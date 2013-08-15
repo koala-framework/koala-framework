@@ -12,7 +12,9 @@ class Kwf_Controller_Action_Redirects_RedirectController extends Kwf_Controller_
         }
         $domainComponentClasses = array();
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
-            if (Kwc_Abstract::getFlag($c, 'hasDomain')) {
+            if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
+                in_array('domain', Kwc_Abstract::getSetting($c, 'baseProperties'))
+            ) {
                 $domainComponentClasses[] = $c;
             }
         }

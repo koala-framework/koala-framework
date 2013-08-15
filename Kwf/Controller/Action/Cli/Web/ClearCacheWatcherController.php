@@ -254,8 +254,12 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 $section = 'web'; //TODO: where to get all possible sections?
                 $languages = Kwf_Trl::getInstance()->getLanguages();
                 foreach($languages as $language) {
-                    $cacheId = 'fileContents'.$language.$section.self::_getHostForCacheId();
-                        $cacheId .= str_replace(array('/', '.', '-', ':'), array('_', '_', '_', '_'), $section.'-'.$file);
+                    $cacheId  = 'fileContents'.$section;
+                    if (substr($file, -3) == '.js') {
+                        //cache javascript per language for trl calls and host for eg. Kwf_Assets_GoogleMapsApiKey
+                        $cacheId .= $language.self::_getHostForCacheId();
+                    }
+                    $cacheId .= str_replace(array('/', '\\', '.', '-', ':'), '_', $section.'-'.$file);
                     echo "remove from assets cache: $cacheId";
                     if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) {
                         echo " [DELETED]";
@@ -315,6 +319,13 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 echo "cleared setup.php cache";
                 if ($ret) echo " [FAILED]";
                 echo "\n";
+
+                echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
+            }
+        } else if (preg_match('#Acl\.php$#', $file)) {
+            if ($event == 'MODIFY') {
+                Kwf_Acl::clearCache();
+                echo "cleared acl cache...\n";
 
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
@@ -494,6 +505,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         $dependenciesChanged = false;
         $generatorssChanged = false;
         $dimensionsChanged = false;
+        $menuConfigChanged = false;
         foreach ($componentClasses as $c) {
             Kwf_Component_Settings::$_rebuildingSettings = true;
             if ($setting) {
@@ -518,6 +530,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             }
             if (isset($newSettings['dimensions']) && $newSettings['dimensions'] != $settings[$c]['dimensions']) {
                 $dimensionsChanged = true;
+            }
+            if (isset($newSettings['menuConfig']) && $newSettings['menuConfig'] != $settings[$c]['menuConfig']) {
+                $menuConfigChanged = true;
             }
             $settings[$c] = $newSettings;
         }
@@ -578,6 +593,11 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             }
             Kwf_Cache_Simple::delete($clearCacheSimple);
             echo "cleared media cache...\n";
+        }
+        if ($menuConfigChanged) {
+            echo "menu config changed...\n";
+            Kwf_Acl::clearCache();
+            echo "cleared acl cache...\n";
         }
 
         $dependentComponentClasses = array();

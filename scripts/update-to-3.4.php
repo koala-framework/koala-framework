@@ -25,6 +25,48 @@ function checkGallery($files) {
     }
 }
 
+function checkBaseProperties($files) {
+    foreach ($files as $f) {
+        $content = file_get_contents($f);
+        if (strpos($content, 'hasDomain')) {
+            echo "\033[45mPlease change setting hasDomain to BaseProperties\033[00m\n";
+        }
+        if (strpos($content, 'hasLanguage')) {
+            echo "\033[45mPlease change setting hasLanguage to BaseProperties\033[00m\n";
+        }
+        if (strpos($content, 'hasMoneyFormat')) {
+            echo "\033[45mPlease change setting hasMoneyFormat to BaseProperties\033[00m\n";
+        }
+    }
+}
+
+function updateStatisticsConfig()
+{
+    $content = file_get_contents('config.ini');
+    $original = $content;
+    $content = str_replace('statistic.', 'statistics.', $content);
+    $content = str_replace('moneyFormat', 'money.format', $content);
+    $content = str_replace('moneyDecimals', 'money.decimals', $content);
+    $content = str_replace('moneyDecimalSeparator', 'money.decimalSeparator', $content);
+    $content = str_replace('moneyThousandSeparator', 'money.thousandSeparator', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.piwikId/', 'kwc.domains.$1.statistics.piwikId', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.piwikDomain/', 'kwc.domains.$1.statistics.piwikDomain', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.twynCustomerId/', 'kwc.domains.$1.statistics.twynCustomerId', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.analyticsCode/', 'kwc.domains.$1.statistics.analyticsCode', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.ignoreAnalyticsCode/', 'kwc.domains.$1.statistics.ignoreAnalyticsCode', $content);
+    $content = preg_replace('/kwc\.domains\.([a-z]*)\.ignorePiwikCode/', 'kwc.domains.$1.statistics.ignorePiwikCode', $content);
+    $content = str_replace('piwikId', 'piwik.id', $content);
+    $content = str_replace('piwikDomain', 'piwik.domain', $content);
+    $content = str_replace('ignorePiwikCode', 'piwik.ignore', $content);
+    $content = str_replace('twynCustomerId', 'twin.customerId', $content);
+    $content = str_replace('analyticsCode', 'analytics.code', $content);
+    $content = str_replace('ignoreAnalyticsCode', 'analytics.ignore', $content);
+    if ($original != $content) {
+        file_put_contents('config.ini', $content);
+        echo "Updated statistics config\n";
+    }
+}
+
 function replaceFiles($files, $from, $to) {
     foreach ($files as $f) {
         $content = file_get_contents($f);
@@ -114,7 +156,12 @@ replaceFiles($files, 'Kwc_Composite_LinksImages_Component', 'Kwc_List_ImagesLink
 replaceFiles($files, 'Kwc_Composite_Downloads_Component', 'Kwc_List_Downloads_Component');
 replaceFiles($files, 'Kwc_Composite_ImagesEnlarge_Component', 'Kwc_List_Gallery_Component');
 replaceFiles($files, 'Kwc_Composite_Links_Component', 'Kwc_List_Links_Component');
+replaceFiles($files, 'Kwc_Box_Analytics_Component', 'Kwc_Statistics_Analytics_Component');
+replaceFiles($files, 'Kwc_Root_DomainRoot_Domain_Analytics_Component', 'Kwc_Statistics_Analytics_Component');
+replaceFiles($files, 'Kwc_Root_DomainRoot_Domain_AdsenseAnalytics_Component', 'Kwc_Statistics_Adsense_Component');
 checkGallery($files);
+checkBaseProperties($files);
+updateStatisticsConfig();
 updateIncludeCode();
 updateMasterCssClass();
 moveCssFiles();

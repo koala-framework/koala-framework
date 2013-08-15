@@ -1,3 +1,4 @@
+<? if (count($this->networks)) { ?>
 <div class="<?=$this->cssClass?>">
     <?php foreach ($this->networks as $network) { ?>
     <a href="<?= htmlspecialchars($network['url']) ?>" rel="popup_blank">
@@ -5,3 +6,4 @@
     </a>
     <?php } ?>
 </div>
+<? } ?>

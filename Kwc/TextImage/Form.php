@@ -23,7 +23,8 @@ class Kwc_TextImage_Form extends Kwc_Abstract_Form
         $image = Kwc_Abstract_Form::createChildComponentForm($this->getClass(), "-image");
         $fs->add($image);
 
-        $fs = $fs->add(new Kwf_Form_Container_FieldSet(trlKwf('Text/Image - Alignment')));
+        $fs = $fs->add(new Kwf_Form_Container_FieldSet(trlKwf('Text/Image - Alignment')))
+            ->setName('alignment');
         $fs->add(new Kwf_Form_Field_Radio('position', trlKwf('Alignment')))
             ->setValues(array(
                 'left' => trlKwf('Left'),

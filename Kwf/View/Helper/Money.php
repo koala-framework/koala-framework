@@ -10,40 +10,21 @@ class Kwf_View_Helper_Money
     public function money($amount)
     {
         $component = null;
-        if (isset($this->_view) && $this->_view && $this->_view->data && $this->_view->data instanceof Kwf_Component_Data) {
+        if (isset($this->_view) && $this->_view && $this->_view->data &&
+            $this->_view->data instanceof Kwf_Component_Data
+        ) {
             $component = $this->_view->data;
         }
-
-        $decimals = 2;
         if ($component) {
-            $decimalSeparator = $component->trlcKwf('decimal separator', ".");
-            $thousandSeparator = $component->trlcKwf('thousands separator', ",");
+            $format = $component->getBaseProperty('money.format');
+            $decimals = $component->getBaseProperty('money.decimals');
+            $decimalSeparator = $component->getBaseProperty('money.decimalSeparator');
+            $thousandSeparator = $component->getBaseProperty('money.thousandSeparator');
         } else {
+            $format = Kwf_Registry::get('config')->moneyFormat;
+            $decimals = 2;
             $decimalSeparator = trlcKwf('decimal separator', ".");
             $thousandSeparator = trlcKwf('thousands separator', ",");
-        }
-        $format = Kwf_Registry::get('config')->moneyFormat;
-
-        if ($component) {
-            $c = $component;
-            while ($c && !Kwc_Abstract::getFlag($c->componentClass, 'hasMoneyFormat')) {
-                $c = $c->parent;
-            }
-            if ($c) {
-                $formats = $c->getComponent()->getMoneyFormat();
-                if (isset($formats['format'])) {
-                    $format = $formats['format'];
-                }
-                if (isset($formats['decimals'])) {
-                    $decimals = $formats['decimals'];
-                }
-                if (isset($formats['decimalSeparator'])) {
-                    $decimalSeparator = $formats['decimalSeparator'];
-                }
-                if (isset($formats['thousandSeparator'])) {
-                    $thousandSeparator = $formats['thousandSeparator'];
-                }
-            }
         }
 
         $number = number_format($amount, $decimals, $decimalSeparator, $thousandSeparator);

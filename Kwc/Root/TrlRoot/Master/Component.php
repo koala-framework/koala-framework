@@ -22,15 +22,19 @@ class Kwc_Root_TrlRoot_Master_Component extends Kwc_Abstract
             'model' => 'Kwc_Root_CategoryModel'
         );
         $ret['flags']['hasHome'] = true;
-        $ret['flags']['hasLanguage'] = true;
         $ret['flags']['subroot'] = true;
         $ret['flags']['chainedType'] = 'Trl';
+        $ret['flags']['hasBaseProperties'] = true;
+        $ret['baseProperties'] = array('language');
         $ret['editComponents'] = array('flag');
         return $ret;
     }
 
-    public function getLanguage()
+    public function getBaseProperty($propertyName)
     {
-        return $this->getData()->language;
+        if ($propertyName == 'language') {
+            return $this->getData()->language;
+        }
+        return null;
     }
 }

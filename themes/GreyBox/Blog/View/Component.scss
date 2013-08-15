@@ -9,8 +9,8 @@
         padding-bottom: 20px;
         h1.title {
             font-size: 26px;
-            padding-bottom: 5px;
             padding-top: 15px;
+            margin-bottom: 0;
             a:visited {
                 color: black;
             }
@@ -27,6 +27,9 @@
                 font-weight: bold;
                 &:hover { text-decoration: underline; }
             }
+        }
+        .content {
+            margin-top: 20px;
         }
         .teaser { margin: 10px 0px; padding: 10px; background: var(lightGray); }
         .readMoreLink {

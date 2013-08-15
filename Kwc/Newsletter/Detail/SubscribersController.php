@@ -5,13 +5,33 @@ class Kwc_Newsletter_Detail_SubscribersController extends Kwf_Controller_Action_
 
     public function init()
     {
-        $this->setModel($this->_getParam('subscribeModel'));
+        $key = $this->_getParam('subscribeModelKey');
+        $mailComponent = $this->_getMailComponent();
+        $rs = $mailComponent->getComponent()->getRecipientSources();
+        if (isset($rs[$key])) {
+            $this->_model = $rs[$key]['model'];
+        } else {
+            $rs = reset($rs);
+            $this->_model = $rs['model'];
+        }
         parent::init();
     }
 
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
+        if ($this->_model->hasColumn('newsletter_component_id')) {
+            if ($this->_getParam('newsletterComponentId')) {
+                // check if newsletterComponentId is allowed for user
+                $acl = Kwf_Registry::get('acl')->getComponentAcl();
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('newsletterComponentId'), array('ignoreVisible'=>true, 'limit'=>1));
+                if (!$acl->isAllowed(Kwf_Registry::get('userModel')->getAuthedUser(), $c)) throw new Kwf_Exception_AccessDenied();
+                $ret->whereEquals('newsletter_component_id', $this->_getParam('newsletterComponentId'));
+            } else {
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
+                $ret->whereEquals('newsletter_component_id', $c->parent->dbId);
+            }
+        }
         $mailComponent = $this->_getMailComponent();
         $rs = $mailComponent->getComponent()->getRecipientSources();
         foreach(array_keys($rs) as $key) {
@@ -43,7 +63,9 @@ class Kwc_Newsletter_Detail_SubscribersController extends Kwf_Controller_Action_
         $this->view->sources = $rs;
 
         $rs = reset($rs);
-        if (!isset($rs['select'])) $rs['select'] = array();
+        if (!isset($rs['select'])) $rs['select'] = new Kwf_Model_Select();
+        $rs['select']->merge($this->_getSelect());
+        $model = Kwf_Model_Abstract::getInstance($rs['model']);
         $row = Kwf_Model_Abstract::getInstance($rs['model'])->getRow($rs['select']);
         $this->view->subscribeModel = $rs['model'];
         if ($row) {

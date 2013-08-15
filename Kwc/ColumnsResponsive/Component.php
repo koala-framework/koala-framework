@@ -1,6 +1,7 @@
 <?php
 class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
 {
+    public static $needsParentComponentClass = true;
     public static function getSettings($parentComponentClass)
     {
         $ret = parent::getSettings();
@@ -10,7 +11,6 @@ class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
         $ret['assets']['files'][] = 'kwf/Kwc/ColumnsResponsive/Component.js';
         $ret['assets']['dep'][] = 'KwfResponsiveEl';
 
-        $ret['needsParentComponentClass'] = true;
         $ret['generators']['child'] = array(
             'class' => 'Kwc_ColumnsResponsive_Generator',
             'component' => $parentComponentClass
@@ -77,9 +77,17 @@ class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
     {
         $ret = parent::getTemplateVars();
         $row = $ret['row'];
+
         $columnTypes = $this->_getSetting('columns');
-        $columns = $columnTypes[$row->type];
-        $ret['cssClass'] .= " col{$row->type}";
+        $type = $row->type;
+        if (!$type) {
+            //default is first
+            $type = array_shift(array_keys($columnTypes));
+        }
+        $columns = $columnTypes[$type];
+
+
+        $ret['cssClass'] .= " col{$type}";
         foreach($ret['listItems'] as $key => $value) {
             $ret['listItems'][$key]['class'] .= " span{$columns['colSpans'][$key]}";
         }

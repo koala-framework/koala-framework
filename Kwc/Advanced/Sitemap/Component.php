@@ -10,21 +10,21 @@ class Kwc_Advanced_Sitemap_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['levels'] = $this->getRow()->levels;
         $ret['target'] = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($this->getRow()->target, array('limit'=>1));
         $ret['listHtml'] = '';
         if ($ret['target']) {
-            $ret['listHtml'] = $this->_getListHtml($ret['target'], 0);
+            $ret['listHtml'] = $this->_getListHtml($renderer, $ret['target'], 0);
         }
         return $ret;
     }
 
     //not in template for easier recursion
-    private function _getListHtml(Kwf_Component_Data $c, $level)
+    private function _getListHtml(Kwf_Component_Renderer_Abstract $renderer, Kwf_Component_Data $c, $level)
     {
         $ret = '';
         $level++;
@@ -34,10 +34,11 @@ class Kwc_Advanced_Sitemap_Component extends Kwc_Abstract
         foreach ($c->getChildPages($select) as $child) {
             $ret .= "<li>\n";
             $helper = new Kwf_Component_View_Helper_ComponentLink();
+            $helper->setRenderer($renderer);
             $ret .= $helper->componentLink($child);
             $ret .= "\n";
             if ($level < $this->getRow()->levels) {
-                $ret .= $this->_getListHtml($child, $level);
+                $ret .= $this->_getListHtml($renderer, $child, $level);
             }
             $ret .= "</li>\n";
         }

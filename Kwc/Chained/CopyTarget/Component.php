@@ -1,7 +1,7 @@
 <?php
 abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
 {
-    public static function getSettings($includePageGenerator = true)
+    public static function getSettings($includePageGenerator = 'Kwc_Root_Category_Component')
     {
         $ret = parent::getSettings();
         $ret['generators']['target'] = array(
@@ -10,13 +10,20 @@ abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
         );
 
         if ($includePageGenerator) {
-            $pageGenerator = Kwc_Chained_Cc_Component::createChainedGenerator('Kwc_Root_Category_Component', 'page');
+            $pageGenerator = Kwc_Chained_Cc_Component::createChainedGenerator($includePageGenerator, 'page');
             if ($pageGenerator) {
                 $ret['generators']['page'] = $pageGenerator;
                 $ret['generators']['page']['class'] = 'Kwc_Chained_CopyTarget_PagesGenerator';
             }
         }
         $ret['flags']['hasAllChainedByMaster'] = true;
+        return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['target'] = $this->getData()->getChildComponent('-target');
         return $ret;
     }
 

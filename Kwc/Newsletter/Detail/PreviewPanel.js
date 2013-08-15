@@ -103,16 +103,16 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
                 });
                 for (var key in data.sources) {
                     if (data.sources[key].title) {
-                        this.recipientSources.push([data.sources[key].model, data.sources[key].title]);
+                        this.recipientSources.push([key, data.sources[key].title]);
                     } else {
-                        this.recipientSources.push([data.sources[key].model, data.sources[key].model]);
+                        this.recipientSources.push([key, data.sources[key].model]);
                     }
                 }
 
                 if (this.recipientSources.length == 1) {
                     for (var key in data.sources) {
                         Ext.apply(this.baseParams, {
-                            subscribeModel: data.sources[key].model
+                            subscribeModelKey: key
                         });
                     }
                 } else {
@@ -130,7 +130,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
                         listeners: {
                             select: function(combo, record, index) {
                                 Ext.apply(this.baseParams, {
-                                    subscribeModel: record.data.id
+                                    subscribeModelKey: record.data.id
                                 });
                                 if (this.recipientComboBox.disabled) this.recipientComboBox.enable();
                                 delete this.recipientComboBox.lastQuery;
