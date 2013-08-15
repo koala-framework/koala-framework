@@ -10,7 +10,7 @@ class Kwc_Blog_List_View_Component extends Kwc_Directories_List_View_Component
     public function getPartialVars($partial, $nr, $info)
     {
         $ret = parent::getPartialVars($partial, $nr, $info);
-        $ret['blogpost'] = $ret['item']->getChildComponent('-content');
+        $ret['content'] = $ret['item']->getChildComponent('-content');
         return $ret;
     }
 }

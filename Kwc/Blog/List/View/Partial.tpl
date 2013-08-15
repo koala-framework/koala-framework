@@ -11,8 +11,8 @@
         <?=$this->data->trlKwf('Posted on {0}', $this->date($this->item->publish_date))?>
         <?=$this->data->trlKwf('by {0}', $this->item->author)?>
     </div>
-    <div class="blogpost">
-        <?=$this->component($this->blogpost)?>
+    <div class="content">
+        <?=$this->component($this->content)?>
     </div>
     <? if($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
         <div class="readMoreLink">
