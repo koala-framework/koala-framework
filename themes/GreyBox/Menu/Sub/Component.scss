@@ -19,6 +19,9 @@
         &.last {
             border-right: none;
         }
+        &.current {
+            font-weight: bold;
+        }
 
         a {
             height: 32px;
