@@ -9457,16 +9457,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1982</id>
 </text>
 <text>
-<en>Allow the use of cookies</en>
-<id>1983</id>
-<de>Erlaube die Verwendung von Cookies</de>
-</text>
-<text>
-<en>Do not allow the use of cookies</en>
-<id>1984</id>
-<de>Erlaube die Verwendung von Cookies nicht</de>
-</text>
-<text>
 <en>Header Title</en>
 <id>1985</id>
 </text>
@@ -9550,13 +9540,18 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Akzeptieren und Fortfahren</de>
 </text>
 <text>
-<en>Cookie Setting</en>
-<id>2005</id>
-<de>Cookie Einstellung</de>
-</text>
-<text>
 <en>Cookie Opt In / Opt Out</en>
 <id>2006</id>
+</text>
+<text>
+<en>Cookies are set when visiting this webpage. Click to deactivate cookies.</en>
+<de>Bei Ihrem Besuch dieser Webseite werden aktuell Cookies gesetzt. Klicken Sie hier, um die Cookies zu deaktivieren.</de>
+<id>2007</id>
+</text>
+<text>
+<en>No cookies are set when visiting this webpage. Click to activate cookies.</en>
+<de>Bei Ihrem Besuch dieser Webseite werden aktuell keine Cookies gesetzt. Klicken Sie hier, wenn Sie die Verwendung von Cookies akzeptieren möchten.</de>
+<id>2008</id>
 </text>
 </trl>
 

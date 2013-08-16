@@ -1,0 +1,26 @@
+.cssClass {
+    .kwcForm {
+        background: none;
+        padding: 0px;
+        width: auto;
+
+        .kwfFormFieldCheckbox input { 
+            margin-left: 0px;
+            margin-top: 0px;
+            position: absolute;
+            top: 2px;
+        }
+        
+        label.boxLabel { 
+            float: none;
+            margin-left: 20px;
+        }
+        
+        .submitWrapper {
+            position: static;
+            float: right;
+            margin-right: -20px;
+            margin-top: -22px;
+        }
+    }
+}

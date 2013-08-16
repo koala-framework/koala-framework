@@ -1,27 +1,34 @@
 <?php
 class Kwc_Statistics_Opt_FrontendForm extends Kwc_Abstract_FrontendForm
 {
+    private $_isOptIn;
+
+    public function __construct($name, $componentClass, $isOptIn)
+    {
+        $this->_isOptIn = $isOptIn;
+        $ret = parent::__construct($name, $componentClass);
+        return $ret;
+    }
+
     protected function _init()
     {
         $this->setModel(new Kwf_Model_FnF(
-            array('data' => array(array('id' => 1, 'opt' => Kwf_Statistics::getUserOptValue())))
+            array('data' => array(array('id' => 1, 'opt' => $this->_isOptIn)))
         ));
         $this->setId(1);
-        $select = new Kwf_Form_Field_Select('opt', trlKwfStatic('Cookie Setting'));
-        $values = array(
-            Kwf_Statistics::OPT_IN => trlKwfStatic('Allow the use of cookies'),
-            Kwf_Statistics::OPT_OUT => trlKwfStatic('Do not allow the use of cookies')
-        );
-        $select->setValues($values)->setAllowBlank(false);
-        if (!Kwf_Statistics::issetUserOptValue()) {
-            $select->setShowNoSelection(true)->setEmptyText(trlKwfStatic('Please select a value'));
+        if ($this->_isOptIn) {
+            $label = trlKwfStatic('Cookies are set when visiting this webpage. Click to deactivate cookies.');
+        } else {
+            $label = trlKwfStatic('No cookies are set when visiting this webpage. Click to activate cookies.');
         }
-        $this->add($select);
+        $this->add(new Kwf_Form_Field_Checkbox('opt', ''))
+            ->setBoxLabel($label);
         parent::_init();
     }
 
-    protected function _afterSave($row)
+    protected function _beforeSave($row)
     {
-        Kwf_Statistics::setUserOptValue($row->opt);
+        $value = $row->opt ? Kwf_Statistics::OPT_IN : Kwf_Statistics::OPT_OUT;
+        Kwf_Statistics::setUserOptValue($value);
     }
 }
