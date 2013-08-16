@@ -45,9 +45,10 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
     public function getTemplateVars($renderer)
     {
         $ret = parent::getTemplateVars();
-        $ret['optComponent'] = Kwf_Component_Data_Root::getInstance()->getComponentByClass(
-            'Kwc_Statistics_Opt_Component', array('subroot' => $this->getData(), 'limit' => 1)
+        $components = Kwf_Component_Data_Root::getInstance()->getComponentsByClass(
+            'Kwc_Statistics_Opt_Component', array('subroot' => $this->getData())
         );
+        $ret['optComponent'] = isset($components[0]) ? $components[0] : null;
         return $ret;
     }
 }
