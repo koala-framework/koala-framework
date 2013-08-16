@@ -27,7 +27,8 @@
                     echo $this->componentLink($nc, null, array('skipAppendText'=>true));
                 } ?>
             <? } ?>
-            <?=$this->data->trlKwf('by {0}', $this->item->author)?>
+            <?=$this->data->trlKwf('by {0}', $this->item->author)?>.
+            <?=$this->data->trlKwf('Bookmark the {0}.', $this->componentLink($this->data, $this->data->trlkwf('permalink')))?>
         </div>
         <? if ($this->placeholder['backLink']) { ?>
             <div class="backLink">
