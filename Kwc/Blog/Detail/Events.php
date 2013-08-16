@@ -1,5 +1,5 @@
 <?php
-class Kwc_Blog_Detail_Events extends Kwc_Abstract_Events
+class Kwc_Blog_Detail_Events extends Kwc_Directories_Item_Detail_Events
 {
     public function getListeners()
     {
