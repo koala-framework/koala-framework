@@ -1,5 +1,15 @@
 <div class="<?=$this->cssClass;?>">
     <div class="blogContent">
+        <? if ($this->previousPost || $this->nextPost) { ?>
+            <p class="nextPreviousLinks">
+                <? if ($this->previousPost) { ?>
+                    <?=$this->componentLink($this->previousPost, $this->placeholder['previousLink'])?>
+                <? } ?>
+                <? if ($this->nextPost) { ?>
+                    <?=$this->componentLink($this->nextPost, $this->placeholder['nextLink'])?>
+                <? } ?>
+            </p>
+        <? } ?>
         <h1 class="title"><?=$this->componentLink($this->item, $this->title)?></h1>
         <div class="postInfo">
             <?=$this->data->trlKwf('Posted on {0}', $this->date($this->row->publish_date))?>
