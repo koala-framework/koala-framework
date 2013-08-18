@@ -383,9 +383,6 @@ class Kwf_Util_Setup
         $ret .= "    Kwf_Component_Data_Root::setShowInvisible(true);\n";
         $ret .= "}\n";
 
-        $ret .= "Kwf_Benchmark::checkpoint('setUp');\n";
-        $ret .= "\n";
-
         return $ret;
     }
 }
