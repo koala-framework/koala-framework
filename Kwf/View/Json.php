@@ -36,9 +36,6 @@ class Kwf_View_Json extends Zend_View_Abstract
         if ($this->_outputFormat == 'kwfConnection' && !isset($out['success'])) {
             $out['success'] = !isset($out['exception']) && !isset($out['error']);
         }
-        if (!isset($out['requestNum'])) {
-            $out['requestNum'] = Zend_Registry::get('requestNum');
-        }
         return $out;
     }
 

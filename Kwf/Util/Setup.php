@@ -154,8 +154,6 @@ class Kwf_Util_Setup
 
         $ret .= "umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen\n";
 
-        $ret .= "Zend_Registry::set('requestNum', ''.floor(Kwf_Benchmark::\$startTime*100));\n";
-
         //this is *NOT* recommended but still works somehow
         $ret .= "if (get_magic_quotes_gpc()) Kwf_Util_UndoMagicQuotes::undoMagicQuotes();\n";
 
@@ -167,7 +165,6 @@ class Kwf_Util_Setup
             }
 
             if (Kwf_Config::getValue('debug.querylog')) {
-                $ret .= "    header('X-Kwf-RequestNum: '.Zend_Registry::get('requestNum'));\n";
                 $ret .= "    register_shutdown_function(array('Kwf_Setup', 'shutDown'));\n";
             }
             $ret .= "    ob_start();\n";
