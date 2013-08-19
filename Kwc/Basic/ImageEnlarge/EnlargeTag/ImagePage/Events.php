@@ -66,31 +66,32 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
     {
         // get previous and next items and delete the cache for them
         $c = $event->component;
-        $getChildren = array();
         if ($c->componentClass != $this->_class) {
-            $c = $c->getRecursiveChildComponents(array('componentClass'=>$this->_class));
-            if (count($c) > 1) throw new Kwf_Exception("only a single component should exist");
-            if (isset($c[0])) {
-                $c = $c[0];
+            foreach ($c->getRecursiveChildComponents(array('componentClass'=>$this->_class)) as $c) {
                 $i = $c->parent->parent;
                 if (is_instance_of($i->componentClass, 'Kwc_Basic_LinkTag_Component')) {
                     $i = $i->parent;
                 }
+                $getChildren = array();
                 while ($i != $event->component) {
+                    if ($i->generator->getGeneratorFlag('table')) {
+                        //only relevant if child is *not* created by a table generator
+                        continue 2;
+                    }
                     $getChildren[] = $i->generator->getIdSeparator().$i->id;
                     $i = $i->parent;
                 }
-            }
-        }
-        $result = call_user_func(
-            array($this->_class, 'getPreviousAndNextImagePage'), $this->_class, $event->component, $getChildren, true
-        );
+                $result = call_user_func(
+                    array($this->_class, 'getPreviousAndNextImagePage'), $this->_class, $event->component, $getChildren, true
+                );
 
-        foreach ($result as $r) {
-            if (!$r) continue;
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $r
-            ));
+                foreach ($result as $r) {
+                    if (!$r) continue;
+                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                        $this->_class, $r
+                    ));
+                }
+            }
         }
     }
 
