@@ -959,6 +959,7 @@
 <ro>Nu se poate salva, vă rugăm să completaţi corect toate câmpurile subliniate cu roşu.</ro>
 <sl>Podatkov ni bilo možno shraniti. Pravilno izpolnite vsa rdeče označena polja.</sl>
 <ru>Невозможно сохранить, пожалуйста, заполните правильно все поля отмеченные красным подчерком.</ru>
+<fr>Saving n'est pas possible, veuillez remplir correctement tous les champs soulignés en rouge.</fr>
 </text>
 <text>
 <en>Do you really want to delete this entry?</en>
@@ -3444,6 +3445,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hu>Kérjük töltse ki a mezőt</hu>
 <bg>Во молиме внесете текст во полето</bg>
 <es_CL>Por favor, rellene el campo</es_CL>
+<fr>S'il vous plaît remplir dans ce domaine</fr>
 </text>
 <text>
 <en>'%value%' has not only alphabetic and digit characters</en>
@@ -6727,6 +6729,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1320</id>
 <ro>Vă rugăm să completaţi corect câmpul marcat.</ro>
 <sl>Pravilno izpolnite označena polja.</sl>
+<fr>S'il vous plaît compléter les champs en surbrillance correctement.</fr>
 </text>
 <text>
 <en>user-defined</en>
@@ -8429,6 +8432,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1702</id>
 <ro>Înapoi la Overview</ro>
 <sl>Nazaj na pregled</sl>
+<fr>Retour au sommaire</fr>
 </text>
 <text>
 <en>Guestbook Detail</en>
