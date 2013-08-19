@@ -117,6 +117,7 @@ function moveCssFiles()
     if (file_exists('css/master.css') && file_exists('css/web.css')) {
         $c = file_get_contents('css/master.css')."\n\n".file_get_contents('css/web.css');
         file_put_contents("css/web.css", $c);
+        unlink('css/master.css');
         echo "moved css/master.css contents into css/web.css\n";
     }
     if (file_exists('css/web.css') && file_exists('components/Root/Component.php')) {
