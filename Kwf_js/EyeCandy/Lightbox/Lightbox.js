@@ -530,6 +530,8 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         var m = this._getOuterMargin();
         if (xy[0] < Ext.getBody().getScroll().left+m) xy[0] = Ext.getBody().getScroll().left+m;
         if (xy[1] < Ext.getBody().getScroll().top+m) xy[1] = Ext.getBody().getScroll().top+m;
+        xy[0] = Math.floor(xy[0]);
+        xy[1] = Math.floor(xy[1]);
 
         return xy;
     },
