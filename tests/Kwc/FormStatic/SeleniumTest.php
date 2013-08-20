@@ -39,15 +39,6 @@ class Kwc_FormStatic_SeleniumTest extends Kwf_Test_SeleniumTestCase
         sleep(1);
         $this->assertTextPresent('The form has been submitted successfully');
 
-        if (Kwf_Util_Model_MailLog::isAvailable()) {
-            // geschickte mail checken
-            $mail = $this->_getLatestMail();
-            $this->assertContains('Das ist das Kontaktformular Template:', $mail->body_text);
-            $this->assertContains('Email: test@vivid-planet.com', $mail->body_text);
-            $this->assertContains('Fullname: myname', $mail->body_text);
-            $this->assertContains('Content:'."\nlorem ipsum", $mail->body_text);
-        }
-
         // enquiries checken
         $enquiries = Kwf_Model_Abstract::getInstance('Kwf_Model_Mail');
         $row = $enquiries->getRow($enquiries->select()
