@@ -12,9 +12,6 @@ var initEl = function(el) {
             el.removeClass('largeText');
         }
     }
-    if (el.child('div.text .basicText').dom.childElementCount == 0) {
-        el.addClass('noText');
-    }
 };
 
 Kwf.onElementReady('.kwcTextImage', function(el) {

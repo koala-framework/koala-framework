@@ -41,6 +41,9 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
             }
             $ret['mailImageVAlign'] = $this->_getSetting('mailImageVAlign');
         }
+        if (!$ret['text']->hasContent()) {
+            $ret['cssClass'] .= ' noText';
+        }
         return $ret;
     }
 }
