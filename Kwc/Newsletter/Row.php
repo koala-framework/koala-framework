@@ -105,6 +105,11 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
 
                 $row->delete();
 
+                if ($status == 'failed' && $debugOutput) {
+                    echo "stopping because sending failed in debug mode\n";
+                    break;
+                }
+
             } else {
 
                 $this->status = 'finished';
