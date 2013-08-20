@@ -276,16 +276,16 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
+            }
 
-            } else if (self::_endsWith($file, '/dependencies.ini')) {
-                if ($event == 'MODIFY') {
+        } else if (self::_endsWith($file, '/dependencies.ini')) {
+            if ($event == 'MODIFY') {
 
-                    self::_clearAssetsDependencies();
+                self::_clearAssetsDependencies();
 
-                    self::_clearAssetsAll();
+                self::_clearAssetsAll();
 
-                    echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
-                }
+                echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
         } else if (preg_match('#/config([^/]*)?\.ini$#', $file)) { //config.ini, configPoi.ini, config.local.ini (in any directory)
             if ($event == 'MODIFY') {
@@ -682,7 +682,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     {
         if (is_null($fileTypes)) $fileTypes = array('js', 'css', 'printcss');
         if (is_string($fileTypes)) $fileTypes = array($fileTypes);
-        
+
         $section = 'web'; //TODO: where to get all possible sections?
         $languages = Kwf_Trl::getInstance()->getLanguages();
         $rootComponent = Kwf_Component_Data_Root::getComponentClass();
