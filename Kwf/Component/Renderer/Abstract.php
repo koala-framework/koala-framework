@@ -87,7 +87,7 @@ abstract class Kwf_Component_Renderer_Abstract
     }
 
     /**
-     * Render components (ie. expand <cc ...>)
+     * Render components (ie. expand <kwc ...>)
      *
      * @param int render pass; 1 or 2: 1 for content that can be stored in fullPage cache,
                                        2 for everything else. 2 includes 1, so calling just with 2 also works
@@ -110,7 +110,7 @@ abstract class Kwf_Component_Renderer_Abstract
             $p = substr($ret, $start+4, 1);
             if ($pass == 1 && $p == 2) {
                 $offset = $start+1;
-                continue; //matches $pass? (first char after {cc)
+                continue; //matches $pass? (first char after <kwc)
             }
             if ($benchmarkEnabled) $startTime = microtime(true);
             $end = strpos($ret, '>', $start);
