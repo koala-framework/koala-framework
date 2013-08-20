@@ -11,6 +11,14 @@ $grid-padding   : 0em;
             padding-bottom: 0px;
             padding-right: 0;
         }
+
+        .kwcTextImage {
+            &.noText {
+                .kwcBasicImageEnlarge {
+                    text-align: left;
+                }
+            }
+        }
     }
 }
 
