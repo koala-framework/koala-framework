@@ -28,12 +28,12 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
                     Kwf_Component_Cache::getInstance()
                         ->save($component, $content, 'component', 'page');
 
-                    $statType = 'nocache';
+                    $statType = 'miss';
                 } else {
                     $statType = 'noviewcache';
                 }
             } else {
-                $statType = 'cache';
+                $statType = 'hit';
             }
             if ($statType) Kwf_Benchmark::count("rendered $statType", $component->componentId.': page');
             Kwf_Benchmark::countLog('render-'.$statType);
@@ -44,9 +44,11 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
             $content = $this->_render(1, $content);
             Kwf_Benchmark::checkpoint('render pass 1');
             Kwf_Component_Cache::getInstance()->save($component, $content, 'component', 'fullPage', '', $this->_minLifetime);
+            Kwf_Benchmark::count("rendered miss", $component->componentId.': fullPage');
 
             Kwf_Benchmark::countLog('fullpage-miss');
         } else {
+            Kwf_Benchmark::count("rendered hit", $component->componentId.': fullPage');
             Kwf_Benchmark::countLog('fullpage-hit');
         }
 

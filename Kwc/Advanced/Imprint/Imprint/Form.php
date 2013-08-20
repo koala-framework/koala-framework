@@ -34,7 +34,7 @@ class Kwc_Advanced_Imprint_Imprint_Form extends Kwc_Abstract_Form
             ->setWidth(300);
         $this->fields->add(new Kwf_Form_Field_TextField('court', trlKwf('Court')))
             ->setWidth(300);
-        $this->fields->add(new Kwf_Form_Field_TextField('uid_number', trlKwf('Purchase tax-identification number')))
+        $this->fields->add(new Kwf_Form_Field_TextField('uid_number', trlKwf('VAT identification number')))
             ->setWidth(300);
         $this->fields->add(new Kwf_Form_Field_TextField('bank_data', trlKwf('Bank data')))
             ->setWidth(300);
@@ -46,7 +46,7 @@ class Kwc_Advanced_Imprint_Imprint_Form extends Kwc_Abstract_Form
             ->setWidth(300);
         $this->fields->add(new Kwf_Form_Field_TextField('bic_swift', trlKwf('BIC / SWIFT')))
             ->setWidth(300);
-        $this->fields->add(new Kwf_Form_Field_TextField('dvr_number', trlKwf('DVR-Number')))
+        $this->fields->add(new Kwf_Form_Field_TextField('dvr_number', trlKwf('Data handling register number')))
             ->setWidth(300);
         $this->fields->add(new Kwf_Form_Field_TextField('club_number_zvr', trlKwf('Clubnumber ZVR')))
             ->setWidth(300);

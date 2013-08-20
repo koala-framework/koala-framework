@@ -32,6 +32,26 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
         }
     }
 
+    public function getFulltextComponents(Kwf_Component_Data $component)
+    {
+        $fulltextComponents = $component->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'inherit' => false, 'page'=>false));
+        if (Kwc_Abstract::getFlag($component->componentClass, 'hasFulltext')) {
+            $fulltextComponents[] = $component;
+        }
+
+        foreach ($fulltextComponents as $c) {
+            if (!method_exists($c->getComponent(), 'getFulltextComponents')) continue;
+            //components can return other components that should be included in fulltext content
+            foreach ($c->getComponent()->getFulltextComponents() as $c) {
+                $fulltextComponents = array_merge(
+                    $fulltextComponents,
+                    $this->getFulltextComponents($component)
+                );
+            }
+        }
+        return $fulltextComponents;
+    }
+
     public function getFulltextContentForPage(Kwf_Component_Data $page, array $fulltextComponents = array())
     {
         if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) return null;
@@ -42,12 +62,8 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
         }
 
         if (!$fulltextComponents) {
-            $fulltextComponents = $page->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'inherit' => false, 'page'=>false));
-            if (Kwc_Abstract::getFlag($page->componentClass, 'hasFulltext')) {
-                $fulltextComponents[] = $page;
-            }
+            $fulltextComponents = $this->getFulltextComponents($page);
         }
-
 
         $ret = array();
 
@@ -72,6 +88,7 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
             $content = $c->getComponent()->getFulltextContent();
             unset($c);
             foreach ($content as $field=>$text) {
+                if (!$text) continue;
                 if (isset($ret[$field])) {
                     if (is_string($ret[$field])) {
                         $ret[$field] = $ret[$field].' '.$text;

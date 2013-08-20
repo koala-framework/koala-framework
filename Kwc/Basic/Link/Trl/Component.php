@@ -5,6 +5,8 @@ class Kwc_Basic_Link_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
     {
         $ret = parent::getSettings($mainComponentClass);
         $ret['ownModel'] = Kwc_Abstract::getSetting($mainComponentClass, 'ownModel');
+        $ret['assets']['dep'][] = 'ExtFormFields';
+        $ret['assets']['files'][] = 'kwf/Kwc/Basic/Link/Trl/CopyButton.js';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'text';
         return $ret;
     }

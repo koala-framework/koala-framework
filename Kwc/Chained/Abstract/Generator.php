@@ -58,19 +58,16 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
 
     protected function _getChainedData($data)
     {
-        // TODO: Das ist nicht wirklich korrekt, reicht aber bis jetzt aus
-        /*
-         * Wenn man eine MasterAsChild hat und Boxen vererbt werden,
-         * haben diese Boxen kein chained gesetzt, brauchen es uU.
-         * aber. Daher wird nach oben gesucht und die erste chained
-         * zurückgegeben, eigentlich sollte aber wieder reingesucht
-         * werden, damit es korrekt ist.
-         */
-        while ($data) {
-            if (isset($data->chained)) return $data->chained;
-            $data = $data->parent;
+        $ret = null;
+        if ($data) {
+            if (isset($data->chained)) {
+                $ret = $data->chained;
+            } else { // MasterAsChild (only called for inherit component which are on the page of the first found chained)
+                while (!isset($data->chained)) $data = $data->parent;
+                $ret = $data->chained->getPage();
+            }
         }
-        return null;
+        return $ret;
     }
 
     protected function _getChainedChildComponents($parentData, $select)
@@ -163,7 +160,7 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
         return substr($row->componentId, max(strrpos($row->componentId, '-'),strrpos($row->componentId, '_'))+1);
     }
 
-    
+
     protected function _getComponentIdFromRow($parentData, $row)
     {
         return $parentData->componentId.$this->getIdSeparator().$this->_getIdFromRow($row);

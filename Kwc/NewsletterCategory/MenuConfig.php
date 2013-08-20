@@ -3,11 +3,6 @@ class Kwc_NewsletterCategory_MenuConfig extends Kwc_Newsletter_MenuConfig
 {
     public function addResources(Kwf_Acl $acl)
     {
-        if (!$acl->has('kwc_newsletter')) {
-            $acl->add(new Kwf_Acl_Resource_MenuDropdown('kwc_newsletter',
-                array('text'=>trlKwfStatic('Newsletter'), 'icon'=>'email_open_image.png')), 'kwf_component_root');
-        }
-
         $menuConfig = array('icon'=>new Kwf_Asset('package'));
 
         $components = Kwf_Component_Data_Root::getInstance()
@@ -30,7 +25,7 @@ class Kwc_NewsletterCategory_MenuConfig extends Kwc_Newsletter_MenuConfig
                     Kwc_Admin::getInstance($this->_class)->getControllerUrl('Categories').'?componentId='.$c->dbId,
                     $c
                 ),
-                'kwc_newsletter'
+                $this->_getParentResource($acl, 'categories')
             );
         }
 

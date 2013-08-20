@@ -93,7 +93,6 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = true;
-        $ret['allowIsolatedRender'] = false;
         $ret['contentSender'] = 'Kwf_Component_Abstract_ContentSender_Default';
         return $ret;
     }

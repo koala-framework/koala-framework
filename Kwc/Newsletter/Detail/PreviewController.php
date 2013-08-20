@@ -5,7 +5,9 @@ class Kwc_Newsletter_Detail_PreviewController extends Kwc_Mail_PreviewController
     {
         $select = new Kwf_Model_Select();
         $select->whereEquals('id', $this->_getParam('recipientId'));
-        $row = Kwf_Model_Abstract::getInstance($this->_getParam('subscribeModel'))->getRow($select);
+        $rs = $this->_getMailComponent()->getRecipientSources();
+        $model = $rs[$this->_getParam('subscribeModelKey')]['model'];
+        $row = Kwf_Model_Abstract::getInstance($model)->getRow($select);
         return $row;
     }
 

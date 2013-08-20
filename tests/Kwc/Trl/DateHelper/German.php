@@ -14,12 +14,16 @@ class Kwc_Trl_DateHelper_German extends Kwc_Abstract
             'component' => 'Kwc_Trl_DateHelper_DateTime_Component',
             'name' => 'dateTime',
         );
-        $ret['flags']['hasLanguage'] = true;
+        $ret['flags']['hasBaseProperties'] = true;
+        $ret['baseProperties'] = array('language');
         return $ret;
     }
 
-    public function getLanguage()
+    public function getBaseProperty($propertyName)
     {
-        return $this->getData()->language;
+        if ($propertyName == 'language') {
+            return $this->getData()->language;
+        }
+        return null;
     }
 }

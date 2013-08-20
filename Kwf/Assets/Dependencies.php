@@ -248,7 +248,6 @@ class Kwf_Assets_Dependencies
                         $this->_addAbsoluteFiles($assetsType, $i);
                     }
                 }
-
                 $this->_processComponentDependency($assetsType, $rootComponent, $rootComponent, $dependency == 'ComponentsAdmin');
             }
             return;

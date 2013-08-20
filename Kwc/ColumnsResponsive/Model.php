@@ -8,7 +8,7 @@ class Kwc_ColumnsResponsive_Model extends Kwf_Model_FnF
         $row = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($class, 'ownModel'))->getRow($select);
         $columnTypes = Kwc_Abstract::getSetting($class, 'columns');
         if (!$row) {
-            $columns = $columnTypes[array_shift(array_keys($columns))];
+            $columns = $columnTypes[array_shift(array_keys($columnTypes))];
         } else {
             $columns = $columnTypes[$row->type];
         }

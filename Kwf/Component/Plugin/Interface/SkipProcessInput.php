@@ -6,8 +6,12 @@
  */
 interface Kwf_Component_Plugin_Interface_SkipProcessInput
 {
+    const SKIP_NONE = false;
+    const SKIP_SELF = 'current';
+    const SKIP_SELF_AND_CHILDREN = true;
+
     /**
-     * Return true to skip processInput for component and it's children
+     * Return constant to choose whicht processInput should be skipped
      */
     public function skipProcessInput();
 }

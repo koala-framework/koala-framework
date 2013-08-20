@@ -1,0 +1,4 @@
+<?php
+class Kwc_Trl_MasterAsChild_Page_Trl_Component extends Kwc_Chained_Abstract_MasterAsChild_Component
+{
+}

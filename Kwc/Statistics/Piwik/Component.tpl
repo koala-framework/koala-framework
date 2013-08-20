@@ -4,6 +4,8 @@
   var _paq = _paq || [];
   <? if ($this->disableCookies) { ?>
   _paq.push(['disableCookies']);
+  <? } else { ?>
+  if (!Kwf.Statistics.isUserOptIn()) { _paq.push(['disableCookies']); }
   <? } ?>
   <? foreach ($this->customVariables as $cv) { ?>
   _paq.push(["setCustomVariable", <?=$cv['index']?>, "<?=$cv['name']?>", "<?=$cv['value']?>", "<?=$cv['scope']?>"]);

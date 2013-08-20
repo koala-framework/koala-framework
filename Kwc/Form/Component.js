@@ -133,7 +133,12 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
         }
 
         if (!this.config.useAjaxRequest || this.ajaxRequestSubmitted) return;
-
+        this.submit();
+        e.stopEvent();
+    },
+    
+    submit: function()
+    {
         var button = this.el.child('.submitWrapper .button');
         button.down('.saving').show();
         button.down('.submit').hide();
@@ -245,7 +250,5 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
             },
             scope: this
         });
-
-        e.stopEvent();
     }
 });

@@ -55,6 +55,7 @@
 .kwfLightbox .lightboxBody .nextBtn a,
 .kwfLightbox .lightboxBody .prevBtn,
 .kwfLightbox .lightboxBody .prevBtn a {
+    text-decoration: none;
     position: absolute;
     top: 0px;
     width: 40%;

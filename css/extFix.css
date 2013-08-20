@@ -20,3 +20,6 @@ body.x-masked-relative {
 }
 */
 
+body.ext-gecko .x-window-body .x-form-item {
+    overflow: hidden;
+}

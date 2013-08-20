@@ -1,4 +1,20 @@
+.cssClass {
+    .kwcBasicImageEnlarge {
+        text-align: center;
+
+        img {
+            display: inline;
+        }
+    }
+}
+
 .cssClass.largeText {
+    .kwcBasicImageEnlarge {
+        img {
+            display: block;
+        }
+    }
+
     .noFlow.smallImage {
         .image,
         .text {

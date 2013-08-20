@@ -110,9 +110,6 @@
     margin-left: 20px;
     padding: 5px;
 }
-.cssClass .kwfFormFieldRadio {
-    margin-left: -10px;
-}
 .cssClass form .kwfFormFieldRadio label {
     margin-right: 20px;
     clear: none;

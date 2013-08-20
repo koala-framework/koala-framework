@@ -49,10 +49,9 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
         // APC
         $cacheId = $this->_getCacheId($component->componentId, $renderer, $type, $value);
-        $ttl = 0;
+        $ttl = null;
         if ($lifetime) $ttl = $lifetime;
         Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, array(), $ttl);
-
         return true;
     }
 
@@ -88,7 +87,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             $row = $this->getModel('cache')->export(Kwf_Model_Db::FORMAT_ARRAY, $select, $options);
             if (isset($row[0])) {
                 Kwf_Benchmark::countLog('viewcache-db');
-                $ttl = 0;
+                $ttl = null;
                 if ($row[0]['expire']) {
                     $ttl = $row[0]['expire']-time();
                 }

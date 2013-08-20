@@ -183,7 +183,7 @@ abstract class Kwf_Component_Renderer_Abstract
                         $content = null;
                     }
 
-                    $statType = 'cache'; //for statistic: was cached
+                    $statType = 'hit'; //for statistic: was cached
                 }
 
                 if ($content == Kwf_Component_Cache::NO_CACHE) { /* if loaded cache was NO_CACHE or cache disabled
@@ -273,7 +273,7 @@ abstract class Kwf_Component_Renderer_Abstract
                         }
                     }
 
-                    $statType = 'nocache'; //for statistic: was not cached
+                    $statType = 'miss'; //for statistic: was not cached
                 } else {
                     $statType = 'noviewcache'; //for statistic: view cache is disabled
                 }

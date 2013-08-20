@@ -54,4 +54,17 @@ class Kwc_Paragraphs_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
         Kwc_Admin::getInstance($c->componentClass)->makeVisible($c);
     }
+
+    public function openPreviewAction()
+    {
+        $page = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $this->_getParam('componentId'),
+            array('ignoreVisible'=>true, 'limit' => 1)
+        );
+        if (!$page) {
+            throw new Kwf_Exception_Client(trlKwf('Page not found'));
+        }
+        header('Location: '.$page->getPreviewUrl());
+        exit;
+    }
 }

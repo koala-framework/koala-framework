@@ -1,16 +1,19 @@
 Kwf.Utils.ResponsiveEl('.kwcTextImage', [420]);
 
-//remove largeText class if >70% of element is covered by image
+//remove largeText class if >55% of element is covered by image
 (function() {
 
 var initEl = function(el) {
     var img = el.child('div.image img');
     if (img) {
-        if (img.getWidth() < (el.getWidth() * 0.7)) {
+        if (img.getWidth() < (el.getWidth() * 0.55)) {
             el.addClass('largeText');
         } else {
             el.removeClass('largeText');
         }
+    }
+    if (el.child('div.text .basicText').dom.childElementCount == 0) {
+        el.addClass('noText');
     }
 };
 

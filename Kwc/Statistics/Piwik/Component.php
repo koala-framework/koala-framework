@@ -35,31 +35,18 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
 
     protected function _getDomain()
     {
-        $cfg = Kwf_Config::getValueArray('statistic');
-        return isset($cfg['piwikDomain']) ? $cfg['piwikDomain'] : null;
+        return $this->getData()->getBaseProperty('statistics.piwik.domain');
     }
 
     protected function _getIdSite()
     {
-        $cfg = Kwf_Config::getValueArray('statistic');
-        $ret = isset($cfg['piwikId']) ? $cfg['piwikId'] : null;
-
-        $ignore = false;
-        if (isset($cfg['ignore']) && $cfg['ignore']) {
-            $ignore = true;
+        $ret = null;
+        if (!$this->getData()->getBaseProperty('statistics.ignore') &&
+            !$this->getData()->getBaseProperty('statistics.piwik.ignore')
+        ) {
+            $ret = $this->getData()->getBaseProperty('statistics.piwik.id');
         }
-
-        $domain = Kwc_Root_DomainRoot_Domain_Component::getDomainComponent($this->getData());
-        if ($domain) {
-            $domains = Kwf_Config::getValueArray('kwc.domains');
-            $domain = $domains[$domain->id];
-            if (isset($domain['piwikId'])) $ret = $domain['piwikId'];
-            if (isset($domain['statistik']['ignore'])) $ignore = $domain['statistik']['ignore'];
-        }
-
-        if (!$ignore) {
-            return $ret;
-        }
+        return $ret;
     }
 
     protected function _getCustomVariables()
