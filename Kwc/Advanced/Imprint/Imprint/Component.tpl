@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass?>">
     <? if($this->row->company || $this->row->name || $this->row->address || $this->row->zipcode || $this->row->city) {?>
-        <span class="imprintHeadline"><?=$this->data->trlKwf('Operating company / responsible person for the content');?></span>
+        <span class="imprintHeadline"><?=$this->data->trlKwf('Operating company / Responsible for content');?></span>
         <p>
             <? if($this->row->company) echo $this->row->company."<br/>";?>
             <? if($this->row->name) echo $this->row->name."<br/>";?>
@@ -40,7 +40,7 @@
         </p>
     <? } ?>
     <? if($this->row->uid_number) {?>
-        <span class="imprintHeadline"><?=$this->data->trlKwf('Purchase tax-identification number');?></span>
+        <span class="imprintHeadline"><?=$this->data->trlKwf('VAT identification number');?></span>
         <p>
             <?=$this->row->uid_number;?>
         </p>
@@ -56,7 +56,7 @@
         </p>
     <? } ?>
     <? if($this->row->dvr_number) {?>
-        <span class="imprintHeadline"><?=$this->data->trlKwf('DVR-Number');?></span>
+        <span class="imprintHeadline"><?=$this->data->trlKwf('Data handling register number');?></span>
         <p>
             <?=$this->row->dvr_number;?>
         </p>

@@ -917,7 +917,9 @@ abstract class Kwf_Component_Generator_Abstract
             // Do not return page generators
             // For Page generators the dbIdShortcut is only used for components below the current
             // page in models
-            if (!$g->getGeneratorFlag('page') && $g->hasSetting('dbIdShortcut')) {
+            if (!$g->getGeneratorFlag('page') && $g->hasSetting('dbIdShortcut') &&
+                Kwc_Abstract::getIndirectChildComponentClasses($class, array('componentClass' => $this->_class))
+            ) {
                 $ret[] = $g->getSetting('dbIdShortcut');
             }
         }
