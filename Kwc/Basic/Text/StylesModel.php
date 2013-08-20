@@ -51,8 +51,8 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
             if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
             } else if (substr($file, 0, 8) == 'dynamic/') {
             } else {
-                $c = $loader->getFileContents($file);
-                $ret = array_merge($ret, self::parseMasterStyles($c['contents']));
+                $c = file_get_contents($loader->getDependencies()->getAssetPath($file));
+                $ret = array_merge($ret, self::parseMasterStyles($c));
             }
         }
         Kwf_Cache_SimpleStatic::add($cacheId, $ret);
