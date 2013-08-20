@@ -177,12 +177,13 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 var imagesToLoad = 0;
                 this.contentEl.query('img.hideWhileLoading').each(function(imgEl) {
                     imagesToLoad++;
-                    imgEl.onload = (function() {
+                    Ext.fly(imgEl).on('load', function() {
                         imagesToLoad--;
                         if (imagesToLoad <= 0) showContent.call(this);
-                    }).createDelegate(this);
+                    }, this);
                 }, this);
                 if (imagesToLoad == 0) showContent.call(this);
+
                 this.initialize();
             },
             failure: function() {
@@ -452,6 +453,30 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         Kwf.EyeCandy.Lightbox.Styles.CenterBox.superclass.updateContent.apply(this, arguments);
 
+        this.lightbox.contentEl.query('img').each(function(imgEl) {
+            var s = Ext.fly(imgEl).getSize();
+            if (s.height == 0 || s.width == 0) {
+                //img tags that set width/height: auto in css don't have size until they are loaded
+                //move the size attribute into inline style with respecting aspect ratio
+                imgEl.style.height = imgEl.getAttribute('height')+'px';
+                if (Ext.fly(imgEl).getHeight() < imgEl.getAttribute('height')) {
+                    var ratio = imgEl.getAttribute('width') / imgEl.getAttribute('height');
+                    imgEl.style.width = (ratio * Ext.fly(imgEl).getHeight())+'px';
+                }
+                imgEl.style.width = imgEl.getAttribute('width')+'px';
+                if (Ext.fly(imgEl).getWidth() < imgEl.getAttribute('width')) {
+                    var ratio = imgEl.getAttribute('height') / imgEl.getAttribute('width');
+                    imgEl.style.height = (ratio * Ext.fly(imgEl).getWidth())+'px';
+                }
+                Ext.fly(imgEl).on('load', function() {
+                    //once the img is loaded remove the style again and let css with: auto do it's work
+                    //required to be able to react to browser window change
+                    this.style.width = '';
+                    this.style.height = '';
+                }, imgEl);
+            }
+        }, this);
+
         if (!this.lightbox.options.height) this.lightbox.innerLightboxEl.dom.style.height = '';
         if (!this.lightbox.options.width) this.lightbox.innerLightboxEl.dom.style.width = '';
         if (isVisible) {
@@ -500,7 +525,6 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
             (winSize.width - this.lightbox.innerLightboxEl.getSize().width) / 2 + Ext.getBody().getScroll().left,
             (winSize.height - this.lightbox.innerLightboxEl.getSize().height) / 2 + Ext.getBody().getScroll().top
         ];
-
 
         //if lightbox is larget than viewport don't position lightbox above, the user can only scroll down
         var m = this._getOuterMargin();
