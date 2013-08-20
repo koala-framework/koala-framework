@@ -92,8 +92,6 @@
     background-position: center center;
 }
 .kwfLightbox .lightboxBody .image { z-index: 1; }
-.kwfLightbox .lightboxBody .image .centerImage { margin-bottom: -3px; }
-.kwfLightbox .lightboxBody .centerImage { margin-bottom: -3px; }
 
 .kwfLightbox .lightboxFooter p { text-align: left; margin-bottom: 0px; }
 .kwfLightbox .lightboxFooter p.imageCaption { margin-top: 10px; }
