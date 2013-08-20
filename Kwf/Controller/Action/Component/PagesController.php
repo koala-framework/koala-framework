@@ -258,7 +258,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
                 $component = $root->getComponentById($oldRow->id, array('ignoreVisible' => true));
                 while ($component) {
                     if (Kwc_Abstract::getFlag($component->componentClass, 'hasHome')) {
-                        if ($component == $homeComponent) {
+                        if ($component === $homeComponent) {
                             $oldId = $oldRow->id;
                             $oldVisible = $oldRow->visible;
                             if (!$this->_hasPermissions($oldRow, 'makeHome')) {
