@@ -13,7 +13,7 @@ class Kwc_List_Switch_LargeContentPlugin extends Kwf_Component_Plugin_Abstract
             $helper->setRenderer($renderer);
             $html = $helper->component($this->_currentItem);
             $output = preg_replace(
-                '#%largeContentBegin%.*?%largeContentEnd%#',
+                '/%largeContentBegin%.*?%largeContentEnd%/s',
                 $html,
                 $output
             );
