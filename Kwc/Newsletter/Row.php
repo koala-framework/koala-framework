@@ -50,10 +50,12 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $start = microtime(true);
         do {
             // Schlafen bis errechnet Zeit
-            $sleep = $start + 60/$mailsPerMinute * $count - microtime(true);
-            if ($sleep > 0) usleep($sleep * 1000000);
-            if ($debugOutput) {
-                //echo "sleeping {$sleep}s\n";
+            if ($this->mails_per_minute != 'fast') {
+                $sleep = $start + 60/$mailsPerMinute * $count - microtime(true);
+                if ($sleep > 0) usleep($sleep * 1000000);
+                if ($debugOutput) {
+                    echo "sleeping {$sleep}s\n";
+                }
             }
 
             // Zeile aus queue holen, falls nichts gefunden, Newsletter fertig
