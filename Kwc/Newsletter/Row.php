@@ -60,8 +60,14 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
                 }
             }
 
+            Kwf_Benchmark::enable();
+            Kwf_Benchmark::reset();
+            Kwf_Benchmark::checkpoint('start');
+            $t = microtime(true);
+
             // Zeile aus queue holen, falls nichts gefunden, Newsletter fertig
             $row = $this->getNextRow($this->id);
+            Kwf_Benchmark::checkpoint('get next recipient');
             if ($row) {
 
                 $row->status = 'sending';
@@ -85,7 +91,6 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
                     try {
                         $this->_sendMail($recipient, $debugOutput);
                         $count++;
-                        if ($debugOutput) echo '.';
                         $status = 'sent';
                     } catch (Exception $e) {
                         echo 'Exception in Sending Newsletter with id ' . $this->id . ' with recipient ' . $recipient->getMailEmail();
@@ -95,6 +100,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
                     }
                     $this->count_sent++;
                     $this->last_sent_date = date('Y-m-d H:i:s');
+                    $t = microtime(true);
                     $this->save();
                 }
 
@@ -108,6 +114,15 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
                 ))->save();
 
                 $row->delete();
+
+                Kwf_Benchmark::checkpoint('update queue');
+
+                if ($debugOutput) {
+                    if (Kwf_Benchmark::isEnabled()) {
+                        echo Kwf_Benchmark::getCheckpointOutput();
+                    }
+                    echo "$status in ".round(microtime(true)-$t, 2)."s [".round($count/(microtime(true)-$start), 1)." mails/s]\n\n";
+                }
 
                 if ($status == 'failed' && $debugOutput) {
                     echo "stopping because sending failed in debug mode\n";
@@ -158,11 +173,12 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $mc = $this->getMailComponent();
         $t = microtime(true);
         $mail = $mc->createMail($recipient);
-        //if ($debugOutput) echo "createMail: ".round((microtime(true)-$t)*1000)."ms\n";
+        if ($debugOutput) echo "createMail: ".round((microtime(true)-$t)*1000)."ms\n";
 
         $t = microtime(true);
         $mail->send();
-        //if ($debugOutput) echo "send: ".round((microtime(true)-$t)*1000)."ms\n";
+        if ($debugOutput) echo "send: ".round((microtime(true)-$t)*1000)."ms\n";
+        Kwf_Benchmark::checkpoint('send mail');
     }
 
     public function getNextRow()
