@@ -272,9 +272,7 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
                 handler : function () {
                     this._removeEditDialogForm();
                     var node = this.treePanel.tree.selModel.selNode;
-                    this.editDialog.getAutoForm().setBaseParams({
-                        componentId: node.attributes.editControllerComponentId
-                    });
+                    this.editDialog.getAutoForm().setBaseParams({});
                     this.editDialog.showEdit(node.id);
                 },
                 icon    : '/assets/silkicons/page_gear.png',
@@ -288,7 +286,6 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
                     this._removeEditDialogForm();
                     var node = this.treePanel.tree.selModel.selNode;
                     this.editDialog.getAutoForm().setBaseParams({
-                        componentId: node.attributes.editControllerComponentId,
                         parent_id: node.id
                     });
                     this.editDialog.showAdd();
