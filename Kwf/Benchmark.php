@@ -65,6 +65,7 @@ class Kwf_Benchmark
         self::$_counterLog = array();
         self::$_checkpoints = array();
         self::$_subCheckpoints = array();
+        self::$startTime = microtime(true);
     }
     public static function getCounterValue($name)
     {

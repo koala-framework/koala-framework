@@ -129,7 +129,9 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $renderer->setRecipient($recipient);
         $renderer->setHtmlStyles($this->getHtmlStyles());
         $ret = $renderer->renderComponent($this->getData());
+        Kwf_Benchmark::checkpoint('html: render');
         $ret = $this->_processPlaceholder($ret, $recipient);
+        Kwf_Benchmark::checkpoint('html: placeholder');
         $redirectComponent = $this->getData()->getChildComponent('_redirect')->getComponent();
         $ret = $redirectComponent->replaceLinks($ret, $recipient);
         Kwf_Benchmark::checkpoint('html: replaceLinks');
@@ -145,6 +147,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
                     'views', 'blank.gif');
             $imgUrl .= '?' . http_build_query($params);
             $ret .= '<img src="' . $imgUrl . '" width="1" height="1" />';
+            Kwf_Benchmark::checkpoint('html: view tracker');
         }
         return $ret;
     }
@@ -160,9 +163,12 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $renderer->setRenderFormat(Kwf_Component_Renderer_Mail::RENDER_TXT);
         $renderer->setRecipient($recipient);
         $ret = $renderer->renderComponent($this->getData());
+        Kwf_Benchmark::checkpoint('text: render');
         $ret = $this->_processPlaceholder($ret, $recipient);
+        Kwf_Benchmark::checkpoint('text: placeholder');
         $ret = str_replace('&nbsp;', ' ', $ret);
         $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
+        Kwf_Benchmark::checkpoint('text: replaceLinks');
         return $ret;
     }
 
