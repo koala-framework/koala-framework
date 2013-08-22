@@ -30,22 +30,9 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         throw new Kwf_Exception("moved to cli controller");
     }
 
-    public function sendMail($recipient, $debugOutput = false)
+    protected final function _sendMail($recipient, $debugOutput = false)
     {
-        return $this->_sendMail($recipient, $debugOutput);
-    }
-
-    protected function _sendMail($recipient, $debugOutput = false)
-    {
-        $mc = $this->getMailComponent();
-        $t = microtime(true);
-        $mail = $mc->createMail($recipient);
-        //if ($debugOutput) echo "createMail: ".round((microtime(true)-$t)*1000)."ms\n";
-
-        $t = microtime(true);
-        $mail->send();
-        //if ($debugOutput) echo "send: ".round((microtime(true)-$t)*1000)."ms\n";
-        Kwf_Benchmark::checkpoint('send mail');
+        throw new Kwf_Exception("moved to cli controller");
     }
 
     public function getNextRow()

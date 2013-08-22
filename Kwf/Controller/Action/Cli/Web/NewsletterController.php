@@ -68,11 +68,12 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
 
                     $numOfProcesses = 1;
                     if ($newsletterRow->mails_per_minute == 'fast') {
-                        $numOfProcesses = 5;
+                        $numOfProcesses = 3;
                     }
                     while (count($procs[$newsletterRow->id]) < $numOfProcesses) {
                         $cmd = "php bootstrap.php newsletter send --newsletterId=$newsletterRow->id";
                         if ($this->_getParam('debug')) $cmd .= " --debug";
+                        if ($this->_getParam('benchmark')) $cmd .= " --benchmark";
                         if ($this->_getParam('debug')) {
                             echo "\n*** starting new process...\n";
                             echo $cmd."\n";
@@ -131,7 +132,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
             Kwf_Benchmark::enable();
             Kwf_Benchmark::reset();
             Kwf_Benchmark::checkpoint('start');
-            $t = microtime(true);
+            $userStart = microtime(true);
 
             // Zeile aus queue holen, falls nichts gefunden, Newsletter fertig
             $row = $nlRow->getNextRow($nlRow->id);
@@ -159,7 +160,17 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                     $status = 'usernotfound';
                 } else {
                     try {
-                        $nlRow->sendMail($recipient, $this->_getParam('debug'));
+
+                        $mc = $nlRow->getMailComponent();
+                        $t = microtime(true);
+                        $mail = $mc->createMail($recipient);
+                        $createTime = microtime(true)-$t;
+
+                        $t = microtime(true);
+                        $mail->send();
+                        $sendTime = microtime(true)-$t;
+                        Kwf_Benchmark::checkpoint('send mail');
+
                         $count++;
                         $status = 'sent';
                     } catch (Exception $e) {
@@ -187,10 +198,13 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                 Kwf_Benchmark::checkpoint('update queue');
 
                 if ($this->_getParam('debug')) {
-                    if (Kwf_Benchmark::isEnabled()) {
-                        //echo Kwf_Benchmark::getCheckpointOutput();
+                    if (Kwf_Benchmark::isEnabled() && $this->_getParam('benchmark')) {
+                        echo Kwf_Benchmark::getCheckpointOutput();
                     }
-                    echo "$status in ".round(microtime(true)-$t, 2)."s [".round(memory_get_usage()/(1024*1024))."MB] [".round($count/(microtime(true)-$start), 1)." mails/s]\n\n";
+                    echo "[".getmypid()."] $status in ".round((microtime(true)-$userStart)*1000)."ms (";
+                    echo "create ".round($createTime*1000)."ms, ";
+                    echo "send ".round($sendTime*1000)."ms";
+                    echo ") [".round(memory_get_usage()/(1024*1024))."MB] [".round($count/(microtime(true)-$start), 1)." mails/s]\n";
                 }
 
                 if ($status == 'failed' && $this->_getParam('debug')) {
