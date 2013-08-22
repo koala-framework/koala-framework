@@ -10,44 +10,10 @@ class Kwc_Newsletter_Model extends Kwf_Model_Db_Proxy
         'Mail' => 'Kwc_Mail_Model'
     );
 
-    public function send($timeLimit = 60, $debugOutput = false)
-    {
-        // select random newsletter to send
-        $select = $this->select()
-            ->where(new Kwf_Model_Select_Expr_Or(array(
-                new Kwf_Model_Select_Expr_Equal('status', 'start'),
-                new Kwf_Model_Select_Expr_Equal('status', 'startLater'),
-                new Kwf_Model_Select_Expr_Equal('status', 'sending')
-            )))
-            ->order('RAND()');
-        $nlRow = null;
-        $id = 0;
-        foreach ($this->getRows($select) as $r) {
-            $row = $r->getNextRow($r->id);
-
-            if ($r->status == 'startLater' && time()>=strtotime($r->start_date)) {
-                $r->status = 'start';
-                $r->save();
-            }
-            // Wenn Newsletter auf "sending" ist, aber seit mehr als 5 Minuten
-            // nichts mehr gesendet wurde, auf "start" stellen
-            if ($r->status == 'sending' && time() - strtotime($r->last_sent_date) > 5*60) {
-                $r->status = 'start';
-                $r->save();
-            }
-            if ($row && ($id == 0 || $row->id < $id) && $r->status=='start') {
-                $nlRow = $r;
-                $id = $row->id;
-            }
-        }
-
-        if (!$nlRow) {
-            if ($debugOutput) {
-                echo "Nothing to send.\n";
-            }
-            return;
-        }
-
-        $nlRow->send($timeLimit, $debugOutput);
-    }
+    /**
+     * @deprecated
+     * If you need to override send to enforce a specific start time that should be implemented using sendLater
+     */
+    public final function send($timeLimit = 60, $debugOutput = false)
+    {}
 }
