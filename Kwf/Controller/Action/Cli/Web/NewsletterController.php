@@ -51,11 +51,6 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                 $rows = $model->getRows($select);
                 $activeCountRows = count($rows);
                 foreach ($rows as $newsletterRow) {
-                    if ($newsletterRow->status == 'sending' && time() - strtotime($newsletterRow->last_sent_date) < 60) {
-                        if ($this->_getParam('debug')) echo "still sending in other process ($newsletterRow->id)\n";
-                        $activeCountRows--;
-                        continue;
-                    }
                     if (!isset($procs[$newsletterRow->id])) {
                         $procs[$newsletterRow->id] = array();
                     }
