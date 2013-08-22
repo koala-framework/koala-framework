@@ -81,17 +81,17 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                         $cmd = "php bootstrap.php newsletter send --newsletterId=$newsletterRow->id";
                         if ($this->_getParam('debug')) $cmd .= " --debug";
                         if ($this->_getParam('benchmark')) $cmd .= " --benchmark";
-                        if ($this->_getParam('debug')) {
-                            echo "\n*** starting new process...\n";
-                            echo $cmd."\n";
-                        }
                         $descriptorspec = array(
                             1 => STDOUT,
                             2 => STDERR,
                         );
                         $p = new Kwf_Util_Proc($cmd, $descriptorspec);
                         $procs[$newsletterRow->id][] = $p;
-                        echo "PID: ".$p->getPid()."\n";
+                        if ($this->_getParam('debug')) {
+                            echo "\n*** started new process with PID ".$p->getPid()."\n";
+                            echo $cmd."\n";
+                        }
+                        sleep(3); //don't start all processes at the same time
                     }
                 }
 
