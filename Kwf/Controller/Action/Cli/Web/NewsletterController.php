@@ -28,6 +28,8 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
 
         $model = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Model');
 
+        $procs = array();
+
         while (true) {
             do {
                 $select = $model->select()
@@ -48,15 +50,49 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                         $activeCountRows--;
                         continue;
                     }
-                    $cmd = "php bootstrap.php newsletter send --newsletterId=$newsletterRow->id";
-                    if ($this->_getParam('debug')) $cmd .= " --debug";
-                    if ($this->_getParam('debug')) echo $cmd."\n";
-                    passthru($cmd);
+                    if (!isset($procs[$newsletterRow->id])) {
+                        $procs[$newsletterRow->id] = array();
+                    }
+
+                    //remove stopped processes (might stop because of memory limit or simply crash for some reason)
+                    foreach ($procs[$newsletterRow->id] as $k=>$p) {
+                        if (!$p->isRunning()) {
+                            echo "process ".$p->getPid()." stopped...\n";
+                            unset($procs[$newsletterRow->id][$k]);
+                        }
+                    }
+
+                    if ($this->_getParam('debug')) {
+                        echo count($procs[$newsletterRow->id])." running processes\n";
+                    }
+
+                    $numOfProcesses = 1;
+                    if ($newsletterRow->mails_per_minute == 'fast') {
+                        $numOfProcesses = 5;
+                    }
+                    while (count($procs[$newsletterRow->id]) < $numOfProcesses) {
+                        $cmd = "php bootstrap.php newsletter send --newsletterId=$newsletterRow->id";
+                        if ($this->_getParam('debug')) $cmd .= " --debug";
+                        if ($this->_getParam('debug')) {
+                            echo "\n*** starting new process...\n";
+                            echo $cmd."\n";
+                        }
+                        $descriptorspec = array(
+                            1 => STDOUT,
+                            2 => STDERR,
+                        );
+                        $p = new Kwf_Util_Proc($cmd, $descriptorspec);
+                        $procs[$newsletterRow->id][] = $p;
+                        echo "PID: ".$p->getPid()."\n";
+                    }
                 }
+
+                if ($this->_getParam('debug')) echo "sleep 10 secs (I).\n";
+                sleep(10);
 
                 Kwf_Model_Abstract::clearAllRows();
             } while($activeCountRows);
-            if ($this->_getParam('debug')) echo "sleep 10 secs.\n";
+            if ($this->_getParam('debug')) echo "sleep 10 secs (II).\n";
             sleep(10);
         }
     }
