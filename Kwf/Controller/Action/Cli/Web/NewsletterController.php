@@ -142,7 +142,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
             $userStart = microtime(true);
 
             // Zeile aus queue holen, falls nichts gefunden, Newsletter fertig
-            $row = $nlRow->getNextRow($nlRow->id);
+            $row = $nlRow->getNextQueueRow();
             Kwf_Benchmark::checkpoint('get next recipient');
             if ($row) {
 

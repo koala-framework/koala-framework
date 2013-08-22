@@ -35,7 +35,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         throw new Kwf_Exception("moved to cli controller");
     }
 
-    public function getNextRow()
+    public function getNextQueueRow()
     {
         $model = $this->getModel()->getDependentModel('Queue');
         $select = $model->select()
