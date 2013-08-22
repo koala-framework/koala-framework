@@ -51,6 +51,12 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                 $rows = $model->getRows($select);
                 $activeCountRows = count($rows);
                 foreach ($rows as $newsletterRow) {
+
+                    if ($newsletterRow->status != 'sending') {
+                        $newsletterRow->status = 'sending';
+                        $newsletterRow->save();
+                    }
+
                     if (!isset($procs[$newsletterRow->id])) {
                         $procs[$newsletterRow->id] = array();
                     }
@@ -111,8 +117,6 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
         $mailsPerMinute = $nlRow->getCountOfMailsPerMinute();
 
         // Newsletter senden initialisieren
-        $nlRow->status = 'sending';
-        $nlRow->save();
         if ($this->_getParam('debug')) {
             echo "Sending newsletters of newletterId {$nlRow->id} at a speed of $mailsPerMinute mails/minute\n";
         }
@@ -130,6 +134,13 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                     echo "sleeping {$sleep}s\n";
                 }
             }
+
+            $nlStatus = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Model')->fetchColumnByPrimaryId('status', $nlRow->id);
+            if ($nlStatus != 'sending') {
+                //break if newsletter stopped/paused
+                break;
+            }
+
 
             Kwf_Benchmark::enable();
             Kwf_Benchmark::reset();
@@ -225,11 +236,6 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
 
         } while ($row);
         $stop = microtime(true);
-
-        if ($nlRow->status == 'sending') {
-            $nlRow->status = 'start';
-            $nlRow->save();
-        }
 
         // Log schreiben
         $logModel = $nlRow->getModel()->getDependentModel('Log');
