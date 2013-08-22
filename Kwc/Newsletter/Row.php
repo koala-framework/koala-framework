@@ -25,148 +25,14 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         }
     }
 
-
     public final function send($debugOutput = false)
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        throw new Kwf_Exception("moved to cli controller");
+    }
 
-        $mailsPerMinute = $this->_getCountOfMailsPerMinute();
-
-        // Newsletter senden initialisieren
-        $this->status = 'sending';
-        $this->save();
-        if ($debugOutput) {
-            echo "Sending newsletters of newletterId {$this->id} at a speed of $mailsPerMinute mails/minute\n";
-        }
-
-        // In Schleife senden
-        $queueLogModel = $this->getModel()->getDependentModel('QueueLog');
-        $count = 0; $countErrors = 0; $countNoUser = 0;
-        $start = microtime(true);
-        do {
-            // Schlafen bis errechnet Zeit
-            if ($this->mails_per_minute != 'fast') {
-                $sleep = $start + 60/$mailsPerMinute * $count - microtime(true);
-                if ($sleep > 0) usleep($sleep * 1000000);
-                if ($debugOutput) {
-                    echo "sleeping {$sleep}s\n";
-                }
-            }
-
-            Kwf_Benchmark::enable();
-            Kwf_Benchmark::reset();
-            Kwf_Benchmark::checkpoint('start');
-            $t = microtime(true);
-
-            // Zeile aus queue holen, falls nichts gefunden, Newsletter fertig
-            $row = $this->getNextRow($this->id);
-            Kwf_Benchmark::checkpoint('get next recipient');
-            if ($row) {
-
-                if ($row->status != 'sending') {
-                    $row->status = 'sending';
-                    $row->save();
-                }
-
-                $recipient = $row->getRecipient();
-                if (!$recipient || !$recipient->getMailEmail()) {
-                    $countNoUser++;
-                    $status = 'usernotfound';
-                } else if ($recipient instanceof Kwc_Mail_Recipient_UnsubscribableInterface &&
-                    $recipient->getMailUnsubscribe())
-                {
-                    $countNoUser++;
-                    $status = 'usernotfound';
-                } else if ($recipient instanceof Kwf_Model_Row_Abstract &&
-                    $recipient->hasColumn('activated') && !$recipient->activated)
-                {
-                    $countNoUser++;
-                    $status = 'usernotfound';
-                } else {
-                    try {
-                        $this->_sendMail($recipient, $debugOutput);
-                        $count++;
-                        $status = 'sent';
-                    } catch (Exception $e) {
-                        echo 'Exception in Sending Newsletter with id ' . $this->id . ' with recipient ' . $recipient->getMailEmail();
-                        echo $e->__toString();
-                        $countErrors++;
-                        $status = 'failed';
-                    }
-                    $this->count_sent++;
-                    $this->last_sent_date = date('Y-m-d H:i:s');
-                    $this->save();
-                }
-
-                $queueLogModel->createRow(array(
-                    'newsletter_id' => $row->newsletter_id,
-                    'recipient_model' => $row->recipient_model,
-                    'recipient_id' => $row->recipient_id,
-                    'searchtext' => $row->searchtext,
-                    'status' => $status,
-                    'send_date' => date('Y-m-d H:i:s')
-                ))->save();
-
-                $row->delete();
-
-                Kwf_Benchmark::checkpoint('update queue');
-
-                if ($debugOutput) {
-                    if (Kwf_Benchmark::isEnabled()) {
-                        echo Kwf_Benchmark::getCheckpointOutput();
-                    }
-                    echo "$status in ".round(microtime(true)-$t, 2)."s [".round(memory_get_usage()/(1024*1024))."MB] [".round($count/(microtime(true)-$start), 1)." mails/s]\n\n";
-                }
-
-                if ($status == 'failed' && $debugOutput) {
-                    echo "stopping because sending failed in debug mode\n";
-                    break;
-                }
-
-                if (memory_get_usage() > 100*1024*1024) {
-                    if ($debugOutput) {
-                        echo "stopping because of >100MB memory usage\n";
-                    }
-                    break;
-                }
-
-            } else {
-
-                $this->status = 'finished';
-                $this->save();
-
-            }
-
-        } while ($row);
-        $stop = microtime(true);
-
-        if ($this->status == 'sending') {
-            $this->status = 'start';
-            $this->save();
-        }
-
-        // Log schreiben
-        $logModel = $this->getModel()->getDependentModel('Log');
-        $row = $logModel->createRow(array(
-            'newsletter_id' => $this->id,
-            'start' => date('Y-m-d H:i:s', floor($start)),
-            'stop' => date('Y-m-d H:i:s', floor($stop)),
-            'count' => $count,
-            'countErrors' => $countErrors
-        ));
-        $row->save();
-
-        // Debugmeldungen
-        if ($debugOutput) {
-            $average = round($count/($stop-$start)*60);
-            $info = $this->getInfo();
-            echo "\n";
-            echo "$count Newsletters sent ($average/minute), $countErrors errors, $countNoUser user not found.\n";
-            echo $info['text'] . "\n";
-            if ($this->status == 'finished') echo "Newsletter finished.\n";
-        }
-
-        Kwf_Component_ModelObserver::getInstance()->enable();
+    public function sendMail($recipient, $debugOutput = false)
+    {
+        return $this->_sendMail($recipient, $debugOutput);
     }
 
     protected function _sendMail($recipient, $debugOutput = false)
@@ -174,11 +40,11 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $mc = $this->getMailComponent();
         $t = microtime(true);
         $mail = $mc->createMail($recipient);
-        if ($debugOutput) echo "createMail: ".round((microtime(true)-$t)*1000)."ms\n";
+        //if ($debugOutput) echo "createMail: ".round((microtime(true)-$t)*1000)."ms\n";
 
         $t = microtime(true);
         $mail->send();
-        if ($debugOutput) echo "send: ".round((microtime(true)-$t)*1000)."ms\n";
+        //if ($debugOutput) echo "send: ".round((microtime(true)-$t)*1000)."ms\n";
         Kwf_Benchmark::checkpoint('send mail');
     }
 
@@ -208,7 +74,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $queueLogModel = $this->getModel()->getDependentModel('QueueLog');
         $select = new Kwf_Model_Select();
 
-        $seconds = ($ret['queued'] / $this->_getCountOfMailsPerMinute()) * 60;
+        $seconds = ($ret['queued'] / $this->getCountOfMailsPerMinute()) * 60;
         $hours = floor($seconds / 3600);
         $seconds -= $hours * 3600;
         $minutes = floor($seconds / 60);
@@ -249,7 +115,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
             ->getComponent();
     }
 
-    protected function _getCountOfMailsPerMinute()
+    public function getCountOfMailsPerMinute()
     {
         $mailsPerMinute = 30;
         if ($this->mails_per_minute == 'fast') {
