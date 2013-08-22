@@ -35,15 +35,28 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         throw new Kwf_Exception("moved to cli controller");
     }
 
-    public function getNextQueueRow()
+    public function getNextQueueRow($sendProcessPid)
     {
-        $model = $this->getModel()->getDependentModel('Queue');
-        $select = $model->select()
-            ->whereEquals('status', 'queued')
-            ->whereEquals('newsletter_id', $this->id)
-            ->order('id')
-            ->limit(1);
-        return $model->getRow($select);
+        while (true) {
+            $model = $this->getModel()->getDependentModel('Queue');
+            $select = $model->select()
+                ->whereEquals('newsletter_id', $this->id)
+                ->whereNull('send_process_pid')
+                ->order('id')
+                ->limit(1);
+            $row = $model->getRow($select);
+            if (!$row) return null; //queue empty
+
+            $model->getTable()->update(
+                array(
+                    'send_process_pid'=>$sendProcessPid,
+                ),
+                "id={$row->id} AND ISNULL(send_process_pid)"
+            );
+            $pid = $model->fetchColumnByPrimaryId('send_process_pid', $row->id);
+            if ($pid == $sendProcessPid) return $row;
+            //else another process has taken our row, try again
+        }
     }
 
     public function getInfo()
@@ -54,7 +67,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $ret['state']    = $this->status;
         $ret['sent']     = $this->count_sent;
         $ret['total']    = $queue->countRows($select) + $this->count_sent;
-        $ret['queued']   = $queue->countRows($select->whereEquals('status', 'queued'));
+        $ret['queued']   = $queue->countRows($select->whereNull('send_process_pid'));
         $ret['lastSentDate'] = strtotime($this->last_sent_date);
         $ret['speed'] = $this->mails_per_minute;
 

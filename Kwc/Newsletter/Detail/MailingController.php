@@ -53,7 +53,6 @@ class Kwc_Newsletter_Detail_MailingController extends Kwf_Controller_Action_Auto
             ->whereEquals('newsletter_id', $this->_getNewsletterRow()->id);
         $count = $this->_model->countRows($select);
 
-        $select->whereEquals('status', 'queued');
         $count2 = $this->_model->countRows($select);
         $this->_model->deleteRows($select);
         $this->view->message = trlKwf(
