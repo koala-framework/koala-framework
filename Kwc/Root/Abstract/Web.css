@@ -39,3 +39,9 @@ ul.webListNone,
     position: absolute;
     padding: 5px;
 }
+
+@media only screen and (max-width : 1024px) {
+    .outerBenchmarkBox {
+        display: none;
+    }
+}
