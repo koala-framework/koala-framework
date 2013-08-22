@@ -28,6 +28,8 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
 
     public function send($timeLimit = 60, $debugOutput = false)
     {
+        Kwf_Component_ModelObserver::getInstance()->disable();
+
         if ($timeLimit) {
             set_time_limit($timeLimit + 10);
         } else {
@@ -147,6 +149,8 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
             echo $info['text'] . "\n";
             if ($this->status == 'finished') echo "Newsletter finished.\n";
         }
+
+        Kwf_Component_ModelObserver::getInstance()->enable();
     }
 
     protected function _sendMail($recipient, $debugOutput = false)
