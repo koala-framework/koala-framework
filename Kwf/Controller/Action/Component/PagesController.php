@@ -88,6 +88,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
 
         //default werte
         $data['actions'] = array_merge(array(
+            'properties' => !$data['disabled'],
             'delete' => false,
             'copy' => false,
             'paste' => false,
