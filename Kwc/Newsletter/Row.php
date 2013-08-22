@@ -70,8 +70,10 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
             Kwf_Benchmark::checkpoint('get next recipient');
             if ($row) {
 
-                $row->status = 'sending';
-                $row->save();
+                if ($row->status != 'sending') {
+                    $row->status = 'sending';
+                    $row->save();
+                }
 
                 $recipient = $row->getRecipient();
                 if (!$recipient || !$recipient->getMailEmail()) {
