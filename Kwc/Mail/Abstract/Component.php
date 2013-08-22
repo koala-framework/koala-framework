@@ -127,15 +127,12 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $renderer = new Kwf_Component_Renderer_Mail();
         $renderer->setRenderFormat(Kwf_Component_Renderer_Mail::RENDER_HTML);
         $renderer->setRecipient($recipient);
+        $renderer->setHtmlStyles($this->getHtmlStyles());
         $ret = $renderer->renderComponent($this->getData());
         $ret = $this->_processPlaceholder($ret, $recipient);
         $redirectComponent = $this->getData()->getChildComponent('_redirect')->getComponent();
         $ret = $redirectComponent->replaceLinks($ret, $recipient);
-        $htmlStyles = $this->getHtmlStyles();
-        if ($htmlStyles){
-            $p = new Kwc_Mail_HtmlParser($htmlStyles);
-            $ret = $p->parse($ret);
-        }
+        Kwf_Benchmark::checkpoint('html: replaceLinks');
         if ($addViewTracker && $this->_getSetting('trackViews')) {
             $params = array();
             if ($recipient->id) $params['recipientId'] = urlencode($recipient->id);
