@@ -13,57 +13,60 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                 'param'=> 'debug',
                 'value'=> false,
                 'valueOptional' => true,
-            ),
-            array(
-                'param'=> 'timeLimit',
-                'value'=> 55,
-                'valueOptional' => true,
             )
         );
     }
 
     public function indexAction()
     {
+        throw new Kwf_Exception_Client("Don't call Newsletter controller directly. Use process-control to start 'php bootstrap.php newsletter start' instead.");
+    }
+
+    public function startAction()
+    {
         $this->_helper->viewRenderer->setNoRender(true);
 
         $model = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Model');
 
-        // select random newsletter to send
-        $select = $this->select()
-            ->where(new Kwf_Model_Select_Expr_Or(array(
-                new Kwf_Model_Select_Expr_Equal('status', 'start'),
-                new Kwf_Model_Select_Expr_Equal('status', 'startLater'),
-                new Kwf_Model_Select_Expr_Equal('status', 'sending')
-            )))
-            ->order('RAND()');
-        $nlRow = null;
-        $id = 0;
-        foreach ($this->getRows($select) as $r) {
-            $row = $r->getNextRow($r->id);
+        while (true) {
+            do {
+                $select = $model->select()
+                    ->where(new Kwf_Model_Select_Expr_Or(array(
+                        new Kwf_Model_Select_Expr_Equal('status', 'start'),
+                        new Kwf_Model_Select_Expr_And(array(
+                            new Kwf_Model_Select_Expr_Equal('status', 'startLater'),
+                            new Kwf_Model_Select_Expr_HigherEqual('start_date', new Kwf_DateTime(time())),
+                        )),
+                        new Kwf_Model_Select_Expr_Equal('status', 'sending')
+                    )))
+                    ->order('RAND()');
+                $rows = $model->getRows($select);
+                $activeCountRows = count($rows);
+                foreach ($rows as $newsletterRow) {
+                    if ($newsletterRow->status == 'sending' && time() - strtotime($newsletterRow->last_sent_date) < 60) {
+                        if ($this->_getParam('debug')) echo "still sending in other process ($newsletterRow->id)\n";
+                        $activeCountRows--;
+                        continue;
+                    }
+                    $cmd = "php bootstrap.php newsletter send --newsletterId=$newsletterRow->id";
+                    if ($this->_getParam('debug')) $cmd .= " --debug";
+                    if ($this->_getParam('debug')) echo $cmd."\n";
+                    passthru($cmd);
+                }
 
-            if ($r->status == 'startLater' && time()>=strtotime($r->start_date)) {
-                $r->status = 'start';
-                $r->save();
-            }
-            // Wenn Newsletter auf "sending" ist, aber seit mehr als 5 Minuten
-            // nichts mehr gesendet wurde, auf "start" stellen
-            if ($r->status == 'sending' && time() - strtotime($r->last_sent_date) > 5*60) {
-                $r->status = 'start';
-                $r->save();
-            }
-            if ($row && ($id == 0 || $row->id < $id) && $r->status=='start') {
-                $nlRow = $r;
-                $id = $row->id;
-            }
+                Kwf_Model_Abstract::clearAllRows();
+            } while($activeCountRows);
+            if ($this->_getParam('debug')) echo "sleep 10 secs.\n";
+            sleep(10);
         }
+    }
 
-        if (!$nlRow) {
-            if ($this->_getParam('debug')) {
-                echo "Nothing to send.\n";
-            }
-            return;
-        }
+    public function sendAction()
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
 
-        $nlRow->send($this->_getParam('timeLimit'), $this->_getParam('debug'));
+        $newsletterId = $this->_getParam('newsletterId');
+        $nlRow = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Model')->getRow($newsletterId);
+        $nlRow->send($this->_getParam('debug'));
     }
 }
