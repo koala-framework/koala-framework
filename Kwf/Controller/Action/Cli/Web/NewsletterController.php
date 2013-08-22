@@ -16,6 +16,12 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
             )
         );
     }
+    /*
+    possible parameters:
+    --maxProcesses
+    --debug
+    --benchmark
+    */
 
     public function indexAction()
     {
@@ -68,7 +74,8 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
 
                     $numOfProcesses = 1;
                     if ($newsletterRow->mails_per_minute == 'fast') {
-                        $numOfProcesses = 3;
+                        $numOfProcesses = $this->_getParam('maxProcesses');
+                        if (!$numOfProcesses) $numOfProcesses = 3;
                     }
                     while (count($procs[$newsletterRow->id]) < $numOfProcesses) {
                         $cmd = "php bootstrap.php newsletter send --newsletterId=$newsletterRow->id";
