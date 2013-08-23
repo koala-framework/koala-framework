@@ -16,6 +16,21 @@
             float: left;
         }
     }
+    &.gt659 ul li.current {
+        border: none;
+        border-bottom: 1px solid #ccc;
+        background: var(light);
+        position: relative;
+        z-index: 3;
+        background: var(light);
+        position: relative;
+        z-index: 3;
+
+        &.hasSubmenu {
+            border: 1px solid #ccc;
+            border-bottom: none;
+        }
+    }
     ul li {
         position: relative;
         z-index: 0;
@@ -24,57 +39,61 @@
         a {
             padding: 10px 10px 11px;
             margin-bottom: 0px;
-            background: #efefef;
             position: relative;
-            font-size: 15px;
+            font-size: 16px;
             z-index: 2;
             position: relative;
             display: block;
-
-            &:after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 50%;
-                top: 0px;
-                left: 0px;
-                background: #f6f6f6;
-                z-index: -1;
-            }
+            text-transform: uppercase;
+            font-family: 'Univers LT W01 55 Roman';
             &:hover {
-                background: var(secColor);
-                color: var(light);
+                color: var(secColor);
 
-                &:after {
-                    content: '';
-                    position: absolute;
-                    width: 100%;
-                    height: 50%;
-                    top: 0px;
-                    left: 0px;
-                    background: #e17373;
-                    z-index: -1;
-                }
             }
         }
         &.current a {
-            background: var(secColor);
-            color: var(light);
+            color: var(secColor);
 
-            &:after {
-                content: '';
-                position: absolute;
-                width: 100%;
-                height: 50%;
-                top: 0px;
-                left: 0px;
-                background: #e17373;
-                z-index: -1;
-            }
         }
     }
     &.webStandard ul.menu {
         margin-bottom: 0px;
         margin-left: 0px;
     }
+
+    ul li:hover .dropdown {
+        display: none;
+    }
+    .dropdown {
+        margin-top: -3px;
+        display: none;
+        
+        ul {
+            padding: 20px 50px 20px 20px;
+            background: var(light);
+    
+            li {
+            padding: 5px;
+    
+                a {
+                    text-transform: uppercase;
+                    color: var(typo);
+                    font-size: 14px;
+                    font-famiy: 'Univers LT W01 55 Roman';
+
+                    &:hover {
+                        color: var(secColor);
+                    }
+                }
+            }
+        }
+    }
+    
+
+}
+body.gt960 .cssClass ul li:hover .dropdown {
+    display: none;
+}
+body.gt1100 .cssClass ul li:hover .dropdown {
+    display: block;
 }

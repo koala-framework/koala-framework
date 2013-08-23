@@ -8,12 +8,14 @@
         <!--[if (gte IE 6)&(lte IE 8)]>
         <script type="text/javascript" src="/assets/jquerySelectivizr/selectivizr.min.js"></script>
         <![endif]-->
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link type="text/css" rel="stylesheet" href="http://fast.fonts.net/cssapi/245016a6-66c1-4998-9b9c-874900361e1f.css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
     </head>
     <body class="<?=$this->cssClass?>">
         <div id="outerBg">
             <?=$this->component($this->boxes['background']);?>
         </div>
+        <div id="mask"></div>
         <div id="page">
             <div id="outerHeader">
                 <div id="header">
@@ -22,11 +24,20 @@
                             <?=$this->component($this->boxes['logo']);?>
                         </a>
                     </div>
-                    <div class="searchBox">
-                        <?=$this->component($this->boxes['searchBox']);?>
-                    </div>
-                    <div class="mainMenu">
-                        <?=$this->component($this->boxes['mainMenu']);?>
+                    <div class="rightBox">
+                        <div class="searchBox">
+                            <?=$this->component($this->boxes['searchBox']);?>
+                        </div>
+                        <div class="topMenu">
+                            <?=$this->component($this->boxes['topMenu']);?>
+                        </div>
+                        <div class="mainMenu">
+                            <?=$this->component($this->boxes['mainMenu']);?>
+                        </div>
+                        <div class="verticalMenu">
+                            <?=$this->component($this->boxes['verticalMenu']);?>
+                        </div>
+                        <div class="clear"></div>
                     </div>
                     <div class="clear"></div>
                     <div class="subMenuHorizontal">
@@ -52,28 +63,24 @@
                         <div class="centerColumn">
                             <?=$this->componentWithMaster($this->componentWithMaster);?>
                         </div>
+                        <!--
                         <div class="rightColumn">
                             <?=$this->component($this->boxes['rightBox']);?>
                         </div>
+                        -->
                         <div class="clear"></div>
-                    </div>
-                </div>
-            </div>
-            <div id="outerBottomStage">
-                <div id="bottomStage">
-                    <div class="bottomStageShadow"></div>
-                    <div class="innerBottomStage">
-                        <?=$this->component($this->boxes['bottomStage']);?>
                     </div>
                 </div>
             </div>
         </div>
         <div id="outerFooter">
             <div id="footer">
+                <div class="leftArea">
+                    <?=$this->component($this->boxes['footerImage']);?>
+                </div>
                 <div class="bottomMenu">
                     <?=$this->component($this->boxes['bottomMenu']);?>
                 </div>
-                <div class="leftArea"></div>
             </div>
         </div>
         <?=$this->includeCode('footer')?>
