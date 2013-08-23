@@ -233,7 +233,7 @@ $preloadClasses[] = 'Kwf_Cache';
             foreach ($ip as $path) {
                 $file = $path.'/'.str_replace('_', '/', $cls).'.php';
                 if (file_exists($file)) {
-                    $ret .= "require_once('".$file."');\n";
+                    $ret .= "if (!class_exists('$cls', false) && !interface_exists('$cls', false)) require('".$file."');\n";
                     break;
                 }
             }
