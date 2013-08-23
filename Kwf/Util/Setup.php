@@ -54,15 +54,17 @@ class Kwf_Util_Setup
             'Kwf_Loader',
             'Kwf_Debug',
         );
+        $ret .= "if (!class_exists('Zend_Registry', false)) {\n";
         foreach ($preloadClasses as $cls) {
             foreach ($ip as $path) {
                 $file = $path.'/'.str_replace('_', '/', $cls).'.php';
                 if (file_exists($file)) {
-                    $ret .= "require_once('".$file."');\n";
+                    $ret .= "require('".$file."');\n";
                     break;
                 }
             }
         }
+        $ret .= "}\n";
 
         $ret .= "Kwf_Benchmark::\$startTime = microtime(true);\n";
         $ret .= "\n";
@@ -167,13 +169,8 @@ class Kwf_Util_Setup
         }
 
         $preloadClasses = array(
-            'Zend_Registry',
-            'Kwf_Registry',
-            'Kwf_Benchmark',
-            'Kwf_Loader',
             'Kwf_Config',
             'Kwf_Cache_Simple',
-            'Kwf_Debug',
             'Kwf_Trl',
         );
 $preloadClasses[] = 'Kwf_Util_Https';
@@ -229,11 +226,12 @@ $preloadClasses[] = 'Kwf_Cache';
             $preloadClasses[] = 'Kwf_Util_SessionToken';
 
         }
+        $ret .= "if (!class_exists('Kwf_Config', false)) {\n";
         foreach ($preloadClasses as $cls) {
             foreach ($ip as $path) {
                 $file = $path.'/'.str_replace('_', '/', $cls).'.php';
                 if (file_exists($file)) {
-                    $ret .= "if (!class_exists('$cls', false) && !interface_exists('$cls', false)) require('".$file."');\n";
+                    $ret .= "    require('".$file."');\n";
                     break;
                 }
             }
