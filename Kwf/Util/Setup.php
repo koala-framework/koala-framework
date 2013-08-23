@@ -179,7 +179,6 @@ $preloadClasses[] = 'Kwf_Util_SessionHandler';
 $preloadClasses[] = 'Kwf_Util_Memcache';
 $preloadClasses[] = 'Zend_Session';
 $preloadClasses[] = 'Kwf_Benchmark_Counter';
-$preloadClasses[] = 'Kwf_Benchmark_Counter_Interface';
 $preloadClasses[] = 'Kwf_Benchmark_Counter_Apc';
 
 //$preloadClasses[] = 'Kwf_Component_Data_Home';

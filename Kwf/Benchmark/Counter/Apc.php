@@ -1,5 +1,5 @@
 <?php
-class Kwf_Benchmark_Counter_Apc implements Kwf_Benchmark_Counter_Interface
+class Kwf_Benchmark_Counter_Apc
 {
     public function increment($name, $value=1)
     {
