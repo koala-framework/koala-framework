@@ -1,10 +1,29 @@
 <?php
 class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
 {
+    protected static function _getGroupedViewPlugins(Kwf_Component_Data $component)
+    {
+        $plugins = array();
+        foreach ($component->getComponent()->getActiveViewPlugins() as $p) {
+            if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewBeforeCache')) {
+                $plugins['beforeCache'][] = $p;
+            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewBeforeChildRender')) {
+                $plugins['before'][] = $p;
+            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewAfterChildRender')) {
+                $plugins['after'][] = $p;
+            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewReplace')) {
+                $plugins['replace'][] = $p;
+            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_UseViewCache')) {
+                $plugins['useCache'][] = $p;
+            }
+        }
+        return $plugins;
+    }
+
     public function component(Kwf_Component_Data $component = null)
     {
         if (!$component) return '';
-        $plugins = self::_getGroupedViewPlugins($component->componentClass);
+        $plugins = self::_getGroupedViewPlugins($component);
         $viewCacheSettings = $component->getComponent()->getViewCacheSettings();
         return $this->_getRenderPlaceholder(
             $component->componentId, array(), null, $plugins, $viewCacheSettings['enabled']
