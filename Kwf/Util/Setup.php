@@ -167,11 +167,33 @@ class Kwf_Util_Setup
         }
 
         $preloadClasses = array(
+            'Zend_Registry',
+            'Kwf_Registry',
+            'Kwf_Benchmark',
             'Kwf_Loader',
             'Kwf_Config',
             'Kwf_Cache_Simple',
+            'Kwf_Debug',
             'Kwf_Trl',
         );
+$preloadClasses[] = 'Kwf_Util_Https';
+$preloadClasses[] = 'Kwf_Cache_SimpleStatic';
+$preloadClasses[] = 'Kwf_Util_SessionHandler';
+$preloadClasses[] = 'Zend_Cache_Core';
+$preloadClasses[] = 'Zend_Cache_Backend_Memcached';
+$preloadClasses[] = 'Kwf_Cache_Backend_Memcached';
+$preloadClasses[] = 'Kwf_Util_Memcache';
+$preloadClasses[] = 'Zend_Session';
+$preloadClasses[] = 'Kwf_Benchmark_Counter';
+$preloadClasses[] = 'Kwf_Benchmark_Counter_Interface';
+$preloadClasses[] = 'Kwf_Benchmark_Counter_Apc';
+$preloadClasses[] = 'Zend_Cache';
+$preloadClasses[] = 'Kwf_Cache';
+
+//$preloadClasses[] = 'Kwf_Component_Data_Home';
+// $preloadClasses[] = 'Kwc_Abstract_Composite_Component';
+// $preloadClasses[] = 'Kwc_Statistics_OptBox_Component';
+// $preloadClasses[] = 'Statistics_OptBox_Component';
         if (Kwf_Component_Data_Root::getComponentClass()) {
             //only load component related classes if it is a component web
             $preloadClasses[] = 'Kwf_Model_Select';
@@ -180,14 +202,32 @@ class Kwf_Util_Setup
             $preloadClasses[] = 'Kwf_Component_Select';
             $preloadClasses[] = 'Kwf_Component_Abstract';
             $preloadClasses[] = 'Kwc_Abstract';
+            $preloadClasses[] = 'Kwf_Component_Settings';
+            $preloadClasses[] = 'Kwc_Paragraphs_Component';
             $preloadClasses[] = 'Kwf_Component_Renderer_Abstract';
             $preloadClasses[] = 'Kwf_Component_Renderer';
             $preloadClasses[] = 'Kwf_Component_Cache';
             $preloadClasses[] = 'Kwf_Component_Cache_Mysql';
+            $preloadClasses[] = 'Kwf_Component_Cache_Memory';
             $preloadClasses[] = 'Kwf_Component_View_Helper_Abstract';
             $preloadClasses[] = 'Kwf_Component_View_Renderer';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_Master';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_Component';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_ComponentLink';
+            $preloadClasses[] = 'Kwf_View_Helper_Link';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Abstract';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Default';
+
+            $preloadClasses[] = 'Kwf_Component_Plugin_Abstract';
+            $preloadClasses[] = 'Kwf_Component_Plugin_Interface_ViewBeforeChildRender';
+            $preloadClasses[] = 'Kwc_Statistics_CookieAfterPlugin';
+            $preloadClasses[] = 'Kwf_Statistics';
+            $preloadClasses[] = 'Kwc_Menu_Abstract_HideInvisibleDynamicPlugin';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_Dynamic';
+            $preloadClasses[] = 'Kwf_Component_Dynamic_Abstract';
+            $preloadClasses[] = 'Kwf_Component_Dynamic_SessionToken';
+            $preloadClasses[] = 'Kwf_Util_SessionToken';
+
         }
         foreach ($preloadClasses as $cls) {
             foreach ($ip as $path) {
