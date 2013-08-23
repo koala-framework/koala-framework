@@ -176,16 +176,11 @@ class Kwf_Util_Setup
 $preloadClasses[] = 'Kwf_Util_Https';
 $preloadClasses[] = 'Kwf_Cache_SimpleStatic';
 $preloadClasses[] = 'Kwf_Util_SessionHandler';
-$preloadClasses[] = 'Zend_Cache_Core';
-$preloadClasses[] = 'Zend_Cache_Backend_Memcached';
-$preloadClasses[] = 'Kwf_Cache_Backend_Memcached';
 $preloadClasses[] = 'Kwf_Util_Memcache';
 $preloadClasses[] = 'Zend_Session';
 $preloadClasses[] = 'Kwf_Benchmark_Counter';
 $preloadClasses[] = 'Kwf_Benchmark_Counter_Interface';
 $preloadClasses[] = 'Kwf_Benchmark_Counter_Apc';
-$preloadClasses[] = 'Zend_Cache';
-$preloadClasses[] = 'Kwf_Cache';
 
 //$preloadClasses[] = 'Kwf_Component_Data_Home';
 // $preloadClasses[] = 'Kwc_Abstract_Composite_Component';

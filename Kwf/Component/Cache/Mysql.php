@@ -51,7 +51,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $cacheId = $this->_getCacheId($component->componentId, $renderer, $type, $value);
         $ttl = null;
         if ($lifetime) $ttl = $lifetime;
-        Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, array(), $ttl);
+        Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, $ttl);
         return true;
     }
 
@@ -91,7 +91,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 if ($row[0]['expire']) {
                     $ttl = $row[0]['expire']-time();
                 }
-                Kwf_Component_Cache_Memory::getInstance()->save($row[0]['content'], $cacheId, array(), $ttl);
+                Kwf_Component_Cache_Memory::getInstance()->save($row[0]['content'], $cacheId, $ttl);
                 $data = array(
                     'contents' => $row[0]['content'],
                     'expire' => $row[0]['expire']
