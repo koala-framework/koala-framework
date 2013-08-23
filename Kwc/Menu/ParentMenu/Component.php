@@ -14,6 +14,11 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
         return $ret;
     }
 
+    public function getActiveViewPlugins()
+    {
+        return $this->_getParentContentData()->getComponent()->getActiveViewPlugins();
+    }
+
     private function _getParentContentData()
     {
         $data = $this->getData();
