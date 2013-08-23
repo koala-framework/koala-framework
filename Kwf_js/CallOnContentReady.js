@@ -7,6 +7,17 @@
  * */
 Kwf._readyHandlers = [];
 
+if (!Kwf.isApp) {
+    $(document).ready(function() {
+        if (!document.body) {
+            //this happens if a redirect by changing location in JS is done
+            //in that case no contentReady needs to be called
+            return;
+        }
+        Kwf.callOnContentReady(document.body, { newRender: true });
+    });
+}
+
 Kwf.callOnContentReady = function(el, options) {
     if (!options) options = {};
     if (Ext.Element && el instanceof Ext.Element) el = el.dom;

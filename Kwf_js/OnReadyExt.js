@@ -14,19 +14,6 @@ Kwf.onContentReady = function(fn, scope, options) {
     });
 };
 
-
-if (!Kwf.isApp) {
-    $(document).ready(function()
-    {
-        if (!document.body) {
-            //this happens if a redirect by changing location in JS is done
-            //in that case no contentReady needs to be called
-            return;
-        }
-        Kwf.callOnContentReady(document.body, { newRender: true });
-    });
-}
-
 /**
  * Add a callback function that gets called once for every element that appears
  * in the dom tree
