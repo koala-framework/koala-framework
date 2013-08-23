@@ -180,11 +180,6 @@ $preloadClasses[] = 'Kwf_Util_Memcache';
 $preloadClasses[] = 'Zend_Session';
 $preloadClasses[] = 'Kwf_Benchmark_Counter';
 $preloadClasses[] = 'Kwf_Benchmark_Counter_Apc';
-
-//$preloadClasses[] = 'Kwf_Component_Data_Home';
-// $preloadClasses[] = 'Kwc_Abstract_Composite_Component';
-// $preloadClasses[] = 'Kwc_Statistics_OptBox_Component';
-// $preloadClasses[] = 'Statistics_OptBox_Component';
         if (Kwf_Component_Data_Root::getComponentClass()) {
             //only load component related classes if it is a component web
             $preloadClasses[] = 'Kwf_Model_Select';
@@ -209,11 +204,6 @@ $preloadClasses[] = 'Kwf_Benchmark_Counter_Apc';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Abstract';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Default';
 
-            $preloadClasses[] = 'Kwf_Component_Plugin_Abstract';
-            $preloadClasses[] = 'Kwf_Component_Plugin_Interface_ViewBeforeChildRender';
-            $preloadClasses[] = 'Kwc_Statistics_CookieAfterPlugin';
-            $preloadClasses[] = 'Kwf_Statistics';
-            $preloadClasses[] = 'Kwc_Menu_Abstract_HideInvisibleDynamicPlugin';
             $preloadClasses[] = 'Kwf_Component_View_Helper_Dynamic';
             $preloadClasses[] = 'Kwf_Component_Dynamic_Abstract';
             $preloadClasses[] = 'Kwf_Component_Dynamic_SessionToken';
