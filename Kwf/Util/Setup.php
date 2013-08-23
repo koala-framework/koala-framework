@@ -180,17 +180,12 @@ class Kwf_Util_Setup
             $preloadClasses[] = 'Kwf_Component_Select';
             $preloadClasses[] = 'Kwf_Component_Abstract';
             $preloadClasses[] = 'Kwc_Abstract';
-            $preloadClasses[] = 'Kwc_Paragraphs_Component';
             $preloadClasses[] = 'Kwf_Component_Renderer_Abstract';
             $preloadClasses[] = 'Kwf_Component_Renderer';
             $preloadClasses[] = 'Kwf_Component_Cache';
             $preloadClasses[] = 'Kwf_Component_Cache_Mysql';
             $preloadClasses[] = 'Kwf_Component_View_Helper_Abstract';
             $preloadClasses[] = 'Kwf_Component_View_Renderer';
-            $preloadClasses[] = 'Kwf_Component_View_Helper_Master';
-            $preloadClasses[] = 'Kwf_Component_View_Helper_Component';
-            $preloadClasses[] = 'Kwf_Component_View_Helper_ComponentLink';
-            $preloadClasses[] = 'Kwf_View_Helper_Link';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Abstract';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Default';
         }
