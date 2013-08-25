@@ -66,34 +66,6 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
     public abstract function render($componentId, $config);
 
     /**
-     * schreibt den cache, kann überschrieben werden um den cache zu deaktivieren
-     *
-     * wird nur aufgerufen wenn ungecached (logisch)
-     */
-    public function saveCache($componentId, $renderer, $config, $value, $content, $lifetime)
-    {
-        $component = $this->_getComponentById($componentId);
-        $type = $this->_getType();
-
-        $settings = $this->getViewCacheSettings($componentId);
-        if (!$settings['enabled']) {
-            $content = Kwf_Component_Cache::NO_CACHE;
-        }
-
-        // Content-Cache
-        Kwf_Component_Cache::getInstance()->save(
-            $component,
-            $content,
-            $renderer,
-            $type,
-            $value,
-            isset($settings['lifetime']) ? $settings['lifetime'] : null
-        );
-
-        return true;
-    }
-
-    /**
      * Kann die render ausgabe (die aus cache oder direkt aus render kommen kann)
      * anpassen.
      *
