@@ -722,11 +722,13 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         }
         this.fireEvent('newitem', this, val, this.filteredQueryData);
         if (this.addNewItemUrl) {
+            var params = Ext.apply({
+                    val: val
+                }, this.store.baseParams
+            );
             Ext.Ajax.request({
                 url: this.addNewItemUrl,
-                params: {
-                    val: val
-                },
+                params: params,
                 success: function(request, options, r) {
                     var newItemObject = {};
                     newItemObject[this.valueField] = r.id;
@@ -953,6 +955,9 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
                 }
             }
         }
+    },
+    setFormBaseParams: function(params) {
+        Ext.apply(this.store.baseParams, params);
     },
     onKeyUpBuffered : function(e){
         if(!e.isNavKeyPress()){
