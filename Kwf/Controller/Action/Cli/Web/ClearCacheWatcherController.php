@@ -543,7 +543,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             self::_clearAssetsAll();
         }
 
-        $clearCacheSimple = array();
         $clearCacheSimpleStatic = array(
             'has-', //Kwf_Component_Abstract::hasSetting
             'cs-', //Kwf_Component_Abstract::getSetting
@@ -557,7 +556,12 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         if ($generatorssChanged) {
             echo "generators changed...\n";
             echo count(Kwc_Abstract::getComponentClasses())." component classes (previously)\n";
-            $clearCacheSimple[] = 'url-';
+
+            $m = Kwf_Component_Cache::getInstance()->getModel('url');
+            foreach ($m->getRows() as $r) {
+                Kwf_Cache_Simple::delete('url-'.$r->url);
+                $r->delete();
+            }
             foreach ($newChildComponentClasses as $cmpClass) {
                 if (!in_array($cmpClass, Kwc_Abstract::getComponentClasses())) {
                     self::_loadSettingsRecursive($settings, $cmpClass);
@@ -573,7 +577,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         echo "cleared component settings apc cache...\n";
         self::_clearApcCache(array(
             'clearCacheSimpleStatic' => $clearCacheSimpleStatic,
-            'clearCacheSimple' => $clearCacheSimple
         ));
 
         if ($dimensionsChanged) {
