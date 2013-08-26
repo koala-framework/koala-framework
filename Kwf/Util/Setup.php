@@ -212,6 +212,20 @@ class Kwf_Util_Setup
         Kwf_Cache_Simple::$backend = null; //unset to re-calculate
         $ret .= "Kwf_Cache_Simple::\$backend = '".Kwf_Cache_Simple::getBackend()."';\n";
 
+        if (Kwf_Config::getValue('server.memcache.host')) {
+            $host = Kwf_Config::getValue('server.memcache.host');
+            if ($host == '%webserverHostname%') {
+                if (php_sapi_name() == 'cli') {
+                    $host = Kwf_Util_Apc::callUtil('get-hostname', array(), array('returnBody'=>true, 'skipCache'=>true));
+                } else {
+                    $host = php_uname('n');
+                }
+            }
+            $ret .= "Kwf_Cache_Simple::\$memcacheHost = '".$host."';\n";
+            $ret .= "Kwf_Cache_Simple::\$memcachePort = '".Kwf_Config::getValue('server.memcache.port')."';\n";
+        }
+
+
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
 
         $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
@@ -253,7 +267,7 @@ class Kwf_Util_Setup
         $ret .= "\n";
 
         //store session data in memcache if avaliable
-        if ((Kwf_Util_Memcache::getHost() || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
+        if ((Kwf_COnfig::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 

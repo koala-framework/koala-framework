@@ -71,7 +71,7 @@ class Kwf_Util_ClearCache
         if ($simpleCache && $simpleCache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
             $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
         } else {
-            if (Kwf_Util_Memcache::getHost()) {
+            if (Kwf_Cache_Simple::$memcacheHost) {
                 //complete memcache, used by Cache_SimpleStatic
                 $types[] = new Kwf_Util_ClearCache_Types_Memcache();
             }

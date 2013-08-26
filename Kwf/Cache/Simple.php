@@ -10,6 +10,8 @@
 class Kwf_Cache_Simple
 {
     public static $backend; //set in Setup
+    public static $memcacheHost; //set in Setup
+    public static $memcachePort; //set in Setup
 
     private static $_zendCache = null;
     private static $_cacheNamespace = null;
@@ -28,7 +30,7 @@ class Kwf_Cache_Simple
         }
         if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
             $ret = 'elastiCache';
-        } else if (Kwf_Util_Memcache::getHost()) {
+        } else if (Kwf_Config::getValue('server.memcache.host')) {
             $ret = 'memcache';
         } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
             $ret = 'apc';
@@ -108,7 +110,7 @@ class Kwf_Cache_Simple
         static $memcache;
         if (isset($memcache)) return $memcache;
         $memcache = new Memcache;
-        $memcache->addServer(Kwf_Util_Memcache::getHost(), Kwf_Util_Memcache::getPort());
+        $memcache->addServer(self::$memcacheHost, self::$memcachePort);
         return $memcache;
     }
 

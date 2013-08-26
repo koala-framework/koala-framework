@@ -7,8 +7,8 @@ class Kwf_Cache_Backend_Memcached extends Zend_Cache_Backend_Memcached
     {
         if (!isset($options['servers'])) {
             $options['servers'] = array(array(
-                'host' => Kwf_Util_Memcache::getHost(),
-                'port' => Kwf_Util_Memcache::getPort()
+                'host' => Kwf_Cache_Simple::$memcacheHost,
+                'port' => Kwf_Cache_Simple::$memcachePort
             ));
         }
         foreach ($options['servers'] as &$s) {
