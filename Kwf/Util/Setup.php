@@ -185,10 +185,7 @@ class Kwf_Util_Setup
             //only load component related classes if it is a component web
             $preloadClasses[] = 'Kwf_Component_Data';
             $preloadClasses[] = 'Kwf_Component_Data_Root';
-            $preloadClasses[] = 'Kwf_Component_Abstract';
-            $preloadClasses[] = 'Kwc_Abstract';
             $preloadClasses[] = 'Kwf_Component_Settings';
-            $preloadClasses[] = 'Kwc_Paragraphs_Component';
 
             $preloadClasses[] = 'Kwf_Component_Renderer_Abstract';
             $preloadClasses[] = 'Kwf_Component_Renderer';
@@ -197,7 +194,6 @@ class Kwf_Util_Setup
             $preloadClasses[] = 'Kwf_Component_Cache_Memory';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Abstract';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Default';
-            $preloadClasses[] = 'Kwf_Util_SessionToken';
         }
 
 
