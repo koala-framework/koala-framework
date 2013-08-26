@@ -94,9 +94,6 @@ class Kwf_Cache_SimpleStatic
 
         static $prefix;
         if (extension_loaded('apcu')) {
-            if ($data === null) {
-                $data = 'kwfNull';
-            }
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apc_add($prefix.$cacheId, $data, $ttl);
         } else if (extension_loaded('apc')) {
@@ -107,6 +104,9 @@ class Kwf_Cache_SimpleStatic
             $id = $prefix.$cacheId;
             if (strlen($id) > Yac::YAC_MAX_KEY_LEN) {
                 $id = md5($id);
+            }
+            if ($data === null) {
+                $data = 'kwfNull';
             }
             $yac = new Yac();
             return $yac->set($id, $data, $ttl);
