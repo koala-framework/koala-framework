@@ -187,9 +187,10 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                         $countErrors++;
                         $status = 'failed';
                     }
-                    $nlRow->count_sent++;
-                    $nlRow->last_sent_date = date('Y-m-d H:i:s');
-                    $nlRow->save();
+                    $nlRow->getModel()->getTable()->update(array(
+                        'count_sent' => new Zend_Db_Expr('count_sent + 1'),
+                        'last_sent_date' => date('Y-m-d H:i:s')
+                    ), 'id = '.$nlRow->id);
                 }
 
                 $queueLogModel->createRow(array(
