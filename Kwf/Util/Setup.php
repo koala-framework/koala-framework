@@ -183,10 +183,8 @@ class Kwf_Util_Setup
 
         if (Kwf_Component_Data_Root::getComponentClass()) {
             //only load component related classes if it is a component web
-            $preloadClasses[] = 'Kwf_Model_Select';
             $preloadClasses[] = 'Kwf_Component_Data';
             $preloadClasses[] = 'Kwf_Component_Data_Root';
-            $preloadClasses[] = 'Kwf_Component_Select';
             $preloadClasses[] = 'Kwf_Component_Abstract';
             $preloadClasses[] = 'Kwc_Abstract';
             $preloadClasses[] = 'Kwf_Component_Settings';
