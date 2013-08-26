@@ -105,6 +105,7 @@ abstract class Kwf_Component_Renderer_Abstract
             //in second pass execute all EXECUTE_BEFORE plugins
             $ret = $this->_executePlugins($ret, 'B');
         }
+
         $offset = 0;
         while (($start = strpos($ret, '<kwc', $offset)) !== false) {
             $p = substr($ret, $start+4, 1);
@@ -115,6 +116,7 @@ abstract class Kwf_Component_Renderer_Abstract
             if ($benchmarkEnabled) $startTime = microtime(true);
             $end = strpos($ret, '>', $start);
 
+            $isCacheable = $p==1; //only load <kwc1 placeholders
             $args = explode(' ', substr($ret, $start+6, $end-$start-6));
             $type = $args[0];
             $componentId = $args[1];
@@ -152,8 +154,8 @@ abstract class Kwf_Component_Renderer_Abstract
                 $helper = $helpers[$type];
             }
 
-            $useViewCache = true;
-            if (isset($plugins['useCache']) && $pass==2) { //in pass 2 decide here not to use view cache; pass 1 handled below
+            $useViewCache = $isCacheable;
+            if ($useViewCache && isset($plugins['useCache']) && $pass==2) { //in pass 2 decide here not to use view cache; pass 1 handled below
                 foreach ($plugins['useCache'] as $pluginClass) {
                     $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
                     // if one of the plugins return false no cache is used
@@ -206,6 +208,7 @@ abstract class Kwf_Component_Renderer_Abstract
                         $content = $plugin->processOutput($content, $this);
                     }
                 }
+
                 if ($saveCache) {
 
                     $m = Kwf_Component_Cache::getInstance()->getModel('includes');
@@ -258,6 +261,8 @@ abstract class Kwf_Component_Renderer_Abstract
 
                     $settings = $helper->getViewCacheSettings($componentId);
                     if (!$settings['enabled']) {
+                        //something is very wrong
+                        throw new Kwf_Exception('$isCacheable should be false if the view cache is disabled for this helper');
                         $cacheContent = Kwf_Component_Cache::NO_CACHE;
                     }
                     // Content-Cache
