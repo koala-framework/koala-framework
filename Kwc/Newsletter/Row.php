@@ -59,6 +59,17 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         }
     }
 
+    //returns current sending speed in mails per minute
+    public function getCurrentSpeed()
+    {
+        $startDate = max(time()-60, strtotime($this->resume_date));
+        $queueLogModel = $this->getModel()->getDependentModel('QueueLog');
+        $select = $queueLogModel->select()
+            ->whereEquals('newsletter_id', $this->id)
+            ->where(new Kwf_Model_Select_Expr_Higher('send_date', new Kwf_DateTime($startDate)));
+        return $queueLogModel->countRows($select) / (time()-$startDate) * 60;
+    }
+
     public function getInfo()
     {
         $queue = $this->getModel()->getDependentModel('Queue');
@@ -69,10 +80,9 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $ret['total']    = $queue->countRows($select) + $this->count_sent;
         $ret['queued']   = $queue->countRows($select->whereNull('send_process_pid'));
         $ret['lastSentDate'] = strtotime($this->last_sent_date);
-        $ret['speed'] = $this->mails_per_minute;
+        $currentSpeed = $this->getCurrentSpeed();
+        $ret['speed'] = $currentSpeed.' '.trlKwf('Mails/Min');
 
-        $queueLogModel = $this->getModel()->getDependentModel('QueueLog');
-        $select = new Kwf_Model_Select();
 
         $seconds = ($ret['queued'] / $this->getCountOfMailsPerMinute()) * 60;
         $hours = floor($seconds / 3600);

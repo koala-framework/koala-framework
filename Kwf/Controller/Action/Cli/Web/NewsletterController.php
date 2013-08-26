@@ -105,6 +105,10 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                         }
                         sleep(3); //don't start all processes at the same time
                     }
+
+                    echo "Newletter $newsletterRow->id: currently sending with ".
+                        $newsletterRow->getCurrentSpeed().
+                        " mails/min\n";
                 }
 
                 if ($this->_getParam('debug')) echo "sleep 10 secs (I).\n";
