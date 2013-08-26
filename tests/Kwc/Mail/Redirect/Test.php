@@ -24,7 +24,7 @@ class Kwc_Mail_Redirect_Test extends Kwc_TestAbstract
     {
         $mail = $this->_root;
         $c = $mail->getComponent();
-        $recipients = Kwf_Model_Abstract::getInstance('Kwc_Mail_Placeholder_Mail_Recipients');
+        $recipients = Kwf_Model_Abstract::getInstance('Kwc_Mail_Redirect_Mail_Recipients');
         $recipient = $recipients->getRow(
             $recipients->select()->whereEquals('email', 'ufx@vivid-planet.com')
         );
