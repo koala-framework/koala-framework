@@ -7,6 +7,7 @@
 class Kwf_Component_Cache_Memory
 {
     private static $_zendCache = null;
+    const CACHE_VERSION = 1; //increase when incompatible changes to cache contents are made, additionally cache_component table needs to be truncated by update script
 
     public static function getInstance()
     {
@@ -30,7 +31,7 @@ class Kwf_Component_Cache_Memory
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
             static $prefix;
-            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
 
             $tmp = Kwf_Cache_Simple::getMemcache()->get($prefix.$id);
             if (is_array($tmp) && isset($tmp[0])) {
@@ -50,7 +51,7 @@ class Kwf_Component_Cache_Memory
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
             static $prefix;
-            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
             $data = array($data, time(), $ttl);
             return Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $data, MEMCACHE_COMPRESSED, $ttl);
         } else {
@@ -64,7 +65,7 @@ class Kwf_Component_Cache_Memory
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
             static $prefix;
-            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
             return Kwf_Cache_Simple::getMemcache()->delete($prefix.$id);
         } else {
             return self::getZendCache()->remove($id);
