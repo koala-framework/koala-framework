@@ -21,10 +21,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
     public function indexAction()
     {
-        if (Kwf_Component_Cache_Memory::getInstance()->getBackend() instanceof Zend_Cache_Backend_Apc) {
-            throw new Kwf_Exception_Client("clear-cache-watcher is not compatible with component cache memory apc backend");
-        }
-        if (!Kwf_Cache_Simple::getZendCache()) { //false means apc cache
+        if (Kwf_Cache_Simple::getBackend() == 'apc') {
             throw new Kwf_Exception_Client("clear-cache-watcher is not compatible with simple cache apc backend");
         }
 
