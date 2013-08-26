@@ -69,23 +69,6 @@ class Kwc_Root_Abstract extends Kwc_Abstract
         return $ret;
     }
 
-    protected function _getMasterChildContentWidth(Kwf_Component_Data $sourcePage)
-    {
-        $ret = $this->_getSetting('contentWidth');
-        $boxes = array();
-        foreach ($sourcePage->getChildBoxes() as $box) {
-            $boxes[$box->box] = $box;
-        }
-        foreach ($this->_getSetting('contentWidthBoxSubtract') as $box=>$width) {
-            if (!isset($boxes[$box])) continue;
-            $c = $boxes[$box];
-            if ($c && $c->hasContent()) {
-                $ret -= $width;
-            }
-        }
-        return $ret;
-    }
-
     public function getBaseProperty($propertyName)
     {
         if ($propertyName == 'language') {
