@@ -110,18 +110,6 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
                 $this->_sumTime += $this->_lastQuery->getElapsedSecs();
                 $this->_logger->debug('Sum: '.$this->_sumTime);
             }
-            /*
-            $d = array();
-            $d['query'] = $this->_lastQuery->getQuery();
-            if ($this->_lastQuery instanceof Kwf_Db_Profiler_Query) $d['backtrace'] = $this->_lastQuery->getBacktrace();
-            $d['time'] = $this->_lastQuery->getElapsedSecs();
-            $d['type'] = $this->_lastQuery->getQueryType();
-            $d['params'] = $this->_lastQuery->getQueryParams();
-            $filename = '/tmp/querylog.'.Zend_Registry::get('requestNum');
-            $f = fopen($filename, 'a');
-            fwrite($f, "\nquerylog\n".serialize($d));
-            fclose($f);
-            */
 
         } else {
             throw new Kwf_Exception('Query not found');
