@@ -220,6 +220,7 @@ $preloadClasses[] = 'Kwf_Benchmark_Counter_Apc';
                 }
             }
         }
+        $ret .= "}\n";
 
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
 
