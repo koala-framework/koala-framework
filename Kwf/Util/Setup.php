@@ -225,11 +225,25 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        if (Kwf_Config::getValue('server.https')) {
+            if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
+                $ret .= "\$domains = array(";
+                foreach ($domains as $d) {
+                    $ret .= "'".$d."'=>true, ";
+                }
+                $ret .= ");\n";
+                $ret .= "Kwf_Util_Https::\$supportsHttps = isset(\$domains[\$_SERVER['HTTP_HOST']]);";
+            } else {
+                $ret .= "Kwf_Util_Https::\$supportsHttps = true;\n";
+            }
+        } else {
+            $ret .= "Kwf_Util_Https::\$supportsHttps = false;\n";
+        }
         $ret .= "session_set_cookie_params(\n";
         $ret .= " 0,";     //lifetime
         $ret .= " '/',";   //path
         $ret .= " null,";  //domain
-        $ret .= " Kwf_Util_Https::supportsHttps(),"; //secure
+        $ret .= " Kwf_Util_Https::\$supportsHttps,"; //secure
         $ret .= " true";   //httponly
         $ret .= ");\n";
 
