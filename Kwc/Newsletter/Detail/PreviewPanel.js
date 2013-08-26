@@ -138,7 +138,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             }
         }, this);
 
-        this.tbar = [this.button['html'], this.button['text'], '-', this.addressField, this.sendButton, '-', this.subscribeModelComboBox, this.recipientComboBox];
+        this.tbar = [this.button['html'], this.button['text'], '-', trlKwf('Send testmail to:'), this.addressField, this.sendButton, '-', this.subscribeModelComboBox, this.recipientComboBox];
         Kwc.Newsletter.Detail.PreviewPanel.superclass.initComponent.call(this);
     },
 
