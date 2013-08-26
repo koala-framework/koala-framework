@@ -140,7 +140,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         this.progress.updateProgress(progress, Math.round(progress * 100) + '%');
         this.newsletterInfoMailsSent.update(info.text);
         if (info.state == 'start' || info.state == 'sending') {
-            this.newsletterInfoSpeed.update(trlKwf('Newsletter speed: <b>{0}</b>', [info.speed]));
+            this.newsletterInfoSpeed.update(trlKwf('current speed: <b>{0}</b>', [info.speed]));
             this.newsletterInfoTime.update(trlKwf('Remaining time: <b>{0}</b>', [info.remainingTime]));
         }
         return !(info.state == 'finished');

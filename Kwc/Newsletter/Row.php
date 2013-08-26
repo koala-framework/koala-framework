@@ -62,6 +62,8 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
     //returns current sending speed in mails per minute
     public function getCurrentSpeed()
     {
+        if (!$this->resume_date) return null;
+
         $startDate = max(time()-60, strtotime($this->resume_date));
         $queueLogModel = $this->getModel()->getDependentModel('QueueLog');
         $select = $queueLogModel->select()
@@ -83,15 +85,17 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
 
         $ret['speed'] = '';
         $ret['remainingTime'] = '';
-        if (time()-strtotime($this->resume_date) > 30) {
+        if ($this->resume_date && time()-strtotime($this->resume_date) > 30) {
             $currentSpeed = $this->getCurrentSpeed();
-            $ret['speed'] = $currentSpeed.' '.trlKwf('Mails/Min');
+            if ($currentSpeed) {
+                $ret['speed'] = round($currentSpeed).' '.trlKwf('Mails/Min');
 
-            $seconds = ($ret['queued'] / $currentSpeed) * 60;
-            $hours = floor($seconds / 3600);
-            $seconds -= $hours * 3600;
-            $minutes = floor($seconds / 60);
-            $ret['remainingTime'] = sprintf('%02d:%02d', $hours, $minutes);
+                $seconds = ($ret['queued'] / $currentSpeed) * 60;
+                $hours = floor($seconds / 3600);
+                $seconds -= $hours * 3600;
+                $minutes = floor($seconds / 60);
+                $ret['remainingTime'] = sprintf('%02d:%02d', $hours, $minutes);
+            }
         }
 
         $text = '';
@@ -103,19 +107,18 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
             default: $text = trlKwf('Newsletter waiting for start.'); break;
         }
         $ret['shortText'] = $text;
-        $text .= ' ';
 
-        $text .= trlKwf(
-            '{0} sent, {1} waiting to send.',
-            array($ret['sent'], $ret['queued'])
-        );
-        if ($ret['lastSentDate']) {
-            $time = date(trlKwf('Y-m-d H:i'), $ret['lastSentDate']);
-            $t = ' ' . trlKwf('Last mail sent: {0}', $time);;
-            $text .= $t;
-            $ret['shortText'] .= $t;
+        if ($ret['sent'] || $ret['queued']) {
+            $text .= ' ';
+            $text .= trlKwf('{0} sent, {1} waiting to send.', array($ret['sent'], $ret['queued']));
+            if ($ret['lastSentDate']) {
+                $time = date(trlKwf('Y-m-d H:i'), $ret['lastSentDate']);
+                $t = ' ' . trlKwf('Last mail sent: {0}', $time);;
+                $text .= $t;
+                $ret['shortText'] .= $t;
+            }
+            $ret['text'] = $text;
         }
-        $ret['text'] = $text;
 
         return $ret;
     }
@@ -130,14 +133,16 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
 
     public function getCountOfMailsPerMinute()
     {
-        $mailsPerMinute = 30;
-        if ($this->mails_per_minute == 'fast') {
-            $mailsPerMinute = 100;
+        if ($this->mails_per_minute == 'unlimited') {
+            return null;
+        } else if ($this->mails_per_minute == 'fast') {
+            return 100;
         } else if ($this->mails_per_minute == 'normal') {
-            $mailsPerMinute = 40;
+            return 40;
         } else if ($this->mails_per_minute == 'slow') {
-            $mailsPerMinute = 20;
+            return 20;
+        } else {
+            throw new Kwf_Exception('unknown speed');
         }
-        return $mailsPerMinute;
     }
 }

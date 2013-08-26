@@ -9261,7 +9261,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Start newsletter</en>
-<de>Start Newsletter</de>
+<de>Starte Newsletter</de>
 <id>1936</id>
 </text>
 <text>
@@ -9270,8 +9270,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1937</id>
 </text>
 <text>
-<en>Newsletter speed: &lt;b&gt;{0}&lt;/b&gt;</en>
-<de>Newsletter Geschwindigkeit: &lt;b&gt;{0}&lt;/b&gt;</de>
+<en>current speed: &lt;b&gt;{0}&lt;/b&gt;</en>
+<de>Aktuelle Geschwindigkeit: &lt;b&gt;{0}&lt;/b&gt;</de>
 <id>1938</id>
 </text>
 <text>
@@ -9560,7 +9560,17 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <de>Webseite erstellt von</de>
 <en>Website produced by</en>
-<id>1892</id>
+<id>2009</id>
+</text>
+<text>
+<de>{0} gesendet, {1} in der Warteschlange</de>
+<en>{0} sent, {1} waiting to send.</en>
+<id>2010</id>
+</text>
+<text>
+<en>Unlimited</en>
+<de>Unbegrenzt</de>
+<id>2011</id>
 </text>
 <text>
 <en>Send testmail to:</en>

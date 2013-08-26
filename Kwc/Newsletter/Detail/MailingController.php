@@ -80,6 +80,7 @@ class Kwc_Newsletter_Detail_MailingController extends Kwf_Controller_Action_Auto
             if ($row->status == 'stop') {
                 $this->view->error = trlKwf('Newsletter stopped, cannot change status.');
             } else if (in_array($status, array('start', 'pause', 'stop'))) {
+                if ($status != 'start') $row->resume_date = null;
                 $row->status = $status;
                 $row->save();
             } else {

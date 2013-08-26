@@ -8,7 +8,7 @@ class Kwc_Newsletter_Detail_MailingFormController extends Kwf_Controller_Action_
     {
         parent::_initFields();
         $form = $this->_form;
-        $form->setLabelWidth(120);
+        $form->setLabelWidth(150);
 
         $cards = $form->add(new Kwf_Form_Container_Cards());
         $cards->setCombobox(new Kwf_Form_Field_Radio('status', trlKwf('Start newsletter')));
@@ -29,7 +29,8 @@ class Kwc_Newsletter_Detail_MailingFormController extends Kwf_Controller_Action_
             ->setValues(array(
                 'slow' => trlKwf('Slow'),
                 'normal' => trlKwf('Normal'),
-                'fast' => trlKwf('Fast')
+                'fast' => trlKwf('Fast'),
+                'unlimited' => trlKwf('Unlimited'),
             ));
     }
 

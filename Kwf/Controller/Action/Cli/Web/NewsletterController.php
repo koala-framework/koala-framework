@@ -37,86 +37,82 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
         $procs = array();
 
         while (true) {
-            do {
-                $select = $model->select()
-                    ->where(new Kwf_Model_Select_Expr_Or(array(
-                        new Kwf_Model_Select_Expr_Equal('status', 'start'),
-                        new Kwf_Model_Select_Expr_And(array(
-                            new Kwf_Model_Select_Expr_Equal('status', 'startLater'),
-                            new Kwf_Model_Select_Expr_HigherEqual('start_date', new Kwf_DateTime(time())),
-                        )),
-                        new Kwf_Model_Select_Expr_Equal('status', 'sending')
-                    )))
-                    ->order('RAND()');
-                $rows = $model->getRows($select);
-                $activeCountRows = count($rows);
-                foreach ($rows as $newsletterRow) {
+            $select = $model->select()
+                ->where(new Kwf_Model_Select_Expr_Or(array(
+                    new Kwf_Model_Select_Expr_Equal('status', 'start'),
+                    new Kwf_Model_Select_Expr_And(array(
+                        new Kwf_Model_Select_Expr_Equal('status', 'startLater'),
+                        new Kwf_Model_Select_Expr_HigherEqual('start_date', new Kwf_DateTime(time())),
+                    )),
+                    new Kwf_Model_Select_Expr_Equal('status', 'sending')
+                )));
+            $rows = $model->getRows($select);
+            $activeCountRows = count($rows);
+            foreach ($rows as $newsletterRow) {
 
-                    if ($newsletterRow->status != 'sending') {
-                        $newsletterRow->resume_date = date('Y-m-d H:i:s');
-                        $newsletterRow->status = 'sending';
-                        $newsletterRow->save();
-                    }
-
-                    if (!isset($procs[$newsletterRow->id])) {
-                        $procs[$newsletterRow->id] = array();
-                    }
-
-                    //remove stopped processes (might stop because of memory limit or simply crash for some reason)
-                    foreach ($procs[$newsletterRow->id] as $k=>$p) {
-                        if (!$p->isRunning()) {
-                            echo "process ".$p->getPid()." stopped...\n";
-                            unset($procs[$newsletterRow->id][$k]);
-                        }
-                    }
-
-                    $s = new Kwf_Model_Select();
-                    $s->whereEquals('newsletter_id', $newsletterRow->id);
-                    $s->whereNull('send_process_pid');
-                    if (!$newsletterRow->getModel()->getDependentModel('Queue')->countRows($s)) {
-                        $newsletterRow->status = 'finished';
-                        $newsletterRow->save();
-                        continue;
-                    }
-
-                    if ($this->_getParam('debug')) {
-                        echo count($procs[$newsletterRow->id])." running processes\n";
-                    }
-
-                    $numOfProcesses = 1;
-                    if ($newsletterRow->mails_per_minute == 'fast') {
-                        $numOfProcesses = $this->_getParam('maxProcesses');
-                        if (!$numOfProcesses) $numOfProcesses = 3;
-                    }
-                    while (count($procs[$newsletterRow->id]) < $numOfProcesses) {
-                        $cmd = "php bootstrap.php newsletter send --newsletterId=$newsletterRow->id";
-                        if ($this->_getParam('debug')) $cmd .= " --debug";
-                        if ($this->_getParam('benchmark')) $cmd .= " --benchmark";
-                        if ($this->_getParam('verbose')) $cmd .= " --verbose";
-                        $descriptorspec = array(
-                            1 => STDOUT,
-                            2 => STDERR,
-                        );
-                        $p = new Kwf_Util_Proc($cmd, $descriptorspec);
-                        $procs[$newsletterRow->id][] = $p;
-                        if ($this->_getParam('debug')) {
-                            echo "\n*** started new process with PID ".$p->getPid()."\n";
-                            echo $cmd."\n";
-                        }
-                        sleep(3); //don't start all processes at the same time
-                    }
-
-                    echo "Newletter $newsletterRow->id: currently sending with ".
-                        $newsletterRow->getCurrentSpeed().
-                        " mails/min\n";
+                if ($newsletterRow->status != 'sending') {
+                    $newsletterRow->resume_date = date('Y-m-d H:i:s');
+                    $newsletterRow->status = 'sending';
+                    $newsletterRow->save();
                 }
 
-                if ($this->_getParam('debug')) echo "sleep 10 secs (I).\n";
-                sleep(10);
+                if (!isset($procs[$newsletterRow->id])) {
+                    $procs[$newsletterRow->id] = array();
+                }
 
-                Kwf_Model_Abstract::clearAllRows();
-            } while($activeCountRows);
-            if ($this->_getParam('debug')) echo "sleep 10 secs (II).\n";
+                //remove stopped processes (might stop because of memory limit or simply crash for some reason)
+                foreach ($procs[$newsletterRow->id] as $k=>$p) {
+                    if (!$p->isRunning()) {
+                        echo "process ".$p->getPid()." stopped...\n";
+                        unset($procs[$newsletterRow->id][$k]);
+                    }
+                }
+
+                $s = new Kwf_Model_Select();
+                $s->whereEquals('newsletter_id', $newsletterRow->id);
+                $s->whereNull('send_process_pid');
+                if (!$newsletterRow->getModel()->getDependentModel('Queue')->countRows($s)) {
+                    $newsletterRow->status = 'finished';
+                    $newsletterRow->save();
+                    continue;
+                }
+
+                if ($this->_getParam('debug')) {
+                    echo count($procs[$newsletterRow->id])." running processes\n";
+                }
+
+                $numOfProcesses = 1;
+                if ($newsletterRow->mails_per_minute == 'unlimited') {
+                    $numOfProcesses = $this->_getParam('maxProcesses');
+                    if (!$numOfProcesses) $numOfProcesses = 3;
+                }
+                while (count($procs[$newsletterRow->id]) < $numOfProcesses) {
+                    $cmd = "php bootstrap.php newsletter send --newsletterId=$newsletterRow->id";
+                    if ($this->_getParam('debug')) $cmd .= " --debug";
+                    if ($this->_getParam('benchmark')) $cmd .= " --benchmark";
+                    if ($this->_getParam('verbose')) $cmd .= " --verbose";
+                    $descriptorspec = array(
+                        1 => STDOUT,
+                        2 => STDERR,
+                    );
+                    $p = new Kwf_Util_Proc($cmd, $descriptorspec);
+                    $procs[$newsletterRow->id][] = $p;
+                    if ($this->_getParam('debug')) {
+                        echo "\n*** started new process with PID ".$p->getPid()."\n";
+                        echo $cmd."\n";
+                    }
+                    sleep(3); //don't start all processes at the same time
+                }
+
+                if ($this->_getParam('debug')) {
+                    echo "Newletter $newsletterRow->id: currently sending with ".
+                        round($newsletterRow->getCurrentSpeed()).
+                        " mails/min\n";
+                }
+            }
+
+            Kwf_Model_Abstract::clearAllRows();
+            if ($this->_getParam('debug')) echo "sleep 10 secs.\n";
             sleep(10);
         }
     }
@@ -137,7 +133,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
         $start = microtime(true);
         do {
             // Schlafen bis errechnet Zeit
-            if ($nlRow->mails_per_minute != 'fast') {
+            if ($nlRow->mails_per_minute != 'unlimited') {
                 $sleep = $start + 60/$mailsPerMinute * $count - microtime(true);
                 if ($sleep > 0) usleep($sleep * 1000000);
                 if ($this->_getParam('debug')) {
