@@ -41,7 +41,8 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
                     'controllerUrl'         => $this->getControllerUrl('Preview'),
                     'subscribersControllerUrl' => $this->getControllerUrl('Subscribers'),
                     'authedUserEmail'       => Kwf_Registry::get('userModel')->getAuthedUser()->email,
-                    'title'                 => trlKwf('Preview')
+                    'title'                 => trlKwf('Preview'),
+                    'recipientSources'      => $this->_getRecipientSources()
                 ),
                 'mailing' => array(
                     'xtype'                 => 'kwc.newsletter.recipients',
@@ -76,5 +77,11 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
         ));
 
         return $ret;
+    }
+
+    protected function _getRecipientSources()
+    {
+        $mailClass = (Kwc_Abstract::getChildComponentClass($this->_class, 'mail'));
+        return Kwc_Abstract::getSetting($mailClass, 'recipientSources');
     }
 }
