@@ -26,8 +26,12 @@ class Kwf_Cache_Simple
                 $ret = 'elastiCache';
             } else if (Kwf_Util_Memcache::getHost()) {
                 $ret = 'memcache';
+            } else if (extension_loaded('apcu')) {
+                $ret = 'apcu';
             } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
                 $ret = 'apc';
+            } else if (extension_loaded('yac')) {
+                $ret = 'yac';
             } else {
                 $ret = 'file';
             }
@@ -50,6 +54,22 @@ class Kwf_Cache_Simple
                 self::$_zendCache->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
                     'cacheClusterId' => Kwf_Config::getValue('aws.simpleCacheCluster'),
                 )));
+            } else if ($be == 'apcu') {
+                self::$_zendCache = new Zend_Cache_Core(array(
+                    'lifetime' => null,
+                    'write_control' => false,
+                    'automatic_cleaning_factor' => 0,
+                    'automatic_serialization' => true
+                ));
+                self::$_zendCache->setBackend(new Kwf_Cache_Backend_Apcu());
+            } else if ($be == 'yac') {
+                self::$_zendCache = new Zend_Cache_Core(array(
+                    'lifetime' => null,
+                    'write_control' => false,
+                    'automatic_cleaning_factor' => 0,
+                    'automatic_serialization' => true
+                ));
+                self::$_zendCache->setBackend(new Kwf_Cache_Backend_Yac());
             } else if ($be == 'apc') {
                 self::$_zendCache = false;
             } else {

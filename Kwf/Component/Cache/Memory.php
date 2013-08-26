@@ -33,6 +33,10 @@ class Kwf_Component_Cache_Memory extends Zend_Cache_Core
                 'compression' => true,
             )));
             //do *not* use cache_namespace for this cache (we don't want to delete it on clear-cache)
+        } else if ($be == 'yac') {
+            $this->setBackend(new Kwf_Cache_Backend_Yac());
+        } else if ($be == 'apcu') {
+            $this->setBackend(new Kwf_Cache_Backend_Apcu());
         } else if ($be == 'memcache') {
             $this->setBackend(new Kwf_Cache_Backend_Memcached(array(
                 'compression' => true,

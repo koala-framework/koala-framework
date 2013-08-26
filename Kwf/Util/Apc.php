@@ -29,6 +29,10 @@ class Kwf_Util_Apc
             $outputType = 'apc user';
         } else if (isset($params['type']) && $params['type'] == 'file') {
             $outputType = 'optcode';
+        } else if (isset($params['type']) && $params['type'] == 'yac') {
+            $outputType = 'yac';
+        } else if (isset($params['type']) && $params['type'] == 'apcu') {
+            $outputType = 'apcu';
         }
 
         $params['password'] = self::_getHttpPassword();
@@ -185,6 +189,11 @@ class Kwf_Util_Apc
                 }
             } else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'user') {
                 apc_clear_cache('user');
+            } else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'yac') {
+                $yac = new Yac();
+                $yac->flush();
+            } else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'apcu') {
+                apcu_clear_cache();
             } else {
                 apc_clear_cache('file');
             }
