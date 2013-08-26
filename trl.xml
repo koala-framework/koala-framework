@@ -9567,5 +9567,15 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Sende Testmail an:</de>
 <id>2009</id>
 </text>
+<text>
+<en>Send Newsletter</en>
+<de>Newsletter versenden</de>
+<id>2010</id>
+</text>
+<text>
+<en>Start</en>
+<de>Starten</de>
+<id>2011</id>
+</text>
 </trl>
 
