@@ -9,6 +9,8 @@
  */
 class Kwf_Cache_Simple
 {
+    public static $backend; //set in Setup
+
     private static $_zendCache = null;
     private static $_cacheNamespace = null;
 
@@ -21,21 +23,17 @@ class Kwf_Cache_Simple
 
     public static function getBackend()
     {
-        static $ret;
-        if (isset($ret)) return $ret;
-        $cacheId = 'cacheSimpleBe';
-        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
-        if (!$ret) {
-            if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
-                $ret = 'elastiCache';
-            } else if (Kwf_Util_Memcache::getHost()) {
-                $ret = 'memcache';
-            } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
-                $ret = 'apc';
-            } else {
-                $ret = 'file';
-            }
-            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+        if (isset(self::$backend)) {
+            return self::$backend;
+        }
+        if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
+            $ret = 'elastiCache';
+        } else if (Kwf_Util_Memcache::getHost()) {
+            $ret = 'memcache';
+        } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
+            $ret = 'apc';
+        } else {
+            $ret = 'file';
         }
         return $ret;
     }

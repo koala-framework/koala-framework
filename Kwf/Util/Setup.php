@@ -209,6 +209,9 @@ class Kwf_Util_Setup
         }
         $ret .= "}\n";
 
+        Kwf_Cache_Simple::$backend = null; //unset to re-calculate
+        $ret .= "Kwf_Cache_Simple::\$backend = '".Kwf_Cache_Simple::getBackend()."';\n";
+
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
 
         $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
