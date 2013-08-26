@@ -82,6 +82,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                         $cmd = "php bootstrap.php newsletter send --newsletterId=$newsletterRow->id";
                         if ($this->_getParam('debug')) $cmd .= " --debug";
                         if ($this->_getParam('benchmark')) $cmd .= " --benchmark";
+                        if ($this->_getParam('verbose')) $cmd .= " --verbose";
                         $descriptorspec = array(
                             1 => STDOUT,
                             2 => STDERR,
@@ -116,11 +117,6 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
 
         $mailsPerMinute = $nlRow->getCountOfMailsPerMinute();
 
-        // Newsletter senden initialisieren
-        if ($this->_getParam('debug')) {
-            echo "Sending newsletters of newletterId {$nlRow->id} at a speed of $mailsPerMinute mails/minute\n";
-        }
-
         // In Schleife senden
         $queueLogModel = $nlRow->getModel()->getDependentModel('QueueLog');
         $count = 0; $countErrors = 0; $countNoUser = 0;
@@ -137,7 +133,9 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
 
             $nlStatus = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Model')->fetchColumnByPrimaryId('status', $nlRow->id);
             if ($nlStatus != 'sending') {
-                //break if newsletter stopped/paused
+                if ($this->_getParam('debug')) {
+                    echo "break sending because newsletter status changed to '$nlStatus'\n";
+                }
                 break;
             }
 
@@ -206,7 +204,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
 
                 Kwf_Benchmark::checkpoint('update queue');
 
-                if ($this->_getParam('debug')) {
+                if ($this->_getParam('verbose')) {
                     if (Kwf_Benchmark::isEnabled() && $this->_getParam('benchmark')) {
                         echo Kwf_Benchmark::getCheckpointOutput();
                     }
