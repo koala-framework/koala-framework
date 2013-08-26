@@ -539,7 +539,13 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
         if ($this->getData()->isPage) {
             $p = $this->getData();
-            while ($p->parent) $p = $p->parent; //root suchen TODO: wenn mehrere Master-tpl da stoppen
+            //if we have several Master.tpl stop at the first and get the contentWidth
+            while ($p->parent) {
+                if (Kwc_Abstract::getFlag($p->componentClass, 'resetMaster')) {
+                    break;
+                }
+                $p = $p->parent;
+            }
             return $p->getComponent()->_getMasterChildContentWidth($this->getData());
         } else {
             if (!$this->getData()->parent) {
@@ -565,6 +571,26 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $ret = $this->getContentWidth();
         if ($this->_hasSetting('contentWidthSubtract')) {
             $ret -= $this->_getSetting('contentWidthSubtract');
+        }
+        return $ret;
+    }
+    
+    protected function _getMasterChildContentWidth(Kwf_Component_Data $sourcePage)
+    {
+        if (!$this->_hasSetting('contentWidth')) {
+            throw new Kwf_Exception('contentWidth has to be set');
+        }
+        $ret = $this->_getSetting('contentWidth');
+        $boxes = array();
+        foreach ($sourcePage->getChildBoxes() as $box) {
+            $boxes[$box->box] = $box;
+        }
+        foreach ($this->_getSetting('contentWidthBoxSubtract') as $box=>$width) {
+            if (!isset($boxes[$box])) continue;
+            $c = $boxes[$box];
+            if ($c && $c->hasContent()) {
+                $ret -= $width;
+            }
         }
         return $ret;
     }
