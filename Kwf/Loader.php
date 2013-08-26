@@ -38,7 +38,7 @@ class Kwf_Loader
         } else {
             $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
             try {
-                include_once $file;
+                include $file;
             } catch (Exception $e) {
                 if ($fp = @fopen($file, 'r', true)) {
                     //wenns die datei gibt, fehler weiterschmeissen
