@@ -1,12 +1,6 @@
 <?php
 class Kwf_Mail extends Zend_Mail
 {
-    // die folgenden 5 sind für maillog
-    protected $_ownFrom = '';
-    protected $_ownTo = array();
-    protected $_ownCc = array();
-    protected $_ownBcc = array();
-    protected $_attachments = array();
     protected $_attachImages = false;
     protected $_domain = null;
 
@@ -34,7 +28,6 @@ class Kwf_Mail extends Zend_Mail
 
     public function addCc($email, $name='')
     {
-        $this->_ownCc[] = trim("$name <$email>");
         if (Kwf_Registry::get('config')->debug->sendAllMailsTo) {
             if ($name) {
                 $this->addHeader('X-Real-Cc', $name ." <".$email.">");
@@ -49,7 +42,6 @@ class Kwf_Mail extends Zend_Mail
 
     public function addBcc($email)
     {
-        $this->_ownBcc[] = $email;
         if (Kwf_Registry::get('config')->debug->sendAllMailsTo) {
             $this->addHeader('X-Real-Bcc', $email);
         } else {
@@ -138,18 +130,11 @@ class Kwf_Mail extends Zend_Mail
         parent::setBodyHtml($html, $charset, $encoding);
     }
 
-    public function addAttachment(Zend_Mime_Part $attachment)
-    {
-        $this->_attachments[] = $attachment;
-        return parent::addAttachment($attachment);
-    }
-
     public function setFrom($email, $name='')
     {
         if (empty($email)) {
             throw new Kwf_Exception("Email address '$email' cannot be set as from part in a mail. Empty or invalid address.");
         }
-        $this->_ownFrom = trim("$name <$email>");
         parent::setFrom($email, $name);
         return $this;
     }
@@ -169,28 +154,6 @@ class Kwf_Mail extends Zend_Mail
         if ($this->getFrom() == null) {
             $sender = $this->getSenderFromConfig();
             $this->setFrom($sender['address'], $sender['name']);
-        }
-
-        // in service mitloggen wenn url vorhanden
-        if (Kwf_Util_Model_MailLog::isAvailable()) {
-            $r = Kwf_Model_Abstract::getInstance('Kwf_Util_Model_MailLog')->createRow();
-            if (isset($_COOKIE['unitTest']) && $_COOKIE['unitTest']) {
-                $r->identifier = $_COOKIE['unitTest'];
-            }
-            $attachmentFilenames = array();
-            foreach ($this->_attachments as $attachment) {
-                $attachmentFilenames[] = $attachment->filename;
-            }
-            $r->from = $this->_ownFrom;
-            $r->return_path = $this->getReturnPath();
-            $r->to = implode(';', $this->_ownTo);
-            $r->cc = implode(';', $this->_ownCc);
-            $r->bcc = implode(';', $this->_ownBcc);
-            $r->attachment_filenames = implode(';', $attachmentFilenames);
-            $r->subject = $this->getSubject();
-            $r->body_text = $this->_bodyText;
-            $r->body_html = $this->_bodyHtml;
-            $r->save();
         }
 
         if (!$transport) {
