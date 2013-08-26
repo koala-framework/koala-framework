@@ -80,15 +80,19 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $ret['total']    = $queue->countRows($select) + $this->count_sent;
         $ret['queued']   = $queue->countRows($select->whereNull('send_process_pid'));
         $ret['lastSentDate'] = strtotime($this->last_sent_date);
-        $currentSpeed = $this->getCurrentSpeed();
-        $ret['speed'] = $currentSpeed.' '.trlKwf('Mails/Min');
 
+        $ret['speed'] = '';
+        $ret['remainingTime'] = '';
+        if (time()-strtotime($this->resume_date) > 30) {
+            $currentSpeed = $this->getCurrentSpeed();
+            $ret['speed'] = $currentSpeed.' '.trlKwf('Mails/Min');
 
-        $seconds = ($ret['queued'] / $currentSpeed) * 60;
-        $hours = floor($seconds / 3600);
-        $seconds -= $hours * 3600;
-        $minutes = floor($seconds / 60);
-        $ret['remainingTime'] = sprintf('%02d:%02d', $hours, $minutes);
+            $seconds = ($ret['queued'] / $currentSpeed) * 60;
+            $hours = floor($seconds / 3600);
+            $seconds -= $hours * 3600;
+            $minutes = floor($seconds / 60);
+            $ret['remainingTime'] = sprintf('%02d:%02d', $hours, $minutes);
+        }
 
         $text = '';
         switch ($this->status) {
