@@ -15,5 +15,7 @@
             <h3>Result:</h3>
             <div id="result"></div>
         </div>
+        <input id="add" type="button" value="Add Element">
+        <div id="dynamic"></div>
     </body>
 </html>

@@ -27,7 +27,7 @@ Kwf.callOnContentReady = function(el, options) {
     });
     for (var i = 0; i < Kwf._readyHandlers.length; i++) {
         var hndl = Kwf._readyHandlers[i];
-        if (hndl.selector == null) { // this is onJContentReady
+        if (hndl.selector == null) {
             hndl.fn.call(hndl.scope || window, (el || document.body), options);
         } else {
             if (hndl.type == 'jquery') { // OnElementReady jQuery
