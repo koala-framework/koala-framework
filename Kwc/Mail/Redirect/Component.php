@@ -116,7 +116,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
             $m = $this->getChildModel();
         }
 
-        while (preg_match('/\*([a-zA-Z_]+?)\*(.+?)\*/', $mailText, $matches)) {
+        while (preg_match('/\*([a-zA-Z_]+?)\*(.+?)(\*\*(.+?))?\*/', $mailText, $matches)) {
             if (!$recipient) {
                 $mailText = str_replace(
                     $matches[0],
@@ -125,10 +125,15 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
                 );
             } else {
                 $href = htmlspecialchars_decode($matches[2]);
+                $title = '';
+                if (isset($matches[4])) {
+                    $title = htmlspecialchars_decode($matches[4]);
+                }
                 $r = $m->getRow($m->select()->whereEquals('value', $href));
                 if (!$r) {
                     $r = $m->createRow(array(
                         'value' => $href,
+                        'title' => $title,
                         'type' => $matches[1]
                     ));
                     $r->save();
