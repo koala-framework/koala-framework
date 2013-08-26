@@ -576,7 +576,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         echo "cleared component settings apc cache...\n";
         self::_clearApcCache(array(
             'clearCacheSimpleStatic' => $clearCacheSimpleStatic,
-            '$clearCacheSimple' => $clearCacheSimple
+            'clearCacheSimple' => $clearCacheSimple
         ));
 
         if ($dimensionsChanged) {

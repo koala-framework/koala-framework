@@ -189,33 +189,7 @@ class Kwf_Cache_Simple
 
     public static function clear($cacheIdPrefix)
     {
-        if (self::getBackend() == 'memcache') {
-            //TODO don't do this, *please*
-            return self::getMemcache()->flush();
-        } else if (self::getBackend() == 'apc') {
-            if (!class_exists('APCIterator')) {
-                apc_clear_cache('user');
-            } else {
-                static $prefix;
-                if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
-                $it = new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#', APC_ITER_NONE);
-                if ($it->getTotalCount() && !$it->current()) {
-                    //APCIterator is borked, delete everything
-                    //see https://bugs.php.net/bug.php?id=59938
-                    apc_clear_cache('user');
-                } else {
-                    //APCIterator seems to work, use it for deletion
-                    apc_delete($it);
-                }
-            }
-        } else {
-            //we can't do any better here :/
-            if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
-                throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
-            }
-            if (!isset(self::$_zendCache)) self::getZendCache();
-            self::$_zendCache->clean();
-        }
+        throw new Kwf_Exception("don't delete the whole cache");
     }
 
     public static function getUniquePrefix()
