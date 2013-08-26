@@ -137,6 +137,9 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
                         'type' => $matches[1]
                     ));
                     $r->save();
+                } else if (empty($r->title) && !empty($title)) {
+                    $r->title = $title;
+                    $r->save();
                 }
 
                 // $recipientSource muss immer dabei sein, auch wenn es nur ein
