@@ -69,6 +69,15 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                         }
                     }
 
+                    $s = new Kwf_Model_Select();
+                    $s->whereEquals('newsletter_id', $newsletterRow->id);
+                    $s->whereNull('send_process_pid');
+                    if (!$newsletterRow->getModel()->getDependentModel('Queue')->countRows($s)) {
+                        $newsletterRow->status = 'finished';
+                        $newsletterRow->save();
+                        continue;
+                    }
+
                     if ($this->_getParam('debug')) {
                         echo count($procs[$newsletterRow->id])." running processes\n";
                     }
@@ -225,12 +234,6 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                     }
                     break;
                 }
-
-            } else {
-
-                $nlRow->status = 'finished';
-                $nlRow->save();
-
             }
 
         } while ($row);
