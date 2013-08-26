@@ -16,6 +16,7 @@
             <div id="result"></div>
         </div>
         <input id="add" type="button" value="Add Element">
+        <input id="changeVisibility" type="button" value="Change Visibility">
         <div id="dynamic"></div>
     </body>
 </html>

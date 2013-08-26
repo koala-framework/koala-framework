@@ -17,6 +17,10 @@ class Kwf_Js_OnReadyPriority_SeleniumTest extends Kwf_Test_SeleniumTestCase
         // Checking if dynamically added div is detected by elementReady and
         // hidden elements are ignored
         $this->click("add");
-        $this->assertEquals('3 2 1', $this->getText('css=#result'));
+        $this->assertEquals('7 6 3 2 1', $this->getText('css=#result'));
+
+        // Checking if change of visibility does fire elementReady
+        $this->click("changeVisibility");
+        $this->assertEquals('7 6 2 1', $this->getText('css=#result'));
     }
 }
