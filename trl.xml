@@ -9562,5 +9562,20 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Website produced by</en>
 <id>1892</id>
 </text>
+<text>
+<en>Send testmail to:</en>
+<de>Sende Testmail an:</de>
+<id>2009</id>
+</text>
+<text>
+<en>Send Newsletter</en>
+<de>Newsletter versenden</de>
+<id>2010</id>
+</text>
+<text>
+<en>Start</en>
+<de>Starten</de>
+<id>2011</id>
+</text>
 </trl>
 

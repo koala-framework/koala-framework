@@ -13,10 +13,10 @@ class Kwc_Directories_TopChoose_Form extends Kwc_Abstract_Form
         $values = array();
         foreach ($directories as $directory) {
             $title = $directory->getTitle();
-            if (Kwc_Abstract::hasSetting($this->_class, 'componentNameShort')) {
-                $name = Kwc_Abstract::getSetting($this->_class, 'componentNameShort');
+            if (Kwc_Abstract::hasSetting($class, 'componentNameShort')) {
+                $name = Kwc_Abstract::getSetting($class, 'componentNameShort');
             } else {
-                $name = Kwc_Abstract::getSetting($this->_class, 'componentName');
+                $name = Kwc_Abstract::getSetting($class, 'componentName');
             }
             $name = Kwf_Trl::getInstance()->trlStaticExecute($name);
             if ($title != $name) $title .= ' - ' . $name;

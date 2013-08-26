@@ -9,7 +9,7 @@ Kwc.Newsletter.Detail.RecipientsAction = Ext.extend(Ext.Action, {
         tooltip : trlKwf('Adds the currently shown recipients to the newsletter'),
         scope   : this,
         handler : function(a, b, c) {
-            if (this.getGrid().getSelectionModel() instanceof Ext.grid.CheckboxSelectionModel) {
+            if (Ext.grid.CheckboxSelectionModel && this.getGrid().getSelectionModel() instanceof Ext.grid.CheckboxSelectionModel) {
                 var selectedRows = this.getGrid().getSelectionModel().getSelections();
                 var ids = [];
                 selectedRows.each(function(selectedRow) { ids.push(selectedRow.id); }, this);
@@ -54,7 +54,7 @@ Kwc.Newsletter.Detail.RemoveRecipientsAction = Ext.extend(Ext.Action, {
         tooltip : trlKwf('Removes the currently shown recipients to the newsletter'),
         scope   : this,
         handler : function(a, b, c) {
-            if (this.getGrid().getSelectionModel() instanceof Ext.grid.CheckboxSelectionModel) {
+            if (Ext.grid.CheckboxSelectionModel && this.getGrid().getSelectionModel() instanceof Ext.grid.CheckboxSelectionModel) {
                 var selectedRows = this.getGrid().getSelectionModel().getSelections();
                 var ids = [];
                 selectedRows.each(function(selectedRow) { ids.push(selectedRow.id); }, this);

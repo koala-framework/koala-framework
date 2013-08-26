@@ -238,6 +238,7 @@ class Kwf_Assets_Dependencies
         $this->_processedDependencies[] = $assetsType.$dependency;
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
             if ($rootComponent) {
+                $this->_processComponentDependency($assetsType, $rootComponent, $rootComponent, $dependency == 'ComponentsAdmin');
                 if ($dependency == 'Components') {
                     $files = Kwf_Component_Abstract_Admin::getComponentFiles($rootComponent, array(
                         'css' => array('filename'=>'Web', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
@@ -248,7 +249,6 @@ class Kwf_Assets_Dependencies
                         $this->_addAbsoluteFiles($assetsType, $i);
                     }
                 }
-                $this->_processComponentDependency($assetsType, $rootComponent, $rootComponent, $dependency == 'ComponentsAdmin');
             }
             return;
         }

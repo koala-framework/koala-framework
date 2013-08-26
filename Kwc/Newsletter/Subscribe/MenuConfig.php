@@ -12,6 +12,10 @@ class Kwc_Newsletter_Subscribe_MenuConfig extends Kwf_Component_Abstract_MenuCon
         return 'kwc_newsletter';
     }
 
+    protected function _getMenuConfigText(Kwf_Component_Data $c) {
+        return trlKwf('Recipients');
+    }
+
     public function addResources(Kwf_Acl $acl)
     {
         $menuConfig = array('icon'=>new Kwf_Asset('group.png'));
@@ -21,7 +25,7 @@ class Kwc_Newsletter_Subscribe_MenuConfig extends Kwf_Component_Abstract_MenuCon
                     array('ignoreVisible'=>true)
                 );
         foreach ($components as $c) {
-            $menuConfig['text'] = trlKwf('Recipients');
+            $menuConfig['text'] = $this->_getMenuConfigText($c);
             if (count($components) > 1) {
                 $subRoot = $c;
                 while($subRoot = $subRoot->parent) {

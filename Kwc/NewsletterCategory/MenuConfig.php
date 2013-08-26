@@ -1,6 +1,15 @@
 <?php
 class Kwc_NewsletterCategory_MenuConfig extends Kwc_Newsletter_MenuConfig
 {
+    protected function _getMenuConfigText(Kwf_Component_Data $c, $type)
+    {
+        $ret = parent::_getMenuConfigText($c, $type);
+        if ($type == 'categories') {
+            return trlKwfStatic('Edit {0}', trlKwfStatic('Categories'));
+        }
+        return $ret;
+    }
+
     public function addResources(Kwf_Acl $acl)
     {
         $menuConfig = array('icon'=>new Kwf_Asset('package'));
@@ -8,7 +17,7 @@ class Kwc_NewsletterCategory_MenuConfig extends Kwc_Newsletter_MenuConfig
         $components = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
         foreach ($components as $c) {
-            $menuConfig['text'] = trlKwfStatic('Edit {0}', trlKwfStatic('Categories'));
+            $menuConfig['text'] = $this->_getMenuConfigText($c, 'categories');
             if (count($components) > 1) {
                 $subRoot = $c;
                 while($subRoot = $subRoot->parent) {

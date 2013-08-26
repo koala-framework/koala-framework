@@ -7,32 +7,6 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
 
     private $_componentField;
 
-    protected function _hasPermissions($row, $action)
-    {
-        if ($row->getModel() instanceof Kwf_Component_Model) {
-            $component = $row->getData();
-        } else {
-            if ($row instanceof Kwc_Root_Category_Trl_GeneratorRow) {
-                $component = Kwf_Component_Data_Root::getInstance()
-                    ->getComponentById($row->component_id, array('ignoreVisible' => true));
-            } else {
-                $component = Kwf_Component_Data_Root::getInstance()
-                    ->getComponentById($row->parent_id, array('ignoreVisible' => true));
-            }
-        }
-        $ret = false;
-        while ($component) {
-            if ($component->componentId == $this->_getParam('componentId')) $ret = true;
-            $component = $component->parent;
-        }
-
-        if ($ret) {
-            return parent::_hasPermissions($row, $action);
-        } else {
-            return false;
-        }
-    }
-
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
     {
         $row->parent_id = $this->_getParam('parent_id');
@@ -53,6 +27,12 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
         //--- main generator form (if Category_Generator this contains Pagename and Pagetype)
         $componentOrParent = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($this->_getComponentOrParentId(), array('ignoreVisible' => true));
+        if (!$componentOrParent ||
+            !Kwf_Registry::get('acl')->getComponentAcl()
+                ->isAllowed($this->_getAuthData(), $componentOrParent
+        )) {
+            throw new Kwf_Exception_AccessDenied();
+        }
         if ($this->_getParam('id')) {
             if ($componentOrParent->componentId == 'root') {
                 $this->_form = null;

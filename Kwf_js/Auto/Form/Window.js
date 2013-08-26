@@ -1,6 +1,10 @@
 Ext.namespace('Kwf.Auto.Form');
 
 Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
+    saveText: trlKwf('Save'),
+    cancelText: trlKwf('Cancel'),
+    closeText: trlKwf('Close'),
+
     initComponent : function()
     {
         if (!this.editTitle) {
@@ -82,7 +86,7 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
 
         if (type == 'save') {
             this.actions[type] = new Ext.Action({
-                text    : trlKwf('Save'),
+                text    : this.saveText,
                 handler : function() {
                     this.getAutoForm().submit({
                         success: function() {
@@ -95,7 +99,7 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
             });
         } else if (type == 'cancel') {
             this.actions[type] = new Ext.Action({
-                text    : trlKwf('Cancel'),
+                text    : this.cancelText,
                 handler : function() {
                     this.hide();
                 },
@@ -103,7 +107,7 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
             });
         } else if (type == 'close') {
             this.actions[type] = new Ext.Action({
-                text    : trlKwf('Close'),
+                text    : this.closeText,
                 handler : function() {
                     this.hide();
                 },

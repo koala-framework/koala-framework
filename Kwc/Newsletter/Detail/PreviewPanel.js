@@ -4,14 +4,13 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     autoScroll: true,
     bodyCssClass: 'mailPreviewPanel',
     button: [],
-    recipientSources: [],
+    sources: [],
     html: false,
     text: false,
     disableComboBox: false,
 
     initComponent : function()
     {
-        this.getRecipientSources();
         this.button['html'] = new Ext.Toolbar.Button ({
             icon    : '/assets/silkicons/html.png',
             cls     : 'x-btn-text-icon',
@@ -64,15 +63,96 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             vtype: 'email'
         });
 
-        this.tbar = [this.button['html'], this.button['text'], '-', this.addressField, this.sendButton, '-'];
+        for (var key in this.recipientSources) {
+            if (this.recipientSources[key].title) {
+                this.sources.push([key, this.recipientSources[key].title]);
+            } else {
+                this.sources.push([key, this.recipientSources[key].model]);
+            }
+        }
+
+        this.subscribeModelComboBox = new Kwf.Form.ComboBox({
+            triggerAction: 'all',
+            editable: false,
+            width: 200,
+            maxHeight: 350,
+            listWidth: 280,
+            emptyText: trlKwf('Select an subscriber pool...'),
+            store: {
+                data: this.sources
+            },
+            listeners: {
+                select: function(combo, record, index) {
+                    var object = { subscribeModelKey: record.data.id };
+                    Ext.apply(this.baseParams, object);
+                    this.recipientComboBox.setFormBaseParams(object);
+                    if (this.recipientComboBox.disabled) this.recipientComboBox.enable();
+                    delete this.recipientComboBox.lastQuery;
+                },
+                scope: this
+            }
+        });
+
+        if (this.sources.length == 1) {
+            this.subscribeModelComboBox.hide();
+        } else {
+            this.disableComboBox = true;
+        }
+
+        this.recipientComboBox = new Kwf.Form.ComboBox({
+            fieldLabel: trlKwf('Subscriber'),
+            store: {
+                url: this.subscribersControllerUrl + '/json-data'
+            },
+            disabled: this.disableComboBox,
+            baseParams: this.baseParams,
+            minChars: 0,
+            width: 200,
+            maxHeight: 350,
+            listWidth: 280,
+            displayField: 'email',
+            pageSize: 10,
+            typeAhead: true,
+            triggerAction: 'all',
+            emptyText: trlKwf('Select an subscriber...'),
+            selectOnFocus: true,
+            forceSelection: true,
+            loadingText: trlKwf('Searching...'),
+            tpl: new Ext.XTemplate(
+                '<tpl for=".">',
+                    '<div class="x-combo-list-item changeuser-list-item">',
+                        '<h3>{lastname}&nbsp;{firstname}</h3>',
+                        '{email}',
+                    '</div>',
+                '</tpl>'
+            ),
+            listeners: {
+                select: function(combo, record, index) {
+                    this.applyBaseParams({
+                        recipientId: record.data.id
+                    });
+                    this.html = false; this.text = false;
+                    this.load();
+                },
+                scope: this
+            }
+        }, this);
+
+        this.tbar = [this.button['html'], this.button['text'], '-', trlKwf('Send testmail to:'), this.addressField, this.sendButton, '-', this.subscribeModelComboBox, this.recipientComboBox];
         Kwc.Newsletter.Detail.PreviewPanel.superclass.initComponent.call(this);
     },
 
     applyBaseParams : function(baseParams) {
         Kwc.Newsletter.Detail.PreviewPanel.superclass.applyBaseParams.call(this, baseParams);
-        Ext.apply(this.baseParams, {
+        var object = {
             newsletterId: this.baseParams.componentId.substr(this.baseParams.componentId.lastIndexOf('_')+1)
-        });
+        };
+        if (this.sources.length == 1) {
+            for (var key in this.recipientSources) {
+                object.subscribeModelKey = key;
+            }
+        }
+        Ext.apply(this.baseParams, object);
     },
 
     load: function(params, options) {
@@ -83,104 +163,11 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             params:  this.baseParams,
             mask: this.el,
             success: function(r, options, data) {
+                this.recipientComboBox.setValue(data.recipientId);
                 this.html = data.html;
                 this.text = data.text;
                 this.body.dom.innerHTML = this.html;
                 this.button[data.format].toggle(true);
-            },
-            scope: this
-        });
-    },
-
-    getRecipientSources: function() {
-        if (this.recipientSources.length) return;
-        Ext.Ajax.request({
-            url: this.subscribersControllerUrl + '/json-get-recipient-sources',
-            params:  this.baseParams,
-            success: function(r, options, data) {
-                Ext.apply(this.baseParams, {
-                    recipientId: data.recipientId
-                });
-                for (var key in data.sources) {
-                    if (data.sources[key].title) {
-                        this.recipientSources.push([key, data.sources[key].title]);
-                    } else {
-                        this.recipientSources.push([key, data.sources[key].model]);
-                    }
-                }
-
-                if (this.recipientSources.length == 1) {
-                    for (var key in data.sources) {
-                        Ext.apply(this.baseParams, {
-                            subscribeModelKey: key
-                        });
-                    }
-                } else {
-                    this.disableComboBox = true;
-                    this.subscribeModelComboBox = new Kwf.Form.ComboBox({
-                        triggerAction: 'all',
-                        editable: false,
-                        width: 200,
-                        maxHeight: 350,
-                        listWidth: 280,
-                        emptyText: trlKwf('Select an subscriber pool...'),
-                        store: {
-                            data: this.recipientSources
-                        },
-                        listeners: {
-                            select: function(combo, record, index) {
-                                Ext.apply(this.baseParams, {
-                                    subscribeModelKey: record.data.id
-                                });
-                                if (this.recipientComboBox.disabled) this.recipientComboBox.enable();
-                                delete this.recipientComboBox.lastQuery;
-                            },
-                            scope: this
-                        }
-                    });
-                    this.getTopToolbar().addField(this.subscribeModelComboBox);
-                }
-
-                this.recipientComboBox = new Kwf.Form.ComboBox({
-                    fieldLabel: trlKwf('Subscriber'),
-                    store: {
-                        url: this.subscribersControllerUrl + '/json-data'
-                    },
-                    disabled: this.disableComboBox,
-                    baseParams: this.baseParams,
-                    minChars: 0,
-                    width: 200,
-                    maxHeight: 350,
-                    listWidth: 280,
-                    displayField: 'email',
-                    pageSize: 10,
-                    typeAhead: true,
-                    triggerAction: 'all',
-                    emptyText: trlKwf('Select an subscriber...'),
-                    selectOnFocus: true,
-                    forceSelection: true,
-                    loadingText: trlKwf('Searching...'),
-                    value: data.recipientId,
-                    tpl: new Ext.XTemplate(
-                        '<tpl for=".">',
-                            '<div class="x-combo-list-item changeuser-list-item">',
-                                '<h3>{lastname}&nbsp;{firstname}</h3>',
-                                '{email}',
-                            '</div>',
-                        '</tpl>'
-                    ),
-                    listeners: {
-                        select: function(combo, record, index) {
-                            this.applyBaseParams({
-                                recipientId: record.data.id
-                            });
-                            this.html = false; this.text = false;
-                            this.load();
-                        },
-                        scope: this
-                    }
-                }, this);
-                this.getTopToolbar().addField(this.recipientComboBox);
             },
             scope: this
         });

@@ -24,6 +24,10 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $parent = Kwf_Component_Data_Root::getInstance()->getChildPage(array('home' => true), array());
         }
 
+        if ($parent instanceof Kwc_Basic_LinkTag_FirstChildPage_Data) {
+            $parent = $parent->_getFirstChildPage();
+        }
+
         //TODO: the proper solution would be to restructure List_Switch so that the page is our parent
         if (is_instance_of($parent->componentClass, 'Kwc_List_Switch_Component') && $previous) {
             $parent = $parent->getChildComponent('_'.$previous->id);
