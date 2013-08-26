@@ -37,6 +37,10 @@ class Kwf_Loader
             require_once Kwf_Config::getValue('externLibraryPath.tcpdf').'/tcpdf.php';
         } else {
             $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+            $start = substr($file, 0, 4);
+            if ($start == 'Kwf/' || $start == 'Kwc/') {
+                $file = KWF_PATH.'/'.$file;
+            }
             try {
                 include $file;
             } catch (Exception $e) {
