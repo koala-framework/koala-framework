@@ -36,3 +36,21 @@ Kwf.onJElementReady = function(selector, fn, scope, options) {
         type: 'jquery'
     });
 };
+
+Kwf._callOnJElementReady = function(hndl, el) {
+    $.each($(hndl.selector), function(i, el) {
+        if (hndl.options.checkVisibility && !$(v).is(':visible')) return;
+        if (!el.initDone) el.initDone = {};
+        if (el.initDone[hndl.num]) return;
+        el.initDone[hndl.num] = true;
+        el = $(el);
+        var config = {};
+        var configEl = el.children('input[type="hidden"]');
+        if (configEl && configEl.length > 0) {
+            try {
+                config = $.parseJSON(configEl.val());
+            } catch (err) {}
+        }
+        hndl.fn.call(hndl.scope, el, config);
+    });
+}

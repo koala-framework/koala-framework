@@ -31,38 +31,10 @@ Kwf.callOnContentReady = function(el, options) {
             hndl.fn.call(hndl.scope || window, (el || document.body), options);
         } else {
             if (hndl.type == 'jquery') { // OnElementReady jQuery
-                $.each($(hndl.selector), function(i, el) {
-                    if (hndl.options.checkVisibility && !$(v).is(':visible')) return;
-                    if (!el.initDone) el.initDone = {};
-                    if (el.initDone[hndl.num]) return;
-                    el.initDone[hndl.num] = true;
-                    el = $(el);
-                    var config = {};
-                    var configEl = el.children('input[type="hidden"]');
-                    if (configEl && configEl.length > 0) {
-                        try {
-                            config = $.parseJSON(configEl.val());
-                        } catch (err) {}
-                    }
-                    hndl.fn.call(hndl.scope, el, config);
-                });
+                Kwf._callOnJElementReady(hndl, el);
 
             } else if (hndl.type == 'ext') { // OnElementReady ExtJS
-                Ext.query(hndl.selector, el).each(function(el) {
-                    if (hndl.options.checkVisibility && !Ext.fly(el).isVisible(true)) return;
-                    if (!el.initDone) el.initDone = {};
-                    if (el.initDone[hndl.num]) return;
-                    el.initDone[hndl.num] = true;
-                    el = Ext.get(el);
-                    var config = {};
-                    var configEl = el.child('> input[type="hidden"]')
-                    if (configEl) {
-                        try {
-                            config = Ext.decode(configEl.getValue());
-                        } catch (err) {}
-                    }
-                    hndl.fn.call(hndl.scope, el, config);
-                }, this);
+                Kwf._callOnElementReady(hndl, el);
             }
         }
     }
