@@ -148,7 +148,7 @@ class Kwf_Benchmark
 
     public static function output()
     {
-        Kwf_Benchmark::checkpoint('shutDown');
+        self::shutDown();
 
         if (!self::$_enabled) return;
         self::disable();
@@ -366,13 +366,13 @@ class Kwf_Benchmark
 
     final public static function shutDown()
     {
-        Kwf_Benchmark::checkpoint('shutDown');
-
-        if (!self::$_logEnabled) return;
-
         static $wasCalled = false;
         if ($wasCalled) return;
         $wasCalled = true;
+
+        Kwf_Benchmark::checkpoint('shutDown');
+
+        if (!self::$_logEnabled) return;
 
         self::_getInstance()->_shutDown();
     }
