@@ -84,12 +84,11 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
         $ret['speed'] = $currentSpeed.' '.trlKwf('Mails/Min');
 
 
-        $seconds = ($ret['queued'] / $this->getCountOfMailsPerMinute()) * 60;
+        $seconds = ($ret['queued'] / $currentSpeed) * 60;
         $hours = floor($seconds / 3600);
         $seconds -= $hours * 3600;
         $minutes = floor($seconds / 60);
-        $seconds -= $minutes * 60;
-        $ret['remainingTime'] = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+        $ret['remainingTime'] = sprintf('%02d:%02d', $hours, $minutes);
 
         $text = '';
         switch ($this->status) {
