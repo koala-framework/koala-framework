@@ -53,6 +53,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                 foreach ($rows as $newsletterRow) {
 
                     if ($newsletterRow->status != 'sending') {
+                        $newsletterRow->resume_date = date('Y-m-d H:i:s');
                         $newsletterRow->status = 'sending';
                         $newsletterRow->save();
                     }
