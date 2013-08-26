@@ -124,7 +124,7 @@ abstract class Kwf_Component_Renderer_Abstract
             $plugins = json_decode($args[3], true);
             $config = $args[4];
             $config = $config != '' ? unserialize(base64_decode($config)) : array();
-            if ($type == 'dynamic' && $config['class'] == 'Kwf_Component_Dynamic_SessionToken' && !Kwf_Util_SessionToken::getSessionToken()) {
+            if ($type == 'dynamic' && $config['class'] == 'Kwf_Component_Dynamic_SessionToken' && !Kwf_Setup::hasAuthedUser()) {
                 //yes, this is cheating, but a very common case that's worth optimizing using this hack
                 $ret = substr($ret, 0, $start).''.substr($ret, $end+1);
                 continue;
