@@ -10,6 +10,20 @@
         background-color: white;
         border-bottom: 2px solid #AAAAAA;
 
+        .nextPreviousLinks {
+            float: right;
+            margin-top: 20px;
+            a {
+                color: #1982d1;
+                font-weight: bold;
+                font-size: 12px;
+                margin-left: 10px;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
         h1.title {
             font-size: 26px;
             padding-bottom: 5px;

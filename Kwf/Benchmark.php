@@ -348,22 +348,6 @@ class Kwf_Benchmark
         return $ret;
     }
 
-    public static function info($msg)
-    {
-        if (!self::$_enabled) return;
-        if (Kwf_Config::getValue('debug.firephp') && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
-            p($msg, 'INFO');
-        }
-    }
-
-    public static function cacheInfo($msg)
-    {
-        if (!Kwf_Config::getValue('debug.componentCache.info')) return;
-        if (Kwf_Config::getValue('debug.firephp') && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
-            p($msg, 'INFO');
-        }
-    }
-
     final public static function shutDown()
     {
         Kwf_Benchmark::checkpoint('shutDown');

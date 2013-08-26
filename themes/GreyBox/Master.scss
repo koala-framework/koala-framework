@@ -29,9 +29,24 @@ $grid-padding   : 0px;
     }
 
     #footer {
+        color: #666;
+        .webStandard {
+            font-size: 13px;
+        }
+        a {
+            color: #555;
+            font-weight: bold;
+        }
         padding-top: 20px;
-        padding-left: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
         clear: both;
+        .bottomMenu {
+            float: left;
+        }
+        .poweredBy {
+            float: right;
+        }
     }
 
     #title {
