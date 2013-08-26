@@ -1,20 +1,4 @@
 /**
- * Register a function that will be called when content is loaded or shown
- * @param callback function
- * @param scope for callback
- * @param options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
- */
-Kwf.onContentReady = function(fn, scope, options) {
-    Kwf._readyHandlers.push({
-        selector: null,
-        fn: fn,
-        scope: scope,
-        options: options || {},
-        type: 'ext'
-    });
-};
-
-/**
  * Add a callback function that gets called once for every element that appears
  * in the dom tree
  *
