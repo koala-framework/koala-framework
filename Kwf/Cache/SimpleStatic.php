@@ -78,13 +78,13 @@ class Kwf_Cache_SimpleStatic
             return $ret;
         } else {
             $ret = self::_getZendCache()->load(self::_processId($cacheId));
+            $success = true;
             if ($ret === false) { //ZendCache returns false if nothing was found in cache
                 $success = false;
                 $ret = false;
             } else if ($ret === 'kwfFalse') {
                 $ret = false;
             }
-            $success = $ret !== false;
             return $ret;
         }
     }
