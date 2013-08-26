@@ -19,7 +19,7 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
         if ($authedUser) {
             $s = new Kwf_Model_Select();
             $s->whereEquals('user_id', $authedUser->id);
-            if ($authedUser->role == 'external') {
+            if ($authedUser->__get('role') == 'external') { // $authedUser->role throws error when role is an expression (PHP Bug?)
                 $this->_exprs['autheduser_visible'] = new Kwf_Model_Select_Expr_Not(new Kwf_Model_Select_Expr_Field('only_intern'));
             } else {
                 $this->_exprs['autheduser_visible'] = new Kwf_Model_Select_Expr_Boolean(true);
