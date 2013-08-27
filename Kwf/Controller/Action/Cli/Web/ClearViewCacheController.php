@@ -34,12 +34,14 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
             exit;
         }
 
-        echo "Will delete $entries view cache entries. Continue? [Y/n]\n";
-        $stdin = fopen('php://stdin', 'r');
-        $input = trim(strtolower(fgets($stdin, 2)));
-        fclose($stdin);
-        if (!($input == '' || $input == 'j' || $input == 'y')) {
-            exit(1);
+        if (!$this->_getParam('force')) {
+            echo "Will delete $entries view cache entries. Continue? [Y/n]\n";
+            $stdin = fopen('php://stdin', 'r');
+            $input = trim(strtolower(fgets($stdin, 2)));
+            fclose($stdin);
+            if (!($input == '' || $input == 'j' || $input == 'y')) {
+                exit(1);
+            }
         }
 
         echo "Deleting view cache...";
