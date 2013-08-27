@@ -31,7 +31,22 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             html: trlKwf('Pause')
         });
         this.newsletterPauseButton.on('click', function(ev) {
-            this.setStatus('pause');
+            Ext.Ajax.request({
+                url: this.controllerUrl + '/json-change-status',
+                params : Ext.apply(Kwf.clone(this.getBaseParams()), {
+                    status: 'pause'
+                }),
+                success: function(response, options, r) {
+                    this.newsletterStartButton.update(trlKwf('Resume Sending'));
+                    if (r.info.state == 'sending') r.info.state = 'start';
+                    this._updateProgress(r.info)
+                    if (r.info.state != 'finished') {
+                        this.startTimer();
+                    }
+                    this.load();
+                },
+                scope: this
+            });
         }, this);
 
         this.newsletterStartButtonContainer = this.newsletterButtonsContainer.createChild({
@@ -119,9 +134,10 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             params : this.getBaseParams(),
             success: function(response, options, r) {
                 var info = r.info;
-                this.checkButtons(info);
+                this._updateButtons(info);
                 if (info.state == 'sending') info.state = 'start';
-                if (this.setProgress(info)) {
+                this._updateProgress(info);
+                if (info.state != 'finished') {
                     this.startTimer();
                 }
             },
@@ -129,7 +145,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         });
     },
 
-    setProgress: function(info)
+    _updateProgress: function(info)
     {
         var progress = 0;
         if (info.total > 0) progress = info.sent / info.total;
@@ -139,24 +155,6 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             this.newsletterInfoSpeed.update(trlKwf('current speed: <b>{0}</b>', [info.speed]));
             this.newsletterInfoTime.update(trlKwf('Remaining time: <b>{0}</b>', [info.remainingTime]));
         }
-        return !(info.state == 'finished');
-    },
-
-    setStatus: function(status)
-    {
-        Ext.Ajax.request({
-            url: this.controllerUrl + '/json-change-status',
-            params : Ext.apply(Kwf.clone(this.getBaseParams()), {
-                status: status
-            }),
-            success: function(response, options, r) {
-                if (status == 'pause') this.newsletterStartButton.update(trlKwf('Resume Sending'));
-                if (r.info.state == 'sending') r.info.state = 'start';
-                if (this.setProgress(r.info)) this.startTimer();
-                this.load();
-            },
-            scope: this
-        });
     },
 
     startTimer: function()
@@ -183,9 +181,11 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             url: this.controllerUrl + '/json-status',
             params : this.getBaseParams(),
             success: function(response, options, r) {
-                this.checkButtons(r.info);
-                if (!this.setProgress(r.info))
-                    this.stopTimer();
+                this._updateButtons(r.info);
+                this._updateProgress(r.info);
+                if (r.info.state != 'finished') {
+                    this.startTimer();
+                }
                 this.timerBusy = false;
             },
             failure: function(response) {
@@ -195,7 +195,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         });
     },
 
-    checkButtons: function(info)
+    _updateButtons: function(info)
     {
         if (info.state == 'start' || info.state == 'startLater' || info.state == 'sending') {
             this.newsletterStartButtonContainer.hide();
