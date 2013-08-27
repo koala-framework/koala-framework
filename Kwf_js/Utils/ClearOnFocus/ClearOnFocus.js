@@ -2,7 +2,7 @@ Kwf.onContentReady(function()
 {
     var Event = Ext.EventManager;
 
-    var els = Ext.query('input.kwfClearOnFocus');
+    var els = Ext.query('.kwfClearOnFocus');
     els.forEach(function(el) {
         if (!el || el.value == '') return;
         var xel = Ext.get(el);

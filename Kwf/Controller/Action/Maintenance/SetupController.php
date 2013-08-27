@@ -14,8 +14,10 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
             throw new Kwf_Exception_Client("Application seems to be set up already. (update file exists)");
         }
 
-        if (file_exists('config.local.ini') && filesize('config.local.ini') > 0) {
-            throw new Kwf_Exception_Client("Application seems to be set up already. (config.local.ini file exists)");
+        if (file_exists('config.local.ini') && filesize('config.local.ini') > 0 && Kwf_Registry::get('config')->setupFinished) {
+            if (strpos(file_get_contents('config.local.ini'), "\nsetupFinished = false\n") !== false) {
+                throw new Kwf_Exception_Client("Application seems to be set up already. (config.local.ini file exists)");
+            }
         }
 
         $db = null;
