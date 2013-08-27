@@ -100,11 +100,11 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
 
         $text = '';
         switch ($this->status) {
-            case 'stop': $text = trlKwf('Newsletter stopped, cannot start again.'); break;
-            case 'pause': $text = trlKwf('Newsletter paused.'); break;
-            case 'start': case 'sending': $text = trlKwf('Newsletter sending.'); break;
-            case 'finished': $text = trlKwf('Newsletter finished.'); break;
-            default: $text = trlKwf('Newsletter waiting for start.'); break;
+            case 'stop': $text = trlKwf('Sending stopped, cannot start again').'.'; break;
+            case 'pause': $text = trlKwf('Sending paused').'.'; break;
+            case 'start': case 'sending': $text = trlKwf('Sending').'.'; break;
+            case 'finished': $text = trlKwf('Sending finished').'.'; break;
+            default: $text = trlKwf('Newsletter waiting for start').'.'; break;
         }
         $ret['shortText'] = $text;
 

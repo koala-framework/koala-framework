@@ -74,6 +74,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                 if (!$newsletterRow->getModel()->getDependentModel('Queue')->countRows($s)) {
                     $newsletterRow->status = 'finished';
                     $newsletterRow->save();
+                    if ($this->_getParam('debug')) echo "Newsletter finished.\n";
 
                     //give send processes time to finish
                     sleep(5);
@@ -278,7 +279,6 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
             echo "\n";
             echo "$count Newsletters sent ($average/minute), $countErrors errors, $countNoUser user not found.\n";
             echo $info['text'] . "\n";
-            if ($nlRow->status == 'finished') echo "Newsletter finished.\n";
         }
 
         Kwf_Component_ModelObserver::getInstance()->enable();

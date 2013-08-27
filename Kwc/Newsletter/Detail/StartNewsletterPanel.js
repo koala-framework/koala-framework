@@ -7,10 +7,10 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             title: trlKwf('Mailing'),
             layout: 'column',
             border: false,
-            height: 100,
+            height: 150,
             defaults: {
                 border: false,
-                height: 100
+                height: 150
             }
         });
 
@@ -47,7 +47,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         this.newsletterStartButton.on('click', function(ev) {
             this.mailingFormWindow = new Kwf.Auto.Form.Window({
                 controllerUrl: this.formControllerUrl,
-                title: trlKwf('Newsletter sending settings'),
+                editTitle: trlKwf('Send Newsletter'),
                 saveText: trlKwf('Start')
             }, this);
             this.mailingFormWindow.on('datachange', function() {
@@ -150,7 +150,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
                 status: status
             }),
             success: function(response, options, r) {
-                if (status == 'pause') this.newsletterStartButton.update(trlKwf('Send Newsletter'));
+                if (status == 'pause') this.newsletterStartButton.update(trlKwf('Resume Sending'));
                 if (r.info.state == 'sending') r.info.state = 'start';
                 if (this.setProgress(r.info)) this.startTimer();
                 this.load();
@@ -206,7 +206,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         } else if (info.state == 'finished') {
             this.newsletterStartButtonContainer.show();
             this.newsletterPauseButtonContainer.hide();
-            this.newsletterStartButton.update(trlKwf('Newsletter finished'));
+            this.newsletterStartButton.update(trlKwf('Sending finished'));
             this.newsletterStartButton.dom.disabled = 'disabled';
         }
     }

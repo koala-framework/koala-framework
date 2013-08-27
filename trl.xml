@@ -5773,39 +5773,32 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Novice</sl>
 </text>
 <text>
-<en>Newsletter stopped, cannot start again.</en>
-<de>Newsletter wurde gestoppt und kann nicht mehr gestartet werden.</de>
+<en>Sending stopped, cannot start again</en>
+<de>Versand wurde gestoppt und kann nicht mehr gestartet werden</de>
 <id>1170</id>
-<ro>Newsletter-ul a fost oprit. Nu mai poate fi repornit.</ro>
-<sl>Pošiljanje e-novic je bilo prekinjeno in ga ni možno ponovno aktivirati.</sl>
+<ro>Newsletter-ul a fost oprit. Nu mai poate fi repornit</ro>
+<sl>Pošiljanje e-novic je bilo prekinjeno in ga ni možno ponovno aktivirati</sl>
 </text>
 <text>
-<en>Newsletter paused.</en>
-<de>Newsletter pausiert.</de>
+<en>Sending paused</en>
+<de>Versand pausiert</de>
 <id>1171</id>
-<ro>Pauză Newsletter.</ro>
-<sl>Pošiljanje e-novic začasno prekinjeno. </sl>
+<ro>Pauză Newsletter</ro>
+<sl>Pošiljanje e-novic začasno prekinjeno</sl>
 </text>
 <text>
-<en>Newsletter sending.</en>
-<de>Sende Newsletter.</de>
+<en>Sending</en>
+<de>Versand läuft</de>
 <id>1172</id>
-<ro>Trimite Newsletter.</ro>
-<sl>Pošlji e-novice.</sl>
+<ro>Trimite Newsletter</ro>
+<sl>Pošlji e-novice</sl>
 </text>
 <text>
-<en>Newsletter finished.</en>
-<de>Newsletter fertig.</de>
-<id>1173</id>
-<ro>Newsletter finalizat.</ro>
-<sl>Pošiljanje e-novic zaključeno.</sl>
-</text>
-<text>
-<en>Newsletter waiting for start.</en>
-<de>Newsletter wartet auf Startvorgang.</de>
+<en>Newsletter waiting for start</en>
+<de>Newsletter wartet auf Startvorgang</de>
 <id>1174</id>
-<ro>Newsletter în aşteptare start.</ro>
-<sl>E-novice čakajo na začetek pošiljanja.</sl>
+<ro>Newsletter în aşteptare start</ro>
+<sl>E-novice čakajo na začetek pošiljanja</sl>
 </text>
 <text>
 <en>Last mail sent: {0}</en>
@@ -9265,11 +9258,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1936</id>
 </text>
 <text>
-<en>Newsletter sending settings</en>
-<de>Newsletter Sendeeinstellungen</de>
-<id>1937</id>
-</text>
-<text>
 <en>current speed: &lt;b&gt;{0}&lt;/b&gt;</en>
 <de>Aktuelle Geschwindigkeit: &lt;b&gt;{0}&lt;/b&gt;</de>
 <id>1938</id>
@@ -9290,8 +9278,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1941</id>
 </text>
 <text>
-<en>Newsletter finished</en>
-<de>Newsletter fertig</de>
+<en>Sending finished</en>
+<de>Sendevorgang abgeschlossen</de>
 <id>1942</id>
 </text>
 <text>
@@ -9586,6 +9574,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Start</en>
 <de>Starten</de>
 <id>2011</id>
+</text>
+<text>
+<en>Resume Sending</en>
+<de>Senden Fortsetzen</de>
+<id>2012</id>
 </text>
 </trl>
 
