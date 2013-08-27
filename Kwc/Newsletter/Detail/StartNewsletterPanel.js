@@ -1,10 +1,6 @@
 Ext.ns('Kwc.Newsletter.Detail');
 Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
 
-    startNewsletterText: trlKwf('Send Newsletter'),
-    pauseText: trlKwf('Pause'),
-    newsletterFinishedText: trlKwf('Newsletter finished'),
-
     initComponent: function()
     {
         Ext.applyIf(this, {
@@ -32,7 +28,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         this.newsletterPauseButton = this.newsletterPauseButtonContainer.createChild({
             tag: 'button',
             cls: 'kwcNewsletterButtonPause',
-            html: this.pauseText
+            html: trlKwf('Pause')
         });
         this.newsletterPauseButton.on('click', function(ev) {
             this.setStatus('pause');
@@ -46,7 +42,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         this.newsletterStartButton = this.newsletterStartButtonContainer.createChild({
             tag: 'button',
             cls: 'kwcNewsletterButtonStart',
-            html: this.startNewsletterText
+            html: trlKwf('Send Newsletter')
         });
         this.newsletterStartButton.on('click', function(ev) {
             this.mailingFormWindow = new Kwf.Auto.Form.Window({
@@ -154,7 +150,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
                 status: status
             }),
             success: function(response, options, r) {
-                if (status == 'pause') this.newsletterStartButton.update(this.startNewsletterText);
+                if (status == 'pause') this.newsletterStartButton.update(trlKwf('Send Newsletter'));
                 if (r.info.state == 'sending') r.info.state = 'start';
                 if (this.setProgress(r.info)) this.startTimer();
                 this.load();
@@ -210,7 +206,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         } else if (info.state == 'finished') {
             this.newsletterStartButtonContainer.show();
             this.newsletterPauseButtonContainer.hide();
-            this.newsletterStartButton.update(this.newsletterFinishedText);
+            this.newsletterStartButton.update(trlKwf('Newsletter finished'));
             this.newsletterStartButton.dom.disabled = 'disabled';
         }
     }
