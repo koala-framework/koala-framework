@@ -7,10 +7,10 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             title: trlKwf('Mailing'),
             layout: 'column',
             border: false,
-            height: 150,
+            height: 130,
             defaults: {
                 border: false,
-                height: 150
+                height: 130
             }
         });
 
