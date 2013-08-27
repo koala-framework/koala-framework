@@ -51,41 +51,33 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
 
     public function countRows($where = array())
     {
-        $syncType = $this->_synchronize();
+        $this->_synchronize();
         $ret = parent::countRows($where);
-        if ($syncType !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
         return $ret;
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
-        $syncType = $this->_synchronize();
+        $this->_synchronize();
         $ret = parent::getIds($where, $order, $limit, $start);
-        if ($syncType !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
         return $ret;
     }
 
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
-        $syncType = $this->_synchronize();
+        $this->_synchronize();
         $ret = parent::getRows($where, $order, $limit, $start);
-        if ($syncType !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
         return $ret;
     }
 
     public function getRow($select)
     {
-        $syncType = $this->_synchronize();
+        $this->_synchronize();
         $ret = parent::getRow($select);
-        if ($syncType !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
         return $ret;
     }
 
@@ -165,6 +157,7 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
     {
         if ($this->_synchronizeDone) {
             if ($syncType !== self::SYNC_ALWAYS) {
+                $this->_lockSync();
                 //es wurde bereits synchronisiert
                 return array(
                     'type' => self::SYNC_SELECT_TYPE_NOSYNC,
@@ -181,6 +174,7 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
                     $lastSync = file_get_contents($lastSyncFile);
                 }
                 if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
+                    $this->_lockSync();
                     //maxSyncDelay wurde noch nicht erreicht
                     return array(
                         'type' => self::SYNC_SELECT_TYPE_NOSYNC,
@@ -268,10 +262,8 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
 
     public final function synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
     {
-        $syncType = $this->_synchronize($overrideMaxSyncDelay);
-        if ($syncType !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_synchronize($overrideMaxSyncDelay);
+        $this->_unlockSync();
         $this->_afterSync();
     }
 
@@ -320,7 +312,7 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
                     $s = $this->getProxyModel()->select()->order($pk, 'DESC')->limit(1);
                     $maxRow = $this->getProxyModel()->getRow($s);
                 }
-
+                
                 $this->getProxyModel()->import($format, $data, $options);
 
                 if ($this->_callObserverForRowUpdates) {
@@ -348,7 +340,6 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
             //$msg .= ' SELECT: '.str_replace("\n", " ", print_r($select, true));
             file_put_contents('log/mirrorcache', $msg."\n", FILE_APPEND);
         }
-        return $select['type'];
     }
 
     private function _getMaxSyncDelay()
