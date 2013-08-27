@@ -458,8 +458,8 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
         $this->view->visible = $row->visible == '1';
         if (!isset($this->view->icon)) {
             $this->view->icon = $this->view->visible ?
-                $this->_icons['invisible']->__toString() :
-                $this->_icons['default']->__toString();
+                $this->_icons['default']->__toString() :
+                $this->_icons['invisible']->__toString();
         }
     }
 
