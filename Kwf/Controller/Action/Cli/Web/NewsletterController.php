@@ -86,7 +86,6 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                             'newsletter_id' => $queueRow->newsletter_id,
                             'recipient_model' => $queueRow->recipient_model,
                             'recipient_id' => $queueRow->recipient_id,
-                            'searchtext' => $queueRow->searchtext,
                             'status' => 'failed',
                             'send_date' => date('Y-m-d H:i:s')
                         ))->save();
@@ -227,7 +226,6 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                     'newsletter_id' => $row->newsletter_id,
                     'recipient_model' => $row->recipient_model,
                     'recipient_id' => $row->recipient_id,
-                    'searchtext' => $row->searchtext,
                     'status' => $status,
                     'send_date' => date('Y-m-d H:i:s')
                 ))->save();
