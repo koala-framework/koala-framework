@@ -368,9 +368,7 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
             array($r['updateRow']),
             array('replace' => true));
 
-        if ($select['type'] !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
         return $r['updateRow'];
     }
 
@@ -392,9 +390,7 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
             array($r['insertRow']),
             array('replace' => true));
 
-        if ($select['type'] !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
         return $r['insertRow'];
     }
 
