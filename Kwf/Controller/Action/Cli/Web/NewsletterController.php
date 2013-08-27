@@ -74,6 +74,28 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                 if (!$newsletterRow->getModel()->getDependentModel('Queue')->countRows($s)) {
                     $newsletterRow->status = 'finished';
                     $newsletterRow->save();
+
+                    //give send processes time to finish
+                    sleep(5);
+
+                    //delete "hanging" queue entries
+                    $s = new Kwf_Model_Select();
+                    $s->whereEquals('newsletter_id', $newsletterRow->id);
+                    foreach ($newsletterRow->getModel()->getDependentModel('Queue')->getRows($s) as $queueRow) {
+                        $newsletterRow->getModel()->getDependentModel('QueueLog')->createRow(array(
+                            'newsletter_id' => $queueRow->newsletter_id,
+                            'recipient_model' => $queueRow->recipient_model,
+                            'recipient_id' => $queueRow->recipient_id,
+                            'searchtext' => $queueRow->searchtext,
+                            'status' => 'failed',
+                            'send_date' => date('Y-m-d H:i:s')
+                        ))->save();
+                        $msg = "Newsletter finished but queue entry with pid $queueRow->send_process_pid still exists: $queueRow->recipient_id $queueRow->searchtext";
+                        $e = new Kwf_Exception($msg);
+                        $e->logOrThrow();
+                        echo $msg."\n";
+                        $queueRow->delete();
+                    }
                     continue;
                 }
 
