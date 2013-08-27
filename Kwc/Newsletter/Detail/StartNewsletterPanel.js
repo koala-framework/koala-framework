@@ -146,7 +146,10 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
     {
         if (!this._deferedUpdateStatusRunning) {
             this._deferedUpdateStatusRunning = true;
-            this._updateStatus.defer(5000, this);
+            (function() {
+                this._deferedUpdateStatusRunning = false;
+                this._updateStatus();
+            }).defer(5000, this);
         }
     },
 
