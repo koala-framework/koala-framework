@@ -50,16 +50,18 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
                 $msg .= trim(file_get_contents($tempFile))."\n";
             }
 
-            $mail = new Kwf_Mail();
-            $mail->setSubject(Kwf_Config::getValue('server.domain').' process-control output');
-            $mail->setBodyText($msg);
-            foreach (Kwf_Registry::get('config')->developers as $d) {
-                if ($d->sendProcessControlOutput) {
-                    $d->email;
-                    $mail->addTo($d->email);
+            if ($msg) {
+                $mail = new Kwf_Mail();
+                $mail->setSubject(Kwf_Config::getValue('server.domain').' process-control output');
+                $mail->setBodyText($msg);
+                foreach (Kwf_Registry::get('config')->developers as $d) {
+                    if ($d->sendProcessControlOutput) {
+                        $d->email;
+                        $mail->addTo($d->email);
+                    }
                 }
+                $mail->send();
             }
-            $mail->send();
         }
 
         exit;
