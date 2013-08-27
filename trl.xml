@@ -9551,7 +9551,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2009</id>
 </text>
 <text>
-<de>{0} gesendet, {1} in der Warteschlange</de>
+<de>{0} gesendet, {1} in der Warteschlange.</de>
 <en>{0} sent, {1} waiting to send.</en>
 <id>2010</id>
 </text>
