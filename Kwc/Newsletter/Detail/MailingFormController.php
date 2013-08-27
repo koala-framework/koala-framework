@@ -11,13 +11,13 @@ class Kwc_Newsletter_Detail_MailingFormController extends Kwf_Controller_Action_
         $form->setLabelWidth(150);
 
         $cards = $form->add(new Kwf_Form_Container_Cards());
-        $cards->setCombobox(new Kwf_Form_Field_Radio('status', trlKwf('Start newsletter')));
+        $cards->setCombobox(new Kwf_Form_Field_Radio('status', trlKwf('Starting Time')));
         $cards->getCombobox()
             ->setAllowBlank(false)
             ->setWidth(150);
 
         $card = $cards->add();
-        $card->setTitle(trlKwf('Now'));
+        $card->setTitle(trlKwf('Instantly'));
         $card->setName('start');
 
         $card = $cards->add();

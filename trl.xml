@@ -9253,8 +9253,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1935</id>
 </text>
 <text>
-<en>Start newsletter</en>
-<de>Starte Newsletter</de>
+<en>Starting Time</en>
+<de>Startzeitpunkt</de>
 <id>1936</id>
 </text>
 <text>
@@ -9333,8 +9333,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1955</id>
 </text>
 <text>
-<en>Now</en>
-<de>Jetzt</de>
+<en>Instantly</en>
+<de>Sofort</de>
 <id>1956</id>
 </text>
 <text>
@@ -9563,17 +9563,17 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Send testmail to:</en>
 <de>Sende Testmail an:</de>
-<id>2013</id>
+<id>2009</id>
 </text>
 <text>
 <en>Send Newsletter</en>
 <de>Newsletter versenden</de>
-<id>2014</id>
+<id>2010</id>
 </text>
 <text>
 <en>Start</en>
 <de>Starten</de>
-<id>2015</id>
+<id>2011</id>
 </text>
 <text>
 <en>Resume Sending</en>

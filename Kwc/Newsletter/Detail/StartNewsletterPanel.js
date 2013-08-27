@@ -37,13 +37,8 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
                     status: 'pause'
                 }),
                 success: function(response, options, r) {
-                    this.newsletterStartButton.update(trlKwf('Resume Sending'));
-                    if (r.info.state == 'sending') r.info.state = 'start';
-                    this._updateProgress(r.info)
-                    if (r.info.state != 'finished') {
-                        this.startTimer();
-                    }
-                    this.load();
+                    this._updateButtons(r.info);
+                    this._updateProgress(r.info);
                 },
                 scope: this
             });
@@ -129,19 +124,9 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
 
     load: function()
     {
-        Ext.Ajax.request({
-            url: this.controllerUrl + '/json-status',
-            params : this.getBaseParams(),
-            success: function(response, options, r) {
-                var info = r.info;
-                this._updateButtons(info);
-                if (info.state == 'sending') info.state = 'start';
-                this._updateProgress(info);
-                if (info.state != 'finished') {
-                    this.startTimer();
-                }
-            },
-            scope: this
+        this._updateStatus({
+            mask: this.el,
+            ignoreVisible: true
         });
     },
 
@@ -157,39 +142,30 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         }
     },
 
-    startTimer: function()
+    _deferedUpdateStatus: function()
     {
-        var self = this;
-        function updateTimer() {
-            self.hTimer = window.setTimeout(updateTimer, 30000);
-            self.tick();
+        if (!this._deferedUpdateStatusRunning) {
+            this._deferedUpdateStatusRunning = true;
+            this._updateStatus.defer(5000, this);
         }
-        this.hTimer = window.setTimeout(updateTimer, 5000);
     },
 
-    stopTimer: function()
+    _updateStatus: function(options)
     {
-        if (this.hTimer != null) window.clearTimeout(this.hTimer);
-        this.hTimer = null;
-    },
-
-    tick: function()
-    {
-        if (this.timerBusy) return;
-        this.timerBusy = true;
+        if (!this.el.isVisible(true) && (!options || !options.ignoreVisible)) {
+            this._deferedUpdateStatus();
+            return;
+        }
         Ext.Ajax.request({
+            mask: (options && options.mask) ? options.mask : false,
             url: this.controllerUrl + '/json-status',
             params : this.getBaseParams(),
             success: function(response, options, r) {
                 this._updateButtons(r.info);
                 this._updateProgress(r.info);
-                if (r.info.state != 'finished') {
-                    this.startTimer();
-                }
-                this.timerBusy = false;
             },
-            failure: function(response) {
-                this.timerBusy = false;
+            callback: function() {
+                this._deferedUpdateStatus();
             },
             scope: this
         });
@@ -197,17 +173,23 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
 
     _updateButtons: function(info)
     {
+        this.newsletterStartButton.dom.disabled = false;
         if (info.state == 'start' || info.state == 'startLater' || info.state == 'sending') {
             this.newsletterStartButtonContainer.hide();
             this.newsletterPauseButtonContainer.show();
         } else if (info.state == 'pause') {
             this.newsletterStartButtonContainer.show();
             this.newsletterPauseButtonContainer.hide();
+            this.newsletterStartButton.update(trlKwf('Resume Sending'));
         } else if (info.state == 'finished') {
             this.newsletterStartButtonContainer.show();
             this.newsletterPauseButtonContainer.hide();
             this.newsletterStartButton.update(trlKwf('Sending finished'));
-            this.newsletterStartButton.dom.disabled = 'disabled';
+            this.newsletterStartButton.dom.disabled = true;
+        } else {
+            this.newsletterStartButtonContainer.show();
+            this.newsletterPauseButtonContainer.hide();
+            this.newsletterStartButton.update(trlKwf('Send Newsletter'));
         }
     }
 });
