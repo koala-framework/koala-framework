@@ -14,7 +14,7 @@ Ext.util.Format.booleanText = function(v, p, record) {
     return v && v != '0' ? trlKwf('Yes') : trlKwf('No');
 };
 Ext.util.Format.booleanIcon = function(value, p, record, rowIndex, colIndex, store, column) {
-    if (value) {
+    if (value && value != '0') {
         if (column && column.tooltip) {
             p.attr += ' title="'+column.tooltip+'"';
         }
