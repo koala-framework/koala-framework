@@ -10,7 +10,7 @@
             );
             echo $this->componentLink(
                 $this->optComponent,
-                $this->data->trlKwf('Accept and continue'),
+                '<span>' . $this->data->trlKwf('Accept and continue') . '</span>',
                 array(
                     'cssClass' => 'accept',
                     'get' => array('optValue' => 'in', 'redirect' => urlencode($this->data->url))
