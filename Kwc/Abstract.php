@@ -527,6 +527,19 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     }
 
     /**
+     * Returns the view plugins that should be used for this component instance
+     *
+     * Must only return plugins defined in 'plugins' setting.
+     * Can also return non-view plugins, those will silently be ignored.
+     *
+     * Default implementation returns 'plugins' setting.
+     */
+    public function getActiveViewPlugins()
+    {
+        return $this->_getSetting('plugins');
+    }
+
+    /**
      * Returns available width of this component
      *
      * use 'contentWidth' setting to set a fixed with

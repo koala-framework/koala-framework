@@ -4,6 +4,7 @@
  *
  * Shows a layer with cookie informations
  * Set the default value for opt-in for JavaScript
+ * Depends on Kwc_Statistics_Opt_Component
  */
 class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
 {
@@ -13,17 +14,7 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['files'][] = 'kwf/Kwc/Statistics/OptBox/Component.js';
         $ret['cssClass'] = 'webStandard';
         $ret['flags']['hasHeaderIncludeCode'] = true;
-        $ret['flags']['processInput'] = true;
         return $ret;
-    }
-
-    public function processInput($postData)
-    {
-        if (isset($postData['accept'])) {
-            Kwf_Statistics::setUserOptValue(Kwf_Statistics::OPT_IN);
-            header('Location: ' . $this->getData()->url);
-            exit;
-        }
     }
 
     /**

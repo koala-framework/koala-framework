@@ -8,12 +8,16 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 
     public function load($id, $doNotTestCacheValidity = false)
     {
+        if (php_sapi_name() == 'cli') return false;
+
         $id = $this->_processId($id);
         return parent::load($id, $doNotTestCacheValidity);
     }
 
     public function loadWithMetadata($id, $doNotTestCacheValidity = false)
     {
+        if (php_sapi_name() == 'cli') return false;
+
         $id = $this->_processId($id);
 
         $tmp = apc_fetch($id);
@@ -28,12 +32,15 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 
     public function test($id)
     {
+        if (php_sapi_name() == 'cli') return false;
+
         $id = $this->_processId($id);
         return parent::test($id);
     }
 
     public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
+        if (php_sapi_name() == 'cli') return true;
         $id = $this->_processId($id);
         return parent::save($data, $id, $tags, $specificLifetime);
     }
@@ -50,12 +57,16 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 
     public function getMetadatas($id)
     {
+        if (php_sapi_name() == 'cli') return false;
+
         $id = $this->_processId($id);
         return parent::getMetadatas($id);
     }
 
     public function touch($id, $extraLifetime)
     {
+        if (php_sapi_name() == 'cli') return false;
+
         $id = $this->_processId($id);
         return parent::touch($id, $extraLifetime);
     }
