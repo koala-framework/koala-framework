@@ -29,6 +29,8 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
 
     private $_synchronizeDone = false;
     private $_lockSync;
+    private $_lockCount = 0;
+    private $_lockWrite;
 
     public function __construct(array $config = array())
     {
@@ -51,41 +53,37 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
 
     public function countRows($where = array())
     {
-        $syncType = $this->_synchronize();
+        $this->_synchronize();
         $ret = parent::countRows($where);
-        if ($syncType !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
+        $this->_afterSync();
         return $ret;
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
-        $syncType = $this->_synchronize();
+        $this->_synchronize();
         $ret = parent::getIds($where, $order, $limit, $start);
-        if ($syncType !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
+        $this->_afterSync();
         return $ret;
     }
 
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
-        $syncType = $this->_synchronize();
+        $this->_synchronize();
         $ret = parent::getRows($where, $order, $limit, $start);
-        if ($syncType !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
+        $this->_afterSync();
         return $ret;
     }
 
     public function getRow($select)
     {
-        $syncType = $this->_synchronize();
+        $this->_synchronize();
         $ret = parent::getRow($select);
-        if ($syncType !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
+        $this->_afterSync();
         return $ret;
     }
 
@@ -109,36 +107,43 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
 
     private function _unlockSync()
     {
-        fclose($this->_lockSync);
-        $this->_lockSync = null;
-        $observedRows = $this->_observedRows;
-        $this->_observedRows = array();
-        foreach ($observedRows as $action => $rows) {
-            foreach ($rows as $row) {
-                Kwf_Component_ModelObserver::getInstance()->add($action, $row);
+        $this->_lockCount--;
+        if ($this->_lockCount == 0) {
+            fclose($this->_lockSync);
+            $this->_lockSync = null;
+            $observedRows = $this->_observedRows;
+            $this->_observedRows = array();
+            foreach ($observedRows as $action => $rows) {
+                foreach ($rows as $row) {
+                    Kwf_Component_ModelObserver::getInstance()->add($action, $row);
+                }
             }
         }
     }
 
     private function _lockSync($write = false)
     {
-        if ($this->_lockSync) {
-            throw new Kwf_Exception('Already locked');
+        if ($write && $this->_lockCount && !$this->_lockWrite) {
+            throw new Kwf_Exception("already read locked but write lock requested");
         }
-        $filename = $this->_getLastSyncFile().'.lock';
-        $this->_lockSync = fopen($filename, "w");
+        $this->_lockCount++;
+        if ($this->_lockCount == 1) {
+            $this->_lockWrite = $write;
+            $filename = $this->_getLastSyncFile().'.lock';
+            $this->_lockSync = fopen($filename, "w");
 
-        $startTime = microtime(true);
-        while(true) {
-            if (flock($this->_lockSync, ($write ? LOCK_EX : LOCK_SH) | LOCK_NB)) {
-                break;
+            $startTime = microtime(true);
+            while(true) {
+                if (flock($this->_lockSync, ($write ? LOCK_EX : LOCK_SH) | LOCK_NB)) {
+                    break;
+                }
+                if (microtime(true)-$startTime > 120) {
+                    throw new Kwf_Exception("Lock Failed, locked by: " . $filename);
+                }
+                usleep(rand(0, 100)*100);
             }
-            if (microtime(true)-$startTime > 120) {
-                throw new Kwf_Exception("Lock Failed, locked by: " . $filename);
-            }
-            usleep(rand(0, 100)*100);
+            fwrite($this->_lockSync, getmypid());
         }
-        fwrite($this->_lockSync, getmypid());
     }
 
     /**
@@ -165,6 +170,7 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
     {
         if ($this->_synchronizeDone) {
             if ($syncType !== self::SYNC_ALWAYS) {
+                $this->_lockSync();
                 //es wurde bereits synchronisiert
                 return array(
                     'type' => self::SYNC_SELECT_TYPE_NOSYNC,
@@ -181,6 +187,7 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
                     $lastSync = file_get_contents($lastSyncFile);
                 }
                 if ($lastSync && $lastSync + $this->_getMaxSyncDelay() > time()) {
+                    $this->_lockSync();
                     //maxSyncDelay wurde noch nicht erreicht
                     return array(
                         'type' => self::SYNC_SELECT_TYPE_NOSYNC,
@@ -268,10 +275,8 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
 
     public final function synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
     {
-        $syncType = $this->_synchronize($overrideMaxSyncDelay);
-        if ($syncType !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_synchronize($overrideMaxSyncDelay);
+        $this->_unlockSync();
         $this->_afterSync();
     }
 
@@ -320,7 +325,7 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
                     $s = $this->getProxyModel()->select()->order($pk, 'DESC')->limit(1);
                     $maxRow = $this->getProxyModel()->getRow($s);
                 }
-
+                
                 $this->getProxyModel()->import($format, $data, $options);
 
                 if ($this->_callObserverForRowUpdates) {
@@ -348,7 +353,6 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
             //$msg .= ' SELECT: '.str_replace("\n", " ", print_r($select, true));
             file_put_contents('log/mirrorcache', $msg."\n", FILE_APPEND);
         }
-        return $select['type'];
     }
 
     private function _getMaxSyncDelay()
@@ -377,9 +381,8 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
             array($r['updateRow']),
             array('replace' => true));
 
-        if ($select['type'] !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
+        $this->_afterSync();
         return $r['updateRow'];
     }
 
@@ -401,9 +404,8 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
             array($r['insertRow']),
             array('replace' => true));
 
-        if ($select['type'] !== self::SYNC_SELECT_TYPE_NOSYNC) {
-            $this->_unlockSync();
-        }
+        $this->_unlockSync();
+        $this->_afterSync();
         return $r['insertRow'];
     }
 

@@ -148,7 +148,7 @@ class Kwf_Benchmark
 
     public static function output()
     {
-        Kwf_Benchmark::checkpoint('shutDown');
+        self::shutDown();
 
         if (!self::$_enabled) return;
         self::disable();
@@ -366,13 +366,13 @@ class Kwf_Benchmark
 
     final public static function shutDown()
     {
-        Kwf_Benchmark::checkpoint('shutDown');
-
-        if (!self::$_logEnabled) return;
-
         static $wasCalled = false;
         if ($wasCalled) return;
         $wasCalled = true;
+
+        Kwf_Benchmark::checkpoint('shutDown');
+
+        if (!self::$_logEnabled) return;
 
         self::_getInstance()->_shutDown();
     }
@@ -403,8 +403,9 @@ class Kwf_Benchmark
 
     protected function _shutDown()
     {
-        if ($this->_getUrlType() == 'asset' && !self::$_counterLog) return;
-        $prefix = $this->_getUrlType().'-';
+        $urlType = $this->_getUrlType();
+        if ($urlType == 'asset' && !self::$_counterLog) return;
+        $prefix = $urlType.'-';
         $this->_memcacheCount($prefix.'requests', 1);
         foreach (self::$_counterLog as $name=>$value) {
             $this->_memcacheCount($name, $value);

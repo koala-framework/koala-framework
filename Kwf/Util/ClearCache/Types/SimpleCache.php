@@ -6,8 +6,7 @@ class Kwf_Util_ClearCache_Types_SimpleCache extends Kwf_Util_ClearCache_Types_Ab
         $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
         if (!$skipOtherServers) {
             //namespace used in Kwf_Cache_Simple
-            $cache = Kwf_Cache_Simple::getZendCache();
-            $mc = $cache->getBackend()->getMemcache();
+            $mc = Kwf_Cache_Simple::getMemcache();
             if ($mc->get(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace')) {
                 $mc->increment(Kwf_Cache_Simple::getUniquePrefix().'cache_namespace');
             }

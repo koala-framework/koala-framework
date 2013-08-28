@@ -106,7 +106,7 @@ class Kwf_Benchmark_Rrd extends Kwf_Util_Rrd_File
         $load = explode(' ', $load);
         $values[] = $load[0];
 
-        if (Kwf_Util_Memcache::getHost()) {
+        if (Kwf_Cache_Simple::$memcacheHost) {
             $counter = new Kwf_Benchmark_Counter_Memcache();
             $memcache = $counter->getMemcache();
             $memcacheStats = $memcache->getStats();
@@ -161,7 +161,7 @@ class Kwf_Benchmark_Rrd extends Kwf_Util_Rrd_File
         }
         $values = array_merge($values, array_values($cnt));
 
-        if (Kwf_Util_Memcache::getHost()) {
+        if (Kwf_Cache_Simple::$memcacheHost) {
             $values[] = $memcacheStats['bytes'];
             $values[] = $memcacheStats['curr_items'];
             $values[] = $memcacheStats['curr_connections'];

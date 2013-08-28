@@ -29,7 +29,7 @@ class Kwc_Mail_PreviewController extends Kwf_Controller_Action
         $recipient = $this->_getRecipient();
         $mail = $this->_getMailComponent();
         if (!$recipient) throw new Kwf_ClientException(trlKwf('User not found, cannot send testmail.'));
-        $this->view->message = $mail->send($recipient, null, $this->_getParam('address'), $this->_getParam('format')) ?
+        $this->view->message = $mail->send($recipient, null, $this->_getParam('address'), $this->_getParam('format'), false) ?
             trlKwf('E-Mail successfully sent.') :
             trlKwf('Error while sending E-Mail.');
     }

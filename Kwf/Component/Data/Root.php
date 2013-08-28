@@ -667,9 +667,9 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
      *
      * für getComponentById
      */
-    public function addToDataCache(Kwf_Component_Data $d, Kwf_Component_Select $select)
+    public function addToDataCache(Kwf_Component_Data $d, $ignoreVisible)
     {
-        if ($select->getPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
+        if ($ignoreVisible) {
             $this->_dataCacheIgnoreVisible[$d->componentId] = $d;
         } else {
             $this->_dataCache[$d->componentId] = $d;

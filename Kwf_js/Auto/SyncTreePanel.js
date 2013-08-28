@@ -358,7 +358,12 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
 
     onMoved : function (response)
     {
-        var parent = this.tree.getNodeById(response.parent);
+        var parent;
+        if (!response.parent) {
+            parent = this.tree.getRootNode();
+        } else {
+            parent = this.tree.getNodeById(response.parent);
+        }
         var node = this.tree.getNodeById(response.node);
         var before = this.tree.getNodeById(response.before);
         parent.insertBefore(node, before);

@@ -1,5 +1,5 @@
 <?php
-class Kwf_Benchmark_Counter_Memcache implements Kwf_Benchmark_Counter_Interface
+class Kwf_Benchmark_Counter_Memcache
 {
     private $_memcache;
     private $_prefix;
