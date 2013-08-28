@@ -304,6 +304,11 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
         return $this;
     }
 
+    public function clearValidators()
+    {
+        $this->_validators = array();
+    }
+
     /**
      * Add validators to the field here, called in prepareSave
     **/
