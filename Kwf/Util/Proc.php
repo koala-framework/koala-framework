@@ -52,4 +52,10 @@ class Kwf_Util_Proc
     {
         return proc_get_status($this->_process);
     }
+
+    public function isRunning()
+    {
+        $st = $this->getStatus();
+        return $st['running'];
+    }
 }

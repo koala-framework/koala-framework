@@ -3,6 +3,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
 {
     protected $_params = array();
     protected $_redirectRow = null;
+    protected $_redirectRowsCache = array();
 
     public static function getSettings()
     {
@@ -129,15 +130,19 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
                 if (isset($matches[4])) {
                     $title = htmlspecialchars_decode($matches[4]);
                 }
-                $r = $m->getRow($m->select()->whereEquals('value', $href));
-                if (!$r) {
-                    $r = $m->createRow(array(
-                        'value' => $href,
-                        'title' => $title,
-                        'type' => $matches[1]
-                    ));
-                    $r->save();
-                } else if (empty($r->title) && !empty($title)) {
+                if (!isset($this->_redirectRowsCache[$href])) {
+                    $r = $m->getRow($m->select()->whereEquals('value', $href));
+                    if (!$r) {
+                        $r = $m->createRow(array(
+                            'value' => $href,
+                            'type' => $matches[1]
+                        ));
+                        $r->save();
+                    }
+                    $this->_redirectRowsCache[$href] = $r;
+                }
+                $r = $this->_redirectRowsCache[$href];
+                if (empty($r->title) && !empty($title)) {
                     $r->title = $title;
                     $r->save();
                 }
@@ -150,6 +155,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
                 $newLink = $this->_getRedirectUrl(array(
                     $r->id, $recipient->$recipientPrimary, $recipientSource
                 ));
+
                 $mailText = str_replace($matches[0], $newLink, $mailText);
             }
         }
