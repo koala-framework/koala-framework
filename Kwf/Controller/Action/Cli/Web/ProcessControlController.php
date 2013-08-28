@@ -209,11 +209,11 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
                         $killed[] = $p['pid'];
                     } else {
                         if (!$this->_getParam('silent')) echo "kill $p[pid] $p[cmd] $p[args]\n";
-                        posix_kill($p['pid'], SIGTERM);
+                        system("kill $p[pid]");
                         $killed[] = $p['pid'];
                         foreach ($p['childPIds'] as $pid) {
                             if (!$this->_getParam('silent')) echo "    kill child process $pid\n";
-                            posix_kill($pid, SIGTERM);
+                            system("kill $pid");
                             $killed[] = $pid;
                         }
                     }
