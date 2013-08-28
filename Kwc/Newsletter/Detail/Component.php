@@ -90,7 +90,6 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
                 'newsletter_id' => $newsletter->id,
                 'recipient_model' => get_class($model),
                 'recipient_id' => $e['id'],
-                'status' => 'queued',
                 'searchtext' =>
                     $e[$mapping['firstname']] . ' ' .
                     $e[$mapping['lastname']] . ' ' .

@@ -51,6 +51,9 @@ class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controlle
 
             $newDetailRow = $newDetail->row;
             $newDetailRow->create_date = date('Y-m-d H:i:s');
+            $newDetailRow->mails_per_minute = 'normal';
+            $newDetailRow->start_date = null;
+            $newDetailRow->resume_date = null;
             $newDetailRow->last_sent_date = null;
             $newDetailRow->count_sent = 0;
             $newDetailRow->status = null;
