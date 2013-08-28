@@ -56,6 +56,7 @@ class Kwf_Component_Cache_MenuStaticPage_Test extends Kwc_TestAbstract
 
         $this->_process();
 
+        $c = $this->_root->getComponentById('1-menu');
         $html = $c->render(true, false);
         $this->assertEquals(0, substr_count($html, '<li'));
     }
@@ -73,6 +74,7 @@ class Kwf_Component_Cache_MenuStaticPage_Test extends Kwc_TestAbstract
 
         $this->_process();
 
+        $c = $this->_root->getComponentById('1-menu');
         $html = $c->render(true, false);
         $this->assertEquals(3, substr_count($html, '<li'));
         $this->assertContains('/test1/1:page"', $html);
@@ -92,6 +94,7 @@ class Kwf_Component_Cache_MenuStaticPage_Test extends Kwc_TestAbstract
 
         $this->_process();
 
+        $c = $this->_root->getComponentById('1-menu');
         $html = $c->render(true, false);
         $this->assertEquals(1, substr_count($html, '<li'));
         $this->assertContains('/testx/1:page"', $html);
