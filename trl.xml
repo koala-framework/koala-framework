@@ -8004,6 +8004,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Success</en>
 <id>1600</id>
 <sl>Ne sme biti negativno.</sl>
+<de>Erfolg</de>
 </text>
 <text>
 <en>Status Update successfully posted.</en>
@@ -8750,10 +8751,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Link Text</en>
 <id>1762</id>
 <ro>Link Text</ro>
+<de>Link-Text</de>
 </text>
 <text>
 <en>This field should only contain numbers</en>
 <id>1764</id>
+<de>Dieses Feld darf nur Zahlen enthalten</de>
 </text>
 <text>
 <en>Please check your details</en>
@@ -8763,18 +8766,22 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Automatically sent e-mail</en>
 <id>1768</id>
+<de>Automatisch gesendetes E-Mail</de>
 </text>
 <text>
 <en>E-Mail CC</en>
 <id>1769</id>
+<de>E-Mail in Kopie (CC)</de>
 </text>
 <text>
 <en>Original  Name</en>
 <id>1770</id>
+<de>Ursprünglicher Name</de>
 </text>
 <text>
 <en>Link.to FlashMediaPlayer</en>
 <id>1772</id>
+<de>Link zum Flash-Mediaplayer</de>
 </text>
 <text>
 <en>Form Properties</en>
@@ -8820,6 +8827,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Alt Text</en>
 <id>1792</id>
+<de>Alternativer Text</de>
 </text>
 <text>
 <en>Add Recipients</en>
@@ -8854,10 +8862,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Adopt</en>
 <id>1800</id>
+<de>Übernehmen</de>
 </text>
 <text>
 <en>Video</en>
 <id>1801</id>
+<de>Video</de>
 </text>
 <text>
 <en>+{0}% VAT</en>
@@ -9007,6 +9017,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>for child pages</en>
 <id>1842</id>
+<de>für Unterseiten</de>
 </text>
 <text>
 <en>Hot-topic</en>
@@ -9031,26 +9042,32 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>show on all devices</en>
 <id>1861</id>
+<de>Auf allen Geräten anzeigen</de>
 </text>
 <text>
 <en>hide on mobile devices</en>
 <id>1862</id>
+<de>Auf mobilen Geräten nicht anzeigen</de>
 </text>
 <text>
 <en>only show on mobile devices</en>
 <id>1863</id>
+<de>Nur auf mobilen Geräten anzeigen</de>
 </text>
 <text>
 <en>No category selected.</en>
 <id>1880</id>
+<de>Keine Kategorie gewählt.</de>
 </text>
 <text>
 <en>Menu settings</en>
 <id>1881</id>
+<de>Menü-Einstellungen</de>
 </text>
 <text>
 <en>Hide</en>
 <id>1882</id>
+<de>Verstecken</de>
 </text>
 <text>
 <en>Device visible</en>
@@ -9059,6 +9076,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>id</en>
 <id>1887</id>
+<de>ID</de>
 </text>
 <text>
 <en>Show categories</en>
@@ -9073,10 +9091,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Home</en>
 <id>1890</id>
+<de>Home</de>
 </text>
 <text>
 <en>Open Graph</en>
 <id>1891</id>
+<de>Open Graph</de>
 </text>
 <text>
 <en>Amount of Money</en>
@@ -9085,62 +9105,77 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Mp3 File</en>
 <id>1893</id>
+<de>MP3-Datei</de>
 </text>
 <text>
 <en>Width (px)</en>
 <id>1894</id>
+<de>Breite (px)</de>
 </text>
 <text>
 <en>Height (px)</en>
 <id>1895</id>
+<de>Höhe (px)</de>
 </text>
 <text>
 <en>Repeat</en>
 <id>1896</id>
+<de>Wiederholen</de>
 </text>
 <text>
 <en>Auto play</en>
 <id>1897</id>
+<de>Automatisch abspielen</de>
 </text>
 <text>
 <en>Audio</en>
 <id>1898</id>
+<de>Ton/Audio</de>
 </text>
 <text>
 <en>Files</en>
 <id>1899</id>
+<de>Dateien</de>
 </text>
 <text>
 <en>Mp4 file</en>
 <id>1900</id>
+<de>MP4-File</de>
 </text>
 <text>
 <en>Ogg File</en>
 <id>1901</id>
+<de>OGG-Datei</de>
 </text>
 <text>
 <en>Webm file (optional)</en>
 <id>1902</id>
+<de>Webm-Datei (optional)</de>
 </text>
 <text>
 <en>Large Image</en>
 <id>1907</id>
+<de>Großes Bild</de>
 </text>
 <text>
 <en>Favourites</en>
 <id>1860</id>
+<de>Favoriten</de>
 </text>
 <text>
 <en>save as favourite</en>
 <id>1908</id>
+<de>Als Favorit speichern</de>
 </text>
 <text>
 <en>delete favourite</en>
 <id>1909</id>
+<de>Favorit löschen</de>
 </text>
 <text>
 <en>Label Width</en>
 <id>1910</id>
+<de>Breite der Bezeichnung</de>
 </text>
 <text>
 <en>Submit Caption</en>
@@ -9150,50 +9185,62 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Column {0}, width {1}%</en>
 <id>1912</id>
+<de>Spalte {0}, Breite {1}%</de>
 </text>
 <text>
 <en>2 Columns (50% - 50%)</en>
 <id>1913</id>
+<de>2 Spalten (50% - 50%)</de>
 </text>
 <text>
 <en>2 Columns (33% - 66%)</en>
 <id>1914</id>
+<de>2 Spalten (33% - 66%)</de>
 </text>
 <text>
 <en>2 Columns (66% - 33%)</en>
 <id>1915</id>
+<de>2 Spalten (66% - 33%)</de>
 </text>
 <text>
 <en>2 Columns (25% - 75%)</en>
 <id>1916</id>
+<de>2 Spalten (25% - 75%)</de>
 </text>
 <text>
 <en>2 Columns (75% - 25%)</en>
 <id>1917</id>
+<de>2 Spalten (75% - 25%)</de>
 </text>
 <text>
 <en>3 Columns (33% - 33% - 33%)</en>
 <id>1918</id>
+<de>3 Spalten (33% - 33% - 33%)</de>
 </text>
 <text>
 <en>3 Columns (50% - 25% - 25%)</en>
 <id>1919</id>
+<de>3 Spalten (50% - 25% - 25%)</de>
 </text>
 <text>
 <en>3 Columns (25% - 50% - 25%)</en>
 <id>1920</id>
+<de>3 Spalten (25% - 50% - 25%)</de>
 </text>
 <text>
 <en>3 Columns (25% - 25% - 50%)</en>
 <id>1921</id>
+<de>3 Spalten (25% - 25% - 50%)</de>
 </text>
 <text>
 <en>Columns type</en>
 <id>1922</id>
+<de>Spalten-Typ</de>
 </text>
 <text>
 <en>to page</en>
 <id>1923</id>
+<de>Zur Seite</de>
 </text>
 <text>
 <en>Feedback to page </en>
@@ -9435,42 +9482,52 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Preview Modus</en>
 <id>1976</id>
+<de>Vorschau-Modus</de>
 </text>
 <text>
 <en>Desktop</en>
 <id>1977</id>
+<de>Desktop</de>
 </text>
 <text>
 <en>Notebook</en>
 <id>1978</id>
+<de>Laptop</de>
 </text>
 <text>
 <en>Tablet Portrait</en>
 <id>1979</id>
+<de>Tablet Hochformat</de>
 </text>
 <text>
 <en>Tablet Landscape</en>
 <id>1980</id>
+<de>Tablet Querformat</de>
 </text>
 <text>
 <en>Smartphone Portrait</en>
 <id>1981</id>
+<de>Smartphone Hochformat</de>
 </text>
 <text>
 <en>Smartphone Landscape</en>
 <id>1982</id>
+<de>Smartphone Querformat</de>
 </text>
 <text>
 <en>Header Title</en>
 <id>1985</id>
+<de>Header-Titel</de>
 </text>
 <text>
 <en>Continue reading</en>
 <id>1986</id>
+<de>Weiterlesen</de>
 </text>
 <text>
 <en>said</en>
 <id>1987</id>
+<de>gesagt</de>
 </text>
 <text>
 <en>BlackMarlock</en>
@@ -9479,46 +9536,57 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Hintergrundbild</en>
 <id>1989</id>
+<de>Background image</de>
 </text>
 <text>
 <en>Logo</en>
 <id>1990</id>
+<de>Logo</de>
 </text>
 <text>
 <en>Please select recipients.</en>
 <id>1991</id>
+<de>Bitte Empfänger auswählen.</de>
 </text>
 <text>
 <en>Create Post</en>
 <id>1992</id>
+<de>Beitrag erstellen</de>
 </text>
 <text>
 <en>Number</en>
 <id>1993</id>
+<de>Nummer</de>
 </text>
 <text>
 <en>no user id</en>
 <id>1994</id>
+<de>Keine User-ID</de>
 </text>
 <text>
 <en>Original headline</en>
 <id>1995</id>
+<de>Ursprüngliche Überschrift</de>
 </text>
 <text>
 <en>Your email address will not be published.</en>
 <id>1996</id>
+<de>Ihre E-Mail-Adresse wird nicht veröffentlicht.</de>
 </text>
 <text>
 <en>Post Comment</en>
 <id>1997</id>
+<de>Kommentar senden</de>
 </text>
 <text>
 <en>Blog</en>
 <id>1998</id>
+<de>Blog</de>
 </text>
 <text>
 <en>Posted on {0}</en>
 <id>1999</id>
+<de>Gepostet am {0}</de>
 </text>
 <text>
 <en>by {0}</en>
@@ -9527,6 +9595,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>This entry was posted in</en>
 <id>2001</id>
+<de>Dieser Eintrag wurde erstellt in</de>
 </text>
 <text>
 <en>This website uses cookies to help us give you the best experience when you visit our website.</en>
@@ -9546,6 +9615,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Cookie Opt In / Opt Out</en>
 <id>2006</id>
+<de>Cookie Opt-In / Opt-Out</de>
 </text>
 <text>
 <en>Cookies are set when visiting this webpage. Click to deactivate cookies.</en>
