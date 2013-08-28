@@ -1,3 +1,4 @@
+<? if ($this->optComponent) { ?>
 <div class="<?=$this->cssClass?>">
     <div class="inner">
         <?=$this->data->trlKwf('This website uses cookies to help us give you the best experience when you visit our website.')?>
@@ -19,3 +20,4 @@
         }?>
     </div>
 </div>
+<? } ?>

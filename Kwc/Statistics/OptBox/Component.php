@@ -5,6 +5,7 @@
  * Shows a layer with cookie informations
  * Set the default value for opt-in for JavaScript
  * Depends on Kwc_Statistics_Opt_Component
+ * Has to be set up as box with 'inherit' => true and 'unique' => true
  */
 class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
 {
