@@ -13,7 +13,7 @@
                 '<span>' . $this->data->trlKwf('Accept and continue') . '</span>',
                 array(
                     'cssClass' => 'accept',
-                    'get' => array('optValue' => 'in', 'redirect' => urlencode($this->data->url))
+                    'get' => array('optValue' => 'in')
                 ),
                 'accept'
             );
