@@ -19,7 +19,7 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
 
     Kwf.onElementReady(selector, function(el) {
         initEl(el);
-    });
+    }, this, {priority: -1});
 
     Ext.fly(window).on('resize', function() {
         Ext.select(selector).each(function(el) {

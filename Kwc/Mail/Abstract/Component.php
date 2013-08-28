@@ -52,7 +52,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function createMail(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
+    public function createMail(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null, $addViewTracker = true)
     {
         $this->_mailData = $data;
 
@@ -71,7 +71,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         if ((!$format && $recipient->getMailFormat() == Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML) ||
             $format == Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML)
         {
-            $html = $this->getHtml($recipient, true);
+            $html = $this->getHtml($recipient, $addViewTracker);
             $mail->setDomain($this->getData()->getDomain());
             $mail->setAttachImages($this->_getSetting('attachImages'));
             $mail->setBodyHtml($html);
@@ -106,9 +106,9 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
      *        ausgelesen werden
      * Wird von Gästebuch verwendet
      */
-    public function send(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
+    public function send(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null, $addViewTracker = true)
     {
-        $mail = $this->createMail($recipient, $data, $toAddress, $format);
+        $mail = $this->createMail($recipient, $data, $toAddress, $format, $addViewTracker);
         return $mail->send();
     }
 

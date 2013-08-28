@@ -10,6 +10,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
 
         $this->_columns->add(new Kwf_Grid_Column('pos'));
         $this->_columns->add(new Kwf_Grid_Column('link', trlKwf('Link'), 600));
+        $this->_columns->add(new Kwf_Grid_Column('title', trlKwf('Title'), 200));
         $this->_columns->add(new Kwf_Grid_Column('count', trlKwf('Count'), 50))
             ->setCssClass('kwf-renderer-decimal');
         $this->_columns->add(new Kwf_Grid_Column('percent', trlKwf('[%]'), 50));
@@ -39,6 +40,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             $ret[] = array(
                 'pos' => $pos++,
                 'link' => '<b>' . trlKwf('view rate') . '</b> (' . trlKwf('percentage of users which opened the html newsletter') . ')',
+                'title' => '',
                 'count' => $count,
                 'percent' => number_format(($count / $total)*100, 2) . '%'
             );
@@ -52,17 +54,19 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
         $ret[] = array(
             'pos' => $pos++,
             'link' => '<b>' . trlKwf('click rate') . '</b> (' . trlKwf('percentage of users which clicked at least one link in newsletter') . ')',
+            'title' => '',
             'count' => $count,
             'percent' => number_format(($count / $total)*100, 2) . '%'
         );
         $ret[] = array(
             'pos' => $pos++,
             'link' => ' ',
+            'title' => '',
             'count' => '',
             'percent' => '',
         );
         $sql = "
-            SELECT r.value, r.type, count(*) c
+            SELECT r.value, r.type, r.title, count(*) c
             FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
             WHERE s.redirect_id=r.id AND mail_component_id=?
             GROUP BY redirect_id
@@ -86,6 +90,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             $ret[] = array(
                 'pos' => $pos++,
                 'link' => $link,
+                'title' => $row['title'],
                 'count' => $row['c'],
                 'percent' => number_format(($row['c'] / $total)*100, 2) . '%'
             );
