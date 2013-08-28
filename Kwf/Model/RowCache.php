@@ -97,7 +97,14 @@ class Kwf_Model_RowCache extends Kwf_Model_Proxy
                 $this->clearRowCache($r[$this->getPrimaryKey()]);
             }
         } else {
-            Kwf_Cache_Simple::clear($this->_getCacheId(''));
+            //this is very inefficient as we have to iterate all ids
+            //but there is no way to delete all ids
+            $cacheIds = array();
+            $s = new Kwf_Model_Select();
+            foreach ($this->getIds($s) as $id) {
+                $cacheIds[] = $this->_getCacheId($id);
+            }
+            Kwf_Cache_Simple::delete($cacheIds);
         }
         parent::_afterImport($format, $data, $options);
     }
@@ -105,6 +112,10 @@ class Kwf_Model_RowCache extends Kwf_Model_Proxy
     protected function _afterDeleteRows($where)
     {
         parent::_afterDeleteRows($where);
-        Kwf_Cache_Simple::clear($this->_getCacheId(''));
+        $cacheIds = array();
+        foreach ($this->getIds($where) as $id) {
+            $cacheIds[] = $this->_getCacheId($id);
+        }
+        Kwf_Cache_Simple::delete($cacheIds);
     }
 }

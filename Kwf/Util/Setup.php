@@ -54,15 +54,17 @@ class Kwf_Util_Setup
             'Kwf_Loader',
             'Kwf_Debug',
         );
+        $ret .= "if (!class_exists('Zend_Registry', false)) {\n";
         foreach ($preloadClasses as $cls) {
             foreach ($ip as $path) {
                 $file = $path.'/'.str_replace('_', '/', $cls).'.php';
                 if (file_exists($file)) {
-                    $ret .= "require_once('".$file."');\n";
+                    $ret .= "require('".$file."');\n";
                     break;
                 }
             }
         }
+        $ret .= "}\n";
 
         $ret .= "Kwf_Benchmark::\$startTime = microtime(true);\n";
         $ret .= "\n";
@@ -167,37 +169,62 @@ class Kwf_Util_Setup
         }
 
         $preloadClasses = array(
-            'Kwf_Loader',
             'Kwf_Config',
             'Kwf_Cache_Simple',
             'Kwf_Trl',
         );
+        $preloadClasses[] = 'Kwf_Util_Https';
+        $preloadClasses[] = 'Kwf_Cache_SimpleStatic';
+        $preloadClasses[] = 'Kwf_Util_SessionHandler';
+        $preloadClasses[] = 'Kwf_Util_Memcache';
+        $preloadClasses[] = 'Zend_Session';
+        $preloadClasses[] = 'Kwf_Benchmark_Counter';
+        $preloadClasses[] = 'Kwf_Benchmark_Counter_Apc';
+
         if (Kwf_Component_Data_Root::getComponentClass()) {
             //only load component related classes if it is a component web
-            $preloadClasses[] = 'Kwf_Model_Select';
             $preloadClasses[] = 'Kwf_Component_Data';
             $preloadClasses[] = 'Kwf_Component_Data_Root';
-            $preloadClasses[] = 'Kwf_Component_Select';
-            $preloadClasses[] = 'Kwf_Component_Abstract';
-            $preloadClasses[] = 'Kwc_Abstract';
+            $preloadClasses[] = 'Kwf_Component_Settings';
+
             $preloadClasses[] = 'Kwf_Component_Renderer_Abstract';
             $preloadClasses[] = 'Kwf_Component_Renderer';
             $preloadClasses[] = 'Kwf_Component_Cache';
             $preloadClasses[] = 'Kwf_Component_Cache_Mysql';
-            $preloadClasses[] = 'Kwf_Component_View_Helper_Abstract';
-            $preloadClasses[] = 'Kwf_Component_View_Renderer';
+            $preloadClasses[] = 'Kwf_Component_Cache_Memory';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Abstract';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Default';
         }
+
+
+        $ret .= "if (!class_exists('Kwf_Config', false)) {\n";
         foreach ($preloadClasses as $cls) {
             foreach ($ip as $path) {
                 $file = $path.'/'.str_replace('_', '/', $cls).'.php';
                 if (file_exists($file)) {
-                    $ret .= "require_once('".$file."');\n";
+                    $ret .= "    require('".$file."');\n";
                     break;
                 }
             }
         }
+        $ret .= "}\n";
+
+        Kwf_Cache_Simple::$backend = null; //unset to re-calculate
+        $ret .= "Kwf_Cache_Simple::\$backend = '".Kwf_Cache_Simple::getBackend()."';\n";
+
+        if (Kwf_Config::getValue('server.memcache.host')) {
+            $host = Kwf_Config::getValue('server.memcache.host');
+            if ($host == '%webserverHostname%') {
+                if (php_sapi_name() == 'cli') {
+                    $host = Kwf_Util_Apc::callUtil('get-hostname', array(), array('returnBody'=>true, 'skipCache'=>true));
+                } else {
+                    $host = php_uname('n');
+                }
+            }
+            $ret .= "Kwf_Cache_Simple::\$memcacheHost = '".$host."';\n";
+            $ret .= "Kwf_Cache_Simple::\$memcachePort = '".Kwf_Config::getValue('server.memcache.port')."';\n";
+        }
+
 
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
 
@@ -215,18 +242,32 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
+        if (Kwf_Config::getValue('server.https')) {
+            if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
+                $ret .= "\$domains = array(";
+                foreach ($domains as $d) {
+                    $ret .= "'".$d."'=>true, ";
+                }
+                $ret .= ");\n";
+                $ret .= "Kwf_Util_Https::\$supportsHttps = isset(\$domains[\$_SERVER['HTTP_HOST']]);";
+            } else {
+                $ret .= "Kwf_Util_Https::\$supportsHttps = true;\n";
+            }
+        } else {
+            $ret .= "Kwf_Util_Https::\$supportsHttps = false;\n";
+        }
         $ret .= "session_set_cookie_params(\n";
         $ret .= " 0,";     //lifetime
         $ret .= " '/',";   //path
         $ret .= " null,";  //domain
-        $ret .= " Kwf_Util_Https::supportsHttps(),"; //secure
+        $ret .= " Kwf_Util_Https::\$supportsHttps,"; //secure
         $ret .= " true";   //httponly
         $ret .= ");\n";
 
         $ret .= "\n";
 
         //store session data in memcache if avaliable
-        if ((Kwf_Util_Memcache::getHost() || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
+        if ((Kwf_COnfig::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
@@ -379,9 +420,6 @@ class Kwf_Util_Setup
         $ret .= "    }\n";
         $ret .= "    Kwf_Component_Data_Root::setShowInvisible(true);\n";
         $ret .= "}\n";
-
-        $ret .= "Kwf_Benchmark::checkpoint('setUp');\n";
-        $ret .= "\n";
 
         return $ret;
     }

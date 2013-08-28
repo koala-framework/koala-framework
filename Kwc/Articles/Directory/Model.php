@@ -30,12 +30,16 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
         }
 
         $this->_exprs['date_year'] = new Kwf_Model_Select_Expr_Date_Year('date');
-        $this->_exprs['is_top'] = new Kwf_Model_Select_Expr_And(array(
-            new Kwf_Model_Select_Expr_Equal('is_top_checked', 1),
-            new Kwf_Model_Select_Expr_Or(array(
-                new Kwf_Model_Select_Expr_IsNull('is_top_expire'),
-                new Kwf_Model_Select_Expr_HigherEqual('is_top_expire', new Kwf_Date(mktime())),
+        $this->_exprs['is_top'] = new Kwf_Model_Select_Expr_If(
+            new Kwf_Model_Select_Expr_And(array(
+                new Kwf_Model_Select_Expr_Equal('is_top_checked', 1),
+                new Kwf_Model_Select_Expr_Or(array(
+                    new Kwf_Model_Select_Expr_IsNull('is_top_expire'),
+                    new Kwf_Model_Select_Expr_HigherEqual('is_top_expire', new Kwf_Date(mktime())),
+                )),
             )),
-        ));
+            new Kwf_Model_Select_Expr_String(1),
+            new Kwf_Model_Select_Expr_String(0)
+        );
     }
 }

@@ -2,36 +2,40 @@
 /**
  * A simple and fast cache. Doesn't have all the Zend_Cache bloat.
  *
- * If available it uses apc user cache direclty (highly recommended!!), else it falls
- * back to Zend_Cache using a memcache backend.
+ * If available it uses apc user cache or memcache directly (highly recommended!!), else it falls
+ * back to Zend_Cache using a (slow) file backend.
  *
  * If aws.simpleCacheCluster is set Aws ElastiCache will be used.
  */
 class Kwf_Cache_Simple
 {
+    public static $backend; //set in Setup
+    public static $memcacheHost; //set in Setup
+    public static $memcachePort; //set in Setup
+
     private static $_zendCache = null;
+    private static $_cacheNamespace = null;
 
     public static function resetZendCache()
     {
         self::$_zendCache = null;
+        self::$_cacheNamespace = null;
         Kwf_Cache_SimpleStatic::resetZendCache();
     }
 
     public static function getBackend()
     {
-        $cacheId = 'cacheSimpleBe';
-        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
-        if (!$ret) {
-            if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
-                $ret = 'elastiCache';
-            } else if (Kwf_Util_Memcache::getHost()) {
-                $ret = 'memcache';
-            } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
-                $ret = 'apc';
-            } else {
-                $ret = 'file';
-            }
-            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+        if (isset(self::$backend)) {
+            return self::$backend;
+        }
+        if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
+            $ret = 'elastiCache';
+        } else if (Kwf_Config::getValue('server.memcache.host')) {
+            $ret = 'memcache';
+        } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
+            $ret = 'apc';
+        } else {
+            $ret = 'file';
         }
         return $ret;
     }
@@ -41,6 +45,7 @@ class Kwf_Cache_Simple
         if (!isset(self::$_zendCache)) {
             $be = self::getBackend();
             if ($be == 'elastiCache') {
+                //TODO: use similar like memcache without Zend_Cache
                 self::$_zendCache = new Zend_Cache_Core(array(
                     'lifetime' => null,
                     'write_control' => false,
@@ -60,7 +65,8 @@ class Kwf_Cache_Simple
                     'automatic_serialization' => true
                 ));
                 if ($be == 'memcache') {
-                    self::$_zendCache->setBackend(new Kwf_Cache_Backend_Memcached());
+                    //not used using Zend_Cache
+                    self::$_zendCache = false;
                 } else {
                     //fallback to file backend (NOT recommended!)
                     self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
@@ -99,14 +105,43 @@ class Kwf_Cache_Simple
         return $cacheId;
     }
 
+    public static function getMemcache()
+    {
+        static $memcache;
+        if (isset($memcache)) return $memcache;
+        $memcache = new Memcache;
+        $memcache->addServer(self::$memcacheHost, self::$memcachePort);
+        return $memcache;
+    }
+
+    private static function _getMemcachePrefix()
+    {
+        if (!isset(self::$_cacheNamespace)) {
+            $mc = self::getMemcache();
+            //namespace is incremented in Kwf_Util_ClearCache
+            //use memcache directly as Zend would not save the integer directly and we can't increment it then
+            $v = $mc->get(self::getUniquePrefix().'cache_namespace');
+            if (!$v) {
+                $v = time();
+                $mc->set(self::getUniquePrefix().'cache_namespace', $v);
+            }
+            self::$_cacheNamespace = self::getUniquePrefix().'-'.$v;
+        }
+        return self::$_cacheNamespace;
+    }
+
     public static function fetch($cacheId, &$success = true)
     {
-        if (!isset(self::$_zendCache)) self::getZendCache();
-        if (!self::$_zendCache) {
+        if (self::getBackend() == 'memcache') {
+            $ret = self::getMemcache()->get(self::_getMemcachePrefix().$cacheId);
+            $success = $ret !== false;
+            return $ret;
+        } else if (self::getBackend() == 'apc') {
             static $prefix;
             if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
             return apc_fetch($prefix.$cacheId, $success);
         } else {
+            if (!isset(self::$_zendCache)) self::getZendCache();
             $ret = self::$_zendCache->load(self::_processId($cacheId));
             $success = $ret !== false;
             return $ret;
@@ -115,35 +150,38 @@ class Kwf_Cache_Simple
 
     public static function add($cacheId, $data, $ttl = null)
     {
-        if (!isset(self::$_zendCache)) self::getZendCache();
-        if (!self::$_zendCache) {
+        if (self::getBackend() == 'memcache') {
+            return self::getMemcache()->set(self::_getMemcachePrefix().$cacheId, $data, 0, $ttl);
+        } else if (self::getBackend() == 'apc') {
             static $prefix;
             if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
             return apc_add($prefix.$cacheId, $data, $ttl);
         } else {
+            if (!isset(self::$_zendCache)) self::getZendCache();
             return self::$_zendCache->save($data, self::_processId($cacheId), array(), $ttl);
         }
     }
 
     public static function delete($cacheIds)
     {
-        if (!isset(self::$_zendCache)) self::getZendCache();
-
         if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
-        static $prefix;
-        if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
         $ret = true;
         $ids = array();
         foreach ($cacheIds as $cacheId) {
-            if (!self::$_zendCache) {
+            if (self::getBackend() == 'memcache') {
+                $r = self::getMemcache()->delete(self::_getMemcachePrefix().$cacheId);
+            } else if (self::getBackend() == 'apc') {
+                static $prefix;
+                if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
                 $r = apc_delete($prefix.$cacheId);
                 $ids[] = $prefix.$cacheId;
             } else {
+                if (!isset(self::$_zendCache)) self::getZendCache();
                 $r = self::$_zendCache->remove(self::_processId($cacheId));
             }
             if (!$r) $ret = false;
         }
-        if (!self::$_zendCache && php_sapi_name() == 'cli' && $ids) {
+        if (self::getBackend() == 'apc' && php_sapi_name() == 'cli' && $ids) {
             $ret = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
         }
         return $ret;
@@ -151,31 +189,7 @@ class Kwf_Cache_Simple
 
     public static function clear($cacheIdPrefix)
     {
-        if (!isset(self::$_zendCache)) self::getZendCache();
-
-        if (!self::$_zendCache) {
-            if (!class_exists('APCIterator')) {
-                apc_clear_cache('user');
-            } else {
-                static $prefix;
-                if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
-                $it = new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#', APC_ITER_NONE);
-                if ($it->getTotalCount() && !$it->current()) {
-                    //APCIterator is borked, delete everything
-                    //see https://bugs.php.net/bug.php?id=59938
-                    apc_clear_cache('user');
-                } else {
-                    //APCIterator seems to work, use it for deletion
-                    apc_delete($it);
-                }
-            }
-        } else {
-            //we can't do any better here :/
-            if (Kwf_Config::getValue('aws.simpleCacheCluster')) {
-                throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
-            }
-            self::$_zendCache->clean();
-        }
+        throw new Kwf_Exception("don't delete the whole cache");
     }
 
     public static function getUniquePrefix()

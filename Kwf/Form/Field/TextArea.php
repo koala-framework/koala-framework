@@ -25,7 +25,14 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
         if (is_numeric($width)) {
             $width .= 'px';
         }
-        $ret['html'] .= "style=\"width: $width; height: {$this->getHeight()}px\">";
+        $ret['html'] .= "style=\"width: $width; height: {$this->getHeight()}px\"";
+
+        $cls = $this->getCls();
+        if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
+            $cls .= ' kwfClearOnFocus';
+        }
+        if ($cls) $ret['html'] .= ' class="'.trim($cls).'"';
+        $ret['html'] .= '>';
         $ret['html'] .= htmlspecialchars($value);
         $ret['html'] .= "</textarea>";
         return $ret;

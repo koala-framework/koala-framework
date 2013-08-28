@@ -73,9 +73,9 @@ class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
         return $ret;
     }
 
-    public function createMail(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null)
+    public function createMail(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null, $addViewTracker = true)
     {
-        $mail = parent::createMail($recipient, $data, $toAddress, $format);
+        $mail = parent::createMail($recipient, $data, $toAddress, $format, $addViewTracker);
         if ($this->getRow()->from_email && $this->_getSetting('editFrom')) {
             $mail->setFrom($this->getRow()->from_email, $this->getRow()->from_name);
         }

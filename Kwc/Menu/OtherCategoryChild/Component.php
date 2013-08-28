@@ -4,7 +4,6 @@ class Kwc_Menu_OtherCategoryChild_Component extends Kwc_Basic_ParentContent_Comp
     public static function getSettings($menuComponentClass)
     {
         $ret = parent::getSettings();
-        $ret['plugins'] = Kwc_Abstract::getSetting($menuComponentClass, 'plugins');
         $ret['viewCache'] = Kwc_Abstract::getSetting($menuComponentClass, 'viewCache');
         $ret['menuComponentClass'] = $menuComponentClass;
         return $ret;

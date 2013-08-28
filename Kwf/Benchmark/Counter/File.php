@@ -1,5 +1,5 @@
 <?php
-class Kwf_Benchmark_Counter_File implements Kwf_Benchmark_Counter_Interface
+class Kwf_Benchmark_Counter_File
 {
     private $_lock = null;
 

@@ -57,8 +57,8 @@ class Kwf_Component_Output_CacheTest extends Kwf_Test_TestCase
         $value = $this->_renderer->renderMaster($this->_root);
         $this->assertRegExp('#c2_root c2_child c2_childNoCache #s', $value);
 
-        //page, master, 2 component, a {nocache}, 1 fullPage
-        $this->assertEquals(6, $model->countRows());
+        //page, master, 2 component, 1 fullPage
+        $this->assertEquals(5, $model->countRows());
     }
 
     public function testC4()

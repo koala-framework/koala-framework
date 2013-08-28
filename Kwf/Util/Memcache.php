@@ -6,18 +6,7 @@ class Kwf_Util_Memcache
      */
     public static function getHost()
     {
-        static $ret;
-        if (!isset($ret)) {
-            $ret = Kwf_Config::getValue('server.memcache.host');
-            if ($ret == '%webserverHostname%') {
-                if (php_sapi_name() == 'cli') {
-                    $ret = Kwf_Util_Apc::callUtil('get-hostname', array(), array('returnBody'=>true, 'skipCache'=>true));
-                } else {
-                    $ret = php_uname('n');
-                }
-            }
-        }
-        return $ret;
+        return Kwf_Cache_Simple::$memcacheHost;
     }
 
     /**
@@ -25,6 +14,6 @@ class Kwf_Util_Memcache
      */
     public static function getPort()
     {
-        return Kwf_Config::getValue('server.memcache.port');
+        return Kwf_Cache_Simple::$memcachePort;
     }
 }
