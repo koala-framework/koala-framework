@@ -57,8 +57,7 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Login
             if (isset($_POST['save_cookie']) && $_POST['save_cookie']) {
                 $this->_saveCookie();
             }
-            header('Location: '.$currentPageUrl);
-            die();
+            Kwf_Util_Redirect::redirect($currentPageUrl);
         }
         return false;
     }

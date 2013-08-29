@@ -91,6 +91,8 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         Kwf_Config_Web::reload();
         Zend_Registry::getInstance()->offsetUnset('db');
         Zend_Registry::getInstance()->offsetSet('dao', new Kwf_Dao());
+        Kwf_Component_Settings::getAllSettingsCache()->clean();
+        Kwf_Cache_SimpleStatic::_delete('componentClasses-'.Kwf_Component_Data_Root::getComponentClass());
 
         $updates = array();
         foreach (Kwf_Util_Update_Helper::getUpdateTags() as $tag) {

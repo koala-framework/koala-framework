@@ -10,6 +10,11 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
         return $ret;
     }
 
+    public function getActiveViewPlugins()
+    {
+        return $this->_getMenuSource()->getComponent()->getActiveViewPlugins();
+    }
+
     //used by trl
     public function getMenuData()
     {

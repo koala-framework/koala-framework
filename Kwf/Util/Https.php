@@ -1,6 +1,8 @@
 <?php
 class Kwf_Util_Https
 {
+    static $supportsHttps; //set in setup
+
     public static function ensureHttps()
     {
         if (self::supportsHttps()) {
@@ -30,12 +32,7 @@ class Kwf_Util_Https
      */
     public static function supportsHttps()
     {
-        if (php_sapi_name() != 'cli') {
-            if (self::domainSupportsHttps($_SERVER['HTTP_HOST'])) {
-                return true;
-            }
-        }
-        return false;
+        return self::$supportsHttps;
     }
 
     /**

@@ -65,6 +65,7 @@ class Kwf_Benchmark
         self::$_counterLog = array();
         self::$_checkpoints = array();
         self::$_subCheckpoints = array();
+        self::$startTime = microtime(true);
     }
     public static function getCounterValue($name)
     {
@@ -148,7 +149,7 @@ class Kwf_Benchmark
 
     public static function output()
     {
-        Kwf_Benchmark::checkpoint('shutDown');
+        self::shutDown();
 
         if (!self::$_enabled) return;
         self::disable();
@@ -268,38 +269,43 @@ class Kwf_Benchmark
             echo "</div>";
         }
         if (Kwf_Config::getValue('debug.benchmarklog')) {
-            $out = "\n";
-            $out .= "  ms  % Checkpoint\n";
-            $sum = 0;
-            foreach (self::$_checkpoints as $checkpoint) {
-                $sum += $checkpoint[0];
-            }
-            foreach (self::$_checkpoints as $i=>$checkpoint) {
-                $ms = round($checkpoint[0]*1000);
-                $out .= str_pad(round($checkpoint[0]*1000), 4, ' ', STR_PAD_LEFT);
-                $out .= str_pad(round(($checkpoint[0]/$sum)*100), 3, ' ', STR_PAD_LEFT);
-                $out .= " ".$checkpoint[1]."";
-                $out .= "\n";
-                if (isset(self::$_subCheckpoints[$i])) {
-                    $subCheckpoints = array();
-                    foreach (self::$_subCheckpoints[$i] as $cp) {
-                        $subCheckpoints[0][] = $cp[0];
-                        $subCheckpoints[1][] = $cp[1];
-                    }
-                    array_multisort($subCheckpoints[0], SORT_DESC, SORT_NUMERIC, $subCheckpoints[1]);
-                    foreach (array_keys($subCheckpoints[0]) as $k) {
-                        $percent = ($subCheckpoints[0][$k]/$sum)*100;
-                        if ($percent > 1) {
-                            $out .= ' '.str_pad(round($subCheckpoints[0][$k]*1000), 4, ' ', STR_PAD_LEFT);
-                            $out .= str_pad(round($percent), 3, ' ', STR_PAD_LEFT);
-                            $out .= '  '.$subCheckpoints[1][$k];
-                            $out .= "\n";
-                        }
+            $out = "\n".self::getCheckpointOutput();
+            file_put_contents('benchmarklog', $out, FILE_APPEND);
+        }
+    }
+
+    public static function getCheckpointOutput()
+    {
+        $out = "  ms  % Checkpoint\n";
+        $sum = 0;
+        foreach (self::$_checkpoints as $checkpoint) {
+            $sum += $checkpoint[0];
+        }
+        foreach (self::$_checkpoints as $i=>$checkpoint) {
+            $ms = round($checkpoint[0]*1000);
+            $out .= str_pad(round($checkpoint[0]*1000), 4, ' ', STR_PAD_LEFT);
+            $out .= str_pad(round(($checkpoint[0]/$sum)*100), 3, ' ', STR_PAD_LEFT);
+            $out .= " ".$checkpoint[1]."";
+            $out .= "\n";
+            if (isset(self::$_subCheckpoints[$i])) {
+                $subCheckpoints = array();
+                foreach (self::$_subCheckpoints[$i] as $cp) {
+                    $subCheckpoints[0][] = $cp[0];
+                    $subCheckpoints[1][] = $cp[1];
+                }
+                array_multisort($subCheckpoints[0], SORT_DESC, SORT_NUMERIC, $subCheckpoints[1]);
+                foreach (array_keys($subCheckpoints[0]) as $k) {
+                    $percent = ($subCheckpoints[0][$k]/$sum)*100;
+                    if ($percent > 1) {
+                        $out .= ' '.str_pad(round($subCheckpoints[0][$k]*1000), 4, ' ', STR_PAD_LEFT);
+                        $out .= str_pad(round($percent), 3, ' ', STR_PAD_LEFT);
+                        $out .= '  '.$subCheckpoints[1][$k];
+                        $out .= "\n";
                     }
                 }
             }
-            file_put_contents('benchmarklog', $out, FILE_APPEND);
         }
+        return $out;
     }
 
     private static function _getCounterOutput($counter, $useHtml)
@@ -350,13 +356,13 @@ class Kwf_Benchmark
 
     final public static function shutDown()
     {
-        Kwf_Benchmark::checkpoint('shutDown');
-
-        if (!self::$_logEnabled) return;
-
         static $wasCalled = false;
         if ($wasCalled) return;
         $wasCalled = true;
+
+        Kwf_Benchmark::checkpoint('shutDown');
+
+        if (!self::$_logEnabled) return;
 
         self::_getInstance()->_shutDown();
     }
@@ -388,8 +394,9 @@ class Kwf_Benchmark
 
     protected function _shutDown()
     {
-        if ($this->_getUrlType() == 'asset' && !self::$_counterLog) return;
-        $prefix = $this->_getUrlType().'-';
+        $urlType = $this->_getUrlType();
+        if ($urlType == 'asset' && !self::$_counterLog) return;
+        $prefix = $urlType.'-';
         $this->_memcacheCount($prefix.'requests', 1);
         foreach (self::$_counterLog as $name=>$value) {
             $this->_memcacheCount($name, $value);

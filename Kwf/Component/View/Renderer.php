@@ -1,25 +1,6 @@
 <?php
 abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abstract
 {
-    protected static function _getGroupedViewPlugins($componentClass)
-    {
-        $plugins = array();
-        foreach (Kwc_Abstract::getSetting($componentClass, 'plugins') as $p) {
-            if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewBeforeCache')) {
-                $plugins['beforeCache'][] = $p;
-            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewBeforeChildRender')) {
-                $plugins['before'][] = $p;
-            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewAfterChildRender')) {
-                $plugins['after'][] = $p;
-            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_ViewReplace')) {
-                $plugins['replace'][] = $p;
-            } else if (is_instance_of($p, 'Kwf_Component_Plugin_Interface_UseViewCache')) {
-                $plugins['useCache'][] = $p;
-            }
-        }
-        return $plugins;
-    }
-
     protected function _canBeIncludedInFullPageCache($componentId, $viewCacheEnabled)
     {
         //is caching possible for this type? and is view cache enabled?

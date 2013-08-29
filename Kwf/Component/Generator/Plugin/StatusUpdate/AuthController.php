@@ -22,8 +22,7 @@ class Kwf_Component_Generator_Plugin_StatusUpdate_AuthController extends Kwf_Con
     {
         $backend = $this->_getBackend();
         if ($backend->isAuthed()) throw new Kwf_Exception("Already Authenticated");
-        header('Location: '.$backend->getAuthUrl());
-        exit;
+        Kwf_Util_Redirect::redirect($backend->getAuthUrl());
     }
 
     public function callbackAction()

@@ -1,6 +1,8 @@
 <?php
 class Kwf_Component_Plugin_Interface_UseViewCache_Component extends Kwc_Abstract
 {
+    public static $num;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -8,11 +10,11 @@ class Kwf_Component_Plugin_Interface_UseViewCache_Component extends Kwc_Abstract
         return $ret;
     }
 
+
     public function getTemplateVars($renderer)
     {
         $ret = parent::getTemplateVars($renderer);
-        static $num = 0;
-        $ret['num'] = $num++;
+        $ret['num'] = self::$num;
         return $ret;
     }
 }

@@ -11,7 +11,27 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
         $ret['showParentPageLink'] = false;
         $ret['level'] = 'main';
         $ret['flags']['hasAlternativeComponent'] = true;
-        $ret['plugins'][] = 'Kwc_Menu_Abstract_HideInvisibleDynamicPlugin';
+
+        $ret['plugins']['hideInvisibleDynamic'] = 'Kwc_Menu_Abstract_HideInvisibleDynamicPlugin';
+
+        return $ret;
+    }
+
+    public function getActiveViewPlugins()
+    {
+        $ret = parent::getActiveViewPlugins();
+
+        $found = false;
+        $pages = $this->_getMenuPages(null, array());
+        foreach ($pages as $p) {
+            if (Kwc_Abstract::getFlag($p->componentClass, 'hasIsVisibleDynamic')) {
+                $found = true;
+                break;
+            }
+        }
+        if (!$found) {
+            unset($ret['hideInvisibleDynamic']);
+        }
         return $ret;
     }
 

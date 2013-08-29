@@ -3,6 +3,6 @@ class Kwc_Articles_Directory_ContentSender extends Kwc_Directories_List_ViewAjax
 {
     public function sendContent($includeMaster)
     {
-        header('Location: /');
+        Kwf_Util_Redirect::redirect('/');
     }
 }

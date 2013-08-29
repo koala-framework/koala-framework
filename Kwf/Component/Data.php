@@ -1419,7 +1419,7 @@ class Kwf_Component_Data
         unset($vars['class']);
         $vars['unserialized'] = true;
         $ret = new $cls($vars);
-        Kwf_Component_Data_Root::getInstance()->addToDataCache($ret, new Kwf_Component_Select());
+        Kwf_Component_Data_Root::getInstance()->addToDataCache($ret, false);
         //TODO: generator data-cache?
         return $ret;
     }

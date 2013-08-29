@@ -746,7 +746,7 @@ abstract class Kwf_Component_Generator_Abstract
             $config['generator'] = $this; //wird benötigt für duplizieren
             $pageDataClass = $this->_getDataClass($config, $row);
             $ret = new $pageDataClass($config);
-            Kwf_Component_Data_Root::getInstance()->addToDataCache($ret, $select);
+            Kwf_Component_Data_Root::getInstance()->addToDataCache($ret, $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE));
         }
         return $ret;
     }
