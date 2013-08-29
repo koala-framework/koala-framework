@@ -41,9 +41,12 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($component->componentId.' page', microtime(true)-$startTime);
             Kwf_Benchmark::checkpoint('render page');
 
-            $content = $this->_render(1, $content);
+            $pass1Cacheable = true;
+            $content = $this->_render(1, $content, $pass1Cacheable);
             Kwf_Benchmark::checkpoint('render pass 1');
-            Kwf_Component_Cache::getInstance()->save($component, $content, $this->_getRendererName(), 'fullPage', '', $this->_minLifetime);
+            if ($pass1Cacheable) {
+                Kwf_Component_Cache::getInstance()->save($component, $content, $this->_getRendererName(), 'fullPage', '', $this->_minLifetime);
+            }
             Kwf_Benchmark::count("rendered miss", $component->componentId.': fullPage');
 
             Kwf_Benchmark::countLog('fullpage-miss');
