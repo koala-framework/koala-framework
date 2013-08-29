@@ -19,11 +19,6 @@ class Kwc_Articles_Detail_Form extends Kwf_Form
             ->setHeight(100);
         $this->add(new Kwf_Form_Field_DateField('date', trlKwf('Publication')))
             ->setAllowBlank(false);
-        $this->add(new Kwf_Form_Field_NumberField('mail_priority', trlKwf('E-Mail priority')))
-            ->setAllowDecimals(false)
-            ->setWidth(100)
-            ->setAllowBlank(false)
-            ->setDefaultValue("0");
         $this->add(new Kwf_Form_Field_Select('author_id', trlKwf('Author')))
             ->setAllowBlank(false)
             ->setWidth(200)
@@ -55,6 +50,7 @@ class Kwc_Articles_Detail_Form extends Kwf_Form
         $this->add(new Kwf_Form_Field_Select('priority', trlKwf('Priority')))
             ->setAllowBlank(false)
             ->setValues($priority)
+            ->setWidth(40)
             ->setHelpText(trlKwfStatic('For sorting articles if they have same date'));
      }
 }

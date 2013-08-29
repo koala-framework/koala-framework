@@ -1,0 +1,1 @@
+ALTER TABLE `kwc_articles` DROP `mail_priority`;
