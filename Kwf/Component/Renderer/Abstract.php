@@ -93,7 +93,7 @@ abstract class Kwf_Component_Renderer_Abstract
                                        2 for everything else. 2 includes 1, so calling just with 2 also works
      * @param string render content
      */
-    protected function _render($pass, $ret)
+    protected function _render($pass, $ret, &$pass1Cacheable = true)
     {
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
@@ -155,11 +155,14 @@ abstract class Kwf_Component_Renderer_Abstract
             }
 
             $useViewCache = $isCacheable;
-            if ($useViewCache && isset($plugins['useCache']) && $pass==2) { //in pass 2 decide here not to use view cache; pass 1 handled below
+            if ($useViewCache && isset($plugins['useCache'])) { //decide here not to use view cache; pass 1 additionally handled below
                 foreach ($plugins['useCache'] as $pluginClass) {
                     $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $componentId);
                     // if one of the plugins return false no cache is used
                     $useViewCache = $plugin->useViewCache($this) && $useViewCache;
+                    if (!$useViewCache && $pass==1) {
+                        $pass1Cacheable = false;
+                    }
                 }
             }
 
