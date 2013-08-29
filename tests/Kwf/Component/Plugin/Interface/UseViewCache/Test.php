@@ -124,7 +124,6 @@ class Kwf_Component_Plugin_Interface_UseViewCache_Test extends Kwc_TestAbstract
 
     public function testEmptyCacheDontCacheIfNoViewCacheMaster()
     {
-        $this->markTestIncomplete(); //if fixed re-enable viewCache in Kwc_Form
         $c = $this->_root->getComponentByClass('Kwf_Component_Plugin_Interface_UseViewCache_Component');
         Kwf_Component_Plugin_Interface_UseViewCache_Plugin_Component::$useViewCache = false;
         $html1 = $c->render(true, true);
