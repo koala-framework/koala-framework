@@ -30,8 +30,7 @@ class Kwc_Statistics_Opt_Component extends Kwc_Form_Component
                 Kwf_Statistics::OPT_IN : Kwf_Statistics::OPT_OUT;
             Kwf_Statistics::setUserOptValue($value);
             if (isset($postData['redirect'])) {
-                header('Location: ' . $postData['redirect']);
-                exit;
+                Kwf_Util_Redirect::redirect($postData['redirect']);
             }
         }
         parent::_processInput($postData);
