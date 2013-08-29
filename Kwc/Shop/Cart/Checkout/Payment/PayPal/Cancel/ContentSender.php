@@ -14,6 +14,6 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Cancel_ContentSender extends Kwf_Com
             }
             unset($session->paypalCartId);
         }
-        header('Location: ' . $this->_data->parent->parent->parent->getUrl());
+        Kwf_Util_Redirect::redirect($this->_data->parent->parent->parent->getUrl());
     }
 }

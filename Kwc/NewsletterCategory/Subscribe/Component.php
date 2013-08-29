@@ -91,8 +91,7 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
                         if ($this->getSuccessComponent() && $this->getSuccessComponent()->isPage &&
                             (!isset($postData['doNotRelocate']) || !$postData['doNotRelocate'])
                         ) {
-                            header('Location: ' . $this->getSuccessComponent()->url);
-                            exit;
+                            Kwf_Util_Redirect::redirect($this->getSuccessComponent()->url);
                         }
                     }
                 } else {
