@@ -180,8 +180,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
                 $url = $success;
             }
             if ($url) {
-                header('Location: ' . $url);
-                exit;
+                Kwf_Util_Redirect::redirect($url);
             }
         }
     }

@@ -5,7 +5,6 @@ class Kwf_Controller_Action_Debug_SessionRestartController extends Kwf_Controlle
     {
         Zend_Session::start();
         Zend_Session::destroy();
-        header('Location: /');
-        die();
+        Kwf_Util_Redirect::redirect('/');
     }
 }
