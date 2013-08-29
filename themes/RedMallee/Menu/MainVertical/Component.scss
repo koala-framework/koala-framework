@@ -1,0 +1,94 @@
+@import "compass/css3/box-sizing";
+@import "kwf/background-image-dpr2";
+
+.cssClass {
+    position: relative;
+    width: auto;
+
+    > a.showMenu {
+        display: block;
+        background: url('/assets/web/images/mainMenuBg.png') repeat-x top left;
+        line-height: 40px;
+        font-family: 'Univers LT W01 45 Light';
+        font-size: 14px;
+        color: var(mainColor);
+        text-align: right;
+        padding-right: 15px;
+        text-decoration: none;
+        text-transform: uppercase;
+
+        &:after {
+            display: inline-block;
+            content: "";
+            width: 8px;
+            height: 10px;
+            margin-left: 5px;
+            background: url('/assets/web/images/arrowWhiteDown.png') no-repeat center left;
+        }
+    }
+
+    > ul {
+        overflow: hidden;
+
+    }
+
+    ul {
+        display: block;
+        width: 100%;
+        height: auto;
+
+        li {
+            position: relative;
+            @include box-sizing(border-box);
+            padding: 0 15px 0 15px;
+            margin-bottom: 1px;
+            display: block;
+            height: 40px;
+            line-height: 40px;
+            background: url('/assets/web/images/mainMenuBgMobileGrey.png') repeat-x top left;
+
+            &.moved {
+                position: static;
+
+                > .subMenu {
+                    visibility: visible;
+                }
+            }
+
+            a {
+                font-family: 'Univers LT W01 45 Light';
+                font-size: 16px;
+                display: block;
+                color: var(mainColor);
+                text-transform: uppercase;
+                text-decoration: none;
+                height: 45px;
+                line-height: 45px;
+                border-bottom: 1px solid #c0c0c0;
+            }
+
+            &.hasDropdown > a {
+                @include background-image-dpr2('/assets/web/images', 'arrowBlueRight.png', 5px, 8px);
+                background: url('/assets/web/images/arrowBlueRight.png') no-repeat center right;
+            }
+
+            .subMenu {
+                position: absolute;
+                left: 100%;
+                top: 0;
+                visibility: hidden;
+                z-index: 99;
+            }
+
+            &.back a {
+                color: #999;
+                padding-left: 15px;
+                background: url('/assets/web/images/arrowLeftGrey.png') no-repeat center left;
+            }
+        }
+    }
+
+    > ul {
+        display: none;
+    }
+}

@@ -1,0 +1,65 @@
+@import "compass/css3/box-sizing";
+@import "susy";
+@import "kwf/background-image-dpr2";
+
+.cssClass {
+    margin-right: 0px;
+    @include box-sizing(border-box);
+    padding: 0 15px;
+    
+    h1 {
+        font-size: 26px;
+        color: var(typo);
+        padding: 10px 0px;
+    }
+    
+    .listItem {
+        margin-bottom: 20px;
+        padding-right: 20px;
+        position: relative;
+        @include box-sizing(border-box);
+        .redMalleeListTeaserItemImage img {
+            width: 100%;
+            height: auto;
+        }
+        a {
+            text-decoration: none;
+        }
+        p {
+            color: #494949;
+        }
+        .kwcText {
+            margin-top: 10px;
+            margin-bottom: 0px
+        }
+        .readMore {
+            text-align: right;
+            margin-top: -10px;
+
+            p:before {
+                @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'readMoreBg.png', 20px, 22px);
+                background-repeat: no-repeat;
+                content: '';
+                width: 20px;
+                height: 22px;
+                display: inline-block;
+                position: relative;
+                top: 7px;
+            }
+        }
+    }
+    
+    .kwcBasicHeadline {
+        position: relative;
+        z-index: 3;
+    }
+    
+    &.gt600 {
+        .listItem {
+            @include span-columns(1,2);
+            &.kwcOdd {
+                @include omega;
+            }
+        }
+    }
+}

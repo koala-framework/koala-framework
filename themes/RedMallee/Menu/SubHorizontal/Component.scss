@@ -14,21 +14,19 @@
         padding: 0px;
 
             a {
-                background: #ccc;
                 position: relative;
                 z-index: 15;
                 position: relative;
                 display: block;
+                text-transform: uppercase;
 
                 &:hover {
-                    background: var(secColor);
-                    color: var(light);
+                    color: #717171;
                 }
             }
             &.current a,
             a:hover {
-                background: #C80000;
-                color: var(light) !important;
+                color: #717171;
             }
         }
     }

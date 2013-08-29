@@ -15,6 +15,26 @@ $container-style: magic;
 html, body {
     height: 100%;
 }
+#outerBg {
+    display: none;
+
+    @include at-breakpoint(8 no-mediaqueries) {
+        display: block;
+    }
+}
+#mask {
+    display: none;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 11;
+    background: var(dark);
+    opacity: 0.7;
+    filter: alpha(opacity = 70);
+}
+#outerHeader {
+    position: relative;
+}
 body.sticky {
     @include at-breakpoint(10 no-mediaqueries) {
         #outerContent,
@@ -48,17 +68,24 @@ body.sticky {
     position: relative;
     width: 100%;
 
+    
     #outerHeader {
         background: var(light);
-        border-top: 5px solid var(secColor);
+        min-height: 120px;
+        z-index: 12;
+
+        @include at-breakpoint(8 no-mediaqueries) {
+            margin-bottom: 35px;
+        }
 
         #header {
-            overflow: visible;
+            overflow: visible !important;
+            position: relative;
             @include clearfix;
             @include container;
 
             .logo {
-                display: block;
+                display: inline;
                 text-align: center;
                 max-height: 100px;
 
@@ -73,86 +100,99 @@ body.sticky {
                 }
                 @include at-breakpoint(8 no-mediaqueries) {
                     max-height: 50px;
+                    float: left;
                 }
 
                 img {
                     @include at-breakpoint(4 no-mediaqueries) {
                         display: block;
                     }
-
-                    display: inline;
                 }
             }
-
-            .searchBox {
-                height: 40px;
-                position: relative;
-                top: 2px;
-                border-bottom: none;
-                margin-bottom: -3px;
-
-                @include at-breakpoint(5 no-mediaqueries) {
-                    background: #EFEFEF;
-                    float: right;
-
-                    &:after {
-                        content: '';
-                        position: absolute;
-                        width: 100%;
-                        height: 50%;
-                        top: 0px;
-                        left: 0px;
-                        background: #f6f6f6;
-                        z-index: 0;
-                    }
-                    input {
-                        z-index: 1;
-                    }
-                }
+            .rightBox {
                 @include at-breakpoint(8 no-mediaqueries) {
+                    float: right;
+                    margin-top: 30px;
+                }
+
+                .searchBox {
                     height: 40px;
                     position: relative;
                     top: 2px;
+                    border-bottom: none;
                     margin-bottom: -3px;
+
+                    @include at-breakpoint(5 no-mediaqueries) {
+
+                        input {
+                            z-index: 1;
+                        }
+                    }
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        height: 40px;
+                        position: relative;
+                        top: 2px;
+                        margin-bottom: -3px;
+                    }
                 }
-            }
-
-            .mainMenu {
-                position: relative;
-                top: 0px;
-
-                @include at-breakpoint(4 no-mediaqueries) {
+                .redMalleeMenuTop {
+                    display: none;
+                    @include at-breakpoint(5 no-mediaqueries) {
+                        display: block;
+                    }
+                }
+                .mainMenu {
                     position: relative;
                     top: 0px;
-                }
-                @include at-breakpoint(5 no-mediaqueries) {
-                    position: relative;
-                    top: 3px;
-                }
-                @include at-breakpoint(8 no-mediaqueries) {
-                    position: relative;
-                    top: 3px;
-                    margin-right: 0px;
-                    float: right;
+                    display: none;
 
+                    @include at-breakpoint(5 no-mediaqueries) {
+                        position: relative;
+                        top: 3px;
+                        display: block;
+                    }
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        position: relative;
+                        top: 3px;
+                        margin-right: 0px;
+                        float: right;
+
+                        ul li {
+                            float: left;
+                        }
+                    }
                     ul li {
-                        float: left;
+                        &:hover .dropdown {
+                            display: none;
+                            @include at-breakpoint(8 no-mediaqueries) {
+                                display: block;
+                            }                                
+                        }
+                    }
+                }
+                .verticalMenu {
+                    display: block;
+
+                    @include at-breakpoint(5 no-mediaqueries) {
+                        display: none;
                     }
                 }
             }
 
             .subMenuHorizontal {
 
-                @include at-breakpoint(6 no-mediaqueries) {
-                    background: #ccc;
+                @include at-breakpoint(5 no-mediaqueries) {
                     top: 0px;
+                    border-top: 1px solid #ccc;
+                    border-bottom: 1px solid #ccc;
+                    margin-top: 2px;
                     position: relative;
                 }
 
                 .webStandard.redMalleeMenuSubHorizontal {
                     display: none;
 
-                    @include at-breakpoint(6 no-mediaqueries) {
+                    @include at-breakpoint(5 no-mediaqueries) {
                         display: block;
                         position: relative;
                         z-index: 15;
@@ -169,30 +209,23 @@ body.sticky {
                                 color: white;
                                 margin-right: -4px;
 
-                                &.current {
-
-                                    a {
-                                        color: white;
-                                    }
                                 }
 
                                 a {
-                                    color: #000;
                                     font-size: 14px;
                                     padding: 0px 17px;
                                 }
-                            }
                         }
                     }
-                    @include at-breakpoint(8 no-mediaqueries) {
-                        display: none;
-                    }
                 }
-            }
+                @include at-breakpoint(8 no-mediaqueries) {
+                    display: none;
+                }
+        }
             .subSubMenuHorizontal .webStandard.redMalleeMenuSubSubHorizontal {
                 display: none;
 
-                @include at-breakpoint(6 no-mediaqueries) {
+                @include at-breakpoint(5 no-mediaqueries) {
                     display: block;
                     position: relative;
                     z-index: 15;
@@ -206,7 +239,7 @@ body.sticky {
                 }
                 @include at-breakpoint(8 no-mediaqueries) {
                     display: none;
-                    }
+                }
             }
         }
     }
@@ -215,7 +248,7 @@ body.sticky {
 
         @include container;
         background: #fff;
-        padding-bottom: 100px;
+        padding-bottom: 250px;
         position: relative;
 
         #content {
@@ -236,9 +269,8 @@ body.sticky {
                 }
 
                 .leftColumn {
-                    @include at-breakpoint(6 no-mediaqueries) {
                         display: none;
-                    }
+                    
                     @include at-breakpoint(8 no-mediaqueries) {
                         @include span-columns(2);
                         @include box-sizing(border-box);
@@ -257,7 +289,7 @@ body.sticky {
                         margin-top: 0px;
                     }
                     @include at-breakpoint(8 no-mediaqueries) {
-                        @include span-columns(4);
+                        @include span-columns(6);
                         @include box-sizing(border-box);
                         padding-right: 50px
                     }
@@ -272,46 +304,26 @@ body.sticky {
             }
         }
     }
-    #outerBottomStage {
-
-        padding-bottom: 150px;
-        #bottomStage {
-            @include container;
-            background: #fff;
-            min-height: 230px;
-            width: 100%;
-
-            .innerBottomStage {
-                margin: 20px auto 0px;
-                position: relative;
-            }
-
-            .bottomStageShadow {
-                height: 10px;
-                width: 100%;
-            }
-        }
-    }
-
 }
 
 #outerFooter {
 
-    height: 100px;
-    margin-top: -105px;
+    min-height: 165px;
+    margin-top: -165px;
     width: 100%;
-    background: white;
+    background: #e1dfe0;
     bottom: 0px;
-    border-top: 5px solid var(secColor);
+    position: relative;
+    z-index: 10;
 
     #footer {
         @include container;
-        margin-top: 20px;
 
         .bottomMenu {
             float: right;
             position: relative;
             z-index: 3;
+            margin-right: 50px;
         }
 
         .leftArea {
@@ -319,4 +331,3 @@ body.sticky {
         }
     }
 }
-

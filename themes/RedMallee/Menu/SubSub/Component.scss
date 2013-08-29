@@ -1,0 +1,14 @@
+.cssClass > ul {
+    padding-bottom: 10px;
+    > li {
+        margin-top: 5px;
+        padding-left: 20px;
+
+        a {
+            font-size: 12px;
+            text-transform: uppercase;
+            font-family: 'Univers LT W01 45 Light';
+            
+        }
+    }
+}

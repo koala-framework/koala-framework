@@ -1,30 +1,36 @@
-@import "kwf/background-image-dpr2";
+.cssClass > ul {
 
-.cssClass > ul > li {
-    padding-left: 15px;
-    margin-top: 10px;
-    border-bottom: 1px dashed var(highlightedText);
     padding-bottom: 10px;
-
-    &.first {
-        margin-top: 0px;
-    }
-    > a {
-        background-repeat: no-repeat;
-        background-position: left 6px;
-        @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'arrowSmallRight.png', 6px, 6px);
-        margin-left: -15px;
+    border-bottom: 1px solid #BDBDBD;
+    > li {
         padding-left: 15px;
-        display: block;
-        font-size: 12px;
-        font-weight: bold;
-    }
+        margin-top: 5px;
+        padding-bottom: 10px;
 
-    &.current.hasSubmenu > a {
-        background-repeat: no-repeat;
-        background-position: left 6px;
-        @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'arrowSmallRightActive.png', 6px, 6px);
-    }
+        &.first {
+            margin-top: 0px;
+        }
+        > a {
+            margin-left: -15px;
+            padding-left: 15px;
+            display: block;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-family: 'Univers LT W01 45 Light';
+        }
+        &.current > a {
+            color: var(secColor);
+        }
+        &.current.hasSubmenu > a {
+            color: var(secColor);
+        }
+        &.current > li > a{
+            color: var(mainColor);
+        }
+        &.current li.current a{
+            color: var(secColor);
+        }
+}
 }
 
 

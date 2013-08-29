@@ -4,21 +4,36 @@
 .cssClass {
     padding-left: 3px;
     margin-top: 3px;
-
-    .webForm input {
+    .kwcForm {
+        position: relative;
         float: right;
-        @include transition(width 0.4s ease, background 0.4s ease);
-        width: 80px;
-        background: url("/assets/kwf/themes/RedMallee/FulltextSearch/Box/search.png") no-repeat scroll 5px 6px #F6F6F6 !important;
-        @include border-radius-pie(5px);
-        font-size: 14px;
-        height: 22px;
-        line-height: 1.2em;
-        padding: 4px 10px 4px 28px;
 
-        &:focus {
-            width: 200px;
-            background-color: #f9f9f9;
+        .webForm input {
+            float: right;
+            @include transition(width 0.4s ease, background 0.4s ease);
+            width: 80px;
+            font-size: 14px;
+            height: 22px;
+            line-height: 1.2em;
+            padding: 4px 10px 4px 28px;
+            border: none;
+            color: #707070;
+            color: var(lightGrey);
+    
+            &:focus {
+                width: 200px;
+            }
         }
+    }
+    .loupe {
+        background: url('/assets/kwf/themes/RedMallee/images/search.png') no-repeat;
+        width: 45px;
+        height: 37px;
+        content: ' ';
+        display: block;
+        position: relative;
+        float: right;
+        margin-right: -27px;
+        margin-top: -2px;
     }
 }
