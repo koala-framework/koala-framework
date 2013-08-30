@@ -501,7 +501,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
     protected function _getRowById($id)
     {
         if ($id) {
-            $s = new Kwf_Model_Select();
+            $s = $this->_getSelect(); //use same select as for loading to be able to save only rows we can view
             $s->whereId($id);
             $row = $this->_model->getRow($s);
         } else {
