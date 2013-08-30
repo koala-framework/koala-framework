@@ -464,10 +464,12 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $newRow = $sourceRow->duplicate($data);
 
         //force reload to have the new row loaded
-        $this->_pageDataLoaded = false; //TODO do this only once
-        $this->_loadPageData();
+        $targetGenerator = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($newRow->parent_id)->getGenerator('page');
+        $targetGenerator->_pageDataLoaded = false; //TODO do this only once
+        $targetGenerator->_loadPageData();
 
-                                                        //ids are numeric, we don't have to use parentSource/parentTarget
+        //ids are numeric, we don't have to use parentSource/parentTarget
         $source = Kwf_Component_Data_Root::getInstance()->getComponentById($childId, array('ignoreVisible'=>true));
         $target = Kwf_Component_Data_Root::getInstance()->getComponentById($newRow->id, array('ignoreVisible'=>true));
         if (!$target) {
