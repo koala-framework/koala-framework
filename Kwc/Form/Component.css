@@ -59,14 +59,7 @@
     width: auto;
     border: none;
     background: none;
-    margin-left: 5px;
     margin-top: 3px;
-}
-.ext-ie6 .cssClass form .kwfFormFieldCheckbox label {
-    margin-right: 0px;
-}
-.cssClass form .kwfFormFieldCheckbox label {
-    margin-right: 15px;
 }
 .cssClass label {
     margin-right: 20px;
@@ -103,7 +96,7 @@
     margin-left: 20px;
     padding: 5px;
 }
-.cssClass form .kwfFormFieldRadio label {
+.cssClass form .kwfFormFieldRadio .kwfFormFieldWrapper label {
     margin-right: 20px;
     clear: none;
 }
