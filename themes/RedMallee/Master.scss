@@ -23,14 +23,21 @@ html, body {
     }
 }
 #mask {
-    display: none;
     height: 100%;
     width: 100%;
     position: fixed;
     z-index: 11;
     background: var(dark);
+    visibility: hidden;
+    opacity: 0;
+    filter: alpha(opacity = 0);
+    transition: visibility 0s 0.3s, opacity 0.3s linear;
+}
+#mask.visible {
+    visibility: visible;
     opacity: 0.7;
     filter: alpha(opacity = 70);
+    transition: opacity 0.3s linear;
 }
 #outerHeader {
     position: relative;

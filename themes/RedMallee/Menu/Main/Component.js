@@ -9,11 +9,11 @@ $(function(){
 
     $(selector).mouseenter(function() {
         if (window.innerWidth > 979) {
-            mask.stop().fadeIn(400);
+            mask.addClass('visible');
         }
     });
     $(selector).mouseleave(function() {
-        mask.stop().fadeOut(400);
+            mask.removeClass('visible');
     });
 });
 
