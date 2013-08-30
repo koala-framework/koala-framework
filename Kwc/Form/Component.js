@@ -1,4 +1,4 @@
-Kwf.Utils.ResponsiveEl('.kwcForm', [500, 350]);
+Kwf.Utils.ResponsiveEl('.kwcForm', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
 
 Kwf.onContentReady(function(el, param) {
     if (!param.newRender) return false;

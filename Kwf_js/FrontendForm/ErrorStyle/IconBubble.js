@@ -7,7 +7,7 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
             if (!firstField) { firstField = field; }
             field.el.addClass('kwfFieldError');
             if (!field.errorEl) {
-                field.errorEl = field.el.createChild({
+                field.errorEl = field.el.child('.kwfFormFieldWrapper').createChild({
                     cls: 'kwfFieldErrorIconBubble'
                 });
                 field.errorEl.createChild({
@@ -20,6 +20,7 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                 field.errorEl.child('.arrow').enableDisplayMode('block');
                 field.errorEl.child('.message').hide();
                 field.errorEl.child('.arrow').hide();
+                /*
                 if (field instanceof Kwf.FrontendForm.TextArea) {
                     field.errorEl.alignTo(field.el.child('textarea'), 'tr', [-20-field.el.child('textarea').getBorderWidth("r"), 2+field.el.child('textarea').getBorderWidth("t")]);
                 } else if (field instanceof Kwf.FrontendForm.Radio) {
@@ -43,6 +44,7 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                 } else {
                     field.errorEl.alignTo(field.el, 'r-r', [-10, 0]);
                 }
+                */
                 field.errorEl.enableDisplayMode('block');
                 field.errorEl.hide();
                 
