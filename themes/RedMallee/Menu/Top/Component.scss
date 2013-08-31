@@ -1,0 +1,27 @@
+.cssClass.gt500 {
+    margin-top: 5px;
+
+    ul {
+        float: right;
+
+        li {
+            float: left;
+            margin-right: 10px;
+
+            &.last {
+                margin-right: 10px;
+            }
+            
+            a {
+                font-family: 'Univers LT W01 55 Roman';
+                font-size: 12px;
+                text-transform: uppercase;
+                color: #717171;
+            }
+            
+            &.current a, a:hover {
+                color: var(secColor);
+            }
+        }
+    }
+}

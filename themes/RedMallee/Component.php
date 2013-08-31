@@ -15,11 +15,13 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
             'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => array(
                 'mainMenu' => 'RedMallee_Menu_Main_Component',
+                'verticalMenu' => 'RedMallee_Menu_MainVertical_Component',
                 'subMenu' => 'RedMallee_Menu_Sub_Component',
                 'subMenuHorizontal' => 'RedMallee_Menu_SubHorizontal_Component',
                 'subSubMenuHorizontal' => 'RedMallee_Menu_SubSubHorizontal_Component',
                 'subSubMenu' => 'RedMallee_Menu_SubSub_Component',
                 'bottomMenu' => 'RedMallee_Menu_Bottom_Component',
+                'topMenu' => 'RedMallee_Menu_Top_Component',
             ),
             'inherit' => true,
         );
@@ -27,6 +29,14 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
             'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => array(
                 'logo' => 'RedMallee_Box_Logo_Component'
+            ),
+            'inherit' => true,
+            'unique' => true
+        );
+        $ret['generators']['footerImage'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => array(
+                'footerImage' => 'RedMallee_Box_Footer_Component'
             ),
             'inherit' => true,
             'unique' => true
@@ -60,15 +70,6 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
                 'inherit' => true,
                 'boxName' => 'List Fade'
         );
-        $ret['generators']['bottomStage'] = array(
-                'class' => 'Kwf_Component_Generator_Box_StaticSelect',
-                'component' => array(
-                        'parentContent' => 'Kwc_Basic_ParentContent_Component',
-                        'bottomStage' => 'RedMallee_List_BottomStage_Component'
-                ),
-                'inherit' => true,
-                'boxName' => 'Bottom Stage'
-        );
         $ret['generators']['searchBox'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => 'RedMallee_FulltextSearch_Box_Component',
@@ -97,8 +98,8 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
             'inherit' => true,
             'boxName' => trlStatic('Hintergrundbild')
         );
-
-        $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'bottomStage', 'logo', 'background');
+        
+        $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'logo', 'background', 'footerImage');
 
         $ret['masterTemplate'] = KWF_PATH.'/themes/RedMallee/Master.tpl';
 

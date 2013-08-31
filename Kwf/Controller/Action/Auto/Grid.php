@@ -501,7 +501,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
     protected function _getRowById($id)
     {
         if ($id) {
-            $s = new Kwf_Model_Select();
+            $s = $this->_getSelect(); //use same select as for loading to be able to save only rows we can view
             $s->whereId($id);
             $row = $this->_model->getRow($s);
         } else {
@@ -942,6 +942,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
         // setting width for each column
         $colIndex = 0;
+        $renderer = array();
         foreach ($this->_columns as $column) {
             if (!($column->getShowIn() & Kwf_Grid_Column::SHOW_IN_XLS)) continue;
             if (is_null($column->getHeader())) continue;
@@ -955,6 +956,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             }
 
             $sheet->getColumnDimension($this->_getColumnLetterByIndex($colIndex))->setWidth($width);
+            $renderer[$colIndex] = $column->getRenderer();
             $colIndex++;
         }
 
@@ -986,6 +988,9 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                     $text = $helperDateTime->dateTime($text);
                 }
                 $sheet->setCellValueExplicit($cell, $text, $cellType);
+                if ($renderer[$col] == 'clickableLink') {
+                    $sheet->getCell($cell)->getHyperlink()->setUrl($text);
+                }
             }
 
             $this->_progressBar->next(1, trlKwf('Writing data. Please be patient.'));

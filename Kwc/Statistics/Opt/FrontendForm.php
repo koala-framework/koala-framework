@@ -25,10 +25,4 @@ class Kwc_Statistics_Opt_FrontendForm extends Kwc_Abstract_FrontendForm
             ->setBoxLabel($label);
         parent::_init();
     }
-
-    protected function _beforeSave($row)
-    {
-        $value = $row->opt ? Kwf_Statistics::OPT_IN : Kwf_Statistics::OPT_OUT;
-        Kwf_Statistics::setUserOptValue($value);
-    }
 }

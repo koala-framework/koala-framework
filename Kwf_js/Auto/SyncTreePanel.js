@@ -108,7 +108,9 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         if (meta.buttons.each == undefined) { // Abfrage nötig, falls keine Buttons geliefert
             var tbar = [];
             for (var button in meta.buttons) {
-                tbar.add(this.getAction(button));
+                if (meta.buttons[button]) {
+                    tbar.add(this.getAction(button));
+                }
             }
             this.filters = new Kwf.Auto.FilterCollection(meta.filters);
             this.filters.each(function(filter) {
@@ -358,7 +360,12 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
 
     onMoved : function (response)
     {
-        var parent = this.tree.getNodeById(response.parent);
+        var parent;
+        if (!response.parent) {
+            parent = this.tree.getRootNode();
+        } else {
+            parent = this.tree.getNodeById(response.parent);
+        }
         var node = this.tree.getNodeById(response.node);
         var before = this.tree.getNodeById(response.before);
         parent.insertBefore(node, before);

@@ -1,1 +1,1 @@
-Kwf.Utils.ResponsiveEl('.redMalleeBoxLogo', [875]);
+Kwf.Utils.ResponsiveEl('.redMalleeBoxLogo', [875, 500]);

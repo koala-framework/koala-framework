@@ -36,7 +36,7 @@ class Kwc_Form_Field_DateField_Component extends Kwc_Form_Field_Abstract_Compone
         if ($this->getFormField()->getFieldLabel()) {
             $message .= $this->getFormField()->getFieldLabel().': ';
         }
-        $t = strtotime($row->{$f->getName()});
+        $t = strtotime($row->{$this->getFormField()->getName()});
         $message .= date($this->getData()->trlKwf('Y-m-d'), $t);
         return $message;
     }

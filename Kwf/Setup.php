@@ -220,7 +220,7 @@ class Kwf_Setup
                 Kwf_Util_Https::ensureHttp();
             }
 
-            $contentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
+            $contentSender = Kwf_Component_Settings::getSetting($data->componentClass, 'contentSender');
             $contentSender = new $contentSender($data);
             $contentSender->sendContent(true);
             Kwf_Benchmark::shutDown();

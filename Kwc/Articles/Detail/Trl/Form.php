@@ -24,8 +24,6 @@ class Kwc_Articles_Detail_Trl_Form extends Kwf_Form
         $this->add(new Kwf_Form_Field_ShowField('original_date', trlKwf('Publication')))
             ->setData(new Kwf_Data_Trl_OriginalComponentFromData('date'))
             ->setTpl('{value:date}');
-        $this->add(new Kwf_Form_Field_ShowField('original_mail_priority', trlKwf('E-Mail priority')))
-            ->setData(new Kwf_Data_Trl_OriginalComponentFromData('mail_priority'));
         $this->add(new Kwf_Form_Field_ShowField('original_author_id', trlKwf('Author')))
             ->setData(new Kwc_Articles_Detail_Trl_Data('author_id'));
         $this->add(new Kwf_Form_Field_ShowField('original_vi_nr', trlKwf('VI-Number')))

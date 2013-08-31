@@ -67,14 +67,9 @@ class Kwf_Util_ClearCache
     public function getTypes()
     {
         $types = array();
-        $simpleCache = Kwf_Cache_Simple::getZendCache();
-        if ($simpleCache && $simpleCache->getBackend() instanceof Zend_Cache_Backend_Memcached) {
+        $simpleCacheBackend = Kwf_Cache_Simple::getBackend();
+        if ($simpleCacheBackend == 'memcache' || $simpleCacheBackend == 'elastiCache') {
             $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
-        } else {
-            if (Kwf_Util_Memcache::getHost()) {
-                //complete memcache, used by Cache_SimpleStatic
-                $types[] = new Kwf_Util_ClearCache_Types_Memcache();
-            }
         }
         $hasApc = extension_loaded('apc');
         if (!$hasApc) {

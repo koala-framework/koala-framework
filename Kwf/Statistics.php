@@ -26,7 +26,7 @@ class Kwf_Statistics
     public static function isUserOptIn(Kwf_Component_Data $data)
     {
         if (!self::issetUserOptValue()) {
-            return self::getDefaultOptValue($data) == self::OPT_OUT;
+            return self::getDefaultOptValue($data) == self::OPT_IN;
         } else {
             return self::getUserOptValue() == self::OPT_IN;
         }

@@ -37,17 +37,38 @@ class Kwf_Loader
             require_once Kwf_Config::getValue('externLibraryPath.tcpdf').'/tcpdf.php';
         } else {
             $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+            $start = substr($file, 0, 4);
+            if ($start == 'Kwf/' || $start == 'Kwc/') {
+                //use absolute path for optimal performance
+                $absolutePathUsed = true;
+                $file = KWF_PATH.'/'.$file;
+            }
             try {
-                include_once $file;
+                include $file;
             } catch (Exception $e) {
                 if ($fp = @fopen($file, 'r', true)) {
-                    //wenns die datei gibt, fehler weiterschmeissen
-                    //(file_exists akzeptiert leider keinen use_include_path parameter)
+                    //if file exists re-throw exception
+                    //(file_exists accepts unfortunately no use_include_path parameter)
                     fclose($fp);
                     throw $e;
                 }
-                //wenns die datei nicht gibt, keinen fehler schmeissen
-                //ist notwendig für class_exists das false zurück gibt
+
+                if (!isset($absolutePathUsed)) return;
+
+                //not found, try again without absolute KWF_PATH
+                $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+                try {
+                    include $file;
+                } catch (Exception $e) {
+                    if ($fp = @fopen($file, 'r', true)) {
+                        //if file exists re-throw exception
+                        //(file_exists accepts unfortunately no use_include_path parameter)
+                        fclose($fp);
+                        throw $e;
+                    }
+                    //if file does not exist don't throw exception
+                    //required for class_exists to return false
+                }
             }
         }
     }

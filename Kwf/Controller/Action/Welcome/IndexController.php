@@ -7,7 +7,6 @@ class Kwf_Controller_Action_Welcome_IndexController extends Kwf_Controller_Actio
         if ($this->getFrontController()->getRouter()->hasRoute('admin')) {
             $location = $this->getRequest()->getBaseUrl().'/admin';
         }
-        header('Location: ' . $location);
-        die();
+        Kwf_Util_Redirect::redirect($location);
     }
 }
