@@ -111,6 +111,7 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
                     if (substr($file->getFilename(), -4) == '-lib' || $file->getFilename() == 'library') continue;
                     if (substr($file->getFilename(), 0, 6) == 'backup') continue;
                     if ($file->getFilename() == 'config.local.ini') continue;
+                    if ($file->getFilename() == 'config_section') continue;
                     if ($file->getFilename() == 'php.ini') continue;  //php config might be in document_root (wtf, godaddy)
                     if ($file->getFilename() == 'php5.ini') continue; //php config might be in document_root (wtf, godaddy)
                     if ($file->getFilename() == $backupDir) continue;
