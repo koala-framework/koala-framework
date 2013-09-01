@@ -68,11 +68,7 @@ class Kwf_Cache_Simple
                     //not used using Zend_Cache
                     self::$_zendCache = false;
                 } else {
-                    //fallback to file backend (NOT recommended!)
-                    self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
-                        'cache_dir' => 'cache/simple',
-                        'hashed_directory_level' => 2
-                    )));
+                    self::$_zendCache = false;
                 }
             }
 
@@ -130,6 +126,13 @@ class Kwf_Cache_Simple
         return self::$_cacheNamespace;
     }
 
+    //for 'file' backend
+    public static function _getFileNameForCacheId($cacheId)
+    {
+        $cacheId = preg_replace('#[^a-zA-Z0-9_-]#', '_', $cacheId);
+        return "cache/simple/".$cacheId;
+    }
+
     public static function fetch($cacheId, &$success = true)
     {
         if (self::getBackend() == 'memcache') {
@@ -140,6 +143,21 @@ class Kwf_Cache_Simple
             static $prefix;
             if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
             return apc_fetch($prefix.$cacheId, $success);
+        } else if (self::getBackend() == 'file') {
+            $file = self::_getFileNameForCacheId($cacheId);
+            if (!file_exists($file)) {
+                $success =  false;
+                return false;
+            }
+            $data = unserialize(file_get_contents($file));
+            if (isset($data[1]) && time() > $data[1]) {
+                //expired
+                unlink($file);
+                $success =  false;
+                return false;
+            }
+            $success = true;
+            return $data[0];
         } else {
             if (!isset(self::$_zendCache)) self::getZendCache();
             $ret = self::$_zendCache->load(self::_processId($cacheId));
@@ -156,6 +174,11 @@ class Kwf_Cache_Simple
             static $prefix;
             if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
             return apc_add($prefix.$cacheId, $data, $ttl);
+        } else if (self::getBackend() == 'file') {
+             $file = self::_getFileNameForCacheId($cacheId);
+             $data = array($data);
+             if ($ttl) $data[1] = time()+$ttl;
+             return file_put_contents($file, serialize($data));
         } else {
             if (!isset(self::$_zendCache)) self::getZendCache();
             return self::$_zendCache->save($data, self::_processId($cacheId), array(), $ttl);
@@ -175,6 +198,13 @@ class Kwf_Cache_Simple
                 if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
                 $r = apc_delete($prefix.$cacheId);
                 $ids[] = $prefix.$cacheId;
+            } else if (self::getBackend() == 'file') {
+                $file = self::_getFileNameForCacheId($cacheId);
+                if (!file_exists($file)) {
+                    $r = false;
+                } else {
+                    if (!unlink($file)) $r = false;
+                }
             } else {
                 if (!isset(self::$_zendCache)) self::getZendCache();
                 $r = self::$_zendCache->remove(self::_processId($cacheId));

@@ -9,47 +9,18 @@
  */
 class Kwf_Cache_SimpleStatic
 {
-    private static $_zendCache = null;
-
-    public static function resetZendCache()
-    {
-        self::$_zendCache = null;
-    }
-
-    private static function _getZendCache()
-    {
-        if (!isset(self::$_zendCache)) {
-            self::$_zendCache = new Zend_Cache_Core(array(
-                'lifetime' => null,
-                'write_control' => false,
-                'automatic_cleaning_factor' => 0,
-                'automatic_serialization' => true
-            ));
-            /*
-            //don't use memcache, as that needs to access config
-            //if one needs that it could be implemented (but if you have memcache you should have apc anyway)
-            if (extension_loaded('memcache')) {
-                self::$_zendCache->setBackend(new Kwf_Cache_Backend_Memcached());
-            } else {
-            */
-            //fallback to file backend (NOT recommended!)
-            try {
-                self::$_zendCache->setBackend(new Kwf_Cache_Backend_File(array(
-                    'cache_dir' => 'cache/simple'
-                )));
-            } catch (Exception $e) {
-                self::$_zendCache->setBackend(new Zend_Cache_Backend_BlackHole());
-                throw $e;
-            }
-        }
-        return self::$_zendCache;
-    }
-
     private static function _processId($cacheId)
     {
         $cacheId = str_replace('-', '__', $cacheId);
         $cacheId = preg_replace('#[^a-zA-Z0-9_]#', '_', $cacheId);
         return $cacheId;
+    }
+
+    //for 'file' backend
+    private static function _getFileNameForCacheId($cacheId)
+    {
+        $cacheId = preg_replace('#[^a-zA-Z0-9_-]#', '_', $cacheId);
+        return "cache/simple/".$cacheId;
     }
 
     public static function fetch($cacheId, &$success = true)
@@ -59,9 +30,13 @@ class Kwf_Cache_SimpleStatic
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apc_fetch($prefix.$cacheId, $success);
         } else {
-            $ret = self::_getZendCache()->load(self::_processId($cacheId));
-            $success = $ret !== false;
-            return $ret;
+            $file = self::_getFileNameForCacheId($cacheId);
+            if (!file_exists($file)) {
+                $success =  false;
+                return false;
+            }
+            $success = true;
+            return unserialize(file_get_contents($file));
         }
     }
 
@@ -72,7 +47,8 @@ class Kwf_Cache_SimpleStatic
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apc_add($prefix.$cacheId, $data);
         } else {
-            return self::_getZendCache()->save($data, self::_processId($cacheId), array());
+             $file = self::_getFileNameForCacheId($cacheId);
+             return file_put_contents($file, serialize($data));
         }
     }
 
@@ -104,7 +80,9 @@ class Kwf_Cache_SimpleStatic
                 }
             }
         } else {
-            throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
+            foreach (glob(self::_getFileNameForCacheId($cacheIdPrefix).'*') as $f) {
+                unlink($f);
+            }
         }
     }
 
@@ -117,26 +95,29 @@ class Kwf_Cache_SimpleStatic
     {
         if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
 
-        if (extension_loaded('apc')) {
-            $cache = false;
-        } else {
-            $cache = self::_getZendCache();
-        }
-        $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
         $ret = true;
-        $ids = array();
-        foreach ($cacheIds as $cacheId) {
-            if (!$cache) {
-                $r = apc_delete($prefix.$cacheId);
-                $ids[] = $prefix.$cacheId;
-            } else {
-                $r = $cache->remove(self::_processId($cacheId));
+        if (!extension_loaded('apc')) {
+            foreach ($cacheIds as $cacheId) {
+                $file = self::_getFileNameForCacheId($cacheId);
+                if (!file_exists($file)) {
+                    $ret = false;
+                } else {
+                    if (!unlink($file)) $ret = false;
+                }
             }
-            if (!$r) $ret = false;
-        }
-        if (!$cache && php_sapi_name() == 'cli' && $ids) {
-            $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
-            if (!$result['result']) $ret = false;
+        } else {
+            $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+            $ids = array();
+            foreach ($cacheIds as $cacheId) {
+                if (!apc_delete($prefix.$cacheId)) {
+                    $ret = false;
+                }
+                $ids[] = $prefix.$cacheId;
+            }
+            if (php_sapi_name() == 'cli' && $ids) {
+                $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
+                if (!$result['result']) $ret = false;
+            }
         }
         return $ret;
     }
