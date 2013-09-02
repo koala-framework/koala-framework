@@ -74,7 +74,8 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
             $helper->setRenderer($this);
             $content = $helper->component($component);
 
-            $content = $this->_render(1, $content);
+            $pass1Cacheable = true;
+            $content = $this->_render(1, $content, $pass1Cacheable);
             Kwf_Benchmark::checkpoint('render pass 1');
 
             if (strpos($content, '<kwc2 ') === false) {
@@ -86,7 +87,9 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
                     Kwf_Benchmark::checkpoint('html parser (in fullPage)');
                 }
             }
-            Kwf_Component_Cache::getInstance()->save($component, $content, $this->_getRendererName(), 'fullPage', '', $this->_minLifetime);
+            if ($this->_enableCache && $pass1Cacheable) {
+                Kwf_Component_Cache::getInstance()->save($component, $content, $this->_getRendererName(), 'fullPage', '', $this->_minLifetime);
+            }
         }
         $hasPass2Placeholders = strpos($content, '<kwc2 ')!==false;
 
