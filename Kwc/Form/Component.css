@@ -138,6 +138,8 @@
 .cssClass .kwfField { clear: both; position: relative; }
 
 .cssClass .kwcLabelPositionAbove label {
+    display: block;
+    float: none;
     margin-left: 0px;
     text-align: left;
     width: 100%;

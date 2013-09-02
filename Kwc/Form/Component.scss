@@ -32,6 +32,13 @@
         top: 22px;
     }
 
+    div.kwcFormFieldFile {
+        input.fileSelector {
+            height: 19px;
+            padding: 0;
+        }
+    }
+
     &.veryNarrow {
         > div.kwcForm > form {
             .kwfFieldErrorIconBubble {
@@ -64,6 +71,16 @@
             .kwfFormFieldRadio {
                 label {
                     width: auto !important;
+                }
+            }
+        }
+
+        div.kwcFormFieldFile {
+            .underlayFileSelector {
+                a {
+                    position: absolute;
+                    right: 5px;
+                    top: 4px;
                 }
             }
         }
@@ -166,7 +183,8 @@
             }
         }
 
-        .kwcFormFieldMultiCheckbox {
+        .kwcFormFieldMultiCheckbox,
+        .kwcFormFieldFile {
             .kwfFieldErrorIconBubble { 
                 right: -25px;
             }
