@@ -3,5 +3,6 @@ div.kwfFormFieldDateField a.icon {
     width: 16px; height: 16px;
     background-image: url(/assets/silkicons/date.png);
     position: absolute;
+    top: 50%;
 }
 div.kwfFormFieldDateField input { width: 80px; }
