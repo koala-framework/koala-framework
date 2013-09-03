@@ -15,7 +15,7 @@ class Kwc_Newsletter_Detail_StatisticsClicksController extends Kwf_Controller_Ac
     {
         $component = Kwf_Component_Data_Root::getInstance()
             ->getComponentById($this->_getParam('componentId'))
-            ->getChildComponent('-mail');
+            ->getChildComponent('_mail');
         $recipientSources = Kwc_Abstract::getSetting($component->componentClass, 'recipientSources');
         $sql = "
             SELECT recipient_id, recipient_model_shortcut, ip, click_date

@@ -30,7 +30,7 @@ class Kwc_Newsletter_Detail_RecipientsController extends Kwc_Newsletter_Subscrib
     protected function _getMailComponent()
     {
         $mailComponent = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
-            $this->_getParam('componentId') . '-mail',
+            $this->_getParam('componentId') . '_mail',
             array('ignoreVisible' => true)
         );
         return $mailComponent;
