@@ -5,13 +5,13 @@ class Kwf_View_Helper_StatisticCode
     {
         $ret  = '';
 
+        if (Kwf_Registry::get('config')->kwc->domains) {
+            throw new Kwf_Exception('do not use helper statisticCode for webs with domains, use Kwc_Statistics_Piwik_Component as box instead.');
+        }
+
         $cfg = Kwf_Config::getValueArray('statistic');
         if (isset($cfg['ignore']) && $cfg['ignore']) {
             return $ret;
-        }
-
-        if (Kwf_Registry::get('config')->kwc->domains) {
-            throw new Kwf_Exception('do not use helper statisticCode for webs with domains, use Kwc_Statistics_Piwik_Component as box instead.');
         }
 
         if (!$analyticsCode) {
