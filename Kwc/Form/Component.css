@@ -42,7 +42,6 @@
 .cssClass textarea,
 .cssClass select {
     padding: 2px;
-    margin-bottom: 4px;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 11px;
     color: var(typo);
@@ -60,28 +59,15 @@
     width: auto;
     border: none;
     background: none;
-    margin-left: 5px;
     margin-top: 3px;
 }
-.ext-ie6 .cssClass form .kwfFormFieldCheckbox label {
-    margin-right: 0px;
-}
-.cssClass form .kwfFormFieldCheckbox label {
-    margin-right: 15px;
-}
 .cssClass label {
-    float: left;
-    width: 120px; /* set as inline style if setLabelWidth is used */
     margin-right: 20px;
     text-align: right;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 11px;
     color: var(typo);
     line-height: 18px;
-}
-.cssClass .kwfFormFieldWrapper.hasLabel {
-    margin-left: 120px; /* set as inline style if setLabelWidth is used */
-    padding-left: 20px;
 }
 .cssClass .kwcLabelPositionAbove .kwfFormFieldWrapper.hasLabel {
     margin-left: 0;
@@ -110,7 +96,7 @@
     margin-left: 20px;
     padding: 5px;
 }
-.cssClass form .kwfFormFieldRadio label {
+.cssClass form .kwfFormFieldRadio .kwfFormFieldWrapper label {
     margin-right: 20px;
     clear: none;
 }
@@ -122,7 +108,7 @@
 .cssClass form .kwfFormFieldRadioVertical label { float: none; }
 
 .cssClass form .kwfFormFieldMultiCheckboxHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
-.cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; }
+.cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; padding-right: 10px; }
 .cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
 
 .cssClass form .kwfFormContainerColumns .kwfFormContainerColumn { float: left; clear: none; }
@@ -152,6 +138,8 @@
 .cssClass .kwfField { clear: both; position: relative; }
 
 .cssClass .kwcLabelPositionAbove label {
+    display: block;
+    float: none;
     margin-left: 0px;
     text-align: left;
     width: 100%;

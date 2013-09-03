@@ -1,12 +1,11 @@
 Kwf.FrontendForm.DateField = Ext.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         if (!this.form.getFieldConfig(this.getFieldName()).hideTrigger) {
-            var icon = this.el.createChild({
+            var icon = this.el.child('.kwfFormFieldWrapper').createChild({
                 tag: 'a',
                 cls: 'icon',
                 href: '#'
             });
-            icon.alignTo(this.el.child('input'), 'tr');
             icon.on('click', function(ev) {
                 ev.stopEvent();
                 this.showPicker();

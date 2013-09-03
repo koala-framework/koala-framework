@@ -1,3 +1,5 @@
+Kwf.Utils.ResponsiveEl('.kwcForm', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+
 Kwf.onContentReady(function(el, param) {
     if (!param.newRender) return false;
     Ext.select('.kwcForm > form', true, el).each(function(form) {

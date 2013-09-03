@@ -1,11 +1,10 @@
 .kwfFormFieldFileInner img {
     margin-top: -20px;
 }
-.kwfFormFieldFileInnerContent { float: left; white-space: nowrap; }
 .kwfFormFieldFileUploadWrapper { position: relative; }
 .kwfFormFieldFileUploadWrapper .fileSelector,
-.kwfFormFieldFileUploadWrapper .underlayFileSelector {
-    position: absolute; top: 0px; left: 0px;
+.kwfFormFieldFileUploadWrapper > input {
+    position: absolute;
 }
 .kwfFormFieldFileUploadWrapper .fileSelector {
     z-index: 2;
