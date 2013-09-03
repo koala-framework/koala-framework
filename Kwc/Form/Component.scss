@@ -118,6 +118,20 @@
 
         .kwfFormFieldWrapper {
             input, textarea, select, {
+                width: 100% !important;
+
+                &.radio {
+                    width: auto !important;
+                }
+
+                &[type='checkbox'] {
+                    width: auto !important;
+                }
+            }
+        }
+
+        .kwfFormFieldWrapper.hasLabel {
+            input, textarea, select, {
                 width: 67% !important;
 
                 &.radio {
@@ -147,6 +161,10 @@
             &.hasLabel {
                 display: inline-block;
                 position: relative;
+
+                input, textarea, select {
+                    width: auto !important;
+                }
             }
 
             input, textarea, select {
