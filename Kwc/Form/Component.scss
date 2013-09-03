@@ -5,19 +5,6 @@
     .kwfFormFieldWrapper {
         margin-bottom: 4px;
 
-        input, textarea, select {
-            @include box-sizing(border-box);
-            width: 100% !important;
-
-            &.radio {
-                width: auto !important;
-            }
-
-            &[type='checkbox'] {
-                width: auto !important;
-            }
-        }
-
         .kwfFieldErrorIconBubble {
             clear: left;
 
@@ -41,6 +28,21 @@
 
     &.veryNarrow {
         > div.kwcForm > form {
+            .kwfFormFieldWrapper {
+                input, textarea, select {
+                    @include box-sizing(border-box);
+                    width: 100% !important;
+
+                    &.radio {
+                        width: auto !important;
+                    }
+
+                    &[type='checkbox'] {
+                        width: auto !important;
+                    }
+                }
+            }
+
             .kwfFieldErrorIconBubble {
                 background: none transparent;
                 position: relative;
@@ -86,6 +88,35 @@
         }
     }
 
+    &.veryNarrow.gt350 {
+        .kwfFormFieldWrapper {
+            input, textarea, select, {
+                width: 100% !important;
+
+                &.radio {
+                    width: auto !important;
+                }
+
+                &[type='checkbox'] {
+                    width: auto !important;
+                }
+            }
+        }
+
+        .kwfFormFieldWrapper.hasLabel {
+            input, textarea, select, {
+                width: 67% !important;
+
+                &.radio {
+                    width: auto !important;
+                }
+
+                &[type='checkbox'] {
+                    width: auto !important;
+                }
+            }
+        }
+    }
 
     &.gt350 {
         label {
@@ -116,34 +147,6 @@
             }
         }
 
-        .kwfFormFieldWrapper {
-            input, textarea, select, {
-                width: 100% !important;
-
-                &.radio {
-                    width: auto !important;
-                }
-
-                &[type='checkbox'] {
-                    width: auto !important;
-                }
-            }
-        }
-
-        .kwfFormFieldWrapper.hasLabel {
-            input, textarea, select, {
-                width: 67% !important;
-
-                &.radio {
-                    width: auto !important;
-                }
-
-                &[type='checkbox'] {
-                    width: auto !important;
-                }
-            }
-        }
-
         .kwfFieldErrorIconBubble {
             .message {
                 text-align: right;
@@ -161,14 +164,6 @@
             &.hasLabel {
                 display: inline-block;
                 position: relative;
-
-                input, textarea, select {
-                    width: auto !important;
-                }
-            }
-
-            input, textarea, select {
-                width: auto !important;
             }
         }
 

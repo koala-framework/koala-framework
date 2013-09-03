@@ -7,7 +7,6 @@
 .kwcForm div.kwcFormFieldMultiCheckbox .checkboxItem input {
     display: inline-block;
     float: none;
-    width: 30px;
 }
 
 .kwcForm div.kwcFormFieldMultiCheckbox .checkboxItem label {
