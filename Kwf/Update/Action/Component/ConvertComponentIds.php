@@ -19,10 +19,17 @@ class Kwf_Update_Action_Component_ConvertComponentIds extends Kwf_Update_Action_
         $pattern = isset($this->pattern) ? $this->pattern : $search . '%';
         $overwrite = isset($this->overwrite) && $this->overwrite;
 
+        $dbPattern = str_replace('_', '\_', $pattern);
+
         $db = Zend_Registry::get('db');
+
         foreach ($db->query("SHOW TABLES")->fetchAll() as $table) {
             $table = array_values($table);
             $table = $table[0];
+            if ($table == 'cache_component') continue;
+            if ($table == 'cache_component_includes') continue;
+            if ($table == 'cache_component_url') continue;
+            if ($table == 'cache_users') continue;
             $hasComponentId = false;
             $column = 'component_id';
             foreach ($db->query("SHOW FIELDS FROM $table")->fetchAll() as $field) {
@@ -34,7 +41,6 @@ class Kwf_Update_Action_Component_ConvertComponentIds extends Kwf_Update_Action_
                 }
             }
             if ($hasComponentId) {
-                $dbPattern = str_replace('_', '\_', $pattern);
                 if ($overwrite) {
                     $sql = "(SELECT REPLACE($column, '$search', '$replace')
                             FROM $table WHERE $column LIKE '$dbPattern')";
@@ -49,13 +55,13 @@ class Kwf_Update_Action_Component_ConvertComponentIds extends Kwf_Update_Action_
             }
         }
         $db->query("UPDATE kwc_basic_text SET content =
-                REPLACE(content, 'href=\"$search-', 'href=\"$replace-')");
+                REPLACE(content, 'href=\"$search', 'href=\"$replace') WHERE content LIKE '%href=\"$dbPattern\"%'");
         $db->query("UPDATE kwc_basic_text SET content =
-                REPLACE(content, 'href=\"{$search}_', 'href=\"{$replace}_')");
-        $db->query("UPDATE kwc_basic_text SET content =
-                REPLACE(content, 'href=\n  \"$search-', 'href=\n  \"$replace-')");
-        $db->query("UPDATE kwc_basic_text SET content =
-                REPLACE(content, 'href=\n  \"{$search}_', 'href=\n  \"{$replace}_')");
+                REPLACE(content, 'href=\n  \"$search', 'href=\"$replace') WHERE content LIKE '%href=\n  \"$dbPattern\"%'");
+        foreach ($db->query("SELECT component_id, content FROM kwc_basic_text WHERE content LIKE '%href=\"%$dbPattern\"%' OR content LIKE '%href=\n  \"%$dbPattern\"%'")->fetchAll() as $r) {
+            $r['content'] = preg_replace('#(href=\s*")([^"]*/)?([^"]*)'.preg_quote($search).'([^"]*)"#', '\1\2\3'.$replace.'\4"', $r['content']);
+            $db->update('kwc_basic_text', array('content' => $r['content']), 'component_id='.$db->quote($r['component_id']));
+        }
         //TODO: Images
 
     }

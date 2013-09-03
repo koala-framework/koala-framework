@@ -59,7 +59,7 @@ class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controlle
             $newDetailRow->status = null;
             $newDetailRow->save();
 
-            $mailRow = $newDetail->getChildComponent('-mail')->getComponent()->getRow();
+            $mailRow = $newDetail->getChildComponent('_mail')->getComponent()->getRow();
             $mailRow->subject = trlKwf('Copy of').' '.$mailRow->subject;
             $mailRow->save();
         }
