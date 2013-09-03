@@ -63,19 +63,7 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
 
     public static function getHelpOptions()
     {
-        $types = Kwf_Util_ClearCache::getInstance()->getTypes();
         return array(
-            array(
-                'param'=> 'type',
-                'value'=> $types,
-                'valueOptional' => true,
-                'help' => 'what to clear'
-            ),
-            array(
-                'param'=> 'server',
-                'help' => 'server',
-                'allowBlank' => true
-            )
         );
     }
 }
