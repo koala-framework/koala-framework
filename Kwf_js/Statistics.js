@@ -26,7 +26,7 @@ Kwf.Statistics.issetUserOptValue = function() {
 
 Kwf.Statistics.isUserOptIn = function() {
     if (!Kwf.Statistics.issetUserOptValue()) {
-        return Kwf.Statistics.getDefaultOptValue() == 'out';
+        return Kwf.Statistics.getDefaultOptValue() == 'in';
     } else {
         return Kwf.Statistics.getUserOptValue() == 'in';
     }
