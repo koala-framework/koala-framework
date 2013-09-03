@@ -35,7 +35,7 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
             'zoom_properties' => 0,
             'zoom' => 10,
             'height' => 400,
-            'width' => 400,
+            'width' => '', // automatisch 100%, wenn keine Breite angegeben
             'scale' => 1,
             'satelite' => 1,
             'overview' => 1,

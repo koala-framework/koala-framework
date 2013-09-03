@@ -15,8 +15,7 @@ class Kwc_Advanced_GoogleMap_Form extends Kwc_Abstract_Form
         $this->fields->add(new Kwf_Form_Field_NumberField('width', trlKwf('Width')))
             ->setAllowNegative(false)
             ->setAllowDecimals(false)
-            ->setAllowBlank(false)
-            ->setWidth(120);
+            ->setAllowBlank(true);
 
         $this->fields->add(new Kwf_Form_Field_NumberField('height', trlKwf('Height')))
             ->setAllowNegative(false)
