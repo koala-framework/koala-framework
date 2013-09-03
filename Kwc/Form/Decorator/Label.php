@@ -76,9 +76,6 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
             }
             $postHtml = '';
             $style = '';
-            //if ($hasLabel && $item['item']->getLabelWidth() && $labelPos != 'above') {
-                //$style = 'margin-left:'.$item['item']->getLabelWidth().'px';
-            //}
             $preHtml = $preHtml . '<div class="kwfFormFieldWrapper'.($hasLabel ? ' hasLabel' : '').'" style="'.$style.'">';
             $postHtml = '</div>'.$postHtml;
 
