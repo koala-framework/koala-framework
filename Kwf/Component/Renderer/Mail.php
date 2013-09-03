@@ -60,7 +60,7 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
         $this->_renderComponent = $component;
 
         $content = false;
-        if ($this->_enableCache) {
+        if ($this->_enableCache && $component->isPage) { //use fullPage cache only for pages
             $content = Kwf_Component_Cache::getInstance()->load($component->componentId, $this->_getRendererName(), 'fullPage');
             $this->_minLifetime = null;
         }
@@ -87,7 +87,7 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
                     Kwf_Benchmark::checkpoint('html parser (in fullPage)');
                 }
             }
-            if ($this->_enableCache && $pass1Cacheable) {
+            if ($this->_enableCache && $pass1Cacheable && $component->isPage) {
                 Kwf_Component_Cache::getInstance()->save($component, $content, $this->_getRendererName(), 'fullPage', '', $this->_minLifetime);
             }
         }
@@ -98,7 +98,7 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
 
         //if there where components that needed second render cycle the HtmlParser wasn't started yet
         //do that now (should be avoided as it's slow)
-        if ($hasPass2Placeholders && $this->_renderFormat == self::RENDER_HTML && $this->_htmlStyles) {
+        if ((!$component->isPage || $hasPass2Placeholders) && $this->_renderFormat == self::RENDER_HTML && $this->_htmlStyles) {
             $p = new Kwc_Mail_HtmlParser($this->_htmlStyles);
             $content = $p->parse($content);
             Kwf_Benchmark::checkpoint('html parser');

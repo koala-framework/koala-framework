@@ -13,8 +13,8 @@ class Kwc_Newsletter_Detail_Form extends Kwc_Abstract_Form
     {
         parent::_initFields();
 
-        $form = Kwc_Abstract_Form::createChildComponentForm($this->getClass(), '-mail');
-        $form->setIdTemplate('{component_id}_{id}-mail');
+        $form = Kwc_Abstract_Form::createChildComponentForm($this->getClass(), '_mail');
+        $form->setIdTemplate('{component_id}_{id}_mail');
         $this->add($form);
 
         $this->add(new Kwf_Form_Field_ShowField('create_date', trlKwf('Creation Date')))

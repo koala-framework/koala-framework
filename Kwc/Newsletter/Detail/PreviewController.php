@@ -24,7 +24,7 @@ class Kwc_Newsletter_Detail_PreviewController extends Kwc_Mail_PreviewController
     protected function _getMailComponent()
     {
         $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
-            $this->_getParam('componentId') . '-mail', 
+            $this->_getParam('componentId') . '_mail',
             array('ignoreVisible' => true)
         );
         return $component->getComponent();
