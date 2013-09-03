@@ -20,7 +20,6 @@ class Kwf_Cache_Simple
     {
         self::$_zendCache = null;
         self::$_cacheNamespace = null;
-        Kwf_Cache_SimpleStatic::resetZendCache();
     }
 
     public static function getBackend()
