@@ -140,7 +140,7 @@ class Kwf_Media_Output
             if (isset($file['encoding'])) {
                 $encoding = $file['encoding'];
             } else {
-                if (substr($file['mimeType'], 0, 5) == 'text/') {
+                if (substr($file['mimeType'], 0, 5) == 'text/' || $file['mimeType'] == 'application/json') {
                     if (isset($file['contents'])) {
                         $encoding = self::getEncoding($headers);
                         $file['contents'] = self::encode($file['contents'], $encoding);
