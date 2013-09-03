@@ -11,7 +11,7 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
         widths.each(function(w) {
             if (typeof w != 'object') {
                 w = {
-                    minWith: w,
+                    minWidth: w,
                     cls: 'gt'+w
                 };
             }
