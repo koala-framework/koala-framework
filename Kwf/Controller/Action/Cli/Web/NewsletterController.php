@@ -42,7 +42,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                     new Kwf_Model_Select_Expr_Equal('status', 'start'),
                     new Kwf_Model_Select_Expr_And(array(
                         new Kwf_Model_Select_Expr_Equal('status', 'startLater'),
-                        new Kwf_Model_Select_Expr_HigherEqual('start_date', new Kwf_DateTime(time())),
+                        new Kwf_Model_Select_Expr_LowerEqual('start_date', new Kwf_DateTime(time())),
                     )),
                     new Kwf_Model_Select_Expr_Equal('status', 'sending')
                 )));
