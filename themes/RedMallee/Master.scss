@@ -56,7 +56,6 @@ body.sticky {
             background: var(light);
             position: fixed;
             width: 100%;
-            z-index: 50;
             top: -63px;
             box-shadow: 0 1px 7px #595959;
 
@@ -79,7 +78,7 @@ body.sticky {
     #outerHeader {
         background: var(light);
         min-height: 120px;
-
+        z-index: 50;
         @include at-breakpoint(8 no-mediaqueries) {
             margin-bottom: 35px;
         }
