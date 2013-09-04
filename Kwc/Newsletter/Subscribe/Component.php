@@ -119,7 +119,7 @@ class Kwc_Newsletter_Subscribe_Component extends Kwc_Form_Component
             $unsubscribeComponentId = $nlData->getChildComponent('_unsubscribe')->componentId;
         }
 
-        $mail = $this->getData()->getChildComponent('_mail')->getComponent();
+        $mail = $this->getData()->getChildComponent('-mail')->getComponent();
         $mail->send($row, array(
             'formRow' => $row,
             'host' => $host,
