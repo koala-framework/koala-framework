@@ -79,7 +79,6 @@ body.sticky {
     #outerHeader {
         background: var(light);
         min-height: 120px;
-        z-index: 12;
 
         @include at-breakpoint(8 no-mediaqueries) {
             margin-bottom: 35px;
