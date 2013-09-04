@@ -3716,6 +3716,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <context>decimal separator</context>
 <en>.</en>
 <de>,</de>
+<fr>,</fr>
 <id>757</id>
 <sl>,</sl>
 <hu>,</hu>
@@ -8489,6 +8490,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <context>thousands separator</context>
 <en>,</en>
 <de>.</de>
+<fr>.</fr>
 <id>1700</id>
 <sl>.</sl>
 <hu>.</hu>
