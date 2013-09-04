@@ -61,14 +61,15 @@ class Kwc_NewsletterCategory_Subscribe_Component extends Kwc_Newsletter_Subscrib
     //this method is a big mess and will break soon
     public function processInput(array $postData)
     {
-        if (!empty($postData[$this->getData()->componentId]) && !empty($postData['form_email'])) {
+        $emailField = $this->getForm()->getByName('email')->getFieldName();
+        if (!empty($postData[$this->getData()->componentId]) && !empty($postData[$emailField])) {
             if (!$this->getForm()) return;
 
             $model = $this->getForm()->getModel();
             //TODO: don't poke into $postData directly, get value from field instead
             $s = $model->select();
             $s->whereEquals('newsletter_component_id', $this->getSubscribeToNewsletterComponent()->dbId);
-            $s->whereEquals('email', $postData['form_email']);
+            $s->whereEquals('email', $postData[$emailField]);
             $s->whereEquals('unsubscribed', false);
             $exists = $model->getRow($s);
             if ($exists) {
