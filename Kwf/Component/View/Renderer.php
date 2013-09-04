@@ -8,7 +8,7 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         return $settings['enabled'] && $viewCacheEnabled;
     }
 
-    protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $plugins = array(), $viewCacheEnabled = true)
+    protected function _getRenderPlaceholder($componentId, $config = array(), $value = null, $viewCacheEnabled = true)
     {
         $type = $this->_getType();
 
@@ -19,9 +19,8 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         } else {
             $pass = 2;
         }
-        $plugins = $plugins ? json_encode((object)$plugins) : '';
         $config = $config ? base64_encode(serialize($config)) : '';
-        return "<kwc$pass $type $componentId $value $plugins $config>";
+        return "<kwc$pass $type $componentId $value $config>";
     }
 
     protected function _getComponentById($componentId)
