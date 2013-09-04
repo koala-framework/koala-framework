@@ -93,6 +93,7 @@ class Vps_Setup
         Vps_Registry::set('config', $config);
         Vps_Registry::set('configMtime', Vps_Config_Web::getInstanceMtime(self::getConfigSection()));
 
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
 
         if ($config->debug->benchmark) {
             require_once 'Vps/Benchmark.php';
