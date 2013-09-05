@@ -5,7 +5,7 @@ class Kwf_Util_Https
 
     public static function ensureHttps()
     {
-        if (self::supportsHttps()) {
+        if (php_sapi_name() != 'cli' && self::supportsHttps()) {
             if (!isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
                 $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 header('Location: '.$redirect, true, 302);
