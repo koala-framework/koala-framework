@@ -260,6 +260,8 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                 }
             } else if (column.showDataIndex) {
                 column.renderer = Ext.util.Format.showField(column.showDataIndex);
+            } else {
+                column.renderer = Ext.util.Format.htmlEncode;
             }
             if (column.summaryRenderer) {
                 if (Ext.util.Format[column.summaryRenderer]) {

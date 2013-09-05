@@ -46,6 +46,8 @@ Ext.util.Format.decimal = function(v, p)
     }
     if (v === null || v == undefined) return "";
 
+    v = Ext.util.Format.htmlEncode(v);
+
     v = v.toString().replace(",", ".");
     v = (Math.round((v-0)*100))/100;
     v = (v == Math.floor(v)) ? v + ".00" : ((v*10 == Math.floor(v*10)) ? v + "0" : v);
@@ -77,7 +79,7 @@ Ext.util.Format.percent = function(v)
 
 Ext.util.Format.showField = function(fieldName) {
     return function(value, p, record) {
-        return record.data[fieldName];
+        return Ext.util.Format.htmlEncode(record.data[fieldName]);
     };
 };
 
@@ -86,7 +88,7 @@ if (Ext.util.Format.nl2br) {
     Ext.util.Format.nl2Br = Ext.util.Format.nl2br;
 } else {
     Ext.util.Format.nl2Br = function(v) {
-        return v.replace(/\n/g, "<br />");
+        return Ext.util.Format.htmlEncode(v).replace(/\n/g, "<br />");
     };
 }
 
@@ -149,6 +151,7 @@ Ext.util.Format.secondsToTime = function(v, format) {
 Ext.util.Format.mouseoverPic = function(v, p, record){
     if (!v) return '';
     p.css += 'kwf-cell-button';
+    v = Ext.util.Format.htmlEncode(v);
     p.attr += 'style="background-image:url('+v+');"';
     p.attr += ' ext:qtip="&lt;img src=\''+record.data.pic_large+'\' /&gt;"';
     return '';
@@ -209,6 +212,7 @@ Ext.util.Format.genderIcon = function(value, p, record, rowIndex, colIndex, stor
 Ext.util.Format.fileSize = function(size) {
     var unit;
     if (!parseInt(size) && size !== 0) return '';
+    size = parseInt(size);
     if(size < 1024) {
         unit = 'bytes';
     } else if(size < 1048576) {
@@ -224,6 +228,7 @@ Ext.util.Format.fileSize = function(size) {
 Ext.util.Format.notEditable = function(v, p)
 {
     p.css += 'kwf-renderer-noteditable';
+    v = Ext.util.Format.htmlEncode(v);
     return v;
 };
 
@@ -251,17 +256,20 @@ Ext.util.Format.image = function(v, p, record){
 
 Ext.util.Format.clickableLink = function(v, p, record){
     if (!v) return '';
+    v = Ext.util.Format.htmlEncode(v);
     return '<a href="'+v+'" target="_blank">'+v+'</a>';
 };
 
 Ext.util.Format.clickableMailLink = function(v, p, record){
     if (!v) return '';
+    v = Ext.util.Format.htmlEncode(v);
     return '<a href="mailto:'+v+'" target="_blank">'+v+'</a>';
 };
 
 Ext.util.Format.tableTrl = function(v, p, record, rowIndex, colIndex, store, column){
     if (!v || v == '') {
         v = record.data[column.dataIndex+'data'];
+        v = Ext.util.Format.htmlEncode(v);
         p.attr += 'style="background: url(/assets/silkicons/link.png) no-repeat right center; border: 1px solid #b4e889; padding-right: 20px;"';
     } else {
         p.attr += 'style="background: url(/assets/silkicons/link_break.png) no-repeat right center; border: 1px solid #f16565; padding-right: 20px;"';
