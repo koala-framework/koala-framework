@@ -63,7 +63,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
                 //remove stopped processes (might stop because of memory limit or simply crash for some reason)
                 foreach ($procs[$newsletterRow->id] as $k=>$p) {
                     if (!$p->isRunning()) {
-                        echo "process ".$p->getPid()." stopped...\n";
+                        if ($this->_getParam('debug')) echo "process ".$p->getPid()." stopped...\n";
                         unset($procs[$newsletterRow->id][$k]);
                     }
                 }
