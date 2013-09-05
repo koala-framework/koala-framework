@@ -71,9 +71,11 @@ class Kwf_Util_Setup
 
         //only replace configured value to avoid spoofing
         //required eg. behind load balancers
-        if (Kwf_Config::getValue('server.replaceVars.remoteAddr')) {
-            $a = Kwf_Config::getValue('server.replaceVars.remoteAddr');
-            $ret .= "\nif (isset(\$_SERVER['$a'])) \$_SERVER['REMOTE_ADDR'] = \$_SERVER['$a'];\n";
+        if (Kwf_Config::getValueArray('server.replaceVars.remoteAddr')) {
+            $a = Kwf_Config::getValueArray('server.replaceVars.remoteAddr');
+            $ret .= "\nif (isset(\$_SERVER['REMOTE_ADDR']) && \$_SERVER['REMOTE_ADDR'] == '$a[if]' && isset(\$_SERVER['$a[replace]'])) {\n";
+            $ret .= "    \$_SERVER['REMOTE_ADDR'] = \$_SERVER['$a[replace]'];\n";
+            $ret .= "}\n";
         }
 
         //try different values, if one spoofs this this is no security issue
