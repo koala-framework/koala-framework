@@ -18,6 +18,7 @@ class Kwc_Newsletter_Detail_Mail_Component extends Kwc_Mail_Component
                 'select' => $select
             )
         );
+        $ret['trackViews'] = true;
         return $ret;
     }
 

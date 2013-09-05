@@ -35,7 +35,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $ret['returnPath'] = null;
         $ret['subject'] = trlKwf('Automatically sent e-mail');
         $ret['attachImages'] = false;
-        $ret['trackViews'] = true;
+        $ret['trackViews'] = false;
 
         return $ret;
     }
