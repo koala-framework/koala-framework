@@ -296,7 +296,7 @@ body.sticky {
                     @include at-breakpoint(8 no-mediaqueries) {
                         @include span-columns(6);
                         @include box-sizing(border-box);
-                        padding-right: 50px
+                        padding-right: 20px
                     }
                 }
 
