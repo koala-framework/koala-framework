@@ -181,9 +181,12 @@ abstract class Kwf_Component_Renderer_Abstract
 
     private function _renderUncached($componentId, $type, $config)
     {
-        $c = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($componentId, array('ignoreVisible'=>true));
-        $plugins = $this->_getGroupedViewPlugins($c);
+        $plugins = array();
+        if ($type == 'component') {
+            $c = Kwf_Component_Data_Root::getInstance()
+                ->getComponentById($componentId, array('ignoreVisible'=>true));
+            $plugins = $this->_getGroupedViewPlugins($c);
+        }
         $content = $this->_executePlugins(null, $plugins, $componentId, array('replace'));
 
         if (is_null($content)) {
@@ -197,9 +200,12 @@ abstract class Kwf_Component_Renderer_Abstract
 
     private function _renderAndCache($componentId, $type, $value, $config, $addPluginPlaceholders, &$cacheSaved = true)
     {
-        $c = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($componentId, array('ignoreVisible'=>true));
-        $plugins = $this->_getGroupedViewPlugins($c);
+        $plugins = array();
+        if ($type == 'component') {
+            $c = Kwf_Component_Data_Root::getInstance()
+                ->getComponentById($componentId, array('ignoreVisible'=>true));
+            $plugins = $this->_getGroupedViewPlugins($c);
+        }
 
         $cacheSaved = true;
         if (isset($plugins['useCache'])) {
