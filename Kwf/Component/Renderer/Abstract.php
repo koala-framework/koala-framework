@@ -232,12 +232,31 @@ abstract class Kwf_Component_Renderer_Abstract
         //after plugin always as placeholder to execute later
         $content = $this->_addPluginPlaceholders($content, $plugins, $componentId, array('after'));
 
+        $cacheContent = $content;
+
+        if ($cacheSaved && $this->_enableCache) {
+            $viewCacheSettings = $this->_getHelper($type)->getViewCacheSettings($componentId);
+            if (!is_bool($viewCacheSettings['enabled'])) {
+                //dynamic (callback) cache enabled setting
+                if (!call_user_func_array($viewCacheSettings['enabled']['callback'], $viewCacheSettings['enabled']['args'])) {
+                    $cacheSaved = false;
+                } else {
+                    $cacheContent = '<useCacheDynamic '.$componentId.
+                                    ' '.$type.
+                                    ' '.base64_encode(serialize($config)).
+                                    ' '.serialize($viewCacheSettings['enabled']).
+                                '>'.$cacheContent.'</useCacheDynamic '.$componentId.'>';
+                }
+            }
+        }
+
         if ($cacheSaved && $this->_enableCache) {
             //if saving to cache add placeholders
-            $cacheContent = $this->_addPluginPlaceholders($content, $plugins, $componentId, array('replace', 'before', 'useCache'));
+            $cacheContent = $this->_addPluginPlaceholders($cacheContent, $plugins, $componentId, array('replace', 'before', 'useCache'));
             $this->_cacheSave($componentId, $type, $value, $cacheContent);
 
             if ($addPluginPlaceholders) {
+                //return cached content to be able to re-execute plugins in pass2
                 $content = $cacheContent;
             } else {
                 $content = $this->_executePlugins($content, $plugins, $componentId, array('before', 'replace'));
@@ -320,6 +339,31 @@ abstract class Kwf_Component_Renderer_Abstract
         return $ret;
     }
 
+    private function _findAndExecuteUseCacheDynamic($ret)
+    {
+        static $benchmarkEnabled;
+        if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
+
+        //'<useCacheDynamic '.$componentId.' '.serialize($viewCacheSettings['enabled']).'>'.$content.'</useCacheDynamic '.$componentId.'>'
+        while (($start = strpos($ret, '<useCacheDynamic ')) !== false) {
+            $startEnd = strpos($ret, '>', $start);
+            $args = explode(' ', substr($ret, $start+17, $startEnd-$start-17));
+            //args: 0: componentId, 1: type, 2: config, 3: serialized cache enabled callback fn
+            $end = strpos($ret, '</useCacheDynamic '.$args[0].'>');
+            $content = substr($ret, $startEnd+1, $end-$startEnd-1);
+            if ($benchmarkEnabled) $startTime = microtime(true);
+            $cb = unserialize($args[3]);
+            if (!call_user_func_array($cb['callback'], $cb['args'])) {
+                //cache disabled, re-render
+                $content = $this->_getHelper($args[1])->render($args[0], unserialize(base64_decode($args[2])));
+            }
+            $ret = substr($ret, 0, $start).$content.substr($ret, $end+20+strlen($args[0]));
+
+            if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('useCacheDynamic '.$args[1], microtime(true)-$startTime);
+        }
+        return $ret;
+    }
+
     /**
      * Render components (ie. expand <kwc ...>)
      *
@@ -333,6 +377,7 @@ abstract class Kwf_Component_Renderer_Abstract
         $ret = $this->_findAndExecutePlugins($ret, 'C');
         $ret = $this->_findAndExecutePlugins($ret, 'B');
         $ret = $this->_findAndExecutePlugins($ret, 'R');
+        $ret = $this->_findAndExecuteUseCacheDynamic($ret);
 
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
@@ -381,11 +426,12 @@ abstract class Kwf_Component_Renderer_Abstract
                     $content = $this->_findAndExecutePlugins($content, 'B');
                 }
 
+                $content = $this->_findAndExecuteUseCacheDynamic($content);
+
             } else {
                 if ($this->_enableCache && $target['isCacheable']) {
                     //cache miss
                     $statType = 'miss';
-
                     $content = $this->_renderAndCache($target['componentId'], $target['type'], $target['value'], $target['config'],
                         false //don't add plugin placeholders, execute them
                     );
@@ -398,7 +444,6 @@ abstract class Kwf_Component_Renderer_Abstract
             }
 
             $content = $helper->renderCached($content, $target['componentId'], $target['config']);
-
 
             $ret = substr($ret, 0, $target['start']).$content.substr($ret, $target['end']+1);
 

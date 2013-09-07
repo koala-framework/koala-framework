@@ -21,4 +21,25 @@ class Kwf_Component_Partial_Paging extends Kwf_Component_Partial_Abstract
         }
         return $ret;
     }
+
+    public static function useViewCache($componentId, $params)
+    {
+        return array(
+            'callback' => array(
+                'Kwf_Component_Partial_Paging',
+                '_useViewCacheDynamic'
+            ),
+            'args' => array(
+                $params['paramName']
+            )
+        );
+    }
+
+    public function _useViewCacheDynamic($paramName)
+    {
+        if (!isset($_GET[$paramName]) || $_GET[$paramName]==1) {
+            return true;
+        }
+        return false;
+    }
 }
