@@ -11,6 +11,10 @@ class Kwf_Config
 
         $cfg = Kwf_Registry::get('config');
         foreach (explode('.', $var) as $i) {
+            if (!isset($cfg->$i)) {
+                $cfg = null;
+                break;
+            }
             $cfg = $cfg->$i;
         }
         if ($cfg) {
