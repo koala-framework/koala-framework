@@ -198,6 +198,7 @@ class Kwf_Cache_Simple
                 $r = apc_delete($prefix.$cacheId);
                 $ids[] = $prefix.$cacheId;
             } else if (self::getBackend() == 'file') {
+                $r = true;
                 $file = self::_getFileNameForCacheId($cacheId);
                 if (!file_exists($file)) {
                     $r = false;
