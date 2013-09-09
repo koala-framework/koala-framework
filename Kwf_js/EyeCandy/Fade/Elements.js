@@ -28,9 +28,7 @@ Kwf.onContentReady(function()
         }
 
         element.fadeElementsObject = new cls(config);
-        if (config.autoStart == undefined || config.autoStart) {
-            element.fadeElementsObject.start();
-        }
+        element.fadeElementsObject.start();
     });
 });
 
@@ -147,7 +145,9 @@ Kwf.Fade.Elements.prototype = {
             this.calculateMaxHeight();
         }, this));
         if (this.fadeElements.length <= 1) return;
-        this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
+        if (this.startRandom) {
+            this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
+        }
     },
 
     doFade: function(direction) {
