@@ -50,6 +50,7 @@ Kwf.Fade.Elements = function(cfg) {
     this.easingFadeIn = 'ease';
     this.fadeEvery = 7;
     this.startRandom = true;
+    this.direction = cfg.direction;
 
     if (typeof cfg.template != 'undefined') this._template = cfg.template;
     if (typeof cfg.animationType != 'undefined') this.animationType = cfg.animationType;
@@ -150,7 +151,7 @@ Kwf.Fade.Elements.prototype = {
         this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
     },
 
-    doFade: function(direction) {
+    doFade: function() {
         if (this.fadeElements.length <= 1 || this._isAnimating) return;
 
         this._isAnimating = true;
@@ -174,8 +175,8 @@ Kwf.Fade.Elements.prototype = {
             var top = height;
 
             var dir = 'r';
-            if (direction) { // get direction if set
-                dir = direction.substring(0,1);
+            if (this.direction) { // get direction if set
+                dir = this.direction.substring(0,1);
             }
             // determine opposite direction depending on given direction
             if (dir == 'r') {
