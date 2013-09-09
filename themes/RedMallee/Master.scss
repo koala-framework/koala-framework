@@ -171,7 +171,11 @@ body.sticky {
                             display: none;
                             @include at-breakpoint(8 no-mediaqueries) {
                                 display: block;
-                            }                                
+                            }   
+                            
+                            ul li {
+                                float: none;
+                            }
                         }
                     }
                 }
