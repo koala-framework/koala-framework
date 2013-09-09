@@ -60,6 +60,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onComponentClassPartialChanged'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_ComponentClass_PartialsChanged',
+            'callback' => 'onComponentClassPartialsChanged'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_ComponentClassPage_ContentChanged',
             'callback' => 'onComponentClassPageContentChanged'
         );
@@ -285,6 +289,15 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'value' => $event->id
         );
         $this->_log("type=partial component_class=$event->class value=$event->id");
+    }
+
+    public function onComponentClassPartialsChanged(Kwf_Component_Event_ComponentClass_PartialsChanged $event)
+    {
+        $this->_updates[] = array(
+            'type' => 'partials',
+            'component_class' => $event->class
+        );
+        $this->_log("type=partials component_class=$event->class");
     }
 
     public function onComponentClassPageContentChanged(Kwf_Component_Event_ComponentClassPage_ContentChanged $event)
