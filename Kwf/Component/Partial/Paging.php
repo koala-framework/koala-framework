@@ -24,6 +24,7 @@ class Kwf_Component_Partial_Paging extends Kwf_Component_Partial_Abstract
 
     public static function useViewCache($componentId, $params)
     {
+        if (!isset($params['paramName'])) return false;
         return array(
             'callback' => array(
                 'Kwf_Component_Partial_Paging',
