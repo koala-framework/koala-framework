@@ -1,20 +1,20 @@
 @import "compass/css3/images";
 
-.cssClass {
+.cssClass.webStandard {
     background-color: #e6e6e6;
     margin-top: 2px;
     
     ul {
         height: 32px;
-        margin-left: 20px;
+        margin-left: 19px;
     }
 
     li {
         height: 32px;
-        border-right: 1px solid #444;
+        border-right: 1px solid #dedede;
         float: left;
         display: block;
-        font-size: 14px;
+        font-size: 13px;
         
         &.last {
             border-right: none;
@@ -25,7 +25,7 @@
 
         a {
             height: 32px;
-            padding: 0 10px;
+            padding: 0 16px;
             display: block;
             line-height: 32px;
             color: #373737;
