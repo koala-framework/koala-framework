@@ -56,7 +56,7 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
     public function onParentChanged(Kwf_Component_Event_Page_ParentChanged $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-            $this->_class
+            $this->_class, $event->component
         ));
     }
 

@@ -249,11 +249,23 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     public function onComponentClassContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
     {
-        $this->_updates[] = array(
-            'type' => 'component',
-            'component_class' => $event->class
-        );
-        $this->_log("type=component component_class=$event->class");
+        $subroot = null;
+        if ($event->component) $subroot = $event->component->getSubroot();
+        if ($subroot) {
+            $id = $subroot->componentId . '%';
+            $this->_updates[] = array(
+                'type' => 'component',
+                'component_class' => $event->class,
+                'expanded_component_id' => $id
+            );
+            $this->_log("type=component expanded_component_id=$id component_class=$event->class");
+        } else {
+            $this->_updates[] = array(
+                'type' => 'component',
+                'component_class' => $event->class
+            );
+            $this->_log("type=component component_class=$event->class");
+        }
     }
 
     public function onComponentClassPartialsChanged(Kwf_Component_Event_ComponentClass_PartialsChanged $event)
