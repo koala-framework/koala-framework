@@ -14,6 +14,15 @@
         }
     }
 
+    div.kwcForm form div.kwfFormFieldRadioHorizontal {
+        label {
+            display: inline-block; 
+            float: none;
+            width: auto;
+            margin-left: 0px;
+        }
+    }
+
     div.kwfFormFieldDateField a.icon {
         right: 4px;
         top: 22px;

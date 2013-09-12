@@ -101,7 +101,6 @@
     clear: none;
 }
 .cssClass form .kwfFormFieldRadio input { margin: 0px; padding: 0px; }
-.cssClass form .kwfFormFieldRadioHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
 .cssClass form .kwfFormFieldRadioHorizontal span { white-space: nowrap; }
 .cssClass form .kwfFormFieldRadioVertical span { display: block; }
 .cssClass form .kwfFormFieldRadioVertical span label { margin-left: 0px; }
