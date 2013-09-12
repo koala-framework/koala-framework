@@ -5,8 +5,14 @@
  */
 class Kwf_Component_Event_ComponentClass_Abstract extends Kwf_Component_Event_Abstract
 {
-    public function __construct($componentClass)
+    /**
+     * @var Kwf_Component_Data
+     */
+    public $component;
+
+    public function __construct($componentClass, Kwf_Component_Data $component = null)
     {
         $this->class = $componentClass;
+        $this->component = $component;
     }
 }
