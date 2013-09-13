@@ -21,5 +21,10 @@
 .webStandard ul li { list-style-type: square; }
 
 .webStandard.kwcText a {
+    color: var(mainColor);
+    text-decoration: underline;
+}
+.webStandard.kwcText a:hover {
     color: var(secColor);
 }
+    
