@@ -34,7 +34,7 @@ Ext.form.Field.override({
                     e.stopEvent();
                     var helpWindow = new Ext.Window({
                         html: this.helpText,
-                        width: 400,
+                        width: 450,
                         bodyStyle: 'padding: 10px; background-color: white;',
                         autoHeight: true,
                         bodyBorder : false,
