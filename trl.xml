@@ -9768,5 +9768,33 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Senden Fortsetzen</de>
 <id>2012</id>
 </text>
+<text>
+<en>One Thought on "{1}"</en>
+<en_plural>{0} Thoughts on "{1}"</en_plural>
+<id>2013</id>
+</text>
+<text>
+<en>← Previous</en>
+<de>← Voriges</de>
+<id>2014</id>
+</text>
+<text>
+<en>Next →</en>
+<de>Nächstes →</de>
+<id>2015</id>
+</text>
+<text>
+<en>Size of Target Image to support High Resolution Displays ("Retina")</en>
+<de>Größe des Bildes für Unterstützung hoch aufgelöster Displays ("Retina")</de>
+<id>2016</id>
+</text>
+<text>
+<en>Mails/Min</en>
+<id>2017</id>
+</text>
+<text>
+<en>Bookmark the {0}.</en>
+<id>2018</id>
+</text>
 </trl>
 
