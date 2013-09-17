@@ -106,6 +106,7 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
         $ret['assets']['files'][] = 'kwf/themes/RedMallee/Master.scss';
         $ret['assets']['files'][] = 'kwf/themes/RedMallee/Web.scss';
         $ret['assets']['files'][] = 'kwf/themes/RedMallee/js/stickyHeader.js';
+        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['assets']['dep'][] = 'jQuery';
 
         return $ret;
