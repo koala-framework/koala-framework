@@ -63,4 +63,21 @@ class Kwc_Form_Field_Abstract_Trl_Component extends Kwc_Chained_Trl_Component
         }
         return $this->_formField;
     }
+
+    /**
+     * This function is used to return a human-readable string for this field
+     * depending on submited data.
+     * @param Kwc_Form_Dynamic_Form_MailRow $row
+     * @return string
+     */
+    public function getSubmitMessage($row)
+    {
+        $message = '';
+        if ($this->getFormField()->getFieldLabel()) {
+            $message .= $this->getFormField()->getFieldLabel().': ';
+        }
+
+        $message .= $row->{$this->getFormField()->getName()};
+        return $message;
+    }
 }

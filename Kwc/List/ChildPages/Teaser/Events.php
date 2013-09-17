@@ -33,6 +33,8 @@ class Kwc_List_ChildPages_Teaser_Events extends Kwc_Abstract_Events
     public function onPageAddedOrRemoved(Kwf_Component_Event_Component_Abstract $ev)
     {
         // deleting by component would cause on every page change searching for ChildPages_Teaser_Component, this is faster and sufficent
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        if ($ev->component->generator instanceof Kwc_Root_Category_Generator) {
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $ev->component));
+        }
     }
 }

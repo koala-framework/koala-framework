@@ -16,7 +16,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
             return $info['text'];
         } else if ($name == 'subject') {
             $model = $this->getModel()->getDependentModel('Mail');
-            $id = $this->component_id . '_' . $this->id . '-mail';
+            $id = $this->component_id . '_' . $this->id . '_mail';
             $mailRow = $model->getRow($id);
             if ($mailRow) return $mailRow->subject;
             return '';
@@ -125,7 +125,7 @@ class Kwc_Newsletter_Row extends Kwf_Model_Proxy_Row
 
     public function getMailComponent()
     {
-        $componentId = $this->component_id . '_' . $this->id . '-mail';
+        $componentId = $this->component_id . '_' . $this->id . '_mail';
         return Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($componentId, array('ignoreVisible' => true))
             ->getComponent();

@@ -2,17 +2,18 @@ Kwf.Utils.ResponsiveEl('.redMalleeMenuMain', [1100, 960, 700, 659, 500]);
 Kwf.Utils.ResponsiveEl('body', [1100, 960, 700, 659, 500]);
 
 $(function(){
-    var selector = $('.redMalleeMenuMain ul li.hasSubmenu');
+    var selector = $('.redMalleeMenuMain > ul > li.hasSubmenu');
     var dropdown = $('.dropdown');
     var mask = $('#mask');
 
-    $(selector).mouseover(function() {
+
+    $(selector).mouseenter(function() {
         if (window.innerWidth > 979) {
-            mask.css('display', 'block');
+            mask.addClass('visible');
         }
     });
-    $(selector).mouseout(function() {
-        mask.css('display', 'none');
+    $(selector).mouseleave(function() {
+            mask.removeClass('visible');
     });
 });
 

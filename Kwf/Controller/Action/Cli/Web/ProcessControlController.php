@@ -15,7 +15,10 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
     public function preDispatch()
     {
         parent::preDispatch();
-        $this->_commands = Kwf_Registry::get('config')->processControl->toArray();
+        $this->_commands = array();
+        if (Kwf_Registry::get('config')->processControl) {
+            $this->_commands = Kwf_Registry::get('config')->processControl->toArray();
+        }
         foreach ($this->_commands as $k=>$c) {
             if (!$c) {
                 unset($this->_commands[$k]);

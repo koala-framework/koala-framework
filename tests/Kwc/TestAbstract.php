@@ -10,6 +10,7 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
     {
         parent::setUp();
         if ($componentClass) $this->_init($componentClass);
+        Kwf_Component_Data_Root::setShowInvisible(false);
     }
 
     protected function _init($componentClass)

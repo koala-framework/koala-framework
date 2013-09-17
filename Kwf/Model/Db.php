@@ -774,7 +774,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         );
         $ret = array();
         foreach ($rows as $i) {
-            $ret[] = $i['id'];
+            $ret[] = $i[$this->getPrimaryKey()];
         }
         return $ret;
     }

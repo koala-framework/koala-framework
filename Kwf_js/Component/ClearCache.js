@@ -42,6 +42,10 @@ Kwf.Component.ClearCache = Ext.extend(Ext.Panel, {
                         name: 'expandedId'
                     }),
                     new Ext.form.TextField({
+                        fieldLabel: 'type',
+                        name: 'type'
+                    }),
+                    new Ext.form.TextField({
                         fieldLabel: 'component_class',
                         name: 'class'
                     })

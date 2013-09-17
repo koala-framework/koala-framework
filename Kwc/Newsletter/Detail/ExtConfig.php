@@ -30,7 +30,7 @@ class Kwc_Newsletter_Detail_ExtConfig extends Kwf_Component_Abstract_ExtConfig_F
                     'xtype'                 => 'kwf.component',
                     'componentEditUrl'      => '/admin/component/edit',
                     'mainComponentClass'    => $mailContentClass,
-                    'componentIdSuffix'     => '-mail-content',
+                    'componentIdSuffix'     => '_mail-content',
                     'componentConfigs'      => $configs,
                     'mainEditComponents'    => $editComponents,
                     'mainType'              => $mainType,

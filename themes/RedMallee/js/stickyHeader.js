@@ -1,4 +1,4 @@
-$(function(){
+Kwf.onContentReady(function() {
     var mainMenu = $('.mainMenu').offset().top;
     $(window).scroll(function(){
         if( $(window).scrollTop() > (mainMenu-45) && ($(window).width() > 1100)) {
@@ -9,7 +9,6 @@ $(function(){
             $('#outerHeader').removeClass("sticky");
             $('body').removeClass("sticky");
             $('#outerHeader').addClass("notSticky");
-
         }
     });
 });

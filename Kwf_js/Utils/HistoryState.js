@@ -57,7 +57,7 @@ Kwf.Utils.HistoryStateHash = function() {
         //IE fallback, using # urls
         this.states[location.pathname + location.search] = {}; //initial state
         var token = Ext.History.getToken();
-        if (token) {
+        if (token && token.substr(0, 1) == '/') {
             location.replace(token);
         }
         Ext.History.on('change', function(token) {

@@ -14,7 +14,7 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
     {
         $ret = parent::getSettings();
         $ret['generators']['mail'] = array(
-            'class' => 'Kwf_Component_Generator_Static',
+            'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Newsletter_Detail_Mail_Component'
         );
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Newsletter/Detail/TabPanel.js';
@@ -65,7 +65,7 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
 
         // check if the necessary modelShortcut is set in 'mail' childComponent
         // this function checks if everything neccessary is set
-        $this->getData()->getChildComponent('-mail')->getChildComponent('_redirect')
+        $this->getData()->getChildComponent('_mail')->getChildComponent('_redirect')
             ->getComponent()->getRecipientModelShortcut(get_class($model));
 
         if (!$model->hasColumnMappings('Kwc_Mail_Recipient_Mapping')) {

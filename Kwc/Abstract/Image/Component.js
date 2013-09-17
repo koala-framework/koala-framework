@@ -12,8 +12,8 @@ if (window.devicePixelRatio && window.devicePixelRatio > 1) {
 (function() {
 
 var initEl = function(el) {
-    if (el.child('img')) {
-        if (el.getWidth() < el.child('img').dom.getAttribute('width')) {
+    if (el.child('img') && el.getWidth()) {
+        if (el.getWidth() < (el.child('img').dom.getAttribute('width')) / window.devicePixelRatio) {
             el.addClass('autoWidth');
         } else {
             el.removeClass('autoWidth');

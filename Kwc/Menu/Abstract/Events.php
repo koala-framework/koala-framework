@@ -56,7 +56,7 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
     public function onParentChanged(Kwf_Component_Event_Page_ParentChanged $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-            $this->_class
+            $this->_class, $event->component
         ));
     }
 
@@ -148,9 +148,13 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
 
     public function onRecursiveRemoved(Kwf_Component_Event_Component_RecursiveRemoved $event)
     {
-        //TODO: Component_RecursiveContentChanged could be used, ParentMenu etc have to listen to that too then
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-            $this->_class
-        ));
+        $components = $event->component->getRecursiveChildComponents(
+            array('showInMenu' => true, 'page' => true)
+        );
+        foreach ($components as $component) {
+            $this->onPageChanged(new Kwf_Component_Event_Page_Removed(
+                $component->componentClass, $component, Kwf_Component_Event_Page_Removed::FLAG_ROW_ADDED_REMOVED
+            ));
+        }
     }
 }

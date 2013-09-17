@@ -28,7 +28,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
         if (!$total) { return array(); }
 
         $newsletterComponent = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
-            $this->_getParam('componentId') . '-mail',
+            $this->_getParam('componentId') . '_mail',
             array('ignoreVisible' => true)
         );
         $trackViews = Kwc_Abstract::getSetting($newsletterComponent->componentClass, 'trackViews');
@@ -36,7 +36,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             $sql = "
                 SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
                 FROM kwc_mail_views WHERE mail_component_id=?";
-            $count = $db->fetchOne($sql, $this->_getParam('componentId') . '-mail');
+            $count = $db->fetchOne($sql, $this->_getParam('componentId') . '_mail');
             $ret[] = array(
                 'pos' => $pos++,
                 'link' => '<b>' . trlKwf('view rate') . '</b> (' . trlKwf('percentage of users which opened the html newsletter') . ')',
@@ -50,7 +50,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
             FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
             WHERE s.redirect_id=r.id AND mail_component_id=?";
-        $count = $db->fetchOne($sql, $this->_getParam('componentId') . '-mail');
+        $count = $db->fetchOne($sql, $this->_getParam('componentId') . '_mail');
         $ret[] = array(
             'pos' => $pos++,
             'link' => '<b>' . trlKwf('click rate') . '</b> (' . trlKwf('percentage of users which clicked at least one link in newsletter') . ')',
@@ -72,7 +72,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             GROUP BY redirect_id
             ORDER BY c DESC
         ";
-        foreach ($db->fetchAll($sql, $this->_getParam('componentId') . '-mail') as $row) {
+        foreach ($db->fetchAll($sql, $this->_getParam('componentId') . '_mail') as $row) {
             if ($row['type'] == 'showcomponent') {
                 $c = Kwf_Component_Data_Root::getInstance()->getComponentById($row['value']);
                 if ($c) {

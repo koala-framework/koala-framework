@@ -26,7 +26,7 @@ Kwf.Statistics.issetUserOptValue = function() {
 
 Kwf.Statistics.isUserOptIn = function() {
     if (!Kwf.Statistics.issetUserOptValue()) {
-        return Kwf.Statistics.getDefaultOptValue() == 'out';
+        return Kwf.Statistics.getDefaultOptValue() == 'in';
     } else {
         return Kwf.Statistics.getUserOptValue() == 'in';
     }
@@ -44,4 +44,11 @@ Kwf.Statistics.getUserOptValue = function() {
         }
     }
     return opt;
+};
+
+Kwf.Statistics.setUserOptValue = function(value) {
+    if (value == 'in' || value == 'out') {
+        var expires = new Date(new Date().getTime() + 3*365*24*60*60);
+        document.cookie = 'cookieOpt=' + value + ';path=/;expires=' + expires.toGMTString() + ';';
+    }
 };

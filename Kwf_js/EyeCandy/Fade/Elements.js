@@ -48,6 +48,7 @@ Kwf.Fade.Elements = function(cfg) {
     this.easingFadeIn = 'ease';
     this.fadeEvery = 7;
     this.startRandom = true;
+    this.direction = cfg.direction;
 
     if (typeof cfg.template != 'undefined') this._template = cfg.template;
     if (typeof cfg.animationType != 'undefined') this.animationType = cfg.animationType;
@@ -150,7 +151,7 @@ Kwf.Fade.Elements.prototype = {
         }
     },
 
-    doFade: function(direction) {
+    doFade: function() {
         if (this.fadeElements.length <= 1 || this._isAnimating) return;
 
         this._isAnimating = true;
@@ -174,8 +175,8 @@ Kwf.Fade.Elements.prototype = {
             var top = height;
 
             var dir = 'r';
-            if (direction) { // get direction if set
-                dir = direction.substring(0,1);
+            if (this.direction) { // get direction if set
+                dir = this.direction.substring(0,1);
             }
             // determine opposite direction depending on given direction
             if (dir == 'r') {
@@ -202,6 +203,9 @@ Kwf.Fade.Elements.prototype = {
                             zIndex: 0
                         });
                         this._isAnimating = false;
+
+                        Kwf.fireComponentEvent('componentSlideOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
                     }, this));
                 } else {
                     activeEl.animate({
@@ -211,12 +215,14 @@ Kwf.Fade.Elements.prototype = {
                             left: 0,
                             zIndex: 0
                         });
+                        Kwf.fireComponentEvent('componentSlideOut', Ext.get($(this).parent().get(0)), Ext.get(this));
                     });
                     nextEl.animate({
                         left: '+='+width
                     }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         nextEl.css('left', '0px');
                         this._isAnimating = false;
+                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
                     }, this));
                 }
             } else if (dir == 't' || dir == 'b') {
@@ -233,6 +239,9 @@ Kwf.Fade.Elements.prototype = {
                             zIndex: 0
                         });
                         this._isAnimating = false;
+
+                        Kwf.fireComponentEvent('componentSlideOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
                     }, this));
                 } else {
                     activeEl.animate({
@@ -242,12 +251,14 @@ Kwf.Fade.Elements.prototype = {
                             top: 0,
                             zIndex: 0
                         });
+                        Kwf.fireComponentEvent('componentSlideOut', Ext.get($(this).parent().get(0)), Ext.get(this));
                     });
                     nextEl.animate({
                         top: '+='+height
                     }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         nextEl.css('top', '0px');
                         this._isAnimating = false;
+                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
                     }, this));
                 }
             }
@@ -257,18 +268,24 @@ Kwf.Fade.Elements.prototype = {
                 opacity: 0
             });
             if ($.support.transition || $.support.transform) {
-                activeEl.transition({ opacity: 0 }, this.fadeDuration * 500, this.easingFadeOut);
+                activeEl.transition({ opacity: 0 }, this.fadeDuration * 500, this.easingFadeOut, $.proxy(function() {
+                    Kwf.fireComponentEvent('componentFadeOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
+                }, this));
                 nextEl.transition({ opacity: 1 }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                     nextEl.css({zIndex: 10});
                     activeEl.css({zIndex: 0});
                     this._isAnimating = false;
+                    Kwf.fireComponentEvent('componentFadeIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
                 }, this));
             } else {
-                activeEl.fadeTo(this.fadeDuration * 500, 0, this.easingFadeOut);
+                activeEl.fadeTo(this.fadeDuration * 500, 0, this.easingFadeOut, $.proxy(function() {
+                    Kwf.fireComponentEvent('componentFadeOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
+                }, this));
                 nextEl.fadeTo(this.fadeDuration * 1000, 1, this.easingFadeIn, $.proxy(function() {
-                     nextEl.css({zIndex: 10});
+                    nextEl.css({zIndex: 10});
                     activeEl.css({zIndex: 0});
                     this._isAnimating = false;
+                    Kwf.fireComponentEvent('componentFadeIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
                 }, this));
             }
         }

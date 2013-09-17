@@ -136,7 +136,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 $sourceSize = @getimagesize($data['file']);
             }
             $targetSize = $this->getImageDimensions();
-            if ($sourceSize[0] > $targetSize['width']*1.1 || $sourceSize[0] > $targetSize['height']*1.1) {
+            if ($sourceSize[0] > $targetSize['width']*1.1 || $sourceSize[1] > $targetSize['height']*1.1) {
                 $id = $this->getData()->componentId;
                 $type = 'dpr2-'.$this->getImageUrlType();
                 $ret['imageDpr2'] = Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
