@@ -116,7 +116,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
      * @param string E-Mail address of user
      * @param string webcode parameter used for Service Model (that can have global users)
      */
-    public function createUserRow($email, $webcode = null)
+    public function createUserRow($email)
     {
         $row = parent::createRow(array('email' => $email));
         $this->_resetPermissions($row);
