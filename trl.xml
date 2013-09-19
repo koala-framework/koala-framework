@@ -1468,6 +1468,7 @@
 <ro>Caută</ro>
 <sl>Išči</sl>
 <ru>Поиск</ru>
+<sk>Hľadaj</sk>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -3701,6 +3702,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>758</id>
 <ro>Distanţă</ro>
 <sl>Razdalja</sl>
+<sk>Odstup</sk>
 </text>
 <text>
 <en>Close</en>
@@ -4593,6 +4595,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Zaznamek za</sl>
 <uk>Розмістити на</uk>
 <cz>Sdílet přes</cz>
+<sk>Pridať na</sk>
 </text>
 <text>
 <en>Rating</en>
@@ -5327,6 +5330,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Utilizator</ro>
 <sl>Uporabnik</sl>
 <ru>Пользователь</ru>
+<sk>Užívateľ</sk>
 </text>
 <text>
 <en>Statistics</en>
@@ -7505,6 +7509,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1472</id>
 <ro>Căutare:</ro>
 <sl>Išči: </sl>
+<sk>Hľadaj:</sk>
 </text>
 <text>
 <en>copy/paste</en>
@@ -8578,6 +8583,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1718</id>
 <de>Level</de>
 <ro>Nivel</ro>
+<sl>Stopnja</sl>
 </text>
 <text>
 <en>Show Parent</en>
@@ -8983,6 +8989,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>No entries found</en>
 <de>Keine Einträge gefunden</de>
 <id>1804</id>
+<sk>Žiadne výsledky vyhľadávania</sk>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
@@ -9018,11 +9025,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Authors</en>
 <de>Autoren</de>
 <id>1811</id>
+<sl>Avtorji</sl>
 </text>
 <text>
 <en>Articles</en>
 <de>Artikel</de>
 <id>1813</id>
+<sl>Članek</sl>
 </text>
 <text>
 <en>E-Mail priority</en>
@@ -9033,11 +9042,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Author</en>
 <de>Autor</de>
 <id>1815</id>
+<sl>Avtor</sl>
 </text>
 <text>
 <en>Please use this format -&gt; Year / Month</en>
 <de>Bitte nutzen Sie dieses Format -&gt; Jahr / Monat</de>
 <id>1816</id>
+<sl>Prosimo uporabite to obliko -&gt; leto / mesec</sl>
 </text>
 <text>
 <en>VI-Number</en>
@@ -9068,16 +9079,19 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Question</en>
 <de>Frage</de>
 <id>1825</id>
+<sl>Vprašanje</sl>
 </text>
 <text>
 <en>Answer</en>
 <de>Antwort</de>
 <id>1826</id>
+<sl>Odgovor</sl>
 </text>
 <text>
 <en>Questions and answers</en>
 <de>Fragen und Antworten</de>
 <id>1827</id>
+<sl>Vprašanja in odgovori</sl>
 </text>
 <text>
 <en>Enter tag...</en>
@@ -9133,6 +9147,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Priority</en>
 <de>Priorität</de>
 <id>1858</id>
+<sl>Prioriteta</sl>
 </text>
 <text>
 <en>For sorting articles if they have same date</en>
@@ -9143,21 +9158,25 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>show on all devices</en>
 <id>1861</id>
 <de>Auf allen Geräten anzeigen</de>
+<sl>Prikaži na vseh napravah</sl>
 </text>
 <text>
 <en>hide on mobile devices</en>
 <id>1862</id>
 <de>Auf mobilen Geräten nicht anzeigen</de>
+<sl>Ne prikaži na mobilnih napravah</sl>
 </text>
 <text>
 <en>only show on mobile devices</en>
 <id>1863</id>
 <de>Nur auf mobilen Geräten anzeigen</de>
+<sl>Prikaži samo na mobilnih napravah</sl>
 </text>
 <text>
 <en>No category selected.</en>
 <id>1880</id>
 <de>Keine Kategorie gewählt.</de>
+<sl>Nobena kategorija ni izbrana.</sl>
 </text>
 <text>
 <en>Menu settings</en>
@@ -9168,6 +9187,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Hide</en>
 <id>1882</id>
 <de>Verstecken</de>
+<sl>Skriti</sl>
 </text>
 <text>
 <en>Device visible</en>
@@ -9192,6 +9212,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Home</en>
 <id>1890</id>
 <de>Home</de>
+<sl>Domov</sl>
 </text>
 <text>
 <en>Open Graph</en>
@@ -9221,6 +9242,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Repeat</en>
 <id>1896</id>
 <de>Wiederholen</de>
+<sl>Ponovi</sl>
 </text>
 <text>
 <en>Auto play</en>
@@ -9261,6 +9283,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Favourites</en>
 <id>1860</id>
 <de>Favoriten</de>
+<sl>Favoriti</sl>
 </text>
 <text>
 <en>save as favourite</en>
@@ -9341,6 +9364,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>to page</en>
 <id>1923</id>
 <de>Zur Seite</de>
+<sl>Na stran</sl>
 </text>
 <text>
 <en>Feedback to page </en>
@@ -9365,21 +9389,25 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Send copy to User</en>
 <de>Sende Kopie an Benutzer</de>
 <id>1866</id>
+<sl>Pošlji kopijo uporabniku</sl>
 </text>
 <text>
 <en>Thank you for your inquiry, it will be processed as soon as posible.</en>
 <de>Danke für Ihre Anfrage. Wir werden uns bemühen, diese so schnell wie möglich zu bearbeiten.</de>
 <id>1869</id>
+<sl>Hvala za vaše vprašanje. Potrudili se bomo, da vam odgovorimo čim hitreje.</sl>
 </text>
 <text>
 <en>Setup</en>
 <de>Installation</de>
 <id>1929</id>
+<sl>Nastavitve</sl>
 </text>
 <text>
 <en>Download Updates</en>
 <de>Updates herunterladen</de>
 <id>1930</id>
+<sl>Prenesi posodobitve</sl>
 </text>
 <text>
 <en>Update Error</en>
@@ -9390,6 +9418,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Updates Finished</en>
 <de>Updates fertig</de>
 <id>1932</id>
+<sl>Posodobitev končana</sl>
 </text>
 <text>
 <en>Original Image caption</en>
@@ -9450,6 +9479,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Sending...</en>
 <de>Sende...</de>
 <id>1948</id>
+<sl>Pošiljanje...</sl>
 </text>
 <text>
 <en>Send testmail to...</en>
@@ -9475,6 +9505,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Searching...</en>
 <de>Suchen...</de>
 <id>1953</id>
+<sl>Iskanje...</sl>
 </text>
 <text>
 <en>view rate</en>
@@ -9490,11 +9521,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Instantly</en>
 <de>Sofort</de>
 <id>1956</id>
+<sl>Takoj</sl>
 </text>
 <text>
 <en>Later</en>
 <de>Später</de>
 <id>1957</id>
+<sl>Kasneje</sl>
 </text>
 <text>
 <en>Sending speed</en>
@@ -9505,11 +9538,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Slow</en>
 <de>Langsam</de>
 <id>1959</id>
+<sl>Počasi</sl>
 </text>
 <text>
 <en>Fast</en>
 <de>Schnell</de>
 <id>1960</id>
+<sl>Hitro</sl>
 </text>
 <text>
 <en>Paragraphs passwordprotected</en>
@@ -9520,6 +9555,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Saving</en>
 <de>Speichern</de>
 <id>1962</id>
+<sl>Shranjevanje</sl>
 </text>
 <text>
 <en>QuickWrite</en>
@@ -9535,6 +9571,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>E-Mail Field</en>
 <de>E-Mail Feld</de>
 <id>1965</id>
+<sl>E-mail polje</sl>
 </text>
 <text>
 <en>Fulltext Search</en>
@@ -9623,6 +9660,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>said</en>
 <id>1987</id>
 <de>gesagt</de>
+<sl>rečeno</sl>
 </text>
 <text>
 <en>BlackMarlock</en>
@@ -9642,6 +9680,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Please select recipients.</en>
 <id>1991</id>
 <de>Bitte Empfänger auswählen.</de>
+<sl>Prosimo izberite prejemnika.</sl>
 </text>
 <text>
 <en>Create Post</en>
@@ -9652,6 +9691,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Number</en>
 <id>1993</id>
 <de>Nummer</de>
+<sl>Številka</sl>
 </text>
 <text>
 <en>no user id</en>
@@ -9667,6 +9707,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Your email address will not be published.</en>
 <id>1996</id>
 <de>Ihre E-Mail-Adresse wird nicht veröffentlicht.</de>
+<sl>Vaš e-mail naslov ne bo objavljen.</sl>
 </text>
 <text>
 <en>Post Comment</en>
@@ -9682,10 +9723,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Posted on {0}</en>
 <id>1999</id>
 <de>Gepostet am {0}</de>
+<sl>Poslano na {0}</sl>
 </text>
 <text>
 <en>by {0}</en>
 <id>2000</id>
+<sl>od {0}</sl>
 </text>
 <text>
 <en>This entry was posted in</en>
@@ -9722,6 +9765,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Cookie Opt In / Opt Out</en>
 <id>2006</id>
 <de>Cookie Opt-In / Opt-Out</de>
+<sl>Piškotke vključeni / izključeni</sl>
 </text>
 <text>
 <en>Cookies are set when visiting this webpage. Click to deactivate cookies.</en>
