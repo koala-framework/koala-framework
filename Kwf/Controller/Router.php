@@ -102,8 +102,7 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                     array('module'=>'index',
                           'controller' => 'index',
                           'action' => 'index')));
-
-            $this->AddRoute('admin', new Zend_Controller_Router_Route(
+            $this->AddRoute('welcome', new Zend_Controller_Router_Route(
                     $prefix.'',
                     array('module'=>'kwf_controller_action_welcome',
                           'controller' => 'welcome',
