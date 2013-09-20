@@ -7,7 +7,7 @@ class Kwc_ColumnsResponsive_Generator extends Kwf_Component_Generator_Table
             return array();
         }
         if (!$parentData) return array();
-        $this->_getModel()->setData($parentData->componentClass, $parentData->componentId);
+        $this->_getModel()->setData($parentData->componentClass, $parentData->dbId);
         return $this->_getModel()->getRows($select);
     }
 }
