@@ -169,7 +169,7 @@ class Kwc_Mail_HtmlParser
         // replace entities
         $html = preg_replace('/&([a-z0-9#]{2,5});/i', '+$1;', $html);
 
-        $html = preg_replace('#<((kwc/?plugin)[^>]*)>#', '+\1$', $html);
+        $html = preg_replace('#<((kwc|/?plugin)[^>]*)>#', '+\1$', $html);
 
         //before sending to xml parser make sure we have valid xml by tidying it up
         $config = array(
@@ -243,7 +243,7 @@ class Kwc_Mail_HtmlParser
         // re-replace entities
         $this->_ret = preg_replace('/\+([a-z0-9#]{2,5});/i', '&$1;', $this->_ret);
 
-        $this->_ret = preg_replace('#\+(kwc|plugin|/plugin)\$#', '<\1>', $this->_ret);
+        $this->_ret = preg_replace('#\+(kwc|plugin|/plugin)(.*?)\$#', '<\1\2>', $this->_ret);
 
         return $this->_ret;
     }
