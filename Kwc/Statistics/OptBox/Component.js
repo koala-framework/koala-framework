@@ -6,7 +6,7 @@ Kwf.onContentReady(function(body, param) {
         html += '<div class="inner">';
         html += trlKwf('This website uses cookies to help us give you the best experience when you visit our website.');
         if (Kwf.Statistics.optUrl) {
-            html += ' <a href="' + Kwf.Statistics.optUrl + '">' + trlKwf('More information about the use of cookies') + '</a>';
+            html += ' <a href="' + Kwf.Statistics.optUrl + '" class="info">' + trlKwf('More information about the use of cookies') + '</a>';
         }
         html += '<a href="" class="accept"><span>' + trlKwf('Accept and continue') + '</span></a>';
         html += '<div></div>';
