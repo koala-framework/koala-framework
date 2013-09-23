@@ -151,7 +151,7 @@ Kwf.Fade.Elements.prototype = {
         this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
     },
 
-    doFade: function() {
+    doFade: function(direction) {
         if (this.fadeElements.length <= 1 || this._isAnimating) return;
 
         this._isAnimating = true;
@@ -177,6 +177,9 @@ Kwf.Fade.Elements.prototype = {
             var dir = 'r';
             if (this.direction) { // get direction if set
                 dir = this.direction.substring(0,1);
+            }
+            if (direction) {
+                dir = direction.substring(0,1);
             }
             // determine opposite direction depending on given direction
             if (dir == 'r') {
