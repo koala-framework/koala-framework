@@ -250,7 +250,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     public function onComponentClassContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
     {
         $subroot = null;
-        if ($event->component) $subroot = $event->component->getSubroot();
+        if ($event->subroot) $subroot = $event->subroot->getSubroot();
         if ($subroot) {
             $id = $subroot->componentId . '%';
             $this->_updates[] = array(

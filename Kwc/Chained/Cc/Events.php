@@ -190,10 +190,10 @@ class Kwc_Chained_Cc_Events extends Kwc_Chained_Abstract_Events
     public function onComponentClassChanged(Kwf_Component_Event_ComponentClass_Abstract $event)
     {
         $eventCls = get_class($event);
-        if ($event->component) {
+        if ($event->subroot) {
             $chainedType = 'Cc';
             $select = array('ignoreVisible'=>true);
-            $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($event->component, $chainedType, $select);
+            $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($event->subroot, $chainedType, $select);
             foreach ($chained as $component) {
                 $this->fireEvent(
                     new $eventCls($this->_class, $component)
