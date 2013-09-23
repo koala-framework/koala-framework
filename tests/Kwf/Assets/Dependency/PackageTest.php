@@ -12,7 +12,7 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
     {
         $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test');
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_RecursiveIterator($package));
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_RecursiveIterator($package->getDependency()));
         $array = iterator_to_array($it, false);
         $this->assertEquals(4, count($array));
     }
@@ -37,7 +37,7 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
     {
         $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test3');
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_RecursiveIterator($package));
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_RecursiveIterator($package->getDependency()));
         $array = iterator_to_array($it, false);
         $this->assertEquals(6, count($array));
 

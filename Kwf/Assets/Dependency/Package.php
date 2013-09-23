@@ -1,11 +1,11 @@
 <?php
-class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
+class Kwf_Assets_Dependency_Package
     implements Kwf_Assets_Dependency_UrlResolvableInterface
 {
     protected $_providerList;
     protected $_dependencyName;
     protected $_dependency;
-    protected $_param;
+
     public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $dependencyName)
     {
         $this->_providerList = $providerList;
@@ -18,14 +18,15 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
         $this->_dependency = $d;
     }
 
-    public function getDependencies()
+    public function getDependency()
     {
-        return array($this->_dependency);
+        return $this->_dependency;
     }
+
 
     public function getPackageContents($mimeType, $language)
     {
-        $it = new Kwf_Assets_Dependency_RecursiveIterator($this);
+        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->_dependency);
         $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
         $it = new RecursiveIteratorIterator($it);
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
@@ -82,7 +83,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
 
         $ret = array();
         $ret[] = '/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter().'/'.$language.'/'.$ext;
-        $it = new Kwf_Assets_Dependency_RecursiveIterator($this);
+        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->_dependency);
         $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
         $it = new RecursiveIteratorIterator($it);
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
