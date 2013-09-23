@@ -8,11 +8,11 @@ class Kwf_Component_Event_ComponentClass_Abstract extends Kwf_Component_Event_Ab
     /**
      * @var Kwf_Component_Data
      */
-    public $component;
+    public $subroot;
 
-    public function __construct($componentClass, Kwf_Component_Data $component = null)
+    public function __construct($componentClass, Kwf_Component_Data $subroot = null)
     {
         $this->class = $componentClass;
-        $this->component = $component;
+        $this->subroot = $subroot;
     }
 }

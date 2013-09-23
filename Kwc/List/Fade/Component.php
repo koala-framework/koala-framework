@@ -25,7 +25,9 @@ abstract class Kwc_List_Fade_Component extends Kwc_Abstract_List_Component
             'easingFadeOut'      => 'easeInQuad',
             'easingFadeIn'       => 'easeOutQuad',
             'startRandom'        => true,
+//             'animationType'      => ['', 'slide'],
             'autoStart'          => true,
+//             'direction'          => ['left'|'right'],
             'template' => false
         );
 
