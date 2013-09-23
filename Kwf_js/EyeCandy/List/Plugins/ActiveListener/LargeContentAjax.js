@@ -75,8 +75,8 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
         } else {
             this.largeContent[item.id].child('.loading').remove();
             this.largeContent[item.id].show();
-            this.largeContent[item.id].hide();
             Kwf.callOnContentReady(this.largeContent[item.id].dom, {newRender: true});
+            this.largeContent[item.id].hide();
         }
     },
 
