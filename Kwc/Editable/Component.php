@@ -26,4 +26,9 @@ class Kwc_Editable_Component extends Kwc_Abstract
         $ret['content'] = $this->getData()->getChildComponent('-content');
         return $ret;
     }
+
+    public function hasContent()
+    {
+        return $this->getData()->getChildComponent('-content')->hasContent();
+    }
 }
