@@ -31,6 +31,7 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
         $ret = '';
         $fileNames = array();
+        $maxMTime = 0;
         foreach ($it as $i) {
             if ($i->getIncludeInPackage()) {
                 if ($i instanceof Kwf_Assets_Dependency_File) {
@@ -46,7 +47,17 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
                     $ret .= $c."\n";
                 }
             }
+            $mTime = $i->getMTime();
+            if ($mTime) {
+                $maxMTime = max($maxMTime, $mTime);
+            }
         }
+
+        $ret = str_replace(
+            '{$application.maxAssetsMTime}',
+            $maxMTime,
+            $ret);
+
         return $ret;
     }
 
@@ -88,11 +99,10 @@ class Kwf_Assets_Dependency_Package extends Kwf_Assets_Dependency_Abstract
                     throw new Kwf_Exception("dependency that should not be in package must implement UrlResolvableInterface");
                 }
                 $ret[] = '/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();
-            } else {
-                $mTime = $i->getMTime();
-                if ($mTime) {
-                    $maxMTime = max($maxMTime, $mTime);
-                }
+            }
+            $mTime = $i->getMTime();
+            if ($mTime) {
+                $maxMTime = max($maxMTime, $mTime);
             }
         }
         $ret[0] .= '?t='.$maxMTime;

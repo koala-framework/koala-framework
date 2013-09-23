@@ -20,14 +20,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
         }
 
-        /*
-        TODO implement
-        $ret = str_replace(
-            '{$application.maxAssetsMTime}',
-            $this->getDependencies()->getMaxFileMTime(),
-            $ret);
-        */
-
         static $jsLoader;
         if (!isset($jsLoader)) $jsLoader = new Kwf_Trl_JsLoader();
 
