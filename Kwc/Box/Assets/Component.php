@@ -17,7 +17,7 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['language'] = $this->getData()->getLanguage();
-        $ret['assetsPackage'] = new Kwf_Assets_Dependency_Package(new Kwf_Assets_ProviderList_Default(), 'Frontend');
+        $ret['assetsPackage'] = Kwf_Assets_Dependency_Package_Default::getInstance('Frontend');
         return $ret;
     }
 

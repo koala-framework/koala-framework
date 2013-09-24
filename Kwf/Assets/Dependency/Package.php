@@ -1,6 +1,6 @@
 <?php
 class Kwf_Assets_Dependency_Package
-    implements Kwf_Assets_Dependency_UrlResolvableInterface
+    implements Kwf_Assets_Dependency_UrlResolvableInterface, Serializable
 {
     protected $_providerList;
     protected $_dependencyName;
@@ -10,22 +10,23 @@ class Kwf_Assets_Dependency_Package
     {
         $this->_providerList = $providerList;
         $this->_dependencyName = $dependencyName;
-        $dep = array();
-        $d = $providerList->findDependency($dependencyName);
-        if (!$d) {
-            throw new Kwf_Exception("Could not resolve dependency '$dependencyName'");
-        }
-        $this->_dependency = $d;
     }
 
     public function getDependency()
     {
+        if (!isset($this->_dependency)) {
+            $d = $this->_providerList->findDependency($this->_dependencyName);
+            if (!$d) {
+                throw new Kwf_Exception("Could not resolve dependency '$this->_dependencyName'");
+            }
+            $this->_dependency = $d;
+        }
         return $this->_dependency;
     }
 
     public function getMaxMTime($mimeType)
     {
-        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->_dependency);
+        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->getDependency());
         $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
         $it = new RecursiveIteratorIterator($it);
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
@@ -41,7 +42,7 @@ class Kwf_Assets_Dependency_Package
 
     public function getPackageContents($mimeType, $language)
     {
-        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->_dependency);
+        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->getDependency());
         $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
         $it = new RecursiveIteratorIterator($it);
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
@@ -91,6 +92,12 @@ class Kwf_Assets_Dependency_Package
 
     public function getPackageUrls($mimeType, $language)
     {
+        if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') {
+            $cacheId = 'depPckUrls-'.$this->_dependencyName.'-'.$mimeType.'-'.$language;
+            $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            if ($ret !== false) return $ret;
+        }
+
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/css') $ext = 'css';
         else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
@@ -98,7 +105,7 @@ class Kwf_Assets_Dependency_Package
 
         $ret = array();
         $ret[] = '/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter().'/'.$language.'/'.$ext;
-        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->_dependency);
+        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->getDependency());
         $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
         $it = new RecursiveIteratorIterator($it);
         $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
@@ -122,6 +129,29 @@ class Kwf_Assets_Dependency_Package
             }
         }
         $ret[0] .= '?t='.$maxMTime;
+
+        if (isset($cacheId)) {
+            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+        }
         return $ret;
+    }
+
+    public function serialize()
+    {
+        $ret = array();
+        foreach (get_object_vars($this) as $k=>$i) {
+            if ($k == '_dependency') { //don't serialize _dependency, re-create lazily if required
+                continue;
+            }
+            $ret[$k] = $i;
+        }
+        return serialize($ret);
+    }
+
+    public function unserialize($serialized)
+    {
+        foreach (unserialize($serialized) as $k=>$i) {
+            $this->$k = $i;
+        }
     }
 }

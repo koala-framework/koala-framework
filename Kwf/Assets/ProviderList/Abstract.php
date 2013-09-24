@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_ProviderList_Abstract
+class Kwf_Assets_ProviderList_Abstract implements Serializable
 {
     protected $_providers;
     protected $_dependencies = array();
@@ -40,5 +40,24 @@ class Kwf_Assets_ProviderList_Abstract
             }
         }
         return null;
+    }
+
+    public function serialize()
+    {
+        $ret = array();
+        foreach (get_object_vars($this) as $k=>$i) {
+            if ($k == '_dependencies') { //don't serialize _dependencies, that's basically just a cache
+                $i = array();
+            }
+            $ret[$k] = $i;
+        }
+        return serialize($ret);
+    }
+
+    public function unserialize($serialized)
+    {
+        foreach (unserialize($serialized) as $k=>$i) {
+            $this->$k = $i;
+        }
     }
 }
