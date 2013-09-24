@@ -23,6 +23,21 @@ class Kwf_Assets_Dependency_Package
         return $this->_dependency;
     }
 
+    public function getMaxMTime($mimeType)
+    {
+        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->_dependency);
+        $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
+        $it = new RecursiveIteratorIterator($it);
+        $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
+        $maxMTime = 0;
+        foreach ($it as $i) {
+            $mTime = $i->getMTime();
+            if ($mTime) {
+                $maxMTime = max($maxMTime, $mTime);
+            }
+        }
+        return $maxMTime;
+    }
 
     public function getPackageContents($mimeType, $language)
     {
