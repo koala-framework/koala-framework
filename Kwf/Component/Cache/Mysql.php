@@ -122,8 +122,8 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select, $options) as $row) {
             $cacheIds[] = $this->_getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
             Kwf_Benchmark::countLog('viewcache-delete-'.$row['type']);
-            if ($row['type'] != 'fullPage' && !in_array($row['component_id'], $checkIncludeIds)) {
-                $checkIncludeIds[] = $row['component_id'];
+            if ($row['type'] != 'fullPage' && !isset($checkIncludeIds[$row['component_id']])) {
+                $checkIncludeIds[$row['component_id']] = true;
             }
             if ($log) {
                 $log->log("delete view cache $row[component_id] $row[renderer] $row[type] $row[value]", Zend_Log::INFO);
@@ -166,7 +166,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $s = new Kwf_Model_Select();
         $s->whereEquals('type', 'fullPage');
         if ($checkIncludeIds) {
-            $ids = array_keys($this->_fetchIncludesTree($checkIncludeIds));
+            $ids = array_keys($this->_fetchIncludesTree(array_keys($checkIncludeIds)));
             if ($ids) {
                 $s->whereEquals('component_id', $ids);
                 if ($log) {
