@@ -16,8 +16,27 @@ class Kwf_Assets_Dispatcher
         if (strpos($url, '?') !== false) {
             $url = substr($url, 0, strpos($url, '?'));
         }
+
+        if ($encoding != 'none') {
+            //own cache for encoded contents, not using Kwf_Assets_Cache as we don't need to in two-level cache
+            $cacheId = str_replace(array(':', '/'), '_', $url).'_'.$encoding;
+            $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            if ($ret === false) {
+                $ret = self::_getOutputForUrlNoEncoding($url);
+                $ret['contents'] = Kwf_Media_Output::encode($ret['contents'], $encoding);
+                $ret['encoding'] = $encoding;
+                Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+            }
+            return $ret;
+        } else {
+            return self::_getOutputForUrlNoEncoding($url);
+        }
+    }
+
+    static private function _getOutputForUrlNoEncoding($url)
+    {
         $cache = Kwf_Assets_Cache::getInstance();
-        $cacheId = str_replace(array(':', '/'), '_', $url).'_'.$encoding;
+        $cacheId = str_replace(array(':', '/'), '_', $url);
         $ret = $cache->load($cacheId);
 
         if ($ret === false) {
@@ -42,13 +61,11 @@ class Kwf_Assets_Dispatcher
                 $contents = $dependency->getContents($language);
                 $mtime = $dependency->getMTime();
             }
-            $contents = Kwf_Media_Output::encode($contents, $encoding);
             if ($extension == 'js') $mimeType = 'text/javascript; charset=utf-8';
             else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf8';
             $ret = array(
                 'contents' => $contents,
                 'mimeType' => $mimeType,
-                'encoding' => $encoding
             );
             if ($mtime) $ret['mtime'] = $mtime;
             $cache->save($ret, $cacheId);
