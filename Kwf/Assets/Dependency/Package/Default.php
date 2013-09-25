@@ -2,6 +2,7 @@
 class Kwf_Assets_Dependency_Package_Default extends Kwf_Assets_Dependency_Package
 {
     private static $_defaultProviderList;
+    static private $_instances = array();
     /**
      * Returns a Default Asset Package (using Kwf_Assets_ProviderList_Default)
      *
@@ -9,8 +10,7 @@ class Kwf_Assets_Dependency_Package_Default extends Kwf_Assets_Dependency_Packag
      */
     public static function getInstance($dependencyName)
     {
-        static $instances = array();
-        if (isset($instances[$dependencyName])) return $instances[$dependencyName];
+        if (isset(self::$_instances[$dependencyName])) return self::$_instances[$dependencyName];
 
         $cacheId = 'depPkgDef_'.$dependencyName;
         $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
@@ -18,8 +18,13 @@ class Kwf_Assets_Dependency_Package_Default extends Kwf_Assets_Dependency_Packag
             $ret = new self($dependencyName);
             Kwf_Assets_Cache::getInstance()->save($ret, $cacheId);
         }
-        $instances[$dependencyName] = $ret;
+        self::$_instances[$dependencyName] = $ret;
         return $ret;
+    }
+
+    public function clearInstances()
+    {
+        self::$_instances = array();
     }
 
     private static function _getDefaultProviderList()
