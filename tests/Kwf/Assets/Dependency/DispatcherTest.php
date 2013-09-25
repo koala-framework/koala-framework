@@ -32,7 +32,7 @@ class Kwf_Assets_Dependency_DispatcherTest extends Kwf_Test_TestCase
         $this->assertEquals(1, count($urls));
         $url = $urls[0];
 
-        $output = Kwf_Assets_Dispatcher::getOutputForUrl($url, 'en');
+        $output = Kwf_Assets_Dispatcher::getOutputForUrl($url, 'none');
 
         $contents = trim($output['contents']);
         $contents = str_replace("\n\n", "\n", $contents);
@@ -46,14 +46,14 @@ class Kwf_Assets_Dependency_DispatcherTest extends Kwf_Test_TestCase
         $this->assertEquals(2, count($urls));
 
         $url = $urls[0];
-        $output = Kwf_Assets_Dispatcher::getOutputForUrl($url, 'en');
+        $output = Kwf_Assets_Dispatcher::getOutputForUrl($url, 'none');
 
         $contents = trim($output['contents']);
         $contents = str_replace("\n\n", "\n", $contents);
         $this->assertEquals("foo2;\nbar2;", $contents);
 
         $url = $urls[1];
-        $output = Kwf_Assets_Dispatcher::getOutputForUrl($url, 'en');
+        $output = Kwf_Assets_Dispatcher::getOutputForUrl($url, 'none');
 
         $contents = trim($output['contents']);
         $contents = str_replace("\n\n", "\n", $contents);

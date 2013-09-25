@@ -20,7 +20,8 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
     public function testPackageInvalid()
     {
         $this->setExpectedException('Kwf_Exception');
-        new Kwf_Assets_Dependency_Package($this->_list, 'Invalid');
+        $p = new Kwf_Assets_Dependency_Package($this->_list, 'Invalid');
+        $p->getDependency();
     }
 
     public function testPackageContents()

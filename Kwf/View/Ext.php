@@ -28,8 +28,6 @@ class Kwf_View_Ext extends Kwf_View
         }
 
         // View einrichten
-        $loader = new Kwf_Assets_Loader();
-        $dep = $loader->getDependencies();
         $ext['class'] = $class;
         if (!isset($config->id)) $config->id = 'mainPanel';
         if (!isset($config->region)) $config->region = 'center';

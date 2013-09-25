@@ -14,6 +14,24 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         return $ret;
     }
 
+    public static function expandAssetVariables($contents, $section = 'web', &$mtimeFiles = array())
+    {
+        static $assetVariables = array();
+        if (!isset($assetVariables[$section])) {
+            $assetVariables[$section] = Kwf_Config::getValueArray('assetVariables');
+            if (file_exists('assetVariables.ini')) {
+                $mtimeFiles[] = 'assetVariables.ini';
+                $cfg = new Zend_Config_Ini('assetVariables.ini', $section);
+                $assetVariables[$section] = array_merge($assetVariables[$section], $cfg->toArray());
+            }
+        }
+        foreach ($assetVariables[$section] as $k=>$i) {
+            $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
+            $contents = str_replace('var('.$k.')', $i, $contents);
+        }
+        return $contents;
+    }
+
     protected function _processContents($ret)
     {
         $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
@@ -26,7 +44,7 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
             $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
         }
 
-        $ret = Kwf_Assets_Loader::expandAssetVariables($ret);
+        $ret = self::expandAssetVariables($ret);
 
 
         $cssClass = $this->_fileName;

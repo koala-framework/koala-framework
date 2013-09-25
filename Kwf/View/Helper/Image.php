@@ -1,8 +1,6 @@
 <?php
 class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
 {
-    private $_dep;
-
     protected function _getImageUrl($image)
     {
         $url = (string)$image;
@@ -21,13 +19,10 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
 
     private function _getAssetPath($image)
     {
-        if (!$this->_dep) {
-            $loader = new Kwf_Assets_Loader();
-            $this->_dep = $loader->getDependencies();
-        }
         $url = $this->_getImageUrl($image);
         if (stripos($url, "/assets/") === 0) {
-            return $this->_dep->getAssetPath(substr($url, 8));
+            $file = new Kwf_Assets_Dependency_File(substr($url, 8));
+            return $file->getFileName();
         } else {
             throw new Kwf_Exception("Path does not include '/assets/'. Not implemented yet.");
         }

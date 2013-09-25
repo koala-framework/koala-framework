@@ -1,15 +1,6 @@
 <?php
 class Kwf_View_Helper_Assets
 {
-    private $_dep;
-    public function __construct($dep = null)
-    {
-        if (!$dep) {
-            $l = new Kwf_Assets_Loader();
-            $dep = $l->getDependencies();
-        }
-        $this->_dep = $dep;
-    }
     public function assets(Kwf_Assets_Dependency_Package $assetsPackage, $language = null)
     {
         if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
