@@ -32,6 +32,9 @@ abstract class Kwf_Component_Renderer_Abstract
         $this->_enableCache = $enableCache;
     }
 
+    /**
+     * Renders a single component without master
+     */
     public function renderComponent($component)
     {
         $helper = new Kwf_Component_View_Helper_Component();
@@ -45,6 +48,7 @@ abstract class Kwf_Component_Renderer_Abstract
 
     protected abstract function _getRendererName();
 
+    //overridden by Renderer_Mail to use mail templates
     public function getTemplate(Kwf_Component_Data $component, $type)
     {
         $template = Kwc_Abstract::getTemplateFile($component->componentClass, $type);
