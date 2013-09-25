@@ -12,11 +12,11 @@ class Kwf_Assets_Dependency_Package_Default extends Kwf_Assets_Dependency_Packag
         static $instances = array();
         if (isset($instances[$dependencyName])) return $instances[$dependencyName];
 
-        $cacheId = 'depPkgDef-'.$dependencyName;
-        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
+        $cacheId = 'depPkgDef_'.$dependencyName;
+        $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
         if (!$ret) {
             $ret = new self($dependencyName);
-            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+            Kwf_Assets_Cache::getInstance()->save($ret, $cacheId);
         }
         $instances[$dependencyName] = $ret;
         return $ret;

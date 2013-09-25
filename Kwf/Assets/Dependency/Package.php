@@ -92,8 +92,8 @@ class Kwf_Assets_Dependency_Package
     public function getPackageUrls($mimeType, $language)
     {
         if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') {
-            $cacheId = 'depPckUrls-'.$this->_dependencyName.'-'.$mimeType.'-'.$language;
-            $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            $cacheId = 'depPckUrls_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType).'_'.$language;
+            $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
             if ($ret !== false) return $ret;
         }
 
@@ -126,7 +126,7 @@ class Kwf_Assets_Dependency_Package
         $ret[0] .= '?t='.$maxMTime;
 
         if (isset($cacheId)) {
-            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+            Kwf_Assets_Cache::getInstance()->save($ret, $cacheId);
         }
         return $ret;
     }
