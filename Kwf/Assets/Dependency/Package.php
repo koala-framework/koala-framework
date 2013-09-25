@@ -5,10 +5,14 @@ class Kwf_Assets_Dependency_Package
     protected $_providerList;
     protected $_dependencyName;
     protected $_dependency;
+    protected $_cacheFilteredUniqueDependencies;
 
     public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $dependencyName)
     {
         $this->_providerList = $providerList;
+        if (!is_string($dependencyName)) {
+            throw new Kwf_Exception("dependencyName needs to be a string");
+        }
         $this->_dependencyName = $dependencyName;
     }
 
@@ -26,12 +30,8 @@ class Kwf_Assets_Dependency_Package
 
     public function getMaxMTime($mimeType)
     {
-        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->getDependency());
-        $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
-        $it = new RecursiveIteratorIterator($it);
-        $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
         $maxMTime = 0;
-        foreach ($it as $i) {
+        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             $mTime = $i->getMTime();
             if ($mTime) {
                 $maxMTime = max($maxMTime, $mTime);
@@ -40,16 +40,24 @@ class Kwf_Assets_Dependency_Package
         return $maxMTime;
     }
 
+    private function _getFilteredUniqueDependencies($mimeType)
+    {
+        if (!isset($this->_cacheFilteredUniqueDependencies[$mimeType])) {
+            $it = new Kwf_Assets_Dependency_RecursiveIterator($this->getDependency());
+            $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
+            $it = new RecursiveIteratorIterator($it);
+            $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
+            $this->_cacheFilteredUniqueDependencies[$mimeType] = iterator_to_array($it);
+        }
+        return $this->_cacheFilteredUniqueDependencies[$mimeType];
+    }
+
     public function getPackageContents($mimeType, $language)
     {
-        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->getDependency());
-        $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
-        $it = new RecursiveIteratorIterator($it);
-        $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
-        $ret = '';
         $fileNames = array();
         $maxMTime = 0;
-        foreach ($it as $i) {
+        $ret = '';
+        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if ($i instanceof Kwf_Assets_Dependency_File) {
                     if ($i->getFileName()) {
@@ -105,13 +113,9 @@ class Kwf_Assets_Dependency_Package
 
         $ret = array();
         $ret[] = '/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter().'/'.$language.'/'.$ext;
-        $it = new Kwf_Assets_Dependency_RecursiveIterator($this->getDependency());
-        $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
-        $it = new RecursiveIteratorIterator($it);
-        $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
         $includesDependencies = array();
         $maxMTime = 0;
-        foreach ($it as $i) {
+        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if (!$i->getIncludeInPackage()) {
                 if (in_array($i, $includesDependencies, true)) {
                     //include dependency only once
@@ -141,6 +145,9 @@ class Kwf_Assets_Dependency_Package
         $ret = array();
         foreach (get_object_vars($this) as $k=>$i) {
             if ($k == '_dependency') { //don't serialize _dependency, re-create lazily if required
+                continue;
+            }
+            if ($k == '_cacheFilteredUniqueDependencies') { //don't serialize _cacheFilteredUniqueDependencies, re-create lazily if required
                 continue;
             }
             $ret[$k] = $i;
