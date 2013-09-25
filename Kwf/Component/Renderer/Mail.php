@@ -57,8 +57,6 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
 
-        $this->_renderComponent = $component;
-
         $content = false;
         if ($this->_enableCache && $component->isPage) { //use fullPage cache only for pages
             $content = Kwf_Component_Cache::getInstance()->load($component->componentId, $this->_getRendererName(), 'fullPage');

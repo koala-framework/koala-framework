@@ -2,7 +2,6 @@
 abstract class Kwf_Component_Renderer_Abstract
 {
     protected $_enableCache = null;
-    protected $_renderComponent;
 
     protected $_includedComponents = array();
     protected $_minLifetime;
@@ -30,8 +29,6 @@ abstract class Kwf_Component_Renderer_Abstract
 
     public function renderComponent($component)
     {
-        $this->_renderComponent = $component;
-
         $helper = new Kwf_Component_View_Helper_Component();
         $helper->setRenderer($this);
         $content = $helper->component($component);
@@ -612,10 +609,5 @@ abstract class Kwf_Component_Renderer_Abstract
                 'isCacheable' => ($p == 1)
             );
         }
-    }
-
-    public function getRenderComponent()
-    {
-        return $this->_renderComponent;
     }
 }
