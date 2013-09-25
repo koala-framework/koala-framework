@@ -112,6 +112,15 @@
                         width: auto !important;
                     }
                 }
+
+                .kwfFormFieldFileUploadWrapper {
+                    .kwfFormFieldFileUploadButton {
+                        position: absolute;
+                        opacity: 0.4;
+                        right: 2px;
+                        top: 4px;
+                    }
+                }
             }
 
             .kwfFormFieldWrapper.hasLabel {
