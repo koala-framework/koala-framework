@@ -8,6 +8,11 @@ abstract class Kwf_Component_Renderer_Abstract
 
     private $_helpers = array();
 
+    const PLUGIN_TYPE_AFTER = 'A';
+    const PLUGIN_TYPE_BEFORE = 'B';
+    const PLUGIN_TYPE_USECACHE = 'C';
+    const PLUGIN_TYPE_REPLACE = 'R';
+
     public function includedComponent($targetComponentId, $targetType)
     {
         $this->_includedComponents[] = $targetComponentId;
@@ -65,13 +70,13 @@ abstract class Kwf_Component_Renderer_Abstract
             $content = substr($ret, $startEnd+1, $end-$startEnd-1);
             if ($benchmarkEnabled) $startTime = microtime(true);
             $plugin = Kwf_Component_Plugin_Abstract::getInstance($args[1], $args[2]);
-            if ($pluginType == 'C') {
+            if ($pluginType == self::PLUGIN_TYPE_USECACHE) {
                 if (!$plugin->useViewCache($this)) {
                     $content = $this->_getHelper('component')->render($args[2], array());
                 }
-            } else if ($pluginType == 'A' || $pluginType == 'B') {
+            } else if ($pluginType == self::PLUGIN_TYPE_AFTER || $pluginType == self::PLUGIN_TYPE_BEFORE) {
                 $content = $plugin->processOutput($content, $this);
-            } else if ($pluginType == 'R') {
+            } else if ($pluginType == self::PLUGIN_TYPE_REPLACE) {
                 $c = $plugin->replaceOutput($this);
                 if ($c !== false) {
                     $content = $c;
@@ -104,28 +109,28 @@ abstract class Kwf_Component_Renderer_Abstract
         if (in_array('before', $pluginTypes) && isset($plugins['before'])) {
             foreach ($plugins['before'] as $pluginClass) {
                 $pluginNr++;
-                $content = "<pluginB $pluginNr $pluginClass $componentId>$content</pluginB $pluginNr>";
+                $content = "<plugin".self::PLUGIN_TYPE_BEFORE." $pluginNr $pluginClass $componentId>$content</plugin".self::PLUGIN_TYPE_BEFORE." $pluginNr>";
             }
         }
 
         if (in_array('after', $pluginTypes) && isset($plugins['after'])) {
             foreach ($plugins['after'] as $pluginClass) {
                 $pluginNr++;
-                $content = "<pluginA $pluginNr $pluginClass $componentId>$content</pluginA $pluginNr>";
+                $content = "<plugin".self::PLUGIN_TYPE_AFTER." $pluginNr $pluginClass $componentId>$content</plugin".self::PLUGIN_TYPE_AFTER." $pluginNr>";
             }
         }
 
         if (in_array('replace', $pluginTypes) && isset($plugins['replace'])) {
             foreach ($plugins['replace'] as $pluginClass) {
                 $pluginNr++;
-                $content = "<pluginR $pluginNr $pluginClass $componentId>$content</pluginR $pluginNr>";
+                $content = "<plugin".self::PLUGIN_TYPE_REPLACE." $pluginNr $pluginClass $componentId>$content</plugin".self::PLUGIN_TYPE_REPLACE." $pluginNr>";
             }
         }
 
         if (in_array('useCache', $pluginTypes) && isset($plugins['useCache'])) {
             foreach ($plugins['useCache'] as $pluginClass) {
                 $pluginNr++;
-                $content = "<pluginC $pluginNr $pluginClass $componentId>$content</pluginC $pluginNr>";
+                $content = "<plugin".self::PLUGIN_TYPE_USECACHE." $pluginNr $pluginClass $componentId>$content</plugin".self::PLUGIN_TYPE_USECACHE." $pluginNr>";
             }
         }
         return $content;
@@ -296,7 +301,7 @@ abstract class Kwf_Component_Renderer_Abstract
                 $statType = 'hit';
 
                 //look for UseViewCache plugin in $content
-                if ($p = $this->_findSinglePlugin('C', $content)) {
+                if ($p = $this->_findSinglePlugin(self::PLUGIN_TYPE_USECACHE, $content)) {
                     if (!$p['plugin']->useViewCache($this)) {
                         //useViewCache=false: re-render but don't cache
                         $pass1Cacheable = false;
@@ -371,9 +376,9 @@ abstract class Kwf_Component_Renderer_Abstract
     protected function _renderPass2($ret)
     {
         //execute all plugins that where added in pass 1
-        $ret = $this->_findAndExecutePlugins($ret, 'C');
-        $ret = $this->_findAndExecutePlugins($ret, 'B');
-        $ret = $this->_findAndExecutePlugins($ret, 'R');
+        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_USECACHE);
+        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_BEFORE);
+        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_REPLACE);
         $ret = $this->_findAndExecuteUseCacheDynamic($ret);
 
         static $benchmarkEnabled;
@@ -402,7 +407,7 @@ abstract class Kwf_Component_Renderer_Abstract
                 $statType = 'hit';
 
                 //look for UseViewCache plugin in $content
-                if ($p = $this->_findSinglePlugin('C', $content)) {
+                if ($p = $this->_findSinglePlugin(self::PLUGIN_TYPE_USECACHE, $content)) {
                     if (!$p['plugin']->useViewCache($this)) {
                         //re-render, without <pluginC
                         $content = $this->_renderUncached($target['componentId'], $target['type'], $target['config']);
@@ -412,7 +417,7 @@ abstract class Kwf_Component_Renderer_Abstract
                     }
                 } else {
                     //execute replace and before plugin
-                    if ($p = $this->_findSinglePlugin('R', $content)) {
+                    if ($p = $this->_findSinglePlugin(self::PLUGIN_TYPE_REPLACE, $content)) {
                         $r = $p['plugin']->replaceOutput($this);
                         if ($r !== false) {
                             $content = $r;
@@ -420,7 +425,7 @@ abstract class Kwf_Component_Renderer_Abstract
                             $content = $p['content'];
                         }
                     }
-                    $content = $this->_findAndExecutePlugins($content, 'B');
+                    $content = $this->_findAndExecutePlugins($content, self::PLUGIN_TYPE_BEFORE);
                 }
 
                 $content = $this->_findAndExecuteUseCacheDynamic($content);
@@ -467,7 +472,7 @@ abstract class Kwf_Component_Renderer_Abstract
             $ret = substr($ret, 0, $start).$content.substr($ret, $end+7+strlen($args[0]));
         }
 
-        $ret = $this->_findAndExecutePlugins($ret, 'A');
+        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_AFTER);
 
         return $ret;
     }
