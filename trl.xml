@@ -454,7 +454,7 @@
 <en>Submit</en>
 <de>Senden</de>
 <id>81</id>
-<es>enviar</es>
+<es>Enviar</es>
 <pt>mandar</pt>
 <ru>Готово</ru>
 <jp>伝送する</jp>
@@ -1479,6 +1479,7 @@
 <ro>Caută</ro>
 <sl>Išči</sl>
 <ru>Поиск</ru>
+<fr>Rechercher</fr>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -3727,6 +3728,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>,</mk>
 <cz>,</cz>
 <es_CL>,</es_CL>
+<fr>,</fr>
 </text>
 <text>
 <en>Space</en>
@@ -5021,6 +5023,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1007</id>
 <ro>Telefon</ro>
 <sl>Telefon</sl>
+<es>Teléfono</es>
 </text>
 <text>
 <en>EMail</en>
@@ -5035,6 +5038,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1009</id>
 <ro>Numărul de înregistrare la Registrul Comerţului</ro>
 <sl>Št. poslovnega registra</sl>
+<fr>Numéro du registre du commerce et des sociétés</fr>
+<es>Número de inscripción en el Registro Mercantil</es>
 </text>
 <text>
 <en>Register court</en>
@@ -5160,6 +5165,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1033</id>
 <ro>Administrator / Responsabil pentru conţinut</ro>
 <sl>Upravljavec/odgovorna oseba za vsebino</sl>
+<fr>Exploitant / Responsable du contenu</fr>
+<es>Empresa / Responsable del contenido</es>
 </text>
 <text>
 <en>Disclaimer</en>
@@ -5174,6 +5181,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1037</id>
 <ro>Cod unic de înregistrare</ro>
 <sl>ID-DDV </sl>
+<fr>Numéro d'identification de TVA</fr>
+<es>Número de identificación a efectos del IVA</es>
 </text>
 <text>
 <en>Data handling register number</en>
@@ -5181,6 +5190,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1039</id>
 <ro>Cod autorizare prelucrare date personale</ro>
 <sl>Št. DVR</sl>
+<fr>Numéro du registre de traitement de données autrichien (DVR)</fr>
 </text>
 <text>
 <en>Agency accordant §5 ECG</en>
@@ -7614,6 +7624,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1472</id>
 <ro>Căutare:</ro>
 <sl>Išči: </sl>
+<fr>Rechercher:</fr>
 </text>
 <text>
 <en>copy/paste</en>
@@ -8501,6 +8512,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>.</mk>
 <cz>.</cz>
 <es_CL>.</es_CL>
+<fr>.</fr>
 </text>
 <text>
 <en>old</en>
@@ -8516,6 +8528,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Înapoi la Overview</ro>
 <sl>Nazaj na pregled</sl>
 <fr>Retour au sommaire</fr>
+<es>Volver a Información general</es>
 </text>
 <text>
 <en>Guestbook Detail</en>
@@ -9482,6 +9495,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Webseite erstellt von</de>
 <en>Website produced by</en>
 <id>1892</id>
+<es>Sitio web creado por</es>
 </text>
 </trl>
 
