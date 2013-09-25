@@ -10,7 +10,12 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
     public function getContents($language)
     {
         $ret = parent::getContents($language);
+        $ret = $this->_processContents($ret);
+        return $ret;
+    }
 
+    protected function _processContents($ret)
+    {
         $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
 
         if ($pathType == 'ext') {
@@ -64,7 +69,6 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
             $ret = str_replace('$cssClass', $cssClass, $ret);
             $ret = str_replace('.cssClass', '.'.$cssClass, $ret);
         }
-
         return $ret;
     }
 

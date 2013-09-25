@@ -19,6 +19,7 @@ class Kwf_Assets_Dispatcher
         $cache = Kwf_Assets_Cache::getInstance();
         $cacheId = str_replace(array(':', '/'), '_', $url);
         $ret = $cache->load($cacheId);
+
         if ($ret === false) {
             $param = explode('/', $url);
             $dependencyClass = $param[0];
