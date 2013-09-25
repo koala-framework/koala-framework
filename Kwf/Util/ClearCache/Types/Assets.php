@@ -48,7 +48,9 @@ class Kwf_Util_ClearCache_Types_Assets extends Kwf_Util_ClearCache_Types_Abstrac
                 $urls = array_merge($urls, $p->getPackageUrls('text/css; media=print', $language));
             }
             foreach ($urls as $url) {
-                Kwf_Assets_Dispatcher::getOutputForUrl($url); //this will fill cache
+                if (substr($url, 0, 1) == '/') {
+                    Kwf_Assets_Dispatcher::getOutputForUrl($url, 'none'); //this will fill cache
+                }
             }
         }
     }

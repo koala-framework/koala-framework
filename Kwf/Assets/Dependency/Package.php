@@ -116,10 +116,14 @@ class Kwf_Assets_Dependency_Package
                     continue;
                 }
                 $includesDependencies[] = $i;
-                if (!$i instanceof Kwf_Assets_Dependency_UrlResolvableInterface) {
-                    throw new Kwf_Exception("dependency that should not be in package must implement UrlResolvableInterface");
+                if ($i instanceof Kwf_Assets_Dependency_HttpUrl) {
+                    $ret[] = $i->getUrl();
+                } else {
+                    if (!$i instanceof Kwf_Assets_Dependency_UrlResolvableInterface) {
+                        throw new Kwf_Exception("dependency that should not be in package must implement UrlResolvableInterface");
+                    }
+                    $ret[] = '/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();
                 }
-                $ret[] = '/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();
             }
             $mTime = $i->getMTime();
             if ($mTime) {

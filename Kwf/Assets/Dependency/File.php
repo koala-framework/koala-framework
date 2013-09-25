@@ -44,7 +44,9 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     public static function createDependency($fileName)
     {
-        if (substr($fileName, -3) == '.js') {
+        if (substr($fileName, 0, 7) == 'http://' || substr($fileName, 0, 8) == 'https://') {
+            return new Kwf_Assets_Dependency_HttpUrl($fileName);
+        } else if (substr($fileName, -3) == '.js') {
             return new Kwf_Assets_Dependency_File_Js($fileName);
         } else if (substr($fileName, -4) == '.css') {
             return new Kwf_Assets_Dependency_File_Css($fileName);
