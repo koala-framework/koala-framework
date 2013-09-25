@@ -11,7 +11,19 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
 
     protected function _putFileContents($contents)
     {
-        file_put_contents($this->getFileSource(), $contents);
+        $filename  = $this->getFileSource();
+        $handle = fopen($filename, "w");
+        $pointer = 0;
+        $length = 1024;
+        $bytesWritten = 0;
+        while ($contentPart = substr($contents, $pointer, $length)) {
+            $bytesWritten += fwrite($handle, $contentPart);
+            $pointer = $pointer+$length;
+        }
+        fclose($handle);
+        if ($bytesWritten != strlen($contents)) {
+            throw new Kwf_Exception("Writing file failed");
+        }
     }
 
     public function writeFile($contents, $filename, $extension, $mimeType = null)
