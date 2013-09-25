@@ -4,12 +4,12 @@ class Kwf_Assets_Dispatcher
     static public function dispatch($url)
     {
         if (substr($url, 0, 21)=='/assets/dependencies/') {
-            $out = self::getOutputForUrl($url);
+            $out = self::getOutputForUrl($url, Kwf_Media_Output::getEncoding());
             Kwf_Media_Output::output($out);
         }
     }
 
-    static public function getOutputForUrl($url)
+    static public function getOutputForUrl($url, $encoding)
     {
         if (substr($url, 0, 21) != '/assets/dependencies/') throw new Kwf_Exception("invalid url: '$url'");
         $url = substr($url, 21);
@@ -17,7 +17,7 @@ class Kwf_Assets_Dispatcher
             $url = substr($url, 0, strpos($url, '?'));
         }
         $cache = Kwf_Assets_Cache::getInstance();
-        $cacheId = str_replace(array(':', '/'), '_', $url);
+        $cacheId = str_replace(array(':', '/'), '_', $url).'_'.$encoding;
         $ret = $cache->load($cacheId);
 
         if ($ret === false) {
@@ -42,11 +42,13 @@ class Kwf_Assets_Dispatcher
                 $contents = $dependency->getContents($language);
                 $mtime = $dependency->getMTime();
             }
+            $contents = Kwf_Media_Output::encode($contents, $encoding);
             if ($extension == 'js') $mimeType = 'text/javascript; charset=utf-8';
             else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf8';
             $ret = array(
                 'contents' => $contents,
-                'mimeType' => $mimeType
+                'mimeType' => $mimeType,
+                'encoding' => $encoding
             );
             if ($mtime) $ret['mtime'] = $mtime;
             $cache->save($ret, $cacheId);
