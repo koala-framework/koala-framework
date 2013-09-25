@@ -1,6 +1,8 @@
 <?php
 class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
 {
+    private $_contentsCache;
+
     public function getMimeType()
     {
         return 'text/css';
@@ -63,25 +65,29 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
             $ret = str_replace('.cssClass', '.'.$cssClass, $ret);
         }
 
-
         return $ret;
     }
 
     public function getContentsPacked($language)
     {
-        $contents = $this->getContents($language);
+        if (!isset($this->_cacheContents)) {
 
-        $contents = str_replace("\r", "\n", $contents);
+            $contents = $this->getContents($language);
 
-        // remove comments
-        $contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
+            $contents = str_replace("\r", "\n", $contents);
 
-        // multiple whitespaces
-        $contents = str_replace("\t", " ", $contents);
-        $contents = preg_replace('/(\n)\n+/', '$1', $contents);
-        $contents = preg_replace('/(\n)\ +/', '$1', $contents);
-        $contents = preg_replace('/(\ )\ +/', '$1', $contents);
+            // remove comments
+            $contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
 
-        return $contents;
+            // multiple whitespaces
+            $contents = str_replace("\t", " ", $contents);
+            $contents = preg_replace('/(\n)\n+/', '$1', $contents);
+            $contents = preg_replace('/(\n)\ +/', '$1', $contents);
+            $contents = preg_replace('/(\ )\ +/', '$1', $contents);
+
+            $this->_cacheContents = $contents;
+        }
+
+        return $this->_cacheContents;
     }
 }

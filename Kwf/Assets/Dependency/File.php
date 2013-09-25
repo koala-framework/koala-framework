@@ -2,6 +2,8 @@
 class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 {
     protected $_fileName;
+    private $_mtimeCache;
+
     public function __construct($fileName)
     {
         $this->_fileName = $fileName;
@@ -31,10 +33,13 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     public function getMTime()
     {
-        $f = $this->getFileName();
-        if ($f) {
-            return filemtime($f);
+        if (!isset($this->_mtimeCache)) {
+            $f = $this->getFileName();
+            if ($f) {
+                $this->_mtimeCache = filemtime($f);
+            }
         }
+        return $this->_mtimeCache;
     }
 
     public static function createDependency($fileName)
