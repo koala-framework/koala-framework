@@ -54,21 +54,12 @@ class Kwf_Assets_Dependency_Package
 
     public function getPackageContents($mimeType, $language)
     {
-        $fileNames = array();
         $maxMTime = 0;
         $ret = '';
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
-                if ($i instanceof Kwf_Assets_Dependency_File) {
-                    if ($i->getFileName()) {
-                        if (in_array($i->getFileName(), $fileNames)) {
-                            throw new Kwf_Exception("Duplicate file: ".$i->getFileName());
-                        }
-                        $fileNames[] = $i->getFileName();
-                    }
-                }
                 if ($c = $i->getContentsPacked($language)) {
-                    //$ret .= "/* *** ".$i->getFileName()." */\n";
+                    //$ret .= "/* *** ".$i->getFileName()." *"."/\n";
                     $ret .= $c."\n";
                 }
             }
