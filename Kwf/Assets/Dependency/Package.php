@@ -47,7 +47,10 @@ class Kwf_Assets_Dependency_Package
             $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
             $it = new RecursiveIteratorIterator($it);
             $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
-            $this->_cacheFilteredUniqueDependencies[$mimeType] = iterator_to_array($it);
+            $this->_cacheFilteredUniqueDependencies[$mimeType] = array();
+            foreach ($it as $i) {
+                $this->_cacheFilteredUniqueDependencies[$mimeType][] = $i;
+            }
         }
         return $this->_cacheFilteredUniqueDependencies[$mimeType];
     }
