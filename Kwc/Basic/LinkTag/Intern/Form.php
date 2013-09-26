@@ -9,6 +9,10 @@ class Kwc_Basic_LinkTag_Intern_Form extends Kwc_Abstract_Form
             ->setControllerUrl(Kwc_Admin::getInstance($class)->getControllerUrl('Pages'))
             ->setWidth(233)
             ->setAllowBlank(false);
+
+        $this->add(new Kwf_Form_Field_Select('anchor', trlKwf('Anchor')))
+            ->setValues(Kwc_Admin::getInstance($class)->getControllerUrl('Anchors') . '/json-data')
+            ->setShowNoSelection(true);
     }
 
     public function prepareSave($parentRow, $postData)
