@@ -108,18 +108,24 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                     var preserveRatio = false;
                     var cropData = null;
                     if (this.dimensionField.getValue() == this.getValue().dimension) {
-                        //TODO load saved crop-values if not 0
-                        cropData = this.getValue().cropData;
+                        // load saved crop-values if not 0
+                        if (this.getValue().cropData.width > 0 && this.getValue().cropData.height > 0) {
+                            cropData = this.getValue().cropData;
+                        }
                     }
                     var dimension = this.dimensions[this.dimensionField.getValue()];
                     if (dimension.height == 'user' && this.heightField.getValue() != '') {
                         height = this.heightField.getValue();
+                    } else if (dimension.height > 0) {
+                        height = dimension.height;
                     } else {
                         //TODO throw exception no value set
                     }
 
                     if (dimension.width == 'user' && this.widthField.getValue() != '') {
                         width = this.widthField.getValue();
+                    } else if (dimension.width > 0) {
+                        width = dimension.width;
                     } else {
                         //TODO throw exception no value set
                     }
