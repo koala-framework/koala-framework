@@ -144,13 +144,14 @@ class Kwf_Util_ClearCache
     }
 
     /**
-     * @param string types of caches that should be cleared
-     * @param bool if output should shown (for cli)
-     * @param bool if caches should be refreshed (warmed up)
-     * @param array possible options: skipMaintenanceBootstrap, skipOtherServers
+     * @param array possible options: types(=all), output(=false), refresh(=true), skipMaintenanceBootstrap, skipOtherServers
      */
-    public final function clearCache($typeNames = 'all', $output = false, $refresh = true, $options = array())
+    public final function clearCache(array $options)
     {
+        $typeNames = $options['types'];
+        $output = isset($options['output']) ? $options['output'] : false;
+        $refresh = isset($options['refresh']) ? $options['refresh'] : false;
+
         Kwf_Component_ModelObserver::getInstance()->disable();
 
         ini_set('memory_limit', '512M');

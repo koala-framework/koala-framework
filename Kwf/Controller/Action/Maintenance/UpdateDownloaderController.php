@@ -154,7 +154,7 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
             unlink($target);
         }
 
-        Kwf_Util_ClearCache::getInstance()->clearCache('all', false, true);
+        Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>false, 'refresh'=>true));
     }
 
     public function jsonExecuteUpdatesAction()

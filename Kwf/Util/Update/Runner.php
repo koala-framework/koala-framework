@@ -101,7 +101,12 @@ class Kwf_Util_Update_Runner
         $this->_executeUpdatesAction('postUpdate');
         if (!$this->_skipClearCache) {
             if ($this->_verbose) echo "\n";
-            Kwf_Util_ClearCache::getInstance()->clearCache('all', $this->_verbose, true, array('skipMaintenanceBootstrap'=>true));
+            Kwf_Util_ClearCache::getInstance()->clearCache(array(
+                'types' => 'all',
+                'output' => $this->_verbose,
+                'refresh' => true,
+                'skipMaintenanceBootstrap'=>true,
+            ));
             if ($this->_verbose) echo "\n";
         }
         $this->_executeUpdatesAction('postClearCache');
