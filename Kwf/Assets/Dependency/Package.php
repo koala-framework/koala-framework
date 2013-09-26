@@ -30,12 +30,22 @@ class Kwf_Assets_Dependency_Package
 
     public function getMaxMTime($mimeType)
     {
+        if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
+            $cacheId = 'depPckMaxMTime_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+            $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
+            if ($ret !== false) return $ret;
+        }
+
         $maxMTime = 0;
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             $mTime = $i->getMTime();
             if ($mTime) {
                 $maxMTime = max($maxMTime, $mTime);
             }
+        }
+
+        if (isset($cacheId)) {
+            Kwf_Assets_Cache::getInstance()->save($maxMTime, $cacheId);
         }
         return $maxMTime;
     }
@@ -72,10 +82,12 @@ class Kwf_Assets_Dependency_Package
             }
         }
 
-        $ret = str_replace(
-            '{$application.maxAssetsMTime}',
-            $maxMTime,
-            $ret);
+        if ($mimeType == 'text/javascript') {
+            $ret = str_replace(
+                '{$application.maxAssetsMTime}',
+                Kwf_Assets_Dependency_Package_Default::getInstance('Admin')->getMaxMTime('text/javascript'),
+                $ret);
+        }
 
         return $ret;
     }
