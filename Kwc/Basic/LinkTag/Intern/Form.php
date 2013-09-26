@@ -21,10 +21,12 @@ class Kwc_Basic_LinkTag_Intern_Form extends Kwc_Abstract_Form
             // Limit 1 weil alle komponenten die hier zurück kommen, dieselbe url
             // haben und es wird ja überprüft ob zu sich selbst gelinkt wird
             $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
-                $parentRow->component_id, array('limit' => 1)
+                $parentRow->component_id, array('limit' => 1, 'ignoreVisible' => true)
             );
             if (isset($postData[$this->fields['target']->getFieldName()]) &&
-                    $data && $data->getPage() && $data->getPage()->dbId == $postData[$this->fields['target']->getFieldName()]) {
+                $data && $data->isPage && $data->getPage() &&
+                $data->getPage()->dbId == $postData[$this->fields['target']->getFieldName()]
+            ) {
                 throw new Kwf_ClientException(trlKwf('Link cannot link to itself'));
             }
         }
