@@ -144,13 +144,14 @@ class Kwf_Util_ClearCache
     }
 
     /**
-     * @param array possible options: types(=all), output(=false), refresh(=true), skipMaintenanceBootstrap, skipOtherServers
+     * @param array possible options: types(=all), output(=false), refresh(=true), excludeTypes, skipMaintenanceBootstrap, skipOtherServers
      */
     public final function clearCache(array $options)
     {
         $typeNames = $options['types'];
         $output = isset($options['output']) ? $options['output'] : false;
         $refresh = isset($options['refresh']) ? $options['refresh'] : false;
+        $excludeTypes = isset($options['excludeTypes']) ? $options['excludeTypes'] : array();
 
         Kwf_Component_ModelObserver::getInstance()->disable();
 
@@ -171,6 +172,11 @@ class Kwf_Util_ClearCache
                     $types[] = $t;
                 }
             }
+        }
+
+        if (is_string($excludeTypes)) $excludeTypes = explode(',', $excludeTypes);
+        foreach ($types as $k=>$i) {
+            if (in_array($i->getTypeName(), $excludeTypes)) unset($types[$k]);
         }
 
         $maxTypeNameLength = 0;

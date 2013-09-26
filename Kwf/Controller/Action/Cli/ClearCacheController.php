@@ -16,6 +16,9 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
         if ($this->_getParam('skip-other-servers')) {
             $options['skipOtherServers'] = true;
         }
+        if (is_string($this->_getParam('exclude-type'))) {
+            $options['excludeTypes'] = $this->_getParam('exclude-type');
+        }
         Kwf_Util_ClearCache::getInstance()->clearCache($options);
         exit;
     }
