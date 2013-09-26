@@ -21,19 +21,26 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         $cropY = $row->crop_y;
         $cropWidth = $row->crop_width;
         $cropHeight = $row->crop_height;
-        $scaleFactor = Kwf_Media_Image::getHandyScaleFactor($row->getParentRow('Image')->getFileSource());
-        if ($scaleFactor != 1) {
-            $cropX = $row->crop_x / $scaleFactor;
-            $cropY = $row->crop_y / $scaleFactor;
-            $cropWidth = $row->crop_width / $scaleFactor;
-            $cropHeight = $row->crop_height / $scaleFactor;
+
+        if ($row->getParentRow('Image')) {
+            $scaleFactor = Kwf_Media_Image::getHandyScaleFactor($row->getParentRow('Image')->getFileSource());
+            if ($scaleFactor != 1) {
+                $cropX = $row->crop_x / $scaleFactor;
+                $cropY = $row->crop_y / $scaleFactor;
+                $cropWidth = $row->crop_width / $scaleFactor;
+                $cropHeight = $row->crop_height / $scaleFactor;
+            }
+        }
+        $bestfit = true;
+        if (isset($d['bestfit'])) {
+            $bestfit = $d['bestfit'];
         }
 
         $value = array(
             'dimension' => $dimension,
             'width' => $row->width,
             'height' => $row->height,
-            'bestfit' => $d['bestfit'],
+            'bestfit' => $bestfit,
             'cropData' => array(
                 'x' => $cropX,
                 'y' => $cropY,
