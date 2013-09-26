@@ -2,12 +2,14 @@
 class Kwc_Basic_LinkTag_Intern_Data extends Kwf_Component_Data
 {
     private $_data = array();
+    private $_anchor = null;
 
     protected function _getData($select = array())
     {
         $m = Kwc_Abstract::createModel($this->componentClass);
         $target = $m->fetchColumnByPrimaryId('target', $this->dbId);
         if ($target) {
+            $this->_anchor = $m->fetchColumnByPrimaryId('anchor', $this->dbId);
             $ret = null;
             $s = $select;
             $s['subroot'] = $this;
@@ -40,7 +42,11 @@ class Kwc_Basic_LinkTag_Intern_Data extends Kwf_Component_Data
     {
         if ($var == 'url') {
             if (!$this->getLinkedData()) return '';
-            return $this->getLinkedData()->url;
+            $ret = $this->getLinkedData()->url;
+            if ($this->_anchor) {
+                $ret .= '#' . $this->_anchor;
+            }
+            return $ret;
         } else if ($var == 'rel') {
             if (!$this->getLinkedData()) return '';
             return $this->getLinkedData()->rel;
