@@ -71,7 +71,8 @@ class Kwf_Assets_Loader
                     }
                     $im = new Imagick();
                     if (substr($file, -4)=='.ico') $im->setFormat('ico'); //required because imagick can't autodetect ico format
-                    $im->readImage($this->_getDep()->getAssetPath($file));
+                    $file = new Kwf_Assets_Dependency_File($file);
+                    $im->readImage($file->getFileName());
                     $fx = explode('_', substr($fx, 3));
                     foreach ($fx as $i) {
                         $params = array();
@@ -81,8 +82,8 @@ class Kwf_Assets_Loader
                         }
                         call_user_func(array('Kwf_Assets_Effects', $i), $im, $params);
                     }
-                    $cacheData['mtime'] = filemtime($this->_getDep()->getAssetPath($file));
-                    $cacheData['mtimeFiles'] = array($this->_getDep()->getAssetPath($file));
+                    $cacheData['mtime'] = $file->getMTime();
+                    $cacheData['mtimeFiles'] = array($file->getFileName());
                     $cacheData['contents'] = $im->getImagesBlob();;
                     $im->destroy();
                     $cache->save($cacheData, $cacheId);
@@ -91,7 +92,8 @@ class Kwf_Assets_Loader
                 $ret['mtime'] = time();
             } else {
                 $ret['mtime'] = time();
-                $ret['contents'] = file_get_contents($this->_getDep()->getAssetPath($file));
+                $file = new Kwf_Assets_Dependency_File($file);
+                $ret['contents'] = $file->getContents(null);
             }
         }
 
