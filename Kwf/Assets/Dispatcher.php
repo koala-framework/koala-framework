@@ -24,8 +24,9 @@ class Kwf_Assets_Dispatcher
 
         if ($encoding != 'none') {
             //own cache for encoded contents, not using Kwf_Assets_Cache as we don't need to in two-level cache
-            $cacheId = str_replace(array(':', '/'), '_', $url).'_'.$encoding;
+            $cacheId = 'as_'.str_replace(array(':', '/'), '_', $url).'_'.$encoding;
             $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            $ret = false;
             if ($ret === false) {
                 $ret = self::_getOutputForUrlNoEncoding($url);
                 $ret['contents'] = Kwf_Media_Output::encode($ret['contents'], $encoding);
@@ -74,6 +75,12 @@ class Kwf_Assets_Dispatcher
             );
             if ($mtime) $ret['mtime'] = $mtime;
             $cache->save($ret, $cacheId);
+
+            //save generated caches for clear-cache-watcher
+            $fileName = 'cache/assets/output-cache-ids-'.$extension;
+            if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
+                file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+            }
         }
 
         return $ret;
