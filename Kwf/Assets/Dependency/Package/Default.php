@@ -6,20 +6,14 @@ class Kwf_Assets_Dependency_Package_Default extends Kwf_Assets_Dependency_Packag
     /**
      * Returns a Default Asset Package (using Kwf_Assets_ProviderList_Default)
      *
-     * Very fast, as the result is cached
+     * Very fast, as all expensive operations are done lazily
      */
     public static function getInstance($dependencyName)
     {
-        if (isset(self::$_instances[$dependencyName])) return self::$_instances[$dependencyName];
-
-        $cacheId = 'depPkgDef_'.$dependencyName;
-        $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
-        if (!$ret) {
-            $ret = new self($dependencyName);
-            Kwf_Assets_Cache::getInstance()->save($ret, $cacheId);
+        if (!isset(self::$_instances[$dependencyName])) {
+            self::$_instances[$dependencyName] = new self($dependencyName);
         }
-        self::$_instances[$dependencyName] = $ret;
-        return $ret;
+        return self::$_instances[$dependencyName];
     }
 
     public function clearInstances()
@@ -49,20 +43,5 @@ class Kwf_Assets_Dependency_Package_Default extends Kwf_Assets_Dependency_Packag
     {
         $dependencyName = $parameter;
         return self::getInstance($dependencyName);
-    }
-
-    public function serialize()
-    {
-        $pl = $this->_providerList;
-        unset($this->_providerList); //don't serialize _providerList, will be set to default on unserialize
-        $ret = parent::serialize();
-        $this->_providerList = $pl;
-        return $ret;
-    }
-
-    public function unserialize($serialized)
-    {
-        parent::unserialize($serialized);
-        $this->_providerList = self::_getDefaultProviderList();
     }
 }

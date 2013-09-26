@@ -140,23 +140,10 @@ class Kwf_Assets_Dependency_Package
 
     public function serialize()
     {
-        $ret = array();
-        foreach (get_object_vars($this) as $k=>$i) {
-            if ($k == '_dependency') { //don't serialize _dependency, re-create lazily if required
-                continue;
-            }
-            if ($k == '_cacheFilteredUniqueDependencies') { //don't serialize _cacheFilteredUniqueDependencies, re-create lazily if required
-                continue;
-            }
-            $ret[$k] = $i;
-        }
-        return serialize($ret);
+        throw new Kwf_Exception("you should not serialize/cache Package, it does everything lazily");
     }
 
     public function unserialize($serialized)
     {
-        foreach (unserialize($serialized) as $k=>$i) {
-            $this->$k = $i;
-        }
     }
 }
