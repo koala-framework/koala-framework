@@ -1,14 +1,18 @@
 <?php
 class Kwf_Media_Output
 {
+    const ENCODING_NONE = 'none';
+    const ENCODING_GZIP = 'gzip';
+    const ENCODING_DEFLATE = 'deflate';
+
     public static function getEncoding()
     {
         if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
             $encoding = strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')
-                        ? 'gzip' : (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate')
-                        ? 'deflate' : 'none');
+                        ? self::ENCODING_GZIP : (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate')
+                        ? self::ENCODING_DEFLATE : self::ENCODING_NONE);
         } else {
-            $encoding = 'none';
+            $encoding = self::ENCODING_NONE;
         }
         return $encoding;
     }
@@ -136,7 +140,7 @@ class Kwf_Media_Output
             if (isset($file['filename']) && $file['filename']) {
                 $ret['headers'][] = 'Content-Disposition: inline; filename="' . $file['filename'] . '"';
             }
-            $encoding = 'none';
+            $encoding = self::ENCODING_NONE;
             if (isset($file['encoding'])) {
                 $encoding = $file['encoding'];
             } else {
@@ -219,8 +223,8 @@ class Kwf_Media_Output
 
     static public function encode($contents, $encoding)
     {
-        if ($encoding != 'none') {
-            return gzencode($contents, 9, ($encoding=='gzip') ? FORCE_GZIP : FORCE_DEFLATE);
+        if ($encoding != self::ENCODING_NONE) {
+            return gzencode($contents, 9, ($encoding==self::ENCODING_GZIP) ? FORCE_GZIP : FORCE_DEFLATE);
         } else {
             return $contents;
         }
