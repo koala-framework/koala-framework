@@ -16,7 +16,10 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 'text' => trlKwf('default'),
                 'width' => 300,
                 'height' => 200,
-                'bestfit' => true
+                'bestfit' => false
+              // bestfit = false means image will be scaled up to match size.
+                //  so the aspect ratio will be fixed when croping so that scaling wont deform image
+                // bestfit = true means image wont be scaled up if smaller than size.
             ),
             'original'=>array(
                 'text' => trlKwf('original'),
