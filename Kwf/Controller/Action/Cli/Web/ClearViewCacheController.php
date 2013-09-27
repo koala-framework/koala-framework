@@ -49,8 +49,15 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
             }
         }
 
-        echo "Deleting view cache...";
-        Kwf_Component_Cache::getInstance()->deleteViewCache($select);
+        echo "Deleting view cache...\n";
+        $c = new Zend_ProgressBar_Adapter_Console();
+        $c->setElements(array(
+            Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+            Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+            Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT
+        ));
+        $c->setTextWidth(50);
+        Kwf_Component_Cache::getInstance()->deleteViewCache($select, $c);
         echo "done\n";
 
         if ($this->_getParam('clear')) {

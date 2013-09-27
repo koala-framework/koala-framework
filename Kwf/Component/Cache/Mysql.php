@@ -107,7 +107,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         return $data;
     }
 
-    public function deleteViewCache($select)
+    public function deleteViewCache($select, $progressBarAdapter = null)
     {
         $select->whereEquals('deleted', false);
         $model = $this->getModel();
@@ -119,11 +119,23 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $partialIds = array();
         $deleteIds = array();
         $checkIncludeIds = array();
-        foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select, $options) as $row) {
+        $rows = $model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select, $options);
+        $progress = null;
+        if ($progressBarAdapter) {
+            $count = count($rows);
+            $steps = (int)((count($rows) * 2)/100 + 3);
+            $step = 0;
+            $progress = new Zend_ProgressBar($progressBarAdapter, 0, $steps);
+        }
+        foreach ($rows as $key => $row) {
+            if ($progress && ($key%100) == 0) {
+                $step += 100;
+                $progress->next(1, "viewcache $step / $count");
+            }
             $cacheIds[] = $this->_getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
             Kwf_Benchmark::countLog('viewcache-delete-'.$row['type']);
-            if ($row['type'] != 'fullPage' && !in_array($row['component_id'], $checkIncludeIds)) {
-                $checkIncludeIds[] = $row['component_id'];
+            if ($row['type'] != 'fullPage' && !isset($checkIncludeIds[$row['component_id']])) {
+                $checkIncludeIds[$row['component_id']] = true;
             }
             if ($log) {
                 $log->log("delete view cache $row[component_id] $row[renderer] $row[type] $row[value]", Zend_Log::INFO);
@@ -141,6 +153,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 throw new Kwf_Exception('Should not happen.');
             }
         }
+        if ($progress) { $progress->next(1, "partialIds"); }
         foreach ($partialIds as $componentId => $values) {
             $select = $model->select();
             $select->where(new Kwf_Model_Select_Expr_And(array(
@@ -150,6 +163,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             )));
             $model->updateRows(array('deleted' => true), $select);
         }
+        if ($progress) { $progress->next(1, "deleteIds"); }
         foreach ($deleteIds as $type => $componentIds) {
             $select = $model->select();
             $select->where(new Kwf_Model_Select_Expr_And(array(
@@ -159,14 +173,20 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             $model->updateRows(array('deleted' => true), $select);
         }
 
-        foreach ($cacheIds as $cacheId) {
+        if ($progress) { $step = 0; }
+        foreach ($cacheIds as $key => $cacheId) {
+            if ($progress && ($key%100) == 0) {
+                $step += 100;
+                $progress->next(1, "memcache $step / $count");
+            }
             Kwf_Component_Cache_Memory::getInstance()->remove($cacheId);
         }
 
+        if ($progress) { $progress->next(1, "fullPage"); }
         $s = new Kwf_Model_Select();
         $s->whereEquals('type', 'fullPage');
         if ($checkIncludeIds) {
-            $ids = array_keys($this->_fetchIncludesTree($checkIncludeIds));
+            $ids = array_keys($this->_fetchIncludesTree(array_keys($checkIncludeIds)));
             if ($ids) {
                 $s->whereEquals('component_id', $ids);
                 if ($log) {
@@ -177,6 +197,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 $this->deleteViewCache($s);
             }
         }
+        if ($progress) $progress->finish();
 
         file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Component_Events::$eventsCount.' events; '.count($deleteIds).' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'')."\n", FILE_APPEND);
 
