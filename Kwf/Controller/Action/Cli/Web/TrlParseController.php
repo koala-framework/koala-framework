@@ -202,7 +202,6 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
                 'target_plural' => $row->{$target.'_plural'},
                 'context' => $row->context
             );
-            break;
         }
 
         $iterator = new RecursiveDirectoryIterator('.');
@@ -225,7 +224,7 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
                     if ($type == 'trl') {
                         $changedC = preg_replace('#(trl(Static)?\\((\'|"))'.preg_quote($text['source']).'(\3)#', '\1'.$text['target'].'\4', $changedC);
                     } else if ($type == 'trlc') {
-                        $changedC = preg_replace('#(trlc(Static)?\\((\'|")'.preg_quote($text['context']).'\3,\s*(\'|"))'.preg_quote($text['source']).'(\4)#', 'x\1'.$text['target'].'\5', $changedC);
+                        $changedC = preg_replace('#(trlc(Static)?\\((\'|")'.preg_quote($text['context']).'\3,\s*(\'|"))'.preg_quote($text['source']).'(\4)#', '\1'.$text['target'].'\5', $changedC);
                     }
                 }
             }
