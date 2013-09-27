@@ -124,7 +124,7 @@ class Kwf_Util_Setup
 
         $ret .= "\$ml = ini_get('memory_limit');\n";
         $ret .= "if (strtoupper(substr(\$ml, -1)) == 'M') {\n";
-        $ret .= "    if ((int)substr(\$ml, 0, -1) < 128*1024*1024) {\n";
+        $ret .= "    if ((int)substr(\$ml, 0, -1) < 128) {\n";
         $ret .= "        ini_set('memory_limit', '128M');\n";
         $ret .= "    }\n";
         $ret .= "}\n";
