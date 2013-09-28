@@ -19,6 +19,10 @@ class Kwc_Newsletter_Update_35009 extends Kwf_Update
 
     public function getProgressSteps()
     {
-        return Kwf_Registry::get('db')->query("SELECT COUNT(*) FROM kwc_newsletter GROUP BY component_id")->fetchColumn();
+        try {
+            return Kwf_Registry::get('db')->query("SELECT COUNT(*) FROM kwc_newsletter GROUP BY component_id")->fetchColumn();
+        } catch (Exception $e) {
+            return 1;
+        }
     }
 }
