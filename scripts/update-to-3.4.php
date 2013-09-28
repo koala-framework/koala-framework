@@ -134,13 +134,15 @@ function moveCssFiles()
         rename('css/web.printcss', 'components/Root/Web.printcss');
         echo "moved css/web.printcss to components/Root/Web.printcss\n";
     }
-    $c = file_get_contents('dependencies.ini');
-    $c = str_replace("Frontend.files[] = web/css/master.css\n", '', $c);
-    $c = str_replace("Frontend.files[] = web/css/web.css\n", '', $c);
-    $c = str_replace("Frontend.files[] = web/css/web.scss\n", '', $c);
-    $c = str_replace("Frontend.files[] = web/css/web.printcss\n", '', $c);
-    file_put_contents('dependencies.ini', $c);
-    echo "updated dependencies.ini\n";
+    if (file_exists('dependencies.ini')) {
+        $c = file_get_contents('dependencies.ini');
+        $c = str_replace("Frontend.files[] = web/css/master.css\n", '', $c);
+        $c = str_replace("Frontend.files[] = web/css/web.css\n", '', $c);
+        $c = str_replace("Frontend.files[] = web/css/web.scss\n", '', $c);
+        $c = str_replace("Frontend.files[] = web/css/web.printcss\n", '', $c);
+        file_put_contents('dependencies.ini', $c);
+        echo "updated dependencies.ini\n";
+    }
 }
 
 function updateAclTrl()

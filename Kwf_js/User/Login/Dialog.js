@@ -68,6 +68,10 @@ Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
 
         if(doc && doc.body){
             if (doc.body.innerHTML.match(/successful/)) {
+                var sessionToken = doc.body.innerHTML.match(/sessionToken:([^:]+):/);
+                if (sessionToken[1]) {
+                    Kwf.sessionToken = sessionToken[1];
+                }
                 this.hide();
                 if (this.location) {
                     location.href = this.location;

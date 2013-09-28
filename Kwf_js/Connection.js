@@ -212,6 +212,10 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
     repeatRequest: function(options) {
         Kwf.Connection.runningRequests++;
         delete options.kwfIsSuccess;
+
+        //session token might have changed if user had to login -> update it
+        if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
+
         Kwf.Connection.superclass.request.call(this, options);
         if (options.progress) {
             this._showProgress(options);

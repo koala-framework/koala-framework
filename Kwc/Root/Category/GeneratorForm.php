@@ -22,7 +22,7 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
             foreach (Kwc_Abstract::getSetting($component->componentClass, 'generators') as $key => $generator) {
                 if (is_instance_of($generator['class'], 'Kwc_Root_Category_Generator')) {
                     foreach ($generator['component'] as $k => $class) {
-                        $name = Kwc_Abstract::getSetting($class, 'componentName');
+                        $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($class, 'componentName'));
                         if ($name) {
                             $name = str_replace('.', ' ', $name);
                             $componentNames[$k] = $name;

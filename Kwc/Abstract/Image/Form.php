@@ -15,6 +15,7 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
         }
 
         $this->_initFieldsCaption();
+        $this->_initFieldsAltText();
 
         parent::_initFields();
     }
@@ -55,6 +56,10 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
             $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))
                 ->setWidth(300);
         }
+    }
+
+    protected function _initFieldsAltText()
+    {
         if (Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
             $this->add(new Kwf_Form_Field_TextField('alt_text', trlKwf('Alt Text')))
                 ->setWidth(300);

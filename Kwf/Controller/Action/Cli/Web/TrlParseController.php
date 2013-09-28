@@ -170,5 +170,71 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
         }
         exit;
     }
+
+    public function changeWebCodeLanguageAction()
+    {
+        $target = $this->_getParam('target');
+        if (!$target) throw new Kwf_Exception_Client("target parameter required");
+
+        $source = Kwf_Config::getValue('webCodeLanguage');
+        $c = file_get_contents('config.ini');
+        $c = str_replace("webCodeLanguage = ".$source."\n", "webCodeLanguage = $target\n", $c);
+        file_put_contents('config.ini', $c);
+
+        $texts = array(
+            'trl' => array(),
+            'trlc' => array(),
+            'trlp' => array(),
+            'trlcp' => array(),
+        );
+        foreach (Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Web')->getRows() as $row) {
+            $type = 'trl';
+            if ($row->context) {
+                $type .= 'c';
+            }
+            if ($row->{$source.'_plural'}) $type .= 'p';
+            if (!$row->{$target}) continue;
+            if (substr(trim($row->{$target}), 0, 1) == '?') continue;
+            $texts[$type][] = array(
+                'source' => $row->{$source},
+                'source_plural' => $row->{$source.'_plural'},
+                'target' => $row->{$target},
+                'target_plural' => $row->{$target.'_plural'},
+                'context' => $row->context
+            );
+        }
+
+        $iterator = new RecursiveDirectoryIterator('.');
+        foreach(new RecursiveIteratorIterator($iterator) as $file) {
+
+            if ($file->isDir()) continue;
+            if (strpos($file->getPathname(), ".svn")) continue;
+            if (strpos($file->getPathname(), ".git")) continue;
+            if (stripos($file->getPathname(), KWF_PATH) !== false) continue;
+            if (stripos($file->getPathname(), '/cache/') !== false) continue;
+            $extension = end(explode('.', $file->getFileName()));
+            if($extension!='php' && $extension !='js' && $extension !='tpl') continue;
+            $file = $file->getPathname();
+
+            echo $file;
+            $c = file_get_contents($file);
+            $changedC = $c;
+            foreach ($texts as $type=>$t) {
+                foreach ($t as $text) {
+                    if ($type == 'trl') {
+                        $changedC = preg_replace('#(trl(Static)?\\((\'|"))'.preg_quote($text['source']).'(\3)#', '\1'.$text['target'].'\4', $changedC);
+                    } else if ($type == 'trlc') {
+                        $changedC = preg_replace('#(trlc(Static)?\\((\'|")'.preg_quote($text['context']).'\3,\s*(\'|"))'.preg_quote($text['source']).'(\4)#', '\1'.$text['target'].'\5', $changedC);
+                    }
+                }
+            }
+            if ($changedC != $c) {
+                echo " [changed]";
+                file_put_contents($file, $changedC);
+            }
+            echo "\n";
+        }
+        exit;
+    }
 }
 

@@ -319,7 +319,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
-        } else if (preg_match('#Acl\.php$#', $file)) {
+        } else if (preg_match('#(Acl|MenuConfig)\.php$#', $file)) {
             if ($event == 'MODIFY') {
                 Kwf_Acl::clearCache();
                 echo "cleared acl cache...\n";

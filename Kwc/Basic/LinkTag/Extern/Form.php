@@ -16,7 +16,7 @@ class Kwc_Basic_LinkTag_Extern_Form extends Kwc_Abstract_Form
             $cards = $this->add(new Kwf_Form_Container_Cards('open_type', trlKwf('Open in')));
             $cards->getCombobox()->setAllowBlank(false);
             $card = $cards->add();
-                $card->setTitle(trlKwf('Own window'));
+                $card->setTitle(trlKwf('Same window'));
                 $card->setName('self');
             $card = $cards->add();
                 $card->setTitle(trlKwf('New window'));

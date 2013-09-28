@@ -2948,7 +2948,7 @@
 <sl>Odpri v</sl>
 </text>
 <text>
-<en>Own window</en>
+<en>Same window</en>
 <de>Selben Fenster</de>
 <id>613</id>
 <ro>Aceeaşi fereastră</ro>
@@ -9738,7 +9738,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>This website uses cookies to help us give you the best experience when you visit our website.</en>
 <id>2002</id>
-<de>Wir verwenden Cookies, um diese Webseite zu betrieben und ihre Benutzerfreundlichkeit zu verbessern.</de>
+<de>Wir verwenden Cookies, um diese Webseite zu betreiben und ihre Benutzerfreundlichkeit zu verbessern.</de>
 <sl>Za pravilno delovanje in preprostejšo uporabo te strani uporabljamo piškotke.</sl>
 <hu>Weboldalunk futtatásához és a használhatóságának növeléséhez „cookie”-kat használunk.</hu>
 <bg>При поддръжката и експлоатацията на този сайт се използват " бисквитки " за да се подобри неговото ползване.</bg>
@@ -9850,6 +9850,21 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>or larger</en>
 <de>oder größer</de>
 <id>2019</id>
+</text>
+<text>
+<en>Inherit from parent page</en>
+<de>Von übergeordneter Seite übernehmen</de>
+<id>2020</id>
+</text>
+<text>
+<en>Own settings for this page</en>
+<de>Eigene Einstellungen für diese Seite</de>
+<id>2021</id>
+</text>
+<text>
+<en>No content</en>
+<de>Kein Inhalt</de>
+<id>2022</id>
 </text>
 </trl>
 

@@ -13,6 +13,7 @@ class Kwc_Box_OpenGraph_Image_Component extends Kwc_Abstract_Image_Component
                 'scale' => Kwf_Media_Image::SCALE_CROP
             ),
         );
+        $ret['altText'] = false;
         return $ret;
     }
 
