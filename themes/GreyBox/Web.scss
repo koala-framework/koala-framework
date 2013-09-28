@@ -14,8 +14,8 @@
 .webStandard h4 { font-size: 12px; margin-bottom: 5px; color: var(mainColor); } /* Überschrift 4 */
 .webStandard h5 { font-size: 11px; margin-bottom: 5px; color: var(mainColor); } /* Überschrift 5 */
 
-.webStandard a { text-decoration: none; color: var(mainColor); outline: none; }
-.webStandard a:hover { text-decoration: none; color: var(secColor); }
+.webStandard a { text-decoration: none; color: #1982d1; outline: none; font-weight: bold; }
+.webStandard a:hover { text-decoration: underline; color: #1982d1; }
 
 .webStandard ol { margin-bottom: 10px; margin-left: 30px; line-height: 18px; }
 .webStandard ul { margin-bottom: 10px; margin-left: 20px; line-height: 18px; }
