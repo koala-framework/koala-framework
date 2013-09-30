@@ -43,6 +43,9 @@ Kwf.onContentReady(function(readyEl) {
         l.style.onContentReady();
         el.kwfLightbox = l;
         Kwf.EyeCandy.Lightbox.currentOpen = l;
+
+        //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
+        Kwf.callOnContentReady(l.contentEl.dom, {newRender: false});
     });
 
     readyEl = Ext.get(readyEl);
