@@ -42,7 +42,11 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                 foreach ($assets['dep'] as $i) {
                     if (!in_array($i, $addedDep)) {
                         $addedDep[] = $i;
-                        $ret[] = $i;
+                        $d = $this->_providerList->findDependency(trim($i));
+                        if (!$d) {
+                            throw new Kwf_Exception("Can't find dependency '$i'");
+                        }
+                        $ret[] = $d;
                     }
                 }
                 foreach ($assets['files'] as $i) {
@@ -72,7 +76,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                     }
                 }
             }
-            return $ret;
+            return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
         } else {
             return null;
         }

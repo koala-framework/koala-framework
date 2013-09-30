@@ -22,7 +22,11 @@ class Kwf_Assets_Provider_Ini extends Kwf_Assets_Provider_Abstract implements Se
         $ret = array();
         if (isset($dep['dep'])) {
             foreach ($dep['dep'] as $i) {
-                $ret[] = trim($i);
+                $d = $this->_providerList->findDependency(trim($i));
+                if (!$d) {
+                    throw new Kwf_Exception("Can't find dependency '$i'");
+                }
+                $ret[] = $d;
             }
         }
 
@@ -48,7 +52,8 @@ class Kwf_Assets_Provider_Ini extends Kwf_Assets_Provider_Abstract implements Se
                 $ret[] = $i;
             }
         }
-        return $ret;
+
+        return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
     }
 
     public function serialize()

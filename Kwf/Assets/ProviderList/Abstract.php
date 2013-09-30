@@ -5,6 +5,9 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
     protected $_dependencies = array();
     public function __construct(array $providers)
     {
+        foreach ($providers as $p) {
+            $p->setProviderList($this);
+        }
         $this->_providers = $providers;
     }
 
@@ -19,24 +22,8 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         foreach ($this->_providers as $p) {
             $d = $p->getDependency($dependencyName);
             if ($d !== null) {
-                if (is_object($d)) {
-                    $this->_dependencies[$dependencyName] = $d;
-                    return $d;
-                }
-                $ret = new Kwf_Assets_Dependency_Dependencies(array(), $dependencyName);
-                $this->_dependencies[$dependencyName] = $ret;
-                foreach ($d as $i) {
-                    if (is_object($i)) {
-                        $ret->addDependency($i);
-                    } else {
-                        $d = $this->findDependency($i);
-                        if (!$d) {
-                            throw new Kwf_Exception("Can't find dependency '$i'");
-                        }
-                        $ret->addDependency($d);
-                    }
-                }
-                return $ret;
+                $this->_dependencies[$dependencyName] = $d;
+                return $d;
             }
         }
         return null;
@@ -44,6 +31,7 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
 
     public function serialize()
     {
+        throw new Kwf_Exception("unsupported, should not be required");
         $ret = array();
         foreach (get_object_vars($this) as $k=>$i) {
             if ($k == '_dependencies') { //don't serialize _dependencies, that's basically just a cache
