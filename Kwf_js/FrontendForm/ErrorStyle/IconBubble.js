@@ -56,7 +56,17 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
     hideFieldError: function(field)
     {
         field.el.removeClass('kwfFieldError');
-        if (field.errorEl) field.errorEl.fadeOut();
+        if (field.errorEl && field.errorEl.isVisible() && !field.errorEl.fadingOut) {
+            field.errorEl.hide();
+            Kwf.callOnContentReady(field.el, {newRender: false});
+            field.errorEl.show();
+            field.errorEl.fadeOut({
+                callback: function() {
+                    field.errorEl.fadingOut = false;
+                }
+            });
+            field.errorEl.fadingOut = true;
+        }
     }
 });
 Kwf.FrontendForm.errorStyles['iconBubble'] = Kwf.FrontendForm.ErrorStyle.IconBubble;
