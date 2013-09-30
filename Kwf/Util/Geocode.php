@@ -32,7 +32,12 @@ class Kwf_Util_Geocode
             $result = Zend_Json::decode($body);
             setlocale(LC_NUMERIC, explode(', ', trlcKwf('locale', 'C')));
         } else {
-            $result = Zend_Json::decode($body);
+            try {
+                $result = Zend_Json::decode($body);
+            } catch (Zend_Json_Exception $e) {
+                $e = new Kwf_Exception_Other($e);
+                $e->logOrThrow();
+            }
         }
 
         if (isset($result) && isset($result['Placemark']) && isset($result['Placemark'][0])
