@@ -26,6 +26,22 @@ class Kwf_Acl_Component extends Kwf_Acl
 
         $this->add(new Zend_Acl_Resource('kwf_component_root')); //Komponenten können hier resourcen anhängen
 
+        $this->add(new Kwf_Acl_Resource_MenuDropdown('settings',
+                    array('text'=>trlKwf('Toolbox'), 'icon'=>'wrench.png')));
+            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_user_users',
+                    array('text'=>trlKwf('Useradministration'), 'icon'=>'user.png')), 'settings');
+                $this->add(new Zend_Acl_Resource('kwf_user_user'), 'kwf_user_users');
+                $this->add(new Zend_Acl_Resource('kwf_user_log'), 'kwf_user_users');
+                $this->add(new Zend_Acl_Resource('kwf_user_comments'), 'kwf_user_users');
+            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_component_clear-cache',
+                    array('text'=>trlKwf('Clear Cache'), 'icon'=>'database.png')), 'settings');
+            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_redirects_redirects',
+                    array('text'=>trlKwf('Redirects'), 'icon'=>'page_white_go.png')), 'settings');
+                $this->add(new Zend_Acl_Resource('kwf_redirects_redirect'), 'kwf_redirects_redirects');
+                    $this->add(new Zend_Acl_Resource('kwf_redirects_pages'), 'kwf_redirects_redirect');
+
+
+
         $this->add(new Zend_Acl_Resource('kwc_structure')); // Create Structure Resource for all classes
         foreach(Kwc_Abstract::getComponentClasses() as $class) {
             $this->add(new Kwf_Acl_Resource_Component_Structure($class), 'kwc_structure');
@@ -40,6 +56,11 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->allow('superuser', 'kwf_component');
         $this->allow('superuser', 'edit_role_superuser');
         $this->allow('superuser', 'edit_role_preview');
+
+        $this->allow('admin', null);
+        $this->allow('superuser', 'settings');
+        $this->allow('superuser', 'kwf_enquiries_enquiries');
+        $this->deny('superuser', 'kwf_component_clear-cache');
 
         $this->allow('admin', 'kwf_component_show-component');
         $this->allow('admin', 'kwf_component_pages');

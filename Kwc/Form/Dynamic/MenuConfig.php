@@ -12,15 +12,9 @@ class Kwc_Form_Dynamic_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abst
                 )
             );
         }
-
-        if ($acl->has('kwf_enquiries_enquiries')) {
-            if (!$acl->inherits('kwf_enquiries_enquiries', 'kwf_enquiries_dropdown')) {
-                $all = $acl->get('kwf_enquiries_enquiries');
-                $mc = $all->getMenuConfig();
-                $mc['text'] = trlKwf('All Enquiries');
-                $all->setMenuConfig($mc);
-                $acl->setParentResource($all, 'kwf_enquiries_dropdown');
-            }
+        if (!$acl->has('kwf_enquiries_enquiries')) {
+            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_enquiries_enquiries',
+                    array('text'=>trlKwfStatic('All Enquiries'), 'icon'=>'email.png')), 'kwf_enquiries_dropdown');
         }
 
         if (Kwc_Abstract::hasSetting($this->_class, 'componentNameShort')) {
