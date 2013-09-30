@@ -1,5 +1,12 @@
 .cssClass.webStandard {
     h1 {
+        a {
+            color: #111111;
+            &:hover {
+                text-decoration: none;
+                color: #1982d1;
+            }
+        }
         color: #111111;
         font-size: 36px;
         font-weight: bold;

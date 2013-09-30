@@ -19,9 +19,6 @@
         &.last {
             border-right: none;
         }
-        &.current {
-            font-weight: bold;
-        }
 
         a {
             height: 32px;
@@ -29,10 +26,14 @@
             display: block;
             line-height: 32px;
             color: #373737;
+            font-weight: normal;
 
             &:hover {
                 @include background(linear-gradient(#f9f9f9, #e5e5e5));
             }
+        }
+        &.current a {
+            font-weight: bold;
         }
     }
 }
