@@ -435,13 +435,11 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         var maxSize = this._getMaxContentSize();
         if (newSize.width > maxSize.width) newSize.width = maxSize.width;
 
-        if (newSize.height > maxSize.height) {
-            if (this.lightbox.options.adaptHeight) {
-                newSize.height = maxSize.height;
-            } else {
-                if (!dontDeleteHeight) {
-                    delete newSize.height;
-                }
+        if (this.lightbox.options.adaptHeight && newSize.height > maxSize.height) {
+            newSize.height = maxSize.height;
+        } else {
+            if (!dontDeleteHeight) {
+                delete newSize.height;
             }
         }
 
