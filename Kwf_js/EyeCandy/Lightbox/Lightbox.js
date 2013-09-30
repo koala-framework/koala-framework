@@ -166,9 +166,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                     if (this.lightboxEl.isVisible()) {
                         this.contentEl.fadeIn();
                     }
-                    this._blockOnContentReady = true; //don't resize twice
-                    Kwf.callOnContentReady(this.contentEl.dom, {newRender: true});
-                    this._blockOnContentReady = false;
                     this.style.afterContentShown();
                     if (this.lightboxEl.isVisible()) {
                         this.preloadLinks();
@@ -305,6 +302,11 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     afterContentShown: Ext.emptyFn,
     updateContent: function(responseText) {
         this.lightbox.contentEl.update(responseText);
+
+        this._blockOnContentReady = true; //don't resize twice
+        //callOnContentReady so eg. ResponsiveEl can do it's job which might change the height of contents
+        Kwf.callOnContentReady(this.lightbox.contentEl.dom, {newRender: true});
+        this._blockOnContentReady = false;
     },
     onShow: Ext.emptyFn,
     afterShow: Ext.emptyFn,
