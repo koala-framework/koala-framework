@@ -30,14 +30,22 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
         }, this);
     };
 
-    Kwf.onElementReady(selector, function(el) {
-        initEl(el);
-    }, this, {priority: -1});
-
-    Ext.fly(window).on('resize', function() {
-        Ext.select(selector).each(function(el) {
-            initEl(el);
-        }, this);
+    Kwf.Utils.ResponsiveEl._els.push({
+        selector: selector,
+        fn: initEl
     });
-
 };
+
+Kwf.Utils.ResponsiveEl._els = [];
+
+Kwf.onContentReady(function(el) {
+    Kwf.Utils.ResponsiveEl._els.each(function(i) {
+        Ext.fly(el).select(i.selector).each(i.fn);
+    });
+}, this, {priority: -1});
+
+Ext.fly(window).on('resize', function() {
+    Kwf.Utils.ResponsiveEl._els.each(function(i) {
+        Ext.select(i.selector).each(i.fn);
+    });
+});
