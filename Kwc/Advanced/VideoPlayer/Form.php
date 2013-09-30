@@ -19,7 +19,8 @@ class Kwc_Advanced_VideoPlayer_Form extends Kwc_Abstract_Composite_Form
             ->setDirectory('AdvancedVideoPlayer')
             ->setAllowOnlyImages(false);
 
-        $fs = $this->fields->add(new Kwf_Form_Container_FieldSet(trlKwf('Settings')));
+        $fs = $this->fields->add(new Kwf_Form_Container_FieldSet(trlKwf('Settings')))
+            ->setHelpText(trlKwf('Insert "100%" in both fields to make it responsive.'));
         $fs->add(new Kwf_Form_Field_TextField('video_width', trlKwf('Width (px)')))
             ->setWidth(80);
         $fs->add(new Kwf_Form_Field_TextField('video_height', trlKwf('Height (px)')))
