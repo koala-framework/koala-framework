@@ -5,31 +5,17 @@ class Kwc_Abstract_Cards_Events extends Kwc_Abstract_Composite_Events // extends
     {
         parent::_onOwnRowUpdate($c, $event);
         if ($event->isDirty('component')) {
+            $generators = Kwc_Abstract::getSetting($this->_class, 'generators');
+            $classes = $generators['child']['component'];
             $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved(
-                $this->_getClassFromRow($event->row, true), $c)
+                $this->_getClassFromRow($classes, $event->row, true), $c)
             );
             $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded(
-                $this->_getClassFromRow($event->row, false), $c)
+                $this->_getClassFromRow($classes, $event->row, false), $c)
             );
             $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
                 $this->_class, $c)
             );
         }
-    }
-
-    protected function _getClassFromRow($row, $cleanValue = false)
-    {
-        $generators = Kwc_Abstract::getSetting($this->_class, 'generators');
-        $classes = $generators['child']['component'];
-        if ($cleanValue) {
-            $c = $row->getCleanValue('component');
-        } else {
-            $c = $row->component;
-        }
-        if (isset($classes[$c])) {
-            return $classes[$row->component];
-        }
-        $class = array_shift($classes);
-        return $class;
     }
 }
