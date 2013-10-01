@@ -104,18 +104,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
     protected function _getClassFromRow($row, $cleanValue = false)
     {
         $classes = $this->_getGenerator()->getChildComponentClasses();
-        if (count($classes) > 1 && $row->getModel()->hasColumn('component')) {
-            if ($cleanValue) {
-                $c = $row->getCleanValue('component');
-            } else {
-                $c = $row->component;
-            }
-            if (isset($classes[$c])) {
-                return $classes[$row->component];
-            }
-        }
-        $class = array_shift($classes);
-        return $class;
+        return parent::_getClassFromRow($classes, $row, $cleanValue);
     }
 
     //overrridden in Kwc_Root_Category_GeneratorEvents

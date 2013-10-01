@@ -17,6 +17,22 @@ class Kwf_Component_Events
         return $this->_config;
     }
 
+    protected function _getClassFromRow($classes, $row, $cleanValue = false)
+    {
+        if (count($classes) > 1 && $row->getModel()->hasColumn('component')) {
+            if ($cleanValue) {
+                $c = $row->getCleanValue('component');
+            } else {
+                $c = $row->component;
+            }
+            if (isset($classes[$c])) {
+                return $classes[$c];
+            }
+        }
+        $class = array_shift($classes);
+        return $class;
+    }
+
     protected function _init() {}
 
     /**
