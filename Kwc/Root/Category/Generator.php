@@ -95,14 +95,6 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     }
 
     /**
-     * Returns all recursive children of a page (only visible ones)
-     */
-    public function getRecursiveVisiblePageChildIds($parentId)
-    {
-        return $this->getRecursivePageChildIds($parentId, true);
-    }
-
-    /**
      * Returns all recursive children of a page
      */
     public function getRecursivePageChildIds($parentId, $onlyVisible = false)

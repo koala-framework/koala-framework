@@ -41,6 +41,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
             if ($event->row->visible) {
                 foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>false)) as $c) {
                     $this->_fireComponentEvent('Added', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
+                    $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($c->componentClass, $c));
                 }
             } else {
                 foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>true)) as $c) {

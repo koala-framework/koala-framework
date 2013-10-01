@@ -44,7 +44,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         $ids = array($c->dbId);
         $c = $c->getPageOrRoot();
         foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
-            $ids = array_merge($ids, $gen->getRecursiveVisiblePageChildIds($c->dbId));
+            $ids = array_merge($ids, $gen->getRecursivePageChildIds($c->dbId)); // also get invisible pages because link to a page that got invisible has to be deleted
         }
         return $ids;
     }
