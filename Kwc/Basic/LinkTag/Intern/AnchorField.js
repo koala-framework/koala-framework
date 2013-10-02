@@ -17,4 +17,4 @@ Kwc.LinkTag.Intern.AnchorField = Ext.extend(Kwf.Form.ComboBox, {
     }
 });
 
-Ext.reg('anchor', Kwc.LinkTag.Intern.AnchorField);
+Ext.reg('kwc.linktag.intern.anchor', Kwc.LinkTag.Intern.AnchorField);
