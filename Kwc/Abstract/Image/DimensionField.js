@@ -75,9 +75,6 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                 vertical: false,
                 items: radios
             });
-            this.dimensionField.on('change', function () {
-                //TODO implement disable crop-button if 'original' is selected
-            }, this);
             this.widthField = new Ext.form.NumberField({
                 fieldLabel: trlKwf('Width'),
                 width: 50,
@@ -162,6 +159,15 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                 },
                 scope: this
             });
+
+            this.dimensionField.on('change', function () {
+                var dimension = this.dimensions[this.dimensionField.getValue()];
+                if (dimension.width == 0 && dimension.height == 0) {
+                    button.disable();
+                } else {
+                    button.enable();
+                }
+            }, this);
 
             this.sizeWindow = new Ext.Window({
                 title: trlKwf('Image Size'),
