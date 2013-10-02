@@ -23,7 +23,7 @@ class Kwf_Component_Events_Table_Test extends Kwc_TestAbstract
         $row = $model->getRow(3);
         $row->visible = 1;
         $row->save();
-        $this->assertEquals(1, $this->_events->countCalled);
+        $this->assertEquals(2, $this->_events->countCalled);
     }
 
     public function testEvents2()
