@@ -29,5 +29,14 @@ function updateHtaccess()
     echo "updated .htaccess to support running in subfolder\n";
 }
 
+function updateBootstrap()
+{
+    $c = file_get_contents('bootstrap.php');
+    $c = str_replace("Kwf_Assets_Loader::load();\n", '', $c);
+    file_put_contents('bootstrap.php', $c);
+    echo "updated bootstrap.php to remove assets loader call which is not required anymore\n";
+}
+
 updateAclMenuUrls();
 updateHtaccess();
+updateBootstrap();

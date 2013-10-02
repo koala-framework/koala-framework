@@ -240,7 +240,7 @@ class Kwf_Util_Setup
         }
 
         $ret .= "if (substr(\$requestUri, 0, 8) == '/assets/') {\n";
-        $ret .= "    Kwf_Assets_Loader::load();\n";
+        $ret .= "    Kwf_Assets_Loader::load(\$requestUri);\n";
         $ret .= "}\n";
 
         $ret .= "Zend_Registry::setClassName('Kwf_Registry');\n";
