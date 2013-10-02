@@ -99,7 +99,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
             this.dimensionField.on('change', this._validateSizes, this);
 
             var button = new Ext.Button({
-                text: 'Crop Image',
+                text: trlKwf('Crop Image'),
                 handler: function() {
                     var width, height;
                     var preserveRatio = false;
