@@ -37,7 +37,7 @@ class Kwc_Basic_LinkTag_FirstChildPage_Events extends Kwc_Abstract_Events
         $component = $event->component->parent;
 
         while($component && is_instance_of($component->componentClass, 'Kwc_Basic_LinkTag_FirstChildPage_Component')) {
-            $this->fireUrlChanged($component);
+            $this->_fireUrlChanged($component);
             $component = $component->parent;
         }
     }
@@ -51,21 +51,21 @@ class Kwc_Basic_LinkTag_FirstChildPage_Events extends Kwc_Abstract_Events
             $pos = $component->row->pos;
         }
         if ($pos == 1) {
-            $this->fireUrlChanged($component->parent);
+            $this->_fireUrlChanged($component->parent);
         }
     }
 
     public function onPageAddedOrRemoved(Kwf_Component_Event_Component_AbstractFlag $event)
     {
-        $this->fireUrlChanged($event->component->parent);
+        $this->_fireUrlChanged($event->component->parent);
     }
 
     public function onPageParentChanged(Kwf_Component_Event_Page_ParentChanged $event)
     {
-        $this->fireUrlChanged($event->newParent);
+        $this->_fireUrlChanged($event->newParent);
     }
 
-    private function fireUrlChanged($component)
+    private function _fireUrlChanged($component)
     {
         if ($component && $component->componentClass == $this->_class) {
             $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $component));
