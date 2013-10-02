@@ -11,8 +11,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             tag: 'div',
             cls: 'crop-image-wrapper',
             style: {
-                background: '#ffffff',
-                opacity: 0.5,
                 position: 'absolute'
             }
         }]

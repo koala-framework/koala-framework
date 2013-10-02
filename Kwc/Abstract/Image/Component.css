@@ -5,3 +5,12 @@
     width: 100%;
     height: auto;
 }
+
+.x-window .x-resizable-pinned .x-resizable-handle {
+    opacity: 1;
+    filter: none;
+}
+
+.x-window .crop-image-wrapper {
+    background-image: url("/assets/kwf/images/stripesDark.png") !important;
+}
