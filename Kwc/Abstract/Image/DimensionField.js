@@ -3,6 +3,9 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
     triggerClass: 'x-form-search-trigger',
     width: 300,
     readOnly: true,
+    imageData: null,
+    cropData: null,
+
     initComponent: function() {
         Kwc.Abstract.Image.DimensionField.superclass.initComponent.call(this);
     },
@@ -25,23 +28,25 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
         if (this.value) {
             this.setValue(this.value);
         }
+        this.findParentByType('kwf.autoform').// TODO: retrieve Upload-field more cleanly
+            findByType('kwf.file')[0].on('change', function (el, value) {
+                this.imageData = value;
+        }, this);
     },
 
     _validateSizes: function()
     {
         var dim = this.dimensionField.getValue();
-        if (this.dimensions[dim].scale == 'crop' || this.dimensions[dim].scale == 'bestfit') {
-            if (this.widthField.getValue() < 1 && this.dimensions[dim].width == 'user'
-                && this.heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
-            ) {
-                if (this.widthField.getValue() < 1) {
-                    this.widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
-                }
-                if (this.heightField.getValue() < 1) {
-                    this.heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
-                }
-                return false;
+        if (this.widthField.getValue() < 1 && this.dimensions[dim].width == 'user'
+            && this.heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
+        ) {
+            if (this.widthField.getValue() < 1) {
+                this.widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
             }
+            if (this.heightField.getValue() < 1) {
+                this.heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
+            }
+            return false;
         }
 
         this.widthField.clearInvalid();
@@ -93,6 +98,81 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
             this.heightField.on('keyup', this._validateSizes, this);
             this.dimensionField.on('change', this._validateSizes, this);
 
+            var button = new Ext.Button({
+                text: trlKwf('Crop Image'),
+                handler: function() {
+                    var width, height;
+                    var preserveRatio = false;
+                    var cropData = null;
+                    if (this.dimensionField.getValue() == this.getValue().dimension) {
+                        // load saved crop-values if not 0
+                        if (this.getValue().cropData.width > 0 && this.getValue().cropData.height > 0) {
+                            cropData = this.getValue().cropData;
+                        }
+                    }
+                    var dimension = this.dimensions[this.dimensionField.getValue()];
+                    if (dimension.height == 'user' && this.heightField.getValue() != '') {
+                        height = this.heightField.getValue();
+                    } else if (dimension.height >= 0) {
+                        height = dimension.height;
+                    } else {
+                        Ext.Msg.alert(trlKwf('Error'), trlKwf('No height value was set'));
+                        return;
+                    }
+
+                    if (dimension.width == 'user' && this.widthField.getValue() != '') {
+                        width = this.widthField.getValue();
+                    } else if (dimension.width == 'contentWidth') {
+                        width = 0;
+                    } else if (dimension.width >= 0) {
+                        width = dimension.width;
+                    } else {
+                        Ext.Msg.alert(trlKwf('Error'), trlKwf('No width value was set'));
+                        return;
+                    }
+
+                    if (dimension.bestfit == false) {
+                        preserveRatio = true;
+                    }
+
+                    // call controller to create image with nice size to work with
+                    var imageURL = '/kwf/media/upload/download-handy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey;
+
+                    var cw = new Kwc.Abstract.Image.CropWindow({
+                        imageUrl: imageURL,
+                        preserveRatio: preserveRatio,
+                        outWidth: width,
+                        outHeight: height,
+                        cropData: cropData,
+                        buttons: [{
+                            text: trlKwf('OK'),
+                            handler: function() {
+                                this.cropData = cw.cropData;
+                                cw.close();
+                            },
+                            scope: this
+                        },{
+                            text: trlKwf('Cancel'),
+                            handler: function() {
+                                cw.close();
+                            },
+                            scope: this
+                        }]
+                    });
+                    cw.show();
+                },
+                scope: this
+            });
+
+            this.dimensionField.on('change', function () {
+                var dimension = this.dimensions[this.dimensionField.getValue()];
+                if (dimension.width == 0 && dimension.height == 0) {
+                    button.disable();
+                } else {
+                    button.enable();
+                }
+            }, this);
+
             this.sizeWindow = new Ext.Window({
                 title: trlKwf('Image Size'),
                 closeAction: 'hide',
@@ -112,7 +192,8 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                                 this.widthField,
                                 this.heightField
                             ]
-                        }
+                        },
+                        button
                     ]
                 }),
                 buttons: [{
@@ -123,7 +204,8 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                             this.setValue({
                                 dimension: this.dimensionField.getValue(),
                                 width: this.widthField.getValue(),
-                                height: this.heightField.getValue()
+                                height: this.heightField.getValue(),
+                                cropData: this.cropData
                             });
                         } else {
                             Ext.Msg.alert(trlKwf('Error'), trlKwf('Please fill the marked fields correctly.'));
@@ -138,6 +220,13 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                     scope: this
                 }]
             });
+        }
+
+        if (!this.imageData) {
+            //TODO better way to find button in panel
+            this.sizeWindow.items.items[0].items.items[2].disable();
+        } else {
+            this.sizeWindow.items.items[0].items.items[2].enable();
         }
 
         var v = this.getValue();
@@ -199,14 +288,10 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                 ret += '?';
             }
             ret += ' ';
-            var scaleModes = {
-                bestfit: trlKwf('Bestfit'),
-                crop: trlKwf('Crop'),
-                deform: trlKwf('Deform'),
-                original: trlKwf('Original')
-            };
-            if (d.scale && scaleModes[d.scale]) {
-                ret += scaleModes[d.scale];
+            if (d.bestfit) {
+                ret += trlKwf('Bestfit');
+            } else {
+                ret += trlKwf('Crop');
             }
             ret = ret.trim() + ')';
         }

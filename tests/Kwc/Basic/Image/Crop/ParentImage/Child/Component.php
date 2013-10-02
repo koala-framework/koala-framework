@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_Image_ParentImageComponent_Child_Component
+class Kwc_Basic_Image_Crop_ParentImage_Child_Component
     extends Kwc_Basic_Image_Component
 {
     public static $getMediaOutputCalled = 0;
@@ -7,7 +7,7 @@ class Kwc_Basic_Image_ParentImageComponent_Child_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['ownModel'] = 'Kwc_Basic_Image_TestModel';
+        $ret['ownModel'] = 'Kwc_Basic_Image_Crop_TestModel';
         $ret['dimensions'] = array(array('width'=>16, 'height'=>16, 'bestfit' => false));
         $ret['useParentImage'] = true;
         return $ret;

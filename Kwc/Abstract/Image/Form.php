@@ -3,7 +3,7 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
 {
     protected function _initFields()
     {
-        $this->_initFieldsUpload();
+        $image = $this->_initFieldsUpload();
 
         // Height, Width
         // add always if multiple dimensions (even if useParentImage)
@@ -11,7 +11,8 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
         if (count($dimensions) > 1) {
             $this->add(new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension')))
                 ->setAllowBlank(false)
-                ->setDimensions($dimensions);
+                ->setDimensions($dimensions)
+                ->setUploadField($image);
         }
 
         $this->_initFieldsCaption();
@@ -44,8 +45,15 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
             $helptext .= "<br />" . trlKwf('Size of Target Image to support High Resolution Displays ("Retina")') . ': ' . ($dimensions[0]['width'] * 2) . 'x' . ($dimensions[0]['height'] * 2) . 'px';
             $helptext .= "<br />" . trlKwf('or larger');
             $helptext .= "<br />" . trlKwf('If size does not fit, scale method will be') . ': ' . $dimensions[0]['scale'];
+
+            $scaleMethod = trlKwf('Crop');
+            if ($dimensions[0]['bestfit']) {
+                $scaleMethod = trlKwf('Bestfit');
+            }
+            $helptext .= "<br />" . trlKwf('If size does not fit, scale method will be') . ': ' . $scaleMethod;
             $this->getByName('Image')->setHelpText($helptext);
         }
+        return $image;
     }
 
 

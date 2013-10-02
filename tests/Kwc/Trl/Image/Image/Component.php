@@ -11,7 +11,7 @@ class Kwc_Trl_Image_Image_Component extends Kwc_Basic_Image_Component
                 'text' => trlKwf('default'),
                 'width' => 120,
                 'height' => 120,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
+                'bestfit' => true,
             )
         );
         return $ret;

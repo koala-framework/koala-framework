@@ -10,8 +10,7 @@ class Kwc_Abstract_Image_Trl_Image_Component extends Kwc_Abstract_Image_Componen
             'master'=>array(
                 'text' => '',
                 'width' => 0,
-                'height' => 0,
-                'scale' => Kwf_Media_Image::SCALE_ORIGINAL
+                'height' => 0
             )
         );
 

@@ -6,7 +6,7 @@ class Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Component extends Kwc_Basic_I
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_TestModel';
         $ret['dimensions'] = array(array(
-            'width'=>null, 'height'=>null, 'scale'=>Kwf_Media_Image::SCALE_ORIGINAL
+            'width'=>null, 'height'=>null
         ));
         $ret['imageTitle'] = false;
         return $ret;
