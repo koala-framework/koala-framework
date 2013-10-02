@@ -41,6 +41,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
             if ($event->row->visible) {
                 foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>false)) as $c) {
                     $this->_fireComponentEvent('Added', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_VISIBILITY_CHANGED);
+                    $this->fireEvent(new Kwf_Component_Event_Component_RecursiveAdded($c->componentClass, $c));
                 }
             } else {
                 foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>true)) as $c) {
@@ -90,6 +91,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>true)) as $c) {
             if ($c->isVisible()) {
                 $this->_fireComponentEvent('Removed', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
+                $this->fireEvent(new Kwf_Component_Event_Component_RecursiveRemoved($c->componentClass, $c));
             } else {
                 $this->fireEvent(new Kwf_Component_Event_Component_InvisibleRemoved($c->componentClass, $c));
             }
@@ -113,18 +115,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
     protected function _getClassFromRow($row, $cleanValue = false)
     {
         $classes = $this->_getGenerator()->getChildComponentClasses();
-        if (count($classes) > 1 && $row->getModel()->hasColumn('component')) {
-            if ($cleanValue) {
-                $c = $row->getCleanValue('component');
-            } else {
-                $c = $row->component;
-            }
-            if (isset($classes[$c])) {
-                return $classes[$row->component];
-            }
-        }
-        $class = array_shift($classes);
-        return $class;
+        return parent::_getClassFromRow($classes, $row, $cleanValue);
     }
 
     //overrridden in Kwc_Root_Category_GeneratorEvents
