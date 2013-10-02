@@ -113,18 +113,22 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
                     var dimension = this.dimensions[this.dimensionField.getValue()];
                     if (dimension.height == 'user' && this.heightField.getValue() != '') {
                         height = this.heightField.getValue();
-                    } else if (dimension.height > 0) {
+                    } else if (dimension.height >= 0) {
                         height = dimension.height;
                     } else {
-                        //TODO throw exception no value set
+                        Ext.Msg.alert(trlKwf('Error'), trlKwf('No height value was set'));
+                        return;
                     }
 
                     if (dimension.width == 'user' && this.widthField.getValue() != '') {
                         width = this.widthField.getValue();
-                    } else if (dimension.width > 0) {
+                    } else if (dimension.width == 'contentWidth') {
+                        width = 0;
+                    } else if (dimension.width >= 0) {
                         width = dimension.width;
                     } else {
-                        //TODO throw exception no value set
+                        Ext.Msg.alert(trlKwf('Error'), trlKwf('No width value was set'));
+                        return;
                     }
 
                     if (dimension.bestfit == false) {
