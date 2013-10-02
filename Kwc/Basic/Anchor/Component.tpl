@@ -1,1 +1,1 @@
-<a class="<?=$this->cssClass?>" id="<?=$this->anchor?>"></a>
+<div class="<?=$this->cssClass?>" id="<?=$this->anchor?>"></div>

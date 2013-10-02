@@ -20,6 +20,6 @@ class Kwc_Basic_Anchor_Component extends Kwc_Abstract_Composite_Component
 
     public function getAnchors()
     {
-        return array($this->getRow()->anchor => $this->getRow()->anchor);
+        return array($this->getRow()->anchor => $this->getRow()->anchor_name);
     }
 }

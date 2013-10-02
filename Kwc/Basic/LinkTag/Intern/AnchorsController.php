@@ -16,7 +16,7 @@ class Kwc_Basic_LinkTag_Intern_AnchorsController extends Kwf_Controller_Action_A
         if ($component) {
             foreach ($component->getChildComponents(array('flag' => 'hasAnchors')) as $component) {
                 foreach ($component->getComponent()->getAnchors() as $anchor => $name) {
-                    $ret[] = array('id' => $anchor, 'name' => '#' . $name);
+                    $ret[] = array('id' => $anchor, 'name' => $name);
                 }
             }
         }
