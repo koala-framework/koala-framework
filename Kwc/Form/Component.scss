@@ -183,10 +183,8 @@
             }
 
             .kwfFormFieldWrapper {
-                &.hasLabel {
-                    display: inline-block;
-                    position: relative;
-                }
+                display: inline-block;
+                position: relative;
             }
 
             .kwfFieldErrorIconBubble {
