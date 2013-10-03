@@ -8,7 +8,7 @@ class Kwc_Basic_LinkTag_Intern_Data extends Kwf_Component_Data
     {
         $m = Kwc_Abstract::createModel($this->componentClass);
         $result = $m->fetchColumnsByPrimaryId(array('target', 'anchor'), $this->dbId);
-        if ($result['target']) {
+        if ($result) {
             $ret = null;
             $s = $select;
             $s['subroot'] = $this;
