@@ -2,25 +2,29 @@
 class Kwc_Basic_LinkTag_Intern_Data extends Kwf_Component_Data
 {
     private $_data = array();
+    private $_anchor = null;
 
     protected function _getData($select = array())
     {
         $m = Kwc_Abstract::createModel($this->componentClass);
-        $target = $m->fetchColumnByPrimaryId('target', $this->dbId);
-        if ($target) {
+        $result = $m->fetchColumnsByPrimaryId(array('target', 'anchor'), $this->dbId);
+        if ($result) {
             $ret = null;
             $s = $select;
             $s['subroot'] = $this;
             $s['limit'] = 1;
             $components = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
-                $target,
+                $result['target'],
                 $s
             );
             if ($components) $ret = $components[0];
             if (!$ret) {
                 $ret = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
-                    $target, $select
+                    $result['target'], $select
                 );
+            }
+            if ($result['anchor']) {
+                $this->_anchor = $result['anchor'];
             }
             return $ret;
         }
@@ -40,7 +44,11 @@ class Kwc_Basic_LinkTag_Intern_Data extends Kwf_Component_Data
     {
         if ($var == 'url') {
             if (!$this->getLinkedData()) return '';
-            return $this->getLinkedData()->url;
+            $ret = $this->getLinkedData()->url;
+            if ($this->_anchor) {
+                $ret .= '#' . $this->_anchor;
+            }
+            return $ret;
         } else if ($var == 'rel') {
             if (!$this->getLinkedData()) return '';
             return $this->getLinkedData()->rel;
