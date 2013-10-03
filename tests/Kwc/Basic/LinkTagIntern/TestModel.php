@@ -5,6 +5,7 @@ class Kwc_Basic_LinkTagIntern_TestModel extends Kwc_Basic_LinkTag_Model
     {
         $config['proxyModel'] = new Kwf_Model_FnF(array(
             'primaryKey' => 'component_id',
+            'columns' => array(),
             'data'=> array(
                 array('component_id'=>'1300', 'target'=>'1310'),
                 array('component_id'=>'1302', 'target'=>'1399'), //nicht vorhandene seite
