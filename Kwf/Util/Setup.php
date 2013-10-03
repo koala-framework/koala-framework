@@ -137,10 +137,6 @@ class Kwf_Util_Setup
             }
             $ret .= "}\n";
         }
-        if (Kwf_Config::getValue('debug.benchmarkCounter')) {
-            //vor registerAutoload aufrufen damit wir dort benchmarken können
-            $ret .= "Kwf_Benchmark::enableLog();\n";
-        }
 
         $ret .= "Kwf_Loader::registerAutoload();\n";
 
@@ -184,6 +180,7 @@ class Kwf_Util_Setup
         $preloadClasses = array(
             'Kwf_Config',
             'Kwf_Cache_Simple',
+            'Kwf_Cache_SimpleStatic',
         );
         $ret .= self::_generatePreloadClassesCode($preloadClasses, $ip);
 
@@ -193,7 +190,6 @@ class Kwf_Util_Setup
         $preloadClasses[] = 'Kwf_Registry';
         $preloadClasses[] = 'Kwf_Trl';
         $preloadClasses[] = 'Kwf_Util_Https';
-        $preloadClasses[] = 'Kwf_Cache_SimpleStatic';
         $preloadClasses[] = 'Kwf_Util_SessionHandler';
         $preloadClasses[] = 'Kwf_Util_Memcache';
         $preloadClasses[] = 'Zend_Session';
@@ -219,6 +215,7 @@ class Kwf_Util_Setup
         $preloadClasses = array();
         $preloadClasses[] = 'Kwf_Assets_Loader';
         $preloadClasses[] = 'Kwf_Assets_Dependencies';
+        $preloadClasses[] = 'Kwf_Media_Output';
         $ret .= self::_generatePreloadClassesCode($preloadClasses, $ip);
         $ret .= "    }\n";
         $ret .= "}\n";
@@ -243,6 +240,10 @@ class Kwf_Util_Setup
         $ret .= "    Kwf_Assets_Loader::load(\$requestUri);\n";
         $ret .= "}\n";
 
+        if (Kwf_Config::getValue('debug.benchmarkCounter')) {
+            //vor registerAutoload aufrufen damit wir dort benchmarken können
+            $ret .= "Kwf_Benchmark::enableLog();\n";
+        }
         $ret .= "Zend_Registry::setClassName('Kwf_Registry');\n";
 
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
