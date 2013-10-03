@@ -368,8 +368,17 @@ class Kwf_Assets_Loader
                     $ret['contents'] = $cacheData['contents'];
                     $ret['mtime'] = time();
                 } else {
-                    $ret['mtime'] = time();
-                    $ret['contents'] = file_get_contents($this->_getDep()->getAssetPath($file));
+                    $cacheId = 'asfile-'.$file;
+                    $data = Kwf_Cache_SimpleStatic::fetch($cacheId);
+                    if ($data === false) {
+                        $f = $this->_getDep()->getAssetPath($file);
+                        $data = array(
+                            'file' => $f,
+                            'mtime' => filemtime($f),
+                        );
+                        Kwf_Cache_SimpleStatic::add($cacheId, $data);
+                    }
+                    $ret = array_merge($ret, $data);
                 }
             }
         }
