@@ -9,10 +9,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         tag: 'div',
         children: [{
             tag: 'div',
-            cls: 'kwc-crop-image-wrapper',
-            style: {
-                position: 'absolute'
-            }
+            cls: 'kwc-crop-image-wrapper'
         }]
     },
 
@@ -65,8 +62,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             height: this.height,
             width: this.width,
             style:{
-                cursor: 'move',
-                position: 'absolute',
                 background: 'url('+this.src+') no-repeat left top'
             }
         });

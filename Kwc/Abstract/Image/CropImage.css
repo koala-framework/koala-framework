@@ -5,4 +5,10 @@
 
 .x-window .kwc-crop-image-wrapper {
     background-image: url("/assets/kwf/images/stripesDark.png");
+    position: absolute;
+}
+
+.kwc-crop-image-resizable {
+    cursor: move;
+    position: absolute;
 }
