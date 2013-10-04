@@ -3,7 +3,7 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
 {
     protected function _initFields()
     {
-        $image = $this->_initFieldsUpload();
+        $this->_initFieldsUpload();
 
         // Height, Width
         // add always if multiple dimensions (even if useParentImage)
@@ -51,7 +51,6 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
             $helptext .= "<br />" . trlKwf('If size does not fit, scale method will be') . ': ' . $scaleMethod;
             $this->getByName('Image')->setHelpText($helptext);
         }
-        return $image;
     }
 
 
