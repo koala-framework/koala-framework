@@ -3,7 +3,7 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
     cropData: null,
     imageUrl: '',
     resizable: false,
-    title: 'Image Crop Utility',
+    title: trlKwf('Image Crop Utility'),
     width: 660,
     height: 510,
     modal: true,
@@ -15,12 +15,12 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
             items: [
                 {
                     xtype: 'button',
-                    text: 'cancel',
+                    text: trlKwf('Cancel'),
                     itemId: 'cancelButton'
                 },
                 {
                     xtype: 'button',
-                    text: 'save',
+                    text: trlKwf('Save'),
                     itemId: 'saveButton'
                 }
             ]
@@ -31,7 +31,7 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
         //TODO implement mask while loading
         var imgLoad = new Image();
         imgLoad.onerror = (function() {
-            Ext.Msg.alert(trl('Error'), trl('Couldn\'t load image.'));
+            Ext.Msg.alert(trlKwf('Error'), trlKwf('Couldn\'t load image.'));
         });
         imgLoad.onload = (function(){
             this.setSize(imgLoad.width+14, imgLoad.height + 69);
