@@ -1,0 +1,8 @@
+.kwc-crop-image-resizable .x-resizable-handle {
+    opacity: 1;
+    filter: none;
+}
+
+.x-window .kwc-crop-image-wrapper {
+    background-image: url("/assets/kwf/images/stripesDark.png");
+}

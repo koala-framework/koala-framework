@@ -62,6 +62,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionWindow.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropImage.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropImage.css';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropWindow.js';
         $ret['assets']['files'][] = 'kwf/Kwc/Abstract/Image/Component.js';
         $ret['assets']['dep'][] = 'KwfOnReady';

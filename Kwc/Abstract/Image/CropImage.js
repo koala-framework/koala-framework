@@ -9,7 +9,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         tag: 'div',
         children: [{
             tag: 'div',
-            cls: 'crop-image-wrapper',
+            cls: 'kwc-crop-image-wrapper',
             style: {
                 position: 'absolute'
             }
@@ -48,7 +48,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             'background': 'url('+this.src+') no-repeat left top'
         });
 
-        var wrapEl = this.el.down('.crop-image-wrapper');
+        var wrapEl = this.el.down('.kwc-crop-image-wrapper');
         wrapEl.setSize(this.width, this.height);
 
         this.image = new Ext.BoxComponent({
@@ -83,6 +83,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             minWidth: this.minWidth,
             minHeight: this.minHeight
         });
+        resizer.getEl().addClass('kwc-crop-image-resizable');
         resizer.on("resize", function() {
             this.updateCropRegion();
             var res = this.getCropData();
