@@ -28,47 +28,45 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
 
         Kwc.Abstract.Image.CropWindow.superclass.initComponent.call(this);
 
-        var me = this; //Using var me because it's not possible to use scope another way
-        // tried to capsule imgLoad in Ext.get()-Element and work with on('load', function , scope) but didn't work
+        //TODO implement mask while loading
         var imgLoad = new Image();
         imgLoad.onerror = (function() {
-            //TODO implement user-error-notification
-            //TODO implement mask while loading
+            Ext.Msg.alert(trl('Error'), trl('Couldn\'t load image.'));
         });
         imgLoad.onload = (function(){
-            me.setSize(imgLoad.width+14, imgLoad.height + 69);
+            this.setSize(imgLoad.width+14, imgLoad.height + 69);
             var cropWidth, cropHeight, cropX = 0, cropY = 0;
-            if (me.cropData) {
-                cropX = me.cropData.x;
-                cropY = me.cropData.y;
-                cropWidth = me.cropData.width;
-                cropHeight = me.cropData.height;
+            if (this.cropData) {
+                cropX = this.cropData.x;
+                cropY = this.cropData.y;
+                cropWidth = this.cropData.width;
+                cropHeight = this.cropData.height;
             } else {
                 cropWidth = imgLoad.width;
                 cropHeight = imgLoad.height;
 
-                if (me.preserveRatio) {
-                    if (cropHeight / me.outHeight > cropWidth / me.outWidth) {
+                if (this.preserveRatio) {
+                    if (cropHeight / this.outHeight > cropWidth / this.outWidth) {
                         // orientate on width
-                        cropHeight = me.outHeight * cropWidth / me.outWidth;
+                        cropHeight = this.outHeight * cropWidth / this.outWidth;
                         cropY = (imgLoad.height - cropHeight)/2;
                     } else {
                         // orientate on height
-                        cropWidth = me.outWidth * cropHeight / me.outHeight;
+                        cropWidth = this.outWidth * cropHeight / this.outHeight;
                         cropX = (imgLoad.width - cropWidth)/2;
                     }
                 }
             }
 
-            me.cropData = {
+            this.cropData = {
                 x: cropX,
                 y: cropY,
                 width: cropWidth,
                 height: cropHeight
             };
             var crop = new Kwc.Abstract.Image.CropImage({
-                src: me.imageUrl,
-                preserveRatio: me.preserveRatio,
+                src: this.imageUrl,
+                preserveRatio: this.preserveRatio,
                 width: imgLoad.width,
                 height: imgLoad.height,
                 cropWidth: cropWidth,
@@ -78,13 +76,13 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
             });
 
             crop.on('changeCrop', function(foo,x) {
-                me.fireEvent('changeCrop', foo, x);
-                me.cropData = x;
-            }, me);
-            me.add(crop);
-            me.doLayout();
-        });
-        imgLoad.src = me.imageUrl;
+                this.fireEvent('changeCrop', foo, x);
+                this.cropData = x;
+            }, this);
+            this.add(crop);
+            this.doLayout();
+        }).createDelegate(this);
+        imgLoad.src = this.imageUrl;
     }
 });
 

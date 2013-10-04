@@ -84,29 +84,28 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             minHeight: this.minHeight
         });
         resizer.on("resize", function() {
-            me.updateCropRegion();
-            var res = me.getCropData();
+            this.updateCropRegion();
+            var res = this.getCropData();
             this.fireEvent('changeCrop', this, res);
             this.fireEvent('resizeCrop', this, res);
         }, this);
 
-        var me = this;
         var dragDrop = new Ext.dd.DD(this.image.getEl(), '');
-        dragDrop.startDrag = function (x, y) {
-            dragDrop.constrainTo(me.el);
-            me.image.getEl().setStyle({
+        dragDrop.startDrag = (function (x, y) {
+            dragDrop.constrainTo(this.el);
+            this.image.getEl().setStyle({
                 'background': 'transparent'
             });
-        };
-        dragDrop.endDrag  = function (e) {
-            me.updateCropRegion();
-            me.image.getEl().setStyle({
-                'background-image': 'url('+me.src+')',
+        }).createDelegate(this);
+        dragDrop.endDrag = (function (e) {
+            this.updateCropRegion();
+            this.image.getEl().setStyle({
+                'background-image': 'url('+this.src+')',
                 'background-repeat': 'no-repeat'
             });
-            me.fireEvent('changeCrop', me, me.getCropData());
-            me.fireEvent('moveCrop', me, me.getCropData());
-        };
+            this.fireEvent('changeCrop', this, this.getCropData());
+            this.fireEvent('moveCrop', this, this.getCropData());
+        }).createDelegate(this);
     }
 });
 
