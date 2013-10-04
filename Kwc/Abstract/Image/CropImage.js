@@ -25,17 +25,21 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         if (!this.image) {
             return;
         }
-        var image = this.image.getBox();
+        var imageBox = this.image.getBox();
         var result = {
-            x: (image.x - parent.x),
-            y: (image.y - parent.y),
-            width: image.width,
-            height: image.height
+            x: (imageBox.x - parent.x),
+            y: (imageBox.y - parent.y),
+            width: imageBox.width,
+            height: imageBox.height
         };
+        return result;
+    },
+
+    updateCropRegion: function () {
+        var result = this.getCropData();
         this.image.getEl().setStyle({
             'background-position': (-result.x)+'px '+(-result.y)+'px'
         });
-        return result;
     },
 
     onRender: function(ct, position) {
@@ -66,7 +70,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 background: 'url('+this.src+') no-repeat left top'
             }
         });
-        this.getCropData();
+        this.updateCropRegion();
 
         var resizer = new Ext.Resizable(this.image.getEl(), {
             handles: 'all',
@@ -80,6 +84,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             minHeight: this.minHeight
         });
         resizer.on("resize", function() {
+            me.updateCropRegion();
             var res = me.getCropData();
             this.fireEvent('changeCrop', this, res);
             this.fireEvent('resizeCrop', this, res);
@@ -94,6 +99,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             });
         };
         dragDrop.endDrag  = function (e) {
+            me.updateCropRegion();
             me.image.getEl().setStyle({
                 'background-image': 'url('+me.src+')',
                 'background-repeat': 'no-repeat'
