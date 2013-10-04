@@ -99,6 +99,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
             this.dimensionField.on('change', this._validateSizes, this);
 
             var button = new Ext.Button({
+                id: 'kwf-crop-button',
                 text: trlKwf('Crop Image'),
                 handler: function() {
                     var width, height;
@@ -223,10 +224,9 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
         }
 
         if (!this.imageData) {
-            //TODO better way to find button in panel
-            this.sizeWindow.items.items[0].items.items[2].disable();
+            this.sizeWindow.findById('kwf-crop-button').disable();
         } else {
-            this.sizeWindow.items.items[0].items.items[2].enable();
+            this.sizeWindow.findById('kwf-crop-button').enable();
         }
 
         var v = this.getValue();
