@@ -103,7 +103,7 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
             }
             if ($target == 'app.tar.gz') {
                 //move away current files to backup
-                $backupDir = uniqid("backup").'app';
+                $backupDir = uniqid("backup".date('Y-m-d')).'app';
                 mkdir($backupDir);
                 $it = new DirectoryIterator(getcwd());
                 foreach($it as $file) {
@@ -147,7 +147,7 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
                     $targetDir = 'kwf-lib';
                     copy($targetDir.'/include_path', $dirs[0].'/include_path');
                 }
-                rename($targetDir, uniqid("backup").$targetDir);
+                rename($targetDir, uniqid("backup".date('Y-m-d')).$targetDir);
                 rename("$dirs[0]",  $targetDir);
             }
             rmdir($dir);
