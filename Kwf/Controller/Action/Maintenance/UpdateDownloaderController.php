@@ -119,6 +119,7 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
                     if ($file->getFilename() == 'app.tar.gz') continue;
                     if ($file->getFilename() == 'temp') continue;
                     if ($file->getFilename() == 'log') continue;
+                    if ($file->getFilename() == 'uploads') continue;
                     rename($file->getPathname(), $backupDir.'/'.$file->getFilename());
                 }
 
@@ -128,6 +129,7 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
                     if($file->isDot()) continue;
                     if ($file->getFilename() == 'temp') continue;
                     if ($file->getFilename() == 'log') continue;
+                    if ($file->getFilename() == 'uploads') continue;
                     rename($file->getPathname(), './'.$file->getFilename());
                 }
                 system("rm -r ".escapeshellarg($dirs[0]));
