@@ -47,6 +47,11 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         $this->view->appVersion = Kwf_Config::getValue('application.name');
         $this->view->baseUrl = Kwf_Setup::getBaseUrl();
         $this->view->defaultDbName = Kwf_Config::getValue('application.id');
+        $this->view->possibleConfigSections = array();
+        $cfg = new Kwf_Config_Ini('config.ini');
+        foreach ($cfg as $k=>$i) {
+            $this->view->possibleConfigSections[] = array($k, $k);
+        }
         $this->view->assetsType = 'Kwf_Controller_Action_Maintenance:Setup';
         $this->view->viewport = 'Kwf.Maintenance.Viewport';
         $this->view->xtype = 'kwf.maintenance.setup';
@@ -70,6 +75,19 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
                 'message' => ''
             );
         }
+        if (!is_writable('config_section')) {
+            $this->view->checks[] = array(
+                'checkText' => 'config_section writeable',
+                'status' => Kwf_Util_Check_Config::RESULT_FAILED,
+                'message' => 'config_section must be writeable during installation',
+            );
+        } else {
+            $this->view->checks[] = array(
+                'checkText' => 'config_section writeable',
+                'status' => Kwf_Util_Check_Config::RESULT_OK,
+                'message' => ''
+            );
+        }
     }
 
     public function jsonInstallAction()
@@ -85,6 +103,8 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         $cfg .= "\n";
         $cfg .= "debug.error.log = ".(!$this->_getParam('display_errors') ? 'true' : 'false')."\n";
         file_put_contents('config.local.ini', $cfg);
+
+        file_put_contents('config_section', $this->_getParam('config_section'));
 
         //re-create config to load changed config.local.ini
         Kwf_Config::deleteValueCache('database');

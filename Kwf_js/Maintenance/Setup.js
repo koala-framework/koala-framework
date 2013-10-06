@@ -99,6 +99,16 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
             bodyStyle: "padding: 10px;",
             cls: 'kwfSetupForm',
             items: [{
+                xtype: 'combobox',
+                name: 'config_section',
+                fieldLabel: 'Config Section',
+                value: 'production',
+                editable: false,
+                triggerAction: 'all',
+                store: {
+                    data: this.possibleConfigSections
+                }
+            },{
                 xtype: 'checkbox',
                 name: 'display_errors',
                 fieldLabel: 'Display Errors'
@@ -165,7 +175,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
             border: false,
             cls: 'kwfSetupFinished',
             bodyStyle: "padding: 10px;",
-            html: '<h1>Installation Finished!</h1><p>Installing '+this.appVersion+' finished.</p><p><a href="'+this.baseUrl+'">» Proceed to your site</a></p><p>Thank you for using Koala Framework.</p>'
+            html: '<h1>Installation Finished!</h1><p>Installing '+this.appVersion+' finished.</p><p><a href="'+this.baseUrl+'/">» Proceed to your site</a></p><p>Thank you for using Koala Framework.</p>'
         });
 
         this.cards = new Ext.Panel({
