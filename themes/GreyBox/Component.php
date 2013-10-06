@@ -65,6 +65,13 @@ class GreyBox_Component extends Kwf_Component_Theme_Abstract
             'name' => trlStatic('Suche')
         );
 
+        $ret['generators']['lastPosts'] = array(
+            'class' => 'Kwf_Component_Generator_MultiBox_Static',
+            'component' => 'GreyBox_Blog_Box_LastPosts_Component',
+            'box' => 'rightBox',
+            'inherit' => true
+        );
+
         $ret['editComponents'] = array('title', 'metaTags', 'openGraph', 'headerTitle');
 
         $ret['contentWidth'] = 800;

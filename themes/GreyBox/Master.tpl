@@ -27,6 +27,9 @@
                     <div id="innerContent">
                         <?=$this->componentWithMaster($this->componentWithMaster);?>
                     </div>
+                    <div id="rightBox">
+                        <?=$this->multiBox('rightBox')?>
+                    </div>
                 </div>
             </div>
             <div id="outerFooter">
