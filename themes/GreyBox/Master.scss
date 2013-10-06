@@ -34,15 +34,14 @@ $grid-padding   : 0px;
             }
             #rightBox {
                 @include box-sizing(border-box);
-                padding: 10px 30px;
-                border-radius: 5px;
-                background-color: white;
-                border-bottom: 2px solid #aaaaaa;
-                padding-bottom: 20px;
-                padding-right: 20px;
-                margin-bottom: 20px;
-                margin-top: 20px;
-
+                > .box {
+                    border-radius: 5px;
+                    background-color: white;
+                    border-bottom: 2px solid #aaaaaa;
+                    margin-bottom: 20px;
+                    margin-top: 20px;
+                    margin-right: 20px;
+                }
             }
         }
     }
