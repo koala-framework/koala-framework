@@ -158,10 +158,12 @@ Kwf.Fade.Elements.prototype = {
         var activeEl = $(this.fadeElements[this.active]);
         if (!activeEl.is(':visible')) {
             this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
+            this._isAnimating = false;
             return;
         }
         var nextEl = $(this.fadeElements[this.next]);
         if (activeEl[0] == nextEl[0]) {
+            this._isAnimating = false;
             return;
         }
 

@@ -31,6 +31,7 @@ class Kwc_IncludeCode_Test extends Kwc_TestAbstract
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root_page4');
         $html = $c->render(null, true);
-        $this->assertEquals(substr_count($html, 'foobar    </body>'), 1);
+        $this->assertEquals(substr_count($html, 'foobar'), 1);
+        $this->assertRegExp('#foobar\s*<script type="text/javascript">.*?</script>\s*</body>#s', $html);
     }
 }

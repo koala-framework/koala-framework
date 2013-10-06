@@ -9192,6 +9192,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Device visible</en>
 <id>1883</id>
+<de>Sichtbarkeit auf Geräten</de>
 </text>
 <text>
 <en>id</en>
@@ -9865,6 +9866,16 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>No content</en>
 <de>Kein Inhalt</de>
 <id>2022</id>
+</text>
+<text>
+<en>Insert "100%" in both fields to make it responsive.</en>
+<de>Für Responsive in beiden Feldern "100%" eintragen.</de>
+<id>2023</id>
+</text>
+<text>
+<en>Anchor</en>
+<de>Anker</de>
+<id>2024</id>
 </text>
 </trl>
 
