@@ -12,14 +12,6 @@ class Kwc_Basic_Image_Crop_Root extends Kwc_Root_Abstract
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Basic_Image_Crop_ImageFixDimensionComponent'
         );
-        $ret['generators']['page2'] = array(
-            'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'Kwc_Basic_Image_Crop_ImageUserSelectComponent'
-        );
-        $ret['generators']['page10'] = array(
-            'class' => 'Kwf_Component_Generator_Page_Static',
-            'component' => 'Kwc_Basic_Image_Crop_ParentImage_Component'
-        );
 
         $ret['generators']['page3'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
