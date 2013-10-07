@@ -1,0 +1,16 @@
+.cssClass {
+    height: 120px;
+    overflow: hidden;
+    position: relative;
+
+    a {
+        position: absolute;
+        top: -120px;
+    }
+    a:hover {
+        top: 0;
+        span.outerHoverIcon {
+            display: none;
+        }
+    }
+}

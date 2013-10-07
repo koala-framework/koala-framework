@@ -76,7 +76,7 @@
         <div id="outerFooter">
             <div id="footer">
                 <div class="leftArea">
-                    <?=$this->component($this->boxes['footerImage']);?>
+                    <?=$this->component($this->boxes['footerLogos']);?>
                 </div>
                 <div class="bottomMenu">
                     <?=$this->component($this->boxes['bottomMenu']);?>
