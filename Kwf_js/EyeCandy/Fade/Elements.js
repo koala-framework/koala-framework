@@ -1,6 +1,6 @@
-Kwf.onContentReady(function()
+Kwf.onContentReady(function(el)
 {
-    var fadeComponents = $('div.kwfFadeElements');
+    var fadeComponents = $(el).find('div.kwfFadeElements');
     fadeComponents.each(function(index, element) {
         var elementWrapper = $(element);
         if (element.fadeElementsObject) return; // nur einmal initialisieren
