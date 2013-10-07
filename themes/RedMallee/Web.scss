@@ -34,4 +34,32 @@
 .webStandard .switchContent a:hover {
     color: var(secColor);
 }
+.webStandard.kwcListLinks a {
+    text-decoration: underline;
+}
+.webForm.kwcForm {
+    position: relative;
     
+    label {
+        font-size: 14px;
+        line-height: 25px;
+        text-align: left;
+    }
+    button {
+        background: none repeat scroll 0 0 grey;
+        border: none;
+        border-right: 1px solid grey;
+        box-shadow: none;
+        color: #FFFFFF;
+        font-size: 18px;
+        padding: 5px 51px;
+        margin-top: 10px;
+    }
+    input,
+    textarea {
+        font-size: 14px;
+        border: 1px solid #333;
+        padding: 6px;
+        margin-bottom: 10px;
+    }
+}
