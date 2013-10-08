@@ -56,19 +56,13 @@
                     <div class="breadcrumbs">
                         <?=$this->component($this->boxes['breadcrumbs']);?>
                     </div>
-                    <div id="innerContent">
+                    <div id="innerContent" class="innerContentClass<? if($this->boxes['subMenu']->hasContent()) echo " hasSubMenu";  ?>">
                         <div class="leftColumn">
                             <?=$this->component($this->boxes['subMenu']);?>
                         </div>
                         <div class="centerColumn">
                             <?=$this->componentWithMaster($this->componentWithMaster);?>
                         </div>
-                        <!--
-                        <div class="rightColumn">
-                            <?=$this->component($this->boxes['rightBox']);?>
-                        </div>
-                        -->
-                        <div class="clear"></div>
                     </div>
                 </div>
             </div>

@@ -277,6 +277,7 @@ body.sticky {
                 }
             }
             #innerContent {
+                @include pie-clearfix;
                 margin: 0px 5px;
 
                 @include at-breakpoint(6 no-mediaqueries) {
@@ -284,18 +285,11 @@ body.sticky {
                 }
 
                 .leftColumn {
-                        display: none;
-                    
                     @include at-breakpoint(8 no-mediaqueries) {
-                        @include span-columns(2);
+                        @include span-columns(0);
                         @include box-sizing(border-box);
                         padding-right: 50px;
-
-                        .redMalleeMenuSub {
-                            display: block;
-                        }
                     }
-
                 }
 
                 .centerColumn {
@@ -304,17 +298,27 @@ body.sticky {
                         margin-top: 0px;
                     }
                     @include at-breakpoint(8 no-mediaqueries) {
-                        @include span-columns(6);
+                        @include span-columns(8);
                         @include box-sizing(border-box);
                         padding-right: 20px
                     }
                 }
-
-                .rightColumn {
+            }
+            #innerContent.hasSubMenu {
+                .leftColumn {
                     @include at-breakpoint(8 no-mediaqueries) {
-                        @include span-columns(2 omega);
+                        @include span-columns(2);
+                    }
+                    .redMalleeMenuSub {
+                        display: block;
                     }
 
+                }
+
+                .centerColumn {
+                    @include at-breakpoint(8 no-mediaqueries) {
+                        @include span-columns(6);
+                    }
                 }
             }
         }
