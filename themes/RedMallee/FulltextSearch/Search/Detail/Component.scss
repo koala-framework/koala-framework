@@ -2,7 +2,8 @@
 
 .cssClass {
     border-top: 1px solid #bbb;
-    padding-top: 10px;
+    padding-top: 20px;
+    padding-bottom: 10px;
 
     a {
         @include pie-clearfix;
