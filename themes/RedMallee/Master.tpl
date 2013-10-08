@@ -34,6 +34,7 @@
                         <div class="mainMenu">
                             <?=$this->component($this->boxes['mainMenu']);?>
                         </div>
+                        <div class="clear"></div>
                         <div class="verticalMenu">
                             <?=$this->component($this->boxes['verticalMenu']);?>
                         </div>
