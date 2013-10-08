@@ -8,7 +8,7 @@ class Kwc_List_Switch_Preview_Large_Component extends Kwc_Basic_Image_Component
         'default'=>array(
             'width' => self::CONTENT_WIDTH,
             'height' => 0,
-            'bestfit' => false,
+            'cover' => true,
         ));
         $ret['componentName'] = trlKwfStatic('Large Image');
         $ret['useParentImage'] = true;

@@ -16,10 +16,10 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 'text' => trlKwf('default'),
                 'width' => 300,
                 'height' => 200,
-                'bestfit' => false
-              // bestfit = false means image will be scaled up to match size.
+                'cover' => true
+              // cover = true means image will be scaled up to match size.
                 //  so the aspect ratio will be fixed when croping so that scaling wont deform image
-                // bestfit = true means image wont be scaled up if smaller than size.
+                // cover = false means image wont be scaled up if smaller than size.
             ),
             'original'=>array(
                 'text' => trlKwf('original'),
@@ -30,19 +30,19 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 'text' => trlKwf('user-defined'),
                 'width' => self::USER_SELECT,
                 'height' => self::USER_SELECT,
-                'bestfit' => true
+                'cover' => false
             ),
             'customcrop'=>array(
                 'text' => trlKwf('user-defined'),
                 'width' => self::USER_SELECT,
                 'height' => self::USER_SELECT,
-                'bestfit' => false
+                'cover' => true
             ),
             'fullWidth'=>array(
                 'text' => trlKwf('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
-                'bestfit' => false
+                'cover' => true
             ),
         );
 
@@ -83,7 +83,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 throw new Kwf_Exception('Dimension setting must contain array of arrays');
             }
             if (isset($d['scale'])) {
-                throw new Kwf_Exception('Scale does not exist anymore. Use bestfit = false|true instead.');
+                throw new Kwf_Exception('Scale does not exist anymore. Use cover = false|true instead.');
             }
         }
     }
@@ -271,8 +271,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         } else {
             $s['height'] = $d['height'];
         }
-        if (isset($d['bestfit'])) {
-            $s['bestfit'] = $d['bestfit'];
+        if (isset($d['cover'])) {
+            $s['cover'] = $d['cover'];
         }
         if (isset($d['aspectRatio'])) $s['aspectRatio'] = $d['aspectRatio'];
 

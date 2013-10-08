@@ -6,7 +6,7 @@ class Kwc_Box_Favicon_Component extends Kwc_Basic_Image_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Favicon');
         $ret['dimensions'] = array(
-            array('width'=>0, 'height'=>0, 'bestfit' => false)
+            array('width'=>0, 'height'=>0, 'cover' => true)
         );
         return $ret;
     }

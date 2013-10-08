@@ -12,7 +12,7 @@ class Kwc_Abstract_Image_Pdf extends Kwc_Abstract_Pdf
             $size = $this->getSize();
 
             $imageSize = array(
-                'bestfit' => true,
+                'cover' => false,
                 'width' => $this->_calculateMm($size['width']),
                 'height' => $this->_calculateMm($size['height'])
             );

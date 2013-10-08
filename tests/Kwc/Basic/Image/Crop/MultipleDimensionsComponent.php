@@ -13,32 +13,32 @@ class Kwc_Basic_Image_Crop_MultipleDimensionsComponent extends Kwc_Basic_Image_C
             'small' => array(
                 'width' => 100,
                 'height' => 100,
-                'bestfit' => false,
+                'cover' => true,
             ),
             'medium' => array(
                 'width' => 200,
                 'height' => 200,
-                'bestfit' => false,
+                'cover' => true,
             ),
             'large' => array(
                 'width' => 300,
                 'height' => 300,
-                'bestfit' => false,
+                'cover' => true,
             ),
             'userWidth' => array(
                 'width' => Kwc_Abstract_Image_Component::USER_SELECT,
                 'height' => 300,
-                'bestfit' => false,
+                'cover' => true,
             ),
             'userHeight' => array(
                 'width' => 300,
                 'height' => Kwc_Abstract_Image_Component::USER_SELECT,
-                'bestfit' => false,
+                'cover' => true,
             ),
             'userSize' => array(
                 'width' => Kwc_Abstract_Image_Component::USER_SELECT,
                 'height' => Kwc_Abstract_Image_Component::USER_SELECT,
-                'bestfit' => false,
+                'cover' => true,
             ),
         );
         return $ret;

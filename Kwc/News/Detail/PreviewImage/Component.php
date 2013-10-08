@@ -8,7 +8,7 @@ class Kwc_News_Detail_PreviewImage_Component extends Kwc_Basic_Image_Component
             array(
                 'width' => 120,
                 'height' => 90,
-                'bestfit' => true,
+                'cover' => false,
             )
         );
         return $ret;

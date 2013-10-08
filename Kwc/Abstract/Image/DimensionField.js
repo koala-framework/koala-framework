@@ -83,8 +83,8 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimensions, v)
             ret += '?';
         }
         ret += ' ';
-        if (d.bestfit) {
-            ret += trlKwf('Bestfit');
+        if (d.cover) {
+            ret += trlKwf('Cover');
         } else {
             ret += trlKwf('Crop');
         }

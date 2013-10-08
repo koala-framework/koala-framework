@@ -7,7 +7,7 @@ class Kwc_Basic_ImageEnlarge_TestComponent extends Kwc_Basic_ImageEnlarge_Compon
         $ret['generators']['child']['component']['linkTag'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_TestComponent';
         $ret['generators']['child']['addUrlPart'] = false;
         $ret['dimensions'] = array(
-            array('width'=>10, 'height'=>10, 'bestfit' => false)
+            array('width'=>10, 'height'=>10, 'cover' => true)
         );
         $ret['ownModel'] = 'Kwc_Basic_ImageEnlarge_TestModel';
         return $ret;

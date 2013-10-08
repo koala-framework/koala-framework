@@ -6,7 +6,7 @@ class Kwc_User_Detail_GeneralCommunity_Avatar_Component extends Kwc_Basic_Image_
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Avatar');
         $ret['dimensions'] = array(
-            array('width'=>150, 'height'=>150, 'bestfit' => true)
+            array('width'=>150, 'height'=>150, 'cover' => false)
         );
         $ret['generators']['small'] = array(
             'class' => 'Kwf_Component_Generator_Static',

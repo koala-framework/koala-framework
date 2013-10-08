@@ -10,7 +10,7 @@ class Kwc_Basic_Image_CacheParentImage_ParentImage_Component extends Kwc_Basic_I
                 'text' => 'default',
                 'width' => 20,
                 'height' => 0,
-                'bestfit' => false,
+                'cover' => true,
             ),
         );
         unset($ret['ownModel']);

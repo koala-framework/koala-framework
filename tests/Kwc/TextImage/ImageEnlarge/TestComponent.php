@@ -11,13 +11,13 @@ class Kwc_TextImage_ImageEnlarge_TestComponent extends Kwc_TextImage_ImageEnlarg
                 'text' => 'groß auf der Seite',
                 'width' => 300,
                 'height' => 200,
-                'bestfit' => true,
+                'cover' => false,
             ),
             'small' => array(
                 'text' => 'Small',
                 'width' => 150,
                 'height'=>null,
-                'bestfit' => false,
+                'cover' => true,
             ),
             'original' => array(
                 'text' => 'Original',
@@ -28,7 +28,7 @@ class Kwc_TextImage_ImageEnlarge_TestComponent extends Kwc_TextImage_ImageEnlarg
                 'text' => 'Custom',
                 'width' => Kwc_Abstract_Image_Component::USER_SELECT,
                 'height' => Kwc_Abstract_Image_Component::USER_SELECT,
-                'bestfit' => true,
+                'cover' => false,
             )
         );
         return $ret;

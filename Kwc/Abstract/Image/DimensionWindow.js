@@ -88,7 +88,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                     return;
                 }
 
-                if (dimension.bestfit == false) {
+                if (dimension.cover == true) {
                     preserveRatio = true;
                 }
 
@@ -200,10 +200,10 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             && this.heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
         ) {
             if (this.widthField.getValue() < 1) {
-                this.widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
+                this.widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or cover.'));
             }
             if (this.heightField.getValue() < 1) {
-                this.heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
+                this.heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or cover.'));
             }
             return false;
         }

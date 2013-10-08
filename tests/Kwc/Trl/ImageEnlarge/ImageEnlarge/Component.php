@@ -13,7 +13,7 @@ class Kwc_Trl_ImageEnlarge_ImageEnlarge_Component extends Kwc_Basic_ImageEnlarge
                 'text' => trlKwf('default'),
                 'width' => 120,
                 'height' => 120,
-                'bestfit' => true,
+                'cover' => false,
             )
         );
         return $ret;

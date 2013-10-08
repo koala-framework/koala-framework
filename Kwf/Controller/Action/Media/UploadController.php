@@ -27,7 +27,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
                 if (substr($image['mime'], 0, 6) != 'image/') $maxResolution = 0;
             }
             if ($maxResolution > 0) {
-                $fileData = Kwf_Media_Image::scale($file['tmp_name'], array('width' => $maxResolution, 'height' => $maxResolution, 'bestfit' => true));
+                $fileData = Kwf_Media_Image::scale($file['tmp_name'], array('width' => $maxResolution, 'height' => $maxResolution, 'cover' => false));
                 $filename = substr($file['name'], 0, strrpos($file['name'], '.'));
                 $extension = substr(strrchr($file['name'], '.'), 1);
                 $fileRow->verifyUpload($file);
@@ -59,7 +59,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
                 $maxResolution = $_SERVER['HTTP_X_UPLOAD_MAXRESOLUTION'];
                 $tempFile = tempnam('temp', 'upload');
                 file_put_contents($tempFile, $fileData);
-                $fileData = Kwf_Media_Image::scale($tempFile, array('width' => $maxResolution, 'height' => $maxResolution, 'bestfit' => true));
+                $fileData = Kwf_Media_Image::scale($tempFile, array('width' => $maxResolution, 'height' => $maxResolution, 'cover' => false));
                 unlink($tempFile);
                 $fileRow->writeFile($fileData, $filename, $extension, $mimeType);
             } else {
@@ -85,11 +85,11 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 
         $sizes = array(
             'default' => array(40, 40),
-            'frontend' => array(100, 100, 'bestfit' => false,),
+            'frontend' => array(100, 100, 'cover' => true,),
             'gridRow' => array(0, 20),
-            'gridRowLarge' => array(200, 200, 'bestfit' => true,),
-            'imageGrid' => array(140, 140, 'bestfit' => true),
-            'imageGridLarge' => array(400, 400, 'bestfit' => true),
+            'gridRowLarge' => array(200, 200, 'cover' => false,),
+            'imageGrid' => array(140, 140, 'cover' => false),
+            'imageGridLarge' => array(400, 400, 'cover' => false),
         );
         if (isset($sizes[$this->_getParam('size')])) {
             $size = $this->_getParam('size');
@@ -146,7 +146,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         if ($scaleFactor == 1) {
             $outputParams['file'] = $source;
         } else {
-            $targetSize = array(600, 600, 'bestfit' => true);
+            $targetSize = array(600, 600, 'cover' => false);
             $image = Kwf_Media_Image::scale($fileRow->getFileSource(), $targetSize);
             $outputParams['contents'] = $image;
         }

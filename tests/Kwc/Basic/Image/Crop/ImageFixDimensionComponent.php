@@ -10,7 +10,7 @@ class Kwc_Basic_Image_Crop_ImageFixDimensionComponent extends Kwc_Basic_Image_Co
             array(
                 'width' => 500,
                 'height' => 500,
-                'bestfit' => false,
+                'cover' => true,
             )
         );
         return $ret;

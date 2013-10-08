@@ -6,7 +6,7 @@ class Kwc_Basic_Image_EmptyImageComponent extends Kwc_Basic_Image_Component
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwc_Basic_Image_TestModel';
         $ret['emptyImage'] = 'empty.png';
-        $ret['dimensions'] = array(array('width'=>16, 'height'=>16, 'bestfit' => false));
+        $ret['dimensions'] = array(array('width'=>16, 'height'=>16, 'cover' => true));
         return $ret;
     }
 }

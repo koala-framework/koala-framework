@@ -31,16 +31,16 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
                 $cropHeight = $row->crop_height / $scaleFactor;
             }
         }
-        $bestfit = true;
-        if (isset($d['bestfit'])) {
-            $bestfit = $d['bestfit'];
+        $cover = false;
+        if (isset($d['cover'])) {
+            $cover = $d['cover'];
         }
 
         $value = array(
             'dimension' => $dimension,
             'width' => $row->width,
             'height' => $row->height,
-            'bestfit' => $bestfit,
+            'cover' => $cover,
             'cropData' => array(
                 'x' => $cropX,
                 'y' => $cropY,

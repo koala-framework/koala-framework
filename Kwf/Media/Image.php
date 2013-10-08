@@ -3,7 +3,7 @@ class Kwf_Media_Image
 {
     public static function getHandyScaleFactor($originalPath)
     {
-        $targetSize = array(600, 600, 'bestfit' => true);
+        $targetSize = array(600, 600, 'cover' => false);
         $original = @getimagesize($originalPath);
         $original['width'] = $original[0];
         $original['height'] = $original[1];
@@ -17,7 +17,7 @@ class Kwf_Media_Image
     }
 
     /**
-     * targetSize options: width, height, bestfit, aspectRatio
+     * targetSize options: width, height, cover, aspectRatio
      */
     public static function calculateScaleDimensions($source, $targetSize)
     {
@@ -88,9 +88,9 @@ class Kwf_Media_Image
         if (isset($targetSize['crop'])) $crop = $targetSize['crop'];
         else $crop = null;
 
-        // get bestfit
-        if (isset($targetSize['bestfit'])) $bestfit = $targetSize['bestfit'];
-        else $bestfit = false;
+        // get cover
+        if (isset($targetSize['cover'])) $cover = $targetSize['cover'];
+        else $cover = true;
 
         if ($outputWidth == 0 && $outputHeight == 0) {
             // Handle keep original
@@ -112,7 +112,7 @@ class Kwf_Media_Image
         }
 
 
-        if (!$bestfit) { // image will always have defined size
+        if ($cover) { // image will always have defined size
             if ($outputWidth == 0) {
                 if (isset($targetSize['aspectRatio'])) {
                     $outputWidth = round($outputHeight * $targetSize['aspectRatio']);
@@ -172,7 +172,7 @@ class Kwf_Media_Image
                     $crop['y'] += $yDiff / 2;
                 }
             }
-        } elseif ($bestfit) { // image keeps aspectratio and will not be scaled up
+        } elseif (!$cover) { // image keeps aspectratio and will not be scaled up
             // calculateWidth is cropWidth if existing else originalWidth.
             // prevent image scale up
             if (!$crop) {

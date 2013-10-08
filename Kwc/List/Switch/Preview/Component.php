@@ -10,7 +10,7 @@ class Kwc_List_Switch_Preview_Component extends Kwc_Basic_Image_Component
             'default'=>array(
                 'width' => 100,
                 'height' => 75,
-                'bestfit' => false,
+                'cover' => true,
             )
         );
         return $ret;
