@@ -1,0 +1,13 @@
+@import "compass/utilities/general/clearfix";
+.cssClass {
+    @include pie-clearfix;
+    margin-top: 50px;
+    
+    .listItem {
+        float: left;
+        margin-left: 20px;
+    }
+    .listItem.kwcFirst {
+        margin: 0;
+    }
+}
