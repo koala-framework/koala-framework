@@ -110,7 +110,9 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
                 if (count($splited) != 2) {
                     throw new Kwf_Exception('Id doesn\'t consist of all needed parts.');
                 }
-                $uploadsRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')->getRow($splited[0]);
+                $uploadsRow = $row->getModel()
+                    ->getReferencedModel($this->getName())
+                    ->getRow($splited[0]);
                 if ($uploadsRow->getHashKey() != $splited[1]) {
                     throw new Kwf_Exception('Posted hashKey does not match file-hashkey.');
                 }
