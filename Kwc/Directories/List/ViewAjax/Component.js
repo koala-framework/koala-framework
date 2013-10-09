@@ -295,7 +295,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         }, this);
         
         this.store.on('load', function(s) {
-            this.el.parent('.kwcDirectoriesListViewAjax').child('.kwcCountValue').update(this.store.getTotalCount());
+            this.el.parent('.kwcDirectoriesListViewAjax').child('.kwcDirectoriesListViewCount .totalValue').update(this.store.getTotalCount());
         }, this);
 
         var viewConfig = {
