@@ -5,6 +5,12 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             this._activate(item);
         }, this);
 
+        Kwf.onContentReady(function(el) {
+            //recalculate container height as the content height might have changed due to ResponsiveEl
+            var h = this._getLargeContentHeight(this.list.getActiveItem());
+            this.largeContainer.setHeight(h);
+        }, this);
+
         this.largeContainer = this.list.el.child(this.largeContainerSelector);
         this.largeContent = {};
         this.fetchedItems = {};
@@ -17,7 +23,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
         this.largeContent[item.id] = this.largeContainer.createChild({
             html: '<div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div>'
         });
-        this.largeContent[item.id].setHeight(this.largeContainer.getHeight());
+        this.largeContent[item.id].setHeight(this.largeContainer.getHeight()); //set current height to new element while it loads - we don't know it's correct height yet
         this.largeContent[item.id].enableDisplayMode('block');
         if (!options.visible) {
             this.largeContent[item.id].hide();
@@ -27,6 +33,9 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             params: { url: item.el.child('a').dom.href },
             url: Kwf.getKwcRenderUrl(),
             success: function(response) {
+
+                //remove height again so height can depend on content
+                this.largeContent[item.id].dom.style.height = '';
 
                 var contentEl = this.largeContent[item.id].createChild();
                 this.largeContent[item.id].setStyle('position', 'absolute');
@@ -48,7 +57,8 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             var previousHeight = this.largeContainer.getHeight();
             var newHeight = this._getLargeContentHeight(item);
             this.largeContainer.setHeight(newHeight); //set to new height, not animated
-            Kwf.callOnContentReady(contentEl.dom, {newRender: true});
+            Kwf.callOnContentReady(this.largeContent[item.id].parent(), {newRender: true});
+            newHeight = this._getLargeContentHeight(item); //calculate again, might be changed by ResponsiveEl which triggers in callOnContentReady
             contentEl.hide(); //hide after callOnContentReady, will be faded in after images loaded
             this.largeContainer.setHeight(previousHeight, false); //set back to previous height, not animated
             this.largeContainer.setHeight(newHeight, true); //animate to new height
@@ -115,7 +125,8 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             var oldHeight = this.largeContainer.getHeight();
             var newHeight = this._getLargeContentHeight(item);
             this.largeContainer.setHeight(newHeight); //set new height without animation
-            Kwf.callOnContentReady(nextEl.dom, {newRender: false});
+            Kwf.callOnContentReady(nextEl.parent(), {newRender: false});
+            newHeight = this._getLargeContentHeight(item); //calculate again, might be changed by ResponsiveEl which triggers in callOnContentReady
             this.largeContainer.setHeight(oldHeight); //set previous height without animation
             this.largeContainer.setHeight(newHeight, true); //and now animate to new height
             nextEl.hide();
