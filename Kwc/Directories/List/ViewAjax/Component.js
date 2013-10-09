@@ -293,6 +293,10 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         this.store.on('loadexception', function(proxy, o, response, e) {
             throw e; //re-throw
         }, this);
+        
+        this.store.on('load', function(s) {
+            this.el.parent('.kwcDirectoriesListViewAjax').child('.kwcDirectoriesListViewCount .totalValue').update(this.store.getTotalCount());
+        }, this);
 
         var viewConfig = {
             store: this.store,
