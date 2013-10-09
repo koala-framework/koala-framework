@@ -5,6 +5,7 @@ class Kwc_Directories_List_View_Count_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['cssClass'] = 'webStandard';
+        $ret['placeholder']['total'] = trlKwfStatic('total').': ';
         return $ret;
     }
 
@@ -16,6 +17,7 @@ class Kwc_Directories_List_View_Count_Component extends Kwc_Abstract
         if ($ret['count'] instanceof Kwf_Model_Select) {
             throw new Kwf_Exception("Not yet implemented, probably not really possible");
         }
+        $ret['totalLabel'] = $this->_getPlaceholder('total');
         return $ret;
     }
     
