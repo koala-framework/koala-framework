@@ -33,14 +33,16 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
 
     public function testProcessInputNothingUploaded()
     {
+        $uploadRow = $this->_uploadsModel->getRow(1);
         $input = array(
-            'File_upload_id' => '1'
+            'File_upload_id' => $uploadRow->id.'_'.$uploadRow->getHashKey()
         );
         $data = $this->_field->processInput($this->_row, $input);
+
         $this->assertEquals($data, array('File' => '1'));
 
         $input = array(
-            'File_upload_id' => '1',
+            'File_upload_id' => $uploadRow->id.'_'.$uploadRow->getHashKey(),
             'File' => array(
                 'error' => UPLOAD_ERR_NO_FILE,
                 'tmp_name' => false
@@ -101,8 +103,9 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
 
     public function testProcessInputFileDelete()
     {
+        $uploadRow = $this->_uploadsModel->getRow(1);
         $input = array(
-            'File_upload_id' => '1',
+            'File_upload_id' => $uploadRow->id.'_'.$uploadRow->getHashKey(),
             'File_del' => '1',
         );
         $data = $this->_field->processInput($this->_row, $input);

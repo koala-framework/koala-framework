@@ -106,6 +106,16 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
             if (!$postData[$this->getFieldName().'_upload_id']) {
                 $postData[$this->getFieldName()] = null;
             } else {
+                $splited = explode('_', $postData[$this->getFieldName().'_upload_id']);
+                if (count($splited) != 2) {
+                    throw new Kwf_Exception('Id doesn\'t consist of all needed parts.');
+                }
+                $uploadsRow = $row->getModel()
+                    ->getReferencedModel($this->getName())
+                    ->getRow($splited[0]);
+                if ($uploadsRow->getHashKey() != $splited[1]) {
+                    throw new Kwf_Exception('Posted hashKey does not match file-hashkey.');
+                }
                 $postData[$this->getFieldName()] = (int)$postData[$this->getFieldName().'_upload_id'];
             }
             unset($postData[$this->getFieldName().'_upload_id']);
@@ -163,7 +173,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         $ret['html']  = "<div class=\"kwfFormFieldFileInnerImg\">\n";
         if ($value) {
             $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
-                        " value=\"$value[uploadId]\" />";
+                        " value=\"$value[uploadId]_$value[hashKey]\" />";
             if ($value['image']) {
                 //todo: width und height von image
                 $ret['html'] .= " <img src=\"/kwf/media/upload/preview?uploadId=$value[uploadId]&hashKey=$value[hashKey]&amp;size=frontend\" alt=\"\" width=\"100\" height=\"100\" />";
@@ -187,11 +197,13 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
             $ret['html'] .= '</div>';
             $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlKwf("Delete").'</button></div>';
             $uploadId = $value['uploadId'];
+            $hashKey = '_'.$value['hashKey'];
         } else {
             $uploadId = '0';
+            $hashKey = '';
         }
         $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
-                    " value=\"$uploadId\" />";
+                    " value=\"$uploadId$hashKey\" />";
         $ret['html'] .= '</div>';
         return $ret;
     }
