@@ -1,3 +1,3 @@
 <div class="<?=$this->cssClass?>">
-<span class="label"><?=$this->data->trl('total')?></span>: <span class="value"><?=$this->count?></span>
+<span class="kwcCountLabel"><?=$this->data->trl('total')?></span>: <span class="kwcCountValue"><?=$this->count?></span>
 </div>
