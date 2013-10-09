@@ -40,6 +40,21 @@ Kwf.onElementReady('.kwcDirectoriesListViewAjax', function(el, config) {
     priority: 0 //call *after* initializing kwcForm to have access to searchForm
 });
 
+//if there is no viewAjax that can handle the changed state reload current page
+//this can happen if a reload has been between state navigations
+Kwf.Utils.HistoryState.on('popstate', function() {
+    var found = false;
+    for (var componentId in Kwf.Utils.HistoryState.currentState.viewAjax) {
+        if (Kwc.Directories.List.ViewAjax.byComponentId[componentId]) {
+            found = true;
+        }
+    }
+    if (!found) {
+        location.href = location.href;
+    }
+}, this);
+
+
 Ext.ns('Kwc.Directories.List');
 Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
@@ -119,10 +134,11 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             }, this);
         }
 
-        Kwf.Utils.HistoryState.currentState[this.componentId] = {};
+        if (!Kwf.Utils.HistoryState.currentState.viewAjax) Kwf.Utils.HistoryState.currentState.viewAjax = {};
+        Kwf.Utils.HistoryState.currentState.viewAjax[this.componentId] = {};
 
         if (this.searchForm) {
-            Kwf.Utils.HistoryState.currentState[this.componentId].searchFormValues = this.searchForm.getValues();
+            this._getState().searchFormValues = this.searchForm.getValues();
         }
 
         if (!Kwc.Directories.List.ViewAjax.filterLinks[this.componentId]) {
@@ -132,12 +148,12 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
         //set menuLinkId to link that is current, be be able to set current again
         Kwc.Directories.List.ViewAjax.filterLinks[this.componentId].forEach(function(i) {
             if (Ext.fly(i).hasClass('current')) {
-                Kwf.Utils.HistoryState.currentState[this.componentId].menuLinkId = i.id;
+                this._getState().menuLinkId = i.id;
             }
         }, this);
 
         if (this.filterComponentId) {
-            Kwf.Utils.HistoryState.currentState[this.componentId].viewFilter = this.filterComponentId;
+            this._getState().viewFilter = this.filterComponentId;
             this.view.applyBaseParams({
                 filterComponentId: this.filterComponentId
             });
@@ -210,7 +226,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
     _getState: function()
     {
-        return Kwf.Utils.HistoryState.currentState[this.componentId];
+        return Kwf.Utils.HistoryState.currentState.viewAjax[this.componentId];
     },
 
     loadView: function(p)
