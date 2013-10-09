@@ -18,4 +18,16 @@ class Kwc_Directories_List_View_Count_Component extends Kwc_Abstract
         }
         return $ret;
     }
+    
+    public function getViewCacheSettings()
+    {
+        $ret = parent::getViewCacheSettings();
+        $c = $this->getData()->parent;
+        if ($c->getComponent()->getPartialClass($c->componentClass) == 'Kwf_Component_Partial_Id')
+        {
+            $ret['enabled'] = false;
+        }
+        return $ret;
+    }
+    
 }
