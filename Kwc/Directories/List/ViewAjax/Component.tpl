@@ -5,6 +5,7 @@
             <?=$this->component($this->searchForm)?>
         </div>
     <? } ?>
+    <? if (isset($this->count)) echo $this->component($this->count); ?>
     <div class="viewContainer">
         <?=$this->partials($this->data);?>
     </div>
