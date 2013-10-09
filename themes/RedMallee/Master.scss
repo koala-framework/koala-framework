@@ -342,15 +342,21 @@ body.sticky {
         @include container;
 
         .bottomMenu {
-            float: right;
+            float: left;
             position: relative;
             z-index: 3;
-            margin-right: 50px;
+            margin-left: 5px;
+            @include at-breakpoint(8 no-mediaqueries) {
+                margin-right: 50px;
+                margin-left: 0;
+                float: right;
+            }
         }
 
         .leftArea {
             float: left;
         }
+        padding: 10px;
     }
 }
 
