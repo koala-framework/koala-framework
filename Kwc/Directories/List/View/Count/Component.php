@@ -11,8 +11,11 @@ class Kwc_Directories_List_View_Count_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['count'] = count($this->getData()->parent
-            ->getComponent()->getItemIds());
+        $ret['count'] = $this->getData()->parent->getComponent()->getPagingCount();
+        if (!$ret['count']) $ret['count'] = 0;
+        if ($ret['count'] instanceof Kwf_Model_Select) {
+            throw new Kwf_Exception("Not yet implemented, probably not really possible");
+        }
         return $ret;
     }
 }
