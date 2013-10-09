@@ -215,6 +215,8 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         }
         Kwf.EyeCandy.Lightbox.currentOpen = this;
 
+        this.showOptions = options;
+
         this.lightboxEl.addClass('kwfLightboxOpen');
         if (this.fetched) {
             if (!this.lightboxEl.isVisible()) {
