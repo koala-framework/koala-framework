@@ -310,7 +310,10 @@ body.sticky {
                         @include span-columns(2);
                     }
                     .redMalleeMenuSub {
-                        display: block;
+                        display: none;
+                        @include at-breakpoint(8 no-mediaqueries) {
+                            display: block;
+                        }
                     }
 
                 }
