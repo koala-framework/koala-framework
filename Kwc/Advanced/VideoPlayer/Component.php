@@ -82,7 +82,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
                 'title' => 'ogg',
             );
         }
-        $ret['config'] = Kwc_Abstract::getSetting($this->getData()->componentClass, 'video');
+        $ret['config'] = $this->_getSetting('video');
         $dimensions = $this->getVideoDimensions();
         $ret['config']['videoWidth'] = $dimensions['width'];
         $ret['config']['videoHeight'] = $dimensions['height'];
@@ -109,7 +109,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             'height' => 0,
         );
 
-        $videoSetting = $this->getSetting($this->getData()->getComponentClass(), 'video');
+        $videoSetting = $this->_getSetting('video');
         $row = $this->getRow();
         if ($row->video_width) {
             $ret['width'] = $row->video_width;
