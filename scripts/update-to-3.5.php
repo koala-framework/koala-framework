@@ -45,10 +45,12 @@ function updateBootstrap()
         $c = str_replace("require_once \$path.'/Vkwf/SetupPoi.php';\n", "require_once 'vkwf-lib/Vkwf/SetupPoi.php';\n", $c);
 
         if (!file_exists('vkwf-lib')) {
-            link('vkwf-lib', trim(file_get_contents('include_path')));
+            symlink(trim(file_get_contents('include_path')), 'vkwf-lib');
+            unlink('include_path');
         }
         if (!file_exists('kwf-lib')) {
-            link('kwf-lib', trim(file_get_contents('vkwf-lib/include_path')));
+            symlink(trim(file_get_contents('vkwf-lib/include_path')), 'kwf-lib');
+            unlink('vkwf-lib/include_path');
         }
     }
     file_put_contents('bootstrap.php', $c);
