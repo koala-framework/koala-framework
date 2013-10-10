@@ -13,7 +13,6 @@ $img = '/kwf/kwctest/Kwc_Basic_ImageEnlarge_Root/media/Kwc_Basic_ImageEnlarge_En
 if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == $img) {
     sleep(5);
 }
-Kwf_Assets_Loader::load();
 
 $front = Kwf_Controller_Front::getInstance();
 $response = $front->dispatch();

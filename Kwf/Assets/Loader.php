@@ -9,23 +9,17 @@ class Kwf_Assets_Loader
     private $_scssParser = null;
     private $_scssParserOptions = null;
 
-    static public function load()
+    static public function load($url)
     {
-        if (!isset($_SERVER['REQUEST_URI'])) return;
-        require_once 'Kwf/Loader.php';
-        $baseUrl = Kwf_Setup::getBaseUrl();
-        if (substr($_SERVER['REQUEST_URI'], 0, strlen($baseUrl)+8)==$baseUrl.'/assets/') {
-            $url = substr($_SERVER['REQUEST_URI'], strlen($baseUrl)+8);
-            if (strpos($url, '?') !== false) {
-                $url = substr($url, 0, strpos($url, '?'));
-            }
-            try {
-                $l = new self();
-                $out = $l->getFileContents($url);
-                Kwf_Media_Output::output($out);
-            } catch (Kwf_Assets_NotFoundException $e) {
-                throw new Kwf_Exception_NotFound();
-            }
+        if (strpos($url, '?') !== false) {
+            $url = substr($url, 0, strpos($url, '?'));
+        }
+        try {
+            $l = new self();
+            $out = $l->getFileContents(substr($url, 8));
+            Kwf_Media_Output::output($out);
+        } catch (Kwf_Assets_NotFoundException $e) {
+            throw new Kwf_Exception_NotFound();
         }
     }
 
@@ -374,8 +368,17 @@ class Kwf_Assets_Loader
                     $ret['contents'] = $cacheData['contents'];
                     $ret['mtime'] = time();
                 } else {
-                    $ret['mtime'] = time();
-                    $ret['contents'] = file_get_contents($this->_getDep()->getAssetPath($file));
+                    $cacheId = 'asfile-'.$file;
+                    $data = Kwf_Cache_SimpleStatic::fetch($cacheId);
+                    if ($data === false) {
+                        $f = $this->_getDep()->getAssetPath($file);
+                        $data = array(
+                            'file' => $f,
+                            'mtime' => filemtime($f),
+                        );
+                        Kwf_Cache_SimpleStatic::add($cacheId, $data);
+                    }
+                    $ret = array_merge($ret, $data);
                 }
             }
         }

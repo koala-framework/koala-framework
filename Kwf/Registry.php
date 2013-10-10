@@ -48,3 +48,4 @@ class Kwf_Registry extends Zend_Registry
         return parent::offsetExists($index);
     }
 }
+Zend_Registry::setClassName('Kwf_Registry');
