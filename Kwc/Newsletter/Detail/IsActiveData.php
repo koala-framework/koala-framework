@@ -5,11 +5,11 @@ class Kwc_Newsletter_Detail_IsActiveData extends Kwf_Data_Abstract
     {
         if ($row instanceof Kwc_Mail_Recipient_UnsubscribableInterface) {
             if ($row->getMailUnsubscribe() && $row->activated) {
-                return '<span class="unsubscribed">'.trlKwf('unsubscribed').'</span>';
+                return trlKwf('unsubscribed');
             } else if (!$row->activated) {
-                return '<span class="inactive">'.trlKwf('not activated').'</span>';
+                return trlKwf('not activated');
             } else if (!$row->getMailUnsubscribe() && $row->activated) {
-                return '<span class="active">'.trlKwf('active').'</span>';
+                return trlKwf('active');
             }
         }
     }
