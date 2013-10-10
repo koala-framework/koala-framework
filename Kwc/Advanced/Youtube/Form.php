@@ -19,5 +19,6 @@ class Kwc_Advanced_Youtube_Form extends Kwc_Abstract_Form
                 '16x9' => trlStatic('16:9'),
                 '4x3' => trlStatic('4:3')
             ));
+        $this->add(new Kwf_Form_Field_Checkbox('autoplay', trlKwfStatic('Autoplay')));
     }
 }

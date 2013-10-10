@@ -14,7 +14,6 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
 
         $ret['videoWidth'] = 900;
         $ret['playerVars'] = array(
-            'autoplay' => 1,
             'rel' => 0,
             'iv_load_policy' => 3,
             'wmode' => 'opaque'
@@ -51,6 +50,7 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
             }
         }
         $ret['config'] = array_merge($config, array('playerVars' => $this->_getSetting('playerVars')));
+        $ret['config']['playerVars']['autoplay'] = ($ret['row']->autoplay) ? 1 : 0;
         return $ret;
     }
 
