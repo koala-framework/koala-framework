@@ -21,11 +21,19 @@
     background-color: transparent !important;
 }
 
-.cssClass input {
-    font-size: 14px;
-    padding: 4px;
-}
-
 .cssClass .kwfViewAjaxItem {
     margin-bottom: 10px;
+}
+.cssClass {
+    input {
+        font-size: 14px;
+        padding: 4px;
+        width: 250px;
+    }
+    .kwfButtonFlat {
+        clear: none;
+        button {
+            margin: 0 30px;
+        }
+    }
 }

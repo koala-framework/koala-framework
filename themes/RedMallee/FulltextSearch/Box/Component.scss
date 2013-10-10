@@ -1,5 +1,6 @@
 @import "compass/css3/transition";
 @import "kwf/css3/border-radius";
+@import "kwf/background-image-dpr2";
 
 .cssClass {
     padding-left: 3px;
@@ -8,7 +9,7 @@
         position: relative;
         float: right;
 
-        .webForm input {
+        .webForm.kwcForm input {
             float: right;
             @include transition(width 0.4s ease, background 0.4s ease);
             width: 80px;
@@ -19,14 +20,14 @@
             border: none;
             color: #707070;
             color: var(lightGrey);
-    
+
             &:focus {
                 width: 200px;
             }
         }
     }
     .loupe {
-        background: url('/assets/kwf/themes/RedMallee/images/search.png') no-repeat;
+        @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'search.png', 45px, 37px, no-repeat left top transparent);
         width: 45px;
         height: 37px;
         content: ' ';

@@ -22,7 +22,7 @@
 <uk>Помилка</uk>
 <ro>Eroare</ro>
 <mk>Грешка</mk>
-<cz>Chyba</cz>
+<cs>Chyba</cs>
 <sl>Napaka</sl>
 <es>Error</es>
 <ru>Ошибка</ru>
@@ -3693,7 +3693,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>,</ro>
 <es>,</es>
 <mk>,</mk>
-<cz>,</cz>
+<cs>,</cs>
 <es_CL>,</es_CL>
 </text>
 <text>
@@ -4594,7 +4594,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Bookmark pentru</ro>
 <sl>Zaznamek za</sl>
 <uk>Розмістити на</uk>
-<cz>Sdílet přes</cz>
+<cs>Sdílet přes</cs>
 <sk>Pridať na</sk>
 </text>
 <text>
@@ -7080,7 +7080,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>uk</uk>
 <ro>ro</ro>
 <mk>mk</mk>
-<cz>cz</cz>
+<cs>cs</cs>
 <sl>sl</sl>
 <es>es</es>
 <es_CL>es</es_CL>
@@ -8388,7 +8388,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>.</ro>
 <es>.</es>
 <mk>.</mk>
-<cz>.</cz>
+<cs>.</cs>
 <es_CL>.</es_CL>
 </text>
 <text>
@@ -9774,6 +9774,9 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Pri vašem obisku te spletne strani se piškotki trenutno shranjujejo. Kliknite na to mesto, če želite deaktivirati piškotke.</sl>
 <sk>Pri návšteve tejto stránky sa používajú aktuálne cookies. Ak chcete cookies deaktivovať, kliknite tu.</sk>
 <hr>Prilikom Vašeg posjeta ovoj internetskoj stranici trenutno se pohranjuju kolačići. Kliknite ovdje kako biste deaktivirali kolačiće.</hr>
+<bg>При вашето посещение на тази страница се използват „бисквитки”. Кликнете тук, за да деактивирате „бисквитките”.</bg>
+<cs>Při Vaší návštěvě této internetové stránky se aktuálně používají cookies. Klikněte sem, abyste cookies deaktivovali.</cs>
+<ro>Când vizitaţi această pagină web, în prezent sunt generate cookie-uri. Faceţi click aici pentru a dezactiva cookie-urile.</ro>
 <id>2007</id>
 </text>
 <text>
@@ -9782,6 +9785,9 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Pri vašem obisku te spletne strani se piškotki trenutno ne shranjujejo. Kliknite na to mesto, če želite odobriti uporabo piškotkov.</sl>
 <sk>Pri návšteve tejto stránky sa súbory cookies aktuálne nepoužívajú. Ak chcete súbory cookies opäť akceptovať, kliknite tu.</sk>
 <hr>Prilikom Vašeg posjeta ovoj internetskoj stranici trenutno se ne pohranjuju kolačići. Kliknite ovdje ako želite prihvatiti korištenje kolačića.</hr>
+<bg>При посещение ви на тази страница не се използват „бисквитки”. Кликнете тук, ако искате да приемете използването на „бисквитки”.</bg>
+<cs>Při Vaší návštěvě této internetové stránky se aktuálně nepoužívají žádné cookies. Klikněte sem, pokud chcete souhlasit s použitím cookies.</cs>
+<ro>Când vizitaţi această pagină web, în prezent nu sunt generate cookie-uri. Faceţi click aici pentru a activa cookie-urile.</ro>
 <id>2008</id>
 </text>
 <text>
@@ -9876,6 +9882,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Anchor</en>
 <de>Anker</de>
 <id>2024</id>
+</text>
+<text>
+<en>Linked Images</en>
+<de>Verlinkte Bilder</de>
+<id>2025</id>
 </text>
 </trl>
 

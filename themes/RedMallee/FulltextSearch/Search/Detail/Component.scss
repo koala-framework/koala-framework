@@ -1,0 +1,17 @@
+@import "compass/utilities/general/clearfix";
+
+.cssClass {
+    border-top: 1px solid #bbb;
+    padding-top: 20px;
+    padding-bottom: 10px;
+
+    a {
+        @include pie-clearfix;
+        font-weight: bold;
+        text-decoration: underline;
+        line-height: 20px;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+}

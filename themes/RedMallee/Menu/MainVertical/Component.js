@@ -44,21 +44,29 @@ Kwf.onJElementReady('.redMalleeMenuMainVertical', function(el, config) {
         el.find('ul.menu li.hasDropdown').each(function(index, child) {
             $(child).children('a').click(function(event) {
                 event.preventDefault();
+                menu.css('height', 'auto');
                 currentLeft += left;
                 $(child).addClass('moved');
                 el.animate({
                     left: '-' + currentLeft + '%'
+                });
+                menu.animate({
+                    height: $(child).find('ul.subMenu').height()
                 });
             });
         });
         el.find('ul.menu li.back').each(function(index, child) {
             $(child).children('a').click(function(event) {
                 event.preventDefault();
+                menu.css('height', 'auto');
                 currentLeft -= left;
                 el.animate({
                     left: '-' + currentLeft + '%'
                 }, function() {
                     $(child).parent().parent().removeClass('moved');
+                });
+                menu.animate({
+                    height: $(child).parents('ul').parents('ul').height()
                 });
             });
         });
