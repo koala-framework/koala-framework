@@ -1,6 +1,6 @@
-Kwf.onContentReady(function()
+Kwf.onContentReady(function(el)
 {
-    var fadeComponents = $('div.kwfFadeElements');
+    var fadeComponents = $(el).find('div.kwfFadeElements');
     fadeComponents.each(function(index, element) {
         var elementWrapper = $(element);
         if (element.fadeElementsObject) return; // nur einmal initialisieren
@@ -158,10 +158,12 @@ Kwf.Fade.Elements.prototype = {
         var activeEl = $(this.fadeElements[this.active]);
         if (!activeEl.is(':visible')) {
             this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
+            this._isAnimating = false;
             return;
         }
         var nextEl = $(this.fadeElements[this.next]);
         if (activeEl[0] == nextEl[0]) {
+            this._isAnimating = false;
             return;
         }
 

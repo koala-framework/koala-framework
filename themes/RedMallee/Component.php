@@ -33,14 +33,14 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
             'inherit' => true,
             'unique' => true
         );
-        $ret['generators']['footerImage'] = array(
+        
+        $ret['generators']['footerLogos'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
-            'component' => array(
-                'footerImage' => 'RedMallee_Box_Footer_Component'
-            ),
+            'component' => 'RedMallee_Box_FooterLogos_Component',
             'inherit' => true,
             'unique' => true
         );
+        
         $ret['generators']['box']['component']['metaTags'] = 'Kwc_Box_MetaTagsContent_Component';
         $ret['generators']['title'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
@@ -99,7 +99,7 @@ class RedMallee_Component extends Kwf_Component_Theme_Abstract
             'boxName' => trlStatic('Hintergrundbild')
         );
         
-        $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'logo', 'background', 'footerImage');
+        $ret['editComponents'] = array('title', 'metaTags', 'listFade', 'logo', 'background', 'footerLogos');
 
         $ret['masterTemplate'] = KWF_PATH.'/themes/RedMallee/Master.tpl';
 

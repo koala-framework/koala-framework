@@ -1,0 +1,16 @@
+.cssClass {
+    height: 70px;
+    overflow: hidden;
+    position: relative;
+
+    a {
+        position: absolute;
+        top: -70px;
+    }
+    a:hover {
+        top: 0;
+    }
+    .showHoverIcon.kwcBasicImageEnlarge a .outerHoverIcon {
+        display: none;
+    }
+}

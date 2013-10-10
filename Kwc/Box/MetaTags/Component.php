@@ -67,10 +67,15 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract
         } else {
             $host = Kwf_Config::getValue('server.domain');
         }
+
         $hostParts = explode('.', $host);
         if (count($hostParts) < 2) {
             $configDomain = $host;
         } else {
+            $shortParts = array('com', 'co', 'gv', 'or');
+            if (count($hostParts) > 2 & in_array($hostParts[count($hostParts)-2], $shortParts)) {
+                $hostParts[count($hostParts)-2] = $hostParts[count($hostParts)-3].$hostParts[count($hostParts)-2];
+            }
             $configDomain = $hostParts[count($hostParts)-2]  // zB 'vivid-planet'
                             .$hostParts[count($hostParts)-1]; // zB 'com'
         }

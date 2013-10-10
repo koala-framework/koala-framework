@@ -64,7 +64,9 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             $result = $this->_login();
             $this->view->username = $this->_getParam('username');
             if ($result->isValid()) {
-                $this->view->text = trlKwf('Login successful').'<!--successful-->';
+                $this->view->text  = trlKwf('Login successful');
+                $this->view->text .= '<!--successful-->';
+                $this->view->text .= '<!--sessionToken:'.Kwf_Util_SessionToken::getSessionToken().':-->';
                 $this->view->cssClass = 'kwfLoginResultSuccess';
             } else {
                 if ($result->getCode() == Zend_Auth_Result::FAILURE_UNCATEGORIZED) {

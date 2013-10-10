@@ -16,8 +16,15 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
 
         $this->_filters['text'] = array(
             'type'=>'TextField',
-            'width'=>80,
+            'width'=>180,
             'queryFields' => array($lang, $lang.'_plural')
+        );
+        $this->_filters['empty'] = array(
+            'type'=>'Button',
+            'text' => trl('only empty'),
+            'icon' => new Kwf_Asset('textfield'),
+            'cls' => 'x-btn-text-icon',
+            'skipWhere' => true
         );
 
 
@@ -38,6 +45,21 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
         }
 
         parent::_initColumns();
+    }
+
+    protected function _getSelect()
+    {
+        $ret = parent::_getSelect();
+        if ($this->_getParam('query_empty')) {
+            $or = array();
+            $langs = self::getLanguages();
+            foreach ($langs as $lang) {
+                $or[] = new Kwf_Model_Select_Expr_Equal($lang, '');
+            }
+            $ret->where(new Kwf_Model_Select_Expr_Or($or));
+
+        }
+        return $ret;
     }
 
     protected function _getLanguage()

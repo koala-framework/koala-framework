@@ -1,32 +1,33 @@
 @import "kwf/background-image-dpr2";
 
-.cssClass ul.menu {
-    margin-bottom: 0px;
-    vertical-align: middle;
-    line-height: 165px;
+.cssClass {
+    margin-top: 30px;
 
-    &:before {
-        @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'contact.png', 26px, 20px);
-        background-repeat: no-repeat;
-        width: 26px;
-        height: 20px;
-        content: '';
-        display: inline-block;
-        float: left;
-        margin-right: 7px;
-        position: relative;
-        top: 5px;
-        margin-top: 68px;
-    }
+    ul.menu {
+        margin-bottom: 0px;
+        vertical-align: middle;
 
-    li {
-        float: left;
-        margin-right: 15px;
-        padding-top: 0px;
+        &:before {
+            @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'contact.png', 26px, 20px);
+            background-repeat: no-repeat;
+            width: 26px;
+            height: 20px;
+            content: '';
+            display: inline-block;
+            float: left;
+            margin-right: 7px;
+            position: relative;
+        }
+
+        li {
+            float: left;
+            margin-right: 15px;
+            padding-top: 0px;
 
 
-        a {
-            color: #5e5e5e;
+            a {
+                color: #5e5e5e;
+            }
         }
     }
 }

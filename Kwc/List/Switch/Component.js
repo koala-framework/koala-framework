@@ -34,7 +34,7 @@ Kwc.List.Switch.Component = Ext.extend(Kwf.EyeCandy.List,
         }
         if (this.useHistoryState) {
             new Kwf.EyeCandy.List.Plugins.ActiveChanger.HistoryState({
-            })
+            });
         }
 
         Kwc.List.Switch.Component.superclass._init.call(this);

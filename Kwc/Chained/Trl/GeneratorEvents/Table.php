@@ -143,18 +143,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
     protected function _getMasterClassFromMasterRow($row, $cleanValue = false)
     {
         $classes = $this->_getChainedGenerator()->getChildComponentClasses();
-        if (count($classes) > 1 && $row->getModel()->hasColumn('component')) {
-            if ($cleanValue) {
-                $c = $row->getCleanValue('component');
-            } else {
-                $c = $row->component;
-            }
-            if (isset($classes[$c])) {
-                return $classes[$row->component];
-            }
-        }
-        $class = array_shift($classes);
-        return $class;
+        return $this->_getClassFromRow($classes, $row, $cleanValue);
     }
 
     private function _getMasterComponentsFromMasterRow($row, $select)

@@ -18,6 +18,8 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         $ret['assets']['dep'][] = 'mediaelement';
         $ret['assets']['dep'][] = 'KwfOnReady';
 
+        $ret['generators']['child']['component']['previewImage'] = 'Kwc_Advanced_VideoPlayer_PreviewImage_Component';
+
         $ret['video'] = array(
             'defaultVideoWidth' =>  480,
             'defaultVideoHeight' => 270,
@@ -80,24 +82,44 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
                 'title' => 'ogg',
             );
         }
-        $videoSetting = $this->getSetting($this->getData()->getComponentClass(), 'video');
-        $ret['config'] = Kwc_Abstract::getSetting($this->getData()->componentClass, 'video');
+        $ret['config'] = $this->_getSetting('video');
+        $dimensions = $this->getVideoDimensions();
+        $ret['config']['videoWidth'] = $dimensions['width'];
+        $ret['config']['videoHeight'] = $dimensions['height'];
         $row = $this->getRow();
-        if ($row->video_width) {
-            $ret['config']['videoWidth'] = $row->video_width;
-        } else {
-            $ret['config']['videoWidth'] = $videoSetting['defaultVideoWidth'];
-        }
-        if ($row->video_height) {
-            $ret['config']['videoHeight'] = $row->video_height;
-        } else {
-            $ret['config']['videoHeight'] = $videoSetting['defaultVideoHeight'];
-        }
         if ($row->auto_play) {
             $ret['config']['autoPlay'] = true;
         }
         if ($row->loop) {
             $ret['config']['loop'] = true;
+        }
+
+        $ret['imageUrl'] = false;
+        if ($image = $this->getData()->getChildComponent('-previewImage')) {
+            $ret['imageUrl'] = $image->getComponent()->getImageUrl();
+        }
+
+        return $ret;
+    }
+
+    public function getVideoDimensions()
+    {
+        $ret = array(
+            'width' => 0,
+            'height' => 0,
+        );
+
+        $videoSetting = $this->_getSetting('video');
+        $row = $this->getRow();
+        if ($row->video_width) {
+            $ret['width'] = $row->video_width;
+        } else {
+            $ret['width'] = $videoSetting['defaultVideoWidth'];
+        }
+        if ($row->video_height) {
+            $ret['height'] = $row->video_height;
+        } else {
+            $ret['height'] = $videoSetting['defaultVideoHeight'];
         }
         return $ret;
     }

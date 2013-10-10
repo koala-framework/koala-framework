@@ -40,11 +40,10 @@
         li {
             position: relative;
             @include box-sizing(border-box);
-            padding: 0 15px 0 15px;
+            border-bottom: 1px solid #c0c0c0;
+            padding: 10px 15px 10px 15px;
             margin-bottom: 1px;
             display: block;
-            height: 40px;
-            line-height: 40px;
             background: url('/assets/web/images/mainMenuBgMobileGrey.png') repeat-x top left;
 
             &.moved {
@@ -62,14 +61,13 @@
                 color: var(mainColor);
                 text-transform: uppercase;
                 text-decoration: none;
-                height: 45px;
-                line-height: 45px;
-                border-bottom: 1px solid #c0c0c0;
+                line-height: 18px;
             }
 
             &.hasDropdown > a {
-                @include background-image-dpr2('/assets/web/images', 'arrowBlueRight.png', 5px, 8px);
-                background: url('/assets/web/images/arrowBlueRight.png') no-repeat center right;
+                @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'readMoreBg.png', 20px, 22px);
+                background-repeat: no-repeat;
+                background-position: center right;
             }
 
             .subMenu {
@@ -82,8 +80,10 @@
 
             &.back a {
                 color: #999;
-                padding-left: 15px;
-                background: url('/assets/web/images/arrowLeftGrey.png') no-repeat center left;
+                padding-left: 24px;
+                @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'menuBack.png', 20px, 22px);
+                background-repeat: no-repeat;
+                background-position: center left;
             }
         }
     }

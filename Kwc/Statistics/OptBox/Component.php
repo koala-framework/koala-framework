@@ -44,8 +44,8 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
         $controllerUrl = Kwc_Admin::getInstance($this->getData()->componentClass)
             ->getControllerUrl();
         $reload = $this->_reloadOnOptChanged() ? 'true' : 'false';
-        $ret  = "if (Kwf == 'undefined') Kwf = {};";
-        $ret .= "if (Kwf.Statistics == 'undefined') Kwf.Statistics = {};";
+        $ret  = "if (typeof Kwf == 'undefined') Kwf = {};";
+        $ret .= "if (typeof Kwf.Statistics == 'undefined') Kwf.Statistics = {};";
         $ret .= "Kwf.Statistics.defaultOptValue = '$value';";
         $ret .= "Kwf.Statistics.optUrl = '$url';";
         $ret .= "Kwf.Statistics.cssClass = '$cssClass';";

@@ -36,62 +36,54 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
-    //usually child componets can be deleted using %, but not those from pages table as the ids always start with numeric
-    //this method returns all child ids needed for deleting recursively
-    private function _getIdsFromRecursiveEvent(Kwf_Component_Event_Component_RecursiveAbstract $event)
-    {
-        $c = $event->component;
-        $ids = array($c->dbId);
-        $c = $c->getPageOrRoot();
-        foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
-            $ids = array_merge($ids, $gen->getRecursiveVisiblePageChildIds($c->dbId));
-        }
-        return $ids;
-    }
-
-    public function onRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
-    {
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
-            foreach ($this->_getComponentsForTarget($childPageId, true) as $c) {
-                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-                if ($c->isPage) {
-                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
-                }
-            }
-        }
-    }
-
-    public function onRecursiveRemovedAdded(Kwf_Component_Event_Component_RecursiveAbstract $event)
-    {
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
-            foreach ($this->_getComponentsForTarget($childPageId, true) as $c) {
-                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-                if ($c->isPage) {
-                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
-                }
-            }
-        }
-    }
-
-    public function onPageRemovedAdded(Kwf_Component_Event_Component_AbstractFlag $event)
-    {
-        foreach ($this->_getComponentsForTarget($event->component->dbId, false) as $c) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-            if ($c->isPage) {
-                $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
-            }
-        }
-    }
-
     protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
         parent::_onOwnRowUpdate($c, $event);
         self::$_pageIds[$this->_class] = null;
     }
 
-    private function _getComponentsForTarget($targetId, $includeSubpages)
+    public function onRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
-        return self::getComponentsForTarget($this->_class, $targetId, $includeSubpages);
+        foreach ($this->_getPageIdsFromRecursiveEvent($event) as $pageId) {
+            $this->_deleteCacheForTarget($pageId, true);
+        }
+    }
+
+    public function onRecursiveRemovedAdded(Kwf_Component_Event_Component_RecursiveAbstract $event)
+    {
+        foreach ($this->_getPageIdsFromRecursiveEvent($event) as $pageId) {
+            $this->_deleteCacheForTarget($pageId, true);
+        }
+    }
+
+    public function onPageRemovedAdded(Kwf_Component_Event_Component_AbstractFlag $event)
+    {
+        $this->_deleteCacheForTarget($event->component->dbId, false);
+    }
+
+    //usually child componets can be deleted using %, but not those from pages table as the ids always start with numeric
+    //this method returns all child ids needed for deleting recursively
+    private function _getPageIdsFromRecursiveEvent(Kwf_Component_Event_Component_RecursiveAbstract $event)
+    {
+        $c = $event->component;
+        $ids = array();
+        if ($c->isPage) {
+            $ids[] = $c->dbId;
+        }
+        if ($c->generator instanceof Kwc_Root_Category_Generator) {
+            $ids = array_merge($ids, $c->generator->getRecursivePageChildIds($c->dbId));
+        }
+        return $ids;
+    }
+
+    private function _deleteCacheForTarget($targetId, $includeSubpages)
+    {
+        foreach (self::getComponentsForTarget($this->_class, $targetId, $includeSubpages) as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+            if ($c->isPage) {
+                $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+            }
+        }
     }
 
     //used in trl

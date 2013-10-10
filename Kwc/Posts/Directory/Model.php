@@ -57,6 +57,9 @@ class Kwc_Posts_Directory_Model extends Kwf_Model_Db_Proxy
         if ($col == 'component_id') {
             return in_array($col, $this->getOwnColumns()); // component_id must not be in siblings
         }
+        if ($col == 'component') {
+            return false;
+        }
         return parent::hasColumn($col);
     }
 }
