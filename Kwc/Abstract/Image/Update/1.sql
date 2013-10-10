@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS `kwc_basic_image` (
   `kwf_upload_id` int(11) DEFAULT NULL,
   `dimension` varchar(200) DEFAULT NULL,
   `data` text NOT NULL,
+  `scale` VARCHAR( 20 ) NOT NULL,
   PRIMARY KEY (`component_id`),
   KEY `kwf_upload_id` (`kwf_upload_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-ALTER TABLE  `kwc_basic_image` ADD  `scale` VARCHAR( 20 ) NOT NULL ;
+
