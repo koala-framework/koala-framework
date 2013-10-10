@@ -9,12 +9,6 @@ class Kwf_Util_ClearCache_Types_Trl extends Kwf_Util_ClearCache_Types_Dir
     protected function _clearCache($options)
     {
         parent::_clearCache($options);
-        foreach (glob('cache/model/zend_cache---trl_*') as $f) {
-            unlink($f);
-        }
-        foreach (glob('cache/model/zend_cache---internal-metadatas---trl_*') as $f) {
-            unlink($f);
-        }
         Kwf_Cache_SimpleStatic::clear('trl-');
     }
 

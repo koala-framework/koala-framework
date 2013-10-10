@@ -440,7 +440,7 @@ class Kwf_Trl
                 'caching' => !isset($this->_modelKwf) && !isset($this->_modelWeb)
             ),
             array(
-                'cache_dir' => 'cache/model'
+                'cache_dir' => 'cache/trl'
             )
         );
         $cacheId = 'trl_'.$source.$target.$plural;
