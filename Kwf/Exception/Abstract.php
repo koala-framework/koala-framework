@@ -48,7 +48,7 @@ abstract class Kwf_Exception_Abstract extends Exception
         }
 
 
-
+        require_once 'Kwf/Trl.php';
         $view = Kwf_Debug::getView();
         $view->exception = $msg;
         $view->message = $exception->getMessage();
