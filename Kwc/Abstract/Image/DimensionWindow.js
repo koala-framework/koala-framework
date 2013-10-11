@@ -88,7 +88,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                     return;
                 }
 
-                if (dimension.cover == true) {
+                if (dimension.cover == true && !(width == 0 || height == 0)) {
                     preserveRatio = true;
                 }
 
