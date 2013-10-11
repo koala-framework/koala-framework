@@ -41,7 +41,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         return result;
     },
 
-    updateCropRegion: function () {
+    _updateCropRegion: function () {
         var result = this.getCropData();
         this._image.getEl().setStyle({
             'background-position': (-result.x)+'px '+(-result.y)+'px'
@@ -74,7 +74,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 background: 'url('+this.src+') no-repeat left top'
             }
         });
-        this.updateCropRegion();
+        this._updateCropRegion();
 
         var resizer = new Ext.Resizable(this._image.getEl(), {
             handles: 'all',
@@ -89,7 +89,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         });
         resizer.getEl().addClass('kwc-crop-image-resizable');
         resizer.on("resize", function() {
-            this.updateCropRegion();
+            this._updateCropRegion();
             var res = this.getCropData();
             this.fireEvent('changeCrop', this, res);
             this.fireEvent('resizeCrop', this, res);
@@ -103,7 +103,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             });
         }).createDelegate(this);
         dragDrop.endDrag = (function (e) {
-            this.updateCropRegion();
+            this._updateCropRegion();
             this._image.getEl().setStyle({
                 'background-image': 'url('+this.src+')',
                 'background-repeat': 'no-repeat'
