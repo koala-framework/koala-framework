@@ -26,7 +26,6 @@ class Kwf_Assets_Dispatcher
             //own cache for encoded contents, not using Kwf_Assets_Cache as we don't need to in two-level cache
             $cacheId = 'as_'.str_replace(array(':', '/'), '_', $url).'_'.$encoding;
             $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
-            $ret = false;
             if ($ret === false) {
                 $ret = self::_getOutputForUrlNoEncoding($url);
                 $ret['contents'] = Kwf_Media_Output::encode($ret['contents'], $encoding);
