@@ -14,8 +14,8 @@
 .webStandard h4 { font-size: 12px; margin-bottom: 5px; color: var(mainColor); } /* Überschrift 4 */
 .webStandard h5 { font-size: 11px; margin-bottom: 5px; color: var(mainColor); } /* Überschrift 5 */
 
-.webStandard a { text-decoration: none; color: var(mainColor); outline: none; }
-.webStandard a:hover { text-decoration: none; color: var(secColor); }
+.webStandard a { text-decoration: none; color: #1982d1; outline: none; font-weight: bold; }
+.webStandard a:hover { text-decoration: underline; color: #1982d1; }
 
 .webStandard ol { margin-bottom: 10px; margin-left: 30px; line-height: 18px; }
 .webStandard ul { margin-bottom: 10px; margin-left: 20px; line-height: 18px; }
@@ -32,7 +32,6 @@ html {
 body.frontend {
     background-color: #ccc;
 }
-
 .webForm.kwcForm {
     .submitWrapper .button {
         float: right;
@@ -61,6 +60,7 @@ body.frontend {
         .kwfFormFieldWrapper.hasLabel {
             margin-left: 0px;
             padding-left: 0px;
+            display: block !important;
         }
         input, textarea {
             background: #fff;
@@ -86,7 +86,7 @@ body.frontend {
             display: inline-block;
             font-size: 13px;
             left: 4px;
-            width: auto;
+            width: auto !important;
             text-align: left;
             min-width: 60px;
             padding: 4px 10px;
@@ -94,6 +94,9 @@ body.frontend {
             top: 24px;
             z-index: 1;
             .labelSeparator { display: none; }
+            .requiredSign {
+                display: none;
+            }
         }
         &.kwfFieldError {
             input, textarea {

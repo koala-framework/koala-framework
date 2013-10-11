@@ -11,11 +11,12 @@
             font-size: 26px;
             padding-top: 15px;
             margin-bottom: 0;
-            a:visited {
-                color: black;
-            }
-            a:hover {
-                color: #1982d1;
+            a {
+                color: #333333;
+                &:hover {
+                    text-decoration: none;
+                    color: #1982d1;
+                }
             }
         }
         .postInfo,
