@@ -1,6 +1,6 @@
 <?php
 class Kwf_Assets_Dependency_TestDependencyDynamic extends Kwf_Assets_Dependency_Abstract
-    implements Kwf_Assets_Dependency_UrlResolvableInterface
+    implements Kwf_Assets_Interface_UrlResolvable
 {
     public function getContents()
     {

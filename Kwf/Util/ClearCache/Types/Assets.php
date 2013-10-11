@@ -39,7 +39,7 @@ class Kwf_Util_ClearCache_Types_Assets extends Kwf_Util_ClearCache_Types_Abstrac
         $dependencyName = array('Frontend', 'Admin');
         foreach ($dependencyName as $depName) {
 
-            $p = Kwf_Assets_Dependency_Package_Default::getInstance($depName);
+            $p = Kwf_Assets_Package_Default::getInstance($depName);
             $urls = array();
             foreach ($langs as $language) {
                 $urls = array_merge($urls, $p->getPackageUrls('text/javascript', $language));

@@ -1,7 +1,7 @@
 <?php
 class Kwf_View_Helper_Assets
 {
-    public function assets(Kwf_Assets_Dependency_Package $assetsPackage, $language = null)
+    public function assets(Kwf_Assets_Package $assetsPackage, $language = null)
     {
         if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
 

@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_Dependency_RecursiveIterator extends ArrayIterator implements RecursiveIterator
+class Kwf_Assets_Dependency_Iterator_Recursive extends ArrayIterator implements RecursiveIterator
 {
     public function __construct(Kwf_Assets_Dependency_Abstract $dependency)
     {

@@ -1,6 +1,6 @@
 <?php
-class Kwf_Assets_Dependency_Package
-    implements Kwf_Assets_Dependency_UrlResolvableInterface, Serializable
+class Kwf_Assets_Package
+    implements Kwf_Assets_Interface_UrlResolvable, Serializable
 {
     protected $_providerList;
     protected $_dependencyName;
@@ -53,10 +53,10 @@ class Kwf_Assets_Dependency_Package
     private function _getFilteredUniqueDependencies($mimeType)
     {
         if (!isset($this->_cacheFilteredUniqueDependencies[$mimeType])) {
-            $it = new Kwf_Assets_Dependency_RecursiveIterator($this->getDependency());
-            $it = new Kwf_Assets_Dependency_UniqueFilterIterator($it);
+            $it = new Kwf_Assets_Dependency_Iterator_Recursive($this->getDependency());
+            $it = new Kwf_Assets_Dependency_Iterator_UniqueFilter($it);
             $it = new RecursiveIteratorIterator($it);
-            $it = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, $mimeType);
+            $it = new Kwf_Assets_Dependency_Iterator_MimeTypeFilter($it, $mimeType);
             $this->_cacheFilteredUniqueDependencies[$mimeType] = array();
             foreach ($it as $i) {
                 $this->_cacheFilteredUniqueDependencies[$mimeType][] = $i;
@@ -81,14 +81,14 @@ class Kwf_Assets_Dependency_Package
                 $maxMTime = max($maxMTime, $mTime);
             }
         }
-
+/* TODO find a better solution for that, using Default Admin isn't compatible with tests as wrong Component dependencies are used
         if ($mimeType == 'text/javascript') {
             $ret = str_replace(
                 '{$application.maxAssetsMTime}',
-                Kwf_Assets_Dependency_Package_Default::getInstance('Admin')->getMaxMTime('text/javascript'),
+                Kwf_Assets_Package_Default::getInstance('Admin')->getMaxMTime('text/javascript'),
                 $ret);
         }
-
+*/
         return $ret;
     }
 
@@ -131,7 +131,7 @@ class Kwf_Assets_Dependency_Package
                 if ($i instanceof Kwf_Assets_Dependency_HttpUrl) {
                     $ret[] = $i->getUrl();
                 } else {
-                    if (!$i instanceof Kwf_Assets_Dependency_UrlResolvableInterface) {
+                    if (!$i instanceof Kwf_Assets_Interface_UrlResolvable) {
                         throw new Kwf_Exception("dependency that should not be in package must implement UrlResolvableInterface");
                     }
                     $ret[] = '/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();

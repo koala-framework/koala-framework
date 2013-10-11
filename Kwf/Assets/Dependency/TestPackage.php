@@ -2,7 +2,7 @@
 /**
  * Used by unittests that have own dependencies in dependencies.ini
  */
-class Kwf_Assets_Dependency_TestPackage extends Kwf_Assets_Dependency_Package
+class Kwf_Assets_Dependency_TestPackage extends Kwf_Assets_Package
 {
     protected $_testDependenciesIni;
 

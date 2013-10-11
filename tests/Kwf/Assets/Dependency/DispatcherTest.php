@@ -10,7 +10,7 @@ class Kwf_Assets_Dependency_DispatcherTest extends Kwf_Test_TestCase
 
     public function testPackageContents()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test');
+        $package = new Kwf_Assets_Package($this->_list, 'Test');
         $contents = $package->getPackageContents('text/javascript', 'en');
         $contents = trim($contents);
         $contents = str_replace("\n\n", "\n", $contents);
@@ -19,7 +19,7 @@ class Kwf_Assets_Dependency_DispatcherTest extends Kwf_Test_TestCase
 
     public function testPackageUrls()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test');
+        $package = new Kwf_Assets_Package($this->_list, 'Test');
         $urls = $package->getPackageUrls('text/javascript', 'en');
         $this->assertEquals(1, count($urls));
         //I don't care about the actual url, as long was we can dispatch it (see next test)
@@ -27,7 +27,7 @@ class Kwf_Assets_Dependency_DispatcherTest extends Kwf_Test_TestCase
 
     public function testPackageDispatch()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test');
+        $package = new Kwf_Assets_Package($this->_list, 'Test');
         $urls = $package->getPackageUrls('text/javascript', 'en');
         $this->assertEquals(1, count($urls));
         $url = $urls[0];
@@ -41,7 +41,7 @@ class Kwf_Assets_Dependency_DispatcherTest extends Kwf_Test_TestCase
 
     public function testPackageDispatchDynamicNotInAll()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'TestWithDynamic');
+        $package = new Kwf_Assets_Package($this->_list, 'TestWithDynamic');
         $urls = $package->getPackageUrls('text/javascript', 'en');
         $this->assertEquals(2, count($urls));
 

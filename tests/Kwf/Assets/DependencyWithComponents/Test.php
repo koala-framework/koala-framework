@@ -10,16 +10,22 @@ class Kwf_Assets_DependencyWithComponents_Test extends Kwc_TestAbstract
 
     public function testPackageFiles()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'Frontend');
+        $package = new Kwf_Assets_Package($this->_list, 'Frontend');
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_RecursiveIterator($package->getDependency()));
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($package->getDependency()));
         $array = iterator_to_array($it, false);
         $this->assertEquals(3, count($array));
     }
 
+    public function testFindDependency()
+    {
+        $this->assertNotNull($this->_list->findDependency('Test'));
+        $this->assertNotNull($this->_list->findDependency('Frontend'));
+    }
+
     public function testPackageContents()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'Frontend');
+        $package = new Kwf_Assets_Package($this->_list, 'Frontend');
 
         $contents = $package->getPackageContents('text/javascript', 'en');
         $contents = trim($contents);

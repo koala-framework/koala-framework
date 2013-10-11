@@ -42,7 +42,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if ($ret !== false) return $ret;
 
-        $package = Kwf_Assets_Dependency_Package_Default::getInstance('Frontend');
+        $package = Kwf_Assets_Package_Default::getInstance('Frontend');
         $c = $package->getPackageContents('text/css', null);
         $ret = self::parseMasterStyles($c);
         Kwf_Cache_SimpleStatic::add($cacheId, $ret);

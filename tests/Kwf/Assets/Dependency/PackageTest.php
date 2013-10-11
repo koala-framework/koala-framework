@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
+class Kwf_Assets_PackageTest extends Kwf_Test_TestCase
 {
     private $_list;
     public function setUp()
@@ -10,9 +10,9 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
 
     public function testPackageFiles()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test');
+        $package = new Kwf_Assets_Package($this->_list, 'Test');
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_RecursiveIterator($package->getDependency()));
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($package->getDependency()));
         $array = iterator_to_array($it, false);
         $this->assertEquals(4, count($array));
     }
@@ -20,13 +20,13 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
     public function testPackageInvalid()
     {
         $this->setExpectedException('Kwf_Exception');
-        $p = new Kwf_Assets_Dependency_Package($this->_list, 'Invalid');
+        $p = new Kwf_Assets_Package($this->_list, 'Invalid');
         $p->getDependency();
     }
 
     public function testPackageContents()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test');
+        $package = new Kwf_Assets_Package($this->_list, 'Test');
 
         $contents = $package->getPackageContents('text/javascript', 'en');
         $contents = trim($contents);
@@ -36,9 +36,9 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
 
     public function testPackageSameDepTwice()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test3');
+        $package = new Kwf_Assets_Package($this->_list, 'Test3');
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_RecursiveIterator($package->getDependency()));
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($package->getDependency()));
         $array = iterator_to_array($it, false);
         $this->assertEquals(6, count($array));
 
@@ -49,7 +49,7 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
 
     public function testPackageContentsSameDepTwice()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'Test3');
+        $package = new Kwf_Assets_Package($this->_list, 'Test3');
 
         $contents = $package->getPackageContents('text/javascript', 'en');
         $contents = trim($contents);
@@ -59,7 +59,7 @@ class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
 
     public function testDynamicSameDepTwice()
     {
-        $package = new Kwf_Assets_Dependency_Package($this->_list, 'TestWithDynamic2');
+        $package = new Kwf_Assets_Package($this->_list, 'TestWithDynamic2');
         $urls = $package->getPackageUrls('text/javascript', 'en');
         $this->assertEquals(2, count($urls));
     }

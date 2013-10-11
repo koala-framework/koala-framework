@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_Dependency_Package_Default extends Kwf_Assets_Dependency_Package
+class Kwf_Assets_Package_Default extends Kwf_Assets_Package
 {
     private static $_defaultProviderList;
     static private $_instances = array();

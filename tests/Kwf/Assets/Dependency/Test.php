@@ -39,7 +39,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
             ))
         ));
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_RecursiveIterator($d));
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($d));
 
         $array = iterator_to_array($it, false);
         $this->assertEquals(array($file1, $file2), $array);
@@ -63,18 +63,18 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
             ))
         ));
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_RecursiveIterator($d));
-        $filterIt = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, 'text/css');
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($d));
+        $filterIt = new Kwf_Assets_Dependency_Iterator_MimeTypeFilter($it, 'text/css');
 
         $array = iterator_to_array($filterIt, false);
         $this->assertEquals(array($file2), $array);
 
-        $filterIt = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, 'text/javascript');
+        $filterIt = new Kwf_Assets_Dependency_Iterator_MimeTypeFilter($it, 'text/javascript');
 
         $array = iterator_to_array($filterIt, false);
         $this->assertEquals(array($file1), $array);
 
-        $filterIt = new Kwf_Assets_Dependency_MimeTypeFilterItrator($it, 'text/invalid');
+        $filterIt = new Kwf_Assets_Dependency_Iterator_MimeTypeFilter($it, 'text/invalid');
 
         $array = iterator_to_array($filterIt, false);
         $this->assertEquals(array(), $array);

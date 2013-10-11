@@ -47,7 +47,7 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
             if (!$assetsBoxUsed) {
                 //add default assets if there was no box
                 $a = new Kwf_View_Helper_Assets();
-                $ret .= $a->assets(Kwf_Assets_Dependency_Package_Default::getInstance('Frontend'));
+                $ret .= $a->assets(Kwf_Assets_Package_Default::getInstance('Frontend'));
             }
 
             $ret .= Kwf_View_Helper_DebugData::debugData();

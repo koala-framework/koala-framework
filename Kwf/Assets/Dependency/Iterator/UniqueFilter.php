@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_Dependency_UniqueFilterIterator extends RecursiveFilterIterator
+class Kwf_Assets_Dependency_Iterator_UniqueFilter extends RecursiveFilterIterator
 {
     private $_processed = array();
     public function accept()
