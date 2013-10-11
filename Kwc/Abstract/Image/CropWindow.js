@@ -28,12 +28,14 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
 
         Kwc.Abstract.Image.CropWindow.superclass.initComponent.call(this);
 
-        //TODO implement mask while loading
+        Ext.getBody().mask(trlKwf('Loading image'), 'x-mask-loading');
         var imgLoad = new Image();
         imgLoad.onerror = (function() {
+            Ext.getBody().unmask();
             Ext.Msg.alert(trlKwf('Error'), trlKwf('Couldn\'t load image.'));
         });
         imgLoad.onload = (function(){
+            Ext.getBody().unmask();
             this.setSize(imgLoad.width+14, imgLoad.height + 69);
             var cropWidth, cropHeight, cropX = 0, cropY = 0;
             if (this.cropData) {
