@@ -1,9 +1,18 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
-    minWidth: 50,
-    minHeight: 50,
+    src: null,//image path
     preserveRatio: false,
-    image: null,
+    width: null,//width of image
+    height: null,//height of image
+    //values of initial selected region
+    cropWidth: null,
+    cropHeight: null,
+    cropX: null,
+    cropY: null,
+
+    minWidth: 50,//min width of crop region
+    minHeight: 50,//min height of crop region
+    _image: null,
 
     autoEl: {
         tag: 'div',
@@ -19,10 +28,10 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
     getCropData: function() {
         var parent = this.getBox();
-        if (!this.image) {
+        if (!this._image) {
             return;
         }
-        var imageBox = this.image.getBox();
+        var imageBox = this._image.getBox();
         var result = {
             x: (imageBox.x - parent.x),
             y: (imageBox.y - parent.y),
@@ -34,7 +43,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
     updateCropRegion: function () {
         var result = this.getCropData();
-        this.image.getEl().setStyle({
+        this._image.getEl().setStyle({
             'background-position': (-result.x)+'px '+(-result.y)+'px'
         });
     },
@@ -48,7 +57,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         var wrapEl = this.el.down('.kwc-crop-image-wrapper');
         wrapEl.setSize(this.width, this.height);
 
-        this.image = new Ext.BoxComponent({
+        this._image = new Ext.BoxComponent({
             opacity: 1.0,
             autoEl: {
                 tag: 'div',
@@ -67,7 +76,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         });
         this.updateCropRegion();
 
-        var resizer = new Ext.Resizable(this.image.getEl(), {
+        var resizer = new Ext.Resizable(this._image.getEl(), {
             handles: 'all',
             pinned: true,
             preserveRatio: this.preserveRatio,
@@ -86,16 +95,16 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             this.fireEvent('resizeCrop', this, res);
         }, this);
 
-        var dragDrop = new Ext.dd.DD(this.image.getEl(), '');
+        var dragDrop = new Ext.dd.DD(this._image.getEl(), '');
         dragDrop.startDrag = (function (x, y) {
             dragDrop.constrainTo(this.el);
-            this.image.getEl().setStyle({
+            this._image.getEl().setStyle({
                 'background': 'transparent'
             });
         }).createDelegate(this);
         dragDrop.endDrag = (function (e) {
             this.updateCropRegion();
-            this.image.getEl().setStyle({
+            this._image.getEl().setStyle({
                 'background-image': 'url('+this.src+')',
                 'background-repeat': 'no-repeat'
             });
