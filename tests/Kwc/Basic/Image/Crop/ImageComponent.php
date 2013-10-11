@@ -1,6 +1,7 @@
 <?php
 class Kwc_Basic_Image_Crop_ImageComponent extends Kwc_Basic_Image_Component
 {
+    public static $getMediaOutputCalled;
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -13,5 +14,11 @@ class Kwc_Basic_Image_Crop_ImageComponent extends Kwc_Basic_Image_Component
             )
         );
         return $ret;
+    }
+
+    public static function getMediaOutput($id, $type, $className)
+    {
+        self::$getMediaOutputCalled++;
+        return parent::getMediaOutput($id, $type, $className);
     }
 }
