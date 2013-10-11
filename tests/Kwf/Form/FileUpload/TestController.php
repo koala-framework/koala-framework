@@ -14,7 +14,7 @@ class Kwf_Form_FileUpload_TestController extends Kwf_Controller_Action_Auto_Form
     public function indexAction()
     {
         parent::indexAction();
-        $this->view->assetsType = 'Kwf_Form_FileUpload:Test';
+        $this->view->assetsPackage = new Kwf_Assets_Package_TestPackage('Kwf_Form_FileUpload');
         $this->view->viewport = 'Kwf.Test.Viewport';
     }
 

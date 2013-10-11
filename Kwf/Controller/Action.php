@@ -52,11 +52,13 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
         if ($this->_getParam('application_max_assets_mtime')
                 && $this->getHelper('ViewRenderer')->isJson()) {
+            /*
             if (Kwf_Assets_Package_Default::getInstance('Admin')->getMaxMTime('text/javascript') != $this->_getParam('application_max_assets_mtime')) {
                 $this->_forward('json-wrong-version', 'error',
                                     'kwf_controller_action_error');
                 return;
             }
+            */
         }
 
         if ($this->_helper->getHelper('viewRenderer')->isJson() && Kwf_Util_SessionToken::getSessionToken()) {

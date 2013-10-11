@@ -4,7 +4,7 @@ class Kwf_Connection_TestController extends Kwf_Controller_Action
     public function indexAction()
     {
         $this->view->ext('Kwf.Test.ConnectionsError', array(
-            'assetsType' => 'Kwf_Connection:Test'
+            'assetsPackage' =>  new Kwf_Assets_Package_TestPackage('Kwf_Connection')
         ), 'Kwf.Test.Viewport');
         $connections_counts = new Kwf_Session_Namespace('test_connection_count');
         $connections_counts->timeouts = 0;

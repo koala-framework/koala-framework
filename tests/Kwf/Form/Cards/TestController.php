@@ -33,7 +33,7 @@ class Kwf_Form_Cards_TestController extends Kwf_Controller_Action_Auto_Form
         $config = array();
         $config['baseParams']['id'] = $this->_getParam('id');
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $config['assetsType'] = 'Kwf_Form_Cards:Test';
+        $config['assetsPackage'] =  new Kwf_Assets_Package_TestPackage('Kwf_Form_Cards');
         $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 

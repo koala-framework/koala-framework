@@ -7,8 +7,7 @@ class Kwf_AutoForm_TestController extends Kwf_Controller_Action_Auto_Form
 
     public function indexAction()
     {
-        //$this->view->assetsType = 'Kwf_AutoForm:Test';
-        $this->view->assetsPackage = new Kwf_Assets_Dependency_TestPackage('Kwf_AutoForm');
+        $this->view->assetsPackage = new Kwf_Assets_Package_TestPackage('Kwf_AutoForm');
         $this->view->viewport = 'Kwf.Test.Viewport';
         parent::indexAction();
     }

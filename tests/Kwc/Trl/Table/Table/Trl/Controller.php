@@ -5,6 +5,6 @@ class Kwc_Trl_Table_Table_Trl_Controller extends Kwc_Basic_Table_Trl_Controller
     {
         parent::indexAction();
         $this->view->viewport = 'Kwf.Test.Viewport';
-        $this->view->assetsType = 'Kwc_Trl_Table:Test';
+        $this->view->assetsPackage = new Kwf_Assets_Package_TestPackage('Kwc_Trl_Table');
     }
 }

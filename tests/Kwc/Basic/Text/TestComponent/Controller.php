@@ -5,12 +5,12 @@ class Kwc_Basic_Text_TestComponent_Controller extends Kwc_Basic_Text_Controller
     {
         parent::indexAction();
         $this->view->viewport = 'Kwf.Test.Viewport';
-        $this->view->assetsType = 'Kwc_Basic_Text:Test';
+        $this->view->assetsPackage = new Kwf_Assets_Package_TestPackage('Kwc_Basic_Text');
     }
 
     protected function _initFields()
     {
         parent::_initFields();
-        $this->_form->setAssetsType('Kwc_Basic_Text:Test');
+        $this->_form->setAssetsPackage(new Kwf_Assets_Package_TestPackage('Kwc_Basic_Text'));
     }
 }

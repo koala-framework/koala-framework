@@ -55,7 +55,7 @@ class Kwf_Form_MultiCheckbox_TestController extends Kwf_Controller_Action_Auto_F
             $config,
             array(
                 'controllerUrl' => $this->getRequest()->getPathInfo(),
-                'assetsType' => 'Kwf_Form_MultiCheckbox:Test',
+                'assetsPackage' => new Kwf_Assets_Package_TestPackage('Kwf_Form_MultiCheckbox'),
             )
         );
         $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');

@@ -14,7 +14,7 @@ class Kwf_AutoTree_BasicController extends Kwf_Controller_Action_Auto_Tree
 
     public function indexAction()
     {
-        $this->view->assetsType = 'Kwf_AutoTree:Test';
+        $this->view->assetsPackage = new Kwf_Assets_Package_TestPackage('Kwf_AutoTree');
         $this->view->viewport = 'Kwf.Test.Viewport';
         parent::indexAction();
     }

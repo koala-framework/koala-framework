@@ -4,7 +4,7 @@ class Kwf_Exception_JsErrorHandler_TestController extends Kwf_Controller_Action
     public function indexAction()
     {
         $this->view->viewport = 'Kwf.Test.Viewport';
-        $this->view->assetsType = 'Kwf_Exception_JsErrorHandler:Test';
+        $this->view->assetsPackage = new Kwf_Assets_Package_TestPackage('Kwf_Exception_JsErrorHandler');
         $this->view->xtype = 'panel';
         $this->view->html = '';
         for($i=1;$i<=8;$i++) {

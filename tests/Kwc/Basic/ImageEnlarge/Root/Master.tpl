@@ -1,7 +1,7 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?=$this->assets('Kwc_Basic_ImageEnlarge:Test')?>
+        <?=$this->assets(new Kwf_Assets_Package_TestPackage('Kwc_Basic_ImageEnlarge'))?>
         <?=$this->debugData()?>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     </head>
