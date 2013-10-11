@@ -236,6 +236,9 @@ class Kwf_Util_Setup
             $ret .= "Kwf_Cache_Simple::\$memcachePort = '".Kwf_Config::getValue('server.memcache.port')."';\n";
         }
 
+        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
+        $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
+
         $ret .= "if (substr(\$requestUri, 0, 8) == '/assets/') {\n";
         $ret .= "    Kwf_Assets_Loader::load(\$requestUri);\n";
         $ret .= "}\n";
@@ -247,9 +250,6 @@ class Kwf_Util_Setup
         $ret .= "Zend_Registry::setClassName('Kwf_Registry');\n";
 
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
-
-        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
-        $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
 
         if (Kwf_Config::getValue('debug.checkBranch') && is_file('kwf_branch')) {
             $ret .= "if (trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";
