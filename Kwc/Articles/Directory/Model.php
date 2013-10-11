@@ -29,6 +29,11 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
             $this->_exprs['autheduser_visible'] = new Kwf_Model_Select_Expr_Boolean(false);
         }
 
+        $this->_exprs['name'] = new Kwf_Model_Select_Expr_Concat(array(
+            new Kwf_Model_Select_Expr_Field('date'),
+            new Kwf_Model_Select_Expr_String(': '),
+            new Kwf_Model_Select_Expr_Field('title')
+        ));
         $this->_exprs['date_year'] = new Kwf_Model_Select_Expr_Date_Year('date');
         $this->_exprs['is_top'] = new Kwf_Model_Select_Expr_If(
             new Kwf_Model_Select_Expr_And(array(

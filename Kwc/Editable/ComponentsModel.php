@@ -6,8 +6,8 @@ class Kwc_Editable_ComponentsModel extends Kwf_Model_Data_Abstract
         $data = array();
         $components = Kwf_Component_Data_Root::getInstance()
             ->getComponentsByClass(array('Kwc_Editable_Component', 'Kwc_Editable_Trl_Component'));
+        $user = Kwf_Registry::get('userModel')->getAuthedUser();
         foreach ($components as $c) {
-            $user = Kwf_Registry::get('userModel')->getAuthedUser();
             if (Kwf_Registry::get('acl')->getComponentAcl()->isAllowed($user, $c)) {
                 $data[] = array(
                     'id' => $c->dbId,
