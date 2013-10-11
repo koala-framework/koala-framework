@@ -102,7 +102,8 @@ class Kwf_Media_Image
             return array(
                 'width' => $originalSize[0],
                 'height' => $originalSize[1],
-                'rotate' => null
+                'rotate' => null,
+                'keepOriginal' => true
            );
         }
 
@@ -232,7 +233,7 @@ class Kwf_Media_Image
             && $ret['height'] == $originalSize[1]
         ) {
             $ret['rotate'] = null;
-            unset($ret['crop']);
+            $ret['keepOriginal'] = true;
         }
 
         return $ret;
@@ -252,7 +253,7 @@ class Kwf_Media_Image
 
         // if image already has the correct size return original
         // needed e.g. for animated gifs because they will lose animation if changed
-        if (!isset($size['crop'])) {
+        if (isset($size['keepOriginal']) && $size['keepOriginal']) {
             if ($source instanceof Imagick) {
                 $ret = $source->getImageBlob();
             } else {

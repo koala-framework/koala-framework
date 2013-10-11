@@ -94,9 +94,16 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $this->assertTrue($c->hasContent());
         $url = $c->getComponent()->getImageUrl();
         $this->assertNotNull($url);
-
-        $this->assertEquals(array('width'=>16, 'height'=>16, 'rotate'=>null),
-        $c->getComponent()->getImageDimensions());
+        $assertion = array('width'=>16, 'height'=>16, 'rotate'=>null,
+            'crop'=> array (
+                'width' => 16,
+                'height' => 16,
+                'x' => 0,
+                'y' => 0
+            ),
+            'keepOriginal'=>true
+        );
+        $this->assertEquals($assertion, $c->getComponent()->getImageDimensions());
 
         $o = Kwc_Basic_Image_Component::getMediaOutput($c->componentId, 'default', $c->componentClass);
         $this->assertNotNull($o);
