@@ -68,6 +68,7 @@ class Kwc_Newsletter_Subscribe_RecipientsController extends Kwc_Newsletter_Subsc
 
         $this->_columns->add(new Kwf_Grid_Column('activated', trlKwf('Active?'), 80))
             ->setData(new Kwc_Newsletter_Detail_IsActiveData())
+            ->setRenderer('newsletterState')
             ->setType('string');
     }
 

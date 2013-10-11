@@ -276,3 +276,14 @@ Ext.util.Format.tableTrl = function(v, p, record, rowIndex, colIndex, store, col
     }
     return v;
 };
+Ext.util.Format.newsletterState = function(v, p, record){
+    if (!v) return '';
+    if (v == trlKwf('unsubscribed')) {
+        return '<span class="unsubscribed">'+v+'</span>';
+    } else if (v == trlKwf('not activated')) {
+        return '<span class="inactive">'+v+'</span>';
+    } else if (v == trlKwf('active')) {
+        return '<span class="active">'+v+'</span>';
+    }
+    return v;
+};

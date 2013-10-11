@@ -1,5 +1,5 @@
 <?php
-class Kwf_Util_Geocode
+class Vps_Util_Geocode
 {
     /**
      * Gibt die Geokoordinaten anhand einer Adresse zurück
@@ -28,12 +28,12 @@ class Kwf_Util_Geocode
         if (version_compare(PHP_VERSION, '5.2.3') == -1) {
             setlocale(LC_NUMERIC, 'C');
             $result = Zend_Json::decode($body);
-            setlocale(LC_NUMERIC, explode(', ', trlcKwf('locale', 'C')));
+            setlocale(LC_NUMERIC, explode(', ', trlcVps('locale', 'C')));
         } else {
             try {
                 $result = Zend_Json::decode($body);
             } catch (Zend_Json_Exception $e) {
-                $e = new Kwf_Exception_Other($e);
+                $e = new Vps_Exception_Other($e);
                 $e->logOrThrow();
             }
         }

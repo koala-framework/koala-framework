@@ -39,7 +39,7 @@ class Kwf_Exception extends Kwf_Exception_NoLog
             return false;
         }
         $body = $this->_getLogBody();
-        Kwf_Exception_Logger_Abstract::getInstance()->log($this, 'error', $body);
+        return Kwf_Exception_Logger_Abstract::getInstance()->log($this, 'error', $body);
     }
 
     protected function _getLogBody()
