@@ -143,13 +143,9 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             'mimeType' => $fileRow->mime_type,
             'downloadFilename' => $fileRow->filename . '.' . $fileRow->extension
         );
-        if ($scaleFactor == 1) {
-            $outputParams['file'] = $source;
-        } else {
-            $targetSize = array(600, 600, 'cover' => false);
-            $image = Kwf_Media_Image::scale($fileRow->getFileSource(), $targetSize);
-            $outputParams['contents'] = $image;
-        }
+        $targetSize = array(600, 600, 'cover' => false);
+        $image = Kwf_Media_Image::scale($fileRow->getFileSource(), $targetSize);
+        $outputParams['contents'] = $image;
         Kwf_Media_Output::output($outputParams);
     }
 }
