@@ -6,10 +6,12 @@ class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controlle
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Kwf_Grid_Column('subject', trlKwf('Subject'), 300));
+        $this->_columns->add(new Kwf_Grid_Column('subject', trlKwf('Subject'), 300))
+            ->setSortable(false);
         $this->_columns->add(new Kwf_Grid_Column('create_date', trlKwf('Creation Date'), 120))
             ->setRenderer('localizedDatetime');
-        $this->_columns->add(new Kwf_Grid_Column('info_short', trlKwf('Status'), 400));
+        $this->_columns->add(new Kwf_Grid_Column('info_short', trlKwf('Status'), 400))
+            ->setSortable(false);
         parent::_initColumns();
         $countEditButtons = 0;
         foreach($this->_columns as $column) {

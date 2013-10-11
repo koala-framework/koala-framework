@@ -21,6 +21,29 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Abstract_Image
         return $ret;
     }
 
+    protected function _getOptions()
+    {
+        $ret = $this->getData()->chained->getComponent()->getOptions();
+        if (Kwc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'imageTitle')) {
+            $ret['title'] = nl2br($this->getRow()->title);
+        }
+
+        $masterComponentClass = Kwc_Abstract::getSetting(
+            $this->_getImageEnlargeComponentData()->componentClass, 'masterComponentClass'
+        );
+        if (Kwc_Abstract::getSetting($masterComponentClass, 'imageCaption')) {
+            $ret['imageCaption'] = $this->_getImageEnlargeComponentData()->getComponent()
+                ->getRow()->image_caption;
+        }
+        //TODO implement fullSizeDownloadable
+        return $ret;
+    }
+
+    public final function getOptions()
+    {
+        return $this->_getOptions();
+    }
+
     private function _getImageEnlargeComponentData()
     {
         $d = $this->getData();
