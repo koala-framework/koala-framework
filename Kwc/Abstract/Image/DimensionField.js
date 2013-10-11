@@ -84,9 +84,9 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimensions, v)
         }
         ret += ' ';
         if (d.cover) {
-            ret += trlKwf('Cover');
-        } else {
             ret += trlKwf('Crop');
+        } else {
+            ret += trlKwf('don\'t Crop');
         }
         ret = ret.trim() + ')';
     }
