@@ -92,7 +92,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             this._updateCropRegion();
             var res = this.getCropData();
             this.fireEvent('changeCrop', this, res);
-            this.fireEvent('resizeCrop', this, res);
         }, this);
 
         var dragDrop = new Ext.dd.DD(this._image.getEl(), '');
@@ -109,7 +108,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 'background-repeat': 'no-repeat'
             });
             this.fireEvent('changeCrop', this, this.getCropData());
-            this.fireEvent('moveCrop', this, this.getCropData());
         }).createDelegate(this);
     }
 });

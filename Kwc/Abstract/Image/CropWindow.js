@@ -75,8 +75,7 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
                 cropY: cropY
             });
 
-            crop.on('changeCrop', function(foo,x) {
-                this.fireEvent('changeCrop', foo, x);
+            crop.on('changeCrop', function(cropImageElement, x) {
                 this.cropData = x;
             }, this);
             this.add(crop);
