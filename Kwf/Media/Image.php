@@ -1,6 +1,11 @@
 <?php
 class Kwf_Media_Image
 {
+    /**
+     * Returns an image with a size which should be good to work with.
+     * Acutally this is a 600x600 max-width. If it's smaller in both dimensions
+     * it will keep it's original size.
+     */
     public static function getHandyScaleFactor($originalPath)
     {
         $targetSize = array(600, 600, 'cover' => false);
