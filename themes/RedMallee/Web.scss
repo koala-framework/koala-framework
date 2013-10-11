@@ -37,6 +37,20 @@
 .webStandard.kwcListLinks a {
     text-decoration: underline;
 }
+.webStandard.kwcCompositeSwitchDisplay a.switchLink {
+    color: var(mainColor);
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: normal;
+    background: url("/assets/kwf/themes/RedMallee/images/readMoreBg.png") -4px 0 no-repeat;
+}
+.webStandard.kwcCompositeSwitchDisplay a.switchLink.switchLinkOpened {
+    background: url("/assets/kwf/themes/RedMallee/images/readMoreBg.png") -4px 0 no-repeat;
+}
+.webStandard.kwcCompositeSwitchDisplay .content.switchContent {
+    background: #f8f8f8;
+}
 body.frontend {
     .webForm.kwcForm {
         position: relative;
