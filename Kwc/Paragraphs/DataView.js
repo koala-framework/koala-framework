@@ -52,10 +52,11 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
         var nodes = this.getNodes();
         for (var i=0; i< nodes.length; i++) {
             var node = nodes[i];
-            var tbCt = Ext.get(node).down('.kwc-paragraphs-toolbar');
-            if (tbCt.down('.x-toolbar')) {
+            if (node.hasParagraphsToolbarRendered) {
                 continue;
             }
+            node.hasParagraphsToolbarRendered = true;
+            var tbCt = Ext.get(node).down('.kwc-paragraphs-toolbar');
             var tb = new Ext.Toolbar({
                 renderTo: tbCt
             });
