@@ -149,9 +149,14 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
             unset($params['type']);
         }
         $res = $service->search($queryString, $offset, $limit, $params);
+        $numHits = $res->response->numFound;
         foreach ($res->response->docs as $doc) {
             $data = Kwf_Component_Data_Root::getInstance()->getComponentById($doc->componentId);
-            if ($data) {
+            if (!$data) {
+                //if page was removed/hidden and index is not yet updated delete the document now
+                $this->deleteDocument($subroot, $doc->componentId);
+                $numHits--;
+            } else {
                 $ret[] = array(
                     'data' => $data,
                     'content' => $doc->content,
@@ -161,7 +166,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
         //TODO: error handling
         return array(
             'hits' => $ret,
-            'numHits' => $res->response->numFound,
+            'numHits' => $numHits,
             'error' => false
         );
     }
