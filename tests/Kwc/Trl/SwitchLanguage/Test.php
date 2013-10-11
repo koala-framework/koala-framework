@@ -100,4 +100,26 @@ class Kwc_Trl_SwitchLanguage_Test extends Kwc_TestAbstract
         $this->assertContains('href="/en/test3_en"', $html);
         $this->assertContains('href="/de"', $html);
     }
+
+    public function testHideEnDomain()
+    {
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_Model');
+        $row = $model->getRow('root-en');
+
+        $html = $this->_root->getComponentById('4-switchLanguage')->render();
+        $this->assertContains('href="/de/test3"', $html);
+        $this->assertContains('href="/en/test3_en"', $html);
+
+        $row->visible = false;
+        $row->save();
+        $this->_process();
+        $html = $this->_root->getComponentById('4-switchLanguage')->render();
+        $this->assertNotContains('href="/en', $html);
+
+        $row->visible = true;
+        $row->save();
+        $this->_process();
+        $html = $this->_root->getComponentById('4-switchLanguage')->render();
+        $this->assertContains('href="/en/test3_en"', $html);
+    }
 }
