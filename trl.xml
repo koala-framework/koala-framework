@@ -9845,5 +9845,51 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Verlinkte Bilder</de>
 <id>2013</id>
 </text>
+<text>
+<en>Links for Footer Logos</en>
+<id>2014</id>
+</text>
+<text>
+<en>Logos for Footer</en>
+<id>2015</id>
+</text>
+<text>
+<en>Mails/Min</en>
+<id>2016</id>
+</text>
+<text>
+<en>optional, if empty full width</en>
+<id>2017</id>
+</text>
+<text>
+<en>No valid youtube url</en>
+<id>2018</id>
+</text>
+<text>
+<en>Autoplay</en>
+<id>2019</id>
+</text>
+<text>
+<en>Youtube</en>
+<id>2020</id>
+</text>
+<text>
+<en>total</en>
+<id>2021</id>
+</text>
+<text>
+<en>Youtube in Lightbox</en>
+<id>2022</id>
+</text>
+<text>
+<en>Mr. {0}</en>
+<de>Herr {0}</de>
+<id>2023</id>
+</text>
+<text>
+<en>Mrs. {0}</en>
+<de>Frau {0}</de>
+<id>2024</id>
+</text>
 </trl>
 
