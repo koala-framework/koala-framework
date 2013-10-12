@@ -12,4 +12,15 @@ class Kwc_Blog_Comments_QuickWrite_Form_Component extends Kwc_Posts_Write_Form_C
     {
         return $this->_getPostsComponent()->getComponent()->getRow();
     }
+
+
+    protected function _afterInsert(Kwf_Model_Row_Interface $row)
+    {
+        parent::_afterInsert($row);
+        $dir = $this->getData()->getParentByClass('Kwc_Blog_Comments_Directory_Component');
+        if ($dir) {
+            $dir->getComponent()->afterAddComment($row);
+        }
+    }
+
 }

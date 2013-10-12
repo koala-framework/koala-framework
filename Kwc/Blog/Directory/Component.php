@@ -8,6 +8,7 @@ class Kwc_Blog_Directory_Component extends Kwc_Directories_ItemPage_Directory_Co
         $ret['componentName'] = trlKwfStatic('Blog.Blog');
         $ret['componentIcon'] = new Kwf_Asset('newspaper');
         $ret['childModel'] = 'Kwc_Blog_Directory_Model';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
 
         $ret['generators']['detail']['class'] = 'Kwc_Blog_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Kwc_Blog_Detail_Component';
@@ -32,7 +33,7 @@ class Kwc_Blog_Directory_Component extends Kwc_Directories_ItemPage_Directory_Co
         $ret['menuConfig'] = 'Kwf_Component_Abstract_MenuConfig_SameClass';
 
         //darf im seitenbaum nicht berbeitet werden
-        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
+        $ret['extConfig'] = 'Kwc_Blog_Directory_ExtConfig';
 
         //config fuer admin button oben
         $ret['extConfigControllerIndex'] = 'Kwc_Directories_Item_Directory_ExtConfigTabs';
