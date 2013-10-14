@@ -55,7 +55,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
         this.cropButton = new Ext.Button({
             id: 'kwf-crop-button',
-            text: trlKwf('Crop Image'),
+            text: trlKwf('Select image region'),
             handler: function() {
                 var width, height;
                 var preserveRatio = false;
