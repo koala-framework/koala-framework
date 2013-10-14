@@ -13,7 +13,7 @@ class Kwc_Form_Dynamic_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abst
             );
         }
         if (!$acl->has('kwf_enquiries_enquiries')) {
-            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_enquiries_enquiries',
+            $acl->add(new Kwf_Acl_Resource_MenuUrl('kwf_enquiries_enquiries',
                     array('text'=>trlKwfStatic('All Enquiries'), 'icon'=>'email.png')), 'kwf_enquiries_dropdown');
         }
 

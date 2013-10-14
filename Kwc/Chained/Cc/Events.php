@@ -103,7 +103,7 @@ class Kwc_Chained_Cc_Events extends Kwc_Chained_Abstract_Events
         );
         $ret[] = array(
             'class' => $masterComponentClass,
-            'event' => 'Kwf_Component_Event_ComponentClass_PartialsChanged',
+            'event' => 'Kwf_Component_Event_ComponentClass_AllPartialChanged',
             'callback' => 'onComponentClassChanged'
         );
         $ret[] = array(
