@@ -31,9 +31,74 @@ function createTrlCacheFolder()
     }
 }
 
+function checkFileForCropParameter($path)
+{
+    $c = file_get_contents($path);
+    $parameterChanged = false;
+    $c = preg_replace_callback(
+        '#\'scale\' => Kwf_Media_Image::SCALE_BESTFIT#s',
+        function($m) {
+            $parameterChanged = true;
+            return '\'cover\' => false';
+        },
+        $c
+    );
+    $c = preg_replace_callback(
+        '#\'scale\' => Kwf_Media_Image::SCALE_ORIGINAL#s',
+        function($m) {
+            $parameterChanged = true;
+            return '\'cover\' => false';
+        },
+        $c
+    );
+    $c = preg_replace_callback(
+        '#\'scale\' => Kwf_Media_Image::SCALE_CROP#s',
+        function($m) {
+            $parameterChanged = true;
+            return '\'cover\' => true';
+        },
+        $c
+    );
+    $c = preg_replace_callback(
+        '#\'scale\' => Kwf_Media_Image::SCALE_DEFORM#s',
+        function($m) {
+            $parameterChanged = true;
+            return '\'cover\' => true';
+        },
+        $c
+    );
+    if ($parameterChanged) {
+        file_put_contents($path, $c);
+//         echo "\t\tParameter changed\n";
+//     } else {
+//         echo "\t\tNothing had to be changed\n";
+    }
+}
+
+function recursiveCropImageOptionsReplace($directory)
+{
+//     echo "\trecursive head $directory\n";
+    if (!is_dir($directory)) {
+        return false;
+    }
+    $files = scandir($directory);
+    foreach ($files as $file) {
+        $path = $directory.'/'.$file;
+        if ($file != '.' && $file != '..' && !recursiveCropImageOptionsReplace($path)) {
+            $info = pathinfo($path, PATHINFO_EXTENSION);
+            if ($info == 'php' || $info == 'yml' ) {
+                checkFileForCropParameter($path);
+//                 echo "\tupdated $path to match new parameter\n";
+            }
+        }
+    }
+}
 
 createTrlCacheFolder();
 
 $files = glob_recursive('Events.php');
 replaceFiles($files, 'Kwf_Component_Event_ComponentClass_PartialsChanged', 'Kwf_Component_Event_ComponentClass_AllPartialChanged');
 
+echo "Update Image-Parameter\n";
+recursiveCropImageOptionsReplace('components');
+echo "Finished changing Image-Parameters\n";
