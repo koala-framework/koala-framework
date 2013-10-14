@@ -363,7 +363,7 @@ abstract class Kwf_Component_Renderer_Abstract
                 //cache disabled, re-render
                 $content = $this->_getHelper($args[1])->render($args[0], unserialize(base64_decode($args[2])));
             }
-            $ret = substr($ret, 0, $start).$content.substr($ret, $end+20+strlen($args[0]));
+            $ret = substr($ret, 0, $start).$content.substr($ret, $end+19+strlen($args[0]));
 
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('useCacheDynamic '.$args[1], microtime(true)-$startTime);
         }
