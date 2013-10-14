@@ -51,17 +51,13 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
         $field->setControllerUrl(Kwc_Admin::getInstance($class)->getControllerUrl());
         $this->fields->add($field);
 
-        $this->setAssetsType('Frontend');
+        $this->setAssetsPackage(Kwf_Assets_Package_Default::getInstance('Frontend'));
     }
 
     //für tests
-    public function setAssetsType($type)
+    public function setAssetsPackage(Kwf_Assets_Package $package)
     {
-        $loader = new Kwf_Assets_Loader();
-        $dep = $loader->getDependencies();
-        $urls = $dep->getAssetUrls($type, 'css', 'web', Kwf_Component_Data_Root::getComponentClass());
-
-        $this->fields['content']->setCssFiles($urls);
+        $urls = $package->getPackageUrls('text/css', Kwf_Trl::getInstance()->getTargetLanguage());
 
         foreach ($urls as $url) {
             if (strpos($url, 'Kwc_Basic_Text_StylesAsset')!==false) {
