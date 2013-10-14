@@ -30,9 +30,9 @@ Kwf.GoogleMap.load = function(callback, scope)
         apiKeyIndex = hostParts[hostParts.length-2]  // eg. 'koala-framework'
                      +hostParts[hostParts.length-1]; // eg. 'org'
     }
-    if (['orat', 'coat', 'gvat', 'couk'].indexOf(ret) != -1) {
+    if (['orat', 'coat', 'gvat', 'couk'].indexOf(apiKeyIndex) != -1) {
         //one part more for those
-        apiKeyIndex = hostParts[hostParts.length-3]+ret;
+        apiKeyIndex = hostParts[hostParts.length-3]+apiKeyIndex;
     }
 
     var key = '';
