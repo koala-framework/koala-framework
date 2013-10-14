@@ -7,11 +7,6 @@ $grid-padding   : 0em;
     > .listItem {
         padding-bottom: 20px;
 
-        &.kwcLast {
-            padding-bottom: 0px;
-            padding-right: 0;
-        }
-
         .kwcTextImage {
             &.noText {
                 .kwcBasicImageEnlarge {
@@ -26,6 +21,11 @@ $grid-padding   : 0em;
     .listItem {
         @include box-sizing(border-box);
         padding-right: 20px;
+
+        &.kwcLast {
+            padding-bottom: 0px;
+            padding-right: 0;
+        }
 
     }
 
