@@ -6,7 +6,7 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
         $ret = parent::getListeners();
         $usesContentWidth = false;
         foreach (Kwc_Abstract::getSetting($this->_class, 'dimensions') as $dim) {
-            if ($dim['width'] == Kwc_Abstract_Image_Component::CONTENT_WIDTH) {
+            if (isset($dim['width']) && $dim['width'] == Kwc_Abstract_Image_Component::CONTENT_WIDTH) {
                 $usesContentWidth = true;
             }
         }

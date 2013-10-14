@@ -22,9 +22,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 // cover = false means image wont be scaled up if smaller than size.
             ),
             'original'=>array(
-                'text' => trlKwf('original'),
-                'width' => 0,
-                'height' => 0
+                'text' => trlKwf('original')
             ),
             'custombestfit'=>array(
                 'text' => trlKwf('user-defined'),
