@@ -45,6 +45,7 @@ class Kwf_Assets_Dispatcher
         $ret = $cache->load($cacheId);
 
         if ($ret === false) {
+            require_once 'Kwf/Trl.php'; //required because setup doesn't load Trl.php before dispatching assets
             $param = explode('/', $url);
             $dependencyClass = $param[0];
             $dependencyParams = $param[1];
