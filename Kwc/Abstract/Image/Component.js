@@ -9,26 +9,28 @@ if (window.devicePixelRatio && window.devicePixelRatio > 1) {
 }
 
 //resize image to 100% container width if image is larger than container
-(function() {
-
-var initEl = function(el) {
-    if (el.child('img') && el.getWidth()) {
-        if (el.getWidth() < (el.child('img').dom.getAttribute('width')) / window.devicePixelRatio) {
-            el.addClass('autoWidth');
-        } else {
-            el.removeClass('autoWidth');
+Kwf.onContentReady(function(readyEl) {
+    Ext.get(readyEl).select('img', true).each(function(el) {
+        var s = el.getSize();
+        if (s.height == 0 || s.width == 0) {
+            //img tags that set width/height: auto in css don't have size until they are loaded
+            //move the size attribute into inline style with respecting aspect ratio
+            el.dom.style.height = el.dom.getAttribute('height')+'px';
+            if (el.getHeight() < el.dom.getAttribute('height')) {
+                var ratio = el.dom.getAttribute('width') / el.dom.getAttribute('height');
+                el.dom.style.width = (ratio * el.getHeight())+'px';
+            }
+            el.dom.style.width = el.dom.getAttribute('width')+'px';
+            if (el.getWidth() < el.dom.getAttribute('width')) {
+                var ratio = el.dom.getAttribute('height') / el.dom.getAttribute('width');
+                el.dom.style.height = (ratio * el.getWidth())+'px';
+            }
+            el.on('load', function() {
+                //once the img is loaded remove the style again and let css with: auto do it's work
+                //required to be able to react to browser window change
+                this.style.width = '';
+                this.style.height = '';
+            }, el.dom);
         }
-    }
-};
-
-Kwf.onElementReady('.kwcAbstractImage', function(el) {
-    initEl(el);
-});
-
-Ext.fly(window).on('resize', function() {
-    Ext.select('.kwcAbstractImage').each(function(el) {
-        initEl(el);
     }, this);
-});
-
-})();
+}, this, { priority: -1 });
