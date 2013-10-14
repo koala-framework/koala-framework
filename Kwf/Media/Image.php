@@ -103,6 +103,12 @@ class Kwf_Media_Image
                 'width' => $originalSize[0],
                 'height' => $originalSize[1],
                 'rotate' => null,
+                'crop' => array(
+                    'x' => 0,
+                    'y' => 0,
+                    'width' => $originalSize[0],
+                    'height' => $originalSize[1]
+                ),
                 'keepOriginal' => true
            );
         }
