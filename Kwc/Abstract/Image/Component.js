@@ -16,6 +16,8 @@ Kwf.onContentReady(function(readyEl) {
         if (!el.dom.getAttribute('width') || !el.dom.getAttribute('height')) {
             return;
         }
+        if (Ext.isIE8 || Ext.isIE7 || Ext.isIE6) return; //those suckers don't support responsiveness or dpr2, so all below is not needed
+
         //img tags that set width/height: auto in css don't have size until they are loaded
         //move the size attribute into inline style with respecting aspect ratio
         //also always set width as style for dpr2 images as width: auto would display them in double size
