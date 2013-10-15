@@ -16,7 +16,7 @@ class Kwf_Util_ClearCache_Types_Trl extends Kwf_Util_ClearCache_Types_Dir
     {
         $webCodeLanguage = Kwf_Registry::get('config')->webCodeLanguage;
         if ($webCodeLanguage != 'en') {
-            Kwf_Trl::getInstance()->trl('Login', array(), 'en', $webCodeLanguage);
+            Kwf_Trl::getInstance()->trlKwf('Login', array(), $webCodeLanguage);
         }
     }
 
