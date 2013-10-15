@@ -62,7 +62,6 @@
                             <?=$this->component($this->boxes['subMenu']);?>
                         </div>
                         <div class="centerColumn">
-                            <div id="loading"></div>
                             <?=$this->componentWithMaster($this->componentWithMaster);?>
                         </div>
                     </div>
