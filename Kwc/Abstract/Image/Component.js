@@ -21,8 +21,7 @@ Kwf.onContentReady(function(readyEl) {
                 var ratio = el.dom.getAttribute('width') / el.dom.getAttribute('height');
                 el.dom.style.width = (ratio * el.getHeight())+'px';
             }
-        }
-        if (s.width == 0) {
+        } else if (s.width == 0) {
             el.dom.style.width = el.dom.getAttribute('width')+'px';
             if (el.getWidth() < el.dom.getAttribute('width')) {
                 var ratio = el.dom.getAttribute('height') / el.dom.getAttribute('width');
