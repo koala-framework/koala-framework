@@ -34,10 +34,12 @@ class Kwf_Component_Cache_Memory
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
 
             $tmp = Kwf_Cache_Simple::getMemcache()->get($prefix.$id);
-            if (is_array($tmp) && isset($tmp[0])) {
+            if (is_array($tmp) && array_key_exists(0, $tmp)) {
                 return array(
                     'contents' => $tmp[0],
+                    'timestamp' => $tmp[1],
                     'expire' => $tmp[2] ? ($tmp[1] + $tmp[2]) : null, //mtime + lifetime
+                    'microtime' => $tmp[3]
                 );
             }
             return false;
@@ -46,13 +48,13 @@ class Kwf_Component_Cache_Memory
         }
     }
 
-    public function save($data, $id, $ttl)
+    public function save($data, $id, $ttl, $timestamp = null)
     {
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
-            $data = array($data, time(), $ttl);
+            $data = array($data, time(), $ttl, $timestamp);
             return Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $data, MEMCACHE_COMPRESSED, $ttl);
         } else {
             return self::getZendCache()->save($data, $id, array(), $ttl);
