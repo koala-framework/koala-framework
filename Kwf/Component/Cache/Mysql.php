@@ -71,7 +71,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         }
         $cacheId = $this->_getCacheId($componentId, $renderer, $type, $value);
         $data = Kwf_Component_Cache_Memory::getInstance()->loadWithMetaData($cacheId);
-        if ($data === false || is_null($data['contents'])) {
+        if ($data === false || is_int($data)) {
             Kwf_Benchmark::count('comp cache mysql');
             $select = $this->getModel('cache')->select()
                 ->whereEquals('component_id', $componentId)
@@ -83,8 +83,8 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                     new Kwf_Model_Select_Expr_Higher('expire', time()),
                     new Kwf_Model_Select_Expr_IsNull('expire'),
                 )));
-            if (is_array($data) && is_null($data['contents'])) {
-                $select->whereEquals('microtime', $data['microtime']);
+            if (is_int($data)) {
+                $select->where(new Kwf_Model_Select_Expr_Higher('microtime', $data));
             }
             $options = array(
                 'columns' => array('content', 'expire'),
@@ -168,7 +168,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 $step += 100;
                 $progress->next(1, "memcache $step / $count");
             }
-            Kwf_Component_Cache_Memory::getInstance()->save(null, $cacheId, null, $microtime);
+            Kwf_Component_Cache_Memory::getInstance()->remove($cacheId, $microtime);
         }
         $this->_afterMemcacheDelete($select); // For unit testing - DO NOT DELETE!
 
