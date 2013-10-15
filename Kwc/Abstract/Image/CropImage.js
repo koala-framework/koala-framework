@@ -74,7 +74,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 background: 'url('+this.src+') no-repeat left top'
             }
         });
-        this._updateCropRegion();
 
         var resizer = new Ext.Resizable(this._image.getEl(), {
             handles: 'all',
@@ -109,6 +108,11 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             });
             this.fireEvent('changeCrop', this, this.getCropData());
         }).createDelegate(this);
+    },
+
+    afterRender: function () {
+        Kwc.Abstract.Image.CropImage.superclass.afterRender.call(this);
+        this._updateCropRegion();
     }
 });
 
