@@ -24,6 +24,9 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
             'lifetime'=>null,
             'automatic_cleaning_factor' => false,
             'automatic_serialization'=>true))->clean();
+        if (Kwf_Cache_Simple::getBackend() != 'memcache') {
+            Kwf_Component_Cache_Memory::getZendCache()->clean();
+        }
         Kwf_Cache_Simple::resetZendCache();
         Kwf_Registry::get('config')->debug->componentCache->disable = false;
         Kwf_Config::deleteValueCache('debug.componentCache.disable');
