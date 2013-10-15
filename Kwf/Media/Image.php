@@ -98,19 +98,33 @@ class Kwf_Media_Image
         else $cover = true;
 
         if ($outputWidth == 0 && $outputHeight == 0) {
-            // Handle keep original
-            return array(
-                'width' => $originalSize[0],
-                'height' => $originalSize[1],
-                'rotate' => null,
-                'crop' => array(
-                    'x' => 0,
-                    'y' => 0,
+            if ($crop) {
+                return array(
+                    'width' => $crop['width'],
+                    'height' => $crop['height'],
+                    'rotate' => null,
+                    'crop' => array(
+                        'x' => $crop['x'],
+                        'y' => $crop['y'],
+                        'width' => $crop['width'],
+                        'height' => $crop['height']
+                    ),
+                );
+            } else {
+                // Handle keep original
+                return array(
                     'width' => $originalSize[0],
-                    'height' => $originalSize[1]
-                ),
-                'keepOriginal' => true
-           );
+                    'height' => $originalSize[1],
+                    'rotate' => null,
+                    'crop' => array(
+                        'x' => 0,
+                        'y' => 0,
+                        'width' => $originalSize[0],
+                        'height' => $originalSize[1]
+                    ),
+                    'keepOriginal' => true,
+                );
+            }
         }
 
 
