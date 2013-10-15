@@ -13,6 +13,9 @@ Kwf.onContentReady(function(readyEl) {
         var s = el.getSize();
         if (el.dom.imgSizeInitDone) return;
         el.dom.imgSizeInitDone = true;
+        if (!el.dom.getAttribute('width') || !el.dom.getAttribute('height')) {
+            return;
+        }
         //img tags that set width/height: auto in css don't have size until they are loaded
         //move the size attribute into inline style with respecting aspect ratio
         //also always set width as style for dpr2 images as width: auto would display them in double size
