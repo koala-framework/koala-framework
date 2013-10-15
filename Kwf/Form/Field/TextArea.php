@@ -13,6 +13,13 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
         $this->setWidth(100);
         $this->setHeight(60);
     }
+
+    protected function _addValidators()
+    {
+        parent::_addValidators();
+        unset($this->_validators['noNewline']);
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $name = $this->getFieldName();
