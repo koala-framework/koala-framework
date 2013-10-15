@@ -99,4 +99,24 @@ class Kwf_Component_Cache_Memory
         }
     }
 
+    /**
+     * Internal function only ment to be used by unit tests
+     *
+     * @internal
+     */
+    public function _clean()
+    {
+        $be = Kwf_Cache_Simple::getBackend();
+        if ($be == 'memcache') {
+            return Kwf_Cache_Simple::getMemcache()->flush();
+        } else if ($be == 'file') {
+            foreach (glob('cache/view/*') as $i) {
+                unlink($i);
+            }
+            return true;
+        } else {
+            return self::getZendCache()->clean();
+        }
+    }
+
 }

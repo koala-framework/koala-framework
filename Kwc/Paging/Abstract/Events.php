@@ -12,6 +12,11 @@ class Kwc_Paging_Abstract_Events extends Kwc_Abstract_Events
                         'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
                         'callback' => 'onParentContentChanged'
                     );
+                    $ret[] = array(
+                        'class' => $class,
+                        'event' => 'Kwf_Component_Event_ComponentClass_PartialsChanged',
+                        'callback' => 'onParentPartialsChanged'
+                    );
                 }
             }
         }
@@ -21,6 +26,11 @@ class Kwc_Paging_Abstract_Events extends Kwc_Abstract_Events
     public function onParentContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class));
+    }
+
+    public function onParentPartialsChanged(Kwf_Component_Event_ComponentClass_PartialsChanged $event)
+    {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
     }
 }

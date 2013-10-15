@@ -30,6 +30,10 @@ class Kwf_Component_Output_Test extends Kwc_TestAbstract
         $value = $view->renderComponent($root->getChildComponent('-child'));
         $this->assertEquals('plugin(plugin(c1_child c1_childchild))', $value);
 
+        //re-render, now cached
+        $value = $view->renderComponent($root->getChildComponent('-child'));
+        $this->assertEquals('plugin(plugin(c1_child c1_childchild))', $value);
+
         $value = $view->renderMaster($root);
         $this->assertRegExp('#c1_rootmaster c1_box .*c1_root plugin\(plugin\(c1_child c1_childchild\)\).*#s', $value);
 

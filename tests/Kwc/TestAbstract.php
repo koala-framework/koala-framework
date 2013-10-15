@@ -19,11 +19,8 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
         Zend_Session::$_unitTestEnabled = true;
         $this->_root = Kwf_Component_Data_Root::getInstance();
         $this->_root->setFilename('kwf/kwctest/'.$componentClass);
-        apc_clear_cache('user');
-        Kwf_Cache::factory('Core', 'Memcached', array(
-            'lifetime'=>null,
-            'automatic_cleaning_factor' => false,
-            'automatic_serialization'=>true))->clean();
+        if (function_exists('apc_clear_cache')) apc_clear_cache('user');
+        Kwf_Component_Cache_Memory::getInstance()->_clean();
         Kwf_Cache_Simple::resetZendCache();
         Kwf_Registry::get('config')->debug->componentCache->disable = false;
         Kwf_Config::deleteValueCache('debug.componentCache.disable');

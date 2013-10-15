@@ -1,7 +1,7 @@
 <?php
 /**
  * @group slow
- * @group seleniuim
+ * @group selenium
  */
 class Kwc_FavouritesSelenium_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {

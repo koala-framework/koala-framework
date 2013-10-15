@@ -3,7 +3,7 @@ class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
 {
     public function partial($componentId, $config, $id, $viewCacheEnabled)
     {
-        return $this->_getRenderPlaceholder($componentId, $config, $id, array(), $viewCacheEnabled);
+        return $this->_getRenderPlaceholder($componentId, $config, $id, $viewCacheEnabled);
     }
 
     protected function _canBeIncludedInFullPageCache($componentId, $viewCacheEnabled)
@@ -39,10 +39,10 @@ class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
             $end = strpos($cachedContent, '>', $start);
 
             $args = explode(' ', substr($cachedContent, $start+6, $end-$start-6));
-            $dynamicConfig = $args[4];
+            $dynamicConfig = $args[3];
             $dynamicConfig = $dynamicConfig != '' ? unserialize(base64_decode($dynamicConfig)) : array();
             $dynamicConfig['info'] = $config['info'];
-            $args[4] = base64_encode(serialize($dynamicConfig));
+            $args[3] = base64_encode(serialize($dynamicConfig));
 
             $newContent = '<kwc2 '.implode(' ', $args).'>';
             $cachedContent = substr($cachedContent, 0, $start).$newContent.substr($cachedContent, $end+1);

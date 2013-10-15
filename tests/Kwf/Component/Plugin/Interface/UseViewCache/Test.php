@@ -18,13 +18,16 @@ class Kwf_Component_Plugin_Interface_UseViewCache_Test extends Kwc_TestAbstract
         Kwf_Component_Plugin_Interface_UseViewCache_Plugin_Component::$useViewCache = true;
         $html1 = $c->render();
         Kwf_Component_Plugin_Interface_UseViewCache_Component::$num++;
+        $this->assertEquals(trim($html1), '(0)');
+
         $html2 = $c->render();
         Kwf_Component_Plugin_Interface_UseViewCache_Component::$num++;
+        $this->assertEquals(trim($html2), '(0)');
+
         $html3 = $c->render();
         Kwf_Component_Plugin_Interface_UseViewCache_Component::$num++;
+        $this->assertEquals(trim($html3), '(0)');
 
-        $this->assertEquals($html1, $html2);
-        $this->assertEquals($html1, $html3);
 
         apc_clear_cache('user');
         Kwf_Cache::factory('Core', 'Memcached', array(
@@ -35,15 +38,16 @@ class Kwf_Component_Plugin_Interface_UseViewCache_Test extends Kwc_TestAbstract
 
         Kwf_Component_Plugin_Interface_UseViewCache_Plugin_Component::$useViewCache = false;
         $html4 = $c->render();
+        $this->assertEquals(trim($html4), '(3)');
         Kwf_Component_Plugin_Interface_UseViewCache_Component::$num++;
+
         $html5 = $c->render();
+        $this->assertEquals(trim($html5), '(4)');
         Kwf_Component_Plugin_Interface_UseViewCache_Component::$num++;
+
         $html6 = $c->render();
         Kwf_Component_Plugin_Interface_UseViewCache_Component::$num++;
-        $this->assertNotEquals($html3, $html4);
-        $this->assertNotEquals($html4, $html5);
-        $this->assertNotEquals($html4, $html6);
-        $this->assertNotEquals($html5, $html6);
+        $this->assertEquals(trim($html6), '(5)');
 
         Kwf_Component_Plugin_Interface_UseViewCache_Plugin_Component::$useViewCache = true;
         $html7 = $c->render();
