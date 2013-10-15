@@ -1,5 +1,5 @@
 .kwfFadeElements { position: relative; overflow: hidden; }
-.kwfFadeElement { position: absolute; top: 0px; left: 0px; }
+.kwfFadeElement { position: absolute; top: 0px; left: 0px; width: 100%; }
 
 .elementAccessLinks { position: relative; z-index: 2; }
 .elementAccessLinks li { float: left; }
