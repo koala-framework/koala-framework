@@ -72,6 +72,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                     height = this.heightField.getValue();
                 } else if (dimension.height >= 0) {
                     height = dimension.height;
+                } else if (typeof dimension.height === 'undefined') {
+                    height = 0;
                 } else {
                     Ext.Msg.alert(trlKwf('Error'), trlKwf('No height value was set'));
                     return;
@@ -83,6 +85,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                     width = 0;
                 } else if (dimension.width >= 0) {
                     width = dimension.width;
+                } else if (typeof dimension.width === 'undefined') {
+                    width = 0;
                 } else {
                     Ext.Msg.alert(trlKwf('Error'), trlKwf('No width value was set'));
                     return;
