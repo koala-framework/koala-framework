@@ -154,7 +154,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 text: trlKwf('OK'),
                 handler: function() {
                     if (this._validateSizes()) {
-                        this.close();
                         this.value = {
                             dimension: this.dimensionField.getValue(),
                             width: this.widthField.getValue(),
@@ -162,6 +161,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                             cropData: this.value.cropData
                         };
                         this.fireEvent('save', this.value);
+                        this.close();
                     } else {
                         Ext.Msg.alert(trlKwf('Error'), trlKwf('Please fill the marked fields correctly.'));
                     }
