@@ -50,6 +50,8 @@ class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
             }
             $this->addValidator($v, 'notEmpty');
         }
+        $this->addValidator(new Kwf_Validate_NoNewline(), 'noNewline');
+        $this->addValidator(new Kwf_Validate_NoTags(), 'noTags');
     }
 
     public function validate($row, $postData)

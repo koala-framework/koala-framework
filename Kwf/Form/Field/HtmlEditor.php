@@ -12,4 +12,11 @@ class Kwf_Form_Field_HtmlEditor extends Kwf_Form_Field_SimpleAbstract
         $this->setLoadAfterSave(true);
         $this->setXtype('htmleditor');
     }
+
+    protected function _addValidators()
+    {
+        parent::_addValidators();
+        unset($this->_validators['noNewline']);
+        unset($this->_validators['noTags']);
+    }
 }
