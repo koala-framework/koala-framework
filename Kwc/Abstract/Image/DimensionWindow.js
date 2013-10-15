@@ -154,7 +154,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 text: trlKwf('OK'),
                 handler: function() {
                     if (this._validateSizes()) {
-                        this.hide();
+                        this.close();
                         this.value = {
                             dimension: this.dimensionField.getValue(),
                             width: this.widthField.getValue(),
@@ -170,7 +170,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             },{
                 text: trlKwf('Cancel'),
                 handler: function() {
-                    this.hide();
+                    this.close();
                 },
                 scope: this
             }

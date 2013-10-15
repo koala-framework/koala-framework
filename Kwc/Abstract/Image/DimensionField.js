@@ -34,13 +34,14 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
     },
 
     onTriggerClick: function() {
-        if (!this.sizeWindow) {
-            this.sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
-                dimensions: this.dimensions,
-                value: this.getValue(),
-                imageData: this.imageData
-            });
+        if (this.sizeWindow) {
+            //TODO remove object
         }
+        this.sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
+            dimensions: this.dimensions,
+            value: this.getValue(),
+            imageData: this.imageData
+        });
         this.sizeWindow.on('save', function(value) {
             this.setValue(value);
         }, this);

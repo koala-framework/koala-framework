@@ -505,16 +505,15 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         );
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
-            'width' => 100,
-            'height' => 100,
+            'width' => 50,
+            'height' => 50,
             'rotate' => null,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
-                'width' => 100,
-                'height' => 100
+                'width' => 50,
+                'height' => 50
             ),
-            'keepOriginal' => true
        ));
     }
 
