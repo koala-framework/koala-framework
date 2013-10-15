@@ -9,7 +9,7 @@ if (window.devicePixelRatio && window.devicePixelRatio > 1) {
 }
 
 Kwf.onContentReady(function(readyEl) {
-    Ext.get(readyEl).select('img', true).each(function(el) {
+    Ext.get(readyEl).select('.kwcAbstractImage img', true).each(function(el) {
         var s = el.getSize();
         if (el.dom.imgSizeInitDone) return;
         el.dom.imgSizeInitDone = true;
