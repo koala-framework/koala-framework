@@ -29,6 +29,16 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
         }
         this.findParentByType('kwf.autoform').// TODO: retrieve Upload-field more cleanly
             findByType('kwf.file')[0].on('change', function (el, value) {
+                if (this.imageData != null && this.imageData != "") {
+                    var dimensionValue = this.getValue();
+                    if (dimensionValue.cropData) {
+                        dimensionValue.cropData.x = null;
+                        dimensionValue.cropData.y = null;
+                        dimensionValue.cropData.width = null;
+                        dimensionValue.cropData.height = null;
+                        this.setValue(dimensionValue);
+                    }
+                }
                 this.imageData = value;
         }, this);
     },
