@@ -19,10 +19,14 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
             inp.on('keydown', function() {
                 this.fireEvent('change', this.getValue());
             }, this, { delay: 1 });
+            this._initPlaceholder(this.el.child('input'));
         }
+    },
+
+    _initPlaceholder: function(input)
+    {
         var nativePlaceholderSupport = ('placeholder' in document.createElement('input'));
         if (!nativePlaceholderSupport) {
-            var input = this.el.child('input');
             this._placeholder = input.dom.getAttribute('placeholder');
             if (this._placeholder) {
                 input.dom.value = this._placeholder;
