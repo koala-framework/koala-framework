@@ -95,6 +95,11 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
         var dragDrop = new Ext.dd.DD(this._image.getEl(), '');
         dragDrop.startDrag = (function (x, y) {
+            var wrapper = this.getEl().child('.kwc-crop-image-wrapper');
+            wrapper.imageSrcBackup = wrapper.getStyle('background-image');
+            wrapper.setStyle({
+                'background-image': 'none'
+            });
             dragDrop.constrainTo(this.el);
             this._image.getEl().setStyle({
                 'background': 'transparent'
@@ -105,6 +110,10 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             this._image.getEl().setStyle({
                 'background-image': 'url('+this.src+')',
                 'background-repeat': 'no-repeat'
+            });
+            var wrapper = this.getEl().child('.kwc-crop-image-wrapper');
+            wrapper.setStyle({
+                'background-image': wrapper.imageSrcBackup
             });
             this.fireEvent('changeCrop', this, this.getCropData());
         }).createDelegate(this);
