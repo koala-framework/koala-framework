@@ -16,7 +16,7 @@ class Kwc_Root_Abstract extends Kwc_Abstract
             'inherit' => true,
             'priority' => 0
         );
-        $ret['componentName'] = trlKwf('Root');
+        $ret['componentName'] = trlKwfStatic('Root');
         $ret['contentWidth'] = 600;
         $ret['contentWidthBoxSubtract'] = array();
         $ret['flags']['hasBaseProperties'] = true;
