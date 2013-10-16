@@ -148,6 +148,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     {
         $type = 'default';
         $s = $this->_getImageDimensions();
+        // This check is done with === because (0 == 'contentWidth') = true
         if ($s['width'] === self::CONTENT_WIDTH) {
             //use the contentWidth as type so we have an unique media cacheId depending on the width
             //that way it's not necessary to delete the media cache when content with changes
