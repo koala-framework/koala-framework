@@ -9950,5 +9950,30 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Frau {0}</de>
 <id>2024</id>
 </text>
+<text>
+<en>Image Crop Utility</en>
+<de>Bildausschnitt Tool</de>
+<id>2025</id>
+</text>
+<text>
+<en>Loading image</en>
+<de>Lade Bild</de>
+<id>2026</id>
+</text>
+<text>
+<en>Couldn't load image.</en>
+<de>Bild konnte nicht geladen werden.</de>
+<id>2027</id>
+</text>
+<text>
+<en>don't Crop</en>
+<de>Nicht abschneiden</de>
+<id>2028</id>
+</text>
+<text>
+<en>Select image region</en>
+<de>Wähle Bildbereich</de>
+<id>2029</id>
+</text>
 </trl>
 

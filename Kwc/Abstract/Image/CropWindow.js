@@ -35,7 +35,7 @@ Kwc.Abstract.Image.CropWindow = Ext.extend(Ext.Window, {
         var imgLoad = new Image();
         imgLoad.onerror = (function() {
             this.body.unmask();
-            Ext.Msg.alert(trlKwf('Error'), trlKwf('Couldn\'t load image.'));
+            Ext.Msg.alert(trlKwf('Error'), trlKwf("Couldn't load image."));
         });
         imgLoad.onload = (function(){
             this.body.unmask();
