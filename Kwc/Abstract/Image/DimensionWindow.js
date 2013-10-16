@@ -198,14 +198,16 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         this._validateSizes();
     },
 
-    _resetCropRegion: function ()
+    _resetCropRegion: function (element, value)
     {
-        this.value = {
-            dimension: this.dimensionField.getValue(),
-            width: this.widthField.getValue(),
-            height: this.heightField.getValue(),
-            cropData: null
-        };
+        if (value.inputValue != this.value.dimension) {
+            this.value = {
+                dimension: this.dimensionField.getValue(),
+                width: this.widthField.getValue(),
+                height: this.heightField.getValue(),
+                cropData: null
+            };
+        }
     },
 
     _validateSizes: function()
