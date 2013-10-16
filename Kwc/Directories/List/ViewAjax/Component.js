@@ -177,6 +177,9 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             } else {
                 this.loadView({});
             }
+            if (!this.view.visibleDetail && this.view._lastViewScrollPosition) {
+                Ext.select('html, body').scrollTo('b', this.view._lastViewScrollPosition.top);
+            }
             if (this._getState().menuLinkId) {
                 Kwc.Directories.List.ViewAjax.filterLinks[this.componentId].forEach(function(i) {
                     Ext.fly(i).removeClass('current');
@@ -463,6 +466,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 
         ev.stopEvent();
         //more... Link clicked
+        this._lastViewScrollPosition = Ext.getBody().getScroll();
         this.showDetail(target.dom.href);
     },
 
