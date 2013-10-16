@@ -20,6 +20,38 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
                 this.fireEvent('change', this.getValue());
             }, this, { delay: 1 });
         }
+        var nativePlaceholderSupport = ('placeholder' in document.createElement('input'));
+        if (!nativePlaceholderSupport) {
+            var input = this.el.child('input');
+            this._placeholder = input.dom.getAttribute('placeholder');
+            if (this._placeholder) {
+                input.dom.value = this._placeholder;
+                input.on('focus', function() {
+                    if (input.getValue() == this._placeholder) {
+                        input.dom.value = '';
+                        input.removeClass('placeholderVisible');
+                    }
+                }, this);
+                input.on('blur', function() {
+                    if (input.getValue() == '') {
+                        input.dom.value = this._placeholder;
+                        input.addClass('placeholderVisible');
+                    }
+                }, this);
+                this.form.on('beforeSubmit', function() {
+                    if (input.dom.value == this._placeholder) {
+                        input.dom.value = '';
+                        input.removeClass('placeholderVisible');
+                    }
+                }, this);
+                this.form.on('submitSuccess', function() {
+                    if (input.dom.value == '') {
+                        input.dom.value = this._placeholder;
+                        input.addClass('placeholderVisible');
+                    }
+                }, this);
+            }
+        }
     },
     getFieldName: function() {
         var inp = this.el.child('input');
@@ -29,7 +61,9 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
     getValue: function() {
         var inp = this.el.child('input');
         if (!inp) return null;
-        return inp.dom.value;
+        var ret = inp.dom.value;
+        if (this._placeholder && ret == this._placeholder) ret = '';
+        return ret;
     },
     clearValue: function() {
         var inp = this.el.child('input');
