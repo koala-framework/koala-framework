@@ -1,5 +1,5 @@
 <?php
-class Kwc_Box_TitleEditable_Events extends Kwc_Abstract_Events
+class Kwc_Box_TitleEditable_Events extends Kwc_Box_Title_Events
 {
     protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
