@@ -40,62 +40,32 @@ class Kwf_Media_Image
         if (!$sourceSize) return false;
 
         $w = null;
-        if (isset($sourceSize['width'])) $w = $sourceSize['width'];
         if (isset($sourceSize[0])) $w = $sourceSize[0];
+        if (isset($sourceSize['width'])) $w = $sourceSize['width'];
 
         $h = null;
-        if (isset($sourceSize['height'])) $h = $sourceSize['height'];
         if (isset($sourceSize[1])) $h = $sourceSize[1];
+        if (isset($sourceSize['height'])) $h = $sourceSize['height'];
+
+        if (!$w || !$h) return false;
 
         $originalSize = array($w, $h);
 
-
-        // Check if image has to be rotated
-        $rotate = null;
-        if (Kwf_Registry::get('config')->image->autoExifRotate
-            && $source
-            && function_exists('exif_read_data')
-            && isset($sourceSize['mime'])
-            && ($sourceSize['mime'] == 'image/jpg'
-                || $sourceSize['mime'] == 'image/jpeg')
-        ) {
-            try {
-                $exif = exif_read_data($source);
-                if (isset($exif['Orientation'])) {
-                    switch ($exif['Orientation']) {
-                        case 6:
-                            $originalSize = array($h, $w);
-                            $rotate = 90;
-                        case 8:
-                            $originalSize = array($h, $w);
-                            $rotate = -90;
-                    }
-                }
-            } catch (ErrorException $e) {
-                $rotate = null;
-            }
-        }
-
-        if (!$originalSize[0] || !$originalSize[1]) return false;
-
-
         // get output-width
+        $outputWidth = 0;
+        if (isset($targetSize[0])) $outputWidth = $targetSize[0];
         if (isset($targetSize['width'])) $outputWidth = $targetSize['width'];
-        else if (isset($targetSize[0])) $outputWidth = $targetSize[0];
-        else $outputWidth = 0;
 
         // get output-height
+        $outputHeight = 0;
+        if (isset($targetSize[1])) $outputHeight = $targetSize[1];
         if (isset($targetSize['height'])) $outputHeight = $targetSize['height'];
-        else if (isset($targetSize[1])) $outputHeight = $targetSize[1];
-        else $outputHeight = 0;
 
         // get crop-data
-        if (isset($targetSize['crop'])) $crop = $targetSize['crop'];
-        else $crop = null;
+        $crop = isset($targetSize['crop']) ? $targetSize['crop'] : null;
 
         // get cover
-        if (isset($targetSize['cover'])) $cover = $targetSize['cover'];
-        else $cover = true;
+        $cover = isset($targetSize['cover']) ? $targetSize['cover'] : true;
 
         if ($outputWidth == 0 && $outputHeight == 0) {
             if ($crop) {
@@ -127,7 +97,31 @@ class Kwf_Media_Image
             }
         }
 
-
+        // Check if image has to be rotated
+        $rotate = null;
+        if (Kwf_Registry::get('config')->image->autoExifRotate
+            && $source
+            && function_exists('exif_read_data')
+            && isset($sourceSize['mime'])
+            && ($sourceSize['mime'] == 'image/jpg'
+                || $sourceSize['mime'] == 'image/jpeg')
+        ) {
+            try {
+                $exif = exif_read_data($source);
+                if (isset($exif['Orientation'])) {
+                    switch ($exif['Orientation']) {
+                        case 6:
+                            $originalSize = array($h, $w);
+                            $rotate = 90;
+                        case 8:
+                            $originalSize = array($h, $w);
+                            $rotate = -90;
+                    }
+                }
+            } catch (ErrorException $e) {
+                $rotate = null;
+            }
+        }
 
         // Calculate missing dimension
         $calculateWidth = $originalSize[0];
@@ -137,8 +131,8 @@ class Kwf_Media_Image
             $calculateHeight = $crop['height'];
         }
 
-
         if ($cover) { // image will always have defined size
+
             if ($outputWidth == 0) {
                 if (isset($targetSize['aspectRatio'])) {
                     $outputWidth = round($outputHeight * $targetSize['aspectRatio']);
@@ -155,7 +149,6 @@ class Kwf_Media_Image
                 }
                 if ($outputHeight <= 0) $outputHeight = 1;
             }
-
             if (!$crop) { // crop from complete image
                 $crop = array();
                 // calculate crop depending on target-size
@@ -168,17 +161,9 @@ class Kwf_Media_Image
                 }
                 // calculate x and y of crop
                 $xDiff = $originalSize[0] - $crop['width'];
+                $crop['x'] = $xDiff > 0 ? $xDiff / 2 : 0;
                 $yDiff = $originalSize[1] - $crop['height'];
-                if ($xDiff > 0) {
-                    $crop['x'] = $xDiff / 2;
-                } else {
-                    $crop['x'] = 0;
-                }
-                if ($yDiff > 0) {
-                    $crop['y'] = $yDiff / 2;
-                } else {
-                    $crop['y'] = 0;
-                }
+                $crop['y'] = $yDiff > 0 ? $yDiff / 2 : 0;
             } else {
                 $oldCrop['width'] = $crop['width'];
                 $oldCrop['height'] = $crop['height'];
@@ -190,15 +175,13 @@ class Kwf_Media_Image
                     $crop['width'] = $crop['height'] * ($outputWidth / $outputHeight);
                 }
                 $xDiff = $oldCrop['width'] - $crop['width'];
+                $crop['x'] += $xDiff > 0 ? $xDiff / 2 : 0;
                 $yDiff = $oldCrop['height'] - $crop['height'];
-                if ($xDiff > 0) {
-                    $crop['x'] += $xDiff / 2;
-                }
-                if ($yDiff > 0) {
-                    $crop['y'] += $yDiff / 2;
-                }
+                $crop['y'] += $yDiff > 0 ? $yDiff / 2 : 0;
             }
+
         } elseif (!$cover) { // image keeps aspectratio and will not be scaled up
+
             // calculateWidth is cropWidth if existing else originalWidth.
             // prevent image scale up
             if (!$crop) {
@@ -209,7 +192,6 @@ class Kwf_Media_Image
                     'height' => $originalSize[1]
                 );
             }
-
             if ($calculateWidth <= $outputWidth && $calculateHeight <= $outputHeight) {
                 $outputWidth = $calculateWidth;
                 $outputHeight = $calculateHeight;
@@ -230,6 +212,7 @@ class Kwf_Media_Image
                 $outputWidth = $calculateWidth / $heightRatio;
                 $outputHeight = $calculateHeight / $heightRatio;
             }
+
         }
 
         $outputWidth = round($outputWidth);
