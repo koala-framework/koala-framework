@@ -11,10 +11,10 @@ class Vpc_Advanced_Team_Member_Data_Vcard_Component extends Vpc_Abstract
 
     public function sendContent()
     {
+        $dataRow = (object)$this->getData()->parent->getComponent()->getRow()->toArray();
         if (!isset($dataRow->lastname) || !isset($dataRow->firstname)) {
             throw new Vps_Exception_NotFound();
         }
-        $dataRow = (object)$this->getData()->parent->getComponent()->getRow()->toArray();
         $imageData = $this->getData()->parent->parent->getChildComponent('-image');
         $defaults = $this->_getDefaultValues();
         self::outputVcard($dataRow, $defaults, $imageData);
