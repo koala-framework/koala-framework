@@ -24,19 +24,19 @@ class Kwf_Trl_JsLoader
                 if ($trlelement['type'] == 'trl') {
                     $values['before'] = $trlelement['before'];
                     $values['tochange'] = $trlelement['text'];
-                    $method = $trlelement['type'];
-                    $values['now'] = $trl->$method($values['tochange'], array(), $source, $language);
+                    $method = $trlelement['type'].$mode;
+                    $values['now'] = $trl->$method($values['tochange'], array(), $language);
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace($method.$mode, "trl", $values['now']);
+                    $values['now'] = str_replace($method, "trl", $values['now']);
 
                 } else if ($trlelement['type'] == 'trlc') {
                     $values['context'] = $trlelement['context'];
                     $values['before'] = $trlelement['before'];
                     $values['tochange'] = $trlelement['text'];
-                    $method = $trlelement['type'];
-                    $values['now'] = $trl->$method($values['context'],$values['tochange'], array(), $source, $language);
+                    $method = $trlelement['type'].$mode;
+                    $values['now'] = $trl->$method($values['context'],$values['tochange'], array(), $language);
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace($method.$mode, 'trl', $values['now']);
+                    $values['now'] = str_replace($method, 'trl', $values['now']);
                     $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
                     $values['now'] = str_replace('"'.$values['context'].'", ', '', $values['now']);
 
