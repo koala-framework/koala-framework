@@ -10,7 +10,7 @@ class Kwc_Basic_Image_CacheFullWidth_Image_Component extends Kwc_Basic_Image_Com
                 'text' => trlKwf('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
-                'scale' => Kwf_Media_Image::SCALE_DEFORM
+                'cover' => true,
             ),
         );
 

@@ -34,7 +34,14 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('1600');
         $this->assertTrue($c->hasContent());
 
-        $this->assertEquals(array('width'=>100, 'height'=>100, 'scale'=>Kwf_Media_Image::SCALE_DEFORM, 'rotate' => null),
+        $this->assertEquals(array('width'=>100, 'height'=>100, 'rotate' => null,
+            'crop' => array(
+                'x' => 0,
+                'y' => 0,
+                'width' => 16,
+                'height' => 16
+            )
+        ),
         $c->getComponent()->getImageDimensions());
     }
 
@@ -70,7 +77,14 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
     {
         $c = $this->_root->getComponentById('1603');
 
-        $this->assertEquals(array('width'=>10, 'height'=>10, 'scale'=>Kwf_Media_Image::SCALE_DEFORM, 'rotate' => null),
+        $this->assertEquals(array('width'=>10, 'height'=>10, 'rotate' => null,
+            'crop' => array(
+                'x' => 0,
+                'y' => 0,
+                'width' => 16,
+                'height' => 16
+            )
+        ),
         $c->getComponent()->getImageDimensions());
     }
 
@@ -80,9 +94,16 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $this->assertTrue($c->hasContent());
         $url = $c->getComponent()->getImageUrl();
         $this->assertNotNull($url);
-
-        $this->assertEquals(array('width'=>16, 'height'=>16, 'scale'=>Kwf_Media_Image::SCALE_DEFORM, 'rotate'=>null),
-        $c->getComponent()->getImageDimensions());
+        $assertion = array('width'=>16, 'height'=>16, 'rotate'=>null,
+            'crop'=> array (
+                'width' => 16,
+                'height' => 16,
+                'x' => 0,
+                'y' => 0
+            ),
+            'keepOriginal'=>true
+        );
+        $this->assertEquals($assertion, $c->getComponent()->getImageDimensions());
 
         $o = Kwc_Basic_Image_Component::getMediaOutput($c->componentId, 'default', $c->componentClass);
         $this->assertNotNull($o);

@@ -9,7 +9,7 @@ class Kwc_Root_TrlRoot_Master_FlagImage_Component extends Kwc_Abstract_Image_Com
                 'text' => trlKwf('default'),
                 'width' => 16,
                 'height' => 16,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
+                'cover' => false,
             ),
         );
         $ret['componentName'] = trlcKwf('Flag of a Country', 'Flag');

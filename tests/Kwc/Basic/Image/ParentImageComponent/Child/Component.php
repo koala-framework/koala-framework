@@ -8,7 +8,7 @@ class Kwc_Basic_Image_ParentImageComponent_Child_Component
     {
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwc_Basic_Image_TestModel';
-        $ret['dimensions'] = array(array('width'=>16, 'height'=>16, 'scale'=>Kwf_Media_Image::SCALE_DEFORM));
+        $ret['dimensions'] = array(array('width'=>16, 'height'=>16, 'cover' => true));
         $ret['useParentImage'] = true;
         return $ret;
     }

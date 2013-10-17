@@ -16,11 +16,37 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
             $dimension = current(array_keys($dimensions));
         }
         $d = $dimensions[$dimension];
+
+        $cropX = $row->crop_x;
+        $cropY = $row->crop_y;
+        $cropWidth = $row->crop_width;
+        $cropHeight = $row->crop_height;
+
+        if ($row->getParentRow('Image')) {
+            $scaleFactor = Kwf_Media_Image::getHandyScaleFactor($row->getParentRow('Image')->getFileSource());
+            if ($scaleFactor != 1) {
+                $cropX = $row->crop_x / $scaleFactor;
+                $cropY = $row->crop_y / $scaleFactor;
+                $cropWidth = $row->crop_width / $scaleFactor;
+                $cropHeight = $row->crop_height / $scaleFactor;
+            }
+        }
+        $cover = false;
+        if (isset($d['cover'])) {
+            $cover = $d['cover'];
+        }
+
         $value = array(
             'dimension' => $dimension,
             'width' => $row->width,
             'height' => $row->height,
-            'scale' => $d['scale'],
+            'cover' => $cover,
+            'cropData' => array(
+                'x' => $cropX,
+                'y' => $cropY,
+                'width' => $cropWidth,
+                'height' => $cropHeight
+            )
         );
         return array($this->getFieldName() => $value);
     }
@@ -36,6 +62,26 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         $row->dimension = isset($value['dimension']) ? $value['dimension'] : null;
         $row->width = (isset($value['width']) && $value['width']) ? $value['width'] : null;
         $row->height = (isset($value['height']) && $value['height']) ? $value['height'] : null;
+        if (isset($value['cropData'])) {
+            $row->crop_x = (isset($value['cropData']['x']) && $value['cropData']['x'])
+                ? $value['cropData']['x'] : null;
+            $row->crop_y = (isset($value['cropData']['y']) && $value['cropData']['y'])
+                ? $value['cropData']['y'] : null;
+            $row->crop_width = (isset($value['cropData']['width']) && $value['cropData']['width'])
+                ? $value['cropData']['width'] : null;
+            $row->crop_height = (isset($value['cropData']['height']) && $value['cropData']['height'])
+                ? $value['cropData']['height'] : null;
+
+            if ($row->getParentRow('Image')) {
+                $scaleFactor = Kwf_Media_Image::getHandyScaleFactor($row->getParentRow('Image')->getFileSource());
+                if ($scaleFactor != 1) {
+                    $row->crop_x = $row->crop_x * $scaleFactor;
+                    $row->crop_y = $row->crop_y * $scaleFactor;
+                    $row->crop_width = $row->crop_width * $scaleFactor;
+                    $row->crop_height = $row->crop_height * $scaleFactor;
+                }
+            }
+        }
     }
 
     protected function _getValueFromPostData($postData)
@@ -72,19 +118,6 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
             $dimension = $dimensions[$data['dimension']];
         } else {
             $dimension = current($dimensions);
-        }
-        if ($dimension) {
-            if (($dimension['scale'] == Kwf_Media_Image::SCALE_BESTFIT ||
-                $dimension['scale'] == Kwf_Media_Image::SCALE_CROP ||
-                $dimension['scale'] == Kwf_Media_Image::SCALE_DEFORM) &&
-                (empty($data['width']) && empty($dimension['width'])) &&
-                (empty($data['height']) && empty($dimension['height']))
-            ) {
-                $ret[] = array(
-                    'message' => trlKwf('Dimension: At least width or height must be set higher than 0.'),
-                    'field' => $this
-                );
-            }
         }
 
         return $ret;

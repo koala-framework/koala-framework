@@ -7,39 +7,38 @@ class Kwc_Basic_Image_MultipleDimensionsComponent extends Kwc_Basic_Image_Compon
         $ret['ownModel'] = 'Kwc_Basic_Image_TestModel';
         $ret['dimensions'] = array(
             'original' => array(
-                'scale' => Kwf_Media_Image::SCALE_ORIGINAL,
                 'width'=>0,
                 'height'=>0
             ),
             'small' => array(
                 'width' => 100,
                 'height' => 100,
-                'scale' => Kwf_Media_Image::SCALE_DEFORM
+                'cover' => true,
             ),
             'medium' => array(
                 'width' => 200,
                 'height' => 200,
-                'scale' => Kwf_Media_Image::SCALE_DEFORM
+                'cover' => true,
             ),
             'large' => array(
                 'width' => 300,
                 'height' => 300,
-                'scale' => Kwf_Media_Image::SCALE_DEFORM
+                'cover' => true,
             ),
             'userWidth' => array(
                 'width' => Kwc_Abstract_Image_Component::USER_SELECT,
                 'height' => 300,
-                'scale' => Kwf_Media_Image::SCALE_DEFORM
+                'cover' => true,
             ),
             'userHeight' => array(
                 'width' => 300,
                 'height' => Kwc_Abstract_Image_Component::USER_SELECT,
-                'scale' => Kwf_Media_Image::SCALE_DEFORM
+                'cover' => true,
             ),
             'userSize' => array(
                 'width' => Kwc_Abstract_Image_Component::USER_SELECT,
                 'height' => Kwc_Abstract_Image_Component::USER_SELECT,
-                'scale' => Kwf_Media_Image::SCALE_DEFORM
+                'cover' => true,
             ),
         );
         return $ret;

@@ -6,7 +6,7 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
         $ret = parent::getListeners();
         $usesContentWidth = false;
         foreach (Kwc_Abstract::getSetting($this->_class, 'dimensions') as $dim) {
-            if ($dim['width'] == Kwc_Abstract_Image_Component::CONTENT_WIDTH) {
+            if (isset($dim['width']) && $dim['width'] == Kwc_Abstract_Image_Component::CONTENT_WIDTH) {
                 $usesContentWidth = true;
             }
         }
@@ -41,7 +41,10 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
     protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
         parent::_onOwnRowUpdateNotVisible($c, $event);
-        if ($event->isDirty(array('kwf_upload_id', 'width', 'height', 'dimension'))) {
+        if ($event->isDirty(array('kwf_upload_id', 'width', 'height',
+                'dimension', 'crop_x', 'crop_y',
+                'crop_width', 'crop_height'))
+        ) {
             $this->_fireMediaChanged($c);
         }
     }

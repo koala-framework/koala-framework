@@ -12,7 +12,7 @@ class Kwc_List_Gallery_Image_Component extends Kwc_Basic_ImageEnlarge_Component
                 'text' => trlKwf('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
-                'scale' => Kwf_Media_Image::SCALE_CROP,
+                'cover' => true,
                 'aspectRatio' => 3/4,
             ),
         );
