@@ -270,7 +270,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
     private function _getMicrotime()
     {
         list($usec, $sec) = explode(" ", microtime());
-        return (string)($sec . (int)($usec*10000));
+        return (string)($sec . substr($usec, 2, 4));
     }
 
     protected static function _getCacheId($componentId, $renderer, $type, $value)
