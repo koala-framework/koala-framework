@@ -398,7 +398,7 @@ class Kwf_Util_Setup
             $ret .= "set_time_limit($tl);\n";
         }
 
-        $locale = Kwf_Trl::getInstance()->trlc('locale', 'C', array(), Kwf_Trl::SOURCE_KWF, Kwf_Trl::getInstance()->getWebCodeLanguage());
+        $locale = Kwf_Trl::getInstance()->trlcKwf('locale', 'C', array(), Kwf_Trl::getInstance()->getWebCodeLanguage());
         $ret .= "setlocale(LC_ALL, explode(', ', '".$locale."'));\n";
         /*
             Das LC_NUMERIC wird absichtlich ausgenommen weil:

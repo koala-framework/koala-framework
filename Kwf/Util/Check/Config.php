@@ -425,7 +425,7 @@ class Kwf_Util_Check_Config
     {
         $locale = setlocale(LC_ALL, 0); //backup locale
 
-        $l = Kwf_Trl::getInstance()->trlc('locale', 'C', array(), Kwf_Trl::SOURCE_KWF, 'de');
+        $l = Kwf_Trl::getInstance()->trlcKwf('locale', 'C', array(), 'de');
         if (!setlocale(LC_ALL, explode(', ', $l))) {
             throw new Kwf_Exception("Locale not installed, tried: ".$l);
         }
