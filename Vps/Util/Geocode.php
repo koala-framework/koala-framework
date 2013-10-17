@@ -9,16 +9,14 @@ class Vps_Util_Geocode
      */
     public static function getCoordinates($address)
     {
-        $apiKey = Vps_Assets_GoogleMapsApiKey::getKey();
         $q = $address;
         $q = str_replace(array('ä','ö','ü','Ä','Ö','Ü','ß'), array('ae','oe','ue','Ae','Oe','Ue','ss'), $q);
         $getParams = array(
-            'q' => $q,
-            'output' => 'json',
-            'key' => $apiKey
+            'address' => $q,
+            'sensor' => 'false'
         );
 
-        $client = new Zend_Http_Client("http://maps.google.com/maps/geo");
+        $client = new Zend_Http_Client("http://maps.googleapis.com/maps/api/geocode/json");
         $client->setMethod(Zend_Http_Client::GET);
         $client->setParameterGet($getParams);
         $body = utf8_encode($client->request()->getBody());
@@ -32,17 +30,20 @@ class Vps_Util_Geocode
             $result = Zend_Json::decode($body);
             setlocale(LC_NUMERIC, explode(', ', trlcVps('locale', 'C')));
         } else {
-            $result = Zend_Json::decode($body);
+            try {
+                $result = Zend_Json::decode($body);
+            } catch (Zend_Json_Exception $e) {
+                $e = new Vps_Exception_Other($e);
+                $e->logOrThrow();
+            }
         }
 
-        if (isset($result) && isset($result['Placemark']) && isset($result['Placemark'][0])
-            && isset($result['Placemark'][0]['Point']) && isset($result['Placemark'][0]['Point']['coordinates'])
-            && isset($result['Placemark'][0]['Point']['coordinates'][0])
-            && isset($result['Placemark'][0]['Point']['coordinates'][1])
+        if (isset($result['results'][0]['geometry']['location']['lat'])
+            && isset($result['results'][0]['geometry']['location']['lng'])
         ) {
             return array(
-                'lat' => $result['Placemark'][0]['Point']['coordinates'][1],
-                'lng' => $result['Placemark'][0]['Point']['coordinates'][0]
+                'lat' => $result['results'][0]['geometry']['location']['lat'],
+                'lng' => $result['results'][0]['geometry']['location']['lng']
             );
         }
         return null;
