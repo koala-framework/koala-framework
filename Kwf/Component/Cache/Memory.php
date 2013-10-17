@@ -40,13 +40,13 @@ class Kwf_Component_Cache_Memory
                     'timestamp' => $tmp[1],
                     'expire' => $tmp[2] ? ($tmp[1] + $tmp[2]) : null, //mtime + lifetime
                 );
-            } else if (is_int($tmp)) {
+            } else if ($tmp) {
                 return $tmp;
             }
             return false;
         } else {
             $ret = self::getZendCache()->loadWithMetaData($id);
-            if (is_int($ret['contents'])) {
+            if (substr($ret['contents'], 0, 13) == 'kwf-timestamp') {
                 return $ret['contents'];
             } else {
                 return $ret;
@@ -76,7 +76,7 @@ class Kwf_Component_Cache_Memory
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
             return Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $microtime);
         } else {
-            return self::getZendCache()->save($microtime, $id);
+            return self::getZendCache()->save('kwf-timestamp' . $microtime, $id);
         }
     }
 

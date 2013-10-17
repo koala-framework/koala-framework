@@ -26,7 +26,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     public function save(Kwf_Component_Data $component, $content, $renderer='component', $type = 'component', $value = '', $lifetime = null)
     {
-        $microtime = (int)(microtime(true)*10000);
+        $microtime = $this->_getMicrotime();
         // MySQL
         $data = array(
             'component_id' => (string)$component->componentId,
@@ -71,7 +71,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         }
         $cacheId = $this->_getCacheId($componentId, $renderer, $type, $value);
         $data = Kwf_Component_Cache_Memory::getInstance()->loadWithMetaData($cacheId);
-        if ($data === false || is_int($data)) {
+        if ($data === false || !is_array($data)) {
             Kwf_Benchmark::count('comp cache mysql');
             $select = $this->getModel('cache')->select()
                 ->whereEquals('component_id', $componentId)
@@ -83,7 +83,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                     new Kwf_Model_Select_Expr_Higher('expire', time()),
                     new Kwf_Model_Select_Expr_IsNull('expire'),
                 )));
-            if (is_int($data)) {
+            if ($data !== false) {
                 $select->where(new Kwf_Model_Select_Expr_Higher('microtime', $data));
             }
             $options = array(
@@ -114,7 +114,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     public function deleteViewCache($select, $progressBarAdapter = null)
     {
-        $microtime = (int)(microtime(true)*10000);
+        $microtime = $this->_getMicrotime();
         $select->whereEquals('deleted', false);
         $model = $this->getModel();
         $log = Kwf_Component_Events_Log::getInstance();
@@ -266,6 +266,13 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
         return $ret;
     }
+
+    private function _getMicrotime()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return (string)($sec . (int)($usec*10000));
+    }
+
     protected static function _getCacheId($componentId, $renderer, $type, $value)
     {
         return "cc_".str_replace('-', '__', $componentId)."_{$renderer}_{$type}_{$value}";
