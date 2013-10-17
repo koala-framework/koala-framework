@@ -19,4 +19,8 @@ class Kwf_Component_Partial_Id extends
         return $component->getComponent()->getItemIds($count, $offset);
     }
 
+    public static function useViewCache($componentId, $params)
+    {
+        return false;
+    }
 }
