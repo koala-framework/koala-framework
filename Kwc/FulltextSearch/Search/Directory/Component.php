@@ -11,6 +11,7 @@ class Kwc_FulltextSearch_Search_Directory_Component extends Kwc_Directories_Item
         $ret['childModel'] = 'Kwc_FulltextSearch_Search_Directory_Model';
         $ret['flags']['usesFulltext'] = true;
         $ret['updateTags'] = array('fulltext');
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         return $ret;
     }
 }

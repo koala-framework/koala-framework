@@ -19,14 +19,18 @@ class Kwc_Box_SwitchLanguage_Events extends Kwc_Abstract_Events
 
     public function onPageAddedRemoved(Kwf_Component_Event_Component_Abstract $ev)
     {
-        $master = $ev->component;
-        if (is_instance_of($master->componentClass, 'Kwc_Chained_Trl_Component')) {
-            $master = $master->chained;
-        }
-        foreach ($master->getRecursiveChildComponents(array('componentClass' => $this->_class)) as $c) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $c
-            ));
+        if (is_instance_of($ev->component->componentClass, 'Kwc_Chained_Start_Component')) { // Whole language has been disabled
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        } else {
+            $master = $ev->component;
+            if (is_instance_of($master->componentClass, 'Kwc_Chained_Trl_Component')) {
+                $master = $master->chained;
+            }
+            foreach ($master->getRecursiveChildComponents(array('componentClass' => $this->_class)) as $c) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                    $this->_class, $c
+                ));
+            }
         }
     }
 }

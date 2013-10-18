@@ -18,17 +18,13 @@
     }
     &.gt659 ul li.current {
         border: none;
-        border-bottom: 1px solid #ccc;
-        background: var(light);
         position: relative;
         z-index: 3;
-        background: var(light);
         position: relative;
         z-index: 3;
 
         &.hasSubmenu {
-            border: 1px solid #ccc;
-            border-bottom: none;
+            border: none;
         }
     }
     ul li {

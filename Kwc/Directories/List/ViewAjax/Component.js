@@ -43,14 +43,16 @@ Kwf.onElementReady('.kwcDirectoriesListViewAjax', function(el, config) {
 //if there is no viewAjax that can handle the changed state reload current page
 //this can happen if a reload has been between state navigations
 Kwf.Utils.HistoryState.on('popstate', function() {
-    var found = false;
-    for (var componentId in Kwf.Utils.HistoryState.currentState.viewAjax) {
-        if (Kwc.Directories.List.ViewAjax.byComponentId[componentId]) {
-            found = true;
+    if (Kwf.Utils.HistoryState.currentState.viewAjax) {
+        var found = false;
+        for (var componentId in Kwf.Utils.HistoryState.currentState.viewAjax) {
+            if (Kwc.Directories.List.ViewAjax.byComponentId[componentId]) {
+                found = true;
+            }
         }
-    }
-    if (!found) {
-        location.href = location.href;
+        if (!found) {
+            location.href = location.href;
+        }
     }
 }, this);
 
@@ -176,6 +178,9 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
                 });
             } else {
                 this.loadView({});
+            }
+            if (!this.view.visibleDetail && this.view._lastViewScrollPosition) {
+                Ext.select('html, body').scrollTo('b', this.view._lastViewScrollPosition.top);
             }
             if (this._getState().menuLinkId) {
                 Kwc.Directories.List.ViewAjax.filterLinks[this.componentId].forEach(function(i) {
@@ -463,6 +468,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 
         ev.stopEvent();
         //more... Link clicked
+        this._lastViewScrollPosition = Ext.getBody().getScroll();
         this.showDetail(target.dom.href);
     },
 
