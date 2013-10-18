@@ -14,7 +14,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         parent::__construct($fileName);
     }
 
-    private function _getContents($language, $pack)
+    protected function _getContents($language, $pack)
     {
         if (isset($this->_contentsCache) && $pack) {
             $ret = $this->_contentsCache;
@@ -73,7 +73,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         return $ret;
     }
 
-    public function getContents($language)
+    public final function getContents($language)
     {
         return $this->_getContents($language, false);
     }
@@ -90,7 +90,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         return $contents;
     }
 
-    public function getContentsPacked($language)
+    public final function getContentsPacked($language)
     {
         return $this->_getContents($language, true);
     }
