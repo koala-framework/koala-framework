@@ -12,6 +12,13 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         $this->setInputType('text');
     }
 
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'emptyText';
+        return $ret;
+    }
+
     protected function _addValidators()
     {
         parent::_addValidators();
@@ -57,6 +64,7 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         }
         $ret['type'] = $this->getInputType();
         $ret['name'] = "$name$fieldNamePostfix";
+        $value = str_replace(array("\n", "\r"), array(' ', ''), $value);
         $ret['value'] = $value;
         if ($style) $ret['style'] = trim($style);
         if ($cls) $ret['class'] = trim($cls);
@@ -75,6 +83,9 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         }
         if ($this->getAutoComplete() === false) {
             $ret['autoComplete'] = 'off';
+        }
+        if ($this->getEmptyText()) {
+            $ret['placeholder'] = $this->getEmptyText();
         }
         return $ret;
     }

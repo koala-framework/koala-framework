@@ -13,6 +13,13 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
         $this->setWidth(100);
         $this->setHeight(60);
     }
+
+    protected function _addValidators()
+    {
+        parent::_addValidators();
+        unset($this->_validators['noNewline']);
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $name = $this->getFieldName();
@@ -32,6 +39,10 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
             $cls .= ' kwfClearOnFocus';
         }
         if ($cls) $ret['html'] .= ' class="'.trim($cls).'"';
+        if ($this->getEmptyText()) {
+            $ret['html'] .= ' placeholder="'.htmlspecialchars($this->getEmptyText()).'"';
+        }
+
         $ret['html'] .= '>';
         $ret['html'] .= htmlspecialchars($value);
         $ret['html'] .= "</textarea>";

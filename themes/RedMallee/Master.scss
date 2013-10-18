@@ -45,6 +45,7 @@ html, body {
     @include transition-duration(0.3s);
     @include transition-timing-function(linear);
 }
+
 #outerHeader {
     position: relative;
 }

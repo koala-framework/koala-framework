@@ -4,6 +4,7 @@ Kwf.FrontendForm.TextArea = Ext.extend(Kwf.FrontendForm.Field, {
             input.on('keypress', function() {
                 this.fireEvent('change', this.getValue());
             }, this);
+            this._initPlaceholder(input);
         }, this);
     },
     getFieldName: function() {
