@@ -166,16 +166,20 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
                 }
             }
         }
+
         foreach ($classes as $type=>$i) {
             foreach ($i as $cls) {
                 if (substr($cls, 0, 5) == 'Ext4.') {
                     $cls = 'Ext.'.substr($cls, 5);
                 }
                 if (substr($cls, 0, 4) == 'Ext.') {
+                    if (!isset($aliasClasses[$cls])) {
+                        throw new Kwf_Exception("Can't resolve dependency: $cls for $dependency");
+                    }
                     $cls = $aliasClasses[$cls];
                 }
                 $d = $this->_providerList->findDependency($cls);
-                if (!$d) throw new Kwf_Exception("Can't resolve dependency: extend $cls");
+                if (!$d) throw new Kwf_Exception("Can't resolve dependency: extend $cls for $dependency");
                 $deps[$type][] = $d;
             }
         }
