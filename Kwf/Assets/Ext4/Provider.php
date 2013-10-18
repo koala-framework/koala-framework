@@ -28,6 +28,14 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
             if (preg_match('#^\s*(alternateClassName):\s*\'([a-zA-Z0-9\.]+)\'\s*,?\s*$#m', $fileContents, $m)) {
                 $classes[$m[2]] = $depName;
             }
+            if (preg_match('#^\s*(alternateClassName):\s*\[([^\]]+)\]\s*,?\s*$#m', $fileContents, $m)) {
+                if (preg_match_all('#\'([a-zA-Z0-9\._]+)\'#', $m[2], $m2)) {
+                    foreach ($m2[1] as $i) {
+                        $classes[$i] = $depName;
+                    }
+                }
+
+            }
         }
         return $classes;
     }
@@ -79,54 +87,57 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
 
         $aliasClasses = self::_getAliasClasses();
 
-        if (preg_match('#^\s*'.'// @require\s+([a-zA-Z0-9\./\-_]+)\s*$#m', $fileContents, $m)) {
-            $f = $m[1];
-            if (substr($f, -3) == '.js') {
-                $f = substr($f, 0, -3);
-                $curFile = $dependency->getFileName();
-                $curFile = substr($curFile, 0, strrpos($curFile, '/')+1);
+        if (preg_match_all('#^\s*'.'// @require\s+([a-zA-Z0-9\./\-_]+)\s*$#m', $fileContents, $m)) {
+            foreach ($m[1] as $f) {
+                if (substr($f, -3) == '.js') {
+                    $f = substr($f, 0, -3);
+                    $curFile = $dependency->getFileName();
+                    $curFile = substr($curFile, 0, strrpos($curFile, '/')+1);
 
-                while (substr($f, 0, 3) == '../') {
-                    $f = substr($f, 3);
-                    $curFile = substr($curFile, 0, strrpos($curFile, '/', -2)+1);
-                }
+                    while (substr($f, 0, 3) == '../') {
+                        $f = substr($f, 3);
+                        $curFile = substr($curFile, 0, strrpos($curFile, '/', -2)+1);
+                    }
 
-                $f = $curFile . $f;
-                static $paths;
-                if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
-                $found = false;
-                foreach ($paths as $k=>$i) {
-                    if (substr($f, 0, strlen($i)+1) == $i.'/') {
-                        $f = substr($f, strlen($i)+1);
-                        if (substr($f, 0, 6) == 'tests/') {
-                            $f = substr($f, 6);
-                        } else if ($k == 'ext4' && substr($f, 0, 4) == 'src/') {
-                            $f = 'Ext4.'.substr($f, 4);
+                    $f = $curFile . $f;
+                    static $paths;
+                    if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
+                    $found = false;
+                    foreach ($paths as $k=>$i) {
+                        if (substr($f, 0, strlen($i)+1) == $i.'/') {
+                            $f = substr($f, strlen($i)+1);
+                            if (substr($f, 0, 6) == 'tests/') {
+                                $f = substr($f, 6);
+                            } else if ($k == 'ext4' && substr($f, 0, 4) == 'src/') {
+                                $f = 'Ext4.'.substr($f, 4);
+                            }
+                            $found = true;
+                            break;
                         }
-                        $found = true;
-                        break;
+                    }
+                    if (!$found) throw new Kwf_Exception('path not found');
+                    $f = str_replace('/', '.', $f);
+
+                } else {
+                    if (substr($f, 0, 5) == 'Ext4.') {
+                        $f = 'Ext.'.substr($f, 5);
+                    }
+                    if (substr($f, 0, 4) == 'Ext.') {
+                        $f = $aliasClasses[$f];
                     }
                 }
-                if (!$found) throw new Kwf_Exception('path not found');
-                $f = str_replace('/', '.', $f);
 
-            } else {
-                if (substr($f, 0, 5) == 'Ext4.') {
-                    $f = 'Ext.'.substr($f, 5);
+                if ($dependency->getFileName() == Kwf_Config::getValue('path.ext4').'/src/util/Offset.js') {
+                    if ($f == 'Ext4.dom.CompositeElement') {
+                        $f = null;
+                    }
                 }
-                $f = $aliasClasses[$f];
-            }
 
-            if ($dependency->getFileName() == Kwf_Config::getValue('path.ext4').'/src/util/Offset.js') {
-                if ($f == 'Ext4.dom.CompositeElement') {
-                    $f = null;
+                if ($f) {
+                    $d = $this->_providerList->findDependency($f);
+                    if (!$d) throw new Kwf_Exception("Can't resolve dependency: require $f");
+                    $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = $d;
                 }
-            }
-
-            if ($f) {
-                $d = $this->_providerList->findDependency($f);
-                if (!$d) throw new Kwf_Exception("Can't resolve dependency: require $f");
-                $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = $d;
             }
         }
 
