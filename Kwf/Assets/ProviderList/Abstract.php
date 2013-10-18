@@ -60,6 +60,14 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         foreach ($this->_providers as $p) {
             $deps = $p->getDependenciesForDependency($dependency);
             foreach ($deps as $type=>$i) {
+                if ($type != Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES
+                    && $type != Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES
+                ) {
+                    throw new Kwf_Exception("invalid dependency type");
+                }
+                if (!is_array($i)) {
+                    throw new Kwf_Exception("invalid dependency, expected array");
+                }
                 if (!isset($ret[$type])) $ret[$type] = array();
                 $ret[$type] = array_merge($ret[$type], $i);
             }
