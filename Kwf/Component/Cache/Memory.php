@@ -47,7 +47,7 @@ class Kwf_Component_Cache_Memory
         } else {
             $ret = self::getZendCache()->loadWithMetaData($id);
             if (substr($ret['contents'], 0, 13) == 'kwf-timestamp') {
-                return $ret['contents'];
+                return substr($ret['contents'], 13);
             } else {
                 return $ret;
             }
