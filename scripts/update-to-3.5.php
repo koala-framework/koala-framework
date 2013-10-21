@@ -43,6 +43,8 @@ function updateBootstrap()
         $c = str_replace($r, '', $c);
 
         $c = str_replace("require_once \$path.'/Vkwf/SetupPoi.php';\n", "require_once 'vkwf-lib/Vkwf/SetupPoi.php';\n", $c);
+        $c = str_replace("require_once \$path.'/Vkwf/Setup.php';\n", "require_once 'vkwf-lib/Vkwf/Setup.php';\n", $c);
+
 
         if (!file_exists('vkwf-lib')) {
             symlink(trim(file_get_contents('include_path')), 'vkwf-lib');
