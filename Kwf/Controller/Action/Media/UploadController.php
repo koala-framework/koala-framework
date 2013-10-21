@@ -75,9 +75,12 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 
     public function previewAction()
     {
+        if (!$this->_getParam('uploadId')) {
+            throw new Kwf_Exception_NotFound();
+        }
         $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')
             ->getRow($this->_getParam('uploadId'));
-        if (!$fileRow) throw new Kwf_Exception("Can't find upload");
+        if (!$fileRow) throw new Kwf_Exception_NotFound();
 
         if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
            throw new Kwf_Exception_AccessDenied();
