@@ -18,15 +18,11 @@ $grid-padding   : 0em;
 }
 
 .cssClass.gt480 {
+    margin-right: -20px;
+
     .listItem {
         @include box-sizing(border-box);
         padding-right: 20px;
-
-        &.kwcLast {
-            padding-bottom: 0px;
-            padding-right: 0;
-        }
-
     }
 
     &.col2col-50_50 {
