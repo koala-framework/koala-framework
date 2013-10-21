@@ -1,0 +1,1 @@
+master <?=$this->component($this->componentWithMaster[0]['data'])?>
