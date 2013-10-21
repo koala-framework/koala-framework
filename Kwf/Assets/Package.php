@@ -81,14 +81,14 @@ class Kwf_Assets_Package
                 $maxMTime = max($maxMTime, $mTime);
             }
         }
-/* TODO find a better solution for that, using Default Admin isn't compatible with tests as wrong Component dependencies are used
+
         if ($mimeType == 'text/javascript') {
             $ret = str_replace(
-                '{$application.maxAssetsMTime}',
-                Kwf_Assets_Package_Default::getInstance('Admin')->getMaxMTime('text/javascript'),
+                '{$application.assetsVersion}',
+                Kwf_Assets_Dispatcher::getAssetsVersion(),
                 $ret);
         }
-*/
+
         return $ret;
     }
 
@@ -118,7 +118,8 @@ class Kwf_Assets_Package
         else throw new Kwf_Exception_NotYetImplemented();
 
         $ret = array();
-        $ret[] = '/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter().'/'.$language.'/'.$ext;
+        $ret[] = '/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
+            .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
         $includesDependencies = array();
         $maxMTime = 0;
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
@@ -142,7 +143,6 @@ class Kwf_Assets_Package
                 $maxMTime = max($maxMTime, $mTime);
             }
         }
-        $ret[0] .= '?t='.$maxMTime;
 
         if (isset($cacheId)) {
             Kwf_Assets_Cache::getInstance()->save($ret, $cacheId);

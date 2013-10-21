@@ -75,7 +75,6 @@ class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
     {
         $this->view->wrongversion = true;
         $this->view->success = false;
-        $l = new Kwf_Assets_Loader();
-        $this->view->maxAssetsMTime = $l->getDependencies()->getMaxFileMTime();
+        $this->view->assetsVersion = Kwf_Assets_Dispatcher::getAssetsVersion();
     }
 }
