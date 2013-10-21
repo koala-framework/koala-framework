@@ -113,26 +113,6 @@
 .cssClass form .kwfFormContainerColumns .kwfFormContainerColumn { float: left; clear: none; }
 .cssClass form .kwfFormContainerColumns .kwfFormContainerColumn .kwfField { clear: none; }
 
-.cssClass .kwcFormError {
-    padding: 10px 10px 5px 10px;
-    background: var(errorBg) url('/assets/kwf/images/stripes.png') repeat left 3px;
-    border: 1px solid var(errorBorder) ;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    margin-right: 40px;
-}
-.cssClass .kwcFormError p.error {
-    color: var(errorText) ;
-    margin-bottom: 5px;
-    padding-left: 20px;
-    background: url('/assets/kwf/images/iconAlert.png') no-repeat left center;
-}
-
-.cssClass .kwcFormError ul li {
-    color: var(errorText);
-}
 .cssClass span.comment { margin-left: 10px; color: #999; }
 .cssClass .kwfField { clear: both; position: relative; }
 

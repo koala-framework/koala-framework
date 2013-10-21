@@ -1,5 +1,6 @@
-@import "compass/css3/box-sizing";
 @import "compass/utilities/general/clearfix";
+@import "compass/css3/box-sizing";
+@import "kwf/css3/border-radius";
 
 .cssClass {
     .kwfFormFieldWrapper {
@@ -227,5 +228,36 @@
 
     &.unResponsive {
         @extend .responsive.gt500;
+    }
+
+    /* -------------------------------------- ERROR ----------------------------------------------*/
+
+    .cssClass {
+        .kwcFormError {
+            @include border-radius-pie(4px);
+            padding: 20px 10px 10px 10px;
+            background: none #BB1900;
+            margin-bottom: 20px;
+
+            p.error {
+                background: url("/assets/silkicons/exclamation.png") no-repeat scroll left top transparent;
+                color: var(errorText);
+                margin-bottom: 5px;
+                padding-left: 20px;
+                line-height: 20px;
+                font-size: 14px;
+            }
+
+            ul li {
+                @include box-sizing(border-box);
+                list-style-image: none;
+                color: var(errorText);
+                display: inline-block;
+                vertical-align: top;
+                padding-right: 10px;
+                min-width: 220px;
+                width: 50%;
+            }
+        }
     }
 }
