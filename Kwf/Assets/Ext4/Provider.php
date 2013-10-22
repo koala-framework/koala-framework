@@ -148,6 +148,11 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
         if (preg_match('#Ext4?\.require\(\s*\'([a-zA-Z0-9\.]+)\'#', $fileContents, $m)) {
             $classes['requires'][] = $m[1];
         }
+        if (preg_match('#Ext4?\.require\(\s*\[([^]]+\])#', $fileContents, $m)) {
+            if (preg_match_all('#\'([a-zA-Z0-9\._]+)\'#', $m[1], $m2)) {
+                $classes['requires'] = array_merge($classes['requires'], $m2[1]);
+            }
+        }
 
         if (preg_match('#Ext4?\.define\(\s*[\'"]#', $fileContents, $m)) {
             if (preg_match_all('#^\s*(extend|override|requires|mixins|uses):\s*\'([a-zA-Z0-9\.]+)\'\s*,?\s*$#m', $fileContents, $m)) {

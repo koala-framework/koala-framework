@@ -112,4 +112,13 @@ class Kwf_Assets_Ext4_ProviderTest extends Kwf_Test_TestCase
         $array = $d->getRecursiveFiles();
         $this->assertEquals(196, count($array));
     }
+
+    public function testRequire()
+    {
+        $l = new Kwf_Assets_Ext4_TestProviderList();
+        $d = $l->findDependency('Kwf.Assets.Ext4.TestRequire');
+        $d->printDebugTree();
+        $array = $d->getRecursiveFiles();
+        $this->assertEquals(2, count($array));
+    }
 }
