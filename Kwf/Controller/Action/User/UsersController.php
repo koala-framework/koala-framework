@@ -38,7 +38,8 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         $acl = Kwf_Registry::get('acl');
         $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
         foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
-            $roles[] = array($role->getRoleId(), $role->getRoleName());
+            $roleName = Kwf_Trl::getInstance()->trlStaticExecute($role->getRoleName());
+            $roles[] = array($role->getRoleId(), $roleName);
         }
         $this->_filters['role'] = array(
             'type'=>'ComboBox',
