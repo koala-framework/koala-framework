@@ -270,20 +270,20 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         if (!isset($d['width'])) {
             $s['width'] = 0;
-        } else if ($d['width'] == self::USER_SELECT) {
+        } else if ($d['width'] === self::USER_SELECT) {
             if (!is_object($row)) {
                 $s['width'] = 0;
             } else {
                 $s['width'] = $row->width;
             }
-        } else if ($d['width'] == self::CONTENT_WIDTH) {
+        } else if ($d['width'] === self::CONTENT_WIDTH) {
             $s['width'] = self::CONTENT_WIDTH;
         } else {
             $s['width'] = $d['width'];
         }
         if (!isset($d['height'])) {
             $s['height'] = 0;
-        } else if ($d['height'] == self::USER_SELECT) {
+        } else if ($d['height'] === self::USER_SELECT) {
             if (!is_object($row)) {
                 $s['height'] = 0;
             } else {
