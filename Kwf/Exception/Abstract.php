@@ -55,6 +55,22 @@ abstract class Kwf_Exception_Abstract extends Exception
         $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
             htmlspecialchars($_SERVER['REQUEST_URI']) : '' ;
         $view->debug = Kwf_Exception::isDebug();
+
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            $data = null;
+            if (isset($_SERVER['HTTP_HOST'])) {
+                //try to get the page of current domain to get correct language
+                $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
+                $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', $acceptLanguage);
+            }
+            if (!$data) $data = Kwf_Component_Data_Root::getInstance();
+            $view->data = $data; //can be used for trl
+        } else {
+            //no components used, use Kwf_Trl object that also has trl() methods
+            //HACK, but will work if only trl is used in template
+            $view->data = Kwf_Trl::getInstance();
+        }
+
         $header = $this->getHeader();
         $template = $this->getTemplate();
         $template = strtolower(Zend_Filter::filterStatic($template, 'Word_CamelCaseToDash').'.tpl');
