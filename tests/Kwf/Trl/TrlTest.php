@@ -328,11 +328,11 @@ class Kwf_Trl_TrlTest extends Kwf_Test_TestCase
         $this->_trlObject = new Kwf_Trl($config);
         $this->_trlObject->setLanguages(array('de', 'en'));
         $this->_trlObject->setModel($modelKwf, 'kwf');
-        $this->assertEquals('dingsbums', $this->_trlObject->trl('foobar', array(), 'kwf', 'de'));
-        $this->assertEquals('dingsbumse', $this->_trlObject->trlp('foobar', 'foobars', array(2), 'kwf', 'de'));
-        $this->assertEquals('spezial dingsbums', $this->_trlObject->trlcp('special', 'special foobar', 'special foobars', array(1), 'kwf', 'de'));
-        $this->assertEquals('spezial dingsbums', $this->_trlObject->trlc('special', 'special foobar', array(), 'kwf', 'de'));
-        $this->assertEquals('5 dings', $this->_trlObject->trl('{0} foo', array(5), 'kwf', 'de'));
+        $this->assertEquals('dingsbums', $this->_trlObject->trlKwf('foobar', array(), 'de'));
+        $this->assertEquals('dingsbumse', $this->_trlObject->trlpKwf('foobar', 'foobars', array(2), 'de'));
+        $this->assertEquals('spezial dingsbums', $this->_trlObject->trlcpKwf('special', 'special foobar', 'special foobars', array(1), 'de'));
+        $this->assertEquals('spezial dingsbums', $this->_trlObject->trlcKwf('special', 'special foobar', array(), 'de'));
+        $this->assertEquals('5 dings', $this->_trlObject->trlKwf('{0} foo', array(5), 'de'));
     }
 
     public function testTrlTranslationNotFound()
@@ -357,7 +357,7 @@ class Kwf_Trl_TrlTest extends Kwf_Test_TestCase
         $this->_trlObject = new Kwf_Trl($config);
         $this->_trlObject->setLanguages(array('de', 'en'));
         $this->_trlObject->setModel($modelKwf, 'kwf');
-        $this->assertEquals('notfound', $this->_trlObject->trl('notfound', array(), 'kwf'));
+        $this->assertEquals('notfound', $this->_trlObject->trlKwf('notfound', array()));
     }
 
     public function testTrlParserCleanup()

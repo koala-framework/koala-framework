@@ -98,7 +98,8 @@ class Kwf_Component_Settings
     {
         foreach ($settings as $k=>$i) {
             if (is_string($i) && preg_match('#^\\s*(trl|trlKwf)\\(\'(.*)\'\\)\s*$#', $i, $m)) {
-                $settings[$k] = Kwf_Trl::getInstance()->trl($m[2], array(), $m[1]=='trlKwf' ? Kwf_Trl::SOURCE_KWF : Kwf_Trl::SOURCE_WEB);
+                $fn = $m[1]; //trl or trlKwf
+                $settings[$k] = Kwf_Trl::getInstance()->$fn($m[2], array());
             } else if (is_string($i) && preg_match('#^\\.\'(.*)\'$#', $i, $m)) {
                 if (isset($settings[$k])) {
                     $settings[$k] = $settings[$k] . $m[1];
