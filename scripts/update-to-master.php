@@ -31,9 +31,24 @@ function createTrlCacheFolder()
     }
 }
 
+function updateErrorViews($files)
+{
+    foreach ($files as $f) {
+        $content = file_get_contents($f);
+        $origContent = $content;
+        $content = preg_replace('#<\?=\s*trl#', '<?=$this->data->trl', $content);
+        if ($origContent != $content) {
+            file_put_contents($f, $content);
+            echo "Change $f: update trl\n";
+        }
+    }
+}
+
 
 createTrlCacheFolder();
 
 $files = glob_recursive('Events.php');
 replaceFiles($files, 'Kwf_Component_Event_ComponentClass_PartialsChanged', 'Kwf_Component_Event_ComponentClass_AllPartialChanged');
+
+updateErrorViews(glob('views/error*.tpl'));
 
