@@ -10,7 +10,7 @@ class Kwc_List_Switch_Preview_Component extends Kwc_Basic_Image_Component
             'default'=>array(
                 'width' => 100,
                 'height' => 75,
-                'scale' => Kwf_Media_Image::SCALE_CROP
+                'cover' => true,
             )
         );
         return $ret;

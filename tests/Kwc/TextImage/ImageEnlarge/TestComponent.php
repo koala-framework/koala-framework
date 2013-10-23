@@ -11,25 +11,24 @@ class Kwc_TextImage_ImageEnlarge_TestComponent extends Kwc_TextImage_ImageEnlarg
                 'text' => 'groß auf der Seite',
                 'width' => 300,
                 'height' => 200,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
+                'cover' => false,
             ),
             'small' => array(
                 'text' => 'Small',
                 'width' => 150,
                 'height'=>null,
-                'scale' => Kwf_Media_Image::SCALE_DEFORM
+                'cover' => true,
             ),
             'original' => array(
                 'text' => 'Original',
                 'width'=>null,
                 'height'=>null,
-                'scale' => Kwf_Media_Image::SCALE_ORIGINAL
             ),
             'custom' => array(
                 'text' => 'Custom',
                 'width' => Kwc_Abstract_Image_Component::USER_SELECT,
                 'height' => Kwc_Abstract_Image_Component::USER_SELECT,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
+                'cover' => false,
             )
         );
         return $ret;

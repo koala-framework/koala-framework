@@ -11,7 +11,7 @@ class Kwc_Articles_Detail_PreviewImage_Mail_Component extends Kwc_Basic_Image_Co
                 'text' => trlKwf('default'),
                 'width' => 230,
                 'height' => 0,
-                'scale' => Kwf_Media_Image::SCALE_CROP
+                'cover' => true,
             )
         );
         return $ret;

@@ -43,7 +43,12 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
             $helptext = trlKwf('Size of Target Image') . ': ' . $dimensions[0]['width'] . 'x' . $dimensions[0]['height'] . 'px';
             $helptext .= "<br />" . trlKwf('Size of Target Image to support High Resolution Displays ("Retina")') . ': ' . ($dimensions[0]['width'] * 2) . 'x' . ($dimensions[0]['height'] * 2) . 'px';
             $helptext .= "<br />" . trlKwf('or larger');
-            $helptext .= "<br />" . trlKwf('If size does not fit, scale method will be') . ': ' . $dimensions[0]['scale'];
+
+            $scaleMethod = trlKwf('don\'t Crop');
+            if ($dimensions[0]['cover']) {
+                $scaleMethod = trlKwf('Crop');
+            }
+            $helptext .= "<br />" . trlKwf('If size does not fit, scale method will be') . ': ' . $scaleMethod;
             $this->getByName('Image')->setHelpText($helptext);
         }
     }

@@ -17,7 +17,7 @@ class Kwf_Util_Model_Welcome extends Kwf_Model_Db
     public static function getImageDimensions($type)
     {
         if ($type == 'LoginImage') {
-            return array(300, 80, Kwf_Media_Image::SCALE_CROP);
+            return array(300, 80, 'cover' => true);
         } else if ($type == 'WelcomeImage') {
             return array(300, 100);
         }
