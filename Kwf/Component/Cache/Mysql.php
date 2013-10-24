@@ -26,6 +26,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     public function save(Kwf_Component_Data $component, $content, $renderer='component', $type = 'component', $value = '', $lifetime = null)
     {
+        $microtime = $this->_getMicrotime();
         // MySQL
         $data = array(
             'component_id' => (string)$component->componentId,
@@ -36,6 +37,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'renderer' => $renderer,
             'type' => $type,
             'value' => (string)$value,
+            'microtime' => $microtime,
             'expire' => is_null($lifetime) ? null : time() + $lifetime,
             'deleted' => false,
             'content' => $content
@@ -51,7 +53,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $cacheId = $this->_getCacheId($component->componentId, $renderer, $type, $value);
         $ttl = null;
         if ($lifetime) $ttl = $lifetime;
-        Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, $ttl);
+        Kwf_Component_Cache_Memory::getInstance()->save($content, $cacheId, $ttl, $microtime);
         return true;
     }
 
@@ -69,7 +71,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         }
         $cacheId = $this->_getCacheId($componentId, $renderer, $type, $value);
         $data = Kwf_Component_Cache_Memory::getInstance()->loadWithMetaData($cacheId);
-        if ($data === false) {
+        if ($data === false || !is_array($data)) {
             Kwf_Benchmark::count('comp cache mysql');
             $select = $this->getModel('cache')->select()
                 ->whereEquals('component_id', $componentId)
@@ -81,6 +83,9 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                     new Kwf_Model_Select_Expr_Higher('expire', time()),
                     new Kwf_Model_Select_Expr_IsNull('expire'),
                 )));
+            if ($data !== false) {
+                $select->where(new Kwf_Model_Select_Expr_Higher('microtime', $data));
+            }
             $options = array(
                 'columns' => array('content', 'expire'),
             );
@@ -109,6 +114,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     public function deleteViewCache($select, $progressBarAdapter = null)
     {
+        $microtime = $this->_getMicrotime();
         $select->whereEquals('deleted', false);
         $model = $this->getModel();
         $log = Kwf_Component_Events_Log::getInstance();
@@ -153,35 +159,20 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 throw new Kwf_Exception('Should not happen.');
             }
         }
-        if ($progress) { $progress->next(1, "partialIds"); }
-        foreach ($partialIds as $componentId => $values) {
-            $select = $model->select();
-            $select->where(new Kwf_Model_Select_Expr_And(array(
-                new Kwf_Model_Select_Expr_Equals('component_id', $componentId),
-                new Kwf_Model_Select_Expr_Equals('type', 'partial'),
-                new Kwf_Model_Select_Expr_Equals('value', $values)
-            )));
-            $model->updateRows(array('deleted' => true), $select);
-        }
-        if ($progress) { $progress->next(1, "deleteIds"); }
-        foreach ($deleteIds as $type => $componentIds) {
-            $select = $model->select();
-            $select->where(new Kwf_Model_Select_Expr_And(array(
-                new Kwf_Model_Select_Expr_Equals('component_id', $componentIds),
-                new Kwf_Model_Select_Expr_Equals('type', $type)
-            )));
-            $model->updateRows(array('deleted' => true), $select);
-        }
 
+        // Memcache
+        $this->_beforeMemcacheDelete($select); // For unit testing - DO NOT DELETE!
         if ($progress) { $step = 0; }
         foreach ($cacheIds as $key => $cacheId) {
             if ($progress && ($key%100) == 0) {
                 $step += 100;
                 $progress->next(1, "memcache $step / $count");
             }
-            Kwf_Component_Cache_Memory::getInstance()->remove($cacheId);
+            Kwf_Component_Cache_Memory::getInstance()->remove($cacheId, $microtime);
         }
+        $this->_afterMemcacheDelete($select); // For unit testing - DO NOT DELETE!
 
+        // FullPage
         if ($progress) { $progress->next(1, "fullPage"); }
         $s = new Kwf_Model_Select();
         $s->whereEquals('type', 'fullPage');
@@ -197,10 +188,34 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 $this->deleteViewCache($s);
             }
         }
+
+        // Database
+        $this->_beforeDatabaseDelete($select); // For unit testing - DO NOT DELETE!
+        if ($progress) { $progress->next(1, "partialIds"); }
+        foreach ($partialIds as $componentId => $values) {
+            $select = $model->select();
+            $select->where(new Kwf_Model_Select_Expr_And(array(
+                new Kwf_Model_Select_Expr_Equals('component_id', $componentId),
+                new Kwf_Model_Select_Expr_Equals('type', 'partial'),
+                new Kwf_Model_Select_Expr_Equals('value', $values),
+                new Kwf_Model_Select_Expr_LowerEqual('microtime', $microtime)
+            )));
+            $model->updateRows(array('deleted' => true), $select);
+        }
+        if ($progress) { $progress->next(1, "deleteIds"); }
+        foreach ($deleteIds as $type => $componentIds) {
+            $select = $model->select();
+            $select->where(new Kwf_Model_Select_Expr_And(array(
+                new Kwf_Model_Select_Expr_Equals('component_id', $componentIds),
+                new Kwf_Model_Select_Expr_Equals('type', $type),
+                new Kwf_Model_Select_Expr_LowerEqual('microtime', $microtime)
+            )));
+            $model->updateRows(array('deleted' => true), $select);
+        }
+        $this->_afterDatabaseDelete($select); // For unit testing - DO NOT DELETE!
+
         if ($progress) $progress->finish();
-
         file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Component_Events::$eventsCount.' events; '.count($deleteIds).' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'')."\n", FILE_APPEND);
-
         return count($cacheIds);
     }
 
@@ -251,6 +266,13 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
         return $ret;
     }
+
+    private function _getMicrotime()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return (string)($sec . substr($usec, 2, 4));
+    }
+
     protected static function _getCacheId($componentId, $renderer, $type, $value)
     {
         return "cc_".str_replace('-', '__', $componentId)."_{$renderer}_{$type}_{$value}";
@@ -260,4 +282,15 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
     {
         return self::_getCacheId($componentId, $renderer, $type, $value);
     }
+
+    // wird nur von Kwf_Component_View_Renderer->saveCache() verwendet
+    public function test($componentId, $renderer, $type = 'component', $value = '')
+    {
+        return !is_null($this->load($componentId, $renderer, $type, $value));
+    }
+
+    protected function _beforeMemcacheDelete($select) {} // For unit testing - DO NOT DELETE!
+    protected function _afterMemcacheDelete($select) {} // For unit testing - DO NOT DELETE!
+    protected function _beforeDatabaseDelete($select) {} // For unit testing - DO NOT DELETE!
+    protected function _afterDatabaseDelete($select) {} // For unit testing - DO NOT DELETE!
 }

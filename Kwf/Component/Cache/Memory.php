@@ -41,11 +41,14 @@ class Kwf_Component_Cache_Memory
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
 
             $tmp = Kwf_Cache_Simple::getMemcache()->get($prefix.$id);
-            if (is_array($tmp) && isset($tmp[0])) {
+            if (is_array($tmp) && array_key_exists(0, $tmp)) {
                 return array(
                     'contents' => $tmp[0],
+                    'timestamp' => $tmp[1],
                     'expire' => $tmp[2] ? ($tmp[1] + $tmp[2]) : null, //mtime + lifetime
                 );
+            } else if ($tmp) {
+                return $tmp;
             }
             return false;
         } else if ($be == 'file') {
@@ -58,7 +61,12 @@ class Kwf_Component_Cache_Memory
             }
             return $data;
         } else {
-            return self::getZendCache()->loadWithMetaData($id);
+            $ret = self::getZendCache()->loadWithMetaData($id);
+            if (substr($ret['contents'], 0, 13) == 'kwf-timestamp') {
+                return substr($ret['contents'], 13);
+            } else {
+                return $ret;
+            }
         }
     }
 
@@ -83,19 +91,15 @@ class Kwf_Component_Cache_Memory
 
     }
 
-    public function remove($id)
+    public function remove($id, $microtime)
     {
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
-            return Kwf_Cache_Simple::getMemcache()->delete($prefix.$id);
-        } else if ($be == 'file') {
-            $file = self::_getFileNameForCacheId($id);
-            if (!file_exists($file)) return false;
-            return unlink($file);
+            return Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $microtime);
         } else {
-            return self::getZendCache()->remove($id);
+            return self::getZendCache()->save('kwf-timestamp' . $microtime, $id);
         }
     }
 
