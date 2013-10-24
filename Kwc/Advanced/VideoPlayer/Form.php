@@ -27,6 +27,7 @@ class Kwc_Advanced_VideoPlayer_Form extends Kwc_Abstract_Composite_Form
             ->setWidth(80);
         $fs->add(new Kwf_Form_Field_Select('format', trlKwf('Format')))
             ->setValues(array('16x9' => trlKwfStatic('16:9'), '4x3' => trlKwfStatic('4:3')))
+            ->setDefaultValue('16x9')
             ->setAllowBlank(false);
         $fs->add(new Kwf_Form_Field_Checkbox('loop', trlKwf('Repeat')));
         $fs->add(new Kwf_Form_Field_Checkbox('auto_play', trlKwf('Auto play')));
