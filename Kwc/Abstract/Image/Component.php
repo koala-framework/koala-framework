@@ -100,8 +100,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         //width oder height gesetzt sein
         reset($settings['dimensions']);
         $firstDimension = current($settings['dimensions']);
-        if (($firstDimension['scale'] == Kwf_Media_Image::SCALE_BESTFIT ||
-            $firstDimension['scale'] == Kwf_Media_Image::SCALE_CROP) &&
+        if (($firstDimension['scale'] === Kwf_Media_Image::SCALE_BESTFIT ||
+            $firstDimension['scale'] === Kwf_Media_Image::SCALE_CROP) &&
             empty($firstDimension['width']) &&
             empty($firstDimension['height'])
         ) {
@@ -171,7 +171,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     {
         $type = 'default';
         $s = $this->_getImageDimensions();
-        if ($s['width'] == self::CONTENT_WIDTH) {
+        if ($s['width'] === self::CONTENT_WIDTH) {
             //use the contentWidth as type so we have an unique media cacheId depending on the width
             //that way it's not necessary to delete the media cache when content with changes
             $type = $this->getContentWidth();
@@ -300,7 +300,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     public function getImageDimensions()
     {
         $size = $this->_getImageDimensions();
-        if ($size['width'] == self::CONTENT_WIDTH) {
+        if ($size['width'] === self::CONTENT_WIDTH) {
             $size['width'] = $this->getContentWidth();
         }
         $data = $this->_getImageDataOrEmptyImageData();
@@ -332,14 +332,14 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $dim = $component->getComponent()->getImageDimensions(); //take actual image size as base
             $dim['width'] *= 2;
             $dim['height'] *= 2;
-            if ($dim['scale'] == Kwf_Media_Image::SCALE_BESTFIT) {
+            if ($dim['scale'] === Kwf_Media_Image::SCALE_BESTFIT) {
                 //don't cause rounding errors
                 $dim['scale'] = Kwf_Media_Image::SCALE_DEFORM;
             }
         } else {
             //default size; display pixel ratio 1
             $dim = $component->getComponent()->_getImageDimensions();
-            if ($dim['width'] == self::CONTENT_WIDTH) {
+            if ($dim['width'] === self::CONTENT_WIDTH) {
                 $dim['width'] = $component->getComponent()->getContentWidth();
             }
         }
@@ -373,7 +373,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     {
         $data = $this->_getImageDataOrEmptyImageData();
         $s = $this->_getImageDimensions();
-        if ($s['width'] == self::CONTENT_WIDTH) {
+        if ($s['width'] === self::CONTENT_WIDTH) {
             return parent::getContentWidth();
         }
         if ($data) {
