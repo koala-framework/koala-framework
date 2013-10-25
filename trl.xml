@@ -9950,5 +9950,40 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Frau {0}</de>
 <id>2024</id>
 </text>
+<text>
+<en>Must not include newlines</en>
+<id>2026</id>
+</text>
+<text>
+<en>Must not include tags</en>
+<id>2027</id>
+</text>
+<text>
+<en>Stretch video to maximum width</en>
+<de>Video auf maximale Breite vergrößern</de>
+<id>2028</id>
+</text>
+<text>
+<en>16:9</en>
+<id>2029</id>
+</text>
+<text>
+<en>4:3</en>
+<id>2030</id>
+</text>
+<text>
+<en>Set size of video</en>
+<de>Benutzerdefinierte Videogröße setzen</de>
+<id>2031</id>
+</text>
+<text>
+<en>Preview image</en>
+<de>Vorschaubild</de>
+<id>2032</id>
+</text>
+<text>
+<en>Recent Posts</en>
+<id>2033</id>
+</text>
 </trl>
 
