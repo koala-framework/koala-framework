@@ -111,15 +111,20 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
 
         $videoSetting = $this->_getSetting('video');
         $row = $this->getRow();
-        if ($row->video_width) {
-            $ret['width'] = $row->video_width;
+        if ($row->size == 'contentWidth') {
+            $ret['width'] = '100%';
+            $ret['height'] = '100%';
         } else {
-            $ret['width'] = $videoSetting['defaultVideoWidth'];
-        }
-        if ($row->video_height) {
-            $ret['height'] = $row->video_height;
-        } else {
-            $ret['height'] = $videoSetting['defaultVideoHeight'];
+            if ($row->video_width) {
+                $ret['width'] = $row->video_width;
+            } else {
+                $ret['width'] = $videoSetting['defaultVideoWidth'];
+            }
+            if ($row->video_height) {
+                $ret['height'] = $row->video_height;
+            } else {
+                $ret['height'] = $videoSetting['defaultVideoHeight'];
+            }
         }
         return $ret;
     }
