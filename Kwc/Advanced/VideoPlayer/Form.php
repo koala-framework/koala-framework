@@ -22,7 +22,7 @@ class Kwc_Advanced_VideoPlayer_Form extends Kwc_Abstract_Composite_Form
         $fs = $this->fields->add(new Kwf_Form_Container_FieldSet(trlKwf('Settings')))
             ->setHelpText(trlKwf('Insert "100%" in both fields to make it responsive.'));
 
-        $cards = $fs->add(new Kwf_Form_Container_Cards('size_type', trlKwf('Size')));
+        $cards = $fs->add(new Kwf_Form_Container_Cards('size', trlKwf('Size')));
         $cards->getCombobox()
             ->setWidth(300)
             ->setListWidth(300);
