@@ -75,6 +75,7 @@ class Kwf_Setup
     {
         $error = error_get_last();
         if ($error !== null) {
+            ini_set('memory_limit', memory_get_usage()+16*1024*1024); //in case it was an memory limit error make sure we have enough memory for error handling
             if (!(
                    (defined('E_STRICT') && $error["type"] == E_STRICT)
                 || (defined('E_DEPRECATED') && $error["type"] == E_DEPRECATED)
