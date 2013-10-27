@@ -73,6 +73,16 @@ class Kwf_Setup
 
     public static function shutDown()
     {
+        $error = error_get_last();
+        if ($error !== null) {
+            if (!(
+                   (defined('E_STRICT') && $error["type"] == E_STRICT)
+                || (defined('E_DEPRECATED') && $error["type"] == E_DEPRECATED)
+            )) {
+                $e = new ErrorException($error["message"], 0, $error["type"], $error["file"], $error["line"]);
+                Kwf_Debug::handleException($e);
+            }
+        }
         Kwf_Benchmark::shutDown();
     }
 
