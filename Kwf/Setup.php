@@ -80,6 +80,7 @@ class Kwf_Setup
                 || (defined('E_DEPRECATED') && $error["type"] == E_DEPRECATED)
             )) {
                 $e = new ErrorException($error["message"], 0, $error["type"], $error["file"], $error["line"]);
+                chdir(APP_PATH);
                 Kwf_Debug::handleException($e);
             }
         }
