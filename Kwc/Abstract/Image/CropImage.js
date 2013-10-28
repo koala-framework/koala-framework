@@ -2,13 +2,12 @@ Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     src: null,//image path
     preserveRatio: false,
-    width: null,//width of image
+    width: null,//width of image,
     height: null,//height of image
+    outWidth: null,
+    outHeight: null,
     //values of initial selected region
-    cropWidth: null,
-    cropHeight: null,
-    cropX: null,
-    cropY: null,
+    cropData: null,
 
     minWidth: 50,//min width of crop region
     minHeight: 50,//min height of crop region
@@ -20,10 +19,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             tag: 'div',
             cls: 'kwc-crop-image-wrapper'
         }]
-    },
-
-    initComponent: function() {
-        Kwc.Abstract.Image.CropImage.superclass.initComponent.call(this);
     },
 
     getCropData: function() {
@@ -54,8 +49,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             'background': 'url('+this.src+') no-repeat left top'
         });
 
-        var wrapEl = this.el.down('.kwc-crop-image-wrapper');
-        wrapEl.setSize(this.width, this.height);
+        this._wrapEl = this.el.down('.kwc-crop-image-wrapper');
+        this._wrapEl.setSize(this.width, this.height);
 
         this._image = new Ext.BoxComponent({
             opacity: 1.0,
@@ -66,8 +61,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             renderTo: this.el,
             constrainTo: this.el,
             src: Ext.BLANK_IMAGE_URL,
-            x: this.cropX,
-            y: this.cropY,
+            x: 0,
+            y: 0,
             height: this.height,
             width: this.width,
             style:{
@@ -75,19 +70,19 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             }
         });
 
-        var resizer = new Ext.Resizable(this._image.getEl(), {
+        this._resizer = new Ext.Resizable(this._image.getEl(), {
             handles: 'all',
             pinned: true,
             preserveRatio: this.preserveRatio,
             maxWidth: this.width,
             maxHeight: this.height,
-            width: this.cropWidth,
-            height: this.cropHeight,
+            width: this.width,
+            height: this.height,
             minWidth: this.minWidth,
             minHeight: this.minHeight
         });
-        resizer.getEl().addClass('kwc-crop-image-resizable');
-        resizer.on("resize", function() {
+        this._resizer.getEl().addClass('kwc-crop-image-resizable');
+        this._resizer.on("resize", function() {
             this._updateCropRegion();
             var res = this.getCropData();
             this.fireEvent('changeCrop', this, res);
@@ -121,7 +116,66 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
     afterRender: function () {
         Kwc.Abstract.Image.CropImage.superclass.afterRender.call(this);
+        this.getEl().mask(trlKwf('Loading image'), 'x-mask-loading');
+        var imgLoad = new Image();
+        imgLoad.onerror = (function() {
+            this.getEl().unmask();
+            Ext.Msg.alert(trlKwf('Error'), trlKwf("Couldn't load image."));
+        }).createDelegate(this);
+        imgLoad.onload = (function(){
+            this.getEl().unmask();
+            this.height = imgLoad.height;
+            this.width = imgLoad.width;
+
+            this._setImageSize(this.width, this.height);
+            this.setCropData(this.cropData, this.preserveRatio);
+
+            var params = {
+                'width': this.width,
+                'height': this.height
+            };
+            this.fireEvent('finishedLoading', this, params);
+        }).createDelegate(this);
+        imgLoad.src = this.src;
+
         this._updateCropRegion();
+    },
+
+    setCropData: function (cropData, preserveRatio)
+    {
+        if (!cropData) { // calculate default selection
+            cropData = {};
+            cropData.x = 0;
+            cropData.y = 0;
+            cropData.width = this.width;
+            cropData.height = this.height;
+
+            if (preserveRatio) {
+                if (this.height / this.outHeight > this.width / this.outWidth) {
+                    // orientate on width
+                    cropData.height = this.outHeight * this.width / this.outWidth;
+                    cropData.y = (this.height - cropData.height)/2;
+                } else {
+                    // orientate on height
+                    cropData.width = this.outWidth * this.height / this.outHeight;
+                    cropData.x = (this.width - cropData.width)/2;
+                }
+            }
+        }
+        this.cropData = cropData;
+        this._image.setPosition(cropData.x, cropData.y);
+        this._resizer.preserveRatio = preserveRatio;
+        this._resizer.resizeTo(cropData.width, cropData.height);
+    },
+
+    _setImageSize: function (width, height)
+    {
+        this._wrapEl.setSize(width, height);
+        this.setSize(width+14, height + 69);
+        this._image.width = width;
+        this._image.height = height;
+        this._resizer.maxWidth = width;
+        this._resizer.maxHeight = height;
     }
 });
 
