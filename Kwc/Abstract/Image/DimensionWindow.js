@@ -25,13 +25,13 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 }
             });
         }
-        this.dimensionField = new Kwf.Form.RadioGroup({
+        this._dimensionField = new Kwf.Form.RadioGroup({
             columns: 1,
             hideLabel: true,
             vertical: false,
             items: radios
         });
-        this.widthField = new Ext.form.NumberField({
+        this._widthField = new Ext.form.NumberField({
             fieldLabel: trlKwf('Width'),
             width: 50,
             enableKeyEvents: true,
@@ -39,7 +39,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             validationEvent: false,
             allowNegative: false
         });
-        this.heightField = new Ext.form.NumberField({
+        this._heightField = new Ext.form.NumberField({
             fieldLabel: trlKwf('Height'),
             width: 50,
             enableKeyEvents: true,
@@ -48,23 +48,23 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             allowNegative: false
         });
 
-        this.widthField.on('blur', this._validateSizes, this);
-        this.widthField.on('keyup', this._validateSizes, this);
-        this.heightField.on('blur', this._validateSizes, this);
-        this.heightField.on('keyup', this._validateSizes, this);
-        this.dimensionField.on('change', this._validateSizes, this);
-        this.dimensionField.on('change', this._resetCropRegion, this);
+        this._widthField.on('blur', this._validateSizes, this);
+        this._widthField.on('keyup', this._validateSizes, this);
+        this._heightField.on('blur', this._validateSizes, this);
+        this._heightField.on('keyup', this._validateSizes, this);
+        this._dimensionField.on('change', this._validateSizes, this);
+        this._dimensionField.on('change', this._resetCropRegion, this);
 
         // Has to be initialised before cropRegion because cropRegion needs dimensionValue
         if (this.value && this.value.dimension) {
-            this.dimensionField.setValue(this.value.dimension);
-            this.widthField.setValue(this.value.width);
-            this.heightField.setValue(this.value.height);
+            this._dimensionField.setValue(this.value.dimension);
+            this._widthField.setValue(this.value.width);
+            this._heightField.setValue(this.value.height);
         } else {
             for (var i in this.dimensions) {
                 break;
             }
-            this.dimensionField.setValue(i);
+            this._dimensionField.setValue(i);
         }
         this._enableDisableFields();
 
@@ -80,11 +80,11 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                     autoHeight: true,
                     title: trlKwf('Size'),
                     items: [
-                        this.widthField,
-                        this.heightField
+                        this._widthField,
+                        this._heightField
                     ]
                 },
-                this.dimensionField
+                this._dimensionField
             ]
         });
 
@@ -113,9 +113,9 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                     if (this._validateSizes()) {
                         this.value.cropData = this.cropData;
                         this.value = {
-                            dimension: this.dimensionField.getValue(),
-                            width: this.widthField.getValue(),
-                            height: this.heightField.getValue(),
+                            dimension: this._dimensionField.getValue(),
+                            width: this._widthField.getValue(),
+                            height: this._heightField.getValue(),
                             cropData: this.value.cropData
                         };
                         this.fireEvent('save', this.value);
@@ -141,7 +141,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     _initCropRegion: function ()
     {
         var cropData = null;
-        if (this.dimensionField.getValue() == this.value.dimension) {
+        if (this._dimensionField.getValue() == this.value.dimension) {
             // load saved crop-values if not 0
             if (this.value.cropData && this.value.cropData.width > 0 && this.value.cropData.height > 0) {
                 cropData = this.value.cropData;
@@ -183,7 +183,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         var preserveRatio = false;
         var outWidth = this._getWidth();
         var outHeight = this._getHeight();
-        var dimension = this.dimensions[this.dimensionField.getValue()];
+        var dimension = this.dimensions[this._dimensionField.getValue()];
         if (dimension.cover == true && !(outWidth == 0 || outHeight == 0)) {
             preserveRatio = true;
         }
@@ -193,9 +193,9 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     _getHeight: function ()
     {
         var outHeight = -1;
-        var dimension = this.dimensions[this.dimensionField.getValue()];
-        if (dimension.height == 'user' && this.heightField.getValue() != '') {
-            outHeight = this.heightField.getValue();
+        var dimension = this.dimensions[this._dimensionField.getValue()];
+        if (dimension.height == 'user' && this._heightField.getValue() != '') {
+            outHeight = this._heightField.getValue();
         } else if (dimension.height >= 0) {
             outHeight = dimension.height;
         } else if (typeof dimension.height === 'undefined') {
@@ -209,9 +209,9 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     _getWidth: function ()
     {
         var outWidth = -1;
-        var dimension = this.dimensions[this.dimensionField.getValue()];
-        if (dimension.width == 'user' && this.widthField.getValue() != '') {
-            outWidth = this.widthField.getValue();
+        var dimension = this.dimensions[this._dimensionField.getValue()];
+        if (dimension.width == 'user' && this._widthField.getValue() != '') {
+            outWidth = this._widthField.getValue();
         } else if (dimension.width == 'contentWidth') {
             outWidth = 0;
         } else if (dimension.width >= 0) {
@@ -231,9 +231,9 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             cropData = this.value.cropData;
         }
         this.value = {
-            dimension: this.dimensionField.getValue(),
-            width: this.widthField.getValue(),
-            height: this.heightField.getValue(),
+            dimension: this._dimensionField.getValue(),
+            width: this._widthField.getValue(),
+            height: this._heightField.getValue(),
             cropData: cropData
         };
         var outWidth = this._getWidth();
@@ -248,30 +248,30 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
     _validateSizes: function()
     {
-        var dim = this.dimensionField.getValue();
-        if (this.widthField.getValue() < 1 && this.dimensions[dim].width == 'user'
-            && this.heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
+        var dim = this._dimensionField.getValue();
+        if (this._widthField.getValue() < 1 && this.dimensions[dim].width == 'user'
+            && this._heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
         ) {
-            if (this.widthField.getValue() < 1) {
-                this.widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or cover.'));
+            if (this._widthField.getValue() < 1) {
+                this._widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or cover.'));
             }
-            if (this.heightField.getValue() < 1) {
-                this.heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or cover.'));
+            if (this._heightField.getValue() < 1) {
+                this._heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or cover.'));
             }
             return false;
         }
 
-        this.widthField.clearInvalid();
-        this.heightField.clearInvalid();
+        this._widthField.clearInvalid();
+        this._heightField.clearInvalid();
 
         return true;
     },
 
     _enableDisableFields: function()
     {
-        var dim = this.dimensions[this.dimensionField.getValue()];
-        this.widthField.setDisabled(!(dim && dim.width == 'user'));
-        this.heightField.setDisabled(!(dim && dim.height == 'user'));
+        var dim = this.dimensions[this._dimensionField.getValue()];
+        this._widthField.setDisabled(!(dim && dim.width == 'user'));
+        this._heightField.setDisabled(!(dim && dim.height == 'user'));
     }
 });
 
