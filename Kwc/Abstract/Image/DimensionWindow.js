@@ -74,9 +74,10 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
         this._configPane = new Ext.FormPanel({
             region: 'west',
-            layout: 'fit',
+            bodyStyle: 'padding: 10px',
             width: 250,
             items: [
+                this._dimensionField,
                 {
                     xtype: 'fieldset',
                     autoHeight: true,
@@ -85,8 +86,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                         this._widthField,
                         this._heightField
                     ]
-                },
-                this._dimensionField
+                }
             ]
         });
 
