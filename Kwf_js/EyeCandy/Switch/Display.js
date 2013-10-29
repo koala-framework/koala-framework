@@ -13,7 +13,7 @@ Kwf.onContentReady(function() {
     });
 });
 
-Kwf.Switch.Display = function(el) {
+Kwf.Switch.Display = function(el, config) {
     this.addEvents({
         'beforeOpen': true,
         'beforeClose': true,
@@ -21,6 +21,12 @@ Kwf.Switch.Display = function(el) {
         'closed': true
     });
     this._lockAnimation = false;
+    var defaultConfig = {
+        animation: { 
+            duration: .5
+        }
+    };
+    config = Ext.apply(defaultConfig, config);
 
     this.el = el;
     this.switchLink = Ext.get(Ext.query('.switchLink', this.el.dom)[0]);
@@ -56,17 +62,17 @@ Kwf.Switch.Display = function(el) {
     if (this.switchLink && this.switchContent) {
         if (this.switchLink.hasClass('switchLinkHover')) {
             Kwf.Event.on(this.el.dom, 'mouseEnter', function() {
-                this.doOpen();
+                this.doOpen(config);
             }, this);
             Kwf.Event.on(this.el.dom, 'mouseLeave', function() {
-                this.doClose();
+                this.doClose(config);
             }, this);
         } else {
             Ext.EventManager.addListener(this.switchLink, 'click', function(e) {
                 if (this.switchLink.hasClass('switchLinkOpened')) {
-                    this.doClose();
+                    this.doClose(config);
                 } else {
-                    this.doOpen();
+                    this.doOpen(config);
                 }
             }, this, { stopEvent: true });
         }
@@ -80,7 +86,7 @@ Kwf.Switch.Display = function(el) {
 };
 
 Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
-    doClose: function() {
+    doClose: function(config) {
         if (!this.switchLink.hasClass('switchLinkHover')) {
             if (this._lockAnimation) return;
             this._lockAnimation = true;
@@ -90,7 +96,7 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
         this.switchContent.stopFx();
         this.switchContent.scaleHeight = this.switchContent.getHeight();
         this.switchContent.scale(undefined, 0,
-            { easing: 'easeOut', duration: .5, afterStyle: "display:none;",
+            { easing: 'easeOut', duration: config.animation.duration, afterStyle: "display:none;",
                 callback: function() {
                     this.fireEvent('closed', this);
                     this._lockAnimation = false;
@@ -101,7 +107,7 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
         this.switchLink.removeClass('switchLinkOpened');
     },
 
-    doOpen: function() {
+    doOpen: function(config) {
         if (!this.switchLink.hasClass('switchLinkHover')) {
             if (this._lockAnimation) return;
             this._lockAnimation = true;
@@ -111,7 +117,7 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
         this.switchContent.stopFx();
         this.switchContent.setStyle('display', 'block');
         this.switchContent.scale(undefined, this.switchContent.scaleHeight,
-            { easing: 'easeOut', duration: .5, afterStyle: "display:block;height:auto;",
+            { easing: 'easeOut', duration: config.animation.duration, afterStyle: "display:block;height:auto;",
                 callback: function() {
                     this.fireEvent('opened', this);
                     Kwf.callOnContentReady(this.el.dom, {newRender: false});
