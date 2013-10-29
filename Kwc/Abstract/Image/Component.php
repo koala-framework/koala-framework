@@ -13,7 +13,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $ret['dimensions'] = array(
             'default'=>array(
-                'text' => trlKwf('default'),
+                'text' => trlKwf('300 x 200px'),
                 'width' => 300,
                 'height' => 200,
                 'cover' => true
@@ -21,25 +21,22 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 //  so the aspect ratio will be fixed when croping so that scaling wont deform image
                 // cover = false means image wont be scaled up if smaller than size.
             ),
-            'original'=>array(
-                'text' => trlKwf('original')
-            ),
-            'custombestfit'=>array(
-                'text' => trlKwf('user-defined'),
-                'width' => self::USER_SELECT,
-                'height' => self::USER_SELECT,
-                'cover' => false
-            ),
-            'customcrop'=>array(
-                'text' => trlKwf('user-defined'),
-                'width' => self::USER_SELECT,
-                'height' => self::USER_SELECT,
+            'flexibleHeight'=>array(
+                'text' => trlKwf('300px width'),
+                'width' => 300,
+                'height' => 0,
                 'cover' => true
             ),
             'fullWidth'=>array(
                 'text' => trlKwf('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
+                'cover' => true
+            ),
+            'custom'=>array(
+                'text' => trlKwf('user-defined'),
+                'width' => self::USER_SELECT,
+                'height' => self::USER_SELECT,
                 'cover' => true
             ),
         );
