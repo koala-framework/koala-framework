@@ -50,8 +50,10 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
         this._widthField.on('blur', this._validateSizes, this);
         this._widthField.on('keyup', this._validateSizes, this);
+        this._widthField.on('keyup', this._updateOutSize, this);
         this._heightField.on('blur', this._validateSizes, this);
         this._heightField.on('keyup', this._validateSizes, this);
+        this._heightField.on('keyup', this._updateOutSize, this);
         this._dimensionField.on('change', this._validateSizes, this);
         this._dimensionField.on('change', this._resetCropRegion, this);
 
@@ -265,6 +267,21 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         this._heightField.clearInvalid();
 
         return true;
+    },
+
+    _updateOutSize: function()
+    {
+        var outWidth = this._widthField.getValue();
+        var outHeight = this._heightField.getValue();
+        var cropData = this._cropImage.getCropData();
+        var preserveRatio = false;
+        if (outWidth > 0 && outHeight > 0) {
+            this._cropImage.outWidth = outWidth;
+            this._cropImage.outHeight = outHeight;
+            preserveRatio = true;
+            cropData.height = outHeight * cropData.width / outWidth;
+        }
+        this._cropImage.setCropData(cropData, preserveRatio);
     },
 
     _enableDisableFields: function()
