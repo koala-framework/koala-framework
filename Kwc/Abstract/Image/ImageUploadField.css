@@ -1,0 +1,20 @@
+.imageUploadBigPreview .imageUploadContainer {
+    /*padding-left: 0px !important;*/
+}
+
+.imageUploadBigPreview .dimensionContainer {
+    height: 0;
+    left: 122px;
+    top: -55px;
+}
+
+.imageUploadBigPreview .dimensionContainer .imageDimension {
+    width: 227px !important;
+}
+
+.imageUploadBigPreview div div div > a {
+    left: 464px !important;
+    top: -88px !important;
+}
+
+/*picture_edit*/

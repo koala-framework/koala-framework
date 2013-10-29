@@ -2,6 +2,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     allowOnlyImages: false,
     fileSizeLimit: 0,
     showPreview: true,
+    previewSize: 40,
     showDeleteButton: true,
     infoPosition: 'south',
     defaultAutoCreate : {
@@ -17,12 +18,12 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         'default': 'page_white'
     },
     previewTpl: ['<a href="{href}" target="_blank" ',
-                 'style="width: 40px; height: 40px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
+                 'style="width: {previewSize}px; height: {previewSize}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview}); background-size: cover;"></a>'],
     // also usable in infoTpl: {href}
     infoTpl: ['{filename}.{extension}<br />',
               '{fileSize:fileSize}',
               '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl>'],
-    emptyTpl: '<div style="height: 40px; width: 40px; text-align: center;"><br />('+trlKwf('empty')+')</div>',
+    emptyTpl: ['<div style="height: {previewSize}px; width: {previewSize}px; text-align: center;"><br />('+trlKwf('empty')+')</div>'],
 
     initComponent: function() {
         this.addEvents(['uploaded']);
@@ -32,6 +33,11 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 this.previewTpl = new Ext.XTemplate(this.previewTpl);
             }
             this.previewTpl.compile();
+
+            if (!(this.emptyTpl instanceof Ext.XTemplate)) {
+                this.emptyTpl = new Ext.XTemplate(this.emptyTpl);
+            }
+            this.emptyTpl.compile();
         }
 
         if (!(this.infoTpl instanceof Ext.XTemplate)) {
@@ -74,7 +80,9 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                     'background-color: white;'
             });
 
-            this.previewImage.update(this.emptyTpl); //bild wird in der richtigen größe angezeigt
+            this.emptyTpl.overwrite(this.previewImage, { //bild wird in der richtigen größe angezeigt
+                previewSize: this.previewSize
+            });
         }
 
         if (this.infoPosition == 'west') this.createInfoContainer();
@@ -256,14 +264,20 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             if (value.mimeType) {
                 if (this.showPreview) {
                     if (value.mimeType.match(/(^image\/)/)) {
-                        icon = '/kwf/media/upload/preview?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
+                        var previewSize = 'default';
+                        if (this.previewSize > 40) {
+                            previewSize = 'frontend';
+                        }
+                        icon = '/kwf/media/upload/preview?uploadId='+value.uploadId
+                            +'&hashKey='+value.hashKey+'&size='+previewSize;
                     } else {
                         icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
                         icon = '/assets/silkicons/' + icon + '.png';
                     }
                     this.previewTpl.overwrite(this.previewImage, {
                         preview: icon,
-                        href: href
+                        href: href,
+                        previewSize: this.previewSize
                     });
                 }
 
@@ -272,7 +286,9 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 this.infoTpl.overwrite(this.infoContainer, infoVars);
             } else {
                 if (this.showPreview) {
-                    this.previewImage.update(this.emptyTpl);
+                    this.emptyTpl.overwrite(this.previewImage, {
+                        previewSize: this.previewSize
+                    });
                 }
                 this.infoContainer.update('');
             }
