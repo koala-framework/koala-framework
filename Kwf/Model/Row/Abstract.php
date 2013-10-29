@@ -299,6 +299,22 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
             }
             $r->_saveWithoutResetDirty();
         }
+
+        foreach ($this->_childRows as $row) {
+            if ($row->_isDeleted) continue;
+            if (!($row->getModel() instanceof Kwf_Model_RowsSubModel_Interface)) {
+                if (!$row->{$row->_getPrimaryKey()}) {
+                    //Tabellen Relationen müssen *nach* der row gespeichert werden,
+                    //da beim hinzufügen die id noch nicht verfügbar ist
+                    $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
+                    $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
+                }
+                if ($row->isDirty()) {
+                    $row->save();
+                }
+            }
+        }
+
         return null;
     }
 
@@ -489,20 +505,6 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
 
     protected function _afterSave()
     {
-        foreach ($this->_childRows as $row) {
-            if ($row->_isDeleted) continue;
-            if (!($row->getModel() instanceof Kwf_Model_RowsSubModel_Interface)) {
-                if (!$row->{$row->_getPrimaryKey()}) {
-                    //Tabellen Relationen müssen *nach* der row gespeichert werden,
-                    //da beim hinzufügen die id noch nicht verfügbar ist
-                    $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
-                    $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
-                }
-                if ($row->isDirty()) {
-                    $row->save();
-                }
-            }
-        }
         $this->_updateFilters(true);
 
         $this->_callReferencedModelsRowUpdated('save');
