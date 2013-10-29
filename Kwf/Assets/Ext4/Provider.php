@@ -9,6 +9,7 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
         $t = microtime(true);
         $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(Kwf_Config::getValue('path.ext4').'/src'), RecursiveIteratorIterator::LEAVES_ONLY);
         foreach ($it as $i) {
+            if (substr($i->getPathname(), -3) != '.js') continue;
             $depName = 'Ext4.'.str_replace('/', '.', substr($i->getPathname(), strlen(Kwf_Config::getValue('path.ext4').'/src/'), -3));
             $fileContents = file_get_contents($i->getPathname());
             if (preg_match_all('#^\s*(//|\*) @(class|alternateClassName|define) ([a-zA-Z0-9\./]+)\s*$#m', $fileContents, $m)) {
