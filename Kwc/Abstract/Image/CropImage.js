@@ -9,8 +9,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     //values of initial selected region
     cropData: null,
 
-    minWidth: 50,//min width of crop region
-    minHeight: 50,//min height of crop region
+    minWidth: 52,//min width of crop region
+    minHeight: 52,//min height of crop region
     _image: null,
 
     _centerHandle: '<div class="handle {position}"></div>',
@@ -35,15 +35,29 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             width: imageBox.width,
             height: imageBox.height
         };
+        var resetPosition = false;
         if (result.x < 0 || result.y < 0) {
+            resetPosition = true;
             if (result.x < 0) {
                 result.x = 0;
-                this._image.getEl().setStyle('left', '0px');
             }
             if (result.y < 0) {
                 result.y = 0;
-                this._image.getEl().setStyle('top', '0px');
             }
+        }
+        var width = this._image.getEl().parent().getWidth();
+        var height = this._image.getEl().parent().getHeight();
+        if (result.x + result.width > width) {
+            resetPosition = true;
+            result.x = width - result.width;
+        }
+        if (result.y + result.height > height) {
+            resetPosition = true;
+            result.y = height - result.height;
+        }
+        if (resetPosition) {
+            this._image.getEl().setStyle('left', result.x+'px');
+            this._image.getEl().setStyle('top', result.y+'px');
         }
         return result;
     },
