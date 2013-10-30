@@ -32,16 +32,14 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             items: radios
         });
         this._widthField = new Ext.form.NumberField({
-            fieldLabel: trlKwf('Width'),
-            width: 50,
+            columnWidth: 0.45,
             enableKeyEvents: true,
             validateOnBlur: false,
             validationEvent: false,
             allowNegative: false
         });
         this._heightField = new Ext.form.NumberField({
-            fieldLabel: trlKwf('Height'),
-            width: 50,
+            columnWidth: 0.45,
             enableKeyEvents: true,
             validateOnBlur: false,
             validationEvent: false,
@@ -75,15 +73,22 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         this._configPane = new Ext.FormPanel({
             region: 'west',
             bodyStyle: 'padding: 10px',
-            width: 250,
+            width: 200,
+            hideBorders: true,
             items: [
                 this._dimensionField,
                 {
-                    xtype: 'fieldset',
+                    xtype: 'panel',
+                    layout: 'column',
+                    hideBorders: true,
                     autoHeight: true,
-                    title: trlKwf('Size'),
                     items: [
                         this._widthField,
+                        {
+                            columnWidth: 0.1,
+                            html: 'x',
+                            style: 'line-height:20px;text-align:center;'
+                        },
                         this._heightField
                     ]
                 }
@@ -175,7 +180,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         this._cropImage.on('finishedLoading', function (dimensions) {
             this._cropPane.width = dimensions.width;
             this._cropPane.height = dimensions.height;
-            this.setSize(250 + 18 + dimensions.width, dimensions.height + 73);
+            this.setSize(200 + 18 + dimensions.width, dimensions.height + 73);
             //TODO handle image height smaller than dimensions-radios
         }, this);
     },
