@@ -62,11 +62,6 @@
     margin-top: 3px;
 }
 .cssClass label {
-    margin-right: 20px;
-    text-align: right;
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: var(typo);
     line-height: 18px;
 }
 .cssClass .kwcLabelPositionAbove .kwfFormFieldWrapper.hasLabel {
