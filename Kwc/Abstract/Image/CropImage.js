@@ -33,10 +33,20 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             width: imageBox.width,
             height: imageBox.height
         };
+        if (result.x < 0 || result.y < 0) {
+            if (result.x < 0) {
+                result.x = 0;
+                this._image.getEl().setStyle('left', '0px');
+            }
+            if (result.y < 0) {
+                result.y = 0;
+                this._image.getEl().setStyle('top', '0px');
+            }
+        }
         return result;
     },
 
-    _updateCropRegion: function () {
+    _updateCropRegionImage: function () {
         var result = this.getCropData();
         this._image.getEl().setStyle({
             'background-position': (-result.x)+'px '+(-result.y)+'px'
@@ -83,7 +93,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         });
         this._resizer.getEl().addClass('kwc-crop-image-resizable');
         this._resizer.on("resize", function() {
-            this._updateCropRegion();
+            this._updateCropRegionImage();
             var res = this.getCropData();
             this.fireEvent('changeCrop', this, res);
         }, this);
@@ -101,7 +111,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             });
         }).createDelegate(this);
         dragDrop.endDrag = (function (e) {
-            this._updateCropRegion();
+            this._updateCropRegionImage();
             this._image.getEl().setStyle({
                 'background-image': 'url('+this.src+')',
                 'background-repeat': 'no-repeat'
@@ -138,7 +148,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         }).createDelegate(this);
         imgLoad.src = this.src;
 
-        this._updateCropRegion();
+        this._updateCropRegionImage();
     },
 
     setCropData: function (cropData, preserveRatio)
