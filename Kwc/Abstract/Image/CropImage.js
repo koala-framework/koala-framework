@@ -13,6 +13,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     minHeight: 50,//min height of crop region
     _image: null,
 
+    _centerHandle: '<div class="handle {position}"></div>',
+
     autoEl: {
         tag: 'div',
         children: [{
@@ -89,8 +91,10 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             width: this.width,
             height: this.height,
             minWidth: this.minWidth,
-            minHeight: this.minHeight
+            minHeight: this.minHeight,
+            transparent: true
         });
+
         this._resizer.getEl().addClass('kwc-crop-image-resizable');
         this._resizer.on("resize", function() {
             this._updateCropRegionImage();
@@ -125,6 +129,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     },
 
     afterRender: function () {
+        this._styleHandles();
         Kwc.Abstract.Image.CropImage.superclass.afterRender.call(this);
         this.getEl().mask(trlKwf('Loading image'), 'x-mask-loading');
         var imgLoad = new Image();
@@ -186,6 +191,55 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         this._image.height = height;
         this._resizer.maxWidth = width;
         this._resizer.maxHeight = height;
+    },
+
+    _styleHandles: function() {
+        if (this._centerHandle) {
+            if (!(this._centerHandle instanceof Ext.XTemplate)) {
+                this._centerHandle = new Ext.XTemplate(this._centerHandle);
+            }
+            this._centerHandle.compile();
+        }
+
+        var middleHandles = [
+             this._resizer.west.el,
+             this._resizer.east.el,
+             this._resizer.north.el,
+             this._resizer.south.el
+        ];
+        for (var i = 0; i < middleHandles.length; i++) {
+            middleHandles[i].setStyle('background-image', 'none');
+            middleHandles[i].setStyle('opacity', '1');
+        }
+
+        this._setCssClassesForHandler(this._resizer.west.el, 'west');
+        this._setCssClassesForHandler(this._resizer.east.el, 'east');
+        this._setCssClassesForHandler(this._resizer.north.el, 'north');
+        this._setCssClassesForHandler(this._resizer.south.el, 'south');
+    },
+
+    _setCssClassesForHandler: function (el, side) {
+        this._centerHandle.append(el, {
+            position: 'dashedline'
+        });
+        this._centerHandle.append(el, {
+            position: side
+        });
+        if (side == 'west' || side == 'east') {
+            this._centerHandle.append(el, {
+                position: 'north'+side
+            });
+            this._centerHandle.append(el, {
+                position: 'south'+side
+            });
+        } else {
+            this._centerHandle.append(el, {
+                position: side+'west'
+            });
+            this._centerHandle.append(el, {
+                position: side+'east'
+            });
+        }
     }
 });
 

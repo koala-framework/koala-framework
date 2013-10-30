@@ -4,11 +4,108 @@
 }
 
 .x-window .kwc-crop-image-wrapper {
-    background-image: url("/assets/kwf/images/stripesDark.png");
+    background-image: url("/assets/kwf/images/cropimage/background.png");
     position: absolute;
 }
 
 .kwc-crop-image-resizable {
     cursor: move;
     position: absolute;
+}
+
+.x-resizable-handle .dashedline {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.x-resizable-handle-west .dashedline {
+    border-left: 1px dashed #999999;
+    left: 0px;
+}
+.x-resizable-handle-east .dashedline {
+    border-right: 1px dashed #999999;
+    right: 0px;
+}
+.x-resizable-handle-south .dashedline {
+    border-bottom: 1px dashed #999999;
+    bottom: 0px;
+}
+.x-resizable-handle-north .dashedline {
+    border-top: 1px dashed #999999;
+    top: 0px;
+}
+
+.x-resizable-handle-north,
+.x-resizable-handle-south {
+    height: 7px;
+}
+.x-resizable-handle-north .handle.north,
+.x-resizable-handle-south .handle.south {
+    background-image: url('/assets/kwf/images/cropimage/topBottomMiddle.png');
+    height: 7px;
+    width: 26px;
+    position: absolute;
+    margin-left: -13px;
+    left: 50%;
+}
+
+.x-resizable-handle-west,
+.x-resizable-handle-east {
+    width: 7px;
+}
+.x-resizable-handle-west .handle.west,
+.x-resizable-handle-east .handle.east {
+    background-image: url('/assets/kwf/images/cropimage/leftRightMiddle.png');
+    height: 26px;
+    width: 7px;
+    position: absolute;
+    margin-top: -13px;
+    top: 50%;
+}
+
+.x-resizable-handle-west .handle.northwest,
+.x-resizable-handle-west .handle.southwest,
+.x-resizable-handle-east .handle.northeast,
+.x-resizable-handle-east .handle.southeast {
+    height: 19px;
+    width: 7px;
+    position: absolute;
+}
+.x-resizable-handle-west .handle.northwest,
+.x-resizable-handle-east .handle.northeast {
+    background-image: url('/assets/kwf/images/cropimage/leftRightTop.png');
+    margin-top: 7px;
+}
+
+.x-resizable-handle-west .handle.southwest,
+.x-resizable-handle-east .handle.southeast {
+    background-image: url('/assets/kwf/images/cropimage/leftRightBottom.png');
+    bottom: 0px;
+    margin-bottom: 7px;
+}
+
+.x-resizable-handle-north .handle.northwest,
+.x-resizable-handle-north .handle.northeast,
+.x-resizable-handle-south .handle.southwest,
+.x-resizable-handle-south .handle.southeast {
+    height: 7px;
+    width: 26px;
+    position: absolute;
+}
+.x-resizable-handle-north .handle.northwest {
+    background-image: url('/assets/kwf/images/cropimage/leftTop.png');
+}
+.x-resizable-handle-south .handle.southwest {
+    background-image: url('/assets/kwf/images/cropimage/leftBottom.png');
+}
+
+.x-resizable-handle-north .handle.northeast,
+.x-resizable-handle-south .handle.southeast {
+    right: 0px;
+}
+.x-resizable-handle-north .handle.northeast {
+    background-image: url('/assets/kwf/images/cropimage/rightTop.png');
+}
+.x-resizable-handle-south .handle.southeast {
+    background-image: url('/assets/kwf/images/cropimage/rightBottom.png');
 }
