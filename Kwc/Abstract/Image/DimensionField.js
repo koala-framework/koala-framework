@@ -1,13 +1,16 @@
 Ext.namespace('Kwc.Abstract.Image');
-Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
-    triggerClass: 'x-form-search-trigger',
-    width: 300,
-    readOnly: true,
+Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
+    autoEl: {
+        tag: 'div',
+        cls: 'imageDimension',
+        children: [{
+            tag: 'div',
+            cls: 'dimension',
+            html: 'DIMENSION'
+        }]
+    },
     imageData: null,
 
-    initComponent: function() {
-        Kwc.Abstract.Image.DimensionField.superclass.initComponent.call(this);
-    },
     getValue: function() {
         return this.value || {};
     },
@@ -16,14 +19,24 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
         this.value = v;
         if (this.rendered) {
             if (v.dimension) {
-                this.setRawValue(Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions, v));
+                this.getEl().child('.dimension').update(Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions, v));
             } else {
-                this.setRawValue('');
+                this.getEl().child('.dimension').update('');
             }
         }
     },
+
     afterRender: function() {
         Kwc.Abstract.Image.DimensionField.superclass.afterRender.call(this);
+        var cropButton = new Ext.Button({
+            text: trlKwf('Configure'),
+            cls: 'x-btn-text-icon',
+            icon: '/assets/silkicons/shape_handles.png',
+            renderTo: this.getEl(),
+            scope: this,
+            handler: this._onButtonClick
+        });
+
         if (this.value) {
             this.setValue(this.value);
         }
@@ -43,7 +56,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
         }, this);
     },
 
-    onTriggerClick: function() {
+    _onButtonClick: function() {
         var sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
             dimensions: this.dimensions,
             value: this.getValue(),

@@ -10,11 +10,11 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
 
         $this->add(new Kwc_Abstract_Image_ImageUploadField(
             Kwc_Abstract::getSetting($this->getClass(), 'dimensions'),
-            Kwc_Abstract::getSetting($this->getClass(), 'imageLabel'),
-            Kwc_Abstract::getSetting($this->getClass(), 'allowBlank'),
-            Kwc_Abstract::getSetting($this->getClass(), 'maxResolution'),
-            Kwc_Abstract::getSetting($this->getClass(), 'showHelpText')
-        ));
+            Kwc_Abstract::getSetting($this->getClass(), 'imageLabel')
+        ))
+            ->setAllowBlankImage(Kwc_Abstract::getSetting($this->getClass(), 'allowBlank'))
+            ->setMaxResolution(Kwc_Abstract::getSetting($this->getClass(), 'maxResolution'))
+            ->setShowHelptext(Kwc_Abstract::getSetting($this->getClass(), 'showHelpText'));
 
         if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
             $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))

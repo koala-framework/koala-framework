@@ -2,19 +2,15 @@
     /*padding-left: 0px !important;*/
 }
 
+/* position of dimension text and button */
 .imageUploadBigPreview .dimensionContainer {
     height: 0;
     left: 122px;
-    top: -55px;
+    top: -46px;
 }
 
-.imageUploadBigPreview .dimensionContainer .imageDimension {
-    width: 227px !important;
-}
-
+/* position of help-text icon */
 .imageUploadBigPreview div div div > a {
     left: 464px !important;
     top: -88px !important;
 }
-
-/*picture_edit*/
