@@ -27,7 +27,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                 }
             }
 
-            $componentClasses = $this->_getRecursiveChildClasses($this->_rootComponentClass, $dependencyName);
+            $componentClasses = $this->_getRecursiveChildClasses($this->_rootComponentClass);
 
             $addedFiles = array();
             $addedDep = array();
@@ -82,7 +82,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
         }
     }
 
-    private function _getRecursiveChildClasses($class, $dependencyName, &$processedComponents = array())
+    private function _getRecursiveChildClasses($class, &$processedComponents = array())
     {
         $processedComponents[] = $class;
 
@@ -100,7 +100,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
 
         foreach ($classes as $i) {
             if ($i && !in_array($i, $processedComponents)) {
-                $ret = array_merge($ret, $this->_getRecursiveChildClasses($i, $dependencyName, $processedComponents));
+                $ret = array_merge($ret, $this->_getRecursiveChildClasses($i, $processedComponents));
             }
         }
 
