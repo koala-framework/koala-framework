@@ -74,6 +74,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             region: 'west',
             bodyStyle: 'padding: 10px',
             width: 200,
+            title: trlKwf('Select dimension'),
             hideBorders: true,
             items: [
                 this._dimensionField,
@@ -98,6 +99,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         this._cropPane = new Ext.Panel({
             region: 'center',
             layout: 'fit',
+            title: trlKwf('Select image region'),
             width: 600,
             height: 200,
             items: [
@@ -180,7 +182,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         this._cropImage.on('finishedLoading', function (dimensions) {
             this._cropPane.width = dimensions.width;
             this._cropPane.height = dimensions.height;
-            this.setSize(200 + 18 + dimensions.width, dimensions.height + 73);
+            this.setSize(200 + 18 + dimensions.width, dimensions.height + 98);
             //TODO handle image height smaller than dimensions-radios
         }, this);
     },
