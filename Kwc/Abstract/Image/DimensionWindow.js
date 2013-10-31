@@ -4,7 +4,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     dimensions: null,
     value: null, //contains width, height, cropdata
 
-    title: trlKwf('Image Size'),
+    title: trlKwf('Configure'),
     closeAction: 'close',
     modal: true,
     minWidth: 418,
