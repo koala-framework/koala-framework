@@ -27,6 +27,8 @@ function createTrlCacheFolder()
 {
     if (!is_dir('cache/trl')) {
         mkdir('cache/trl');
+        file_put_contents('cache/trl/.gitignore', '*');
+        system("git add -f cache/trl/.gitignore");
         echo "folder \"cache/trl\" created\n";
     }
 }
