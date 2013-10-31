@@ -3,34 +3,16 @@
 @import "kwf/css3/border-radius";
 
 .cssClass {
+/* ------------------------------------------ Basic Styling --------------------------------------*/
     .kwfFormFieldWrapper {
+        position: relative;
         margin-bottom: 4px;
-
-        .kwfFieldErrorIconBubble {
-            clear: left;
-
-            .message {
-                text-align: left;
-            }
-        }
-    }
-
-    div.kwfFormFieldDateField a.icon {
-        right: 0;
-        top: 0;
-    }
-
-    div.kwcFormFieldFile {
-        input.fileSelector {
-            height: 19px;
-            padding: 0;
-        }
     }
 
     &.responsive {
         &.veryNarrow {
             > div.kwcForm > form {
-                .kwfFormFieldWrapper {
+                div.kwfFormFieldWrapper {
                     input, textarea, select {
                         &.radio {
                             width: auto !important;
@@ -42,26 +24,11 @@
                     }
                 }
 
-                .kwfFieldErrorIconBubble {
-                    background: none transparent;
-                    position: relative;
-                    height: auto;
-                    width: auto;
-
-                    .message {
-                        background: none transparent;
-                        display: block !important;
-                        opacity: 1 !important;
-                        filter: alpha(opacity = 100) !important;
-                        color: red;
-                        padding: 0;
-                        margin: 0;
-                        right: 0px !important;
-                        position: relative;
-                    }
-
-                    .arrow {
-                        display: none !important;
+                .kwfFormFieldFileUploadWrapper {
+                    .underlayFileSelector {
+                        a.kwfFormFieldFileUploadButton {
+                            float: right;
+                        }
                     }
                 }
             }
@@ -91,14 +58,6 @@
                         input, textarea, select {
                             @include box-sizing(border-box);
                             width: 100% !important;
-
-                            &.radio {
-                                width: auto !important;
-                            }
-
-                            &[type='checkbox'] {
-                                width: auto !important;
-                            }
                         }
                     }
                 }
@@ -110,45 +69,33 @@
                         }
                     }
                 }
-
-                div.kwcFormFieldFile {
-                    .underlayFileSelector {
-                        a {
-                            position: absolute;
-                            right: 5px;
-                            top: 4px;
-                        }
-                    }
-                }
             }
+
             /* ----------------------------- veryNarrow gt350 / Default --------------------------*/
             &.veryNarrow.gt350 {
+                .kwfField {
+                    > label {
+                        margin-right: 6%;
+                        max-width: 34%;
+                        min-width: 34%;
+                    }
+                }
+
                 .kwfFormFieldWrapper {
                     input, textarea, select, {
-                        width: 100% !important;
-
                         &.radio {
                             width: auto !important;
                         }
 
                         &[type='checkbox'] {
                             width: auto !important;
-                        }
-                    }
-
-                    .kwfFormFieldFileUploadWrapper {
-                        .kwfFormFieldFileUploadButton {
-                            position: absolute;
-                            opacity: 0.4;
-                            right: 2px;
-                            top: 4px;
                         }
                     }
                 }
 
                 .kwfFormFieldWrapper.hasLabel {
                     input, textarea, select, {
-                        width: 60% !important;
+                        max-width: 60%;
 
                         &.radio {
                             width: auto !important;
@@ -160,13 +107,12 @@
                     }
                 }
             }
+
             /* ---------------------------------- gt350 / Default --------------------------------*/
             &.gt350 {
                 label {
                     text-align: right;
-                    margin-right: 6%;
                     float: left;
-                    width: 34%;
                 }
 
                 .kwfFormFieldRadioHorizontal,
@@ -189,11 +135,6 @@
                     }
                 }
 
-                div.kwfFormFieldDateField a.icon {
-                    right: 4px;
-                    top: 3px;
-                }
-
                 .kwcFormFieldRadio {
                     .kwfFormFieldWrapper {
                         &.hasLabel {
@@ -210,13 +151,8 @@
                         }
                     }
                 }
-
-                .kwfFieldErrorIconBubble {
-                    .message {
-                        text-align: right;
-                    }
-                }
             }
+
             /* ---------------------------------- gt500 / Default --------------------------------*/
             &.gt500 {
                 label {
@@ -226,38 +162,95 @@
 
                 .kwfFormFieldWrapper {
                     display: inline-block;
-                    position: relative;
                 }
+            }
+        }
+    }
 
+/* ----------------------------------------- Error Bubbles ---------------------------------------*/
+    .kwfFieldErrorIconBubble {
+        clear: left;
+
+        .message {
+            text-align: left;
+        }
+    }
+
+    &.responsive {
+        &.veryNarrow {
+            > div.kwcForm > form {
                 .kwfFieldErrorIconBubble {
-                    top: 50%;
-                    right: 3px;
-                    margin-top: -8px;
+                    background: none transparent;
+                    position: relative;
+                    height: auto;
+                    width: auto;
 
                     .message {
-                        text-align: center;
+                        background: none transparent;
+                        display: block !important;
+                        opacity: 1 !important;
+                        filter: alpha(opacity = 100) !important;
+                        color: red;
+                        padding: 0;
+                        margin: 0;
+                        right: 0px !important;
+                        position: relative;
                     }
-                }
 
-                .kwcFormFieldRadio {
-                    .kwfFieldErrorIconBubble {
-                        right: -3px;
+                    .arrow {
+                        display: none !important;
                     }
                 }
+            }
+        }
 
-                .kwcFormFieldCheckbox {
-                    .kwfFieldErrorIconBubble {
-                        right: -10px;
-                        top: 3px;
-                    }
+        &.veryNarrow.gt350 {
+            .kwfFieldErrorIconBubble {
+                .message {
+                    text-align: right;
                 }
+            }
 
-                .kwcFormFieldMultiCheckbox,
-                .kwcFormFieldFile {
-                    .kwfFieldErrorIconBubble {
-                        right: -25px;
+            .kwcFormFieldRadio,
+            .kwcFormFieldCheckbox {
+                .kwfFieldErrorIconBubble {
+                    .message {
+                        text-align: left;
                     }
                 }
+            }
+        }
+    }
+
+    &.gt500 {
+        .kwfFieldErrorIconBubble {
+            top: 50%;
+            right: 3px;
+            margin-top: -8px;
+
+            .message {
+                text-align: center;
+            }
+        }
+
+        .kwcFormFieldRadio {
+            .kwfFieldErrorIconBubble {
+                right: -3px;
+            }
+        }
+
+        .kwcFormFieldCheckbox {
+            .kwfFieldErrorIconBubble {
+                right: -10px;
+                top: 3px;
+            }
+        }
+
+        .kwcFormFieldMultiCheckbox,
+        .kwcFormFieldFile,
+        .kwcFormFieldDateField {
+            .kwfFieldErrorIconBubble {
+                right: -25px;
             }
         }
     }
