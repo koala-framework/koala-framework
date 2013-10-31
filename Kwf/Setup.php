@@ -73,6 +73,18 @@ class Kwf_Setup
 
     public static function shutDown()
     {
+        $error = error_get_last();
+        if ($error !== null) {
+            ini_set('memory_limit', memory_get_usage()+16*1024*1024); //in case it was an memory limit error make sure we have enough memory for error handling
+            if (!(
+                   (defined('E_STRICT') && $error["type"] == E_STRICT)
+                || (defined('E_DEPRECATED') && $error["type"] == E_DEPRECATED)
+            )) {
+                $e = new ErrorException($error["message"], 0, $error["type"], $error["file"], $error["line"]);
+                chdir(APP_PATH);
+                Kwf_Debug::handleException($e);
+            }
+        }
         Kwf_Benchmark::shutDown();
     }
 
