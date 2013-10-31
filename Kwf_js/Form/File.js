@@ -283,6 +283,9 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
                 var infoVars = Kwf.clone(value);
                 infoVars.href = href;
+                if (infoVars.filename.length > 17) {
+                    infoVars.filename = infoVars.filename.substring(0, 15)+'... ';
+                }
                 this.infoTpl.overwrite(this.infoContainer, infoVars);
             } else {
                 if (this.showPreview) {
