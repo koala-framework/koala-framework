@@ -18,7 +18,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         'default': 'page_white'
     },
     previewTpl: ['<a href="{href}" target="_blank" ',
-                 'style="width: {previewSize}px; height: {previewSize}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview}); background-size: cover;"></a>'],
+                 'style="width: {previewSize}px; height: {previewSize}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
     // also usable in infoTpl: {href}
     infoTpl: ['{filename}.{extension}<br />',
               '{fileSize:fileSize}',
@@ -266,7 +266,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                     if (value.mimeType.match(/(^image\/)/)) {
                         var previewSize = 'default';
                         if (this.previewSize > 40) {
-                            previewSize = 'frontend';
+                            previewSize = 'previewLarge';
                         }
                         icon = '/kwf/media/upload/preview?uploadId='+value.uploadId
                             +'&hashKey='+value.hashKey+'&size='+previewSize;
