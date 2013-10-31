@@ -66,16 +66,15 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                 throw new Kwf_Exception("Path '$path' does not exist.");
             }
             $files = array();
-            $dirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
-            foreach ($dirIterator as $file) {
-                if (!preg_match('#/\\.svn/#', $file->getPathname())
-                    && (substr($file->getPathname(), -3) == '.js'
-                        || substr($file->getPathname(), -4) == '.css')) {
-                    $f = $file->getPathname();
-                    $f = substr($f, strlen($paths[$pathType]));
-                    $f = $pathType . $f;
-                    $files[] = self::createDependency($f);
-                }
+            $it = new RecursiveDirectoryIterator($path);
+            $it = new Kwf_Iterator_Filter_HiddenFiles($it);
+            $it = new RecursiveIteratorIterator($it);
+            $it = new Kwf_Iterator_Filter_FileExtension($it, array('js', 'css'));
+            foreach ($it as $file) {
+                $f = $file->getPathname();
+                $f = substr($f, strlen($paths[$pathType]));
+                $f = $pathType . $f;
+                $files[] = self::createDependency($f);
             }
             return new Kwf_Assets_Dependency_Dependencies($files, $fileName.'*');
         }
