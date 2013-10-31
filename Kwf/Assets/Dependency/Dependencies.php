@@ -10,9 +10,12 @@ class Kwf_Assets_Dependency_Dependencies extends Kwf_Assets_Dependency_Abstract
         $this->_name = $name;
     }
 
-    public function getDependencies()
+    public function getDependencies($type)
     {
-        return $this->_dependencies;
+        if ($type == self::DEPENDENCY_TYPE_REQUIRES || $type == self::DEPENDENCY_TYPE_ALL) {
+            return $this->_dependencies;
+        }
+        return array();
     }
 
     public function addDependency(Kwf_Assets_Dependency_Abstract $dep)

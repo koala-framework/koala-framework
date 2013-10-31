@@ -12,7 +12,7 @@ class Kwf_Assets_DependencyWithComponents_Test extends Kwc_TestAbstract
     {
         $package = new Kwf_Assets_Package($this->_list, 'Frontend');
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($package->getDependency()));
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($package->getDependency(), Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL));
         $array = iterator_to_array($it, false);
         $this->assertEquals(3, count($array));
     }

@@ -31,13 +31,13 @@ class Kwf_Assets_Package
     public function getMaxMTime($mimeType)
     {
         if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
-            $cacheId = 'depPckMaxMTime_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+            $cacheId = 'depPckMaxMTime_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
             $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
             if ($ret !== false) return $ret;
         }
 
         $maxMTime = 0;
-        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
+        foreach ($this->_getFilteredUniqueDependenciesCached($mimeType) as $i) {
             $mTime = $i->getMTime();
             if ($mTime) {
                 $maxMTime = max($maxMTime, $mTime);
@@ -60,26 +60,59 @@ class Kwf_Assets_Package
         return $maxMTime;
     }
 
-    private function _getFilteredUniqueDependencies($mimeType)
+    protected function _getFilteredUniqueDependenciesCached($mimeType)
     {
         if (!isset($this->_cacheFilteredUniqueDependencies[$mimeType])) {
-            $it = new Kwf_Assets_Dependency_Iterator_Recursive($this->getDependency());
-            $it = new Kwf_Assets_Dependency_Iterator_UniqueFilter($it);
-            $it = new RecursiveIteratorIterator($it);
-            $it = new Kwf_Assets_Dependency_Iterator_MimeTypeFilter($it, $mimeType);
-            $this->_cacheFilteredUniqueDependencies[$mimeType] = array();
-            foreach ($it as $i) {
-                $this->_cacheFilteredUniqueDependencies[$mimeType][] = $i;
-            }
+            $this->_cacheFilteredUniqueDependencies[$mimeType] = $this->_getFilteredUniqueDependencies($mimeType);
         }
         return $this->_cacheFilteredUniqueDependencies[$mimeType];
+    }
+
+    protected function _getFilteredUniqueDependencies($mimeType)
+    {
+        $processed = array();
+        $ret = array();
+        $uses = array($this->getDependency());
+        while ($i = array_shift($uses)) {
+            $deps = $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed);
+            if ($deps) {
+                $ret = array_merge($ret, $deps['requires']);
+                $uses = array_merge($uses, $deps['uses']);
+            }
+        }
+        return $ret;
+    }
+
+    private function _getFilteredUniqueDependenciesProcessDep($dep, $mimeType, &$processed)
+    {
+        $ret = array(
+            'requires' => array(),
+            'uses' => array()
+        );
+        if (in_array($dep, $processed, true)) {
+            return;
+        }
+        $processed[] = $dep;
+        foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES) as $i) {
+            $ret['uses'][] = $i;
+        }
+        foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES) as $i) {
+            if ($childDep = $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed)) {
+                $ret['requires'] = array_merge($ret['requires'], $childDep['requires']);
+                $ret['uses'] = array_merge($ret['uses'], $childDep['uses']);
+            }
+        }
+        if ($dep->getMimeType() == $mimeType) {
+            $ret['requires'][] = $dep;
+        }
+        return $ret;
     }
 
     public function getPackageContents($mimeType, $language)
     {
         $maxMTime = 0;
         $ret = '';
-        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
+        foreach ($this->_getFilteredUniqueDependenciesCached($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if ($c = $i->getContentsPacked($language)) {
                     //$ret .= "/* *** ".$i->getFileName()." *"."/\n";
@@ -132,7 +165,7 @@ class Kwf_Assets_Package
             .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
         $includesDependencies = array();
         $maxMTime = 0;
-        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
+        foreach ($this->_getFilteredUniqueDependenciesCached($mimeType) as $i) {
             if (!$i->getIncludeInPackage()) {
                 if (in_array($i, $includesDependencies, true)) {
                     //include dependency only once

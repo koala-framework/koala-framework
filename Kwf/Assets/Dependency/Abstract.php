@@ -1,6 +1,10 @@
 <?php
 abstract class Kwf_Assets_Dependency_Abstract
 {
+    const DEPENDENCY_TYPE_ALL = 'all';
+    const DEPENDENCY_TYPE_REQUIRES = 'requires';
+    const DEPENDENCY_TYPE_USES = 'uses';
+
     public function getContents()
     {
         return null;
@@ -11,7 +15,7 @@ abstract class Kwf_Assets_Dependency_Abstract
         return $this->getContents($language);
     }
 
-    public function getDependencies()
+    public function getDependencies($type)
     {
         return array();
     }
@@ -38,5 +42,10 @@ abstract class Kwf_Assets_Dependency_Abstract
     public function __toString()
     {
         return get_class($this);
+    }
+
+    public function toDebug()
+    {
+        return get_class($this).': '.$this->__toString()."\n";
     }
 }
