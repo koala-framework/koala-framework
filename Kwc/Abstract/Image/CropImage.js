@@ -85,7 +85,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 src: this.src
             },
             renderTo: this.el,
-            constrainTo: this.el,
             src: Ext.BLANK_IMAGE_URL,
             x: 0,
             y: 0,
@@ -100,6 +99,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             handles: 'all',
             pinned: true,
             preserveRatio: this.preserveRatio,
+            constrainTo: this.getEl(), // TODO improve because it's possible to get 3px or so out of image...
             maxWidth: this.width,
             maxHeight: this.height,
             width: this.width,
@@ -157,6 +157,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             this.width = imgLoad.width;
 
             this._setImageSize(this.width, this.height);
+            this.setSize(this.width, this.height);
             this.setCropData(this.cropData, this.preserveRatio);
 
             var params = {
