@@ -1,7 +1,7 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?=$this->assets('Kwf_EyeCandy_Marquee:Test')?>
+        <?=$this->assets(new Kwf_Assets_Package_TestPackage('Kwf_EyeCandy_Marquee'))?>
     </head>
     <body>
         <div class="kwfMarqueeElements">

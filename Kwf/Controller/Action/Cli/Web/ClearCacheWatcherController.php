@@ -233,36 +233,8 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         if (substr($file, -4)=='.css' || substr($file, -3)=='.js' || substr($file, -9)=='.printcss' || substr($file, -5)=='.scss') {
             echo "asset modified: $event $file\n";
             if ($event == 'MODIFY') {
-                $found = false;
-                $paths = Kwf_Config::getValueArray('path'); //TODO: reload when config changes
-                foreach ($paths as $type=>$path) {
-                    if ($path == '.') $path = getcwd();
-                    if (substr($file, 0, strlen($path)) == $path) {
-                        $file = $type . substr($file, strlen($path));
-                        $found = true;
-                        break;
-                    }
-                }
-                if (!$found) {
-                    echo "not found in config->path: $file\n";
-                    return;
-                }
 
-                $section = 'web'; //TODO: where to get all possible sections?
-                $languages = Kwf_Trl::getInstance()->getLanguages();
-                foreach($languages as $language) {
-                    $cacheId  = 'fileContents'.$section;
-                    if (substr($file, -3) == '.js') {
-                        //cache javascript per language for trl calls and host for eg. Kwf_Assets_GoogleMapsApiKey
-                        $cacheId .= $language.self::_getHostForCacheId();
-                    }
-                    $cacheId .= str_replace(array('/', '\\', '.', '-', ':'), '_', $section.'-'.$file);
-                    echo "remove from assets cache: $cacheId";
-                    if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) {
-                        echo " [DELETED]";
-                    }
-                    echo "\n";
-                }
+                //there is no cache for individual files, scss cache is handled in Kwf_Assets_Dependency_File_Scss using mtime
 
                 $assetsType = substr($file, strrpos($file, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
@@ -660,49 +632,30 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         echo "deleted ".$countDeleted." view cache entries\n";
     }
 
-    private static function _getHostForCacheId()
-    {
-        $hostForCacheId = Kwf_Registry::get('config')->server->domain; //TODO all possible hosts
-        if (preg_match('#[^\.]+\.[^\.]+$#', $hostForCacheId, $m)) {
-            $hostForCacheId = $m[0];
-        }
-        $hostForCacheId = str_replace(array('.', '-', ':'), array('', '', ''), $hostForCacheId);
-        return $hostForCacheId;
-    }
-
     private static function _clearAssetsDependencies()
     {
-        if (file_exists('cache/assets/generated-dependencies')) {
-            foreach (file('cache/assets/generated-dependencies') as $cacheId) {
-                echo trim($cacheId);
-                if (Kwf_Assets_Cache::getInstance()->remove(trim($cacheId))) {
-                    echo " [DELETED]";
-                }
-                echo "\n";
-            }
-            unlink('cache/assets/generated-dependencies');
-        }
+        //there is no cache containting dependencies
     }
 
     private static function _clearAssetsAll($fileType = null)
     {
-        if (file_exists('cache/assets/generated-all')) {
-            $notDeletedCacheIds = array();
-            foreach (file('cache/assets/generated-all') as $cacheId) {
+        if (!$fileType) {
+            self::_clearAssetsAll('js');
+            self::_clearAssetsAll('css');
+            self::_clearAssetsAll('printcss');
+            return;
+        }
+        $fileName = 'cache/assets/output-cache-ids-'.$fileType;
+        if (file_exists($fileName)) {
+            $cacheIds = file($fileName);
+            unlink($fileName);
+            foreach ($cacheIds as $cacheId) {
                 $cacheId = trim($cacheId);
-                if ($fileType) {
-                    if (!preg_match('#_'.$fileType.'_enc#', $cacheId)) {
-                        $notDeletedCacheIds[] = $cacheId;
-                        continue;
-                    }
-                }
                 echo $cacheId;
-                if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) {
-                    echo " [DELETED]";
-                }
+                if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) echo " [DELETED]";
+                if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_gzip', 'as_'.$cacheId.'_deflate'))) echo " [gzip DELETED]";
                 echo "\n";
             }
-            file_put_contents('cache/assets/generated-all', implode("\n", $notDeletedCacheIds)."\n");
         }
     }
 }

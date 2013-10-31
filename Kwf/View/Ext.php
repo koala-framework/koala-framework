@@ -28,16 +28,14 @@ class Kwf_View_Ext extends Kwf_View
         }
 
         // View einrichten
-        $loader = new Kwf_Assets_Loader();
-        $dep = $loader->getDependencies();
         $ext['class'] = $class;
         if (!isset($config->id)) $config->id = 'mainPanel';
         if (!isset($config->region)) $config->region = 'center';
-        if (isset($config->assetsType)) {
-            $ext['assetsType'] = $config->assetsType;
-            unset($config->assetsType);
+        if (isset($config->assetsPackage)) {
+            $ext['assetsPackage'] = $config->assetsPackage;
+            unset($config->assetsPackage);
         } else {
-            $ext['assetsType'] = 'Admin';
+            $ext['assetsPackage'] = Kwf_Assets_Package_Default::getInstance('Admin');
         }
         $ext['config'] = $config;
 

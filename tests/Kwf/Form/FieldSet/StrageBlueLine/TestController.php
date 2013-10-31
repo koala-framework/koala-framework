@@ -30,7 +30,7 @@ class Kwf_Form_FieldSet_StrageBlueLine_TestController extends Kwf_Controller_Act
         $config = array();
         $config['baseParams']['id'] = 1;
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $config['assetsType'] = 'Kwf_Form_FieldSet_StrageBlueLine:Test';
+        $config['assetsPackage'] = new Kwf_Assets_Package_TestPackage('Kwf_Form_FieldSet_StrageBlueLine');
         $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 }

@@ -22,6 +22,7 @@ class Kwf_Util_ClearCache
             if ($d->isDir() && substr($d->getFilename(), 0, 1) != '.') {
                 if ($d->getFilename() == 'searchindex') continue;
                 if ($d->getFilename() == 'fulltext') continue;
+                if ($d->getFilename() == 'scss') continue; //never clear scss, too expensive to regenerate
                 $ret[] = $d->getFilename();
             }
         }

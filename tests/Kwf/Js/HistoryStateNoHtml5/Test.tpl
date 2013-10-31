@@ -5,7 +5,7 @@
             //disable also for browsers that would support it
             window.history.pushState = false;
         </script>
-        <?=$this->assets('Kwf_Js_HistoryStateNoHtml5:Test')?>
+         <?=$this->assets(new Kwf_Assets_Package_TestPackage('Kwf_Js_HistoryStateNoHtml5'))?>
     </head>
     <body>
         <div id="testBtn1" style="height:20px;background-color:red;">sub</div>

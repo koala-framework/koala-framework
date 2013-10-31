@@ -32,6 +32,15 @@ function createTrlCacheFolder()
         echo "folder \"cache/trl\" created\n";
     }
 }
+function createScssCacheFolder()
+{
+    if (!is_dir('cache/scss')) {
+        mkdir('cache/scss');
+        file_put_contents('cache/scss/.gitignore', '*');
+        system("git add -f cache/scss/.gitignore");
+        echo "folder \"cache/scss\" created\n";
+    }
+}
 
 function updateErrorViews($files)
 {
@@ -105,6 +114,7 @@ function recursiveCropImageOptionsReplace($directory)
 }
 
 createTrlCacheFolder();
+createScssCacheFolder();
 
 $files = glob_recursive('Events.php');
 replaceFiles($files, 'Kwf_Component_Event_ComponentClass_PartialsChanged', 'Kwf_Component_Event_ComponentClass_AllPartialChanged');
@@ -113,3 +123,4 @@ updateErrorViews(glob('views/error*.tpl'));
 
 echo "Update Image-Parameter\n";
 recursiveCropImageOptionsReplace('components');
+

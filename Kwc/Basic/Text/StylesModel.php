@@ -30,7 +30,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
                 'name' => $m[5][$i],
                 'tagName' => $tagName,
                 'className' => $m[3][$i],
-                'styles' => Kwf_Assets_Loader::expandAssetVariables($m[4][$i], 'web'),
+                'styles' => Kwf_Assets_Dependency_File_Css::expandAssetVariables($m[4][$i], 'web'),
             );
         }
         return $styles;
@@ -42,19 +42,9 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if ($ret !== false) return $ret;
 
-        $loader = new Kwf_Assets_Loader();
-        $dep = $loader->getDependencies();
-        $files = $dep->getAssetFiles('Frontend', 'css', 'web', Kwf_Component_Data_Root::getComponentClass());
-        unset($files['mtime']);
-        $ret = array();
-        foreach ($files as $file) {
-            if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
-            } else if (substr($file, 0, 8) == 'dynamic/') {
-            } else {
-                $c = file_get_contents($loader->getDependencies()->getAssetPath($file));
-                $ret = array_merge($ret, self::parseMasterStyles($c));
-            }
-        }
+        $package = Kwf_Assets_Package_Default::getInstance('Frontend');
+        $c = $package->getPackageContents('text/css', null);
+        $ret = self::parseMasterStyles($c);
         Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
     }

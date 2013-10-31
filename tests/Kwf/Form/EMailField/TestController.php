@@ -20,7 +20,7 @@ class Kwf_Form_EMailField_TestController extends Kwf_Controller_Action_Auto_Form
     {
         $config = array();
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $config['assetsType'] = 'Kwf_Form_EMailField:Test';
+        $config['assetsPanel'] = new Kwf_Assets_Package_TestPackage('Kwf_Form_EMailField');
         $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 }

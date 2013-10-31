@@ -6,6 +6,6 @@ class Kwf_Component_SharedData_Detail_SharedData_Controller extends Kwf_Controll
     {
         parent::indexAction();
         $this->view->viewport = 'Kwf.Test.Viewport';
-        $this->view->assetsType = 'Kwf_Component_SharedData:Test';
+        $this->view->assetsPackage = new Kwf_Assets_Package_TestPackage('Kwf_Component_SharedData');
     }
 }

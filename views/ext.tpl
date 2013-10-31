@@ -38,7 +38,7 @@
     </script>
 
     <?= $this->debugData() ?>
-    <?= $this->assets($this->ext['assetsType']) ?>
+    <?= $this->assets($this->ext['assetsPackage']) ?>
 
     <script type="text/javascript">
         Kwf.userRole = '<?= $this->ext['userRole'] ?>';

@@ -60,7 +60,7 @@ class Kwf_Form_CheckboxFieldsetInCards_TestController extends Kwf_Controller_Act
             $config,
             array(
                 'controllerUrl' => $this->getRequest()->getPathInfo(),
-                'assetsType' => 'Kwf_Form_CheckboxFieldsetInCards:Test',
+                'assetsPackage' => new Kwf_Assets_Package_TestPackage('Kwf_Form_CheckboxFieldsetInCards'),
             )
         );
         $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');

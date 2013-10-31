@@ -20,7 +20,7 @@ class Kwf_Form_UrlField_TestController extends Kwf_Controller_Action_Auto_Form
     {
         $config = array();
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $config['assetsType'] = 'Kwf_Form_UrlField:Test';
+        $config['assetsPackage'] = new Kwf_Assets_Package_TestPackage('Kwf_Form_UrlField');
         $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 }

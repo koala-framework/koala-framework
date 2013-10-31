@@ -17,7 +17,29 @@ Kwf.GoogleMap.load = function(callback, scope)
 
     Kwf.GoogleMap.isLoaded = true;
 
-    var url = 'http:/'+'/maps.google.com/maps?file=api&v=2.x&key={Kwf_Assets_GoogleMapsApiKey::getKey()}&c&async=2&hl='+trlKwf('en');
+
+    //try find the correct api key
+    //Kwf.GoogleMap.apiKeys is set by Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys
+    //and contains possibly multiple api keys (to support multiple domains)
+    var apiKeyIndex;
+
+    var hostParts = location.host.split('.');
+    if (hostParts.length <= 1) {
+        apiKeyIndex = location.host;
+    } else {
+        apiKeyIndex = hostParts[hostParts.length-2]  // eg. 'koala-framework'
+                     +hostParts[hostParts.length-1]; // eg. 'org'
+    }
+    if (['orat', 'coat', 'gvat', 'couk'].indexOf(apiKeyIndex) != -1) {
+        //one part more for those
+        apiKeyIndex = hostParts[hostParts.length-3]+apiKeyIndex;
+    }
+
+    var key = '';
+    if (apiKeyIndex in Kwf.GoogleMap.apiKeys) {
+        key = Kwf.GoogleMap.apiKeys[apiKeyIndex];
+    }
+    var url = 'http:/'+'/maps.google.com/maps?file=api&v=2.x&key='+key+'&c&async=2&hl='+trlKwf('en');
     url += '&callback=Kwf.GoogleMap._loaded';
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');

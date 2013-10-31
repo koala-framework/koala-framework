@@ -101,7 +101,7 @@ class Kwf_Media_OutputTest extends Kwf_Test_TestCase
             'mimeType' => 'text/plain',
             'mtime' => time(),
             'etag' => 'asdf',
-            'encoding' => 'gzip'
+            'encoding' => Kwf_Media_Output::ENCODING_GZIP
         );
         $output = Kwf_Media_Output::getOutputData($file, array());
         $this->_assert200($output, $file);

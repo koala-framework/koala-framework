@@ -1,7 +1,7 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?=$this->assets('Frontend')?>
+        <?=$this->assets(new Kwf_Assets_Package_TestPackage('Kwc_Trl_MenuCache'))?>
     </head>
     <body>
         Default-Master, in Root-Komponente überschreiben!

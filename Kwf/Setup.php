@@ -143,9 +143,11 @@ class Kwf_Setup
 
     public static function getBaseUrl()
     {
+        static $ret;
+        if (isset($ret)) return $ret;
         $ret = Kwf_Config::getValue('server.baseUrl');
         if ($ret === null && isset($_SERVER['PHP_SELF']) && php_sapi_name() != 'cli') {
-            return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
+            $ret = substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
         }
         return $ret;
     }
@@ -258,11 +260,7 @@ class Kwf_Setup
         if ($requestPath === false) return;
 
         $urlParts = explode('/', substr($requestPath, 1));
-        if (is_array($urlParts) && count($urlParts) == 2 && $urlParts[0] == 'media'
-            && $urlParts[1] == 'headline'
-        ) {
-            Kwf_Media_Headline::outputHeadline($_GET['selector'], $_GET['text'], $_GET['assetsType']);
-        } else if (is_array($urlParts) && $urlParts[0] == 'media') {
+        if (is_array($urlParts) && $urlParts[0] == 'media') {
             if (sizeof($urlParts) != 7) {
                 throw new Kwf_Exception_NotFound();
             }

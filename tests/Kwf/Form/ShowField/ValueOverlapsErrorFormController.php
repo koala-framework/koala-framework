@@ -28,7 +28,7 @@ class Kwf_Form_ShowField_ValueOverlapsErrorFormController extends Kwf_Controller
         $config['baseParams']['id'] = 1;
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
         $this->view->ext('Kwf.Test.OverlapsError', array(
-            'assetsType' => 'Kwf_Form_ShowField:Test',
+            'assetsPackage' => new Kwf_Assets_Package_TestPackage('Kwf_Form_ShowField'),
             'controllerUrl' => '/kwf/test/kwf_form_show-field_value-overlaps-error-form',
         ), 'Kwf.Test.Viewport');
     }

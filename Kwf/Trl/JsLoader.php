@@ -5,11 +5,10 @@
  */
 class Kwf_Trl_JsLoader
 {
-    public function trlLoad($contents, $language)
+    public function trlLoad($contents, $parsedElements, $language)
     {
-        $elements = Kwf_Trl::getInstance()->parse($contents, 'js');
         $trl = Kwf_Trl::getInstance();
-        foreach ($elements as $i=>$trlelement) {
+        foreach ($parsedElements as $i=>$trlelement) {
             $values = array();
             if (!isset($trlelement['error'])) {
                 if ($trlelement['source'] == Kwf_Trl::SOURCE_KWF) {
