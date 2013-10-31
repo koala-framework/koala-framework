@@ -7,10 +7,14 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     title: trlKwf('Image Size'),
     closeAction: 'close',
     modal: true,
-    width: 850,
-    height: 350,
+    minWidth: 418,
+    minHeight: 250,
+    width: 418,
+    height: 250,
     layout: 'fit',
     resizable: false,
+
+    minImageSize: 64,
 
     initComponent: function() {
         var radios = [];
@@ -86,6 +90,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             region: 'west',
             bodyStyle: 'padding: 10px',
             width: 200,
+            autoScroll: true,
             title: trlKwf('Select dimension'),
             hideBorders: true,
             items: [
@@ -107,7 +112,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
         this._cropPane = new Ext.Panel({
             region: 'center',
-            layout: 'fit',
             title: trlKwf('Select image region'),
             width: 600,
             height: 200,
@@ -189,10 +193,29 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             this.cropData = x;
         }, this);
         this._cropImage.on('finishedLoading', function (dimensions) {
-            this._cropPane.width = dimensions.width;
-            this._cropPane.height = dimensions.height;
-            this.setSize(200 + 18 + dimensions.width, dimensions.height + 98);
-            //TODO handle image height smaller than dimensions-radios
+            if (dimensions.width < this.minImageSize
+                || dimensions.height < this.minImageSize)
+            { // Disable crop because image to small
+                this._cropPane.disable();
+                this._cropPane.title;
+                this._cropPane.setTitle(this._cropPane.title+ ' '+trlKwf('(Image to small)'));
+            } else {
+                this._cropPane.enable();
+                this._cropPane.setTitle(
+                    this._cropPane.title.replace(' '+trlKwf('(Image to small)'), '')
+                );
+
+                // Check if smaller than usefull so keep min-width
+                var width = this.width;
+                if (dimensions.width +200 +18 > this.minWidth) {//200px is "select dimension" width and border
+                    width = 200 +18 + dimensions.width;
+                }
+                var height = this.height;
+                if (dimensions.height +98 > this.minHeight) { //titles height
+                    height = dimensions.height +98;
+                }
+                this.setSize(width, height);
+            }
         }, this);
     },
 
