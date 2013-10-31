@@ -32,18 +32,30 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             items: radios
         });
         this._widthField = new Ext.form.NumberField({
-            columnWidth: 0.45,
+            width: 45,
             enableKeyEvents: true,
             validateOnBlur: false,
             validationEvent: false,
             allowNegative: false
         });
         this._heightField = new Ext.form.NumberField({
-            columnWidth: 0.45,
+            width: 45,
             enableKeyEvents: true,
             validateOnBlur: false,
             validationEvent: false,
             allowNegative: false
+        });
+        this._xField = new Ext.BoxComponent({
+            autoEl: {
+                html: 'x',
+                style: 'line-height:20px;text-align:center;padding-left:2px;padding-right:2px;'
+            }
+        });
+        this._pxField = new Ext.BoxComponent({
+            autoEl: {
+                html: 'px',
+                style: 'line-height:20px;text-align:center;padding-left:2px;'
+            }
         });
 
         this._widthField.on('blur', this._validateSizes, this);
@@ -85,12 +97,9 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                     autoHeight: true,
                     items: [
                         this._widthField,
-                        {
-                            columnWidth: 0.1,
-                            html: 'x',
-                            style: 'line-height:20px;text-align:center;'
-                        },
-                        this._heightField
+                        this._xField,
+                        this._heightField,
+                        this._pxField
                     ]
                 }
             ]
@@ -296,6 +305,10 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         var dim = this.dimensions[this._dimensionField.getValue()];
         this._widthField.setDisabled(!(dim && dim.width == 'user'));
         this._heightField.setDisabled(!(dim && dim.height == 'user'));
+        this._xField.setDisabled(!(dim && dim.width == 'user')
+            || !(dim && dim.height == 'user'));
+        this._pxField.setDisabled(!(dim && dim.width == 'user')
+                || !(dim && dim.height == 'user'));
     }
 });
 
