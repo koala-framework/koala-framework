@@ -184,6 +184,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             preserveRatio: preserveRatio,
             width: 500,
             height: 300,
+            style: 'left:50%;top:50%;position:absolute;',
             outWidth: outWidth,
             outHeight: outHeight,
             cropData: cropData
@@ -216,6 +217,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 }
                 this.setSize(width, height);
             }
+            this._cropImage.getEl().setStyle('margin-left', dimensions.width/-2+'px');
+            this._cropImage.getEl().setStyle('margin-top', dimensions.height/-2+'px');
         }, this);
     },
 
