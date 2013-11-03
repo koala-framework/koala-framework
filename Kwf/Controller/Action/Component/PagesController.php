@@ -412,21 +412,18 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
             throw new Kwf_Exception_AccessDenied();
         }
 
-        Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
-
         $progressBar = new Zend_ProgressBar(
             new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
             0, Kwf_Util_Component::getDuplicateProgressSteps($source)
         );
 
         ini_set('memory_limit', '256M');
-
+        Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
         $newPage = Kwf_Util_Component::duplicate($source, $target, $progressBar);
-
         Kwf_Util_Component::afterDuplicate($source, $newPage);
+        Kwf_Component_ModelObserver::getInstance()->enable();
 
         $progressBar->finish();
-
 
         $s = new Kwf_Model_Select();
         $s->whereEquals('parent_id', $newPage->row->parent_id);
@@ -437,7 +434,5 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         $row->pos = $lastRow ? $lastRow->pos+1 : 1;
         $row->visible = false;
         $row->save();
-
-        Kwf_Component_ModelObserver::getInstance()->enable();
     }
 }

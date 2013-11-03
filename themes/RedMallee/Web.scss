@@ -27,6 +27,9 @@
 .webStandard.kwcText a:hover {
     color: var(secColor);
 }
+.webStandard.kwfSwitchDisplay .switchContent {
+    z-index: 0;
+}
 .webStandard .switchContent a {
     color: var(mainColor);
     text-decoration: underline;
@@ -39,10 +42,10 @@
 }
 .webStandard.kwcCompositeSwitchDisplay a.switchLink {
     color: var(mainColor);
-    font-size: 20px;
+    font-size: 14px;
     margin-top: 15px;
     margin-bottom: 5px;
-    font-weight: normal;
+    font-weight: bold;
     background: url("/assets/kwf/themes/RedMallee/images/readMoreBg.png") -4px 0 no-repeat;
 }
 .webStandard.kwcCompositeSwitchDisplay a.switchLink.switchLinkOpened {

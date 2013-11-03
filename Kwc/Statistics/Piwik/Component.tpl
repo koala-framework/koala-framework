@@ -15,13 +15,15 @@
   _paq.push(["enableLinkTracking"]);
   <? } ?>
 
-  (function() {
-    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://<?=$this->domain?>/";
-    _paq.push(["setTrackerUrl", u+"piwik.php"]);
-    _paq.push(["setSiteId", "<?=$this->id?>"]);
-    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
-    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
-  })();
+  if (!location.search.match(/[\?&]kwcPreview/)) {
+      (function() {
+        var u=(("https:" == document.location.protocol) ? "https" : "http") + "://<?=$this->domain?>/";
+        _paq.push(["setTrackerUrl", u+"piwik.php"]);
+        _paq.push(["setSiteId", "<?=$this->id?>"]);
+        var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+        g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+      })();
+  }
 </script>
 <noscript>
     <img src="https://<?=$this->domain?>/piwik.php?idsite=<?=$this->id?>&amp;rec=1" style="border:0" alt="" />

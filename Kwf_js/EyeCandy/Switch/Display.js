@@ -13,7 +13,7 @@ Kwf.onContentReady(function() {
     });
 });
 
-Kwf.Switch.Display = function(el) {
+Kwf.Switch.Display = function(el, config) {
     this.addEvents({
         'beforeOpen': true,
         'beforeClose': true,
@@ -21,6 +21,12 @@ Kwf.Switch.Display = function(el) {
         'closed': true
     });
     this._lockAnimation = false;
+    var defaultConfig = {
+        animation: { 
+            duration: .5
+        }
+    };
+    this.config = Ext.apply(defaultConfig, config);
 
     this.el = el;
     this.switchLink = Ext.get(Ext.query('.switchLink', this.el.dom)[0]);
@@ -90,7 +96,7 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
         this.switchContent.stopFx();
         this.switchContent.scaleHeight = this.switchContent.getHeight();
         this.switchContent.scale(undefined, 0,
-            { easing: 'easeOut', duration: .5, afterStyle: "display:none;",
+            { easing: 'easeOut', duration: this.config.animation.duration, afterStyle: "display:none;",
                 callback: function() {
                     this.fireEvent('closed', this);
                     this._lockAnimation = false;
@@ -111,7 +117,7 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
         this.switchContent.stopFx();
         this.switchContent.setStyle('display', 'block');
         this.switchContent.scale(undefined, this.switchContent.scaleHeight,
-            { easing: 'easeOut', duration: .5, afterStyle: "display:block;height:auto;",
+            { easing: 'easeOut', duration: this.config.animation.duration, afterStyle: "display:block;height:auto;",
                 callback: function() {
                     this.fireEvent('opened', this);
                     Kwf.callOnContentReady(this.el.dom, {newRender: false});

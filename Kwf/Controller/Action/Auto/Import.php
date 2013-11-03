@@ -50,5 +50,14 @@ abstract class Kwf_Controller_Action_Auto_Import extends Kwf_Controller_Action_A
         unlink($target);
     }
 
+    public function jsonSaveAction()
+    {
+        parent::jsonSaveAction();
+
+        //don't send added id because we use a FnF model where this entry can't get edited anyway
+        unset($this->view->data['addedId']);
+    }
+
+
     protected abstract function _import($excel);
 }
