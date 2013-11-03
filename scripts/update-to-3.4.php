@@ -1,7 +1,4 @@
 <?
-require_once dirname(__FILE__) . '/../Kwf/Setup.php';
-Kwf_Setup::setUp();
-
 $file = is_file('vkwf_branch') ? 'vkwf_branch' : 'kwf_branch';
 file_put_contents($file, "3.4\n");
 echo "Changed $file to 3.4\n";
