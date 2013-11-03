@@ -104,6 +104,9 @@ class Kwf_Cache_Simple
     {
         static $memcache;
         if (isset($memcache)) return $memcache;
+        if (!self::$memcacheHost) {
+            return false;
+        }
         $memcache = new Memcache;
         $memcache->addServer(self::$memcacheHost, self::$memcachePort);
         return $memcache;
