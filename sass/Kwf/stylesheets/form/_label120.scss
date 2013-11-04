@@ -1,0 +1,10 @@
+@mixin label120 {
+    label {
+        width: 120px;
+        margin-right: 20px;
+    }
+
+    .kwfFormFieldWrapper {
+        display: inline-block;
+    }
+}

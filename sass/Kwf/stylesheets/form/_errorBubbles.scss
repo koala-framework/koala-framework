@@ -1,0 +1,32 @@
+@mixin errorBubbles {
+    .kwfFieldErrorIconBubble {
+        top: 50%;
+        right: 3px;
+        margin-top: -8px;
+
+        .message {
+            text-align: center;
+        }
+    }
+
+    .kwcFormFieldRadio {
+        .kwfFieldErrorIconBubble {
+            right: -3px;
+        }
+    }
+
+    .kwcFormFieldCheckbox {
+        .kwfFieldErrorIconBubble {
+            right: -10px;
+            top: 3px;
+        }
+    }
+
+    .kwcFormFieldMultiCheckbox,
+    .kwcFormFieldFile,
+    .kwcFormFieldDateField {
+        .kwfFieldErrorIconBubble {
+            right: -25px;
+        }
+    }
+}

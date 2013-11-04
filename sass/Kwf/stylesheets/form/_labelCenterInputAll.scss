@@ -1,0 +1,32 @@
+@mixin labelCenterInputAll {
+    > div.kwcForm > form {
+        .kwfFormFieldWrapper {
+            > input, textarea, select {
+                @include box-sizing(border-box);
+                width: 100% !important;
+            }
+        }
+
+        label {
+            display: inline-block;
+            min-width: 100%;
+            text-align: center;
+        }
+
+        .kwfFormFieldRadio {
+            .kwfFormFieldRadio {
+                label {
+                    width: auto !important;
+                    display: inline;
+                }
+            }
+        }
+
+        .kwcFormFieldMultiCheckbox {
+            label {
+                width: auto !important;
+                display: inline;
+            }
+        }
+    }
+}

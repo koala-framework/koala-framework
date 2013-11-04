@@ -1,0 +1,16 @@
+@mixin errorSimpleAlignRight {
+    .kwfFieldErrorIconBubble {
+        .message {
+            text-align: right;
+        }
+    }
+
+    .kwcFormFieldRadio,
+    .kwcFormFieldCheckbox {
+        .kwfFieldErrorIconBubble {
+            .message {
+                text-align: left;
+            }
+        }
+    }
+}

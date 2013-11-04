@@ -1,0 +1,35 @@
+@mixin label34Input60 {
+    .kwfField {
+        > label {
+            margin-right: 6%;
+            max-width: 34%;
+            min-width: 34%;
+        }
+    }
+
+    .kwfFormFieldWrapper {
+        input, textarea, select, {
+            &.radio {
+                width: auto !important;
+            }
+
+            &[type='checkbox'] {
+                width: auto !important;
+            }
+        }
+    }
+
+    .kwfFormFieldWrapper.hasLabel {
+        input, textarea, select, {
+            max-width: 60%;
+
+            &.radio {
+                width: auto !important;
+            }
+
+            &[type='checkbox'] {
+                width: auto !important;
+            }
+        }
+    }
+}

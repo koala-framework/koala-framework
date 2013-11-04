@@ -1,0 +1,18 @@
+@mixin labelTopInputAll {
+    > div.kwcForm > form {
+        .kwfFormFieldWrapper {
+            > input, textarea, select {
+                @include box-sizing(border-box);
+                width: 100% !important;
+            }
+        }
+    }
+
+    .kwfFormFieldRadio {
+        .kwfFormFieldRadio {
+            label {
+                width: auto !important;
+            }
+        }
+    }
+}
