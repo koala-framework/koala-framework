@@ -217,6 +217,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             }
             this._cropImage.getEl().setStyle('margin-left', dimensions.width/-2+'px');
             this._cropImage.getEl().setStyle('margin-top', dimensions.height/-2+'px');
+            this.center();
         }, this);
     },
 
