@@ -100,12 +100,13 @@ body.sticky {
                 display: inline;
                 text-align: center;
                 max-height: 100px;
+                padding: 20px;
 
                 @include at-breakpoint(4 no-mediaqueries) {
                     height: auto;
                     margin: auto;
-                    padding: 20px;
                     text-align: left;
+                    padding: 20px 0;
                 }
                 @include at-breakpoint(6 no-mediaqueries) {
                     max-height: 50px;
