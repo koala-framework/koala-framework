@@ -2,8 +2,8 @@ Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     src: null,//image path
     preserveRatio: false,
-    width: null,//width of image,
-    height: null,//height of image
+    width: 0,//width of image,
+    height: 0,//height of image
     outWidth: null,
     outHeight: null,
     //values of initial selected region
@@ -76,7 +76,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         });
 
         this._wrapEl = this.el.down('.kwc-crop-image-wrapper');
-        this._wrapEl.setSize(this.width, this.height);
+        this._wrapEl.setSize(0, 0);
 
         this._image = new Ext.BoxComponent({
             opacity: 1.0,
@@ -88,22 +88,19 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             src: Ext.BLANK_IMAGE_URL,
             x: 0,
             y: 0,
-            height: this.height,
-            width: this.width,
+            height: 0,
+            width: 0,
             style:{
                 background: 'url('+this.src+') no-repeat left top'
             }
         });
-
         this._resizer = new Ext.Resizable(this._image.getEl(), {
             handles: 'all',
             pinned: true,
             preserveRatio: this.preserveRatio,
             constrainTo: this.getEl(), // TODO improve because it's possible to get 3px or so out of image...
-            maxWidth: this.width,
-            maxHeight: this.height,
-            width: this.width,
-            height: this.height,
+            width: 0,
+            height: 0,
             minWidth: this.minWidth,
             minHeight: this.minHeight,
             transparent: true
@@ -173,13 +170,15 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
     setCropData: function (cropData, preserveRatio)
     {
-        if (!cropData) { // calculate default selection
+        if (!cropData
+            || cropData.width == 0 || cropData.width == null
+            || cropData.height == 0 || cropData.height == null
+        ) { // calculate default selection
             cropData = {};
             cropData.x = 0;
             cropData.y = 0;
             cropData.width = this.width;
             cropData.height = this.height;
-
             if (preserveRatio) {
                 if (this.height / this.outHeight > this.width / this.outWidth) {
                     // orientate on width
@@ -195,7 +194,9 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         this.cropData = cropData;
         this._image.setPosition(cropData.x, cropData.y);
         this._resizer.preserveRatio = preserveRatio;
-        this._resizer.resizeTo(cropData.width, cropData.height);
+        if (cropData.width != null && cropData.height != null) {
+            this._resizer.resizeTo(cropData.width, cropData.height);
+        }
     },
 
     _setImageSize: function (width, height)

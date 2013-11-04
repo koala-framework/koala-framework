@@ -45,10 +45,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
                 if (this.imageData != null && this.imageData != "") {
                     var dimensionValue = this.getValue();
                     if (dimensionValue.cropData) {
-                        dimensionValue.cropData.x = null;
-                        dimensionValue.cropData.y = null;
-                        dimensionValue.cropData.width = null;
-                        dimensionValue.cropData.height = null;
+                        dimensionValue.cropData = null;
                         this.setValue(dimensionValue);
                     }
                 }
