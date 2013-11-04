@@ -206,6 +206,9 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
             //$deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = new Kwf_Assets_Ext4_CssDependency('ext4/resources/ext-theme-classic-sandbox/ext-theme-classic-all.css');
             $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = new Kwf_Assets_Ext4_CssDependency('ext4/resources/ext-theme-neptune/ext-theme-neptune-all.css');
         }
+        if ($dependency->getFileName() == Kwf_Config::getValue('path.ext4').'/src/data/Model.js') {
+            $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = $this->_providerList->findDependency('Ext4.data.proxy.Ajax');
+        }
 
 
         return $deps;
