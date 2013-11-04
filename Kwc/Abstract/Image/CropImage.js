@@ -173,6 +173,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         if (!cropData
             || cropData.width == 0 || cropData.width == null
             || cropData.height == 0 || cropData.height == null
+            || cropData.width > this.width || cropData.height > this.height
         ) { // calculate default selection
             cropData = {};
             cropData.x = 0;
