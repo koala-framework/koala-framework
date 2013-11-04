@@ -2,6 +2,7 @@
 @import "compass/css3/box-sizing";
 @import "kwf/form/labelTopInputAll";
 @import "kwf/form/labelCenterInputAll";
+@import "kwf/form/labelLeftInputAll";
 @import "kwf/form/label34Input60";
 @import "kwf/form/labelLeft";
 @import "kwf/form/label120";
@@ -13,7 +14,6 @@
 /* ------------------------------------------ Basic Styling --------------------------------------*/
     .kwfFormFieldWrapper {
         position: relative;
-        margin-bottom: 4px;
     }
 
     &.responsive {
@@ -51,6 +51,46 @@
             &.gt350 {
                 @include labelCenterInputAll;
                 @include errorSimple;
+            }
+        }
+
+/* ------------------------------------------ SmallBox-Style ---------------------------------------*/
+        &.smallBox {
+            &.veryNarrow {
+                @include labelLeftInputAll;
+                @include errorSimple;
+            }
+
+            &.gt350 {
+                @include labelLeftInputAll;
+                @include errorSimple;
+            }
+
+            &.gt500 {
+                @include label120;
+                @include errorBubbles;
+            }
+        }
+
+/* ------------------------------------------ CenterDefault-Style ---------------------------------------*/
+        &.centerDefault {
+            &.veryNarrow {
+                @include labelCenterInputAll;
+                @include errorSimple;
+            }
+
+            &.veryNarrow.gt350 {
+                @include label34Input60;
+                @include errorSimpleAlignRight;
+            }
+
+            &.gt350 {
+                @include labelLeft;
+            }
+
+            &.gt500 {
+                @include label120;
+                @include errorBubbles;
             }
         }
 

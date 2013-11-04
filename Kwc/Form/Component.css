@@ -96,7 +96,7 @@
     clear: none;
 }
 .cssClass form .kwfFormFieldRadio input { margin: 0px; padding: 0px; }
-.cssClass form .kwfFormFieldRadioHorizontal span { white-space: nowrap; }
+.cssClass form .kwfFormFieldRadioHorizontal span { display: inline-block; }
 .cssClass form .kwfFormFieldRadioVertical span { display: block; }
 .cssClass form .kwfFormFieldRadioVertical span label { margin-left: 0px; }
 .cssClass form .kwfFormFieldRadioVertical label { float: none; }
@@ -109,7 +109,7 @@
 .cssClass form .kwfFormContainerColumns .kwfFormContainerColumn .kwfField { clear: none; }
 
 .cssClass span.comment { margin-left: 10px; color: #999; }
-.cssClass .kwfField { clear: both; position: relative; }
+.cssClass .kwfField { clear: both; position: relative; margin-bottom: 4px; }
 
 .cssClass .kwcLabelPositionAbove label {
     display: block;

@@ -1,6 +1,9 @@
+@import "compass/css3/box-sizing";
+
 @mixin label34Input60 {
     .kwfField {
         > label {
+            @include box-sizing(border-box);
             margin-right: 6%;
             max-width: 34%;
             min-width: 34%;
@@ -21,6 +24,7 @@
 
     .kwfFormFieldWrapper.hasLabel {
         input, textarea, select, {
+            @include box-sizing(border-box);
             max-width: 60%;
 
             &.radio {
