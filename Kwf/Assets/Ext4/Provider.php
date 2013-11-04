@@ -74,12 +74,6 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
             Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES => array(),
         );
 
-        if ($dependency->getFileName() == Kwf_Config::getValue('path.ext4').'/src/panel/Panel.js') {
-            //$deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = new Kwf_Assets_Ext4_CssDependency('ext4/resources/ext-theme-classic-sandbox/ext-theme-classic-all.css');
-            $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = new Kwf_Assets_Ext4_CssDependency('ext4/resources/ext-theme-neptune/ext-theme-neptune-all.css');
-        }
-
-
         $fileContents = $dependency->getContents('en');
 
         // remove comments to avoid dependencies from docs/examples
@@ -189,6 +183,12 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
                 $deps[$type][] = $d;
             }
         }
+
+        if ($dependency->getFileName() == Kwf_Config::getValue('path.ext4').'/src/panel/Panel.js') {
+            //$deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = new Kwf_Assets_Ext4_CssDependency('ext4/resources/ext-theme-classic-sandbox/ext-theme-classic-all.css');
+            $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = new Kwf_Assets_Ext4_CssDependency('ext4/resources/ext-theme-neptune/ext-theme-neptune-all.css');
+        }
+
 
         return $deps;
     }
