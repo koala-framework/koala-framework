@@ -26,13 +26,17 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
                     $classes[$cls] = $depName;
                 }
             }
-            if (preg_match('#^\s*(alternateClassName):\s*\'([a-zA-Z0-9\.]+)\'\s*,?\s*$#m', $fileContents, $m)) {
-                $classes[$m[2]] = $depName;
+            if (preg_match_all('#^\s*(alternateClassName|alias)\s*:\s*\'([a-zA-Z0-9\.]+)\'\s*,?\s*$#m', $fileContents, $m)) {
+                foreach ($m[2] as $i) {
+                    $classes[$i] = $depName;
+                }
             }
-            if (preg_match('#^\s*(alternateClassName):\s*\[([^\]]+)\]\s*,?\s*$#m', $fileContents, $m)) {
-                if (preg_match_all('#\'([a-zA-Z0-9\._]+)\'#', $m[2], $m2)) {
-                    foreach ($m2[1] as $i) {
-                        $classes[$i] = $depName;
+            if (preg_match_all('#^\s*(alternateClassName|alias)\s*:\s*\[([^\]]+)\]\s*,?\s*$#m', $fileContents, $m)) {
+                foreach ($m[2] as $j) {
+                    if (preg_match_all('#\'([a-zA-Z0-9\._]+)\'#', $j, $m2)) {
+                        foreach ($m2[1] as $i) {
+                            $classes[$i] = $depName;
+                        }
                     }
                 }
 
@@ -150,19 +154,33 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
         }
 
         if (preg_match('#Ext4?\.define\(\s*[\'"]#', $fileContents, $m)) {
-            if (preg_match_all('#^\s*(extend|override|requires|mixins|uses):\s*\'([a-zA-Z0-9\.]+)\'\s*,?\s*$#m', $fileContents, $m)) {
+            if (preg_match_all('#^\s*(extend|override|requires|mixins|uses)\s*:\s*\'([a-zA-Z0-9\.]+)\'\s*,?\s*$#m', $fileContents, $m)) {
                 foreach ($m[2] as $k=>$cls) {
                     $type = ($m[1][$k] == 'uses' ? Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES : Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES);
                     $classes[$type][] = $cls;
                 }
             }
 
-            if (preg_match_all('#^\s*(requires|mixins|uses):\s*(\[.+?\]|{.+?})\s*,?\s*$#ms', $fileContents, $m)) {
+            if (preg_match_all('#^\s*(requires|mixins|uses)\s*:\s*(\[.+?\]|{.+?})\s*,?\s*$#ms', $fileContents, $m)) {
                 foreach ($m[2] as $k=>$i) {
                     $type = ($m[1][$k] == 'uses' ? Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES : Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES);
                     if (preg_match_all('#\'([a-zA-Z0-9\._]+)\'#', $i, $m2)) {
                         $classes[$type] = array_merge($classes[$type], $m2[1]);
                     }
+                }
+            }
+
+            //this should probably only be done for relevant classes, ie. layout for panel, proxy for model etc
+            if (preg_match_all('#^\s*(proxy|layout|reader|writer)\s*:\s*\'([a-zA-Z0-9\.]+)\'\s*,?\s*$#m', $fileContents, $m)) {
+                foreach ($m[2] as $k=>$cls) {
+                    $type = Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES;
+                    $classes[$type][] = $aliasClasses[$m[1][$k].'.'.$cls];
+                }
+            }
+            if (preg_match_all('#^\s*(proxy|layout|reader|writer)\s*:\s*{\s*type\s*:\s*\'([a-zA-Z0-9\.]+)\'#m', $fileContents, $m)) {
+                foreach ($m[2] as $k=>$cls) {
+                    $type = Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES;
+                    $classes[$type][] = $aliasClasses[$m[1][$k].'.'.$cls];
                 }
             }
         }

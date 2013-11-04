@@ -110,15 +110,38 @@ class Kwf_Assets_Ext4_ProviderTest extends Kwf_Test_TestCase
         $l = new Kwf_Assets_Ext4_TestProviderList();
         $d = $l->findDependency('Ext4.window.Window');
         $array = $d->getRecursiveFiles();
-        $this->assertEquals(196, count($array));
+        $this->assertEquals(197, count($array));
     }
 
     public function testRequire()
     {
         $l = new Kwf_Assets_Ext4_TestProviderList();
         $d = $l->findDependency('Kwf.Assets.Ext4.TestRequire');
-        $d->printDebugTree();
         $array = $d->getRecursiveFiles();
         $this->assertEquals(2, count($array));
+    }
+
+    public function testModel()
+    {
+        $l = new Kwf_Assets_Ext4_TestProviderList();
+        $d = $l->findDependency('Ext4.data.Model');
+        $array = $d->getRecursiveFiles();
+        $this->assertEquals(71, count($array));
+    }
+
+    public function testModelProxy()
+    {
+        $l = new Kwf_Assets_Ext4_TestProviderList();
+        $d = $l->findDependency('Kwf.Assets.Ext4.TestModel');
+        $array = $d->getRecursiveFiles();
+        $this->assertEquals(73, count($array));
+    }
+
+    public function testModelProxy2()
+    {
+        $l = new Kwf_Assets_Ext4_TestProviderList();
+        $d = $l->findDependency('Kwf.Assets.Ext4.TestModel2');
+        $array = $d->getRecursiveFiles();
+        $this->assertEquals(73, count($array));
     }
 }
