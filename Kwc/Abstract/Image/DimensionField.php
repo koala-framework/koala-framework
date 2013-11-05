@@ -81,6 +81,11 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
                     $row->crop_height = $row->crop_height * $scaleFactor;
                 }
             }
+        } else {
+            $row->crop_x = null;
+            $row->crop_y = null;
+            $row->crop_width = null;
+            $row->crop_height = null;
         }
     }
 
