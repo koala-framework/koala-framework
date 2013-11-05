@@ -36,17 +36,23 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
             $cover = $d['cover'];
         }
 
+        $cropData = null;
+        if ($cropX !== null && $cropY !== null
+            && $cropWidth !== null && $cropHeight !== null
+       ) {
+            $cropData = array(
+                'x' => $cropX,
+                'y' => $cropY,
+                'width' => $cropWidth,
+                'height' => $cropHeight
+            );
+        }
         $value = array(
             'dimension' => $dimension,
             'width' => $row->width,
             'height' => $row->height,
             'cover' => $cover,
-            'cropData' => array(
-                'x' => $cropX,
-                'y' => $cropY,
-                'width' => $cropWidth,
-                'height' => $cropHeight
-            )
+            'cropData' => $cropData
         );
         return array($this->getFieldName() => $value);
     }
