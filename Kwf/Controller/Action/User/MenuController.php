@@ -27,10 +27,11 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
         }
 
         $authData = $this->_getAuthData();
+        $user = Zend_Registry::get('userModel')->getAuthedUser()->getKwfUser();
 
         $this->view->menus = $menus;
         $this->view->showLogout = $showLogout;
-        $this->view->userId = $authData ? $authData->id : 0;
+        $this->view->userId = $user ? $user->id : null;
         $this->view->fullname = $authData ? $authData->__toString() : '';
 
         $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
