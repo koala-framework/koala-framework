@@ -25,10 +25,10 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         if ($row->getParentRow('Image')) {
             $scaleFactor = Kwf_Media_Image::getHandyScaleFactor($row->getParentRow('Image')->getFileSource());
             if ($scaleFactor != 1) {
-                $cropX = $row->crop_x / $scaleFactor;
-                $cropY = $row->crop_y / $scaleFactor;
-                $cropWidth = $row->crop_width / $scaleFactor;
-                $cropHeight = $row->crop_height / $scaleFactor;
+                $cropX = $row->crop_x != null ? $row->crop_x / $scaleFactor : null;
+                $cropY = $row->crop_y != null ? $row->crop_y / $scaleFactor : null;
+                $cropWidth = $row->crop_width != null ? $row->crop_width / $scaleFactor : null;
+                $cropHeight = $row->crop_height != null ? $row->crop_height / $scaleFactor : null;
             }
         }
         $cover = false;
