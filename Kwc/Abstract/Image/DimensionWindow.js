@@ -61,6 +61,18 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 style: 'line-height:20px;text-align:center;padding-left:2px;'
             }
         });
+        this._userSelection = new Ext.FormPanel({
+            xtype: 'panel',
+            layout: 'column',
+            hideBorders: true,
+            autoHeight: true,
+            items: [
+                this._widthField,
+                this._xField,
+                this._heightField,
+                this._pxField
+            ]
+        });
 
         this._widthField.on('blur', this._validateSizes, this);
         this._widthField.on('keyup', this._validateSizes, this);
@@ -95,18 +107,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             hideBorders: true,
             items: [
                 this._dimensionField,
-                {
-                    xtype: 'panel',
-                    layout: 'column',
-                    hideBorders: true,
-                    autoHeight: true,
-                    items: [
-                        this._widthField,
-                        this._xField,
-                        this._heightField,
-                        this._pxField
-                    ]
-                }
+                this._userSelection
             ]
         });
 
@@ -324,13 +325,25 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
     _enableDisableFields: function()
     {
-        var dim = this.dimensions[this._dimensionField.getValue()];
-        this._widthField.setDisabled(!(dim && dim.width == 'user'));
-        this._heightField.setDisabled(!(dim && dim.height == 'user'));
-        this._xField.setDisabled(!(dim && dim.width == 'user')
-            || !(dim && dim.height == 'user'));
-        this._pxField.setDisabled(!(dim && dim.width == 'user')
-                || !(dim && dim.height == 'user'));
+        var userSelection = false;
+        for (var i in this.dimensions) {
+            var dim = this.dimensions[i];
+            if (dim.width == 'user' || dim.height == 'user') {
+                userSelection = true;
+            }
+        }
+        if (userSelection) {
+            this._userSelection.show();
+            var dim = this.dimensions[this._dimensionField.getValue()];
+            this._widthField.setDisabled(!(dim && dim.width == 'user'));
+            this._heightField.setDisabled(!(dim && dim.height == 'user'));
+            this._xField.setDisabled(!(dim && dim.width == 'user')
+                    || !(dim && dim.height == 'user'));
+            this._pxField.setDisabled(!(dim && dim.width == 'user')
+                    || !(dim && dim.height == 'user'));
+        } else {
+            this._userSelection.hide();
+        }
     }
 });
 
