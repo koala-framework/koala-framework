@@ -41,14 +41,14 @@ class Kwc_Abstract_Image_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
         $image = new Imagick();
         $image->readImageBlob($output['contents']);
         if ($image->getImageWidth() == 100) {
-            $factor = $image->getImageWidth() / $imageOriginal->getImageWidth();
+            $previewFactor = $image->getImageWidth() / $imageOriginal->getImageWidth();
         } else if ($image->getImageHeight() == 100) {
-            $factor = $image->getImageHeight() / $imageOriginal->getImageHeight();
+            $previewFactor = $image->getImageHeight() / $imageOriginal->getImageHeight();
         }
-        $cropX = floor($cropX * $factor);
-        $cropY = floor($cropY * $factor);
-        $cropWidth = floor($cropWidth * $factor);
-        $cropHeight = floor($cropHeight * $factor);
+        $cropX = floor($cropX * $previewFactor);
+        $cropY = floor($cropY * $previewFactor);
+        $cropWidth = floor($cropWidth * $previewFactor);
+        $cropHeight = floor($cropHeight * $previewFactor);
 
         $draw = new ImagickDraw();
         if ($this->_isLightImage($output)) {
