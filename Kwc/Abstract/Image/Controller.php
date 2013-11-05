@@ -58,12 +58,27 @@ class Kwc_Abstract_Image_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
         }
         $draw->setFillOpacity(0.3);
 
+        // if cropX == 0 or cropY == 0 no rectangle should be drawn, because it
+        // can't be 0 wide on topmost and leftmost position so it will result in
+        // a 1px line which is wrong
         //Top region
-        $draw->rectangle(0, 0, $image->getImageWidth(), $cropY);
+        if ($cropY > 0) {
+            $draw->rectangle(0, 0, $image->getImageWidth(), $cropY);
+        }
         //Left region
-        $draw->rectangle(0, $cropY+1, $cropX, $cropY + $cropHeight-1);
+        if ($cropX > 0) {
+            if ($cropY > 0) {
+                $draw->rectangle(0, $cropY+1, $cropX, $cropY + $cropHeight-1);
+            } else {
+                $draw->rectangle(0, $cropY, $cropX, $cropY + $cropHeight-1);
+            }
+        }
         //Right region
-        $draw->rectangle($cropX+$cropWidth, $cropY+1, $image->getImageWidth(), $cropY + $cropHeight-1);
+        if ($cropY > 0) {
+            $draw->rectangle($cropX+$cropWidth, $cropY+1, $image->getImageWidth(), $cropY + $cropHeight-1);
+        } else {
+            $draw->rectangle($cropX+$cropWidth, $cropY, $image->getImageWidth(), $cropY + $cropHeight-1);
+        }
         //Bottom region
         $draw->rectangle(0, $cropY + $cropHeight, $image->getImageWidth(), $image->getImageHeight());
 
