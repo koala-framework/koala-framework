@@ -22,9 +22,9 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     previewTpl: ['<a href="{href}" target="_blank" class="previewImage" ',
                  'style="width: {previewSize}px; height: {previewSize}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
     // also usable in infoTpl: {href}
-    infoTpl: ['{filename}.{extension}<br />',
+    infoTpl: ['<div class="filedescription">{filename}.{extension}<br />',
               '{fileSize:fileSize}',
-              '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl>'],
+              '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl></div>'],
     emptyTpl: ['<div style="height: {previewSize}px; width: {previewSize}px; text-align: center;"><br />('+trlKwf('empty')+')</div>'],
 
     initComponent: function() {
@@ -280,8 +280,8 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
                 var infoVars = Kwf.clone(value);
                 infoVars.href = href;
-                if (infoVars.filename.length > 17) {
-                    infoVars.filename = infoVars.filename.substring(0, 15)+'... ';
+                if (infoVars.filename.length+value.extension.length > 45) {
+                    infoVars.filename = infoVars.filename.substring(0, 40)+'... ';
                 }
                 this.infoTpl.overwrite(this.infoContainer, infoVars);
             } else {
