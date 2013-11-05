@@ -18,14 +18,12 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
         $this->fields->add($this->_image);
 
         $this->_dimensions = $dimensions;
-        if (count($dimensions) > 1) {
-            $this->fields->add(new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension')))
-                ->setAllowBlank(false)
-                ->setTriggerClass('cropTrigger')
-                ->setLabelStyle('display:none')
-                ->setCtCls('dimensionContainer')
-                ->setDimensions($dimensions);
-        }
+        $this->fields->add(new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension')))
+            ->setAllowBlank(false)
+            ->setTriggerClass('cropTrigger')
+            ->setLabelStyle('display:none')
+            ->setCtCls('dimensionContainer')
+            ->setDimensions($dimensions);
     }
 
     public function setShowHelptext($showHelptext)
