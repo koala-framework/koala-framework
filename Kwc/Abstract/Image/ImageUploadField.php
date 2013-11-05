@@ -7,6 +7,7 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
     public function __construct($dimensions, $imageLabel)
     {
         parent::__construct();
+        $this->setXtype('kwc.image.imageuploadfield');
         $this->setBaseCls('imageUploadBigPreview');
         // Fileupload
         $this->_image = new Kwf_Form_Field_File('Image', $imageLabel);

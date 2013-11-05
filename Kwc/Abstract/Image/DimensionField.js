@@ -24,6 +24,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
                 this.getEl().child('.dimension').update('');
             }
         }
+        this.fireEvent('change', this.value);
     },
 
     afterRender: function() {

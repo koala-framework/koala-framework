@@ -2,9 +2,11 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     allowOnlyImages: false,
     fileSizeLimit: 0,
     showPreview: true,
+    previewUrl: '/kwf/media/upload/preview?',
     previewSize: 40,
     showDeleteButton: true,
     infoPosition: 'south',
+    imageData: null,
     defaultAutoCreate : {
         tag: 'div',
         style: 'width: 320px; height: 53px'
@@ -17,7 +19,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         'application/mspowerpoint': 'page_white_powerpoint',
         'default': 'page_white'
     },
-    previewTpl: ['<a href="{href}" target="_blank" ',
+    previewTpl: ['<a href="{href}" target="_blank" class="previewImage" ',
                  'style="width: {previewSize}px; height: {previewSize}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
     // also usable in infoTpl: {href}
     infoTpl: ['{filename}.{extension}<br />',
@@ -257,19 +259,14 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             v = value.uploadId;
         }
         if (v != this.value) {
+            this.imageData = value;
             this.fireEvent('change', this, value, this.value);
-
             var icon = false;
             var href = '/kwf/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
             if (value.mimeType) {
                 if (this.showPreview) {
                     if (value.mimeType.match(/(^image\/)/)) {
-                        var previewSize = 'default';
-                        if (this.previewSize > 40) {
-                            previewSize = 'previewLarge';
-                        }
-                        icon = '/kwf/media/upload/preview?uploadId='+value.uploadId
-                            +'&hashKey='+value.hashKey+'&size='+previewSize;
+                        icon = this._getPreviewUrl(this.previewUrl);
                     } else {
                         icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
                         icon = '/assets/silkicons/' + icon + '.png';
@@ -297,6 +294,19 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             }
         }
         Kwf.Form.File.superclass.setValue.call(this, value.uploadId);
+    },
+
+    _getPreviewUrl: function (previewUrl) {
+        return previewUrl+'uploadId='+this.imageData.uploadId
+        +'&hashKey='+this.imageData.hashKey;
+    },
+
+    setPreviewUrl: function (previewUrl) {
+        this.previewUrl = previewUrl;
+        if (this.getEl().child('.previewImage') && this.getValue()) {
+            this.getEl().child('.previewImage')
+                .setStyle('background-image', 'url('+this._getPreviewUrl(previewUrl)+')');
+        }
     },
 
     validateValue : function(value){
