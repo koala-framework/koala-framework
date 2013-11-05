@@ -12,6 +12,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     minWidth: 52,//min width of crop region
     minHeight: 52,//min height of crop region
     _image: null,
+    _cropRegionChanged: false,
+    _ignoreRegionChangeAction: false,
 
     _centerHandle: '<div class="handle {position}"></div>',
 
@@ -21,6 +23,13 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             tag: 'div',
             cls: 'kwc-crop-image-wrapper'
         }]
+    },
+
+    getValue: function () {
+        if (this._cropRegionChanged) {
+            return this.getCropData();
+        }
+        return null;
     },
 
     getCropData: function() {
@@ -108,9 +117,13 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
         this._resizer.getEl().addClass('kwc-crop-image-resizable');
         this._resizer.on("resize", function() {
+            if (this._ignoreRegionChangeAction) {
+                this._ignoreRegionChangeAction = false;
+            } else {
+                this._cropRegionChanged = true;
+            }
             this._updateCropRegionImage();
             var res = this.getCropData();
-            this.fireEvent('changeCrop', this, res);
         }, this);
 
         var dragDrop = new Ext.dd.DD(this._image.getEl(), '');
@@ -126,6 +139,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             });
         }).createDelegate(this);
         dragDrop.endDrag = (function (e) {
+            this._cropRegionChanged = true;
             this._updateCropRegionImage();
             this._image.getEl().setStyle({
                 'background-image': 'url('+this.src+')',
@@ -135,7 +149,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             wrapper.setStyle({
                 'background-image': wrapper.imageSrcBackup
             });
-            this.fireEvent('changeCrop', this, this.getCropData());
         }).createDelegate(this);
     },
 
@@ -192,11 +205,14 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                     cropData.x = (this.width - cropData.width)/2;
                 }
             }
+        } else {
+            this._cropRegionChanged = true;
         }
         this.cropData = cropData;
         this._image.setPosition(cropData.x, cropData.y);
         this._resizer.preserveRatio = preserveRatio;
         if (cropData.width != null && cropData.height != null) {
+            this._ignoreRegionChangeAction = true;
             this._resizer.resizeTo(cropData.width, cropData.height);
         }
     },
