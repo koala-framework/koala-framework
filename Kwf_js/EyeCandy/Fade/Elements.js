@@ -440,7 +440,7 @@ Kwf.Fade.Elements.prototype = {
                     if (nextIdx < 0) nextIdx = this.fadeElements.length-1;
 
                     this.next = nextIdx;
-                    this.doFade('left');
+                    this.doFade('right');
                     if (this.elementAccessPlayPause) this.pause();
                 }, this));
             }
@@ -456,7 +456,7 @@ Kwf.Fade.Elements.prototype = {
                     if (nextIdx >= this.fadeElements.length) nextIdx = 0;
 
                     this.next = nextIdx;
-                    this.doFade('right');
+                    this.doFade('left');
                     if (this.elementAccessPlayPause) this.pause();
                 }, this));
             }
