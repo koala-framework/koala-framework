@@ -332,6 +332,7 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
         $ret[] = 'checkAllText';
         $ret[] = 'checkNoneText';
         $ret[] = 'emptyMessage';
+        $ret[] = 'title';
         return $ret;
     }
 
