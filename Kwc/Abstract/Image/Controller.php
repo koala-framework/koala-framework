@@ -11,12 +11,11 @@ class Kwc_Abstract_Image_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
            throw new Kwf_Exception_AccessDenied();
         }
 
+        //Scale dimensions
         $dimensions = array(100, 100, 'cover' => false);
-        $size = 'previewLarge';
-
         static $cache = null;
         if (!$cache) $cache = new Kwf_Assets_Cache(array('checkComponentSettings'=>false));
-        $cacheId = $size.'_'.$fileRow->id;
+        $cacheId = 'previewLarge_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
             $output['contents'] = Kwf_Media_Image::scale($fileRow->getFileSource(), $dimensions);
@@ -24,52 +23,80 @@ class Kwc_Abstract_Image_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
             $cache->save($output, $cacheId);
         }
 
-//         $isLightImage = $this->_isLightImage($output);
+        if ($this->_getParam('cropX') == NULL || $this->_getParam('cropY') == NULL
+            || $this->_getParam('cropWidth') == NULL || $this->_getParam('cropHeight') == NULL
+        ) {
+            Kwf_Media_Output::output($output);
+        }
 
-//         $cropX = $this->_getParam('cropX');
-//         $cropY = $this->_getParam('cropY');
-//         $cropWidth = $this->_getParam('cropWidth');
-//         $cropHeight = $this->_getParam('cropHeight');
+        //Calculate values relative to original image size
+        $factor = Kwf_Media_Image::getHandyScaleFactor($fileRow->getFileSource());
+        $cropX = $this->_getParam('cropX') * $factor;
+        $cropY = $this->_getParam('cropY') * $factor;
+        $cropWidth = $this->_getParam('cropWidth') * $factor;
+        $cropHeight = $this->_getParam('cropHeight') * $factor;
 
-//         $draw = new ImagickDraw();
-//         $draw->setFillColor('black');
-//         $draw->rectangle(0, 0, $image->getImageWidth(), $cropX);
-//         $draw->rectangle(0, $cropY, $cropX, $cropHeight);
-//         $draw->rectangle($cropX+$cropWidth, $cropY, $image->getImageWidth() - ($cropX + $cropWidth), $cropHeight);
-//         $draw->rectangle(0, $cropY + $cropHeight, $image->getImageWidth(), $image->getImageHeight()-($cropY + $cropHeight));
+        //Calculate values relative to preview image
+        $imageOriginal = new Imagick($fileRow->getFileSource());
+        $image = new Imagick();
+        $image->readImageBlob($output['contents']);
+        if ($image->getImageWidth() == 100) {
+            $factor = $image->getImageWidth() / $imageOriginal->getImageWidth();
+        } else if ($image->getImageHeight() == 100) {
+            $factor = $image->getImageHeight() / $imageOriginal->getImageHeight();
+        }
+        $cropX = floor($cropX * $factor);
+        $cropY = floor($cropY * $factor);
+        $cropWidth = floor($cropWidth * $factor);
+        $cropHeight = floor($cropHeight * $factor);
 
-//         $image = new Imagick();
-//         $image->readImage($output['contents']);
-//         $image->drawImage($draw);
+        $draw = new ImagickDraw();
+        if ($this->_isLightImage($output)) {
+            $draw->setFillColor('black');
+        } else {
+            $draw->setFillColor('white');
+        }
+        $draw->setFillOpacity(0.3);
 
-//         $output['contents'] = $image;
+        //Top region
+        $draw->rectangle(0, 0, $image->getImageWidth(), $cropY);
+        //Left region
+        $draw->rectangle(0, $cropY+1, $cropX, $cropY + $cropHeight-1);
+        //Right region
+        $draw->rectangle($cropX+$cropWidth, $cropY+1, $image->getImageWidth(), $cropY + $cropHeight-1);
+        //Bottom region
+        $draw->rectangle(0, $cropY + $cropHeight, $image->getImageWidth(), $image->getImageHeight());
+
+        $image->drawImage($draw);
+
+        $output['contents'] = $image->getImageBlob();
 
         Kwf_Media_Output::output($output);
     }
 
-//     private function _isLightImage($imageData)
-//     {
-//         $image = new Imagick();
-//         $image->readImage($imageData['contents']);
-//         $max = $image->getQuantumRange();
-//         $max = $max["quantumRangeLong"];
-//         $image->setImageType(Imagick::IMGTYPE_GRAYSCALEMATTE);
-//         $float = "0.".$percent;
-//         $float = floatval($float);
-//         $image->thresholdImage($float * $max, 255);
-//         $image->setBackgroundColor('white');
-//         $black = 0;
-//         $white = 0;
-//         for($x = 0; $x < $image->getImageWidth(); $x++) {
-//             for ($y = 0; $y < $image->getImageHeight(); $y++) {
-//                 $pixel = $image->getImagePixelColor($x, $y);
-//                 if ($pixel->getColorValue(Imagick::COLOR_BLACK)) {
-//                     $black++;
-//                 } else {
-//                     $white++;
-//                 }
-//             }
-//         }
-//         return $white > $black;
-//     }
+    private function _isLightImage($imageData)
+    {
+        $image = new Imagick();
+        $image->readImageBlob($imageData['contents']);
+        $max = $image->getQuantumRange();
+        $max = $max["quantumRangeLong"];
+        $image->setImageType(Imagick::IMGTYPE_GRAYSCALEMATTE);
+        $float = 0.5;
+        $image->thresholdImage($float * $max, 255);
+        $image->setBackgroundColor('white');
+        $black = 0;
+        $white = 0;
+        for($x = 0; $x < $image->getImageWidth(); $x++) {
+            for ($y = 0; $y < $image->getImageHeight(); $y++) {
+                $pixel = $image->getImagePixelColor($x, $y);
+                $value = $pixel->getColor();
+                if ($value['r'] == 0 && $value['g'] == 0 && $value['b'] == 0) {
+                    $black++;
+                } else {
+                    $white++;
+                }
+            }
+        }
+        return $white > $black;
+    }
 }

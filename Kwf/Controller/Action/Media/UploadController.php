@@ -86,7 +86,6 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         $sizes = array(
             'default' => array(40, 40),
             'frontend' => array(100, 100, 'cover' => true,),
-            'previewLarge' => array(100, 100, 'cover' => false),
             'gridRow' => array(0, 20),
             'gridRowLarge' => array(200, 200, 'cover' => false,),
             'imageGrid' => array(140, 140, 'cover' => false),
