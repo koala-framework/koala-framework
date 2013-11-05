@@ -32,6 +32,9 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
 
     _setPreviewUrl: function(dimension) {
         var cropParams = '';
+        if (dimension) {
+            cropParams += dimension.dimension != null ? '&dimension='+dimension.dimension : '';
+        }
         if (dimension && dimension.cropData) {
             cropParams += dimension.cropData.x != null ? '&cropX='+dimension.cropData.x : '';
             cropParams += dimension.cropData.y != null ? '&cropY='+dimension.cropData.y : '';

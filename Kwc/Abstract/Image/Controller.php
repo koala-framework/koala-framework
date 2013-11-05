@@ -23,21 +23,40 @@ class Kwc_Abstract_Image_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
             $cache->save($output, $cacheId);
         }
 
+        $imageOriginal = new Imagick($fileRow->getFileSource());
         if ($this->_getParam('cropX') == NULL || $this->_getParam('cropY') == NULL
             || $this->_getParam('cropWidth') == NULL || $this->_getParam('cropHeight') == NULL
-        ) {
-            Kwf_Media_Output::output($output);
+       ) { //calculate default selection
+            $dimension = $this->_getParam('dimension');
+            if (!$dimension) Kwf_Media_Output::output($output);
+
+            $dimensions = Kwc_Abstract::getSetting($this->_getParam('class'), 'dimensions');
+            $dimension = $dimensions[$dimension];
+            if (!$dimension['cover']) Kwf_Media_Output::output($output);
+
+            $cropX = 0;
+            $cropY = 0;
+            $cropHeight = $imageOriginal->getImageHeight();
+            $cropWidth = $imageOriginal->getImageWidth();
+            if ($imageOriginal->getImageHeight() / $dimension['height']
+                > $imageOriginal->getImageWidth() / $dimension['width']
+            ) {// orientate on width
+                $cropHeight = $dimension['height'] * $imageOriginal->getImageWidth() / $dimension['width'];
+                $cropY = ($imageOriginal->getImageHeight() - $cropHeight) /2;
+            } else {// orientate on height
+                $cropWidth = $dimension['width'] * $imageOriginal->getImageHeight() / $dimension['height'];
+                $cropX = ($imageOriginal->getImageWidth() - $cropWidth) /2;
+            }
+        } else {
+            //Calculate values relative to original image size
+            $factor = Kwf_Media_Image::getHandyScaleFactor($fileRow->getFileSource());
+            $cropX = $this->_getParam('cropX') * $factor;
+            $cropY = $this->_getParam('cropY') * $factor;
+            $cropWidth = $this->_getParam('cropWidth') * $factor;
+            $cropHeight = $this->_getParam('cropHeight') * $factor;
         }
 
-        //Calculate values relative to original image size
-        $factor = Kwf_Media_Image::getHandyScaleFactor($fileRow->getFileSource());
-        $cropX = $this->_getParam('cropX') * $factor;
-        $cropY = $this->_getParam('cropY') * $factor;
-        $cropWidth = $this->_getParam('cropWidth') * $factor;
-        $cropHeight = $this->_getParam('cropHeight') * $factor;
-
-        //Calculate values relative to preview image
-        $imageOriginal = new Imagick($fileRow->getFileSource());
+        // Calculate values relative to preview image
         $image = new Imagick();
         $image->readImageBlob($output['contents']);
         if ($image->getImageWidth() == 100) {
