@@ -33,10 +33,10 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
     _setPreviewUrl: function(dimension) {
         var cropParams = '';
         if (dimension && dimension.cropData) {
-            cropParams += dimension.cropData.x ? '&cropX='+dimension.cropData.x : '';
-            cropParams += dimension.cropData.y ? '&cropY='+dimension.cropData.y : '';
-            cropParams += dimension.cropData.width ? '&cropWidth='+dimension.cropData.width : '';
-            cropParams += dimension.cropData.height ? '&cropHeight='+dimension.cropData.height : '';
+            cropParams += dimension.cropData.x != null ? '&cropX='+dimension.cropData.x : '';
+            cropParams += dimension.cropData.y != null ? '&cropY='+dimension.cropData.y : '';
+            cropParams += dimension.cropData.width != null ? '&cropWidth='+dimension.cropData.width : '';
+            cropParams += dimension.cropData.height != null ? '&cropHeight='+dimension.cropData.height : '';
         }
         var link = this.previewUrl+'?componentId='+this.baseParams.componentId+cropParams+'&';
         var fileUploadField = this._getFileUploadField();
