@@ -25,7 +25,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     infoTpl: ['<div class="filedescription">{filename}.{extension}<br />',
               '{fileSize:fileSize}',
               '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl></div>'],
-    emptyTpl: ['<div style="height: {previewSize}px; width: {previewSize}px; text-align: center;"><br />('+trlKwf('empty')+')</div>'],
+    emptyTpl: ['<div style="height: {previewSize}px; width: {previewSize}px; text-align: center;line-height:{previewSize}px">('+trlKwf('empty')+')</div>'],
 
     initComponent: function() {
         this.addEvents(['uploaded']);
