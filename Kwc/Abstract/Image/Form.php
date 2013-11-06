@@ -8,14 +8,19 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
                 ->setVtype('alphanum');
         }
 
-        $this->add(new Kwc_Abstract_Image_ImageUploadField(
+        $imageUploadField = new Kwc_Abstract_Image_ImageUploadField(
             Kwc_Abstract::getSetting($this->getClass(), 'dimensions'),
             Kwc_Abstract::getSetting($this->getClass(), 'imageLabel')
-        ))
+        );
+        $imageUploadField
             ->setAllowBlankImage(Kwc_Abstract::getSetting($this->getClass(), 'allowBlank'))
-            ->setMaxResolution(Kwc_Abstract::getSetting($this->getClass(), 'maxResolution'))
             ->setShowHelptext(Kwc_Abstract::getSetting($this->getClass(), 'showHelpText'))
             ->setPreviewUrl(Kwc_Admin::getInstance($this->getClass())->getControllerUrl().'/preview-with-crop');
+
+        if (Kwc_Abstract::getSetting($this->getClass(), 'maxResolution')) {
+            $this->setMaxResolution(Kwc_Abstract::getSetting($this->getClass(), 'maxResolution'));
+        }
+        $this->add($imageUploadField);
 
         if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
             $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))
