@@ -1,9 +1,10 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
 
-    baseParams: {},
+    baseParams: null,
 
     initComponent: function() {
+        this.baseParams = {};
         Kwc.Abstract.Image.ImageUploadField.superclass.initComponent.call(this);
         var dimensionsField = this._getDimensionsField();
         if (dimensionsField) {// because it's possible to define only a single dimension
