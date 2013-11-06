@@ -266,7 +266,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             if (value.mimeType) {
                 if (this.showPreview) {
                     if (value.mimeType.match(/(^image\/)/)) {
-                        icon = this._getPreviewUrl(this.previewUrl);
+                        icon = this._generatePreviewUrl(this.previewUrl);
                     } else {
                         icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
                         icon = '/assets/silkicons/' + icon + '.png';
@@ -293,7 +293,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         Kwf.Form.File.superclass.setValue.call(this, value.uploadId);
     },
 
-    _getPreviewUrl: function (previewUrl) {
+    _generatePreviewUrl: function (previewUrl) {
         return previewUrl+'uploadId='+this.imageData.uploadId
         +'&hashKey='+this.imageData.hashKey;
     },
@@ -302,7 +302,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         this.previewUrl = previewUrl;
         if (this.getEl().child('.previewImage') && this.getValue()) {
             this.getEl().child('.previewImage')
-                .setStyle('background-image', 'url('+this._getPreviewUrl(previewUrl)+')');
+                .setStyle('background-image', 'url('+this._generatePreviewUrl(previewUrl)+')');
         }
     },
 
