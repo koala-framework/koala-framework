@@ -32,19 +32,20 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
     },
 
     _setPreviewUrl: function(dimension) {
-        var cropParams = '';
-        if (dimension) {
-            cropParams += dimension.dimension != null ? '&dimension='+dimension.dimension : '';
-        }
+        var previewParams = {
+            componentId: this.baseParams.componentId
+        };
+        if (dimension && dimension.dimension != null) previewParams.dimension = dimension.dimension;
+
         if (dimension && dimension.cropData) {
-            cropParams += dimension.cropData.x != null ? '&cropX='+dimension.cropData.x : '';
-            cropParams += dimension.cropData.y != null ? '&cropY='+dimension.cropData.y : '';
-            cropParams += dimension.cropData.width != null ? '&cropWidth='+dimension.cropData.width : '';
-            cropParams += dimension.cropData.height != null ? '&cropHeight='+dimension.cropData.height : '';
+            if (dimension.cropData.x != null) previewParams.cropX = dimension.cropData.x;
+            if (dimension.cropData.y != null) previewParams.cropY = dimension.cropData.y;
+            if (dimension.cropData.width != null) previewParams.cropWidth = dimension.cropData.width;
+            if (dimension.cropData.height != null) previewParams.cropHeight = dimension.cropData.height;
         }
-        var link = this.previewUrl+'?componentId='+this.baseParams.componentId+cropParams+'&';
-        var fileUploadField = this._getFileUploadField();
-        fileUploadField.setPreviewUrl(link);
+        this._getFileUploadField().setPreviewUrl(this.previewUrl+'?'
+            +Ext.urlEncode(previewParams)+'&'
+        );
     },
 
     setFormBaseParams: function(params) {
