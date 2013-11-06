@@ -29,7 +29,8 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
 
     afterRender: function() {
         Kwc.Abstract.Image.DimensionField.superclass.afterRender.call(this);
-        var cropButton = new Ext.Button({
+        this._cropButton = new Ext.Button({
+            disabled: true,
             text: trlKwf('Configure'),
             cls: 'x-btn-text-icon',
             icon: '/assets/silkicons/shape_handles.png',
@@ -43,6 +44,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         }
         this.findParentByType('kwf.autoform').// TODO: retrieve Upload-field more cleanly
             findByType('kwf.file')[0].on('change', function (el, value) {
+                this._cropButton.setDisabled(value == '');
                 if (this.imageData != null && this.imageData != "") {
                     var dimensionValue = this.getValue();
                     if (dimensionValue.cropData) {
