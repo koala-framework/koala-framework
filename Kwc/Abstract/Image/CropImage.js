@@ -27,12 +27,12 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
     getValue: function () {
         if (this._cropRegionChosen) {
-            return this.getCropData();
+            return this._getCropData();
         }
         return null;
     },
 
-    getCropData: function() {
+    _getCropData: function() {
         var parent = this.getBox();
         if (!this._image) {
             return;
@@ -72,7 +72,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     },
 
     _updateCropRegionImage: function () {
-        var result = this.getCropData();
+        var result = this._getCropData();
         this._image.getEl().setStyle({
             'background-position': (-result.x)+'px '+(-result.y)+'px'
         });
@@ -123,7 +123,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 this._cropRegionChosen = true;
             }
             this._updateCropRegionImage();
-            var res = this.getCropData();
+            var res = this._getCropData();
         }, this);
 
         var dragDrop = new Ext.dd.DD(this._image.getEl(), '');

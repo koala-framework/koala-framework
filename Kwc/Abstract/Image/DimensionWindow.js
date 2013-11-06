@@ -312,7 +312,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     {
         var outWidth = this._widthField.getValue();
         var outHeight = this._heightField.getValue();
-        var cropData = this._cropImage.getCropData();
+        var cropData = this._cropImage.getValue();
         var preserveRatio = false;
         if (outWidth > 0 && outHeight > 0) {
             this._cropImage.outWidth = outWidth;
