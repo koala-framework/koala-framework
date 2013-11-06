@@ -171,8 +171,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             }
         }
 
-        var outWidth = this._getWidth();
-        var outHeight = this._getHeight();
+        var outWidth = this._getUserSelectedDimensionWidth();
+        var outHeight = this._getUserSelectedDimensionHeight();
         if (outWidth == -1 || outHeight == -1) {
             return;
         }
@@ -221,8 +221,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     _getPreserveRatio: function()
     {
         var preserveRatio = false;
-        var outWidth = this._getWidth();
-        var outHeight = this._getHeight();
+        var outWidth = this._getUserSelectedDimensionWidth();
+        var outHeight = this._getUserSelectedDimensionHeight();
         var dimension = this.dimensions[this._dimensionField.getValue()];
         if (dimension.cover == true && !(outWidth == 0 || outHeight == 0)) {
             preserveRatio = true;
@@ -230,7 +230,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         return preserveRatio;
     },
 
-    _getHeight: function ()
+    _getUserSelectedDimensionHeight: function ()
     {
         var outHeight = -1;
         var dimension = this.dimensions[this._dimensionField.getValue()];
@@ -246,7 +246,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         return outHeight;
     },
 
-    _getWidth: function ()
+    _getUserSelectedDimensionWidth: function ()
     {
         var outWidth = -1;
         var dimension = this.dimensions[this._dimensionField.getValue()];
@@ -276,8 +276,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             height: this._heightField.getValue(),
             cropData: cropData
         };
-        var outWidth = this._getWidth();
-        var outHeight = this._getHeight();
+        var outWidth = this._getUserSelectedDimensionWidth();
+        var outHeight = this._getUserSelectedDimensionHeight();
         if (outWidth == -1 || outHeight == -1) {
             return;
         }
