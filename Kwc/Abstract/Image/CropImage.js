@@ -7,7 +7,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     outWidth: null,
     outHeight: null,
     //values of initial selected region
-    cropData: null,
+    _cropData: null,
 
     minWidth: 52,//min width of crop region
     minHeight: 52,//min height of crop region
@@ -168,7 +168,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
             this._setImageSize(this.width, this.height);
             this.setSize(this.width, this.height);
-            this.setCropData(this.cropData, this.preserveRatio);
+            this.setCropData(this._cropData, this.preserveRatio);
 
             var params = {
                 'width': this.width,
@@ -208,7 +208,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         } else {
             this._cropRegionChosen = true;
         }
-        this.cropData = cropData;
+        this._cropData = cropData;
         this._image.setPosition(cropData.x, cropData.y);
         this._resizer.preserveRatio = preserveRatio;
         if (cropData.width != null && cropData.height != null) {
