@@ -61,6 +61,7 @@ class Kwc_Abstract_Image_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
         // Calculate values relative to preview image
         $image = new Imagick();
         $image->readImageBlob($output['contents']);
+        $previewFactor = 1;
         if ($image->getImageWidth() == 100) {
             $previewFactor = $image->getImageWidth() / $imageOriginal->getImageWidth();
         } else if ($image->getImageHeight() == 100) {
