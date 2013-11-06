@@ -122,6 +122,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         });
 
         this.items = new Ext.FormPanel({
+            border: false,
             bodyStyle: 'padding: 10px',
             layout: 'border',
             items: [
