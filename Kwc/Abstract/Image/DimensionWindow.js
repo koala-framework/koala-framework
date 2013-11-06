@@ -61,7 +61,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 style: 'line-height:20px;text-align:center;padding-left:2px;'
             }
         });
-        this._userSelection = new Ext.FormPanel({
+        this._userSelection = new Ext.Panel({
             xtype: 'panel',
             layout: 'column',
             hideBorders: true,
@@ -98,7 +98,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
         this._initCropRegion();
 
-        this._configPane = new Ext.FormPanel({
+        this._configPane = new Ext.Panel({
             region: 'west',
             bodyStyle: 'padding: 10px',
             width: 200,
