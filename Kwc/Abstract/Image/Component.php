@@ -33,6 +33,9 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 'height' => 0,
                 'cover' => true
             ),
+            'original'=>array(
+                'text' => trlKwf('original')
+            ),
             'custom'=>array(
                 'text' => trlKwf('user-defined'),
                 'width' => self::USER_SELECT,
