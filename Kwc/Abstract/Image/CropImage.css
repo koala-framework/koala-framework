@@ -1,3 +1,9 @@
+.kwc-abstract-image-dimension-window-crop-image {
+    left:50%;
+    top:50%;
+    position:absolute;
+}
+
 .kwc-abstract-image-crop-image-resizable .x-resizable-handle {
     opacity: 1;
     filter: none;

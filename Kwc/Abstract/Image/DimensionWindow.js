@@ -183,7 +183,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             // call controller to create image with nice size to work with
             src: '/kwf/media/upload/download-handy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey,
             preserveRatio: preserveRatio,
-            style: 'left:50%;top:50%;position:absolute;',
+            cls: 'kwc-abstract-image-dimension-window-crop-image',
             outWidth: outWidth,
             outHeight: outHeight,
             cropData: cropData
