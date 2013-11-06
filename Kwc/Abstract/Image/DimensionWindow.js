@@ -135,12 +135,11 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 text: trlKwf('OK'),
                 handler: function() {
                     if (this._validateSizes()) {
-                        this.value.cropData = this._cropImage.getValue();
                         this.value = {
                             dimension: this._dimensionField.getValue(),
                             width: this._widthField.getValue(),
                             height: this._heightField.getValue(),
-                            cropData: this.value.cropData
+                            cropData: this._cropImage.getValue()
                         };
                         this.fireEvent('save', this.value);
                         this.close();
