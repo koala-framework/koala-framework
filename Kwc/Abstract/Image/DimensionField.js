@@ -5,8 +5,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         cls: 'imageDimension',
         children: [{
             tag: 'div',
-            cls: 'dimension',
-            html: 'DIMENSION'
+            cls: 'dimension'
         }]
     },
     imageData: null,
