@@ -14,6 +14,7 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
         $this->_image->setPreviewSize(100) // set to provide big preview image
             ->setCls('imageUploadFile')
             ->setWidth(423)
+            ->setHeight(112)
             ->setCtCls('imageUploadContainer')
             ->setAllowOnlyImages(true);
         $this->fields->add($this->_image);
