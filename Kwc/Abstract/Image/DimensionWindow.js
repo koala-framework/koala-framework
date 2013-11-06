@@ -202,18 +202,18 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 this._cropPane.setTitle(
                     this._cropPane.title.replace(' '+trlKwf('(Image to small)'), '')
                 );
-
-                // Check if smaller than usefull so keep min-width
-                var width = this.width;
-                if (dimensions.width +200 +18 > this.minWidth) {//200px is "select dimension" width and border
-                    width = 200 +18 + dimensions.width;
-                }
-                var height = this.height;
-                if (dimensions.height +98 > this.minHeight) { //titles height
-                    height = dimensions.height +98;
-                }
-                this.setSize(width, height);
             }
+            // Check if smaller than usefull so keep min-width
+            var width = this.width;
+            if (dimensions.width +200 +18 > this.minWidth) {//200px is "select dimension" width and border
+                width = 200 +18 + dimensions.width;
+            }
+            var height = this.height;
+            if (dimensions.height +98 > this.minHeight) { //titles height
+                height = dimensions.height +98;
+            }
+            this.setSize(width, height);
+
             this._cropImage.getEl().setStyle('margin-left', dimensions.width/-2+'px');
             this._cropImage.getEl().setStyle('margin-top', dimensions.height/-2+'px');
             this.center();
