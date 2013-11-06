@@ -10,11 +10,9 @@ class Kwc_Abstract_Image_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
         if ($fileRow->getHashKey() != $this->_getParam('hashKey')) {
            throw new Kwf_Exception_AccessDenied();
         }
-
         //Scale dimensions
         $dimensions = array(100, 100, 'cover' => false);
-        static $cache = null;
-        if (!$cache) $cache = new Kwf_Assets_Cache(array('checkComponentSettings'=>false));
+        $cache = new Kwf_Assets_Cache(array('checkComponentSettings'=>false));
         $cacheId = 'previewLarge_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
