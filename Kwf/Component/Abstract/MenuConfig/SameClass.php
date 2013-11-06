@@ -16,7 +16,7 @@ class Kwf_Component_Abstract_MenuConfig_SameClass extends Kwf_Component_Abstract
             $name = Kwc_Abstract::getSetting($this->_class, 'componentName');
         }
         $icon = Kwc_Abstract::getSetting($this->_class, 'componentIcon');
-        if (count($components) > 1) {
+        if (count($components)) {
             $dropdownName = 'kwc_'.$this->_class;
             if (!$acl->has($dropdownName)) {
                 $dropDown = new Kwf_Acl_Resource_MenuDropdown(
@@ -37,13 +37,6 @@ class Kwf_Component_Abstract_MenuConfig_SameClass extends Kwf_Component_Abstract
                     ), $dropdownName
                 );
             }
-        } else if (count($components) == 1) {
-            $c = $components[0];
-            $acl->add(
-                new Kwf_Acl_Resource_Component_MenuUrl(
-                    $c, array('text'=>$name, 'icon'=>$icon)
-                ), $this->_getParentResource($acl)
-            );
         }
     }
 
