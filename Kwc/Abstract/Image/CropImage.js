@@ -21,7 +21,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         tag: 'div',
         children: [{
             tag: 'div',
-            cls: 'kwc-crop-image-wrapper'
+            cls: 'kwc-abstract-image-crop-image-wrapper'
         }]
     },
 
@@ -84,7 +84,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             'background': 'url('+this.src+') no-repeat left top'
         });
 
-        this._wrapEl = this.el.down('.kwc-crop-image-wrapper');
+        this._wrapEl = this.el.down('.kwc-abstract-image-crop-image-wrapper');
         this._wrapEl.setSize(0, 0);
 
         this._image = new Ext.BoxComponent({
@@ -115,7 +115,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             transparent: true
         });
 
-        this._resizer.getEl().addClass('kwc-crop-image-resizable');
+        this._resizer.getEl().addClass('kwc-abstract-image-crop-image-resizable');
         this._resizer.on("resize", function() {
             if (this._ignoreRegionChangeAction) {
                 this._ignoreRegionChangeAction = false;
@@ -128,7 +128,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
         var dragDrop = new Ext.dd.DD(this._image.getEl(), '');
         dragDrop.startDrag = (function (x, y) {
-            var wrapper = this.getEl().child('.kwc-crop-image-wrapper');
+            var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
             wrapper.imageSrcBackup = wrapper.getStyle('background-image');
             wrapper.setStyle({
                 'background-image': 'none'
@@ -145,7 +145,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 'background-image': 'url('+this.src+')',
                 'background-repeat': 'no-repeat'
             });
-            var wrapper = this.getEl().child('.kwc-crop-image-wrapper');
+            var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
             wrapper.setStyle({
                 'background-image': wrapper.imageSrcBackup
             });

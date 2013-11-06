@@ -8,23 +8,21 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
     {
         parent::__construct();
         $this->setXtype('kwc.image.imageuploadfield');
-        $this->setBaseCls('imageUploadBigPreview');
+        $this->setBaseCls('kwc-abstract-image-image-upload-big-preview');
         // Fileupload
         $this->_image = new Kwf_Form_Field_File('Image', $imageLabel);
         $this->_image->setPreviewSize(100) // set to provide big preview image
-            ->setCls('imageUploadFile')
+            ->setCls('kwc-abstract-image-image-upload-file')
             ->setWidth(423)
             ->setHeight(112)
-            ->setCtCls('imageUploadContainer')
             ->setAllowOnlyImages(true);
         $this->fields->add($this->_image);
 
         $this->_dimensions = $dimensions;
         $this->fields->add(new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension')))
             ->setAllowBlank(false)
-            ->setTriggerClass('cropTrigger')
             ->setLabelStyle('display:none')
-            ->setCtCls('dimensionContainer')
+            ->setCtCls('kwc-abstract-image-dimension-container')
             ->setDimensions($dimensions);
     }
 

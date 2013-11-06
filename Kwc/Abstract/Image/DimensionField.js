@@ -2,10 +2,10 @@ Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     autoEl: {
         tag: 'div',
-        cls: 'imageDimension',
+        cls: 'kwc-abstract-image-dimension',
         children: [{
             tag: 'div',
-            cls: 'dimension'
+            cls: 'kwc-abstract-image-dimension-name'
         }]
     },
     imageData: null,
@@ -18,9 +18,9 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         this.value = v;
         if (this.rendered) {
             if (v.dimension) {
-                this.getEl().child('.dimension').update(Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions, v));
+                this.getEl().child('.kwc-abstract-image-dimension-name').update(Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions, v));
             } else {
-                this.getEl().child('.dimension').update('');
+                this.getEl().child('.kwc-abstract-image-dimension-name').update('');
             }
         }
         this.fireEvent('change', this.value);
