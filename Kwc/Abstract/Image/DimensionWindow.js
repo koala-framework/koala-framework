@@ -83,7 +83,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         this._dimensionField.on('change', this._validateSizes, this);
         this._dimensionField.on('change', this._resetCropRegion, this);
 
-        // Has to be initialised before cropRegion because cropRegion needs dimensionValue
+        // Has to be initialized before cropRegion because cropRegion needs dimensionValue
         if (this.value && this.value.dimension) {
             this._dimensionField.setValue(this.value.dimension);
             this._widthField.setValue(this.value.width);
