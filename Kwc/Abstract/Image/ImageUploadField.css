@@ -15,7 +15,8 @@
     top: -88px !important;
 }
 
-.imageUploadFile .filedescription {
-    margin-left: 123px;
-    width: 250px;
+.imageUploadFile .filedescription .filename {
+    overflow: hidden;
+    max-height: 36px;
+    line-height: 12px;
 }
