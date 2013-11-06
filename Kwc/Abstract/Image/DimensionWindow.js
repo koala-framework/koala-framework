@@ -98,7 +98,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
         this._initCropRegion();
 
-        this._configPane = new Ext.Panel({
+        this._configPanel = new Ext.Panel({
             region: 'west',
             bodyStyle: 'padding: 10px',
             width: 200,
@@ -111,7 +111,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             ]
         });
 
-        this._cropPane = new Ext.Panel({
+        this._cropPanel = new Ext.Panel({
             region: 'center',
             title: trlKwf('Select image region'),
             width: 600,
@@ -126,8 +126,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             bodyStyle: 'padding: 10px',
             layout: 'border',
             items: [
-                this._configPane,
-                this._cropPane
+                this._configPanel,
+                this._cropPanel
             ]
         });
         this.buttons = [
@@ -193,13 +193,12 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             if (dimensions.width < this.minImageSize
                 || dimensions.height < this.minImageSize)
             { // Disable crop because image to small
-                this._cropPane.disable();
-                this._cropPane.title;
-                this._cropPane.setTitle(this._cropPane.title+ ' '+trlKwf('(Image to small)'));
+                this._cropPanel.disable();
+                this._cropPanel.setTitle(this._cropPanel.title+ ' '+trlKwf('(Image to small)'));
             } else {
-                this._cropPane.enable();
-                this._cropPane.setTitle(
-                    this._cropPane.title.replace(' '+trlKwf('(Image to small)'), '')
+                this._cropPanel.enable();
+                this._cropPanel.setTitle(
+                    this._cropPanel.title.replace(' '+trlKwf('(Image to small)'), '')
                 );
             }
             // Check if smaller than usefull so keep min-width
