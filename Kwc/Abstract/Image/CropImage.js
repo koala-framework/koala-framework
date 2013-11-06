@@ -12,7 +12,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     minWidth: 52,//min width of crop region
     minHeight: 52,//min height of crop region
     _image: null,
-    _cropRegionChanged: false,
+    _cropRegionChosen: false,
     _ignoreRegionChangeAction: false,
 
     _centerHandle: '<div class="handle {position}"></div>',
@@ -26,7 +26,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     },
 
     getValue: function () {
-        if (this._cropRegionChanged) {
+        if (this._cropRegionChosen) {
             return this.getCropData();
         }
         return null;
@@ -120,7 +120,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             if (this._ignoreRegionChangeAction) {
                 this._ignoreRegionChangeAction = false;
             } else {
-                this._cropRegionChanged = true;
+                this._cropRegionChosen = true;
             }
             this._updateCropRegionImage();
             var res = this.getCropData();
@@ -139,7 +139,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             });
         }).createDelegate(this);
         dragDrop.endDrag = (function (e) {
-            this._cropRegionChanged = true;
+            this._cropRegionChosen = true;
             this._updateCropRegionImage();
             this._image.getEl().setStyle({
                 'background-image': 'url('+this.src+')',
@@ -206,7 +206,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 }
             }
         } else {
-            this._cropRegionChanged = true;
+            this._cropRegionChosen = true;
         }
         this.cropData = cropData;
         this._image.setPosition(cropData.x, cropData.y);
