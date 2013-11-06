@@ -22,8 +22,8 @@ class Kwc_Abstract_Image_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
         }
 
         $imageOriginal = new Imagick($fileRow->getFileSource());
-        if ($this->_getParam('cropX') == NULL || $this->_getParam('cropY') == NULL
-            || $this->_getParam('cropWidth') == NULL || $this->_getParam('cropHeight') == NULL
+        if ($this->_getParam('cropX') == null || $this->_getParam('cropY') == null
+            || $this->_getParam('cropWidth') == null || $this->_getParam('cropHeight') == null
        ) { //calculate default selection
             $dimension = $this->_getParam('dimension');
             if (!$dimension) Kwf_Media_Output::output($output);
