@@ -256,7 +256,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
     _resetCropRegion: function (element, value)
     {
-        var cropData = null;
+        var cropData = this._cropImage.getValue();
         if (value.inputValue == this.value.dimension) {
             cropData = this.value.cropData;
         }
@@ -266,10 +266,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             height: this._heightField.getValue(),
             cropData: cropData
         };
-        var outWidth = this._getUserSelectedDimensionWidth();
-        var outHeight = this._getUserSelectedDimensionHeight();
-        this._cropImage.outWidth = outWidth;
-        this._cropImage.outHeight = outHeight;
+        this._cropImage.outWidth = this._getUserSelectedDimensionWidth();
+        this._cropImage.outHeight = this._getUserSelectedDimensionHeight();
         this._cropImage.setCropData(cropData, this._getPreserveRatio());
     },
 
@@ -300,11 +298,10 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         var outHeight = this._heightField.getValue();
         var cropData = this._cropImage.getValue();
         var preserveRatio = false;
+        this._cropImage.outWidth = outWidth;
+        this._cropImage.outHeight = outHeight;
         if (outWidth > 0 && outHeight > 0) {
-            this._cropImage.outWidth = outWidth;
-            this._cropImage.outHeight = outHeight;
             preserveRatio = true;
-            cropData.height = outHeight * cropData.width / outWidth;
         }
         this._cropImage.setCropData(cropData, preserveRatio);
     },

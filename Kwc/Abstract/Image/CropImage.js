@@ -199,24 +199,22 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             || (cropData.width > this.width && this.width != 0)
             || (cropData.height > this.height && this.height != 0)
         ) { // calculate default selection
-            cropData = {};
-            cropData.x = 0;
-            cropData.y = 0;
-            cropData.width = this.width;
-            cropData.height = this.height;
-            if (preserveRatio) {
-                if (this.height / this.outHeight > this.width / this.outWidth) {
-                    // orientate on width
-                    cropData.height = this.outHeight * this.width / this.outWidth;
-                    cropData.y = (this.height - cropData.height)/2;
-                } else {
-                    // orientate on height
-                    cropData.width = this.outWidth * this.height / this.outHeight;
-                    cropData.x = (this.width - cropData.width)/2;
-                }
-            }
+            cropData = this._generateDefaultCrop(preserveRatio);
         } else {
             this._cropRegionChosen = true;
+        }
+        if (this.outWidth != 0 && this.outHeight != 0
+            && this.outWidth / this.outHeight != cropData.width / cropData.heigth
+        ) {
+            var width = cropData.height * this.outWidth / this.outHeight;
+            var height = cropData.width * this.outHeight / this.outWidth;
+            if (width < this.width) {
+                cropData.width = width;
+            } else if (height < this.height) {
+                cropData.height = height;
+            } else {
+                cropData = this._generateDefaultCrop(preserveRatio);
+            }
         }
         this._cropData = cropData;
         this._image.setPosition(cropData.x, cropData.y);
@@ -225,6 +223,26 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             this._ignoreRegionChangeAction = true;
             this._resizer.resizeTo(cropData.width, cropData.height);
         }
+    },
+
+    _generateDefaultCrop: function (preserveRatio) {
+        cropData = {};
+        cropData.x = 0;
+        cropData.y = 0;
+        cropData.width = this.width;
+        cropData.height = this.height;
+        if (preserveRatio) {
+            if (this.height / this.outHeight > this.width / this.outWidth) {
+                // orientate on width
+                cropData.height = this.outHeight * this.width / this.outWidth;
+                cropData.y = (this.height - cropData.height)/2;
+            } else {
+                // orientate on height
+                cropData.width = this.outWidth * this.height / this.outHeight;
+                cropData.x = (this.width - cropData.width)/2;
+            }
+        }
+        return cropData;
     },
 
     _styleHandles: function() {
