@@ -18,6 +18,13 @@ class Kwf_Form_Field_ShowSelect extends Kwf_Form_Field_ShowField
                     }
                 }
             } else if (is_array($data)) {
+                if (is_array($data[0])) {
+                        $oldData = $data;
+                        $data = array();
+                    foreach ($oldData as $d) {
+                        $data[$d[0]] = $d[1];
+                    }
+                }
                 if ($ret[$this->getName()] === false || $ret[$this->getName()] === null) {
                     $ret[$this->getName()] = null;
                 } else if (!$ret[$this->getName()]) {
