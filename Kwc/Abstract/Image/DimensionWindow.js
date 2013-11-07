@@ -124,6 +124,17 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         cropPanelItems.add(this._cropImage);
 
         this._cropPanel = new Ext.Panel({
+            tbar: [{
+                text: trlKwf('Reset'),
+                handler: function () {
+                    this._cropImage.setCropData(null, this._getPreserveRatio());
+                },
+                cls:"x-btn-text-icon",
+                hideLabel: true,
+                icon: '/assets/silkicons/arrow_rotate_clockwise.png',
+                tooltip: trlKwf('Reset to default for this dimension. Cancel to undo changes.'),
+                scope: this
+            }],
             cls: 'kwc-abstract-image-dimension-window-crop-panel',
             region: 'center',
             title: trlKwf('Select image region'),
@@ -206,8 +217,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             width = this._configPanel.width +18 + imageWidth;
         }
         var height = this.height;
-        if (imageHeight +98 > this.minHeight) { //titles height
-            height = imageHeight +98;
+        if (imageHeight +98 + 26 > this.minHeight) { //titles height + toolbar height
+            height = imageHeight +98 +26;
         }
         this.setSize(width, height);
     },
