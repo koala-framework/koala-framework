@@ -184,9 +184,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
         var outWidth = this._getUserSelectedDimensionWidth();
         var outHeight = this._getUserSelectedDimensionHeight();
-        if (outWidth == -1 || outHeight == -1) {
-            return;
-        }
 
         var imageWidth = Math.round(this.imageData.imageWidth / this.imageData.imageHandyScaleFactor);
         var imageHeight = Math.round(this.imageData.imageHeight / this.imageData.imageHandyScaleFactor);
@@ -221,7 +218,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         var outWidth = this._getUserSelectedDimensionWidth();
         var outHeight = this._getUserSelectedDimensionHeight();
         var dimension = this.dimensions[this._dimensionField.getValue()];
-        if (dimension.cover == true && !(outWidth == 0 || outHeight == 0)) {
+        if (dimension.cover == true && !(outWidth <= 0 || outHeight <= 0)) {
             preserveRatio = true;
         }
         return preserveRatio;
@@ -237,8 +234,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             outHeight = dimension.height;
         } else if (typeof dimension.height === 'undefined') {
             outHeight = 0;
-        } else {
-            Ext.Msg.alert(trlKwf('Error'), trlKwf('No height value was set'));
         }
         return outHeight;
     },
@@ -255,8 +250,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             outWidth = dimension.width;
         } else if (typeof dimension.width === 'undefined') {
             outWidth = 0;
-        } else {
-            Ext.Msg.alert(trlKwf('Error'), trlKwf('No width value was set'));
         }
         return outWidth;
     },
@@ -275,9 +268,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         };
         var outWidth = this._getUserSelectedDimensionWidth();
         var outHeight = this._getUserSelectedDimensionHeight();
-        if (outWidth == -1 || outHeight == -1) {
-            return;
-        }
         this._cropImage.outWidth = outWidth;
         this._cropImage.outHeight = outHeight;
         this._cropImage.setCropData(cropData, this._getPreserveRatio());

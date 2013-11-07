@@ -191,6 +191,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
     setCropData: function (cropData, preserveRatio)
     {
+        if (this.outWidth == -1) this.outWidth = 0;
+        if (this.outHeight == -1) this.outHeight = 0;
         if (!cropData
             || cropData.width == 0 || cropData.width == null
             || cropData.height == 0 || cropData.height == null
