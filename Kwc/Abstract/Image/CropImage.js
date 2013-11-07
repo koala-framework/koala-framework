@@ -79,6 +79,11 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         });
     },
 
+    isCropDisabled: function () {
+        return this.width < this._minImageSize
+            || this.height < this._minImageSize;
+    },
+
     onRender: function(ct, position) {
         Kwc.Abstract.Image.CropImage.superclass.onRender.call(this, ct, position);
         this.el.setStyle({
@@ -155,9 +160,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             });
         }).createDelegate(this);
 
-        if (this.width < this._minImageSize
-            || this.height < this._minImageSize)
-        { // Disable crop because image too small
+        if (this.isCropDisabled()) { // Disable crop because image too small
             this._resizer.enabled = false;
             this._resizer.getEl().removeClass('kwc-abstract-image-crop-image-resizable');
             this._resizer.getEl().addClass('kwc-abstract-image-crop-image-resizable-disabled');

@@ -109,14 +109,27 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
         this._initCropRegion();
 
+        var cropPanelItems = new Array();
+        if (this._cropImage.isCropDisabled()) {
+            // show information for not able to crop
+            var cropDisabledInfo = new Ext.BoxComponent({
+                autoEl: {
+                    tag: 'div',
+                    cls: 'information',
+                    html: trlKwf('There is no crop enabled because image is too small!')
+                }
+            });
+            cropPanelItems.add(cropDisabledInfo);
+        }
+        cropPanelItems.add(this._cropImage);
+
         this._cropPanel = new Ext.Panel({
+            cls: 'kwc-abstract-image-dimension-window-crop-panel',
             region: 'center',
             title: trlKwf('Select image region'),
             width: 600,
             height: 200,
-            items: [
-                this._cropImage
-            ]
+            items: cropPanelItems
         });
 
         this.items = new Ext.FormPanel({
