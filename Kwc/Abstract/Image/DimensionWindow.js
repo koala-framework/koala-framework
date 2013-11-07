@@ -272,14 +272,16 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         if (value.inputValue == this.value.dimension) {
             cropData = this.value.cropData;
         }
+        var width = this._getUserSelectedDimensionWidth();
+        var height = this._getUserSelectedDimensionHeight();
         this.value = {
             dimension: this._dimensionField.getValue(),
-            width: this._widthField.getValue(),
-            height: this._heightField.getValue(),
+            width: width,
+            height: height,
             cropData: cropData
         };
-        this._cropImage.outWidth = this._getUserSelectedDimensionWidth();
-        this._cropImage.outHeight = this._getUserSelectedDimensionHeight();
+        this._cropImage.outWidth = width;
+        this._cropImage.outHeight = height;
         this._cropImage.setCropData(cropData, this._getPreserveRatio());
     },
 
