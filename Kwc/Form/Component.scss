@@ -1,14 +1,14 @@
 @import "compass/utilities/general/clearfix";
 @import "compass/css3/box-sizing";
-@import "kwf/form/labelTopInputAll";
-@import "kwf/form/labelCenterInputAll";
-@import "kwf/form/labelLeftInputAll";
-@import "kwf/form/label34Input60";
-@import "kwf/form/labelLeft";
-@import "kwf/form/label120";
-@import "kwf/form/errorSimple";
-@import "kwf/form/errorSimpleAlignRight";
-@import "kwf/form/errorBubbles";
+@import "kwf/form/label-top-input-all";
+@import "kwf/form/label-center-input-all";
+@import "kwf/form/label-left-input-all";
+@import "kwf/form/label-34-input-60";
+@import "kwf/form/label-left";
+@import "kwf/form/label-120";
+@import "kwf/form/error/icon-bubble/error-simple";
+@import "kwf/form/error/icon-bubble/error-simple-align-right";
+@import "kwf/form/error/icon-bubble/error-bubbles";
 
 .cssClass {
 /* ------------------------------------------ Basic Styling --------------------------------------*/
@@ -40,79 +40,75 @@
                 }
             }
         }
-
-/* ------------------------------------------ Center-Style ---------------------------------------*/
+/* ------------------------------------------ Styles --------------------------------------*/
         &.center {
             &.veryNarrow {
-                @include labelCenterInputAll;
-                @include errorSimple;
+                @include label-center-input-all;
+                @include error-simple;
             }
 
             &.gt350 {
-                @include labelCenterInputAll;
-                @include errorSimple;
+                @include label-center-input-all;
+                @include error-simple;
             }
         }
 
-/* ------------------------------------------ SmallBox-Style ---------------------------------------*/
         &.smallBox {
             &.veryNarrow {
-                @include labelLeftInputAll;
-                @include errorSimple;
+                @include label-left-input-all;
+                @include error-simple;
             }
 
             &.gt350 {
-                @include labelLeftInputAll;
-                @include errorSimple;
+                @include label-left-input-all;
+                @include error-simple;
             }
 
             &.gt500 {
-                @include label120;
-                @include errorBubbles;
+                @include label-120;
+                @include error-bubbles;
             }
         }
 
-/* ------------------------------------------ CenterDefault-Style ---------------------------------------*/
         &.centerDefault {
             &.veryNarrow {
-                @include labelCenterInputAll;
-                @include errorSimple;
+                @include label-center-input-all;
+                @include error-simple;
             }
 
             &.veryNarrow.gt350 {
-                @include label34Input60;
-                @include errorSimpleAlignRight;
+                @include label-34-input-60;
+                @include error-simple-align-right;
             }
 
             &.gt350 {
-                @include labelLeft;
+                @include label-left;
             }
 
             &.gt500 {
-                @include label120;
-                @include errorBubbles;
+                @include label-120;
+                @include error-bubbles;
             }
         }
 
-/* ----------------------------------------- Default-Style ---------------------------------------*/
         &.default {
             &.veryNarrow {
-                @include labelTopInputAll;
-                @include errorSimple;
+                @include label-top-input-all;
+                @include error-simple;
             }
 
             &.veryNarrow.gt350 {
-                @include label34Input60;
-                @include errorSimpleAlignRight;
+                @include label-34-input-60;
+                @include error-simple-align-right;
             }
 
             &.gt350 {
-                @include labelLeft;
+                @include label-left;
             }
 
             &.gt500 {
-                @include label120;
-                @include errorBubbles;
+                @include label-120;
+                @include error-bubbles;
             }
         }
     }
