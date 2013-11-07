@@ -193,12 +193,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     {
         if (this.outWidth == -1) this.outWidth = 0;
         if (this.outHeight == -1) this.outHeight = 0;
-        if (!cropData
-            || cropData.width == 0 || cropData.width == null
-            || cropData.height == 0 || cropData.height == null
-            || (cropData.width > this.width && this.width != 0)
-            || (cropData.height > this.height && this.height != 0)
-        ) { // calculate default selection
+        if (!cropData) { // calculate default selection
             cropData = this._generateDefaultCrop(preserveRatio);
         } else {
             this._cropRegionChosen = true;
