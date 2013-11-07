@@ -25,7 +25,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     infoTpl: ['<div class="filedescription"><div class="filename">{filename}.{extension}</div>',
               '<div class="filesize">{fileSize:fileSize}',
               '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl></div></div>'],
-    emptyTpl: ['<div style="height: {previewSize}px; width: {previewSize}px; text-align: center;line-height:{previewSize}px">('+trlKwf('empty')+')</div>'],
+    emptyTpl: ['<div class="empty" style="height: {previewSize}px; width: {previewSize}px; text-align: center;line-height:{previewSize}px">('+trlKwf('empty')+')</div>'],
 
     initComponent: function() {
         this.addEvents(['uploaded']);
@@ -78,6 +78,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
         if (this.showPreview) {
             this.previewImage = this.el.createChild({
+                cls: 'box',
                 style: 'margin-right: 10px; padding: 5px; float: left; border: 1px solid #b5b8c8;'+
                     'background-color: white;'
             });

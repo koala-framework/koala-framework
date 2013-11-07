@@ -16,3 +16,13 @@
     max-height: 36px;
     line-height: 12px;
 }
+
+.kwc-abstract-image-image-upload-file .empty {
+    background-color: #ffffff;
+}
+
+.kwc-abstract-image-image-upload-file .box {
+    background-image:url(/assets/ext/resources/images/default/grid/loading.gif);
+    background-position: center;
+    background-repeat: no-repeat;
+}
