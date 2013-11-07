@@ -256,6 +256,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
     _resetCropRegion: function (element, value)
     {
+        //Change to cropData = null to reset selection on change
         var cropData = this._cropImage.getValue();
         if (value.inputValue == this.value.dimension) {
             cropData = this.value.cropData;
