@@ -11,114 +11,79 @@
 @import "kwf/form/error/icon-bubble/error-bubbles";
 
 .cssClass {
-/* ------------------------------------------ Basic Styling --------------------------------------*/
     .kwfFormFieldWrapper {
         position: relative;
     }
 
-    &.responsive {
-        &.veryNarrow {
-            > div.kwcForm > form {
-                div.kwfFormFieldWrapper {
-                    input, textarea, select {
-                        &.radio {
-                            width: auto !important;
-                        }
-
-                        &[type='checkbox'] {
-                            width: auto !important;
-                        }
-                    }
-                }
-
-                .kwfFormFieldFileUploadWrapper {
-                    .underlayFileSelector {
-                        a.kwfFormFieldFileUploadButton {
-                            float: right;
-                        }
-                    }
-                }
-            }
-        }
 /* ------------------------------------------ Styles --------------------------------------*/
-        &.center {
-            &.veryNarrow {
-                @include label-center-input-all;
-                @include error-simple;
-            }
-
-            &.gt350 {
-                @include label-center-input-all;
-                @include error-simple;
-            }
+    &.center {
+        &.veryNarrow {
+            @include label-center-input-all;
+            @include error-simple;
         }
 
-        &.smallBox {
-            &.veryNarrow {
-                @include label-left-input-all;
-                @include error-simple;
-            }
-
-            &.gt350 {
-                @include label-left-input-all;
-                @include error-simple;
-            }
-
-            &.gt500 {
-                @include label-120;
-                @include error-bubbles;
-            }
-        }
-
-        &.centerDefault {
-            &.veryNarrow {
-                @include label-center-input-all;
-                @include error-simple;
-            }
-
-            &.veryNarrow.gt350 {
-                @include label-34-input-60;
-                @include error-simple-align-right;
-            }
-
-            &.gt350 {
-                @include label-left;
-            }
-
-            &.gt500 {
-                @include label-120;
-                @include error-bubbles;
-            }
-        }
-
-        &.default {
-            &.veryNarrow {
-                @include label-top-input-all;
-                @include error-simple;
-            }
-
-            &.veryNarrow.gt350 {
-                @include label-34-input-60;
-                @include error-simple-align-right;
-            }
-
-            &.gt350 {
-                @include label-left;
-            }
-
-            &.gt500 {
-                @include label-120;
-                @include error-bubbles;
-            }
+        &.gt350 {
+            @include label-center-input-all;
+            @include error-simple;
         }
     }
 
-/* ----------------------------------------- Error Bubbles ---------------------------------------*/
-    .kwfFieldErrorIconBubble {
-        clear: left;
+    &.smallBox {
+        &.veryNarrow {
+            @include label-left-input-all;
+            @include error-simple;
+        }
 
-        .message {
-            text-align: left;
+        &.veryNarrow.gt350 {
+            @include label-left-input-all;
+            @include error-simple;
+        }
+
+        &.gt500 {
+            @include label-120;
+            @include error-bubbles;
+        }
+    }
+
+    &.centerDefault {
+        &.veryNarrow {
+            @include label-center-input-all;
+            @include error-simple;
+        }
+
+        &.veryNarrow.gt350 {
+            @include label-34-input-60;
+            @include error-simple-align-right;
+        }
+
+        &.gt350 {
+            @include label-left;
+        }
+
+        &.gt500 {
+            @include label-120;
+            @include error-bubbles;
+        }
+    }
+
+    &.default {
+        &.veryNarrow {
+            @include label-top-input-all;
+            @include error-simple;
+        }
+
+        &.veryNarrow.gt350 {
+            @include label-34-input-60;
+            @include error-simple-align-right;
+        }
+
+        &.gt350 {
+            @include label-left;
+        }
+
+        &.gt500 {
+            @include label-120;
+            @include error-bubbles;
         }
     }
 }

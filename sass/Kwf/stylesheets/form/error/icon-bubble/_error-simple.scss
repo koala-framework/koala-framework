@@ -5,6 +5,7 @@
             position: relative;
             height: auto;
             width: auto;
+            clear: left;
 
             .message {
                 background: none transparent;
@@ -16,6 +17,7 @@
                 margin: 0;
                 right: 0px !important;
                 position: relative;
+                text-align: left;
             }
 
             .arrow {

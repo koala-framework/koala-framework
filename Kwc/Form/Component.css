@@ -101,7 +101,7 @@
 .cssClass form .kwfFormFieldRadioVertical span label { margin-left: 0px; }
 .cssClass form .kwfFormFieldRadioVertical label { float: none; }
 
-.cssClass form .kwfFormFieldMultiCheckboxHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
+.cssClass form .kwfFormFieldMultiCheckboxHorizontal label { float: none; width: auto; margin-left: 0px; }
 .cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; padding-right: 10px; }
 .cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
 

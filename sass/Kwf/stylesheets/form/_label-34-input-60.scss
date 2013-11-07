@@ -10,30 +10,10 @@
         }
     }
 
-    .kwfFormFieldWrapper {
-        input, textarea, select, {
-            &.radio {
-                width: auto !important;
-            }
-
-            &[type='checkbox'] {
-                width: auto !important;
-            }
-        }
-    }
-
     .kwfFormFieldWrapper.hasLabel {
         input, textarea, select, {
             @include box-sizing(border-box);
             max-width: 60%;
-
-            &.radio {
-                width: auto !important;
-            }
-
-            &[type='checkbox'] {
-                width: auto !important;
-            }
         }
     }
 }

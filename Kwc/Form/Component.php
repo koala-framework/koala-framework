@@ -43,7 +43,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
         $ret['errorStyle'] = null; //default from config.ini: kwc.form.errorStyle
 
-        $ret['cssClass'] = 'responsive default';
+        $ret['cssClass'] = 'default';
 
         return $ret;
     }
