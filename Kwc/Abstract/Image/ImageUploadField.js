@@ -6,18 +6,19 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
     initComponent: function() {
         this.baseParams = {};
         Kwc.Abstract.Image.ImageUploadField.superclass.initComponent.call(this);
-        var dimensionsField = this._getDimensionsField();
-        if (dimensionsField) {// because it's possible to define only a single dimension
-            dimensionsField.on('change', function (dimension) {
+        var dimensionField = this._getDimensionField();
+        if (dimensionField) {// because it's possible to define only a single dimension
+            dimensionField.on('change', function (dimension) {
                 this._setPreviewUrl(dimension);
             }, this);
         }
         var fileUploadField = this._getFileUploadField();
         fileUploadField.on('change', function (el, value) {
-            var dimensionsField = this._getDimensionsField();
             var dimension = null;
-            if (dimensionsField) {
-                dimension = dimensionsField.getValue();
+            var dimensionField = this._getDimensionField();
+            if (dimensionField) {
+                dimensionField.newImageUploaded(value);
+                dimension = dimensionField.getValue();
             }
             this._setPreviewUrl(dimension);
         }, this);
@@ -27,7 +28,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         return this.findByType('kwf.file')[0];
     },
 
-    _getDimensionsField: function () {
+    _getDimensionField: function () {
         return this.findByType('kwc.image.dimensionfield')[0];
     },
 

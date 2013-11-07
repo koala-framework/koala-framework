@@ -41,18 +41,6 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         if (this.value) {
             this.setValue(this.value);
         }
-        this.findParentByType('kwf.autoform').// TODO: retrieve Upload-field more cleanly
-            findByType('kwf.file')[0].on('change', function (el, value) {
-                this._cropButton.setDisabled(value == '');
-                if (this.imageData != null && this.imageData != "") {
-                    var dimensionValue = this.getValue();
-                    if (dimensionValue.cropData) {
-                        dimensionValue.cropData = null;
-                        this.setValue(dimensionValue);
-                    }
-                }
-                this.imageData = value;
-        }, this);
     },
 
     _onButtonClick: function() {
@@ -65,6 +53,18 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
             this.setValue(value);
         }, this);
         sizeWindow.show();
+    },
+
+    newImageUploaded: function (value) {
+        this._cropButton.setDisabled(value == '');
+        if (this.imageData != null && this.imageData != "") {
+            var dimensionValue = this.getValue();
+            if (dimensionValue.cropData) {
+                dimensionValue.cropData = null;
+                this.setValue(dimensionValue);
+            }
+        }
+        this.imageData = value;
     }
 });
 
