@@ -60,4 +60,31 @@ class Kwf_Form_Field_ShowSelect extends Kwf_Form_Field_ShowField
         $ret = parent::setReferenceField($referenceField);
         return $ret;
     }
+
+    public function trlStaticExecute($language = null)
+    {
+        parent::trlStaticExecute($language);
+        $trl = Kwf_Trl::getInstance();
+
+        $values = $this->getValues();
+        if (is_array($values)) {
+            foreach ($values as $k => $v) {
+                $newKey = $k;
+                $newValue = $v;
+                if (is_string($k)) $newKey = $trl->trlStaticExecute($k, $language); //TODO key nicht (immer) übersetzen
+                if (is_string($v)) $newValue = $trl->trlStaticExecute($v, $language);
+                else if (is_array($v)) {
+                    foreach ($v as $k2 => $v2) {
+                        if (is_string($v2)) {
+                            $newValue[$k2] = $trl->trlStaticExecute($v2, $language);
+                        }
+                    }
+                }
+
+                unset($values[$k]);
+                $values[$newKey] = $newValue;
+            }
+            $this->setProperty('values', $values);
+        }
+    }
 }
