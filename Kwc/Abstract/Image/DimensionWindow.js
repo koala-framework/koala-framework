@@ -14,8 +14,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     layout: 'fit',
     resizable: false,
 
-    minImageSize: 64,
-
     initComponent: function() {
         var radios = [];
         for (var i in this.dimensions) {
@@ -96,8 +94,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         }
         this._enableDisableFields();
 
-        this._initCropRegion();
-
         this._configPanel = new Ext.Panel({
             region: 'west',
             bodyStyle: 'padding: 10px',
@@ -110,6 +106,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 this._userSelection
             ]
         });
+
+        this._initCropRegion();
 
         this._cropPanel = new Ext.Panel({
             region: 'center',
@@ -177,45 +175,31 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             return;
         }
 
-        var preserveRatio = this._getPreserveRatio();
-
+        var imageWidth = Math.round(this.imageData.imageWidth / this.imageData.imageHandyScaleFactor);
+        var imageHeight = Math.round(this.imageData.imageHeight / this.imageData.imageHandyScaleFactor);
         this._cropImage = new Kwc.Abstract.Image.CropImage({
             // call controller to create image with nice size to work with
             src: '/kwf/media/upload/download-handy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey,
-            preserveRatio: preserveRatio,
+            preserveRatio: this._getPreserveRatio(),
             cls: 'kwc-abstract-image-dimension-window-crop-image',
             outWidth: outWidth,
             outHeight: outHeight,
-            cropData: cropData
+            cropData: cropData,
+            width: imageWidth,
+            height: imageHeight,
+            style: 'margin-left:'+imageWidth/-2+'px;margin-top:'+imageHeight/-2+'px'
         });
 
-        this._cropImage.on('finishedLoading', function (dimensions) {
-            if (dimensions.width < this.minImageSize
-                || dimensions.height < this.minImageSize)
-            { // Disable crop because image to small
-                this._cropPanel.disable();
-                this._cropPanel.setTitle(this._cropPanel.title+ ' '+trlKwf('(Image to small)'));
-            } else {
-                this._cropPanel.enable();
-                this._cropPanel.setTitle(
-                    this._cropPanel.title.replace(' '+trlKwf('(Image to small)'), '')
-                );
-            }
-            // Check if smaller than usefull so keep min-width
-            var width = this.width;
-            if (dimensions.width +200 +18 > this.minWidth) {//200px is "select dimension" width and border
-                width = 200 +18 + dimensions.width;
-            }
-            var height = this.height;
-            if (dimensions.height +98 > this.minHeight) { //titles height
-                height = dimensions.height +98;
-            }
-            this.setSize(width, height);
-
-            this._cropImage.getEl().setStyle('margin-left', dimensions.width/-2+'px');
-            this._cropImage.getEl().setStyle('margin-top', dimensions.height/-2+'px');
-            this.center();
-        }, this);
+        // Check if smaller than usefull so keep min-width
+        var width = this.width;
+        if (imageWidth +this._configPanel.width +18 > this.minWidth) {// and border
+            width = this._configPanel.width +18 + imageWidth;
+        }
+        var height = this.height;
+        if (imageHeight +98 > this.minHeight) { //titles height
+            height = imageHeight +98;
+        }
+        this.setSize(width, height);
     },
 
     _getPreserveRatio: function()

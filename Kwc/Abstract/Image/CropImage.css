@@ -4,6 +4,17 @@
     position:absolute;
 }
 
+.kwc-abstract-image-crop-image-resizable-disabled .x-resizable-handle-north,
+.kwc-abstract-image-crop-image-resizable-disabled .x-resizable-handle-northeast,
+.kwc-abstract-image-crop-image-resizable-disabled .x-resizable-handle-east,
+.kwc-abstract-image-crop-image-resizable-disabled .x-resizable-handle-southeast,
+.kwc-abstract-image-crop-image-resizable-disabled .x-resizable-handle-south,
+.kwc-abstract-image-crop-image-resizable-disabled .x-resizable-handle-southwest,
+.kwc-abstract-image-crop-image-resizable-disabled .x-resizable-handle-west,
+.kwc-abstract-image-crop-image-resizable-disabled .x-resizable-handle-northwest {
+    cursor: auto;
+}
+
 .kwc-abstract-image-crop-image-resizable .x-resizable-handle {
     opacity: 1;
     filter: none;
