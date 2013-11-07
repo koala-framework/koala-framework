@@ -290,10 +290,10 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             && this._heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
         ) {
             if (this._widthField.getValue() < 1) {
-                this._widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or cover.'));
+                this._widthField.markInvalid(trlKwf('Width or height must be higher than 0.'));
             }
             if (this._heightField.getValue() < 1) {
-                this._heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or cover.'));
+                this._heightField.markInvalid(trlKwf('Width or height must be higher than 0.'));
             }
             return false;
         }
