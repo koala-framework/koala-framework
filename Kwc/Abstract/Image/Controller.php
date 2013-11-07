@@ -27,9 +27,13 @@ class Kwc_Abstract_Image_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
        ) { //calculate default selection
             $dimension = $this->_getParam('dimension');
             if (!$dimension) Kwf_Media_Output::output($output);
-
             $dimensions = Kwc_Abstract::getSetting($this->_getParam('class'), 'dimensions');
             $dimension = $dimensions[$dimension];
+
+            if ($dimension['width'] == Kwc_Abstract_Image_Component::USER_SELECT)
+                $dimension['width'] = $this->_getParam('width');
+            if ($dimension['height'] == Kwc_Abstract_Image_Component::USER_SELECT)
+                $dimension['height'] = $this->_getParam('height');
             if (!$dimension['cover']) Kwf_Media_Output::output($output);
             if ($dimension['width'] == Kwc_Abstract_Image_Component::CONTENT_WIDTH)
                 Kwf_Media_Output::output($output);

@@ -38,6 +38,10 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         };
         if (dimension && dimension.dimension != null) previewParams.dimension = dimension.dimension;
 
+        value = this._getDimensionField().getValue();
+        if (value.width != null) previewParams.width = value.width;
+        if (value.height != null) previewParams.height = value.height;
+
         if (dimension && dimension.cropData) {
             if (dimension.cropData.x != null) previewParams.cropX = dimension.cropData.x;
             if (dimension.cropData.y != null) previewParams.cropY = dimension.cropData.y;
