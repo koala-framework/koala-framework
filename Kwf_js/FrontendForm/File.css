@@ -12,3 +12,7 @@
     filter: alpha(opacity=0);
 }
 .kwfFormFieldFileUploadWrapper .underlayFileSelector { z-index: 1; }
+
+.kwfFormFieldFileUploadWrapper .underlayFileSelector a.kwfFormFieldFileUploadButton {
+    float: right;
+}

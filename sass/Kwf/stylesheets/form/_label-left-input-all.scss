@@ -1,0 +1,43 @@
+@import "compass/css3/box-sizing";
+
+@mixin label-left-input-all {
+    > div.kwcForm > form {
+        .kwfFormFieldWrapper {
+            display: table-cell;
+            width: 100%;
+
+            > input, textarea, select {
+                @include box-sizing(border-box);
+                width: 100% !important;
+            }
+        }
+
+        label {
+            @include box-sizing(border-box);
+            display: table-cell;
+            vertical-align: top;
+            padding-right: 20px;
+            margin-right: 0px;
+            text-align: left;
+            min-width: 60px;
+        }
+
+        .kwfFormFieldRadio {
+            .kwfFormFieldWrapper {
+                label {
+                    display: inline;
+                    vertical-align: middle;
+                }
+            }
+        }
+
+        .kwcFormFieldMultiCheckbox {
+            .kwfFormFieldWrapper {
+                label {
+                    display: inline;
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+}
