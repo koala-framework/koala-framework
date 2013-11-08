@@ -116,7 +116,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 autoEl: {
                     tag: 'div',
                     cls: 'information',
-                    html: trlKwf('There is no crop enabled because image is too small!')
+                    html: trlKwf('Croping is not possible because image is too small.')
                 }
             });
             cropPanelItems.add(cropDisabledInfo);
@@ -132,7 +132,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 cls:"x-btn-text-icon",
                 hideLabel: true,
                 icon: '/assets/silkicons/arrow_rotate_clockwise.png',
-                tooltip: trlKwf('Reset to default for this dimension. Cancel to undo changes.'),
+                tooltip: trlKwf('Reset to default(maximum) for this dimension.'),
                 scope: this
             }],
             cls: 'kwc-abstract-image-dimension-window-crop-panel',
