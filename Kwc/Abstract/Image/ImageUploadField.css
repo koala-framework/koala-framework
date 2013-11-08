@@ -5,12 +5,6 @@
     top: -46px;
 }
 
-/* position of help-text icon */
-.kwc-abstract-image-image-upload-big-preview div div div > a {
-    left: 464px !important;
-    top: -88px !important;
-}
-
 .kwc-abstract-image-image-upload-file .filedescription .filename {
     overflow: hidden;
     max-height: 36px;

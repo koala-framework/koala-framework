@@ -51,8 +51,6 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
     },
     afterRender: function() {
-        Kwf.Form.File.superclass.afterRender.call(this);
-
         if (Kwf.Utils.Upload.supportsHtml5Upload()) {
             this.el.on('dragenter', function(e) {
                 e.browserEvent.stopPropagation();
@@ -98,7 +96,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         if (this.showDeleteButton) {
             this.deleteButton = new Ext.Button({
                 text: trlKwf('Delete File'),
-                cls: 'x-btn-text-icon',
+                cls: 'x-btn-text-icon kwcDeleteFileButton',
                 icon: '/assets/silkicons/delete.png',
                 renderTo: this.el.createChild({}),
                 scope: this,
@@ -107,6 +105,8 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 }
             });
         }
+        Kwf.Form.File.superclass.afterRender.call(this);
+
         if (this.infoPosition == 'south') this.createInfoContainer();
 
         if (!Kwf.Utils.Upload.supportsHtml5Upload()) {
@@ -148,6 +148,13 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             this.swfu.on('flashLoadError', function() {
                 this.createUploadButton();
             }, this);
+        }
+    },
+
+    alignHelpAndComment: function() {
+        if (this.helpEl) {
+            var deleteButton = this.helpEl.parent().child('.kwcDeleteFileButton');
+            this.helpEl.anchorTo(deleteButton, 'r', [10, -8]);
         }
     },
 
