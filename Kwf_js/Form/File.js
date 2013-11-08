@@ -96,7 +96,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         if (this.showDeleteButton) {
             this.deleteButton = new Ext.Button({
                 text: trlKwf('Delete File'),
-                cls: 'x-btn-text-icon kwcDeleteFileButton',
+                cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/delete.png',
                 renderTo: this.el.createChild({}),
                 scope: this,
@@ -153,8 +153,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
     alignHelpAndComment: function() {
         if (this.helpEl) {
-            var deleteButton = this.helpEl.parent().child('.kwcDeleteFileButton');
-            this.helpEl.anchorTo(deleteButton, 'r', [10, -8]);
+            this.helpEl.anchorTo(this.deleteButton.el, 'r', [10, -8]);
         }
     },
 
