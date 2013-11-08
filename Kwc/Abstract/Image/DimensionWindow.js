@@ -131,7 +131,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 },
                 cls:"x-btn-text-icon",
                 hideLabel: true,
-                icon: '/assets/silkicons/arrow_rotate_clockwise.png',
+                icon: '/assets/silkicons/arrow_out.png',
                 tooltip: trlKwf('Reset to default(maximum) for this dimension.'),
                 scope: this
             }],
