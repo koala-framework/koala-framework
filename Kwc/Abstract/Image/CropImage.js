@@ -221,7 +221,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     },
 
     _generateDefaultCrop: function (preserveRatio) {
-        cropData = {};
+        var cropData = {};
         cropData.x = 0;
         cropData.y = 0;
         cropData.width = this.width;
