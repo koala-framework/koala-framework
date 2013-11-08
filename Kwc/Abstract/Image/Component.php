@@ -21,12 +21,6 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 //  so the aspect ratio will be fixed when croping so that scaling wont deform image
                 // cover = false means image wont be scaled up if smaller than size.
             ),
-            'flexibleHeight'=>array(
-                'text' => trlKwf('300px width'),
-                'width' => 300,
-                'height' => 0,
-                'cover' => true
-            ),
             'fullWidth'=>array(
                 'text' => trlKwf('full width'),
                 'width' => self::CONTENT_WIDTH,
