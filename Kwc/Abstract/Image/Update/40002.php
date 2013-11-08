@@ -15,6 +15,10 @@ class Kwc_Abstract_Image_Update_40002 extends Kwf_Update
         foreach ($rows as $row) {
             if ($row->dimension == 'customcrop') {
                 $row->dimension = 'custom';
+                $row->crop_x = null;
+                $row->crop_y = null;
+                $row->crop_width = null;
+                $row->crop_heigth = null;
             } else if ($row->dimension == 'custombestfit') {
                 $row->dimension = 'custom';
                 if ($row->imageExists()) {
