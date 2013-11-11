@@ -132,7 +132,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 cls:"x-btn-text-icon",
                 hideLabel: true,
                 icon: '/assets/silkicons/arrow_out.png',
-                tooltip: trlKwf('Reset to default(maximum) for this dimension.'),
+                tooltip: trlKwf('Reset to default(maximum).'),
                 scope: this
             }],
             cls: 'kwc-abstract-image-dimension-window-crop-panel',
