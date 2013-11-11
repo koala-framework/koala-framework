@@ -16,6 +16,7 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
 
     public function validate($row, $postData)
     {
+        return array();
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
