@@ -14,6 +14,11 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         }
         var fileUploadField = this._getFileUploadField();
         fileUploadField.on('change', function (el, value) {
+            if (!value || !value.mimeType.match(/(^image\/)/)) {
+                value = '';
+                this._getFileUploadField().setPreviewUrl(null);
+                return;
+            }
             var dimension = null;
             var dimensionField = this._getDimensionField();
             if (dimensionField) {

@@ -312,6 +312,10 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
     setPreviewUrl: function (previewUrl) {
         this.previewUrl = previewUrl;
+        if (!previewUrl) {
+            this.getEl().child('.box').setStyle('background-image', 'none');
+            return;
+        }
         if (this.getEl().child('.previewImage') && this.getValue()) {
             this.getEl().child('.box').setStyle('background-image', 'url(/assets/ext/resources/images/default/grid/loading.gif)');
             var img = new Image();
