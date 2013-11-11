@@ -48,6 +48,18 @@ abstract class Kwf_Form_Container_Abstract extends Kwf_Form_Field_Abstract
                 $ret['loadAfterSave'] = true;
             }
         }
+
+        $fieldWidth = $this->getDefaultFieldWidth();
+        if ($fieldWidth) {
+            foreach ($this->fields as $field) {
+                if ($field instanceof Kwf_Form_Container_Abstract && $field->getDefaultFieldWidth() === null) {
+                    $field->setDefaultFieldWidth($fieldWidth);
+                } else if ($field->getWidth() === null) {
+                    $field->setWidth($fieldWidth);
+                }
+            }
+        }
+
         $ret = parent::getMetaData($model);
         $ret['items'] = $this->fields->getMetaData($model);
         if (!count($ret['items'])) unset($ret['items']);
@@ -162,5 +174,15 @@ abstract class Kwf_Form_Container_Abstract extends Kwf_Form_Field_Abstract
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         $ret['items'] = $this->fields->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         return $ret;
+    }
+
+    public function setDefaultFieldWidth($width)
+    {
+        return $this->setProperty('defaultFieldWidth', $width);
+    }
+
+    public function getDefaultFieldWidth()
+    {
+        return $this->getProperty('defaultFieldWidth');
     }
 }
