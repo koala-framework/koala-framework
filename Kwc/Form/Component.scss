@@ -34,14 +34,9 @@
             @include error-simple;
         }
 
-        &.veryNarrow.gt350 {
+        &.gt350 {
             @include label-left-input-all;
             @include error-simple;
-        }
-
-        &.gt500 {
-            @include label-120;
-            @include error-bubbles;
         }
     }
 
