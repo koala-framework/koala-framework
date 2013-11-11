@@ -30,6 +30,10 @@ class Kwc_Abstract_Image_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
             $dimensions = Kwc_Abstract::getSetting($this->_getParam('class'), 'dimensions');
             $dimension = $dimensions[$dimension];
 
+            if (!isset($dimension['width'])) $dimension['width'] = 0;
+            if (!isset($dimension['height'])) $dimension['height'] = 0;
+            if (!isset($dimension['cover'])) $dimension['cover'] = false;
+
             if ($dimension['width'] == Kwc_Abstract_Image_Component::USER_SELECT)
                 $dimension['width'] = $this->_getParam('width');
             if ($dimension['height'] == Kwc_Abstract_Image_Component::USER_SELECT)
