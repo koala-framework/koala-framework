@@ -201,10 +201,15 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             style: 'width: '+w+'px; height: '+h+'px; top: 0; position: absolute; overflow: hidden;'
         });
 
+        var accept = '*';
+        if (this.allowOnlyImages) {
+            accept = 'image/\*';
+        }
         var fileInput = fileInputContainer.createChild({
             tag: 'input',
             type: 'file',
-            style: 'opacity: 0; cursor: pointer; '
+            style: 'opacity: 0; cursor: pointer; ',
+            accept: accept
         });
         fileInput.on('change', function(ev, dom) {
             if (dom.files) {
