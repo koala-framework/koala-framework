@@ -10,9 +10,16 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('textarea');
-        $this->setWidth(100);
-        $this->setHeight(60);
     }
+
+    public function getMetaData($model)
+    {
+        $ret = parent::getMetaData($model);
+        if (!isset($ret['width'])) $ret['width'] = 100;
+        if (!isset($ret['height'])) $ret['height'] = 60;
+        return $ret;
+    }
+
 
     protected function _addValidators()
     {
