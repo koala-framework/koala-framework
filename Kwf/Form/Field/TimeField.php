@@ -9,8 +9,15 @@ class Kwf_Form_Field_TimeField extends Kwf_Form_Field_SimpleAbstract
         parent::__construct($field_name, $field_label);
         $this->setXtype('timefield');
         $this->setFormat('H:i');
-        $this->setWidth(70);
     }
+
+    public function getMetaData($model)
+    {
+        $ret = parent::getMetaData($model);
+        if (!isset($ret['width'])) $ret['width'] = 70;
+        return $ret;
+    }
+
 
     protected function _addValidators()
     {
