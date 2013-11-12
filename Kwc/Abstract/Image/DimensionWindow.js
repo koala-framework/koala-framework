@@ -19,7 +19,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         for (var i in this.dimensions) {
             radios.push({
                 inputValue: i,
-                boxLabel: Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions, {dimension: i}),
+                boxLabel: Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[i]),
                 name: 'dimension',
                 listeners: {
                     check: this._enableDisableFields,

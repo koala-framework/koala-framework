@@ -18,7 +18,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         this.value = v;
         if (this.rendered) {
             if (v.dimension) {
-                this.getEl().child('.kwc-abstract-image-dimension-name').update(Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions, v));
+                this.getEl().child('.kwc-abstract-image-dimension-name').update(Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[v.dimension], v));
             } else {
                 this.getEl().child('.kwc-abstract-image-dimension-name').update('');
             }
@@ -68,54 +68,34 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     }
 });
 
-Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimensions, v)
+Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
 {
     var ret;
-    var hasName = true;
-    if (dimensions[v.dimension] && dimensions[v.dimension].text) {
-        ret = dimensions[v.dimension].text;
-    } else if (dimensions[v.dimension]) {
-        ret = '';
-        hasName = false;
+    if (!dimension) return;
+
+    if (dimension.text) {
+        ret = dimension.text;
     } else {
-        ret = v.dimension;
+        ret = '';
     }
-    if (dimensions[v.dimension]) {
-        var d = dimensions[v.dimension];
-        if (hasName) {
-            ret += ' (';
-        }
-        if (d.width == 'user') {
-            if (v.width) {
-                ret += String(v.width);
-            } else {
-                ret += '?';
-            }
-        } else if (d.width) {
-            ret += String(d.width);
+    var width = null;
+    if (!isNaN(parseInt(dimension.width))) {
+        width = dimension.width;
+    } else if (dimension.width == 'user' && v) {
+        width = v.width;
+    }
+    var height = null;
+    if (!isNaN(parseInt(dimension.height))) {
+        height = dimension.height;
+    } else if (dimension.height == 'user' && v) {
+        height = v.height;
+    }
+
+    if (height && width) {
+        if (ret) {
+            ret += ' ('+width+' x '+height+' px)';
         } else {
-            ret += '?';
-        }
-        ret += ' x ';
-        if (d.height == 'user') {
-            if (v.height) {
-                ret += String(v.height);
-            } else {
-                ret += '?';
-            }
-        } else if (d.height) {
-            ret += String(d.height);
-        } else {
-            ret += '?';
-        }
-        ret += ' px, ';
-        if (d.cover) {
-            ret += trlKwf(' cover');
-        } else {
-            ret += trlKwf(' don\'t cover');
-        }
-        if (hasName) {
-            ret = ret.trim() + ')';
+            ret = width + ' x ' + height+' px';
         }
     }
     return ret;
