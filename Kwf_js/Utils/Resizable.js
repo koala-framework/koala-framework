@@ -211,7 +211,7 @@ Ext.extend(Kwf.Utils.Resizable, Ext.util.Observable, {
         minX: 0,
         minY: 0,
         draggable: false,
-        grabOffsets: [0, 0],
+        grabOffsets: null,
 
         /**
          * @cfg {Mixed} constrainTo Constrain the resize to a particular element
@@ -269,6 +269,7 @@ Ext.extend(Kwf.Utils.Resizable, Ext.util.Observable, {
             this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
             this.overlay.show();
 
+            this.grabOffsets = [0, 0];
             if(this.constrainTo) {
                 var handleXY = handle.el.getXY();
                 var yOffset = 0;
