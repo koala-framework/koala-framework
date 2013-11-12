@@ -273,16 +273,16 @@ Ext.extend(Kwf.Utils.Resizable, Ext.util.Observable, {
                 var handleXY = handle.el.getXY();
                 var yOffset = 0;
                 var xOffset = 0;
-                if (handle.position.contains('south')) {
+                if (handle.position.indexOf('south') !== -1) {
                     yOffset = (e.getXY()[1] - handleXY[1]) - handle.el.getHeight();
                 }
-                if (handle.position.contains('north')) {
+                if (handle.position.indexOf('north') !== -1) {
                     yOffset = e.getXY()[1] - handleXY[1];
                 }
-                if (handle.position.contains('east')) {
+                if (handle.position.indexOf('east') !== -1) {
                     xOffset = (e.getXY()[0] - handleXY[0]) - handle.el.getWidth();
                 }
-                if (handle.position.contains('west')) {
+                if (handle.position.indexOf('west') !== -1) {
                     xOffset = e.getXY()[0] - handleXY[0];
                 }
                 this.grabOffsets = [xOffset, yOffset];
