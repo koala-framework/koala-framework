@@ -6,6 +6,13 @@
  * http://extjs.com/license
  */
 
+/*
+ * IMPORTANT:
+ * This file was copied to fix a bug resizing with constraint.
+ * Depending on the position where grabing the handle it was possible on resize
+ * to move outside of constraint region.
+ */
+
 /**
  * @class Ext.Resizable
  * @extends Ext.util.Observable
