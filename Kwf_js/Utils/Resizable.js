@@ -211,6 +211,7 @@ Ext.extend(Kwf.Utils.Resizable, Ext.util.Observable, {
         minX: 0,
         minY: 0,
         draggable: false,
+        grabOffsets: [0, 0],
 
         /**
          * @cfg {Mixed} constrainTo Constrain the resize to a particular element
@@ -269,6 +270,22 @@ Ext.extend(Kwf.Utils.Resizable, Ext.util.Observable, {
             this.overlay.show();
 
             if(this.constrainTo) {
+                var handleXY = handle.el.getXY();
+                var yOffset = 0;
+                var xOffset = 0;
+                if (handle.position.contains('south')) {
+                    yOffset = (e.getXY()[1] - handleXY[1]) - handle.el.getHeight();
+                }
+                if (handle.position.contains('north')) {
+                    yOffset = e.getXY()[1] - handleXY[1];
+                }
+                if (handle.position.contains('east')) {
+                    xOffset = (e.getXY()[0] - handleXY[0]) - handle.el.getWidth();
+                }
+                if (handle.position.contains('west')) {
+                    xOffset = e.getXY()[0] - handleXY[0];
+                }
+                this.grabOffsets = [xOffset, yOffset];
                 var ct = Ext.get(this.constrainTo);
                 this.resizeRegion = ct.getRegion().adjust(
                     ct.getFrameWidth('t'),
@@ -415,7 +432,11 @@ new Ext.Panel({
         if(this.enabled && this.activeHandle){
             try{// try catch so if something goes wrong the user doesn't get hung
 
-            if(this.resizeRegion && !this.resizeRegion.contains(e.getPoint())) {
+            // Reason for resize problem: the location where grabing the handle
+            var point = e.getPoint();
+            point.adjust(-this.grabOffsets[1], -this.grabOffsets[0],
+                -this.grabOffsets[1], -this.grabOffsets[0]);
+            if(this.resizeRegion && !this.resizeRegion.contains(point)) {
                 return;
             }
 
