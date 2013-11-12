@@ -7,3 +7,12 @@
     background-position: left center;
     line-height: 14px;
 }
+
+.kwc-abstract-image-dimension-window-imagedata {
+    margin-top:10px;
+}
+
+.kwc-abstract-image-dimension-window-userselection,
+.kwc-abstract-image-dimension-window-userselection > div > div {
+    border: none;
+}

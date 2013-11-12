@@ -62,6 +62,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         this._userSelection = new Ext.Panel({
             xtype: 'panel',
             layout: 'column',
+            cls: 'kwc-abstract-image-dimension-window-userselection',
             hideBorders: true,
             autoHeight: true,
             items: [
@@ -94,16 +95,47 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         }
         this._enableDisableFields();
 
+        var resolutionField = new Ext.BoxComponent({
+            autoEl: {
+                html: this.imageData.imageWidth+'x'+this.imageData.imageHeight+'px',
+                hideBorders: true
+            }
+        });
+        var filenameField = new Ext.BoxComponent({
+            autoEl: {
+                html: this.imageData.filename+'.'+this.imageData.extension,
+                hideBorders: true
+            }
+        });
+        var filesizeField = new Ext.BoxComponent({
+            autoEl: {
+                html: Math.round((this.imageData.fileSize/10.24))/100+' KB',
+                hideBorders: true
+            }
+        });
+        var imageDataField = {
+            xtype: 'fieldset',
+            autoHeight: true,
+            cls: 'kwc-abstract-image-dimension-window-imagedata',
+            hideBorders: false,
+            title: trlKwf('Image Data'),
+            items: [
+                filenameField,
+                resolutionField,
+                filesizeField
+            ]
+        };
+
         this._configPanel = new Ext.Panel({
             region: 'west',
             bodyStyle: 'padding: 10px',
             width: 270,
             autoScroll: true,
             title: trlKwf('Select dimension'),
-            hideBorders: true,
             items: [
                 this._dimensionField,
-                this._userSelection
+                this._userSelection,
+                imageDataField
             ]
         });
 
