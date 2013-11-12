@@ -93,9 +93,9 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
 
     if (height && width) {
         if (ret) {
-            ret += ' ('+width+' x '+height+' px)';
+            ret += ' ('+width+'x'+height+'px)';
         } else {
-            ret = width + ' x ' + height+' px';
+            ret = width + 'x' + height+'px';
         }
     }
     return ret;
