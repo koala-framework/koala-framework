@@ -13,7 +13,6 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $ret['dimensions'] = array(
             'default'=>array(
-                'text' => trlKwf('300 x 200px'),
                 'width' => 300,
                 'height' => 200,
                 'cover' => true

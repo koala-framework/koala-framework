@@ -71,10 +71,52 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
 Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimensions, v)
 {
     var ret;
+    var hasName = true;
     if (dimensions[v.dimension] && dimensions[v.dimension].text) {
         ret = dimensions[v.dimension].text;
+    } else if (dimensions[v.dimension]) {
+        ret = '';
+        hasName = false;
     } else {
         ret = v.dimension;
+    }
+    if (dimensions[v.dimension]) {
+        var d = dimensions[v.dimension];
+        if (hasName) {
+            ret += ' (';
+        }
+        if (d.width == 'user') {
+            if (v.width) {
+                ret += String(v.width);
+            } else {
+                ret += '?';
+            }
+        } else if (d.width) {
+            ret += String(d.width);
+        } else {
+            ret += '?';
+        }
+        ret += ' x ';
+        if (d.height == 'user') {
+            if (v.height) {
+                ret += String(v.height);
+            } else {
+                ret += '?';
+            }
+        } else if (d.height) {
+            ret += String(d.height);
+        } else {
+            ret += '?';
+        }
+        ret += ' px, ';
+        if (d.cover) {
+            ret += trlKwf(' cover');
+        } else {
+            ret += trlKwf(' don\'t cover');
+        }
+        if (hasName) {
+            ret = ret.trim() + ')';
+        }
     }
     return ret;
 };
