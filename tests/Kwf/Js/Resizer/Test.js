@@ -1,5 +1,5 @@
 Kwf.onElementReady('.kwfResizeElement', function(element) {
-    var resizer = new Ext.Resizable(element.child('.resizeElement'), {
+    var resizer = new Kwf.Utils.Resizable(element.child('.resizeElement'), {
         handles: 'all',
         pinned: true,
         preserveRatio: true,
@@ -14,4 +14,17 @@ Kwf.onElementReady('.kwfResizeElement', function(element) {
     resizer.on("resize", function(width, height, e) {
     }, this);
     new Ext.dd.DD(element.child('.resizeElement'), '');
+
+    var window = new Ext.Window({
+        title: trlKwf('Test'),
+        closeAction: 'close',
+        width: 200,
+        height: 300,
+        layout: 'fit',
+        resizable: true,
+        initComponent: function() {
+            Ext.Window.superclass.initComponent.call(this);
+        }
+    });
+    window.show();
 });

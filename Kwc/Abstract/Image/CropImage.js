@@ -110,7 +110,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             }
         });
 
-        this._resizer = new Ext.Resizable(this._image.getEl(), {
+        this._resizer = new Kwf.Utils.Resizable(this._image.getEl(), {
             handles: 'all',
             pinned: true,
             preserveRatio: this.preserveRatio,
