@@ -57,7 +57,7 @@
             if (window.Ext4) {
                 if (Ext4.panel && Ext4.panel.Panel && panel instanceof Ext4.panel.Panel) {
                     isExt4Panel = true;
-                } else if (Ext4.ClassManager.isCreated(panel.xtype)) {
+                } else if (Ext4.ClassManager.getNameByAlias('widget.'+panel.xtype)) {
                     isExt4Panel = true;
                 }
             }
