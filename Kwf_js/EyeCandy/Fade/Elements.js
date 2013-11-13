@@ -195,6 +195,7 @@ Kwf.Fade.Elements.prototype = {
             }
 
             if (dir == 'l' || dir == 'r') {
+                if (nextEl.position().left != 0) left = nextEl.position().left;
                 $(nextEl).show().css({
                     left: left,
                     zIndex: 10
@@ -224,7 +225,7 @@ Kwf.Fade.Elements.prototype = {
                         Kwf.fireComponentEvent('componentSlideOut', Ext.get($(this).parent().get(0)), Ext.get(this));
                     });
                     nextEl.animate({
-                        left: '+='+width
+                        left: 0
                     }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         nextEl.css('left', '0px');
                         this._isAnimating = false;
@@ -232,6 +233,7 @@ Kwf.Fade.Elements.prototype = {
                     }, this));
                 }
             } else if (dir == 't' || dir == 'b') {
+                if (nextEl.position().top != 0) top = nextEl.position().top;
                 $(nextEl).show().css({
                     top: top,
                     zIndex: 10
