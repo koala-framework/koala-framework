@@ -181,7 +181,7 @@ class Kwf_Setup
             $sitemap = new Kwf_Component_Sitemap();
             $sitemap->outputSitemap(Kwf_Component_Data_Root::getInstance());
         }
-        if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf'))) {
+        if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf', 'api'))) {
             if (!isset($_SERVER['HTTP_HOST'])) {
                 $requestUrl = 'http://'.Kwf_Config::getValue('server.domain').$fullRequestPath;
             } else {
