@@ -171,16 +171,20 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
             }
 
             //this should probably only be done for relevant classes, ie. layout for panel, proxy for model etc
-            if (preg_match_all('#^\s*(proxy|layout|reader|writer)\s*:\s*\'([a-zA-Z0-9\.]+)\'\s*,?\s*$#m', $fileContents, $m)) {
+            if (preg_match_all('#^\s*(proxy|layout|reader|writer|componentLayout)\s*:\s*\'([a-zA-Z0-9\.]+)\'\s*,?\s*$#m', $fileContents, $m)) {
                 foreach ($m[2] as $k=>$cls) {
                     $type = Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES;
-                    $classes[$type][] = $aliasClasses[$m[1][$k].'.'.$cls];
+                    $t = $m[1][$k];
+                    $t = ($t == 'componentLayout') ? 'layout' : $t;
+                    $classes[$type][] = $aliasClasses[$t.'.'.$cls];
                 }
             }
-            if (preg_match_all('#^\s*(proxy|layout|reader|writer)\s*:\s*{\s*type\s*:\s*\'([a-zA-Z0-9\.]+)\'#m', $fileContents, $m)) {
+            if (preg_match_all('#^\s*(proxy|layout|reader|writer|componentLayout)\s*:\s*{\s*type\s*:\s*\'([a-zA-Z0-9\.]+)\'#m', $fileContents, $m)) {
                 foreach ($m[2] as $k=>$cls) {
                     $type = Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES;
-                    $classes[$type][] = $aliasClasses[$m[1][$k].'.'.$cls];
+                    $t = $m[1][$k];
+                    $t = ($t == 'componentLayout') ? 'layout' : $t;
+                    $classes[$type][] = $aliasClasses[$t.'.'.$cls];
                 }
             }
         }
