@@ -199,6 +199,7 @@ Kwf.Fade.Elements.prototype = {
                     left: left,
                     zIndex: 10
                 });
+                Kwf.callOnContentReady(nextEl);
                 if ($.support.transition || $.support.transform) {
                     this._components.transition({ x: width }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         this._components.css({ x: 0 });
@@ -235,6 +236,7 @@ Kwf.Fade.Elements.prototype = {
                     top: top,
                     zIndex: 10
                 });
+                Kwf.callOnContentReady(nextEl);
                 if ($.support.transition || $.support.transform) {
                     this._components.transition({ y: height }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         this._components.css({ y: 0 });
