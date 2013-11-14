@@ -13,8 +13,8 @@ class Kwf_Form_Field_ShowSelect extends Kwf_Form_Field_ShowField
                 || $data instanceof Kwf_Model_Rowset_Interface
             ) {
                 foreach ($data as $row) {
-                    if ($row->id == $ret[$this->getName()]) {
-                        $ret[$this->getName()] = $row->__toString();
+                    if ($row->id == $ret[$this->getFieldName()]) {
+                        $ret[$this->getFieldName()] = $row->__toString();
                     }
                 }
             } else if (is_array($data)) {
@@ -25,21 +25,21 @@ class Kwf_Form_Field_ShowSelect extends Kwf_Form_Field_ShowField
                         $data[$d[0]] = $d[1];
                     }
                 }
-                if ($ret[$this->getName()] === false || $ret[$this->getName()] === null) {
-                    $ret[$this->getName()] = null;
-                } else if (!$ret[$this->getName()]) {
-                    $ret[$this->getName()] = null;
+                if ($ret[$this->getFieldName()] === false || $ret[$this->getFieldName()] === null) {
+                    $ret[$this->getFieldName()] = null;
+                } else if (!$ret[$this->getFieldName()]) {
+                    $ret[$this->getFieldName()] = null;
                 } else {
-                    $ret[$this->getName()] = $data[$ret[$this->getName()]];
+                    $ret[$this->getFieldName()] = $data[$ret[$this->getFieldName()]];
                 }
             }
         } else {
             $reference = $this->getReference();
             if ($reference) {
                 if ($referenceField = $this->getReferenceField()) {
-                    $ret[$this->getName()] = $row->getParentRow($reference)->$referenceField;
+                    $ret[$this->getFieldName()] = $row->getParentRow($reference)->$referenceField;
                 } else {
-                    $ret[$this->getName()] = $row->getParentRow($reference)->__toString();
+                    $ret[$this->getFieldName()] = $row->getParentRow($reference)->__toString();
                 }
             }
         }
