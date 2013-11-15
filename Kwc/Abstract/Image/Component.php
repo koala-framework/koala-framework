@@ -13,7 +13,6 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $ret['dimensions'] = array(
             'default'=>array(
-                'text' => trlKwf('default'),
                 'width' => 300,
                 'height' => 200,
                 'cover' => true
@@ -21,25 +20,19 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 //  so the aspect ratio will be fixed when croping so that scaling wont deform image
                 // cover = false means image wont be scaled up if smaller than size.
             ),
-            'original'=>array(
-                'text' => trlKwf('original')
-            ),
-            'custombestfit'=>array(
-                'text' => trlKwf('user-defined'),
-                'width' => self::USER_SELECT,
-                'height' => self::USER_SELECT,
-                'cover' => false
-            ),
-            'customcrop'=>array(
-                'text' => trlKwf('user-defined'),
-                'width' => self::USER_SELECT,
-                'height' => self::USER_SELECT,
-                'cover' => true
-            ),
             'fullWidth'=>array(
                 'text' => trlKwf('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
+                'cover' => true
+            ),
+            'original'=>array(
+                'text' => trlKwf('original')
+            ),
+            'custom'=>array(
+                'text' => trlKwf('user-defined'),
+                'width' => self::USER_SELECT,
+                'height' => self::USER_SELECT,
                 'cover' => true
             ),
         );
@@ -57,11 +50,15 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['flags']['hasFulltext'] = true;
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.css';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionWindow.css';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionWindow.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropImage.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropImage.css';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropWindow.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageUploadField.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageUploadField.css';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwf_js/Utils/Resizable.js';
         $ret['assets']['files'][] = 'kwf/Kwc/Abstract/Image/Component.js';
         $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';

@@ -150,6 +150,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
             $ret['image'] = true;
             $ret['imageWidth'] = $size[0];
             $ret['imageHeight'] = $size[1];
+            $ret['imageHandyScaleFactor'] = Kwf_Media_Image::getHandyScaleFactor($this->getFileSource());
         } else {
             $ret['image'] = false;
         }

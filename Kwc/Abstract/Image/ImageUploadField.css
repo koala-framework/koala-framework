@@ -1,0 +1,16 @@
+/* position of dimension text and button */
+.kwc-abstract-image-image-upload-big-preview .kwc-abstract-image-dimension-container {
+    height: 0;
+    left: 122px;
+    top: -46px;
+}
+
+.kwc-abstract-image-image-upload-file .filedescription .filename {
+    overflow: hidden;
+    max-height: 36px;
+    line-height: 12px;
+}
+
+.kwc-abstract-image-image-upload-file .empty {
+    background-color: #ffffff;
+}

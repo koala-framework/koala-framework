@@ -2,8 +2,11 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     allowOnlyImages: false,
     fileSizeLimit: 0,
     showPreview: true,
+    previewUrl: '/kwf/media/upload/preview?',
+    previewSize: 40,
     showDeleteButton: true,
     infoPosition: 'south',
+    imageData: null,
     defaultAutoCreate : {
         tag: 'div',
         style: 'width: 320px; height: 53px'
@@ -16,13 +19,13 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         'application/mspowerpoint': 'page_white_powerpoint',
         'default': 'page_white'
     },
-    previewTpl: ['<a href="{href}" target="_blank" ',
-                 'style="width: 40px; height: 40px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
+    previewTpl: ['<a href="{href}" target="_blank" class="previewImage" ',
+                 'style="width: {previewSize}px; height: {previewSize}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
     // also usable in infoTpl: {href}
-    infoTpl: ['{filename}.{extension}<br />',
-              '{fileSize:fileSize}',
-              '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl>'],
-    emptyTpl: '<div style="height: 40px; width: 40px; text-align: center;"><br />('+trlKwf('empty')+')</div>',
+    infoTpl: ['<div class="filedescription"><div class="filename">{filename}.{extension}</div>',
+              '<div class="filesize">{fileSize:fileSize}',
+              '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl></div></div>'],
+    emptyTpl: ['<div class="empty" style="height: {previewSize}px; width: {previewSize}px; text-align: center;line-height:{previewSize}px">('+trlKwf('empty')+')</div>'],
 
     initComponent: function() {
         this.addEvents(['uploaded']);
@@ -32,6 +35,11 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 this.previewTpl = new Ext.XTemplate(this.previewTpl);
             }
             this.previewTpl.compile();
+
+            if (!(this.emptyTpl instanceof Ext.XTemplate)) {
+                this.emptyTpl = new Ext.XTemplate(this.emptyTpl);
+            }
+            this.emptyTpl.compile();
         }
 
         if (!(this.infoTpl instanceof Ext.XTemplate)) {
@@ -43,8 +51,6 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
     },
     afterRender: function() {
-        Kwf.Form.File.superclass.afterRender.call(this);
-
         if (Kwf.Utils.Upload.supportsHtml5Upload()) {
             this.el.on('dragenter', function(e) {
                 e.browserEvent.stopPropagation();
@@ -70,11 +76,14 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
         if (this.showPreview) {
             this.previewImage = this.el.createChild({
+                cls: 'box',
                 style: 'margin-right: 10px; padding: 5px; float: left; border: 1px solid #b5b8c8;'+
                     'background-color: white;'
             });
 
-            this.previewImage.update(this.emptyTpl); //bild wird in der richtigen größe angezeigt
+            this.emptyTpl.overwrite(this.previewImage, { //bild wird in der richtigen größe angezeigt
+                previewSize: this.previewSize
+            });
         }
 
         if (this.infoPosition == 'west') this.createInfoContainer();
@@ -96,6 +105,8 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 }
             });
         }
+        Kwf.Form.File.superclass.afterRender.call(this);
+
         if (this.infoPosition == 'south') this.createInfoContainer();
 
         if (!Kwf.Utils.Upload.supportsHtml5Upload()) {
@@ -137,6 +148,12 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             this.swfu.on('flashLoadError', function() {
                 this.createUploadButton();
             }, this);
+        }
+    },
+
+    alignHelpAndComment: function() {
+        if (this.helpEl) {
+            this.helpEl.anchorTo(this.deleteButton.el, 'r', [10, -8]);
         }
     },
 
@@ -184,10 +201,15 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             style: 'width: '+w+'px; height: '+h+'px; top: 0; position: absolute; overflow: hidden;'
         });
 
+        var accept = '*';
+        if (this.allowOnlyImages) {
+            accept = 'image/\*';
+        }
         var fileInput = fileInputContainer.createChild({
             tag: 'input',
             type: 'file',
-            style: 'opacity: 0; cursor: pointer; '
+            style: 'opacity: 0; cursor: pointer; ',
+            accept: accept
         });
         fileInput.on('change', function(ev, dom) {
             if (dom.files) {
@@ -249,21 +271,22 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             v = value.uploadId;
         }
         if (v != this.value) {
+            this.imageData = value;
             this.fireEvent('change', this, value, this.value);
-
             var icon = false;
             var href = '/kwf/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
             if (value.mimeType) {
                 if (this.showPreview) {
                     if (value.mimeType.match(/(^image\/)/)) {
-                        icon = '/kwf/media/upload/preview?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
+                        icon = this._generatePreviewUrl(this.previewUrl);
                     } else {
                         icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
                         icon = '/assets/silkicons/' + icon + '.png';
                     }
                     this.previewTpl.overwrite(this.previewImage, {
                         preview: icon,
-                        href: href
+                        href: href,
+                        previewSize: this.previewSize
                     });
                 }
 
@@ -272,12 +295,37 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 this.infoTpl.overwrite(this.infoContainer, infoVars);
             } else {
                 if (this.showPreview) {
-                    this.previewImage.update(this.emptyTpl);
+                    this.emptyTpl.overwrite(this.previewImage, {
+                        previewSize: this.previewSize
+                    });
                 }
                 this.infoContainer.update('');
             }
         }
         Kwf.Form.File.superclass.setValue.call(this, value.uploadId);
+    },
+
+    _generatePreviewUrl: function (previewUrl) {
+        return previewUrl+'uploadId='+this.imageData.uploadId
+        +'&hashKey='+this.imageData.hashKey;
+    },
+
+    setPreviewUrl: function (previewUrl) {
+        this.previewUrl = previewUrl;
+        if (!previewUrl) {
+            this.getEl().child('.box').setStyle('background-image', 'none');
+            return;
+        }
+        if (this.getEl().child('.previewImage') && this.getValue()) {
+            this.getEl().child('.box').setStyle('background-image', 'url(/assets/ext/resources/images/default/grid/loading.gif)');
+            var img = new Image();
+            img.onload = (function () {
+                this.getEl().child('.box').setStyle('background-image', 'none');
+            }).createDelegate(this);
+            img.src = this._generatePreviewUrl(previewUrl);
+            this.getEl().child('.previewImage')
+                .setStyle('background-image', 'url('+this._generatePreviewUrl(previewUrl)+')');
+        }
     },
 
     validateValue : function(value){
