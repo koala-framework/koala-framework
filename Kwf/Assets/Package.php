@@ -46,6 +46,16 @@ class Kwf_Assets_Package
 
         if (isset($cacheId)) {
             Kwf_Assets_Cache::getInstance()->save($maxMTime, $cacheId);
+
+            //save generated caches for clear-cache-watcher
+            if ($mimeType == 'text/javascript') $ext = 'js';
+            else if ($mimeType == 'text/css') $ext = 'css';
+            else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
+            else throw new Kwf_Exception_NotYetImplemented();
+            $fileName = 'cache/assets/package-max-mtime-'.$ext;
+            if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
+                file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+            }
         }
         return $maxMTime;
     }

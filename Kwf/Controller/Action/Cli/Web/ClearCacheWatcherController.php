@@ -657,5 +657,17 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 echo "\n";
             }
         }
+
+        $fileName = 'cache/assets/package-max-mtime-'.$fileType;
+        if (file_exists($fileName)) {
+            $cacheIds = file($fileName);
+            unlink($fileName);
+            foreach ($cacheIds as $cacheId) {
+                $cacheId = trim($cacheId);
+                echo $cacheId;
+                if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) echo " [DELETED]";
+                echo "\n";
+            }
+        }
     }
 }
