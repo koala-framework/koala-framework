@@ -11,7 +11,7 @@ class Kwf_Assets_Ext4_AclControllerProvider extends Kwf_Assets_Provider_Abstract
                     $cls = 'App.controller.'.$r->getExtController();
                     $d = $this->_providerList->findDependency($cls);
                     if (!$d) {
-                        throw new Kwf_Exception("Didn't find dependency $cls.");
+                        throw new Kwf_Exception("Didn't find dependency '$cls'.");
                     }
                     $deps[] = $d;
                 }
