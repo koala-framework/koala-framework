@@ -1,4 +1,4 @@
-<?
+<?php
 $file = is_file('vkwf_branch') ? 'vkwf_branch' : 'kwf_branch';
 file_put_contents($file, "master\n");
 echo "Changed $file to master\n";
@@ -47,7 +47,7 @@ function updateErrorViews($files)
     foreach ($files as $f) {
         $content = file_get_contents($f);
         $origContent = $content;
-        $content = preg_replace('#<\?=\s*trl#', '<?=$this->data->trl', $content);
+        $content = preg_replace('#<\?=\s*trl#', '<'.'?=$this->data->trl', $content);
         if ($origContent != $content) {
             file_put_contents($f, $content);
             echo "Change $f: update trl\n";
