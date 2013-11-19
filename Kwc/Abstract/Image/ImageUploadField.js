@@ -2,8 +2,6 @@ Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
 
     baseParams: null,
-    _dimensionFieldRendered: false,
-    _fileUploadFieldRendered: false,
 
     initComponent: function() {
         this.baseParams = {};
@@ -11,7 +9,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         var dimensionField = this._getDimensionField();
         if (dimensionField) {// because it's possible to define only a single dimension
             dimensionField.on('render', function () {
-                this._dimensionFieldRendered = true;
+                // fileUploadField also has to be rendered
                 this._alignDimensionField();
             }, this);
             dimensionField.on('change', function (dimension) {
@@ -33,18 +31,14 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             }
             this._setPreviewUrl(dimension);
         }, this);
-        fileUploadField.on('render', function () {
-            this._fileUploadFieldRendered = true;
-            this._alignDimensionField();
-        }, this);
     },
 
     _alignDimensionField: function () {
-        if (this._dimensionFieldRendered && this._fileUploadFieldRendered) {
-            var dimensionField = this._getDimensionField();
-            var fileUploadField = this._getFileUploadField();
+        var dimensionField = this._getDimensionField();
+        var fileUploadField = this._getFileUploadField();
+        if (dimensionField.getEl() && fileUploadField.getEl()) {
             dimensionField.getEl().parent().parent().addClass('kwc-dimensionfield-container');
-            dimensionField.getEl().anchorTo(fileUploadField.getEl().child('.box'), 'br', [10, -42]);
+            dimensionField.getEl().alignTo(fileUploadField.getEl().child('.box'), 'br', [10, -42]);
         }
     },
 
