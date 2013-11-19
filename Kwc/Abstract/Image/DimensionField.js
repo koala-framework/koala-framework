@@ -27,7 +27,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
             if (v.dimension) {
                 this.getEl().child('.kwc-abstract-image-dimension-name').update(Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[v.dimension], v));
             } else {
-                this.getEl().child('.kwc-abstract-image-dimension-name').update('');
+                this.getEl().child('.kwc-abstract-image-dimension-name').update('&nbsp;');
             }
         }
         this.fireEvent('change', this.value);
@@ -105,6 +105,7 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
             ret = width + 'x' + height+'px';
         }
     }
+    if (!ret) ret = '&nbsp;';
     return ret;
 };
 

@@ -1,8 +1,8 @@
-/* position of dimension text and button */
-.kwc-abstract-image-image-upload-big-preview .kwc-abstract-image-dimension-container {
+.kwc-abstract-image-image-upload-big-preview
+    .kwc-abstract-image-image-upload-big-preview-body
+    .kwc-dimensionfield-container.x-form-item {
+    overflow: visible;
     height: 0;
-    left: 122px;
-    top: -46px;
 }
 
 .kwc-abstract-image-image-upload-file .filedescription .filename {
