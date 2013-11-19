@@ -9,6 +9,12 @@ class Kwf_Assets_Provider_Ini extends Kwf_Assets_Provider_Abstract implements Se
         $this->_iniFile = $iniFile;
     }
 
+    //used only by IniNoFiles
+    public function hasDependencyInConfig($dependencyName)
+    {
+        return isset($this->_config[$dependencyName]);
+    }
+
     public function getDependency($dependencyName)
     {
         if (!isset($this->_config)) {
@@ -17,22 +23,33 @@ class Kwf_Assets_Provider_Ini extends Kwf_Assets_Provider_Abstract implements Se
             unset($ini);
         }
 
-        if (!isset($this->_config[$dependencyName])) return null;
-        $dep = $this->_config[$dependencyName];
-        $ret = array();
-        if (isset($dep['dep'])) {
-            foreach ($dep['dep'] as $i) {
+        if (substr($dependencyName, -6) == 'IniDep') {
+            //ini dep is own dependency as it might be defined in different file than files
+            $dep = substr($dependencyName, 0, -6);
+
+            if (!isset($this->_config[$dep]['dep'])) return null;
+
+            foreach ($this->_config[$dep]['dep'] as $i) {
                 $d = $this->_providerList->findDependency(trim($i));
                 if (!$d) {
                     throw new Kwf_Exception("Can't find dependency '$i'");
                 }
                 $ret[] = $d;
             }
-        }
+        } else {
+            if (!isset($this->_config[$dependencyName]['files'])) return null;
+            $ret = array();
 
-        $files = array();
-        if (isset($dep['files'])) {
-            foreach ($dep['files'] as $i) {
+            //optional
+            $dep = $this->_providerList->findDependency($dependencyName.'IniDep');
+            if ($dep) {
+                $ret[] = $dep;
+            }
+
+            $depFiles = $this->_config[$dependencyName]['files'];
+
+            $files = array();
+            foreach ($depFiles as $i) {
                 $i = Kwf_Assets_Dependency_File::createDependency(trim($i));
                 if ($i instanceof Kwf_Assets_Dependency_File && $i->getFileName()) {
                     $files[] = $i->getFileName();

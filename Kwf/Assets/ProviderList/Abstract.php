@@ -11,6 +11,11 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         $this->_providers = $providers;
     }
 
+    public function getProviders()
+    {
+        return $this->_providers;
+    }
+
     /**
      * @return Kwf_Assets_Dependency_Abstract
      */
