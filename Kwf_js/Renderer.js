@@ -127,7 +127,14 @@ Ext.util.Format.germanDay = function(value, p) {
     p.css += 'kwf-renderer-bright';
     return Ext.util.Format.date(value, 'd.m.');
 };
-Ext.util.Format.time = Ext.util.Format.dateRenderer('H:i');
+Ext.util.Format.time = function(value) {
+    var time = /^..:..:..$/.exec(value); //regex by Michael "regex noob" Freudenthaler
+    if (time) {
+        value = value.split(':');
+        return value[0]+':'+value[1];
+    }
+    return Ext.util.Format.date(value, 'H:i');
+}
 Ext.util.Format.secondsToTime = function(v, format) {
     format.css += 'secondsToTimeRight';
 
