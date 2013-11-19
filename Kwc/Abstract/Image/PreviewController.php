@@ -1,5 +1,5 @@
 <?php
-class Kwc_Abstract_Image_PreviewController extends Kwf_Controller_Action_Auto_Kwc_Form
+class Kwc_Abstract_Image_PreviewController extends Kwf_Controller_Action
 {
     protected function _isAllowedComponent()
     {
