@@ -16,9 +16,11 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
 
     setValue: function(v) {
         if (v == '') {
-            var firstKey = Object.keys(this.dimensions)[0];
-            v = this.dimensions[firstKey];
-            v.dimension = firstKey;
+            for (i in this.dimensions) {
+                v = this.dimensions[i];
+                v.dimension = i;
+                break;
+            }
         }
         this.value = v;
         if (this.rendered) {
