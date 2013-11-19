@@ -5,41 +5,49 @@
  */
 Kwf.Utils.ResponsiveEl = function(selector, widths)
 {
-    if (!widths instanceof Array) widths = [widths];
+    var initEl;
 
-    var initEl = function(el) {
-        var changed = false;
-        widths.each(function(w) {
-            if (typeof w != 'object') {
-                w = {
-                    minWidth: w,
-                    cls: 'gt'+w
-                };
-            }
-            var match = true;
-            if (w.minWidth && !(el.getWidth() > w.minWidth)) {
-                match = false;
-            }
-            if (match && w.maxWidth && !(el.getWidth() < w.maxWidth)) {
-                match = false;
-            }
-            if (match) {
-                if (!el.hasClass(w.cls)) {
-                    el.addClass(w.cls);
-                    changed = true;
-                }
-            } else {
-                if (el.hasClass(w.cls)) {
-                    el.removeClass(w.cls);
-                    changed = true;
-                }
-            }
-        }, this);
+    if (typeof(widths) != "function") {
 
-        if (changed && !Kwf.Utils.ResponsiveEl._initialCall) {
-            Kwf.callOnContentReady(el.dom, {newRender: false});
-        }
-    };
+        if (!widths instanceof Array) widths = [widths];
+        initEl = function(el) {
+            var changed = false;
+            widths.each(function(w) {
+                if (typeof w != 'object') {
+                    w = {
+                        minWidth: w,
+                        cls: 'gt'+w
+                    };
+                }
+                var match = true;
+                if (w.minWidth && !(el.getWidth() > w.minWidth)) {
+                    match = false;
+                }
+                if (match && w.maxWidth && !(el.getWidth() < w.maxWidth)) {
+                    match = false;
+                }
+                if (match) {
+                    if (!el.hasClass(w.cls)) {
+                        el.addClass(w.cls);
+                        changed = true;
+                    }
+                } else {
+                    if (el.hasClass(w.cls)) {
+                        el.removeClass(w.cls);
+                        changed = true;
+                    }
+                }
+            }, this);
+            if (changed && !Kwf.Utils.ResponsiveEl._initialCall) {
+                Kwf.callOnContentReady(el.dom, {newRender: false});
+            }
+        };
+
+    } else {
+
+        initEl = widths;
+
+    }
 
     Kwf.Utils.ResponsiveEl._els.push({
         selector: selector,
