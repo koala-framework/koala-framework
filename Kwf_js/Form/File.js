@@ -80,10 +80,6 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         if (this.infoPosition == 'west') this.createInfoContainer();
 
         this.uploadButtonContainer = this.el.createChild({
-            cls: 'uploadButton',
-            style: 'display: none'
-        });
-        this.swfUploadButtonContainer = this.el.createChild({
             cls: 'uploadButton'
         });
 
@@ -103,6 +99,11 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         if (this.infoPosition == 'south') this.createInfoContainer();
 
         if (!Kwf.Utils.Upload.supportsHtml5Upload()) {
+            this.uploadButtonContainer.dom.style.display = 'none';
+            var insertBefore = this.deleteButton ? this.deleteButton.el : null;
+            this.swfUploadButtonContainer = this.el.createChild({
+                cls: 'uploadButton'
+            }, insertBefore);
             this.swfu = new Kwf.Utils.SwfUpload({
                 fileSizeLimit: this.fileSizeLimit,
                 allowOnlyImages: this.allowOnlyImages,
