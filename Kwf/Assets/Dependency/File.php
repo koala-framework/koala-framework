@@ -3,29 +3,10 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 {
     protected $_fileName;
     private $_mtimeCache;
-    private $_dependencies = array();
 
     public function __construct($fileName)
     {
         $this->_fileName = $fileName;
-    }
-
-    public function setDependencies($type, $deps)
-    {
-        $this->_dependencies[$type] = $deps;
-    }
-
-    public function getDependencies($type)
-    {
-        if ($type == Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL) {
-            $ret = array();
-            foreach ($this->_dependencies as $i) {
-                $ret = array_merge($ret, $i);
-            }
-            return $ret;
-        }
-        if (!isset($this->_dependencies[$type])) return array();
-        return $this->_dependencies[$type];
     }
 
     public function getContents($language)
