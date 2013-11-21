@@ -151,6 +151,12 @@ abstract class Kwf_Component_Generator_Abstract
         return self::$instances[$instanceKey];
     }
 
+    public static function hasInstance($componentClass, $key)
+    {
+        $settings = Kwc_Abstract::getSetting($componentClass, 'generators');
+        return isset($settings[$key]);
+    }
+
     private static function _getGeneratorsForComponent($componentClass, $pluginBaseComponentClass)
     {
         $ret = array();
