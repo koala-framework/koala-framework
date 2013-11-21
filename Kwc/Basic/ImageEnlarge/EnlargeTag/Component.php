@@ -8,6 +8,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
         $ret['alternativePreviewImage'] = true;
         $ret['fullSizeDownloadable'] = false;
         $ret['imageTitle'] = true;
+        $ret['altText'] = false;
         $ret['dimensions'] = array(array('width'=>800, 'height'=>600, 'cover' => false));
 
         $ret['generators']['imagePage'] = array(
