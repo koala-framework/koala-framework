@@ -1,0 +1,106 @@
+Kwf.onJElementReady('.kwcMenuMobile', function(el, config) {
+    var slideDuration = 400;
+    var menuLink = el.children('.showMenu');
+    var menu = null;
+    var animateMenuAfterLoad = false;
+    var ajaxRequest = null;
+
+    $(window).load(function(event) {
+        animateMenuAfterLoad = false;
+        getMenu();
+    });
+
+    menuLink.click(function(event) {
+        event.preventDefault();
+        if (menu && menu.is(':animated')) return;
+
+        var activeEl = $('.kwcMenuMobile').children('.showMenu.active');
+        if (activeEl.length && activeEl.get(0) != menuLink.get(0)) {
+            activeEl.removeClass('active')
+                .next('.slider').children('ul.menu').slideToggle(slideDuration);
+        }
+
+        if (!menu) {
+            animateMenuAfterLoad = true;
+            el.addClass('loading');
+            getMenu();
+        } else {
+            menu.slideToggle(slideDuration);
+        }
+        menuLink.toggleClass('active');
+    });
+
+    var currentLeft = 0;
+    var left = 100;
+    el.on('menuLoaded', function() {
+        el.removeClass('loading');
+        menu.find('li.hasDropdown').each(function(index, child) {
+            $(child).children('a').click(function(event) {
+                menu.css('height', 'auto');
+                event.preventDefault();
+                currentLeft += left;
+                $(child).addClass('moved');
+                el.children('.slider').animate({
+                    left: '-' + currentLeft + '%'
+                });
+                menu.animate({
+                    height: $(child).find('ul.subMenu').height()
+                });
+            });
+        });
+        menu.find('li.back').each(function(index, child) {
+            $(child).children('a').click(function(event) {
+                menu.css('height', 'auto');
+                event.preventDefault();
+                currentLeft -= left;
+                el.children('.slider').animate({
+                    left: '-' + currentLeft + '%'
+                }, function() {
+                    $(child).parent().parent().removeClass('moved');
+                });
+                menu.animate({
+                    height: $(child).parents('ul').parents('ul').height()
+                });
+            });
+        });
+    });
+
+    var getMenu = function() {
+        if (!ajaxRequest) {
+            ajaxRequest = $.getJSON(config.controllerUrl + '/json-index', {
+                rootComponentId: config.rootComponentId,
+                componentId: config.componentId,
+                kwfSessionToken: Kwf.sessionToken
+            }, function(data) {
+                var tpl = '<div class="slider">\n' +
+                    '<ul class="menu">\n' +
+                        '{{#pages}}' +
+                            '<li class="{{class}}">\n' +
+                                '<a href="{{url}}">{{name}}</a>\n' +
+                                '<ul class="subMenu">\n' +
+                                    '{{#children}}' +
+                                        '{{> children}}\n' +
+                                    '{{/children}}' +
+                                '</ul>\n' +
+                            '</li>\n' +
+                        '{{/pages}}' +
+                    '</ul>\n' +
+                '</div>';
+                var partials = {
+                    children: '<li class="{{class}}">\n' +
+                        '<a href="{{url}}">{{name}}</a>\n' +
+                        '<ul class="subMenu">\n' +
+                            '{{#children}}' +
+                                '{{> children}}\n' +
+                            '{{/children}}' +
+                        '</ul>\n' +
+                    '</li>\n'
+                };
+                el.append(Mustache.render(tpl, data, partials));
+                menu = el.find('ul.menu');
+                if (animateMenuAfterLoad) menu.slideDown(slideDuration);
+                el.trigger('menuLoaded');
+            });
+        }
+    };
+});
