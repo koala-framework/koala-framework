@@ -103,4 +103,4 @@ Kwf.onJElementReady('.kwcMenuMobile', function(el, config) {
             });
         }
     };
-});
+}, this, { checkVisibility: true });
