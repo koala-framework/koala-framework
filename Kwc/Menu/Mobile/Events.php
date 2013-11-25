@@ -31,6 +31,16 @@ class Kwc_Menu_Mobile_Events extends Kwc_Abstract_Events
         );
         $ret[] = array(
             'class' => null,
+            'event' => 'Kwf_Component_Event_Page_NameChanged',
+            'callback' => 'onPageChanged'
+        );
+        $ret[] = array(
+            'class' => null,
+            'event' => 'Kwf_Component_Event_Page_UrlChanged',
+            'callback' => 'onPageChanged'
+        );
+        $ret[] = array(
+            'class' => null,
             'event' => 'Kwf_Component_Event_Component_RecursiveRemoved',
             'callback' => 'onPageChangedRecursive'
         );
@@ -49,7 +59,11 @@ class Kwc_Menu_Mobile_Events extends Kwc_Abstract_Events
 
     private function _deleteCache($event)
     {
-        $cacheId = 'menuMobile' . $event->component->getSubroot()->componentId;
-        Kwf_Cache_Simple::delete($cacheId);
+        $components = Kwf_Component_Data_Root::getInstance()
+            ->getComponentsByClass('Kwc_Menu_Mobile_Component', array('subroot' => $event->component->getSubroot()));
+        foreach($components as $component) {
+            $cacheId = 'kwcMenuMobile-' . $component->componentId;
+            Kwf_Cache_Simple::delete($cacheId);
+        }
     }
 }
