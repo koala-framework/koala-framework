@@ -131,4 +131,31 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
             throw new Kwf_ClientException($msg);
         }
     }
+
+    public function jsonDuplicateAction()
+    {
+        if (!isset($this->_permissions['duplicate']) || !$this->_permissions['duplicate']) {
+            throw new Kwf_Exception("Duplicate is not allowed.");
+        }
+
+        $ids = $this->getRequest()->getParam($this->_primaryKey);
+        $ids = explode(';', $ids);
+
+        $progressBar = null;
+
+        $this->view->data = array('duplicatedIds' => array());
+        ignore_user_abort(true);
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
+        $dir = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $this->_getParam('componentId'),
+            array('ignoreVisible'=>true, 'limit'=>1)
+        );
+        foreach ($ids as $id) {
+            $child = $dir->getChildComponent(array('id'=>'-'.$id, 'ignoreVisible'=>true));
+            $newChild = Kwf_Util_Component::duplicate($child, $dir, $progressBar);
+            $newChild->row->save();
+            $this->view->data['duplicatedIds'][] = $newChild->id;
+        }
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
+    }
 }
