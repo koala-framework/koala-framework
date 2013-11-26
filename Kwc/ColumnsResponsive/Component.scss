@@ -4,6 +4,8 @@ $gutter-width   : 0em;
 $grid-padding   : 0em;
 
 .cssClass {
+    margin-right: -20px;
+
     > .listItem {
         padding-bottom: 20px;
 
@@ -24,7 +26,6 @@ $grid-padding   : 0em;
 
         &.kwcLast {
             padding-bottom: 0px;
-            padding-right: 0;
         }
 
     }
@@ -72,6 +73,12 @@ $grid-padding   : 0em;
 
         .listItem.span2 {
             @include span-columns(2, 4);
+        }
+    }
+
+    &.col4col-25_25_25_25 {
+        .listItem.span1 {
+            @include span-columns(1, 4);
         }
     }
 
