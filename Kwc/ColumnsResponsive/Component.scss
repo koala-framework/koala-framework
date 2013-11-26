@@ -4,8 +4,6 @@ $gutter-width   : 0em;
 $grid-padding   : 0em;
 
 .cssClass {
-    margin-right: -20px;
-
     > .listItem {
         padding-bottom: 20px;
 
@@ -20,6 +18,8 @@ $grid-padding   : 0em;
 }
 
 .cssClass.gt480 {
+    margin-right: -20px;
+
     .listItem {
         @include box-sizing(border-box);
         padding-right: 20px;
