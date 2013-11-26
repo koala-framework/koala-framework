@@ -99,7 +99,7 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
             $contents = str_replace("\r", "\n", $contents);
 
             // remove comments
-            $contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
+            //$contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
 
             // multiple whitespaces
             $contents = str_replace("\t", " ", $contents);
