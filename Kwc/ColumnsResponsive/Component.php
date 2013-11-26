@@ -68,6 +68,11 @@ class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
                 'columns' => 4,
                 'colSpans' => array(1,1,2),
                 'name' => trlKwfStatic('3 Columns (25% - 25% - 50%)')
+            ),
+            '4col-25_25_25_25' => array(
+                'columns' => 4,
+                'colSpans' => array(1,1,1,1),
+                'name' => trlKwfStatic('4 Columns (25% - 25% - 25% - 25%)')
             )
         );
         return $ret;
