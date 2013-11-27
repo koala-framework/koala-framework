@@ -9,6 +9,7 @@ class Kwf_Model_DbWithConnection_ExprDate_Model extends Kwf_Model_Db
 
         $config['exprs'] = array(
             'date_year' => new Kwf_Model_Select_Expr_Date_Year('date'),
+            'date_year_two_digits' => new Kwf_Model_Select_Expr_Date_Year('date', Kwf_Model_Select_Expr_Date_Year::FORMAT_DIGITS_TWO),
         );
 
         parent::__construct($config);

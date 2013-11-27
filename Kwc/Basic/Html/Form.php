@@ -7,6 +7,7 @@ class Kwc_Basic_Html_Form extends Kwc_Abstract_Composite_Form
         $this->fields->prepend(new Kwf_Form_Field_TextArea('content'))
             ->setFieldLabel(trlKwf('Content'))
             ->setHeight(225)
-            ->setWidth(450);
+            ->setWidth(450)
+            ->setAllowTags(true);
     }
 }

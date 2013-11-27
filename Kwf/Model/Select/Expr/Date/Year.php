@@ -5,10 +5,13 @@
  */
 class Kwf_Model_Select_Expr_Date_Year implements Kwf_Model_Select_Expr_Interface
 {
+    const FORMAT_DIGITS_TWO = 'y';
+    const FORMAT_DIGITS_FOUR = 'Y';
     private $_field;
 
-    public function __construct($field)
+    public function __construct($field, $format = Kwf_Model_Select_Expr_Date_Year::FORMAT_DIGITS_FOUR)
     {
+        $this->_format = $format;
         $this->_field = $field;
     }
 
@@ -27,6 +30,11 @@ class Kwf_Model_Select_Expr_Date_Year implements Kwf_Model_Select_Expr_Interface
     public function getResultType()
     {
         return Kwf_Model_Interface::TYPE_INTEGER;
+    }
+
+    public function getFormat()
+    {
+        return $this->_format;
     }
 
 

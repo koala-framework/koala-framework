@@ -699,13 +699,14 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             }
             return str_pad($v, $expr->getPadLength(), $expr->getPadStr(), $padType);
         } else if ($expr instanceof Kwf_Model_Select_Expr_Date_Year) {
-            $f = $expr->getField();
+            $field = $expr->getField();
+            $format = $expr->getFormat();
             if (is_array($row)) {
-                $v = $row[$f];
+                $v = $row[$field];
             } else {
-                $v = $row->$f;
+                $v = $row->$field;
             }
-            return date('Y', strtotime($v));
+            return date($format, strtotime($v));
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
             $f = $expr->getField();
             if (is_array($row)) {

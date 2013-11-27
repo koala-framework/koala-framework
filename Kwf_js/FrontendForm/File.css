@@ -5,6 +5,7 @@
 .kwfFormFieldFileUploadWrapper .fileSelector,
 .kwfFormFieldFileUploadWrapper > input {
     position: absolute;
+    width: 100%;
 }
 .kwfFormFieldFileUploadWrapper .fileSelector {
     z-index: 2;

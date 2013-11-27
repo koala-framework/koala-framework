@@ -74,6 +74,13 @@ class Kwf_Form_Field_ComboBox extends Kwf_Form_Field_SimpleAbstract
                 $newValue = $v;
                 if (is_string($k)) $newKey = $trl->trlStaticExecute($k, $language); //TODO key nicht (immer) übersetzen
                 if (is_string($v)) $newValue = $trl->trlStaticExecute($v, $language);
+                else if (is_array($v)) {
+                    foreach ($v as $k2 => $v2) {
+                        if (is_string($v2)) {
+                            $newValue[$k2] = $trl->trlStaticExecute($v2, $language);
+                        }
+                    }
+                }
 
                 unset($values[$k]);
                 $values[$newKey] = $newValue;

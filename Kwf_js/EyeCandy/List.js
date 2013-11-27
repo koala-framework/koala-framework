@@ -31,6 +31,8 @@ Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
     defaultState: 'normal',
     activeState: 'active',
     childSelector: '> .listItem',
+
+    _lockChangeActive: false,
     _init: function() {
         this.addEvents({
             'childMouseEnter': true,
@@ -128,6 +130,7 @@ Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
     },
 
     setActiveItem: function(item) {
+        if (this._lockChangeActive) return;
         var previousItem = this.activeItem;
         this.activeItem = item;
         if (previousItem != this.activeItem) {
@@ -144,5 +147,14 @@ Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
     },
     getActiveItem: function() {
         return this.activeItem;
+    },
+
+    /**
+     * Locks changing active item, if locked setActiveItem won't change the active item
+     *
+     * Can be used to lock during animations.
+     */
+    setLockChangeActive: function(i) {
+        this._lockChangeActive = i;
     }
 });

@@ -16,7 +16,17 @@ class Kwc_Advanced_VideoPlayer_PreviewImage_Component extends Kwc_Basic_Image_Co
 
     protected function _getImageDimensions()
     {
-        $ret = $this->getData()->parent->getComponent()->getVideoDimensions();
+        $parentComponent = $this->getData()->parent->getComponent();
+        $ret = $parentComponent->getVideoDimensions();
+        $row = $parentComponent->getRow();
+        if ($row->size == 'contentWidth') {
+            $ret['width'] = $parentComponent->getContentWidth();
+            if ($row->format == '4x3') {
+                $ret['height'] = (int)(($ret['width'] / 4) * 3);
+            } else {
+                $ret['height'] = (int)(($ret['width'] / 16) * 9);
+            }
+        }
         $ret['scale'] = Kwf_Media_Image::SCALE_CROP;
         return $ret;
     }

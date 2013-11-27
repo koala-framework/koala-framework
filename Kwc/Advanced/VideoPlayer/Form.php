@@ -21,10 +21,26 @@ class Kwc_Advanced_VideoPlayer_Form extends Kwc_Abstract_Composite_Form
 
         $fs = $this->fields->add(new Kwf_Form_Container_FieldSet(trlKwf('Settings')))
             ->setHelpText(trlKwf('Insert "100%" in both fields to make it responsive.'));
-        $fs->add(new Kwf_Form_Field_TextField('video_width', trlKwf('Width (px)')))
+
+        $cards = $fs->add(new Kwf_Form_Container_Cards('size', trlKwf('Size')));
+        $cards->getCombobox()
+            ->setWidth(300)
+            ->setListWidth(300);
+
+        $card = $cards->add(new Kwf_Form_Container_Card('contentWidth'))
+            ->setTitle(trlKwf('Stretch video to maximum width'));
+        $card->add(new Kwf_Form_Field_Select('format', trlKwf('Format')))
+            ->setValues(array('16x9' => trlKwfStatic('16:9'), '4x3' => trlKwfStatic('4:3')))
+            ->setDefaultValue('16x9')
+            ->setAllowBlank(false);
+
+        $card = $cards->add(new Kwf_Form_Container_Card('userDefined'))
+            ->setTitle(trlKwf('Set size of video'));
+        $card->add(new Kwf_Form_Field_TextField('video_width', trlKwf('Width (px)')))
             ->setWidth(80);
-        $fs->add(new Kwf_Form_Field_TextField('video_height', trlKwf('Height (px)')))
+        $card->add(new Kwf_Form_Field_TextField('video_height', trlKwf('Height (px)')))
             ->setWidth(80);
+
         $fs->add(new Kwf_Form_Field_Checkbox('loop', trlKwf('Repeat')));
         $fs->add(new Kwf_Form_Field_Checkbox('auto_play', trlKwf('Auto play')));
     }

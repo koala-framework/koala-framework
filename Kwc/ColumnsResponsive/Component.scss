@@ -23,11 +23,6 @@ $grid-padding   : 0em;
     .listItem {
         @include box-sizing(border-box);
         padding-right: 20px;
-
-        &.kwcLast {
-            padding-bottom: 0px;
-        }
-
     }
 
     &.col2col-50_50 {

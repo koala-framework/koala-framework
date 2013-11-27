@@ -195,10 +195,12 @@ Kwf.Fade.Elements.prototype = {
             }
 
             if (dir == 'l' || dir == 'r') {
+                if (nextEl.position().left != 0) left = nextEl.position().left;
                 $(nextEl).show().css({
                     left: left,
                     zIndex: 10
                 });
+                Kwf.callOnContentReady(nextEl);
                 if ($.support.transition || $.support.transform) {
                     this._components.transition({ x: width }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         this._components.css({ x: 0 });
@@ -223,7 +225,7 @@ Kwf.Fade.Elements.prototype = {
                         Kwf.fireComponentEvent('componentSlideOut', Ext.get($(this).parent().get(0)), Ext.get(this));
                     });
                     nextEl.animate({
-                        left: '+='+width
+                        left: 0
                     }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         nextEl.css('left', '0px');
                         this._isAnimating = false;
@@ -231,10 +233,12 @@ Kwf.Fade.Elements.prototype = {
                     }, this));
                 }
             } else if (dir == 't' || dir == 'b') {
+                if (nextEl.position().top != 0) top = nextEl.position().top;
                 $(nextEl).show().css({
                     top: top,
                     zIndex: 10
                 });
+                Kwf.callOnContentReady(nextEl);
                 if ($.support.transition || $.support.transform) {
                     this._components.transition({ y: height }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         this._components.css({ y: 0 });
@@ -440,7 +444,7 @@ Kwf.Fade.Elements.prototype = {
                     if (nextIdx < 0) nextIdx = this.fadeElements.length-1;
 
                     this.next = nextIdx;
-                    this.doFade('left');
+                    this.doFade('right');
                     if (this.elementAccessPlayPause) this.pause();
                 }, this));
             }
@@ -456,7 +460,7 @@ Kwf.Fade.Elements.prototype = {
                     if (nextIdx >= this.fadeElements.length) nextIdx = 0;
 
                     this.next = nextIdx;
-                    this.doFade('right');
+                    this.doFade('left');
                     if (this.elementAccessPlayPause) this.pause();
                 }, this));
             }

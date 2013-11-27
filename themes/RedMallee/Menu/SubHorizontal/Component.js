@@ -4,14 +4,17 @@ Kwf.onElementReady('.redMalleeMenuSubHorizontal', function(el) {
     $(menu).before('<a class="arrowLeft"></a>').before('<a class="arrowRight"></a>');
     var arrowLeft = $(el.child('.arrowLeft').dom).hide();
     var arrowRight = $(el.child('.arrowRight').dom);
+    $(menu).on('touchend', function(event) {
+        event.preventDefault();
+    });
     arrowLeft.bind('click', function() {
         $(menu).animate({
-            scrollLeft: 0
+            scrollLeft: '-=' + ($(menu).innerWidth() - arrowLeft.width())
         }, 500);
     });
     arrowRight.bind('click', function() {
         $(menu).animate({
-            scrollLeft: menu.scrollWidth - $(menu).innerWidth()
+            scrollLeft: '+=' + ($(menu).innerWidth() - arrowLeft.width())
         }, 500);
     });
     $(menu).scroll(function(event) {

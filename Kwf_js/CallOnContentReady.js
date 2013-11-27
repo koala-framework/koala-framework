@@ -21,6 +21,7 @@ if (!Kwf.isApp) {
 Kwf.callOnContentReady = function(el, options) {
     if (!options) options = {};
     if (Ext.Element && el instanceof Ext.Element) el = el.dom;
+    if (jQuery && el instanceof jQuery) el = el.get();
 
     Kwf._readyHandlers.sort(function(a, b) {
         return (a.options.priority || 0) - (b.options.priority || 0);

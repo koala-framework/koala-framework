@@ -9975,5 +9975,40 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Wähle Bildbereich</de>
 <id>2029</id>
 </text>
+<text>
+<en>Must not include newlines</en>
+<id>2030</id>
+</text>
+<text>
+<en>Must not include tags</en>
+<id>2031</id>
+</text>
+<text>
+<en>Stretch video to maximum width</en>
+<de>Video auf maximale Breite vergrößern</de>
+<id>2032</id>
+</text>
+<text>
+<en>16:9</en>
+<id>2033</id>
+</text>
+<text>
+<en>4:3</en>
+<id>2034</id>
+</text>
+<text>
+<en>Set size of video</en>
+<de>Benutzerdefinierte Videogröße setzen</de>
+<id>2035</id>
+</text>
+<text>
+<en>Preview image</en>
+<de>Vorschaubild</de>
+<id>2036</id>
+</text>
+<text>
+<en>Recent Posts</en>
+<id>2037</id>
+</text>
 </trl>
 

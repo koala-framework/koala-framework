@@ -5,6 +5,12 @@
  */
 class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
 {
+    public function __construct($fieldName = null, $fieldLabel = null)
+    {
+        parent::__construct($fieldName, $fieldLabel);
+        $this->setAllowTags(false);
+    }
+
     public function load($row, $postData = array())
     {
         $ret = array();
@@ -51,7 +57,7 @@ class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
             $this->addValidator($v, 'notEmpty');
         }
         $this->addValidator(new Kwf_Validate_NoNewline(), 'noNewline');
-        $this->addValidator(new Kwf_Validate_NoTags(), 'noTags');
+        if (!$this->getAllowTags()) $this->addValidator(new Kwf_Validate_NoTags(), 'noTags');
     }
 
     public function validate($row, $postData)
@@ -123,6 +129,13 @@ class Kwf_Form_Field_SimpleAbstract extends Kwf_Form_Field_Abstract
     public final function getValueFromPostData($postData)
     {
         return $this->_getValueFromPostData($postData);
+    }
+
+    public function getMetaData($model)
+    {
+        $ret = parent::getMetaData($model);
+        unset($ret['allowTags']);
+        return $ret;
     }
 
     /**

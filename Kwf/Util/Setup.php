@@ -272,7 +272,7 @@ class Kwf_Util_Setup
                     $ret .= "'".$d."'=>true, ";
                 }
                 $ret .= ");\n";
-                $ret .= "Kwf_Util_Https::\$supportsHttps = isset(\$domains[\$_SERVER['HTTP_HOST']]);";
+                $ret .= "Kwf_Util_Https::\$supportsHttps = isset(\$_SERVER['HTTP_HOST']) && isset(\$domains[\$_SERVER['HTTP_HOST']]);\n";
             } else {
                 $ret .= "Kwf_Util_Https::\$supportsHttps = true;\n";
             }

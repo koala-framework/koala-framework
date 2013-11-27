@@ -66,6 +66,7 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 
         $s = array('ignoreVisible'=>true);
         foreach ($source->getChildComponents($s) as $c) {
+
             if ($c->generator->hasSetting('inherit') && $c->generator->getSetting('inherit')) {
                 if ($c->generator->hasSetting('unique') && $c->generator->getSetting('unique')) {
                     continue;
@@ -74,6 +75,13 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
             if ($c->generator->getGeneratorFlag('pageGenerator')) {
                 continue;
             }
+
+            $genKey = $c->generator->getGeneratorKey();
+            if (!Kwf_Component_Generator_Abstract::hasInstance($target->componentClass, $genKey)) {
+                //generator doesn't exist in target, skip
+                continue;
+            }
+
             $c->generator->duplicateChild($c, $target, $progressBar);
         }
     }

@@ -1,6 +1,8 @@
 <?php
 class Kwc_ColumnsResponsive_Model extends Kwf_Model_FnF
 {
+    protected $_rowClass = 'Kwc_ColumnsResponsive_Row';
+
     public function setData($class, $dbId)
     {
         $select = new Kwf_Model_Select();

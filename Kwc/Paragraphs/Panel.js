@@ -34,27 +34,29 @@ Kwc.Paragraphs.Panel = Ext.extend(Kwf.Binding.AbstractPanel,
             delete this.autoLoad;
         }
 
-        this.dataView = new Kwc.Paragraphs.DataView({
-            components: this.components,
-            componentIcons: this.componentIcons,
-            showDelete: this.showDelete,
-            showDeviceVisible: this.showDeviceVisible,
-            showPosition: this.showPosition,
-            showCopyPaste: this.showCopyPaste,
-            listeners: {
-                scope: this,
-                'delete': this.onDelete,
-                edit: this.onEdit,
-                changeVisible: this.onChangeVisible,
-                changeDeviceVisible: this.onChangeDeviceVisible,
-                changePos: this.onChangePos,
-                addParagraphMenuShow: this.onAddParagraphMenuShow,
-                addParagraph: this.onParagraphAdd,
-                copyParagraph: this.onCopyParagraph,
-                pasteParagraph: this.onPasteParagraph,
-                copyPasteMenuShow: this.onCopyPasteMenuShow
-            }
-        });
+        if (!this.dataView) {
+            this.dataView = new Kwc.Paragraphs.DataView({
+                components: this.components,
+                componentIcons: this.componentIcons,
+                showDelete: this.showDelete,
+                showDeviceVisible: this.showDeviceVisible,
+                showPosition: this.showPosition,
+                showCopyPaste: this.showCopyPaste,
+                listeners: {
+                    scope: this,
+                    'delete': this.onDelete,
+                    edit: this.onEdit,
+                    changeVisible: this.onChangeVisible,
+                    changeDeviceVisible: this.onChangeDeviceVisible,
+                    changePos: this.onChangePos,
+                    addParagraphMenuShow: this.onAddParagraphMenuShow,
+                    addParagraph: this.onParagraphAdd,
+                    copyParagraph: this.onCopyParagraph,
+                    pasteParagraph: this.onPasteParagraph,
+                    copyPasteMenuShow: this.onCopyPasteMenuShow
+                }
+            });
+        }
 
         this.items = [ this.dataView ];
 

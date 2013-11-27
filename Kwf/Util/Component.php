@@ -85,6 +85,9 @@ class Kwf_Util_Component
             $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($_REQUEST['dbId'], array('limit'=>1));
         } else {
             $url = $_REQUEST['url'];
+            if (!is_string($url)) {
+                throw new Kwf_Exception_NotFound();
+            }
             $parsedUrl = parse_url($url);
             $_GET = array();
             if (isset($parsedUrl['query'])) {
