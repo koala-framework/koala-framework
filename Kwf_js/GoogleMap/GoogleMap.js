@@ -17,7 +17,7 @@ Kwf.GoogleMap.load = function(callback, scope)
 
     Kwf.GoogleMap.isLoaded = true;
 
-    var url = 'http:/'+'/maps.google.com/maps?file=api&v=2.x&key={Kwf_Assets_GoogleMapsApiKey::getKey()}&c&async=2&hl='+trlKwf('en');
+    var url = 'http:/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key={Kwf_Assets_GoogleMapsApiKey::getKey()}&c&async=2&language='+trlKwf('en');
     url += '&callback=Kwf.GoogleMap._loaded';
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
@@ -95,10 +95,11 @@ Kwf.GoogleMap.Map = function(config) {
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
 
+
     if (!this.config.markers) this.config.markers = [ ];
     if (typeof this.config.markers[0] == 'undefined' &&
         (this.config.markers.longitude || this.config.markers.coordinates)
-    ) {
+        ) {
         this.config.markers = [ this.config.markers ];
     }
 
@@ -118,7 +119,7 @@ Kwf.GoogleMap.Map = function(config) {
     if (!this.config.lightMarkers) this.config.lightMarkers = [ ];
     if (typeof this.config.lightMarkers[0] == 'undefined' &&
         (this.config.lightMarkers.longitude || this.config.lightMarkers.coordinates)
-    ) {
+        ) {
         this.config.lightMarkers = [ this.config.lightMarkers ];
     }
 
@@ -176,68 +177,49 @@ Kwf.GoogleMap.Map = function(config) {
 Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
 
     markers: [ ],
-
     show : function()
     {
-        this.gmap = new GMap2(this.mapContainer.down(".container").dom);
+        this.directionsService = new google.maps.DirectionsService();
+        this.directionsDisplay = new google.maps.DirectionsRenderer();
+        //CONTROLLS
+        if (parseInt(this.map_type == 'satellite')) {
+            this.config.map_type = true;
+        } else {
+            this.config.map_type = false;
+        }
+        var mapOptions = {
+            center: new google.maps.LatLng(parseFloat(this.config.latitude), parseFloat(this.config.longitude)),
+            zoom: parseInt(this.config.zoom),
+            zoomControl: this.config.zoom_properties,
+            scaleControl: this.config.scale,
+            mapTypeControl: this.config.map_type,
+            overviewMapControl: this.config.overview
+        };
+        this.gmap = new google.maps.Map(this.mapContainer.down(".container").dom,
+            mapOptions);
+        this.directionsDisplay.setMap(this.gmap);
+        this.directionsDisplay.setPanel(this.mapContainer.down(".mapDir").dom);
 
         if (this.config.map_type == 'satellite') {
-            this.gmap.setMapType(G_SATELLITE_MAP);
+            this.gmap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
         } else if (this.config.map_type == 'hybrid') {
-            this.gmap.setMapType(G_HYBRID_MAP);
-        }
-
-        if (this.config.zoom_properties == '0') {
-            this.gmap.addControl(new GLargeMapControl());
-        } else if (this.config.zoom_properties == '1') {
-            this.gmap.addControl(new GSmallMapControl());
-        }
-
-        if (parseInt(this.config.scale)) {
-            this.gmap.addControl(
-                new GScaleControl(),
-                new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(64,15))
-            );
-        }
-        if (parseInt(this.config.satelite)) {
-            this.gmap.addControl(new GMapTypeControl());
-        }
-        if (parseInt(this.config.overview)) {
-            this.gmap.addControl(new GOverviewMapControl());
-        }
-        if (typeof this.config.zoom_scrollwheel == 'undefined' || this.config.zoom_scrollwheel) {
-            this.gmap.enableScrollWheelZoom();
+            this.gmap.setMapTypeId(google.maps.MapTypeId.HYBRID);
         }
 
         if (typeof this.config.zoom == 'object'
             && this.config.zoom[0] && this.config.zoom[1]
             && this.config.zoom[2] && this.config.zoom[3]
-        ) {
-            this.config.zoom = this.gmap.getBoundsZoomLevel(new GLatLngBounds(
-                new GLatLng(this.config.zoom[2], this.config.zoom[3]),
-                new GLatLng(this.config.zoom[0], this.config.zoom[1])
+            ) {
+            this.config.zoom = this.gmap.getBoundsZoomLevel(new google.maps.LatLngBounds(
+                new google.maps.LatLng(this.config.zoom[2], this.config.zoom[3]),
+                new google.maps.LatLng(this.config.zoom[0], this.config.zoom[1])
             ));
             if (this.config.maximumInitialResolution < this.config.zoom)
                 this.config.zoom = this.config.maximumInitialResolution;
         }
 
-        this.gmap.setCenter(
-            new GLatLng(
-                parseFloat(this.config.latitude),
-                parseFloat(this.config.longitude)
-            ),
-            parseInt(this.config.zoom)
-        );
-
-        if (this.mapContainer.down(".mapDir")) {
-            this.mapDir = new GDirections(
-                this.gmap,
-                this.mapContainer.down(".mapDir").dom
-            );
-        }
-
         if (typeof this.config.markers == 'string') {
-            GEvent.addListener(this.gmap, "moveend", this._reloadMarkers.createDelegate(
+            google.maps.event.addListener(this.gmap, "moveend", this._reloadMarkers.createDelegate(
                 this, [ ]
             ));
             this._reloadMarkers();
@@ -255,27 +237,11 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
             map.markers.each(function(m) {
                 if (m.kwfConfig.autoOpenInfoWindow) this.showWindow(m);
             }, map);
-            if (Kwf.GoogleMap.maps.length) {
-                showNextWindow.defer(1500, this);
-            }
         };
         if (Kwf.GoogleMap.maps.length == 0) {
             showNextWindow.defer(1, this);
         }
         Kwf.GoogleMap.maps.push(this);
-
-        var mapTypes = this.gmap.getMapTypes();
-        var minRes = this.config.minimumResolution;
-        var maxRes = this.config.maximumResolution;
-        for (var i=0; i<mapTypes.length; i++) {
-            if (minRes) {
-                mapTypes[i].getMinimumResolution = function() {return minRes;};
-            }
-            if (maxRes) {
-                mapTypes[i].getMaximumResolution = function() {return maxRes;};
-            }
-        }
-
         this.fireEvent('show', this);
     },
 
@@ -303,7 +269,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
                     for (var i = 0; i < this.markers.length; i++) {
                         if (this.markers[i].kwfConfig.latitude == m.latitude
                             && this.markers[i].kwfConfig.longitude == m.longitude
-                        ) {
+                            ) {
                             doAdd = false;
                             break;
                         }
@@ -321,41 +287,38 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
     {
         var marker = this.createMarker(markerConfig);
         marker.kwfConfig = markerConfig;
+        marker.setMap(this.gmap);
         this.markers.push(marker);
-        this.gmap.addOverlay(marker);
-
         if (markerConfig.infoHtml) {
-            GEvent.addListener(marker, 'click', this.showWindow.createDelegate(
+            google.maps.event.addListener(marker, 'click', this.toggleWindow.createDelegate(
                 this, [ marker ]
             ));
         }
     },
-    
+
     createMarker : function(markerConfig)
     {
         var gmarkCfg = { draggable: false };
         if (markerConfig.draggable) gmarkCfg.draggable = true;
-        gmarkCfg.icon = this.getMarkerIcon(markerConfig);
-        return new GMarker(
-            new GLatLng(
-                parseFloat(markerConfig.latitude),
-                parseFloat(markerConfig.longitude)
-            ),
-            gmarkCfg
-        );
+        var image = this.getMarkerIcon(markerConfig);
+        var myLatLng = new google.maps.LatLng(parseFloat(markerConfig.latitude), parseFloat(markerConfig.longitude));
+        return new google.maps.Marker({
+            position: myLatLng,
+            icon: image
+        });
     },
-    
+
     getMarkerIcon : function(markerConfig)
     {
-        var icon = new GIcon(G_DEFAULT_ICON);
+        var image = '';
         if (this._isLightMarker(markerConfig.latitude, markerConfig.longitude)
-                && this.config.lightMarkerSrc
-        ) {
-            icon.image = this.config.lightMarkerSrc;
+            && this.config.lightMarkerSrc
+            ) {
+            image = this.config.lightMarkerSrc;
         } else if (this.config.markerSrc) {
-            icon.image = this.config.markerSrc;
+            image = this.config.markerSrc;
         }
-        return icon;
+        return image;
     },
 
     _isLightMarker : function(lat, lng) {
@@ -372,66 +335,41 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
      * @param marker: The marker with 'kwfConfig' property inside
      */
     showWindow : function(marker) {
+        marker.infoWindow = new google.maps.InfoWindow();
         if (marker.kwfConfig.infoHtml && marker.kwfConfig.infoHtml != ""
             && "<br />" != marker.kwfConfig.infoHtml.toLowerCase()
-        ) {
-            marker.openInfoWindowHtml(marker.kwfConfig.infoHtml, {
-                maxWidth: parseInt(this.config.width * 0.8)
-            });
+            ) {
+            marker.infoWindow.setContent(marker.kwfConfig.infoHtml);
+            marker.infoWindow.open(marker.map, marker);
+        }
+    },
+    closeWindow: function(marker) {
+        marker.infoWindow.close();
+    },
+    toggleWindow: function(marker) {
+        if (marker.infoWindow.getMap() !== null && typeof marker.infoWindow.getMap() !== "undefined") {
+            this.closeWindow(marker);
+        } else {
+            this.showWindow(marker);
         }
     },
 
     setMapDir : function (fromAddress) {
-        this.gmap.closeInfoWindow();
-        var gcoder = new GClientGeocoder();
-        gcoder.setBaseCountryCode('AT');
-        gcoder.getLocations(fromAddress, this.testCallback.createDelegate(this));
+        var end = new google.maps.LatLng(parseFloat(this.config.latitude), parseFloat(this.config.longitude));
+        var request = {
+            origin:fromAddress,
+            destination:end,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        this.directionsService.route(request, this._directionsCallback.createDelegate(
+            this
+        ));
     },
-    testCallback : function(o) {
-        if (!o.Placemark) {
-            alert(trlKwf('Entered place could not been found!'));
+    _directionsCallback: function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            this.directionsDisplay.setDirections(response);
         } else {
-            this.useFrom(o.Placemark[0], false);
-            this.suggestLocations(o.Placemark);
-        }
-    },
-    useFrom : function(Placemark, rewriteInput) {
-        if (typeof Placemark != 'object') {
-            Placemark = this.suggestPlacemarks[Placemark];
-        }
-        var pos = Placemark.Point.coordinates[1] +','+ Placemark.Point.coordinates[0];
-        this.mapDir.load(
-            'from: ' + pos + ' to: ' + this.config.latitude + ',' + this.config.longitude,
-            { 'locale': 'de_AT' }
-        );
-        if (rewriteInput) {
-            this.mapContainer.down("form.fromAddress").set({ value: Placemark.address });
-        }
-        this.mapContainer.down(".mapDirSuggestParent").setStyle({display:"none"});
-
-        this.fireEvent('useFrom', this);
-    },
-    suggestLocations : function(Placemark){
-        this.suggestPlacemarks = Placemark;
-        var el = this.mapContainer.down(".mapDirSuggestParent ul.mapDirSuggest");
-        var elParent = this.mapContainer.down(".mapDirSuggestParent");
-        if (Placemark.length > 1) {
-            el.remove();
-            elParent.setStyle({display:"block"});
-            el = elParent.createChild({tag: 'ul'});
-            el.addClass('mapDirSuggest');
-            for (var i=0; i<10; i++) {
-                if (!Placemark[i]) break;
-                var a = el.createChild({tag: 'li'}).createChild({
-                    tag: 'a', href: '#', html: Placemark[i].address, rel:i
-                });
-                a.on('click', function(e, el) {
-                    this.useFrom(Placemark[el.rel], true);
-                    e.stopEvent();
-                }, this);
-            }
-        } else if (elParent) {
-            elParent.setStyle({ display:"none" });
+            alert(trlKwf('Entered place could not been found!'));
         }
     }
 });
