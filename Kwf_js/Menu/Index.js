@@ -191,6 +191,7 @@ Kwf.Menu.Index = Ext.extend(Ext.Toolbar,
                 text: result.fullname,
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/user.png',
+                disabled: !result.userId,
                 handler: function() {
                     var dlg = new Kwf.Auto.Form.Window({
                         formConfig: {

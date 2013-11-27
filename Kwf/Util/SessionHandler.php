@@ -30,6 +30,9 @@ class Kwf_Util_SessionHandler
 
     public static function init()
     {
+        ini_set('session.gc_probability', '1'); //always enable gc, is disabled on debian systems where gc is done by a cronjob
+        ini_set('session.gc_divisor', '1000');
+
         $h = new self();
         session_set_save_handler(
             array($h, 'open'),

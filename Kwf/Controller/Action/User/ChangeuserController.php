@@ -52,4 +52,28 @@ class Kwf_Controller_Action_User_ChangeuserController extends Kwf_Controller_Act
         }
         $this->_getModel()->changeUser($user);
     }
+
+    public function changeUserAction()
+    {
+        if (!$this->_getParam('email')) {
+            throw new Kwf_Exception_Client("email is required");
+        }
+        $select = self::_getSelect();
+        $select->whereEquals('email', $this->_getParam('email'));
+        $user = $this->_model->getRow($select);
+        if (!$user) {
+            throw new Kwf_Exception_AccessDenied();
+        }
+
+        $storage = Kwf_Auth::getInstance()->getStorage();
+        $loginData = $storage->read();
+        if (!isset($loginData['changeUserId'])) {
+            $loginData['changeUserId'] = $loginData['userId'];
+        }
+        $loginData['userId'] = $user->id;
+        $storage->write($loginData);
+
+        header('Location: /');
+        exit;
+    }
 }

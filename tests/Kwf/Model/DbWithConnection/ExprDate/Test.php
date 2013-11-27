@@ -32,4 +32,14 @@ class Kwf_Model_DbWithConnection_ExprDate_Test extends Kwf_Model_DbWithConnectio
 
         $m->dropTable();
     }
+
+    public function testTwoDigits()
+    {
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_ExprDate_Model');
+        $m->setUp();
+
+        $this->assertEquals(83, $m->getRow(1)->date_year_two_digits);
+        $this->assertEquals(03, $m->getRow(2)->date_year_two_digits);
+        $m->dropTable();
+    }
 }

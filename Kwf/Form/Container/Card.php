@@ -10,4 +10,10 @@ class Kwf_Form_Container_Card extends Kwf_Form_Container_Abstract
         $this->setBaseCls('x-plain');
         $this->setAutoHeight(true);
     }
+    protected function _getTrlProperties()
+    {
+        $ret = parent::_getTrlProperties();
+        $ret[] = 'title';
+        return $ret;
+    }
 }
