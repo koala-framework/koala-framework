@@ -81,6 +81,13 @@ class Kwf_Util_Model_Feed_Row_Entry extends Kwf_Model_Row_Data_Abstract
             $data['id'] = $data['link'];
         }
 
+        if ($data['link'] && substr($data['link'], 0, 1) == '/') {
+            $url = parse_url($feed->link);
+            if ($url && isset($url['scheme']) && isset($url['host'])) {
+                $data['link'] = $url['scheme'].'://'.$url['host'].$data['link'];
+            }
+        }
+
         $data['author_name'] = null;
         if (isset($xml->children('http://posterous.com/help/rss/1.0')->author->displayName)) {
             $data['author_name'] = (string)$xml->children('http://posterous.com/help/rss/1.0')->author->displayName;
