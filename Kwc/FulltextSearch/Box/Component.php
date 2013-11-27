@@ -9,6 +9,7 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
         $ret['useLiveSearch'] = true;
         $ret['hideSubmit'] = false;
         $ret['flags']['forwardProcessInput'] = true;
+        $ret['minSearchTermLength'] = 3;
         return $ret;
     }
 
@@ -35,6 +36,7 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
             'searchUrl' => $searchPage->getAbsoluteUrl(),
             'useLiveSearch' => $this->_getSetting('useLiveSearch'),
             'hideSubmit' => $this->_getSetting('hideSubmit'),
+            'minSearchTermLength' => $this->_getSetting('minSearchTermLength')
         );
         return $ret;
     }

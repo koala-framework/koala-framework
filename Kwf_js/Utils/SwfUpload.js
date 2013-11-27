@@ -44,7 +44,7 @@ Ext.extend(Kwf.Utils.SwfUpload, Ext.util.Observable, {
         }
 
         var params = Kwf.clone(this.postParams);
-        
+
         //send boolean values as 1/0 as else "false" as string would be sent
         for (var i in params) {
             if (typeof params[i] == 'boolean') params[i] = params[i] ? 1 : 0;
@@ -71,6 +71,9 @@ Ext.extend(Kwf.Utils.SwfUpload, Ext.util.Observable, {
             button_window_mode: SWFUpload.WINDOW_MODE.OPAQUE,
             button_action : this.selectMultiple ? SWFUpload.BUTTON_ACTION.SELECT_FILES : SWFUpload.BUTTON_ACTION.SELECT_FILE,
             button_cursor : SWFUpload.CURSOR.HAND,
+            swfupload_load_failed_handler : function() {
+                this.customSettings.component.fireEvent('loadFailed');
+            },
 
             file_queued_handler: function(file) {
                 this.customSettings.component.fireEvent('fileQueued', file);

@@ -6,6 +6,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     infoPosition: 'south',
     defaultAutoCreate : {
         tag: 'div',
+        cls: 'swfUploadField',
         style: 'width: 320px; height: 53px'
     },
     fileIcons: {
@@ -70,8 +71,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
         if (this.showPreview) {
             this.previewImage = this.el.createChild({
-                style: 'margin-right: 10px; padding: 5px; float: left; border: 1px solid #b5b8c8;'+
-                    'background-color: white;'
+                cls: 'previewImage'
             });
 
             this.previewImage.update(this.emptyTpl); //bild wird in der richtigen größe angezeigt
@@ -80,8 +80,8 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         if (this.infoPosition == 'west') this.createInfoContainer();
 
         this.uploadButtonContainer = this.el.createChild({
-                                         style: 'float:left; margin-right: 5px; position: relative; '
-                                     });
+            cls: 'uploadButton'
+        });
 
         this.createUploadButton();
         if (this.showDeleteButton) {
@@ -99,14 +99,22 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         if (this.infoPosition == 'south') this.createInfoContainer();
 
         if (!Kwf.Utils.Upload.supportsHtml5Upload()) {
+            this.uploadButtonContainer.dom.style.display = 'none';
+            var insertBefore = this.deleteButton ? this.deleteButton.el : null;
+            this.swfUploadButtonContainer = this.el.createChild({
+                cls: 'uploadButton'
+            }, insertBefore);
             this.swfu = new Kwf.Utils.SwfUpload({
                 fileSizeLimit: this.fileSizeLimit,
                 allowOnlyImages: this.allowOnlyImages,
-                buttonPlaceholderId: this.uploadButtonContainer.id,
+                buttonPlaceholderId: this.swfUploadButtonContainer.id,
                 postParams: {
                     maxResolution: this.maxResolution
                 }
             });
+            this.swfu.on('loadFailed', function() {
+                this.uploadButtonContainer.show();
+            }, this);
             this.swfu.on('fileQueued', function(file) {
                 this.progress = Ext.MessageBox.show({
                     title : trlKwf('Upload'),

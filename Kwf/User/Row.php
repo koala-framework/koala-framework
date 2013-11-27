@@ -23,6 +23,11 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return $ret;
     }
 
+    public function getKwfUser()
+    {
+        return $this;
+    }
+
     public function setNotifyGlobalUserAdded($val)
     {
         $this->_notifyGlobalUserAdded = $val;

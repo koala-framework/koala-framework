@@ -1,4 +1,16 @@
-.x-form-field .swfupload {
+.x-form-element .swfUploadField .swfupload {
     float: left;
     margin-right: 5px;
+}
+.x-form-element .swfUploadField .uploadButton {
+    float:left;
+    margin-right: 5px;
+    position: relative;
+}
+.x-form-element .swfUploadField .previewImage {
+    margin-right: 10px;
+    padding: 5px;
+    float: left;
+    border: 1px solid #b5b8c8;
+    background-color: white;
 }
