@@ -46,50 +46,33 @@ Kwf.Form.GoogleMapWindow = Ext.extend(Ext.Window,
         Kwf.Form.GoogleMapWindow.superclass.initComponent.call(this);
     },
     afterRender:function(){
-        Kwf.Form.GoogleMapWindow.superclass.afterRender.call(this);
-        this.map = new GMap2(this.body.dom);
-        this.geocoder = new GClientGeocoder();
-        this.map.addControl(new GLargeMapControl());
-        this.buttons = [
-        {
-            text: trlKwf('Cancel'),
-            handler: function() {
-                this.hide();
-            },
-            scope: this
-        },{
-            text: trlKwf('OK'),
-            handler: function() {
-                this.clear = false;
-                this.fireEvent('confirm', this);
-                this.hide();
-            },
-            scope: this
-        }];
-        Kwf.Form.GoogleMapWindow.superclass.initComponent.call(this);
-    },
-    afterRender:function(){
+        var startLatLng = new google.maps.LatLng(47.9534, 13.2448);
         Kwf.Form.GoogleMapWindow.superclass.afterRender.call(this);
         Kwf.GoogleMap.load(function() {
-            this.map = new GMap2(this.body.dom);
-            this.geocoder = new GClientGeocoder();
-            this.map.addControl(new GLargeMapControl());
-            this.map.addControl(new GScaleControl(), new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(64,15)));
-            this.map.addControl(new GMapTypeControl());
-            this.map.addControl(new GOverviewMapControl());
+            var mapOptions = {
+                center: startLatLng,
+                zoom: parseInt(8),
+                zoomControl: true,
+                scaleControl: true,
+                mapTypeControl: true,
+                overviewMapControl: true
+            };
+            this.map = new google.maps.Map(this.body.dom,
+                mapOptions);
+            this.geocoder = new google.maps.Geocoder();
 
-            var point = new GLatLng(47.9534, 13.2448);
-            this.marker = new GMarker(point, {draggable: true});
-            //TODO falscher startort
-            if (this.markerpoint_x) {
-                this.setMarkerPoint(this.markerpoint_y+';'+this.markerpoint_x);
-            } else {
-                this.setMarkerPoint ('47.9534;13.2448');
-            }
+            this.marker =  new google.maps.Marker({
+                position: startLatLng,
+                draggable: true
+            });
+            this.marker.setMap(this.map);
+            this.marker.infoWindow = new google.maps.InfoWindow();
 
-            GEvent.addListener(this.marker, 'click',     this.showLatLng.createDelegate(this));
-            GEvent.addListener(this.marker, 'dragstart', this.hideLatLng.createDelegate(this));
-            GEvent.addListener(this.marker, 'dragend',   this.showLatLng.createDelegate(this));
+            google.maps.event.addListener(this.marker, 'click',     this.showLatLng.createDelegate(this));
+            google.maps.event.addListener(this.marker, 'dragstart', this.hideLatLng.createDelegate(this));
+            google.maps.event.addListener(this.marker, 'dragend',   this.showLatLng.createDelegate(this));
+
+            this.showLatLng();
         }, this);
     },
     addressPrompt:function(){
@@ -100,97 +83,41 @@ Kwf.Form.GoogleMapWindow = Ext.extend(Ext.Window,
         }, this);
     },
     geoCodeLookup : function(address) {
-        this.geocoder.getLocations(address, this.addAddressToMap.createDelegate(this));
+        this.geocoder.geocode( { 'address': address}, this.addAddressToMap.createDelegate(this));
     },
-    addAddressToMap : function(response) {
-        this.placemarks = response.Placemark;
-        if (!response || response.Status.code != 200) {
-                Ext.MessageBox.alert(
-                    trlKwf('Error'),
-                    trlKwf('Code {0} Error Returned', [response.Status.code])
-                );
-            } else {
-            place = response.Placemark[0];
-            addressinfo = place.AddressDetails;
-            accuracy = addressinfo.Accuracy;
-            if (accuracy == 0) {
-                Ext.MessageBox.alert(trlKwf('Unknown address'), trlKwf('Address could not be found'));
-            }else{
-                if (accuracy < 7) {
-                    var myData = [];
-                    for (var i=0; i<this.placemarks.length; i++) {
-                        if (!this.placemarks[i]) { break; }
-                        var tempPush = [this.placemarks[i].address];
-                        myData.push(tempPush);
-                    }
-
-                    var store = new Ext.data.SimpleStore({
-                        fields: [
-                        {name: 'address'}
-                        ]
-                    });
-                    store.loadData(myData);
-
-                    var grid = new Ext.grid.GridPanel({
-                        store:store,
-                        columns: [
-                            {id: 'address', header: trlKwf("Adresses"), width: 300, sortable:false, dataIndex: 'address'}
-                        ]
-                    });
-                    grid.on('rowdblclick', function(grid, index) {
-                        win.close();
-                        this.setMarkerPoint(this.placemarks[index].Point.coordinates[1]+';'+this.placemarks[index].Point.coordinates[0]);
-                    }, this);
-                    grid.on('rowmousedown', function(grid, index) {
-                        this.setMarkerPoint(this.placemarks[index].Point.coordinates[1]+';'+this.placemarks[index].Point.coordinates[0]);
-                    }, this);
-
-                    var win = new Ext.Window({
-                        modal: true,
-                        title: trlKwf('Possible Destinations'),
-                        width:400,
-                        height:250,
-                        shadow:true,
-                        closeAction: 'close',
-                        layout: 'fit',
-                        buttons: [{
-                            text: 'Ok',
-                            handler: function() {
-                                win.close();
-                            },
-                            scope: this
-                        }],
-                        items: [grid]
-                    });
-                    win.show();
-                } else {
-                    this.setMarkerPoint(place.Point.coordinates[1]+';'+place.Point.coordinates[0]);
-                }
-            }
-          }
+    addAddressToMap : function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            var newLocation = results[0].geometry.location;
+            this.marker.setPosition(newLocation);
+            this.map.setCenter(newLocation);
+            this.showLatLng();
+        } else {
+            alert(trlKwf('Entered place could not been found!'));
+        }
     },
     showLatLng:function(){
-        var pnt = this.marker.getPoint();
-        pnt.y = Math.round(pnt.y * 100000000) / 100000000;
-        pnt.x = Math.round(pnt.x * 100000000) / 100000000;
+        var pnt = this.marker.getPosition();
+        pnt.y = Math.round(pnt.ob * 100000000) / 100000000;
+        pnt.x = Math.round(pnt.pb * 100000000) / 100000000;
         this.markerpoint_x = pnt.x;
         this.markerpoint_y = pnt.y;
-        this.marker.openInfoWindowHtml('<strong>'+trlKwf('Move marker while pressing mousekey.')+'</strong><br /><br />' +
+        this.marker.infoWindow.setContent('<strong>'+trlKwf('Move marker while pressing mousekey.')+'</strong><br /><br />' +
                 trlKwf('Latitude')+ ': ' +pnt.y +'<br />'+trlKwf('Longitude')+ ': ' +pnt.x);
+        this.marker.infoWindow.open(this.map, this.marker);
     },
     hideLatLng:function(){
-        this.marker.closeInfoWindow();
+        this.marker.infoWindow.close();
     },
     setMarkerPoint:function(value){
         var points = value.split(";");
         this.markerpoint_y = points[0];
         this.markerpoint_x = points[1];
+        var latLng = new google.maps.LatLng(this.markerpoint_y,this.markerpoint_x);
         if (this.markerpoint_y && this.markerpoint_x && this.map){
-            this.map.setCenter(new GLatLng(this.markerpoint_y,this.markerpoint_x), 13);
-            this.marker.setLatLng(new GLatLng(this.markerpoint_y,this.markerpoint_x));
-            this.marker.closeInfoWindow();
-            this.map.clearOverlays();
-            this.map.addOverlay(this.marker);
+            this.map.setCenter(latLng, 13);
+            this.marker.setPosition(latLng);
+//            this.map.clearOverlays();
+//            this.map.addOverlay(this.marker);
             this.showLatLng();
         } else if (!this.markerpoint_y && !this.markerpoint_y) {
             this.addressPrompt();
@@ -202,9 +129,9 @@ Kwf.Form.GoogleMapWindow = Ext.extend(Ext.Window,
             this.clear = false;
             return "";
         }
-        var pnt = this.marker.getPoint();
-        pnt.y = Math.round(pnt.y * 100000000) / 100000000;
-        pnt.x = Math.round(pnt.x * 100000000) / 100000000;
+        var pnt = this.marker.getPosition();
+        pnt.y = Math.round(pnt.ob * 100000000) / 100000000;
+        pnt.x = Math.round(pnt.pb * 100000000) / 100000000;
         return  pnt.y +';'+pnt.x;
     },
     setHideClearButton:function(check){
