@@ -68,7 +68,7 @@ Kwf.Utils.Upload = {
             }
         }
         xhr.open('POST', '/kwf/media/upload/json-upload');
-        xhr.setRequestHeader('X-Upload-Name', file.name);
+        xhr.setRequestHeader('X-Upload-Name', encodeURIComponent(file.name));
         xhr.setRequestHeader('X-Upload-Size', file.size);
         xhr.setRequestHeader('X-Upload-Type', file.type);
         xhr.setRequestHeader('X-Upload-MaxResolution', config.maxResolution);
