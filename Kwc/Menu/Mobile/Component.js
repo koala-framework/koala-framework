@@ -67,7 +67,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function(el, config) {
 
                 menu.find('li.hasChildren ul.subMenu').prepend('<li class="back">\n' +
                     '<a href="#">\n' +
-                        trl('back') + '\n' +
+                        trlKwf('back') + '\n' +
                     '</a>\n' +
                 '</li>');
 
