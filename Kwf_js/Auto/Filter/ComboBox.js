@@ -21,7 +21,12 @@ Kwf.Auto.Filter.ComboBox = function(config)
             data: filterData
         });
         if (!config['default'] && filterStore.find('id', 0) == -1) {
-            filterStore.insert(0, [new record({id: 0, name: config['defaultText'] ? config['defaultText'] : trlKwf('all')})]);
+            var name = config['defaultText'] ? config['defaultText'] : trlKwf('all');
+            filterStore.insert(0, [new record({
+                id: 0,
+                name: name,
+                displayname: name
+            })]);
             config['default'] = 0;
         }
         this.combo = new Ext.form.ComboBox({
