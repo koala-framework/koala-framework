@@ -1,15 +1,10 @@
 <?php
 class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
 {
-    protected $_componentSelect;
-
     public function jsonIndexAction()
     {
         $categoryComponents = $this->_getCategoryComponent();
 
-        $select = new Kwf_Component_Select();
-        $select->whereShowInMenu(true);
-        $this->_componentSelect = $select;
         $cacheId = 'kwcMenuMobile-' . $this->_getParam('componentId');
         $data = Kwf_Cache_Simple::fetch($cacheId);
         if ($data === false) {
@@ -38,7 +33,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         $i = 0;
         if (!is_array($parentPage)) $parentPage = array($parentPage);
         foreach ($parentPage as $component) {
-            $pages = $component->getChildPages($this->_componentSelect);
+            $pages = $component->getChildPages(array('showInMenu'=>true));
             foreach($pages as $page) {
                 $ret[$i]['name'] = $page->name;
                 $ret[$i]['url'] = $page->url;
