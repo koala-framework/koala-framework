@@ -28,7 +28,7 @@ Kwf.onJElementReady = function(selector, fn, scope, options) {
 
 Kwf._callOnJElementReady = function(hndl, el) {
     $.each($(hndl.selector), function(i, el) {
-        if (hndl.options.checkVisibility && !$(v).is(':visible')) return;
+        if (hndl.options.checkVisibility && !$(el).is(':visible')) return;
         if (!el.initDone) el.initDone = {};
         if (el.initDone[hndl.num]) return;
         el.initDone[hndl.num] = true;
