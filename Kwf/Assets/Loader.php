@@ -74,7 +74,7 @@ class Kwf_Assets_Loader
                     }
                     $im = new Imagick();
                     if (substr($file, -4)=='.ico') $im->setFormat('ico'); //required because imagick can't autodetect ico format
-                    $file = new Kwf_Assets_Dependency_File($file);
+                    $file = new Kwf_Assets_Dependency_File(substr($file, strpos($file, '/')+1));
                     $im->readImage($file->getFileName());
                     $fx = explode('_', substr($fx, 3));
                     foreach ($fx as $i) {
