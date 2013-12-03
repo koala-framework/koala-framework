@@ -44,7 +44,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             fileUploadField.getEl().child('.hover-background').addClass('error');
             if (!fileUploadField.getEl().child('.hover-background .message')) {
                 fileUploadField.getEl().child('.hover-background').createChild({
-                    html:trl('ACHTUNG! Die Bildgröße des hochgeladenen Bildes entspricht nicht der Mindestanforderung.'),
+                    html:trlKwf('CAUTION! Image size does not match minimum requirement.'),
                     cls: 'message'
                 });
             }

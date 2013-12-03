@@ -25,7 +25,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         this.value = v;
         if (this.rendered) {
             if (v.dimension) {
-                this.getEl().child('.kwc-abstract-image-dimension-name').update(trl('Anforderung: ')+Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[v.dimension], v));
+                this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('Required: ')+Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[v.dimension], v));
             } else {
                 this.getEl().child('.kwc-abstract-image-dimension-name').update('&nbsp;');
             }
@@ -36,7 +36,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     afterRender: function() {
         Kwc.Abstract.Image.DimensionField.superclass.afterRender.call(this);
         this._cropButton = new Ext.Button({
-            text: trlKwf('Configure'),
+            text: trlKwf('Edit'),
             cls: 'x-btn-text-icon kwc-abstract-image-dimension-cropbutton',
             icon: '/assets/silkicons/shape_handles.png',
             renderTo: this.getEl(),
