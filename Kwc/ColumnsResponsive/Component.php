@@ -108,6 +108,10 @@ class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
         $columns = $columnTypes[$this->getRow()->type];
 
         $widthCalc = $columns['colSpans'][$child->id - 1] / $columns['columns'];
-        return floor($ownWidth * $widthCalc);
+        $ret = floor($ownWidth * $widthCalc);
+        if ($ret < 480) {
+            $ret = min($ownWidth, 480);
+        }
+        return $ret;
     }
 }
