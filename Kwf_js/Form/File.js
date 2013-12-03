@@ -12,7 +12,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     defaultAutoCreate : {
         tag: 'div',
         cls: 'swfUploadField',
-        style: 'width: 320px; height: 53px',
+        style: 'width: 336px; height: 53px',
         html: '<div class="hint">'+trl('oder Datei hier hinziehen')+'</div>'
     },
     fileIcons: {
