@@ -34,6 +34,9 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         return null;
     },
 
+    /**
+     * Reads width, height, x and y from controls
+     */
     _getCropData: function() {
         var parent = this.getBox();
         if (!this._image) {
@@ -180,16 +183,20 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     afterRender: function () {
         this._styleHandles();
         Kwc.Abstract.Image.CropImage.superclass.afterRender.call(this);
+
+        // Loading-Mask while loading down-sampled image
         this.getEl().mask(trlKwf('Loading image'), 'x-mask-loading');
         var imgLoad = new Image();
         imgLoad.onerror = (function() {
             this.getEl().unmask();
             Ext.Msg.alert(trlKwf('Error'), trlKwf("Couldn't load image."));
         }).createDelegate(this);
+
         imgLoad.onload = (function(){
             this.getEl().unmask();
         }).createDelegate(this);
         imgLoad.src = this.src;
+
         this._updateCropRegionImage();
     },
 
