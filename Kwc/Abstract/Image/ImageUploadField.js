@@ -14,6 +14,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             }, this);
             dimensionField.on('change', function (dimension) {
                 this._setPreviewUrl(dimension);
+                this._checkForImageTooSmall(dimension);
             }, this);
         }
         var fileUploadField = this._getFileUploadField();
@@ -33,6 +34,23 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             }
             this._setPreviewUrl(dimension);
         }, this);
+    },
+
+    _checkForImageTooSmall: function (value) {
+        var dimensionField = this._getDimensionField();
+        var fileUploadField = this._getFileUploadField();
+        if (!fileUploadField.getEl().child('.hover-background')) return;
+        if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensionField.dimensions)) {
+            fileUploadField.getEl().child('.hover-background').addClass('error');
+            if (!fileUploadField.getEl().child('.hover-background .message')) {
+                fileUploadField.getEl().child('.hover-background').createChild({
+                    html:trl('ACHTUNG! Die Bildgröße des hochgeladenen Bildes entspricht nicht der Mindestanforderung.'),
+                    cls: 'message'
+                });
+            }
+        } else {
+            fileUploadField.getEl().child('.hover-background').removeClass('error');
+        }
     },
 
     _alignDimensionField: function () {

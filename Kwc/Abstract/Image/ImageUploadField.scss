@@ -109,6 +109,19 @@
 
 .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background.error {
     background-color: rgba(255,0,0,0.77);
+    height: 65px;
+}
+
+.kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background .message {
+    display: none;
+}
+.kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background.error .message {
+    display: inline;
+    color: white;
+    font-weight: bold;
+    left: 5px;
+    top: 35px;
+    position: absolute;
 }
 
 .kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-dimension-name,

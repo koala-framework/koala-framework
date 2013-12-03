@@ -74,6 +74,21 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     }
 });
 
+Kwc.Abstract.Image.DimensionField.checkImageSize = function(value, dimensions)
+{
+    if (!value.cropData)
+        return true;
+    var dimension = dimensions[value.dimension];
+    dimension.width = dimension.width == 'user' ? value.width : dimension.width;
+    dimension.height = dimension.height == 'user' ? value.height : dimension.height;
+    //TODO implement 'contentWidth'
+    if (dimension.width > value.cropData.width
+        || dimension.height > value.cropData.height) {
+        return false;
+    }
+    return true;
+};
+
 Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
 {
     var ret;
