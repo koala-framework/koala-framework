@@ -133,6 +133,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             }
             this._updateCropRegionImage();
             var res = this._getCropData();
+            this.fireEvent('cropChanged', res);
         }, this);
 
         var dragDrop = new Ext.dd.DD(this._image.getEl(), '');

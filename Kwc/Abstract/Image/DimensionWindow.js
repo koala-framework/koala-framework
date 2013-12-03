@@ -242,6 +242,19 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             height: imageHeight,
             style: 'margin-left:'+imageWidth/-2+'px;margin-top:'+imageHeight/-2+'px'
         });
+        this._cropImage.on('cropChanged', function (cropData) {
+            var value = {
+                dimension: this._dimensionField.getValue(),
+                width: this._widthField.getValue(),
+                height: this._heightField.getValue(),
+                cropData: cropData
+            };
+            if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, this.dimensions)) {
+                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').setStyle('background-color', 'rgba(255,0,0,0.5)');
+            } else {
+                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').setStyle('background-color', 'transparent');
+            }
+        }, this);
 
         // Check if smaller than usefull so keep min-width
         var width = this.width;
