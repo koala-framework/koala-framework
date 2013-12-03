@@ -12,6 +12,7 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $providers[] = new Kwf_Assets_Provider_Ini(KWF_PATH.'/dependencies.ini');
         $providers[] = new Kwf_Assets_Provider_IniNoFiles();
         $providers[] = new Kwf_Assets_Provider_Dynamic();
+        $providers[] = new Kwf_Assets_Modernizr_Provider();
         parent::__construct($providers);
     }
 }
