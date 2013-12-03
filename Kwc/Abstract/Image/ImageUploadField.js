@@ -22,8 +22,10 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             if (!value || !value.mimeType || !value.mimeType.match(/(^image\/)/)) {
                 dimensionField.newImageUploaded('');
                 this._getFileUploadField().setPreviewUrl(null);
+                this.removeClass('image-uploaded');
                 return;
             }
+            this.addClass('image-uploaded');
             var dimension = null;
             if (dimensionField) {
                 dimensionField.newImageUploaded(value);
@@ -36,14 +38,14 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
     _alignDimensionField: function () {
         var dimensionField = this._getDimensionField();
         var fileUploadField = this._getFileUploadField();
+        fileUploadField.container.addClass('kwc-abstract-image-imageuploadfile-container');
         if (dimensionField.getEl() && fileUploadField.getEl()) {
             dimensionField.getEl().parent().parent().addClass('kwc-dimensionfield-container');
-            dimensionField.getEl().alignTo(fileUploadField.getEl().child('.box'), 'br', [10, -42]);
         }
     },
 
     _getFileUploadField: function () {
-        return this.findByType('kwf.file')[0];
+        return this.findByType('kwc.imagefile')[0];
     },
 
     _getDimensionField: function () {
