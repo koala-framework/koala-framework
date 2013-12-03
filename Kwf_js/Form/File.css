@@ -21,6 +21,10 @@
     background-color: white;
 }
 
-.swfUploadField .hint {
+.x-form-element .swfUploadField .hint {
     display: none;
+}
+
+.x-form-element .swfUploadField .info-container .filedescription {
+    overflow: hidden;
 }
