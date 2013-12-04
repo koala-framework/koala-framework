@@ -8,6 +8,7 @@ class Kwf_Model_Select_Expr_Date_Year implements Kwf_Model_Select_Expr_Interface
     const FORMAT_DIGITS_TWO = 'y';
     const FORMAT_DIGITS_FOUR = 'Y';
     private $_field;
+    private $_format;
 
     public function __construct($field, $format = Kwf_Model_Select_Expr_Date_Year::FORMAT_DIGITS_FOUR)
     {
@@ -37,7 +38,6 @@ class Kwf_Model_Select_Expr_Date_Year implements Kwf_Model_Select_Expr_Interface
         return $this->_format;
     }
 
-
     public function toArray()
     {
         $field = $this->_field;
@@ -45,6 +45,7 @@ class Kwf_Model_Select_Expr_Date_Year implements Kwf_Model_Select_Expr_Interface
         return array(
             'exprType' => str_replace('Kwf_Model_Select_Expr_', '', get_class($this)),
             'field' => $field,
+            'format' => $this->_format,
         );
     }
 
@@ -55,6 +56,6 @@ class Kwf_Model_Select_Expr_Date_Year implements Kwf_Model_Select_Expr_Interface
         if (is_array($field)) {
             $field = Kwf_Model_Select_Expr::fromArray($field);
         }
-        return new $cls($field);
+        return new $cls($field, $data['format']);
     }
 }
