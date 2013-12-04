@@ -14,6 +14,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     minHeight: 52,//min height of crop region
     _image: null,
     _cropRegionChosen: false,
+    _userSelectedCropRegion: null,
     _ignoreRegionChangeAction: false,
 
     _centerHandle: '<div class="handle {position}"></div>',
@@ -33,6 +34,9 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         return null;
     },
 
+    /**
+     * Reads width, height, x and y from controls
+     */
     _getCropData: function() {
         var parent = this.getBox();
         if (!this._image) {
@@ -126,13 +130,15 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
         this._resizer.getEl().addClass('kwc-abstract-image-crop-image-resizable');
         this._resizer.on("resize", function() {
+            var res = this._getCropData();
             if (this._ignoreRegionChangeAction) {
                 this._ignoreRegionChangeAction = false;
             } else {
                 this._cropRegionChosen = true;
+                this._userSelectedCropRegion = res;
             }
             this._updateCropRegionImage();
-            var res = this._getCropData();
+            this.fireEvent('cropChanged', res);
         }, this);
 
         var dragDrop = new Ext.dd.DD(this._image.getEl(), '');
@@ -149,6 +155,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         }).createDelegate(this);
         dragDrop.endDrag = (function (e) {
             this._cropRegionChosen = true;
+            this._userSelectedCropRegion = this._getCropData();
             this._updateCropRegionImage();
             this._image.getEl().setStyle({
                 'background-image': 'url('+this.src+')',
@@ -176,16 +183,20 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     afterRender: function () {
         this._styleHandles();
         Kwc.Abstract.Image.CropImage.superclass.afterRender.call(this);
+
+        // Loading-Mask while loading down-sampled image
         this.getEl().mask(trlKwf('Loading image'), 'x-mask-loading');
         var imgLoad = new Image();
         imgLoad.onerror = (function() {
             this.getEl().unmask();
             Ext.Msg.alert(trlKwf('Error'), trlKwf("Couldn't load image."));
         }).createDelegate(this);
+
         imgLoad.onload = (function(){
             this.getEl().unmask();
         }).createDelegate(this);
         imgLoad.src = this.src;
+
         this._updateCropRegionImage();
     },
 
@@ -202,12 +213,18 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         if (this.outWidth != 0 && this.outHeight != 0
             && this.outWidth / this.outHeight != cropData.width / cropData.heigth
         ) {
-            var width = cropData.height * this.outWidth / this.outHeight;
-            var height = cropData.width * this.outHeight / this.outWidth;
-            if (width < this.width) {
-                cropData.width = width;
-            } else if (height < this.height) {
-                cropData.height = height;
+            if (this._userSelectedCropRegion) {
+                // Get saved user selected crop-region as base for recalculating
+                // width and height are set directly because else object is referenced
+                cropData.height = this._userSelectedCropRegion.height;
+                cropData.width = this._userSelectedCropRegion.width;
+                var width = cropData.height * this.outWidth / this.outHeight;
+                var height = cropData.width * this.outHeight / this.outWidth;
+                if (width < this.width) {
+                    cropData.width = width;
+                } else if (height < this.height) {
+                    cropData.height = height;
+                }
             } else {
                 cropData = this._generateDefaultCrop(preserveRatio);
             }

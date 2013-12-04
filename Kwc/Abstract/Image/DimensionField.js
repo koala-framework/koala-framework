@@ -1,5 +1,7 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
+    _scaleFactor: null,
+
     autoEl: {
         tag: 'div',
         cls: 'kwc-abstract-image-dimension',
@@ -25,7 +27,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         this.value = v;
         if (this.rendered) {
             if (v.dimension) {
-                this.getEl().child('.kwc-abstract-image-dimension-name').update(Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[v.dimension], v));
+                this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('Required: ')+Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[v.dimension], v));
             } else {
                 this.getEl().child('.kwc-abstract-image-dimension-name').update('&nbsp;');
             }
@@ -36,9 +38,8 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     afterRender: function() {
         Kwc.Abstract.Image.DimensionField.superclass.afterRender.call(this);
         this._cropButton = new Ext.Button({
-            disabled: true,
-            text: trlKwf('Configure'),
-            cls: 'x-btn-text-icon',
+            text: trlKwf('Edit'),
+            cls: 'x-btn-text-icon kwc-abstract-image-dimension-cropbutton',
             icon: '/assets/silkicons/shape_handles.png',
             renderTo: this.getEl(),
             scope: this,
@@ -51,19 +52,35 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     },
 
     _onButtonClick: function() {
-        var sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
+        this._sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
             dimensions: this.dimensions,
             value: this.getValue(),
             imageData: this.imageData
         });
-        sizeWindow.on('save', function(value) {
+        this._sizeWindow.on('save', function(value) {
             this.setValue(value);
         }, this);
-        sizeWindow.show();
+        this._sizeWindow.setScaleFactor(this._scaleFactor);
+        this._sizeWindow.show();
+    },
+
+    setContentWidth: function (contentWidth) {
+        for (i in this.dimensions) {
+            var dimension = this.dimensions[i];
+            if (dimension.width == 'contentWidth') {
+                dimension.width = contentWidth;
+            }
+        }
+    },
+
+    setScaleFactor: function (scaleFactor) {
+        this._scaleFactor = scaleFactor;
+        if (this._sizeWindow)
+            this._sizeWindow.setScaleFactor(scaleFactor);
     },
 
     newImageUploaded: function (value) {
-        this._cropButton.setDisabled(value == '');
+        this._cropButton.setVisible(value != '');
         if (this.imageData != null && this.imageData != "") {
             var dimensionValue = this.getValue();
             if (dimensionValue.cropData) {
@@ -74,6 +91,20 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         this.imageData = value;
     }
 });
+
+Kwc.Abstract.Image.DimensionField.checkImageSize = function(value, dimensions, scaleFactor)
+{
+    if (!value.cropData)
+        return true;
+    var dimension = dimensions[value.dimension];
+    dimension.width = dimension.width == 'user' ? value.width : dimension.width;
+    dimension.height = dimension.height == 'user' ? value.height : dimension.height;
+    if (dimension.width > value.cropData.width * scaleFactor
+        || dimension.height > value.cropData.height * scaleFactor) {
+        return false;
+    }
+    return true;
+};
 
 Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
 {
@@ -98,7 +129,7 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
         height = v.height;
     }
 
-    if (height && width) {
+    if (height || width) {
         if (ret) {
             ret += ' ('+width+'x'+height+'px)';
         } else {

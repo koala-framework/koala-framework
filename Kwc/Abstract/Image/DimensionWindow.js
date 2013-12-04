@@ -1,10 +1,12 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
+    _scaleFactor: null,
+
     dimensions: null,
     value: null, //contains width, height, cropdata
 
-    title: trlKwf('Configure'),
+    title: trlKwf('Edit'),
     closeAction: 'close',
     modal: true,
     minWidth: 488,
@@ -13,6 +15,11 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     height: 250,
     layout: 'fit',
     resizable: false,
+    _showUserSelection: null,
+
+    setScaleFactor: function (scaleFactor) {
+        this.scaleFactor = scaleFactor;
+    },
 
     initComponent: function() {
         var radios = [];
@@ -242,6 +249,19 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             height: imageHeight,
             style: 'margin-left:'+imageWidth/-2+'px;margin-top:'+imageHeight/-2+'px'
         });
+        this._cropImage.on('cropChanged', function (cropData) {
+            var value = {
+                dimension: this._dimensionField.getValue(),
+                width: this._widthField.getValue(),
+                height: this._heightField.getValue(),
+                cropData: cropData
+            };
+            if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, this.dimensions, this.scaleFactor)) {
+                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').setStyle('background-color', 'rgba(255,0,0,0.5)');
+            } else {
+                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').setStyle('background-color', 'transparent');
+            }
+        }, this);
 
         // Check if smaller than usefull so keep min-width
         var width = this.width;
@@ -354,22 +374,31 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
     _enableDisableFields: function()
     {
-        var userSelection = false;
-        for (var i in this.dimensions) {
-            var dim = this.dimensions[i];
-            if (dim.width == 'user' || dim.height == 'user') {
-                userSelection = true;
+        if (this._showUserSelection == null) {
+            this._showUserSelection = false;
+            for (var i in this.dimensions) {
+                var dim = this.dimensions[i];
+                if (dim.width == 'user' || dim.height == 'user'
+                    || dim.showUserSelectionWidth || dim.showUserSelectionHeight
+                ) {
+                    if (dim.width == 'user')
+                        dim.showUserSelectionWidth = true;
+                    if (dim.height == 'user')
+                        dim.showUserSelectionHeight = true;
+                    this._showUserSelection = true;
+                }
             }
         }
-        if (userSelection) {
+        if (this._showUserSelection) {
             this._userSelection.show();
             var dim = this.dimensions[this._dimensionField.getValue()];
-            this._widthField.setDisabled(!(dim && dim.width == 'user'));
-            this._heightField.setDisabled(!(dim && dim.height == 'user'));
-            this._xField.setDisabled(!(dim && dim.width == 'user')
-                    || !(dim && dim.height == 'user'));
-            this._pxField.setDisabled(!(dim && dim.width == 'user')
-                    || !(dim && dim.height == 'user'));
+            if (!dim) return;
+            this._widthField.setDisabled(!dim.showUserSelectionWidth);
+            this._heightField.setDisabled(!dim.showUserSelectionHeight);
+            this._xField.setDisabled(!dim.showUserSelectionWidth
+                    || !dim.showUserSelectionHeight);
+            this._pxField.setDisabled(!dim.showUserSelectionWidth
+                    || !dim.showUserSelectionHeight);
         } else {
             this._userSelection.hide();
         }

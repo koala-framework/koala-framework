@@ -12,6 +12,8 @@ class Kwc_Abstract_Image_PreviewController extends Kwf_Controller_Action
 
     public function previewWithCropAction()
     {
+        $previewWidth = 390;
+        $previewHeight = 184;
         $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')
             ->getRow($this->_getParam('uploadId'));
         if (!$fileRow) throw new Kwf_Exception("Can't find upload");
@@ -20,7 +22,7 @@ class Kwc_Abstract_Image_PreviewController extends Kwf_Controller_Action
            throw new Kwf_Exception_AccessDenied();
         }
         //Scale dimensions
-        $dimensions = array(100, 100, 'cover' => false);
+        $dimensions = array($previewWidth, $previewHeight, 'cover' => false);
         $cache = new Kwf_Assets_Cache(array('checkComponentSettings'=>false));
         $cacheId = 'previewLarge_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
@@ -79,9 +81,9 @@ class Kwc_Abstract_Image_PreviewController extends Kwf_Controller_Action
         $image = new Imagick();
         $image->readImageBlob($output['contents']);
         $previewFactor = 1;
-        if ($image->getImageWidth() == 100) {
+        if ($image->getImageWidth() == $previewWidth) {
             $previewFactor = $image->getImageWidth() / $imageOriginal->getImageWidth();
-        } else if ($image->getImageHeight() == 100) {
+        } else if ($image->getImageHeight() == $previewHeight) {
             $previewFactor = $image->getImageHeight() / $imageOriginal->getImageHeight();
         }
         $cropX = floor($cropX * $previewFactor);

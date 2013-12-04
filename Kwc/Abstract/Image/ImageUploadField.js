@@ -1,6 +1,7 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
 
+    _scaleFactor: null,
     baseParams: null,
 
     initComponent: function() {
@@ -14,18 +15,24 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             }, this);
             dimensionField.on('change', function (dimension) {
                 this._setPreviewUrl(dimension);
+                this._checkForImageTooSmall(dimension);
             }, this);
         }
         var fileUploadField = this._getFileUploadField();
         fileUploadField.on('change', function (el, value) {
             var dimensionField = this._getDimensionField();
-            if (!value || !value.mimeType.match(/(^image\/)/)) {
+            if (!value || !value.mimeType || !value.mimeType.match(/(^image\/)/)) {
                 dimensionField.newImageUploaded('');
                 this._getFileUploadField().setPreviewUrl(null);
+                this.removeClass('image-uploaded');
                 return;
             }
+            this.addClass('image-uploaded');
             var dimension = null;
             if (dimensionField) {
+                dimensionField.setContentWidth(value.contentWidth);
+                this._scaleFactor = value.imageHandyScaleFactor;
+                dimensionField.setScaleFactor(value.imageHandyScaleFactor);
                 dimensionField.newImageUploaded(value);
                 dimension = dimensionField.getValue();
             }
@@ -33,17 +40,34 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         }, this);
     },
 
+    _checkForImageTooSmall: function (value) {
+        var dimensionField = this._getDimensionField();
+        var fileUploadField = this._getFileUploadField();
+        if (!fileUploadField.getEl().child('.hover-background')) return;
+        if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensionField.dimensions, this._scaleFactor)) {
+            fileUploadField.getEl().child('.hover-background').addClass('error');
+            if (!fileUploadField.getEl().child('.hover-background .message')) {
+                fileUploadField.getEl().child('.hover-background').createChild({
+                    html:trlKwf('CAUTION! Image size does not match minimum requirement.'),
+                    cls: 'message'
+                });
+            }
+        } else {
+            fileUploadField.getEl().child('.hover-background').removeClass('error');
+        }
+    },
+
     _alignDimensionField: function () {
         var dimensionField = this._getDimensionField();
         var fileUploadField = this._getFileUploadField();
+        fileUploadField.container.addClass('kwc-abstract-image-imageuploadfile-container');
         if (dimensionField.getEl() && fileUploadField.getEl()) {
             dimensionField.getEl().parent().parent().addClass('kwc-dimensionfield-container');
-            dimensionField.getEl().alignTo(fileUploadField.getEl().child('.box'), 'br', [10, -42]);
         }
     },
 
     _getFileUploadField: function () {
-        return this.findByType('kwf.file')[0];
+        return this.findByType('kwc.imagefile')[0];
     },
 
     _getDimensionField: function () {

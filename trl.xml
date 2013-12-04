@@ -10010,5 +10010,50 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Recent Posts</en>
 <id>2037</id>
 </text>
+<text>
+<en>CAUTION! Image size does not match minimum requirement.</en>
+<de>Achtung! Die Bildgröße des hochgeladenen Bildes entspricht nicht der Mindestanforderung.</de>
+<id>2038</id>
+</text>
+<text>
+<en>Required: </en>
+<de>Anforderung: </de>
+<id>2039</id>
+</text>
+<text>
+<en>don\'t Crop</en>
+<en>nicht Abschneiden</en>
+<id>2040</id>
+</text>
+<text>
+<en>Image Data</en>
+<de>Bildinformationen</de>
+<id>2041</id>
+</text>
+<text>
+<en>Select dimension</en>
+<de>Wähle Größe</de>
+<id>2042</id>
+</text>
+<text>
+<en>Croping is not possible because image is too small.</en>
+<de>Bild kann nicht beschnitten werden, da es zu klein ist.</de>
+<id>2043</id>
+</text>
+<text>
+<en>Reset</en>
+<de>Zurücksetzen</de>
+<id>2044</id>
+</text>
+<text>
+<en>Reset to default(maximum).</en>
+<de>Auf Standard zurücksetzen(Maximum).</de>
+<id>2045</id>
+</text>
+<text>
+<en>Width or height must be higher than 0.</en>
+<de>Breite oder Höhe müssen größer als 0 sein.</de>
+<id>2046</id>
+</text>
 </trl>
 

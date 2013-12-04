@@ -4,13 +4,16 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     showPreview: true,
     previewUrl: '/kwf/media/upload/preview?',
     previewSize: 40,
+    previewWidth: false,
+    previewHeight: false,
     showDeleteButton: true,
     infoPosition: 'south',
     imageData: null,
     defaultAutoCreate : {
         tag: 'div',
         cls: 'swfUploadField',
-        style: 'width: 320px; height: 53px'
+        style: 'width: 336px; height: 53px',
+        html: '<div class="hint">'+trl('oder Datei hier hinziehen')+'</div>'
     },
     fileIcons: {
         'application/pdf': 'page_white_acrobat',
@@ -20,13 +23,13 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         'application/mspowerpoint': 'page_white_powerpoint',
         'default': 'page_white'
     },
-    previewTpl: ['<a href="{href}" target="_blank" class="previewImage" ',
-                 'style="width: {previewSize}px; height: {previewSize}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
+    previewTpl: ['<div class="hover-background"></div><a href="{href}" target="_blank" class="previewImage" ',
+                 'style="width: {previewWidth}px; height: {previewHeight}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
     // also usable in infoTpl: {href}
     infoTpl: ['<div class="filedescription"><div class="filename">{filename}.{extension}</div>',
-              '<div class="filesize">{fileSize:fileSize}',
-              '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl></div></div>'],
-    emptyTpl: ['<div class="empty" style="height: {previewSize}px; width: {previewSize}px; text-align: center;line-height:{previewSize}px">('+trlKwf('empty')+')</div>'],
+              '<div class="filesize"><tpl if="image">{imageWidth}x{imageHeight}px, </tpl>',
+              '{fileSize:fileSize}</div></div>'],
+    emptyTpl: ['<div class="empty" style="height: {previewHeight}px; width: {previewWidth}px; text-align: center;line-height:{previewHeight}px">('+trlKwf('empty')+')</div>'],
 
     initComponent: function() {
         this.addEvents(['uploaded']);
@@ -76,12 +79,15 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         }
 
         if (this.showPreview) {
-            this.previewImage = this.el.createChild({
-                cls: 'box previewImage',
+            this.previewImageBox = this.el.createChild({
+                cls: 'box'
             });
 
-            this.emptyTpl.overwrite(this.previewImage, { //bild wird in der richtigen größe angezeigt
-                previewSize: this.previewSize
+            var previewWidth = this.previewWidth ? this.previewWidth : this.previewSize;
+            var previewHeight = this.previewHeight ? this.previewHeight : this.previewSize;
+            this.emptyTpl.overwrite(this.previewImageBox, { //bild wird in der richtigen größe angezeigt
+                previewWidth: previewWidth,
+                previewHeight: previewHeight
             });
         }
 
@@ -97,7 +103,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 text: trlKwf('Delete File'),
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/delete.png',
-                renderTo: this.el.createChild({}),
+                renderTo: this.el.createChild({cls: 'deleteButton'}),
                 scope: this,
                 handler: function() {
                     this.setValue('');
@@ -277,6 +283,11 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         if (value.uploadId) {
             v = value.uploadId;
         }
+        if (v) {
+            this.addClass('file-uploaded');
+        } else {
+            this.removeClass('file-uploaded');
+        }
         if (v != this.value) {
             this.imageData = value;
             this.fireEvent('change', this, value, this.value);
@@ -290,20 +301,27 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                         icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
                         icon = '/assets/silkicons/' + icon + '.png';
                     }
-                    this.previewTpl.overwrite(this.previewImage, {
+                    var previewWidth = this.previewWidth ? this.previewWidth : this.previewSize;
+                    var previewHeight = this.previewHeight ? this.previewHeight : this.previewSize;
+                    this.previewTpl.overwrite(this.previewImageBox, {
                         preview: icon,
                         href: href,
-                        previewSize: this.previewSize
+                        previewWidth: previewWidth,
+                        previewHeight: previewHeight
                     });
                 }
 
                 var infoVars = Kwf.clone(value);
                 infoVars.href = href;
+                this.infoContainer.addClass('info-container');
                 this.infoTpl.overwrite(this.infoContainer, infoVars);
             } else {
                 if (this.showPreview) {
-                    this.emptyTpl.overwrite(this.previewImage, {
-                        previewSize: this.previewSize
+                    var previewWidth = this.previewWidth ? this.previewWidth : this.previewSize;
+                    var previewHeight = this.previewHeight ? this.previewHeight : this.previewSize;
+                    this.emptyTpl.overwrite(this.previewImageBox, {
+                        previewWidth: previewWidth,
+                        previewHeight: previewHeight
                     });
                 }
                 this.infoContainer.update('');
