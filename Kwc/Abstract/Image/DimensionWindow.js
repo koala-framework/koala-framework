@@ -1,6 +1,8 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
+    _scaleFactor: null,
+
     dimensions: null,
     value: null, //contains width, height, cropdata
 
@@ -14,6 +16,10 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     layout: 'fit',
     resizable: false,
     _showUserSelection: null,
+
+    setScaleFactor: function (scaleFactor) {
+        this.scaleFactor = scaleFactor;
+    },
 
     initComponent: function() {
         var radios = [];
@@ -250,7 +256,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 height: this._heightField.getValue(),
                 cropData: cropData
             };
-            if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, this.dimensions)) {
+            if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, this.dimensions, this.scaleFactor)) {
                 this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').setStyle('background-color', 'rgba(255,0,0,0.5)');
             } else {
                 this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').setStyle('background-color', 'transparent');

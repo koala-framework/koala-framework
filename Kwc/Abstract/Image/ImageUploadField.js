@@ -1,6 +1,7 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
 
+    _scaleFactor: null,
     baseParams: null,
 
     initComponent: function() {
@@ -29,6 +30,9 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             this.addClass('image-uploaded');
             var dimension = null;
             if (dimensionField) {
+//                dimensionField.setContentWidth(value.contentWidth);
+                this._scaleFactor = value.imageHandyScaleFactor;
+                dimensionField.setScaleFactor(value.imageHandyScaleFactor);
                 dimensionField.newImageUploaded(value);
                 dimension = dimensionField.getValue();
             }
@@ -40,7 +44,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         var dimensionField = this._getDimensionField();
         var fileUploadField = this._getFileUploadField();
         if (!fileUploadField.getEl().child('.hover-background')) return;
-        if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensionField.dimensions)) {
+        if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensionField.dimensions, this._scaleFactor)) {
             fileUploadField.getEl().child('.hover-background').addClass('error');
             if (!fileUploadField.getEl().child('.hover-background .message')) {
                 fileUploadField.getEl().child('.hover-background').createChild({

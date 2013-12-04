@@ -1,5 +1,7 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
+    _scaleFactor: null,
+
     autoEl: {
         tag: 'div',
         cls: 'kwc-abstract-image-dimension',
@@ -50,15 +52,31 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     },
 
     _onButtonClick: function() {
-        var sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
+        this._sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
             dimensions: this.dimensions,
             value: this.getValue(),
             imageData: this.imageData
         });
-        sizeWindow.on('save', function(value) {
+        this._sizeWindow.on('save', function(value) {
             this.setValue(value);
         }, this);
-        sizeWindow.show();
+        this._sizeWindow.setScaleFactor(this._scaleFactor);
+        this._sizeWindow.show();
+    },
+
+//    setContentWidth: function (contentWidth) {
+//        for (i in this.dimensions) {
+//            var dimension = this.dimensions[i];
+//            if (dimension.width == 'contentWidth') {
+//                dimension.width = contentWidth;
+//            }
+//        }
+//    },
+
+    setScaleFactor: function (scaleFactor) {
+        this._scaleFactor = scaleFactor;
+        if (this._sizeWindow)
+            this._sizeWindow.setScaleFactor(scaleFactor);
     },
 
     newImageUploaded: function (value) {
@@ -74,16 +92,15 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     }
 });
 
-Kwc.Abstract.Image.DimensionField.checkImageSize = function(value, dimensions)
+Kwc.Abstract.Image.DimensionField.checkImageSize = function(value, dimensions, scaleFactor)
 {
     if (!value.cropData)
         return true;
     var dimension = dimensions[value.dimension];
     dimension.width = dimension.width == 'user' ? value.width : dimension.width;
     dimension.height = dimension.height == 'user' ? value.height : dimension.height;
-    //TODO implement 'contentWidth'
-    if (dimension.width > value.cropData.width
-        || dimension.height > value.cropData.height) {
+    if (dimension.width > value.cropData.width * scaleFactor
+        || dimension.height > value.cropData.height * scaleFactor) {
         return false;
     }
     return true;
