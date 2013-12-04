@@ -31,7 +31,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
                 pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.dimensions[v.dimension], v);
             }
             if (pixelString) {
-                this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('Required: ')+pixelString);
+                this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('At least: ')+pixelString);
             } else {
                 this.getEl().child('.kwc-abstract-image-dimension-name').update('&nbsp;');
             }

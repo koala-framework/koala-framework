@@ -138,7 +138,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             bodyStyle: 'padding: 10px',
             width: 270,
             autoScroll: true,
-            title: trlKwf('Select dimension'),
+            title: trlKwf('Dimension'),
             items: [
                 this._dimensionField,
                 this._userSelection,
@@ -171,12 +171,12 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 cls:"x-btn-text-icon",
                 hideLabel: true,
                 icon: '/assets/silkicons/arrow_out.png',
-                tooltip: trlKwf('Reset to default(maximum).'),
+                tooltip: trlKwf('Reset to default (maximum)'),
                 scope: this
             }],
             cls: 'kwc-abstract-image-dimension-window-crop-panel',
             region: 'center',
-            title: trlKwf('Select image region'),
+            title: trlKwf('Image region'),
             width: 600,
             height: 200,
             items: cropPanelItems
