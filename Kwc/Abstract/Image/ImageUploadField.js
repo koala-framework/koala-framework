@@ -45,6 +45,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         var fileUploadField = this._getFileUploadField();
         if (!fileUploadField.getEl().child('.hover-background')) return;
         if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensionField.dimensions, this._scaleFactor)) {
+            this.getEl().addClass('error');
             fileUploadField.getEl().child('.hover-background').addClass('error');
             if (!fileUploadField.getEl().child('.hover-background .message')) {
                 fileUploadField.getEl().child('.hover-background').createChild({
@@ -53,6 +54,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
                 });
             }
         } else {
+            this.getEl().removeClass('error');
             fileUploadField.getEl().child('.hover-background').removeClass('error');
         }
     },

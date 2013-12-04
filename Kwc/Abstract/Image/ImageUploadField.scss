@@ -127,8 +127,10 @@
 
 .kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-dimension-name,
 .kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .info-container,
-.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background,
-.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background.error{
+.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background,,
+.kwc-abstract-image-image-upload-big-preview.error .kwc-abstract-image-dimension-name,
+.kwc-abstract-image-image-upload-big-preview.error .kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .info-container,
+.kwc-abstract-image-image-upload-big-preview.error .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background {
     display: block;
 }
 
