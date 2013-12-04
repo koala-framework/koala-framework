@@ -26,8 +26,12 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         }
         this.value = v;
         if (this.rendered) {
+            var pixelString = '';
             if (v.dimension) {
-                this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('Required: ')+Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.dimensions[v.dimension], v));
+                pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.dimensions[v.dimension], v);
+            }
+            if (pixelString) {
+                this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('Required: ')+pixelString);
             } else {
                 this.getEl().child('.kwc-abstract-image-dimension-name').update('&nbsp;');
             }
