@@ -67,10 +67,11 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
         $s = array('ignoreVisible'=>true);
         foreach ($source->getChildComponents($s) as $c) {
 
-            if ($c->generator->hasSetting('inherit') && $c->generator->getSetting('inherit')) {
-                if ($c->generator->hasSetting('unique') && $c->generator->getSetting('unique')) {
+            if ($c->generator->hasSetting('inherit') && $c->generator->getSetting('inherit') &&
+                $c->generator->hasSetting('unique') && $c->generator->getSetting('unique') &&
+                $source->componentId != $c->parent->componentId
+            ) {
                     continue;
-                }
             }
             if ($c->generator->getGeneratorFlag('pageGenerator')) {
                 continue;
