@@ -4,7 +4,8 @@ class Kwc_ColumnsResponsive_Trl_Controller extends Kwc_ColumnsResponsive_Control
     protected $_model = 'Kwc_ColumnsResponsive_Model';
     protected function _setModelData()
     {
-        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'));
+        $c = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible' => true));
         $this->_model->setData($c->chained->componentClass, $c->chained->componentId);
     }
 }
