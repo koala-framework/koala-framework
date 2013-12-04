@@ -64,14 +64,14 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         this._sizeWindow.show();
     },
 
-//    setContentWidth: function (contentWidth) {
-//        for (i in this.dimensions) {
-//            var dimension = this.dimensions[i];
-//            if (dimension.width == 'contentWidth') {
-//                dimension.width = contentWidth;
-//            }
-//        }
-//    },
+    setContentWidth: function (contentWidth) {
+        for (i in this.dimensions) {
+            var dimension = this.dimensions[i];
+            if (dimension.width == 'contentWidth') {
+                dimension.width = contentWidth;
+            }
+        }
+    },
 
     setScaleFactor: function (scaleFactor) {
         this._scaleFactor = scaleFactor;
@@ -129,7 +129,7 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
         height = v.height;
     }
 
-    if (height && width) {
+    if (height || width) {
         if (ret) {
             ret += ' ('+width+'x'+height+'px)';
         } else {
