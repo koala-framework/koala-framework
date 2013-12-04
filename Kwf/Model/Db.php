@@ -530,6 +530,16 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                 $field = $this->_formatField($field, $dbSelect, $tableNameAlias);
             }
             return "DATE_FORMAT($field, '%$format')";
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Date_Format) {
+            $field = $expr->getField();
+            $format = $expr->getFormat();
+            if ($field instanceof Kwf_Model_Select_Expr_Interface) {
+                $field = $this->_createDbSelectExpression($field, $dbSelect, null, $tableNameAlias);
+            } else {
+                $field = $this->_formatField($field, $dbSelect, $tableNameAlias);
+            }
+            $format = str_replace(array('Y', 'm', 'd'), array('%Y', '%m', '%d'), $format);
+            return "DATE_FORMAT($field, '$format')";
         } else if ($expr instanceof Kwf_Model_Select_Expr_String) {
             $quotedString = $this->_fixStupidQuoteBug($expr->getString());
             $quotedString = $this->getTable()->getAdapter()->quote($quotedString);
