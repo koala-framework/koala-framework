@@ -4,7 +4,6 @@ class Kwf_View_Ext4 extends Kwf_View
     public function render($name)
     {
         $this->assetsPackage = Kwf_Assets_Package_Default::getInstance('Admin');
-        //$this->assetsPackage = new Kwf_Assets_Package(new Assets_ProviderList(), 'Controller.Calendar');
 
         $this->extTemplate = 'ext4.tpl';
         if (Kwf_Util_SessionToken::getSessionToken()) {

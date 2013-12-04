@@ -6,7 +6,6 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
         static $classes;
         if (isset($classes)) return $classes;
         $classes = array();
-        $t = microtime(true);
         $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(Kwf_Config::getValue('path.ext4').'/src'), RecursiveIteratorIterator::LEAVES_ONLY);
         foreach ($it as $i) {
             if (substr($i->getPathname(), -3) != '.js') continue;
