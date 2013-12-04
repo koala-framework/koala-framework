@@ -129,6 +129,9 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         });
 
         this._resizer.getEl().addClass('kwc-abstract-image-crop-image-resizable');
+        this._resizer.on('beforeresize', function () {
+            this._hideCropShadow();
+        }, this);
         this._resizer.on("resize", function() {
             var res = this._getCropData();
             if (this._ignoreRegionChangeAction) {
@@ -138,16 +141,13 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 this._userSelectedCropRegion = res;
             }
             this._updateCropRegionImage();
+            this._showCropShadow();
             this.fireEvent('cropChanged', res);
         }, this);
 
         var dragDrop = new Ext.dd.DD(this._image.getEl(), '');
         dragDrop.startDrag = (function (x, y) {
-            var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
-            wrapper.imageSrcBackup = wrapper.getStyle('background-image');
-            wrapper.setStyle({
-                'background-image': 'none'
-            });
+            this._hideCropShadow();
             dragDrop.constrainTo(this.getEl());
             this._image.getEl().setStyle({
                 'background': 'transparent'
@@ -161,10 +161,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 'background-image': 'url('+this.src+')',
                 'background-repeat': 'no-repeat'
             });
-            var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
-            wrapper.setStyle({
-                'background-image': wrapper.imageSrcBackup
-            });
+            this._showCropShadow();
         }).createDelegate(this);
 
         if (this.isCropDisabled()) { // Disable crop because image too small
@@ -178,6 +175,22 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             this._resizer.getEl().removeClass('kwc-abstract-image-crop-image-resizable-disabled');
             dragDrop.unlock();
         }
+    },
+
+    _hideCropShadow: function () {
+        var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
+        wrapper.imageSrcBackup = wrapper.getStyle('background-image');
+        wrapper.setStyle({
+            'background-image': 'none',
+            'background-color': 'transparent'
+        });
+    },
+
+    _showCropShadow: function () {
+        var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
+        wrapper.setStyle({
+            'background-image': wrapper.imageSrcBackup
+        });
     },
 
     afterRender: function () {
