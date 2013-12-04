@@ -1,10 +1,14 @@
 Kwc.Abstract.Image.ImageFile = Ext.extend(Kwf.Form.File, {
-    initComponent: function() {
-        Kwc.Abstract.Image.ImageFile.superclass.initComponent.call(this);
-    },
+    contentWidth: null,
+
     afterRender: function() {
         Kwc.Abstract.Image.ImageFile.superclass.afterRender.call(this);
         this.deleteButton.setText(trlKwf('delete'));
+    },
+
+    setValue: function (value) {
+        this.contentWidth = value.contentWidth;
+        Kwc.Abstract.Image.ImageFile.superclass.setValue.call(this, value);
     }
 });
 

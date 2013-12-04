@@ -10,15 +10,13 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
         $this->setXtype('kwc.image.imageuploadfield');
         $this->setBaseCls('kwc-abstract-image-image-upload-big-preview');
         // Fileupload
-        $this->_image = new Kwf_Form_Field_File('Image', $imageLabel);
-        $this->_image->setXtype('kwc.imagefile');
+        $this->_image = new Kwc_Abstract_Image_ImageFile('Image', $imageLabel);
         $this->_image->setPreviewSize(10) // set to provide big preview image
             ->setPreviewWidth(390)
             ->setPreviewHeight(184)
             ->setCls('kwc-abstract-image-image-upload-file')
             ->setWidth(390)
-            ->setHeight(184)
-            ->setAllowOnlyImages(true);
+            ->setHeight(184);
         $this->fields->add($this->_image);
 
         $this->_dimensions = $dimensions;
