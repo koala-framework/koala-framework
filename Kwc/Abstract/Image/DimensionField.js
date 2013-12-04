@@ -27,7 +27,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         this.value = v;
         if (this.rendered) {
             if (v.dimension) {
-                this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('Required: ')+Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[v.dimension], v));
+                this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('Required: ')+Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.dimensions[v.dimension], v));
             } else {
                 this.getEl().child('.kwc-abstract-image-dimension-name').update('&nbsp;');
             }
@@ -97,25 +97,17 @@ Kwc.Abstract.Image.DimensionField.checkImageSize = function(value, dimensions, s
     if (!value.cropData)
         return true;
     var dimension = dimensions[value.dimension];
-    dimension.width = dimension.width == 'user' ? value.width : dimension.width;
-    dimension.height = dimension.height == 'user' ? value.height : dimension.height;
-    if (dimension.width > value.cropData.width * scaleFactor
-        || dimension.height > value.cropData.height * scaleFactor) {
+    var width =  dimension.width == 'user' ? value.width : dimension.width;
+    var height = dimension.height == 'user' ? value.height : dimension.height;
+    if (width > value.cropData.width * scaleFactor
+        || height > value.cropData.height * scaleFactor) {
         return false;
     }
     return true;
 };
 
-Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
+Kwc.Abstract.Image.DimensionField.getDimensionPixelString = function(dimension, v)
 {
-    var ret;
-    if (!dimension) return;
-
-    if (dimension.text) {
-        ret = dimension.text;
-    } else {
-        ret = '';
-    }
     var width = null;
     if (!isNaN(parseInt(dimension.width))) {
         width = dimension.width;
@@ -128,13 +120,35 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
     } else if (dimension.height == 'user' && v) {
         height = v.height;
     }
+    var ret = '';
+    if (height && width) {
+        ret = width + 'x' + height+'px';
+    } else if (height) {
+        ret = trlKwf('{0}px high', height);
+    } else if (width) {
+        ret = trlKwf('{0}px wide', width);
+    }
+    return ret;
+};
 
-    if (height || width) {
-        if (ret) {
-            ret += ' ('+width+'x'+height+'px)';
-        } else {
-            ret = width + 'x' + height+'px';
+Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
+{
+    var ret;
+    if (!dimension) return;
+
+    if (dimension.text) {
+        ret = dimension.text;
+    } else {
+        ret = '';
+    }
+
+    var pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(dimension, v);
+    if (ret) {
+        if (pixelString) {
+            ret += ' ('+pixelString+')';
         }
+    } else {
+        ret = pixelString;
     }
     if (!ret) ret = '&nbsp;';
     return ret;
