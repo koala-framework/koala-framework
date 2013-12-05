@@ -105,6 +105,12 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $ret;
     }
 
+    public function beforeDelete($row)
+    {
+        $id = $this->_getUniqueId($row->getRow());
+        unset($this->_rows[$id]);
+    }
+
     /**
      * wird aufgerufen von row
      */
