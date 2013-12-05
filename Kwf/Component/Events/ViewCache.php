@@ -206,7 +206,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     }
 
     // namechanged and filnamechanged-events
-    public function onPageChanged(Kwf_Component_Event_Page_ContentChanged $event)
+    public function onPageChanged(Kwf_Component_Event_Component_Abstract $event)
     {
         $this->_updates[] = array(
             'type' => 'componentLink',
