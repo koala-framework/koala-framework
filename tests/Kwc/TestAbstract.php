@@ -20,9 +20,7 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
         $this->_root = Kwf_Component_Data_Root::getInstance();
         $this->_root->setFilename('kwf/kwctest/'.$componentClass);
         if (function_exists('apc_clear_cache')) apc_clear_cache('user');
-        if (Kwf_Cache_Simple::getBackend() != 'memcache') {
-            Kwf_Component_Cache_Memory::getInstance()->_clean();
-        }
+        Kwf_Component_Cache_Memory::getInstance()->_clean();
         Kwf_Cache_Simple::resetZendCache();
         Kwf_Registry::get('config')->debug->componentCache->disable = false;
         Kwf_Config::deleteValueCache('debug.componentCache.disable');
