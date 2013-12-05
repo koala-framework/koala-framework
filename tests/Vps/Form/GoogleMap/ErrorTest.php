@@ -12,6 +12,7 @@ class Vps_Form_GoogleMap_ErrorTest extends Vps_Test_SeleniumTestCase
         $this->open('/vps/test/vps_form_google-map_test');
         $this->waitForConnections();
         $this->click("//input[@name='mapEmpty']/../..//img");
+        sleep(1);
         $this->assertNotNull($this->getText("//span[text()='".trlVps('enter address')."']"));
 
         $this->open('/vps/test/vps_form_google-map_test');
