@@ -18,8 +18,6 @@ class Kwc_Root_Category_Admin extends Kwc_Abstract_Admin
 
     public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
-        parent::duplicate($source, $target, $progressBar);
-
         //pages are not duplicated because they are not returned by 'inherit'=>false
         //so duplicate them here
         $s = array(
@@ -29,5 +27,6 @@ class Kwc_Root_Category_Admin extends Kwc_Abstract_Admin
         foreach ($source->getChildComponents($s) as $c) {
             $c->generator->duplicateChild($c, $target, $progressBar);
         }
+        parent::duplicate($source, $target, $progressBar);
     }
 }
