@@ -27,7 +27,7 @@ class Kwc_Menu_EditableItems_Generator extends Kwf_Component_Generator_Table
     {
         $model = $this->getModel();
         $select = $model->select()
-            ->whereEquals('parent_component_id', $parentTarget->componentId)
+            ->whereEquals('parent_component_id', $parentTarget->parent->componentId)
             ->whereEquals('name', $source->row->name);
         return $model->getRow($select);
     }
