@@ -5,12 +5,48 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
     {
         this.layout = 'border';
 
+        this.actions.copy = new Ext.Action({
+            text    : trlKwf('Copy'),
+            icon: '/assets/silkicons/page_white_copy.png',
+            //cls     : 'x-btn-text-icon',
+            handler : this.onCopy,
+            disabled: true,
+            scope   : this
+        });
+        this.actions.paste = new Ext.Action({
+            text    : trlKwf('Paste'),
+            icon: '/assets/silkicons/page_white_copy.png',
+            //cls     : 'x-btn-text-icon',
+            handler : this.onPaste,
+            scope   : this
+        });
+
         var gridConfig = {
             controllerUrl: this.controllerUrl,
             region: 'center',
             split: true,
             baseParams: this.baseParams, //Kompatibilität zu ComponentPanel
-            autoLoad: this.autoLoad
+            autoLoad: this.autoLoad,
+            listeners: {
+                beforerendergrid: function(grid) {
+                    grid.getTopToolbar().add({
+                        cls: 'x-btn-icon',
+                        icon: '/assets/silkicons/page_white_copy.png',
+                        menu: [
+                            this.actions.copy,
+                            this.actions.paste
+                        ]
+                    });
+                },
+                selectionchange: function() {
+                    if (this.grid.getSelected()) {
+                        this.actions.copy.enable();
+                    } else {
+                        this.actions.copy.disable();
+                    }
+                },
+                scope: this
+            }
         };
         if (this.useInsertAdd) {
             gridConfig.onAdd = this.onAdd.createDelegate(this); // wg. Scope
@@ -140,6 +176,39 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
             this.multiFileUploadPanel.setBaseParams(baseParams);
         }
         return Kwc.Abstract.List.List.superclass.setBaseParams.apply(this, arguments);
+    },
+
+    onCopy: function()
+    {
+        var params = Kwf.clone(this.getBaseParams());
+        params.id = this.grid.getSelectedId();
+        Ext.Ajax.request({
+            url: this.controllerUrl+'/json-copy',
+            params: params,
+            mask: this.el
+        });
+    },
+    onPaste: function()
+    {
+        Ext.Ajax.request({
+            url: this.controllerUrl+'/json-paste',
+            params: this.getBaseParams(),
+            mask: this.el,
+            maskText : trlKwf('Pasting...'),
+            scope: this,
+            success: function() {
+                this.grid.getSelectionModel().clearSelections();
+                this.reload({
+                    callback: function(o, r, s) {
+                        this.grid.getSelectionModel().selectLastRow();
+                        if (this.childPanel.setActiveTab) {
+                            this.childPanel.setActiveTab(0);
+                        }
+                    },
+                    scope: this
+                });
+            }
+        });
     }
 });
 Ext.reg('kwc.list.list', Kwc.Abstract.List.List);
