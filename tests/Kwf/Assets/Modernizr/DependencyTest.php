@@ -6,7 +6,7 @@ class Kwf_Assets_Modernizr_DependencyTest extends Kwf_Test_TestCase
         $dep = new Kwf_Assets_Modernizr_Dependency();
         $dep->addFeature('CssAnimations');
         $this->assertContains(
-            '/build-cssanimations-cssclasses-teststyles-testprop-testallprops-domprefixes.js',
+            '/build-cssanimations-cssclasses-testprop-testallprops-domprefixes.js',
             $dep->getFileName()
         );
 
