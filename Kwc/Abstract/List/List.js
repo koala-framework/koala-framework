@@ -29,14 +29,17 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
             autoLoad: this.autoLoad,
             listeners: {
                 beforerendergrid: function(grid) {
-                    grid.getTopToolbar().add({
-                        cls: 'x-btn-icon',
-                        icon: '/assets/silkicons/page_white_copy.png',
-                        menu: [
-                            this.actions.copy,
-                            this.actions.paste
-                        ]
-                    });
+                    var tb = grid.getTopToolbar();
+                    if (tb) {
+                        tb.add({
+                            cls: 'x-btn-icon',
+                            icon: '/assets/silkicons/page_white_copy.png',
+                            menu: [
+                                   this.actions.copy,
+                                   this.actions.paste
+                                   ]
+                        });
+                    }
                 },
                 selectionchange: function() {
                     if (this.grid.getSelected()) {
@@ -128,7 +131,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
     {
         this.grid.load();
         this.grid.selectId(false);
-        
+
         // Alle Forms leeren wenn Seite neu geladen wird
         this.editPanels.each(function(panel) {
             panel.setBaseParams(this.getBaseParams());
