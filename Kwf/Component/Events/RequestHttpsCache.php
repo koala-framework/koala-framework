@@ -18,7 +18,10 @@ class Kwf_Component_Events_RequestHttpsCache extends Kwf_Component_Events
 
     public function onComponentAdded(Kwf_Component_Event_Component_Added $ev)
     {
-        $cacheId = 'reqHttps-'.$ev->component->getPage()->componentId;
-        Kwf_Cache_Simple::delete($cacheId);
+        $page = $ev->component->getPage();
+        if ($page) {
+            $cacheId = 'reqHttps-'.$page->componentId;
+            Kwf_Cache_Simple::delete($cacheId);
+        }
     }
 }

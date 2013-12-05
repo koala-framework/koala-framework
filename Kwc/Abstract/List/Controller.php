@@ -114,12 +114,7 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
 
-        $s = new Kwf_Model_Select();
-        $s->whereEquals('component_id', $this->_getParam('componentId'));
-        $max = Kwc_Abstract::getSetting($this->_getParam('class'), 'maxEntries');
-        if ($this->_model->countRows($s)+count($ids) >= $max) {
-            throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
-        }
+        $this->_validateMaxEntries();
 
         $progressBar = null;
 
@@ -138,7 +133,7 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
     }
 
-    public function jsonInsertAction()
+    private function _validateMaxEntries()
     {
         $max = Kwc_Abstract::getSetting($this->_getParam('class'), 'maxEntries');
         $s = new Kwf_Model_Select();
@@ -146,7 +141,53 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if ($this->_model->countRows($s)+1 >= $max) {
             throw new Kwf_Exception_Client(trlKwf("Can't create more than {0} entries.", $max));
         }
+    }
 
+    public function jsonInsertAction()
+    {
+        $this->_validateMaxEntries();
         parent::jsonInsertAction();
+    }
+
+    public function jsonCopyAction()
+    {
+        $id = $this->_getParam('componentId').'-'.$this->_getParam('id');
+        if (!Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
+            throw new Kwf_Exception("Component with id '$id' not found");
+        }
+        $session = new Kwf_Session_Namespace('Kwc_Abstract_List:copy');
+        $session->id = $id;
+    }
+
+    public function jsonPasteAction()
+    {
+        $this->_validateMaxEntries();
+
+        $session = new Kwf_Session_Namespace('Kwc_Abstract_List:copy');
+        $id = $session->id;
+        if (!$id || !Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
+            throw new Kwf_Exception_Client(trlKwf('Clipboard is empty'));
+        }
+        $target = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
+        $source = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true));
+
+        if ($source->parent->componentClass != $target->componentClass) {
+            throw new Kwf_Exception_Client(trlKwf('Source and target paragraphs are not compatible.'));
+        }
+
+        Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
+
+        $progressBar = null;
+
+        $newItem = Kwf_Util_Component::duplicate($source, $target, $progressBar);
+
+        $row = $newItem->row;
+        $target->getChildComponents(array('ignoreVisible'=>true));
+        $row->pos = null; //moves to end of list
+        $row->visible = false;
+        $row->save();
+
+        Kwf_Util_Component::afterDuplicate($source, $target);
+        Kwf_Component_ModelObserver::getInstance()->enable();
     }
 }
