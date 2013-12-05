@@ -6,6 +6,7 @@ class Kwf_Assets_Modernizr_TestProviderList extends Kwf_Assets_ProviderList_Abst
         parent::__construct(array(
             new Kwf_Assets_Modernizr_Provider(),
             new Kwf_Assets_Provider_Ini(dirname(__FILE__).'/ProviderTestDependencies.ini'),
+            new Kwf_Assets_Provider_IniNoFiles(),
         ));
     }
 }

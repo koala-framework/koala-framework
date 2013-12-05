@@ -19,6 +19,7 @@ class Kwf_Assets_Package_TestPackage extends Kwf_Assets_Package
         $providers = array();
         $providers[] = new Kwf_Assets_Provider_Ini(KWF_PATH.'/dependencies.ini');
         $providers[] = new Kwf_Assets_Provider_Ini($testDependenciesIni);
+        $providers[] = new Kwf_Assets_Provider_IniNoFiles();
         $providers[] = new Kwf_Assets_Provider_Components($rootComponentClass);
         $providers[] = new Kwf_Assets_Provider_Dynamic();
         $providerList = new Kwf_Assets_ProviderList_Abstract($providers);
