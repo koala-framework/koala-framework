@@ -68,7 +68,7 @@ Ext4.define('Kwf.Ext4.Data.StoreSyncQueue', {
 
         if (hasException) {
             if (qo.failure) qo.failure.call(qo.scope || this, batch, qo);
-            this.exceptions = Ext.Array.merge(this.exceptions, batch.exceptions);
+            this.exceptions = Ext4.Array.merge(this.exceptions, batch.exceptions);
             this.hasException = true;
         } else {
             if (qo.success) qo.success.call(qo.scope || this, batch, qo);
