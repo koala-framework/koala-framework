@@ -58,6 +58,8 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
         if (($model = $source->getComponent()->getOwnModel()) && $source->dbId != $target->dbId) {
             $row = $model->getRow($source->dbId);
             if ($row) {
+                $targetRow = $model->getRow($target->dbId);
+                if ($targetRow) { $targetRow->delete(); }
                 $newRow = $row->duplicate(array(
                     'component_id' => $target->dbId
                 ));
