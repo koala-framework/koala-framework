@@ -1,4 +1,8 @@
 <?php
+/**
+ * @group selenium
+ * @group slow
+ */
 class Kwf_Assets_Ext4_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function testIt()
