@@ -1,5 +1,6 @@
 Ext4.define('Kwf.Ext4.App.MainController', {
     extend: 'Ext.app.Controller',
+    $namespace: 'App',
     requires: [
         'Ext.state.LocalStorageProvider',
         'Ext.state.Manager',
