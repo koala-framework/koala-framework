@@ -48,7 +48,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             if ($contentLength != strlen($fileData)) {
                 throw new Kwf_Exception("Content-Length doesn't match uploaded data");
             }
-            $name = $_SERVER['HTTP_X_UPLOAD_NAME'];
+            $name = rawurldecode($_SERVER['HTTP_X_UPLOAD_NAME']);
             $filename = substr($name, 0, strrpos($name, '.'));
             $extension = substr(strrchr($name, '.'), 1);
             $mimeType = null;
