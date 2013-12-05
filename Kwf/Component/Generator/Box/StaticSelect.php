@@ -97,6 +97,8 @@ class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_S
 
         if ($sourceRow) { //if not row exists that's ok, it's also not needed in the duplicated one
             $targetId = $parentTarget->dbId.$this->_idSeparator.$source->id;
+            $targetRow = $this->_getModel()->getRow($targetId);
+            if ($targetRow) { $targetRow->delete(); }
             $sourceRow->duplicate(array(
                 'component_id' => $targetId,
             ));

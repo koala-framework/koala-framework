@@ -58,6 +58,8 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
         if (($model = $source->getComponent()->getOwnModel()) && $source->dbId != $target->dbId) {
             $row = $model->getRow($source->dbId);
             if ($row) {
+                $targetRow = $model->getRow($target->dbId);
+                if ($targetRow) { $targetRow->delete(); }
                 $newRow = $row->duplicate(array(
                     'component_id' => $target->dbId
                 ));
@@ -66,23 +68,18 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 
         $s = array('ignoreVisible'=>true);
         foreach ($source->getChildComponents($s) as $c) {
-
             if ($c->generator->hasSetting('inherit') && $c->generator->getSetting('inherit') &&
                 $c->generator->hasSetting('unique') && $c->generator->getSetting('unique') &&
                 $source->componentId != $c->parent->componentId
             ) {
-                    continue;
-            }
-            if ($c->generator->getGeneratorFlag('pageGenerator')) {
+                continue;
+            } else if (!$c->generator->hasSetting('inherit') &&
+                !Kwf_Component_Generator_Abstract::hasInstance($target->componentClass, $c->generator->getGeneratorKey())
+            ) {
+                continue;
+            } else if ($c->generator->getGeneratorFlag('pageGenerator')) {
                 continue;
             }
-
-            $genKey = $c->generator->getGeneratorKey();
-            if (!Kwf_Component_Generator_Abstract::hasInstance($target->componentClass, $genKey)) {
-                //generator doesn't exist in target, skip
-                continue;
-            }
-
             $c->generator->duplicateChild($c, $target, $progressBar);
         }
     }

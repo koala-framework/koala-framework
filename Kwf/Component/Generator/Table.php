@@ -349,12 +349,9 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             throw new Kwf_Exception("you must call this only with the correct source");
         }
 
-        $data = array();
-        if ($this->_getUseComponentId()) { //only duplicate rows that are scoped to source component (using component_id)
-            $data['component_id'] = $parentTarget->dbId;
-            $newRow = $source->row->duplicate($data);
-        } else {
-            $newRow = $source->row;
+        $newRow = $this->_duplicateRow($source, $parentTarget);
+        if (!$newRow) {
+            return null;
         }
 
         $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
@@ -364,6 +361,17 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         }
         Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);
         return $target;
+    }
+
+    protected function _duplicateRow($source, $parentTarget)
+    {
+        $ret = null;
+        if ($this->_getUseComponentId()) { //only duplicate rows that are scoped to source component (using component_id)
+            $ret = $source->row->duplicate(array('component_id' => $parentTarget->dbId));
+        } else {
+            $ret = $source->row;
+        }
+        return $ret;
     }
 
     public function makeChildrenVisible($source)

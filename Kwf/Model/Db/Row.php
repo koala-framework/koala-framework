@@ -99,6 +99,12 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
         return $ret;
     }
 
+    protected function _beforeDelete()
+    {
+        $this->_model->beforeDelete($this);
+        parent::_beforeDelete();
+    }
+
     public function delete()
     {
         parent::delete();
