@@ -50,9 +50,9 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
     {
         Kwf_Util_Https::ensureHttps();
 
-        if ($this->_getParam('application_assets_version')
+        if ($this->_getParam('applicationAssetsVersion')
                 && $this->getHelper('ViewRenderer')->isJson()) {
-            if (Kwf_Assets_Dispatcher::getAssetsVersion() != $this->_getParam('application_assets_version')) {
+            if (Kwf_Assets_Dispatcher::getAssetsVersion() != $this->_getParam('applicationAssetsVersion')) {
                 $this->_forward('json-wrong-version', 'error',
                                     'kwf_controller_action_error');
                 return;

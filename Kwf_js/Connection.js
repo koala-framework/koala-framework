@@ -57,7 +57,7 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
             options.scope = this;
         }
         if (!options.params) options.params = {};
-        options.params.application_max_assets_mtime = Kwf.application.maxAssetsMTime;
+        options.params.applicationAssetsVersion = Kwf.application.assetsVersion;
         if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
         if (!options.url.match(':\/\/')) {
             //absolute url incl. http:// erstellen
@@ -306,8 +306,8 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
                     }, {
                         text: trlKwf('Ignore'),
                         handler: function() {
-                            Kwf.application.maxAssetsMTime = r.maxAssetsMTime;
-                            options.params.application_max_assets_mtime = Kwf.application.maxAssetsMTime;
+                            Kwf.application.assetsVersion = r.assetsVersion;
+                            options.params.applicationAssetsVersion = Kwf.application.assetsVersion;
                             this.repeatRequest(options);
                             dlg.hide();
                         },
