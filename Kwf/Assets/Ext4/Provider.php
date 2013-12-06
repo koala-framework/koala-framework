@@ -103,6 +103,9 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
                     $found = false;
                     foreach ($paths as $k=>$i) {
                         if (substr($f, 0, strlen($i)+1) == $i.'/') {
+                            if (substr(substr($f, strlen($i)+1), 0, 8) == 'library/') {
+                                continue;
+                            }
                             $f = substr($f, strlen($i)+1);
                             if (substr($f, 0, 6) == 'tests/') {
                                 $f = substr($f, 6);
