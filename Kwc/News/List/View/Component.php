@@ -9,9 +9,9 @@ class Kwc_News_List_View_Component extends Kwc_Directories_List_View_Component
         return $ret;
     }
 
-    public function getPartialVars()
+    public function getPartialVars($partial, $nr, $info)
     {
-        $ret = parent::getPartialVars();
+        $ret = parent::getPartialVars($partial, $nr, $info);
         $ret['showPreviewImage'] = $this->_getSetting('showPreviewImage');
         return $ret;
     }
