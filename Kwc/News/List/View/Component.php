@@ -8,4 +8,11 @@ class Kwc_News_List_View_Component extends Kwc_Directories_List_View_Component
         $ret['showPreviewImage'] = true;
         return $ret;
     }
+
+    public function getPartialVars()
+    {
+        $ret = parent::getPartialVars();
+        $ret['showPreviewImage'] = $this->_getSetting('showPreviewImage');
+        return $ret;
+    }
 }
