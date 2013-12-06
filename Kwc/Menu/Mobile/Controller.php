@@ -35,12 +35,18 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         foreach ($parentPage as $component) {
             $pages = $component->getChildPages(array('showInMenu'=>true));
             foreach($pages as $page) {
+                if ($page->row
+                    && isset($page->row->device_visible)
+                    && $page->row->device_visible == Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE
+                ) {
+                    continue;
+                }
+
                 $ret[$i]['name'] = $page->name;
                 $ret[$i]['url'] = $page->url;
                 $ret[$i]['class'] = array();
                 $ret[$i]['children'] = $this->_getChildPages($page);
 
-                if ($page->row && isset($page->row->device_visible)) $ret[$i]['class'][] = $page->row->device_visible;
                 if ($i == 0) $ret[$i]['class'][] = 'first';
                 if ($i == count($pages)-1) $ret[$i]['class'][] = 'last';
                 if (!empty($ret[$i]['children'])) $ret[$i]['class'][] = 'hasChildren';
