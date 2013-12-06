@@ -113,6 +113,35 @@ function recursiveCropImageOptionsReplace($directory)
     }
 }
 
+function updateIncludePath()
+{
+    $defaultPaths = array(
+        'app', 'controllers', 'models', 'components', 'themes'
+    );
+    $addConfig = "";
+
+    $c = file_get_contents('bootstrap.php');
+    preg_match_all('#\$include_path\s*\.=\s*PATH_SEPARATOR\s*\.\s*\'([^\']+)\';'."\n?#", $c, $m);
+    $c = str_replace('$include_path  = get_include_path();'."\n", '', $c);
+    $c = str_replace('set_include_path($include_path);'."\n", '', $c);
+    foreach ($m[0] as $k=>$i) {
+        $c = str_replace($i, '', $c);
+        $path = $m[1][$k];
+        if (!in_array($path, $defaultPaths)) {
+            $addConfig = "includepath.web".ucfirst($path)." = $path\n";
+        }
+    }
+    file_put_contents('bootstrap.php', $c);
+    echo "removed include paths from bootstrap.php\n";
+
+    if ($addConfig) {
+        $c = file_get_contents('config.ini');
+        $c = str_replace("[production]\n", "[production]\n".$addConfig, $c);
+        file_put_contents('config.ini', $c);
+        echo "added custom include paths to config.ini\n";
+    }
+}
+
 createTrlCacheFolder();
 createScssCacheFolder();
 
@@ -124,3 +153,4 @@ updateErrorViews(glob('views/error*.tpl'));
 echo "Update Image-Parameter\n";
 recursiveCropImageOptionsReplace('components');
 
+updateIncludePath();

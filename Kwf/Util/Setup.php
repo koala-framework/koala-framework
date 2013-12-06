@@ -1,9 +1,8 @@
 <?php
 class Kwf_Util_Setup
 {
-    public static function minimalBootstrapAndGenerateFile()
+    private static function _getZendPath()
     {
-        if (!defined('KWF_PATH')) define('KWF_PATH', realpath(dirname(__FILE__).'/../..'));
         if (file_exists(KWF_PATH.'/include_path')) {
             $zendPath = trim(file_get_contents(KWF_PATH.'/include_path'));
             $zendPath = str_replace(
@@ -14,9 +13,16 @@ class Kwf_Util_Setup
         } else {
             die ('zend not found');
         }
+        return $zendPath;
+    }
+
+    public static function minimalBootstrapAndGenerateFile()
+    {
+        if (!defined('KWF_PATH')) define('KWF_PATH', realpath(dirname(__FILE__).'/../..'));
 
         //reset include path, don't use anything from php.ini
-        set_include_path(get_include_path() . PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . $zendPath);
+        set_include_path('.' . PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . self::_getZendPath());
+        if (defined('VKWF_PATH')) set_include_path(get_include_path().PATH_SEPARATOR . VKWF_PATH);
 
         require_once 'Kwf/Loader.php';
         Kwf_Loader::registerAutoload();
@@ -52,11 +58,15 @@ class Kwf_Util_Setup
 
     public static function generateCode()
     {
-        $ip = get_include_path();
-        $ip = explode(PATH_SEPARATOR, $ip);
+        $ip = array(
+            '.',
+            KWF_PATH,
+            self::_getZendPath()
+        );
+        if (defined('VKWF_PATH')) $ip[] = VKWF_PATH;
         $ip[] = 'cache/generated';
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
-            $ip[] = $p;
+            if ($p) $ip[] = $p;
         }
         $ip = array_unique($ip);
 
