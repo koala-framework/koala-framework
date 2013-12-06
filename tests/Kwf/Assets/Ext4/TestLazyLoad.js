@@ -9,7 +9,6 @@ window.onload = function() {
                     html: 'windowcontent 123 123 123'
                 });
                 w.show();
-                window.winLoaded = true; //for waitForCondition in selenium
             });
         });
     });

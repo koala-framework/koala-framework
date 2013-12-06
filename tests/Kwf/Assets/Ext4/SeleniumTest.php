@@ -15,8 +15,7 @@ class Kwf_Assets_Ext4_SeleniumTest extends Kwf_Test_SeleniumTestCase
     public function testLazyLoad()
     {
         $this->open('/kwf/test/kwf_assets_ext4_test/lazy-load');
-        sleep(3);
-        $this->waitForCondition('!selenium.browserbot.getCurrentWindow().window.winLoaded');
+        sleep(5);
         $this->assertBodyTextContains('windowtitle');
         $this->assertBodyTextContains('windowcontent');
     }
