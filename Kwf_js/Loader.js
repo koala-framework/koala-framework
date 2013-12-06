@@ -23,6 +23,8 @@ window.Kwf.Loader.require = function(expression, fn, scope)
     _callbacks[expression] = [];
     _callbacks[expression].push({fn: fn, scope: scope});
 
+    var head = document.head || document.getElementsByTagName("head")[0];
+
     var scriptEl = document.createElement('script');
     scriptEl.src = src;
     scriptEl.async = true;
@@ -33,14 +35,14 @@ window.Kwf.Loader.require = function(expression, fn, scope)
         }
         _callbacks[expression] = [];
     };
-    document.head.appendChild(scriptEl);
+    head.appendChild(scriptEl);
 
     src = '/assets/dependencies/Kwf_Assets_Package_LazyLoad/'+config.providerList+':'+expression+':'+_loaded.join(',')+'/en/css';
     var styleEl = document.createElement('link');
     styleEl.type = 'text/css';
     styleEl.rel = 'stylesheet';
     styleEl.href = src;
-    document.head.appendChild(styleEl);
+    head.appendChild(styleEl);
 
     _loaded.push(expression);
 };
