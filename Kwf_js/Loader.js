@@ -6,6 +6,8 @@ var config = window.Kwf.Loader.config;
 
 window.Kwf.Loader.require = function(expression, fn, scope)
 {
+    if (!scope) scope = window;
+
     var classIsLoaded = false;
     var Ext = window.Ext4;
     if (Ext && Ext.ClassManager && Ext.ClassManager.isCreated(expression)) {
