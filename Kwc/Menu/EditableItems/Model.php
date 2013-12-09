@@ -49,7 +49,7 @@ class Kwc_Menu_EditableItems_Model extends Kwf_Model_Abstract
             }
             $childPages = $component->getChildPages($childPagesComponentSelect);
             foreach ($childPages as $childPage) {
-                if (isset($whereEquals['name']) && $childPage->name != $whereEquals['name']) {
+                if (isset($whereEquals['filename']) && $childPage->filename != $whereEquals['filename']) {
                     continue;
                 }
                 if (is_numeric($childPage->dbId)) {
