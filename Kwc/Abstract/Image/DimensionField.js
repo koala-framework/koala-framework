@@ -59,7 +59,8 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         this._sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
             dimensions: this.dimensions,
             value: this.getValue(),
-            imageData: this.imageData
+            imageData: this.imageData,
+            selectDimensionDisabled: this.selectDimensionDisabled
         });
         this._sizeWindow.on('save', function(value) {
             this.setValue(value);

@@ -145,6 +145,9 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 imageDataField
             ]
         });
+        if (this.selectDimensionDisabled) {
+            this._configPanel.disable();
+        }
 
         this._initCropRegion();
 

@@ -8,6 +8,22 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
                 ->setVtype('alphanum');
         }
 
+        $this->add($this->_getImageUploadField());
+
+        if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
+            $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))
+                ->setWidth(300);
+        }
+        if (Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
+            $this->add(new Kwf_Form_Field_TextField('alt_text', trlKwf('Alt Text')))
+                ->setWidth(300);
+        }
+
+        parent::_initFields();
+    }
+
+    protected function _getImageUploadField()
+    {
         $imageUploadField = new Kwc_Abstract_Image_ImageUploadField(
             Kwc_Abstract::getSetting($this->getClass(), 'dimensions'),
             Kwc_Abstract::getSetting($this->getClass(), 'imageLabel')
@@ -20,18 +36,7 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
         if (Kwc_Abstract::getSetting($this->getClass(), 'maxResolution')) {
             $this->setMaxResolution(Kwc_Abstract::getSetting($this->getClass(), 'maxResolution'));
         }
-        $this->add($imageUploadField);
-
-        if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
-            $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))
-                ->setWidth(300);
-        }
-        if (Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
-            $this->add(new Kwf_Form_Field_TextField('alt_text', trlKwf('Alt Text')))
-                ->setWidth(300);
-        }
-
-        parent::_initFields();
+        return $imageUploadField;
     }
 
     public function setFieldLabel($label)

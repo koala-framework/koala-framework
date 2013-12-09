@@ -20,11 +20,12 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
         $this->fields->add($this->_image);
 
         $this->_dimensions = $dimensions;
-        $this->fields->add(new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension')))
-            ->setAllowBlank(false)
+        $this->_dimensionField = new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension'));
+        $this->_dimensionField->setAllowBlank(false)
             ->setLabelStyle('display:none')
             ->setCtCls('kwc-abstract-image-dimension-container')
             ->setDimensions($dimensions);
+        $this->fields->add($this->_dimensionField);
     }
 
     public function setShowHelptext($showHelptext)
@@ -44,6 +45,12 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
         } else {
             $this->getByName('Image')->setHelpText('');
         }
+        return $this;
+    }
+
+    public function setSelectDimensionDisabled($disable)
+    {
+        $this->_dimensionField->setSelectDimensionDisabled($disable);
         return $this;
     }
 
