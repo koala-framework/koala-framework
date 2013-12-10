@@ -47,12 +47,10 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
             if ($columns == 6) {
                 $columns = '3';
             }
-            if ($columns >=3 && $columns <= 10) {
-                if ($columns % 2 == 0) {
-                    $columns = '4';
-                } else {
-                    $columns = '3';
-                }
+            if ($columns % 2 == 0) {
+                $columns = '4';
+            } else {
+                $columns = '3';
             }
             $ret = (int)floor((590 - ($columns-1) * $contentMargin) / $columns);
         } else {
