@@ -9,6 +9,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component extends Kwc_Shop_Cart_Ch
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Wirecard');
+        // Delete confirm because of wirecard dispatch confirm url
         unset($ret['generators']['confirm']);
         $ret['generators']['child']['component']['confirmLink'] = 'Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component';
         $ret['generators']['cancel'] = array(
