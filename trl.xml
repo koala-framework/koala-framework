@@ -10085,6 +10085,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2024</id>
 </text>
 <text>
+<en>Paste</en>
+<de>Einfügen</de>
+<id>2025</id>
+</text>
+<text>
 <en>Must not include newlines</en>
 <id>2026</id>
 </text>
@@ -10118,9 +10123,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Recent Posts</en>
 <id>2033</id>
-<en>Paste</en>
-<de>Einfügen</de>
-<id>2025</id>
 </text>
 </trl>
 
