@@ -29,6 +29,13 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component extends Kwc_Shop_Cart_Ch
             'name' => trlKwfStatic('Success')
         );
 
+        /**
+         * Possible types are:
+         * BANCONTACT_MISTERCASH, C2P (Click2Pay), CCARD (Credit Card), EKONTO, ELV (Electronic Funds Transfer),
+         * EPS (EPS e-payment), GIROPAY, IDL (iDEAL), INSTALLMENT, INSTANTBANK, INVOICE, MAESTRO,
+         * MONETA, MPASS, PRZELEWY24, PAYPAL, PBX (Paybox), POLI, PSC (Paysafecard), QUICK, SKRILLDIRECT,
+         * SKRILLWALLET, SOFORTUEBERWEISUNG
+         **/
         $ret['paymentType'] = 'SELECT';
         return $ret;
     }
