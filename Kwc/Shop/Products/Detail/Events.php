@@ -24,9 +24,11 @@ class Kwc_Shop_Products_Detail_Events extends Kwc_Directories_Item_Detail_Events
 
     public function onPriceRowUpdate(Kwf_Component_Event_Row_Abstract $ev)
     {
-        $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+        $components = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
             'shopProducts_'.$ev->row->getParentRow('Product')->id, array('ignoreVisible' => true)
         );
-        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $component));
+        foreach ($components as $component) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $component));
+        }
     }
 }

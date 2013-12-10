@@ -8,16 +8,19 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
     {
         static $i = array();
         if (is_string($subroot) && $subroot) {
-            $subrootId = Kwf_Component_Data_Root::getInstance()->getComponentById($subroot)->id;
-        } else {
-            $subrootId = ''; //valid; no subroots exist
-            while ($subroot) {
-                if (Kwc_Abstract::getFlag($subroot->componentClass, 'subroot')) {
-                    $subrootId = $subroot->id;
-                }
-                $subroot = $subroot->parent;
-            }
+            $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($subroot);
         }
+
+        // Create core names from subroot. e.g. root-at => at, root-ro-master => ro_master
+        $subrootIds = array();
+        while ($subroot) {
+            if (Kwc_Abstract::getFlag($subroot->componentClass, 'subroot')) {
+                $subrootIds[] = $subroot->id;
+            }
+            $subroot = $subroot->parent;
+        }
+        $subrootId = implode('_', array_reverse($subrootIds));
+
         if (!isset($i[$subrootId])) {
             $solr = Kwf_Config::getValueArray('fulltext.solr');
             $path = $solr['path'];

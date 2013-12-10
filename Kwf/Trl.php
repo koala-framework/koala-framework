@@ -350,12 +350,12 @@ class Kwf_Trl
 
                     $args = $trlStaticData['args'];
                     if ($args[1]) {
-                        if (is_string($args[1])) {
-                            $args[1] = $this->trlStaticExecute($args[1], $language);
-                        } else {
+                        if (is_array($args[1])) {
                             foreach ($args[1] as $k=>$i) {
                                 $args[1][$k] = $this->trlStaticExecute($i, $language);
                             }
+                        } else {
+                            $args[1] = $this->trlStaticExecute($args[1], $language);
                         }
                     }
                     $args[] = $language;

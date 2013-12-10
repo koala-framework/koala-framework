@@ -10085,13 +10085,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2024</id>
 </text>
 <text>
-<en>Image Crop Utility</en>
-<de>Bildausschnitt Tool</de>
+<en>Paste</en>
+<de>Einfügen</de>
 <id>2025</id>
 </text>
 <text>
-<en>Loading image</en>
-<de>Lade Bild</de>
+<en>Must not include newlines</en>
 <id>2026</id>
 </text>
 <text>
@@ -10143,6 +10142,16 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Recent Posts</en>
 <id>2037</id>
+</text>
+<text>
+<en>Image Crop Utility</en>
+<de>Bildausschnitt Tool</de>
+<id>2038</id>
+</text>
+<text>
+<en>Loading image</en>
+<de>Lade Bild</de>
+<id>2039</id>
 </text>
 </trl>
 
