@@ -329,6 +329,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 $dim['width'] = $component->getComponent()->getContentWidth();
             }
         }
+        return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dim);
+    }
+
+    public static function getMediaOutputForDimension($data, $dim)
+    {
         $ret = array();
         if (isset($data['image'])) {
             $output = Kwf_Media_Image::scale($data['image'], $dim);

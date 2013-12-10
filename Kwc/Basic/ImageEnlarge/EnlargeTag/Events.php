@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_ImageEnlarge_EnlargeTag_Events extends Kwc_Abstract_Image_Events
+class Kwc_Basic_ImageEnlarge_EnlargeTag_Events extends Kwc_Abstract_Events
 {
     private function _canCreateUsIndirectly($class)
     {
