@@ -6,6 +6,7 @@ class Kwc_Menu_Mobile_Component extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['level'] = array('main');
         $ret['cssClass'] = 'webListNone';
+        $ret['placeholder']['menuLink'] = trlKwfStatic('Menu');
 
         $ret['assets']['dep'][] = 'mustache';
         $ret['assets']['dep'][] = 'KwfOnReadyJQuery';
