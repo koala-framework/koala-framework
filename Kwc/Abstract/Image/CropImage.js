@@ -89,6 +89,14 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     },
 
     onRender: function(ct, position) {
+        if (this.cropData) {
+            this._userSelectedCropRegion = {
+                x: this.cropData.x,
+                y: this.cropData.y,
+                width: this.cropData.width,
+                height: this.cropData.height
+            };
+        }
         Kwc.Abstract.Image.CropImage.superclass.onRender.call(this, ct, position);
         this.el.setStyle({
             'background': 'url('+this.src+') no-repeat left top'
