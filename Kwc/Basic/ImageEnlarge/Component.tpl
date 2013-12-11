@@ -5,6 +5,6 @@
     </a>
     <?}?>
     <? if ($this->showImageCaption && !empty($this->image_caption)) { ?>
-    <div class="imageCaption" style="width:<?=$this->imageParam($this->image,'width','default');?>px;"><?=(!empty($this->image_caption) ? $this->image_caption : '');?></div>
+    <div class="imageCaption" style="max-width:<?=$this->imageParam($this->image,'width','default');?>px;"><?=(!empty($this->image_caption) ? $this->image_caption : '');?></div>
     <? } ?>
 </div>
