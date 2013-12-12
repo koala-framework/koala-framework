@@ -1470,6 +1470,7 @@
 <ru>Поиск</ru>
 <sk>Hľadaj</sk>
 <fr>Rechercher</fr>
+<uk>Пошук</uk>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -9005,6 +9006,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Keine Einträge gefunden</de>
 <id>1804</id>
 <sk>Žiadne výsledky vyhľadávania</sk>
+<uk>Записів не знайдено</uk>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
@@ -9756,7 +9758,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Wir verwenden Cookies, um diese Webseite zu betreiben und ihre Benutzerfreundlichkeit zu verbessern.</de>
 <sl>Za pravilno delovanje in preprostejšo uporabo te strani uporabljamo piškotke.</sl>
 <hu>Weboldalunk futtatásához és a használhatóságának növeléséhez „cookie”-kat használunk.</hu>
-<bg>При поддръжката и експлоатацията на този сайт се използват " бисквитки " за да се подобри неговото ползване.</bg>
+<bg>При поддръжката и експлоатацията на този сайт се използват "бисквитки", за да се подобри неговото ползване.</bg>
 <cs>K provozu této webové stránky a za účelem dosažení Vaší spokojenosti s užíváním stránek, používáme soubory cookies.</cs>
 </text>
 <text>
