@@ -11,7 +11,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                 'mimeType' => 'application/json',
                 'mtime' => time(),
                 'contents' => json_encode(array(
-                    'pages' => $this->_getChildPages($this->_getCategoryComponent())
+                    'pages' => $this->_getChildPages()
                 ))
             );
             Kwf_Cache_Simple::add($cacheId, $data);
@@ -25,7 +25,22 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         return true;
     }
 
-    protected function _getChildPages($parentPage)
+    protected function _getChildPages()
+    {
+        $category = Kwc_Abstract::getSetting($this->_getParam('class'), 'level');
+        if (is_string($category)) $category = array($category);
+        $categoryClass = null;
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subrootComponentId'));
+
+        $categoryComponents = array();
+        foreach($component->getChildComponents(array('flag' => 'menuCategory')) as $cat) {
+            if (in_array($cat->id, $category)) $categoryComponents[] = $cat;
+        }
+
+        return $this->_getChildPagesRecursive($categoryComponents);
+    }
+
+    protected function _getChildPagesRecursive($parentPage)
     {
         $ret = array();
         $i = 0;
@@ -43,7 +58,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                 $ret[$i]['name'] = $page->name;
                 $ret[$i]['url'] = $page->url;
                 $ret[$i]['class'] = array();
-                $ret[$i]['children'] = $this->_getChildPages($page);
+                $ret[$i]['children'] = $this->_getChildPagesRecursive($page);
 
                 if ($i == 0) $ret[$i]['class'][] = 'first';
                 if ($i == count($pages)-1) $ret[$i]['class'][] = 'last';
@@ -54,19 +69,5 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
             }
         }
         return $ret;
-    }
-
-    protected function _getCategoryComponent()
-    {
-        $category = Kwc_Abstract::getSetting($this->_getParam('class'), 'level');
-        if (is_string($category)) $category = array($category);
-        $categoryClass = null;
-        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subrootComponentId'));
-
-        $categoryComponents = array();
-        foreach($component->getChildComponents(array('flag' => 'menuCategory')) as $cat) {
-            if (in_array($cat->id, $category)) $categoryComponents[] = $cat;
-        }
-        return $categoryComponents;
     }
 }
