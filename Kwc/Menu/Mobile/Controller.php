@@ -3,8 +3,6 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
 {
     public function jsonIndexAction()
     {
-        $categoryComponents = $this->_getCategoryComponent();
-
         $cacheId = 'kwcMenuMobile-' . $this->_getParam('componentId');
         $data = Kwf_Cache_Simple::fetch($cacheId);
         if ($data === false) {
@@ -13,7 +11,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                 'mimeType' => 'application/json',
                 'mtime' => time(),
                 'contents' => json_encode(array(
-                    'pages' => $this->_getChildPages($categoryComponents)
+                    'pages' => $this->_getChildPages($this->_getCategoryComponent())
                 ))
             );
             Kwf_Cache_Simple::add($cacheId, $data);
