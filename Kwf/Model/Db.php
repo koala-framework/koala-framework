@@ -845,6 +845,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $select = $where;
         }
         $dbSelect = $this->createDbSelect($select);
+//         p($dbSelect);
         if ($order = $select->getPart(Kwf_Model_Select::ORDER)) {
             foreach ($order as $o) {
                 if ($o['field'] instanceof Zend_Db_Expr) {
