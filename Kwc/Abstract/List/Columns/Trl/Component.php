@@ -1,5 +1,5 @@
 <?php
-class Kwc_List_Gallery_Trl_Component extends Kwc_Abstract_List_Trl_Component
+class Kwc_Abstract_List_Columns_Trl_Component extends Kwc_Abstract_List_Trl_Component
 {
     public static function getSettings($masterComponent)
     {

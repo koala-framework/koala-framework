@@ -1,5 +1,5 @@
 <?php
-class Kwc_List_Gallery_Events extends Kwc_Abstract_List_Events
+class Kwc_Abstract_List_Columns_Events extends Kwc_Abstract_List_Events
 {
     protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
     {
