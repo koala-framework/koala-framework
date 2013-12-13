@@ -225,7 +225,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     closeAndPushState: function() {
-        if (Kwf.Utils.HistoryState.entries > 0) {
+        if (!this.options.disableHistoryState && Kwf.Utils.HistoryState.entries > 0) {
             Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate = true; //required to avoid flicker on closing, see popstate handler
             var previousEntries = Kwf.Utils.HistoryState.entries;
             history.back();
