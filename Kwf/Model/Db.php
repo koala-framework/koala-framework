@@ -547,8 +547,14 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
             return "SUM($field)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Max) {
-            $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
-            return "MAX($field)";
+            if ($expr->getField() instanceof Kwf_Model_Select_Expr_Child_Count) {
+                $childExpr = $expr->getField();
+                $subSelect = $this->_createDbSelectExpression($childExpr, '', $depOf, $tableNameAlias);
+                return "(select MAX($subSelect) FROM ".$depOf->_tableName.")";
+            } else {
+                $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
+                return "MAX($field)";
+            }
         } else if ($expr instanceof Kwf_Model_Select_Expr_Min) {
             $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
             return "MIN($field)";
@@ -839,6 +845,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $select = $where;
         }
         $dbSelect = $this->createDbSelect($select);
+//         p($dbSelect);
         if ($order = $select->getPart(Kwf_Model_Select::ORDER)) {
             foreach ($order as $o) {
                 if ($o['field'] instanceof Zend_Db_Expr) {
