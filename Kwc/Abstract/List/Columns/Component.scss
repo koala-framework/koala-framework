@@ -39,14 +39,6 @@ div.cssClass {
         }
     }
 
-    &.gt360 {
-        &.col4 {
-            .listItem {
-                @include span-columns(1, 4);
-            }
-        }
-    }
-
     &.gt600 {
         @for $i from 1 through 10 {
             &.col#{$i} {
