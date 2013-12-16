@@ -19,7 +19,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         var fileUploadField = this._getFileUploadField();
         fileUploadField.on('change', function (el, value) {
             var dimensionField = this._getDimensionField();
-            if (!value || !value.mimeType.match(/(^image\/)/)) {
+            if (!value || !value.mimeType || !value.mimeType.match(/(^image\/)/)) {
                 dimensionField.newImageUploaded('');
                 this._getFileUploadField().setPreviewUrl(null);
                 return;
