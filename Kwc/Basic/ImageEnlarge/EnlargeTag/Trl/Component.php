@@ -49,6 +49,10 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
     public function getImageDimension()
     {
         $dimension = $this->getData()->chained->getComponent()->_getSetting('dimension');
+        if ($this->getData()->chained->getComponent()->getRow()->use_crop) {
+            $parentDimensions = $this->_getImageEnlargeComponent()->getImageDimensions();
+            $dimension['crop'] = $parentDimensions['crop'];
+        }
         $data = $this->_getImageData();
         return Kwf_Media_Image::calculateScaleDimensions($data['file'], $dimension);
     }
