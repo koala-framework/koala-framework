@@ -151,3 +151,8 @@
 .kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .box .empty {
     display: none;
 }
+
+.kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .filedescription .filename {
+    white-space: nowrap;
+    overflow: hidden;
+}
