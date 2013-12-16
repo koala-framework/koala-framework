@@ -60,12 +60,13 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
             dimensions: this.dimensions,
             value: this.getValue(),
             imageData: this.imageData,
-            selectDimensionDisabled: this.selectDimensionDisabled
+            selectDimensionDisabled: this.selectDimensionDisabled,
+            _scaleFactor: this._scaleFactor,
+            _dpr2Check: this.dpr2Check
         });
         this._sizeWindow.on('save', function(value) {
             this.setValue(value);
         }, this);
-        this._sizeWindow.setScaleFactor(this._scaleFactor);
         this._sizeWindow.show();
     },
 
@@ -80,8 +81,6 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
 
     setScaleFactor: function (scaleFactor) {
         this._scaleFactor = scaleFactor;
-        if (this._sizeWindow)
-            this._sizeWindow.setScaleFactor(scaleFactor);
     },
 
     newImageUploaded: function (value) {

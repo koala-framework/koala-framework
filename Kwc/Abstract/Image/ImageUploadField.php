@@ -7,6 +7,7 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
     public function __construct($dimensions, $imageLabel)
     {
         parent::__construct();
+        $dpr2Check = Kwf_Config::getValue('kwc.requireDpr2');
         $this->setXtype('kwc.image.imageuploadfield');
         $this->setBaseCls('kwc-abstract-image-image-upload-big-preview');
         // Fileupload
@@ -21,6 +22,7 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
 
         $this->_dimensions = $dimensions;
         $this->_dimensionField = new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension'));
+        $this->_dimensionField->setDpr2Check($dpr2Check);
         $this->_dimensionField->setAllowBlank(false)
             ->setLabelStyle('display:none')
             ->setCtCls('kwc-abstract-image-dimension-container')

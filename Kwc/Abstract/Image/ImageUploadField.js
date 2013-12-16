@@ -44,7 +44,9 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         var dimensionField = this._getDimensionField();
         var fileUploadField = this._getFileUploadField();
         if (!fileUploadField.getEl().child('.hover-background')) return;
-        if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensionField.dimensions, this._scaleFactor)) {
+        var scaleFactor = this._scaleFactor;
+        if (dimensionField.dpr2Check) scaleFactor /= 2;
+        if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensionField.dimensions, scaleFactor)) {
             this.getEl().addClass('error');
             fileUploadField.getEl().child('.hover-background').addClass('error');
             if (!fileUploadField.getEl().child('.hover-background .message')) {
