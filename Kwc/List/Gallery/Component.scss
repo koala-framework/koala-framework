@@ -2,13 +2,15 @@
 @import "compass/css3/box-sizing";
 $gutter-width   : 0em;
 $grid-padding   : 0em;
+$contentMargin  : 10px;
+$breakpoint     : 600;
 
 div.cssClass {
-    margin-right: -10px;
+    margin-right: -$contentMargin;
 
     .listItem {
         @include box-sizing(border-box);
-        padding: 0 10px 7px 0;
+        padding: 0 $contentMargin 7px 0;
         position: relative;
         margin: 0;
     }
@@ -47,7 +49,7 @@ div.cssClass {
         }
     }
 
-    &.gt600 {
+    &.gt#{$breakpoint} {
         @for $i from 1 through 10 {
             &.col#{$i} {
                 .listItem {

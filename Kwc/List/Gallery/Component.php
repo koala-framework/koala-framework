@@ -9,6 +9,7 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         $ret['generators']['child']['component'] = 'Kwc_List_Gallery_Image_Component';
         $ret['assets']['files'][] = 'kwf/Kwc/List/Gallery/Component.js';
         $ret['extConfig'] = 'Kwc_List_Gallery_ExtConfig';
+        $ret['breakpoint'] = '600';
         return $ret;
     }
 
@@ -39,20 +40,21 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
     {
         $ownWidth = parent::_getChildContentWidth($child);
         $contentMargin = $this->_getSetting('contentMargin');
+        $breakpoint = $this->_getSetting('breakpoint');
         $columns = (int)$this->_getGalleryColumns();
         $ownWidth -= ($columns-1) * $contentMargin;
 
         if (!$columns) $columns = 1;
         if ($columns >=5 && $columns <= 10) {
             if ($columns == 6) {
-                $columns = '3';
+                $columns = 3;
             }
             if ($columns % 2 == 0) {
-                $columns = '4';
+                $columns = 4;
             } else {
-                $columns = '3';
+                $columns = 3;
             }
-            $ret = (int)floor((590 - ($columns-1) * $contentMargin) / $columns);
+            $ret = (int)floor((($breakpoint - $contentMargin) - ($columns-1) * $contentMargin) / $columns);
         } else {
             $ret = (int)floor($ownWidth / $columns);
         }
