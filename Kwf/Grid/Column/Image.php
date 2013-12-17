@@ -100,7 +100,7 @@ class Kwf_Grid_Column_Image extends Kwf_Grid_Column
             throw new Kwf_Exception_NotFound();
         }
         return array(
-            'contents' => Kwf_Media_Image::scale($uploadRow->getFileSource(), $size),
+            'contents' => Kwf_Media_Image::scale($uploadRow->getFileSource(), $size, $uploadRow->id),
             'mimeType' => $uploadRow->mime_type
         );
     }
