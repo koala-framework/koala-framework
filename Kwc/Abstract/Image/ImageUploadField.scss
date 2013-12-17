@@ -100,7 +100,7 @@
 }
 
 .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background {
-    background-color: rgba(0,0,0,0.77);
+    background-image: url('/assets/kwf/images/cropimage/blackPx85.png');
     height: 35px;
     width: 390px;
     top: 0px;
@@ -109,7 +109,7 @@
 }
 
 .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background.error {
-    background-color: rgba(255,0,0,0.77);
+    background-image: url('/assets/kwf/images/cropimage/redPx85.png');
     height: 65px;
 }
 

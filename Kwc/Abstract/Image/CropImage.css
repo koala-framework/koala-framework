@@ -24,6 +24,10 @@
     background-image: url("/assets/kwf/images/cropimage/background.png");
     position: absolute;
 }
+.x-window .kwc-abstract-image-crop-image-wrapper.crop-changing {
+    background-image: none;
+    background-color: transparent;
+}
 
 .kwc-abstract-image-crop-image-resizable {
     cursor: move;

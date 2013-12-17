@@ -187,18 +187,12 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
     _hideCropShadow: function () {
         var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
-        wrapper.imageSrcBackup = wrapper.getStyle('background-image');
-        wrapper.setStyle({
-            'background-image': 'none',
-            'background-color': 'transparent'
-        });
+        wrapper.addClass('crop-changing');
     },
 
     _showCropShadow: function () {
         var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
-        wrapper.setStyle({
-            'background-image': wrapper.imageSrcBackup
-        });
+        wrapper.removeClass('crop-changing');
     },
 
     afterRender: function () {

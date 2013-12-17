@@ -259,9 +259,23 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             var scaleFactor = this._scaleFactor;
             if (this._dpr2Check) scaleFactor /= 2;
             if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, this.dimensions, scaleFactor)) {
-                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').setStyle('background-color', 'rgba(255,0,0,0.5)');
+                for (i in this._dimensionField.items.items) {
+                    var item = this._dimensionField.items.items[i];
+                    if (item.checked) {
+                        item.container.addClass('error');
+                    } else if (item.container) {
+                        item.container.removeClass('error');
+                    }
+                }
+                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').addClass('error');
             } else {
-                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').setStyle('background-color', 'transparent');
+                for (i in this._dimensionField.items.items) {
+                    var item = this._dimensionField.items.items[i];
+                    if (item.container) {
+                        item.container.removeClass('error');
+                    }
+                }
+                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').removeClass('error');
             }
         }, this);
 
