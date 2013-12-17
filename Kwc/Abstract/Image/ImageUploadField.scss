@@ -134,13 +134,19 @@
     display: block;
 }
 
+.kwc-abstract-image-image-upload-file {
+    position: relative;
+}
+
 .kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .hint {
     display: inline;
     position: absolute;
     color: #CCCCCC;
     font-weight: bold;
     font-size: 20px;
-    left: 155px;
+    left: 0px;
+    width: 100%;
+    text-align: center;
     top: 90px;
     text-transform: uppercase;
 }

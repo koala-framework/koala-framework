@@ -13,7 +13,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         tag: 'div',
         cls: 'swfUploadField',
         style: 'width: 336px; height: 53px',
-        html: '<div class="hint">'+trl('oder Datei hier hinziehen')+'</div>'
+        html: '<div class="hint">'+trlKwf('or drag here')+'</div>'
     },
     fileIcons: {
         'application/pdf': 'page_white_acrobat',

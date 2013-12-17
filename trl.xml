@@ -10219,34 +10219,39 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2052</id>
 </text>
 <text>
+<en>or drag here</en>
+<de>oder hier hinziehen</de>
+<id>2053</id>
+</text>
+<text>
 <en>Layer</en>
 <de>Ebene</de>
-<id>2040</id>
+<id>2054</id>
 </text>
 <text>
 <en>Headline {0}</en>
 <de>Überschrift {0}</de>
-<id>2041</id>
+<id>2055</id>
 </text>
 <text>
 <en>Text 1</en>
 <de>Text 1</de>
-<id>2042</id>
+<id>2056</id>
 </text>
 <text>
 <en>Text 2</en>
 <de>Text 2</de>
-<id>2043</id>
+<id>2057</id>
 </text>
 <text>
 <en>Original text 1</en>
 <de>Original text 1</de>
-<id>2044</id>
+<id>2058</id>
 </text>
 <text>
 <en>Original text 2</en>
 <de>Original text 2</de>
-<id>2045</id>
+<id>2059</id>
 </text>
 <text>
 <en>Layer</en>
