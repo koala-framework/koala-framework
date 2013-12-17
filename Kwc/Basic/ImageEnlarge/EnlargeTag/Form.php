@@ -3,8 +3,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
-        $checkbox = new Kwf_Form_Field_Checkbox('use_crop', trl('Enlarge Image'));
-        $checkbox->setBoxLabel(trl('Use crop region'));
+        $checkbox = new Kwf_Form_Field_Checkbox('use_crop', trlKwf('Enlarge Image'));
+        $checkbox->setBoxLabel(trlKwf('Use crop region'));
         $this->add($checkbox);
         if (Kwc_Abstract::getSetting($this->getClass(), 'imageTitle')) {
             $this->add(new Kwf_Form_Field_TextArea('title', trlKwf('Image text')))
