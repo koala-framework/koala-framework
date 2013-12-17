@@ -24,6 +24,10 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
                 $cfg = new Zend_Config_Ini('assetVariables.ini', $section);
                 $assetVariables[$section] = array_merge($assetVariables[$section], $cfg->toArray());
             }
+            foreach ($assetVariables[$section] as $k=>$i) {
+                //also support lowercase variables
+                if (strtolower($k) != $k) $assetVariables[$section][strtolower($k)] = $i;
+            }
         }
         foreach ($assetVariables[$section] as $k=>$i) {
             $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
