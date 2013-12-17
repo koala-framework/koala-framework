@@ -1,0 +1,10 @@
+2013-12-17 15:23:03
+/kwf/util/apc/clear-cache
+9 msec
+Load: 0.00
+Memory: 5335 kb
+DB-Queries: (none)
+
+
+  ms  % Checkpoint
+   9100 shutDown

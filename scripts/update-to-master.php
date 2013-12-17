@@ -148,6 +148,11 @@ createScssCacheFolder();
 $files = glob_recursive('Events.php');
 replaceFiles($files, 'Kwf_Component_Event_ComponentClass_PartialsChanged', 'Kwf_Component_Event_ComponentClass_AllPartialChanged');
 
+$files = glob_recursive('Component.php');
+$files[] = 'config.ini';
+replaceFiles($files, 'Kwc_Basic_Headlines_Component', 'Kwc_Legacy_Headlines_Component');
+replaceFiles($files, 'Kwc_Basic_Headline_Component', 'Kwc_Legacy_Headline_Component');
+
 updateErrorViews(glob('views/error*.tpl'));
 
 echo "Update Image-Parameter\n";
