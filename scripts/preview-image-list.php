@@ -1,4 +1,8 @@
 <?php
+/**
+ * Just copy this into your bootstrap to find out which components have to be checked
+ * It's returning a list of every page containing a component with alternative preview-image
+ */
 $data = Kwf_Registry::get('db')->query('SELECT * FROM `kwc_basic_image` WHERE data like \'%preview_image":true%\'')->fetchAll();
 foreach ($data as $row) {
     $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row['component_id'], array('ignoreVisible' => false));
