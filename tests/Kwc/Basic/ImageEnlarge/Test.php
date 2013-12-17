@@ -242,7 +242,6 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
 
     public function testWithOriginalHtml()
     {
-        $this->markTestIncomplete();
         $html = $this->_root->getComponentById('1803-linkTag_imagePage')->render();
 
         $doc = new DOMDocument();
@@ -254,7 +253,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->assertEquals(1, count($a));
         $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$a[0]['href'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
-        $this->assertEquals('application/octet-stream', $o['mimeType']);
+        $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
         $this->assertEquals(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1', $o['file']);
     }
