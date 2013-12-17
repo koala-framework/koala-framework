@@ -61,6 +61,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['files'][] = 'kwf/Kwf_js/Utils/Resizable.js';
         $ret['assets']['files'][] = 'kwf/Kwc/Abstract/Image/Component.js';
         $ret['assets']['dep'][] = 'KwfOnReady';
+        $ret['assets']['dep'][] = 'KwfResponsiveImg';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
         return $ret;
     }
