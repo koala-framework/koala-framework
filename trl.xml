@@ -10209,14 +10209,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2050</id>
 </text>
 <text>
-<en>Image Crop Utility</en>
-<de>Bildausschnitt Tool</de>
-<id>2047</id>
+<en>Loading image</en>
+<de>Bild wird geladen</de>
+<id>2051</id>
 </text>
 <text>
-<en>Loading image</en>
-<de>Lade Bild</de>
-<id>2048</id>
+<en>Use crop region</en>
+<de>verwende ausgewählten Bildbereich</de>
+<id>2052</id>
 </text>
 <text>
 <en>Layer</en>
