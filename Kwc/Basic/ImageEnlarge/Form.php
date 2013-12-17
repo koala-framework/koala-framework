@@ -7,7 +7,13 @@ class Kwc_Basic_ImageEnlarge_Form extends Kwc_Abstract_Image_Form
 
         $linkTag = $this->getByName('linkTag');
         if ($linkTag) {
-            $linkTag->setTitle(trlKwf('Click on Preview Image').':');
+            $childs = $linkTag->getChildren();
+            $childs = $childs[0]->getChildren();
+            if ($childs[0] instanceof Kwf_Form_Container_Cards) {
+                $linkTag->setTitle(trlKwf('Click on Preview Image').':');
+            } else {
+                $linkTag->setTitle(trlKwf('Image Enlarge').':');
+            }
         }
     }
 }
