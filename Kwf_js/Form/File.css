@@ -13,7 +13,8 @@
     margin-right: 5px;
     position: relative;
 }
-.x-form-element .swfUploadField .previewImage {
+.x-form-element .swfUploadField .previewImage,
+.x-form-element .swfUploadField .box .empty {
     margin-right: 10px;
     padding: 5px;
     float: left;
