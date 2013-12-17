@@ -16,6 +16,7 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
             $this->add(new Kwf_Form_Field_TextField('alt_text', trlKwf('Alt Text')))
+                ->setHelpText(trlKwf('Optional: Describe this image for visually handicapped people and search engines.'))
                 ->setWidth(300);
         }
 

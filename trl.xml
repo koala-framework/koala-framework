@@ -9082,7 +9082,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Alt Text</en>
 <id>1792</id>
-<de>Alternativer Text</de>
+<de>Alt Text</de>
 </text>
 <text>
 <en>Add Recipients</en>
@@ -10247,5 +10247,20 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Original text 2</en>
 <de>Original text 2</de>
 <id>2045</id>
+</text>
+<text>
+<en>Layer</en>
+<de>Ebene</de>
+<id>2060</id>
+</text>
+<text>
+<en>Optional: Describe this image for visually handicapped people and search engines.</en>
+<de>Optional: Beschreibung des Bildes für sehschwache Menschen und Suchmaschinen.</de>
+<id>2061</id>
+</text>
+<text>
+<en>Selection too small!</en>
+<de>Auswahl zu klein!</de>
+<id>2062</id>
 </text>
 </trl>
