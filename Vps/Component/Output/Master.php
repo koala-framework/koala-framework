@@ -18,6 +18,9 @@ class Vps_Component_Output_Master extends Vps_Component_Output_NoCache
                     'masterComponent' => $component
                 );
             }
+            if (Vpc_Abstract::getFlag($component->componentClass, 'resetMaster')) {
+                break;
+            }
             $component = $component->parent;
         }
         return $this->_render($c->componentId, $c->componentClass, true);
