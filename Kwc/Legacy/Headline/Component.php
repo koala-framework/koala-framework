@@ -1,16 +1,16 @@
 <?php
-class Kwc_Basic_Headlines_Component extends Kwc_Abstract
+class Kwc_Legacy_Headline_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlKwfStatic('Headlines'),
+            'componentName' => trlKwfStatic('Headline'),
             'componentIcon' => new Kwf_Asset('text_padding_top'),
             'ownModel'      => 'Kwf_Component_FieldModel',
             'cssClass'      => 'webStandard',
             'extConfig'     => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
-        $ret['throwHasContentChangedOnRowColumnsUpdate'] = array('headline1', 'headline2');
+        $ret['throwHasContentChangedOnRowColumnsUpdate'] = array('headline1');
         return $ret;
     }
 
@@ -18,13 +18,12 @@ class Kwc_Basic_Headlines_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['headline1'] = $this->_getRow()->headline1;
-        $ret['headline2'] = $this->_getRow()->headline2;
         return $ret;
     }
 
     public function hasContent()
     {
-        if (trim($this->_getRow()->headline1) != "" || trim($this->_getRow()->headline2) != "") {
+        if (trim($this->_getRow()->headline1) != "" ) {
             return true;
         }
         return false;

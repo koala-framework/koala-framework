@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_Headline_Trl_Component extends Kwc_Chained_Trl_Component
+class Kwc_Legacy_Headlines_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
