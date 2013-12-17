@@ -1,5 +1,5 @@
 <?php
-class Kwc_Trl_Headlines_Root extends Kwc_Root_TrlRoot_Component
+class Kwc_Trl_Headline_Root extends Kwc_Root_TrlRoot_Component
 {
     public static function getSettings()
     {
@@ -9,8 +9,8 @@ class Kwc_Trl_Headlines_Root extends Kwc_Root_TrlRoot_Component
             'de' => 'Deutsch',
             'en' => 'English'
         ));
-        $ret['generators']['master']['component'] = 'Kwc_Trl_Headlines_German';
-        $ret['generators']['chained']['component'] = 'Kwc_Trl_Headlines_English.Kwc_Trl_Headlines_German';
+        $ret['generators']['master']['component'] = 'Kwc_Trl_Headline_German';
+        $ret['generators']['chained']['component'] = 'Kwc_Trl_Headline_English.Kwc_Trl_Headline_German';
         return $ret;
     }
 }

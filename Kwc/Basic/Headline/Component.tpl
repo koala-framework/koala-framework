@@ -1,5 +1,6 @@
 <div class="<?=$this->cssClass?>">
-    <? if ($this->headline1) { ?>
-        <h1><?= $this->headline1 ?></h1>
-    <? } ?>
+    <<?=$this->headlineType ?>>
+        <?= $this->headline1 ?>
+        <? if ($this->headline2) { ?><span class="sub"><?= $this->headline2 ?></span><? } ?>
+    </<?=$this->headlineType ?>>
 </div>

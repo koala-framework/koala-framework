@@ -10153,5 +10153,35 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Lade Bild</de>
 <id>2039</id>
 </text>
+<text>
+<en>Layer</en>
+<de>Ebene</de>
+<id>2040</id>
+</text>
+<text>
+<en>Headline {0}</en>
+<de>Überschrift {0}</de>
+<id>2041</id>
+</text>
+<text>
+<en>Text 1</en>
+<de>Text 1</de>
+<id>2042</id>
+</text>
+<text>
+<en>Text 2</en>
+<de>Text 2</de>
+<id>2043</id>
+</text>
+<text>
+<en>Original text 1</en>
+<de>Original text 1</de>
+<id>2044</id>
+</text>
+<text>
+<en>Original text 2</en>
+<de>Original text 2</de>
+<id>2045</id>
+</text>
 </trl>
 

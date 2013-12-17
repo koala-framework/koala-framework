@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_Headlines_Admin extends Kwc_Admin
+class Kwc_Legacy_Headlines_Admin extends Kwc_Admin
 {
     public function componentToString(Kwf_Component_Data $data)
     {
