@@ -297,6 +297,7 @@ class Kwf_Component_Settings
                     'scss' => array('filename'=>'Component', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
                     'masterCss' => array('filename'=>'Master', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
                     'masterScss' => array('filename'=>'Master', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
+                    'js' => array('filename'=>'Component', 'ext'=>'js', 'returnClass'=>false, 'multiple'=>true),
                 ));
             } else {
 
