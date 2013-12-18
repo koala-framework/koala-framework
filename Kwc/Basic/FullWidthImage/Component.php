@@ -1,5 +1,5 @@
 <?php
-class Kwc_FullWidthImage_Component extends Kwc_TextImage_ImageEnlarge_Component
+class Kwc_Basic_FullWidthImage_Component extends Kwc_TextImage_ImageEnlarge_Component
 {
     public static function getSettings()
     {
