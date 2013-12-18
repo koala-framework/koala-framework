@@ -105,7 +105,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
         $cacheId = $size.'_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
-            $output['contents'] = Kwf_Media_Image::scale($fileRow->getFileSource(), $sizes[$size]);
+            $output['contents'] = Kwf_Media_Image::scale($fileRow->getFileSource(), $sizes[$size], $fileRow->id);
             $output['mimeType'] = $fileRow->mime_type;
             $cache->save($output, $cacheId);
         }
@@ -147,7 +147,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             'downloadFilename' => $fileRow->filename . '.' . $fileRow->extension
         );
         $targetSize = array(600, 600, 'cover' => false);
-        $image = Kwf_Media_Image::scale($fileRow->getFileSource(), $targetSize);
+        $image = Kwf_Media_Image::scale($fileRow->getFileSource(), $targetSize, $fileRow->id);
         $outputParams['contents'] = $image;
         Kwf_Media_Output::output($outputParams);
     }

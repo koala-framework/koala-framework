@@ -242,7 +242,58 @@ class Kwf_Media_Image
         return $ret;
     }
 
-    public static function scale($source, $size)
+    private static function _preScale($source, $sourceSize, $size, $uploadId)
+    {
+        $preScaleFactor = 0;
+        $preScaleCacheFile = null;
+
+        $preScaleWidth = $sourceSize[0];
+        $preScaleHeight = $sourceSize[1];
+        if (isset($size['rotate']) && $size['rotate']) {
+            list($preScaleWidth, $preScaleHeight) = array($preScaleHeight, $preScaleWidth); //swap
+        }
+        $preScaleTargetWidth = $size['width'];
+        $preScaleTargetHeight = $size['height'];
+        if (isset($size['crop']['width'])) {
+            $preScaleTargetWidth *= $preScaleWidth / $size['crop']['width'];
+            $preScaleTargetHeight *= $preScaleHeight / $size['crop']['height'];
+        }
+
+        $previousCacheFile = null;
+        while ($preScaleWidth/2 > $preScaleTargetWidth && $preScaleHeight/2 > $preScaleTargetHeight) {
+            //generate pre scaled versions of the image, every versions half the size of the previous
+            $preScaleWidth /= 2;
+            $preScaleHeight /= 2;
+            $preScaleFactor++;
+            if (!is_dir("cache/mediaprescale/$uploadId")) mkdir("cache/mediaprescale/$uploadId");
+            $preScaleCacheFile = "cache/mediaprescale/$uploadId/$preScaleFactor";
+            if (!file_exists($preScaleCacheFile)) {
+                $im = new Imagick();
+                $f = $source;
+                if ($previousCacheFile) {
+                    $f = $previousCacheFile;
+                }
+                $fp = fopen($f, 'rb');
+                $im->readImageFile($fp, 'foo.'.str_replace('image/', '', $sourceSize['mime'])); //add fake filename to help imagick with format detection
+                fclose($fp);
+                if (!$previousCacheFile) {
+                    $im = self::_processCommonImagickSettings($im); //only once
+                }
+                $im->resizeImage($preScaleWidth, $preScaleHeight, Imagick::FILTER_LANCZOS, 1);
+                $fp = fopen($preScaleCacheFile, 'wb');
+                $im->writeImageFile($fp);
+                fclose($fp);
+                $im->destroy();
+            }
+            $previousCacheFile = $preScaleCacheFile;
+        }
+        return array(
+            'factor' => $preScaleFactor,
+            'file' => $preScaleCacheFile
+        );
+    }
+
+    public static function scale($source, $size, $uploadId = null)
     {
         if ($source instanceof Kwf_Uploads_Row) {
             $source = $source->getFileSource();
@@ -250,6 +301,8 @@ class Kwf_Media_Image
         if (is_string($source) && !is_file($source)) {
             return false;
         }
+
+        $sourceSize = @getimagesize($source);
 
         $size = self::calculateScaleDimensions($source, $size);
         if ($size === false) return false;
@@ -266,17 +319,36 @@ class Kwf_Media_Image
         }
 
         if (class_exists('Imagick')) {
+            $preScale = array('factor'=>0);
+            if ($uploadId && !$source instanceof Imagick) {
+                $preScale = self::_preScale($source, $sourceSize, $size, $uploadId);
+            }
+
             if ($source instanceof Imagick) {
                 $im = $source;
             } else {
                 $im = new Imagick();
-                $im->readImage($source);
+                $f = $source;
+                if ($preScale['factor']) {
+                    $f = $preScale['file'];
+                }
+                $fp = fopen($f, 'rb');
+                $im->readImageFile($fp, 'foo.'.str_replace('image/', '', $sourceSize['mime'])); //add fake filename to help imagick with format detection
+                fclose($fp);
             }
-            $im = self::_processCommonImagickSettings($im);
+            if (!$preScale['factor']) {
+                //preScale does this already
+                $im = self::_processCommonImagickSettings($im);
+            }
             if (isset($size['rotate']) && $size['rotate']) {
                 $im->rotateImage('#FFF', $size['rotate']);
             }
-            $im->cropImage($size['crop']['width'], $size['crop']['height'], $size['crop']['x'], $size['crop']['y']);
+
+            $factor = pow(2, $preScale['factor']); //1 if factor==0
+            $im->cropImage($size['crop']['width']/$factor,
+                           $size['crop']['height']/$factor,
+                           $size['crop']['x']/$factor,
+                           $size['crop']['y']/$factor);
             $im->resizeImage($size['width'], $size['height'], Imagick::FILTER_LANCZOS, 1);
             $im->setImagePage(0, 0, 0, 0);
 //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
