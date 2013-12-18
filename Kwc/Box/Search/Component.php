@@ -14,8 +14,6 @@ abstract class Kwc_Box_Search_Component extends Kwc_Abstract_Composite_Component
         $ret['assets']['dep'][] = 'ExtUpdateManager';
         $ret['assets']['dep'][] = 'KwfClearOnFocus';
         $ret['assets']['dep'][] = 'ExtDelayedTask';
-        $ret['assets']['dep'][] = 'KwfOnReady';
-        $ret['assets']['files'][] = 'kwf/Kwc/Box/Search/Component.js';
 
         $ret['placeholder']['searchButton'] = trlKwfStatic('Search');
         $ret['placeholder']['clearOnFocus'] = trlKwfStatic('Search term');

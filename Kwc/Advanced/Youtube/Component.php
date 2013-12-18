@@ -8,7 +8,6 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwfStatic('Youtube');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['assets']['dep'][] = 'KwfYoutubePlayer';
-        $ret['assets']['files'][] = 'kwf/Kwc/Advanced/Youtube/Component.js';
         
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
 

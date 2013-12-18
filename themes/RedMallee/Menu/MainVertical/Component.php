@@ -6,9 +6,6 @@ class RedMallee_Menu_MainVertical_Component extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['level'] = array('main', 'top');
         $ret['cssClass'] = ' webListNone';
-
-        $ret['assets']['dep'][] = 'KwfOnReadyJQuery';
-        $ret['assets']['files'][] = 'kwf/themes/RedMallee/Menu/MainVertical/Component.js';
         return $ret;
     }
 

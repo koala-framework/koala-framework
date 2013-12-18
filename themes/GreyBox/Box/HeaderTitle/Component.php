@@ -5,7 +5,6 @@ class GreyBox_Box_HeaderTitle_Component extends Kwc_Basic_Headlines_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Header Title');
-        $ret['assets']['files'][] = 'kwf/themes/GreyBox/Box/HeaderTitle/Component.js';
         return $ret;
     }
 

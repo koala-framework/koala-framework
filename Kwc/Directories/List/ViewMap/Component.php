@@ -4,8 +4,6 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['files'][] = 'kwf/Kwc/Directories/List/ViewMap/Component.js';
-        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['assets']['dep'][] = 'KwfGoogleMap';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['generators']['child']['component']['paging'] = null;

@@ -12,11 +12,8 @@ abstract class Kwc_Abstract_Flash_Component extends Kwc_Abstract
             'component' => 'Kwc_Abstract_Flash_Placeholder_Component'
         );
 
-        $ret['assets']['files'][] = 'kwf/Kwc/Abstract/Flash/Component.js';
-        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['assets']['dep'][] = 'SwfObject';
-        $ret['assets']['dep'][] = 'ExtElement';
 
         $ret['cssClass'] = 'webStandard';
 

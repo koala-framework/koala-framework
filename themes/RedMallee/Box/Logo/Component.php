@@ -5,7 +5,6 @@ class RedMallee_Box_Logo_Component extends Kwc_Basic_Image_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Logo');
-        $ret['assets']['files'][] = 'kwf/themes/RedMallee/Box/Logo/Component.js';
         $ret['dimensions'] = array(
             'customcrop'=>array(
                 'text' => trlKwf('user-defined'),

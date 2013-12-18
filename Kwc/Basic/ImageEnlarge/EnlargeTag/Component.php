@@ -16,14 +16,6 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
             'name' => trlKwfStatic('Image'),
             'component' => 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component'
         );
-
-        $ret['assets']['files'][] = 'kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/Component.js';
-        $ret['assets']['dep'][] = 'ExtElement';
-        $ret['assets']['dep'][] = 'ExtConnection';
-        $ret['assets']['dep'][] = 'ExtDomHelper';
-        $ret['assets']['dep'][] = 'ExtUtilJson';
-        $ret['assets']['dep'][] = 'ExtFx';
-
         return $ret;
     }
 

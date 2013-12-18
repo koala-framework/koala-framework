@@ -83,7 +83,6 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldComponentController extends Kwf_Cont
     {
         $settings = '';
         if ($js) {
-            $settings .= "        \$ret['assets']['files'][] = 'web/components/$name/Component.js';";
         }
         $templateVars = '';
         $class = str_replace('/', '_', $name);

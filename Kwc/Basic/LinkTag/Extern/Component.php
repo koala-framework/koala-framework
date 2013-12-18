@@ -14,8 +14,6 @@ class Kwc_Basic_LinkTag_Extern_Component extends Kwc_Basic_LinkTag_Abstract_Comp
             'hasPopup'      => true, //TODO: bezeichnung von diesem setting ist scheiße
             'openType'      => null, //wenn hasPopup auf false
         ));
-        $ret['assets']['files'][] = 'kwf/Kwc/Basic/LinkTag/Extern/Component.js';
-        $ret['assets']['dep'][] = 'KwfOnReady';
         return $ret;
     }
 

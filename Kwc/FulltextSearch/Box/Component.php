@@ -4,8 +4,6 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['files'][] = 'kwf/Kwc/FulltextSearch/Box/Component.js';
-        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['useLiveSearch'] = true;
         $ret['hideSubmit'] = false;
         $ret['flags']['forwardProcessInput'] = true;

@@ -9,8 +9,6 @@ class Kwc_Menu_Mobile_Component extends Kwc_Abstract
         $ret['placeholder']['menuLink'] = trlKwfStatic('Menu');
 
         $ret['assets']['dep'][] = 'mustache';
-        $ret['assets']['dep'][] = 'KwfOnReadyJQuery';
-        $ret['assets']['files'][] = 'kwf/Kwc/Menu/Mobile/Component.js';
         return $ret;
     }
 

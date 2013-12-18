@@ -6,8 +6,6 @@ class RedMallee_Menu_SubHorizontal_Component extends Kwc_Menu_Component
         $ret = parent::getSettings();
         $ret['level'] = 2;
         $ret['cssClass'] .= ' webListNone';
-
-        $ret['assets']['files'][] = 'kwf/themes/RedMallee/Menu/SubHorizontal/Component.js';
         return $ret;
     }
 }

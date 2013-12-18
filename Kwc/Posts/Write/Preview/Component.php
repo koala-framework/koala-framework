@@ -7,7 +7,6 @@ class Kwc_Posts_Write_Preview_Component extends Kwc_Abstract
 
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtDelayedTask';
-        $ret['assets']['files'][] = 'kwf/Kwc/Posts/Write/Preview/Component.js';
 
         $ret['placeholder']['preview'] = trlKwfStatic('Preview').':';
         // es wird von der eigenen komponente aus so lange nach oben gesucht

@@ -10,7 +10,6 @@ class Kwc_Statistics_Opt_Component extends Kwc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Cookie Opt In / Opt Out');
-        $ret['assets']['files'][] = 'kwf/Kwc/Statistics/Opt/Component.js';
         $ret['viewCache'] = false;
         return $ret;
     }

@@ -4,8 +4,6 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['files'][] = 'kwf/Kwc/Advanced/GoogleMapView/Component.js';
-        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['assets']['dep'][] = 'KwfGoogleMap';
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['placeholder']['noCoordinates'] = ''; //leer, wird in GoogleMap benötgit damit man im backend sieht was falsch ist
