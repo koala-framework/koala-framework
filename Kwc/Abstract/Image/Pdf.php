@@ -16,7 +16,8 @@ class Kwc_Abstract_Image_Pdf extends Kwc_Abstract_Pdf
                 'width' => $this->_calculateMm($size['width']),
                 'height' => $this->_calculateMm($size['height'])
             );
-            $content = Kwf_Media_Image::scale($source, $imageSize);
+            $uploadId = isset($data['uploadId']) ? $data['uploadId'] : null;
+            $content = Kwf_Media_Image::scale($source, $imageSize, $uploadId);
             $filter = new Kwf_Filter_Ascii();
             $tempFilename = tempnam('application/temp', 'pdfimage');
             file_put_contents($tempFilename, $content);

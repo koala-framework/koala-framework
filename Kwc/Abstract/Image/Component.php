@@ -200,7 +200,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             'filename' => $filename,
             'file' => $file,
             'mimeType' => $fileRow->mime_type,
-            'row' => $row
+            'row' => $row,
+            'uploadId' => $fileRow->id
         );
     }
 
@@ -341,7 +342,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             if ($scalingNeeded) {
                 //NOTE: don't pass actual size of the resulting image, scale() will calculate that on it's own
                 //else size is calculated twice and we get rounding errors
-                $output = Kwf_Media_Image::scale($data['file'], $dim);
+                $uploadId = isset($data['uploadId']) ? $data['uploadId'] : null;
+                $output = Kwf_Media_Image::scale($data['file'], $dim, $uploadId);
                 $ret['contents'] = $output;
             } else {
                 $ret['file'] = $data['file'];

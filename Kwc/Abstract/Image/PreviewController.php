@@ -25,7 +25,7 @@ class Kwc_Abstract_Image_PreviewController extends Kwf_Controller_Action
         $cacheId = 'previewLarge_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
-            $output['contents'] = Kwf_Media_Image::scale($fileRow->getFileSource(), $dimensions);
+            $output['contents'] = Kwf_Media_Image::scale($fileRow->getFileSource(), $dimensions, $fileRow->id);
             $output['mimeType'] = $fileRow->mime_type;
             $cache->save($output, $cacheId);
         }

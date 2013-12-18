@@ -26,8 +26,9 @@ class Kwf_Util_Model_Welcome extends Kwf_Model_Db
     {
         $row = Kwf_Model_Abstract::getInstance($className)->getRow($id);
         $dim = self::getImageDimensions($type);
+        $uploadRow = $row->getParentRow($type);
         return array(
-            'contents'=>Kwf_Media_Image::scale($row->getParentRow($type), $dim),
+            'contents'=>Kwf_Media_Image::scale($uploadRow, $dim, $uploadRow->id),
             'mimeType' => $row->getParentRow($type)->mime_type
         );
     }

@@ -31,7 +31,7 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         $this->assertEquals($smallImage['width'], $im->getImageWidth());
         $this->assertEquals($smallImage['height'], $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/'.$smallImage['uploadId'],
-                                    array($smallImage['width'], $smallImage['height'], 'cover' => true)), $o['contents']);
+                                    array('width'=>$smallImage['width'], 'height'=>$smallImage['height'], 'cover' => true), $smallImage['uploadId']), $o['contents']);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
