@@ -4,7 +4,7 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
     private $_image;
     private $_dimensions;
 
-    public function __construct($dimensions, $imageLabel)
+    public function __construct($imageLabel)
     {
         parent::__construct();
         $dpr2Check = Kwf_Config::getValue('kwc.requireDpr2');
@@ -20,14 +20,18 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
             ->setHeight(184);
         $this->fields->add($this->_image);
 
-        $this->_dimensions = $dimensions;
         $this->_dimensionField = new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension'));
         $this->_dimensionField->setDpr2Check($dpr2Check);
         $this->_dimensionField->setAllowBlank(false)
             ->setLabelStyle('display:none')
-            ->setCtCls('kwc-abstract-image-dimension-container')
-            ->setDimensions($dimensions);
+            ->setCtCls('kwc-abstract-image-dimension-container');
         $this->fields->add($this->_dimensionField);
+    }
+
+    public function setDimensions($dimensions)
+    {
+        $this->_dimensions = $dimensions;
+        $this->_dimensionField->setDimensions($dimensions);
     }
 
     public function setShowHelptext($showHelptext)

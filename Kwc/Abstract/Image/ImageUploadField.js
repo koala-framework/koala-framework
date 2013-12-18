@@ -15,7 +15,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             }, this);
             dimensionField.on('change', function (dimension) {
                 this._setPreviewUrl(dimension);
-                this._checkForImageTooSmall(dimension);
+                this._checkForImageTooSmall();
             }, this);
         }
         var fileUploadField = this._getFileUploadField();
@@ -40,13 +40,18 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         }, this);
     },
 
-    _checkForImageTooSmall: function (value) {
+    _checkForImageTooSmall: function () {
         var dimensionField = this._getDimensionField();
+        var value = dimensionField.getValue();
         var fileUploadField = this._getFileUploadField();
         if (!fileUploadField.getEl().child('.hover-background')) return;
         var scaleFactor = this._scaleFactor;
         if (dimensionField.dpr2Check) scaleFactor /= 2;
-        if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensionField.dimensions, scaleFactor)) {
+        this._checkForImageTooSmallUserNotification(value, dimensionField.dimensions, scaleFactor, fileUploadField, dimensionField);
+    },
+
+    _checkForImageTooSmallUserNotification: function (value, dimensions, scaleFactor, fileUploadField, dimensionField) {
+        if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensions, scaleFactor)) {
             this.getEl().addClass('error');
             fileUploadField.getEl().child('.hover-background').addClass('error');
             if (!fileUploadField.getEl().child('.hover-background .message')) {

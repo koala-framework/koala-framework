@@ -1,10 +1,12 @@
 <?php
 class Kwc_Basic_ImageEnlarge_Form extends Kwc_Abstract_Image_Form
 {
+    protected $_imageUploadFieldClass = 'Kwc_Basic_ImageEnlarge_ImageUploadField';
+
     protected function _initFields()
     {
         parent::_initFields();
-
+        $this->setIdentifier('kwc-basic-imageenlarge-form');
         $linkTag = $this->getByName('linkTag');
         if ($linkTag) {
             $childs = $linkTag->getChildren();
@@ -15,5 +17,27 @@ class Kwc_Basic_ImageEnlarge_Form extends Kwc_Abstract_Image_Form
                 $linkTag->setTitle(trlKwf('Image Enlarge').':');
             }
         }
+    }
+
+    private static function _findDimensionByChildComponentClassRecursive($class)
+    {
+        if (is_instance_of($class, 'Kwc_Basic_ImageEnlarge_EnlargeTag_Component')) {
+            return Kwc_Abstract::getSetting($class, 'dimension');
+        } else {
+            foreach (Kwc_Abstract::getChildComponentClasses($class) as $childClass) {
+                $dimension = self::_findDimensionByChildComponentClassRecursive($childClass);
+                if ($dimension) {
+                    return $dimension;
+                }
+            }
+        }
+        return false;
+    }
+
+    protected function _createImageUploadField($imageLabel)
+    {
+        $ret = parent::_createImageUploadField($imageLabel);
+        $ret->setImageEnlargeDimension(self::_findDimensionByChildComponentClassRecursive($this->getClass()));
+        return $ret;
     }
 }

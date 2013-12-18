@@ -10224,8 +10224,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2053</id>
 </text>
 <text>
-<en>Layer</en>
-<de>Ebene</de>
+<en>CAUTION! Image size does not match minimum requirement for enlarge image.</en>
+<de>Achtung! Die Bildgröße des hochgeladenen Bildes entspricht nicht der Mindestanforderung der Bildvergrößerung.</de>
 <id>2054</id>
 </text>
 <text>
@@ -10269,3 +10269,4 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2062</id>
 </text>
 </trl>
+

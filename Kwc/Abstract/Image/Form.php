@@ -1,6 +1,8 @@
 <?php
 class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
 {
+    protected $_imageUploadFieldClass = 'Kwc_Abstract_Image_ImageUploadField';
+
     protected function _initFields()
     {
         if (Kwc_Abstract::getSetting($this->getClass(), 'editFilename')) {
@@ -8,7 +10,7 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
                 ->setVtype('alphanum');
         }
 
-        $this->add($this->_getImageUploadField());
+        $this->add($this->_createImageUploadField(Kwc_Abstract::getSetting($this->getClass(), 'imageLabel')));
 
         if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
             $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))
@@ -23,12 +25,11 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
         parent::_initFields();
     }
 
-    protected function _getImageUploadField()
+    protected function _createImageUploadField($imageLabel)
     {
-        $imageUploadField = new Kwc_Abstract_Image_ImageUploadField(
-            Kwc_Abstract::getSetting($this->getClass(), 'dimensions'),
-            Kwc_Abstract::getSetting($this->getClass(), 'imageLabel')
-        );
+        $cls = $this->_imageUploadFieldClass;
+        $imageUploadField = new $cls($imageLabel);
+        $imageUploadField->setDimensions(Kwc_Abstract::getSetting($this->getClass(), 'dimensions'));
         $imageUploadField
             ->setAllowBlankImage(Kwc_Abstract::getSetting($this->getClass(), 'allowBlank'))
             ->setShowHelptext(Kwc_Abstract::getSetting($this->getClass(), 'showHelpText'))
