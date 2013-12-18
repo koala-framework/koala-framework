@@ -39,7 +39,7 @@ class Kwf_Assets_DependencyIni_ProviderTest extends Kwf_Test_TestCase
         $this->assertNotNull($d);
         $this->assertTrue($d instanceof Kwf_Assets_Dependency_Dependencies);
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($d));
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($d, Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL));
         $fileNames = array();
         foreach ($it as $i) {
             $fileNames[] = substr($i, strrpos($i, '/')+1);

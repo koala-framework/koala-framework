@@ -19,7 +19,7 @@ class Kwf_Assets_Modernizr_ProviderTest extends Kwf_Test_TestCase
     {
         $d = $this->_list->findDependency('Test');
         $this->assertTrue($d instanceof Kwf_Assets_Dependency_Dependencies);
-        $d = current($d->getDependencies());
+        $d = current($d->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL));
         $this->assertTrue($d instanceof Kwf_Assets_Modernizr_Dependency);
         $this->assertEquals(array('Animation', 'Transition'), $d->getFeatures());
     }

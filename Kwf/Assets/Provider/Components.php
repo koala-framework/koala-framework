@@ -22,7 +22,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                 ));
                 foreach ($files as $i) {
                     foreach ($i as $j) {
-                        $ret[] = Kwf_Assets_Dependency_File::createDependency($j);
+                        $ret[] = Kwf_Assets_Dependency_File::createDependency($j, $this->_providerList);
                     }
                 }
             }
@@ -53,7 +53,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                     if (!in_array($i, $addedFiles)) {
                         $addedFiles[] = $i;
                         if (!is_object($i)) {
-                            $i = Kwf_Assets_Dependency_File::createDependency($i);
+                            $i = Kwf_Assets_Dependency_File::createDependency($i, $this->_providerList);
                         }
                         $ret[] = $i;
                     }
@@ -71,7 +71,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                     foreach ($componentCssFiles as $i) {
                         if (!in_array($i, $addedFiles)) {
                             $addedFiles[] = $i;
-                            $ret[] = Kwf_Assets_Dependency_File::createDependency($i);
+                            $ret[] = Kwf_Assets_Dependency_File::createDependency($i, $this->_providerList);
                         }
                     }
                 }

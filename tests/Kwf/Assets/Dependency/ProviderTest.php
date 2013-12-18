@@ -12,9 +12,9 @@ class Kwf_Assets_Dependency_ProviderTest extends Kwf_Test_TestCase
     {
         $d = $this->_list->findDependency('Test');
         $this->assertTrue($d instanceof Kwf_Assets_Dependency_Dependencies);
-        $this->assertEquals(3, count($d->getDependencies()));
+        $this->assertEquals(3, count($d->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL)));
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($d));
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($d, Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL));
         $array = iterator_to_array($it, false);
         $this->assertEquals(4, count($array));
     }
@@ -30,7 +30,7 @@ class Kwf_Assets_Dependency_ProviderTest extends Kwf_Test_TestCase
         $d = $this->_list->findDependency('TestWithStar');
         $this->assertTrue($d instanceof Kwf_Assets_Dependency_Dependencies);
 
-        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($d));
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_Recursive($d, Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL));
         $array = iterator_to_array($it, false);
 
         //foo2.js must be only once in array (not added again thru *)

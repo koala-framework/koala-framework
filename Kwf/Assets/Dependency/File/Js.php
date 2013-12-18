@@ -14,7 +14,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         parent::__construct($fileName);
     }
 
-    private function _getContents($language, $pack)
+    protected function _getContents($language, $pack)
     {
         if (isset($this->_contentsCache) && $pack) {
             $ret = $this->_contentsCache;
@@ -38,22 +38,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             }
 
             if ($pack) {
-
-                $ret = str_replace("\r", "\n", $ret);
-
-                // remove comments
-                $ret = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $ret);
-                // deaktiviert wg. urls mit http:// in hilfetexten $contents = preg_replace('!//[^\n]*!', '', $ret);
-
-                // remove tabs, spaces, newlines, etc. - funktioniert nicht - da fehlen hinundwider ;
-                //$ret = str_replace(array("\r", "\n", "\t"), "", $ret);
-
-                // multiple whitespaces
-                $ret = str_replace("\t", " ", $ret);
-                $ret = preg_replace('/(\n)\n+/', '$1', $ret);
-                $ret = preg_replace('/(\n)\ +/', '$1', $ret);
-                $ret = preg_replace('/(\ )\ +/', '$1', $ret);
-
+                $ret = self::pack($ret);
                 $this->_contentsCache = $ret;
             }
 
@@ -68,7 +53,27 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         return $ret;
     }
 
-    public function getContents($language)
+    public static function pack($ret)
+    {
+        $ret = str_replace("\r", "\n", $ret);
+
+        // remove comments
+        $ret = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $ret);
+        // deaktiviert wg. urls mit http:// in hilfetexten $contents = preg_replace('!//[^\n]*!', '', $ret);
+
+        // remove tabs, spaces, newlines, etc. - funktioniert nicht - da fehlen hinundwider ;
+        //$ret = str_replace(array("\r", "\n", "\t"), "", $ret);
+
+        // multiple whitespaces
+        $ret = str_replace("\t", " ", $ret);
+        $ret = preg_replace('/(\n)\n+/', '$1', $ret);
+        $ret = preg_replace('/(\n)\ +/', '$1', $ret);
+        $ret = preg_replace('/(\ )\ +/', '$1', $ret);
+
+        return $ret;
+    }
+
+    public final function getContents($language)
     {
         return $this->_getContents($language, false);
     }
@@ -85,7 +90,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         return $contents;
     }
 
-    public function getContentsPacked($language)
+    public final function getContentsPacked($language)
     {
         return $this->_getContents($language, true);
     }

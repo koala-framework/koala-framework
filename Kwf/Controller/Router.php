@@ -65,6 +65,11 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/kwf/component/:controller/:action',
                     array('module'     => 'kwf_controller_action_component',
                           'action'     =>'index')));
+        $this->AddRoute('kwf_ext4', new Zend_Controller_Router_Route(
+                    '/kwf/ext4/:resource',
+                    array('module'     => 'kwf_controller_action_ext4',
+                          'controller' => 'ext4',
+                          'action'     =>'index')));
 
         if (Kwf_Registry::get('config')->includepath->kwfTests) {
             //für selenium-tests von sachen die im kwf liegen

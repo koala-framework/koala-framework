@@ -31,7 +31,7 @@ class Kwf_Assets_Package
     public function getMaxMTime($mimeType)
     {
         if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
-            $cacheId = 'depPckMaxMTime_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+            $cacheId = 'depPckMaxMTime_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
             $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
             if ($ret !== false) return $ret;
         }
@@ -60,17 +60,10 @@ class Kwf_Assets_Package
         return $maxMTime;
     }
 
-    private function _getFilteredUniqueDependencies($mimeType)
+    protected function _getFilteredUniqueDependencies($mimeType)
     {
         if (!isset($this->_cacheFilteredUniqueDependencies[$mimeType])) {
-            $it = new Kwf_Assets_Dependency_Iterator_Recursive($this->getDependency());
-            $it = new Kwf_Assets_Dependency_Iterator_UniqueFilter($it);
-            $it = new RecursiveIteratorIterator($it);
-            $it = new Kwf_Assets_Dependency_Iterator_MimeTypeFilter($it, $mimeType);
-            $this->_cacheFilteredUniqueDependencies[$mimeType] = array();
-            foreach ($it as $i) {
-                $this->_cacheFilteredUniqueDependencies[$mimeType][] = $i;
-            }
+            $this->_cacheFilteredUniqueDependencies[$mimeType] = $this->getDependency()->getFilteredUniqueDependencies($mimeType);
         }
         return $this->_cacheFilteredUniqueDependencies[$mimeType];
     }
