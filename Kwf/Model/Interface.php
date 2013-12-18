@@ -14,6 +14,7 @@ interface Kwf_Model_Interface
     const TYPE_STRING = 'string';
     const TYPE_FLOAT = 'float';
     const TYPE_DATE = 'date';
+    const TYPE_DATETIME = 'datetime';
 
     /**
      * @return Kwf_Model_Row_Interface

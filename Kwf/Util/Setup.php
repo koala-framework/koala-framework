@@ -225,7 +225,6 @@ class Kwf_Util_Setup
         $ret .= "    } else {\n";
         $preloadClasses = array();
         $preloadClasses[] = 'Kwf_Assets_Loader';
-        $preloadClasses[] = 'Kwf_Assets_Dependencies';
         $preloadClasses[] = 'Kwf_Media_Output';
         $ret .= self::_generatePreloadClassesCode($preloadClasses, $ip);
         $ret .= "    }\n";

@@ -21,7 +21,7 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package
         self::$_instances = array();
     }
 
-    private static function _getDefaultProviderList()
+    public static function getDefaultProviderList()
     {
         if (!isset(self::$_defaultProviderList)) {
             self::$_defaultProviderList = new Kwf_Assets_ProviderList_Default();
@@ -31,7 +31,7 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package
 
     public function __construct($dependencyName)
     {
-        parent::__construct(self::_getDefaultProviderList(), $dependencyName);
+        parent::__construct(self::getDefaultProviderList(), $dependencyName);
     }
 
     public function toUrlParameter()

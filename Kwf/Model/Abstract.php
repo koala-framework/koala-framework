@@ -707,6 +707,15 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                 $v = $row->$field;
             }
             return date($format, strtotime($v));
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Date_Format) {
+            $field = $expr->getField();
+            $format = $expr->getFormat();
+            if (is_array($row)) {
+                $v = $row[$field];
+            } else {
+                $v = $row->$field;
+            }
+            return date($format, strtotime($v));
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
             $f = $expr->getField();
             if (is_array($row)) {

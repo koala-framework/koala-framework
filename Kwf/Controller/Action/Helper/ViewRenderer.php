@@ -10,7 +10,7 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 
     public function preDispatch() {
         $module = $this->getRequest()->getParam('module');
-        if ($this->isJson()) {
+        if ($this->isJson() || $this->_actionController instanceof Zend_Rest_Controller) {
             $this->setView(new Kwf_View_Json());
         } else {
             $this->setView(new Kwf_View_Ext());

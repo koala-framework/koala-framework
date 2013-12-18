@@ -24,7 +24,7 @@ class Kwf_Assets_Dispatcher
 
         if ($encoding != 'none') {
             //own cache for encoded contents, not using Kwf_Assets_Cache as we don't need to in two-level cache
-            $cacheId = 'as_'.str_replace(array(':', '/'), '_', $url).'_'.$encoding;
+            $cacheId = 'as_'.str_replace(array(':', '/', ','), '_', $url).'_'.$encoding;
             $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
             if ($ret === false) {
                 $ret = self::_getOutputForUrlNoEncoding($url);
@@ -41,7 +41,7 @@ class Kwf_Assets_Dispatcher
     static private function _getOutputForUrlNoEncoding($url)
     {
         $cache = Kwf_Assets_Cache::getInstance();
-        $cacheId = str_replace(array(':', '/'), '_', $url);
+        $cacheId = str_replace(array(':', '/', '.', ','), '_', $url);
         $ret = $cache->load($cacheId);
 
         if ($ret === false) {

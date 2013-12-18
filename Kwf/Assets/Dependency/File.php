@@ -42,18 +42,18 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         return $this->_mtimeCache;
     }
 
-    public static function createDependency($fileName)
+    public static function createDependency($fileName, Kwf_Assets_ProviderList_Abstract $providerList)
     {
         if (substr($fileName, 0, 7) == 'http://' || substr($fileName, 0, 8) == 'https://') {
-            return new Kwf_Assets_Dependency_HttpUrl($fileName);
+            $ret = new Kwf_Assets_Dependency_HttpUrl($fileName);
         } else if (substr($fileName, -3) == '.js') {
-            return new Kwf_Assets_Dependency_File_Js($fileName);
+            $ret = new Kwf_Assets_Dependency_File_Js($fileName);
         } else if (substr($fileName, -4) == '.css') {
-            return new Kwf_Assets_Dependency_File_Css($fileName);
+            $ret = new Kwf_Assets_Dependency_File_Css($fileName);
         } else if (substr($fileName, -9) == '.printcss') {
-            return new Kwf_Assets_Dependency_File_PrintCss($fileName);
+            $ret = new Kwf_Assets_Dependency_File_PrintCss($fileName);
         } else if (substr($fileName, -5) == '.scss') {
-            return new Kwf_Assets_Dependency_File_Scss($fileName);
+            $ret = new Kwf_Assets_Dependency_File_Scss($fileName);
         } else if (substr($fileName, -2) == '/*') {
             $pathType = substr($fileName, 0, strpos($fileName, '/'));
             $fileName = substr($fileName, strpos($fileName, '/')); //pathtype abschneiden
@@ -74,11 +74,13 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                 $f = $file->getPathname();
                 $f = substr($f, strlen($paths[$pathType]));
                 $f = $pathType . $f;
-                $files[] = self::createDependency($f);
+                $files[] = self::createDependency($f, $providerList);
             }
-            return new Kwf_Assets_Dependency_Dependencies($files, $fileName.'*');
+            $ret = new Kwf_Assets_Dependency_Dependencies($files, $fileName.'*');
+        } else {
+            throw new Kwf_Exception("unknown file type: ".$fileName);
         }
-        throw new Kwf_Exception("unknown file type: ".$fileName);
+        return $ret;
     }
 
     public function __toString()
