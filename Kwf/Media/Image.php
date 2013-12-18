@@ -273,16 +273,15 @@ class Kwf_Media_Image
                 if ($previousCacheFile) {
                     $f = $previousCacheFile;
                 }
-                $fp = fopen($f, 'rb');
-                $im->readImageFile($fp, 'foo.'.str_replace('image/', '', $sourceSize['mime'])); //add fake filename to help imagick with format detection
-                fclose($fp);
+if (!file_exists($f)) d($f);
+                $im->readImageBlob(file_get_contents($f), 'foo.'.str_replace('image/', '', $sourceSize['mime'])); //add fake filename to help imagick with format detection
                 if (!$previousCacheFile) {
                     $im = self::_processCommonImagickSettings($im); //only once
                 }
                 $im->resizeImage($preScaleWidth, $preScaleHeight, Imagick::FILTER_LANCZOS, 1);
-                $fp = fopen($preScaleCacheFile, 'wb');
-                $im->writeImageFile($fp);
-                fclose($fp);
+                $blob = $im->getImageBlob();
+                if (!strlen($blob)) throw new Kwf_Exception("imageblob is empty");
+                file_put_contents($preScaleCacheFile, $blob);
                 $im->destroy();
             }
             $previousCacheFile = $preScaleCacheFile;
@@ -332,9 +331,9 @@ class Kwf_Media_Image
                 if ($preScale['factor']) {
                     $f = $preScale['file'];
                 }
-                $fp = fopen($f, 'rb');
-                $im->readImageFile($fp, 'foo.'.str_replace('image/', '', $sourceSize['mime'])); //add fake filename to help imagick with format detection
-                fclose($fp);
+                $blob = file_get_contents($f);
+                if (!strlen($blob)) throw new Kwf_Exception("File is empty");
+                $im->readImageBlob($blob, 'foo.'.str_replace('image/', '', $sourceSize['mime'])); //add fake filename to help imagick with format detection
             }
             if (!$preScale['factor']) {
                 //preScale does this already
