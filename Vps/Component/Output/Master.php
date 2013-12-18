@@ -6,7 +6,9 @@ class Vps_Component_Output_Master extends Vps_Component_Output_NoCache
     public function render($component)
     {
         $c = $component;
-        if ($component->componentId != Vps_Component_Data_Root::getInstance()->componentId) {
+        if (!Vpc_Abstract::getFlag($component->componentClass, 'resetMaster') &&
+            $component->componentId != Vps_Component_Data_Root::getInstance()->componentId
+        ) {
             $component = $component->parent;
         }
         while ($component) {
