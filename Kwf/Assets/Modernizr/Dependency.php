@@ -7,6 +7,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
     public function addFeature($feature)
     {
         $this->_features[] = $feature;
+        unset($this->_fileNameCache);
     }
 
     public function getFeatures()
@@ -28,6 +29,8 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
     {
         if (isset($this->_fileNameCache)) return $this->_fileNameCache;
 
+        if (!$this->_features) return null;
+
         $requiredFeatures = $this->_features;
         sort($requiredFeatures);
 
@@ -41,7 +44,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
                 return $this->_fileNameCache;
             }
         }
-        throw new Kwf_Exception("Can't find generated Modernizr file with following features: ".implode(', ', $this->_features));
+        throw new Kwf_Exception("Can't find generated Modernizr file with following ".count($this->_features)." features: ".implode(', ', $this->_features));
     }
 
     public function getMTime()
