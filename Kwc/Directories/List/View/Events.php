@@ -41,23 +41,36 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
+    private function _usesPartialId()
+    {
+        $partialClass = call_user_func(
+            array(strpos($this->_class, '.') ? substr($this->_class, 0, strpos($this->_class, '.')) : $this->_class, 'getPartialClass'), $this->_class
+        );
+        return is_instance_of($partialClass, 'Kwf_Component_Partial_Id');
+    }
+
     public function onDirectoryRowInsert(Kwc_Directories_List_EventItemInserted $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        if (!$this->_usesPartialId()) {
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
+        }
     }
 
     public function onDirectoryRowDelete(Kwc_Directories_List_EventItemDeleted $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        if ($this->_usesPartialId()) {
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
+        } else {
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
+        }
     }
 
     public function onDirectoryRowUpdate(Kwc_Directories_List_EventItemUpdated $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
-        $partialClass = call_user_func(
-            array(strpos($this->_class, '.') ? substr($this->_class, 0, strpos($this->_class, '.')) : $this->_class, 'getPartialClass'), $this->_class
-        );
-        if (is_instance_of($partialClass, 'Kwf_Component_Partial_Id')) {
+        if ($this->_usesPartialId()) {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
         } else {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
