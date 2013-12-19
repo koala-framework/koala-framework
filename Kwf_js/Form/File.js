@@ -341,7 +341,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             this.getEl().child('.box').setStyle('background-image', 'none');
             return;
         }
-        if (this.getEl().child('.previewImage') && this.getValue()) {
+        if (this.getEl().child('.previewImage') && this.imageData) {
             this.getEl().child('.box').setStyle('background-image', 'url(/assets/ext/resources/images/default/grid/loading.gif)');
             var img = new Image();
             img.onload = (function () {
