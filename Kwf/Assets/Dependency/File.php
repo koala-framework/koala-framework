@@ -91,4 +91,50 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         }
         return $ret;
     }
+
+    protected function _getComponentCssClass()
+    {
+        $cssClass = $this->getFileName();
+        if (defined('VKWF_PATH') && substr($cssClass, 0, strlen(VKWF_PATH)) == VKWF_PATH) {
+            $cssClass = substr($cssClass, strlen(VKWF_PATH)+1);
+        }
+        if (substr($cssClass, 0, strlen(KWF_PATH)) == KWF_PATH) {
+            $cssClass = substr($cssClass, strlen(KWF_PATH)+1);
+        }
+        if (substr($cssClass, 0, strlen(getcwd())) == getcwd()) {
+            $cssClass = substr($cssClass, strlen(getcwd())+1);
+        }
+        if (substr($cssClass, 0, 11) == 'components/') {
+            $cssClass = substr($cssClass, 11);
+        }
+        if (substr($cssClass, 0, 7) == 'themes/') {
+            $cssClass = substr($cssClass, 7);
+        }
+        if (substr($cssClass, -4) == '.css') {
+            $cssClass = substr($cssClass, 0, -4);
+        }
+        if (substr($cssClass, -5) == '.scss') {
+            $cssClass = substr($cssClass, 0, -5);
+        }
+        if (substr($cssClass, -3) == '.js') {
+            $cssClass = substr($cssClass, 0, -3);
+        }
+        if (substr($cssClass, -9) == '.printcss') {
+            $cssClass = substr($cssClass, 0, -9);
+        }
+        if (substr($cssClass, -10) == '/Component') {
+            $cssClass = substr($cssClass, 0, -10);
+        } else if (substr($cssClass, -7) == '/Master') {
+            $cssClass = substr($cssClass, 0, -7);
+            $cssClass = 'master'.$cssClass;
+        } else {
+            $cssClass = false;
+        }
+
+        if ($cssClass) {
+            $cssClass = str_replace('/', '', $cssClass);
+            return strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
+        }
+        return null;
+    }
 }
