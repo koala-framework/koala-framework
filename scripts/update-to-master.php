@@ -41,15 +41,6 @@ function createScssCacheFolder()
         echo "folder \"cache/scss\" created\n";
     }
 }
-function createMediaScaleCacheFolder()
-{
-    if (!is_dir('cache/mediaprescale')) {
-        mkdir('cache/mediaprescale');
-        file_put_contents('cache/mediaprescale/.gitignore', '*');
-        system("git add -f cache/mediaprescale/.gitignore");
-        echo "folder \"cache/mediaprescale\" created\n";
-    }
-}
 
 function updateErrorViews($files)
 {

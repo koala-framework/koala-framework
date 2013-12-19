@@ -23,7 +23,6 @@ class Kwf_Util_ClearCache
                 if ($d->getFilename() == 'searchindex') continue;
                 if ($d->getFilename() == 'fulltext') continue;
                 if ($d->getFilename() == 'scss') continue; //never clear scss, too expensive to regenerate
-                if ($d->getFilename() == 'mediaprescale') continue; //never clear mediaprescale, too expensive to regenerate
                 $ret[] = $d->getFilename();
             }
         }
@@ -104,7 +103,7 @@ class Kwf_Util_ClearCache
         if (Kwf_Config::getValue('assetsCacheUrl')) {
             $types[] = new Kwf_Util_ClearCache_Types_AssetsServer();
         }
- 
+
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
         if (Kwf_Component_Data_Root::getComponentClass()) {

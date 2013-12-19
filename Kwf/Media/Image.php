@@ -265,15 +265,15 @@ class Kwf_Media_Image
             $preScaleWidth /= 2;
             $preScaleHeight /= 2;
             $preScaleFactor++;
-            if (!is_dir("cache/mediaprescale/$uploadId")) mkdir("cache/mediaprescale/$uploadId");
-            $preScaleCacheFile = "cache/mediaprescale/$uploadId/$preScaleFactor";
+            $dir = Kwf_Config::getValue('uploads') . "/mediaprescale/$uploadId";
+            if (!is_dir($dir)) mkdir($dir);
+            $preScaleCacheFile = "$dir/$preScaleFactor";
             if (!file_exists($preScaleCacheFile)) {
                 $im = new Imagick();
                 $f = $source;
                 if ($previousCacheFile) {
                     $f = $previousCacheFile;
                 }
-if (!file_exists($f)) d($f);
                 $im->readImageBlob(file_get_contents($f), 'foo.'.str_replace('image/', '', $sourceSize['mime'])); //add fake filename to help imagick with format detection
                 if (!$previousCacheFile) {
                     $im = self::_processCommonImagickSettings($im); //only once

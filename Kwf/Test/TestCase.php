@@ -10,7 +10,8 @@ class Kwf_Test_TestCase extends PHPUnit_Framework_TestCase
         Kwf_Component_ModelObserver::getInstance()->setSkipFnF(false);
 
         //clear cache as tests use new upload ids
-        foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator('cache/mediaprescale', FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+        $dir = Kwf_Config::getValue('uploads') . "/mediaprescale";
+        foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
             $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
         }
     }
