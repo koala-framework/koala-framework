@@ -1899,6 +1899,7 @@
 <id>362</id>
 <ro>Acest câmp trebuie să conţină o adresă de e-mail de forma "user@domain.com".</ro>
 <sl>To polje mora vsebovati e-naslov v obliki "uporabnik@domena.com".</sl>
+<es>Aquí debe ingresar una dirección de correo electrónico en el formato "usuario@dominio.com".</es>
 </text>
 <text>
 <en>This field should only contain letters and _</en>
@@ -5739,6 +5740,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Format</ro>
 <bg>Формат</bg>
 <sl>format</sl>
+<es>Formato</es>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
@@ -6353,6 +6355,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>HTML-формат</bg>
 <mk>HTML-Формат</mk>
 <sl>HTML-format</sl>
+<es>Formato HTML</es>
 </text>
 <text>
 <en>Text-Format</en>
@@ -6363,6 +6366,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>Текстов формат</bg>
 <mk>Текст-Формат</mk>
 <sl>tekstovni format</sl>
+<es>Formato de texto</es>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
