@@ -266,7 +266,7 @@ class Kwf_Media_Image
             $preScaleHeight /= 2;
             $preScaleFactor++;
             $dir = Kwf_Config::getValue('uploads') . "/mediaprescale/$uploadId";
-            if (!is_dir($dir)) mkdir($dir);
+            if (!is_dir($dir)) mkdir($dir, 0777, true);
             $preScaleCacheFile = "$dir/$preScaleFactor";
             if (!file_exists($preScaleCacheFile)) {
                 $im = new Imagick();
