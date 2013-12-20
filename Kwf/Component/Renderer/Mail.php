@@ -42,7 +42,7 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
     {
         if ($type == 'Component') {
             $mailType = 'Mail.' . $this->getRenderFormat();
-        } else if ($file == 'Partial') {
+        } else if ($type == 'Partial') {
             $mailType = 'Partial.' . $this->getRenderFormat();
         }
         $template = Kwc_Abstract::getTemplateFile($component->componentClass, $mailType);
