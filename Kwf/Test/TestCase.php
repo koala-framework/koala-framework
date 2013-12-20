@@ -11,8 +11,10 @@ class Kwf_Test_TestCase extends PHPUnit_Framework_TestCase
 
         //clear cache as tests use new upload ids
         $dir = Kwf_Config::getValue('uploads') . "/mediaprescale";
-        foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
-            $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+        if (file_exists($dir)) {
+            foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+                $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+            }
         }
     }
 
