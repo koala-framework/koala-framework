@@ -10,76 +10,76 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
 
     public function getDependency($dependencyName)
     {
-        if ($dependencyName == 'Components' || $dependencyName == 'ComponentsAdmin') {
-
+        if ($dependencyName == 'Components') {
             $ret = array();
-
-            if ($dependencyName == 'Components') {
-                $files = Kwf_Component_Abstract_Admin::getComponentFiles($this->_rootComponentClass, array(
-                    'css' => array('filename'=>'Web', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
-                    'printcss' => array('filename'=>'Web', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
-                    'scss' => array('filename'=>'Web', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
-                ));
-                foreach ($files as $i) {
-                    foreach ($i as $j) {
-                        $ret[] = Kwf_Assets_Dependency_File::createDependency($j, $this->_providerList);
-                    }
+            $files = Kwf_Component_Abstract_Admin::getComponentFiles($this->_rootComponentClass, array(
+                'css' => array('filename'=>'Web', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
+                'printcss' => array('filename'=>'Web', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
+                'scss' => array('filename'=>'Web', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
+            ));
+            foreach ($files as $i) {
+                foreach ($i as $j) {
+                    $ret[] = Kwf_Assets_Dependency_File::createDependency($j, $this->_providerList);
                 }
             }
 
             $componentClasses = $this->_getRecursiveChildClasses($this->_rootComponentClass);
 
             $addedFiles = array();
-            $addedDep = array();
 
             foreach ($componentClasses as $class) {
 
-                if ($dependencyName == 'ComponentsAdmin') {
-                    $assets = Kwc_Abstract::getSetting($class, 'assetsAdmin');
-                } else {
-                    $assets = Kwc_Abstract::getSetting($class, 'assets');
+                $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assets'));
+
+                //alle css-dateien der vererbungshierache includieren
+                $files = Kwc_Abstract::getSetting($class, 'componentFiles');
+                $componentCssFiles = array();
+                foreach (array_merge($files['css'], $files['printcss'], $files['scss'], $files['js'], $files['masterCss'], $files['masterScss']) as $f) {
+                    $componentCssFiles[] = $f;
                 }
-                foreach ($assets['dep'] as $i) {
-                    if (!in_array($i, $addedDep)) {
-                        $addedDep[] = $i;
-                        $d = $this->_providerList->findDependency(trim($i));
-                        if (!$d) {
-                            throw new Kwf_Exception("Can't find dependency '$i'");
-                        }
-                        $ret[] = $d;
-                    }
-                }
-                foreach ($assets['files'] as $i) {
+                //reverse damit css von weiter unten in der vererbungshierachie überschreibt
+                $componentCssFiles = array_reverse($componentCssFiles);
+                foreach ($componentCssFiles as $i) {
                     if (!in_array($i, $addedFiles)) {
                         $addedFiles[] = $i;
-                        if (!is_object($i)) {
-                            $i = Kwf_Assets_Dependency_File::createDependency($i, $this->_providerList);
-                        }
-                        $ret[] = $i;
-                    }
-                }
-
-                if ($dependencyName == 'Components') {
-                    //alle css-dateien der vererbungshierache includieren
-                    $files = Kwc_Abstract::getSetting($class, 'componentFiles');
-                    $componentCssFiles = array();
-                    foreach (array_merge($files['css'], $files['printcss'], $files['scss'], $files['js'], $files['masterCss'], $files['masterScss']) as $f) {
-                        $componentCssFiles[] = $f;
-                    }
-                    //reverse damit css von weiter unten in der vererbungshierachie überschreibt
-                    $componentCssFiles = array_reverse($componentCssFiles);
-                    foreach ($componentCssFiles as $i) {
-                        if (!in_array($i, $addedFiles)) {
-                            $addedFiles[] = $i;
-                            $ret[] = Kwf_Assets_Dependency_File::createDependency($i, $this->_providerList);
-                        }
+                        $ret[] = Kwf_Assets_Dependency_File::createDependency($i, $this->_providerList);
                     }
                 }
             }
             return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
-        } else {
-            return null;
+
+        } else if ($dependencyName == 'ComponentsAdmin') {
+            $ret = array();
+            $componentClasses = $this->_getRecursiveChildClasses($this->_rootComponentClass);
+            foreach ($componentClasses as $class) {
+                    $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assetsAdmin'));
+            }
+            return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
         }
+        return null;
+    }
+
+    private function _getComponentSettingDependencies($class, $setting)
+    {
+        $ret = array();
+        $assets = Kwc_Abstract::getSetting($class, $setting);
+        foreach ($assets['dep'] as $i) {
+            $d = $this->_providerList->findDependency(trim($i));
+            if (!$d) {
+                throw new Kwf_Exception("Can't find dependency '$i'");
+            }
+            $ret[] = $d;
+        }
+        foreach ($assets['files'] as $i) {
+            if (!in_array($i, $addedFiles)) {
+                $addedFiles[] = $i;
+                if (!is_object($i)) {
+                    $i = Kwf_Assets_Dependency_File::createDependency($i, $this->_providerList);
+                }
+                $ret[] = $i;
+            }
+        }
+        return $ret;
     }
 
     private function _getRecursiveChildClasses($class, &$processedComponents = array())
