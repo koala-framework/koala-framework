@@ -202,7 +202,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->assertEquals(10, $im->getImageWidth());
         $this->assertEquals(10, $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/2',
-                                    array(10, 10, 'cover' => true)), $contents);
+                                    array(10, 10, 'cover' => true), 2), $contents);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
