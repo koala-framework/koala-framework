@@ -104,6 +104,9 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         if (substr($cssClass, 0, strlen(getcwd())) == getcwd()) {
             $cssClass = substr($cssClass, strlen(getcwd())+1);
         }
+        if (substr($cssClass, 0, 2) == './') {
+            $cssClass = substr($cssClass, 2);
+        }
         if (substr($cssClass, 0, 11) == 'components/') {
             $cssClass = substr($cssClass, 11);
         }
