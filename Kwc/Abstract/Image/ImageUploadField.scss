@@ -46,12 +46,14 @@
     @include opacity(0.3);
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .uploadButton {
+.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .uploadButton,
+.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .swfupload  {
     position: absolute;
     bottom: 100px;
     right: 120px;
 }
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .uploadButton {
+.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .uploadButton,
+.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .swfupload {
     bottom: 5px;
     right: 85px;
     @include opacity(0.3);
