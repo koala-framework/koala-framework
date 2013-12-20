@@ -116,6 +116,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
         if (!Kwf.Utils.Upload.supportsHtml5Upload()) {
             this.uploadButtonContainer.dom.style.display = 'none';
+            this.el.child('.hint').setStyle('display', 'none');
             var insertBefore = this.deleteButton ? this.deleteButton.el.parent() : null;
 
             this.swfUploadButtonContainer = this.el.createChild({
