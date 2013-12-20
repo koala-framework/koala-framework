@@ -441,6 +441,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                 }
                 if (isset($data['type'])) {
                     $d['type'] = $data['type'];
+                    if ($d['type'] == 'datetime') $d['type'] = 'date';
                 }
 
                 if (isset($data['dateFormat'])) {
