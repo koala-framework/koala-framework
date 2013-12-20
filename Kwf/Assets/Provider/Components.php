@@ -29,7 +29,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
 
             foreach ($componentClasses as $class) {
 
-                $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assets'));
+                $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assets', $addedFiles));
 
                 //alle css-dateien der vererbungshierache includieren
                 $files = Kwc_Abstract::getSetting($class, 'componentFiles');
@@ -50,16 +50,17 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
 
         } else if ($dependencyName == 'ComponentsAdmin') {
             $ret = array();
+            $addedFiles = array();
             $componentClasses = $this->_getRecursiveChildClasses($this->_rootComponentClass);
             foreach ($componentClasses as $class) {
-                    $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assetsAdmin'));
+                $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assetsAdmin', $addedFiles));
             }
             return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
         }
         return null;
     }
 
-    private function _getComponentSettingDependencies($class, $setting)
+    private function _getComponentSettingDependencies($class, $setting, &$addedFiles)
     {
         $ret = array();
         $assets = Kwc_Abstract::getSetting($class, $setting);
