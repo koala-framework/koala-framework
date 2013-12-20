@@ -18,7 +18,7 @@ Kwc.Abstract.Image.ImageFile = Ext.extend(Kwf.Form.File, {
 
     setValue: function (value) {
         this._completeValue = value;
-        if (value) {
+        if (value.uploadId) {
             this.uploadButton.setText(trlKwf('Change Image'));
         } else {
             this.uploadButton.setText(trlKwf('Upload Image'));
