@@ -342,7 +342,12 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $sourceSize = @getimagesize($data['file']);
             $scalingNeeded = true;
             $resultingSize = Kwf_Media_Image::calculateScaleDimensions($data['file'], $dim);
-            if ($sourceSize && array($resultingSize['crop']['width'], $resultingSize['crop']['height']) == array($sourceSize[0], $sourceSize[1])) {
+            if ($sourceSize
+                && array($resultingSize['crop']['width'], $resultingSize['crop']['height'])
+                    == array($sourceSize[0], $sourceSize[1])
+                && array($resultingSize['width'], $resultingSize['height'])
+                    == array($sourceSize[0], $sourceSize[1])
+            ) {
                 $scalingNeeded = false;
             }
             if ($scalingNeeded) {
