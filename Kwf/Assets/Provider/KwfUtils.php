@@ -6,13 +6,13 @@ class Kwf_Assets_Provider_KwfUtils extends Kwf_Assets_Provider_Abstract
         if ($dependency instanceof Kwf_Assets_Dependency_File_Js) {
             $deps = array();
             $c = $dependency->getContents('en');
-            if (preg_match('#^\s*Kwf\.Utils\.ResponsiveEl\(#', $c)) {
+            if (preg_match('#^\s*Kwf\.Utils\.ResponsiveEl\(#m', $c)) {
                 $deps[] = 'KwfResponsiveEl';
             }
-            if (preg_match('#^\s*Kwf\.on(Element|Content)Ready\(#', $c)) {
+            if (preg_match('#^\s*Kwf\.on(Element|Content)Ready\(#m', $c)) {
                 $deps[] = 'KwfOnReady';
             }
-            if (preg_match('#^\s*Kwf\.onJElementReady\(#', $c)) {
+            if (preg_match('#^\s*Kwf\.onJElementReady\(#m', $c)) {
                 $deps[] = 'KwfOnReadyJQuery';
             }
             $ret = array();
