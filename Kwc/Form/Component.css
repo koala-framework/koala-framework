@@ -118,3 +118,7 @@
     text-align: left;
     width: 100%;
 }
+
+.cssClass .spEmail {
+    display: none;
+}
