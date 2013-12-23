@@ -103,5 +103,11 @@ body.frontend {
             }
         }
     }
+    .kwfFormFieldRecaptcha {
+        label { display: none; }
+        input {
+            text-indent: 0px;
+        }
+    }
 }
 
