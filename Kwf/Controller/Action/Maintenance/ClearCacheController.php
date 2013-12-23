@@ -4,7 +4,7 @@ class Kwf_Controller_Action_Maintenance_ClearCacheController extends Kwf_Control
     public function indexAction()
     {
         $this->view->typeNames = Kwf_Util_ClearCache::getInstance()->getTypeNames();
-        $this->view->assetsType = 'Kwf_Controller_Action_Maintenance:ClearCache';
+        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('ClearCache');
         $this->view->xtype = 'kwf.maintenance.clearCache';
     }
 
