@@ -196,6 +196,11 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     show: function(options)
     {
         this.createLightboxEl();
+
+        this.innerLightboxEl.query('.kwfIframe').each(function(iframe) {
+            Ext.get(iframe).createChild(iframe.iframeHtml);
+        });
+
         this.style.onShow(options);
 
         if (!this.closeHref) {
@@ -241,7 +246,14 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     closeAndPushState: function() {
-        if (!this.options.disableHistoryState && Kwf.Utils.HistoryState.entries > 0) {
+        this.innerLightboxEl.query('iframe').each(function(iframe) {
+            var parent = Ext.get(iframe).parent();
+            parent.addClass('kwfIframe');
+            parent.dom.iframeHTML = iframe.outerHTML;
+            Ext.get(iframe).remove();
+        }, this);
+
+        if (Kwf.Utils.HistoryState.entries > 0) {
             Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate = true; //required to avoid flicker on closing, see popstate handler
             var previousEntries = Kwf.Utils.HistoryState.entries;
             history.back();
