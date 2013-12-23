@@ -85,6 +85,7 @@ class Kwf_Util_ClearCache
             if ($d != 'config'    //handled in Types_Config
                 && $d != 'assets' //handled in Types_Assets
                 && $d != 'trl' //handled in Types_Trl
+                && $d != 'view' //removed indirectly by Types_TableComponentView
             ) {
                 $types[] = new Kwf_Util_ClearCache_Types_Dir($d);
             }
