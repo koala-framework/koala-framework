@@ -9,6 +9,13 @@ class Kwf_Form_Field_Recaptcha extends Kwf_Form_Field_Abstract
             //if user did solve one captcha we store that in session and don't annoy him again
             return $ret;
         }
+        if (empty($_POST["recaptcha_challenge_field"]) || empty($_POST["recaptcha_response_field"])) {
+            $ret[] = array(
+                'message' => trlKwf('Please solve captcha correctly'),
+                'field' => $this
+            );
+            return $ret;
+        }
         require_once(Kwf_Config::getValue('externLibraryPath.recaptcha').'/recaptchalib.php');
         $resp = recaptcha_check_answer (Kwf_Config::getValue('recaptcha.privateKey'),
                                 $_SERVER["REMOTE_ADDR"],
