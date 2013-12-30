@@ -202,6 +202,9 @@ class Kwc_Mail_HtmlParser
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
+        } else {
+            require_once Kwf_Config::getValue('externLibraryPath.htmLawed').'/htmLawed.php';
+            $html = htmLawed($html);
         }
 
         $this->_stack = array();

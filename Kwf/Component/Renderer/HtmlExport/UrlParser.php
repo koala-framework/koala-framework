@@ -87,6 +87,9 @@ class Kwf_Component_Renderer_HtmlExport_UrlParser
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
+        } else {
+            require_once Kwf_Config::getValue('externLibraryPath.htmLawed').'/htmLawed.php';
+            $html = htmLawed($html);
         }
 
         $this->_stack = array();
