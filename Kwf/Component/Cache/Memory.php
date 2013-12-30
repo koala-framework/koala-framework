@@ -98,6 +98,11 @@ class Kwf_Component_Cache_Memory
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
             return Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $microtime);
+        } else if ($be == 'file') {
+            $file = self::_getFileNameForCacheId($id);
+            if (!file_exists($file)) return false;
+            unlink($file);
+            return true;
         } else {
             return self::getZendCache()->save('kwf-timestamp' . $microtime, $id);
         }
