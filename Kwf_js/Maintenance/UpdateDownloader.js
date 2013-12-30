@@ -29,6 +29,7 @@ Kwf.Maintenance.UpdateDownloader = Ext.extend(Ext.Panel, {
         this.buttons = [{
             text: trlKwf('Download Updates'),
             handler: function() {
+                Kwf.application.assetsVersion = null; //unset to avoid checking (which is problematic during update)
                 Kwf.Utils.BackgroundProcess.request({
                     url: '/kwf/maintenance/update-downloader/json-download-updates',
                     params: {
