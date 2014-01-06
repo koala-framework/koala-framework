@@ -52,7 +52,7 @@ Kwf.Maintenance.UpdateDownloader = Ext.extend(Ext.Panel, {
                                     Ext.Msg.alert(trlKwf('Update Error'), r.message+"<br />"+r.errMsg.replace("\n", "<br />"));
                                 } else if (r.message) {
                                     Ext.Msg.alert(trlKwf('Updates Finished'), r.message, function() {
-                                        locaiton.href = '/kwf/welcome';
+                                        location.href = '/kwf/welcome';
                                     }, scope);
                                 }
                             }
