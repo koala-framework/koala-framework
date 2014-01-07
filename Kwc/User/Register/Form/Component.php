@@ -7,6 +7,8 @@ class Kwc_User_Register_Form_Component extends Kwc_Form_Component
         $ret['placeholder']['submitButton'] = trlKwfStatic('create account');
         $ret['generators']['child']['component']['success'] = 'Kwc_User_Register_Form_Success_Component';
         $ret['standardRole'] = 'user';
+        $ret['viewCache'] = false;
+        $ret['plugins'] = array();
         return $ret;
     }
 
@@ -32,5 +34,11 @@ class Kwc_User_Register_Form_Component extends Kwc_Form_Component
         } else {
             $this->_form->add(new Kwc_User_Detail_General_Form('general', null));
         }
+    }
+
+    protected function _processInput($postData)
+    {
+        $postData[$this->getData()->componentId.'-post'] = true; //force processInput to be called (required for createUserRow call)
+        parent::_processInput($postData);
     }
 }
