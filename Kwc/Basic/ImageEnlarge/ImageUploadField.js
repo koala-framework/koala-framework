@@ -39,14 +39,17 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Abstract.Image.ImageUpl
             }
 
             // change min-requirement text
-            var pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.imageEnlargeDimension, value);
-            dimensionField.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('At least: ')+pixelString);
+            var pixelString = Kwc.Abstract.Image.DimensionField
+                .getDimensionPixelString(this.imageEnlargeDimension, value);
+            dimensionField.getEl().child('.kwc-abstract-image-dimension-name')
+                .update(trlKwf('At least: ')+pixelString);
 
             // check size and show message at fileUploadField
             valueCopy.dimension = 0;
-            dimensions = new Array();
-            dimensions.add(this.imageEnlargeDimension);
-            if (!Kwc.Abstract.Image.DimensionField.checkImageSize(valueCopy, dimensions, scaleFactor)) {
+            enlargeDimensions = new Array();
+            enlargeDimensions.add(this.imageEnlargeDimension);
+            if (!Kwc.Abstract.Image.DimensionField
+                    .checkImageSize(valueCopy, enlargeDimensions, scaleFactor)) {
                 this.getEl().addClass('error');
                 fileUploadField.getEl().child('.hover-background').addClass('error');
                 if (!fileUploadField.getEl().child('.hover-background .message')) {
@@ -54,15 +57,26 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Abstract.Image.ImageUpl
                         html:trlKwf('CAUTION! Image size does not match minimum requirement for enlarge image.'),
                         cls: 'message'
                     });
+                } else {
+                    fileUploadField.getEl().child('.hover-background .message')
+                        .update(trlKwf('CAUTION! Image size does not match minimum requirement for enlarge image.'));
                 }
             } else {
-                this.getEl().removeClass('error');
-                fileUploadField.getEl().child('.hover-background').removeClass('error');
+                var pixelString = Kwc.Abstract.Image.DimensionField
+                    .getDimensionPixelString(dimensions[value.dimension], value);
+                dimensionField.getEl().child('.kwc-abstract-image-dimension-name')
+                    .update(trlKwf('At least: ')+pixelString);
+
+                Kwc.Basic.ImageEnlarge.ImageUploadField.superclass
+                    ._checkForImageTooSmallUserNotification.call(this, value, dimensions, scaleFactor, fileUploadField, dimensionField);
             }
         } else {
-            var pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(dimensions[value.dimension], value);
-            dimensionField.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('At least: ')+pixelString);
-            Kwc.Basic.ImageEnlarge.ImageUploadField.superclass._checkForImageTooSmallUserNotification.call(this, value, dimensions, scaleFactor, fileUploadField, dimensionField);
+            var pixelString = Kwc.Abstract.Image.DimensionField
+                .getDimensionPixelString(dimensions[value.dimension], value);
+            dimensionField.getEl().child('.kwc-abstract-image-dimension-name')
+                .update(trlKwf('At least: ')+pixelString);
+            Kwc.Basic.ImageEnlarge.ImageUploadField.superclass
+                ._checkForImageTooSmallUserNotification.call(this, value, dimensions, scaleFactor, fileUploadField, dimensionField);
         }
     }
 });

@@ -166,7 +166,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             tbar: [{
                 text: trlKwf('Reset'),
                 handler: function () {
-                    this._cropImage.setCropData(null, this._getPreserveRatio());
+                    this._cropImage.resetCropData(this._getPreserveRatio());
                 },
                 cls:"x-btn-text-icon",
                 hideLabel: true,

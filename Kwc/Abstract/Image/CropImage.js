@@ -215,6 +215,11 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         this._updateCropRegionImage();
     },
 
+    resetCropData: function (preserveRatio) {
+        this._userSelectedCropRegion = null;
+        this.setCropData(null, preserveRatio);
+    },
+
     setCropData: function (cropData, preserveRatio)
     {
         if (this.outWidth == -1) this.outWidth = 0;
@@ -260,15 +265,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         cropData.width = this.width;
         cropData.height = this.height;
         if (preserveRatio) {
-            if (this.height / this.outHeight > this.width / this.outWidth) {
-                // orientate on width
-                cropData.height = this.outHeight * this.width / this.outWidth;
-                cropData.y = (this.height - cropData.height)/2;
-            } else {
-                // orientate on height
-                cropData.width = this.outWidth * this.height / this.outHeight;
-                cropData.x = (this.width - cropData.width)/2;
-            }
+            cropData = Kwc.Abstract.Image.CropImage
+                .calculateDefaultCrop(this.outWidth, this.outHeight, this.width, this.height);
         }
         return cropData;
     },
@@ -322,5 +320,27 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         }
     }
 });
+Kwc.Abstract.Image.CropImage.calculateDefaultCrop = function (outWidth, outHeight, width, height) {
+    var cropData = {
+        width: null,
+        height: null,
+        x: null,
+        y: null
+    };
+    if (height / outHeight > width / outWidth) {
+        // orientate on width
+        cropData.width = width;
+        cropData.height = outHeight * width / outWidth;
+        cropData.y = (height - cropData.height)/2;
+        cropData.x = 0;
+    } else {
+        // orientate on height
+        cropData.height = height;
+        cropData.width = outWidth * height / outHeight;
+        cropData.x = (width - cropData.width)/2;
+        cropData.y = 0;
+    }
+    return cropData;
+};
 
 Ext.reg('kwc.image.cropimage', Kwc.Abstract.Image.CropImage);
