@@ -54,12 +54,16 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Abstract.Image.ImageUpl
                 fileUploadField.getEl().child('.hover-background').addClass('error');
                 if (!fileUploadField.getEl().child('.hover-background .message')) {
                     fileUploadField.getEl().child('.hover-background').createChild({
-                        html:trlKwf('CAUTION! Image size does not match minimum requirement for enlarge image.'),
+                        html:trlKwf('Caution! Image size of uploaded image does not match minimum requirement for enlarge image.'),
                         cls: 'message'
                     });
                 } else {
                     fileUploadField.getEl().child('.hover-background .message')
-                        .update(trlKwf('CAUTION! Image size does not match minimum requirement for enlarge image.'));
+                        .update(trlKwf('Caution! Image size of uploaded image does not match minimum requirement for enlarge image.'));
+                }
+                if (cropCheckbox.checked) {
+                    fileUploadField.getEl().child('.hover-background .message')
+                        .update(trlKwf('Caution! Crop region does not match minimum requirement for enlarge image.'));
                 }
             } else {
                 var pixelString = Kwc.Abstract.Image.DimensionField

@@ -44,12 +44,6 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         var dimensionField = this._getDimensionField();
         var value = Kwf.clone(dimensionField.getValue());
         var fileUploadField = this._getFileUploadField();
-        if (!value.cropData) {
-            var dimension = dimensionField.dimensions[value.dimension];
-            value.cropData = Kwc.Abstract.Image.CropImage
-                .calculateDefaultCrop(dimension.width, dimension.height,
-                    dimensionField.imageData.imageWidth, dimensionField.imageData.imageHeight);
-        }
         if (!fileUploadField.getEl().child('.hover-background')) return;
         var scaleFactor = this._scaleFactor;
         if (dimensionField.dpr2Check) scaleFactor /= 2;
@@ -59,12 +53,21 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
     _checkForImageTooSmallUserNotification: function (value, dimensions, scaleFactor, fileUploadField, dimensionField) {
         if (!fileUploadField.getEl().child('.hover-background .message')) {
             fileUploadField.getEl().child('.hover-background').createChild({
-                html:trlKwf('CAUTION! Image size does not match minimum requirement.'),
+                html:trlKwf('Caution! Image size of uploaded image does not match minimum requirement.'),
                 cls: 'message'
             });
         } else {
             fileUploadField.getEl().child('.hover-background .message')
-                .update(trlKwf('CAUTION! Image size does not match minimum requirement.'));
+                .update(trlKwf('Caution! Image size of uploaded image does not match minimum requirement.'));
+        }
+        if (!value.cropData) {
+            var dimension = dimensionField.dimensions[value.dimension];
+            value.cropData = Kwc.Abstract.Image.CropImage
+                .calculateDefaultCrop(dimension.width, dimension.height,
+                    dimensionField.imageData.imageWidth, dimensionField.imageData.imageHeight);
+        } else {
+            fileUploadField.getEl().child('.hover-background .message')
+                .update(trlKwf('Caution! Crop region does not match minimum requirement.'));
         }
         if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensions, scaleFactor)) {
             this.getEl().addClass('error');

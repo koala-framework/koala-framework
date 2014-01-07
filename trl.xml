@@ -10144,8 +10144,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2037</id>
 </text>
 <text>
-<en>CAUTION! Image size does not match minimum requirement.</en>
-<de>Achtung! Die Größe der Auswahl entspricht nicht der Mindestanforderung.</de>
+<en>Caution! Image size of uploaded image does not match minimum requirement.</en>
+<de>Achtung! Die Bildgröße entspricht nicht der Mindestanforderung.</de>
 <id>2038</id>
 </text>
 <text>
@@ -10224,7 +10224,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2053</id>
 </text>
 <text>
-<en>CAUTION! Image size does not match minimum requirement for enlarge image.</en>
+<en>Caution! Image size of uploaded image does not match minimum requirement for enlarge image.</en>
 <de>Achtung! Die Bildgröße des hochgeladenen Bildes entspricht nicht der Mindestanforderung der Bildvergrößerung.</de>
 <id>2054</id>
 </text>
@@ -10267,6 +10267,16 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Selection too small!</en>
 <de>Auswahl zu klein!</de>
 <id>2062</id>
+</text>
+<text>
+<en>Caution! Crop region does not match minimum requirement.</en>
+<de>Achtung! Die Bildauswahl entspricht nicht der Mindestanforderung.</de>
+<id>2063</id>
+</text>
+<text>
+<en>Caution! Crop region does not match minimum requirement for enlarge image.</en>
+<de>Achtung! Die Bildauswahl entspricht nicht der Mindestanforderung der Bildvergrößerung.</de>
+<id>2064</id>
 </text>
 </trl>
 

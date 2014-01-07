@@ -112,19 +112,18 @@
 
 .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background.error {
     background-image: url('/assets/kwf/images/cropimage/redPx85.png');
-    height: 65px;
+    height: auto;
 }
 
 .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background .message {
     display: none;
 }
 .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background.error .message {
-    display: inline;
+    display: block;
     color: white;
     font-weight: bold;
-    left: 5px;
-    top: 35px;
-    position: absolute;
+    margin-top: 30px;
+    padding: 5px;
 }
 
 .kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-dimension-name,
