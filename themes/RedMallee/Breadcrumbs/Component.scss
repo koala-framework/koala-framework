@@ -16,9 +16,9 @@
 }
 .cssClass a:after {
     content: ' ';
+    @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'arrowSmallRight.png', 6px, 6px);
     background-repeat: no-repeat;
     background-position: center center;
-    @include background-image-dpr2('/assets/kwf/themes/RedMallee/images', 'arrowSmallRight.png', 6px, 6px);
     padding: 0px 5px;
 }
 .cssClass a.last:after {
