@@ -22,6 +22,11 @@ class Kwc_Statistics_Opt_Component extends Kwc_Form_Component
         );
     }
 
+    public function getSuccessComponent()
+    {
+        return $this->getData()->getPage()->url;
+    }
+
     protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
         $value = $row->opt ? Kwf_Statistics::OPT_IN : Kwf_Statistics::OPT_OUT;
