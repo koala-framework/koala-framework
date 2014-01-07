@@ -1,5 +1,5 @@
 <?php
-class GreyBox_Box_HeaderTitle_Component extends Kwc_Basic_Headlines_Component
+class GreyBox_Box_HeaderTitle_Component extends Kwc_Legacy_Headlines_Component
 {
     public static function getSettings()
     {

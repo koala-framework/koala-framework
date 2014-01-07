@@ -6,7 +6,7 @@ class Kwf_Controller_Action_Maintenance_UpdateController extends Kwf_Controller_
     public function indexAction()
     {
         $this->view->typeNames = Kwf_Util_ClearCache::getInstance()->getTypeNames();
-        $this->view->assetsType = 'Kwf_Controller_Action_Maintenance:Update';
+        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('Update');
         $this->view->xtype = 'kwf.maintenance.update';
         $this->view->useBackgroundProcess = !!Kwf_Config::getValue('server.phpCli');
     }

@@ -103,13 +103,21 @@ class Kwf_Media_Output
                 $headers['If-Modified-Since'] == $lastModifiedString) {
             $ret['responseCode'] = 304;
             $ret['contentLength'] = 0;
-            $ret['headers'][] = array('Not Modified', true, 304);
+            if (php_sapi_name() == 'cgi-fcgi') {
+                $ret['headers'][] = "Status: 304 Not Modified";
+            } else {
+                $ret['headers'][] = array('Not Modified', true, 304);
+            }
             $ret['headers'][] = 'Last-Modified: '.$headers['If-Modified-Since'];
         } else if (isset($file['etag']) && isset($headers['If-None-Match']) &&
                 $headers['If-None-Match'] == $file['etag']) {
             $ret['responseCode'] = 304;
             $ret['contentLength'] = 0;
-            $ret['headers'][] = array('Not Modified', true, 304);
+            if (php_sapi_name() == 'cgi-fcgi') {
+                $ret['headers'][] = "Status: 304 Not Modified";
+            } else {
+                $ret['headers'][] = array('Not Modified', true, 304);
+            }
             $ret['headers'][] = 'ETag: '.$headers['If-None-Match'];
         } else {
             if (substr($file['mimeType'], 0, 12) != 'application/') {

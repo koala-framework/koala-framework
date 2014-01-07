@@ -165,6 +165,11 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     errorPlaceholder: r.errorPlaceholder
                 });
 
+                for (var fieldName in r.errorFields) {
+                    var field = this.findField(fieldName);
+                    field.onError(r.errorFields[fieldName]);
+                }
+
                 var hasErrors = false;
                 if (r.errorMessages && r.errorMessages.length) {
                     hasErrors = true;

@@ -29,6 +29,7 @@ Kwf.Maintenance.UpdateDownloader = Ext.extend(Ext.Panel, {
         this.buttons = [{
             text: trlKwf('Download Updates'),
             handler: function() {
+                Kwf.application.assetsVersion = null; //unset to avoid checking (which is problematic during update)
                 Kwf.Utils.BackgroundProcess.request({
                     url: '/kwf/maintenance/update-downloader/json-download-updates',
                     params: {
@@ -45,11 +46,14 @@ Kwf.Maintenance.UpdateDownloader = Ext.extend(Ext.Panel, {
                             url: '/kwf/maintenance/update-downloader/json-execute-updates',
                             progress: true,
                             scope: this,
+                            timeout: 10*60*1000,
                             success: function(response, options, r) {
                                 if (r.errMsg) {
                                     Ext.Msg.alert(trlKwf('Update Error'), r.message+"<br />"+r.errMsg.replace("\n", "<br />"));
                                 } else if (r.message) {
-                                    Ext.Msg.alert(trlKwf('Updates Finished'), r.message);
+                                    Ext.Msg.alert(trlKwf('Updates Finished'), r.message, function() {
+                                        location.href = '/kwf/welcome';
+                                    }, scope);
                                 }
                             }
                         });

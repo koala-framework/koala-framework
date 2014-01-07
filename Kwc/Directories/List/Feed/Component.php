@@ -55,7 +55,8 @@ class Kwc_Directories_List_Feed_Component extends Kwc_Abstract_Feed_Component
         return array(
             'title' => $item->getTitle(),
             'description' => '',
-            'link' => 'http://'.$_SERVER['HTTP_HOST'].$item->url //TODO this will be cached and that will cause problems
+            'link' => $item->getAbsoluteUrl(),
+            'guid' => $item->id
         );
     }
 
