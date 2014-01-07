@@ -10,10 +10,10 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     title: trlKwf('Edit'),
     closeAction: 'close',
     modal: true,
-    minWidth: 488,
-    minHeight: 250,
-    width: 488,
-    height: 250,
+    minWidth: 550,
+    minHeight: 400,
+    width: 550,
+    height: 400,
     layout: 'fit',
     resizable: false,
     _showUserSelection: null,
@@ -162,6 +162,9 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         }
         cropPanelItems.add(this._cropImage);
 
+        this._errorMessage = new Ext.Toolbar.TextItem({
+            text: '&nbsp;'
+        });
         this._cropPanel = new Ext.Panel({
             tbar: [{
                 text: trlKwf('Reset'),
@@ -173,7 +176,10 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 icon: '/assets/silkicons/arrow_out.png',
                 tooltip: trlKwf('Reset to default (maximum)'),
                 scope: this
-            }],
+            },
+            '->',
+                this._errorMessage
+            ],
             cls: 'kwc-abstract-image-dimension-window-crop-panel',
             region: 'center',
             title: trlKwf('Image region'),
@@ -258,23 +264,16 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             };
             var scaleFactor = this._scaleFactor;
             if (this._dpr2Check) scaleFactor /= 2;
+            var errorMessageEl = Ext.get(this._errorMessage.getEl());
+            errorMessageEl.addClass('kwc-abstract-image-dimensionwindow-errorMessage');
             if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, this.dimensions, scaleFactor)) {
-                for (i in this._dimensionField.items.items) {
-                    var item = this._dimensionField.items.items[i];
-                    if (item.checked) {
-                        item.container.addClass('error');
-                    } else if (item.container) {
-                        item.container.removeClass('error');
-                    }
-                }
+                errorMessageEl.addClass('error');
+                errorMessageEl.update(trlKwf('Selection too small!'));
                 this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').addClass('error');
             } else {
-                for (i in this._dimensionField.items.items) {
-                    var item = this._dimensionField.items.items[i];
-                    if (item.container) {
-                        item.container.removeClass('error');
-                    }
-                }
+                var errorMessageEl = Ext.get(this._errorMessage.getEl());
+                errorMessageEl.removeClass('error');
+                errorMessageEl.update('');
                 this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').removeClass('error');
             }
         }, this);

@@ -25,3 +25,14 @@
 .x-window .kwc-abstract-image-crop-image-wrapper.error {
     background-image: url('/assets/kwf/images/cropimage/redPx85.png');
 }
+
+.kwc-abstract-image-dimensionwindow-errorMessage.error {
+    padding-left: 18px;
+    background-image: url('/assets/silkicons/exclamation.png');
+    background-repeat: no-repeat;
+    font: 11px tahoma,verdana,helvetica;
+    color: #444444;
+    font-weight: bold;
+    margin-right: 5px;
+    background-position: 0px 1px;
+}
