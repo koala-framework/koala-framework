@@ -144,7 +144,6 @@ function updateIncludePath()
 
 createTrlCacheFolder();
 createScssCacheFolder();
-createMediaScaleCacheFolder();
 
 $files = glob_recursive('Events.php');
 replaceFiles($files, 'Kwf_Component_Event_ComponentClass_PartialsChanged', 'Kwf_Component_Event_ComponentClass_AllPartialChanged');
