@@ -13,7 +13,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     minWidth: 52,//min width of crop region
     minHeight: 52,//min height of crop region
     _image: null,
-    _cropRegionChosen: false,
     _userSelectedCropRegion: null,
     _ignoreRegionChangeAction: false,
 
@@ -28,7 +27,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     },
 
     getValue: function () {
-        if (this._cropRegionChosen) {
+        if (this._userSelectedCropRegion) {
             return this._getCropData();
         }
         return null;
@@ -88,7 +87,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             || this.height < this._minImageSize;
     },
 
-    onRender: function(ct, position) {
+    initComponent: function () {
+        Kwc.Abstract.Image.CropImage.superclass.initComponent.call(this);
         if (this.cropData) {
             this._userSelectedCropRegion = {
                 x: this.cropData.x,
@@ -97,6 +97,9 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
                 height: this.cropData.height
             };
         }
+    },
+
+    onRender: function(ct, position) {
         Kwc.Abstract.Image.CropImage.superclass.onRender.call(this, ct, position);
         this.el.setStyle({
             'background': 'url('+this.src+') no-repeat left top'
@@ -145,7 +148,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             if (this._ignoreRegionChangeAction) {
                 this._ignoreRegionChangeAction = false;
             } else {
-                this._cropRegionChosen = true;
                 this._userSelectedCropRegion = res;
             }
             this._updateCropRegionImage();
@@ -162,7 +164,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             });
         }).createDelegate(this);
         dragDrop.endDrag = (function (e) {
-            this._cropRegionChosen = true;
             this._userSelectedCropRegion = this._getCropData();
             this._updateCropRegionImage();
             this._image.getEl().setStyle({
@@ -225,10 +226,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         if (this.outWidth == -1) this.outWidth = 0;
         if (this.outHeight == -1) this.outHeight = 0;
         if (!cropData) { // calculate default selection
-            this._cropRegionChosen = false;
+            this._userSelectedCropRegion = null;
             cropData = this._generateDefaultCrop(preserveRatio);
-        } else {
-            this._cropRegionChosen = true;
         }
         if (this.outWidth != 0 && this.outHeight != 0
             && this.outWidth / this.outHeight != cropData.width / cropData.heigth
