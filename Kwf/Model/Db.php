@@ -307,6 +307,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                 }
             }
         }
+        if ($this->_hasDeletedFlag && !$select->getPart(Kwf_Model_Select::IGNORE_DELETED)) {
+            $dbSelect->where("deleted = 0");
+        }
         if ($where = $select->getPart(Kwf_Model_Select::WHERE)) {
             foreach ($where as $w) {
                 $dbSelect->where($w[0], $w[1], $w[2]);
@@ -830,7 +833,11 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     public function deleteRows($where)
     {
-        $ret = $this->getTable()->delete($this->_getTableUpdateWhere($where));
+        if ($this->hasDeletedFlag()) {
+            $ret = $this->updateRows(array('deleted' => true), $where);
+        } else {
+            $ret = $this->getTable()->delete($this->_getTableUpdateWhere($where));
+        }
         $this->_afterDeleteRows($where);
         return $ret;
     }

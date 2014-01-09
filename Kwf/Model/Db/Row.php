@@ -109,7 +109,12 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
     {
         parent::delete();
         $this->_beforeDelete();
-        $this->_row->delete();
+        if ($this->_model->hasDeletedFlag()) {
+            $this->_row->deleted = true;
+            $this->_row->save();
+        } else {
+            $this->_row->delete();
+        }
         $this->_afterDelete();
     }
 
