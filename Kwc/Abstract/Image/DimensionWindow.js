@@ -246,7 +246,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         this._cropImage = new Kwc.Abstract.Image.CropImage({
             // call controller to create image with nice size to work with
             src: '/kwf/media/upload/download-handy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey,
-            preserveRatio: this._getPreserveRatio(),
             cls: 'kwc-abstract-image-dimension-window-crop-image',
             outWidth: outWidth,
             outHeight: outHeight,
@@ -361,7 +360,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         };
         this._cropImage.outWidth = width;
         this._cropImage.outHeight = height;
-        this._cropImage.setCropData(cropData, this._getPreserveRatio());
+        this._cropImage.setCropDataAndPreserveRatio(cropData, this._getPreserveRatio());
     },
 
     _validateSizes: function()
@@ -396,7 +395,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         if (outWidth > 0 && outHeight > 0) {
             preserveRatio = true;
         }
-        this._cropImage.setCropData(cropData, preserveRatio);
+        this._cropImage.setCropDataAndPreserveRatio(cropData, preserveRatio);
     },
 
     _enableDisableFields: function()

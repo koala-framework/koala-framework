@@ -1,7 +1,6 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     src: null,//image path
-    preserveRatio: false,
     width: 0,//width of image,
     height: 0,//height of image
     outWidth: null,
@@ -127,7 +126,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         this._resizer = new Kwf.Utils.Resizable(this._image.getEl(), {
             handles: 'all',
             pinned: true,
-            preserveRatio: this.preserveRatio,
             constrainTo: this.getEl(), // TODO improve because it's possible to get 3px or so out of image...
             width: 0,
             height: 0,
@@ -213,10 +211,10 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
     resetCropData: function (preserveRatio) {
         this._userSelectedCropRegion = null;
-        this.setCropData(null, preserveRatio);
+        this.setCropDataAndPreserveRatio(null, preserveRatio);
     },
 
-    setCropData: function (cropData, preserveRatio)
+    setCropDataAndPreserveRatio: function (cropData, preserveRatio)
     {
         if (this.outWidth == -1) this.outWidth = 0;
         if (this.outHeight == -1) this.outHeight = 0;
