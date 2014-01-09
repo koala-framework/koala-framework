@@ -18,6 +18,7 @@ class Kwc_Chained_Trl_ChainedGenerator extends Kwc_Chained_Abstract_ChainedGener
     protected function _formatSelect($parentData, $select)
     {
         $ret = parent::_formatSelect($parentData, $select);
+        if (!$ret) return $ret;
         $ret->whereEquals('master', false);
         return $ret;
     }
