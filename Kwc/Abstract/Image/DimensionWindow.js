@@ -266,7 +266,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             if (this._dpr2Check) scaleFactor /= 2;
             var errorMessageEl = Ext.get(this._errorMessage.getEl());
             errorMessageEl.addClass('kwc-abstract-image-dimensionwindow-errorMessage');
-            if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, this.dimensions, scaleFactor)) {
+            if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, this.dimensions, scaleFactor)) {
                 errorMessageEl.addClass('error');
                 errorMessageEl.update(trlKwf('Selection too small!'));
                 this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').addClass('error');

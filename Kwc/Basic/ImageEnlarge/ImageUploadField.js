@@ -16,14 +16,14 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Abstract.Image.ImageUpl
         return useCropCheckboxes[0];
     },
 
-    _checkImageTooSmallCheckUseImageEnlargeDimension: function () {
+    _isValidateImageTooSmallUsingImageEnlargeDimensions: function () {
         // In this component there is no option to select a different sub-component
         return true;
     },
 
-    _checkForImageTooSmallUserNotification: function (value, dimensions, scaleFactor, fileUploadField, dimensionField) {
+    _validateImageTooSmallUserNotification: function (value, dimensions, scaleFactor, fileUploadField, dimensionField) {
         var valueCopy = Kwf.clone(value);
-        if (this._checkImageTooSmallCheckUseImageEnlargeDimension()) { // check if previewimage is selected
+        if (this._isValidateImageTooSmallUsingImageEnlargeDimensions()) { // check if previewimage is selected
             var cropCheckbox = this._findUseCropCheckbox();
             if (!cropCheckbox.kwcBasicImageEnlargeHasListener) {
                 // Can't be done in afterRender because cropCheckbox isn't rendered
@@ -49,7 +49,7 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Abstract.Image.ImageUpl
             enlargeDimensions = new Array();
             enlargeDimensions.add(this.imageEnlargeDimension);
             if (!Kwc.Abstract.Image.DimensionField
-                    .checkImageSize(valueCopy, enlargeDimensions, scaleFactor)) {
+                    .isValidImageSize(valueCopy, enlargeDimensions, scaleFactor)) {
                 this.getEl().addClass('error');
                 fileUploadField.getEl().child('.hover-background').addClass('error');
                 if (!fileUploadField.getEl().child('.hover-background .message')) {
@@ -72,7 +72,7 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Abstract.Image.ImageUpl
                     .update(trlKwf('At least: ')+pixelString);
 
                 Kwc.Basic.ImageEnlarge.ImageUploadField.superclass
-                    ._checkForImageTooSmallUserNotification.call(this, value, dimensions, scaleFactor, fileUploadField, dimensionField);
+                    ._validateImageTooSmallUserNotification.call(this, value, dimensions, scaleFactor, fileUploadField, dimensionField);
             }
         } else {
             var pixelString = Kwc.Abstract.Image.DimensionField
@@ -80,7 +80,7 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Abstract.Image.ImageUpl
             dimensionField.getEl().child('.kwc-abstract-image-dimension-name')
                 .update(trlKwf('At least: ')+pixelString);
             Kwc.Basic.ImageEnlarge.ImageUploadField.superclass
-                ._checkForImageTooSmallUserNotification.call(this, value, dimensions, scaleFactor, fileUploadField, dimensionField);
+                ._validateImageTooSmallUserNotification.call(this, value, dimensions, scaleFactor, fileUploadField, dimensionField);
         }
     }
 });

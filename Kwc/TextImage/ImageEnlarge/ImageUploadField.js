@@ -3,13 +3,13 @@ Kwc.TextImage.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Basic.ImageEnlarge.
 
     afterRender: function() {
         Kwc.TextImage.ImageEnlarge.ImageUploadField.superclass.afterRender.call(this);
-        var actionField = this._getActionCombobox();
+        var actionField = this._findActionCombobox();
         actionField.on('changevalue', function (combo, value, index) {
             this._checkForImageTooSmall();
         }, this);
     },
 
-    _getActionCombobox: function () {
+    _findActionCombobox: function () {
         var actionSelectFields = this.findParentBy(function (component, container){
             if (component.identifier == 'kwc-basic-imageenlarge-form') {
                 return true;
@@ -24,9 +24,9 @@ Kwc.TextImage.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Basic.ImageEnlarge.
         return actionSelectFields[0];
     },
 
-    _checkImageTooSmallCheckUseImageEnlargeDimension: function () {
+    _isValidateImageTooSmallUsingImageEnlargeDimensions: function () {
         // check if dropdown has selected imageenlarge
-        var actionField = this._getActionCombobox();
+        var actionField = this._findActionCombobox();
         var action = actionField.defaultValue;
         if (actionField.getValue()) {
             action = actionField.getValue();

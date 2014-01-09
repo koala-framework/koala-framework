@@ -96,7 +96,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     }
 });
 
-Kwc.Abstract.Image.DimensionField.checkImageSize = function(value, dimensions, scaleFactor)
+Kwc.Abstract.Image.DimensionField.isValidImageSize = function(value, dimensions, scaleFactor)
 {
     if (!value.cropData)
         return true;

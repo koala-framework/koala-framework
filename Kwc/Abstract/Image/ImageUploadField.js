@@ -47,10 +47,10 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         if (!fileUploadField.getEl().child('.hover-background')) return;
         var scaleFactor = this._scaleFactor;
         if (dimensionField.dpr2Check) scaleFactor /= 2;
-        this._checkForImageTooSmallUserNotification(value, dimensionField.dimensions, scaleFactor, fileUploadField, dimensionField);
+        this._validateImageTooSmallUserNotification(value, dimensionField.dimensions, scaleFactor, fileUploadField, dimensionField);
     },
 
-    _checkForImageTooSmallUserNotification: function (value, dimensions, scaleFactor, fileUploadField, dimensionField) {
+    _validateImageTooSmallUserNotification: function (value, dimensions, scaleFactor, fileUploadField, dimensionField) {
         if (!fileUploadField.getEl().child('.hover-background .message')) {
             fileUploadField.getEl().child('.hover-background').createChild({
                 html:trlKwf('Caution! Image size of uploaded image does not match minimum requirement.'),
@@ -69,7 +69,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             fileUploadField.getEl().child('.hover-background .message')
                 .update(trlKwf('Caution! Crop region does not match minimum requirement.'));
         }
-        if (!Kwc.Abstract.Image.DimensionField.checkImageSize(value, dimensions, scaleFactor)) {
+        if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, dimensions, scaleFactor)) {
             this.getEl().addClass('error');
             fileUploadField.getEl().child('.hover-background').addClass('error');
         } else {
