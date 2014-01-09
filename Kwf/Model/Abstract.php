@@ -11,6 +11,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     protected $_dependentModels = array();
     protected $_referenceMap = array();
     protected $_toStringField;
+    
+    protected $_hasDeletedFlag = false;
     /**
      * Row-Filters für automatisch befüllte Spalten
      *
@@ -55,6 +57,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         if (isset($config['filters'])) $this->_filters = (array)$config['filters'];
         if (isset($config['toStringField'])) $this->_toStringField = (string)$config['toStringField'];
         if (isset($config['exprs'])) $this->_exprs = (array)$config['exprs'];
+        if (isset($config['hasDeletedFlag'])) $this->_hasDeletedFlag = $config['hasDeletedFlag'];
         self::$instanceCount[spl_object_hash($this)] = get_class($this);
         self::$_allInstances[] = $this;
         $this->_init();
@@ -1045,5 +1048,10 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function hasColumnMappings($mapping) {
         return isset($this->_columnMappings[$mapping]);
+    }
+    
+    public function hasDeletedFlag()
+    {
+        return $this->_hasDeletedFlag;
     }
 }

@@ -16,8 +16,10 @@ class Kwf_Model_Select
     const EXPR = 'expr';
     const OTHER = 'other';
     const UNION = 'union';
+    const IGNORE_DELETED = 'ignoreDeleted';
 
     const ORDER_RAND = 'orderRand';
+
 
     protected $_parts = array();
 
@@ -26,12 +28,13 @@ class Kwf_Model_Select
         if (is_string($where)) {
             $where = array($where);
         }
+
         foreach ($where as $key => $val) {
             if (is_int($key)) {
                 $this->where($val);
                 continue;
             }
-            if ($key != 'limit' && $key != 'order') {
+            if ($key != 'limit' && $key != 'order' && $key != self::IGNORE_DELETED) {
                 $method = "where".ucfirst($key);
             } else {
                 $method = $key;
@@ -306,5 +309,11 @@ class Kwf_Model_Select_Expr_LowerEquals implements Kwf_Model_Select_Expr_Or
             $ret->_parts[$k] = $i;
         }
         return $ret;
+    }
+    
+    public function ignoreDeleted($value = true)
+    {
+        $this->_parts[self::IGNORE_DELETED] = $value;
+        return $this;
     }
 }
