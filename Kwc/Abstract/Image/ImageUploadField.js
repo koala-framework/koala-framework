@@ -11,7 +11,12 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         if (dimensionField) {// because it's possible to define only a single dimension
             dimensionField.on('render', function () {
                 // fileUploadField also has to be rendered
-                this._alignDimensionField();
+                var dimensionField = this._getDimensionField();
+                var fileUploadField = this._getFileUploadField();
+                fileUploadField.container.addClass('kwc-abstract-image-imageuploadfile-container');
+                if (dimensionField.getEl() && fileUploadField.getEl()) {
+                    dimensionField.getEl().parent().parent().addClass('kwc-dimensionfield-container');
+                }
             }, this);
             dimensionField.on('change', function (dimension) {
                 this._setPreviewUrl(dimension);
@@ -75,15 +80,6 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         } else {
             this.getEl().removeClass('error');
             fileUploadField.getEl().child('.hover-background').removeClass('error');
-        }
-    },
-
-    _alignDimensionField: function () {
-        var dimensionField = this._getDimensionField();
-        var fileUploadField = this._getFileUploadField();
-        fileUploadField.container.addClass('kwc-abstract-image-imageuploadfile-container');
-        if (dimensionField.getEl() && fileUploadField.getEl()) {
-            dimensionField.getEl().parent().parent().addClass('kwc-dimensionfield-container');
         }
     },
 
