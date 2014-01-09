@@ -64,6 +64,8 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
     directoryUrl: null, //needed to implement back-link in detail without page load
 
+    loadMoreBufferPx: 700,
+
     border: false,
     layout: 'fit',
     cls: 'posts',
@@ -77,7 +79,8 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
             baseParams: {
                 componentId: this.componentId
             },
-            placeholder: this.placeholder
+            placeholder: this.placeholder,
+            loadMoreBufferPx: this.loadMoreBufferPx
         });
         this.items = [this.view];
 
@@ -264,6 +267,11 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
     showDetail: function(id) {
         this.view.showDetail(id);
+    },
+
+    loadMore: function()
+    {
+        this.view.loadMore();
     }
 
 });
@@ -345,14 +353,16 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 
         Kwc.Directories.List.ViewAjax.View.superclass.initComponent.call(this);
 
-        Ext.fly(window).on('scroll', function() {
-            var height = this.el.getTop()+this.el.getHeight();
-            height -= Ext.getBody().getViewSize().height;
-            height = height - Ext.getBody().getScroll().top;
-            if (height < 700) {
-                this.loadMore();
-            }
-        }, this, { buffer: 50 });
+        if (this.loadMoreBufferPx) {
+            Ext.fly(window).on('scroll', function() {
+                var height = this.el.getTop()+this.el.getHeight();
+                height -= Ext.getBody().getViewSize().height;
+                height = height - Ext.getBody().getScroll().top;
+                if (height < this.loadMoreBufferPx) {
+                    this.loadMore();
+                }
+            }, this, { buffer: 50 });
+        }
 
         Ext.fly(window).on('scroll', function() {
             var scrollHeight = Ext.getBody().getScroll().top;
