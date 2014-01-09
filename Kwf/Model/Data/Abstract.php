@@ -222,6 +222,9 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
         if ($id = $select->getPart(Kwf_Model_Select::WHERE_ID)) {
             if ($data[$this->getPrimaryKey()] != (string)$id) return false;
         }
+        if ($this->_hasDeletedFlag && !$select->getPart(Kwf_Model_Select::IGNORE_DELETED)) {
+            if ($data['deleted']) return false;
+        }
         if ($where = $select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
             foreach ($where as $f=>$v) {
                 if (!is_array($v)) $v = array($v);
