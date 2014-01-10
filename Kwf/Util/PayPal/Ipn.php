@@ -16,16 +16,6 @@ class Kwf_Util_PayPal_Ipn
     {
         if (Kwf_Setup::getConfigSection()=='production' || !isset($_GET['dontValidate'])) {
 
-            $req = 'cmd=_notify-validate';
-
-            foreach ($_POST as $key => $value) {
-                if(get_magic_quotes_gpc() == 1) {
-                    $value = stripslashes($value);
-                }
-                $value = urlencode($value);
-                $req .= "&$key=$value";
-            }
-
             // post back to PayPal system to validate
             if (isset($_POST['test_ipn']) && $_POST['test_ipn']) {
                 $domain = 'www.sandbox.paypal.com';
@@ -33,28 +23,18 @@ class Kwf_Util_PayPal_Ipn
                 $domain = 'www.paypal.com';
             }
             // post back to PayPal system to validate
-            $header  = "POST /cgi-bin/webscr HTTP/1.1\r\n";
-            $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-            $header .= "Host: $domain\r\n";
-            $header .= "Content-Length: " . strlen($req) . "\r\n";
-            $header .= "Connection: close\r\n\r\n";
-            $fp = fsockopen ('ssl://' . $domain, 443, $errno, $errstr, 30);
+            $client = new Zend_Http_Client('https://'.$domain.'/cgi-bin/webscr');
+            $client->setParameterPost('cmd', '_notify-validate');
+            $client->setParameterPost($_POST);
+            $response = $client->request(Zend_Http_Client::POST);
 
-            if (!$fp) {
-                throw new Kwf_Exception("Http error in Ipn validation");
-            } else {
-                fputs ($fp, $header . $req);
-                $res = '';
-                while (!feof($fp)) {
-                    $res .= fgets ($fp, 1024);
-                }
-                fclose ($fp);
-            }
+            $res = trim($response->getBody());
+
         } else {
             $res = 'VERIFIED';
         }
 
-        if (trim($res) == "VERIFIED") {
+        if ($res == "VERIFIED") {
             // TODO:
             // Check the payment_status is Completed
             // Check that txn_id has not been previously processed
@@ -70,10 +50,12 @@ class Kwf_Util_PayPal_Ipn
             }
             $row->save();
 
-        } else if (trim($res) == "INVALID") {
+        } else if ($res == "INVALID") {
             throw new Kwf_Exception("Ipn validation received INVALID $domain");
         } else {
-            throw new Kwf_Exception("Ipn validation received something strange: $res");
+            $msg = "Ipn validation received something strange: $res\n";
+            if (isset($response)) $msg .= $response->asString();
+            throw new Kwf_Exception($msg);
         }
     }
 }
