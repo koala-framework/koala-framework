@@ -383,6 +383,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return 0;
     }
 
+    public function getMaxContentWidth()
+    {
+        return parent::getContentWidth();
+    }
+
     public function getFulltextContent()
     {
         $ret = array();

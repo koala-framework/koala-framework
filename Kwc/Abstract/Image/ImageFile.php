@@ -12,7 +12,7 @@ class Kwc_Abstract_Image_ImageFile extends Kwf_Form_Field_File
     {
         $ret = parent::load($row, $postData);
         $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible' => true));
-        $ret[$this->getFieldName()]['contentWidth'] = $component->getComponent()->getContentWidth();
+        $ret[$this->getFieldName()]['contentWidth'] = $component->getComponent()->getMaxContentWidth();
         return $ret;
     }
 }

@@ -26,6 +26,9 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         var fileUploadField = this._getFileUploadField();
         fileUploadField.on('change', function (el, value) {
             var dimensionField = this._getDimensionField();
+            if (dimensionField && value.contentWidth) {
+                dimensionField.setContentWidth(value.contentWidth);
+            }
             if (!value || !value.mimeType || !value.mimeType.match(/(^image\/)/)) {
                 dimensionField.newImageUploaded('');
                 this._getFileUploadField().setPreviewUrl(null);
@@ -35,7 +38,6 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             this.addClass('image-uploaded');
             var dimension = null;
             if (dimensionField) {
-                dimensionField.setContentWidth(value.contentWidth);
                 this._scaleFactor = value.imageHandyScaleFactor;
                 dimensionField.setScaleFactor(value.imageHandyScaleFactor);
                 dimensionField.newImageUploaded(value);
