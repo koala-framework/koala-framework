@@ -1,7 +1,9 @@
-<?=$this->component($this->linkTag)?>
+<span class="<?=$this->cssClass;?>">
+    <?=$this->component($this->linkTag)?>
 
-    <?=$this->mailEncodeText($this->text)?>
+        <?=$this->mailEncodeText($this->text)?>
 
-<?if ($this->hasContent($this->linkTag)) {?>
-</a>
-<?}?>
+    <?if ($this->hasContent($this->linkTag)) {?>
+    </a>
+    <?}?>
+</span>
