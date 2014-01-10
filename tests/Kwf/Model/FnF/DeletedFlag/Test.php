@@ -25,9 +25,9 @@ class Kwf_Model_FnF_DeletedFlag_Test extends Kwf_Test_TestCase
         $s->whereEquals('deleted', 1);
         $this->assertEquals(1, count($model->getRows($s)));
     }
-public function testCountRow()
+    public function testCountRow()
     {
-        $model = new Kwf_Model_FnF_DeletedFlag_IgnoreDeleted_Model(array(
+        $model = new Kwf_Model_FnF_DeletedFlag_Model(array(
             'columns' => array('id', 'foo', 'deleted'),
             'data'=>array(
                 array('id'=>1, 'foo'=>'bar', 'deleted' => 0),
@@ -40,7 +40,7 @@ public function testCountRow()
     }
     public function testGetRows()
     {
-        $model = new Kwf_Model_FnF_DeletedFlag_IgnoreDeleted_Model(array(
+        $model = new Kwf_Model_FnF_DeletedFlag_Model(array(
             'columns' => array('id', 'foo', 'deleted'),
             'data'=>array(
                 array('id'=>1, 'foo'=>'bar', 'deleted' => 0),
@@ -53,7 +53,7 @@ public function testCountRow()
     }
     public function testGetRow()
     {
-        $model = new Kwf_Model_FnF_DeletedFlag_IgnoreDeleted_Model(array(
+        $model = new Kwf_Model_FnF_DeletedFlag_Model(array(
             'columns' => array('id', 'foo', 'deleted'),
             'data'=>array(
                 array('id'=>1, 'foo'=>'bar', 'deleted' => 0),
@@ -67,7 +67,7 @@ public function testCountRow()
     }
     public function testGetIds()
     {
-        $model = new Kwf_Model_FnF_DeletedFlag_IgnoreDeleted_Model(array(
+        $model = new Kwf_Model_FnF_DeletedFlag_Model(array(
             'columns' => array('id', 'foo', 'deleted'),
             'data'=>array(
                 array('id'=>1, 'foo'=>'bar', 'deleted' => 0),
@@ -80,7 +80,7 @@ public function testCountRow()
     }
     public function testDeleteRows()
     {
-        $model = new Kwf_Model_FnF_DeletedFlag_IgnoreDeleted_Model(array(
+        $model = new Kwf_Model_FnF_DeletedFlag_Model(array(
             'columns' => array('id', 'foo', 'deleted'),
             'data'=>array(
                 array('id'=>1, 'foo'=>'bar', 'deleted' => 0),
@@ -94,7 +94,7 @@ public function testCountRow()
     }
     public function testUpdateRows()
     {
-        $model = new Kwf_Model_FnF_DeletedFlag_IgnoreDeleted_Model(array(
+        $model = new Kwf_Model_FnF_DeletedFlag_Model(array(
             'columns' => array('id', 'foo', 'deleted'),
             'data'=>array(
                 array('id'=>1, 'foo'=>'bar', 'deleted' => 0),
@@ -119,7 +119,7 @@ public function testCountRow()
     }
     public function testExport()
     {
-        $model = new Kwf_Model_FnF_DeletedFlag_IgnoreDeleted_Model(array(
+        $model = new Kwf_Model_FnF_DeletedFlag_Model(array(
             'columns' => array('id', 'foo', 'deleted'),
             'data'=>array(
                 array('id'=>1, 'foo'=>'bar', 'deleted' => 0),
