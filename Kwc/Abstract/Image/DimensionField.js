@@ -73,8 +73,9 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     setContentWidth: function (contentWidth) {
         for (i in this.dimensions) {
             var dimension = this.dimensions[i];
-            if (dimension.width == 'contentWidth') {
+            if (dimension.width == 'contentWidth' || dimension.widthBase == 'contentWidth') {
                 dimension.width = contentWidth;
+                dimension.widthBase = 'contentWidth';
             }
         }
     },

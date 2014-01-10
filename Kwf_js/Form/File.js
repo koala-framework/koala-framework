@@ -292,7 +292,6 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         }
         if (v != this.value) {
             this.imageData = value;
-            this.fireEvent('change', this, value, this.value);
             var icon = false;
             var href = '/kwf/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
             if (value.mimeType) {
@@ -328,6 +327,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 }
                 this.infoContainer.update('');
             }
+            this.fireEvent('change', this, value, this.value);
         }
         Kwf.Form.File.superclass.setValue.call(this, value.uploadId);
     },

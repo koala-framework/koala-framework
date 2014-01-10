@@ -44,6 +44,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
                 dimension = dimensionField.getValue();
             }
             this._setPreviewUrl(dimension);
+            this._checkForImageTooSmall();
         }, this);
     },
 
