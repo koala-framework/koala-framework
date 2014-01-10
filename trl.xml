@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+disableHistoryState<?xml version="1.0" encoding="utf-8"?>
 <trl>
 <text>
 <en>Visible</en>
@@ -1604,6 +1604,7 @@
 <ru>Поиск</ru>
 <sk>Hľadaj</sk>
 <fr>Rechercher</fr>
+<uk>Пошук</uk>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -2032,6 +2033,7 @@
 <id>362</id>
 <ro>Acest câmp trebuie să conţină o adresă de e-mail de forma "user@domain.com".</ro>
 <sl>To polje mora vsebovati e-naslov v obliki "uporabnik@domena.com".</sl>
+<es>Aquí debe ingresar una dirección de correo electrónico en el formato "usuario@dominio.com".</es>
 </text>
 <text>
 <en>This field should only contain letters and _</en>
@@ -5872,6 +5874,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Format</ro>
 <bg>Формат</bg>
 <sl>format</sl>
+<es>Formato</es>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
@@ -6486,6 +6489,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>HTML-формат</bg>
 <mk>HTML-Формат</mk>
 <sl>HTML-format</sl>
+<es>Formato HTML</es>
 </text>
 <text>
 <en>Text-Format</en>
@@ -6496,6 +6500,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>Текстов формат</bg>
 <mk>Текст-Формат</mk>
 <sl>tekstovni format</sl>
+<es>Formato de texto</es>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
@@ -9139,6 +9144,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Keine Einträge gefunden</de>
 <id>1804</id>
 <sk>Žiadne výsledky vyhľadávania</sk>
+<uk>Записів не знайдено</uk>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
@@ -9891,7 +9897,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Wir verwenden Cookies, um diese Webseite zu betreiben und ihre Benutzerfreundlichkeit zu verbessern.</de>
 <sl>Za pravilno delovanje in preprostejšo uporabo te strani uporabljamo piškotke.</sl>
 <hu>Weboldalunk futtatásához és a használhatóságának növeléséhez „cookie”-kat használunk.</hu>
-<bg>При поддръжката и експлоатацията на този сайт се използват " бисквитки " за да се подобри неговото ползване.</bg>
+<bg>При поддръжката и експлоатацията на този сайт се използват "бисквитки", за да се подобри неговото ползване.</bg>
 <cs>K provozu této webové stránky a za účelem dosažení Vaší spokojenosti s užíváním stránek, používáme soubory cookies.</cs>
 </text>
 <text>
@@ -9926,6 +9932,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>При вашето посещение на тази страница се използват „бисквитки”. Кликнете тук, за да деактивирате „бисквитките”.</bg>
 <cs>Při Vaší návštěvě této internetové stránky se aktuálně používají cookies. Klikněte sem, abyste cookies deaktivovali.</cs>
 <ro>Când vizitaţi această pagină web, în prezent sunt generate cookie-uri. Faceţi click aici pentru a dezactiva cookie-urile.</ro>
+<fr>Actuellement, des cookies sont posés durant votre visite sur le présent site Web. Cliquez ici pour désactiver les cookies.</fr>
+<es>Durante su visita a esta página web se colocan actualmente cookies. Haga clic aquí para desactivar las cookies.</es>
 <id>2007</id>
 </text>
 <text>
@@ -9937,6 +9945,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>При посещение ви на тази страница не се използват „бисквитки”. Кликнете тук, ако искате да приемете използването на „бисквитки”.</bg>
 <cs>Při Vaší návštěvě této internetové stránky se aktuálně nepoužívají žádné cookies. Klikněte sem, pokud chcete souhlasit s použitím cookies.</cs>
 <ro>Când vizitaţi această pagină web, în prezent nu sunt generate cookie-uri. Faceţi click aici pentru a activa cookie-urile.</ro>
+<fr>Actuellement, aucun cookie n'est posé durant votre visite sur le présent site Web. Cliquez ici pour accepter les cookies.</fr>
+<es>Durante su visita a esta página web no se colocan cookies actualmente. Haga clic aquí si desea aceptar el empleo de cookies.</es>
 <id>2008</id>
 </text>
 <text>
@@ -10121,7 +10131,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2032</id>
 </text>
 <text>
-<en>Recent Posts</en>
+<de>Videoquelle</de>
+<en>Source Type</en>
 <id>2033</id>
 </text>
 </trl>
