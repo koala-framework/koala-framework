@@ -130,6 +130,14 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             ]
         };
 
+        var showDimensionField = new Ext.BoxComponent({
+            autoEl: {
+                html: '<div class="only-dimension">'+trlKwf('Dimension')+': '+Kwc.Abstract.Image.DimensionField
+                    .getDimensionString(this.dimensions[this._dimensionField.getValue()])+'</div>',
+                hideBorders: true
+            }
+        });
+
         this._configPanel = new Ext.Panel({
             region: 'west',
             bodyStyle: 'padding: 10px',
@@ -139,11 +147,20 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             items: [
                 this._dimensionField,
                 this._userSelection,
+                showDimensionField,
                 imageDataField
             ]
         });
         if (this.selectDimensionDisabled) {
-            this._configPanel.disable();
+            //this._configPanel.disable();
+            this._dimensionField.setVisible(false);
+            this._userSelection.setVisible(false);
+            this._widthField.setVisible(false);
+            this._xField.setVisible(false);
+            this._heightField.setVisible(false);
+            this._pxField.setVisible(false);
+        } else {
+            showDimensionField.setVisible(false);
         }
 
         this._initCropRegion();
