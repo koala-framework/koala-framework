@@ -17,9 +17,14 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Chec
             'component' => 'Kwc_Shop_Cart_Checkout_Payment_PayPal_Cancel_Component',
             'name' => trlKwfStatic('Cancel')
         );
-
-        $ret['business'] = ''; // deprecated, use paypalId in config instead
         return $ret;
+    }
+
+    public static function validateSettings($settings, $componentClass)
+    {
+        if (isset($settings['business'])) {
+            throw new Kwf_Exception('setting "business" is deprectated, use paypalId in config');
+        }
     }
 
     public function confirmOrder($order)
