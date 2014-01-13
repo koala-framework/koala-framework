@@ -1,16 +1,27 @@
 .cssClass div.text { display: none; }
 .cssClass .fromAddress { margin-top:6px; }
 .cssClass .fromAddress input { float: left; padding: 3px; }
-.cssClass .fromAddress input.textBefore { width: 375px; color: var(typo); }
+.cssClass .fromAddress input.textBefore { width: 98%; color: var(typo); display: block; margin-bottom: 10px;}
+.cssClass.gt500 .fromAddress input.textBefore {width: 50%; display: block;}
 .cssClass .fromAddress input.kwfClearOnFocusBlurred { color: var(gray); }
 .cssClass .fromAddress input.textOn { color: var(typo); }
 .cssClass .fromAddress button {
-    float: right;
-	font-weight: bold;
-    margin: -3px 0px 0px 0px;
-    padding: 0px 5px;
+    font-weight: bold;
     overflow: visible;
-	cursor: pointer;
+    cursor: pointer;
+    width: 100%;
+    margin: 0;
+    float: left;
+    padding: 8px 5px;
+    display: block;
+    float:left;
+}
+.cssClass.gt500 .fromAddress button {
+    width: 200px;
+    float: right;
+    padding: 2px 5px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .cssClass .mapDirSuggestParent { display: none; margin-top: 30px; }
