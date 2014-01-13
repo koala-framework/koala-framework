@@ -1,6 +1,7 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     _scaleFactor: null,
+    _resolvedDimensions: null,
 
     autoEl: {
         tag: 'div',
@@ -28,7 +29,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         if (this.rendered) {
             var pixelString = '';
             if (v.dimension) {
-                pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.dimensions[v.dimension], v);
+                pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this._resolvedDimensions[v.dimension], v);
             }
             if (pixelString) {
                 this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('At least: ')+pixelString);
@@ -57,7 +58,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
 
     _onButtonClick: function() {
         this._sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
-            dimensions: this.dimensions,
+            dimensions: this._resolvedDimensions,
             value: this.getValue(),
             imageData: this.imageData,
             selectDimensionDisabled: this.selectDimensionDisabled,
@@ -71,11 +72,15 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     },
 
     setContentWidth: function (contentWidth) {
-        for (i in this.dimensions) {
-            var dimension = this.dimensions[i];
-            if (dimension.width == 'contentWidth' || dimension.widthBase == 'contentWidth') {
+        // ContentWidth is used through this array at
+        //  + isValidImageSize (used by DimensionWindow)
+        //  + getDimensionPixelString
+        //  + getDimensionString (is using getDimensionPixelString)
+        this._resolvedDimensions = Kwf.clone(this.dimensions);
+        for (i in this._resolvedDimensions) {
+            var dimension = this._resolvedDimensions[i];
+            if (dimension.width == 'contentWidth') {
                 dimension.width = contentWidth;
-                dimension.widthBase = 'contentWidth';
             }
         }
     },
