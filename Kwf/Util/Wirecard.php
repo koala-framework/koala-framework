@@ -1,15 +1,23 @@
 <?php
 class Kwf_Util_Wirecard
 {
-    public function dispatch($logModel = 'Kwf_Util_Wirecard_LogModel')
+    public static function dispatch($logModel = 'Kwf_Util_PayPal_Ipn_LogModel')
     {
         $url = Kwf_Setup::getRequestPath();
         if ($url != '/wirecard_confirm') return;
 
+        self::process($logModel);
+
+        echo 'OK';
+        exit;
+    }
+
+    public static function process($logModel = 'Kwf_Util_Wirecard_LogModel', $secret = null)
+    {
         Zend_Registry::get('config')->debug->error->log = true; //log immer aktivieren, da dieser request von wirecard gemacht wird
         ignore_user_abort(true);
 
-        $secret = Kwf_Registry::get('config')->wirecard->secret;
+        if (!$secret) $secret = Kwf_Registry::get('config')->wirecard->secret;
 
         $paymentState = isset($_POST["paymentState"]) ? $_POST["paymentState"] : "";
 

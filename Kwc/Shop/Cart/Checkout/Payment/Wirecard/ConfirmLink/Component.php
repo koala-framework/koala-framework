@@ -4,9 +4,9 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['viewCache'] = false;
         $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Checkout/Payment/Wirecard/ConfirmLink/Component.js';
         $ret['assets']['dep'][] = 'KwfOnReady';
-        $ret['viewCache'] = false;
         return $ret;
     }
 
@@ -33,23 +33,24 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
         $total = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Component')
             ->getComponent()->getTotal($order);
 
-        $wirecardConfig = Kwf_Config::getValueArray('wirecard');
-        if (empty($wirecardConfig)) {
+        $wirecardCustomerId = $this->getData()->getBaseProperty('wirecard.customerId');
+        $wirecardSecret = $this->getData()->getBaseProperty('wirecard.secret');
+        if (!$wirecardCustomerId || !$wirecardSecret) {
             throw new Kwf_Exception('Set wirecard settings (customerId & secret) in config!');
         }
 
         $payment = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component');
         $orderDescription = $order->firstname . ' ' . $order->lastname . ' (' . $order->zip . '), Bestellung: ' . $order->id;
         $params = array(
-            'secret' => $wirecardConfig['secret'],
-            'customerId' => $wirecardConfig['customerId'],
+            'secret' => $wirecardSecret,
+            'customerId' => $wirecardCustomerId,
             'amount' => $total,
             'currency' => 'EUR',
             'language' => $this->getData()->getLanguage(),
             'orderDescription' => $orderDescription,
             'displayText' => $this->getData()->trlKwf('Thank you very much for your order.'),
             'successURL' => $payment->getChildComponent('_success')->getAbsoluteUrl(),
-            'confirmURL' => $this->getData()->getSubroot()->getAbsoluteUrl().'wirecard_confirm',
+            'confirmURL' => $payment->getChildComponent('_ipn')->getAbsoluteUrl(),
             'serviceURL' => $this->getData()->getSubroot()->getAbsoluteUrl(),
             'failureURL' => $payment->getChildComponent('_failure')->getAbsoluteUrl(),
             'cancelURL' => $payment->getChildComponent('_cancel')->getAbsoluteUrl(),

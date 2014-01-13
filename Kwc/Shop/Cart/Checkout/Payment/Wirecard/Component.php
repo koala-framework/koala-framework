@@ -1,7 +1,6 @@
 <?php
 /**
- * Set Wirecard dispatch in bootstrap: Kwf_Util_Wirecard::dispatch('Kwc_Shop_Cart_Checkout_Payment_Wirecard_Model');
- * And preLoginIgnore for wirecard confirm url in config: preLoginIgnore.wirecardConfirm = /wirecard_confirm
+ * set preLoginIgnore for wirecard confirm url in config: preLoginIgnore.wirecardConfirm = url
  **/
 class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component extends Kwc_Shop_Cart_Checkout_Payment_Abstract_Component
 {
@@ -30,6 +29,11 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component extends Kwc_Shop_Cart_Ch
             'name' => trlKwfStatic('Success')
         );
 
+        $ret['generators']['ipn'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Shop_Cart_Checkout_Payment_Wirecard_Ipn_Component'
+        );
+
         /**
          * Possible types are:
          * BANCONTACT_MISTERCASH, C2P (Click2Pay), CCARD (Credit Card), EKONTO, ELV (Electronic Funds Transfer),
@@ -39,12 +43,5 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component extends Kwc_Shop_Cart_Ch
          **/
         $ret['paymentType'] = 'SELECT';
         return $ret;
-    }
-
-    public static function validateSettings($settings, $componentClass)
-    {
-        parent::validateSettings($settings, $componentClass);
-        if (!Kwf_Config::getValue('wirecard.secret')) throw new Kwf_Exception('Set wirecard secret in config');
-        if (!Kwf_Config::getValue('wirecard.customerId')) throw new Kwf_Exception('Set wirecard customerId in config');
     }
 }

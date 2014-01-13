@@ -18,11 +18,11 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends Kwc_Edit
     public function processInput($data)
     {
         if (isset($data['paymentState']) && $data['paymentState'] == 'SUCCESS') {
-            $wirecardConfig = Kwf_Config::getValueArray('wirecard');
-            if (empty($wirecardConfig)) {
-                throw new Kwf_Exception('Set wirecard settings (customerId & secret) in config!');
+            $wirecardSecret = $this->getData()->getBaseProperty('wirecard.secret');
+            if (!$wirecardSecret) {
+                throw new Kwf_Exception('Set wirecard setting secret in config!');
             }
-            $data['secret'] = $wirecardConfig['secret'];
+            $data['secret'] = $wirecardSecret;
             $responseFingerprintSeed  = "";
             foreach (explode(',', $data['responseFingerprintOrder']) as $key) {
                 $responseFingerprintSeed  .= $data[$key];
