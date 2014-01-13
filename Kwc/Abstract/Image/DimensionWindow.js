@@ -16,7 +16,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     height: 400,
     layout: 'fit',
     resizable: false,
-    _showUserSelection: null,
 
     initComponent: function() {
         var radios = [];
@@ -417,22 +416,21 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
     _enableDisableFields: function()
     {
-        if (this._showUserSelection == null) {
-            this._showUserSelection = false;
-            for (var i in this.dimensions) {
-                var dim = this.dimensions[i];
-                if (dim.width == 'user' || dim.height == 'user'
-                    || dim.showUserSelectionWidth || dim.showUserSelectionHeight
-                ) {
-                    if (dim.width == 'user')
-                        dim.showUserSelectionWidth = true;
-                    if (dim.height == 'user')
-                        dim.showUserSelectionHeight = true;
-                    this._showUserSelection = true;
-                }
+        var showUserSelection = false;
+        for (var i in this.dimensions) {
+            var dim = this.dimensions[i];
+            if (dim.width == 'user' || dim.height == 'user'
+                || dim.showUserSelectionWidth || dim.showUserSelectionHeight
+            ) {
+                if (dim.width == 'user')
+                    dim.showUserSelectionWidth = true;
+                if (dim.height == 'user')
+                    dim.showUserSelectionHeight = true;
+                showUserSelection = true;
             }
         }
-        if (this._showUserSelection) {
+
+        if (showUserSelection) {
             this._userSelection.show();
             var dim = this.dimensions[this._dimensionField.getValue()];
             if (!dim) return;
