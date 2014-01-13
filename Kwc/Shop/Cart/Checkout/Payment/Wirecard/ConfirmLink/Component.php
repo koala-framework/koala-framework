@@ -77,7 +77,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
             $ret .= "<input type=\"hidden\" name=\"$k\" value=\"".htmlspecialchars($i)."\">\n";
         }
 
-        $ret .= "<input type=\"image\" src=\"/assets/kwf/Kwc/Shop/Cart/Checkout/Payment/Wirecard/wirecard.png\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">\n";
+        $ret .= "<input type=\"button\" value=\"{$this->getData()->trlKwf('Buy now')}\" class=\"submit\">\n";
         $ret .= "</form>\n";
         return $ret;
     }

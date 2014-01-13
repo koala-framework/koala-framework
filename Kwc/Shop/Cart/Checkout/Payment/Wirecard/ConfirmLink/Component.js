@@ -1,6 +1,6 @@
 Kwf.onElementReady('.kwcShopCartCheckoutPaymentWirecardConfirmLink', function(el, config) {
     var form = el.child('form');
-    form.on('submit', function(e) {
+    el.child('.submit').on('click', function(e) {
         e.preventDefault();
         el.child('.process').show();
         form.hide();
@@ -8,9 +8,9 @@ Kwf.onElementReady('.kwcShopCartCheckoutPaymentWirecardConfirmLink', function(el
             url: config.controllerUrl,
             params: config.params,
             callback: function(response, options) {
-                this.dom.submit();
+                form.dom.submit();
             },
-            scope: form
+            scope: this
         });
     }, this);
 });
