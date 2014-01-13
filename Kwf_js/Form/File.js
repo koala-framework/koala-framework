@@ -3,9 +3,8 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     fileSizeLimit: 0,
     showPreview: true,
     previewUrl: '/kwf/media/upload/preview?',
-    previewSize: 40,
-    previewWidth: false,
-    previewHeight: false,
+    previewWidth: 40,
+    previewHeight: 40,
     showDeleteButton: true,
     infoPosition: 'south',
     imageData: null,
@@ -83,11 +82,9 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 cls: 'box'
             });
 
-            var previewWidth = this.previewWidth ? this.previewWidth : this.previewSize;
-            var previewHeight = this.previewHeight ? this.previewHeight : this.previewSize;
             this.emptyTpl.overwrite(this.previewImageBox, { //bild wird in der richtigen größe angezeigt
-                previewWidth: previewWidth,
-                previewHeight: previewHeight
+                previewWidth: this.previewWidth,
+                previewHeight: this.previewHeight
             });
         }
 
@@ -302,13 +299,11 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                         icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
                         icon = '/assets/silkicons/' + icon + '.png';
                     }
-                    var previewWidth = this.previewWidth ? this.previewWidth : this.previewSize;
-                    var previewHeight = this.previewHeight ? this.previewHeight : this.previewSize;
                     this.previewTpl.overwrite(this.previewImageBox, {
                         preview: icon,
                         href: href,
-                        previewWidth: previewWidth,
-                        previewHeight: previewHeight
+                        previewWidth: this.previewWidth,
+                        previewHeight: this.previewHeight
                     });
                 }
 
@@ -318,11 +313,9 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 this.infoTpl.overwrite(this.infoContainer, infoVars);
             } else {
                 if (this.showPreview) {
-                    var previewWidth = this.previewWidth ? this.previewWidth : this.previewSize;
-                    var previewHeight = this.previewHeight ? this.previewHeight : this.previewSize;
                     this.emptyTpl.overwrite(this.previewImageBox, {
-                        previewWidth: previewWidth,
-                        previewHeight: previewHeight
+                        previewWidth: this.previewWidth,
+                        previewHeight: this.previewHeight
                     });
                 }
                 this.infoContainer.update('');
