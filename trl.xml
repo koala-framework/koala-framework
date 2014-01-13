@@ -6014,9 +6014,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Order at {0}</en>
 <id>1183</id>
-<de>Sortieren nach {0}</de>
-<ro>Aranjează după {0}</ro>
-<sl>Razvrstiti po {0}</sl>
+<de>Bestellung bei {0}</de>
 </text>
 <text>
 <en>Texts</en>

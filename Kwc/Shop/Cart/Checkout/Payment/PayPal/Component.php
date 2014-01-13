@@ -29,7 +29,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Chec
 
     public function getItemName($order)
     {
-        return trlKwf('Order at {0}', Kwf_Registry::get('config')->application->name);
+        return trlcKwf('shop order', 'Order at {0}', Kwf_Registry::get('config')->application->name);
     }
 
     public function processIpn(Kwf_Util_PayPal_Ipn_LogModel_Row $row, $param)
