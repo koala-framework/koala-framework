@@ -38,7 +38,7 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
                     }
                 }
             }, this);
-            if (changed && !Kwf.Utils.ResponsiveEl._initialCall) {
+            if (changed) {
                 Kwf.callOnContentReady(el.dom, {newRender: false});
             }
         };
@@ -58,11 +58,9 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
 Kwf.Utils.ResponsiveEl._els = [];
 
 Kwf.onContentReady(function(el) {
-    Kwf.Utils.ResponsiveEl._initialCall = true; //don't callOnContentReady on initial evaluation
     Kwf.Utils.ResponsiveEl._els.each(function(i) {
         Ext.fly(el).select(i.selector).each(i.fn);
     });
-    Kwf.Utils.ResponsiveEl._initialCall = false;
 }, this, {priority: -1});
 
 Ext.fly(window).on('resize', function() {
