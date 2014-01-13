@@ -29,7 +29,9 @@ class Kwf_Assets_Provider_Ini extends Kwf_Assets_Provider_Abstract implements Se
 
             if (!isset($this->_config[$dep]['dep'])) return null;
 
+            $ret = array();
             foreach ($this->_config[$dep]['dep'] as $i) {
+                if (!$i) continue;
                 $d = $this->_providerList->findDependency(trim($i));
                 if (!$d) {
                     throw new Kwf_Exception("Can't find dependency '$i'");
