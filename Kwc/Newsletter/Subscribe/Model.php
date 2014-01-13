@@ -9,7 +9,7 @@ class Kwc_Newsletter_Subscribe_Model extends Kwf_Model_Db
             'firstname' => 'firstname',
             'lastname' => 'lastname',
             'email' => 'email',
-            'format' => 'format',
+            'format' => null
         ),
         'Kwc_Mail_Recipient_GenderMapping' => array(
             'gender' => 'gender',
