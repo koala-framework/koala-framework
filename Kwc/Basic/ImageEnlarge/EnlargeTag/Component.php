@@ -27,7 +27,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
      * to get the dimension-values defined in getSettings and the crop-values
      * if use_crop was checked.
      */
-    public function getImageDimension()
+    public function getImageDimensions()
     {
         $dimension = $this->_getSetting('dimension');
         if ($this->getRow()->use_crop) {
@@ -122,7 +122,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         if (!$data) {
             return null;
         }
-        $dimension = $component->getComponent()->getImageDimension();
+        $dimension = $component->getComponent()->getImageDimensions();
         return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dimension);
      }
 

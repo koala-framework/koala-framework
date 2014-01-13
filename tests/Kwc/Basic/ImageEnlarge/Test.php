@@ -171,7 +171,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->assertEquals('default', $url[3]);
 
         $c = $this->_root->getComponentById('1802-linkTag');
-        $dim = $c->getComponent()->getImageDimension();
+        $dim = $c->getComponent()->getImageDimensions();
         $this->assertEquals(210, $dim['width']);
         $this->assertEquals(70, $dim['height']);
     }

@@ -16,7 +16,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
 
         $c = $this->getData()->parent->getComponent();
 
-        $size = $c->getImageDimension();
+        $size = $c->getImageDimensions();
         $ret['width'] = $size['width'];
         $ret['height'] = $size['height'];
         $ret['imageUrl'] = $c->getImageUrl();

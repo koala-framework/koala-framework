@@ -133,7 +133,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
     public function testDeImageEnlargeDimensions()
     {
         $c = $this->_root->getComponentById('root-master_test2-linkTag');
-        $dim = $c->getComponent()->getImageDimension();
+        $dim = $c->getComponent()->getImageDimensions();
         $this->assertEquals(560, $dim['width']);
         $this->assertEquals(560, $dim['height']);
     }

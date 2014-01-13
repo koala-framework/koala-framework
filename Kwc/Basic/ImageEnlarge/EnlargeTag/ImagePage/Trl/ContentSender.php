@@ -3,7 +3,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_ContentSender extends Kwf_
 {
     protected function _getOptions()
     {
-        $dim = $this->_data->parent->getComponent()->getImageDimension();
+        $dim = $this->_data->parent->getComponent()->getImageDimensions();
         $options = array(
             'width' => $dim['width'],
             'height' => $dim['height'],

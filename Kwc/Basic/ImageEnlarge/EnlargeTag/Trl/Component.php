@@ -46,7 +46,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
     /**
      * This function is called by Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component
      */
-    public function getImageDimension()
+    public function getImageDimensions()
     {
         $dimension = $this->getData()->chained->getComponent()->_getSetting('dimension');
         if ($this->getData()->chained->getComponent()->getRow()->use_crop) {
@@ -96,7 +96,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
         if (!$data) {
             return null;
         }
-        $dimension = $component->getComponent()->getImageDimension();
+        $dimension = $component->getComponent()->getImageDimensions();
         return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dimension);
     }
 
