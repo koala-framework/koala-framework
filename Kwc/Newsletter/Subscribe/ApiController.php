@@ -48,7 +48,6 @@ class Kwc_Newsletter_Subscribe_ApiController extends Kwf_Controller_Action
         $row->firstname = $this->_getParam('firstname');
         $row->lastname = $this->_getParam('lastname');
         $row->email = $this->_getParam('email');
-        $row->format = $this->_getParam('format') ? $this->_getParam('format') : 'html';
         $row->subscribe_date = date('Y-m-d H:i:s');
 
         $inserted = $this->_insertSubscription($row);

@@ -13,7 +13,6 @@ class Kwc_Newsletter_Subscribe_Update_1 extends Kwf_Update
                 `firstname` varchar(255) NOT NULL,
                 `lastname` varchar(255) NOT NULL,
                 `email` varchar(255) NOT NULL,
-                `format` enum('','html','text') NOT NULL,
                 `subscribe_date` datetime NOT NULL,
                 `unsubscribed` tinyint(1) NOT NULL,
                 `activated` tinyint( 1 ) NOT NULL DEFAULT '0',
