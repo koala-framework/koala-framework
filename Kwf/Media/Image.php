@@ -31,6 +31,7 @@ class Kwf_Media_Image
         $size = array($w, $h);
         $rotate = null;
         if (Kwf_Registry::get('config')->image->autoExifRotate &&
+            class_exists('Imagick') &&
             $source &&
             isset($sourceSize['mime']) &&
             ($sourceSize['mime'] == 'image/jpg' || $sourceSize['mime'] == 'image/jpeg')
