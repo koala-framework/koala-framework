@@ -36,15 +36,17 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
                 return;
             }
             this.addClass('image-uploaded');
-            var dimension = null;
+            var dimensionValue = null;
             if (dimensionField) {
                 this._scaleFactor = value.imageHandyScaleFactor;
                 dimensionField.setScaleFactor(value.imageHandyScaleFactor);
                 dimensionField.newImageUploaded(value);
-                dimension = dimensionField.getValue();
+                dimensionValue = dimensionField.getValue();
+                if (dimensionValue.dimension) {
+                    this._checkForImageTooSmall();
+                }
             }
-            this._setPreviewUrl(dimension);
-            this._checkForImageTooSmall();
+            this._setPreviewUrl(dimensionValue);
         }, this);
     },
 
