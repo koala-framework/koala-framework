@@ -57,7 +57,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         if (!fileUploadField.getEl().child('.hover-background')) return;
         var scaleFactor = this._scaleFactor;
         if (dimensionField.dpr2Check) scaleFactor /= 2;
-        this._validateImageTooSmallUserNotification(value, dimensionField.dimensions, scaleFactor, fileUploadField, dimensionField);
+        this._validateImageTooSmallUserNotification(value, dimensionField.resolvedDimensions, scaleFactor, fileUploadField, dimensionField);
     },
 
     _validateImageTooSmallUserNotification: function (value, dimensions, scaleFactor, fileUploadField, dimensionField) {

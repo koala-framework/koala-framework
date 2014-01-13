@@ -1,7 +1,7 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     _scaleFactor: null,
-    _resolvedDimensions: null,
+    resolvedDimensions: null,
 
     autoEl: {
         tag: 'div',
@@ -29,7 +29,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         if (this.rendered) {
             var pixelString = '';
             if (v.dimension) {
-                pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this._resolvedDimensions[v.dimension], v);
+                pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.resolvedDimensions[v.dimension], v);
             }
             if (pixelString) {
                 this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('At least: ')+pixelString);
@@ -58,7 +58,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
 
     _onButtonClick: function() {
         this._sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
-            dimensions: this._resolvedDimensions,
+            dimensions: this.resolvedDimensions,
             value: this.getValue(),
             imageData: this.imageData,
             selectDimensionDisabled: this.selectDimensionDisabled,
@@ -76,9 +76,9 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         //  + isValidImageSize (used by DimensionWindow)
         //  + getDimensionPixelString
         //  + getDimensionString (is using getDimensionPixelString)
-        this._resolvedDimensions = Kwf.clone(this.dimensions);
-        for (i in this._resolvedDimensions) {
-            var dimension = this._resolvedDimensions[i];
+        this.resolvedDimensions = Kwf.clone(this.dimensions);
+        for (i in this.resolvedDimensions) {
+            var dimension = this.resolvedDimensions[i];
             if (dimension.width == 'contentWidth') {
                 dimension.width = contentWidth;
             }
