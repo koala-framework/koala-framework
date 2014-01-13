@@ -20,10 +20,7 @@ class Kwc_Newsletter_Subscribe_Row extends Kwf_Model_Db_Row
 
     public function getMailFormat()
     {
-        return ($this->format == 'text' ?
-            Kwc_Mail_Recipient_Interface::MAIL_FORMAT_TEXT :
-            Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML
-        );
+        return Kwc_Mail_Recipient_Interface::MAIL_FORMAT_HTML;
     }
 
     public function getMailGender()
