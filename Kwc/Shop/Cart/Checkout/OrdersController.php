@@ -157,13 +157,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
             $order->invoice_date = date('Y-m-d');
         }
         if (!$order->invoice_number) {
-            $s = $this->_model->select();
-            $s->limit(1);
-            $s->order('invoice_number', 'DESC');
-            $row = $this->_model->getRow($s);
-            $maxNumber = 0;
-            if ($row) $maxNumber = $row->invoice_number;
-            $order->invoice_number = $maxNumber + 1;
+            $order->generateInvoiceNumber();
         }
         $order->save();
 
