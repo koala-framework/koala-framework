@@ -96,22 +96,23 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         return this.findByType('kwc.image.dimensionfield')[0];
     },
 
-    _setPreviewUrl: function(dimension) {
+    _setPreviewUrl: function(value) {
         var previewParams = {
             componentId: this.baseParams.componentId
         };
-        if (dimension && dimension.dimension != null) previewParams.dimension = dimension.dimension;
+        if (value) {
+            if (value.dimension != null) previewParams.dimension = value.dimension;
+            if (value.width != null) previewParams.width = value.width;
+            if (value.height != null) previewParams.height = value.height;
 
-        value = this._getDimensionField().getValue();
-        if (value.width != null) previewParams.width = value.width;
-        if (value.height != null) previewParams.height = value.height;
-
-        if (dimension && dimension.cropData) {
-            if (dimension.cropData.x != null) previewParams.cropX = dimension.cropData.x;
-            if (dimension.cropData.y != null) previewParams.cropY = dimension.cropData.y;
-            if (dimension.cropData.width != null) previewParams.cropWidth = dimension.cropData.width;
-            if (dimension.cropData.height != null) previewParams.cropHeight = dimension.cropData.height;
+            if (value.cropData) {
+                if (value.cropData.x != null) previewParams.cropX = value.cropData.x;
+                if (value.cropData.y != null) previewParams.cropY = value.cropData.y;
+                if (value.cropData.width != null) previewParams.cropWidth = value.cropData.width;
+                if (value.cropData.height != null) previewParams.cropHeight = value.cropData.height;
+            }
         }
+
         this._getFileUploadField().setPreviewUrl(this.previewUrl+'?'
             +Ext.urlEncode(previewParams)+'&'
         );
