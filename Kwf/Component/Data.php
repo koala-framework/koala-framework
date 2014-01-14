@@ -1433,6 +1433,10 @@ class Kwf_Component_Data
             $this->_lazyParent = $this->parent->componentId;
             unset($this->parent);
         }
+        if (isset($this->chained)) {
+            $this->_lazyChained = $this->chained->componentId;
+            unset($this->chained);
+        }
         if (isset($this->_component)) {
             $this->_component->freeMemory();
             unset($this->_component);
