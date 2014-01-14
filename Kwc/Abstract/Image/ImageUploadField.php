@@ -32,6 +32,7 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
     {
         $this->_dimensions = $dimensions;
         $this->_dimensionField->setDimensions($dimensions);
+        return $this;
     }
 
     public function setShowHelptext($showHelptext)
