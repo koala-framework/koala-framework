@@ -2,8 +2,6 @@ Kwf.Utils.ResponsiveImg = function(selector)
 {
     Kwf.onContentReady(function(readyEl) {
         Ext.get(readyEl).select(selector, true).each(function(el) {
-            if (el.dom.imgSizeInitDone) return;
-            el.dom.imgSizeInitDone = true;
             if (!el.dom.getAttribute('width') || !el.dom.getAttribute('height')) {
                 return;
             }
