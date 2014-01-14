@@ -1,6 +1,8 @@
 <?php
 class Kwc_Basic_LinkTag_ComponentClass_ComponentsController extends Kwf_Controller_Action_Auto_Grid
 {
+    protected $_permissions = array();
+
     protected function _initColumns()
     {
         parent::_initColumns();
