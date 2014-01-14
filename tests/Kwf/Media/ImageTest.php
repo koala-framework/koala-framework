@@ -67,7 +67,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $asserted = array(
             'width' => $expectedSize[0],
             'height' => $expectedSize[1],
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -98,7 +98,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => $expectedSize[0],
             'height' => $expectedSize[1],
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => $expectedSize[2],
                 'y' => $expectedSize[3],
@@ -138,7 +138,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $dim = array('width'=>10, 'height'=>0, 'cover' => true, 'aspectRatio'=>3/4);
         $ret = Kwf_Media_Image::calculateScaleDimensions(array(100, 100), $dim);
         $this->assertEquals($ret, array('width'=>10, 'height'=>8,
-            'rotate'=>null,
+            'rotate'=>0,
             'crop' => array(
                 'x' => 0,
                 'y' => 10,
@@ -149,7 +149,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $dim = array('width'=>0, 'height'=>10, 'cover' => true, 'aspectRatio'=>3/4);
         $ret = Kwf_Media_Image::calculateScaleDimensions(array(100, 100), $dim);
         $this->assertEquals($ret, array('width'=>8, 'height'=>10,
-            'rotate'=>null,
+            'rotate'=>0,
             'crop' => array(
                 'x' => 10,
                 'y' => 0,
@@ -210,7 +210,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 300,
             'height' => 300,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -226,7 +226,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 300,
             'height' => 300,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -253,7 +253,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 300,
             'height' => 300,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -275,7 +275,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 300,
             'height' => 300,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -314,7 +314,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 300,
             'height' => 300,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -330,7 +330,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 300,
             'height' => 300,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -357,7 +357,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 300,
             'height' => 300,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -379,7 +379,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 300,
             'height' => 300,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -405,7 +405,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 300,
             'height' => 300,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -427,7 +427,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 300,
             'height' => 300,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -468,7 +468,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -484,7 +484,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -507,7 +507,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 50,
             'height' => 50,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -567,7 +567,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -582,7 +582,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 50,
                 'y' => 0,
@@ -597,7 +597,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 100,
@@ -612,7 +612,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -627,7 +627,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 200,
             'height' => 200,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 25,
                 'y' => 0,
@@ -642,7 +642,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 200,
             'height' => 200,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 25,
@@ -664,7 +664,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 200, 'height' => 200,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -685,7 +685,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 50, 'height' => 50,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -706,7 +706,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 200, 'height' => 200,
-            'rotate' => null, 'crop' => array(
+            'rotate' => 0, 'crop' => array(
                 'x' => 0,
                 'y' => 0,
                 'width' => 200,
@@ -728,7 +728,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 100, 'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -750,7 +750,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 100, 'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 12.5,
                 'y' => 0,
@@ -771,7 +771,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 100, 'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 12.5,
@@ -793,7 +793,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 50, 'height' => 50,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -814,7 +814,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 50, 'height' => 50,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 50,
                 'y' => 0,
@@ -835,7 +835,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 50, 'height' => 50,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 50,
@@ -857,7 +857,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 100, 'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -873,7 +873,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -888,7 +888,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 100,
             'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -903,7 +903,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 200,
             'height' => 200,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -918,7 +918,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $this->assertEquals($ret, array(
             'width' => 200,
             'height' => 200,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -940,7 +940,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 50, 'height' => 50,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -961,7 +961,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 50, 'height' => 50,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -983,7 +983,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 200, 'height' => 200,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -1004,7 +1004,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 200, 'height' => 200,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -1025,7 +1025,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 100, 'height' => 100,
-            'rotate' => null, 'crop' => array(
+            'rotate' => 0, 'crop' => array(
                 'x' => 0,
                 'y' => 0,
                 'width' => 100,
@@ -1046,7 +1046,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 100, 'height' => 100,
-            'rotate' => null, 'crop' => array(
+            'rotate' => 0, 'crop' => array(
                 'x' => 0,
                 'y' => 0,
                 'width' => 100,
@@ -1068,7 +1068,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 50, 'height' => 25,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -1089,7 +1089,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 25, 'height' => 50,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -1111,7 +1111,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 100, 'height' => 200,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -1132,7 +1132,7 @@ class Kwf_Media_ImageTest extends Kwf_Test_TestCase
         $ret = Kwf_Media_Image::calculateScaleDimensions($imageSize, $dimension);
         $this->assertEquals($ret, array(
             'width' => 200, 'height' => 100,
-            'rotate' => null,
+            'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
