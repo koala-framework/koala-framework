@@ -12,14 +12,12 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component extends Kwc_Chai
         $ret = parent::getTemplateVars();
 
         $c = $this->getData()->parent->getComponent();
-        $ret['options'] = (object)$c->getOptions();
 
-        $c = $this->getData()->parent->getChildComponent('-image')->getComponent();
         $size = $c->getImageDimensions();
         $ret['width'] = $size['width'];
         $ret['height'] = $size['height'];
-
         $ret['imageUrl'] = $c->getImageUrl();
+        $ret['options'] = (object)$c->getOptions();
 
         if (isset($ret['previous'])) {
             $ret['previous'] = self::getChainedByMaster($ret['previous'], $this->getData());

@@ -57,8 +57,10 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropImage.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropImage.css';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageUploadField.js';
-        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageUploadField.css';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageUploadField.scss';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwf_js/Utils/Resizable.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageFile.js';
+        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['assets']['dep'][] = 'KwfResponsiveImg';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
         return $ret;
@@ -326,6 +328,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 $dim['width'] = $component->getComponent()->getContentWidth();
             }
         }
+        return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dim);
+    }
+
+    public static function getMediaOutputForDimension($data, $dim)
+    {
         $ret = array();
         if (isset($data['image'])) {
             $output = Kwf_Media_Image::scale($data['image'], $dim);
@@ -334,7 +341,12 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $sourceSize = @getimagesize($data['file']);
             $scalingNeeded = true;
             $resultingSize = Kwf_Media_Image::calculateScaleDimensions($data['file'], $dim);
-            if ($sourceSize && array($resultingSize['width'], $resultingSize['height']) == array($sourceSize[0], $sourceSize[1])) {
+            if ($sourceSize
+                && array($resultingSize['crop']['width'], $resultingSize['crop']['height'])
+                    == array($sourceSize[0], $sourceSize[1])
+                && array($resultingSize['width'], $resultingSize['height'])
+                    == array($sourceSize[0], $sourceSize[1])
+            ) {
                 $scalingNeeded = false;
             }
             if ($scalingNeeded) {
@@ -369,6 +381,15 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             return $s['width'];
         }
         return 0;
+    }
+
+    /**
+     * This function is needed because getContentWidth returns the width of uploaded
+     * image.
+     */
+    public function getMaxContentWidth()
+    {
+        return parent::getContentWidth();
     }
 
     public function getFulltextContent()

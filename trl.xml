@@ -9085,7 +9085,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Alt Text</en>
 <id>1792</id>
-<de>Alternativer Text</de>
+<de>Alt Text</de>
 </text>
 <text>
 <en>Add Recipients</en>
@@ -10112,8 +10112,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2028</id>
 </text>
 <text>
-<en>Select image region</en>
-<de>Wähle Bildbereich</de>
+<en>Image region</en>
+<de>Bildbereich</de>
 <id>2029</id>
 </text>
 <text>
@@ -10152,44 +10152,139 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2037</id>
 </text>
 <text>
-<en>Image Crop Utility</en>
-<de>Bildausschnitt Tool</de>
+<en>Caution! Image size of uploaded image does not match minimum requirement.</en>
+<de>Achtung! Die Bildgröße entspricht nicht der Mindestanforderung.</de>
 <id>2038</id>
 </text>
 <text>
-<en>Loading image</en>
-<de>Lade Bild</de>
+<en>At least: </en>
+<de>Mindestens: </de>
 <id>2039</id>
 </text>
 <text>
-<en>Layer</en>
-<de>Ebene</de>
+<en>don\'t Crop</en>
+<en>nicht Abschneiden</en>
 <id>2040</id>
+</text>
+<text>
+<en>Image Data</en>
+<de>Bildinformationen</de>
+<id>2041</id>
+</text>
+<text>
+<en>Dimension</en>
+<de>Größe</de>
+<id>2042</id>
+</text>
+<text>
+<en>Cropping is not possible because image is too small.</en>
+<de>Bild kann nicht beschnitten werden, da es zu klein ist.</de>
+<id>2043</id>
+</text>
+<text>
+<en>Reset</en>
+<de>Zurücksetzen</de>
+<id>2044</id>
+</text>
+<text>
+<en>Reset to default (maximum)</en>
+<de>Auf Standard zurücksetzen (Maximum)</de>
+<id>2045</id>
+</text>
+<text>
+<en>Width or height must be higher than 0.</en>
+<de>Breite oder Höhe müssen größer als 0 sein.</de>
+<id>2046</id>
+</text>
+<text>
+<en>{0}px high</en>
+<de>{0}px hoch</de>
+<id>2047</id>
+</text>
+<text>
+<en>{0}px wide</en>
+<de>{0}px breit</de>
+<id>2048</id>
+</text>
+<text>
+<en>Change Image</en>
+<de>Bild austauschen</de>
+<id>2049</id>
+</text>
+<text>
+<en>Upload Image</en>
+<de>Bild hochladen</de>
+<id>2050</id>
+</text>
+<text>
+<en>Loading image</en>
+<de>Bild wird geladen</de>
+<id>2051</id>
+</text>
+<text>
+<en>Use crop region</en>
+<de>verwende ausgewählten Bildbereich</de>
+<id>2052</id>
+</text>
+<text>
+<en>or drag here</en>
+<de>oder hier hinziehen</de>
+<id>2053</id>
+</text>
+<text>
+<en>Caution! Image size of uploaded image does not match minimum requirement for enlarge image.</en>
+<de>Achtung! Die Bildgröße des hochgeladenen Bildes entspricht nicht der Mindestanforderung der Bildvergrößerung.</de>
+<id>2054</id>
 </text>
 <text>
 <en>Headline {0}</en>
 <de>Überschrift {0}</de>
-<id>2041</id>
+<id>2055</id>
 </text>
 <text>
 <en>Text 1</en>
 <de>Text 1</de>
-<id>2042</id>
+<id>2056</id>
 </text>
 <text>
 <en>Text 2</en>
 <de>Text 2</de>
-<id>2043</id>
+<id>2057</id>
 </text>
 <text>
 <en>Original text 1</en>
 <de>Original text 1</de>
-<id>2044</id>
+<id>2058</id>
 </text>
 <text>
 <en>Original text 2</en>
 <de>Original text 2</de>
-<id>2045</id>
+<id>2059</id>
+</text>
+<text>
+<en>Layer</en>
+<de>Ebene</de>
+<id>2060</id>
+</text>
+<text>
+<en>Optional: Describe this image for visually handicapped people and search engines.</en>
+<de>Optional: Beschreibung des Bildes für sehschwache Menschen und Suchmaschinen.</de>
+<id>2061</id>
+</text>
+<text>
+<en>Selection too small!</en>
+<de>Auswahl zu klein!</de>
+<id>2062</id>
+</text>
+<text>
+<en>Caution! Crop region does not match minimum requirement.</en>
+<de>Achtung! Die Bildauswahl entspricht nicht der Mindestanforderung.</de>
+<id>2063</id>
+</text>
+<text>
+<en>Caution! Crop region does not match minimum requirement for enlarge image.</en>
+<de>Achtung! Die Bildauswahl entspricht nicht der Mindestanforderung der Bildvergrößerung.</de>
+<id>2064</id>
 </text>
 <text>
 <de>Videoquelle</de>

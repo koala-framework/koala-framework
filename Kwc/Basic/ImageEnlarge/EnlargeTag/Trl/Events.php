@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Abstract_Image_Trl_Events
+class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Events
 {
 
     private function _canCreateUsIndirectly($class)

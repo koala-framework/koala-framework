@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Form extends Kwc_Abstract_Image_Trl_Form
+class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {

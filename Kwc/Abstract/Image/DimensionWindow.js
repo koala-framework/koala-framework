@@ -1,16 +1,19 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
+    _scaleFactor: null,
+    _dpr2Check: false,
+
     dimensions: null,
     value: null, //contains width, height, cropdata
 
-    title: trlKwf('Configure'),
+    title: trlKwf('Edit'),
     closeAction: 'close',
     modal: true,
-    minWidth: 488,
-    minHeight: 250,
-    width: 488,
-    height: 250,
+    minWidth: 550,
+    minHeight: 400,
+    width: 550,
+    height: 400,
     layout: 'fit',
     resizable: false,
 
@@ -126,18 +129,38 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             ]
         };
 
+        var showDimensionField = new Ext.BoxComponent({
+            autoEl: {
+                html: '<div class="only-dimension">'+trlKwf('Dimension')+': '+Kwc.Abstract.Image.DimensionField
+                    .getDimensionString(this.dimensions[this._dimensionField.getValue()])+'</div>',
+                hideBorders: true
+            }
+        });
+
         this._configPanel = new Ext.Panel({
             region: 'west',
             bodyStyle: 'padding: 10px',
             width: 270,
             autoScroll: true,
-            title: trlKwf('Select dimension'),
+            title: trlKwf('Dimension'),
             items: [
                 this._dimensionField,
                 this._userSelection,
+                showDimensionField,
                 imageDataField
             ]
         });
+        if (this.selectDimensionDisabled) {
+            //this._configPanel.disable();
+            this._dimensionField.setVisible(false);
+            this._userSelection.setVisible(false);
+            this._widthField.setVisible(false);
+            this._xField.setVisible(false);
+            this._heightField.setVisible(false);
+            this._pxField.setVisible(false);
+        } else {
+            showDimensionField.setVisible(false);
+        }
 
         this._initCropRegion();
 
@@ -148,28 +171,34 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 autoEl: {
                     tag: 'div',
                     cls: 'information',
-                    html: trlKwf('Croping is not possible because image is too small.')
+                    html: trlKwf('Cropping is not possible because image is too small.')
                 }
             });
             cropPanelItems.add(cropDisabledInfo);
         }
         cropPanelItems.add(this._cropImage);
 
+        this._errorMessage = new Ext.Toolbar.TextItem({
+            text: '&nbsp;'
+        });
         this._cropPanel = new Ext.Panel({
             tbar: [{
                 text: trlKwf('Reset'),
                 handler: function () {
-                    this._cropImage.setCropData(null, this._getPreserveRatio());
+                    this._cropImage.setCropDataAndPreserveRatio(null, this._getPreserveRatio());
                 },
                 cls:"x-btn-text-icon",
                 hideLabel: true,
                 icon: '/assets/silkicons/arrow_out.png',
-                tooltip: trlKwf('Reset to default(maximum).'),
+                tooltip: trlKwf('Reset to default (maximum)'),
                 scope: this
-            }],
+            },
+            '->',
+                this._errorMessage
+            ],
             cls: 'kwc-abstract-image-dimension-window-crop-panel',
             region: 'center',
-            title: trlKwf('Select image region'),
+            title: trlKwf('Image region'),
             width: 600,
             height: 200,
             items: cropPanelItems
@@ -233,7 +262,6 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         this._cropImage = new Kwc.Abstract.Image.CropImage({
             // call controller to create image with nice size to work with
             src: '/kwf/media/upload/download-handy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey,
-            preserveRatio: this._getPreserveRatio(),
             cls: 'kwc-abstract-image-dimension-window-crop-image',
             outWidth: outWidth,
             outHeight: outHeight,
@@ -242,6 +270,28 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             height: imageHeight,
             style: 'margin-left:'+imageWidth/-2+'px;margin-top:'+imageHeight/-2+'px'
         });
+        this._cropImage.on('cropChanged', function (cropData) {
+            var value = {
+                dimension: this._dimensionField.getValue(),
+                width: this._widthField.getValue(),
+                height: this._heightField.getValue(),
+                cropData: cropData
+            };
+            var scaleFactor = this._scaleFactor;
+            if (this._dpr2Check) scaleFactor /= 2;
+            var errorMessageEl = Ext.get(this._errorMessage.getEl());
+            errorMessageEl.addClass('kwc-abstract-image-dimensionwindow-errorMessage');
+            if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, this.dimensions, scaleFactor)) {
+                errorMessageEl.addClass('error');
+                errorMessageEl.update(trlKwf('Selection too small!'));
+                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').addClass('error');
+            } else {
+                var errorMessageEl = Ext.get(this._errorMessage.getEl());
+                errorMessageEl.removeClass('error');
+                errorMessageEl.update('');
+                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').removeClass('error');
+            }
+        }, this);
 
         // Check if smaller than usefull so keep min-width
         var width = this.width;
@@ -278,6 +328,12 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         } else if (typeof dimension.height === 'undefined') {
             outHeight = 0;
         }
+        if (dimension.aspectRatio) {
+            if (outHeight == 0) {
+                var width = this._getUserSelectedDimensionWidth();
+                outHeight = dimension.aspectRatio * width;
+            }
+        }
         return outHeight;
     },
 
@@ -293,6 +349,12 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             outWidth = dimension.width;
         } else if (typeof dimension.width === 'undefined') {
             outWidth = 0;
+        }
+        if (dimension.aspectRatio) {
+            if (outWidth == 0) {
+                var height = this._getUserSelectedDimensionHeight();
+                outWidth = height / dimension.aspectRatio;
+            }
         }
         return outWidth;
     },
@@ -314,7 +376,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         };
         this._cropImage.outWidth = width;
         this._cropImage.outHeight = height;
-        this._cropImage.setCropData(cropData, this._getPreserveRatio());
+        this._cropImage.setCropDataAndPreserveRatio(cropData, this._getPreserveRatio());
     },
 
     _validateSizes: function()
@@ -349,27 +411,35 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         if (outWidth > 0 && outHeight > 0) {
             preserveRatio = true;
         }
-        this._cropImage.setCropData(cropData, preserveRatio);
+        this._cropImage.setCropDataAndPreserveRatio(cropData, preserveRatio);
     },
 
     _enableDisableFields: function()
     {
-        var userSelection = false;
+        var showUserSelection = false;
         for (var i in this.dimensions) {
             var dim = this.dimensions[i];
-            if (dim.width == 'user' || dim.height == 'user') {
-                userSelection = true;
+            if (dim.width == 'user' || dim.height == 'user'
+                || dim.showUserSelectionWidth || dim.showUserSelectionHeight
+            ) {
+                if (dim.width == 'user')
+                    dim.showUserSelectionWidth = true;
+                if (dim.height == 'user')
+                    dim.showUserSelectionHeight = true;
+                showUserSelection = true;
             }
         }
-        if (userSelection) {
+
+        if (showUserSelection) {
             this._userSelection.show();
             var dim = this.dimensions[this._dimensionField.getValue()];
-            this._widthField.setDisabled(!(dim && dim.width == 'user'));
-            this._heightField.setDisabled(!(dim && dim.height == 'user'));
-            this._xField.setDisabled(!(dim && dim.width == 'user')
-                    || !(dim && dim.height == 'user'));
-            this._pxField.setDisabled(!(dim && dim.width == 'user')
-                    || !(dim && dim.height == 'user'));
+            if (!dim) return;
+            this._widthField.setDisabled(!dim.showUserSelectionWidth);
+            this._heightField.setDisabled(!dim.showUserSelectionHeight);
+            this._xField.setDisabled(!dim.showUserSelectionWidth
+                    || !dim.showUserSelectionHeight);
+            this._pxField.setDisabled(!dim.showUserSelectionWidth
+                    || !dim.showUserSelectionHeight);
         } else {
             this._userSelection.hide();
         }

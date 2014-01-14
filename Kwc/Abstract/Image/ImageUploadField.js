@@ -1,6 +1,7 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
 
+    _scaleFactor: null,
     baseParams: null,
 
     initComponent: function() {
@@ -10,62 +11,129 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         if (dimensionField) {// because it's possible to define only a single dimension
             dimensionField.on('render', function () {
                 // fileUploadField also has to be rendered
-                this._alignDimensionField();
+                var dimensionField = this._getDimensionField();
+                var fileUploadField = this._getFileUploadField();
+                fileUploadField.container.addClass('kwc-abstract-image-imageuploadfile-container');
+                if (dimensionField.getEl() && fileUploadField.getEl()) {
+                    dimensionField.getEl().parent().parent().addClass('kwc-dimensionfield-container');
+                }
             }, this);
             dimensionField.on('change', function (dimension) {
                 this._setPreviewUrl(dimension);
+                this._checkForImageTooSmall();
             }, this);
         }
         var fileUploadField = this._getFileUploadField();
         fileUploadField.on('change', function (el, value) {
             var dimensionField = this._getDimensionField();
+            if (dimensionField && value.contentWidth) {
+                dimensionField.setContentWidth(value.contentWidth);
+            }
             if (!value || !value.mimeType || !value.mimeType.match(/(^image\/)/)) {
                 dimensionField.newImageUploaded('');
                 this._getFileUploadField().setPreviewUrl(null);
+                this.removeClass('image-uploaded');
                 return;
             }
-            var dimension = null;
+            this.addClass('image-uploaded');
+            var dimensionValue = null;
             if (dimensionField) {
+                this._scaleFactor = value.imageHandyScaleFactor;
+                dimensionField.setScaleFactor(value.imageHandyScaleFactor);
                 dimensionField.newImageUploaded(value);
-                dimension = dimensionField.getValue();
+                dimensionValue = dimensionField.getValue();
+                if (dimensionValue.dimension) {
+                    this._checkForImageTooSmall();
+                }
             }
-            this._setPreviewUrl(dimension);
+            this._setPreviewUrl(dimensionValue);
         }, this);
     },
 
-    _alignDimensionField: function () {
+    _checkForImageTooSmall: function () {
         var dimensionField = this._getDimensionField();
+        var value = Kwf.clone(dimensionField.getValue());
         var fileUploadField = this._getFileUploadField();
-        if (dimensionField.getEl() && fileUploadField.getEl()) {
-            dimensionField.getEl().parent().parent().addClass('kwc-dimensionfield-container');
-            dimensionField.getEl().alignTo(fileUploadField.getEl().child('.box'), 'br', [10, -42]);
+        if (!fileUploadField.getEl().child('.hover-background')) return;
+        var scaleFactor = this._scaleFactor;
+        if (dimensionField.dpr2Check) scaleFactor /= 2;
+        this._validateImageTooSmallUserNotification(value, dimensionField.resolvedDimensions, scaleFactor, fileUploadField, dimensionField);
+    },
+
+    _validateImageTooSmallUserNotification: function (value, dimensions, scaleFactor, fileUploadField, dimensionField) {
+        if (!fileUploadField.getEl().child('.hover-background .message')) {
+            fileUploadField.getEl().child('.hover-background').createChild({
+                html:trlKwf('Caution! Image size of uploaded image does not match minimum requirement.'),
+                cls: 'message'
+            });
+        } else {
+            fileUploadField.getEl().child('.hover-background .message')
+                .update(trlKwf('Caution! Image size of uploaded image does not match minimum requirement.'));
+        }
+        if (!value.cropData) {
+            var dimension = dimensionField.dimensions[value.dimension];
+            value.cropData = Kwc.Abstract.Image.CropImage
+                .calculateDefaultCrop(dimension.width, dimension.height,
+                    dimensionField.imageData.imageWidth, dimensionField.imageData.imageHeight);
+        } else {
+            fileUploadField.getEl().child('.hover-background .message')
+                .update(trlKwf('Caution! Crop region does not match minimum requirement.'));
+        }
+        if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, dimensions, scaleFactor)) {
+            this.getEl().addClass('error');
+            fileUploadField.getEl().child('.hover-background').addClass('error');
+        } else {
+            this.getEl().removeClass('error');
+            fileUploadField.getEl().child('.hover-background').removeClass('error');
         }
     },
 
     _getFileUploadField: function () {
-        return this.findByType('kwf.file')[0];
+        return this.findByType('kwc.imagefile')[0];
     },
 
     _getDimensionField: function () {
         return this.findByType('kwc.image.dimensionfield')[0];
     },
 
-    _setPreviewUrl: function(dimension) {
+    _setPreviewUrl: function(value) {
         var previewParams = {
             componentId: this.baseParams.componentId
         };
-        if (dimension && dimension.dimension != null) previewParams.dimension = dimension.dimension;
+        if (value) {
+            if (value.dimension != null) {
+                previewParams.dimension = value.dimension;
+                var dimension = this._getDimensionField().resolvedDimensions[value.dimension];
+                if (dimension && value.cropData) {
+                    if (dimension.width != 0 && dimension.height != 0
+                        && Math.floor(dimension.width * 100 / dimension.height)
+                            != Math.floor(value.cropData.width * 100 / value.cropData.height)) {
+                        var result = Kwc.Abstract.Image.CropImage
+                            .calculateDefaultCrop(dimension.width, dimension.height,
+                                                value.cropData.width, value.cropData.height);
+                        // This also resets the value of dimensionField. Thisway also
+                        // dimensionWindow and cropImage component access correct values.
+                        // Also if only "save" is clicked and nothing was changed
+                        // the corrected values are saved.
+                        value.cropData.width = result.width;
+                        value.cropData.height = result.height;
+                        value.cropData.x += result.x;
+                        value.cropData.y += result.y;
+                    }
+                }
+            }
 
-        value = this._getDimensionField().getValue();
-        if (value.width != null) previewParams.width = value.width;
-        if (value.height != null) previewParams.height = value.height;
+            if (value.width != null) previewParams.width = value.width;
+            if (value.height != null) previewParams.height = value.height;
 
-        if (dimension && dimension.cropData) {
-            if (dimension.cropData.x != null) previewParams.cropX = dimension.cropData.x;
-            if (dimension.cropData.y != null) previewParams.cropY = dimension.cropData.y;
-            if (dimension.cropData.width != null) previewParams.cropWidth = dimension.cropData.width;
-            if (dimension.cropData.height != null) previewParams.cropHeight = dimension.cropData.height;
+            if (value.cropData) {
+                if (value.cropData.x != null) previewParams.cropX = value.cropData.x;
+                if (value.cropData.y != null) previewParams.cropY = value.cropData.y;
+                if (value.cropData.width != null) previewParams.cropWidth = value.cropData.width;
+                if (value.cropData.height != null) previewParams.cropHeight = value.cropData.height;
+            }
         }
+
         this._getFileUploadField().setPreviewUrl(this.previewUrl+'?'
             +Ext.urlEncode(previewParams)+'&'
         );

@@ -3,14 +3,16 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     fileSizeLimit: 0,
     showPreview: true,
     previewUrl: '/kwf/media/upload/preview?',
-    previewSize: 40,
+    previewWidth: 40,
+    previewHeight: 40,
     showDeleteButton: true,
     infoPosition: 'south',
     imageData: null,
     defaultAutoCreate : {
         tag: 'div',
         cls: 'swfUploadField',
-        style: 'width: 320px; height: 53px'
+        style: 'width: 336px; height: 53px',
+        html: '<div class="hint">'+trlKwf('or drag here')+'</div>'
     },
     fileIcons: {
         'application/pdf': 'page_white_acrobat',
@@ -20,13 +22,13 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         'application/mspowerpoint': 'page_white_powerpoint',
         'default': 'page_white'
     },
-    previewTpl: ['<a href="{href}" target="_blank" class="previewImage" ',
-                 'style="width: {previewSize}px; height: {previewSize}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
+    previewTpl: ['<div class="hover-background"></div><a href="{href}" target="_blank" class="previewImage" ',
+                 'style="width: {previewWidth}px; height: {previewHeight}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
     // also usable in infoTpl: {href}
     infoTpl: ['<div class="filedescription"><div class="filename">{filename}.{extension}</div>',
-              '<div class="filesize">{fileSize:fileSize}',
-              '<tpl if="image">, {imageWidth}x{imageHeight}px</tpl></div></div>'],
-    emptyTpl: ['<div class="empty" style="height: {previewSize}px; width: {previewSize}px; text-align: center;line-height:{previewSize}px">('+trlKwf('empty')+')</div>'],
+              '<div class="filesize"><tpl if="image">{imageWidth}x{imageHeight}px, </tpl>',
+              '{fileSize:fileSize}</div></div>'],
+    emptyTpl: ['<div class="empty" style="height: {previewHeight}px; width: {previewWidth}px; text-align: center;line-height:{previewHeight}px">('+trlKwf('empty')+')</div>'],
 
     initComponent: function() {
         this.addEvents(['uploaded']);
@@ -76,12 +78,13 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         }
 
         if (this.showPreview) {
-            this.previewImage = this.el.createChild({
-                cls: 'box previewImage',
+            this.previewImageBox = this.el.createChild({
+                cls: 'box'
             });
 
-            this.emptyTpl.overwrite(this.previewImage, { //bild wird in der richtigen größe angezeigt
-                previewSize: this.previewSize
+            this.emptyTpl.overwrite(this.previewImageBox, { //bild wird in der richtigen größe angezeigt
+                previewWidth: this.previewWidth,
+                previewHeight: this.previewHeight
             });
         }
 
@@ -97,7 +100,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 text: trlKwf('Delete File'),
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/delete.png',
-                renderTo: this.el.createChild({}),
+                renderTo: this.el.createChild({cls: 'deleteButton'}),
                 scope: this,
                 handler: function() {
                     this.setValue('');
@@ -110,7 +113,9 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
         if (!Kwf.Utils.Upload.supportsHtml5Upload()) {
             this.uploadButtonContainer.dom.style.display = 'none';
-            var insertBefore = this.deleteButton ? this.deleteButton.el : null;
+            this.el.child('.hint').setStyle('display', 'none');
+            var insertBefore = this.deleteButton ? this.deleteButton.el.parent() : null;
+
             this.swfUploadButtonContainer = this.el.createChild({
                 cls: 'uploadButton'
             }, insertBefore);
@@ -277,9 +282,13 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         if (value.uploadId) {
             v = value.uploadId;
         }
+        if (v) {
+            this.addClass('file-uploaded');
+        } else {
+            this.removeClass('file-uploaded');
+        }
         if (v != this.value) {
             this.imageData = value;
-            this.fireEvent('change', this, value, this.value);
             var icon = false;
             var href = '/kwf/media/upload/download?uploadId='+value.uploadId+'&hashKey='+value.hashKey;
             if (value.mimeType) {
@@ -290,24 +299,28 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                         icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
                         icon = '/assets/silkicons/' + icon + '.png';
                     }
-                    this.previewTpl.overwrite(this.previewImage, {
+                    this.previewTpl.overwrite(this.previewImageBox, {
                         preview: icon,
                         href: href,
-                        previewSize: this.previewSize
+                        previewWidth: this.previewWidth,
+                        previewHeight: this.previewHeight
                     });
                 }
 
                 var infoVars = Kwf.clone(value);
                 infoVars.href = href;
+                this.infoContainer.addClass('info-container');
                 this.infoTpl.overwrite(this.infoContainer, infoVars);
             } else {
                 if (this.showPreview) {
-                    this.emptyTpl.overwrite(this.previewImage, {
-                        previewSize: this.previewSize
+                    this.emptyTpl.overwrite(this.previewImageBox, {
+                        previewWidth: this.previewWidth,
+                        previewHeight: this.previewHeight
                     });
                 }
                 this.infoContainer.update('');
             }
+            this.fireEvent('change', this, value, this.value);
         }
         Kwf.Form.File.superclass.setValue.call(this, value.uploadId);
     },
@@ -323,7 +336,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             this.getEl().child('.box').setStyle('background-image', 'none');
             return;
         }
-        if (this.getEl().child('.previewImage') && this.getValue()) {
+        if (this.getEl().child('.previewImage') && this.imageData) {
             this.getEl().child('.box').setStyle('background-image', 'url(/assets/ext/resources/images/default/grid/loading.gif)');
             var img = new Image();
             img.onload = (function () {

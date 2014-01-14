@@ -1,7 +1,6 @@
 Ext.namespace('Kwc.Abstract.Image');
 Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     src: null,//image path
-    preserveRatio: false,
     width: 0,//width of image,
     height: 0,//height of image
     outWidth: null,
@@ -13,8 +12,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     minWidth: 52,//min width of crop region
     minHeight: 52,//min height of crop region
     _image: null,
-    _cropRegionChosen: false,
-    _ignoreRegionChangeAction: false,
+    _userSelectedCropRegion: null,
 
     _centerHandle: '<div class="handle {position}"></div>',
 
@@ -27,12 +25,15 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
     },
 
     getValue: function () {
-        if (this._cropRegionChosen) {
+        if (this._userSelectedCropRegion) {
             return this._getCropData();
         }
         return null;
     },
 
+    /**
+     * Reads width, height, x and y from controls
+     */
     _getCropData: function() {
         var parent = this.getBox();
         if (!this._image) {
@@ -84,6 +85,18 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             || this.height < this._minImageSize;
     },
 
+    initComponent: function () {
+        Kwc.Abstract.Image.CropImage.superclass.initComponent.call(this);
+        if (this.cropData) {
+            this._userSelectedCropRegion = {
+                x: this.cropData.x,
+                y: this.cropData.y,
+                width: this.cropData.width,
+                height: this.cropData.height
+            };
+        }
+    },
+
     onRender: function(ct, position) {
         Kwc.Abstract.Image.CropImage.superclass.onRender.call(this, ct, position);
         this.el.setStyle({
@@ -113,7 +126,6 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         this._resizer = new Kwf.Utils.Resizable(this._image.getEl(), {
             handles: 'all',
             pinned: true,
-            preserveRatio: this.preserveRatio,
             constrainTo: this.getEl(), // TODO improve because it's possible to get 3px or so out of image...
             width: 0,
             height: 0,
@@ -125,39 +137,33 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         });
 
         this._resizer.getEl().addClass('kwc-abstract-image-crop-image-resizable');
+        this._resizer.on('beforeresize', function () {
+            this._hideCropShadow();
+        }, this);
         this._resizer.on("resize", function() {
-            if (this._ignoreRegionChangeAction) {
-                this._ignoreRegionChangeAction = false;
-            } else {
-                this._cropRegionChosen = true;
-            }
-            this._updateCropRegionImage();
             var res = this._getCropData();
+            this._userSelectedCropRegion = res;
+            this._updateCropRegionImage();
+            this._showCropShadow();
+            this.fireEvent('cropChanged', res);
         }, this);
 
         var dragDrop = new Ext.dd.DD(this._image.getEl(), '');
         dragDrop.startDrag = (function (x, y) {
-            var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
-            wrapper.imageSrcBackup = wrapper.getStyle('background-image');
-            wrapper.setStyle({
-                'background-image': 'none'
-            });
+            this._hideCropShadow();
             dragDrop.constrainTo(this.getEl());
             this._image.getEl().setStyle({
                 'background': 'transparent'
             });
         }).createDelegate(this);
         dragDrop.endDrag = (function (e) {
-            this._cropRegionChosen = true;
+            this._userSelectedCropRegion = this._getCropData();
             this._updateCropRegionImage();
             this._image.getEl().setStyle({
                 'background-image': 'url('+this.src+')',
                 'background-repeat': 'no-repeat'
             });
-            var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
-            wrapper.setStyle({
-                'background-image': wrapper.imageSrcBackup
-            });
+            this._showCropShadow();
         }).createDelegate(this);
 
         if (this.isCropDisabled()) { // Disable crop because image too small
@@ -173,41 +179,59 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         }
     },
 
+    _hideCropShadow: function () {
+        var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
+        wrapper.addClass('crop-changing');
+    },
+
+    _showCropShadow: function () {
+        var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
+        wrapper.removeClass('crop-changing');
+    },
+
     afterRender: function () {
         this._styleHandles();
         Kwc.Abstract.Image.CropImage.superclass.afterRender.call(this);
+
+        // Loading-Mask while loading down-sampled image
         this.getEl().mask(trlKwf('Loading image'), 'x-mask-loading');
         var imgLoad = new Image();
         imgLoad.onerror = (function() {
             this.getEl().unmask();
             Ext.Msg.alert(trlKwf('Error'), trlKwf("Couldn't load image."));
         }).createDelegate(this);
+
         imgLoad.onload = (function(){
             this.getEl().unmask();
         }).createDelegate(this);
         imgLoad.src = this.src;
+
         this._updateCropRegionImage();
     },
 
-    setCropData: function (cropData, preserveRatio)
+    setCropDataAndPreserveRatio: function (cropData, preserveRatio)
     {
         if (this.outWidth == -1) this.outWidth = 0;
         if (this.outHeight == -1) this.outHeight = 0;
         if (!cropData) { // calculate default selection
-            this._cropRegionChosen = false;
+            this._userSelectedCropRegion = null;
             cropData = this._generateDefaultCrop(preserveRatio);
-        } else {
-            this._cropRegionChosen = true;
         }
         if (this.outWidth != 0 && this.outHeight != 0
             && this.outWidth / this.outHeight != cropData.width / cropData.heigth
         ) {
-            var width = cropData.height * this.outWidth / this.outHeight;
-            var height = cropData.width * this.outHeight / this.outWidth;
-            if (width < this.width) {
-                cropData.width = width;
-            } else if (height < this.height) {
-                cropData.height = height;
+            if (this._userSelectedCropRegion) {
+                // Get saved user selected crop-region as base for recalculating
+                // width and height are set directly because else object is referenced
+                cropData.height = this._userSelectedCropRegion.height;
+                cropData.width = this._userSelectedCropRegion.width;
+                var width = cropData.height * this.outWidth / this.outHeight;
+                var height = cropData.width * this.outHeight / this.outWidth;
+                if (width < this.width) {
+                    cropData.width = width;
+                } else if (height < this.height) {
+                    cropData.height = height;
+                }
             } else {
                 cropData = this._generateDefaultCrop(preserveRatio);
             }
@@ -216,8 +240,9 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         this._image.setPosition(cropData.x, cropData.y);
         this._resizer.preserveRatio = preserveRatio;
         if (cropData.width != null && cropData.height != null) {
-            this._ignoreRegionChangeAction = true;
+            var backup = this._userSelectedCropRegion;
             this._resizer.resizeTo(cropData.width, cropData.height);
+            this._userSelectedCropRegion = backup;
         }
     },
 
@@ -228,15 +253,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         cropData.width = this.width;
         cropData.height = this.height;
         if (preserveRatio) {
-            if (this.height / this.outHeight > this.width / this.outWidth) {
-                // orientate on width
-                cropData.height = this.outHeight * this.width / this.outWidth;
-                cropData.y = (this.height - cropData.height)/2;
-            } else {
-                // orientate on height
-                cropData.width = this.outWidth * this.height / this.outHeight;
-                cropData.x = (this.width - cropData.width)/2;
-            }
+            cropData = Kwc.Abstract.Image.CropImage
+                .calculateDefaultCrop(this.outWidth, this.outHeight, this.width, this.height);
         }
         return cropData;
     },
@@ -290,5 +308,27 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         }
     }
 });
+Kwc.Abstract.Image.CropImage.calculateDefaultCrop = function (outWidth, outHeight, width, height) {
+    var cropData = {
+        width: null,
+        height: null,
+        x: null,
+        y: null
+    };
+    if (height / outHeight > width / outWidth) {
+        // orientate on width
+        cropData.width = width;
+        cropData.height = outHeight * width / outWidth;
+        cropData.y = (height - cropData.height)/2;
+        cropData.x = 0;
+    } else {
+        // orientate on height
+        cropData.height = height;
+        cropData.width = outWidth * height / outHeight;
+        cropData.x = (width - cropData.width)/2;
+        cropData.y = 0;
+    }
+    return cropData;
+};
 
 Ext.reg('kwc.image.cropimage', Kwc.Abstract.Image.CropImage);

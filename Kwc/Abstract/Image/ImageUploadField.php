@@ -4,26 +4,35 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
     private $_image;
     private $_dimensions;
 
-    public function __construct($dimensions, $imageLabel)
+    public function __construct($imageLabel)
     {
         parent::__construct();
+        $dpr2Check = Kwf_Config::getValue('kwc.requireDpr2');
         $this->setXtype('kwc.image.imageuploadfield');
         $this->setBaseCls('kwc-abstract-image-image-upload-big-preview');
         // Fileupload
-        $this->_image = new Kwf_Form_Field_File('Image', $imageLabel);
-        $this->_image->setPreviewSize(100) // set to provide big preview image
+        $this->_image = new Kwc_Abstract_Image_ImageFile('Image', $imageLabel);
+        $this->_image // set to provide big preview image
+            ->setPreviewWidth(390)
+            ->setPreviewHeight(184)
             ->setCls('kwc-abstract-image-image-upload-file')
-            ->setWidth(423)
-            ->setHeight(112)
-            ->setAllowOnlyImages(true);
+            ->setWidth(390)
+            ->setHeight(184);
         $this->fields->add($this->_image);
 
-        $this->_dimensions = $dimensions;
-        $this->fields->add(new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension')))
-            ->setAllowBlank(false)
+        $this->_dimensionField = new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension'));
+        $this->_dimensionField->setDpr2Check($dpr2Check);
+        $this->_dimensionField->setAllowBlank(false)
             ->setLabelStyle('display:none')
-            ->setCtCls('kwc-abstract-image-dimension-container')
-            ->setDimensions($dimensions);
+            ->setCtCls('kwc-abstract-image-dimension-container');
+        $this->fields->add($this->_dimensionField);
+    }
+
+    public function setDimensions($dimensions)
+    {
+        $this->_dimensions = $dimensions;
+        $this->_dimensionField->setDimensions($dimensions);
+        return $this;
     }
 
     public function setShowHelptext($showHelptext)
@@ -43,6 +52,12 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
         } else {
             $this->getByName('Image')->setHelpText('');
         }
+        return $this;
+    }
+
+    public function setSelectDimensionDisabled($disable)
+    {
+        $this->_dimensionField->setSelectDimensionDisabled($disable);
         return $this;
     }
 
