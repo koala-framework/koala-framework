@@ -1,5 +1,5 @@
 <?php
-class Kwc_ColumnsResponsive_Trl_Events extends Kwc_Chained_Abstract_Events
+class Kwc_Columns_Trl_Events extends Kwc_Chained_Abstract_Events
 {
     public function onMasterContentChanged($event)
     {

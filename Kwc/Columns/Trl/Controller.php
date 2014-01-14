@@ -1,7 +1,7 @@
 <?php
-class Kwc_ColumnsResponsive_Trl_Controller extends Kwc_ColumnsResponsive_Controller
+class Kwc_Columns_Trl_Controller extends Kwc_Columns_Controller
 {
-    protected $_model = 'Kwc_ColumnsResponsive_Model';
+    protected $_model = 'Kwc_Columns_Model';
     protected function _setModelData()
     {
         $c = Kwf_Component_Data_Root::getInstance()

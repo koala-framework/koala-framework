@@ -1,9 +1,9 @@
 <?php
-class Kwc_ColumnsResponsive_Basic_ContentWidthTest extends Kwc_TestAbstract
+class Kwc_Columns_Basic_ContentWidthTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        parent::setUp('Kwc_ColumnsResponsive_Basic_Root');
+        parent::setUp('Kwc_Columns_Basic_Root');
     }
 
     public function test2ColumnsWith50_50()

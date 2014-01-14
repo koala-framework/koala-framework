@@ -1,5 +1,5 @@
 <?php
-class Kwc_ColumnsResponsive_ExtConfig extends Kwc_Abstract_List_ExtConfigList
+class Kwc_Columns_ExtConfig extends Kwc_Abstract_List_ExtConfigList
 {
     protected function _getConfig()
     {

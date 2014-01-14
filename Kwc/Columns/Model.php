@@ -1,7 +1,7 @@
 <?php
-class Kwc_ColumnsResponsive_Model extends Kwf_Model_FnF
+class Kwc_Columns_Model extends Kwf_Model_FnF
 {
-    protected $_rowClass = 'Kwc_ColumnsResponsive_Row';
+    protected $_rowClass = 'Kwc_Columns_Row';
 
     public function setData($class, $dbId)
     {

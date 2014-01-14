@@ -1,17 +1,17 @@
 <?php
-class Kwc_ColumnsResponsive_Basic_GeneratorTest extends Kwc_TestAbstract
+class Kwc_Columns_Basic_GeneratorTest extends Kwc_TestAbstract
 {
-    //also manual test: /kwf/kwctest/Kwc_ColumnsResponsive_Basic_Root/foo
+    //also manual test: /kwf/kwctest/Kwc_Columns_Basic_Root/foo
     public function setUp()
     {
-        parent::setUp('Kwc_ColumnsResponsive_Basic_Root');
+        parent::setUp('Kwc_Columns_Basic_Root');
     }
 
     public function testGetChildsFromParagraphs()
     {
         $components = Kwf_Component_Data_Root::getInstance()
             ->getComponentsBySameClass(
-                'Kwc_ColumnsResponsive_Basic_Paragraphs_Component',
+                'Kwc_Columns_Basic_Paragraphs_Component',
                 array(
                     'id' => 1
                 )

@@ -1,5 +1,5 @@
 <?php
-class Kwc_ColumnsResponsive_Generator extends Kwf_Component_Generator_Table
+class Kwc_Columns_Generator extends Kwf_Component_Generator_Table
 {
     protected function _fetchRows($parentData, $select)
     {

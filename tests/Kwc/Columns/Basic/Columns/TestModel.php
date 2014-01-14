@@ -1,5 +1,5 @@
 <?php
-class Kwc_ColumnsResponsive_Basic_Columns_TestModel extends Kwf_Model_FnF
+class Kwc_Columns_Basic_Columns_TestModel extends Kwf_Model_FnF
 {
     public function __construct(array $config = array())
     {

@@ -1,5 +1,5 @@
 <?php
-class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
+class Kwc_Columns_Component extends Kwc_Abstract_List_Component
 {
     public static $needsParentComponentClass = true;
     public static function getSettings($parentComponentClass)
@@ -9,12 +9,12 @@ class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
         $ret['componentIcon'] = new Kwf_Asset('application_tile_horizontal');
 
         $ret['generators']['child'] = array(
-            'class' => 'Kwc_ColumnsResponsive_Generator',
+            'class' => 'Kwc_Columns_Generator',
             'component' => $parentComponentClass
         );
-        $ret['extConfig'] = 'Kwc_ColumnsResponsive_ExtConfig';
+        $ret['extConfig'] = 'Kwc_Columns_ExtConfig';
 
-        $ret['childModel'] = new Kwc_ColumnsResponsive_Model(array(
+        $ret['childModel'] = new Kwc_Columns_Model(array(
             'columns' => array('id', 'component_id', 'name'),
             'primaryKey' => 'id'
         ));

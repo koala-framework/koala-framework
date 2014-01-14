@@ -1,5 +1,5 @@
 <?php
-class Kwc_ColumnsResponsive_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
+class Kwc_Columns_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 {
     protected $_buttons = array();
     protected $_hasComponentId = false;

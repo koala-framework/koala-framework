@@ -1,5 +1,5 @@
 <?php
-class Kwc_ColumnsResponsive_Basic_Paragraphs_TestModel extends Kwf_Model_FnF
+class Kwc_Columns_Basic_Paragraphs_TestModel extends Kwf_Model_FnF
 {
     protected $_data = array(
         array('id'=>1, 'component_id' => 3000, 'component' => 'columns', 'pos' => 1, 'visible' => true),

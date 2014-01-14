@@ -26,3 +26,4 @@ function replaceFiles($files, $from, $to) {
 $files = glob_recursive('Component.php');
 $files[] = 'config.ini';
 replaceFiles($files, 'Kwc_Columns_Component', 'Kwc_Legacy_Columns_Component');
+replaceFiles($files, 'Kwc_ColumnsResponsive_Component', 'Kwc_Columns_Component');
