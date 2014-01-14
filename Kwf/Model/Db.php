@@ -994,6 +994,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     private function _createDbSelectWithColumns($select, $options)
     {
+        $select = clone $select;
         if (isset($options['columns'])) {
             foreach ($options['columns'] as $c) {
                 $select->expr($c);
