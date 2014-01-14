@@ -10,6 +10,9 @@ class Kwf_Media_Image
     {
         $targetSize = array(600, 600, 'cover' => false);
         $original = @getimagesize($originalPath);
+        if (abs(self::getExifRotation($originalPath)) == 90) {
+            $original = array($original[1], $original[0]);
+        }
         $original['width'] = $original[0];
         $original['height'] = $original[1];
         $target = Kwf_Media_Image::calculateScaleDimensions($originalPath, $targetSize);
@@ -19,6 +22,31 @@ class Kwf_Media_Image
         } else {
             return $original['width'] / $target['width'];
         }
+    }
+
+    public static function getExifRotation($source)
+    {
+        $rotate = 0;
+        if (Kwf_Registry::get('config')->image->autoExifRotate
+            && class_exists('Imagick')
+        ) {
+            if (is_string($source)) {
+                $source = new Imagick($source);
+            }
+            $orientation = $source->getImageOrientation();
+            switch ($orientation) {
+                case Imagick::ORIENTATION_BOTTOMRIGHT:
+                    $rotate = 180;
+                    break;
+                case Imagick::ORIENTATION_RIGHTTOP:
+                    $rotate = 90;
+                    break;
+                case Imagick::ORIENTATION_LEFTBOTTOM:
+                    $rotate = -90;
+                    break;
+            }
+        }
+        return $rotate;
     }
 
     /**
@@ -72,7 +100,7 @@ class Kwf_Media_Image
                 return array(
                     'width' => $crop['width'],
                     'height' => $crop['height'],
-                    'rotate' => null,
+                    'rotate' => 0,
                     'crop' => array(
                         'x' => $crop['x'],
                         'y' => $crop['y'],
@@ -85,7 +113,7 @@ class Kwf_Media_Image
                 return array(
                     'width' => $originalSize[0],
                     'height' => $originalSize[1],
-                    'rotate' => null,
+                    'rotate' => 0,
                     'crop' => array(
                         'x' => 0,
                         'y' => 0,
@@ -98,29 +126,11 @@ class Kwf_Media_Image
         }
 
         // Check if image has to be rotated
-        $rotate = null;
-        if (Kwf_Registry::get('config')->image->autoExifRotate &&
-            class_exists('Imagick') &&
-            $source &&
-            isset($sourceSize['mime']) &&
-            ($sourceSize['mime'] == 'image/jpg' || $sourceSize['mime'] == 'image/jpeg')
-        ) {
-            if (is_string($source)) {
-                $source = new Imagick($source);
-            }
-            $orientation = $source->getImageOrientation();
-            switch ($orientation) {
-                case Imagick::ORIENTATION_BOTTOMRIGHT:
-                    $rotate = 180;
-                    break;
-                case Imagick::ORIENTATION_RIGHTTOP:
-                    $rotate = 90;
-                    $size = array($h, $w);
-                    break;
-                case Imagick::ORIENTATION_LEFTBOTTOM:
-                    $rotate = -90;
-                    $size = array($h, $w);
-                    break;
+        $rotate = 0;
+        if ($source) {
+            $rotate = self::getExifRotation($source);
+            if (abs($rotate) == 90) {
+                $originalSize = array($originalSize[1], $originalSize[0]);
             }
         }
 
@@ -236,7 +246,7 @@ class Kwf_Media_Image
             && $ret['width'] == $originalSize[0]
             && $ret['height'] == $originalSize[1]
         ) {
-            $ret['rotate'] = null;
+            $ret['rotate'] = 0;
             $ret['keepOriginal'] = true;
         }
 
@@ -250,7 +260,9 @@ class Kwf_Media_Image
 
         $preScaleWidth = $sourceSize[0];
         $preScaleHeight = $sourceSize[1];
-        if (isset($size['rotate']) && $size['rotate']) {
+        if (isset($size['rotate'])
+            && ($size['rotate'] == 90 || $size['rotate'] == -90)
+        ) {
             list($preScaleWidth, $preScaleHeight) = array($preScaleHeight, $preScaleWidth); //swap
         }
         $preScaleTargetWidth = $size['width'];
@@ -279,7 +291,15 @@ class Kwf_Media_Image
                 if (!$previousCacheFile) {
                     $im = self::_processCommonImagickSettings($im); //only once
                 }
-                $im->resizeImage($preScaleWidth, $preScaleHeight, Imagick::FILTER_LANCZOS, 1);
+                $realWidth = $preScaleWidth;
+                $realHeight = $preScaleHeight;
+                if (isset($size['rotate'])
+                    && ($size['rotate'] == 90 || $size['rotate'] == -90)
+                ) {
+                    $realWidth = $preScaleHeight;
+                    $realHeight = $preScaleWidth;
+                }
+                $im->resizeImage($realWidth, $realHeight, Imagick::FILTER_LANCZOS, 1);
                 $blob = $im->getImageBlob();
                 if (!strlen($blob)) throw new Kwf_Exception("imageblob is empty");
                 file_put_contents($preScaleCacheFile, $blob);

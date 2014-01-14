@@ -34,7 +34,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('1600');
         $this->assertTrue($c->hasContent());
 
-        $this->assertEquals(array('width'=>100, 'height'=>100, 'rotate' => null,
+        $this->assertEquals(array('width'=>100, 'height'=>100, 'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -77,7 +77,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
     {
         $c = $this->_root->getComponentById('1603');
 
-        $this->assertEquals(array('width'=>10, 'height'=>10, 'rotate' => null,
+        $this->assertEquals(array('width'=>10, 'height'=>10, 'rotate' => 0,
             'crop' => array(
                 'x' => 0,
                 'y' => 0,
@@ -94,7 +94,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $this->assertTrue($c->hasContent());
         $url = $c->getComponent()->getImageUrl();
         $this->assertNotNull($url);
-        $assertion = array('width'=>16, 'height'=>16, 'rotate'=>null,
+        $assertion = array('width'=>16, 'height'=>16, 'rotate'=>0,
             'crop'=> array (
                 'width' => 16,
                 'height' => 16,
