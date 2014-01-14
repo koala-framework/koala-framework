@@ -383,6 +383,10 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return 0;
     }
 
+    /**
+     * This function is needed because getContentWidth returns the width of uploaded
+     * image.
+     */
     public function getMaxContentWidth()
     {
         return parent::getContentWidth();
