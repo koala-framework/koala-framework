@@ -99,27 +99,28 @@ class Kwf_Media_Image
 
         // Check if image has to be rotated
         $rotate = null;
-        if (Kwf_Registry::get('config')->image->autoExifRotate
-            && $source
-            && function_exists('exif_read_data')
-            && isset($sourceSize['mime'])
-            && ($sourceSize['mime'] == 'image/jpg'
-                || $sourceSize['mime'] == 'image/jpeg')
+        if (Kwf_Registry::get('config')->image->autoExifRotate &&
+            class_exists('Imagick') &&
+            $source &&
+            isset($sourceSize['mime']) &&
+            ($sourceSize['mime'] == 'image/jpg' || $sourceSize['mime'] == 'image/jpeg')
         ) {
-            try {
-                $exif = exif_read_data($source);
-                if (isset($exif['Orientation'])) {
-                    switch ($exif['Orientation']) {
-                        case 6:
-                            $originalSize = array($h, $w);
-                            $rotate = 90;
-                        case 8:
-                            $originalSize = array($h, $w);
-                            $rotate = -90;
-                    }
-                }
-            } catch (ErrorException $e) {
-                $rotate = null;
+            if (is_string($source)) {
+                $source = new Imagick($source);
+            }
+            $orientation = $source->getImageOrientation();
+            switch ($orientation) {
+                case Imagick::ORIENTATION_BOTTOMRIGHT:
+                    $rotate = 180;
+                    break;
+                case Imagick::ORIENTATION_RIGHTTOP:
+                    $rotate = 90;
+                    $size = array($h, $w);
+                    break;
+                case Imagick::ORIENTATION_LEFTBOTTOM:
+                    $rotate = -90;
+                    $size = array($h, $w);
+                    break;
             }
         }
 

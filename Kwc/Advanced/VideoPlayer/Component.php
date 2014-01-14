@@ -157,6 +157,10 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
 
     protected function _getVideoUrl($format = 'mp4')
     {
+        $row = $this->getRow();
+        if ($row->source_type == 'links') {
+            return $row->{$format.'_url'};
+        }
         return Kwf_Media::getUrl($this->getData()->componentClass,
             $this->getData()->componentId, $format, 'video.'.$format);
     }

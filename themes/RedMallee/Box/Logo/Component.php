@@ -8,8 +8,8 @@ class RedMallee_Box_Logo_Component extends Kwc_Basic_Image_Component
         $ret['dimensions'] = array(
             'customcrop'=>array(
                 'text' => trlKwf('user-defined'),
-                'width' => 305,
-                'height' => 100,
+                'width' => 244,
+                'height' => 80,
                 'scale' => Kwf_Media_Image::SCALE_CROP
             )
         );

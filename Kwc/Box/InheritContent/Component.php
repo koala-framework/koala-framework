@@ -42,14 +42,16 @@ class Kwc_Box_InheritContent_Component extends Kwc_Abstract
                 $page = $page->parent;
                 if ($page instanceof Kwf_Component_Data_Root) break;
             }
-            $ic = $page;
+            $c = $page;
             foreach ($ids as $id) {
-                $ic = $ic->getChildComponent('-'.$id);
-                if (!$ic) {
+                $c = $c->getChildComponent('-'.$id);
+                if (!$c) {
                     return null;
                 }
             }
-            $c = $ic->getChildComponent(array('generator' => 'child'));
+            if ($c->componentClass == $this->getData()->componentClass) {
+                $c = $c->getChildComponent(array('generator' => 'child'));
+            }
             if (!$c) break; //box wurde überschrieben
             if ($page instanceof Kwf_Component_Data_Root) break;
             $page = $page->parent;

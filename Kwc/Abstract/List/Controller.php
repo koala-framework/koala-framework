@@ -151,12 +151,16 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 
     public function jsonCopyAction()
     {
-        $id = $this->_getParam('componentId').'-'.$this->_getParam('id');
-        if (!Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
-            throw new Kwf_Exception("Component with id '$id' not found");
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
+        if (!$c) {
+            throw new Kwf_Exception("Component not found");
+        }
+        $c = $c->getChildComponent(array('id' => $c->getGenerator('child')->getIdSeparator().$this->_getParam('id')));
+        if (!$c) {
+            throw new Kwf_Exception("Component not found");
         }
         $session = new Kwf_Session_Namespace('Kwc_Abstract_List:copy');
-        $session->id = $id;
+        $session->id = $c->dbId;
     }
 
     public function jsonPasteAction()

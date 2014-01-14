@@ -4,6 +4,7 @@ class Kwc_Shop_Cart_Checkout_Component extends Kwc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['componentName'] = trlKwfStatic('Orders');
         $ret['generators']['child']['component']['form'] = 'Kwc_Shop_Cart_Checkout_Form_Component';
 
         $ret['generators']['payment'] = array(

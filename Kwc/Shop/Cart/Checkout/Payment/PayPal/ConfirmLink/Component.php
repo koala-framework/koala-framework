@@ -28,10 +28,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
         $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->parent->parent->parent->componentClass, 'childModel'))
             ->getReferencedModel('Order')->getCartOrder();
         $total = $this->getData()->parent->parent->getComponent()->getTotal($order);
-        $paypalId =  Kwf_Registry::get('config')->paypalId;
-        if (!$paypalId) {
-            $paypalId = Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'business');
-        }
+        $paypalId =  $this->getData()->getBaseProperty('paypalId');
 
         $custom = Kwf_Util_PayPal_Ipn_LogModel::getEncodedCallback(
             $this->getData()->parent->componentId, array('orderId' => $order->id)

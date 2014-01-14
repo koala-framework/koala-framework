@@ -18,7 +18,7 @@ class Kwf_Form_Field_ShowSelect extends Kwf_Form_Field_ShowField
                     }
                 }
             } else if (is_array($data)) {
-                if (is_array($data[0])) {
+                if (isset($data[0]) && is_array($data[0])) {
                         $oldData = $data;
                         $data = array();
                     foreach ($oldData as $d) {

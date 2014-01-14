@@ -374,7 +374,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     //view cache can depend on settings
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
-                    $s->whereEquals('type', 'component');
                     self::_deleteViewCache($s);
                 }
             } else if (self::_endsWith($file, '/Component.yml')) {
@@ -550,6 +549,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         self::_clearApcCache(array(
             'clearCacheSimpleStatic' => $clearCacheSimpleStatic,
         ));
+        echo "\n";
 
         if ($dimensionsChanged) {
             echo "dimensions changed...\n";

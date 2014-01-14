@@ -11,7 +11,7 @@ class Kwc_Menu_EditableItems_Model extends Kwf_Model_Abstract
 
     protected function _getOwnColumns()
     {
-        return array('id', 'pos', 'target_page_id', 'name');
+        return array('id', 'pos', 'target_page_id', 'name', 'filename');
     }
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
@@ -49,7 +49,7 @@ class Kwc_Menu_EditableItems_Model extends Kwf_Model_Abstract
             }
             $childPages = $component->getChildPages($childPagesComponentSelect);
             foreach ($childPages as $childPage) {
-                if (isset($whereEquals['name']) && $childPage->name != $whereEquals['name']) {
+                if (isset($whereEquals['filename']) && $childPage->filename != $whereEquals['filename']) {
                     continue;
                 }
                 if (is_numeric($childPage->dbId)) {
@@ -63,7 +63,8 @@ class Kwc_Menu_EditableItems_Model extends Kwf_Model_Abstract
                         'id' => $id,
                         'pos' => $i++,
                         'target_page_id' => $childPage->componentId,
-                        'name' => $childPage->name
+                        'name' => $childPage->name,
+                        'filename' => $childPage->filename
                     );
                     $dataKeys[] = $id;
                 }
