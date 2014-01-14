@@ -171,7 +171,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 autoEl: {
                     tag: 'div',
                     cls: 'information',
-                    html: trlKwf('Croping is not possible because image is too small.')
+                    html: trlKwf('Cropping is not possible because image is too small.')
                 }
             });
             cropPanelItems.add(cropDisabledInfo);
