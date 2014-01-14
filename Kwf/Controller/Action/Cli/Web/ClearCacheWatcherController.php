@@ -19,6 +19,24 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         return false;
     }
 
+    private static function _informDuckcast($cacheType)
+    {
+        if (Kwf_Config::getValue('debug.duckcast.host')) {
+            echo "Inform Duckcast ...";
+
+            try {
+                file_get_contents(
+                    'http://'.Kwf_Config::getValue('debug.duckcast.host')
+                        .':'.Kwf_Config::getValue('debug.duckcast.port').'/watcher?cacheType='.$cacheType
+                );
+            } catch (Exception $e) {
+                echo " [".$e->getMessage()."]\n";
+                return;
+            }
+            echo " [ok]\n";
+        }
+    }
+
     public function indexAction()
     {
         if (Kwf_Cache_Simple::getBackend() == 'apc') {
@@ -669,5 +687,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 echo "\n";
             }
         }
+        self::_informDuckcast($fileType);
     }
 }
