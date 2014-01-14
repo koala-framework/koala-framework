@@ -69,9 +69,9 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         $row->width = (isset($value['width']) && $value['width']) ? $value['width'] : null;
         $row->height = (isset($value['height']) && $value['height']) ? $value['height'] : null;
         if (isset($value['cropData'])) {
-            $row->crop_x = (isset($value['cropData']['x']) && $value['cropData']['x'])
+            $row->crop_x = (isset($value['cropData']['x']) && $value['cropData']['x'] !== null)
                 ? $value['cropData']['x'] : null;
-            $row->crop_y = (isset($value['cropData']['y']) && $value['cropData']['y'])
+            $row->crop_y = (isset($value['cropData']['y']) && $value['cropData']['y'] !== null)
                 ? $value['cropData']['y'] : null;
             $row->crop_width = (isset($value['cropData']['width']) && $value['cropData']['width'])
                 ? $value['cropData']['width'] : null;
