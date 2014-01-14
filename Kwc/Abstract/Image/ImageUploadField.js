@@ -101,7 +101,28 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             componentId: this.baseParams.componentId
         };
         if (value) {
-            if (value.dimension != null) previewParams.dimension = value.dimension;
+            if (value.dimension != null) {
+                previewParams.dimension = value.dimension;
+                var dimension = this._getDimensionField().resolvedDimensions[value.dimension];
+                if (dimension && value.cropData) {
+                    if (dimension.width != 0 && dimension.height != 0
+                        && Math.floor(dimension.width * 100 / dimension.height)
+                            != Math.floor(value.cropData.width * 100 / value.cropData.height)) {
+                        var result = Kwc.Abstract.Image.CropImage
+                            .calculateDefaultCrop(dimension.width, dimension.height,
+                                                value.cropData.width, value.cropData.height);
+                        // This also resets the value of dimensionField. Thisway also
+                        // dimensionWindow and cropImage component access correct values.
+                        // Also if only "save" is clicked and nothing was changed
+                        // the corrected values are saved.
+                        value.cropData.width = result.width;
+                        value.cropData.height = result.height;
+                        value.cropData.x += result.x;
+                        value.cropData.y += result.y;
+                    }
+                }
+            }
+
             if (value.width != null) previewParams.width = value.width;
             if (value.height != null) previewParams.height = value.height;
 
