@@ -22,12 +22,6 @@ class Kwc_Basic_LinkTag_News_NewsController extends Kwf_Controller_Action_Auto_G
 
     protected function _isAllowedComponent()
     {
-        $componentId = $this->_getParam('newsComponentId');
-        $component = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($componentId, array('ignoreVisible'=>true, 'limit'=>1));
-        if (!$component) return false;
-        if (!is_instance_of($component->componentClass, 'Kwc_News_Directory_Component')) return false;
-        $subRoot = $component->getSubroot();
-        return Kwf_Registry::get('acl')->getComponentAcl()->isAllowed($this->_getAuthData(), $subRoot);
+        return !!Kwf_Registry::get('userModel')->getAuthedUser();
     }
 }

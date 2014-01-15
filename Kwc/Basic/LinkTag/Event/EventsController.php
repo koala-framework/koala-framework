@@ -23,12 +23,6 @@ class Kwc_Basic_LinkTag_Event_EventsController extends Kwf_Controller_Action_Aut
 
     protected function _isAllowedComponent()
     {
-        $componentId = $this->_getParam('eventsComponentId');
-        $component = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($componentId, array('ignoreVisible'=>true, 'limit'=>1));
-        if (!$component) return false;
-        if (!is_instance_of($component->componentClass, 'Kwc_Events_Directory_Component')) return false;
-        $subRoot = $component->getSubroot();
-        return Kwf_Registry::get('acl')->getComponentAcl()->isAllowed($this->_getAuthData(), $subRoot);
+        return !!Kwf_Registry::get('userModel')->getAuthedUser();
     }
 }
