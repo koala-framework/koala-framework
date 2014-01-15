@@ -155,7 +155,7 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if (!$c) {
             throw new Kwf_Exception("Component not found");
         }
-        $c = $c->getChildComponent(array('id' => $c->getGenerator('child')->getIdSeparator().$this->_getParam('id')));
+        $c = $c->getChildComponent(array('id' => $c->getGenerator('child')->getIdSeparator().$this->_getParam('id'), 'ignoreVisible'=>true));
         if (!$c) {
             throw new Kwf_Exception("Component not found");
         }
