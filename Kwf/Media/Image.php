@@ -24,7 +24,7 @@ class Kwf_Media_Image
         if (self::_generateIntValue($contents[0], $contents[1], false) == 0XFFD8) { //Marks jpg file
             // could be dynamically changed if exif-data-block start at
                         // different location (documentation not clear about this)
-            for ($count = 2; $count < $fileHeaderSize; $count++) {
+            for ($count = 2; $count < $fileHeaderSize-1; $count++) {
                 $marker = self::_generateIntValue($contents[$count], $contents[$count+1], false);
                 if ($marker == 0xFFE1) {//marks start exif-data-block
                     $type = self::_generateIntValue($contents[$count+10], $contents[$count+11], false);
