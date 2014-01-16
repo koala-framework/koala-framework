@@ -25,7 +25,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
         }
 
         $masterComponentClass = Kwc_Abstract::getSetting(
-            $this->_getImageEnlargeComponentData()->componentClass, 'masterComponentClass'
+            $this->_getImageEnlargeComponent()->getData()->componentClass, 'masterComponentClass'
         );
         if (Kwc_Abstract::getSetting($masterComponentClass, 'imageCaption')) {
             $ret['imageCaption'] = $this->_getImageEnlargeComponent()
