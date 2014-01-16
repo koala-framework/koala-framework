@@ -4,6 +4,14 @@
  */
 class Kwf_Media_ImageExifRotation_Test extends Kwf_Test_TestCase
 {
+    public function testExifRotationFallbackWrongExif()
+    {
+        $rotation = Kwf_Media_Image::getExifRotationFallback('../images/avatar_ghost.jpg');
+        $this->assertEquals($rotation, 0);
+        $rotation = Kwf_Media_Image::getExifRotationFallback('../images/colorpicker/map-red-max.png');
+        $this->assertEquals($rotation, 0);
+    }
+
     public function testExifRotationFallback()
     {
         $rotation = Kwf_Media_Image::getExifRotationFallback('Kwf/Media/ImageExifRotation/rotation/rotation0.jpg');

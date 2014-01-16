@@ -19,7 +19,7 @@ class Kwf_Media_Image
     {
         $rotation = 0;
         $handle = fopen($source, "rb"); // b for windows compatibility
-        $fileHeaderSize = 5000;
+        $fileHeaderSize = min(5000, filesize($source));
         $contents = fread($handle, $fileHeaderSize);
         if (self::_generateIntValue($contents[0], $contents[1], false) == 0XFFD8) { //Marks jpg file
             // could be dynamically changed if exif-data-block start at
