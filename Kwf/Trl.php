@@ -377,21 +377,21 @@ class Kwf_Trl
         return $ret;
     }
 
-    public function trlKwf($string, $params, $language = null)
+    public function trlKwf($string, $params = array(), $language = null)
     {
         return $this->_trlc('', $string, $params, self::SOURCE_KWF, $language);
     }
 
-    public function trl($string, $params, $language = null)
+    public function trl($string, $params = array(), $language = null)
     {
         return $this->_trlc('', $string, $params, self::SOURCE_WEB, $language);
     }
-    public function trlcKwf($context, $string, $params, $language = null)
+    public function trlcKwf($context, $string, $params = array(), $language = null)
     {
         return $this->_trlc($context, $string, $params, self::SOURCE_KWF, $language);
     }
 
-    public function trlc($context, $string, $params, $language = null)
+    public function trlc($context, $string, $params = array(), $language = null)
     {
         return $this->_trlc($context, $string, $params, self::SOURCE_WEB, $language);
     }
