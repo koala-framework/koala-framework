@@ -97,6 +97,7 @@ class Kwf_Media_Image
                 $rotate = self::getExifRotationFallback($source);
             }
         }
+        return $rotate;
     }
 
     /**
