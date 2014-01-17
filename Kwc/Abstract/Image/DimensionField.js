@@ -40,6 +40,11 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         this.fireEvent('change', this.value);
     },
 
+    initComponent: function() {
+        this.resolvedDimensions = Kwf.clone(this.dimensions);
+        Kwc.Abstract.Image.DimensionField.superclass.initComponent.call(this);
+    },
+
     afterRender: function() {
         Kwc.Abstract.Image.DimensionField.superclass.afterRender.call(this);
         this._cropButton = new Ext.Button({
@@ -67,6 +72,18 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         });
         this._sizeWindow.on('save', function(value) {
             this.setValue(value);
+            // Height and Width could be set from user. resolvedDimensions have
+            // to be updated.
+            for (i in this.resolvedDimensions) {
+                var dimension = this.dimensions[i];
+                var resolvedDimension = this.resolvedDimensions[i];
+                if (resolvedDimension.width == 'user') {
+                    resolvedDimension.width = dimension.width;
+                }
+                if (resolvedDimension.height == 'user') {
+                    resolvedDimension.height = dimension.height;
+                }
+            }
         }, this);
         this._sizeWindow.show();
     },
