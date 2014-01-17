@@ -130,6 +130,9 @@ class Kwf_Media_Image
             if (abs($rotate) == 90) {
                 $size = array($h, $w);
             }
+            if (!$rotate) {
+                $rotate = null;
+            }
         }
 
         if (!$size[0] || !$size[1]) return false;
