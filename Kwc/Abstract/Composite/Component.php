@@ -28,9 +28,9 @@ class Kwc_Abstract_Composite_Component extends Kwc_Abstract
         return false;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['keys'] = array();
         foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
             $ret[$c->id] = $c;
