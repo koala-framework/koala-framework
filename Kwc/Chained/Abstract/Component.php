@@ -108,10 +108,10 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         }
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $data = $this->getData();
-        $ret = $data->chained->getComponent()->getTemplateVars();
+        $ret = $data->chained->getComponent()->getTemplateVars($renderer);
         $ret['data'] = $data;
         $ret['chained'] = $data->chained;
         if (!is_instance_of($data->chained->componentClass, 'Kwc_Chained_Abstract_Component')) {

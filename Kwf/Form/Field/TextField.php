@@ -43,7 +43,11 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
     protected function _getOutputValueFromValues($values)
     {
         $name = $this->getFieldName();
-        $ret = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
+        if ($this->getClearOnFocus()) {
+            $ret = !empty($values[$name]) ? $values[$name] : $this->getDefaultValue();
+        } else {
+            $ret = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
+        }
         return (string)$ret;
     }
 

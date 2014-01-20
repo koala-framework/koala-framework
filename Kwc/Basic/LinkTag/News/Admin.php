@@ -53,6 +53,7 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
             $form = Kwc_Abstract_Form::createComponentForm($this->_class, 'child');
             $form->fields['news_id']->setBaseParams(array('newsComponentId'=>$new->dbId));
             $form->fields['news_id']->setFieldLabel($new->getPage()->name);
+            $form->fields['news_id']->setData(new Kwc_Basic_LinkTag_News_NewsIdData());
             $ret[$new->dbId] = array(
                 'form' => $form,
                 'title' => count($news) > 1 ? $new->getTitle() : trlKwf('News')

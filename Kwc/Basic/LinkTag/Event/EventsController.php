@@ -1,6 +1,7 @@
 <?php
 class Kwc_Basic_LinkTag_Event_EventsController extends Kwf_Controller_Action_Auto_Grid
 {
+    protected $_permissions = array();
     protected $_modelName = 'Kwc_Events_Directory_Model';
     protected $_defaultOrder = array('field'=>'start_date', 'direction'=>'DESC');
     protected $_paging = 20;
@@ -18,5 +19,10 @@ class Kwc_Basic_LinkTag_Event_EventsController extends Kwf_Controller_Action_Aut
         $ret->whereEquals('visible', 1);
         $ret->whereEquals('component_id', $this->_getParam('eventsComponentId'));
         return $ret;
+    }
+
+    protected function _isAllowedComponent()
+    {
+        return !!Kwf_Registry::get('userModel')->getAuthedUser();
     }
 }

@@ -10291,5 +10291,74 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Source Type</en>
 <id>2046</id>
 </text>
+<text>
+<en>Import</en>
+<id>2034</id>
+</text>
+<text>
+<en>Pasting...</en>
+<id>2035</id>
+</text>
+<text>
+<en>What sheet do you want to import?</en>
+<id>2036</id>
+</text>
+<text>
+<en>Header (First Row in the Excel File)</en>
+<id>2037</id>
+</text>
+<text>
+<en>Do you want to delete existing data</en>
+<id>2038</id>
+</text>
+<text>
+<en>Update existing data</en>
+<id>2039</id>
+</text>
+<text>
+<en>Complement</en>
+<id>2040</id>
+</text>
+<text>
+<en>Override</en>
+<id>2041</id>
+</text>
+<text>
+<en>No data received</en>
+<id>2042</id>
+</text>
+<text>
+<en>Thank you very much for your order.</en>
+<id>2043</id>
+</text>
+<text>
+<en>Buy now</en>
+<de>Jetzt kaufen</de>
+<id>2044</id>
+</text>
+<text>
+<en>Wirecard</en>
+<id>2045</id>
+</text>
+<text>
+<en>Failure</en>
+<id>2046</id>
+</text>
+<text>
+<en>Mp4 link</en>
+<id>2047</id>
+</text>
+<text>
+<en>Ogg link</en>
+<id>2048</id>
+</text>
+<text>
+<en>Webm link</en>
+<id>2049</id>
+</text>
+<text>
+<en>Recent Posts</en>
+<id>2050</id>
+</text>
 </trl>
 
