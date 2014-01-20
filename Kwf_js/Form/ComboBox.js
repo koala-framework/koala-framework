@@ -160,6 +160,12 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
     setValue : function(v)
     {
         if (v === '') v = null;
+        if (v && typeof v == 'object' && typeof v.id != 'undefined' && typeof v.name != 'undefined') {
+            Kwf.Form.ComboBox.superclass.setValue.call(this, v.id);
+            this.setRawValue(v.name);
+            this.fireEvent('changevalue', this.value, this);
+            return;
+        }
         if (v == this.emptyText) v = null;
         if (v && this.store.proxy && this.valueField && this.mode == 'remote') {
             //wenn proxy vorhanden können daten nachgeladen werden

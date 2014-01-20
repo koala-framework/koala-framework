@@ -1429,7 +1429,7 @@ class Kwf_Component_Data
      */
     protected function _freeMemory()
     {
-        if (isset($this->parent)) {
+        if (isset($this->parent) && $this->parent) {
             $this->_lazyParent = $this->parent->componentId;
             unset($this->parent);
         }

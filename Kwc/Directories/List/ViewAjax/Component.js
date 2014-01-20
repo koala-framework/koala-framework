@@ -94,7 +94,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
                 records.push(new this.view.store.recordType({
                     id: id,
                     content: el.dom.innerHTML
-                }));
+                }, id));
             }
             el.remove();
         }, this);

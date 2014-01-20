@@ -6,6 +6,100 @@ class Kwf_Media_Image
     const SCALE_DEFORM = 'deform';
     const SCALE_ORIGINAL = 'original';
 
+    private static function _generateIntValue($high, $low, $reversed)
+    {
+        return $reversed ? ord($low)*256 + ord($high) : ord($high)*256 + ord($low);
+    }
+
+    /**
+     * Got information from http://www.media.mit.edu/pia/Research/deepview/exif.html
+     * and http://www.impulseadventure.com/photo/exif-orientation.html
+     */
+    public static function getExifRotationFallback($source)
+    {
+        $rotation = 0;
+        $handle = fopen($source, "rb"); // b for windows compatibility
+        $fileHeaderSize = min(5000, filesize($source));
+        $contents = fread($handle, $fileHeaderSize);
+        if (self::_generateIntValue($contents[0], $contents[1], false) == 0XFFD8) { //Marks jpg file
+            // could be dynamically changed if exif-data-block start at
+                        // different location (documentation not clear about this)
+            for ($count = 2; $count < $fileHeaderSize-1; $count++) {
+                $marker = self::_generateIntValue($contents[$count], $contents[$count+1], false);
+                if ($marker == 0xFFE1) {//marks start exif-data-block
+                    $type = self::_generateIntValue($contents[$count+10], $contents[$count+11], false);
+                    if ($type == 0x4D4D) {//Motorola, reverse byte-order
+                        $reversed = true;
+                    } else if ($type == 0x4949) { //Intel
+                        $reversed = false;
+                    }
+                    //number of directory entries in IFD0
+                    $propertyCount = self::_generateIntValue($contents[$count+19],
+                                            $contents[$count+18], $reversed);
+                    $dataPos = $count+20;
+                    for ($p = 0; $p < $propertyCount; $p++) {
+                        $tag = self::_generateIntValue($contents[$dataPos+($p*12)+1],
+                                        $contents[$dataPos+($p*12)], $reversed);
+                        if ($tag == 0x0112) { //Orientation-Tag
+                            // reversed saved in this form: 00 06 | 00 00 should be 00 00 | 00 06
+                            // normally saved in this form: 06 00 | 00 00
+                            $highBytes = self::_generateIntValue($contents[$dataPos+($p*12)+11],
+                                            $contents[$dataPos+($p*12)+10], $reversed);
+                            $lowBytes = self::_generateIntValue($contents[$dataPos+($p*12)+9],
+                                            $contents[$dataPos+($p*12)+8], $reversed);
+                            $exifOrientation = $highBytes * pow(16, 4) + $lowBytes;
+                            switch ($exifOrientation) {
+                                case 1:
+                                    $rotation = 0;
+                                    break;
+                                case 8: //Left_Bottom
+                                    $rotation = -90;
+                                    break;
+                                case 3:
+                                    $rotation = 180;
+                                    break;
+                                case 6: //Right_Top
+                                    $rotation = 90;
+                                    break;
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        fclose($handle);
+        return $rotation;
+    }
+
+    public static function getExifRotation($source)
+    {
+        $rotate = 0;
+        if (Kwf_Registry::get('config')->image->autoExifRotate) {
+            if (class_exists('Imagick') && method_exists(new Imagick(), 'getImageOrientation')) {
+                if (is_string($source)) {
+                    $source = new Imagick($source);
+                }
+                $orientation = $source->getImageOrientation();
+                switch ($orientation) {
+                    case Imagick::ORIENTATION_BOTTOMRIGHT:
+                        $rotate = 180;
+                        break;
+                    case Imagick::ORIENTATION_RIGHTTOP:
+                        $rotate = 90;
+                        break;
+                    case Imagick::ORIENTATION_LEFTBOTTOM:
+                        $rotate = -90;
+                        break;
+                }
+            } else {
+                $rotate = self::getExifRotationFallback($source);
+            }
+        }
+        return $rotate;
+    }
+
     /**
      * targetSize options: width, height, scale, aspectRatio (if SCALE_CROP and width or height is 0)
      */
@@ -29,31 +123,18 @@ class Kwf_Media_Image
         if (isset($sourceSize['height'])) $h = $sourceSize['height'];
         if (isset($sourceSize[1])) $h = $sourceSize[1];
         $size = array($w, $h);
+
         $rotate = null;
-        if (Kwf_Registry::get('config')->image->autoExifRotate &&
-            class_exists('Imagick') &&
-            $source &&
-            isset($sourceSize['mime']) &&
-            ($sourceSize['mime'] == 'image/jpg' || $sourceSize['mime'] == 'image/jpeg')
-        ) {
-            if (is_string($source)) {
-                $source = new Imagick($source);
+        if ($source) {
+            $rotate = self::getExifRotation($source);
+            if (abs($rotate) == 90) {
+                $size = array($h, $w);
             }
-            $orientation = $source->getImageOrientation();
-            switch ($orientation) {
-                case Imagick::ORIENTATION_BOTTOMRIGHT:
-                    $rotate = 180;
-                    break;
-                case Imagick::ORIENTATION_RIGHTTOP:
-                    $rotate = 90;
-                    $size = array($h, $w);
-                    break;
-                case Imagick::ORIENTATION_LEFTBOTTOM:
-                    $rotate = -90;
-                    $size = array($h, $w);
-                    break;
+            if (!$rotate) {
+                $rotate = null;
             }
         }
+
         if (!$size[0] || !$size[1]) return false;
 
         if (isset($targetSize['width'])) $width = $targetSize['width'];

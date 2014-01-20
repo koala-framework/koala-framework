@@ -10,14 +10,15 @@ class Kwc_Abstract_List_Trl_AdminModel extends Kwf_Model_Data_Abstract
         $s->ignoreVisible();
         $s->whereGenerator('child');
         foreach ($c->getChildComponents($s) as $c) {
+            $row = $c->generator->getTrlRowByData($c);
             $this->_data[$c->componentId] = array(
                 'id' => $c->chained->row->id,
                 'component_id' => $componentId,
-                'row' => $c->row,
+                'row' => $row,
                 'pos' => $c->chained->row->pos
             );
             foreach ($this->_translateFields as $tf) {
-                $this->_data[$c->componentId][$tf] = $c->row->{$tf};
+                $this->_data[$c->componentId][$tf] = $row->{$tf};
             }
         }
     }

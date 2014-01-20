@@ -13,15 +13,13 @@ class Kwc_Abstract_List_Trl_Generator extends Kwc_Chained_Trl_Generator
         return $ret;
     }
 
-    protected function _formatConfig($parentData, $row)
+    public function getTrlRowByData(Kwf_Component_Data $data)
     {
-        $ret = parent::_formatConfig($parentData, $row);
-        $id = $parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row);
-        $ret['row'] = $this->_getRow($id);
-        if (!$ret['row']) {
+        $ret = $this->_getRow($data->dbId);
+        if (!$ret) {
             $m = Kwc_Abstract::createChildModel($this->_class);
-            $ret['row'] = $m->createRow();
-            $ret['row']->component_id = $id;
+            $ret = $m->createRow();
+            $ret->component_id = $data->dbId;
         }
         return $ret;
     }
