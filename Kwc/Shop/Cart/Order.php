@@ -2,6 +2,22 @@
 class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
     implements Kwc_Mail_Recipient_TitleInterface
 {
+    protected $_groupNumbersByCheckoutComponent = false;
+
+    public function generateInvoiceNumber()
+    {
+        $s = $this->getModel()->select();
+        $s->limit(1);
+        $s->order('invoice_number', 'DESC');
+        if ($this->_groupNumbersByCheckoutComponent) {
+            $s->whereEquals('checkout_component_id', $this->checkout_component_id);
+        }
+        $row = $this->getModel()->getRow($s);
+        $maxNumber = 0;
+        if ($row) $maxNumber = $row->invoice_number;
+        $this->invoice_number = $maxNumber + 1;
+    }
+
     protected function _afterSave()
     {
         parent::_afterSave();
@@ -17,6 +33,9 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
             $s = $this->getModel()->select();
             $s->limit(1);
             $s->order('number', 'DESC');
+            if ($this->_groupNumbersByCheckoutComponent) {
+                $s->whereEquals('checkout_component_id', $this->checkout_component_id);
+            }
             $row = $this->getModel()->getRow($s);
             $maxNumber = 0;
             if ($row) $maxNumber = $row->number;

@@ -13,7 +13,8 @@ class Kwc_Paragraphs_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         $this->_columns->add(new Kwf_Grid_Column('component_class'));
         $this->_columns->add(new Kwf_Grid_Column('component_name'));
         $this->_columns->add(new Kwf_Grid_Column('component_icon'));
-        $this->_columns->add(new Kwf_Grid_Column('pos'));
+        $this->_columns->add(new Kwf_Grid_Column('pos'))
+            ->setType('int');
 
         $this->_columns->add(new Kwf_Grid_Column('preview'))
             ->setData(new Kwf_Data_Kwc_Frontend($this->_getParam('class')))

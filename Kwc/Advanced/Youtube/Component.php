@@ -44,8 +44,10 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
         if ($d = $ret['row']->dimensions) {
             if ($d == '16x9') {
                 $config['height'] = ($config['width'] / 16) * 9;
+                $config['ratio'] = $d;
             } else if ($d == '4x3') {
                 $config['height'] = ($config['width'] / 4) * 3;
+                $config['ratio'] = $d;
             }
         }
         $ret['config'] = array_merge($config, array('playerVars' => $this->_getSetting('playerVars')));

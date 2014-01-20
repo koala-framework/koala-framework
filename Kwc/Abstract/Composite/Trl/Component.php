@@ -8,9 +8,9 @@ class Kwc_Abstract_Composite_Trl_Component extends Kwc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
             if ($ret[$c->id]) $ret[$c->id] = $c; // Bei TextImage kann zB. Bild ausgeblendet werden und soll dann in Übersetzung auch nicht angezeigt werden
         }
