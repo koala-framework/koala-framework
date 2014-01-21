@@ -8,7 +8,7 @@ class Kwc_Menu_EditableItems_Controller extends Kwf_Controller_Action_Auto_Kwc_G
     protected function _initColumns()
     {
         $this->_columns->add(new Kwf_Grid_Column('pos'));
-        $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Page name'), 200));
+        $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Page name'), 116));
     }
 
     protected function _getSelect()
