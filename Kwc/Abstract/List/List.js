@@ -1,6 +1,8 @@
 Ext.namespace('Kwc.Abstract.List');
 Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
 {
+    listWidth: 300,
+
     initComponent: function()
     {
         this.layout = 'border';
@@ -116,7 +118,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
         this.westPanel = new Ext.Panel({
             layout: 'border',
             region: 'west',
-            width: 300,
+            width: this.listWidth,
             border: false,
             items: westItems,
             collapsible : true,
