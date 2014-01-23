@@ -105,9 +105,6 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
 
         if (!this.activeItem) {
             //the first one activated must be already shown in largeContainer
-            if (!this.largeContent[item.id]) {
-                this._loadItem(item, {visible: true});
-            }
             this.largeContent[item.id] = this.largeContainer.child('div');
             this.largeContent[item.id].enableDisplayMode('block');
             this.largeContent[item.id].setStyle('position', 'absolute');
