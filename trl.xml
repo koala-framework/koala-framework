@@ -8055,6 +8055,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>%value%' koda je bila že uporabljena.</sl>
 </text>
 <text>
+<en>Dear Mrs./Mr. {0} {1}</en>
+<de>Sehr geehrte/r Frau/Herr {0} {1}</de>
+<id>1549</id>
+</text>
+<text>
 <en>'%value%' is not a valid voucher code</en>
 <de>'%value%' ist ein ungültiger Gutschein Code</de>
 <id>1581</id>

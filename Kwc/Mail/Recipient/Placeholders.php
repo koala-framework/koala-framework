@@ -25,7 +25,7 @@ class Kwc_Mail_Recipient_Placeholders
             } else if ($recipient->getMailGender() == 'female' && $recipient->getMailLastname()) {
                 $t = $trl->trlKwf('Dear Mrs. {0} {1}', $replace, $language);
             } else {
-                $t = $trl->trlKwf('Dear Sir or Madam', array(), $language);
+                $t = $trl->trlKwf('Dear Mrs./Mr. {0} {1}', $replace, $language);
             }
             $ret['salutation_polite'] = trim(str_replace('  ', ' ', $t));
 
