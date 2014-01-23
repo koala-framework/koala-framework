@@ -3,6 +3,7 @@ class Kwc_List_Switch_LargeContentPlugin extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewBeforeChildRender
 {
     protected $_currentItem;
+    protected $_currentPreview;
 
     public function processOutput($output, $renderer)
     {
@@ -17,10 +18,10 @@ class Kwc_List_Switch_LargeContentPlugin extends Kwf_Component_Plugin_Abstract
                 $html,
                 $output
             );
-            $output = str_replace('class="listSwitchItem defaultActive', 'class="listSwitchItem', $output);
+            $output = preg_replace('/class="listSwitchItem(.*)defaultActive/', 'class="listSwitchItem', $output);
             $output = str_replace(
-                '<div id="'.$this->_currentItem->parent->componentId.'" class="listSwitchItem',
-                '<div id="'.$this->_currentItem->parent->componentId.'" class="listSwitchItem defaultActive',
+                '<div id="'.$this->_currentPreview->componentId.'" class="listSwitchItem',
+                '<div id="'.$this->_currentPreview->componentId.'" class="listSwitchItem defaultActive',
                 $output
             );
         }
@@ -31,5 +32,10 @@ class Kwc_List_Switch_LargeContentPlugin extends Kwf_Component_Plugin_Abstract
     public function setCurrentItem($item)
     {
         $this->_currentItem = $item;
+    }
+
+    public function setCurrentPreview($preview)
+    {
+        $this->_currentPreview = $preview;
     }
 }
