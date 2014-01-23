@@ -59,4 +59,23 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
         }
         return $ret;
     }
+
+    public function getDefaultItemPage()
+    {
+        return $this->getData()
+            ->getChildComponent(array('generator'=>'itemPages', 'limit'=>1));
+    }
+
+    public function getLargeComponent($itemPageComponent)
+    {
+        return $this->getData()
+            ->getChildComponent('-'.$itemPageComponent->id)
+            ->getChildComponent('-large');
+    }
+
+    public function getPreviewComponent($itemPageComponent)
+    {
+        return $this->getData()
+            ->getChildComponent('-'.$itemPageComponent->id);
+    }
 }
