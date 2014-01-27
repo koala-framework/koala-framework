@@ -171,6 +171,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         if (!$result->isValid()) {
             $this->view->error = implode("<br />", $result->getMessages());
         }
+        $this->view->sessionToken = Kwf_Util_SessionToken::getSessionToken();
     }
 
     public function jsonLogoutUserAction()
