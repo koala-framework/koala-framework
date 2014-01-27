@@ -46,6 +46,18 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         $this->_helper->notifyPostDispatch();
     }
 
+    protected function _validateSessionToken()
+    {
+        if ($this->_helper->getHelper('viewRenderer')->isJson() && Kwf_Util_SessionToken::getSessionToken()) {
+            if (!$this->_getParam('kwfSessionToken')) {
+                throw new Kwf_Exception("Missing sessionToken parameter");
+            }
+            if ($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken()) {
+                throw new Kwf_Exception("Invalid kwfSessionToken");
+            }
+        }
+    }
+
     public function preDispatch()
     {
         Kwf_Util_Https::ensureHttps();
@@ -59,14 +71,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
             }
         }
 
-        if ($this->_helper->getHelper('viewRenderer')->isJson() && Kwf_Util_SessionToken::getSessionToken()) {
-            if (!$this->_getParam('kwfSessionToken')) {
-                throw new Kwf_Exception("Missing sessionToken parameter");
-            }
-            if ($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken()) {
-                throw new Kwf_Exception("Invalid kwfSessionToken");
-            }
-        }
+        $this->_validateSessionToken();
 
         $t = microtime(true);
         $allowed = false;

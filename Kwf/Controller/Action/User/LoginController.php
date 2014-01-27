@@ -1,6 +1,15 @@
 <?php
 class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 {
+    protected function _validateSessionToken()
+    {
+        if ($this->getRequest()->getActionName() != 'json-logout-user'
+            && $this->getRequest()->getActionName() != 'json-login-user'
+        ) {
+            parent::_validateSessionToken();
+        }
+    }
+
     public function indexAction()
     {
         // ursprünglich $this->_getParam('location'), dann gehen aber GET params verloren
