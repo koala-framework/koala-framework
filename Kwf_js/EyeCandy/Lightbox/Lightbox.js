@@ -197,9 +197,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     {
         this.createLightboxEl();
 
-        this.innerLightboxEl.query('.kwfIframe').each(function(iframe) {
-            Ext.get(iframe).createChild(iframe.iframeHtml);
-        });
+        if (this.iframeHtml) {
+            this.contentEl.createChild(this.iframeHtml);
+        }
 
         this.style.onShow(options);
 
@@ -246,11 +246,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     closeAndPushState: function() {
-        this.innerLightboxEl.query('iframe').each(function(iframe) {
-            var parent = Ext.get(iframe).parent();
-            parent.addClass('kwfIframe');
-            parent.dom.iframeHTML = iframe.outerHTML;
-            Ext.get(iframe).remove();
+        this.innerLightboxEl.select('iframe').each(function(iframe) {
+            this.iframeHtml = iframe.dom.outerHTML;
+            iframe.remove();
         }, this);
 
         if (!this.options.disableHistoryState && Kwf.Utils.HistoryState.entries > 0) {
