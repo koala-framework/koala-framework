@@ -28,5 +28,28 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
                 if (this.autoSync) grid.getStore().sync();
             }, this);
         }
+        grid.query('> toolbar[dock=top] field').each(function(field) {
+            field.on('change', function() {
+                var filterId = 'filter-'+field.getName();
+                var v = field.getValue();
+                var filter = this.grid.getStore().filters.get(filterId);
+                if (!filter || filter.value != v) {
+                    this.grid.getStore().addFilter({
+                        id: filterId,
+                        property: field.getName(),
+                        value: v
+                    });
+                }
+            }, this, { buffer: 300 });
+        }, this);
+
+        if (grid.getStore()) this.onBindStore();
+        Ext4.Function.interceptAfter(grid, "bindStore", this.onBindStore, this);
+    },
+    onBindStore: function() {
+        var s = this.grid.getStore();
+        this.grid.query('pagingtoolbar').each(function(i) {
+            i.bindStore(s);
+        }, this);
     }
 });

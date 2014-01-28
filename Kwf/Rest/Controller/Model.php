@@ -80,6 +80,9 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
                 $this->_applySelectFilter($ret, $f);
             }
         }
+        if ($this->_getParam('limit')) {
+            $ret->limit($this->_getParam('limit'), $this->_getParam('start'));
+        }
         return $ret;
     }
 
@@ -107,6 +110,7 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         foreach ($this->_model->getRows($s) as $row) {
             $this->view->data[] = $this->_loadDataFromRow($row);
         }
+        $this->view->total = $this->_model->countRows($s);
     }
 
     // Handle GET and return a specific resource item
