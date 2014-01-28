@@ -7,18 +7,14 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Columns');
         $ret['componentIcon'] = new Kwf_Asset('application_tile_horizontal');
+        $ret['childModel'] = 'Kwc_Columns_Model';
 
         $ret['generators']['child'] = array(
             'class' => 'Kwc_Columns_Generator',
             'component' => $parentComponentClass
         );
         $ret['extConfig'] = 'Kwc_Columns_ExtConfig';
-
-        $ret['childModel'] = new Kwc_Columns_Model(array(
-            'columns' => array('id', 'component_id', 'name'),
-            'primaryKey' => 'id'
-        ));
-        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Columns/List.js';
 
         $ret['columns'] = array(
             '2col-50_50' => array(
@@ -75,6 +71,21 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
         return $ret;
     }
 
+    public function getChildModel()
+    {
+        return self::getColumnsModel($this->getData()->componentClass);
+    }
+
+    public static function getColumnsModel($componentClass)
+    {
+        static $models = array();
+        if (!isset($models[$componentClass])) {
+            $m = Kwc_Abstract::getSetting($componentClass, 'childModel');
+            $models[$componentClass] = new $m(array('componentClass' => $componentClass));
+        }
+        return $models[$componentClass];
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -88,10 +99,14 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
         }
         $columns = $columnTypes[$type];
 
-
+        $i = 1;
         $ret['cssClass'] .= " col{$type}";
         foreach($ret['listItems'] as $key => $value) {
-            $ret['listItems'][$key]['class'] .= " span{$columns['colSpans'][$key]}";
+            $cls = " span{$columns['colSpans'][$i-1]}";
+            if ($i == 1) $cls .= " lineFirst";
+            if ($i == count($columns['colSpans'])) $cls .= " lineLast";
+            $ret['listItems'][$key]['class'] .= $cls;
+            ($i == count($columns['colSpans'])) ? $i = 1 : $i++;
         }
         return $ret;
     }
@@ -99,12 +114,7 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
     protected function _getChildContentWidth(Kwf_Component_Data $child)
     {
         $ownWidth = parent::_getChildContentWidth($child);
-
-        $component = $child->parent;
-        $columnTypes = $this->_getSetting('columns');
-        $columns = $columnTypes[$this->getRow()->type];
-
-        $widthCalc = $columns['colSpans'][$child->id - 1] / $columns['columns'];
+        $widthCalc = $child->row->col_span / $child->row->columns;
         $ret = floor($ownWidth * $widthCalc);
         if ($ret < 480) {
             $ret = min($ownWidth, 480);

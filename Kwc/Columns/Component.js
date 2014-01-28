@@ -1,1 +1,1 @@
-Kwf.Utils.ResponsiveEl('.kwcColumnsResponsive', [480]);
+Kwf.Utils.ResponsiveEl('.kwcColumns', [480]);

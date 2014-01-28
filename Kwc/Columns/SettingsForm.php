@@ -4,10 +4,11 @@ class Kwc_Columns_SettingsForm extends Kwc_Abstract_Form
     protected function _initFields()
     {
         parent::_initFields();
+        $types = $this->_getColumnTypes();
         $this->add(new Kwf_Form_Field_Select('type', trlKwf('Columns type')))
-            ->setShowNoSelection(true)
             ->setAllowBlank(false)
-            ->setValues($this->_getColumnTypes());
+            ->setDefaultValue(array_shift(array_keys($types)))
+            ->setValues($types);
     }
 
     protected function _getColumnTypes()

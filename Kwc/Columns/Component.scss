@@ -1,5 +1,6 @@
 @import "susy";
 @import "compass/css3/box-sizing";
+@import "compass/utilities/general/clearfix";
 $gutter-width   : 0em;
 $grid-padding   : 0em;
 
@@ -77,7 +78,12 @@ $grid-padding   : 0em;
         }
     }
 
-    > .listItem.kwcLast {
+    > .listItem.kwcLast,
+    &.columns > .listItem.lineLast {
         @include omega;
+    }
+
+    &.columns > .listItem.lineFirst {
+        clear: both;
     }
 }

@@ -17,34 +17,34 @@ class Kwc_Columns_Basic_ContentWidthTest extends Kwc_TestAbstract
 
     public function test2ColumnsWith75_25()
     {
-        $c = $this->_root->getComponentById('3000-2-1');
+        $c = $this->_root->getComponentById('3000-2-3');
         $this->assertEquals(675, (int)$c->getComponent()->getContentWidth());
 
-        $c = $this->_root->getComponentById('3000-2-2');
+        $c = $this->_root->getComponentById('3000-2-4');
         $this->assertEquals(480, (int)$c->getComponent()->getContentWidth());
     }
 
     public function test3ColumnsWith33_33_33()
     {
-        $c = $this->_root->getComponentById('3000-3-1');
+        $c = $this->_root->getComponentById('3000-3-5');
         $this->assertEquals(480, (int)$c->getComponent()->getContentWidth());
 
-        $c = $this->_root->getComponentById('3000-3-2');
+        $c = $this->_root->getComponentById('3000-3-6');
         $this->assertEquals(480, (int)$c->getComponent()->getContentWidth());
 
-        $c = $this->_root->getComponentById('3000-3-3');
+        $c = $this->_root->getComponentById('3000-3-7');
         $this->assertEquals(480, (int)$c->getComponent()->getContentWidth());
     }
 
     public function test3ColumnsWith25_50_25()
     {
-        $c = $this->_root->getComponentById('3000-4-1');
+        $c = $this->_root->getComponentById('3000-4-8');
         $this->assertEquals(480, (int)$c->getComponent()->getContentWidth());
 
-        $c = $this->_root->getComponentById('3000-4-2');
+        $c = $this->_root->getComponentById('3000-4-9');
         $this->assertEquals(480, (int)$c->getComponent()->getContentWidth());
 
-        $c = $this->_root->getComponentById('3000-4-3');
+        $c = $this->_root->getComponentById('3000-4-10');
         $this->assertEquals(480, (int)$c->getComponent()->getContentWidth());
     }
 }
