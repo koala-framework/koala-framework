@@ -15,9 +15,8 @@ Ext4.define('Kwf.Ext4.Controller.Binding.FormToGrid', {
         form.disable();
 
         if (!this.formSaveButton) this.formSaveButton = form.down('button#save');
+        if (!this.formDeleteButton) this.formDeleteButton = form.down('button#delete');
         if (!this.gridAddButton) this.gridAddButton = grid.down('button#add');
-
-        if (this.formSaveButton) this.formSaveButton.disable();
 
         grid.on('selectionchange', function(model, rows) {
             if (rows[0]) {
@@ -61,6 +60,23 @@ Ext4.define('Kwf.Ext4.Controller.Binding.FormToGrid', {
 
                 form.down(this.focusOnAddSelector).focus();
                 this.fireEvent('add');
+            }, this);
+        }
+        if (this.formDeleteButton) {
+            this.formDeleteButton.on('click', function() {
+                Ext4.Msg.show({
+                    title: trlKwf('Delete'),
+                    msg: trlKwf('Do you really wish to remove this entry?'),
+                    buttons: Ext4.Msg.YESNO,
+                    scope: this,
+                    fn: function(button) {
+                        if (button == 'yes') {
+                            grid.getStore().remove(form.getRecord());
+                            grid.getStore().sync();
+                        }
+                    }
+                });
+
             }, this);
         }
     }
