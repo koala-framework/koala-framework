@@ -11,10 +11,6 @@
 
 .kwfFormContainerFieldSet fieldset {
     border: 2px groove #EEE;
-
-}
-.kwfFormContainerFieldSet fieldset .kwfField {
-    z-index: 1;
 }
 
 .kwfFormContainerFieldSet .kwfFormContainerFieldSetCollapsed div {
