@@ -2,6 +2,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
+    autoSync: true,
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
@@ -20,10 +21,11 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
             }
         }, this);
         if (this.gridDeleteButton) {
+            this.gridDeleteButton.disable();
             this.gridDeleteButton.on('click', function() {
                 var sm = grid.getSelectionModel();
                 grid.getStore().remove(sm.getSelection());
-                grid.getStore().sync();
+                if (this.autoSync) grid.getStore().sync();
             }, this);
         }
     }

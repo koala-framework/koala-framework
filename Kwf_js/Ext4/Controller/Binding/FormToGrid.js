@@ -2,6 +2,7 @@ Ext4.define('Kwf.Ext4.Controller.Binding.FormToGrid', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
+    focusOnAddSelector: 'field',
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
@@ -23,10 +24,8 @@ Ext4.define('Kwf.Ext4.Controller.Binding.FormToGrid', {
                 var row = rows[0];
                 form.getForm().loadRecord(row);
                 form.enable();
-                if (this.formSaveButton) this.formSaveButton.enable();
             } else {
                 form.disable();
-                if (this.formSaveButton) this.formSaveButton.disable();
             }
         }, this);
         grid.on('beforedeselect', function(sm, record) {
@@ -34,6 +33,14 @@ Ext4.define('Kwf.Ext4.Controller.Binding.FormToGrid', {
                 return false;
             }
         }, this);
+
+        if (this.updateOnChange) {
+            Ext4.each(form.query('field'), function(i) {
+                i.on('change', function() {
+                    this.form.updateRecord();
+                }, this);
+            }, this);
+        }
 
         if (this.formSaveButton) {
             this.formSaveButton.on('click', function() {
@@ -52,7 +59,8 @@ Ext4.define('Kwf.Ext4.Controller.Binding.FormToGrid', {
                 s.add(row);
                 grid.getSelectionModel().select(row);
 
-                form.down('field').focus();
+                form.down(this.focusOnAddSelector).focus();
+                this.fireEvent('add');
             }, this);
         }
     }

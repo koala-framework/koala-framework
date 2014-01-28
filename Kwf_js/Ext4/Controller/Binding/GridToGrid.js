@@ -14,8 +14,13 @@ Ext4.define('Kwf.Ext4.Controller.Binding.GridToGrid', {
             if (rows[0]) {
                 var row = rows[0];
                 var store = row[this.relation]();
+                if (!store.loaded) {
+                    store.loaded = true;
+                    if (!row.phantom) {
+                        store.load();
+                    }
+                }
                 this.grid.bindStore(store);
-                store.load();
                 this.grid.enable();
             } else {
                 this.grid.disable();
