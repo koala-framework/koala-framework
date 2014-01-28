@@ -17,6 +17,11 @@
     z-index: 1;
 }
 
+.kwfFormContainerFieldSet fieldset .kwfField select {
+    position: relative;
+    z-index: 1;
+}
+
 .kwfFormContainerFieldSet .kwfFormContainerFieldSetCollapsed div {
     display: none;
 }
