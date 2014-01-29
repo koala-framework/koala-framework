@@ -94,8 +94,8 @@
 <hr>Vaš račun kod {0} je upravo kreiran.</hr>
 </text>
 <text>
-<en>Please use the following link to choose yourself a password and to login</en>
-<de>Bitte verwenden Sie diesen Link, um sich ein Passwort zu erstellen und einzuloggen.</de>
+<en>Please use the following link to choose yourself a password</en>
+<de>Bitte verwenden Sie diesen Link, um sich ein Passwort zu erstellen</de>
 <id>16</id>
 <ro>Vă rugăm să folosiţi următorul link pentru a seta parola şi pentru a vă autentifica</ro>
 <uk>Будь ласка, використовуйте це посилання, щоб потрапити на ваш аккаунт</uk>
@@ -10364,6 +10364,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Recent Posts</en>
 <id>2050</id>
+</text>
+<text>
+<en>As soon as you have chosen a password you can login at the following Link</en>
+<de>Sobald Sie Ihr Passwort erstellt haben, können Sie sich über den folgenden Link einloggen</de>
+<id>2051</id>
 </text>
 </trl>
 
