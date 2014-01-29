@@ -70,6 +70,24 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return $activationUrl;
     }
 
+    public function getLoginUrl()
+    {
+        $ret = '/' . Kwf_Controller_Front_Component::getInstance()
+            ->getWebRouter()->getRoute('admin')->assemble();
+
+        $root = Kwf_Component_Data_Root::getInstance();
+        if ($root && $this->_allowFrontendUrls()) {
+            $component = $root->getComponentByClass(
+                'Kwc_User_Login_Component', array('limit' => 1)
+            );
+            if ($component) {
+                $ret = $component->url;
+            }
+        }
+
+        return $ret;
+    }
+
     public function encodePassword($password)
     {
         return md5($password.$this->password_salt);
@@ -281,6 +299,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->url;
         $mail->lostPasswordUrl = $mail->webUrl.$lostPassUrl.'?code='.$this->id.'-'.
                         $this->getActivationCode();
+        $mail->loginUrl = $mail->webUrl . $this->getLoginUrl();
         return $mail;
     }
 
