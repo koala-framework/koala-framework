@@ -4,6 +4,7 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     protected $_model;
     protected $_saveColumns;
     protected $_loadColumns;
+    protected $_queryColumns;
 
     public function preDispatch()
     {
@@ -88,7 +89,18 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
 
     protected function _applySelectFilter($select, $filter)
     {
-        $select->whereEquals($filter->property, $filter->value);
+        if ($filter->property == 'query') {
+            $ors = array();
+            if (!$this->_queryColumns) {
+                throw new Kwf_Exception("_queryColumns are required");
+            }
+            foreach ($this->_queryColumns as $c) {
+                $ors[] = new Kwf_Model_Select_Expr_Like($c, '%'.$filter->value.'%');
+            }
+            $select->where(new Kwf_Model_Select_Expr_Or($ors));
+        } else {
+            $select->whereEquals($filter->property, $filter->value);
+        }
     }
 
     protected function _loadDataFromRow($row)
