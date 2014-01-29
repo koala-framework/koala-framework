@@ -48,6 +48,14 @@
 
     }
 
+    .kwcBasicImageEnlarge {
+        margin: 0 auto;
+    }
+
+    &.lt420 .image, &.largeImage .image {
+        width: 100% !important;
+    }
+
     .imageCaption {
         padding: 0 0 5px 0;
         text-align: center;

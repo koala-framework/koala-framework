@@ -17,8 +17,16 @@
         <? } else { ?>
         <div class="nextBtnInactive"></div>
         <? } ?>
-        <div class="image">
-            <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
+        <? $aspectRatio = 0; ?>
+        <? $width = 0; ?>
+        <? if ($this->width && $this->width > 0) { ?>
+            <? $aspectRatio = $this->height / $this->width * 100; ?>
+            <? $width = $this->width; ?>
+        <? } ?>
+        <div class="image" style="max-width:<?=$width;?>px;">
+            <div class="container" style="padding-bottom:<?=$aspectRatio;?>%;">
+                <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
+            </div>
         </div>
     </div>
     <div class="lightboxFooter">

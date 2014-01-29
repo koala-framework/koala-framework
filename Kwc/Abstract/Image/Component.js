@@ -7,5 +7,3 @@ if (window.devicePixelRatio && window.devicePixelRatio > 1) {
         }
     });
 }
-
-Kwf.Utils.ResponsiveImg('.kwcAbstractImage img');

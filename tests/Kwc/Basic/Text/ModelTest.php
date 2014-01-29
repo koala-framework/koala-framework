@@ -173,7 +173,9 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $html = $c->getData()->render();
         $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'.
                     '\s*<p>\s*<div class="kwcAbstractImage kwcBasicTextImageTestComponent".*>'
+                    .'\s*<div class="container" style="padding-bottom:[0-9,.]+%">'
                     .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1009-i1/default/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" />'
+                    .'\s*</div>'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
 
