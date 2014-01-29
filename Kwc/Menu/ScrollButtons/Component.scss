@@ -1,0 +1,50 @@
+@import "kwf/background-image-dpr2"; 
+
+.cssClass {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  height: 38px;
+    ul {
+        overflow-x: scroll;
+        white-space: nowrap;
+        z-index: 15;
+
+        li {
+            z-index: 0;
+            padding: 0px;
+            margin: 0px 10px;
+            display: inline-block;
+            line-height: 38px;
+            a {
+                z-index: 13;
+                position: relative;
+                display: block;
+                vertical-align: middle;
+            }
+            &.current a {
+                color: var(secColor);
+            }
+        }
+    }
+
+    > a {
+        position: absolute;
+        display: block;
+        width: 62px;
+        height: 38px;
+        top: 0;
+
+        &.arrowLeft {
+            @include background-image-dpr2('/assets/kwf/Kwc/Menu/ScrollButtons/images', 'arrowLeft.png', 62px, 38px, no-repeat left top transparent);
+            left: 0;
+            z-index: 15;
+        }
+
+        &.arrowRight {
+            @include background-image-dpr2('/assets/kwf/Kwc/Menu/ScrollButtons/images', 'arrowRight.png', 62px, 38px, no-repeat right top transparent);
+            right: 0;
+            z-index: 15;
+        }
+    }
+}
