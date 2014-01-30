@@ -31,33 +31,35 @@ Ext4.define('Kwf.Ext4.Controller.Binding.FormToGrid', {
                 form.disable();
             }
         }, this);
-        grid.on('beforeselect', function(sm, record) {
-            if (form.getRecord() !== record && form.getForm().isDirty()) {
-                Ext4.Msg.show({
-                    title: trlKwf('Save'),
-                    msg: trlKwf('Do you want to save the changes?'),
-                    buttons: Ext4.Msg.YESNOCANCEL,
-                    scope: this,
-                    fn: function(button) {
-                        if (button == 'yes') {
-                            if (this.doSave()) {
+        if (!this.updateOnChange) {
+            grid.on('beforeselect', function(sm, record) {
+                if (form.getRecord() !== record && form.getForm().isDirty()) {
+                    Ext4.Msg.show({
+                        title: trlKwf('Save'),
+                        msg: trlKwf('Do you want to save the changes?'),
+                        buttons: Ext4.Msg.YESNOCANCEL,
+                        scope: this,
+                        fn: function(button) {
+                            if (button == 'yes') {
+                                if (this.doSave()) {
+                                    form.getForm().reset(true);
+                                    grid.getSelectionModel().select(record);
+                                } else {
+                                    //validation failed re-select
+                                    grid.getSelectionModel().select(form.getRecord());
+                                }
+                            } else if (button == 'no') {
                                 form.getForm().reset(true);
                                 grid.getSelectionModel().select(record);
-                            } else {
-                                //validation failed re-select
+                            } else if (button == 'cancel') {
                                 grid.getSelectionModel().select(form.getRecord());
                             }
-                        } else if (button == 'no') {
-                            form.getForm().reset(true);
-                            grid.getSelectionModel().select(record);
-                        } else if (button == 'cancel') {
-                            grid.getSelectionModel().select(form.getRecord());
                         }
-                    }
-                });
-                return false;
-            }
-        }, this);
+                    });
+                    return false;
+                }
+            }, this);
+        }
 
         if (this.updateOnChange) {
             Ext4.each(form.query('field'), function(i) {
