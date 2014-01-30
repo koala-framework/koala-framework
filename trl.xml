@@ -13,6 +13,7 @@
 <ru>Видимый</ru>
 <es_CL>Visible</es_CL>
 <sk>Viditeľné</sk>
+<hr>Vidljivo</hr>
 </text>
 <text>
 <en>Error</en>
@@ -28,6 +29,7 @@
 <ru>Ошибка</ru>
 <es_CL>Error</es_CL>
 <sk>Chyba</sk>
+<hr>Greška</hr>
 </text>
 <text>
 <en>Page not found</en>
@@ -40,6 +42,7 @@
 <ru>Страница не найдена</ru>
 <bg>Страницата не беше намерена.</bg>
 <sk>Stránka sa nenašla.</sk>
+<hr>Stranica nije pronađena</hr>
 </text>
 <text>
 <en>Lost password?</en>
@@ -51,6 +54,7 @@
 <sl>Pozabljeno geslo</sl>
 <ru>Забыли пароль?</ru>
 <sk>Zabudli ste heslo?</sk>
+<hr>Zaboravili ste lozinku?</hr>
 </text>
 <text>
 <en>Login</en>
@@ -62,6 +66,7 @@
 <sl>Prijava</sl>
 <ru>Логин</ru>
 <sk>Prihlásiť sa</sk>
+<hr>Login</hr>
 </text>
 <text>
 <en>Hello {0}!</en>
@@ -75,6 +80,7 @@
 <ru>Добрый день {0}!</ru>
 <es_CL>Hola {0}!</es_CL>
 <sk>Ahoj {0}!</sk>
+<hr>Pozdrav {0}!</hr>
 </text>
 <text>
 <en>Your account at {0} has just been created.</en>
@@ -85,6 +91,7 @@
 <mk>Вашиот акаунт е креиран.</mk>
 <sl>Pravkar ste uspešno ustvarili svoj račun pri {0}.</sl>
 <ru>Ваш аккаунт на {0} только что был создан.</ru>
+<hr>Tvoj račun kod {0} je upravo izrađen.</hr>
 </text>
 <text>
 <en>Please use the following link to choose yourself a password and to login</en>
@@ -105,6 +112,7 @@
 <mk>Овој e-mail е генериран автоматски. Ако одговорите на ова порака може да нема примач.</mk>
 <sl>To je avtomatsko generirano e-sporočilo. To sporočilo je bilo generirano avtomatsko, zato nanj ne odgovarjajte.</sl>
 <ru>Этот E-Mail был сгененрирован автоматически. Возможно, получателя не существует.</ru>
+<hr>Ovaj Email je generiran automatski. Molimo nemojte odgovarati na isti.</hr>
 </text>
 <text>
 <en>Your account at {0} has been deleted.</en>
@@ -115,6 +123,7 @@
 <mk>Вашиот акаунт е избришан.</mk>
 <sl>Izbrisali ste svoj račun pri {0}.</sl>
 <ru>Ваш аккаунт на {0} был удален.</ru>
+<hr>Vaš račun kod {0} je izbrisan.</hr>
 </text>
 <text>
 <en>Please use the following link to choose yourself a new password.</en>
@@ -337,6 +346,7 @@
 <es>Imagen extendida</es>
 <ru>Увеличить изображение</ru>
 <es_CL>Imagen extendida</es_CL>
+<hr>Povećaj sliku</hr>
 </text>
 <text>
 <en>Comment</en>
@@ -348,6 +358,7 @@
 <es>Comentario</es>
 <ru>Коментарий</ru>
 <es_CL>Comentario</es_CL>
+<hr>Komentar</hr>
 </text>
 <text>
 <en>Size</en>
@@ -359,6 +370,7 @@
 <es>Tamaño</es>
 <ru>Размер</ru>
 <es_CL>Tamaño</es_CL>
+<hr>Veličina</hr>
 </text>
 <text>
 <en>Preview</en>
@@ -368,6 +380,7 @@
 <mk>Преглед</mk>
 <sl>Predogled</sl>
 <ru>Предпросмотр</ru>
+<hr>Pregled</hr>
 </text>
 <text>
 <en>Text</en>
@@ -379,6 +392,7 @@
 <es>Texto</es>
 <ru>Текст</ru>
 <es_CL>Texto</es_CL>
+<hr>Tekst</hr>
 </text>
 <text>
 <en>Position of Image</en>
@@ -527,6 +541,7 @@
 <bg>Име</bg>
 <sq>Emri</sq>
 <es_CL>Nombre</es_CL>
+<sk>Meno</sk>
 </text>
 <text>
 <en>Lastname</en>
@@ -543,6 +558,7 @@
 <bg>Фамилия</bg>
 <sq>Mbiemri</sq>
 <es_CL>Apellido</es_CL>
+<sk>Priezvisko</sk>
 </text>
 <text>
 <en>Email</en>
@@ -722,6 +738,7 @@
 <mk>Женски</mk>
 <sq>Femërore</sq>
 <es_CL>Femenino</es_CL>
+<sk>Žena</sk>
 </text>
 <text>
 <en>Male</en>
@@ -737,6 +754,7 @@
 <ru>Мужской</ru>
 <sq>Mashkullore</sq>
 <es_CL>Masculino</es_CL>
+<sk>Muž</sk>
 </text>
 <text>
 <en>Gender</en>
@@ -752,6 +770,7 @@
 <ru>Пол</ru>
 <sq>Gjinia</sq>
 <es_CL>Género</es_CL>
+<sk>Pohlavie</sk>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -970,6 +989,7 @@
 <id>233</id>
 <ro>Doriţi să salvaţi modificările?</ro>
 <sl>Ali želite shraniti spremembe?</sl>
+<sk>Želáte si uložiť zmeny?</sk>
 </text>
 <text>
 <en>Copying...</en>
@@ -2688,6 +2708,7 @@
 <ro>Setări</ro>
 <sl>Nastavitve </sl>
 <uk>Налаштування</uk>
+<sk>Nastavenia</sk>
 </text>
 <text>
 <en>Link Image</en>
@@ -5327,6 +5348,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1074</id>
 <ro>Nu au fost găsite înregistrări pentru textul căutat &amp;quot;{0}&amp;quot;.</ro>
 <sl>Sistemi ni našel ustreznih zadetkov za iskani pojem &amp;quot;{0}&amp;quot;.</sl>
+<uk>Нічого не знайдено</uk>
 </text>
 <text>
 <en>Show All</en>
@@ -5552,6 +5574,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1124</id>
 <ro>Stimate domnule {0} {1}</ro>
 <sl>Spoštovani gospod {0} {1}</sl>
+<es>Apreciado señor {0} {1}</es>
+<sk>Vážený pán {0} {1}</sk>
 </text>
 <text>
 <en>Dear Mrs. {0}</en>
@@ -5559,6 +5583,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1125</id>
 <ro>Stimată doamnă {0}</ro>
 <sl>Spoštovana gospa {0}</sl>
+<es>Apreciada señora {0}</es>
+<sk>Vážená pani {0}</sk>
 </text>
 <text>
 <en>Excel export</en>
@@ -5630,6 +5656,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1137</id>
 <ro>Stimată doamnă {0} {1}</ro>
 <sl>Spoštovana gospa {0} {1}</sl>
+<es>Apreciada señora {0} {1}</es>
+<sk>Vážená pani {0} {1}</sk>
 </text>
 <text>
 <en>Dear Mr. {0}</en>
@@ -5637,6 +5665,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1138</id>
 <ro>Stimate domnule {0}</ro>
 <sl>Spoštovani gospod {0}</sl>
+<es>Apreciado señor {0}</es>
+<sk>Vážený pán {0}</sk>
 </text>
 <text>
 <en>Hello Mr. {0}</en>
@@ -5741,6 +5771,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>Формат</bg>
 <sl>format</sl>
 <es>Formato</es>
+<sk>Formát</sk>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
@@ -5748,6 +5779,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1156</id>
 <ro>Newsletter-ul a fost oprit. Nu mai este posibilă modificarea statusului.</ro>
 <sl>Pošiljanje e-novic je bilo prekinjeno.  Statusa ni možno spremeniti.</sl>
+<sk>Newsletter zastavený, nie je možné uložiť zmeny.</sk>
 </text>
 <text>
 <en>Unknown status.</en>
@@ -5960,6 +5992,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1195</id>
 <ro>Bună ziua  {0} {1}</ro>
 <sl>Dober dan {0} {1}</sl>
+<es>Buenos días {0} {1}</es>
+<sk>Dobrý deň {0} {1}</sk>
 </text>
 <text>
 <en>Hello {0} {1}</en>
@@ -6172,6 +6206,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Odjava od e-novic</sl>
 <uk>Відмовитися від розсилки новин</uk>
 <sq>Одјави се за Newsletter</sq>
+<es>Cancelar Suscripción</es>
+<sk>Odhlásiť z odberu noviniek</sk>
 </text>
 <text>
 <en>You have been successfully unsubscribed from the newsletter.</en>
@@ -6180,6 +6216,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Aţi fost dezabonat de la newsletter.</ro>
 <sl>Uspešno ste se odjavili od e-novic.</sl>
 <sq>Вие сте успешно одјавени.</sq>
+<es>Usted canceló su suscripción exitosamente.</es>
+<sk>Boli ste úspešne odhlásený z odberu noviniek.</sk>
 </text>
 <text>
 <en>Unsubscribe newsletter</en>
@@ -6189,6 +6227,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Odjava od e-novic</sl>
 <uk>Відмовитися від розсилки новин</uk>
 <sq>Одјави се за Newsletter</sq>
+<es>Cancelar suscripción</es>
+<sk>Odhlásiť z odberu noviniek</sk>
 </text>
 <text>
 <en>default</en>
@@ -6239,6 +6279,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1255</id>
 <ro>Setări destinatar newsletter</ro>
 <sl>E-novice Prejemniki Nastavitve</sl>
+<sk>Nastavenia odberateľa noviniek</sk>
 </text>
 <text>
 <en>unsubscribed</en>
@@ -6246,6 +6287,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1256</id>
 <ro>anulat</ro>
 <sl>Odjavljen</sl>
+<es>suscripción cancelada</es>
+<sk>odhlásený</sk>
 </text>
 <text>
 <en>not activated</en>
@@ -6291,6 +6334,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Aţi fost abonat pentru newsletter-ul {0}.</ro>
 <sl>Pravkar ste bili vneseni kot prejemnik e-novic pri {0}.</sl>
 <uk>Ви щойно підписалися на автоматичну розсилку новин від {0}.</uk>
+<sk>Boli ste prihlásený na odber noviniek na {0}.</sk>
 </text>
 <text>
 <en>ACTIVATION LINK</en>
@@ -6314,6 +6358,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Puteţi să dezabonaţi oricând newsletter-ul, accesând următorul link:</ro>
 <sl>Od e-novic se lahko kadarkoli odjavite tako, da kliknete na naslednjo povezavo:</sl>
 <uk>Для того, щоб відмовитися від автоматичної розсилки новин, перейдіть за посиланням:</uk>
+<es>Para cancelar su suscripción de nuestro Newsletter, haga clic en el siguiente link:</es>
+<sk>Odhlásiť sa môžete kedykoľvek kliknutím na túto linku:</sk>
 </text>
 <text>
 <en>To change you data or settings, click this link:</en>
@@ -6322,6 +6368,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Pentru a modifica datele sau setările dumneavoastră faceţi click pe următorul link:</ro>
 <sl>Za spremembo svojih podatkov in nastavitev kliknite na naslednjo povezavo:</sl>
 <uk>Для того, щоб змінити свої данні або налаштування, перейдіть за посилянням: </uk>
+<sk>Na zmenu svojich údajov alebo nastavení kliknite na túto linku:</sk>
 </text>
 <text>
 <en>Thanks for your subscription!</en>
@@ -6330,6 +6377,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Mulţumim pentru înscriere!</ro>
 <sl>Hvala, ker ste se prijavili!</sl>
 <uk>Щиро вдячні за Вашу підписку!</uk>
+<sk>Ďakujeme za vaše prihlásenie!</sk>
 </text>
 <text>
 <en>Please click the following link to confirm your E-Mail address and to receive our newsletters in future.</en>
@@ -6356,6 +6404,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>HTML-Формат</mk>
 <sl>HTML-format</sl>
 <es>Formato HTML</es>
+<sk>HTML formát</sk>
 </text>
 <text>
 <en>Text-Format</en>
@@ -6367,6 +6416,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>Текст-Формат</mk>
 <sl>tekstovni format</sl>
 <es>Formato de texto</es>
+<sk>Textový formát</sk>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
@@ -7527,6 +7577,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Išči: </sl>
 <sk>Hľadaj:</sk>
 <fr>Rechercher:</fr>
+<uk>Пошук</uk>
 </text>
 <text>
 <en>copy/paste</en>
@@ -8392,6 +8443,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>Відмовитися від розсилки</uk>
 <sq>Одјави се</sq>
 <sl>Odjavi</sl>
+<es>Cancelar suscripción</es>
+<sk>Odhlásiť</sk>
 </text>
 <text>
 <context>thousands separator</context>
@@ -8701,6 +8754,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Keine Einträge wurden ausgewählt.</de>
 <ro>Nu a fost selectat niciun obiect.</ro>
 <sl>Noben vnos ni bil izbran.</sl>
+<uk>Записів не знайдено</uk>
 </text>
 <text>
 <en>clearing cache...</en>
@@ -9480,6 +9534,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Edit newsletter</en>
 <de>Newsletter bearbeiten</de>
 <id>1941</id>
+<sk>Nastavenia odberu noviniek</sk>
 </text>
 <text>
 <en>Sending finished</en>
@@ -9527,6 +9582,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Suchen...</de>
 <id>1953</id>
 <sl>Iskanje...</sl>
+<uk>Пошук</uk>
 </text>
 <text>
 <en>view rate</en>
