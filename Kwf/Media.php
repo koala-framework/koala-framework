@@ -2,6 +2,7 @@
 class Kwf_Media
 {
     private static $_ouputCache;
+    const DONT_HASH_TYPE_PREFIX = 'dh-';
 
     /**
      *
@@ -18,7 +19,11 @@ class Kwf_Media
             $filename = $filename->filename . '.' . $filename->extension;
         }
         if ($filename == '.') $filename = '';
-        $checksum = self::getChecksum($class, $id, $type, $filename);
+        $checksumType = $type;
+        if (substr($type, 0, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX)) == Kwf_Media::DONT_HASH_TYPE_PREFIX) {
+            $checksumType = Kwf_Media::DONT_HASH_TYPE_PREFIX;
+        }
+        $checksum = self::getChecksum($class, $id, $checksumType, $filename);
         $prefix = '';
         if ($r = Kwf_Component_Data_Root::getInstance()) {
             if ($r->filename) {
@@ -38,6 +43,9 @@ class Kwf_Media
 
     public static function getChecksum($class, $id, $type, $filename)
     {
+        if (substr($type, 0, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX)) == Kwf_Media::DONT_HASH_TYPE_PREFIX) {
+            $type = Kwf_Media::DONT_HASH_TYPE_PREFIX;
+        }
         return Kwf_Util_Hash::hash($class . $id . $type . urldecode($filename));
     }
 
