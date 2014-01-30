@@ -9781,6 +9781,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Sprejmi in nadaljuj</sl>
 <bg>Приеми и продължи</bg>
 <cs>Souhlasím a pokračovat</cs>
+<hu>Elfogadás és továbblépés</hu>
 </text>
 <text>
 <en>Cookie Opt In / Opt Out</en>
@@ -9799,6 +9800,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Când vizitaţi această pagină web, în prezent sunt generate cookie-uri. Faceţi click aici pentru a dezactiva cookie-urile.</ro>
 <fr>Actuellement, des cookies sont posés durant votre visite sur le présent site Web. Cliquez ici pour désactiver les cookies.</fr>
 <es>Durante su visita a esta página web se colocan actualmente cookies. Haga clic aquí para desactivar las cookies.</es>
+<hu>Ha megnyitja ezt a honlapot, akkor oda sütik települnek. Kattintson ide, ha deaktiválni szeretné a sütiket.</hu>
 <id>2007</id>
 </text>
 <text>
@@ -9812,6 +9814,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Când vizitaţi această pagină web, în prezent nu sunt generate cookie-uri. Faceţi click aici pentru a activa cookie-urile.</ro>
 <fr>Actuellement, aucun cookie n'est posé durant votre visite sur le présent site Web. Cliquez ici pour accepter les cookies.</fr>
 <es>Durante su visita a esta página web no se colocan cookies actualmente. Haga clic aquí si desea aceptar el empleo de cookies.</es>
+<hu>Ha megnyitja ezt a honlapot, oda pillanatnyilag nem települnek sütik. Kattintson ide, ha jóváhagyja a sütik alkalmazását.</hu>
 <id>2008</id>
 </text>
 <text>
