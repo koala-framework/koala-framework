@@ -7,7 +7,9 @@
 <? } ?>
 <div class="<?=$this->cssClass?>"<? if ($this->imageDpr2) { ?> data-dpr2src="<?=$this->imageDpr2?>"<? } ?>
     style="max-width:<?=$width;?>px;">
-        <div class="container" style="padding-bottom:<?=$aspectRatio;?>%">
+        <? $baseUrl = preg_replace("/(\/dh-[0-9]*)\//", "/dh-{width}/", $this->image->getComponent()->getImageUrl()); ?>
+        <div class="container" style="padding-bottom:<?=$aspectRatio;?>%"
+            data-src="<?=$baseUrl;?>">
             <?=$this->image($this->image, $this->altText, $this->imgCssClass)?>
         </div>
     <? if ($this->showImageCaption) { ?>

@@ -97,8 +97,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         $data = $this->_getImageEnlargeComponent()->getImageData();
         if ($data) {
             $id = $this->getData()->componentId;
-            $type = 'default'; // TODO test if dpr2 enabled
-            return Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
+            return Kwf_Media::getUrl($this->getData()->componentClass, $id, Kwf_Media::DONT_HASH_TYPE_PREFIX, $data['filename']);
         }
         return null;
     }
@@ -123,6 +122,12 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
             return null;
         }
         $dimension = $component->getComponent()->getImageDimensions();
+        // calculate output width/height on base of getImageDimensions and given width
+        $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
+        if ($width) {
+            $dimension['height'] = $width / $dimension['width'] * $dimension['height'];
+            $dimension['width'] = $width;
+        }
         return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dimension);
      }
 

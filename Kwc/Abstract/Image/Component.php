@@ -143,13 +143,13 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     //only for events
     public function getImageUrlType()
     {
-        $type = 'default';
+        $type = Kwf_Media::DONT_HASH_TYPE_PREFIX;
         $s = $this->_getImageDimensions();
         // This check is done with === because (0 == 'contentWidth') = true
         if ($s['width'] === self::CONTENT_WIDTH) {
             //use the contentWidth as type so we have an unique media cacheId depending on the width
             //that way it's not necessary to delete the media cache when content with changes
-            $type = $this->getContentWidth();
+            $type = Kwf_Media::DONT_HASH_TYPE_PREFIX.$this->getContentWidth();
         }
         return $type;
     }
@@ -327,6 +327,14 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 $dim['width'] = $component->getComponent()->getContentWidth();
             }
         }
+
+        // calculate output width/height on base of getImageDimensions and given width
+        $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
+        if ($width) {
+            $dim['height'] = $width / $dim['width'] * $dim['height'];
+            $dim['width'] = $width;
+        }
+
         return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dim);
     }
 
