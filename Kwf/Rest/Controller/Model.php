@@ -76,24 +76,32 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         $ret = $this->_getSelect();
         $filter = $this->_getParam('filter');
         if ($filter) {
-            $filter = json_decode($filter);
-            foreach ($filter as $f) {
-                $this->_applySelectFilter($ret, $f);
-            }
+            $this->_applySelectFilters($ret, json_decode($filter));
         }
 
         $sort = $this->_getParam('sort');
         if ($sort) {
-            $sort = json_decode($sort);
-            foreach ($sort as $s) {
-                $ret->order($s->property, $s->direction);
-            }
+            $this->_applySelectSort($ret, json_decode($sort));
         }
 
         if ($this->_getParam('limit')) {
             $ret->limit($this->_getParam('limit'), $this->_getParam('start'));
         }
         return $ret;
+    }
+
+    protected function _applySelectSort($select, array $sort)
+    {
+        foreach ($sort as $s) {
+            $select->order($s->property, $s->direction);
+        }
+    }
+
+    protected function _applySelectFilters($select, array $filters)
+    {
+        foreach ($filters as $f) {
+            $this->_applySelectFilter($select, $f);
+        }
     }
 
     protected function _applySelectFilter($select, $filter)
@@ -108,7 +116,9 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
             }
             $select->where(new Kwf_Model_Select_Expr_Or($ors));
         } else {
-            $select->whereEquals($filter->property, $filter->value);
+            if ($filter->value) {
+                $select->whereEquals($filter->property, $filter->value);
+            }
         }
     }
 
