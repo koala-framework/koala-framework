@@ -102,10 +102,11 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
 
     public function getContentWidth()
     {
-        if ($this->getRow()->size != 'contentWidth' && $this->getRow()->video_width) {
-            return $this->getRow()->video_width;
+        $dimensions = $this->getVideoDimensions();
+        if ($dimensions['width'] == '100%') {
+            return parent::getContentWidth();
         }
-        return parent::getContentWidth();
+        return $dimensions['width'];
     }
 
     public function getVideoDimensions()
