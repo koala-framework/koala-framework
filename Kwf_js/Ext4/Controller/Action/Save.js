@@ -1,4 +1,4 @@
-Ext4.define('Kwf.Ext4.Controller.Action.Form.Save', {
+Ext4.define('Kwf.Ext4.Controller.Action.Save', {
     extend: 'Ext.Action',
     constructor: function(config)
     {

@@ -1,4 +1,4 @@
-Ext4.define('Kwf.Ext4.Controller.Action.Form.Delete', {
+Ext4.define('Kwf.Ext4.Controller.Action.Delete', {
     extend: 'Ext.Action',
     constructor: function(config)
     {
