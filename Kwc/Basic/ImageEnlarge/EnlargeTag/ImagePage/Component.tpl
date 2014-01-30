@@ -24,8 +24,12 @@
             <? $width = $this->width; ?>
         <? } ?>
         <div class="image" style="max-width:<?=$width;?>px;">
-            <div class="container" style="padding-bottom:<?=$aspectRatio;?>%;">
-                <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
+            <? $baseUrl = preg_replace("/(\/dh-[0-9]*)\//", "/dh-{width}/", $this->imageUrl); ?>
+            <div class="container" style="padding-bottom:<?=$aspectRatio;?>%;"
+                    data-src="<?=$baseUrl;?>">
+                <noscript>
+                    <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
+                </noscript>
             </div>
         </div>
     </div>

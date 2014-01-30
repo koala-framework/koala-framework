@@ -1,5 +1,10 @@
 <?php
-class Kwc_ImageResponsive_Test extends Kwc_TestAbstract
+/**
+ * @group slow
+ * @group selenium
+ * @group image
+ */
+class Kwc_ImageResponsive_Test extends Kwf_Test_SeleniumTestCase
 {
     /**
      * Use this links to test components for responsiveness:
@@ -33,7 +38,18 @@ class Kwc_ImageResponsive_Test extends Kwc_TestAbstract
      * Kwc_Basic_ImageEnlarge_EnlargeTag_Component
      */
 
-    public function testNothing()
+    public function testJavascriptCreatesCorrectImageSrcElement()
     {
+        $this->openKwc('Kwc_ImageResponsive_Root_Component/imageabstract1');
+        $this->assertElementPresent("css=img[src^=\"/kwf/kwctest/Kwc_ImageResponsive_Root_Component/media/Kwc_ImageResponsive_Components_ImageAbstract_Component/root_imageabstract1/dh-300/\"]");
+    }
+
+    public function testJavascriptCreatesCorrectImageSrcImageEnlargeImagePage()
+    {
+        $this->openKwc('Kwc_ImageResponsive_Root_Component/imageenlarge1');
+        $this->click("css=.kwcImageResponsiveComponentsImageEnlarge > a");
+
+        sleep(1);
+        $this->assertElementPresent("css=.kwcBasicImageEnlargeEnlargeTagImagePage img[src^=\"/kwf/kwctest/Kwc_ImageResponsive_Root_Component/media/Kwc_ImageResponsive_Components_ImageEnlarge_EnlargeTag_Component/root_imageenlarge1-linkTag/dh-\"]");
     }
 }

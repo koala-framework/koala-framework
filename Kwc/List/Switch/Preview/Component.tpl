@@ -6,7 +6,10 @@
     <? $width = $dimensions['width']; ?>
 <? } ?>
 <div class="<?=$this->cssClass?>" style="width:<?=$width;?>px;">
-    <div class="container" style="padding-bottom:<?=$aspectRatio;?>%;">
-        <?=$this->image($this->data, '', $this->imgCssClass)?>
+    <? $baseUrl = preg_replace("/(\/dh-[0-9]*)\//", "/dh-{width}/", $this->image->getComponent()->getImageUrl()); ?>
+    <div class="container" style="padding-bottom:<?=$aspectRatio;?>%;" data-src="<?=$baseUrl;?>">
+        <noscript>
+            <?=$this->image($this->data, '', $this->imgCssClass)?>
+        </noscript>
     </div>
 </div>

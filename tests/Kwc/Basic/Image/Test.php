@@ -17,7 +17,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $url = explode('/', trim($url, '/'));
         $this->assertEquals('Kwc_Basic_Image_FixDimensionComponent', $url[1]);
         $this->assertEquals('1600', $url[2]);
-        $this->assertEquals('default', $url[3]);
+        $this->assertEquals('dh-', $url[3]);
         $this->assertEquals('foo.png', $url[6]);
     }
 
@@ -60,7 +60,11 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $html = $this->_root->getComponentById(1600)->render();
 
         $this->assertRegExp('#^\s*<div class="kwcAbstractImage kwcBasicImageFixDimensionComponent".*>'.
-            '\s*<img src="/media/Kwc_Basic_Image_FixDimensionComponent/1600/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'.
+            '\s*<div class="container" .*>'.
+            '\s*<noscript>'.
+            '\s*<img src="/media/Kwc_Basic_Image_FixDimensionComponent/1600/dh-/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'.
+            '\s*</noscript>'.
+            '\s*</div>'.
             '\s*</div>\s*$#ms', $html);
     }
 
