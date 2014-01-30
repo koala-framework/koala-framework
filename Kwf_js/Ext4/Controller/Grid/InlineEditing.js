@@ -2,7 +2,6 @@ Ext4.define('Kwf.Ext4.Controller.Grid.InlineEditing', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
-    autoSync: true,
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
