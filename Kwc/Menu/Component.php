@@ -15,7 +15,7 @@ class Kwc_Menu_Component extends Kwc_Menu_Abstract_Component
         );
         $ret['separator'] = '';
         $ret['linkPrefix'] = '';
-        $ret['cssClass'] = 'webStandard printHidden';
+        $ret['cssClass'] = 'webStandard webMenu printHidden';
         $ret['emptyIfSingleEntry'] = false;
         return $ret;
     }
