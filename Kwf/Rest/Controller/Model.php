@@ -81,6 +81,15 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
                 $this->_applySelectFilter($ret, $f);
             }
         }
+
+        $sort = $this->_getParam('sort');
+        if ($sort) {
+            $sort = json_decode($sort);
+            foreach ($sort as $s) {
+                $ret->order($s->property, $s->direction);
+            }
+        }
+
         if ($this->_getParam('limit')) {
             $ret->limit($this->_getParam('limit'), $this->_getParam('start'));
         }
