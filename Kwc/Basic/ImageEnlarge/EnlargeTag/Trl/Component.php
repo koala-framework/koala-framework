@@ -67,10 +67,24 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
      */
     public function getImageUrl()
     {
+        $dimensions = $this->getImageDimensions();
+        $baseUrl = $this->getBaseImageUrl();
+        if ($baseUrl) {
+            return str_replace('{width}', $dimensions['width'], $this->getBaseImageUrl());
+        }
+        return null;
+    }
+
+    public function getBaseImageUrl()
+    {
         $data = $this->_getImageData();
-        $id = $this->getData()->componentId;
-        $type = Kwf_Media::DONT_HASH_TYPE_PREFIX;
-        return Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
+        if ($data) {
+            return Kwf_Media::getUrl($this->getData()->componentClass,
+                        $this->getData()->componentId,
+                        Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}',
+                        $data['filename']);
+        }
+        return null;
     }
 
     private function _getImageEnlargeComponent()
@@ -99,6 +113,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
         $dimension = $component->getComponent()->getImageDimensions();
         $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
         if ($width) {
+            $width = Kwf_Media_Image::getResponsiveWidthStep($width,
+                Kwf_Media_Image::getResponsiveWidthSteps($dimension, $data));
             $dimension['height'] = $width / $dimension['width'] * $dimension['height'];
             $dimension['width'] = $width;
         }

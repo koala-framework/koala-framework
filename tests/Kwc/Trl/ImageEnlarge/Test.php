@@ -181,7 +181,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->assertEquals($matches[4], $smallWidth);
         $this->assertEquals($matches[5], $smallHeight);
 
-        preg_match('#href="(.+?)".*?src="(.+?)"#ms', $html, $matches);
+        preg_match('#href="(.+?)".*? src="(.+?)"#ms', $html, $matches);
         $smallSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[2]);
         $this->assertEquals($smallWidth, $smallSrcSize[0]);
         $this->assertEquals($smallHeight, $smallSrcSize[1]);
@@ -197,6 +197,5 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $largeSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[1]);
         $this->assertEquals($largeWidth, $largeSrcSize[0]);
         $this->assertEquals($largeHeight, $largeSrcSize[1]);
-
     }
 }

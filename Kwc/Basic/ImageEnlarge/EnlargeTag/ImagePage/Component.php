@@ -47,6 +47,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
             $ret['previous'] = null;
         }
 
+        $ret['aspectRatio'] = 0;
+        if ($ret['width'] && $ret['width'] > 0) {
+            $ret['aspectRatio'] = $ret['height'] / $ret['width'] * 100;
+        }
+        $ret['baseUrl'] = $c->getBaseImageUrl();
         return $ret;
     }
 

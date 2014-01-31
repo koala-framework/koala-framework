@@ -28,12 +28,13 @@ class Kwc_Composite_Images_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
-        $im = new Imagick();
-        $im->readImageBlob($o['contents']);
-        $this->assertEquals(100, $im->getImageWidth());
-        $this->assertEquals(100, $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Composite_Images_Image_UploadsModel')->getUploadDir().'/1',
-                                    array(100, 100, 'cover' => true)), $o['contents']);
+        $im = new Imagick($o['file']);
+        $this->assertEquals(16, $im->getImageWidth());
+        $this->assertEquals(16, $im->getImageHeight());
+        $this->assertEquals(
+            Kwf_Media_Image::scale(
+                Kwf_Model_Abstract::getInstance('Kwc_Composite_Images_Image_UploadsModel')->getUploadDir().'/1',
+                                    array(16, 16, 'cover' => true)), file_get_contents($o['file']));
     }
 
 }

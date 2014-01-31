@@ -17,16 +17,9 @@
         <? } else { ?>
         <div class="nextBtnInactive"></div>
         <? } ?>
-        <? $aspectRatio = 0; ?>
-        <? $width = 0; ?>
-        <? if ($this->width && $this->width > 0) { ?>
-            <? $aspectRatio = $this->height / $this->width * 100; ?>
-            <? $width = $this->width; ?>
-        <? } ?>
-        <div class="image" style="max-width:<?=$width;?>px;">
-            <? $baseUrl = preg_replace("/(\/dh-[0-9]*)\//", "/dh-{width}/", $this->imageUrl); ?>
-            <div class="container" style="padding-bottom:<?=$aspectRatio;?>%;"
-                    data-src="<?=$baseUrl;?>">
+        <div class="image" style="max-width:<?=$this->width;?>px;">
+            <div class="container" style="padding-bottom:<?=$this->aspectRatio;?>%;"
+                    data-src="<?=$this->baseUrl;?>">
                 <noscript>
                     <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
                 </noscript>

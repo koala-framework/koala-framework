@@ -15,6 +15,22 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         return $ret;
     }
 
+    public function getBaseImageUrl()
+    {
+        if ($this->getRow()->own_image) {
+            return $this->getData()->getChildComponent('-image')->getComponent()->getBaseImageUrl();
+        } else {
+            $data = $this->getData()->chained->getComponent()->getImageDataOrEmptyImageData();
+            if ($data && $data['filename']) {
+                return Kwf_Media::getUrl($this->getData()->componentClass,
+                    $this->getData()->componentId,
+                    Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}',
+                    $data['filename']);
+            }
+        }
+        return null;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -23,6 +39,7 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         if ($imageCaptionSetting) {
             $ret['image_caption'] = $this->getRow()->image_caption;
         }
+        $ret['baseUrl'] = $this->getBaseImageUrl();
         return $ret;
     }
 
@@ -31,11 +48,10 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         if ($this->getRow()->own_image) {
             return $this->getData()->getChildComponent('-image')->getComponent()->getImageUrl();
         } else {
-            $data = $this->getData()->chained->getComponent()->getImageDataOrEmptyImageData();
-            if ($data && $data['filename']) {
-                $id = $this->getData()->componentId;
-                $type = $this->getData()->chained->getComponent()->getImageUrlType();
-                return Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
+            $baseUrl = $this->getBaseImageUrl();
+            if ($baseUrl) {
+                $dimensions = $this->getData()->chained->getComponent()->getImageDimensions();
+                return str_replace('{width}', $dimensions['width'], $baseUrl);
             }
         }
         return null;
