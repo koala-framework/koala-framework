@@ -29,9 +29,16 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
         $this->fireEvent(new Kwf_Component_Event_Media_Changed(
             $this->_class, $c, $type
         ));
-        $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-            $this->_class, $c, 'dpr2-'.$type
-        ));
+        $imageData = $c->getComponent()->getImageData();
+        if ($imageData) {
+            $dim = $c->getComponent()->getImageDimensions();
+            $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+            foreach ($steps as $step) {
+                $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                    $this->_class, $c, $type.$step
+                ));
+            }
+        }
         $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
             $this->_class, $c
         ));

@@ -49,10 +49,10 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
     {
         $o = Kwc_Basic_Image_Component::getMediaOutput('1600', 'default', 'Kwc_Basic_Image_FixDimensionComponent');
         $this->assertEquals('image/png', $o['mimeType']);
-        $im = new Imagick();
-        $im->readImageBlob($o['contents']);
-        $this->assertEquals(100, $im->getImageWidth());
-        $this->assertEquals(100, $im->getImageHeight());
+        $im = new Imagick($o['file']);
+        // File can be maximum original-size or dpr2 of dimension
+        $this->assertEquals(16, $im->getImageWidth());
+        $this->assertEquals(16, $im->getImageHeight());
     }
 
     public function testHtml()
@@ -138,30 +138,30 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
 
-        Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', Kwf_Media::DONT_HASH_TYPE_PREFIX);
         $c = $this->_root->getComponentById('1605');
         $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_TestModel')->getRow('1605');
         $row->kwf_upload_id = 2;
         $row->save();
         Kwf_Component_ModelObserver::getInstance()->process();
-        Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', Kwf_Media::DONT_HASH_TYPE_PREFIX);
         $this->assertEquals(2, Kwc_Basic_Image_ParentImageComponent_Child_Component::$getMediaOutputCalled);
     }
 
     public function testClearOutputCache()
     {
-        Kwf_Media::clearCache('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        Kwf_Media::clearCache('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX);
 
         Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled = 0;
 
-        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX);
         $this->assertEquals(1, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
-        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX);
         $this->assertEquals(1, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
-        Kwf_Media::clearCache('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
-        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        Kwf_Media::clearCache('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX);
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX);
         $this->assertEquals(2, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
         $c = $this->_root->getComponentById('1600');
@@ -169,7 +169,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $row->kwf_upload_id = 2;
         $row->save();
         Kwf_Component_ModelObserver::getInstance()->process();
-        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX);
         $this->assertEquals(3, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
     }
 

@@ -99,6 +99,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
         $dimension = $component->getComponent()->getImageDimensions();
         $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
         if ($width) {
+            $width = Kwf_Media_Image::getResponsiveWidthStep($width,
+                Kwf_Media_Image::getResponsiveWidthSteps($dimension, $data));
             $dimension['height'] = $width / $dimension['width'] * $dimension['height'];
             $dimension['width'] = $width;
         }

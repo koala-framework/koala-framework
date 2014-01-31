@@ -34,7 +34,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
             $parentDimension = $this->_getImageEnlargeComponent()->getImageDimensions();
             $dimension['crop'] = $parentDimension['crop'];
         }
-        $data = $this->_getImageData();
+        $data = $this->getImageData();
         return Kwf_Media_Image::calculateScaleDimensions($data['file'], $dimension);
     }
 
@@ -61,7 +61,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
             $ret['title'] = nl2br($this->getRow()->title);
         }
         if ($this->_getSetting('fullSizeDownloadable')) {
-            $data = $this->_getImageData();
+            $data = $this->getImageData();
             if ($data && $data['filename']) {
                 $ret['fullSizeUrl'] = Kwf_Media::getUrl($this->getData()->componentClass,
                     $this->getData()->componentId, 'original', $data['filename']);
@@ -102,7 +102,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         return null;
     }
 
-    private function _getImageData()
+    public function getImageData()
     {
         return $this->_getImageEnlargeComponent()->getImageData();
     }
@@ -117,7 +117,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         $component = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
         if (!$component) return null;
 
-        $data = $component->getComponent()->_getImageData();
+        $data = $component->getComponent()->getImageData();
         if (!$data) {
             return null;
         }
@@ -125,6 +125,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         // calculate output width/height on base of getImageDimensions and given width
         $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
         if ($width) {
+            $width = Kwf_Media_Image::getResponsiveWidthStep($width,
+                    Kwf_Media_Image::getResponsiveWidthSteps($dimension, $data));
             $dimension['height'] = $width / $dimension['width'] * $dimension['height'];
             $dimension['width'] = $width;
         }
