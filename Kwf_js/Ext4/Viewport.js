@@ -6,7 +6,7 @@ Ext4.define('Kwf.Ext4.Viewport', {
         this.items[0].region = 'center';
         this.items.push(Ext4.create('Kwf.Ext4.Menu', {
             region: 'north',
-            height: 30,
+            height: 35,
             border: false
         }));
         this.callParent(arguments);
