@@ -99,26 +99,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $ret['image_caption'] = $this->_getRow()->image_caption;
             $ret['showImageCaption'] = $imageCaptionSetting;
         }
-
-        //image src for high device pixel ratio (retina) displays
-        $ret['imageDpr2'] = null;
-        $data = $this->_getImageDataOrEmptyImageData();
-        if ($data) {
-            if (isset($data['image'])) {
-                $sourceSize = array($data['image']->getImageWidth(), $data['image']->getImageHeight());
-            } else {
-                $sourceSize = @getimagesize($data['file']);
-            }
-            $targetSize = $this->getImageDimensions();
-            if ($sourceSize[0] > $targetSize['width']*1.1 || $sourceSize[1] > $targetSize['height']*1.1) {
-                $id = $this->getData()->componentId;
-                $type = 'dpr2-'.$this->getImageUrlType();
-                $ret['imageDpr2'] = Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
-            }
-        }
-
         $ret['altText'] = $this->_getAltText();
-
         return $ret;
     }
 
@@ -315,18 +296,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             return null;
         }
 
-        if (substr($type, 0, 5) == 'dpr2-') {
-            //display pixel ratio 2
-            $dim = $component->getComponent()->getImageDimensions(); //take actual image size as base
-            $dim['width'] *= 2;
-            $dim['height'] *= 2;
-        } else {
-            //default size; display pixel ratio 1
-            $dim = $component->getComponent()->_getImageDimensions();
-            if ($dim['width'] === self::CONTENT_WIDTH) {
-                $dim['width'] = $component->getComponent()->getContentWidth();
-            }
-        }
+        $dim = $component->getComponent()->getImageDimensions();
 
         // calculate output width/height on base of getImageDimensions and given width
         $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
