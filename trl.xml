@@ -10370,5 +10370,161 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Sobald Sie Ihr Passwort erstellt haben, können Sie sich über den folgenden Link einloggen</de>
 <id>2051</id>
 </text>
+<text>
+<en>Saturday</en>
+<id>2065</id>
+</text>
+<text>
+<en>{0} selected row{1}</en>
+<id>2066</id>
+</text>
+<text>
+<en>Please Wait...</en>
+<id>2067</id>
+</text>
+<text>
+<en>This field should be an e-mail address in the format "user@example.com"</en>
+<id>2068</id>
+</text>
+<text>
+<en>true</en>
+<id>2069</id>
+</text>
+<text>
+<en>false</en>
+<id>2070</id>
+</text>
+<text>
+<en>0,000.00</en>
+<id>2071</id>
+</text>
+<text>
+<en>The time in this field must be equal to or after {0}</en>
+<id>2072</id>
+</text>
+<text>
+<en>The time in this field must be equal to or before {0}</en>
+<id>2073</id>
+</text>
+<text>
+<en>{0} is not a valid time</en>
+<id>2074</id>
+</text>
+<text>
+<en>You must select at least one item in this group</en>
+<id>2075</id>
+</text>
+<text>
+<en>You must select one item in this group</en>
+<id>2076</id>
+</text>
+<text>
+<en>This field should be a URL in the format "http://www.domain.com" or tel://0043 1234</en>
+<id>2077</id>
+</text>
+<text>
+<en>Toolbox</en>
+<id>2078</id>
+</text>
+<text>
+<en>Useradministration</en>
+<id>2079</id>
+</text>
+<text>
+<en>Redirects</en>
+<id>2080</id>
+</text>
+<text>
+<en>Please solve captcha correctly</en>
+<id>2081</id>
+</text>
+<text>
+<en>Background Image</en>
+<id>2082</id>
+</text>
+<text>
+<en>don\'t Crop</en>
+<id>2083</id>
+</text>
+<text>
+<en>Preview only works with recipients in the newsletter</en>
+<de>Vorschau funktioniert nur mit Empfängern im Newsletter</de>
+<id>2084</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname male</context>
+<id>2085</id>
+</text>
+<text>
+<en>Mrs.</en>
+<id>2086</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname female</context>
+<id>2087</id>
+</text>
+<text>
+<en>Dear Sir or Madam</en>
+<id>2088</id>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname unknown gender</context>
+<id>2089</id>
+</text>
+<text>
+<en>Carousel</en>
+<id>2090</id>
+</text>
+<text>
+<en>Stage</en>
+<id>2091</id>
+</text>
+<text>
+<en>Please don't fill 'Leave empty' field</en>
+<id>2092</id>
+</text>
+<text>
+<en>Leave empty</en>
+<id>2093</id>
+</text>
+<text>
+<en>4 Columns (25% - 25% - 25% - 25%)</en>
+<id>2094</id>
+</text>
+<text>
+<en>back</en>
+<id>2095</id>
+</text>
+<text>
+<en>A new comment has been written in your Blog.</en>
+<id>2096</id>
+</text>
+<text>
+<en>Blog Post</en>
+<id>2097</id>
+</text>
+<text>
+<en>New comment in your blog</en>
+<id>2098</id>
+</text>
+<text>
+<en>Captcha</en>
+<id>2099</id>
+</text>
+<text>
+<en>Blog Settings</en>
+<id>2100</id>
+</text>
+<text>
+<en>New Comment Mail Receiver</en>
+<id>2101</id>
+</text>
+<text>
+<en>Test</en>
+<id>2102</id>
+</text>
 </trl>
 

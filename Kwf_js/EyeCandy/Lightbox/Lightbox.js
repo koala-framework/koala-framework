@@ -413,7 +413,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     _getOuterMargin: function()
     {
         var maxSize = this._getMaxContentSize(false);
-        if (maxSize.width <= 490 || maxSize.height <= 490) {
+        if (maxSize.width <= 650) {
             return 0;
         } else {
             return 20;

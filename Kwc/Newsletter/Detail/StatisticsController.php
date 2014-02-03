@@ -39,7 +39,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             $count = $db->fetchOne($sql, $this->_getParam('componentId') . '_mail');
             $ret[] = array(
                 'pos' => $pos++,
-                'link' => '<b>' . trlKwf('view rate') . '</b> (' . trlKwf('percentage of users which opened the html newsletter') . ')',
+                'link' => trlKwf('view rate') . ' (' . trlKwf('percentage of users which opened the html newsletter') . ')',
                 'title' => '',
                 'count' => $count,
                 'percent' => number_format(($count / $total)*100, 2) . '%'
@@ -53,7 +53,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
         $count = $db->fetchOne($sql, $this->_getParam('componentId') . '_mail');
         $ret[] = array(
             'pos' => $pos++,
-            'link' => '<b>' . trlKwf('click rate') . '</b> (' . trlKwf('percentage of users which clicked at least one link in newsletter') . ')',
+            'link' => trlKwf('click rate') . ' (' . trlKwf('percentage of users which clicked at least one link in newsletter') . ')',
             'title' => '',
             'count' => $count,
             'percent' => number_format(($count / $total)*100, 2) . '%'

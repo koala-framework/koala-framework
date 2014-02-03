@@ -155,6 +155,11 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         return $this->getData()->chained->getComponent()->getContentWidth();
     }
 
+    public function hasContent()
+    {
+        return $this->getData()->chained->hasContent();
+    }
+
     public function getPdfWriter($pdf)
     {
         if (!isset($this->_pdfWriter)) {
