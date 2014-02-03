@@ -25,12 +25,6 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
             this.moveElement = this.moveElement.child(this.moveElementSelector);
         }
 
-        if (this.list.items.length > numberShown) {
-            for(var i=numberShown; i<this.list.getItems().length; ++i) {
-                this.list.getItem(i).el.hide();
-            }
-        }
-
         Ext.fly(window).on('resize', function() {
             this.updateButtons();
         }, this)
@@ -41,6 +35,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
             cls: 'carouselPrevious',
             href: '#'
         }).on('click', function(ev) {
+            if (this.list.el.child('a.carouselPrevious').hasClass('deactivated')) return;
             ev.stopEvent();
             this.onMovePrevious();
         }, this);
@@ -49,6 +44,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
             cls: 'carouselNext',
             href: '#'
         }).on('click', function(ev) {
+            if (this.list.el.child('a.carouselNext').hasClass('deactivated')) return;
             ev.stopEvent();
             this.onMoveNext();
         }, this);
@@ -57,6 +53,13 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
     },
     updateButtons: function() {
         var numberShown = Math.floor(this.list.el.getWidth()/this.list.items[0].el.getWidth());
+
+        for (var i=0; i<this.list.getItems().length; i++) {
+            this.list.getItem(i).el.show();
+        }
+        for (var i=numberShown; i<this.list.getItems().length; i++) {
+            this.list.getItem(i).el.hide();
+        }
 
         if (this.list.items.length > numberShown) {
             this.list.el.child('a.carouselPrevious').removeClass('deactivated');
@@ -70,10 +73,11 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         if (this._moveActive) return;
         this._moveActive = true;
 
+        var numberShown = Math.floor(this.list.el.getWidth()/this.list.items[0].el.getWidth());
+
         // fade out first one
         if (this.useFade) {
             var cfg = Ext.applyIf({
-                endOpacity: 0.01
             }, this.fadeAnimationConfig);
             this.list.getItem(0).el.fadeOut(cfg);
         }
@@ -81,22 +85,20 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         // fade in new one
         if (this.useFade) {
             var cfg = Ext.applyIf({
-                endOpacity: 0.99
             }, this.fadeAnimationConfig);
-            this.list.getItem(this.numberShown).el.fadeIn(cfg);
+            this.list.getItem(numberShown).el.fadeIn(cfg);
         } else {
-            this.list.getItem(this.numberShown).el.show();
+            this.list.getItem(numberShown).el.show();
         }
 
         var firstElWidth = this.list.getItem(0).getWidthIncludingMargin();
 
         var cfg = Ext.applyIf({
             callback: function() {
-
                 if (this.useFade) {
                     //fully hide & show (as we have endOpacity)
                     this.list.getItem(0).el.hide();
-                    this.list.getItem(this.numberShown).el.show();
+                    this.list.getItem(numberShown).el.show();
                 }
 
                 // push moved left element to back
@@ -118,11 +120,12 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         }, this.animationConfig);
         this.moveElement.move('left', firstElWidth, cfg);
     },
+    onMovePrevious: function() {
 
-    onMovePrevious: function()
-    {
         if (this._moveActive) return;
         this._moveActive = true;
+
+        var numberShown = Math.floor(this.list.el.getWidth()/this.list.items[0].el.getWidth());
 
         // rechts rausgeschobenes element vorn dran
         this.list.getLastItem().el.insertBefore(this.list.getItem(0).el);
@@ -140,8 +143,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         // fade in first
         if (this.useFade) {
             var cfg = Ext.applyIf({
-                useDisplay: false,
-                endOpacity: 0.99
+                useDisplay: false
             }, this.fadeAnimationConfig);
             this.list.getItem(0).el.fadeIn(cfg);
         } else {
@@ -151,10 +153,9 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         // fade out last
         if (this.useFade) {
             var cfg = Ext.applyIf({
-                useDisplay: false,
-                endOpacity: 0.01
+                useDisplay: false
             }, this.fadeAnimationConfig);
-            this.list.getItem(this.numberShown).el.fadeOut(cfg);
+            this.list.getItem(numberShown).el.fadeOut(cfg);
         }
 
         var cfg = Ext.applyIf({
@@ -162,7 +163,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
                 this._moveActive = false;
                 if (this.useFade) {
                     //fully hide & show (as we have endOpacity)
-                    this.list.getItem(this.numberShown).el.hide();
+                    this.list.getItem(numberShown).el.hide();
                     this.list.getItem(0).el.show();
                 }
             },
