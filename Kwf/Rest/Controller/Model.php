@@ -166,9 +166,14 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         }
 
         $this->_fillRowInsert($row, $data);
+        $this->_beforeInsert($row);
         $row->save();
 
         $this->view->data = $row->toArray();
+    }
+
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
+    {
     }
 
     protected function _fillRowInsert($row, $data)
