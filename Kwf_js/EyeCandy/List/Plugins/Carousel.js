@@ -1,5 +1,4 @@
 Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
-    numberShown: 5,
     //animationConfig: { duration: 0.25 },
     //fadeAnimationConfig: { duration: 0.25 }, //optional, by default animationConfig will be used
     useFade: true, //if elements will be faded in/out in addition to the moving
@@ -7,6 +6,11 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
     _moveActive: false,
     init: function() {
+        var firstChild = this.list.items.length > 0 ? this.list.items[0] : null;
+        if (!firstChild) return false;
+
+        var numberShown = Math.floor(this.list.el.getWidth()/firstChild.el.getWidth());
+
         Ext.applyIf(this, {
             animationConfig: { duration: 0.25 }
         });
@@ -21,33 +25,47 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
             this.moveElement = this.moveElement.child(this.moveElementSelector);
         }
 
-        if (this.list.items.length > this.numberShown) {
-            for(var i=this.numberShown; i<this.list.getItems().length; ++i) {
+        if (this.list.items.length > numberShown) {
+            for(var i=numberShown; i<this.list.getItems().length; ++i) {
                 this.list.getItem(i).el.hide();
             }
         }
+
+        Ext.fly(window).on('resize', function() {
+            this.updateButtons();
+        }, this)
     },
     render: function() {
-        if (this.list.items.length > this.numberShown) {
-            this.list.el.createChild({
-                tag: 'a',
-                cls: 'carouselPrevious',
-                href: '#'
-            }).on('click', function(ev) {
-                ev.stopEvent();
-                this.onMovePrevious();
-            }, this);
-            this.list.el.createChild({
-                tag: 'a',
-                cls: 'carouselNext',
-                href: '#'
-            }).on('click', function(ev) {
-                ev.stopEvent();
-                this.onMoveNext();
-            }, this);
+        this.list.el.createChild({
+            tag: 'a',
+            cls: 'carouselPrevious',
+            href: '#'
+        }).on('click', function(ev) {
+            ev.stopEvent();
+            this.onMovePrevious();
+        }, this);
+        this.list.el.createChild({
+            tag: 'a',
+            cls: 'carouselNext',
+            href: '#'
+        }).on('click', function(ev) {
+            ev.stopEvent();
+            this.onMoveNext();
+        }, this);
+
+        this.updateButtons();
+    },
+    updateButtons: function() {
+        var numberShown = Math.floor(this.list.el.getWidth()/this.list.items[0].el.getWidth());
+
+        if (this.list.items.length > numberShown) {
+            this.list.el.child('a.carouselPrevious').removeClass('deactivated');
+            this.list.el.child('a.carouselNext').removeClass('deactivated');
+        } else {
+            this.list.el.child('a.carouselPrevious').addClass('deactivated');
+            this.list.el.child('a.carouselNext').addClass('deactivated');
         }
     },
-
     onMoveNext: function() {
         if (this._moveActive) return;
         this._moveActive = true;
