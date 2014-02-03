@@ -100,6 +100,17 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $ret['showImageCaption'] = $imageCaptionSetting;
         }
         $ret['altText'] = $this->_getAltText();
+
+        $width = 0;
+        $aspectRatio = 0;
+        $dimensions = $this->getImageDimensions();
+        if (isset($dimensions['width']) && $dimensions['width'] > 0) {
+            $aspectRatio = $dimensions['height'] / $dimensions['width'] * 100;
+            $width = $dimensions['width'];
+        }
+        $ret['width'] = $width;
+        $ret['aspectRatio'] = $aspectRatio;
+        $ret['baseUrl'] = preg_replace("/(\/dh-[0-9]*)\//", "/dh-{width}/", $this->getData()->getComponent()->getImageUrl());
         return $ret;
     }
 
