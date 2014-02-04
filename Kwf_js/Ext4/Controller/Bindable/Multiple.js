@@ -71,5 +71,16 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Multiple', {
     getPanel: function()
     {
         return this.panel;
+    },
+    onAdd: function()
+    {
+        var ret = false;
+        Ext4.each(this.items, function(i) {
+            if (i.onAdd()) {
+                ret = true;
+                return false;
+            }
+        }, this);
+        return ret;
     }
 });

@@ -78,6 +78,7 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
     {
         if (this.focusOnAddSelector) {
             this.form.down(this.focusOnAddSelector).focus();
+            return true;
         }
     }
 });
