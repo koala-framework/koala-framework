@@ -43,6 +43,17 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
                     'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
                     'callback' => 'onClassContentChanged'
                 );
+
+                $ret[] = array(
+                    'class' => $class,
+                    'event' => 'Kwf_Component_Event_Component_ContentChanged',
+                    'callback' => 'onImageContentChanged'
+                );
+                $ret[] = array(
+                    'class' => $class,
+                    'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
+                    'callback' => 'onClassContentChanged'
+                );
             }
         }
         return $ret;
@@ -55,14 +66,44 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
         ));
     }
 
+    public function onImageContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
+    {
+        $childComponents = $event->component->getChildComponents(array(
+            'componentClass' => $this->_class
+        ));
+        foreach ($childComponents as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                $this->_class, $c
+            ));
+
+            $imageData = $c->getComponent()->getImageData();
+            if ($imageData) {
+                $dim = $c->getComponent()->getImageDimensions();
+                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+                foreach ($steps as $step) {
+                    $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                        $this->_class, $c, Kwf_Media::DONT_HASH_TYPE_PREFIX.$step
+                    ));
+                }
+            }
+        }
+    }
+
     public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
     {
         $components = $event->component->parent
             ->getRecursiveChildComponents(array('componentClass' => $this->_class));
         foreach ($components as $component) {
-            $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                $this->_class, $component
-            ));
+            $imageData = $component->getComponent()->getImageData();
+            if ($imageData) {
+                $dim = $component->getComponent()->getImageDimensions();
+                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+                foreach ($steps as $step) {
+                    $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                        $this->_class, $component, Kwf_Media::DONT_HASH_TYPE_PREFIX.$step
+                    ));
+                }
+            }
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                 $this->_class, $component
             ));
