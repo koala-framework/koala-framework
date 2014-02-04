@@ -169,7 +169,7 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         $this->_beforeInsert($row);
         $row->save();
 
-        $this->view->data = $row->toArray();
+        $this->view->data = $this->_loadDataFromRow($row);
     }
 
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
@@ -209,7 +209,7 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         $this->_fillRow($row, $data);
         $row->save();
 
-        $this->view->data = $row->toArray();
+        $this->view->data = $this->_loadDataFromRow($row);
     }
 
     // Handle DELETE requests to delete a specific item
