@@ -43,6 +43,8 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
 
     save: function()
     {
+        if (!this.form.getRecord()) return;
+
         this.form.updateRecord();
 
         //trackResetOnLoad only calls resetOriginalValue on load, not on updateRecord

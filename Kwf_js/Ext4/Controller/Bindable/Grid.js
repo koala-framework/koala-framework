@@ -37,7 +37,9 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
 
     save: function()
     {
-        this.grid.getStore().sync();
+        if (this.grid.getStore()) {
+            this.grid.getStore().sync();
+        }
     },
 
     getLoadedRecord: function()
