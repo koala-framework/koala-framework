@@ -45,7 +45,7 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
                     scope: this,
                     fn: function(button) {
                         if (button == 'yes') {
-                            if (this.doSave()) {
+                            if (this.save()) {
                                 bindable.reset();
                                 grid.getSelectionModel().select(record);
                             } else {
@@ -66,7 +66,7 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
 
         if (this.saveButton) {
             this.saveButton.on('click', function() {
-                this.doSave();
+                this.save();
             }, this);
         }
         if (this.addButton) {
@@ -101,7 +101,8 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
             }, this);
         }
     },
-    doSave: function()
+
+    save: function()
     {
         if (!this.bindable.isValid()) {
             Ext4.Msg.alert(trlKwf('Save'),
@@ -115,5 +116,15 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
         this.fireEvent('save');
 
         return true;
+    },
+
+    isDirty: function()
+    {
+        return this.bindable.isDirty();
+    },
+
+    reset: function()
+    {
+        return this.bindable.reset();
     }
 });
