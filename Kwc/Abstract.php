@@ -594,6 +594,8 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             throw new Kwf_Exception('contentWidth has to be set');
         }
         $ret = $this->_getSetting('contentWidth');
+        if (!$this->_hasSetting('contentWidthBoxSubtract')) return $ret;
+
         $boxes = array();
         foreach ($sourcePage->getChildBoxes() as $box) {
             $boxes[$box->box] = $box;
