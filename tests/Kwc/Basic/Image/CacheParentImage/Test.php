@@ -20,7 +20,7 @@ class Kwc_Basic_Image_CacheParentImage_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', $url, $m));
         $this->assertEquals($m[1], 'Kwc_Basic_Image_CacheParentImage_Image_Component');
         $this->assertEquals($m[2], 'root_image');
-        $this->assertEquals($m[3], 'default');
+        $this->assertEquals($m[3], 'dh-');
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
         $im = new Imagick();
         $im->readImageBlob($o['contents']);
@@ -43,7 +43,7 @@ class Kwc_Basic_Image_CacheParentImage_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', $url, $m));
         $this->assertEquals($m[1], 'Kwc_Basic_Image_CacheParentImage_Image_Component');
         $this->assertEquals($m[2], 'root_image');
-        $this->assertEquals($m[3], 'default');
+        $this->assertEquals($m[3], 'dh-');
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
         $im = new Imagick();
         $im->readImageBlob($o['contents']);
@@ -62,7 +62,7 @@ class Kwc_Basic_Image_CacheParentImage_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', $url, $m));
         $this->assertEquals($m[1], 'Kwc_Basic_Image_CacheParentImage_ParentImage_Component');
         $this->assertEquals($m[2], 'root_image-parentImage');
-        $this->assertEquals($m[3], 'default');
+        $this->assertEquals($m[3], 'dh-');
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
         $im = new Imagick();
         $im->readImageBlob($o['contents']);
@@ -85,7 +85,7 @@ class Kwc_Basic_Image_CacheParentImage_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', $url, $m));
         $this->assertEquals($m[1], 'Kwc_Basic_Image_CacheParentImage_ParentImage_Component');
         $this->assertEquals($m[2], 'root_image-parentImage');
-        $this->assertEquals($m[3], 'default');
+        $this->assertEquals($m[3], 'dh-');
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
         $im = new Imagick();
         $im->readImageBlob($o['contents']);

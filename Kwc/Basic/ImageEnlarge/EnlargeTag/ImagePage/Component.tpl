@@ -17,8 +17,13 @@
         <? } else { ?>
         <div class="nextBtnInactive"></div>
         <? } ?>
-        <div class="image">
-            <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
+        <div class="image" style="max-width:<?=$this->width;?>px;">
+            <div class="container" style="padding-bottom:<?=$this->aspectRatio;?>%;"
+                    data-src="<?=$this->baseUrl;?>">
+                <noscript>
+                    <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
+                </noscript>
+            </div>
         </div>
     </div>
     <div class="lightboxFooter">

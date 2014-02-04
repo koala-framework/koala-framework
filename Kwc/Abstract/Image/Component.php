@@ -61,7 +61,6 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['files'][] = 'kwf/Kwf_js/Utils/Resizable.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageFile.js';
         $ret['assets']['dep'][] = 'KwfOnReady';
-        $ret['assets']['dep'][] = 'KwfResponsiveImg';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
         return $ret;
     }
@@ -100,26 +99,18 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $ret['image_caption'] = $this->_getRow()->image_caption;
             $ret['showImageCaption'] = $imageCaptionSetting;
         }
-
-        //image src for high device pixel ratio (retina) displays
-        $ret['imageDpr2'] = null;
-        $data = $this->_getImageDataOrEmptyImageData();
-        if ($data) {
-            if (isset($data['image'])) {
-                $sourceSize = array($data['image']->getImageWidth(), $data['image']->getImageHeight());
-            } else {
-                $sourceSize = @getimagesize($data['file']);
-            }
-            $targetSize = $this->getImageDimensions();
-            if ($sourceSize[0] > $targetSize['width']*1.1 || $sourceSize[1] > $targetSize['height']*1.1) {
-                $id = $this->getData()->componentId;
-                $type = 'dpr2-'.$this->getImageUrlType();
-                $ret['imageDpr2'] = Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
-            }
-        }
-
         $ret['altText'] = $this->_getAltText();
 
+        $width = 0;
+        $aspectRatio = 0;
+        $dimensions = $this->getImageDimensions();
+        if (isset($dimensions['width']) && $dimensions['width'] > 0) {
+            $aspectRatio = $dimensions['height'] / $dimensions['width'] * 100;
+            $width = $dimensions['width'];
+        }
+        $ret['width'] = $width;
+        $ret['aspectRatio'] = $aspectRatio;
+        $ret['baseUrl'] = preg_replace("/(\/dh-[0-9]*)\//", "/dh-{width}/", $this->getData()->getComponent()->getImageUrl());
         return $ret;
     }
 
@@ -144,13 +135,13 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     //only for events
     public function getImageUrlType()
     {
-        $type = 'default';
+        $type = Kwf_Media::DONT_HASH_TYPE_PREFIX;
         $s = $this->_getImageDimensions();
         // This check is done with === because (0 == 'contentWidth') = true
         if ($s['width'] === self::CONTENT_WIDTH) {
             //use the contentWidth as type so we have an unique media cacheId depending on the width
             //that way it's not necessary to delete the media cache when content with changes
-            $type = $this->getContentWidth();
+            $type = Kwf_Media::DONT_HASH_TYPE_PREFIX.$this->getContentWidth();
         }
         return $type;
     }
@@ -316,18 +307,16 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             return null;
         }
 
-        if (substr($type, 0, 5) == 'dpr2-') {
-            //display pixel ratio 2
-            $dim = $component->getComponent()->getImageDimensions(); //take actual image size as base
-            $dim['width'] *= 2;
-            $dim['height'] *= 2;
-        } else {
-            //default size; display pixel ratio 1
-            $dim = $component->getComponent()->_getImageDimensions();
-            if ($dim['width'] === self::CONTENT_WIDTH) {
-                $dim['width'] = $component->getComponent()->getContentWidth();
-            }
+        $dim = $component->getComponent()->getImageDimensions();
+
+        // calculate output width/height on base of getImageDimensions and given width
+        $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
+        if ($width) {
+            $width = Kwf_Media_Image::getResponsiveWidthStep($width, Kwf_Media_Image::getResponsiveWidthSteps($dim, $data));
+            $dim['height'] = $width / $dim['width'] * $dim['height'];
+            $dim['width'] = $width;
         }
+
         return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dim);
     }
 

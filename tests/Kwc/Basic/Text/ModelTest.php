@@ -133,7 +133,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $row = $c->getRow();
         $html = '<p><img src="http://www.vivid-planet.com/assets/web/images/structure/logo.png" /></p>';
         $html = $row->tidy($html);
-        $this->assertRegExp("#^<p>\n  <img src=\"/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1008-i1/default/[0-9a-z]+/[0-9]+/logo.png\" width=\"100\" height=\"100\" />\n</p>$#ms", $html);
+        $this->assertRegExp("#^<p>\n  <img src=\"/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1008-i1/dh-/[0-9a-z]+/[0-9]+/logo.png\" width=\"100\" height=\"100\" />\n</p>$#ms", $html);
 
         $cc = array_values($c->getData()->getChildComponents());
         $this->assertEquals(1, count($cc));
@@ -173,7 +173,11 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $html = $c->getData()->render();
         $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'.
                     '\s*<p>\s*<div class="kwcAbstractImage kwcBasicTextImageTestComponent".*>'
-                    .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1009-i1/default/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" />'
+                    .'\s*<div class="container" .*>'
+                    .'\s*<noscript>'
+                    .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1009-i1/dh-/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" />'
+                    .'\s*</noscript>'
+                    .'\s*</div>'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
 
@@ -190,7 +194,11 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $html = $c->getData()->render();
         $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="kwcAbstractImage kwcBasicTextImageTestComponent".*>'
-                    .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1010-i1/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
+                    .'\s*<div class="container" .*>'
+                    .'\s*<noscript>'
+                    .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1010-i1/dh-/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
+                    .'\s*</noscript>'
+                    .'\s*</div>'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
     }
@@ -222,7 +230,11 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $html = $c->getData()->render();
         $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="kwcAbstractImage kwcBasicTextImageTestComponent".*>'
-                    .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1015-i1/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
+                    .'\s*<div class="container" .*>'
+                    .'\s*<noscript>'
+                    .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1015-i1/dh-/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
+                    .'\s*</noscript>'
+                    .'\s*</div>'
                     .'\s*</div>\s*</p>'
                     .'\s*</div>\s*$#ms', $html);
     }

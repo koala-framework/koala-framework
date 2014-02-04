@@ -38,7 +38,7 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
 
         $this->assertContains('kwcBasicImageCacheRootImagesEnlargeComponent', $html);
         $this->assertContains('kwcBasicImageCacheRootImageEnlargeComponent', $html);
-        $this->assertRegExp("#/media/Kwc_Basic_Image_Cache_Root_ImageEnlargeComponent/root-1/default/[^/]+/[0-9]+/foo.png#ms", $html);
+        $this->assertRegExp("#/media/Kwc_Basic_Image_Cache_Root_ImageEnlargeComponent/root-1/dh-/[^/]+/[0-9]+/foo.png#ms", $html);
     }
 
     public function testNextPreviousLinks()

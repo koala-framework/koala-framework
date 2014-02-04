@@ -6,6 +6,42 @@ class Kwf_Media_Image
         return $reversed ? ord($low)*256 + ord($high) : ord($high)*256 + ord($low);
     }
 
+    public static function getResponsiveWidthStep($width, $widths)
+    {
+        foreach ($widths as $cachedWidth) {
+            if ($width <= $cachedWidth) {
+                return $cachedWidth;
+            }
+        }
+        return end($widths);
+    }
+
+    public static function getResponsiveWidthSteps($dim, $imageData)
+    {
+        $ret = array();
+        $size = getimagesize($imageData['file']);
+
+        $maxWidth = $dim['width'] * 2;
+        if ($size[0] < $dim['width'] * 2) {
+            $maxWidth = $size[0];
+        }
+        $calculateWidth = $dim['width'];
+        if ($size[0] < $dim['width']) {
+            $calculateWidth = $size[0];
+        }
+
+        $width = $calculateWidth % 100; // startwidth or minwidth
+        if ($width == 0) $width = 100;
+        do {
+            $ret[] = $width;
+            $width += 100;
+        } while ($width < $maxWidth);
+        if ($width - 100 != $maxWidth) {
+            $ret[] = $maxWidth;
+        }
+        return $ret;
+    }
+
     /**
      * Got information from http://www.media.mit.edu/pia/Research/deepview/exif.html
      * and http://www.impulseadventure.com/photo/exif-orientation.html

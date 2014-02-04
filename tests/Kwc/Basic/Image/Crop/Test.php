@@ -15,14 +15,14 @@ class Kwc_Basic_Image_Crop_Test extends Kwc_TestAbstract
 
     public function testClearOutputCacheWhenChangingCropOptions()
     {
-        Kwf_Media::clearCache('Kwc_Basic_Image_Crop_ImageComponent', 'root_page', 'default');
+        Kwf_Media::clearCache('Kwc_Basic_Image_Crop_ImageComponent', 'root_page', Kwf_Media::DONT_HASH_TYPE_PREFIX);
 
         Kwc_Basic_Image_Crop_ImageComponent::$getMediaOutputCalled = 0;
 
-        Kwf_Media::getOutput('Kwc_Basic_Image_Crop_ImageComponent', 'root_page', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_Crop_ImageComponent', 'root_page', Kwf_Media::DONT_HASH_TYPE_PREFIX);
         $this->assertEquals(1, Kwc_Basic_Image_Crop_ImageComponent::$getMediaOutputCalled);
 
-        Kwf_Media::getOutput('Kwc_Basic_Image_Crop_ImageComponent', 'root_page', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_Crop_ImageComponent', 'root_page', Kwf_Media::DONT_HASH_TYPE_PREFIX);
         $this->assertEquals(1, Kwc_Basic_Image_Crop_ImageComponent::$getMediaOutputCalled);
 
         $c = $this->_root->getComponentById('root_page');
@@ -30,7 +30,7 @@ class Kwc_Basic_Image_Crop_Test extends Kwc_TestAbstract
         $row->crop_x = 20;
         $row->save();
         Kwf_Component_ModelObserver::getInstance()->process();
-        Kwf_Media::getOutput('Kwc_Basic_Image_Crop_ImageComponent', 'root_page', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_Crop_ImageComponent', 'root_page', Kwf_Media::DONT_HASH_TYPE_PREFIX);
         $this->assertEquals(2, Kwc_Basic_Image_Crop_ImageComponent::$getMediaOutputCalled);
     }
 
