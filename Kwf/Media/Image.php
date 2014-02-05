@@ -10,8 +10,11 @@ class Kwf_Media_Image
      * Got information from http://www.media.mit.edu/pia/Research/deepview/exif.html
      * and http://www.impulseadventure.com/photo/exif-orientation.html
      */
-    public static function getExifRotationFallback($source)
+    public static function getExifRotation($source)
     {
+        if (!Kwf_Registry::get('config')->image->autoExifRotate) {
+            return 0;
+        }
         $rotation = 0;
         $handle = fopen($source, "rb"); // b for windows compatibility
         $fileHeaderSize = min(5000, filesize($source));
@@ -66,33 +69,6 @@ class Kwf_Media_Image
         }
         fclose($handle);
         return $rotation;
-    }
-
-    public static function getExifRotation($source)
-    {
-        $rotate = 0;
-        if (Kwf_Registry::get('config')->image->autoExifRotate) {
-            if (class_exists('Imagick') && method_exists(new Imagick(), 'getImageOrientation')) {
-                if (is_string($source)) {
-                    $source = new Imagick($source);
-                }
-                $orientation = $source->getImageOrientation();
-                switch ($orientation) {
-                    case Imagick::ORIENTATION_BOTTOMRIGHT:
-                        $rotate = 180;
-                        break;
-                    case Imagick::ORIENTATION_RIGHTTOP:
-                        $rotate = 90;
-                        break;
-                    case Imagick::ORIENTATION_LEFTBOTTOM:
-                        $rotate = -90;
-                        break;
-                }
-            } else {
-                $rotate = self::getExifRotationFallback($source);
-            }
-        }
-        return $rotate;
     }
 
     /**
