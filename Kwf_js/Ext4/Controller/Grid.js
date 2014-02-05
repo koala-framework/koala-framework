@@ -3,6 +3,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
         observable: 'Ext.util.Observable'
     },
     autoSync: true,
+    autoLoad: false,
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
@@ -45,11 +46,25 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
 
         if (grid.getStore()) this.onBindStore();
         Ext4.Function.interceptAfter(grid, "bindStore", this.onBindStore, this);
+
+        if (this.autoLoad) {
+            this.grid.getStore().load();
+        }
     },
-    onBindStore: function() {
+    onBindStore: function()
+    {
         var s = this.grid.getStore();
         this.grid.query('pagingtoolbar').each(function(i) {
             i.bindStore(s);
+        }, this);
+        this.grid.query('> toolbar[dock=top] field').each(function(field) {
+            var filterId = 'filter-'+field.getName();
+            var v = field.getValue();
+            this.grid.getStore().addFilter({
+                id: filterId,
+                property: field.getName(),
+                value: v
+            }, false);
         }, this);
     }
 });
