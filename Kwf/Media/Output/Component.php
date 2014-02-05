@@ -74,7 +74,7 @@ class Kwf_Media_Output_Component
         if ($writeCache && $ret == Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
             //only cache VALID_DONT_CACHE, not VALID as it will be cached in Kwf_Media::getOutput
             //this cache doesn't need to be cleared, because of it's lifetime
-            Kwf_Cache_Simple::add($cacheId, $plugins, 60*60);
+            Kwf_Cache_Simple::add($cacheId, $plugins, 60*60-1); //one second less than isValid cache in Kwf_Media
         }
         return $ret;
     }
