@@ -85,21 +85,25 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
         }
         if (this.deleteButton) {
             this.deleteButton.on('click', function() {
-                Ext4.Msg.show({
-                    title: trlKwf('Delete'),
-                    msg: trlKwf('Do you really wish to remove this entry?'),
-                    buttons: Ext4.Msg.YESNO,
-                    scope: this,
-                    fn: function(button) {
-                        if (button == 'yes') {
-                            grid.getStore().remove(bindable.getLoadedRecord());
-                            grid.getStore().sync();
-                        }
-                    }
-                });
-
+                this.destory();
             }, this);
         }
+    },
+
+    destory: function()
+    {
+        Ext4.Msg.show({
+            title: trlKwf('Delete'),
+            msg: trlKwf('Do you really wish to remove this entry?'),
+            buttons: Ext4.Msg.YESNO,
+            scope: this,
+            fn: function(button) {
+                if (button == 'yes') {
+                    this.source.getStore().remove(bindable.getLoadedRecord());
+                    this.source.getStore().sync();
+                }
+            }
+        });
     },
 
     save: function()
