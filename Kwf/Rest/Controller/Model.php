@@ -119,7 +119,7 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
             }
             $select->where(new Kwf_Model_Select_Expr_Or($ors));
         } else {
-            if ($filter->value) {
+            if (!is_null($filter->value)) {
                 $select->whereEquals($filter->property, $filter->value);
             }
         }
