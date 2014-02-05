@@ -9,6 +9,7 @@ class Kwc_Trl_Columns_German extends Kwc_Abstract
             'component' => 'Kwc_Trl_Columns_Columns_Component',
             'name' => 'test',
         );
+        $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }
 }

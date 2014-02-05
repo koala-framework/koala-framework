@@ -1,0 +1,1 @@
+columnContent <?=$this->data->componentId?>

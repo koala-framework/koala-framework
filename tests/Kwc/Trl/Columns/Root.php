@@ -10,7 +10,7 @@ class Kwc_Trl_Columns_Root extends Kwc_Root_TrlRoot_Component
             'en' => 'English'
         ));
         $ret['generators']['master']['component'] = 'Kwc_Trl_Columns_German';
-        $ret['generators']['chained']['component'] = 'Kwc_Root_TrlRoot_Chained_Component.Kwc_Trl_Columns_German';
+        $ret['generators']['chained']['component'] = 'Kwc_Trl_Columns_English.Kwc_Trl_Columns_German';
         return $ret;
     }
 }
