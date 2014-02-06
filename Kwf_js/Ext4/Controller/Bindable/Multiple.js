@@ -42,10 +42,10 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Multiple', {
         return ret;
     },
 
-    save: function()
+    save: function(syncQueue)
     {
         Ext4.each(this.items, function(i) {
-            i.save();
+            i.save(syncQueue);
         }, this);
     },
 

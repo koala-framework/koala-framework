@@ -35,10 +35,14 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
         return true;
     },
 
-    save: function()
+    save: function(syncQueue)
     {
         if (this.grid.getStore()) {
-            this.grid.getStore().sync();
+            if (syncQueue) {
+                syncQueue.add(this.grid.getStore());
+            } else {
+                this.grid.getStore().sync();
+            }
         }
     },
 

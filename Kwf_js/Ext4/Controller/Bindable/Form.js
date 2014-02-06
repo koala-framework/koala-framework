@@ -41,7 +41,7 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
         return this.form.getForm().isValid()
     },
 
-    save: function()
+    save: function(syncQueue)
     {
         if (!this.form.getRecord()) return;
 

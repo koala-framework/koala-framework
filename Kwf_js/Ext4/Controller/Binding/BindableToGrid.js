@@ -2,6 +2,7 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
+    requires: [ 'Kwf.Ext4.Data.StoreSyncQueue' ],
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
@@ -66,7 +67,15 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
 
         if (this.saveButton) {
             this.saveButton.on('click', function() {
-                this.save();
+                var syncQueue = new Kwf.Ext4.Data.StoreSyncQueue();
+                this.save(syncQueue);
+                syncQueue.start({
+                    success: function() {
+                        this.fireEvent('savesuccess');
+                    },
+                    scope: this
+                });
+
             }, this);
         }
         if (this.addButton) {
@@ -106,16 +115,28 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
         });
     },
 
-    save: function()
+    save: function(syncQueue)
     {
         if (!this.bindable.isValid()) {
             Ext4.Msg.alert(trlKwf('Save'),
                 trlKwf("Can't save, please fill all red underlined fields correctly."));
             return false;
         }
-        this.bindable.save();
 
-        this.source.getStore().sync();
+
+        if (syncQueue) {
+            syncQueue.add(this.source.getStore()); //sync this.source store first
+            this.bindable.save(syncQueue);         //then bindables (so bindable grid is synced second)
+                                                   //bindable forms can still update the row as the sync is not yet started
+        } else {
+            this.bindable.save();                  //bindables first to allow form updating the row before sync
+            this.source.getStore().sync({
+                success: function() {
+                    this.fireEvent('savesuccess');
+                },
+                scope: this
+            });
+        }
 
         this.fireEvent('save');
 

@@ -26,9 +26,9 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.GridBinding', {
         return this.bindableToGridController.isValid();
     },
 
-    save: function()
+    save: function(syncQueue)
     {
-        this.bindableToGridController.save();
+        this.bindableToGridController.save(syncQueue);
     },
 
     enable: function()
