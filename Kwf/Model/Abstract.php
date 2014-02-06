@@ -1054,4 +1054,24 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     {
         return $this->_hasDeletedFlag;
     }
+
+    public static function convertValueToType($value, $type)
+    {
+        if (is_null($value)) return $value;
+
+        if ($type == Kwf_Model_Abstract::TYPE_STRING) {
+            $value = (string)$value;
+        } else if ($type == Kwf_Model_Abstract::TYPE_BOOLEAN) {
+            $value = (bool)$value;
+        } else if ($type == Kwf_Model_Abstract::TYPE_INTEGER) {
+            $value = (int)$value;
+        } else if ($type == Kwf_Model_Abstract::TYPE_DATE) {
+            $value = (string)$value;
+        } else if ($type == Kwf_Model_Abstract::TYPE_DATETIME) {
+            $value = (string)$value;
+        } else if ($type == Kwf_Model_Abstract::TYPE_FLOAT) {
+            $value = (float)$value;
+        }
+        return $value;
+    }
 }

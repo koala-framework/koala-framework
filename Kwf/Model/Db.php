@@ -71,6 +71,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         else if ($type == 'tinytext') $type = self::TYPE_STRING;
         else if (substr($type, -3) == 'int') $type = self::TYPE_INTEGER;
         else if ($type == 'datetime') $type = self::TYPE_DATETIME;
+        else if ($type == 'timestamp') $type = self::TYPE_DATETIME;
         else if ($type == 'date') $type = self::TYPE_DATE;
         else if ($type == 'decimal') $type = self::TYPE_FLOAT;
         else if (substr($type, 0, 6) == 'double') $type = self::TYPE_FLOAT;
@@ -1375,5 +1376,14 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     {
         $sql = "SELECT ".implode(',', $columns)." FROM ".$this->getTableName()." WHERE ".$this->getPrimaryKey()."=?";
         return Kwf_Registry::get('db')->query($sql, $id)->fetch();
+    }
+
+    /**
+     * @internal
+     */
+    public function convertValueType($column, $value)
+    {
+        $type = $this->getColumnType($column);
+        return self::convertValueToType($value, $type);
     }
 }

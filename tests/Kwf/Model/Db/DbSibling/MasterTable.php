@@ -11,7 +11,11 @@ class Kwf_Model_Db_DbSibling_MasterTable extends Kwf_Db_Table_Abstract
         'id' => array(
             'DATA_TYPE' => 'int'
         ),
-        'foo' => array(),
-        'bar' => array(),
+        'foo' => array(
+            'DATA_TYPE' => 'string'
+        ),
+        'bar' => array(
+            'DATA_TYPE' => 'string'
+        ),
     );
 }
