@@ -16,7 +16,7 @@ class Kwc_Newsletter_Detail_PreviewController extends Kwc_Mail_PreviewController
             if (isset($source['select'])) $select->merge($source['select']);
             $model = Kwf_Model_Abstract::getInstance($source['model']);
             $row = $model->getRow($select);
-            if (!$row) throw new Kwf_Exception_Client(trlKwf('Preview only works with recipients in the newsletter'));
+            if (!$row) throw new Kwf_Exception_Client(trlKwf('Preview cannot be shown because it needs at least one recipient of this newsletter'));
             $recipientId = $row->id;
         }
         $select = new Kwf_Model_Select();
