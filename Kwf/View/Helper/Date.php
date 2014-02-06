@@ -9,11 +9,14 @@ class Kwf_View_Helper_Date
 
     public function date($date, $format = null)
     {
+        $language = null;
         if (!$format) {
             if (isset($this->_view) && $this->_view->data && $this->_view->data instanceof Kwf_Component_Data) {
                 $format = $this->_view->data->trlKwf('Y-m-d');
+                $language = $this->_view->data->getLanguage();
             } else if (isset($this->_view) && $this->_view->item && $this->_view->item instanceof Kwf_Component_Data) {
                 $format = $this->_view->item->trlKwf('Y-m-d');
+                $language = $this->_view->item->getLanguage();
             } else {
                 $format = trlKwf('Y-m-d');
             }
@@ -22,12 +25,6 @@ class Kwf_View_Helper_Date
         if (!$date || substr($date, 0, 10) == '0000-00-00') return '';
 
         $d = new Kwf_Date($date);
-        return $d->format($format);
-
-        /*
-        Das ist schneller, kann aber keine übersetzung bei Monatsnamen etc
-        $datetime = new DateTime($date);
-        return $datetime->format($format);
-        */
+        return $d->format($format, $language);
     }
 }
