@@ -19,7 +19,7 @@ class Kwc_Newsletter_QueueModel extends Kwf_Model_Db_Proxy
         $newsletter = $this->getReferencedModel('Newsletter')->getRow($select);
         if (!$newsletter) throw new Kwf_Exception('No Newsletter found');
         if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
-            throw new Kwf_ClientException(trlKwf('Can only add users to a paused newsletter'));
+            throw new Kwf_ClientException(trlKwf('Can only remove users from a paused newsletter'));
         }
 
         parent::deleteRows($where);

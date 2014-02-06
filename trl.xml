@@ -10521,5 +10521,23 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Test</en>
 <id>2102</id>
 </text>
+<text>
+<en>Can only remove users from a paused newsletter</en>
+<de>Empfänger können nur von einem pausierten Newsletter gelöscht werden</de>
+<id>2103</id>
+</text>
+<text>
+<en>Preview cannot be shown because it needs at least one recipient of this newsletter</en>
+<de>Vorschau kann nicht angezeigt werden weil kein Empfänger in diesem Newsletter existiert</de>
+<id>2104</id>
+</text>
+<text>
+<en>Button</en>
+<id>2105</id>
+</text>
+<text>
+<en>File not found</en>
+<id>2106</id>
+</text>
 </trl>
 
