@@ -222,22 +222,27 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
     /**
      * Ob die Row seblst dirty ist
      */
-    protected function _isDirty()
+    protected function _isDirty($column = null)
     {
+        if ($column) {
+            return array_key_exists($column, $this->_cleanData);
+        }
         return !empty($this->_cleanData);
     }
 
     /**
      * Ob die Row oder eine sibling row dirty ist
      */
-    public final function isDirty()
+    public final function isDirty($column = null)
     {
-        if ($this->_isDirty()) return true;
+        if ($this->_isDirty($column)) return true;
         foreach ($this->_getSiblingRows() as $r) {
-            if ($r->_isDirty()) return true;
+            if ($r->_isDirty($column)) return true;
         }
-        foreach ($this->_childRows as $row) {
-            if ($row->isDirty()) return true;
+        if (!$column) {
+            foreach ($this->_childRows as $row) {
+                if ($row->isDirty()) return true;
+            }
         }
         return false;
     }
