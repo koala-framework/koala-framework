@@ -85,12 +85,12 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
         }
         if (this.deleteButton) {
             this.deleteButton.on('click', function() {
-                this.destory();
+                this.deleteSelected();
             }, this);
         }
     },
 
-    destory: function()
+    deleteSelected: function()
     {
         Ext4.Msg.show({
             title: trlKwf('Delete'),
