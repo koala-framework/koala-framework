@@ -37,35 +37,26 @@ Ext4.define('Kwf.Ext4.Data.StoreSyncQueue', {
 
     _startSync: function(store, options)
     {
-        if (store instanceof Ext4.data.Model) {
-            store.save({
+        if (store.getNewRecords().length || store.getUpdatedRecords().length || store.getRemovedRecords().length) {
+            this._running.push(store);
+            store.sync({
+                store: store,
                 queueOptions: options,
-                callback: function() {
+                callback: function(batch, options) {
+                    var store = options.store;
+                    this._running.splice(this._running.indexOf(store), 1);
+                    this._callback(batch.hasException, batch, options);
+                    if (!this._running.length) {
+                        this._callbackFinished();
+                    }
                 },
                 scope: this
             });
         } else {
-            if (store.getNewRecords().length || store.getUpdatedRecords().length || store.getRemovedRecords().length) {
-                this._running.push(store);
-                store.sync({
-                    store: store,
-                    queueOptions: options,
-                    callback: function(batch, options) {
-                        var store = options.store;
-                        this._running.splice(this._running.indexOf(store), 1);
-                        this._callback(batch.hasException, batch, options);
-                        if (!this._running.length) {
-                            this._callbackFinished();
-                        }
-                    },
-                    scope: this
-                });
-            } else {
-                this._callback(false, {}, {
-                    queueOptions: options,
-                    store: store
-                });
-            }
+            this._callback(false, {}, {
+                queueOptions: options,
+                store: store
+            });
         }
     },
 
