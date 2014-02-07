@@ -16,6 +16,11 @@ class Kwf_Date
         }
     }
 
+    public static function create($date)
+    {
+        return new self($date);
+    }
+
     public function format($format = 'Y-m-d', $language = null)
     {
         $needsZendDate = !!array_intersect(array('D', 'l', 'S', 'F', 'M', 'e'), str_split($format));
