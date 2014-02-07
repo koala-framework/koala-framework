@@ -1,6 +1,8 @@
 <div class="<?=$this->cssClass?>" style="max-width:<?=$this->width;?>px;">
     <?=$this->component($this->linkTag)?>
     <div class="container" style="padding-bottom:<?=$this->aspectRatio?>%;"
+            data-min-width="<?=$this->minWidth;?>"
+            data-max-width="<?=$this->maxWidth;?>"
             data-src="<?=$this->baseUrl;?>">
         <noscript>
             <?=$this->image($this->image, $this->altText, $this->imgCssClass)?>

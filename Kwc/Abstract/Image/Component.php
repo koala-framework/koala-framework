@@ -104,9 +104,14 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $width = 0;
         $aspectRatio = 0;
         $dimensions = $this->getImageDimensions();
+        $ret['minWidth'] = 0;
+        $ret['maxWidth'] = 0;
         if (isset($dimensions['width']) && $dimensions['width'] > 0) {
             $aspectRatio = $dimensions['height'] / $dimensions['width'] * 100;
             $width = $dimensions['width'];
+            $steps = Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $this->getImageData());
+            $ret['minWidth'] = $steps[0];
+            $ret['maxWidth'] = end($steps);
         }
         $ret['width'] = $width;
         $ret['aspectRatio'] = $aspectRatio;
