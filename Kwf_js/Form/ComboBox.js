@@ -188,7 +188,7 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 callback: function(r, options, success) {
                     if (success) {
                         if (this.findRecord(this.valueField, this.value)) {
-                            this.setValue(this.value);
+                            Kwf.Form.ComboBox.superclass.setValue.call(this, this.value);
                         } else {
                             this.setValue(null);
                         }
