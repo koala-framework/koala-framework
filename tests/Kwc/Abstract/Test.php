@@ -6,6 +6,28 @@ class Kwc_Abstract_Test extends Kwc_TestAbstract
         parent::setUp('Kwc_Abstract_Root_Component');
     }
 
+    public function testImage404WhenWrongWidth()
+    {
+        $html = $this->_root->getComponentById('root_imageabstract1')->render();
+        $file100 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-100');
+        $file200 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-200');
+        try {
+            // This checks if image in defined dimensions doesn't exist
+            $file300 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-300');
+            $this->assertEquals(true, false);
+        } catch (Kwf_Exception_NotFound $e) {
+            $this->assertEquals(true, true);
+        }
+
+        try {
+            // This checks if image in defined dimensions doesn't exist
+            $file0 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-0');
+            $this->assertEquals(true, false);
+        } catch (Kwf_Exception_NotFound $e) {
+            $this->assertEquals(true, true);
+        }
+    }
+
     public function testImageCacheDeletedAfterDimensionsChange()
     {
         $html = $this->_root->getComponentById('root_imageabstract1')->render();

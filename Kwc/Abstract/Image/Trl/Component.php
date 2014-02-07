@@ -101,7 +101,7 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
 
     public static function isValidMediaOutput($id, $type, $className)
     {
-        return Kwf_Media_Output_Component::isValid($id);
+        return Kwf_Media_Output_Component::isValidImage($id, $type);
     }
 
     //if own_image getMediaOutput of image child component is used
