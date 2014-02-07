@@ -2,7 +2,7 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
     extend: 'Kwf.Ext4.Controller.Bindable.Abstract',
 
     relation: null,
-    grid: null,
+    gridController: null,
 
     load: function(row)
     {
@@ -14,20 +14,20 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
                 store.load();
             }
         }
-        this.grid.bindStore(store);
+        this.gridController.grid.bindStore(store);
     },
 
     reset: function()
     {
         this._loadedRecord = null;
-        this.grid.unbindStore();
+        this.gridController.grid.unbindStore();
     },
 
     isDirty: function()
     {
         return false;
-        if (!this.grid.getStore()) return false;
-        return this.grid.getStore().getModifiedRecords().length || this.grid.getStore().getNewRecords().length;
+        if (!this.gridController.grid.getStore()) return false;
+        return this.gridController.grid.getStore().getModifiedRecords().length || this.gridController.grid.getStore().getNewRecords().length;
     },
 
     isValid: function()
@@ -37,11 +37,11 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
 
     save: function(syncQueue)
     {
-        if (this.grid.getStore()) {
+        if (this.gridController.grid.getStore()) {
             if (syncQueue) {
-                syncQueue.add(this.grid.getStore());
+                syncQueue.add(this.gridController.grid.getStore());
             } else {
-                this.grid.getStore().sync();
+                this.gridController.grid.getStore().sync();
             }
         }
     },
@@ -53,11 +53,11 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
 
     enable: function()
     {
-        this.grid.enable();
+        this.gridController.grid.enable();
     },
     disable: function()
     {
-        this.grid.disable();
+        this.gridController.grid.disable();
     },
     getPanel: function()
     {

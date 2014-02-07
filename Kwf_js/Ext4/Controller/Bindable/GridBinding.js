@@ -34,12 +34,12 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.GridBinding', {
     enable: function()
     {
         if (this.panel) this.panel.enable();
-        this.bindableToGridController.source.enable();
+        this.bindableToGridController.gridController.grid.enable();
     },
     disable: function()
     {
         if (this.panel) this.panel.disable();
-        this.bindableToGridController.source.disable();
+        this.bindableToGridController.gridController.grid.disable();
     },
     getPanel: function()
     {

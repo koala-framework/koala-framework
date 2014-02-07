@@ -3,23 +3,23 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
         observable: 'Ext.util.Observable'
     },
     requires: [ 'Kwf.Ext4.Data.StoreSyncQueue' ],
+    gridController: null,
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
     },
 
+
     init: function()
     {
-        var grid = this.source;
+        var grid = this.gridController.grid;
         var bindable = this.bindable;
         bindable.disable();
 
         if (!this.saveButton && bindable.getPanel()) this.saveButton = bindable.getPanel().down('button#save');
-        if (!this.deleteButton && bindable.getPanel()) this.deleteButton = bindable.getPanel().down('button#delete');
         if (!this.addButton) this.addButton = grid.down('button#add');
 
         if (this.saveButton) this.saveButton.disable();
-        if (this.deleteButton) this.deleteButton.disable();
 
         grid.on('selectionchange', function(model, rows) {
             if (rows[0]) {
@@ -29,11 +29,9 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
                 }
                 bindable.enable();
                 if (this.saveButton) this.saveButton.enable();
-                if (this.deleteButton) this.deleteButton.enable();
             } else {
                 bindable.disable();
                 if (this.saveButton) this.saveButton.disable();
-                if (this.deleteButton) this.deleteButton.disable();
             }
         }, this);
 
@@ -92,27 +90,6 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
                 this.fireEvent('add');
             }, this);
         }
-        if (this.deleteButton) {
-            this.deleteButton.on('click', function() {
-                this.deleteSelected();
-            }, this);
-        }
-    },
-
-    deleteSelected: function()
-    {
-        Ext4.Msg.show({
-            title: trlKwf('Delete'),
-            msg: trlKwf('Do you really wish to remove this entry?'),
-            buttons: Ext4.Msg.YESNO,
-            scope: this,
-            fn: function(button) {
-                if (button == 'yes') {
-                    this.source.getStore().remove(bindable.getLoadedRecord());
-                    this.source.getStore().sync();
-                }
-            }
-        });
     },
 
     save: function(syncQueue)
@@ -125,12 +102,12 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
 
 
         if (syncQueue) {
-            syncQueue.add(this.source.getStore()); //sync this.source store first
+            syncQueue.add(this.gridController.grid.getStore()); //sync this.gridController.grid store first
             this.bindable.save(syncQueue);         //then bindables (so bindable grid is synced second)
                                                    //bindable forms can still update the row as the sync is not yet started
         } else {
             this.bindable.save();                  //bindables first to allow form updating the row before sync
-            this.source.getStore().sync({
+            this.gridController.grid.getStore().sync({
                 success: function() {
                     this.fireEvent('savesuccess');
                 },

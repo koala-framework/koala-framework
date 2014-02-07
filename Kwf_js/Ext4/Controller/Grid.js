@@ -12,21 +12,34 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
     init: function()
     {
         var grid = this.grid;
-        if (!this.gridDeleteButton) this.gridDeleteButton = grid.down('button#delete');
+        if (!this.deleteButton) this.deleteButton = grid.down('button#delete');
+        if (this.deleteButton) this.deleteButton.disable();
         grid.on('selectionchange', function(model, rows) {
             if (rows[0]) {
                 var row = rows[0];
-                if (this.gridDeleteButton) this.gridDeleteButton.enable();
+                if (this.deleteButton) this.deleteButton.enable();
             } else {
-                if (this.gridDeleteButton) this.gridDeleteButton.disable();
+                if (this.deleteButton) this.deleteButton.disable();
             }
         }, this);
-        if (this.gridDeleteButton) {
-            this.gridDeleteButton.disable();
-            this.gridDeleteButton.on('click', function() {
-                var sm = grid.getSelectionModel();
-                grid.getStore().remove(sm.getSelection());
-                if (this.autoSync) grid.getStore().sync();
+        if (this.deleteButton) {
+            this.deleteButton.disable();
+            this.deleteButton.on('click', function() {
+                if (this.autoSync) {
+                    Ext4.Msg.show({
+                        title: trlKwf('Delete'),
+                        msg: trlKwf('Do you really wish to remove this entry?'),
+                        buttons: Ext4.Msg.YESNO,
+                        scope: this,
+                        fn: function(button) {
+                            if (button == 'yes') {
+                                this.deleteSelected();
+                            }
+                        }
+                    });
+                } else {
+                    this.deleteSelected();
+                }
             }, this);
         }
         grid.query('> toolbar[dock=top] field').each(function(field) {
@@ -51,6 +64,13 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
             this.grid.getStore().load();
         }
     },
+
+    deleteSelected: function()
+    {
+        this.grid.getStore().remove(this.grid.getSelectionModel().getSelection());
+        if (this.autoSync) this.grid.getStore().sync();
+    },
+
     onBindStore: function()
     {
         var s = this.grid.getStore();

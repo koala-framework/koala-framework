@@ -20,19 +20,31 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
                     return false;
                 }
 
-                form.updateRecord();
-
-                //trackResetOnLoad only calls resetOriginalValue on load, not on updateRecord
-                Ext4.each(this.form.getRecord().fields.items, function(field) {
-                    var f = this.form.getForm().findField(field.name);
-                    if (f) {
-                        f.resetOriginalValue();
-                    }
-                }, this);
+                this.save();
 
                 form.getRecord().save();
 
             }, this);
         }
+    },
+
+    load: function(row)
+    {
+        this.form.loadRecord(row);
+    },
+
+    save: function()
+    {
+        if (!this.form.getRecord()) return;
+
+        this.form.updateRecord();
+
+        //trackResetOnLoad only calls resetOriginalValue on load, not on updateRecord
+        Ext4.each(this.form.getRecord().fields.items, function(field) {
+            var f = this.form.getForm().findField(field.name);
+            if (f) {
+                f.resetOriginalValue();
+            }
+        }, this);
     }
 });

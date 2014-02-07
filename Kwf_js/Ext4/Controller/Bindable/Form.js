@@ -1,7 +1,7 @@
 Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
     extend: 'Kwf.Ext4.Controller.Bindable.Abstract',
 
-    form: null,
+    formController: null,
     updateOnChange: false,
     focusOnAddSelector: 'field',
 
@@ -9,12 +9,12 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
     {
         this.callParent(arguments);
 
-        this.form.getForm().trackResetOnLoad = true;
+        this.formController.form.getForm().trackResetOnLoad = true;
 
         if (this.updateOnChange) {
-            Ext4.each(this.form.query('field'), function(i) {
+            Ext4.each(this.formController.form.query('field'), function(i) {
                 i.on('change', function() {
-                    this.form.updateRecord();
+                    this.formController.form.updateRecord();
                 }, this);
             }, this);
         }
@@ -22,52 +22,42 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
 
     load: function(row)
     {
-        this.form.loadRecord(row);
+        this.formController.load(row);
     },
 
     reset: function()
     {
-        this.form.getForm().reset(true);
+        this.formController.form.getForm().reset(true);
     },
 
     isDirty: function()
     {
         if (this.updateOnChange) return false;
-        return this.form.getForm().isDirty()
+        return this.formController.form.getForm().isDirty();
     },
 
     isValid: function()
     {
-        return this.form.getForm().isValid()
+        return this.formController.form.getForm().isValid();
     },
 
     save: function(syncQueue)
     {
-        if (!this.form.getRecord()) return;
-
-        this.form.updateRecord();
-
-        //trackResetOnLoad only calls resetOriginalValue on load, not on updateRecord
-        Ext4.each(this.form.getRecord().fields.items, function(field) {
-            var f = this.form.getForm().findField(field.name);
-            if (f) {
-                f.resetOriginalValue();
-            }
-        }, this);
+        return this.formController.save(syncQueue);
     },
 
     getLoadedRecord: function()
     {
-        return this.form.getRecord();
+        return this.formController.form.getRecord();
     },
 
     enable: function()
     {
-        this.form.enable();
+        this.formController.form.enable();
     },
     disable: function()
     {
-        this.form.disable();
+        this.formController.form.disable();
     },
     getPanel: function()
     {
@@ -77,7 +67,7 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
     onAdd: function()
     {
         if (this.focusOnAddSelector) {
-            this.form.down(this.focusOnAddSelector).focus();
+            this.formController.form.down(this.focusOnAddSelector).focus();
             return true;
         }
     }
