@@ -87,7 +87,7 @@ Ext4.define('Kwf.Ext4.Menu', {
             i.destroy();
         });
         var menuItems = this._processMenus(result.menus);
-        menuItems.each(function(menuItem) {
+        Ext4.each(menuItems, function(menuItem) {
             if (menuItem.icon && menuItem.text) {
                 menuItem.cls = 'x-btn-text-icon';
             } else if (menuItem.icon) {

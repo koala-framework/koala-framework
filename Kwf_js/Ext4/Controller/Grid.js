@@ -42,7 +42,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
                 }
             }, this);
         }
-        grid.query('> toolbar[dock=top] field').each(function(field) {
+        Ext4.each(grid.query('> toolbar[dock=top] field'), function(field) {
             field.on('change', function() {
                 var filterId = 'filter-'+field.getName();
                 var v = field.getValue();
@@ -74,10 +74,10 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
     onBindStore: function()
     {
         var s = this.grid.getStore();
-        this.grid.query('pagingtoolbar').each(function(i) {
+        Ext4.each(this.grid.query('pagingtoolbar'), function(i) {
             i.bindStore(s);
         }, this);
-        this.grid.query('> toolbar[dock=top] field').each(function(field) {
+        Ext4.each(this.grid.query('> toolbar[dock=top] field'), function(field) {
             var filterId = 'filter-'+field.getName();
             var v = field.getValue();
             this.grid.getStore().addFilter({
