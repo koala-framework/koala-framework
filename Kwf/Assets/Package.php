@@ -64,6 +64,13 @@ class Kwf_Assets_Package
     {
         if (!isset($this->_cacheFilteredUniqueDependencies[$mimeType])) {
             $this->_cacheFilteredUniqueDependencies[$mimeType] = $this->getDependency()->getFilteredUniqueDependencies($mimeType);
+            if ($mimeType == 'text/javascript') {
+                array_unshift(
+                    $this->_cacheFilteredUniqueDependencies[$mimeType],
+                    new Kwf_Assets_Dependency_File_Js(KWF_PATH.'/Kwf_js/Trl.js'),
+                    new Kwf_Assets_Dependency_File_Js(KWF_PATH.'/Kwf_js/AssetsVersion.js')
+                );
+            }
         }
         return $this->_cacheFilteredUniqueDependencies[$mimeType];
     }
