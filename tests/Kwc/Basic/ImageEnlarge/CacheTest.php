@@ -80,4 +80,37 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
             array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo1/image')
         );
     }
+
+    public function testEnlargeCacheDeletedOnBaseImageChanged()
+    {
+        // Image and Enlarge müssen unterschiedliche dimensionen haben (damit da der cache nicht überlappt)
+        // Get EnlargeComponent
+        $component = $this->_root->getChildComponent('1804')
+                                 ->getChildComponent('-linkTag')
+                                 ->getChildComponent('_imagePage');
+        // Render EnlargeComponent. Request Enlarge-Image (image has to be big enough)
+        preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $component->render(), $matches);
+        foreach ($matches[0] as $key => $m) {
+            if ($matches[3][$key] == 'dh-{width}') continue;
+            $fileWithGreaterHeight = Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
+            $fileWithGreaterHeight2 = Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
+        }
+
+        // Change basis-bild
+        $row = $this->_root->getChildComponent('1804')->getComponent()->getRow();
+        $row->kwf_upload_id = 5;
+        $row->save();
+        $this->_process();
+
+        // überprüfe ob das bild von enlarge auch getauscht wurde
+        preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $component->render(), $matches);
+        foreach ($matches[0] as $key => $m) {
+            if ($matches[3][$key] == 'dh-{width}') continue;
+            $fileWithSmallerHeight = Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
+        }
+        $image1 = new Imagick();
+        $image1->readimageblob($fileWithGreaterHeight['contents']);
+        $image2 = new Imagick($fileWithSmallerHeight['file']);
+        $this->assertNotEquals($image1->getImageHeight(), $image2->getImageHeight());
+    }
 }

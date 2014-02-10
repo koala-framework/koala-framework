@@ -26,38 +26,28 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Events extends Kwc_Abstract_Events
             if ($this->_canCreateUsIndirectly($class)) {
                 $ret[] = array(
                     'class' => $class,
-                    'event' => 'Kwf_Component_Event_Media_Changed',
-                    'callback' => 'onMediaChanged'
+                    'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
+                    'callback' => 'onClassContentChanged'
                 );
                 $ret[] = array(
                     'class' => $class,
-                    'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
-                    'callback' => 'onClassContentChanged'
+                    'event' => 'Kwc_Abstract_Image_ImageChangedEvent',
+                    'callback' => 'onImageChanged'
                 );
             }
         }
         return $ret;
     }
 
-    public function onClassContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
-    {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-            $this->_class
-        ));
-    }
-
-    public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
+    public function onImageChanged(Kwc_Abstract_Image_ImageChangedEvent $event)
     {
         $components = $event->component
             ->getRecursiveChildComponents(array('componentClass' => $this->_class, 'ignoreVisible'=>true)); //ignore visible because we need to clear media cache for invisible images too (as it's shown in preview)
         foreach ($components as $component) {
-            $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                $this->_class, $component, Kwf_Media::DONT_HASH_TYPE_PREFIX
-            ));
             $imageData = $component->getComponent()->getImageData();
             if ($imageData) {
                 $dim = $component->getComponent()->getImageDimensions();
-                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
                 foreach ($steps as $step) {
                     $this->fireEvent(new Kwf_Component_Event_Media_Changed(
                         $this->_class, $component, Kwf_Media::DONT_HASH_TYPE_PREFIX.$step
@@ -68,5 +58,12 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Events extends Kwc_Abstract_Events
                 $this->_class, $component
             ));
         }
+    }
+
+    public function onClassContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
+    {
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
+            $this->_class
+        ));
     }
 }

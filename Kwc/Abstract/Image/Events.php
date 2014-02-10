@@ -26,6 +26,7 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
     protected function _fireMediaChanged(Kwf_Component_Data $c)
     {
         $imageData = $c->getComponent()->getImageData();
+        $this->fireEvent(new Kwc_Abstract_Image_ImageChangedEvent($this->_class, $c));
         if ($imageData) {
             $dim = $c->getComponent()->getImageDimensions();
             $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
