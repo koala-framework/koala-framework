@@ -8,7 +8,7 @@
     </div>
     <? if ($this->placeholder['backLink']) { ?>
         <div class="backLink">
-            <p><?=$this->componentLink($this->data->parent, $this->placeholder['backLink'])?><p>
+            <p><?=$this->componentLink($this->data->parent, $this->placeholder['backLink'])?></p>
         </div>
     <? } ?>
 </div>
