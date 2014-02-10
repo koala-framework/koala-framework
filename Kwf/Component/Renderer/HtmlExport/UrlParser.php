@@ -57,40 +57,7 @@ class Kwf_Component_Renderer_HtmlExport_UrlParser
         $html = preg_replace('/&([a-z0-9#]{2,5});/i', '+$1;', $html);
 
         //before sending to xml parser make sure we have valid xml by tidying it up
-        $config = array(
-            'indent'         => true,
-            'output-xhtml'   => true,
-            'clean'          => false,
-            'wrap'           => '86',
-            'doctype'        => 'omit',
-            'drop-proprietary-attributes' => false,
-            'word-2000'      => true,
-            'show-body-only' => true,
-            'bare'           => true,
-            'enclose-block-text'=>true,
-            'enclose-text'   => true,
-            'join-styles'    => false,
-            'join-classes'   => false,
-            'logical-emphasis' => true,
-            'lower-literals' => true,
-            'literal-attributes' => false,
-            'indent-spaces' => 2,
-            'quote-nbsp'     => true,
-            'output-bom'     => false,
-            'char-encoding'  =>'utf8',
-            'newline'        =>'LF',
-            'uppercase-tags' => false,
-            'drop-font-tags' => false,
-        );
-        if (class_exists('tidy')) {
-            $tidy = new tidy;
-            $tidy->parseString($html, $config, 'utf8');
-            $tidy->cleanRepair();
-            $html = $tidy->value;
-        } else {
-            require_once Kwf_Config::getValue('externLibraryPath.htmLawed').'/htmLawed.php';
-            $html = htmLawed($html);
-        }
+        $html = Kwf_Util_Tidy::repairHtml($html);
 
         $this->_stack = array();
         $this->_ret = '';

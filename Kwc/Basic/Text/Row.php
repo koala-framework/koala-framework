@@ -211,35 +211,11 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
         //delete BOM that might have sneaked into the text (at any position)
         $html = str_replace(chr(0xEF).chr(0xBB).chr(0xBF), '', $html);
 
-        $config = array(
-                    'indent'         => true,
-                    'output-xhtml'   => true,
-                    'clean'          => false,
-                    'wrap'           => '86',
-                    'doctype'        => 'omit',
-                    'drop-proprietary-attributes' => true,
-                    'drop-font-tags' => true,
-                    'word-2000'      => true,
-                    'show-body-only' => true,
-                    'bare'           => true,
-                    'enclose-block-text'=>true,
-                    'enclose-text'   => true,
-                    'join-styles'    => false,
-                    'join-classes'   => false,
-                    'logical-emphasis' => true,
-                    'lower-literals' => true,
-                    'literal-attributes' => false,
-                    'indent-spaces' => 2,
-                    'quote-nbsp'     => true,
-                    'output-bom'     => false,
-                    'char-encoding'  =>'utf8',
-                    'newline'        =>'LF',
-                    'uppercase-tags' =>'false'
-                    );
         $enableTidy = Kwc_Abstract::getSetting($this->_componentClass, 'enableTidy');
         $enableFontSize = Kwc_Abstract::getSetting($this->_componentClass, 'enableFontSize');
-        if ($enableFontSize){
-            $config['drop-font-tags'] = false;
+        $config = array();
+        if (!$enableFontSize){
+            $config['drop-font-tags'] = true;
         }
         if ($enableTidy) {
 
@@ -255,15 +231,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
             $html = str_replace('_mce_type="bookmark"', 'class="_mce_type-bookmark"', $html);
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
 
-            if (class_exists('tidy')) {
-                $tidy = new tidy;
-                $tidy->parseString($html, $config, 'utf8');
-                $tidy->cleanRepair();
-                $html = $tidy->value;
-            } else {
-                require_once Kwf_Config::getValue('externLibraryPath.htmLawed').'/htmLawed.php';
-                $html = htmLawed($html);
-            }
+            $html = Kwf_Util_Tidy::repairHtml($html, $config);
             if (!$parser) {
                 $parser = new Kwc_Basic_Text_Parser($this->componentId, $this->getModel());
                 $parser->setMasterStyles(Kwc_Basic_Text_StylesModel::getMasterStyles());
@@ -272,14 +240,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
             $parser->setEnableTagsWhitelist(Kwc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
             $parser->setEnableStyles(Kwc_Abstract::getSetting($this->_componentClass, 'enableStyles'));
             $html = $parser->parse($html);
-            if (class_exists('tidy')) {
-                $tidy->parseString($html, $config, 'utf8');
-                $tidy->cleanRepair();
-                $html = $tidy->value;
-            } else {
-                require_once Kwf_Config::getValue('externLibraryPath.htmLawed').'/htmLawed.php';
-                $html = htmLawed($html);
-            }
+            $html = Kwf_Util_Tidy::repairHtml($html, $config);
             $html = str_replace('class="_mce_type-bookmark"', '_mce_type="bookmark"', $html);
             $html = str_replace('#nbsp#', '&nbsp;', $html);
         }
