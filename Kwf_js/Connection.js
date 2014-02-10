@@ -320,16 +320,28 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
             }
             if (r.login && !options.ignoreErrors) {
                 options.kwfLogin = true;
-                var dlg = new Kwf.User.Login.Dialog({
-                    message: r.message,
-                    success: function() {
-                        //redo action...
-                        this.repeatRequest(options);
-                    },
-                    scope: this
-                });
-                Ext.getBody().unmask();
-                dlg.showLogin();
+                if (!Kwf.Connection._loginDialog) {
+                    Kwf.Connection._afterLoginRequests = [];
+                    Kwf.Connection._loginDialog = new Kwf.User.Login.Dialog({
+                        message: r.message,
+                        success: function() {
+
+                            Kwf.Connection._loginDialog.destroy();
+                            delete Kwf.Connection._loginDialog;
+
+                            //redo requests...
+                            Kwf.Connection._afterLoginRequests.each(function(i) {
+                                this.repeatRequest(i);
+                            }, this);
+
+                            Kwf.Connection._afterLoginRequests.length = 0;
+                        },
+                        scope: this
+                    });
+                    Ext.getBody().unmask();
+                    Kwf.Connection._loginDialog.showLogin();
+                }
+                Kwf.Connection._afterLoginRequests.push(options); //redo after login
                 return;
             }
             if (!options.ignoreErrors) {
