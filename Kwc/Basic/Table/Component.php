@@ -57,6 +57,10 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
             $ret['dataRows'][] = $rowData;
         }
         $ret['dataRows'] = Kwc_Basic_Table_Component::addDefaultCssClasses($ret['dataRows'], $this->_getSetting('rowStyles'));
+        $ret['headerRows'] = array();
+        if (isset($ret['dataRows'][0]['htmlTag']) && $ret['dataRows'][0]['htmlTag'] == 'th') {
+            $ret['headerRows'] = array(array_shift($ret['dataRows']));
+        }
         return $ret;
     }
 
