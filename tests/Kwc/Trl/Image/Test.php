@@ -3,6 +3,7 @@
  * @group slow
  * @group Kwc_Trl
  * @group Kwc_Trl_Image
+ * @group Image
  *
 ansicht frontend:
 http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_Image_Root/de/test1 (...2)

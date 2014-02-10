@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Image
+ */
 class Kwc_Basic_Image_DprImage_Test extends Kwc_TestAbstract
 {
     public function setUp()
@@ -14,7 +17,7 @@ class Kwc_Basic_Image_DprImage_Test extends Kwc_TestAbstract
     {
         $c = $this->_root->getComponentById('root_page1');
         $html = $c->render();
-        $this->assertTrue(!!preg_match('#data-src="([^"]+)"#', $html, $m));
+        $this->assertTrue(!!preg_match('# src="([^"]+)"#', $html, $m));
         $url = str_replace('{width}', '', $m[1]);
         $url = explode('/', trim($url, '/'));
         $class = $url[4];

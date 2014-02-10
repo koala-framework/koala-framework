@@ -3,6 +3,7 @@
  * @group slow
  * @group Kwc_Trl
  * @group Kwc_Trl_ImageEnlarge
+ * @group Image
  *
  * Was wo angezeigt werden soll siehe Kwc_Trl_ImageEnlarge_Master
  *

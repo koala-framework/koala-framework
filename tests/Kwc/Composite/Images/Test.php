@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Composite_Images
+ * @group Image
  *
  * http://kwf.kwf.niko.vivid/kwf/componentedittest/Kwc_Composite_Images_Root/Kwc_Composite_Images_TestComponent/Index?componentId=2100
  */

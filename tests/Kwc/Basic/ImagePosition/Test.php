@@ -29,7 +29,7 @@ class Kwc_Basic_ImagePosition_Test extends Kwc_TestAbstract
         $this->assertRegExp('#^\s*<div class="kwcBasicImagePosition kwcBasicImagePositionTestComponent">'.
             '\s*<div class="posright">'
             .'\s*<div class="kwcAbstractImage kwcBasicImagePositionImageTestComponent".*>'
-            .'\s*<div class="container .*" .*>'
+            .'\s*<div class="container" .*>'
             .'\s*<noscript>'
             .'\s*<img src="/media/Kwc_Basic_ImagePosition_Image_TestComponent/1900-image/dh-'.$dim['width'].'/[^/]+/[0-9]+/foo.png" width="16" height="16" alt="" />'
             .'\s*</noscript>'

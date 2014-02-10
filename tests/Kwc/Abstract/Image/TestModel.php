@@ -9,7 +9,8 @@ class Kwc_Abstract_Image_TestModel extends Kwc_Abstract_Image_Model
                 'columns' => array(),
                 'primaryKey' => 'component_id',
                 'data'=> array(
-                    array('component_id'=>'root_imageabstract1', 'kwf_upload_id'=>1, 'dimension' => 'default')
+                    array('component_id'=>'root_imageabstract1', 'kwf_upload_id'=>1, 'dimension' => 'default'),
+                    array('component_id'=>'root_imageabstract2', 'kwf_upload_id'=>3, 'dimension' => 'default2')
                 )
             ));
         parent::__construct($config);

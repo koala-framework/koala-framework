@@ -1,31 +1,58 @@
 <?php
-class Kwc_Abstract_Test extends Kwc_TestAbstract
+/**
+ * @group Image
+ */
+class Kwc_Abstract_ImageTest extends Kwc_TestAbstract
 {
     public function setUp()
     {
         parent::setUp('Kwc_Abstract_Root_Component');
     }
 
-    public function testImage404WhenWrongWidth()
+    public function testImage404WithTooBigWidth()
     {
-        $html = $this->_root->getComponentById('root_imageabstract1')->render();
-        $file100 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-100');
-        $file200 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-200');
-        try {
-            // This checks if image in defined dimensions doesn't exist
-            $file300 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-300');
-            $this->assertEquals(true, false);
-        } catch (Kwf_Exception_NotFound $e) {
-            $this->assertEquals(true, true);
-        }
+        $this->_assertReturns404('dh-500');
+    }
 
+    public function testImage404WhenNegativeWidth()
+    {
+        $this->_assertReturns404('dh--100');
+    }
+
+    public function testImage404WhenIncorrectValue()
+    {
+        $this->_assertReturns404('dh-100x');
+        $this->_assertReturns404('default');
+    }
+
+    public function testImageDpr2SizeAvailable()
+    {
+        $file200 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-200');
+        $image = new Imagick();
+        $image->readimageblob($file200['contents']);
+        $this->assertEquals(200, $image->getImageWidth());
+    }
+
+    private function _assertReturns404($type)
+    {
         try {
             // This checks if image in defined dimensions doesn't exist
-            $file0 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-0');
+            $file = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', $type);
             $this->assertEquals(true, false);
         } catch (Kwf_Exception_NotFound $e) {
             $this->assertEquals(true, true);
         }
+    }
+
+    public function testImageWorkingType()
+    {
+        $file100 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-100');
+        $image = new Imagick();
+        $image->readimageblob($file100['contents']);
+        $this->assertEquals(100, $image->getImageWidth());
+        $file200 = Kwf_Media::getOutput('Kwc_Abstract_Image_TestComponent', 'root_imageabstract1', 'dh-200');
+        $image->readimageblob($file200['contents']);
+        $this->assertEquals(200, $image->getImageWidth());
     }
 
     public function testImageCacheDeletedAfterDimensionsChange()

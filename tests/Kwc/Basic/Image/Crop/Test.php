@@ -2,6 +2,7 @@
 /**
  * @group Basic_ImageEnlarge
  * @group Kwc_Image
+ * @group Image
  *
  * http://kwf.niko.vivid/kwf/kwctest/Kwc_Basic_Image_Crop_Root/page
  */

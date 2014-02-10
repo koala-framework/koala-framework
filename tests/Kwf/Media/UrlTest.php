@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Media
+ * @group Image
  */
 class Kwf_Media_UrlTest extends Kwc_TestAbstract
 {

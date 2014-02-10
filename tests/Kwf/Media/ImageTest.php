@@ -1,6 +1,7 @@
 <?php
 /**
  * @group MediaImage
+ * @group Image
  */
 class Kwf_Media_ImageTest extends Kwf_Test_TestCase
 {

@@ -2,7 +2,8 @@
 /**
  * @group slow
  * @group selenium
- * @group image
+ * @group Kwc_Image
+ * @group Image
  */
 class Kwc_ImageResponsive_Test extends Kwf_Test_SeleniumTestCase
 {
@@ -41,7 +42,7 @@ class Kwc_ImageResponsive_Test extends Kwf_Test_SeleniumTestCase
     public function testJavascriptCreatesCorrectImageSrcElement()
     {
         $this->openKwc('Kwc_ImageResponsive_Root_Component/imageabstract1');
-        $this->assertElementPresent("css=img[src^=\"/kwf/kwctest/Kwc_ImageResponsive_Root_Component/media/Kwc_ImageResponsive_Components_ImageAbstract_Component/root_imageabstract1/dh-300/\"]");
+        $this->assertElementPresent("css=img[src^=\"/kwf/kwctest/Kwc_ImageResponsive_Root_Component/media/Kwc_ImageResponsive_Components_ImageAbstract_Component/root_imageabstract1/dh-16/\"]");
     }
 
     public function testJavascriptCreatesCorrectImageSrcImageEnlargeImagePage()
