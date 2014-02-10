@@ -142,7 +142,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
             $dimension['height'] = $width / $dimension['width'] * $dimension['height'];
             $dimension['width'] = $width;
         }
-        return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dimension);
+        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dimension);
      }
 
 

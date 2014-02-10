@@ -324,41 +324,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $dim['width'] = $width;
         }
 
-        return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dim);
-    }
-
-    public static function getMediaOutputForDimension($data, $dim)
-    {
-        $ret = array();
-        if (isset($data['image'])) {
-            $output = Kwf_Media_Image::scale($data['image'], $dim);
-            $ret['contents'] = $output;
-        } else {
-            $sourceSize = @getimagesize($data['file']);
-            $scalingNeeded = true;
-            $resultingSize = Kwf_Media_Image::calculateScaleDimensions($data['file'], $dim);
-            if ($sourceSize
-                && array($resultingSize['crop']['width'], $resultingSize['crop']['height'])
-                    == array($sourceSize[0], $sourceSize[1])
-                && array($resultingSize['width'], $resultingSize['height'])
-                    == array($sourceSize[0], $sourceSize[1])
-            ) {
-                $scalingNeeded = false;
-            }
-            if ($scalingNeeded) {
-                //NOTE: don't pass actual size of the resulting image, scale() will calculate that on it's own
-                //else size is calculated twice and we get rounding errors
-                $uploadId = isset($data['uploadId']) ? $data['uploadId'] : null;
-                $output = Kwf_Media_Image::scale($data['file'], $dim, $uploadId);
-                $ret['contents'] = $output;
-            } else {
-                $ret['file'] = $data['file'];
-            }
-        }
-        $ret['mimeType'] = $data['mimeType'];
-
-        $ret['mtime'] = filemtime($data['file']);
-        return $ret;
+        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dim);
     }
 
     public function getContentWidth()
