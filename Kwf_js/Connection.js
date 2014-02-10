@@ -367,7 +367,8 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
 
         options.kwfIsSuccess = false;
 
-        errorMsgTitle = trlKwf('Error');
+        var errorText, errorMsg;
+        var errorMsgTitle = trlKwf('Error');
         if (options.errorText) {
             errorText = options.errorText;
             errorMsg = options.errorText;
