@@ -31,6 +31,9 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $this->view->role = $this->_getParam('role');
         $this->view->login = true;
         $this->view->success = false;
+
+        $this->getResponse()->setRawHeader('HTTP/1.0 401 Access Denied');
+        $this->getResponse()->setHttpResponseCode(401);
     }
 
 

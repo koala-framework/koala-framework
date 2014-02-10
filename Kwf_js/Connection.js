@@ -212,6 +212,7 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
     repeatRequest: function(options) {
         Kwf.Connection.runningRequests++;
         delete options.kwfIsSuccess;
+        delete options.kwfLogin;
 
         //session token might have changed if user had to login -> update it
         if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
@@ -284,72 +285,11 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
             return;
         }
 
-        if (!r.success) {
-            if (r.wrongversion && !options.ignoreErrors) {
-                var dlg = new Ext.Window({
-                    autoCreate : true,
-                    title: trlKwf('Error - wrong version'),
-                    resizable: false,
-                    modal: true,
-                    buttonAlign:"center",
-                    width:250,
-                    height:100,
-                    plain:true,
-                    closable: false,
-                    html: trlKwf('Because of an application update the application has to be reloaded.'),
-                    buttons: [{
-                        text: trlKwf('OK'),
-                        handler: function() {
-                            location.reload();
-                        },
-                        scope: this
-                    }, {
-                        text: trlKwf('Ignore'),
-                        handler: function() {
-                            Kwf.application.assetsVersion = r.assetsVersion;
-                            options.params.applicationAssetsVersion = Kwf.application.assetsVersion;
-                            this.repeatRequest(options);
-                            dlg.hide();
-                        },
-                        scope: this
-                    }]
-                });
-                dlg.show();
-                dlg.getEl().addClass('x-window-dlg');
-                return;
-            }
-            if (r.login && !options.ignoreErrors) {
-                options.kwfLogin = true;
-                if (!Kwf.Connection._loginDialog) {
-                    Kwf.Connection._afterLoginRequests = [];
-                    Kwf.Connection._loginDialog = new Kwf.User.Login.Dialog({
-                        message: r.message,
-                        success: function() {
-
-                            Kwf.Connection._loginDialog.destroy();
-                            delete Kwf.Connection._loginDialog;
-
-                            //redo requests...
-                            Kwf.Connection._afterLoginRequests.each(function(i) {
-                                this.repeatRequest(i);
-                            }, this);
-
-                            Kwf.Connection._afterLoginRequests.length = 0;
-                        },
-                        scope: this
-                    });
-                    Ext.getBody().unmask();
-                    Kwf.Connection._loginDialog.showLogin();
-                }
-                Kwf.Connection._afterLoginRequests.push(options); //redo after login
-                return;
-            }
-            if (!options.ignoreErrors) {
-                if (r.error) {
-                    Ext.Msg.alert(trlKwf('Error'), r.error);
-                } else {
-                    Ext.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
-                }
+        if (!r.success && !options.ignoreErrors) {
+            if (r.error) {
+                Ext.Msg.alert(trlKwf('Error'), r.error);
+            } else {
+                Ext.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
             }
             Ext.callback(options.kwfCallback.failure, options.kwfCallback.scope, [response, options]);
             return;
@@ -378,6 +318,69 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
         if (Kwf.Connection.isLeavingPage) return; //when user leaves page all requests are stopped. Don't show errors in that case.
 
         options.kwfIsSuccess = false;
+
+        var r = Ext.decode(response.responseText);
+
+        if (r && r.wrongversion && !options.ignoreErrors) {
+            var dlg = new Ext.Window({
+                autoCreate : true,
+                title: trlKwf('Error - wrong version'),
+                resizable: false,
+                modal: true,
+                buttonAlign:"center",
+                width:250,
+                height:100,
+                plain:true,
+                closable: false,
+                html: trlKwf('Because of an application update the application has to be reloaded.'),
+                buttons: [{
+                    text: trlKwf('OK'),
+                    handler: function() {
+                        location.reload();
+                    },
+                    scope: this
+                }, {
+                    text: trlKwf('Ignore'),
+                    handler: function() {
+                        Kwf.application.assetsVersion = r.assetsVersion;
+                        options.params.applicationAssetsVersion = Kwf.application.assetsVersion;
+                        this.repeatRequest(options);
+                        dlg.hide();
+                    },
+                    scope: this
+                }]
+            });
+            dlg.show();
+            dlg.getEl().addClass('x-window-dlg');
+            return;
+        }
+        if (r && r.login && !options.ignoreErrors) {
+            options.kwfLogin = true;
+            if (!Kwf.Connection._loginDialog) {
+                Kwf.Connection._afterLoginRequests = [];
+                Kwf.Connection._loginDialog = new Kwf.User.Login.Dialog({
+                    message: r.message,
+                    success: function() {
+
+                        Kwf.Connection._loginDialog.destroy();
+                        delete Kwf.Connection._loginDialog;
+
+                        //redo requests...
+                        Kwf.Connection._afterLoginRequests.each(function(i) {
+                            this.repeatRequest(i);
+                        }, this);
+
+                        Kwf.Connection._afterLoginRequests.length = 0;
+                    },
+                    scope: this
+                });
+                Ext.getBody().unmask();
+                Kwf.Connection._loginDialog.showLogin();
+            }
+            Kwf.Connection._afterLoginRequests.push(options); //redo after login
+            return;
+        }
+
 
         var errorText, errorMsg;
         var errorMsgTitle = trlKwf('Error');

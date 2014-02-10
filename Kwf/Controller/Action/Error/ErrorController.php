@@ -76,5 +76,8 @@ class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
         $this->view->wrongversion = true;
         $this->view->success = false;
         $this->view->assetsVersion = Kwf_Assets_Dispatcher::getAssetsVersion();
+
+        $this->getResponse()->setRawHeader('HTTP/1.0 428 Precondition Required');
+        $this->getResponse()->setHttpResponseCode(428);
     }
 }
