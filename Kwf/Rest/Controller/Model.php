@@ -49,7 +49,12 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         }
 
         if (!$allowed) {
-            throw new Kwf_Exception_AccessDenied();
+            $params = array(
+                'resource' => $resource,
+                'role' => $this->_getUserRole()
+            );
+            $this->_forward('json-login', 'login',
+                                'kwf_controller_action_user', $params);
         }
     }
 
