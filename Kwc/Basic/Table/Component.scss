@@ -1,3 +1,5 @@
+@import "kwf/form/flip-scroll";
+
 .cssClass {
     margin-bottom: 10px;
 
@@ -7,6 +9,26 @@
         tr {
             th { font-weight: bold; }
             td { padding: 2px 0px; }
+        }
+    }
+}
+
+.kwfMainContent {
+    > .kwcParagraphs {
+        > .kwcParagraphItem {
+            > .cssClass {
+                &.sm635 {
+                    @include flip-scroll;
+                }
+            }
+
+            .kwcColumns {
+                .cssClass {
+                    &.sm400 {
+                        @include flip-scroll;
+                    }
+                }
+            }
         }
     }
 }
