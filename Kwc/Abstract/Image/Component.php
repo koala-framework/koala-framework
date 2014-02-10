@@ -142,9 +142,12 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $data = $this->_getImageDataOrEmptyImageData();
         if ($data) {
             $s = $this->getImageDimensions();
+            $imageData = $this->_getImageDataOrEmptyImageData();
+            $width = Kwf_Media_Image::getResponsiveWidthStep($s['width'],
+                                Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData));
             if (Kwc_Abstract::getSetting($this->getData()->componentClass, 'useDataUrl')) {
                 $id = $this->getData()->componentId;
-                $type = Kwf_Media::DONT_HASH_TYPE_PREFIX.$s['width'];
+                $type = Kwf_Media::DONT_HASH_TYPE_PREFIX.$width;
                 $data = self::getMediaOutput($id, $type, $this->getData()->componentClass);
                 if (isset($data['file'])) {
                     $c = file_get_contents($data['file']);
@@ -157,7 +160,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                     return "data:$mime;base64,$base64";
                 }
             }
-            return str_replace('{width}', $s['width'], $this->getBaseImageUrl());
+            return str_replace('{width}', $width, $this->getBaseImageUrl());
         }
         return null;
     }
