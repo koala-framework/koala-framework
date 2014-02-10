@@ -33,6 +33,8 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
         Kwc_FulltextSearch_MetaModel::setInstance(new Kwf_Model_FnF(array(
             'primaryKey' => 'page_id',
         )));
+        Kwf_Component_LogDuplicateModel::setInstance(new Kwf_Model_FnF(array(
+        )));
         return $this->_root;
     }
 

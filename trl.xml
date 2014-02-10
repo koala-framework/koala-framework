@@ -66,7 +66,7 @@
 <sl>Prijava</sl>
 <ru>Логин</ru>
 <sk>Prihlásiť sa</sk>
-<hr>Log in</hr>
+<hr>Login</hr>
 </text>
 <text>
 <en>Hello {0}!</en>
@@ -80,7 +80,7 @@
 <ru>Добрый день {0}!</ru>
 <es_CL>Hola {0}!</es_CL>
 <sk>Ahoj {0}!</sk>
-<hr>Halo {0}!</hr>
+<hr>Pozdrav {0}!</hr>
 </text>
 <text>
 <en>Your account at {0} has just been created.</en>
@@ -401,7 +401,7 @@
 <mk>Преглед</mk>
 <sl>Predogled</sl>
 <ru>Предпросмотр</ru>
-<hr>Preview</hr>
+<hr>Pregled</hr>
 </text>
 <text>
 <en>Text</en>
@@ -575,6 +575,7 @@
 <sq>Emri</sq>
 <es_CL>Nombre</es_CL>
 <hr>Ime</hr>
+<sk>Meno</sk>
 </text>
 <text>
 <en>Lastname</en>
@@ -592,6 +593,7 @@
 <sq>Mbiemri</sq>
 <es_CL>Apellido</es_CL>
 <hr>Prezime</hr>
+<sk>Priezvisko</sk>
 </text>
 <text>
 <en>Email</en>
@@ -790,6 +792,7 @@
 <sq>Femërore</sq>
 <es_CL>Femenino</es_CL>
 <hr>žensko</hr>
+<sk>Žena</sk>
 </text>
 <text>
 <en>Male</en>
@@ -806,6 +809,7 @@
 <sq>Mashkullore</sq>
 <es_CL>Masculino</es_CL>
 <hr>muško</hr>
+<sk>Muž</sk>
 </text>
 <text>
 <en>Gender</en>
@@ -822,6 +826,7 @@
 <sq>Gjinia</sq>
 <es_CL>Género</es_CL>
 <hr>Spol</hr>
+<sk>Pohlavie</sk>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -1065,6 +1070,7 @@
 <ro>Doriţi să salvaţi modificările?</ro>
 <sl>Ali želite shraniti spremembe?</sl>
 <hr>Želite pohraniti promijene?</hr>
+<sk>Želáte si uložiť zmeny?</sk>
 </text>
 <text>
 <en>Copying...</en>
@@ -2822,6 +2828,7 @@
 <ro>Setări</ro>
 <sl>Nastavitve </sl>
 <uk>Налаштування</uk>
+<sk>Nastavenia</sk>
 </text>
 <text>
 <en>Link Image</en>
@@ -5461,6 +5468,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1074</id>
 <ro>Nu au fost găsite înregistrări pentru textul căutat &amp;quot;{0}&amp;quot;.</ro>
 <sl>Sistemi ni našel ustreznih zadetkov za iskani pojem &amp;quot;{0}&amp;quot;.</sl>
+<uk>Нічого не знайдено</uk>
 </text>
 <text>
 <en>Show All</en>
@@ -5686,6 +5694,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1124</id>
 <ro>Stimate domnule {0} {1}</ro>
 <sl>Spoštovani gospod {0} {1}</sl>
+<es>Apreciado señor {0} {1}</es>
+<sk>Vážený pán {0} {1}</sk>
 </text>
 <text>
 <en>Dear Mrs. {0}</en>
@@ -5693,6 +5703,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1125</id>
 <ro>Stimată doamnă {0}</ro>
 <sl>Spoštovana gospa {0}</sl>
+<es>Apreciada señora {0}</es>
+<sk>Vážená pani {0}</sk>
 </text>
 <text>
 <en>Excel export</en>
@@ -5764,6 +5776,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1137</id>
 <ro>Stimată doamnă {0} {1}</ro>
 <sl>Spoštovana gospa {0} {1}</sl>
+<es>Apreciada señora {0} {1}</es>
+<sk>Vážená pani {0} {1}</sk>
 </text>
 <text>
 <en>Dear Mr. {0}</en>
@@ -5771,6 +5785,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1138</id>
 <ro>Stimate domnule {0}</ro>
 <sl>Spoštovani gospod {0}</sl>
+<es>Apreciado señor {0}</es>
+<sk>Vážený pán {0}</sk>
 </text>
 <text>
 <en>Hello Mr. {0}</en>
@@ -5875,6 +5891,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>Формат</bg>
 <sl>format</sl>
 <es>Formato</es>
+<sk>Formát</sk>
 </text>
 <text>
 <en>Newsletter stopped, cannot change status.</en>
@@ -5882,6 +5899,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1156</id>
 <ro>Newsletter-ul a fost oprit. Nu mai este posibilă modificarea statusului.</ro>
 <sl>Pošiljanje e-novic je bilo prekinjeno.  Statusa ni možno spremeniti.</sl>
+<sk>Newsletter zastavený, nie je možné uložiť zmeny.</sk>
 </text>
 <text>
 <en>Unknown status.</en>
@@ -6092,6 +6110,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1195</id>
 <ro>Bună ziua  {0} {1}</ro>
 <sl>Dober dan {0} {1}</sl>
+<es>Buenos días {0} {1}</es>
+<sk>Dobrý deň {0} {1}</sk>
 </text>
 <text>
 <en>Hello {0} {1}</en>
@@ -6304,6 +6324,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Odjava od e-novic</sl>
 <uk>Відмовитися від розсилки новин</uk>
 <sq>Одјави се за Newsletter</sq>
+<es>Cancelar Suscripción</es>
+<sk>Odhlásiť z odberu noviniek</sk>
 </text>
 <text>
 <en>You have been successfully unsubscribed from the newsletter.</en>
@@ -6312,6 +6334,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Aţi fost dezabonat de la newsletter.</ro>
 <sl>Uspešno ste se odjavili od e-novic.</sl>
 <sq>Вие сте успешно одјавени.</sq>
+<es>Usted canceló su suscripción exitosamente.</es>
+<sk>Boli ste úspešne odhlásený z odberu noviniek.</sk>
 </text>
 <text>
 <en>Unsubscribe newsletter</en>
@@ -6321,6 +6345,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Odjava od e-novic</sl>
 <uk>Відмовитися від розсилки новин</uk>
 <sq>Одјави се за Newsletter</sq>
+<es>Cancelar suscripción</es>
+<sk>Odhlásiť z odberu noviniek</sk>
 </text>
 <text>
 <en>default</en>
@@ -6371,6 +6397,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1255</id>
 <ro>Setări destinatar newsletter</ro>
 <sl>E-novice Prejemniki Nastavitve</sl>
+<sk>Nastavenia odberateľa noviniek</sk>
 </text>
 <text>
 <en>unsubscribed</en>
@@ -6378,6 +6405,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1256</id>
 <ro>anulat</ro>
 <sl>Odjavljen</sl>
+<es>suscripción cancelada</es>
+<sk>odhlásený</sk>
 </text>
 <text>
 <en>not activated</en>
@@ -6423,6 +6452,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Aţi fost abonat pentru newsletter-ul {0}.</ro>
 <sl>Pravkar ste bili vneseni kot prejemnik e-novic pri {0}.</sl>
 <uk>Ви щойно підписалися на автоматичну розсилку новин від {0}.</uk>
+<sk>Boli ste prihlásený na odber noviniek na {0}.</sk>
 </text>
 <text>
 <en>ACTIVATION LINK</en>
@@ -6446,6 +6476,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Puteţi să dezabonaţi oricând newsletter-ul, accesând următorul link:</ro>
 <sl>Od e-novic se lahko kadarkoli odjavite tako, da kliknete na naslednjo povezavo:</sl>
 <uk>Для того, щоб відмовитися від автоматичної розсилки новин, перейдіть за посиланням:</uk>
+<es>Para cancelar su suscripción de nuestro Newsletter, haga clic en el siguiente link:</es>
+<sk>Odhlásiť sa môžete kedykoľvek kliknutím na túto linku:</sk>
 </text>
 <text>
 <en>To change you data or settings, click this link:</en>
@@ -6454,6 +6486,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Pentru a modifica datele sau setările dumneavoastră faceţi click pe următorul link:</ro>
 <sl>Za spremembo svojih podatkov in nastavitev kliknite na naslednjo povezavo:</sl>
 <uk>Для того, щоб змінити свої данні або налаштування, перейдіть за посилянням: </uk>
+<sk>Na zmenu svojich údajov alebo nastavení kliknite na túto linku:</sk>
 </text>
 <text>
 <en>Thanks for your subscription!</en>
@@ -6462,6 +6495,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Mulţumim pentru înscriere!</ro>
 <sl>Hvala, ker ste se prijavili!</sl>
 <uk>Щиро вдячні за Вашу підписку!</uk>
+<sk>Ďakujeme za vaše prihlásenie!</sk>
 </text>
 <text>
 <en>Please click the following link to confirm your E-Mail address and to receive our newsletters in future.</en>
@@ -6488,6 +6522,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>HTML-Формат</mk>
 <sl>HTML-format</sl>
 <es>Formato HTML</es>
+<sk>HTML formát</sk>
 </text>
 <text>
 <en>Text-Format</en>
@@ -6499,6 +6534,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>Текст-Формат</mk>
 <sl>tekstovni format</sl>
 <es>Formato de texto</es>
+<sk>Textový formát</sk>
 </text>
 <text>
 <en>Your E-Mail address has been verified. You will receive our newsletters in future.</en>
@@ -7659,6 +7695,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Išči: </sl>
 <sk>Hľadaj:</sk>
 <fr>Rechercher:</fr>
+<uk>Пошук</uk>
 </text>
 <text>
 <en>copy/paste</en>
@@ -8524,6 +8561,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>Відмовитися від розсилки</uk>
 <sq>Одјави се</sq>
 <sl>Odjavi</sl>
+<es>Cancelar suscripción</es>
+<sk>Odhlásiť</sk>
 </text>
 <text>
 <context>thousands separator</context>
@@ -8833,6 +8872,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Keine Einträge wurden ausgewählt.</de>
 <ro>Nu a fost selectat niciun obiect.</ro>
 <sl>Noben vnos ni bil izbran.</sl>
+<uk>Записів не знайдено</uk>
 </text>
 <text>
 <en>clearing cache...</en>
@@ -9613,6 +9653,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Edit newsletter</en>
 <de>Newsletter bearbeiten</de>
 <id>1941</id>
+<sk>Nastavenia odberu noviniek</sk>
 </text>
 <text>
 <en>Sending finished</en>
@@ -9660,6 +9701,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Suchen...</de>
 <id>1953</id>
 <sl>Iskanje...</sl>
+<uk>Пошук</uk>
 </text>
 <text>
 <en>view rate</en>
@@ -9914,6 +9956,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Sprejmi in nadaljuj</sl>
 <bg>Приеми и продължи</bg>
 <cs>Souhlasím a pokračovat</cs>
+<hu>Elfogadás és továbblépés</hu>
 </text>
 <text>
 <en>Cookie Opt In / Opt Out</en>
@@ -9932,6 +9975,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Când vizitaţi această pagină web, în prezent sunt generate cookie-uri. Faceţi click aici pentru a dezactiva cookie-urile.</ro>
 <fr>Actuellement, des cookies sont posés durant votre visite sur le présent site Web. Cliquez ici pour désactiver les cookies.</fr>
 <es>Durante su visita a esta página web se colocan actualmente cookies. Haga clic aquí para desactivar las cookies.</es>
+<hu>Ha megnyitja ezt a honlapot, akkor oda sütik települnek. Kattintson ide, ha deaktiválni szeretné a sütiket.</hu>
 <id>2007</id>
 </text>
 <text>
@@ -9945,6 +9989,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Când vizitaţi această pagină web, în prezent nu sunt generate cookie-uri. Faceţi click aici pentru a activa cookie-urile.</ro>
 <fr>Actuellement, aucun cookie n'est posé durant votre visite sur le présent site Web. Cliquez ici pour accepter les cookies.</fr>
 <es>Durante su visita a esta página web no se colocan cookies actualmente. Haga clic aquí si desea aceptar el empleo de cookies.</es>
+<hu>Ha megnyitja ezt a honlapot, oda pillanatnyilag nem települnek sütik. Kattintson ide, ha jóváhagyja a sütik alkalmazását.</hu>
 <id>2008</id>
 </text>
 <text>

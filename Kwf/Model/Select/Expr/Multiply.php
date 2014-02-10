@@ -7,6 +7,6 @@ class Kwf_Model_Select_Expr_Multiply extends Kwf_Model_Select_Expr_Unary_Abstrac
 {
     public function getResultType()
     {
-        return Kwf_Model_Interface::TYPE_INTEGER;
+        return Kwf_Model_Interface::TYPE_FLOAT;
     }
 }
