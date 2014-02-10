@@ -38,7 +38,7 @@ Kwf.GoogleMap.load = function(callback, scope)
     if (apiKeyIndex in Kwf.GoogleMap.apiKeys) {
         key = Kwf.GoogleMap.apiKeys[apiKeyIndex];
     }
-    var url = 'http:/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&async=2&language='+trlKwf('en');
+    var url = 'http:/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+trlKwf('en');
     url += '&callback=Kwf.GoogleMap._loaded';
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
@@ -218,8 +218,10 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         };
         this.gmap = new google.maps.Map(this.mapContainer.down(".container").dom,
             mapOptions);
-        this.directionsDisplay.setMap(this.gmap);
-        this.directionsDisplay.setPanel(this.mapContainer.down(".mapDir").dom);
+        if (this.mapContainer.down(".mapDir")) {
+            this.directionsDisplay.setMap(this.gmap);
+            this.directionsDisplay.setPanel(this.mapContainer.down(".mapDir").dom);
+        }
 
         if (this.config.map_type == 'satellite') {
             this.gmap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
@@ -231,12 +233,10 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
             && this.config.zoom[0] && this.config.zoom[1]
             && this.config.zoom[2] && this.config.zoom[3]
             ) {
-            this.config.zoom = this.gmap.getBoundsZoomLevel(new google.maps.LatLngBounds(
-                new google.maps.LatLng(this.config.zoom[2], this.config.zoom[3]),
-                new google.maps.LatLng(this.config.zoom[0], this.config.zoom[1])
-            ));
-            if (this.config.maximumInitialResolution < this.config.zoom)
-                this.config.zoom = this.config.maximumInitialResolution;
+            var bounds = new google.maps.LatLngBounds();
+            bounds.extend(new google.maps.LatLng(this.config.zoom[0], this.config.zoom[1]));
+            bounds.extend(new google.maps.LatLng(this.config.zoom[2], this.config.zoom[3]));
+            this.gmap.fitBounds(bounds);
         }
 
         if (typeof this.config.markers == 'string') {

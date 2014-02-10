@@ -84,4 +84,32 @@ class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
         $this->assertEquals('1', $model->getRow($select)->componentId);
         $this->assertEquals(1, $model->countRows($select));
     }
+
+    public function testDuplicateHome()
+    {
+        $source = $this->_root->getComponentById('1');
+        $target = $this->_root->getComponentById('4');
+        $this->assertEquals(0, count($target->getChildPages()));
+
+        Kwf_Component_ModelObserver::getInstance()->disable(); //PagesController also does that (for performance reasons)
+        Kwf_Util_Component::duplicate($source, $target);
+        Kwf_Component_ModelObserver::getInstance()->enable();
+
+        $new = $this->_root->getComponentById('5');
+        $this->assertEquals(false, $new->isHome);
+    }
+
+    public function testDuplicate()
+    {
+        $source = $this->_root->getComponentById('1');
+        $target = $this->_root->getComponentById('4');
+        $this->assertEquals(0, count($target->getChildPages()));
+
+        Kwf_Component_ModelObserver::getInstance()->disable(); //PagesController also does that (for performance reasons)
+        Kwf_Util_Component::duplicate($source, $target);
+        Kwf_Component_ModelObserver::getInstance()->enable();
+
+        $this->assertEquals(1, count($target->getChildPages()));
+        $this->assertEquals(1, count($target->getChildPage()->getChildPages()));
+    }
 }

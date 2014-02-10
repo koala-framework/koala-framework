@@ -489,7 +489,20 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
             ->getComponentById($parentTargetId, array('ignoreVisible'=>true))
             ->dbId;
         $sourceRow = $this->getModel()->getRow($childId);
+        if ($sourceRow->is_home) {
+            //copy is_home only if target has no home yet
+            $t = Kwf_Component_Data_Root::getInstance()->getComponentById($parentTargetId, array('ignoreVisible'=>true));
+            while ($t && !Kwc_Abstract::getFlag($t->componentClass, 'hasHome')) {
+                $t = $t->parent;
+            }
+            if (!$t || $t->getChildPage(array('home' => true, 'ignoreVisible'=>true), array())) {
+                $data['is_home'] = false;
+            }
+        }
         $newRow = $sourceRow->duplicate($data);
+
+        //clear cache in here as while duplicating the modelobserver might be disabled
+        Kwf_Cache_Simple::delete('pcIds-'.$newRow->parent_id);
 
         //ids are numeric, we don't have to use parentSource/parentTarget
         $source = Kwf_Component_Data_Root::getInstance()->getComponentById($childId, array('ignoreVisible'=>true));
