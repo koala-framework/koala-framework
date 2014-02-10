@@ -7,15 +7,21 @@
 class Kwf_Component_Cache_Memory
 {
     private static $_zendCache = null;
+    private static $_instance;
     const CACHE_VERSION = 1; //increase when incompatible changes to cache contents are made, additionally cache_component table needs to be truncated by update script
+
 
     public static function getInstance()
     {
-        static $i;
-        if (!isset($i)) {
-            $i = new self();
+        if (!isset(self::$_instance)) {
+            self::$_instance = new self();
         }
-        return $i;
+        return self::$_instance;
+    }
+
+    public static function setInstance($instance)
+    {
+        self::$_instance = $instance;
     }
 
     public static function getZendCache()
