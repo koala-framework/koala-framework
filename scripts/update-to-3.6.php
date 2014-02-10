@@ -27,8 +27,8 @@ function createTrlCacheFolder()
 {
     if (!is_dir('cache/trl')) {
         mkdir('cache/trl');
-        file_put_contents('cache/trl/.gitignore', '*');
-        system("git add -f cache/trl/.gitignore");
+        file_put_contents('cache/trl/.gitignore', "*\n!.gitignore\n");
+        system("git add cache/trl/.gitignore");
         echo "folder \"cache/trl\" created\n";
     }
 }
@@ -36,8 +36,8 @@ function createScssCacheFolder()
 {
     if (!is_dir('cache/scss')) {
         mkdir('cache/scss');
-        file_put_contents('cache/scss/.gitignore', '*');
-        system("git add -f cache/scss/.gitignore");
+        file_put_contents('cache/scss/.gitignore', "*\n!.gitignore\n");
+        system("git add cache/scss/.gitignore");
         echo "folder \"cache/scss\" created\n";
     }
 }

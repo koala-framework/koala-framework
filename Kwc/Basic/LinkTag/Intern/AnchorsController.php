@@ -22,4 +22,9 @@ class Kwc_Basic_LinkTag_Intern_AnchorsController extends Kwf_Controller_Action_A
         }
         return $ret;
     }
+
+    protected function _isAllowedComponent()
+    {
+        return !!Kwf_Registry::get('userModel')->getAuthedUser();
+    }
 }

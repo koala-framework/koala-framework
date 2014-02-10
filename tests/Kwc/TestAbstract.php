@@ -28,6 +28,8 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
             'primaryKey' => 'page_id',
         )));
         Kwf_Assets_Package_Default::clearInstances();
+        Kwf_Component_LogDuplicateModel::setInstance(new Kwf_Model_FnF(array(
+        )));
         return $this->_root;
     }
 

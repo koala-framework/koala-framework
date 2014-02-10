@@ -124,7 +124,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                     $queryFields = array();
                     foreach ($this->_columns as $column) {
                         $index = $column->getDataIndex();
-                        if (!in_array($index, $this->_model->getColumns())) continue;
+                        if (isset($this->_model) && !in_array($index, $this->_model->getColumns())) continue;
                         $queryFields[] = $index;
                     }
                 }

@@ -16,7 +16,7 @@ Kwf.onJElementReady('.kwcMenuDropdownMask', function(target) {
         $(subMask).css({height: maskHeight, top: maskOffset, 'z-index': 1});
     }
 
-    if(fixedParent && fixedParent.length) {
+    if (fixedParent && fixedParent.length) {
         subMask = $(mask).clone();
         $(fixedParent).prepend(subMask);
         setCss();
@@ -26,11 +26,13 @@ Kwf.onJElementReady('.kwcMenuDropdownMask', function(target) {
     }
 
     $('.kwcMenuDropdownMask > ul > li').on('mouseenter', function(e){
-       $('.kwcMenuDropdownMaskMask').addClass('visible')
+        if ($(e.currentTarget).hasClass('hasSubmenu'))
+            $('.kwcMenuDropdownMaskMask').addClass('visible')
     })
 
     $('.kwcMenuDropdownMask > ul > li').on('mouseleave', function(e){
-       $('.kwcMenuDropdownMaskMask').removeClass('visible')
+        if ($(e.currentTarget).hasClass('hasSubmenu'))
+            $('.kwcMenuDropdownMaskMask').removeClass('visible')
     })
 });
 
