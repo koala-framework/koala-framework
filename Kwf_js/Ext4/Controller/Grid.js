@@ -24,23 +24,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
         }, this);
         if (this.deleteButton) {
             this.deleteButton.disable();
-            this.deleteButton.on('click', function() {
-                if (this.autoSync) {
-                    Ext4.Msg.show({
-                        title: trlKwf('Delete'),
-                        msg: trlKwf('Do you really wish to remove this entry?'),
-                        buttons: Ext4.Msg.YESNO,
-                        scope: this,
-                        fn: function(button) {
-                            if (button == 'yes') {
-                                this.deleteSelected();
-                            }
-                        }
-                    });
-                } else {
-                    this.deleteSelected();
-                }
-            }, this);
+            this.deleteButton.on('click', this.onDeleteClick, this);
         }
         Ext4.each(grid.query('> toolbar[dock=top] field'), function(field) {
             field.on('change', function() {
@@ -65,10 +49,33 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
         }
     },
 
-    deleteSelected: function()
+    onDeleteClick: function()
+    {
+        if (this.autoSync) {
+            Ext4.Msg.show({
+                title: trlKwf('Delete'),
+                msg: trlKwf('Do you really wish to remove this entry?'),
+                buttons: Ext4.Msg.YESNO,
+                scope: this,
+                fn: function(button) {
+                    if (button == 'yes') {
+                        this.deleteSelected();
+                    }
+                }
+            });
+        } else {
+            this.deleteSelected();
+        }
+    },
+
+    deleteSelected: function(options)
     {
         this.grid.getStore().remove(this.grid.getSelectionModel().getSelection());
-        if (this.autoSync) this.grid.getStore().sync();
+        if (this.autoSync) {
+            var syncOptions = {};
+            if (options && options.syncOptions) syncOptions = options.syncOptions;
+            this.grid.getStore().sync(syncOptions);
+        }
     },
 
     onBindStore: function()

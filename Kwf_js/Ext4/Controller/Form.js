@@ -12,25 +12,26 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
         var form = this.form;
         if (!this.saveButton) this.saveButton = form.down('button#save');
         if (this.saveButton) {
-            this.saveButton.on('click', function()
-            {
-                if (!this.form.getForm().isValid()) {
-                    Ext4.Msg.alert(trlKwf('Save'),
-                        trlKwf("Can't save, please fill all red underlined fields correctly."));
-                    return false;
-                }
-
-                this.save();
-
-                form.getRecord().save();
-
-            }, this);
+            this.saveButton.on('click', this.onSaveClick, this);
         }
     },
 
     load: function(row)
     {
         this.form.loadRecord(row);
+    },
+
+    onSaveClick: function()
+    {
+        if (!this.form.getForm().isValid()) {
+            Ext4.Msg.alert(trlKwf('Save'),
+                trlKwf("Can't save, please fill all red underlined fields correctly."));
+            return false;
+        }
+
+        this.save();
+
+        this.form.getRecord().save();
     },
 
     save: function()
