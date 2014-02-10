@@ -14,8 +14,7 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
 
         if (is_string($this->_model)) $this->_model = Kwf_Model_Abstract::getInstance($this->_model);
 
-        if ($this->_getParam('applicationAssetsVersion')
-                && $this->getHelper('ViewRenderer')->isJson()) {
+        if ($this->_getParam('applicationAssetsVersion')) {
             if (Kwf_Assets_Dispatcher::getAssetsVersion() != $this->_getParam('applicationAssetsVersion')) {
                 $this->_forward('json-wrong-version', 'error',
                                     'kwf_controller_action_error');
