@@ -13,21 +13,21 @@ class Kwf_Media_ResponsiveSteps_Test extends Kwf_Test_TestCase
         $imageData['file'] = '../images/stripesDark.png';
         $dim['width'] = 100;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(40);
         $this->assertEquals($steps, $resultingSteps);
 
         $imageData['file'] = '../images/avatar_ghost.jpg';
         $dim['width'] = 300;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(50, 150);
         $this->assertEquals($steps, $resultingSteps);
 
         $imageData['file'] = '../images/devices/macBook.jpg';
         $dim['width'] = 3000;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(
             40, 140, 240, 340, 440, 540, 640, 740, 840, 940, 1040, 1140, 1240,
             1340, 1440, 1540, 1640, 1740, 1840, 1940, 2040
@@ -40,21 +40,21 @@ class Kwf_Media_ResponsiveSteps_Test extends Kwf_Test_TestCase
         $imageData['file'] = '../images/stripesDark.png';
         $dim['width'] = 40;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(40);
         $this->assertEquals($steps, $resultingSteps);
 
         $imageData['file'] = '../images/avatar_ghost.jpg';
         $dim['width'] = 150;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(50, 150);
         $this->assertEquals($steps, $resultingSteps);
 
         $imageData['file'] = '../images/devices/macBook.jpg';
         $dim['width'] = 2040;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(
             40, 140, 240, 340, 440, 540, 640, 740, 840, 940, 1040, 1140, 1240,
             1340, 1440, 1540, 1640, 1740, 1840, 1940, 2040
@@ -67,21 +67,21 @@ class Kwf_Media_ResponsiveSteps_Test extends Kwf_Test_TestCase
         $imageData['file'] = '../images/stripesDark.png';
         $dim['width'] = 30;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(30, 40);
         $this->assertEquals($steps, $resultingSteps);
 
         $imageData['file'] = '../images/avatar_ghost.jpg';
         $dim['width'] = 100;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(100, 150);
         $this->assertEquals($steps, $resultingSteps);
 
         $imageData['file'] = '../images/devices/macBook.jpg';
         $dim['width'] = 1100;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(
             100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200,
             1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2040
@@ -94,21 +94,21 @@ class Kwf_Media_ResponsiveSteps_Test extends Kwf_Test_TestCase
         $imageData['file'] = '../images/stripesDark.png';
         $dim['width'] = 20;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(20, 40);
         $this->assertEquals($steps, $resultingSteps);
 
         $imageData['file'] = '../images/avatar_ghost.jpg';
         $dim['width'] = 75;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(75, 150);
         $this->assertEquals($steps, $resultingSteps);
 
         $imageData['file'] = '../images/devices/macBook.jpg';
         $dim['width'] = 1020;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(
             20, 120, 220, 320, 420, 520, 620, 720, 820, 920,
             1020,
@@ -123,21 +123,21 @@ class Kwf_Media_ResponsiveSteps_Test extends Kwf_Test_TestCase
         $imageData['file'] = '../images/stripesDark.png';
         $dim['width'] = 15;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(15, 30);
         $this->assertEquals($steps, $resultingSteps);
 
         $imageData['file'] = '../images/avatar_ghost.jpg';
         $dim['width'] = 70;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(70, 140);
         $this->assertEquals($steps, $resultingSteps);
 
         $imageData['file'] = '../images/devices/macBook.jpg';
         $dim['width'] = 934;
         $dim['height'] = 100;
-        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+        $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
         $resultingSteps = array(
             34, 134, 234, 334, 434, 534, 634, 734, 834,
             934,

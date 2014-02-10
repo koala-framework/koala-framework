@@ -109,7 +109,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if (isset($dimensions['width']) && $dimensions['width'] > 0) {
             $aspectRatio = $dimensions['height'] / $dimensions['width'] * 100;
             $width = $dimensions['width'];
-            $steps = Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $this->getImageData());
+            $imageData = $this->getImageData();
+            $steps = Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageData['file']);
             $ret['minWidth'] = $steps[0];
             $ret['maxWidth'] = end($steps);
         }
@@ -144,7 +145,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $s = $this->getImageDimensions();
             $imageData = $this->_getImageDataOrEmptyImageData();
             $width = Kwf_Media_Image::getResponsiveWidthStep($s['width'],
-                                Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData));
+                                Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData['file']));
             if (Kwc_Abstract::getSetting($this->getData()->componentClass, 'useDataUrl')) {
                 $id = $this->getData()->componentId;
                 $type = Kwf_Media::DONT_HASH_TYPE_PREFIX.$width;
@@ -319,7 +320,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         // calculate output width/height on base of getImageDimensions and given width
         $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
         if ($width) {
-            $width = Kwf_Media_Image::getResponsiveWidthStep($width, Kwf_Media_Image::getResponsiveWidthSteps($dim, $data));
+            $width = Kwf_Media_Image::getResponsiveWidthStep($width,
+                        Kwf_Media_Image::getResponsiveWidthSteps($dim, $data['file']));
             $dim['height'] = $width / $dim['width'] * $dim['height'];
             $dim['width'] = $width;
         }

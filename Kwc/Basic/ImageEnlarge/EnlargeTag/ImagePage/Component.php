@@ -52,7 +52,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         $ret['maxWidth'] = 0;
         if ($ret['width'] && $ret['width'] > 0) {
             $ret['aspectRatio'] = $ret['height'] / $ret['width'] * 100;
-            $steps = Kwf_Media_Image::getResponsiveWidthSteps($size, $c->getImageData());
+            $imageData = $c->getImageData();
+            $steps = Kwf_Media_Image::getResponsiveWidthSteps($size, $imageData['file']);
             $ret['minWidth'] = $steps[0];
             $ret['maxWidth'] = end($steps);
         }

@@ -197,7 +197,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $dim = $c->getData()->getChildComponent('-i1')->getComponent()->getImageDimensions();
         $imageData = $c->getData()->getChildComponent('-i1')->getComponent()->getImageData();
         $width = Kwf_Media_Image::getResponsiveWidthStep($dim['width'],
-                        Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData));
+                        Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']));
         $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="kwcAbstractImage kwcBasicTextImageTestComponent".*>'
                     .'\s*<div class="container" .*>'
@@ -231,7 +231,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $imageData = $this->_root->getComponentById(1015)
             ->getChildComponent('-i1')->getComponent()->getImageData();
         $width = Kwf_Media_Image::getResponsiveWidthStep($dim['width'],
-                        Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData));
+                        Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']));
         $row = $c->getRow();
         $html = '<p><img src="/media/Kwc_Basic_Text_Image_TestComponent/1015-i1/File/small/e73520d11dee6ff49859b8bb26fc631f/filename.jpg?319" /></p>';
         $row->content = $html;

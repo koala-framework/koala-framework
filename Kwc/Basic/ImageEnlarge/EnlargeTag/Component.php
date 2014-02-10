@@ -97,8 +97,9 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         $baseUrl = $this->getBaseImageUrl();
         if ($baseUrl) {
             $dimensions = $this->getImageDimensions();
+            $imageData = $this->getImageData();
             $width = Kwf_Media_Image::getResponsiveWidthStep($dimensions['width'],
-                    Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $this->getImageData()));
+                    Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageData['file']));
             return str_replace('{width}', $width, $baseUrl);
         }
         return null;
@@ -138,7 +139,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
         if ($width) {
             $width = Kwf_Media_Image::getResponsiveWidthStep($width,
-                    Kwf_Media_Image::getResponsiveWidthSteps($dimension, $data));
+                    Kwf_Media_Image::getResponsiveWidthSteps($dimension, $data['file']));
             $dimension['height'] = $width / $dimension['width'] * $dimension['height'];
             $dimension['width'] = $width;
         }

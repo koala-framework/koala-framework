@@ -20,7 +20,7 @@ class Kwf_Media_Image
     public static function getResponsiveWidthSteps($dim, $imagepath)
     {
         $ret = array();
-        $size = getimagesize($imageData['file']);
+        $size = getimagesize($imagepath);
 
         $maxWidth = $dim['width'] * 2;
         if ($size[0] < $dim['width'] * 2) {

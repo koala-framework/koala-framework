@@ -79,7 +79,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
             $imageData = $c->getComponent()->getImageData();
             if ($imageData) {
                 $dim = $c->getComponent()->getImageDimensions();
-                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
                 foreach ($steps as $step) {
                     $this->fireEvent(new Kwf_Component_Event_Media_Changed(
                         $this->_class, $c, Kwf_Media::DONT_HASH_TYPE_PREFIX.$step
@@ -97,7 +97,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
             $imageData = $component->getComponent()->getImageData();
             if ($imageData) {
                 $dim = $component->getComponent()->getImageDimensions();
-                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData);
+                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
                 foreach ($steps as $step) {
                     $this->fireEvent(new Kwf_Component_Event_Media_Changed(
                         $this->_class, $component, Kwf_Media::DONT_HASH_TYPE_PREFIX.$step
