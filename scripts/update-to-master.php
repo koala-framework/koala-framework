@@ -23,7 +23,14 @@ function replaceFiles($files, $from, $to) {
     }
 }
 
+function updateConfig() {
+    $c = file_get_contents('config.ini');
+    $c = preg_replace('#^preview\.responsive#m', 'kwc.responsive', $c);
+    file_put_contents('config.ini', $c);
+}
+
 $files = glob_recursive('Component.php');
 $files[] = 'config.ini';
 replaceFiles($files, 'Kwc_Columns_Component', 'Kwc_Legacy_Columns_Component');
 replaceFiles($files, 'Kwc_ColumnsResponsive_Component', 'Kwc_Columns_Component');
+updateConfig();
