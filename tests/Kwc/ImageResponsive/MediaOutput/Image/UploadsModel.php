@@ -1,5 +1,5 @@
 <?php
-class Kwc_Abstract_Image_UploadsModel extends Kwf_Test_Uploads_Model
+class Kwc_ImageResponsive_MediaOutput_Image_UploadsModel extends Kwf_Test_Uploads_Model
 {
     public function __construct($config = array())
     {
