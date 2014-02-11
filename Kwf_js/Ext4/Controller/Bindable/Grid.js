@@ -25,7 +25,6 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
 
     isDirty: function()
     {
-        return false;
         if (!this.gridController.grid.getStore()) return false;
         return this.gridController.grid.getStore().getModifiedRecords().length || this.gridController.grid.getStore().getNewRecords().length;
     },
