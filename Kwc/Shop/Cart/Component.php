@@ -57,6 +57,17 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret['countProducts'] = $this->getData()->countChildComponents(array('generator'=>'detail'));
         $ret['checkout'] = $this->getData()->getChildComponent('_checkout');
         $ret['shop'] = $this->getData()->getParentPage();
+
+        $ret['order'] = Kwf_Model_Abstract::getInstance($this->_getSetting('childModel'))
+        ->getReferencedModel('Order')
+        ->getCartOrder();
+        $ret['subTotal'] = $ret['order']->getSubTotal();
+        $ret['total'] = $ret['order']->getTotal();
+
+        $ret['sumRows'] = $ret['order']->getSumRows();
+        foreach ($ret['sumRows'] as $k=>$i) {
+            $ret['sumRows'][$k]['text'] = $this->getData()->trlStaticExecute($i['text']);
+        }
         return $ret;
     }
 

@@ -3,6 +3,12 @@
     <form action="<?= $this->data->url ?>" method="post">
         <?=$this->component($this->view)?>
         <div class="clear"></div>
+        <? foreach ($this->sumRows as $row) { ?>
+            <div class="amounts <?=isset($row['class']) ? $row['class'] : ''?>">
+                <span class="label"><?=$row['text']?></span>
+                <span class="sum"><?=$this->money($row['amount'],'')?></span>
+            </div>
+        <? } ?>
         <div class="back">
             <?=$this->componentLink($this->shop, $this->placeholder['backToShop']);?>
         </div>
