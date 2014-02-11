@@ -12,8 +12,8 @@
             </tr>
             <? } ?>
         </thead>
-        <? } ?>
         <tbody>
+        <? } ?>
             <? foreach ($this->dataRows as $dr) { ?>
             <tr class="<?=$dr['cssClass']; ?>">
                 <? foreach ($dr['data'] as $dataItem) { ?>
@@ -23,6 +23,8 @@
                 <? } ?>
             </tr>
             <? } ?>
+        <? if ($this->headerRows) { ?>
         </tbody>
+        <? } ?>
     </table>
 </div>
