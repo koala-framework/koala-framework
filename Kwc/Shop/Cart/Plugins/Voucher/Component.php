@@ -38,7 +38,8 @@ class Kwc_Shop_Cart_Plugins_Voucher_Component extends Kwf_Component_Plugin_Abstr
         return array(array(
             'amount' => $amount,
             'text' => $text.':',
-            'type' => 'voucher'
+            'type' => 'voucher',
+            'class' => 'voucher'
         ));
     }
 
