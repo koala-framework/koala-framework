@@ -75,6 +75,15 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         return $ret;
     }
 
+    public function getDefaultDependencies()
+    {
+        $ret = array();
+        foreach ($this->_providers as $p) {
+            $ret = array_merge($ret, $p->getDefaultDependencies());
+        }
+        return $ret;
+    }
+
 
     public function serialize()
     {

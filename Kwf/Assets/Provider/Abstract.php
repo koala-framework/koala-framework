@@ -13,6 +13,11 @@ abstract class Kwf_Assets_Provider_Abstract
         return array();
     }
 
+    public function getDefaultDependencies()
+    {
+        return array();
+    }
+
     public function setProviderList(Kwf_Assets_ProviderList_Abstract $providerList)
     {
         $this->_providerList = $providerList;
