@@ -11,7 +11,7 @@ var addArrow = function(el) {
     }
 };
 var flipScroll = function() {
-    Ext.select('.kwcBasicTable.responsiveFlipScroll').each(function(el) {
+    Ext.select('.kwcBasicTable.responsiveFlipScroll', true).each(function(el) {
         if (el.hasClass('flipScroll')) {
             if (el.getWidth() > el.dom.flipScrollSetAt) {
                 el.removeClass('flipScroll');
