@@ -50,7 +50,7 @@ class Kwc_ImageResponsive_CreatesImgElement_Test extends Kwf_Test_SeleniumTestCa
         $this->openKwc('Kwc_ImageResponsive_CreatesImgElement_Root_Component/imageenlarge1');
         $this->click("css=.kwcBasicImageEnlarge > a");
 
-        sleep(1);
+        $this->waitForConnections();
         $this->assertElementPresent("css=.kwcBasicImageEnlargeEnlargeTagImagePage img[src^=\"/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/media/Kwc_ImageResponsive_CreatesImgElement_Components_ImageEnlarge_EnlargeTag_Component/root_imageenlarge1-linkTag/dh-\"]");
     }
 }

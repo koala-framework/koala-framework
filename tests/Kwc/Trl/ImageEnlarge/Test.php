@@ -55,6 +55,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
                 array('component_id'=>'root-en_test5-image', 'kwf_upload_id'=>'6'),
                 array('component_id'=>'root-en_test6-image', 'kwf_upload_id'=>null),
                 array('component_id'=>'root-en_test7-image', 'kwf_upload_id'=>'3'),
+                array('component_id'=>'root-en_test7-image', 'kwf_upload_id'=>'3'),
             ));
 
 
@@ -188,7 +189,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         return null;
     }
 
-    public function testDeChangeImageMediaCacheOfEnlargeTagTrlDeletedWhenSameWidth()
+    public function testDeChangeImageMedia_CacheOfEnlargeTagTrlDeletedWithSameWidth()
     {
         $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test1');
         $c = $imageEnlargeTrlComponent
@@ -203,27 +204,64 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->_process();
         $imageWithNumber3 = $this->_getImageFromHtml($c->render());
 
+        $image1 = new Imagick($imageWithNumber1['file']);
+        $image3 = new Imagick($imageWithNumber3['file']);
+
+        $this->assertEquals(560, $image1->getImageWidth());
+        $this->assertEquals(320, $image3->getImageHeight());
+    }
+
+    public function testDeChangeImageMedia_CacheOfEnlargeTagTrlDeletedWithSameWidth2()
+    {
+        $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test1');
+        $c = $imageEnlargeTrlComponent
+                ->getChildComponent('-linkTag')
+                ->getChildComponent('_imagePage');
+        $imageWithNumber1 = $this->_getImageFromHtml($c->render());
+
         $row = $imageEnlargeTrlComponent->getComponent()->getRow();
         $row->own_image = 1;
         $row->save();
         $row = $imageEnlargeTrlComponent->getChildComponent('-image')->getComponent()->getRow(); //own preview image in en
-        $row->kwf_upload_id = '6';
+        $row->kwf_upload_id = '3';
         $row->save();
         $this->_process();
-        $imageWithNumber6FromTrl = $this->_getImageFromHtml($c->render());
+        $imageWithNumber3FromTrl = $this->_getImageFromHtml($c->render());
+
+        $image1 = new Imagick($imageWithNumber1['file']);
+        $image3 = new Imagick($imageWithNumber3FromTrl['file']);
+
+        $this->assertEquals(560, $image1->getImageWidth());
+        $this->assertEquals(560, $image3->getImageWidth());
+        $this->assertEquals(320, $image3->getImageHeight());
+    }
+
+    public function testEnChangeOwnImageMedia_CacheOfEnlargeTagTrlDeletedWhenSameWidth()
+    {
+        $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test7');
+        $c = $imageEnlargeTrlComponent
+                ->getChildComponent('-linkTag')
+                ->getChildComponent('_imagePage');
+        $imageWithNumber1 = $this->_getImageFromHtml($c->render());
+
+        // Gets row of trl-component, adds image
+        $row = $imageEnlargeTrlComponent->getComponent()->getRow();
+        $row->own_image = 1;
+        $row->save();
+        $this->_process();
+        $imageWithNumber3 = $this->_getImageFromHtml($c->render());
 
         $image1 = new Imagick($imageWithNumber1['file']);
         $image3 = new Imagick($imageWithNumber3['file']);
-        $image6 = new Imagick($imageWithNumber6FromTrl['file']);
-
-        $this->assertEquals(560, $image1->getImageWidth());
-        $this->assertEquals(320, $image3->getImageHeight());
-        $this->assertEquals(180, $image6->getImageWidth());
+        $this->assertEquals($image1->getImageWidth(), 560);
+        $this->assertEquals($image1->getImageHeight(), 560);
+        $this->assertEquals($image3->getImageWidth(), 560);
+        $this->assertEquals($image3->getImageHeight(), 320);
     }
 
-    public function testEnChangeOwnImageMediaCacheOfEnlargeTagTrlDeletedWhenSameWidth()
+    public function testEnChangeOwnImageMedia_CacheOfEnlargeTagTrlDeletedWhenSameWidth2()
     {
-        $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test7');
+        $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test3');
         $c = $imageEnlargeTrlComponent
                 ->getChildComponent('-linkTag')
                 ->getChildComponent('_imagePage');
@@ -231,22 +269,20 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
 
         // Gets row of trl-component, adds image
         $row = $imageEnlargeTrlComponent->getComponent()->getRow();
-        $row->own_image = 1;
+        $row->own_image = 0;
         $row->save();
         $this->_process();
         $imageWithNumber1 = $this->_getImageFromHtml($c->render());
 
-        $row = $imageEnlargeTrlComponent->getComponent()->getRow();
-        $row->own_image = 0;
-        $row->save();
-        $this->_process();
-        $imageWithNumber6AfterDeleteCache = $this->_getImageFromHtml($c->render());
-
-        $this->assertEquals($imageWithNumber6, $imageWithNumber6AfterDeleteCache);
-        $this->assertNotEquals($imageWithNumber6, $imageWithNumber1);
+        $image6 = new Imagick($imageWithNumber6['file']);
+        $image1 = new Imagick($imageWithNumber1['file']);
+        $this->assertEquals($image6->getImageWidth(), 180);
+        $this->assertEquals($image6->getImageHeight(), 330);
+        $this->assertEquals($image1->getImageWidth(), 560);
+        $this->assertEquals($image1->getImageHeight(), 560);
     }
 
-    public function testEnChangeOwnImageAndSetUploadMediaCacheOfEnlargeTagTrlDeletedWhenSameWidth()
+    public function testEnChangeOwnImageAndSetUploadMedia_CacheOfEnlargeTagTrlDeletedWhenSameWidth()
     {
         $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test1');
         $c = $imageEnlargeTrlComponent
@@ -264,14 +300,13 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->_process();
         $imageWithNumber3 = $this->_getImageFromHtml($c->render());
 
-        $row = $imageEnlargeTrlComponent->getComponent()->getRow();
-        $row->own_image = 0;
-        $row->save();
-        $this->_process();
-        $imageWithNumber1AfterDeleteCache = $this->_getImageFromHtml($c->render());
-
-        $this->assertEquals($imageWithNumber1, $imageWithNumber1AfterDeleteCache);
-        $this->assertNotEquals($imageWithNumber1, $imageWithNumber3);
+        $image1 = new Imagick($imageWithNumber1['file']);
+        $image3 = new Imagick($imageWithNumber3['file']);
+        $this->assertNotEquals($image1->getImageHeight(), $image3->getImageHeight());
+        $this->assertEquals($image1->getImageWidth(), 560);
+        $this->assertEquals($image1->getImageHeight(), 560);
+        $this->assertEquals($image3->getImageWidth(), 560);
+        $this->assertEquals($image3->getImageHeight(), 320);
     }
 
     private function _checkTheSizes($html, $largeImageNum, $largeWidth, $largeHeight, $smallImageNum, $smallWidth, $smallHeight)

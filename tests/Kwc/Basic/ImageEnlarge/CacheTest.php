@@ -83,7 +83,8 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
 
     public function testEnlargeCacheDeletedOnBaseImageChanged()
     {
-        // Image and Enlarge müssen unterschiedliche dimensionen haben (damit da der cache nicht überlappt)
+        // Image and Enlarge have to define different dimensions because else it
+        // could happen that the parent has the same types as the child.
         // Get EnlargeComponent
         $component = $this->_root->getChildComponent('1804')
                                  ->getChildComponent('-linkTag')
@@ -93,7 +94,6 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         foreach ($matches[0] as $key => $m) {
             if ($matches[3][$key] == 'dh-{width}') continue;
             $fileWithGreaterHeight = Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
-            $fileWithGreaterHeight2 = Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
         }
 
         // Change basis-bild
@@ -102,7 +102,7 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         $row->save();
         $this->_process();
 
-        // überprüfe ob das bild von enlarge auch getauscht wurde
+        // Assert if image cache was changed
         preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $component->render(), $matches);
         foreach ($matches[0] as $key => $m) {
             if ($matches[3][$key] == 'dh-{width}') continue;

@@ -23,8 +23,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
                 $imageClass = Kwc_Abstract::getChildComponentClass($class, 'image');
                 $ret[] = array(
                     'class' => $imageClass,
-                    'event' => 'Kwf_Component_Event_Media_Changed',
-                    'callback' => 'onMediaChanged'
+                    'event' => 'Kwc_Abstract_Image_ImageChangedEvent',
+                    'callback' => 'onImageChanged'
                 );
                 $ret[] = array(
                     'class' => $imageClass,
@@ -35,8 +35,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
                 $masterComponentClass = Kwc_Abstract::getSetting($class, 'masterComponentClass');
                 $ret[] = array(
                     'class' => $masterComponentClass,
-                    'event' => 'Kwf_Component_Event_Media_Changed',
-                    'callback' => 'onMasterMediaChanged'
+                    'event' => 'Kwc_Abstract_Image_ImageChangedEvent',
+                    'callback' => 'onMasterImageChanged'
                 );
                 $ret[] = array(
                     'class' => $masterComponentClass,
@@ -89,7 +89,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
         }
     }
 
-    public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
+    public function onImageChanged(Kwc_Abstract_Image_ImageChangedEvent $event)
     {
         $components = $event->component->parent
             ->getRecursiveChildComponents(array('componentClass' => $this->_class));
@@ -110,15 +110,20 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
         }
     }
 
-    public function onMasterMediaChanged(Kwf_Component_Event_Media_Changed $event)
+    public function onMasterImageChanged(Kwc_Abstract_Image_ImageChangedEvent $event)
     {
         $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($event->component, 'Trl');
         foreach ($chained as $c) {
             $components = $c->getRecursiveChildComponents(array('componentClass' => $this->_class));
             foreach ($components as $component) {
-                $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                    $this->_class, $component
-                ));
+                $imageData = $component->getComponent()->getImageData();
+                $dim = $component->getComponent()->getImageDimensions();
+                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
+                foreach ($steps as $step) {
+                    $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                        $this->_class, $component, Kwf_Media::DONT_HASH_TYPE_PREFIX.$step
+                    ));
+                }
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                     $this->_class, $component
                 ));
