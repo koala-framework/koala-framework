@@ -4,11 +4,12 @@ Ext4.define('Kwf.Ext4.Viewport', {
     layout: 'border',
     initComponent : function() {
         this.items[0].region = 'center';
-        this.items.push(Ext4.create('Kwf.Ext4.Menu', {
+        this.menu = Ext4.create('Kwf.Ext4.Menu', {
             region: 'north',
             height: 35,
             border: false
-        }));
+        });
+        this.items.push(this.menu);
         this.callParent(arguments);
     }
 });

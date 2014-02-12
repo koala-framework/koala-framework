@@ -28,6 +28,7 @@ Ext4.define('Kwf.Ext4.Menu', {
     {
         Ext4.Ajax.request({
             url: this.controllerUrl+'/json-data',
+            method: 'GET',
             params: this.params,
             success: this.loadMenu,
             scope: this
@@ -96,6 +97,14 @@ Ext4.define('Kwf.Ext4.Menu', {
             this.add(menuItem);
         }, this);
         this.add(new Ext4.toolbar.Fill());
+        this.loadingAnim = this.add({
+            xtype: 'component',
+            cls: Ext4.baseCSSPrefix + 'mask-msg-text ext4-maincontroller-loading',
+            height: 16,
+            width: 16,
+            renderTpl: '<div class=\"icon\"></div>',
+            style: 'display:none'
+        });
 
         /*
         TODO: port rest of this file to ext4
