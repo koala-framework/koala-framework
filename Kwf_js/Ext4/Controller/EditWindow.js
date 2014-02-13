@@ -5,16 +5,19 @@ Ext4.define('Kwf.Ext4.Controller.EditWindow', {
     modal: true,
     closeAction: 'hide',
     stateful: true,
-    bbar: ['->', {
-        text: trlKwf('Save'),
-        itemId: 'save'
-    }, {
-        text: trlKwf('Cancel'),
-        itemId: 'cancel'
-    }],
-    initComponent: function()
-    {
-        this.items = [this.form];
+    showSave: true,
+    initComponent: function() {
+        this.bbar = ['->'];
+        if (this.showSave) {
+            this.bbar.push({
+                text: trlKwf('Save'),
+                itemId: 'save'
+            });
+        }
+        this.bbar.push({
+            text: this.showSave ? trlKwf('Cancel') : trlKwf('Close'),
+            itemId: 'cancel'
+        });
         this.callParent(arguments);
     }
 });
