@@ -1,7 +1,7 @@
 <span class="<?=$this->cssClass;?>">
     <?=$this->component($this->linkTag)?>
 
-        <?=$this->mailEncodeText($this->text)?>
+        <span><?=$this->mailEncodeText($this->text)?></span>
 
     <?if ($this->hasContent($this->linkTag)) {?>
     </a>
