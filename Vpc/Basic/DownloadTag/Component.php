@@ -106,9 +106,13 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Basic_LinkTag_Abstract_Compone
             Vps_Component_Data_Root::getInstance()->getComponentById($id),
             new Vps_Component_Cache_Meta_Static_Callback($row->getModel())
         );
+
+        $filename = $row->filename != '' ? $row->filename : 'unnamed';
+        $filename .= '.'.$fileRow->extension;
         return array(
             'file' => $file,
-            'mimeType' => $mimeType
+            'mimeType' => $mimeType,
+            'downloadFilename' => $filename
         );
     }
 
