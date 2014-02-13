@@ -58,7 +58,11 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     {
         $info = $this->getTable()->info();
         if (isset($info['metadata'][$col])) {
-            return $this->_getTypeFromDbType($info['metadata'][$col]['DATA_TYPE']);
+            $type = $this->_getTypeFromDbType($info['metadata'][$col]['DATA_TYPE']);
+            if ($col == 'pos' && $type == self::TYPE_BOOLEAN) {
+                throw new Kwf_Exception('Column "pos" must not be of type TINYINT in table "' . $info['name'] . '"');
+            }
+            return $type;
         }
         return parent::getColumnType($col);
     }
