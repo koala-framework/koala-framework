@@ -67,4 +67,4 @@ Ext.fly(window).on('resize', function() {
     Kwf.Utils.ResponsiveEl._els.each(function(i) {
         Ext.select(i.selector).each(i.fn);
     });
-});
+}, this, { buffer: 100 });
