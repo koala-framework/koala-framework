@@ -105,9 +105,13 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
         if (!$file || !file_exists($file)) {
             return null;
         }
+
+        $filename = $row->filename != '' ? $row->filename : 'unnamed';
+        $filename .= '.'.$fileRow->extension;
         return array(
             'file' => $file,
-            'mimeType' => $mimeType
+            'mimeType' => $mimeType,
+            'downloadFilename' => $filename
         );
     }
 }
