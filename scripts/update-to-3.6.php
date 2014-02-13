@@ -6,8 +6,9 @@ echo "Changed $file to 3.6\n";
 function glob_recursive($pattern, $flags = 0) {
     $files = glob($pattern, $flags);
     foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
-        if (dirname($dir) == './kwf-lib') continue;
-        if (dirname($dir) == './library') continue;
+        if (dirname($dir) == './kwf-lib' || $dir == './kwf-lib') continue;
+        if (dirname($dir) == './vkwf-lib' || $dir == './vkwf-lib') continue;
+        if (dirname($dir) == './library' || $dir == './library') continue;
         $files = array_merge($files, glob_recursive($dir.'/'.basename($pattern), $flags));
     }
     return $files;
@@ -149,7 +150,7 @@ $files = glob_recursive('Events.php');
 replaceFiles($files, 'Kwf_Component_Event_ComponentClass_PartialsChanged', 'Kwf_Component_Event_ComponentClass_AllPartialChanged');
 
 $files = glob_recursive('Component.php');
-$files[] = 'config.ini';
+$files = array_merge($files, glob_recursive('config.ini'));
 replaceFiles($files, 'Kwc_Basic_Headlines_Component', 'Kwc_Legacy_Headlines_Component');
 replaceFiles($files, 'Kwc_Basic_Headline_Component', 'Kwc_Legacy_Headline_Component');
 
