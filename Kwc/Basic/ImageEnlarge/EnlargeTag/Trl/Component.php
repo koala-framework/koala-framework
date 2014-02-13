@@ -99,16 +99,4 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
         $dimension = $component->getComponent()->getImageDimensions();
         return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dimension);
     }
-
-    public function getCacheMeta()
-    {
-        $ret = parent::getCacheMeta();
-
-        //own_image checkbox kann sich aendern
-        $row = $this->_getImageEnlargeComponent()->getRow();
-        $model = $row->getModel();
-        $primaryKey = $model->getPrimaryKey();
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model($model);
-        return $ret;
-    }
 }

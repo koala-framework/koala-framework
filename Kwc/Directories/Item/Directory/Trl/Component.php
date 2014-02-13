@@ -13,9 +13,4 @@ class Kwc_Directories_Item_Directory_Trl_Component extends Kwc_Directories_List_
     {
         return array($directoryClass);
     }
-
-    public static function getCacheMetaForView($view)
-    {
-        return Kwc_Directories_Item_Directory_Cc_Component::getCacheMetaForView($view);
-    }
 }

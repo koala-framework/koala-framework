@@ -7,11 +7,4 @@ class Kwc_Box_Tags_RelatedNews_View_Component extends Kwc_Directories_List_ViewP
         $ret['limit'] = 10;
         return $ret;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwf_Component_Generator_Plugin_Tags_ComponentsToTagsModel');
-        return $ret;
-    }
 }

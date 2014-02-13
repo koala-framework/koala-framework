@@ -33,9 +33,4 @@ class Kwc_Box_Title_Component extends Kwc_Abstract
         $ret['title'] = $this->_getTitle();
         return $ret;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        return Kwc_Menu_Component::getStaticCacheMeta($componentClass);
-    }
 }

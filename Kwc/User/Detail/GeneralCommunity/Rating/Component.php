@@ -49,12 +49,4 @@ class Kwc_User_Detail_GeneralCommunity_Rating_Component extends Kwc_Abstract
         }
         return $ret;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Forum_Directory_Model');
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Posts_Directory_Model');
-        return $ret;
-    }
 }

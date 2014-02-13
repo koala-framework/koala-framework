@@ -69,10 +69,7 @@ class Kwf_Component_ModelObserver
                 if (get_class($model) == 'Kwf_Model_Db') $model = $model->getTable();
             }
         }
-        if ($model instanceof Kwf_Component_Cache_MetaModel ||
-            $model instanceof Kwf_Component_Cache_Model ||
-            ($model instanceof  Kwf_Model_Field && !$primary)
-        ) {
+        if (($model instanceof  Kwf_Model_Field && !$primary)) {
             return;
         }
         if (get_class($model) == 'Kwf_Db_Table') return;

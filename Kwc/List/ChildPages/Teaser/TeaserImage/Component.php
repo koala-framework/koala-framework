@@ -32,13 +32,4 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Component extends Kwc_Abstract_Comp
         if ($this->getRow()->visible) return true;
         return false;
     }
-
-    public function getCacheMeta()
-    {
-        $ret = parent::getCacheMeta();
-        if (isset($this->getData()->targetPage->row)) {
-            $ret[] = new Kwf_Component_Cache_Meta_Component($this->getData()->targetPage);
-        }
-        return $ret;
-    }
 }

@@ -38,11 +38,4 @@ class Kwc_Paragraphs_Trl_Component extends Kwc_Chained_Trl_Component
         }
         return false;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwc_Chained_Abstract_ParentIdCacheMeta(Kwc_Abstract::getSetting($componentClass, 'childModel'));
-        return $ret;
-    }
 }

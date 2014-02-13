@@ -33,11 +33,4 @@ class Kwc_Basic_Download_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         */
         return $return;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwc_Chained_Abstract_ParentIdCacheMeta(Kwc_Abstract::getSetting($componentClass, 'ownModel'));
-        return $ret;
-    }
 }

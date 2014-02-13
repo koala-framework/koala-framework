@@ -61,11 +61,4 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         }
         return false;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_ChildModel();
-        return $ret;
-    }
 }

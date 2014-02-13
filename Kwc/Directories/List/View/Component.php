@@ -231,39 +231,4 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
             return $dir->getComponent()->getViewCacheLifetimeForView();
         }
     }
-
-    public function getCacheMeta()
-    {
-        $dir = $this->getData()->parent->getComponent()->getItemDirectory();
-        if (!$dir) return array();
-        $dirClass = $dir;
-        if ($dir instanceof Kwf_Component_Data) $dirClass = $dir->componentClass;
-        $callClass = $dirClass;
-        if (strpos($dirClass, '.') !== false) {
-            $callClass = substr($dirClass, 0, strpos($dirClass, '.'));
-        }
-
-        // ask the directory which meta/pattern is required, because only
-        // the directory know this
-        $ret = call_user_func(array($callClass, 'getCacheMetaForView'), $this->getData());
-
-        // trl view is the same, therefore add partial-meta to generator-model,
-        // because this is the model with the data for the view
-        if (is_string($dir)) {
-            $dirs = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($dir);
-        } else {
-            $dirs = array($dir);
-        }
-        foreach ($dirs as $dir) {
-            $generators = Kwf_Component_Generator_Abstract::getInstances($dir, array('generator'=>'detail'));
-            if (isset($generators[0])) {
-                if (is_instance_of($this->getPartialClass(), 'Kwf_Component_Partial_Id')) {
-                    $ret[] = new Kwf_Component_Cache_Meta_Static_ModelPartialId($generators[0]->getModel());
-                } else {
-                    $ret[] = new Kwf_Component_Cache_Meta_Static_ModelPartial($generators[0]->getModel());
-                }
-            }
-        }
-        return $ret;
-    }
 }

@@ -97,13 +97,4 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract
         $ret['metaTags'] = $this->_getMetaTags();
         return $ret;
     }
-
-    public function getCacheMeta()
-    {
-        $ret = parent::getCacheMeta();
-        foreach ($this->_getMetaTagComponents() as $component) {
-            $ret[] = new Kwf_Component_Cache_Meta_Component($component);
-        }
-        return $ret;
-    }
 }

@@ -45,12 +45,4 @@ class Kwc_Posts_Latest_Component extends Kwc_Abstract
         }
         return $ret;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Posts_Directory_Model');
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model(Kwf_Registry::get('config')->user->model);
-        return $ret;
-    }
 }

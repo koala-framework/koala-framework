@@ -16,12 +16,4 @@ class Kwc_List_ChildPages_Teaser_Trl_Component extends Kwc_Chained_Trl_Component
         ));
         return $ret;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwf_Component_Model', '{componentId}');
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Root_Category_Trl_GeneratorModel');
-        return $ret;
-    }
 }
