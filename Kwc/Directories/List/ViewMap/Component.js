@@ -69,7 +69,7 @@ Kwf.onContentReady(function() {
         var up = Ext.get(map).up('div.kwfSwitchDisplay');
         if (up) {
             (function(up, map) {
-                Ext.get(up).switchDisplayObject.on('opened', function() {
+                Ext.get(up).dom.switchDisplayObject.on('opened', function() {
                     Kwc.Directories.List.ViewMap.renderMap(map);
                 });
             }).defer(1, this, [up, map]);

@@ -6,6 +6,7 @@ class Kwc_ColumnsResponsive_Generator extends Kwf_Component_Generator_Table
         if ($select->hasPart(Kwf_Component_Select::WHERE_ID)) {
             return array();
         }
+        if (!$parentData) return array();
         $this->_getModel()->setData($parentData->componentClass, $parentData->dbId);
         return $this->_getModel()->getRows($select);
     }
