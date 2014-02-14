@@ -1,5 +1,6 @@
 <?php if (count($this->menu)) { ?>
     <div class="<?=$this->cssClass;?>">
+        <input type="hidden" value="<?=htmlspecialchars(json_encode($this->config))?>" />
         <ul class="menu">
             <? foreach ($this->menu as $m) { ?>
                 <li class="<?=$m['class'];?>">

@@ -1,11 +1,16 @@
-Kwf.onJElementReady('.kwcMenuDropdownMask', function(target) {
+Kwf.onJElementReady('.kwcMenuDropdownMask', function(target, config) {
     var mask = $('<div class="kwcMenuDropdownMaskMask"></div>');
+    var maskClone = $(mask).clone();
     var subMask;
 
-    $('body').prepend($(mask).clone());
+    $(config.maskParent).prepend($(maskClone));
+
+    if(config.maskParent !== 'body') {
+        $(maskClone).addClass('notBody');
+    }
 
     var parents = $(target).parentsUntil('body');
-    var fixedParent = $(parents).filter(function(i, parent) { 
+    var fixedParent = $(parents).filter(function(i, parent) {
       return $(parent).css('position') === 'fixed';
     })
 
