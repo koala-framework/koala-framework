@@ -2,7 +2,7 @@ Kwf.onElementReady('.kwcUserLoginFacebook', function(el, config){
     if (!Ext.get('fb-root')) {
         el.createChild({id: 'fb-root'});
     }
-    Kwf.Facebook.on('afterinit', function(){
+    Kwf.Facebook.onReady(function(){
         el.child('.kwfFbLoginButton').on('click', function(ev){
             loginInit();
         }, this);
