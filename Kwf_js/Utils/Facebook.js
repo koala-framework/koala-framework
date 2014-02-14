@@ -14,7 +14,7 @@ Ext.extend(Kwf.FacebookClass, Ext.util.Observable, {
     }
 });
 Kwf.Facebook = new Kwf.FacebookClass();
-Kwf.Facebook.appId = '{Kwf_Util_Facebook_Assets::getAppId()}';
+Kwf.Facebook.appId = Kwf.FacebookAppId;
 window.fbAsyncInit = function() {
     FB.init({
         appId      : Kwf.Facebook.appId, // App ID
