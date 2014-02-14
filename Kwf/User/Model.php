@@ -305,7 +305,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
     {
         Kwf_Auth::getInstance()->clearIdentity();
         $user->setPassword($password);
-        $this->_realLoginModifyRow($user);
+        $this->_logLogin($user);
         $auth = Kwf_Auth::getInstance();
         $auth->getStorage()->write(array('userId' => $user->id));
         return null;
