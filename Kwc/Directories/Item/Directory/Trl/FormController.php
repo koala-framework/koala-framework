@@ -1,4 +1,11 @@
 <?php
+class Kwc_Directories_Item_Directory_Trl_FormController_ComponentData extends Kwf_Data_Table
+{
+    public function save(Kwf_Model_Row_Interface $row, $data)
+    {
+    }
+}
+
 class Kwc_Directories_Item_Directory_Trl_FormController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_buttons = array();
@@ -43,7 +50,7 @@ class Kwc_Directories_Item_Directory_Trl_FormController extends Kwf_Controller_A
                 ->setWidth(250)
                 ->setListWidth(250)
                 ->setAllowBlank(false)
-                ->setSave(false);
+                ->setData(new Kwc_Directories_Item_Directory_Trl_FormController_ComponentData('component'));
             foreach ($forms as $key => $form) {
                 $card = $cards->add();
                 $card->add($form);
