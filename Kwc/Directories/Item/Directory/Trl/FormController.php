@@ -42,7 +42,8 @@ class Kwc_Directories_Item_Directory_Trl_FormController extends Kwf_Controller_A
             $cards->getCombobox()
                 ->setWidth(250)
                 ->setListWidth(250)
-                ->setAllowBlank(false);
+                ->setAllowBlank(false)
+                ->setSave(false);
             foreach ($forms as $key => $form) {
                 $card = $cards->add();
                 $card->add($form);
