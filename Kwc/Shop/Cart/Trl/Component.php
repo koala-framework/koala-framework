@@ -12,6 +12,17 @@ class Kwc_Shop_Cart_Trl_Component extends Kwc_Directories_Item_Directory_Trl_Com
         return $this->getData()->chained->getComponent()->getChildModel();
     }
 
+    public function getFormComponents()
+    {
+        $ret = array();
+        foreach ($this->getData()->getChildComponents(array('generator'=>'detail')) as $c) {
+            $ret[] = $c->getChildComponent('-form')
+                ->getChildComponent('-child')
+                ->getComponent();
+        }
+        return $ret;
+    }
+
     public function getForms()
     {
         $ret = array();
