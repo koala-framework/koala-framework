@@ -81,13 +81,15 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
                 if (!bindable.isValid()) {
                     return false;
                 }
+
                 var s = grid.getStore();
                 var row = s.model.create();
                 s.add(row);
-                grid.getSelectionModel().select(row);
+                this.fireEvent('add', row);
 
+                grid.getSelectionModel().select(row);
                 bindable.onAdd(row);
-                this.fireEvent('add');
+
             }, this);
         }
     },
