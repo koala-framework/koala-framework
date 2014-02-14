@@ -10913,7 +10913,214 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>File not found</en>
+<de>Datei nicht gefunden</de>
 <id>2106</id>
+</text>
+<text>
+<en>(No title)</en>
+<de>(Kein Titel)</de>
+<id>2144</id>
+</text>
+<text>
+<en>Create event for {0}</en>
+<de>Termin erstellen für {0}</de>
+<id>2145</id>
+</text>
+<text>
+<en>Move event to {0}</en>
+<de>Termin verschieben nach {0}</de>
+<id>2146</id>
+</text>
+<text>
+<en>Update event to {0}</en>
+<de>Termin updaten nach {0}</de>
+<id>2147</id>
+</text>
+<text>
+<en>+{0} more...</en>
+<de>+{0} mehr...</de>
+<id>2148</id>
+</text>
+<text>
+<en>Day</en>
+<de>Tag</de>
+<id>2149</id>
+</text>
+<text>
+<en>Week</en>
+<de>Woche</de>
+<id>2150</id>
+</text>
+<text>
+<en>Month</en>
+<de>Monat</de>
+<id>2151</id>
+</text>
+<text>
+<en>Jump to:</en>
+<de>Springe zu:</de>
+<id>2152</id>
+</text>
+<text>
+<en>Go</en>
+<de>Los</de>
+<id>2153</id>
+</text>
+<text>
+<en>{0} Days</en>
+<de>{0} Tage</de>
+<id>2154</id>
+</text>
+<text>
+<en>{0} Weeks</en>
+<de>{0} Wochen</de>
+<id>2155</id>
+</text>
+<text>
+<en>Add Event</en>
+<de>Termin hinzufügen</de>
+<id>2156</id>
+</text>
+<text>
+<en>Edit Event</en>
+<de>Termin bearbeiten</de>
+<de></de>
+<id>2157</id>
+</text>
+<text>
+<en>Saving changes...</en>
+<de>Änderungen werden gespeichert...</de>
+<id>2158</id>
+</text>
+<text>
+<en>Deleting event...</en>
+<de>Lösche Termin...</de>
+<id>2159</id>
+</text>
+<text>
+<en>Edit Details...</en>
+<de>Details bearbeiten...</de>
+<id>2160</id>
+</text>
+<text>
+<en>When</en>
+<de>Wann</de>
+<id>2161</id>
+</text>
+<text>
+<en>Calendar</en>
+<de>Kalender</de>
+<id>2162</id>
+</text>
+<text>
+<en>Calendars</en>
+<de>Kalender</de>
+<id>2163</id>
+</text>
+<text>
+<en>Edit Details</en>
+<de>Details bearbeiten</de>
+<id>2164</id>
+</text>
+<text>
+<en>Move to...</en>
+<de>Verschieben nach...</de>
+<id>2165</id>
+</text>
+<text>
+<en>Sun</en>
+<de>Son</de>
+<id>2166</id>
+</text>
+<text>
+<en>Mon</en>
+<de>Mon</de>
+<id>2167</id>
+</text>
+<text>
+<en>Tue</en>
+<de>Die</de>
+<id>2168</id>
+</text>
+<text>
+<en>Wed</en>
+<de>Mit</de>
+<id>2169</id>
+</text>
+<text>
+<en>Thu</en>
+<de>Don</de>
+<id>2170</id>
+</text>
+<text>
+<en>Fri</en>
+<de>Fre</de>
+<id>2171</id>
+</text>
+<text>
+<en>Sat</en>
+<de>Sam</de>
+<id>2172</id>
+</text>
+<text>
+<en>first</en>
+<de>erste</de>
+<id>2173</id>
+</text>
+<text>
+<en>second</en>
+<de>zweite</de>
+<id>2174</id>
+</text>
+<text>
+<en>third</en>
+<de>dritte</de>
+<id>2175</id>
+</text>
+<text>
+<en>fourth</en>
+<de>vierte</de>
+<id>2176</id>
+</text>
+<text>
+<en>fifth</en>
+<de>fünfte</de>
+<id>2177</id>
+</text>
+<text>
+<en>sixth</en>
+<de>sechste</de>
+<id>2178</id>
+</text>
+<text>
+<en>Do you really wish to remove this entry?</en>
+<de>Wollten sie diesen Eintrag wirklich löschen?</de>
+<id>2179</id>
+</text>
+<text>
+<en>Please Login</en>
+<de>Bitte einloggen</de>
+<id>2180</id>
+</text>
+<text>
+<en>Invisible</en>
+<de>Unsichtbar</de>
+<id>2181</id>
+</text>
+<text>
+<en>It is not possible to delete a column in first row</en>
+<de>Es ist nicht möglich eine Spalte der ersten Zeile zu löschen</de>
+<id>2182</id>
+</text>
+<text>
+<en>Responsive style</en>
+<de>Responsive Stiel</de>
+<id>2183</id>
+</text>
+<text>
+<en>Flip Scroll</en>
+<de>Flip Scroll</de>
+<id>2184</id>
 </text>
 </trl>
 
