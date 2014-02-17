@@ -22,7 +22,6 @@ Kwf.onContentReady(function(readyEl) {
         //move the size attribute into inline style with respecting aspect ratio
         //also always set width as style for dpr2 images as width: auto would display them in double size
         el.dom.style.width = el.dom.getAttribute('width')+'px';
-        el.dom.style.height = el.dom.getAttribute('height')+'px';
         if (el.getWidth() < el.dom.getAttribute('width')) {
             //image is responsive, adapt height accordingly
             var ratio = el.dom.getAttribute('height') / el.dom.getAttribute('width');
