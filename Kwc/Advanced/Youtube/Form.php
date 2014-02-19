@@ -12,7 +12,11 @@ class Kwc_Advanced_Youtube_Form extends Kwc_Abstract_Form
             ->addValidator($validator)
             ->setAllowBlank(false)
             ->setWidth(400);
-        $this->add(new Kwf_Form_Field_TextField('videoWidth', trlKwfStatic('Width')));
+        if (Kwc_Abstract::getSetting($this->getClass(), 'videoWidth') ==
+            Kwc_Advanced_Youtube_Component::USER_SELECT
+        ) {
+            $this->add(new Kwf_Form_Field_TextField('videoWidth', trlKwfStatic('Width')));
+        }
         $this->add(new Kwf_Form_Field_Select('dimensions', trlStatic('Dimensionen')))
             ->setDefaultValue('16x9')
             ->setValues(array(

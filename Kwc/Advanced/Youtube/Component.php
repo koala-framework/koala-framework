@@ -2,16 +2,20 @@
 class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
 {
     const REGEX = '/(?<=(?:v|i)=)[a-zA-Z0-9-]+(?=&)|(?<=(?:v|i)\/)[^&\n]+|(?<=embed\/)[^"&\n]+|(?<=(?:v|i)=)[^&\n]+|(?<=youtu.be\/)[^&\n]+/';
+
+    const USER_SELECT = 'user';
+    const CONTENT_WIDTH = 'contentWidth';
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Youtube');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['assets']['dep'][] = 'KwfYoutubePlayer';
-        
+
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
 
-        $ret['videoWidth'] = 900;
+        $ret['videoWidth'] = self::USER_SELECT;
         $ret['playerVars'] = array(
             'rel' => 0,
             'iv_load_policy' => 3,
@@ -36,9 +40,18 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars();
 
         preg_match(self::REGEX, $ret['row']->url, $matches);
+        $width = $this->_getSetting('videoWidth');
+        if ($width === self::USER_SELECT) {
+            $width = (int)$ret['row']->videoWidth;
+        } else if (is_int($width)) {
+            $width = $width;
+        }
+        if (!$width || $width === self::CONTENT_WIDTH) {
+            $width = (int)$this->getContentWidth();
+        }
         $config = array(
             'videoId' => $matches[0],
-            'width' => ($ret['row']->videoWidth) ? $ret['row']->videoWidth : $this->_getSetting('videoWidth'),
+            'width' => $width,
             'height' => 0
         );
         if ($d = $ret['row']->dimensions) {
