@@ -70,8 +70,9 @@ Kwf.Fade.Elements = function(cfg) {
 
     this.fadeElements = $(this.selectorRoot).find(this.selector);
 
-    $(this.selectorRoot).append('<div class="components"></div>');
-    $(this.selectorRoot).children('.components').append(this.fadeElements);
+    $(this.selectorRoot).append('<div class="outerComponents"></div>');
+    $(this.selectorRoot).children('.outerComponents').append('<div class="components"></div>');
+    $(this.selectorRoot).find('.components').append(this.fadeElements);
 
     if (this.startRandom) {
         this.active = Math.floor(Math.random() * this.fadeElements.length);
@@ -140,7 +141,7 @@ Kwf.Fade.Elements.prototype = {
     _isAnimating: false,
 
     start: function() {
-        this._components = $(this.selectorRoot).children('.components');
+        this._components = $(this.selectorRoot).find('.components');
         this.calculateMaxHeight();
         $(window).resize($.proxy(function() {
             this.calculateMaxHeight();
@@ -200,7 +201,7 @@ Kwf.Fade.Elements.prototype = {
                     left: left,
                     zIndex: 10
                 });
-                Kwf.callOnContentReady(nextEl);
+                Kwf.callOnContentReady(nextEl.get(0));
                 if ($.support.transition || $.support.transform) {
                     this._components.transition({ x: width }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         this._components.css({ x: 0 });
@@ -238,7 +239,7 @@ Kwf.Fade.Elements.prototype = {
                     top: top,
                     zIndex: 10
                 });
-                Kwf.callOnContentReady(nextEl);
+                Kwf.callOnContentReady(nextEl.get(0));
                 if ($.support.transition || $.support.transform) {
                     this._components.transition({ y: height }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         this._components.css({ y: 0 });
