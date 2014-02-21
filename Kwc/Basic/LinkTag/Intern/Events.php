@@ -76,7 +76,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         return $ids;
     }
 
-    private function _deleteCacheForTarget($targetId, $includeSubpages)
+    protected function _deleteCacheForTarget($targetId, $includeSubpages)
     {
         foreach (self::getComponentsForTarget($this->_class, $targetId, $includeSubpages) as $c) {
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
