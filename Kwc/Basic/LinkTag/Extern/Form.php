@@ -27,11 +27,11 @@ class Kwc_Basic_LinkTag_Extern_Form extends Kwc_Abstract_Form
                 $card->setName('popup');
 
                 $card->add(new Kwf_Form_Field_TextField('width', 'Width'))
-                    ->setValue(400)
+                    ->setDefaultValue(400)
                     ->setAllowBlank(false)
                     ->setVtype('alphanum');
                 $card->add(new Kwf_Form_Field_TextField('height', 'Height'))
-                    ->setValue(400)
+                    ->setDefaultValue(400)
                     ->setAllowBlank(false)
                     ->setVtype('alphanum');
                 $card->add(new Kwf_Form_Field_Checkbox('menubar', 'Menubar'));
