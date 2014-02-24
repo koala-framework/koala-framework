@@ -46,7 +46,10 @@ Kwf.onElementReady('.kwcListCarousel', function(el, config){
         } else if(wrapper.hasClass('imageWrapper')) {
             var imageItem = wrapper.child('.listItem');
             wrapper.setLeft(0);
-            imageItem.setWidth(el.getWidth());
+            if(imageItem && imageItem.length){
+                imageItem.setWidth(el.getWidth());
+            }
+
         }
     }
 
@@ -57,7 +60,7 @@ Kwf.onElementReady('.kwcListCarousel', function(el, config){
     }
 
     responsiveContent(el);
-    
+
     Kwf.Utils.ResponsiveEl('.kwcListCarousel', responsiveContent);
 
 }, this);
