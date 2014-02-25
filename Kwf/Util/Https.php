@@ -6,6 +6,13 @@ class Kwf_Util_Https
     public static function ensureHttps()
     {
         if (php_sapi_name() != 'cli' && self::supportsHttps()) {
+            if (isset($_SERVER['REQUEST_URI']) && substr($_SERVER['REQUEST_URI'], 0, 24) == '/admin/component/preview' && isset($_GET['url'])) {
+                $urlParts = parse_url($_GET['url']);
+                if (isset($urlParts['host']) && !self::domainSupportsHttps($urlParts['host'])) {
+                    self::ensureHttp(true);
+                    return;
+                }
+            }
             if (!isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
                 $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 header('Location: '.$redirect, true, 302);
@@ -15,10 +22,12 @@ class Kwf_Util_Https
         }
     }
 
-    public static function ensureHttp()
+    public static function ensureHttp($ignoreSessionExists = false)
     {
         if (php_sapi_name() != 'cli') {
-            if (isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST' && !Kwf_Session::sessionExists()) {
+            if (isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST' &&
+                ($ignoreSessionExists || !Kwf_Session::sessionExists())
+            ) {
                 $redirect = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 header('Location: '.$redirect, true, 302);
                 Kwf_Benchmark::shutDown();
