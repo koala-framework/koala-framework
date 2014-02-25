@@ -186,9 +186,11 @@ class Kwf_Component_Data
      *
      * @return string
      */
-    public function getPreviewUrl()
+    public function getPreviewUrl($previewMode = true)
     {
-        return Kwf_Setup::getBaseUrl().'/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl(true).'?kwcPreview');
+        $kwcPreview = '';
+        if ($previewMode) $kwcPreview = '?kwcPreview';
+        return Kwf_Setup::getBaseUrl().'/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl(true).$kwcPreview);
     }
 
     public function __get($var)
