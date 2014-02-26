@@ -76,10 +76,16 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         return $this->_entries;
     }
 
-    private function _getLinkData($pageNumber, $text = null)
+    private function _getLinkData($pageNumber, $type = null)
     {
-        if (is_null($text)) $text = $pageNumber;
-
+        if (is_null($type)) {
+            $text = $pageNumber;
+        } else {
+            $buttonTexts = $this->_getPlaceholder();
+            $text = $buttonTexts[$type];
+        }
+        if ($text === false) return null;
+        
         $params = array();
         $get = array();
         foreach ($_GET as $p=>$v) {
@@ -104,13 +110,13 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         if ($currentPage == $pageNumber) $classes[] = 'active';
 
         $buttonTexts = $this->_getPlaceholder();
-        if ($text==$buttonTexts['next']) {
+        if ($type=='next') {
             $classes[] = 'jumpNext';
-        } else if ($text==$buttonTexts['previous']) {
+        } else if ($type=='previous') {
             $classes[] = 'jumpPrevious';
-        } else if ($text==$buttonTexts['first']) {
+        } else if ($type=='first') {
             $classes[] = 'jumpFirst';
-        } else if ($text==$buttonTexts['last']) {
+        } else if ($type=='last') {
             $classes[] = 'jumpLast';
         }
 
@@ -220,14 +226,12 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
 
     protected function _getPageLinks($pages, $currentPage)
     {
-        $buttonTexts = $this->_getPlaceholder();
-
         $pageLinks = array();
-        if ($currentPage >= 3 && !$this->_getSetting('nextPrevOnly') && $buttonTexts['first'] !== false) {
-            $pageLinks[] = $this->_getLinkData(1, $buttonTexts['first']);
+        if ($currentPage >= 3 && !$this->_getSetting('nextPrevOnly')) {
+            $pageLinks[] = $this->_getLinkData(1, 'first');
         }
-        if ($currentPage >= 2 && $buttonTexts['previous'] !== false) {
-            $pageLinks[] = $this->_getLinkData($currentPage-1, $buttonTexts['previous']);
+        if ($currentPage >= 2) {
+            $pageLinks[] = $this->_getLinkData($currentPage-1, 'previous');
         }
 
         $appendPagelinks = array();
@@ -247,11 +251,11 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
             }
         }
 
-        if ($currentPage < $pages && $buttonTexts['next'] !== false) {
-            $appendPagelinks[] = $this->_getLinkData($currentPage+1, $buttonTexts['next']);
+        if ($currentPage < $pages) {
+            $appendPagelinks[] = $this->_getLinkData($currentPage+1, 'next');
         }
-        if ($currentPage < $pages - 1 && !$this->_getSetting('nextPrevOnly') && $buttonTexts['last'] !== false) {
-            $appendPagelinks[] = $this->_getLinkData($pages, $buttonTexts['last']);
+        if ($currentPage < $pages - 1 && !$this->_getSetting('nextPrevOnly')) {
+            $appendPagelinks[] = $this->_getLinkData($pages, 'last');
         }
 
         if (!$this->_getSetting('nextPrevOnly')) {
@@ -279,6 +283,10 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         foreach ($appendPagelinks as $linkData) {
             $pageLinks[] = $linkData;
         }
-        return $pageLinks;
+        $ret = array();
+        foreach ($pageLinks as $pageLink) {
+            if ($pageLink) $ret[] = $pageLink;
+        }
+        return $ret;
     }
 }
