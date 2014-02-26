@@ -371,7 +371,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         marker.infoWindow.close();
     },
     toggleWindow: function(marker) {
-        if (marker.infoWindow.getMap() !== null && typeof marker.infoWindow.getMap() !== "undefined") {
+        if (marker.infoWindow && marker.infoWindow.getMap() !== null && typeof marker.infoWindow.getMap() !== "undefined") {
             this.closeWindow(marker);
         } else {
             this.showWindow(marker);
