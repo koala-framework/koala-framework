@@ -18,6 +18,8 @@ Kwf.onJElementReady('.kwcMenuMobile', function(el, config) {
         if (activeEl.length && activeEl.get(0) != menuLink.get(0)) {
             activeEl.removeClass('active')
                 .next('.slider').children('ul.menu').slideToggle(slideDuration);
+            activeEl.parent().removeClass('open')
+                .next('.slider').children('ul.menu').slideToggle(slideDuration);
         }
 
         if (!menu) {
@@ -28,6 +30,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function(el, config) {
             menu.slideToggle(slideDuration);
         }
         menuLink.toggleClass('active');
+        menuLink.parent().toggleClass('open');
     });
 
     var getMenu = function() {
