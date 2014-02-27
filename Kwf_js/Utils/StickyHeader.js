@@ -21,7 +21,7 @@ Kwf.Utils.StickyHeader = function(selector, listenerWidth)
             $(fixedParent).addClass('kwfUtilsStickyHeader');
 
             function setCss(){
-                if($(window).scrollTop() > $(target).height() && $(window).width() > listenerWidth) {
+                if($(window).scrollTop() > $(target).height() && $(window).width() > width) {
                     $(fixedParent).addClass('stick');
                 } else {
                     $(fixedParent).removeClass('stick');
