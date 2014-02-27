@@ -1,6 +1,8 @@
-Kwf.Utils.StickyHeader = function(selector)
+Kwf.Utils.StickyHeader = function(selector, listenerWidth)
 {
     Kwf.onJElementReady(selector, function(target) {
+
+        var width = listenerWidth ? listenerWidth : 550;
 
         var parents = $(target).parentsUntil('body');
         var fixedParent = $(parents).filter(function(i, parent) {
@@ -19,20 +21,10 @@ Kwf.Utils.StickyHeader = function(selector)
             $(fixedParent).addClass('kwfUtilsStickyHeader');
 
             function setCss(){
-                if($(fixedParent).css('position') === 'absolute') return false;
-
-                if($(window).scrollTop() > $(target).height() && $(window).width() > 550) {
+                if($(window).scrollTop() > $(target).height() && $(window).width() > listenerWidth) {
                     $(fixedParent).addClass('stick');
                 } else {
                     $(fixedParent).removeClass('stick');
-                }
-            }
-
-            function compareWindowHeight(){
-                if($(fixedParent).height()*4 > $(window).height()) {
-                    $(fixedParent).css({position: 'absolute'});
-                } else {
-                    $(fixedParent).css({position: 'fixed'});
                 }
             }
 
@@ -40,11 +32,6 @@ Kwf.Utils.StickyHeader = function(selector)
                 setCss();
             })
 
-            $(window).on('resize', function(e){
-                compareWindowHeight();
-            })
-
-            compareWindowHeight();
             setCss();
         }
     })
