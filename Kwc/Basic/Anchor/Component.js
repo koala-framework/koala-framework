@@ -1,8 +1,8 @@
-Kwf.onJContentReady(function(){
+Kwf.onContentReady(function(el){
     if(window.location.hash) {
-        var el = $(document).find(window.location.hash);
-        if(el && el.length) {
-            $(window).scrollTop($(el).offset().top);
+        var target = Ext.get(window.location.hash.replace('#', ''));
+        if(target) {
+            window.scrollTo(0, target.getTop());
         }
     }
 }, this, {priority: 50});
