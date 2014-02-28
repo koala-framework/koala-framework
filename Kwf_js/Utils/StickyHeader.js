@@ -1,9 +1,11 @@
-Kwf.Utils.StickyHeader = function(selector)
+Kwf.Utils.StickyHeader = function(selector, listenerWidth)
 {
     Kwf.onJElementReady(selector, function(target) {
 
+        var width = listenerWidth ? listenerWidth : 550;
+
         var parents = $(target).parentsUntil('body');
-        var fixedParent = $(parents).filter(function(i, parent) { 
+        var fixedParent = $(parents).filter(function(i, parent) {
             return $(parent).css('position') === 'fixed';
         })
 
@@ -19,7 +21,7 @@ Kwf.Utils.StickyHeader = function(selector)
             $(fixedParent).addClass('kwfUtilsStickyHeader');
 
             function setCss(){
-                if($(window).scrollTop() > $(target).height() && $(window).width() > 550) {
+                if($(window).scrollTop() > $(target).height() && $(window).width() > width) {
                     $(fixedParent).addClass('stick');
                 } else {
                     $(fixedParent).removeClass('stick');

@@ -35,22 +35,24 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
         if ($trackViews) {
             $sql = "
                 SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
-                FROM kwc_mail_views WHERE mail_component_id=?";
-            $count = $db->fetchOne($sql, $this->_getParam('componentId') . '_mail');
-            $ret[] = array(
-                'pos' => $pos++,
-                'link' => trlKwf('view rate') . ' (' . trlKwf('percentage of users which opened the html newsletter') . ')',
-                'title' => '',
-                'count' => $count,
-                'percent' => number_format(($count / $total)*100, 2) . '%'
-            );
+                FROM kwc_mail_views WHERE mail_component_id=0 OR mail_component_id=1";
+            $count = $db->fetchOne($sql, array($this->_getParam('componentId') . '_mail', $this->_getParam('componentId') . '-mail'));
+            if ($count) {
+                $ret[] = array(
+                    'pos' => $pos++,
+                    'link' => trlKwf('view rate') . ' (' . trlKwf('percentage of users which opened the html newsletter') . ')',
+                    'title' => '',
+                    'count' => $count,
+                    'percent' => number_format(($count / $total)*100, 2) . '%'
+                );
+            }
         }
 
         $sql = "
             SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
             FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
-            WHERE s.redirect_id=r.id AND mail_component_id=?";
-        $count = $db->fetchOne($sql, $this->_getParam('componentId') . '_mail');
+            WHERE s.redirect_id=r.id AND (mail_component_id=0 OR mail_component_id=1)";
+        $count = $db->fetchOne($sql, array($this->_getParam('componentId') . '_mail', $this->_getParam('componentId') . '-mail'));
         $ret[] = array(
             'pos' => $pos++,
             'link' => trlKwf('click rate') . ' (' . trlKwf('percentage of users which clicked at least one link in newsletter') . ')',
@@ -68,11 +70,11 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
         $sql = "
             SELECT r.value, r.type, r.title, count(*) c
             FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
-            WHERE s.redirect_id=r.id AND mail_component_id=?
+            WHERE s.redirect_id=r.id AND (mail_component_id=0 OR mail_component_id=1)
             GROUP BY redirect_id
             ORDER BY c DESC
         ";
-        foreach ($db->fetchAll($sql, $this->_getParam('componentId') . '_mail') as $row) {
+        foreach ($db->fetchAll($sql, array($this->_getParam('componentId') . '_mail', $this->_getParam('componentId') . '-mail')) as $row) {
             if ($row['type'] == 'showcomponent') {
                 $c = Kwf_Component_Data_Root::getInstance()->getComponentById($row['value']);
                 if ($c) {
