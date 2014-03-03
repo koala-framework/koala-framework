@@ -49,8 +49,9 @@ class Kwc_Newsletter_Detail_Mail_Component extends Kwc_Mail_Component
         $db = Kwf_Registry::get('db');
         $sql = "
             SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
-            FROM kwc_mail_views WHERE mail_component_id=?";
-        return $db->fetchOne($sql, $this->getData()->componentId);
+            FROM kwc_mail_views WHERE mail_component_id=? OR mail_component_id=?";
+        $compatibilityId = str_replace('_mail', '-mail', $this->getData()->componentId);
+        return $db->fetchOne($sql, array($this->getData()->componentId, $compatibilityId));
     }
 
     public function getTotalClicks()
@@ -59,7 +60,8 @@ class Kwc_Newsletter_Detail_Mail_Component extends Kwc_Mail_Component
         $sql = "
             SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
             FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
-            WHERE s.redirect_id=r.id AND mail_component_id=?";
-        return $db->fetchOne($sql, $this->getData()->componentId);
+            WHERE s.redirect_id=r.id AND mail_component_id=? OR mail_component_id=?";
+        $compatibilityId = str_replace('_mail', '-mail', $this->getData()->componentId);
+        return $db->fetchOne($sql, array($this->getData()->componentId, $compatibilityId));
     }
 }
