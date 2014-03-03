@@ -22,6 +22,7 @@ class Kwc_Basic_Link_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $ret['text'] = $this->_getRow()->text;
+        if (!$this->hasContent($ret['linkTag'])) $ret['cssClass'] .= ' emptyLink';
         return $ret;
     }
 
