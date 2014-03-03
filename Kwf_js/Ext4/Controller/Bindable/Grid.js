@@ -6,6 +6,14 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
 
     load: function(row)
     {
+        var storeName = this.relation+'Store'; //same naming as in Ext.data.association.HasMany
+        if (this._loadedRecord && this._loadedRecord[storeName]) {
+            //if new row has same id as currently loaded copy the store
+            //this makes sures dirty values are kept
+            if (row.getId() == this._loadedRecord.getId()) {
+                row[storeName] = this._loadedRecord[storeName];
+            }
+        }
         this._loadedRecord = row;
         var store = row[this.relation]();
         if (!store.loaded) {

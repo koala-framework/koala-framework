@@ -93,5 +93,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
                 value: v
             }, false);
         }, this);
+
+        this.fireEvent('bindstore', s);
     }
 });

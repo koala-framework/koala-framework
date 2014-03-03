@@ -18,7 +18,26 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
 
     load: function(row)
     {
-        this.form.loadRecord(row);
+        //when loading the same row (by comparing the id) keep dirty values
+        var keepDirtyValues = this.form.getForm()._record
+            && this.form.getForm()._record.getId() == row.getId();
+
+        this.form.getForm()._record = row;
+
+        // Suspend here because setting the value on a field could trigger
+        // a layout, for example if an error gets set, or it's a display field
+        Ext4.suspendLayouts();
+        Ext4.iterate(row.getData(), function(fieldId, val) {
+            var field = this.form.getForm().findField(fieldId);
+            if (field) {
+                if (keepDirtyValues && field.isDirty()) {
+                    return;
+                }
+                field.setValue(val);
+                field.resetOriginalValue();
+            }
+        }, this);
+        Ext4.resumeLayouts(true);
     },
 
     onSaveClick: function()

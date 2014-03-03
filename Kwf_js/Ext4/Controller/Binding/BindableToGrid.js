@@ -63,6 +63,9 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
             }
         }, this);
 
+        this.gridController.on('bindstore', this.onBindStore, this);
+        if (grid.getStore()) this.onBindStore(grid.getStore());
+
         if (this.saveButton) {
             this.saveButton.on('click', function() {
                 var syncQueue = new Kwf.Ext4.Data.StoreSyncQueue();
@@ -92,6 +95,24 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
 
             }, this);
         }
+    },
+
+    onRefreshStore: function()
+    {
+        var curr = this.bindable.getLoadedRecord();
+        if (curr) {
+            var newRow = this.gridController.grid.getStore().getById(curr.getId());
+            //A refresh that loads the current row, a new object is created.
+            //Load the new row, dirty values should be kept by the bindable
+            if (newRow && newRow !== curr) {
+                this.bindable.load(newRow);
+            }
+        }
+    },
+
+    onBindStore: function(store)
+    {
+        store.on('refresh', this.onRefreshStore, this);
     },
 
     save: function(syncQueue)
