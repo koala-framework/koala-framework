@@ -22,7 +22,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         for (var i in this.dimensions) {
             radios.push({
                 inputValue: i,
-                boxLabel: Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[i]),
+                boxLabel: Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[i], this._dpr2Check),
                 name: 'dimension',
                 listeners: {
                     check: this._enableDisableFields,
@@ -132,7 +132,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         var showDimensionField = new Ext.BoxComponent({
             autoEl: {
                 html: '<div class="only-dimension">'+trlKwf('Dimension')+': '+Kwc.Abstract.Image.DimensionField
-                    .getDimensionString(this.dimensions[this._dimensionField.getValue()])+'</div>',
+                    .getDimensionString(this.dimensions[this._dimensionField.getValue()], this._dpr2Check)+'</div>',
                 hideBorders: true
             }
         });
@@ -142,7 +142,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             bodyStyle: 'padding: 10px',
             width: 270,
             autoScroll: true,
-            title: trlKwf('Dimension'),
+            title: trlKwf('Output Image-Dimension'),
             items: [
                 this._dimensionField,
                 this._userSelection,
@@ -278,10 +278,9 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 cropData: cropData
             };
             var scaleFactor = this._scaleFactor;
-            if (this._dpr2Check) scaleFactor /= 2;
             var errorMessageEl = Ext.get(this._errorMessage.getEl());
             errorMessageEl.addClass('kwc-abstract-image-dimensionwindow-errorMessage');
-            if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, this.dimensions, scaleFactor)) {
+            if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, this.dimensions, scaleFactor, this._dpr2Check)) {
                 errorMessageEl.addClass('error');
                 errorMessageEl.update(trlKwf('Selection too small!'));
                 this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').addClass('error');

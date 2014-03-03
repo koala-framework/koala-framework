@@ -29,7 +29,7 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
         if (this.rendered) {
             var pixelString = '';
             if (v.dimension) {
-                pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.resolvedDimensions[v.dimension], v);
+                pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.resolvedDimensions[v.dimension], v, this.dpr2Check);
             }
             if (pixelString) {
                 this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('At least: ')+pixelString);
@@ -119,22 +119,28 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
     }
 });
 
-Kwc.Abstract.Image.DimensionField.isValidImageSize = function(value, dimensions, scaleFactor)
+Kwc.Abstract.Image.DimensionField.isValidImageSize = function(value, dimensions, scaleFactor, dpr2)
 {
     if (!value.cropData)
         return true;
     var dimension = dimensions[value.dimension];
     var width =  dimension.width == 'user' ? value.width : dimension.width;
     var height = dimension.height == 'user' ? value.height : dimension.height;
-    if (width > value.cropData.width * scaleFactor
-        || height > value.cropData.height * scaleFactor) {
+    var dprFactor = 1;
+    if (dpr2) {
+        dprFactor = 2;
+    }
+    if (width * dprFactor > value.cropData.width * scaleFactor
+        || height * dprFactor > value.cropData.height * scaleFactor) {
         return false;
     }
     return true;
 };
 
-Kwc.Abstract.Image.DimensionField.getDimensionPixelString = function(dimension, v)
+Kwc.Abstract.Image.DimensionField.getDimensionPixelString = function(dimension, v, dpr2)
 {
+    var dprFactor = 1;
+    if (dpr2) dprFactor = 2;
     var width = null;
     if (!isNaN(parseInt(dimension.width))) {
         width = dimension.width;
@@ -147,6 +153,8 @@ Kwc.Abstract.Image.DimensionField.getDimensionPixelString = function(dimension, 
     } else if (dimension.height == 'user' && v) {
         height = v.height;
     }
+    height *= dprFactor;
+    width *= dprFactor;
     var ret = '';
     if (height && width) {
         ret = width + 'x' + height+'px';
@@ -158,7 +166,7 @@ Kwc.Abstract.Image.DimensionField.getDimensionPixelString = function(dimension, 
     return ret;
 };
 
-Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
+Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v, dpr2)
 {
     var ret;
     if (!dimension) return;
@@ -169,7 +177,7 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v)
         ret = '';
     }
 
-    var pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(dimension, v);
+    var pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(dimension, v, dpr2);
     if (ret) {
         if (pixelString) {
             ret += ' ('+pixelString+')';

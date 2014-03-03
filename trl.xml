@@ -11122,5 +11122,10 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Flip Scroll</de>
 <id>2184</id>
 </text>
+<text>
+<en>Output Image-Dimension</en>
+<de>Ausgabe Bilddimension</de>
+<id>2185</id>
+</text>
 </trl>
 
