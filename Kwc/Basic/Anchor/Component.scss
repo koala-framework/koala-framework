@@ -1,6 +1,4 @@
-@import "compass/utilities/general/clearfix";
 
 div.cssClass {
-    @include pie-clearfix;
-    display: block;
+    display: inline-block;
 }
