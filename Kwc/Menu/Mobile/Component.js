@@ -16,10 +16,15 @@ Kwf.onJElementReady('.kwcMenuMobile', function(el, config) {
 
         var activeEl = $('.kwcMenuMobile').children('.showMenu.active');
         if (activeEl.length && activeEl.get(0) != menuLink.get(0)) {
-            activeEl.removeClass('active')
-                .next('.slider').children('ul.menu').slideToggle(slideDuration);
-            activeEl.parent().removeClass('open')
-                .next('.slider').children('ul.menu').slideToggle(slideDuration);
+            activeEl
+                .removeClass('active')
+                .next('.slider')
+                .children('ul.menu')
+                .slideToggle(slideDuration, function(){
+                    this
+                        .parent()
+                        .removeClass('open');
+                });
         }
 
         if (!menu) {
