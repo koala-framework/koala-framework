@@ -73,12 +73,11 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
         $sql = "
             SELECT r.value, r.type, r.title, count(*) c
             FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
-            WHERE s.redirect_id=r.id AND (mail_component_id=? OR mail_component_id=?)
+            WHERE s.redirect_id=r.id AND mail_component_id=?
             GROUP BY redirect_id
             ORDER BY c DESC
         ";
-        $compatibilityId = str_replace('_mail', '-mail', $newsletterComponent->componentId);
-        foreach ($db->fetchAll($sql, array($newsletterComponent->componentId, $compatibilityId)) as $row) {
+        foreach ($db->fetchAll($sql, $newsletterComponent->componentId) as $row) {
             if ($row['type'] == 'showcomponent') {
                 $c = Kwf_Component_Data_Root::getInstance()->getComponentById($row['value']);
                 if ($c) {
