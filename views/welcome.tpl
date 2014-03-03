@@ -1,6 +1,6 @@
 <?php if($this->image) { ?>
     <div id="welcomeImg">
-        <img src="<?= $this->image ?>" style="display: block;" width="<?= $this->imageSize['width'] ?>" height="<?= $this->imageSize['height'] ?>" />
+        <img src="<?= $this->image ?>" width="<?= $this->imageSize['width'] ?>" height="<?= $this->imageSize['height'] ?>" />
     </div>
 <?php } ?>
 <div class="welcomeBox">
