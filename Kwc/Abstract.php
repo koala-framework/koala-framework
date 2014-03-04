@@ -551,11 +551,13 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if ($this->_hasSetting('contentWidth')) return $this->_getSetting('contentWidth');
 
         if ($this->getData()->isPage) {
-            $p = $this->getData();
-            $componentWithMaster = Kwf_Component_View_Helper_Master::getComponentsWithMasterTemplate($p);
+            $componentWithMaster = Kwf_Component_View_Helper_Master::
+                getComponentsWithMasterTemplate($this->getData());
             $last = array_pop($componentWithMaster);
-            if ($last) {
+            if ($last && $last['type'] == 'master') {
                 $p = $last['data'];
+            } else {
+                $p = Kwf_Component_Data_Root::getInstance(); // for tests
             }
             return $p->getComponent()->_getMasterChildContentWidth($this->getData());
         } else {
