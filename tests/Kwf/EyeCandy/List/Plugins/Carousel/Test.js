@@ -6,7 +6,6 @@ Kwf.onContentReady(function() {
                 childSelector: '.testItem',
                 plugins: [
                     new Kwf.EyeCandy.List.Plugins.Carousel({
-                        numberShown: 3
                     })
                 ]
             });
