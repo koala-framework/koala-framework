@@ -1,30 +1,85 @@
-Kwf.Utils.ResponsiveImg = function(selector)
-{
-    Kwf.onContentReady(function(readyEl) {
-        Ext.get(readyEl).select(selector, true).each(function(el) {
-            if (!el.dom.getAttribute('width') || !el.dom.getAttribute('height')) {
-                return;
-            }
-            if (Ext.isIE8 || Ext.isIE7 || Ext.isIE6) return; //those suckers don't support responsiveness or dpr2, so all below is not needed
+Kwf._responsiveImgEls = [];
+Kwf._responsiveImgSelectors = [];
+Kwf.DONT_HASH_TYPE_PREFIX = 'dh-';
 
-            //img tags that set width/height: auto in css don't have size until they are loaded
-            //move the size attribute into inline style with respecting aspect ratio
-            //also always set width as style for dpr2 images as width: auto would display them in double size
-            el.dom.style.width = el.dom.getAttribute('width')+'px';
-            if (!el.dom.complete) {
-                el.dom.style.height = el.dom.getAttribute('height')+'px';
-                if (el.getWidth() < el.dom.getAttribute('width')) {
-                    //image is responsive, adapt height accordingly
-                    var ratio = el.dom.getAttribute('height') / el.dom.getAttribute('width');
-                    el.dom.style.height = (ratio * el.getWidth())+'px';
-                }
-                el.on('load', function() {
-                    //once the img is loaded remove the style again and let css with: auto do it's work
-                    //required to be able to react to browser window change
-                    //this.style.width = ''; //don't remove width as that would break with dpr2 images
-                    this.style.height = '';
-                }, el.dom);
-            }
-        }, this);
-    }, this, { priority: -1 });
+Kwf.Utils.ResponsiveImg = function (selector) {
+    Kwf._responsiveImgSelectors.push(selector);
 };
+
+Kwf.onContentReady(function() {
+    var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
+    Kwf._responsiveImgSelectors.each(function(i) {
+        Ext.select(i, true).each(function (el) {
+            if (!el.responsiveImgInitDone) {
+                el.responsiveImgInitDone = true;
+                var baseUrl = el.dom.getAttribute("data-src");
+                var minWidth = parseInt(el.dom.getAttribute("data-min-width"));
+                var maxWidth = parseInt(el.dom.getAttribute("data-max-width"));
+                Kwf._responsiveImgEls.push({
+                    el: el,
+                    loadedWidth: el.getWidth(),
+                    baseUrl: baseUrl,
+                    minWidth: minWidth,
+                    maxWidth: maxWidth
+                });
+
+                var width = Kwf.Utils._getResponsiveWidthStep(
+                        el.getWidth() * devicePixelRatio, minWidth, maxWidth);
+                var sizePath = baseUrl.replace(Kwf.DONT_HASH_TYPE_PREFIX+'{width}',
+                        Kwf.DONT_HASH_TYPE_PREFIX+width);
+
+                el.createChild({
+                    tag: 'img',
+                    src: sizePath
+                });
+
+            } else { // Possible resize through ResponsiveEl
+                Kwf._responsiveImgEls.each(function(i) {
+                    Kwf.Utils._checkResponsiveImgEl(i, true);
+                });
+            }
+        });
+    });
+});
+
+Kwf.Utils._getResponsiveWidthStep = function (width,  minWidth, maxWidth) {
+    var steps = Kwf.Utils._getResponsiveWidthSteps(minWidth, maxWidth);
+    for(var i = 0; i < steps.length; i++) {
+        if (width <= steps[i]) {
+            return steps[i];
+        }
+    }
+    return steps[steps.length-1];
+};
+
+// Has similar algorithm in Kwf_Media_Image
+Kwf.Utils._getResponsiveWidthSteps = function (minWidth, maxWidth) {
+    var width = minWidth; // startwidth or minwidth
+    var steps = [];
+    do {
+        steps.push(width);
+        width += 100;
+    } while (width < maxWidth);
+    if (width - 100 != maxWidth) {
+        steps.push(maxWidth);
+    }
+    return steps;
+};
+
+Kwf.Utils._checkResponsiveImgEl = function (responsiveImgEl, ignoreWidth) {
+    var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
+    var width = Kwf.Utils._getResponsiveWidthStep(responsiveImgEl.el.getWidth() * devicePixelRatio,
+                    responsiveImgEl.minWidth, responsiveImgEl.maxWidth);
+    if (ignoreWidth || width > responsiveImgEl.loadedWidth) {
+        responsiveImgEl.loadedWidth = width;
+        responsiveImgEl.el.child('img').dom.src
+            = responsiveImgEl.baseUrl.replace(Kwf.DONT_HASH_TYPE_PREFIX+'{width}',
+                    Kwf.DONT_HASH_TYPE_PREFIX+width);
+    }
+};
+
+Ext.fly(window).on('resize', function() {
+    Kwf._responsiveImgEls.each(function(i) {
+        Kwf.Utils._checkResponsiveImgEl(i);
+    });
+}, this, {buffer: 200});

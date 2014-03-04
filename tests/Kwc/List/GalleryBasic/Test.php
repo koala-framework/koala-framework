@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Image
+ */
 class Kwc_List_GalleryBasic_Test extends Kwc_TestAbstract
 {
     public function setUp()

@@ -3,6 +3,7 @@
  * @group slow
  * @group Kwc_Trl
  * @group Kwc_Trl_Image
+ * @group Image
  *
 ansicht frontend:
 http://kwf.kwf.niko.vivid/kwf/kwctest/Kwc_Trl_Image_Root/de/test1 (...2)
@@ -106,7 +107,7 @@ class Kwc_Trl_Image_Test extends Kwc_TestAbstract
         // getMediaOutput aufrufen, damit Cache-Meta geschrieben wird (wegen d0cf3812b20fa19c40617ac5b08ed08a18ff808d)
         // muss so gemacht werden, weil der request über getimagesize weiter unten
         // nicht das FnF-Cache Model dieses Request schreiben kann
-        preg_match('/.*\/media\/([\w\.]+)\/([\w\-]+)\/(\w+)\/.*/', $html, $matches);
+        preg_match('# src=".*/media/([^/]+)/([^/]+)/([^/]+)#', $html, $matches);
         Kwf_Media::getOutput($matches[1], $matches[2], $matches[3]);
 
         $this->assertRegExp('#<img.+?src=".+?'.$smallImageNum.'\.jpg.+width="'.$smallWidth.'".+height="'.$smallHeight.'"#ms', $html);

@@ -53,11 +53,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
             $parentDimensions = $this->_getImageEnlargeComponent()->getImageDimensions();
             $dimension['crop'] = $parentDimensions['crop'];
         }
-        $data = $this->_getImageData();
+        $data = $this->getImageData();
         return Kwf_Media_Image::calculateScaleDimensions($data['file'], $dimension);
     }
 
-    private function _getImageData()
+    public function getImageData()
     {
         return $this->_getImageEnlargeComponent()->getImageData();
     }
@@ -67,10 +67,24 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
      */
     public function getImageUrl()
     {
-        $data = $this->_getImageData();
-        $id = $this->getData()->componentId;
-        $type = 'default'; // TODO test if dpr2 enabled
-        return Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
+        $dimensions = $this->getImageDimensions();
+        $baseUrl = $this->getBaseImageUrl();
+        if ($baseUrl) {
+            return str_replace('{width}', $dimensions['width'], $this->getBaseImageUrl());
+        }
+        return null;
+    }
+
+    public function getBaseImageUrl()
+    {
+        $data = $this->getImageData();
+        if ($data) {
+            return Kwf_Media::getUrl($this->getData()->componentClass,
+                        $this->getData()->componentId,
+                        Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}',
+                        $data['filename']);
+        }
+        return null;
     }
 
     private function _getImageEnlargeComponent()
@@ -84,7 +98,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
 
     public static function isValidMediaOutput($id, $type, $className)
     {
-        return Kwf_Media_Output_Component::isValid($id);
+        return Kwf_Media_Output_Component::isValidImage($id, $type);
     }
 
     public static function getMediaOutput($id, $type, $className)
@@ -92,11 +106,18 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
         $component = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
         if (!$component) return null;
 
-        $data = $component->getComponent()->_getImageData();
+        $data = $component->getComponent()->getImageData();
         if (!$data) {
             return null;
         }
         $dimension = $component->getComponent()->getImageDimensions();
-        return Kwc_Abstract_Image_Component::getMediaOutputForDimension($data, $dimension);
+        $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
+        if ($width) {
+            $width = Kwf_Media_Image::getResponsiveWidthStep($width,
+                Kwf_Media_Image::getResponsiveWidthSteps($dimension, $data['file']));
+            $dimension['height'] = $width / $dimension['width'] * $dimension['height'];
+            $dimension['width'] = $width;
+        }
+        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dimension);
     }
 }

@@ -1,6 +1,13 @@
-<div class="<?=$this->cssClass?>"<? if ($this->imageDpr2) { ?> data-dpr2src="<?=$this->imageDpr2?>"<? } ?>>
+<div class="<?=$this->cssClass?>" style="max-width:<?=$this->width;?>px;">
     <?=$this->component($this->linkTag)?>
-    <?=$this->image($this->image, $this->altText, $this->imgCssClass)?>
+    <div class="container" style="padding-bottom:<?=$this->aspectRatio?>%;"
+            data-min-width="<?=$this->minWidth;?>"
+            data-max-width="<?=$this->maxWidth;?>"
+            data-src="<?=$this->baseUrl;?>">
+        <noscript>
+            <?=$this->image($this->image, $this->altText, $this->imgCssClass)?>
+        </noscript>
+    </div>
     <?if ($this->hasContent($this->linkTag)) {?>
     </a>
     <?}?>

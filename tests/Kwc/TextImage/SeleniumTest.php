@@ -3,6 +3,7 @@
  * @group slow
  * @group selenium
  * @group Kwc_TextImage
+ * @group Image
  */
 class Kwc_TextImage_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {

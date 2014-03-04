@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Kwc_Image
+ * @group Image
  */
 class Kwc_Basic_Image_CacheFullWidth_Test extends Kwc_TestAbstract
 {
@@ -21,10 +22,10 @@ class Kwc_Basic_Image_CacheFullWidth_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', $src, $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
-        $im = new Imagick();
-        $im->readImageBlob($o['contents']);
-        $this->assertEquals(600, $im->getImageWidth());
-        $this->assertEquals(600, $im->getImageHeight());
+        $im = new Imagick($o['file']);
+        // File can be maximum original-size or dpr2 of dimension
+        $this->assertEquals(16, $im->getImageWidth());
+        $this->assertEquals(16, $im->getImageHeight());
     }
 
     public function testBoxChangeHasContent()
@@ -46,9 +47,9 @@ class Kwc_Basic_Image_CacheFullWidth_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', $src, $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
-        $im = new Imagick();
-        $im->readImageBlob($o['contents']);
-        $this->assertEquals(500, $im->getImageWidth());
-        $this->assertEquals(500, $im->getImageHeight());
+        $im = new Imagick($o['file']);
+        // File can be maximum original-size or dpr2 of dimension
+        $this->assertEquals(16, $im->getImageWidth());
+        $this->assertEquals(16, $im->getImageHeight());
     }
 }
