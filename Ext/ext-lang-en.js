@@ -114,7 +114,7 @@ if(Ext && Ext.DatePicker){
     format            : trlKwf("m/d/y"),
     okText            : "&#160;"+trlKwf('OK')+"&#160;",
     cancelText        : trlKwf("Cancel"),
-    startDay          : 0
+    startDay          : parseInt(trlcKwf('start day of week', '0'))
   });
 }
 

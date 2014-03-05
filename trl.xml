@@ -11127,5 +11127,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Ausgabe Bilddimension</de>
 <id>2185</id>
 </text>
+<text>
+<en>0</en>
+<de>1</de>
+<context>start day of week</context>
+<id>2186</id>
+</text>
 </trl>
 

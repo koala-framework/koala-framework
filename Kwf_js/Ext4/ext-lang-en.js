@@ -100,7 +100,7 @@ Ext4.define("Ext.locale.en.picker.Date", {
     monthYearText: trlKwf('Choose a month (Control+Up/Down to move years)'),
     todayTip: trlKwf("{0} (Spacebar)"),
     format: trlKwf("m/d/y"),
-    startDay: 0
+    startDay: parseInt(trlcKwf('start day of week', '0'))
 });
 
 Ext4.define("Ext.locale.en.picker.Month", {

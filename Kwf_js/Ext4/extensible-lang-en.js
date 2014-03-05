@@ -21,7 +21,7 @@ Ext4.onReady(function() {
     
     if (exists('Extensible.calendar.view.AbstractCalendar')) {
         Ext4.apply(Extensible.calendar.view.AbstractCalendar.prototype, {
-            startDay: 0,
+            startDay: parseInt(trlcKwf('start day of week', '0')),
             todayText: trlKwf('Today'),
             defaultEventTitleText: trlKwf('(No title)'),
             ddCreateEventText: trlKwf('Create event for {0}'),
@@ -55,7 +55,8 @@ Ext4.onReady(function() {
             },
             getMultiWeekText: function(numWeeks) {
                 return trlKwf('{0} Weeks');
-            }
+            },
+            startDay: parseInt(trlcKwf('start day of week', '0'))
         });
     }
     
