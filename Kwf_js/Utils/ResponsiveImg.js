@@ -11,6 +11,9 @@ Kwf.onContentReady(function() {
     Kwf._responsiveImgSelectors.each(function(i) {
         Ext.select(i, true).each(function (el) {
             if (!el.responsiveImgInitDone) {
+                if (el.getWidth() == 0) {
+                    return;
+                }
                 el.responsiveImgInitDone = true;
                 var baseUrl = el.dom.getAttribute("data-src");
                 var minWidth = parseInt(el.dom.getAttribute("data-min-width"));
