@@ -110,6 +110,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
+    public final function getAltText()
+    {
+        return $this->_getAltText();
+    }
+
     protected function _getAltText()
     {
         $ret = '';

@@ -1,18 +1,15 @@
 <?php
-class Kwc_Articles_Detail_PreviewImage_Mail_Component extends Kwc_Basic_Image_Component
+class Kwc_Articles_Detail_PreviewImage_Mail_Component extends Kwc_Basic_ImageParent_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
-        $ret['useParentImage'] = true;
-        $ret['dimensions'] = array(
-            'default'=>array(
-                'text' => trlKwf('default'),
-                'width' => 230,
-                'height' => 0,
-                'cover' => true,
-            )
+        $ret['dimension'] = array(
+            'text' => trlKwf('default'),
+            'width' => 230,
+            'height' => 0,
+            'cover' => true,
         );
         return $ret;
     }
