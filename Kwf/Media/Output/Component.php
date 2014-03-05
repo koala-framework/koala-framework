@@ -1,6 +1,9 @@
 <?php
 class Kwf_Media_Output_Component
 {
+    /**
+     * Helper function that calculates vars needed by components with responsive images
+     */
     public static function getResponsiveImageVars($dimensions, $imageFile)
     {
         $ret = array();
@@ -21,8 +24,10 @@ class Kwf_Media_Output_Component
     }
 
     /**
-     * Returns correctly scaled and croped image with mimetype. This is used by
-     * Kwc_Abstract_Image_Component and Kwc_Basic_ImageEnlarge_EnlargeTag_Component
+     * Helper function that returns scaled and croped images for media output
+     *
+     * Used by image components in getMediaOutput.
+     * Tries to avoid scaling if not required (to keep gif animation intact)
      */
     public static function getMediaOutputForDimension($data, $dim)
     {
