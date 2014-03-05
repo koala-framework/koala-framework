@@ -10,9 +10,9 @@ class Kwc_Abstract_Image_Trl_Image_Component extends Kwc_Abstract_Image_Componen
         return $ret;
     }
 
-    protected function _getImageDimensions()
+    public function getConfiguredImageDimensions()
     {
-        $dimension = $this->getData()->parent->chained->getComponent()->_getImageDimensions();
+        $dimension = $this->getData()->parent->chained->getComponent()->getConfiguredImageDimensions();
         $row = $this->getRow();
         if ($row->crop_width && $row->crop_height) {
             $dimension['crop']['x'] = $row->crop_x;

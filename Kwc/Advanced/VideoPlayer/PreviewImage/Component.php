@@ -15,7 +15,7 @@ class Kwc_Advanced_VideoPlayer_PreviewImage_Component extends Kwc_Basic_Image_Co
         return $ret;
     }
 
-    protected function _getImageDimensions()
+    public function getConfiguredImageDimensions()
     {
         $parentComponent = $this->getData()->parent->getComponent();
         $ret = $parentComponent->getVideoDimensions();

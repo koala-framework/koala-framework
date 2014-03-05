@@ -216,7 +216,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return null;
     }
 
-    protected function _getImageDimensions()
+    public function getConfiguredImageDimensions()
     {
         $row = $this->getRow();
         $dimension = $this->_getSetting('dimensions');
@@ -277,7 +277,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
     public function getImageDimensions()
     {
-        $size = $this->_getImageDimensions();
+        $size = $this->getConfiguredImageDimensions();
         if ($size['width'] === self::CONTENT_WIDTH) {
             $size['width'] = $this->getContentWidth();
         }
@@ -322,7 +322,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     public function getContentWidth()
     {
         $data = $this->_getImageDataOrEmptyImageData();
-        $s = $this->_getImageDimensions();
+        $s = $this->getConfiguredImageDimensions();
         if ($s['width'] === self::CONTENT_WIDTH) {
             return parent::getContentWidth();
         }
