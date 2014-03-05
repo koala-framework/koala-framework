@@ -14,7 +14,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
     init: function()
     {
         var grid = this.grid;
-        if (!this.deleteButton) this.deleteButton = grid.down('button#delete');
+        if (typeof this.deleteButton == 'undefined') this.deleteButton = grid.down('button#delete');
         if (this.deleteButton) this.deleteButton.disable();
         grid.on('selectionchange', function(model, rows) {
             if (rows[0]) {

@@ -10,7 +10,7 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
     init: function()
     {
         var form = this.form;
-        if (!this.saveButton) this.saveButton = form.down('button#save');
+        if (typeof this.saveButton == 'undefined') this.saveButton = form.down('button#save');
         if (this.saveButton) {
             this.saveButton.on('click', this.onSaveClick, this);
         }
