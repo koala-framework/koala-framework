@@ -71,5 +71,10 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
                 f.resetOriginalValue();
             }
         }, this);
+    },
+
+    getLoadedRecord: function()
+    {
+        return this.form.getRecord();
     }
 });

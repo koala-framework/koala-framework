@@ -48,7 +48,7 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
 
     getLoadedRecord: function()
     {
-        return this.formController.form.getRecord();
+        return this.formController.getLoadedRecord();
     },
 
     enable: function()
