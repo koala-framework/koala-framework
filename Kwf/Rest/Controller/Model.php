@@ -58,6 +58,12 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         }
     }
 
+    public function postDispatch()
+    {
+        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Component_Cache::getInstance()->writeBuffer();
+    }
+
     protected function _getUserRole()
     {
         if (php_sapi_name() == 'cli') return 'cli';
