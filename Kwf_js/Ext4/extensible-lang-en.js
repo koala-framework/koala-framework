@@ -102,7 +102,8 @@ Ext4.onReady(function() {
     if (exists('Extensible.form.field.DateRange')) {
         Ext4.apply(Extensible.form.field.DateRange.prototype, {
             toText: trlKwf('to'),
-            allDayText: trlKwf('All day')
+            allDayText: trlKwf('All day'),
+            startDay: parseInt(trlcKwf('start day of week', '0'))
         });
     }
     
