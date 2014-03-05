@@ -94,6 +94,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
         Ext4.each(this.grid.query('> toolbar[dock=top] field'), function(field) {
             var filterId = 'filter-'+field.getName();
             var v = field.getValue();
+            if (typeof v == 'undefined') v = null;
             this.grid.getStore().addFilter({
                 id: filterId,
                 property: field.getName(),
