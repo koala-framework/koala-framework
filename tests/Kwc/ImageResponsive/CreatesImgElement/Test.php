@@ -29,7 +29,8 @@ class Kwc_ImageResponsive_CreatesImgElement_Test extends Kwf_Test_SeleniumTestCa
      */
     public function setUp()
     {
-        parent::setUp('Kwc_ImageResponsive_CreatesImgElement_Root_Component');
+        parent::setUp();
+        Kwf_Component_Data_Root::setComponentClass('Kwc_ImageResponsive_CreatesImgElement_Root_Component');
     }
 
     /**
@@ -41,13 +42,13 @@ class Kwc_ImageResponsive_CreatesImgElement_Test extends Kwf_Test_SeleniumTestCa
 
     public function testJavascriptCreatesCorrectImageSrcElement()
     {
-        $this->openKwc('Kwc_ImageResponsive_CreatesImgElement_Root_Component/imageabstract1');
+        $this->openKwc('/imageabstract1');
         $this->assertElementPresent("css=img[src^=\"/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/media/Kwc_ImageResponsive_CreatesImgElement_Components_ImageAbstract_Component/root_imageabstract1/dh-16/\"]");
     }
 
     public function testJavascriptCreatesCorrectImageSrcImageEnlargeImagePage()
     {
-        $this->openKwc('Kwc_ImageResponsive_CreatesImgElement_Root_Component/imageenlarge1');
+        $this->openKwc('/imageenlarge1');
         $this->click("css=.kwcBasicImageEnlarge > a");
 
         $this->waitForConnections();
