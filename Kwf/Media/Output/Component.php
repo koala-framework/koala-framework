@@ -1,6 +1,25 @@
 <?php
 class Kwf_Media_Output_Component
 {
+    public static function getResponsiveImageVars($dimensions, $imageFile)
+    {
+        $ret = array();
+        $width = 0;
+        $aspectRatio = 0;
+        $ret['minWidth'] = 0;
+        $ret['maxWidth'] = 0;
+        if (isset($dimensions['width']) && $dimensions['width'] > 0) {
+            $aspectRatio = $dimensions['height'] / $dimensions['width'] * 100;
+            $width = $dimensions['width'];
+            $steps = Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageFile);
+            $ret['minWidth'] = $steps[0];
+            $ret['maxWidth'] = end($steps);
+        }
+        $ret['width'] = $width;
+        $ret['aspectRatio'] = $aspectRatio;
+        return $ret;
+    }
+
     /**
      * Returns correctly scaled and croped image with mimetype. This is used by
      * Kwc_Abstract_Image_Component and Kwc_Basic_ImageEnlarge_EnlargeTag_Component

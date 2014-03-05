@@ -47,16 +47,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
             $ret['previous'] = null;
         }
 
-        $ret['aspectRatio'] = 0;
-        $ret['minWidth'] = 0;
-        $ret['maxWidth'] = 0;
-        if ($ret['width'] && $ret['width'] > 0) {
-            $ret['aspectRatio'] = $ret['height'] / $ret['width'] * 100;
-            $imageData = $c->getImageData();
-            $steps = Kwf_Media_Image::getResponsiveWidthSteps($size, $imageData['file']);
-            $ret['minWidth'] = $steps[0];
-            $ret['maxWidth'] = end($steps);
-        }
+        $imageData = $c->getImageData();
+        $ret = array_merge($ret,
+            Kwf_Media_Output_Component::getResponsiveImageVars($size, $imageData['file'])
+        );
+
         $ret['baseUrl'] = $c->getBaseImageUrl();
         return $ret;
     }

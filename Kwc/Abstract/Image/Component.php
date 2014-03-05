@@ -101,21 +101,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
         $ret['altText'] = $this->_getAltText();
 
-        $width = 0;
-        $aspectRatio = 0;
-        $dimensions = $this->getImageDimensions();
-        $ret['minWidth'] = 0;
-        $ret['maxWidth'] = 0;
-        if (isset($dimensions['width']) && $dimensions['width'] > 0) {
-            $aspectRatio = $dimensions['height'] / $dimensions['width'] * 100;
-            $width = $dimensions['width'];
-            $imageData = $this->getImageData();
-            $steps = Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageData['file']);
-            $ret['minWidth'] = $steps[0];
-            $ret['maxWidth'] = end($steps);
-        }
-        $ret['width'] = $width;
-        $ret['aspectRatio'] = $aspectRatio;
+        $imageData = $this->getImageData();
+        $ret = array_merge($ret,
+            Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['file'])
+        );
+
         $ret['baseUrl'] = $this->getBaseImageUrl();
         return $ret;
     }
