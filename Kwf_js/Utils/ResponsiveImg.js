@@ -4,45 +4,24 @@ Kwf.DONT_HASH_TYPE_PREFIX = 'dh-';
 
 Kwf.Utils.ResponsiveImg = function (selector) {
     Kwf._responsiveImgSelectors.push(selector);
+    Kwf.onElementReady(selector, function (el) {
+        el.isResponsiveImg = true;
+        Kwf.Utils._initResponsiveImgEl(el);
+    });
 };
 
-Kwf.onContentReady(function() {
-    var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
-    Kwf._responsiveImgSelectors.each(function(i) {
-        Ext.select(i, true).each(function (el) {
+// onContentReady is needed because onElementReady is only fired once
+Kwf.onContentReady(function(el) {
+    if (el != document.body) {
+        el = Ext.get(el);
+        if (el.isResponsiveImg) {
             if (!el.responsiveImgInitDone) {
-                if (el.getWidth() == 0) {
-                    return;
-                }
-                el.responsiveImgInitDone = true;
-                var baseUrl = el.dom.getAttribute("data-src");
-                var minWidth = parseInt(el.dom.getAttribute("data-min-width"));
-                var maxWidth = parseInt(el.dom.getAttribute("data-max-width"));
-                Kwf._responsiveImgEls.push({
-                    el: el,
-                    loadedWidth: el.getWidth(),
-                    baseUrl: baseUrl,
-                    minWidth: minWidth,
-                    maxWidth: maxWidth
-                });
-
-                var width = Kwf.Utils._getResponsiveWidthStep(
-                        el.getWidth() * devicePixelRatio, minWidth, maxWidth);
-                var sizePath = baseUrl.replace(Kwf.DONT_HASH_TYPE_PREFIX+'{width}',
-                        Kwf.DONT_HASH_TYPE_PREFIX+width);
-
-                el.createChild({
-                    tag: 'img',
-                    src: sizePath
-                });
-
-            } else { // Possible resize through ResponsiveEl
-                Kwf._responsiveImgEls.each(function(i) {
-                    Kwf.Utils._checkResponsiveImgEl(i, true);
-                });
+                Kwf.Utils._initResponsiveImgEl(el);
+            } else {
+                Kwf.Utils._checkResponsiveImgEl(el.responsiveImgObj, true);
             }
-        });
-    });
+        }
+    }
 });
 
 Kwf.Utils._getResponsiveWidthStep = function (width,  minWidth, maxWidth) {
@@ -67,6 +46,36 @@ Kwf.Utils._getResponsiveWidthSteps = function (minWidth, maxWidth) {
         steps.push(maxWidth);
     }
     return steps;
+};
+
+Kwf.Utils._initResponsiveImgEl = function (el) {
+    var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
+    if (el.getWidth() == 0) {
+        return;
+    }
+    el.responsiveImgInitDone = true;
+    var baseUrl = el.dom.getAttribute("data-src");
+    var minWidth = parseInt(el.dom.getAttribute("data-min-width"));
+    var maxWidth = parseInt(el.dom.getAttribute("data-max-width"));
+    var responsiveImgElement = {
+        el: el,
+        loadedWidth: el.getWidth(),
+        baseUrl: baseUrl,
+        minWidth: minWidth,
+        maxWidth: maxWidth
+    };
+    Kwf._responsiveImgEls.push(responsiveImgElement);
+    el.responsiveImgObj = responsiveImgElement;
+
+    var width = Kwf.Utils._getResponsiveWidthStep(
+            el.getWidth() * devicePixelRatio, minWidth, maxWidth);
+    var sizePath = baseUrl.replace(Kwf.DONT_HASH_TYPE_PREFIX+'{width}',
+            Kwf.DONT_HASH_TYPE_PREFIX+width);
+
+    el.createChild({
+        tag: 'img',
+        src: sizePath
+    });
 };
 
 Kwf.Utils._checkResponsiveImgEl = function (responsiveImgEl, ignoreWidth) {
