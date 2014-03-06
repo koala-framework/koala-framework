@@ -238,11 +238,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         }
 
         if (typeof this.config.markers == 'string') {
-            google.maps.event.addListener(this.gmap, "moveend", this._reloadMarkers.createDelegate(
-                this, [ ]
-            ));
-            // Fix for bug: http://stackoverflow.com/questions/2832636/google-maps-api-v3-getbounds-is-undefined
-            google.maps.event.addListener(this.gmap, 'bounds_changed', this._reloadMarkers.createDelegate(
+            google.maps.event.addListener(this.gmap, "idle", this._reloadMarkers.createDelegate(
                 this, [ ]
             ));
         } else {
