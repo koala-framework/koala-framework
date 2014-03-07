@@ -312,16 +312,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $dim = $component->getComponent()->getImageDimensions();
 
-        // calculate output width/height on base of getImageDimensions and given width
-        $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
-        if ($width) {
-            $width = Kwf_Media_Image::getResponsiveWidthStep($width,
-                        Kwf_Media_Image::getResponsiveWidthSteps($dim, $data['file']));
-            $dim['height'] = $width / $dim['width'] * $dim['height'];
-            $dim['width'] = $width;
-        }
-
-        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dim);
+        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dim, $type);
     }
 
     public function getContentWidth()

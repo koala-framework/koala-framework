@@ -29,8 +29,17 @@ class Kwf_Media_Output_Component
      * Used by image components in getMediaOutput.
      * Tries to avoid scaling if not required (to keep gif animation intact)
      */
-    public static function getMediaOutputForDimension($data, $dim)
+    public static function getMediaOutputForDimension($data, $dim, $type)
     {
+        // calculate output width/height on base of getImageDimensions and given width
+        $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
+        if ($width) {
+            $width = Kwf_Media_Image::getResponsiveWidthStep($width,
+                        Kwf_Media_Image::getResponsiveWidthSteps($dim, $data['file']));
+            $dim['height'] = $width / $dim['width'] * $dim['height'];
+            $dim['width'] = $width;
+        }
+
         $ret = array();
         if (isset($data['image'])) {
             $output = Kwf_Media_Image::scale($data['image'], $dim);
