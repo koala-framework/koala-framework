@@ -7,7 +7,6 @@ class Kwc_Tabs_Trl_Component extends Kwc_Abstract_List_Trl_Component
         foreach($ret['listItems'] as $k => $v) {
             $ret['listItems'][$k]['title'] = $v['data']->generator->getTrlRowByData($v['data'])->title;
         }
-        $ret['extConfig'] = 'Kwc_Abstract_List_Trl_ExtConfigFullSizeEdit';
         return $ret;
     }
 }

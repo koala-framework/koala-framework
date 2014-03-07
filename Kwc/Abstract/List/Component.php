@@ -32,6 +32,12 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
         }
     }
 
+    // For trl
+    public final function getSelect()
+    {
+        return $this->_getSelect();
+    }
+
     //kann überschrieben werden um zB ein limit einzubauen
     protected function _getSelect()
     {
@@ -43,7 +49,7 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $children = $this->getData()->getChildComponents($this->_getSelect());
+        $children = $this->getData()->getChildComponents($this->getSelect());
 
         // children ist die alte methode, bleibt drin wegen kompatibilität
         $ret['children'] = $children;
@@ -66,12 +72,18 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
             $i++;
 
             $ret['listItems'][] = array(
-                'data' => $this->_getItemComponent($child),
+                'data' => $this->getItemComponent($child),
                 'class' => $class,
                 'style' => '',
             );
         }
         return $ret;
+    }
+
+    // For trl
+    public final function getItemComponent($childComponent)
+    {
+        return $this->_getItemComponent($childComponent);
     }
 
     protected function _getItemComponent($childComponent)

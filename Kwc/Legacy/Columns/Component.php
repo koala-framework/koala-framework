@@ -20,7 +20,7 @@ class Kwc_Legacy_Columns_Component extends Kwc_Abstract_List_Component
     {
         $ret = parent::getTemplateVars();
         foreach($ret['listItems'] as $k => $v) {
-            $ret['listItems'][$k]['width'] = $this->_getChildContentWidth($v['data']).'px';
+            $ret['listItems'][$k]['width'] = $this->getChildContentWidth($v['data']).'px';
         }
         return $ret;
     }
@@ -42,6 +42,11 @@ class Kwc_Legacy_Columns_Component extends Kwc_Abstract_List_Component
             return (int)round($ownWidth * $w/100);
         }
         return null; //unbekanntes format
+    }
+
+    // For trl
+    public final function getChildContentWidth(Kwf_Component_Data $child) {
+        return $this->_getChildContentWidth($child);
     }
 
     //unterstützt werden:
