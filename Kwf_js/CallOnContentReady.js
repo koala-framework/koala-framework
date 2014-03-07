@@ -18,6 +18,10 @@ if (!Kwf.isApp) {
     });
 }
 
+/**
+ * @param element the added/changed dom element
+ * @param options newRender (bool): if new elements have been added to the dom or just visiblity/width changed
+ */
 Kwf.callOnContentReady = function(el, options) {
     if (!options) options = {};
     if (Ext.Element && el instanceof Ext.Element) el = el.dom;
@@ -43,7 +47,7 @@ Kwf.callOnContentReady = function(el, options) {
 
 /**
  * Register a function that will be called when content is loaded or shown
- * @param callback function
+ * @param callback function (passed arguments: el, options (newRender=bool))
  * @param scope for callback
  * @param options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
  */
