@@ -129,8 +129,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $class = $url[1];
         $id = $url[2];
         $type = $url[3];
-
-        $o = Kwc_Basic_Image_Component::getMediaOutput($id, $type, $class);
+        $o = Kwf_Media::getOutput($class, $id, $type);
         $this->assertNotNull($o);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();

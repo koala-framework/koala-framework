@@ -1,0 +1,13 @@
+.cssClass .container {
+    height: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.cssClass img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+}

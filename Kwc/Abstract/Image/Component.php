@@ -101,23 +101,18 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
         $ret['altText'] = $this->_getAltText();
 
-        $width = 0;
-        $aspectRatio = 0;
-        $dimensions = $this->getImageDimensions();
-        $ret['minWidth'] = 0;
-        $ret['maxWidth'] = 0;
-        if (isset($dimensions['width']) && $dimensions['width'] > 0) {
-            $aspectRatio = $dimensions['height'] / $dimensions['width'] * 100;
-            $width = $dimensions['width'];
-            $imageData = $this->getImageData();
-            $steps = Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageData['file']);
-            $ret['minWidth'] = $steps[0];
-            $ret['maxWidth'] = end($steps);
-        }
-        $ret['width'] = $width;
-        $ret['aspectRatio'] = $aspectRatio;
+        $imageData = $this->getImageData();
+        $ret = array_merge($ret,
+            Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['file'])
+        );
+
         $ret['baseUrl'] = $this->getBaseImageUrl();
         return $ret;
+    }
+
+    public final function getAltText()
+    {
+        return $this->_getAltText();
     }
 
     protected function _getAltText()
@@ -226,7 +221,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return null;
     }
 
-    protected function _getImageDimensions()
+    public function getConfiguredImageDimensions()
     {
         $row = $this->getRow();
         $dimension = $this->_getSetting('dimensions');
@@ -287,7 +282,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
     public function getImageDimensions()
     {
-        $size = $this->_getImageDimensions();
+        $size = $this->getConfiguredImageDimensions();
         if ($size['width'] === self::CONTENT_WIDTH) {
             $size['width'] = $this->getContentWidth();
         }
@@ -317,22 +312,13 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $dim = $component->getComponent()->getImageDimensions();
 
-        // calculate output width/height on base of getImageDimensions and given width
-        $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
-        if ($width) {
-            $width = Kwf_Media_Image::getResponsiveWidthStep($width,
-                        Kwf_Media_Image::getResponsiveWidthSteps($dim, $data['file']));
-            $dim['height'] = $width / $dim['width'] * $dim['height'];
-            $dim['width'] = $width;
-        }
-
-        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dim);
+        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dim, $type);
     }
 
     public function getContentWidth()
     {
         $data = $this->_getImageDataOrEmptyImageData();
-        $s = $this->_getImageDimensions();
+        $s = $this->getConfiguredImageDimensions();
         if ($s['width'] === self::CONTENT_WIDTH) {
             return parent::getContentWidth();
         }
