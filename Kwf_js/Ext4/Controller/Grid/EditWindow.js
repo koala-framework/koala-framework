@@ -44,8 +44,9 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
         if (!this.editActionColumn) this.editActionColumn = this.gridController.grid.down('actioncolumn#edit')
         if (this.windowSaveButton) {
             this.windowSaveButton.on('click', function() {
-                this.doSave();
-                this.closeWindow();
+                if (this.doSave() !== false) {
+                    this.closeWindow();
+                }
             }, this);
         }
         if (this.windowCancelButton) {
@@ -100,8 +101,9 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
                     if (btn == 'no') {
                         this.closeWindow();
                     } else if (btn == 'yes') {
-                        this.doSave();
-                        this.closeWindow();
+                        if (this.doSave() !== false) {
+                            this.closeWindow();
+                        }
                     }
                 },
                 scope: this
