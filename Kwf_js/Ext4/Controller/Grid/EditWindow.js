@@ -1,3 +1,4 @@
+// @require Kwf.Ext4.Controller.Grid
 Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
     mixins: {
         observable: 'Ext.util.Observable'
