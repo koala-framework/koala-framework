@@ -6,6 +6,7 @@ Ext4.define('Kwf.Ext4.Controller.EditWindow', {
     closeAction: 'hide',
     stateful: true,
     showSave: true,
+    padding: 10,
     initComponent: function() {
         this.bbar = ['->'];
         if (this.showSave) {
