@@ -3,6 +3,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
+    focusOnEditSelector: 'field',
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
@@ -40,6 +41,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
         if (!this.windowSaveButton) this.windowSaveButton = this.editWindow.down('> toolbar > button#save');
         if (!this.windowCancelButton) this.windowCancelButton = this.editWindow.down('> toolbar > button#cancel');
         if (!this.addButton) this.addButton = this.gridController.grid.down('button#add');
+        if (!this.editActionColumn) this.editActionColumn = this.gridController.grid.down('actioncolumn#edit')
         if (this.windowSaveButton) {
             this.windowSaveButton.on('click', function() {
                 this.doSave();
@@ -55,19 +57,34 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
         }, this);
 
         this.gridController.grid.on('celldblclick', function(grid, td, cellIndex, row, tr, rowIndex, e) {
-            this.bindable.load(row);
-            this.editWindow.setTitle(trlKwf('Edit'));
-            this.editWindow.show();
-            //this.form.down('field').focus();
+            this.openEditWindow(row);
         }, this);
+
+        if (this.editActionColumn) {
+            this.editActionColumn.on('click', function(view, cell, rowIndex, colIndex, e) {
+                this.openEditWindow(this.gridController.grid.store.getAt(rowIndex));
+            }, this);
+        }
         if (this.addButton) {
             this.addButton.on('click', function() {
-                this.editWindow.setTitle(trlKwf('Add'));
                 var row = this.gridController.grid.getStore().model.create();
-                this.bindable.load(row);
-                this.editWindow.show();
-                //this.form.down('field').focus();
+                this.fireEvent('add', row);
+                this.openEditWindow(row);
             }, this);
+        }
+    },
+
+    openEditWindow: function(row)
+    {
+        this.bindable.load(row);
+        if (row.phantom) {
+            this.editWindow.setTitle(trlKwf('Add'));
+        } else {
+            this.editWindow.setTitle(trlKwf('Edit'));
+        }
+        this.editWindow.show();
+        if (this.focusOnEditSelector) {
+            this.editWindow.down(this.focusOnEditSelector).focus();
         }
     },
 
