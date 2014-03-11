@@ -2,6 +2,7 @@
 class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
     implements Kwf_Media_Output_IsValidInterface
 {
+    const CONTENT_WIDTH = 'contentWidth';
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -37,6 +38,9 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
     public function getImageDimensions()
     {
         $dimension = $this->_getSetting('dimension');
+        if ($dimension['width'] === self::CONTENT_WIDTH) {
+            $dimension['width'] = $this->getContentWidth();
+        }
         $parentDimension = $this->_getImageComponent()->getConfiguredImageDimensions();
         if (isset($parentDimension['crop'])) $dimension['crop'] = $parentDimension['crop'];
         $data = $this->getImageData();
