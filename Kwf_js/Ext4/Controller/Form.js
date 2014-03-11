@@ -2,6 +2,7 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
+    autoLoadComboBoxStores: true,
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
@@ -18,6 +19,14 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
 
     load: function(row)
     {
+        if (this.autoLoadComboBoxStores) {
+            this.form.query("combobox").each(function(i) {
+                if (i.queryMode == 'remote' && i.store && !i.store.lastOptions) {
+                    i.store.load();
+                }
+            }, this);
+        }
+
         //when loading the same row (by comparing the id) keep dirty values
         var keepDirtyValues = this.form.getForm()._record
             && this.form.getForm()._record.getId() == row.getId();
