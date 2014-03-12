@@ -1,6 +1,11 @@
 Ext4.define('Kwf.Ext4.Data.StoreSyncQueue', {
+    mixins: {
+        observable: 'Ext.util.Observable'
+    },
     constructor: function()
     {
+        this.mixins.observable.constructor.call(this);
+
         this._queue = [];
         this._running = [];
         this.exceptions = [];
@@ -10,7 +15,7 @@ Ext4.define('Kwf.Ext4.Data.StoreSyncQueue', {
 
     start: function(startOptions)
     {
-        this._startOptions = startOptions;
+        this._startOptions = startOptions || {};
         this.isRunning = true;
         Ext4.each(this._queue, function(i) {
             this._startSync(i.store, i.options);
@@ -80,9 +85,12 @@ Ext4.define('Kwf.Ext4.Data.StoreSyncQueue', {
         this.isRunning = false;
         if (this.hasException) {
             if (this._startOptions.failure) this._startOptions.failure.call(this._startOptions.scope || this, this);
+            this.fireEvent('failure', this);
         } else {
             if (this._startOptions.success) this._startOptions.success.call(this._startOptions.scope || this, this);
+            this.fireEvent('success', this);
         }
         if (this._startOptions.callback) this._startOptions.callback.call(this._startOptions.scope || this, this);
+        this.fireEvent('finished', this);
     }
 });
