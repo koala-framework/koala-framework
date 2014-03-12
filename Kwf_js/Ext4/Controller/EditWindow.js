@@ -6,12 +6,13 @@ Ext4.define('Kwf.Ext4.Controller.EditWindow', {
     closeAction: 'hide',
     stateful: true,
     showSave: true,
+    saveText: trlKwf('Save'),
     padding: 10,
     initComponent: function() {
         this.bbar = ['->'];
         if (this.showSave) {
             this.bbar.push({
-                text: trlKwf('Save'),
+                text: this.saveText,
                 itemId: 'save'
             });
         }
