@@ -4,6 +4,16 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.GridBinding', {
     bindableToGridController: null,
     panel: null,
 
+    init: function()
+    {
+        this.callParent(arguments);
+        if (this.reloadRowOnSave) {
+            this.bindableToGridController.on('savesuccess', function() {
+                this._reloadLoadedRow();
+            }, this);
+        }
+    },
+
     reset: function()
     {
         this.callParent(arguments);

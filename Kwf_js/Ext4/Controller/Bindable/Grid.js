@@ -3,26 +3,10 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
 
     relation: null,
     gridController: null,
-    reloadRowOnWrite: false,
+    reloadRowOnSave: false,
 
     init: function()
     {
-        if (this.reloadRowOnWrite) {
-            this.gridController.on('write', function() {
-                var r = this.getLoadedRecord();
-                if (!r.phantom) {
-                    r.self.load(r.getId(), {
-                        success: function(loadedRow) {
-                            r.beginEdit();
-                            r.set(loadedRow.getData());
-                            r.endEdit();
-                            r.commit();
-                        },
-                        scope: this
-                    });
-                }
-            }, this);
-        }
     },
 
     load: function(row)
@@ -63,13 +47,42 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
         return true;
     },
 
+    _reloadLoadedRow: function()
+    {
+        var r = this.getLoadedRecord();
+        if (!r.phantom) {
+            r.self.load(r.getId(), {
+                success: function(loadedRow) {
+                    r.beginEdit();
+                    r.set(loadedRow.getData());
+                    r.endEdit();
+                    r.commit();
+                },
+                scope: this
+            });
+        }
+    },
+
     save: function(syncQueue)
     {
         if (this.gridController.grid.getStore()) {
             if (syncQueue) {
                 syncQueue.add(this.gridController.grid.getStore());
+                if (this.reloadRowOnSave) {
+                    syncQueue.on('finished', function() {
+                        this._reloadLoadedRow();
+
+                    }, this, { single: true });
+                }
             } else {
-                this.gridController.grid.getStore().sync();
+                this.gridController.grid.getStore().sync({
+                    callback: function() {
+                        if (this.reloadRowOnSave) {
+                            this._reloadLoadedRow();
+                        }
+                    },
+                    scope: this
+                });
             }
         }
     },
