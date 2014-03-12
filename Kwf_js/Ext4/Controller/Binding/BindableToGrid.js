@@ -70,12 +70,7 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
             this.saveButton.on('click', function() {
                 var syncQueue = new Kwf.Ext4.Data.StoreSyncQueue();
                 this.save(syncQueue);
-                syncQueue.start({
-                    success: function() {
-                        this.fireEvent('savesuccess');
-                    },
-                    scope: this
-                });
+                syncQueue.start();
 
             }, this);
         }
@@ -128,6 +123,11 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
             syncQueue.add(this.gridController.grid.getStore()); //sync this.gridController.grid store first
             this.bindable.save(syncQueue);         //then bindables (so bindable grid is synced second)
                                                    //bindable forms can still update the row as the sync is not yet started
+            syncQueue.on('finished', function(syncQueue) {
+                if (!syncQueue.hasException) {
+                    this.fireEvent('savesuccess');
+                }
+            }, this, { single: true });
         } else {
             this.bindable.save();                  //bindables first to allow form updating the row before sync
             this.gridController.grid.getStore().sync({
