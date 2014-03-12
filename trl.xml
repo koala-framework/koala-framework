@@ -14,6 +14,7 @@
 <es_CL>Visible</es_CL>
 <sk>Viditeľné</sk>
 <hr>Vidljivo</hr>
+<si>vidno</si>
 </text>
 <text>
 <en>Error</en>
@@ -30,6 +31,7 @@
 <es_CL>Error</es_CL>
 <sk>Chyba</sk>
 <hr>Greška</hr>
+<si>napaka</si>
 </text>
 <text>
 <en>Page not found</en>
@@ -43,6 +45,7 @@
 <bg>Страницата не беше намерена.</bg>
 <sk>Stránka sa nenašla.</sk>
 <hr>Stranica nije pronađena</hr>
+<si>Strani se ne najde.</si>
 </text>
 <text>
 <en>Lost password?</en>
@@ -55,6 +58,8 @@
 <ru>Забыли пароль?</ru>
 <sk>Zabudli ste heslo?</sk>
 <hr>Zaboravili ste lozinku?</hr>
+<si>Ste pozabili geslo?</si>
+<bg>Забравена парола?</bg>
 </text>
 <text>
 <en>Login</en>
@@ -67,6 +72,8 @@
 <ru>Логин</ru>
 <sk>Prihlásiť sa</sk>
 <hr>Login</hr>
+<si>registracija</si>
+<bg>Вход</bg>
 </text>
 <text>
 <en>Hello {0}!</en>
@@ -81,6 +88,8 @@
 <es_CL>Hola {0}!</es_CL>
 <sk>Ahoj {0}!</sk>
 <hr>Pozdrav {0}!</hr>
+<si>Pozdravljeni {0}!</si>
+<bg>Здравейте {0}!</bg>
 </text>
 <text>
 <en>Your account at {0} has just been created.</en>
@@ -92,6 +101,8 @@
 <sl>Pravkar ste uspešno ustvarili svoj račun pri {0}.</sl>
 <ru>Ваш аккаунт на {0} только что был создан.</ru>
 <hr>Vaš račun kod {0} je upravo kreiran.</hr>
+<si>Ustvarjen je bil račun pri  {0} </si>
+<bg>Вашият акаунт в {0} беше създаден.</bg>
 </text>
 <text>
 <en>Please use the following link to choose yourself a password and to login</en>
@@ -103,6 +114,8 @@
 <sl>Kliknite na to povezavo, da določite geslo in se prijavite.</sl>
 <ru>Пожалуйста, воспользуйтесь следующей ссылкой для выбора пароля и логина</ru>
 <hr>Molimo koristite ovaj link za kreiranje lozinke i za log in.</hr>
+<si>Prosimo uporabite ta link za novo geslo in registracijo.</si>
+<bg>Моля, използвайте този линк за създаване на парола и вход.</bg>
 </text>
 <text>
 <en>This email has been generated automatically. There may be no recipient if you answer to this email.</en>
@@ -114,6 +127,8 @@
 <sl>To je avtomatsko generirano e-sporočilo. To sporočilo je bilo generirano avtomatsko, zato nanj ne odgovarjajte.</sl>
 <ru>Этот E-Mail был сгененрирован автоматически. Возможно, получателя не существует.</ru>
 <hr>Ovo je automatska e-mail poruka. Ne postoji primatelj kojemu možete poslati odgovor. </hr>
+<si>Sporočilo je avtomatsko in nima prejemnika.</si>
+<bg>Това е автоматично генериран мейл. Моля, не изпращайте отговор до него.</bg>
 </text>
 <text>
 <en>Your account at {0} has been deleted.</en>
@@ -125,6 +140,8 @@
 <sl>Izbrisali ste svoj račun pri {0}.</sl>
 <ru>Ваш аккаунт на {0} был удален.</ru>
 <hr>Vaš račun kod {0} je izbrisan.</hr>
+<si>Izbrisan je bil vaš račun pri {0}. </si>
+<bg>Вашият акаунт в {0} беше изтрит.</bg>
 </text>
 <text>
 <en>Please use the following link to choose yourself a new password.</en>
@@ -136,6 +153,8 @@
 <sl>Kliknite na naslednjo povezavo, da določite novo geslo.</sl>
 <ru>Пожалуйста, воспользуйтесь следующей ссылкой для установки нового пароля.</ru>
 <hr>Molimo koristite ovaj link za kreiranje nove vlastite lozinke.  </hr>
+<si>Prosimo uporabite link, da si ustvarite novo geslo.</si>
+<bg>Моля, използвайте този линк за задаване на парола. </bg>
 </text>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
@@ -150,6 +169,8 @@
 <ru>Место вылета: почтовый код, Город, Улица</ru>
 <es_CL>Place of departure: zip code, Town, Street</es_CL>
 <hr>Mjesto polaska: poštanski broj, mjesto, ulica</hr>
+<si>Kraj odhoda: poštna številka, kraj, ulica</si>
+<bg>Място на отпътуване: пощенски код, населено място, улица</bg>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -163,6 +184,8 @@
 <ru>Введенное место не найдено!</ru>
 <es_CL>Entered place could not been found!</es_CL>
 <hr>Upisano mjesto nije pronađeno!</hr>
+<si>Vnešenega kraja ni možno najti. </si>
+<bg>Въведеното населено място не може да бъде намерено!</bg>
 </text>
 <text>
 <en>Show Route</en>
@@ -175,6 +198,8 @@
 <ru>Показать маршрут</ru>
 <es_CL>Show Route</es_CL>
 <hr>Prikaz puta</hr>
+<si>pokaži pot</si>
+<bg>Покажи маршрут</bg>
 </text>
 <text>
 <en>Suggestions</en>
@@ -186,6 +211,8 @@
 <sl>Predlogi</sl>
 <ru>Предложения</ru>
 <hr>Prijedlozi</hr>
+<si>predlogi</si>
+<bg>Предложения</bg>
 </text>
 <text>
 <en>Coordinates</en>
@@ -197,6 +224,8 @@
 <sl>Koordinate</sl>
 <ru>Координаты</ru>
 <hr>Koordinati</hr>
+<si>koordinate</si>
+<bg>Координати</bg>
 </text>
 <text>
 <en>Zoomlevel</en>
@@ -208,6 +237,8 @@
 <sl>Stopnja povečave</sl>
 <ru>Уровень приближения</ru>
 <hr>Zoomiranje</hr>
+<si>zoomnivo</si>
+<bg>степен на zoom</bg>
 </text>
 <text>
 <en>Width</en>
@@ -221,6 +252,8 @@
 <ru>Ширина</ru>
 <es_CL>Ancho</es_CL>
 <hr>Širina</hr>
+<si>širina</si>
+<bg>ширина</bg>
 </text>
 <text>
 <en>Height</en>
@@ -234,6 +267,8 @@
 <ru>Высота</ru>
 <es_CL>Altura</es_CL>
 <hr>Visine</hr>
+<si>višina</si>
+<bg>височина</bg>
 </text>
 <text>
 <en>Move + Zoom</en>
@@ -245,6 +280,8 @@
 <sl>Pomikanje + povečava</sl>
 <ru>Переместить + Увеличить</ru>
 <hr>Pomicati + zoomirati</hr>
+<si>premakniti + povečati</si>
+<bg>преместване + zoom</bg>
 </text>
 <text>
 <en>Move + Zoom (without zoombar)</en>
@@ -256,6 +293,8 @@
 <sl>Pomikanje + povečava (brez povečevalne skale)</sl>
 <ru>Переместить + Увеличить (без шкалы увеличения)</ru>
 <hr>Pomicati + zoomirati (bez zoom toolbar)</hr>
+<si>premakniti + povečati (brez zoom-a)</si>
+<bg>преместване + zoom (без лента за увеличаване)</bg>
 </text>
 <text>
 <en>Scale</en>
@@ -267,6 +306,8 @@
 <sl>Skaliranje</sl>
 <ru>Масштаб</ru>
 <hr>Skaliranje</hr>
+<si>narediti  lestvico</si>
+<bg>скала</bg>
 </text>
 <text>
 <en>Satelitemap</en>
@@ -278,6 +319,8 @@
 <sl>Satelitska karta</sl>
 <ru>Спутниковая карта</ru>
 <hr>Satelitska karta</hr>
+<si>karta satelita</si>
+<bg>сателитна карта</bg>
 </text>
 <text>
 <en>Overviewmap</en>
@@ -288,6 +331,8 @@
 <sl>Pregledna karta</sl>
 <ru>Крупномасштабная карта</ru>
 <hr>Pregledna karta</hr>
+<si>karta pregleda</si>
+<bg>преглед на картата</bg>
 </text>
 <text>
 <en>Worldview</en>
@@ -298,6 +343,8 @@
 <ru>Глобальный вид</ru>
 <hr>Pogled na svijet</hr>
 <uk>Світоглад</uk>
+<si>svetovni pogled</si>
+<bg>преглед свят</bg>
 </text>
 <text>
 <en>Detailview</en>
@@ -308,6 +355,8 @@
 <sl>Podrobni prikaz</sl>
 <ru>Детальный вид</ru>
 <hr>Detaljni pregled</hr>
+<si>podrobni pogled</si>
+<bg>детайлен преглед</bg>
 </text>
 <text>
 <en>Filename</en>
@@ -321,6 +370,8 @@
 <ru>Имя файла</ru>
 <es_CL>Nombre de archivo</es_CL>
 <hr>Naziv datoteke</hr>
+<si>ime datoteke</si>
+<bg>име на документа</bg>
 </text>
 <text>
 <en>File</en>
@@ -334,6 +385,8 @@
 <ru>Файл</ru>
 <es_CL>Archivo</es_CL>
 <hr>Datoteka</hr>
+<si>datoteka</si>
+<bg>документ</bg>
 </text>
 <text>
 <en>Content</en>
@@ -345,6 +398,8 @@
 <sl>Vsebina</sl>
 <ru>Содержание</ru>
 <hr>Sadržaj</hr>
+<si>vsebina</si>
+<bg>съдържание</bg>
 </text>
 <text>
 <en>Image</en>
@@ -358,6 +413,8 @@
 <es_CL>Imagen</es_CL>
 <hr>Slika</hr>
 <uk>Зображення</uk>
+<si>slika</si>
+<bg>снимка</bg>
 </text>
 <text>
 <en>Image Enlarge</en>
@@ -371,6 +428,7 @@
 <es_CL>Imagen extendida</es_CL>
 <hr>Povečati sliku</hr>
 <uk>Збільшити зображення</uk>
+<si>povečati sliko</si>
 </text>
 <text>
 <en>Comment</en>
@@ -384,6 +442,7 @@
 <es_CL>Comentario</es_CL>
 <hr>Komentar</hr>
 <uk>Коментарі</uk>
+<si>komentar</si>
 </text>
 <text>
 <en>Size</en>
@@ -397,6 +456,7 @@
 <es_CL>Tamaño</es_CL>
 <hr>Veličina</hr>
 <uk>Розмір</uk>
+<si>velikost</si>
 </text>
 <text>
 <en>Preview</en>
@@ -408,6 +468,7 @@
 <ru>Предпросмотр</ru>
 <hr>Pregled</hr>
 <uk>Попередній перегляд</uk>
+<si>predogled</si>
 </text>
 <text>
 <en>Text</en>
@@ -421,6 +482,7 @@
 <es_CL>Texto</es_CL>
 <hr>Tekst</hr>
 <uk>Текст</uk>
+<si>tekst</si>
 </text>
 <text>
 <en>Position of Image</en>
@@ -432,6 +494,7 @@
 <ru>Позиция изображения</ru>
 <hr>Pozicija slike</hr>
 <uk>Положення зображення</uk>
+<si>pozicija slike</si>
 </text>
 <text>
 <en>Left</en>
@@ -445,6 +508,7 @@
 <es_CL>Izquierda</es_CL>
 <hr>Lijevo</hr>
 <uk>Зліва</uk>
+<si>levo</si>
 </text>
 <text>
 <en>Right</en>
@@ -458,6 +522,7 @@
 <es_CL>Derecha</es_CL>
 <hr>Desno</hr>
 <uk>Право</uk>
+<si>desno</si>
 </text>
 <text>
 <en>Default Value</en>
@@ -470,6 +535,7 @@
 <ru>Значение поумолчанию</ru>
 <hr>Standardna vrijednost</hr>
 <uk>Значення за замовчуванням</uk>
+<si>standardna vrednost</si>
 </text>
 <text>
 <en>Passwords are different. Please try again.</en>
@@ -481,6 +547,7 @@
 <ru>Пароли различаются. Пожалуйста, повторите еще раз.</ru>
 <hr>Lozinke su različite. Pokušajte ponovno. </hr>
 <uk>Паролі відрізняються. Будь ласка, спробуйте ще раз.</uk>
+<si>Gesli se razlikujeta. Prosimo poskusite ponovno.</si>
 </text>
 <text>
 <en>Description</en>
@@ -492,6 +559,7 @@
 <ru>Описание</ru>
 <hr>Opis</hr>
 <uk>Опис</uk>
+<si>opis</si>
 </text>
 <text>
 <en>Submit</en>
@@ -510,6 +578,8 @@
 <hu>Küldés</hu>
 <es_CL>enviar</es_CL>
 <hr>Pošalji</hr>
+<si>poslati</si>
+<ua>Надіслати</ua>
 </text>
 <text>
 <en>Validator</en>
@@ -521,6 +591,7 @@
 <ru>Валидатор</ru>
 <hr>Validator</hr>
 <uk>Validator</uk>
+<si>verificir</si>
 </text>
 <text>
 <en>E-Mail</en>
@@ -535,6 +606,7 @@
 <es_CL>E-Mail</es_CL>
 <hr>e-mail</hr>
 <uk>E-Mail</uk>
+<si>e-mail</si>
 </text>
 <text>
 <en>Date</en>
@@ -548,6 +620,7 @@
 <es_CL>Fecha</es_CL>
 <hr>Datum</hr>
 <uk>Дата</uk>
+<si>datum</si>
 </text>
 <text>
 <en>at</en>
@@ -560,6 +633,7 @@
 <es_CL>en</es_CL>
 <hr>u</hr>
 <uk>про</uk>
+<si>ob</si>
 </text>
 <text>
 <en>Title</en>
@@ -575,6 +649,7 @@
 <sq>Titulli</sq>
 <es_CL>Título</es_CL>
 <hr>Naslov</hr>
+<si>naziv</si>
 </text>
 <text>
 <en>Firstname</en>
@@ -593,6 +668,7 @@
 <es_CL>Nombre</es_CL>
 <hr>Ime</hr>
 <sk>Meno</sk>
+<si>ime</si>
 </text>
 <text>
 <en>Lastname</en>
@@ -611,6 +687,7 @@
 <es_CL>Apellido</es_CL>
 <hr>Prezime</hr>
 <sk>Priezvisko</sk>
+<si>priimek</si>
 </text>
 <text>
 <en>Email</en>
@@ -624,6 +701,7 @@
 <es_CL>E-Mail</es_CL>
 <hr>e-mail</hr>
 <uk>Email</uk>
+<si>e-mail</si>
 </text>
 <text>
 <en>Subject</en>
@@ -635,6 +713,7 @@
 <ru>Тема</ru>
 <hr>Predmet</hr>
 <uk>Тема</uk>
+<si>zadeva</si>
 </text>
 <text>
 <en>Member since</en>
@@ -646,6 +725,7 @@
 <ru>Учавствует с</ru>
 <hr>Član od</hr>
 <uk>Учасник з</uk>
+<si>član od</si>
 </text>
 <text>
 <en>Click here</en>
@@ -657,6 +737,7 @@
 <ru>Нажми сюда</ru>
 <hr>Kliknite ovdje</hr>
 <uk>Натисніть тут</uk>
+<si>kliknite tukaj</si>
 </text>
 <text>
 <en>Name</en>
@@ -670,6 +751,7 @@
 <es_CL>Nombre</es_CL>
 <hr>Ime</hr>
 <uk>Ім'я</uk>
+<si>ime</si>
 </text>
 <text>
 <en>Latest online</en>
@@ -680,6 +762,7 @@
 <ru>Последний раз онлайн</ru>
 <hr>Zadnji put online</hr>
 <uk>Останні онлайн</uk>
+<si>zadnjič objavljeno</si>
 </text>
 <text>
 <en>Short description</en>
@@ -691,6 +774,7 @@
 <ru>Краткое описание</ru>
 <hr>Kratak opis</hr>
 <uk>Короткий опис</uk>
+<si>kratek opis</si>
 </text>
 <text>
 <en>Signature</en>
@@ -704,6 +788,7 @@
 <es_CL>Firma</es_CL>
 <hr>Potpis</hr>
 <uk>Підпис</uk>
+<si>signatura</si>
 </text>
 <text>
 <en>Publish Date</en>
@@ -715,6 +800,7 @@
 <ru>Дата публикации</ru>
 <hr>Datum objave</hr>
 <uk>Дата публікації</uk>
+<si>datum objave</si>
 </text>
 <text>
 <en>Expiry Date</en>
@@ -726,6 +812,7 @@
 <ru>Дата истечения</ru>
 <hr>Datum isteka</hr>
 <uk>Дата закінчення терміну дії</uk>
+<si>datum poteka</si>
 </text>
 <text>
 <en>Teaser</en>
@@ -736,6 +823,7 @@
 <ru>Тизер</ru>
 <hr>Kratki tekst (teaser)</hr>
 <uk>Teaser</uk>
+<si>kratek tekst (teaser)</si>
 </text>
 <text>
 <en>Comment was successfully saved.</en>
@@ -746,6 +834,7 @@
 <ru>Коментарий успешно сохранен.</ru>
 <hr>Komentar je uspješno pohranjen.</hr>
 <uk>Цей коментар був успішно збережений.</uk>
+<si>Komentar je bil uspešno shranjen.</si>
 </text>
 <text>
 <en>to continue</en>
@@ -758,6 +847,7 @@
 <es_CL>para continuar</es_CL>
 <hr>za nastavak</hr>
 <uk>продовжити</uk>
+<si>nadaljevati</si>
 </text>
 <text>
 <en>Product</en>
@@ -771,6 +861,7 @@
 <es_CL>Producto</es_CL>
 <hr>Proizvod</hr>
 <uk>Продукт</uk>
+<si>produkt</si>
 </text>
 <text>
 <en>Activate Useraccount</en>
@@ -781,6 +872,7 @@
 <ru>Активировать аккаунт пользователя</ru>
 <hr>Aktivacija korisničkog računa</hr>
 <uk>Активувати аккаунт</uk>
+<si>Uporabniški račun je aktiven.</si>
 </text>
 <text>
 <en>Please enter in both fields the password which you want to use for your useraccount</en>
@@ -791,6 +883,7 @@
 <ru>Пожалуйста, введите в оба поля пароль, который вы хотите использовать</ru>
 <hr>Molimo upišite u oba polja željenu lozinku za Vaš korisnički račun</hr>
 <uk>Будь ласка, введіть в обох полях пароль, який ви хочете використовувати для Вашого аккаунту</uk>
+<si>Prosimo vnesite željeno geslo za vaš uporabniški račun v obe polji . </si>
 </text>
 <text>
 <en>Your useraccount was successfully activated.</en>
@@ -801,6 +894,7 @@
 <ru>Ваша учетная запись активирована</ru>
 <hr>Vaš korisnički račun je uspješno aktiviran.</hr>
 <uk>Ваш аккаунт було успішно активовано.</uk>
+<si>Vaš uporabniški račun je bil uspešno aktiviran.</si>
 </text>
 <text>
 <en>to get back to the Startpage</en>
@@ -811,6 +905,7 @@
 <ru>для перехода на Главную Страницу</ru>
 <hr>za povratak na početnu stranicu</hr>
 <uk>повернутися до стартову сторінку</uk>
+<si>nazaj na začetno stran</si>
 </text>
 <text>
 <en>Female</en>
@@ -828,6 +923,7 @@
 <es_CL>Femenino</es_CL>
 <hr>žensko</hr>
 <sk>Žena</sk>
+<si>ženski</si>
 </text>
 <text>
 <en>Male</en>
@@ -845,6 +941,7 @@
 <es_CL>Masculino</es_CL>
 <hr>muško</hr>
 <sk>Muž</sk>
+<si>moški</si>
 </text>
 <text>
 <en>Gender</en>
@@ -862,6 +959,7 @@
 <es_CL>Género</es_CL>
 <hr>Spol</hr>
 <sk>Pohlavie</sk>
+<si>spol</si>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -872,6 +970,7 @@
 <ru>Аккаунт - Свойства</ru>
 <hr>Račun - Postavke</hr>
 <uk>Аккаунт - Властивості</uk>
+<si>Račun - lastnosti</si>
 </text>
 <text>
 <en>The changed data was saved successfully</en>
@@ -883,6 +982,7 @@
 <ru>Изменения успешно сохранены</ru>
 <hr>Promijenjeni podatci su uspješno pohranjeni. </hr>
 <uk>Змінені дані були успішно збережені</uk>
+<si>Spremenjeni podatki so bili uspešno shranjeni.</si>
 </text>
 <text>
 <en>You don't have enough permissions for this Action</en>
@@ -894,6 +994,7 @@
 <ru>У вас недостаточно прав для выполнения этого действия.</ru>
 <hr>Nemate dovoljno prava za ovu radnju. </hr>
 <uk>У Вас немає достатньо прав для цієї дії</uk>
+<si>Za to niste pooblaščeni.</si>
 </text>
 <text>
 <en>Login failed</en>
@@ -905,6 +1006,7 @@
 <ru>Ошибка входа</ru>
 <hr>Login nije uspio</hr>
 <uk>Помилка входу</uk>
+<si>Neuspešna prijava.</si>
 </text>
 <text>
 <en>Activation code is invalid. Maybe the URL wasn\'t copied completely?</en>
@@ -915,6 +1017,7 @@
 <ru>Код активации не валидный. Может быть адрес страницы был скопирован не полностью?</ru>
 <hr>Code za aktivaciju je pogrešan. Možda URL nije u potpunosti kopiran?</hr>
 <uk> Код активації невірний. Може бути, URL-адреса не була скопійована повністю?</uk>
+<si>Vstopna koda je napačna. Ponovno preverite ustreznost kopije URL zapisa. </si>
 </text>
 <text>
 <en>Data not submitted completely.</en>
@@ -925,6 +1028,7 @@
 <ru>Данные введены не полностью.</ru>
 <hr>Podatci nisu potpuni.</hr>
 <uk>Дані не представлені повністю.</uk>
+<si>Podatki nsio popolno izpolnjeni. </si>
 </text>
 <text>
 <en>Change password</en>
@@ -936,6 +1040,7 @@
 <ru>Изменить пароль</ru>
 <hr>Promjena lozinke</hr>
 <uk>Зміна пароля</uk>
+<si>Spremenite geslo</si>
 </text>
 <text>
 <en>Repeat password</en>
@@ -947,6 +1052,7 @@
 <ru>Повторить пароль</ru>
 <hr>Ponovite lozinku</hr>
 <uk>Повторити пароль</uk>
+<si>Ponovite geslo</si>
 </text>
 <text>
 <en>First name</en>
@@ -962,6 +1068,7 @@
 <es_CL>Nombre</es_CL>
 <hr>Ime</hr>
 <uk>Ім'я</uk>
+<si>ime</si>
 </text>
 <text>
 <en>Last name</en>
@@ -977,6 +1084,7 @@
 <es_CL>Apellido</es_CL>
 <hr>Prezime</hr>
 <uk>Прізвище</uk>
+<si>priimek</si>
 </text>
 <text>
 <en>Advice</en>
@@ -988,6 +1096,7 @@
 <ru>Рекомендация</ru>
 <hr>Informacije</hr>
 <uk>Інформація</uk>
+<si>informacije</si>
 </text>
 <text>
 <en>After following actions emails are sent automatically to the respective user:</en>
@@ -998,6 +1107,7 @@
 <ru>После следующего действия сообщения будут автоматически отправляться на указанный email пользователя</ru>
 <hr>Nakon promjene sljedećih polja, automatski se šalje e-mail na upisanu e-mail adresu: </hr>
 <uk>Після виконання дії, цього листа будуть автоматично відправлені на відповідного користувача:</uk>
+<si>Po spremembi podatkov bo na vaš e-mail naslov generirano avtomatsko sporočilo. </si>
 </text>
 <text>
 <en>Create, Delete and E-Mail change</en>
@@ -1008,6 +1118,7 @@
 <ru>Создать, Удалить и Изменить E-Mail</ru>
 <hr>Dodati, izbrisati i promjena e-maila</hr>
 <uk>Створити, Видалити і Змінити E-mail</uk>
+<si>Vstaviti, izbrisati in spremeniti e-mail</si>
 </text>
 <text>
 <en>Rights</en>
@@ -1019,6 +1130,7 @@
 <ru>Права</ru>
 <hr>Prava</hr>
 <uk>Права</uk>
+<si>pravice</si>
 </text>
 <text>
 <en>Edit</en>
@@ -1030,6 +1142,7 @@
 <ru>Изменить</ru>
 <hr>Urediti</hr>
 <uk>Редагувати</uk>
+<si>obdelati</si>
 </text>
 <text>
 <en>edit</en>
@@ -1041,6 +1154,7 @@
 <ru>изменить</ru>
 <hr>urediti</hr>
 <uk>редагувати</uk>
+<si>obdelati</si>
 </text>
 <text>
 <en>The file is larger than the maximum upload amount.</en>
@@ -1051,6 +1165,7 @@
 <ru>Файл больше максимально допустимого размера.</ru>
 <hr>Datoteka prelazi maksimalnu veličinu za upload.</hr>
 <uk>Файлу більше максимального розміру завантаження.</uk>
+<si>Velikost datoteke presega največjo dovoljeno velikost.  </si>
 </text>
 <text>
 <en>The file was not uploaded completely.</en>
@@ -1061,6 +1176,7 @@
 <ru>Файл не был загружен полностью.</ru>
 <hr>Datoteka nije u potpunosti uploadana.</hr>
 <uk>Файл не був завантажений повністю.</uk>
+<si>Datoteka ni popolno naložena.</si>
 </text>
 <text>
 <en>An account with this email address already exists</en>
@@ -1071,6 +1187,7 @@
 <ru>Аккаунт с таким же E-Mail уже существует</ru>
 <hr>Već postoji račun sa navedenom e-mail adresom. </hr>
 <uk>Аккаунт з цією адресою електронної пошти вже існує</uk>
+<si>Račun s tem e-mail naslovom že obstaja.</si>
 </text>
 <text>
 <en>Passwords are different - please try again</en>
@@ -1081,6 +1198,7 @@
 <ru>Пароли различаются - Пожалуйста, повторите еще раз</ru>
 <hr>Lozinke su različite - molimo pokušajte ponovno</hr>
 <uk>Паролі різні - спробуйте ще раз</uk>
+<si>Različna gesla - prosimo poskusite ponovno</si>
 </text>
 <text>
 <en>Please enter the text you wish to assign.</en>
@@ -1091,6 +1209,7 @@
 <ru>Пожалуйста, введите текст, который вы хотите привязать.</ru>
 <hr>Molimo upišite tekst kojeg želite dodati.</hr>
 <uk>Будь ласка, введіть текст, який ви хочете призначити.</uk>
+<si>Prosimo vnesite tekst, ki ga želite dodeliti.</si>
 </text>
 <text>
 <en>Seperate items by a new line.</en>
@@ -1101,6 +1220,7 @@
 <ru>Новая строка для разделения элементов.</ru>
 <hr>Podjelite elemente pomoću dodatnog reda. </hr>
 <uk>Виділити елементи в одну лінію.</uk>
+<si>Ločite elemente z dodano novo vrstico.</si>
 </text>
 <text>
 <en>Can't save, please fill all red underlined fields correctly.</en>
@@ -1112,6 +1232,7 @@
 <fr>Saving n'est pas possible, veuillez remplir correctement tous les champs soulignés en rouge.</fr>
 <hr>Spremanje nije moguće, molimo popunite sva crveno podcrtana polja ispravno.</hr>
 <uk>Неможливо зберегти, будь ласка, заповніть всі червоні поля.</uk>
+<si>Shranjevanje ni mogoče, prosimo izpolnite pravilno vsa polja označena z rdečo.</si>
 </text>
 <text>
 <en>Do you really want to delete this entry?</en>
@@ -1121,6 +1242,7 @@
 <sl>Ali ste prepričani, da želite izbrisati vnos?</sl>
 <hr>Stvarno želite izbrisati ovaj unos?</hr>
 <uk>Ви дійсно хочете видалити цей запис?</uk>
+<si>Želite vnos resnično brisati?</si>
 </text>
 <text>
 <en>Do you want to save the changes?</en>
@@ -1131,6 +1253,7 @@
 <hr>Želite pohraniti promijene?</hr>
 <sk>Želáte si uložiť zmeny?</sk>
 <uk>Ви хочете, щоб зберегти зміни?</uk>
+<si>Želite shraniti spremembo?</si>
 </text>
 <text>
 <en>Copying...</en>
@@ -1144,6 +1267,7 @@
 <es_CL>Proceso de copiar...</es_CL>
 <hr>Kopiranje...</hr>
 <uk>Копіювання...</uk>
+<si>kopiranje...</si>
 </text>
 <text>
 <en>create</en>
@@ -1156,6 +1280,7 @@
 <es_CL>crear</es_CL>
 <hr>u izradi</hr>
 <uk>створити</uk>
+<si>ustvariti</si>
 </text>
 <text>
 <en>File successfully created:</en>
@@ -1165,6 +1290,7 @@
 <sl>Datoteka je bila uspešno ustvarjena.</sl>
 <hr>Datoteka je uspješno kreirana:</hr>
 <uk>Файл успішно створено:</uk>
+<si>Datoteka je bila uspešno ustvarjena:</si>
 </text>
 <text>
 <en>Component</en>
@@ -1176,6 +1302,7 @@
 <ru>Компонента</ru>
 <hr>Komponenta</hr>
 <uk>Компонент</uk>
+<si>komponente</si>
 </text>
 <text>
 <en>Add Component</en>
@@ -1187,6 +1314,7 @@
 <ru>Добавить компоненту</ru>
 <hr>Dodati komponentu</hr>
 <uk>Додати компонент</uk>
+<si>Dodati komponente</si>
 </text>
 <text>
 <en>Creating...</en>
@@ -1197,6 +1325,7 @@
 <ru>Создание...</ru>
 <hr>Kreiranje...</hr>
 <uk>Створити</uk>
+<si>ustvariti...</si>
 </text>
 <text>
 <en>Page</en>
@@ -1210,6 +1339,7 @@
 <es_CL>Página</es_CL>
 <hr>Stranica</hr>
 <uk>Сторінка</uk>
+<si>stran</si>
 </text>
 <text>
 <en>Page properties</en>
@@ -1221,6 +1351,7 @@
 <ru>Свойства страницы</ru>
 <hr>Svojstva stranice</hr>
 <uk>Опції сторінки</uk>
+<si>lastnosti strani</si>
 </text>
 <text>
 <en>Add new child page</en>
@@ -1230,6 +1361,7 @@
 <sl>Dodaj novo podstran</sl>
 <hr>Dodati dodatnu podstranicu</hr>
 <uk>Додати нову сторінку</uk>
+<si>Dodati novo stran</si>
 </text>
 <text>
 <en>Delete Page</en>
@@ -1242,6 +1374,7 @@
 <es_CL>Eliminar la página</es_CL>
 <hr>Izbrisati stranicu</hr>
 <uk>Видалити сторінку</uk>
+<si>Brisati stran</si>
 </text>
 <text>
 <en>Show / Hide Page</en>
@@ -1251,6 +1384,7 @@
 <sl>Prikaži/skrij stran</sl>
 <hr>Pokaži/sakrij stranicu</hr>
 <uk>Показати / Приховати Сторінку</uk>
+<si>Stran vidna/nevidna</si>
 </text>
 <text>
 <en>Use as homepage</en>
@@ -1261,6 +1395,7 @@
 <sl>Uporabi kot začetno stran</sl>
 <hr>Koristiti kao početnu stranicu</hr>
 <uk>Використати в якості домашньої сторінки</uk>
+<si>Uporabiti kot vstopno stran</si>
 </text>
 <text>
 <en>Expand here</en>
@@ -1271,6 +1406,7 @@
 <ru>Развернуть тут</ru>
 <hr>Ovjde proširiti</hr>
 <uk>Розгорнути тут</uk>
+<si>tukaj razširiti</si>
 </text>
 <text>
 <en>Collapse here</en>
@@ -1281,6 +1417,7 @@
 <ru>Свернуть тут</ru>
 <hr>Ovjde smanjiti</hr>
 <uk>Згорнути тут</uk>
+<si>tukaj skrčiti</si>
 </text>
 <text>
 <en>Open preview</en>
@@ -1291,6 +1428,7 @@
 <ru>Открыть предпросмотр</ru>
 <hr>Otvori preview</hr>
 <uk>Відкрити попередній перегляд</uk>
+<si>odpreti predogled</si>
 </text>
 <text>
 <en>A Server failure occured.</en>
@@ -1302,6 +1440,7 @@
 <ru>Возникла ошибка на сервере.</ru>
 <hr>Serverska pogreška. </hr>
 <uk>Сталася помилка сервера.</uk>
+<si>Napaka na strežniku.</si>
 </text>
 <text>
 <en>Error - wrong version</en>
@@ -1312,6 +1451,7 @@
 <ru>Ошибка - неправильная версия.</ru>
 <hr>Pogreška - kriva verzija. </hr>
 <uk>Error - wrong version</uk>
+<si>Napaka - napačna verzija.</si>
 </text>
 <text>
 <en>Because of an application update the application has to be reloaded.</en>
@@ -1321,6 +1461,7 @@
 <sl>Zaradi nadgradnje je treba aplikacijo ponovno naložiti.</sl>
 <hr>Zbog update-a je potrebno reloadanje nove aplikacije.</hr>
 <uk>Через поновлення програми програма має бути перезавантажено.</uk>
+<si>Zaradi nadgradnje mora biti aplikacija ponovno naložena.</si>
 </text>
 <text>
 <en>A connection problem occured.</en>
@@ -1331,6 +1472,7 @@
 <ru>Ошибка соедиенения.</ru>
 <hr>Problem sa povezivanjem. </hr>
 <uk>Виникла проблема зв'язку.</uk>
+<si>Nastopila je napaka pri povezavi. </si>
 </text>
 <text>
 <en>Select your Position</en>
@@ -1340,6 +1482,7 @@
 <sl>Izberite svoj položaj.</sl>
 <hr>Birajte poziciju.</hr>
 <uk> Виберіть установки</uk>
+<si>Izberite svojo pozicijo. </si>
 </text>
 <text>
 <en>enter address</en>
@@ -1352,6 +1495,7 @@
 <es_CL>Introducir la dirección</es_CL>
 <hr>Upis adrese.</hr>
 <uk>введіть адресу</uk>
+<si>Vnesite naslov. </si>
 </text>
 <text>
 <en>Example</en>
@@ -1365,6 +1509,7 @@
 <es_CL>Ejemplo</es_CL>
 <hr>Primjer</hr>
 <uk>Приклад</uk>
+<si>primer</si>
 </text>
 <text>
 <en>Unknown address</en>
@@ -1375,6 +1520,7 @@
 <sl>Naslov je neznan.</sl>
 <hr>Nepoznata adresa</hr>
 <uk>Невідома адреса</uk>
+<si>neznani naslov</si>
 </text>
 <text>
 <en>Address could not be found</en>
@@ -1384,6 +1530,7 @@
 <sl>Naslova ni bilo možno najti.</sl>
 <hr>Pronalazak adrese nije moguć.</hr>
 <uk>Адреса не знайдена</uk>
+<si>Naslova ni možno najti. </si>
 </text>
 <text>
 <en>Move marker while pressing mousekey.</en>
@@ -1393,6 +1540,7 @@
 <sl>Kazalec premaknite z miško.</sl>
 <hr>Pomičite marker sa mišom.</hr>
 <uk>Перемістити маркер, утримуючи кнопку миші.</uk>
+<si>Premaknite oznako s klikom na miško. </si>
 </text>
 <text>
 <en>Latitude</en>
@@ -1402,6 +1550,7 @@
 <sl>Geografska širina</sl>
 <hr>Stupanj geografske širine</hr>
 <uk>Широта</uk>
+<si>širinska stopnja</si>
 </text>
 <text>
 <en>Longitude</en>
@@ -1411,6 +1560,7 @@
 <sl>Geografska dolžina</sl>
 <hr>Stupanj geografske dužine</hr>
 <uk>Довгота</uk>
+<si>dolžinska stopnja</si>
 </text>
 <text>
 <en>Insert new image or edit selected image.</en>
@@ -1420,6 +1570,7 @@
 <sl>Vstavljanje nove slike ali urejanje izbrane slike.</sl>
 <hr>Dodaj novu sliku ili obradi odabranu sliku.</hr>
 <uk>Вставити нове зображення або редагувати обране зображення.</uk>
+<si>Vstavite novo sliko ali obdelajte izbrano sliko.</si>
 </text>
 <text>
 <en>Create new Download for the selected text or edit selected Download.</en>
@@ -1429,6 +1580,7 @@
 <sl>Ponovni prenos izbranega besedila ali urejanje izbranega prenosa.</sl>
 <hr>Kreira novi download za odabrani tekst ili dorađuje odabrani download.</hr>
 <uk>Створити нове Завантаження для обраного тексту або редагувати обране Завантаження.</uk>
+<si>Na novo prenesite izbrani tekst ali obdelajte izbrani prenos.</si>
 </text>
 <text>
 <en>Create new Link for the selected text or edit selected Link.</en>
@@ -1438,6 +1590,7 @@
 <sl>Ustvarjanje nove povezave za izbrano besedilo ali urejanje izbrane povezave.</sl>
 <hr>Kreira novi link za odabrani tekst ili dorađuje odabrani link. </hr>
 <uk>Створити нове Посилання для обраного тексту або редагувати обране Посилання.</uk>
+<si>Ustvarite nov link za izbrani tekst ali obdelajte izbrani link.</si>
 </text>
 <text>
 <en>Undo the last action.</en>
@@ -1447,6 +1600,7 @@
 <sl>Razveljavi zadnji delovni korak.</sl>
 <hr>Undo zadnji odabir.</hr>
 <uk>Скасувати останню дію.</uk>
+<si>Razveljavi zadnji korak.</si>
 </text>
 <text>
 <en>Redo the last action.</en>
@@ -1456,6 +1610,7 @@
 <sl>Ponovi zadnji delovni korak.</sl>
 <hr>Redo zadnji odabir.</hr>
 <uk>Повторити останню дію.</uk>
+<si>Ponovi zadnji korak.</si>
 </text>
 <text>
 <en>Insert a custom character.</en>
@@ -1465,6 +1620,7 @@
 <sl>Vstavi posebni znak.</sl>
 <hr>Ubacivanje posebnog znaka.</hr>
 <uk>Вставити символ користувача.</uk>
+<si>Vstaviti poseben znak.</si>
 </text>
 <text>
 <en>Insert text without formating.</en>
@@ -1474,6 +1630,7 @@
 <sl>Vstavi besedilo brez oblikovanja.</sl>
 <hr>Ubacivanje teksta bez formatiranja. </hr>
 <uk>Вставити текст без форматування.</uk>
+<si>Vstaviti tekst brez formatiranja.</si>
 </text>
 <text>
 <en>Insert Custom Character</en>
@@ -1483,6 +1640,7 @@
 <sl>Vstavi prilagojeni znak.</sl>
 <hr>Ubacivanje posebnog znaka korisnika</hr>
 <uk>Вставити символ користувача</uk>
+<si>Vstavite znak uporabnika</si>
 </text>
 <text>
 <en>Insert Plain Text</en>
@@ -1492,6 +1650,7 @@
 <sl>Vstavi "golo" besedilo.</sl>
 <hr>Ubacivanje "čistog" teksta</hr>
 <uk>Вставити текст "Зрозуміло"</uk>
+<si>Vstavite tekst</si>
 </text>
 <text>
 <en>Cleaning...</en>
@@ -1502,6 +1661,7 @@
 <ru>Очистка...</ru>
 <hr>Čišćenje...</hr>
 <uk>Очищення...</uk>
+<si>Čiščenje</si>
 </text>
 <text>
 <en>Password lost</en>
@@ -1512,6 +1672,7 @@
 <ru>Потерялся пароль</ru>
 <hr>Zaboravljena lozinka</hr>
 <uk>Забули пароль</uk>
+<si>Pozabljeno geslo</si>
 </text>
 <text>
 <en>Please enter your email address</en>
@@ -1522,6 +1683,7 @@
 <ru>Пожалуйста, введите ваш email адрес</ru>
 <hr>Molimo upišite svoju e-mail adresu</hr>
 <uk>Будь ласка, введіть Вашу адресу електронної пошти</uk>
+<si>Prosimo vnesite vaš e-mail naslov</si>
 </text>
 <text>
 <en>Please type in your password. After clicking the button below</en>
@@ -1530,6 +1692,7 @@
 <ro>Vă rugăm să introduceţi parola dumneavoastră. După ce faceţi click pe butonul de mai jos</ro>
 <sl>Vnesite geslo. Kliknite na spodnji gumb,</sl>
 <uk>Будь ласка, введіть Ваш пароль. Після натискання на кнопку нижче</uk>
+<si>Prosimo vnesite vaše geslo. Po tem ko kliknete na spodnjo ikono</si>
 </text>
 <text>
 <en>you are logged in automatically and may use the typed in password</en>
@@ -1538,6 +1701,7 @@
 <ro> veţi fi logat automat şi veţi putea să folosiţi parola introdusă</ro>
 <sl>če želite avtomatsko prijavo. Vneseno geslo lahko</sl>
 <uk>Ви автоматично увійдете в систему і можете використовувати набраний пароль</uk>
+<si>prijavljeni ste avtomatsko in lahko uporabite vneseno geslo</si>
 </text>
 <text>
 <en>for future logins.</en>
@@ -1546,6 +1710,7 @@
 <ro> pentru login-urile viitoare.</ro>
 <sl>uporabite ob prihodnjih prijavah.</sl>
 <uk>для майбутніх входів.</uk>
+<si>za prihodnje prijave.</si>
 </text>
 <text>
 <en>Your email address:</en>
@@ -1555,6 +1720,7 @@
 <ro>Adresa dumneavoastră de e-mail:</ro>
 <sl>Vaš e-naslov:</sl>
 <uk>Ваша адреса електронної пошти:</uk>
+<si>Vaš e-mail naslov:</si>
 </text>
 <text>
 <en>Activate and login account</en>
@@ -1563,6 +1729,7 @@
 <ro>Activare şi login cont</ro>
 <sl>Aktiviranje računa in prijava</sl>
 <uk>Активувати та увійти в аккаунт</uk>
+<si>Aktiviranje konta in prijava</si>
 </text>
 <text>
 <en>The repeated password is different - please try again.</en>
@@ -1571,6 +1738,7 @@
 <ro>Parola repetată este diferită - vă rugăm să mai încercaţi o dată.</ro>
 <sl>Gesli se ne ujemata – poskusite ponovno.</sl>
 <uk>Повторний пароль відрізняється - спробуйте ще раз.</uk>
+<si>Ponovljeno geslo se razlikuje - prosimo vnesite ga ponolno.</si>
 </text>
 <text>
 <en>An error has occurred</en>
@@ -1583,6 +1751,7 @@
 <sl>Prišlo je do napake.</sl>
 <es_CL>Ha ocurrido un error</es_CL>
 <uk>Сталася помилка</uk>
+<si>Prišlo je do napake.</si>
 </text>
 <text>
 <en>Link cannot link to itself</en>
@@ -1591,6 +1760,7 @@
 <ro>Link-ul nu poate crea legătura cu sine</ro>
 <sl>Povezava ne more voditi do same sebe.</sl>
 <uk>Посилання не працює</uk>
+<si>Link ni možno polinkati samega nase.</si>
 </text>
 <text>
 <en>Add Paragraph</en>
@@ -1599,6 +1769,7 @@
 <ro>Adaugă paragraf</ro>
 <sl>Dodaj odstavek</sl>
 <uk>Додати абзац</uk>
+<si>Vstavite odsatvek</si>
 </text>
 <text>
 <en>Save</en>
@@ -1608,6 +1779,7 @@
 <sl>Shrani</sl>
 <ru>Сохранить</ru>
 <uk>Зберегти</uk>
+<si>Shraniti</si>
 </text>
 <text>
 <en>Cancel</en>
@@ -1617,6 +1789,7 @@
 <sl>Prekliči</sl>
 <ru>Отмена</ru>
 <uk>Відмінити</uk>
+<si>Preklicati</si>
 </text>
 <text>
 <en>Save and Back</en>
@@ -1626,6 +1799,7 @@
 <sl>Shrani in nazaj</sl>
 <ru>Сохранить и Вернуться</ru>
 <uk>Зберегти та Повернутися на попередню сторінку</uk>
+<si>Shraniti in nazaj</si>
 </text>
 <text>
 <en>Delete</en>
@@ -1635,6 +1809,7 @@
 <sl>Izbriši</sl>
 <ru>Удалить</ru>
 <uk>Видалити</uk>
+<si>Brisati</si>
 </text>
 <text>
 <en>delete</en>
@@ -1644,6 +1819,7 @@
 <sl>Izbriši</sl>
 <ru>удалить</ru>
 <uk>видалити</uk>
+<si>brisati</si>
 </text>
 <text>
 <en>New Entry</en>
@@ -1653,6 +1829,7 @@
 <sl>Nov vnos</sl>
 <ru>Новая запись</ru>
 <uk>Новий запис</uk>
+<si>Nov vnos</si>
 </text>
 <text>
 <en>delete?</en>
@@ -1662,6 +1839,7 @@
 <sl>Izbrišem?</sl>
 <ru>удалить?</ru>
 <uk>видалити?</uk>
+<si>Želite brisati?</si>
 </text>
 <text>
 <en>Duplicate</en>
@@ -1671,6 +1849,7 @@
 <sl>Podvoji</sl>
 <ru>Копировать</ru>
 <uk>Дублювати</uk>
+<si>Podvajati</si>
 </text>
 <text>
 <en>Print</en>
@@ -1680,6 +1859,7 @@
 <sl>Natisni</sl>
 <ru>Печать</ru>
 <uk>Друкувати</uk>
+<si>Natisniti</si>
 </text>
 <text>
 <en>CSV Export</en>
@@ -1688,6 +1868,7 @@
 <ro>Export CSV</ro>
 <sl>Izvozi v CSV</sl>
 <uk>Експорт в CSV</uk>
+<si>CSV izvoz</si>
 </text>
 <text>
 <en>Excel Export</en>
@@ -1697,6 +1878,7 @@
 <sl>Izvozi v Excel</sl>
 <ru>Экспорт в Excel</ru>
 <uk>Експорт в Excel</uk>
+<si>Excel izvoz</si>
 </text>
 <text>
 <en>Do you really wish to remove this entry / these entries?</en>
@@ -1705,6 +1887,7 @@
 <ro>Sunteţi sigur că doriţi să ştergeţi această postare (aceste postări)?</ro>
 <sl>Ali ste prepričani, da želite izbrisati vnos(e)?</sl>
 <uk>Ви впевнені, що хочете видалити цей запис / ці записи?</uk>
+<si>Želite ta vnos (vnose) res zbrisati?</si>
 </text>
 <text>
 <en>Add</en>
@@ -1714,6 +1897,7 @@
 <sl>Dodaj</sl>
 <ru>Добавить</ru>
 <uk>Додати</uk>
+<si>Dodati</si>
 </text>
 <text>
 <en>Toggle Visibility</en>
@@ -1722,6 +1906,7 @@
 <ro>Schimbă vizibilitate</ro>
 <sl>Preklopi vidljivost</sl>
 <uk>Перемкнути видимість</uk>
+<si>Preklop vidljivosti </si>
 </text>
 <text>
 <en>Search</en>
@@ -1733,6 +1918,7 @@
 <sk>Hľadaj</sk>
 <fr>Rechercher</fr>
 <uk>Пошук</uk>
+<si>Iskati</si>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -1741,6 +1927,7 @@
 <ro>Destinaţii posibile</ro>
 <sl>Možni cilj</sl>
 <uk>Можливі призначення</uk>
+<si>Možna destinacija</si>
 </text>
 <text>
 <en>Hyperlink</en>
@@ -1750,6 +1937,7 @@
 <sl>hiperpovezava</sl>
 <ru>Ссылка</ru>
 <uk>Гіперпосилання</uk>
+<si>Hyperlink</si>
 </text>
 <text>
 <en>Undo (Ctrl+Z)</en>
@@ -1759,6 +1947,7 @@
 <sl>Razveljavi (Ctrl + Z)</sl>
 <ru>Отмена (Ctrl+Z)</ru>
 <uk>Відмінити (Ctrl+Z)</uk>
+<si>Razveljavitev (Ctrl+Z)</si>
 </text>
 <text>
 <en>Redo</en>
@@ -1768,6 +1957,7 @@
 <sl>Ponovi</sl>
 <ru>Восстановить</ru>
 <uk>Повторити</uk>
+<si>Ponoviti</si>
 </text>
 <text>
 <en>Character</en>
@@ -1777,6 +1967,7 @@
 <sl>Znak</sl>
 <ru>Символ</ru>
 <uk>Знак Зодіаку</uk>
+<si>Znak</si>
 </text>
 <text>
 <en>Loading...</en>
@@ -1786,6 +1977,7 @@
 <sl>Nalagam ...</sl>
 <ru>Загрузка...</ru>
 <uk>Завантаження...</uk>
+<si>Naložiti...</si>
 </text>
 <text>
 <en>{0} selected row(s)</en>
@@ -1795,6 +1987,7 @@
 <sl>Štev. označenih vrstic: {0}</sl>
 <ru>выбрано: {0} записей</ru>
 <uk>{0} обраний рядок(ки)</uk>
+<si>{0} označene vrste</si>
 </text>
 <text>
 <en>Close this tab</en>
@@ -1804,6 +1997,7 @@
 <sl>Zapri zavihek</sl>
 <ru>Закрыть вкладку</ru>
 <uk>Закрити вкладку</uk>
+<si>Zapri ta tab</si>
 </text>
 <text>
 <en>The value in this field is invalid</en>
@@ -1812,6 +2006,7 @@
 <ro>Valoarea din acest câmp este invalidă</ro>
 <sl>Vrednost v tem polju je neveljavna.</sl>
 <uk>Значення в цьому полі є недійсним</uk>
+<si>Vrednost v polju je neveljavna</si>
 </text>
 <text>
 <en>January</en>
@@ -1821,6 +2016,7 @@
 <sl>Januar</sl>
 <ru>Январь</ru>
 <uk>Січень</uk>
+<si>januar</si>
 </text>
 <text>
 <en>February</en>
@@ -1830,6 +2026,7 @@
 <sl>Februar</sl>
 <ru>Февраль</ru>
 <uk>Лютий</uk>
+<si>februar</si>
 </text>
 <text>
 <en>March</en>
@@ -1839,6 +2036,7 @@
 <sl>Marec</sl>
 <ru>Март</ru>
 <uk>Березень</uk>
+<si>marc</si>
 </text>
 <text>
 <en>April</en>
@@ -1848,6 +2046,7 @@
 <sl>April</sl>
 <ru>Апрель</ru>
 <uk>Квітень</uk>
+<si>april</si>
 </text>
 <text>
 <en>May</en>
@@ -1857,6 +2056,7 @@
 <sl>Maj</sl>
 <ru>Май</ru>
 <uk>Травень</uk>
+<si>mai</si>
 </text>
 <text>
 <en>June</en>
@@ -1866,6 +2066,7 @@
 <sl>Junij</sl>
 <ru>Июнь</ru>
 <uk>Червень</uk>
+<si>juni</si>
 </text>
 <text>
 <en>July</en>
@@ -1875,6 +2076,7 @@
 <sl>Julij</sl>
 <ru>Июль</ru>
 <uk>Липень</uk>
+<si>juli</si>
 </text>
 <text>
 <en>August</en>
@@ -1884,6 +2086,7 @@
 <sl>Avgust</sl>
 <ru>Август</ru>
 <uk>Серпень</uk>
+<si>avgust</si>
 </text>
 <text>
 <en>September</en>
@@ -1893,6 +2096,7 @@
 <sl>September</sl>
 <ru>Сентябрь</ru>
 <uk>Вересень</uk>
+<si>september</si>
 </text>
 <text>
 <en>October</en>
@@ -1902,6 +2106,7 @@
 <sl>Oktober</sl>
 <ru>Октябрь</ru>
 <uk>Жовтень</uk>
+<si>oktober</si>
 </text>
 <text>
 <en>November</en>
@@ -1911,6 +2116,7 @@
 <sl>November</sl>
 <ru>Ноябрь</ru>
 <uk>Листопад</uk>
+<si>november</si>
 </text>
 <text>
 <en>December</en>
@@ -1920,6 +2126,7 @@
 <sl>December</sl>
 <ru>Декабрь</ru>
 <uk>Грудень</uk>
+<si>december</si>
 </text>
 <text>
 <en>Sunday</en>
@@ -1928,6 +2135,7 @@
 <ro>Duminică</ro>
 <sl>Nedelja</sl>
 <uk>Неділя</uk>
+<si>nedelja</si>
 </text>
 <text>
 <en>Monday</en>
@@ -1936,6 +2144,7 @@
 <ro>Luni</ro>
 <sl>Ponedeljek</sl>
 <uk>Понеділок</uk>
+<si>ponedeljek</si>
 </text>
 <text>
 <en>Tuesday</en>
@@ -1944,6 +2153,7 @@
 <ro>Marţi</ro>
 <sl>Torek</sl>
 <uk>Вівторок</uk>
+<si>torek</si>
 </text>
 <text>
 <en>Wednesday</en>
@@ -1952,6 +2162,7 @@
 <ro>Miercuri</ro>
 <sl>Sreda</sl>
 <uk>Середа</uk>
+<si>sreda</si>
 </text>
 <text>
 <en>Thursday</en>
@@ -1960,6 +2171,7 @@
 <ro>Joi</ro>
 <sl>Četrtek</sl>
 <uk>Четвер</uk>
+<si>četrtek</si>
 </text>
 <text>
 <en>Friday</en>
@@ -1968,6 +2180,7 @@
 <ro>Vineri</ro>
 <sl>Petek</sl>
 <uk>П'ятниця</uk>
+<si>petek</si>
 </text>
 <text>
 <en>OK</en>
@@ -1977,6 +2190,7 @@
 <sl>OK</sl>
 <ru>ОК</ru>
 <uk>ОК</uk>
+<si>OK</si>
 </text>
 <text>
 <en>Yes</en>
@@ -1986,6 +2200,7 @@
 <sl>Da</sl>
 <ru>Да</ru>
 <uk>Так</uk>
+<si>Ja</si>
 </text>
 <text>
 <en>No</en>
@@ -1995,6 +2210,7 @@
 <sl>Ne</sl>
 <ru>Нет</ru>
 <uk>Ні</uk>
+<si>Ne</si>
 </text>
 <text>
 <en>Today</en>
@@ -2004,6 +2220,7 @@
 <sl>Danes</sl>
 <ru>Сегодня</ru>
 <uk>Сьогодні</uk>
+<si>Danes</si>
 </text>
 <text>
 <en>This date is before the minimum date</en>
@@ -2012,6 +2229,7 @@
 <ro>Această dată este mai devreme decât data minimă</ro>
 <sl>Ta datum je pred najzgodnejšim datumom.</sl>
 <uk>Ця дата до мінімальної дати</uk>
+<si>Datum je pred najnižjim  datumom</si>
 </text>
 <text>
 <en>This date is after the maximum date</en>
@@ -2020,6 +2238,7 @@
 <ro>Această dată este mai târziu decât data maximă</ro>
 <sl>Ta datum je po najpoznejšem datumu.</sl>
 <uk>Ця дата після максимальної дати</uk>
+<si>Datum je za najvišjim datumom</si>
 </text>
 <text>
 <en>Next Month (Control+Right)</en>
@@ -2028,6 +2247,7 @@
 <ro>luna următoare (Control + ➝)</ro>
 <sl>Naslednji mesec (Ctrl + ➝)</sl>
 <uk>Наступний місяць (Ctrl + ➝)</uk>
+<si>naslednji mesec (Control + ➝)</si>
 </text>
 <text>
 <en>Previous Month (Control+Left)</en>
@@ -2036,6 +2256,7 @@
 <ro>luna anterioară (Control + ←)</ro>
 <sl>Prejšnji mesec (Ctrl + ←)</sl>
 <uk>Попередній місяць (Ctrl + ←)</uk>
+<si>zadnji mesec (Control + ←)</si>
 </text>
 <text>
 <en>Choose a month (Control+Up/Down to move years)</en>
@@ -2044,6 +2265,7 @@
 <ro>Selectaţi o lună (Control + ↑/↓ pentru a mişca anii)</ro>
 <sl>Izberite mesec (Ctrl + ↑/↓ za prejšnje/naslednje leto)</sl>
 <uk>Оберіть місяць (Ctrl + ↑/↓ змінити рік)</uk>
+<si>Izberite mesec (Control + ↑/↓ za premik let)</si>
 </text>
 <text>
 <en>{0} (Spacebar)</en>
@@ -2052,6 +2274,7 @@
 <ro>{0} (Tasta Space)</ro>
 <sl>{0} (preslednica)</sl>
 <uk>{0} (Пробіл)</uk>
+<si>{0} (tipka presledek)</si>
 </text>
 <text>
 <en>m/d/y</en>
@@ -2060,6 +2283,7 @@
 <ro>l/z/a</ro>
 <sl>d.m.Y</sl>
 <uk>м/д/р</uk>
+<si>m/d/l</si>
 </text>
 <text>
 <en>of {0}</en>
@@ -2069,6 +2293,7 @@
 <sl>od {0}</sl>
 <ru>из {0}</ru>
 <uk>з {0}</uk>
+<si>od  {0}</si>
 </text>
 <text>
 <en>First Page</en>
@@ -2077,6 +2302,7 @@
 <ro>Prima pagină</ro>
 <sl>Prva stran</sl>
 <uk>Перша сторінка</uk>
+<si>Prva stran</si>
 </text>
 <text>
 <en>Previous Page</en>
@@ -2085,6 +2311,7 @@
 <ro>Pagina anterioară</ro>
 <sl>Prejšnja stran</sl>
 <uk>Попередня сторінка</uk>
+<si>Prejšna stran</si>
 </text>
 <text>
 <en>Next Page</en>
@@ -2093,6 +2320,7 @@
 <ro>Pagina următoare</ro>
 <sl>Naslednja stran</sl>
 <uk>Наступна сторінка</uk>
+<si>Naslednja stran</si>
 </text>
 <text>
 <en>Last Page</en>
@@ -2101,6 +2329,7 @@
 <ro>Ultima pagină</ro>
 <sl>Zadnja stran</sl>
 <uk>Остання сторінка</uk>
+<si>Zadnja stran</si>
 </text>
 <text>
 <en>Refresh</en>
@@ -2110,6 +2339,7 @@
 <sl>Ponovno naloži</sl>
 <ru>Обновить</ru>
 <uk>Оновити</uk>
+<si>Ponovno naložiti</si>
 </text>
 <text>
 <en>Displaying {0} - {1} of {2}</en>
@@ -2119,6 +2349,7 @@
 <sl>Prikaz {0}–{1} od {2}</sl>
 <ru>Показаны {0} - {1} из {2}</ru>
 <uk>Показано {0} - {1} з {2}</uk>
+<si>Prikaz {0} - {1} od {2}</si>
 </text>
 <text>
 <en>No data to display</en>
@@ -2128,6 +2359,7 @@
 <sl>Podatki za prikaz niso na voljo.</sl>
 <ru>Нет данных</ru>
 <uk>Немає даних для відображення</uk>
+<si>Za prikaz ni podatkov </si>
 </text>
 <text>
 <en>The minimum length for this field is {0}</en>
@@ -2136,6 +2368,7 @@
 <ro>Lungimea minimă pentru acest câmp este {0}</ro>
 <sl>Minimalna dolžina tega polja je {0}.</sl>
 <uk>Мінімальна довжина цього поля - {0}</uk>
+<si>Najmanjša dolžina za to polje je {0}</si>
 </text>
 <text>
 <en>The maximum length for this field is {0}</en>
@@ -2144,6 +2377,7 @@
 <ro>Lungimea maximă pentru acest câmp este {0}</ro>
 <sl>Maksimalna dolžina tega polja je {0}.</sl>
 <uk>Максимальна довжина цього поля - {0}</uk>
+<si>Največja dolžina za to polje je {0}</si>
 </text>
 <text>
 <en>This field is required</en>
@@ -2153,6 +2387,7 @@
 <sl>To polje je potrebno.</sl>
 <ru>Поле является обязательным</ru>
 <uk>Це поле є обов\'язковим</uk>
+<si>Polje je obvezno</si>
 </text>
 <text>
 <en>The minimum value for this field is {0}</en>
@@ -2161,6 +2396,7 @@
 <ro>Valoarea minimă pentru acest câmp este {0}</ro>
 <sl>Minimalna vrednost tega polja je {0}.</sl>
 <uk>Мінімальне значення цього поля - {0}</uk>
+<si>Najnižja vrednost za to polje je {0}</si>
 </text>
 <text>
 <en>The maximum value for this field is {0}</en>
@@ -2169,6 +2405,7 @@
 <ro>Valoarea maximă pentru acest câmp este {0}</ro>
 <sl>Maksimalna vrednost tega polja je {0}.</sl>
 <uk>Максимальне значення цього поля - {0}</uk>
+<si>Najvišja vrednost za to polje je  {0}</si>
 </text>
 <text>
 <en>{0} is not a valid number</en>
@@ -2177,6 +2414,7 @@
 <ro>{0} nu este un număr valid.</ro>
 <sl>Št. {0} ni veljavna.</sl>
 <uk>{0} - не допустиме число</uk>
+<si>{0} ni veljavno število.</si>
 </text>
 <text>
 <en>Disabled</en>
@@ -2186,6 +2424,7 @@
 <sl>Skrito</sl>
 <ru>Не активно</ru>
 <uk>Вимкнений</uk>
+<si>Onemogočen</si>
 </text>
 <text>
 <en>The date in this field must be after {0}</en>
@@ -2194,6 +2433,7 @@
 <ro>Data din acest câmp trebuie să fie după {0}</ro>
 <sl>Datum v tem polju mora biti poznejši od {0}.</sl>
 <uk>Дата у цьому полі має бути після {0}</uk>
+<si>Datum v polju mora biti za {0} </si>
 </text>
 <text>
 <en>The date in this field must be before {0}</en>
@@ -2202,6 +2442,7 @@
 <ro>Data din acest câmp trebuie să fie înainte de {0}</ro>
 <sl>Datum v tem polju mora biti zgodnejši od {0}.</sl>
 <uk>Дата в цьому полі повинна бути до {0}</uk>
+<si>Datum v polju mora biti pred {0}</si>
 </text>
 <text>
 <en>{0} is not a valid date - it must be in the format {1}</en>
@@ -2210,6 +2451,7 @@
 <ro>{0} nu este o dată validă - trebuie să aibă formatul {1}</ro>
 <sl>Datum {0} ni veljaven – biti mora v obliki {1}.</sl>
 <uk>{0} не є правильною датою - дата має бути вказана у форматі {1}</uk>
+<si>{0} ni veljaven datum - mora biti v formatu {1} </si>
 </text>
 <text>
 <en>This field should be an e-mail address in the format "user@domain.com"</en>
@@ -2219,6 +2461,8 @@
 <sl>To polje mora vsebovati e-naslov v obliki "uporabnik@domena.com".</sl>
 <es>Aquí debe ingresar una dirección de correo electrónico en el formato "usuario@dominio.com".</es>
 <uk>Це поле повинно містити адресу електронної пошти у форматі "user@domain.com"</uk>
+<si>To polje mora imeti e-mail naslov v obliki "uporabnik@domain.com"</si>
+<hr>Ovo polje bi trebalo sadržavati e-mail adresu u sljedećem formatu "korisnik@domain.com".</hr>
 </text>
 <text>
 <en>This field should only contain letters and _</en>
@@ -2227,6 +2471,7 @@
 <ro>Acest câmp trebuie să conţină doar litere şi _</ro>
 <sl>To polje sme vsebovati samo črke in _.</sl>
 <uk>Це поле повинно містити лише букви та _</uk>
+<si>To polje mora imati samo znak in _</si>
 </text>
 <text>
 <en>This field should only contain letters, numbers and _</en>
@@ -2235,6 +2480,7 @@
 <ro>Acest câmp trebuie să conţină doar litere, cifre şi _</ro>
 <sl>To polje sme vsebovati samo črke, številke in _.</sl>
 <uk>Це поле повинно містити лише букви, цифри та _</uk>
+<si>To polje mora imeti samo znak, števila in _</si>
 </text>
 <text>
 <en>Please enter the URL for the link:</en>
@@ -2243,6 +2489,7 @@
 <ro>Vă rugăm să introduceţi adresa de internet a link-ului:</ro>
 <sl>Vnesite spletni naslov za povezavo:</sl>
 <uk>Будь ласка, введіть URL для посилання:</uk>
+<si>Prosim vnesite naslov strani za povezavo:</si>
 </text>
 <text>
 <en>Bold (Ctrl+B)</en>
@@ -2251,6 +2498,7 @@
 <ro>Bold (Ctrl+B)</ro>
 <sl>Krepko (Ctrl + B)</sl>
 <uk>Напівжирний (Ctrl+B)</uk>
+<si>Krepko (Ctrl+B)</si>
 </text>
 <text>
 <en>Make the selected text bold.</en>
@@ -2259,6 +2507,7 @@
 <ro>Schimbă formatul textului selectat în bold.</ro>
 <sl>Označi izbrano besedilo kot krepko.</sl>
 <uk>Зробити виділений текст напівжирним.</uk>
+<si>Napišite označeni tekst krepko:</si>
 </text>
 <text>
 <en>Italic (Ctrl+I)</en>
@@ -2267,6 +2516,7 @@
 <ro>Italic (Ctrl+I)</ro>
 <sl>Ležeče (Ctrl + I)</sl>
 <uk>Курсив (Ctrl+I)</uk>
+<si>Italic (Ctrl+I)</si>
 </text>
 <text>
 <en>Make the selected text italic.</en>
@@ -2275,6 +2525,7 @@
 <ro>Schimbă formatul textului selectat în italic.</ro>
 <sl>Označi izbrano besedilo kot poševno.</sl>
 <uk>Зробити виділений текст курсивом.</uk>
+<si>Napišite označeni tekst italic.</si>
 </text>
 <text>
 <en>Underline (Ctrl+U)</en>
@@ -2283,6 +2534,7 @@
 <ro>Subliniază (Ctrl+U)</ro>
 <sl>Podčrtaj (Ctrl + U)</sl>
 <uk>Підкреслений (Ctrl+U)</uk>
+<si>Podčrtati (Ctrl+U)</si>
 </text>
 <text>
 <en>Underline the selected text.</en>
@@ -2291,6 +2543,7 @@
 <ro>Subliniază textul selectat.</ro>
 <sl>Podčrtaj izbrano besedilo.</sl>
 <uk>Підкреслити виділений текст.</uk>
+<si>Podčrtaj označeni tekst.</si>
 </text>
 <text>
 <en>Grow Text</en>
@@ -2299,6 +2552,7 @@
 <ro>Măreşte textul.</ro>
 <sl>Povečaj velikost pisave.</sl>
 <uk>Збільшити текст</uk>
+<si>Tekst povečati.</si>
 </text>
 <text>
 <en>Increase the font size.</en>
@@ -2307,6 +2561,7 @@
 <ro>Măreşte fontul.</ro>
 <sl>Velikost pisave je povečana.</sl>
 <uk>Збільшити розмір шрифту.</uk>
+<si>Velikost pisave se poveča.</si>
 </text>
 <text>
 <en>Shrink Text</en>
@@ -2315,6 +2570,7 @@
 <ro>Micşorează textul.</ro>
 <sl>Zmanjšaj velikost pisave.</sl>
 <uk>Зменшити текст</uk>
+<si>Tekst zmanjšati.</si>
 </text>
 <text>
 <en>Decrease the font size.</en>
@@ -2323,6 +2579,7 @@
 <ro>Micşorează fontul.</ro>
 <sl>Velikost pisave je zmanjšana.</sl>
 <uk>Зменшити розмір шрифту.</uk>
+<si>Velikost pisave se zmanjša. </si>
 </text>
 <text>
 <en>Text Highlight Color</en>
@@ -2331,6 +2588,7 @@
 <ro>Text-Culoare Highlight</ro>
 <sl>Barva označevanja besedila.</sl>
 <uk>Колір виділення тексту</uk>
+<si>Tekst označiti z barvo.</si>
 </text>
 <text>
 <en>Change the background color of the selected text.</en>
@@ -2339,6 +2597,7 @@
 <ro>Schimbă culoarea fondului textului selectat.</ro>
 <sl>Podlaga izbranega besedila se obarva.</sl>
 <uk>Змінити колір фону для виділеного тексту.</uk>
+<si>Zamenja se barva v ozadju označenega teksta </si>
 </text>
 <text>
 <en>Font Color</en>
@@ -2347,6 +2606,7 @@
 <ro>Culoare font</ro>
 <sl>Barva pisave</sl>
 <uk>Колір тексту</uk>
+<si>Barva </si>
 </text>
 <text>
 <en>Change the color of the selected text.</en>
@@ -2670,6 +2930,7 @@
 <ro>pentru a vă întoarce la formular</ro>
 <sl>Nazaj na obrazec</sl>
 <uk>повернутися до форми</uk>
+<hr>za povratak na obrazac</hr>
 </text>
 <text>
 <en>Show Original</en>
@@ -3536,6 +3797,7 @@
 <sl>Obrazec je bil uspešno poslan.</sl>
 <hu>Az űrlapot sikeresen elküldtük</hu>
 <es_CL>El formulario es enviado con éxito.</es_CL>
+<hr>Upit je uspješno poslan.</hr>
 </text>
 <text>
 <en>Search engine referer</en>
@@ -4432,6 +4694,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>804</id>
 <ro>Cod poştal</ro>
 <sl>Poštna št.</sl>
+<hr>Poštanski broj</hr>
 </text>
 <text>
 <en>City</en>
@@ -4462,6 +4725,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Telefon</ro>
 <sl>Telefon</sl>
 <es_CL>Teléfono</es_CL>
+<hr>Telefon</hr>
 </text>
 <text>
 <en>Checkout</en>
@@ -5450,6 +5714,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1006</id>
 <ro>Cod poştal</ro>
 <sl>Poštna št.</sl>
+<hr>Poštanski broj</hr>
 </text>
 <text>
 <en>Fon</en>
@@ -7616,6 +7881,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Konto löschen</de>
 <ro>Şterge contul</ro>
 <sl>Račun brisati</sl>
+<bg>Изтриване на регистрация</bg>
 </text>
 <text>
 <en>Your Password</en>
@@ -8633,6 +8899,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1615</id>
 <ro>Formularul a fost trimis cu succes. În scurt timp veţi primi un e-mail cu link-ul de acces la secţiunea protejată.</ro>
 <sl>Obrazec je bil uspešno poslan. V kratkem boste prejeli e-sporočilo s povezavo za dostop do zaščitenega območja.</sl>
+<hr>Upit je uspješno poslan. </hr>
 </text>
 <text>
 <en>Please enter your E-Mail Address to access this area.</en>
@@ -9069,6 +9336,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1713</id>
 <ro>A intervenit o eroare la procesarea formularului. Vă rugăm să reîncercaţi puţin mai târziu.</ro>
 <sl>Pri obdelavi obrazca je prišlo do napake. Ponovno poskusite kasneje.</sl>
+<hr>Pojavila se greška prilikom obrade upita. Molimo pokušajte ponovno za nekoliko trenutaka. </hr>
 </text>
 <text>
 <en>Choose Child</en>
@@ -10275,6 +10543,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hu>További információ a „cookie”-k használatáról</hu>
 <bg>Повече за употребата на "бисквитки"</bg>
 <cs>Více informací o použití cookies </cs>
+<hr>Više informacije u vezi korištenja kolačića</hr>
 </text>
 <text>
 <en>Accept and continue</en>
