@@ -3,6 +3,8 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
+    editWindow: null,
+    form: null,
     focusOnEditSelector: 'field',
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
