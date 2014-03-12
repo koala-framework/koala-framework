@@ -40,6 +40,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
         } else {
             this.bindable.save();
         }
+        this.fireEvent('save');
     },
 
     init: function()
