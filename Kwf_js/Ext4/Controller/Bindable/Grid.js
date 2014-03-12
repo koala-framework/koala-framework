@@ -27,6 +27,48 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
                 store.load();
             }
         }
+
+        //if both model has HayMany assocication and child model has BelongsTo associacion
+        //we set the child models the parent model instance wich they will use for getXxx
+        //that way both share the same object
+        var belongsToAssoc;
+        store.model.prototype.associations.each(function(assoc) {
+            if (assoc instanceof Ext4.data.association.BelongsTo) {
+                Ext4.ClassManager.get(assoc.model).prototype.associations.each(function(i) {
+                    if (i instanceof Ext4.data.association.HasMany
+                        && i.model == store.model.$className
+                        && i.foreignKey == assoc.foreignKey
+                    ) {
+                        belongsToAssoc = assoc;
+                    }
+                }, this);
+
+            }
+        }, this);
+        if (belongsToAssoc) {
+            if (!store['belongsTo'+belongsToAssoc.instanceName]) {
+                store.loadRecords = Ext4.Function.createInterceptor(store.loadRecords, function(records) {
+                    var store = this;
+                    for (var i=0; i < records.length; i++) {
+                        records[i][belongsToAssoc.instanceName] = store['belongsTo'+belongsToAssoc.instanceName];
+                    }
+                });
+                store.insert = Ext4.Function.createInterceptor(store.insert, function(index, records) {
+                    var store = this;
+                    if (!Ext4.isIterable(records)) {
+                        records = [records];
+                    }
+                    for (var i=0; i < records.length; i++) {
+                        records[i][belongsToAssoc.instanceName] = store['belongsTo'+belongsToAssoc.instanceName];
+                    }
+                });
+            }
+            store['belongsTo'+belongsToAssoc.instanceName] = row;
+            store.each(function(r) {
+                r[belongsToAssoc.instanceName] = row;
+            }, this);
+        }
+
         this.gridController.grid.bindStore(store);
     },
 
