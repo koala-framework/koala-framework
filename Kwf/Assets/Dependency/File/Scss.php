@@ -21,7 +21,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         $cacheId = str_replace(array('/', '.', '-'), '_', $fileName);
         $mtime = $cache->test($cacheId);
         $ret = false;
-        if ($mtime && filemtime($fileName) < $mtime) {
+        if ($mtime && filemtime($fileName) == $mtime) {
             $ret = $cache->load($cacheId);
         }
         if (!$ret) {
