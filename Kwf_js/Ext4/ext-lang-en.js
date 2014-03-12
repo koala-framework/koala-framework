@@ -61,13 +61,13 @@ Ext4.onReady(function() {
 
         Ext4.Date.parseCodes.S.s = "(?:st|nd|rd|th)";
     }
-    
+
     if (Ext4.util && Ext4.util.Format) {
         Ext4.apply(Ext4.util.Format, {
-            thousandSeparator: ',',
-            decimalSeparator: '.',
-            currencySign: '$',
-            dateFormat: 'm/d/Y'
+            thousandSeparator: '', //shitty trl parser doesn't eat that: trlcKwf('thousands separator', ","),
+            decimalSeparator: trlcKwf('decimal separator', "."),
+            currencySign: '€', //currencySign in trl, really?
+            dateFormat: trlKwf('Y-m-d')
         });
     }
 });
