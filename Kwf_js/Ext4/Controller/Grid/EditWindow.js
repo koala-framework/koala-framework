@@ -6,6 +6,9 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
     editWindow: null,
     form: null,
     focusOnEditSelector: 'field',
+    autoSync: true,
+
+    _addToStoreOnSave: false,
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
@@ -20,19 +23,23 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
         }
 
         var row = this.bindable.getLoadedRecord();
-        if (row.phantom) {
+        if (row.phantom && this._addToStoreOnSave) {
             this.gridController.grid.getStore().add(row);
         }
-        var syncQueue = new Kwf.Ext4.Data.StoreSyncQueue();
-        syncQueue.add(this.gridController.grid.getStore()); //sync this.gridController.grid store first
-        this.bindable.save(syncQueue);         //then bindables (so bindable grid is synced second)
-                                                //bindable forms can still update the row as the sync is not yet started
-        syncQueue.start({
-            success: function() {
-                this.fireEvent('savesuccess');
-            },
-            scope: this
-        });
+        if (this.autoSync) {
+            var syncQueue = new Kwf.Ext4.Data.StoreSyncQueue();
+            syncQueue.add(this.gridController.grid.getStore()); //sync this.gridController.grid store first
+            this.bindable.save(syncQueue);         //then bindables (so bindable grid is synced second)
+                                                    //bindable forms can still update the row as the sync is not yet started
+            syncQueue.start({
+                success: function() {
+                    this.fireEvent('savesuccess');
+                },
+                scope: this
+            });
+        } else {
+            this.bindable.save();
+        }
     },
 
     init: function()
@@ -73,12 +80,14 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
                 var row = this.gridController.grid.getStore().model.create();
                 this.fireEvent('add', row);
                 this.openEditWindow(row);
+                this._addToStoreOnSave = true;
             }, this);
         }
     },
 
     openEditWindow: function(row)
     {
+        this._addToStoreOnSave = false;
         this.bindable.load(row);
         if (row.phantom) {
             this.editWindow.setTitle(trlKwf('Add'));
