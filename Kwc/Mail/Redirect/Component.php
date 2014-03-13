@@ -130,22 +130,22 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
                 if (isset($matches[4])) {
                     $title = urldecode(htmlspecialchars_decode($matches[4]));
                 }
-                if (!isset($this->_redirectRowsCache[$href])) {
-                    $r = $m->getRow($m->select()->whereEquals('value', $href));
+                if (!isset($this->_redirectRowsCache[$href.$title])) {
+                    $select = $m->select();
+                    $select->whereEquals('value', $href);
+                    $select->whereEquals('title', $title);
+                    $r = $m->getRow($select);
                     if (!$r) {
                         $r = $m->createRow(array(
                             'value' => $href,
-                            'type' => $matches[1]
+                            'type' => $matches[1],
+                            'title' => $title
                         ));
                         $r->save();
                     }
-                    $this->_redirectRowsCache[$href] = $r;
+                    $this->_redirectRowsCache[$href.$title] = $r;
                 }
-                $r = $this->_redirectRowsCache[$href];
-                if (empty($r->title) && !empty($title)) {
-                    $r->title = $title;
-                    $r->save();
-                }
+                $r = $this->_redirectRowsCache[$href.$title];
 
                 // $recipientSource muss immer dabei sein, auch wenn es nur ein
                 // model gibt. Würde später eines dazukommen, funktionierten die alten
