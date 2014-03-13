@@ -139,6 +139,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             if (meta.grouping) {
                 var storeType = Ext.data.GroupingStore;
                 storeConfig.groupField = meta.grouping.groupField;
+                storeConfig.remoteGroup = meta.grouping.remoteGroup;
                 delete meta.grouping.groupField;
             } else {
                 var storeType = Ext.data.Store;
