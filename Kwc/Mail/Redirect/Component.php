@@ -128,7 +128,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
                 $href = htmlspecialchars_decode($matches[2]);
                 $title = '';
                 if (isset($matches[4])) {
-                    $title = htmlspecialchars_decode($matches[4]);
+                    $title = urldecode(htmlspecialchars_decode($matches[4]));
                 }
                 if (!isset($this->_redirectRowsCache[$href])) {
                     $r = $m->getRow($m->select()->whereEquals('value', $href));
