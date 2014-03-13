@@ -95,7 +95,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             $ret[] = array(
                 'pos' => $pos++,
                 'link' => $link,
-                'title' => urldecode($row['title']),
+                'title' => $row['title'],
                 'count' => $row['c'],
                 'percent' => number_format(($row['c'] / $total)*100, 2) . '%'
             );
