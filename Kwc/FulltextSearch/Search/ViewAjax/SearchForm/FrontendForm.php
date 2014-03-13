@@ -8,6 +8,6 @@ class Kwc_FulltextSearch_Search_ViewAjax_SearchForm_FrontendForm extends Kwf_For
         $this->fields->add(new Kwf_Form_Field_TextField('query', 'Query'))
             ->setAutoComplete(false)
             ->setHideLabel(true)
-            ->setEmptyText(trlStatic('Suchbegriff'));
+            ->setEmptyText(trlKwfStatic('Search'));
     }
 }
