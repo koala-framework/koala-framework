@@ -6,6 +6,7 @@ class Kwc_Mail_Image_Mail_Component extends Kwc_Mail_Component
         $ret = parent::getSettings();
         $ret['generators']['content']['component'] = 'Kwc_Mail_Image_Content_Component';
         $ret['ownModel'] = 'Kwc_Mail_Image_Mail_Model';
+        $ret['docType'] = false;
         return $ret;
     }
 }

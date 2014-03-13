@@ -180,7 +180,7 @@ class Kwc_Mail_HtmlParser
             'doctype'        => 'omit',
             'drop-proprietary-attributes' => false,
             'word-2000'      => true,
-            'show-body-only' => true,
+            'show-body-only' => false,
             'bare'           => true,
             'enclose-block-text'=>true,
             'enclose-text'   => true,
