@@ -150,7 +150,9 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         $this->created = date('Y-m-d H:i:s');
         $this->deleted = 0;
         $this->locked = 0;
-        $this->password = '';
+        if (!$this->password) {
+            $this->password = '';
+        }
         $this->generatePasswordSalt();
         if (!$this->gender) $this->gender = '';
     }
