@@ -1,5 +1,5 @@
 .kwfLightbox {
-    position: fixed;
+    position: absolute;
     z-index: 100;
     top: 0; left: 0;
     height: 100%;
@@ -27,9 +27,8 @@
 }
 
 .kwfLightbox.mobile .closeButton {
-    position: fixed;
-    right: 12px;
-    top: 12px;
+    right: 0;
+    top: 0;
 }
 .kwfLightbox.mobile .kwfLightboxInner {
     margin-bottom: 0;
