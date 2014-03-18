@@ -35,13 +35,16 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 } else if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
                     $this->getResponse()->setHeader('Content-Type', 'text/javascript');
                 } else {
-                    if (!headers_sent()) {
-                        header('Content-Type: text/html');
-                    }
+                    $this->getResponse()->setHeader('Content-Type', 'text/html; charset=utf-8');
+                    ob_start();
                     Kwf_Benchmark::output();
-                    echo "<pre>";
-                    echo htmlspecialchars($this->_jsonFormat(Zend_Json::encode($this->view->getOutput())));
-                    echo "</pre>";
+                    $benchmark = ob_get_contents();
+                    ob_end_clean();
+                    $out =  "<pre>";
+                    $out .= htmlspecialchars($this->_jsonFormat(Zend_Json::encode($this->view->getOutput())));
+                    $out .= "</pre>";
+                    $out .= "\n".$benchmark;
+                    $this->getResponse()->setBody($out);
                     $this->setNoRender();
                 }
             } else {
