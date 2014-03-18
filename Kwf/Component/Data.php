@@ -874,7 +874,7 @@ class Kwf_Component_Data
     {
         $select = $this->_formatSelect($select);
         $select->limit(1);
-        $cc = $this->getRecursiveChildComponents($select);
+        $cc = $this->getRecursiveChildComponents($select, $childSelect);
         if (!$cc) return null;
         return current($cc);
     }
