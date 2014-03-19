@@ -75,9 +75,9 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
         $type = $this->_getParam('type');
         $cc = Kwf_Util_ClearCache::getInstance();
         if ($type == 'media') {
-            $cc->clearCache(array('type'=>'media', 'output'=>false, 'refresh'=>true));
+            $cc->clearCache(array('types'=>'media', 'output'=>false, 'refresh'=>true));
         } else if ($type == 'assets') {
-            $cc->clearCache(array('type'=>'assets', 'output'=>false, 'refresh'=>true));
+            $cc->clearCache(array('types'=>'assets', 'output'=>false, 'refresh'=>true));
         } else if ($type == 'trl') {
             $cache = new Kwf_Util_ClearCache_Types_Trl();
             $cache->clearCache(array());
