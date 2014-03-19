@@ -1,4 +1,6 @@
 Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+    stopAtEnd: false,
+
     init: function() {
 
         this.previousLink = this.list.el.createChild({
@@ -36,7 +38,7 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Kwf.EyeCa
     },
     onPrevious: function() {
         var item;
-        if (this.list.getActiveItem() === this.list.getFirstItem()) {
+        if (this.list.getActiveItem() === this.list.getFirstItem() && !this.stopAtEnd) {
             item = this.list.getLastItem();
         } else {
             item = this.list.getItem(this.list.getActiveItem().listIndex-1);
@@ -48,7 +50,7 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext.extend(Kwf.EyeCa
     },
     onNext: function() {
         var item;
-        if (this.list.getActiveItem() === this.list.getLastItem()) {
+        if (this.list.getActiveItem() === this.list.getLastItem() && !this.stopAtEnd) {
             item = this.list.getFirstItem();
         } else {
             item = this.list.getItem(this.list.getActiveItem().listIndex+1);
