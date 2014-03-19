@@ -3,6 +3,7 @@ class Kwf_Util_Model_Welcome extends Kwf_Model_Db
     implements Kwf_Media_Output_Interface
 {
     protected $_table = 'kwf_welcome';
+    protected $_rowClass = 'Kwf_Util_Model_Row_Welcome';
     protected $_referenceMap    = array(
         'WelcomeImage' => array(
             'column'           => 'kwf_upload_id',
