@@ -27,7 +27,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
         Ext.fly(window).on('resize', function() {
             this.updateButtons();
-        }, this)
+        }, this);
     },
     render: function() {
         this.list.el.createChild({
