@@ -80,7 +80,8 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
                 componentId: this.componentId
             },
             placeholder: this.placeholder,
-            loadMoreBufferPx: this.loadMoreBufferPx
+            loadMoreBufferPx: this.loadMoreBufferPx,
+            loadDetailAjax: this.loadDetailAjax
         });
         this.items = [this.view];
 
@@ -466,6 +467,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
     },
 
     onItemClick: function(view, number, target, ev) {
+        if (!this.loadDetailAjax) return;
         var row = this.store.getAt(number);
         var target = Ext.get(ev.getTarget());
         if (target.dom.tagName.toLowerCase() != 'a') target = target.up('a');

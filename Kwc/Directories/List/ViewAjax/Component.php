@@ -12,6 +12,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
         $ret['assets']['dep'][] = 'KwfStatistics';
 
         $ret['loadMoreBufferPx'] = 700; //if false infinite scrolling is disabled, you still can call loadMore() manually
+        $ret['loadDetailAjax'] = true; //true by default - the detail will be loaded via ajax
 
         return $ret;
     }
@@ -42,6 +43,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
                 'noEntriesFound' => $this->_getPlaceholder('noEntriesFound')
             ),
             'loadMoreBufferPx' => $this->_getSetting('loadMoreBufferPx'),
+            'loadDetailAjax' => $this->_getSetting('loadDetailAjax'),
         );
         return $ret;
     }
