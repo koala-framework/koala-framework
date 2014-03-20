@@ -303,7 +303,10 @@ class Kwf_Util_Check_Config
 
     private static function _setup_kwf()
     {
-        Kwf_Registry::get('config');
+        //don't use Kwf_Config_Web::getInstance or Kwf_Registry::get('cache') as that would cache
+        $configClass = Kwf_Setup::$configClass;
+        $section = call_user_func(array($configClass, 'getDefaultConfigSection'));
+        $ret = new $configClass($section);
         return array(
             'status' => self::RESULT_OK,
         );
@@ -311,6 +314,11 @@ class Kwf_Util_Check_Config
 
     private static function _kwf_version()
     {
+        //don't use Kwf_Config_Web::getInstance or Kwf_Registry::get('cache') as that would cache
+        $configClass = Kwf_Setup::$configClass;
+        $section = call_user_func(array($configClass, 'getDefaultConfigSection'));
+        $config = new $configClass($section);
+
         if (file_exists('kwf_branch')) {
             $v = trim(file_get_contents('kwf_branch'));
         } else if (file_exists('vkwf_branch')) {
@@ -321,7 +329,7 @@ class Kwf_Util_Check_Config
                 'message' => "Can't check kwf version, kwf_branch file not found"
             );
         }
-        $kwfVersion = Kwf_Registry::get('config')->application->kwf->version;
+        $kwfVersion = $config->application->kwf->version;
         if ($v != $kwfVersion) {
             return array(
                 'status' => self::RESULT_FAILED,
