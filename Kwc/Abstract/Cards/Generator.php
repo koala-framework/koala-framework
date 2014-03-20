@@ -90,12 +90,11 @@ class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
 
     protected function _formatSelect($parentData, $select = array())
     {
-
         if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
             $cc = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
-            if (is_array($parentData)) {
-            } else {
-                $component = $this->_getModel()->fetchColumnByPrimaryId('component', $parentData->dbId);
+            if (count($parentData) == 1) {
+                $pd = $parentData[0];
+                $component = $this->_getModel()->fetchColumnByPrimaryId('component', $pd->dbId);
                 if (!$component || !in_array($this->_settings['component'][$component], $cc)) return null;
             }
         }
