@@ -88,6 +88,10 @@ Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             }
         }
 
+        if (meta.form.loadAfterSave) {
+            this.loadAfterSave = true;
+        }
+
         if (meta.buttons && typeof meta.form.tbar == 'undefined') {
             for (var b in meta.buttons) {
                 if (!meta.form.tbar) meta.form.tbar = [];
@@ -174,7 +178,7 @@ Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
                 if (result.data && this.getForm()) {
                     if (this.actions['delete']) this.actions['delete'].enable();
 //                     if (this.getForm()) {
-                    	this.fireEvent('beforeloadform', this.getForm(), result.data);
+                        this.fireEvent('beforeloadform', this.getForm(), result.data);
                         this.getForm().setValues(result.data);
                         this.fireEvent('loadform', this.getForm(), result.data);
 //todo: werte zwischenspeichern und setzen wenn form gerendered wurde?
@@ -324,8 +328,7 @@ Kwf.Auto.FormPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             this.getAction('delete').enable();
             this.getAction('save').enable();
         }
-        if (this.getForm().loadAfterSave) {
-            //bei file-upload neu laden
+        if (this.loadAfterSave) {
             this.reload();
         }
     },
