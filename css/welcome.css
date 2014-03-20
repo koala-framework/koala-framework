@@ -6,6 +6,9 @@
     border: 2px solid #a9bfd4;
     border-bottom: none;
 }
+.kwf-welcome div#welcomeImg img {
+    display: block;
+}
 .kwf-welcome .welcomeBox {
     border: 2px solid #a9bfd4;
     background-color: #e2ebf5;
