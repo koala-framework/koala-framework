@@ -2,12 +2,12 @@
 /**
  * Component that allows dynamic content without having to disable view cache.
  */
-abstract class Kwc_Advanced_DyamicContent_Component extends Kwc_Abstract
+abstract class Kwc_Advanced_DynamicContent_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['plugins'][] = 'Kwc_Advanced_DyamicContent_Plugin';
+        $ret['plugins'][] = 'Kwc_Advanced_DynamicContent_Plugin';
         return $ret;
     }
 

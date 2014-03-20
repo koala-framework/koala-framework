@@ -1,5 +1,5 @@
 <?php
-class Kwc_Advanced_DyamicContent_Plugin extends Kwf_Component_Plugin_Abstract
+class Kwc_Advanced_DynamicContent_Plugin extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewAfterChildRender
 {
     public function processOutput($output, $renderer)
