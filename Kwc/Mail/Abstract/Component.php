@@ -36,6 +36,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $ret['subject'] = trlKwf('Automatically sent e-mail');
         $ret['attachImages'] = false;
         $ret['trackViews'] = false;
+        $ret['docType'] = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
 
         return $ret;
     }
@@ -149,6 +150,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
             $ret .= '<img src="' . $imgUrl . '" width="1" height="1" />';
             Kwf_Benchmark::checkpoint('html: view tracker');
         }
+        $ret = ltrim($this->_getSetting('docType')."\n".$ret);
         return $ret;
     }
 

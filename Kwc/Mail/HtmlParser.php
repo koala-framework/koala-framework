@@ -172,7 +172,9 @@ class Kwc_Mail_HtmlParser
         $html = preg_replace('#<((kwc|/?plugin)[^>]*)>#', '+\1$', $html);
 
         //before sending to xml parser make sure we have valid xml by tidying it up
-        $html = Kwf_Util_Tidy::repairHtml($html);
+        $html = Kwf_Util_Tidy::repairHtml($html, array(
+            'show-body-only' => false,
+        ));
 
         $this->_stack = array();
         $this->_ret = '';

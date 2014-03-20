@@ -56,11 +56,22 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
 };
 
 Kwf.Utils.ResponsiveEl._els = [];
+Kwf.Utils.ResponsiveEl._anchorDone = false;
 
 Kwf.onContentReady(function(el) {
     Kwf.Utils.ResponsiveEl._els.each(function(i) {
         Ext.fly(el).select(i.selector).each(i.fn);
     });
+    if(!Kwf.Utils.ResponsiveEl._anchorDone && el === document.body) {
+        Kwf.Utils.ResponsiveEl._anchorDone = true;
+        if(window.location.hash) {
+            var target = Ext.get(window.location.hash.replace('#', ''));
+            if(target) {
+               //fix anchor target as ResponsiveEl might have changed the heights of elements
+                window.scrollTo(0, target.getTop());
+            }
+        }
+    }
 }, this, {priority: -1});
 
 Ext.fly(window).on('resize', function() {

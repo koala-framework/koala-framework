@@ -7,6 +7,7 @@ class Kwc_Mail_Placeholder_Mail_Component extends Kwc_Mail_Component
         $ret['generators']['content']['component'] = 'Kwc_Mail_Placeholder_Content_Component';
         $ret['ownModel'] = 'Kwc_Mail_Placeholder_Mail_Model';
         $ret['recipientSources']['test'] = 'Kwc_Mail_Placeholder_Mail_Recipients';
+        $ret['docType'] = false;
         return $ret;
     }
 }
