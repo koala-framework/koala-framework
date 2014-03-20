@@ -7,7 +7,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         if (!isset($cache)) {
             $cache = new Zend_Cache_Core(array(
                 'lifetime' => null,
-                'automatic_serialization' => false,
+                'automatic_serialization' => true,
                 'automatic_cleaning_factor' => 0,
                 'write_control' => false,
             ));
@@ -19,12 +19,20 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 
         $fileName = $this->getFileName();
         $cacheId = str_replace(array('/', '.', '-'), '_', $fileName);
-        $mtime = $cache->test($cacheId);
-        $ret = false;
-        if ($mtime && filemtime($fileName) == $mtime) {
-            $ret = $cache->load($cacheId);
+
+        $ret = $cache->load($cacheId);
+        if ($ret && !isset($ret['mtime'])) {
+            $ret = false;
         }
-        if (!$ret) {
+        if ($ret && $ret['mtime'] != filemtime($fileName)) {
+            //file modified, invalidate
+            $ret = false;
+        }
+        if ($ret) {
+            $ret = $ret['contents'];
+        }
+
+        if ($ret === false) {
             $ret = Kwf_Assets_Dependency_File::getContents($language);
 
             static $scssParser;
@@ -41,7 +49,10 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                 ));
             }
             $ret = $scssParser->toCss($ret, false);
-            $cache->save($ret, $cacheId);
+            $cache->save(
+                array('mtime'=>filemtime($fileName), 'contents'=>$ret),
+                $cacheId
+            );
         }
 
         $ret = $this->_processContents($ret);
