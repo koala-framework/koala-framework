@@ -25,6 +25,7 @@ Kwf.onContentReady(function(readyEl) {
     }
 
     Ext.query('.kwfLightbox').each(function(el) {
+        //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
         if (el.kwfLightbox) return;
         var lightboxEl = Ext.get(el);
         var options = Ext.decode(lightboxEl.child('input.options').dom.value);
@@ -50,6 +51,7 @@ Kwf.onContentReady(function(readyEl) {
 
     readyEl = Ext.get(readyEl);
     if (readyEl.isVisible() && Kwf.EyeCandy.Lightbox.currentOpen) {
+        //callOnContentReady was called for an element inside the lightbox, style can update the lightbox size
         if (Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl
             && Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl.isVisible()
             && (Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl.contains(readyEl)
@@ -460,12 +462,16 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         return newSize;
     },
-    updateContent: function(responseText) {
+
+    //update the lightbox content which was loaded using ajax
+    updateContent: function(responseText)
+    {
         var isVisible = this.lightbox.lightboxEl.isVisible();
         this.lightbox.lightboxEl.show(); //to mesaure
 
         var originalSize = this.lightbox.innerLightboxEl.getSize();
 
+        //do the actual update + callOnContentReady
         Kwf.EyeCandy.Lightbox.Styles.CenterBox.superclass.updateContent.apply(this, arguments);
 
         if (!this.lightbox.options.height) this.lightbox.innerLightboxEl.dom.style.height = '';
@@ -531,6 +537,8 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         this.lightbox.innerLightboxEl.setXY(this._getCenterXy(), anim);
     },
 
+    //called if element *inside* lightbox did fire callOnContentReady
+    //it might have changed it's height and we need to adapt the lightbox size
     onContentReady: function()
     {
         if (this.lightbox._blockOnContentReady) return;
@@ -556,6 +564,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         this.lightbox.innerLightboxEl.setXY(xy);
     },
 
+    //the browser window resized, the lightbox content might be responsive - update lightbox size
     onResizeWindow: function(ev)
     {
         var s = Ext.getBody().getViewSize();
