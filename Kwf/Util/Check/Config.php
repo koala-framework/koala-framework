@@ -93,6 +93,9 @@ class Kwf_Util_Check_Config
         $checks['setup_kwf'] = array(
             'name' => 'loading kwf'
         );
+        $checks['kwf_version'] = array(
+            'name' => 'kwf version'
+        );
         $checks['db_connection'] = array(
             'name' => 'db connection'
         );
@@ -301,6 +304,30 @@ class Kwf_Util_Check_Config
     private static function _setup_kwf()
     {
         Kwf_Registry::get('config');
+        return array(
+            'status' => self::RESULT_OK,
+        );
+    }
+
+    private static function _kwf_version()
+    {
+        if (file_exists('kwf_branch')) {
+            $v = trim(file_get_contents('kwf_branch'));
+        } else if (file_exists('vkwf_branch')) {
+            $v = trim(file_get_contents('vkwf_branch'));
+        } else {
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Can't check kwf version, kwf_branch file not found"
+            );
+        }
+        $kwfVersion = Kwf_Registry::get('config')->application->kwf->version;
+        if ($v != $kwfVersion) {
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "Wrong kwf version, '$v' expected, '$kwfVersion' used"
+            );
+        }
         return array(
             'status' => self::RESULT_OK,
         );
