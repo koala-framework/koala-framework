@@ -65,6 +65,11 @@ class Kwf_Config_Web extends Kwf_Config_Ini
         $config = new $configClass(Kwf_Setup::getConfigSection());
         $cacheId = 'config_'.str_replace('-', '_', Kwf_Setup::getConfigSection());
         Kwf_Config_Cache::getInstance()->save($config, $cacheId);
+        if (extension_loaded('apc')) {
+            $apcCacheId = $cacheId.getcwd();
+            apc_delete($apcCacheId);
+            apc_delete($apcCacheId.'mtime');
+        }
 
         Kwf_Config_Web::clearInstances();
         Kwf_Registry::set('config', $config);
