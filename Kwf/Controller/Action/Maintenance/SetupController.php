@@ -54,8 +54,6 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
     
     public function jsonCheckRequirementsAction()
     {
-        Kwf_Util_ClearCache::getInstance()->clearCache('all', false, false);
-
         //TODO check for web running in root of domain
         //TODO alternative for maintenance mode: current one needs write perm on bootstrap.php plus sucks across multiple servers
         $this->view->checks = Kwf_Util_Check_Config::getCheckResults();
