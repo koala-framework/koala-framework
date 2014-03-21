@@ -42,7 +42,8 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
     {
         if (php_sapi_name() == 'cli') return true;
         $id = $this->_processId($id);
-        return parent::save($data, $id, $tags, $specificLifetime);
+        parent::save($data, $id, $tags, $specificLifetime);
+        return true; //silently ignore apc_store returning false
     }
 
     public function remove($id)
