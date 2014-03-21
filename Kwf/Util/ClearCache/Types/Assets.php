@@ -8,6 +8,10 @@ class Kwf_Util_ClearCache_Types_Assets extends Kwf_Util_ClearCache_Types_Abstrac
 
     protected function _refreshCache($options)
     {
+        if (!Zend_Registry::get('db')) {
+            $this->_output("skipped, no db configured ");
+            return;
+        }
         $config = Zend_Registry::get('config');
 
         $langs = array();

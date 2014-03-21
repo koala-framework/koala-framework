@@ -62,7 +62,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         //TODO check for web running in root of domain
         //TODO alternative for maintenance mode: current one needs write perm on bootstrap.php plus sucks across multiple servers
         $this->view->checks = Kwf_Util_Check_Config::getCheckResults();
-        if (!is_writable('config.local.ini')) {
+        if (!is_writable('config.local.ini') && !is_writable('.')) {
             $this->view->checks[] = array(
                 'checkText' => 'config.local.ini writeable',
                 'status' => Kwf_Util_Check_Config::RESULT_FAILED,
@@ -75,7 +75,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
                 'message' => ''
             );
         }
-        if (!is_writable('config_section')) {
+        if (!is_writable('config_section') && !is_writable('.')) {
             $this->view->checks[] = array(
                 'checkText' => 'config_section writeable',
                 'status' => Kwf_Util_Check_Config::RESULT_FAILED,
