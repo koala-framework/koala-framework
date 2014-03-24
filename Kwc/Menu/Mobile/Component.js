@@ -21,8 +21,8 @@ Kwf.onJElementReady('.kwcMenuMobile', function(el, config) {
                 .next('.slider')
                 .children('ul.menu')
                 .slideToggle(slideDuration, function(){
-                    this
-                        .parent()
+                    $(this)
+                        .parent().parent()
                         .removeClass('open');
                 });
         }
