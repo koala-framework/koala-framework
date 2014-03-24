@@ -54,11 +54,13 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
     updateButtons: function() {
         var numberShown = Math.floor(this.list.el.getWidth()/this.list.items[0].el.getWidth());
 
-        for (var i=0; i<this.list.getItems().length; i++) {
-            this.list.getItem(i).el.show();
-        }
-        for (var i=numberShown; i<this.list.getItems().length; i++) {
-            this.list.getItem(i).el.hide();
+        if (this.useFade) {
+            for (var i=0; i<this.list.getItems().length; i++) {
+                this.list.getItem(i).el.show();
+            }
+            for (var i=numberShown; i<this.list.getItems().length; i++) {
+                this.list.getItem(i).el.hide();
+            }
         }
 
         if (this.list.items.length > numberShown) {
