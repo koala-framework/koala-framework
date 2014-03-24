@@ -377,17 +377,16 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
             }
         }, this);
 
+        this.originalInnerLightboxSize = this.lightbox.innerLightboxEl.getSize();
         this._resizeContent();
     },
     _resizeContent: function()
     {
         this._updateMobile();
 
-        /* Because this.lightbox.contentEl is here not set it's not simply possible
-         * to call _getContentSize so it's needed to extract calculation.
-         */
-        //if content is larger than window, resize accordingly
-        var originalSize = this._calculateSize(this.lightbox.innerLightboxEl.getSize());
+        // content isn't loaded so innerLightboxEl is used to calculate size
+        // if content is larger than window, resize accordingly
+        var originalSize = this._calculateLightboxSize(Kwf.clone(this.originalInnerLightboxSize));
         this.lightbox.innerLightboxEl.setSize(originalSize);
         this._center(false);
     },
@@ -405,10 +404,6 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
             var offs = contentSize.height-maxSize.height;
             contentSize.height -= offs;
             contentSize.width -= offs*ratio;
-        } else {
-//            if (!dontDeleteHeight) {
-//                delete size.height;
-//            }
         }
         return contentSize;
     },
@@ -454,7 +449,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         if (this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter')) {
             newSize.height -= this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter').getPadding('tb');
         }
-        newSize = this._calculateSize(newSize);
+        newSize = this._calculateLightboxSize(newSize);
         var maxSize = this._getMaxContentSize();
         if ((!this.lightbox.options.adaptHeight || newSize.height <= maxSize.height) && !dontDeleteHeight) {
             delete newSize.height;
