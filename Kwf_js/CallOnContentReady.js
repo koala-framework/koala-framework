@@ -26,6 +26,13 @@ Kwf.callOnContentReady = function(el, options) {
     if (!options) options = {};
     if (Ext.Element && el instanceof Ext.Element) el = el.dom;
     if (jQuery && el instanceof jQuery) el = el.get();
+    if (typeof options.newRender === 'undefined') {
+        if (console.warn) console.warn('Please set option newRender: true|false on callOnContentReady');
+        options.newRender = true;
+    }
+    if (!el) {
+        if (console.warn) console.warn('Please pass element argument on callOnContentReady');
+    }
 
     Kwf._readyHandlers.sort(function(a, b) {
         return (a.options.priority || 0) - (b.options.priority || 0);
