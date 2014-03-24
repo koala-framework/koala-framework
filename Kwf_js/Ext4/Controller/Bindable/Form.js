@@ -22,6 +22,9 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
 
     load: function(row)
     {
+        if (this.formController.form.isDisabled()) {
+            Ext4.Error.raise('Can\'t load into disabled form');
+        }
         this.formController.load(row);
     },
 
@@ -57,6 +60,11 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
     },
     disable: function()
     {
+        this.formController.form.getForm()._record = null;
+        Ext4.each(this.formController.form.query('field'), function(i) {
+            i.setValue(null);
+            i.resetOriginalValue();
+        }, this);
         this.formController.form.disable();
     },
     getPanel: function()

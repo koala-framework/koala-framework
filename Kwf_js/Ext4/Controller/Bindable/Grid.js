@@ -140,6 +140,13 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
     },
     disable: function()
     {
+        this._loadedRecord = null;
+        var s = this.gridController.grid.store;
+        if (s) {
+            this.gridController.grid.bindStore(Ext4.create('Ext.data.Store', {
+                model: s.model
+            }));
+        }
         this.gridController.grid.disable();
     },
     getPanel: function()

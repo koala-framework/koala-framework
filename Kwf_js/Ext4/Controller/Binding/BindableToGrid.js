@@ -24,10 +24,10 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
         grid.on('selectionchange', function(model, rows) {
             if (rows[0]) {
                 var row = rows[0];
+                bindable.enable();
                 if (bindable.getLoadedRecord() !== row) {
                     bindable.load(row);
                 }
-                bindable.enable();
                 if (this.saveButton) this.saveButton.enable();
             } else {
                 bindable.disable();
