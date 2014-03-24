@@ -17,6 +17,17 @@ Kwf.Utils.YoutubePlayer.load = function(callback, scope)
 
     Kwf.Utils.YoutubePlayer.isLoaded = true;
 
+    //workaround mediaelementjs also defining onYouTubePlayerAPIReady
+    //placed here in load() so we are called after mediaelementjs
+    var origOnYouTubePlayerAPIReady = window.onYouTubePlayerAPIReady;
+    window.onYouTubePlayerAPIReady = function() {
+        if (origOnYouTubePlayerAPIReady) origOnYouTubePlayerAPIReady();
+        Kwf.Utils.YoutubePlayer.isCallbackCalled = true;
+        Kwf.Utils.YoutubePlayer.callbacks.forEach(function(i) {
+            i.callback.call(i.scope || window);
+        });
+    };
+
     var tag = document.createElement('script');
     tag.setAttribute('type', 'text/javascript');
     tag.setAttribute('src', 'http://www.youtube.com/iframe_api');
@@ -24,11 +35,3 @@ Kwf.Utils.YoutubePlayer.load = function(callback, scope)
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 };
 
-if (typeof window.onYouTubePlayerAPIReady == 'undefined') {
-    window.onYouTubePlayerAPIReady = function() {
-        Kwf.Utils.YoutubePlayer.isCallbackCalled = true;
-        Kwf.Utils.YoutubePlayer.callbacks.forEach(function(i) {
-            i.callback.call(i.scope || window);
-        });
-    }
-}
