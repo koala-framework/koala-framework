@@ -462,8 +462,10 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     private static function _clearApcCache($params)
     {
         echo "APC: ";
-        if (isset($params['cacheIds']) && is_array($params['cacheIds'])) {
-            $params['cacheIds'] = implode(',', $params['cacheIds']);
+        foreach ($params as $k=>$i) {
+            if (is_array($i)) {
+                $params[$k] = implode(',', $i);
+            }
         }
         Kwf_Util_Apc::callClearCacheByCli($params, array('outputFn' => 'printf'));
     }

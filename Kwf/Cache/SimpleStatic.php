@@ -61,7 +61,7 @@ class Kwf_Cache_SimpleStatic
     {
         if (extension_loaded('apc')) {
             if (php_sapi_name() == 'cli') {
-                Kwf_Util_Apc::callClearCacheByCli(array('clearCacheSimpleStatic'=>array($cacheIdPrefix)));
+                Kwf_Util_Apc::callClearCacheByCli(array('clearCacheSimpleStatic'=>$cacheIdPrefix));
             } else {
                 if (!class_exists('APCIterator')) {
                     throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
