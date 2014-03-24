@@ -76,10 +76,18 @@ class Kwf_Setup
         $error = error_get_last();
         if ($error !== null) {
             ini_set('memory_limit', memory_get_usage()+16*1024*1024); //in case it was an memory limit error make sure we have enough memory for error handling
-            if (!(
-                   (defined('E_STRICT') && $error["type"] == E_STRICT)
-                || (defined('E_DEPRECATED') && $error["type"] == E_DEPRECATED)
-            )) {
+            $ignore = false;
+            if (preg_match('#^include\(\).*Failed opening \'[^\']*cache/setup\d+.php\' for inclusion#', $error['message'])) {
+                //ignore error that can happen before creating setup the first time
+                $ignore = true;
+            }
+            if (defined('E_STRICT') && $error["type"] == E_STRICT) {
+                $ignore = true;
+            }
+            if (defined('E_DEPRECATED') && $error["type"] == E_DEPRECATED) {
+                $ignore = true;
+            }
+            if (!$ignore) {
                 $e = new ErrorException($error["message"], 0, $error["type"], $error["file"], $error["line"]);
                 chdir(APP_PATH);
                 Kwf_Debug::handleException($e);
