@@ -190,8 +190,9 @@ Ext4.define('Kwf.Ext4.Menu', {
                 scope: this
             });
         }
+        */
         if (result.showLogout) {
-            this.userToolbar.add({
+            this.add({
                 cls: 'x-btn-icon',
                 tooltip: trlKwf('Logout'),
                 icon: '/assets/silkicons/door_out.png',
@@ -209,6 +210,7 @@ Ext4.define('Kwf.Ext4.Menu', {
                 scope: this
             });
         }
+        /*
         this.userToolbar.add({
             cls: 'x-btn-icon',
             icon: '/assets/kwf/images/information.png',
