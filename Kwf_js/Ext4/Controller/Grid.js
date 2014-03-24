@@ -74,7 +74,13 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
     {
         this.grid.getStore().remove(this.grid.getSelectionModel().getSelection());
         if (this.autoSync) {
-            this.grid.getStore().sync();
+            this.grid.getStore().sync({
+                success: function() {
+                    this.fireEvent('savesuccess');
+                },
+                scope: this
+            });
+            this.fireEvent('save');
         }
     },
 
