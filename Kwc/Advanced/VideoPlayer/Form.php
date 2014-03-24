@@ -7,6 +7,7 @@ class Kwc_Advanced_VideoPlayer_Form extends Kwc_Abstract_Composite_Form
     {
         parent::__construct($name, $class, $id);
         $cards = $this->fields->add(new Kwf_Form_Container_Cards('source_type', trlKwf('Source Type')));
+        $cards->getCombobox()->setAllowBlank(false);
         $card = $cards->add();
         $card->setName('files');
         $card->setTitle(trlKwf('Files'));
@@ -40,7 +41,8 @@ class Kwc_Advanced_VideoPlayer_Form extends Kwc_Abstract_Composite_Form
         $cards = $fs->add(new Kwf_Form_Container_Cards('size', trlKwf('Size')));
         $cards->getCombobox()
             ->setWidth(300)
-            ->setListWidth(300);
+            ->setListWidth(300)
+            ->setAllowBlank(false);
 
         $card = $cards->add(new Kwf_Form_Container_Card('contentWidth'))
             ->setTitle(trlKwf('Stretch video to maximum width'));
