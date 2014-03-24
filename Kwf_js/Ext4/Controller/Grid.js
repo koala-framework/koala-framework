@@ -70,13 +70,11 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
         }
     },
 
-    deleteSelected: function(options)
+    deleteSelected: function()
     {
         this.grid.getStore().remove(this.grid.getSelectionModel().getSelection());
         if (this.autoSync) {
-            var syncOptions = {};
-            if (options && options.syncOptions) syncOptions = options.syncOptions;
-            this.grid.getStore().sync(syncOptions);
+            this.grid.getStore().sync();
         }
     },
 
