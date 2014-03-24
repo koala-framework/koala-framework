@@ -11,8 +11,10 @@ abstract class Kwc_Directories_Item_Directory_Component extends Kwc_Directories_
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Directories/Item/Directory/TabsPanel.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Directories/Item/Directory/EditFormPanel.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Directories/Item/Directory/Plugin.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Directories/Item/Directory/GridPanel.js';
         $ret['extConfig'] = 'Kwc_Directories_Item_Directory_ExtConfigEditButtons';
         $ret['extConfigControllerIndex'] = 'Kwf_Component_Abstract_ExtConfig_None';
+        $ret['multiFileUpload'] = false;
         return $ret;
     }
 }
