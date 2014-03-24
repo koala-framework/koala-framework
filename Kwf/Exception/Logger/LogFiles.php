@@ -6,7 +6,7 @@ class Kwf_Exception_Logger_LogFiles extends Kwf_Exception_Logger_Abstract
         $path = 'log/'.$type.'/' . date('Y-m-d');
         $filename = date('H_i_s') . '_' . uniqid() . '.txt';
 
-        if (!is_dir($path)) @mkdir($path);
+        if (!is_dir($path)) @mkdir($path, 0777);
         try {
             $fp = fopen("$path/$filename", 'a');
             fwrite($fp, $content);
