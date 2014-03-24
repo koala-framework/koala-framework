@@ -194,7 +194,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     } else {
                         (function(el) {
                             el.remove();
-                            Kwf.callOnContentReady(this.el.dom);
+                            Kwf.callOnContentReady(this.el.dom, {newRender: false});
                         }).defer(5000, this, [el]);
                     }
                     Kwf.callOnContentReady(el.dom, {newRender: true});
@@ -202,7 +202,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     document.location.href = r.successUrl;
                 } else {
                     //errors are shown, lightbox etc needs to resize
-                    Kwf.callOnContentReady(this.el.dom);
+                    Kwf.callOnContentReady(this.el.dom, {newRender: false});
                 }
 
                 var scrollTo = null;

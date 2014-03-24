@@ -63,7 +63,7 @@ Kwf.ComponentAjax.ComponentAjax = (function(link, config) {
                     } else {
                         content.fadeIn(options.showFxConfig);
                     }
-                    Kwf.callOnContentReady();
+                    Kwf.callOnContentReady(content, {newRender: true});
                 },
                 scope: this
             });
