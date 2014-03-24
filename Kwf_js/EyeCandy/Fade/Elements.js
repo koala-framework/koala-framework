@@ -201,7 +201,7 @@ Kwf.Fade.Elements.prototype = {
                     left: left,
                     zIndex: 10
                 });
-                Kwf.callOnContentReady(nextEl.get(0));
+                Kwf.callOnContentReady(nextEl.get(0), {newRender: false});
                 if ($.support.transition || $.support.transform) {
                     this._components.transition({ x: width }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         this._components.css({ x: 0 });
@@ -239,7 +239,7 @@ Kwf.Fade.Elements.prototype = {
                     top: top,
                     zIndex: 10
                 });
-                Kwf.callOnContentReady(nextEl.get(0));
+                Kwf.callOnContentReady(nextEl.get(0), {newRender: false});
                 if ($.support.transition || $.support.transform) {
                     this._components.transition({ y: height }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         this._components.css({ y: 0 });

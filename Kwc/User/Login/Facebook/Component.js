@@ -17,7 +17,7 @@ Kwf.onElementReady('.kwcUserLoginFacebook', function(el, config){
                     url: config.controllerUrl + '/json-auth',
                     success: function(response, options, r) {
                         el.child('.success').show();
-                        Kwf.callOnContentReady(el.dom);
+                        Kwf.callOnContentReady(el.dom, {newRender: false});
                     },
                     scope: this
                 });
