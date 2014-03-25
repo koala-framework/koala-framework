@@ -4,12 +4,14 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
     initComponent: function()
     {
         this.layout = 'border';
-        
-        this.grid = new Kwf.Auto.GridPanel(Ext.applyIf({
+
+        this.grid = new Kwc.Directories.Item.Directory.GridPanel(Ext.applyIf({
             controllerUrl: this.controllerUrl,
             region: 'west',
             width: this.width,
-            split: true
+            split: true,
+            baseParams: this.baseParams,
+            multiFileUpload: this.multiFileUpload
         }, this.gridConfig));
 
         if (this.componentPlugins) {

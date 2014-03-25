@@ -161,4 +161,22 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
         }
         if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
     }
+
+    public function jsonMultiUploadAction()
+    {
+        $componentId = $this->_getParam('componentId');
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
+        if (Kwc_Abstract::getSetting($component->componentClass, 'multiFileUpload')) {
+            $uploadIds = $this->_getParam('uploadIds');
+            $uploadIds = explode(',', $uploadIds);
+            foreach ($uploadIds as $uploadId) {
+                $this->_createNewDetailComponentFromUpload($uploadId, $component);
+            }
+        }
+    }
+
+    protected function _createNewDetailComponentFromUpload($uploadId, $component)
+    {
+        throw new Kwf_Exception_NotYetImplemented('You have to override _createNewDetailComponentFormUpload function to create child components on multiFileUpload');
+    }
 }
