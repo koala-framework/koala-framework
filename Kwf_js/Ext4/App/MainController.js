@@ -37,7 +37,7 @@ Ext4.define('Kwf.Ext4.App.MainController', {
     {
         if (options.method != 'GET') {
             this._runningRequests++;
-            if (this.viewport) {
+            if (this.viewport && this.viewport.menu && this.viewport.menu.loadingAnim) {
                 this.viewport.menu.loadingAnim.el.fadeIn();
                 this.viewport.menu.loadingAnim.el.child('.icon')
                 this.viewport.menu.loadingAnim.el.child('.icon').setStyle('top', '');
@@ -51,7 +51,7 @@ Ext4.define('Kwf.Ext4.App.MainController', {
             this._runningRequests--;
             Ext4.defer(function() {
                 if (this._runningRequests == 0) {
-                    if (this.viewport) {
+                    if (this.viewport && this.viewport.menu && this.viewport.menu.loadingAnim) {
                         this.viewport.menu.loadingAnim.el.child('.icon').animate({
                             from: {
                                 opacity: 0
