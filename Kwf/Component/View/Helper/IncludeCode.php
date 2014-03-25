@@ -7,6 +7,10 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
 
         $ret = '';
 
+        if ($position == 'header') {
+            $ret .= Kwf_View_Helper_DebugData::debugData();
+        }
+
         $flag = ($position == 'header') ? 'hasHeaderIncludeCode' : 'hasFooterIncludeCode';
         $cmps = $data->getRecursiveChildComponents(array('flags'=>array($flag=>true)));
         if (Kwc_Abstract::getFlag($data->componentClass, $flag)) {
@@ -49,8 +53,6 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
                 $a = new Kwf_View_Helper_Assets();
                 $ret .= $a->assets(Kwf_Assets_Package_Default::getInstance('Frontend'));
             }
-
-            $ret .= Kwf_View_Helper_DebugData::debugData();
 
             $helper = new Kwf_Component_View_Helper_Dynamic();
             $helper->setRenderer($this->_getRenderer());
