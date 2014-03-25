@@ -4,6 +4,7 @@ Ext4.define('Kwf.Ext4.Menu', {
         'Ext.toolbar.Fill',
         'Ext.toolbar.Spacer'
     ],
+    cls: 'kwf-ext4-menu',
 
     controllerUrl: '/kwf/user/menu',
     changeUserTpl: ['<tpl for=".">',
