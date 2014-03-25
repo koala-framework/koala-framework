@@ -377,35 +377,35 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
             }
         }, this);
 
+        this.originalInnerLightboxSize = this.lightbox.innerLightboxEl.getSize();
         this._resizeContent();
     },
     _resizeContent: function()
     {
         this._updateMobile();
 
-        //if content is larger than window, resize accordingly
-        var originalSize = this.lightbox.innerLightboxEl.getSize();
-
-        var maxSize = this._getMaxContentSize();
-
-        if (originalSize.width > maxSize.width) {
-            var ratio = originalSize.height / originalSize.width;
-            var offs = originalSize.width-maxSize.width;
-            originalSize.width -= offs;
-            if (this.lightbox.options.adaptHeight) originalSize.height -= offs*ratio;
-        }
-        if (this.lightbox.options.adaptHeight && originalSize.height > maxSize.height) {
-            var ratio = originalSize.width / originalSize.height;
-            var offs = originalSize.height-maxSize.height;
-            originalSize.height -= offs;
-            originalSize.width -= offs*ratio;
-        }
-        if (!this.lightbox.options.adaptHeight && originalSize.height > maxSize.height) {
-            //delete originalSize.height;
-        }
+        // content isn't loaded so innerLightboxEl is used to calculate size
+        // if content is larger than window, resize accordingly
+        var originalSize = this._calculateLightboxSize(Kwf.clone(this.originalInnerLightboxSize));
         this.lightbox.innerLightboxEl.setSize(originalSize);
-
         this._center(false);
+    },
+    _calculateLightboxSize: function (contentSize) {
+        var maxSize = this._getMaxContentSize();
+        if (contentSize.width > maxSize.width) {
+            var ratio = contentSize.height / contentSize.width;
+            var offs = contentSize.width-maxSize.width;
+            contentSize.width -= offs;
+            if (this.lightbox.options.adaptHeight) contentSize.height -= offs*ratio;
+        }
+
+        if (this.lightbox.options.adaptHeight && contentSize.height > maxSize.height) {
+            var ratio = contentSize.width / contentSize.height;
+            var offs = contentSize.height-maxSize.height;
+            contentSize.height -= offs;
+            contentSize.width -= offs*ratio;
+        }
+        return contentSize;
     },
     afterContentShown: function() {
         this._center(false);
@@ -449,17 +449,11 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         if (this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter')) {
             newSize.height -= this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter').getPadding('tb');
         }
+        newSize = this._calculateLightboxSize(newSize);
         var maxSize = this._getMaxContentSize();
-        if (newSize.width > maxSize.width) newSize.width = maxSize.width;
-
-        if (this.lightbox.options.adaptHeight && newSize.height > maxSize.height) {
-            newSize.height = maxSize.height;
-        } else {
-            if (!dontDeleteHeight) {
-                delete newSize.height;
-            }
+        if ((!this.lightbox.options.adaptHeight || newSize.height <= maxSize.height) && !dontDeleteHeight) {
+            delete newSize.height;
         }
-
         return newSize;
     },
 
