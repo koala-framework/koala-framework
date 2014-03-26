@@ -42,6 +42,9 @@ Kwc.Directories.Item.Directory.GridPanel = Ext.extend(Kwf.Binding.ProxyPanel,
             this.multiFileUploadPanel.setBaseParams(baseParams);
         }
         return Kwc.Directories.Item.Directory.GridPanel.superclass.setBaseParams.apply(this, arguments);
+    },
+    addBinding: function (bindForm) {
+        this.proxyItem.addBinding(bindForm);
     }
 });
 
