@@ -86,10 +86,6 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
 
     onBindStore: function()
     {
-        if (this._store) {
-            this._store.un('write', this.onStoreWrite, this);
-        }
-
         var s = this.grid.getStore();
         this._store = s;
         Ext4.each(this.grid.query('pagingtoolbar'), function(i) {
@@ -107,13 +103,5 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
         }, this);
 
         this.fireEvent('bindstore', s);
-
-        s.on('write', this.onStoreWrite, this);
-    },
-
-
-    onStoreWrite: function(store, operation)
-    {
-        this.fireEvent('write', store, operation);
     }
 });
