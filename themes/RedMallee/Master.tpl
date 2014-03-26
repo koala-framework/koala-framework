@@ -60,6 +60,7 @@
                     <div id="innerContent" class="innerContentClass<? if($this->boxes['subMenu']->hasContent()) echo " hasSubMenu";  ?>">
                         <div class="leftColumn">
                             <?=$this->component($this->boxes['subMenu']);?>
+                            <?=$this->component($this->boxes['leftContentBox']);?>
                         </div>
                         <div class="centerColumn">
                             <?=$this->componentWithMaster($this->componentWithMaster);?>
