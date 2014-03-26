@@ -21,6 +21,7 @@ class Kwf_Component_Cache_DynamicWithPartialId_TestComponent_Component extends K
         $ret = array();
         $ret['componentId'] = $this->getData()->componentId;
         $ret['count'] = count($this->getItemIds());
+        $ret['disableCache'] = true;
         return $ret;
     }
 
