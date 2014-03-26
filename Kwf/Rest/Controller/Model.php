@@ -151,6 +151,11 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     {
         $this->view->data = array();
         $s = $this->_getSelectIndex();
+        if ($this->_loadColumns) {
+            foreach ($this->_loadColumns as $c) {
+                $s->expr($c);
+            }
+        }
         foreach ($this->_model->getRows($s) as $row) {
             $this->view->data[] = $this->_loadDataFromRow($row);
         }
@@ -160,7 +165,14 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     // Handle GET and return a specific resource item
     public function getAction()
     {
-        $row = $this->_model->getRow($this->_getParam('id'));
+        $s = new Kwf_Model_Select();
+        if ($this->_loadColumns) {
+            foreach ($this->_loadColumns as $c) {
+                $s->expr($c);
+            }
+        }
+        $s->whereId($this->_getParam('id'));
+        $row = $this->_model->getRow($s);
         if (!$row) throw new Kwf_Exception_NotFound();
         $this->view->data = $this->_loadDataFromRow($row);
     }
