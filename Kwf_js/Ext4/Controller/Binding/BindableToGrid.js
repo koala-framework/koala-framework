@@ -3,7 +3,10 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
         observable: 'Ext.util.Observable'
     },
     requires: [ 'Kwf.Ext4.Data.StoreSyncQueue' ],
+
     gridController: null,
+    bindable: null,
+
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
@@ -12,12 +15,21 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
 
     init: function()
     {
+        if (!this.gridController) Ext4.Error.raise('gridController config is required');
+        if (!this.gridController instanceof Kwf.Ext4.Controller.Grid) Ext4.Error.raise('gridController config needs to be a Kwf.Ext4.Controller.Grid');
+
+        if (!this.bindable) Ext4.Error.raise('bindable config is required');
+        if (!this.bindable instanceof Ext4.window.Window) Ext4.Error.raise('bindable config needs to be a Kwf.Ext4.Controller.Bindable.Abstract');
+
         var grid = this.gridController.grid;
         var bindable = this.bindable;
         bindable.disable();
 
         if (!this.saveButton && bindable.getPanel()) this.saveButton = bindable.getPanel().down('button#save');
+        if (this.saveButton && !this.saveButton instanceof Ext4.button.Button) Ext4.Error.raise('saveButton config needs to be a Ext.button.Button');
+
         if (!this.addButton) this.addButton = grid.down('button#add');
+        if (this.addButton && !this.addButton instanceof Ext4.button.Button) Ext4.Error.raise('addButton config needs to be a Ext.button.Button');
 
         if (this.saveButton) this.saveButton.disable();
 

@@ -5,6 +5,9 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
     autoSync: true,
     autoLoad: false,
 
+    grid: null,
+    deleteButton: null,
+
     _store: null,
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
@@ -13,8 +16,11 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
 
     init: function()
     {
+        if (!this.grid) Ext4.Error.raise('grid config is required');
+        if (!this.grid instanceof Ext4.grid.Panel) Ext4.Error.raise('grid config needs to be a Ext.grid.Panel');
         var grid = this.grid;
         if (typeof this.deleteButton == 'undefined') this.deleteButton = grid.down('button#delete');
+        if (this.deleteButton && !this.deleteButton instanceof Ext4.button.Button) Ext4.Error.raise('deleteButton config needs to be a Ext.button.Button');
         if (this.deleteButton) this.deleteButton.disable();
         grid.on('selectionchange', function(model, rows) {
             if (rows[0]) {

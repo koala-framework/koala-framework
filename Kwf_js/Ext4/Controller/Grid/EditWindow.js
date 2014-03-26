@@ -3,10 +3,13 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
-    editWindow: null,
-    form: null,
     focusOnEditSelector: 'field',
     autoSync: true,
+
+    form: null,
+    editWindow: null,
+    bindable: null,
+    gridController: null,
 
     _addToStoreOnSave: false,
     constructor: function(config) {
@@ -45,13 +48,31 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
 
     init: function()
     {
+        if (!this.gridController) Ext4.Error.raise('gridController config is required');
+        if (!this.gridController instanceof Ext4.window.Window) Ext4.Error.raise('gridController config needs to be a Kwf.Ext4.Controller.Grid');
+        if (!this.editWindow) Ext4.Error.raise('editWindow config is required');
+        if (!this.editWindow instanceof Ext4.window.Window) Ext4.Error.raise('editWindow config needs to be a Ext.window.Window');
+        if (!this.bindable) Ext4.Error.raise('bindable config is required');
+        if (!this.bindable instanceof Ext4.window.Window) Ext4.Error.raise('bindable config needs to be a Kwf.Ext4.Controller.Bindable.Abstract');
+
         if (!this.form) {
             this.form = this.editWindow.down('form');
         }
+        if (!this.form) Ext4.Error.raise('form config is required');
+        if (!this.form instanceof Ext4.form.Panel) Ext4.Error.raise('form config needs to be a Ext.form.Panel');
+
         if (!this.windowSaveButton) this.windowSaveButton = this.editWindow.down('> toolbar > button#save');
+        if (this.windowSaveButton && !this.windowSaveButton instanceof Ext4.button.Button) Ext4.Error.raise('windowSaveButton config needs to be a Ext.button.Button');
+
         if (!this.windowCancelButton) this.windowCancelButton = this.editWindow.down('> toolbar > button#cancel');
+        if (this.windowCancelButton && !this.windowCancelButton instanceof Ext4.button.Button) Ext4.Error.raise('windowCancelButton config needs to be a Ext.button.Button');
+
         if (!this.addButton) this.addButton = this.gridController.grid.down('button#add');
+        if (this.addButton && !this.addButton instanceof Ext4.button.Button) Ext4.Error.raise('addButton config needs to be a Ext.button.Button');
+
         if (!this.editActionColumn) this.editActionColumn = this.gridController.grid.down('actioncolumn#edit')
+        if (this.editActionColumn && !this.editActionColumn instanceof Ext4.button.Button) Ext4.Error.raise('editActionColumn config needs to be a Ext.grid.Column');
+
         if (this.windowSaveButton) {
             this.windowSaveButton.on('click', function() {
                 if (this.doSave() !== false) {

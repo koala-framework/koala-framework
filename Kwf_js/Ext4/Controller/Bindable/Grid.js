@@ -7,6 +7,11 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
 
     init: function()
     {
+        if (!this.gridController) Ext4.Error.raise('gridController config is required');
+        if (!this.gridController instanceof Kwf.Ext4.Controller.Grid) Ext4.Error.raise('gridController config needs to be a Kwf.Ext4.Controller.Grid');
+
+        if (!this.relation) Ext4.Error.raise('relation config is required');
+
         if (this.reloadRowOnSave) {
             //savesuccess is fired by gridController on sync after delete
             this.gridController.on('savesuccess', this._reloadLoadedRow, this);
