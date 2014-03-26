@@ -154,9 +154,16 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         $ret = array();
         $ret['componentId'] = $this->getData()->componentId;
         $ret['count'] = $this->getPagingCount($select);
+        $ret['disableCache'] = false;
+        $ret['disableCacheParams'] = array();
         $paging = $this->_getPagingComponent();
         if ($paging) {
             $ret['paging'] = $paging->getComponent()->getPartialParams();
+            $ret['disableCacheParams'][] = $ret['paging']['paramName'];
+        }
+        $search = $this->_getSearchForm();
+        if ($search) {
+            $ret['disableCacheParams'][] = $search->componentId.'-post';
         }
         $ret['noEntriesFound'] = $this->_getPlaceholder('noEntriesFound');
         return $ret;

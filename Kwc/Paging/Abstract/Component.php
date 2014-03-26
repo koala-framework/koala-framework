@@ -85,7 +85,7 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
             $text = $buttonTexts[$type];
         }
         if ($text === false) return null;
-        
+
         $params = array();
         $get = array();
         foreach ($_GET as $p=>$v) {
@@ -208,11 +208,17 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         ) {
             $pagesize = $select->getPart('limitCount');
         }
+
+        $disableCacheParams = array();
+        $disableCacheParams[] = $this->_getParamName();
+
         return array(
             'class' => get_class($this),
             'paramName' => $this->_getParamName(),
             'pages' => $this->_getPages(),
-            'pagesize' => $pagesize
+            'pagesize' => $pagesize,
+            'disableCache' => false,
+            'disableCacheParams' => $disableCacheParams
         );
     }
 
