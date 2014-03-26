@@ -294,6 +294,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
                     }
                     if (doAdd) this.addMarker(m);
                 }, this);
+                Kwf.callOnContentReady(this.mapContainer, {newRender: true});
                 this.gmapLoader.hide();
             },
             params: params,
