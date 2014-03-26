@@ -909,6 +909,13 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                 $ret = min($ret, $r->$f);
             }
             return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_GroupConcat) {
+            $f = $expr->getField();
+            $ret = array();
+            foreach ($rowset as $r) {
+                $ret[] = $r->$f;
+            }
+            return implode($expr->getSeparator(), $ret);
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
             if (!count($rowset)) {
                 return null;

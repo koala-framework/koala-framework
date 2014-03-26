@@ -583,6 +583,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                     COS($long2 - $long1)
                 ) / 180 * PI() * 6378.137) <= $radius
             ";
+        } else if ($expr instanceof Kwf_Model_Select_Expr_GroupConcat) {
+            $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
+            return "GROUP_CONCAT($field SEPARATOR ".$this->getAdapter()->quote($expr->getSeparator()).")";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Child) {
             $depM = $depOf->getDependentModel($expr->getChild());
             $dbDepM = self::_getInnerDbModel($depM);
