@@ -8,8 +8,10 @@ abstract class Kwc_Directories_Category_ShowCategories_Abstract_Component extend
         $select = parent::getSelect();
         if (!$select) return null;
 
+        $s = new Kwf_Component_Select();
+        $s->whereGenerator('categories');
         $tableName = Kwc_Abstract::getSetting(
-            $this->getItemDirectory()->getChildComponent('_categories')->componentClass,
+            $this->getItemDirectory()->getChildComponent($s)->componentClass,
             'categoryToItemModelName'
         );
         $refData = Kwc_Directories_Category_Detail_List_Component::getTableReferenceData($tableName, 'Item');
