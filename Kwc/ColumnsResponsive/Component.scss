@@ -10,7 +10,7 @@ $container-style: fluid;
 
     @include container;
 
-    .listItem.span1 {
+    > .listItem.span1 {
         @include span-columns(1);
     }
 }
@@ -22,11 +22,11 @@ $container-style: fluid;
 
     @include container;
 
-    .listItem.span1 {
+    > .listItem.span1 {
         @include span-columns(1);
     }
 
-    .listItem.span2 {
+    > .listItem.span2 {
         @include span-columns(2);
     }
 }
@@ -38,11 +38,11 @@ $container-style: fluid;
 
     @include container;
 
-    .listItem.span1 {
+    > .listItem.span1 {
         @include span-columns(1);
     }
 
-    .listItem.span3 {
+    > .listItem.span3 {
         @include span-columns(3);
     }
 }
@@ -53,7 +53,7 @@ $container-style: fluid;
 
     @include container;
 
-    .listItem.span1 {
+    > .listItem.span1 {
         @include span-columns(1);
     }
 }
@@ -66,11 +66,11 @@ $container-style: fluid;
 
     @include container;
 
-    .listItem.span1 {
+    > .listItem.span1 {
         @include span-columns(1);
     }
 
-    .listItem.span2 {
+    > .listItem.span2 {
         @include span-columns(2);
     }
 }
@@ -84,7 +84,7 @@ $container-style: fluid;
 .cssClass.col3col-50_25_25,
 .cssClass.col3col-25_50_25,
 .cssClass.col3col-25_25_50 {
-    .listItem.kwcLast {
+    > .listItem.kwcLast {
         @include omega;
     }
 }
@@ -102,9 +102,9 @@ $column-width   : 100%;
     .cssClass.col3col-25_25_50 {
         @include container;
 
-        .listItem.span1,
-        .listItem.span2,
-        .listItem.span3 {
+        > .listItem.span1,
+        > .listItem.span2,
+        > .listItem.span3 {
             @include span-columns(1);
         }
     }
