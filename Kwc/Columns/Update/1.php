@@ -42,6 +42,8 @@ class Kwc_Columns_Update_1 extends Kwf_Update
             }
         }
 
+        if (empty($search)) return;
+
         $db = Zend_Registry::get('db');
         foreach ($db->listTables() as $table) {
             if ($table == 'cache_component') continue;
