@@ -11403,5 +11403,10 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <context>start day of week</context>
 <id>2186</id>
 </text>
+<text>
+<en>Copy to...</en>
+<de>Kopieren nach...</de>
+<id>2187</id>
+</text>
 </trl>
 
