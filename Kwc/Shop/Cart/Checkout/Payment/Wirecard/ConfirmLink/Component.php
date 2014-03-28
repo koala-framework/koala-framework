@@ -44,7 +44,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
         $params = array(
             'secret' => $wirecardSecret,
             'customerId' => $wirecardCustomerId,
-            'amount' => $total,
+            'amount' => round($total, 2),
             'currency' => 'EUR',
             'language' => $this->getData()->getLanguage(),
             'orderDescription' => $orderDescription,
