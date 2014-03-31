@@ -292,9 +292,9 @@ class Kwf_Util_Check_Config
 
     private static function _system()
     {
-        $out = shell_exec("ls");
+        $out = shell_exec(Kwf_Config::getValue('server.phpCli')." --version 2>&1");
         if (!$out) {
-            throw new Kwf_Exception("executing 'ls' returned nothing");
+            throw new Kwf_Exception("executing '".Kwf_Config::getValue('server.phpCli')." --version' returned nothing");
         }
         return array(
             'status' => self::RESULT_OK,
@@ -462,7 +462,10 @@ class Kwf_Util_Check_Config
 
         $l = Kwf_Trl::getInstance()->trlcKwf('locale', 'C', array(), 'de');
         if (!setlocale(LC_ALL, explode(', ', $l))) {
-            throw new Kwf_Exception("Locale not installed, tried: ".$l);
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Locale not installed, tried: ".$l
+            );
         }
 
         if (is_string($locale) && strpos($locale, ';')) {
