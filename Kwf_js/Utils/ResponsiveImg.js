@@ -6,7 +6,7 @@ Kwf.Utils.ResponsiveImg = function (selector) {
     Kwf._responsiveImgSelectors.push(selector);
 };
 
-Kwf.onContentReady(function(el, options) {
+Kwf.onContentReady(function onContentReadyResponsiveImg(el, options) {
     if (options.newRender) { // maybe new elements so check every selector
         el = Ext.get(el);
         Kwf._responsiveImgSelectors.each(function(i) {

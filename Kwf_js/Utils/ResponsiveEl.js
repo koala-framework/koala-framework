@@ -10,7 +10,7 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
     if (typeof(widths) != "function") {
 
         if (!widths instanceof Array) widths = [widths];
-        initEl = function(el) {
+        initEl = function initResponsiveEl(el) {
             var changed = false;
             widths.each(function(w) {
                 if (typeof w != 'object') {

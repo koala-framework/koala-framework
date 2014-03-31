@@ -1,11 +1,5 @@
-Kwf.onContentReady(function() {
-    var els = Ext.query('div.kwfTabs');
-    els.forEach(function(el) {
-        el = Ext.get(el);
-        if (!el.tabsObject) {
-            el.tabsObject = new Kwf.Tabs(el);
-        }
-    });
+Kwf.onElementReady('div.kwfTabs', function(el) {
+    el.tabsObject = new Kwf.Tabs(el);
 });
 
 

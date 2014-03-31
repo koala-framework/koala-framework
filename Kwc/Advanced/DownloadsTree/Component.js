@@ -1,5 +1,4 @@
-Kwf.onContentReady(function() {
-    Ext.query('.kwcAdvancedDownloadsTree .content').each(function(i) {
+Kwf.onElementReady('.kwcAdvancedDownloadsTree .content', function(i) {
         var options = Ext.decode(Ext.get(i).down('.options').dom.value);
         this.downloads = new Kwf.Auto.GridPanel({
             controllerUrl: options.downloadsUrl,
@@ -37,5 +36,4 @@ Kwf.onContentReady(function() {
             layout: 'border',
             items: [this.downloads, this.projects]
         });
-    }, this); 
 });

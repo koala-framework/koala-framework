@@ -1,23 +1,18 @@
 Ext.namespace("Kwf.EyeCandy");
 
-Kwf.onContentReady(function(readyEl) {
-    if (readyEl.tagName.toLowerCase() != 'body' && !Ext.fly(readyEl).isVisible(true)) return; //initialize only visible items
-    Ext.query('.kwfEyeCandyList', readyEl).forEach(function(el) {
-        if (!el.list && Ext.fly(el).isVisible(true)) {
-            var opts = Ext.fly(el).down('.options', true);
-            if (opts) {
-                opts = Ext.decode(opts.value);
-                var cls = Kwf.EyeCandy.List;
-                if (opts['class']) {
-                    cls = eval(opts['class']);
-                    delete opts['class'];
-                }
-                opts.el = el;
-                el.list = new cls(opts);
-            }
+Kwf.onElementShow('.kwfEyeCandyList', function onContentReadyEyeCandyList(el) {
+    var opts = Ext.fly(el).down('.options', true);
+    if (opts) {
+        opts = Ext.decode(opts.value);
+        var cls = Kwf.EyeCandy.List;
+        if (opts['class']) {
+            cls = eval(opts['class']);
+            delete opts['class'];
         }
-    }, this);
-});
+        opts.el = el;
+        el.list = new cls(opts);
+    }
+}, this, { defer: true });
 
 Kwf.EyeCandy.List = function(cfg) {
     Ext.apply(this, cfg);

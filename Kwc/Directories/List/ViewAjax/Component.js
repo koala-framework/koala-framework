@@ -32,7 +32,7 @@ Kwf.onContentReady(function(el) {
     }, this);
 });
 
-Kwf.onElementReady('.kwcDirectoriesListViewAjax', function(el, config) {
+Kwf.onElementReady('.kwcDirectoriesListViewAjax', function initListViewAjax(el, config) {
     config.renderTo = el.down('.viewContainer');
     el.select('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
     el.kwcViewAjax = new Kwc.Directories.List.ViewAjax(config);

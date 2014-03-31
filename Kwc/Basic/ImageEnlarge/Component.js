@@ -1,4 +1,4 @@
-Kwf.onElementReady('.kwcBasicImageEnlarge.showHoverIcon > a', function(el) {
+Kwf.onElementReady('.kwcBasicImageEnlarge.showHoverIcon > a', function initImageEnlarge(el) {
     if (el.getWidth() > 50 && el.getHeight() > 50) {
         el.createChild({ tag: 'span', cls: 'outerHoverIcon', html: '<span class="innerHoverIcon"></span>'});
         if (el.getWidth() < 200) {

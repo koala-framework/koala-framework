@@ -1,8 +1,4 @@
-Kwf.onContentReady(function() {
-    // alle multicheckboxes holen
-    var multiCheckboxes = Ext.query('.kwfFormFieldMultiCheckbox');
-    Ext.each(multiCheckboxes, function(mc) {
-        mc = Ext.get(mc);
+Kwf.onElementReady('.kwfFormFieldMultiCheckbox', function onElementReadyMultiCheckbox(mc) {
         var checkAll = mc.child('a.kwfMultiCheckboxCheckAll');
         var checkNone = mc.child('a.kwfMultiCheckboxCheckNone');
 
@@ -28,7 +24,6 @@ Kwf.onContentReady(function() {
                 }
             }, mc);
         }
-    });
 });
 
 Kwf.FrontendForm.MultiCheckbox = Ext.extend(Kwf.FrontendForm.Field, {
