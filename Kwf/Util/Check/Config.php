@@ -99,9 +99,6 @@ class Kwf_Util_Check_Config
         $checks['db_connection'] = array(
             'name' => 'db connection'
         );
-        $checks['git'] = array(
-            'name' => 'git >= 1.5'
-        );
         $checks['uploads'] = array(
             'name' => 'uploads'
         );
@@ -345,27 +342,6 @@ class Kwf_Util_Check_Config
     {
         if (Kwf_Registry::get('db')) {
             Kwf_Registry::get('db')->query("SHOW TABLES")->fetchAll();
-        }
-        return array(
-            'status' => self::RESULT_OK,
-        );
-    }
-
-    private static function _git()
-    {
-        $gitVersion = exec("git --version", $out, $ret);
-        if ($ret) {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "Git command is not available."
-            );
-        }
-        if (!preg_match('#^git version ([0-9\\.]+)$#', $gitVersion, $m)) {
-            throw new Kwf_Exception("Invalid git --version response");
-        }
-        $gitVersion = $m[1];
-        if (version_compare($gitVersion, "1.5.0") < 0) {
-            throw new Kwf_Exception("Invalid git version '$gitVersion', >= 1.5.0 is required");
         }
         return array(
             'status' => self::RESULT_OK,
