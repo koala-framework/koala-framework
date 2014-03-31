@@ -75,7 +75,7 @@ Kwf.Utils._initResponsiveImgEl = function (el) {
     el.maxWidth = maxWidth;
 
     var width = Kwf.Utils._getResponsiveWidthStep(
-            el.getWidth() * devicePixelRatio, minWidth, maxWidth);
+            el.loadedWidth * devicePixelRatio, minWidth, maxWidth);
     var sizePath = baseUrl.replace(Kwf.DONT_HASH_TYPE_PREFIX+'{width}',
             Kwf.DONT_HASH_TYPE_PREFIX+width);
 
@@ -86,9 +86,10 @@ Kwf.Utils._initResponsiveImgEl = function (el) {
 };
 
 Kwf.Utils._checkResponsiveImgEl = function (responsiveImgEl) {
-    if (responsiveImgEl.getWidth() == 0) return;
+    var elWidth = responsiveImgEl.getWidth();
+    if (elWidth == 0) return;
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
-    var width = Kwf.Utils._getResponsiveWidthStep(responsiveImgEl.getWidth() * devicePixelRatio,
+    var width = Kwf.Utils._getResponsiveWidthStep(elWidth * devicePixelRatio,
             responsiveImgEl.minWidth, responsiveImgEl.maxWidth);
     if (width > responsiveImgEl.loadedWidth) {
         responsiveImgEl.loadedWidth = width;
