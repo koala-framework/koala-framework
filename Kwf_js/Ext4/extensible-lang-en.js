@@ -169,7 +169,8 @@ Ext4.onReady(function() {
         Ext4.apply(Extensible.calendar.menu.Event.prototype, {
             editDetailsText: trlKwf('Edit Details'),
             deleteText: trlKwf('Delete'),
-            moveToText: trlKwf('Move to...')
+            moveToText: trlKwf('Move to...'),
+            copyToText: trlKwf('Copy to...')
         });
     }
     
