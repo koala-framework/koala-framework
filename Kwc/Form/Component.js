@@ -1,4 +1,7 @@
-Kwf.Utils.ResponsiveEl('.kwcForm', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.kwcForm.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.kwcForm.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.kwcForm.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.kwcForm.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
 Kwf.onElementReady('.kwcForm > form', function initForm(form) {
     form = form.parent('.kwcForm', false);
