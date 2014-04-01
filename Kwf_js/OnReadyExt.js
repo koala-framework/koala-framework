@@ -16,8 +16,45 @@ Kwf.onElementReady = function(selector, fn, scope, options) {
         fn: fn,
         scope: scope,
         options: options || {},
-        num: Kwf._readyHandlers.length, //unique number, used to mark in initDone
-        type: 'ext'
+        num: Kwf._readyHandlers.length, //unique number
+        type: 'ext',
+        onAction: 'render'
+    });
+};
+
+Kwf.onElementShow = function(selector, fn, scope, options) {
+    Kwf._readyHandlers.push({
+        selector: selector,
+        fn: fn,
+        scope: scope,
+        options: options || {},
+        num: Kwf._readyHandlers.length, //unique number
+        type: 'extShow',
+        onAction: 'show'
+    });
+};
+
+Kwf.onElementHide = function(selector, fn, scope, options) {
+    Kwf._readyHandlers.push({
+        selector: selector,
+        fn: fn,
+        scope: scope,
+        options: options || {},
+        num: Kwf._readyHandlers.length, //unique number
+        type: 'extHide',
+        onAction: 'hide'
+    });
+};
+
+Kwf.onElementWidthChange = function(selector, fn, scope, options) {
+    Kwf._readyHandlers.push({
+        selector: selector,
+        fn: fn,
+        scope: scope,
+        options: options || {},
+        num: Kwf._readyHandlers.length, //unique number
+        type: 'extWidthChange',
+        onAction: 'widthChange'
     });
 };
 

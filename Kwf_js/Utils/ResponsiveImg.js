@@ -3,40 +3,21 @@ Kwf._responsiveImgSelectors = [];
 Kwf.DONT_HASH_TYPE_PREFIX = 'dh-';
 
 Kwf.Utils.ResponsiveImg = function (selector) {
-    Kwf._responsiveImgSelectors.push(selector);
-};
-
-Kwf.onContentReady(function onContentReadyResponsiveImg(el, options) {
-    if (options.newRender) { // maybe new elements so check every selector
-        el = Ext.get(el);
-        Kwf._responsiveImgSelectors.each(function(i) {
-            el.select(i, true).each(function (el) {
-                if (!el.responsiveImgInitDone) {
-                    // check if this element is already known and therefore in array or not
-                    if (!el.responsiveImgInArray) {
-                        el.responsiveImgInArray = true;
-                        Kwf._responsiveImgEls.push(el);
-                    }
-                    if (el.getWidth() == 0) return;
-                    Kwf.Utils._initResponsiveImgEl(el);
-                } else {
-                    Kwf.Utils._checkResponsiveImgEl(el);
-                }
-            });
-        });
-    } else { // No new elements so iterate over Kwf._responsiveImgEls
-        Kwf._responsiveImgEls.each(function(responsiveImgEl) {
-            if (el.contains(responsiveImgEl.dom)) {
-                if (!responsiveImgEl.responsiveImgInitDone) {
-                    if (responsiveImgEl.getWidth() == 0) return;
-                    Kwf.Utils._initResponsiveImgEl(responsiveImgEl);
-                } else {
-                    Kwf.Utils._checkResponsiveImgEl(responsiveImgEl);
-                }
+    //Kwf._responsiveImgSelectors.push(selector);
+    Kwf.onElementWidthChange(selector, function initResponsiveImg(el) {
+        if (!el.responsiveImgInitDone) {
+            // check if this element is already known and therefore in array or not
+            if (!el.responsiveImgInArray) {
+                el.responsiveImgInArray = true;
+                Kwf._responsiveImgEls.push(el);
             }
-        });
-    }
-});
+            if (el.getWidth() == 0) return;
+            Kwf.Utils._initResponsiveImgEl(el);
+        } else {
+            Kwf.Utils._checkResponsiveImgEl(el);
+        }
+    }, this, { defer: true });
+};
 
 Kwf.Utils._getResponsiveWidthStep = function (width,  minWidth, maxWidth) {
     var steps = Kwf.Utils._getResponsiveWidthSteps(minWidth, maxWidth);
@@ -95,9 +76,3 @@ Kwf.Utils._checkResponsiveImgEl = function (responsiveImgEl) {
                     Kwf.DONT_HASH_TYPE_PREFIX+width);
     }
 };
-
-Ext.fly(window).on('resize', function() {
-    Kwf._responsiveImgEls.each(function(responsiveImgEl) {
-        Kwf.Utils._checkResponsiveImgEl(responsiveImgEl);
-    });
-}, this, {buffer: 200});
