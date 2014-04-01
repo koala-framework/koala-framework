@@ -10106,51 +10106,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Spalte {0}, Breite {1}%</de>
 </text>
 <text>
-<en>2 Columns (50% - 50%)</en>
-<id>1913</id>
-<de>2 Spalten (50% - 50%)</de>
-</text>
-<text>
-<en>2 Columns (33% - 66%)</en>
-<id>1914</id>
-<de>2 Spalten (33% - 66%)</de>
-</text>
-<text>
-<en>2 Columns (66% - 33%)</en>
-<id>1915</id>
-<de>2 Spalten (66% - 33%)</de>
-</text>
-<text>
-<en>2 Columns (25% - 75%)</en>
-<id>1916</id>
-<de>2 Spalten (25% - 75%)</de>
-</text>
-<text>
-<en>2 Columns (75% - 25%)</en>
-<id>1917</id>
-<de>2 Spalten (75% - 25%)</de>
-</text>
-<text>
-<en>3 Columns (33% - 33% - 33%)</en>
-<id>1918</id>
-<de>3 Spalten (33% - 33% - 33%)</de>
-</text>
-<text>
-<en>3 Columns (50% - 25% - 25%)</en>
-<id>1919</id>
-<de>3 Spalten (50% - 25% - 25%)</de>
-</text>
-<text>
-<en>3 Columns (25% - 50% - 25%)</en>
-<id>1920</id>
-<de>3 Spalten (25% - 50% - 25%)</de>
-</text>
-<text>
-<en>3 Columns (25% - 25% - 50%)</en>
-<id>1921</id>
-<de>3 Spalten (25% - 25% - 50%)</de>
-</text>
-<text>
 <en>Columns type</en>
 <id>1922</id>
 <de>Spalten-Typ</de>
@@ -11114,10 +11069,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Leave empty</en>
 <id>2093</id>
-</text>
-<text>
-<en>4 Columns (25% - 25% - 25% - 25%)</en>
-<id>2094</id>
 </text>
 <text>
 <en>back</en>
