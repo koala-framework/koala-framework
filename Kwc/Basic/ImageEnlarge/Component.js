@@ -5,4 +5,4 @@ Kwf.onElementReady('.kwcBasicImageEnlarge.showHoverIcon > a', function initImage
             el.addClass('small');
         }
     }
-}, this, { checkVisibility: true });
+}, this, { checkVisibility: true, defer: true });

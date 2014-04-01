@@ -21,4 +21,4 @@ Kwf.onElementReady('a', function onElementReadyLinkExtern(lnk) {
                 });
             }
         });
-});
+}, this, { defer: true });
