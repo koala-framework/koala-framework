@@ -37,7 +37,8 @@ Kwf.onElementReady('.kwcDirectoriesListViewAjax', function initListViewAjax(el, 
     el.select('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
     el.kwcViewAjax = new Kwc.Directories.List.ViewAjax(config);
 }, this, {
-    priority: 0 //call *after* initializing kwcForm to have access to searchForm
+    priority: 0, //call *after* initializing kwcForm to have access to searchForm
+    defer: true
 });
 
 //if there is no viewAjax that can handle the changed state reload current page

@@ -20,12 +20,22 @@ if (!Kwf.isApp) {
         //console.profileEnd();
         //console.log(Kwf._onReadyStats);
 
+        (function() {
+            Kwf._onReadySkipDeferred = false;
+            //console.profile("callOnContentReady body");
+            Kwf._resetOnReadyStats();
+            Kwf.callOnContentReady(document.body, { action: 'render' });
+            //console.profileEnd();
+            //console.log(Kwf._onReadyStats);
+        }).defer(100);
+
         Ext.fly(window).on('resize', function() {
             Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
         }, this, { buffer: 100 });
     });
 }
 
+Kwf._onReadySkipDeferred = true;
 Kwf._onReadyIsCalling = false;
 Kwf._onReadyCallQueue = [];
 Kwf._onReadyElQueue = [];
@@ -82,6 +92,16 @@ Kwf.callOnContentReady = function(renderedEl, options)
     var addToQueue = function(onActions) {
         for (var i = 0; i < Kwf._readyHandlers.length; i++) {
             var hndl = Kwf._readyHandlers[i];
+
+            if (Kwf._onReadySkipDeferred) {
+                if (hndl.options.defer) {
+                    continue;
+                }
+            } else {
+                if (!hndl.options.defer) {
+                    continue;
+                }
+            }
 
             if (onActions.indexOf(hndl.onAction) != -1) {
                 if (options.action != 'render' && Kwf._elCacheBySelector[hndl.selector]) {
