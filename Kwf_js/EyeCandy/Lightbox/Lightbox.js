@@ -22,38 +22,37 @@ Kwf.onElementReady('a', function onElementReadyLightbox(el) {
         }, el, { stopEvent: true });
     }
 });
+Kwf.onElementReady('.kwfLightbox', function onElementReadyLightbox(el) {
+    //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
+    if (el.dom.kwfLightbox) return;
+    var lightboxEl = Ext.get(el);
+    var options = Ext.decode(lightboxEl.child('input.options').dom.value);
+    var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
+    Kwf.Utils.HistoryState.currentState.lightbox = window.location.href;
+    Kwf.Utils.HistoryState.updateState();
+    lightboxEl.enableDisplayMode('block');
+    l.lightboxEl = lightboxEl;
+    l.innerLightboxEl = lightboxEl.down('.kwfLightboxInner');
+    l.fetched = true;
+    l.initialize();
+    l.closeHref = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
+    l.contentEl = l.innerLightboxEl.down('.kwfLightboxContent');
+    l.style.afterCreateLightboxEl();
+    l.style.onShow();
+    l.style.onContentReady();
+    el.dom.kwfLightbox = l;
+    Kwf.EyeCandy.Lightbox.currentOpen = l;
+
+    //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
+    Kwf.callOnContentReady(l.contentEl.dom, {newRender: false});
+});
 
 Kwf.onContentReady(function onContentReadyLightbox(readyEl, options)
 {
-    if (options.newRender) {
-        Ext.query('.kwfLightbox').each(function(el) {
-            //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
-            if (el.kwfLightbox) return;
-            var lightboxEl = Ext.get(el);
-            var options = Ext.decode(lightboxEl.child('input.options').dom.value);
-            var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
-            Kwf.Utils.HistoryState.currentState.lightbox = window.location.href;
-            Kwf.Utils.HistoryState.updateState();
-            lightboxEl.enableDisplayMode('block');
-            l.lightboxEl = lightboxEl;
-            l.innerLightboxEl = lightboxEl.down('.kwfLightboxInner');
-            l.fetched = true;
-            l.initialize();
-            l.closeHref = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
-            l.contentEl = l.innerLightboxEl.down('.kwfLightboxContent');
-            l.style.afterCreateLightboxEl();
-            l.style.onShow();
-            l.style.onContentReady();
-            el.kwfLightbox = l;
-            Kwf.EyeCandy.Lightbox.currentOpen = l;
-
-            //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
-            Kwf.callOnContentReady(l.contentEl.dom, {newRender: false});
-        });
-    }
+    if (!Kwf.EyeCandy.Lightbox.currentOpen) return;
 
     readyEl = Ext.get(readyEl);
-    if (readyEl.isVisible() && Kwf.EyeCandy.Lightbox.currentOpen) {
+    if (readyEl.isVisible()) {
         //callOnContentReady was called for an element inside the lightbox, style can update the lightbox size
         if (Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl
             && Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl.isVisible()
