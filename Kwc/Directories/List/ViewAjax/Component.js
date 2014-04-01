@@ -67,7 +67,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
     loadMoreBufferPx: 700,
 
     border: false,
-    layout: 'fit',
+    layout: 'auto',
     cls: 'posts',
     initComponent: function() {
         Kwc.Directories.List.ViewAjax.byComponentId[this.componentId] = this;
@@ -283,7 +283,7 @@ Kwc.Directories.List.ViewAjax.filterLinks = {};
 
 Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 {
-    layout: 'fit',
+    layout: 'auto',
     border: false,
     autoHeight: true,
 
