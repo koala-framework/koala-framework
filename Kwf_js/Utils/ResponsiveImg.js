@@ -90,7 +90,7 @@ Kwf.Utils._checkResponsiveImgEl = function (responsiveImgEl) {
             responsiveImgEl.minWidth, responsiveImgEl.maxWidth);
     if (width > responsiveImgEl.loadedWidth) {
         responsiveImgEl.loadedWidth = width;
-        responsiveImgEl.child('img').dom.src
+        responsiveImgEl.child('img', true).src
             = responsiveImgEl.baseUrl.replace(Kwf.DONT_HASH_TYPE_PREFIX+'{width}',
                     Kwf.DONT_HASH_TYPE_PREFIX+width);
     }
