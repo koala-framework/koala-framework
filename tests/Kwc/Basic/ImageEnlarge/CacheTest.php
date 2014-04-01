@@ -21,10 +21,10 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         $xml = simplexml_import_dom($doc);
 
         $img = $xml->xpath("//img");
-        $this->assertEquals(1, count($img));
-        $this->assertEquals($smallImage['width'], (string)$img[0]['width']);
-        $this->assertEquals($smallImage['height'], (string)$img[0]['height']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertEquals(2, count($img));
+        $this->assertEquals($smallImage['width'], (string)$img[1]['width']);
+        $this->assertEquals($smallImage['height'], (string)$img[1]['height']);
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[1]['src'], $m));
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
         $this->assertEquals($smallImage['mimeType'], $o['mimeType']);
         $im = new Imagick();
@@ -47,10 +47,10 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         $xml = simplexml_import_dom($doc);
 
         $img = $xml->xpath("//img");
-        $this->assertEquals(1, count($img));
-        $this->assertEquals($largeImage['width'], (string)$img[0]['width']);
-        $this->assertEquals($largeImage['height'], (string)$img[0]['height']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertEquals(2, count($img));
+        $this->assertEquals($largeImage['width'], (string)$img[1]['width']);
+        $this->assertEquals($largeImage['height'], (string)$img[1]['height']);
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[1]['src'], $m));
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
         $this->assertEquals($largeImage['mimeType'], $o['mimeType']);
         $im = new Imagick();

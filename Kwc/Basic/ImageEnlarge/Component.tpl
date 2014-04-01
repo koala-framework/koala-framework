@@ -4,6 +4,7 @@
             data-min-width="<?=$this->minWidth;?>"
             data-max-width="<?=$this->maxWidth;?>"
             data-src="<?=$this->baseUrl;?>">
+        <img />
         <noscript>
             <?=$this->image($this->image, $this->altText, $this->imgCssClass)?>
         </noscript>

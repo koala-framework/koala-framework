@@ -21,12 +21,12 @@ class Kwc_Composite_Images_Test extends Kwc_TestAbstract
         $xml = simplexml_import_dom($doc);
 
         $img = $xml->xpath("//img");
-        $this->assertEquals(3, count($img));
-        $this->assertEquals(100, (string)$img[0]['width']);
-        $this->assertEquals(100, (string)$img[0]['height']);
-        $src = (string)$img[0]['src'];
+        $this->assertEquals(6, count($img));
+        $this->assertEquals(100, (string)$img[1]['width']);
+        $this->assertEquals(100, (string)$img[1]['height']);
+        $src = (string)$img[1]['src'];
 
-        $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[1]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick($o['file']);
