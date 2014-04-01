@@ -57,6 +57,9 @@ class Vpc_Form_Dynamic_Form_Component extends Vpc_Form_Component
         } else {
             $host = Vps_Registry::get('config')->server->domain;
         }
+        if (substr($host, 0, 4) == 'www.') {
+            $host = substr($host, 4);
+        }
         $row->setFrom("noreply@$host");
         $settings = $this->getData()->parent->getComponent()->getMailSettings();
         $row->addTo($settings['recipient']);
