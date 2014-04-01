@@ -226,27 +226,34 @@ class Kwf_Util_Check_Config
             );
         }
 
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
-        if ($mime != 'image/png') {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "fileinfo returned wrong information: $mime"
-            );
-        }
+        try {
+            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
+            if ($mime != 'image/png') {
+                return array(
+                    'status' => self::RESULT_WARNING,
+                    'message' => "fileinfo returned wrong information: $mime"
+                );
+            }
 
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
-        if (!($mime == 'application/msword' || $mime == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "fileinfo returned wrong information: $mime"
-            );
-        }
+            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
+            if (!($mime == 'application/msword' || $mime == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+                return array(
+                    'status' => self::RESULT_WARNING,
+                    'message' => "fileinfo returned wrong information: $mime"
+                );
+            }
 
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
-        if ($mime != 'application/vnd.oasis.opendocument.text') {
+            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
+            if ($mime != 'application/vnd.oasis.opendocument.text') {
+                return array(
+                    'status' => self::RESULT_WARNING,
+                    'message' => "fileinfo returned wrong information: $mime"
+                );
+            }
+        } catch (Exception $e) {
             return array(
                 'status' => self::RESULT_WARNING,
-                'message' => "fileinfo returned wrong information: $mime"
+                'message' => "fileinfo failed: ".$e->getMessage()
             );
         }
         return array(
