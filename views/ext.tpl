@@ -37,8 +37,8 @@
         var Kwf = {isApp: true};
     </script>
 
-    <?= $this->debugData() ?>
-    <?= $this->assets($this->ext['assetsPackage']) ?>
+    <?php echo $this->debugData() ?>
+    <?php echo $this->assets($this->ext['assetsPackage']) ?>
 
     <script type="text/javascript">
     (function() {
