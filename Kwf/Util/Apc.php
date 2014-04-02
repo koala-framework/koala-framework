@@ -181,7 +181,7 @@ class Kwf_Util_Apc
                     apc_delete($cacheId);
                 }
             }
-            if (isset($_REQUEST['files'])) {
+            if (isset($_REQUEST['files']) && function_exists('apc_delete_file')) {
                 foreach (explode(',', $_REQUEST['files']) as $file) {
                     @apc_delete_file($file);
                 }
