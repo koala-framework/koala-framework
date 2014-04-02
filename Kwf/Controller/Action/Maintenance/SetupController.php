@@ -3,6 +3,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
 {
     public function preDispatch()
     {
+        Kwf_Exception_Abstract::$logErrors = false;
         //don't call parent, no acl required
 
         if (file_exists('downloader.php')) {
