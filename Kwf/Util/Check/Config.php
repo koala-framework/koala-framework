@@ -73,6 +73,9 @@ class Kwf_Util_Check_Config
         $checks['tidy'] = array(
             'name' => 'tidy Php extension'
         );
+        $checks['json'] = array(
+            'name' => 'json Php extension'
+        );
         $checks['pdo_mysql'] = array(
             'name' => 'pdo_mysql Php extension'
         );
@@ -277,6 +280,19 @@ class Kwf_Util_Check_Config
             return array(
                 'status' => self::RESULT_WARNING,
                 'message' => "Extension 'tidy' is not loaded."
+            );
+        }
+        return array(
+            'status' => self::RESULT_OK,
+        );
+    }
+
+    private static function _json()
+    {
+        if (!function_exists('json_decode')) {
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "Extension 'json' is not loaded."
             );
         }
         return array(
