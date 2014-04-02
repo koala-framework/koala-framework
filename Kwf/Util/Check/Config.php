@@ -79,6 +79,9 @@ class Kwf_Util_Check_Config
         $checks['pdo_mysql'] = array(
             'name' => 'pdo_mysql Php extension'
         );
+        $checks['short_open_tag'] = array(
+            'name' => 'short_open_tag setting'
+        );
         $checks['system'] = array(
             'name' => 'executing system commands'
         );
@@ -304,6 +307,19 @@ class Kwf_Util_Check_Config
     {
         if (!extension_loaded('pdo_mysql')) {
             throw new Kwf_Exception("Extension 'pdo_mysql' is not loaded");
+        }
+        return array(
+            'status' => self::RESULT_OK,
+        );
+    }
+
+    private static function _short_open_tag()
+    {
+        if (!ini_get('short_open_tag')) {
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "short_open_tag must be enabled"
+            );
         }
         return array(
             'status' => self::RESULT_OK,
