@@ -33,7 +33,7 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
         $ret['searchForm'] = $searchPage->getChildComponent('-view')->getChildComponent('-searchForm');
         $ret['config'] = array(
             'searchTitle' => $searchPage->getTitle(),
-            'searchUrl' => $searchPage->getAbsoluteUrl(),
+            'searchUrl' => $searchPage->url,
             'useLiveSearch' => $this->_getSetting('useLiveSearch'),
             'hideSubmit' => $this->_getSetting('hideSubmit'),
             'minSearchTermLength' => $this->_getSetting('minSearchTermLength')
