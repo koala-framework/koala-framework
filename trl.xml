@@ -11359,5 +11359,10 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Kopieren nach...</de>
 <id>2187</id>
 </text>
+<text>
+<en>Session expired, please re-login.</en>
+<de>Session abgelaufen, bitte neu einloggen.</de>
+<id>2188</id>
+</text>
 </trl>
 

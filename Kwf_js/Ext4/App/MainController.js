@@ -85,7 +85,7 @@ Ext4.define('Kwf.Ext4.App.MainController', {
 
         var r = Ext4.decode(response.responseText, true);
         if (response.status == 401) {
-            var msg = trlKwf('Please Login');
+            var msg = trlKwf('Session expired, please re-login.');
             if (r && r.role && r.role != 'guest') {
                 msg = trlKwf("You don't have enough permissions for this Action");
             }
