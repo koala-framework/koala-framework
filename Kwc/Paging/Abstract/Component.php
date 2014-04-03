@@ -21,24 +21,14 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
             'prefix'   => trlKwfStatic('Page').':'
         );
         $ret['cssClass'] = 'webPaging webStandard';
+        $ret['plugins']['useViewCache'] = 'Kwc_Paging_Abstract_UseViewCachePlugin';
+
         return $ret;
     }
 
     public static function getPartialClass($componentClass)
     {
         return 'Kwf_Component_Partial_Pager';
-    }
-
-    public function getViewCacheSettings()
-    {
-        $ret = parent::getViewCacheSettings();
-        $c = $this->getData()->parent;
-        if ($c->getComponent() instanceof Kwc_Directories_List_View_Component &&
-            $c->getComponent()->getPartialClass($c->componentClass) == 'Kwf_Component_Partial_Id')
-        {
-            $ret['enabled'] = false;
-        }
-        return $ret;
     }
 
     public function getCount()
@@ -85,7 +75,7 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
             $text = $buttonTexts[$type];
         }
         if ($text === false) return null;
-        
+
         $params = array();
         $get = array();
         foreach ($_GET as $p=>$v) {
@@ -208,11 +198,21 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
         ) {
             $pagesize = $select->getPart('limitCount');
         }
+
+        $disableCacheParams = array();
+        $disableCacheParams[] = $this->_getParamName();
+        $c = $this->getData()->parent->getComponent();
+        if ($c instanceof Kwc_Directories_List_View_Component && $c->hasSearchForm()) {
+            $disableCacheParams[] = $c->getData()->componentId.'-post';
+        }
+
         return array(
             'class' => get_class($this),
             'paramName' => $this->_getParamName(),
             'pages' => $this->_getPages(),
-            'pagesize' => $pagesize
+            'pagesize' => $pagesize,
+            'disableCache' => false,
+            'disableCacheParams' => $disableCacheParams
         );
     }
 

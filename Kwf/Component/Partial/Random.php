@@ -13,4 +13,9 @@ class Kwf_Component_Partial_Random extends Kwf_Component_Partial_Abstract
         }
         return array_keys($random);
     }
+
+    public static function useViewCache()
+    {
+        return false;
+    }
 }
