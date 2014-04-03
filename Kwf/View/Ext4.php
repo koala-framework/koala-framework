@@ -23,6 +23,13 @@ class Kwf_View_Ext4 extends Kwf_View
         } else {
             $this->favicon = null;
         }
+
+        $this->userRole = Zend_Registry::get('userModel')->getAuthedUserRole();
+        $user = Zend_Registry::get('userModel')->getAuthedUser();
+        if ($user) {
+            $this->user = "$user->email, id $user->id, $user->role";
+        }
+
         return parent::render($name);
     }
 }

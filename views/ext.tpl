@@ -43,6 +43,9 @@
     <script type="text/javascript">
     (function() {
         var Ext = (window.Ext4 || window.Ext);
+        <?php if (isset($this->ext['user'])) { ?>
+        Kwf.user = '<?= $this->ext['user'] ?>';
+        <?php } ?>
         Kwf.userRole = '<?= $this->ext['userRole'] ?>';
         <? if (isset($this->sessionToken)) { ?>
         Kwf.sessionToken = '<?= $this->sessionToken ?>';

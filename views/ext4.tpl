@@ -41,6 +41,10 @@
     <?= $this->assets($this->assetsPackage) ?>
 
     <script type="text/javascript">
+    <?php if ($this->user) { ?>
+    Kwf.user = '<?= $this->user ?>';
+    <?php } ?>
+    Kwf.userRole = '<?= $this->userRole ?>';
     <? if (isset($this->sessionToken)) { ?>
     Kwf.sessionToken = '<?= $this->sessionToken ?>';
     <? } ?>
