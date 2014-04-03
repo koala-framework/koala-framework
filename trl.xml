@@ -3809,6 +3809,7 @@
 <sl>Meseci</sl>
 <uk>Місяці</uk>
 <ua>Місяці</ua>
+<si>meseci</si>
 </text>
 <text>
 <en>Categories</en>
@@ -5289,6 +5290,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Poštna št.</sl>
 <hr>Poštanski broj</hr>
 <ua>Індекс</ua>
+<si>Poštna številka</si>
 </text>
 <text>
 <en>City</en>
@@ -5323,6 +5325,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es_CL>Teléfono</es_CL>
 <hr>Telefon</hr>
 <ua>Телефон</ua>
+<si>Telefon</si>
 </text>
 <text>
 <en>Checkout</en>
@@ -7770,6 +7773,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>aproximativ o lună</ro>
 <sl>pribl. 1 mesec</sl>
 <ua>приблизно місяць</ua>
+<si>približno 1 mesec</si>
 </text>
 <text>
 <en>{0} months</en>
@@ -7778,6 +7782,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>{0} luni</ro>
 <sl>{0} mesecev</sl>
 <ua>{0} місяців</ua>
+<si>{0} mesecev</si>
 </text>
 <text>
 <en>about a year</en>
@@ -7786,6 +7791,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>aproximativ un an</ro>
 <sl>pribl. 1 leto</sl>
 <ua>приблизно рік</ua>
+<si>približno eno leto</si>
 </text>
 <text>
 <en>{0} years</en>
@@ -7794,6 +7800,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>{0} ani</ro>
 <sl>{0} let</sl>
 <ua>{0} років</ua>
+<si>{0} let</si>
 </text>
 <text>
 <en>Standard</en>
@@ -9477,6 +9484,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Ani</ro>
 <sl>Leta</sl>
 <ua>Роки</ua>
+<si>Let</si>
 </text>
 <text>
 <en>Read more</en>
@@ -10454,6 +10462,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Subiectul  e-mail-ului</ro>
 <sl>Zadeva e-sporočila</sl>
 <ua>Тема повідомлення</ua>
+<si>Zadeva e-maila</si>
 </text>
 <text>
 <en>Predefined text of E-Mail</en>
@@ -11166,6 +11175,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1816</id>
 <sl>Prosimo uporabite to obliko -&gt; leto / mesec</sl>
 <ua>Будь ласка використовуйте формат  -&gt; Year / Month</ua>
+<si>Prosimo uporabite ta zapis -&gt; leto / mesec</si>
 </text>
 <text>
 <en>VI-Number</en>
@@ -11374,6 +11384,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Amount of Money</en>
 <id>1892</id>
+<de>količina denarja</de>
 </text>
 <text>
 <en>Mp3 File</en>
@@ -11991,6 +12002,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>При поддръжката и експлоатацията на този сайт се използват "бисквитки", за да се подобри неговото ползване.</bg>
 <cs>K provozu této webové stránky a za účelem dosažení Vaší spokojenosti s užíváním stránek, používáme soubory cookies.</cs>
 <ua>Ми використовуємо Cookies для найкращої якості роботи сайту.</ua>
+<si>Za pravilno delovanje in preprostejšo uporabo te strani uporabljamo piškotke. </si>
 </text>
 <text>
 <en>More information about the use of cookies</en>
@@ -12002,6 +12014,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <cs>Více informací o použití cookies </cs>
 <hr>Više informacije u vezi korištenja kolačića</hr>
 <ua>Детальніше про використання Cookies</ua>
+<si>Več o uporabi piškotkov.</si>
 </text>
 <text>
 <en>Accept and continue</en>
@@ -12012,6 +12025,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <cs>Souhlasím a pokračovat</cs>
 <hu>Elfogadás és továbblépés</hu>
 <ua>Прийняти та продовжити</ua>
+<si>Sprejmi in nadaljuj.</si>
 </text>
 <text>
 <en>Cookie Opt In / Opt Out</en>
@@ -12019,6 +12033,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Cookie Opt-In / Opt-Out</de>
 <sl>Piškotke vključeni / izključeni</sl>
 <ua>Cookie Opt In / Opt Out</ua>
+<si>Piškotki Opt-In/Opt-Out</si>
 </text>
 <text>
 <en>Cookies are set when visiting this webpage. Click to deactivate cookies.</en>
@@ -12056,6 +12071,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Sitio web creado por</es>
 <id>2009</id>
 <ua>Сайт створено</ua>
+<si>Spletno stran je izdelal</si>
 </text>
 <text>
 <de>{0} gesendet, {1} in der Warteschlange.</de>
@@ -12075,6 +12091,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2009</id>
 <es>Sitio web creado por</es>
 <ua>Сайт створено</ua>
+<si>Spletno stran je izdelal</si>
 </text>
 <text>
 <en>{0} sent, {1} waiting to send.</en>
