@@ -18,10 +18,12 @@ class Kwf_Exception_Logger_LogFiles extends Kwf_Exception_Logger_Abstract
                     $to[] = $dev->email;
                 }
             }
-            mail(implode('; ', $to),
-                'Error while trying to write error file',
-                $e->__toString()."\n\n---------------------------\n\nOriginal Exception:\n\n".$content
-                );
+            if ($to) {
+                mail(implode('; ', $to),
+                    'Error while trying to write error file',
+                    $e->__toString()."\n\n---------------------------\n\nOriginal Exception:\n\n".$content
+                    );
+            }
         }
         return true;
     }

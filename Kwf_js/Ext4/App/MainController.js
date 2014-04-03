@@ -114,6 +114,9 @@ Ext4.define('Kwf.Ext4.App.MainController', {
             dlg.show();
         } else {
             Ext4.Msg.alert(trlKwf('Error'), trlKwf('A Server failure occured.'));
+            if (response.status != 500) {
+                throw new Error('Request failed: '+response.status + ' '+response.statusText);
+            }
         }
     }
 });

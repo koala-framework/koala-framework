@@ -1,36 +1,4 @@
-Kwf.Debug.sentErrors = [];
-Ext.ux.ErrorHandler.on('error', function(ex) {
-    var ownPrefix = location.protocol+'//'+location.host;
-    if (ex.url && ex.url.substr(0, ownPrefix.length) != ownPrefix) {
-        //ignore errors out of our control (other server, chrome://)
-        return;
-    }
-    if (Kwf.Debug.displayErrors) {
-        throw ex;
-    }
-    var params = {
-        url: ex.url,
-        lineNumber: ex.lineNumber,
-        stack: Ext.encode(ex.stack),
-        message: ex.message,
-        location: location.href,
-        referrer: document.referrer
-    };
-    if (Kwf.Debug.sentErrors.indexOf(Ext.encode(params)) != -1) {
-        //this error has been sent alrady, don't send again
-        return;
-    }
-    Kwf.Debug.sentErrors.push(Ext.encode(params));
-    Ext.Ajax.request({
-        url: '/kwf/error/error/json-mail',
-        ignoreErrors: true,
-        params: params
-    });
-});
-
-if (!Kwf.Debug.displayErrors) {
-    Ext.ux.ErrorHandler.init();
-}
+Ext.ns('Kwf.ErrorHandler');
 
 /**
  * message
@@ -62,15 +30,9 @@ Kwf.handleError = function(error) {
             title = (trlKwf('Error'));
             msg = trlKwf("A Server failure occured.");
             if (error.mail || (typeof error.mail == 'undefined')) {
-                Ext.Ajax.request({
-                    url: '/kwf/error/error/json-mail',
-                    params: {
-                        url: error.url,
-                        message: error.message,
-                        location: location.href,
-                        referrer: document.referrer
-                    },
-                    ignoreErrors: true
+                Kwf.ErrorHandler.log({
+                    url: error.url,
+                    message: error.message
                 });
             }
         }
@@ -125,14 +87,9 @@ Kwf.handleError = function(error) {
     } else {
         Ext.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
         if (error.mail || (typeof error.mail == 'undefined')) {
-            Ext.Ajax.request({
-                url: '/kwf/error/error/json-mail',
-                params: {
-                    url: error.url,
-                    message: error.message,
-                    location: location.href,
-                    referrer: document.referrer
-                }
+            Kwf.ErrorHandler.log({
+                url: error.url,
+                message: error.message
             });
         }
         if (error.abort) error.abort.call(error.scope || window); //there is no possibility to retry, so just abort

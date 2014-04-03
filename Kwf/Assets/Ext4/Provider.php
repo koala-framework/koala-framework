@@ -62,6 +62,9 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
             $class = substr($dependencyName, 4);
             $file = Kwf_Config::getValue('path.ext4').'/src'.str_replace('.', '/', $class).'.js';
             if (!file_exists($file)) return null;
+            if ($file == Kwf_Config::getValue('path.ext4').'/src/lang/Error.js') {
+                return new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Ext4/Error.js');
+            }
 
             return new Kwf_Assets_Ext4_JsDependency($file);
         }
