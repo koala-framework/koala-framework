@@ -44,15 +44,15 @@
     (function() {
         var Ext = (window.Ext4 || window.Ext);
         Kwf.userRole = '<?= $this->ext['userRole'] ?>';
-        <? if (isset($this->sessionToken)) { ?>
+        <?php if (isset($this->sessionToken)) { ?>
         Kwf.sessionToken = '<?= $this->sessionToken ?>';
-        <? } ?>
+        <?php } ?>
         Kwf.main = function() {
-            <? if ($this->ext['class']) { ?>
+            <?php if ($this->ext['class']) { ?>
             var panel = new <?= $this->ext['class'] ?>(<?= Zend_Json::encode($this->ext['config']) ?>);
-            <? } else { ?>
+            <?php } else { ?>
             var panel = <?= Zend_Json::encode($this->ext['config']) ?>;
-            <? } ?>
+            <?php } ?>
             var isExt4Panel = false;
             if (window.Ext4) {
                 if (Ext4.panel && Ext4.panel.Panel && panel instanceof Ext4.panel.Panel) {
