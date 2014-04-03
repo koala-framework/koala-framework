@@ -92,7 +92,7 @@ class Kwf_Util_Update_Runner
         return $ret;
     }
 
-    public function executeUpdates()
+    public function executeUpdates($options = array())
     {
         $doneNames = array();
 
@@ -104,7 +104,7 @@ class Kwf_Util_Update_Runner
             Kwf_Util_ClearCache::getInstance()->clearCache(array(
                 'types' => 'all',
                 'output' => $this->_verbose,
-                'refresh' => true,
+                'refresh' => isset($options['refreshCache']) ? $options['refreshCache'] : true,
                 'skipMaintenanceBootstrap'=>true,
             ));
             if ($this->_verbose) echo "\n";
