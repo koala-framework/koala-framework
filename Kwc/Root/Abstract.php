@@ -25,7 +25,8 @@ class Kwc_Root_Abstract extends Kwc_Abstract
 
     public function formatPath($parsedUrl)
     {
-        if (!Kwf_Config::getValue('server.domain')) {
+        if (!Kwf_Config::getValue('server.domain')
+            || !Kwf_Config::getValue('server.redirectToDomain')) {
             //domain is optional (but recommended)
             //for easy setup of examples just ignore the domain (as we don't have anything to compare to anyway)
             return $parsedUrl['path'];
