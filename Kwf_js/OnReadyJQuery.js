@@ -12,16 +12,25 @@ Kwf.onJContentReady = Kwf.onContentReady;
  *
  * @param element selector
  * @param callback function
- * @param scope
  * @param options see onContentReady options, additionally checkVisibility (boolean, only call onElementReady when element is visible)
  */
-Kwf.onJElementReady = function(selector, fn, scope, options) {
-    Kwf._readyHandlers.push({
-        selector: selector,
-        fn: fn,
-        scope: scope,
-        options: options || {},
-        num: Kwf._readyHandlers.length, //unique number, used to mark in initDone
-        type: 'jquery'
-    });
+Kwf.onJElementReady = function(selector, fn, options) {
+    if (arguments.length == 4) {
+        var scope = arguments[2];
+        var options = arguments[3];
+        options.scope = scope;
+    }
+    Kwf._addReadyHandler('jquery', 'render', selector, fn, options);
+};
+
+Kwf.onJElementShow = function(selector, fn,  options) {
+    Kwf._addReadyHandler('jquery', 'show', selector, fn, options);
+};
+
+Kwf.onJElementHide = function(selector, fn, options) {
+    Kwf._addReadyHandler('jquery', 'hide', selector, fn, options);
+};
+
+Kwf.onJElementWidthChange = function(selector, fn, options) {
+    Kwf._addReadyHandler('jquery', 'widthChange', selector, fn, options);
 };

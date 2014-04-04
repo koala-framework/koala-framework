@@ -21,4 +21,4 @@ Kwf.onElementReady('.kwcAdvancedYoutube .youtubePlayer', function(el, config) {
             playerVars: config.playerVars
         });
     }, this);
-}, this, { defer: true, checkVisibility: true });
+}, { defer: true, checkVisibility: true });

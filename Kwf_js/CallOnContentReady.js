@@ -45,6 +45,18 @@ Kwf._elQueueNum = 0;
 Kwf._onReadyElSortCache = {};
 Kwf._elCacheBySelector = {};
 
+Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
+{
+    Kwf._readyHandlers.push({
+        selector: selector,
+        fn: fn,
+        options: options || {},
+        num: Kwf._readyHandlers.length, //unique number
+        type: type,
+        onAction: onAction
+    });
+};
+
 /**
  * @param element the added/changed dom element
  * @param options newRender (bool): if new elements have been added to the dom or just visiblity/width changed
@@ -152,7 +164,6 @@ Kwf.callOnContentReady = function(renderedEl, options)
                         Kwf._onReadyElQueue.push({
                             el: els[j],
                             fn: hndl.fn,
-                            scope: hndl.scope,
                             options: hndl.options,
                             num: hndl.num,
                             type: hndl.type,
@@ -208,7 +219,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
             var hndl = Kwf._readyHandlers[i];
             if (hndl.selector == null) {
                 var t = Kwf.Utils.BenchmarkBox.now();
-                hndl.fn.call(hndl.scope || window, queueEntry.renderedEl, queueEntry.options);
+                hndl.fn.call(hndl.options.scope || window, queueEntry.renderedEl, queueEntry.options);
                 Kwf.Utils.BenchmarkBox.time('onContentReady', Kwf.Utils.BenchmarkBox.now()-t);
             }
         }
@@ -238,28 +249,28 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 } catch (err) {}
             }
             var t = Kwf.Utils.BenchmarkBox.now();
-            if (queueEntry.type == 'ext') {
-                queueEntry.fn.call(queueEntry.scope, Ext.get(el), config);
-            } else if (queueEntry.type == 'jquery') {
-                queueEntry.fn.call(queueEntry.scope, $(el), config);
-            }
+            el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
+            queueEntry.fn.call(queueEntry.options.scope || window, el, config);
             Kwf.Utils.BenchmarkBox.time('onRender', Kwf.Utils.BenchmarkBox.now()-t);
         } else {
             if (queueEntry.onAction == 'show') {
                 if (Ext.fly(el).getWidth() > 0) {
                     var t = Kwf.Utils.BenchmarkBox.now();
-                    queueEntry.fn.call(queueEntry.scope, Ext.get(el));
+                    el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
+                    queueEntry.fn.call(queueEntry.options.scope || window, el);
                     Kwf.Utils.BenchmarkBox.time('onShow', Kwf.Utils.BenchmarkBox.now()-t);
                 }
             } else if (queueEntry.onAction == 'hide') {
                 if (Ext.fly(el).getWidth() == 0) {
                     var t = Kwf.Utils.BenchmarkBox.now();
-                    queueEntry.fn.call(queueEntry.scope, Ext.get(el));
+                    el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
+                    queueEntry.fn.call(queueEntry.options.scope || window, el);
                     Kwf.Utils.BenchmarkBox.time('onHide', Kwf.Utils.BenchmarkBox.now()-t);
                 }
             } else if (queueEntry.onAction == 'widthChange') {
                 var t = Kwf.Utils.BenchmarkBox.now();
-                queueEntry.fn.call(queueEntry.scope, Ext.get(el));
+                el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
+                queueEntry.fn.call(queueEntry.options.scope || window, el);
                 Kwf.Utils.BenchmarkBox.time('onWidthChange', Kwf.Utils.BenchmarkBox.now()-t);
             }
 
@@ -298,14 +309,17 @@ Kwf.callOnContentReady = function(renderedEl, options)
 /**
  * Register a function that will be called when content is loaded or shown
  * @param callback function (passed arguments: el, options (newRender=bool))
- * @param scope for callback
  * @param options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
  */
-Kwf.onContentReady = function(fn, scope, options) {
+Kwf.onContentReady = function(fn, options) {
+    if (arguments.length == 3) {
+        var scope = arguments[1];
+        var options = arguments[2];
+        options.scope = scope;
+    }
     Kwf._readyHandlers.push({
         selector: null,
         fn: fn,
-        scope: scope,
         options: options || {}
     });
 };

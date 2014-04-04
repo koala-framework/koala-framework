@@ -7,7 +7,7 @@ Kwf.Utils.ResponsiveImg = function (selector) {
         } else {
             Kwf.Utils._checkResponsiveImgEl(el);
         }
-    }, this, { defer: true });
+    }, { defer: true });
 };
 
 Kwf.Utils._getResponsiveWidthStep = function (width,  minWidth, maxWidth) {

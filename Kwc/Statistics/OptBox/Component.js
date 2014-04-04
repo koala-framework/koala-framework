@@ -14,7 +14,7 @@ Kwf.onContentReady(function(body, param) {
         Ext.getBody().insertFirst(html);
         Ext.getBody().optBox = true;
     }
-}, this, {priority: -2}); // before Kwf.Utils.ResponsiveEl
+}, {priority: -2}); // before Kwf.Utils.ResponsiveEl
 
 Kwf.onElementReady('.kwcStatisticsOptBox a.accept', function(link) {
     link.on('click', function(e, el) {

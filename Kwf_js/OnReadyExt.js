@@ -7,71 +7,25 @@
  *
  * @param element selector
  * @param callback function
- * @param scope
  * @param options see onContentReady options, additionally checkVisibility (boolean, only call onElementReady when element is visible)
  */
-Kwf.onElementReady = function(selector, fn, scope, options) {
-    Kwf._readyHandlers.push({
-        selector: selector,
-        fn: fn,
-        scope: scope,
-        options: options || {},
-        num: Kwf._readyHandlers.length, //unique number
-        type: 'ext',
-        onAction: 'render'
-    });
+Kwf.onElementReady = function(selector, fn, options) {
+    if (arguments.length == 4) {
+        var scope = arguments[2];
+        var options = arguments[3];
+        options.scope = scope;
+    }
+    Kwf._addReadyHandler('ext', 'render', selector, fn, options);
 };
 
-Kwf.onElementShow = function(selector, fn, scope, options) {
-    Kwf._readyHandlers.push({
-        selector: selector,
-        fn: fn,
-        scope: scope,
-        options: options || {},
-        num: Kwf._readyHandlers.length, //unique number
-        type: 'extShow',
-        onAction: 'show'
-    });
+Kwf.onElementShow = function(selector, fn,  options) {
+    Kwf._addReadyHandler('ext', 'show', selector, fn, options);
 };
 
-Kwf.onElementHide = function(selector, fn, scope, options) {
-    Kwf._readyHandlers.push({
-        selector: selector,
-        fn: fn,
-        scope: scope,
-        options: options || {},
-        num: Kwf._readyHandlers.length, //unique number
-        type: 'extHide',
-        onAction: 'hide'
-    });
+Kwf.onElementHide = function(selector, fn, options) {
+    Kwf._addReadyHandler('ext', 'hide', selector, fn, options);
 };
 
-Kwf.onElementWidthChange = function(selector, fn, scope, options) {
-    Kwf._readyHandlers.push({
-        selector: selector,
-        fn: fn,
-        scope: scope,
-        options: options || {},
-        num: Kwf._readyHandlers.length, //unique number
-        type: 'extWidthChange',
-        onAction: 'widthChange'
-    });
+Kwf.onElementWidthChange = function(selector, fn, options) {
+    Kwf._addReadyHandler('ext', 'widthChange', selector, fn, options);
 };
-
-Kwf._callOnElementReady = function(hndl, el) {
-    Ext.query(hndl.selector, el).each(function(el) {
-        if (hndl.options.checkVisibility && !Ext.fly(el).isVisible(true)) return;
-        if (!el.initDone) el.initDone = {};
-        if (el.initDone[hndl.num]) return;
-        el.initDone[hndl.num] = true;
-        el = Ext.get(el);
-        var config = {};
-        var configEl = el.child('> input[type="hidden"]')
-        if (configEl) {
-            try {
-                config = Ext.decode(configEl.getValue());
-            } catch (err) {}
-        }
-        hndl.fn.call(hndl.scope, el, config);
-    }, this);
-}
