@@ -21,7 +21,8 @@ Kwf.onElementReady('a', function onElementReadyLightbox(el) {
             ev.stopEvent();
         }, el, { stopEvent: true });
     }
-});
+}, { defer: true });
+
 Kwf.onElementReady('.kwfLightbox', function onElementReadyLightbox(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
     if (el.dom.kwfLightbox) return;

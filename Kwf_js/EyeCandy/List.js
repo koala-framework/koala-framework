@@ -1,6 +1,6 @@
 Ext.namespace("Kwf.EyeCandy");
 
-Kwf.onElementShow('.kwfEyeCandyList', function onContentReadyEyeCandyList(el) {
+Kwf.onElementShow('.kwfEyeCandyList', function initEyeCandyList(el) {
     var opts = Ext.fly(el).down('.options', true);
     if (opts) {
         opts = Ext.decode(opts.value);
@@ -12,7 +12,7 @@ Kwf.onElementShow('.kwfEyeCandyList', function onContentReadyEyeCandyList(el) {
         opts.el = el;
         el.list = new cls(opts);
     }
-}, this, { defer: true });
+}, { defer: true });
 
 Kwf.EyeCandy.List = function(cfg) {
     Ext.apply(this, cfg);
