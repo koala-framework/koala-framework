@@ -16,18 +16,21 @@ if (!Kwf.isApp) {
         }
         var t = Kwf.Utils.BenchmarkBox.now();
         //console.profile("callOnContentReady body");
-        Kwf.callOnContentReady(document.body, { action: 'render', deferred: false });
+        Kwf._skipDeferred = true;
+        Kwf.callOnContentReady(document.body, { action: 'render' });
+        delete Kwf._skipDeferred;
         //console.profileEnd();
         Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
         Kwf.Utils.BenchmarkBox.create({
             counters: Kwf._onReadyStats,
             type: 'onReady'
         });
-
         (function() {
             Kwf._deferredStart = Kwf.Utils.BenchmarkBox.now();
             //console.profile("callOnContentReady body deferred");
-            Kwf.callOnContentReady(document.body, { action: 'render', deferred: true });
+            Kwf._skipDeferred = false;
+            Kwf.callOnContentReady(document.body, { action: 'render' });
+            delete Kwf._skipDeferred;
             //console.profileEnd();
         }).defer(100);
 
@@ -37,6 +40,7 @@ if (!Kwf.isApp) {
     });
 }
 
+Kwf._skipDeferred;
 Kwf._deferredStart = null;
 Kwf._onReadyIsCalling = false;
 Kwf._onReadyCallQueue = [];
@@ -102,11 +106,13 @@ Kwf.callOnContentReady = function(renderedEl, options)
             var hndl = Kwf._readyHandlers[i];
 
 
-            if (options.deferred === true) {
+            //Kwf._skipDeferred gets set before callOnContentReady(body)
+            //can not be part of options as it would be missing in recursive calls
+            if (Kwf._skipDeferred === true) {
                 if (hndl.options.defer) {
                     continue;
                 }
-            } else if (options.deferred === false) {
+            } else if (Kwf._skipDeferred === false) {
                 if (!hndl.options.defer) {
                     continue;
                 }
@@ -277,7 +283,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
     }
 
-    if (options.deferred === true) {
+    if (Kwf._skipDeferred === false) {
         var processNext = function processNext() {
             Kwf.Utils.BenchmarkBox.count('chunks');
             var t = Kwf.Utils.BenchmarkBox.now();
