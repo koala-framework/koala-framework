@@ -266,10 +266,32 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
     }
 
-    while (Kwf._onReadyElQueue.length) {
-        _processOnReadyElQueueEntry();
+    if (options.deferred === true) {
+        var processNext = function processNext() {
+            Kwf.Utils.BenchmarkBox.count('chunks');
+            var t = Kwf.Utils.BenchmarkBox.now();
+            while (Kwf._onReadyElQueue.length && Kwf.Utils.BenchmarkBox.now()-t < 50) {
+                _processOnReadyElQueueEntry();
+            }
+            if (Kwf._onReadyElQueue.length) {
+                processNext.defer(this, 1);
+            } else {
+                Kwf._onReadyIsCalling = false;
+                Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-Kwf._deferredStart);
+                Kwf.Utils.BenchmarkBox.create({
+                    counters: Kwf._onReadyStats,
+                    type: 'onReady defer'
+                });
+            }
+        };
+        processNext();
+    } else {
+        while (Kwf._onReadyElQueue.length) {
+            _processOnReadyElQueueEntry();
+        }
+        Kwf._onReadyIsCalling = false;
     }
-    Kwf._onReadyIsCalling = false;
+
 };
 
 
