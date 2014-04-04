@@ -17,7 +17,7 @@ Kwf.Tabs = function(el) {
     this.fxDuration = .5;
 
     this.tabsContents = this.el.createChild({
-        tag: 'div', cls: 'kwfTabsContents'
+        tag: 'div', cls: 'kwfTabsContents', 'data-width': '100%'
     }, this.el.first());
     var tabsLinks = this.el.createChild({
         tag: 'div', cls: 'kwfTabsLinks'

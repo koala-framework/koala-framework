@@ -3,7 +3,7 @@
  *
  * Basically simulates media queries for elements
  */
-Kwf.Utils.ResponsiveEl = function(selector, widths)
+Kwf.Utils.ResponsiveEl = function(selector, widths, options)
 {
     var initEl;
 
@@ -12,6 +12,7 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
         if (!widths instanceof Array) widths = [widths];
         initEl = function initResponsiveEl(el) {
             var changed = false;
+            var elWidth = Kwf.Utils.Element.getCachedWidth(el);
             widths.each(function(w) {
                 if (typeof w != 'object') {
                     w = {
@@ -20,10 +21,10 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
                     };
                 }
                 var match = true;
-                if (w.minWidth && !(el.getWidth() > w.minWidth)) {
+                if (w.minWidth && !(elWidth > w.minWidth)) {
                     match = false;
                 }
-                if (match && w.maxWidth && !(el.getWidth() < w.maxWidth)) {
+                if (match && w.maxWidth && !(elWidth < w.maxWidth)) {
                     match = false;
                 }
                 if (match) {
@@ -49,5 +50,5 @@ Kwf.Utils.ResponsiveEl = function(selector, widths)
 
     }
 
-    Kwf.onElementWidthChange(selector, initEl);
+    Kwf.onElementWidthChange(selector, initEl, window, options);
 };

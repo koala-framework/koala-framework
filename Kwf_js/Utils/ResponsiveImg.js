@@ -1,17 +1,8 @@
-Kwf._responsiveImgEls = [];
-Kwf._responsiveImgSelectors = [];
 Kwf.DONT_HASH_TYPE_PREFIX = 'dh-';
 
 Kwf.Utils.ResponsiveImg = function (selector) {
-    //Kwf._responsiveImgSelectors.push(selector);
     Kwf.onElementWidthChange(selector, function initResponsiveImg(el) {
         if (!el.responsiveImgInitDone) {
-            // check if this element is already known and therefore in array or not
-            if (!el.responsiveImgInArray) {
-                el.responsiveImgInArray = true;
-                Kwf._responsiveImgEls.push(el);
-            }
-            if (el.getWidth() == 0) return;
             Kwf.Utils._initResponsiveImgEl(el);
         } else {
             Kwf.Utils._checkResponsiveImgEl(el);
@@ -44,13 +35,15 @@ Kwf.Utils._getResponsiveWidthSteps = function (minWidth, maxWidth) {
 };
 
 Kwf.Utils._initResponsiveImgEl = function (el) {
+    var elWidth = Kwf.Utils.Element.getCachedWidth(el);
+    if (elWidth == 0) return;
     el.responsiveImgInitDone = true;
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
     var baseUrl = el.dom.getAttribute("data-src");
     var minWidth = parseInt(el.dom.getAttribute("data-min-width"));
     var maxWidth = parseInt(el.dom.getAttribute("data-max-width"));
 
-    el.loadedWidth = el.getWidth();
+    el.loadedWidth = elWidth;
     el.baseUrl = baseUrl;
     el.minWidth = minWidth;
     el.maxWidth = maxWidth;
@@ -64,7 +57,7 @@ Kwf.Utils._initResponsiveImgEl = function (el) {
 };
 
 Kwf.Utils._checkResponsiveImgEl = function (responsiveImgEl) {
-    var elWidth = responsiveImgEl.getWidth();
+    var elWidth = Kwf.Utils.Element.getCachedWidth(responsiveImgEl);
     if (elWidth == 0) return;
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
     var width = Kwf.Utils._getResponsiveWidthStep(elWidth * devicePixelRatio,
