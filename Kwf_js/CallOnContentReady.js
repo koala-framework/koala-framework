@@ -1,11 +1,14 @@
-/* fn: fn, 
- * scope: scope, 
- * options: options || {}, 
+Kwf.enableOnReadyConsoleProfile = false;
+
+/* fn: fn,
+ * scope: scope,
+ * options: options || {},
  * type: [jquery|ext],
  * num: unique number, //used to mark in initDone
  * selector: selector, // null if onContentReady
  * */
 Kwf._readyHandlers = [];
+
 
 if (!Kwf.isApp) {
     $(document).ready(function() {
@@ -15,11 +18,11 @@ if (!Kwf.isApp) {
             return;
         }
         var t = Kwf.Utils.BenchmarkBox.now();
-        //console.profile("callOnContentReady body");
+        if (Kwf.enableOnReadyConsoleProfile) console.profile("callOnContentReady body");
         Kwf._skipDeferred = true;
         Kwf.callOnContentReady(document.body, { action: 'render' });
         delete Kwf._skipDeferred;
-        //console.profileEnd();
+        if (Kwf.enableOnReadyConsoleProfile) console.profileEnd();
         Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
         Kwf.Utils.BenchmarkBox.create({
             counters: Kwf._onReadyStats,
@@ -27,12 +30,11 @@ if (!Kwf.isApp) {
         });
         (function() {
             Kwf._deferredStart = Kwf.Utils.BenchmarkBox.now();
-            //console.profile("callOnContentReady body deferred");
+            if (Kwf.enableOnReadyConsoleProfile) console.profile("callOnContentReady body deferred");
             Kwf._skipDeferred = false;
             Kwf.callOnContentReady(document.body, { action: 'render' });
             delete Kwf._skipDeferred;
-            //console.profileEnd();
-        }).defer(100);
+        }).defer(10);
 
         Ext.fly(window).on('resize', function() {
             Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
@@ -296,6 +298,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
             } else {
                 Kwf._onReadyIsCalling = false;
                 Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-Kwf._deferredStart);
+                if (Kwf.enableOnReadyConsoleProfile) console.profileEnd();
                 Kwf.Utils.BenchmarkBox.create({
                     counters: Kwf._onReadyStats,
                     type: 'onReady defer'
