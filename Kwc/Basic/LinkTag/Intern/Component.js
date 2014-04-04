@@ -1,4 +1,4 @@
-Kwf.onElementReady('.kwcBasicLinkTagIntern', function(el){
+Kwf.onElementReady('.kwcBasicLinkTagIntern', function linkTagIntern(el){
     var pos = el.dom.href.indexOf('#');
     if (pos > 0 && el.dom.href.substr(0, pos) === location.href.substr(0, pos)) {
         var target = $(el.dom.href.substr(pos));
@@ -11,4 +11,4 @@ Kwf.onElementReady('.kwcBasicLinkTagIntern', function(el){
             })
         }
     }
-});
+}, { defer: true });

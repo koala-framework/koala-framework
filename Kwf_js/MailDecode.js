@@ -1,4 +1,4 @@
-Kwf.onElementReady('a', function(el)
+Kwf.onElementReady('a', function decodeMailHref(el)
 {
     var atDecoding = '(kwfat)';
     var dotDecoding = '(kwfdot)';
@@ -8,8 +8,8 @@ Kwf.onElementReady('a', function(el)
         el.href = el.href.replace(atDecoding, '@');
         el.href = el.href.replace(dotDecoding, '.');
     }
-});
-Kwf.onElementReady('span.kwfEncodedMail', function(el)
+}, { defer: true });
+Kwf.onElementReady('span.kwfEncodedMail', function decodeMail(el)
 {
     var atDecoding = '(kwfat)';
     var dotDecoding = '(kwfdot)';

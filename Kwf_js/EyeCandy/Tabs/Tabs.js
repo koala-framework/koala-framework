@@ -1,4 +1,4 @@
-Kwf.onElementReady('div.kwfTabs', function(el) {
+Kwf.onElementReady('div.kwfTabs', function tabs(el) {
     el.tabsObject = new Kwf.Tabs(el);
 });
 

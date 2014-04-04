@@ -1,35 +1,28 @@
-Kwf.onContentReady(function(el)
-{
-    var fadeComponents = $(el).find('div.kwfFadeElements');
-    fadeComponents.each(function(index, element) {
-        var elementWrapper = $(element);
-        if (element.fadeElementsObject) return; // nur einmal initialisieren
+Kwf.onJElementReady('div.kwfFadeElements', function fadeElements(element) {
+    var fadeClass = element.find('.fadeClass');
+    var selector = element.find('.fadeSelector')[0].value;
+    var config = element.find('.fadeConfig'); // optional
+    if (config && config[0]) {
+        config = $.parseJSON(config[0].value);
+    } else {
+        config = { };
+    }
+    var textSelector = element.find('.textSelector'); // optional
+    if (textSelector && textSelector[0]) {
+        config.textSelector = textSelector[0].value;
+    }
 
-        var fadeClass = elementWrapper.find('.fadeClass');
-        var selector = elementWrapper.find('.fadeSelector')[0].value;
-        var config = elementWrapper.find('.fadeConfig'); // optional
-        if (config && config[0]) {
-            config = $.parseJSON(config[0].value);
-        } else {
-            config = { };
-        }
-        var textSelector = elementWrapper.find('.textSelector'); // optional
-        if (textSelector && textSelector[0]) {
-            config.textSelector = textSelector[0].value;
-        }
+    config.selector = selector;
+    config.selectorRoot = element;
 
-        config.selector = selector;
-        config.selectorRoot = element;
+    var cls = Kwf.Fade.Elements;
+    if (fadeClass.length) {
+        cls = eval(fadeClass[0].value);
+        delete fadeClass;
+    }
 
-        var cls = Kwf.Fade.Elements;
-        if (fadeClass.length) {
-            cls = eval(fadeClass[0].value);
-            delete fadeClass;
-        }
-
-        element.fadeElementsObject = new cls(config);
-        element.fadeElementsObject.start();
-    });
+    element.fadeElementsObject = new cls(config);
+    element.fadeElementsObject.start();
 });
 
 if (!Kwf.Fade) Kwf.Fade = {};

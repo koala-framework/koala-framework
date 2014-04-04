@@ -1,4 +1,4 @@
-Kwf.onContentReady(function(el) {
+Kwf.onContentReady(function kwcPreviewLink(el) {
     if (location.search.match(/[\?&]kwcPreview/)) {
         Ext.get(el).select('a', true).each(function(a) {
             if (a.dom.href.indexOf(window.location.host) !== -1) { // intern
@@ -10,5 +10,5 @@ Kwf.onContentReady(function(el) {
             }
         }, this);
     }
-}, this, { priority: -10 });
+}, { priority: -10 });
 // priority because this code has to be load before every element uses a link in preview mode

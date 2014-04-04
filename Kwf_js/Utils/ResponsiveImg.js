@@ -1,7 +1,7 @@
 Kwf.DONT_HASH_TYPE_PREFIX = 'dh-';
 
 Kwf.Utils.ResponsiveImg = function (selector) {
-    Kwf.onElementWidthChange(selector, function initResponsiveImg(el) {
+    Kwf.onElementWidthChange(selector, function responsiveImg(el) {
         if (!el.responsiveImgInitDone) {
             Kwf.Utils._initResponsiveImgEl(el);
         } else {

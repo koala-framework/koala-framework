@@ -239,7 +239,9 @@ Kwf.callOnContentReady = function(renderedEl, options)
         queueEntry.fn.call(queueEntry.options.scope || window, el, config);
         Kwf.Utils.BenchmarkBox.time(timerName, Kwf.Utils.BenchmarkBox.now()-t);
         var fnName = queueEntry.fn.name;
-        if (!fnName) fnName = 'unknown';
+        if (!fnName) {
+            fnName = 'unknown';
+        }
         Kwf.Utils.BenchmarkBox.time('fn: '+fnName, Kwf.Utils.BenchmarkBox.now()-t);
     };
     function _processOnReadyElQueueEntry()

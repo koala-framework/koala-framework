@@ -20,7 +20,7 @@ Kwf.Utils.Element.getCachedWidth = function(el) {
     }
     return ret;
 };
-Kwf.onContentReady(function(el, options) {
+Kwf.onContentReady(function clearCachedWidth(el, options) {
     if (options.action == 'widthChange' || options.action == 'show') {
         for (var i=0; i<Kwf.Utils.Element._cachedWidthEls.length; i++) {
             var e = Kwf.Utils.Element._cachedWidthEls[i];

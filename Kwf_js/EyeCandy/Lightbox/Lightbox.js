@@ -1,4 +1,4 @@
-Kwf.onElementReady('a', function onElementReadyLightbox(el) {
+Kwf.onElementReady('a', function lightboxLink(el) {
     el = el.dom;
     if (el.kwfLightbox) return;
     var m = el.rel.match(/(^lightbox| lightbox)({.*?})?/);
@@ -23,7 +23,7 @@ Kwf.onElementReady('a', function onElementReadyLightbox(el) {
     }
 }, { defer: true });
 
-Kwf.onElementReady('.kwfLightbox', function onElementReadyLightbox(el) {
+Kwf.onElementReady('.kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
     if (el.dom.kwfLightbox) return;
     var lightboxEl = Ext.get(el);
@@ -48,7 +48,7 @@ Kwf.onElementReady('.kwfLightbox', function onElementReadyLightbox(el) {
     Kwf.callOnContentReady(l.contentEl.dom, {newRender: false});
 });
 
-Kwf.onContentReady(function onContentReadyLightbox(readyEl, options)
+Kwf.onContentReady(function lightboxContent(readyEl, options)
 {
     if (!Kwf.EyeCandy.Lightbox.currentOpen) return;
 

@@ -1,4 +1,4 @@
-Kwf.onElementReady('a', function onElementReadyLinkExtern(lnk) {
+Kwf.onElementReady('a', function linkExtern(lnk) {
         var rels = lnk.dom.rel.split(' ');
         Ext.each(rels, function(rel) {
             if (rel.match(/^popup/)) {
