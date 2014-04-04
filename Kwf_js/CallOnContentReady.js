@@ -231,6 +231,17 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
     }
 
+    function _callQueueFn(timerName, queueEntry, config)
+    {
+        var t = Kwf.Utils.BenchmarkBox.now();
+        var el = queueEntry.el;
+        el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
+        queueEntry.fn.call(queueEntry.options.scope || window, el, config);
+        Kwf.Utils.BenchmarkBox.time(timerName, Kwf.Utils.BenchmarkBox.now()-t);
+        var fnName = queueEntry.fn.name;
+        if (!fnName) fnName = 'unknown';
+        Kwf.Utils.BenchmarkBox.time('fn: '+fnName, Kwf.Utils.BenchmarkBox.now()-t);
+    };
     function _processOnReadyElQueueEntry()
     {
         var queueEntry = Kwf._onReadyElQueue.shift();
@@ -254,30 +265,18 @@ Kwf.callOnContentReady = function(renderedEl, options)
                     }
                 } catch (err) {}
             }
-            var t = Kwf.Utils.BenchmarkBox.now();
-            el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
-            queueEntry.fn.call(queueEntry.options.scope || window, el, config);
-            Kwf.Utils.BenchmarkBox.time('onRender', Kwf.Utils.BenchmarkBox.now()-t);
+            _callQueueFn('onRender', queueEntry, config);
         } else {
             if (queueEntry.onAction == 'show') {
                 if (Ext.fly(el).getWidth() > 0) {
-                    var t = Kwf.Utils.BenchmarkBox.now();
-                    el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
-                    queueEntry.fn.call(queueEntry.options.scope || window, el);
-                    Kwf.Utils.BenchmarkBox.time('onShow', Kwf.Utils.BenchmarkBox.now()-t);
+                    _callQueueFn('onShow', queueEntry);
                 }
             } else if (queueEntry.onAction == 'hide') {
                 if (Ext.fly(el).getWidth() == 0) {
-                    var t = Kwf.Utils.BenchmarkBox.now();
-                    el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
-                    queueEntry.fn.call(queueEntry.options.scope || window, el);
-                    Kwf.Utils.BenchmarkBox.time('onHide', Kwf.Utils.BenchmarkBox.now()-t);
+                    _callQueueFn('onHide', queueEntry);
                 }
             } else if (queueEntry.onAction == 'widthChange') {
-                var t = Kwf.Utils.BenchmarkBox.now();
-                el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
-                queueEntry.fn.call(queueEntry.options.scope || window, el);
-                Kwf.Utils.BenchmarkBox.time('onWidthChange', Kwf.Utils.BenchmarkBox.now()-t);
+                _callQueueFn('onWidthChange', queueEntry);
             }
 
         }
