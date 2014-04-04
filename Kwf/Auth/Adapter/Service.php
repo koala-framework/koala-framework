@@ -29,9 +29,19 @@ class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
     public function authenticate()
     {
         if (empty($this->_identity)) {
-            throw new Kwf_Exception('A value for the identity was not provided prior to authentication with Kwf_Auth_Adapter_Service.');
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity,
+                array(
+                    trlKwf('User is required'),
+                )
+            );
         } else if ($this->_credential === null) {
-            throw new Kwf_Exception('A credential value was not provided prior to authentication with Kwf_Auth_Adapter_Service.');
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity,
+                array(
+                    trlKwf('Password is required'),
+                )
+            );
         }
 
         $cache = $this->_getCache();
