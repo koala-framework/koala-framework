@@ -14,19 +14,21 @@ if (!Kwf.isApp) {
             //in that case no contentReady needs to be called
             return;
         }
+        var t = Kwf.Utils.BenchmarkBox.now();
         //console.profile("callOnContentReady body");
-        Kwf._resetOnReadyStats();
-        Kwf.callOnContentReady(document.body, { action: 'render' });
+        Kwf.callOnContentReady(document.body, { action: 'render', deferred: false });
         //console.profileEnd();
-        //console.log(Kwf._onReadyStats);
+        Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
+        Kwf.Utils.BenchmarkBox.create({
+            counters: Kwf._onReadyStats,
+            type: 'onReady'
+        });
 
         (function() {
-            Kwf._onReadySkipDeferred = false;
-            //console.profile("callOnContentReady body");
-            Kwf._resetOnReadyStats();
-            Kwf.callOnContentReady(document.body, { action: 'render' });
+            Kwf._deferredStart = Kwf.Utils.BenchmarkBox.now();
+            //console.profile("callOnContentReady body deferred");
+            Kwf.callOnContentReady(document.body, { action: 'render', deferred: true });
             //console.profileEnd();
-            //console.log(Kwf._onReadyStats);
         }).defer(100);
 
         Ext.fly(window).on('resize', function() {
@@ -35,31 +37,13 @@ if (!Kwf.isApp) {
     });
 }
 
-Kwf._onReadySkipDeferred = true;
+Kwf._deferredStart = null;
 Kwf._onReadyIsCalling = false;
 Kwf._onReadyCallQueue = [];
 Kwf._onReadyElQueue = [];
 Kwf._elQueueNum = 0;
 Kwf._onReadyElSortCache = {};
 Kwf._elCacheBySelector = {};
-Kwf._resetOnReadyStats = function() {
-    Kwf._onReadyStats = {
-        callOnContentReady: 0,
-        onContentReady: 0,
-        query: 0,
-        queryTime: 0,
-        querySkip: 0,
-        queryCache: 0,
-        onRender: 0,
-        onShow: 0,
-        onHide: 0,
-        onWidthChange: 0,
-        sort: 0,
-        sortTime: 0,
-        sortCacheMiss: 0,
-        sortCacheHit: 0
-    };
-}
 
 /**
  * @param element the added/changed dom element
@@ -67,7 +51,7 @@ Kwf._resetOnReadyStats = function() {
  */
 Kwf.callOnContentReady = function(renderedEl, options)
 {
-    Kwf._onReadyStats.callOnContentReady++;
+    Kwf.Utils.BenchmarkBox.count('callOnContentReady');
     if (!options) options = {};
     if (options.newRender) {
         delete options.newRender;
@@ -89,28 +73,32 @@ Kwf.callOnContentReady = function(renderedEl, options)
         options: options
     });
 
+
     var addToQueue = function(onActions) {
+
+
         for (var i = 0; i < Kwf._readyHandlers.length; i++) {
             var hndl = Kwf._readyHandlers[i];
 
-            if (Kwf._onReadySkipDeferred) {
+
+            if (options.deferred === true) {
                 if (hndl.options.defer) {
                     continue;
                 }
-            } else {
+            } else if (options.deferred === false) {
                 if (!hndl.options.defer) {
                     continue;
                 }
             }
-
             if (onActions.indexOf(hndl.onAction) != -1) {
-                if (options.action != 'render' && Kwf._elCacheBySelector[hndl.selector]) {
+
+                if (Kwf._elCacheBySelector[hndl.selector]) {
                     if (Kwf._elCacheBySelector[hndl.selector].length === 0) {
                         //Optimize: if we never got element by that selector, skip query
-                        Kwf._onReadyStats.querySkip++;
+                        Kwf.Utils.BenchmarkBox.count('querySkip');
                         continue;
                     }
-                    Kwf._onReadyStats.queryCache++;
+                    Kwf.Utils.BenchmarkBox.count('queryCache');
                     var els = [];
                     for (var j=0; j<Kwf._elCacheBySelector[hndl.selector].length; j++) {
                         if (renderedEl == document.body || $.contains(renderedEl, Kwf._elCacheBySelector[hndl.selector][j])) {
@@ -118,11 +106,9 @@ Kwf.callOnContentReady = function(renderedEl, options)
                         }
                     }
                 } else {
-                    Kwf._onReadyStats.query++;
-                    var t = window.performance.now();
+                    var t = Kwf.Utils.BenchmarkBox.now();
                     var els = $.makeArray($(renderedEl).find(hndl.selector));
-                    t = window.performance.now() - t;
-                    Kwf._onReadyStats.queryTime += t;
+                    Kwf.Utils.BenchmarkBox.time('query', Kwf.Utils.BenchmarkBox.now() - t);
                     if (options.action == 'render' && renderedEl == document.body) {
                         Kwf._elCacheBySelector[hndl.selector] = els;
                     }
@@ -141,6 +127,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
                         while (n = n.parentNode) {
                             parentsCount++;
                         }
+                        Kwf.Utils.BenchmarkBox.count('readyEl');
                         Kwf._onReadyElQueue.push({
                             el: els[j],
                             fn: hndl.fn,
@@ -170,8 +157,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         addToQueue(['widthChange']);
     }
 
-    Kwf._onReadyStats.sort++;
-    var t = window.performance.now();
+    var t = Kwf.Utils.BenchmarkBox.now();
     Kwf._onReadyElQueue.sort(function sortOnReadyElQueue(a, b) {
         if (a.priority != b.priority) {
             return a.priority - b.priority;
@@ -183,8 +169,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
             }
         }
     });
-    t = window.performance.now() - t;
-    Kwf._onReadyStats.sortTime += t;
+    Kwf.Utils.BenchmarkBox.time('sort', Kwf.Utils.BenchmarkBox.now() - t);
 
     if (Kwf._onReadyIsCalling) {
         return;
@@ -194,8 +179,6 @@ Kwf.callOnContentReady = function(renderedEl, options)
 
     while (Kwf._onReadyCallQueue.length) {
         var queueEntry = Kwf._onReadyCallQueue.pop();
-        renderedEl = queueEntry.renderedEl;
-        options = queueEntry.options;
 
         Kwf._readyHandlers.sort(function(a, b) {
             return (a.options.priority || 0) - (b.options.priority || 0);
@@ -203,61 +186,69 @@ Kwf.callOnContentReady = function(renderedEl, options)
         for (var i = 0; i < Kwf._readyHandlers.length; i++) {
             var hndl = Kwf._readyHandlers[i];
             if (hndl.selector == null) {
-                Kwf._onReadyStats.onContentReady++;
-                hndl.fn.call(hndl.scope || window, renderedEl, options);
+                var t = Kwf.Utils.BenchmarkBox.now();
+                hndl.fn.call(hndl.scope || window, queueEntry.renderedEl, queueEntry.options);
+                Kwf.Utils.BenchmarkBox.time('onContentReady', Kwf.Utils.BenchmarkBox.now()-t);
             }
         }
     }
 
-    while (Kwf._onReadyElQueue.length) {
-
+    function _processOnReadyElQueueEntry()
+    {
         var queueEntry = Kwf._onReadyElQueue.shift();
         var el = queueEntry.el;
         if (queueEntry.onAction == 'render') {
             if (queueEntry.options.checkVisibility && Ext.fly(el).getWidth() == 0) {
-                continue;
+                return;
             }
             if (!el.initDone) el.initDone = {};
             if (el.initDone[queueEntry.num]) {
-                continue;
+                return;
             }
             el.initDone[queueEntry.num] = true;
             var config = {};
-            var configEl = Ext.fly(el).child('input[type="hidden"]', true)
-            if (configEl) {
+            var configEl = $(el).find('> input[type="hidden"]')
+            if (configEl.length) {
                 try {
-                    config = $.parseJSON(configEl.value);
+                    var v = configEl.get(0).value;
+                    if (v.substr(0, 1) == '{') {
+                        config = $.parseJSON(v);
+                    }
                 } catch (err) {}
             }
-            Kwf._onReadyStats.onRender++;
-
+            var t = Kwf.Utils.BenchmarkBox.now();
             if (queueEntry.type == 'ext') {
                 queueEntry.fn.call(queueEntry.scope, Ext.get(el), config);
             } else if (queueEntry.type == 'jquery') {
                 queueEntry.fn.call(queueEntry.scope, $(el), config);
-
             }
+            Kwf.Utils.BenchmarkBox.time('onRender', Kwf.Utils.BenchmarkBox.now()-t);
         } else {
             if (queueEntry.onAction == 'show') {
                 if (Ext.fly(el).getWidth() > 0) {
-                    Kwf._onReadyStats.onShow++;
+                    var t = Kwf.Utils.BenchmarkBox.now();
                     queueEntry.fn.call(queueEntry.scope, Ext.get(el));
+                    Kwf.Utils.BenchmarkBox.time('onShow', Kwf.Utils.BenchmarkBox.now()-t);
                 }
             } else if (queueEntry.onAction == 'hide') {
                 if (Ext.fly(el).getWidth() == 0) {
-                    Kwf._onReadyStats.onHide++;
+                    var t = Kwf.Utils.BenchmarkBox.now();
                     queueEntry.fn.call(queueEntry.scope, Ext.get(el));
+                    Kwf.Utils.BenchmarkBox.time('onHide', Kwf.Utils.BenchmarkBox.now()-t);
                 }
             } else if (queueEntry.onAction == 'widthChange') {
-                Kwf._onReadyStats.onWidthChange++;
+                var t = Kwf.Utils.BenchmarkBox.now();
                 queueEntry.fn.call(queueEntry.scope, Ext.get(el));
+                Kwf.Utils.BenchmarkBox.time('onWidthChange', Kwf.Utils.BenchmarkBox.now()-t);
             }
 
         }
     }
 
+    while (Kwf._onReadyElQueue.length) {
+        _processOnReadyElQueueEntry();
+    }
     Kwf._onReadyIsCalling = false;
-
 };
 
 
