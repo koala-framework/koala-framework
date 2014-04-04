@@ -1,0 +1,35 @@
+.benchmarkContainer {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 1000;
+    width: 100px;
+}
+.benchmarkBox {
+    text-align: left;
+    width: 100px;
+}
+
+.benchmarkBox:hover {
+}
+
+.benchmarkBox a.showContent {
+    font-family: Verdana;
+    font-size: 10px;
+    padding: 5px;
+}
+.benchmarkBox .benchmarkBoxContent {
+    font-family: Verdana;
+    font-size: 10px;
+    background-color: white;
+    width: 1500px;
+    padding: 5px; padding-top: 0;
+    display: none;
+}
+.benchmarkBox.visible {
+    width: 200px;
+    margin-left: -100px;
+}
+.benchmarkBox.visible .benchmarkBoxContent {
+    display: block;
+}
