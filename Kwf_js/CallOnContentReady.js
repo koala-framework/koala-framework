@@ -73,6 +73,15 @@ Kwf.callOnContentReady = function(renderedEl, options)
         options: options
     });
 
+    if (options.action == 'render') {
+        //new elements rendered, clear cache
+        Kwf._elCacheBySelector = {};
+
+        var t = Kwf.Utils.BenchmarkBox.now();
+        var html = renderedEl.innerHTML;
+        Kwf.Utils.BenchmarkBox.time('innerHTML', Kwf.Utils.BenchmarkBox.now()-t);
+    }
+
 
     var addToQueue = function(onActions) {
 
@@ -91,6 +100,18 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 }
             }
             if (onActions.indexOf(hndl.onAction) != -1) {
+
+                if (options.action == 'render' && !Kwf._elCacheBySelector[hndl.selector]) {
+                    var t = Kwf.Utils.BenchmarkBox.now();
+                    var m = hndl.selector.match(/^[a-z]*\.([a-z]+)/i)
+                    if (m) {
+                        //do a stupid text search on the selector, using that we can skip query for many selectors that don't exist in the current el
+                        if (html.indexOf(m[1]) == -1) {
+                            Kwf._elCacheBySelector[hndl.selector] = [];
+                        }
+                    }
+                    Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
+                }
 
                 if (Kwf._elCacheBySelector[hndl.selector]) {
                     if (Kwf._elCacheBySelector[hndl.selector].length === 0) {
