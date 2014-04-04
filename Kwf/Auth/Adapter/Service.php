@@ -32,14 +32,14 @@ class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity,
                 array(
-                    trlKwf('User is required'),
+                    trlKwf('Please specify a user name.'),
                 )
             );
         } else if ($this->_credential === null) {
             return new Zend_Auth_Result(
                 Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity,
                 array(
-                    trlKwf('Password is required'),
+                    trlKwf('Please specify a password.'),
                 )
             );
         }

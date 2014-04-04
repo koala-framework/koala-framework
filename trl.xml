@@ -11364,5 +11364,15 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Session abgelaufen, bitte neu einloggen.</de>
 <id>2188</id>
 </text>
+<text>
+<en>Please specify a user name.</en>
+<de>Bitte geben Sie einen Benutzernamen an.</de>
+<id>2189</id>
+</text>
+<text>
+<en>Please specify a password.</en>
+<de>Bitte geben Sie ein Passwort an.</de>
+<id>2190</id>
+</text>
 </trl>
 
