@@ -47,7 +47,6 @@ Kwf._deferredStart = null;
 Kwf._onReadyIsCalling = false;
 Kwf._onReadyCallQueue = [];
 Kwf._onReadyElQueue = [];
-Kwf._elQueueNum = 0;
 Kwf._onReadyElSortCache = {};
 Kwf._elCacheBySelector = {};
 
@@ -188,7 +187,6 @@ Kwf.callOnContentReady = function(renderedEl, options)
                         type: hndl.type,
                         onAction: hndl.onAction,
                         selector: hndl.selector,
-                        queueNum: Kwf._elQueueNum++,
                         priority: hndl.options.priority || 0,
                         parentsCount: parentsCount
                     });
