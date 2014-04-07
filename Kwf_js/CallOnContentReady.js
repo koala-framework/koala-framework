@@ -251,7 +251,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         var queueEntry = Kwf._onReadyElQueue.shift();
         var el = queueEntry.el;
         if (queueEntry.onAction == 'render') {
-            if (queueEntry.options.checkVisibility && Ext.fly(el).getWidth() == 0) {
+            if (queueEntry.options.checkVisibility && !$(el).is(':visible')) {
                 return;
             }
             if (!el.initDone) el.initDone = {};
@@ -272,11 +272,11 @@ Kwf.callOnContentReady = function(renderedEl, options)
             _callQueueFn('onRender', queueEntry, config);
         } else {
             if (queueEntry.onAction == 'show') {
-                if (Ext.fly(el).getWidth() > 0) {
+                if ($(el).is(':visible')) {
                     _callQueueFn('onShow', queueEntry);
                 }
             } else if (queueEntry.onAction == 'hide') {
-                if (Ext.fly(el).getWidth() == 0) {
+                if (!$(el).is(':visible')) {
                     _callQueueFn('onHide', queueEntry);
                 }
             } else if (queueEntry.onAction == 'widthChange') {
