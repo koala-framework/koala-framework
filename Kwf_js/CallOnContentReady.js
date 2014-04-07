@@ -119,8 +119,17 @@ Kwf.callOnContentReady = function(renderedEl, options)
                     continue;
                 }
             }
-            if (onActions.indexOf(hndl.onAction) == -1) {
-                continue;
+
+            if (hndl.options.checkVisibility) {
+                if (renderedEl != document.body && !$(renderedEl).is(':visible')) {
+                    continue;
+                }
+                //if checkVisibility is activated, don't skip based on onActions as
+                //even a widthChange action could make an element visible (media queries)
+            } else {
+                if (onActions.indexOf(hndl.onAction) == -1) {
+                    continue;
+                }
             }
 
             if (options.action == 'render' && !Kwf._elCacheBySelector[hndl.selector]) {
