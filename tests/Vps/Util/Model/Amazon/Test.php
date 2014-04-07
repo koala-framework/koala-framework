@@ -9,6 +9,9 @@ class Vps_Util_Model_Amazon_Test extends Vps_Test_TestCase
     public function setUp()
     {
         parent::setUp();
+        if (!Vps_Registry::get('config')->amazon || !Vps_Registry::get('config')->amazon->key) {
+            $this->markTestSkipped();
+        }
         sleep(1);
         Vps_Model_Abstract::clearInstances();
     }
