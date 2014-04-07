@@ -119,69 +119,70 @@ Kwf.callOnContentReady = function(renderedEl, options)
                     continue;
                 }
             }
-            if (onActions.indexOf(hndl.onAction) != -1) {
+            if (onActions.indexOf(hndl.onAction) == -1) {
+                continue;
+            }
 
-                if (options.action == 'render' && !Kwf._elCacheBySelector[hndl.selector]) {
-                    var t = Kwf.Utils.BenchmarkBox.now();
-                    var m = hndl.selector.match(/^[a-z]*\.([a-z]+)/i)
-                    if (m) {
-                        //do a stupid text search on the selector, using that we can skip query for many selectors that don't exist in the current el
-                        if (html.indexOf(m[1]) == -1) {
-                            Kwf._elCacheBySelector[hndl.selector] = [];
-                        }
-                    }
-                    Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
-                }
-
-                if (Kwf._elCacheBySelector[hndl.selector]) {
-                    if (Kwf._elCacheBySelector[hndl.selector].length === 0) {
-                        //Optimize: if we never got element by that selector, skip query
-                        Kwf.Utils.BenchmarkBox.count('querySkip');
-                        continue;
-                    }
-                    Kwf.Utils.BenchmarkBox.count('queryCache');
-                    var els = [];
-                    for (var j=0; j<Kwf._elCacheBySelector[hndl.selector].length; j++) {
-                        if (renderedEl == document.body || $.contains(renderedEl, Kwf._elCacheBySelector[hndl.selector][j])) {
-                            els.push(Kwf._elCacheBySelector[hndl.selector][j]);
-                        }
-                    }
-                } else {
-                    var t = Kwf.Utils.BenchmarkBox.now();
-                    var els = $.makeArray($(renderedEl).find(hndl.selector));
-                    Kwf.Utils.BenchmarkBox.time('query', Kwf.Utils.BenchmarkBox.now() - t);
-                    if (options.action == 'render' && renderedEl == document.body) {
-                        Kwf._elCacheBySelector[hndl.selector] = els;
+            if (options.action == 'render' && !Kwf._elCacheBySelector[hndl.selector]) {
+                var t = Kwf.Utils.BenchmarkBox.now();
+                var m = hndl.selector.match(/^[a-z]*\.([a-z]+)/i)
+                if (m) {
+                    //do a stupid text search on the selector, using that we can skip query for many selectors that don't exist in the current el
+                    if (html.indexOf(m[1]) == -1) {
+                        Kwf._elCacheBySelector[hndl.selector] = [];
                     }
                 }
-                for (var j = 0; j< els.length; ++j) {
-                    var alreadyInQueue = false;
-                    Kwf._onReadyElQueue.each(function(q) {
-                        if (q.num == hndl.num && q.el === els[j]) {
-                            alreadyInQueue = true;
-                            return true;
-                        }
-                    }, this);
-                    if (!alreadyInQueue) {
-                        var parentsCount = 0;
-                        var n = els[j];
-                        while (n = n.parentNode) {
-                            parentsCount++;
-                        }
-                        Kwf.Utils.BenchmarkBox.count('readyEl');
-                        Kwf._onReadyElQueue.push({
-                            el: els[j],
-                            fn: hndl.fn,
-                            options: hndl.options,
-                            num: hndl.num,
-                            type: hndl.type,
-                            onAction: hndl.onAction,
-                            selector: hndl.selector,
-                            queueNum: Kwf._elQueueNum++,
-                            priority: hndl.options.priority || 0,
-                            parentsCount: parentsCount
-                        });
+                Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
+            }
+
+            if (Kwf._elCacheBySelector[hndl.selector]) {
+                if (Kwf._elCacheBySelector[hndl.selector].length === 0) {
+                    //Optimize: if we never got element by that selector, skip query
+                    Kwf.Utils.BenchmarkBox.count('querySkip');
+                    continue;
+                }
+                Kwf.Utils.BenchmarkBox.count('queryCache');
+                var els = [];
+                for (var j=0; j<Kwf._elCacheBySelector[hndl.selector].length; j++) {
+                    if (renderedEl == document.body || $.contains(renderedEl, Kwf._elCacheBySelector[hndl.selector][j])) {
+                        els.push(Kwf._elCacheBySelector[hndl.selector][j]);
                     }
+                }
+            } else {
+                var t = Kwf.Utils.BenchmarkBox.now();
+                var els = $.makeArray($(renderedEl).find(hndl.selector));
+                Kwf.Utils.BenchmarkBox.time('query', Kwf.Utils.BenchmarkBox.now() - t);
+                if (options.action == 'render' && renderedEl == document.body) {
+                    Kwf._elCacheBySelector[hndl.selector] = els;
+                }
+            }
+            for (var j = 0; j< els.length; ++j) {
+                var alreadyInQueue = false;
+                Kwf._onReadyElQueue.each(function(q) {
+                    if (q.num == hndl.num && q.el === els[j]) {
+                        alreadyInQueue = true;
+                        return true;
+                    }
+                }, this);
+                if (!alreadyInQueue) {
+                    var parentsCount = 0;
+                    var n = els[j];
+                    while (n = n.parentNode) {
+                        parentsCount++;
+                    }
+                    Kwf.Utils.BenchmarkBox.count('readyEl');
+                    Kwf._onReadyElQueue.push({
+                        el: els[j],
+                        fn: hndl.fn,
+                        options: hndl.options,
+                        num: hndl.num,
+                        type: hndl.type,
+                        onAction: hndl.onAction,
+                        selector: hndl.selector,
+                        queueNum: Kwf._elQueueNum++,
+                        priority: hndl.options.priority || 0,
+                        parentsCount: parentsCount
+                    });
                 }
             }
         }
