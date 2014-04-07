@@ -1,8 +1,7 @@
-Kwf.onElementHide('.kwcAdvancedYoutube .youtubePlayer', function(el) {
-    var kwcAdvancedYoutube = el.findParent('.kwcAdvancedYoutube', 5, true);
-    if (kwcAdvancedYoutube.dom.player) {
-        kwcAdvancedYoutube.dom.player.destroy();
-        kwcAdvancedYoutube.dom.player = false;
+Kwf.onElementHide('.kwcAdvancedYoutube', function(el) {
+    if (el.dom.player) {
+        el.dom.player.destroy();
+        el.dom.player = false;
     }
 });
 
