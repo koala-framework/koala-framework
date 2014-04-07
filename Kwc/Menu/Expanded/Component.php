@@ -8,6 +8,13 @@ class Kwc_Menu_Expanded_Component extends Kwc_Menu_Abstract_Component
         return $ret;
     }
 
+    public static function getAlternativeComponents($componentClass)
+    {
+        $ret = parent::getAlternativeComponents($componentClass);
+        $ret['parentMenu'] = 'Kwc_Menu_Expanded_ParentMenu_Component.'.$componentClass;
+        return $ret;
+    }
+
     protected static function _requiredLevels($componentClass)
     {
         $level = (int)Kwc_Abstract::getSetting($componentClass, 'level');

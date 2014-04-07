@@ -84,13 +84,13 @@ class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
         $row = $ret['row'];
 
         $columnTypes = $this->_getSetting('columns');
+
         $type = $row->type;
         if (!$type) {
             //default is first
             $type = array_shift(array_keys($columnTypes));
         }
         $columns = $columnTypes[$type];
-
 
         $ret['cssClass'] .= " col{$type}";
         foreach($ret['listItems'] as $key => $value) {
@@ -105,7 +105,11 @@ class Kwc_ColumnsResponsive_Component extends Kwc_Abstract_List_Component
 
         $component = $child->parent;
         $columnTypes = $this->_getSetting('columns');
-        $columns = $columnTypes[$this->getRow()->type];
+        if (!isset($columnTypes[$this->getRow()->type])) {
+            $columns = $columnTypes[array_shift(array_keys($columnTypes))];
+        } else {
+            $columns = $columnTypes[$this->getRow()->type];
+        }
 
         $widthCalc = $columns['colSpans'][$child->id - 1] / $columns['columns'];
         return floor($ownWidth * $widthCalc);
