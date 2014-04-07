@@ -234,23 +234,32 @@ Kwf.callOnContentReady = function(renderedEl, options)
             if (hndl.selector == null) {
                 var t = Kwf.Utils.BenchmarkBox.now();
                 hndl.fn.call(hndl.options.scope || window, queueEntry.renderedEl, queueEntry.options);
-                Kwf.Utils.BenchmarkBox.time('onContentReady', Kwf.Utils.BenchmarkBox.now()-t);
+                var fnName = hndl.fn.name;
+                if (!fnName) {
+                    fnName = 'unknown';
+                }
+                Kwf.Utils.BenchmarkBox.subTime('onContentReady', 'fn: '+fnName, Kwf.Utils.BenchmarkBox.now()-t);
+
             }
         }
     }
 
-    function _callQueueFn(timerName, queueEntry, config)
+    function _callQueueFn(queueEntry, config)
     {
         var t = Kwf.Utils.BenchmarkBox.now();
         var el = queueEntry.el;
         el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
         queueEntry.fn.call(queueEntry.options.scope || window, el, config);
-        Kwf.Utils.BenchmarkBox.time(timerName, Kwf.Utils.BenchmarkBox.now()-t);
         var fnName = queueEntry.fn.name;
         if (!fnName) {
             fnName = 'unknown';
         }
-        Kwf.Utils.BenchmarkBox.time('fn: '+fnName, Kwf.Utils.BenchmarkBox.now()-t);
+
+        Kwf.Utils.BenchmarkBox.subTime(
+            'on'+queueEntry.onAction.charAt(0).toUpperCase() + queueEntry.onAction.slice(1),
+            'fn: '+fnName,
+            Kwf.Utils.BenchmarkBox.now()-t
+        );
     };
     function _processOnReadyElQueueEntry()
     {
@@ -276,18 +285,18 @@ Kwf.callOnContentReady = function(renderedEl, options)
                     }
                 } catch (err) {}
             }
-            _callQueueFn('onRender', queueEntry, config);
+            _callQueueFn(queueEntry, config);
         } else {
             if (queueEntry.onAction == 'show') {
                 if ($(el).is(':visible')) {
-                    _callQueueFn('onShow', queueEntry);
+                    _callQueueFn(queueEntry);
                 }
             } else if (queueEntry.onAction == 'hide') {
                 if (!$(el).is(':visible')) {
-                    _callQueueFn('onHide', queueEntry);
+                    _callQueueFn(queueEntry);
                 }
             } else if (queueEntry.onAction == 'widthChange') {
-                _callQueueFn('onWidthChange', queueEntry);
+                _callQueueFn(queueEntry);
             }
 
         }

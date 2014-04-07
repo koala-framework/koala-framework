@@ -10,6 +10,7 @@
         Kwf.Utils.BenchmarkBox.now = function() { return 0; };
         Kwf.Utils.BenchmarkBox.count = function() { };
         Kwf.Utils.BenchmarkBox.time = function() { };
+        Kwf.Utils.BenchmarkBox.subTime = function() { };
         Kwf.Utils.BenchmarkBox.create = function() { };
         return;
     }
@@ -77,6 +78,20 @@
         Kwf.Utils.BenchmarkBox._timers[name] += duration;
         Kwf.Utils.BenchmarkBox.count(name);
     };
+    Kwf.Utils.BenchmarkBox._subTimers = {};
+    Kwf.Utils.BenchmarkBox.subTime = function(name, subName, duration) {
+        if (!Kwf.Utils.BenchmarkBox._subTimers[name]) {
+            Kwf.Utils.BenchmarkBox._subTimers[name] = {};
+        }
+        if (!Kwf.Utils.BenchmarkBox._subTimers[name][subName]) {
+            Kwf.Utils.BenchmarkBox._subTimers[name][subName] = {
+                count: 0,
+                duration: 0
+            };
+        }
+        Kwf.Utils.BenchmarkBox._subTimers[name][subName].count++;
+        Kwf.Utils.BenchmarkBox._subTimers[name][subName].duration += duration;
+    };
     Kwf.Utils.BenchmarkBox.initBox = function(el) {
         if (el.dom.initDone) return;
         el.dom.initDone = true;
@@ -125,8 +140,28 @@
             }
             html += i+': '+c+'<br />';
         }
+        for (var name in Kwf.Utils.BenchmarkBox._subTimers) {
+            var st = Kwf.Utils.BenchmarkBox._subTimers[name];
+            var subArray = [];
+            for (var subName in st) {
+                subArray.push({
+                    count: st[subName].count,
+                    duration: st[subName].duration,
+                    name: subName
+                });
+            }
+            html += name+'<br />';
+            subArray.sort(function(i, j) {
+                return j.duration-i.duration;
+            });
+            subArray = subArray.slice(0, 5); //only top 5
+            subArray.each(function(i) {
+                html += '&nbsp;&nbsp;'+i.name+' '+i.count+' ('+(Math.round(i.duration*100)/100)+'ms)<br />';
+            });
+        }
         Kwf.Utils.BenchmarkBox._counters = {};
         Kwf.Utils.BenchmarkBox._timers = {};
+        Kwf.Utils.BenchmarkBox._subTimers = {};
         html = '<div class="benchmarkBoxContent">'+html+'</div>';
         var el = Ext.getBody().createChild({
             cls: 'benchmarkBox',
