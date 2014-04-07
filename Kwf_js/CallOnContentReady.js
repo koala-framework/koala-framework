@@ -211,7 +211,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
             if (a.parentsCount != b.parentsCount) {
                 return a.parentsCount - b.parentsCount;
             } else {
-                return 1;
+                return a.num - b.num;
             }
         }
     });
