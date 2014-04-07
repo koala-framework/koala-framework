@@ -5,7 +5,9 @@ class Kwf_Assets_DependencyCssByJs_TestProviderList extends Kwf_Assets_ProviderL
     {
         parent::__construct(array(
             new Kwf_Assets_Provider_Ini(dirname(__FILE__).'/dependencies.ini'),
-            new Kwf_Assets_Provider_CssByJs(),
+            new Kwf_Assets_Provider_CssByJs(array(
+                'kwf/'
+            )),
         ));
     }
 }
