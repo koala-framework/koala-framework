@@ -14,7 +14,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Controller extends Zend_
             $order->payment_component_id = $component->componentId;
             $order->checkout_component_id = $component->parent->componentId;
             $order->cart_component_class = $component->parent->parent->componentClass;
-            $order->status = 'ordered';
+            $order->status = 'processing';
             $order->date = date('Y-m-d H:i:s');
             $order->save();
             $session = new Zend_Session_Namespace('kwcShopCart');
