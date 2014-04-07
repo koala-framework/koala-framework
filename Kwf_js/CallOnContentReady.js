@@ -165,14 +165,12 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 }
             }
             for (var j = 0; j< els.length; ++j) {
-                var alreadyInQueue = false;
-                Kwf._onReadyElQueue.each(function(q) {
-                    if (q.num == hndl.num && q.el === els[j]) {
-                        alreadyInQueue = true;
-                        return true;
-                    }
-                }, this);
+
+                if (!els[j].onReadyQueue) els[j].onReadyQueue = [];
+                var alreadyInQueue = els[j].onReadyQueue.indexOf(hndl.num) != -1;
+
                 if (!alreadyInQueue) {
+                    els[j].onReadyQueue.push(hndl.num);
                     var parentsCount = 0;
                     var n = els[j];
                     while (n = n.parentNode) {
@@ -258,6 +256,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     {
         var queueEntry = Kwf._onReadyElQueue.shift();
         var el = queueEntry.el;
+        el.onReadyQueue.splice(el.onReadyQueue.indexOf(queueEntry.num), 1);
         if (queueEntry.onAction == 'render') {
             if (queueEntry.options.checkVisibility && !$(el).is(':visible')) {
                 return;
