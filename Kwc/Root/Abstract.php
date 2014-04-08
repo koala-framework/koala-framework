@@ -20,7 +20,6 @@ class Kwc_Root_Abstract extends Kwc_Abstract
         $ret['contentWidth'] = 600;
         $ret['contentWidthBoxSubtract'] = array();
         $ret['flags']['hasBaseProperties'] = true;
-        $ret['assets']['dep'][] = 'KwfBenchmarkBox';
         return $ret;
     }
 
