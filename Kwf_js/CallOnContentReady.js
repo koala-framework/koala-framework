@@ -7,7 +7,8 @@ Kwf.enableOnReadyConsoleProfile = false;
  * num: unique number, //used to mark in initDone
  * selector: selector, // null if onContentReady
  * */
-Kwf._readyHandlers = [];
+Kwf._readyHandlers = []; //for onContentReady
+Kwf._readyElHandlers = []; //for onElement*
 Kwf._skipDeferred; //if callOnContentReady should skip 'defer' callbacks or execute only 'defer' callbacks
                    //used on initial ready
 Kwf._deferredStart = null; //used for timing deferred, required here because of multiple chunks
@@ -52,11 +53,11 @@ if (!Kwf.isApp) {
 
 Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
 {
-    Kwf._readyHandlers.push({
+    Kwf._readyElHandlers.push({
         selector: selector,
         fn: fn,
         options: options || {},
-        num: Kwf._readyHandlers.length, //unique number
+        num: Kwf._readyElHandlers.length, //unique number
         type: type,
         onAction: onAction
     });
@@ -103,8 +104,8 @@ Kwf.callOnContentReady = function(renderedEl, options)
     var addToQueue = function(onActions) {
 
 
-        for (var i = 0; i < Kwf._readyHandlers.length; i++) {
-            var hndl = Kwf._readyHandlers[i];
+        for (var i = 0; i < Kwf._readyElHandlers.length; i++) {
+            var hndl = Kwf._readyElHandlers[i];
 
 
             //Kwf._skipDeferred gets set before callOnContentReady(body)
@@ -231,16 +232,13 @@ Kwf.callOnContentReady = function(renderedEl, options)
         });
         for (var i = 0; i < Kwf._readyHandlers.length; i++) {
             var hndl = Kwf._readyHandlers[i];
-            if (hndl.selector == null) {
-                var t = Kwf.Utils.BenchmarkBox.now();
-                hndl.fn.call(hndl.options.scope || window, queueEntry.renderedEl, queueEntry.options);
-                var fnName = hndl.fn.name;
-                if (!fnName) {
-                    fnName = 'unknown';
-                }
-                Kwf.Utils.BenchmarkBox.subTime('onContentReady', 'fn: '+fnName, Kwf.Utils.BenchmarkBox.now()-t);
-
+            var t = Kwf.Utils.BenchmarkBox.now();
+            hndl.fn.call(hndl.options.scope || window, queueEntry.renderedEl, queueEntry.options);
+            var fnName = hndl.fn.name;
+            if (!fnName) {
+                fnName = 'unknown';
             }
+            Kwf.Utils.BenchmarkBox.subTime('onContentReady', 'fn: '+fnName, Kwf.Utils.BenchmarkBox.now()-t);
         }
     }
 
@@ -344,7 +342,6 @@ Kwf.onContentReady = function(fn, options) {
         options.scope = scope;
     }
     Kwf._readyHandlers.push({
-        selector: null,
         fn: fn,
         options: options || {}
     });
