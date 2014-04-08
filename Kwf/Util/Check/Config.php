@@ -536,6 +536,9 @@ class Kwf_Util_Check_Config
         if (!apc_delete('foobar')) {
             throw new Kwf_Exception("apc_delete returned false");
         }
+        if (extension_loaded('apcu') && function_exists('apc_delete_file')) {
+            throw new Kwf_Exception("apc and apcu loaded");
+        }
         return array(
             'status' => self::RESULT_OK,
         );
