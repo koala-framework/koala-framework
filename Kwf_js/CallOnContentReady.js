@@ -276,7 +276,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
             }
             el.initDone[queueEntry.num] = true;
             var config = {};
-            var configEl = $(el).find('> input[type="hidden"]')
+            var configEl = $(el).find('> input[type="hidden"]');
             if (configEl.length) {
                 try {
                     var v = configEl.get(0).value;
