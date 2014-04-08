@@ -37,10 +37,10 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $xml = simplexml_import_dom($doc);
 
         $img = $xml->xpath("//img");
-        $this->assertEquals(1, count($img));
-        $this->assertEquals(10, (string)$img[0]['width']);
-        $this->assertEquals(10, (string)$img[0]['height']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertEquals(2, count($img));
+        $this->assertEquals(10, (string)$img[1]['width']);
+        $this->assertEquals(10, (string)$img[1]['height']);
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[1]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -68,8 +68,8 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $xml = simplexml_import_dom($doc);
 
         $img = $xml->xpath("//img");
-        $this->assertEquals(1, count($img));
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertEquals(2, count($img));
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[1]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -108,10 +108,10 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $xml = simplexml_import_dom($doc);
 
         $img = $xml->xpath("//img");
-        $this->assertEquals(1, count($img));
-        $this->assertEquals(10, (string)$img[0]['width']);
-        $this->assertEquals(10, (string)$img[0]['height']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertEquals(2, count($img));
+        $this->assertEquals(10, (string)$img[1]['width']);
+        $this->assertEquals(10, (string)$img[1]['height']);
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[1]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -140,8 +140,8 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $xml = simplexml_import_dom($doc);
 
         $img = $xml->xpath("//img");
-
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertEquals(2, count($img));
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[1]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -187,10 +187,10 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $xml = simplexml_import_dom($doc);
 
         $img = $xml->xpath("//img");
-        $this->assertEquals(1, count($img));
-        $this->assertEquals(10, (string)$img[0]['width']);
-        $this->assertEquals(10, (string)$img[0]['height']);
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertEquals(2, count($img));
+        $this->assertEquals(10, (string)$img[1]['width']);
+        $this->assertEquals(10, (string)$img[1]['height']);
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[1]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/gif', $o['mimeType']);
         $im = new Imagick();
@@ -218,7 +218,8 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $xml = simplexml_import_dom($doc);
 
         $img = $xml->xpath("//img");
-        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[0]['src'], $m));
+        $this->assertEquals(2, count($img));
+        $this->assertTrue(!!preg_match('#^/media/([^/]+)/([^/]+)/([^/]+)#', (string)$img[1]['src'], $m));
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
 
         $this->assertEquals('image/gif', $o['mimeType']);

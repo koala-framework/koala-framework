@@ -29,4 +29,4 @@ Kwf.onElementReady('.kwcUserLoginFacebook', function(el, config){
         }
     });
     }
-}, this);
+});

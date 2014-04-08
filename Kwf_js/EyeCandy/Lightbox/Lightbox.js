@@ -1,56 +1,59 @@
-Kwf.onContentReady(function(readyEl) {
-    var els = document.getElementsByTagName('a');
-    for (var i=0; i<els.length; i++) {
-        if (els[i].kwfLightbox) continue;
-        var m = els[i].rel.match(/(^lightbox| lightbox)({.*?})?/);
-        if (m) {
-            var options = {};
-            if (m[2]) options = Ext.decode(m[2]);
-            var l;
-            if (Kwf.EyeCandy.Lightbox.allByUrl[els[i].href]) {
-                l = Kwf.EyeCandy.Lightbox.allByUrl[els[i].href];
-            } else {
-                l = new Kwf.EyeCandy.Lightbox.Lightbox(Ext.get(els[i]).dom.href, options);
-            }
-            els[i].kwfLightbox = l;
-            Ext.EventManager.addListener(els[i], 'click', function(ev) {
-                this.kwfLightbox.show({
-                    clickTarget: Ext.get(this)
-                });
-                Kwf.Utils.HistoryState.currentState.lightbox = this.href;
-                Kwf.Utils.HistoryState.pushState(document.title, this.href);
-                ev.stopEvent();
-            }, els[i], { stopEvent: true });
+Kwf.onElementReady('a', function lightboxLink(el) {
+    el = el.dom;
+    if (el.kwfLightbox) return;
+    var m = el.rel.match(/(^lightbox| lightbox)({.*?})?/);
+    if (m) {
+        var options = {};
+        if (m[2]) options = Ext.decode(m[2]);
+        var l;
+        if (Kwf.EyeCandy.Lightbox.allByUrl[el.href]) {
+            l = Kwf.EyeCandy.Lightbox.allByUrl[el.href];
+        } else {
+            l = new Kwf.EyeCandy.Lightbox.Lightbox(el.href, options);
         }
-    }
-
-    Ext.query('.kwfLightbox').each(function(el) {
-        //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
-        if (el.kwfLightbox) return;
-        var lightboxEl = Ext.get(el);
-        var options = Ext.decode(lightboxEl.child('input.options').dom.value);
-        var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
-        Kwf.Utils.HistoryState.currentState.lightbox = window.location.href;
-        Kwf.Utils.HistoryState.updateState();
-        lightboxEl.enableDisplayMode('block');
-        l.lightboxEl = lightboxEl;
-        l.innerLightboxEl = lightboxEl.down('.kwfLightboxInner');
-        l.fetched = true;
-        l.initialize();
-        l.closeHref = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
-        l.contentEl = l.innerLightboxEl.down('.kwfLightboxContent');
-        l.style.afterCreateLightboxEl();
-        l.style.onShow();
-        l.style.onContentReady();
         el.kwfLightbox = l;
-        Kwf.EyeCandy.Lightbox.currentOpen = l;
+        Ext.EventManager.addListener(el, 'click', function(ev) {
+            this.kwfLightbox.show({
+                clickTarget: Ext.get(this)
+            });
+            Kwf.Utils.HistoryState.currentState.lightbox = this.href;
+            Kwf.Utils.HistoryState.pushState(document.title, this.href);
+            ev.stopEvent();
+        }, el, { stopEvent: true });
+    }
+}, { defer: true });
 
-        //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
-        Kwf.callOnContentReady(l.contentEl.dom, {newRender: false});
-    });
+Kwf.onElementReady('.kwfLightbox', function lightboxEl(el) {
+    //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
+    if (el.dom.kwfLightbox) return;
+    var lightboxEl = Ext.get(el);
+    var options = Ext.decode(lightboxEl.child('input.options').dom.value);
+    var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
+    Kwf.Utils.HistoryState.currentState.lightbox = window.location.href;
+    Kwf.Utils.HistoryState.updateState();
+    lightboxEl.enableDisplayMode('block');
+    l.lightboxEl = lightboxEl;
+    l.innerLightboxEl = lightboxEl.down('.kwfLightboxInner');
+    l.fetched = true;
+    l.initialize();
+    l.closeHref = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
+    l.contentEl = l.innerLightboxEl.down('.kwfLightboxContent');
+    l.style.afterCreateLightboxEl();
+    l.style.onShow();
+    l.style.onContentReady();
+    el.dom.kwfLightbox = l;
+    Kwf.EyeCandy.Lightbox.currentOpen = l;
+
+    //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
+    Kwf.callOnContentReady(l.contentEl.dom, {newRender: false});
+});
+
+Kwf.onContentReady(function lightboxContent(readyEl, options)
+{
+    if (!Kwf.EyeCandy.Lightbox.currentOpen) return;
 
     readyEl = Ext.get(readyEl);
-    if (readyEl.isVisible() && Kwf.EyeCandy.Lightbox.currentOpen) {
+    if (readyEl.isVisible()) {
         //callOnContentReady was called for an element inside the lightbox, style can update the lightbox size
         if (Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl
             && Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl.isVisible()

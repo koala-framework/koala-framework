@@ -63,4 +63,4 @@ Kwf.onElementReady('.kwcListCarousel', function(el, config){
 
     Kwf.Utils.ResponsiveEl('.kwcListCarousel', responsiveContent);
 
-}, this);
+});

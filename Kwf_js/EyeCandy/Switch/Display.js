@@ -1,16 +1,13 @@
 // um flackern zu unterbinden
 document.write('<style type="text/css"> div.kwfSwitchDisplay div.switchContent { display: none; } </style>');
 
-Kwf.onContentReady(function() {
-    var els = Ext.query('div.kwfSwitchDisplay');
-    els.forEach(function(el) {
-        el = Ext.get(el);
-        // Attach Switch.Display-Object to dom because ext-element is still existent even though
-        // it's no part of dom anymore when html is changed e.g. because of ajax-view
-        if (!el.dom.switchDisplayObject) {
-            el.dom.switchDisplayObject = new Kwf.Switch.Display(el);
-        }
-    });
+Kwf.onElementReady('div.kwfSwitchDisplay', function(el) {
+    el = Ext.get(el);
+    // Attach Switch.Display-Object to dom because ext-element is still existent even though
+    // it's no part of dom anymore when html is changed e.g. because of ajax-view
+    if (!el.dom.switchDisplayObject) {
+        el.dom.switchDisplayObject = new Kwf.Switch.Display(el);
+    }
 });
 
 Kwf.Switch.Display = function(el, config) {

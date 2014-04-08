@@ -1,9 +1,7 @@
 Kwf.Utils.ResponsiveEl('.kwcTextImage', [800, 420, {maxWidth: 420, cls: 'lt420'}]);
 
 //remove largeText class if >55% of element is covered by image
-(function() {
-
-var initEl = function(el) {
+Kwf.onElementWidthChange('.kwcTextImage', function textImage(el) {
     var img = el.child('div.image img');
     if (img) {
         if (img.getWidth() < (el.getWidth() * 0.55)) {
@@ -14,16 +12,4 @@ var initEl = function(el) {
             el.addClass('largeImage');
         }
     }
-};
-
-Kwf.onElementReady('.kwcTextImage', function(el) {
-    initEl(el);
 });
-
-Ext.fly(window).on('resize', function() {
-    Ext.select('.kwcTextImage').each(function(el) {
-        initEl(el);
-    }, this);
-});
-
-})();

@@ -1,11 +1,5 @@
-Kwf.onContentReady(function() {
-    var els = Ext.query('div.kwfTabs');
-    els.forEach(function(el) {
-        el = Ext.get(el);
-        if (!el.tabsObject) {
-            el.tabsObject = new Kwf.Tabs(el);
-        }
-    });
+Kwf.onElementReady('div.kwfTabs', function tabs(el) {
+    el.tabsObject = new Kwf.Tabs(el);
 });
 
 
@@ -23,7 +17,7 @@ Kwf.Tabs = function(el) {
     this.fxDuration = .5;
 
     this.tabsContents = this.el.createChild({
-        tag: 'div', cls: 'kwfTabsContents'
+        tag: 'div', cls: 'kwfTabsContents', 'data-width': '100%'
     }, this.el.first());
     var tabsLinks = this.el.createChild({
         tag: 'div', cls: 'kwfTabsLinks'

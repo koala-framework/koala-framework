@@ -1,4 +1,4 @@
-Kwf.onContentReady(function(body, param) {
+Kwf.onContentReady(function statisticsOptBox(body, param) {
     if (!param.newRender) return;
     // TODO: make default behaviour customizable
     if (Kwf.Statistics.getDefaultOptValue() == 'out' && !Kwf.Statistics.issetUserOptValue()) {
@@ -14,9 +14,9 @@ Kwf.onContentReady(function(body, param) {
         Ext.getBody().insertFirst(html);
         Ext.getBody().optBox = true;
     }
-}, this, {priority: -2}); // before Kwf.Utils.ResponsiveEl
+}, {priority: -2}); // before Kwf.Utils.ResponsiveEl
 
-Kwf.onElementReady('.kwcStatisticsOptBox a.accept', function(link) {
+Kwf.onElementReady('.kwcStatisticsOptBox a.accept', function statisticsOptBox(link) {
     link.on('click', function(e, el) {
         e.stopEvent();
         Kwf.Statistics.setUserOptValue('in');

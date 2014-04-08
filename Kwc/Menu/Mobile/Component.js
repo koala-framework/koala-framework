@@ -1,4 +1,4 @@
-Kwf.onJElementReady('.kwcMenuMobile', function(el, config) {
+Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
     var slideDuration = 400;
     var menuLink = el.children('.showMenu');
     var menu = null;
@@ -115,4 +115,4 @@ Kwf.onJElementReady('.kwcMenuMobile', function(el, config) {
             });
         }
     };
-}, this, { checkVisibility: true });
+}, { checkVisibility: true, defer: true });
