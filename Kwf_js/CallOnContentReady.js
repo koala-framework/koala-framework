@@ -71,9 +71,10 @@ Kwf.callOnContentReady = function(renderedEl, options)
 {
     Kwf.Utils.BenchmarkBox.count('callOnContentReady');
     if (!options) options = {};
-    if (options.newRender) {
+    if (typeof options.newRender != 'undefined') {
+        //backwards compatibility, for callOnContentReady call
+        options.action = options.newRender ? 'render' : 'show';
         delete options.newRender;
-        options.action = 'render';
     }
     if (!options.action) {
         if (console && console.warn) console.warn('Please set option action on callOnContentReady');
@@ -85,7 +86,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     }
     if (Ext.Element && renderedEl instanceof Ext.Element) renderedEl = renderedEl.dom;
     if (jQuery && renderedEl instanceof jQuery) renderedEl = renderedEl.get();
-    options.newRender = options.action == 'render'; //backwards compatibility
+    options.newRender = options.action == 'render'; //backwards compatibility, for onContentReady callback
 
     Kwf._onReadyCallQueue.push({
         renderedEl: renderedEl,
