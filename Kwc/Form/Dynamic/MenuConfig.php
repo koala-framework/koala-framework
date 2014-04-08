@@ -5,18 +5,6 @@ class Kwc_Form_Dynamic_MenuConfig extends Kwf_Component_Abstract_MenuConfig_Abst
     {
         $components = Kwf_Component_Data_Root::getInstance()->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
 
-        if (!$acl->has('kwf_enquiries_dropdown')) {
-            $acl->addResource(
-                new Kwf_Acl_Resource_MenuDropdown(
-                    'kwf_enquiries_dropdown', array('text'=>trlKwfStatic('Enquiries'), 'icon'=>'email.png')
-                )
-            );
-        }
-        if (!$acl->has('kwf_enquiries_enquiries')) {
-            $acl->add(new Kwf_Acl_Resource_MenuUrl('kwf_enquiries_enquiries',
-                    array('text'=>trlKwfStatic('All Enquiries'), 'icon'=>'email.png')), 'kwf_enquiries_dropdown');
-        }
-
         if (Kwc_Abstract::hasSetting($this->_class, 'componentNameShort')) {
             $name = Kwc_Abstract::getSetting($this->_class, 'componentNameShort');
         } else {
