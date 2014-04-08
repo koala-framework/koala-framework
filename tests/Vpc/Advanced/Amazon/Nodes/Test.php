@@ -10,6 +10,10 @@ class Vpc_Advanced_Amazon_Nodes_Test extends Vps_Test_SeleniumTestCase
 
     public function setUp()
     {
+        if (!Vps_Registry::get('config')->amazon || !Vps_Registry::get('config')->amazon->key) {
+            $this->markTestSkipped();
+        }
+
         Vps_Component_Data_Root::setComponentClass('Vpc_Advanced_Amazon_Nodes_Root');
         $this->_root = Vps_Component_Data_Root::getInstance();
         parent::setUp();
