@@ -144,4 +144,15 @@ class Kwf_Assets_Ext4_ProviderTest extends Kwf_Test_TestCase
         $array = $d->getRecursiveFiles();
         $this->assertEquals(73, count($array));
     }
+
+    public function testOverride()
+    {
+        $l = new Kwf_Assets_Ext4_TestProviderList();
+        $d = $l->findDependency('Ext4.form.field.ComboBox');
+        $array = array();
+        foreach ($d->getRecursiveFiles() as $i) {
+            $array[] = $i->getFileName();
+        }
+        $this->assertContains(KWF_PATH.'/Kwf_js/Ext4/Overrides/ComboBox.js', $array);
+    }
 }

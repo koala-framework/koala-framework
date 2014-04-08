@@ -44,6 +44,30 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
         return $classes;
     }
 
+    private static function _getOverrides()
+    {
+        static $ret;
+        if (isset($ret)) return $ret;
+        $ret = array();
+        $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(Kwf_Config::getValue('path.kwf').'/Kwf_js/Ext4/Overrides'), RecursiveIteratorIterator::LEAVES_ONLY);
+        foreach ($it as $i) {
+            if (substr($i->getPathname(), -3) != '.js') continue;
+            $depName = 'Kwf.'.str_replace('/', '.', substr($i->getPathname(), strlen(Kwf_Config::getValue('path.kwf').'/Kwf_js/'), -3));
+            $fileContents = file_get_contents($i->getPathname());
+
+            // remove comments to avoid dependencies from docs/examples
+            $fileContents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $fileContents);
+
+            if (preg_match('#Ext4?\.define\(\s*[\'"]#', $fileContents, $m)) {
+                if (preg_match('#^\s*(override)\s*:\s*\'([a-zA-Z0-9\.]+)\'\s*,?\s*$#m', $fileContents, $m)) {
+                    if (!isset($ret[$m[2]])) $ret[$m[2]] = array();
+                    $ret[$m[2]][] = $depName;
+                }
+            }
+        }
+        return $ret;
+    }
+
     public function getDependency($dependencyName)
     {
         /*if ($dependencyName == 'Ext4Corex') {
@@ -217,6 +241,19 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
         }
         if ($dependency->getFileName() == Kwf_Config::getValue('path.ext4').'/src/data/Model.js') {
             $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = $this->_providerList->findDependency('Ext4.data.proxy.Ajax');
+        }
+
+        //add kwf overrides, automatically look them up in Ext4/Overrides
+        if ($dependency instanceof Kwf_Assets_Ext4_JsDependency) {
+            if (preg_match('#Ext4?\.define\(\s*[\'"]([a-zA-Z0-9\._]+)[\'"]#', $fileContents, $m)) {
+                $define = $m[1];
+                $overrides = self::_getOverrides();
+                if (isset($overrides[$define])) {
+                    foreach ($overrides[$define] as $i) {
+                        $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES][] = $this->_providerList->findDependency($i);
+                    }
+                }
+            }
         }
 
 
