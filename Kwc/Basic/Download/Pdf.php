@@ -16,14 +16,18 @@ class Kwc_Basic_Download_Pdf extends Kwc_Abstract_Pdf
             $filesize = '';
         }
 
-        $downloadTagVars = $this->_component->getData()
-            ->getChildComponent('-downloadTag')->getComponent()->getTemplateVars();
-        $protocol = Kwf_Config::getValue('server.https') ? 'https' : 'http';
-        $link = $protocol . '://' . $this->_component->getData()->getDomain() . $downloadTagVars['url'];
+        $link = $this->_getDownloadUrl();
 
         $this->_pdf->Cell(0, 0, $vars['infotext'].$filesize, '', 1, '', 0, $link);
         $this->Ln(1);
 
     }
 
+    protected function _getDownloadUrl()
+    {
+        $downloadTagVars = $this->_component->getData()
+            ->getChildComponent('-downloadTag')->getComponent()->getTemplateVars();
+        $protocol = Kwf_Config::getValue('server.https') ? 'https' : 'http';
+        return $protocol . '://' . $this->_component->getData()->getDomain() . $downloadTagVars['url'];
+    }
 }
