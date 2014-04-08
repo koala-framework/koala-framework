@@ -154,7 +154,9 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         if (!$runner->checkUpdatesSettings()) {
             throw new Kwf_Exception_Client("checkSettings failed, setup stopped");
         }
-        $doneNames = $runner->executeUpdates();
+        $doneNames = $runner->executeUpdates(array(
+            'refreshCache' => false
+        ));
         $runner->writeExecutedUpdates($doneNames);
  
         $errors = $runner->getErrors();
