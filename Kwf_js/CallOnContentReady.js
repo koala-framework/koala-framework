@@ -8,6 +8,14 @@ Kwf.enableOnReadyConsoleProfile = false;
  * selector: selector, // null if onContentReady
  * */
 Kwf._readyHandlers = [];
+Kwf._skipDeferred; //if callOnContentReady should skip 'defer' callbacks or execute only 'defer' callbacks
+                   //used on initial ready
+Kwf._deferredStart = null; //used for timing deferred, required here because of multiple chunks
+Kwf._onReadyIsCalling = false; //true while callOnContentReady is processing onReadyElQueue and we can add more to queue
+Kwf._onReadyCallQueue = []; //queue for onContentReady to avoid recursions
+Kwf._onReadyElQueue = []; //queue for onElementReady/Show/Hide/WidthChange calls
+Kwf._elCacheBySelector = {};
+
 
 
 if (!Kwf.isApp) {
@@ -41,14 +49,6 @@ if (!Kwf.isApp) {
         }, this, { buffer: 100 });
     });
 }
-
-Kwf._skipDeferred;
-Kwf._deferredStart = null;
-Kwf._onReadyIsCalling = false;
-Kwf._onReadyCallQueue = [];
-Kwf._onReadyElQueue = [];
-Kwf._onReadyElSortCache = {};
-Kwf._elCacheBySelector = {};
 
 Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
 {
