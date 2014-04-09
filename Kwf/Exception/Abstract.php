@@ -1,6 +1,8 @@
 <?php
 abstract class Kwf_Exception_Abstract extends Exception
 {
+    public static $logErrors; //overrides debug.error.log
+
     public abstract function getHeader();
 
     public abstract function log();
@@ -13,6 +15,7 @@ abstract class Kwf_Exception_Abstract extends Exception
     public static function isDebug()
     {
         try {
+            if (isset(self::$logErrors)) return !self::$logErrors;
             return !Kwf_Config::getValue('debug.error.log');
         } catch (Exception $e) {
             return true;

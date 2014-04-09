@@ -6,7 +6,7 @@ class Kwc_Advanced_VideoPlayer_Form extends Kwc_Abstract_Composite_Form
     public function __construct($name, $class, $id = null)
     {
         parent::__construct($name, $class, $id);
-        $cards = $this->fields->add(new Kwf_Form_Container_Cards('source_type', trlKwf('Source Type')));
+        $cards = $this->fields->add(new Kwf_Form_Container_Cards('source_type', trlKwf('Video Source Type')));
         $cards->getCombobox()->setAllowBlank(false);
         $card = $cards->add();
         $card->setName('files');

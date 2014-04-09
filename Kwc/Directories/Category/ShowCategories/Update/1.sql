@@ -1,4 +1,3 @@
-DROP TABLE kwc_directories_category_showcategories;
 CREATE TABLE `kwc_directories_category_showcategories` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `component_id` varchar(255) NOT NULL,

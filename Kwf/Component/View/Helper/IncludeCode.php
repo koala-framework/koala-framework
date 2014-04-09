@@ -12,7 +12,7 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
         }
 
         $flag = ($position == 'header') ? 'hasHeaderIncludeCode' : 'hasFooterIncludeCode';
-        $cmps = $data->getRecursiveChildComponents(array('flags'=>array($flag=>true)));
+        $cmps = $data->getPage()->getRecursiveChildComponents(array('flags'=>array($flag=>true)));
         if (Kwc_Abstract::getFlag($data->componentClass, $flag)) {
             $cmps[] = $data;
         }

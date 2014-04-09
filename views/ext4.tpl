@@ -45,9 +45,9 @@
     Kwf.user = '<?= $this->user ?>';
     <?php } ?>
     Kwf.userRole = '<?= $this->userRole ?>';
-    <? if (isset($this->sessionToken)) { ?>
+    <?php if (isset($this->sessionToken)) { ?>
     Kwf.sessionToken = '<?= $this->sessionToken ?>';
-    <? } ?>
+    <?php } ?>
     Ext4.application({
         name: 'App',
         controllers: ['<?=$this->extController?>'],

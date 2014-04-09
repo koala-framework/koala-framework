@@ -28,7 +28,7 @@ class Kwc_FulltextSearch_Box_Trl_Component extends Kwc_Chained_Trl_Component
             $ret['searchForm'] =$searchPage->getChildComponent('-view')
                                            ->getChildComponent('-searchForm');
             $ret['config']['searchTitle'] = $searchPage->getTitle();
-            $ret['config']['searchUrl'] = $searchPage->getAbsoluteUrl();
+            $ret['config']['searchUrl'] = $searchPage->url;
         }
         return $ret;
     }

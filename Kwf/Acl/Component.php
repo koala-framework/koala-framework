@@ -26,6 +26,15 @@ class Kwf_Acl_Component extends Kwf_Acl
 
         $this->add(new Zend_Acl_Resource('kwf_component_root')); //Komponenten können hier resourcen anhängen
 
+        $this->addResource(
+            new Kwf_Acl_Resource_MenuDropdown(
+                'kwf_enquiries_dropdown', array('text'=>trlKwfStatic('Enquiries'), 'icon'=>'email.png')
+            )
+        );
+
+        $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_enquiries_enquiries',
+                array('text'=>trlKwfStatic('All Enquiries'), 'icon'=>'email.png')), 'kwf_enquiries_dropdown');
+
         $this->add(new Kwf_Acl_Resource_MenuDropdown('settings',
                     array('text'=>trlKwf('Toolbox'), 'icon'=>'wrench.png')));
             $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_user_users',

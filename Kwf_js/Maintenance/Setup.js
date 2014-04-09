@@ -2,6 +2,9 @@ Ext.ns('Kwf.Maintenance');
 Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
     border: false,
     initComponent: function() {
+
+        Kwf.Debug.displayErrors = true;
+
         this.layout = 'border';
         this.about = {
             cls: 'kwfSetupAbout',
@@ -216,7 +219,8 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
             url: '/kwf/maintenance/setup/json-install',
             params: params,
             progress: true,
-            success: function() {
+            timeout: 1000*60*5,
+            callback: function() {
                 this.cards.getLayout().setActiveItem(this.stepFinished);
                 this.steps.setCurrentStep('finished');
             },

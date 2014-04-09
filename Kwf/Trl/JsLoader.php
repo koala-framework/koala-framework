@@ -25,6 +25,7 @@ class Kwf_Trl_JsLoader
                     $values['tochange'] = $trlelement['text'];
                     $method = $trlelement['type'].$mode;
                     $values['now'] = $trl->$method($values['tochange'], array(), $language);
+                    $values['now'] = str_replace("'", "\'", $values['now']);
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
                     $values['now'] = str_replace($method, "trl", $values['now']);
 

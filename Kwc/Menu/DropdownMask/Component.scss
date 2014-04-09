@@ -12,14 +12,10 @@
     background: #000000;
     visibility: hidden;
     @include opacity(0);
-    @include transition-property(all);
-    @include transition-duration(0.3s);
 
     &.visible {
         visibility: visible;
         @include opacity(0.7);
-        @include transition-property(all);
-        @include transition-duration(0.3s);
     }
     &.notBody {
         position: absolute;

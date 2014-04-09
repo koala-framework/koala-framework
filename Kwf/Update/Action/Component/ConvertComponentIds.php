@@ -30,28 +30,34 @@ class Kwf_Update_Action_Component_ConvertComponentIds extends Kwf_Update_Action_
             if ($table == 'cache_component_includes') continue;
             if ($table == 'cache_component_url') continue;
             if ($table == 'cache_users') continue;
-            $hasComponentId = false;
-            $column = 'component_id';
             foreach ($db->query("SHOW FIELDS FROM $table")->fetchAll() as $field) {
+                $hasComponentId = false;
                 if ($table == 'kwf_pages') {
-                    $column = 'parent_id';
-                    $hasComponentId = true;
+                    if ($field['Field'] == 'parent_id') {
+                        $column = 'parent_id';
+                        $hasComponentId = true;
+                    } else if ($field['Field'] == 'parent_subroot_id') {
+                        $column = 'parent_subroot_id';
+                        $hasComponentId = true;
+                    }
                 } else if ($field['Field'] == 'component_id') {
+                    $column = 'component_id';
                     $hasComponentId = true;
                 }
-            }
-            if ($hasComponentId) {
-                if ($overwrite) {
-                    $sql = "(SELECT REPLACE($column, '$search', '$replace')
-                            FROM $table WHERE $column LIKE '$dbPattern')";
-                    $ids = $db->fetchCol($sql);
-                    $sql = "DELETE FROM $table
-                        WHERE $column IN ('" . implode("', '", $ids) . "')";
-                    $db->query($sql);
+
+                if ($hasComponentId) {
+                    if ($overwrite) {
+                        $sql = "(SELECT REPLACE($column, '$search', '$replace')
+                                FROM $table WHERE $column LIKE '$dbPattern')";
+                        $ids = $db->fetchCol($sql);
+                        $sql = "DELETE FROM $table
+                            WHERE $column IN ('" . implode("', '", $ids) . "')";
+                        $db->query($sql);
+                    }
+                    $db->query("UPDATE $table SET $column =
+                            REPLACE($column, '$search', '$replace')
+                            WHERE $column LIKE '$dbPattern'");
                 }
-                $db->query("UPDATE $table SET $column =
-                        REPLACE($column, '$search', '$replace')
-                        WHERE $column LIKE '$dbPattern'");
             }
         }
         $db->query("UPDATE kwc_basic_text SET content =

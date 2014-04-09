@@ -18,7 +18,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         }
 
         $fileName = $this->getFileName();
-        $cacheId = str_replace(array('/', '.', '-'), '_', $fileName);
+        $cacheId = str_replace(array('\\', ':', '/', '.', '-'), '_', $fileName);
 
         $ret = $cache->load($cacheId);
         if ($ret && !isset($ret['mtime'])) {

@@ -181,14 +181,20 @@ class Kwf_Util_Apc
                     apc_delete($cacheId);
                 }
             }
-            if (isset($_REQUEST['files'])) {
+            if (isset($_REQUEST['files']) && function_exists('apc_delete_file')) {
                 foreach (explode(',', $_REQUEST['files']) as $file) {
                     @apc_delete_file($file);
                 }
             } else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'user') {
-                apc_clear_cache('user');
+                if (extension_loaded('apcu')) {
+                    apc_clear_cache();
+                } else {
+                    apc_clear_cache('user');
+                }
             } else {
-                apc_clear_cache('file');
+                if (!extension_loaded('apcu')) {
+                    apc_clear_cache('file');
+                }
             }
             echo 'OK '.round((microtime(true)-$s)*1000).' ms';
             exit;

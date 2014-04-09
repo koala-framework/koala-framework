@@ -115,6 +115,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
                 this.moveElement.move('right', firstElWidth, false);
 
                 this._moveActive = false;
+                this.afterAnimation('next');
             },
             scope: this
         }, this.animationConfig);
@@ -166,10 +167,15 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
                     this.list.getItem(numberShown).el.hide();
                     this.list.getItem(0).el.show();
                 }
+                this.afterAnimation('previous');
             },
             scope: this
         }, this.animationConfig);
         this.moveElement.move('right', this.list.getItem(0).getWidthIncludingMargin(), cfg);
+    },
+
+    afterAnimation: function(direction)
+    {
     }
 
 });
