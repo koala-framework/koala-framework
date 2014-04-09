@@ -1,11 +1,14 @@
 @import "susy";
 @import "compass/css3/box-sizing";
+@import "compass/utilities/general/clearfix";
+
 $gutter-width   : 0em;
 $grid-padding   : 0em;
 $contentMargin  : 10px;
 $breakpoint     : 600;
 
 div.cssClass {
+    @include pie-clearfix;
     margin-right: -$contentMargin;
 
     > .listItem {
@@ -54,6 +57,10 @@ div.cssClass {
             &.col#{$i} {
                 > .listItem {
                     @include span-columns(1, $i);
+
+                    &.lastInLine {
+                        @include pie-clearfix;
+                    }
                 }
             }
         }

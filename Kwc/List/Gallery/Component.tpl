@@ -20,11 +20,7 @@
             <?=$this->component($child);?>
         </div>
         <?
-            if ($i%$this->imagesPerLine == $this->imagesPerLine-1) {
-                echo '<div class="clear"></div>';
-            }
             $i++;
         ?>
     <? } ?>
-    <div class="clear"></div>
 </div>

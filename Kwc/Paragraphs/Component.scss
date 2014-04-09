@@ -1,17 +1,22 @@
+@import "compass/utilities/general/clearfix";
 @import "kwf/mobile-breakpoint";
 
 .cssClass {
-    .kwcParagraphItem.onlyShowOnMobile {
-        display: none;
-    }
+    .kwcParagraphItem {
+        @include pie-clearfix;
 
-    @include mobile-breakpoint {
-        .kwcParagraphItem.onlyShowOnMobile {
-            display: block;
+        &.onlyShowOnMobile {
+            display: none;
         }
 
-        .kwcParagraphItem.hideOnMobile {
-            display: none;
+        @include mobile-breakpoint {
+            &.onlyShowOnMobile {
+                display: block;
+            }
+
+            &.hideOnMobile {
+                display: none;
+            }
         }
     }
 }
