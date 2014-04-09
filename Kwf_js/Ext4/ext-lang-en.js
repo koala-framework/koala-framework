@@ -158,7 +158,8 @@ Ext4.define("Ext.locale.en.form.field.Date", {
     maxText: trlKwf("The date in this field must be before {0}"),
     invalidText: trlKwf("{0} is not a valid date - it must be in the format {1}"),
     format: trlKwf("Y-m-d"),
-    altFormats: "m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d"
+    altFormats: "m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d",
+    startDay: parseInt(trlcKwf('start day of week', '0'))
 });
 
 Ext4.define("Ext.locale.en.form.field.ComboBox", {
