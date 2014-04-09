@@ -58,6 +58,9 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
+        if (substr($host, 0, 4) == 'www.') {
+            $host = substr($host, 4);
+        }
         $row->setFrom("noreply@$host");
         $settings = $this->getData()->parent->getComponent()->getMailSettings();
         $row->addTo($settings['recipient']);
