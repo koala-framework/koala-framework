@@ -34,7 +34,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
 
     this.searchForm = Kwc.Form.findForm(el);
 
-    if (location.protocol+'//'+location.host+location.pathname == config.searchUrl) {
+    if (location.pathname == config.searchUrl) {
         //we are already on search page; nothing to do
         this.searchMainContent = Ext.select('.kwfMainContent').first();
         Kwf.Utils.HistoryState.currentState.searchBoxValues = this.searchForm.getValues();
@@ -123,7 +123,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
         this.loadingContent.enableDisplayMode('block');
 
         var requestParams = this.searchForm.getValuesIncludingPost();
-        requestParams.url = this.config.searchUrl;
+        requestParams.url = location.protocol+'//'+location.host+this.config.searchUrl;
         Ext.Ajax.request({
             params: requestParams,
             url: Kwf.getKwcRenderUrl(),

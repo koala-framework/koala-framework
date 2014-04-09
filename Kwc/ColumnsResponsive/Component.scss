@@ -6,7 +6,6 @@ $grid-padding   : 0em;
 .cssClass {
     > .listItem {
         padding-bottom: 20px;
-
         .kwcTextImage {
             &.noText {
                 .kwcBasicImageEnlarge {
@@ -26,7 +25,7 @@ $grid-padding   : 0em;
     }
 
     &.col2col-50_50 {
-       > .listItem.span1 {
+        > .listItem.span1 {
             @include span-columns(1, 2);
         }
     }
