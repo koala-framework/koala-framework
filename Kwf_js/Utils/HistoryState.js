@@ -75,7 +75,7 @@ Kwf.Utils.HistoryStateHash = function() {
         }, this);
         Kwf.onContentReady(function() {
             Kwf.History.init();
-        }, this);
+        });
     }
 };
 Ext.extend(Kwf.Utils.HistoryStateHash, Kwf.Utils.HistoryStateAbstract, {

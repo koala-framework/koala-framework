@@ -9,7 +9,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             //recalculate container height as the content height might have changed due to ResponsiveEl
             var h = this._getLargeContentHeight(this.list.getActiveItem());
             this.largeContainer.setHeight(h);
-        }, this);
+        },  { scope: this } );
 
         this.largeContainer = this.list.el.child(this.largeContainerSelector);
         this.largeContent = {};
