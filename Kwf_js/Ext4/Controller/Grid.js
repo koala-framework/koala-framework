@@ -2,6 +2,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
+    uses: [ 'Ext.window.MessageBox' ],
     autoSync: true,
     autoLoad: false,
 
@@ -19,9 +20,20 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
         if (!this.grid) Ext4.Error.raise('grid config is required');
         if (!this.grid instanceof Ext4.grid.Panel) Ext4.Error.raise('grid config needs to be a Ext.grid.Panel');
         var grid = this.grid;
+
         if (typeof this.deleteButton == 'undefined') this.deleteButton = grid.down('button#delete');
         if (this.deleteButton && !this.deleteButton instanceof Ext4.button.Button) Ext4.Error.raise('deleteButton config needs to be a Ext.button.Button');
-        if (this.deleteButton) this.deleteButton.disable();
+        if (this.deleteButton) {
+            this.deleteButton.disable();
+            this.deleteButton.on('click', this.onDeleteClick, this);
+        }
+
+        if (typeof this.exportCsvButton == 'undefined') this.exportCsvButton = grid.down('button#exportCsv');
+        if (this.exportCsvButton && !this.exportCsvButton instanceof Ext4.button.Button) Ext4.Error.raise('exportCsvButton config needs to be a Ext.button.Button');
+        if (this.exportCsvButton) {
+            this.exportCsvButton.on('click', this.csvExport, this);
+        }
+
         grid.on('selectionchange', function(model, rows) {
             if (rows[0]) {
                 var row = rows[0];
@@ -30,10 +42,6 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
                 if (this.deleteButton) this.deleteButton.disable();
             }
         }, this);
-        if (this.deleteButton) {
-            this.deleteButton.disable();
-            this.deleteButton.on('click', this.onDeleteClick, this);
-        }
         Ext4.each(grid.query('> toolbar[dock=top] field'), function(field) {
             field.on('change', function() {
                 var filterId = 'filter-'+field.getName();
@@ -109,5 +117,95 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
         }, this);
 
         this.fireEvent('bindstore', s);
+    },
+
+    csvExport: function()
+    {
+        var csv = '';
+
+        //header
+        var sep = '';
+        Ext4.each(this.grid.columns, function(col) {
+            if (!col.dataIndex) return;
+            csv += sep+col.text;
+            sep = ';';
+        }, this);
+        csv += '\n';
+
+
+        var pageSize = 25;
+        var totalCount = this._store.getTotalCount();
+        var pageCount = Math.ceil(totalCount / pageSize);
+        var page = 1;
+
+        //create own store, so grid doesn't display loaded rows
+        var store = this._store.self.create({
+            filters: this._store.filters.items,
+            sorters: this._store.sorters.items
+        });
+
+        Ext4.Msg.show({
+            title: trlKwf('Export'),
+            msg: trlKwf('Exporting rows...'),
+            progress: true,
+            buttons: Ext4.Msg.CANCEL
+        });
+
+        loadPage.call(this);
+
+        function loadPage()
+        {
+            if (!Ext4.Msg.isVisible()) return; //export cancelled
+            Ext4.Msg.updateProgress((page-1)/pageCount);
+            store.loadPage(page, {
+                callback: function() {
+                    exportRows.call(this);
+                    if (page < pageCount) {
+                        page++;
+                        loadPage.call(this);
+                    } else {
+                        Ext4.Msg.updateProgress(1);
+                        createDownload.call(this);
+                    }
+                },
+                scope: this
+            });
+        }
+
+        function exportRows()
+        {
+            store.each(function(row) {
+                var sep = '';
+                Ext4.each(this.grid.columns, function(col) {
+                    if (!col.dataIndex) return;
+                    var val = row.get(col.dataIndex);
+                    if (col.renderer) {
+                        val = Ext.util.Format.stripTags(col.renderer(val, col, row));
+                    }
+                    if (!val) val = '';
+                    csv += sep;
+                    csv += String(val).replace('\\', '\\\\').replace(';', '\;').replace('\n', '\\n');
+                    sep = ';';
+                }, this);
+                csv += '\n';
+            }, this);
+        }
+
+        function createDownload()
+        {
+            //TODO IE8 compatibility
+            var URL = window.URL || window.webkiURL;
+            var blob = new Blob([csv]);
+            var blobURL = URL.createObjectURL(blob);
+            var a = this.grid.el.createChild({
+                tag: 'a',
+                href: blobURL,
+                style: 'display:none;',
+                download: 'export.csv'
+            });
+            a.dom.click();
+            a.remove();
+            Ext4.Msg.hide();
+        }
     }
 });
