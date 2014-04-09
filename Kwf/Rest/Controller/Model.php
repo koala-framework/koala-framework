@@ -202,9 +202,8 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     private function _fillRow($row, $data)
     {
         foreach ($this->_saveColumns as $col) {
-            if (!isset($data->$col)) continue;
+            if (!property_exists($data, $col)) continue;
             $v = $data->$col;
-            if ($v === null) continue;
             if ($this->_model->getColumnType($col) == Kwf_Model_Interface::TYPE_DATE) {
                 $v = new Kwf_Date($v);
                 $v = $v->format();
