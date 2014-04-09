@@ -9,6 +9,9 @@ class Kwf_Util_Model_Amazon_Test extends Kwf_Test_TestCase
     public function setUp()
     {
         parent::setUp();
+        if (!Kwf_Registry::get('config')->amazon || !Kwf_Registry::get('config')->amazon->key) {
+            $this->markTestSkipped();
+        }
         sleep(1);
         Kwf_Model_Abstract::clearInstances();
     }
