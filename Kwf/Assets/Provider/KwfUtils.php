@@ -9,10 +9,10 @@ class Kwf_Assets_Provider_KwfUtils extends Kwf_Assets_Provider_Abstract
             if (preg_match('#^\s*Kwf\.Utils\.ResponsiveEl\(#m', $c)) {
                 $deps[] = 'KwfResponsiveEl';
             }
-            if (preg_match('#^\s*Kwf\.on(Element|Content)Ready\(#m', $c)) {
+            if (preg_match('#^\s*Kwf\.on(Element|Content)(Ready|Show|Hide|WidthChange)\(#m', $c)) {
                 $deps[] = 'KwfOnReady';
             }
-            if (preg_match('#^\s*Kwf\.onJElementReady\(#m', $c)) {
+            if (preg_match('#^\s*Kwf\.onJElement(Ready|Show|Hide|WidthChange)\(#m', $c)) {
                 $deps[] = 'KwfOnReadyJQuery';
             }
             $ret = array();
