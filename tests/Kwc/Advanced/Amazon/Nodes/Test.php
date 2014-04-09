@@ -10,6 +10,10 @@ class Kwc_Advanced_Amazon_Nodes_Test extends Kwf_Test_SeleniumTestCase
 
     public function setUp()
     {
+        if (!Kwf_Registry::get('config')->amazon || !Kwf_Registry::get('config')->amazon->key) {
+            $this->markTestSkipped();
+        }
+
         Kwf_Component_Data_Root::setComponentClass('Kwc_Advanced_Amazon_Nodes_Root');
         $this->_root = Kwf_Component_Data_Root::getInstance();
         parent::setUp();
