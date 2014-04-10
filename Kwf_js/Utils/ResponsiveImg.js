@@ -1,11 +1,51 @@
 Kwf.DONT_HASH_TYPE_PREFIX = 'dh-';
 
+Kwf.Utils._lastScrollTop = null;
+$(window).scroll(function()
+{
+    var $w = $(window);
+    if (Kwf.Utils._lastScrollTop && $w.scrollTop()-Kwf.Utils._lastScrollTop < 50) {
+        //only check for images to load in steps of 50px, we can do that as we load 50px in advance
+        return;
+    }
+
+    Kwf.Utils._lastScrollTop = $w.scrollTop()
+    for(var i=0; i<Kwf._deferredImages.length; ++i) {
+        var el = Kwf._deferredImages[i];
+        if (Kwf.Utils._isElementInView(el)) {
+            Kwf._deferredImages.splice(i, 1);
+            i--;
+            Kwf.Utils._initResponsiveImgEl(el);
+        }
+    }
+});
+
+
+Kwf.Utils._isElementInView = function(el)
+{
+    var $e = $(el.dom);
+    var threshold = 50;
+    if ($e.is(":hidden")) return false;
+    var $w = $(window);
+    var wt = $w.scrollTop(),
+        wb = wt + $w.height(),
+        et = $e.offset().top,
+        eb = et + $e.height();
+    return eb >= wt - threshold && et <= wb + threshold;
+}
+
+Kwf._deferredImages = [];
+
 Kwf.Utils.ResponsiveImg = function (selector) {
     Kwf.onElementWidthChange(selector, function responsiveImg(el) {
-        if (!el.responsiveImgInitDone) {
-            Kwf.Utils._initResponsiveImgEl(el);
+        if (Kwf.Utils._isElementInView(el)) {
+            if (!el.responsiveImgInitDone) {
+                Kwf.Utils._initResponsiveImgEl(el);
+            } else {
+                Kwf.Utils._checkResponsiveImgEl(el);
+            }
         } else {
-            Kwf.Utils._checkResponsiveImgEl(el);
+            Kwf._deferredImages.push(el);
         }
     }, { defer: true });
 };
