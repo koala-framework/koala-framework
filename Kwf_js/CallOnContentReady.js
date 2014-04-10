@@ -298,7 +298,9 @@ Kwf.callOnContentReady = function(renderedEl, options)
                     callQueueFn(queueEntry);
                 }
             } else if (queueEntry.onAction == 'widthChange') {
-                callQueueFn(queueEntry);
+                if (!queueEntry.options.checkVisibility || Kwf.Utils.Element.isVisible(el)) {
+                    callQueueFn(queueEntry);
+                }
             }
 
         }
