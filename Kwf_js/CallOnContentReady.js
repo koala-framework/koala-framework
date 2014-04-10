@@ -130,7 +130,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
 
         if (hndl.options.checkVisibility) {
-            if (renderedEl != document.body && !$(renderedEl).is(':visible')) {
+            if (renderedEl != document.body && !Kwf.Utils.Element.isVisible(renderedEl)) {
                 continue;
             }
             //if checkVisibility is activated, don't skip based on onActions as
@@ -269,7 +269,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         var el = queueEntry.el;
         el.onReadyQueue.splice(el.onReadyQueue.indexOf(queueEntry.num), 1);
         if (queueEntry.onAction == 'render') {
-            if (queueEntry.options.checkVisibility && !$(el).is(':visible')) {
+            if (queueEntry.options.checkVisibility && !Kwf.Utils.Element.isVisible(el)) {
                 return;
             }
             if (!el.initDone) el.initDone = {};
@@ -290,11 +290,11 @@ Kwf.callOnContentReady = function(renderedEl, options)
             callQueueFn(queueEntry, config);
         } else {
             if (queueEntry.onAction == 'show') {
-                if ($(el).is(':visible')) {
+                if (Kwf.Utils.Element.isVisible(el)) {
                     callQueueFn(queueEntry);
                 }
             } else if (queueEntry.onAction == 'hide') {
-                if (!$(el).is(':visible')) {
+                if (!Kwf.Utils.Element.isVisible(el)) {
                     callQueueFn(queueEntry);
                 }
             } else if (queueEntry.onAction == 'widthChange') {
