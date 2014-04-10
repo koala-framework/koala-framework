@@ -7,7 +7,6 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
     autoLoad: false,
 
     grid: null,
-    deleteButton: null,
 
     _store: null,
     constructor: function(config) {
