@@ -3,6 +3,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
     //fadeAnimationConfig: { duration: 0.25 }, //optional, by default animationConfig will be used
     useFade: true, //if elements will be faded in/out in addition to the moving
     moveElementSelector: false, //if false list.el, else list.child(moveElementSelector)
+    getItemWidth: null, // Set function to get List Item Width dynamically (e.g. getItemWidth: function(listWidth) { ... })
 
     _moveActive: false,
     init: function() {
@@ -52,9 +53,20 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         this.updateButtons();
     },
     updateButtons: function() {
-        var numberShown = Math.floor(this.list.el.getWidth()/this.list.items[0].el.getWidth());
+        var listWidth = Kwf.Utils.Element.getCachedWidth(this.list.el.parent());
+        var numberShown = 1;
+        var itemWidth = listWidth;
+
+        if (this.getItemWidth) {
+            itemWidth = this.getItemWidth.call(this, listWidth);
+            numberShown = Math.floor(this.list.el.getWidth()/itemWidth);
+        } else if (this.numberShown > 0) {
+            numberShown = this.numberShown;
+            itemWidth = listWidth / numberShown;
+        }
 
         for (var i=0; i<this.list.getItems().length; i++) {
+            this.list.getItem(i).el.setStyle('width', itemWidth+'px');
             this.list.getItem(i).el.show();
         }
         for (var i=numberShown; i<this.list.getItems().length; i++) {
@@ -90,6 +102,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         } else {
             this.list.getItem(numberShown).el.show();
         }
+        Kwf.callOnContentReady(this.list.getItem(numberShown).el, {action: 'show'});
 
         var firstElWidth = this.list.getItem(0).getWidthIncludingMargin();
 
@@ -150,6 +163,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         } else {
             this.list.getItem(0).el.show();
         }
+        Kwf.callOnContentReady(this.list.getItem(0).el, {action: 'show'});
 
         // fade out last
         if (this.useFade) {
