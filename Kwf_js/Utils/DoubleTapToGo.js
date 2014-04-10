@@ -10,7 +10,6 @@ Kwf.Utils.DoubleTapToGo = function(el, params) {
     ) return false;
 
     var applyOnEl = function(el, params) {
-        Kwf.log(el);
         var curItem = false;
         $(el).on('click', function(e) {
             var item = $(this);
