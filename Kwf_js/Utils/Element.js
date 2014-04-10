@@ -23,7 +23,7 @@ Kwf.Utils.Element.getCachedWidth = function(e) {
 Kwf.Utils.Element.isVisible = function(el) {
     if (el instanceof Ext.Element) el = el.dom;
     var t = Kwf.Utils.BenchmarkBox.now();
-    var ret = $(el).is(':visible');
+    var ret = Ext.fly(el).isVisible(true);
     Kwf.Utils.BenchmarkBox.time('isVisible uncached', Kwf.Utils.BenchmarkBox.now()-t);
     return ret;
 };
