@@ -21,7 +21,7 @@ Kwf.Utils.ResponsiveImg = function (selector) {
 var lastScrollTop = null;
 $w.scroll(function()
 {
-    if (lastScrollTop && $w.scrollTop()-lastScrollTop < 50) {
+    if (lastScrollTop && Math.abs($w.scrollTop()-lastScrollTop) < 50) {
         //only check for images to load in steps of 50px, we can do that as we load 50px in advance
         return;
     }
