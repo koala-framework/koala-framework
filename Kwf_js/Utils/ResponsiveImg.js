@@ -53,7 +53,11 @@ Kwf.Utils._initResponsiveImgEl = function (el) {
     var sizePath = baseUrl.replace(Kwf.DONT_HASH_TYPE_PREFIX+'{width}',
             Kwf.DONT_HASH_TYPE_PREFIX+width);
 
-    el.child('img', true).src = sizePath;
+    var img = el.child('img', true);
+    Ext.fly(img).on('load', function() {
+        el.removeClass('webResponsiveImgLoading');
+    }, this);
+    img.src = sizePath;
 };
 
 Kwf.Utils._checkResponsiveImgEl = function (responsiveImgEl) {
