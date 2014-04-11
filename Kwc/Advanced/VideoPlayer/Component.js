@@ -4,7 +4,7 @@ Kwf.onContentReady(function(el){
             if (el.mediaElement) el.mediaElement.stop();
         }
     }, this);
-}, this);
+});
 Kwf.onElementReady('.kwcAdvancedVideoPlayer', function(el, config) {
     $(el.dom).children('video').mediaelementplayer({
         //custom path to flash

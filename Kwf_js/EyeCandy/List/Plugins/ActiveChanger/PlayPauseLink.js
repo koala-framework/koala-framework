@@ -34,7 +34,7 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = Ext.extend(Kwf.EyeCandy.
                         this._playQueued = true;
                     }
                 }
-            }, this);
+            }, { scope: this });
         }
     },
 
