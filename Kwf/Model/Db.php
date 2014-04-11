@@ -1214,6 +1214,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                     $this->_importBufferOptions = $options;
                     $this->_importBuffer = $data;
                 }
+                if ($options['buffer'] !== true && count($this->_importBuffer) > $options['buffer']) {
+                    $this->writeBuffer();
+                }
             } else {
                 $this->_importArray($data, $options);
             }
