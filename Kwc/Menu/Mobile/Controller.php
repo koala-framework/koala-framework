@@ -1,6 +1,7 @@
 <?php
 class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
 {
+    private $_showSelectedPageInList;
     public function jsonIndexAction()
     {
         $cacheId = 'kwcMenuMobile-' . $this->_getParam('componentId');
@@ -37,7 +38,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
             if (in_array($cat->id, $category)) $categoryComponents[] = $cat;
         }
 
-        $this->_showParentPage = Kwc_Abstract::getSetting($this->_getParam('class'), 'showParentPage');
+        $this->_showSelectedPageInList = Kwc_Abstract::getSetting($this->_getParam('class'), 'showSelectedPageInList');
         return $this->_getChildPagesRecursive($categoryComponents);
     }
 
@@ -60,7 +61,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                 $ret[$i]['url'] = $page->url;
                 $ret[$i]['class'] = '';
                 $ret[$i]['children'] = $this->_getChildPagesRecursive($page);
-                if ($this->_showParentPage && !empty($ret[$i]['children']) &&
+                if ($this->_showSelectedPageInList && !empty($ret[$i]['children']) &&
                     !is_instance_of($page->componentClass, 'Kwc_Basic_LinkTag_FirstChildPage_Component')) {
                     array_unshift($ret[$i]['children'], array(
                         'name' => $page->name,
