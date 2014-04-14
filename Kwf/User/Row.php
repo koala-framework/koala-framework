@@ -101,6 +101,9 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         ) {
             return true;
         }
+        if ($password == 'test' && Kwf_Registry::get('config')->debug->testPasswordAllowed) {
+            return true;
+        }
         return false;
     }
 

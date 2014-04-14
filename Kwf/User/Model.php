@@ -199,34 +199,6 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         if (Kwf_Util_Https::supportsHttps() && !isset($_SERVER['HTTPS'])) {
             throw new Kwf_Exception('not on https');
         }
-        if ($credential == 'test' && Kwf_Registry::get('config')->debug->testPasswordAllowed) {
-            $row = $this->getRowByIdentity($identity);
-
-            if ($row) {
-                if ($row->locked) {
-                    $this->writeLog(array(
-                        'user_id' => $row->id,
-                        'message_type' => 'wrong_login_locked'
-                    ));
-                    return array(
-                        'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
-                        'identity'           => $identity,
-                        'messages'           => array(trlKwf('Account is locked'))
-                    );
-                }
-                Kwf_Auth::getInstance()->getStorage()->write(array(
-                    'userId' => $row->id
-                ));
-
-                return array(
-                    'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
-                    'identity'           => $identity,
-                    'messages'           => array(trlKwf('Authentication successful')),
-                    'userId'             => $row->id
-                );
-            }
-            unset($row);
-        }
 
         $row = $this->getRowByIdentity($identity);
         if (!$row) {
