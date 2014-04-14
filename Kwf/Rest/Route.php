@@ -1,6 +1,17 @@
 <?php
 class Kwf_Rest_Route extends Zend_Rest_Route
 {
+    protected function _checkRestfulModule($moduleName)
+    {
+        if ($this->_allRestful()) {
+            return true;
+        }
+        if ($this->_fullRestfulModule($moduleName)) {
+            return true;
+        }
+        return false;
+    }
+
     public function match($request, $partial = false)
     {
         if (!$request instanceof Zend_Controller_Request_Http) {
@@ -21,10 +32,8 @@ class Kwf_Rest_Route extends Zend_Rest_Route
             // Determine Module
             $moduleName = $this->_defaults[$this->_moduleKey];
             $dispatcher = $this->_front->getDispatcher();
-
             if ($dispatcher && $dispatcher->isValidModule($path[0])) {
-                $moduleName = $path[0];
-                if ($this->_checkRestfulModule($moduleName)) {
+                if ($this->_checkRestfulModule($path[0])) {
                     $values[$this->_moduleKey] = array_shift($path);
                     $this->_moduleValid = true;
                 }
