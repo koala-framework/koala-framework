@@ -5,11 +5,20 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
     {
         static $classes;
         if (isset($classes)) return $classes;
-        $classes = array();
-        $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(Kwf_Config::getValue('path.ext4').'/src'), RecursiveIteratorIterator::LEAVES_ONLY);
+        $p = Kwf_Config::getValue('path.ext4');
+        $classes = array_merge(
+            self::_getAliasClassesForPath($p.'/src', $p.'/src'),
+            self::_getAliasClassesForPath($p.'/examples/ux', $p.'/examples')
+        );
+        return $classes;
+    }
+
+    private static function _getAliasClassesForPath($path, $stripPath)
+    {
+        $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::LEAVES_ONLY);
         foreach ($it as $i) {
             if (substr($i->getPathname(), -3) != '.js') continue;
-            $depName = 'Ext4.'.str_replace('/', '.', substr($i->getPathname(), strlen(Kwf_Config::getValue('path.ext4').'/src/'), -3));
+            $depName = 'Ext4.'.str_replace('/', '.', substr($i->getPathname(), strlen($stripPath)+1, -3));
             $fileContents = file_get_contents($i->getPathname());
             if (preg_match_all('#^\s*(//|\*) @(class|alternateClassName|define) ([a-zA-Z0-9\./]+)\s*$#m', $fileContents, $m)) {
                 foreach ($m[3] as $cls) {
@@ -84,7 +93,11 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
         } else*/
         if (substr($dependencyName, 0, 4) == 'Ext4') {
             $class = substr($dependencyName, 4);
-            $file = Kwf_Config::getValue('path.ext4').'/src'.str_replace('.', '/', $class).'.js';
+            if (substr($class, 0, 4)=='.ux.') {
+                $file = Kwf_Config::getValue('path.ext4').'/examples'.str_replace('.', '/', $class).'.js';
+            } else {
+                $file = Kwf_Config::getValue('path.ext4').'/src'.str_replace('.', '/', $class).'.js';
+            }
             if (!file_exists($file)) return null;
             if ($file == Kwf_Config::getValue('path.ext4').'/src/lang/Error.js') {
                 return new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Ext4/Error.js');
