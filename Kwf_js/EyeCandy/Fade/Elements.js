@@ -1,26 +1,39 @@
 Kwf.onJElementReady('div.kwfFadeElements', function fadeElements(element) {
-    var fadeClass = element.find('.fadeClass');
-    var selector = element.find('.fadeSelector')[0].value;
-    var config = element.find('.fadeConfig'); // optional
+    fadeClass = null;
+    selector = null;
+    if (element.find('.fadeClass').length) {
+        fadeClass = element.find('.fadeClass');
+    }
+    if (element.find('.fadeSelector').length) {
+        selector = element.find('.fadeSelector')[0].value;
+    }
+    var config = element.find('.fadeConfig');
     if (config && config[0]) {
         config = $.parseJSON(config[0].value);
     } else {
         config = { };
     }
-    var textSelector = element.find('.textSelector'); // optional
+    var textSelector = null; // optional
+    if (element.find('.textSelector').length) {
+        textSelector = element.find('.textSelector');
+    }
     if (textSelector && textSelector[0]) {
         config.textSelector = textSelector[0].value;
     }
 
-    config.selector = selector;
+    if (selector) {
+        config.selector = selector;
+    }
+    if (fadeClass) {
+        config.fadeClass = fadeClass[0].value;
+    }
     config.selectorRoot = element;
 
     var cls = Kwf.Fade.Elements;
-    if (fadeClass.length) {
-        cls = eval(fadeClass[0].value);
-        delete fadeClass;
+    if (config.fadeClass.length) {
+        cls = eval(config.fadeClass);
+        delete config.fadeClass;
     }
-
     element.fadeElementsObject = new cls(config);
     element.fadeElementsObject.start();
 });
