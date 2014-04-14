@@ -37,6 +37,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
             if (in_array($cat->id, $category)) $categoryComponents[] = $cat;
         }
 
+        $this->_showParentPage = Kwc_Abstract::getSetting($this->_getParam('class'), 'showParentPage');
         return $this->_getChildPagesRecursive($categoryComponents);
     }
 
@@ -57,13 +58,19 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
 
                 $ret[$i]['name'] = $page->name;
                 $ret[$i]['url'] = $page->url;
-                $ret[$i]['class'] = array();
+                $ret[$i]['class'] = '';
                 $ret[$i]['children'] = $this->_getChildPagesRecursive($page);
+                if ($this->_showParentPage && !empty($ret[$i]['children']) &&
+                    !is_instance_of($page->componentClass, 'Kwc_Basic_LinkTag_FirstChildPage_Component')) {
+                    array_unshift($ret[$i]['children'], array(
+                        'name' => $page->name,
+                        'url' => $page->url,
+                        'class' => 'parent',
+                        'children' => array()
+                    ));
+                }
 
-                if ($i == 0) $ret[$i]['class'][] = 'first';
-                if ($i == count($pages)-1) $ret[$i]['class'][] = 'last';
-                if (!empty($ret[$i]['children'])) $ret[$i]['class'][] = 'hasChildren';
-                $ret[$i]['class'] = implode(' ', $ret[$i]['class']);
+                if (!empty($ret[$i]['children'])) $ret[$i]['class'] = 'hasChildren';
 
                 $i++;
             }
