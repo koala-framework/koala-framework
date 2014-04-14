@@ -199,7 +199,7 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         $this->_fillRow($row, $data);
     }
 
-    private function _fillRow($row, $data)
+    protected function _fillRow($row, $data)
     {
         foreach ($this->_saveColumns as $col) {
             if (!property_exists($data, $col)) continue;
