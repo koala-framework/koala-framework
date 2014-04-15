@@ -62,6 +62,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageFile.js';
         $ret['assets']['dep'][] = 'KwfResponsiveImg';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
+
+        $ret['defineWidth'] = false;
         return $ret;
     }
 
@@ -107,6 +109,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         );
 
         $ret['baseUrl'] = $this->getBaseImageUrl();
+        $ret['defineWidth'] = $this->_getSetting('defineWidth');
         return $ret;
     }
 

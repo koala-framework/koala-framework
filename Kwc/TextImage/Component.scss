@@ -52,7 +52,7 @@
         margin: 0 auto;
     }
 
-    &.lt420 .image, &.largeImage .image {
+    &.lt420 .image .kwcAbstractImage, &.largeImage .image .kwcAbstractImage {
         width: 100% !important;
     }
 
