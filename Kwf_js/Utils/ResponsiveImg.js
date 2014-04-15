@@ -105,11 +105,12 @@ function isElementInView(el)
 {
     var $e = $(el.dom);
     var threshold = 50;
+    
     if ($e.is(":hidden")) return false;
     var wt = $w.scrollTop(),
         wb = wt + $w.height(),
         et = $e.offset().top,
-        eb = et + $e.height();
+        eb = et + el.dom.clientWidth;
     return eb >= wt - threshold && et <= wb + threshold;
 }
 
