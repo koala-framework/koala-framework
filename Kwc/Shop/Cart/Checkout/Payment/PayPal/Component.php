@@ -18,6 +18,13 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Chec
             'name' => trlKwf('Cancel')
         );
 
+        /**
+         * Do not prompt buyers for a shipping address. Allowable values are:
+         * 0 - prompt for an address, but do not require one
+         * 1 - do not prompt for an address
+         * 2 - prompt for an address, and require one
+         */
+        $ret['noShipping'] = 1;
         $ret['business'] = ''; // deprecated, use paypalId in config instead
         return $ret;
     }
