@@ -93,8 +93,10 @@ Kwf.callOnContentReady = function(renderedEl, options)
         options: options
     });
 
-    var html = false;
-    if (options.action == 'render' && Kwf._skipDeferred !== false && renderedEl == document.body) {
+    if (options.action == 'render') {
+        //new elements rendered, clear cache
+        Kwf._elCacheBySelector = {};
+
         var t = Kwf.Utils.BenchmarkBox.now();
         var html = renderedEl.innerHTML;
         Kwf.Utils.BenchmarkBox.time('innerHTML', Kwf.Utils.BenchmarkBox.now()-t);
@@ -139,9 +141,9 @@ Kwf.callOnContentReady = function(renderedEl, options)
             }
         }
 
-        if (html) {
+        if (options.action == 'render' && !Kwf._elCacheBySelector[hndl.selector]) {
             var t = Kwf.Utils.BenchmarkBox.now();
-            var m = hndl.selector.match(/^[a-z]*\.([a-z]+)/i);
+            var m = hndl.selector.match(/^[a-z]*\.([a-z]+)/i)
             if (m) {
                 //do a stupid text search on the selector, using that we can skip query for many selectors that don't exist in the current el
                 if (html.indexOf(m[1]) == -1) {
@@ -168,7 +170,9 @@ Kwf.callOnContentReady = function(renderedEl, options)
             var t = Kwf.Utils.BenchmarkBox.now();
             var els = $.makeArray($(renderedEl).find(hndl.selector));
             Kwf.Utils.BenchmarkBox.time('query', Kwf.Utils.BenchmarkBox.now() - t);
-            Kwf._elCacheBySelector[hndl.selector] = els;
+            if (options.action == 'render' && renderedEl == document.body) {
+                Kwf._elCacheBySelector[hndl.selector] = els;
+            }
         }
         for (var j = 0; j< els.length; ++j) {
 
