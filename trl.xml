@@ -79,7 +79,7 @@
 <uk>Добрий день</uk>
 <ru>Добрый день {0}!</ru>
 <es_CL>Hola {0}!</es_CL>
-<sk>Ahoj {0}!</sk>
+<sk>Dobrý deň {0}!</sk>
 <hr>Pozdrav {0}!</hr>
 </text>
 <text>
@@ -1402,6 +1402,7 @@
 <sl>Vnesite e-naslov.</sl>
 <ru>Пожалуйста, введите ваш email адрес</ru>
 <uk>Будь ласка, введіть Вашу адресу електронної пошти</uk>
+<sk>Vložte prosím svoju e-mailovú adresu</sk>
 </text>
 <text>
 <en>Please type in your password. After clicking the button below</en>
@@ -1463,6 +1464,7 @@
 <sl>Prišlo je do napake.</sl>
 <es_CL>Ha ocurrido un error</es_CL>
 <uk>Сталася помилка</uk>
+<sk>Vyskytla sa chyba</sk>
 </text>
 <text>
 <en>Link cannot link to itself</en>
@@ -1613,6 +1615,7 @@
 <sk>Hľadaj</sk>
 <fr>Rechercher</fr>
 <uk>Пошук</uk>
+<cs>Vyhledat</cs>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -2622,6 +2625,7 @@
 <ro>A intervenit o eroare. Vă rugăm să încercaţi din nou mai târziu.</ro>
 <sl>Prišlo je do napake. Poskusite ponovno kasneje.</sl>
 <uk>Сталася помилка. Будь ласка, спробуйте пізніше.</uk>
+<sk>Vyskytla sa chyba. Skúste prosím neskôr.</sk>
 </text>
 <text>
 <en>on</en>
@@ -3416,6 +3420,7 @@
 <sl>Obrazec je bil uspešno poslan.</sl>
 <hu>Az űrlapot sikeresen elküldtük</hu>
 <es_CL>El formulario es enviado con éxito.</es_CL>
+<sk>Údaje boli úspešne odoslané.</sk>
 </text>
 <text>
 <en>Search engine referer</en>
@@ -3766,6 +3771,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>Во молиме внесете текст во полето</bg>
 <es_CL>Por favor, rellene el campo</es_CL>
 <fr>S'il vous plaît remplir dans ce domaine</fr>
+<sk>Vyplňte prosím políčko</sk>
 </text>
 <text>
 <en>'%value%' has not only alphabetic and digit characters</en>
@@ -3791,6 +3797,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>'%value%' nu este o adresă validă de e-mail.</ro>
 <sl>%value%' ni veljaven e-naslov.</sl>
 <es_CL>'%value%' no es una dirección válida de correo electrónico</es_CL>
+<sk>'%value%' nie je platná e-mailová adresa</sk>
 </text>
 <text>
 <en>'%hostname%' is not a valid hostname for email address '%value%'</en>
@@ -5457,6 +5464,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1030</id>
 <ro>'%value%' există deja</ro>
 <sl>%value%' že obstaja.</sl>
+<sk>'%value%' už existuje</sk>
 </text>
 <text>
 <en>Imprint</en>
@@ -5838,6 +5846,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Vă rugăm să selectaţi</ro>
 <mk>Ве молиме одберете</mk>
 <sl>Prosimo izberite</sl>
+<sk>Prosím vyberte si</sk>
 </text>
 <text>
 <en>Root</en>
@@ -6172,6 +6181,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Newsletter</de>
 <ro>Newsletter</ro>
 <sl>Novice</sl>
+<sk>Novinky</sk>
 </text>
 <text>
 <en>Sending stopped, cannot start again</en>
@@ -6645,6 +6655,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1260</id>
 <ro>Abonează newsletter-ul</ro>
 <sl>Prijava na e-novice</sl>
+<sk>Prihlásenie na odber noviniek Volkswagen</sk>
 </text>
 <text>
 <en>Hello {0}</en>
@@ -6653,6 +6664,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Bună ziua {0}</ro>
 <sl>Pozdravljeni, {0}</sl>
 <uk>Добрий день</uk>
+<sk>Dobrý deň {0}</sk>
 </text>
 <text>
 <en>You have just been subscribed to the newsletter at {0}.</en>
@@ -6661,7 +6673,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Aţi fost abonat pentru newsletter-ul {0}.</ro>
 <sl>Pravkar ste bili vneseni kot prejemnik e-novic pri {0}.</sl>
 <uk>Ви щойно підписалися на автоматичну розсилку новин від {0}.</uk>
-<sk>Boli ste prihlásený na odber noviniek na {0}.</sk>
+<sk>Boli ste prihlásený na odber noviniek Volkswagen na {0}.</sk>
 </text>
 <text>
 <en>ACTIVATION LINK</en>
@@ -6759,6 +6771,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1273</id>
 <ro>Datele dumneavoastră au fost salvate cu succes.</ro>
 <sl>Vaši podatki so bili uspešno shranjeni.</sl>
+<sk>Údaje boli úspešne uložené.</sk>
 </text>
 <text>
 <en>Create Date</en>
@@ -7740,6 +7753,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Izberite eno od možnosti</sl>
 <mk>Ве молиме изберете опција</mk>
 <bg>Ве молиме изберете опција</bg>
+<sk>Vyberte si prosím jednu z možností</sk>
 </text>
 <text>
 <en>No Filedata received.</en>
@@ -9392,6 +9406,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1804</id>
 <sk>Žiadne výsledky vyhľadávania</sk>
 <uk>Записів не знайдено</uk>
+<cs>Novinky nebyly nalezeny</cs>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
