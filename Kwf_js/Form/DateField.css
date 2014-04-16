@@ -100,19 +100,14 @@ table.x-date-inner {
     color: #333;
     color: var(datePickerTextColor);
 }
-.frontend .x-date-picker .x-menu {
-    border: none;
+.frontend .x-menu {
     padding: 0px;
     box-shadow: 0 9px 14px -4px #333333;
     border: 1px solid var(datePickerBorderColor);
 }
 .frontend .x-date-picker {
     background:none;
-    width: auto !important;
-
-    > table {
-        width: 220px !important;
-    }
+    width: 175px;
 }
 .frontend .x-btn-left, .frontend .x-btn-right, .frontend .x-btn-center {
     background: none;

@@ -21,7 +21,7 @@ class Kwc_Root_Category_Trl_Update_33918 extends Kwf_Update
                 if ($field['Field'] == 'component_id') $hasComponentId = true;
             }
             if (!$primary) {
-                throw new Kwf_Exception('primary key not found');
+                continue;
             }
             if ($hasComponentId) {
                 $tables[] = array(

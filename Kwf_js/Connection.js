@@ -57,7 +57,9 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
             options.scope = this;
         }
         if (!options.params) options.params = {};
-        options.params.applicationAssetsVersion = Kwf.application.assetsVersion;
+        if (Kwf.isApp) {
+            options.params.applicationAssetsVersion = Kwf.application.assetsVersion;
+        }
         if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
         if (!options.url.match(':\/\/')) {
             //absolute url incl. http:// erstellen

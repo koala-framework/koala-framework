@@ -203,7 +203,9 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         this.directionsService = new google.maps.DirectionsService();
         this.directionsDisplay = new google.maps.DirectionsRenderer();
         //CONTROLLS
-        if (!this.config.map_type) {
+        if (parseInt(this.config.satelite)) {
+            this.config.map_type = true;
+        } else {
             this.config.map_type = false;
         }
         var mapOptions = {

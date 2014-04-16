@@ -8,6 +8,7 @@ class Kwc_Menu_Mobile_Component extends Kwc_Abstract
         $ret['cssClass'] = 'webListNone webStandard webMenu default';
         $ret['placeholder']['menuLink'] = trlKwfStatic('Menu');
 
+        $ret['showSelectedPageInList'] = true;
         $ret['assets']['dep'][] = 'mustache';
         return $ret;
     }
