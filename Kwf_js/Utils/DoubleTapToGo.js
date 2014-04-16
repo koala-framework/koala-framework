@@ -20,16 +20,14 @@ Kwf.Utils.DoubleTapToGo = function(el, params) {
         });
 
         $(document).on('click touchstart MSPointerDown', function(e) {
-            if (params && params.onopen && !el[0].doubleTapToGo) {
-                el[0].doubleTapToGo = true;
-                params.onopen.call(this, e, el[0]);
-            }
-
             var resetItem = true;
             var parents = $( e.target ).parents();
             for (var i = 0; i < parents.length; i++) {
                 if (parents[i] == curItem[0]) {
                     resetItem = false;
+                    if (params && params.onopen) {
+                        params.onopen.call(this, e, curItem);
+                    }
                 }
             }
             if (resetItem) curItem = false;
