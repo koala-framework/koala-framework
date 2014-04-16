@@ -435,7 +435,10 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
                             $destRow->component = 'mail';
                         }
                     } else {
-                        if (isset($linkClasses['intern']) && $linkClasses['intern']) {
+                        if (isset($linkClasses['intern']) &&
+                            $linkClasses['intern'] &&
+                            Kwf_Config::getValue('server.redirectToDomain') // we cannot decide whether link goes on current site so skip making internal link
+                        ) {
                             $url = $part['href'];
                             $parsedUrl = parse_url($url);
                             if (!isset($parsedUrl['host'])) {
