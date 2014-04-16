@@ -85,7 +85,10 @@ Kwf.callOnContentReady = function(renderedEl, options)
         renderedEl = document.body;
     }
     if (Ext.Element && renderedEl instanceof Ext.Element) renderedEl = renderedEl.dom;
-    if (jQuery && renderedEl instanceof jQuery) renderedEl = renderedEl.get();
+    if (jQuery && renderedEl instanceof jQuery) {
+        renderedEl.each(function(){ Kwf.callOnContentReady(this, options); });
+        return;
+    }
     options.newRender = options.action == 'render'; //backwards compatibility, for onContentReady callback
 
     Kwf._onReadyCallQueue.push({
