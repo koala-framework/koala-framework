@@ -72,10 +72,10 @@ class Kwf_Component_Cache_Menu_AlternativeComponentTest extends Kwc_TestAbstract
         $this->assertEquals('Kwf_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);
 
         $menu = $this->_root->getComponentById('1-menu3');
-        $this->assertEquals('Kwc_Menu_ParentMenu_Component.Kwf_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);
+        $this->assertEquals('Kwc_Menu_Expanded_ParentMenu_Component.Kwf_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);
 
         $menu = $this->_root->getComponentById('2-menu3');
-        $this->assertEquals('Kwc_Menu_ParentMenu_Component.Kwf_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);
+        $this->assertEquals('Kwc_Menu_Expanded_ParentMenu_Component.Kwf_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);
 
         $menu = $this->_root->getComponentById('3-menu3');
         $this->assertEquals('Kwc_Menu_ParentContent_Component.Kwf_Component_Cache_Menu_Root3_Menu3_Component', $menu->componentClass);

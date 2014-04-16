@@ -34,6 +34,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 $ret = $this->_getModel()->fetchColumnsByPrimaryId($cols, $id);
                 if ($ret) {
                     if ($ret['is_home']) $ret['visible'] = 1;
+                    $ret['self_visible'] = $ret['visible'];
                     $ret['parent_visible'] = $ret['visible'];
                     $i = $ret['parent_id'];
                     $ret['parent_ids'] = array($i);
@@ -427,7 +428,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $ret['icon'] = 'page';
         if ($component->isHome) {
             $ret['iconEffects'][] = 'home';
-        } else if (!$component->visible) {
+        } else if (!$component->row->self_visible) {
             $ret['iconEffects'][] = 'invisible';
         }
         $ret['allowDrag'] = true;
