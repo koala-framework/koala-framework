@@ -110,7 +110,7 @@ function isElementInView(el)
     var wt = $w.scrollTop(),
         wb = wt + $w.height(),
         et = $e.offset().top,
-        eb = et + el.dom.clientWidth;
+        eb = et + el.dom.clientHeight;
     return eb >= wt - threshold && et <= wb + threshold;
 }
 
