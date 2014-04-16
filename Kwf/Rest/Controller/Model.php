@@ -190,6 +190,8 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         $this->_fillRowInsert($row, $data);
         $this->_beforeInsert($row);
         $row->save();
+        $this->_afterSave($row, $data);
+        $this->_afterInsert($row, $data);
 
         $this->view->data = $this->_loadDataFromRow($row);
     }
@@ -226,6 +228,8 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         $this->_fillRow($row, $data);
         $this->_beforeUpdate($row);
         $row->save();
+        $this->_afterSave($row, $data);
+        $this->_afterUpdate($row, $data);
 
         $this->view->data = $this->_loadDataFromRow($row);
     }
@@ -248,6 +252,18 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     }
 
     protected function _beforeDelete(Kwf_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _afterUpdate(Kwf_Model_Row_Interface $row, $data)
+    {
+    }
+
+    protected function _afterInsert(Kwf_Model_Row_Interface $row, $data)
+    {
+    }
+
+    protected function _afterSave(Kwf_Model_Row_Interface $row, $data)
     {
     }
 }
