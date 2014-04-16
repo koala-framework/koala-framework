@@ -39,11 +39,10 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
             $this->getData()->parent->componentId, array('orderId' => $order->id)
         );
 
-        $alternetive = $order->alternative_shipping_address;
+        $alternative = $order->alternative_shipping_address;
         $params = array(
             'charset' => 'utf-8',
-            'cmd' => '_ext-enter',
-            'redirect_cmd' => '_xclick',
+            'cmd' => '_xclick',
             'business' => $paypalId,
             'lc' => 'AT',
             'item_name' => $this->getData()->parent->getComponent()->getItemName($order),
@@ -52,7 +51,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
             'currency_code' => 'EUR',
             'button_subtype' => 'products',
             'no_note' => '1',
-            'no_shipping' => '1',
+            'no_shipping' => Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'noShipping'),
             'rm' => '1',
             'return' => $this->getData()->parent->getChildComponent('_confirm')->getAbsoluteUrl() .
                 '?custom=' . urlencode($custom),
@@ -60,16 +59,24 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component extends Kwc_Ab
             'notify_url' => str_replace('.vivid/', '.fb-dev.vivid-planet.com/',
                 $this->getData()->parent->getChildComponent('_ipn')->getAbsoluteUrl()),
             'bn' => 'PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted',
-            'custom' => $custom,
-            'email' => $order->email,
-            'first_name' => ($alternetive) ? $order->shipping_firstname : $order->firstname,
-            'last_name' => ($alternetive) ? $order->shipping_lastname : $order->lastname,
-            'address1' => ($alternetive) ? $order->shipping_street : $order->street,
-            'address2' => ($alternetive) ? $order->shipping_addition : $order->addition,
-            'city' => ($alternetive) ? $order->shipping_city : $order->city,
-            'state' => ($alternetive) ? $order->shipping_country : $order->country,
-            'zip' => ($alternetive) ? $order->shipping_zip : $order->zip
+            'custom' => $custom
         );
+
+        if ($params['no_shipping'] === 0 || $params['no_shipping'] === 2) {
+            $params = array_merge($params, array(
+                'cmd' => '_ext-enter',
+                'redirect_cmd' => '_xclick',
+                'address_override' => '1',
+                'email' => $order->email,
+                'first_name' => ($alternative) ? $order->shipping_firstname : $order->firstname,
+                'last_name' => ($alternative) ? $order->shipping_lastname : $order->lastname,
+                'address1' => ($alternative) ? $order->shipping_street : $order->street,
+                'address2' => ($alternative) ? $order->shipping_addition : $order->addition,
+                'city' => ($alternative) ? $order->shipping_city : $order->city,
+                'country' => ($alternative) ? $order->shipping_country : $order->country,
+                'zip' => ($alternative) ? $order->shipping_zip : $order->zip
+            ));
+        }
 
         $paypalDomain = Kwf_Registry::get('config')->paypalDomain;
         $ret = "<form id=\"paypalButton\" action=\"https://$paypalDomain/cgi-bin/webscr\" method=\"post\">\n";
