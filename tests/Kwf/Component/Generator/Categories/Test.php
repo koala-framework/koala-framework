@@ -112,4 +112,54 @@ class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
         $this->assertEquals(1, count($target->getChildPages()));
         $this->assertEquals(1, count($target->getChildPage()->getChildPages()));
     }
+
+    public function testByFileName()
+    {
+        $pm = Kwf_Model_Abstract::getInstance('Kwf_Component_Generator_Categories_PagesModel');
+        $c = $this->_root->getRecursiveChildComponent(array(
+            'filename' => 'foo3',
+            'pseudoPage'=>true,
+        ));
+        $this->assertEquals(4, $c->componentId);
+    }
+
+    public function testByFileNameCache()
+    {
+        $c = $this->_root->getChildComponent('-bottom')->getRecursiveChildComponent(array(
+            'filename' => 'foo4',
+            'pseudoPage'=>true,
+        ));
+        $this->assertEquals(null, $c);
+        $pm = Kwf_Model_Abstract::getInstance('Kwf_Component_Generator_Categories_PagesModel');
+        $pm->createRow(array('id'=>5, 'pos'=>3, 'visible'=>true, 'name'=>'Foo4', 'filename' => 'foo4', 'custom_filename' => false,
+                'parent_id'=>'root-bottom', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id' => 'root'))
+            ->save();
+        $this->_process();
+        $c = $this->_root->getChildComponent('-bottom')->getRecursiveChildComponent(array(
+            'filename' => 'foo4',
+            'pseudoPage'=>true,
+        ));
+        $this->assertNotNull($c);
+        $this->assertEquals(5, $c->componentId);
+    }
+
+    public function testByFileNameCacheDirectyFromRoot()
+    {
+        $c = $this->_root->getRecursiveChildComponent(array(
+            'filename' => 'foo4',
+            'pseudoPage'=>true,
+        ));
+        $this->assertEquals(null, $c);
+        $pm = Kwf_Model_Abstract::getInstance('Kwf_Component_Generator_Categories_PagesModel');
+        $pm->createRow(array('id'=>5, 'pos'=>3, 'visible'=>true, 'name'=>'Foo4', 'filename' => 'foo4', 'custom_filename' => false,
+                'parent_id'=>'root-bottom', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id' => 'root'))
+            ->save();
+        $this->_process();
+        $c = $this->_root->getRecursiveChildComponent(array(
+            'filename' => 'foo4',
+            'pseudoPage'=>true,
+        ));
+        $this->assertNotNull($c);
+        $this->assertEquals(5, $c->componentId);
+    }
 }

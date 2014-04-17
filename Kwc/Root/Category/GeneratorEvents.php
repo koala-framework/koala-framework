@@ -83,9 +83,6 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
             //cache is ordered by pos
             Kwf_Cache_Simple::delete('pcIds-'.$event->row->parent_id);
         }
-        if ($event->isDirty(array('parent_id', 'filename'))) {
-            Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->getCleanValue('parent_id').'-'.$event->row->getCleanValue('filename'));
-        }
     }
 
     private function _deletePageDataCacheRecursive($id)
@@ -97,6 +94,18 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
 
     public function onPageDataChanged(Kwf_Component_Event_Row_Abstract $event)
     {
+        if ($event instanceof Kwf_Component_Event_Row_Updated  && $event->isDirty(array('parent_id', 'filename'))) {
+            Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->getCleanValue('parent_id').'-'.$event->row->getCleanValue('filename'));
+            if (!is_numeric($event->row->getCleanValue('parent_id'))) {
+                Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->getCleanValue('parent_subroot_id').'-'.$event->row->getCleanValue('filename'));
+            }
+        } else if ($event instanceof Kwf_Component_Event_Row_Inserted || $event instanceof Kwf_Component_Event_Row_Deleted) {
+            Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->parent_id.'-'.$event->row->filename);
+            if (!is_numeric($event->row->parent_id)) {
+                Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->parent_subroot_id.'-'.$event->row->filename);
+            }
+        }
+
         Kwf_Cache_Simple::delete('pd-'.$event->row->id);
         if ($event instanceof Kwf_Component_Event_Row_Deleted) {
             $this->_deletePageDataCacheRecursive($event->row->id);
