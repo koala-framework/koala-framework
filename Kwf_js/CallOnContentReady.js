@@ -147,7 +147,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         if (options.action != 'render') {
             useSelectorCache = true;
         } else {
-            if (Kwf._skipDeferred === false && Kwf._elCacheBySelector[hndl.selector]) {
+            if (Kwf._skipDeferred === false && renderedEl == document.body && Kwf._elCacheBySelector[hndl.selector]) {
                 useSelectorCache = true;
             } else {
                 var t = Kwf.Utils.BenchmarkBox.now();
@@ -164,7 +164,6 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
             }
         }
-
         if (useSelectorCache && Kwf._elCacheBySelector[hndl.selector]) {
             Kwf.Utils.BenchmarkBox.count('queryCache');
             var els = [];
