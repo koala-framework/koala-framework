@@ -165,7 +165,7 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     // Handle GET and return a specific resource item
     public function getAction()
     {
-        $s = new Kwf_Model_Select();
+        $s = $this->_getSelect();
         if ($this->_loadColumns) {
             foreach ($this->_loadColumns as $c) {
                 $s->expr($c);
@@ -222,7 +222,9 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     {
         $data = json_decode($this->getRequest()->getRawBody());
 
-        $row = $this->_model->getRow($this->_getParam('id'));
+        $s = $this->_getSelect();
+        $s->whereId($this->_getParam('id'));
+        $row = $this->_model->getRow($s);
         if (!$row) throw new Kwf_Exception_NotFound();
 
         $this->_fillRow($row, $data);
@@ -237,7 +239,9 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     // Handle DELETE requests to delete a specific item
     public function deleteAction()
     {
-        $row = $this->_model->getRow($this->_getParam('id'));
+        $s = $this->_getSelect();
+        $s->whereId($this->_getParam('id'));
+        $row = $this->_model->getRow($s);
         if (!$row) throw new Kwf_Exception_NotFound();
         $this->_beforeDelete($row);
         $row->delete();
