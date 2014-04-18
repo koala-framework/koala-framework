@@ -171,8 +171,8 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
     },
     showLatLng:function(){
         var pnt = this.marker.getPoint();
-        pnt.y = Math.round(pnt.y * 100000000) / 100000000;
-        pnt.x = Math.round(pnt.x * 100000000) / 100000000;
+        pnt.y = Math.round(pnt.lat() * 100000000) / 100000000;
+        pnt.x = Math.round(pnt.lng() * 100000000) / 100000000;
         this.markerpoint_x = pnt.x;
         this.markerpoint_y = pnt.y;
         this.marker.openInfoWindowHtml('<strong>'+trlVps('Move marker while pressing mousekey.')+'</strong><br /><br />' +
@@ -203,8 +203,8 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
             return "";
         }
         var pnt = this.marker.getPoint();
-        pnt.y = Math.round(pnt.y * 100000000) / 100000000;
-        pnt.x = Math.round(pnt.x * 100000000) / 100000000;
+        pnt.y = Math.round(pnt.lat() * 100000000) / 100000000;
+        pnt.x = Math.round(pnt.lng() * 100000000) / 100000000;
         return  pnt.y +';'+pnt.x;
     },
     setHideClearButton:function(check){
