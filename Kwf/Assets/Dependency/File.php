@@ -94,25 +94,23 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     protected function _getComponentCssClass()
     {
-        $cssClass = $this->getFileName();
-        if (defined('VKWF_PATH') && substr($cssClass, 0, strlen(VKWF_PATH)) == VKWF_PATH) {
-            $cssClass = substr($cssClass, strlen(VKWF_PATH)+1);
+        $cssClass = realpath($this->getFileName());
+
+        static $paths;
+        if (!isset($paths)) {
+            $paths = Kwf_Config::getValueArray('path');
+            foreach ($paths as &$p) {
+                if (substr($p, 0, 1) == '.') $p = getcwd().substr($p, 1);
+            }
+            unset($paths['web']);
         }
-        if (substr($cssClass, 0, strlen(KWF_PATH)) == KWF_PATH) {
-            $cssClass = substr($cssClass, strlen(KWF_PATH)+1);
+        foreach ($paths as $i) {
+            $i = realpath($i);
+            if ($i && substr($cssClass, 0, strlen($i)) == $i) {
+                $cssClass = substr($cssClass, strlen($i)+1);
+            }
         }
-        if (substr($cssClass, 0, strlen(getcwd())) == getcwd()) {
-            $cssClass = substr($cssClass, strlen(getcwd())+1);
-        }
-        if (substr($cssClass, 0, 2) == './') {
-            $cssClass = substr($cssClass, 2);
-        }
-        if (substr($cssClass, 0, 11) == 'components/') {
-            $cssClass = substr($cssClass, 11);
-        }
-        if (substr($cssClass, 0, 7) == 'themes/') {
-            $cssClass = substr($cssClass, 7);
-        }
+
         if (substr($cssClass, -4) == '.css') {
             $cssClass = substr($cssClass, 0, -4);
         }
@@ -133,7 +131,6 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         } else {
             $cssClass = false;
         }
-
         if ($cssClass) {
             $cssClass = str_replace('/', '', $cssClass);
             return strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
