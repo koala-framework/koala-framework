@@ -29,10 +29,11 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
         $this->fireEvent(new Kwc_Abstract_Image_ImageChangedEvent($this->_class, $c));
         if ($imageData) {
             $dim = $c->getComponent()->getImageDimensions();
+            $typeBase = $c->getComponent()->getBaseType();
             $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
             foreach ($steps as $step) {
                 $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                    $this->_class, $c, Kwf_Media::DONT_HASH_TYPE_PREFIX.$step
+                    $this->_class, $c, str_replace('{width}', $step, $typeBase)
                 ));
             }
         }

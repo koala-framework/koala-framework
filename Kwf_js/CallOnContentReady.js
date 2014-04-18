@@ -85,7 +85,10 @@ Kwf.callOnContentReady = function(renderedEl, options)
         renderedEl = document.body;
     }
     if (Ext.Element && renderedEl instanceof Ext.Element) renderedEl = renderedEl.dom;
-    if (jQuery && renderedEl instanceof jQuery) renderedEl = renderedEl.get();
+    if (jQuery && renderedEl instanceof jQuery) {
+        renderedEl.each(function(){ Kwf.callOnContentReady(this, options); });
+        return;
+    }
     options.newRender = options.action == 'render'; //backwards compatibility, for onContentReady callback
 
     Kwf._onReadyCallQueue.push({
@@ -93,14 +96,6 @@ Kwf.callOnContentReady = function(renderedEl, options)
         options: options
     });
 
-    if (options.action == 'render') {
-        //new elements rendered, clear cache
-        Kwf._elCacheBySelector = {};
-
-        var t = Kwf.Utils.BenchmarkBox.now();
-        var html = renderedEl.innerHTML;
-        Kwf.Utils.BenchmarkBox.time('innerHTML', Kwf.Utils.BenchmarkBox.now()-t);
-    }
 
     //add entries to _onReadyElQueue, depending on renderedEl
     var onActions;
@@ -114,6 +109,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         onActions = ['widthChange'];
     }
 
+    var html = false;
     for (var i = 0; i < Kwf._readyElHandlers.length; i++) {
         var hndl = Kwf._readyElHandlers[i];
 
@@ -141,24 +137,34 @@ Kwf.callOnContentReady = function(renderedEl, options)
             }
         }
 
-        if (options.action == 'render' && !Kwf._elCacheBySelector[hndl.selector]) {
+        if (options.action == 'render' && !html) {
             var t = Kwf.Utils.BenchmarkBox.now();
-            var m = hndl.selector.match(/^[a-z]*\.([a-z]+)/i)
-            if (m) {
-                //do a stupid text search on the selector, using that we can skip query for many selectors that don't exist in the current el
-                if (html.indexOf(m[1]) == -1) {
-                    Kwf._elCacheBySelector[hndl.selector] = [];
-                }
-            }
-            Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
+            html = renderedEl.innerHTML;
+            Kwf.Utils.BenchmarkBox.time('innerHTML', Kwf.Utils.BenchmarkBox.now()-t);
         }
 
-        if (Kwf._elCacheBySelector[hndl.selector]) {
-            if (Kwf._elCacheBySelector[hndl.selector].length === 0) {
-                //Optimize: if we never got element by that selector, skip query
-                Kwf.Utils.BenchmarkBox.count('querySkip');
-                continue;
+        var useSelectorCache;
+        if (options.action != 'render') {
+            useSelectorCache = true;
+        } else {
+            if (Kwf._skipDeferred === false && renderedEl == document.body && Kwf._elCacheBySelector[hndl.selector]) {
+                useSelectorCache = true;
+            } else {
+                var t = Kwf.Utils.BenchmarkBox.now();
+                var m = hndl.selector.match(/^[a-z]*\.([a-z]+)/i);
+                //do a stupid text search on the selector, using that we can skip query for many selectors that don't exist in the current el
+                if (m && html.indexOf(m[1]) == -1) {
+                    useSelectorCache = true;
+                    if (!Kwf._elCacheBySelector[hndl.selector]) {
+                        Kwf._elCacheBySelector[hndl.selector] = [];
+                    }
+                } else {
+                    useSelectorCache = false;
+                }
+                Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
             }
+        }
+        if (useSelectorCache && Kwf._elCacheBySelector[hndl.selector]) {
             Kwf.Utils.BenchmarkBox.count('queryCache');
             var els = [];
             for (var j=0; j<Kwf._elCacheBySelector[hndl.selector].length; j++) {
@@ -170,8 +176,14 @@ Kwf.callOnContentReady = function(renderedEl, options)
             var t = Kwf.Utils.BenchmarkBox.now();
             var els = $.makeArray($(renderedEl).find(hndl.selector));
             Kwf.Utils.BenchmarkBox.time('query', Kwf.Utils.BenchmarkBox.now() - t);
-            if (options.action == 'render' && renderedEl == document.body) {
+            if (!Kwf._elCacheBySelector[hndl.selector]) {
                 Kwf._elCacheBySelector[hndl.selector] = els;
+            } else {
+                els.each(function(i) {
+                    if (Kwf._elCacheBySelector[hndl.selector].indexOf(i) == -1) {
+                        Kwf._elCacheBySelector[hndl.selector].push(i);
+                    }
+                }, this);
             }
         }
         for (var j = 0; j< els.length; ++j) {
@@ -232,6 +244,11 @@ Kwf.callOnContentReady = function(renderedEl, options)
         });
         for (var i = 0; i < Kwf._readyHandlers.length; i++) {
             var hndl = Kwf._readyHandlers[i];
+            if ((hndl.options.defer && Kwf._skipDeferred === true) ||
+                (!hndl.options.defer && Kwf._skipDeferred === false)
+            ) {
+                continue;
+            }
             var t = Kwf.Utils.BenchmarkBox.now();
             hndl.fn.call(hndl.options.scope || window, queueEntry.renderedEl, queueEntry.options);
             var fnName = hndl.fn.name;

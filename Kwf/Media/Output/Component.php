@@ -33,6 +33,7 @@ class Kwf_Media_Output_Component
     {
         // calculate output width/height on base of getImageDimensions and given width
         $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
+        $width = substr($width, 0, strpos($width, '-'));
         if ($width) {
             $width = Kwf_Media_Image::getResponsiveWidthStep($width,
                         Kwf_Media_Image::getResponsiveWidthSteps($dim, $data['file']));
@@ -82,22 +83,24 @@ class Kwf_Media_Output_Component
         if ($isValid == Kwf_Media_Output_IsValidInterface::VALID
             || $isValid == Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE
         ) {
-            $isValidImage = Kwf_Media_Output_IsValidInterface::INVALID;
-            $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
-            if (is_numeric($width)) {
-                // Can be searched with ignore-visible because if it is invisble and
-                // not allowed to show Kwf_Media_Output_Component::isValid would return
-                // invalid or access_denied
-                $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
-                $dim = $c->getComponent()->getImageDimensions();
-                $imageData = $c->getComponent()->getImageData();
-                $resultWidth = Kwf_Media_Image::getResponsiveWidthStep($width,
-                    Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']));
-                if ($width == $resultWidth) {
-                    $isValidImage = $isValid;
+            // Can be searched with ignore-visible because if it is invisble and
+            // not allowed to show Kwf_Media_Output_Component::isValid would return
+            // invalid or access_denied
+            $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
+            $baseType = $c->getComponent()->getBaseType();
+            $dim = $c->getComponent()->getImageDimensions();
+            $imageData = $c->getComponent()->getImageData();
+            $widths = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
+            $ok = false;
+            foreach ($widths as $w) {
+                if (str_replace('{width}', $w, $baseType) == $type) {
+                    $ok = true;
+                    break;
                 }
             }
-            $isValid = $isValidImage;
+            if (!$ok) {
+                $isValid = Kwf_Media_Output_IsValidInterface::INVALID;
+            }
         }
         return $isValid;
     }

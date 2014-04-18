@@ -1,5 +1,5 @@
 .kwfLoadingAnimation .loading {
-    content: '',
+    content: '';
     display: block;
     background-image: url("/assets/web/images/loadingbig.png");
     width: 50px;

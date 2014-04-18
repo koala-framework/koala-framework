@@ -90,11 +90,13 @@ class Kwf_Util_Component
             }
             $parsedUrl = parse_url($url);
             $_GET = array();
+            $_REQUEST = array();
             if (isset($parsedUrl['query'])) {
                 foreach (explode('&' , $parsedUrl['query']) as $get) {
                     if (!$get) continue;
                     $pos = strpos($get, '=');
                     $_GET[substr($get, 0, $pos)] = substr($get, $pos+1); //ouch
+                    $_REQUEST[substr($get, 0, $pos)] = substr($get, $pos+1); //ouch
                 }
             }
             $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl($url, null);

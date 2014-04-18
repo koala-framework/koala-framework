@@ -92,7 +92,7 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         // Render EnlargeComponent. Request Enlarge-Image (image has to be big enough)
         preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $component->render(), $matches);
         foreach ($matches[0] as $key => $m) {
-            if ($matches[3][$key] == 'dh-{width}') continue;
+            if (strpos($matches[3][$key], '{width}')!==false) continue;
             $fileWithGreaterHeight = Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
         }
 
@@ -105,7 +105,7 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         // Assert if image cache was changed
         preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $component->render(), $matches);
         foreach ($matches[0] as $key => $m) {
-            if ($matches[3][$key] == 'dh-{width}') continue;
+            if (strpos($matches[3][$key], '{width}')!==false) continue;
             $fileWithSmallerHeight = Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
         }
         $image1 = new Imagick();

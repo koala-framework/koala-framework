@@ -62,6 +62,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageFile.js';
         $ret['assets']['dep'][] = 'KwfResponsiveImg';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
+
+        $ret['defineWidth'] = false;
         return $ret;
     }
 
@@ -107,6 +109,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         );
 
         $ret['baseUrl'] = $this->getBaseImageUrl();
+        $ret['defineWidth'] = $this->_getSetting('defineWidth');
         return $ret;
     }
 
@@ -143,7 +146,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                                 Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData['file']));
             if (Kwc_Abstract::getSetting($this->getData()->componentClass, 'useDataUrl')) {
                 $id = $this->getData()->componentId;
-                $type = Kwf_Media::DONT_HASH_TYPE_PREFIX.$width;
+                $type = str_replace('{width}', $width, $this->getBaseType());
                 $data = self::getMediaOutput($id, $type, $this->getData()->componentClass);
                 if (isset($data['file'])) {
                     $c = file_get_contents($data['file']);
@@ -161,13 +164,20 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return null;
     }
 
+    public function getBaseType()
+    {
+        $type = Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}';
+        $type .= '-'.substr(md5(json_encode($this->_getSetting('dimensions'))), 0, 6);
+        return $type;
+    }
+
     public function getBaseImageUrl()
     {
         $data = $this->_getImageDataOrEmptyImageData();
         if ($data) {
             return Kwf_Media::getUrl($this->getData()->componentClass,
                 $this->getData()->componentId,
-                Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}',
+                $this->getBaseType(),
                 $data['filename']);
         }
         return null;

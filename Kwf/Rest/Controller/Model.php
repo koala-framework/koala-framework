@@ -165,7 +165,7 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     // Handle GET and return a specific resource item
     public function getAction()
     {
-        $s = new Kwf_Model_Select();
+        $s = $this->_getSelect();
         if ($this->_loadColumns) {
             foreach ($this->_loadColumns as $c) {
                 $s->expr($c);
@@ -190,6 +190,8 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         $this->_fillRowInsert($row, $data);
         $this->_beforeInsert($row);
         $row->save();
+        $this->_afterSave($row, $data);
+        $this->_afterInsert($row, $data);
 
         $this->view->data = $this->_loadDataFromRow($row);
     }
@@ -199,7 +201,7 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         $this->_fillRow($row, $data);
     }
 
-    private function _fillRow($row, $data)
+    protected function _fillRow($row, $data)
     {
         foreach ($this->_saveColumns as $col) {
             if (!property_exists($data, $col)) continue;
@@ -220,12 +222,16 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     {
         $data = json_decode($this->getRequest()->getRawBody());
 
-        $row = $this->_model->getRow($this->_getParam('id'));
+        $s = $this->_getSelect();
+        $s->whereId($this->_getParam('id'));
+        $row = $this->_model->getRow($s);
         if (!$row) throw new Kwf_Exception_NotFound();
 
         $this->_fillRow($row, $data);
         $this->_beforeUpdate($row);
         $row->save();
+        $this->_afterSave($row, $data);
+        $this->_afterUpdate($row, $data);
 
         $this->view->data = $this->_loadDataFromRow($row);
     }
@@ -233,7 +239,9 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     // Handle DELETE requests to delete a specific item
     public function deleteAction()
     {
-        $row = $this->_model->getRow($this->_getParam('id'));
+        $s = $this->_getSelect();
+        $s->whereId($this->_getParam('id'));
+        $row = $this->_model->getRow($s);
         if (!$row) throw new Kwf_Exception_NotFound();
         $this->_beforeDelete($row);
         $row->delete();
@@ -248,6 +256,18 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     }
 
     protected function _beforeDelete(Kwf_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _afterUpdate(Kwf_Model_Row_Interface $row, $data)
+    {
+    }
+
+    protected function _afterInsert(Kwf_Model_Row_Interface $row, $data)
+    {
+    }
+
+    protected function _afterSave(Kwf_Model_Row_Interface $row, $data)
     {
     }
 }

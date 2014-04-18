@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>" style="max-width:<?=$this->width;?>px;">
+<div class="<?=$this->cssClass?>" style="max-width:<?=$this->width;?>px;<? if ($this->defineWidth) {?> width:<?=$this->width;?>px;<? } ?>">
     <?=$this->component($this->linkTag)?>
     <div class="container" style="padding-bottom:<?=$this->aspectRatio?>%;"
             data-min-width="<?=$this->minWidth;?>"

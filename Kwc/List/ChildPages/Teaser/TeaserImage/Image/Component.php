@@ -10,6 +10,7 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Image_Component extends Kwc_Basic_I
             'height' => 75,
             'cover' => false,
         );
+        $ret['defineWidth'] = true;
         return $ret;
     }
 }

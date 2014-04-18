@@ -34,7 +34,7 @@ class Kwc_Basic_Html_Test extends Kwc_TestAbstract
     {
         $c = $this->_root->getComponentById(2001)->getComponent();
         $html = $c->getData()->render();
-        $this->assertEquals("<div class=\"kwcBasicHtmlTestComponent\">\n    <p>foochildbar</p></div>",
+        $this->assertEquals("<div class=\"kwcAbstractComposite kwcBasicHtmlTestComponent\">\n    <p>foochildbar</p></div>",
                             $html);
     }
 

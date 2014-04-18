@@ -42,6 +42,17 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
         exit(1);
     }
 
+    public function mediaAction()
+    {
+        if (Kwf_Cache_Simple::getBackend() == 'memcache') {
+            $this->memcacheAction();
+        } else {
+            Kwf_Media_MemoryCache::getInstance()->_clean();
+            echo "done\n";
+            exit;
+        }
+    }
+
     public function writeMaintenanceAction()
     {
         Kwf_Util_Maintenance::writeMaintenanceBootstrapSelf();
