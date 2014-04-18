@@ -15,6 +15,11 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         return $ret;
     }
 
+    public function getBaseType()
+    {
+        return $this->getData()->chained->getComponent()->getBaseType();
+    }
+
     public function getBaseImageUrl()
     {
         if ($this->getRow()->own_image) {
@@ -24,7 +29,7 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
             if ($data && $data['filename']) {
                 return Kwf_Media::getUrl($this->getData()->componentClass,
                     $this->getData()->componentId,
-                    Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}',
+                    $this->getBaseType(),
                     $data['filename']);
             }
         }

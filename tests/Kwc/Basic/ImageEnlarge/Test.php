@@ -24,7 +24,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $url = explode('/', trim($c->getComponent()->getImageUrl(), '/'));
         $this->assertEquals('Kwc_Basic_ImageEnlarge_WithoutSmallImageComponent', $url[1]);
         $this->assertEquals('1800', $url[2]);
-        $this->assertEquals('dh-'.$dim['width'], $url[3]);
+        $this->assertContains('dh-'.$dim['width'].'-', $url[3]);
     }
 
     public function testWithoutSmallImageComponentHtml()
@@ -95,7 +95,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $url = explode('/', trim($c->getComponent()->getImageUrl(), '/'));
         $this->assertEquals('Kwc_Basic_ImageEnlarge_TestComponent', $url[1]);
         $this->assertEquals('1801', $url[2]);
-        $this->assertEquals('dh-'.$dim['width'], $url[3]);
+        $this->assertContains('dh-'.$dim['width'].'-', $url[3]);
     }
 
     public function testWithoutSmallImageUploadedHtml()
@@ -169,7 +169,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $url = explode('/', trim($c->getComponent()->getImageUrl(), '/'));
         $this->assertEquals('Kwc_Basic_ImageEnlarge_TestComponent', $url[1]);
         $this->assertEquals('1802', $url[2]);
-        $this->assertEquals('dh-'.$dim['width'], $url[3]);
+        $this->assertContains('dh-'.$dim['width'].'-', $url[3]);
 
         $c = $this->_root->getComponentById('1802-linkTag');
         $dim = $c->getComponent()->getImageDimensions();

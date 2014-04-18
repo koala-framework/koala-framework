@@ -75,13 +75,18 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
         return null;
     }
 
+    public function getBaseType()
+    {
+        return $this->getData()->chained->getComponent()->getBaseType();
+    }
+
     public function getBaseImageUrl()
     {
         $data = $this->getImageData();
         if ($data) {
             return Kwf_Media::getUrl($this->getData()->componentClass,
                         $this->getData()->componentId,
-                        Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}',
+                        $this->getBaseType(),
                         $data['filename']);
         }
         return null;

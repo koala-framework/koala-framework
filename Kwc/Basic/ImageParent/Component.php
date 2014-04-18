@@ -70,12 +70,19 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         return null;
     }
 
+    public function getBaseType()
+    {
+        $type = Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}';
+        $type .= '-'.substr(md5(json_encode($this->_getSetting('dimension'))), 0, 6);
+        return $type;
+    }
+
     private function _getBaseImageUrl()
     {
         $data = $this->getImageData();
         if ($data) {
             $id = $this->getData()->componentId;
-            return Kwf_Media::getUrl($this->getData()->componentClass, $id, Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}', $data['filename']);
+            return Kwf_Media::getUrl($this->getData()->componentClass, $id, $this->getBaseType(), $data['filename']);
         }
         return null;
     }
