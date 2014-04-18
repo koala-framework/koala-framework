@@ -48,7 +48,7 @@ class Kwf_Media_MemoryCache
                 unlink($file);
                 return false;
             }
-            return $data;
+            return $data['contents'];
         } else {
             return Kwf_Cache_Simple::fetch('media-'.$id);
         }
