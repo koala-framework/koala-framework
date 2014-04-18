@@ -244,6 +244,11 @@ Kwf.callOnContentReady = function(renderedEl, options)
         });
         for (var i = 0; i < Kwf._readyHandlers.length; i++) {
             var hndl = Kwf._readyHandlers[i];
+            if ((hndl.options.defer && Kwf._skipDeferred === true) ||
+                (!hndl.options.defer && Kwf._skipDeferred === false)
+            ) {
+                continue;
+            }
             var t = Kwf.Utils.BenchmarkBox.now();
             hndl.fn.call(hndl.options.scope || window, queueEntry.renderedEl, queueEntry.options);
             var fnName = hndl.fn.name;
