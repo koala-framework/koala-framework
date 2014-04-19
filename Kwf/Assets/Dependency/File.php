@@ -103,6 +103,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                 if (substr($p, 0, 1) == '.') $p = getcwd().substr($p, 1);
             }
             unset($paths['web']);
+            $paths['webComponents'] = getcwd().'/components';
         }
         foreach ($paths as $i) {
             $i = realpath($i);
