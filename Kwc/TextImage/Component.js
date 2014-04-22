@@ -14,8 +14,10 @@ var initEl = function(el) {
     }
 };
 
-Kwf.onElementReady('.kwcTextImage', function(el) {
-    initEl(el);
+Kwf.onContentReady(function(el) {
+    Ext.get(el).select('.kwcTextImage').each(function(imageEl){
+        initEl(imageEl);
+    }, this);
 });
 
 Ext.fly(window).on('resize', function() {
