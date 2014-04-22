@@ -206,10 +206,10 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         foreach ($this->_saveColumns as $col) {
             if (!property_exists($data, $col)) continue;
             $v = $data->$col;
-            if ($this->_model->getColumnType($col) == Kwf_Model_Interface::TYPE_DATE) {
+            if (!is_null($v) && $this->_model->getColumnType($col) == Kwf_Model_Interface::TYPE_DATE) {
                 $v = new Kwf_Date($v);
                 $v = $v->format();
-            } else if ($this->_model->getColumnType($col) == Kwf_Model_Interface::TYPE_DATETIME) {
+            } else if (!is_null($v) && $this->_model->getColumnType($col) == Kwf_Model_Interface::TYPE_DATETIME) {
                 $v = new Kwf_DateTime($v);
                 $v = $v->format();
             }
