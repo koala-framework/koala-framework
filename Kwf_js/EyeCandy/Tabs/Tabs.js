@@ -92,16 +92,15 @@ Ext.extend(Kwf.Tabs, Ext.util.Observable, {
         oldContentEl.stopFx();
         newContentEl.stopFx();
         this.tabsContents.stopFx();
-
         if (this._activeTabIdx !== null) {
             Ext.get(this.switchEls[this._activeTabIdx]).removeClass('kwfTabsLinkActive');
-            oldContentEl.setStyle('position', 'absolute');
-            newContentEl.setStyle('position', 'absolute');
             oldContentEl.setStyle('z-index', '2');
             newContentEl.setStyle('z-index', '1');
+            Kwf.callOnContentReady(this.contentEls[idx], {newRender: false});
+            oldContentEl.setStyle('position', 'absolute');
+            newContentEl.setStyle('position', 'absolute');
             oldContentEl.setVisible(false);
         }
-        Kwf.callOnContentReady(this.contentEls[idx], {newRender: false});
         if (this._activeTabIdx !== null) {
             oldContentEl.setVisible(true);
 
