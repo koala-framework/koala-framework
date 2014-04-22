@@ -308,7 +308,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 
         this.view = new Ext.DataView(viewConfig);
         this.view.updateIndexes = this.view.updateIndexes.createSequence(function() {
-            Kwf.callOnContentReady(this.view.el);
+            Kwf.callOnContentReady(this.view.el, {newRender: true});
         }, this);
 
         this.view.on('click', this.onItemClick, this);
