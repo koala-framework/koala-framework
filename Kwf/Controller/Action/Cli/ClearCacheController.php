@@ -44,13 +44,10 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
 
     public function mediaAction()
     {
-        if (Kwf_Cache_Simple::getBackend() == 'memcache') {
-            $this->memcacheAction();
-        } else {
-            Kwf_Media_MemoryCache::getInstance()->_clean();
-            echo "done\n";
-            exit;
-        }
+        echo "clearing media cache, this can take some time...\n";
+        Kwf_Media_MemoryCache::getInstance()->clean();
+        echo "done\n";
+        exit;
     }
 
     public function writeMaintenanceAction()

@@ -6,7 +6,10 @@
  */
 class Kwf_Media_MemoryCache
 {
-    private static $_zendCache = null;
+    /**
+     * @var Zend_Cache_Core
+     */
+    private $_secondLevelCache = null;
     /**
      * @var self
      */
@@ -26,11 +29,21 @@ class Kwf_Media_MemoryCache
         self::$_instance = $instance;
     }
 
-    //for 'file' backend
-    private static function _getFileNameForCacheId($cacheId)
+    private function _getSecondLevelCache()
     {
-        $cacheId = preg_replace('#[^a-zA-Z0-9_-]#', '_', $cacheId);
-        return 'cache/media/mem-'.$cacheId;
+        if (!$this->_secondLevelCache) {
+            $this->_secondLevelCache = new Zend_Cache_Core(array(
+                'lifetime' => null,
+                'write_control' => false,
+                'automatic_cleaning_factor' => 0,
+                'automatic_serialization' => true,
+            ));
+            $this->_secondLevelCache->setBackend(new Kwf_Cache_Backend_File(array(
+                'cache_dir' => 'cache/mediameta',
+                'hashed_directory_level' => 2,
+            )));
+        }
+        return $this->_secondLevelCache;
     }
 
     public function load($id)
@@ -39,23 +52,33 @@ class Kwf_Media_MemoryCache
         if ($be == 'memcache') {
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
-            return Kwf_Cache_Simple::getMemcache()->get($prefix.$id);
+            $ret = Kwf_Cache_Simple::getMemcache()->get($prefix.$id);
         } else if ($be == 'file') {
-            $file = self::_getFileNameForCacheId($id);
-            if (!file_exists($file)) return false;
-            $data = unserialize(file_get_contents($file));
-            if ($data['expire'] && time() > $data['expire']) {
-                unlink($file);
-                return false;
-            }
-            return $data['contents'];
+            //use secondlevel cache only
+            $ret = false;
         } else {
-            return Kwf_Cache_Simple::fetch('media-'.$id);
+            $ret = Kwf_Cache_Simple::fetch('media-'.$id);
         }
+        if ($ret === false) {
+            $ret = $this->_getSecondLevelCache()->load($id);
+            if ($be != 'file') {
+                //first level empty, refill from second level contents
+                $metaDatas = $this->_getSecondLevelCache()->getMetadatas($id);
+                $ttl = $metaDatas['expire'] ? $metaDatas['expire']-$metaDatas['mtime'] : 0;
+                if ($be == 'memcache') {
+                    $flags = is_int($ret) ? null : MEMCACHE_COMPRESSED;
+                    Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $ret, $flags, $ttl);
+                } else {
+                    Kwf_Cache_Simple::add('media-'.$id, $ret, $ttl);
+                }
+            }
+        }
+        return $ret;
     }
 
     public function save($data, $id, $ttl = null)
     {
+        $this->_getSecondLevelCache()->save($data, $id, array(), $ttl);
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
             static $prefix;
@@ -63,12 +86,8 @@ class Kwf_Media_MemoryCache
             $flags = is_int($data) ? null : MEMCACHE_COMPRESSED;
             return Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $data, $flags, $ttl);
         } else if ($be == 'file') {
-            $file = self::_getFileNameForCacheId($id);
-            $data = array(
-                'contents' => $data,
-                'expire' => $ttl ? time()+$ttl : null
-            );
-            return file_put_contents($file, serialize($data));
+            //use secondlevel cache only
+            return true;
         } else {
             return Kwf_Cache_Simple::add('media-'.$id, $data, $ttl);
         }
@@ -77,6 +96,7 @@ class Kwf_Media_MemoryCache
 
     public function remove($id)
     {
+        $this->_getSecondLevelCache()->remove($id);
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
             static $prefix;
@@ -92,24 +112,22 @@ class Kwf_Media_MemoryCache
         }
     }
 
-    /**
-     * Internal function only ment to be used by unit tests
-     *
-     * @internal
-     */
-    public function _clean()
+    public function clean()
     {
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
-            return Kwf_Cache_Simple::getMemcache()->flush();
-        } else if ($be == 'file') {
-            foreach (glob('cache/media/mem-*') as $i) {
-                unlink($i);
+            $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
+            foreach ($this->_getSecondLevelCache()->getIds() as $id) {
+                Kwf_Cache_Simple::getMemcache()->delete($prefix.$id);
             }
-            return true;
+        } else if ($be == 'file') {
+            //use secondlevel cache only
         } else {
-            return Kwf_Cache_Simple::clear('media-');
+            foreach ($this->_getSecondLevelCache()->getIds() as $id) {
+                Kwf_Cache_Simple::delete('media-'.$id);
+            }
         }
+        $this->_getSecondLevelCache()->clean();
     }
 
 }

@@ -29,6 +29,15 @@ function updateConfig() {
     $c = preg_replace('#^preview\.responsive#m', 'kwc.responsive', $c);
     file_put_contents('config.ini', $c);
 }
+function createMediaMetaCacheFolder()
+{
+    if (!is_dir('cache/mediameta')) {
+        mkdir('cache/mediameta');
+        file_put_contents('cache/mediameta/.gitignore', "*\n!.gitignore\n");
+        system("git add cache/mediameta/.gitignore");
+        echo "folder \"cache/mediameta\" created\n";
+    }
+}
 
 $files = glob_recursive('Component.php');
 $files = array_merge($files, glob_recursive('config.ini'));
@@ -36,3 +45,5 @@ replaceFiles($files, 'Kwc_Columns_Component', 'Kwc_Legacy_Columns_Component');
 replaceFiles($files, 'Kwc_ColumnsResponsive_Component', 'Kwc_Columns_Component');
 replaceFiles($files, 'Kwc_Advanced_DyamicContent_Component', 'Kwc_Advanced_DynamicContent_Component');
 updateConfig();
+createMediaMetaCacheFolder();
+

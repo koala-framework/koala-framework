@@ -24,6 +24,7 @@ class Kwf_Util_ClearCache
                 if ($d->getFilename() == 'fulltext') continue;
                 if ($d->getFilename() == 'scss') continue; //never clear scss, too expensive to regenerate
                 if ($d->getFilename() == 'media') continue; //never clear media, too expensive to regenerate
+                if ($d->getFilename() == 'mediameta') continue; //never clear mediameta, too expensive to regenerate
                 $ret[] = $d->getFilename();
             }
         }
