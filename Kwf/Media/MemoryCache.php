@@ -46,8 +46,14 @@ class Kwf_Media_MemoryCache
         return $this->_secondLevelCache;
     }
 
+    private static function _processCacheId($cacheId)
+    {
+        return preg_replace('#[^a-zA-Z0-9_-]#', '_', $cacheId);
+    }
+
     public function load($id)
     {
+        $id = self::_processCacheId($id);
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
             static $prefix;
@@ -78,6 +84,7 @@ class Kwf_Media_MemoryCache
 
     public function save($data, $id, $ttl = null)
     {
+        $id = self::_processCacheId($id);
         $this->_getSecondLevelCache()->save($data, $id, array(), $ttl);
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
@@ -96,6 +103,7 @@ class Kwf_Media_MemoryCache
 
     public function remove($id)
     {
+        $id = self::_processCacheId($id);
         $this->_getSecondLevelCache()->remove($id);
         $be = Kwf_Cache_Simple::getBackend();
         if ($be == 'memcache') {
