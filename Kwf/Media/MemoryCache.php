@@ -48,7 +48,7 @@ class Kwf_Media_MemoryCache
 
     private static function _processCacheId($cacheId)
     {
-        return preg_replace('#[^a-zA-Z0-9_-]#', '_', $cacheId);
+        return preg_replace('#[^a-zA-Z0-9_]#', '_', $cacheId);
     }
 
     public function load($id)
