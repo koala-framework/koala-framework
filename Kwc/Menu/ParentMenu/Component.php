@@ -51,7 +51,7 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
     }
 
     //helper that sets current to current page
-    private function _processMenuSetCurrent(&$ret)
+    protected function _processMenuSetCurrent(&$ret)
     {
         $currentPages = array_reverse($this->_getCurrentPages());
 
