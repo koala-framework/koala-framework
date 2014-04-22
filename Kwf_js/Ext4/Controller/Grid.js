@@ -64,7 +64,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
         }
     },
 
-    onDeleteClick: function()
+    onDeleteClick: function(options)
     {
         if (this.autoSync) {
             Ext4.Msg.show({
@@ -75,11 +75,13 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
                 fn: function(button) {
                     if (button == 'yes') {
                         this.deleteSelected();
+                        if (options.callback) options.callback.call(options.scope || this);
                     }
                 }
             });
         } else {
             this.deleteSelected();
+            if (options.callback) options.callback.call(options.scope || this);
         }
     },
 

@@ -64,6 +64,9 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
         if (!this.windowSaveButton) this.windowSaveButton = this.editWindow.down('> toolbar > button#save');
         if (this.windowSaveButton && !this.windowSaveButton instanceof Ext4.button.Button) Ext4.Error.raise('windowSaveButton config needs to be a Ext.button.Button');
 
+        if (!this.windowDeleteButton) this.windowDeleteButton = this.editWindow.down('> toolbar > button#delete');
+        if (this.windowDeleteButton && !this.windowDeleteButton instanceof Ext4.button.Button) Ext4.Error.raise('windowDeleteButton config needs to be a Ext.button.Button');
+
         if (!this.windowCancelButton) this.windowCancelButton = this.editWindow.down('> toolbar > button#cancel');
         if (this.windowCancelButton && !this.windowCancelButton instanceof Ext4.button.Button) Ext4.Error.raise('windowCancelButton config needs to be a Ext.button.Button');
 
@@ -78,6 +81,16 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
                 if (this.doSave() !== false) {
                     this.closeWindow();
                 }
+            }, this);
+        }
+        if (this.windowDeleteButton) {
+            this.windowDeleteButton.on('click', function() {
+                this.gridController.onDeleteClick({
+                    callback: function() {
+                        this.closeWindow();
+                    },
+                    scope: this
+                });
             }, this);
         }
         if (this.windowCancelButton) {
