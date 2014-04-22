@@ -49,8 +49,9 @@ Kwf.Switch.Display = function(el, config) {
         this.switchContent.setStyle('display', 'none');
     }
 
-    // if it is important, show on startup
-    if (this.switchContent.child('.kwfImportant')) {
+    // if it is important or active, show on startup
+    if (this.switchContent.child('.kwfImportant')
+        || this.switchContent.hasClass('active')) {
         this.switchContent.setStyle('display', 'block');
         this.switchContent.setStyle('height', 'auto');
         this.switchLink.addClass('switchLinkOpened');
