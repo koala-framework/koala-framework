@@ -117,11 +117,11 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
         this.fireEvent('beforeOpen', this);
         this.switchContent.stopFx();
         this.switchContent.setStyle('display', 'block');
+        Kwf.callOnContentReady(this.el.dom, {newRender: false});
         this.switchContent.scale(undefined, this.switchContent.scaleHeight,
             { easing: 'easeOut', duration: this.config.animation.duration, afterStyle: "display:block;height:auto;",
                 callback: function() {
                     this.fireEvent('opened', this);
-                    Kwf.callOnContentReady(this.el.dom, {newRender: false});
                     if (Ext.isIE6) {
                         this.switchContent.setWidth(this.switchContent.getWidth());
                     }
