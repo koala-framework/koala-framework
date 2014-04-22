@@ -1,7 +1,7 @@
 <?php
 $file = is_file('vkwf_branch') ? 'vkwf_branch' : 'kwf_branch';
-file_put_contents($file, "master\n");
-echo "Changed $file to master\n";
+file_put_contents($file, "3.7\n");
+echo "Changed $file to 3.7\n";
 
 function glob_recursive($pattern, $flags = 0) {
     $files = glob($pattern, $flags);
