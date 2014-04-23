@@ -33,12 +33,12 @@ class Kwf_Media
                 Kwf_Cache_Simple::add($cacheId, $time);
             }
         }
-        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.urlencode($filename);
+        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.rawurlencode($filename);
     }
 
     public static function getChecksum($class, $id, $type, $filename)
     {
-        return Kwf_Util_Hash::hash($class . $id . $type . urldecode($filename));
+        return Kwf_Util_Hash::hash($class . $id . $type . rawurldecode($filename));
     }
 
     /**
