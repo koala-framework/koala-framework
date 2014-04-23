@@ -51,6 +51,9 @@ class Kwf_Assets_Dispatcher
             $dependencyParams = $param[1];
             $language = $param[2];
             $extension = $param[3];
+            if (!class_exists($dependencyClass)) {
+                throw new Kwf_Exception_NotFound();
+            }
             if (!is_instance_of($dependencyClass, 'Kwf_Assets_Interface_UrlResolvable')) {
                 throw new Kwf_Exception("invalid dependency class");
             }
