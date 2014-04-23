@@ -240,8 +240,10 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
             if ($r->_isDirty($column)) return true;
         }
         if (!$column) {
-            foreach ($this->_childRows as $row) {
-                if ($row->isDirty()) return true;
+            foreach ($this->_childRows as $rule=>$rows) {
+                foreach ($rows as $row) {
+                    if ($row->isDirty()) return true;
+                }
             }
         }
         return false;
@@ -305,17 +307,19 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
             $r->_saveWithoutResetDirty();
         }
 
-        foreach ($this->_childRows as $row) {
-            if ($row->_isDeleted) continue;
-            if (!($row->getModel() instanceof Kwf_Model_RowsSubModel_Interface)) {
-                if (!$row->{$row->_getPrimaryKey()}) {
-                    //Tabellen Relationen müssen *nach* der row gespeichert werden,
-                    //da beim hinzufügen die id noch nicht verfügbar ist
-                    $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), null);
-                    $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
-                }
-                if ($row->isDirty()) {
-                    $row->save();
+        foreach ($this->_childRows as $rule=>$rows) {
+            foreach ($rows as $row) {
+                if ($row->_isDeleted) continue;
+                if (!($row->getModel() instanceof Kwf_Model_RowsSubModel_Interface)) {
+                    if (!$row->{$row->_getPrimaryKey()}) {
+                        //Tabellen Relationen müssen *nach* der row gespeichert werden,
+                        //da beim hinzufügen die id noch nicht verfügbar ist
+                        $ref = $row->getModel()->getReferenceByModelClass(get_class($this->_model), $rule ? $rule : null);
+                        $row->{$ref['column']} = $this->{$this->_getPrimaryKey()};
+                    }
+                    if ($row->isDirty()) {
+                        $row->save();
+                    }
                 }
             }
         }
@@ -406,8 +410,11 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
             $select->whereEquals($ref['column'], $this->{$this->_getPrimaryKey()});
             $ret = $m->getRows($select);
         }
+
+        $rule = isset($dependent['rule']) ? $dependent['rule'] : '';
+        if (!isset($this->_childRows[$rule])) $this->_childRows[$rule] = array();
         foreach ($ret as $r) {
-            if (!in_array($r, $this->_childRows, true)) $this->_childRows[] = $r;
+            if (!in_array($r, $this->_childRows[$rule], true)) $this->_childRows[$rule][] = $r;
         }
         $ret->rewind();
         return $ret;
@@ -417,18 +424,23 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
     {
         if ($rule instanceof Kwf_Model_Abstract) {
             $m = $rule;
+            $dependentOf = $this->_model;
         } else {
-            $m = $this->_model->getDependentModel($rule);
+            $dependent = $this->_model->getDependentModelWithDependentOf($rule);
+            $m = $dependent['model'];
+            $dependentOf = $dependent['dependentOf'];
         }
 
         if ($m instanceof Kwf_Model_RowsSubModel_Interface) {
             $ret = $m->createRowByParentRow($this, $data);
         } else {
             $ret = $m->createRow($data);
-            $ref = $m->getReferenceByModelClass(get_class($this->_model), null);
+            $ref = $m->getReferenceByModelClass(get_class($dependentOf), isset($dependent['rule']) ? $dependent['rule'] : null);
             $ret->{$ref['column']} = $this->{$this->_getPrimaryKey()};
         }
-        $this->_childRows[] = $ret;
+        $rule = isset($dependent['rule']) ? $dependent['rule'] : '';
+        if (!isset($this->_childRows[$rule])) $this->_childRows[$rule] = array();
+        $this->_childRows[$rule][] = $ret;
         return $ret;
     }
 
@@ -493,12 +505,14 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
     protected function _beforeSave()
     {
         $this->_updateFilters(false);
-        foreach ($this->_childRows as $row) {
-            if ($row->_isDeleted) continue;
-            //if (method_exists($row->getModel(), 'createRowByParentRow')) {
-            if ($row->getModel() instanceof Kwf_Model_RowsSubModel_Interface) {
-                //FieldRows müssen *vor* der row gespeichert werden, damit das data Feld die korrekten Werte hat
-                $row->save();
+        foreach ($this->_childRows as $rule=>$rows) {
+            foreach ($rows as $row) {
+                if ($row->_isDeleted) continue;
+                //if (method_exists($row->getModel(), 'createRowByParentRow')) {
+                if ($row->getModel() instanceof Kwf_Model_RowsSubModel_Interface) {
+                    //FieldRows müssen *vor* der row gespeichert werden, damit das data Feld die korrekten Werte hat
+                    $row->save();
+                }
             }
         }
     }
