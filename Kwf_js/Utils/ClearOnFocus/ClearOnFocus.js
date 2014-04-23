@@ -9,18 +9,18 @@ Kwf.onElementReady('.kwfClearOnFocus', function(xel)
         xel.addClass('kwfClearOnFocusBlurred');
 
         Event.on(el, 'focus', function() {
-            if (el.value == '' || el.value == initText) {
-                xel.removeClass('kwfClearOnFocusBlurred');
-                el.value = '';
+            if (this.value == '' || this.value == initText) {
+                Ext.fly(this).removeClass('kwfClearOnFocusBlurred');
+                this.value = '';
             }
-        });
+        }, el);
 
         Event.on(el, 'blur', function() {
-            if (el.value == '') {
-                el.value = initText;
-                xel.addClass('kwfClearOnFocusBlurred');
+            if (this.value == '') {
+                this.value = initText;
+                Ext.fly(this).addClass('kwfClearOnFocusBlurred');
             }
-        });
+        }, el);
 
         // form ermitteln und clearOnFocus value nicht mitsenden
         var elForm = el.parentNode;
