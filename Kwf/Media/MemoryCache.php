@@ -68,7 +68,7 @@ class Kwf_Media_MemoryCache
         }
         if ($ret === false) {
             $ret = $this->_getSecondLevelCache()->load($id);
-            if ($be != 'file') {
+            if ($ret && $be != 'file') {
                 //first level empty, refill from second level contents
                 $metaDatas = $this->_getSecondLevelCache()->getMetadatas($id);
                 $ttl = $metaDatas['expire'] ? $metaDatas['expire']-$metaDatas['mtime'] : 0;
