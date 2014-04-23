@@ -105,7 +105,7 @@ class Kwf_Mail extends Zend_Mail
                     $type = $parts[3];
                     $checksum = $parts[4];
                     $filename = $parts[6];
-                    if ($checksum != Kwf_Media::getChecksum($class, $id, $type, urldecode($filename))) {
+                    if ($checksum != Kwf_Media::getChecksum($class, $id, $type, $filename)) {
                         throw new Kwf_Exception_AccessDenied('Access to file not allowed.');
                     }
                     $output = Kwf_Media::getOutputWithoutCheckingIsValid($class, $id, $type);
