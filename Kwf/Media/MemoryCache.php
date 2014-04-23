@@ -32,16 +32,17 @@ class Kwf_Media_MemoryCache
     private function _getSecondLevelCache()
     {
         if (!$this->_secondLevelCache) {
-            $this->_secondLevelCache = new Zend_Cache_Core(array(
+            $c = new Zend_Cache_Core(array(
                 'lifetime' => null,
                 'write_control' => false,
                 'automatic_cleaning_factor' => 0,
                 'automatic_serialization' => true,
             ));
-            $this->_secondLevelCache->setBackend(new Kwf_Cache_Backend_File(array(
+            $c->setBackend(new Kwf_Cache_Backend_File(array(
                 'cache_dir' => 'cache/mediameta',
                 'hashed_directory_level' => 2,
             )));
+            $this->_secondLevelCache = $c;
         }
         return $this->_secondLevelCache;
     }
