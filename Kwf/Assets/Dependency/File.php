@@ -104,12 +104,12 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             $paths = Kwf_Config::getValueArray('path');
             foreach ($paths as &$p) {
                 if (substr($p, 0, 1) == '.') $p = getcwd().substr($p, 1);
+                $p = realpath($p);
             }
             unset($paths['web']);
             $paths['webComponents'] = getcwd().'/components';
         }
         foreach ($paths as $i) {
-            $i = realpath($i);
             if ($i && substr($cssClass, 0, strlen($i)) == $i) {
                 $cssClass = substr($cssClass, strlen($i)+1);
             }
