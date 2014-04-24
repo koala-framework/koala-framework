@@ -17,9 +17,14 @@
         }
 
         .noFlow {
-            .image,
-            .text {
+            .image {
                 display: table-cell;
+            }
+
+            &.positionLeft, &.positionRight {
+                .text {
+                    display: table-cell;
+                }
             }
         }
 
