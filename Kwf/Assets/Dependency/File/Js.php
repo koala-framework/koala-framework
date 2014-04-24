@@ -16,6 +16,9 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     protected function _getContents($language, $pack)
     {
+        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+        $useTrl = !in_array($pathType, array('ext', 'ext4', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
+
         if (isset($this->_contentsCache) && $pack) {
             $ret = $this->_contentsCache;
         } else {
@@ -23,7 +26,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $ret = parent::getContents($language);
 
             //TODO same code is in in File_Css too
-            $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
             if ($pathType == 'ext') {
                 //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
                 $ret = str_replace('../images/', '/assets/ext/resources/images/', $ret);
@@ -47,14 +49,19 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 $this->_contentsCache = $ret;
             }
 
-            $this->_parsedElementsCache = Kwf_Trl::getInstance()->parse($ret, 'js');
+            if ($useTrl) {
+                $this->_parsedElementsCache = Kwf_Trl::getInstance()->parse($ret, 'js');
+            }
         }
 
-        static $jsLoader;
-        if (!isset($jsLoader)) $jsLoader = new Kwf_Trl_JsLoader();
+        if ($useTrl) {
+            static $jsLoader;
+            if (!isset($jsLoader)) $jsLoader = new Kwf_Trl_JsLoader();
 
-        $ret = $jsLoader->trlLoad($ret, $this->_parsedElementsCache, $language);
-        $ret = $this->_hlp($ret, $language);
+            $ret = $jsLoader->trlLoad($ret, $this->_parsedElementsCache, $language);
+            $ret = $this->_hlp($ret, $language);
+        }
+
         return $ret;
     }
 
