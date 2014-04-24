@@ -66,9 +66,10 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
 
         this.save();
 
-        this.form.getRecord().save({
+        this.getLoadedRecord().save({
             success: function() {
-                this.fireEvent('savesuccess', this.form.getRecord());
+                this.fireEvent('savesuccess', this.getLoadedRecord());
+                this.load(this.getLoadedRecord());
             },
             scope: this
         });

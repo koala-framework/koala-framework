@@ -138,6 +138,7 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
             syncQueue.on('finished', function(syncQueue) {
                 if (!syncQueue.hasException) {
                     this.fireEvent('savesuccess');
+                    this.bindable.load(this.bindable.getLoadedRecord());
                 }
             }, this, { single: true });
         } else {
@@ -145,6 +146,7 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
             this.gridController.grid.getStore().sync({
                 success: function() {
                     this.fireEvent('savesuccess');
+                    this.bindable.load(this.bindable.getLoadedRecord());
                 },
                 scope: this
             });
