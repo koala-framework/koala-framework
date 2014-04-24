@@ -790,6 +790,20 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         ));
     }
 
+    public function getRow($select)
+    {
+        if (is_string($select) || is_int($select)) {
+            //primary key given, skip query and use already existing row
+            if (!is_array($this->getPrimaryKey())) {
+                $select = $this->transformColumnName($select);
+                if (isset($this->_rows[$select])) {
+                    return $this->_rows[$select];
+                }
+            }
+        }
+        return parent::getRow($select);
+    }
+
     public function getIds($select = array(), $order=null, $limit=null, $start=null)
     {
         if (!is_object($select)) {

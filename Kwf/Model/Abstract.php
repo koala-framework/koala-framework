@@ -187,15 +187,6 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function getRow($select)
     {
-        if (is_string($select) || is_int($select)) {
-            //primary key given, skip query and use already existing row
-            if (!is_array($this->getPrimaryKey())) {
-                $select = $this->transformColumnName($select);
-                if (isset($this->_rows[$select])) {
-                    return $this->_rows[$select];
-                }
-            }
-        }
         if (!$select) {
             throw new Kwf_Exception('getRow needs a parameter, null is not allowed.');
         }
