@@ -25,7 +25,7 @@ class Kwf_Assets_Provider_JsClassKwf extends Kwf_Assets_Provider_Abstract
                 )
             );
         }
-        $fileContents = $dependency->getContents('en');
+        $fileContents = file_get_contents($dependency->getFileName());
 
         // remove comments to avoid dependencies from docs/examples
         $fileContents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $fileContents);
