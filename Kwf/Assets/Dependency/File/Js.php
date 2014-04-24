@@ -39,9 +39,11 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 $ret = preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', '$1'.$baseUrl.'/$2/', $ret);
             }
 
-            $cssClass = $this->_getComponentCssClass();
-            if ($cssClass) {
-                $ret = preg_replace('#\'\.cssClass([\s\'\.])#', '\'.'.$cssClass.'$1', $ret);
+            if (strpos($ret, '.cssClass') !== false) {
+                $cssClass = $this->_getComponentCssClass();
+                if ($cssClass) {
+                    $ret = preg_replace('#\'\.cssClass([\s\'\.])#', '\'.'.$cssClass.'$1', $ret);
+                }
             }
 
             if ($pack) {
