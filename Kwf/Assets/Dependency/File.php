@@ -3,6 +3,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 {
     protected $_fileName;
     private $_mtimeCache;
+    private $_fileNameCache;
 
     public function __construct($fileName)
     {
@@ -16,6 +17,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     public function getFileName()
     {
+        if (isset($this->_fileNameCache)) return $this->_fileNameCache;
         static $paths;
         if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
 
@@ -28,6 +30,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         } else {
             throw new Kwf_Exception_NotYetImplemented();
         }
+        $this->_fileNameCache = $f;
         return $f;
     }
 
