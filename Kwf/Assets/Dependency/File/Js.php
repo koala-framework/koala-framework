@@ -69,7 +69,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                         'hashed_directory_level' => 2,
                     )));
                 }
-                $cacheId = 'trlParsedElements'.str_replace(array('\\', ':', '/', '.', '-'), '_', $this->_fileName);
+                $cacheId = 'trlParsedElements'.$pack.str_replace(array('\\', ':', '/', '.', '-'), '_', $this->_fileName);
                 $cacheData = $cache->load($cacheId);
                 if ($cacheData) {
                     if ($cacheData['mtime'] != filemtime($this->getFileName())) {
