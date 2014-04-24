@@ -41,6 +41,25 @@ class Kwc_Basic_Image_Crop_Test extends Kwc_TestAbstract
         $this->assertEquals(2, Kwc_Basic_Image_Crop_ImageComponent::$getMediaOutputCalled);
     }
 
+    public function testUrlChangeWhenChangingCropOptions()
+    {
+        $component = $this->_root->getComponentById('root_page');
+
+        $url1 = $component->getComponent()->getBaseImageUrl();
+        $html1 = $component->render();
+
+        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_Crop_TestModel')->getRow('root_page');
+        $row->crop_x = 20;
+        $row->save();
+        $this->_process();
+
+        $url2 = $component->getComponent()->getBaseImageUrl();
+        $html2 = $component->render();
+
+        $this->assertNotEquals($url1, $url2);
+        $this->assertNotEquals($html1, $html2);
+    }
+
     public function testSettingCropOptions()
     {
         $c = $this->_root->getComponentById('root_page');
