@@ -50,7 +50,38 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             }
 
             if ($useTrl) {
-                $this->_parsedElementsCache = Kwf_Trl::getInstance()->parse($ret, 'js');
+                //Kwf_Trl::parse is very slow, try to cache it
+                //this mainly helps during development when ccw clears the assets cache but this cache stays
+                static $cache;
+                if (!isset($cache)) {
+                    $cache = new Zend_Cache_Core(array(
+                        'lifetime' => null,
+                        'automatic_serialization' => true,
+                        'automatic_cleaning_factor' => 0,
+                        'write_control' => false,
+                    ));
+                    $cache->setBackend(new Zend_Cache_Backend_File(array(
+                        'cache_dir' => 'cache/assets',
+                        'cache_file_umask' => 0666,
+                        'hashed_directory_umask' => 0777,
+                        'hashed_directory_level' => 2,
+                    )));
+                }
+                $cacheId = 'trlParsedElements'.str_replace(array('\\', ':', '/', '.', '-'), '_', $this->_fileName);
+                $cacheData = $cache->load($cacheId);
+                if ($cacheData) {
+                    if ($cacheData['mtime'] != filemtime($this->getFileName())) {
+                        $cacheData = false;
+                    }
+                }
+                if (!$cacheData) {
+                    $cacheData = array(
+                        'contents' => Kwf_Trl::getInstance()->parse($ret, 'js'),
+                        'mtime' => filemtime($this->getFileName())
+                    );
+                    $cache->save($cacheData, $cacheId);
+                }
+                $this->_parsedElementsCache = $cacheData['contents'];
             }
         }
 
