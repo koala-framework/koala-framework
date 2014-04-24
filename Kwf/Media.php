@@ -18,7 +18,7 @@ class Kwf_Media
             $filename = $filename->filename . '.' . $filename->extension;
         }
         if ($filename == '.') $filename = '';
-        $checksum = self::getChecksum($class, $id, $type, $filename);
+        $checksum = self::getChecksum($class, $id, $type, rawurlencode($filename));
         $prefix = '';
         if ($r = Kwf_Component_Data_Root::getInstance()) {
             if ($r->filename) {
@@ -36,9 +36,9 @@ class Kwf_Media
         return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.rawurlencode($filename);
     }
 
-    public static function getChecksum($class, $id, $type, $filename)
+    public static function getChecksum($class, $id, $type, $encodedFilename)
     {
-        return Kwf_Util_Hash::hash($class . $id . $type . rawurldecode($filename));
+        return Kwf_Util_Hash::hash($class . $id . $type . rawurldecode($encodedFilename));
     }
 
     /**
