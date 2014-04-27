@@ -59,6 +59,8 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
     {
         $urls = $package->getPackageUrls('text/css', Kwf_Trl::getInstance()->getTargetLanguage());
 
+        $this->fields['content']->setCssFiles($urls);
+
         foreach ($urls as $url) {
             if (strpos($url, 'Kwc_Basic_Text_StylesAsset')!==false) {
                 $this->fields['content']->setStylesCssFile($url);
