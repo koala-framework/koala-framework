@@ -40,9 +40,11 @@ class Kwf_Assets_Dispatcher
 
     static private function _getOutputForUrlNoEncoding($url)
     {
-        $cache = Kwf_Assets_Cache::getInstance();
         $cacheId = str_replace(array(':', '/', '.', ','), '_', $url);
-        $ret = $cache->load($cacheId);
+        $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+        if ($ret === false) {
+            $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
+        }
 
         if ($ret === false) {
             require_once 'Kwf/Trl.php'; //required because setup doesn't load Trl.php before dispatching assets
@@ -77,7 +79,11 @@ class Kwf_Assets_Dispatcher
                 'mimeType' => $mimeType,
             );
             if ($mtime) $ret['mtime'] = $mtime;
-            $cache->save($ret, $cacheId);
+            if ($dependency instanceof Kwf_Assets_Package) {
+                Kwf_Assets_BuildCache::getInstance()->save($ret, $cacheId);
+            } else {
+                Kwf_Assets_Cache::getInstance()->save($ret, $cacheId);
+            }
 
             //save generated caches for clear-cache-watcher
             $fileName = 'cache/assets/output-cache-ids-'.$extension;
