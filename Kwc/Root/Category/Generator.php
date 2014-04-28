@@ -371,6 +371,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $data['row'] = (object)$page;
         $data['parent'] = $parentData;
         $data['isHome'] = $page['is_home'];
+        $data['selfVisible'] = $page['self_visible'];
         if (!$page['visible']) {
             $data['invisible'] = true;
         }
@@ -426,9 +427,10 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         }
 
         $ret['icon'] = 'page';
+
         if ($component->isHome) {
             $ret['iconEffects'][] = 'home';
-        } else if (!$component->row->self_visible) {
+        } else if (!$component->selfVisible) {
             $ret['iconEffects'][] = 'invisible';
         }
         $ret['allowDrag'] = true;
