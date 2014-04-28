@@ -19,23 +19,26 @@ Kwf.Utils.ResponsiveImg = function (selector) {
 };
 
 var lastScrollTop = null;
-$w.scroll(function()
-{
-    if (lastScrollTop && Math.abs($w.scrollTop()-lastScrollTop) < 50) {
-        //only check for images to load in steps of 50px, we can do that as we load 50px in advance
-        return;
-    }
-
-    lastScrollTop = $w.scrollTop()
-    for(var i=0; i<deferredImages.length; ++i) {
-        var el = deferredImages[i];
-        if (isElementInView(el)) {
-            deferredImages.splice(i, 1);
-            i--;
-            initResponsiveImgEl(el);
+$(function(){
+    $w.scroll(function()
+    {
+        if (lastScrollTop && Math.abs($w.scrollTop()-lastScrollTop) < 50) {
+            //only check for images to load in steps of 50px, we can do that as we load 50px in advance
+            return;
         }
-    }
-});
+
+        lastScrollTop = $w.scrollTop()
+        for(var i=0; i<deferredImages.length; ++i) {
+            var el = deferredImages[i];
+            if (isElementInView(el)) {
+                deferredImages.splice(i, 1);
+                i--;
+                initResponsiveImgEl(el);
+            }
+        }
+    });
+})
+
 
 function getResponsiveWidthStep(width,  minWidth, maxWidth) {
     var steps = getResponsiveWidthSteps(minWidth, maxWidth);
