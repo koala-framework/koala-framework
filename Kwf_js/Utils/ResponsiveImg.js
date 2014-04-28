@@ -19,7 +19,7 @@ Kwf.Utils.ResponsiveImg = function (selector) {
 };
 
 var lastScrollTop = null;
-$(function(){
+$(function() {
     $w.scroll(function()
     {
         if (lastScrollTop && Math.abs($w.scrollTop()-lastScrollTop) < 50) {
@@ -37,7 +37,7 @@ $(function(){
             }
         }
     });
-})
+});
 
 
 function getResponsiveWidthStep(width,  minWidth, maxWidth) {
