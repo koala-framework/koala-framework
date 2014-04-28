@@ -5,6 +5,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
     uses: [ 'Ext.window.MessageBox' ],
     autoSync: true,
     autoLoad: false,
+    deleteConfirmText: trlKwf('Do you really wish to remove this entry?'),
 
     grid: null,
 
@@ -69,7 +70,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
         if (this.autoSync) {
             Ext4.Msg.show({
                 title: trlKwf('Delete'),
-                msg: trlKwf('Do you really wish to remove this entry?'),
+                msg: this.deleteConfirmText,
                 buttons: Ext4.Msg.YESNO,
                 scope: this,
                 fn: function(button) {
