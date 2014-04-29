@@ -162,7 +162,7 @@
 </text>
 <text>
 <en>Show Route</en>
-<de>Route zeigen</de>
+<de>Pokaži rutu</de>
 <es>Show Route</es>
 <id>33</id>
 <ro>Arată ruta</ro>
@@ -180,6 +180,7 @@
 <mk>Предлози</mk>
 <sl>Predlogi</sl>
 <ru>Предложения</ru>
+<hr>Prijedlozi</hr>
 </text>
 <text>
 <en>Coordinates</en>
@@ -190,6 +191,7 @@
 <mk>Кординати</mk>
 <sl>Koordinate</sl>
 <ru>Координаты</ru>
+<hr>Koordinate</hr>
 </text>
 <text>
 <en>Zoomlevel</en>
@@ -200,6 +202,7 @@
 <mk>Ниво на зголемување</mk>
 <sl>Stopnja povečave</sl>
 <ru>Уровень приближения</ru>
+<hr>Zoom level</hr>
 </text>
 <text>
 <en>Width</en>
@@ -212,6 +215,7 @@
 <es>Ancho</es>
 <ru>Ширина</ru>
 <es_CL>Ancho</es_CL>
+<hr>Širina</hr>
 </text>
 <text>
 <en>Height</en>
@@ -224,6 +228,7 @@
 <es>Altura</es>
 <ru>Высота</ru>
 <es_CL>Altura</es_CL>
+<hr>Visina</hr>
 </text>
 <text>
 <en>Move + Zoom</en>
@@ -234,6 +239,7 @@
 <mk>Премести + Зголеми</mk>
 <sl>Pomikanje + povečava</sl>
 <ru>Переместить + Увеличить</ru>
+<hr>Pomakni + Povećaj</hr>
 </text>
 <text>
 <en>Move + Zoom (without zoombar)</en>
@@ -254,6 +260,7 @@
 <mk>Скала</mk>
 <sl>Skaliranje</sl>
 <ru>Масштаб</ru>
+<hr>Skaliraj</hr>
 </text>
 <text>
 <en>Satelitemap</en>
@@ -264,6 +271,7 @@
 <mk>Мапа на страната</mk>
 <sl>Satelitska karta</sl>
 <ru>Спутниковая карта</ru>
+<hr>Satelitska karta</hr>
 </text>
 <text>
 <en>Overviewmap</en>
@@ -273,6 +281,7 @@
 <uk>Загальна карта</uk>
 <sl>Pregledna karta</sl>
 <ru>Крупномасштабная карта</ru>
+<hr>Pregled karte</hr>
 </text>
 <text>
 <en>Worldview</en>
@@ -282,6 +291,7 @@
 <sl>Širši prikaz</sl>
 <ru>Глобальный вид</ru>
 <uk>Світоглад</uk>
+<hr>Prikaz svijeta</hr>
 </text>
 <text>
 <en>Detailview</en>
@@ -291,6 +301,7 @@
 <uk>Детальний огляд</uk>
 <sl>Podrobni prikaz</sl>
 <ru>Детальный вид</ru>
+<hr>Detaljan pregled</hr>
 </text>
 <text>
 <en>Filename</en>
@@ -303,6 +314,7 @@
 <es>Nombre de archivo</es>
 <ru>Имя файла</ru>
 <es_CL>Nombre de archivo</es_CL>
+<hr>Naziv datoteke</hr>
 </text>
 <text>
 <en>File</en>
@@ -315,6 +327,7 @@
 <es>Archivo</es>
 <ru>Файл</ru>
 <es_CL>Archivo</es_CL>
+<hr>Datoteka</hr>
 </text>
 <text>
 <en>Content</en>
@@ -325,6 +338,7 @@
 <mk>Содржина</mk>
 <sl>Vsebina</sl>
 <ru>Содержание</ru>
+<hr>Sadržaj</hr>
 </text>
 <text>
 <en>Image</en>
@@ -337,6 +351,7 @@
 <ru>Изображение</ru>
 <es_CL>Imagen</es_CL>
 <uk>Зображення</uk>
+<hr>Slika</hr>
 </text>
 <text>
 <en>Image Enlarge</en>
@@ -410,6 +425,7 @@
 <sl>Položaj slike</sl>
 <ru>Позиция изображения</ru>
 <uk>Положення зображення</uk>
+<hr>Pozicija slike</hr>
 </text>
 <text>
 <en>Left</en>
@@ -422,6 +438,7 @@
 <ru>Лево</ru>
 <es_CL>Izquierda</es_CL>
 <uk>Зліва</uk>
+<hr>Lijevo</hr>
 </text>
 <text>
 <en>Right</en>
@@ -434,6 +451,7 @@
 <ru>Право</ru>
 <es_CL>Derecha</es_CL>
 <uk>Право</uk>
+<hr>Desno</hr>
 </text>
 <text>
 <en>Default Value</en>
@@ -465,6 +483,7 @@
 <sl>Opis</sl>
 <ru>Описание</ru>
 <uk>Опис</uk>
+<hr>Opis</hr>
 </text>
 <text>
 <en>Submit</en>
@@ -482,6 +501,7 @@
 <bg>Изпрати</bg>
 <hu>Küldés</hu>
 <es_CL>enviar</es_CL>
+<hr>Pošalji</hr>
 </text>
 <text>
 <en>Validator</en>
@@ -492,6 +512,7 @@
 <sl>Preverjalnik</sl>
 <ru>Валидатор</ru>
 <uk>Validator</uk>
+<hr>Validator</hr>
 </text>
 <text>
 <en>E-Mail</en>
@@ -505,6 +526,7 @@
 <sl>E-naslov</sl>
 <es_CL>E-Mail</es_CL>
 <uk>E-Mail</uk>
+<hr>E-Mail</hr>
 </text>
 <text>
 <en>Date</en>
@@ -517,6 +539,7 @@
 <ru>Дата</ru>
 <es_CL>Fecha</es_CL>
 <uk>Дата</uk>
+<hr>Datum</hr>
 </text>
 <text>
 <en>at</en>
@@ -528,6 +551,7 @@
 <ru>на</ru>
 <es_CL>en</es_CL>
 <uk>про</uk>
+<hr>u</hr>
 </text>
 <text>
 <en>Title</en>
@@ -542,6 +566,7 @@
 <ru>Название</ru>
 <sq>Titulli</sq>
 <es_CL>Título</es_CL>
+<hr>Titula</hr>
 </text>
 <text>
 <en>Firstname</en>
@@ -559,6 +584,7 @@
 <sq>Emri</sq>
 <es_CL>Nombre</es_CL>
 <sk>Meno</sk>
+<hr>Ime</hr>
 </text>
 <text>
 <en>Lastname</en>
@@ -576,6 +602,7 @@
 <sq>Mbiemri</sq>
 <es_CL>Apellido</es_CL>
 <sk>Priezvisko</sk>
+<hr>Prezime</hr>
 </text>
 <text>
 <en>Email</en>
@@ -588,6 +615,7 @@
 <sl>E-naslov</sl>
 <es_CL>E-Mail</es_CL>
 <uk>Email</uk>
+<hr>E-Mail</hr>
 </text>
 <text>
 <en>Subject</en>
@@ -598,6 +626,7 @@
 <sl>Zadeva</sl>
 <ru>Тема</ru>
 <uk>Тема</uk>
+<hr>Predmet</hr>
 </text>
 <text>
 <en>Member since</en>
@@ -608,6 +637,7 @@
 <sl>Član od</sl>
 <ru>Учавствует с</ru>
 <uk>Учасник з</uk>
+<hr>Član od</hr>
 </text>
 <text>
 <en>Click here</en>
@@ -618,6 +648,7 @@
 <sl>Klikni tukaj</sl>
 <ru>Нажми сюда</ru>
 <uk>Натисніть тут</uk>
+<hr>Kliknite ovdje</hr>
 </text>
 <text>
 <en>Name</en>
@@ -630,6 +661,7 @@
 <ru>Название</ru>
 <es_CL>Nombre</es_CL>
 <uk>Ім'я</uk>
+<hr>Ime</hr>
 </text>
 <text>
 <en>Latest online</en>
@@ -649,6 +681,7 @@
 <sl>Kratek opis</sl>
 <ru>Краткое описание</ru>
 <uk>Короткий опис</uk>
+<hr>Kratki opis</hr>
 </text>
 <text>
 <en>Signature</en>
@@ -661,6 +694,7 @@
 <ru>Подпись</ru>
 <es_CL>Firma</es_CL>
 <uk>Підпис</uk>
+<hr>Potpis</hr>
 </text>
 <text>
 <en>Publish Date</en>
@@ -671,6 +705,7 @@
 <sl>Datum objave</sl>
 <ru>Дата публикации</ru>
 <uk>Дата публікації</uk>
+<hr>Datum objave</hr>
 </text>
 <text>
 <en>Expiry Date</en>
@@ -681,6 +716,7 @@
 <sl>Datum poteka objave</sl>
 <ru>Дата истечения</ru>
 <uk>Дата закінчення терміну дії</uk>
+<hr>Datum isteka</hr>
 </text>
 <text>
 <en>Teaser</en>
@@ -690,6 +726,7 @@
 <sl>Kratek opis (teaser)</sl>
 <ru>Тизер</ru>
 <uk>Teaser</uk>
+<hr>Teaser</hr>
 </text>
 <text>
 <en>Comment was successfully saved.</en>
@@ -699,6 +736,7 @@
 <sl>Komentar je bil uspešno shranjen.</sl>
 <ru>Коментарий успешно сохранен.</ru>
 <uk>Цей коментар був успішно збережений.</uk>
+<hr>Komentar je uspješno spremljen.</hr>
 </text>
 <text>
 <en>to continue</en>
@@ -710,6 +748,7 @@
 <ru>для продолжения</ru>
 <es_CL>para continuar</es_CL>
 <uk>продовжити</uk>
+<hr>kako biste nastavili</hr>
 </text>
 <text>
 <en>Product</en>
@@ -722,6 +761,7 @@
 <ru>Продукт</ru>
 <es_CL>Producto</es_CL>
 <uk>Продукт</uk>
+<hr>Proizvod</hr>
 </text>
 <text>
 <en>Activate Useraccount</en>
@@ -758,6 +798,7 @@
 <sl>Nazaj na začetno stran</sl>
 <ru>для перехода на Главную Страницу</ru>
 <uk>повернутися до стартову сторінку</uk>
+<hr>kako biste se vratili na početnu stranicu</hr>
 </text>
 <text>
 <en>Female</en>
@@ -774,6 +815,7 @@
 <sq>Femërore</sq>
 <es_CL>Femenino</es_CL>
 <sk>Žena</sk>
+<hr>Žensko</hr>
 </text>
 <text>
 <en>Male</en>
@@ -790,6 +832,7 @@
 <sq>Mashkullore</sq>
 <es_CL>Masculino</es_CL>
 <sk>Muž</sk>
+<hr>Muško</hr>
 </text>
 <text>
 <en>Gender</en>
@@ -806,6 +849,7 @@
 <sq>Gjinia</sq>
 <es_CL>Género</es_CL>
 <sk>Pohlavie</sk>
+<hr>Rod</hr>
 </text>
 <text>
 <en>Account - Properties</en>
@@ -815,6 +859,7 @@
 <sl>Račun – lastnosti</sl>
 <ru>Аккаунт - Свойства</ru>
 <uk>Аккаунт - Властивості</uk>
+<hr>Račun - postavke</hr>
 </text>
 <text>
 <en>The changed data was saved successfully</en>
@@ -825,6 +870,7 @@
 <sl>Spremenjeni podatki so bili uspešno shranjeni.</sl>
 <ru>Изменения успешно сохранены</ru>
 <uk>Змінені дані були успішно збережені</uk>
+<hr>Promijenjeni podaci uspješno su spremljeni.</hr>
 </text>
 <text>
 <en>You don't have enough permissions for this Action</en>
@@ -845,6 +891,7 @@
 <sl>Prijava ni uspela</sl>
 <ru>Ошибка входа</ru>
 <uk>Помилка входу</uk>
+<hr>Prijava nije uspjela.</hr>
 </text>
 <text>
 <en>Activation code is invalid. Maybe the URL wasn\'t copied completely?</en>
@@ -873,6 +920,7 @@
 <sl>Spremeni geslo</sl>
 <ru>Изменить пароль</ru>
 <uk>Зміна пароля</uk>
+<hr>Promijeni lozinku</hr>
 </text>
 <text>
 <en>Repeat password</en>
@@ -883,6 +931,7 @@
 <sl>Ponovi geslo</sl>
 <ru>Повторить пароль</ru>
 <uk>Повторити пароль</uk>
+<hr>Ponovi lozinku</hr>
 </text>
 <text>
 <en>First name</en>
@@ -897,6 +946,7 @@
 <sq>Emri</sq>
 <es_CL>Nombre</es_CL>
 <uk>Ім'я</uk>
+<hr>Ime</hr>
 </text>
 <text>
 <en>Last name</en>
@@ -911,6 +961,7 @@
 <sq>Mbiemri</sq>
 <es_CL>Apellido</es_CL>
 <uk>Прізвище</uk>
+<hr>Prezime</hr>
 </text>
 <text>
 <en>Advice</en>
@@ -921,6 +972,7 @@
 <sl>Informacija</sl>
 <ru>Рекомендация</ru>
 <uk>Інформація</uk>
+<hr>Informacija</hr>
 </text>
 <text>
 <en>After following actions emails are sent automatically to the respective user:</en>
@@ -959,6 +1011,7 @@
 <sl>Uredi</sl>
 <ru>Изменить</ru>
 <uk>Редагувати</uk>
+<hr>Obradi</hr>
 </text>
 <text>
 <en>edit</en>
@@ -969,6 +1022,7 @@
 <sl>Uredi</sl>
 <ru>изменить</ru>
 <uk>редагувати</uk>
+<hr>obradi</hr>
 </text>
 <text>
 <en>The file is larger than the maximum upload amount.</en>
@@ -1122,6 +1176,7 @@
 <ru>Страница</ru>
 <es_CL>Página</es_CL>
 <uk>Сторінка</uk>
+<hr>Stranica</hr>
 </text>
 <text>
 <en>Page properties</en>
@@ -1132,6 +1187,7 @@
 <sl>Lastnosti strani</sl>
 <ru>Свойства страницы</ru>
 <uk>Опції сторінки</uk>
+<hr>Postavke stranice</hr>
 </text>
 <text>
 <en>Add new child page</en>
@@ -1151,6 +1207,7 @@
 <es>Eliminar la página</es>
 <es_CL>Eliminar la página</es_CL>
 <uk>Видалити сторінку</uk>
+<hr>Obriši stranicu</hr>
 </text>
 <text>
 <en>Show / Hide Page</en>
@@ -1168,6 +1225,7 @@
 <mk>Користи како почетна страна</mk>
 <sl>Uporabi kot začetno stran</sl>
 <uk>Використати в якості домашньої сторінки</uk>
+<hr>Koristi kao početnu stranicu</hr>
 </text>
 <text>
 <en>Expand here</en>
@@ -1195,6 +1253,7 @@
 <sl>Odpri predogled</sl>
 <ru>Открыть предпросмотр</ru>
 <uk>Відкрити попередній перегляд</uk>
+<hr>Otvori pregled</hr>
 </text>
 <text>
 <en>A Server failure occured.</en>
@@ -1205,6 +1264,7 @@
 <sl>Prišlo je do napake na strežniku.</sl>
 <ru>Возникла ошибка на сервере.</ru>
 <uk>Сталася помилка сервера.</uk>
+<hr>Greška na serveru.</hr>
 </text>
 <text>
 <en>Error - wrong version</en>
@@ -1239,6 +1299,7 @@
 <ro>Selectaţi poziţia dumneavoastră.</ro>
 <sl>Izberite svoj položaj.</sl>
 <uk> Виберіть установки</uk>
+<hr>Odaberite svoju poziciju.</hr>
 </text>
 <text>
 <en>enter address</en>
@@ -1250,6 +1311,7 @@
 <es>Introducir la dirección</es>
 <es_CL>Introducir la dirección</es_CL>
 <uk>введіть адресу</uk>
+<hr>Upišite adresu.</hr>
 </text>
 <text>
 <en>Example</en>
@@ -1403,6 +1465,7 @@
 <ru>Пожалуйста, введите ваш email адрес</ru>
 <uk>Будь ласка, введіть Вашу адресу електронної пошти</uk>
 <sk>Vložte prosím svoju e-mailovú adresu</sk>
+<hr>Molimo upišite svoju E-mail adresu</hr>
 </text>
 <text>
 <en>Please type in your password. After clicking the button below</en>
@@ -1436,6 +1499,7 @@
 <ro>Adresa dumneavoastră de e-mail:</ro>
 <sl>Vaš e-naslov:</sl>
 <uk>Ваша адреса електронної пошти:</uk>
+<hr>Vaša E-Mail adresa:</hr>
 </text>
 <text>
 <en>Activate and login account</en>
@@ -1465,6 +1529,7 @@
 <es_CL>Ha ocurrido un error</es_CL>
 <uk>Сталася помилка</uk>
 <sk>Vyskytla sa chyba</sk>
+<hr>Došlo je do pogreške.</hr>
 </text>
 <text>
 <en>Link cannot link to itself</en>
@@ -1490,6 +1555,7 @@
 <sl>Shrani</sl>
 <ru>Сохранить</ru>
 <uk>Зберегти</uk>
+<hr>Spremi</hr>
 </text>
 <text>
 <en>Cancel</en>
@@ -1499,6 +1565,7 @@
 <sl>Prekliči</sl>
 <ru>Отмена</ru>
 <uk>Відмінити</uk>
+<hr>Poništi</hr>
 </text>
 <text>
 <en>Save and Back</en>
@@ -1508,6 +1575,7 @@
 <sl>Shrani in nazaj</sl>
 <ru>Сохранить и Вернуться</ru>
 <uk>Зберегти та Повернутися на попередню сторінку</uk>
+<hr>Spremi i natrag</hr>
 </text>
 <text>
 <en>Delete</en>
@@ -1517,6 +1585,7 @@
 <sl>Izbriši</sl>
 <ru>Удалить</ru>
 <uk>Видалити</uk>
+<hr>Obriši</hr>
 </text>
 <text>
 <en>delete</en>
@@ -1526,6 +1595,7 @@
 <sl>Izbriši</sl>
 <ru>удалить</ru>
 <uk>видалити</uk>
+<hr>obriši</hr>
 </text>
 <text>
 <en>New Entry</en>
@@ -1535,6 +1605,7 @@
 <sl>Nov vnos</sl>
 <ru>Новая запись</ru>
 <uk>Новий запис</uk>
+<hr>Novi unos</hr>
 </text>
 <text>
 <en>delete?</en>
@@ -1544,6 +1615,7 @@
 <sl>Izbrišem?</sl>
 <ru>удалить?</ru>
 <uk>видалити?</uk>
+<hr>obrisati?</hr>
 </text>
 <text>
 <en>Duplicate</en>
