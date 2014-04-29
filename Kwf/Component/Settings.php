@@ -10,6 +10,8 @@ class Kwf_Component_Settings
     public static $_rebuildingSettings = false;
     private static $_cacheSettings = array();
 
+    public static $_rootComponentClassSet;
+
     public static function hasSettings($class)
     {
         $cacheId = 'hasSettings-'.$class;
@@ -437,32 +439,19 @@ class Kwf_Component_Settings
         self::$_cacheSettings = array();
     }
 
-    public static function getAllSettingsCache()
+    public static function setAllSettings($settings)
     {
-        static $cache;
-        if (!isset($cache)) {
-            $cache = new Kwf_Cache_Core(array(
-                'checkComponentSettings' => false,
-                'lifetime' => null,
-                'automatic_serialization' => true,
-                'automatic_cleaning_factor' => 0,
-            ));
-            $cache->setBackend(new Zend_Cache_Backend_File(array(
-                'cache_dir' => 'cache/component',
-                'cache_file_umask' => 0666,
-                'hashed_directory_umask' => 0777,
-            )));
-        }
-        return $cache;
+        self::$_settings = $settings;
+        self::$_cacheSettings = array();
     }
 
     public static function &_getSettingsCached()
     {
         self::$_cacheSettings = array();
         if (!self::$_settings) {
-            $cacheId = 'componentSettings_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
-            self::$_settings = self::getAllSettingsCache()->load($cacheId);
-            if (!self::$_settings) {
+            if (!self::$_rootComponentClassSet && file_exists('build/component/settings')) {
+                self::$_settings = unserialize(file_get_contents('build/component/settings'));
+            } else {
                 $fullT = microtime(true);
 
                 self::$_rebuildingSettings = true;
@@ -485,12 +474,11 @@ class Kwf_Component_Settings
                         throw new Kwf_Exception("$c: ".$e->getMessage());
                     }
                 }
-
-                self::getAllSettingsCache()->save(self::$_settings, $cacheId);
             }
         }
         return self::$_settings;
     }
+
     public static function getComponentClasses()
     {
         $root = Kwf_Component_Data_Root::getComponentClass();

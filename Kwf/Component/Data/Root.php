@@ -78,6 +78,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
      */
     public static function setComponentClass($componentClass)
     {
+        Kwf_Component_Settings::$_rootComponentClassSet = true;
         self::$_rootComponentClass = $componentClass;
         self::reset();
     }
