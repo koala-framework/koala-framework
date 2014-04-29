@@ -18,6 +18,7 @@ class Kwf_Util_Build
     public function getTypes()
     {
         $types = array();
+        $types[] = new Kwf_Util_Build_Types_Trl();
         $types[] = new Kwf_Util_Build_Types_Assets();
         if (Kwf_Component_Data_Root::getComponentClass()) {
             $types[] = new Kwf_Util_Build_Types_ComponentSettings();
