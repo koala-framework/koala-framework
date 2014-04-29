@@ -76,6 +76,9 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
                 $i++;
             }
         }
+        if ($this->_model->hasColumn('component')) {
+            $this->_columns->add(new Kwf_Grid_Column('component'));
+        }
         $this->_columns->add(new Kwf_Grid_Column('component_class'))
             ->setData(new Kwf_Data_Kwc_ComponentClass($this->_getParam('class'), 'detail'));
         $this->_columns->add(new Kwf_Grid_Column('edit_components'))
