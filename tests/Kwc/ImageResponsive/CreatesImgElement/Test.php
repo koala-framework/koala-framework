@@ -44,7 +44,7 @@ class Kwc_ImageResponsive_CreatesImgElement_Test extends Kwf_Test_SeleniumTestCa
     {
         $this->openKwc('/imageabstract1');
         sleep(2);
-        $this->assertElementPresent("css=img[src^=\"/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/media/Kwc_ImageResponsive_CreatesImgElement_Components_ImageAbstract_Component/root_imageabstract1/dh-250\"]");
+        $this->assertElementPresent("css=img[src^=\"/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/media/Kwc_ImageResponsive_CreatesImgElement_Components_ImageAbstract_Component/root_imageabstract1/dh-\"]");
     }
 
     public function testJavascriptCreatesCorrectImageSrcImageEnlargeImagePage()
