@@ -1,4 +1,4 @@
-Kwf.Utils.ResponsiveEl('.kwcTextImage', [800, 420, {maxWidth: 420, cls: 'lt420'}]);
+Kwf.Utils.ResponsiveEl('.kwcTextImage', [800, 420]);
 
 //remove largeText class if >55% of element is covered by image
 Kwf.onElementWidthChange('.kwcTextImage', function textImage(el) {

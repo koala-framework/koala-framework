@@ -16,18 +16,6 @@
             }
         }
 
-        .noFlow {
-            .image {
-                display: table-cell;
-            }
-
-            &.positionLeft, &.positionRight {
-                .text {
-                    display: table-cell;
-                }
-            }
-        }
-
         .positionLeft, .positionRight { .imageCaption { text-align: left; }}
         .positionLeft .image { float: left; margin-right: 18px; }
         .positionRight .image { float: right; margin-left: 18px; }
@@ -57,8 +45,25 @@
         margin: 0 auto;
     }
 
-    &.lt420 .image .kwcAbstractImage, &.largeImage .image .kwcAbstractImage {
+    &.largeText {
+        .noFlow {
+            .image {
+                display: table-cell;
+            }
+
+            &.positionLeft, &.positionRight {
+                .text {
+                    display: table-cell;
+                }
+            }
+        }
+    }
+
+    &.largeImage .image .kwcAbstractImage {
         width: 100% !important;
+    }
+    &.largeImage .image {
+        float: none !important;
     }
 
     .imageCaption {
