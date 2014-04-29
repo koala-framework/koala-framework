@@ -32,7 +32,7 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
             activeTab: 0,
             items: this.editPanels
         });
-        if (this.contentEditComponents.length > 1) {
+        if (this.hasMultipleDetailComponents) {
             this.tabs.on('render', function(){
                 for (var i=1; i<this.editPanels.length; i++) {
                     this.tabs.hideTabStripItem(i);
@@ -47,8 +47,10 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
     },
     _displayTabsUsedByTheSelectedRow: function()
     {
-        if (this.grid.grid.getSelected() &&
-            this.grid.grid.getSelected().get('component')) {
+        if (this.hasMultipleDetailComponents
+            && this.grid.grid.getSelected()
+            && this.grid.grid.getSelected().get('component')
+        ) {
             this.editPanels.each(function(panel){
                 var componentType = this.grid.grid.getSelected().get('component');
                 if (panel.componentType
