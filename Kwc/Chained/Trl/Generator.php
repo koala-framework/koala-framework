@@ -43,4 +43,26 @@ class Kwc_Chained_Trl_Generator extends Kwc_Chained_Abstract_Generator
         }
         return null;
     }
+
+    protected function _formatConfig($parentData, $row)
+    {
+        $ret = parent::_formatConfig($parentData, $row);
+        if ($this->_getChainedGenerator() instanceof Kwf_Component_Generator_PseudoPage_Static) {
+            //get trlStatic setting from chained generator and execute trlStaticExecute again
+            $c = $this->_getChainedGenerator()->_settings;
+            if (isset($ret['name'])) {
+                $ret['name'] = $parentData->trlStaticExecute($c['name']);
+            }
+            if (isset($ret['filename'])) {
+                if (isset($c['filename'])) {
+                    $ret['filename'] = $c['filename'];
+                } else if (isset($c['name'])) {
+                    $ret['filename'] = $c['name'];
+                }
+                $ret['filename'] = $parentData->trlStaticExecute($ret['filename']);
+                $ret['filename'] = Kwf_Filter::filterStatic($ret['filename'], 'Ascii');
+            }
+        }
+        return $ret;
+    }
 }
