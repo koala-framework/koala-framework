@@ -21,7 +21,7 @@ class Kwf_Util_Build
         $types[] = new Kwf_Util_Build_Types_Assets();
         if (Kwf_Component_Data_Root::getComponentClass()) {
             $types[] = new Kwf_Util_Build_Types_ComponentSettings();
-            //$types[] = new Kwf_Util_Build_Types_Events();
+            $types[] = new Kwf_Util_Build_Types_ComponentEvents();
         }
         return $types;
     }
