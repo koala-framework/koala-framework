@@ -15,7 +15,25 @@ class Kwc_Chained_Trl_Generator extends Kwc_Chained_Abstract_Generator
     {
         $select = parent::_getChainedSelect($select);
         $select->ignoreVisible(); // Visible ist bei Trl immer extra zu setzen
+
+        if ($this->_getChainedGenerator() instanceof Kwf_Component_Generator_PseudoPage_Static) {
+            //filename is translated, unset, checked in _createData
+            $select->unsetPart(Kwf_Component_Select::WHERE_FILENAME);
+        }
         return $select;
+    }
+
+    protected function _createData($parentData, $row, $select)
+    {
+        $ret = parent::_createData($parentData, $row, $select);
+        if ($this->_getChainedGenerator() instanceof Kwf_Component_Generator_PseudoPage_Static) {
+            if ($whereFileName = $select->getPart(Kwf_Component_Select::WHERE_FILENAME)) {
+                if ($ret->filename != $whereFileName) {
+                    $ret = null;
+                }
+            }
+        }
+        return $ret;
     }
 
     public function getEventsClass()
@@ -54,9 +72,9 @@ class Kwc_Chained_Trl_Generator extends Kwc_Chained_Abstract_Generator
                 $ret['name'] = $parentData->trlStaticExecute($c['name']);
             }
             if (isset($ret['filename'])) {
-                if (isset($c['filename'])) {
+                if (isset($c['filename']) && $c['filename']) {
                     $ret['filename'] = $c['filename'];
-                } else if (isset($c['name'])) {
+                } else if (isset($c['name']) && $c['name']) {
                     $ret['filename'] = $c['name'];
                 }
                 $ret['filename'] = $parentData->trlStaticExecute($ret['filename']);

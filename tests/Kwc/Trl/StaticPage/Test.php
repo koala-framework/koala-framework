@@ -25,4 +25,18 @@ class Kwc_Trl_StaticPage_Test extends Kwc_TestAbstract
         $this->assertEquals('Visible', $this->_root->getComponentById('root-en_foo')->name);
         $this->assertEquals('visible', $this->_root->getComponentById('root-en_foo')->filename);
     }
+
+    public function testGetByFilenameEn()
+    {
+        $c = $this->_root->getComponentById('root-en');
+
+        $i = $c->getChildComponent(array('filename'=>'visiblex'));
+        $this->assertNull($i);
+        $i = $c->getChildComponent(array('filename'=>'sichtbar'));
+        $this->assertNull($i);
+
+        $i = $c->getChildComponent(array('filename'=>'visible'));
+        $this->assertNotNull($i);
+        $this->assertEquals($i->componentId, 'root-en_foo');
+    }
 }
