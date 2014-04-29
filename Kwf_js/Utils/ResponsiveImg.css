@@ -1,6 +1,30 @@
 .webResponsiveImgLoading {
-    background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif);
+    position: relative;
+}
+
+.webResponsiveImgLoading:after {
+    position: absolute;
+    content: "";
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+}
+
+.cssanimations .webResponsiveImgLoading:after {
+    background-image: url(/assets/kwf/images/loading/loadingsmall.png);
     background-repeat: no-repeat;
     background-position: center;
-    background-color: white;
+    -moz-animation: kwfLoadingSpin .5s infinite linear;
+    -webkit-animation: kwfLoadingSpin .5s infinite linear;
+    animation: kwfLoadingSpin .5s infinite linear;
+}
+
+.no-cssanimations .webResponsiveImgLoading:after {
+    background-image: url(/assets/kwf/images/loading/loadingsmall.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    -moz-animation: none;
+    -webkit-animation: none;
+    animation: none;
 }
