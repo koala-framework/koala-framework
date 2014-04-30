@@ -80,6 +80,10 @@ class Kwf_Util_Build
             $progress = new Zend_ProgressBar($options['progressAdapter'], 0, $countSteps);
         }
 
+        if (!file_exists('build')) {
+            mkdir('build');
+        }
+
         $currentStep = 0;
         foreach ($types as $type) {
             $currentStep++;

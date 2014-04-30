@@ -3,6 +3,10 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 {
     protected function _build($options)
     {
+        if (!file_exists('build/assets')) {
+            mkdir('build/assets');
+        }
+
         $config = Zend_Registry::get('config');
 
         $langs = array();

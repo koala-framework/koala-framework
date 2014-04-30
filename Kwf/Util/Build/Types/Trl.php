@@ -3,6 +3,10 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
 {
     protected function _build()
     {
+        if (!file_exists('build/trl')) {
+            mkdir('build/trl');
+        }
+
         foreach (glob('build/trl/*') as $f) {
             unlink($f);
         }

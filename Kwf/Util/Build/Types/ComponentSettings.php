@@ -3,6 +3,10 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
 {
     protected function _build($options)
     {
+        if (!file_exists('build/component')) {
+            mkdir('build/component');
+        }
+
         Kwf_Component_Settings::resetSettingsCache();
 
         $fileName = 'build/component/settings';
