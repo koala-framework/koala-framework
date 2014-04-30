@@ -136,6 +136,9 @@ class Kwf_Controller_Front extends Zend_Controller_Front
                 $request = new Kwf_Controller_Request_Http();
             }
         }
+        if ($response === null) {
+            $response = new Kwf_Controller_Response_Http();
+        }
         $ret = parent::dispatch($request, $response);
         Kwf_Benchmark::shutDown();
         return $ret;

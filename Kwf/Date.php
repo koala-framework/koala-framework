@@ -31,7 +31,7 @@ class Kwf_Date
             $date->setOptions(array(
                 'format_type' => 'php'
             ));
-            $date->setLocale(Kwf_Trl::getInstance()->trlcKwf('locale', 'C', array(), $language));
+            $date->setLocale($language);
             return $date->toString($format);
         }
     }

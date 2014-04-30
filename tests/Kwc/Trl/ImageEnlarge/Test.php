@@ -183,7 +183,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
     {
         preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $html, $matches);
         foreach ($matches[0] as $key => $m) {
-            if ($matches[3][$key] == 'dh-{width}') continue;
+            if (substr($matches[3][$key], 0, 10) == 'dh-{width}') continue;
             return Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
         }
         return null;
@@ -316,7 +316,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         // nicht das FnF-Cache Model dieses Request schreiben kann
         preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $html, $matches);
         foreach ($matches[0] as $key => $m) {
-            if ($matches[3][$key] == 'dh-{width}') continue;
+            if (substr($matches[3][$key], 0, 10) == 'dh-{width}') continue;
             Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
         }
         preg_match('#^.*?<a.+?&quot;width&quot;:(\d+),&quot;height&quot;:(\d+).+?<img.+?src=".+?(\d+)\.jpg.+width="(\d+)".+height="(\d+)".+$#ms', $html, $matches);

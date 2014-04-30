@@ -1,0 +1,1 @@
+ALTER TABLE `kwc_newsletter_categories` CHANGE `pos` `pos` SMALLINT( 6 ) NOT NULL

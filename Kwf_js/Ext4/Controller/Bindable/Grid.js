@@ -101,7 +101,7 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
     _reloadLoadedRow: function()
     {
         var r = this.getLoadedRecord();
-        if (!r.phantom) {
+        if (r && !r.phantom) {
             r.self.load(r.getId(), {
                 success: function(loadedRow) {
                     r.beginEdit();

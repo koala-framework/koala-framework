@@ -123,7 +123,11 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
 
     public function toDebug()
     {
-        return $this->_row->toDebug();
+        $i = get_class($this);
+        $ret = print_r($this->toArray(), true);
+        $ret = preg_replace('#^Array#', $i, $ret);
+        $ret = "<pre>$ret</pre>";
+        return $ret;
     }
     public function __toString()
     {

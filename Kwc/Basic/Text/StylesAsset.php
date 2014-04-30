@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_Text_StylesAsset extends Kwf_Assets_Dependency_File
+class Kwc_Basic_Text_StylesAsset extends Kwf_Assets_Dependency_Abstract
     implements Kwf_Assets_Interface_UrlResolvable
 {
     private $_stylesModel;

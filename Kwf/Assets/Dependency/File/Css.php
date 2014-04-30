@@ -47,14 +47,19 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
             //hack to get the correct paths for the mediaelement pictures
             $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
         }
+        if ($baseUrl = Kwf_Setup::getBaseUrl()) {
+            $ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
+        }
 
         $ret = self::expandAssetVariables($ret);
 
 
-        $cssClass = $this->_getComponentCssClass();
-        if ($cssClass) {
-            $ret = str_replace('$cssClass', $cssClass, $ret);
-            $ret = str_replace('.cssClass', '.'.$cssClass, $ret);
+        if (strpos($ret, 'cssClass') !== false && (strpos($ret, '$cssClass') !== false || strpos($ret, '.cssClass') !== false)) {
+            $cssClass = $this->_getComponentCssClass();
+            if ($cssClass) {
+                $ret = str_replace('$cssClass', $cssClass, $ret);
+                $ret = str_replace('.cssClass', '.'.$cssClass, $ret);
+            }
         }
         return $ret;
     }

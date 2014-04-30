@@ -43,8 +43,12 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         if ($ret !== false) return $ret;
 
         $package = Kwf_Assets_Package_Default::getInstance('Frontend');
-        $c = $package->getPackageContents('text/css', null);
-        $ret = self::parseMasterStyles($c);
+        $ret = array();
+        foreach ($package->getDependency()->getFilteredUniqueDependencies('text/css') as $dep) {
+            if ($dep instanceof Kwf_Assets_Dependency_File) {
+                $ret = array_merge($ret, self::parseMasterStyles(file_get_contents($dep->getFileName())));
+            }
+        }
         Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
     }

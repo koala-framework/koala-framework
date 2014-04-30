@@ -1,9 +1,9 @@
 <table width="100%" cellspacing="0" cellpadding="0">
     <tr>
         <td>
-            <<?=$this->headlineType ?>>
+            <<?=$this->headlineType['tag'] ?><? if ($this->headlineType['class']) { ?> class="<?=$this->headlineType['class']?>"<? } ?>>
                 <?= $this->headline1 ?>
-            </<?=$this->headlineType ?>>
+            </<?=$this->headlineType['tag'] ?>>
         </td>
     </tr>
      <? if ($this->headline2) { ?>

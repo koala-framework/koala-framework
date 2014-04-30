@@ -28,8 +28,12 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
         $imageData = $c->getComponent()->getImageData();
         $this->fireEvent(new Kwc_Abstract_Image_ImageChangedEvent($this->_class, $c));
         if ($imageData) {
-            $dim = $c->getComponent()->getImageDimensions();
             $typeBase = $c->getComponent()->getBaseType();
+            // Kwc_Abstract_Image_Component->getBaseImageUrl is cached in Kwf_Media and uses therefore the base type
+            $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                $this->_class, $c, $typeBase
+            ));
+            $dim = $c->getComponent()->getImageDimensions();
             $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
             foreach ($steps as $step) {
                 $this->fireEvent(new Kwf_Component_Event_Media_Changed(
@@ -38,6 +42,9 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
             }
         }
         $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
+            $this->_class, $c
+        ));
+        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
             $this->_class, $c
         ));
     }

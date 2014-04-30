@@ -250,14 +250,15 @@ class Kwf_Component_Settings
             self::_verifyComponentClass($class);
             if ($setting == 'parentClasses') {
                 $p = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-                $ret = array();
-                do {
+                $ret = array($class);
+                while ($p = get_parent_class($p)) {
                     $ret[] = $p;
-                } while ($p = get_parent_class($p));
+                }
             } else if ($setting == 'parentFilePaths') {
                 //value = klasse, key=pfad
                 $ret = array();
                 foreach (self::getSetting($class, 'parentClasses') as $c) {
+                    $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
                     if (method_exists($c, '_getYamlConfigFile')) {
                         $file = call_user_func(array($c, '_getYamlConfigFile'));
                     } else {

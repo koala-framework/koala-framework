@@ -117,7 +117,7 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
             Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES => array(),
         );
 
-        $fileContents = $dependency->getContents('en');
+        $fileContents = file_get_contents($dependency->getFileName());
 
         // remove comments to avoid dependencies from docs/examples
         $fileContents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $fileContents);

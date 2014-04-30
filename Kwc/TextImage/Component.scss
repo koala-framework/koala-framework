@@ -9,7 +9,15 @@
 }
 
 .cssClass {
-    &.gt800, &.largeText {
+    &.gt420 {
+        .image {
+            margin-bottom: 3px;
+            display: inline;
+            max-width: 50%;
+        }
+    }
+
+    &.gt420, &.largeText {
         .kwcBasicImageEnlarge {
             img {
                 display: block;
@@ -17,9 +25,14 @@
         }
 
         .noFlow {
-            .image,
-            .text {
+            .image {
                 display: table-cell;
+            }
+
+            &.positionLeft, &.positionRight {
+                .text {
+                    display: table-cell;
+                }
             }
         }
 
@@ -29,9 +42,9 @@
         .positionCenter {
             .image {
                 text-align: center;
-                display: block;
+                display: inline;
 
-                .kwcBasicImageEnlarge {
+                > .kwcBasicImageEnlarge {
                     img {
                         margin-bottom: -3px;
                         display: inline;
@@ -45,15 +58,16 @@
         .imageCaption {
             padding: 3px 0 5px 0;
         }
-
     }
 
     .kwcBasicImageEnlarge {
         margin: 0 auto;
     }
 
-    &.lt420 .image .kwcAbstractImage, &.largeImage .image .kwcAbstractImage {
-        width: 100% !important;
+    .image {
+        > .kwcAbstractImage {
+            max-width: 100% !important;
+        }
     }
 
     .imageCaption {
