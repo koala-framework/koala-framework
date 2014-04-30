@@ -9,6 +9,7 @@ class Kwf_Assets_ProviderList_Maintenance extends Kwf_Assets_ProviderList_Abstra
         $providers[] = new Kwf_Assets_Provider_IniNoFiles();
         $providers[] = new Kwf_Assets_Provider_ExtTrl();
         $providers[] = new Kwf_Assets_Provider_DefaultAssets();
+        $providers[] = new Kwf_Assets_Provider_ErrorHandler();
         parent::__construct($providers);
     }
 }
