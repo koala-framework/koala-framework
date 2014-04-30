@@ -9,3 +9,7 @@ if (!file_exists('scss')) {
     file_put_contents('scss/config/.gitkeep', '');
     system('git add scss/config/.gitkeep');
 }
+
+$c = file_get_contents(".gitignore");
+$c = trim($c)."\nbuild\n";
+file_put_contents('.gitignore', $c);
