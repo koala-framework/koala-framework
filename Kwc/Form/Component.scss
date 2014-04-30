@@ -1,4 +1,5 @@
 @import "compass/utilities/general/clearfix";
+@import "kwf/background-image-dpr2";
 @import "compass/css3/box-sizing";
 @import "kwf/form/label-top-input-all";
 @import "kwf/form/label-center-input-all";
@@ -79,6 +80,42 @@
         &.gt500 {
             @include label-120;
             @include error-bubbles;
+        }
+    }
+}
+
+/* ------------------------------------ Button Loading ------------------------------------*/
+
+.cssClass {
+    .submitWrapper {
+        .saving {
+            visibility: hidden;
+            position: absolute;
+            margin-left: -12px;
+            margin-top: -12px;
+            height: 24px;
+            width: 24px;
+            left: 50%;
+            top: 50%;
+        }
+    }
+}
+
+.cssanimations {
+    .submitWrapper {
+        .saving {
+            @include background-image-dpr2('/assets/web/images', 'loadingsmall.png', 24px, 24px, no-repeat scroll 0 0 transparent);
+            animation:spin .6s infinite linear;
+            -moz-animation:spin .6s infinite linear;
+            -webkit-animation:spin .6s infinite linear;
+        }
+    }
+}
+
+.no-cssanimations {
+    .submitWrapper {
+        .saving {
+            background: url(/assets/kwf/images/loading/loadingsmall.gif);
         }
     }
 }
