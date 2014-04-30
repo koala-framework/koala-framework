@@ -38,7 +38,7 @@ class Kwf_Setup
             }
             include('cache/setup'.self::CACHE_SETUP_VERSION.'.php');
         }
-        if (self::getBaseUrl() === null) {
+        if (defined('VKWF_PATH') && self::getBaseUrl() === null) {
             //if server.baseUrl is not set try to auto detect it and generate config.local.ini accordingly
             //this code is not used if server.baseUrl is set to "" in vkwf
             if (php_sapi_name() == 'cli') {
