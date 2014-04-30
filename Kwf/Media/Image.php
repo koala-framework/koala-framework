@@ -72,6 +72,8 @@ class Kwf_Media_Image
                         $reversed = true;
                     } else if ($type == 0x4949) { //Intel
                         $reversed = false;
+                    } else {
+                        return 0;
                     }
                     //number of directory entries in IFD0
                     $propertyCount = self::_generateIntValue($contents[$count+19],
