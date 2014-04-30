@@ -41,6 +41,7 @@ Kwf.Fade.Elements = function(cfg) {
     this.easingFadeIn = 'ease';
     this.fadeEvery = 7;
     this.startRandom = true;
+    this.autoStart = true;
     this.direction = cfg.direction;
 
     if (typeof cfg.template != 'undefined') this._template = cfg.template;
@@ -58,6 +59,7 @@ Kwf.Fade.Elements = function(cfg) {
     if (typeof cfg.easingFadeIn != 'undefined') this.easingFadeIn = cfg.easingFadeIn;
     if (typeof cfg.fadeEvery != 'undefined') this.fadeEvery = cfg.fadeEvery;
     if (typeof cfg.startRandom != 'undefined') this.startRandom = cfg.startRandom;
+    if (typeof cfg.autoStart != 'undefined') this.autoStart = cfg.autoStart;
 
     this._elementAccessLinkEls = [];
 
@@ -140,7 +142,7 @@ Kwf.Fade.Elements.prototype = {
             this.calculateMaxHeight();
         }, this));
         if (this.fadeElements.length <= 1) return;
-        if (this.startRandom) {
+        if (this.autoStart) {
             this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
         }
     },
