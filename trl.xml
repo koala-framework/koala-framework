@@ -1688,6 +1688,7 @@
 <fr>Rechercher</fr>
 <uk>Пошук</uk>
 <cs>Vyhledat</cs>
+<hr>Pretraži</hr>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -9479,6 +9480,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sk>Žiadne výsledky vyhľadávania</sk>
 <uk>Записів не знайдено</uk>
 <cs>Novinky nebyly nalezeny</cs>
+<hr>Nisu pronađeni rezultati</hr>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
