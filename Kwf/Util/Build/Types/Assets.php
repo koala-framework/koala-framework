@@ -3,10 +3,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 {
     protected function _build($options)
     {
-        if (!Zend_Registry::get('db')) {
-            $this->_output("skipped, no db configured ");
-            return;
-        }
         $config = Zend_Registry::get('config');
 
         $langs = array();
