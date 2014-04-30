@@ -47,7 +47,19 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             foreach ($urls as $url) {
                 if (substr($url, 0, 1) == '/') {
                     if (Kwf_Setup::getBaseUrl()) $url = substr($url, strlen(Kwf_Setup::getBaseUrl()));
-                    Kwf_Assets_Dispatcher::getOutputForUrl($url, Kwf_Media_Output::ENCODING_NONE); //this will fill cache
+                    if (substr($url, 0, 21) != '/assets/dependencies/') throw new Kwf_Exception("invalid url: '$url'");
+                    $u = substr($url, 21);
+                    if (strpos($u, '?') !== false) {
+                        $u = substr($u, 0, strpos($u, '?'));
+                    }
+                    $param = explode('/', $u);
+                    $dependencyClass = $param[0];
+                    $dependencyParams = $param[1];
+                    $language = $param[2];
+                    $extension = $param[3];
+                    if (is_instance_of($dependencyClass, 'Kwf_Assets_Package')) {
+                        Kwf_Assets_Dispatcher::getOutputForUrl($url, Kwf_Media_Output::ENCODING_NONE); //this will fill cache
+                    }
                 }
             }
         }
