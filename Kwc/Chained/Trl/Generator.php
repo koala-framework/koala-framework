@@ -68,7 +68,7 @@ class Kwc_Chained_Trl_Generator extends Kwc_Chained_Abstract_Generator
         if ($this->_getChainedGenerator() instanceof Kwf_Component_Generator_PseudoPage_Static) {
             //get trlStatic setting from chained generator and execute trlStaticExecute again
             $c = $this->_getChainedGenerator()->_settings;
-            if (isset($ret['name'])) {
+            if (isset($ret['name']) && isset($c['name'])) {
                 $ret['name'] = $parentData->trlStaticExecute($c['name']);
             }
             if (isset($ret['filename'])) {
