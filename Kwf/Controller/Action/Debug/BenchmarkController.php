@@ -95,7 +95,7 @@ class Kwf_Controller_Action_Debug_BenchmarkController extends Kwf_Controller_Act
                 }
             }
         }
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
 
 
@@ -120,7 +120,7 @@ class Kwf_Controller_Action_Debug_BenchmarkController extends Kwf_Controller_Act
         foreach ($startDates as $d) {
             echo "<img src=\"/kwf/debug/benchmark/graph?rrd=$rrd&name=$name&start=".urlencode($d)."\" />";
         }
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
 
     public function graphAction()
@@ -166,6 +166,6 @@ class Kwf_Controller_Action_Debug_BenchmarkController extends Kwf_Controller_Act
             }
             echo "<br />";
         }
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
 }
