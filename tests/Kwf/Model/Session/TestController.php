@@ -19,7 +19,7 @@ class Kwf_Model_Session_TestController extends Kwf_Controller_Action
         $model = Kwf_Model_Abstract::getInstance('Kwf_Model_Session_TestModel');
         $row = $model->getRow(1);
         echo $row->foo;
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
 
 
@@ -31,7 +31,7 @@ class Kwf_Model_Session_TestController extends Kwf_Controller_Action
         $row->foo = 'bum';
         $row->save();
         echo "OK";
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
 
 }

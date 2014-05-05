@@ -69,6 +69,6 @@ class Kwc_TestController extends Kwf_Controller_Action
         Kwf_Benchmark::output();
 
 
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
 }

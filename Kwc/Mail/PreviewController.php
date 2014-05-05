@@ -39,7 +39,7 @@ class Kwc_Mail_PreviewController extends Kwf_Controller_Action
         $this->getResponse()->setHeader('Content-Type', 'text/html; charset=utf-8');
         $recipient = $this->_getRecipient();
         $mail = $this->_getMailComponent();
-        echo $mail->getHtml($recipient);
+        $this->getResponse()->setBody($mail->getHtml($recipient));
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
@@ -48,7 +48,7 @@ class Kwc_Mail_PreviewController extends Kwf_Controller_Action
         $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=utf-8');
         $recipient = $this->_getRecipient();
         $mail = $this->_getMailComponent();
-        echo $mail->getText($recipient);
+        $this->getResponse()->setBody($mail->getText($recipient));
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }

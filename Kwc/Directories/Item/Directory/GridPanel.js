@@ -47,5 +47,3 @@ Kwc.Directories.Item.Directory.GridPanel = Ext.extend(Kwf.Binding.ProxyPanel,
         this.proxyItem.addBinding(bindForm);
     }
 });
-
-Ext.reg('kwc.directories.item.directory', Kwc.Directories.Item.Directory.GridPanel);
