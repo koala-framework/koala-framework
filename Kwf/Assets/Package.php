@@ -31,7 +31,7 @@ class Kwf_Assets_Package
     public function getMaxMTime($mimeType)
     {
         if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
-            $cacheId = 'depPckMaxMTime_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+            $cacheId = 'mtime_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
             $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
             if ($ret !== false) return $ret;
         }
@@ -52,7 +52,7 @@ class Kwf_Assets_Package
             else if ($mimeType == 'text/css') $ext = 'css';
             else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
             else throw new Kwf_Exception_NotYetImplemented();
-            $fileName = 'cache/assets/package-max-mtime-'.$ext;
+            $fileName = 'build/assets/package-max-mtime-'.$ext;
             if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
                 file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
             }

@@ -97,7 +97,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             }
         }
 
-        $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor --exclude 'magick|\.nfs|\.git|.*\.kate-swp|~|/cache/|/log/|/temp/|data/index|benchmarklog|querylog|eventlog' ".implode(' ', $watchPaths);
+        $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor --exclude 'magick|\.nfs|\.git|.*\.kate-swp|~|/cache/|/log/|/temp/|data/index|benchmarklog|querylog|eventlog|/build/' ".implode(' ', $watchPaths);
         echo $cmd."\n";
         $descriptorspec = array(
             1 => array("pipe", "w"),
@@ -663,27 +663,32 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             self::_clearAssetsAll('printcss');
             return;
         }
-        $fileName = 'cache/assets/output-cache-ids-'.$fileType;
-        if (file_exists($fileName)) {
-            $cacheIds = file($fileName);
-            unlink($fileName);
-            foreach ($cacheIds as $cacheId) {
-                $cacheId = trim($cacheId);
-                echo $cacheId;
-                if (Kwf_Assets_Cache::getInstance()->remove($cacheId) || Kwf_Assets_BuildCache::getInstance()->remove($cacheId)) echo " [DELETED]";
-                if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_gzip', 'as_'.$cacheId.'_deflate'))) echo " [gzip DELETED]";
-                echo "\n";
+        $fileNames = array(
+            'cache/assets/output-cache-ids-'.$fileType,
+            'build/assets/output-cache-ids-'.$fileType,
+        );
+        foreach ($fileNames as $fileName) {
+            if (file_exists($fileName)) {
+                $cacheIds = file($fileName);
+                unlink($fileName);
+                foreach ($cacheIds as $cacheId) {
+                    $cacheId = trim($cacheId);
+                    echo $cacheId;
+                    if (Kwf_Assets_Cache::getInstance()->remove($cacheId) || Kwf_Assets_BuildCache::getInstance()->remove($cacheId)) echo " [DELETED]";
+                    if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_gzip', 'as_'.$cacheId.'_deflate'))) echo " [gzip DELETED]";
+                    echo "\n";
+                }
             }
         }
 
-        $fileName = 'cache/assets/package-max-mtime-'.$fileType;
+        $fileName = 'build/assets/package-max-mtime-'.$fileType;
         if (file_exists($fileName)) {
             $cacheIds = file($fileName);
             unlink($fileName);
             foreach ($cacheIds as $cacheId) {
                 $cacheId = trim($cacheId);
                 echo $cacheId;
-                if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) echo " [DELETED]";
+                if (Kwf_Assets_BuildCache::getInstance()->remove($cacheId)) echo " [DELETED]";
                 echo "\n";
             }
         }

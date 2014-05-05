@@ -61,12 +61,14 @@ class Kwf_Assets_BuildCache
             unlink($f);
         }
     }
-/*
+
     public function remove($cacheId)
     {
         Kwf_Cache_SimpleStatic::_delete('as-'.$cacheId);
         $fileName = self::$_buildDir.'/'.$cacheId;
-        if (file_exists($fileName)) unlink($fileName);
-        return self::_getSlowCache()->remove($cacheId);
-    }*/
+        if (file_exists($fileName)) {
+            unlink($fileName);
+            return true;
+        }
+    }
 }

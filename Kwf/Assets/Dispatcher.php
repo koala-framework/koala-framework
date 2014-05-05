@@ -81,12 +81,14 @@ class Kwf_Assets_Dispatcher
             if ($mtime) $ret['mtime'] = $mtime;
             if ($dependency instanceof Kwf_Assets_Package) {
                 Kwf_Assets_BuildCache::getInstance()->save($ret, $cacheId);
+                $cacheDir = 'build';
             } else {
                 Kwf_Assets_Cache::getInstance()->save($ret, $cacheId);
+                $cacheDir = 'cache';
             }
 
             //save generated caches for clear-cache-watcher
-            $fileName = 'cache/assets/output-cache-ids-'.$extension;
+            $fileName = $cacheDir.'/assets/output-cache-ids-'.$extension;
             if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
                 file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
             }
