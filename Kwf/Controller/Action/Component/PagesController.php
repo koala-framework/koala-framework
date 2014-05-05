@@ -322,7 +322,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
     protected function _changeVisibility(Kwf_Model_Row_Interface $row)
     {
         parent::_changeVisibility($row);
-        $row->getData()->row->self_visible = $row->visible;
+        $row->getData()->selfVisible = $row->visible;
         $config = $row->getData()->generator->getPagesControllerConfig($row->getData());
         $icon = new Kwf_Asset($config['icon']);
         $this->view->icon = $icon->toString($config['iconEffects']);
