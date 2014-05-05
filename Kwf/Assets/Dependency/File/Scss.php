@@ -33,24 +33,27 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         }
 
         if ($ret === false) {
-            $ret = Kwf_Assets_Dependency_File::getContents($language);
 
-            static $scssParser;
-            if (!isset($scssParser)) {
-                $scssParser = new Kwf_Util_SassParser(array(
-                    'style' => 'compact',
-                    'cache' => false,
-                    'syntax' => 'scss',
-                    'debug' => true,
-                    'debug_info' => false,
-                    'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
-                    'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
-                    'extensions' => array('Compass', 'Susy', 'Kwf', 'Web')
-                ));
+            $sassc = Kwf_Config::getValue('server.sassc');
+            $loadPath = array(
+                Kwf_Config::getValue('externLibraryPath.compassMixins').'/lib',
+                Kwf_Config::getValue('externLibraryPath.susy').'/sass',
+                './scss',
+                KWF_PATH.'/sass/Kwf/stylesheets',
+            );
+            $loadPath = escapeshellarg(implode(PATH_SEPARATOR, $loadPath));
+            $fileName = escapeshellarg($this->getFileName());
+            $outFile = tempnam('temp', 'outcss');
+            $cmd = "$sassc --load-path $loadPath --style nested $fileName $outFile";
+            exec($cmd, $out, $retVal);
+            if ($retVal) {
+                throw new Kwf_Exception("sassc failed: ".implode("\n", $out));
             }
-            $ret = $scssParser->toCss($ret, false);
+            $ret = file_get_contents($outFile);
+            unlink($outFile);
+
             $cache->save(
-                array('mtime'=>filemtime($fileName), 'contents'=>$ret),
+                array('mtime'=>filemtime($this->getFileName()), 'contents'=>$ret),
                 $cacheId
             );
         }
