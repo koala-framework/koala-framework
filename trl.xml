@@ -3295,6 +3295,7 @@
 <uk>повернутися до форми</uk>
 <hr>za povratak na obrazac</hr>
 <ua>повернутися до формуляру</ua>
+<si>nazaj na formular</si>
 </text>
 <text>
 <en>Show Original</en>
@@ -5438,6 +5439,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Înapoi la Coşul de cumpărături</ro>
 <sl>Nazaj na košarico</sl>
 <ua>Повернутися до корзини</ua>
+<si>Nazaj v koš</si>
 </text>
 <text>
 <en>Shop.Cart</en>
@@ -6723,6 +6725,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Nazaj na začetno stran</sl>
 <hr>Povratak na početnu stranicu</hr>
 <ua>Повернутися на головну</ua>
+<si>Nazaj na domačo stran</si>
 </text>
 <text>
 <en>Customer added by {0}</en>
@@ -7496,6 +7499,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Nazaj na ...</sl>
 <hr>povratak na...</hr>
 <ua>Повернутися до...</ua>
+<si>nazaj k</si>
 </text>
 <text>
 <en>Order at {0}</en>
@@ -10434,6 +10438,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Volver a Información general</es>
 <hr>Povratak na preglednik</hr>
 <ua>Назад до огляду</ua>
+<si>Nazaj na pregled</si>
 </text>
 <text>
 <en>Guestbook Detail</en>
