@@ -26,7 +26,6 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
                 echo "ERROR: build folder doesn't exist.\n";
             } else if (file_exists('build/version.json')) {
                 $v = json_decode(file_get_contents('build/version.json'));
-                $repos = array();
                 foreach ($v as $k=>$i) {
                     if ($k == 'web') {
                         if (!file_exists('.git')) {
@@ -47,12 +46,6 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
                     if (isset($i->rev)) {
                         if ($git->revParse('HEAD') != $i->rev) {
                             echo "ERROR: $k: build version doesn't match git revision.\n";
-                            continue;
-                        }
-                    }
-                    if (isset($i->branch)) {
-                        if ($git->getActiveBranch() != $i->branch) {
-                            echo "ERROR: $k: build version doesn't match git branch.\n";
                             continue;
                         }
                     }
