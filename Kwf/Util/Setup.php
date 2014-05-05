@@ -262,13 +262,12 @@ class Kwf_Util_Setup
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
 
         if (Kwf_Config::getValue('debug.checkBranch') && is_file('kwf_branch')) {
-            $ret .= "if (trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";
-            $ret .= "    \$validCommands = array('shell', 'export', 'copy-to-test');\n";
-            $ret .= "    if (php_sapi_name() != 'cli' || !isset(\$_SERVER['argv'][1]) || !in_array(\$_SERVER['argv'][1], \$validCommands)) {\n";
-            $ret .= "        \$required = trim(file_get_contents('kwf_branch'));\n";
-            $ret .= "        throw new Kwf_Exception_Client(\"Invalid Kwf branch. Required: '\$required', used: '\".Kwf_Config::getValue('application.kwf.version').\"'\");\n";
+            $ret .= "    \$requiredBranch = trim(file_get_contents('kwf_branch'));\n";
+            $ret .= "    \$configContents = file_get_contents(Kwf_Config::getValue('path.kwf').'/config.ini'); //don't use Kwf_Config as that might be cached\n";
+            $ret .= "    if (strpos(\$configContents, \"application.kwf.version = \$requiredBranch\n\") === false) {\n";
+            $ret .= "        preg_match(\"#application\.kwf\.version = (.*)\\n#\", \$configContents, \$m);\n";
+            $ret .= "        throw new Kwf_Exception_Client(\"Invalid Kwf branch. Required: '\$requiredBranch', used: '\".\$m[1].\"'\n\");\n";
             $ret .= "    }\n";
-            $ret .= "}\n";
         }
 
         $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
