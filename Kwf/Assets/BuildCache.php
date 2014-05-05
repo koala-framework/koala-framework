@@ -18,9 +18,6 @@ class Kwf_Assets_BuildCache
         if ($ret === false) {
             $fileName = self::$_buildDir.'/'.$cacheId;
             if (!file_exists($fileName)) {
-                if (!$this->building) {
-                    throw new Kwf_Exception("Build file '$fileName' not found");
-                }
                 return false;
             }
             $ret = unserialize(file_get_contents($fileName));
