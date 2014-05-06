@@ -58,6 +58,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
             'paymentType' => Kwc_Abstract::getSetting($payment->componentClass, 'paymentType'),
             'order_id' => $order->id
         );
+        if ($shopId = $this->getData()->getBaseProperty('wirecard.shopId')) $params['shopId'] = $shopId;
 
         $requestFingerprintSeed  = "";
         $exclude = array('requestFingerprintOrder');
