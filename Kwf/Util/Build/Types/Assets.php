@@ -17,20 +17,13 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 $langs[] = $lang;
             }
         }
-
         if (Kwf_Component_Data_Root::getComponentClass()) {
-            $lngClasses = array();
             foreach(Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
-                    in_array('language', Kwc_Abstract::getSetting($c, 'baseProperties'))
-                ) {
-                    $lngClasses[] = $c;
+                if (Kwc_Abstract::getFlag($c, 'hasPossibleLanguages')) {
+                    foreach (call_user_func(array($c, 'getPossibleLanguages'), $c) as $i) {
+                        if (!in_array($i, $langs)) $langs[] = $i;
+                    }
                 }
-            }
-            $lngs = Kwf_Component_Data_Root::getInstance()
-                ->getComponentsBySameClass($lngClasses, array('ignoreVisible'=>true));
-            foreach ($lngs as $c) {
-                $langs[] = $c->getLanguage();
             }
         }
         $langs = array_unique($langs);

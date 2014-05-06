@@ -17,6 +17,17 @@ class Kwc_Root_TrlRoot_Component extends Kwc_Root_Abstract
             'uniqueFilename' => true,
         );
         $ret['childModel'] = new Kwc_Root_TrlRoot_Model(array('de' => 'Deutsch'));
+        $ret['flags']['hasPossibleLanguages'] = true;
+        return $ret;
+    }
+
+    public static function getPossibleLanguages($componentClass)
+    {
+        $ret = array();
+        $rows = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($componentClass, 'childModel'))->getRows();
+        foreach ($rows as $row) {
+            $ret[] = $row->id;
+        }
         return $ret;
     }
 

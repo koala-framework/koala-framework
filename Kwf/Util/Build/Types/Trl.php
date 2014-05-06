@@ -11,8 +11,27 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             unlink($f);
         }
         Kwf_Trl::getInstance()->clearCache();
-        $languages = array(Kwf_Registry::get('config')->webCodeLanguage, 'de');
-        foreach ($languages as $l) {
+
+        $config = Zend_Registry::get('config');
+        $langs = array();
+        if ($config->webCodeLanguage) $langs[] = $config->webCodeLanguage;
+
+        if ($config->languages) {
+            foreach ($config->languages as $lang=>$name) {
+                $langs[] = $lang;
+            }
+        }
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            foreach(Kwc_Abstract::getComponentClasses() as $c) {
+                if (Kwc_Abstract::getFlag($c, 'hasPossibleLanguages')) {
+                    foreach (call_user_func(array($c, 'getPossibleLanguages'), $c) as $i) {
+                        if (!in_array($i, $langs)) $langs[] = $i;
+                    }
+                }
+            }
+        }
+
+        foreach ($langs as $l) {
             $cacheFileName = null;
             $c = Kwf_Trl::getInstance()->_loadCache(Kwf_Trl::SOURCE_WEB, $l, true, $cacheFileName);
             if ($cacheFileName) file_put_contents($cacheFileName, serialize($c));

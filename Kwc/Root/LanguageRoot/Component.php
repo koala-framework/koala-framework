@@ -11,7 +11,14 @@ class Kwc_Root_LanguageRoot_Component extends Kwc_Root_Abstract
                 'en'=>'Kwc_Root_LanguageRoot_Language_Component'
             )
         );
+        $ret['flags']['hasPossibleLanguages'] = true;
         return $ret;
+    }
+
+    public static function getPossibleLanguages($componentClass)
+    {
+        $g = Kwc_Abstract::getSetting($componentClass, 'generators');
+        return array_keys($g['language']['component']);
     }
 
     public function getPageByUrl($path, $acceptLangauge)
