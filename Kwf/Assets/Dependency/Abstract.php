@@ -16,6 +16,11 @@ abstract class Kwf_Assets_Dependency_Abstract
         return $this->getContents($language);
     }
 
+    public function getContentsPackedSourceMap($language)
+    {
+        return false;
+    }
+
     public function setDependencies($type, $deps)
     {
         $this->_dependencies[$type] = $deps;

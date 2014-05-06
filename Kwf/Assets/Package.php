@@ -77,14 +77,66 @@ class Kwf_Assets_Package
         return $this->_cacheFilteredUniqueDependencies[$mimeType];
     }
 
+    public function getPackageContentsSourceMap($mimeType, $language)
+    {
+        $ret = '';
+        $maps = array();
+        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
+            if ($i->getIncludeInPackage()) {
+                $c = $i->getContentsPackedSourceMap($language);
+                if (!$c) {
+                    $packageContents = $i->getContentsPacked($language);
+                    $f = tempnam('temp', 'dynass'); //TODO delete temp file
+                    file_put_contents($f, $packageContents);
+                    $data = array(
+                        "version" => 3,
+                        "file" => $f,
+                        "sources"=> array(),
+                        "names"=> array(),
+                        "mappings" => array()
+                    );
+                    $c = json_encode($data);
+                }
+                $f = tempnam('temp', 'map'); //TODO delte temp file
+                file_put_contents($f, $c);
+                $maps[] = $f;
+            }
+        }
+        if ($maps) {
+            $outFile = tempnam('temp', 'sourcemap');
+            $cmd = "PATH=\$PATH:/var/www/node/bin  ./node_modules/.bin/mapcat ".implode(' ', $maps);
+            $cmd .= " --mapout $outFile.map";
+            $cmd .= " --jsout $outFile";
+            $cmd .= " 2>&1 ";
+            $out = array();
+            exec($cmd, $out, $retVal);
+            if ($retVal) {
+                throw new Kwf_Exception('mapcat failed: '.implode("\n", $out));
+            }
+            $ret = file_get_contents("$outFile.map");
+            unlink("$outFile.map");
+            unlink("$outFile");
+            $ret = json_decode($ret);
+            foreach ($ret->sources as &$i) {
+                $i = '/assets/'.$i;
+            }
+            $ret = json_encode($ret);
+        }
+        return $ret;
+    }
+
     public function getPackageContents($mimeType, $language)
     {
         $maxMTime = 0;
         $ret = '';
+        $maps = array();
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if ($c = $i->getContentsPacked($language)) {
-                    //$ret .= "/* *** ".$i->getFileName()." *"."/\n";
+                    //$ret .= "/* *** $i */\n";
+                    if (strpos($c, "//@ sourceMappingURL=") !== false && strpos($c, "//# sourceMappingURL=") !== false) {
+                        throw new Kwf_Exception("contents must not contain sourceMappingURL");
+                    }
                     $ret .= $c."\n";
                 }
             }
@@ -101,6 +153,13 @@ class Kwf_Assets_Package
                 $ret);
         }
 
+        if ($mimeType == 'text/javascript') $ext = 'js';
+        else if ($mimeType == 'text/css') $ext = 'css';
+        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
+        else throw new Kwf_Exception_NotYetImplemented();
+
+        $ret .= "\n//@ sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language);
+
         return $ret;
     }
 
@@ -116,6 +175,12 @@ class Kwf_Assets_Package
         return new $class(new $providerList, $param[1]);
     }
 
+    public function getPackageUrl($ext, $language)
+    {
+        return Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
+            .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
+    }
+
     public function getPackageUrls($mimeType, $language)
     {
         if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
@@ -129,9 +194,9 @@ class Kwf_Assets_Package
         else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
         else throw new Kwf_Exception_NotYetImplemented();
 
-        $ret = array();
-        $ret[] = Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
-            .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
+        $ret = array(
+            $this->getPackageUrl($ext, $language)
+        );
         $includesDependencies = array();
         $maxMTime = 0;
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {

@@ -14,40 +14,92 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         parent::__construct($fileName);
     }
 
+    protected function _getRawContents($language)
+    {
+        $ret = parent::getContents($language);
+
+        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+
+        //TODO same code is in in File_Css too
+        if ($pathType == 'ext') {
+            //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
+            $ret = str_replace('../images/', '/assets/ext/resources/images/', $ret);
+        } else if ($pathType == 'mediaelement') {
+            //hack to get the correct paths for the mediaelement pictures
+            $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
+        }
+
+        if ($baseUrl = Kwf_Setup::getBaseUrl()) {
+            $ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
+            $ret = preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', '$1'.$baseUrl.'/$2/', $ret);
+        }
+
+        if (strpos($ret, '.cssClass') !== false) {
+            $cssClass = $this->_getComponentCssClass();
+            if ($cssClass) {
+                $ret = preg_replace('#\'\.cssClass([\s\'\.])#', '\'.'.$cssClass.'$1', $ret);
+            }
+        }
+        return $ret;
+    }
+
     protected function _getContents($language, $pack)
     {
         $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
         $useTrl = !in_array($pathType, array('ext', 'ext4', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
 
+        $retSourceMap = false;
         if (isset($this->_contentsCache) && $pack) {
             $ret = $this->_contentsCache;
+            $retSourceMap = $this->_contentsCacheSourceMap;
         } else {
 
-            $ret = parent::getContents($language);
-
-            //TODO same code is in in File_Css too
-            if ($pathType == 'ext') {
-                //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
-                $ret = str_replace('../images/', '/assets/ext/resources/images/', $ret);
-            } else if ($pathType == 'mediaelement') {
-                //hack to get the correct paths for the mediaelement pictures
-                $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
-            }
-
-            if ($baseUrl = Kwf_Setup::getBaseUrl()) {
-                $ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
-                $ret = preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', '$1'.$baseUrl.'/$2/', $ret);
-            }
-
-            if (strpos($ret, '.cssClass') !== false) {
-                $cssClass = $this->_getComponentCssClass();
-                if ($cssClass) {
-                    $ret = preg_replace('#\'\.cssClass([\s\'\.])#', '\'.'.$cssClass.'$1', $ret);
-                }
-            }
+            $ret = $this->_getRawContents($language);
 
             if ($pack) {
-                $ret = self::pack($ret);
+
+                $fileName = realpath($this->getFileName());
+
+                static $paths;
+                if (!isset($paths)) {
+                    $paths = Kwf_Config::getValueArray('path');
+                    foreach ($paths as &$p) {
+                        if (substr($p, 0, 1) == '.') $p = getcwd().substr($p, 1);
+                        $p = realpath($p);
+                    }
+                }
+                foreach ($paths as $k=>$p) {
+                    if (substr($fileName, 0, strlen($p)) == $p) {
+                        $fileName = $k.substr($fileName, strlen($p));
+                        break;
+                    }
+                }
+
+                $buildFile = "cache/uglifyjs/".$fileName;
+                if (!file_exists("$buildFile.min.js") || filemtime($this->getFileName()) != file_get_contents("$buildFile.buildtime")) {
+                    $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
+                    if (!file_exists($dir)) mkdir($dir, 0777, true);
+                    file_put_contents($buildFile, $ret);
+                    $cmd = "PATH=\$PATH:/var/www/node/bin ./node_modules/.bin/uglifyjs2 ";
+                    $cmd .= "--source-map ".escapeshellarg("$buildFile.min.js.map.json").' ';
+                    $cmd .= "--prefix 2 ";
+                    $cmd .= "--output ".escapeshellarg("$buildFile.min.js").' ';
+                    $cmd .= escapeshellarg($buildFile);
+                    $out = array();
+                    system($cmd, $retVal);
+                    if ($retVal) {
+                        throw new Kwf_Exception("uglifyjs2 failed");
+                    }
+                    $ret = file_get_contents("$buildFile.min.js");
+                    $ret = str_replace("\n//@ sourceMappingURL=$buildFile.min.js.map.json", '', $ret);
+                    file_put_contents("$buildFile.min.js", $ret);
+                    file_put_contents("$buildFile.buildtime", filemtime($this->getFileName()));
+                }
+
+                $ret = file_get_contents("$buildFile.min.js");
+                $retSourceMap = file_get_contents("$buildFile.min.js.map.json");
+
+                $this->_contentsCacheSourceMap = $retSourceMap;
                 $this->_contentsCache = $ret;
             }
 
@@ -95,11 +147,16 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $ret = $this->_hlp($ret, $language);
         }
 
-        return $ret;
+        return array(
+            'contents' => $ret,
+            'sourceMap' => $retSourceMap
+        );
     }
 
     public static function pack($ret)
     {
+
+
         $ret = str_replace("\r", "\n", $ret);
 
         // remove comments
@@ -120,7 +177,8 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     public final function getContents($language)
     {
-        return $this->_getContents($language, false);
+        $c = $this->_getContents($language, false);
+        return $c['contents'];
     }
 
     private function _hlp($contents, $language)
@@ -137,6 +195,13 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     public final function getContentsPacked($language)
     {
-        return $this->_getContents($language, true);
+        $c = $this->_getContents($language, true);
+        return $c['contents'];
+    }
+
+    public final function getContentsPackedSourceMap($language)
+    {
+        $c = $this->_getContents($language, true);
+        return $c['sourceMap'];
     }
 }

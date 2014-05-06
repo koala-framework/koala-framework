@@ -1,14 +1,9 @@
 <?php
-class Kwf_Assets_Ext4_JsDependency extends Kwf_Assets_Dependency_File
+class Kwf_Assets_Ext4_JsDependency extends Kwf_Assets_Dependency_File_Js
 {
-    public function getMimeType()
+    public function _getRawContents($language)
     {
-        return 'text/javascript';
-    }
-
-    public function getContents($language)
-    {
-        $ret = parent::getContents($language);
+        $ret = parent::_getRawContents($language);
         if ($this->getFileName() == Kwf_Config::getValue('path.ext4').'/src/Ext.js') {
             $ret = "Ext.sandboxName = 'Ext4';\n".$ret;
             $ret = "Ext.isSandboxed = true;\n".$ret;
@@ -24,13 +19,6 @@ class Kwf_Assets_Ext4_JsDependency extends Kwf_Assets_Dependency_File
             $ret .= "});\n";
         }
         $ret = "(function(Ext) {\n".$ret."\n})(this.Ext4 || (this.Ext4 = {}));\n";
-        return $ret;
-    }
-
-    public function getContentsPacked($language)
-    {
-        $ret = $this->getContents($language);
-        $ret = Kwf_Assets_Dependency_File_Js::pack($ret);
         return $ret;
     }
 }
