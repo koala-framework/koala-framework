@@ -50,9 +50,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         foreach ($parentPage as $component) {
             $pages = $component->getChildPages(array('showInMenu'=>true));
             foreach($pages as $page) {
-                if ($page->row
-                    && isset($page->row->device_visible)
-                    && $page->row->device_visible == Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE
+                if ($page->getDeviceVisible() == Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE
                 ) {
                     continue;
                 }
