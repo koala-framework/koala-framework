@@ -1,0 +1,33 @@
+@mixin loading-animation-big($path, $file, $width, $height, $params:"") {
+
+    @import "kwf/background-image-dpr2";
+
+    .cssanimations {
+        .kwcListSwitch .listSwitchLargeContent .loading {
+            @include background-image-dpr2('$path', '$file', $width, $height, $params);
+            height: $height;
+            width: $width;
+            margin-left: -($width / 2);
+            margin-top: -($height / 2);
+            -moz-animation: kwfLoadingSpin .5s infinite linear;
+            -webkit-animation: kwfLoadingSpin .5s infinite linear;
+            animation: kwfLoadingSpin .5s infinite linear;
+        }
+    }
+
+    .no-cssanimations {
+        .kwcListSwitch .listSwitchLargeContent .loading {
+            background: url($path + '/' + $file) $params;
+            position: absolute;
+            height: $height;
+            width: $width;
+            margin: 0 auto;
+            display: block;
+            content: '';
+            left: 50%;
+            top: 50%;
+            margin-left: -($width / 2);
+            margin-top: -($height / 2);
+        }
+    }
+}

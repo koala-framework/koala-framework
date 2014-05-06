@@ -2,29 +2,17 @@
     position: relative;
 }
 
-.webResponsiveImgLoading:after {
+html.cssanimations .webResponsiveImgLoading:after,
+html.no-cssanimations .webResponsiveImgLoading:after {
+    background-position: center;
     position: absolute;
+    height: 100%;
+    width: 100%;
     content: "";
+    margin: 0;
     bottom: 0;
     right: 0;
     left: 0;
     top: 0;
 }
 
-.cssanimations .webResponsiveImgLoading:after {
-    background-image: url(/assets/kwf/images/loading/loadingsmall.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    -moz-animation: kwfLoadingSpin .5s infinite linear;
-    -webkit-animation: kwfLoadingSpin .5s infinite linear;
-    animation: kwfLoadingSpin .5s infinite linear;
-}
-
-.no-cssanimations .webResponsiveImgLoading:after {
-    background-image: url(/assets/kwf/images/loading/loadingsmall.gif);
-    background-repeat: no-repeat;
-    background-position: center;
-    -moz-animation: none;
-    -webkit-animation: none;
-    animation: none;
-}

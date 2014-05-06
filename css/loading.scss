@@ -1,29 +1,9 @@
-@import "kwf/background-image-dpr2";
+@import "kwf/loading-animation-small";
+@import "kwf/loading-animation-big";
 
-.kwfLoadingAnimation .loading {
-    position: absolute; top: 50%; left: 50%; margin-left: -25px; margin-top: -25px;
-    display: block;
-    margin: 0 auto;
-    content: '';
-    width: 50px;
-    height: 50px;
-}
+@include loading-animation-big('/assets/kwf/images/loading', 'loadingbig', 50px, 50px, no-repeat scroll center center transparent);
 
-.kwfLoadingAnimation.small .loading {
-    margin-left: -12px; margin-top: -12px;
-    width: 24px;
-    height: 24px;
-}
-
-.cssanimations .kwfLoadingAnimation .loading {
-    @include background-image-dpr2('/assets/kwf/images/loading', 'loadingbig.png', 50px, 50px, no-repeat scroll 0 0 transparent);
-    -moz-animation: kwfLoadingSpin .5s infinite linear;
-    -webkit-animation: kwfLoadingSpin .5s infinite linear;
-    animation: kwfLoadingSpin .5s infinite linear;
-}
-.cssanimations .kwfLoadingAnimation.small .loading {
-    @include background-image-dpr2('/assets/kwf/images/loading', 'loadingsmall.png', 24px, 24px, no-repeat scroll 0 0 transparent);
-}
+@include loading-animation-small('/assets/kwf/images/loading', 'loadingsmall', 24px, 24px, no-repeat scroll center center transparent);
 
 @-moz-keyframes kwfLoadingSpin {
     0% { -moz-transform:rotate(0deg); }
@@ -38,13 +18,4 @@
 @keyframes kwfLoadingSpin {
     0% { transform:rotate(0deg); }
     100% { transform:rotate(360deg); }
-}
-
-.no-cssanimations .kwfMainContent.loadingContent .loading {
-    width: 50px;
-    height: 50px;
-    background: url(/assets/kwf/images/loading/loadingbig.gif);
-    -moz-animation: none;
-    -webkit-animation: none;
-    animation: none;
 }
