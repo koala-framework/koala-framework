@@ -235,30 +235,6 @@ Kwf.callOnContentReady = function(renderedEl, options)
 
     Kwf._onReadyIsCalling = true;
 
-    //process onContentReady handlers
-    while (Kwf._onReadyCallQueue.length) {
-        var queueEntry = Kwf._onReadyCallQueue.pop();
-
-        Kwf._readyHandlers.sort(function(a, b) {
-            return (a.options.priority || 0) - (b.options.priority || 0);
-        });
-        for (var i = 0; i < Kwf._readyHandlers.length; i++) {
-            var hndl = Kwf._readyHandlers[i];
-            if ((hndl.options.defer && Kwf._skipDeferred === true) ||
-                (!hndl.options.defer && Kwf._skipDeferred === false)
-            ) {
-                continue;
-            }
-            var t = Kwf.Utils.BenchmarkBox.now();
-            hndl.fn.call(hndl.options.scope || window, queueEntry.renderedEl, queueEntry.options);
-            var fnName = hndl.fn.name;
-            if (!fnName) {
-                fnName = 'unknown';
-            }
-            Kwf.Utils.BenchmarkBox.subTime('onContentReady', 'fn: '+fnName, Kwf.Utils.BenchmarkBox.now()-t);
-        }
-    }
-
     //call the callback of an element ready handler
     function callQueueFn(queueEntry, config)
     {
@@ -350,6 +326,29 @@ Kwf.callOnContentReady = function(renderedEl, options)
         Kwf._onReadyIsCalling = false;
     }
 
+    //process onContentReady handlers
+    Kwf._readyHandlers.sort(function(a, b) {
+        return (a.options.priority || 0) - (b.options.priority || 0);
+    });
+    while (Kwf._onReadyCallQueue.length) {
+        var queueEntry = Kwf._onReadyCallQueue.pop();
+
+        for (var i = 0; i < Kwf._readyHandlers.length; i++) {
+            var hndl = Kwf._readyHandlers[i];
+            if ((hndl.options.defer && Kwf._skipDeferred === true) ||
+                (!hndl.options.defer && Kwf._skipDeferred === false)
+            ) {
+                continue;
+            }
+            var t = Kwf.Utils.BenchmarkBox.now();
+            hndl.fn.call(hndl.options.scope || window, queueEntry.renderedEl, queueEntry.options);
+            var fnName = hndl.fn.name;
+            if (!fnName) {
+                fnName = 'unknown';
+            }
+            Kwf.Utils.BenchmarkBox.subTime('onContentReady', 'fn: '+fnName, Kwf.Utils.BenchmarkBox.now()-t);
+        }
+    }
 };
 
 
