@@ -102,28 +102,7 @@
 }
 
 .kwfLightbox .loading {
-    position: absolute; top: 50%; left: 50%; margin-left: -25px; margin-top: -25px;
-    z-index: 1;
-    display: block;
-    margin: 0 auto;
-    width: 50px;
-    height: 50px;
-}
-
-.cssanimations .kwfLightbox .loading {
-    @include background-image-dpr2('/assets/kwf/images/loading', 'loadingbig.png', 50px, 50px, no-repeat scroll 0 0 transparent);
-    -moz-animation: kwfLoadingSpin .5s infinite linear;
-    -webkit-animation: kwfLoadingSpin .5s infinite linear;
-    animation: kwfLoadingSpin .5s infinite linear;
-}
-
-.no-cssanimations .kwfLightbox .loading {
-    width: 50px;
-    height: 50px;
-    background: url('/assets/kwf/images/loading/loadingbig.gif') no-repeat 0 0 transparent;
-    -moz-animation: none;
-    -webkit-animation: none;
-    animation: none;
+    /* /css/loading.scss */
 }
 
 @media (max-width: 650px) {

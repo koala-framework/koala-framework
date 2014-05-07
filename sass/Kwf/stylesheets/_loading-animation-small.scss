@@ -1,10 +1,9 @@
-@mixin loading-animation-small($path, $file, $width, $height, $params:"") {
-
-    @import "kwf/background-image-dpr2";
+@mixin loading-animation-small($animationName, $path, $file, $width, $height, $params:"") {
 
     .cssanimations {
         .kwfLoadingAnimation.small .loading,
-        .webResponsiveImgLoading:after {
+        .webResponsiveImgLoading:after,
+        .kwcShopCart .submitWrapper .saving {
             background: url($path + '/' + $file + '.png') $params;
             position: absolute;
             height: $height;
@@ -16,9 +15,9 @@
             top: 50%;
             margin-left: -($width / 2);
             margin-top: -($height / 2);
-            -moz-animation: kwfLoadingSpin .5s infinite linear;
-            -webkit-animation: kwfLoadingSpin .5s infinite linear;
-            animation: kwfLoadingSpin .5s infinite linear;
+            -moz-animation: $animationName .5s infinite linear;
+            -webkit-animation: $animationName .5s infinite linear;
+            animation: $animationName .5s infinite linear;
 
             @media (min-device-pixel-ratio: 1.1), (-webkit-min-device-pixel-ratio: 1.1) {
                 & {
@@ -32,7 +31,8 @@
 
     .no-cssanimations {
         .kwfLoadingAnimation.small .loading,
-        .webResponsiveImgLoading:after {
+        .webResponsiveImgLoading:after,
+        .kwcShopCart .submitWrapper .saving {
             background: url($path + '/' + $file + '.gif') $params;
             position: absolute;
             height: $height;

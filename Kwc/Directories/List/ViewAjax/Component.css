@@ -22,10 +22,7 @@
 }
 
 .cssClass.loadingContent .loading {
-    margin: 0px auto 0px auto;
-    width: 66px;
-    height: 66px;
-    background: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif);
+    /* /css/loading.scss */
 }
 
 .cssClass .viewContainer .linkToTop {

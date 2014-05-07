@@ -1,23 +1,43 @@
-@mixin loading-animation-big($path, $file, $width, $height, $params:"") {
-
-    @import "kwf/background-image-dpr2";
+@mixin loading-animation-big($animationName, $path, $file, $width, $height, $params:"") {
 
     .cssanimations {
-        .kwcListSwitch .listSwitchLargeContent .loading {
-            @include background-image-dpr2('$path', '$file', $width, $height, $params);
+        .kwfLightbox .loading,
+        .kwcListSwitch .listSwitchLargeContent .loading,
+        .youtubeContainer .outerLoading .loading,
+        .kwcDirectoriesListViewAjax.loadingContent .loading,
+        .kwcDirectoriesListViewAjax div.ext-el-mask-msg.loading {
+            background: url($path + '/' + $file + '.png') $params;
+            position: absolute;
             height: $height;
             width: $width;
+            margin: 0 auto;
+            display: block;
+            content: '';
+            left: 50%;
+            top: 50%;
             margin-left: -($width / 2);
             margin-top: -($height / 2);
-            -moz-animation: kwfLoadingSpin .5s infinite linear;
-            -webkit-animation: kwfLoadingSpin .5s infinite linear;
-            animation: kwfLoadingSpin .5s infinite linear;
+            -moz-animation: $animationName .5s infinite linear;
+            -webkit-animation: $animationName .5s infinite linear;
+            animation: $animationName .5s infinite linear;
+
+            @media (min-device-pixel-ratio: 1.1), (-webkit-min-device-pixel-ratio: 1.1) {
+                & {
+                  background-image: url($path + '/dpr2/' + $file + '.png');
+                  background-size: $width $height;
+                  -webkit-background-size: $width $height;
+                }
+            }
         }
     }
 
     .no-cssanimations {
-        .kwcListSwitch .listSwitchLargeContent .loading {
-            background: url($path + '/' + $file) $params;
+        .kwfLightbox .loading,
+        .kwcListSwitch .listSwitchLargeContent .loading,
+        .youtubeContainer .outerLoading .loading,
+        .kwcDirectoriesListViewAjax.loadingContent .loading,
+        .kwcDirectoriesListViewAjax div.ext-el-mask-msg.loading {
+            background: url($path + '/' + $file + '.gif') $params;
             position: absolute;
             height: $height;
             width: $width;

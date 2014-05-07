@@ -1,9 +1,9 @@
 @import "kwf/loading-animation-small";
 @import "kwf/loading-animation-big";
 
-@include loading-animation-big('/assets/kwf/images/loading', 'loadingbig', 50px, 50px, no-repeat scroll center center transparent);
+@include loading-animation-big(kwfLoadingSpin, /assets/kwf/images/loading, loadingbig, 50px, 50px, no-repeat scroll center center transparent);
 
-@include loading-animation-small('/assets/kwf/images/loading', 'loadingsmall', 24px, 24px, no-repeat scroll center center transparent);
+@include loading-animation-small(kwfLoadingSpin, /assets/kwf/images/loading, loadingsmall, 24px, 24px, no-repeat scroll center center transparent);
 
 @-moz-keyframes kwfLoadingSpin {
     0% { -moz-transform:rotate(0deg); }
