@@ -16,15 +16,18 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
             widths.each(function(w) {
                 if (typeof w != 'object') {
                     w = {
-                        minWidth: w,
+                        higherWidth: w,
                         cls: 'gt'+w
                     };
                 }
                 var match = true;
-                if (w.minWidth && !(elWidth > w.minWidth)) {
+                if (w.higherWidth && !(elWidth > w.higherWidth)) {
                     match = false;
                 }
-                if (match && w.maxWidth && !(elWidth < w.maxWidth)) {
+                if (w.minWidth && !(elWidth >= w.minWidth)) {
+                    match = false;
+                }
+                if (match && w.maxWidth && !(elWidth <= w.maxWidth)) {
                     match = false;
                 }
                 if (match) {
