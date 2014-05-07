@@ -12,6 +12,7 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['assets']['dep'][] = 'KwfOnReadyJQuery';
         $ret['assets']['files'][] = 'kwf/Kwc/Statistics/OptBox/Component.js';
         $ret['cssClass'] = 'webStandard';
         $ret['flags']['hasHeaderIncludeCode'] = true;
