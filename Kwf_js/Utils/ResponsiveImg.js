@@ -104,12 +104,33 @@ function checkResponsiveImgEl(responsiveImgEl) {
     }
 };
 
+function doesElementScroll(el)
+{
+    var i = el;
+    var ret = false;
+    while (i != document.body) {
+        var overflow = $(i).css('overflow-y');
+        if (overflow == 'auto' || overflow == 'scroll') {
+            return true;
+        }
+        i = i.parentNode;
+    }
+    return false;
+}
+
 function isElementInView(el)
 {
     var $e = $(el.dom);
     var threshold = 50;
     
     if ($e.is(":hidden")) return false;
+
+    if (doesElementScroll(el.dom)) {
+        //if img is in a scrolling element always load it.
+        //this could be improved but usually it's not needed
+        return true;
+    }
+
     var wt = $w.scrollTop(),
         wb = wt + $w.height(),
         et = $e.offset().top,
