@@ -45,7 +45,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     'debug_info' => false,
                     'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
                     'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
-                    'extensions' => array('Compass', 'Susy', 'Kwf')
+                    'extensions' => array('Compass', 'Susy', 'Kwf', 'Web')
                 ));
             }
             $ret = $scssParser->toCss($ret, false);

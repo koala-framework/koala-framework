@@ -5,6 +5,7 @@ class Kwf_Util_SassParser extends SassParser
     protected static function _getExtensionPaths()
     {
         return array(
+            'web' => Kwf_Config::getValue('path.kwf').'/sass/',
             'sass' => Kwf_Config::getValue('externLibraryPath.sass') . '/Extensions/',
             'kwf' => Kwf_Config::getValue('path.kwf').'/sass/'
         );
@@ -21,7 +22,7 @@ class Kwf_Util_SassParser extends SassParser
                 $extensionPath = $extensionPath . $namespace . '/' . $namespace . '.php';
                 if (file_exists($extensionPath)) {
                     require_once($extensionPath);
-                    if ($namespace == 'Kwf' || $namespace == 'Compass') {
+                    if ($namespace == 'Kwf' || $namespace == 'Web' || $namespace == 'Compass') {
                         $hook = $namespace . 'Sass::resolveExtensionPath';
                     } else {
                         $hook = $namespace . '::resolveExtensionPath';
@@ -53,7 +54,7 @@ class Kwf_Util_SassParser extends SassParser
                     )
                     ) {
                         require_once($extensionPath);
-                        if ($namespace == 'Kwf' || $namespace == 'Compass') {
+                        if ($namespace == 'Kwf' || $namespace == 'Web' || $namespace == 'Compass') {
                             $namespace = $namespace . 'Sass::';
                         } else {
                             $namespace = $namespace . '::';
