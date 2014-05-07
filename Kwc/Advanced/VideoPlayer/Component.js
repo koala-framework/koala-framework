@@ -6,7 +6,7 @@ Kwf.onContentReady(function(el){
     }, this);
 });
 Kwf.onElementReady('.kwcAdvancedVideoPlayer', function(el, config) {
-    $(el.dom).children('video').mediaelementplayer({
+    $(el.dom).find('video').mediaelementplayer({
         //custom path to flash
         flashName: '/assets/mediaelement/build/flashmediaelement.swf',
         // if the <video width> is not specified, this is the default
