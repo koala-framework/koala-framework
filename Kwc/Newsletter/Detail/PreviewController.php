@@ -10,11 +10,13 @@ class Kwc_Newsletter_Detail_PreviewController extends Kwc_Mail_PreviewController
                 $this->_getParam('componentId'),
                 array('ignoreVisible' => true)
             );
-            $select = new Kwf_Model_Select();
-            $select->whereEquals('newsletter_component_id', $component->parent->componentId);
             $source = reset($rs);
-            if (isset($source['select'])) $select->merge($source['select']);
             $model = Kwf_Model_Abstract::getInstance($source['model']);
+            $select = $model->select();
+            if ($model->hasColumn('newsletter_component_id')) {
+                $select->whereEquals('newsletter_component_id', $component->parent->componentId);
+            }
+            if (isset($source['select'])) $select->merge($source['select']);
             $row = $model->getRow($select);
             if (!$row) throw new Kwf_Exception_Client(trlKwf('Preview cannot be shown because it needs at least one recipient of this newsletter'));
             $recipientId = $row->id;

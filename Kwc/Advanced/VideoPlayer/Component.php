@@ -12,6 +12,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             'componentIcon' => new Kwf_Asset('film'),
             'extConfig' => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
+        $ret['assetsAdmin']['dep'][] = 'KwfFormCards';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assets']['dep'][] = 'jQuery';
         $ret['assets']['dep'][] = 'mediaelement';

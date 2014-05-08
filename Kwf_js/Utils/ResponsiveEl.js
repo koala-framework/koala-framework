@@ -16,15 +16,18 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
             widths.each(function(w) {
                 if (typeof w != 'object') {
                     w = {
-                        minWidth: w,
+                        higherWidth: w,
                         cls: 'gt'+w
                     };
                 }
                 var match = true;
-                if (w.minWidth && !(elWidth > w.minWidth)) {
+                if (w.higherWidth && !(elWidth > w.higherWidth)) {
                     match = false;
                 }
-                if (match && w.maxWidth && !(elWidth < w.maxWidth)) {
+                if (w.minWidth && !(elWidth >= w.minWidth)) {
+                    match = false;
+                }
+                if (match && w.maxWidth && !(elWidth <= w.maxWidth)) {
                     match = false;
                 }
                 if (match) {
@@ -52,3 +55,16 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
 
     Kwf.onElementWidthChange(selector, initEl, options);
 };
+
+Kwf.onContentReady(function jumpToAnchor(el) {
+    if(!Kwf.Utils.ResponsiveEl._anchorDone && el === document.body) {
+        Kwf.Utils.ResponsiveEl._anchorDone = true;
+        if(window.location.hash) {
+            var target = Ext.get(window.location.hash.replace('#', ''));
+            if (target) {
+               //fix anchor target as ResponsiveEl might have changed the heights of elements
+                window.scrollTo(0, target.getTop());
+            }
+        }
+    }
+}, {priority: 50});
