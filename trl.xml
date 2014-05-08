@@ -5353,6 +5353,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>De la</ro>
 <sl>Od</sl>
 <ua>З</ua>
+<si>Od</si>
 </text>
 <text>
 <en>To</en>
@@ -5361,6 +5362,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Până la</ro>
 <sl>Do</sl>
 <ua>До</ua>
+<si>Do</si>
 </text>
 <text>
 <en>Place (City)</en>
@@ -5401,6 +5403,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Data de final</ro>
 <sl>Datum zaključka</sl>
 <ua>Дата завершення</ua>
+<si>Datum poteka</si>
 </text>
 <text>
 <en>Events.Show categories</en>
@@ -6391,6 +6394,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Parola funizată este incorectă</ro>
 <sl>Prevzeto geslo ni veljavno.</sl>
 <ua>Невірний пароль</ua>
+<si>Dano geslo ni veljavno</si>
 </text>
 <text>
 <de>Diese Seite wurde zuletzt gefunden von</de>
@@ -8245,6 +8249,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Valid începând din</ro>
 <sl>Veljavno od</sl>
 <ua>Дійсний з</ua>
+<si>Veljavno od</si>
 </text>
 <text>
 <en>Current Price</en>
@@ -9115,6 +9120,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>« Nazaj</sl>
 <hr>« povratak</hr>
 <ua>« назад</ua>
+<si>"nazaj</si>
 </text>
 <text>
 <en>Link to parent page</en>
@@ -9360,6 +9366,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Format invalid pentru timp. Acesta trebuie să aibă formatul "12:34:00".</ro>
 <sl>Oblika ni ustrezna. Zahtevana oblika "12:34:00".</sl>
 <ua>Помилка.Час повинен бути у форматі  "12:34:00".</ua>
+<si>Ni veljavna časovna oblika. Zahtevani format je "12:34:00"</si>
 </text>
 <text>
 <en>Amazon.Product</en>
@@ -10820,6 +10827,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Parola este invalidă</ro>
 <sl>Geslo ni veljavno.</sl>
 <ua>Пароль не дійсний</ua>
+<si>Geslo ni veljavno</si>
 </text>
 <text>
 <en>The password must be at least 8 characters long</en>
