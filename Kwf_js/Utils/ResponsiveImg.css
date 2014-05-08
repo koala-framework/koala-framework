@@ -1,6 +1,18 @@
 .webResponsiveImgLoading {
-    background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: white;
+    position: relative;
 }
+
+html.cssanimations .webResponsiveImgLoading:after,
+html.no-cssanimations .webResponsiveImgLoading:after {
+    background-position: center;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    content: "";
+    margin: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+}
+

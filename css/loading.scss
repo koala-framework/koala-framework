@@ -1,0 +1,21 @@
+@import "kwf/loading-animation-small";
+@import "kwf/loading-animation-big";
+
+@include loading-animation-big(kwfLoadingSpin, /assets/kwf/images/loading, loadingbig, 50px, 50px, no-repeat scroll center center transparent);
+
+@include loading-animation-small(kwfLoadingSpin, /assets/kwf/images/loading, loadingsmall, 24px, 24px, no-repeat scroll center center transparent);
+
+@-moz-keyframes kwfLoadingSpin {
+    0% { -moz-transform:rotate(0deg); }
+    100% { -moz-transform:rotate(360deg); }
+}
+
+@-webkit-keyframes kwfLoadingSpin {
+    0% { -webkit-transform:rotate(0deg); }
+    100% { -webkit-transform:rotate(360deg); }
+}
+
+@keyframes kwfLoadingSpin {
+    0% { transform:rotate(0deg); }
+    100% { transform:rotate(360deg); }
+}
