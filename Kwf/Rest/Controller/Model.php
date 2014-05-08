@@ -92,6 +92,11 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         }
         $this->_applySelectFilters($ret, $filter);
 
+        $query = $this->_getParam('query');
+        if ($query) {
+            $this->_applySelectQuery($ret, $query);
+        }
+
         $sort = $this->_getParam('sort');
         if ($sort) {
             $this->_applySelectSort($ret, json_decode($sort));
@@ -120,19 +125,24 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
     protected function _applySelectFilter($select, $filter)
     {
         if ($filter->property == 'query') {
-            $ors = array();
-            if (!$this->_queryColumns) {
-                throw new Kwf_Exception("_queryColumns are required");
-            }
-            foreach ($this->_queryColumns as $c) {
-                $ors[] = new Kwf_Model_Select_Expr_Like($c, '%'.$filter->value.'%');
-            }
-            $select->where(new Kwf_Model_Select_Expr_Or($ors));
+            $this->_applySelectQuery($select, $filter->value);
         } else {
             if (!is_null($filter->value)) {
                 $select->whereEquals($filter->property, $filter->value);
             }
         }
+    }
+
+    protected function _applySelectQuery($select, $query)
+    {
+        $ors = array();
+        if (!$this->_queryColumns) {
+            throw new Kwf_Exception("_queryColumns are required");
+        }
+        foreach ($this->_queryColumns as $c) {
+            $ors[] = new Kwf_Model_Select_Expr_Like($c, '%'.$query.'%');
+        }
+        $select->where(new Kwf_Model_Select_Expr_Or($ors));
     }
 
     protected function _loadDataFromRow($row)
