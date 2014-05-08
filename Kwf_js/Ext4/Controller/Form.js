@@ -32,6 +32,11 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
                     i.store.load();
                 }
             }, this);
+            Ext4.each(this.form.query('multiselectfield'), function(i) {
+                if (i.store && !i.store.lastOptions) {
+                    i.store.load();
+                }
+            }, this);
         }
 
         //when loading the same row (by comparing the id) keep dirty values
