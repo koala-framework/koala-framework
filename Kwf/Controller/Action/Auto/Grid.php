@@ -579,7 +579,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
         ignore_user_abort(true);
         if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
         foreach ($ids as $id) {
-            $row = $this->_model->find($id)->current();
+            $row = $this->_getRowById($id);
             if (!$row) {
                 throw new Kwf_Exception_Client("Can't find row with id '$id'.");
             }
@@ -611,7 +611,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
         ignore_user_abort(true);
         if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
         foreach ($ids as $id) {
-            $row = $this->_model->getRow($id);
+            $row = $this->_getRowById($id);
             if (!$row) {
                 throw new Kwf_Exception("Can't find row with id '$id'.");
             }
