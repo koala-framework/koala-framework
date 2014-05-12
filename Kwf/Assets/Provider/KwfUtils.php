@@ -5,7 +5,7 @@ class Kwf_Assets_Provider_KwfUtils extends Kwf_Assets_Provider_Abstract
     {
         if ($dependency instanceof Kwf_Assets_Dependency_File_Js) {
             $deps = array();
-            $c = file_get_contents($dependency->getFileName());
+            $c = file_get_contents($dependency->getAbsoluteFileName());
             if (preg_match('#^\s*Kwf\.Utils\.ResponsiveEl\(#m', $c)) {
                 $deps[] = 'KwfResponsiveEl';
             }

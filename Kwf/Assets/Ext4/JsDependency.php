@@ -4,11 +4,11 @@ class Kwf_Assets_Ext4_JsDependency extends Kwf_Assets_Dependency_File_Js
     public function _getRawContents($language)
     {
         $ret = parent::_getRawContents($language);
-        if ($this->getFileName() == Kwf_Config::getValue('path.ext4').'/src/Ext.js') {
+        if ($this->getFileNameWithType() == 'ext4/src/Ext.js') {
             $ret = "Ext.sandboxName = 'Ext4';\n".$ret;
             $ret = "Ext.isSandboxed = true;\n".$ret;
             $ret = "Ext.buildSettings = { baseCSSPrefix: \"x4-\", scopeResetCSS: true };\n".$ret;
-        } else if ($this->getFileName() == Kwf_Config::getValue('path.ext4').'/src/class/Loader.js') {
+        } else if ($this->getFileNameWithType() == 'ext4/src/class/Loader.js') {
             $ret .= "\n";
             $ret .= "Ext.Loader.setConfig({\n";
             $ret .= "    enabled: true,\n";

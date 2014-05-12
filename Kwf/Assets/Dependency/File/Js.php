@@ -58,22 +58,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
             if ($pack) {
 
-                $fileName = realpath($this->getFileName());
-
-                static $paths;
-                if (!isset($paths)) {
-                    $paths = Kwf_Config::getValueArray('path');
-                    foreach ($paths as &$p) {
-                        if (substr($p, 0, 1) == '.') $p = getcwd().substr($p, 1);
-                        $p = realpath($p);
-                    }
-                }
-                foreach ($paths as $k=>$p) {
-                    if (substr($fileName, 0, strlen($p)) == $p) {
-                        $fileName = $k.substr($fileName, strlen($p));
-                        break;
-                    }
-                }
+                $fileName = $this->getFileNameWithType();
 
                 $buildFile = "cache/uglifyjs/".$fileName;
                 if (!file_exists("$buildFile.min.js") || filemtime($this->getFileName()) != file_get_contents("$buildFile.buildtime")) {
@@ -124,14 +109,14 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 $cacheId = 'trlParsedElements'.$pack.str_replace(array('\\', ':', '/', '.', '-'), '_', $this->_fileName);
                 $cacheData = $cache->load($cacheId);
                 if ($cacheData) {
-                    if ($cacheData['mtime'] != filemtime($this->getFileName())) {
+                    if ($cacheData['mtime'] != filemtime($this->getAbsoluteFileName())) {
                         $cacheData = false;
                     }
                 }
                 if (!$cacheData) {
                     $cacheData = array(
                         'contents' => Kwf_Trl::getInstance()->parse($ret, 'js'),
-                        'mtime' => filemtime($this->getFileName())
+                        'mtime' => filemtime($this->getAbsoluteFileName())
                     );
                     $cache->save($cacheData, $cacheId);
                 }
