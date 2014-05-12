@@ -31,8 +31,8 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             $fileName = $this->getAbsoluteFileName();
             $sassc = Kwf_Config::getValue('server.sassc');
             $loadPath = array(
-                Kwf_Config::getValue('externLibraryPath.compassMixins').'/lib',
-                Kwf_Config::getValue('externLibraryPath.susy').'/sass',
+                Kwf_Config::getValue('path.compassMixins').'/lib',
+                Kwf_Config::getValue('path.susy').'/sass',
                 './scss',
                 KWF_PATH.'/sass/Kwf/stylesheets',
             );
