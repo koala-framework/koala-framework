@@ -65,7 +65,8 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                     $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
                     if (!file_exists($dir)) mkdir($dir, 0777, true);
                     file_put_contents($buildFile, $ret);
-                    $cmd = "PATH=\$PATH:/var/www/node/bin ./node_modules/.bin/uglifyjs2 ";
+                    $uglifyjs = Kwf_Config::getValue('server.uglifyjs');
+                    $cmd = "$uglifyjs ";
                     $cmd .= "--source-map ".escapeshellarg("$buildFile.min.js.map.json").' ';
                     $cmd .= "--prefix 2 ";
                     $cmd .= "--output ".escapeshellarg("$buildFile.min.js").' ';
