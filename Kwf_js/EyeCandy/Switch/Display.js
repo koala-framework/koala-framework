@@ -22,7 +22,7 @@ Kwf.Switch.Display = function(el, config) {
     });
     this._lockAnimation = false;
     var defaultConfig = {
-        animation: { 
+        animation: {
             duration: .5
         }
     };
@@ -61,6 +61,12 @@ Kwf.Switch.Display = function(el, config) {
 
     if (this.switchLink && this.switchContent) {
         if (this.switchLink.hasClass('switchLinkHover')) {
+            Kwf.Event.on(this.switchLink.dom, 'mouseEnter', function() {
+                this.switchLinkHover = true;
+            }, this);
+            Kwf.Event.on(this.switchLink.dom, 'mouseLeave', function() {
+                this.switchLinkHover = false;
+            }, this);
             Kwf.Event.on(this.el.dom, 'mouseEnter', function() {
                 this.doOpen();
             }, this);
@@ -89,8 +95,8 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
     doClose: function() {
         if (!this.switchLink.hasClass('switchLinkHover')) {
             if (this._lockAnimation) return;
-            this._lockAnimation = true;
         }
+        this._lockAnimation = true;
 
         this.fireEvent('beforeClose', this);
         this.switchContent.stopFx();
@@ -110,8 +116,10 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
     doOpen: function() {
         if (!this.switchLink.hasClass('switchLinkHover')) {
             if (this._lockAnimation) return;
-            this._lockAnimation = true;
+        } else if (!this.switchLinkHover) {
+            return;
         }
+        this._lockAnimation = true;
 
         this.fireEvent('beforeOpen', this);
         this.switchContent.stopFx();
