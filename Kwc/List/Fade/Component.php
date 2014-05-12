@@ -41,10 +41,17 @@ abstract class Kwc_List_Fade_Component extends Kwc_Abstract_List_Component
         $ret = parent::getTemplateVars();
         $ret['selector'] = $this->_getSetting('selector');
         $ret['textSelector'] = $this->_getSetting('textSelector');
-        $ret['fadeConfig'] = $this->_getSetting('fadeConfig');
         $ret['fadeClass'] = $this->_getSetting('fadeClass');
-        if (isset($ret['fadeConfig']['template']) && $ret['fadeConfig']['template']) {
-            $ret['fadeConfig']['template'] = $this->getData()->trlStaticExecute($ret['fadeConfig']['template']);
+        $ret['fadeConfig'] = array(
+            'fadeConfig' => $this->_getSetting('fadeConfig'),
+            'selector' => $ret['selector'],
+            'textSelector' => $ret['textSelector'],
+            'fadeClass' => $ret['fadeClass']
+        );
+        if (isset($ret['fadeConfig']['fadeConfig']['template'])
+            && $ret['fadeConfig']['fadeConfig']['template']) {
+            $ret['fadeConfig']['fadeConfig']['template'] = $this->getData()
+                ->trlStaticExecute($ret['fadeConfig']['fadeConfig']['template']);
         }
         return $ret;
     }
