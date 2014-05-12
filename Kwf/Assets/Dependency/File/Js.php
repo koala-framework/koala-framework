@@ -61,7 +61,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 $fileName = $this->getFileNameWithType();
 
                 $buildFile = "cache/uglifyjs/".$fileName;
-                if (!file_exists("$buildFile.min.js") || filemtime($this->getFileName()) != file_get_contents("$buildFile.buildtime")) {
+                if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
                     $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
                     if (!file_exists($dir)) mkdir($dir, 0777, true);
                     file_put_contents($buildFile, $ret);
@@ -77,12 +77,16 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                     }
                     $ret = file_get_contents("$buildFile.min.js");
                     $ret = str_replace("\n//@ sourceMappingURL=$buildFile.min.js.map.json", '', $ret);
-                    file_put_contents("$buildFile.min.js", $ret);
-                    file_put_contents("$buildFile.buildtime", filemtime($this->getFileName()));
+
+                    $map = new Kwf_Assets_Util_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $ret);
+                    $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
+                    unset($map);
+                    file_put_contents("$buildFile.buildtime", filemtime($this->getAbsoluteFileName()));
                 }
 
                 $ret = file_get_contents("$buildFile.min.js");
                 $retSourceMap = file_get_contents("$buildFile.min.js.map.json");
+
 
                 $this->_contentsCacheSourceMap = $retSourceMap;
                 $this->_contentsCache = $ret;
