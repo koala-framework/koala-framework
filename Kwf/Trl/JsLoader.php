@@ -7,6 +7,15 @@ class Kwf_Trl_JsLoader
 {
     public function trlLoad($contents, $parsedElements, $language)
     {
+        foreach ($this->getReplacements($parsedElements, $language) as $value) {
+            $contents = str_replace($value['search'], $value['replace'], $contents);
+        }
+        return $contents;
+    }
+
+    public function getReplacements($parsedElements, $language)
+    {
+        $ret = array();
         $trl = Kwf_Trl::getInstance();
         foreach ($parsedElements as $i=>$trlelement) {
             $values = array();
@@ -71,10 +80,10 @@ class Kwf_Trl_JsLoader
                     $values['now'] = str_replace('\''.$values['context'].'\',', "", $values['now']);
                     $values['now'] = str_replace($method, 'trlp', $values['now']);
                 }
-                $contents = str_replace($values['before'], $values['now'], $contents);
+                $ret[] = array('search'=>$values['before'], 'replace'=>$values['now']);
             }
         }
-        return $contents;
+        return $ret;
     }
 
 }

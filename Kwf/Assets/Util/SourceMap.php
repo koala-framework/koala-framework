@@ -68,12 +68,6 @@ class Kwf_Assets_Util_SourceMap
                     }
                 }
                 $generatedColumn += $offset;
-                if ($generatedLine == 1) {
-                    if ($offset) {
-                        echo "\noffset: ".$offset." => {$generatedColumn}\n";
-                    }
-                    echo "new=$newGeneratedColumn, prevNew=$newPreviousGeneratedColumn, writing offs=".($generatedColumn - $newPreviousGeneratedColumn)."\n";
-                }
                 $newMappings .= Kwf_Assets_Util_Base64VLQ::encode($generatedColumn - $newPreviousGeneratedColumn);
                 $newPreviousGeneratedColumn = $generatedColumn;
 

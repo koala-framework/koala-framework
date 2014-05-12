@@ -43,105 +43,116 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         return $ret;
     }
 
-    protected function _getContents($language, $pack)
+    private function _getCompliedContents()
     {
-        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
-        $useTrl = !in_array($pathType, array('ext', 'ext4', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
-
-        $retSourceMap = false;
-        if (isset($this->_contentsCache) && $pack) {
-            $ret = $this->_contentsCache;
-            $retSourceMap = $this->_contentsCacheSourceMap;
-        } else {
-
-            $ret = $this->_getRawContents($language);
-
-            if ($pack) {
-
-                $fileName = $this->getFileNameWithType();
-
-                $buildFile = "cache/uglifyjs/".$fileName;
-                if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
-                    $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
-                    if (!file_exists($dir)) mkdir($dir, 0777, true);
-                    file_put_contents($buildFile, $ret);
-                    $uglifyjs = Kwf_Config::getValue('server.uglifyjs');
-                    $cmd = "$uglifyjs ";
-                    $cmd .= "--source-map ".escapeshellarg("$buildFile.min.js.map.json").' ';
-                    $cmd .= "--prefix 2 ";
-                    $cmd .= "--output ".escapeshellarg("$buildFile.min.js").' ';
-                    $cmd .= escapeshellarg($buildFile);
-                    $out = array();
-                    system($cmd, $retVal);
-                    if ($retVal) {
-                        throw new Kwf_Exception("uglifyjs2 failed");
-                    }
-                    $ret = file_get_contents("$buildFile.min.js");
-                    $ret = str_replace("\n//@ sourceMappingURL=$buildFile.min.js.map.json", '', $ret);
-
-                    $map = new Kwf_Assets_Util_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $ret);
-                    $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
-                    unset($map);
-                    file_put_contents("$buildFile.buildtime", filemtime($this->getAbsoluteFileName()));
-                }
-
-                $ret = file_get_contents("$buildFile.min.js");
-                $retSourceMap = file_get_contents("$buildFile.min.js.map.json");
-
-
-                $this->_contentsCacheSourceMap = $retSourceMap;
-                $this->_contentsCache = $ret;
-            }
-
-            if ($useTrl) {
-                //Kwf_Trl::parse is very slow, try to cache it
-                //this mainly helps during development when ccw clears the assets cache but this cache stays
-                static $cache;
-                if (!isset($cache)) {
-                    $cache = new Zend_Cache_Core(array(
-                        'lifetime' => null,
-                        'automatic_serialization' => true,
-                        'automatic_cleaning_factor' => 0,
-                        'write_control' => false,
-                    ));
-                    $cache->setBackend(new Zend_Cache_Backend_File(array(
-                        'cache_dir' => 'cache/assets',
-                        'cache_file_umask' => 0666,
-                        'hashed_directory_umask' => 0777,
-                        'hashed_directory_level' => 2,
-                    )));
-                }
-                $cacheId = 'trlParsedElements'.$pack.str_replace(array('\\', ':', '/', '.', '-'), '_', $this->_fileName);
-                $cacheData = $cache->load($cacheId);
-                if ($cacheData) {
-                    if ($cacheData['mtime'] != filemtime($this->getAbsoluteFileName())) {
-                        $cacheData = false;
-                    }
-                }
-                if (!$cacheData) {
-                    $cacheData = array(
-                        'contents' => Kwf_Trl::getInstance()->parse($ret, 'js'),
-                        'mtime' => filemtime($this->getAbsoluteFileName())
-                    );
-                    $cache->save($cacheData, $cacheId);
-                }
-                $this->_parsedElementsCache = $cacheData['contents'];
-            }
+        if (isset($this->_contentsCache)) {
+            return array(
+                'contents' => $this->_contentsCache,
+                'sourceMap' => $this->_contentsCacheSourceMap,
+                'trlElements' => $this->_parsedElementsCache
+            );
         }
 
-        if ($useTrl) {
-            static $jsLoader;
-            if (!isset($jsLoader)) $jsLoader = new Kwf_Trl_JsLoader();
+        $fileName = $this->getFileNameWithType();
 
-            $ret = $jsLoader->trlLoad($ret, $this->_parsedElementsCache, $language);
-            $ret = $this->_hlp($ret, $language);
+        $buildFile = "cache/uglifyjs/".$fileName;
+        if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
+
+            $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+            $useTrl = !in_array($pathType, array('ext', 'ext4', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
+
+            $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
+            if (!file_exists($dir)) mkdir($dir, 0777, true);
+            file_put_contents($buildFile, $this->_getRawContents(null));
+            $uglifyjs = Kwf_Config::getValue('server.uglifyjs');
+            $cmd = "$uglifyjs ";
+            $cmd .= "--source-map ".escapeshellarg("$buildFile.min.js.map.json").' ';
+            $cmd .= "--prefix 2 ";
+            $cmd .= "--output ".escapeshellarg("$buildFile.min.js").' ';
+            $cmd .= escapeshellarg($buildFile);
+            $out = array();
+            system($cmd, $retVal);
+            if ($retVal) {
+                throw new Kwf_Exception("uglifyjs2 failed");
+            }
+            $contents = file_get_contents("$buildFile.min.js");
+            $contents = str_replace("\n//@ sourceMappingURL=$buildFile.min.js.map.json", '', $contents);
+
+            $map = new Kwf_Assets_Util_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
+            $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
+            unset($map);
+
+            $trlElements = array();
+            if ($useTrl) $trlElements = Kwf_Trl::getInstance()->parse($contents, 'js');
+            file_put_contents("$buildFile.min.js.trl", serialize($trlElements));
+
+            file_put_contents("$buildFile.buildtime", filemtime($this->getAbsoluteFileName()));
         }
+
+        $this->_contentsCacheSourceMap = file_get_contents("$buildFile.min.js.map.json");
+        $this->_contentsCache = file_get_contents("$buildFile.min.js");
+        $this->_parsedElementsCache = unserialize(file_get_contents("$buildFile.min.js.trl"));
 
         return array(
-            'contents' => $ret,
-            'sourceMap' => $retSourceMap
+            'contents' => $this->_contentsCache,
+            'sourceMap' => $this->_contentsCacheSourceMap,
+            'trlElements' => $this->_parsedElementsCache
         );
     }
+
+    protected function _getContents($language, $pack)
+    {
+        if ($pack) {
+            $ret = $this->_getCompliedContents();
+        } else {
+            $contents = $this->_getRawContents(null);
+            $ret = array(
+                'contents' => $contents,
+                'trlElements' => Kwf_Trl::getInstance()->parse($contents, 'js')
+            );
+            unset($contents);
+        }
+
+        if ($ret['trlElements']) {
+
+            if (isset($ret['sourceMap'])) {
+                $buildFile = "cache/assets/".$this->getFileNameWithType().'-'.$language;
+                $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
+                if (!file_exists($dir)) mkdir($dir, 0777, true);
+
+                if (file_exists($buildFile)) {
+                    $ret = array(
+                        'contents' => file_get_contents($buildFile),
+                        'sourceMap' => file_get_contents("$buildFile.map"),
+                    );
+                } else {
+                    $map = new Kwf_Assets_Util_SourceMap($ret['sourceMap'], $ret['contents']);
+                    foreach ($this->_getTrlReplacements($ret, $language) as $value) {
+                        $map->stringReplace($value['search'], $value['replace']);
+                    }
+                    $map->save("$buildFile.map", $buildFile);
+                    unset($map);
+                }
+            } else {
+                foreach ($this->_getTrlReplacements($ret, $language) as $value) {
+                    $ret['contents'] = str_replace($value['search'], $value['replace'], $ret['contents']);
+                }
+                unset($ret['trlElements']);
+            }
+        }
+
+        return $ret;
+    }
+
+    private function _getTrlReplacements($ret, $language)
+    {
+        static $jsLoader;
+        if (!isset($jsLoader)) $jsLoader = new Kwf_Trl_JsLoader();
+        $replacements = $jsLoader->getReplacements($ret['trlElements'], $language);
+        $replacements = array_merge($replacements, $this->_getHelpReplacements($ret['contents'], $language));
+        return $replacements;
+    }
+
 
     public static function pack($ret)
     {
@@ -171,16 +182,17 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         return $c['contents'];
     }
 
-    private function _hlp($contents, $language)
+    private function _getHelpReplacements($contents, $language)
     {
+        $ret = array();
         $matches = array();
         preg_match_all("#hlp\(['\"](.+?)['\"]\)#", $contents, $matches);
         foreach ($matches[0] as $key => $search) {
             $r = Zend_Registry::get('hlp')->hlp($matches[1][$key], $language);
             $r = str_replace(array("\n", "\r", "'"), array('\n', '', "\\'"), $r);
-            $contents = str_replace($search, "'" . $r . "'", $contents);
+            $ret[] = array('search'=>$search, 'replace' => "'" . $r . "'");
         }
-        return $contents;
+        return $ret;
     }
 
     public final function getContentsPacked($language)

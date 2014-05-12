@@ -58,7 +58,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                     if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
                         file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
                     }
-
                     $cacheContents = array(
                         'contents' => $p->getPackageContentsSourceMap($mimeType, $language),
                         'mimeType' => 'application/json',

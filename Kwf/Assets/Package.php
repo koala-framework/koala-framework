@@ -120,7 +120,7 @@ class Kwf_Assets_Package
                     $retSources .= ($retSources ? ',' : '').substr(json_encode($data['sources']), 1, -1);
                 }
                 if ($data['names']) {
-                    $retNames .= substr(json_encode($data['names']), 1, -1);
+                    $retNames .= ($retNames ? ',' : '').substr(json_encode($data['names']), 1, -1);
                 }
                 if ($previousFileLast) {
                     // adjust first by previous
@@ -152,6 +152,7 @@ class Kwf_Assets_Package
         $maxMTime = 0;
         $ret = '';
         $maps = array();
+
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if ($c = $i->getContentsPacked($language)) {
