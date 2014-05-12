@@ -26,24 +26,76 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 }
             }
         }
-        $langs = array_unique($langs);
+
+        $mimeTypeByExtension = array(
+            'js' => 'text/javascript',
+            'css' => 'text/css',
+            'printcss' => 'text/css; media=print'
+        );
+
 
         Kwf_Assets_BuildCache::getInstance()->building = true;
         Kwf_Assets_BuildCache::getInstance()->clean();
 
+        $langs = array_unique($langs);
         $dependencyName = array('Frontend', 'Admin');
-        foreach ($dependencyName as $depName) {
+        $exts = array('js', 'css', 'printcss');
 
+        echo "\ncalculating dependencies...\n";
+        $steps = count($dependencyName) * count($exts);
+        $c = new Zend_ProgressBar_Adapter_Console();
+        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+        $c->setTextWidth(50);
+        $progress = new Zend_ProgressBar($c, 0, $steps);
+
+        $countDependencies = 0;
+        foreach ($dependencyName as $depName) {
             $p = Kwf_Assets_Package_Default::getInstance($depName);
+            foreach ($exts as $extension) {
+                $progress->next(1, "$depName $extension");
+                $countDependencies += count($p->getFilteredUniqueDependencies($mimeTypeByExtension[$extension]));
+            }
+        }
+        $progress->finish();
+
+        echo "compiling assets...\n";
+        $c = new Zend_ProgressBar_Adapter_Console();
+        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+        $c->setTextWidth(50);
+        $progress = new Zend_ProgressBar($c, 0, $countDependencies);
+
+        foreach ($dependencyName as $depName) {
+            $p = Kwf_Assets_Package_Default::getInstance($depName);
+            foreach ($exts as $extension) {
+                foreach ($p->getFilteredUniqueDependencies($mimeTypeByExtension[$extension]) as $dep) {
+                    $progress->next(1, "$dep");
+                    $dep->warmupCaches();
+                }
+            }
+        }
+        $progress->finish();
+
+        echo "generating packages...\n";
+        $steps = count($dependencyName) * count($langs) * count($exts) * 2;
+        $c = new Zend_ProgressBar_Adapter_Console();
+        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+        $c->setTextWidth(50);
+        $progress = new Zend_ProgressBar($c, 0, $steps);
+        foreach ($dependencyName as $depName) {
 
             foreach ($langs as $language) {
 
-                $exts = array('js', 'css', 'printcss');
                 foreach ($exts as $extension) {
 
-                    if ($extension == 'js') $mimeType = 'text/javascript';
-                    else if ($extension == 'css') $mimeType = 'text/css';
-                    else if ($extension == 'printcss') $mimeType = 'text/css; media=print';
+                    $progress->next(1, "$depName $extension $language");
+
+                    $mimeType = $mimeTypeByExtension[$extension];
                     $cacheContents = array(
                         'contents' => $p->getPackageContents($mimeType, $language),
                         'mimeType' => $extension == 'js' ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf8',
@@ -58,6 +110,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                     if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
                         file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
                     }
+
+                    $progress->next(1, "$depName $extension $language map");
                     $cacheContents = array(
                         'contents' => $p->getPackageContentsSourceMap($mimeType, $language),
                         'mimeType' => 'application/json',
@@ -68,6 +122,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 }
             }
         }
+
         Kwf_Assets_BuildCache::getInstance()->building = false;
     }
 

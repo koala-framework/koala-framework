@@ -96,9 +96,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     public function __toString()
     {
-        $ret = parent::__toString();
-        $ret .= ' '.$this->_fileName;
-        return $ret;
+        return $this->_fileName;
     }
 
     protected function _getComponentCssClass()

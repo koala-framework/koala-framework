@@ -26,16 +26,8 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         return $ret;
     }
 
-    private function _getCompliedContents()
+    public function warmupCaches()
     {
-        if (isset($this->_contentsCache)) {
-            return array(
-                'contents' => $this->_contentsCache,
-                'sourceMap' => $this->_contentsCacheSourceMap,
-                'trlElements' => $this->_parsedElementsCache
-            );
-        }
-
         $fileName = $this->getFileNameWithType();
 
         $buildFile = "cache/uglifyjs/".$fileName;
@@ -55,7 +47,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $out = array();
             system($cmd, $retVal);
             if ($retVal) {
-                throw new Kwf_Exception("uglifyjs2 failed");
+                throw new Kwf_Exception("uglifyjs failed");
             }
             $contents = file_get_contents("$buildFile.min.js");
             $contents = str_replace("\n//@ sourceMappingURL=$buildFile.min.js.map.json", '', $contents);
@@ -95,6 +87,18 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         $this->_contentsCache = file_get_contents("$buildFile.min.js");
         $this->_parsedElementsCache = unserialize(file_get_contents("$buildFile.min.js.trl"));
 
+        return array(
+            'contents' => $this->_contentsCache,
+            'sourceMap' => $this->_contentsCacheSourceMap,
+            'trlElements' => $this->_parsedElementsCache
+        );
+    }
+
+    private function _getCompliedContents()
+    {
+        if (!isset($this->_contentsCache)) {
+            $this->warmupCaches();
+        }
         return array(
             'contents' => $this->_contentsCache,
             'sourceMap' => $this->_contentsCacheSourceMap,

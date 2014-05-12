@@ -60,6 +60,11 @@ class Kwf_Assets_Package
         return $maxMTime;
     }
 
+    public function getFilteredUniqueDependencies($mimeType)
+    {
+        return $this->_getFilteredUniqueDependencies($mimeType);
+    }
+
     protected function _getFilteredUniqueDependencies($mimeType)
     {
         if (!isset($this->_cacheFilteredUniqueDependencies[$mimeType])) {
@@ -151,8 +156,6 @@ class Kwf_Assets_Package
     {
         $maxMTime = 0;
         $ret = '';
-        $maps = array();
-
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if ($c = $i->getContentsPacked($language)) {

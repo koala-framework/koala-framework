@@ -23,10 +23,9 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         return DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $absolutes);
     }
 
-    public function getContents($language)
+    public function warmupCaches()
     {
         $cacheFile = $this->_getCacheFileName();
-
         if (!file_exists("$cacheFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$cacheFile.buildtime")) {
             $fileName = $this->getAbsoluteFileName();
             $sassc = Kwf_Config::getValue('server.sassc');
@@ -97,6 +96,14 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             unset($map);
 
             file_put_contents("$cacheFile.buildtime", filemtime($fileName));
+        }
+    }
+
+    public function getContents($language)
+    {
+        $cacheFile = $this->_getCacheFileName();
+        if (!file_exists("$cacheFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$cacheFile.buildtime")) {
+            $this->warmupCaches();
         }
         $ret = file_get_contents($cacheFile);
         return $ret;
