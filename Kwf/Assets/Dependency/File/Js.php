@@ -18,27 +18,10 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
     {
         $ret = parent::getContents($language);
 
-        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
-
-        //TODO same code is in in File_Css too
-        if ($pathType == 'ext') {
-            //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
-            $ret = str_replace('../images/', '/assets/ext/resources/images/', $ret);
-        } else if ($pathType == 'mediaelement') {
-            //hack to get the correct paths for the mediaelement pictures
-            $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
-        }
-
         if ($baseUrl = Kwf_Setup::getBaseUrl()) {
-            $ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
-            $ret = preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', '$1'.$baseUrl.'/$2/', $ret);
-        }
-
-        if (strpos($ret, '.cssClass') !== false) {
-            $cssClass = $this->_getComponentCssClass();
-            if ($cssClass) {
-                $ret = preg_replace('#\'\.cssClass([\s\'\.])#', '\'.'.$cssClass.'$1', $ret);
-            }
+            //TODO properly implement this, we can't do it here as it's dependent on config
+            //$ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
+            //$ret = preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', '$1'.$baseUrl.'/$2/', $ret);
         }
         return $ret;
     }
@@ -59,7 +42,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
 
             $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
-            $useTrl = !in_array($pathType, array('ext', 'ext4', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
 
             $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
             if (!file_exists($dir)) mkdir($dir, 0777, true);
@@ -79,10 +61,30 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $contents = str_replace("\n//@ sourceMappingURL=$buildFile.min.js.map.json", '', $contents);
 
             $map = new Kwf_Assets_Util_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
+
+
+            if (strpos($contents, '.cssClass') !== false) {
+                $cssClass = $this->_getComponentCssClass();
+                if ($cssClass) {
+                    if (preg_match_all('#\'\.cssClass([\s\'\.])#', $contents, $m)) {
+                        foreach ($m[0] as $k=>$i) {
+                            $map->stringReplace($i, '\'.'.$cssClass.$m[1][$k]);
+                        }
+                    }
+                }
+            }
+
+            if ($pathType == 'ext') {
+                $map->stringReplace('../images/', '/assets/ext/resources/images/');
+            } else if ($pathType == 'mediaelement') {
+                $map->stringReplace('url(', 'url(/assets/mediaelement/build/');
+            }
+
             $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
             unset($map);
 
             $trlElements = array();
+            $useTrl = !in_array($pathType, array('ext', 'ext4', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
             if ($useTrl) $trlElements = Kwf_Trl::getInstance()->parse($contents, 'js');
             file_put_contents("$buildFile.min.js.trl", serialize($trlElements));
 
