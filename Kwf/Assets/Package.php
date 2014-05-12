@@ -79,49 +79,71 @@ class Kwf_Assets_Package
 
     public function getPackageContentsSourceMap($mimeType, $language)
     {
-        $ret = '';
-        $maps = array();
+        $retSources = '';
+        $retNames = '';
+        $retMappings = '';
+        $previousFileLast = false;
+        $previousFileSourcesCount = 0;
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 $c = $i->getContentsPackedSourceMap($language);
                 if (!$c) {
                     $packageContents = $i->getContentsPacked($language);
-                    $f = tempnam('temp', 'dynass'); //TODO delete temp file
-                    file_put_contents($f, $packageContents);
+                    $sources = array();
+                    if ($i instanceof Kwf_Assets_Dependency_File) {
+                        $sources[] = $i->getFileNameWithType();
+                    }
                     $data = array(
                         "version" => 3,
-                        "file" => $f,
-                        "sources"=> array(),
+                        //"file" => ,
+                        "sources"=> $sources,
                         "names"=> array(),
-                        "mappings" => array()
+                        "mappings" => ($sources ? 'AAAAA' : '').str_repeat(';', substr_count($packageContents, "\n")),
+                        '_x_org_koala-framework_last' => array(
+                            'source' => 0,
+                            'originalLine' => 0,
+                            'originalColumn' => 0,
+                            'name' => 0,
+                        )
                     );
-                    $c = json_encode($data);
+                } else {
+                    $data = json_decode($c, true);
                 }
-                $f = tempnam('temp', 'map'); //TODO delte temp file
-                file_put_contents($f, $c);
-                $maps[] = $f;
+                if (!isset($data['_x_org_koala-framework_last'])) {
+                    throw new Kwf_Exception("source map doesn't contain _x_org_koala-framework_last extension");
+                }
+
+                foreach ($data['sources'] as &$s) {
+                    $s = '/assets/'.$s;
+                }
+                if ($data['sources']) {
+                    $retSources .= ($retSources ? ',' : '').substr(json_encode($data['sources']), 1, -1);
+                }
+                if ($data['names']) {
+                    $retNames .= substr(json_encode($data['names']), 1, -1);
+                }
+                if ($previousFileLast) {
+                    // adjust first by previous
+                    if (substr($data['mappings'], 0, 6) == 'AAAAA,') $data['mappings'] = substr($data['mappings'], 6);
+                    $str  = Kwf_Assets_Util_Base64VLQ::encode(0);
+                    $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['source'] + $previousFileSourcesCount);
+                    $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['originalLine']);
+                    $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['originalColumn']);
+                    $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['name']);
+                    $str .= ",";
+                    $data['mappings'] = $str . $data['mappings'];
+                }
+                $previousFileLast = $data['_x_org_koala-framework_last'];
+                $previousFileSourcesCount = count($data['sources']);
+
+                if ($retMappings) $retMappings .= ';';
+                $retMappings .= $data['mappings'];
             }
         }
-        if ($maps) {
-            $outFile = tempnam('temp', 'sourcemap');
-            $cmd = "PATH=\$PATH:/var/www/node/bin  ./node_modules/.bin/mapcat ".implode(' ', $maps);
-            $cmd .= " --mapout $outFile.map";
-            $cmd .= " --jsout $outFile";
-            $cmd .= " 2>&1 ";
-            $out = array();
-            exec($cmd, $out, $retVal);
-            if ($retVal) {
-                throw new Kwf_Exception('mapcat failed: '.implode("\n", $out));
-            }
-            $ret = file_get_contents("$outFile.map");
-            unlink("$outFile.map");
-            unlink("$outFile");
-            $ret = json_decode($ret);
-            foreach ($ret->sources as &$i) {
-                $i = '/assets/'.$i;
-            }
-            $ret = json_encode($ret);
-        }
+
+        //manually build json, names array can be relatively large and merging all entries would be slow
+        $ret = '{"version":3, "sources": ['.$retSources.'], "names": ['.$retNames.'], "mappings": "'.$retMappings.'"}';
+
         return $ret;
     }
 
