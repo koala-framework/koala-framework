@@ -103,6 +103,10 @@ class Kwf_Assets_Dispatcher
 
     static private function _buildOutputForUrl($url)
     {
+        if (!Kwf_Config::getValue('assets.lazyBuild')) {
+            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
+        }
+
         require_once 'Kwf/Trl.php'; //required because setup doesn't load Trl.php before dispatching assets
         $param = explode('/', $url);
         $dependencyClass = $param[0];

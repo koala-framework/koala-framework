@@ -41,6 +41,10 @@ class Kwf_Assets_Package
             if ($ret !== false) return $ret;
         }
 
+        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
+            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
+        }
+
         $maxMTime = 0;
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             $mTime = $i->getMTime();
@@ -223,6 +227,10 @@ class Kwf_Assets_Package
             $cacheId = $this->getPackageUrlsCacheId($mimeType, $language);
             $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
             if ($ret !== false) return $ret;
+        }
+
+        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
+            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
         }
 
         if ($mimeType == 'text/javascript') $ext = 'js';
