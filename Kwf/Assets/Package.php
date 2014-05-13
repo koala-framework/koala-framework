@@ -83,6 +83,10 @@ class Kwf_Assets_Package
 
     public function getPackageContentsSourceMap($mimeType, $language)
     {
+        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
+            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
+        }
+
         $retSources = '';
         $retNames = '';
         $retMappings = '';
@@ -160,6 +164,10 @@ class Kwf_Assets_Package
 
     public function getPackageContents($mimeType, $language)
     {
+        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
+            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
+        }
+
         $maxMTime = 0;
         $ret = '';
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
