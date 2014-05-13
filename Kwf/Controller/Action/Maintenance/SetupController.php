@@ -6,6 +6,10 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         Kwf_Exception_Abstract::$logErrors = false;
         //don't call parent, no acl required
 
+        if (!file_exists('build/assets')) {
+            throw new Kwf_Exception_Client("Installation incomplete: 'build' folder does not exist. You can generate it by calling 'php bootstrap.php build' on commandline. On production servers you should upload locally generated build.");
+        }
+
         if (file_exists('downloader.php')) {
             throw new Kwf_Exception_Client("downloader.php still exists, please delete before starting setup");
         }
