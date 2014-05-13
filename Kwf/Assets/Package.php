@@ -89,6 +89,7 @@ class Kwf_Assets_Package
         $retMappings = '';
         $previousFileLast = false;
         $previousFileSourcesCount = 0;
+        $previousFileNamesCount = 0;
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 $c = $i->getContentsPackedSourceMap($language);
@@ -97,13 +98,15 @@ class Kwf_Assets_Package
                     $sources = array();
                     if ($i instanceof Kwf_Assets_Dependency_File) {
                         $sources[] = $i->getFileNameWithType();
+                    } else {
+                        $sources[] = 'dynamic/'.get_class($i).'-'.uniqid();
                     }
                     $data = array(
                         "version" => 3,
                         //"file" => ,
                         "sources"=> $sources,
                         "names"=> array(),
-                        "mappings" => ($sources ? 'AAAAA' : '').str_repeat(';', substr_count($packageContents, "\n")),
+                        "mappings" => 'AAAAA'.str_repeat(';', substr_count($packageContents, "\n")),
                         '_x_org_koala-framework_last' => array(
                             'source' => 0,
                             'originalLine' => 0,
@@ -134,12 +137,13 @@ class Kwf_Assets_Package
                     $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['source'] + $previousFileSourcesCount);
                     $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['originalLine']);
                     $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['originalColumn']);
-                    $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['name']);
+                    $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['name'] + $previousFileNamesCount);
                     $str .= ",";
                     $data['mappings'] = $str . $data['mappings'];
                 }
                 $previousFileLast = $data['_x_org_koala-framework_last'];
                 $previousFileSourcesCount = count($data['sources']);
+                $previousFileNamesCount = count($data['names']);
 
                 if ($retMappings) $retMappings .= ';';
                 $retMappings .= $data['mappings'];
@@ -147,8 +151,11 @@ class Kwf_Assets_Package
         }
 
         //manually build json, names array can be relatively large and merging all entries would be slow
-        $ret = '{"version":3, "sources": ['.$retSources.'], "names": ['.$retNames.'], "mappings": "'.$retMappings.'"}';
-
+        if ($mimeType == 'text/javascript') $ext = 'js';
+        else if ($mimeType == 'text/css') $ext = 'css';
+        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
+        $file = $this->getPackageUrl($ext, $language);
+        $ret = '{"version":3, "file": "'.$file.'", "sources": ['.$retSources.'], "names": ['.$retNames.'], "mappings": "'.$retMappings.'"}';
         return $ret;
     }
 
