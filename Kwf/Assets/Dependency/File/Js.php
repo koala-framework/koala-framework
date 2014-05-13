@@ -50,7 +50,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 throw new Kwf_Exception("uglifyjs failed");
             }
             $contents = file_get_contents("$buildFile.min.js");
-            $contents = str_replace("\n//@ sourceMappingURL=$buildFile.min.js.map.json", '', $contents);
+            $contents = str_replace("\n//# sourceMappingURL=$buildFile.min.js.map.json", '', $contents);
 
             $map = new Kwf_Assets_Util_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
 
