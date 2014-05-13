@@ -16,14 +16,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     protected function _getRawContents($language)
     {
-        $ret = parent::getContents($language);
-
-        if ($baseUrl = Kwf_Setup::getBaseUrl()) {
-            //TODO properly implement this, we can't do it here as it's dependent on config
-            //$ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
-            //$ret = preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', '$1'.$baseUrl.'/$2/', $ret);
-        }
-        return $ret;
+        return parent::getContents($language);
     }
 
     public function warmupCaches()

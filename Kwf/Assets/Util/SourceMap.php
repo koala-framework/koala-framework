@@ -225,9 +225,9 @@ class Kwf_Assets_Util_SourceMap
         return $this->_file;
     }
 
-    public function getMapContents()
+    public function getMapContents($includeLastExtension = true)
     {
-        if (!isset($this->_map->{'_x_org_koala-framework_last'})) {
+        if ($includeLastExtension && !isset($this->_map->{'_x_org_koala-framework_last'})) {
             $this->_addLastExtension();
         }
         return json_encode($this->_map);

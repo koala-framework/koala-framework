@@ -59,70 +59,121 @@ class Kwf_Assets_Dispatcher
     static private function _getOutputForUrlNoEncoding($url)
     {
         $cacheId = self::_getCacheIdByUrl($url);
-        $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-        if ($ret === false) {
-            $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
-        }
+        $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
 
         if ($ret === false) {
-            require_once 'Kwf/Trl.php'; //required because setup doesn't load Trl.php before dispatching assets
-            $param = explode('/', $url);
-            $dependencyClass = $param[0];
-            $dependencyParams = $param[1];
-            $language = $param[2];
-            $extension = $param[3];
-            if (!class_exists($dependencyClass)) {
-                throw new Kwf_Exception_NotFound();
-            }
-            if (!is_instance_of($dependencyClass, 'Kwf_Assets_Interface_UrlResolvable')) {
-                throw new Kwf_Exception("invalid dependency class");
-            }
-            $dependency = call_user_func(array($dependencyClass, 'fromUrlParameter'), $dependencyClass, $dependencyParams);
+            $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+            if ($ret === false) {
+                $ret = self::_buildOutputForUrl($url);
 
-            $sourceMap = false;
-            if (substr($extension, -4) == '.map') {
-                $extension = substr($extension, 0, -4);
-                $sourceMap = true;
+                //save generated caches for clear-cache-watcher
+                $fileName = 'cache/assets/output-cache-ids-'.$extension;
+                if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
+                    file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+                }
             }
-            if ($extension == 'js') $mimeType = 'text/javascript';
-            else if ($extension == 'css') $mimeType = 'text/css';
-            else if ($extension == 'printcss') $mimeType = 'text/css; media=print';
-            else throw new Kwf_Exception_NotYetImplemented();
 
-            if (!$sourceMap) {
-                if ($dependency instanceof Kwf_Assets_Package) {
-                    $contents = $dependency->getPackageContents($mimeType, $language);
-                    $mtime = $dependency->getMaxMTime($mimeType);
+            if (Kwf_Setup::getBaseUrl()) {
+                $sourceMap = false;
+                if (substr($url, -4) == '.map') {
+                    $contentUrl = substr($contentUrl, 0, -4);
+                    $content = self::_getOutputForUrlNoEncoding($contentUrl);
+                    $replacements = $this->_getBaseUrlReplacements($mimeType, $content);
+                    if ($replacements) {
+                        $map = new Kwf_Assets_Util_SourceMap($ret, $content);
+                        foreach ($replacements as $i) {
+                            $map->stringReplace($i['search'], $i['replace']);
+                        }
+                        $ret = $map->getMapContents(false);
+                    }
                 } else {
-                    $contents = $dependency->getContents($language);
-                    $mtime = $dependency->getMTime();
+                    $replacements = $this->_getBaseUrlReplacements($mimeType, $content);
+                    foreach ($replacements as $i) {
+                        $ret = str_replace($i['search'], $i['replace'], $ret);
+                    }
                 }
-                if ($extension == 'js') $mimeType = 'text/javascript; charset=utf-8';
-                else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf8';
-            } else {
-                if ($dependency instanceof Kwf_Assets_Package) {
-                    $contents = $dependency->getPackageContentsSourceMap($mimeType, $language);
-                    $mtime = $dependency->getMaxMTime($mimeType);
-                } else {
-                    throw new Kwf_Exception("can't generate sourcemap for non-packages");
-                }
-                $mimeType = 'application/json';
             }
-            $ret = array(
-                'contents' => $contents,
-                'mimeType' => $mimeType,
-            );
-            if ($mtime) $ret['mtime'] = $mtime;
             Kwf_Assets_Cache::getInstance()->save($ret, $cacheId);
-            $cacheDir = 'cache';
+        }
+        return $ret;
+    }
 
-            //save generated caches for clear-cache-watcher
-            $fileName = 'cache/assets/output-cache-ids-'.$extension;
-            if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
-                file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+    static private function _buildOutputForUrl($url)
+    {
+        require_once 'Kwf/Trl.php'; //required because setup doesn't load Trl.php before dispatching assets
+        $param = explode('/', $url);
+        $dependencyClass = $param[0];
+        $dependencyParams = $param[1];
+        $language = $param[2];
+        $extension = $param[3];
+        if (!class_exists($dependencyClass)) {
+            throw new Kwf_Exception_NotFound();
+        }
+        if (!is_instance_of($dependencyClass, 'Kwf_Assets_Interface_UrlResolvable')) {
+            throw new Kwf_Exception("invalid dependency class");
+        }
+        $dependency = call_user_func(array($dependencyClass, 'fromUrlParameter'), $dependencyClass, $dependencyParams);
+
+        $sourceMap = false;
+        if (substr($extension, -4) == '.map') {
+            $extension = substr($extension, 0, -4);
+            $sourceMap = true;
+        }
+        if ($extension == 'js') $mimeType = 'text/javascript';
+        else if ($extension == 'css') $mimeType = 'text/css';
+        else if ($extension == 'printcss') $mimeType = 'text/css; media=print';
+        else throw new Kwf_Exception_NotYetImplemented();
+
+        if (!$sourceMap) {
+            if ($dependency instanceof Kwf_Assets_Package) {
+                $contents = $dependency->getPackageContents($mimeType, $language);
+                $mtime = $dependency->getMaxMTime($mimeType);
+            } else {
+                $contents = $dependency->getContents($language);
+                $mtime = $dependency->getMTime();
+            }
+            if ($extension == 'js') $mimeType = 'text/javascript; charset=utf-8';
+            else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf8';
+        } else {
+            if ($dependency instanceof Kwf_Assets_Package) {
+                $contents = $dependency->getPackageContentsSourceMap($mimeType, $language);
+                $mtime = $dependency->getMaxMTime($mimeType);
+            } else {
+                throw new Kwf_Exception("can't generate sourcemap for non-packages");
+            }
+            $mimeType = 'application/json';
+        }
+        $ret = array(
+            'contents' => $contents,
+            'mimeType' => $mimeType,
+        );
+        if ($mtime) $ret['mtime'] = $mtime;
+        return $ret;
+    }
+
+    private function _getBaseUrlReplacements($mimeType, $contents)
+    {
+        $baseUrl = Kwf_Setup::getBaseUrl();
+        if (!$baseUrl) return array();
+        $ret = array();
+        if (preg_match_all('#url\\((\s*[\'"]?)/assets/#', $contents, $m)) {
+            foreach ($m[0] as $k=>$i) {
+                $ret[] = array(
+                    'search' => $i,
+                    'replace' => 'url('.$m[1][$k].''.$baseUrl.'/assets/'
+                );
             }
         }
-
+        if ($mimeType == 'text/javascript') {
+            if (preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', $contents, $m)) {
+                foreach ($m[0] as $k=>$i) {
+                    $ret[] = array(
+                        'search' => $i,
+                        'replace' => $m[1][$k].$baseUrl.'/'.$m[1][$k].'/'
+                    );
+                }
+            }
+        }
         return $ret;
     }
 
