@@ -35,16 +35,14 @@ class Kwf_Assets_Package
 
     public function getMaxMTimeCacheId($mimeType)
     {
-        return 'mtime_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+        return 'mtime_'.get_class($this->_providerList).'_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
     }
 
     public function getMaxMTime($mimeType)
     {
-        if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
-            $cacheId = $this->getMaxMTimeCacheId($mimeType);
-            $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-            if ($ret !== false) return $ret;
-        }
+        $cacheId = $this->getMaxMTimeCacheId($mimeType);
+        $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+        if ($ret !== false) return $ret;
 
         if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
             throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
@@ -223,16 +221,14 @@ class Kwf_Assets_Package
 
     public function getPackageUrlsCacheId($mimeType, $language)
     {
-        return 'depPckUrls_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType).'_'.$language;
+        return 'depPckUrls_'.get_class($this->_providerList).'_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType).'_'.$language;
     }
 
     public function getPackageUrls($mimeType, $language)
     {
-        if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
-            $cacheId = $this->getPackageUrlsCacheId($mimeType, $language);
-            $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-            if ($ret !== false) return $ret;
-        }
+        $cacheId = $this->getPackageUrlsCacheId($mimeType, $language);
+        $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+        if ($ret !== false) return $ret;
 
         if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
             throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
