@@ -261,6 +261,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     public function createDbSelect($select)
     {
         if (!$select) return null;
+        if (!$this->_db && !Kwf_Registry::get('db')) {
+            throw new Kwf_Model_Db_DatabaseNotConfiguredException("Database not configured.");
+        }
         $tablename = $this->getTableName();
         $dbSelect = $this->getTable()->select();
         $dbSelect->from($tablename);
