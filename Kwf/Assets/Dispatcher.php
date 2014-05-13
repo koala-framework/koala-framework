@@ -66,10 +66,13 @@ class Kwf_Assets_Dispatcher
             if ($ret === false) {
                 $ret = self::_buildOutputForUrl($url);
 
-                //save generated caches for clear-cache-watcher
-                $fileName = 'cache/assets/output-cache-ids-'.$extension;
-                if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
-                    file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+                if (substr($url, -4) != '.map') {
+                    //save generated caches for clear-cache-watcher
+                    $extension = substr($url, -(strlen($url)-strrpos($url, '/')-1));
+                    $fileName = 'cache/assets/output-cache-ids-'.$extension;
+                    if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
+                        file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+                    }
                 }
             }
 
