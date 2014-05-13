@@ -28,10 +28,15 @@ class Kwf_Assets_Package
         return $this->_dependency;
     }
 
+    public function getMaxMTimeCacheId($mimeType)
+    {
+        return 'mtime_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+    }
+
     public function getMaxMTime($mimeType)
     {
         if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
-            $cacheId = 'mtime_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+            $cacheId = $this->getMaxMTimeCacheId($mimeType);
             $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
             if ($ret !== false) return $ret;
         }
@@ -44,19 +49,6 @@ class Kwf_Assets_Package
             }
         }
 
-        if (isset($cacheId)) {
-            Kwf_Assets_BuildCache::getInstance()->save($maxMTime, $cacheId);
-
-            //save generated caches for clear-cache-watcher
-            if ($mimeType == 'text/javascript') $ext = 'js';
-            else if ($mimeType == 'text/css') $ext = 'css';
-            else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
-            else throw new Kwf_Exception_NotYetImplemented();
-            $fileName = 'build/assets/package-max-mtime-'.$ext;
-            if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
-                file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
-            }
-        }
         return $maxMTime;
     }
 
@@ -218,10 +210,17 @@ class Kwf_Assets_Package
             .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
     }
 
+
+
+    public function getPackageUrlsCacheId($mimeType, $language)
+    {
+        return 'depPckUrls_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType).'_'.$language;
+    }
+
     public function getPackageUrls($mimeType, $language)
     {
         if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
-            $cacheId = 'depPckUrls_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType).'_'.$language;
+            $cacheId = $this->getPackageUrlsCacheId($mimeType, $language);
             $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
             if ($ret !== false) return $ret;
         }
@@ -256,10 +255,6 @@ class Kwf_Assets_Package
             if ($mTime) {
                 $maxMTime = max($maxMTime, $mTime);
             }
-        }
-
-        if (isset($cacheId)) {
-            Kwf_Assets_BuildCache::getInstance()->save($ret, $cacheId);
         }
         return $ret;
     }

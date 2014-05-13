@@ -56,6 +56,22 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             foreach ($exts as $extension) {
                 $progress->next(1, "$depName $extension");
                 $countDependencies += count($p->getFilteredUniqueDependencies($mimeTypeByExtension[$extension]));
+
+                $cacheId = $p->getMaxMTimeCacheId($mimeTypeByExtension[$extension]);
+                $maxMTime = $p->getMaxMTime($mimeTypeByExtension[$extension]);
+                Kwf_Assets_BuildCache::getInstance()->save($maxMTime, $cacheId);
+
+                //save generated caches for clear-cache-watcher
+                $fileName = 'build/assets/package-max-mtime-'.$extension;
+                if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
+                    file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+                }
+
+                foreach ($langs as $language) {
+                    $urls = $p->getPackageUrls($mimeTypeByExtension[$extension], $language);
+                    $cacheId = $p->getPackageUrlsCacheId($mimeTypeByExtension[$extension], $language);
+                    Kwf_Assets_BuildCache::getInstance()->save($urls, $cacheId);
+                }
             }
         }
         $progress->finish();
