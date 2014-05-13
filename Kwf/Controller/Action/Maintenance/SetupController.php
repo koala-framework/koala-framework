@@ -53,7 +53,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         foreach ($cfg as $k=>$i) {
             $this->view->possibleConfigSections[] = array($k, $k);
         }
-        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('Setup');
+        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('Maintenance');
         $this->view->viewport = 'Kwf.Maintenance.Viewport';
         $this->view->xtype = 'kwf.maintenance.setup';
     }
