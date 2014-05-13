@@ -38,11 +38,17 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         Kwf_Assets_BuildCache::getInstance()->clean();
 
         $langs = array_unique($langs);
-        $dependencyName = array('Frontend', 'Admin');
+        $packages = array(
+            Kwf_Assets_Package_Default::getInstance('Frontend'),
+            Kwf_Assets_Package_Default::getInstance('Admin'),
+        );
+        if (Kwf_Controller_Front::getInstance()->getControllerDirectory('kwf_controller_action_maintenance')) {
+            $packages[] = Kwf_Assets_Package_Maintenance::getInstance('Maintenance');
+        }
         $exts = array('js', 'css', 'printcss');
 
         echo "\ncalculating dependencies...\n";
-        $steps = count($dependencyName) * count($exts);
+        $steps = count($packages) * count($exts);
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
@@ -51,8 +57,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $progress = new Zend_ProgressBar($c, 0, $steps);
 
         $countDependencies = 0;
-        foreach ($dependencyName as $depName) {
-            $p = Kwf_Assets_Package_Default::getInstance($depName);
+        foreach ($packages as $p) {
+            $depName = $p->getDependencyName();
             foreach ($exts as $extension) {
                 $progress->next(1, "$depName $extension");
                 $countDependencies += count($p->getFilteredUniqueDependencies($mimeTypeByExtension[$extension]));
@@ -84,8 +90,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $c->setTextWidth(50);
         $progress = new Zend_ProgressBar($c, 0, $countDependencies);
 
-        foreach ($dependencyName as $depName) {
-            $p = Kwf_Assets_Package_Default::getInstance($depName);
+        foreach ($packages as $p) {
             foreach ($exts as $extension) {
                 foreach ($p->getFilteredUniqueDependencies($mimeTypeByExtension[$extension]) as $dep) {
                     $progress->next(1, "$dep");
@@ -96,15 +101,15 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $progress->finish();
 
         echo "generating packages...\n";
-        $steps = count($dependencyName) * count($langs) * count($exts) * 2;
+        $steps = count($packages) * count($langs) * count($exts) * 2;
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
         $c->setTextWidth(50);
         $progress = new Zend_ProgressBar($c, 0, $steps);
-        foreach ($dependencyName as $depName) {
-
+        foreach ($packages as $p) {
+            $depName = $p->getDependencyName();
             foreach ($langs as $language) {
 
                 foreach ($exts as $extension) {
