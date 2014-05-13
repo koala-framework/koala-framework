@@ -119,12 +119,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
                 if (!file_exists($dir)) mkdir($dir, 0777, true);
 
-                if (file_exists($buildFile)) {
-                    $ret = array(
-                        'contents' => file_get_contents($buildFile),
-                        'sourceMap' => file_get_contents("$buildFile.map"),
-                    );
-                } else {
+                if (!file_exists($buildFile)) {
                     $map = new Kwf_Assets_Util_SourceMap($ret['sourceMap'], $ret['contents']);
                     foreach ($this->_getTrlReplacements($ret, $language) as $value) {
                         $map->stringReplace($value['search'], $value['replace']);
@@ -132,6 +127,10 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                     $map->save("$buildFile.map", $buildFile);
                     unset($map);
                 }
+                $ret = array(
+                    'contents' => file_get_contents($buildFile),
+                    'sourceMap' => file_get_contents("$buildFile.map"),
+                );
             } else {
                 foreach ($this->_getTrlReplacements($ret, $language) as $value) {
                     $ret['contents'] = str_replace($value['search'], $value['replace'], $ret['contents']);
