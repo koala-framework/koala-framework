@@ -42,5 +42,9 @@ abstract class Kwf_Util_Build_Types_Abstract
         return $this->_success;
     }
 
+    public function checkRequirements()
+    {
+    }
+
     abstract public function getTypeName();
 }
