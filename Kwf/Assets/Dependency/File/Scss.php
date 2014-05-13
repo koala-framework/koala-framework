@@ -26,7 +26,18 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
     public function warmupCaches()
     {
         $cacheFile = $this->_getCacheFileName();
-        if (!file_exists("$cacheFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$cacheFile.buildtime")) {
+        $useCache = false;
+        if (file_exists("$cacheFile.sourcetimes")) {
+            $useCache = true;
+            $sourceTimes = unserialize(file_get_contents("$cacheFile.sourcetimes"));
+            foreach ($sourceTimes as $i) {
+                if (!file_exists($i['file']) || filemtime($i['file']) != $i['mtime']) {
+                    $useCache = false;
+                    break;
+                }
+            }
+        }
+        if (!$useCache) {
             $fileName = $this->getAbsoluteFileName();
             $sassc = Kwf_Config::getValue('server.sassc');
             $loadPath = array(
@@ -48,6 +59,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                 throw new Kwf_Exception("sassc failed: ".implode("\n", $out));
             }
             $map = json_decode(file_get_contents("{$cacheFile}.map"));
+            $sourceFiles = array();
             foreach ($map->sources as $k=>$i) {
                 //sources are relative to cache/sass, strip that
                 if (substr($i, 0, 6) != '../../') {
@@ -59,6 +71,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     throw new Kwf_Exception("Can't find path for '$i'");
                 }
                 $map->sources[$k] = $f;
+                $sourceFiles[] = $f;
             }
             $map->file = $cacheFile;
             file_put_contents("$cacheFile.map", json_encode($map));
@@ -95,7 +108,15 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             $map->save("{$cacheFile}.map", $cacheFile);
             unset($map);
 
-            file_put_contents("$cacheFile.buildtime", filemtime($fileName));
+            $sourceTimes = array();
+            foreach ($sourceFiles as $f) {
+                $f = new Kwf_Assets_Dependency_File($f);
+                $sourceTimes[] = array(
+                    'file' => $f->getAbsoluteFileName(),
+                    'mtime' => filemtime($f->getAbsoluteFileName())
+                );
+            }
+            file_put_contents("$cacheFile.sourcetimes", serialize($sourceTimes));
         }
     }
 
