@@ -187,17 +187,10 @@ class Kwf_Assets_Dispatcher
     /**
      * Returns a timestamp that can be used as assets version
      *
-     * will be reset everytime assets cache is cleared
+     * will be reset everytime assets are built
      */
     public static function getAssetsVersion()
     {
-        $cache = Kwf_Assets_Cache::getInstance();
-        $cacheId = 'assetsVersion';
-        $ret = $cache->load($cacheId);
-        if ($ret === false) {
-            $ret = time();
-            $cache->save($ret, $cacheId);
-        }
-        return $ret;
+        return  Kwf_Assets_BuildCache::getInstance()->load('assetsVersion');
     }
 }

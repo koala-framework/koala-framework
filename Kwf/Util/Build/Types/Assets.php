@@ -37,6 +37,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         Kwf_Assets_BuildCache::getInstance()->building = true;
         Kwf_Assets_BuildCache::getInstance()->clean();
 
+        Kwf_Assets_BuildCache::getInstance()->save(time(), 'assetsVersion');
+
         $langs = array_unique($langs);
         $packages = array(
             Kwf_Assets_Package_Default::getInstance('Frontend'),
