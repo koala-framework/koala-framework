@@ -84,7 +84,7 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Grid', {
     reset: function()
     {
         this._loadedRecord = null;
-        this.gridController.grid.unbindStore();
+        this.gridController.grid.bindStore(Ext4.StoreMgr.get('ext-empty-store'));
     },
 
     isDirty: function()
