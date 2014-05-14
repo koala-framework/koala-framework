@@ -44,7 +44,7 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
 
     protected function _processContents($ret)
     {
-        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+        $pathType = $this->getType();
 
         if ($pathType == 'ext') {
             //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben

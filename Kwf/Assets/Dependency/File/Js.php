@@ -23,10 +23,15 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
     {
         $fileName = $this->getFileNameWithType();
 
-        $buildFile = "cache/uglifyjs/".$fileName;
+        $inLibrary = false;
+        $pathType = $this->getType();
+        if (substr($this->getAbsoluteFileName(), 0, strlen(Kwf_Config::getValue('libraryPath'))) == Kwf_Config::getValue('libraryPath')) {
+            $inLibrary = true;
+            $buildFile = Kwf_Config::getValue('libraryPath')."/build/uglifyjs/".substr($this->getAbsoluteFileName(), strlen(Kwf_Config::getValue('libraryPath'))+1);
+        } else {
+            $buildFile = "cache/uglifyjs/".$fileName;
+        }
         if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
-
-            $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
 
             $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
             if (!file_exists($dir)) mkdir($dir, 0777, true);
@@ -65,20 +70,25 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 $map->stringReplace('url(', 'url(/assets/mediaelement/build/');
             }
 
+
             $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
             unset($map);
 
-            $trlElements = array();
-            $useTrl = !in_array($pathType, array('ext', 'ext4', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
-            if ($useTrl) $trlElements = Kwf_Trl::getInstance()->parse($contents, 'js');
-            file_put_contents("$buildFile.min.js.trl", serialize($trlElements));
+            if (!$inLibrary) {
+                $trlElements = Kwf_Trl::getInstance()->parse($contents, 'js');
+                file_put_contents("$buildFile.min.js.trl", serialize($trlElements));
+            }
 
             file_put_contents("$buildFile.buildtime", filemtime($this->getAbsoluteFileName()));
         }
 
         $this->_contentsCacheSourceMap = file_get_contents("$buildFile.min.js.map.json");
         $this->_contentsCache = file_get_contents("$buildFile.min.js");
-        $this->_parsedElementsCache = unserialize(file_get_contents("$buildFile.min.js.trl"));
+        if (!$inLibrary) {
+            $this->_parsedElementsCache = unserialize(file_get_contents("$buildFile.min.js.trl"));
+        } else {
+            $this->_parsedElementsCache = array();
+        }
 
         return array(
             'contents' => $this->_contentsCache,

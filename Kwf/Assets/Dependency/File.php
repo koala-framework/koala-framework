@@ -18,6 +18,11 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         return file_get_contents($this->getAbsoluteFileName());
     }
 
+    public function getType()
+    {
+        return substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+    }
+
     public function getFileNameWithType()
     {
         return $this->_fileName;
@@ -29,7 +34,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         static $paths;
         if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
 
-        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+        $pathType = $this->getType();
         $f = substr($this->_fileName, strpos($this->_fileName, '/'));
         if (isset($paths[$pathType])) {
             $f = $paths[$pathType].$f;
