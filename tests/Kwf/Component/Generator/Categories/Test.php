@@ -162,4 +162,35 @@ class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
         $this->assertNotNull($c);
         $this->assertEquals(5, $c->componentId);
     }
+
+    public function testFileNameChangeCache()
+    {
+        $c = $this->_root->getChildComponent('-bottom')->getRecursiveChildComponent(array(
+            'filename' => 'foo3',
+            'pseudoPage'=>true,
+        ));
+        $this->assertNotNull($c);
+
+        $pm = Kwf_Model_Abstract::getInstance('Kwf_Component_Generator_Categories_PagesModel');
+        $row = $pm->getRow(4);
+        $row->filename = 'bar';
+        $row->save();
+        $this->_process();
+
+        $c = $this->_root->getChildComponent('-bottom')->getRecursiveChildComponent(array(
+            'filename' => 'foo3',
+            'pseudoPage'=>true,
+        ));
+        $this->assertNull($c);
+
+        $row->filename = 'foo3';
+        $row->save();
+        $this->_process();
+
+        $c = $this->_root->getChildComponent('-bottom')->getRecursiveChildComponent(array(
+            'filename' => 'foo3',
+            'pseudoPage'=>true,
+        ));
+        $this->assertNotNull($c);
+    }
 }

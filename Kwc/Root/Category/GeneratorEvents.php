@@ -96,8 +96,10 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
     {
         if ($event instanceof Kwf_Component_Event_Row_Updated  && $event->isDirty(array('parent_id', 'filename'))) {
             Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->getCleanValue('parent_id').'-'.$event->row->getCleanValue('filename'));
+            Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->parent_id.'-'.$event->row->filename);
             if (!is_numeric($event->row->getCleanValue('parent_id'))) {
                 Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->getCleanValue('parent_subroot_id').'-'.$event->row->getCleanValue('filename'));
+                Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->parent_subroot_id.'-'.$event->row->filename);
             }
         } else if ($event instanceof Kwf_Component_Event_Row_Inserted || $event instanceof Kwf_Component_Event_Row_Deleted) {
             Kwf_Cache_Simple::delete('pcFnIds-'.$event->row->parent_id.'-'.$event->row->filename);
