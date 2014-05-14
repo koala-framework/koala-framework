@@ -62,6 +62,7 @@ class Kwf_Assets_Loader
         if (substr($ret['mimeType'], 0, 5) == 'text/') {
             $ret['mtime'] = time();
             $file = new Kwf_Assets_Dependency_File($file);
+            if (!$file->getFileName() || !file_exists(!$file->getFileName())) throw new Kwf_Exception_NotFound();
             $ret['contents'] = $file->getContents(null);
         } else {
             $fx = substr($file, 0, strpos($file, '/'));
