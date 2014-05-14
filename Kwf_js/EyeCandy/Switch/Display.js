@@ -22,7 +22,7 @@ Kwf.Switch.Display = function(el, config) {
     });
     this._lockAnimation = false;
     var defaultConfig = {
-        animation: { 
+        animation: {
             duration: .5
         }
     };
@@ -87,19 +87,24 @@ Kwf.Switch.Display = function(el, config) {
 
 Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
     doClose: function() {
-        if (!this.switchLink.hasClass('switchLinkHover')) {
-            if (this._lockAnimation) return;
-            this._lockAnimation = true;
+        if (this._state == 'closing' || this._state == 'closed') {
+            return;
         }
+        if (this._state == 'opening' && this.switchContent.scaleHeight) {
+            this.switchContent.scale(undefined, this.switchContent.scaleHeight);
+        }
+        this._state = 'closing';
 
         this.fireEvent('beforeClose', this);
         this.switchContent.stopFx();
-        this.switchContent.scaleHeight = this.switchContent.getHeight();
+        if (!this.switchContent.scaleHeight) {
+            this.switchContent.scaleHeight = this.switchContent.getHeight();
+        }
         this.switchContent.scale(undefined, 0,
             { easing: 'easeOut', duration: this.config.animation.duration, afterStyle: "display:none;",
                 callback: function() {
                     this.fireEvent('closed', this);
-                    this._lockAnimation = false;
+                    this._state = 'closed';
                 },
                 scope: this
             }
@@ -108,10 +113,13 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
     },
 
     doOpen: function() {
-        if (!this.switchLink.hasClass('switchLinkHover')) {
-            if (this._lockAnimation) return;
-            this._lockAnimation = true;
+        if (this._state == 'opening' || this._state == 'opened') {
+            return;
         }
+        if (this._state == 'closing') {
+            this.switchContent.scale(undefined, 0);
+        }
+        this._state = 'opening';
 
         this.fireEvent('beforeOpen', this);
         this.switchContent.stopFx();
@@ -120,11 +128,11 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
             { easing: 'easeOut', duration: this.config.animation.duration, afterStyle: "display:block;height:auto;",
                 callback: function() {
                     this.fireEvent('opened', this);
+                    this._state = 'opened';
                     Kwf.callOnContentReady(this.el.dom, {newRender: false});
                     if (Ext.isIE6) {
                         this.switchContent.setWidth(this.switchContent.getWidth());
                     }
-                    this._lockAnimation = false;
                 },
                 scope: this
             }
