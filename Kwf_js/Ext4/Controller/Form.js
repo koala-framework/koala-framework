@@ -20,7 +20,7 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
         if (typeof this.saveButton == 'undefined') this.saveButton = form.down('button#save');
         if (this.saveButton && !this.saveButton instanceof Ext4.button.Button) Ext4.Error.raise('saveButton config needs to be a Ext.button.Button');
         if (this.saveButton) {
-            this.saveButton.on('click', this.onSaveClick, this);
+            this.saveButton.on('click', this.validateAndSubmit, this);
         }
     },
 
@@ -61,7 +61,7 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
         Ext4.resumeLayouts(true);
     },
 
-    onSaveClick: function()
+    validateAndSubmit: function(options)
     {
         if (!this.form.getForm().isValid()) {
             Ext4.Msg.alert(trlKwf('Save'),
@@ -75,9 +75,18 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
             success: function() {
                 this.fireEvent('savesuccess', this.getLoadedRecord());
                 this.load(this.getLoadedRecord());
+                if (options.success) {
+                    options.success.call(options.scope || this);
+                }
+            },
+            failure: function() {
+                if (options.failure) {
+                    options.failure.call(options.scope || this);
+                }
             },
             scope: this
         });
+        return true;
     },
 
     save: function()
