@@ -23,6 +23,7 @@ class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Compon
         $ret['flags']['hasResources'] = true;
         $ret['componentName'] = trlKwfStatic('Newsletter');
         $ret['componentIcon'] = new Kwf_Asset('email');
+        $ret['flags']['skipFulltextRecursive'] = true;
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         $ret['extConfigControllerIndex'] = 'Kwc_Newsletter_ExtConfigEditButtons';

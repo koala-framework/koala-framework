@@ -25,7 +25,6 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Chec
          * 2 - prompt for an address, and require one
          */
         $ret['noShipping'] = 1;
-        $ret['business'] = ''; // deprecated, use paypalId in config instead
         return $ret;
     }
 
