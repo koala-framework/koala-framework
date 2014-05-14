@@ -53,9 +53,9 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         this.updateButtons();
     },
     updateButtons: function() {
-        var listWidth = Kwf.Utils.Element.getCachedWidth(this.list.el.parent());
+        var listWidth = Kwf.Utils.Element.getCachedWidth(this.list.el);
         var numberShown = 1;
-        var itemWidth = listWidth;
+        var itemWidth;
 
         if (this.getItemWidth) {
             itemWidth = this.getItemWidth.call(this, listWidth);
@@ -66,7 +66,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         }
 
         for (var i=0; i<this.list.getItems().length; i++) {
-            this.list.getItem(i).el.setStyle('width', itemWidth+'px');
+            if (itemWidth) this.list.getItem(i).el.setStyle('width', itemWidth+'px');
             this.list.getItem(i).el.show();
         }
         for (var i=numberShown; i<this.list.getItems().length; i++) {

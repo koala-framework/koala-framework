@@ -2,7 +2,7 @@ Kwf.onContentReady(function statisticsOptBox(body, param) {
     if (!param.newRender) return;
     // TODO: make default behaviour customizable
     if (Kwf.Statistics.getDefaultOptValue() == 'out' && !Kwf.Statistics.issetUserOptValue()) {
-        if (Ext.getBody().optBox) return;
+        if ($('body').data().optbox) return;
         var html = '<div class="' + Kwf.Statistics.cssClass + '">';
         html += '<div class="inner">';
         html += trlKwf('This website uses cookies to help us give you the best experience when you visit our website.');
@@ -11,8 +11,8 @@ Kwf.onContentReady(function statisticsOptBox(body, param) {
         }
         html += '<a href="" class="accept"><span>' + trlKwf('Accept and continue') + '</span></a>';
         html += '<div></div>';
-        Ext.getBody().insertFirst(html);
-        Ext.getBody().optBox = true;
+        $('body').prepend(html);
+        $('body').data('optbox', true);
     }
 }, {priority: -2}); // before Kwf.Utils.ResponsiveEl
 

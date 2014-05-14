@@ -202,7 +202,7 @@
 </text>
 <text>
 <en>Show Route</en>
-<de>Route zeigen</de>
+<hr>Pokaži rutu</hr>
 <es>Show Route</es>
 <id>33</id>
 <ro>Arată ruta</ro>
@@ -1869,6 +1869,7 @@
 <ua>Будь ласка, введіть свою електронну адресу</ua>
 <bg>Моля, въведете Вашия e-mail адрес. </bg>
 <sk>Vložte prosím svoju e-mailovú adresu</sk>
+<hr>Molimo upišite svoju E-mail adresu</hr>
 </text>
 <text>
 <en>Please type in your password. After clicking the button below</en>
@@ -1951,6 +1952,7 @@
 <ua>Виникла помилка</ua>
 <bg>Грешка</bg>
 <sk>Vyskytla sa chyba</sk>
+<hr>Došlo je do pogreške.</hr>
 </text>
 <text>
 <en>Link cannot link to itself</en>
@@ -2145,6 +2147,7 @@
 <ua>Пошук</ua>
 <hr>Traži</hr>
 <cs>Vyhledat</cs>
+<hr>Pretraži</hr>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -11131,6 +11134,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>Записів не знайдено</uk>
 <ua>Записів не знайдено</ua>
 <cs>Novinky nebyly nalezeny</cs>
+<hr>Nisu pronađeni rezultati</hr>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
