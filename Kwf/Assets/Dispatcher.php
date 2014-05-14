@@ -63,8 +63,13 @@ class Kwf_Assets_Dispatcher
 
         if ($ret === false) {
             $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-            if ($ret === false) {
+
+            if ($ret === false || $ret === 'outdated') {
+                if ($ret === 'outdated' && Kwf_Config::getValue('assets.lazyBuild') == 'outdated') {
+                    Kwf_Assets_BuildCache::getInstance()->building = true;
+                }
                 $ret = self::_buildOutputForUrl($url);
+                Kwf_Assets_BuildCache::getInstance()->building = false;
 
                 if (substr($url, -4) != '.map') {
                     //save generated caches for clear-cache-watcher
