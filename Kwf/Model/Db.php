@@ -627,7 +627,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             if (!$dbDepOf instanceof Kwf_Model_Db) {
                 throw new Kwf_Exception_NotYetImplemented();
             }
-            $ref = $depM->getReferenceByModelClass(get_class($depOf), $expr->getChild());
+            $d = $depOf->getDependentModelWithDependentOf($expr->getChild());
+            $ref = $d['model']->getReferenceByModelClass(get_class($d['dependentOf']), isset($d['rule']) ? $d['rule'] : null);
             $depSelect = $expr->getSelect();
             if (!$depSelect) $depSelect = $dbDepM->select();
             $col1 = $dbDepM->_formatField($ref['column'], null /* select fehlt - welches ist das korrekte?*/);
