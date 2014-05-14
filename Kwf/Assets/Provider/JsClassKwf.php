@@ -18,6 +18,7 @@ class Kwf_Assets_Provider_JsClassKwf extends Kwf_Assets_Provider_Abstract
         if (!$dependency instanceof Kwf_Assets_Dependency_File_Js) {
             return array();
         }
+
         if ($dependency->getFileNameWithType() == 'kwf/Kwf_js/Loader.js') {
             return array(
                 Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES => array(

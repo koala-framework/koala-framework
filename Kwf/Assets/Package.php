@@ -162,7 +162,7 @@ class Kwf_Assets_Package
         return $ret;
     }
 
-    public function getPackageContents($mimeType, $language)
+    public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
     {
         if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
             throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
@@ -193,15 +193,17 @@ class Kwf_Assets_Package
                 $ret);
         }
 
-        if ($mimeType == 'text/javascript') $ext = 'js';
-        else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
-        else throw new Kwf_Exception_NotYetImplemented();
 
-        if ($ext == 'js') {
-            $ret .= "\n//# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)."\n";
-        } else if ($ext == 'css' || $ext == 'printcss') {
-            $ret .= "\n/*# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)." */\n";
+        if ($includeSourceMapComment) {
+            if ($mimeType == 'text/javascript') $ext = 'js';
+            else if ($mimeType == 'text/css') $ext = 'css';
+            else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
+            else throw new Kwf_Exception_NotYetImplemented();
+            if ($ext == 'js') {
+                $ret .= "\n//# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)."\n";
+            } else if ($ext == 'css' || $ext == 'printcss') {
+                $ret .= "\n/*# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)." */\n";
+            }
         }
 
         return $ret;

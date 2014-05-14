@@ -10,6 +10,9 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         if (substr($fileNameWithType, 0, 1) == '/') {
             throw new Kwf_Exception('Don\'t use absolute file names');
         }
+        if (!$fileNameWithType) {
+            throw new Kwf_Exception("Invalid filename");
+        }
         $this->_fileName = $fileNameWithType;
     }
 

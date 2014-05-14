@@ -7,7 +7,7 @@ class Kwf_Assets_Modernizr_DependencyTest extends Kwf_Test_TestCase
         $dep->addFeature('CssAnimations');
         $this->assertContains(
             '/build-cssanimations-cssclasses-testprop-testallprops-domprefixes.js',
-            $dep->getFileName()
+            $dep->getAbsoluteFileName()
         );
 
         $this->assertContains('window.Modernizr=', $dep->getContents('en'));

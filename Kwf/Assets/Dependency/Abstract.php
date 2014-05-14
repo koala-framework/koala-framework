@@ -73,6 +73,19 @@ abstract class Kwf_Assets_Dependency_Abstract
         return get_class($this).': '.$this->__toString()."\n";
     }
 
+    public function getRecursiveDependencies()
+    {
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_UniqueFilter(new Kwf_Assets_Dependency_Iterator_Recursive($this, Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL)), RecursiveIteratorIterator::CHILD_FIRST);
+        $array = array();
+        $array[] = $this;
+        foreach ($it as $i) {
+            if ($i !== $this) {
+                $array[] = $i;
+            }
+        }
+        return $array;
+    }
+
     public function getRecursiveFiles()
     {
         $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_UniqueFilter(new Kwf_Assets_Dependency_Iterator_Recursive($this, Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL)), RecursiveIteratorIterator::CHILD_FIRST);
