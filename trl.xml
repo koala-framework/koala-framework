@@ -12929,5 +12929,106 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Bitte geben Sie ein Passwort an.</de>
 <id>2190</id>
 </text>
+<text>
+<en>Export</en>
+<id>2205</id>
+</text>
+<text>
+<en>Exporting rows...</en>
+<id>2206</id>
+</text>
+<text>
+<en>Export CSV</en>
+<id>2207</id>
+</text>
+<text>
+<en>Related Products</en>
+<id>2208</id>
+</text>
+<text>
+<en>Social Media</en>
+<id>2209</id>
+</text>
+<text>
+<en>Facebook</en>
+<id>2210</id>
+</text>
+<text>
+<en>Twitter</en>
+<id>2211</id>
+</text>
+<text>
+<en>Google+</en>
+<id>2212</id>
+</text>
+<text>
+<en>2 click social media buttons</en>
+<de>2 Klick Social Media Buttons</de>
+<id>2213</id>
+</text>
+<text>
+<en>2 clicks for more privacy: When you click here the button will be activated and you can send your recommendation. As soon as the button is activated data will be send to third party &amp;ndash; for details click on &lt;em&gt;i&lt;/em&gt;.</en>
+<de>2 Klicks für mehr Datenschutz: Erst wenn Sie hier klicken, wird der Button aktiv und Sie können Ihre Empfehlung an Facebook senden. Schon beim Aktivieren werden Daten an Dritte übertragen &amp;ndash; siehe &lt;em&gt;i&lt;/em&gt;.</de>
+<id>2214</id>
+</text>
+<text>
+<en>not connected to Facebook</en>
+<de>nicht mit Facebook verbunden</de>
+<id>2215</id>
+</text>
+<text>
+<en>connected to Facebook</en>
+<de>mit Facebook verbunden</de>
+<id>2216</id>
+</text>
+<text>
+<en>Recommend</en>
+<de>Empfehlen</de>
+<id>2217</id>
+</text>
+<text>
+<en>not connected to Twitter</en>
+<de>nicht mit Twitter verbunden</de>
+<id>2218</id>
+</text>
+<text>
+<en>connected to Twitter</en>
+<de>mit Twitter verbunden</de>
+<id>2219</id>
+</text>
+<text>
+<en>Tweet</en>
+<de>Twittern</de>
+<id>2220</id>
+</text>
+<text>
+<en>not connected to Google+</en>
+<de>nicht mit Google+ verbunden</de>
+<id>2221</id>
+</text>
+<text>
+<en>connected to Google+</en>
+<de>mit Google+ verbunden</de>
+<id>2222</id>
+</text>
+<text>
+<en>If you activate these buttons with a click informations will be send to Facebook, Twitter or Google in the USA and may be stored there. For details click on &lt;em&gt;i&lt;/em&gt;.</en>
+<de>Wenn Sie diese Felder durch einen Klick aktivieren, werden Informationen an Facebook, Twitter oder Google in die USA übertragen und unter Umständen auch dort gespeichert. Näheres erfahren Sie durch einen Klick auf das &lt;em&gt;i&lt;/em&gt;.</de>
+<id>2223</id>
+</text>
+<text>
+<en>Agree permanent activation and data transfer:</en>
+<de>Dauerhaft aktivieren und Datenüber&amp;shy;tragung zustimmen:</de>
+<id>2224</id>
+</text>
+<text>
+<en>settings</en>
+<de>Einstellungen</de>
+<id>2225</id>
+</text>
+<text>
+<en>Parent Page Name</en>
+<id>2226</id>
+</text>
 </trl>
 

@@ -46,6 +46,8 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         } else if ($pathType == 'mediaelement') {
             //hack to get the correct paths for the mediaelement pictures
             $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
+        } else if ($pathType == 'socialshareprivacy') {
+            $ret = str_replace('url(', 'url(/assets/socialshareprivacy/socialshareprivacy/', $ret);
         }
         if ($baseUrl = Kwf_Setup::getBaseUrl()) {
             $ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
