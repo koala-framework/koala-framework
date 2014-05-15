@@ -81,8 +81,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         }
         if (Kwf_Component_Data_Root::getComponentClass()) {
             foreach(Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::getFlag($c, 'hasPossibleLanguages')) {
-                    foreach (call_user_func(array($c, 'getPossibleLanguages'), $c) as $i) {
+                if (Kwc_Abstract::getFlag($c, 'hasAvailableLanguages')) {
+                    foreach (call_user_func(array($c, 'getAvailableLanguages'), $c) as $i) {
                         if (!in_array($i, $langs)) $langs[] = $i;
                     }
                 }
