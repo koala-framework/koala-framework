@@ -3,24 +3,24 @@ var kwcFavouritesInitialized = false;
 Kwf.onJElementReady('.kwcFavourites', function(el, config) {
     kwcFavouritesComponentIds.push(config.componentId);
 
-    setTimeout(function() {
-        if (kwcFavouritesInitialized) return;
+    if (!kwcFavouritesInitialized) {
         kwcFavouritesInitialized = true;
-
-        $.getJSON(config.controllerUrl + '/json-get-favourites', {
-            componentId: config.componentId,
-            kwfSessionToken: Kwf.sessionToken,
-            kwcFavouritesComponentIds: kwcFavouritesComponentIds
-        }, function(data) {
-            $.each(data.componentIds, function(index, value) {
-                var favEl = $('#' + value);
-                favEl.addClass('isFavourite');
-                favEl.children('.switchContent').html(config.deleteFavourite);
+        setTimeout(function() {
+            $.getJSON(config.controllerUrl + '/json-get-favourites', {
+                componentId: config.componentId,
+                kwfSessionToken: Kwf.sessionToken,
+                kwcFavouritesComponentIds: kwcFavouritesComponentIds
+            }, function(data) {
+                $.each(data.componentIds, function(index, value) {
+                    var favEl = $('#' + value);
+                    favEl.addClass('isFavourite');
+                    favEl.children('.switchContent').html(config.deleteFavourite);
+                });
+                kwcFavouritesComponentIds = [];
+                kwcFavouritesInitialized = false;
             });
-            kwcFavouritesComponentIds = [];
-            kwcFavouritesInitialized = false;
-        });
-    }, 10);
+        }, 10);
+    }
 
     var switchContent = el.children('.switchContent');
     el.find('div.switchLink > a').on('click.kwcFavourites', function(ev) {
