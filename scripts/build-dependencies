@@ -3,10 +3,10 @@ set -e
 # Any subsequent commands which fail will cause the shell script to exit immediately
 
 cd ~
-git clone git@github.com:nsams/libsass.git
+git clone https://github.com/nsams/libsass.git
 cd libsass
 make
-git clone git@github.com:hcatlin/sassc.git
+git clone https://github.com/hcatlin/sassc.git
 cd sassc
 SASS_LIBSASS_PATH=.. make
 
