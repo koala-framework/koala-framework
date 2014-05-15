@@ -1,4 +1,4 @@
-<?
+<?php
 $file = is_file('vkwf_branch') ? 'vkwf_branch' : 'kwf_branch';
 file_put_contents($file, "3.5\n");
 echo "Changed $file to 3.5\n";
