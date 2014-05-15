@@ -21,7 +21,7 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
         }
         Kwf_Util_ClearCache::getInstance()->clearCache($options);
 
-        if (!$this->_getParam('skip-check-build')) {
+        if (!$this->_getParam('skip-check-build') && Kwf_Config::getValue('application.id') != 'kwf') {
             if (!file_exists('build')) {
                 echo "ERROR: build folder doesn't exist.\n";
             } else if (file_exists('build/version.json')) {
