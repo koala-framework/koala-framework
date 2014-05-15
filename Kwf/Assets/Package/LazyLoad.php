@@ -31,9 +31,6 @@ class Kwf_Assets_Package_LazyLoad extends Kwf_Assets_Package
 
     public function toUrlParameter()
     {
-        if ($this->_providerList !== Kwf_Assets_Package_Default::getDefaultProviderList()) {
-            throw new Kwf_Exception("Can only convert to url parameter with default provider list");
-        }
         return get_class($this->_providerList).':'.$this->_dependencyName.':'.implode(',', $this->_loadedDependencies);
     }
 
