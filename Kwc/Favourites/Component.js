@@ -1,3 +1,4 @@
+(function() {
 var kwcFavouritesComponentIds = [];
 var kwcFavouritesInitialized = false;
 Kwf.onJElementReady('.kwcFavourites', function(el, config) {
@@ -48,3 +49,4 @@ Kwf.onJElementReady('.kwcFavourites', function(el, config) {
         });
     });
 }, this, {defer: true});
+})();
