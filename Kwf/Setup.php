@@ -298,6 +298,13 @@ class Kwf_Setup
         $requestPath = self::getRequestPath();
         if ($requestPath === false) return;
 
+        $baseUrl = Kwf_Setup::getBaseUrl();
+        if ($baseUrl) {
+            if (substr($requestPath, 0, strlen($baseUrl)) != $baseUrl) {
+                throw new Kwf_Exception_NotFound();
+            }
+            $requestPath = substr($requestPath, strlen($baseUrl));
+        }
         $urlParts = explode('/', substr($requestPath, 1));
         if (is_array($urlParts) && $urlParts[0] == 'media') {
             if (sizeof($urlParts) != 7) {

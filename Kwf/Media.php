@@ -24,10 +24,10 @@ class Kwf_Media
             $checksumType = Kwf_Media::DONT_HASH_TYPE_PREFIX;
         }
         $checksum = self::getChecksum($class, $id, $checksumType, $filename);
-        $prefix = '';
+        $prefix = Kwf_Setup::getBaseUrl();
         if ($r = Kwf_Component_Data_Root::getInstance()) {
             if ($r->filename) {
-                $prefix = '/'.$r->filename;
+                $prefix .= '/'.$r->filename;
             }
         }
         if (is_null($time)) {
