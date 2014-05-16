@@ -1,5 +1,6 @@
 Kwf.onComponentEvent('favouritesChanged', function(change) {
-    Ext.select('.kwcFavouritesPageComponentFavouritesCount').each(function(element) {
-        element.update(parseInt(element.dom.innerHTML) + change);
+    $('.kwcFavouritesPageComponentFavouritesCount').each(function() {
+        var element = $(this);
+        element.html(parseInt(element.html()) + change);
     }, this);
 });
