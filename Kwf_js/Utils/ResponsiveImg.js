@@ -121,8 +121,8 @@ function doesElementScroll(el)
 function isElementInView(el)
 {
     var $e = $(el.dom);
-    var threshold = 50;
-    
+    var threshold = 200;
+
     if ($e.is(":hidden")) return false;
 
     if (doesElementScroll(el.dom)) {
