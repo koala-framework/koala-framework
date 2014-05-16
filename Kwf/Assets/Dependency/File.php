@@ -5,23 +5,39 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     private $_mtimeCache;
     private $_fileNameCache;
 
-    public function __construct($fileName)
+    public function __construct($fileNameWithType)
     {
-        $this->_fileName = $fileName;
+        if (substr($fileNameWithType, 0, 1) == '/') {
+            throw new Kwf_Exception('Don\'t use absolute file names');
+        }
+        if (!$fileNameWithType) {
+            throw new Kwf_Exception("Invalid filename");
+        }
+        $this->_fileName = $fileNameWithType;
     }
 
     public function getContents($language)
     {
-        return file_get_contents($this->getFileName());
+        return file_get_contents($this->getAbsoluteFileName());
     }
 
-    public function getFileName()
+    public function getType()
+    {
+        return substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+    }
+
+    public function getFileNameWithType()
+    {
+        return $this->_fileName;
+    }
+
+    public function getAbsoluteFileName()
     {
         if (isset($this->_fileNameCache)) return $this->_fileNameCache;
         static $paths;
         if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
 
-        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+        $pathType = $this->getType();
         $f = substr($this->_fileName, strpos($this->_fileName, '/'));
         if (isset($paths[$pathType])) {
             $f = $paths[$pathType].$f;
@@ -37,7 +53,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     public function getMTime()
     {
         if (!isset($this->_mtimeCache)) {
-            $f = $this->getFileName();
+            $f = $this->getAbsoluteFileName();
             if ($f) {
                 $this->_mtimeCache = filemtime($f);
             }
@@ -88,16 +104,12 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     public function __toString()
     {
-        $ret = $this->_fileName;
-        if (!$ret) {
-            $ret = parent::__toString();
-        }
-        return $ret;
+        return $this->_fileName;
     }
 
     protected function _getComponentCssClass()
     {
-        $cssClass = realpath($this->getFileName());
+        $cssClass = realpath($this->getAbsoluteFileName());
 
         static $paths;
         if (!isset($paths)) {
@@ -140,5 +152,40 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             return strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
         }
         return null;
+    }
+
+    private static function _getAbsolutePath($path)
+    {
+        if (substr($path, 0, 1)=='.') $path = getcwd().'/'.$path;
+        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+        $absolutes = array();
+        foreach ($parts as $part) {
+            if ('.' == $part) continue;
+            if ('..' == $part) {
+                array_pop($absolutes);
+            } else {
+                $absolutes[] = $part;
+            }
+        }
+        return DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $absolutes);
+    }
+
+    public static function getPathWithTypeByFileName($fileName)
+    {
+        static $paths;
+        if (!isset($paths)) {
+            $paths = Kwf_Config::getValueArray('path');
+            foreach ($paths as $k=>$p) {
+                $paths[$k] = self::_getAbsolutePath($p);
+            }
+            $paths = array_reverse($paths);
+        }
+        $fileName = self::_getAbsolutePath($fileName);
+        foreach ($paths as $k=>$p) {
+            if (substr($fileName, 0, strlen($p)) == $p) {
+                return $k.substr($fileName, strlen($p));
+            }
+        }
+        return false;
     }
 }

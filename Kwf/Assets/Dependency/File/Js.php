@@ -14,92 +14,158 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         parent::__construct($fileName);
     }
 
-    protected function _getContents($language, $pack)
+    protected function _getRawContents($language)
     {
-        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
-        $useTrl = !in_array($pathType, array('ext', 'ext4', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
+        return parent::getContents($language);
+    }
 
-        if (isset($this->_contentsCache) && $pack) {
-            $ret = $this->_contentsCache;
+    public function warmupCaches()
+    {
+        $fileName = $this->getFileNameWithType();
+
+        $inLibrary = false;
+        $pathType = $this->getType();
+        if (substr($this->getAbsoluteFileName(), 0, strlen(Kwf_Config::getValue('libraryPath'))) == Kwf_Config::getValue('libraryPath')) {
+            $inLibrary = true;
+            $buildFile = Kwf_Config::getValue('libraryPath')."/build/uglifyjs/".substr($this->getAbsoluteFileName(), strlen(Kwf_Config::getValue('libraryPath'))+1);
         } else {
+            $buildFile = "cache/uglifyjs/".$fileName;
+        }
+        if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
 
-            $ret = parent::getContents($language);
-
-            //TODO same code is in in File_Css too
-            if ($pathType == 'ext') {
-                //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
-                $ret = str_replace('../images/', '/assets/ext/resources/images/', $ret);
-            } else if ($pathType == 'mediaelement') {
-                //hack to get the correct paths for the mediaelement pictures
-                $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
+            $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
+            if (!file_exists($dir)) mkdir($dir, 0777, true);
+            file_put_contents($buildFile, $this->_getRawContents(null));
+            $uglifyjs = Kwf_Config::getValue('server.uglifyjs');
+            $cmd = "$uglifyjs ";
+            $cmd .= "--source-map ".escapeshellarg("$buildFile.min.js.map.json").' ';
+            $cmd .= "--prefix 2 ";
+            $cmd .= "--output ".escapeshellarg("$buildFile.min.js").' ';
+            $cmd .= escapeshellarg($buildFile);
+            $out = array();
+            system($cmd, $retVal);
+            if ($retVal) {
+                throw new Kwf_Exception("uglifyjs failed");
             }
+            $contents = file_get_contents("$buildFile.min.js");
+            $contents = str_replace("\n//# sourceMappingURL=$buildFile.min.js.map.json", '', $contents);
 
-            if ($baseUrl = Kwf_Setup::getBaseUrl()) {
-                $ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
-                $ret = preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', '$1'.$baseUrl.'/$2/', $ret);
-            }
+            $map = new Kwf_Assets_Util_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
 
-            if (strpos($ret, '.cssClass') !== false) {
+
+            if (strpos($contents, '.cssClass') !== false) {
                 $cssClass = $this->_getComponentCssClass();
                 if ($cssClass) {
-                    $ret = preg_replace('#\'\.cssClass([\s\'\.])#', '\'.'.$cssClass.'$1', $ret);
-                }
-            }
-
-            if ($pack) {
-                $ret = self::pack($ret);
-                $this->_contentsCache = $ret;
-            }
-
-            if ($useTrl) {
-                //Kwf_Trl::parse is very slow, try to cache it
-                //this mainly helps during development when ccw clears the assets cache but this cache stays
-                static $cache;
-                if (!isset($cache)) {
-                    $cache = new Zend_Cache_Core(array(
-                        'lifetime' => null,
-                        'automatic_serialization' => true,
-                        'automatic_cleaning_factor' => 0,
-                        'write_control' => false,
-                    ));
-                    $cache->setBackend(new Zend_Cache_Backend_File(array(
-                        'cache_dir' => 'cache/assets',
-                        'cache_file_umask' => 0666,
-                        'hashed_directory_umask' => 0777,
-                        'hashed_directory_level' => 2,
-                    )));
-                }
-                $cacheId = 'trlParsedElements'.$pack.str_replace(array('\\', ':', '/', '.', '-'), '_', $this->_fileName);
-                $cacheData = $cache->load($cacheId);
-                if ($cacheData) {
-                    if ($cacheData['mtime'] != filemtime($this->getFileName())) {
-                        $cacheData = false;
+                    if (preg_match_all('#\'\.cssClass([\s\'\.])#', $contents, $m)) {
+                        foreach ($m[0] as $k=>$i) {
+                            $map->stringReplace($i, '\'.'.$cssClass.$m[1][$k]);
+                        }
                     }
                 }
-                if (!$cacheData) {
-                    $cacheData = array(
-                        'contents' => Kwf_Trl::getInstance()->parse($ret, 'js'),
-                        'mtime' => filemtime($this->getFileName())
-                    );
-                    $cache->save($cacheData, $cacheId);
-                }
-                $this->_parsedElementsCache = $cacheData['contents'];
             }
+
+            if ($pathType == 'ext') {
+                $map->stringReplace('../images/', '/assets/ext/resources/images/');
+            } else if ($pathType == 'mediaelement') {
+                $map->stringReplace('url(', 'url(/assets/mediaelement/build/');
+            }
+
+
+            $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
+            unset($map);
+
+            if (!$inLibrary) {
+                $trlElements = Kwf_Trl::getInstance()->parse($contents, 'js');
+                file_put_contents("$buildFile.min.js.trl", serialize($trlElements));
+            }
+
+            file_put_contents("$buildFile.buildtime", filemtime($this->getAbsoluteFileName()));
         }
 
-        if ($useTrl) {
-            static $jsLoader;
-            if (!isset($jsLoader)) $jsLoader = new Kwf_Trl_JsLoader();
+        $this->_contentsCacheSourceMap = file_get_contents("$buildFile.min.js.map.json");
+        $this->_contentsCache = file_get_contents("$buildFile.min.js");
+        if (!$inLibrary) {
+            $this->_parsedElementsCache = unserialize(file_get_contents("$buildFile.min.js.trl"));
+        } else {
+            $this->_parsedElementsCache = array();
+        }
 
-            $ret = $jsLoader->trlLoad($ret, $this->_parsedElementsCache, $language);
-            $ret = $this->_hlp($ret, $language);
+        return array(
+            'contents' => $this->_contentsCache,
+            'sourceMap' => $this->_contentsCacheSourceMap,
+            'trlElements' => $this->_parsedElementsCache
+        );
+    }
+
+    private function _getCompliedContents()
+    {
+        if (!isset($this->_contentsCache)) {
+            $this->warmupCaches();
+        }
+        return array(
+            'contents' => $this->_contentsCache,
+            'sourceMap' => $this->_contentsCacheSourceMap,
+            'trlElements' => $this->_parsedElementsCache
+        );
+    }
+
+    protected function _getContents($language, $pack)
+    {
+        if ($pack) {
+            $ret = $this->_getCompliedContents();
+        } else {
+            $contents = $this->_getRawContents(null);
+            $ret = array(
+                'contents' => $contents,
+                'trlElements' => Kwf_Trl::getInstance()->parse($contents, 'js')
+            );
+            unset($contents);
+        }
+
+        if ($ret['trlElements']) {
+
+            if (isset($ret['sourceMap'])) {
+                $buildFile = "cache/assets/".$this->getFileNameWithType().'-'.$language;
+                $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
+                if (!file_exists($dir)) mkdir($dir, 0777, true);
+
+                if (!file_exists($buildFile)) {
+                    $map = new Kwf_Assets_Util_SourceMap($ret['sourceMap'], $ret['contents']);
+                    foreach ($this->_getTrlReplacements($ret, $language) as $value) {
+                        $map->stringReplace($value['search'], $value['replace']);
+                    }
+                    $map->save("$buildFile.map", $buildFile);
+                    unset($map);
+                }
+                $ret = array(
+                    'contents' => file_get_contents($buildFile),
+                    'sourceMap' => file_get_contents("$buildFile.map"),
+                );
+            } else {
+                foreach ($this->_getTrlReplacements($ret, $language) as $value) {
+                    $ret['contents'] = str_replace($value['search'], $value['replace'], $ret['contents']);
+                }
+                unset($ret['trlElements']);
+            }
         }
 
         return $ret;
     }
 
+    private function _getTrlReplacements($ret, $language)
+    {
+        static $jsLoader;
+        if (!isset($jsLoader)) $jsLoader = new Kwf_Trl_JsLoader();
+        $replacements = $jsLoader->getReplacements($ret['trlElements'], $language);
+        $replacements = array_merge($replacements, $this->_getHelpReplacements($ret['contents'], $language));
+        return $replacements;
+    }
+
+
     public static function pack($ret)
     {
+
+
         $ret = str_replace("\r", "\n", $ret);
 
         // remove comments
@@ -120,23 +186,32 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     public final function getContents($language)
     {
-        return $this->_getContents($language, false);
+        $c = $this->_getContents($language, false);
+        return $c['contents'];
     }
 
-    private function _hlp($contents, $language)
+    private function _getHelpReplacements($contents, $language)
     {
+        $ret = array();
         $matches = array();
         preg_match_all("#hlp\(['\"](.+?)['\"]\)#", $contents, $matches);
         foreach ($matches[0] as $key => $search) {
             $r = Zend_Registry::get('hlp')->hlp($matches[1][$key], $language);
             $r = str_replace(array("\n", "\r", "'"), array('\n', '', "\\'"), $r);
-            $contents = str_replace($search, "'" . $r . "'", $contents);
+            $ret[] = array('search'=>$search, 'replace' => "'" . $r . "'");
         }
-        return $contents;
+        return $ret;
     }
 
     public final function getContentsPacked($language)
     {
-        return $this->_getContents($language, true);
+        $c = $this->_getContents($language, true);
+        return $c['contents'];
+    }
+
+    public final function getContentsPackedSourceMap($language)
+    {
+        $c = $this->_getContents($language, true);
+        return $c['sourceMap'];
     }
 }

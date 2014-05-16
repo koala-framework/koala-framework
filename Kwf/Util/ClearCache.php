@@ -23,6 +23,7 @@ class Kwf_Util_ClearCache
                 if ($d->getFilename() == 'searchindex') continue;
                 if ($d->getFilename() == 'fulltext') continue;
                 if ($d->getFilename() == 'scss') continue; //never clear scss, too expensive to regenerate
+                if ($d->getFilename() == 'uglifyjs') continue; //never clear uglifyjs, too expensive to regenerate
                 if ($d->getFilename() == 'media') continue; //never clear media, too expensive to regenerate
                 if ($d->getFilename() == 'mediameta') continue; //never clear mediameta, too expensive to regenerate
                 $ret[] = $d->getFilename();
@@ -109,14 +110,7 @@ class Kwf_Util_ClearCache
 
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            $types[] = new Kwf_Util_ClearCache_Types_ComponentSettings();
-        }
-        $types[] = new Kwf_Util_ClearCache_Types_Trl();
         $types[] = new Kwf_Util_ClearCache_Types_Assets();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            $types[] = new Kwf_Util_ClearCache_Types_Events();
-        }
 
         try {
             $db = Kwf_Registry::get('db');

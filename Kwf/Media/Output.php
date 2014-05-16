@@ -100,7 +100,7 @@ class Kwf_Media_Output
             $ret['headers'][] = 'Pragma:';
         }
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
-                $headers['If-Modified-Since'] == $lastModifiedString) {
+                $file['mtime'] <= strtotime($headers['If-Modified-Since'])) {
             $ret['responseCode'] = 304;
             $ret['contentLength'] = 0;
             if (php_sapi_name() == 'cgi-fcgi') {

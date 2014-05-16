@@ -22,10 +22,10 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
 
     public function getContents($language)
     {
-        return file_get_contents($this->getFileName());
+        return file_get_contents($this->getAbsoluteFileName());
     }
 
-    public function getFileName()
+    public function getAbsoluteFileName()
     {
         if (isset($this->_fileNameCache)) return $this->_fileNameCache;
 
@@ -49,7 +49,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
 
     public function getMTime()
     {
-        return filemtime($this->getFileName());
+        return filemtime($this->getAbsoluteFileName());
     }
 
     public function __toString()

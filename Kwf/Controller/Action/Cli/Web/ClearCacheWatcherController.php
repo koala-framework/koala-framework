@@ -42,6 +42,8 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         if (Kwf_Cache_Simple::getBackend() == 'apc') {
             throw new Kwf_Exception_Client("clear-cache-watcher is not compatible with simple cache apc backend");
         }
+        $a = new Kwf_Util_Build_Types_Assets();
+        $a->checkRequirements();
 
         $bufferUsecs = 200*1000;
 
@@ -97,7 +99,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             }
         }
 
-        $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor --exclude 'magick|\.nfs|\.git|.*\.kate-swp|~|/cache/|/log/|/temp/|data/index|benchmarklog|querylog|eventlog' ".implode(' ', $watchPaths);
+        $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor --exclude 'magick|\.nfs|\.git|.*\.kate-swp|~|/cache/|/log/|/temp/|data/index|benchmarklog|querylog|eventlog|/build/' ".implode(' ', $watchPaths);
         echo $cmd."\n";
         $descriptorspec = array(
             1 => array("pipe", "w"),
@@ -487,8 +489,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     {
         Kwf_Component_Abstract::resetSettingsCache();
 
-        $cacheId = 'componentSettings_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
-        $settings = Kwf_Component_Settings::getAllSettingsCache()->load($cacheId);
+        $settings = Kwf_Component_Settings::_getSettingsCached();
 
         $dependenciesChanged = false;
         $generatorssChanged = false;
@@ -525,7 +526,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             $settings[$c] = $newSettings;
         }
 
-        Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
         echo "refreshed component settings cache...\n";
 
         if ($dependenciesChanged) {
@@ -556,15 +556,15 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             foreach ($newChildComponentClasses as $cmpClass) {
                 if (!in_array($cmpClass, Kwc_Abstract::getComponentClasses())) {
                     self::_loadSettingsRecursive($settings, $cmpClass);
-                    Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
                 }
             }
             $removedComponentClasses = array_diff($oldChildComponentClasses, $newChildComponentClasses);
             foreach ($removedComponentClasses as $removedCls) {
                 self::_removeSettingsRecursive($settings, $removedCls);
-                Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
             }
         }
+        file_put_contents('build/component/settings', serialize($settings));
+
         echo "cleared component settings apc cache...\n";
         self::_clearApcCache(array(
             'clearCacheSimpleStatic' => $clearCacheSimpleStatic,
@@ -665,30 +665,39 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             self::_clearAssetsAll('printcss');
             return;
         }
-        $fileName = 'cache/assets/output-cache-ids-'.$fileType;
+        $fileNames = array(
+            'cache/assets/output-cache-ids-'.$fileType,
+            'build/assets/output-cache-ids-'.$fileType,
+        );
+        foreach ($fileNames as $fileName) {
+            if (file_exists($fileName)) {
+                $cacheIds = file($fileName);
+                unlink($fileName);
+                foreach ($cacheIds as $cacheId) {
+                    $cacheId = trim($cacheId);
+                    echo $cacheId;
+                    if (Kwf_Assets_Cache::getInstance()->remove($cacheId) || Kwf_Assets_BuildCache::getInstance()->remove($cacheId)) echo " [DELETED]";
+                    if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_gzip', 'as_'.$cacheId.'_deflate'))) echo " [gzip DELETED]";
+                    echo "\n";
+                }
+            }
+        }
+
+        $fileName = 'build/assets/package-max-mtime-'.$fileType;
         if (file_exists($fileName)) {
             $cacheIds = file($fileName);
             unlink($fileName);
             foreach ($cacheIds as $cacheId) {
                 $cacheId = trim($cacheId);
                 echo $cacheId;
-                if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) echo " [DELETED]";
-                if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_gzip', 'as_'.$cacheId.'_deflate'))) echo " [gzip DELETED]";
+                if (Kwf_Assets_BuildCache::getInstance()->remove($cacheId)) echo " [DELETED]";
                 echo "\n";
             }
         }
 
-        $fileName = 'cache/assets/package-max-mtime-'.$fileType;
-        if (file_exists($fileName)) {
-            $cacheIds = file($fileName);
-            unlink($fileName);
-            foreach ($cacheIds as $cacheId) {
-                $cacheId = trim($cacheId);
-                echo $cacheId;
-                if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) echo " [DELETED]";
-                echo "\n";
-            }
-        }
+        $a = new Kwf_Util_Build_Types_Assets();
+        $a->flagAllPackagesOutdated($fileType);
+
         self::_informDuckcast($fileType);
     }
 }

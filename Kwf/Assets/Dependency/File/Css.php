@@ -14,7 +14,7 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         return $ret;
     }
 
-    public static function expandAssetVariables($contents, $section = 'web', &$mtimeFiles = array())
+    public static function getAssetVariables($section = 'web', &$mtimeFiles = array())
     {
         static $assetVariables = array();
         if (!isset($assetVariables[$section])) {
@@ -29,7 +29,13 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
                 if (strtolower($k) != $k) $assetVariables[$section][strtolower($k)] = $i;
             }
         }
-        foreach ($assetVariables[$section] as $k=>$i) {
+        return $assetVariables[$section];
+    }
+
+    public static function expandAssetVariables($contents, $section = 'web', &$mtimeFiles = array())
+    {
+        $assetVariables = self::getAssetVariables($section, $mtimeFiles);
+        foreach ($assetVariables as $k=>$i) {
             $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
             $contents = str_replace('var('.$k.')', $i, $contents);
         }
@@ -38,7 +44,7 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
 
     protected function _processContents($ret)
     {
-        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+        $pathType = $this->getType();
 
         if ($pathType == 'ext') {
             //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben

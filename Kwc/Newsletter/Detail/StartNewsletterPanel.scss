@@ -44,7 +44,7 @@
                     border: 1px solid #5B992B;
                     border-bottom: 1px solid #538C27;
                     @include box-shadow-pie(#548c29 0px 0px 8px 4px inset);
-                },
+                }
 
                 &[disabled=disabled], &[disabled] {
                     @include opacity(0.6);

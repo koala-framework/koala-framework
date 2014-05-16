@@ -46,7 +46,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         $ret = array();
         foreach ($package->getDependency()->getFilteredUniqueDependencies('text/css') as $dep) {
             if ($dep instanceof Kwf_Assets_Dependency_File) {
-                $ret = array_merge($ret, self::parseMasterStyles(file_get_contents($dep->getFileName())));
+                $ret = array_merge($ret, self::parseMasterStyles(file_get_contents($dep->getAbsoluteFileName())));
             }
         }
         Kwf_Cache_SimpleStatic::add($cacheId, $ret);

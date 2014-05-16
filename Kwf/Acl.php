@@ -291,6 +291,8 @@ class Kwf_Acl extends Zend_Acl
      */
     public function loadKwcResources()
     {
+        if (!Kwf_Registry::get('db')) return; //if we don't have a db configured yet skip kwc resources. required to be able to build assets without db
+
         if ($this->_kwcResourcesLoaded) return;
         $this->_kwcResourcesLoaded = true;
 

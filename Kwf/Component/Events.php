@@ -54,21 +54,11 @@ class Kwf_Component_Events
     public static final function getAllListeners()
     {
         if (!isset(self::$_listeners)) {
-            $cacheId = 'Kwf_Component_Events_listeners'.Kwf_Component_Data_Root::getComponentClass();
-            $feOptions = array(
-                'automatic_serialization' => true,
-                'write_control' => false,
-            );
-            $beOptions = array(
-                'cache_dir' => 'cache/events',
-            );
-            $cache = Kwf_Cache::factory('Core', 'File', $feOptions, $beOptions);
-            $listeners = $cache->load($cacheId);
-            if (!$listeners) {
-                $listeners = self::_getAllListeners();
-                $cache->save($listeners, $cacheId);
+            if (!Kwf_Component_Settings::$_rootComponentClassSet && file_exists('build/component/events')) {
+                self::$_listeners = unserialize(file_get_contents('build/component/events'));
+            } else {
+                self::$_listeners = self::_getAllListeners();
             }
-            self::$_listeners = $listeners;
         }
 
         return self::$_listeners;

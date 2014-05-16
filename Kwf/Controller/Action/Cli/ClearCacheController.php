@@ -10,7 +10,7 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
     {
         $options = array(
             'types' => $this->_getParam('type'),
-            'output' => true,
+            'output' => !$this->_getParam('silent'),
             'refresh' => true,
         );
         if ($this->_getParam('skip-other-servers')) {
@@ -20,6 +20,39 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
             $options['excludeTypes'] = $this->_getParam('exclude-type');
         }
         Kwf_Util_ClearCache::getInstance()->clearCache($options);
+
+        if (!$this->_getParam('skip-check-build') && Kwf_Config::getValue('application.id') != 'kwf') {
+            if (!file_exists('build')) {
+                echo "ERROR: build folder doesn't exist.\n";
+            } else if (file_exists('build/version.json')) {
+                $v = json_decode(file_get_contents('build/version.json'));
+                foreach ($v as $k=>$i) {
+                    if ($k == 'web') {
+                        if (!file_exists('.git')) {
+                            continue;
+                        }
+                        $git = Kwf_Util_Git::web();
+                    } else {
+                        $repoName = "$k-lib";
+                        if (!file_exists($repoName)) {
+                            echo "ERROR: can't find $k\n";
+                            continue;
+                        }
+                        if (!file_exists($repoName.'/.git')) {
+                            continue;
+                        }
+                        $git = new Kwf_Util_Git($repoName);
+                    }
+                    if (isset($i->rev)) {
+                        if ($git->revParse('HEAD') != $i->rev) {
+                            echo "ERROR: $k: build version doesn't match git revision.\n";
+                            continue;
+                        }
+                    }
+                    echo "OK: build folder is up to date for $k\n";
+                }
+            }
+        }
         exit;
     }
 

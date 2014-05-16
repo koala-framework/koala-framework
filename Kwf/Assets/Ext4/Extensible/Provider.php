@@ -8,8 +8,7 @@ class Kwf_Assets_Ext4_Extensible_Provider extends Kwf_Assets_Provider_Abstract
             if ($class != 'Extensible') {
                 $class = substr($class, 11);
             }
-            $file = Kwf_Config::getValue('path.extensible').'/src/'.str_replace('.', '/', $class).'.js';
-            if (!file_exists($file)) return null;
+            $file = 'extensible/src/'.str_replace('.', '/', $class).'.js';
             return new Kwf_Assets_Ext4_Extensible_JsDependency($file);
         }
         return null;
@@ -17,7 +16,7 @@ class Kwf_Assets_Ext4_Extensible_Provider extends Kwf_Assets_Provider_Abstract
 
     public function getDependenciesForDependency(Kwf_Assets_Dependency_Abstract $dependency)
     {
-        if ($dependency instanceof Kwf_Assets_Ext4_Extensible_JsDependency && $dependency->getFileName() == Kwf_Config::getValue('path.extensible').'/src/data/Model.js') {
+        if ($dependency instanceof Kwf_Assets_Ext4_Extensible_JsDependency && $dependency->getFileNameWithType() == 'extensible/src/data/Model.js') {
             //automatically load core dependencies
             return array(
                 Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES => array(

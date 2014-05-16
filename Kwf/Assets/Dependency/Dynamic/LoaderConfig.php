@@ -1,12 +1,11 @@
 <?php
-class Kwf_Assets_Dependency_Dynamic_LoaderConfig extends Kwf_Assets_Dependency_File
+class Kwf_Assets_Dependency_Dynamic_LoaderConfig extends Kwf_Assets_Dependency_Abstract
 {
     protected $_providerList;
 
     public function __construct(Kwf_Assets_ProviderList_Abstract $providerList)
     {
         $this->_providerList = $providerList;
-        parent::__construct(null);
     }
 
     public function getMimeType()
@@ -25,10 +24,4 @@ class Kwf_Assets_Dependency_Dynamic_LoaderConfig extends Kwf_Assets_Dependency_F
         $ret .= "window.Kwf.Loader.config = ".json_encode($config).";\n";
         return $ret;
     }
-
-    public function getFileName()
-    {
-        return null;
-    }
-
 }

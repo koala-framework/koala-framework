@@ -37,6 +37,6 @@ class Kwf_Assets_Dependency_ProviderTest extends Kwf_Test_TestCase
         $this->assertEquals(4, count($array));
 
         //foo2.js must be first
-        $this->assertContains('foo2.js', $array[0]->getFileName()); //foo2 must be first
+        $this->assertContains('foo2.js', $array[0]->getAbsoluteFileName()); //foo2 must be first
     }
 }

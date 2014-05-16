@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+# Any subsequent commands which fail will cause the shell script to exit immediately
+
+cd ~
+git clone https://github.com/nsams/libsass.git
+cd libsass
+make
+git clone https://github.com/hcatlin/sassc.git
+cd sassc
+SASS_LIBSASS_PATH=.. make
+
+cd ~
+git clone git@github.com:joyent/node.git node-src
+cd node-src
+git checkout v0.11.13
+./configure --prefix=$HOME/node
+make
+make install
+
+cd ~
+~/node/bin/npm install uglify-js

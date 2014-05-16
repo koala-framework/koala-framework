@@ -94,16 +94,16 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
         if (substr($dependencyName, 0, 4) == 'Ext4') {
             $class = substr($dependencyName, 4);
             if (substr($class, 0, 4)=='.ux.') {
-                $file = Kwf_Config::getValue('path.ext4').'/examples'.str_replace('.', '/', $class).'.js';
+                $file = '/examples'.str_replace('.', '/', $class).'.js';
             } else {
-                $file = Kwf_Config::getValue('path.ext4').'/src'.str_replace('.', '/', $class).'.js';
+                $file = '/src'.str_replace('.', '/', $class).'.js';
             }
-            if (!file_exists($file)) return null;
+            if (!file_exists(Kwf_Config::getValue('path.ext4').$file)) return null;
             if ($file == Kwf_Config::getValue('path.ext4').'/src/lang/Error.js') {
                 return new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Ext4/Error.js');
             }
 
-            return new Kwf_Assets_Ext4_JsDependency($file);
+            return new Kwf_Assets_Ext4_JsDependency('ext4'.$file);
         }
     }
 
@@ -117,7 +117,7 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
             Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES => array(),
         );
 
-        $fileContents = file_get_contents($dependency->getFileName());
+        $fileContents = file_get_contents($dependency->getAbsoluteFileName());
 
         // remove comments to avoid dependencies from docs/examples
         $fileContents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $fileContents);
@@ -129,7 +129,7 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
             foreach ($m[1] as $f) {
                 if (substr($f, -3) == '.js') {
                     $f = substr($f, 0, -3);
-                    $curFile = $dependency->getFileName();
+                    $curFile = $dependency->getAbsoluteFileName();
                     $curFile = substr($curFile, 0, strrpos($curFile, '/')+1);
 
                     while (substr($f, 0, 3) == '../') {
@@ -168,7 +168,7 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
                     }
                 }
 
-                if ($dependency->getFileName() == Kwf_Config::getValue('path.ext4').'/src/util/Offset.js') {
+                if ($dependency->getFileNameWithType() == 'ext4/src/util/Offset.js') {
                     if ($f == 'Ext4.dom.CompositeElement') {
                         $f = null;
                     }
@@ -248,11 +248,11 @@ class Kwf_Assets_Ext4_Provider extends Kwf_Assets_Provider_Abstract
             }
         }
 
-        if ($dependency->getFileName() == Kwf_Config::getValue('path.ext4').'/src/panel/Panel.js') {
+        if ($dependency->getFileNameWithType() == 'ext4/src/panel/Panel.js') {
             //$deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = new Kwf_Assets_Ext4_CssDependency('ext4/resources/ext-theme-classic-sandbox/ext-theme-classic-all.css');
             $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = new Kwf_Assets_Ext4_CssDependency('ext4/resources/ext-theme-neptune/ext-theme-neptune-all.css');
         }
-        if ($dependency->getFileName() == Kwf_Config::getValue('path.ext4').'/src/data/Model.js') {
+        if ($dependency->getFileNameWithType() == 'ext4/src/data/Model.js') {
             $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = $this->_providerList->findDependency('Ext4.data.proxy.Ajax');
         }
 
