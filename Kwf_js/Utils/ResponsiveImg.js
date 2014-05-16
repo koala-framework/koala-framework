@@ -6,7 +6,7 @@ var deferredImages = [];
 
 Kwf.Utils.ResponsiveImg = function (selector) {
     Kwf.onElementWidthChange(selector, function responsiveImg(el) {
-        if (isElementInView(el)) {
+        if (el.hasClass('loadImmediately') || isElementInView(el)) {
             if (!el.responsiveImgInitDone) {
                 initResponsiveImgEl(el);
             } else {
