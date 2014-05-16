@@ -75,12 +75,12 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
             success: function() {
                 this.fireEvent('savesuccess', this.getLoadedRecord());
                 this.load(this.getLoadedRecord());
-                if (options.success) {
+                if (options && options.success) {
                     options.success.call(options.scope || this);
                 }
             },
             failure: function() {
-                if (options.failure) {
+                if (options && options.failure) {
                     options.failure.call(options.scope || this);
                 }
             },
