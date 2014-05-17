@@ -1,0 +1,16 @@
+{
+
+    "name": "vivid-planet/koala-framework",
+    "require": {
+        "zf1/zend-db": "1.12.3",
+        "zf1/zend-config": "1.12.3",
+        "zf1/zend-cache": "1.12.3",
+        "zf1/zend-mail": "1.12.3",
+        "zf1/zend-registry": "1.12.3",
+        "zf1/zend-validate": "1.12.3",
+        "zf1/zend-session": "1.12.3",
+        "zf1/zend-controller": "1.12.3",
+        "zf1/zend-view": "1.12.3",
+        "zf1/zend-filter": "1.12.3"
+    }
+}
