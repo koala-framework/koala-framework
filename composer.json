@@ -10,7 +10,21 @@
         "zf1/zend-validate": "1.12.3",
         "zf1/zend-session": "1.12.3",
         "zf1/zend-controller": "1.12.3",
+            "zf1/zend-rest": "1.12.3",
         "zf1/zend-view": "1.12.3",
-        "zf1/zend-filter": "1.12.3"
+        "zf1/zend-filter": "1.12.3",
+        "zf1/zend-http": "1.12.3",
+        "zf1/zend-progressbar": "1.12.3",
+            "zf1/zend-text": "1.12.3",
+        "zf1/zend-log": "1.12.3",
+        "zf1/zend-acl": "1.12.3",
+        "zf1/zend-auth": "1.12.3",
+        "zf1/zend-translate": "1.12.3",
+
+        "kwf-libraries/jquery": "1.11.1",
+        "kwf-libraries/extjs": "2.3.0",
+        "kwf-libraries/tinymce": "3.5.8",
+        "kwf-libraries/swfupload": "2.2.0.1",
+        "kwf-libraries/silkicons": "1.3"
     }
 }
