@@ -15,7 +15,18 @@ class Kwf_Asset
         $type = $this->_type;
         if (!$type) {
             static $paths;
-            if (!isset($paths)) $paths = Zend_Registry::get('config')->path->toArray();
+            if (!isset($paths)) {
+                //TODO cache $paths in Kwf_Cache_SimpleStatic
+                $paths = array(
+                    'web' => '.'
+                );
+                foreach (glob("vendor/*/*") as $i) {
+                    if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
+                        $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                        $paths[$dep->pathType] = $i;
+                    }
+                }
+            }
             if (file_exists($paths['silkicons'].'/'.$icon)) {
                 $filename = $paths['silkicons'].'/'.$icon;
                 $type = 'silkicons';

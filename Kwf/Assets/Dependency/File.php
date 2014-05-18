@@ -35,7 +35,18 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     {
         if (isset($this->_fileNameCache)) return $this->_fileNameCache;
         static $paths;
-        if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
+        if (!isset($paths)) {
+            //TODO cache $paths in Kwf_Cache_SimpleStatic
+            $paths = array(
+                'web' => '.'
+            );
+            foreach (glob("vendor/*/*") as $i) {
+                if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
+                    $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                    $paths[$dep->pathType] = $i;
+                }
+            }
+        }
 
         $pathType = $this->getType();
         $f = substr($this->_fileName, strpos($this->_fileName, '/'));
@@ -44,7 +55,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         } else if (file_exists($this->_fileName)) {
             $f = $this->_fileName;
         } else {
-            throw new Kwf_Exception_NotYetImplemented();
+            throw new Kwf_Exception("Unknown path type: '$pathType'");
         }
         $this->_fileNameCache = $f;
         return $f;

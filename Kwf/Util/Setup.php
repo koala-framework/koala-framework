@@ -3,6 +3,13 @@ class Kwf_Util_Setup
 {
     private static function _getZendPath()
     {
+        $namespaces = require 'vendor/composer/autoload_namespaces.php';
+        $ret = array();
+        foreach ($namespaces as $ns=>$dirs) {
+            $ret = array_merge($ret, $dirs);
+        }
+        $ret = implode(PATH_SEPARATOR, $ret);
+        return $ret;
         if (file_exists(KWF_PATH.'/include_path')) {
             $zendPath = trim(file_get_contents(KWF_PATH.'/include_path'));
             $zendPath = str_replace(
