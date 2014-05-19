@@ -1,7 +1,8 @@
 {
-
     "name": "vivid-planet/koala-framework",
+    "type": "koala-framework",
     "require": {
+        "vivid-planet/koala-framework-installer-plugin": "dev-master",
         "zf1/zend-db": "1.12.3",
         "zf1/zend-config": "1.12.3",
         "zf1/zend-cache": "1.12.3",
@@ -25,6 +26,7 @@
         "kwf-libraries/extjs": "2.3.0",
         "kwf-libraries/tinymce": "3.5.8",
         "kwf-libraries/swfupload": "2.2.0.1",
-        "kwf-libraries/silkicons": "1.3"
+        "kwf-libraries/silkicons": "1.3",
+        "kwf-libraries/susy": "1.0.9"
     }
 }
