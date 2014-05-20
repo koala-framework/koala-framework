@@ -34,10 +34,7 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.GridBinding', {
 
     isValid: function()
     {
-        if (this.callParent(arguments)) {
-            return true;
-        }
-        return this.bindableToGridController.isValid();
+        return this.bindableToGridController.isValid() && this.callParent(arguments);
     },
 
     save: function(syncQueue)
