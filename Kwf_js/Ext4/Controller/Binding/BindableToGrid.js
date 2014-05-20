@@ -157,6 +157,11 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
         return true;
     },
 
+    isValid: function()
+    {
+        return this.bindable.isValid();
+    },
+
     isDirty: function()
     {
         return this.bindable.isDirty();
