@@ -220,6 +220,8 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         $ret = $chainedData;
         if (is_array($select)) {
             $select = new Kwf_Component_Select($select);
+        } else {
+            $select = clone $select;
         }
         foreach (array_reverse($ids) as $id) {
             $select->whereId($id);
