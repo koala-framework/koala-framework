@@ -82,10 +82,18 @@ Ext4.define('Kwf.Ext4.Controller.Binding.EditWindow', {
             return false;
         }
 
-        this.fireEvent('beforesave');
+        var row = this.bindable.getLoadedRecord();
+        if (row.phantom && this._loadedStore
+            && this._loadedStore.indexOf(row) == -1
+        ) {
+            this._loadedStore.add(row);
+        }
+
         if (this.autoSync) {
             var syncQueue = new Kwf.Ext4.Data.StoreSyncQueue();
-            syncQueue.add(this._loadedStore); //sync store first
+            if (this._loadedStore) {
+                syncQueue.add(this._loadedStore); //sync store first
+            }
             this.bindable.save(syncQueue);    //then bindables (so bindable grid is synced second)
                                               //bindable forms can still update the row as the sync is not yet started
             syncQueue.start({

@@ -9,7 +9,6 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
     gridController: null,
     editWindowController: null,
 
-    _addToStoreOnSave: false,
     constructor: function(config) {
         this.mixins.observable.constructor.call(this, config);
         this.init();
@@ -61,21 +60,11 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
                 var row = this.gridController.grid.getStore().model.create();
                 this.fireEvent('add', row);
                 this.openEditWindow(row);
-                this._addToStoreOnSave = true;
             }, this);
         }
-        this.editWindowController.on('beforesave', function() {
-            if (this._addToStoreOnSave) {
-                var row = this.editWindowController.bindable.getLoadedRecord();
-                if (row.phantom && this._addToStoreOnSave) {
-                    this.gridController.grid.getStore().add(row);
-                }
-            }
-        }, this);
     },
     openEditWindow: function(row)
     {
-        this._addToStoreOnSave = false;
         this.editWindowController.openEditWindow(row, this.gridController.grid.store);
     }
 });
