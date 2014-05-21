@@ -140,7 +140,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
         if (this.bindable.isDirty()) {
             Ext4.Msg.show({
                 title: trlKwf('Save'),
-                msg: trlKwf('Save changes?'),
+                msg: trlKwf('Do you want to save the changes?'),
                 icon: Ext4.MessageBox.QUESTION,
                 buttons: Ext4.Msg.YESNOCANCEL,
                 fn: function(btn) {
