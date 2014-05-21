@@ -90,18 +90,26 @@ Ext4.define('Kwf.Ext4.Controller.Binding.EditWindow', {
         }
 
         if (this.autoSync) {
-            var syncQueue = new Kwf.Ext4.Data.StoreSyncQueue();
             if (this._loadedStore) {
+                var syncQueue = new Kwf.Ext4.Data.StoreSyncQueue();
                 syncQueue.add(this._loadedStore); //sync store first
+                this.bindable.save(syncQueue);    //then bindables (so bindable grid is synced second)
+                                                  //bindable forms can still update the row as the sync is not yet started
+                syncQueue.start({
+                    success: function() {
+                        this.fireEvent('savesuccess');
+                    },
+                    scope: this
+                });
+            } else {
+                this.bindable.save();
+                this.bindable.getLoadedRecord().save({
+                    callback: function(records, operation, success) {
+                        if (success) this.fireEvent('savesuccess');
+                    },
+                    scope: this
+                });
             }
-            this.bindable.save(syncQueue);    //then bindables (so bindable grid is synced second)
-                                              //bindable forms can still update the row as the sync is not yet started
-            syncQueue.start({
-                success: function() {
-                    this.fireEvent('savesuccess');
-                },
-                scope: this
-            });
         } else {
             this.bindable.save();
         }
