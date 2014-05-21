@@ -115,8 +115,8 @@ Ext4.define('Kwf.Ext4.Controller.Binding.EditWindow', {
     {
         if (this.bindable.isDirty()) {
             Ext4.Msg.show({
-                title: trl('Speichern'),
-                msg: trl('Wollen Sie die Änderungen speichern?'),
+                title: trlKwf('Save'),
+                msg: trlKwf('Do you want to save the changes?'),
                 icon: Ext4.MessageBox.QUESTION,
                 buttons: Ext4.Msg.YESNOCANCEL,
                 fn: function(btn) {

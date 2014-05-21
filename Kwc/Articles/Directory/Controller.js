@@ -25,8 +25,8 @@ Kwc.Articles.Directory.TabsPanel = Ext.extend(Kwc.Directories.Item.Directory.Tab
     {
         if (this.getFilter('deleted').getParams('deleted').deleted == 1) {
             Ext.Msg.show({
-                title: trl('Wiederherstellen'),
-                msg: trl('Wollen Sie diesen Eintrag (diese Einträge) wirklich wiederherstellen?'),
+                title: trlKwf('Restore'),
+                msg: trlKwf('Do you really want to restore this entry (entries)?'),
                 buttons: Ext.Msg.YESNO,
                 scope: this,
                 fn: function(button) {
@@ -55,7 +55,7 @@ Kwc.Articles.Directory.TabsPanel = Ext.extend(Kwc.Directories.Item.Directory.Tab
 
                         params[this.store.reader.meta.id] = ids.join(';');
 
-                        this.el.mask(trl('Wiederherstellen...'));
+                        this.el.mask(trlKwf('Restoring...'));
                         Ext.Ajax.request({
                             url: this.controllerUrl+'/json-restore',
                             params: params,
