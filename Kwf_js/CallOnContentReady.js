@@ -110,7 +110,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     } else if (options.action == 'hide') {
         onActions = ['hide'];
     } else if (options.action == 'widthChange') {
-        onActions = ['widthChange'];
+        onActions = ['widthChange', 'contentReady'];
     }
 
     var html = false;
