@@ -38,7 +38,8 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         if (!isset($paths)) {
             //TODO cache $paths in Kwf_Cache_SimpleStatic
             $paths = array(
-                'web' => '.'
+                'web' => '.',
+                'webThemes' => './themes',
             );
             foreach (glob("vendor/*/*") as $i) {
                 if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
