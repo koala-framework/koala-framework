@@ -28,5 +28,11 @@
         "kwf-libraries/swfupload": "2.2.0.1",
         "kwf-libraries/silkicons": "1.3",
         "kwf-libraries/susy": "1.0.9"
+    },
+    "autoload": {
+        "psr-0": {
+            "Kwf": "./",
+            "Kwc": "./"
+        }
     }
 }
