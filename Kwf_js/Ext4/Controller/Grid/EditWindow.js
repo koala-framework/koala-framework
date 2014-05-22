@@ -4,7 +4,6 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
         observable: 'Ext.util.Observable'
     },
     uses: [ 'Kwf.Ext4.Controller.Binding.EditWindow' ],
-    autoSync: true,
 
     gridController: null,
     editWindowController: null,
