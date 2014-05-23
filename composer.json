@@ -21,7 +21,6 @@
         "zf1/zend-acl": "1.12.3",
         "zf1/zend-auth": "1.12.3",
         "zf1/zend-translate": "1.12.3",
-        "zf1/zend-uri": "1.12.3",
 
         "kwf-libraries/jquery": "1.11.1",
         "kwf-libraries/extjs": "2.3.0",
