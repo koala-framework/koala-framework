@@ -1,28 +1,6 @@
 <?php
 class Kwf_Util_Setup
 {
-    private static function _getZendPath()
-    {
-        $namespaces = require 'vendor/composer/autoload_namespaces.php';
-        $ret = array();
-        foreach ($namespaces as $ns=>$dirs) {
-            $ret = array_merge($ret, $dirs);
-        }
-        $ret = implode(PATH_SEPARATOR, $ret);
-        return $ret;
-        if (file_exists(KWF_PATH.'/include_path')) {
-            $zendPath = trim(file_get_contents(KWF_PATH.'/include_path'));
-            $zendPath = str_replace(
-                '%version%',
-                file_get_contents(KWF_PATH.'/include_path_version'),
-                $zendPath);
-
-        } else {
-            die ('zend not found');
-        }
-        return $zendPath;
-    }
-
     public static function minimalBootstrapAndGenerateFile()
     {
         if (!defined('KWF_PATH')) define('KWF_PATH', realpath(dirname(__FILE__).'/../..'));
@@ -60,17 +38,12 @@ class Kwf_Util_Setup
 
     public static function generateCode()
     {
-        $preloadIp = array(
-            '.',
-            KWF_PATH,
-            self::_getZendPath()
-        );
-        if (defined('VKWF_PATH')) $preloadIp[] = VKWF_PATH;
-        $preloadIp[] = 'cache/generated';
-        foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
-            if ($p) $preloadIp[] = $p;
+        $preloadIncludePaths = array();
+        $namespaces = require 'vendor/composer/autoload_namespaces.php';
+        $ret = array();
+        foreach ($namespaces as $ns=>$dirs) {
+            $preloadIncludePaths = array_merge($preloadIncludePaths, $dirs);
         }
-        $preloadIp = array_unique($preloadIp);
 
         $ret = "<?php\n";
 
@@ -80,7 +53,7 @@ class Kwf_Util_Setup
             'Kwf_Debug',
         );
         $ret .= "if (!class_exists('Kwf_Loader', false)) {\n";
-        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIp);
+        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIncludePaths);
         $ret .= "}\n";
 
         $ret .= "Kwf_Benchmark::\$startTime = microtime(true);\n";
@@ -200,7 +173,7 @@ class Kwf_Util_Setup
             'Kwf_Cache_Simple',
             'Kwf_Cache_SimpleStatic',
         );
-        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIp);
+        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIncludePaths);
 
         $ret .= "    if (substr(\$requestUri, 0, 8) != '/assets/') {\n";
         $preloadClasses = array();
@@ -228,12 +201,12 @@ class Kwf_Util_Setup
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Abstract';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Default';
         }
-        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIp);
+        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIncludePaths);
         $ret .= "    } else {\n";
         $preloadClasses = array();
         $preloadClasses[] = 'Kwf_Assets_Loader';
         $preloadClasses[] = 'Kwf_Media_Output';
-        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIp);
+        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIncludePaths);
         $ret .= "    }\n";
         $ret .= "}\n";
 
