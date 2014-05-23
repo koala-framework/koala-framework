@@ -1,8 +1,6 @@
 {
     "name": "vivid-planet/koala-framework",
-    "type": "koala-framework",
     "require": {
-        "vivid-planet/koala-framework-installer-plugin": "dev-master",
         "zf1/zend-db": "1.12.3",
         "zf1/zend-config": "1.12.3",
         "zf1/zend-cache": "1.12.3",
