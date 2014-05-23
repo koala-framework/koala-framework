@@ -161,8 +161,6 @@ class Kwf_Util_Setup
             $ret .= "ini_set('display_errors', false);\n";
         }
 
-        $ret .= "date_default_timezone_set('Europe/Berlin');\n";
-
         if (function_exists('mb_internal_encoding')) {
             $ret .= "mb_internal_encoding('UTF-8');\n";
         }
