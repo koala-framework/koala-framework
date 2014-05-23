@@ -16,15 +16,19 @@ class Kwf_Asset
         if (!$type) {
             static $paths;
             if (!isset($paths)) {
-                //TODO cache $paths in Kwf_Cache_SimpleStatic
-                $paths = array(
-                    'web' => '.'
-                );
-                foreach (glob("vendor/*/*") as $i) {
-                    if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
-                        $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
-                        $paths[$dep->pathType] = $i;
+                $cacheId = 'asset-paths';
+                $paths = Kwf_Cache_SimpleStatic::fetch($cacheId);
+                if ($paths === false) {
+                    $paths = array(
+                        'web' => '.'
+                    );
+                    foreach (glob("vendor/*/*") as $i) {
+                        if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
+                            $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                            $paths[$dep->pathType] = $i;
+                        }
                     }
+                    Kwf_Cache_SimpleStatic::add($cacheId, $paths);
                 }
             }
             if (file_exists($paths['silkicons'].'/'.$icon)) {

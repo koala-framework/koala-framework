@@ -36,16 +36,20 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         if (isset($this->_fileNameCache)) return $this->_fileNameCache;
         static $paths;
         if (!isset($paths)) {
-            //TODO cache $paths in Kwf_Cache_SimpleStatic
-            $paths = array(
-                'web' => '.',
-                'webThemes' => './themes',
-            );
-            foreach (glob("vendor/*/*") as $i) {
-                if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
-                    $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
-                    $paths[$dep->pathType] = $i;
+            $cacheId = 'assets-file-paths';
+            $paths = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            if ($paths === false) {
+                $paths = array(
+                    'web' => '.',
+                    'webThemes' => './themes',
+                );
+                foreach (glob("vendor/*/*") as $i) {
+                    if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
+                        $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                        $paths[$dep->pathType] = $i;
+                    }
                 }
+                Kwf_Cache_SimpleStatic::add($cacheId, $paths);
             }
         }
 

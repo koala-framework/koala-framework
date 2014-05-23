@@ -8,19 +8,29 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
             $providers[] = new Kwf_Assets_Provider_Components(Kwf_Component_Data_Root::getComponentClass());
         }
         $providers[] = new Kwf_Assets_Provider_Ini('dependencies.ini');
-//         if (defined('VKWF_PATH')) $providers[] = new Kwf_Assets_Provider_Ini(VKWF_PATH.'/dependencies.ini');
-//         $providers[] = new Kwf_Assets_Provider_Ini(KWF_PATH.'/dependencies.ini');
 
-        //TODO cache in Kwf_Cache_SimpleStatic?, share with Kwf_Assets_ProviderList_Maintenance
-        foreach (glob("vendor/*/*") as $i) {
-            if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
-                $config = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
-                if ($config->provider == 'Kwf_Assets_Provider_Ini') {
-                    $providers[] = new Kwf_Assets_Provider_Ini($i.'/dependencies.ini');
-                } else if ($config->provider) {
-                    throw new Kwf_Exception("Unknown dependencies provider: '{$config->provider}'");
+        $cacheId = 'assets-vendor-providers';
+        $cachedProviders = Kwf_Cache_SimpleStatic::fetch($cacheId);
+        if ($cachedProviders === false) {
+            $cachedProviders = array();
+            foreach (glob("vendor/*/*") as $i) {
+                if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
+                    $config = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                    if ($config->provider == 'Kwf_Assets_Provider_Ini') {
+                        $cachedProviders[] = array(
+                            'cls' => 'Kwf_Assets_Provider_Ini',
+                            'file' => $i.'/dependencies.ini'
+                        );
+                    } else if ($config->provider) {
+                        throw new Kwf_Exception("Unknown dependencies provider: '{$config->provider}'");
+                    }
                 }
             }
+            Kwf_Cache_SimpleStatic::add($cacheId, $cachedProviders);
+        }
+        foreach ($cachedProviders as $p) {
+            $cls = $p['cls'];
+            $providers[] = new $cls($p['file']);
         }
 
         $providers[] = new Kwf_Assets_Provider_IniNoFiles();
