@@ -23,15 +23,10 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
     {
         $fileName = $this->getFileNameWithType();
 
-        $inLibrary = false;
         $pathType = $this->getType();
-        if (substr($this->getAbsoluteFileName(), 0, strlen(Kwf_Config::getValue('libraryPath'))) == Kwf_Config::getValue('libraryPath')) {
-            $inLibrary = true;
-            $buildFile = Kwf_Config::getValue('libraryPath')."/build/uglifyjs/".substr($this->getAbsoluteFileName(), strlen(Kwf_Config::getValue('libraryPath'))+1);
-        } else {
-            $buildFile = "cache/uglifyjs/".$fileName;
-        }
-        if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
+        $useTrl = !in_array($pathType, array('ext', 'ext4', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
+        $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$fileName.'.'.md5(file_get_contents($this->getAbsoluteFileName()));
+        if (!file_exists("$buildFile.min.js")) {
 
             $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
             if (!file_exists($dir)) mkdir($dir, 0777, true);
@@ -74,17 +69,15 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
             unset($map);
 
-            if (!$inLibrary) {
+            if ($useTrl) {
                 $trlElements = Kwf_Trl::getInstance()->parse($contents, 'js');
                 file_put_contents("$buildFile.min.js.trl", serialize($trlElements));
             }
-
-            file_put_contents("$buildFile.buildtime", filemtime($this->getAbsoluteFileName()));
         }
 
         $this->_contentsCacheSourceMap = file_get_contents("$buildFile.min.js.map.json");
         $this->_contentsCache = file_get_contents("$buildFile.min.js");
-        if (!$inLibrary) {
+        if ($useTrl) {
             $this->_parsedElementsCache = unserialize(file_get_contents("$buildFile.min.js.trl"));
         } else {
             $this->_parsedElementsCache = array();
