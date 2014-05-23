@@ -27,19 +27,14 @@ class Kwf_Util_Setup
     {
         if (!defined('KWF_PATH')) define('KWF_PATH', realpath(dirname(__FILE__).'/../..'));
 
-        //reset include path, don't use anything from php.ini
-        set_include_path('.' . PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . self::_getZendPath());
-        if (defined('VKWF_PATH')) set_include_path(get_include_path().PATH_SEPARATOR . VKWF_PATH);
-
-        require_once 'Kwf/Loader.php';
+        require_once KWF_PATH.'/Kwf/Loader.php';
         Kwf_Loader::registerAutoload();
 
-        require_once 'Kwf/Registry.php';
         Zend_Registry::setClassName('Kwf_Registry');
 
         error_reporting(E_ALL^E_STRICT);
 
-        require_once 'Kwf/Trl.php';
+        class_exists('Kwf_Trl'); //trigger autoload
 
         umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen
 
@@ -65,17 +60,17 @@ class Kwf_Util_Setup
 
     public static function generateCode()
     {
-        $ip = array(
+        $preloadIp = array(
             '.',
             KWF_PATH,
             self::_getZendPath()
         );
-        if (defined('VKWF_PATH')) $ip[] = VKWF_PATH;
-        $ip[] = 'cache/generated';
+        if (defined('VKWF_PATH')) $preloadIp[] = VKWF_PATH;
+        $preloadIp[] = 'cache/generated';
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
-            if ($p) $ip[] = $p;
+            if ($p) $preloadIp[] = $p;
         }
-        $ip = array_unique($ip);
+        $preloadIp = array_unique($preloadIp);
 
         $ret = "<?php\n";
 
@@ -85,7 +80,7 @@ class Kwf_Util_Setup
             'Kwf_Debug',
         );
         $ret .= "if (!class_exists('Kwf_Loader', false)) {\n";
-        $ret .= self::_generatePreloadClassesCode($preloadClasses, $ip);
+        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIp);
         $ret .= "}\n";
 
         $ret .= "Kwf_Benchmark::\$startTime = microtime(true);\n";
@@ -109,6 +104,14 @@ class Kwf_Util_Setup
 
         $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".KWF_PATH."');\n";
 
+        $ip = array(
+            '.',
+        );
+        $ip[] = 'cache/generated';
+        foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
+            if ($p) $ip[] = $p;
+        }
+        $ip = array_unique($ip);
         $ret .= "Kwf_Loader::setIncludePath('".implode(PATH_SEPARATOR, $ip)."');\n";
         $ret .= "\n";
         $ret .= "\n";
@@ -126,23 +129,6 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
         $ret .= "\n";
-        $ret .= "//here to be as fast as possible (and have no session)\n";
-        $ret .= "if (\$requestUri == '/kwf/json-progress-status'\n";
-        $ret .= ") {\n";
-        $ret .= "    require_once('Kwf/Util/ProgressBar/DispatchStatus.php');\n";
-        $ret .= "    Kwf_Util_ProgressBar_DispatchStatus::dispatch();\n";
-        $ret .= "}\n";
-        $ret .= "\n";
-        $ret .= "//here to have less dependencies\n";
-        $ret .= "if (\$requestUri == '/kwf/check-config'\n";
-        $ret .= ") {\n";
-        $ret .= "    require_once('Kwf/Util/Check/Config.php');\n";
-        $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
-        $ret .= "}\n";
-        $ret .= "if (php_sapi_name() == 'cli' && isset(\$_SERVER['argv'][1]) && \$_SERVER['argv'][1] == 'check-config') {\n";
-        $ret .= "    require_once('Kwf/Util/Check/Config.php');\n";
-        $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
-        $ret .= "}\n";
 
         if (Kwf_Config::getValue('debug.benchmark') || Kwf_Config::getValue('debug.benchmarklog')) {
             //vor registerAutoload aufrufen damit wir dort benchmarken können
@@ -156,6 +142,22 @@ class Kwf_Util_Setup
         }
 
         $ret .= "Kwf_Loader::registerAutoload();\n";
+        $ret .= "\n";
+
+        $ret .= "//here to be as fast as possible (and have no session)\n";
+        $ret .= "if (\$requestUri == '/kwf/json-progress-status'\n";
+        $ret .= ") {\n";
+        $ret .= "    Kwf_Util_ProgressBar_DispatchStatus::dispatch();\n";
+        $ret .= "}\n";
+        $ret .= "\n";
+        $ret .= "//here to have less dependencies\n";
+        $ret .= "if (\$requestUri == '/kwf/check-config'\n";
+        $ret .= ") {\n";
+        $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
+        $ret .= "}\n";
+        $ret .= "if (php_sapi_name() == 'cli' && isset(\$_SERVER['argv'][1]) && \$_SERVER['argv'][1] == 'check-config') {\n";
+        $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
+        $ret .= "}\n";
 
         $ret .= "\$ml = ini_get('memory_limit');\n";
         $ret .= "if (strtoupper(substr(\$ml, -1)) == 'M') {\n";
@@ -198,7 +200,7 @@ class Kwf_Util_Setup
             'Kwf_Cache_Simple',
             'Kwf_Cache_SimpleStatic',
         );
-        $ret .= self::_generatePreloadClassesCode($preloadClasses, $ip);
+        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIp);
 
         $ret .= "    if (substr(\$requestUri, 0, 8) != '/assets/') {\n";
         $preloadClasses = array();
@@ -226,12 +228,12 @@ class Kwf_Util_Setup
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Abstract';
             $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Default';
         }
-        $ret .= self::_generatePreloadClassesCode($preloadClasses, $ip);
+        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIp);
         $ret .= "    } else {\n";
         $preloadClasses = array();
         $preloadClasses[] = 'Kwf_Assets_Loader';
         $preloadClasses[] = 'Kwf_Media_Output';
-        $ret .= self::_generatePreloadClassesCode($preloadClasses, $ip);
+        $ret .= self::_generatePreloadClassesCode($preloadClasses, $preloadIp);
         $ret .= "    }\n";
         $ret .= "}\n";
 

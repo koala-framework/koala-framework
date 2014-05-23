@@ -1,7 +1,4 @@
 <?php
-
-require_once 'Zend/Auth/Adapter/Interface.php';
-
 class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
 {
     protected $_identity = null;

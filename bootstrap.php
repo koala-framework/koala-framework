@@ -2,7 +2,7 @@
 chdir(dirname(__FILE__).'/tests');
 set_include_path('.'.PATH_SEPARATOR.realpath(getcwd().'/..'));
 
-require_once 'Kwf/Setup.php';
+require 'Kwf/Setup.php';
 Kwf_Setup::setUp();
 
 if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == '/') {

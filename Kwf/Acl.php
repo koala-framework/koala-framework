@@ -528,14 +528,12 @@ class Kwf_Acl extends Zend_Acl
         }
 
         if (!$resource instanceof Zend_Acl_Resource_Interface) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception('addResource() expects $resource to be of type Zend_Acl_Resource_Interface');
         }
 
         $resourceId = $resource->getResourceId();
 
         if (!$this->has($resourceId)) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception("Resource id '$resourceId' doesn't exists in the ACL");
         }
 
@@ -556,7 +554,6 @@ class Kwf_Acl extends Zend_Acl
                 }
                 $resourceParent = $this->get($resourceParentId);
             } catch (Zend_Acl_Exception $e) {
-                require_once 'Zend/Acl/Exception.php';
                 throw new Zend_Acl_Exception("Parent Resource id '$resourceParentId' does not exist", 0, $e);
             }
             $this->_resources[$resourceParentId]['children'][$resourceId] = $resource;

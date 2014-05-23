@@ -129,7 +129,7 @@ class Kwf_Assets_Dispatcher
 
     static private function _buildOutputForUrl($url)
     {
-        require_once 'Kwf/Trl.php'; //required because setup doesn't load Trl.php before dispatching assets
+        class_exists('Kwf_Trl'); //required because setup doesn't load Trl.php before dispatching assets
         $param = explode('/', $url);
         $dependencyClass = $param[0];
         $dependencyParams = $param[1];

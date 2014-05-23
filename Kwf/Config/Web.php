@@ -1,6 +1,4 @@
 <?php
-require_once 'Kwf/Config/Ini.php';
-
 class Kwf_Config_Web extends Kwf_Config_Ini
 {
     private $_section;
@@ -10,19 +8,16 @@ class Kwf_Config_Web extends Kwf_Config_Ini
     public static function getInstance($section = null)
     {
         if (!$section) {
-            require_once str_replace('_', '/', Kwf_Setup::$configClass).'.php';
             $section = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         }
         if (!isset(self::$_instances[$section])) {
             $cacheId = 'config_'.str_replace('-', '_', $section);
             $configClass = Kwf_Setup::$configClass;
-            require_once str_replace('_', '/', $configClass).'.php';
             if (extension_loaded('apc')) {
                 $apcCacheId = $cacheId.getcwd();
                 $ret = apc_fetch($apcCacheId);
                 if (!$ret) {
                     //two level cache
-                    require_once 'Kwf/Config/Cache.php';
                     $cache = Kwf_Config_Cache::getInstance();
                     $ret = $cache->load($cacheId);
                     if ($ret) {
@@ -42,7 +37,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                     apc_add($apcCacheId.'mtime', $cache->test($cacheId));
                 }
             } else {
-                require_once 'Kwf/Config/Cache.php';
                 $cache = Kwf_Config_Cache::getInstance();
                 if(!$ret = $cache->load($cacheId)) {
                     $ret = new $configClass($section);
@@ -83,7 +77,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
             $cacheId .= getcwd();
             return apc_fetch($cacheId.'mtime');
         } else {
-            require_once 'Kwf/Config/Cache.php';
             $cache = Kwf_Config_Cache::getInstance();
             return $cache->test('config_'.str_replace('-', '_', $section));
         }
@@ -116,7 +109,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
         $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
         $kwfSection = $this->_getKwfSection($section, $webPath, $kwfPath);
         if (!$kwfSection) {
-            require_once 'Kwf/Exception.php';
             throw new Kwf_Exception("Add either '$section' to kwf/config.ini or set kwfConfigSection in web config.ini");
         }
 
@@ -131,7 +123,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
             if (preg_match('#(.*)/zend/%version%$#', $p, $m)) {
                 $this->libraryPath = $m[1];
             } else {
-                require_once 'Kwf/Exception.php';
                 throw new Kwf_Exception("Can't detect libraryPath");
             }
         }

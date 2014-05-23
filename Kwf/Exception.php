@@ -1,5 +1,4 @@
 <?php
-require_once 'Kwf/Exception/NoLog.php';
 class Kwf_Exception extends Kwf_Exception_NoLog
 {
     /**

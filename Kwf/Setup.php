@@ -1,13 +1,12 @@
 <?php
-
 //instanceof operator geht für strings ned korrekt, von php.net gfladad
 function is_instance_of($sub, $super)
 {
     $sub = is_object($sub) ? get_class($sub) : (string)$sub;
     $sub = strpos($sub, '.') ? substr($sub, 0, strpos($sub, '.')) : $sub;
     $super = is_object($super) ? get_class($super) : (string)$super;
-    Zend_Loader::loadClass($sub);
-    Zend_Loader::loadClass($super);
+//     Zend_Loader::loadClass($sub);
+//     Zend_Loader::loadClass($super);
 
     switch(true)
     {
@@ -31,12 +30,12 @@ class Kwf_Setup
         error_reporting(E_ALL & ~E_STRICT);
         define('APP_PATH', getcwd());
         Kwf_Setup::$configClass = $configClass;
-        if (!@include('./cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
-            if (!file_exists('cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
+        if (!include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
+            if (!file_exists(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
                 require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
                 Kwf_Util_Setup::minimalBootstrapAndGenerateFile();
             }
-            include('cache/setup'.self::CACHE_SETUP_VERSION.'.php');
+            include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php');
         }
         if (!defined('VKWF_PATH') && php_sapi_name() != 'cli' && self::getBaseUrl() === null) {
             //if server.baseUrl is not set try to auto detect it and generate config.local.ini accordingly

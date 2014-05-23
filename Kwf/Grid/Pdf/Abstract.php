@@ -1,6 +1,4 @@
 <?php
-require_once 'tcpdf.php';
-
 abstract class Kwf_Grid_Pdf_Abstract extends Kwf_Pdf_TcPdf
 {
 

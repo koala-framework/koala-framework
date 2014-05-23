@@ -8,7 +8,6 @@ class Kwf_Registry extends Zend_Registry
             $this->offsetSet('db', $v);
             return $v;
         } else if ($index == 'config' && !parent::offsetExists($index)) {
-            require_once 'Kwf/Config/Web.php';
             $v = Kwf_Config_Web::getInstance();
             $this->offsetSet('config', $v);
             return $v;

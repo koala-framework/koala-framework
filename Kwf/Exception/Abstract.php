@@ -51,7 +51,7 @@ abstract class Kwf_Exception_Abstract extends Exception
                 exit(1);
             }
 
-            require_once 'Kwf/Trl.php';
+            class_exists('Kwf_Trl'); //eventually trigger autoloader
             $view = Kwf_Debug::getView();
             $view->exception = $msg;
             $view->message = $exception->getMessage();
