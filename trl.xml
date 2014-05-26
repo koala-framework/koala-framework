@@ -9643,8 +9643,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Va rugam introduceti in ambele campuri parola dorita pentru contul de utilizator.</ro>
 </text>
 <text>
-<en>Do you have any questions, wishes or suggestions about this product?Send us your feedback!</en>
-<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt?Senden Sie uns dazu Ihr Feedback!</de>
+<en>Do you have any questions, wishes or suggestions about this product? Send us your feedback!</en>
+<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt? Senden Sie uns dazu Ihr Feedback!</de>
 <id>1833</id>
 <ro>Aveti intrebari, solicitari sau sugestii legate de acest produs? Trimiteti-ne feedback-ul dumneavoastra.</ro>
 </text>
@@ -9778,7 +9778,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Column {0}, width {1}%</en>
 <id>1869</id>
-<ro>Va multumim pentru solicitare. O vom procesa in cel mai scurt timp posibil.</ro>
 </text>
 <text>
 <en>2 Columns (50% - 50%)</en>
@@ -9886,13 +9885,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Nu pot fi create mai mult de {0} inregistrari.</ro>
 </text>
 <text>
-<en>save as favourite</en>
+<en>Send copy to User</en>
 <de>Sende Kopie an Benutzer</de>
 <id>1866</id>
-<ro>salveaza la Favorite</ro>
 </text>
 <text>
-<en>Column {0}, width {1}%</en>
+<en>Thank you for your inquiry, it will be processed as soon as posible.</en>
 <de>Danke für Ihre Anfrage. Wir werden uns bemühen, diese so schnell wie möglich zu bearbeiten.</de>
 <id>1869</id>
 <ro>Va multumim pentru solicitare. O vom procesa in cel mai scurt timp posibil.</ro>
