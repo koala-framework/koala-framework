@@ -109,9 +109,11 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
         var curr = this.bindable.getLoadedRecord();
         if (curr) {
             var newRow = this.gridController.grid.getStore().getById(curr.getId());
+            var selected = this.gridController.grid.getSelectionModel().isSelected(newRow);
             //A refresh that loads the current row, a new object is created.
             //Load the new row, dirty values should be kept by the bindable
-            if (newRow && newRow !== curr) {
+            if (newRow && newRow !== curr && selected) {
+                this.bindable.enable();
                 this.bindable.load(newRow);
             }
         }
