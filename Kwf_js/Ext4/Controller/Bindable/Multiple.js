@@ -6,9 +6,9 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Multiple', {
 
     init: function()
     {
-        if (this.panel && !this.panel instanceof Ext4.panel.Panel) Ext4.Error.raise('panel config needs to be a Ext.panel.Panel');
+        if (this.panel && !(this.panel instanceof Ext4.panel.Panel)) Ext4.Error.raise('panel config needs to be a Ext.panel.Panel');
         if (!this.items) Ext4.Error.raise('items config is required');
-        if (!this.items instanceof Array) Ext4.Error.raise('items config needs to be an array');
+        if (!(this.items instanceof Array)) Ext4.Error.raise('items config needs to be an array');
         if (this.items.length < 1) Ext4.Error.raise('items config length needs to be >0');
     },
 

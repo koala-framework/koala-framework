@@ -7,8 +7,8 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.GridBinding', {
     init: function()
     {
         if (!this.bindableToGridController) Ext4.Error.raise('bindableToGridController config is required');
-        if (!this.bindableToGridController instanceof Kwf.Ext4.Controller.Binding.BindableToGrid) Ext4.Error.raise('bindableToGridController config needs to be a Kwf.Ext4.Controller.Binding.BindableToGrid');
-        if (this.panel && !this.panel instanceof Ext4.panel.Panel) Ext4.Error.raise('panel config needs to be a Ext.panel.Panel');
+        if (!(this.bindableToGridController instanceof Kwf.Ext4.Controller.Binding.BindableToGrid)) Ext4.Error.raise('bindableToGridController config needs to be a Kwf.Ext4.Controller.Binding.BindableToGrid');
+        if (this.panel && !(this.panel instanceof Ext4.panel.Panel)) Ext4.Error.raise('panel config needs to be a Ext.panel.Panel');
 
         this.callParent(arguments);
         if (this.reloadRowOnSave) {

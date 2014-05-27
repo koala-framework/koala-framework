@@ -23,16 +23,16 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
         if (this.bindable) Ext4.Error.raise('bindable config doesn\'t exist anymore');
 
         if (!this.gridController) Ext4.Error.raise('gridController config is required');
-        if (!this.gridController instanceof Kwf.Ext4.Controller.Grid) Ext4.Error.raise('gridController config needs to be a Kwf.Ext4.Controller.Grid');
+        if (!(this.gridController instanceof Kwf.Ext4.Controller.Grid)) Ext4.Error.raise('gridController config needs to be a Kwf.Ext4.Controller.Grid');
 
         if (!this.editWindowController) Ext4.Error.raise('editWindowController config is required');
-        if (!this.editWindowController instanceof Kwf.Ext4.Controller.Binding.EditWindow) Ext4.Error.raise('editWindowController config needs to be a Kwf.Ext4.Controller.Binding.EditWindow');
+        if (!(this.editWindowController instanceof Kwf.Ext4.Controller.Binding.EditWindow)) Ext4.Error.raise('editWindowController config needs to be a Kwf.Ext4.Controller.Binding.EditWindow');
 
         if (!this.addButton) this.addButton = this.gridController.grid.down('button#add');
-        if (this.addButton && !this.addButton instanceof Ext4.button.Button) Ext4.Error.raise('addButton config needs to be a Ext.button.Button');
+        if (this.addButton && !(this.addButton instanceof Ext4.button.Button)) Ext4.Error.raise('addButton config needs to be a Ext.button.Button');
 
         if (!this.editActionColumn) this.editActionColumn = this.gridController.grid.down('actioncolumn#edit')
-        if (this.editActionColumn && !this.editActionColumn instanceof Ext4.button.Button) Ext4.Error.raise('editActionColumn config needs to be a Ext.grid.Column');
+        if (this.editActionColumn && !(this.editActionColumn instanceof Ext4.button.Button)) Ext4.Error.raise('editActionColumn config needs to be a Ext.grid.Column');
 
         if (this.editWindowController.deleteButton) {
             this.editWindowController.deleteButton.on('click', function() {

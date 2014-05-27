@@ -14,11 +14,11 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
     init: function()
     {
         if (!this.form) Ext4.Error.raise('form config is required');
-        if (!this.form instanceof Ext4.form.Panel) Ext4.Error.raise('form config needs to be a Ext.form.Panel');
+        if (!(this.form instanceof Ext4.form.Panel)) Ext4.Error.raise('form config needs to be a Ext.form.Panel');
 
         var form = this.form;
         if (typeof this.saveButton == 'undefined') this.saveButton = form.down('button#save');
-        if (this.saveButton && !this.saveButton instanceof Ext4.button.Button) Ext4.Error.raise('saveButton config needs to be a Ext.button.Button');
+        if (this.saveButton && !(this.saveButton instanceof Ext4.button.Button)) Ext4.Error.raise('saveButton config needs to be a Ext.button.Button');
         if (this.saveButton) {
             this.saveButton.on('click', this.validateAndSubmit, this);
         }

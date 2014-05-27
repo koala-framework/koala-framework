@@ -16,25 +16,25 @@ Ext4.define('Kwf.Ext4.Controller.Binding.EditWindow', {
     init: function()
     {
         if (!this.editWindow) Ext4.Error.raise('editWindow config is required');
-        if (!this.editWindow instanceof Ext4.window.Window) Ext4.Error.raise('editWindow config needs to be a Ext.window.Window');
+        if (!(this.editWindow instanceof Ext4.window.Window)) Ext4.Error.raise('editWindow config needs to be a Ext.window.Window');
 
         if (!this.saveButton) this.saveButton = this.editWindow.down('> toolbar > button#save');
-        if (this.saveButton && !this.saveButton instanceof Ext4.button.Button) Ext4.Error.raise('saveButton config needs to be a Ext.button.Button');
+        if (this.saveButton && !(this.saveButton instanceof Ext4.button.Button)) Ext4.Error.raise('saveButton config needs to be a Ext.button.Button');
 
         if (!this.deleteButton) this.deleteButton = this.editWindow.down('> toolbar > button#delete');
-        if (this.deleteButton && !this.deleteButton instanceof Ext4.button.Button) Ext4.Error.raise('deleteButton config needs to be a Ext.button.Button');
+        if (this.deleteButton && !(this.deleteButton instanceof Ext4.button.Button)) Ext4.Error.raise('deleteButton config needs to be a Ext.button.Button');
 
         if (!this.cancelButton) this.cancelButton = this.editWindow.down('> toolbar > button#cancel');
-        if (this.cancelButton && !this.cancelButton instanceof Ext4.button.Button) Ext4.Error.raise('cancelButton config needs to be a Ext.button.Button');
+        if (this.cancelButton && !(this.cancelButton instanceof Ext4.button.Button)) Ext4.Error.raise('cancelButton config needs to be a Ext.button.Button');
 
         if (!this.bindable) Ext4.Error.raise('bindable config is required');
-        if (!this.bindable instanceof Ext4.window.Window) Ext4.Error.raise('bindable config needs to be a Kwf.Ext4.Controller.Bindable.Abstract');
+        if (!(this.bindable instanceof Ext4.window.Window)) Ext4.Error.raise('bindable config needs to be a Kwf.Ext4.Controller.Bindable.Abstract');
 
         if (!this.form) {
             this.form = this.editWindow.down('form');
         }
         if (!this.form) Ext4.Error.raise('form config is required');
-        if (!this.form instanceof Ext4.form.Panel) Ext4.Error.raise('form config needs to be a Ext.form.Panel');
+        if (!(this.form instanceof Ext4.form.Panel)) Ext4.Error.raise('form config needs to be a Ext.form.Panel');
 
         if (this.saveButton) {
             this.saveButton.on('click', function() {
