@@ -4,7 +4,6 @@ Ext4.define('Kwf.Ext4.Controller.Binding.EditWindow', {
     },
     uses: [ 'Kwf.Ext4.Data.StoreSyncQueue' ],
     focusOnEditSelector: 'field',
-    form: null,
     editWindow: null,
     bindable: null,
 
@@ -29,12 +28,6 @@ Ext4.define('Kwf.Ext4.Controller.Binding.EditWindow', {
 
         if (!this.bindable) Ext4.Error.raise('bindable config is required');
         if (!(this.bindable instanceof Kwf.Ext4.Controller.Bindable.Abstract)) Ext4.Error.raise('bindable config needs to be a Kwf.Ext4.Controller.Bindable.Abstract');
-
-        if (!this.form) {
-            this.form = this.editWindow.down('form');
-        }
-        if (!this.form) Ext4.Error.raise('form config is required');
-        if (!(this.form instanceof Ext4.form.Panel)) Ext4.Error.raise('form config needs to be a Ext.form.Panel');
 
         if (this.saveButton) {
             this.saveButton.on('click', function() {
