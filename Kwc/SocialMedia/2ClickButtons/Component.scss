@@ -1,4 +1,16 @@
+@import "compass/utilities/general/clearfix";
+
 .cssClass {
     position: relative;
-    z-index: 36;
+    z-index: 25;
+
+    .socialShareButtons {
+        .social_share_privacy_area {
+            @include pie-clearfix;
+
+            .settings_info {
+                width: 55px;
+            }
+        }
+    }
 }
