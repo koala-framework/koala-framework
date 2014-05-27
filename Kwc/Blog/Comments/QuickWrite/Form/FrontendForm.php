@@ -11,6 +11,8 @@ class Kwc_Blog_Comments_QuickWrite_Form_FrontendForm extends Kwc_Posts_Write_For
             ->setVtype('email')
             ->setWidth(300);
         $this->fields['content']->setFieldLabel(trlKwfStatic('Comment'));
-        $this->insertAfter('content', new Kwf_Form_Field_Recaptcha('captcha', trlKwfStatic('Captcha')));
+        if (Kwf_Config::getValue('recaptcha.privateKey')) {
+            $this->insertAfter('content', new Kwf_Form_Field_Recaptcha('captcha', trlKwfStatic('Captcha')));
+        }
     }
 }
