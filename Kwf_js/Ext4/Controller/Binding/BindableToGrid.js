@@ -19,7 +19,7 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
         if (!(this.gridController instanceof Kwf.Ext4.Controller.Grid)) Ext4.Error.raise('gridController config needs to be a Kwf.Ext4.Controller.Grid');
 
         if (!this.bindable) Ext4.Error.raise('bindable config is required');
-        if (!(this.bindable instanceof Ext4.window.Window)) Ext4.Error.raise('bindable config needs to be a Kwf.Ext4.Controller.Bindable.Abstract');
+        if (!(this.bindable instanceof Kwf.Ext4.Controller.Bindable.Abstract)) Ext4.Error.raise('bindable config needs to be a Kwf.Ext4.Controller.Bindable.Abstract');
 
         var grid = this.gridController.grid;
         var bindable = this.bindable;

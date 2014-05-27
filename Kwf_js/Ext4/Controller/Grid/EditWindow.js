@@ -32,7 +32,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid.EditWindow', {
         if (this.addButton && !(this.addButton instanceof Ext4.button.Button)) Ext4.Error.raise('addButton config needs to be a Ext.button.Button');
 
         if (!this.editActionColumn) this.editActionColumn = this.gridController.grid.down('actioncolumn#edit')
-        if (this.editActionColumn && !(this.editActionColumn instanceof Ext4.button.Button)) Ext4.Error.raise('editActionColumn config needs to be a Ext.grid.Column');
+        if (this.editActionColumn && !(this.editActionColumn instanceof Ext4.grid.column.Column)) Ext4.Error.raise('editActionColumn config needs to be a Ext.grid.column.Column');
 
         if (this.editWindowController.deleteButton) {
             this.editWindowController.deleteButton.on('click', function() {
