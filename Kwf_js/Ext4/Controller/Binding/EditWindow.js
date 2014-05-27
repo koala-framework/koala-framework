@@ -28,7 +28,7 @@ Ext4.define('Kwf.Ext4.Controller.Binding.EditWindow', {
         if (this.cancelButton && !(this.cancelButton instanceof Ext4.button.Button)) Ext4.Error.raise('cancelButton config needs to be a Ext.button.Button');
 
         if (!this.bindable) Ext4.Error.raise('bindable config is required');
-        if (!(this.bindable instanceof Ext4.window.Window)) Ext4.Error.raise('bindable config needs to be a Kwf.Ext4.Controller.Bindable.Abstract');
+        if (!(this.bindable instanceof Kwf.Ext4.Controller.Bindable.Abstract)) Ext4.Error.raise('bindable config needs to be a Kwf.Ext4.Controller.Bindable.Abstract');
 
         if (!this.form) {
             this.form = this.editWindow.down('form');
