@@ -30,7 +30,7 @@ class Kwf_Setup
         error_reporting(E_ALL & ~E_STRICT);
         define('APP_PATH', getcwd());
         Kwf_Setup::$configClass = $configClass;
-        if (!include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
+        if (!@include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
             if (!file_exists(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
                 require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
                 Kwf_Util_Setup::minimalBootstrapAndGenerateFile();
