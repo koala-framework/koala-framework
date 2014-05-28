@@ -1,9 +1,17 @@
 <?php
 class Kwf_Util_Setup
 {
+    private static function _getZendPath()
+    {
+        return 'vendor/koala-framework/library-zendframework1/library';
+    }
+
     public static function minimalBootstrapAndGenerateFile()
     {
         if (!defined('KWF_PATH')) define('KWF_PATH', realpath(dirname(__FILE__).'/../..'));
+
+        //reset include path, don't use anything from php.ini
+        set_include_path('.' . PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . self::_getZendPath());
 
         require_once KWF_PATH.'/Kwf/Loader.php';
         Kwf_Loader::registerAutoload();
@@ -79,6 +87,7 @@ class Kwf_Util_Setup
 
         $ip = array(
             '.',
+            self::_getZendPath()
         );
         $ip[] = 'cache/generated';
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
