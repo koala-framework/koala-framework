@@ -42,11 +42,11 @@ class Kwf_Loader
                 $namespaces = include 'vendor/composer/autoload_namespaces.php';
             }
             $pos = strpos($class, '_');
-            $ns = substr($class, 0, $pos);
+            $ns = substr($class, 0, $pos+1);
             if (!isset($namespaces[$ns])) {
                 $pos = strpos($class, '_', $pos+1);
                 if ($pos !== false) {
-                    $ns = substr($class, 0, $pos);
+                    $ns = substr($class, 0, $pos+1);
                 } else {
                     $ns = $class;
                 }
@@ -56,6 +56,7 @@ class Kwf_Loader
             } else {
                 $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
             }
+
             try {
                 include $file;
             } catch (Exception $e) {
