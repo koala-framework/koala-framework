@@ -42,7 +42,7 @@ class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             if (!$className) {
                 return false;
             }
-            Zend_Loader::loadClass($className);
+            class_exists($className); //trigger autoloader
 
         } else {
 
