@@ -7,7 +7,7 @@ class Kwf_Assets_Util_SourceMap
     {
         $this->_map = json_decode($mapContents);
         if (!$this->_map) {
-            throw new Kwf_Exception("Failed parsing map");
+            throw new Kwf_Exception("Failed parsing map: ".json_last_error());
         }
         $this->_file = $fileContents;
     }

@@ -1,4 +1,4 @@
-Kwf.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.PastePlain = Ext2.extend(Ext2.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -12,11 +12,11 @@ Kwf.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
             handler: this.onPastePlain,
             scope: this,
             tooltip: {
-                cls: 'x-html-editor-tip',
+                cls: 'x2-html-editor-tip',
                 title: trlKwf('Insert Plain Text'),
                 text: trlKwf('Insert text without formating.')
             },
-            cls: 'x-btn-icon',
+            cls: 'x2-btn-icon',
             clickEvent: 'mousedown',
             tabIndex: -1
 
@@ -26,10 +26,10 @@ Kwf.Form.HtmlEditor.PastePlain = Ext.extend(Ext.util.Observable, {
 
     onPastePlain: function() {
         var bookmark = this.cmp.tinymceEditor.selection.getBookmark();
-        Ext.Msg.show({
+        Ext2.Msg.show({
             title : trlKwf('Insert Plain Text'),
             msg : '',
-            buttons: Ext.Msg.OKCANCEL,
+            buttons: Ext2.Msg.OKCANCEL,
             fn: function(btn, text) {
                 if (btn == 'ok') {
                     this.cmp.tinymceEditor.selection.moveToBookmark(bookmark);

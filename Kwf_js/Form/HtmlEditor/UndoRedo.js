@@ -1,4 +1,4 @@
-Kwf.Form.HtmlEditor.UndoRedo = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.UndoRedo = Ext2.extend(Ext2.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -18,11 +18,11 @@ Kwf.Form.HtmlEditor.UndoRedo = Ext.extend(Ext.util.Observable, {
             scope: this,
             icon: '/assets/silkicons/arrow_undo.png',
             tooltip: {
-                cls: 'x-html-editor-tip',
+                cls: 'x2-html-editor-tip',
                 title: trlKwf('Undo (Ctrl+Z)'),
                 text: trlKwf('Undo the last action.')
             },
-            cls: 'x-btn-icon',
+            cls: 'x2-btn-icon',
             clickEvent: 'mousedown',
             tabIndex: -1
         });
@@ -33,11 +33,11 @@ Kwf.Form.HtmlEditor.UndoRedo = Ext.extend(Ext.util.Observable, {
             scope: this,
             icon: '/assets/silkicons/arrow_redo.png',
             tooltip: {
-                cls: 'x-html-editor-tip',
+                cls: 'x2-html-editor-tip',
                 title: trlKwf('Redo'),
                 text: trlKwf('Redo the last action.')
             },
-            cls: 'x-btn-icon',
+            cls: 'x2-btn-icon',
             clickEvent: 'mousedown',
             tabIndex: -1
         });

@@ -1,4 +1,4 @@
-Ext.ns("Ext.ux");
+Ext2.ns("Ext2.ux");
 /**
  * <p>
  *  The ErrorHandler class is intended to be a simple solution for client-side
@@ -20,7 +20,7 @@ Ext.ns("Ext.ux");
  *  developer has a simple mechanism for logging all exceptions.
  * </p>
  * <pre>
- *  Ext.ux.ErrorHandler.on("error", function(ex) {
+ *  Ext2.ux.ErrorHandler.on("error", function(ex) {
  *      // send information to the browser's console
  *      // send information to server for logging or to email to the developer
  *      // alert the user with a friendly message
@@ -32,7 +32,7 @@ Ext.ns("Ext.ux");
  *  level "catch-all" exception handler:
  * </p>
  * <pre>
- *  Ext.ux.ErrorHandler.init();
+ *  Ext2.ux.ErrorHandler.init();
  * </pre>
  * <p>
  *  Unfortunately, the browser level "catch-all" exception handler is only
@@ -49,25 +49,25 @@ Ext.ns("Ext.ux");
  *      var nullObject = null;
  *      nullObject.oops = 5;
  *  } catch (ex) {
- *      Ext.ux.ErrorHandler.handleError(ex);
+ *      Ext2.ux.ErrorHandler.handleError(ex);
  *  }
  * </pre>
  * <i>This class is a singleton and cannot be created directly.</i>
- * @class Ext.ux.ErrorHandler
+ * @class Ext2.ux.ErrorHandler
  * @singleton
- * @extends Ext.util.Observable
+ * @extends Ext2.util.Observable
  * @author Harley Jones, aka <a href="http://extjs.com/forum/member.php?u=118">harley.333</a>
  * @license <a href="http://creativecommons.org/licenses/LGPL/2.1/">LGPL 2.1</a>
  * @version 0.2 (October 28, 2008)
  */
-Ext.ux.ErrorHandler = Ext.extend(Ext.util.Observable, (function() {
+Ext2.ux.ErrorHandler = Ext2.extend(Ext2.util.Observable, (function() {
     return {
         /**
          * @private
          * @constructor
          */
         constructor: function() {
-            Ext.ux.ErrorHandler.superclass.constructor.call(this);
+            Ext2.ux.ErrorHandler.superclass.constructor.call(this);
             this.addEvents(
                 /**
                  * Fires when an error has been handled.  This event is fired from the handleError method.
@@ -96,9 +96,9 @@ Ext.ux.ErrorHandler = Ext.extend(Ext.util.Observable, (function() {
         init: function () {
             // window.onerror is the browser's hook for unhandled exceptions (IE and Firefox only)
             // if another developer is already using window.onerror, let's be respectful
-            window.onerror = !window.onerror ? Ext.ux.ErrorHandler.handleError : window.onerror.createSequence(Ext.ux.ErrorHandler.handleError);
-            Ext.select("img").each(function(el, list, index) {
-                el.on("error", Ext.ux.ErrorHandler.handleError);
+            window.onerror = !window.onerror ? Ext2.ux.ErrorHandler.handleError : window.onerror.createSequence(Ext2.ux.ErrorHandler.handleError);
+            Ext2.select("img").each(function(el, list, index) {
+                el.on("error", Ext2.ux.ErrorHandler.handleError);
             });
         },
         /**
@@ -152,7 +152,7 @@ Ext.ux.ErrorHandler = Ext.extend(Ext.util.Observable, (function() {
                     ex.url = args[1].src;
                 } else {
 					ex.name = "ERR_UNKNOWN";
-					ex.message = Ext.encode(args[0]);
+					ex.message = Ext2.encode(args[0]);
                 }
                 // rebuild the stack (ignore Firefox and Opera)
                 //  arguments.callee               // the handleError method
@@ -189,6 +189,6 @@ Ext.ux.ErrorHandler = Ext.extend(Ext.util.Observable, (function() {
     }
 })());
 // the following line makes this a singleton class
-Ext.ux.ErrorHandler = new Ext.ux.ErrorHandler();
+Ext2.ux.ErrorHandler = new Ext2.ux.ErrorHandler();
 // the following line ensures that the handleError method always executes in the scope of ErrorHandler
-Ext.ux.ErrorHandler.handleError = Ext.ux.ErrorHandler.handleError.createDelegate(Ext.ux.ErrorHandler);
+Ext2.ux.ErrorHandler.handleError = Ext2.ux.ErrorHandler.handleError.createDelegate(Ext2.ux.ErrorHandler);

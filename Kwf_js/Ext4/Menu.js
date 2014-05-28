@@ -91,9 +91,9 @@ Ext4.define('Kwf.Ext4.Menu', {
         var menuItems = this._processMenus(result.menus);
         Ext4.each(menuItems, function(menuItem) {
             if (menuItem.icon && menuItem.text) {
-                menuItem.cls = 'x-btn-text-icon';
+                menuItem.cls = 'x2-btn-text-icon';
             } else if (menuItem.icon) {
-                menuItem.cls = 'x-btn-icon';
+                menuItem.cls = 'x2-btn-icon';
             }
             this.add(menuItem);
         }, this);
@@ -113,7 +113,7 @@ Ext4.define('Kwf.Ext4.Menu', {
         this.showUserMenu = new Ext4.Button({
             id: 'userMenu',
             tooltip: trlKwf('Show User Menu'),
-            cls: 'x-btn-icon',
+            cls: 'x2-btn-icon',
             icon: '/assets/silkicons/bullet_arrow_down.png',
             handler: function() {
                 if (!this.userToolbar.isVisible()) {
@@ -174,7 +174,7 @@ Ext4.define('Kwf.Ext4.Menu', {
             this.userToolbar.add({
                 id: 'currentUser',
                 text: result.fullname,
-                cls: 'x-btn-text-icon',
+                cls: 'x2-btn-text-icon',
                 icon: '/assets/silkicons/user.png',
                 disabled: !result.userId,
                 handler: function() {
@@ -194,7 +194,7 @@ Ext4.define('Kwf.Ext4.Menu', {
         */
         if (result.showLogout) {
             this.add({
-                cls: 'x-btn-icon',
+                cls: 'x2-btn-icon',
                 tooltip: trlKwf('Logout'),
                 icon: '/assets/silkicons/door_out.png',
                 handler: function() {
@@ -213,7 +213,7 @@ Ext4.define('Kwf.Ext4.Menu', {
         }
         /*
         this.userToolbar.add({
-            cls: 'x-btn-icon',
+            cls: 'x2-btn-icon',
             icon: '/assets/kwf/images/information.png',
             tooltip: trlKwf('Information'),
             handler: function() {
@@ -230,7 +230,7 @@ Ext4.define('Kwf.Ext4.Menu', {
             //single frontend urls
             this.add({
                 tooltip: trlKwf('Open frontend in a new window'),
-                cls: 'x-btn-icon',
+                cls: 'x2-btn-icon',
                 icon: '/assets/silkicons/world.png',
                 handler: function() {
                     window.open(result.frontendUrls[0].href);
@@ -243,7 +243,7 @@ Ext4.define('Kwf.Ext4.Menu', {
             result.frontendUrls.each(function(url) {
                 frontendItems.push({
                     text: url.text,
-                    cls: 'x-btn-text-icon',
+                    cls: 'x2-btn-text-icon',
                     icon: '/assets/silkicons/world.png',
                     tooltip: trlKwf('Open frontend in a new window'),
                     handler: function(options) {
@@ -255,7 +255,7 @@ Ext4.define('Kwf.Ext4.Menu', {
             }, this);
             this.add({
                 tooltip: trlKwf('Open frontend in a new window'),
-                cls: 'x-btn-icon',
+                cls: 'x2-btn-icon',
                 icon: '/assets/silkicons/world.png',
                 menu: new Ext4.menu.Menu({
                     items: frontendItems

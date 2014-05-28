@@ -84,7 +84,7 @@ function initResponsiveImgEl(el) {
             DONT_HASH_TYPE_PREFIX+width);
 
     var img = el.child('img', true);
-    Ext.fly(img).on('load', function() {
+    Ext2.fly(img).on('load', function() {
         el.removeClass('webResponsiveImgLoading');
     }, this);
     img.src = sizePath;

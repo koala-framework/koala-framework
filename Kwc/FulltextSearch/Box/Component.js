@@ -5,7 +5,7 @@ Kwf.onElementReady('.kwcFulltextSearchBox', function fulltextSearchBox(el, confi
     defer: true
 });
 
-Ext.ns('Kwc.FulltextSearch.Box');
+Ext2.ns('Kwc.FulltextSearch.Box');
 Kwc.FulltextSearch.Box.Component = function(el, config) {
     this.el = el;
     this.config = config;
@@ -37,7 +37,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
 
     if (location.pathname == config.searchUrl) {
         //we are already on search page; nothing to do
-        this.searchMainContent = Ext.select('.kwfMainContent').first();
+        this.searchMainContent = Ext2.select('.kwfMainContent').first();
         Kwf.Utils.HistoryState.currentState.searchBoxValues = this.searchForm.getValues();
         Kwf.Utils.HistoryState.currentState.searchVisible = true;
         Kwf.Utils.HistoryState.updateState();
@@ -62,7 +62,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
     }, this);
 
     Kwf.Utils.HistoryState.currentState.searchVisible = false;
-    this.previousMainContent = Ext.select('.kwfMainContent').first();
+    this.previousMainContent = Ext2.select('.kwfMainContent').first();
 };
 
 Kwc.FulltextSearch.Box.Component.prototype =
@@ -112,7 +112,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
 
     loadSearch: function(params)
     {
-        this.previousMainContent = Ext.select('.kwfMainContent').first();
+        this.previousMainContent = Ext2.select('.kwfMainContent').first();
         this.previousMainContent.enableDisplayMode('block');
         this.previousMainContent.hide();
         this.loadingContent = this.el.createChild({
@@ -125,7 +125,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
 
         var requestParams = this.searchForm.getValuesIncludingPost();
         requestParams.url = location.protocol+'//'+location.host+this.config.searchUrl;
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             params: requestParams,
             url: Kwf.getKwcRenderUrl(),
             success: function(response, options) {

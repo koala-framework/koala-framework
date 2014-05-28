@@ -173,7 +173,7 @@ class Kwf_Assets_Package
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if ($c = $i->getContentsPacked($language)) {
-                    //$ret .= "/* *** $i */\n";
+                    // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
                     if (strpos($c, "//@ sourceMappingURL=") !== false && strpos($c, "//# sourceMappingURL=") !== false) {
                         throw new Kwf_Exception("contents must not contain sourceMappingURL");
                     }
@@ -185,14 +185,12 @@ class Kwf_Assets_Package
                 $maxMTime = max($maxMTime, $mTime);
             }
         }
-
         if ($mimeType == 'text/javascript') {
             $ret = str_replace(
                 '{$application.assetsVersion}',
                 Kwf_Assets_Dispatcher::getAssetsVersion(),
                 $ret);
         }
-
 
         if ($includeSourceMapComment) {
             if ($mimeType == 'text/javascript') $ext = 'js';

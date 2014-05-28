@@ -1,5 +1,5 @@
-Ext.namespace("Kwc.List.Carousel");
-Kwc.List.Carousel.NextPreviousLinks = Ext.extend(Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks, {
+Ext2.namespace("Kwc.List.Carousel");
+Kwc.List.Carousel.NextPreviousLinks = Ext2.extend(Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks, {
     onPrevious: function() {
         if (!this.list.getActiveChangeLocked()) {
             Kwc.List.Carousel.NextPreviousLinks.superclass.onPrevious.apply(this, arguments);

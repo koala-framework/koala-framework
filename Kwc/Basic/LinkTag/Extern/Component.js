@@ -1,6 +1,6 @@
 Kwf.onElementReady('a', function linkExtern(lnk) {
         var rels = lnk.dom.rel.split(' ');
-        Ext.each(rels, function(rel) {
+        Ext2.each(rels, function(rel) {
             if (rel.match(/^popup/)) {
                 var relProperties = rel.split('_');
                 lnk.addClass('webLinkPopup');
@@ -16,7 +16,7 @@ Kwf.onElementReady('a', function linkExtern(lnk) {
                     if (el.kwfOpenWindow) {
                         el.kwfOpenWindow();
                     } else {
-                        Ext.fly(el).up('a').dom.kwfOpenWindow();
+                        Ext2.fly(el).up('a').dom.kwfOpenWindow();
                     }
                 });
             }

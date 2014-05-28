@@ -1,4 +1,4 @@
-Kwc.Abstract.Image.ImageFile = Ext.extend(Kwf.Form.File, {
+Kwc.Abstract.Image.ImageFile = Ext2.extend(Kwf.Form.File, {
 
     _completeValue: null,
 
@@ -27,4 +27,4 @@ Kwc.Abstract.Image.ImageFile = Ext.extend(Kwf.Form.File, {
     }
 });
 
-Ext.reg('kwc.imagefile', Kwc.Abstract.Image.ImageFile);
+Ext2.reg('kwc.imagefile', Kwc.Abstract.Image.ImageFile);

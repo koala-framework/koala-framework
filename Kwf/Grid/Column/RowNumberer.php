@@ -12,7 +12,7 @@ class Kwf_Grid_Column_RowNumberer extends Kwf_Grid_Column
     {
         $ret = array(
             'header' => $this->getHeader(),
-            'class' => 'Ext.grid.RowNumberer',
+            'class' => 'Ext2.grid.RowNumberer',
             'config' => array(
                 'width' => $this->getWidth()
             )

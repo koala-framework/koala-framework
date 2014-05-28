@@ -46,9 +46,9 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
     {
         $pathType = $this->getType();
 
-        if ($pathType == 'ext') {
+        if ($pathType == 'ext2') {
             //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
-            $ret = str_replace('../images/', '/assets/ext/resources/images/', $ret);
+            $ret = str_replace('../images/', '/assets/ext2/resources/images/', $ret);
         } else if ($pathType == 'mediaelement') {
             //hack to get the correct paths for the mediaelement pictures
             $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);

@@ -1,11 +1,11 @@
-Ext.namespace("Kwf.EyeCandy.List");
+Ext2.namespace("Kwf.EyeCandy.List");
 
 Kwf.EyeCandy.List.Item = function(cfg) {
-    Ext.apply(this, cfg);
+    Ext2.apply(this, cfg);
     this._init();
 };
 
-Ext.extend(Kwf.EyeCandy.List.Item, Ext.util.Observable, {
+Ext2.extend(Kwf.EyeCandy.List.Item, Ext2.util.Observable, {
     //list
     //listIndex
     //el
@@ -24,7 +24,7 @@ Ext.extend(Kwf.EyeCandy.List.Item, Ext.util.Observable, {
         Kwf.Event.on(this.el, 'mouseLeave', function() {
             this.fireEvent('mouseLeave', this);
         }, this);
-        Ext.fly(this.el).on('click', function(ev) {
+        Ext2.fly(this.el).on('click', function(ev) {
             this.fireEvent('click', this, ev);
         }, this);
     },

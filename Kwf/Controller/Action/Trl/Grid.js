@@ -1,6 +1,6 @@
-Ext.namespace('Kwf.Trl');
+Ext2.namespace('Kwf.Trl');
 
-Kwf.Trl.Grid = Ext.extend(Kwf.Auto.GridPanel, {
+Kwf.Trl.Grid = Ext2.extend(Kwf.Auto.GridPanel, {
     initComponent : function()
     {
         Kwf.Trl.Grid.superclass.initComponent.call(this);

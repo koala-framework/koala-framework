@@ -1,17 +1,17 @@
-Ext.namespace('Kwf.User.Activate');
+Ext2.namespace('Kwf.User.Activate');
 
-Kwf.User.Activate.Index = Ext.extend(Ext.Panel,
+Kwf.User.Activate.Index = Ext2.extend(Ext2.Panel,
 {
     initComponent: function() {
         Kwf.User.Activate.Index.superclass.initComponent.call(this);
         if (this.errorMsg != '') {
-            Ext.Msg.show({
+            Ext2.Msg.show({
                 title: trlKwf('Error'),
                 msg: this.errorMsg,
-                buttons: Ext.Msg.OK
+                buttons: Ext2.Msg.OK
             });
         } else {
-            dlg = new Ext.Window({
+            dlg = new Ext2.Window({
                 layout: 'form',
                 modal: true,
                 labelWidth: 130,
@@ -49,13 +49,13 @@ Kwf.User.Activate.Index = Ext.extend(Ext.Panel,
         var password = document.getElementsByName('password1')[0].value;
 
         if (password != document.getElementsByName('password2')[0].value) {
-            Ext.Msg.show({
+            Ext2.Msg.show({
                 title: trlKwf('Passwords not equal'),
                 msg: trlKwf('The repeated password is different - please try again.'),
-                buttons: Ext.Msg.OK
+                buttons: Ext2.Msg.OK
             });
         } else {
-            Ext.Ajax.request({
+            Ext2.Ajax.request({
                 url: '/kwf/user/login/json-activate',
                 params: { userId: this.userId, code: this.code, password: password },
                 success: function(response, options, result) {

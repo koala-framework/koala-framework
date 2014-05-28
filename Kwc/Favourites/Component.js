@@ -1,17 +1,17 @@
 Kwf.onContentReady(function(el) {
-    Ext.query('.kwcFavourites', el).each(function(el) {
+    Ext2.query('.kwcFavourites', el).each(function(el) {
         if (el.initDone) return;
         el.initDone = true;
-        el = Ext.get(el);
+        el = Ext2.get(el);
         var switchContent = el.child('.switchContent');
-        var config = Ext.decode(el.child('input').dom.value);
+        var config = Ext2.decode(el.child('input').dom.value);
         el.hasClass('isFavourite') ? switchContent.update(config.deleteFavourite) : switchContent.update(config.saveFavourite);
         el.child('a').on('click', function(ev) {
             ev.stopEvent();
             el.toggleClass('isFavourite');
             el.hasClass('isFavourite') ? switchContent.update(config.deleteFavourite) : switchContent.update(config.saveFavourite);
             el.addClass('loading');
-            Ext.Ajax.request({
+            Ext2.Ajax.request({
                 url: config.controllerUrl+'/json-favourite',
                 params: {
                     componentId: config.componentId,

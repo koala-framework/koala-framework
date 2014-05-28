@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Newsletter');
-Kwc.Newsletter.Panel = Ext.extend(Kwc.Directories.Item.Directory.Panel,
+Ext2.namespace('Kwc.Newsletter');
+Kwc.Newsletter.Panel = Ext2.extend(Kwc.Directories.Item.Directory.Panel,
 {
     initComponent: function()
     {
@@ -10,7 +10,7 @@ Kwc.Newsletter.Panel = Ext.extend(Kwc.Directories.Item.Directory.Panel,
     onAdd : function()
     {
         this.el.mask(trlKwf('Adding...'));
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl+'/json-insert',
             params: this.getBaseParams(),
             success: function(response, options, r) {
@@ -24,4 +24,4 @@ Kwc.Newsletter.Panel = Ext.extend(Kwc.Directories.Item.Directory.Panel,
         this.fireEvent('addaction', this);
     }
 });
-Ext.reg('kwc.newsletter', Kwc.Newsletter.Panel);
+Ext2.reg('kwc.newsletter', Kwc.Newsletter.Panel);

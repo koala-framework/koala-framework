@@ -1,7 +1,7 @@
 Kwf.Form.HtmlEditor.Styles = function(config) {
-    Ext.apply(this, config);
+    Ext2.apply(this, config);
 
-    this.editStyles = new Ext.Action({
+    this.editStyles = new Ext2.Action({
         testId: 'editStyles',
         icon: '/assets/silkicons/style_edit.png',
         handler: function() {
@@ -9,22 +9,22 @@ Kwf.Form.HtmlEditor.Styles = function(config) {
         },
         scope: this,
         tooltip: {
-            cls: 'x-html-editor-tip',
+            cls: 'x2-html-editor-tip',
             title: trlKwf('Edit Styles'),
             text: trlKwf('Modify and Create Styles.')
         },
-        cls: 'x-btn-icon',
+        cls: 'x2-btn-icon',
         clickEvent: 'mousedown',
         tabIndex: -1
     });
 
     if (this.stylesEditorConfig) {
-        this.stylesEditorDialog = Ext.ComponentMgr.create(this.stylesEditorConfig);
+        this.stylesEditorDialog = Ext2.ComponentMgr.create(this.stylesEditorConfig);
         this.stylesEditorDialog.on('hide', this._reloadStyles, this);
     }
 };
 
-Ext.extend(Kwf.Form.HtmlEditor.Styles, Ext.util.Observable, {
+Ext2.extend(Kwf.Form.HtmlEditor.Styles, Ext2.util.Observable, {
     stylesIdPattern: null,
     init: function(cmp){
         this.cmp = cmp;
@@ -144,7 +144,7 @@ Ext.extend(Kwf.Form.HtmlEditor.Styles, Ext.util.Observable, {
         };
         reloadCss.call(this, document);
         if (this.cmp.doc) reloadCss.call(this, this.cmp.doc);
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             params: {
                 componentId: this.cmp.componentId
             },
@@ -180,10 +180,10 @@ Ext.extend(Kwf.Form.HtmlEditor.Styles, Ext.util.Observable, {
                 editable: false,
                 triggerAction: 'all',
                 forceSelection: true,
-                tpl: '<tpl for="."><div class="x-combo-list-item webStandard kwcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
+                tpl: '<tpl for="."><div class="x2-combo-list-item webStandard kwcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
                 mode: 'local',
                 width: 150,
-                store: new Ext.data.JsonStore({
+                store: new Ext2.data.JsonStore({
                     autoDestroy: true,
                     fields: ['id', 'name', 'tagName', 'className'],
                     data: this.filterStylesByType(type)

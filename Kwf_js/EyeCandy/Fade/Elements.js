@@ -207,8 +207,8 @@ Kwf.Fade.Elements.prototype = {
                         });
                         this._isAnimating = false;
 
-                        Kwf.fireComponentEvent('componentSlideOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
-                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideOut', Ext2.get(activeEl.parent().get(0)), Ext2.get(activeEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                     }, this));
                 } else {
                     activeEl.animate({
@@ -218,14 +218,14 @@ Kwf.Fade.Elements.prototype = {
                             left: 0,
                             zIndex: 0
                         });
-                        Kwf.fireComponentEvent('componentSlideOut', Ext.get($(this).parent().get(0)), Ext.get(this));
+                        Kwf.fireComponentEvent('componentSlideOut', Ext2.get($(this).parent().get(0)), Ext2.get(this));
                     });
                     nextEl.animate({
                         left: 0
                     }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         nextEl.css('left', '0px');
                         this._isAnimating = false;
-                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                     }, this));
                 }
             } else if (dir == 't' || dir == 'b') {
@@ -245,8 +245,8 @@ Kwf.Fade.Elements.prototype = {
                         });
                         this._isAnimating = false;
 
-                        Kwf.fireComponentEvent('componentSlideOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
-                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideOut', Ext2.get(activeEl.parent().get(0)), Ext2.get(activeEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                     }, this));
                 } else {
                     activeEl.animate({
@@ -256,14 +256,14 @@ Kwf.Fade.Elements.prototype = {
                             top: 0,
                             zIndex: 0
                         });
-                        Kwf.fireComponentEvent('componentSlideOut', Ext.get($(this).parent().get(0)), Ext.get(this));
+                        Kwf.fireComponentEvent('componentSlideOut', Ext2.get($(this).parent().get(0)), Ext2.get(this));
                     });
                     nextEl.animate({
                         top: '+='+height
                     }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         nextEl.css('top', '0px');
                         this._isAnimating = false;
-                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                     }, this));
                 }
             }
@@ -274,23 +274,23 @@ Kwf.Fade.Elements.prototype = {
             });
             if ($.support.transition || $.support.transform) {
                 activeEl.transition({ opacity: 0 }, this.fadeDuration * 500, this.easingFadeOut, $.proxy(function() {
-                    Kwf.fireComponentEvent('componentFadeOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
+                    Kwf.fireComponentEvent('componentFadeOut', Ext2.get(activeEl.parent().get(0)), Ext2.get(activeEl.get(0)));
                 }, this));
                 nextEl.transition({ opacity: 1 }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                     nextEl.css({zIndex: 10});
                     activeEl.css({zIndex: 0});
                     this._isAnimating = false;
-                    Kwf.fireComponentEvent('componentFadeIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                    Kwf.fireComponentEvent('componentFadeIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                 }, this));
             } else {
                 activeEl.fadeTo(this.fadeDuration * 500, 0, this.easingFadeOut, $.proxy(function() {
-                    Kwf.fireComponentEvent('componentFadeOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
+                    Kwf.fireComponentEvent('componentFadeOut', Ext2.get(activeEl.parent().get(0)), Ext2.get(activeEl.get(0)));
                 }, this));
                 nextEl.fadeTo(this.fadeDuration * 1000, 1, this.easingFadeIn, $.proxy(function() {
                     nextEl.css({zIndex: 10});
                     activeEl.css({zIndex: 0});
                     this._isAnimating = false;
-                    Kwf.fireComponentEvent('componentFadeIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                    Kwf.fireComponentEvent('componentFadeIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                 }, this));
             }
         }

@@ -1,10 +1,10 @@
-.kwf-renderer-decimal .x-grid3-cell-inner { text-align: right; }
+.kwf-renderer-decimal .x2-grid3-cell-inner { text-align: right; }
 .kwf-renderer-bright { color: #888888; }
 .kwf-renderer-linebreak {
     overflow:visible;
     white-space: normal;
 }
-.x-grid3-check-col {
+.x2-grid3-check-col {
     height:14px;
 }
 .kwf-renderer-noteditable {

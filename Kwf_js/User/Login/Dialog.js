@@ -1,5 +1,5 @@
-Ext.namespace('Kwf.User.Login');
-Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
+Ext2.namespace('Kwf.User.Login');
+Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
 {
     initComponent: function()
     {
@@ -10,8 +10,8 @@ Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
         this.resizable = false;
         this.closable = true;
         this.layout = 'border';
-        this.loginPanel = new Ext.Panel({
-            baseCls: 'x-plain',
+        this.loginPanel = new Ext2.Panel({
+            baseCls: 'x2-plain',
             region: 'south',
             border: false,
             height: 125,
@@ -19,14 +19,14 @@ Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
                     'height="100%" style="border: 0px"></iframe>'
         });
         this.items = [{
-            baseCls: 'x-plain',
+            baseCls: 'x2-plain',
             cls: 'kwf-login-header',
             region: 'north',
             height: 80,
             autoLoad: '/kwf/user/login/header',
             border: false
         },{
-            baseCls: 'x-plain',
+            baseCls: 'x2-plain',
             region: 'center',
             bodyStyle: 'padding: 10px;',
             html: this.message,
@@ -34,7 +34,7 @@ Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
         }, this.loginPanel];
 
         this.buttons = [
-            new Ext.Button({
+            new Ext2.Button({
                 text    : trlKwf('Lost password?'),
                 style   : 'position: absolute; z-index: 500000; margin-top: -40px; margin-left: -270px;',
                 handler : this.lostPassword,
@@ -48,7 +48,7 @@ Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
             // Das direkte this.onLoginLoad() in der nächsten Zeile muss wegen IE sein
             // da der das tlw. direkt im cache hat und das frame.onLoad nicht mitkriegt
             this.onLoginLoad();
-            Ext.EventManager.on(frame, 'load', this.onLoginLoad, this);
+            Ext2.EventManager.on(frame, 'load', this.onLoginLoad, this);
         }, this, { delay: 1 });
 
         Kwf.User.Login.Dialog.superclass.initComponent.call(this);
@@ -56,7 +56,7 @@ Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
 
     _getDoc: function() {
         var frame = this.loginPanel.body.first('iframe');
-        if(Ext.isIE){
+        if(Ext2.isIE){
             return frame.dom.contentWindow.document;
         } else {
             return (frame.dom.contentDocument || window.frames[id].document);
@@ -78,7 +78,7 @@ Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
                 } else {
                     if (Kwf.menu) Kwf.menu.reload();
                     if (this.success) {
-                        Ext.callback(this.success, this.scope);
+                        Ext2.callback(this.success, this.scope);
                     }
                 }
             } else if (doc.getElementsByName('username').length >= 1) {
@@ -90,17 +90,17 @@ Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
     },
 
     lostPassword: function() {
-        Ext.Msg.prompt(trlKwf('Password lost'), trlKwf('Please enter your email address'), function(btn, email) {
+        Ext2.Msg.prompt(trlKwf('Password lost'), trlKwf('Please enter your email address'), function(btn, email) {
             if (btn == 'ok') {
                 var lostPasswordResultDialog = function(response, options, result) {
-                    Ext.Msg.show({
+                    Ext2.Msg.show({
                         title: 'Lost password',
                         msg: result.message,
                         width: 270,
-                        buttons: Ext.MessageBox.OK
+                        buttons: Ext2.MessageBox.OK
                     }, this);
                 };
-                Ext.Ajax.request({
+                Ext2.Ajax.request({
                     mask: true,
                     url: '/kwf/user/login/json-lost-password',
                     params: { email: email },

@@ -1,5 +1,5 @@
 Kwf.onElementReady('.kwcUserLoginFacebook', function(el, config){
-    if (!Ext.get('fb-root')) {
+    if (!Ext2.get('fb-root')) {
         el.createChild({id: 'fb-root'});
     }
     Kwf.Facebook.onReady(function(){
@@ -10,7 +10,7 @@ Kwf.onElementReady('.kwcUserLoginFacebook', function(el, config){
     var loginInit = function() {
         FB.getLoginStatus(function(response){
             if (response.status === 'connected') {
-                Ext.Ajax.request({
+                Ext2.Ajax.request({
                     params: {
                         accessToken: response.authResponse.accessToken
                     },

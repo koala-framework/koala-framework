@@ -31,7 +31,7 @@
     <script type="text/javascript">
         document.write('<div id="loading">');
           document.write('<div class="loading-indicator">');
-            document.write('<?=$this->image('/assets/ext/resources/images/default/shared/large-loading.gif')?>');
+            document.write('<?=$this->image('/assets/ext2/resources/images/default/shared/large-loading.gif')?>');
             document.write('<?= $this->applicationName ?><br /><span id="loading-msg"><?= trlKwf('Loading...') ?></span></div>');
         document.write('</div>');
         var Kwf = {isApp: true};

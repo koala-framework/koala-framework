@@ -1,5 +1,5 @@
-Ext.namespace('Kwf.User.Activate');
-Kwf.User.Activate.Dialog = Ext.extend(Ext.Window,
+Ext2.namespace('Kwf.User.Activate');
+Kwf.User.Activate.Dialog = Ext2.extend(Ext2.Window,
 {
     initComponent: function()
     {
@@ -17,10 +17,10 @@ Kwf.User.Activate.Dialog = Ext.extend(Ext.Window,
         Kwf.User.Login.Dialog.superclass.afterRender.call(this);
         var frameHtml = '<iframe scrolling="no" src="/login/show-form" width="100%" '+
                         'height="100%" style="border: 0px"></iframe>';
-        var frame = Ext.DomHelper.append(this.body, frameHtml, true);
+        var frame = Ext2.DomHelper.append(this.body, frameHtml, true);
 
         function cb(){
-            if(Ext.isIE){
+            if(Ext2.isIE){
                 doc = frame.dom.contentWindow.document;
             }else {
                 doc = (frame.dom.contentDocument || window.frames[id].document);
@@ -33,25 +33,25 @@ Kwf.User.Activate.Dialog = Ext.extend(Ext.Window,
                     } else {
                         if(Kwf.menu) Kwf.menu.reload();
                         if(this.success) {
-                            Ext.callback(this.success, this.scope);
+                            Ext2.callback(this.success, this.scope);
                         }
                     }
                 } else {
                     doc.getElementsByName('username')[0].focus();
                 }
 
-                Ext.EventManager.on(doc.getElementById('lostPassword'), 'click', function() {
-                    Ext.Msg.prompt(trlKwf('Password lost'), trlKwf('Please enter your email address'), function(btn, email) {
+                Ext2.EventManager.on(doc.getElementById('lostPassword'), 'click', function() {
+                    Ext2.Msg.prompt(trlKwf('Password lost'), trlKwf('Please enter your email address'), function(btn, email) {
                         if (btn == 'ok') {
                             var lostPasswordResultDialog = function(response, options, result) {
-                                Ext.Msg.show({
+                                Ext2.Msg.show({
                                     title: 'Lost password',
                                     msg: result.message,
                                     width: 270,
-                                    buttons: Ext.MessageBox.OK
+                                    buttons: Ext2.MessageBox.OK
                                 }, this);
                             };
-                            Ext.Ajax.request({
+                            Ext2.Ajax.request({
                                 url: '/login/json-lost-password',
                                 params: { email: email },
                                 success: lostPasswordResultDialog
@@ -61,7 +61,7 @@ Kwf.User.Activate.Dialog = Ext.extend(Ext.Window,
                 }, this);
             }
         }
-        Ext.EventManager.on(frame, 'load', cb, this);
+        Ext2.EventManager.on(frame, 'load', cb, this);
 
     },
     showLogin: function() {

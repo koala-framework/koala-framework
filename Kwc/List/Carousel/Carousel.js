@@ -1,11 +1,11 @@
-Ext.namespace("Kwc.List.Carousel");
-Kwc.List.Carousel.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Ext2.namespace("Kwc.List.Carousel");
+Kwc.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     numberShown: 5,
     moveElementSelector: false, //if false list.el, else list.child(moveElementSelector)
 
     _currentListIndex: 0,
     init: function() {
-        Ext.applyIf(this, {
+        Ext2.applyIf(this, {
             animationConfig: { duration: 0.60, easing: 'easeBothStrong' }
         });
         if (!this.fadeAnimationConfig) {
@@ -45,7 +45,7 @@ Kwc.List.Carousel.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
 
         var firstElWidth = this.list.getItem(0).getWidthIncludingMargin();
 
-        var cfg = Ext.applyIf({
+        var cfg = Ext2.applyIf({
             callback: function() {
                 // push moved left element to back
                 this.list.getItem(0).el.insertAfter(this.list.getLastItem().el); //move element
@@ -86,7 +86,7 @@ Kwc.List.Carousel.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
         // fade in first
         this.list.getItem(0).el.show();
 
-        var cfg = Ext.applyIf({
+        var cfg = Ext2.applyIf({
             callback: function() {
                 this._currentListIndex = this.list.getActiveItem().listIndex;
                 this.list.setActiveChangeLocked(false);

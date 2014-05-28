@@ -1,4 +1,4 @@
-Kwf.Form.HtmlEditor.Formats = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.Formats = Ext2.extend(Ext2.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.on('initialize', this.onInit, this, {delay: 1, single: true});
@@ -18,30 +18,30 @@ Kwf.Form.HtmlEditor.Formats = Ext.extend(Ext.util.Observable, {
     // private
     afterCreateToolbar: function() {
         var tb = this.cmp.getToolbar();
-        this.boldAction = new Ext.Button({
+        this.boldAction = new Ext2.Button({
             handler: this.onBold,
             scope: this,
             tooltip: {
                 title: trlKwf('Bold (Ctrl+B)'),
                 text: trlKwf('Make the selected text bold.'),
-                cls: 'x-html-editor-tip'
+                cls: 'x2-html-editor-tip'
             },
-            cls : 'x-btn-icon x-edit-bold',
+            cls : 'x2-btn-icon x2-edit-bold',
             clickEvent: 'mousedown',
             tabIndex: -1,
             enableToggle: true
         });
         tb.insert(0, this.boldAction);
 
-        this.italicAction = new Ext.Button({
+        this.italicAction = new Ext2.Button({
             handler: this.onItalic,
             scope: this,
             tooltip: {
                 title: trlKwf('Italic (Ctrl+I)'),
                 text: trlKwf('Make the selected text italic.'),
-                cls: 'x-html-editor-tip'
+                cls: 'x2-html-editor-tip'
             },
-            cls : 'x-btn-icon x-edit-italic',
+            cls : 'x2-btn-icon x2-edit-italic',
             clickEvent: 'mousedown',
             tabIndex: -1,
             enableToggle: true

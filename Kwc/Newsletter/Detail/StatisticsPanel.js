@@ -1,5 +1,5 @@
-Ext.ns('Kwc.Newsletter.Detail');
-Kwc.Newsletter.Detail.StatisticsPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
+Ext2.ns('Kwc.Newsletter.Detail');
+Kwc.Newsletter.Detail.StatisticsPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
     layout: 'border',
 
     initComponent: function() {
@@ -18,4 +18,4 @@ Kwc.Newsletter.Detail.StatisticsPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         Kwc.Newsletter.Detail.StatisticsPanel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwc.newsletter.statistics', Kwc.Newsletter.Detail.StatisticsPanel);
+Ext2.reg('kwc.newsletter.statistics', Kwc.Newsletter.Detail.StatisticsPanel);

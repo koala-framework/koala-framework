@@ -1,5 +1,5 @@
 
-Kwf.Enquiries.ViewPanel = Ext.extend(Kwf.Binding.AbstractPanel,
+Kwf.Enquiries.ViewPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
 {
     initComponent: function()
     {

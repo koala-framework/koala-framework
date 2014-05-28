@@ -9,7 +9,7 @@ Kwf.onElementReady('.kwcForm > form', function form(form) {
         form.kwcForm = new Kwc.Form.Component(form);
     }
 }, { priority: -10, defer: true }); //initialize form very early, as many other components access it
-Ext.ns('Kwc.Form');
+Ext2.ns('Kwc.Form');
 Kwc.Form.findForm = function(el) {
     var formEl = el.child('.kwcForm > form');
     if (formEl) {
@@ -26,7 +26,7 @@ Kwc.Form.Component = function(form)
     this.el = form;
     var config = form.parent().down('.config', true);
     if (!config) return;
-    config = Ext.decode(config.value);
+    config = Ext2.decode(config.value);
     if (!config) return;
     this.config = config;
 
@@ -82,7 +82,7 @@ Kwc.Form.Component = function(form)
 
     this.errorStyle = new Kwf.FrontendForm.errorStyles[this.config.errorStyle](this);
 };
-Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
+Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
     getFieldConfig: function(fieldName)
     {
         if (this.config.fieldConfig[fieldName]) {
@@ -147,7 +147,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
 
         this.errorStyle.hideErrors();
 
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.config.controllerUrl + '/json-save',
             ignoreErrors: true,
             params: this.config.baseParams,

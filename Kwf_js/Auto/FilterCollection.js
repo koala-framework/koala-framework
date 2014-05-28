@@ -1,4 +1,4 @@
-Ext.namespace('Kwf.Auto');
+Ext2.namespace('Kwf.Auto');
 Kwf.Auto.FilterCollection = function(filters, scope)
 {
     Kwf.Auto.FilterCollection.superclass.constructor.call(this);
@@ -15,7 +15,7 @@ Kwf.Auto.FilterCollection = function(filters, scope)
     }
 };
 
-Ext.extend(Kwf.Auto.FilterCollection, Ext.util.MixedCollection, {
+Ext2.extend(Kwf.Auto.FilterCollection, Ext2.util.MixedCollection, {
     applyToTbar : function(tbar, limit, offset)
     {
         var limitCount = 0;

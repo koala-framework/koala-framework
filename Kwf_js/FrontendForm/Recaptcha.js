@@ -1,4 +1,4 @@
-Kwf.FrontendForm.Recaptcha = Ext.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.Recaptcha = Ext2.extend(Kwf.FrontendForm.Field, {
     getFieldName: function() {
         return this.el.child('div[data-fieldname]').dom.getAttribute('data-fieldname');
     },

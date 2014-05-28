@@ -29,7 +29,7 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
         }
         $this->fields = new Kwf_Collection_FormFields();
         $this->setBorder(false);
-        $this->setBaseCls('x-plain');
+        $this->setBaseCls('x2-plain');
         $this->setXtype('multifields');
         $this->setMinEntries(1);
     }

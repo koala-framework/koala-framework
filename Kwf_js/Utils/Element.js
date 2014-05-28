@@ -1,7 +1,7 @@
-Ext.ns('Kwf.Utils.Element');
+Ext2.ns('Kwf.Utils.Element');
 Kwf.Utils.Element._cachedWidthEls = [];
 Kwf.Utils.Element.getCachedWidth = function(e) {
-    if (e instanceof Ext.Element) e = e.dom;
+    if (e instanceof Ext2.Element) e = e.dom;
     var ret = false;
     while (e) {
         if (e.getAttribute('data-width') == '100%') {
@@ -10,7 +10,7 @@ Kwf.Utils.Element.getCachedWidth = function(e) {
             break;
         } else {
             var t = Kwf.Utils.BenchmarkBox.now();
-            ret = Ext.fly(e).getWidth();
+            ret = Ext2.fly(e).getWidth();
             Kwf.Utils.BenchmarkBox.time('getWidth uncached', Kwf.Utils.BenchmarkBox.now()-t);
             e.kwfWidthCache = ret;
             Kwf.Utils.Element._cachedWidthEls.push(e);
@@ -21,9 +21,9 @@ Kwf.Utils.Element.getCachedWidth = function(e) {
     return ret;
 };
 Kwf.Utils.Element.isVisible = function(el) {
-    if (el instanceof Ext.Element) el = el.dom;
+    if (el instanceof Ext2.Element) el = el.dom;
     var t = Kwf.Utils.BenchmarkBox.now();
-    var ret = Ext.fly(el).isVisible(true);
+    var ret = Ext2.fly(el).isVisible(true);
     Kwf.Utils.BenchmarkBox.time('isVisible uncached', Kwf.Utils.BenchmarkBox.now()-t);
     return ret;
 };

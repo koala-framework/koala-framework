@@ -1,4 +1,4 @@
-Kwf.FrontendForm.Cards = Ext.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.Cards = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         var config = this.form.getFieldConfig(this.getFieldName());
         var combobox = this.form.findField(config.combobox);

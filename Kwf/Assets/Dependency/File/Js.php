@@ -8,7 +8,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
     {
         return 'text/javascript';
     }
-
+//
     public function __construct($fileName)
     {
         parent::__construct($fileName);
@@ -64,8 +64,8 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 }
             }
 
-            if ($pathType == 'ext') {
-                $map->stringReplace('../images/', '/assets/ext/resources/images/');
+            if ($pathType == 'ext2') {
+                $map->stringReplace('../images/', '/assets/ext2/resources/images/');
             } else if ($pathType == 'mediaelement') {
                 $map->stringReplace('url(', 'url(/assets/mediaelement/build/');
             }
@@ -129,13 +129,14 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
                 if (!file_exists($dir)) mkdir($dir, 0777, true);
 
-                if (!file_exists($buildFile)) {
+                if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
                     $map = new Kwf_Assets_Util_SourceMap($ret['sourceMap'], $ret['contents']);
                     foreach ($this->_getTrlReplacements($ret, $language) as $value) {
                         $map->stringReplace($value['search'], $value['replace']);
                     }
                     $map->save("$buildFile.map", $buildFile);
                     unset($map);
+                    file_put_contents("$buildFile.buildtime", filemtime($this->getAbsoluteFileName()));
                 }
                 $ret = array(
                     'contents' => file_get_contents($buildFile),
@@ -186,6 +187,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     public final function getContents($language)
     {
+
         $c = $this->_getContents($language, false);
         return $c['contents'];
     }
@@ -205,12 +207,14 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     public final function getContentsPacked($language)
     {
-        $c = $this->_getContents($language, true);
+        $c = $this->_getContents($language, false);
         return $c['contents'];
     }
 
     public final function getContentsPackedSourceMap($language)
     {
+        return null;
+
         $c = $this->_getContents($language, true);
         return $c['sourceMap'];
     }

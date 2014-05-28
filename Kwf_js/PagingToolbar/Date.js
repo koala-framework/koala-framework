@@ -1,17 +1,17 @@
-Ext.namespace('Kwf.PagingToolbar');
+Ext2.namespace('Kwf.PagingToolbar');
 
-Kwf.PagingToolbar.Date = Ext.extend(Ext.PagingToolbar, {
+Kwf.PagingToolbar.Date = Ext2.extend(Ext2.PagingToolbar, {
     initComponent: function() {
         Kwf.PagingToolbar.Date.superclass.initComponent.call(this);
         this.cursor = new Date();
     },
     // private
     onRender : function(ct, position){
-        Ext.PagingToolbar.superclass.onRender.call(this, ct, position);
+        Ext2.PagingToolbar.superclass.onRender.call(this, ct, position);
 
         this.prev = this.addButton({
             tooltip: this.prevText,
-            iconCls: "x-tbar-page-prev",
+            iconCls: "x2-tbar-page-prev",
             handler: this.onClick.createDelegate(this, ["prev"])
         });
         this.addSeparator();
@@ -27,19 +27,19 @@ Kwf.PagingToolbar.Date = Ext.extend(Ext.PagingToolbar, {
         this.addSeparator();
         this.next = this.addButton({
             tooltip: this.nextText,
-            iconCls: "x-tbar-page-next",
+            iconCls: "x2-tbar-page-next",
             handler: this.onClick.createDelegate(this, ["next"])
         });
 
         this.addSeparator();
         this.loading = this.addButton({
             tooltip: this.refreshText,
-            iconCls: "x-tbar-loading",
+            iconCls: "x2-tbar-loading",
             handler: this.onClick.createDelegate(this, ["refresh"])
         });
 
         if(this.displayInfo){
-            this.displayEl = Ext.fly(this.el.dom).createChild({cls:'x-paging-info'});
+            this.displayEl = Ext2.fly(this.el.dom).createChild({cls:'x2-paging-info'});
         }
 
         if(this.dsLoaded){

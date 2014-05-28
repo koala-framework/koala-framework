@@ -1,4 +1,4 @@
-Kwf.Form.FileUploadWindow = Ext.extend(Ext.Window, {
+Kwf.Form.FileUploadWindow = Ext2.extend(Ext2.Window, {
     title: trlKwf('File upload'),
     closeAction: 'close',
     modal: true,
@@ -9,8 +9,8 @@ Kwf.Form.FileUploadWindow = Ext.extend(Ext.Window, {
         if (!this.maxResolution) {
             this.maxResolution = 0;
         }
-        this.form = new Ext.FormPanel({
-            baseCls: 'x-plain',
+        this.form = new Ext2.FormPanel({
+            baseCls: 'x2-plain',
             style: 'padding: 10px;',
             url: '/kwf/media/upload/json-upload'+'?maxResolution='+this.maxResolution,
             fileUpload: true,

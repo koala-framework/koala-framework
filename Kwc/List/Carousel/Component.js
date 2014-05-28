@@ -1,5 +1,5 @@
-Ext.namespace("Kwc.List.Carousel");
-Kwc.List.Carousel.Component = Ext.extend(Kwf.EyeCandy.List, {
+Ext2.namespace("Kwc.List.Carousel");
+Kwc.List.Carousel.Component = Ext2.extend(Kwf.EyeCandy.List, {
     childSelector: '.listItem',
     _activeChangeLocked: false,
     _init: function() {
@@ -31,7 +31,7 @@ Kwf.onElementReady('.kwcListCarousel', function(el, config){
     function responsiveContent(el) {
         if(wrapper.hasClass('listWrapper')) {
             el.query('.listItem').each(function(listItem){
-                listItem = Ext.get(listItem);
+                listItem = Ext2.get(listItem);
                 if(el.getWidth() < (config.contentWidth-1)) {
                     el.removeClass('fullwidth');
                     var invertedWidth = el.getWidth() * -1;

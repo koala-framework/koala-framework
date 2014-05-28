@@ -21,7 +21,7 @@ Kwf.Utils.ResponsiveEl('.kwcBasicTable.responsiveFlipScroll', function(el) {
         addArrow(el);
         if (!el.dom.flipScrollSetAt) {
             el.child('tbody').on('scroll', function(ev) {
-                addArrow(Ext.fly(ev.getTarget()).up('.kwcBasicTable'));
+                addArrow(Ext2.fly(ev.getTarget()).up('.kwcBasicTable'));
             });
         }
         el.dom.flipScrollSetAt = el.getWidth();

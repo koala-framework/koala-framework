@@ -1,4 +1,4 @@
-Ext.ns('Kwf.Statistics');
+Ext2.ns('Kwf.Statistics');
 
 Kwf.Statistics.counter = [];
 
