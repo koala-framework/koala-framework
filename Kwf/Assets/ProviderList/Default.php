@@ -7,7 +7,9 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         if (Kwf_Component_Data_Root::getComponentClass()) {
             $providers[] = new Kwf_Assets_Provider_Components(Kwf_Component_Data_Root::getComponentClass());
         }
-        $providers[] = new Kwf_Assets_Provider_Ini('dependencies.ini');
+        if (file_exists('dependencies.ini')) {
+            $providers[] = new Kwf_Assets_Provider_Ini('dependencies.ini');
+        }
 
         $cacheId = 'assets-vendor-providers';
         $cachedProviders = Kwf_Cache_SimpleStatic::fetch($cacheId);
