@@ -1,4 +1,4 @@
-div.imageGrid .x-panel-body {
+div.imageGrid .x2-panel-body {
     background: white;
     font: 11px Arial, Helvetica, sans-serif;
 }
@@ -26,24 +26,24 @@ div.imageGrid .thumb-wrap div.label {
     font-weight: bold; padding-bottom: 4px; padding-top: 2px; font-size: 14px; color: #15428B;
 }
 
-div.imageGrid .x-view-over {
+div.imageGrid .x2-view-over {
     border:1px solid #dddddd;
-    background: #efefef url(/assets/ext/resources/images/default/grid/row-over.gif) repeat-x left top;
+    background: #efefef url(/assets/ext2/resources/images/default/grid/row-over.gif) repeat-x left top;
     padding: 4px;
 }
 
-div.imageGrid .x-view-selected {
+div.imageGrid .x2-view-selected {
     background-color: #eff5fb;
     border:1px solid #99bbe8;
     padding: 4px;
 }
-div.imageGrid .x-view-selected .thumb {
+div.imageGrid .x2-view-selected .thumb {
     background:transparent;
 }
 
 div.imageGrid .loading-indicator {
     font-size:11px;
-    background-image:url(/assets/ext/resources/images/default/grid/loading.gif);
+    background-image:url(/assets/ext2/resources/images/default/grid/loading.gif);
     background-repeat: no-repeat;
     background-position: left;
     padding-left:20px;

@@ -2,10 +2,10 @@
 
 /*
 .kwc-paragraphs .kwc-paragraphs-toolbar { opacity: 0.3; }
-.kwc-paragraphs .x-view-over .kwc-paragraphs-toolbar { opacity: 1; }
+.kwc-paragraphs .x2-view-over .kwc-paragraphs-toolbar { opacity: 1; }
 */
 
 .kwc-paragraphs-pos-list .visible { color: green; }
 
 .kwc-paragraphs .kwc-paragraph-invisible .kwc-paragraphs-preview { opacity: 0.5; }
-.kwc-paragraphs .x-view-over.kwc-paragraph-invisible .kwc-paragraphs-preview { opacity: 1; }
+.kwc-paragraphs .x2-view-over.kwc-paragraph-invisible .kwc-paragraphs-preview { opacity: 1; }

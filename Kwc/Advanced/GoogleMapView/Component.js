@@ -1,16 +1,16 @@
 Kwf.Utils.ResponsiveEl('.kwcAdvancedGoogleMapView', [500]);
 
-Ext.namespace('Kwc.Advanced.GoogleMap');
+Ext2.namespace('Kwc.Advanced.GoogleMap');
 Kwc.Advanced.GoogleMap.renderedMaps = [];
 
 Kwc.Advanced.GoogleMap.renderMap = function(map) {
     if (Kwc.Advanced.GoogleMap.renderedMaps.indexOf(map) != -1) return;
     Kwc.Advanced.GoogleMap.renderedMaps.push(map);
 
-    var mapContainer = new Ext.Element(map);
+    var mapContainer = new Ext2.Element(map);
     var cfg = mapContainer.down(".options", true);
     if (!cfg) return;
-    cfg = Ext.decode(cfg.value);
+    cfg = Ext2.decode(cfg.value);
 
     var text = mapContainer.down("div.text");
     cfg.mapContainer = mapContainer;
@@ -34,9 +34,9 @@ Kwc.Advanced.GoogleMap.renderMap = function(map) {
 
 Kwf.onContentReady(function(el, options) {
     (function(el) {
-        var maps = Ext.DomQuery.select('div.kwcAdvancedGoogleMapView', el);
-        Ext.each(maps, function(map) {
-            if (!map.gmapObject && Ext.get(map).isVisible(true)) {
+        var maps = Ext2.DomQuery.select('div.kwcAdvancedGoogleMapView', el);
+        Ext2.each(maps, function(map) {
+            if (!map.gmapObject && Ext2.get(map).isVisible(true)) {
                 map.gmapObject = Kwc.Advanced.GoogleMap.renderMap(map);
             }
         });

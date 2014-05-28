@@ -28,10 +28,10 @@ class Kwc_Basic_Text_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->keyPress('dom=window.frames[0].document.body', 'a');
 //         $this->assertEquals('afoo', $this->getText('dom=window.frames[0].document.body'));
 //         $this->clickAt('dom=window.frames[0].document.body', '200,200');
-        $this->assertElementPresent("//select[@class='x-font-select']");
-        $this->assertElementValueEquals("//select[@class='x-font-select']", 'p');
-        $this->select("//select[@class='x-font-select']", 'value=h2');
-//         $this->assertElementValueEquals("//select[@class='x-font-select']", 'h2');
+        $this->assertElementPresent("//select[@class='x2-font-select']");
+        $this->assertElementValueEquals("//select[@class='x2-font-select']", 'p');
+        $this->select("//select[@class='x2-font-select']", 'value=h2');
+//         $this->assertElementValueEquals("//select[@class='x2-font-select']", 'h2');
 
         for ($i=120;$i<256;$i++) {
             $this->keyDown('dom=window.frames[0].document.body', $i);
@@ -42,10 +42,10 @@ class Kwc_Basic_Text_SeleniumTest extends Kwf_Test_SeleniumTestCase
             $this->keyPress('dom=window.frames[0].document.body', "\\$i");
         }
 
-//         $this->assertElementValueEquals("//select[@class='x-font-select']", 'p');
+//         $this->assertElementValueEquals("//select[@class='x2-font-select']", 'p');
 
 //         $this->keyPress('dom=window.frames[0].document.body', '\\38');
-//         $this->assertElementValueEquals("//select[@class='x-font-select']", 'h2');
+//         $this->assertElementValueEquals("//select[@class='x2-font-select']", 'h2');
 
 //         $this->click("//button[text()='".trlKwf('Save')."']");
         sleep(500);

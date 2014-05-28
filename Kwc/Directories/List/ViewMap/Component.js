@@ -1,21 +1,21 @@
-Ext.namespace('Kwc.Directories.List.ViewMap');
+Ext2.namespace('Kwc.Directories.List.ViewMap');
 Kwc.Directories.List.ViewMap.renderedMaps = [];
 
 Kwc.Directories.List.ViewMap.renderMap = function(map) {
     if (Kwc.Directories.List.ViewMap.renderedMaps.indexOf(map) != -1) return;
     Kwc.Directories.List.ViewMap.renderedMaps.push(map);
 
-    var mapContainer = new Ext.Element(map);
+    var mapContainer = new Ext2.Element(map);
     var cfg = mapContainer.down(".options", true);
     if (!cfg) return;
-    cfg = Ext.decode(cfg.value);
+    cfg = Ext2.decode(cfg.value);
 
     // markers aus partials raus sammeln
     if (!cfg.markers) cfg.markers = [];
     if (!cfg.lightMarkers) cfg.lightMarkers = [];
     var markerEls = mapContainer.query(".markerData");
     markerEls.each(function(mel) {
-        var mdata = Ext.decode(mel.value);
+        var mdata = Ext2.decode(mel.value);
         if (typeof cfg.markers == 'object') cfg.markers.push(mdata);
         cfg.lightMarkers.push(mdata);
     });
@@ -65,12 +65,12 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
 };
 
 Kwf.onContentReady(function() {
-    var maps = Ext.DomQuery.select('div.kwcDirectoriesListViewMap');
-    Ext.each(maps, function(map) {
-        var up = Ext.get(map).up('div.kwfSwitchDisplay');
+    var maps = Ext2.DomQuery.select('div.kwcDirectoriesListViewMap');
+    Ext2.each(maps, function(map) {
+        var up = Ext2.get(map).up('div.kwfSwitchDisplay');
         if (up) {
             (function(up, map) {
-                Ext.get(up).dom.switchDisplayObject.on('opened', function() {
+                Ext2.get(up).dom.switchDisplayObject.on('opened', function() {
                     Kwc.Directories.List.ViewMap.renderMap(map);
                 });
             }).defer(1, this, [up, map]);

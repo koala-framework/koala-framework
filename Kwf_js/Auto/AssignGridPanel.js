@@ -1,4 +1,4 @@
-Kwf.Auto.AssignGridPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
+Kwf.Auto.AssignGridPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
 
     gridAssignedControllerUrl: '',
     gridDataControllerUrl: '',
@@ -15,10 +15,10 @@ Kwf.Auto.AssignGridPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
             'assigned': true
         });
 
-        this.actions.assign = new Ext.Action({
+        this.actions.assign = new Ext2.Action({
             text    : trlKwf('Assign'),
             icon    : '/assets/silkicons/table_relationship.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             disabled: true,
             handler : this.onAssign,
             scope   : this
@@ -33,7 +33,7 @@ Kwf.Auto.AssignGridPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
             textAssignActionUrl: this.textAssignActionUrl,
             region: 'center',
             gridConfig: {
-                selModel: new Ext.grid.CheckboxSelectionModel()
+                selModel: new Ext2.grid.CheckboxSelectionModel()
             }
         });
         this.proxyItem = this.gridAssigned;
@@ -45,7 +45,7 @@ Kwf.Auto.AssignGridPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
             controllerUrl: this.gridDataControllerUrl,
             gridConfig: {
                 tbar: [ this.getAction('assign'), '-' ],
-                selModel: new Ext.grid.CheckboxSelectionModel()
+                selModel: new Ext2.grid.CheckboxSelectionModel()
             },
             autoLoad: this.autoLoad
         });
@@ -92,9 +92,9 @@ Kwf.Auto.AssignGridPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
                 params[this.gridDataParamName].push(selections[i].id);
             }
         }
-        params[this.gridDataParamName] = Ext.encode(params[this.gridDataParamName]);
+        params[this.gridDataParamName] = Ext2.encode(params[this.gridDataParamName]);
 
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.assignActionUrl,
             params: params,
             success: function() {
@@ -137,4 +137,4 @@ Kwf.Auto.AssignGridPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
 
 });
 
-Ext.reg('kwf.assigngrid', Kwf.Auto.AssignGridPanel);
+Ext2.reg('kwf.assigngrid', Kwf.Auto.AssignGridPanel);

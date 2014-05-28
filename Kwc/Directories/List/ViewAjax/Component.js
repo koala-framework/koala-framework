@@ -2,12 +2,12 @@ Kwf.onElementReady('a', function viewAjaxFilterLink(a) {
     a = a.dom;
     var m = a.rel.match(/kwfViewAjaxFilter({.*?})/)
     if (m) {
-        var config = Ext.decode(m[1]);
+        var config = Ext2.decode(m[1]);
 
         if (!Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId]) Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId] = [];
         Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId].push(a);
 
-        Ext.fly(a).on('click', function(ev) {
+        Ext2.fly(a).on('click', function(ev) {
             var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.config.viewComponentId];
             if (!view) return
             view.loadView({
@@ -19,9 +19,9 @@ Kwf.onElementReady('a', function viewAjaxFilterLink(a) {
                 Kwf.Utils.HistoryState.pushState(document.title, a.href);
             }
             Kwc.Directories.List.ViewAjax.filterLinks[this.config.viewComponentId].forEach(function(i) {
-                Ext.fly(i).removeClass('current');
+                Ext2.fly(i).removeClass('current');
             }, this);
-            Ext.fly(a).addClass('current');
+            Ext2.fly(a).addClass('current');
 
             ev.stopEvent();
 
@@ -55,8 +55,8 @@ Kwf.Utils.HistoryState.on('popstate', function() {
 }, this);
 
 
-Ext.ns('Kwc.Directories.List');
-Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
+Ext2.ns('Kwc.Directories.List');
+Kwc.Directories.List.ViewAjax = Ext2.extend(Ext2.Panel, {
 
     controllerUrl: null,
 
@@ -133,7 +133,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
                 return false;
             }, this);
 
-            this.addHistoryEntryDeleayedTask = new Ext.util.DelayedTask(function() {
+            this.addHistoryEntryDeleayedTask = new Ext2.util.DelayedTask(function() {
                 this.pushSearchFormHistoryState();
             }, this);
         }
@@ -151,7 +151,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
         //set menuLinkId to link that is current, be be able to set current again
         Kwc.Directories.List.ViewAjax.filterLinks[this.componentId].forEach(function(i) {
-            if (Ext.fly(i).hasClass('current')) {
+            if (Ext2.fly(i).hasClass('current')) {
                 this._getState().menuLinkId = i.id;
             }
         }, this);
@@ -182,13 +182,13 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
                 this.loadView({});
             }
             if (!this.view.visibleDetail && this.view._lastViewScrollPosition) {
-                Ext.select('html, body').scrollTo('b', this.view._lastViewScrollPosition.top);
+                Ext2.select('html, body').scrollTo('b', this.view._lastViewScrollPosition.top);
             }
             if (this._getState().menuLinkId) {
                 Kwc.Directories.List.ViewAjax.filterLinks[this.componentId].forEach(function(i) {
-                    Ext.fly(i).removeClass('current');
+                    Ext2.fly(i).removeClass('current');
                 }, this);
-                var el = Ext.fly(this._getState().menuLinkId);
+                var el = Ext2.fly(this._getState().menuLinkId);
                 if (el) {
                     el.addClass('current');
                 }
@@ -216,7 +216,7 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
     {
         this.addHistoryEntryDeleayedTask.cancel();
         this._getState().searchFormValues = this.searchForm.getValues();
-        var url = location.protocol+'//'+location.host+this.viewUrl+'?'+Ext.urlEncode(this.searchForm.getValuesIncludingPost());
+        var url = location.protocol+'//'+location.host+this.viewUrl+'?'+Ext2.urlEncode(this.searchForm.getValuesIncludingPost());
         Kwf.Utils.HistoryState.pushState(document.title, url);
     },
 
@@ -238,11 +238,11 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
     loadView: function(p)
     {
-        var params = Ext.applyIf(p, {
+        var params = Ext2.applyIf(p, {
             filterComponentId: null
         });
         if (this.searchForm) {
-            Ext.apply(params, this.searchForm.getValues());
+            Ext2.apply(params, this.searchForm.getValues());
         }
         var diffFound = false;
         for(var i in params) {
@@ -279,7 +279,7 @@ Kwc.Directories.List.ViewAjax.byComponentId = {};
 Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId = {};
 Kwc.Directories.List.ViewAjax.filterLinks = {};
 
-Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
+Kwc.Directories.List.ViewAjax.View = Ext2.extend(Kwf.Binding.AbstractPanel,
 {
     layout: 'auto',
     border: false,
@@ -288,16 +288,16 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
     initComponent : function()
     {
         if (!this.tpl) {
-            this.tpl = new Ext.XTemplate(
+            this.tpl = new Ext2.XTemplate(
                 '<tpl for=".">',
                     '<div class="kwfViewAjaxItem">{content}</div>',
                 '</tpl>'
             );
         }
 
-        this.store = new Ext.data.Store({
-            proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
-            reader: new Ext.data.JsonReader({
+        this.store = new Ext2.data.Store({
+            proxy: new Ext2.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
+            reader: new Ext2.data.JsonReader({
                 totalProperty: 'total',
                 root: 'rows',
                 id: 'id',
@@ -341,7 +341,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
             autoHeight: true
         };
 
-        this.view = new Ext.DataView(viewConfig);
+        this.view = new Ext2.DataView(viewConfig);
         this.view.updateIndexes = this.view.updateIndexes.createSequence(function() {
             Kwf.callOnContentReady(this.view.el, {newRender: true});
         }, this);
@@ -353,18 +353,18 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         Kwc.Directories.List.ViewAjax.View.superclass.initComponent.call(this);
 
         if (this.loadMoreBufferPx) {
-            Ext.fly(window).on('scroll', function() {
+            Ext2.fly(window).on('scroll', function() {
                 var height = this.el.getTop()+this.el.getHeight();
-                height -= Ext.getBody().getViewSize().height;
-                height = height - Ext.getBody().getScroll().top;
+                height -= Ext2.getBody().getViewSize().height;
+                height = height - Ext2.getBody().getScroll().top;
                 if (height < this.loadMoreBufferPx) {
                     this.loadMore();
                 }
             }, this, { buffer: 50 });
         }
 
-        Ext.fly(window).on('scroll', function() {
-            var scrollHeight = Ext.getBody().getScroll().top;
+        Ext2.fly(window).on('scroll', function() {
+            var scrollHeight = Ext2.getBody().getScroll().top;
             if (scrollHeight >= 1700) {
                 this.el.up('.viewContainer').addClass('scrolledDown');
             } else {
@@ -456,29 +456,29 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
     },
     applyBaseParams : function(baseParams) {
         if (this.getStore()) {
-            Ext.apply(this.getStore().baseParams, baseParams);
+            Ext2.apply(this.getStore().baseParams, baseParams);
         } else {
             //no store yet, apply them later
             if (!this.baseParams) this.baseParams = {};
-            Ext.apply(this.baseParams, baseParams);
+            Ext2.apply(this.baseParams, baseParams);
         }
     },
 
     onItemClick: function(view, number, target, ev) {
         if (!this.loadDetailAjax) return;
         var row = this.store.getAt(number);
-        var target = Ext.get(ev.getTarget());
+        var target = Ext2.get(ev.getTarget());
         if (target.dom.tagName.toLowerCase() != 'a') target = target.up('a');
         if (!target) return;
         var m = target.dom.rel.match(/kwfDetail([^ ]+)/);
         if (!m) return;
-        var config = Ext.decode(m[1]);
+        var config = Ext2.decode(m[1]);
         if (!config.directoryComponentId) return;
         if (config.directoryComponentId != this.directoryComponentId) return;
 
         ev.stopEvent();
         //more... Link clicked
-        this._lastViewScrollPosition = Ext.getBody().getScroll();
+        this._lastViewScrollPosition = Ext2.getBody().getScroll();
         this.showDetail(target.dom.href);
     },
 
@@ -511,7 +511,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
             style: 'width: ' + this.kwfMainContent.getStyle('width'),
             html: '<div class="loading"></div>'
         }, this.kwfMainContent);
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: Kwf.getKwcRenderUrl(),
             params: { url: href },
             success: function(response, options) {
@@ -523,7 +523,7 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
                 this.detailEl.query('a').forEach(function(el) {
                     if (el.href == location.protocol+'//'+location.host+this.directoryUrl) {
                         el.kwfViewAjaxInitDone = true;
-                        Ext.fly(el).on('click', function(ev) {
+                        Ext2.fly(el).on('click', function(ev) {
                             ev.stopEvent();
                             if (history.length > 1) {
                                 history.back(); //keeps scroll position

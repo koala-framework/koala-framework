@@ -15,17 +15,17 @@ Kwf.onElementReady = function(selector, fn, options) {
         var options = arguments[3];
         options.scope = scope;
     }
-    Kwf._addReadyHandler('ext', 'render', selector, fn, options);
+    Kwf._addReadyHandler('ext2', 'render', selector, fn, options);
 };
 
 Kwf.onElementShow = function(selector, fn,  options) {
-    Kwf._addReadyHandler('ext', 'show', selector, fn, options);
+    Kwf._addReadyHandler('ext2', 'show', selector, fn, options);
 };
 
 Kwf.onElementHide = function(selector, fn, options) {
-    Kwf._addReadyHandler('ext', 'hide', selector, fn, options);
+    Kwf._addReadyHandler('ext2', 'hide', selector, fn, options);
 };
 
 Kwf.onElementWidthChange = function(selector, fn, options) {
-    Kwf._addReadyHandler('ext', 'widthChange', selector, fn, options);
+    Kwf._addReadyHandler('ext2', 'widthChange', selector, fn, options);
 };

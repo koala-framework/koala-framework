@@ -1,11 +1,11 @@
-Ext.ns('Kwc.Mail');
-Kwc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
+Ext2.ns('Kwc.Mail');
+Kwc.Mail.PreviewWindow = Ext2.extend(Ext2.Window, {
     initComponent : function()
     {
         this.button = [];
-        this.button['html'] = new Ext.Toolbar.Button ({
+        this.button['html'] = new Ext2.Toolbar.Button ({
             icon    : '/assets/silkicons/html.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             text	: trlKwf('HTML'),
             enableToggle: true,
             toggleGroup: 'format',
@@ -14,9 +14,9 @@ Kwc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
             scope: this,
             name : 'html'
         });
-        this.button['text'] = new Ext.Toolbar.Button ({
+        this.button['text'] = new Ext2.Toolbar.Button ({
             icon    : '/assets/silkicons/page_white_text.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             text	: trlKwf('Text'),
             enableToggle: true,
             toggleGroup: 'format',
@@ -27,7 +27,7 @@ Kwc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
         });
 
         this.title = trlKwf('Newsletter Preview');
-        this.buttons = [new Ext.Action({
+        this.buttons = [new Ext2.Action({
             text    : trlKwf('Close'),
             handler : function() {
                 this.hide();
@@ -36,19 +36,19 @@ Kwc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
         })];
         this.tbar = [];
 
-        var send = new Ext.Toolbar.Button ({
+        var send = new Ext2.Toolbar.Button ({
             icon    : '/assets/silkicons/email_go.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             text	: trlKwf('Send'),
             handler : function(a, b, c) {
-                Ext.Ajax.request({
+                Ext2.Ajax.request({
                     url : this.controllerUrl + '/json-send-mail',
-                    params: Ext.apply(this.baseParams, {
+                    params: Ext2.apply(this.baseParams, {
                         address: this.address.getValue(),
                         format: this.button['html'].pressed ? 'html' : 'text'
                     }) ,
                     success: function(response, options, r) {
-                        Ext.MessageBox.alert(trlKwf('Status'), r.message);
+                        Ext2.MessageBox.alert(trlKwf('Status'), r.message);
                     },
                     scope: this
                 });
@@ -56,12 +56,12 @@ Kwc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
             scope   : this
         });
 
-        this.address = new Ext.form.TextField({
+        this.address = new Ext2.form.TextField({
             width: 200,
             vtype: 'email'
         });
-        this.subject = new Ext.StatusBar({});
-        this.mailPanel = new Ext.Panel({
+        this.subject = new Ext2.StatusBar({});
+        this.mailPanel = new Ext2.Panel({
             autoScroll: true,
             tbar	: this.subject,
             bodyCssClass: 'mailPreviewPanel'
@@ -82,9 +82,9 @@ Kwc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
         this.mailPanel.body.dom.style.backgroundColor = '#FFFFFF';
         this.mailPanel.body.dom.innerHTML = '';
         this.subject.showBusy();
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl + '/json-data',
-            params		:  Ext.apply(this.baseParams, {
+            params		:  Ext2.apply(this.baseParams, {
                 id : id
             }),
             success: function(r, options, data) {
@@ -101,7 +101,7 @@ Kwc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
     },
 
     applyBaseParams : function(baseParams) {
-    	Ext.apply(this.baseParams, baseParams);
+    	Ext2.apply(this.baseParams, baseParams);
     },
 
     toggleButton : function(button, pressed)
@@ -115,4 +115,4 @@ Kwc.Mail.PreviewWindow = Ext.extend(Ext.Window, {
         }
     }
 });
-Ext.reg('kwc.mail.preview', Kwc.Mail.PreviewWindow);
+Ext2.reg('kwc.mail.preview', Kwc.Mail.PreviewWindow);

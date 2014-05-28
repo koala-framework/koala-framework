@@ -1,8 +1,8 @@
 
-Kwf.User.Grid.SendMailWindow = Ext.extend(Ext.Window,
+Kwf.User.Grid.SendMailWindow = Ext2.extend(Ext2.Window,
 {
     initComponent: function() {
-        this.formPanel = new Ext.FormPanel({
+        this.formPanel = new Ext2.FormPanel({
             labelWidth: 90,
             url: this.controllerUrl+'/json-resend-mail',
             baseParams: this.baseParams,
@@ -53,7 +53,7 @@ Kwf.User.Grid.SendMailWindow = Ext.extend(Ext.Window,
                 }
             ]
         });
-        var infoPanel = new Ext.Panel({
+        var infoPanel = new Ext2.Panel({
             bodyCssClass: 'userMailResendInfo',
             border: false,
             html: trlKwf('Please select the E-Mail type you wish to send to the user.')

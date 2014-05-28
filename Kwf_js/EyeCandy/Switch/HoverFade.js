@@ -1,6 +1,6 @@
 Kwf.onContentReady(function()
 {
-    var els = Ext.query('.kwfSwitchHoverFade');
+    var els = Ext2.query('.kwfSwitchHoverFade');
     els.each(function(el) {
         var hoverFade = new Kwf.Switch.HoverFade({
             wrapper: el
@@ -9,7 +9,7 @@ Kwf.onContentReady(function()
 });
 
 
-Ext.namespace("Kwf.Switch.HoverFade");
+Ext2.namespace("Kwf.Switch.HoverFade");
 
 Kwf.Switch.HoverFade = function(cfg) {
     this.duration = 0.2;
@@ -26,9 +26,9 @@ Kwf.Switch.HoverFade = function(cfg) {
     if (cfg.fadeInAfter) this.fadeInAfter = cfg.fadeInAfter;
     if (cfg.endOpacity) this.endOpacity = cfg.endOpacity;
 
-    this.switchLink = Ext.get(Ext.query('.switchLink', cfg.wrapper)[0]);
-    this.switchContent = Ext.get(Ext.query('.switchContent', cfg.wrapper)[0]);
-    this.fadeWrapper = Ext.get(cfg.wrapper);
+    this.switchLink = Ext2.get(Ext2.query('.switchLink', cfg.wrapper)[0]);
+    this.switchContent = Ext2.get(Ext2.query('.switchContent', cfg.wrapper)[0]);
+    this.fadeWrapper = Ext2.get(cfg.wrapper);
 
     this.switchContent.setStyle('display', 'none');
 

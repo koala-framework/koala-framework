@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Directories.Item.Directory');
-Kwc.Directories.Item.Directory.EditFormPanel = Ext.extend(Kwf.Auto.FormPanel,
+Ext2.namespace('Kwc.Directories.Item.Directory');
+Kwc.Directories.Item.Directory.EditFormPanel = Ext2.extend(Kwf.Auto.FormPanel,
 {
     lastComponentId: null,
     setBaseParams : function(baseParams) {
@@ -24,4 +24,4 @@ Kwc.Directories.Item.Directory.EditFormPanel = Ext.extend(Kwf.Auto.FormPanel,
     }
 });
 
-Ext.reg('kwc.directories.item.directory.form', Kwc.Directories.Item.Directory.EditFormPanel);
+Ext2.reg('kwc.directories.item.directory.form', Kwc.Directories.Item.Directory.EditFormPanel);

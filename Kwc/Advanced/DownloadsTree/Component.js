@@ -1,5 +1,5 @@
 Kwf.onElementReady('.kwcAdvancedDownloadsTree .content', function(i) {
-        var options = Ext.decode(Ext.get(i).down('.options').dom.value);
+        var options = Ext2.decode(Ext2.get(i).down('.options').dom.value);
         this.downloads = new Kwf.Auto.GridPanel({
             controllerUrl: options.downloadsUrl,
             baseParams: {
@@ -28,7 +28,7 @@ Kwf.onElementReady('.kwcAdvancedDownloadsTree .content', function(i) {
             }
         }, this);
 
-        new Ext.Panel({
+        new Ext2.Panel({
             border: true,
             width: options.width,
             height: options.height,

@@ -2,15 +2,15 @@
 // @require Extensible.calendar.data.MemoryEventStore
 // @require Extensible.calendar.CalendarPanel
 
-Ext.define('Extensible.example.calendar.data.Events', {
+Ext2.define('Extensible.example.calendar.data.Events', {
     constructor :  function() {
-        var today = Ext.Date.clearTime(new Date),
+        var today = Ext2.Date.clearTime(new Date),
             makeDate = function(d, h, m, s){
                 d = d * 86400;
                 h = (h || 0) * 3600;
                 m = (m || 0) * 60;
                 s = (s || 0);
-                return Ext.Date.add(today, Ext.Date.SECOND, d + h + m + s);
+                return Ext2.Date.add(today, Ext2.Date.SECOND, d + h + m + s);
             };
 
         return {
@@ -114,18 +114,18 @@ Ext.define('Extensible.example.calendar.data.Events', {
     }
 });
 
-Ext.require([
+Ext2.require([
     'Extensible.calendar.data.MemoryEventStore',
     'Extensible.calendar.CalendarPanel',
 ]);
 
-Ext.onReady(function(){
-    var eventStore = Ext.create('Extensible.calendar.data.MemoryEventStore', {
+Ext2.onReady(function(){
+    var eventStore = Ext2.create('Extensible.calendar.data.MemoryEventStore', {
         // defined in ../data/Events.js
-        data: Ext.create('Extensible.example.calendar.data.Events')
+        data: Ext2.create('Extensible.example.calendar.data.Events')
     });
 
-    Ext.create('Extensible.calendar.CalendarPanel', {
+    Ext2.create('Extensible.calendar.CalendarPanel', {
         eventStore: eventStore,
         renderTo: 'simple',
         title: 'Basic Calendar',

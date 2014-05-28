@@ -87,7 +87,7 @@ Kwf.Utils.TimeAgo = {
     }
 };
 
-Ext.util.Format.timeAgo = function(v, p)
+Ext2.util.Format.timeAgo = function(v, p)
 {
     return Kwf.Utils.TimeAgo.inWords(v);
 };

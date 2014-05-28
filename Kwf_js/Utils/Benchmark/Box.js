@@ -1,5 +1,5 @@
 (function() {
-    Ext.ns('Kwf.Utils.BenchmarkBox');
+    Ext2.ns('Kwf.Utils.BenchmarkBox');
 
     var benchmarkEnabled = Kwf.Debug.benchmark;
     if (!benchmarkEnabled) {
@@ -95,9 +95,9 @@
     Kwf.Utils.BenchmarkBox.initBox = function(el) {
         if (el.dom.initDone) return;
         el.dom.initDone = true;
-        var container = Ext.getBody().child('.benchmarkContainer');
+        var container = Ext2.getBody().child('.benchmarkContainer');
         if (!container) {
-            container = Ext.getBody().createChild({
+            container = Ext2.getBody().createChild({
                 cls: 'benchmarkContainer'
             });
         }
@@ -115,7 +115,7 @@
         });
         showLink.on('click', function(ev) {
             ev.stopEvent();
-            var el = Ext.get(this);
+            var el = Ext2.get(this);
             if (!el.hasClass('visible')) {
                 el.addClass('visible');
                 setCookie('benchmarkBox-'+benchmarkType, '1');
@@ -163,15 +163,15 @@
         Kwf.Utils.BenchmarkBox._timers = {};
         Kwf.Utils.BenchmarkBox._subTimers = {};
         html = '<div class="benchmarkBoxContent">'+html+'</div>';
-        var el = Ext.getBody().createChild({
+        var el = Ext2.getBody().createChild({
             cls: 'benchmarkBox',
             'data-benchmark-type': options.type,
             html: html
         });
         Kwf.Utils.BenchmarkBox.initBox(el);
     };
-    Ext.onReady(function() {
-        Ext.select('.benchmarkBox').each(function(el) {
+    Ext2.onReady(function() {
+        Ext2.select('.benchmarkBox').each(function(el) {
             Kwf.Utils.BenchmarkBox.initBox(el);
         });
     }, this, { delay: 110 });

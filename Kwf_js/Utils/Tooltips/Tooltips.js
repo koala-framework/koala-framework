@@ -1,12 +1,12 @@
 Kwf.onContentReady(function()
 {
-    var tooltipWrappers = Ext.query('.tooltipWrapper');
-    Ext.each(tooltipWrappers, function(tooltipWrapper) {
-        tooltipWrapper = Ext.get(tooltipWrapper);
+    var tooltipWrappers = Ext2.query('.tooltipWrapper');
+    Ext2.each(tooltipWrappers, function(tooltipWrapper) {
+        tooltipWrapper = Ext2.get(tooltipWrapper);
         var contentHtml = tooltipWrapper.down('.tooltipContent').dom.innerHTML;
         var tooltipActivator = tooltipWrapper.down('.tooltipActivator');
 
-        new Ext.ToolTip({
+        new Ext2.ToolTip({
             target: tooltipActivator,
             html: contentHtml,
             dismissDelay:0,

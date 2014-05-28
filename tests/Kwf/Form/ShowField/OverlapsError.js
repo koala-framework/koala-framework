@@ -1,12 +1,12 @@
-Ext.namespace('Kwf.Test');
+Ext2.namespace('Kwf.Test');
 
-Kwf.Test.OverlapsError = Ext.extend(Ext.Panel, {
+Kwf.Test.OverlapsError = Ext2.extend(Ext2.Panel, {
     initComponent: function()
     {
         Kwf.Debug.displayErrors = true;
         this.buttons = [];
         this.buttons.push(
-            new Ext.Button({
+            new Ext2.Button({
             text:'testA',
             handler : function(){
                 var win = new Kwf.Auto.Form.Window({

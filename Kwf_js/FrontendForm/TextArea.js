@@ -1,4 +1,4 @@
-Kwf.FrontendForm.TextArea = Ext.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.TextArea = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         this.el.select('textarea').each(function(input) {
             input.on('keypress', function() {

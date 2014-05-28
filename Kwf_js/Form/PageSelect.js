@@ -1,4 +1,4 @@
-Kwf.Form.PageSelect = Ext.extend(Kwf.Form.AbstractSelect, {
+Kwf.Form.PageSelect = Ext2.extend(Kwf.Form.AbstractSelect, {
     initComponent: function() {
         Kwf.Form.PageSelect.superclass.initComponent.call(this);
     },
@@ -36,4 +36,4 @@ Kwf.Form.PageSelect = Ext.extend(Kwf.Form.AbstractSelect, {
     }
 });
 
-Ext.reg('pageselect', Kwf.Form.PageSelect);
+Ext2.reg('pageselect', Kwf.Form.PageSelect);

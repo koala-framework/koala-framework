@@ -60,7 +60,7 @@ Kwf.onContentReady(function jumpToAnchor(el) {
     if(!Kwf.Utils.ResponsiveEl._anchorDone && el === document.body) {
         Kwf.Utils.ResponsiveEl._anchorDone = true;
         if(window.location.hash) {
-            var target = Ext.get(window.location.hash.replace('#', ''));
+            var target = Ext2.get(window.location.hash.replace('#', ''));
             if (target) {
                //fix anchor target as ResponsiveEl might have changed the heights of elements
                 window.scrollTo(0, target.getTop());

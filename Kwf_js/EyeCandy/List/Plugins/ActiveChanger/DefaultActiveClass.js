@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.ActiveChanger.DefaultActiveClass = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.ActiveChanger.DefaultActiveClass = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     render: function() {
         var found = false;
         this.list.items.forEach(function(item) {

@@ -4,7 +4,7 @@ Kwf.onElementReady('a', function lightboxLink(el) {
     var m = el.rel.match(/(^lightbox| lightbox)({.*?})?/);
     if (m) {
         var options = {};
-        if (m[2]) options = Ext.decode(m[2]);
+        if (m[2]) options = Ext2.decode(m[2]);
         var l;
         if (Kwf.EyeCandy.Lightbox.allByUrl[el.href]) {
             l = Kwf.EyeCandy.Lightbox.allByUrl[el.href];
@@ -12,9 +12,9 @@ Kwf.onElementReady('a', function lightboxLink(el) {
             l = new Kwf.EyeCandy.Lightbox.Lightbox(el.href, options);
         }
         el.kwfLightbox = l;
-        Ext.EventManager.addListener(el, 'click', function(ev) {
+        Ext2.EventManager.addListener(el, 'click', function(ev) {
             this.kwfLightbox.show({
-                clickTarget: Ext.get(this)
+                clickTarget: Ext2.get(this)
             });
             Kwf.Utils.HistoryState.currentState.lightbox = this.href;
             Kwf.Utils.HistoryState.pushState(document.title, this.href);
@@ -26,8 +26,8 @@ Kwf.onElementReady('a', function lightboxLink(el) {
 Kwf.onElementReady('.kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
     if (el.dom.kwfLightbox) return;
-    var lightboxEl = Ext.get(el);
-    var options = Ext.decode(lightboxEl.child('input.options').dom.value);
+    var lightboxEl = Ext2.get(el);
+    var options = Ext2.decode(lightboxEl.child('input.options').dom.value);
     var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
     Kwf.Utils.HistoryState.currentState.lightbox = window.location.href;
     Kwf.Utils.HistoryState.updateState();
@@ -52,7 +52,7 @@ Kwf.onContentReady(function lightboxContent(readyEl, options)
 {
     if (!Kwf.EyeCandy.Lightbox.currentOpen) return;
 
-    readyEl = Ext.get(readyEl);
+    readyEl = Ext2.get(readyEl);
     if (readyEl.isVisible()) {
         //callOnContentReady was called for an element inside the lightbox, style can update the lightbox size
         if (Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl
@@ -88,22 +88,22 @@ Kwf.Utils.HistoryState.on('popstate', function() {
     }
 });
 
-if (!(Ext.isMac && 'ontouchstart' in document.documentElement)) {
-    Ext.fly(window).on('resize', function(ev) {
+if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
+    Ext2.fly(window).on('resize', function(ev) {
         if (Kwf.EyeCandy.Lightbox.currentOpen) {
             Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
         }
     }, this, {buffer: 100});
 } else {
     //on iOS listen to orientationchange as resize event triggers randomly when scrolling
-    Ext.fly(window).on('orientationchange', function(ev) {
+    Ext2.fly(window).on('orientationchange', function(ev) {
         if (Kwf.EyeCandy.Lightbox.currentOpen) {
             Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
         }
     }, this);
 }
 
-Ext.ns('Kwf.EyeCandy.Lightbox');
+Ext2.ns('Kwf.EyeCandy.Lightbox');
 Kwf.EyeCandy.Lightbox.currentOpen = null;
 Kwf.EyeCandy.Lightbox.allByUrl = {};
 Kwf.EyeCandy.Lightbox.Lightbox = function(href, options) {
@@ -126,7 +126,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         var cls = 'kwfLightbox';
         if (this.options.style) cls += ' kwfLightbox'+this.options.style;
         if (this.options.cssClass) cls += ' '+this.options.cssClass;
-        var lightbox = Ext.getBody().createChild({
+        var lightbox = Ext2.getBody().createChild({
             cls: cls,
             html: '<div class="kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'
         });
@@ -151,7 +151,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         if (this.fetched) return;
         this.fetched = true;
 
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             params: { url: this.href },
             url: Kwf.getKwcRenderUrl(),
             success: function(response, options) {
@@ -182,7 +182,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 var imagesToLoad = 0;
                 this.contentEl.query('img.hideWhileLoading').each(function(imgEl) {
                     imagesToLoad++;
-                    Ext.fly(imgEl).on('load', function() {
+                    Ext2.fly(imgEl).on('load', function() {
                         imagesToLoad--;
                         if (imagesToLoad <= 0) showContent.call(this);
                     }, this);
@@ -317,9 +317,9 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
 };
 Kwf.EyeCandy.Lightbox.Styles.Abstract.masks = 0;
 Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
-    init: Ext.emptyFn,
-    afterCreateLightboxEl: Ext.emptyFn,
-    afterContentShown: Ext.emptyFn,
+    init: Ext2.emptyFn,
+    afterCreateLightboxEl: Ext2.emptyFn,
+    afterContentShown: Ext2.emptyFn,
     updateContent: function(responseText) {
         this.lightbox.contentEl.update(responseText);
 
@@ -328,26 +328,26 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
         Kwf.callOnContentReady(this.lightbox.contentEl.dom, {newRender: true});
         this._blockOnContentReady = false;
     },
-    onShow: Ext.emptyFn,
-    afterShow: Ext.emptyFn,
-    onClose: Ext.emptyFn,
-    afterClose: Ext.emptyFn,
-    onContentReady: Ext.emptyFn,
-    onResizeWindow: Ext.emptyFn,
+    onShow: Ext2.emptyFn,
+    afterShow: Ext2.emptyFn,
+    onClose: Ext2.emptyFn,
+    afterClose: Ext2.emptyFn,
+    onContentReady: Ext2.emptyFn,
+    onResizeWindow: Ext2.emptyFn,
 
     mask: function() {
         //calling mask multiple times in valid, unmask must be called exactly often
         Kwf.EyeCandy.Lightbox.Styles.Abstract.masks++;
         if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 1) return;
-        Ext.getBody().addClass('kwfLightboxTheaterMode');
-        var maskEl = Ext.getBody().mask();
-        Ext.getBody().removeClass('x-masked');
-        Ext.getBody().removeClass('x-masked-relative');
+        Ext2.getBody().addClass('kwfLightboxTheaterMode');
+        var maskEl = Ext2.getBody().mask();
+        Ext2.getBody().removeClass('x2-masked');
+        Ext2.getBody().removeClass('x2-masked-relative');
         maskEl.addClass('lightboxMask');
         maskEl.dom.style.height = '';
         maskEl.dom.style.width = '';
 
-        //maskEl.setHeight(Math.max(Ext.lib.Dom.getViewHeight(), Ext.lib.Dom.getDocumentHeight()));
+        //maskEl.setHeight(Math.max(Ext2.lib.Dom.getViewHeight(), Ext2.lib.Dom.getDocumentHeight()));
 
         maskEl.on('click', function() {
             this.lightbox.closeAndPushState();
@@ -356,21 +356,21 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     unmask: function() {
         Kwf.EyeCandy.Lightbox.Styles.Abstract.masks--;
         if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 0) return;
-        Ext.getBody()._mask.fadeOut({
+        Ext2.getBody()._mask.fadeOut({
             concurrent: true,
             callback: function() {
-                Ext.getBody().removeClass('kwfLightboxTheaterMode');
-                Ext.getBody()._mask.remove();
+                Ext2.getBody().removeClass('kwfLightboxTheaterMode');
+                Ext2.getBody()._mask.remove();
             },
             scope: this
         });
     }
 };
 
-Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
+Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
     init: function()
     {
-        this._previousWindowSize = Ext.getBody().getViewSize();
+        this._previousWindowSize = Ext2.getBody().getViewSize();
     },
 
     afterCreateLightboxEl: function() {
@@ -522,14 +522,14 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     _getCenterXy: function() {
         var winSize = this._getMaxContentSize(false);
         var xy = [
-            (winSize.width - this.lightbox.innerLightboxEl.getSize().width) / 2 + Ext.getBody().getScroll().left,
-            (winSize.height - this.lightbox.innerLightboxEl.getSize().height) / 2 + Ext.getBody().getScroll().top
+            (winSize.width - this.lightbox.innerLightboxEl.getSize().width) / 2 + Ext2.getBody().getScroll().left,
+            (winSize.height - this.lightbox.innerLightboxEl.getSize().height) / 2 + Ext2.getBody().getScroll().top
         ];
 
         //if lightbox is larget than viewport don't position lightbox above, the user can only scroll down
         var m = this._getOuterMargin();
-        if (xy[0] < Ext.getBody().getScroll().left+m) xy[0] = Ext.getBody().getScroll().left+m;
-        if (xy[1] < Ext.getBody().getScroll().top+m) xy[1] = Ext.getBody().getScroll().top+m;
+        if (xy[0] < Ext2.getBody().getScroll().left+m) xy[0] = Ext2.getBody().getScroll().left+m;
+        if (xy[1] < Ext2.getBody().getScroll().top+m) xy[1] = Ext2.getBody().getScroll().top+m;
         xy[0] = Math.floor(xy[0]);
         xy[1] = Math.floor(xy[1]);
 
@@ -570,7 +570,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     //the browser window resized, the lightbox content might be responsive - update lightbox size
     onResizeWindow: function(ev)
     {
-        var s = Ext.getBody().getViewSize();
+        var s = Ext2.getBody().getViewSize();
         if (s.width == this._previousWindowSize.width && s.height == this._previousWindowSize.height) {
             return;
         }

@@ -1,4 +1,4 @@
-Ext.ns('Kwf.Auto.Filter');
+Ext2.ns('Kwf.Auto.Filter');
 Kwf.Auto.Filter.Abstract = function(config) {
     Kwf.Auto.Filter.Abstract.superclass.constructor.call(this);
     this.addEvents('filter');
@@ -6,7 +6,7 @@ Kwf.Auto.Filter.Abstract = function(config) {
     this.id = config.name;
     this.label = config.label || null;
 };
-Ext.extend(Kwf.Auto.Filter.Abstract, Ext.util.Observable, {
+Ext2.extend(Kwf.Auto.Filter.Abstract, Ext2.util.Observable, {
     reset: function() {
     },
     getParams: function() {

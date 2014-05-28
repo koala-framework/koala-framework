@@ -1,4 +1,4 @@
-Kwc.Abstract.List.ListEditButton = Ext.extend(Kwf.Auto.GridPanel, {
+Kwc.Abstract.List.ListEditButton = Ext2.extend(Kwf.Auto.GridPanel, {
     initComponent: function() {
         Kwc.Abstract.List.ListEditButton.superclass.initComponent.call(this);
 
@@ -23,4 +23,4 @@ Kwc.Abstract.List.ListEditButton = Ext.extend(Kwf.Auto.GridPanel, {
         this.fireEvent('gotComponentConfigs', this.componentConfigs);
     }
 });
-Ext.reg('kwc.list.listEditButton', Kwc.Abstract.List.ListEditButton);
+Ext2.reg('kwc.list.listEditButton', Kwc.Abstract.List.ListEditButton);

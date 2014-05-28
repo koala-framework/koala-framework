@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Shop.Cart.Plugins.Voucher');
-Kwc.Shop.Cart.Plugins.Voucher.Panel = Ext.extend(Ext.Panel, {
+Ext2.namespace('Kwc.Shop.Cart.Plugins.Voucher');
+Kwc.Shop.Cart.Plugins.Voucher.Panel = Ext2.extend(Ext2.Panel, {
     layout: 'border',
     initComponent: function() {
         var history = new Kwf.Auto.GridPanel({
@@ -24,4 +24,4 @@ Kwc.Shop.Cart.Plugins.Voucher.Panel = Ext.extend(Ext.Panel, {
         Kwc.Shop.Cart.Plugins.Voucher.Panel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwc.shop.cart.plugins.voucher', Kwc.Shop.Cart.Plugins.Voucher.Panel);
+Ext2.reg('kwc.shop.cart.plugins.voucher', Kwc.Shop.Cart.Plugins.Voucher.Panel);

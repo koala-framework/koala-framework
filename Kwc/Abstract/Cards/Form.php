@@ -34,7 +34,7 @@ class Kwc_Abstract_Cards_Form extends Kwc_Abstract_Form
                         $form->setIdTemplate('{0}-child');
                     }
                     $form->setAutoHeight(true);
-                    $form->setBaseCls('x-plain');
+                    $form->setBaseCls('x2-plain');
                 }
 
                 $card = $cards->add();

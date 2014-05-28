@@ -45,7 +45,7 @@ if (!Kwf.isApp) {
             delete Kwf._skipDeferred;
         }).defer(10);
 
-        Ext.fly(window).on('resize', function() {
+        Ext2.fly(window).on('resize', function() {
             Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
         }, this, { buffer: 100 });
     });
@@ -84,7 +84,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         if (console && console && console.warn) console.warn('Please pass element argument on callOnContentReady');
         renderedEl = document.body;
     }
-    if (Ext.Element && renderedEl instanceof Ext.Element) renderedEl = renderedEl.dom;
+    if (Ext2.Element && renderedEl instanceof Ext2.Element) renderedEl = renderedEl.dom;
     if (jQuery && renderedEl instanceof jQuery) {
         renderedEl.each(function(){ Kwf.callOnContentReady(this, options); });
         return;
@@ -240,7 +240,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     {
         var t = Kwf.Utils.BenchmarkBox.now();
         var el = queueEntry.el;
-        el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
+        el = queueEntry.type == 'ext2' ? Ext2.get(el) : $(el);
         queueEntry.fn.call(queueEntry.options.scope || window, el, config);
         var fnName = queueEntry.fn.name;
         if (!fnName) {

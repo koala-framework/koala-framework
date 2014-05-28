@@ -2,7 +2,7 @@
 document.write('<style type="text/css"> div.kwfSwitchDisplay div.switchContent { display: none; } </style>');
 
 Kwf.onElementReady('div.kwfSwitchDisplay', function(el) {
-    el = Ext.get(el);
+    el = Ext2.get(el);
     // Attach Switch.Display-Object to dom because ext-element is still existent even though
     // it's no part of dom anymore when html is changed e.g. because of ajax-view
     if (!el.dom.switchDisplayObject) {
@@ -23,15 +23,15 @@ Kwf.Switch.Display = function(el, config) {
             duration: .5
         }
     };
-    this.config = Ext.apply(defaultConfig, config);
+    this.config = Ext2.apply(defaultConfig, config);
 
     this.el = el;
-    this.switchLink = Ext.get(Ext.query('.switchLink', this.el.dom)[0]);
-    if (!this.switchLink) this.switchLink = Ext.get(Ext.query('.switchLinkHover', this.el.dom)[0]);
-    this.switchContent = Ext.get(Ext.query('.switchContent', this.el.dom)[0]);
-    this.kwfSwitchCloseLink = Ext.query('.switchCloseLink', this.el.dom);
+    this.switchLink = Ext2.get(Ext2.query('.switchLink', this.el.dom)[0]);
+    if (!this.switchLink) this.switchLink = Ext2.get(Ext2.query('.switchLinkHover', this.el.dom)[0]);
+    this.switchContent = Ext2.get(Ext2.query('.switchContent', this.el.dom)[0]);
+    this.kwfSwitchCloseLink = Ext2.query('.switchCloseLink', this.el.dom);
     if (this.kwfSwitchCloseLink.length) {
-        this.kwfSwitchCloseLink = Ext.get(this.kwfSwitchCloseLink[0]);
+        this.kwfSwitchCloseLink = Ext2.get(this.kwfSwitchCloseLink[0]);
     } else {
         this.kwfSwitchCloseLink = false;
     }
@@ -52,7 +52,7 @@ Kwf.Switch.Display = function(el, config) {
         this.switchContent.setStyle('display', 'block');
         this.switchContent.setStyle('height', 'auto');
         this.switchLink.addClass('switchLinkOpened');
-        if (Ext.isIE6) {
+        if (Ext2.isIE6) {
             this.switchContent.setWidth(this.switchContent.getWidth());
         }
     }
@@ -66,7 +66,7 @@ Kwf.Switch.Display = function(el, config) {
                 this.doClose();
             }, this);
         } else {
-            Ext.EventManager.addListener(this.switchLink, 'click', function(e) {
+            Ext2.EventManager.addListener(this.switchLink, 'click', function(e) {
                 if (this.switchLink.hasClass('switchLinkOpened')) {
                     this.doClose();
                 } else {
@@ -77,13 +77,13 @@ Kwf.Switch.Display = function(el, config) {
     }
 
     if (this.kwfSwitchCloseLink) {
-        Ext.EventManager.addListener(this.kwfSwitchCloseLink, 'click', function(e) {
+        Ext2.EventManager.addListener(this.kwfSwitchCloseLink, 'click', function(e) {
             this.doClose();
         }, this, { stopEvent: true });
     }
 };
 
-Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
+Ext2.extend(Kwf.Switch.Display, Ext2.util.Observable, {
     doClose: function() {
         if (this._state == 'closing' || this._state == 'closed') {
             return;
@@ -129,7 +129,7 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
                     this.fireEvent('opened', this);
                     this._state = 'opened';
                     Kwf.callOnContentReady(this.el.dom, {newRender: false});
-                    if (Ext.isIE6) {
+                    if (Ext2.isIE6) {
                         this.switchContent.setWidth(this.switchContent.getWidth());
                     }
                 },

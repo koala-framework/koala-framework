@@ -29,7 +29,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
             'type'      => 'Button',
             'skipWhere' => true,
             'icon'      => $this->getRequest()->getBaseUrl().'/assets/silkicons/user_red.png',
-            'cls'       => 'x-btn-text-icon',
+            'cls'       => 'x2-btn-text-icon',
             'text'      => trlKwf('Show locked users'),
             'tooltip'   => trlKwf('Show locked users too')
         );

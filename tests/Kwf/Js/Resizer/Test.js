@@ -13,9 +13,9 @@ Kwf.onElementReady('.kwfResizeElement', function(element) {
     });
     resizer.on("resize", function(width, height, e) {
     }, this);
-    new Ext.dd.DD(element.child('.resizeElement'), '');
+    new Ext2.dd.DD(element.child('.resizeElement'), '');
 
-    var window = new Ext.Window({
+    var window = new Ext2.Window({
         title: trlKwf('Test'),
         closeAction: 'close',
         width: 200,
@@ -23,7 +23,7 @@ Kwf.onElementReady('.kwfResizeElement', function(element) {
         layout: 'fit',
         resizable: true,
         initComponent: function() {
-            Ext.Window.superclass.initComponent.call(this);
+            Ext2.Window.superclass.initComponent.call(this);
         }
     });
     window.show();

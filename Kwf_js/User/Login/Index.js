@@ -1,6 +1,6 @@
-Ext.namespace('Kwf.User.Login');
+Ext2.namespace('Kwf.User.Login');
 
-Kwf.User.Login.Index = Ext.extend(Ext.Panel,
+Kwf.User.Login.Index = Ext2.extend(Ext2.Panel,
 {
     initComponent: function() {
         Kwf.User.Login.Index.superclass.initComponent.call(this);

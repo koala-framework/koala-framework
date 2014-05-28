@@ -1,6 +1,6 @@
-Ext.namespace('Kwf.Test');
+Ext2.namespace('Kwf.Test');
 
-Kwf.Test.ConnectionsError = Ext.extend(Ext.Panel, {
+Kwf.Test.ConnectionsError = Ext2.extend(Ext2.Panel, {
     html: 'test',
     id: 'blub',
     initComponent: function()
@@ -8,10 +8,10 @@ Kwf.Test.ConnectionsError = Ext.extend(Ext.Panel, {
         Kwf.Debug.displayErrors = false;
         this.buttons = [];
         this.buttons.push(
-            new Ext.Button({
+            new Ext2.Button({
             text:'testA',
             handler : function(){
-                Ext.Ajax.request({
+                Ext2.Ajax.request({
                     timeout: 1000,
                     params: {test:1},
                     errorText: 'foo1',
@@ -28,11 +28,11 @@ Kwf.Test.ConnectionsError = Ext.extend(Ext.Panel, {
             scope: this
         }));
         this.buttons.push(
-            new Ext.Button({
+            new Ext2.Button({
             text:'testC',
             handler : function(){
                 Kwf.Debug.displayErrors = true;
-                Ext.Ajax.request({
+                Ext2.Ajax.request({
                     timeout: 1000,
                     params: {test:1},
                     errorText: 'timeoutError',
@@ -45,7 +45,7 @@ Kwf.Test.ConnectionsError = Ext.extend(Ext.Panel, {
                     },
                     scope: this
                });
-                Ext.Ajax.request({
+                Ext2.Ajax.request({
                     timeout: 1000,
                     params: {test:2},
                     errorText: 'exceptionError',
@@ -62,11 +62,11 @@ Kwf.Test.ConnectionsError = Ext.extend(Ext.Panel, {
             scope: this
         }));
         this.buttons.push(
-            new Ext.Button({
+            new Ext2.Button({
             text:'testD',
             handler : function(){
                 Kwf.Debug.displayErrors = true;
-                Ext.Ajax.request({
+                Ext2.Ajax.request({
                     params: {test:1},
                     url: '/kwf/test/kwf_connection_test/json-real-exception',
                     failure: function() {

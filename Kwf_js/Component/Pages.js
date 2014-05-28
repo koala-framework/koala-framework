@@ -1,11 +1,11 @@
-Ext.namespace('Kwf.Component');
-Kwf.Component.Pages = Ext.extend(Ext.Panel, {
+Ext2.namespace('Kwf.Component');
+Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
     initComponent : function()
     {
         this.actions = {};
         this.componentConfigs = {};
 
-        this.pageButtonMenu = new Ext.menu.Menu({
+        this.pageButtonMenu = new Ext2.menu.Menu({
             items    : [
                 '-',
                 this.getAction('properties'),
@@ -18,8 +18,8 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('preview')
             ]
         });
-        this.pageButton = new Ext.Toolbar.Button({
-            cls     : 'x-btn-text-icon bmenu',
+        this.pageButton = new Ext2.Toolbar.Button({
+            cls     : 'x2-btn-text-icon bmenu',
             text    : trlKwf('Page'),
             menu    : this.pageButtonMenu,
             icon    : '/assets/silkicons/page.png',
@@ -61,7 +61,7 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
             this.tree.getRootNode().reload();
         };
 
-        this.contentTabPanel = new Ext.TabPanel({
+        this.contentTabPanel = new Ext2.TabPanel({
             region      : 'center'
         });
         this.contentTabPanel.on('render', function() {
@@ -120,11 +120,11 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
     onTreePanelLoaded : function(tree)
     {
         tree.loader.on('load', function(tree, node, response) {
-            var result = Ext.decode(response.responseText);
-            Ext.applyIf(this.componentConfigs, result.componentConfigs);
+            var result = Ext2.decode(response.responseText);
+            Ext2.applyIf(this.componentConfigs, result.componentConfigs);
         }, this);
 
-        this.contextMenu = new Ext.menu.Menu({
+        this.contextMenu = new Ext2.menu.Menu({
              items: [
                 '-',
                 this.getAction('properties'),
@@ -187,7 +187,7 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
             var editKey = editComponent.componentId;
             var actionKey = editComponent.componentClass+'-'+editComponent.type;
             if (!this.editActions[editKey+actionKey]) {
-                this.editActions[editKey+actionKey] = new Ext.Action({
+                this.editActions[editKey+actionKey] = new Ext2.Action({
                     text    : this.componentConfigs[actionKey].title,
                     handler : function (o, e) {
                         var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
@@ -207,15 +207,15 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
                         }, this);
                     },
                     icon    : this.componentConfigs[actionKey].icon,
-                    cls     : 'x-btn-text-icon',
+                    cls     : 'x2-btn-text-icon',
                     scope   : this,
                     actionKey: actionKey,
                     editKey: editKey
                 });
             }
             this.editActions[editKey+actionKey].setDisabled(data.disabled);
-            this.contextMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[editKey+actionKey]));
-            this.pageButtonMenu.insert(actionsAdded, new Ext.menu.Item(this.editActions[editKey+actionKey]));
+            this.contextMenu.insert(actionsAdded, new Ext2.menu.Item(this.editActions[editKey+actionKey]));
+            this.pageButtonMenu.insert(actionsAdded, new Ext2.menu.Item(this.editActions[editKey+actionKey]));
             actionsAdded++;
         }, this);
     },
@@ -267,7 +267,7 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
         if (this.actions[type]) return this.actions[type];
 
         if (type == 'properties') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Page properties'),
                 handler : function () {
                     this._removeEditDialogForm();
@@ -276,11 +276,11 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
                     this.editDialog.showEdit(node.id);
                 },
                 icon    : '/assets/silkicons/page_gear.png',
-                cls     : 'x-btn-text-icon',
+                cls     : 'x2-btn-text-icon',
                 scope   : this
             });
         } else if (type == 'add') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Add new child page'),
                 handler : function () {
                     this._removeEditDialogForm();
@@ -291,64 +291,64 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
                     this.editDialog.showAdd();
                 },
                 icon    : '/assets/silkicons/page_add.png',
-                cls     : 'x-btn-text-icon',
+                cls     : 'x2-btn-text-icon',
                 scope   : this
             });
         } else if (type == 'delete') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Delete Page'),
                 handler : function() {
                     this.treePanel.onDelete();
                 },
                 icon    : '/assets/silkicons/page_delete.png',
-                cls     : 'x-btn-text-icon',
+                cls     : 'x2-btn-text-icon',
                 scope   : this
             });
         } else if (type == 'copy') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Copy Page'),
                 handler : function() {
                     this.onCopy();
                 },
                 icon    : '/assets/silkicons/page_copy.png',
-                cls     : 'x-btn-text-icon',
+                cls     : 'x2-btn-text-icon',
                 scope   : this
             });
         } else if (type == 'paste') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Paste Page'),
                 handler : function() {
                     this.onPaste();
                 },
                 icon    : '/assets/silkicons/page_paste.png',
-                cls     : 'x-btn-text-icon',
+                cls     : 'x2-btn-text-icon',
                 scope   : this
             });
         } else if (type == 'visible') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Show / Hide Page'),
                 handler : function() {
                     this.treePanel.onVisible();
                 },
                 icon    : '/assets/fx_invisible/silkicons/page.png',
-                cls     : 'x-btn-text-icon',
+                cls     : 'x2-btn-text-icon',
                 scope   : this
             });
         } else if (type == 'makeHome') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Use as homepage'),
                 handler : function (o, e) {
-                    Ext.Msg.show({
+                    Ext2.Msg.show({
                         title: trlKwf('Use as homepage'),
                         msg: trlKwf('Attention! You are about to set the selected page as the homepage of your website. This may affect the entire website. Do you wish to proceed?'),
-                        buttons: Ext.Msg.YESNO,
-                        icon: Ext.MessageBox.WARNING,
+                        buttons: Ext2.Msg.YESNO,
+                        icon: Ext2.MessageBox.WARNING,
                         fn: function(btn, text) {
                             if (btn == 'yes') {
-                                Ext.Ajax.request({
+                                Ext2.Ajax.request({
                                     url: '/admin/component/pages/json-make-home',
                                     success: function(r) {
-                                        response = Ext.decode(r.responseText);
+                                        response = Ext2.decode(r.responseText);
                                         var oldhome = this.treePanel.tree.getNodeById(response.oldhome);
                                         oldhome.attributes.visible = response.oldhomeVisible;
                                         this.treePanel.setVisible(oldhome);
@@ -365,34 +365,34 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
                     });
                 },
                 icon    : '/assets/silkicons/application_home.png',
-                cls     : 'x-btn-text-icon',
+                cls     : 'x2-btn-text-icon',
                 scope   : this
             });
         } else if (type == 'expand') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Expand here'),
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().expand(true); },
                 icon    : '/assets/silkicons/bullet_add.png',
-                cls     : 'x-btn-text-icon',
+                cls     : 'x2-btn-text-icon',
                 scope   : this
             });
         } else if (type == 'collapse') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Collapse here'),
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().collapse(true); },
                 icon    : '/assets/silkicons/bullet_delete.png',
-                cls     : 'x-btn-text-icon',
+                cls     : 'x2-btn-text-icon',
                 scope   : this
             });
         } else if (type == 'preview') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : trlKwf('Open preview'),
                 handler : function () {
                     window.open('/admin/component/pages/open-preview?page_id='+
                                 this.treePanel.getSelectedId());
                 },
                 icon    : '/assets/silkicons/page_white_magnify.png',
-                cls     : 'x-btn-text-icon',
+                cls     : 'x2-btn-text-icon',
                 scope   : this
             });
         } else {
@@ -402,9 +402,9 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
     },
 
     onCopy: function(o, e) {
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.treePanel.controllerUrl + '/json-copy',
-            params: Ext.apply({id:this.treePanel.getSelectedId()}, this.treePanel.getBaseParams()),
+            params: Ext2.apply({id:this.treePanel.getSelectedId()}, this.treePanel.getBaseParams()),
             mask: this.el,
             success: function(response, options, result) {
             },
@@ -413,9 +413,9 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
     },
 
     onPaste: function() {
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.treePanel.controllerUrl + '/json-paste',
-            params: Ext.apply({id:this.treePanel.getSelectedId()}, this.treePanel.getBaseParams()),
+            params: Ext2.apply({id:this.treePanel.getSelectedId()}, this.treePanel.getBaseParams()),
             timeout: 5*60*1000,
             progress: true,
             progressTitle : trlKwf('Paste Page'),
@@ -429,4 +429,4 @@ Kwf.Component.Pages = Ext.extend(Ext.Panel, {
 
 });
 
-Ext.reg('kwf.component.pages', Kwf.Component.Pages);
+Ext2.reg('kwf.component.pages', Kwf.Component.Pages);

@@ -1,6 +1,6 @@
-Ext.BLANK_IMAGE_URL = '/assets/ext/resources/images/default/s.gif';
+Ext2.BLANK_IMAGE_URL = '/assets/ext2/resources/images/default/s.gif';
 
-Ext.namespace(
+Ext2.namespace(
 'Kwf', 'Kwc',
 'Kwf.Component',
 'Kwf.User.Login',
@@ -15,16 +15,16 @@ Ext.namespace(
 'Kwf.Utils'
 );
 
-Ext.applyIf(Array.prototype, {
+Ext2.applyIf(Array.prototype, {
 
     //deprecated! -> forEach (ist auch ein JS-Standard!)
     each : function(fn, scope){
-        Ext.each(this, fn, scope);
+        Ext2.each(this, fn, scope);
     },
 
     //to use array.forEach directly
     forEach : function(fn, scope){
-        Ext.each(this, fn, scope);
+        Ext2.each(this, fn, scope);
     },
 
     //add is alias for push
@@ -40,7 +40,7 @@ Ext.applyIf(Array.prototype, {
     }
 });
 
-Ext.applyIf(Function.prototype, {
+Ext2.applyIf(Function.prototype, {
 
     interceptResult: function(fcn, scope) {
         if(typeof fcn != "function"){
@@ -55,7 +55,7 @@ Ext.applyIf(Function.prototype, {
             return newRetval;
         };
         if (this.prototype){
-            Ext.apply(interception.prototype, this.prototype);
+            Ext2.apply(interception.prototype, this.prototype);
             if (this.superclass){ interception.superclass=this.superclass; }
             if (this.override){ interception.override=this.override; }
         }
@@ -84,29 +84,29 @@ Kwf.clone = function(o) {
     return c;
 };
 
-if (!Ext.isObject) {
+if (!Ext2.isObject) {
     //TODO Ext4: remove
-    Ext.isObject = (Ext.toString.call(null) === '[object Object]') ?
+    Ext2.isObject = (Ext2.toString.call(null) === '[object Object]') ?
     function(value) {
         // check ownerDocument here as well to exclude DOM nodes
-        return value !== null && value !== undefined && Ext.toString.call(value) === '[object Object]' && value.ownerDocument === undefined;
+        return value !== null && value !== undefined && Ext2.toString.call(value) === '[object Object]' && value.ownerDocument === undefined;
     } :
     function(value) {
-        return Ext.toString.call(value) === '[object Object]';
+        return Ext2.toString.call(value) === '[object Object]';
     };
 }
 
-Ext.onReady(function()
+Ext2.onReady(function()
 {
-//     Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+//     Ext2.state.Manager.setProvider(new Ext2.state.CookieProvider());
 
-    if (Ext.QuickTips) {
-        Ext.QuickTips.init();
+    if (Ext2.QuickTips) {
+        Ext2.QuickTips.init();
     }
 
-    if (Ext.isIE6) {
-        Ext.each(Ext.DomQuery.select('.addHover'), function(el) {
-            var extEl = Ext.fly(el);
+    if (Ext2.isIE6) {
+        Ext2.each(Ext2.DomQuery.select('.addHover'), function(el) {
+            var extEl = Ext2.fly(el);
             extEl.hover(
                 function() { this.addClass('hover'); },
                 function() { this.removeClass('hover'); },
@@ -136,7 +136,7 @@ Kwf.log = function(msg) {
 Kwf.requestSentSinceLastKeepAlive = false;
 
 Kwf.keepAlive = function() { //can be overridden
-    Ext.Ajax.request({
+    Ext2.Ajax.request({
         url: '/kwf/user/login/json-keep-alive',
         ignoreErrors: true
     });
@@ -223,7 +223,7 @@ Kwf.include =  function(url, restart)
 
 Kwf.restart = function()
 {
-    Ext.getBody().unmask();
+    Ext2.getBody().unmask();
     if (Kwf.currentViewport) {
         Kwf.currentViewport.onDestroy();
         delete Kwf.currentViewport;

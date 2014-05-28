@@ -1,4 +1,4 @@
-Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
+Kwf.Form.ComboBox = Ext2.extend(Ext2.form.ComboBox,
 {
     displayField: 'name',
     valueField: 'id',
@@ -11,7 +11,7 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         if(!this.store) {
             throw "no store set";
         }
-        if (!(this.store instanceof Ext.data.Store)) {
+        if (!(this.store instanceof Ext2.data.Store)) {
             //store klonen (um nicht this.initalConfig.store zu ändern)
             var store = {};
             for (var i in this.store) {
@@ -19,17 +19,17 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             }
             delete this.store;
             if (store.data) {
-                store = Ext.applyIf(store, {
+                store = Ext2.applyIf(store, {
                     fields: ['id', 'name'],
                     id: 'id'
                 });
-                this.store = new Ext.data.SimpleStore(store);
+                this.store = new Ext2.data.SimpleStore(store);
                 this.displayField = store.fields[1];
                 this.mode = 'local';
             } else {
                 if (store.reader) {
-                    if (store.reader.type && Ext.data[store.reader.type]) {
-                        var readerType = Ext.data[store.reader.type];
+                    if (store.reader.type && Ext2.data[store.reader.type]) {
+                        var readerType = Ext2.data[store.reader.type];
                         delete store.reader.type;
                     } else if (store.reader.type) {
                         try {
@@ -39,18 +39,18 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                         }
                         delete store.reader.type;
                     } else {
-                        var readerType = Ext.data.JsonReader;
+                        var readerType = Ext2.data.JsonReader;
                     }
                     if (!store.reader.rows) throw "no rows defined, required if reader doesn't this through meta data";
                     var rows = store.reader.rows;
                     delete store.reader.rows;
                     var reader = new readerType(store.reader, rows);
                 } else {
-                    var reader = new Ext.data.JsonReader(); //reader thisuriert sich autom. durch meta-daten
+                    var reader = new Ext2.data.JsonReader(); //reader thisuriert sich autom. durch meta-daten
                 }
                 if (store.proxy) {
-                    if (store.proxy.type && Ext.data[store.proxy.type]) {
-                        var proxyType = Ext.data[store.proxy.type];
+                    if (store.proxy.type && Ext2.data[store.proxy.type]) {
+                        var proxyType = Ext2.data[store.proxy.type];
                         delete store.proxy.type;
                     } else if (store.proxy.type) {
                         try {
@@ -60,24 +60,24 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                         }
                         delete store.proxy.type;
                     } else {
-                        var proxyType = Ext.data.HttpProxy;
+                        var proxyType = Ext2.data.HttpProxy;
                     }
                     var proxy = new proxyType(store.proxy);
                 } else if (store.data) {
-                    var proxy = new Ext.data.MemoryProxy(store.data);
+                    var proxy = new Ext2.data.MemoryProxy(store.data);
                 } else {
-                    var proxy = new Ext.data.HttpProxy(store);
+                    var proxy = new Ext2.data.HttpProxy(store);
                 }
                 var storeConfig = {
                     proxy: proxy,
                     reader: reader
                 };
-                Ext.apply(storeConfig, this.storeConfig);
+                Ext2.apply(storeConfig, this.storeConfig);
                 if (typeof storeConfig.remoteSort == 'undefined') {
-                    storeConfig.remoteSort = proxy instanceof Ext.data.HttpProxy;
+                    storeConfig.remoteSort = proxy instanceof Ext2.data.HttpProxy;
                 }
-                if (store.type && Ext.data[store.type]) {
-                    this.store = new Ext.data[store.type](storeConfig);
+                if (store.type && Ext2.data[store.type]) {
+                    this.store = new Ext2.data[store.type](storeConfig);
                 } else if (store.type) {
                     try {
                         var storeType = eval(store.type);
@@ -86,7 +86,7 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                     }
                     this.store = new storeType(storeConfig);
                 } else {
-                    this.store = new Ext.data.Store(storeConfig);
+                    this.store = new Ext2.data.Store(storeConfig);
                 }
             }
         }
@@ -210,8 +210,8 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
     {
         Kwf.Form.ComboBox.superclass.onRender.call(this, ct, position);
         if (this.addDialog) {
-            var c = this.el.up('div.x-form-field-wrap').insertSibling({style: 'float: right'}, 'before');
-            var button = new Ext.Button({
+            var c = this.el.up('div.x2-form-field-wrap').insertSibling({style: 'float: right'}, 'before');
+            var button = new Ext2.Button({
                 renderTo: c,
                 text: this.addDialog.text || trlKwf('add new entry'),
                 handler: function() {
@@ -222,7 +222,7 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         }
     },
     setFormBaseParams: function(params) {
-        Ext.apply(this.store.baseParams, params);
+        Ext2.apply(this.store.baseParams, params);
     },
 
 
@@ -246,4 +246,4 @@ Kwf.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 
 
 });
-Ext.reg('combobox', Kwf.Form.ComboBox);
+Ext2.reg('combobox', Kwf.Form.ComboBox);

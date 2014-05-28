@@ -1,4 +1,4 @@
-Kwf.Form.MultiCheckbox = Ext.extend(Kwf.Form.FieldSet, {
+Kwf.Form.MultiCheckbox = Ext2.extend(Kwf.Form.FieldSet, {
     afterRender: function() {
         Kwf.Form.MultiCheckbox.superclass.afterRender.call(this);
 
@@ -39,4 +39,4 @@ Kwf.Form.MultiCheckbox = Ext.extend(Kwf.Form.FieldSet, {
     }
 });
 
-Ext.reg('multicheckbox', Kwf.Form.MultiCheckbox);
+Ext2.reg('multicheckbox', Kwf.Form.MultiCheckbox);

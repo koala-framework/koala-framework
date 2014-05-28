@@ -1,5 +1,5 @@
 Kwf.onContentReady(function(el){
-    Ext.get(el).select('.kwcAdvancedVideoPlayer', true).each(function(el) {
+    Ext2.get(el).select('.kwcAdvancedVideoPlayer', true).each(function(el) {
         if (!el.isVisible(true)) {
             if (el.mediaElement) el.mediaElement.stop();
         }
