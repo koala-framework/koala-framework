@@ -1,5 +1,5 @@
 {
-    "name": "vivid-planet/koala-framework",
+    "name": "koala-framework/koala-framework",
     "require": {
         "koala-framework/library-zendframework1": "1.12.6",
 
