@@ -8,12 +8,13 @@ class Kwf_Util_Setup
 
     public static function minimalBootstrapAndGenerateFile()
     {
-        if (!defined('KWF_PATH')) define('KWF_PATH', realpath(dirname(__FILE__).'/../..'));
+        $kwfPath = realpath(dirname(__FILE__).'/../..');
+        if (!defined('KWF_PATH')) define('KWF_PATH', $kwfPath);
 
         //reset include path, don't use anything from php.ini
-        set_include_path('.' . PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . self::_getZendPath());
+        set_include_path('.' . PATH_SEPARATOR . $kwfPath . PATH_SEPARATOR . self::_getZendPath());
 
-        require_once KWF_PATH.'/Kwf/Loader.php';
+        require_once $kwfPath.'/Kwf/Loader.php';
         Kwf_Loader::registerAutoload();
 
         Zend_Registry::setClassName('Kwf_Registry');
@@ -83,7 +84,7 @@ class Kwf_Util_Setup
         $ret .= "    \$_SERVER['HTTPS'] = 'on';\n";
         $ret .= "}\n";
 
-        $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".KWF_PATH."');\n";
+        $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".realpath(dirname(__FILE__).'/../..')."');\n";
         $ret .= "if (!defined('VENDOR_PATH')) define('VENDOR_PATH', 'vendor');\n";
 
         $ip = include VENDOR_PATH.'/composer/include_paths.php';
