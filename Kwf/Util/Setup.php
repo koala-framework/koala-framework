@@ -250,15 +250,6 @@ class Kwf_Util_Setup
 
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
 
-        if (Kwf_Config::getValue('debug.checkBranch') && is_file('kwf_branch')) {
-            $ret .= "    \$requiredBranch = trim(file_get_contents('kwf_branch'));\n";
-            $ret .= "    \$configContents = file_get_contents(Kwf_Config::getValue('path.kwf').'/config.ini'); //don't use Kwf_Config as that might be cached\n";
-            $ret .= "    if (strpos(\$configContents, \"application.kwf.version = \$requiredBranch\n\") === false) {\n";
-            $ret .= "        preg_match(\"#application\.kwf\.version = (.*)\\n#\", \$configContents, \$m);\n";
-            $ret .= "        throw new Kwf_Exception_Client(\"Invalid Kwf branch. Required: '\$requiredBranch', used: '\".\$m[1].\"'\n\");\n";
-            $ret .= "    }\n";
-        }
-
         $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
 
         if (Kwf_Config::getValue('server.https')) {
