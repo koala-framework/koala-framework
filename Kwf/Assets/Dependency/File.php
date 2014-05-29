@@ -62,7 +62,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         } else if (file_exists($this->_fileName)) {
             $f = $this->_fileName;
         } else {
-            throw new Kwf_Exception("Unknown path type: '$pathType'");
+            throw new Kwf_Exception("Unknown path type: '$pathType' for '$this->_fileName'");
         }
         $this->_fileNameCache = $f;
         return $f;
