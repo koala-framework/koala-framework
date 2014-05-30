@@ -156,6 +156,14 @@ class Kwf_Rest_Controller_Model extends Zend_Rest_Controller
         return $data;
     }
 
+    /**
+     * The head action handles HEAD requests and receives an 'id' parameter; it
+     * should respond with the server resource state of the resource identified
+     * by the 'id' value.
+     */
+    public function headAction()
+    {
+    }
     // Handle GET and return a list of resources
     public function indexAction()
     {
