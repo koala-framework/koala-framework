@@ -42,22 +42,27 @@ class Kwf_Loader
                 $namespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
             }
             $pos = strpos($class, '_');
-            $ns = substr($class, 0, $pos+1);
-            if (!isset($namespaces[$ns])) {
-                $pos = strpos($class, '_', $pos+1);
-                if ($pos !== false) {
-                    $ns = substr($class, 0, $pos+1);
-                } else {
-                    $ns = $class;
-                }
+            $ns1 = substr($class, 0, $pos+1);
+
+            $pos = strpos($class, '_', $pos+1);
+            if ($pos !== false) {
+                $ns2 = substr($class, 0, $pos+1);
+            } else {
+                $ns2 = $class;
             }
 
+            $dirs = false;
+            if (isset($namespaces[$ns2])) {
+                $dirs = $namespaces[$ns2];
+            } else if (isset($namespaces[$ns1])) {
+                $dirs = $namespaces[$ns1];
+            }
             $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
-            if (isset($namespaces[$ns])) {
-                if (count($namespaces[$ns]) == 1) {
-                    $file = $namespaces[$ns][0].'/'.$file;
+            if ($dirs !== false) {
+                if (count($dirs) == 1) {
+                    $file = $dirs[0].'/'.$file;
                 } else {
-                    foreach ($namespaces[$ns] as $dir) {
+                    foreach ($dirs as $dir) {
                         if (file_exists($dir.'/'.$file)) {
                             $file = $dir.'/'.$file;
                         }
