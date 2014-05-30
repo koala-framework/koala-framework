@@ -18,13 +18,15 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
             foreach (glob(VENDOR_PATH."/*/*") as $i) {
                 if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
                     $config = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
-                    if ($config->provider == 'Kwf_Assets_Provider_Ini') {
-                        $cachedProviders[] = array(
-                            'cls' => 'Kwf_Assets_Provider_Ini',
-                            'file' => $i.'/dependencies.ini'
-                        );
-                    } else if ($config->provider) {
-                        throw new Kwf_Exception("Unknown dependencies provider: '{$config->provider}'");
+                    if ($config->provider) {
+                        $provider = $config->provider;
+                        if (is_string($provider)) $provider = array($provider);
+                        foreach ($provider as $p) {
+                            $cachedProviders[] = array(
+                                'cls' => $p,
+                                'file' => $i.'/dependencies.ini'
+                            );
+                        }
                     }
                 }
             }
@@ -39,14 +41,11 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $providers[] = new Kwf_Assets_Provider_Dynamic();
         $providers[] = new Kwf_Assets_Provider_KwfUtils();
         $providers[] = new Kwf_Assets_Modernizr_Provider();
-//         $providers[] = new Kwf_Assets_Ext4_Provider();
 //         $providers[] = new Kwf_Assets_Ext4_Extensible_Provider();
         $providers[] = new Kwf_Assets_Provider_JsClassKwf();
         $providers[] = new Kwf_Assets_Provider_JsClass('./ext', 'web/ext', 'App');
-//         $providers[] = new Kwf_Assets_Ext4_AclControllerProvider();
         $providers[] = new Kwf_Assets_Provider_CssByJs(array('kwf/Kwf_js/Ext4', 'web/ext'));
         $providers[] = new Kwf_Assets_Provider_ExtTrl();
-//         $providers[] = new Kwf_Assets_Ext4_TrlProvider();
         $providers[] = new Kwf_Assets_Provider_DefaultAssets();
         $providers[] = new Kwf_Assets_Provider_ErrorHandler();
         parent::__construct($providers);
