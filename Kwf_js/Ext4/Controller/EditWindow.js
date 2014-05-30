@@ -7,6 +7,7 @@ Ext4.define('Kwf.Ext4.Controller.EditWindow', {
     stateful: true,
     showSave: true,
     showDelete: false,
+    constrainHeader: true,
     saveText: trlKwf('Save'),
     deleteText: trlKwf('Delete'),
     padding: 10,

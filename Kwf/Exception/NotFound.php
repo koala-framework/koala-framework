@@ -49,9 +49,9 @@ class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
                     exit;
                 }
             }
-            parent::render($ignoreCli);
         } catch (Exception $e) {
             Kwf_Debug::handleException($e);
         }
+        parent::render($ignoreCli);
     }
 }

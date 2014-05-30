@@ -12,7 +12,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid.DragDropOrder', {
     init: function()
     {
         if (!this.gridController) Ext4.Error.raise('gridController config is required');
-        if (!this.gridController instanceof Kwf.Ext4.Controller.Grid) Ext4.Error.raise('gridController config needs to be a Kwf.Ext4.Controller.Grid');
+        if (!(this.gridController instanceof Kwf.Ext4.Controller.Grid)) Ext4.Error.raise('gridController config needs to be a Kwf.Ext4.Controller.Grid');
 
         var plugin = this.gridController.grid.view.findPlugin('gridviewdragdrop');
         if (!plugin) Ext4.Error.raise('Didn\'t find gridviewdragdrop plugin in grid view');

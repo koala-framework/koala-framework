@@ -89,8 +89,6 @@ class Kwf_Util_Component
                 throw new Kwf_Exception_NotFound();
             }
             $parsedUrl = parse_url($url);
-            $_GET = array();
-            $_REQUEST = array();
             if (isset($parsedUrl['query'])) {
                 foreach (explode('&' , $parsedUrl['query']) as $get) {
                     if (!$get) continue;

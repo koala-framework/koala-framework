@@ -44,7 +44,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         } else if (file_exists($this->_fileName)) {
             $f = $this->_fileName;
         } else {
-            throw new Kwf_Exception_NotYetImplemented();
+            $f = false;
         }
         $this->_fileNameCache = $f;
         return $f;

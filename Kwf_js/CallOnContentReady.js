@@ -7,17 +7,13 @@ Kwf.enableOnReadyConsoleProfile = false;
  * num: unique number, //used to mark in initDone
  * selector: selector, // null if onContentReady
  * */
-Kwf._readyHandlers = []; //for onContentReady
 Kwf._readyElHandlers = []; //for onElement*
 Kwf._skipDeferred; //if callOnContentReady should skip 'defer' callbacks or execute only 'defer' callbacks
                    //used on initial ready
 Kwf._deferredStart = null; //used for timing deferred, required here because of multiple chunks
 Kwf._onReadyIsCalling = false; //true while callOnContentReady is processing onReadyElQueue and we can add more to queue
-Kwf._onReadyCallQueue = []; //queue for onContentReady to avoid recursions
 Kwf._onReadyElQueue = []; //queue for onElementReady/Show/Hide/WidthChange calls
 Kwf._elCacheBySelector = {};
-
-
 
 if (!Kwf.isApp) {
     $(document).ready(function() {
@@ -50,6 +46,21 @@ if (!Kwf.isApp) {
         }, this, { buffer: 100 });
     });
 }
+
+/**
+ * Register a function that will be called when content is loaded or shown
+ * @param callback function (passed arguments: el, options (newRender=bool))
+ * @param options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
+ */
+Kwf.onContentReady = function(fn, options) {
+    if (arguments.length == 3) {
+        var scope = arguments[1];
+        var options = arguments[2];
+        options.scope = scope;
+    }
+    Kwf._addReadyHandler(null, 'contentReady', null, fn, options);
+};
+
 
 Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
 {
@@ -89,24 +100,17 @@ Kwf.callOnContentReady = function(renderedEl, options)
         renderedEl.each(function(){ Kwf.callOnContentReady(this, options); });
         return;
     }
-    options.newRender = options.action == 'render'; //backwards compatibility, for onContentReady callback
-
-    Kwf._onReadyCallQueue.push({
-        renderedEl: renderedEl,
-        options: options
-    });
-
 
     //add entries to _onReadyElQueue, depending on renderedEl
     var onActions;
     if (options.action == 'render') {
-        onActions = ['render', 'show', 'widthChange'];
+        onActions = ['render', 'show', 'widthChange', 'contentReady'];
     } else if (options.action == 'show') {
-        onActions = ['show', 'widthChange'];
+        onActions = ['show', 'widthChange', 'contentReady'];
     } else if (options.action == 'hide') {
         onActions = ['hide'];
     } else if (options.action == 'widthChange') {
-        onActions = ['widthChange'];
+        onActions = ['widthChange', 'contentReady'];
     }
 
     var html = false;
@@ -144,7 +148,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
 
         var useSelectorCache;
-        if (options.action != 'render') {
+        if (options.action != 'render' || !hndl.selector) {
             useSelectorCache = true;
         } else {
             if (Kwf._skipDeferred === false && renderedEl == document.body && Kwf._elCacheBySelector[hndl.selector]) {
@@ -172,6 +176,8 @@ Kwf.callOnContentReady = function(renderedEl, options)
                     els.push(Kwf._elCacheBySelector[hndl.selector][j]);
                 }
             }
+        } else if (!hndl.selector) {
+            var els = $.makeArray($(renderedEl));
         } else {
             var t = Kwf.Utils.BenchmarkBox.now();
             var els = $.makeArray($(renderedEl).find(hndl.selector));
@@ -205,6 +211,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
                     options: hndl.options,
                     num: hndl.num,
                     type: hndl.type,
+                    callerOptions: options,
                     onAction: hndl.onAction,
                     selector: hndl.selector,
                     priority: hndl.options.priority || 0,
@@ -240,7 +247,11 @@ Kwf.callOnContentReady = function(renderedEl, options)
     {
         var t = Kwf.Utils.BenchmarkBox.now();
         var el = queueEntry.el;
-        el = queueEntry.type == 'ext' ? Ext.get(el) : $(el);
+        if (queueEntry.type == 'ext') {
+            el = Ext.get(el);
+        } else if (queueEntry.type == 'jquery') {
+            el = $(el);
+        }
         queueEntry.fn.call(queueEntry.options.scope || window, el, config);
         var fnName = queueEntry.fn.name;
         if (!fnName) {
@@ -281,21 +292,24 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 } catch (err) {}
             }
             callQueueFn(queueEntry, config);
-        } else {
-            if (queueEntry.onAction == 'show') {
-                if (Kwf.Utils.Element.isVisible(el)) {
-                    callQueueFn(queueEntry);
-                }
-            } else if (queueEntry.onAction == 'hide') {
-                if (!Kwf.Utils.Element.isVisible(el)) {
-                    callQueueFn(queueEntry);
-                }
-            } else if (queueEntry.onAction == 'widthChange') {
-                if (!queueEntry.options.checkVisibility || Kwf.Utils.Element.isVisible(el)) {
-                    callQueueFn(queueEntry);
-                }
+        } else if (queueEntry.onAction == 'show') {
+            if (Kwf.Utils.Element.isVisible(el)) {
+                callQueueFn(queueEntry);
             }
-
+        } else if (queueEntry.onAction == 'hide') {
+            if (!Kwf.Utils.Element.isVisible(el)) {
+                callQueueFn(queueEntry);
+            }
+        } else if (queueEntry.onAction == 'widthChange') {
+            if (!queueEntry.options.checkVisibility || Kwf.Utils.Element.isVisible(el)) {
+                callQueueFn(queueEntry);
+            }
+        } else if (queueEntry.onAction == 'contentReady') {
+            var options = {
+                newRender: (queueEntry.callerOptions.action == 'render'),
+                action: queueEntry.callerOptions.action
+            };
+            callQueueFn(queueEntry, options);
         }
     }
 
@@ -326,45 +340,5 @@ Kwf.callOnContentReady = function(renderedEl, options)
         Kwf._onReadyIsCalling = false;
     }
 
-    //process onContentReady handlers
-    Kwf._readyHandlers.sort(function(a, b) {
-        return (a.options.priority || 0) - (b.options.priority || 0);
-    });
-    while (Kwf._onReadyCallQueue.length) {
-        var queueEntry = Kwf._onReadyCallQueue.pop();
-
-        for (var i = 0; i < Kwf._readyHandlers.length; i++) {
-            var hndl = Kwf._readyHandlers[i];
-            if ((hndl.options.defer && Kwf._skipDeferred === true) ||
-                (!hndl.options.defer && Kwf._skipDeferred === false)
-            ) {
-                continue;
-            }
-            var t = Kwf.Utils.BenchmarkBox.now();
-            hndl.fn.call(hndl.options.scope || window, queueEntry.renderedEl, queueEntry.options);
-            var fnName = hndl.fn.name;
-            if (!fnName) {
-                fnName = 'unknown';
-            }
-            Kwf.Utils.BenchmarkBox.subTime('onContentReady', 'fn: '+fnName, Kwf.Utils.BenchmarkBox.now()-t);
-        }
-    }
 };
 
-
-/**
- * Register a function that will be called when content is loaded or shown
- * @param callback function (passed arguments: el, options (newRender=bool))
- * @param options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
- */
-Kwf.onContentReady = function(fn, options) {
-    if (arguments.length == 3) {
-        var scope = arguments[1];
-        var options = arguments[2];
-        options.scope = scope;
-    }
-    Kwf._readyHandlers.push({
-        fn: fn,
-        options: options || {}
-    });
-};
