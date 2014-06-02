@@ -1,2 +1,2 @@
 Sub <?=$this->data->componentId?><br />
-<? include('Kwc/Menu/Component.tpl'); ?>
+<? include(KWF_PATH.'/Kwc/Menu/Component.tpl'); ?>
