@@ -86,10 +86,8 @@ class Kwf_Util_Setup
         $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".KWF_PATH."');\n";
         $ret .= "if (!defined('VENDOR_PATH')) define('VENDOR_PATH', 'vendor');\n";
 
-        $ip = array(
-            '.',
-            self::_getZendPath()
-        );
+        $ip = include VENDOR_PATH.'/composer/include_paths.php';
+        $ip[] = '.';
         $ip[] = 'cache/generated';
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
             if ($p) $ip[] = $p;
