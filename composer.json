@@ -8,7 +8,8 @@
         "koala-framework/library-tinymce": "3.5.8",
         "koala-framework/library-swfupload": "2.2.0.1",
         "koala-framework/library-silkicons": "1.3",
-        "koala-framework/library-susy": "1.0.9"
+        "koala-framework/library-susy": "1.0.9",
+        "koala-framework/library-htmlawed": "1.1.14"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
