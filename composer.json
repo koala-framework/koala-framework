@@ -1,5 +1,7 @@
 {
     "name": "koala-framework/koala-framework",
+    "homepage": "http://www.koala-framework.org/",
+    "license": "BSD-2-Clause",
     "require": {
         "koala-framework/library-zendframework1": "1.12.6",
 
