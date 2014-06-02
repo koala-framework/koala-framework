@@ -10,6 +10,7 @@ class Kwf_Util_Setup
     {
         $kwfPath = realpath(dirname(__FILE__).'/../..');
         if (!defined('KWF_PATH')) define('KWF_PATH', $kwfPath);
+        if (!defined('VENDOR_PATH')) define('VENDOR_PATH', 'vendor');
 
         //reset include path, don't use anything from php.ini
         set_include_path('.' . PATH_SEPARATOR . $kwfPath . PATH_SEPARATOR . self::_getZendPath());
