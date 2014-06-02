@@ -22,7 +22,9 @@ class Kwf_Asset
                     $paths = array(
                         'web' => '.'
                     );
-                    foreach (glob(VENDOR_PATH."/*/*") as $i) {
+                    $vendors = glob(VENDOR_PATH."/*/*");
+                    $vendors[] = KWF_PATH; //required for kwf tests, in web kwf is twice in $vendors but that's not a problem
+                    foreach ($vendors as $i) {
                         if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
                             $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
                             $paths[$dep->pathType] = $i;
