@@ -18,7 +18,7 @@ class Kwf_Assets_Ext4_JsDependency extends Kwf_Assets_Dependency_File_Js
             $ret .= "    }\n";
             $ret .= "});\n";
         }
-        $ret = "(function(Ext) {\n".$ret."\n})(this.Ext4 || (this.Ext4 = {}));\n";
+        $ret = "(function(Ext) {".$ret."})(this.Ext4 || (this.Ext4 = {}));";
         return $ret;
     }
 }
