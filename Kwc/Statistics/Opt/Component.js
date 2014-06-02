@@ -3,4 +3,4 @@ Kwf.onElementReady('.kwcStatisticsOpt .webForm', function(el, config) {
         this.kwcForm.submit();
     }, el);
     el.child('.submit').hide();
-});
+}, {defer: true});

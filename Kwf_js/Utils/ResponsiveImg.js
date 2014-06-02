@@ -6,7 +6,7 @@ var deferredImages = [];
 
 Kwf.Utils.ResponsiveImg = function (selector) {
     Kwf.onElementWidthChange(selector, function responsiveImg(el) {
-        if (isElementInView(el)) {
+        if (el.hasClass('loadImmediately') || isElementInView(el)) {
             if (!el.responsiveImgInitDone) {
                 initResponsiveImgEl(el);
             } else {
@@ -121,8 +121,8 @@ function doesElementScroll(el)
 function isElementInView(el)
 {
     var $e = $(el.dom);
-    var threshold = 50;
-    
+    var threshold = 200;
+
     if ($e.is(":hidden")) return false;
 
     if (doesElementScroll(el.dom)) {

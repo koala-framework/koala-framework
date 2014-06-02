@@ -10,7 +10,7 @@ Ext4.define('Kwf.Ext4.Controller.Bindable.Form', {
         this.callParent(arguments);
 
         if (!this.formController) Ext4.Error.raise('formController config is required');
-        if (!this.formController instanceof Kwf.Ext4.Controller.Form) Ext4.Error.raise('formController config needs to be a Kwf.Ext4.Controller.Form');
+        if (!(this.formController instanceof Kwf.Ext4.Controller.Form)) Ext4.Error.raise('formController config needs to be a Kwf.Ext4.Controller.Form');
 
         this.formController.form.getForm().trackResetOnLoad = true;
 

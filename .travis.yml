@@ -14,6 +14,7 @@ before_script:
   - echo "`pwd`/library/zend/%version%" > include_path
   - echo "[production]" > tests/config.local.ini
   - echo "server.domain = localhost" >> tests/config.local.ini
+  - echo 'server.baseUrl = ""' >> tests/config.local.ini
   - echo "libraryPath = `pwd`/library" >> tests/config.local.ini
   - echo "server.uglifyjs = `pwd`/node_modules/.bin/uglifyjs" >> tests/config.local.ini
   - echo "server.sassc = `pwd`/libsass/sassc/bin/sassc" >> tests/config.local.ini

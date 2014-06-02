@@ -113,7 +113,8 @@ class Kwf_Util_Setup
         if (Kwf_Setup::getBaseUrl()) {
             $ret .= "if (\$requestUri !== null) {\n";
             $ret .= "    if (substr(\$requestUri, 0, ".strlen(Kwf_Setup::getBaseUrl()).") != '".Kwf_Setup::getBaseUrl()."') {\n";
-            $ret .= "        throw new Exception('Invalid baseUrl');\n";
+            $ret .= "        echo 'Invalid baseUrl, expected \'".Kwf_Setup::getBaseUrl()."\'';\n";
+            $ret .= "        exit;\n";
             $ret .= "    }\n";
             $ret .= "    \$requestUri = substr(\$requestUri, ".strlen(Kwf_Setup::getBaseUrl()).");\n";
             $ret .= "}\n";

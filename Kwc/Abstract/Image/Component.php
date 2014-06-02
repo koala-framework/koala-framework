@@ -47,6 +47,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
         $ret['useDataUrl'] = false;
+        $ret['lazyLoadOutOfViewport'] = true; // Set to false to load image also when not in view
         $ret['flags']['hasFulltext'] = true;
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
@@ -110,6 +111,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $ret['baseUrl'] = $this->getBaseImageUrl();
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
+        $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
         return $ret;
     }
 

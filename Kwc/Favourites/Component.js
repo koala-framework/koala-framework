@@ -1,36 +1,52 @@
-Kwf.onContentReady(function(el) {
-    Ext.query('.kwcFavourites', el).each(function(el) {
-        if (el.initDone) return;
-        el.initDone = true;
-        el = Ext.get(el);
-        var switchContent = el.child('.switchContent');
-        var config = Ext.decode(el.child('input').dom.value);
-        el.hasClass('isFavourite') ? switchContent.update(config.deleteFavourite) : switchContent.update(config.saveFavourite);
-        el.child('a').on('click', function(ev) {
-            ev.stopEvent();
-            el.toggleClass('isFavourite');
-            el.hasClass('isFavourite') ? switchContent.update(config.deleteFavourite) : switchContent.update(config.saveFavourite);
-            el.addClass('loading');
-            Ext.Ajax.request({
-                url: config.controllerUrl+'/json-favourite',
-                params: {
-                    componentId: config.componentId,
-                    is_favourite: el.hasClass('isFavourite') ? 1 : 0
-                },
-                callback: function() {
-                    el.removeClass('loading');
-                },
-                success: function() {
-                    var count = 0;
-                    el.hasClass('isFavourite') ? count += 1 : count -= 1;
-                    Kwf.fireComponentEvent('favouritesChanged', count);
-                },
-                failure: function() {
-                    //toggle back
-                    el.toggleClass('isFavourite');
-                },
-                scope: this
+(function() {
+var kwcFavouritesComponentIds = [];
+var kwcFavouritesInitialized = false;
+Kwf.onJElementReady('.kwcFavourites', function(el, config) {
+    kwcFavouritesComponentIds.push(config.componentId);
+
+    if (!kwcFavouritesInitialized) {
+        kwcFavouritesInitialized = true;
+        setTimeout(function() {
+            $.getJSON(config.controllerUrl + '/json-get-favourites', {
+                componentId: config.componentId,
+                kwfSessionToken: Kwf.sessionToken,
+                kwcFavouritesComponentIds: kwcFavouritesComponentIds
+            }, function(data) {
+                $.each(data.componentIds, function(index, value) {
+                    var favEl = $('#' + value);
+                    favEl.addClass('isFavourite');
+                    favEl.children('.switchContent').html(config.deleteFavourite);
+                });
+                kwcFavouritesComponentIds = [];
+                kwcFavouritesInitialized = false;
             });
-        }, this);
-    }, this);
-});
+        }, 10);
+    }
+
+    var switchContent = el.children('.switchContent');
+    el.find('div.switchLink > a').on('click.kwcFavourites', function(ev) {
+        ev.preventDefault();
+        el.toggleClass('isFavourite loading');
+        el.hasClass('isFavourite') ? switchContent.html(config.deleteFavourite) : switchContent.html(config.saveFavourite);
+        $.ajax({
+            method: 'GET',
+            url: config.controllerUrl+'/json-favourite',
+            dataType: 'json',
+            data: {
+                componentId: config.componentId,
+                kwfSessionToken: Kwf.sessionToken,
+                is_favourite: el.hasClass('isFavourite') ? 1 : 0
+            },
+            error: function() {
+                el.toggleClass('isFavourite');
+            },
+            success: function() {
+                el.removeClass('loading');
+                var count = 0;
+                el.hasClass('isFavourite') ? count += 1 : count -= 1;
+                Kwf.fireComponentEvent('favouritesChanged', count);
+            }
+        });
+    });
+}, this, {defer: true});
+})();

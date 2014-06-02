@@ -18,18 +18,18 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
     init: function()
     {
         if (!this.grid) Ext4.Error.raise('grid config is required');
-        if (!this.grid instanceof Ext4.grid.Panel) Ext4.Error.raise('grid config needs to be a Ext.grid.Panel');
+        if (!(this.grid instanceof Ext4.grid.Panel)) Ext4.Error.raise('grid config needs to be a Ext.grid.Panel');
         var grid = this.grid;
 
         if (typeof this.deleteButton == 'undefined') this.deleteButton = grid.down('button#delete');
-        if (this.deleteButton && !this.deleteButton instanceof Ext4.button.Button) Ext4.Error.raise('deleteButton config needs to be a Ext.button.Button');
+        if (this.deleteButton && !(this.deleteButton instanceof Ext4.button.Button)) Ext4.Error.raise('deleteButton config needs to be a Ext.button.Button');
         if (this.deleteButton) {
             this.deleteButton.disable();
             this.deleteButton.on('click', this.onDeleteClick, this);
         }
 
         if (typeof this.exportCsvButton == 'undefined') this.exportCsvButton = grid.down('button#exportCsv');
-        if (this.exportCsvButton && !this.exportCsvButton instanceof Ext4.button.Button) Ext4.Error.raise('exportCsvButton config needs to be a Ext.button.Button');
+        if (this.exportCsvButton && !(this.exportCsvButton instanceof Ext4.button.Button)) Ext4.Error.raise('exportCsvButton config needs to be a Ext.button.Button');
         if (this.exportCsvButton) {
             this.exportCsvButton.on('click', this.csvExport, this);
         }
