@@ -137,13 +137,14 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
                 if (!file_exists($dir)) mkdir($dir, 0777, true);
 
-                if (!file_exists($buildFile)) {
+                if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
                     $map = new Kwf_Assets_Util_SourceMap($ret['sourceMap'], $ret['contents']);
                     foreach ($this->_getTrlReplacements($ret, $language) as $value) {
                         $map->stringReplace($value['search'], $value['replace']);
                     }
                     $map->save("$buildFile.map", $buildFile);
                     unset($map);
+                    file_put_contents("$buildFile.buildtime", filemtime($this->getAbsoluteFileName()));
                 }
                 $ret = array(
                     'contents' => file_get_contents($buildFile),
