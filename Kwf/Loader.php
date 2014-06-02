@@ -39,7 +39,7 @@ class Kwf_Loader
         } else {
             static $namespaces;
             if (!isset($namespaces)) {
-                $namespaces = include 'vendor/composer/autoload_namespaces.php';
+                $namespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
             }
             $pos = strpos($class, '_');
             $ns = substr($class, 0, $pos+1);

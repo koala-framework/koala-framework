@@ -22,7 +22,7 @@ class Kwf_Asset
                     $paths = array(
                         'web' => '.'
                     );
-                    foreach (glob("vendor/*/*") as $i) {
+                    foreach (glob(VENDOR_PATH."/*/*") as $i) {
                         if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
                             $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
                             $paths[$dep->pathType] = $i;

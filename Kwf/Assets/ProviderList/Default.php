@@ -15,7 +15,7 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $cachedProviders = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if ($cachedProviders === false) {
             $cachedProviders = array();
-            foreach (glob("vendor/*/*") as $i) {
+            foreach (glob(VENDOR_PATH."/*/*") as $i) {
                 if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
                     $config = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
                     if ($config->provider == 'Kwf_Assets_Provider_Ini') {

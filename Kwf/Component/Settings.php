@@ -267,7 +267,7 @@ class Kwf_Component_Settings
                         $file = str_replace('_', DIRECTORY_SEPARATOR, $c) . '.php';
                     }
                     $dirs = explode(PATH_SEPARATOR, get_include_path());
-                    foreach (include 'vendor/composer/autoload_namespaces.php' as $ns=>$i) {
+                    foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
                         $dirs = array_merge($dirs, $i);
                     }
                     foreach ($dirs as $dir) {

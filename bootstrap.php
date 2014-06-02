@@ -1,6 +1,7 @@
 <?php
 chdir(dirname(__FILE__).'/tests');
 set_include_path('.'.PATH_SEPARATOR.realpath(getcwd().'/..'));
+define('VENDOR_PATH', '../vendor');
 
 require 'Kwf/Setup.php';
 Kwf_Setup::setUp();

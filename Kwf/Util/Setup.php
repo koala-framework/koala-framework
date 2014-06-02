@@ -3,7 +3,7 @@ class Kwf_Util_Setup
 {
     private static function _getZendPath()
     {
-        return 'vendor/koala-framework/library-zendframework1/library';
+        return VENDOR_PATH.'/koala-framework/library-zendframework1/library';
     }
 
     public static function minimalBootstrapAndGenerateFile()
@@ -47,7 +47,7 @@ class Kwf_Util_Setup
     public static function generateCode()
     {
         $preloadIncludePaths = array();
-        $namespaces = require 'vendor/composer/autoload_namespaces.php';
+        $namespaces = require VENDOR_PATH.'/composer/autoload_namespaces.php';
         $ret = array();
         foreach ($namespaces as $ns=>$dirs) {
             $preloadIncludePaths = array_merge($preloadIncludePaths, $dirs);
@@ -84,6 +84,7 @@ class Kwf_Util_Setup
         $ret .= "}\n";
 
         $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".KWF_PATH."');\n";
+        $ret .= "if (!defined('VENDOR_PATH')) define('VENDOR_PATH', 'vendor');\n";
 
         $ip = array(
             '.',
