@@ -119,9 +119,12 @@ class Kwf_Assets_Package
                     );
                 } else {
                     $data = json_decode($c, true);
+                    if (!$data) {
+                        throw new Kwf_Exception("Invalid source map for '$i', json invalid: '$c'");
+                    }
                 }
                 if (!isset($data['_x_org_koala-framework_last'])) {
-                    throw new Kwf_Exception("source map doesn't contain _x_org_koala-framework_last extension");
+                    throw new Kwf_Exception("source map for '$i' doesn't contain _x_org_koala-framework_last extension");
                 }
 
                 foreach ($data['sources'] as &$s) {

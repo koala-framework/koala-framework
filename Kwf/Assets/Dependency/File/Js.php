@@ -50,6 +50,14 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $contents = file_get_contents("$buildFile.min.js");
             $contents = str_replace("\n//# sourceMappingURL=$buildFile.min.js.map.json", '', $contents);
 
+            $mapData = json_decode(file_get_contents("$buildFile.min.js.map.json"), true);
+            if (count($mapData['sources']) != 1) {
+                throw new Kwf_Exception("uglifyjs must return exactly a single source, ".count($mapData['sources'])." returned");
+            }
+            unset($mapData['file']);
+            $mapData['sources'][0] = $this->getFileNameWithType();
+            file_put_contents("$buildFile.min.js.map.json", json_encode($mapData));
+
             $map = new Kwf_Assets_Util_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
 
 
