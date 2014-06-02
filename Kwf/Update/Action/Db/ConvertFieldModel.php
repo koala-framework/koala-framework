@@ -6,12 +6,10 @@ class Kwf_Update_Action_Db_ConvertFieldModel extends Kwf_Update_Action_Abstract
 
     public function update()
     {
-        parent::update();
-
         if (!$this->silent) echo "convert fields for $this->table\n";
         foreach (Kwf_Registry::get('db')->query("SELECT id, data FROM $this->table")->fetchAll() as $row) {
             if (!$this->silent) echo ".";
-            $data = @unserialize($row['data']);
+            $data = @json_decode($row['data'], true);
             if (!$data) $data = array();
             $sql = "UPDATE $this->table SET ";
             foreach ($this->fields as $f) {
@@ -20,7 +18,7 @@ class Kwf_Update_Action_Db_ConvertFieldModel extends Kwf_Update_Action_Abstract
                     unset($data[$f]);
                 }
             }
-            $sql .= "data=".Kwf_Registry::get('db')->quote(serialize($data));
+            $sql .= "data=".Kwf_Registry::get('db')->quote(json_encode($data));
             $sql .= " WHERE id=$row[id]";
             Kwf_Registry::get('db')->query($sql);
         }

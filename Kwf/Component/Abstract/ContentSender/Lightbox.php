@@ -67,6 +67,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $class = 'kwfLightbox';
             if (isset($options['style'])) $class .= " kwfLightbox$options[style]";
             if (isset($options['cssClass'])) $class .= " $options[cssClass]";
+            if (isset($options['adaptHeight']) && $options['adaptHeight']) $class .= " adaptHeight";
             $options = htmlspecialchars(json_encode($options));
             $lightboxContent = "<div class=\"$class\">\n".
                 "<div class=\"kwfLightboxInner\" style=\"$style\">\n".

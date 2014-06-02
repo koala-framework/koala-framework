@@ -1,13 +1,9 @@
-Kwf.onContentReady(function()
-{
-    var els = Ext2.query('.kwfSwitchHoverFade');
-    els.each(function(el) {
-        var hoverFade = new Kwf.Switch.HoverFade({
-            wrapper: el
-        });
+// deprecated, please don't use me
+Kwf.onElementReady('.kwfSwitchHoverFade', function(el) {
+    var hoverFade = new Kwf.Switch.HoverFade({
+        wrapper: el.dom
     });
-});
-
+}, this, {defer: true});
 
 Ext2.namespace("Kwf.Switch.HoverFade");
 

@@ -9,6 +9,9 @@ Ext2.extend(Kwc.Directories.Plugin.GridWindow, Ext2.util.Observable,
         if (gridPanel instanceof Kwc.Directories.Item.Directory.TabsPanel) {
             gridPanel = gridPanel.grid;
         }
+        if (gridPanel instanceof Kwf.Binding.ProxyPanel) {
+            gridPanel = gridPanel.proxyItem;
+        }
         gridPanel.on('beforerendergrid', function(grid) {
             grid.getTopToolbar().add({
                 text    : this.text,

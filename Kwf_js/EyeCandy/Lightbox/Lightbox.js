@@ -143,6 +143,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         if (this.options.height) {
             el.setHeight(parseInt(this.options.height) + el.getBorderWidth("tb") + el.getPadding("tb"));
         }
+        if (this.options.adaptHeight) {
+            this.lightboxEl.addClass('adaptHeight');
+        }
         this.style.afterCreateLightboxEl();
         this.lightboxEl.hide();
     },

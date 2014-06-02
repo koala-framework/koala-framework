@@ -43,6 +43,8 @@ Kwc.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
         this.list.setActiveChangeLocked(true);
         this.list.getItem(this.numberShown).el.show();
 
+        Kwf.callOnContentReady(this.moveElement, {newRender: false});
+
         var firstElWidth = this.list.getItem(0).getWidthIncludingMargin();
 
         var cfg = Ext2.applyIf({
@@ -85,6 +87,8 @@ Kwc.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
 
         // fade in first
         this.list.getItem(0).el.show();
+
+        Kwf.callOnContentReady(this.moveElement, {newRender: false});
 
         var cfg = Ext2.applyIf({
             callback: function() {

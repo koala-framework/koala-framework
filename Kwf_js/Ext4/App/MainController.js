@@ -11,7 +11,7 @@ Ext4.define('Kwf.Ext4.App.MainController', {
     _runningRequests: 0,
     onLaunch: function()
     {
-        if (!this.mainPanel || !this.mainPanel instanceof Ext4.panel.Panel) {
+        if (!this.mainPanel || !(this.mainPanel instanceof Ext4.panel.Panel)) {
             throw new Error("mainPanel is required and must be an Ext4.panel.Panel");
         }
         this.viewport = Ext4.create('Kwf.Ext4.Viewport', {

@@ -11,13 +11,13 @@ Ext4.define('Kwf.Ext4.Controller.Grid.InlineEditing', {
     init: function()
     {
         if (!this.grid) Ext4.Error.raise('grid config is required');
-        if (!this.grid instanceof Ext4.grid.Panel) Ext4.Error.raise('grid config needs to be a Ext.grid.Panel');
+        if (!(this.grid instanceof Ext4.grid.Panel)) Ext4.Error.raise('grid config needs to be a Ext.grid.Panel');
 
         var grid = this.grid;
         if (typeof this.gridAddButton == 'undefined') this.gridAddButton = grid.down('button#add');
-        if (this.gridAddButton && !this.gridAddButton instanceof Ext4.button.Button) Ext4.Error.raise('gridAddButton config needs to be a Ext.button.Button');
+        if (this.gridAddButton && !(this.gridAddButton instanceof Ext4.button.Button)) Ext4.Error.raise('gridAddButton config needs to be a Ext.button.Button');
         if (typeof this.gridSaveButton == 'undefined') this.gridSaveButton = grid.down('button#save');
-        if (this.gridSaveButton && !this.gridSaveButton instanceof Ext4.button.Button) Ext4.Error.raise('gridSaveButton config needs to be a Ext.button.Button');
+        if (this.gridSaveButton && !(this.gridSaveButton instanceof Ext4.button.Button)) Ext4.Error.raise('gridSaveButton config needs to be a Ext.button.Button');
 
         if (this.gridAddButton) {
             this.gridAddButton.on('click', function() {

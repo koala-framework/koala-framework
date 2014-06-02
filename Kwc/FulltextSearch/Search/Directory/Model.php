@@ -30,6 +30,21 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
         return $this->_rows[$key];
     }
 
+    private function _getSearchQueryByExpr($expr)
+    {
+        if ($expr instanceof Kwf_Model_Select_Expr_Equal) {
+            return $expr->getField().':'.$expr->getValue();
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Or) {
+            $queries = array();
+            foreach ($expr->getExpressions() as $orExpr) {
+                $queries[] = $this->_getSearchExpression($orExpr);
+            }
+            return '('.implode(' OR ', $queries).')';
+        } else {
+            throw new Kwf_Exception_NotYetImplemented();
+        }
+    }
+
     private function _query($select)
     {
         $limitCount = $select->getPart(Kwf_Model_Select::LIMIT_COUNT);
@@ -45,6 +60,13 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
                         if ($field == 'query') {
                             $queryString = $value;
                         }
+                    }
+                } else {
+                    $query = $this->_getSearchQueryByExpr($exp);
+                    if (isset($params['fq'])) {
+                        $params['fq'] .= '+'.$query;
+                    } else {
+                        $params['fq'] = $query;
                     }
                 }
             }

@@ -64,18 +64,16 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
     }, myMap);
 };
 
-Kwf.onContentReady(function() {
-    var maps = Ext2.DomQuery.select('div.kwcDirectoriesListViewMap');
-    Ext2.each(maps, function(map) {
-        var up = Ext2.get(map).up('div.kwfSwitchDisplay');
-        if (up) {
-            (function(up, map) {
-                Ext2.get(up).dom.switchDisplayObject.on('opened', function() {
-                    Kwc.Directories.List.ViewMap.renderMap(map);
-                });
-            }).defer(1, this, [up, map]);
-        } else {
-            Kwc.Directories.List.ViewMap.renderMap(map);
-        }
-    });
+
+Kwf.onElementReady('div.kwcDirectoriesListViewMap', function(map) {
+    var up = map.up('div.kwfSwitchDisplay');
+    if (up) {
+        (function(up, map) {
+            Ext2.get(up).dom.switchDisplayObject.on('opened', function() {
+                Kwc.Directories.List.ViewMap.renderMap(map);
+            });
+        }).defer(1, this, [up, map.dom]);
+    } else {
+        Kwc.Directories.List.ViewMap.renderMap(map.dom);
+    }
 });
