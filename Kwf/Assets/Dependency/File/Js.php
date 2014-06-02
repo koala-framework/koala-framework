@@ -200,14 +200,12 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     public final function getContentsPacked($language)
     {
-        $c = $this->_getContents($language, false);
+        $c = $this->_getContents($language, true);
         return $c['contents'];
     }
 
     public final function getContentsPackedSourceMap($language)
     {
-        return null;
-
         $c = $this->_getContents($language, true);
         return $c['sourceMap'];
     }
