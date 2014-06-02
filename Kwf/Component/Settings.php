@@ -213,6 +213,9 @@ class Kwf_Component_Settings
         }
         $cssClass = array(Kwf_Component_Abstract::formatCssClass($c));
         $dirs = explode(PATH_SEPARATOR, get_include_path());
+        foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
+            $dirs = array_merge($dirs, $i);
+        }
         foreach ($settings['parentClasses'] as $i) {
             if ($i == $c) continue;
             $file = str_replace('_', '/', $i);
