@@ -51,10 +51,18 @@ class Kwf_Loader
                     $ns = $class;
                 }
             }
+
+            $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
             if (isset($namespaces[$ns])) {
-                $file = $namespaces[$ns][0].'/'.str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
-            } else {
-                $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+                if (count($namespaces[$ns]) == 1) {
+                    $file = $namespaces[$ns][0].'/'.$file;
+                } else {
+                    foreach ($namespaces[$ns] as $dir) {
+                        if (file_exists($dir.'/'.$file)) {
+                            $file = $dir.'/'.$file;
+                        }
+                    }
+                }
             }
 
             try {
