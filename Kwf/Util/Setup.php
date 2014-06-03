@@ -90,7 +90,6 @@ class Kwf_Util_Setup
 
         $ip = include VENDOR_PATH.'/composer/include_paths.php';
         $ip[] = '.';
-        $ip[] = 'cache/generated';
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
             if ($p) $ip[] = $p;
         }

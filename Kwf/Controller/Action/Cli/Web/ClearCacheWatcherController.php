@@ -396,25 +396,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $s->whereEquals('component_class', $matchingClasses);
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Component.yml')) {
-                $classFile = 'cache/generated/'.str_replace('_', '/', $cls).'.php';
-                if ($event == 'MODIFY') {
-                    if (file_exists($classFile)) unlink($classFile); //generate, base setting might have changed
-                    Kwf_Component_Settings::$_rebuildingSettings = true;
-                    //generates it
-                    Kwf_Component_Abstract::hasSetting($cls, 'componentName');
-                    Kwf_Component_Settings::$_rebuildingSettings = false;
-                    echo "generated $classFile\n";
-
-                    self::_clearComponentSettingsCache($matchingClasses);
-                } else if ($event == 'DELETE') {
-                    echo "delete $classFile";
-                    if (file_exists($classFile)) {
-                        unlink($classFile);
-                        echo " [DELETED]";
-                    }
-                    echo "\n";
-                }
             } else if (self::_endsWith($file, '/Component.css') || self::_endsWith($file, '/Component.scss') || self::_endsWith($file, '/Component.printcss')) {
                 //MODIFY already handled above (assets)
                 //CREATE/DELETE also handled above

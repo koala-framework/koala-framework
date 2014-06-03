@@ -56,62 +56,8 @@ class Kwf_Component_Settings
     private static function _verifyComponentClass($class)
     {
         $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-        $file = 'components/'.str_replace('_', '/', $c).'.yml';
-        if (substr($class, 0, 4) != 'Kwc_' && file_exists($file)) {
-            if (file_exists('components/'.str_replace('_', '/', $c).'.php')) {
-                throw new Kwf_Exception("both yml and php exist for '$c'");
-            }
-            $classFile = 'cache/generated/'.str_replace('_', '/', $c).'.php';
-            if (!file_exists($classFile)) {
-                $input = file_get_contents($file);
-                require_once Kwf_Config::getValue('externLibraryPath.sfYaml').'/sfYamlParser.php';
-                $yaml = new sfYamlParser();
-                try {
-                    $settings = $yaml->parse($input);
-                } catch (Exception $e) {
-                    throw new Kwf_Exception(sprintf('Unable to parse %s: %s', $file, $e->getMessage()));
-                }
-                if (!isset($settings['base'])) {
-                    throw new Kwf_Exception("'base' setting is required in '$file'");
-                }
-                if (!class_exists($settings['base'])) {
-                    throw new Kwf_Exception("'$file' base class '$settings[base]' does not exist");
-                }
-                $code = "<?php\nclass $c extends $settings[base]\n{\n";
-                $code .= "    public static function _getYamlConfigFile() { return '$file'; }\n";
-                $code .= "}\n";
-                $dir = substr($classFile, 0, strrpos($classFile, '/'));
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0777, true);
-                }
-                file_put_contents($classFile, $code);
-                if (!class_exists($c)) {
-                    throw new Kwf_Exception("just generated class still does not exist");
-                }
-            }
-        } else {
-            if (!class_exists($c)) {
-                throw new Kwf_Exception("Invalid component '$c'");
-            }
-        }
-    }
-
-    private static function _processYamlSettings(&$settings)
-    {
-        foreach ($settings as $k=>$i) {
-            if (is_string($i) && preg_match('#^\\s*(trl|trlKwf)\\(\'(.*)\'\\)\s*$#', $i, $m)) {
-                $fn = $m[1]; //trl or trlKwf
-                $settings[$k] = Kwf_Trl::getInstance()->$fn($m[2], array());
-            } else if (is_string($i) && preg_match('#^\\.\'(.*)\'$#', $i, $m)) {
-                if (isset($settings[$k])) {
-                    $settings[$k] = $settings[$k] . $m[1];
-                } else {
-                    $settings[$k] = $m[1];
-                }
-            }
-            if (is_array($i)) {
-                self::_processYamlSettings($settings[$k]);
-            }
+        if (!class_exists($c)) {
+            throw new Kwf_Exception("Invalid component '$c'");
         }
     }
 
@@ -152,29 +98,6 @@ class Kwf_Component_Settings
         $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
         if (!isset(self::$_cacheSettings[$c][$param])) {
             $settings = call_user_func(array($c, 'getSettings'), $param);
-            if (method_exists($c, '_getYamlConfigFile')) {
-                $file = call_user_func(array($c, '_getYamlConfigFile'));
-                require_once Kwf_Config::getValue('externLibraryPath.sfYaml').'/sfYamlParser.php';
-                $input = file_get_contents($file);
-                $yaml = new sfYamlParser();
-                try {
-                    $mergeSettings = $yaml->parse($input);
-                } catch (Exception $e) {
-                    throw new Kwf_Exception(sprintf('Unable to parse %s: %s', $file, $e->getMessage()));
-                }
-                if (isset($mergeSettings['settings'])) {
-                    self::_processYamlSettings($mergeSettings['settings']);
-                    self::_mergeSettings($settings, $mergeSettings['settings']);
-                }
-                if (isset($mergeSettings['childSettings'])) {
-                    if (isset($settings['childSettings'])) {
-                        self::_processYamlSettings($mergeSettings['childSettings']);
-                        self::_mergeSettings($settings['childSettings'], $mergeSettings['childSettings']);
-                    } else {
-                        $settings['childSettings'] = $mergeSettings['childSettings'];
-                    }
-                }
-            }
             if (substr($param, 0, 2)=='cs') { //child settings
                 $childSettingsComponentClass = substr($param, 2, strpos($param, '>')-2);
                 $childSettingsKey = substr($param, strpos($param, '>')+1);
@@ -264,11 +187,7 @@ class Kwf_Component_Settings
                 $ret = array();
                 foreach (self::getSetting($class, 'parentClasses') as $c) {
                     $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
-                    if (method_exists($c, '_getYamlConfigFile')) {
-                        $file = call_user_func(array($c, '_getYamlConfigFile'));
-                    } else {
-                        $file = str_replace('_', DIRECTORY_SEPARATOR, $c) . '.php';
-                    }
+                    $file = str_replace('_', DIRECTORY_SEPARATOR, $c) . '.php';
                     $dirs = explode(PATH_SEPARATOR, get_include_path());
                     foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
                         $dirs = array_merge($dirs, $i);
@@ -281,7 +200,7 @@ class Kwf_Component_Settings
                         }
                         $path = $dir . '/' . $file;
                         if (is_file($path)) {
-                            if (substr($path, -14) == DIRECTORY_SEPARATOR.'Component.php' || substr($path, -14) == DIRECTORY_SEPARATOR.'Component.yml') {
+                            if (substr($path, -14) == DIRECTORY_SEPARATOR.'Component.php') {
                                 $ret[substr($path, 0, -14)] = substr($c, 0, -10);
                             } else {
                                 $ret[substr($path, 0, -4)] = $c; //nur .php

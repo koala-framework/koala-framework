@@ -40,6 +40,17 @@ function deleteCacheFolder($path)
     rmdir($path);
 }
 
+function glob_recursive($pattern, $flags = 0) {
+    $files = glob($pattern, $flags);
+    foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
+        if (dirname($dir) == './kwf-lib' || $dir == './kwf-lib') continue;
+        if (dirname($dir) == './vkwf-lib' || $dir == './vkwf-lib') continue;
+        if (dirname($dir) == './library' || $dir == './library') continue;
+        $files = array_merge($files, glob_recursive($dir.'/'.basename($pattern), $flags));
+    }
+    return $files;
+}
+
 if (!file_exists('scss')) {
     mkdir('scss');
     mkdir('scss/config');
@@ -85,6 +96,7 @@ foreach ($libDirs as $libDir) {
     }
 }
 
+// ********* Ext -> Ext2
 class MyRecursiveFilterIterator extends RecursiveFilterIterator {
 
     public static $FILTERS = array(
@@ -129,5 +141,42 @@ foreach ($it as $f) {
         }
     }
 }
+echo "\n";
 
-
+// ********* Component.yml -> Component.php
+$files = glob_recursive('Component.yml');
+foreach ($files as $file) {
+    $newFile = substr($file, 0, -3).'php';
+    system("git mv $file $newFile");
+    echo "\n$file -> $newFile (CHECK MANUALLY!!)";
+    $parser = '../library/yaml/4.0.2/sfYamlParser.php';
+    if (!file_exists($parser)) {
+        echo "can't convert $parser not found ";
+        continue;
+    }
+    require_once $parser;
+    $yaml = new sfYamlParser();
+    $settings = $yaml->parse(file_get_contents($newFile));
+    $settings['base'];
+    if (isset($settings['childSettings'])) {
+        $settings['settings']['childSettings'] = $settings['childSettings'];
+    }
+    $cls = $file;
+    $cls = str_replace(array('.yml', 'component/', './'), '', $cls);
+    $cls = str_replace('/', '_', $cls);
+    $c = "<?php\n";
+    $c .= "class ".$cls." extends $settings[base]\n";
+    $c .= "{\n";
+    $c .= "    public static function getSettings()\n";
+    $c .= "    {\n";
+    $c .= "        \$ret = parent::getSettings()\n";
+    foreach ($settings['settings'] as $k=>$i) {
+        $c .= "        \$ret[$k] = ".var_export($i, true)."\n";
+    }
+    $c .= "        return \$ret;\n";
+    $c .= "    }\n";
+    $c .= "}\n";
+    $c = file_get_contents($newFile);
+    file_put_contents($newFile, $c);
+}
+deleteCacheFolder('cache/generated');
