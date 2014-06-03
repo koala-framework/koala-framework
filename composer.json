@@ -14,6 +14,10 @@
         "koala-framework/library-htmlawed": "1.1.14",
         "koala-framework/library-modernizr": "1.8.2.*"
     },
+    "suggest": {
+        "phpoffice/phpexcel": "Allows exporting as XLS in AutoGrid",
+        "tecnick.com/tcpdf": "Allows generating pdfs from components"
+    },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
         "phpunit/phpunit-selenium": "*"

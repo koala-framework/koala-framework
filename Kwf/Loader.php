@@ -34,13 +34,17 @@ class Kwf_Loader
     public static function loadClass($class)
     {
 
-        if ($class == 'TCPDF') {
-            require Kwf_Config::getValue('externLibraryPath.tcpdf').'/tcpdf.php';
+        static $namespaces;
+        if (!isset($namespaces)) {
+            $namespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
+        }
+        static $classMap;
+        if (!isset($classMap)) {
+            $classMap = include VENDOR_PATH.'/composer/autoload_classmap.php';
+        }
+        if (isset($classMap[$class])) {
+            $file = $classMap[$class];
         } else {
-            static $namespaces;
-            if (!isset($namespaces)) {
-                $namespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
-            }
             $pos = strpos($class, '_');
             $ns1 = substr($class, 0, $pos+1);
 
@@ -69,16 +73,16 @@ class Kwf_Loader
                     }
                 }
             }
+        }
 
-            try {
-                include $file;
-            } catch (Exception $e) {
-                if ($fp = @fopen($file, 'r', true)) {
-                    //if file exists re-throw exception
-                    //(file_exists accepts unfortunately no use_include_path parameter)
-                    fclose($fp);
-                    throw $e;
-                }
+        try {
+            include $file;
+        } catch (Exception $e) {
+            if ($fp = @fopen($file, 'r', true)) {
+                //if file exists re-throw exception
+                //(file_exists accepts unfortunately no use_include_path parameter)
+                fclose($fp);
+                throw $e;
             }
         }
     }
