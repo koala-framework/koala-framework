@@ -12,7 +12,8 @@
         "koala-framework/library-silkicons": "1.3",
         "koala-framework/library-susy": "1.0.9",
         "koala-framework/library-htmlawed": "1.1.14",
-        "koala-framework/library-modernizr": "1.8.2.*"
+        "koala-framework/library-modernizr": "1.8.2.*",
+        "koala-framework/library-css3pie": "1.0.0"
     },
     "suggest": {
         "phpoffice/phpexcel": "Allows exporting as XLS in AutoGrid",
