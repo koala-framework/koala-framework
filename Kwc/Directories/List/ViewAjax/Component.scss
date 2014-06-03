@@ -1,3 +1,5 @@
+@import "config/default-loading-animation-big";
+
 .kwfViewAjaxHidden { display: none; }
 
 .cssClass .ext-el-mask {
@@ -5,8 +7,7 @@
 }
 
 .cssClass .ext-el-mask-msg.loading {
-    background: white;
-    border: 1px solid #dddddd;
+    @include default-loading-animation-big;
 }
 
 .cssClass .ext-el-mask-msg.loading div {
@@ -22,10 +23,7 @@
 }
 
 .cssClass.loadingContent .loading {
-    margin: 0px auto 0px auto;
-    width: 66px;
-    height: 66px;
-    background: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif);
+    @include default-loading-animation-big;
 }
 
 .cssClass .viewContainer .linkToTop {

@@ -1,4 +1,6 @@
 @import "compass/utilities/general/clearfix";
+@import "kwf/background-image-dpr2";
+@import "config/default-loading-animation-small";
 @import "compass/css3/box-sizing";
 @import "kwf/form/label-top-input-all";
 @import "kwf/form/label-center-input-all";
@@ -79,6 +81,24 @@
         &.gt500 {
             @include label-120;
             @include error-bubbles;
+        }
+    }
+}
+
+/* ------------------------------------ Button Loading ------------------------------------*/
+
+.cssClass {
+    .submitWrapper {
+        .saving {
+            @include default-loading-animation-small;
+            visibility: hidden;
+            position: absolute;
+            margin-left: -12px;
+            margin-top: -12px;
+            height: 24px;
+            width: 24px;
+            left: 50%;
+            top: 50%;
         }
     }
 }
