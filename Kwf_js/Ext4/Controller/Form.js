@@ -28,7 +28,7 @@ Ext4.define('Kwf.Ext4.Controller.Form', {
     {
         if (this.autoLoadComboBoxStores) {
             Ext4.each(this.form.query("combobox"), function(i) {
-                if (i.queryMode == 'remote' && i.store && !i.store.lastOptions) {
+                if (i.getValue() !== null && i.queryMode == 'remote' && i.store && !i.store.lastOptions) {
                     i.store.load();
                 }
             }, this);
