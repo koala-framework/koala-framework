@@ -34,7 +34,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         $requiredFeatures = $this->_features;
         sort($requiredFeatures);
 
-        $path = Kwf_Config::getValue('path.modernizr');
+        $path = VENDOR_PATH.'/koala-framework/library-modernizr';
         $builds = json_decode(file_get_contents($path.'/builds.json'), true);
         foreach ($builds as $build) {
             $features = $build['features'];
