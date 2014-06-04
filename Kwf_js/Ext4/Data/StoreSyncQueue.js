@@ -7,7 +7,6 @@ Ext4.define('Kwf.Ext4.Data.StoreSyncQueue', {
         this.mixins.observable.constructor.call(this);
 
         this._queue = [];
-        this._running = [];
         this.exceptions = [];
         this.hasException = false;
         this.isRunning = false;
@@ -17,43 +16,33 @@ Ext4.define('Kwf.Ext4.Data.StoreSyncQueue', {
     {
         this._startOptions = startOptions || {};
         this.isRunning = true;
-        Ext4.each(this._queue, function(i) {
-            this._startSync(i.store, i.options);
-        }, this);
-        this._queue.length = 0;
+        this._syncNext();
+    },
 
-        if (!this._running.length) {
-            this._callbackFinished();
-        }
+    _syncNext: function()
+    {
+        var i = this._queue.shift();
+        this._startSync(i.store, i.options);
     },
 
     /**
-     * Add a store that should be synced to the queue. If sync is already running start sync immediately.
+     * Add a store that should be synced to the queue.
      */
     add: function(store, options)
     {
         options = options || {};
-        if (this.isRunning) {
-            this._startSync(store, options);
-        } else {
-            this._queue.push({store: store, options: options});
-        }
+        this._queue.push({store: store, options: options});
     },
 
     _startSync: function(store, options)
     {
         if (store.getNewRecords().length || store.getUpdatedRecords().length || store.getRemovedRecords().length) {
-            this._running.push(store);
             store.sync({
                 store: store,
                 queueOptions: options,
                 callback: function(batch, options) {
                     var store = options.store;
-                    this._running.splice(this._running.indexOf(store), 1);
                     this._callback(batch.hasException, batch, options);
-                    if (!this._running.length) {
-                        this._callbackFinished();
-                    }
                 },
                 scope: this
             });
@@ -77,6 +66,12 @@ Ext4.define('Kwf.Ext4.Data.StoreSyncQueue', {
             this.hasException = true;
         } else {
             if (qo.success) qo.success.call(qo.scope || this, batch, qo);
+        }
+
+        if (this._queue.length) {
+            this._syncNext();
+        } else {
+            this._callbackFinished();
         }
     },
 
