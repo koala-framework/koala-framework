@@ -198,14 +198,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     public static function getPathWithTypeByFileName($fileName)
     {
-        static $paths;
-        if (!isset($paths)) {
-            $paths = Kwf_Config::getValueArray('path');
-            foreach ($paths as $k=>$p) {
-                $paths[$k] = self::_getAbsolutePath($p);
-            }
-            $paths = array_reverse($paths);
-        }
+        $paths = self::_getAllPaths();
         $fileName = self::_getAbsolutePath($fileName);
         foreach ($paths as $k=>$p) {
             if (substr($fileName, 0, strlen($p)) == $p) {

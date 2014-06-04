@@ -68,7 +68,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                 $i = substr($i, 6);
                 $f = self::getPathWithTypeByFileName(getcwd().'/'.$i);
                 if (!$f) {
-                    throw new Kwf_Exception("Can't find path for '$i'");
+                    throw new Kwf_Exception("Can't find path for '".getcwd().'/'.$i."'");
                 }
                 $map->sources[$k] = $f;
                 $sourceFiles[] = $f;

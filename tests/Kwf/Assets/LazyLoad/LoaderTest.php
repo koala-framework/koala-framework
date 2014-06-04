@@ -4,15 +4,15 @@ class Kwf_Assets_LazyLoad_LoaderTest extends Kwf_Test_TestCase
     public function testLoaderDependency()
     {
         $l = new Kwf_Assets_LazyLoad_TestProviderList();
-        $d = $l->findDependency('Kwf.Assets.LazyLoad.TestLoaderDep');
-        $array = $d->getRecursiveDependencies();
-        $this->assertEquals(3, count($array));
+        $d = $l->findDependency('TestLoaderDep');
+        $array = $d->getRecursiveFiles();
+        $this->assertEquals(2, count($array));
     }
 
     public function testPackage1()
     {
         $l = new Kwf_Assets_LazyLoad_TestProviderList();
-        $p = new Kwf_Assets_Package_LazyLoad($l, 'Kwf.Assets.LazyLoad.Foo', array());
+        $p = new Kwf_Assets_Package_LazyLoad($l, 'Foo', array());
         $c = $p->getPackageContents('text/javascript', 'en', false);
         $this->assertContains("Foo", $c);
         $this->assertContains("Bar", $c);
@@ -21,7 +21,7 @@ class Kwf_Assets_LazyLoad_LoaderTest extends Kwf_Test_TestCase
     public function testPackage2()
     {
         $l = new Kwf_Assets_LazyLoad_TestProviderList();
-        $p = new Kwf_Assets_Package_LazyLoad($l, 'Kwf.Assets.LazyLoad.Foo', array('Kwf.Assets.LazyLoad.Bar'));
+        $p = new Kwf_Assets_Package_LazyLoad($l, 'Foo', array('Bar'));
         $c = $p->getPackageContents('text/javascript', 'en', false);
         $this->assertContains("Foo", $c);
         $this->assertNotContains("Bar", $c);
