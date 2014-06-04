@@ -117,36 +117,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                         array('allowModifications'=>true));
 
         $this->_mergeWebConfig($section, $webPath);
-
-        if (!$this->libraryPath) {
-            $p = trim(file_get_contents(KWF_PATH.'/include_path'));
-            if (preg_match('#(.*)/zend/%version%$#', $p, $m)) {
-                $this->libraryPath = $m[1];
-            } else {
-                throw new Kwf_Exception("Can't detect libraryPath");
-            }
-        }
-
-        foreach ($this->path as $k=>$i) {
-            $this->path->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
-                                            array($this->libraryPath, $kwfPath),
-                                            $i);
-        }
-        foreach ($this->includepath as $k=>$i) {
-            $this->includepath->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
-                                            array($this->libraryPath, $kwfPath),
-                                            $i);
-        }
-        foreach ($this->externLibraryPath as $k=>$i) {
-            $this->externLibraryPath->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
-                                            array($this->libraryPath, $kwfPath),
-                                            $i);
-        }
-        foreach ($this->assets->dependencies as $k=>$i) {
-            $this->assets->dependencies->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
-                                            array($this->libraryPath, $kwfPath),
-                                            $i);
-        }
     }
 
     public function getMasterFiles()
