@@ -62,6 +62,12 @@ class Kwc_Basic_ImageParent_Events extends Kwc_Abstract_Events
     {
         $components = $event->component
             ->getChildComponents(array('componentClass' => $this->_class));
+        $this->_clearMediaCache($components);
+    }
+
+    protected function _clearMediaCache($components)
+    {
+        if (!is_array($components)) $components = array($components);
         foreach ($components as $component) {
             $imageData = $component->getComponent()->getImageData();
             if ($imageData) {
