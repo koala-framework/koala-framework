@@ -5758,7 +5758,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Produse</ro>
 <sl>Produkti</sl>
 <ua>Продукти</ua>
-</text>
+<uk>Послуги</uk>
 <text>
 <en>Tags</en>
 <de>Tags</de>
@@ -6860,8 +6860,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1074</id>
 <ro>Nu au fost găsite înregistrări pentru textul căutat &amp;quot;{0}&amp;quot;.</ro>
 <sl>Sistemi ni našel ustreznih zadetkov za iskani pojem &amp;quot;{0}&amp;quot;.</sl>
-<uk>Нічого не знайдено</uk>
 <ua>Жодного запису не знайдено</ua>
+<uk>Записів не знайдено щодо цього запиту</uk>
 </text>
 <text>
 <en>Show All</en>
@@ -10768,8 +10768,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Keine Einträge wurden ausgewählt.</de>
 <ro>Nu a fost selectat niciun obiect.</ro>
 <sl>Noben vnos ni bil izbran.</sl>
-<uk>Записів не знайдено</uk>
 <ua>Не обрано жодного запису.</ua>
+<uk>Не вибрані записи</uk>
 </text>
 <text>
 <en>clearing cache...</en>
@@ -11131,10 +11131,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Keine Einträge gefunden</de>
 <id>1804</id>
 <sk>Žiadne výsledky vyhľadávania</sk>
-<uk>Записів не знайдено</uk>
 <ua>Записів не знайдено</ua>
 <cs>Novinky nebyly nalezeny</cs>
 <hr>Nisu pronađeni rezultati</hr>
+<ro>Nu a fost gasita nicio inregistrare</ro>
+<uk>Записів не знайдено</uk>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
