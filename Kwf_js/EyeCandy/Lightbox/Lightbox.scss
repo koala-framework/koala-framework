@@ -1,3 +1,6 @@
+@import "config/default-loading-animation-big";
+@import "kwf/background-image-dpr2";
+
 .kwfLightbox {
     position: absolute;
     z-index: 100;
@@ -84,15 +87,6 @@
 }
 .kwfLightbox .lightboxBody .prevBtn img.previousImgBtn { position: absolute; top: 100px; left: 0px; }
 
-
-.kwfLightbox .loading {
-    position: absolute; top: 50%; left: 50%; margin-left: -33px; margin-top: -33px; width: 66px; height: 66px;
-    padding: 5px;
-    background-color: white;
-    background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif);
-    background-repeat: no-repeat;
-    background-position: center center;
-}
 .kwfLightbox .lightboxBody .image { z-index: 1; }
 
 .kwfLightbox .lightboxFooter p { text-align: left; margin-bottom: 0px; }
@@ -108,6 +102,10 @@
     filter: alpha(opacity=80);
     z-index: 50 !important;
     position: fixed;
+}
+
+.kwfLightbox .loading {
+    @include default-loading-animation-big;
 }
 
 @media (max-width: 650px) {

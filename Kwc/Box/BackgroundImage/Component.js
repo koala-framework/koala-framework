@@ -30,7 +30,7 @@
     var backgroundResizeOriginalHeight = null;
 
     Ext2.onReady(function() {
-        if (Ext2.isIE8) {
+        if (Ext2.isIE8 && Ext2.get('background')) {
             var bgUrl = Ext2.get('background').getStyle('background-image');
             bgUrl = bgUrl.replace(/url\("?(.*?)"?\)/, '$1');
 

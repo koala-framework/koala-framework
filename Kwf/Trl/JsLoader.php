@@ -44,10 +44,9 @@ class Kwf_Trl_JsLoader
                     $values['tochange'] = $trlelement['text'];
                     $method = $trlelement['type'].$mode;
                     $values['now'] = $trl->$method($values['context'],$values['tochange'], array(), $language);
-                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+                    $beforeWithoutContext = preg_replace('#[\'"]'.$values['context'].'[\'"], ?#', '', $values['before']);
+                    $values['now'] = str_replace($values['tochange'], $values['now'], $beforeWithoutContext);
                     $values['now'] = str_replace($method, 'trl', $values['now']);
-                    $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
-                    $values['now'] = str_replace('"'.$values['context'].'", ', '', $values['now']);
 
                 } else if ($trlelement['type'] == 'trlp') {
                     $values['before'] = $trlelement['before'];
@@ -73,11 +72,10 @@ class Kwf_Trl_JsLoader
                     $newValues = Kwf_Trl::getInstance()->getTrlpValues($values['context'],
                                 $values['single'], $values['plural'], $trlelement['source'], $language );
 
+                    $beforeWithoutContext = preg_replace('#[\'"]'.$values['context'].'[\'"], ?#', '', $values['before']);
                     $method = 'trlcp'.$mode;
-                    $values['now'] = str_replace($values['plural'], $newValues['plural'], $values['before']);
+                    $values['now'] = str_replace($values['plural'], $newValues['plural'], $beforeWithoutContext);
                     $values['now'] = str_replace($values['single'], $newValues['single'], $values['now']);
-                    $values['now'] = str_replace("\"".$values['context']."\",", "", $values['now']);
-                    $values['now'] = str_replace('\''.$values['context'].'\',', "", $values['now']);
                     $values['now'] = str_replace($method, 'trlp', $values['now']);
                 }
                 $ret[] = array('search'=>$values['before'], 'replace'=>$values['now']);
