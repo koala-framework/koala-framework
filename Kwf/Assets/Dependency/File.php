@@ -14,6 +14,11 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             throw new Kwf_Exception("Invalid filename");
         }
         $this->_fileName = $fileNameWithType;
+
+        //check commented out, only required for debugging
+        //if (!file_exists($this->getAbsoluteFileName())) {
+        //    throw new Kwf_Exception("File not found: '$this->_fileName' ('{$this->getAbsoluteFileName()}')");
+        //}
     }
 
     public function getContents($language)
@@ -30,10 +35,8 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     {
         return $this->_fileName;
     }
-
-    public function getAbsoluteFileName()
+    private static function _getAllPaths()
     {
-        if (isset($this->_fileNameCache)) return $this->_fileNameCache;
         static $paths;
         if (!isset($paths)) {
             $cacheId = 'assets-file-paths';
@@ -41,10 +44,10 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             if ($paths === false) {
                 $paths = array(
                     'web' => '.',
-                    'webThemes' => './themes',
+                    'webThemes' => 'themes',
                 );
-                $vendors = glob(VENDOR_PATH."/*/*");
                 $vendors[] = KWF_PATH; //required for kwf tests, in web kwf is twice in $vendors but that's not a problem
+                $vendors = array_merge($vendors, glob(VENDOR_PATH."/*/*"));
                 foreach ($vendors as $i) {
                     if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
                         $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
@@ -54,7 +57,13 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                 Kwf_Cache_SimpleStatic::add($cacheId, $paths);
             }
         }
+        return $paths;
+    }
 
+    public function getAbsoluteFileName()
+    {
+        if (isset($this->_fileNameCache)) return $this->_fileNameCache;
+        $paths = self::_getAllPaths();
         $pathType = $this->getType();
         $f = substr($this->_fileName, strpos($this->_fileName, '/'));
         if (isset($paths[$pathType])) {
@@ -96,8 +105,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             $fileName = substr($fileName, strpos($fileName, '/')); //pathtype abschneiden
             $fileName = substr($fileName, 0, -1); // /* abschneiden
 
-            static $paths;
-            if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
+            $paths = self::_getAllPaths();
             $path = $paths[$pathType].$fileName;
             if (!file_exists($path)) {
                 throw new Kwf_Exception("Path '$path' does not exist.");
