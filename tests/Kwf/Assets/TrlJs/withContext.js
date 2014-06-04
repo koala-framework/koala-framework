@@ -1,1 +1,1 @@
-trlcKwf('decimal separator', '.')
+trlcKwf('decimal separator', '.');

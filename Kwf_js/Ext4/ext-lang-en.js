@@ -64,7 +64,7 @@ Ext4.onReady(function() {
 
     if (Ext4.util && Ext4.util.Format) {
         Ext4.apply(Ext4.util.Format, {
-            thousandSeparator: '', //shitty trl parser doesn't eat that: trlcKwf('thousands separator', ","),
+            thousandSeparator: trlcKwf('thousands separator', ","),
             decimalSeparator: trlcKwf('decimal separator', "."),
             currencySign: '€', //currencySign in trl, really?
             dateFormat: trlKwf('Y-m-d')
