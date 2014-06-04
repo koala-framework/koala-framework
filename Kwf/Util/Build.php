@@ -21,7 +21,7 @@ class Kwf_Util_Build
         $types[] = new Kwf_Util_Build_Types_Trl();
         $types[] = new Kwf_Util_Build_Types_Assets();
         if (Kwf_Component_Data_Root::getComponentClass()) {
-            // disabled because of absolute paths in build $types[] = new Kwf_Util_Build_Types_ComponentSettings();
+            $types[] = new Kwf_Util_Build_Types_ComponentSettings();
             $types[] = new Kwf_Util_Build_Types_ComponentEvents();
         }
         return $types;
