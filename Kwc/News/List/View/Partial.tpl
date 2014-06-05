@@ -16,7 +16,7 @@
         </div>
     <? } ?>
     <? if($this->item->row->teaser) { ?>
-        <div class="teaser>">
+        <div class="teaser">
             <p>
                 <?=nl2br($this->item->row->teaser);?>
                 <? if($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
