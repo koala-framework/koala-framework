@@ -20,9 +20,31 @@ class Kwc_Trl_List_Test extends Kwc_TestAbstract
     public function testIt()
     {
         $c = $this->_root->getComponentById('root-master_test');
-        $this->assertTrue(substr_count($c->render(), 'foo')==3);
+        $this->assertTrue(substr_count($c->render(), 'foo')==2);
 
         $c = $this->_root->getComponentById('root-en_test');
         $this->assertTrue(substr_count($c->render(), 'foo')==1);
+    }
+
+    public function testMasterLimitWithVisible()
+    {
+        $c = $this->_root->getComponentById('root-master_test');
+        $cmp = $c->getChildComponents(array(
+            'limit' => 1
+        ));
+        $cmp = array_values($cmp);
+        $this->assertEquals(1, count($cmp));
+        $this->assertEquals('root-master_test-2', $cmp[0]->componentId);
+    }
+
+    public function testTrlLimitWithVisible()
+    {
+        $c = $this->_root->getComponentById('root-en_test');
+        $cmp = $c->getChildComponents(array(
+            'limit' => 1
+        ));
+        $cmp = array_values($cmp);
+        $this->assertEquals(1, count($cmp));
+        $this->assertEquals('root-en_test-2', $cmp[0]->componentId);
     }
 }

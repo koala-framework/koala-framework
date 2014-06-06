@@ -16,6 +16,10 @@ class Kwc_Chained_Trl_Generator extends Kwc_Chained_Abstract_Generator
         $select = parent::_getChainedSelect($select);
         $select->ignoreVisible(); // Visible ist bei Trl immer extra zu setzen
 
+        if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
+            $select->unsetPart(Kwf_Model_Select::LIMIT_COUNT);
+        }
+
         if ($this->_getChainedGenerator() instanceof Kwf_Component_Generator_PseudoPage_Static) {
             //filename is translated, unset, checked in _createData
             $select->unsetPart(Kwf_Component_Select::WHERE_FILENAME);
