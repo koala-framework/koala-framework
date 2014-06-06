@@ -70,7 +70,7 @@ class Kwf_Assets_Ext4_ProviderTest extends Kwf_Test_TestCase
         $l = new Kwf_Assets_Ext4_TestProviderList();
         $d = $l->findDependency('Ext4.dom.Element');
         $array = $d->getRecursiveFiles();
-        $this->assertEquals(45, count($array));
+        $this->assertEquals(46, count($array));
     }
 
     public function testExtFormat()
@@ -110,7 +110,7 @@ class Kwf_Assets_Ext4_ProviderTest extends Kwf_Test_TestCase
         $l = new Kwf_Assets_Ext4_TestProviderList();
         $d = $l->findDependency('Ext4.window.Window');
         $array = $d->getRecursiveFiles();
-        $this->assertEquals(197, count($array));
+        $this->assertEquals(198, count($array));
     }
 
     public function testRequire()
