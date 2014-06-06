@@ -86,10 +86,10 @@ abstract class Kwf_Exception_Abstract extends Exception
                 header('Content-Type: text/html; charset=utf-8');
             }
 
-            $obStatus = ob_get_status();
-            if ($obStatus['level']) {
-                while(ob_end_flush()) {} //end all output buffers to avoid exception output getting into output buffer
+            while (ob_get_level() > 0) {
+                ob_end_flush();
             }
+
 
             echo $view->render($template);
         } catch (Exception $e) {
