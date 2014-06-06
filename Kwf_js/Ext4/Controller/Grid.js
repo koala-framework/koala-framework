@@ -142,6 +142,7 @@ Ext4.define('Kwf.Ext4.Controller.Grid', {
 
         //create own store, so grid doesn't display loaded rows
         var store = this._store.self.create({
+            model: this._store.model,
             filters: this._store.filters.items,
             sorters: this._store.sorters.items,
             pageSize: pageSize
