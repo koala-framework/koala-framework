@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "726d5ccf40a0fde74861b68869085aa8",
+    "hash": "04a21ee944bcaa6aae14ff4b7d6d627d",
     "packages": [
         {
             "name": "koala-framework/library-compass-mixins",
@@ -320,6 +320,56 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "amazonwebservices/aws-sdk-for-php",
+            "version": "1.5.14",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/amazonwebservices/aws-sdk-for-php.git",
+                "reference": "26ea889e8b574d22b07e7a8259c7b7e052145caa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/amazonwebservices/aws-sdk-for-php/zipball/26ea889e8b574d22b07e7a8259c7b7e052145caa",
+                "reference": "26ea889e8b574d22b07e7a8259c7b7e052145caa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "authentication/",
+                    "extensions/",
+                    "lib/",
+                    "services/",
+                    "utilities/",
+                    "sdk.class.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Amazon Web Services",
+                    "homepage": "http://aws.amazon.com"
+                }
+            ],
+            "description": "AWS SDK for PHP",
+            "homepage": "http://aws.amazon.com/sdkforphp/",
+            "keywords": [
+                "amazon",
+                "aws",
+                "dynamodb",
+                "ec2",
+                "s3",
+                "sdk"
+            ],
+            "time": "2012-08-31 22:21:38"
+        },
         {
             "name": "phpunit/php-code-coverage",
             "version": "1.2.17",
@@ -790,17 +840,9 @@
             "time": "2014-05-16 14:25:18"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "stability-flags": [],
+    "platform": [],
+    "platform-dev": []
 }
