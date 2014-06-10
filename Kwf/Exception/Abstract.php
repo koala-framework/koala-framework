@@ -86,11 +86,6 @@ abstract class Kwf_Exception_Abstract extends Exception
                 header('Content-Type: text/html; charset=utf-8');
             }
 
-            while (ob_get_level() > 0) {
-                ob_end_flush();
-            }
-
-
             echo $view->render($template);
         } catch (Exception $e) {
             echo '<pre>';
