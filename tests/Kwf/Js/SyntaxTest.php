@@ -28,7 +28,7 @@ class Kwf_Js_SyntaxTest extends Kwf_Test_TestCase
     {
         $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->_getScanPath()));
         foreach ($it as $file) {
-            if (preg_match('#/(cache|tests)/#', $file->getPathname())) continue;
+            if (preg_match('#/(cache|tests|vendor|build)/#', $file->getPathname())) continue;
             if (preg_match('#/Form/BasicForm\.js$#', $file->getPathname())) continue;
             if (!preg_match('/\.js$/i', $file->getFilename())) continue;
 
