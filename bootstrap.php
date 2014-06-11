@@ -12,5 +12,30 @@ if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == '/') {
 }
 
 $front = Kwf_Controller_Front::getInstance();
+$front->addControllerDirectory(KWF_PATH . '/tests', 'kwf_test');
+
+$router = $front->getRouter();
+
+if ($router instanceof Kwf_Controller_Router) {
+
+    //für selenium-tests von sachen die im kwf liegen
+    $router->AddRoute('kwf_test', new Zend_Controller_Router_Route(
+                '/kwf/test/:controller/:action',
+                array('module'     => 'kwf_test',
+                    'action'     =>'index')));
+    $router->AddRoute('kwf_kwctest', new Zend_Controller_Router_Route_Regex(
+                'kwf/kwctest/([^/]+)/(.*)',
+                array('module'     => 'kwf_test',
+                    'controller' => 'kwc_test',
+                    'action'     => 'index',
+                    'url'        => ''),
+                array('root'=>1, 'url'=>2)));
+    $router->AddRoute('kwf_test_componentedit', new Zend_Controller_Router_Route(
+                '/kwf/componentedittest/:root/:class/:componentController/:action',
+                array('module' => 'component_test',
+                    'controller' => 'component_test',
+                    'action' => 'index')));
+}
+
 $response = $front->dispatch();
 $response->sendResponse();
