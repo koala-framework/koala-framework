@@ -20,7 +20,8 @@ class Vpc_Advanced_Amazon_Product_Component extends Vpc_Abstract
 
         if (!isset($productsByPage[$this->getData()->parent->componentId])) {
             $all = $this->getData()->parent->getChildComponents(array(
-                'componentClass' => $this->getData()->componentClass
+                'componentClass' => $this->getData()->componentClass,
+                'ignoreVisible' => true
             ));
             $asins = array();
             foreach ($all as $c) {
@@ -59,15 +60,17 @@ class Vpc_Advanced_Amazon_Product_Component extends Vpc_Abstract
                     }
                 }
             }
+
             $productsByPage[$this->getData()->parent->componentId] = $products;
         }
-        $ret['product'] = null;
 
+        $ret['product'] = null;
         if ($this->getRow()->asin) {
             if(isset($productsByPage[$this->getData()->parent->componentId][strtoupper($this->getRow()->asin)])) {
                 $ret['product'] = $productsByPage[$this->getData()->parent->componentId][strtoupper($this->getRow()->asin)];
             }
         }
+
         return $ret;
     }
 
