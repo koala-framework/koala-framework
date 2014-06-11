@@ -70,7 +70,6 @@ class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         }
         if (substr($className, 0, 5) == 'Vkwf_' || substr($className, 0, 5) == 'Vkwc_'
                 || substr($className, 0, 4) == 'Kwc_' || substr($className, 0, 4) == 'Kwf_'
-                || $this->_curModule == 'web_test'
         ) {
             try {
                 Zend_Loader::loadClass($className);
