@@ -111,7 +111,8 @@ class Kwf_Controller_Front extends Zend_Controller_Front
         if (isset($this->_webRouter)) {
             return $this->_webRouter;
         } else {
-            return $this->_getDefaultWebRouter();
+            $this->_webRouter = $this->_getDefaultWebRouter();
+            return $this->_webRouter;
         }
     }
 
