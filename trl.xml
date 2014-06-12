@@ -5916,6 +5916,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1124</id>
 <ro>Stimate domnule {0} {1}</ro>
 <sl>Spoštovani gospod {0} {1}</sl>
+<fr>Cher Mr. {0} {1}</fr>
 </text>
 <text>
 <en>Dear Mrs. {0}</en>
@@ -5923,6 +5924,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1125</id>
 <ro>Stimată doamnă {0}</ro>
 <sl>Spoštovana gospa {0}</sl>
+<fr>Chère Mme. {0}</fr>
 </text>
 <text>
 <en>Excel export</en>
@@ -5994,6 +5996,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1137</id>
 <ro>Stimată doamnă {0} {1}</ro>
 <sl>Spoštovana gospa {0} {1}</sl>
+<fr>Chère Mme. {0} {1}</fr>
 </text>
 <text>
 <en>Dear Mr. {0}</en>
@@ -6001,6 +6004,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1138</id>
 <ro>Stimate domnule {0}</ro>
 <sl>Spoštovani gospod {0}</sl>
+<fr>Cher Mr. {0} {1}</fr>
 </text>
 <text>
 <en>Hello Mr. {0}</en>
@@ -8182,6 +8186,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1549</id>
 <ro>Stimate doamne, stimaţi domni</ro>
 <sl>Spoštovani!</sl>
+<fr>Mesdames et Messieurs</fr>
 </text>
 <text>
 <en>Copy of</en>
