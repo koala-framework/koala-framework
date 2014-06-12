@@ -76,6 +76,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         foreach ($getChildren as $c) {
             $ret = $ret->getChildComponent($c);
         }
+        if (!$ret) return null;
         $ret = $ret->getChildComponent('-linkTag');
         if (is_instance_of($ret->componentClass, 'Kwc_Basic_LinkTag_Component')) {
             $ret = $ret->getChildComponent('-child');
