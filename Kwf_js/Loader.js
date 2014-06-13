@@ -10,7 +10,7 @@ window.Kwf.Loader.require = function(expression, fn, scope)
 
     var classIsLoaded = false;
     var Ext = window.Ext4;
-    if (Ext && Ext2.ClassManager && Ext2.ClassManager.isCreated(expression)) {
+    if (Ext && Ext.ClassManager && Ext.ClassManager.isCreated(expression)) {
         classIsLoaded = true;
     }
     if (classIsLoaded) {
