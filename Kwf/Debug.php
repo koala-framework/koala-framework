@@ -295,6 +295,9 @@ class Kwf_Debug
 
     public static function handleException($exception)
     {
+        if ($exception instanceof Zend_Controller_Exception && $exception->getPrevious()) {
+            $exception = $exception->getPrevious();
+        }
         if (!$exception instanceof Kwf_Exception_Abstract) {
             $exception = new Kwf_Exception_Other($exception);
         }
