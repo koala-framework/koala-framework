@@ -82,7 +82,7 @@ class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
     public function formatClassName($moduleName, $className)
     {
-        if ($moduleName == 'kwf_test') {
+        if ($moduleName == 'kwf_test' || $moduleName == 'tests') {
             return $className;
         } else {
             return parent::formatClassName($moduleName, $className);
