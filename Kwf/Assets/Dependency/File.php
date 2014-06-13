@@ -47,11 +47,15 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                     'webThemes' => 'themes',
                 );
                 $vendors[] = KWF_PATH; //required for kwf tests, in web kwf is twice in $vendors but that's not a problem
+                $vendors[] = '.';
                 $vendors = array_merge($vendors, glob(VENDOR_PATH."/*/*"));
                 foreach ($vendors as $i) {
                     if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
-                        $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
-                        $paths[$dep->pathType] = $i;
+                        $c = new Zend_Config_Ini($i.'/dependencies.ini');
+                        if ($c->config) {
+                            $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                            $paths[$dep->pathType] = $i;
+                        }
                     }
                 }
                 Kwf_Cache_SimpleStatic::add($cacheId, $paths);
