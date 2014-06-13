@@ -16,6 +16,8 @@ class Kwf_Assets_Provider_JsClass extends Kwf_Assets_Provider_Abstract
         if ($this->_namespace) {
             if (substr($dependencyName, 0, strlen($this->_namespace)+1) == $this->_namespace.'.') {
                 $dependencyName = substr($dependencyName, strlen($this->_namespace)+1);
+            } else {
+                return null;
             }
         }
         $d = $this->_basePath.'/'.str_replace('.', '/', $dependencyName).'.js';
