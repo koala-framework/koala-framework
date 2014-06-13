@@ -103,22 +103,22 @@ class Kwf_Assets_Dispatcher
             }
 
             if (Kwf_Setup::getBaseUrl()) {
-                $sourceMap = false;
                 if (substr($url, -4) == '.map') {
-                    $contentUrl = substr($contentUrl, 0, -4);
-                    $content = self::_getOutputForUrlNoEncoding($contentUrl);
-                    $replacements = $this->_getBaseUrlReplacements($mimeType, $content);
+                    $contentUrl = substr($url, 0, -4);
+                    $extension = substr($contentUrl, strrpos($contentUrl, '/')+1);
+                    $replacements = self::_getBaseUrlReplacements($extension, $ret['contents']);
                     if ($replacements) {
-                        $map = new Kwf_Assets_Util_SourceMap($ret, $content);
+                        $map = new Kwf_Assets_Util_SourceMap($ret['contents'], $content);
                         foreach ($replacements as $i) {
                             $map->stringReplace($i['search'], $i['replace']);
                         }
-                        $ret = $map->getMapContents(false);
+                        $ret['contents'] = $map->getMapContents(false);
                     }
                 } else {
-                    $replacements = $this->_getBaseUrlReplacements($mimeType, $content);
+                    $extension = substr($url, strrpos($url, '/')+1);
+                    $replacements = self::_getBaseUrlReplacements($extension, $ret['contents']);
                     foreach ($replacements as $i) {
-                        $ret = str_replace($i['search'], $i['replace'], $ret);
+                        $ret['contents'] = str_replace($i['search'], $i['replace'], $ret['contents']);
                     }
                 }
             }
@@ -180,7 +180,7 @@ class Kwf_Assets_Dispatcher
         return $ret;
     }
 
-    private function _getBaseUrlReplacements($mimeType, $contents)
+    private static function _getBaseUrlReplacements($extension, $contents)
     {
         $baseUrl = Kwf_Setup::getBaseUrl();
         if (!$baseUrl) return array();
@@ -193,12 +193,12 @@ class Kwf_Assets_Dispatcher
                 );
             }
         }
-        if ($mimeType == 'text/javascript') {
-            if (preg_replace('#([\'"])/(kwf|vkwf|admin|assets)/#', $contents, $m)) {
+        if ($extension == 'js') {
+            if (preg_match_all('#([\'"])/(kwf|vkwf|admin|assets)/#', $contents, $m)) {
                 foreach ($m[0] as $k=>$i) {
                     $ret[] = array(
                         'search' => $i,
-                        'replace' => $m[1][$k].$baseUrl.'/'.$m[1][$k].'/'
+                        'replace' => $m[1][$k].$baseUrl.'/'.$m[2][$k].'/'
                     );
                 }
             }
