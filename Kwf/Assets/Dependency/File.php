@@ -205,6 +205,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         $paths = self::_getAllPaths();
         $fileName = self::_getAbsolutePath($fileName);
         foreach ($paths as $k=>$p) {
+            if ($p == '.') $p = getcwd();
             if (substr($fileName, 0, strlen($p)) == $p) {
                 return $k.substr($fileName, strlen($p));
             }

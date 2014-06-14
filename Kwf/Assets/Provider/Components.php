@@ -19,8 +19,11 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
             ));
             foreach ($files as $i) {
                 foreach ($i as $j) {
-                    $j = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($j);
-                    $ret[] = Kwf_Assets_Dependency_File::createDependency($j, $this->_providerList);
+                    $jj = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($j);
+                    if (!$jj) {
+                        throw new Kwf_Exception("Can't find path type for '$j'");
+                    }
+                    $ret[] = Kwf_Assets_Dependency_File::createDependency($jj, $this->_providerList);
                 }
             }
 
