@@ -1,5 +1,5 @@
 
-## Koala Framework [![Build Status](https://travis-ci.org/vivid-planet/koala-framework.png?branch=3.3)](https://travis-ci.org/vivid-planet/koala-framework)
+## Koala Framework [![Build Status](https://travis-ci.org/koala-framework/koala-framework.png?branch=master)](https://travis-ci.org/koala-framework/koala-framework)
 
 http://www.koala-framework.org/
 
