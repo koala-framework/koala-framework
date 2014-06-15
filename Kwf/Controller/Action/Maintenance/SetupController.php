@@ -127,12 +127,8 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
 
         $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates(0, 9999999));
 
-        $file = 'setup/setup.sql'; //initial setup for web
-        if (file_exists($file)) {
-            $update = new Kwf_Update_Sql(0, null);
-            $update->sql = file_get_contents($file);
-            $updates[] = $update;
-        }
+        $updates[] = new Kwf_Update_Setup_InitialDb();
+        $updates[] = new Kwf_Update_Setup_InitialUploads();
 
         $update = new Kwf_Update_Sql(0, null);
         $db = Kwf_Registry::get('db');
