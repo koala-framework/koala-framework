@@ -21,9 +21,19 @@ Kwf.onJElementReady('div.kwfFadeElements', function fadeElements(element) {
         delete fadeClass;
     }
 
+    element = element.get(0);
     element.fadeElementsObject = new cls(config);
     element.fadeElementsObject.start();
 });
+
+
+Kwf.onJElementWidthChange('div.kwfFadeElements', function fadeElementsWidthChange(element) {
+    element = element.get(0);
+    if (element.fadeElementsObject) {
+        element.fadeElementsObject.calculateMaxHeight();
+    }
+}, {priority: 10}); /* after ResponsiveEl */
+
 
 if (!Kwf.Fade) Kwf.Fade = {};
 
@@ -138,9 +148,6 @@ Kwf.Fade.Elements.prototype = {
     start: function() {
         this._components = $(this.selectorRoot).find('.components');
         this.calculateMaxHeight();
-        $(window).resize($.proxy(function() {
-            this.calculateMaxHeight();
-        }, this));
         if (this.fadeElements.length <= 1) return;
         if (this.autoStart) {
             this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
