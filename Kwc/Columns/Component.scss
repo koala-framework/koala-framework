@@ -82,7 +82,7 @@ $grid-padding   : 0em;
         @include omega;
     }
 
-    .listItem.lineFirst {
+    > .listItem.lineFirst {
         clear: both;
     }
 }
