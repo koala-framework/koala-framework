@@ -176,6 +176,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $row->kwf_upload_id = 2;
         $row->save();
         Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Component_Data_Root::reset();
 
         Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX.'100-76b7ff');
         $this->assertEquals(3, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
