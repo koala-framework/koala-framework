@@ -1,5 +1,5 @@
 <?php
-class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Model extends Kwf_Model_Db
+class Kwc_Shop_Cart_Checkout_Payment_Wirecard_LogModel extends Kwf_Model_Db
 {
     protected $_table = 'kwc_wirecard_log';
     protected function _init()

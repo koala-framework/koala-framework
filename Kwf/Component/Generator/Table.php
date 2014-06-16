@@ -23,9 +23,9 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         return $this->_useComponentId;
     }
 
-    final public function getFormattedSelect($parentData)
+    final public function getFormattedSelect($parentData, $select = array())
     {
-        $ret = $this->select($parentData);
+        $ret = $this->select($parentData, $select);
         $ret = $this->_formatSelect($parentData, $ret);
         return $ret;
     }

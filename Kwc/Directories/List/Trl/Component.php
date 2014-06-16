@@ -7,7 +7,9 @@ class Kwc_Directories_List_Trl_Component extends Kwc_Abstract_Composite_Trl_Comp
 
         //child generator 1:1 übernehmen um die gleiche view zu haben (keine uebersetzte)
         $masterGen = Kwc_Abstract::getSetting($masterComponentClass, 'generators');
-        $ret['generators']['child'] = $masterGen['child'];
+        if (is_instance_of($masterGen['child']['component']['view'], 'Kwc_Directories_List_View_Component')) {
+            $ret['generators']['child'] = $masterGen['child'];
+        }
         return $ret;
     }
 

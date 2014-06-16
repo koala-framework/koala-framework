@@ -269,7 +269,7 @@ class Kwf_Component_Data
             unset($this->_lazyGenerator);
             return $ret;
         } else if ($var == 'row' && isset($this->_lazyRow)) {
-            $ret = $this->generator->getModel()->getRow($this->_lazyRow);
+            $ret = $this->generator->getRowByLazyRow($this->_lazyRow, $this);
             $this->row = $ret;
             unset($this->_lazyRow);
             return $ret;
@@ -1390,10 +1390,7 @@ class Kwf_Component_Data
                 $v = array($v->getClass(), $v->getGeneratorKey());
                 $k = '_lazyGenerator';
             } else if ($k == 'row') {
-                if ($v instanceof Kwf_Model_Row_Interface && $this->generator->getModel() !== $v->getModel()) {
-                    throw new Kwf_Exception('data row has invalid model');
-                }
-                $v = $v->{$this->generator->getModel()->getPrimaryKey()};
+                $v = $this->generator->getLazyRowByRow($v, $this);
                 $k = '_lazyRow';
             } else if ($k == 'parent') {
                 $v = $v->componentId;
@@ -1439,10 +1436,7 @@ class Kwf_Component_Data
         }
         //unset($this->generator);
         if (isset($this->row)) {
-            if ($this->row instanceof Kwf_Model_Row_Interface && $this->generator->getModel() !== $this->row->getModel()) {
-                throw new Kwf_Exception('data row has invalid model');
-            }
-            $this->_lazyRow = $this->row->{$this->generator->getModel()->getPrimaryKey()};
+            $this->_lazyRow = $this->generator->getLazyRowByRow($this->row, $this);
             unset($this->row);
         }
         if (isset($this->_uniqueParentDatas)) unset($this->_uniqueParentDatas);
