@@ -106,5 +106,10 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $dimension = $component->getComponent()->getImageDimensions();
 
         return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dimension, $type);
-     }
+    }
+
+    public final function getImageDataOrEmptyImageData()
+    {
+        return $this->_getImageComponent()->getImageDataOrEmptyImageData();
+    }
 }

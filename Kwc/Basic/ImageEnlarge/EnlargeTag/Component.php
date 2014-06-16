@@ -126,6 +126,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         return $this->_getImageEnlargeComponent()->getImageData();
     }
 
+    public final function getImageDataOrEmptyImageData()
+    {
+        return $this->_getImageEnlargeComponent()->getImageDataOrEmptyImageData();
+    }
+
     public static function isValidMediaOutput($id, $type, $className)
     {
         return Kwf_Media_Output_Component::isValidImage($id, $type);

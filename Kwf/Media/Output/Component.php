@@ -89,7 +89,7 @@ class Kwf_Media_Output_Component
             $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
             $baseType = $c->getComponent()->getBaseType();
             $dim = $c->getComponent()->getImageDimensions();
-            $imageData = $c->getComponent()->getImageData();
+            $imageData = $c->getComponent()->getImageDataOrEmptyImageData();
             $widths = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
             $ok = false;
             foreach ($widths as $w) {
