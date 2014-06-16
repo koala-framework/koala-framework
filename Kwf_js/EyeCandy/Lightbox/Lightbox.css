@@ -37,7 +37,6 @@
 .kwfLightbox .closeButton:hover { text-decoration: none; }
 
 .kwfLightbox .kwfLightboxContent {
-    overflow: hidden;
     height: 100%;
     width: 100%;
     padding: 10px;
