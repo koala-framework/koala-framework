@@ -78,11 +78,11 @@ $grid-padding   : 0em;
     }
 
     > .listItem.kwcLast,
-    &.columns > .listItem.lineLast {
+    > .listItem.lineLast {
         @include omega;
     }
 
-    &.columns > .listItem.lineFirst {
+    .listItem.lineFirst {
         clear: both;
     }
 }
