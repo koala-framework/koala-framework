@@ -1,14 +1,22 @@
-Kwf.onElementReady('.kwcBasicLinkTagIntern', function linkTagIntern(el){
-    var pos = el.dom.href.indexOf('#');
-    if (pos > 0 && el.dom.href.substr(0, pos) === location.href.substr(0, pos)) {
-        var target = $(el.dom.href.substr(pos));
-        if (target && target.length) {
-            $(el.dom).click(function(e){
-                e.preventDefault();
-                $('html, body').stop().animate({scrollTop: target.offset().top}, 500, function() {
-                    window.location.hash = el.dom.href.substr(pos);
-                });
-            })
-        }
+Kwf.onContentReady(function linkTagIntern(el){
+    var links = $(el).find('a');
+
+    if(links && links.length) {
+        $.each(links, function(i, link){
+            if($(link).data('checkIntern')) return;
+            $(link).data('checkIntern', true);
+            var pos = $(link).attr('href') ? $(link).attr('href').indexOf('#') : null;
+            if (pos > 0) {
+                var target = $($(link).attr('href').substr(pos));
+                if (target && target.length) {
+                    $(link).click(function(e){
+                        e.preventDefault();
+                        $('html, body').stop().animate({scrollTop: target.offset().top}, 500, function() {
+                            window.location.hash = $(link).attr('href').substr(pos);
+                        });
+                    })
+                }
+            }
+        })
     }
 }, { defer: true });
