@@ -16,3 +16,7 @@
     position: relative;
     overflow: hidden;
 }
+.cssClass .prevBtn,
+.cssClass .nextBtn {
+    z-index: 1;
+}
