@@ -90,16 +90,6 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         return $ret;
     }
 
-    protected function _getOutputValueFromValues($values)
-    {
-        $ret = parent::_getOutputValueFromValues($values);
-        if (!$ret) return '';
-        if ($this->getAllowDecimals() !== false) {
-            $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
-        }
-        return $ret;
-    }
-
     protected function _getInputProperties($values, $fieldNamePostfix, $idPrefix)
     {
         $ret = parent::_getInputProperties($values, $fieldNamePostfix, $idPrefix);
