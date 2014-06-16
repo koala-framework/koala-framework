@@ -8,10 +8,9 @@ class Kwf_Component_FindHome_Test extends Kwc_TestAbstract
 
     public function testFindHome()
     {
-        $this->markTestIncomplete();
         $subroot = Kwf_Component_Data_Root::getInstance()->getChildComponent('-at');
         $home = Kwf_Component_Data_Root::getInstance()
-                    ->getChildPage(array('home' => true, 'subroot'=>$subroot));
+                    ->getChildPage(array('home' => true, 'subroot'=>$subroot), array());
         $this->assertEquals($home->componentClass, 'Kwc_Basic_None_Component');
     }
 }
