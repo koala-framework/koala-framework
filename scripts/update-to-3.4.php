@@ -6,8 +6,9 @@ echo "Changed $file to 3.4\n";
 function glob_recursive($pattern, $flags = 0) {
     $files = glob($pattern, $flags);
     foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
-        if (dirname($dir) == './kwf-lib') continue;
-        if (dirname($dir) == './library') continue;
+        if (dirname($dir) == './kwf-lib' || $dir == './kwf-lib') continue;
+        if (dirname($dir) == './vkwf-lib' || $dir == './vkwf-lib') continue;
+        if (dirname($dir) == './library' || $dir == './library') continue;
         $files = array_merge($files, glob_recursive($dir.'/'.basename($pattern), $flags));
     }
     return $files;
@@ -150,7 +151,7 @@ function updateAclTrl()
     echo "updated app/Acl.php to use trlStatic\n";
 }
 $files = glob_recursive('Component.php');
-$files[] = 'config.ini';
+$files = array_merge($files, glob_recursive('config.ini'));
 replaceFiles($files, 'Kwc_Composite_Images_Component', 'Kwc_List_Images_Component');
 replaceFiles($files, 'Kwc_Composite_LinksImages_Component', 'Kwc_List_ImagesLinked_Component');
 replaceFiles($files, 'Kwc_Composite_Downloads_Component', 'Kwc_List_Downloads_Component');
