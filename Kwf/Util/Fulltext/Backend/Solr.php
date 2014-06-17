@@ -8,7 +8,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
     {
         static $i = array();
         if (is_string($subroot) && $subroot) {
-            $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($subroot);
+            $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($subroot, array('ignoreVisible' => true));
         }
 
         // Create core names from subroot. e.g. root-at => at, root-ro-master => ro_master
