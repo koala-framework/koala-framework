@@ -25,15 +25,15 @@ class Kwf_Util_Update_Helper
     {
         $ret = self::getKwcUpdates($from, $to);
 
-        $u = self::getUpdatesForDir(KWF_PATH.'/Kwf', $from, $to);
+        $u = self::getUpdatesForDir('Kwf_Update', $from, $to);
         $ret = array_merge($ret, $u);
 
         if (defined('VKWF_PATH')) { //HACK
-            $u = self::getUpdatesForDir(VKWF_PATH.'/Vkwf', $from, $to);
+            $u = self::getUpdatesForDir('Vkwf_Update', $from, $to);
             $ret = array_merge($ret, $u);
         }
 
-        $u = self::getUpdatesForDir(getcwd() . '/app', $from, $to);
+        $u = self::getUpdatesForDir('Update', $from, $to);
         foreach ($u as $i) $i->appendTag('web');
         $ret = array_merge($ret, $u);
 
@@ -54,8 +54,8 @@ class Kwf_Util_Update_Helper
                     if (substr($curClass, -10) == '_Component') {
                         $curClass = substr($curClass, 0, -10);
                     }
-                    $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass);
-                    $ret = array_merge($ret, self::getUpdatesForDir($file, $from, $to));
+                    $curClass .= '_Update';
+                    $ret = array_merge($ret, self::getUpdatesForDir($curClass, $from, $to));
                 }
                 $class = get_parent_class($class);
             }
@@ -63,64 +63,67 @@ class Kwf_Util_Update_Helper
         return $ret;
     }
 
-    public static function getUpdatesForDir($file, $from, $to)
+    public static function getUpdatesForDir($classPrefix, $from, $to)
     {
-        $ret = array();
-        $paths = array();
-        $dirs = explode(PATH_SEPARATOR, get_include_path());
-        foreach ($dirs as $k=>$i) {
-            if ($i=='.') {
-                $dirs[$k] = getcwd();
-                continue;
-            }
-            if (!preg_match('#^(/|\w\:\\\\)#i', $i)) {
-                 //relative path, make it absolute
-                 $dirs[$k] = getcwd().'/'.$i;
+        static $namespaces;
+        if (!isset($namespaces)) {
+            $namespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
+        }
+        $pos = strpos($classPrefix, '_');
+        $ns1 = substr($classPrefix, 0, $pos+1);
+
+        $pos = strpos($classPrefix, '_', $pos+1);
+        if ($pos !== false) {
+            $ns2 = substr($classPrefix, 0, $pos+1);
+        } else {
+            $ns2 = $classPrefix;
+        }
+
+        if (isset($namespaces[$ns2])) {
+            $dirs = $namespaces[$ns2];
+        } else if (isset($namespaces[$ns1])) {
+            $dirs = $namespaces[$ns1];
+        } else {
+            $dirs = array();
+        }
+
+        static $includePaths;
+        if (!isset($includePaths)) {
+            $includePaths = include VENDOR_PATH.'/composer/include_paths.php';
+            $includePaths = array_merge($includePaths, Kwf_Config::getValueArray('includepath'));
+        }
+        foreach ($includePaths as $i) {
+            if (file_exists($i.'/'.str_replace('_', '/', $classPrefix))) {
+                $dirs[] = $i;
             }
         }
-        $dirs = array_unique($dirs);
-        $dirs = array_reverse($dirs);
+
+        $ret = array();
         foreach ($dirs as $dir) {
-            if (substr($file, 0, strlen($dir)) == $dir) {
-                $file = substr($file, strlen($dir)+1);
-            }
-            $path = $dir . '/' . $file;
-            if (substr($path, 0, 1)=='.') {
-                $path = getcwd().substr($path, 1);
-            }
-            if (in_array($path, $paths)) continue;
-            $paths[] = $path;
+            $path =  $dir . '/' . str_replace('_', '/', $classPrefix);
             if (is_dir($path)) {
-                $path =  $path . '/Update';
-                if (is_dir($path)) {
-                    foreach (new DirectoryIterator($path) as $i) {
-                        if (!$i->isFile()) continue;
-                        $f = $i->__toString();
-                        $fileType = substr($f, -4);
-                        if ($fileType != '.php' && $fileType != '.sql') continue;
-                        $f = substr($f, 0, -4);
-                        if (!is_numeric($f)) continue;
-                        $nr = (int)$f;
-                        if ($nr >= $from && $nr < $to) {
-                            $n = '';
-                            if ($file) {
-                                $n = str_replace(DIRECTORY_SEPARATOR, '_', $file) . '_';
-                            }
-                            if (preg_match('#^[a-z]+-lib_#', $n)) continue; //kwf-lib, vkwf-lib
-                            if (substr($n, 0, 8) == 'library_') continue;
-                            $n .= 'Update_'.$nr;
-                            $update = self::createUpdate($n, $i->getPathname());
-                            if (!$update) continue;
-                            if ($update->getTags() && !in_array('web', $update->getTags())) {
-                                $tags = $update->getTags();
-                                foreach ($tags as $tag) {
-                                    if (!in_array($tag, self::getUpdateTags())) {
-                                        continue 2;
-                                    }
+                foreach (new DirectoryIterator($path) as $i) {
+                    if (!$i->isFile()) continue;
+                    $f = $i->__toString();
+                    $fileType = substr($f, -4);
+                    if ($fileType != '.php' && $fileType != '.sql') continue;
+                    $f = substr($f, 0, -4);
+                    if (!is_numeric($f)) continue;
+                    $nr = (int)$f;
+                    if ($nr >= $from && $nr < $to) {
+                        $n = $classPrefix.'_'.$nr;
+                        $update = self::createUpdate($n, $i->getPathname());
+
+                        if (!$update) continue;
+                        if ($update->getTags() && !in_array('web', $update->getTags())) {
+                            $tags = $update->getTags();
+                            foreach ($tags as $tag) {
+                                if (!in_array($tag, self::getUpdateTags())) {
+                                    continue 2;
                                 }
                             }
-                            $ret[] = $update;
                         }
+                        $ret[] = $update;
                     }
                 }
             }
