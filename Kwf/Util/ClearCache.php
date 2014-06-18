@@ -110,9 +110,6 @@ class Kwf_Util_ClearCache
 
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            $types[] = new Kwf_Util_ClearCache_Types_ComponentSettings();
-        }
         $types[] = new Kwf_Util_ClearCache_Types_Assets();
 
         try {
