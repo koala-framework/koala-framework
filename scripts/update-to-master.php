@@ -13,7 +13,7 @@ if (is_file('vkwf_branch')) {
     echo "removed kwf_branch file, composer.json is used instead\n";
 }
 if (!file_exists('composer.json')) {
-    file_put_contents('composer.json', json_encode($c, define('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0));
+    file_put_contents('composer.json', json_encode($c, defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0));
     echo "created efault composer.json\n";
 }
 
