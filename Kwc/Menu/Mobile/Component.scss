@@ -4,7 +4,9 @@
 
 .cssClass {
     &.default {
-        width: auto;
+        background: white;
+        width: 100%;
+
         > a.showMenu {
             display: block;
             position: relative;
