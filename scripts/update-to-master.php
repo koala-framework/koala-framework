@@ -7,13 +7,19 @@ $c = array(
 if (is_file('vkwf_branch')) {
     unlink('vkwf_branch');
     echo "removed kwf_branch file, composer.json is used instead\n";
-    $c['require']['vivid-planet']['vkwf'] = 'dev-master';
+    $c['require']['vivid-planet/vkwf'] = 'dev-master';
+    $c['repositories'] = array(
+        array(
+            'type' => 'composer',
+            'url' => 'http://packages.vivid-planet.com/'
+        )
+    );
 } else if (is_file('kwf_branch')) {
     unlink('kwf_branch');
     echo "removed kwf_branch file, composer.json is used instead\n";
 }
 if (!file_exists('composer.json')) {
-    file_put_contents('composer.json', json_encode($c, defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0));
+    file_put_contents('composer.json', json_encode($c, defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0) + defined('JSON_UNESCAPED_SLASHES') ? JSON_UNESCAPED_SLASHES : 0) );
     echo "created efault composer.json\n";
 }
 
