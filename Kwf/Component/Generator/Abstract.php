@@ -112,6 +112,19 @@ abstract class Kwf_Component_Generator_Abstract
         return $this->_getModel();
     }
 
+    public function getRowByLazyRow($lazyRow, $component)
+    {
+        return $this->getModel()->getRow($lazyRow);
+    }
+
+    public function getLazyRowByRow($row, $component)
+    {
+        if ($row instanceof Kwf_Model_Row_Interface && $this->getModel() !== $row->getModel()) {
+            throw new Kwf_Exception('data row has invalid model');
+        }
+        return $row->{$this->getModel()->getPrimaryKey()};
+    }
+
     //um den speicherverbrauch zu reduzieren und fuer tests
     public static function clearInstances()
     {

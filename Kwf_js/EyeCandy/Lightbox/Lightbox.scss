@@ -5,10 +5,8 @@
     position: absolute;
     z-index: 100;
     top: 0; left: 0;
-    width: 100%;
-}
-.kwfLightbox.adaptHeight {
     height: 100%;
+    width: 100%;
 }
 .kwfLightbox .kwfLightboxInner {
     min-width: 100px;
@@ -42,7 +40,6 @@
 .kwfLightbox .closeButton:hover { text-decoration: none; }
 
 .kwfLightbox .kwfLightboxContent {
-    overflow: hidden;
     height: 100%;
     width: 100%;
     padding: 10px;

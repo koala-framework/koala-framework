@@ -85,22 +85,33 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
         }
         $ret['parent'] = $parentData;
 
-        $dbRow = $this->_getModel()->getRow($ret['componentId']);
-        if (!$dbRow) {
-            $dbRow = $this->_getModel()->createRow(array(
-                'component_id' => $ret['componentId'],
-                'name' => $row->getRow()->name,
-                'filename' => $row->getRow()->filename,
-                'visible' => $row->isHome, //home ist standardmäßig immer sichtbar, andere seiten nicht
-                'custom_filename' => false
-            ));
-        }
+        $dbRow = $this->_getRowByPrimaryId($ret['componentId'], $row);
         $ret['row'] = $dbRow;
         $ret['name'] = $dbRow->name;
         $ret['filename'] = $dbRow->filename;
         $ret['visible'] = $row->isHome ? true : $dbRow->visible;
         $ret['selfVisible'] = $row->selfVisible;
         $ret['isHome'] = $row->isHome;
+        return $ret;
+    }
+
+    public function getRowByLazyRow($lazyRow, $component)
+    {
+        return $this->_getRowByPrimaryId($lazyRow, $component->chained);
+    }
+
+    private function _getRowByPrimaryId($componentId, $chainedComponent)
+    {
+        $ret = $this->_getModel()->getRow($componentId);
+        if (!$ret) {
+            $ret = $this->_getModel()->createRow(array(
+                'component_id' => $componentId,
+                'name' => $chainedComponent->getRow()->name,
+                'filename' => $chainedComponent->getRow()->filename,
+                'visible' => $chainedComponent->isHome, //home ist standardmäßig immer sichtbar, andere seiten nicht
+                'custom_filename' => false
+            ));
+        }
         return $ret;
     }
 

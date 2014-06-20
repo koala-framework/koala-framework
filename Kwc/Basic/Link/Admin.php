@@ -10,4 +10,9 @@ class Kwc_Basic_Link_Admin extends Kwc_Abstract_Composite_Admin
         $ret = array_merge($ret, parent::gridColumns());
         return $ret;
     }
+
+    public function componentToString(Kwf_Component_Data $data)
+    {
+        return $data->getComponent()->getRow()->text;
+    }
 }

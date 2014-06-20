@@ -476,16 +476,17 @@ class Kwf_Media_Image
                 $source = imagerotate($source, $size['rotate'], 0);
             }
             $destination = imagecreatetruecolor($size['width'], $size['height']);
+            imagefill($destination, 0, 0, imagecolorallocate($destination, 255, 255, 255));
             imagecopyresampled($destination, $source, 0, 0, $size['crop']['x'], $size['crop']['y'],
                                 $size['width'], $size['height'],
-                                $size['crop']['width'], $size['crop']['width']);
+                                $size['crop']['width'], $size['crop']['height']);
             ob_start();
             if ($srcSize[2] == 1) {
-                $source = imagegif($destination);
+                imagegif($destination);
             } elseif ($srcSize[2] == 2) {
-                $source = imagejpeg($destination);
+                imagejpeg($destination);
             } elseif ($srcSize[2] == 3) {
-                $source = imagepng($destination);
+                imagepng($destination);
             }
             $ret = ob_get_contents();
             ob_end_clean();

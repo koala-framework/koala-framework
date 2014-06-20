@@ -2689,7 +2689,7 @@
 <ro>Acest câmp este necesar</ro>
 <sl>To polje je potrebno.</sl>
 <ru>Поле является обязательным</ru>
-<uk>Це поле є обов\'язковим</uk>
+<uk>Це поле є обов'язковим</uk>
 <si>Polje je obvezno</si>
 <ua>Дане поле є обов'язковим</ua>
 </text>
@@ -5353,6 +5353,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>De la</ro>
 <sl>Od</sl>
 <ua>З</ua>
+<si>Od</si>
 </text>
 <text>
 <en>To</en>
@@ -5361,6 +5362,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Până la</ro>
 <sl>Do</sl>
 <ua>До</ua>
+<si>Do</si>
 </text>
 <text>
 <en>Place (City)</en>
@@ -5401,6 +5403,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Data de final</ro>
 <sl>Datum zaključka</sl>
 <ua>Дата завершення</ua>
+<si>Datum poteka</si>
 </text>
 <text>
 <en>Events.Show categories</en>
@@ -5758,6 +5761,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Produse</ro>
 <sl>Produkti</sl>
 <ua>Продукти</ua>
+<uk>Послуги</uk>
 </text>
 <text>
 <en>Tags</en>
@@ -6391,6 +6395,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Parola funizată este incorectă</ro>
 <sl>Prevzeto geslo ni veljavno.</sl>
 <ua>Невірний пароль</ua>
+<si>Dano geslo ni veljavno</si>
 </text>
 <text>
 <de>Diese Seite wurde zuletzt gefunden von</de>
@@ -6860,8 +6865,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1074</id>
 <ro>Nu au fost găsite înregistrări pentru textul căutat &amp;quot;{0}&amp;quot;.</ro>
 <sl>Sistemi ni našel ustreznih zadetkov za iskani pojem &amp;quot;{0}&amp;quot;.</sl>
-<uk>Нічого не знайдено</uk>
 <ua>Жодного запису не знайдено</ua>
+<uk>Записів не знайдено щодо цього запиту</uk>
 </text>
 <text>
 <en>Show All</en>
@@ -8245,6 +8250,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Valid începând din</ro>
 <sl>Veljavno od</sl>
 <ua>Дійсний з</ua>
+<si>Veljavno od</si>
 </text>
 <text>
 <en>Current Price</en>
@@ -9115,6 +9121,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>« Nazaj</sl>
 <hr>« povratak</hr>
 <ua>« назад</ua>
+<si>"nazaj</si>
 </text>
 <text>
 <en>Link to parent page</en>
@@ -9360,6 +9367,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Format invalid pentru timp. Acesta trebuie să aibă formatul "12:34:00".</ro>
 <sl>Oblika ni ustrezna. Zahtevana oblika "12:34:00".</sl>
 <ua>Помилка.Час повинен бути у форматі  "12:34:00".</ua>
+<si>Ni veljavna časovna oblika. Zahtevani format je "12:34:00"</si>
 </text>
 <text>
 <en>Amazon.Product</en>
@@ -10768,8 +10776,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Keine Einträge wurden ausgewählt.</de>
 <ro>Nu a fost selectat niciun obiect.</ro>
 <sl>Noben vnos ni bil izbran.</sl>
-<uk>Записів не знайдено</uk>
 <ua>Не обрано жодного запису.</ua>
+<uk>Не вибрані записи</uk>
 </text>
 <text>
 <en>clearing cache...</en>
@@ -10825,6 +10833,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Parola este invalidă</ro>
 <sl>Geslo ni veljavno.</sl>
 <ua>Пароль не дійсний</ua>
+<si>Geslo ni veljavno</si>
 </text>
 <text>
 <en>The password must be at least 8 characters long</en>
@@ -11131,10 +11140,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Keine Einträge gefunden</de>
 <id>1804</id>
 <sk>Žiadne výsledky vyhľadávania</sk>
-<uk>Записів не знайдено</uk>
 <ua>Записів не знайдено</ua>
 <cs>Novinky nebyly nalezeny</cs>
 <hr>Nisu pronađeni rezultati</hr>
+<ro>Nu a fost gasita nicio inregistrare</ro>
+<uk>Записів не знайдено</uk>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>

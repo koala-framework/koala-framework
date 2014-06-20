@@ -102,8 +102,12 @@ class Kwf_Mail extends Zend_Mail
                     }
                     $output = Kwf_Media::getOutputWithoutCheckingIsValid($class, $id, $type);
                 } else {
-                    $f = new Kwf_Assets_Dependency_File(substr($path, 8));
-                    $output = $f->getContents(null);
+                    try {
+                        $f = new Kwf_Assets_Loader();
+                        $output = $f->getFileContents(substr($path, 8));
+                    } catch (Kwf_Exception_NotFound $e) {
+                        throw new Kwf_Exception('Asset not found: ' . $path);
+                    }
                 }
                 if (isset($output['contents'])) {
                     $contents = $output['contents'];

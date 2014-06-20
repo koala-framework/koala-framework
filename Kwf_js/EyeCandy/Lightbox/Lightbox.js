@@ -46,7 +46,7 @@ Kwf.onElementReady('.kwfLightbox', function lightboxEl(el) {
 
     //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
     Kwf.callOnContentReady(l.contentEl.dom, {newRender: false});
-});
+}, { priority: 10 }); //after ResponsiveEl so lightbox can adapt to responsive content
 
 Kwf.onContentReady(function lightboxContent(readyEl, options)
 {

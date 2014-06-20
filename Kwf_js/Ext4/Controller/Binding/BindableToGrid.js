@@ -140,7 +140,8 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
             syncQueue.on('finished', function(syncQueue) {
                 if (!syncQueue.hasException) {
                     this.fireEvent('savesuccess');
-                    this.bindable.load(this.bindable.getLoadedRecord());
+                    var rec = this.bindable.getLoadedRecord();
+                    if (rec) this.bindable.load(rec);
                 }
             }, this, { single: true });
         } else {
@@ -148,7 +149,8 @@ Ext4.define('Kwf.Ext4.Controller.Binding.BindableToGrid', {
             this.gridController.grid.getStore().sync({
                 success: function() {
                     this.fireEvent('savesuccess');
-                    this.bindable.load(this.bindable.getLoadedRecord());
+                    var rec = this.bindable.getLoadedRecord();
+                    if (rec) this.bindable.load(rec);
                 },
                 scope: this
             });

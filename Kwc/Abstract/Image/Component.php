@@ -104,7 +104,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
         $ret['altText'] = $this->_getAltText();
 
-        $imageData = $this->getImageData();
+        $imageData = $this->getImageDataOrEmptyImageData();
         $ret = array_merge($ret,
             Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['file'])
         );

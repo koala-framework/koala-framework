@@ -11,12 +11,12 @@
         <p><?=$this->date($this->item->publish_date);?></p>
     </div>
     <? if($this->showPreviewImage && $this->hasContent($this->item->previewImage)) { ?>
-        <div class="prevImage left">
+        <div class="prevImage">
             <?=$this->component($this->item->previewImage);?>
         </div>
     <? } ?>
     <? if($this->item->row->teaser) { ?>
-        <div class="teaser<? if($this->showPreviewImage && $this->hasContent($this->item->previewImage)) { echo ' left'; } ?>">
+        <div class="teaser">
             <p>
                 <?=nl2br($this->item->row->teaser);?>
                 <? if($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>

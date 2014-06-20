@@ -90,16 +90,6 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         return $ret;
     }
 
-    protected function _getOutputValueFromValues($values)
-    {
-        $ret = parent::_getOutputValueFromValues($values);
-        if (!$ret) return '';
-        if ($this->getAllowDecimals() !== false) {
-            $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
-        }
-        return $ret;
-    }
-
     protected function _getInputProperties($values, $fieldNamePostfix, $idPrefix)
     {
         $ret = parent::_getInputProperties($values, $fieldNamePostfix, $idPrefix);
@@ -122,7 +112,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             //$ret['step'] = 'any';
             unset($ret['max']);
             unset($ret['min']);
-            $ret['pattern'] = '\d*'.preg_quote($this->getDecimalSeparator()).'\d*'; //instead of type=number; will however NOT show number keyboard on iPad
+            $ret['pattern'] = '\d*('.preg_quote($this->getDecimalSeparator()).'\d*)?'; //instead of type=number; will however NOT show number keyboard on iPad
         }
         return $ret;
 
