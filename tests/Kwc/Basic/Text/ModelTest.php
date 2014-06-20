@@ -178,10 +178,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
                     .'\s*<div class="container" .*>'
                     .'\s*<noscript>'
                     .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1009-i1/dh-'.$dim['width'].'-[0-9a-z]+/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" />'
-                    .'\s*</noscript>'
-                    .'\s*</div>'
-                    .'\s*</div>\s*</p>'
-                    .'\s*</div>\s*$#ms', $html);
+                    .'\s*</noscript>#ms', $html);
 
     }
 
@@ -203,10 +200,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
                     .'\s*<div class="container" .*>'
                     .'\s*<noscript>'
                     .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1010-i1/dh-'.$width.'-[0-9a-z]+/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
-                    .'\s*</noscript>'
-                    .'\s*</div>'
-                    .'\s*</div>\s*</p>'
-                    .'\s*</div>\s*$#ms', $html);
+                    .'\s*</noscript>#ms', $html);
     }
 
     public function testCreatesDownloadFromOtherComponentId()
@@ -245,9 +239,6 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
                     .'\s*<div class="container" .*>'
                     .'\s*<noscript>'
                     .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1015-i1/dh-'.$width.'-[0-9a-z]+/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
-                    .'\s*</noscript>'
-                    .'\s*</div>'
-                    .'\s*</div>\s*</p>'
-                    .'\s*</div>\s*$#ms', $html);
+                    .'\s*</noscript>#ms', $html);
     }
 }
