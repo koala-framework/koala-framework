@@ -222,7 +222,7 @@ class Kwf_Util_Check_Config
                 );
             }
 
-            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
+            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/Kwf/Util/Check/Config/sample.docx'));
             if (!($mime == 'application/msword' || $mime == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
                 return array(
                     'status' => self::RESULT_WARNING,
@@ -230,7 +230,7 @@ class Kwf_Util_Check_Config
                 );
             }
 
-            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
+            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/Kwf/Util/Check/Config/sample.odt'));
             if ($mime != 'application/vnd.oasis.opendocument.text') {
                 return array(
                     'status' => self::RESULT_WARNING,
