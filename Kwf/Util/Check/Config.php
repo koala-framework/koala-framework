@@ -61,9 +61,6 @@ class Kwf_Util_Check_Config
         $checks['imagick'] = array(
             'name' => 'imagick Php extension'
         );
-        $checks['exif'] = array(
-            'name' => 'read EXIF data'
-        );
         $checks['fileinfo'] = array(
             'name' => 'fileinfo Php extension'
         );
@@ -202,19 +199,6 @@ class Kwf_Util_Check_Config
         $im->getImageBlob();
         $im->destroy();
 
-        return array(
-            'status' => self::RESULT_OK,
-        );
-    }
-
-    private static function _exif()
-    {
-        if (!function_exists('exif_read_data')) {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "Function exif_read_data is not available, rotating images according to exif data won't be possible"
-            );
-        }
         return array(
             'status' => self::RESULT_OK,
         );
