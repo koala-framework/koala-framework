@@ -5,7 +5,7 @@ $c = array(
     )
 );
 if (is_file('vkwf_branch')) {
-    unlink('vkwf_branch');
+    exec("git rm vkwf_branch");
     echo "removed kwf_branch file, composer.json is used instead\n";
     $c['require']['vivid-planet/vkwf'] = 'dev-master';
     $c['repositories'] = array(
@@ -19,8 +19,11 @@ if (is_file('vkwf_branch')) {
     echo "removed kwf_branch file, composer.json is used instead\n";
 }
 if (!file_exists('composer.json')) {
-    file_put_contents('composer.json', json_encode($c, defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0) + defined('JSON_UNESCAPED_SLASHES') ? JSON_UNESCAPED_SLASHES : 0) );
-    echo "created efault composer.json\n";
+    file_put_contents('composer.json', json_encode($c, (defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0) + (defined('JSON_UNESCAPED_SLASHES') ? JSON_UNESCAPED_SLASHES : 0) ));
+    echo "created default composer.json\n";
+    exec("git add composer.json");
+    file_put_contents('composer.lock', '');
+    exec("git add composer.lock");
 }
 
 function deleteCacheFolder($path)
@@ -86,7 +89,7 @@ echo ".gitignore updated to ignore build and vendor\n";
 
 $c = file_get_contents('bootstrap.php');
 $c = preg_replace("#require(_once)? 'kwf-lib/([^']*)';#", "require 'vendor/koala-framework/koala-framework/\\2';", $c);
-$c = preg_replace("#require(_once)? 'vkwf-lib/([^']*)';#", "require 'vendor/koala-framework/vkwf/\\2';", $c);
+$c = preg_replace("#require(_once)? 'vkwf-lib/([^']*)';#", "require 'vendor/vivid-planet/vkwf/\\2';", $c);
 file_put_contents('bootstrap.php', $c);
 echo "bootstrap.php updated to require kwf from vendor\n";
 
@@ -186,3 +189,6 @@ foreach ($files as $file) {
     file_put_contents($newFile, $c);
 }
 deleteCacheFolder('cache/generated');
+
+echo "\n";
+echo "run now 'composer install' to install dependencies\n";
