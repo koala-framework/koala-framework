@@ -62,6 +62,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
         return $this->_getImageEnlargeComponent()->getImageData();
     }
 
+    public final function getImageDataOrEmptyImageData()
+    {
+        return $this->_getImageEnlargeComponent()->getImageDataOrEmptyImageData();
+    }
+
     /**
      * This function is called by Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component
      */
@@ -111,7 +116,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
         $component = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
         if (!$component) return null;
 
-        $data = $component->getComponent()->getImageData();
+        $data = $component->getComponent()->getImageDataOrEmptyImageData();
         if (!$data) {
             return null;
         }
