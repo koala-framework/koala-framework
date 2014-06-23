@@ -239,7 +239,14 @@ class Kwf_Assets_Package
     {
         $cacheId = $this->getPackageUrlsCacheId($mimeType, $language);
         $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-        if ($ret !== false) return $ret;
+        if ($ret !== false) {
+            if (Kwf_Setup::getBaseUrl()) {
+                foreach ($ret as $k=>$i) {
+                    $ret[$k] = Kwf_Setup::getBaseUrl().$i;
+                }
+            }
+            return $ret;
+        }
 
         if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
             throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
@@ -254,7 +261,6 @@ class Kwf_Assets_Package
             $this->getPackageUrl($ext, $language)
         );
         $includesDependencies = array();
-        $maxMTime = 0;
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if (!$i->getIncludeInPackage()) {
                 if (in_array($i, $includesDependencies, true)) {
@@ -270,10 +276,6 @@ class Kwf_Assets_Package
                     }
                     $ret[] = Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();
                 }
-            }
-            $mTime = $i->getMTime();
-            if ($mTime) {
-                $maxMTime = max($maxMTime, $mTime);
             }
         }
         return $ret;
