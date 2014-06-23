@@ -59,6 +59,11 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         return $this->_getCorrectImageComponent()->getImageData();
     }
 
+    public final function getImageDataOrEmptyImageData()
+    {
+        return $this->_getCorrectImageComponent()->getImageDataOrEmptyImageData();
+    }
+
     public function getImageUrl()
     {
         if ($this->getRow()->own_image) {
