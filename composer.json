@@ -1,5 +1,6 @@
 {
     "name": "koala-framework/koala-framework",
+    "description": "Framework and CMS based on Zend Framework and ExtJS",
     "homepage": "http://www.koala-framework.org/",
     "license": "BSD-2-Clause",
     "require": {
