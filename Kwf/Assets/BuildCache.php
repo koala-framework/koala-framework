@@ -14,7 +14,7 @@ class Kwf_Assets_BuildCache
 
     public function load($cacheId)
     {
-        $ret = Kwf_Cache_SimpleStatic::fetch('as-'.$cacheId);
+        $ret = Kwf_Cache_SimpleStatic::fetch('asb-'.$cacheId);
         if ($ret === false) {
             $fileName = self::$_buildDir.'/'.$cacheId;
             if (!file_exists($fileName)) {
@@ -22,7 +22,7 @@ class Kwf_Assets_BuildCache
             }
             $ret = unserialize(file_get_contents($fileName));
             if ($ret !== false) {
-                Kwf_Cache_SimpleStatic::add('as-'.$cacheId, $ret);
+                Kwf_Cache_SimpleStatic::add('asb-'.$cacheId, $ret);
             }
         }
         return $ret;
@@ -34,7 +34,7 @@ class Kwf_Assets_BuildCache
         if (!file_exists(self::$_buildDir)) {
             mkdir(self::$_buildDir, 0777, true);
         }
-        Kwf_Cache_SimpleStatic::add('as-'.$cacheId, $cacheData);
+        Kwf_Cache_SimpleStatic::add('asb-'.$cacheId, $cacheData);
         $fileName = self::$_buildDir.'/'.$cacheId;
         return file_put_contents($fileName, serialize($cacheData));
     }
@@ -56,7 +56,7 @@ class Kwf_Assets_BuildCache
         if (!$this->building) {
             throw new Kwf_Exception("Can't clear out of build");
         }
-        Kwf_Cache_SimpleStatic::clear('as-');
+        Kwf_Cache_SimpleStatic::clear('asb-');
         foreach (glob(self::$_buildDir.'/*') as $f) {
             unlink($f);
         }
@@ -64,7 +64,7 @@ class Kwf_Assets_BuildCache
 
     public function remove($cacheId)
     {
-        Kwf_Cache_SimpleStatic::_delete('as-'.$cacheId);
+        Kwf_Cache_SimpleStatic::_delete('asb-'.$cacheId);
         $fileName = self::$_buildDir.'/'.$cacheId;
         if (file_exists($fileName)) {
             unlink($fileName);
