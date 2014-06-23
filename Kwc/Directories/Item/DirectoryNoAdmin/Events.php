@@ -1,5 +1,5 @@
 <?php
-class Kwc_Directories_Item_Directory_Events extends Kwc_Abstract_Events
+class Kwc_Directories_Item_DirectoryNoAdmin_Events extends Kwc_Abstract_Events
 {
     public function getListeners()
     {
