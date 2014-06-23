@@ -31,6 +31,9 @@ class Kwf_Assets_BuildCache
 
     public function save($cacheData, $cacheId)
     {
+        if (!file_exists(self::$_buildDir)) {
+            mkdir(self::$_buildDir, 0777, true);
+        }
         Kwf_Cache_SimpleStatic::add('as-'.$cacheId, $cacheData);
         $fileName = self::$_buildDir.'/'.$cacheId;
         return file_put_contents($fileName, serialize($cacheData));

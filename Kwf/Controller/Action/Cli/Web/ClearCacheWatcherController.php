@@ -659,6 +659,8 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     echo $cacheId;
                     if (Kwf_Assets_Cache::getInstance()->remove($cacheId) || Kwf_Assets_BuildCache::getInstance()->remove($cacheId)) echo " [DELETED]";
                     if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_gzip', 'as_'.$cacheId.'_deflate'))) echo " [gzip DELETED]";
+                    if (Kwf_Assets_Cache::getInstance()->remove($cacheId.'_map') || Kwf_Assets_BuildCache::getInstance()->remove($cacheId.'_map')) echo " [map DELETED]";
+                    if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_map_gzip', 'as_'.$cacheId.'_map_deflate'))) echo " [map_gzip DELETED]";
                     echo "\n";
                 }
             }
