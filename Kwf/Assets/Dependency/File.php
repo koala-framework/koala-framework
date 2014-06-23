@@ -35,7 +35,8 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     {
         return $this->_fileName;
     }
-    private static function _getAllPaths()
+
+    protected static function _getAllPaths()
     {
         static $paths;
         if (!isset($paths)) {
