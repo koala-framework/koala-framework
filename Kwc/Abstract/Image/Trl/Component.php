@@ -15,11 +15,6 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         return $ret;
     }
 
-    public final function getImageDataOrEmptyImageData()
-    {
-        return $this->_getCorrectImageComponent()->getImageDataOrEmptyImageData();
-    }
-
     public function getBaseType()
     {
         return $this->getData()->chained->getComponent()->getBaseType();
