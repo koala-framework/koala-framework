@@ -180,7 +180,7 @@ class Kwf_Form_Field_MultiCheckboxLegacy extends Kwf_Form_Field_Abstract
     public function save(Kwf_Model_Row_Interface $row, $postData)
     {
         $new = array();
-        if ($postData[$this->getFieldName()]) {
+        if (isset($postData[$this->getFieldName()]) && $postData[$this->getFieldName()]) {
             foreach ($postData[$this->getFieldName()] as $key=>$value) {
                 if ($value) $new[] = $key;
             }
