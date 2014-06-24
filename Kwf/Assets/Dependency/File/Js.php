@@ -37,10 +37,11 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $cmd .= "--prefix 2 ";
             $cmd .= "--output ".escapeshellarg("$buildFile.min.js").' ';
             $cmd .= escapeshellarg($buildFile);
+            $cmd .= " 2>&1";
             $out = array();
-            system($cmd, $retVal);
+            exec($cmd, $out, $retVal);
             if ($retVal) {
-                throw new Kwf_Exception("uglifyjs failed");
+                throw new Kwf_Exception("uglifyjs failed: ".implode("\n", $out));
             }
             $contents = file_get_contents("$buildFile.min.js");
             $contents = str_replace("\n//# sourceMappingURL=$buildFile.min.js.map.json", '', $contents);
