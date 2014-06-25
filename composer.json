@@ -7,7 +7,7 @@
         "koala-framework/library-zendframework1": "1.12.6",
 
         "koala-framework/library-jquery": "1.11.1",
-        "koala-framework/library-extjs2": "2.3.0",
+        "koala-framework/library-extjs2": "2.3.0.*",
         "koala-framework/library-tinymce": "3.5.8",
         "koala-framework/library-swfupload": "2.2.0.1",
         "koala-framework/library-silkicons": "1.3",
