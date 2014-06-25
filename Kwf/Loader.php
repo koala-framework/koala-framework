@@ -100,13 +100,7 @@ class Kwf_Loader
         if (preg_match('#^[a-z]+-lib#i', $class)) return false;
         if (preg_match('#^lib#i', $class)) return false;
 
-        $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
-        foreach (explode(PATH_SEPARATOR, self::$_includePath) as $ip) {
-            if (file_exists($ip.DIRECTORY_SEPARATOR.$file)) {
-                return class_exists($class);
-            }
-        }
-        return false;
+        return class_exists($class);
     }
 
 }
