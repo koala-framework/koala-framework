@@ -43,7 +43,7 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $providers[] = new Kwf_Assets_Modernizr_Provider();
         $providers[] = new Kwf_Assets_Provider_JsClassKwf();
         $providers[] = new Kwf_Assets_Provider_JsClass('./ext', 'web/ext', 'App');
-        $providers[] = new Kwf_Assets_Provider_CssByJs(array('kwf/Kwf_js/Ext4', 'web/ext'));
+        $providers[] = new Kwf_Assets_Provider_CssByJs(array('web/ext'));
         $providers[] = new Kwf_Assets_Provider_ExtTrl();
         $providers[] = new Kwf_Assets_Provider_DefaultAssets();
         $providers[] = new Kwf_Assets_Provider_ErrorHandler();
