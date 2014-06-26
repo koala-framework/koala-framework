@@ -19,6 +19,10 @@
   _paq.push(["setCustomVariable", <?=$cv['index']?>, "<?=$cv['name']?>", "<?=$cv['value']?>", "<?=$cv['scope']?>"]);
   <? } ?>
 
+  <? foreach ($this->additionalConfiguration as $key => $val) { ?>
+  _paq.push(["<?=$key?>", "<?=$val?>"]);
+  <? } ?>
+
   _paq.push(["trackPageView"]);
   <? if ($this->enableLinkTracking) { ?>
   _paq.push(["enableLinkTracking"]);

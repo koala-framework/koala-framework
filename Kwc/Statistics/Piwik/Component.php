@@ -26,7 +26,13 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
         $ret['enableLinkTracking'] = $this->_getSetting('enableLinkTracking');
         $ret['disableCookies'] = $this->_getSetting('disableCookies');
         $ret['customTrackingDomain'] = $this->_getSetting('customTrackingDomain');
+        $ret['additionalConfiguration'] = $this->_getAdditionalConfiguration();
         return $ret;
+    }
+
+    protected function _getAdditionalConfiguration()
+    {
+        return array();
     }
 
     public function hasContent()
