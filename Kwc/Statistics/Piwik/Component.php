@@ -7,6 +7,7 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
         $ret['assets']['dep'][] = 'KwfStatistics';
         $ret['disableCookies'] = false;
         $ret['enableLinkTracking'] = true;
+        $ret['customTrackingDomain'] = false;
         $ret['flags']['hasFooterIncludeCode'] = true;
         return $ret;
     }
@@ -24,6 +25,7 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
         $ret['customVariables'] = $this->_getCustomVariables();
         $ret['enableLinkTracking'] = $this->_getSetting('enableLinkTracking');
         $ret['disableCookies'] = $this->_getSetting('disableCookies');
+        $ret['customTrackingDomain'] = $this->_getSetting('customTrackingDomain');
         return $ret;
     }
 
