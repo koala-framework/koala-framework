@@ -90,14 +90,19 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         $import = array();
         $emails = array();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select) as $e) {
+            $searchArray = array();
+            foreach ($e as $k => $field) {
+                if ($k == 'firstname' || $k == 'lastname' || $k == 'email') {
+                    $searchArray[] = $field;
+                }
+            }
+            $searchText = implode(' ', $searchArray);
             $import[] = array(
                 'newsletter_id' => $newsletter->id,
                 'recipient_model' => get_class($model),
                 'recipient_id' => $e['id'],
                 'searchtext' =>
-                    $e[$mapping['firstname']] . ' ' .
-                    $e[$mapping['lastname']] . ' ' .
-                    $e[$mapping['email']]
+                    $searchText
             );
             $emails[] = $e[$mapping['email']];
         }
