@@ -140,18 +140,10 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     protected function _getComponentCssClass()
     {
-        $cssClass = realpath($this->getAbsoluteFileName());
+        $cssClass = $this->getAbsoluteFileName();
+        if (substr($cssClass, 0, 2) == './') $cssClass = substr($cssClass, 2);
 
-        static $paths;
-        if (!isset($paths)) {
-            $paths = Kwf_Config::getValueArray('path');
-            foreach ($paths as &$p) {
-                if (substr($p, 0, 1) == '.') $p = getcwd().substr($p, 1);
-                $p = realpath($p);
-            }
-            unset($paths['web']);
-            $paths['webComponents'] = getcwd().'/components';
-        }
+        $paths = self::_getAllPaths();
         foreach ($paths as $i) {
             if ($i && substr($cssClass, 0, strlen($i)) == $i) {
                 $cssClass = substr($cssClass, strlen($i)+1);
