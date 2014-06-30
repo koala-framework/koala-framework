@@ -1,9 +1,18 @@
 <?php
 class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
 {
+    protected $_useDefaultRoutes = false;
+
     public function __construct($prefix)
     {
         parent::__construct();
+
+        $this->AddRoute('admin', new Zend_Controller_Router_Route(
+                $prefix.'/:module/:controller/:action',
+                array('module'     =>'index',
+                      'controller' => 'index',
+                      'action'     => 'index')));
+
         $this->AddRoute('kwf_welcome', new Zend_Controller_Router_Route(
                     '/kwf/welcome/:controller/:action',
                     array('module'     => 'kwf_controller_action_welcome',
@@ -115,17 +124,13 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
         //Komponenten routes
         if ($prefix) {
             $prefix = '/'.$prefix;
-            $this->AddRoute('admin', new Zend_Controller_Router_Route(
-                    $prefix.'/:module/:controller/:action',
-                    array('module'=>'index',
-                          'controller' => 'index',
-                          'action' => 'index')));
             $this->AddRoute('welcome', new Zend_Controller_Router_Route(
                     $prefix.'',
                     array('module'=>'kwf_controller_action_welcome',
                           'controller' => 'welcome',
                           'action' => 'index')));
         }
+
         $this->AddRoute('component', new Zend_Controller_Router_Route(
                     $prefix.'/component/:controller/:action',
                     array('module'=>'kwf_controller_action_component',
