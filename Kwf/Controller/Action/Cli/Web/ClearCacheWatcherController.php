@@ -48,10 +48,8 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         $bufferUsecs = 200*1000;
 
         $watchPaths = array(
-            getcwd(),
-            KWF_PATH,
+            getcwd()
         );
-        if (defined('VKWF_PATH')) $watchPaths[] = VKWF_PATH;
 
         $ret = array();
         exec('ps ax -o pid,ppid,user,args', $out);
