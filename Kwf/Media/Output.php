@@ -85,7 +85,8 @@ class Kwf_Media_Output
             }
         }
         if (isset($headers['Https']) && preg_match('/(?i)msie [1-8]/', $headers['User-Agent'])) {
-            $ret['headers'][] = 'Pragma: no-cache';
+            $ret['headers'][] = 'Cache-Control: private';
+            $ret['headers'][] = 'Pragma: private';
         } else if ($lifetime) {
             $ret['headers'][] = 'Cache-Control: public, max-age='.$lifetime;
             $ret['headers'][] = 'Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime);
