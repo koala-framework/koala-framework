@@ -95,9 +95,7 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
 
         this.fireEvent('beforeClose', this);
         this.switchContent.stopFx();
-        if (!this.switchContent.scaleHeight) {
-            this.switchContent.scaleHeight = this.switchContent.getHeight();
-        }
+        this.switchContent.scaleHeight = this.switchContent.getHeight();
         this.switchContent.scale(undefined, 0,
             { easing: 'easeOut', duration: this.config.animation.duration, afterStyle: "display:none;",
                 callback: function() {

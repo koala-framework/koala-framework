@@ -21,6 +21,6 @@ class Kwc_Newsletter_Subscribe_Mail_Component extends Kwc_Mail_Abstract_Componen
 
     public function getSubject(Kwc_Mail_Recipient_Interface $recipient = null)
     {
-        return trlKwf('Newsletter subscription');
+        return $this->getData()->trlKwf('Newsletter subscription');
     }
 }
