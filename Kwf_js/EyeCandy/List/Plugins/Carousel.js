@@ -90,6 +90,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         // fade out first one
         if (this.useFade) {
             var cfg = Ext.applyIf({
+                endOpacity: 0.01
             }, this.fadeAnimationConfig);
             this.list.getItem(0).el.fadeOut(cfg);
         }
@@ -97,11 +98,13 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         // fade in new one
         if (this.useFade) {
             var cfg = Ext.applyIf({
+                endOpacity: 0.99
             }, this.fadeAnimationConfig);
             this.list.getItem(numberShown).el.fadeIn(cfg);
         } else {
             this.list.getItem(numberShown).el.show();
         }
+
         Kwf.callOnContentReady(this.list.getItem(numberShown).el, {action: 'show'});
 
         var firstElWidth = this.list.getItem(0).getWidthIncludingMargin();
@@ -116,6 +119,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
                 // push moved left element to back
                 this.list.getItem(0).el.insertAfter(this.list.getLastItem().el); //move element
+
                 this.list.items.push(this.list.items.shift()); //adapt array
 
                 //adapt listIndex property
@@ -157,7 +161,8 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         // fade in first
         if (this.useFade) {
             var cfg = Ext.applyIf({
-                useDisplay: false
+                useDisplay: false,
+                endOpacity: 0.99
             }, this.fadeAnimationConfig);
             this.list.getItem(0).el.fadeIn(cfg);
         } else {
@@ -168,7 +173,8 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
         // fade out last
         if (this.useFade) {
             var cfg = Ext.applyIf({
-                useDisplay: false
+                useDisplay: false,
+                endOpacity: 0.01
             }, this.fadeAnimationConfig);
             this.list.getItem(numberShown).el.fadeOut(cfg);
         }
