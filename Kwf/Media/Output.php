@@ -84,13 +84,28 @@ class Kwf_Media_Output
                 $lifetime = $file['lifetime'];
             }
         }
-        if (isset($headers['Https']) && preg_match('/(?i)msie [1-8]/', $headers['User-Agent'])) {
+        // According to following link it's not possible in IE<9 to download
+        // any file with Pragma set to "no-cache" or order of Cache-Control other
+        // than "no-store, no-cache" when using a SSL connection.
+        // http://blogs.msdn.com/b/ieinternals/archive/2009/10/02/internet-explorer-cannot-download-over-https-when-no-cache.aspx
+
+        // The order of Cache-Control is correct in default-implementation so
+        // it's only required to reset Pragma to nothing.
+
+        // The definition of Pragma can be found here (http://www.ietf.org/rfc/rfc2616.txt)
+        // at chapter 14.32
+        if ($lifetime) {
+            if (isset($headers['Https']) && preg_match('/msie [6-8]/i', $headers['User-Agent'])) {
+                $ret['headers'][] = 'Cache-Control: private, max-age='.$lifetime;
+                $ret['headers'][] = 'Pragma:';
+            } else {
+                $ret['headers'][] = 'Cache-Control: public, max-age='.$lifetime;
+                $ret['headers'][] = 'Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime);
+                $ret['headers'][] = 'Pragma: public';
+            }
+        } else {
             $ret['headers'][] = 'Cache-Control: private';
-            $ret['headers'][] = 'Pragma: private';
-        } else if ($lifetime) {
-            $ret['headers'][] = 'Cache-Control: public, max-age='.$lifetime;
-            $ret['headers'][] = 'Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime);
-            $ret['headers'][] = 'Pragma: public';
+            $ret['headers'][] = 'Pragma:';
         }
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
                 $headers['If-Modified-Since'] == $lastModifiedString) {
