@@ -20,6 +20,8 @@ class Kwf_Media_Output
     public static function outputWithoutShutdown($file)
     {
         $headers = array();
+        if (isset($_SERVER['HTTPS'])) $headers['Https'] = $_SERVER['HTTPS'];
+        if (isset($_SERVER['HTTP_USER_AGENT'])) $headers['User-Agent'] = $_SERVER['HTTP_USER_AGENT'];
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) $headers['If-Modified-Since'] = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
         if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) $headers['If-None-Match'] = $_SERVER['HTTP_IF_NONE_MATCH'];
         if (isset($_SERVER['HTTP_RANGE'])) $headers['Range'] = $_SERVER['HTTP_RANGE'];
@@ -82,22 +84,12 @@ class Kwf_Media_Output
                 $lifetime = $file['lifetime'];
             }
         }
-        if ($lifetime) {
+        if (isset($headers['Https']) && preg_match('/(?i)msie [1-8]/', $headers['User-Agent'])) {
+            $ret['headers'][] = 'Pragma: no-cache';
+        } else if ($lifetime) {
             $ret['headers'][] = 'Cache-Control: public, max-age='.$lifetime;
             $ret['headers'][] = 'Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime);
             $ret['headers'][] = 'Pragma: public';
-        } else {
-            // According to following link it's not possible in IE<9 to download
-            // any file with Pragma set to "no-cache" or order of Cache-Control other
-            // than "no-store, no-cache" when using a SSL connection.
-            // http://blogs.msdn.com/b/ieinternals/archive/2009/10/02/internet-explorer-cannot-download-over-https-when-no-cache.aspx
-
-            // The order of Cache-Control is correct in default-implementation so
-            // it's only required to reset Pragma to nothing.
-
-            // The definition of Pragma can be found here (http://www.ietf.org/rfc/rfc2616.txt)
-            // at chapter 14.32
-            $ret['headers'][] = 'Pragma:';
         }
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
                 $headers['If-Modified-Since'] == $lastModifiedString) {
