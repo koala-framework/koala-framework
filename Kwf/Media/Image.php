@@ -57,38 +57,51 @@ class Kwf_Media_Image
         if (!Kwf_Registry::get('config')->image->autoExifRotate) {
             return 0;
         }
+
+        $handle = fopen($source, 'rb'); // b for windows compatibility
+        // Check if image is jpg file
+        if (fread($handle, 2) != chr('0xFF').chr('0xD8')) {
+            fclose($handle);
+            return 0;
+        }
+
+        $fileSize = filesize($source);
+        $count = 0;
         $rotation = 0;
-        $handle = fopen($source, "rb"); // b for windows compatibility
-        $fileHeaderSize = min(5000, filesize($source));
-        $contents = fread($handle, $fileHeaderSize);
-        if (self::_generateIntValue($contents[0], $contents[1], false) == 0XFFD8) { //Marks jpg file
-            // could be dynamically changed if exif-data-block start at
-                        // different location (documentation not clear about this)
-            for ($count = 2; $count < $fileHeaderSize-1; $count++) {
-                $marker = self::_generateIntValue($contents[$count], $contents[$count+1], false);
-                if ($marker == 0xFFE1) {//marks start exif-data-block
-                    $type = self::_generateIntValue($contents[$count+10], $contents[$count+11], false);
-                    if ($type == 0x4D4D) {//Motorola, reverse byte-order
-                        $reversed = true;
-                    } else if ($type == 0x4949) { //Intel
-                        $reversed = false;
-                    } else {
-                        return 0;
-                    }
-                    //number of directory entries in IFD0
-                    $propertyCount = self::_generateIntValue($contents[$count+19],
-                                            $contents[$count+18], $reversed);
-                    $dataPos = $count+20;
-                    for ($p = 0; $p < $propertyCount; $p++) {
-                        $tag = self::_generateIntValue($contents[$dataPos+($p*12)+1],
-                                        $contents[$dataPos+($p*12)], $reversed);
-                        if ($tag == 0x0112) { //Orientation-Tag
+        while ($count < 3) { // Run through marker
+            $count++;
+            $marker = fread($handle, 2);
+            // Marks start of stream (SOS)
+            if ($marker == chr(0xFF).chr(0xDA)) break;
+
+            $size = self::_generateIntValue(fread($handle, 1), fread($handle, 1), false);
+            if ($marker == chr(0xFF).chr(0xE1)) { // Start of exif-data-block
+                if (fread($handle, 6) != 'Exif'.chr(0).chr(0)) break;
+
+                $tiffHeaderBytes = fread($handle, 4); // should be 0x49492A00 or 0x4D4D002A
+                if ($tiffHeaderBytes == 'II'.chr('0x2A').chr('0x00')) { // Motorola
+                    $reversed = true;
+                } else if ($tiffHeaderBytes == 'MM'.chr('0x00').chr('0x2A')) { // Intel
+                    $reversed = false;
+                } else { // this case should not exist
+                    break;
+                }
+
+                while (true) {
+                    // IFD = Image File Directory => Image properties
+                    // check offset from tiffHeader-Start to IFD's, if 0 end of all IFD-Blocks
+                    if (fread($handle, 4) == chr(0x00).chr(0x00).chr(0x00).chr(0x00)) break 2;
+
+                    $ifdCount = self::_generateIntValue(fread($handle, 1), fread($handle, 1), $reversed);
+                    if ($fileSize < ftell($handle) + $ifdCount * 12 + 6) break 2; // check to handle eof
+                    for ($i = 0; $i < $ifdCount; $i++) {
+                        $ifdBytes = fread($handle, 12);
+                        $tag = self::_generateIntValue($ifdBytes[0], $ifdBytes[1], $reversed);
+                        if ($tag == 0x0112) {
                             // reversed saved in this form: 00 06 | 00 00 should be 00 00 | 00 06
                             // normally saved in this form: 06 00 | 00 00
-                            $highBytes = self::_generateIntValue($contents[$dataPos+($p*12)+11],
-                                            $contents[$dataPos+($p*12)+10], $reversed);
-                            $lowBytes = self::_generateIntValue($contents[$dataPos+($p*12)+9],
-                                            $contents[$dataPos+($p*12)+8], $reversed);
+                            $highBytes = self::_generateIntValue($ifdBytes[10], $ifdBytes[11], $reversed);
+                            $lowBytes = self::_generateIntValue($ifdBytes[8], $ifdBytes[9], $reversed);
                             $exifOrientation = $highBytes * pow(16, 4) + $lowBytes;
                             switch ($exifOrientation) {
                                 case 1:
@@ -104,11 +117,13 @@ class Kwf_Media_Image
                                     $rotation = 90;
                                     break;
                             }
-                            break;
+                            break 3;
                         }
                     }
-                    break;
                 }
+
+            } else { // Any other marker (e.g. JFIF-0xFFE0, Photoshop-Stuff), not supported. Set file-pointer to end of marker-data
+                fseek($handle, $size -2, SEEK_CUR);
             }
         }
         fclose($handle);
