@@ -32,7 +32,11 @@ class Kwc_Advanced_Sitemap_Component extends Kwc_Abstract
         $select->whereShowInMenu(true);
         $ret .= "<ul>\n";
         foreach ($c->getChildPages($select) as $child) {
-            $ret .= "<li>\n";
+            $noChild = '';
+            if (!$child->getChildPages($select)) {
+                $noChild = 'noChild';
+            }
+            $ret .= '<li class="' . $noChild . '">';
             $helper = new Kwf_Component_View_Helper_ComponentLink();
             $helper->setRenderer($renderer);
             $ret .= $helper->componentLink($child);
