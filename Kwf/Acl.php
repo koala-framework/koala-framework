@@ -393,7 +393,25 @@ class Kwf_Acl extends Zend_Acl
             }
             $menus[] = $menu;
         }
-        return $menus;
+        return $this->_orderResources($menus);
+    }
+
+    private function _orderResources($resources)
+    {
+        usort($resources, array(get_class($this), '_compareMenuConfigOrder'));
+        return $resources;
+    }
+    public static function _compareMenuConfigOrder($first, $second)
+    {
+        $orderFirst = 0;
+        $orderSecond = 0;
+        if (isset($first['menuConfig']['order'])) {
+            $orderFirst = $first['menuConfig']['order'];
+        }
+        if (isset($second['menuConfig']['order'])) {
+            $orderSecond = $second['menuConfig']['order'];
+        }
+        return $orderFirst - $orderSecond;
     }
 
     public function getComponentAcl()
