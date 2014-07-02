@@ -752,6 +752,19 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $e = $expr->getQueryExpr($this);
             if (!$e) return 'TRUE';
             return $this->_createDbSelectExpression($e, $dbSelect, $depOf, $tableNameAlias);
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Parent_Contains) {
+            $dbRefM = self::_getInnerDbModel($depOf->getReferencedModel($expr->getParent()));
+            $dbDepOf = self::_getInnerDbModel($depOf);
+            $refTableName = $dbRefM->getTableName();
+            $ref = $depOf->getReference($expr->getParent());
+            if ($ref === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
+                $ref = $dbDepOf->getReferenceByModelClass($depOf->getParentModel(), null);
+            }
+            $refDbSelect = $dbRefM->createDbSelect($expr->getSelect());
+            $refDbSelect->reset(Zend_Db_Select::COLUMNS);
+            $refDbSelect->from(null, $dbRefM->_formatField($dbRefM->getPrimaryKey(), $refDbSelect));
+            $ret = $this->_formatField($ref['column'], $dbSelect)." IN ($refDbSelect)";
+            return $ret;
         } else {
             throw new Kwf_Exception_NotYetImplemented("Expression not yet implemented: ".get_class($expr));
         }
