@@ -94,6 +94,28 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
 
     }
 
+    public function testMoreAddAttributesToExistingTag()
+    {
+        $styles = array(
+            array(
+                'tag' => 'td',
+                'styles' => array(
+                    'font-family' => 'Verdana',
+                ),
+                'appendTags' => array(
+                    'font' => array(
+                        'color' => 'red'
+                    )
+                )
+            )
+        );
+        $html = '<table><tr><td>Testtext</td></tr></table>';
+        $expected= '<html xmlns="http://www.w3.org/1999/xhtml"><head><title></title></head><table><tr><td><font color="red" face="Verdana">Testtext</font></td></tr></table></html>';
+        $p = new Kwc_Mail_HtmlParser($styles);
+        $html = $p->parse($html);
+        $this->_assertHtmlEquals($expected, $html);
+    }
+
     public function testSelector()
     {
         $styles = array(
@@ -120,5 +142,102 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
         $html = $p->parse($html);
         $this->_assertHtmlEquals($expected, $html);
 
+    }
+
+    public function testAppendTagsKeyAsTag()
+    {
+        $styles = array(
+            array(
+                'tag' => 'li',
+                'appendTags' => array(
+                    'img' => array(
+                        'src' => 'image1.png',
+                    ),
+                )
+            )
+        );
+        $html  = '<table><tr><td><ul><li>Here</li></ul></td></tr></table>';
+        $expected = '<html xmlns="http://www.w3.org/1999/xhtml">';
+        $expected .= '<head><title></title></head><table><tr><td><ul><li><img src="image1.png"/>Here</li></ul></td></tr></table>';
+        $expected .= '</html>';
+        $p = new Kwc_Mail_HtmlParser($styles);
+        $html = $p->parse($html);
+        $this->_assertHtmlEquals($expected, $html);
+    }
+
+    public function testAppendTagsTagInArray()
+    {
+        $styles = array(
+            array(
+                'tag' => 'li',
+                'appendTags' => array(
+                    array(
+                        'tag' => 'img',
+                        'src' => 'image1.png',
+                    )
+                )
+            )
+        );
+        $html  = '<table><tr><td><ul><li>Here</li></ul></td></tr></table>';
+        $expected = '<html xmlns="http://www.w3.org/1999/xhtml">';
+        $expected .= '<head><title></title></head><table><tr><td><ul><li><img src="image1.png"/>Here</li></ul></td></tr></table>';
+        $expected .= '</html>';
+        $p = new Kwc_Mail_HtmlParser($styles);
+        $html = $p->parse($html);
+        $this->_assertHtmlEquals($expected, $html);
+    }
+
+    public function testAppendTagsMoreTagsImg()
+    {
+        $styles = array(
+            array(
+                'tag' => 'li',
+                'appendTags' => array(
+                    array(
+                        'tag' => 'img',
+                        'src' => 'image1.png',
+                    ),
+                    array(
+                        'tag' => 'img',
+                        'src' => 'image2.png'
+                    )
+                )
+            )
+        );
+
+        $html  = '<table><tr><td><ul><li>Here</li></ul></td></tr></table>';
+        $expected = '<html xmlns="http://www.w3.org/1999/xhtml">';
+        $expected .= '<head><title></title></head><table><tr><td><ul><li><img src="image1.png"/><img src="image2.png"/>Here</li></ul></td></tr></table>';
+        $expected .= '</html>';
+        $p = new Kwc_Mail_HtmlParser($styles);
+        $html = $p->parse($html);
+        $this->_assertHtmlEquals($expected, $html);
+    }
+
+    public function testAppendTagsMoreTagsSpan()
+    {
+        $styles = array(
+            array(
+                'tag' => 'li',
+                'appendTags' => array(
+                    array(
+                        'tag' => 'span',
+                        'style' => 'margin-left:10px',
+                    ),
+                    array(
+                        'tag' => 'span',
+                        'style' => 'margin-right:10px',
+                    )
+                )
+            )
+        );
+
+        $html  = '<table><tr><td><ul><li>Here</li></ul></td></tr></table>';
+        $expected = '<html xmlns="http://www.w3.org/1999/xhtml">';
+        $expected .= '<head><title></title></head><table><tr><td><ul><li><span style="margin-left:10px"><span style="margin-right:10px">Here</span></span></li></ul></td></tr></table>';
+        $expected .= '</html>';
+        $p = new Kwc_Mail_HtmlParser($styles);
+        $html = $p->parse($html);
+        $this->_assertHtmlEquals($expected, $html);
     }
 }

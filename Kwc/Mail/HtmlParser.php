@@ -87,9 +87,7 @@ class Kwc_Mail_HtmlParser
             if (self::_matchesStyle($stack, $s)) {
                 $appendTags = array();
                 if (isset($s['appendTags'])) {
-                    foreach ($s['appendTags'] as $t => $v) {
-                        $appendTags[$t] = $v;
-                    }
+                    $appendTags = $s['appendTags'];
                 }
                 if (isset($s['styles'])) {
                     foreach ($s['styles'] as $style=>$value) {
@@ -148,13 +146,21 @@ class Kwc_Mail_HtmlParser
             'class' => $class,
             'appendedTags' => array()
         );
-        foreach ($appendTags as $t=>$attr) {
-            $stackItem['appendedTags'][] = $t;
+        foreach ($appendTags as $tagOrIndex=>$attr) {
+            $t = isset($attr['tag']) ? $attr['tag'] : $tagOrIndex;
+            if (!in_array($t, $this->_noCloseTags)) {
+                $stackItem['appendedTags'][] = $t;
+            }
             $this->_ret .= "<$t";
             foreach ($attr as $k=>$v) {
+                if ($k == 'tag') continue;
                 $this->_ret .= " $k=\"$v\"";
             }
-            $this->_ret .= ">";
+            if (in_array($t, $this->_noCloseTags)) {
+                $this->_ret .= "/>";
+            } else {
+                $this->_ret .= ">";
+            }
         }
         array_push($this->_stack, $stackItem);
     }
