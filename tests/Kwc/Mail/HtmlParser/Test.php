@@ -121,4 +121,25 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
         $this->_assertHtmlEquals($expected, $html);
 
     }
+
+    public function testAppendTagsKeyAsTag()
+    {
+        $styles = array(
+            array(
+                'tag' => 'li',
+                'appendTags' => array(
+                    'img' => array(
+                        'src' => 'image1.png',
+                    ),
+                )
+            )
+        );
+        $html  = '<table><tr><td><ul><li>Here</li></ul></td></tr></table>';
+        $expected = '<html xmlns="http://www.w3.org/1999/xhtml">';
+        $expected .= '<head><title></title></head><table><tr><td><ul><li><img src="image1.png"/>Here</li></ul></td></tr></table>';
+        $expected .= '</html>';
+        $p = new Kwc_Mail_HtmlParser($styles);
+        $html = $p->parse($html);
+        $this->_assertHtmlEquals($expected, $html);
+    }
 }

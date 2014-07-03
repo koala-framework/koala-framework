@@ -23,7 +23,9 @@ class Kwc_Mail_HtmlParser
         if ($tag == 'body') return;
         $stackItem = array_pop($this->_stack);
         foreach (array_reverse($stackItem['appendedTags']) as $t) {
-            $this->_ret .= "</$t>";
+            if (!in_array($t, $this->_noCloseTags)) {
+                $this->_ret .= "</$t>";
+            }
         }
         if (!in_array($stackItem['tag'], $this->_noCloseTags)) {
             $this->_ret .= "</$stackItem[tag]>";
@@ -154,7 +156,11 @@ class Kwc_Mail_HtmlParser
             foreach ($attr as $k=>$v) {
                 $this->_ret .= " $k=\"$v\"";
             }
-            $this->_ret .= ">";
+            if (in_array($t, $this->_noCloseTags)) {
+                $this->_ret .= "/>";
+            } else {
+                $this->_ret .= ">";
+            }
         }
         array_push($this->_stack, $stackItem);
     }
