@@ -129,39 +129,24 @@ abstract class Kwf_Assets_Dependency_Abstract
     public final function getFilteredUniqueDependencies($mimeType)
     {
         $processed = array();
-        $ret = array();
-        $uses = array($this);
-        while ($i = array_shift($uses)) {
-            $deps = $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed);
-            if ($deps) {
-                $ret = array_merge($ret, $deps['requires']);
-                $uses = array_merge($uses, $deps['uses']);
-            }
-        }
-        return $ret;
+        return $this->_getFilteredUniqueDependenciesProcessDep($this, $mimeType, $processed);
     }
 
     private function _getFilteredUniqueDependenciesProcessDep($dep, $mimeType, &$processed)
     {
-        $ret = array(
-            'requires' => array(),
-            'uses' => array()
-        );
         if (in_array($dep, $processed, true)) {
-            return;
+            return array();
         }
         $processed[] = $dep;
-        foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES) as $i) {
-            $ret['uses'][] = $i;
-        }
+        $ret = array();
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES) as $i) {
-            if ($childDep = $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed)) {
-                $ret['requires'] = array_merge($ret['requires'], $childDep['requires']);
-                $ret['uses'] = array_merge($ret['uses'], $childDep['uses']);
-            }
+            $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed));
         }
         if ($dep->getMimeType() == $mimeType) {
-            $ret['requires'][] = $dep;
+            $ret[] = $dep;
+        }
+        foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES) as $i) {
+            $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed));
         }
         return $ret;
     }
