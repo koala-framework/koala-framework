@@ -142,7 +142,7 @@ foreach ($it as $f) {
 
         //ext- -> ext2-
         //x- -> x2-
-        $c = preg_replace('#(\.|\'|"|\' |" )(ext|x)-#', '\1\22-', $c);
+        $c = preg_replace('#(\.|\'|"|\' |" )(ext|x)-#', '${1}${2}2-', $c);
 
         if ($c != $origC) {
             echo "Ext -> Ext2: $f\n";
