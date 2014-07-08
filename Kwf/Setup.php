@@ -247,7 +247,7 @@ class Kwf_Setup
             $root->setCurrentPage($data);
 
             if (isset($_COOKIE['feAutologin']) && !Kwf_Auth::getInstance()->getStorage()->read()) {
-                Kwf_Util_Https::ensureHttp();
+                Kwf_Util_Https::ensureHttps();
                 $feAutologin = explode('.', $_COOKIE['feAutologin']);
                 if (count($feAutologin) == 2) {
                     $adapter = new Kwf_Auth_Adapter_Service();
@@ -261,11 +261,10 @@ class Kwf_Setup
                         setcookie('hasFeAutologin', '', time() - 3600, '/', null, false, true);
                     }
                 }
-            }
-            if (isset($_COOKIE['hasFeAutologin'])) {
+            } else if (isset($_COOKIE['hasFeAutologin']) && !Kwf_Auth::getInstance()->getStorage()->read()) {
                 //feAutologin cookie is set with https-only (for security reasons)
                 //hasFeAutologin is seth without https-only
-                Kwf_Util_Https::ensureHttp();
+                Kwf_Util_Https::ensureHttps();
             }
 
             $contentSender = Kwf_Component_Settings::getSetting($data->componentClass, 'contentSender');
