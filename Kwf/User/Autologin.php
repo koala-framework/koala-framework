@@ -14,8 +14,7 @@ class Kwf_User_Autologin
                 $auth->clearIdentity();
                 $result = $auth->authenticate($adapter);
                 if (!$result->isValid()) {
-                    setcookie('feAutologin', '', time() - 3600, '/', null, Kwf_Util_Https::supportsHttps(), true);
-                    setcookie('hasFeAutologin', '', time() - 3600, '/', null, false, true);
+                    self::clearCookies();
                 }
             }
         } else if (isset($_COOKIE['hasFeAutologin']) && !Kwf_Auth::getInstance()->getStorage()->read()) {
@@ -23,5 +22,18 @@ class Kwf_User_Autologin
             //hasFeAutologin is seth without https-only
             Kwf_Util_Https::ensureHttps();
         }
+    }
+
+    public static function clearCookies()
+    {
+        setcookie('feAutologin', '', time() - 3600, '/', null, Kwf_Util_Https::supportsHttps(), true);
+        setcookie('hasFeAutologin', '', time() - 3600, '/', null, false, true);
+    }
+
+    public static function setCookies($authedUser)
+    {
+        $cookieValue = $authedUser->id.'.'.md5($authedUser->password);
+        setcookie('feAutologin', $cookieValue, time() + (100*24*60*60), '/', null, Kwf_Util_Https::supportsHttps(), true);
+        setcookie('hasFeAutologin', '1', time() + (100*24*60*60), '/', null, false, true);
     }
 }
