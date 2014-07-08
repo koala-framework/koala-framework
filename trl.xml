@@ -102,6 +102,7 @@
 <mk>Ве молиме користете го следниот линк за да изберете лозинка и да се најавите</mk>
 <sl>Kliknite na to povezavo, da določite geslo in se prijavite.</sl>
 <ru>Пожалуйста, воспользуйтесь следующей ссылкой для выбора пароля и логина</ru>
+<hr>Molimo koristite sljedeći link za izbor lozinke i prijavu.</hr>
 </text>
 <text>
 <en>This email has been generated automatically. There may be no recipient if you answer to this email.</en>
@@ -134,6 +135,7 @@
 <mk>Ве молиме користете го следниот линк за да внесете нова лозинка.</mk>
 <sl>Kliknite na naslednjo povezavo, da določite novo geslo.</sl>
 <ru>Пожалуйста, воспользуйтесь следующей ссылкой для установки нового пароля.</ru>
+<hr>Molimo koristite sljedeći link za izradu nove lozinke.</hr>
 </text>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
@@ -147,6 +149,7 @@
 <sl>Kraj odhoda: Poštna številka, kraj, ulica</sl>
 <ru>Место вылета: почтовый код, Город, Улица</ru>
 <es_CL>Place of departure: zip code, Town, Street</es_CL>
+<hr>Početno mjesto: Pošt. br., Mjesto, Ulica</hr>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -159,6 +162,7 @@
 <sl>Vnesenega kraja ni bilo možno najti.</sl>
 <ru>Введенное место не найдено!</ru>
 <es_CL>Entered place could not been found!</es_CL>
+<hr>Upisano mjesto nije moguće pronaći</hr>
 </text>
 <text>
 <en>Show Route</en>
@@ -250,6 +254,7 @@
 <mk>Премести + Зголеми (без барот зазголемување)</mk>
 <sl>Pomikanje + povečava (brez povečevalne skale)</sl>
 <ru>Переместить + Увеличить (без шкалы увеличения)</ru>
+<hr>Pomakni + Povećaj (bez alatne trake)</hr>
 </text>
 <text>
 <en>Scale</en>
@@ -463,6 +468,7 @@
 <sl>Standardna vrednost</sl>
 <ru>Значение поумолчанию</ru>
 <uk>Значення за замовчуванням</uk>
+<hr>Stndardna vrijednost</hr>
 </text>
 <text>
 <en>Passwords are different. Please try again.</en>
@@ -473,6 +479,7 @@
 <sl>Gesli se ne ujemata. Poskusite ponovno.</sl>
 <ru>Пароли различаются. Пожалуйста, повторите еще раз.</ru>
 <uk>Паролі відрізняються. Будь ласка, спробуйте ще раз.</uk>
+<hr>Lozinke su različite. Molimo pokušajte ponovo.</hr>
 </text>
 <text>
 <en>Description</en>
@@ -671,6 +678,7 @@
 <sl>Datum zadnje prijave</sl>
 <ru>Последний раз онлайн</ru>
 <uk>Останні онлайн</uk>
+<hr>Zadnja prijava</hr>
 </text>
 <text>
 <en>Short description</en>
@@ -771,6 +779,7 @@
 <sl>Aktiviraj uporabniški račun</sl>
 <ru>Активировать аккаунт пользователя</ru>
 <uk>Активувати аккаунт</uk>
+<hr>Aktiviraj račun</hr>
 </text>
 <text>
 <en>Please enter in both fields the password which you want to use for your useraccount</en>
@@ -780,6 +789,7 @@
 <sl>V polji vnesite želeno geslo za dostop do uporabniškega računa.</sl>
 <ru>Пожалуйста, введите в оба поля пароль, который вы хотите использовать</ru>
 <uk>Будь ласка, введіть в обох полях пароль, який ви хочете використовувати для Вашого аккаунту</uk>
+<hr>Molimo da u oba polja upišete željenu lozinku.</hr>
 </text>
 <text>
 <en>Your useraccount was successfully activated.</en>
@@ -789,6 +799,7 @@
 <sl>Vaš uporabniški račun je aktiviran.</sl>
 <ru>Ваша учетная запись активирована</ru>
 <uk>Ваш аккаунт було успішно активовано.</uk>
+<hr>Vaš korisnički račun uspješno je aktiviran.</hr>
 </text>
 <text>
 <en>to get back to the Startpage</en>
@@ -881,6 +892,7 @@
 <sl>Nimate zahtevanih pooblastil za to dejanje.</sl>
 <ru>У вас недостаточно прав для выполнения этого действия.</ru>
 <uk>У Вас немає достатньо прав для цієї дії</uk>
+<hr>Za ovu akciju nemate potrebna prava</hr>
 </text>
 <text>
 <en>Login failed</en>
@@ -901,6 +913,7 @@
 <sl>Aktivacijska koda ni pravilna. Preverite, ali ste pravilno vnesli celotni URL.</sl>
 <ru>Код активации не валидный. Может быть адрес страницы был скопирован не полностью?</ru>
 <uk> Код активації невірний. Може бути, URL-адреса не була скопійована повністю?</uk>
+<hr>Kod aktivacije nije ispravan. Možda URL nije ispravno kopiran.</hr>
 </text>
 <text>
 <en>Data not submitted completely.</en>
@@ -910,6 +923,7 @@
 <sl>Ni na voljo vseh podatkov.</sl>
 <ru>Данные введены не полностью.</ru>
 <uk>Дані не представлені повністю.</uk>
+<hr>Podaci nisu potpuni.</hr>
 </text>
 <text>
 <en>Change password</en>
@@ -982,6 +996,7 @@
 <sl>Po spremembi naslednjih polj bo sistem na vpisani e-naslov avtomatsko poslal e-sporočilo:</sl>
 <ru>После следующего действия сообщения будут автоматически отправляться на указанный email пользователя</ru>
 <uk>Після виконання дії, цього листа будуть автоматично відправлені на відповідного користувача:</uk>
+<hr>Nakon promjene u sljedećim poljima korisniku će automatski biti poslan E-mail.</hr>
 </text>
 <text>
 <en>Create, Delete and E-Mail change</en>
@@ -991,6 +1006,7 @@
 <sl>Dodajanje, brisanje in spremembe e-naslova</sl>
 <ru>Создать, Удалить и Изменить E-Mail</ru>
 <uk>Створити, Видалити і Змінити E-mail</uk>
+<hr>Dodavanje, brisanje i E-mail promjene</hr>
 </text>
 <text>
 <en>Rights</en>
@@ -1001,6 +1017,7 @@
 <sl>Pravice</sl>
 <ru>Права</ru>
 <uk>Права</uk>
+<hr>Prava</hr>
 </text>
 <text>
 <en>Edit</en>
@@ -1050,6 +1067,7 @@
 <sl>Račun s tem e-naslovom že obstaja.</sl>
 <ru>Аккаунт с таким же E-Mail уже существует</ru>
 <uk>Аккаунт з цією адресою електронної пошти вже існує</uk>
+<hr>Već postoji korisnički račun sa ovim podacima</hr>
 </text>
 <text>
 <en>Passwords are different - please try again</en>
@@ -1059,6 +1077,7 @@
 <sl>Gesli se ne ujemata – poskusite ponovno.</sl>
 <ru>Пароли различаются - Пожалуйста, повторите еще раз</ru>
 <uk>Паролі різні - спробуйте ще раз</uk>
+<hr>Lozinke su različite - molimo pokušajte ponovo</hr>
 </text>
 <text>
 <en>Please enter the text you wish to assign.</en>
