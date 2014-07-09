@@ -137,11 +137,14 @@ abstract class Kwf_Assets_Dependency_Abstract
         if (in_array($dep, $processed, true)) {
             return array();
         }
-        $processed[] = $dep;
         $ret = array();
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES) as $i) {
             $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed));
         }
+        if (in_array($dep, $processed, true)) {
+            return $ret;
+        }
+        $processed[] = $dep;
         if ($dep->getMimeType() == $mimeType) {
             $ret[] = $dep;
         }
