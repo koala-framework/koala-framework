@@ -13,6 +13,11 @@ Kwf.onElementReady('a', function lightboxLink(el) {
         }
         el.kwfLightbox = l;
         Ext.EventManager.addListener(el, 'click', function(ev) {
+            if (Kwf.EyeCandy.Lightbox.currentOpen.href == this.href) {
+                //already open, ignore click
+                ev.stopEvent();
+                return;
+            }
             this.kwfLightbox.show({
                 clickTarget: Ext.get(this)
             });
