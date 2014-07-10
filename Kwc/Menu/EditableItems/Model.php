@@ -52,11 +52,7 @@ class Kwc_Menu_EditableItems_Model extends Kwf_Model_Abstract
                 if (isset($whereEquals['filename']) && $childPage->filename != $whereEquals['filename']) {
                     continue;
                 }
-                if (is_numeric($childPage->dbId)) {
-                    $id = $childPage->dbId;
-                } else {
-                    $id = substr(md5($childPage->dbId), 0, 5);
-                }
+                $id = $childPage->id;
                 if (!$whereId || $id == $whereId) {
                     $i = 0;
                     $this->_data[$id] = array(
