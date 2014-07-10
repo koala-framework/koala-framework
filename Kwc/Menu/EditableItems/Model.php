@@ -52,7 +52,7 @@ class Kwc_Menu_EditableItems_Model extends Kwf_Model_Abstract
                 if (isset($whereEquals['filename']) && $childPage->filename != $whereEquals['filename']) {
                     continue;
                 }
-                $id = $childPage->id;
+                $id = $this->_getIdForPage($childPage);
                 if (!$whereId || $id == $whereId) {
                     $i = 0;
                     $this->_data[$id] = array(
@@ -72,6 +72,16 @@ class Kwc_Menu_EditableItems_Model extends Kwf_Model_Abstract
             'dataKeys' => $dataKeys,
             'model' => $this
         ));
+    }
+
+    protected function _getIdForPage($page)
+    {
+        if (is_numeric($page->dbId)) {
+            $id = $page->dbId;
+        } else {
+            $id = substr(md5($page->dbId), 0, 5);
+        }
+        return $id;
     }
 
     public function getRowByDataKey($key)
