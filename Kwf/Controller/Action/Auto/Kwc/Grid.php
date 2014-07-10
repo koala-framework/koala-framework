@@ -61,9 +61,11 @@ abstract class Kwf_Controller_Action_Auto_Kwc_Grid extends Kwf_Controller_Action
         } else {
             if (isset($firstConfig['title'])) unset($firstConfig['title']);
             $this->view->assign($firstConfig);
-            $this->view->baseParams = array(
-                'componentId' => $this->_getParam('componentId')
-            );
+            if ($this->_getParam('componentId')) {
+                $this->view->baseParams = array(
+                    'componentId' => $this->_getParam('componentId')
+                );
+            }
         }
     }
 
