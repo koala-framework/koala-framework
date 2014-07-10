@@ -1012,7 +1012,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     public function getUniqueIdentifier()
     {
-        return $this->getTableName();
+        return ($this->_db ? $this->_db.'.' : '') . $this->getTableName();
     }
 
     private function _createDbSelectWithColumns($select, $options)
