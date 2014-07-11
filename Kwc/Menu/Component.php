@@ -54,7 +54,6 @@ class Kwc_Menu_Component extends Kwc_Menu_Abstract_Component
     {
         $ret = parent::getTemplateVars();
         $ret['menu'] = $this->_getMenuData();
-        $this->_attachEditableToMenuData($ret['menu']);
         if ($this->_getSetting('emptyIfSingleEntry')) {
             if (count($ret['menu']) == 1) {
                 $ret['menu'] = array();

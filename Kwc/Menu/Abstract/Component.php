@@ -189,7 +189,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    protected function _getMenuData($parentData = null, $select = array())
+    protected function _getMenuData($parentData = null, $select = array(), $editableClass = 'Kwc_Menu_EditableItems_Component')
     {
         $i = 0;
         $ret = array();
@@ -213,14 +213,15 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
             $ret[] = $r;
             $i++;
         }
+        $this->_attachEditableToMenuData($ret, $editableClass);
 
         return $ret;
     }
 
-    protected function _attachEditableToMenuData(&$menuData)
+    protected function _attachEditableToMenuData(&$menuData, $editableClass = 'Kwc_Menu_EditableItems_Component')
     {
         foreach ($this->_getSetting('generators') as $key => $generator) {
-            if (is_instance_of($generator['component'], 'Kwc_Menu_EditableItems_Component')) {
+            if (is_instance_of($generator['component'], $editableClass)) {
                 $c = $this->getData()->getChildComponent('-'.$key);
                 $c->getComponent()->attachEditableToMenuData($menuData);
             }
