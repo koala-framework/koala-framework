@@ -33,17 +33,21 @@ if (!Kwf.isApp) {
             counters: Kwf._onReadyStats,
             type: 'onReady'
         });
-        (function() {
+        setTimeout(function() {
             Kwf._deferredStart = Kwf.Utils.BenchmarkBox.now();
             if (Kwf.enableOnReadyConsoleProfile) console.profile("callOnContentReady body deferred");
             Kwf._skipDeferred = false;
             Kwf.callOnContentReady(document.body, { action: 'render' });
             delete Kwf._skipDeferred;
-        }).defer(10);
+        }, 10);
 
-        Ext2.fly(window).on('resize', function() {
-            Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
-        }, this, { buffer: 100 });
+        var timeoutId;
+        $(window).resize(function() {
+            if (timeoutId) clearTimeout(timeoutId);
+            var timeoutId = setTimeout(function() {
+                Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
+            }, 100);
+        });
     });
 }
 
@@ -95,7 +99,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         if (console && console && console.warn) console.warn('Please pass element argument on callOnContentReady');
         renderedEl = document.body;
     }
-    if (Ext2.Element && renderedEl instanceof Ext2.Element) renderedEl = renderedEl.dom;
+    if (Ext2 && Ext2.Element && renderedEl instanceof Ext2.Element) renderedEl = renderedEl.dom;
     if (jQuery && renderedEl instanceof jQuery) {
         renderedEl.each(function(){ Kwf.callOnContentReady(this, options); });
         return;
@@ -321,7 +325,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 processOnReadyElQueueEntry();
             }
             if (Kwf._onReadyElQueue.length) {
-                processNext.defer(this, 1);
+                setTimeout(processNext, 1);
             } else {
                 Kwf._onReadyIsCalling = false;
                 Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-Kwf._deferredStart);
