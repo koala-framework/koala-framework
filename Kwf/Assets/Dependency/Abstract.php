@@ -129,17 +129,20 @@ abstract class Kwf_Assets_Dependency_Abstract
     public final function getFilteredUniqueDependencies($mimeType)
     {
         $processed = array();
-        return $this->_getFilteredUniqueDependenciesProcessDep($this, $mimeType, $processed);
+        return $this->_getFilteredUniqueDependenciesProcessDep($this, $mimeType, $processed, array());
     }
 
-    private function _getFilteredUniqueDependenciesProcessDep($dep, $mimeType, &$processed)
+    private function _getFilteredUniqueDependenciesProcessDep($dep, $mimeType, &$processed, $stack)
     {
         if (in_array($dep, $processed, true)) {
             return array();
         }
+        $stack[] = $dep;
         $ret = array();
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES) as $i) {
-            $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed));
+            if (!in_array($i, $stack, true)) {
+                $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, $stack));
+            }
         }
         if (in_array($dep, $processed, true)) {
             return $ret;
