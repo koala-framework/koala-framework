@@ -152,7 +152,7 @@ abstract class Kwf_Assets_Dependency_Abstract
             $ret[] = $dep;
         }
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES) as $i) {
-            $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed));
+            $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, array()));
         }
         return $ret;
     }
