@@ -1,7 +1,8 @@
 <?php
 class Kwc_Composite_SwitchDisplay_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static $needsParentComponentClass = true;
+    public static function getSettings($parentComponentClass)
     {
         $ret = parent::getSettings();
         $ret['componentIcon'] = new Kwf_Asset('shape_move_forwards');
@@ -9,7 +10,7 @@ class Kwc_Composite_SwitchDisplay_Component extends Kwc_Abstract_Composite_Compo
         $ret['generators']['child']['component']['linktext'] =
             'Kwc_Composite_SwitchDisplay_LinkText_Component';
         $ret['generators']['child']['component']['content'] =
-            'Kwc_Paragraphs_Component';
+            $parentComponentClass;
         $ret['cssClass'] = 'webStandard';
         $ret['assets']['dep'][] = 'KwfSwitchDisplay';
         $ret['extConfig'] = 'Kwc_Composite_SwitchDisplay_ExtConfig';
