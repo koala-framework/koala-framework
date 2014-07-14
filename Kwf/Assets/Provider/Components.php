@@ -35,7 +35,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
 
                 $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assets', $addedFiles));
 
-                //alle css-dateien der vererbungshierache includieren
+                //alle dateien der vererbungshierache includieren
                 $files = Kwc_Abstract::getSetting($class, 'componentFiles');
                 $componentCssFiles = array();
                 foreach (array_merge($files['css'], $files['printcss'], $files['scss'], $files['js'], $files['masterCss'], $files['masterScss']) as $f) {
@@ -44,6 +44,32 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                 //reverse damit css von weiter unten in der vererbungshierachie überschreibt
                 $componentCssFiles = array_reverse($componentCssFiles);
                 foreach ($componentCssFiles as $i) {
+                    if (!in_array($i, $addedFiles)) {
+                        $addedFiles[] = $i;
+                        $i = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($i);
+                        $ret[] = Kwf_Assets_Dependency_File::createDependency($i, $this->_providerList);
+                    }
+                }
+            }
+            return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
+
+        } else if ($dependencyName == 'ComponentsDefer') {
+            $ret = array();
+            $componentClasses = $this->_getRecursiveChildClasses($this->_rootComponentClass);
+
+            $addedFiles = array();
+
+            foreach ($componentClasses as $class) {
+
+                $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assetsDefer', $addedFiles));
+
+                //alle dateien der vererbungshierache includieren
+                $files = Kwc_Abstract::getSetting($class, 'componentFiles');
+                $componentFiles = $files['defer.js'];
+
+                //reverse damit css von weiter unten in der vererbungshierachie überschreibt
+                $componentFiles = array_reverse($componentFiles);
+                foreach ($componentFiles as $i) {
                     if (!in_array($i, $addedFiles)) {
                         $addedFiles[] = $i;
                         $i = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($i);

@@ -7,6 +7,7 @@ class Kwf_Assets_Dependency_Dependencies extends Kwf_Assets_Dependency_Abstract
     {
         $this->setDependencies(self::DEPENDENCY_TYPE_REQUIRES, $dependencies);
         $this->_name = $name;
+        parent::__construct();
     }
 
     public function __toString()

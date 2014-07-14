@@ -1,7 +1,7 @@
 <?php
 class Kwf_View_Helper_Assets
 {
-    public function assets(Kwf_Assets_Package $assetsPackage, $language = null)
+    public function assets(Kwf_Assets_Package $assetsPackage, $language = null, $async = false)
     {
         if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
 
@@ -18,7 +18,8 @@ class Kwf_View_Helper_Assets
             $ret .= "/>\n";
         }
         foreach ($assetsPackage->getPackageUrls('text/javascript', $language) as $file) {
-            $ret .= "$indent<script type=\"text/javascript\" src=\"".htmlspecialchars($file)."\"></script>\n";
+            $attr = ($async ? ' async="async"' : '');
+            $ret .= "$indent<script type=\"text/javascript\" src=\"".htmlspecialchars($file)."\"$attr></script>\n";
         }
         return $ret;
     }

@@ -226,6 +226,7 @@ class Kwf_Component_Settings
                     'masterCss' => array('filename'=>'Master', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
                     'masterScss' => array('filename'=>'Master', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
                     'js' => array('filename'=>'Component', 'ext'=>'js', 'returnClass'=>false, 'multiple'=>true),
+                    'defer.js' => array('filename'=>'Component', 'ext'=>'defer.js', 'returnClass'=>false, 'multiple'=>true),
                 ));
             } else {
 

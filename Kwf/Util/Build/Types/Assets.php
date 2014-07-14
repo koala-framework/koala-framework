@@ -60,6 +60,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $packages = array(
             Kwf_Assets_Package_Default::getInstance('Frontend'),
             Kwf_Assets_Package_Default::getInstance('Admin'),
+            Kwf_Assets_Package_LazyLoad::getInstance('FrontendDefer', array('Frontend'))
         );
         if (Kwf_Controller_Front::getInstance()->getControllerDirectory('kwf_controller_action_maintenance')) {
             $packages[] = Kwf_Assets_Package_Maintenance::getInstance('Maintenance');

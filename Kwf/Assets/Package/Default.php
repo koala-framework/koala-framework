@@ -44,4 +44,12 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package
         $dependencyName = $parameter;
         return self::getInstance($dependencyName);
     }
+
+    protected function _getCacheId($mimeType)
+    {
+        if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
+            return str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+        }
+        return null;
+    }
 }

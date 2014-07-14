@@ -6,6 +6,10 @@ abstract class Kwf_Assets_Dependency_Abstract
     const DEPENDENCY_TYPE_USES = 'uses';
     protected $_dependencies = array();
 
+    public function __construct()
+    {
+    }
+
     public function getContents($language)
     {
         return null;
