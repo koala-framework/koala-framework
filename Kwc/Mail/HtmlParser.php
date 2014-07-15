@@ -109,7 +109,7 @@ class Kwc_Mail_HtmlParser
                         } else if ($style == 'text-align') {
                             if ($value == 'center') {
                                 $appendTags[$value] = array();
-                            } else if ($value != 'left') {
+                            } else {
                                 $attributes['align'] = $value;
                             }
                         } else {
