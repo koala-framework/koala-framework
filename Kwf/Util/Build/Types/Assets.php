@@ -206,6 +206,26 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         }
 
         Kwf_Assets_BuildCache::getInstance()->building = false;
+
+
+        $exts = array('js', 'css');
+        foreach ($packages as $p) {
+            $depName = $p->getDependencyName();
+            $language = $langs[0];
+            foreach ($exts as $extension) {
+                $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language);
+                $cacheContents = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+                echo "$depName $extension size: ".Kwf_View_Helper_FileSize::fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)))."\n";
+            }
+        }
+        $d = Kwf_Assets_Package_Default::getDefaultProviderList()->findDependency('Frontend');
+        foreach ($d->getRecursiveDependencies() as $i) {
+            if ($i instanceof Kwf_Assets_Dependency_File && $i->getType() == 'ext2') {
+                echo "\n[WARNING] Frontend contains ext2\n";
+                echo "To improve frontend performance all ext2 dependencies should be moved to FrontendDefer\n\n";
+                break;
+            }
+        }
     }
 
     public function getTypeName()
