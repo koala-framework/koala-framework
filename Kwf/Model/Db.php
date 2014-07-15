@@ -157,7 +157,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $this->_rows[$id];
     }
 
-    private function _formatField($field, Zend_Db_Select $select = null, $tableNameAlias = null)
+    //public so we can access it from Model_Union, but not part of the public api
+    public function _formatField($field, Zend_Db_Select $select = null, $tableNameAlias = null)
     {
         if ($field instanceof Zend_Db_Expr) return $field->__toString();
 
@@ -1031,7 +1032,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $this->getTableName();
     }
 
-    private function _createDbSelectWithColumns($select, $options)
+    //public so we can access it from Model_Union, but not part of the public api
+    public function _createDbSelectWithColumns($select, $options)
     {
         $select = clone $select;
         if (isset($options['columns'])) {
