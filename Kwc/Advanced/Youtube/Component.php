@@ -46,8 +46,8 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
         } else if (is_int($width)) {
             $width = $width;
         }
-        if (!$width || $width === self::CONTENT_WIDTH) {
-            $width = (int)$this->getContentWidth();
+        if (!$width) {
+            $width = '';
         }
         $config = array(
             'videoId' => $matches[0],
