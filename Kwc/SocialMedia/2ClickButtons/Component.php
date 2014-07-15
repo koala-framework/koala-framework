@@ -1,4 +1,5 @@
 <?php
+//requires koala-framework/socialshareprivacy package
 class Kwc_SocialMedia_2ClickButtons_Component extends Kwc_Abstract
 {
     public static function getSettings()
