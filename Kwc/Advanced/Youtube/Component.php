@@ -12,6 +12,7 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwfStatic('Youtube');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['assets']['dep'][] = 'KwfYoutubePlayer';
+        $ret['assets']['dep'][] = 'KwfFormCards';
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
 
@@ -42,24 +43,26 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
         preg_match(self::REGEX, $ret['row']->url, $matches);
         $width = $this->_getSetting('videoWidth');
         if ($width === self::USER_SELECT) {
-            $width = (int)$ret['row']->videoWidth;
-        } else if (is_int($width)) {
-            $width = $width;
-        }
-        if (!$width) {
-            $width = '';
+            if ($ret['row']->size == 'fullWidth') {
+                $width = null;
+            } else {
+                $width = (int)$ret['row']->videoWidth;
+            }
+        } else if ($width === self::CONTENT_WIDTH) {
+            $width = null;
         }
         $config = array(
             'videoId' => $matches[0],
+            'size' => $ret['row']->size,
             'width' => $width,
-            'height' => 0
+            'height' => null
         );
         if ($d = $ret['row']->dimensions) {
             if ($d == '16x9') {
-                $config['height'] = ($config['width'] / 16) * 9;
+                if ($config['width']) $config['height'] = ($config['width'] / 16) * 9;
                 $config['ratio'] = $d;
             } else if ($d == '4x3') {
-                $config['height'] = ($config['width'] / 4) * 3;
+                if ($config['width']) $config['height'] = ($config['width'] / 4) * 3;
                 $config['ratio'] = $d;
             }
         }

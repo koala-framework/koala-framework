@@ -19,5 +19,9 @@ Kwf.onElementReady('.kwcAdvancedYoutube .youtubePlayer', function(el, config) {
             videoId: config.videoId,
             playerVars: config.playerVars
         });
+        if (config.size == 'custom') {
+            kwcAdvancedYoutube.dom.style.width = 'auto';
+            kwcAdvancedYoutube.dom.style.maxWidth = config.width + 'px';
+        }
     }, this);
 }, { defer: true, checkVisibility: true });
