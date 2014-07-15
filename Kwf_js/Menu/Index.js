@@ -167,7 +167,7 @@ Kwf.Menu.Index = Ext.extend(Ext.Toolbar,
             }, this, {delay: 10});
             changeUser.on('select', function(combo, record, index) {
                 Ext.Ajax.request({
-                    url: '/kwf/user/changeUser/json-change-user',
+                    url: this.changeUserUrl+'/json-change-user',
                     params: { userId: record.id },
                     success: function() {
                         location.href = '/kwf/welcome';
