@@ -3,6 +3,7 @@ Ext.namespace('Kwf.Menu');
 Kwf.Menu.Index = Ext.extend(Ext.Toolbar,
 {
     controllerUrl: '/kwf/user/menu',
+    changeUserUrl: '/kwf/user/changeUser',
     changeUserTpl: ['<tpl for=".">',
                         '<div class="x-combo-list-item changeuser-list-item<tpl if="locked != 0"> changeuser-locked</tpl>">',
                             '<h3>{lastname}&nbsp;{firstname}</h3>',
@@ -147,7 +148,7 @@ Kwf.Menu.Index = Ext.extend(Ext.Toolbar,
         if (result.changeUser) {
             var changeUser = new Kwf.Form.ComboBox({
                 store: {
-                    url: '/kwf/user/changeUser/json-data'
+                    url: this.changeUserUrl+'/json-data'
                 },
                 mode: 'remote',
                 editable: true,
