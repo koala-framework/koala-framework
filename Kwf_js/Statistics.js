@@ -1,5 +1,5 @@
-Ext2.ns('Kwf.Statistics');
-
+if (!Kwf) Kwf = {}
+if (!Kwf.Statistics) Kwf.Statistics = {}
 Kwf.Statistics.counter = [];
 
 Kwf.Statistics.onCount = function(fn) {

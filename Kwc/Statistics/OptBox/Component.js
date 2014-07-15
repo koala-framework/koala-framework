@@ -16,9 +16,9 @@ Kwf.onContentReady(function statisticsOptBox(body, param) {
     }
 }, {priority: -2}); // before Kwf.Utils.ResponsiveEl
 
-Kwf.onElementReady('.kwcStatisticsOptBox a.accept', function statisticsOptBox(link) {
-    link.on('click', function(e, el) {
-        e.stopEvent();
+Kwf.onJElementReady('.kwcStatisticsOptBox a.accept', function statisticsOptBox(link) {
+    link.click(function(e) {
+        e.preventDefault();
         Kwf.Statistics.setUserOptValue('in');
         Kwf.fireComponentEvent('cookieOptChanged', 'in');
     });

@@ -54,7 +54,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         $ret['assetsAdmin']['dep'][] = 'ExtSimpleStore';
         $ret['assetsAdmin']['dep'][] = 'KwfColorField';
 
-        $ret['assets']['dep'][] = 'KwfMailDecode';
+        $ret['assetsDefer']['dep'][] = 'KwfMailDecode';
 
         $ret['cssClass'] = 'webStandard kwcText';
 
