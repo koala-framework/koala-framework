@@ -14,11 +14,10 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Products_Component
     {
         $ret = parent::getMailVars($order);
 
-        $ret['items'] = $order->getProductsData();
+        $ret['items'] = $order->getProductsDataWithProduct($this->getData());
 
         $c = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Component');
         $ret['sumRows'] = $c->getComponent()->getSumRows($order);
-
         return $ret;
     }
 }
