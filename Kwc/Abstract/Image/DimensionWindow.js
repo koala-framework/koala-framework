@@ -306,14 +306,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
     _getPreserveRatio: function()
     {
-        var preserveRatio = false;
-        var outWidth = this._getUserSelectedDimensionWidth();
-        var outHeight = this._getUserSelectedDimensionHeight();
-        var dimension = this.dimensions[this._dimensionField.getValue()];
-        if (dimension.cover == true && !(outWidth <= 0 || outHeight <= 0)) {
-            preserveRatio = true;
-        }
-        return preserveRatio;
+        return this._getUserSelectedDimensionWidth() > 0
+            && this._getUserSelectedDimensionHeight() > 0;
     },
 
     _getUserSelectedDimensionHeight: function ()
@@ -401,16 +395,12 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
 
     _updateOutSize: function()
     {
-        var outWidth = this._widthField.getValue();
-        var outHeight = this._heightField.getValue();
-        var cropData = this._cropImage.getValue();
-        var preserveRatio = false;
-        this._cropImage.outWidth = outWidth;
-        this._cropImage.outHeight = outHeight;
-        if (outWidth > 0 && outHeight > 0) {
-            preserveRatio = true;
-        }
-        this._cropImage.setCropDataAndPreserveRatio(cropData, preserveRatio);
+        this._cropImage.outWidth = this._getUserSelectedDimensionWidth();
+        this._cropImage.outHeight = this._getUserSelectedDimensionHeight();
+        this._cropImage.setCropDataAndPreserveRatio(
+            this._cropImage.getValue(),
+            this._getPreserveRatio()
+        );
     },
 
     _enableDisableFields: function()
