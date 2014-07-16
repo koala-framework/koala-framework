@@ -3,6 +3,7 @@ Ext2.namespace('Kwf.Menu');
 Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
 {
     controllerUrl: '/kwf/user/menu',
+    changeUserUrl: '/kwf/user/changeUser',
     changeUserTpl: ['<tpl for=".">',
                         '<div class="x2-combo-list-item changeuser-list-item<tpl if="locked != 0"> changeuser-locked</tpl>">',
                             '<h3>{lastname}&nbsp;{firstname}</h3>',
@@ -147,7 +148,7 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
         if (result.changeUser) {
             var changeUser = new Kwf.Form.ComboBox({
                 store: {
-                    url: '/kwf/user/changeUser/json-data'
+                    url: this.changeUserUrl+'/json-data'
                 },
                 mode: 'remote',
                 editable: true,
@@ -166,7 +167,7 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
             }, this, {delay: 10});
             changeUser.on('select', function(combo, record, index) {
                 Ext2.Ajax.request({
-                    url: '/kwf/user/changeUser/json-change-user',
+                    url: this.changeUserUrl+'/json-change-user',
                     params: { userId: record.id },
                     success: function() {
                         location.href = '/kwf/welcome';

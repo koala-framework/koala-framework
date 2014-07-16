@@ -5,13 +5,17 @@
 
     .youtubeContainer {
         background-color: white;
-        width: 900px;
-        height: 0px;
         position: relative;
-        top: 0px;
-        left: 0px;
         overflow: hidden;
+        height: 0px;
         z-index: 1;
+
+        &.ratio16x9 {
+            padding-bottom: 56.25%;
+        }
+        &.ratio4x3 {
+            padding-bottom: 75%;
+        }
 
         .outerLoading {
             .loading {
@@ -20,7 +24,7 @@
         }
 
         .youtubePlayer {
-            position: relative;
+            position: absolute;
             width: 100%;
             height: 100%;
         }

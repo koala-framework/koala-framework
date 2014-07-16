@@ -50,7 +50,7 @@ class Kwf_Controller_Action_Enquiries_EnquiriesController
         $view->bcc = $row->getBcc();
         $view->to = $row->getTo();
         $view->from = $row->getFrom();
-        echo $view->render('enquiry.tpl');
+        $this->getResponse()->setBody($view->render('enquiry.tpl'));
 
         $this->_helper->viewRenderer->setNoRender();
     }

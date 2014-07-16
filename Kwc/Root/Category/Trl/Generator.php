@@ -90,7 +90,7 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
         $ret['name'] = $dbRow->name;
         $ret['filename'] = $dbRow->filename;
         $ret['visible'] = $row->isHome ? true : $dbRow->visible;
-        $ret['selfVisible'] = $row->selfVisible;
+        $ret['selfVisible'] = $dbRow->visible;
         $ret['isHome'] = $row->isHome;
         return $ret;
     }

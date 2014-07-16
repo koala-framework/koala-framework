@@ -15,7 +15,7 @@ Kwf.Statistics.count = function(url, config) {
 
 Kwf.Statistics.getDefaultOptValue = function() {
     if (typeof Kwf.Statistics.defaultOptValue == 'undefined') {
-        Kwf.Statistics.defaultOptValue = 'opt-out';
+        Kwf.Statistics.defaultOptValue = 'in';
     }
     return Kwf.Statistics.defaultOptValue;
 };

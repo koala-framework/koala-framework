@@ -112,6 +112,15 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
                         });
                     });
                 });
+
+                // Hide menu if link matches hash change (anchor scroll)
+                menu.find('li > a').each(function(index, link) {
+                    if($(link).attr('href').match('^/#')) {
+                        $(link).click(function(e) {
+                            menuLink.trigger('click');
+                        });
+                    }
+                });
             });
         }
     };

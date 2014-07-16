@@ -6,7 +6,7 @@ Kwf.onContentReady(function linkTagIntern(el){
             if($(link).data('checkIntern')) return;
             $(link).data('checkIntern', true);
             var pos = $(link).attr('href') ? $(link).attr('href').indexOf('#') : null;
-            if (pos > 0) {
+            if (pos > 0 && $(link).attr('href').substr(0, 1) == '/') {
                 var target = $($(link).attr('href').substr(pos));
                 if (target && target.length) {
                     $(link).click(function(e){
@@ -14,9 +14,9 @@ Kwf.onContentReady(function linkTagIntern(el){
                         $('html, body').stop().animate({scrollTop: target.offset().top}, 500, function() {
                             window.location.hash = $(link).attr('href').substr(pos);
                         });
-                    })
+                    });
                 }
             }
-        })
+        });
     }
 }, { defer: true });

@@ -346,11 +346,11 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         $s->where('changed_date > indexed_date OR ISNULL(indexed_date)');
         foreach ($m->getRows($s) as $row) {
             if ($this->_getParam('debug')) echo "changed: $row->page_id\n";
-            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
+            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id, array('ignoreVisible' => true));
             if (!$page) {
                 //we don't know the correct subroot, so try deleting from all subroots
                 foreach (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getSubroots() as $sr) {
-                    $sr = Kwf_Component_Data_Root::getInstance()->getComponentById($sr);
+                    $sr = Kwf_Component_Data_Root::getInstance()->getComponentById($sr, array('ignoreVisible' => true));
                     if (!$sr) $sr = Kwf_Component_Data_Root::getInstance();
                     Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteDocument($sr, $row->page_id);
                 }

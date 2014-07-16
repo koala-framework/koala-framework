@@ -2,14 +2,27 @@
 <!-- Piwik -->
 <script type="text/javascript">
   var _paq = _paq || [];
+
   <? if ($this->disableCookies) { ?>
   _paq.push(['disableCookies']);
   <? } else { ?>
   if (!Kwf.Statistics.isUserOptIn()) { _paq.push(['disableCookies']); }
   <? } ?>
+
+  <? if ($this->customTrackingDomain) { ?>
+  _paq.push(['setCookieDomain', '*.<?=$this->customTrackingDomain?>']);
+  _paq.push(['setDomains', '*.<?=$this->customTrackingDomain?>']);
+  _paq.push(['setDocumentTitle', document.domain + "/" + document.title]);
+  <? } ?>
+
   <? foreach ($this->customVariables as $cv) { ?>
   _paq.push(["setCustomVariable", <?=$cv['index']?>, "<?=$cv['name']?>", "<?=$cv['value']?>", "<?=$cv['scope']?>"]);
   <? } ?>
+
+  <? foreach ($this->additionalConfiguration as $key => $val) { ?>
+  _paq.push(["<?=$key?>", "<?=$val?>"]);
+  <? } ?>
+
   _paq.push(["trackPageView"]);
   <? if ($this->enableLinkTracking) { ?>
   _paq.push(["enableLinkTracking"]);

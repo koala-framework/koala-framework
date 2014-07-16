@@ -41,7 +41,8 @@ class Kwf_Util_Process
             unset($cmd[0]);
             if (substr($cmd[1], -13) != 'bootstrap.php' && $cmd[1] != '/usr/local/bin/vps') continue;
             unset($cmd[1]);
-            $cwd = explode(' ', trim(`pwdx $pid`));
+            $cwd = explode(' ', trim(`pwdx $pid 2>/dev/null`));
+            if (count($cwd) != 2) continue;
             if ($cwd[1] != getcwd()) continue;
             $cmdWithoutArgs= '';
             $args = '';

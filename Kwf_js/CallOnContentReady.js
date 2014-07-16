@@ -286,7 +286,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
             if (configEl.length) {
                 try {
                     var v = configEl.get(0).value;
-                    if (v.substr(0, 1) == '{') {
+                    if (v.substr(0, 1) == '{' || v.substr(0, 1) == '[') {
                         config = $.parseJSON(v);
                     }
                 } catch (err) {}

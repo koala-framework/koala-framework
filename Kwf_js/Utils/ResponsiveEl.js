@@ -68,4 +68,4 @@ Kwf.onContentReady(function jumpToAnchor(el) {
             }
         }
     }
-}, {priority: 50});
+}, {defer: true, priority: 50});

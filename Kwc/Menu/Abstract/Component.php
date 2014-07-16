@@ -213,6 +213,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
             $ret[] = $r;
             $i++;
         }
+        $this->_attachEditableToMenuData($ret);
 
         return $ret;
     }
@@ -220,7 +221,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
     protected function _attachEditableToMenuData(&$menuData)
     {
         foreach ($this->_getSetting('generators') as $key => $generator) {
-            if (is_instance_of($generator['component'], 'Kwc_Menu_EditableItems_Component')) {
+            if (is_instance_of($generator['component'], 'Kwc_Menu_EditableItems_Interface')) {
                 $c = $this->getData()->getChildComponent('-'.$key);
                 $c->getComponent()->attachEditableToMenuData($menuData);
             }

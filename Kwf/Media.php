@@ -19,6 +19,11 @@ class Kwf_Media
             $filename = $filename->filename . '.' . $filename->extension;
         }
         if ($filename == '.') $filename = '';
+        //Replace Slashes and Backslashes with an underscore
+        //Otherwise we would get a wrong url
+        //e.g. $filename = foo/bar.png -> /media/FooModel/1/default/ab123/1234/foo/bar.png
+        $filename = str_replace('/', '_', $filename);
+        $filename = str_replace('\\', '_', $filename);
         $checksumType = $type;
         if (substr($type, 0, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX)) == Kwf_Media::DONT_HASH_TYPE_PREFIX) {
             $checksumType = Kwf_Media::DONT_HASH_TYPE_PREFIX;

@@ -211,10 +211,12 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         var mapOptions = {
             center: new google.maps.LatLng(parseFloat(this.config.latitude), parseFloat(this.config.longitude)),
             zoom: parseInt(this.config.zoom),
+            panControl: this.config.pan_control,
             zoomControl: this.config.zoom_properties,
             scaleControl: this.config.scale,
             mapTypeControl: this.config.map_type,
-            overviewMapControl: this.config.overview
+            overviewMapControl: this.config.overview,
+            streetViewControl: this.config.street_view
         };
         this.gmap = new google.maps.Map(this.mapContainer.down(".container").dom,
             mapOptions);

@@ -27,6 +27,7 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
             $this->_exprs['autheduser_read'] = new Kwf_Model_Select_Expr_Child_Contains('Views', $s);
         } else {
             $this->_exprs['autheduser_visible'] = new Kwf_Model_Select_Expr_Boolean(false);
+            $this->_exprs['autheduser_read'] = new Kwf_Model_Select_Expr_Boolean(false);
         }
 
         $this->_exprs['name'] = new Kwf_Model_Select_Expr_Concat(array(
