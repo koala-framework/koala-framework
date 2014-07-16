@@ -26,9 +26,9 @@ Kwf.Switch.HoverFade = function(cfg) {
     this.switchContent = Ext.get(Ext.query('.switchContent', cfg.wrapper)[0]);
     this.fadeWrapper = Ext.get(cfg.wrapper);
 
-    this.switchContent.setStyle('display', 'none');
-
     if (this.switchLink && this.switchContent) {
+        this.switchContent.setStyle('display', 'none');
+
         this.switchLink.on('mouseover', function(e) {
             this.linkOver = true;
             this.fadeIn();
