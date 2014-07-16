@@ -8,8 +8,8 @@ Kwf.enableOnReadyConsoleProfile = false;
  * selector: selector, // null if onContentReady
  * */
 Kwf._readyElHandlers = []; //for onElement*
-Kwf._skipDeferred; //if callOnContentReady should skip 'defer' callbacks or execute only 'defer' callbacks
-                   //used on initial ready
+Kwf._onReadyState;  //if callOnContentReady should skip 'defer' callbacks or execute only 'defer' callbacks
+                    //used on initial ready
 Kwf._deferredStart = null; //used for timing deferred, required here because of multiple chunks
 Kwf._onReadyIsCalling = false; //true while callOnContentReady is processing onReadyElQueue and we can add more to queue
 Kwf._onReadyElQueue = []; //queue for onElementReady/Show/Hide/WidthChange calls
@@ -24,9 +24,9 @@ if (!Kwf.isApp) {
         }
         var t = Kwf.Utils.BenchmarkBox.now();
         if (Kwf.enableOnReadyConsoleProfile) console.profile("callOnContentReady body");
-        Kwf._skipDeferred = true;
+        Kwf._onReadyState = 'callNonDefer';
         Kwf.callOnContentReady(document.body, { action: 'render' });
-        delete Kwf._skipDeferred;
+        Kwf._onReadyState = 'calledNonDefer';
         if (Kwf.enableOnReadyConsoleProfile) console.profileEnd();
         Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
         Kwf.Utils.BenchmarkBox.create({
@@ -36,9 +36,9 @@ if (!Kwf.isApp) {
         setTimeout(function() {
             Kwf._deferredStart = Kwf.Utils.BenchmarkBox.now();
             if (Kwf.enableOnReadyConsoleProfile) console.profile("callOnContentReady body deferred");
-            Kwf._skipDeferred = false;
+            Kwf._onReadyState = 'callDefer';
             Kwf.callOnContentReady(document.body, { action: 'render' });
-            delete Kwf._skipDeferred;
+            Kwf._onReadyState = 'calledDefer';
         }, 10);
 
         var timeoutId;
@@ -76,6 +76,11 @@ Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
         type: type,
         onAction: onAction
     });
+
+    //if initial call is already done redo for new added handlers
+    if (Kwf._onReadyState == 'calledNonDefer' && (!hndl.options.defer || Kwf._onReadyState == 'calledDefer')) {
+        Kwf.callOnContentReady(document.body, { action: 'render', handlerNum: Kwf._readyElHandlers.length-1 });
+    }
 };
 
 /**
@@ -120,14 +125,17 @@ Kwf.callOnContentReady = function(renderedEl, options)
     var html = false;
     for (var i = 0; i < Kwf._readyElHandlers.length; i++) {
         var hndl = Kwf._readyElHandlers[i];
+        if (options.handlerNum && hndl.num != options.handlerNum) {
+            continue;
+        }
 
-        //Kwf._skipDeferred gets set before callOnContentReady(body)
+        //Kwf._onReadyState gets set before callOnContentReady(body)
         //can not be part of options as it would be missing in recursive calls
-        if (Kwf._skipDeferred === true) {
+        if (Kwf._onReadyState == 'callNonDefer') {
             if (hndl.options.defer) {
                 continue;
             }
-        } else if (Kwf._skipDeferred === false) {
+        } else if (Kwf._onReadyState == 'callDefer') {
             if (!hndl.options.defer) {
                 continue;
             }
@@ -155,7 +163,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         if (options.action != 'render' || !hndl.selector) {
             useSelectorCache = true;
         } else {
-            if (Kwf._skipDeferred === false && renderedEl == document.body && Kwf._elCacheBySelector[hndl.selector]) {
+            if (Kwf._onReadyState == 'callDefer' && renderedEl == document.body && Kwf._elCacheBySelector[hndl.selector]) {
                 useSelectorCache = true;
             } else {
                 var t = Kwf.Utils.BenchmarkBox.now();
@@ -317,7 +325,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
     }
 
-    if (Kwf._skipDeferred === false) {
+    if (Kwf._onReadyState == 'callDefer') {
         var processNext = function processNext() {
             Kwf.Utils.BenchmarkBox.count('chunks');
             var t = Kwf.Utils.BenchmarkBox.now();
