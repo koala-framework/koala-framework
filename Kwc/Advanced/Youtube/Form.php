@@ -26,7 +26,7 @@ class Kwc_Advanced_Youtube_Form extends Kwc_Abstract_Form
             $card = $cards->add();
             $card->setTitle(trlKwfStatic('user-defined'));
             $card->setName('custom');
-            $card->add(new Kwf_Form_Field_TextField('videoWidth', trlKwf('Width')))
+            $card->add(new Kwf_Form_Field_TextField('video_width', trlKwf('Width')))
                 ->setAllowBlank(false);
 
             $this->add($cards);

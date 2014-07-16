@@ -46,7 +46,7 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
             if ($ret['row']->size == 'fullWidth') {
                 $width = null;
             } else {
-                $width = (int)$ret['row']->videoWidth;
+                $width = (int)$ret['row']->video_width;
             }
         } else if ($width === self::CONTENT_WIDTH) {
             $width = null;

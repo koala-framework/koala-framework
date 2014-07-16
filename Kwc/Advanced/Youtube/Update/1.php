@@ -12,10 +12,11 @@ class Kwc_Advanced_Youtube_Update_1 extends Kwf_Update
             if (!$row->size) {
                 if (!$row->videoWidth || $row->videoWidth == '100%') {
                     $row->size = 'fullWidth';
-                    unset($row->videoWidth);
                 } else {
                     $row->size = 'custom';
+                    $row->video_width = $row->videoWidth;
                 }
+                unset($row->videoWidth);
                 $row->save();
             }
         }
