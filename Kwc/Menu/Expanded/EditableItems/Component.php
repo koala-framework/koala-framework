@@ -1,5 +1,5 @@
 <?php
-class Kwc_Menu_Expanded_EditableItems_Component extends Kwc_Abstract
+class Kwc_Menu_Expanded_EditableItems_Component extends Kwc_Abstract implements Kwc_Menu_EditableItems_Interface
 {
     public static function getSettings()
     {

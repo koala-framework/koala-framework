@@ -19,7 +19,23 @@ class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
                 $menu[] = $m;
             }
         }
+        $this->_attachEditableToMenuData($menu);
         return $menu;
+    }
+
+    protected function _attachEditableToMenuData(&$menuData, $menuComponent = null)
+    {
+        if (!$menuComponent) $menuComponent = $this->getData();
+        foreach (Kwc_Abstract::getSetting($menuComponent->componentClass, 'generators') as $key => $generator) {
+            $componentClasses = $generator['component'];
+            if (!is_array($componentClasses)) $componentClasses = array($componentClasses);
+            foreach ($componentClasses as $class) {
+                if (is_instance_of($class, 'Kwc_Menu_EditableItems_Interface')) {
+                    $c = $menuComponent->getChildComponent('-'.$key);
+                    $c->getComponent()->attachEditableToMenuData($menuData);
+                }
+            }
+        }
     }
 
     public function getTemplateVars()
