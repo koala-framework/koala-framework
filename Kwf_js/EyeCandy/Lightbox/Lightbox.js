@@ -238,7 +238,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             if (!this.lightboxEl.isVisible()) {
                 this.lightboxEl.fadeIn();
                 this.preloadLinks();
-                Kwf.callOnContentReady(this.innerLightboxEl.dom, {newRender: false});
+                Kwf.callOnContentReady(this.innerLightboxEl.dom, {action: 'show'});
             }
             this.style.afterContentShown();
         } else {
@@ -251,7 +251,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     close: function(options) {
         this.lightboxEl.hide();
         //so eg. flash component can remove object
-        Kwf.callOnContentReady(this.lightboxEl, {newRender: false});
+        Kwf.callOnContentReady(this.lightboxEl, {action: 'hide'});
         this.lightboxEl.show();
 
         this.style.onClose(options);
