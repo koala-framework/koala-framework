@@ -1,5 +1,5 @@
 #tags: log
-CREATE TABLE  `porscheholding`.`kwf_logs` (
+CREATE TABLE  `kwf_logs` (
 `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `type` VARCHAR( 20 ) NOT NULL ,
 `exception` VARCHAR( 255 ) NOT NULL ,
