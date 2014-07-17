@@ -2,9 +2,9 @@
 /**
  * Example for Acl MenuUrl
  *
- * $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_component_logs',
+ * $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_debug_logs',
  *     array('text'=>trlKwf('Logs'), 'icon'=>'script_error.png')), 'settings');
- * $this->add(new Zend_Acl_Resource('kwf_component_logs-form'), 'kwf_component_logs');
+ * $this->add(new Zend_Acl_Resource('kwf_debug_logs-form'), 'kwf_debug_logs');
  **/
 class Kwf_Controller_Action_Logs_CliController extends Kwf_Controller_Action_Cli_Abstract
 {
