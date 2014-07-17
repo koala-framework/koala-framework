@@ -11,6 +11,8 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_preview', 'preview'), 'edit_role');
 
         $this->add(new Zend_Acl_Resource('kwf_debug_class-tree'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_logs'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_logs-form'), 'kwf_debug_logs');
         $this->add(new Zend_Acl_Resource('kwf_component_web'));
         $this->add(new Zend_Acl_Resource('kwf_component_media'));
         $this->add(new Zend_Acl_Resource('kwf_component_benchmark'));
