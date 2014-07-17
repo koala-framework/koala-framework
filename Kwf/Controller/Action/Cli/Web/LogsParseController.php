@@ -1,4 +1,0 @@
-<?php
-class Kwf_Controller_Action_Cli_Web_LogsParseController extends Kwf_Controller_Action_Logs_CliController
-{
-}
