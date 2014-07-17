@@ -71,7 +71,7 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                     $this->_class, $c
                 ));
-                if (!Kwc_Abstract::getSetting($this->_class, 'hasVisible') && $event->isDirty('visible')) {
+                if (Kwc_Abstract::getSetting($this->_class, 'hasVisible') && $event->isDirty('visible')) {
                     $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
                         $this->_class, $c
                     ));
