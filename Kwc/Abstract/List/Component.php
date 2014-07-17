@@ -9,7 +9,7 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
             'ownModel'     => 'Kwc_Abstract_List_OwnModel',
         ));
         $ret['generators']['child'] = array(
-            'class' => 'Kwf_Component_Generator_Table',
+            'class' => 'Kwc_Abstract_List_Generator',
             'component' => null
         );
         $ret['assetsAdmin']['dep'][] = 'KwfProxyPanel';
