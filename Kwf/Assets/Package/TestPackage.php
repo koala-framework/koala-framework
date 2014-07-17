@@ -23,6 +23,7 @@ class Kwf_Assets_Package_TestPackage extends Kwf_Assets_Package
         $providers[] = new Kwf_Assets_Provider_Ini(VENDOR_PATH.'/koala-framework/library-jquery/dependencies.ini');
         $providers[] = new Kwf_Assets_Provider_Ini(VENDOR_PATH.'/koala-framework/library-swfobject/dependencies.ini');
         $providers[] = new Kwf_Assets_Provider_Ini(VENDOR_PATH.'/koala-framework/library-swfupload/dependencies.ini');
+        $providers[] = new Kwf_Assets_Provider_Ini(VENDOR_PATH.'/koala-framework/library-qunit/dependencies.ini');
         $providers[] = new Kwf_Assets_Provider_IniNoFiles();
         $providers[] = new Kwf_Assets_Provider_Components($rootComponentClass);
         $providers[] = new Kwf_Assets_Provider_Dynamic();
