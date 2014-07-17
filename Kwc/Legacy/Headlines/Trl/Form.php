@@ -1,5 +1,5 @@
 <?php
-class Kwc_Legacy_Basic_Headlines_Trl_Form extends Kwc_Abstract_Form
+class Kwc_Legacy_Headlines_Trl_Form extends Kwc_Abstract_Form
 {
     protected function _initFields()
     {
