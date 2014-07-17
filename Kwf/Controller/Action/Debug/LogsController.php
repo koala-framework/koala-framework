@@ -116,12 +116,12 @@ class Kwf_Controller_Action_Debug_LogsController extends Kwf_Controller_Action_A
                 'request_uri' => $logMessage['REQUEST_URI'],
                 'http_referer' => $logMessage['HTTP_REFERER'],
                 'user' => $logMessage['User'],
-                'useragent' => $logMessage['_USERAGENT'],
+                'useragent' => isset($logMessage['_USERAGENT']) ? $logMessage['_USERAGENT'] : '',
                 'get' => $logMessage['_GET'],
                 'post' => $logMessage['_POST'],
                 'server' => $logMessage['_SERVER'],
                 'files' => $logMessage['_FILES'],
-                'session' => $logMessage['_SESSION'],
+                'session' => isset($logMessage['_SESSION']) ? $logMessage['_SESSION'] : '',
                 'filename' => $fileInfo['filename'],
                 'date' => $folders[2] . ' ' . $logMessage['Time']
             ))->save();
