@@ -91,6 +91,7 @@ class Kwf_Controller_Action_Debug_LogsController extends Kwf_Controller_Action_A
         }
 
         $logMessage = array();
+        $data = array();
         foreach ($files as $filename) {
             $fileInfo = pathinfo($filename);
             $folders = explode('/', $fileInfo['dirname']);
@@ -107,7 +108,7 @@ class Kwf_Controller_Action_Debug_LogsController extends Kwf_Controller_Action_A
             $select->whereEquals('filename', $fileInfo['filename']);
             if ($this->_getModel()->countRows($select) > 0) continue;
 
-            $this->_getModel()->createRow(array(
+            $data[] = array(
                 'type' => $folders[1],
                 'exception' => $logMessage['Exception'],
                 'thrown' => $logMessage['Thrown'],
@@ -124,8 +125,10 @@ class Kwf_Controller_Action_Debug_LogsController extends Kwf_Controller_Action_A
                 'session' => isset($logMessage['_SESSION']) ? $logMessage['_SESSION'] : '',
                 'filename' => $fileInfo['filename'],
                 'date' => $folders[2] . ' ' . $logMessage['Time']
-            ))->save();
+            );
         }
+
+        $this->_getModel()->import(Kwf_Model_Abstract::FORMAT_ARRAY, $data);
 
         $this->view->message = trlKwf('All files successfully parsed');
     }
