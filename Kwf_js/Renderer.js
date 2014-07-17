@@ -92,11 +92,6 @@ if (Ext.util.Format.nl2br) {
     };
 }
 
-Ext.util.Format.nl2BrWithHtmlSpaces = function(v) {
-    //span wird in v gesetzt, da er sonst wieder überschrieben wird
-    return Ext.util.Format.nl2Br(v).replace(/ /g, '&nbsp;');
-};
-
 Ext.util.Format.AutoNl2Br = function(v) {
     //span wird in v gesetzt, da er sonst wieder überschrieben wird
     return "<span class=\'kwf-renderer-linebreak\'>"+Ext.util.Format.nl2Br(v)+"</span>";

@@ -13,8 +13,8 @@ class Kwf_Controller_Action_Logs_GridController extends Kwf_Controller_Action_Au
     {
         parent::indexAction();
         $this->view->xtype = 'kwf.logs.panel';
-        $this->view->controllerUrl = '/kwf/component/logs';
-        $this->view->formControllerUrl = '/kwf/component/logs-form';
+        $this->view->controllerUrl = '/kwf/debug/logs';
+        $this->view->formControllerUrl = '/kwf/debug/logs-form';
     }
 
     protected function _initColumns()

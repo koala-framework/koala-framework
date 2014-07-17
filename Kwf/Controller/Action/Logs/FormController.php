@@ -17,7 +17,7 @@ class Kwf_Controller_Action_Logs_FormController extends Kwf_Controller_Action_Au
         $form->add(new Kwf_Form_Field_ShowField('message', trlKwf('Message')));
         $form->add(new Kwf_Form_Field_ShowField('thrown', trlKwf('Thrown')));
         $form->add(new Kwf_Form_Field_ShowField('exception_detail', trlKwf('Detail')))
-            ->setTpl('{value:nl2BrWithHtmlSpaces}');
+            ->setTpl('<pre>{value:nl2Br}</pre>');
         $form->add(new Kwf_Form_Field_ShowField('request_uri', trlKwf('Uri')))
             ->setTpl('{value:clickableLink}');
         $form->add(new Kwf_Form_Field_ShowField('useragent', trlKwf('User Agent')));
@@ -25,15 +25,15 @@ class Kwf_Controller_Action_Logs_FormController extends Kwf_Controller_Action_Au
             ->setTpl('{value:clickableLink}');
         $form->add(new Kwf_Form_Field_ShowField('user', trlKwf('User')));
         $form->add(new Kwf_Form_Field_ShowField('get', trlKwf('$_GET')))
-            ->setTpl('{value:nl2BrWithHtmlSpaces}');
+            ->setTpl('<pre>{value:nl2Br}</pre>');
         $form->add(new Kwf_Form_Field_ShowField('post', trlKwf('$_POST')))
-            ->setTpl('{value:nl2BrWithHtmlSpaces}');
+            ->setTpl('<pre>{value:nl2Br}</pre>');
         $form->add(new Kwf_Form_Field_ShowField('files', trlKwf('$_FILES')))
-            ->setTpl('{value:nl2BrWithHtmlSpaces}');
+            ->setTpl('<pre>{value:nl2Br}</pre>');
         $form->add(new Kwf_Form_Field_ShowField('session', trlKwf('$_SESSION')))
-            ->setTpl('{value:nl2BrWithHtmlSpaces}');
+            ->setTpl('<pre>{value:nl2Br}</pre>');
         $form->add(new Kwf_Form_Field_ShowField('server', trlKwf('$_SERVER')))
-            ->setTpl('{value:nl2BrWithHtmlSpaces}');
+            ->setTpl('<pre>{value:nl2Br}</pre>');
     }
 }
 
