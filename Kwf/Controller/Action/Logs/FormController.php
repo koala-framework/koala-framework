@@ -1,5 +1,5 @@
 <?php
-class Kwf_Controller_Action_Log_FormController extends Kwf_Controller_Action_Auto_Form
+class Kwf_Controller_Action_Logs_FormController extends Kwf_Controller_Action_Auto_Form
 {
     protected $_model = 'Kwf_Log_Model';
     protected $_buttons = array();

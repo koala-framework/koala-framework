@@ -1,5 +1,5 @@
 <?php
-class Kwf_Controller_Action_Log_GridController extends Kwf_Controller_Action_Auto_Grid
+class Kwf_Controller_Action_Logs_GridController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('delete');
     protected $_model = 'Kwf_Log_Model';

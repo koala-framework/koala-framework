@@ -1,5 +1,12 @@
 <?php
-class Kwf_Controller_Action_Log_CliController extends Kwf_Controller_Action_Cli_Abstract
+/**
+ * Example for Acl MenuUrl
+ *
+ * $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_component_logs',
+ *     array('text'=>trlKwf('Logs'), 'icon'=>'script_error.png')), 'settings');
+ * $this->add(new Zend_Acl_Resource('kwf_component_logs-form'), 'kwf_component_logs');
+ **/
+class Kwf_Controller_Action_Logs_CliController extends Kwf_Controller_Action_Cli_Abstract
 {
     protected $_ignore = array('.', '..', '.gitignore', 'srpc-call', 'mirrorcache', 'clear-view-cache');
 
@@ -43,18 +50,21 @@ class Kwf_Controller_Action_Log_CliController extends Kwf_Controller_Action_Cli_
 
     public function indexAction()
     {
+        $config = Kwf_Config::getValueArray('server.updateTags');
+        if (in_array('log', $config) === false) throw new Kwf_Exception('add log updateTag in config');
+
         $model = Kwf_Model_Abstract::getInstance('Kwf_Log_Model');
         if ($logHandle = opendir('log')) {
             while (false !== ($logFolder = readdir($logHandle))) {
                 if (in_array($logFolder, $this->_ignore)) continue;
 
-                if ($logSubHandler = opendir('log/' . $logFolder)) {
-                    while (false !== ($logSubFolder = readdir($logSubHandler))) {
+                if ($logSubHandle = opendir('log/' . $logFolder)) {
+                    while (false !== ($logSubFolder = readdir($logSubHandle))) {
                         if (in_array($logSubFolder, $this->_ignore)) continue;
 
                         if ($logFilesHandle = opendir('log/' . $logFolder . '/' . $logSubFolder)) {
-                            while (false !== ($logFiles = readdir($logFilesHandle))) {
-                                if (in_array($logFiles, $this->_ignore)) continue;
+                            while (false !== ($logFile = readdir($logFilesHandle))) {
+                                if (in_array($logFile, $this->_ignore)) continue;
 
                                 $file = file_get_contents('log/' . $logFolder . '/' . $logSubFolder . '/' . $logFiles);
                                 for($i = 0; $i < count($this->_start); $i++) {
@@ -65,7 +75,7 @@ class Kwf_Controller_Action_Log_CliController extends Kwf_Controller_Action_Cli_
                                 }
 
                                 $select = new Kwf_Model_Select();
-                                $select->whereEquals('filename', $logFiles);
+                                $select->whereEquals('filename', $logFile);
                                 if ($model->countRows($select) > 0) continue;
 
                                 $model->createRow(array(
@@ -89,7 +99,7 @@ class Kwf_Controller_Action_Log_CliController extends Kwf_Controller_Action_Cli_
                             closedir($logFilesHandle);
                         }
                     }
-                    closedir($logSubHandler);
+                    closedir($logSubHandle);
                 }
             }
 
