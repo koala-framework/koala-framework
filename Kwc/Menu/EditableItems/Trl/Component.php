@@ -1,6 +1,5 @@
 <?php
 class Kwc_Menu_EditableItems_Trl_Component extends Kwc_Chained_Trl_Component
-    implements Kwc_Menu_EditableItems_Interface
 {
     public static function getSettings($masterComponentClass)
     {
