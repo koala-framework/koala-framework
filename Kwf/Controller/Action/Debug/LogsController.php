@@ -159,7 +159,7 @@ class Kwf_Controller_Action_Debug_LogsController extends Kwf_Controller_Action_A
         $dirNames = array();
         foreach ($files as $filename) {
             $dirName = dirname($filename);
-            if (!isset($dirName)) $dirNames[$dirName] = true;
+            if (!isset($dirNames[$dirName])) $dirNames[$dirName] = true;
             unlink($filename);
         }
 
