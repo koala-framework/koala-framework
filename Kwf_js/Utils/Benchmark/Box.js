@@ -1,5 +1,6 @@
 (function() {
-    Ext2.ns('Kwf.Utils.BenchmarkBox');
+    if (!Kwf.Utils) Kwf.Utils = {};
+    if (!Kwf.Utils.BenchmarkBox) Kwf.Utils.BenchmarkBox = {};
 
     var benchmarkEnabled = Kwf.Debug.benchmark;
     if (!benchmarkEnabled) {
@@ -93,37 +94,34 @@
         Kwf.Utils.BenchmarkBox._subTimers[name][subName].duration += duration;
     };
     Kwf.Utils.BenchmarkBox.initBox = function(el) {
-        if (el.dom.initDone) return;
-        el.dom.initDone = true;
-        var container = Ext2.getBody().child('.benchmarkContainer');
-        if (!container) {
-            container = Ext2.getBody().createChild({
-                cls: 'benchmarkContainer'
-            });
+        if (el instanceof jQuery) el = el.get(0);
+        if (el.initDone) return;
+        el.initDone = true;
+        var container = $('.benchmarkContainer');
+        if (!container.length) {
+            container = $('<div class="benchmarkContainer"></div>');
+            $('body').append($(container));
         }
-        container.appendChild(el);
+        container.append($(el));
 
-        var benchmarkType = el.dom.getAttribute('data-benchmark-type');
+        var benchmarkType = $(el).data('benchmarkType');
         if (getCookie('benchmarkBox-'+benchmarkType)=='1') {
             el.addClass('visible');
         }
-        var showLink = el.insertFirst({
-            tag: 'a',
-            href: '#',
-            cls: 'showContent',
-            html: '['+benchmarkType+']'
-        });
+        var showLink = $('<a href="#" class="showContent">['+benchmarkType+']</a>');
+        $(showLink).prependTo($(el));
+
         showLink.on('click', function(ev) {
-            ev.stopEvent();
-            var el = Ext2.get(this);
-            if (!el.hasClass('visible')) {
-                el.addClass('visible');
+            ev.preventDefault();
+            var el = $(this);
+            if (!el.parent().hasClass('visible')) {
+                el.parent().addClass('visible');
                 setCookie('benchmarkBox-'+benchmarkType, '1');
             } else {
-                el.removeClass('visible');
+                el.parent().removeClass('visible');
                 setCookie('benchmarkBox-'+benchmarkType, '0');
             }
-        }, el.dom);
+        });
     };
     Kwf.Utils.BenchmarkBox.create = function(options) {
         if (!benchmarkEnabled) return;
@@ -163,16 +161,14 @@
         Kwf.Utils.BenchmarkBox._timers = {};
         Kwf.Utils.BenchmarkBox._subTimers = {};
         html = '<div class="benchmarkBoxContent">'+html+'</div>';
-        var el = Ext2.getBody().createChild({
-            cls: 'benchmarkBox',
-            'data-benchmark-type': options.type,
-            html: html
-        });
+        html = '<div class="benchmarkBox" data-benchmark-type="'+options.type+'">'+html+'</div>';
+        el = $(html);
+        $('body').append(el);
         Kwf.Utils.BenchmarkBox.initBox(el);
     };
-    Ext2.onReady(function() {
-        Ext2.select('.benchmarkBox').each(function(el) {
-            Kwf.Utils.BenchmarkBox.initBox(el);
+    $(function() {
+        $('body').find('.benchmarkBox').each(function(i, el) {
+            Kwf.Utils.BenchmarkBox.initBox($(el));
         });
-    }, this, { delay: 110 });
+    });
 })();

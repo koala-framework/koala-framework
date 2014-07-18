@@ -1,11 +1,11 @@
 (function(){
-
+    
 var DONT_HASH_TYPE_PREFIX = 'dh-';
 var $w = $(window);
 var deferredImages = [];
 
 Kwf.Utils.ResponsiveImg = function (selector) {
-    Kwf.onElementWidthChange(selector, function responsiveImg(el) {
+    Kwf.onJElementWidthChange(selector, function responsiveImg(el) {
         if (el.hasClass('loadImmediately') || isElementInView(el)) {
             if (!el.responsiveImgInitDone) {
                 initResponsiveImgEl(el);
@@ -69,9 +69,9 @@ function initResponsiveImgEl(el) {
     if (elWidth == 0) return;
     el.responsiveImgInitDone = true;
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
-    var baseUrl = el.dom.getAttribute("data-src");
-    var minWidth = parseInt(el.dom.getAttribute("data-min-width"));
-    var maxWidth = parseInt(el.dom.getAttribute("data-max-width"));
+    var baseUrl = el.data("src");
+    var minWidth = parseInt(el.data("minWidth"));
+    var maxWidth = parseInt(el.data("maxWidth"));
 
     el.loadedWidth = elWidth;
     el.baseUrl = baseUrl;
@@ -83,11 +83,11 @@ function initResponsiveImgEl(el) {
     var sizePath = baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
             DONT_HASH_TYPE_PREFIX+width);
 
-    var img = el.child('img', true);
-    Ext2.fly(img).on('load', function() {
+    var img = el.find('img');
+    img.on('load', function() {
         el.removeClass('webResponsiveImgLoading');
-    }, this);
-    img.src = sizePath;
+    });
+    img.attr('src',sizePath);
 };
 
 function checkResponsiveImgEl(responsiveImgEl) {
@@ -98,16 +98,15 @@ function checkResponsiveImgEl(responsiveImgEl) {
             responsiveImgEl.minWidth, responsiveImgEl.maxWidth);
     if (width > responsiveImgEl.loadedWidth) {
         responsiveImgEl.loadedWidth = width;
-        responsiveImgEl.child('img', true).src
+        responsiveImgEl.find('img').attr('src')
             = responsiveImgEl.baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
                     DONT_HASH_TYPE_PREFIX+width);
     }
 };
 
-function doesElementScroll(el)
-{
-    var i = el;
-    var ret = false;
+function doesElementScroll(el) {
+    var i = el.get(0);
+
     while (i != document.body) {
         var overflow = $(i).css('overflow-y');
         if (overflow == 'auto' || overflow == 'scroll') {
@@ -118,14 +117,12 @@ function doesElementScroll(el)
     return false;
 }
 
-function isElementInView(el)
-{
-    var $e = $(el.dom);
+function isElementInView(el) {
     var threshold = 200;
 
-    if ($e.is(":hidden")) return false;
+    if (el.is(':hidden')) return false;
 
-    if (doesElementScroll(el.dom)) {
+    if (doesElementScroll(el)) {
         //if img is in a scrolling element always load it.
         //this could be improved but usually it's not needed
         return true;
@@ -133,8 +130,8 @@ function isElementInView(el)
 
     var wt = $w.scrollTop(),
         wb = wt + $w.height(),
-        et = $e.offset().top,
-        eb = et + el.dom.clientHeight;
+        et = el.offset().top,
+        eb = et + el.innerHeight();
     return eb >= wt - threshold && et <= wb + threshold;
 }
 

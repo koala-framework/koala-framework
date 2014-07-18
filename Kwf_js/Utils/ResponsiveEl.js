@@ -6,7 +6,6 @@
 Kwf.Utils.ResponsiveEl = function(selector, widths, options)
 {
     var initEl;
-
     if (typeof(widths) != "function") {
 
         if (!(widths instanceof Array)) widths = [widths];
@@ -44,27 +43,25 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
                 }
             }, this);
             if (changed) {
-                Kwf.callOnContentReady(el.dom, { action: 'widthChange' });
+                Kwf.callOnContentReady(el, { action: 'widthChange' });
             }
         };
 
     } else {
-
         initEl = widths;
-
     }
 
-    Kwf.onElementWidthChange(selector, initEl, options);
+    Kwf.onJElementWidthChange(selector, initEl, options);
 };
 
 Kwf.onContentReady(function jumpToAnchor(el) {
     if(!Kwf.Utils.ResponsiveEl._anchorDone && el === document.body) {
         Kwf.Utils.ResponsiveEl._anchorDone = true;
         if(window.location.hash) {
-            var target = Ext2.get(window.location.hash.replace('#', ''));
-            if (target) {
+            var target = $(window.location.hash);
+            if (target.length) {
                //fix anchor target as ResponsiveEl might have changed the heights of elements
-                window.scrollTo(0, target.getTop());
+                window.scrollTo(0, $(target).offset().top);
             }
         }
     }
