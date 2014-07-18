@@ -218,7 +218,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    protected function _attachEditableToMenuData(&$menuData, $editableClass = 'Kwc_Menu_EditableItems_Component')
+    protected function _attachEditableToMenuData(&$menuData, $editableClass)
     {
         foreach ($this->_getSetting('generators') as $key => $generator) {
             if (is_instance_of($generator['component'], $editableClass)) {

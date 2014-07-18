@@ -20,9 +20,9 @@ class Kwc_Menu_DropdownMask_Component extends Kwc_Menu_Dropdown_Component
         return $ret;
     }
 
-    protected function _getMenuData($parentData = null, $select = array())
+    protected function _getMenuData($parentData = null, $select = array(), $editableClass = 'Kwc_Menu_EditableItems_Component')
     {
-        $ret = parent::_getMenuData($parentData, $select);
+        $ret = parent::_getMenuData($parentData, $select, $editableClass);
         foreach ($ret as $k=>$i) {
             if (count($ret[$k]['data']->getChildPages(array('showInMenu'=>true))) > 0) {
                 $ret[$k]['class'] .= ' hasSubmenu';
