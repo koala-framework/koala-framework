@@ -14,7 +14,7 @@ Kwf.onElementShow('.kwcAdvancedYoutube .youtubePlayer', function(el) {
     var config = kwcAdvancedYoutube.dom.config;
     if (kwcAdvancedYoutube.dom.player) {
         if (config.playerVars.autoplay) kwcAdvancedYoutube.dom.player.playVideo();
-    } else {
+    } else if (config.videoId) {
         Kwf.Utils.YoutubePlayer.load(function() {
             var loadingEl = kwcAdvancedYoutube.child('.outerLoading');
             loadingEl.enableDisplayMode('block');
