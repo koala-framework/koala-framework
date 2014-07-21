@@ -229,7 +229,7 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
         $ret = parent::getGeneratorFlags();
         $flags = $this->_getChainedGenerator()->getGeneratorFlags();
 
-        $copyFlags = array('pageGenerator', 'showInPageTreeAdmin', 'page', 'pseudoPage', 'box', 'multiBox', 'table', 'static', 'hasHome');
+        $copyFlags = array('pageGenerator', 'showInLinkInternAdmin', 'showInPageTreeAdmin', 'page', 'pseudoPage', 'box', 'multiBox', 'table', 'static', 'hasHome');
         foreach ($copyFlags as $f) {
             if (isset($flags[$f])) {
                 $ret[$f] = $flags[$f];
