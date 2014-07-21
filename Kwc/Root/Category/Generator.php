@@ -396,6 +396,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     {
         $ret = parent::getGeneratorFlags();
         $ret['showInPageTreeAdmin'] = true;
+        $ret['showInLinkInternAdmin'] = true;
         $ret['pseudoPage'] = true;
         $ret['page'] = true;
         $ret['table'] = true;
