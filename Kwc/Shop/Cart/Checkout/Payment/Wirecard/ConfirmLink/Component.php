@@ -6,7 +6,6 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
         $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Checkout/Payment/Wirecard/ConfirmLink/Component.js';
-        $ret['assets']['dep'][] = 'KwfOnReady';
         return $ret;
     }
 

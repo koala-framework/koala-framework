@@ -36,4 +36,4 @@ Kwf.onElementReady('.kwcAdvancedDownloadsTree .content', function(i) {
             layout: 'border',
             items: [this.downloads, this.projects]
         });
-});
+}, { defer: true });

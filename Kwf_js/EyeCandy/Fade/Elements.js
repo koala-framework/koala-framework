@@ -24,7 +24,7 @@ Kwf.onJElementReady('div.kwfFadeElements', function fadeElements(element) {
     element = element.get(0);
     element.fadeElementsObject = new cls(config);
     element.fadeElementsObject.start();
-});
+}, { defer: true });
 
 
 Kwf.onJElementWidthChange('div.kwfFadeElements', function fadeElementsWidthChange(element) {

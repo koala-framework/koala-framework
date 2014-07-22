@@ -35,14 +35,24 @@ class Kwf_Assets_Package
 
     public function getMaxMTimeCacheId($mimeType)
     {
-        return 'mtime_'.get_class($this->_providerList).'_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+        $ret = $this->_getCacheId($mimeType);
+        if (!$ret) return $ret;
+        return 'mtime_'.$ret;
+    }
+
+    //default impl doesn't cache, overriden in Package_Default
+    protected function _getCacheId($mimeType)
+    {
+        return null;
     }
 
     public function getMaxMTime($mimeType)
     {
         $cacheId = $this->getMaxMTimeCacheId($mimeType);
-        $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-        if ($ret !== false) return $ret;
+        if ($cacheId) {
+            $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+            if ($ret !== false) return $ret;
+        }
 
         if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
             throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
@@ -228,11 +238,11 @@ class Kwf_Assets_Package
             .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
     }
 
-
-
     public function getPackageUrlsCacheId($mimeType, $language)
     {
-        return 'depPckUrls_'.get_class($this->_providerList).'_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType).'_'.$language;
+        $ret = $this->_getCacheId($mimeType);
+        if (!$ret) return $ret;
+        return 'depPckUrls_'.$ret.'_'.$language;
     }
 
     public function getPackageUrls($mimeType, $language)
@@ -257,9 +267,8 @@ class Kwf_Assets_Package
         else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
         else throw new Kwf_Exception_NotYetImplemented();
 
-        $ret = array(
-            $this->getPackageUrl($ext, $language)
-        );
+        $ret = array();
+        $hasContents = false;
         $includesDependencies = array();
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if (!$i->getIncludeInPackage()) {
@@ -276,8 +285,15 @@ class Kwf_Assets_Package
                     }
                     $ret[] = Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();
                 }
+            } else {
+                $hasContents = true;
             }
         }
+
+        if ($hasContents) {
+            array_unshift($ret, $this->getPackageUrl($ext, $language));
+        }
+
         return $ret;
     }
 

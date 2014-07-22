@@ -12,7 +12,7 @@ class Kwc_Composite_SwitchDisplay_Component extends Kwc_Abstract_Composite_Compo
         $ret['generators']['child']['component']['content'] =
             $parentComponentClass;
         $ret['cssClass'] = 'webStandard';
-        $ret['assets']['dep'][] = 'KwfSwitchDisplay';
+        $ret['assetsDefer']['dep'][] = 'KwfSwitchDisplay';
         $ret['extConfig'] = 'Kwc_Composite_SwitchDisplay_ExtConfig';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
