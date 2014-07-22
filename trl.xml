@@ -12676,5 +12676,25 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>File not found</en>
 <id>2106</id>
 </text>
+<text>
+<en>Mr. {0}</en>
+<de>Herr {0}</de>
+<ro>Domnul {0}</ro>
+<sl>Gospod {0}</sl>
+<es>Señor {0}</es>
+<sk>Pán {0}</sk>
+<ua>Містер {0}</ua>
+<id>2107</id>
+</text>
+<text>
+<en>Mrs. {0}</en>
+<de>Frau {0}</de>
+<ro>Doamnă {0}</ro>
+<sl>Gospa {0}</sl>
+<es>Señora {0}</es>
+<sk>Pani {0}</sk>
+<ua>Місіс {0}</ua>
+<id>2108</id>
+</text>
 </trl>
 
