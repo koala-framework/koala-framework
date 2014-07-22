@@ -1,4 +1,5 @@
 <?php
+//add dependency koala-framework/mediaelement to use this component
 class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Component
     implements Kwf_Media_Output_IsValidInterface
 {
