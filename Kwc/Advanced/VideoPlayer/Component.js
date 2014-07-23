@@ -1,12 +1,9 @@
-Kwf.onContentReady(function(el){
-    Ext2.get(el).select('.kwcAdvancedVideoPlayer', true).each(function(el) {
-        if (!el.isVisible(true)) {
-            if (el.mediaElement) el.mediaElement.stop();
-        }
-    }, this);
-});
-Kwf.onElementReady('.kwcAdvancedVideoPlayer', function(el, config) {
-    $(el.dom).find('video').mediaelementplayer({
+Kwf.onJElementHide('.kwcAdvancedVideoPlayer', function(el) {
+    if (el.get(0).mediaElement) el.get(0).mediaElement.stop();
+}, {defer: true});
+
+Kwf.onJElementReady('.kwcAdvancedVideoPlayer', function(el, config) {
+    el.find('video').mediaelementplayer({
         //custom path to flash
         flashName: '/assets/mediaelement/build/flashmediaelement.swf',
         // if the <video width> is not specified, this is the default
@@ -51,7 +48,7 @@ Kwf.onElementReady('.kwcAdvancedVideoPlayer', function(el, config) {
         keyActions: config.keyActions,
 
         success: function (mediaElement, domObject) {
-            el.mediaElement = mediaElement;
+            el.get(0).mediaElement = mediaElement;
             if (config.autoPlay) {
                 mediaElement.play();
             }
