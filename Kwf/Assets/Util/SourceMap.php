@@ -233,6 +233,14 @@ class Kwf_Assets_Util_SourceMap
         return json_encode($this->_map);
     }
 
+    public function getMapContentsData($includeLastExtension = true)
+    {
+        if ($includeLastExtension && !isset($this->_map->{'_x_org_koala-framework_last'})) {
+            $this->_addLastExtension();
+        }
+        return $this->_map;
+    }
+
     public function save($mapFileName, $fileFileName = null)
     {
         if ($fileFileName !== null) file_put_contents($fileFileName, $this->_file);
