@@ -1,10 +1,5 @@
 <?php
-/**
- * Controller der für eigene root-komponenten verwendet werden kann.
- * für selenium-tests.
- * Url: /kwf/kwctest/Kwc_Basic_Text_Root/url
- */
-class Kwc_TestController extends Kwf_Controller_Action
+class Kwf_Test_Kwc_RenderComponentController extends Zend_Controller_Action
 {
     public function indexAction()
     {
@@ -56,8 +51,10 @@ class Kwc_TestController extends Kwf_Controller_Action
         }
 
         $domain = 'http://'.Zend_Registry::get('config')->server->domain;
-        $data = $root->getPageByUrl($domain.'/'.$url, null);
+        $data = $root->getPageByUrl($domain.Kwf_Setup::getBaseUrl().'/'.$url, null);
         if (!$data) {
+            p($domain.'/'.$url);
+            d($data);
             throw new Kwf_Exception_NotFound();
         }
         $root->setCurrentPage($data);
