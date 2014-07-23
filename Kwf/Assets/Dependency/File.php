@@ -45,6 +45,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             if ($paths === false) {
                 $paths = array(
                     'web' => '.',
+                    'webComponents' => 'components',
                     'webThemes' => 'themes',
                 );
                 $vendors[] = KWF_PATH; //required for kwf tests, in web kwf is twice in $vendors but that's not a problem
