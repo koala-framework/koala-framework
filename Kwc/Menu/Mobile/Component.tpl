@@ -3,4 +3,5 @@
     <a class="showMenu" href="#">
         <?= $this->placeholder['menuLink'] ?>
     </a>
+    <div class="slider"></div>
 </div>

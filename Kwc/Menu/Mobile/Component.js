@@ -70,7 +70,10 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
                         '</ul>\n' +
                     '</li>\n'
                 };
-                el.append(Mustache.render(tpl, data, partials));
+                //compatibility for old templates that don't contain slider element
+                if(el.find('.slider').length == 0) el.append('<div class="slider"></div>');
+
+                el.find('.slider').replaceWith(Mustache.render(tpl, data, partials));
                 menu = el.find('ul.menu');
                 if (showMenuAfterLoad) menu.slideDown(slideDuration);
 
