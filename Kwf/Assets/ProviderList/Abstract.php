@@ -16,6 +16,39 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         return $this->_providers;
     }
 
+    public static function getVendorProviders()
+    {
+        $cacheId = 'assets-vendor-providers';
+        $cachedProviders = Kwf_Cache_SimpleStatic::fetch($cacheId);
+        if ($cachedProviders === false) {
+            $cachedProviders = array();
+            foreach (glob(VENDOR_PATH."/*/*") as $i) {
+                if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
+                    $config = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                    if ($config->provider) {
+                        $provider = $config->provider;
+                        if (is_string($provider)) $provider = array($provider);
+                        foreach ($provider as $p) {
+                            $cachedProviders[] = array(
+                                'cls' => $p,
+                                'file' => $i.'/dependencies.ini'
+                            );
+                        }
+                    }
+                }
+            }
+            Kwf_Cache_SimpleStatic::add($cacheId, $cachedProviders);
+        }
+
+        $providers = array();
+        foreach ($cachedProviders as $p) {
+            $cls = $p['cls'];
+            $providers[] = new $cls($p['file']);
+        }
+
+        return $providers;
+    }
+
     /**
      * @return Kwf_Assets_Dependency_Abstract
      */
