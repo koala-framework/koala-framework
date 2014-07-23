@@ -16,9 +16,6 @@ class Kwf_Model_DbWithConnection_ReferencesWithinModel_Test extends Kwf_Test_Tes
 
     public function testParentExpression()
     {
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
         $s = new Kwf_Model_Select();
         $s->whereEquals('id', 2);
         $s->expr('parent_bar');

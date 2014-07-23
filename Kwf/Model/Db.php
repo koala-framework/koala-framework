@@ -258,12 +258,18 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $v;
     }
 
-    public function createDbSelect($select)
+    public function createDbSelect($select, $tableNameAlias = null)
     {
         if (!$select) return null;
-        $tablename = $this->getTableName();
+        $tablename = $tableNameAlias ? $tableNameAlias : $this->getTableName();
         $dbSelect = $this->getTable()->select();
-        $dbSelect->from($tablename);
+        if ($tableNameAlias) {
+            $dbSelect->from(array(
+                $tableNameAlias => $this->getTableName()
+            ));
+        } else {
+            $dbSelect->from($this->getTableName());
+        }
         $this->_applySelect($dbSelect, $select);
         return $dbSelect;
     }
@@ -663,7 +669,6 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         } else if ($expr instanceof Kwf_Model_Select_Expr_Parent) {
             $dbRefM = self::_getInnerDbModel($depOf->getReferencedModel($expr->getParent()));
             $dbDepOf = self::_getInnerDbModel($depOf);
-            $refTableName = $dbRefM->getTableName();
             $ref = $depOf->getReference($expr->getParent());
             $refSelect = $dbRefM->select();
             if ($ref === Kwf_Model_RowsSubModel_Interface::SUBMODEL_PARENT) {
@@ -671,18 +676,21 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
 
             $col1 = $dbDepOf->_formatField($ref['column'], $dbSelect, $tableNameAlias);
-            $col2 = $dbRefM->transformColumnName($dbRefM->getPrimaryKey());
+            static $parentNum = 0;
+            $refTableNameAlias = $dbRefM->getTableName().'_parent'.($parentNum++);
+            $col2 = $dbRefM->_formatField($dbRefM->getPrimaryKey(), $dbSelect, $refTableNameAlias);
 
-            $refSelect->where("$refTableName.$col2=$col1");
-            $refDbSelect = $dbRefM->createDbSelect($refSelect);
+            $refSelect->where("$col2=$col1");
+            $refDbSelect = $dbRefM->createDbSelect($refSelect, $refTableNameAlias);
             $f = $expr->getField();
             if (is_string($f)) {
-                $exprStr = $dbRefM->_formatField($f, $refDbSelect);
+                $exprStr = $dbRefM->_formatField($f, $refDbSelect, $refTableNameAlias);
             } else {
-                $exprStr = new Zend_Db_Expr($dbRefM->_createDbSelectExpression($f, $refDbSelect, null, null));
+                $exprStr = new Zend_Db_Expr($dbRefM->_createDbSelectExpression($f, $refDbSelect, null, $refTableNameAlias));
             }
             $refDbSelect->reset(Zend_Db_Select::COLUMNS);
             $refDbSelect->from(null, $exprStr);
+
             return "($refDbSelect)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
             $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
