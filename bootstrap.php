@@ -12,8 +12,8 @@ if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == '/') {
 }
 
 $front = Kwf_Controller_Front::getInstance();
-$front->addControllerDirectory('tests', 'kwf_test');
-$front->addControllerDirectory('tests/controller', 'tests_controller');
+$front->addControllerDirectory(KWF_PATH.'/tests', 'kwf_test');
+$front->addControllerDirectory(KWF_PATH.'/tests/controller', 'tests_controller');
 
 $router = $front->getRouter();
 
