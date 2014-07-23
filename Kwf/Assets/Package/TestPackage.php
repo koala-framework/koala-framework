@@ -15,7 +15,12 @@ class Kwf_Assets_Package_TestPackage extends Kwf_Assets_Package
         }
         $this->_rootComponentClass = $rootComponentClass;
 
-        $testDependenciesIni = KWF_PATH.'/tests/'.str_replace('_', '/', $testDependenciesIni).'/dependencies.ini';
+        $testDependenciesIni = str_replace('_', '/', $testDependenciesIni).'/dependencies.ini';
+        if (file_exists('tests/'.$testDependenciesIni)) {
+            $testDependenciesIni = 'tests/'.$testDependenciesIni;
+        } else if (file_exists(KWF_PATH.'/tests/'.$testDependenciesIni)) {
+            $testDependenciesIni = KWF_PATH.'/tests/'.$testDependenciesIni;
+        }
         $providers = array();
         $providers[] = new Kwf_Assets_Provider_Ini(KWF_PATH.'/dependencies.ini');
         $providers[] = new Kwf_Assets_Provider_Ini($testDependenciesIni);
