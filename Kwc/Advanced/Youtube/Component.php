@@ -40,7 +40,12 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars();
 
-        preg_match(self::REGEX, $ret['row']->url, $matches);
+        if (preg_match(self::REGEX, $ret['row']->url, $matches)) {
+            $videoId = $matches[0];
+        } else {
+            $videoId = null;
+        }
+
         $width = $this->_getSetting('videoWidth');
         if ($width === self::USER_SELECT) {
             if ($ret['row']->size == 'fullWidth') {
@@ -52,10 +57,11 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
             $width = null;
         }
         $config = array(
-            'videoId' => $matches[0],
+            'videoId' => $videoId,
             'size' => $ret['row']->size,
             'width' => $width,
-            'height' => null
+            'height' => null,
+            'ratio' => '16x9'
         );
         if ($d = $ret['row']->dimensions) {
             if ($d == '16x9') {

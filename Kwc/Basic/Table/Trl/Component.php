@@ -32,6 +32,10 @@ class Kwc_Basic_Table_Trl_Component extends Kwc_Chained_Trl_Component
         }
         $rowStyles = $this->getSetting($this->getData()->chained->componentClass, 'rowStyles');
         $ret['dataRows'] = Kwc_Basic_Table_Component::addDefaultCssClasses($ret['dataRows'], $rowStyles);
+        $ret['headerRows'] = array();
+        if (isset($ret['dataRows'][0]['htmlTag']) && $ret['dataRows'][0]['htmlTag'] == 'th') {
+            $ret['headerRows'] = array(array_shift($ret['dataRows']));
+        }
         return $ret;
     }
 

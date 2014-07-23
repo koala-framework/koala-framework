@@ -212,10 +212,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     {
         this.createLightboxEl();
 
-        if (this.iframeHtml) {
-            this.contentEl.createChild(this.iframeHtml);
-        }
-
         this.style.onShow(options);
 
         if (!this.closeHref) {
@@ -242,7 +238,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             if (!this.lightboxEl.isVisible()) {
                 this.lightboxEl.fadeIn();
                 this.preloadLinks();
-                Kwf.callOnContentReady(this.innerLightboxEl.dom, {newRender: false});
+                Kwf.callOnContentReady(this.innerLightboxEl.dom, {action: 'show'});
             }
             this.style.afterContentShown();
         } else {
@@ -255,7 +251,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     close: function(options) {
         this.lightboxEl.hide();
         //so eg. flash component can remove object
-        Kwf.callOnContentReady(this.lightboxEl, {newRender: false});
+        Kwf.callOnContentReady(this.lightboxEl, {action: 'hide'});
         this.lightboxEl.show();
 
         this.style.onClose(options);
@@ -263,11 +259,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     closeAndPushState: function() {
-        this.innerLightboxEl.select('iframe').each(function(iframe) {
-            this.iframeHtml = iframe.dom.outerHTML;
-            iframe.remove();
-        }, this);
-
         if (Kwf.Utils.HistoryState.entries > 0) {
             Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate = true; //required to avoid flicker on closing, see popstate handler
             var previousEntries = Kwf.Utils.HistoryState.entries;

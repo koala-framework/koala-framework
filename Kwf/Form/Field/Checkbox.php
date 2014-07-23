@@ -65,6 +65,12 @@ class Kwf_Form_Field_Checkbox extends Kwf_Form_Field_SimpleAbstract
         $fieldName = $this->getFieldName();
         if (isset($postData[$fieldName.'-post'])) {
             $postData[$fieldName] = (int)isset($postData[$fieldName]);
+        } else if (isset($postData[$fieldName])) {
+            if ($postData[$fieldName] === 'true') {
+                $postData[$fieldName] = true;
+            } else if ($postData[$fieldName] === 'false') {
+                $postData[$fieldName] = false;
+            }
         }
         return $postData;
     }

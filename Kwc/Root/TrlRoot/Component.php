@@ -49,7 +49,7 @@ class Kwc_Root_TrlRoot_Component extends Kwc_Root_Abstract
     {
         $ret = null;
         $lngs = array();
-        foreach ($component->getChildComponents(array('pseudoPage'=>true)) as $c) {
+        foreach ($component->getChildComponents(array('pseudoPage'=>true, 'flag'=>'subroot')) as $c) {
             $lngs[$c->filename] = $c;
         }
         if(preg_match('#^([a-z]{2,3})#', $acceptLanguage, $m)) {

@@ -87,13 +87,16 @@ class Kwf_Media_Image
                     break;
                 }
 
-                while (true) {
+                $count = 0;
+                while ($count < 5) {
+                    $count++;
                     // IFD = Image File Directory => Image properties
                     // check offset from tiffHeader-Start to IFD's, if 0 end of all IFD-Blocks
                     if (fread($handle, 4) == chr(0x00).chr(0x00).chr(0x00).chr(0x00)) break 2;
 
                     $ifdCount = self::_generateIntValue(fread($handle, 1), fread($handle, 1), $reversed);
                     if ($fileSize < ftell($handle) + $ifdCount * 12 + 6) break 2; // check to handle eof
+                    if ($ifdCount > 100) break 2; // check if ifdCount is a possible value
                     for ($i = 0; $i < $ifdCount; $i++) {
                         $ifdBytes = fread($handle, 12);
                         $tag = self::_generateIntValue($ifdBytes[0], $ifdBytes[1], $reversed);

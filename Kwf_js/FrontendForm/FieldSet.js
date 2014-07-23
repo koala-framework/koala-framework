@@ -29,7 +29,7 @@ Kwf.FrontendForm.FieldSet = Ext2.extend(Kwf.FrontendForm.Field, {
     getValue: function() {
         var inp = this.el.child('fieldset > legend > input');
         if (!inp) return null;
-        return inp.dom.value;
+        return inp.dom.checked;
     },
     clearValue: function() {
         var inp = this.el.child('fieldset > legend > input');
@@ -39,7 +39,7 @@ Kwf.FrontendForm.FieldSet = Ext2.extend(Kwf.FrontendForm.Field, {
     setValue: function(value) {
         var inp = this.el.child('fieldset > legend > input');
         if (!inp) return;
-        inp.dom.value = value;
+        inp.dom.checked = value;
     }
 });
 
