@@ -153,11 +153,14 @@ abstract class Kwf_Component_Renderer_Abstract
 
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($componentId.' '.$type, microtime(true)-$startTime);
         }
-        while (preg_match('/{plugin (\d) ([^}]*) ([^}]*)}(.*){\/plugin \\1}/s', $ret, $matches)) {
-            $pluginClass = $matches[2];
-            $plugin = Kwf_Component_Plugin_Abstract::getInstance($pluginClass, $matches[3]);
-            $content = $plugin->processOutput($matches[4]);
-            $ret = str_replace($matches[0], $content, $ret);
+        while (($start = strpos($ret, '{plugin ')) !== false) {
+            $startEnd = strpos($ret, '}', $start);
+            $args = explode(' ', substr($ret, $start+8, $startEnd-$start-8));
+            $end = strpos($ret, '{/plugin '.$args[0].'}');
+            $content = substr($ret, $startEnd+1, $end-$startEnd-1);
+            $plugin = Kwf_Component_Plugin_Abstract::getInstance($args[1], $args[2]);
+            $content = $plugin->processOutput($content);
+            $ret = substr($ret, 0, $start).$content.substr($ret, $end+11+strlen($args[0]));
         }
 
         return $ret;
