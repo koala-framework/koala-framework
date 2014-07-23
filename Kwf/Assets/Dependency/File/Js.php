@@ -56,13 +56,12 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
             $map = new Kwf_Assets_Util_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
 
-
             if (strpos($contents, '.cssClass') !== false) {
                 $cssClass = $this->_getComponentCssClass();
                 if ($cssClass) {
-                    if (preg_match_all('#\'\.cssClass([\s\'\.])#', $contents, $m)) {
+                    if (preg_match_all('#([\'"])\.cssClass([\s\'"\.])#', $contents, $m)) {
                         foreach ($m[0] as $k=>$i) {
-                            $map->stringReplace($i, '\'.'.$cssClass.$m[1][$k]);
+                            $map->stringReplace($i, $m[1][$k].'.'.$cssClass.$m[2][$k]);
                         }
                     }
                 }
