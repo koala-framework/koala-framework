@@ -33,6 +33,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
             getMenu();
         } else {
             menu.slideToggle(slideDuration);
+            el.trigger('menuToggle',[slideDuration]);
         }
         menuLink.toggleClass('active');
         menuLink.parent().toggleClass('open');
