@@ -3,7 +3,7 @@ if (!Kwf.Utils.Element) Kwf.Utils.Element = {};
 
 Kwf.Utils.Element._cachedWidthEls = [];
 Kwf.Utils.Element.getCachedWidth = function(e) {
-    if (Ext2 && Ext2.Element && e instanceof Ext2.Element) e = e.dom;
+    if (typeof Ext2 != 'undefined' && Ext2.Element && e instanceof Ext2.Element) e = e.dom;
     if (e instanceof jQuery) e = e.get(0);
     var ret = false;
     while (e) {
@@ -24,7 +24,7 @@ Kwf.Utils.Element.getCachedWidth = function(e) {
     return ret;
 };
 Kwf.Utils.Element.isVisible = function(el) {
-    if (Ext2 && Ext2.Element && el instanceof Ext2.Element) el = el.dom;
+    if (typeof Ext2 != 'undefined' && Ext2.Element && el instanceof Ext2.Element) el = el.dom;
     var t = Kwf.Utils.BenchmarkBox.now();
     var ret = $(el).is(':visible');
     Kwf.Utils.BenchmarkBox.time('isVisible uncached', Kwf.Utils.BenchmarkBox.now()-t);

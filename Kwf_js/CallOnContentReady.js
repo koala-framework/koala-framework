@@ -104,7 +104,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         if (console && console && console.warn) console.warn('Please pass element argument on callOnContentReady');
         renderedEl = document.body;
     }
-    if (Ext2 && Ext2.Element && renderedEl instanceof Ext2.Element) renderedEl = renderedEl.dom;
+    if (typeof Ext2 != 'undefined' && Ext2.Element && renderedEl instanceof Ext2.Element) renderedEl = renderedEl.dom;
     if (jQuery && renderedEl instanceof jQuery) {
         renderedEl.each(function(){ Kwf.callOnContentReady(this, options); });
         return;
