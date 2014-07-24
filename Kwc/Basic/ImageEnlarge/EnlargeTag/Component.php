@@ -8,7 +8,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwfStatic('Enlarge Image');
         $ret['fullSizeDownloadable'] = false;
         $ret['imageTitle'] = true;
-        $ret['dimension'] = array('width'=>800, 'height'=>600, 'cover' => false);
+        $ret['dimension'] = array('width'=>1920, 'height'=>1440, 'cover' => false);
 
         $ret['generators']['imagePage'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
