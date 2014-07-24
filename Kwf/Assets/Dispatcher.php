@@ -107,13 +107,15 @@ class Kwf_Assets_Dispatcher
                     $contentUrl = substr($url, 0, -4);
                     $extension = substr($contentUrl, strrpos($contentUrl, '/')+1);
                     $replacements = self::_getBaseUrlReplacements($extension, $ret['contents']);
-                    if ($replacements) {
-                        $map = new Kwf_Assets_Util_SourceMap($ret['contents'], $content);
-                        foreach ($replacements as $i) {
-                            $map->stringReplace($i['search'], $i['replace']);
-                        }
-                        $ret['contents'] = $map->getMapContents(false);
+                    $map = new Kwf_Assets_Util_SourceMap($ret['contents'], '');
+                    foreach ($replacements as $i) {
+                        $map->stringReplace($i['search'], $i['replace']);
                     }
+                    $map = $map->getMapContentsData(false);
+                    foreach ($map->sources as $k=>$i) {
+                        $map->sources[$k] = Kwf_Setup::getBaseUrl().$i;
+                    }
+                    $ret['contents'] = json_encode($map);
                 } else {
                     $extension = substr($url, strrpos($url, '/')+1);
                     $replacements = self::_getBaseUrlReplacements($extension, $ret['contents']);

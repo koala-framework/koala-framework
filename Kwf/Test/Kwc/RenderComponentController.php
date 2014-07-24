@@ -53,8 +53,6 @@ class Kwf_Test_Kwc_RenderComponentController extends Zend_Controller_Action
         $domain = 'http://'.Zend_Registry::get('config')->server->domain;
         $data = $root->getPageByUrl($domain.Kwf_Setup::getBaseUrl().'/'.$url, null);
         if (!$data) {
-            p($domain.'/'.$url);
-            d($data);
             throw new Kwf_Exception_NotFound();
         }
         $root->setCurrentPage($data);
