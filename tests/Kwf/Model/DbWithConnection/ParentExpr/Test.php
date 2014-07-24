@@ -15,8 +15,8 @@ class Kwf_Model_DbWithConnection_ParentExpr_Test extends Kwf_Test_TestCase
 
     public function tearDown()
     {
-        $this->_modelParent->dropTable();
-        $this->_modelChild->dropTable();
+        if ($this->_modelParent) $this->_modelParent->dropTable();
+        if ($this->_modelChild) $this->_modelChild->dropTable();
     }
 
     public function testParentExprHigher()
