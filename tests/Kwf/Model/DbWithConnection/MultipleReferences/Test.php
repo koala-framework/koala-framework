@@ -40,4 +40,20 @@ class Kwf_Model_DbWithConnection_MultipleReferences_Test extends Kwf_Test_TestCa
         $foo = $this->_modelFoo->getRow($s);
         $this->assertEquals('5', $foo->foo);
     }
+
+    public function testChildCountExpressionLazy()
+    {
+        $this->assertEquals(2, $this->_modelFoo->getRow(1)->child_count);
+    }
+
+    public function testChildCountExpression()
+    {
+        $this->markTestIncomplete();
+        $s = new Kwf_Model_Select();
+        $s->expr('child_count');
+        $s->whereId(1);
+        $row = $this->_modelFoo->getRow($s);
+        $this->assertEquals(2, $row->child_count);
+    }
+
 }
