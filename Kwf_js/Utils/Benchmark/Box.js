@@ -2,7 +2,7 @@
     if (!Kwf.Utils) Kwf.Utils = {};
     if (!Kwf.Utils.BenchmarkBox) Kwf.Utils.BenchmarkBox = {};
 
-    var benchmarkEnabled = Kwf.Debug.benchmark;
+    var benchmarkEnabled = Kwf.Debug && Kwf.Debug.benchmark;
     if (!benchmarkEnabled) {
         benchmarkEnabled = location.search.match(/[\?&]KWF_BENCHMARK/);
     }
