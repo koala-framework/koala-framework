@@ -593,12 +593,14 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
             return "GROUP_CONCAT($field SEPARATOR ".$this->getAdapter()->quote($expr->getSeparator()).")";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Child) {
-            $depM = $depOf->getDependentModel($expr->getChild());
+            $d = $depOf->getDependentModelWithDependentOf($expr->getChild());
+            $depM = $d['model'];
+            $ref = $d['model']->getReferenceByModelClass(get_class($d['dependentOf']), isset($d['rule']) ? $d['rule'] : null);
+
             $dbDepM = self::_getInnerDbModel($depM);
             $dbDepOf = self::_getInnerDbModel($depOf);
 
             $depTableName = $dbDepM->getTableName();
-            $ref = $depM->getReferenceByModelClass(get_class($depOf), null/*todo*/);
             $depSelect = $expr->getSelect();
             if (!$depSelect) {
                 $depSelect = $dbDepM->select();

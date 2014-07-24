@@ -48,7 +48,6 @@ class Kwf_Model_DbWithConnection_MultipleReferences_Test extends Kwf_Test_TestCa
 
     public function testChildCountExpression()
     {
-        $this->markTestIncomplete();
         $s = new Kwf_Model_Select();
         $s->expr('child_count');
         $s->whereId(1);
