@@ -612,7 +612,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
             $depSelect->where("$depTableName.$col1={$dbDepOf->getTableName()}.$col2");
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
-            $exprStr = $dbDepM->_createDbSelectExpression($expr->getExpr(), $depDbSelect);
+            $exprStr = new Zend_Db_Expr($dbDepM->_createDbSelectExpression($expr->getExpr(), $depDbSelect));
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, $exprStr);
             return "($depDbSelect)";

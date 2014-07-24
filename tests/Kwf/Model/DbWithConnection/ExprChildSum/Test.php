@@ -34,9 +34,6 @@ class Kwf_Model_DbWithConnection_ExprChildSum_Test extends Kwf_Test_TestCase
 
     public function testChildSumWithExpression()
     {
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
         $select = new Kwf_Model_Select();
         $s = new Kwf_Model_Select();
         $s->whereEquals('id', 1);
