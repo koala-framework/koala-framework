@@ -198,6 +198,11 @@ class Kwf_Component_Settings
                             //relative path, make it absolute
                             $dir = getcwd().'/'.$dir;
                         }
+                        $dir = realpath($dir);
+                        if (substr($dir, 0, strlen(getcwd())) != getcwd()) {
+                            throw new Kwf_Exception("'$dir' is not in web directory");
+                        }
+                        $dir = substr($dir, strlen(getcwd())+1);
                         $path = $dir . '/' . $file;
                         if (is_file($path)) {
                             if (substr($path, -14) == DIRECTORY_SEPARATOR.'Component.php') {

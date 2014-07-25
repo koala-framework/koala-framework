@@ -19,6 +19,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
             ));
             foreach ($files as $i) {
                 foreach ($i as $j) {
+                    $j = getcwd().'/'.$j;
                     $jj = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($j);
                     if (!$jj) {
                         throw new Kwf_Exception("Can't find path type for '$j'");
@@ -46,6 +47,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                 foreach ($componentCssFiles as $i) {
                     if (!in_array($i, $addedFiles)) {
                         $addedFiles[] = $i;
+                        $i = getcwd().'/'.$i;
                         $i = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($i);
                         $ret[] = Kwf_Assets_Dependency_File::createDependency($i, $this->_providerList);
                     }
@@ -72,6 +74,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                 foreach ($componentFiles as $i) {
                     if (!in_array($i, $addedFiles)) {
                         $addedFiles[] = $i;
+                        $i = getcwd().'/'.$i;
                         $i = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($i);
                         $ret[] = Kwf_Assets_Dependency_File::createDependency($i, $this->_providerList);
                     }
