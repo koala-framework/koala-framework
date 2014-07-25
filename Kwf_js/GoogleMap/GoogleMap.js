@@ -354,6 +354,11 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         return false;
     },
 
+    /** For images in marker popup **/
+    markerWindowReady: function() {
+        Kwf.callOnContentReady(this.mapContainer, {newRender: true});
+    },
+
     /**
      * @param marker: The marker with 'kwfConfig' property inside
      */
@@ -365,6 +370,9 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
             marker.infoWindow.setContent(marker.kwfConfig.infoHtml);
             marker.infoWindow.open(marker.map, marker);
         }
+        google.maps.event.addListener(marker.infoWindow, 'domready', this.markerWindowReady.createDelegate(
+            this, [ marker ]
+        ));
     },
     closeWindow: function(marker) {
         marker.infoWindow.close();
