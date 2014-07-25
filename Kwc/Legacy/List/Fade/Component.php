@@ -1,11 +1,11 @@
 <?php
-abstract class Kwc_List_Fade_Component extends Kwc_Abstract_List_Component
+abstract class Kwc_Legacy_List_Fade_Component extends Kwc_Abstract_List_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Fade images');
-        $ret['assetsDefer']['dep'][] = 'KwfFadeElements';
+        $ret['assets']['dep'][] = 'KwfFadeElements';
 
         // $ret['generators']['child']['component'] muss gesetzt werden
 

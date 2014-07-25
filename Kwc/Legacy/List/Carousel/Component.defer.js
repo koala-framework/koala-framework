@@ -1,17 +1,17 @@
-Ext2.namespace("Kwc.List.Carousel");
-Kwc.List.Carousel.Component = Ext2.extend(Kwf.EyeCandy.List, {
+Ext2.namespace("Kwc.Legacy.List.Carousel");
+Kwc.Legacy.List.Carousel.Component = Ext2.extend(Kwf.EyeCandy.List, {
     childSelector: '.listItem',
     _activeChangeLocked: false,
     _init: function() {
         this.plugins = [
-            new Kwc.List.Carousel.Carousel({
+            new Kwc.Legacy.List.Carousel.Carousel({
                 numberShown: 3,
                 moveElementSelector: '.listWrapper'
             }),
-            new Kwc.List.Carousel.NextPreviousLinks()
+            new Kwc.Legacy.List.Carousel.NextPreviousLinks()
         ];
 
-        Kwc.List.Carousel.Component.superclass._init.call(this);
+        Kwc.Legacy.List.Carousel.Component.superclass._init.call(this);
     },
     getActiveChangeLocked: function() {
         return this._activeChangeLocked;
@@ -23,7 +23,7 @@ Kwc.List.Carousel.Component = Ext2.extend(Kwf.EyeCandy.List, {
 
 
 
-Kwf.onElementReady('.kwcListCarousel', function(el, config){
+Kwf.onElementReady('.kwcLegacyListCarousel', function(el, config){
 
     el.setStyle('max-width', config.contentWidth+'px');
     var wrapper = el.child('.listWrapper') ? el.child('.listWrapper') : el.child('.imageWrapper');
@@ -54,13 +54,13 @@ Kwf.onElementReady('.kwcListCarousel', function(el, config){
     }
 
     if(wrapper.hasClass('listWrapper')) {
-        var stage = new Kwc.List.Carousel.Component({
+        var stage = new Kwc.Legacy.List.Carousel.Component({
             el: el
         });
     }
 
     responsiveContent(el);
 
-    Kwf.Utils.ResponsiveEl('.kwcListCarousel', responsiveContent);
+    Kwf.Utils.ResponsiveEl('.kwcLegacyListCarousel', responsiveContent);
 
 });

@@ -55,6 +55,7 @@ function glob_recursive($pattern, $flags = 0) {
         if (dirname($dir) == './kwf-lib' || $dir == './kwf-lib') continue;
         if (dirname($dir) == './vkwf-lib' || $dir == './vkwf-lib') continue;
         if (dirname($dir) == './library' || $dir == './library') continue;
+        if (dirname($dir) == './vendor' || $dir == './vendor') continue;
         $files = array_merge($files, glob_recursive($dir.'/'.basename($pattern), $flags));
     }
     return $files;
@@ -189,6 +190,23 @@ foreach ($files as $file) {
     file_put_contents($newFile, $c);
 }
 deleteCacheFolder('cache/generated');
+
+function replaceFiles($files, $from, $to) {
+    foreach ($files as $f) {
+        $content = file_get_contents($f);
+        if (strpos($content, $from)) {
+            file_put_contents($f, str_replace($from, $to, $content));
+            echo "Change $f: $from -> $to\n";
+        }
+    }
+}
+$files = glob_recursive('Component.php');
+replaceFiles($files, 'Kwc_List_Fade_Component', 'Kwc_Legacy_List_Fade_Component');
+replaceFiles($files, 'Kwc_List_Carousel_Component', 'Kwc_Legacy_List_Carousel_Component');
+
+$files = glob_recursive('*.js');
+replaceFiles($files, 'Kwc.List.Fade', 'Kwc.Legacy.List.Fade');
+replaceFiles($files, 'Kwc.List.Carousel', 'Kwc.Legacy.List.Carousel');
 
 echo "\n";
 echo "run now 'composer install' to install dependencies\n";

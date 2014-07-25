@@ -1,5 +1,5 @@
-Ext2.namespace("Kwc.List.Carousel");
-Kwc.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Ext2.namespace("Kwc.Legacy.List.Carousel");
+Kwc.Legacy.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     numberShown: 5,
     moveElementSelector: false, //if false list.el, else list.child(moveElementSelector)
 
