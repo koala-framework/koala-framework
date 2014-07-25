@@ -109,7 +109,7 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
             $fileWithSmallerHeight = Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
         }
         $image1 = new Imagick();
-        $image1->readimageblob($fileWithGreaterHeight['contents']);
+        $image1 = new Imagick($fileWithGreaterHeight['file']);
         $image2 = new Imagick($fileWithSmallerHeight['file']);
         $this->assertNotEquals($image1->getImageHeight(), $image2->getImageHeight());
     }
