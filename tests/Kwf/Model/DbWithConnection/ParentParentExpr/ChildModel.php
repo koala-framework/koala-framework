@@ -11,6 +11,7 @@ class Kwf_Model_DbWithConnection_ParentParentExpr_ChildModel extends Kwf_Model_D
             'Parent' => 'parent_id->Kwf_Model_DbWithConnection_ParentParentExpr_MiddleModel'
         );
         $this->_exprs['parent_foo'] = new Kwf_Model_Select_Expr_Parent('Parent', 'parent_foo');
+        $this->_exprs['parent_child_count'] = new Kwf_Model_Select_Expr_Parent('Parent', 'child_count');
 
         parent::__construct($config);
     }

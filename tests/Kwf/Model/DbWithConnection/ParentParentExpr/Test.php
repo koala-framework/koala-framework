@@ -44,4 +44,18 @@ class Kwf_Model_DbWithConnection_ParentParentExpr_Test extends Kwf_Test_TestCase
         $s->expr('parent_foo');
         $this->assertEquals(5, $this->_modelChild->getRow($s)->parent_foo);
     }
+
+    public function testChildCountLazy()
+    {
+        $this->_modelChild->getRow(1)->parent_child_count;
+    }
+
+    public function testChildCountEager()
+    {
+        $this->markTestIncomplete();
+        $s = new Kwf_Model_Select();
+        $s->whereId(1);
+        $s->expr('parent_child_count');
+        $this->_modelChild->getRow($s)->parent_child_count;
+    }
 }
