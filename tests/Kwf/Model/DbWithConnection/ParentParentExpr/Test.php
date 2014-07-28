@@ -52,7 +52,6 @@ class Kwf_Model_DbWithConnection_ParentParentExpr_Test extends Kwf_Test_TestCase
 
     public function testChildCountEager()
     {
-        $this->markTestIncomplete();
         $s = new Kwf_Model_Select();
         $s->whereId(1);
         $s->expr('parent_child_count');

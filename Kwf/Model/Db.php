@@ -602,16 +602,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
             $depTableName = $dbDepM->getTableName();
             $depSelect = $expr->getSelect();
-            if (!$depSelect) {
-                $depSelect = $dbDepM->select();
-            } else {
-                //wir führen unten ein where aus, das darf nicht im original select bleiben
-                $depSelect = clone $depSelect;
-            }
-            $col1 = $dbDepM->transformColumnName($ref['column']);
-            $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
-            $depSelect->where("$depTableName.$col1={$dbDepOf->getTableName()}.$col2");
+            if (!$depSelect) $depSelect = $dbDepM->select();
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
+            $depDbSelect->where($dbDepM->_formatField($ref['column'])."=".$dbDepOf->_formatField($dbDepOf->getPrimaryKey(), $depDbSelect, $tableNameAlias));
             $exprStr = new Zend_Db_Expr($dbDepM->_createDbSelectExpression($expr->getExpr(), $depDbSelect));
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, $exprStr);
@@ -693,7 +686,6 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
             $refDbSelect->reset(Zend_Db_Select::COLUMNS);
             $refDbSelect->from(null, $exprStr);
-
             return "($refDbSelect)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
             $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
