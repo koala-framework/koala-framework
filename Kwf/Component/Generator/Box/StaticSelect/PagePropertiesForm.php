@@ -11,7 +11,7 @@ class Kwf_Component_Generator_Box_StaticSelect_PagePropertiesForm extends Kwf_Fo
         $label = $generator->getSetting('boxName');
         if (!$label) $label = trlKwf('Type');
         $select = $this->add(new Kwf_Form_Field_Select('component', $label));
-        $select->setWidth(300);
+        $select->setWidth(400);
         $select->setAllowBlank(false);
 
         $countContentComponents = 0;
