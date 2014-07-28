@@ -26,7 +26,7 @@ class Kwf_Model_DbWithConnection_ParentParentExpr_ChildModel extends Kwf_Model_D
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
                         (id, parent_id, zatoo) VALUES (1, 1, 5)");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, parent_id, zatoo) VALUES (3, 1, 4)");
+                        (id, parent_id, zatoo) VALUES (3, 2, 4)");
     }
 
     public function dropTable()

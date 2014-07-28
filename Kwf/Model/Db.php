@@ -687,7 +687,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $refDbSelect = $dbRefM->createDbSelect($refSelect, $refTableNameAlias);
             $f = $expr->getField();
             if (is_string($f)) {
-                $exprStr = $dbRefM->_formatField($f, $refDbSelect, $refTableNameAlias);
+                $exprStr = new Zend_Db_Expr($dbRefM->_formatField($f, $refDbSelect, $refTableNameAlias));
             } else {
                 $exprStr = new Zend_Db_Expr($dbRefM->_createDbSelectExpression($f, $refDbSelect, $refM, $refTableNameAlias));
             }

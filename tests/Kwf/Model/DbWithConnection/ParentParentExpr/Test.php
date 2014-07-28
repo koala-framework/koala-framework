@@ -24,11 +24,24 @@ class Kwf_Model_DbWithConnection_ParentParentExpr_Test extends Kwf_Test_TestCase
         if ($this->_modelMiddle) $this->_modelMiddle->dropTable();
     }
 
-    public function testParentStoredExpr()
+    public function testWhere()
     {
         $select = new Kwf_Model_Select();
         $select->whereEquals('parent_foo', 5);
         $count = $this->_modelChild->countRows($select);
         $this->assertEquals(1, $count);
+    }
+
+    public function testLazy()
+    {
+        $this->assertEquals(5, $this->_modelChild->getRow(1)->parent_foo);
+    }
+
+    public function testEager()
+    {
+        $s = new Kwf_Model_Select();
+        $s->whereId(1);
+        $s->expr('parent_foo');
+        $this->assertEquals(5, $this->_modelChild->getRow($s)->parent_foo);
     }
 }
