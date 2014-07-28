@@ -22,7 +22,8 @@
     "suggest": {
         "phpoffice/phpexcel": "Allows exporting as XLS in AutoGrid",
         "tecnick.com/tcpdf": "Allows generating pdfs from components",
-        "amazonwebservices/aws-sdk-for-php": "Integration with Amazon Web Services"
+        "amazonwebservices/aws-sdk-for-php": "Integration with Amazon Web Services",
+        "reprovinci/solr-php-client": "Integration with Solr"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
