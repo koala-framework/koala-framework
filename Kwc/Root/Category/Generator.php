@@ -338,17 +338,23 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $page = $this->_getPageData($id);
 
         if (!$parentData || ($parentData->componentClass == $this->_class && $page['parent_id'])) {
-            $c = array();
-            if ($select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
-                $c['ignoreVisible'] = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
-            }
-            $parentData = Kwf_Component_Data_Root::getInstance()
-                                ->getComponentById($page['parent_id'], $c);
-            if (!$parentData) return null; // Kommt vor wenn data gefunden wird, parentData aber invisible ist
+            $parentData = $page['parent_id'];
         }
-        $pData = $parentData;
-        while (is_numeric($pData->componentId)) $pData = $pData->parent;
-        if ($pData->componentClass != $this->_class) return null;
+
+        foreach ($page['parent_ids'] as $i) {
+            if (!is_numeric($i)) {
+                $c = array();
+                if ($select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
+                    $c['ignoreVisible'] = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
+                }
+                $pData = Kwf_Component_Data_Root::getInstance()
+                                    ->getComponentById($i, $c);
+                if ($pData->componentClass != $this->_class) {
+                    return null;
+                }
+            }
+        }
+
         return parent::_createData($parentData, $id, $select);
     }
 
@@ -369,7 +375,11 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $data['componentId'] = $this->_getComponentIdFromRow($parentData, $id);
         $data['componentClass'] = $this->_getChildComponentClass($page['component'], $parentData);
         $data['row'] = (object)$page;
-        $data['parent'] = $parentData;
+        if (!is_object($parentData)) {
+            $data['_lazyParent'] = $parentData;
+        } else {
+            $data['parent'] = $parentData;
+        }
         $data['isHome'] = $page['is_home'];
         $data['selfVisible'] = $page['self_visible'];
         if (!$page['visible']) {
