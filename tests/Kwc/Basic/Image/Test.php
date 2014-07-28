@@ -116,7 +116,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $im->readImage($o['file']);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
-        $this->assertEquals(dirname(__FILE__).'/EmptyImageComponent/empty.png', $o['file']);
+        $this->assertContains('/EmptyImageComponent/empty.png', $o['file']);
     }
 
     public function testParentImage()

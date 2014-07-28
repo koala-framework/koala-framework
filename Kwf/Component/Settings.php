@@ -189,23 +189,37 @@ class Kwf_Component_Settings
                 foreach (self::getSetting($class, 'parentClasses') as $c) {
                     $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
                     $file = str_replace('_', DIRECTORY_SEPARATOR, $c) . '.php';
-                    $dirs = explode(PATH_SEPARATOR, get_include_path());
-                    foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
-                        $dirs = array_merge($dirs, $i);
+                    static $dirs;
+                    if (!isset($dirs)) {
+                        $dirs = explode(PATH_SEPARATOR, get_include_path());
+                        foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
+                            $dirs = array_merge($dirs, $i);
+                        }
+                        $dirs = array_unique($dirs);
+                        foreach ($dirs as $k=>$dir) {
+                            if ($dir == '.') $dir = $cwd;
+                            if (!preg_match('#^(/|\w\:\\\\)#i', $dir)) {
+                                //relative path, make it absolute
+                                $dir = $cwd.'/'.$dir;
+                            }
+                            if (!$dir || !file_exists($dir)) {
+                                unset($dirs[$k]);
+                                continue;
+                            }
+                            $dir = realpath($dir);
+                            if (substr($dir, 0, strlen($cwd)) != $cwd
+                            ) {
+                                if (VENDOR_PATH != '../vendor') { //required to support running kwf tests in tests subfolder
+                                    throw new Kwf_Exception("'$dir' is not in web directory '$cwd'");
+                                }
+                            } else {
+                                $dir = substr($dir, strlen($cwd)+1);
+                                if ($dir == '') $dir = '.';
+                            }
+                            $dirs[$k] = $dir;
+                        }
                     }
                     foreach ($dirs as $dir) {
-                        if ($dir == '.') $dir = $cwd;
-                        if (!preg_match('#^(/|\w\:\\\\)#i', $dir)) {
-                            //relative path, make it absolute
-                            $dir = $cwd.'/'.$dir;
-                        }
-                        $dir = realpath($dir);
-                        if (VENDOR_PATH != '../vendor' //required to support running kwf tests in tests subfolder
-                            && substr($dir, 0, strlen($cwd)) != $cwd
-                        ) {
-                            throw new Kwf_Exception("'$dir' is not in web directory '$cwd'");
-                        }
-                        $dir = substr($dir, strlen($cwd)+1);
                         $path = $dir . '/' . $file;
                         if (is_file($path)) {
                             if (substr($path, -14) == DIRECTORY_SEPARATOR.'Component.php') {
