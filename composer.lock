@@ -106,7 +106,7 @@
         },
         {
             "name": "koala-framework/library-extjs2",
-            "version": "v2.3.0-p0",
+            "version": "v2.3.0-p1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/library-extjs2.git",
