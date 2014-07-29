@@ -52,18 +52,22 @@ class Kwf_Assets_Package_LazyLoad extends Kwf_Assets_Package
 
     public function toUrlParameter()
     {
-        if ($this->_providerList !== Kwf_Assets_Package_Default::getDefaultProviderList()) {
-            throw new Kwf_Exception("Can only convert to url parameter with default provider list");
-        }
-        return $this->_dependencyName.':'.implode(',', $this->_loadedDependencies);
+        return get_class($this->_providerList).':'.$this->_dependencyName.':'.implode(',', $this->_loadedDependencies);
     }
 
     public static function fromUrlParameter($class, $parameter)
     {
         $params = explode(':', $parameter);
-        $dependencyName = $params[0];
-        $loadedDependencies = explode(',', $params[1]);
-        return self::getInstance($dependencyName, $loadedDependencies);
+        $providerList = $params[0];
+        $dependencyName = $params[1];
+        $loadedDependencies = array();
+        if ($params[2]) $loadedDependencies = explode(',', $params[2]);
+        if ($providerList == 'Kwf_Assets_ProviderList_Default') {
+            return self::getInstance($dependencyName, $loadedDependencies);
+        } else {
+            $providerList = new $providerList();
+            return new self($providerList, $dependencyName, $loadedDependencies);
+        }
     }
 
     protected function _getCacheId($mimeType)
