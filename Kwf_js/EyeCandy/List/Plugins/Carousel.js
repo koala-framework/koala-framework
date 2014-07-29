@@ -161,7 +161,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstr
         // fade in first
         if (this.useFade) {
             var cfg = Ext2.applyIf({
-                useDisplay: false
+                useDisplay: false,
                 endOpacity: 0.99
             }, this.fadeAnimationConfig);
             this.list.getItem(0).el.fadeIn(cfg);
@@ -173,7 +173,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstr
         // fade out last
         if (this.useFade) {
             var cfg = Ext2.applyIf({
-                useDisplay: false
+                useDisplay: false,
                 endOpacity: 0.01
             }, this.fadeAnimationConfig);
             this.list.getItem(numberShown).el.fadeOut(cfg);
