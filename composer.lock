@@ -4,8 +4,60 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c5069d4d0b98ddcec2edf84888631a10",
+    "hash": "d919cb6e2fdcef0053f144601b28290e",
     "packages": [
+        {
+            "name": "koala-framework/jquery-easing",
+            "version": "v1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koala-framework/jquery-easing.git",
+                "reference": "488d5387d229333c02cf7612a2a95986654e4266"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koala-framework/jquery-easing/zipball/488d5387d229333c02cf7612a2a95986654e4266",
+                "reference": "488d5387d229333c02cf7612a2a95986654e4266",
+                "shasum": ""
+            },
+            "require": {
+                "koala-framework/library-jquery": ">1.7"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "description": "Shim Repository for jQuery Easing plugin",
+            "homepage": "http://gsgd.co.uk/sandbox/jquery/easing/",
+            "time": "2014-07-15 09:22:50"
+        },
+        {
+            "name": "koala-framework/jquery-transit",
+            "version": "v0.9.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koala-framework/jquery-transit.git",
+                "reference": "657379c44bef18bb1af655c66099108b8ab597a3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koala-framework/jquery-transit/zipball/657379c44bef18bb1af655c66099108b8ab597a3",
+                "reference": "657379c44bef18bb1af655c66099108b8ab597a3",
+                "shasum": ""
+            },
+            "require": {
+                "koala-framework/library-jquery": ">1.7"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Shim Repository for jQuery Transit plugin",
+            "homepage": "http://ricostacruz.com/jquery.transit/",
+            "time": "2014-07-15 10:26:24"
+        },
         {
             "name": "koala-framework/library-compass-mixins",
             "version": "v1.0.0",
@@ -58,12 +110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/library-extjs2.git",
-                "reference": "e1aa3a546a0bbaffdfb454d36c37c628b3ce5a6b"
+                "reference": "e7b9faa5e224699d08eaf086d7eae82ca27d4e2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/library-extjs2/zipball/e1aa3a546a0bbaffdfb454d36c37c628b3ce5a6b",
-                "reference": "e1aa3a546a0bbaffdfb454d36c37c628b3ce5a6b",
+                "url": "https://api.github.com/repos/koala-framework/library-extjs2/zipball/e7b9faa5e224699d08eaf086d7eae82ca27d4e2a",
+                "reference": "e7b9faa5e224699d08eaf086d7eae82ca27d4e2a",
                 "shasum": ""
             },
             "type": "library",
@@ -123,16 +175,16 @@
         },
         {
             "name": "koala-framework/library-modernizr",
-            "version": "v1.8.2-p1",
+            "version": "v1.8.3-p0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/library-modernizr.git",
-                "reference": "5eebf92eba5f2e4ec36de646dc5f25e57b45d92a"
+                "reference": "3a6a8181930087bcf4347b1309c716c412de6c9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/library-modernizr/zipball/5eebf92eba5f2e4ec36de646dc5f25e57b45d92a",
-                "reference": "5eebf92eba5f2e4ec36de646dc5f25e57b45d92a",
+                "url": "https://api.github.com/repos/koala-framework/library-modernizr/zipball/3a6a8181930087bcf4347b1309c716c412de6c9f",
+                "reference": "3a6a8181930087bcf4347b1309c716c412de6c9f",
                 "shasum": ""
             },
             "type": "library",
@@ -142,7 +194,7 @@
             ],
             "description": "Modernizr JavaScript Library",
             "homepage": "http://modernizr.com/",
-            "time": "2014-06-16 06:34:49"
+            "time": "2014-07-24 15:14:05"
         },
         {
             "name": "koala-framework/library-mustache-js",
@@ -910,17 +962,10 @@
             "time": "2014-07-09 09:05:48"
         }
     ],
-    "aliases": [
-
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "stability-flags": [],
+    "prefer-stable": false,
+    "platform": [],
+    "platform-dev": []
 }

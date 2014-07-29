@@ -197,11 +197,12 @@ Kwf.callOnContentReady = function(renderedEl, options)
             if (!Kwf._elCacheBySelector[hndl.selector]) {
                 Kwf._elCacheBySelector[hndl.selector] = els;
             } else {
-                els.each(function(i) {
-                    if (Kwf._elCacheBySelector[hndl.selector].indexOf(i) == -1) {
-                        Kwf._elCacheBySelector[hndl.selector].push(i);
+                Kwf._elCacheBySelector[hndl.selector] = els;
+                for(var j=0; j<els.length; ++j) {
+                    if (Kwf._elCacheBySelector[hndl.selector].indexOf(els[j]) == -1) {
+                        Kwf._elCacheBySelector[hndl.selector].push(els[j]);
                     }
-                }, this);
+                }
             }
         }
         for (var j = 0; j< els.length; ++j) {
