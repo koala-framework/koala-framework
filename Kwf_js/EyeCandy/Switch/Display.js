@@ -1,136 +1,117 @@
-Kwf.onElementReady('div.kwfSwitchDisplay', function switchDisplay(el) {
-    el = Ext2.get(el);
-    // Attach Switch.Display-Object to dom because ext-element is still existent even though
-    // it's no part of dom anymore when html is changed e.g. because of ajax-view
-    if (!el.dom.switchDisplayObject) {
-        el.dom.switchDisplayObject = new Kwf.Switch.Display(el);
-    }
-}, {defer: true});
+(function() {
 
-Kwf.Switch.Display = function(el, config) {
-    this.addEvents({
-        'beforeOpen': true,
-        'beforeClose': true,
-        'opened': true,
-        'closed': true
-    });
-    this._lockAnimation = false;
-    var defaultConfig = {
-        animation: {
-            duration: .5
+    Kwf.namespace('Kwf.EyeCandy.Switch.Display');
+
+    var switchDisplayCls = function(el, config) {
+
+        this.config = {
+            duration: 500,
+            easing: 'swing',
+            hover: false,
+            fade: false,
+            fadeInDelay: 200,
+            fadeOutDelay: 200
+        };
+
+        $.extend(this.config, config);
+
+        this.el = $(el);
+        this.switchLink = this.el.find(this.config.link || '.switchLink');
+        this.switchContainer = this.el.find(this.config.container || '.switchContent');
+        this.boundEvent = this.config.hover ? 'hover' : 'click';
+        this.activeTimeout = null;
+
+        this.doOpen = function() {
+            this.switchContainer
+                .css('display', 'block')
+                .css('height', '');
+            Kwf.callOnContentReady(this.el, {action: 'show'});
+            this.switchContainer
+                .css('display', 'none')
+
+            if(this.config.fade) {
+                this.switchContainer.fadeIn(this.config);
+            } else {
+                this.switchContainer.slideDown(this.config);
+            }
+            this.switchLink.addClass('switchLinkOpened');
         }
-    };
-    this.config = Ext2.apply(defaultConfig, config);
 
-    this.el = el;
-    this.switchLink = Ext2.get(Ext2.query('.switchLink', this.el.dom)[0]);
-    if (!this.switchLink) this.switchLink = Ext2.get(Ext2.query('.switchLinkHover', this.el.dom)[0]);
-    this.switchContent = Ext2.get(Ext2.query('.switchContent', this.el.dom)[0]);
-    this.kwfSwitchCloseLink = Ext2.query('.switchCloseLink', this.el.dom);
-    if (this.kwfSwitchCloseLink.length) {
-        this.kwfSwitchCloseLink = Ext2.get(this.kwfSwitchCloseLink[0]);
-    } else {
-        this.kwfSwitchCloseLink = false;
-    }
+        this.doClose = function() {
+            this.switchContainer.css('display', 'none');
+            Kwf.callOnContentReady(this.el, {action: 'hide'});
+            this.switchContainer
+                .css('display', 'block')
 
-    if (!this.switchContent.scaleHeight) {
-        // durch unterbinden von flackern (ganz oben) muss das auf block
-        // gesetzt werden, damit die hoehe gemessen werden kann
-        this.switchContent.setStyle('display', 'block');
-        this.switchContent.scaleHeight = this.switchContent.getHeight();
-        this.switchContent.setHeight(0);
-        // und schnell wieder auf 'none' bevors wer merkt :)
-        this.switchContent.setStyle('display', 'none');
-    }
-
-    // if it is important or active, show on startup
-    if (this.switchContent.child('.kwfImportant')
-        || this.switchContent.hasClass('active')) {
-        this.switchContent.setStyle('display', 'block');
-        this.switchContent.setStyle('height', 'auto');
-        this.switchLink.addClass('switchLinkOpened');
-        if (Ext2.isIE6) {
-            this.switchContent.setWidth(this.switchContent.getWidth());
+            if(this.config.fade) {
+                this.switchContainer.fadeOut(this.config);
+            } else {
+                this.switchContainer.slideUp(this.config);
+            }
+            this.switchLink.removeClass('switchLinkOpened');
         }
-    }
 
-    if (this.switchLink && this.switchContent) {
-        if (this.switchLink.hasClass('switchLinkHover')) {
-            Kwf.Event.on(this.el.dom, 'mouseEnter', function() {
-                this.doOpen();
-            }, this);
-            Kwf.Event.on(this.el.dom, 'mouseLeave', function() {
-                this.doClose();
-            }, this);
-        } else {
-            Ext2.EventManager.addListener(this.switchLink, 'click', function(e) {
-                if (this.switchLink.hasClass('switchLinkOpened')) {
-                    this.doClose();
+        this.switchLink[this.boundEvent]($.proxy(function(){
+            var event = arguments[0];
+            if (this.switchContainer.is(':hidden')) {
+                if (this.config.fade) {
+                    if (this.activeTimeout && event.type === 'mouseleave') {
+                        clearTimeout(this.activeTimeout);
+                        this.activeTimeout = null;
+                        return;
+                    }
+                    this.activeTimeout = setTimeout($.proxy(function() {
+                        this.activeTimeout = null;
+                        this.doOpen();
+                    }, this), this.config.fadeInDelay);
                 } else {
                     this.doOpen();
                 }
-            }, this, { stopEvent: true });
-        }
-    }
-
-    if (this.kwfSwitchCloseLink) {
-        Ext2.EventManager.addListener(this.kwfSwitchCloseLink, 'click', function(e) {
-            this.doClose();
-        }, this, { stopEvent: true });
-    }
-};
-
-Ext2.extend(Kwf.Switch.Display, Ext2.util.Observable, {
-    doClose: function() {
-        if (this._state == 'closing' || this._state == 'closed') {
-            return;
-        }
-        if (this._state == 'opening' && this.switchContent.scaleHeight) {
-            this.switchContent.scale(undefined, this.switchContent.scaleHeight);
-        }
-        this._state = 'closing';
-
-        this.fireEvent('beforeClose', this);
-        this.switchContent.stopFx();
-        this.switchContent.scaleHeight = this.switchContent.getHeight();
-        this.switchContent.scale(undefined, 0,
-            { easing: 'easeOut', duration: this.config.animation.duration, afterStyle: "display:none;",
-                callback: function() {
-                    this.fireEvent('closed', this);
-                    this._state = 'closed';
-                },
-                scope: this
-            }
-        );
-        this.switchLink.removeClass('switchLinkOpened');
-    },
-
-    doOpen: function() {
-        if (this._state == 'opening' || this._state == 'opened') {
-            return;
-        }
-        if (this._state == 'closing') {
-            this.switchContent.scale(undefined, 0);
-        }
-        this._state = 'opening';
-
-        this.fireEvent('beforeOpen', this);
-        this.switchContent.stopFx();
-        this.switchContent.setStyle('display', 'block');
-        Kwf.callOnContentReady(this.el.dom, {newRender: false});
-        this.switchContent.scale(undefined, this.switchContent.scaleHeight,
-            { easing: 'easeOut', duration: this.config.animation.duration, afterStyle: "display:block;height:auto;",
-                callback: function() {
-                    this.fireEvent('opened', this);
-                    this._state = 'opened';
-                    Kwf.callOnContentReady(this.el.dom, {newRender: false});
-                    if (Ext2.isIE6) {
-                        this.switchContent.setWidth(this.switchContent.getWidth());
+            } else {
+                if (this.config.fade) {
+                    if(this.activeTimeout && event.type === 'mouseenter') {
+                        clearTimeout(this.activeTimeout);
+                        this.activeTimeout = null;
+                        return;
                     }
-                },
-                scope: this
+                    this.activeTimeout = setTimeout($.proxy(function(){
+                        this.activeTimeout = null;
+                        this.doClose();
+                    }, this), this.config.fadeOutDelay);
+                } else {
+                    this.doClose();
+                }
             }
-        );
-        this.switchLink.addClass('switchLinkOpened');
+        }, this));
+
     }
-});
+
+    Kwf.EyeCandy.Switch.Display = function(elOrSelector, config) {
+        if (typeof elOrSelector == 'string') {
+            Kwf.onJElementReady(elOrSelector, function(el) {
+                Kwf.EyeCandy.Switch.Display(el, config);
+            }, { defer: true });
+            Kwf.onJElementReady(elOrSelector, function(el, config) {
+                el.find(config.container || 'div.switchContent').hide();
+            });
+        } else {
+            config = config || {};
+            el = elOrSelector;
+            el.find(config.container || 'div.switchContent').hide();
+            el = elOrSelector.get(0);
+
+            if(!el.switchDisplayObject) {
+                el.switchDisplayObject = new switchDisplayCls(el, config);
+            }
+        };
+    };
+
+    Kwf.EyeCandy.Switch.Display('.kwfSwitchDisplay');
+    Kwf.EyeCandy.Switch.Display('.kwfSwitchHoverFade', {
+        fade: true,
+        hover: true,
+        duration: 200
+    });
+
+})();
+

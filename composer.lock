@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "04a21ee944bcaa6aae14ff4b7d6d627d",
+    "hash": "c5069d4d0b98ddcec2edf84888631a10",
     "packages": [
         {
             "name": "koala-framework/library-compass-mixins",
@@ -53,16 +54,16 @@
         },
         {
             "name": "koala-framework/library-extjs2",
-            "version": "v2.3.0",
+            "version": "v2.3.0-p0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/library-extjs2.git",
-                "reference": "582ba7e2279cd9aa32b90877049741dd3c1deef0"
+                "reference": "e1aa3a546a0bbaffdfb454d36c37c628b3ce5a6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/library-extjs2/zipball/582ba7e2279cd9aa32b90877049741dd3c1deef0",
-                "reference": "582ba7e2279cd9aa32b90877049741dd3c1deef0",
+                "url": "https://api.github.com/repos/koala-framework/library-extjs2/zipball/e1aa3a546a0bbaffdfb454d36c37c628b3ce5a6b",
+                "reference": "e1aa3a546a0bbaffdfb454d36c37c628b3ce5a6b",
                 "shasum": ""
             },
             "type": "library",
@@ -72,7 +73,7 @@
             ],
             "description": "ExtJS JavaScript Library",
             "homepage": "http://www.sencha.com/products/extjs/",
-            "time": "2014-05-28 18:18:19"
+            "time": "2014-06-25 11:14:26"
         },
         {
             "name": "koala-framework/library-htmlawed",
@@ -122,16 +123,16 @@
         },
         {
             "name": "koala-framework/library-modernizr",
-            "version": "v1.8.2-p0",
+            "version": "v1.8.2-p1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/library-modernizr.git",
-                "reference": "d26cccbb49e6c002d2b0f0e877fe2b1ea9257d63"
+                "reference": "5eebf92eba5f2e4ec36de646dc5f25e57b45d92a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/library-modernizr/zipball/d26cccbb49e6c002d2b0f0e877fe2b1ea9257d63",
-                "reference": "d26cccbb49e6c002d2b0f0e877fe2b1ea9257d63",
+                "url": "https://api.github.com/repos/koala-framework/library-modernizr/zipball/5eebf92eba5f2e4ec36de646dc5f25e57b45d92a",
+                "reference": "5eebf92eba5f2e4ec36de646dc5f25e57b45d92a",
                 "shasum": ""
             },
             "type": "library",
@@ -141,7 +142,30 @@
             ],
             "description": "Modernizr JavaScript Library",
             "homepage": "http://modernizr.com/",
-            "time": "2014-06-03 07:42:55"
+            "time": "2014-06-16 06:34:49"
+        },
+        {
+            "name": "koala-framework/library-mustache-js",
+            "version": "v0.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koala-framework/library-mustache-js.git",
+                "reference": "508169dab21e35a37f0a92d3963d6b2cc27458e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koala-framework/library-mustache-js/zipball/508169dab21e35a37f0a92d3963d6b2cc27458e5",
+                "reference": "508169dab21e35a37f0a92d3963d6b2cc27458e5",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Minimal templating with {{mustaches}} in JavaScript",
+            "homepage": "https://github.com/janl/mustache.js",
+            "time": "2014-06-23 12:24:06"
         },
         {
             "name": "koala-framework/library-silkicons",
@@ -369,6 +393,52 @@
                 "sdk"
             ],
             "time": "2012-08-31 22:21:38"
+        },
+        {
+            "name": "koala-framework/library-qunit",
+            "version": "v1.14.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koala-framework/library-qunit.git",
+                "reference": "ca159db33e00703699f28eaef7a758192f0c804d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koala-framework/library-qunit/zipball/ca159db33e00703699f28eaef7a758192f0c804d",
+                "reference": "ca159db33e00703699f28eaef7a758192f0c804d",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "An easy-to-use JavaScript Unit Testing framework.",
+            "homepage": "http://qunitjs.com",
+            "time": "2014-06-13 07:03:56"
+        },
+        {
+            "name": "koala-framework/library-qunit-phantomjs-runner",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koala-framework/library-qunit-phantomjs-runner.git",
+                "reference": "5c58caab41412921019503c07d881eb064295925"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koala-framework/library-qunit-phantomjs-runner/zipball/5c58caab41412921019503c07d881eb064295925",
+                "reference": "5c58caab41412921019503c07d881eb064295925",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A PhantomJS-powered headless test runner for QUnit",
+            "homepage": "http://qunitjs.com",
+            "time": "2014-06-13 12:36:53"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -792,17 +862,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.5.0",
+            "version": "v2.5.2",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "b4b09c68ec2f2727574544ef0173684281a5033c"
+                "reference": "f868ecdbcc0276b6158dfbf08b9e98ce07f014e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/b4b09c68ec2f2727574544ef0173684281a5033c",
-                "reference": "b4b09c68ec2f2727574544ef0173684281a5033c",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/f868ecdbcc0276b6158dfbf08b9e98ce07f014e1",
+                "reference": "f868ecdbcc0276b6158dfbf08b9e98ce07f014e1",
                 "shasum": ""
             },
             "require": {
@@ -837,12 +907,20 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-05-16 14:25:18"
+            "time": "2014-07-09 09:05:48"
         }
     ],
-    "aliases": [],
+    "aliases": [
+
+    ],
     "minimum-stability": "stable",
-    "stability-flags": [],
-    "platform": [],
-    "platform-dev": []
+    "stability-flags": [
+
+    ],
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
 }
