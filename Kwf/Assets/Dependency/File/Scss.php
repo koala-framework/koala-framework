@@ -35,20 +35,25 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         if ($ret === false) {
             $ret = Kwf_Assets_Dependency_File::getContents($language);
 
-            static $scssParser;
-            if (!isset($scssParser)) {
-                $scssParser = new Kwf_Util_SassParser(array(
-                    'style' => 'compact',
-                    'cache' => false,
-                    'syntax' => 'scss',
-                    'debug' => true,
-                    'debug_info' => false,
-                    'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
-                    'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
-                    'extensions' => array('Compass', 'Susy', 'Kwf')
-                ));
+            if (trim($ret)) {
+                static $scssParser;
+                if (!isset($scssParser)) {
+                    $scssParser = new Kwf_Util_SassParser(array(
+                        'style' => 'compact',
+                        'cache' => false,
+                        'syntax' => 'scss',
+                        'debug' => true,
+                        'debug_info' => false,
+                        'load_path_functions' => array('Kwf_Util_SassParser::loadCallback'),
+                        'functions' => Kwf_Util_SassParser::getExtensionsFunctions(array('Compass', 'Susy', 'Kwf')),
+                        'extensions' => array('Compass', 'Susy', 'Kwf')
+                    ));
+                }
+                $ret = $scssParser->toCss($ret, false);
+                if (!$ret) {
+                    throw new Kwf_Exception("Sass Parser did return empty result for '$fileName'");
+                }
             }
-            $ret = $scssParser->toCss($ret, false);
             $cache->save(
                 array('mtime'=>filemtime($fileName), 'contents'=>$ret),
                 $cacheId
