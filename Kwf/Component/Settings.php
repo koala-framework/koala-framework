@@ -195,7 +195,6 @@ class Kwf_Component_Settings
                         foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
                             $dirs = array_merge($dirs, $i);
                         }
-                        $dirs = array_unique($dirs);
                         foreach ($dirs as $k=>$dir) {
                             if ($dir == '.') $dir = $cwd;
                             if (!preg_match('#^(/|\w\:\\\\)#i', $dir)) {
@@ -207,20 +206,29 @@ class Kwf_Component_Settings
                                 continue;
                             }
                             $dir = realpath($dir);
-                            if (substr($dir, 0, strlen($cwd)) != $cwd
-                            ) {
-                                if (VENDOR_PATH != '../vendor') { //required to support running kwf tests in tests subfolder
+                            if (substr($dir, 0, strlen($cwd)) != $cwd) {
+                                if (VENDOR_PATH == '../vendor') { //required to support running kwf tests in tests subfolder
+                                    $parentCwd = substr($cwd, 0, strrpos($cwd, '/'));
+                                    if (substr($dir, 0, strlen($parentCwd)) != $parentCwd) {
+                                        throw new Kwf_Exception("'$dir' is not in web directory '$parentCwd'");
+                                    }
+                                    if ($dir == $parentCwd) {
+                                        $dir = '..';
+                                    } else {
+                                        $dir = '../'.substr($dir, strlen($parentCwd)+1);
+                                    }
+                                } else {
                                     throw new Kwf_Exception("'$dir' is not in web directory '$cwd'");
                                 }
                             } else {
                                 $dir = substr($dir, strlen($cwd)+1);
-                                if ($dir == '') $dir = '.';
                             }
                             $dirs[$k] = $dir;
                         }
+                        $dirs = array_unique($dirs);
                     }
                     foreach ($dirs as $dir) {
-                        $path = $dir . '/' . $file;
+                        $path = $dir . ($dir ? '/' : '') . $file;
                         if (is_file($path)) {
                             if (substr($path, -14) == DIRECTORY_SEPARATOR.'Component.php') {
                                 $ret[substr($path, 0, -14)] = substr($c, 0, -10);
