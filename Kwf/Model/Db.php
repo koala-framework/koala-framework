@@ -196,7 +196,8 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                         $ref = $m->getReferenceByModelClass(get_class($siblingOf), $k);
                         $siblingTableName = $m->getTableName();
 
-                        $joinCondition = $this->getTableName().'.'.$this->getPrimaryKey()
+                        $tablename = $tableNameAlias ? $tableNameAlias : $this->getTableName();
+                        $joinCondition = $tablename.'.'.$this->getPrimaryKey()
                             .' = '.$siblingTableName.'.'.$ref['column'];
                         $alreadyJoined = false;
                         $fromPart = $dbSelect->getPart('from');
