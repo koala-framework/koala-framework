@@ -18,6 +18,9 @@ class Kwf_Assets_Provider_KwfUtils extends Kwf_Assets_Provider_Abstract
             if (preg_match('#^\s*Kwf\.onJElement(Ready|Show|Hide|WidthChange)\(#m', $c)) {
                 $deps[] = 'KwfOnReadyJQuery';
             }
+            if (preg_match('#^\s*Kwf\.onComponentEvent\(#m', $c)) {
+                $deps[] = 'Kwf';
+            }
             $ret = array();
             foreach ($deps as $i) {
                 $d = $this->_providerList->findDependency($i);
