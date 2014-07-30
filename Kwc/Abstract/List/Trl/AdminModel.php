@@ -14,7 +14,7 @@ class Kwc_Abstract_List_Trl_AdminModel extends Kwf_Model_Data_Abstract
                 'id' => $c->chained->row->id,
                 'component_id' => $componentId,
                 'row' => $c->row,
-                'pos' => $c->chained->row->pos
+                'pos' => isset($c->chained->row->pos) ? $c->chained->row->pos : null
             );
             foreach ($this->_translateFields as $tf) {
                 $this->_data[$c->componentId][$tf] = $c->row->{$tf};
