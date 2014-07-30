@@ -47,9 +47,13 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
         $bufferUsecs = 200*1000;
 
-        $watchPaths = array(
-            getcwd()
-        );
+        $watchPaths = array();
+        if (Kwf_Config::getValue('application.id') == 'kwf') {
+            //for ccw in kwf itself (where cwd is tests subdir)
+            $watchPaths[] = realpath(getcwd().'/..');
+        } else {
+            $watchPaths[] = getcwd();
+        }
 
         $ret = array();
         exec('ps ax -o pid,ppid,user,args', $out);
