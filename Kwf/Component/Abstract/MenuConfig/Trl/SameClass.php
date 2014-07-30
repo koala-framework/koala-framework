@@ -7,6 +7,11 @@ class Kwf_Component_Abstract_MenuConfig_Trl_SameClass extends Kwf_Component_Abst
         return 5;
     }
 
+    protected function _getParentResource(Kwf_Acl $acl)
+    {
+        return 'kwf_component_root';
+    }
+
     public function addResources(Kwf_Acl $acl)
     {
         $masterCls = $this->_getSetting('masterComponentClass');
@@ -20,7 +25,7 @@ class Kwf_Component_Abstract_MenuConfig_Trl_SameClass extends Kwf_Component_Abst
             $acl->addResource(
                 new Kwf_Acl_Resource_MenuDropdown(
                     $dropdownName, array('text'=>$name, 'icon'=>$icon)
-                ), 'kwf_component_root'
+                ), $this->_getParentResource($acl)
             );
         }
 
