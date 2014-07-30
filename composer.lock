@@ -110,12 +110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/library-extjs2.git",
-                "reference": "e7b9faa5e224699d08eaf086d7eae82ca27d4e2a"
+                "reference": "87b53294765c15ac7f3f2387fcaaa0685e3865b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/library-extjs2/zipball/e7b9faa5e224699d08eaf086d7eae82ca27d4e2a",
-                "reference": "e7b9faa5e224699d08eaf086d7eae82ca27d4e2a",
+                "url": "https://api.github.com/repos/koala-framework/library-extjs2/zipball/87b53294765c15ac7f3f2387fcaaa0685e3865b3",
+                "reference": "87b53294765c15ac7f3f2387fcaaa0685e3865b3",
                 "shasum": ""
             },
             "type": "library",
