@@ -46,6 +46,10 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
             $providers[] = new $cls($p['file']);
         }
 
+        if (VENDOR_PATH=='../vendor') {
+            $providers[] = new Kwf_Assets_Provider_Ini('../dependencies.ini');
+        }
+
         return $providers;
     }
 
