@@ -43,6 +43,7 @@ class Kwc_Basic_Headline_Component extends Kwc_Abstract
                 'class' => null
             )
         );
+        $ret['flags']['hasAnchors'] = true;
         return $ret;
     }
 
@@ -62,5 +63,10 @@ class Kwc_Basic_Headline_Component extends Kwc_Abstract
             return true;
         }
         return false;
+    }
+
+    public function getAnchors()
+    {
+        return array($this->getData()->componentId => $this->getRow()->headline1);
     }
 }
