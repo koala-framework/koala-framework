@@ -23,6 +23,7 @@ class Kwf_View_Ext4 extends Kwf_View
         } else {
             $this->favicon = null;
         }
+        $this->uaCompatibleIeEdge = true;
 
         $this->userRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $user = Zend_Registry::get('userModel')->getAuthedUser();
