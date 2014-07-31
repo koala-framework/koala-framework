@@ -160,7 +160,7 @@ abstract class Kwf_Component_Renderer_Abstract
             $content = substr($ret, $startEnd+1, $end-$startEnd-1);
             $plugin = Kwf_Component_Plugin_Abstract::getInstance($args[1], $args[2]);
             $content = $plugin->processOutput($content);
-            $ret = substr($ret, 0, $start).$content.substr($ret, $end+11+strlen($args[0]));
+            $ret = substr($ret, 0, $start).$content.substr($ret, $end+10+strlen($args[0]));
         }
 
         return $ret;
