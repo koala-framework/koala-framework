@@ -82,4 +82,4 @@ Kwf.onElementReady('div.kwcDirectoriesListViewMap', function(map) {
     } else {
         Kwc.Directories.List.ViewMap.renderMap(map.dom);
     }
-});
+}, { defer: true });

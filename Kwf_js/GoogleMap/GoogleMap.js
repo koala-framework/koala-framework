@@ -283,6 +283,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         params.lowestLat = bounds.getSouthWest().lat();
         params.highestLng = bounds.getNorthEast().lng();
         params.highestLat = bounds.getNorthEast().lat();
+        params.componentId = this.config.componentId;
 
         if (!this.gmapLoader) {
             this.gmapLoader = Ext2.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
@@ -293,7 +294,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
 
         this.lastReloadMarkersRequestId = this.ajax.request({
             url: this.config.markers,
-            success: function(response, options) {
+            success: function(response, options, result) {
                 var ret = Ext2.decode(response.responseText);
                 ret.markers.each(function(m) {
                     var doAdd = true;
