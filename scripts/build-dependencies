@@ -17,6 +17,3 @@ git checkout v0.11.13
 ./configure --prefix=$HOME/node
 make
 make install
-
-cd ~
-~/node/bin/npm install uglify-js
