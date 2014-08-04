@@ -1,14 +1,16 @@
 <?php
 class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
 {
+    private $_path;
     public function __construct($path)
     {
-        $this->_path = substr($path, strlen('bower_components/'));
+        $path = substr($path, strlen('bower_components/'));
+        $this->_path = $path;
     }
 
     public function getDependency($dependencyName)
     {
-        if (strtolower($dependencyName) == $this->_path) {
+        if (strtolower($dependencyName) == $this->_path || strtolower($dependencyName).'.js' == $this->_path) {
             $dir = 'bower_components/'.$this->_path;
             $files = array(
                 $this->_path.'.js',
@@ -17,6 +19,7 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
                 'js/'.$this->_path.'.js',
             );
             foreach ($files as $f) {
+                if (substr($f, -6) == '.js.js') $f = substr($f, 0, -3);
                 if (file_exists($dir.'/'.$f)) {
                     return new Kwf_Assets_Dependency_File_Js($this->_path.'/'.$f);
                 }
