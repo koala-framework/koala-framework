@@ -82,8 +82,6 @@ deleteCacheFolder('cache/trl');
 $c = file(".gitignore", FILE_IGNORE_NEW_LINES);
 $c[] = '/build';
 $c[] = '/vendor';
-$c[] = '/node_modules';
-$c[] = '/bower_components';
 $c = array_filter($c); //remove empty lines
 $c = array_unique($c);
 file_put_contents('.gitignore', implode("\n", $c)."\n");

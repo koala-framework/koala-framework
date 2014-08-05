@@ -41,8 +41,8 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             $fileName = $this->getAbsoluteFileName();
             $sassc = Kwf_Config::getValue('server.sassc');
             $loadPath = array(
-                'bower_components/compass-mixins/lib',
-                'bower_components/susy/sass',
+                VENDOR_PATH.'/bower_components/compass-mixins/lib',
+                VENDOR_PATH.'/bower_components/susy/sass',
                 './scss',
                 KWF_PATH.'/sass/Kwf/stylesheets',
             );

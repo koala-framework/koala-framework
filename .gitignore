@@ -12,5 +12,3 @@ automagic-checkout.log
 .idea/
 /vendor
 /node_modules
-/bower_components
-
