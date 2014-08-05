@@ -60,8 +60,8 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                         }
                     }
                 }
-                foreach (glob('vendor/bower_components/*') as $i) {
-                    $paths[substr($i, 24)] = $i;
+                foreach (glob(VENDOR_PATH.'/bower_components/*') as $i) {
+                    $paths[substr($i, strlen(VENDOR_PATH.'/bower_components/'))] = $i;
                 }
                 Kwf_Cache_SimpleStatic::add($cacheId, $paths);
             }

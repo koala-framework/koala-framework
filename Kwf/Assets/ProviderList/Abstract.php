@@ -37,7 +37,7 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
                     }
                 }
             }
-            foreach (glob('vendor/bower_components/*') as $i) {
+            foreach (glob(VENDOR_PATH.'/bower_components/*') as $i) {
                 $cachedProviders[] = array(
                     'cls' => 'Kwf_Assets_Provider_BowerBuiltFile',
                     'file' => $i

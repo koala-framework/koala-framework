@@ -3,7 +3,7 @@ class Kwf_Util_Setup
 {
     private static function _getZendPath()
     {
-        return VENDOR_PATH.'/koala-framework/library-zendframework1/library';
+        return VENDOR_PATH.'/koala-framework/zendframework1/library';
     }
 
     public static function minimalBootstrapAndGenerateFile()
