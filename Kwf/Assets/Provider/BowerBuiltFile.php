@@ -16,6 +16,7 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             if (substr($path, -3) == '.js') $path = substr($path, 0, -3);
             $type = $path;
             if (substr($type, -2) == 'js') $type = substr($type, 0, -2);
+            if (substr($path, -3) == '-js') $path = substr($path, 0, -3);
             $files = array(
                 $path.'.js',
                 'dist/'.$path.'.js',
