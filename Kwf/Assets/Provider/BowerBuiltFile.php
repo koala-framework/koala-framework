@@ -12,23 +12,28 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
     {
         if (strtolower($dependencyName) == $this->_path || strtolower($dependencyName).'.js' == $this->_path) {
             $dir = VENDOR_PATH.'/bower_components/'.$this->_path;
+            $path = $this->_path;
+            if (substr($path, -3) == '.js') $path = substr($path, 0, -3);
+            $type = $path;
+            if (substr($type, -2) == 'js') $type = substr($type, 0, -2);
             $files = array(
-                $this->_path.'.js',
-                'dist/'.$this->_path.'.js',
-                'src/'.$this->_path.'.js',
-                'js/'.$this->_path.'.js',
-                $this->_path.'/'.$this->_path.'.js',
+                $path.'.js',
+                'dist/'.$path.'.js',
+                'build/'.$path.'.js',
+                'src/'.$path.'.js',
+                'js/'.$path.'.js',
+                $path.'/'.$path.'.js',
             );
             foreach ($files as $f) {
                 if (substr($f, -6) == '.js.js') $f = substr($f, 0, -3);
                 if (file_exists($dir.'/'.$f)) {
                     if (file_exists($dir.'/'.substr($f, 0, -2).'css')) {
                         return new Kwf_Assets_Dependency_Dependencies(array(
-                            new Kwf_Assets_Dependency_File_Js($this->_path.'/'.$f),
-                            new Kwf_Assets_Dependency_File_Css($this->_path.'/'.substr($f, 0, -2).'css'),
+                            new Kwf_Assets_Dependency_File_Js($type.'/'.$f),
+                            new Kwf_Assets_Dependency_File_Css($type.'/'.substr($f, 0, -2).'css'),
                         ), $dependencyName);
                     } else {
-                        return new Kwf_Assets_Dependency_File_Js($this->_path.'/'.$f);
+                        return new Kwf_Assets_Dependency_File_Js($type.'/'.$f);
                     }
                 }
             }
