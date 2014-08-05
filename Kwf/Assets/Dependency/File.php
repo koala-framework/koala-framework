@@ -61,7 +61,9 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                     }
                 }
                 foreach (glob(VENDOR_PATH.'/bower_components/*') as $i) {
-                    $paths[substr($i, strlen(VENDOR_PATH.'/bower_components/'))] = $i;
+                    $type = substr($i, strlen(VENDOR_PATH.'/bower_components/'));
+                    if (substr($type, -2) == 'js') $type = substr($type, 0, -2);
+                    $paths[$type] = $i;
                 }
                 Kwf_Cache_SimpleStatic::add($cacheId, $paths);
             }
