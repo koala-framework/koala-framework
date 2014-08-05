@@ -1,5 +1,5 @@
 <?php
-//requires koala-framework/socialshareprivacy package
+//requires jquery.socialshareprivacy bower package
 class Kwc_SocialMedia_2ClickButtons_Component extends Kwc_Abstract
 {
     public static function getSettings()
@@ -9,7 +9,9 @@ class Kwc_SocialMedia_2ClickButtons_Component extends Kwc_Abstract
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['cssClass'] = 'webStandard webListNone';
-        $ret['assetsDefer']['dep'][] = 'socialshareprivacy';
+        $ret['assetsDefer']['files'] = 'jquery.socialshareprivacy/jquery.socialshareprivacy.min.js';
+        $ret['assetsDefer']['files'] = 'jquery.socialshareprivacy/socialshareprivacy/socialshareprivacy.css';
+        $ret['assetsDefer']['dep'] = 'jQuery';
         return $ret;
     }
 
