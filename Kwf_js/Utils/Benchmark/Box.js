@@ -106,7 +106,7 @@
 
         var benchmarkType = $(el).data('benchmarkType');
         if (getCookie('benchmarkBox-'+benchmarkType)=='1') {
-            el.addClass('visible');
+            $(el).addClass('visible');
         }
         var showLink = $('<a href="#" class="showContent">['+benchmarkType+']</a>');
         $(showLink).prependTo($(el));
