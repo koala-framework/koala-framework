@@ -76,9 +76,8 @@ Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
         type: type,
         onAction: onAction
     });
-
     //if initial call is already done redo for new added handlers
-    if (Kwf._onReadyState == 'calledNonDefer' && (!hndl.options.defer || Kwf._onReadyState == 'calledDefer')) {
+    if (Kwf._onReadyState == 'calledDefer' || (!(options && options.defer) && Kwf._onReadyState == 'calledNonDefer')) {
         Kwf.callOnContentReady(document.body, { action: 'render', handlerNum: Kwf._readyElHandlers.length-1 });
     }
 };
