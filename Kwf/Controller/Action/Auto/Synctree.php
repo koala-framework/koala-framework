@@ -513,7 +513,8 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
         if (!$this->_hasPermissions($row, 'move')) {
             throw new Kwf_Exception("Moving this node is not allowed.");
         }
-        $targetRow = $this->_model->getRow($target);
+        $targetRow = null;
+        if ($target && $target != '0') $targetRow = $this->_model->getRow($target);
         if (!$this->_hasPermissions($targetRow, 'moveTo')) {
             throw new Kwf_Exception("Moving here is not allowed.");
         }
