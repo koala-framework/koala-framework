@@ -1,3 +1,5 @@
+Kwf.namespace('Kwf.EyeCandy.Lightbox');
+
 Kwf.onElementReady('a', function lightboxLink(el) {
     el = el.dom;
     if (el.kwfLightbox) return;
@@ -110,7 +112,6 @@ if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
     }, this);
 }
 
-Ext2.ns('Kwf.EyeCandy.Lightbox');
 Kwf.EyeCandy.Lightbox.currentOpen = null;
 Kwf.EyeCandy.Lightbox.allByUrl = {};
 Kwf.EyeCandy.Lightbox.Lightbox = function(href, options) {
