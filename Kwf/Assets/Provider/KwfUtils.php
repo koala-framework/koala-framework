@@ -3,7 +3,7 @@ class Kwf_Assets_Provider_KwfUtils extends Kwf_Assets_Provider_Abstract
 {
     public function getDependenciesForDependency(Kwf_Assets_Dependency_Abstract $dependency)
     {
-        if ($dependency instanceof Kwf_Assets_Dependency_File_Js) {
+        if ($dependency instanceof Kwf_Assets_Dependency_File_Js && $dependency->getFileNameWithType() != 'kwf/Kwf_js/Utils/Element.js') {
             $deps = array();
             $c = file_get_contents($dependency->getAbsoluteFileName());
             if (preg_match('#^\s*Kwf\.Utils\.ResponsiveEl\(#m', $c)) {
