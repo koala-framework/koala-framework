@@ -43,8 +43,10 @@ if (!Kwf.isApp) {
 
         var timeoutId;
         $(window).resize(function() {
-            if (timeoutId) clearTimeout(timeoutId);
-            var timeoutId = setTimeout(function() {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            timeoutId = setTimeout(function() {
                 Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
             }, 100);
         });
