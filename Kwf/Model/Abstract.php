@@ -344,6 +344,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     {
         $models = array($this);
         $models = array_merge($models, $this->_proxyContainerModels);
+        $m = $this;
+        while ($m instanceof Kwf_Model_Proxy) {
+            $m = $m->getProxyModel();
+            $models[] = $m;
+        }
         foreach ($models as $m) {
             $matchingRules = $m->getReferenceRulesByModelClass($modelClassName);
 
@@ -374,6 +379,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     {
         $models = array($this);
         $models = array_merge($models, $this->_proxyContainerModels);
+        $m = $this;
+        while ($m instanceof Kwf_Model_Proxy) {
+            $m = $m->getProxyModel();
+            $models[] = $m;
+        }
         foreach ($models as $m) {
             if (isset($m->_referenceMap[$rule])) {
                 $ret = $m->_referenceMap[$rule];
@@ -469,6 +479,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         }
         $models = $this->_proxyContainerModels;
         $models[] = $this;
+        $m = $this;
+        while ($m instanceof Kwf_Model_Proxy) {
+            $m = $m->getProxyModel();
+            $models[] = $m;
+        }
         foreach ($models as $m) {
             if (isset($m->_dependentModels[$rule])) {
                 $ret = $m->_dependentModels[$rule];
