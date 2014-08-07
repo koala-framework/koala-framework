@@ -283,12 +283,14 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
 
     _focusAllLightMarkers: false,
     _focusAllLightMarkersHasListener: false,
+    _alreadyLoaded: false,
     focusAllLightMarkers: function () {
         if (!this._focusAllLightMarkersHasListener) {
             this._focusAllLightMarkersHasListener = true;
             this.on('reload', function () {
                 if (this._focusAllLightMarkers) {
                     this._focusAllLightMarkers = false;
+                    this._alreadyLoaded = true;
 
                     // Calculate center of all markers via gmap
                     var latlngbounds = new google.maps.LatLngBounds();
@@ -310,6 +312,10 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
     },
 
     _reloadMarkersOnMapChange: function() {
+        if (this._alreadyLoaded) {
+            this._alreadyLoaded = false;
+            return;
+        }
         var params = this._reloadParams;
         var bounds = this.gmap.getBounds();
         params.lowestLng = bounds.getSouthWest().lng();
