@@ -24,7 +24,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         $fileName = $this->getFileNameWithType();
 
         $pathType = $this->getType();
-        $useTrl = !in_array($pathType, array('ext', 'ext4', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
+        $useTrl = !in_array($pathType, array('ext2', 'ext', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
         $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$fileName.'.'.md5(file_get_contents($this->getAbsoluteFileName()));
         if (!file_exists("$buildFile.min.js")) {
 
