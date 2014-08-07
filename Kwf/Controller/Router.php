@@ -74,11 +74,6 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/kwf/component/:controller/:action',
                     array('module'     => 'kwf_controller_action_component',
                           'action'     =>'index')));
-        $this->AddRoute('kwf_ext4', new Zend_Controller_Router_Route(
-                    '/kwf/ext4/:resource',
-                    array('module'     => 'kwf_controller_action_ext4',
-                          'controller' => 'ext4',
-                          'action'     =>'index')));
 
         $apiRoute = new Zend_Controller_Router_Route('api');
         $restRoute = new Kwf_Rest_Route(

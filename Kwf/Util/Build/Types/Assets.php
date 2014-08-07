@@ -9,12 +9,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
     public function checkRequirements()
     {
-        $uglifyjs = Kwf_Config::getValue('server.uglifyjs');
-        exec("$uglifyjs -V 2>&1", $out, $retVal);
-        if ($retVal) {
-            throw new Kwf_Exception_Client("Can't start uglifyjs, this is required to build javascript assets.\n".
-                "use 'npm -g install uglify-js' to install globally or set binary path in config 'server.uglifyjs'");
-        }
         $sassc = Kwf_Config::getValue('server.sassc');
         exec("$sassc -h 2>&1", $out, $retVal);
         if ($retVal) {
@@ -141,6 +135,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 $countDependencies += count($p->getFilteredUniqueDependencies(self::$_mimeTypeByExtension[$extension]));
 
                 $cacheId = $p->getMaxMTimeCacheId(self::$_mimeTypeByExtension[$extension]);
+                if (!$cacheId) throw new Kwf_Exception("Didn't get cacheId for ".get_class($p));
                 $maxMTime = $p->getMaxMTime(self::$_mimeTypeByExtension[$extension]);
                 Kwf_Assets_BuildCache::getInstance()->save($maxMTime, $cacheId);
 

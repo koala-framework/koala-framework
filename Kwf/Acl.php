@@ -372,7 +372,7 @@ class Kwf_Acl extends Zend_Acl
             } else if ($resource instanceof Kwf_Acl_Resource_MenuEvent) {
                 $menu['type'] = 'event';
                 $menu['eventConfig'] = $resource->getMenuEventConfig();
-            } else if ($resource instanceof Kwf_Acl_Resource_MenuUrl) {
+            } else if ($resource instanceof Kwf_Acl_Resource_Interface_Url) {
                 $menu['type'] = 'url';
                 $menu['url'] = $resource->getMenuUrl();
             } else if ($resource instanceof Kwf_Acl_Resource_MenuCommandDialog) {
@@ -385,9 +385,6 @@ class Kwf_Acl extends Zend_Acl
                 $menu['commandConfig'] = $resource->getMenuCommandConfig();
             } else if ($resource instanceof Kwf_Acl_Resource_MenuSeparator) {
                 $menu['type'] = 'separator';
-            } else if ($resource instanceof Kwf_Acl_Resource_MenuExt4) {
-                $menu['type'] = 'url';
-                $menu['url'] = '/kwf/ext4/'.$resource->getResourceId();
             } else {
                 $menu = $menu['menuConfig'];
             }
