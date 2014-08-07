@@ -18,6 +18,14 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
     Kwf.GoogleMap.load(function() {
         this.show();
     }, myMap);
+
+    if (cfg.searchFormComponentId) {
+        var searchForm = Kwc.Form.formsByComponentId[cfg.searchFormComponentId];
+        searchForm.on('beforeSubmit', function(f) {
+            myMap.setReloadParams(searchForm.getValues());
+            myMap.focusAllLightMarkers();
+        }, this);
+    }
 };
 
 

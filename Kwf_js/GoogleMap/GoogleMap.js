@@ -101,7 +101,8 @@ Kwf.GoogleMap.Map = function(config) {
 
     this.addEvents({
         'show': true,
-        'useFrom': true
+        'useFrom': true,
+        'reload': true
     });
 
     this.mapContainer = Ext2.get(config.mapContainer);
@@ -232,7 +233,8 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         }
 
         if (typeof this.config.markers == 'string') {
-            google.maps.event.addListener(this.gmap, "idle", this.reloadMarkers.createDelegate(
+            if (this.config.dynamicStartPos) this.focusAllLightMarkers();
+            google.maps.event.addListener(this.gmap, "idle", this._reloadMarkersOnMapChange.createDelegate(
                 this, [ ]
             ));
         } else {
@@ -257,20 +259,46 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         this.fireEvent('show', this);
     },
 
+    _focusAllLightMarkers: false,
+    _focusAllLightMarkersHasListener: false,
+    focusAllLightMarkers: function () {
+        if (!this._focusAllLightMarkersHasListener) {
+            this._focusAllLightMarkersHasListener = true;
+            this.on('reload', function () {
+                if (this._focusAllLightMarkers) {
+                    this._focusAllLightMarkers = false;
+
+                    // Calculate center of all markers via gmap
+                    var latlngbounds = new google.maps.LatLngBounds();
+                    this.markers.each(function(n){
+                        if (n.kwfConfig.isLightMarker) latlngbounds.extend(n.getPosition());
+                    });
+                    this.gmap.setCenter(latlngbounds.getCenter());
+                    this.gmap.fitBounds(latlngbounds);
+                }
+            }, this);
+        }
+        this._focusAllLightMarkers = true;
+        this._reloadMarkers(this._reloadParams);
+    },
+
     _reloadParams: {},
     setReloadParams: function (params) {
         this._reloadParams = params;
     },
 
-    reloadMarkers: function() {
+    _reloadMarkersOnMapChange: function() {
         var params = this._reloadParams;
         var bounds = this.gmap.getBounds();
         params.lowestLng = bounds.getSouthWest().lng();
         params.lowestLat = bounds.getSouthWest().lat();
         params.highestLng = bounds.getNorthEast().lng();
         params.highestLat = bounds.getNorthEast().lat();
-        params.componentId = this.config.componentId;
+        this._reloadMarkers(params);
+    },
 
+    _reloadMarkers: function(params) {
+        params.componentId = this.config.componentId;
         if (!this.gmapLoader) {
             this.gmapLoader = Ext2.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
             this.gmapLoader.dom.innerHTML = trlKwf('Loading...');
@@ -312,6 +340,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
                 }
                 Kwf.callOnContentReady(this.mapContainer, {newRender: true});
                 this.gmapLoader.hide();
+                this.fireEvent('reload', this);
             },
             params: params,
             scope: this
