@@ -7,20 +7,18 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         $ret['assetsDefer']['dep'][] = 'KwfGoogleMap';
         $ret['assetsDefer']['dep'][] = 'ExtUtilJson';
         $ret['generators']['child']['component']['paging'] = null;
-        $ret['mapOptions'] = array(
-            'zoom' => null,
-            'zoom_properties' => 0,
-            'height' => 400,
-            'width' => 550,
-            'scale' => 1,
-            'satelite' => 1,
-            'overview' => 1,
-            'useZoomPropertyForSingleMarker' => false,
-            'dynamicStartPos' => true, // if set to true, center of shown coordinates is used
-            'latitude' => 47.95334614,  // if dynamicStartPos = true this is center if no markers available, else this
-            'longitude' => 13.24444771, // point is centered
-            'showAlwaysAllMarkers' => true // if true searchResults are shown blue, rest is red
-        );
+        $ret['mapOptions']['zoom'] = null;
+        $ret['mapOptions']['zoom_properties'] = 0;
+        $ret['mapOptions']['height'] = 400;
+        $ret['mapOptions']['width'] = 550;
+        $ret['mapOptions']['scale'] = 1;
+        $ret['mapOptions']['satelite'] = 1;
+        $ret['mapOptions']['overview'] = 1;
+        $ret['mapOptions']['useZoomPropertyForSingleMarker'] = false;
+        $ret['mapOptions']['dynamicStartPos'] = true; // if set to true, center of shown coordinates is used
+        $ret['mapOptions']['latitude'] = 47.95334614; // if dynamicStartPos = true this is center if no markers available, else this
+        $ret['mapOptions']['longitude'] = 13.24444771; // point is centered
+        $ret['mapOptions']['showAlwaysAllMarkers'] = true; // if true searchResults are shown blue, rest is red
         return $ret;
     }
 
