@@ -1,5 +1,5 @@
 <?php
-class Kwf_Acl_Resource_MenuUrl extends Kwf_Acl_Resource_Abstract
+class Kwf_Acl_Resource_MenuUrl extends Kwf_Acl_Resource_Abstract implements Kwf_Acl_Resource_Interface_Url
 {
     protected $_menuUrl;
 
