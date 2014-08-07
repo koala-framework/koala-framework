@@ -123,39 +123,21 @@ Kwf.GoogleMap.Map = function(config) {
     if (!this.config.markers) this.config.markers = [ ];
     if (typeof this.config.markers[0] == 'undefined' &&
         (this.config.markers.longitude || this.config.markers.coordinates)
-        ) {
+    ) {
         this.config.markers = [ this.config.markers ];
     }
 
-    for (var i = 0; i < this.config.markers.length; i++) {
-        if (this.config.markers[i] && typeof this.config.markers[i].coordinates != 'undefined') {
-            if (typeof this.config.markers[i].latitude == 'undefined') {
-                var splits = this.config.markers[i].coordinates.split(',');
-                this.config.markers[i].latitude = splits[0];
-            }
-            if (typeof this.config.markers[i].longitude == 'undefined') {
-                var splits = this.config.markers[i].coordinates.split(',');
-                this.config.markers[i].longitude = splits[1];
-            }
-        }
-    }
-
-    if (!this.config.lightMarkers) this.config.lightMarkers = [ ];
-    if (typeof this.config.lightMarkers[0] == 'undefined' &&
-        (this.config.lightMarkers.longitude || this.config.lightMarkers.coordinates)
-        ) {
-        this.config.lightMarkers = [ this.config.lightMarkers ];
-    }
-
-    for (var i = 0; i < this.config.lightMarkers.length; i++) {
-        if (this.config.lightMarkers[i].coordinates) {
-            if (typeof this.config.lightMarkers[i].latitude == 'undefined') {
-                var splits = this.config.lightMarkers[i].coordinates.split(',');
-                this.config.lightMarkers[i].latitude = splits[0];
-            }
-            if (typeof this.config.lightMarkers[i].longitude == 'undefined') {
-                var splits = this.config.lightMarkers[i].coordinates.split(',');
-                this.config.lightMarkers[i].longitude = splits[1];
+    if (typeof this.config.markers == 'object') {
+        for (var i = 0; i < this.config.markers.length; i++) {
+            if (this.config.markers[i] && typeof this.config.markers[i].coordinates != 'undefined') {
+                if (typeof this.config.markers[i].latitude == 'undefined') {
+                    var splits = this.config.markers[i].coordinates.split(',');
+                    this.config.markers[i].latitude = splits[0];
+                }
+                if (typeof this.config.markers[i].longitude == 'undefined') {
+                    var splits = this.config.markers[i].coordinates.split(',');
+                    this.config.markers[i].longitude = splits[1];
+                }
             }
         }
     }
@@ -195,7 +177,6 @@ Kwf.GoogleMap.Map = function(config) {
     var container = this.mapContainer.down(".container");
     container.setWidth(this.config.width);
     container.setHeight(this.config.height);
-
 };
 
 Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
@@ -243,7 +224,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         if (typeof this.config.zoom == 'object'
             && this.config.zoom[0] && this.config.zoom[1]
             && this.config.zoom[2] && this.config.zoom[3]
-            ) {
+        ) {
             var bounds = new google.maps.LatLngBounds();
             bounds.extend(new google.maps.LatLng(this.config.zoom[0], this.config.zoom[1]));
             bounds.extend(new google.maps.LatLng(this.config.zoom[2], this.config.zoom[3]));
@@ -251,7 +232,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         }
 
         if (typeof this.config.markers == 'string') {
-            google.maps.event.addListener(this.gmap, "idle", this._reloadMarkers.createDelegate(
+            google.maps.event.addListener(this.gmap, "idle", this.reloadMarkers.createDelegate(
                 this, [ ]
             ));
         } else {
@@ -276,9 +257,14 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         this.fireEvent('show', this);
     },
 
-    _reloadMarkers: function() {
+    _reloadParams: {},
+    setReloadParams: function (params) {
+        this._reloadParams = params;
+    },
+
+    reloadMarkers: function() {
+        var params = this._reloadParams;
         var bounds = this.gmap.getBounds();
-        var params = { };
         params.lowestLng = bounds.getSouthWest().lng();
         params.lowestLat = bounds.getSouthWest().lat();
         params.highestLng = bounds.getNorthEast().lng();
@@ -295,19 +281,34 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         this.lastReloadMarkersRequestId = this.ajax.request({
             url: this.config.markers,
             success: function(response, options, result) {
-                var ret = Ext2.decode(response.responseText);
-                ret.markers.each(function(m) {
+                for (var i = 0; i < this.markers.length; i++) {
+                    this.markers[i].keep = false;
+                }
+
+                result.markers.each(function(m) {
                     var doAdd = true;
                     for (var i = 0; i < this.markers.length; i++) {
                         if (this.markers[i].kwfConfig.latitude == m.latitude
                             && this.markers[i].kwfConfig.longitude == m.longitude
-                            ) {
+                        ) {
+                            this.markers[i].keep = true;
                             doAdd = false;
                             break;
                         }
                     }
                     if (doAdd) this.addMarker(m);
                 }, this);
+
+                var removeMarkers = [];
+                for (var i = 0; i < this.markers.length; i++) {
+                    if (!this.markers[i].keep) {
+                        this.markers[i].setMap(null);
+                        removeMarkers.push(this.markers[i]);
+                    }
+                }
+                for (var i = 0; i < removeMarkers.length; i++) {
+                    this.markers.remove(removeMarkers[i]);
+                }
                 Kwf.callOnContentReady(this.mapContainer, {newRender: true});
                 this.gmapLoader.hide();
             },
@@ -320,6 +321,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
     {
         var marker = this.createMarker(markerConfig);
         marker.kwfConfig = markerConfig;
+        marker.keep = true;
         marker.setMap(this.gmap);
         this.markers.push(marker);
         if (markerConfig.infoHtml) {
