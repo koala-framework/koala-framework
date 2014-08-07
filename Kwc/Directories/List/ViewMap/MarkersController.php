@@ -16,21 +16,21 @@ class Kwc_Directories_List_ViewMap_MarkersController extends Kwf_Controller_Acti
         }
         $select = $view->getSelect();
 
-        if (isset($_REQUEST['lowestLng'])) {
-            $select->where(new Kwf_Model_Select_Expr_Higher('longitude', $_REQUEST['lowestLng']));
-            $baseSelect->where(new Kwf_Model_Select_Expr_Higher('longitude', $_REQUEST['lowestLng']));
+        if ($this->_getParam('lowestLng')) {
+            $select->where(new Kwf_Model_Select_Expr_Higher('longitude', $this->_getParam('lowestLng')));
+            $baseSelect->where(new Kwf_Model_Select_Expr_Higher('longitude', $this->_getParam('lowestLng')));
         }
-        if (isset($_REQUEST['lowestLat'])) {
-            $select->where(new Kwf_Model_Select_Expr_Higher('latitude', $_REQUEST['lowestLat']));
-            $baseSelect->where(new Kwf_Model_Select_Expr_Higher('latitude', $_REQUEST['lowestLat']));
+        if ($this->_getParam('lowestLat')) {
+            $select->where(new Kwf_Model_Select_Expr_Higher('latitude', $this->_getParam('lowestLat')));
+            $baseSelect->where(new Kwf_Model_Select_Expr_Higher('latitude', $this->_getParam('lowestLat')));
         }
-        if (isset($_REQUEST['highestLng'])) {
-            $select->where(new Kwf_Model_Select_Expr_Lower('longitude', $_REQUEST['highestLng']));
-            $baseSelect->where(new Kwf_Model_Select_Expr_Lower('longitude', $_REQUEST['highestLng']));
+        if ($this->_getParam('highestLng')) {
+            $select->where(new Kwf_Model_Select_Expr_Lower('longitude', $this->_getParam('highestLng')));
+            $baseSelect->where(new Kwf_Model_Select_Expr_Lower('longitude', $this->_getParam('highestLng')));
         }
-        if (isset($_REQUEST['highestLat'])) {
-            $select->where(new Kwf_Model_Select_Expr_Lower('latitude', $_REQUEST['highestLat']));
-            $baseSelect->where(new Kwf_Model_Select_Expr_Lower('latitude', $_REQUEST['highestLat']));
+        if ($this->_getParam('highestLat')) {
+            $select->where(new Kwf_Model_Select_Expr_Lower('latitude', $this->_getParam('highestLat')));
+            $baseSelect->where(new Kwf_Model_Select_Expr_Lower('latitude', $this->_getParam('highestLat')));
         }
 
         $itemDirectory = $component->getParent()->getComponent()->getItemDirectory();
