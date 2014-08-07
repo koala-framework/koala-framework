@@ -21,9 +21,12 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
 
     if (cfg.searchFormComponentId) {
         var searchForm = Kwc.Form.formsByComponentId[cfg.searchFormComponentId];
-        searchForm.on('beforeSubmit', function(f) {
-            myMap.setReloadParams(searchForm.getValues());
-            myMap.focusAllLightMarkers();
+        searchForm.on('beforeSubmit', function(form, ev) {
+            myMap.setBaseParams(
+                Ext2.applyIf(searchForm.getValues(), myMap.getBaseParams())
+            );
+            myMap.centerMarkersIntoView();
+            return false;
         }, this);
     }
 };
