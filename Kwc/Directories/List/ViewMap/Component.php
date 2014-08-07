@@ -16,8 +16,9 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
             'satelite' => 1,
             'overview' => 1,
             'useZoomPropertyForSingleMarker' => false,
-            'latitude' => 47.95334614, // this point is centered
-            'longitude' => 13.24444771,
+            'dynamicStartPos' => true, // if set to true, center of shown coordinates is used
+            'latitude' => 47.95334614,  // if dynamicStartPos = true this is center if no markers available, else this
+            'longitude' => 13.24444771, // point is centered
             'showAlwaysAllMarkers' => true // if true searchResults are shown blue, rest is red
         );
         return $ret;
