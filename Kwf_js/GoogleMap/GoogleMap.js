@@ -113,13 +113,14 @@ Kwf.GoogleMap.Map = function(config) {
     if (typeof this.config.scale == 'undefined') this.config.scale = 1;
     if (typeof this.config.zoom_properties == 'undefined') this.config.zoom_properties = 0;
     if (typeof this.config.overview == 'undefined') this.config.overview = 1;
-    if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
+    if (typeof this.config.zoom == 'undefined' || this.config.zoom == null) this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
     if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
     if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
     if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';
-
+    if (typeof this.config.panControl == 'undefined') this.config.panControl = false;
+    if (typeof this.config.streetViewControl == 'undefined') this.config.streetViewControl = false;
 
     if (!this.config.markers) this.config.markers = [ ];
     if (typeof this.config.markers[0] == 'undefined' &&
@@ -195,8 +196,8 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         }
         var mapOptions = {
             center: new google.maps.LatLng(parseFloat(this.config.latitude), parseFloat(this.config.longitude)),
-            zoom: parseInt(this.config.zoom),
-            panControl: this.config.pan_control,
+            zoom: (typeof this.config.zoom == 'number')? parseInt(this.config.zoom) : 13, //initial zoom has to be set
+            panControl: this.config.panControl,
             zoomControl: this.config.zoom_properties,
             zoomControlOptions: {
                 style: google.maps.ZoomControlStyle[this.config.zoomControlStyle],
@@ -205,7 +206,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             scaleControl: this.config.scale,
             mapTypeControl: this.config.map_type,
             overviewMapControl: this.config.overview,
-            streetViewControl: this.config.street_view,
+            streetViewControl: this.config.streetViewControl,
             scrollwheel: this.config.scrollwheel
         };
 
@@ -223,6 +224,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         }
 
         if (typeof this.config.zoom == 'object'
+            && this.config.zoom != null
             && this.config.zoom[0] && this.config.zoom[1]
             && this.config.zoom[2] && this.config.zoom[3]
         ) {
