@@ -6,42 +6,70 @@ class Kwc_Directories_List_ViewMap_MarkersController extends Kwf_Controller_Acti
         $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('componentId'), array('ignoreVisible' => true));
 
         $view = $component->getComponent();
+        $baseSelect = $view->getSelect();
         if ($view->hasSearchForm()) {
             $sf = $view->getSearchForm();
             $params = $this->getRequest()->getParams();
             $params[$sf->componentId.'-post'] = true; //post
             $params[$sf->componentId] = true; //submit
-            $sf->getComponent()->processInput($params); //TODO don't do processInput here in _getSelect()
+            $sf->getComponent()->processInput($params); //TODO don't do processInput here in jsonIndexAction() same problem in AjaxView
         }
         $select = $view->getSelect();
 
         if (isset($_REQUEST['lowestLng'])) {
             $select->where(new Kwf_Model_Select_Expr_Higher('longitude', $_REQUEST['lowestLng']));
+            $baseSelect->where(new Kwf_Model_Select_Expr_Higher('longitude', $_REQUEST['lowestLng']));
         }
         if (isset($_REQUEST['lowestLat'])) {
             $select->where(new Kwf_Model_Select_Expr_Higher('latitude', $_REQUEST['lowestLat']));
+            $baseSelect->where(new Kwf_Model_Select_Expr_Higher('latitude', $_REQUEST['lowestLat']));
         }
         if (isset($_REQUEST['highestLng'])) {
             $select->where(new Kwf_Model_Select_Expr_Lower('longitude', $_REQUEST['highestLng']));
+            $baseSelect->where(new Kwf_Model_Select_Expr_Lower('longitude', $_REQUEST['highestLng']));
         }
         if (isset($_REQUEST['highestLat'])) {
             $select->where(new Kwf_Model_Select_Expr_Lower('latitude', $_REQUEST['highestLat']));
+            $baseSelect->where(new Kwf_Model_Select_Expr_Lower('latitude', $_REQUEST['highestLat']));
         }
+
         $itemDirectory = $component->getParent()->getComponent()->getItemDirectory();
         $items = $itemDirectory->getChildComponents($select);
-        $this->view->count = count($items);
 
+        $markerIds = array();
         $markers = array();
         $parentComponentClass = $component->componentClass;
         foreach ($items as $item) {
+            $markerIds[] = $item->row->id;
             $markers[] = array(
                 'latitude'  => $item->row->latitude,
                 'longitude' => $item->row->longitude,
                 'infoHtml'  => call_user_func_array(
                     array($parentComponentClass, 'getInfoWindowHtml'), array($item)
-                )
+                ),
+                'isLightMarker' => true
             );
         }
+
+        $mapOptions = Kwc_Abstract::getSetting($component->componentClass, 'mapOptions');
+        if ($mapOptions['showAlwaysAllMarkers']) {
+            if ($markerIds) {
+                $baseSelect->whereNotEquals('id', $markerIds);
+            }
+            $otherMarkers = array();
+            foreach ($itemDirectory->getChildComponents($baseSelect) as $item) {
+                $otherMarkers[] = array(
+                    'latitude'  => $item->row->latitude,
+                    'longitude' => $item->row->longitude,
+                    'infoHtml'  => call_user_func_array(
+                        array($parentComponentClass, 'getInfoWindowHtml'), array($item)
+                    ),
+                    'isLightMarker' => false
+                );
+            }
+            $markers = array_merge($markers, $otherMarkers);
+        }
+        $this->view->count = count($markers);
         $this->view->markers = $markers;
     }
 }

@@ -17,7 +17,8 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
             'satelite' => 1,
             'overview' => 1,
             'latitude' => 47.95334614, // this point is centered
-            'longitude' => 13.24444771
+            'longitude' => 13.24444771,
+            'showAlwaysAllMarkers' => true // if true searchResults are shown blue, rest is red
         );
         return $ret;
     }

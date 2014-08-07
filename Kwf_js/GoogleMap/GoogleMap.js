@@ -290,6 +290,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
                     for (var i = 0; i < this.markers.length; i++) {
                         if (this.markers[i].kwfConfig.latitude == m.latitude
                             && this.markers[i].kwfConfig.longitude == m.longitude
+                            && this.markers[i].kwfConfig.isLightMarker == m.isLightMarker
                         ) {
                             this.markers[i].keep = true;
                             doAdd = false;
@@ -346,24 +347,12 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
     getMarkerIcon : function(markerConfig)
     {
         var image = '';
-        if (this._isLightMarker(markerConfig.latitude, markerConfig.longitude)
-            && this.config.lightMarkerSrc
-            ) {
+        if (markerConfig.isLightMarker && this.config.lightMarkerSrc) {
             image = this.config.lightMarkerSrc;
         } else if (this.config.markerSrc) {
             image = this.config.markerSrc;
         }
         return image;
-    },
-
-    _isLightMarker : function(lat, lng) {
-        for (var i = 0; i < this.config.lightMarkers.length; i++) {
-            var m = this.config.lightMarkers[i];
-            if (m.latitude == lat && m.longitude == lng) {
-                return true;
-            }
-        }
-        return false;
     },
 
     /** For images in marker popup **/
