@@ -29,6 +29,7 @@ Kwf.Switch.Display = function(el, config) {
     this.switchLink = Ext.get(Ext.query('.switchLink', this.el.dom)[0]);
     if (!this.switchLink) this.switchLink = Ext.get(Ext.query('.switchLinkHover', this.el.dom)[0]);
     this.switchContent = Ext.get(Ext.query('.switchContent', this.el.dom)[0]);
+    if(!this.switchContent) return;
     this.kwfSwitchCloseLink = Ext.query('.switchCloseLink', this.el.dom);
     if (this.kwfSwitchCloseLink.length) {
         this.kwfSwitchCloseLink = Ext.get(this.kwfSwitchCloseLink[0]);
