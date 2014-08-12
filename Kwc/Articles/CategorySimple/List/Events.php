@@ -16,17 +16,17 @@ class Kwc_Articles_CategorySimple_List_Events extends Kwc_Abstract_Composite_Eve
         );
         $ret[] = array(
             'class' => $modelName,
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onCategoryChanged'
         );
         $ret[] = array(
             'class' => $modelName,
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onCategoryChanged'
         );
         $ret[] = array(
             'class' => $modelName,
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onCategoryUpdated'
         );
         return $ret;
@@ -54,7 +54,7 @@ class Kwc_Articles_CategorySimple_List_Events extends Kwc_Abstract_Composite_Eve
         $this->_onCategoryChanged(array_unique($categoryIds));
     }
 
-    public function onCategoryChanged(Kwf_Component_Event_Row_Abstract $ev)
+    public function onCategoryChanged(Kwf_Events_Event_Row_Abstract $ev)
     {
         $this->_onCategoryChanged($ev->row->category_id);
     }
@@ -68,7 +68,7 @@ class Kwc_Articles_CategorySimple_List_Events extends Kwc_Abstract_Composite_Eve
         }
     }
 
-    public function onCategoryUpdated(Kwf_Component_Event_Row_Updated $ev)
+    public function onCategoryUpdated(Kwf_Events_Event_Row_Updated $ev)
     {
         $this->_deleteCache($ev->row->component_id);
     }

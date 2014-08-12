@@ -6,24 +6,24 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onRowUpdate'
         );
         $masterComponentClass = Kwc_Abstract::getSetting($this->_class, 'masterComponentClass');
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($masterComponentClass, 'childModel'),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onMasterRowUpdate'
         );
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($masterComponentClass, 'childModel'),
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onMasterRowDelete'
         );
         return $ret;
     }
 
-    protected function onRowUpdate(Kwf_Component_Event_Row_Abstract $event)
+    protected function onRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         if ($event->isDirty('visible')) {
             $id = $event->row->component_id;
@@ -39,7 +39,7 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
         }
     }
 
-    protected function onMasterRowUpdate(Kwf_Component_Event_Row_Abstract $event)
+    protected function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         if ($event->isDirty('pos')) {
 
@@ -56,7 +56,7 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
         }
     }
 
-    protected function onMasterRowDelete(Kwf_Component_Event_Row_Abstract $event)
+    protected function onMasterRowDelete(Kwf_Events_Event_Row_Abstract $event)
     {
         $chainedType = 'Trl';
 

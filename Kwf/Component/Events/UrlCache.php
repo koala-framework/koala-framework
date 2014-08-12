@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_Events_UrlCache extends Kwf_Component_Events
+class Kwf_Component_Events_UrlCache extends Kwf_Events_Subscriber
 {
     private $_orExpr;
 
@@ -7,7 +7,7 @@ class Kwf_Component_Events_UrlCache extends Kwf_Component_Events
     {
         $ret = array();
         $ret[] = array(
-            'event' => 'Kwf_Component_Event_Row_UpdatesFinished',
+            'event' => 'Kwf_Events_Event_Row_UpdatesFinished',
             'callback' => 'onRowUpdatesFinished'
         );
         $ret[] = array(
@@ -31,7 +31,7 @@ class Kwf_Component_Events_UrlCache extends Kwf_Component_Events
         $this->_orExpr = new Kwf_Model_Select_Expr_Or(array());
     }
 
-    public function onRowUpdatesFinished(Kwf_Component_Event_Row_UpdatesFinished $event)
+    public function onRowUpdatesFinished(Kwf_Events_Event_Row_UpdatesFinished $event)
     {
         if (count($this->_orExpr->getExpressions())) {
             $select = new Kwf_Model_Select();

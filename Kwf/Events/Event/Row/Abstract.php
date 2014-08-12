@@ -3,7 +3,7 @@
  * @package Component
  * @subpackage Event
  */
-abstract class Kwf_Component_Event_Row_Abstract extends Kwf_Component_Event_Abstract
+abstract class Kwf_Events_Event_Row_Abstract extends Kwf_Events_Event_Abstract
 {
     public $row;
 

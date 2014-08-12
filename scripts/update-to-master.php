@@ -209,6 +209,15 @@ $files = glob_recursive('Component.php');
 $files = array_merge($files, glob_recursive('*.ini'));
 replaceFiles($files, 'ModernizrMediaQueries', 'ModernizrMediaqueries');
 
+$files = array_merge(glob_recursive('Component.php'), glob_recursive('Events.php'));
+replaceFiles($files, 'Kwf_Component_Events_Log', 'Kwf_Events_Log');
+replaceFiles($files, 'Kwf_Component_Event_Media_', 'Kwf_Events_Event_Media_');
+replaceFiles($files, 'Kwf_Component_Event_Model_', 'Kwf_Events_Event_Model_');
+replaceFiles($files, 'Kwf_Component_Event_Row_', 'Kwf_Events_Event_Row_');
+replaceFiles($files, 'Kwf_Component_Event_Abstract', 'Kwf_Events_Event_Abstract');
+replaceFiles($files, 'Kwf_Component_Events::fireEvent', 'Kwf_Events_Dispatcher::fireEvent');
+replaceFiles($files, 'Kwf_Component_Events', 'Kwf_Events_Subscriber');
+
 $files = glob_recursive('*.js');
 replaceFiles($files, 'Kwc.List.Fade', 'Kwc.Legacy.List.Fade');
 replaceFiles($files, 'Kwc.List.Carousel', 'Kwc.Legacy.List.Carousel');

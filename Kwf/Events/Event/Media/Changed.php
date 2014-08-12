@@ -3,7 +3,7 @@
  * @package Component
  * @subpackage Event
  */
-class Kwf_Component_Event_Media_Changed extends Kwf_Component_Event_Abstract
+class Kwf_Events_Event_Media_Changed extends Kwf_Events_Event_Abstract
 {
     public $component;
     public $type;

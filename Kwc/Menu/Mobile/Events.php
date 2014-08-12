@@ -47,7 +47,7 @@ class Kwc_Menu_Mobile_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
-    public function onPageChanged(Kwf_Component_Event_Abstract $event)
+    public function onPageChanged(Kwf_Events_Event_Abstract $event)
     {
         $this->_deleteCache($event);
     }

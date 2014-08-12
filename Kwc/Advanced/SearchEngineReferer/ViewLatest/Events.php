@@ -8,7 +8,7 @@ class Kwc_Advanced_SearchEngineReferer_ViewLatest_Events extends Kwc_Abstract_Ev
             if (in_array('Kwc_Advanced_SearchEngineReferer_Component', Kwc_Abstract::getParentClasses($class))) {
                 $ret[] = array(
                     'class' => Kwc_Abstract::getSetting($class, 'childModel'),
-                    'event' => 'Kwf_Component_Event_Row_Inserted',
+                    'event' => 'Kwf_Events_Event_Row_Inserted',
                     'callback' => 'onRowInsert'
                 );
             }
@@ -16,7 +16,7 @@ class Kwc_Advanced_SearchEngineReferer_ViewLatest_Events extends Kwc_Abstract_Ev
         return $ret;
     }
 
-    public function onRowInsert(Kwf_Component_Event_Row_Inserted $event)
+    public function onRowInsert(Kwf_Events_Event_Row_Inserted $event)
     {
         // Kwc_Advanced_SearchEngineReferer_Component::processInput saves not dbIb but componentId
         $component = Kwf_Component_Data_Root::getInstance()

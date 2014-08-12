@@ -6,23 +6,23 @@ class Kwc_Basic_Table_Events extends Kwc_Abstract_Composite_Events
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onChildRowUpdate'
         );
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onChildRowUpdate'
         );
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onChildRowUpdate'
         );
         return $ret;
     }
 
-    public function onChildRowUpdate(Kwf_Component_Event_Row_Abstract $event)
+    public function onChildRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
             $event->row->component_id, array('limit'=>1, 'ignoreVisible'=>true)

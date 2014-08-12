@@ -14,19 +14,19 @@ class Kwc_Chained_Trl_Events extends Kwc_Chained_Abstract_Events
             }
             $ret[] = array(
                 'class' => $m,
-                'event' => 'Kwf_Component_Event_Row_Updated',
+                'event' => 'Kwf_Events_Event_Row_Updated',
                 'callback' => 'onMasterOwnRowUpdate'
             );
             $ret[] = array(
                 'class' => $m,
-                'event' => 'Kwf_Component_Event_Row_Inserted',
+                'event' => 'Kwf_Events_Event_Row_Inserted',
                 'callback' => 'onMasterOwnRowUpdate'
             );
         }
         return $ret;
     }
 
-    public function onMasterOwnRowUpdate(Kwf_Component_Event_Row_Abstract $event)
+    public function onMasterOwnRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
             $event->row->component_id, array('ignoreVisible'=>true)

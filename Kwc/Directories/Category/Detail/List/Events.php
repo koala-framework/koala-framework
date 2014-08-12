@@ -32,17 +32,17 @@ class Kwc_Directories_Category_Detail_List_Events extends Kwc_Abstract_Composite
                     $relModel = Kwf_Model_Abstract::getInstance($dirModel)->getDependentModel($childReference);
                     $ret[] = array(
                         'class' => $relModel,
-                        'event' => 'Kwf_Component_Event_Row_Updated',
+                        'event' => 'Kwf_Events_Event_Row_Updated',
                         'callback' => 'onUpdateRow'
                     );
                     $ret[] = array(
                         'class' => $relModel,
-                        'event' => 'Kwf_Component_Event_Row_Inserted',
+                        'event' => 'Kwf_Events_Event_Row_Inserted',
                         'callback' => 'onUpdateRow'
                     );
                     $ret[] = array(
                         'class' => $relModel,
-                        'event' => 'Kwf_Component_Event_Row_Deleted',
+                        'event' => 'Kwf_Events_Event_Row_Deleted',
                         'callback' => 'onUpdateRow'
                     );
                 }
@@ -51,7 +51,7 @@ class Kwc_Directories_Category_Detail_List_Events extends Kwc_Abstract_Composite
         return $ret;
     }
 
-    public function onUpdateRow(Kwf_Component_Event_Row_Abstract $ev)
+    public function onUpdateRow(Kwf_Events_Event_Row_Abstract $ev)
     {
         foreach (call_user_func(array($this->_class, 'getItemDirectoryClasses'), $this->_class) as $dirCls) {
             $item = $ev->row->getModel()->getReference('Item');

@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_Events_ProcessInputCache extends Kwf_Component_Events
+class Kwf_Component_Events_ProcessInputCache extends Kwf_Events_Subscriber
 {
     public function getListeners()
     {
@@ -28,7 +28,7 @@ class Kwf_Component_Events_ProcessInputCache extends Kwf_Component_Events
     {
         $cacheId = 'procI-'.$event->component->getPageOrRoot()->componentId;
         Kwf_Cache_Simple::delete($cacheId);
-        $log = Kwf_Component_Events_Log::getInstance();
+        $log = Kwf_Events_Log::getInstance();
         if ($log) {
             $log->log("processInput cache clear componentId=".$event->component->getPageOrRoot()->componentId, Zend_Log::INFO);
         }

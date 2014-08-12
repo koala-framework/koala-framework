@@ -10,23 +10,23 @@ class Kwc_Advanced_SocialBookmarks_Events extends Kwf_Component_Abstract_Events
         $model = $models['Networks'];
         $ret[] = array(
             'class' => $model,
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onNetworksRowUpdate'
         );
         $ret[] = array(
             'class' => $models['Networks'],
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onNetworksRowUpdate'
         );
         $ret[] = array(
             'class' => $models['Networks'],
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onNetworksRowUpdate'
         );
         return $ret;
     }
 
-    public function onNetworksRowUpdate(Kwf_Component_Event_Row_Abstract $event)
+    public function onNetworksRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         $dbId = $event->row->component_id;
         $alternativeCmps = call_user_func(array($this->_class, 'getAlternativeComponents'));

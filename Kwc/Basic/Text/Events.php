@@ -6,13 +6,13 @@ class Kwc_Basic_Text_Events extends Kwc_Abstract_Events
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'stylesModel'),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onStylesRowUpdate'
         );
         return $ret;
     }
 
-    public function onStylesRowUpdate(Kwf_Component_Event_Row_Updated $e)
+    public function onStylesRowUpdate(Kwf_Events_Event_Row_Updated $e)
     {
         $s = new Kwf_Model_Select();
         $s->whereEquals('uses_styles', true);

@@ -8,7 +8,7 @@ class Kwc_Basic_ImageParent_Events extends Kwc_Abstract_Events
         foreach ($this->_getCreatingClasses($this->_class) as $class) {
             $ret[] = array(
                 'class' => $class,
-                'event' => 'Kwf_Component_Event_Media_Changed',
+                'event' => 'Kwf_Events_Event_Media_Changed',
                 'callback' => 'onMediaChanged'
             );
             $ret[] = array(
@@ -47,7 +47,7 @@ class Kwc_Basic_ImageParent_Events extends Kwc_Abstract_Events
         ));
     }
 
-    public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
+    public function onMediaChanged(Kwf_Events_Event_Media_Changed $event)
     {
         $components = $event->component
             ->getChildComponents(array('componentClass' => $this->_class));
@@ -75,7 +75,7 @@ class Kwc_Basic_ImageParent_Events extends Kwc_Abstract_Events
                 $typeBase = $component->getComponent()->getBaseType();
                 $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
                 foreach ($steps as $step) {
-                    $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                    $this->fireEvent(new Kwf_Events_Event_Media_Changed(
                         $this->_class, $component, str_replace('{width}', $step, $typeBase)
                     ));
                 }

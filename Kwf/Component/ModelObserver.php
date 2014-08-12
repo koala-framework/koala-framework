@@ -83,15 +83,15 @@ class Kwf_Component_ModelObserver
         $data = null;
         if ($row) {
             if ($function == 'delete') {
-                $event = 'Kwf_Component_Event_Row_Deleted';
+                $event = 'Kwf_Events_Event_Row_Deleted';
             } else if ($function == 'update') {
-                $event = 'Kwf_Component_Event_Row_Updated';
+                $event = 'Kwf_Events_Event_Row_Updated';
             } else if ($function == 'insert') {
-                $event = 'Kwf_Component_Event_Row_Inserted';
+                $event = 'Kwf_Events_Event_Row_Inserted';
             }
-            if ($event) Kwf_Component_Events::fireEvent(new $event($row));
+            if ($event) Kwf_Events_Dispatcher::fireEvent(new $event($row));
         } else {
-            Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Model_Updated($model));
+            Kwf_Events_Dispatcher::fireEvent(new Kwf_Events_Event_Model_Updated($model));
         }
         $this->_modelEventFired = true;
     }
@@ -148,7 +148,7 @@ class Kwf_Component_ModelObserver
     public function process()
     {
         if ($this->_modelEventFired) {
-            Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Row_UpdatesFinished());
+            Kwf_Events_Dispatcher::fireEvent(new Kwf_Events_Event_Row_UpdatesFinished());
         }
 
         // Suchindex

@@ -1,61 +1,15 @@
 <?php
-class Kwf_Component_Events
+class Kwf_Events_Dispatcher
 {
-    protected $_config;
     public static $_indent = 0;
     private static $_listeners;
     public static $eventsCount = 0;
 
-    protected function __construct($config = array())
-    {
-        $this->_config = $config;
-        $this->_init();
-    }
-
-    public function getConfig()
-    {
-        return $this->_config;
-    }
-
-    protected function _getClassFromRow($classes, $row, $cleanValue = false)
-    {
-        if (count($classes) > 1 && $row->getModel()->hasColumn('component')) {
-            if ($cleanValue) {
-                $c = $row->getCleanValue('component');
-            } else {
-                $c = $row->component;
-            }
-            if (isset($classes[$c])) {
-                return $classes[$c];
-            }
-        }
-        $class = array_shift($classes);
-        return $class;
-    }
-
-    protected function _init() {}
-
-    /**
-     * @return $this
-     */
-    public static final function getInstance($class, $config = array())
-    {
-        $id = md5(serialize(array($class, $config)));
-        static $instances = array();
-        if (!isset($instances[$id])) {
-            if (!$class) {
-                throw new Kwf_Exception("No class given");
-            }
-            $instances[$id] = new $class($config);
-        }
-        return $instances[$id];
-    }
-
     public static final function getAllListeners()
     {
         if (!isset(self::$_listeners)) {
-            if (!Kwf_Component_Settings::$_rootComponentClassSet && file_exists('build/component/events')) {
-                self::$_listeners = unserialize(file_get_contents('build/component/events'));
+            if (!Kwf_Component_Settings::$_rootComponentClassSet && file_exists('build/events/listeners')) {
+                self::$_listeners = unserialize(file_get_contents('build/events/listeners'));
             } else {
                 self::$_listeners = self::_getAllListeners();
             }
@@ -109,12 +63,12 @@ class Kwf_Component_Events
                 }
             }
         }
-        $eventObjects[] = self::getInstance('Kwf_Component_Events_ViewCache');
-        $eventObjects[] = self::getInstance('Kwf_Component_Events_UrlCache');
-        $eventObjects[] = self::getInstance('Kwf_Component_Events_ProcessInputCache');
-        $eventObjects[] = self::getInstance('Kwf_Component_Events_RequestHttpsCache');
+        $eventObjects[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_ViewCache');
+        $eventObjects[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_UrlCache');
+        $eventObjects[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_ProcessInputCache');
+        $eventObjects[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_RequestHttpsCache');
         if ($hasFulltext) {
-            $eventObjects[] = self::getInstance('Kwf_Component_Events_Fulltext');
+            $eventObjects[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_Fulltext');
         }
 
         $listeners = array();
@@ -131,7 +85,7 @@ class Kwf_Component_Events
                     throw new Kwf_Exception('Listeners of ' . get_class($eventObject) . ' must return arrays with keys "class" (optional), "event" and "callback"');
                 }
                 $event = $listener['event'];
-                if (!class_exists($event)) throw new Kwf_Exception("Event-Class $event not found, comes from " . get_class($eventObject));
+                if (!class_exists($event)) throw new Kwf_Exception("Event-Class $event not found, comes from " . get_class($subscriber));
                 $class = isset($listener['class']) ? $listener['class'] : 'all';
                 if (!is_array($class)) {
                     $class = array($class);
@@ -149,14 +103,9 @@ class Kwf_Component_Events
         return $listeners;
     }
 
-    public function getListeners()
-    {
-        return array();
-    }
-
     public static function fireEvent($event)
     {
-        $logger = Kwf_Component_Events_Log::getInstance();
+        $logger = Kwf_Events_Log::getInstance();
         if ($logger && $logger->indent == 0) {
             $logger->info('----');
             $logger->resetTimer();

@@ -3,7 +3,7 @@
  * @package Component
  * @subpackage Event
  */
-class Kwf_Component_Event_Component_RecursiveAbstract extends Kwf_Component_Event_Abstract
+class Kwf_Component_Event_Component_RecursiveAbstract extends Kwf_Events_Event_Abstract
 {
     /**
      * @var Kwf_Component_Data

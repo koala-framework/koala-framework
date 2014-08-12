@@ -6,23 +6,23 @@ class Kwc_Box_Tags_RelatedPages_Events extends Kwc_Abstract_Events
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => 'Kwf_Component_Generator_Plugin_Tags_ComponentsToTagsModel',
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onRowOperation'
         );
         $ret[] = array(
             'class' => 'Kwf_Component_Generator_Plugin_Tags_ComponentsToTagsModel',
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onRowOperation'
         );
         $ret[] = array(
             'class' => 'Kwf_Component_Generator_Plugin_Tags_ComponentsToTagsModel',
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onRowOperation'
         );
         return $ret;
     }
 
-    public function onRowOperation(Kwf_Component_Event_Row_Abstract $event)
+    public function onRowOperation(Kwf_Events_Event_Row_Abstract $event)
     {
         $model = $event->row->getModel();
         $select = $model->select()->whereEquals('tag_id', $event->row->tag_id);

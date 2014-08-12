@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_Events_Log extends Zend_Log
+class Kwf_Events_Log extends Zend_Log
 {
     public $indent = 0;
 
@@ -12,7 +12,7 @@ class Kwf_Component_Events_Log extends Zend_Log
         if (is_null($instance)) {
             $instance = false;
             if (Kwf_Config::getValue('debug.eventlog')) {
-                $instance = new Kwf_Component_Events_Log();
+                $instance = new Kwf_Events_Log();
                 $instance->resetTimer();
             }
         }
