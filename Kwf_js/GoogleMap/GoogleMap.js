@@ -117,7 +117,7 @@ Kwf.GoogleMap.Map = function(config) {
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
     if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
     if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
-    if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlStyle = 'LEFT_TOP';
+    if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';
 
 
     if (!this.config.markers) this.config.markers = [ ];
