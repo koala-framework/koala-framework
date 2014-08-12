@@ -580,18 +580,18 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         } else if ($expr instanceof Kwf_Model_Select_Expr_Area) {
             $lat1 = $this->_formatField('latitude', $dbSelect, $tableNameAlias);
             // calculate radian-values because mysql sin and cos does only work with radians
-            $lat2 = 2 * pi() / 360 * $expr->getLatitude();
+            $lat2 = deg2rad($expr->getLatitude());
             $long1 = $this->_formatField('longitude', $dbSelect, $tableNameAlias);
             // calculate radian-values because mysql sin and cos does only work with radians
-            $long2 = 2 * pi() / 360 * $expr->getLongitude();
+            $long2 = deg2rad($expr->getLongitude());
             $radius = $expr->getRadius();
             // calculate radian-values also directly with mysql because we don't have the
             // values for lat1 and long1 but their field-name/expression
             return "
                 (ACOS(
-                    SIN(2 * PI() / 360 * '.$lat1.') * SIN($lat2) +
-                    COS(2 * PI() / 360 * '.$lat1.') * COS($lat2) *
-                    COS($long2 - (2 * PI() / 360 * '.$long1.'))
+                    SIN(RADIANS($lat1)) * SIN($lat2) +
+                    COS(RADIANS($lat1)) * COS($lat2) *
+                    COS($long2 - RADIANS($long1))
                 ) * 6378.137) <= $radius
             ";
         } else if ($expr instanceof Kwf_Model_Select_Expr_GroupConcat) {
