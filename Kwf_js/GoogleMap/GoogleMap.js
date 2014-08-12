@@ -191,8 +191,8 @@ Kwf.GoogleMap.Map = function(config) {
     }
 
     var container = this.mapContainer.down(".container");
-    container.setWidth(parseInt(this.config.width));
-    container.setHeight(parseInt(this.config.height));
+    container.setWidth(this.config.width);
+    container.setHeight(this.config.height);
 
 };
 
