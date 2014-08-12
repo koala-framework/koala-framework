@@ -1103,4 +1103,9 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         }
         return $value;
     }
+
+    public function getEventsClass()
+    {
+        return null;
+    }
 }

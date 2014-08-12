@@ -23,66 +23,149 @@ class Kwf_Events_Dispatcher
         self::$_listeners = null;
     }
 
+    /**
+     * Add an additional event subscriber, can be used by unit tests
+     *
+     * obj
+     */
+    public static function addListeners($objOrClass)
+    {
+        self::getAllListeners(); //fill cache
+        if ($objOrClass instanceof Kwf_Events_Subscriber) {
+            self::$_listeners = array_merge(self::$_listeners, self::_getListenersFromSubscribers(array($objOrClass)));
+        } else if (is_string($objOrClass)) {
+            if (is_instance_of($objOrClass, 'Kwf_Model_Interface')) {
+                self::$_listeners = array_merge(self::$_listeners, self::_getListenersFromSubscribers(
+                    self::_getSubscribersFromModel($objOrClass)
+                ));
+            } else if (is_instance_of($objOrClass, 'Kwf_Component_Abstract')) {
+                self::$_listeners = array_merge(self::$_listeners, self::_getListenersFromSubscribers(
+                    self::_getSubscribersFromComponent($objOrClass)
+                ));
+            }
+        }
+    }
+
+    private static function _getSubscribersFromComponent($componentClass)
+    {
+        $subscribers = array();
+
+        $eventsClass = Kwc_Admin::getComponentClass($componentClass, 'Events');
+        $subscribers[] = Kwf_Component_Abstract_Events::getInstance(
+                $eventsClass, array('componentClass' => $componentClass)
+        );
+        foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $null) {
+            $generator = current(Kwf_Component_Generator_Abstract::getInstances(
+                    $componentClass, array('generator' => $generatorKey))
+            );
+            $eventsClass = $generator->getEventsClass();
+            if ($eventsClass) {
+                $subscribers[] = Kwf_Component_Generator_Events::getInstance(
+                        $eventsClass,
+                        array(
+                                'componentClass' => $componentClass,
+                                'generatorKey' => $generatorKey
+                        )
+                );
+            }
+        }
+        if (Kwc_Abstract::hasSetting($componentClass, 'menuConfig')) {
+            $mc = Kwf_Component_Abstract_MenuConfig_Abstract::getInstance($componentClass);
+            $eventsClass = $mc->getEventsClass();
+            if ($eventsClass) {
+                $subscribers[] = Kwf_Component_Abstract_MenuConfig_Events::getInstance(
+                        $eventsClass,
+                        array(
+                            'componentClass' => $componentClass
+                        )
+                );
+            }
+        }
+        if (Kwc_Abstract::hasSetting($componentClass, 'ownModel')) {
+            $subscribers = array_merge($subscribers, self::_getSubscribersFromModel(Kwc_Abstract::hasSetting($componentClass, 'ownModel')));
+        }
+        if (Kwc_Abstract::hasSetting($componentClass, 'childModel')) {
+            $subscribers = array_merge($subscribers, self::_getSubscribersFromModel(Kwc_Abstract::hasSetting($componentClass, 'childModel')));
+        }
+        foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $g) {
+            if (isset($g['model'])) {
+                $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($g['model']));
+            }
+        }
+
+        return $subscribers;
+    }
+
+    private static function _getSubscribersFromModel($modelClass)
+    {
+        $subscribers = array();
+        if (!is_string($modelClass)) return $subscribers;
+
+        $modelObj = Kwf_Model_Abstract::getInstance($modelClass);
+        $eventsClass = $modelObj->getEventsClass();
+        if ($eventsClass) {
+            if (!is_array($eventsClass)) $eventsClass = array($eventsClass);
+            foreach ($eventsClass as $c) {
+                $subscribers[] = Kwf_Model_EventSubscriber::getInstance($c, array(
+                    'modelClass' => $modelClass
+                ));
+            }
+        }
+        return $subscribers;
+    }
+
     private static function _getAllListeners()
     {
-        $eventObjects = array();
+        $models = array();
+        $subscribers = array();
         $hasFulltext = false;
         foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
-            $eventsClass = Kwc_Admin::getComponentClass($componentClass, 'Events');
-            $eventObjects[] = Kwf_Component_Abstract_Events::getInstance(
-                    $eventsClass, array('componentClass' => $componentClass)
-            );
-            foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $null) {
-                $generator = current(Kwf_Component_Generator_Abstract::getInstances(
-                        $componentClass, array('generator' => $generatorKey))
-                );
-                $eventsClass = $generator->getEventsClass();
-                if ($eventsClass) {
-                    $eventObjects[] = Kwf_Component_Generator_Events::getInstance(
-                            $eventsClass,
-                            array(
-                                    'componentClass' => $componentClass,
-                                    'generatorKey' => $generatorKey
-                            )
-                    );
-                }
-            }
+            $subscribers = array_merge($subscribers, self::_getSubscribersFromComponent($componentClass));
             if (Kwc_Abstract::getFlag($componentClass, 'usesFulltext')) {
                 $hasFulltext = true;
             }
-            if (Kwc_Abstract::hasSetting($componentClass, 'menuConfig')) {
-                $mc = Kwf_Component_Abstract_MenuConfig_Abstract::getInstance($componentClass);
-                $eventsClass = $mc->getEventsClass();
-                if ($eventsClass) {
-                    $eventObjects[] = Kwf_Component_Abstract_MenuConfig_Events::getInstance(
-                            $eventsClass,
-                            array(
-                                'componentClass' => $componentClass
-                            )
-                    );
-                }
-            }
         }
-        $eventObjects[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_ViewCache');
-        $eventObjects[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_UrlCache');
-        $eventObjects[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_ProcessInputCache');
-        $eventObjects[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_RequestHttpsCache');
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_ViewCache');
+            $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_UrlCache');
+            $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_ProcessInputCache');
+            $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_RequestHttpsCache');
+        }
         if ($hasFulltext) {
-            $eventObjects[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_Fulltext');
+            $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_Fulltext');
         }
 
-        $listeners = array();
-        foreach ($eventObjects as $eventObject) {
-            if (get_class($eventObject) == 'Kwf_Component_Generator_Events_Table') {
-
+        foreach (glob('models/*') as $m) {
+            $m = str_replace('/', '_', substr($m, 7, -4));
+            if (is_instance_of($m, 'Kwf_Model_Interface')) {
+                $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($m));
             }
+        }
 
-            foreach ($eventObject->getListeners() as $listener) {
+        if (Kwf_Config::getValue('user.model')) {
+            $subscribers = array_merge($subscribers, self::_getSubscribersFromModel(Kwf_Config::getValue('user.model')));
+        }
+
+        return self::_getListenersFromSubscribers($subscribers);
+    }
+
+    static private function _getListenersFromSubscribers($subscribers)
+    {
+        $listeners = array();
+        $uniqueSubscribers = array();
+        foreach ($subscribers as $subscriber) {
+            $key = get_class($subscriber).serialize($subscriber->getConfig());
+            if (!isset($uniqueSubscribers[$key])) {
+                $uniqueSubscribers[$key] = $subscriber;
+            }
+        }
+        foreach ($uniqueSubscribers as $subscriber) {
+            foreach ($subscriber->getListeners() as $listener) {
                 if (!is_array($listener) ||
                         !isset($listener['event']) ||
                         !isset($listener['callback'])
                 ) {
-                    throw new Kwf_Exception('Listeners of ' . get_class($eventObject) . ' must return arrays with keys "class" (optional), "event" and "callback"');
+                    throw new Kwf_Exception('Listeners of ' . get_class($subscriber) . ' must return arrays with keys "class" (optional), "event" and "callback"');
                 }
                 $event = $listener['event'];
                 if (!class_exists($event)) throw new Kwf_Exception("Event-Class $event not found, comes from " . get_class($subscriber));
@@ -93,9 +176,9 @@ class Kwf_Events_Dispatcher
                 foreach ($class as $c) {
                     if (is_object($c)) $c = get_class($c);
                     $listeners[$event][$c][] = array(
-                            'class' => get_class($eventObject),
+                            'class' => get_class($subscriber),
                             'method' => $listener['callback'],
-                            'config' => $eventObject->getConfig()
+                            'config' => $subscriber->getConfig()
                     );
                 }
             }
