@@ -116,6 +116,8 @@ Kwf.GoogleMap.Map = function(config) {
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
     if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
+    if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
+    if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlStyle = 'LEFT_TOP';
 
 
     if (!this.config.markers) this.config.markers = [ ];
@@ -214,12 +216,17 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
             zoom: parseInt(this.config.zoom),
             panControl: this.config.pan_control,
             zoomControl: this.config.zoom_properties,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle[this.config.zoomControlStyle],
+                position: google.maps.ControlPosition[this.config.zoomControlPosition]
+            },
             scaleControl: this.config.scale,
             mapTypeControl: this.config.map_type,
             overviewMapControl: this.config.overview,
             streetViewControl: this.config.street_view,
             scrollwheel: this.config.scrollwheel
         };
+
         this.gmap = new google.maps.Map(this.mapContainer.down(".container").dom,
             mapOptions);
         if (this.mapContainer.down(".mapDir")) {
