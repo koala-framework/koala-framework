@@ -503,15 +503,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
     {
         if (isset($options['skipModelObserver']) && $options['skipModelObserver']) return;
 
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            if ($this->_proxyContainerModels) {
-                foreach ($this->_proxyContainerModels as $m) {
-                    Kwf_Component_ModelObserver::getInstance()->add('update', $m);
-                }
-            } else {
-                Kwf_Component_ModelObserver::getInstance()->add('update', $this);
-            }
-        }
+        Kwf_Component_ModelObserver::getInstance()->add('update', $this);
     }
 
     public function import($format, $data, $options = array())

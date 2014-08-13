@@ -163,17 +163,13 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
 
     public function deleteRows($where)
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
         $ret = $this->getProxyModel()->deleteRows($where);
-        Kwf_Component_ModelObserver::getInstance()->enable();
         return $ret;
     }
 
     public function updateRows($data, $where)
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
         $ret = $this->getProxyModel()->updateRows($data, $where);
-        Kwf_Component_ModelObserver::getInstance()->enable();
         return $ret;
     }
 
@@ -198,13 +194,7 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
 
     public function import($format, $data, $options = array())
     {
-        if (!isset($options['skipModelObserver']) || !$options['skipModelObserver']) {
-            Kwf_Component_ModelObserver::getInstance()->disable();
-        }
         $this->getProxyModel()->import($format, $data, $options);
-        if (!isset($options['skipModelObserver']) || !$options['skipModelObserver']) {
-            Kwf_Component_ModelObserver::getInstance()->enable();
-        }
     }
 
     public function writeBuffer()
@@ -259,5 +249,14 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
     public function afterInsert($row)
     {
         $this->getProxyModel()->afterInsert($row);
+    }
+
+    public function getEventSubscribers()
+    {
+        $ret = $this->getProxyModel()->getEventSubscribers();
+        $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwf_Model_Proxy_Events', array(
+            'modelClass' => get_class($this)
+        ));
+        return $ret;
     }
 }

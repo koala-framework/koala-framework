@@ -95,9 +95,7 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
             $this->_beforeUpdate();
         }
         $this->_beforeSaveSiblingMaster();
-        Kwf_Component_ModelObserver::getInstance()->disable();
         $ret = $this->_sourceRow->_saveWithoutResetDirty();
-        Kwf_Component_ModelObserver::getInstance()->enable();
         parent::_saveWithoutResetDirty();
         $this->_afterSave();
         if (!$id) {
@@ -112,9 +110,7 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
     {
         parent::delete();
         $this->_beforeDelete();
-        Kwf_Component_ModelObserver::getInstance()->disable();
         $this->_sourceRow->delete();
-        Kwf_Component_ModelObserver::getInstance()->enable();
         $this->_afterDelete();
     }
 
@@ -134,5 +130,10 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
             $ret = array_merge($r->_toArrayWithoutPrimaryKeys(), $ret);
         }
         return $ret;
+    }
+
+    //union must not fire events itself, it re-fires source model events
+    protected function _callObserver($fn)
+    {
     }
 }

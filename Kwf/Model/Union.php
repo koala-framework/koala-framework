@@ -254,4 +254,36 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             'model' => $this
         ));
     }
+
+    public function createRow(array $data = array())
+    {
+        throw new Kwf_Exception_NotYetImplemented();
+    }
+
+    public function deleteRows($where)
+    {
+        throw new Kwf_Exception_NotYetImplemented();
+    }
+
+    public function updateRows($data, $where)
+    {
+        throw new Kwf_Exception_NotYetImplemented();
+    }
+
+    public function import($format, $data, $options = array())
+    {
+        throw new Kwf_Exception_NotYetImplemented();
+    }
+
+    public function getEventSubscribers()
+    {
+        $ret = array();
+        foreach ($this->_models as $m) {
+            $ret = array_merge($ret, $m->getEventSubscribers());
+        }
+        $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwf_Model_Union_Events', array(
+            'modelClass' => get_class($this)
+        ));
+        return $ret;
+    }
 }

@@ -32,16 +32,16 @@ class Kwf_Events_Dispatcher
     {
         self::getAllListeners(); //fill cache
         if ($objOrClass instanceof Kwf_Events_Subscriber) {
-            self::$_listeners = array_merge(self::$_listeners, self::_getListenersFromSubscribers(array($objOrClass)));
+            self::_addListenersFromSubscribers(self::$_listeners, array($objOrClass));
         } else if (is_string($objOrClass)) {
             if (is_instance_of($objOrClass, 'Kwf_Model_Interface')) {
-                self::$_listeners = array_merge(self::$_listeners, self::_getListenersFromSubscribers(
+                self::_addListenersFromSubscribers(self::$_listeners,
                     self::_getSubscribersFromModel($objOrClass)
-                ));
+                );
             } else if (is_instance_of($objOrClass, 'Kwf_Component_Abstract')) {
-                self::$_listeners = array_merge(self::$_listeners, self::_getListenersFromSubscribers(
+                self::_addListenersFromSubscribers(self::$_listeners,
                     self::_getSubscribersFromComponent($objOrClass)
-                ));
+                );
             }
         }
     }
@@ -98,20 +98,10 @@ class Kwf_Events_Dispatcher
 
     private static function _getSubscribersFromModel($modelClass)
     {
-        $subscribers = array();
-        if (!is_string($modelClass)) return $subscribers;
+        if (!is_string($modelClass)) return array();
 
         $modelObj = Kwf_Model_Abstract::getInstance($modelClass);
-        $eventsClass = $modelObj->getEventsClass();
-        if ($eventsClass) {
-            if (!is_array($eventsClass)) $eventsClass = array($eventsClass);
-            foreach ($eventsClass as $c) {
-                $subscribers[] = Kwf_Model_EventSubscriber::getInstance($c, array(
-                    'modelClass' => $modelClass
-                ));
-            }
-        }
-        return $subscribers;
+        return $modelObj->getEventSubscribers();
     }
 
     private static function _getAllListeners()
@@ -146,12 +136,13 @@ class Kwf_Events_Dispatcher
             $subscribers = array_merge($subscribers, self::_getSubscribersFromModel(Kwf_Config::getValue('user.model')));
         }
 
-        return self::_getListenersFromSubscribers($subscribers);
+        $ret = array();
+        self::_addListenersFromSubscribers($ret, $subscribers);
+        return $ret;
     }
 
-    static private function _getListenersFromSubscribers($subscribers)
+    static private function _addListenersFromSubscribers(array &$listeners, $subscribers)
     {
-        $listeners = array();
         $uniqueSubscribers = array();
         foreach ($subscribers as $subscriber) {
             $key = get_class($subscriber).serialize($subscriber->getConfig());
