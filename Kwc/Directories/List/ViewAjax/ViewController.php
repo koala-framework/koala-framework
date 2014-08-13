@@ -51,7 +51,11 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
 //            throw new Kwf_Exception_NotFound();
         }
         $this->_component = $c;
-        $this->_model = $c->parent->getComponent()->getItemDirectory()->getComponent()->getChildModel();
+        $itemDir = $c->parent->getComponent()->getItemDirectory();
+        if (!is_string($itemDir)) {
+            $itemDir = $itemDir->componentClass;
+        }
+        $this->_model = Kwc_Abstract::createChildModel($itemDir);
         $this->_hasComponentId = $this->_model->hasColumn('component_id');
 
 //         $this->_columns->add(new Kwf_Grid_Column('title'));
@@ -89,7 +93,8 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
 
         $itemDirectory = $viewData->parent->getComponent()->getItemDirectory();
         if (is_string($itemDirectory)) {
-            throw new Kwf_Exception_NotYetImplemented();
+            $ret = Kwf_Component_Generator_Abstract::getInstance($itemDirectory, 'detail')
+                ->formatSelect(null, $ret);
         } else {
             $ret = $itemDirectory->getGenerator('detail')
                 ->formatSelect($itemDirectory, $ret);

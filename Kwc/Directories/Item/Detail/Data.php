@@ -5,7 +5,10 @@ class Kwc_Directories_Item_Detail_Data extends Kwf_Component_Data
     {
         $ret = parent::__get($var);
         if ($var == 'rel') {
-            $ret .= ' kwfDetail'.json_encode(array('directoryComponentId'=>$this->parent->componentId));
+            $ret .= ' kwfDetail'.json_encode(array(
+                'directoryComponentId'    => $this->parent->componentId,
+                'directoryComponentClass' => $this->parent->componentClass
+            ));
         }
         return $ret;
     }
