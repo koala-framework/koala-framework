@@ -60,7 +60,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
 
     private function _getAuthenticateResult($identity, $credential)
     {
-        $adapter = new Kwf_Auth_Adapter_Service();
+        $adapter = new Kwf_Auth_Adapter_PasswordAuth();
         $adapter->setIdentity($identity);
         $adapter->setCredential($credential);
 

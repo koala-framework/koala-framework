@@ -19,7 +19,6 @@ class Kwf_Controller_Action_User_ChangeuserController extends Kwf_Controller_Act
             $roles = array_values(array_unique($roles));
             $ret->whereEquals('role', $roles);
         }
-        $ret->whereEquals('deleted', 0);
         return $ret;
     }
 
@@ -36,7 +35,8 @@ class Kwf_Controller_Action_User_ChangeuserController extends Kwf_Controller_Act
         $this->_columns->add(new Kwf_Grid_Column('role'))
              ->setData(new Kwf_Controller_Action_User_Users_RoleData());
         $this->_columns->add(new Kwf_Grid_Column('email'));
-        $this->_columns->add(new Kwf_Grid_Column('locked'));
+        $this->_columns->add(new Kwf_Grid_Column('locked'))
+            ->setData(new Kwf_Controller_Action_User_Users_LockedData());
     }
 
     public function jsonChangeUserAction()

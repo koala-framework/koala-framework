@@ -108,7 +108,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $activationCode = $this->_getParam('code');
         list($userId, $code) = explode('-', $activationCode, 2);
 
-        $users = Zend_Registry::get('userModel')->getKwfModel();
+        $users = Zend_Registry::get('userModel');
         $row = $users->getRow($userId);
 
         $config = array(
@@ -144,7 +144,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             throw new Kwf_ClientException(trlKwf('Data not submitted completely.'));
         }
 
-        $users = Zend_Registry::get('userModel')->getKwfModel();
+        $users = Zend_Registry::get('userModel');
         $row = $users->getRow($userId);
 
         if (!$row) {
@@ -193,7 +193,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 
     protected function _createAuthAdapter()
     {
-        $adapter = new Kwf_Auth_Adapter_Service();
+        $adapter = new Kwf_Auth_Adapter_PasswordAuth();
         return $adapter;
     }
 
@@ -205,8 +205,8 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 
         $adapter = $this->_createAuthAdapter();
 
-        if (!$adapter instanceof Kwf_Auth_Adapter_Service) {
-            throw new Kwf_Controller_Exception(('_createAuthAdapter didn\'t return instance of Kwf_Auth_Adapter_Service'));
+        if (!$adapter instanceof Kwf_Auth_Adapter_PasswordAuth) {
+            throw new Kwf_Controller_Exception(('_createAuthAdapter didn\'t return instance of Kwf_Auth_Adapter_PasswordAuth'));
         }
 
         $auth = Kwf_Auth::getInstance();
@@ -222,10 +222,9 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             throw new Kwf_Exception_Client(trlKwf("Please enter your E-Mail-Address"));
         }
 
-        $users = Zend_Registry::get('userModel')->getKwfModel();
-        $result = $users->lostPassword($email);
+        Zend_Registry::get('userModel')->lostPassword($email);
 
-        $this->view->message = $result;
+        $this->view->message = trlKwf('Lost password mail sent to email address.');
     }
 
     protected function _onLogin()

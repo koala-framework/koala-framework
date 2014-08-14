@@ -58,6 +58,12 @@ class Kwf_Model_RowCache_Row extends Kwf_Model_Proxy_Row
         return parent::delete();
     }
 
+    public function getProxiedRow()
+    {
+        $this->_loadRow();
+        return parent::getProxiedRow();
+    }
+
     private function _loadRow()
     {
         if (!$this->_row) {

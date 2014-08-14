@@ -7,7 +7,7 @@ class Kwf_User_Autologin
             Kwf_Util_Https::ensureHttps();
             $feAutologin = explode('.', $_COOKIE['feAutologin']);
             if (count($feAutologin) == 2) {
-                $adapter = new Kwf_Auth_Adapter_Service();
+                $adapter = new Kwf_Auth_Adapter_PasswordAuth();
                 $adapter->setIdentity($feAutologin[0]);
                 $adapter->setCredential($feAutologin[1]);
                 $auth = Kwf_Auth::getInstance();

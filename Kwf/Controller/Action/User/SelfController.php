@@ -11,7 +11,12 @@ class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Au
         } else {
             $this->_formName = $regUserForm->self;
         }
+
         parent::preDispatch();
+        $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
+        $row = $this->_form->getModel()->getRowByRowByKwfUser($authedUser);
+        //$row = $this->_form->getModel()->getRowByRowByKwfUser($this->_getParam('id'));
+        $this->_form->setId($row->id);
     }
 
     protected function _initFields()
@@ -32,15 +37,12 @@ class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Au
 
     protected function _hasPermissions($row, $action)
     {
-        $userId = $this->_getParam('id');
-        if (!$userId) {
+        /*
+        $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
+        if ($authedUser->id != $row->id) {
             return false;
         }
-
-        $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
-        if ($authedUser->id != $userId || $authedUser->id != $row->id) {
-            return false;
-        }
+        */
         return true;
     }
 }
