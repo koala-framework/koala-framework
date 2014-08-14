@@ -204,7 +204,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                 //echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
                 //echo " data: ".Kwf_Component_Data::$objectsCount.', ';
                 //echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
-                //p(Kwf_Events_ModelObserver::getInstance()->getProcess());
                 //var_dump(Kwf_Model_Row_Abstract::$objectsByModel);
                 //var_dump(Kwf_Component_Data::$objectsById);
                 //echo "\n";

@@ -5,16 +5,8 @@ class Kwf_Events_ModelObserver
      * @var Kwf_Events_ModelObserver
      */
     static private $_instance;
-    private $_process = array(
-        'insert' => array(),
-        'update' => array(),
-        'delete' => array(),
-        'save'   => array()
-    );
     private $_skipFnF = true;
-    private $_processed = array();
     private $_disabled = 0; // wird zB. beim Import in Proxy ausgeschaltet
-    private $_enableProcess = true; // für Unit Tests
     private $_modelEventFired = false;
 
     public static function getInstance()
@@ -44,11 +36,6 @@ class Kwf_Events_ModelObserver
     public function disable()
     {
         $this->_disabled++;
-    }
-
-    public function setEnableProcess($enableProcess)
-    {
-        $this->_enableProcess = $enableProcess;
     }
 
     public function add($function, $source)
@@ -101,13 +88,5 @@ class Kwf_Events_ModelObserver
         if ($this->_modelEventFired) {
             Kwf_Events_Dispatcher::fireEvent(new Kwf_Events_Event_Row_UpdatesFinished());
         }
-    }
-
-    // Nur für Tests
-    // TODO: Damit sowas nicht notwendig ist, das Ganze testbarer machen (Observer
-    // in Row austauschbar, damit man ihn mocken kann und die Klasse hier modularer machen
-    public function getProcess()
-    {
-        return $this->_process;
     }
 }
