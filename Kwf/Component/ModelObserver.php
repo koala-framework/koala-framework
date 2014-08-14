@@ -95,65 +95,11 @@ class Kwf_Component_ModelObserver
         }
         $this->_modelEventFired = true;
     }
-/*
-    protected function _processCache($source)
-    {
-        if ($source['source'] instanceof Kwf_Model_Interface) {
-            $model = $source['source'];
-            $id = null;
-            $row = null;
-        } else {
-            $row = $source['source'];
-            if ($row instanceof Zend_Db_Table_Row_Abstract) {
-                $model = $row->getTable();
-                $primary = current($model->info('primary'));
-            } else {
-                $model = $row->getModel();
-                $primary = $model->getPrimaryKey();
-                if (get_class($model) == 'Kwf_Model_Db') $model = $model->getTable();
-            }
-            $id = is_array($primary) ? null : $row->$primary;
-            $componentId = isset($row->component_id) ? $row->component_id : null;
-        }
-        if ($model instanceof Kwf_Component_Cache_MetaModel ||
-            $model instanceof Kwf_Component_Cache_Model ||
-            ($model instanceof  Kwf_Model_Field && !$primary)
-        ) {
-            return array();
-        }
-        if (get_class($model) == 'Kwf_Db_Table') return array();
-        if ($this->_skipFnF) {
-            $m = $model;
-            while ($m instanceof Kwf_Model_Proxy) { $m = $m->getProxyModel(); }
-            if ($m instanceof Kwf_Model_FnF) return array();
-        }
-        $modelname = get_class($model);
-        if (!isset($this->_processed[$modelname]) || !in_array($id, $this->_processed[$modelname])) {
-            if (!isset($this->_processed[$modelname])) $this->_processed[$modelname] = array();
-            $this->_processed[$modelname][] = $id;
-            if ($this->_enableProcess) {
-                if ($row) {
-                    $dirtyColumns = isset($source['dirtyColumns']) ? $source['dirtyColumns'] : null;
-                    Kwf_Component_Cache::getInstance()->cleanByRow($row, $dirtyColumns);
-                } else {
-                    // Bei Import kommt ein Model daher
-                    Kwf_Component_Cache::getInstance()->cleanByModel($model);
-                }
-            }
-            return array($modelname => $id);
-        }
-        return array();
-    }
-*/
+
     public function process()
     {
         if ($this->_modelEventFired) {
             Kwf_Events_Dispatcher::fireEvent(new Kwf_Events_Event_Row_UpdatesFinished());
-        }
-
-        // Suchindex
-        if (class_exists('Kwf_Dao_Index', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Kwf_Dao_Index::process();
         }
     }
 
