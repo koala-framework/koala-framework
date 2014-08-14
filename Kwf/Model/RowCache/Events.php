@@ -30,6 +30,16 @@ class Kwf_Model_RowCache_Events extends Kwf_Model_EventSubscriber
 
     public function onModelEvent(Kwf_Events_Event_Model_Updated $ev)
     {
-        //TODO
+        $m = Kwf_Model_Abstract::getInstance($this->_modelClass);
+        if (is_array($ev->ids)) {
+            foreach ($ev->ids as $id) {
+                $m->clearRowCache($id);
+            }
+        } else {
+            //this is very inefficient as we have to iterate all ids
+            //but there is no way to delete all ids
+            $s = new Kwf_Model_Select();
+            $m->clearRowsCache($s);
+        }
     }
 }

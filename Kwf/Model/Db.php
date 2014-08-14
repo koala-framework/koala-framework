@@ -1167,19 +1167,11 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         }
     }
 
-    private function _updateModelObserver($options)
+    private function _updateModelObserver($options, array $ids = null)
     {
         if (isset($options['skipModelObserver']) && $options['skipModelObserver']) return;
 
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            if ($this->_proxyContainerModels) {
-                foreach ($this->_proxyContainerModels as $m) {
-                    Kwf_Events_ModelObserver::getInstance()->add('update', $m);
-                }
-            } else {
-                Kwf_Events_ModelObserver::getInstance()->add('update', $this);
-            }
-        }
+        Kwf_Events_ModelObserver::getInstance()->add('update', $this, $ids);
     }
 
     public function import($format, $data, $options = array())
@@ -1204,7 +1196,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $cmd .= "| {$systemData['mysqlDir']}mysql $systemData[mysqlOptions] 2>&1";
             exec($cmd, $output, $ret);
             unlink($filename);
-            $this->_updateModelObserver($options);
+            $this->_updateModelObserver($options, null);
             if ($ret != 0) throw new Kwf_Exception("SQL import failed: ".implode("\n", $output));
             $this->_afterImport($format, $data, $options);
         } else if ($format == self::FORMAT_CSV) {
@@ -1242,9 +1234,18 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             unlink($filename.'.gz');
             unlink($filename);
             rmdir($tmpImportFolder);
-            $this->_updateModelObserver($options);
+            $this->_updateModelObserver($options, null);
             $this->_afterImport($format, $data, $options);
         } else if ($format == self::FORMAT_ARRAY) {
+            $ids = array();
+            foreach ($data as $k => $v) {
+                if (is_array($ids) && isset($v[$this->getPrimaryKey()])) {
+                    $ids[] = $v[$this->getPrimaryKey()];
+                } else {
+                    //if we don't know all imported ids, pass null
+                    $ids = null;
+                }
+            }
             if (isset($options['buffer']) && $options['buffer']) {
                 if (isset($this->_importBuffer)) {
                     if ($options != $this->_importBufferOptions) {
@@ -1263,7 +1264,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             } else {
                 $this->_importArray($data, $options);
             }
-            $this->_updateModelObserver($options);
+            $this->_updateModelObserver($options, $ids);
             $this->_afterImport($format, $data, $options);
         } else {
             parent::import($format, $data);

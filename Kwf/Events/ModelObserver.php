@@ -38,7 +38,7 @@ class Kwf_Events_ModelObserver
         $this->_disabled++;
     }
 
-    public function add($function, $source)
+    public function add($function, $source, $arg = null)
     {
         if ($this->_disabled) return;
 
@@ -78,7 +78,7 @@ class Kwf_Events_ModelObserver
             }
             if ($event) Kwf_Events_Dispatcher::fireEvent(new $event($row));
         } else {
-            Kwf_Events_Dispatcher::fireEvent(new Kwf_Events_Event_Model_Updated($model));
+            Kwf_Events_Dispatcher::fireEvent(new Kwf_Events_Event_Model_Updated($model, $arg));
         }
         $this->_modelEventFired = true;
     }
