@@ -84,9 +84,11 @@ class Kwf_Model_RowCache extends Kwf_Model_Proxy
         return $ret;
     }
 
-    public function clearRows()
+    public function freeMemory()
     {
-        parent::clearRows();
+        foreach ($this->_cacheRows as $row) {
+            if (is_object($row)) $row->freeMemory();
+        }
         $this->_cacheRows = array();
     }
 

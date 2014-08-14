@@ -1028,13 +1028,18 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         return $this->_exprs[$name];
     }
 
+    public function freeMemory()
+    {
+        foreach ($this->_rows as $row) {
+            if (is_object($row)) $row->freeMemory();
+        }
+        $this->_rows = array();
+    }
+
     public static function clearAllRows()
     {
         foreach (self::$_allInstances as $i) {
-            foreach ($i->_rows as $row) {
-                if (is_object($row)) $row->freeMemory();
-            }
-            $i->_rows = array();
+            $i->freeMemory();
         }
     }
 
