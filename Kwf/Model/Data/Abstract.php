@@ -503,7 +503,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
     {
         if (isset($options['skipModelObserver']) && $options['skipModelObserver']) return;
 
-        Kwf_Component_ModelObserver::getInstance()->add('update', $this);
+        Kwf_Events_ModelObserver::getInstance()->add('update', $this);
     }
 
     public function import($format, $data, $options = array())
@@ -512,7 +512,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
             if (isset($options['replace']) && $options['replace'] && !isset($this->_uniqueColumns)) {
                 throw new Kwf_Exception('You must set uniqueColumns for this model if you use replace');
             }
-            Kwf_Component_ModelObserver::getInstance()->disable();
+            Kwf_Events_ModelObserver::getInstance()->disable();
             foreach ($data as $k => $v) {
                 if (isset($options['replace']) && $options['replace']) {
                     $s = $this->select();
@@ -535,7 +535,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
                 }
                 $row->save();
             }
-            Kwf_Component_ModelObserver::getInstance()->enable();
+            Kwf_Events_ModelObserver::getInstance()->enable();
             $this->_updateModelObserver($options);
             $this->_afterImport($format, $data, $options);
         } else {

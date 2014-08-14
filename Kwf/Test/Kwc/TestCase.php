@@ -38,7 +38,7 @@ abstract class Kwf_Test_Kwc_TestCase extends Kwf_Test_TestCase
     {
         $filename = $this->_root->filename;
 
-        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Events_ModelObserver::getInstance()->process();
         Kwf_Component_Data_Root::reset();
         $this->_root = Kwf_Component_Data_Root::getInstance();
         $this->_root->setFilename($filename);

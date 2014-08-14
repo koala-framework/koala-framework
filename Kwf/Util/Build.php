@@ -45,7 +45,7 @@ class Kwf_Util_Build
         $output = isset($options['output']) ? $options['output'] : false;
         $excludeTypes = isset($options['excludeTypes']) ? $options['excludeTypes'] : array();
 
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
         ini_set('memory_limit', '512M');
 
@@ -106,7 +106,7 @@ class Kwf_Util_Build
             }
         }
 
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        Kwf_Events_ModelObserver::getInstance()->enable();
         return $types;
     }
 }

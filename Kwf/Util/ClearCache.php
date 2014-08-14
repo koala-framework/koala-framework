@@ -151,7 +151,7 @@ class Kwf_Util_ClearCache
         $refresh = isset($options['refresh']) ? $options['refresh'] : false;
         $excludeTypes = isset($options['excludeTypes']) ? $options['excludeTypes'] : array();
 
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
         ini_set('memory_limit', '512M');
         if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
@@ -277,7 +277,7 @@ class Kwf_Util_ClearCache
             Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
         }
 
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        Kwf_Events_ModelObserver::getInstance()->enable();
         return $types;
     }
 }

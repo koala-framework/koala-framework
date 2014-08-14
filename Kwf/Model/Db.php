@@ -1174,10 +1174,10 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         if (Kwf_Component_Data_Root::getComponentClass()) {
             if ($this->_proxyContainerModels) {
                 foreach ($this->_proxyContainerModels as $m) {
-                    Kwf_Component_ModelObserver::getInstance()->add('update', $m);
+                    Kwf_Events_ModelObserver::getInstance()->add('update', $m);
                 }
             } else {
-                Kwf_Component_ModelObserver::getInstance()->add('update', $this);
+                Kwf_Events_ModelObserver::getInstance()->add('update', $this);
             }
         }
     }

@@ -155,7 +155,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 
 
 
-        Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
+        Kwf_Events_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
         $progressBar = new Zend_ProgressBar(
             new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
@@ -194,7 +194,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         }
         Kwf_Util_Component::afterDuplicate($source, $target);
         $progressBar->finish();
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        Kwf_Events_ModelObserver::getInstance()->enable();
 
         if (!$countDuplicated && $errorMsg) {
             //if at least one was duplicated show no error, else show one

@@ -29,7 +29,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
     public function indexAction()
     {
         ini_set('memory_limit', '512M');
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
         //try to update old-style db config
         if (file_exists('config.db.ini')) {

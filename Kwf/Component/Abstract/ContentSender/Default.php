@@ -41,8 +41,8 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                 if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint($i->componentId, microtime(true)-$startTime);
             }
         }
-        if (class_exists('Kwf_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Kwf_Component_ModelObserver::getInstance()->process(false);
+        if (class_exists('Kwf_Events_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Kwf_Events_ModelObserver::getInstance()->process(false);
         }
     }
 
@@ -54,8 +54,8 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
                 $i->getComponent()->postProcessInput($postData);
             }
         }
-        if (class_exists('Kwf_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-            Kwf_Component_ModelObserver::getInstance()->process();
+        if (class_exists('Kwf_Events_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+            Kwf_Events_ModelObserver::getInstance()->process();
         }
     }
 

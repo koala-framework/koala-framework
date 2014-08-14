@@ -170,7 +170,7 @@ abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         parent::_postUpdate();
         if (Kwf_Component_Data_Root::getComponentClass()) {
-            Kwf_Component_ModelObserver::getInstance()->add('update', $this);
+            Kwf_Events_ModelObserver::getInstance()->add('update', $this);
         }
     }
 
@@ -178,7 +178,7 @@ abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         parent::_postInsert();
         if (Kwf_Component_Data_Root::getComponentClass()) {
-            Kwf_Component_ModelObserver::getInstance()->add('insert', $this);
+            Kwf_Events_ModelObserver::getInstance()->add('insert', $this);
         }
     }
 
@@ -186,7 +186,7 @@ abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         parent::_postDelete();
         if (Kwf_Component_Data_Root::getComponentClass()) {
-            Kwf_Component_ModelObserver::getInstance()->add('delete', $this);
+            Kwf_Events_ModelObserver::getInstance()->add('delete', $this);
         }
     }
 }

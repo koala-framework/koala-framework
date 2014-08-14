@@ -148,7 +148,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_TestModel')->getRow('1605');
         $row->kwf_upload_id = 2;
         $row->save();
-        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Events_ModelObserver::getInstance()->process();
         Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-551aa9');
         $this->assertEquals(2, Kwc_Basic_Image_ParentImageComponent_Child_Component::$getMediaOutputCalled);
     }
@@ -175,7 +175,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_TestModel')->getRow('1600');
         $row->kwf_upload_id = 2;
         $row->save();
-        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Events_ModelObserver::getInstance()->process();
         Kwf_Component_Data_Root::reset();
 
         Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX.'100-76b7ff');

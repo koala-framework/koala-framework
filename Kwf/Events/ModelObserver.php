@@ -1,8 +1,8 @@
 <?php
-class Kwf_Component_ModelObserver
+class Kwf_Events_ModelObserver
 {
     /**
-     * @var Kwf_Component_ModelObserver
+     * @var Kwf_Events_ModelObserver
      */
     static private $_instance;
     private $_process = array(
