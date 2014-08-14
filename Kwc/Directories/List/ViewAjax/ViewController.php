@@ -10,7 +10,7 @@ class Kwc_Directories_List_ViewAjax_ViewController_ContentData extends Kwf_Data_
 
     public function load($row, $info)
     {
-        $primaryKeyValue = $row->{$row->getModel()->getPrimaryKey()};
+        $primaryKeyValue = $row->id;
         $config = array(
             'id' => $primaryKeyValue,
             'class' => 'Kwf_Component_Partial_Id',
@@ -36,7 +36,7 @@ class Kwc_Directories_List_ViewAjax_ViewController_ContentData extends Kwf_Data_
     }
 }
 
-class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action_Auto_Kwc_Grid
+class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action_Auto_Grid
 {
     protected $_buttons = array();
     protected $_paging = 25;
@@ -52,13 +52,9 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
         }
         $this->_component = $c;
         $itemDir = $c->parent->getComponent()->getItemDirectory();
-        if (!is_string($itemDir)) {
-            $itemDir = $itemDir->componentClass;
-        }
-        $this->_model = Kwc_Abstract::createChildModel($itemDir);
-        $this->_hasComponentId = $this->_model->hasColumn('component_id');
+        $this->_model = new Kwc_Directories_List_ViewAjax_ViewModel();
+        $this->_model->setItemDirectory($itemDir);
 
-//         $this->_columns->add(new Kwf_Grid_Column('title'));
         $this->_columns->add(new Kwf_Grid_Column('content'))
             ->setData(new Kwc_Directories_List_ViewAjax_ViewController_ContentData($this->_getParam('componentId')));
     }
@@ -90,15 +86,6 @@ class Kwc_Directories_List_ViewAjax_ViewController extends Kwf_Controller_Action
             $sf->getComponent()->processInput($params); //TODO don't do processInput here in _getSelect()
         }
         $ret = $view->getSelect();
-
-        $itemDirectory = $viewData->parent->getComponent()->getItemDirectory();
-        if (is_string($itemDirectory)) {
-            $ret = Kwf_Component_Generator_Abstract::getInstance($itemDirectory, 'detail')
-                ->formatSelect(null, $ret);
-        } else {
-            $ret = $itemDirectory->getGenerator('detail')
-                ->formatSelect($itemDirectory, $ret);
-        }
         return $ret;
     }
 

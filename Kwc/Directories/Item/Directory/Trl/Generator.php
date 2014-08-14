@@ -10,7 +10,8 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
             $select->unsetPart(Kwf_Component_Select::LIMIT_COUNT);
             $select->unsetPart(Kwf_Component_Select::LIMIT_OFFSET);
         }
-        $m = $this->getModel();
+        //not $this->getModel, that's the master model
+        $m = Kwc_Abstract::createChildModel($this->_class);
         $ret = parent::_getChainedChildComponents($parentData, $select);
         if ($m && $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
             //kann nur gemacht werden nur wenn parentData vorhanden
@@ -38,15 +39,12 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
         return $ret;
     }
 
-    public function getModel()
-    {
-        return Kwc_Abstract::createChildModel($this->_class);
-    }
-
     public function getChildIds($parentData, $select = array())
     {
         $ret = parent::getChildIds($parentData, $select);
-        $m = $this->getModel();
+
+        //not $this->getModel, that's the master model
+        $m = Kwc_Abstract::createChildModel($this->_class);
         if ($m && $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE) !== true && $parentData) {
             $ids = array();
             $prefix = $parentData->dbId . $this->getIdSeparator();
@@ -77,7 +75,7 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
         //visible überprüfung wird _getChainedChildComponents auch schon gemacht
         //aber nur wenn parentData dort schon verfügbar ist
         //für fälle wo es das nicht war hier unten nochmal überprüfen
-        $m = $this->getModel();
+        $m = Kwc_Abstract::createChildModel($this->_class);
         if ($m && $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE) !== true) {
             $r = $this->_getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row));
             if (!$r || !$r->visible) {
@@ -90,7 +88,7 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
     protected function _formatConfig($parentData, $row)
     {
         $ret = parent::_formatConfig($parentData, $row);
-        $m = $this->getModel();
+        $m = Kwc_Abstract::createChildModel($this->_class);
         if ($m) {
             $id = $parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row);
             $ret['row'] = $this->_getRow($id);
