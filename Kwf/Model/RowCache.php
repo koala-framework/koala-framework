@@ -120,4 +120,13 @@ class Kwf_Model_RowCache extends Kwf_Model_Proxy
         }
         Kwf_Cache_Simple::delete($cacheIds);
     }
+
+    public function getEventSubscribers()
+    {
+        $ret = parent::getEventSubscribers();
+        $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwf_Model_RowCache_Events', array(
+            'modelClass' => get_class($this)
+        ));
+        return $ret;
+    }
 }
