@@ -168,7 +168,7 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
     public function jsonMultiUploadAction()
     {
         $componentId = $this->_getParam('componentId');
-        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId, array('ignoreVisible' => true));
         if (Kwc_Abstract::getSetting($component->componentClass, 'multiFileUpload')) {
             $uploadIds = $this->_getParam('uploadIds');
             $uploadIds = explode(',', $uploadIds);
