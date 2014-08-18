@@ -1,5 +1,5 @@
 <?php
-//requires geshi/geshi package
+//requires easybook/geshi package
 class Kwc_Advanced_CodeSyntaxHighlight_Component extends Kwc_Abstract
 {
     public static function getSettings()
