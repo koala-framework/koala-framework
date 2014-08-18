@@ -350,9 +350,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
 
         //maskEl.setHeight(Math.max(Ext.lib.Dom.getViewHeight(), Ext.lib.Dom.getDocumentHeight()));
 
-        maskEl.on('click', function() {
-            this.lightbox.closeAndPushState();
-        }, this);
+        maskEl.on('click', this.onMaskClick, this);
     },
     unmask: function() {
         Kwf.EyeCandy.Lightbox.Styles.Abstract.masks--;
@@ -365,6 +363,10 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
             },
             scope: this
         });
+    },
+    onMaskClick: function()
+    {
+        this.lightbox.closeAndPushState();
     }
 };
 
