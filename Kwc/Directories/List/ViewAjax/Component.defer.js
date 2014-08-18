@@ -60,8 +60,6 @@ Kwc.Directories.List.ViewAjax = Ext2.extend(Ext2.Panel, {
 
     controllerUrl: null,
 
-    directoryUrl: null, //needed to implement back-link in detail without page load
-
     loadMoreBufferPx: 700,
 
     border: false,
@@ -69,11 +67,13 @@ Kwc.Directories.List.ViewAjax = Ext2.extend(Ext2.Panel, {
     cls: 'posts',
     initComponent: function() {
         Kwc.Directories.List.ViewAjax.byComponentId[this.componentId] = this;
-        Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.directoryViewComponentId] = this;
+        if (this.directoryViewComponentId) {
+            Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.directoryViewComponentId] = this;
+        }
         this.view = new Kwc.Directories.List.ViewAjax.View({
             controllerUrl: this.controllerUrl,
-            directoryUrl: this.directoryUrl,
             directoryComponentId: this.directoryComponentId,
+            directoryComponentClass: this.directoryComponentClass,
             baseParams: {
                 componentId: this.componentId
             },
@@ -474,7 +474,11 @@ Kwc.Directories.List.ViewAjax.View = Ext2.extend(Kwf.Binding.AbstractPanel,
         if (!m) return;
         var config = Ext2.decode(m[1]);
         if (!config.directoryComponentId) return;
-        if (config.directoryComponentId != this.directoryComponentId) return;
+        if (this.directoryComponentId) {
+            if (config.directoryComponentId != this.directoryComponentId) return;
+        } else {
+            if (config.directoryComponentClass != this.directoryComponentClass) return;
+        }
 
         ev.stopEvent();
         //more... Link clicked
@@ -520,8 +524,9 @@ Kwc.Directories.List.ViewAjax.View = Ext2.extend(Kwf.Binding.AbstractPanel,
                 this.detailEl.update(response.responseText);
                 Kwf.Statistics.count(href);
 
+                var directoryUrl = href.match(/(.*)\/[^/]+/)[1];
                 this.detailEl.query('a').forEach(function(el) {
-                    if (el.href == location.protocol+'//'+location.host+this.directoryUrl) {
+                    if (el.href == directoryUrl) {
                         el.kwfViewAjaxInitDone = true;
                         Ext2.fly(el).on('click', function(ev) {
                             ev.stopEvent();

@@ -10,7 +10,7 @@ Kwf.Binding.TabPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
             enableTabScroll: this.enableTabScroll || false
         }));
         this.tabItems = [];
-        
+
         for (var i in this.tabs) {
             var b = {};
             if (this.baseParams) {
@@ -107,6 +107,18 @@ Kwf.Binding.TabPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
         var arg = arguments;
         this.tabItems.each(function(i) {
             i.reload.apply(i, arg);
+        }, this);
+    },
+    disable: function() {
+        Kwf.Binding.TabPanel.superclass.disable.call(this);
+        this.tabItems.each(function(i) {
+            i.disable();
+        }, this);
+    },
+    enable: function() {
+        Kwf.Binding.TabPanel.superclass.enable.call(this);
+        this.tabItems.each(function(i) {
+            i.enable();
         }, this);
     },
 

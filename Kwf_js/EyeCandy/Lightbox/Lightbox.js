@@ -420,8 +420,12 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         var maxSize = this._getMaxContentSize(false);
         if (maxSize.width <= 650) {
             return 0;
-        } else {
+        } else if (maxSize.width <= 1100) {
             return 20;
+        } else if (maxSize.width <= 1600) {
+            return 40;
+        } else {
+            return 60;
         }
     },
     _updateMobile: function()

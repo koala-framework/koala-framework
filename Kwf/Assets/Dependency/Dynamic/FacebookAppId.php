@@ -13,8 +13,20 @@ class Kwf_Assets_Dependency_Dynamic_FacebookAppId extends Kwf_Assets_Dependency_
 
     public function getContents($language)
     {
-        $appId = Kwf_Registry::get('config')->kwc->fbAppData->appId;
-        return "Kwf.FacebookAppId = $appId;\n";
+        $appIds = array();
+        foreach (Kwf_Component_Abstract::getComponentClasses() as $class) {
+            if (!Kwc_Abstract::getFlag($class, 'hasBaseProperties')) continue;
+
+            $subRoots = Kwf_Component_Data_Root::getInstance()->getComponentsByClass($class);
+            foreach ($subRoots as $subRoot) {
+                if ($appId = $subRoot->getBaseProperty('fbAppData.appId')) {
+                    $appIds[$subRoot->componentId] = $appId;
+                }
+            }
+        }
+        if (empty($appIds)) throw new Kwf_Exception('No Facebook App ID found');
+
+        return "Kwf.FacebookAppIds = " . json_encode($appIds) . ";\n";
     }
 
     public function getFileName()

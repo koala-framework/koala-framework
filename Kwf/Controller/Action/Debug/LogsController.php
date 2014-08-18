@@ -90,9 +90,9 @@ class Kwf_Controller_Action_Debug_LogsController extends Kwf_Controller_Action_A
             throw new Kwf_Exception_Client(trlKwf('No log files found.'));
         }
 
-        $logMessage = array();
         $data = array();
         foreach ($files as $filename) {
+            $logMessage = array();
             $fileInfo = pathinfo($filename);
             $folders = explode('/', $fileInfo['dirname']);
             $file = file_get_contents($filename);

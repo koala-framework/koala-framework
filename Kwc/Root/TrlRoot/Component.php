@@ -60,6 +60,7 @@ class Kwc_Root_TrlRoot_Component extends Kwc_Root_Abstract
         if (!$ret) {
             $ret = current($lngs);
         }
+        if (!$ret) return $ret;
         return $ret->getChildPage(array('home' => true));
     }
 }

@@ -21,24 +21,11 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        if ($this->getData()->parent
-            ->getComponent()
-            ->getItemDirectory()
-            ->getChildComponent('-view')
-            ->componentClass
-            != $this->getData()->componentClass
-        ) {
-//             throw new Kwf_Exception('Invalid View: must be the same as the one used for the directory itself if using ViewAjax');
-        }
-
         $cfg = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->getData()->componentClass);
         $ret['config'] = array(
             'controllerUrl' => $cfg->getControllerUrl('View'),
-            'directoryViewComponentId' => $this->getData()->parent->getComponent()->getItemDirectory()->getChildComponent('-view')->componentId,
             'viewUrl' => $this->getData()->url,
-            'directoryUrl' => $this->getData()->parent->getComponent()->getItemDirectory()->url,
             'componentId' => $this->getData()->componentId,
-            'directoryComponentId' => $this->getData()->parent->getComponent()->getItemDirectory()->componentId,
             'searchFormComponentId' => $this->_getSearchForm() ? $this->_getSearchForm()->componentId : null,
             'placeholder' => array(
                 'noEntriesFound' => $this->_getPlaceholder('noEntriesFound')
@@ -46,6 +33,16 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
             'loadMoreBufferPx' => $this->_getSetting('loadMoreBufferPx'),
             'loadDetailAjax' => $this->_getSetting('loadDetailAjax'),
         );
+        $itemDir = $this->getData()->parent->getComponent()->getItemDirectory();
+        if (is_string($itemDir)) {
+            $ret['config']['directoryViewComponentId'] = false;
+            $ret['config']['directoryComponentId'] = false;
+            $ret['config']['directoryComponentClass'] = $itemDir;
+        } else {
+            $ret['config']['directoryViewComponentId'] = $itemDir->getChildComponent('-view')->componentId;
+            $ret['config']['directoryComponentId'] = $itemDir->componentId;
+            $ret['config']['directoryComponentClass'] = $itemDir->componentClass;
+        }
         return $ret;
     }
 

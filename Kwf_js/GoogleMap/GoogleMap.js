@@ -38,7 +38,7 @@ Kwf.GoogleMap.load = function(callback, scope)
     if (apiKeyIndex in Kwf.GoogleMap.apiKeys) {
         key = Kwf.GoogleMap.apiKeys[apiKeyIndex];
     }
-    var url = 'http:/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+trlKwf('en');
+    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+trlKwf('en');
     url += '&callback=Kwf.GoogleMap._loaded';
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
@@ -115,6 +115,9 @@ Kwf.GoogleMap.Map = function(config) {
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
+    if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
+    if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
+    if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';
 
 
     if (!this.config.markers) this.config.markers = [ ];
@@ -190,8 +193,8 @@ Kwf.GoogleMap.Map = function(config) {
     }
 
     var container = this.mapContainer.down(".container");
-    container.setWidth(parseInt(this.config.width));
-    container.setHeight(parseInt(this.config.height));
+    container.setWidth(this.config.width);
+    container.setHeight(this.config.height);
 
 };
 
@@ -213,11 +216,17 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             zoom: parseInt(this.config.zoom),
             panControl: this.config.pan_control,
             zoomControl: this.config.zoom_properties,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle[this.config.zoomControlStyle],
+                position: google.maps.ControlPosition[this.config.zoomControlPosition]
+            },
             scaleControl: this.config.scale,
             mapTypeControl: this.config.map_type,
             overviewMapControl: this.config.overview,
-            streetViewControl: this.config.street_view
+            streetViewControl: this.config.street_view,
+            scrollwheel: this.config.scrollwheel
         };
+
         this.gmap = new google.maps.Map(this.mapContainer.down(".container").dom,
             mapOptions);
         if (this.mapContainer.down(".mapDir")) {
@@ -354,6 +363,11 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         return false;
     },
 
+    /** For images in marker popup **/
+    markerWindowReady: function() {
+        Kwf.callOnContentReady(this.mapContainer, {newRender: true});
+    },
+
     /**
      * @param marker: The marker with 'kwfConfig' property inside
      */
@@ -365,6 +379,9 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             marker.infoWindow.setContent(marker.kwfConfig.infoHtml);
             marker.infoWindow.open(marker.map, marker);
         }
+        google.maps.event.addListener(marker.infoWindow, 'domready', this.markerWindowReady.createDelegate(
+            this, [ marker ]
+        ));
     },
     closeWindow: function(marker) {
         marker.infoWindow.close();

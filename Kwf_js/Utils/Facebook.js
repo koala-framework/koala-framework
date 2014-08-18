@@ -4,35 +4,59 @@ Kwf.FacebookClass = function() {
     this._onReadyCallbacks = [];
 };
 Ext2.extend(Kwf.FacebookClass, Ext2.util.Observable, {
+    loadedSubroot: null,
     isReady: false,
-    onReady: function(callback, scope) {
-        if (this.isReady) {
-            callback.call(scope || window);
+    onReady: function(options) {
+        if (!options.callback) {
+            options = {
+                callback: options,
+                scope: arguments[1] || this
+            };
+        }
+        if (!options.subroot) options.subroot = 'root';
+
+        if (!Kwf.FacebookAppIds[options.subroot]) {
+            throw new Error('No fbAppData.appId base property set for '+options.subroot);
+        }
+
+        if (!this.loadedSubroot) {
+            this.loadedSubroot = options.subroot;
+
+            var self = this;
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : Kwf.FacebookAppIds[options.subroot], // App ID
+                    status     : true, // check login status
+                    cookie     : true, // enable cookies to allow the server to access the session
+                    oauth      : true, // enable OAuth 2.0
+                    xfbml      : true  // parse XFBML
+                });
+
+                self.isReady = true;
+                self.fireEvent('afterinit'); //deprecated
+                self._onReadyCallbacks.each(function(i) {
+                    i.callback.call(i.callback.scope || window);
+                });
+            };
+
+            // Load the SDK Asynchronously
+            (function(d){
+                var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+                js = d.createElement('script'); js.id = id; js.async = true;
+                js.src = "//connect.facebook.net/" + trlcKwf('facebook js-sdk locale', "en_US") + "/all.js";
+                d.getElementsByTagName('head')[0].appendChild(js);
+            }(document));
         } else {
-            this._onReadyCallbacks.push({ callback: callback, scope: scope });
+            if (this.loadedSubroot != options.subroot) {
+                throw new Error('Facebook API can only be called with same the subroot per page');
+            }
+        }
+
+        if (this.isReady) {
+            options.callback.call(options.scope || window);
+        } else {
+            this._onReadyCallbacks.push({ callback: options.callback, scope: options.scope });
         }
     }
 });
 Kwf.Facebook = new Kwf.FacebookClass();
-Kwf.Facebook.appId = Kwf.FacebookAppId;
-window.fbAsyncInit = function() {
-    FB.init({
-        appId      : Kwf.Facebook.appId, // App ID
-        status     : true, // check login status
-        cookie     : true, // enable cookies to allow the server to access the session
-        oauth      : true, // enable OAuth 2.0
-        xfbml      : true  // parse XFBML
-    });
-    Kwf.Facebook.isReady = true;
-    Kwf.Facebook.fireEvent('afterinit'); //deprecated
-    Kwf.Facebook._onReadyCallbacks.each(function(i) {
-        i.callback.call(i.callback.scope || window);
-    });
-};
-// Load the SDK Asynchronously
-(function(d){
-    var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-    js = d.createElement('script'); js.id = id; js.async = true;
-    js.src = "//connect.facebook.net/" + trlcKwf('facebook js-sdk locale', "en_US") + "/all.js";
-    d.getElementsByTagName('head')[0].appendChild(js);
-}(document));

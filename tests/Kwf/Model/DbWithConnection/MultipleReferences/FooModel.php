@@ -37,4 +37,10 @@ class Kwf_Model_DbWithConnection_MultipleReferences_FooModel extends Kwf_Model_D
     {
         Kwf_Registry::get('db')->query("DROP TABLE IF EXISTS {$this->_tableName}");
     }
+
+    protected function _init()
+    {
+        parent::_init();
+        $this->_exprs['child_count'] = new Kwf_Model_Select_Expr_Child_Count('Reference1');
+    }
 }

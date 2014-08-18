@@ -9,6 +9,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $ret['dimension'] = array('width'=>100, 'height'=>100, 'cover' => false);
         $ret['imgCssClass'] = '';
         $ret['lazyLoadOutOfViewport'] = true; // Set to false to load image also when not in view
+        $ret['defineWidth'] = false;
         return $ret;
     }
 
@@ -34,6 +35,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
 
         $ret['baseUrl'] = $this->_getBaseImageUrl();
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
+        $ret['defineWidth'] = $this->_getSetting('defineWidth');
         return $ret;
     }
 
