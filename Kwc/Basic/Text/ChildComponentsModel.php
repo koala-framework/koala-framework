@@ -29,4 +29,14 @@ class Kwc_Basic_Text_ChildComponentsModel extends Kwf_Model_Db_Proxy
             return parent::getReferencedModel($ref);
         }
     }
+
+    public function getEventSubscribers()
+    {
+        $ret = $this->getProxyModel()->getEventSubscribers();
+        $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwc_Basic_Text_ModelEvents', array(
+            'modelClass' => get_class($this),
+            'componentClass' => $this->_componentClass
+        ));
+        return $ret;
+    }
 }

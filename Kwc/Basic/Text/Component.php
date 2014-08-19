@@ -41,9 +41,9 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                 'image'         => false,
                 'link'          => 'Kwc_Basic_LinkTag_Component',
                 'download'      => 'Kwc_Basic_DownloadTag_Component'
-            ),
-            'model' => 'Kwc_Basic_Text_ChildComponentsModel'
+            )
         );
+        $ret['childModel'] = 'Kwc_Basic_Text_ChildComponentsModel';
 
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Text/StylesEditor.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Text/StylesEditorTab.js';
@@ -73,6 +73,16 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
     public function getOwnModel()
     {
         return self::getTextModel(get_class($this));
+    }
+
+    public static function createOwnModel($class)
+    {
+        return self::getTextModel($class);
+    }
+
+    public static function createChildModel($class)
+    {
+        return self::getTextModel($class)->getDependentModel('ChildComponents');
     }
 
     public static function getTextModel($componentClass)

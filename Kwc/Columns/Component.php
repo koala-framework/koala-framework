@@ -72,6 +72,11 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
         return $ret;
     }
 
+    public static function createChildModel($componentClass)
+    {
+        return self::getColumnsModel($componentClass);
+    }
+
     public function getChildModel()
     {
         return self::getColumnsModel($this->getData()->componentClass);

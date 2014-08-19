@@ -17,4 +17,14 @@ class Kwc_Columns_Model extends Kwc_Abstract_List_Model
     {
         return $this->_componentClass;
     }
+
+    public function getEventSubscribers()
+    {
+        $ret = $this->getProxyModel()->getEventSubscribers();
+        $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwc_Columns_ModelEvents', array(
+            'modelClass' => get_class($this),
+            'componentClass' => $this->_componentClass
+        ));
+        return $ret;
+    }
 }

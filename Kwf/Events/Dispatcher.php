@@ -81,12 +81,14 @@ class Kwf_Events_Dispatcher
                 );
             }
         }
-        if (Kwc_Abstract::hasSetting($componentClass, 'ownModel')) {
-            $subscribers = array_merge($subscribers, self::_getSubscribersFromModel(Kwc_Abstract::hasSetting($componentClass, 'ownModel')));
-        }
-        if (Kwc_Abstract::hasSetting($componentClass, 'childModel')) {
-            $subscribers = array_merge($subscribers, self::_getSubscribersFromModel(Kwc_Abstract::hasSetting($componentClass, 'childModel')));
-        }
+
+        $cls = strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass;
+        $m = call_user_func(array($cls, 'createOwnModel'), $componentClass);
+        if ($m) $subscribers = array_merge($subscribers, $m->getEventSubscribers());
+
+        $m = call_user_func(array($cls, 'createChildModel'), $componentClass);
+        if ($m) $subscribers = array_merge($subscribers, $m->getEventSubscribers());
+
         foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $g) {
             if (isset($g['model'])) {
                 $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($g['model']));

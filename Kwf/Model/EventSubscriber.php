@@ -7,4 +7,9 @@ class Kwf_Model_EventSubscriber extends Kwf_Events_Subscriber
     {
         $this->_modelClass = $this->_config['modelClass'];
     }
+
+    protected function _getModel()
+    {
+        return Kwf_Model_Abstract::getInstance($this->_modelClass);
+    }
 }

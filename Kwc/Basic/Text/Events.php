@@ -17,7 +17,7 @@ class Kwc_Basic_Text_Events extends Kwc_Abstract_Events
         $s = new Kwf_Model_Select();
         $s->whereEquals('uses_styles', true);
         $s->where(new Kwf_Model_Select_Expr_Like('content', '%class="style'.$e->row->id.'"%'));
-        $rows = Kwc_Basic_Text_Component::getTextModel($this->_class)
+        $rows = Kwc_Basic_Text_Component::createOwnModel($this->_class)
             ->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
         foreach ($rows as $row) {
             foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($row['component_id']) as $c) {
