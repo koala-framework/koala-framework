@@ -362,6 +362,7 @@ Kwf.Form.DateTime = Ext2.extend(Ext2.form.Field, {
      */
     ,getValue:function() {
         // create new instance of date
+        this.updateValue();
         return this.dateValue ? new Date(this.dateValue) : '';
     } // eo function getValue
     // }}}

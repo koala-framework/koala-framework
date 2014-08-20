@@ -33,7 +33,12 @@ Kwc.Newsletter.Detail.RecipientsAction = Ext2.extend(Ext2.Action, {
                         msgText += ':<div class="recipientsStatusRtr">'+r.rtrExcluded.join('<br />')+'</div>';
                     }
                     Ext2.MessageBox.alert(trlKwf('Status'), msgText, function() {
-                        this.findParentByType('kwc.newsletter.recipients').fireEvent('queueChanged');
+                        this.findParentBy(function (container) {
+                            if (container instanceof Kwc.Newsletter.Detail.RecipientsPanel) {
+                                return true;
+                            }
+                            return false;
+                        }, this).fireEvent('queueChanged');
                     }, this);
                 },
                 progress: true,
