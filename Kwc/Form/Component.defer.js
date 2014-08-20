@@ -3,12 +3,6 @@ Kwf.Utils.ResponsiveEl('.kwcForm.centerDefault', [{maxWidth: 500, cls: 'veryNarr
 Kwf.Utils.ResponsiveEl('.kwcForm.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 Kwf.Utils.ResponsiveEl('.kwcForm.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
-Kwf.onElementReady('.kwcForm > form', function form(form) {
-    form = form.parent('.kwcForm', false);
-    if (!form.kwcForm) {
-        form.kwcForm = new Kwc.Form.Component(form);
-    }
-}, { priority: -10, defer: true }); //initialize form very early, as many other components access it
 Ext2.ns('Kwc.Form');
 Kwc.Form.findForm = function(el) {
     var formEl = el.child('.kwcForm > form');
@@ -259,3 +253,11 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
         });
     }
 });
+
+Kwf.onElementReady('.kwcForm > form', function form(form) {
+    form = form.parent('.kwcForm', false);
+    if (!form.kwcForm) {
+        form.kwcForm = new Kwc.Form.Component(form);
+    }
+}, { priority: -10, defer: true }); //initialize form very early, as many other components access it
+
