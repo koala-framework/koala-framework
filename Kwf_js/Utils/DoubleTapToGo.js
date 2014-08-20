@@ -34,7 +34,7 @@ Kwf.Utils.DoubleTapToGo = function(el, params) {
         });
     };
 
-    if (el instanceof jQuery) {
+    if (el instanceof jQuery || 'jquery' in Object(el)) {
         applyOnEl(el, params);
     } else {
         Kwf.onJElementReady(el, Kwf.Utils.DoubleTapToGo);
