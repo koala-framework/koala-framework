@@ -15,6 +15,10 @@ class Kwc_Form_Field_Abstract_Trl_Component extends Kwc_Chained_Trl_Component
     {
         $ret = Kwc_Abstract::getTemplateVars();
         $form = $this->_getForm();
+
+        //initialize form, sets formName on fields
+        $form->getComponent()->getForm();
+
         $postData = array();
         $errors = array();
         if ($form->getComponent()->isProcessed()) {
