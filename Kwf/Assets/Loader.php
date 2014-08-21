@@ -53,7 +53,7 @@ class Kwf_Assets_Loader
         } else if (substr($file, -4)=='.ttf') { // für Schriften
             $ret['mimeType'] = 'application/octet-stream';
         } else if (substr($file, -5)=='.woff') { // für Schriften
-            $ret['mimeType'] = 'application/x-woff';
+            $ret['mimeType'] = 'application/font-woff';
         } else if (substr($file, -4)=='.htc') { // für ie css3
             $ret['mimeType'] = 'text/x-component';
         } else if (substr($file, -4)=='.pdf') {
