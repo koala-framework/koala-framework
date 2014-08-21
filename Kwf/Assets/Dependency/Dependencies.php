@@ -15,4 +15,10 @@ class Kwf_Assets_Dependency_Dependencies extends Kwf_Assets_Dependency_Abstract
         if ($this->_name) return $this->_name;
         return parent::__toString();
     }
+
+    public function addDependency($type, Kwf_Assets_Dependency_Abstract $dependency)
+    {
+        $this->_dependencies[$type][] = $dependency;
+        return $this;
+    }
 }
