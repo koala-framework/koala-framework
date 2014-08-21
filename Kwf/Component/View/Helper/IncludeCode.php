@@ -52,7 +52,7 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
                 //add default assets if there was no box
                 $a = new Kwf_View_Helper_Assets();
                 $ret .= $a->assets(Kwf_Assets_Package_Default::getInstance('Frontend'), null, false);
-                $ret .= $a->assets(Kwf_Assets_Package_Default::getInstance('FrontendDefer'), null, true);
+                $ret .= $a->assets(Kwf_Assets_Package_LazyLoad::getInstance('FrontendDefer', array('Frontend')), null, true);
             }
 
             $helper = new Kwf_Component_View_Helper_Dynamic();
