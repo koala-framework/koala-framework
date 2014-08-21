@@ -1,4 +1,6 @@
-Kwf.enableOnReadyConsoleProfile = false;
+(function() {
+
+var enableOnReadyConsoleProfile = false;
 
 /* fn: fn,
  * scope: scope,
@@ -7,13 +9,13 @@ Kwf.enableOnReadyConsoleProfile = false;
  * num: unique number, //used to mark in initDone
  * selector: selector, // null if onContentReady
  * */
-Kwf._readyElHandlers = []; //for onElement*
-Kwf._onReadyState;  //if callOnContentReady should skip 'defer' callbacks or execute only 'defer' callbacks
-                    //used on initial ready
-Kwf._deferredStart = null; //used for timing deferred, required here because of multiple chunks
-Kwf._onReadyIsCalling = false; //true while callOnContentReady is processing onReadyElQueue and we can add more to queue
-Kwf._onReadyElQueue = []; //queue for onElementReady/Show/Hide/WidthChange calls
-Kwf._elCacheBySelector = {};
+var readyElHandlers = []; //for onElement*
+var onReadyState;  //if callOnContentReady should skip 'defer' callbacks or execute only 'defer' callbacks
+                   //used on initial ready
+var deferredStart = null; //used for timing deferred, required here because of multiple chunks
+var onReadyIsCalling = false; //true while callOnContentReady is processing onReadyElQueue and we can add more to queue
+var onReadyElQueue = []; //queue for onElementReady/Show/Hide/WidthChange calls
+var elCacheBySelector = {};
 
 if (!Kwf.isApp) {
     $(document).ready(function() {
@@ -23,22 +25,22 @@ if (!Kwf.isApp) {
             return;
         }
         var t = Kwf.Utils.BenchmarkBox.now();
-        if (Kwf.enableOnReadyConsoleProfile) console.profile("callOnContentReady body");
-        Kwf._onReadyState = 'callNonDefer';
+        if (enableOnReadyConsoleProfile) console.profile("callOnContentReady body");
+        onReadyState = 'callNonDefer';
         Kwf.callOnContentReady(document.body, { action: 'render' });
-        Kwf._onReadyState = 'calledNonDefer';
-        if (Kwf.enableOnReadyConsoleProfile) console.profileEnd();
+        onReadyState = 'calledNonDefer';
+        if (enableOnReadyConsoleProfile) console.profileEnd();
         Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
         Kwf.Utils.BenchmarkBox.create({
             counters: Kwf._onReadyStats,
             type: 'onReady'
         });
         setTimeout(function() {
-            Kwf._deferredStart = Kwf.Utils.BenchmarkBox.now();
-            if (Kwf.enableOnReadyConsoleProfile) console.profile("callOnContentReady body deferred");
-            Kwf._onReadyState = 'callDefer';
+            deferredStart = Kwf.Utils.BenchmarkBox.now();
+            if (enableOnReadyConsoleProfile) console.profile("callOnContentReady body deferred");
+            onReadyState = 'callDefer';
             Kwf.callOnContentReady(document.body, { action: 'render' });
-            Kwf._onReadyState = 'calledDefer';
+            onReadyState = 'calledDefer';
         }, 10);
 
         var timeoutId;
@@ -70,17 +72,17 @@ Kwf.onContentReady = function(fn, options) {
 
 Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
 {
-    Kwf._readyElHandlers.push({
+    readyElHandlers.push({
         selector: selector,
         fn: fn,
         options: options || {},
-        num: Kwf._readyElHandlers.length, //unique number
+        num: readyElHandlers.length, //unique number
         type: type,
         onAction: onAction
     });
     //if initial call is already done redo for new added handlers
-    if (Kwf._onReadyState == 'calledDefer' || (!(options && options.defer) && Kwf._onReadyState == 'calledNonDefer')) {
-        Kwf.callOnContentReady(document.body, { action: 'render', handlerNum: Kwf._readyElHandlers.length-1 });
+    if (onReadyState == 'calledDefer' || (!(options && options.defer) && onReadyState == 'calledNonDefer')) {
+        Kwf.callOnContentReady(document.body, { action: 'render', handlerNum: readyElHandlers.length-1 });
     }
 };
 
@@ -124,19 +126,19 @@ Kwf.callOnContentReady = function(renderedEl, options)
     }
 
     var html = false;
-    for (var i = 0; i < Kwf._readyElHandlers.length; i++) {
-        var hndl = Kwf._readyElHandlers[i];
+    for (var i = 0; i < readyElHandlers.length; i++) {
+        var hndl = readyElHandlers[i];
         if (options.handlerNum && hndl.num != options.handlerNum) {
             continue;
         }
 
-        //Kwf._onReadyState gets set before callOnContentReady(body)
+        //onReadyState gets set before callOnContentReady(body)
         //can not be part of options as it would be missing in recursive calls
-        if (Kwf._onReadyState == 'callNonDefer') {
+        if (onReadyState == 'callNonDefer') {
             if (hndl.options.defer) {
                 continue;
             }
-        } else if (Kwf._onReadyState == 'callDefer') {
+        } else if (onReadyState == 'callDefer') {
             if (!hndl.options.defer) {
                 continue;
             }
@@ -164,7 +166,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         if (options.action != 'render' || !hndl.selector) {
             useSelectorCache = true;
         } else {
-            if (Kwf._onReadyState == 'callDefer' && renderedEl == document.body && Kwf._elCacheBySelector[hndl.selector]) {
+            if (onReadyState == 'callDefer' && renderedEl == document.body && elCacheBySelector[hndl.selector]) {
                 useSelectorCache = true;
             } else {
                 var t = Kwf.Utils.BenchmarkBox.now();
@@ -172,8 +174,8 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 //do a stupid text search on the selector, using that we can skip query for many selectors that don't exist in the current el
                 if (m && html.indexOf(m[1]) == -1) {
                     useSelectorCache = true;
-                    if (!Kwf._elCacheBySelector[hndl.selector]) {
-                        Kwf._elCacheBySelector[hndl.selector] = [];
+                    if (!elCacheBySelector[hndl.selector]) {
+                        elCacheBySelector[hndl.selector] = [];
                     }
                 } else {
                     useSelectorCache = false;
@@ -181,12 +183,12 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
             }
         }
-        if (useSelectorCache && Kwf._elCacheBySelector[hndl.selector]) {
+        if (useSelectorCache && elCacheBySelector[hndl.selector]) {
             Kwf.Utils.BenchmarkBox.count('queryCache');
             var els = [];
-            for (var j=0; j<Kwf._elCacheBySelector[hndl.selector].length; j++) {
-                if (renderedEl == document.body || $.contains(renderedEl, Kwf._elCacheBySelector[hndl.selector][j])) {
-                    els.push(Kwf._elCacheBySelector[hndl.selector][j]);
+            for (var j=0; j<elCacheBySelector[hndl.selector].length; j++) {
+                if (renderedEl == document.body || $.contains(renderedEl, elCacheBySelector[hndl.selector][j])) {
+                    els.push(elCacheBySelector[hndl.selector][j]);
                 }
             }
         } else if (!hndl.selector) {
@@ -195,13 +197,13 @@ Kwf.callOnContentReady = function(renderedEl, options)
             var t = Kwf.Utils.BenchmarkBox.now();
             var els = $.makeArray($(renderedEl).find(hndl.selector));
             Kwf.Utils.BenchmarkBox.time('query', Kwf.Utils.BenchmarkBox.now() - t);
-            if (!Kwf._elCacheBySelector[hndl.selector]) {
-                Kwf._elCacheBySelector[hndl.selector] = els;
+            if (!elCacheBySelector[hndl.selector]) {
+                elCacheBySelector[hndl.selector] = els;
             } else {
-                Kwf._elCacheBySelector[hndl.selector] = els;
+                elCacheBySelector[hndl.selector] = els;
                 for(var j=0; j<els.length; ++j) {
-                    if (Kwf._elCacheBySelector[hndl.selector].indexOf(els[j]) == -1) {
-                        Kwf._elCacheBySelector[hndl.selector].push(els[j]);
+                    if (elCacheBySelector[hndl.selector].indexOf(els[j]) == -1) {
+                        elCacheBySelector[hndl.selector].push(els[j]);
                     }
                 }
             }
@@ -219,7 +221,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
                     parentsCount++;
                 }
                 Kwf.Utils.BenchmarkBox.count('readyEl');
-                Kwf._onReadyElQueue.push({
+                onReadyElQueue.push({
                     el: els[j],
                     fn: hndl.fn,
                     options: hndl.options,
@@ -237,7 +239,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
 
     //sort _onReadyElQueue
     var t = Kwf.Utils.BenchmarkBox.now();
-    Kwf._onReadyElQueue.sort(function sortOnReadyElQueue(a, b) {
+    onReadyElQueue.sort(function sortOnReadyElQueue(a, b) {
         if (a.priority != b.priority) {
             return a.priority - b.priority;
         } else {
@@ -250,11 +252,11 @@ Kwf.callOnContentReady = function(renderedEl, options)
     });
     Kwf.Utils.BenchmarkBox.time('sort', Kwf.Utils.BenchmarkBox.now() - t);
 
-    if (Kwf._onReadyIsCalling) {
+    if (onReadyIsCalling) {
         return;
     }
 
-    Kwf._onReadyIsCalling = true;
+    onReadyIsCalling = true;
 
     //call the callback of an element ready handler
     function callQueueFn(queueEntry, config)
@@ -283,7 +285,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     //own function so it can be called in sync or in deferred chunks
     function processOnReadyElQueueEntry()
     {
-        var queueEntry = Kwf._onReadyElQueue.shift();
+        var queueEntry = onReadyElQueue.shift();
         var el = queueEntry.el;
         el.onReadyQueue.splice(el.onReadyQueue.indexOf(queueEntry.num), 1);
         if (queueEntry.onAction == 'render') {
@@ -327,19 +329,19 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
     }
 
-    if (Kwf._onReadyState == 'callDefer') {
+    if (onReadyState == 'callDefer') {
         var processNext = function processNext() {
             Kwf.Utils.BenchmarkBox.count('chunks');
             var t = Kwf.Utils.BenchmarkBox.now();
-            while (Kwf._onReadyElQueue.length && Kwf.Utils.BenchmarkBox.now()-t < 50) {
+            while (onReadyElQueue.length && Kwf.Utils.BenchmarkBox.now()-t < 50) {
                 processOnReadyElQueueEntry();
             }
-            if (Kwf._onReadyElQueue.length) {
+            if (onReadyElQueue.length) {
                 setTimeout(processNext, 1);
             } else {
-                Kwf._onReadyIsCalling = false;
-                Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-Kwf._deferredStart);
-                if (Kwf.enableOnReadyConsoleProfile) console.profileEnd();
+                onReadyIsCalling = false;
+                Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-deferredStart);
+                if (enableOnReadyConsoleProfile) console.profileEnd();
                 Kwf.Utils.BenchmarkBox.create({
                     counters: Kwf._onReadyStats,
                     type: 'onReady defer'
@@ -348,11 +350,12 @@ Kwf.callOnContentReady = function(renderedEl, options)
         };
         processNext();
     } else {
-        while (Kwf._onReadyElQueue.length) {
+        while (onReadyElQueue.length) {
             processOnReadyElQueueEntry();
         }
-        Kwf._onReadyIsCalling = false;
+        onReadyIsCalling = false;
     }
 
 };
 
+})();
