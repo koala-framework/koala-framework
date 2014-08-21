@@ -1,0 +1,52 @@
+@import "form/styles/label-left";
+@import "form/styles/label-right";
+@import "form/styles/label-align";
+@import "form/styles/label-width";
+@import "form/styles/input-width";
+@import "form/styles/margin";
+@import "form/styles/error/icon-bubble/error-bubbles";
+@import "form/styles/error/icon-bubble/error-simple-align-right";
+@import "form/styles/error/icon-bubble/error-simple";
+
+@mixin form-styles (
+    $label-position  : $form-label-position,                    //left, right, top
+    $label-align  : $form-label-align,                          //left, right
+    $label-width  : $form-label-width,                          //px or %
+    $input-width  : $form-input-width,                          //px or %
+    $margin  : $form-margin,                                    //px or %
+    $error-style  : $form-error-style                           //bubbles, simple-right, simple
+) {
+    @if $label-position == 'left' {
+        @include label-left;
+    } @else if $label-position == 'right' {
+        @include label-right;
+    } @else {
+        label {
+            float: none;
+        }
+    }
+
+    @include label-align($label-align);
+
+    @include label-width($label-width);
+
+    @if $input-width == 'false' {
+        @include input-width($input-width);
+    } @else {
+        @include input-width($input-width);
+    }
+
+    @include margin($margin, $label-position);
+
+    @if $error-style == 'bubbles' {
+        @include error-bubbles;
+    } @else if $error-style == 'simple-right' {
+        @include error-simple-align-right;
+    } @else if $error-style == 'simple' {
+        @include error-simple;
+    }
+}
+
+@mixin form {
+    @include form-styles;
+}

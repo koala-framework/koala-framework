@@ -1,0 +1,6 @@
+@mixin label-width($width) {
+    label {
+        display: block;
+        width: $width;
+    }
+}
