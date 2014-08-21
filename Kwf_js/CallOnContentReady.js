@@ -70,6 +70,7 @@ Kwf.onContentReady = function(fn, options) {
 };
 
 
+var deferHandlerNum = null;
 Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
 {
     readyElHandlers.push({
@@ -82,7 +83,17 @@ Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
     });
     //if initial call is already done redo for new added handlers
     if (onReadyState == 'calledDefer' || (!(options && options.defer) && onReadyState == 'calledNonDefer')) {
-        Kwf.callOnContentReady(document.body, { action: 'render', handlerNum: readyElHandlers.length-1 });
+        if (!deferHandlerNum) {
+            deferHandlerNum = [];
+            setTimeout(function() {
+                //additionally added handlers need to be called async so priorty can be used correctly (we wait to get more handlers added)
+                //needed for FrontendDefer
+                var hndlerNum = deferHandlerNum;
+                deferHandlerNum = null; //set to null before calling callOnContentReady as that might cause _addReadyHandler calls
+                Kwf.callOnContentReady(document.body, { action: 'render', handlerNum: hndlerNum });
+            }, 1);
+        }
+        deferHandlerNum.push(readyElHandlers.length-1);
     }
 };
 
@@ -128,7 +139,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     var html = false;
     for (var i = 0; i < readyElHandlers.length; i++) {
         var hndl = readyElHandlers[i];
-        if (options.handlerNum && hndl.num != options.handlerNum) {
+        if (options.handlerNum && options.handlerNum.indexOf(hndl.num) == -1) {
             continue;
         }
 
