@@ -21,6 +21,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
     {
         if ($dependencyName == 'Components') {
             $ret = array();
+            $nonDeferDep = array();
             $files = Kwf_Component_Abstract_Admin::getComponentFiles($this->_rootComponentClass, array(
                 'css' => array('filename'=>'Web', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
                 'printcss' => array('filename'=>'Web', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
@@ -33,15 +34,19 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                     if (!$jj) {
                         throw new Kwf_Exception("Can't find path type for '$j'");
                     }
-                    $ret[] = $this->_createDependencyForFile($jj);
+                    $nonDeferDep[] = $this->_createDependencyForFile($jj);
                 }
+            }
+            if ($nonDeferDep) {
+                $nonDeferDep = new Kwf_Assets_Dependency_Dependencies($nonDeferDep, 'Web');
+                $ret[] = $nonDeferDep;
             }
 
             $componentClasses = $this->_getRecursiveChildClasses($this->_rootComponentClass);
 
             foreach ($componentClasses as $class) {
 
-                $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assets'));
+                $nonDeferDep = $this->_getComponentSettingDependencies($class, 'assets');
 
                 $deferDep = $this->_getComponentSettingDependencies($class, 'assetsDefer');
 
@@ -62,7 +67,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                         if (substr($i, -8) == 'defer.js') {
                             $deferDep[] = $dep;
                         } else {
-                            $ret[] = $dep;
+                            $nonDeferDep[] = $dep;
                         }
                     }
                 }
@@ -71,6 +76,10 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                     $deferDep = new Kwf_Assets_Dependency_Dependencies($deferDep, $class.' defer');
                     $deferDep->setDeferLoad(true);
                     $ret[] = $deferDep;
+                }
+                if ($nonDeferDep) {
+                    $nonDeferDep = new Kwf_Assets_Dependency_Dependencies($nonDeferDep, $class);
+                    $ret[] = $nonDeferDep;
                 }
             }
             return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);

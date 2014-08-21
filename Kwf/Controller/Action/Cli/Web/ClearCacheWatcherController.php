@@ -646,6 +646,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     {
         if (!$fileType) {
             self::_clearAssetsAll('js');
+            self::_clearAssetsAll('defer.js');
             self::_clearAssetsAll('css');
             self::_clearAssetsAll('printcss');
             return;
