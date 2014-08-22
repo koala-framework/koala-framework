@@ -82,6 +82,7 @@
                     this.doClose();
                 }
             }
+            return false;
         }, this));
 
     }
