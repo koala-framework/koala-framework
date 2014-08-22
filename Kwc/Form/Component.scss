@@ -2,9 +2,9 @@
 @import "kwf/background-image-dpr2";
 @import "config/default-loading-animation-small";
 @import "compass/css3/box-sizing";
-@import "form/styles/defined-styles/form-style-default";
-@import "form/styles/defined-styles/form-style-default-center";
-@import "form/styles/defined-styles/form-style-center";
+@import "form/predefined/form-style-default";
+@import "form/predefined/form-style-default-center";
+@import "form/predefined/form-style-center";
 
 .cssClass {
     .kwfFormFieldWrapper {

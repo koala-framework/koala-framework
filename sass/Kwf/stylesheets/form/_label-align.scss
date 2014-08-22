@@ -1,4 +1,4 @@
-@mixin label-align($position) {
+@mixin form-label-align($position) {
     label {
         text-align: $position;
     }
