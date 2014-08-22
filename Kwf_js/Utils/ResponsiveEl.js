@@ -51,6 +51,7 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
         initEl = widths;
     }
 
+    if (!options) options = {};
     if (typeof options.defer == 'undefined') options.defer = false;
     Kwf.onJElementWidthChange(selector, initEl, options);
 };
