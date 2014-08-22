@@ -1,16 +1,16 @@
 <?php
-class Kwf_Assets_Defer_TestProvider extends Kwf_Assets_Provider_Abstract
+class Kwf_Assets_Defer2_TestProvider extends Kwf_Assets_Provider_Abstract
 {
     public function getDependency($dependencyName)
     {
         if ($dependencyName == 'A') {
             return new Kwf_Assets_Defer_JsDependency("A", false);
         } else if ($dependencyName == 'B') {
-            return new Kwf_Assets_Defer_JsDependency("B", true);
+            return new Kwf_Assets_Defer_JsDependency("B", false);
         } else if ($dependencyName == 'C') {
             return new Kwf_Assets_Defer_JsDependency("C", false);
         } else if ($dependencyName == 'D') {
-            return new Kwf_Assets_Defer_JsDependency("D", false);
+            return new Kwf_Assets_Defer_JsDependency("D", true);
         }
     }
     /*
@@ -19,17 +19,17 @@ class Kwf_Assets_Defer_TestProvider extends Kwf_Assets_Provider_Abstract
                   ^
      -------------|-----------
      |                       |
-     C                       B (defer)
-                             |
-                             |
-                             D
-                             |
-                             |
-                             C (recursion)
+     B                       C
+     |
+     |
+     D (defer)
+     |
+     |
+     C (recursion)
 
     Desired Contents:
-    non-defer: CA
-    defer:     DB
+    non-defer: BCA
+    defer:     D
     */
     public function getDependenciesForDependency($dependency)
     {

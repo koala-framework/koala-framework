@@ -145,7 +145,40 @@ abstract class Kwf_Assets_Dependency_Abstract
     public final function getFilteredUniqueDependencies($mimeType)
     {
         $processed = array();
-        return $this->_getFilteredUniqueDependenciesProcessDep($this, $mimeType, $processed, array());
+        $ret = $this->_getFilteredUniqueDependenciesProcessDep($this, $mimeType, $processed, array());
+
+        //filter out deferred
+        if ($mimeType == 'text/javascript; defer') {
+            $nonDefer = array();
+            $this->_getDependenciesNonDefer($this, $nonDefer, array());
+            foreach ($ret as $k=>$i) {
+                if (in_array($i, $nonDefer, true)) {
+                    unset($ret[$k]);
+                }
+            }
+        }
+        return $ret;
+    }
+
+    private function _getDependenciesNonDefer($dep, &$processed, $stack)
+    {
+        if (in_array($dep, $processed, true)) {
+            return;
+        }
+        $stack[] = $dep;
+        if (!$dep->getDeferLoad()) {
+            $requires = $dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL);
+            foreach ($requires as $i) {
+                if (!in_array($i, $stack, true)) {
+                    $this->_getDependenciesNonDefer($i, $processed, $stack);
+                }
+            }
+            if (in_array($dep, $processed, true)) {
+                return;
+            }
+
+            $processed[] = $dep;
+        }
     }
 
     private function _getFilteredUniqueDependenciesProcessDep($dep, $mimeType, &$processed, $stack)
@@ -154,6 +187,7 @@ abstract class Kwf_Assets_Dependency_Abstract
             return array();
         }
         $stack[] = $dep;
+
         $ret = array();
         if ($mimeType == 'text/javascript' && $dep->getDeferLoad()) {
             return array();
@@ -163,17 +197,8 @@ abstract class Kwf_Assets_Dependency_Abstract
             $mimeType = 'text/javascript; defer2';
         }
 
-        $requires = $dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES);
-        //first recurse into non-defer (so $processed will be filled)
-        foreach ($requires as $i) {
-            if (!$i->getDeferLoad() && !in_array($i, $stack, true)) {
-                $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, $stack));
-            }
-        }
-
-        //then recurse into defer
-        foreach ($requires as $i) {
-            if ($i->getDeferLoad() && !in_array($i, $stack, true)) {
+        foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES) as $i) {
+            if (!in_array($i, $stack, true)) {
                 $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, $stack));
             }
         }
@@ -181,6 +206,7 @@ abstract class Kwf_Assets_Dependency_Abstract
         if (in_array($dep, $processed, true)) {
             return $ret;
         }
+
         $processed[] = $dep;
 
         $mimeMatches = $dep->getMimeType() == $mimeType
