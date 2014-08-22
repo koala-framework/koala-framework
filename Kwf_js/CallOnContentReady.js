@@ -73,10 +73,12 @@ Kwf.onContentReady = function(fn, options) {
 var deferHandlerNum = null;
 Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
 {
+    if (!options) options = {};
+    if (typeof options.defer == 'undefined') options.defer = true; //default defer=true
     readyElHandlers.push({
         selector: selector,
         fn: fn,
-        options: options || {},
+        options: options,
         num: readyElHandlers.length, //unique number
         type: type,
         onAction: onAction
