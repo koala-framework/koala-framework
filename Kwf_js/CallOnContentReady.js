@@ -89,7 +89,7 @@ Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
             deferHandlerNum = [];
             setTimeout(function() {
                 //additionally added handlers need to be called async so priorty can be used correctly (we wait to get more handlers added)
-                //needed for FrontendDefer
+                //needed for Frontend.defer.js
                 var hndlerNum = deferHandlerNum;
                 deferHandlerNum = null; //set to null before calling callOnContentReady as that might cause _addReadyHandler calls
                 Kwf.callOnContentReady(document.body, { action: 'render', handlerNum: hndlerNum });

@@ -6,8 +6,20 @@ abstract class Kwf_Assets_Dependency_Abstract
     const DEPENDENCY_TYPE_USES = 'uses';
     protected $_dependencies = array();
 
+    private $_deferLoad = false;
+
     public function __construct()
     {
+    }
+
+    public function getDeferLoad()
+    {
+        return $this->_deferLoad;
+    }
+
+    public function setDeferLoad($v)
+    {
+        $this->_deferLoad = $v;
     }
 
     public function getContents($language)
@@ -143,18 +155,40 @@ abstract class Kwf_Assets_Dependency_Abstract
         }
         $stack[] = $dep;
         $ret = array();
-        foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES) as $i) {
-            if (!in_array($i, $stack, true)) {
+        if ($mimeType == 'text/javascript' && $dep->getDeferLoad()) {
+            return array();
+        }
+
+        if ($mimeType == 'text/javascript; defer' && $dep->getDeferLoad()) {
+            $mimeType = 'text/javascript; defer2';
+        }
+
+        $requires = $dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES);
+        //first recurse into non-defer (so $processed will be filled)
+        foreach ($requires as $i) {
+            if (!$i->getDeferLoad() && !in_array($i, $stack, true)) {
                 $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, $stack));
             }
         }
+
+        //then recurse into defer
+        foreach ($requires as $i) {
+            if ($i->getDeferLoad() && !in_array($i, $stack, true)) {
+                $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, $stack));
+            }
+        }
+
         if (in_array($dep, $processed, true)) {
             return $ret;
         }
         $processed[] = $dep;
-        if ($dep->getMimeType() == $mimeType) {
+
+        $mimeMatches = $dep->getMimeType() == $mimeType
+            || ($mimeType == 'text/javascript; defer2' && $dep->getMimeType() == 'text/javascript');
+        if ($mimeMatches) {
             $ret[] = $dep;
         }
+
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES) as $i) {
             $ret = array_merge($ret, $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, array()));
         }

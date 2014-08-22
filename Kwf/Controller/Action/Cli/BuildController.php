@@ -44,6 +44,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
 
     private function _showExtDep($d, $stack)
     {
+        if ($d->getDeferLoad()) return;
         $stack[] = $d;
         if ($d instanceof Kwf_Assets_Dependency_File && $d->getType() == 'ext2' || $d->__toString() == 'KwfOnReady') {
             $i = 0;
@@ -68,7 +69,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
 
         foreach ($packages as $p) {
             echo "\n".$p->getDependencyName()."\n";
-            foreach ($p->getDependency()->getRecursiveDependencies() as $i) {
+            foreach ($p->getFilteredUniqueDependencies('text/javascript') as $i) {
                 $sizes[(string)$i] = strlen(gzencode($i->getContentsPacked('en'), 9, FORCE_GZIP));
             }
             arsort($sizes);

@@ -261,6 +261,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 $assetsType = substr($file, strrpos($file, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
+                if ($assetsType == 'js') self::_clearAssetsAll('defer.js');
 
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
 
@@ -271,6 +272,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 $assetsType = substr($file, strrpos($file, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
+                if ($assetsType == 'js') self::_clearAssetsAll('defer.js');
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
 
@@ -644,6 +646,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     {
         if (!$fileType) {
             self::_clearAssetsAll('js');
+            self::_clearAssetsAll('defer.js');
             self::_clearAssetsAll('css');
             self::_clearAssetsAll('printcss');
             return;

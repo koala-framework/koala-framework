@@ -3,6 +3,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 {
     private static $_mimeTypeByExtension = array(
         'js' => 'text/javascript',
+        'defer.js' => 'text/javascript; defer',
         'css' => 'text/css',
         'printcss' => 'text/css; media=print'
     );
@@ -53,8 +54,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
     {
         $packages = array(
             Kwf_Assets_Package_Default::getInstance('Frontend'),
-            Kwf_Assets_Package_Default::getInstance('Admin'),
-            Kwf_Assets_Package_LazyLoad::getInstance('FrontendDefer', array('Frontend'))
+            Kwf_Assets_Package_Default::getInstance('Admin')
         );
         if (Kwf_Controller_Front::getInstance()->getControllerDirectory('kwf_controller_action_maintenance')) {
             $packages[] = Kwf_Assets_Package_Maintenance::getInstance('Maintenance');
@@ -116,7 +116,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
         $langs = $this->_getAllLanguages();
         $packages = $this->_getAllPackages();
-        $exts = array('js', 'css', 'printcss');
+        $exts = array('js', 'defer.js', 'css', 'printcss');
 
         echo "\ncalculating dependencies...\n";
         $steps = count($packages) * count($exts);
@@ -203,7 +203,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         Kwf_Assets_BuildCache::getInstance()->building = false;
 
 
-        $exts = array('js', 'css');
+        $exts = array('js', 'defer.js', 'css');
         foreach ($packages as $p) {
             $depName = $p->getDependencyName();
             $language = $langs[0];
@@ -214,10 +214,10 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             }
         }
         $d = Kwf_Assets_Package_Default::getDefaultProviderList()->findDependency('Frontend');
-        foreach ($d->getRecursiveDependencies() as $i) {
+        foreach ($d->getFilteredUniqueDependencies('text/javascript') as $i) {
             if ($i instanceof Kwf_Assets_Dependency_File && $i->getType() == 'ext2') {
-                echo "\n[WARNING] Frontend contains ext2\n";
-                echo "To improve frontend performance all ext2 dependencies should be moved to FrontendDefer\n\n";
+                echo "\n[WARNING] Frontend text/javascript contains ext2\n";
+                echo "To improve frontend performance all ext2 dependencies should be moved to defer\n\n";
                 break;
             }
         }
