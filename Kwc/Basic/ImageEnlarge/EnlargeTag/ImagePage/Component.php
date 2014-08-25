@@ -25,7 +25,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
 
         // Next-Previous Links
         $imageEnlarge = $this->getData()->parent->parent;
-        if (is_instance_of($imageEnlarge->componentClass, 'Kwc_Basic_ImageEnlarge_Component')) {
+        if (is_instance_of($imageEnlarge->componentClass, 'Kwc_Basic_ImageEnlarge_Component') ||
+            is_instance_of($imageEnlarge->componentClass, 'Kwc_Basic_ImageEnlargeParent_Component')) {
             // Only show links when it's an ImageEnlarge (no LinkTag)
             $parent = $imageEnlarge->parent;
             $getChildren = array();

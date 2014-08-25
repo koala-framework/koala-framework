@@ -1,5 +1,5 @@
 <?php
-class Kwc_Form_Dynamic_Trl_Component extends Kwc_Chained_Trl_Component
+class Kwc_Form_Dynamic_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
@@ -30,6 +30,10 @@ class Kwc_Form_Dynamic_Trl_Component extends Kwc_Chained_Trl_Component
 
     public function getMailSettings()
     {
-        return $this->getData()->chained->getComponent()->getMailSettings();
+        $ret = $this->getData()->chained->getComponent()->getMailSettings();
+        $row = $this->getData()->getComponent()->getRow();
+        if ($row->subject) $ret['subject'] = $row->subject;
+        if ($ret['send_confirm_mail'] && $row->confirm_subject) $ret['confirm_subject'] = $row->confirm_subject;
+        return $ret;
     }
 }

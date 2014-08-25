@@ -27,6 +27,7 @@ function replaceFiles($files, $from, $to) {
 function updateConfig() {
     $c = file_get_contents('config.ini');
     $c = preg_replace('#^preview\.responsive#m', 'kwc.responsive', $c);
+    $c = str_replace('kwc.fbAppData', 'fbAppData', $c);
     file_put_contents('config.ini', $c);
 }
 function createMediaMetaCacheFolder()
