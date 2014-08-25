@@ -24,13 +24,13 @@ class Kwf_Session extends Zend_Session
             $sessionTimeout = 20*60;
             if (!isset($_SESSION['kwfTimeout'])) {
                 $_SESSION['kwfTimeout'] = time() + $sessionTimeout;
-            } else if ($_SESSION['kwfTimeout'] - time() < ($sessionTimeout-5*60)) {
-                //extend timeout every 5 minutes (not in every request for better performance)
-                $_SESSION['kwfTimeout'] = time() + $sessionTimeout;
             } else if ($_SESSION['kwfTimeout'] - time() < 0) {
                 $_SESSION = array();
                 $_SESSION['kwfTimeout'] = time() + $sessionTimeout;
                 Zend_Session::regenerateId();
+            } else if ($_SESSION['kwfTimeout'] - time() < ($sessionTimeout-5*60)) {
+                //extend timeout every 5 minutes (not in every request for better performance)
+                $_SESSION['kwfTimeout'] = time() + $sessionTimeout;
             }
 
             if (!isset($_SESSION['__KWF']['VALID'])) {
