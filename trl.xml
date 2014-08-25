@@ -12194,7 +12194,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sk>Pri návšteve tejto stránky sa používajú aktuálne cookies. Ak chcete cookies deaktivovať, kliknite tu.</sk>
 <hr>Prilikom Vašeg posjeta ovoj internetskoj stranici trenutno se pohranjuju kolačići. Kliknite ovdje kako biste deaktivirali kolačiće.</hr>
 <bg>При вашето посещение на тази страница се използват „бисквитки”. Кликнете тук, за да деактивирате „бисквитките”.</bg>
-<cs>Při Vaší návštěvě této internetové stránky se aktuálně používají cookies. Klikněte sem, abyste cookies deaktivovali.</cs>
+<cs>Při vaší návštěvě těchto webových stránek jsou aktuálně nastavené cookies. Pro deaktivaci cookies klikněte zde.</cs>
 <ro>Când vizitaţi această pagină web, în prezent sunt generate cookie-uri. Faceţi click aici pentru a dezactiva cookie-urile.</ro>
 <fr>Actuellement, des cookies sont posés durant votre visite sur le présent site Web. Cliquez ici pour désactiver les cookies.</fr>
 <es>Durante su visita a esta página web se colocan actualmente cookies. Haga clic aquí para desactivar las cookies.</es>
@@ -12209,7 +12209,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sk>Pri návšteve tejto stránky sa súbory cookies aktuálne nepoužívajú. Ak chcete súbory cookies opäť akceptovať, kliknite tu.</sk>
 <hr>Prilikom Vašeg posjeta ovoj internetskoj stranici trenutno se ne pohranjuju kolačići. Kliknite ovdje ako želite prihvatiti korištenje kolačića.</hr>
 <bg>При посещение ви на тази страница не се използват „бисквитки”. Кликнете тук, ако искате да приемете използването на „бисквитки”.</bg>
-<cs>Při Vaší návštěvě této internetové stránky se aktuálně nepoužívají žádné cookies. Klikněte sem, pokud chcete souhlasit s použitím cookies.</cs>
+<cs>Při vaší návštěvě těchto webových stránek nejsou aktuálně nastavené žádné cookies. Pokud chcete používání cookies akceptovat, klikněte zde.</cs>
 <ro>Când vizitaţi această pagină web, în prezent nu sunt generate cookie-uri. Faceţi click aici pentru a activa cookie-urile.</ro>
 <fr>Actuellement, aucun cookie n'est posé durant votre visite sur le présent site Web. Cliquez ici pour accepter les cookies.</fr>
 <es>Durante su visita a esta página web no se colocan cookies actualmente. Haga clic aquí si desea aceptar el empleo de cookies.</es>
@@ -13316,6 +13316,26 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Parent Page Name</en>
 <id>2226</id>
+</text>
+<text>
+<en>Mr. {0}</en>
+<de>Herr {0}</de>
+<ro>Domnul {0}</ro>
+<sl>Gospod {0}</sl>
+<es>Señor {0}</es>
+<sk>Pán {0}</sk>
+<ua>Містер {0}</ua>
+<id>2107</id>
+</text>
+<text>
+<en>Mrs. {0}</en>
+<de>Frau {0}</de>
+<ro>Doamnă {0}</ro>
+<sl>Gospa {0}</sl>
+<es>Señora {0}</es>
+<sk>Pani {0}</sk>
+<ua>Місіс {0}</ua>
+<id>2108</id>
 </text>
 </trl>
 
