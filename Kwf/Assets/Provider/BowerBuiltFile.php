@@ -43,7 +43,9 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             //eg. FontFaceIcomoon, FontFaceFontAwesome, FontFaceIonicons
             $bowerName = lcfirst(substr($dependencyName, 8));
             if (file_exists('vendor/bower_components/'.$bowerName)) {
-                return new Kwf_Assets_Dependency_FontFace($bowerName, 'vendor/bower_components/'.$bowerName);
+                return new Kwf_Assets_Dependency_FontFace($bowerName, $bowerName);
+            } else if (file_exists('vendor/bower_components/'.$bowerName.'-font')) {
+                return new Kwf_Assets_Dependency_FontFace($bowerName, $bowerName.'-font');
             }
         }
         return null;
