@@ -153,6 +153,7 @@ class Kwf_Assets_Dispatcher
         if ($extension == 'js') $mimeType = 'text/javascript';
         else if ($extension == 'css') $mimeType = 'text/css';
         else if ($extension == 'printcss') $mimeType = 'text/css; media=print';
+        else if ($extension == 'defer.js') $mimeType = 'text/javascript; defer';
         else throw new Kwf_Exception_NotYetImplemented();
 
         if (!$sourceMap) {
