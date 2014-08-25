@@ -1,17 +1,7 @@
 Kwf.onContentReady(function(body, param) {
     if (!param.newRender) return;
-    // TODO: make default behaviour customizable
-    if (Kwf.Statistics.getDefaultOptValue() == 'out' && !Kwf.Statistics.issetUserOptValue()) {
-        if ($('body').data().optbox) return;
-        var html = '<div class="' + Kwf.Statistics.cssClass + '">';
-        html += '<div class="inner">';
-        html += trlKwf('This website uses cookies to help us give you the best experience when you visit our website.');
-        if (Kwf.Statistics.optUrl) {
-            html += ' <a href="' + Kwf.Statistics.optUrl + '" class="info">' + trlKwf('More information about the use of cookies') + '</a>';
-        }
-        html += '<a href="" class="accept"><span>' + trlKwf('Accept and continue') + '</span></a>';
-        html += '<div></div>';
-        $('body').prepend(html);
+    if (Kwf.Statistics.optBoxHtml && !Kwf.Statistics.issetUserOptValue() && !$('body').data().optbox) {
+        $('body').prepend(Kwf.Statistics.optBoxHtml);
         $('body').data('optbox', true);
     }
 }, this, {priority: -2}); // before Kwf.Utils.ResponsiveEl
@@ -21,6 +11,14 @@ Kwf.onJElementReady('.kwcStatisticsOptBox a.accept', function(el) {
         e.preventDefault();
         Kwf.Statistics.setUserOptValue('in');
         Kwf.fireComponentEvent('cookieOptChanged', 'in');
+    });
+}, {priority: 10});
+
+Kwf.onJElementReady('.kwcStatisticsOptBox a.decline', function(el) {
+    el.on('click', function(e, el) {
+        e.preventDefault();
+        Kwf.Statistics.setUserOptValue('out');
+        Kwf.fireComponentEvent('cookieOptChanged', 'out');
     });
 }, {priority: 10});
 

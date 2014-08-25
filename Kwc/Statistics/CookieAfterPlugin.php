@@ -11,14 +11,14 @@ class Kwc_Statistics_CookieAfterPlugin extends Kwf_Component_Plugin_Abstract
 {
     public function processOutput($output, $renderer)
     {
-        $pos = strpos($output, '{/kwcOptType}');
+        $pos = strpos($output, '{/kwcDefaultOptValue}');
         if ($pos) {
-            $defaultOptValue = substr($output, 12, $pos - 12);
+            $defaultOpt = substr($output, 20, $pos - 20);
             if (
-                (!Kwf_Statistics::issetUserOptValue() && $defaultOptValue == Kwf_Statistics::OPT_IN) ||
+                (!Kwf_Statistics::issetUserOptValue() && $defaultOpt == Kwf_Statistics::OPT_IN) ||
                 Kwf_Statistics::getUserOptValue() == Kwf_Statistics::OPT_IN
             ) {
-                return substr($output, $pos + 13);
+                return substr($output, $pos + 21);
             }
         }
         return '';
