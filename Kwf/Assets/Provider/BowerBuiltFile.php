@@ -42,10 +42,20 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
         } else if (substr($dependencyName, 0, 8) == 'FontFace' && strlen($dependencyName) > 8) {
             //eg. FontFaceIcomoon, FontFaceFontAwesome, FontFaceIonicons
             $bowerName = lcfirst(substr($dependencyName, 8));
-            if (file_exists('vendor/bower_components/'.$bowerName)) {
+
+            if (file_exists('vendor/bower_components/'.$bowerName.'/fonts.css')) {
+                return new Kwf_Assets_Dependency_File_Css($bowerName.'/fonts.css');
+            } else if (file_exists('vendor/bower_components/'.$bowerName.'-font/fonts.css')) {
+                return new Kwf_Assets_Dependency_File_Css($bowerName.'-font/fonts.css');
+            } else if (file_exists('vendor/bower_components/'.$bowerName.'-fonts/fonts.css')) {
+                return new Kwf_Assets_Dependency_File_Css($bowerName.'-fonts/fonts.css');
+
+            } else if (file_exists('vendor/bower_components/'.$bowerName)) {
                 return new Kwf_Assets_Dependency_FontFace($bowerName, $bowerName);
             } else if (file_exists('vendor/bower_components/'.$bowerName.'-font')) {
                 return new Kwf_Assets_Dependency_FontFace($bowerName, $bowerName.'-font');
+            } else if (file_exists('vendor/bower_components/'.$bowerName.'-fonts')) {
+                return new Kwf_Assets_Dependency_FontFace($bowerName, $bowerName.'-fonts');
             }
         }
         return null;
