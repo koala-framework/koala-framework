@@ -9,8 +9,10 @@ class Kwc_Basic_Headline_Form extends Kwc_Abstract_Form
         foreach ($headlines as $key => $headline) {
             $values[] = array($key, $headline['text']);
         }
-        $this->fields->add(new Kwf_Form_Field_Select('headline_type', trlKwfStatic('Layer')))
-            ->setValues($values);
+        if (count($values) > 1) {
+            $this->fields->add(new Kwf_Form_Field_Select('headline_type', trlKwfStatic('Layer')))
+                ->setValues($values);
+        }
         $this->fields->add(new Kwf_Form_Field_TextField('headline1', trlKwfStatic('Text 1')))
             ->setWidth(450)
             ->setAllowBlank(false);
