@@ -20,6 +20,27 @@ class Kwf_Acl_ResourceOrderTest extends Kwf_Test_TestCase
         $this->assertEquals('Foo2', $config[0]['menuConfig']['text']);
     }
 
+    public function testSameOrderLeaveUnchanged()
+    {
+        $acl = new Kwf_Acl();
+        $acl->add(new Kwf_Acl_Resource_MenuUrl('foo',
+                array('text'=> 'Foo', 'icon'=>'heart.png', 'order'=>0),
+                '/admin/foo'));
+        $acl->add(new Kwf_Acl_Resource_MenuUrl('bar',
+                array('text'=> 'Bar', 'icon'=>'heart.png', 'order'=>0),
+                '/admin/bar'));
+        $acl->add(new Kwf_Acl_Resource_MenuUrl('foo2',
+                array('text'=> 'Foo2', 'icon'=>'heart.png', 'order'=>0),
+                '/admin/foo2'));
+        $acl->allow(null, 'foo');
+        $acl->allow(null, 'bar');
+        $acl->allow(null, 'foo2');
+        $config = $acl->getMenuConfig(null);
+        $this->assertEquals('Foo', $config[0]['menuConfig']['text']);
+        $this->assertEquals('Bar', $config[1]['menuConfig']['text']);
+        $this->assertEquals('Foo2', $config[2]['menuConfig']['text']);
+    }
+
     public function testOrderDropdown()
     {
         $acl = new Kwf_Acl();

@@ -395,7 +395,13 @@ class Kwf_Acl extends Zend_Acl
 
     private function _orderResources($resources)
     {
+        foreach ($resources as $k=>$i) {
+            $resources[$k]['num'] = $k;
+        }
         usort($resources, array(get_class($this), '_compareMenuConfigOrder'));
+        foreach ($resources as $k=>$i) {
+            unset($resources[$k]['num']);
+        }
         return $resources;
     }
     public static function _compareMenuConfigOrder($first, $second)
@@ -408,7 +414,12 @@ class Kwf_Acl extends Zend_Acl
         if (isset($second['menuConfig']['order'])) {
             $orderSecond = $second['menuConfig']['order'];
         }
-        return $orderFirst - $orderSecond;
+        $ret = $orderFirst - $orderSecond;
+        if ($ret == 0) {
+            //no ordner defined, keep order as it is
+            $ret = $first['num'] - $second['num'];
+        }
+        return $ret;
     }
 
     public function getComponentAcl()
