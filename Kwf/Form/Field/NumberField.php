@@ -58,7 +58,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             $this->addValidator(new Kwf_Validate_NotNegative());
         }
         if ($this->getAllowDecimals() === false) {
-            $this->addValidator(new Kwf_Validate_Digits());
+            $this->addValidator(new Kwf_Validate_Int());
         } else {
             $this->addValidator($this->_floatValidator);
         }
