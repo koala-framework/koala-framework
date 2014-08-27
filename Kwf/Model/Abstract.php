@@ -196,7 +196,12 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $select = clone $select;
         }
         $select->limit(1);
-        return $this->getRows($select)->current();
+        $rows = $this->getRows($select);
+        if ($rows->valid()) {
+            return $this->getRows($select)->current();
+        } else {
+            return null;
+        }
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
