@@ -41,7 +41,8 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             throw new Kwf_Exception("Can't find built dependency for $dependencyName in vendor/bower_components/$this->_path");
         } else if (substr($dependencyName, 0, 8) == 'FontFace' && strlen($dependencyName) > 8) {
             //eg. FontFaceIcomoon, FontFaceFontAwesome, FontFaceIonicons
-            $bowerName = lcfirst(substr($dependencyName, 8));
+            $bowerName = substr($dependencyName, 8);
+            $bowerName[0] = strtolower($bowerName[0]);
 
             if (file_exists('vendor/bower_components/'.$bowerName.'/fonts.css')) {
                 return new Kwf_Assets_Dependency_File_Css($bowerName.'/fonts.css');
