@@ -1,9 +1,3 @@
-.cssClass {
-    overflow: hidden;
-}
-.cssClass .outerContainer {
-    overflow: hidden;
-}
 .cssClass .container {
     height: 0;
     position: relative;
