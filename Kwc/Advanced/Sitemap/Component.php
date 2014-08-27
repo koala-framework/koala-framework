@@ -18,13 +18,14 @@ class Kwc_Advanced_Sitemap_Component extends Kwc_Abstract
             ->getComponentByDbId($this->getRow()->target, array('limit'=>1));
         $ret['listHtml'] = '';
         if ($ret['target']) {
-            $ret['listHtml'] = $this->_getListHtml($renderer, $ret['target'], 0);
+            $ret['listHtml'] = self::getListHtml($renderer, $ret['target'], 0, $ret['levels']);
         }
         return $ret;
     }
 
     //not in template for easier recursion
-    private function _getListHtml(Kwf_Component_Renderer_Abstract $renderer, Kwf_Component_Data $c, $level)
+    // public because for trl
+    public static function getListHtml(Kwf_Component_Renderer_Abstract $renderer, Kwf_Component_Data $c, $level, $levels)
     {
         $ret = '';
         $level++;
@@ -41,8 +42,8 @@ class Kwc_Advanced_Sitemap_Component extends Kwc_Abstract
             $helper->setRenderer($renderer);
             $ret .= $helper->componentLink($child);
             $ret .= "\n";
-            if ($level < $this->getRow()->levels) {
-                $ret .= $this->_getListHtml($renderer, $child, $level);
+            if ($level < $levels) {
+                $ret .= self::getListHtml($renderer, $child, $level, $levels);
             }
             $ret .= "</li>\n";
         }
