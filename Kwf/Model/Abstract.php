@@ -1068,25 +1068,61 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function getColumnMapping($mapping, $column)
     {
-        if (!isset($this->_columnMappings[$mapping])) {
-            throw new Kwf_Exception("unknown mapping: '$mapping'");
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+
+        foreach ($models as $model) {
+            foreach ($model->_columnMappings as $map=>$columns) {
+                do {
+                    if (isset($model->_columnMappings[$map])) {
+                        if (!array_key_exists($column, $model->_columnMappings[$map])) {
+                            throw new Kwf_Exception("unknown mapping column: '$column' for mapping '$mapping' in model '".get_class($model)."'");
+                        }
+                        return $model->_columnMappings[$map][$column];
+                    }
+                } while ($map = get_parent_class($map));
+            }
         }
-        if (!isset($this->_columnMappings[$mapping][$column])) {
-            throw new Kwf_Exception("unknown mapping column: '$column' for mapping '$mapping'");
-        }
-        return $this->_columnMappings[$mapping][$column];
+
+        throw new Kwf_Exception("unknown mapping '$mapping' for '".get_class($this)."'");
     }
 
     public function getColumnMappings($mapping)
     {
-        if (!$this->hasColumnMappings($mapping)) {
-            throw new Kwf_Exception("unknown mapping: '$mapping'");
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+
+        foreach ($models as $model) {
+
+            foreach ($model->_columnMappings as $map=>$columns) {
+                do {
+                    if (isset($model->_columnMappings[$map])) {
+                        return $model->_columnMappings[$map];
+                    }
+                } while ($map = get_parent_class($map));
+            }
+
         }
-        return $this->_columnMappings[$mapping];
+
+        throw new Kwf_Exception("unknown mapping '$mapping' for '".get_class($this)."'");
     }
 
-    public function hasColumnMappings($mapping) {
-        return isset($this->_columnMappings[$mapping]);
+    public function hasColumnMappings($mapping)
+    {
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+
+        foreach ($models as $model) {
+
+            foreach ($model->_columnMappings as $map=>$columns) {
+                do {
+                    if (isset($model->_columnMappings[$map])) {
+                        return true;
+                    }
+                } while ($map = get_parent_class($map));
+            }
+        }
+        return false;
     }
     
     public function hasDeletedFlag()
