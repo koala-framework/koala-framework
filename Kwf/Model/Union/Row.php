@@ -15,6 +15,11 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
         parent::__construct($config);
     }
 
+    public function getSourceRow()
+    {
+        return $this->_sourceRow;
+    }
+
     public function __isset($name)
     {
         if ($name == 'id') return true;
