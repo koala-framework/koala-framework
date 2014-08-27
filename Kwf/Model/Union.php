@@ -156,7 +156,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                 $options = array(
                     'columns' => array($m->getPrimaryKey())
                 );
-                if ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
+                while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
                 $dbSelect = $m->_createDbSelectWithColumns($s, $options);
                 $columns = $dbSelect->getPart(Zend_Db_Select::COLUMNS);
                 $columns[1][2] = 'id';
