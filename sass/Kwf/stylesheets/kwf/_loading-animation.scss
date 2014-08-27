@@ -5,15 +5,13 @@
     @include modernizr(cssanimations) {
         background: url($path + '/' + $file + '.png') $params;
         position: absolute;
-        height: $height;
-        width: $width;
         margin: 0 auto;
         display: block;
+        height: 300%;
+        width: 300%;
         content: '';
-        left: 50%;
-        top: 50%;
-        margin-left: -($width / 2);
-        margin-top: -($height / 2);
+        left: -100%;
+        top: -100%;
         -moz-animation: $animationName .5s infinite linear;
         -webkit-animation: $animationName .5s infinite linear;
         animation: $animationName .5s infinite linear;
@@ -30,14 +28,12 @@
     @include modernizr-no(cssanimations) {
         background: url($path + '/' + $file + '.gif') $params;
         position: absolute;
-        height: $height;
-        width: $width;
         margin: 0 auto;
         display: block;
+        height: 300%;
+        width: 300%;
         content: '';
-        left: 50%;
-        top: 50%;
-        margin-left: -($width / 2);
-        margin-top: -($height / 2);
+        left: -100%;
+        top: -100%;
     }
 }
