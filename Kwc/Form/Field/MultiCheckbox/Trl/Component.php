@@ -12,8 +12,9 @@ class Kwc_Form_Field_MultiCheckbox_Trl_Component extends Kwc_Form_Field_Abstract
     {
         $ret = parent::_getFormField();
         $values = array();
+        $filter = new Kwf_Filter_Ascii();
         foreach ($this->getRow()->getChildRows('Values') as $i) {
-            $values[$i->value] = $i->value;
+            $values[$filter->filter($i->value)] = $i->value;
         }
         $ret->setValues($values);
         return $ret;
