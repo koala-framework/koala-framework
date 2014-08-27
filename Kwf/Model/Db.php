@@ -1239,7 +1239,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         } else if ($format == self::FORMAT_ARRAY) {
             $ids = array();
             foreach ($data as $k => $v) {
-                if (is_array($ids) && isset($v[$this->getPrimaryKey()])) {
+                if (is_array($ids) && !is_array($this->getPrimaryKey()) && isset($v[$this->getPrimaryKey()])) {
                     $ids[] = $v[$this->getPrimaryKey()];
                 } else {
                     //if we don't know all imported ids, pass null
