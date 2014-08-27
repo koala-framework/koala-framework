@@ -205,6 +205,10 @@ $files = glob_recursive('Component.php');
 replaceFiles($files, 'Kwc_List_Fade_Component', 'Kwc_Legacy_List_Fade_Component');
 replaceFiles($files, 'Kwc_List_Carousel_Component', 'Kwc_Legacy_List_Carousel_Component');
 
+$files = glob_recursive('Component.php');
+$files = array_merge($files, glob_recursive('*.ini'));
+replaceFiles($files, 'ModernizrMediaQueries', 'ModernizrMediaqueries');
+
 $files = glob_recursive('*.js');
 replaceFiles($files, 'Kwc.List.Fade', 'Kwc.Legacy.List.Fade');
 replaceFiles($files, 'Kwc.List.Carousel', 'Kwc.Legacy.List.Carousel');
