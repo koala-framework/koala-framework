@@ -4,7 +4,7 @@ class Kwc_Basic_FullWidthImage_Component extends Kwc_TextImage_ImageEnlarge_Comp
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlStatic('Picture 100% width');
+        $ret['componentName'] = trlKwfStatic('Picture 100% width');
         $ret['showHelpText'] = true;
         $ret['defineWidth'] = false;
         $ret['dimensions'] = array(
