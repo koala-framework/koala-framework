@@ -174,13 +174,24 @@ class Kwf_Config_Web extends Kwf_Config_Ini
         return $kwfSection;
     }
 
-    protected function _mergeWebConfig($section, $webPath)
+    private function _mergeThemeConfig($section, $webPath)
     {
         $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
 
         //merge theme config.ini
         $ini = new Zend_Config_Ini($webPath.'/config.ini', $webSection);
         if ($ini->kwc && $t = $ini->kwc->theme) {
+
+            //theme added using composer
+            $ns = require 'vendor/composer/autoload_namespaces.php';
+            foreach ($ns as $k=>$paths) {
+                if (substr($ini->kwc->theme, 0, strlen($k)) == $k) {
+                    if (count($paths) != 1) throw new Kwf_Exception("Failed merging theme config, only one path to theme supported");
+                    $dir = $paths[0].'/'.str_replace('_', '/', substr($t, 0, strpos($t, '_')));
+                    self::mergeConfigs($this, new Kwf_Config_Ini($dir.'/config.ini', 'production'));
+                    return;
+                }
+            }
             foreach (explode(PATH_SEPARATOR, get_include_path()) as $ip) {
                 if (file_exists($ip.'/'.str_replace('_', '/', $t).'.php')) {
                     $dir = $ip.'/'.str_replace('_', '/', substr($t, 0, strpos($t, '_')));
@@ -188,6 +199,13 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                 }
             }
         }
+    }
+
+    protected function _mergeWebConfig($section, $webPath)
+    {
+        $this->_mergeThemeConfig($section, $webPath);
+
+        $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
 
         $this->_masterFiles[] = $webPath.'/config.ini';
         self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.ini', $webSection));
