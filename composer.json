@@ -21,7 +21,7 @@
             "jquery.easing": "1.3.0",
             "mustache.js": "0.8.2",
             "susy": "1.0.9",
-            "compass-mixins": "1.0.0",
+            "compass-mixins": "koala-framework/compass-mixins#5319faa34692aa41258408822f661db9638905f5",
             "tinymce": "tinymce/tinymce#3.5.8"
         },
         "require-npm": {

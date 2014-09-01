@@ -50,9 +50,4 @@ class Kwc_Directories_List_Feed_Component extends Kwc_Abstract_Feed_Component
     {
         return parent::_getRssTitle().' - '.trlKwf('Feed');
     }
-
-    public function getViewCacheLifetime()
-    {
-        return 60*60;
-    }
 }

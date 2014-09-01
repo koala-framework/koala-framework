@@ -247,7 +247,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             'componentKey' => $componentKey
         );
         $classes = self::getChildComponentClasses($class, $constraints);
-        return isset($classes[0]);
+        return count($classes) > 0;
     }
 
     /**
