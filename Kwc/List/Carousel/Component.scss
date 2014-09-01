@@ -32,13 +32,13 @@
         }
     }
     .listItem {
-        display: inline-block;
+        float: left;
     }
     
     &.fullwidth {
         .listWrapper {
             .listItem {
-                margin-left: 18px;
+                margin-left: 20px;
             }
         }
         .imageWrapper {
