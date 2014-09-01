@@ -213,7 +213,6 @@ Kwf.callOnContentReady = function(renderedEl, options)
             if (!elCacheBySelector[hndl.selector]) {
                 elCacheBySelector[hndl.selector] = els;
             } else {
-                elCacheBySelector[hndl.selector] = els;
                 for(var j=0; j<els.length; ++j) {
                     if (elCacheBySelector[hndl.selector].indexOf(els[j]) == -1) {
                         elCacheBySelector[hndl.selector].push(els[j]);
