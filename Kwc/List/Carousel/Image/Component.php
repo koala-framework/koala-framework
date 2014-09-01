@@ -13,7 +13,6 @@ class Kwc_List_Carousel_Image_Component extends Kwc_Basic_Image_Component
                 'cover' => true
             ),
         );
-        $ret['defineWidth'] = true;
         return $ret;
     }
 }
