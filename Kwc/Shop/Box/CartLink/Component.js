@@ -10,7 +10,7 @@ Kwf.onContentReady(function(readyEl, param) {
                     params: { componentId: el.dom.id },
                     url: Kwf.getKwcRenderUrl(),
                     success: function(response, options) {
-                        $(this.dom).html(response.responseText);
+                        $(this.dom).html($(response.responseText).html());
                         Kwf.callOnContentReady(this.dom, {newRender: true});
                     },
                     scope: el
