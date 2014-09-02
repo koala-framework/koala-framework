@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>"
+<div class="<?=$this->cssClass?> <?=$this->imageDimensionSetting;?>"
     style="max-width:<?=$this->width;?>px;<? if ($this->defineWidth) {?> width:<?=$this->width;?>px;<? } ?>"
     data-width="100%"
     data-max-width="<?=$this->maxWidth;?>">

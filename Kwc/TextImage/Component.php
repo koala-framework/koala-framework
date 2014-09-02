@@ -21,6 +21,7 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
             $ret['image'] = false;
         } else {
             $dim = $ret['image']->getComponent()->getImageDimensions();
+            $ret['imageDimensionSetting'] = $ret['image']->getComponent()->getDimensionSetting();
             $ret['imageWidth'] = false;
             if ($dim && isset($dim['width'])) {
                 $ret['imageWidth'] = $dim['width'];

@@ -102,6 +102,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $ret['image_caption'] = $this->_getRow()->image_caption;
             $ret['showImageCaption'] = $imageCaptionSetting;
         }
+        $ret['imageDimensionSetting'] = $this->getDimensionSetting();
         $ret['altText'] = $this->_getAltText();
 
         $imageData = $this->getImageDataOrEmptyImageData();
@@ -113,6 +114,23 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
         return $ret;
+    }
+
+    public function getDimensionSetting()
+    {
+        $dimensions = $this->_getSetting('dimensions');
+        $row = $this->getRow();
+        if (sizeof($dimensions) > 1) {
+            if ($row && isset($dimensions[$row->dimension])) {
+                return $row->dimension;
+            } else {
+                reset($dimensions);
+                return key($dimensions);
+            }
+        } else {
+            reset($dimensions);
+            return key($dimensions);
+        }
     }
 
     public final function getAltText()
