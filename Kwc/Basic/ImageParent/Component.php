@@ -26,13 +26,15 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars($renderer);
         $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
         $ret['image'] = $this->getData();
-        $ret['altText'] = $this->_getImageComponent()->getAltText();
+        $imageComponent = $this->_getImageComponent();
+        if ($imageComponent) {
+            $ret['altText'] = $imageComponent->getAltText();
 
-        $imageData = $this->getImageData();
-        $ret = array_merge($ret,
-            Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['file'])
-        );
-
+            $imageData = $this->getImageData();
+            $ret = array_merge($ret,
+                Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['file'])
+            );
+        }
         $ret['baseUrl'] = $this->_getBaseImageUrl();
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
@@ -58,6 +60,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
 
     public function getImageData()
     {
+        if (!$this->_getImageComponent()) return null;
         return $this->_getImageComponent()->getImageData();
     }
 
