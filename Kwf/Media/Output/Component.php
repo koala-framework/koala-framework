@@ -36,7 +36,7 @@ class Kwf_Media_Output_Component
         $width = substr($width, 0, strpos($width, '-'));
         if ($width) {
             $width = Kwf_Media_Image::getResponsiveWidthStep($width,
-                        Kwf_Media_Image::getResponsiveWidthSteps($dim, $data['file']));
+                        Kwf_Media_Image::getResponsiveWidthSteps($dim, isset($data['image']) ? $data['image'] : $data['file']));
             $dim['height'] = $width / $dim['width'] * $dim['height'];
             $dim['width'] = $width;
         }
@@ -90,7 +90,7 @@ class Kwf_Media_Output_Component
             $baseType = $c->getComponent()->getBaseType();
             $dim = $c->getComponent()->getImageDimensions();
             $imageData = $c->getComponent()->getImageDataOrEmptyImageData();
-            $widths = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
+            $widths = Kwf_Media_Image::getResponsiveWidthSteps($dim, isset($imageData['image']) ? $imageData['image'] : $imageData['file']);
             $ok = false;
             foreach ($widths as $w) {
                 if (str_replace('{width}', $w, $baseType) == $type) {

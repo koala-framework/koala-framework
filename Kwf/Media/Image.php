@@ -17,10 +17,17 @@ class Kwf_Media_Image
     /**
      * Returns supported image-widths of specific image with given base-dimensions
      */
-    public static function getResponsiveWidthSteps($dim, $imagepath)
+    public static function getResponsiveWidthSteps($dim, $image)
     {
         $ret = array();
-        $size = getimagesize($imagepath);
+        if (is_string($image)) {
+            $size = getimagesize($image);
+        } else if ($image instanceof Imagick) {
+            $size = array(
+                $image->getImageWidth(),
+                $image->getImageHeight()
+            );
+        }
 
         $maxWidth = $dim['width'] * 2;
         if ($size[0] < $dim['width'] * 2) {
