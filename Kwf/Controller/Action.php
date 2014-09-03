@@ -150,13 +150,17 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
     protected function _getUserRole()
     {
         if (php_sapi_name() == 'cli') return 'cli';
-        return Kwf_Registry::get('userModel')->getAuthedUserRole();
+        $um = Kwf_Registry::get('userModel');
+        if (!$um) return null;
+        return $um->getAuthedUserRole();
     }
 
     protected function _getAuthData()
     {
         if (php_sapi_name() == 'cli') return null;
-        return Kwf_Registry::get('userModel')->getAuthedUser();
+        $um = Kwf_Registry::get('userModel');
+        if (!$um) return null;
+        return $um->getAuthedUser();
     }
     /**
      * @return Kwf_Acl
