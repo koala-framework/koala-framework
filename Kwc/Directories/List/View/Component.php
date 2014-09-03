@@ -101,7 +101,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         if (!$select) return array();
         if ($count) {
             if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
-                $ex = new Kwf_Exception("Can't use getItemIds with limit in select when \$count paramter is given. You probably should disable paging for this view.");
+                $ex = new Kwf_Exception("Can't use getItemIds with limit in select when \$count paramter is given. You probably should disable paging for {$this->getData()->componentClass}.");
                 $ex->logOrThrow();
             }
             $select->limit($count, $offset);
