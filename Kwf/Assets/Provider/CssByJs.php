@@ -15,7 +15,7 @@ class Kwf_Assets_Provider_CssByJs extends Kwf_Assets_Provider_Abstract
             $fn = $dependency->getFileNameWithType();
             $match = false;
             foreach ($this->_paths as $p) {
-                if (substr($p, 0, strpos($p, '/')) == substr($fn, 0, strpos($fn, '/'))) {
+                if ($p == substr($fn, 0, strlen($p))) {
                     $match = true;
                 }
             }
