@@ -1,5 +1,7 @@
 Kwf.onElementReady('a', function viewAjaxFilterLink(a) {
     a = a.dom;
+    if (a.kwfViewAjaxInitDone) return; //ignore back link
+
     var m = a.rel.match(/kwfViewAjaxFilter({.*?})/)
     if (m) {
         var config = Ext.decode(m[1]);
@@ -9,7 +11,7 @@ Kwf.onElementReady('a', function viewAjaxFilterLink(a) {
 
         Ext.fly(a).on('click', function(ev) {
             var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.config.viewComponentId];
-            if (!view) return
+            if (!view) return;
             view.loadView({
                 filterComponentId: this.config.componentId
             });
