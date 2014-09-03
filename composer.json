@@ -21,7 +21,7 @@
             "jquery.easing": "1.3.0",
             "mustache.js": "0.8.2",
             "susy": "1.0.9",
-            "compass-mixins": "5ccf32be1e1c17fb286179502aed63db2585ce40",
+            "compass-mixins": "1.0.2",
             "tinymce": "tinymce/tinymce#3.5.8"
         },
         "require-npm": {
