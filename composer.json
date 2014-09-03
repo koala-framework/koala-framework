@@ -54,5 +54,7 @@
             "Kwf_": "tests",
             "Kwc_": "tests"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
