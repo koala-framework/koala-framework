@@ -72,24 +72,16 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
         return $ret;
     }
 
-    public static function createChildModel($componentClass)
-    {
-        return self::getColumnsModel($componentClass);
-    }
-
     public function getChildModel()
     {
-        return self::getColumnsModel($this->getData()->componentClass);
+        return self::createChildModel($this->getData()->componentClass);
     }
 
-    public static function getColumnsModel($componentClass)
+    public static function createChildModel($componentClass)
     {
-        static $models = array();
-        if (!isset($models[$componentClass])) {
-            $m = Kwc_Abstract::getSetting($componentClass, 'childModel');
-            $models[$componentClass] = new $m(array('componentClass' => $componentClass));
-        }
-        return $models[$componentClass];
+        return Kwc_Columns_ModelFactory::getModelInstance(array(
+            'componentClass' => $componentClass
+        ));
     }
 
     public function getTemplateVars()

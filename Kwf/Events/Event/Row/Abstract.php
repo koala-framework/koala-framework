@@ -9,7 +9,7 @@ abstract class Kwf_Events_Event_Row_Abstract extends Kwf_Events_Event_Abstract
 
     public function __construct(Kwf_Model_Row_Abstract $row)
     {
-        $this->class = get_class($row->getModel());
+        $this->class = $row->getModel()->getFactoryId();
         $this->row = $row;
     }
 

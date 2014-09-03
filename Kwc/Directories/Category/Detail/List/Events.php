@@ -28,8 +28,8 @@ class Kwc_Directories_Category_Detail_List_Events extends Kwc_Abstract_Composite
                     Kwc_Abstract::getSetting($class, 'childReferenceName') :
                     'Categories';
                 foreach (call_user_func(array($this->_class, 'getItemDirectoryClasses'), $this->_class) as $dirCls) {
-                    $dirModel = Kwc_Abstract::getSetting($dirCls, 'childModel');
-                    $relModel = Kwf_Model_Abstract::getInstance($dirModel)->getDependentModel($childReference);
+                    $dirModel = Kwc_Abstract::createChildModel($dirCls);
+                    $relModel = $dirModel->getDependentModel($childReference);
                     $ret[] = array(
                         'class' => $relModel,
                         'event' => 'Kwf_Events_Event_Row_Updated',

@@ -12,18 +12,19 @@ class Kwc_Paragraphs_Events extends Kwc_Abstract_Events
                 'callback' => 'onChildHasContentChange'
             );
         }
+        $m = Kwc_Abstract::createChildModel($this->_class);
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onRowUpdate'
         );
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onRowInsertOrDelete'
         );
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onRowInsertOrDelete'
         );

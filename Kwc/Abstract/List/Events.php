@@ -4,23 +4,25 @@ class Kwc_Abstract_List_Events extends Kwc_Abstract_Events
     public function getListeners()
     {
         $ret = parent::getListeners();
+        $cls = strpos($this->_class, '.') ? substr($this->_class, 0, strpos($this->_class, '.')) : $this->_class;
+        $m = call_user_func(array($cls, 'createChildModel'), $this->_class);
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onRowInsertOrDelete'
         );
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onRowInsertOrDelete'
         );
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onRowUpdate'
         );
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Model_Updated',
             'callback' => 'onModelUpdate'
         );

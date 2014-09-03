@@ -8,7 +8,7 @@ class Kwc_Chained_Trl_Events extends Kwc_Chained_Abstract_Events
             || Kwc_Abstract::hasSetting($this->_class, 'throwHasContentChangedOnMasterRowColumnsUpdate')
         ) {
             $masterComponentClass = Kwc_Abstract::getSetting($this->_class, 'masterComponentClass');
-            $m = Kwc_Abstract::getSetting($masterComponentClass, 'ownModel');
+            $m = Kwc_Abstract::createOwnModel($masterComponentClass);
             if (!$m) {
                 throw new Kwf_Exception("Master component '$masterComponentClass' doesn't have ownModel");
             }

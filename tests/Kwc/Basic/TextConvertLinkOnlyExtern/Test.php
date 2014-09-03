@@ -22,8 +22,7 @@ class Kwc_Basic_TextConvertLinkOnlyExtern_Test extends Kwc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1003-l1', current($cc)->componentId);
 
-        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
-            ->getDependentModel('ChildComponents');
+        $m = Kwc_Basic_Text_Component::createChildModel($c->getData()->componentClass);
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1003'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -62,8 +61,7 @@ class Kwc_Basic_TextConvertLinkOnlyExtern_Test extends Kwc_TestAbstract
         $row->save();
 
 
-        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
-            ->getDependentModel('ChildComponents');
+        $m = Kwc_Basic_Text_Component::createChildModel($c->getData()->componentClass);
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1005'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();

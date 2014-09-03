@@ -4,19 +4,19 @@ class Kwc_Basic_Table_Trl_Events extends Kwc_Chained_Trl_Events
     public function getListeners()
     {
         $ret = parent::getListeners();
-        $childModel = Kwc_Abstract::getSetting($this->_class, 'childModel');
+        $m = Kwc_Abstract::createChildModel($this->_class);
         $ret[] = array(
-            'class' => $childModel,
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onOwnRowEvent'
         );
         $ret[] = array(
-            'class' => $childModel,
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onOwnRowEvent'
         );
         $ret[] = array(
-            'class' => $childModel,
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onOwnRowEvent'
         );

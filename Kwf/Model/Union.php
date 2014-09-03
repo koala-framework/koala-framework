@@ -27,6 +27,13 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             }
             $i = Kwf_Model_Abstract::getInstance($i);
             $this->_models[$k] = $i;
+            if (!$i->getFactoryConfig()) {
+                $i->setFactoryConfig(array(
+                    'type' => 'UnionSource',
+                    'union' => $this,
+                    'modelKey' => $k,
+                ));
+            }
             while ($i instanceof Kwf_Model_Proxy) $i = $i->getProxyModel();
             if (!$i instanceof Kwf_Model_Db) {
                 $allDb = false;
@@ -282,7 +289,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             $ret = array_merge($ret, $m->getEventSubscribers());
         }
         $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwf_Model_Union_Events', array(
-            'modelClass' => get_class($this)
+            'modelFactoryConfig' => $this->getFactoryConfig()
         ));
         return $ret;
     }

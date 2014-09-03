@@ -4,18 +4,19 @@ class Kwc_Basic_Table_Events extends Kwc_Abstract_Composite_Events
     public function getListeners()
     {
         $ret = parent::getListeners();
+        $m = Kwc_Abstract::createChildModel($this->_class);
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onChildRowUpdate'
         );
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onChildRowUpdate'
         );
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onChildRowUpdate'
         );

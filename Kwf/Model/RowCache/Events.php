@@ -4,18 +4,19 @@ class Kwf_Model_RowCache_Events extends Kwf_Model_EventSubscriber
     public function getListeners()
     {
         $ret = parent::getListeners();
+        $factoryId = $this->_getModel()->getProxyModel()->getFactoryId();
         $ret[] = array(
-            'class' => $this->_modelClass,
+            'class' => $factoryId,
             'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onRowEvent'
         );
         $ret[] = array(
-            'class' => $this->_modelClass,
+            'class' => $factoryId,
             'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onRowEvent'
         );
         $ret[] = array(
-            'class' => $this->_modelClass,
+            'class' => $factoryId,
             'event' => 'Kwf_Events_Event_Model_Updated',
             'callback' => 'onModelEvent'
         );
@@ -24,13 +25,13 @@ class Kwf_Model_RowCache_Events extends Kwf_Model_EventSubscriber
 
     public function onRowEvent(Kwf_Events_Event_Row_Abstract $ev)
     {
-        $m = Kwf_Model_Abstract::getInstance($this->_modelClass);
+        $m = $this->_getModel();
         $m->clearRowCache($ev->row->{$m->getPrimaryKey()});
     }
 
     public function onModelEvent(Kwf_Events_Event_Model_Updated $ev)
     {
-        $m = Kwf_Model_Abstract::getInstance($this->_modelClass);
+        $m = $this->_getModel();
         if (is_array($ev->ids)) {
             foreach ($ev->ids as $id) {
                 $m->clearRowCache($id);

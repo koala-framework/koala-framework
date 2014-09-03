@@ -59,7 +59,7 @@ abstract class Kwf_Exception_Abstract extends Exception
                 htmlspecialchars($_SERVER['REQUEST_URI']) : '' ;
             $view->debug = Kwf_Exception::isDebug() || !Kwf_Registry::get('config')->setupFinished;
             try {
-                if (Kwf_Registry::get('userModel')->getAuthedUserRole() == 'admin') {
+                if (Kwf_Registry::get('userModel') && Kwf_Registry::get('userModel')->getAuthedUserRole() == 'admin') {
                     $view->debug = true;
                 }
             } catch (Exception $e) {}

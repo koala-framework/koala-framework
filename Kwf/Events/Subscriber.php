@@ -1,6 +1,8 @@
 <?php
 class Kwf_Events_Subscriber
 {
+    private static $_instances = array();
+
     protected $_config;
 
     protected function __construct($config = array())
@@ -48,13 +50,17 @@ class Kwf_Events_Subscriber
     public static final function getInstance($class, $config = array())
     {
         $id = md5(serialize(array($class, $config)));
-        static $instances = array();
-        if (!isset($instances[$id])) {
+        if (!isset(self::$_instances[$id])) {
             if (!$class) {
                 throw new Kwf_Exception("No class given");
             }
-            $instances[$id] = new $class($config);
+            self::$_instances[$id] = new $class($config);
         }
-        return $instances[$id];
+        return self::$_instances[$id];
+    }
+
+    public static final function clearInstances()
+    {
+        self::$_instances = array();
     }
 }

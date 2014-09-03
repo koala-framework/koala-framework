@@ -11,20 +11,15 @@ class Kwc_Columns_Model extends Kwc_Abstract_List_Model
         if (!$this->_componentClass) {
             throw new Kwf_Exception('componentClass is required');
         }
+        $this->setFactoryConfig(array(
+            'type' => 'Kwc_Columns_ModelFactory',
+            'id' => $this->_componentClass.'.childModel',
+            'componentClass' => $this->_componentClass
+        ));
     }
 
     public function getComponentClass()
     {
         return $this->_componentClass;
-    }
-
-    public function getEventSubscribers()
-    {
-        $ret = $this->getProxyModel()->getEventSubscribers();
-        $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwc_Columns_ModelEvents', array(
-            'modelClass' => get_class($this),
-            'componentClass' => $this->_componentClass
-        ));
-        return $ret;
     }
 }

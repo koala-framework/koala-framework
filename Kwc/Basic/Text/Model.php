@@ -23,6 +23,11 @@ class Kwc_Basic_Text_Model extends Kwf_Model_Db_Proxy
         }
         $this->_componentClass = $config['componentClass'];
         parent::__construct($config);
+        $this->setFactoryConfig(array(
+            'type' => 'Kwc_Basic_Text_ModelFactory',
+            'id' => $this->_componentClass.'.ownModel',
+            'componentClass' => $this->_componentClass
+        ));
     }
 
     protected function _init()
@@ -53,15 +58,5 @@ class Kwc_Basic_Text_Model extends Kwf_Model_Db_Proxy
         } else {
             return parent::_createDependentModel($rule);
         }
-    }
-
-    public function getEventSubscribers()
-    {
-        $ret = $this->getProxyModel()->getEventSubscribers();
-        $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwc_Basic_Text_ModelEvents', array(
-            'modelClass' => get_class($this),
-            'componentClass' => $this->_componentClass
-        ));
-        return $ret;
     }
 }

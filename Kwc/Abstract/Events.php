@@ -4,14 +4,16 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
     public function getListeners()
     {
         $ret = array();
-        if (Kwc_Abstract::hasSetting($this->_class, 'ownModel')) {
+        $cls = strpos($this->_class, '.') ? substr($this->_class, 0, strpos($this->_class, '.')) : $this->_class;
+        $m = call_user_func(array($cls, 'createOwnModel'), $this->_class);
+        if ($m) {
             $ret[] = array(
-                'class' => Kwc_Abstract::getSetting($this->_class, 'ownModel'),
+                'class' => $m,
                 'event' => 'Kwf_Events_Event_Row_Updated',
                 'callback' => 'onOwnRowUpdate'
             );
             $ret[] = array(
-                'class' => Kwc_Abstract::getSetting($this->_class, 'ownModel'),
+                'class' => $m,
                 'event' => 'Kwf_Events_Event_Row_Inserted',
                 'callback' => 'onOwnRowUpdate'
             );

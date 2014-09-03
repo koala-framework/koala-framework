@@ -4,7 +4,7 @@ class Kwc_Advanced_SocialBookmarks_Events extends Kwf_Component_Abstract_Events
     public function getListeners()
     {
         $ret = array();
-        $ownModel = Kwc_Abstract::getSetting($this->_class, 'ownModel');
+        $ownModel = Kwc_Abstract::createOwnModel($this->_class);
         $models = Kwf_Model_Abstract::getInstance($ownModel)
             ->getDependentModels();
         $model = $models['Networks'];
@@ -14,12 +14,12 @@ class Kwc_Advanced_SocialBookmarks_Events extends Kwf_Component_Abstract_Events
             'callback' => 'onNetworksRowUpdate'
         );
         $ret[] = array(
-            'class' => $models['Networks'],
+            'class' => $model,
             'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onNetworksRowUpdate'
         );
         $ret[] = array(
-            'class' => $models['Networks'],
+            'class' => $model,
             'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onNetworksRowUpdate'
         );

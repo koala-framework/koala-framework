@@ -45,7 +45,7 @@ class Kwf_Exception extends Kwf_Exception_NoLog
     {
         $user = "guest";
         try {
-            if ($u = Zend_Registry::get('userModel')->getAuthedUser()) {
+            if (Zend_Registry::get('userModel') && $u = Zend_Registry::get('userModel')->getAuthedUser()) {
                 $userName = $u->__toString();
                 $user = "$userName, id $u->id, $u->role";
             }

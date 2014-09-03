@@ -116,7 +116,7 @@ class Kwf_Model_RowCache extends Kwf_Model_Proxy
     {
         $ret = parent::getEventSubscribers();
         $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwf_Model_RowCache_Events', array(
-            'modelClass' => get_class($this)
+            'modelFactoryConfig' => $this->getFactoryConfig()
         ));
         return $ret;
     }

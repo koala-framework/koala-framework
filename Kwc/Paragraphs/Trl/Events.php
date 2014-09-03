@@ -4,26 +4,34 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
     public function getListeners()
     {
         $ret = parent::getListeners();
+        $m = Kwc_Abstract::createChildModel($this->_class);
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($this->_class, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onRowUpdate'
         );
-        $masterComponentClass = Kwc_Abstract::getSetting($this->_class, 'masterComponentClass');
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($masterComponentClass, 'childModel'),
+            'class' => $m,
+            'event' => 'Kwf_Events_Event_Row_Inserted',
+            'callback' => 'onRowUpdate'
+        );
+
+        $masterComponentClass = Kwc_Abstract::getSetting($this->_class, 'masterComponentClass');
+        $m = Kwc_Abstract::createChildModel($masterComponentClass);
+        $ret[] = array(
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onMasterRowUpdate'
         );
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($masterComponentClass, 'childModel'),
+            'class' => $m,
             'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onMasterRowDelete'
         );
         return $ret;
     }
 
-    protected function onRowUpdate(Kwf_Events_Event_Row_Abstract $event)
+    public function onRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         if ($event->isDirty('visible')) {
             $id = $event->row->component_id;
@@ -39,7 +47,7 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
         }
     }
 
-    protected function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
+    public function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         if ($event->isDirty('pos')) {
 
@@ -56,7 +64,7 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
         }
     }
 
-    protected function onMasterRowDelete(Kwf_Events_Event_Row_Abstract $event)
+    public function onMasterRowDelete(Kwf_Events_Event_Row_Abstract $event)
     {
         $chainedType = 'Trl';
 

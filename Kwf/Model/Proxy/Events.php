@@ -4,25 +4,24 @@ class Kwf_Model_Proxy_Events extends Kwf_Model_EventSubscriber
     public function getListeners()
     {
         $ret = parent::getListeners();
-        $m = $this->_getModel();
-        $proxyModelClass = get_class($m->getProxyModel());
+        $factoryId = $this->_getModel()->getProxyModel()->getFactoryId();
         $ret[] = array(
-            'class' => $proxyModelClass,
+            'class' => $factoryId,
             'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onRowEvent'
         );
         $ret[] = array(
-            'class' => $proxyModelClass,
+            'class' => $factoryId,
             'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onRowEvent'
         );
         $ret[] = array(
-            'class' => $proxyModelClass,
+            'class' => $factoryId,
             'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onRowEvent'
         );
         $ret[] = array(
-            'class' => $proxyModelClass,
+            'class' => $factoryId,
             'event' => 'Kwf_Events_Event_Model_Updated',
             'callback' => 'onModelEvent'
         );

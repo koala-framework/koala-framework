@@ -3,7 +3,7 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
 {
     public function __construct($name, $class, $id = null)
     {
-        $this->setModel(Kwc_Basic_Text_Component::getTextModel($class));
+        $this->setModel(Kwc_Basic_Text_Component::createChildModel($class));
         parent::__construct($name, $class, $id);
         $field = new Kwf_Form_Field_HtmlEditor('content', trlKwf('Text'));
         $field->setData(new Kwf_Data_Kwc_ComponentIds('content'));

@@ -24,7 +24,18 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
             throw new Kwf_Exception("proxyModel config is required for model '".get_class($this)."'");
         }
         if (!is_string($this->_proxyModel)) {
-            $this->_proxyModel->addProxyContainerModel($this);
+            $this->_initProxyModel();
+        }
+    }
+
+    protected function _initProxyModel()
+    {
+        $this->_proxyModel->addProxyContainerModel($this);
+        if (!$this->_proxyModel->getFactoryConfig()) {
+            $this->_proxyModel->setFactoryConfig(array(
+                'type' => 'Proxied',
+                'proxy' => $this
+            ));
         }
     }
 
@@ -39,7 +50,7 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
     {
         if (is_string($this->_proxyModel)) {
             $this->_proxyModel = Kwf_Model_Abstract::getInstance($this->_proxyModel);
-            $this->_proxyModel->addProxyContainerModel($this);
+            $this->_initProxyModel();
         }
         return $this->_proxyModel;
     }
@@ -254,8 +265,12 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
     public function getEventSubscribers()
     {
         $ret = $this->getProxyModel()->getEventSubscribers();
+        $fc = $this->getFactoryConfig();
+        if (!$fc) {
+            throw new Kwf_Exception("Didn't find factoryConfig for '".get_class($this)."'");
+        }
         $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwf_Model_Proxy_Events', array(
-            'modelClass' => get_class($this)
+            'modelFactoryConfig' => $fc
         ));
         return $ret;
     }

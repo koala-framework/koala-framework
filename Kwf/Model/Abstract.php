@@ -37,16 +37,15 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     protected $_rows = array();
 
-    private static $_instances = array();
     private static $_allInstances = array();
     private $_hasColumnsCache = array();
+    private $_factoryConfig = null;
 
     protected $_proxyContainerModels = array();
 
-    public static $instanceCount = array();
+    //public static $instanceCount = array();
 
     protected $_columnMappings = array();
-
 
     public function __construct(array $config = array())
     {
@@ -58,14 +57,14 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         if (isset($config['toStringField'])) $this->_toStringField = (string)$config['toStringField'];
         if (isset($config['exprs'])) $this->_exprs = (array)$config['exprs'];
         if (isset($config['hasDeletedFlag'])) $this->_hasDeletedFlag = $config['hasDeletedFlag'];
-        self::$instanceCount[spl_object_hash($this)] = get_class($this);
+        //self::$instanceCount[spl_object_hash($this)] = get_class($this);
         self::$_allInstances[] = $this;
         $this->_init();
     }
 
     public function __destruct()
     {
-        unset(self::$instanceCount[spl_object_hash($this)]);
+        //unset(self::$instanceCount[spl_object_hash($this)]);
     }
 
     /**
@@ -82,22 +81,14 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             if (!$config[$modelName]) return null;
             $modelName = $config[$modelName];
         }
-        if (!isset(self::$_instances[$modelName])) {
-            self::$_instances[$modelName] = new $modelName();
-        }
-        return self::$_instances[$modelName];
+        return Kwf_Model_Factory_ClassName::getModelInstance($modelName);
     }
 
     //für unit-tests
     public static function clearInstances()
     {
-        self::$_instances = array();
+        Kwf_Model_Factory_ClassName::clearInstances();
         self::$_allInstances = array();
-    }
-
-    public static function getInstances()
-    {
-        return self::$_instances;
     }
 
     protected function _init()
@@ -198,7 +189,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         $select->limit(1);
         $rows = $this->getRows($select);
         if ($rows->valid()) {
-            return $this->getRows($select)->current();
+            return $rows->current();
         } else {
             return null;
         }
@@ -1153,5 +1144,25 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     public function getEventSubscribers()
     {
         return array();
+    }
+
+    public function setFactoryConfig(array $factoryConfig)
+    {
+        $this->_factoryConfig = $factoryConfig;
+    }
+
+    public function getFactoryId()
+    {
+        $c = $this->getFactoryConfig();
+        if (!$c) return null;
+        return $c['id'];
+    }
+
+    public function getFactoryConfig()
+    {
+        if ($this->_factoryConfig && !isset($this->_factoryConfig['id'])) {
+            $this->_factoryConfig = call_user_func(array('Kwf_Model_Factory_'.$this->_factoryConfig['type'], 'processConfig'), $this->_factoryConfig);
+        }
+        return $this->_factoryConfig;
     }
 }

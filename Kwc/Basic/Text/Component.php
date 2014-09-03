@@ -43,7 +43,6 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                 'download'      => 'Kwc_Basic_DownloadTag_Component'
             )
         );
-        $ret['childModel'] = 'Kwc_Basic_Text_ChildComponentsModel';
 
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Text/StylesEditor.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Text/StylesEditorTab.js';
@@ -72,27 +71,26 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
 
     public function getOwnModel()
     {
-        return self::getTextModel(get_class($this));
+        return self::createOwnModel($this->getData()->componentClass);
+    }
+
+    public function getChildModel()
+    {
+        return self::createChildModel($this->getData()->componentClass);
     }
 
     public static function createOwnModel($class)
     {
-        return self::getTextModel($class);
+        return Kwc_Basic_Text_ModelFactory::getModelInstance(array(
+            'componentClass' => $class
+        ));
     }
 
     public static function createChildModel($class)
     {
-        return self::getTextModel($class)->getDependentModel('ChildComponents');
-    }
-
-    public static function getTextModel($componentClass)
-    {
-        static $models = array();
-        if (!isset($models[$componentClass])) {
-            $m = Kwc_Abstract::getSetting($componentClass, 'ownModel');
-            $models[$componentClass] = new $m(array('componentClass' => $componentClass));
-        }
-        return $models[$componentClass];
+        return Kwc_Basic_Text_ChildComponentsModelFactory::getModelInstance(array(
+            'componentClass' => $class
+        ));
     }
 
     protected function _getContentParts()

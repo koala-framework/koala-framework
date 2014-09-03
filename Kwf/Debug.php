@@ -50,6 +50,10 @@ function p($src, $Type = 'LOG')
         }
     }
     if ($isToDebug) {
+        if (php_sapi_name() == 'cli') {
+            $src = str_replace('<pre>', '', $src);
+            $src = str_replace('</pre>', '', $src);
+        }
         echo $src;
     } else if (function_exists('xdebug_var_dump')
         && !($src instanceof Zend_Db_Select ||

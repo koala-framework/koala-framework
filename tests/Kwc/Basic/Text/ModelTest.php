@@ -23,8 +23,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1003-l1', current($cc)->componentId);
 
-        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
-            ->getDependentModel('ChildComponents');
+        $m = Kwc_Basic_Text_Component::createChildModel($c->getData()->componentClass);
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1003'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -74,8 +73,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1014-l1', current($cc)->componentId);
 
-        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
-            ->getDependentModel('ChildComponents');
+        $m = Kwc_Basic_Text_Component::createChildModel($c->getData()->componentClass);
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1014'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -140,8 +138,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1008-i1', current($cc)->componentId);
 
-        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
-            ->getDependentModel('ChildComponents');
+        $m = Kwc_Basic_Text_Component::createChildModel($c->getData()->componentClass);
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1008'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();

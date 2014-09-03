@@ -6,8 +6,9 @@ class Kwc_Advanced_SearchEngineReferer_ViewLatest_Events extends Kwc_Abstract_Ev
         $ret = parent::getListeners();
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
             if (in_array('Kwc_Advanced_SearchEngineReferer_Component', Kwc_Abstract::getParentClasses($class))) {
+                $m = Kwc_Abstract::createChildModel($class);
                 $ret[] = array(
-                    'class' => Kwc_Abstract::getSetting($class, 'childModel'),
+                    'class' => $m,
                     'event' => 'Kwf_Events_Event_Row_Inserted',
                     'callback' => 'onRowInsert'
                 );
