@@ -114,6 +114,7 @@ Ext2.extend(Kwf.Tabs, Ext2.util.Observable, {
                     this.newEl.setStyle('position', 'static');
                     this.newEl.setVisible(true);
                     this.newEl.setOpacity(1);
+                    this.newEl.setStyle('height', 'auto');
                 },
                 scope: {
                     oldEl: oldContentEl,
@@ -125,19 +126,7 @@ Ext2.extend(Kwf.Tabs, Ext2.util.Observable, {
         this.tabsContents.setHeight(oldContentEl.getHeight());
         this.tabsContents.scale(undefined, newContentEl.getHeight(), {
             easing: 'easeOut',
-            duration: this.fxDuration,
-            callback: function(el) {
-                el.applyStyles({
-                    height: 'auto'
-                });
-                if (Ext2.isIE7) {
-                    (function() {
-                        this.enableDisplayMode('block');
-                        this.hide();
-                        this.show();
-                    }).defer(1, el);
-                }
-            }
+            duration: this.fxDuration
         });
 
         // passed arguments are: tabsObject, newIndex, oldIndex
