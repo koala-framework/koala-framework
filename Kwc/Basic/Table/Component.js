@@ -2,7 +2,7 @@ Kwf.Utils.ResponsiveEl('.kwcBasicTable.responsiveFlipScroll', function(el) {
     var addArrow = function(el) {
         if (el.hasClass('flipScroll')) {
             var tbody = el.children('tbody');
-            if (tbody.scrollLeft == 0 && tbody.width > el.width()) {
+            if (tbody.scrollLeft() == 0 && tbody.width() > el.width()) {
                 el.addClass('arrowRight');
             } else {
                 el.removeClass('arrowRight');
@@ -11,7 +11,7 @@ Kwf.Utils.ResponsiveEl('.kwcBasicTable.responsiveFlipScroll', function(el) {
     };
 
     if (el.hasClass('flipScroll')) {
-        if (el.width() > el.flipScrollSetAt) {
+        if (el.width() > el.get(0).flipScrollSetAt) {
             el.removeClass('flipScroll');
         }
     }
@@ -23,6 +23,6 @@ Kwf.Utils.ResponsiveEl('.kwcBasicTable.responsiveFlipScroll', function(el) {
                 addArrow($(this).closest('.kwcBasicTable'));
             });
         }
-        el.flipScrollSetAt = el.width();
+        el.get(0).flipScrollSetAt = el.width();
     }
 });
