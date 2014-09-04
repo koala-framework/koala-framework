@@ -23,6 +23,14 @@ class Kwc_List_ChildPages_Teaser_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+
+        /*
+        Now the following line look unneded but I can tell you it is needed if you run koala
+        on a 100 year old webserver with php 5.2.4 (WTF!) that crashes (yes, segfault) if the stack (or whatever?)
+        is too large. Stupid PHP, Stupid POI. (Stupid is as stupid does.)
+        */
+        $this->getData()->getPage()->getChildPages();
+
         $ret['children'] = $this->getData()->getChildComponents(array('generator' => 'child'));
         return $ret;
     }
