@@ -48,10 +48,13 @@ class Kwf_View_Ext extends Kwf_View
         }
         $ext['viewport'] = $viewport;
 
-        $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
-        $user = Zend_Registry::get('userModel')->getAuthedUser();
-        if ($user) {
-            $ext['user'] = "$user->email, id $user->id, $user->role";
+        $ext['userRole'] = 'guest';
+        if (Zend_Registry::get('userModel')) {
+            $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
+            $user = Zend_Registry::get('userModel')->getAuthedUser();
+            if ($user) {
+                $ext['user'] = "$user->email, id $user->id, $user->role";
+            }
         }
         $this->ext = $ext;
         $this->extTemplate = 'ext.tpl';
