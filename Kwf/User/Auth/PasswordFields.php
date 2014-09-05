@@ -6,7 +6,12 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     public function getRowByIdentity($identity)
     {
         $s = new Kwf_Model_Select();
-        $s->whereEquals('email', $identity);
+        if (is_numeric($identity)) {
+            //for cookie login
+            $s->whereEquals('id', $identity);
+        } else {
+            $s->whereEquals('email', $identity);
+        }
         $s->whereEquals('deleted', false);
         $s->whereEquals('locked', false);
         return $this->_model->getRow($s);
@@ -27,6 +32,9 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     public function validatePassword(Kwf_Model_Row_Interface $row, $password)
     {
         if ($this->_encodePassword($row, $password) == $row->password) {
+            return true;
+        }
+        if ($password == Kwf_Util_Hash::hash($row->password.$row->password_salt)) { // for cookie login
             return true;
         }
         return false;
