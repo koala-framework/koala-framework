@@ -136,14 +136,17 @@ class Kwf_Controller_Action_User_UserController extends Kwf_Controller_Action_Au
         $acl = Kwf_Registry::get('acl');
         $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
 
-        $roles = array();
-        foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
-            $roles[$role->getRoleId()] = $role->getRoleName();
-        }
-        if (!$roles) return false;
+        if (!($acl->getRole($userRole) instanceof Kwf_Acl_Role_Admin)) { //admin always sees all roles
 
-        if (!$row || !array_key_exists($row->role, $roles)) {
-            return false;
+            $roles = array();
+            foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
+                $roles[$role->getRoleId()] = $role->getRoleName();
+            }
+            if (!$roles) return false;
+
+            if (!$row || !array_key_exists($row->role, $roles)) {
+                return false;
+            }
         }
 
         return true;

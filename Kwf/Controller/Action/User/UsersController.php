@@ -170,23 +170,26 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
     {
         $select = parent::_getSelect();
         $acl = Zend_Registry::get('acl');
-        $roles = array();
-        foreach ($acl->getAllResources() as $res) {
-            if ($res instanceof Kwf_Acl_Resource_EditRole
-                && $acl->isAllowed($this->_getUserRole(), $res, 'view')
-            ) {
-                $roles[] = $res->getRoleId();
+
+        if (!($acl->getRole($this->_getUserRole()) instanceof Kwf_Acl_Role_Admin)) { //admin always sees all roles
+            $roles = array();
+            foreach ($acl->getAllResources() as $res) {
+                if ($res instanceof Kwf_Acl_Resource_EditRole
+                    && $acl->isAllowed($this->_getUserRole(), $res, 'view')
+                ) {
+                    $roles[] = $res->getRoleId();
+                }
+            }
+
+            if ($roles) {
+                $select->whereEquals('role', $roles);
+            } else {
+                $select = null;
             }
         }
 
         if (!$this->_getParam('query_lockedtoo')) {
             $select->whereEquals('locked', 0);
-        }
-
-        if ($roles) {
-            $select->whereEquals('role', $roles);
-        } else {
-            $select = null;
         }
 
         if ($this->_getParam('query_role')) {
@@ -218,6 +221,10 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
     {
         $acl = Kwf_Registry::get('acl');
         $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
+
+        if ($acl->getRole($userRole) instanceof Kwf_Acl_Role_Admin) { //admin always sees all roles
+            return true;
+        }
 
         $roles = array();
         foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
