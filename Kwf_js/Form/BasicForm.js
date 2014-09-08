@@ -36,8 +36,12 @@ Ext.apply(Ext.form.VTypes, {
     },
     emailMask : /[a-z0-9_\.\-@+]/i, //include +
 
+    url: function(v) {
+        return /(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!:]*)(\.\w{2,})?)*\/?)/i.test(v);
+    },
+
     urltel: function(v) {
-        return /^(tel:\/\/[\d\s]+|(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?))+$/.test(v);
+        return /^(tel:\/\/[\d\s]+|(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!:]*)(\.\w{2,})?)*\/?))+$/.test(v);
     },
     urltelTest: trlKwf('This field should be a URL in the format "http://www.domain.com" or tel://0043 1234'),
 
