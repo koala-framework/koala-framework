@@ -220,8 +220,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
                     if (this._validateSizes()) {
                         this.value = {
                             dimension: this._dimensionField.getValue(),
-                            width: this._widthField.getValue(),
-                            height: this._heightField.getValue(),
+                            width: this._getUserSelectedDimensionWidth(),
+                            height: this._getUserSelectedDimensionHeight(),
                             cropData: this._cropImage.getValue()
                         };
                         this.fireEvent('save', this.value);
