@@ -103,8 +103,8 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
             if (value.dimension != null) {
                 previewParams.dimension = value.dimension;
                 var dimension = this._getDimensionField().resolvedDimensions[value.dimension];
-                var outWidth = dimension.width == 'user' ? value.width : dimension.width;
-                var outHeight = dimension.height == 'user' ? value.height : dimension.height;
+                var outWidth = (dimension.width == 'user' || dimension.aspectRatio) ? value.width : dimension.width;
+                var outHeight = (dimension.height == 'user' || dimension.aspectRatio) ? value.height : dimension.height;
                 if (dimension && value.cropData) {
                     if (outWidth != 0 && outHeight != 0
                         && Math.floor(outWidth * 100 / outHeight)
