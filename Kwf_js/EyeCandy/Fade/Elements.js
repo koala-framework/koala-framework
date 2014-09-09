@@ -107,7 +107,10 @@ Kwf.Fade.Elements = function(cfg) {
             if (i != this.active) {
                 ee.css('opacity', 0);
             } else {
-                ee.css('opacity', 1);
+                ee.css({
+                    opacity: 1,
+                    zIndex: 10
+                });
             }
             ee.css({
                 display: 'block',
