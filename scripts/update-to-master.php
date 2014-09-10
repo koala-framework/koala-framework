@@ -215,6 +215,7 @@ replaceFiles($files, 'Kwc.List.Carousel', 'Kwc.Legacy.List.Carousel');
 
 $files = glob_recursive('*.scss');
 replaceFiles($files, '@import "susy";', '@import "kwf/susyone";');
+replaceFiles($files, '@import "kwf/form/', '@import "kwf/legacy/form/');
 
 echo "\n";
 echo "run now 'composer install' to install dependencies\n";
