@@ -79,6 +79,9 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
 
     public static function useAlternativeComponent($componentClass, $parentData, $generator)
     {
+        if ($generator instanceof Kwf_Component_Generator_Box_StaticSelect) {
+            throw new Kwf_Exception("Menus are not compatible with StaticSelect");
+        }
         if (!$parentData) return false;
 
         $foundPageOrCategory = false;
