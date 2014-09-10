@@ -108,6 +108,50 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
 
     public function removeCache()
     {
+        //copy from Kwf_Util_ClearCache_Types_Assets
+        //TODO implement better in kwf 3.8
+        $config = Zend_Registry::get('config');
+        $langs = array();
+        if ($config->webCodeLanguage) $langs[] = $config->webCodeLanguage;
+
+        if ($config->languages) {
+            foreach ($config->languages as $lang=>$name) {
+                $langs[] = $lang;
+            }
+        }
+
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            $lngClasses = array();
+            foreach(Kwc_Abstract::getComponentClasses() as $c) {
+                if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
+                    in_array('language', Kwc_Abstract::getSetting($c, 'baseProperties'))
+                ) {
+                    $lngClasses[] = $c;
+                }
+            }
+            $lngs = Kwf_Component_Data_Root::getInstance()
+                ->getComponentsBySameClass($lngClasses, array('ignoreVisible'=>true));
+            foreach ($lngs as $c) {
+                $langs[] = $c->getLanguage();
+            }
+        }
+        $langs = array_unique($langs);
+        //end copy
+
+        $dep = new Kwc_Basic_Text_StylesAsset(get_class($this));
+        foreach ($langs as $language) {
+            $url = get_class($dep).'/'.$dep->toUrlParameter().'/'.$language.'/css';
+
+            $cacheId = str_replace(array(':', '/', '.', ','), '_', $url);
+            Kwf_Assets_Cache::getInstance()->remove($cacheId);
+
+            $cacheId = 'as_'.str_replace(array(':', '/', ','), '_', $url).'_'.Kwf_Media_Output::ENCODING_GZIP;
+            Kwf_Cache_SimpleStatic::_delete($cacheId);
+            $cacheId = 'as_'.str_replace(array(':', '/', ','), '_', $url).'_'.Kwf_Media_Output::ENCODING_DEFLATE;
+            Kwf_Cache_SimpleStatic::_delete($cacheId);
+        }
+
+
         return self::_getCache()->remove('RteStyles'.$this->getUniqueIdentifier());
     }
 
