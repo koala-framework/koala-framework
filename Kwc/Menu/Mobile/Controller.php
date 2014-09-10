@@ -34,12 +34,19 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subrootComponentId'));
 
         $categoryComponents = array();
-        foreach($component->getChildComponents(array('flag' => 'menuCategory')) as $cat) {
-            if (in_array($cat->id, $category)) $categoryComponents[] = $cat;
+
+        foreach ($component->getChildComponents(array('flag' => 'menuCategory')) as $cat) {
+            if (in_array($cat->id, $category)) $categoryComponents[$cat->id] = $cat;
+        }
+
+        $sortedCategoryComponents = array();
+
+        foreach ($category as $c) {
+            $sortedCategoryComponents[$c] = $categoryComponents[$c];
         }
 
         $this->_showSelectedPageInList = Kwc_Abstract::getSetting($this->_getParam('class'), 'showSelectedPageInList');
-        return $this->_getChildPagesRecursive($categoryComponents);
+        return $this->_getChildPagesRecursive($sortedCategoryComponents);
     }
 
     protected function _getChildPagesRecursive($parentPage)

@@ -8,10 +8,16 @@
         @include pie-clearfix;
         width: 80000px;
         position: relative;
+        .listItem {
+            float: left;
+        }
     }
     .imageWrapper {
         @include pie-clearfix;
         position: relative;
+        .listItem {
+            display: block;
+        }
     }
     a {
         &.listSwitchPrevious {
@@ -30,9 +36,6 @@
             right: 0;
             height: 100%;
         }
-    }
-    .listItem {
-        float: left;
     }
     
     &.fullwidth {

@@ -203,7 +203,6 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
                 if (!hasErrors) {
                     // Scroll to top of form
                     scrollTo = this.el.getY();
-                    this.fireEvent('submitSuccess', this, r);
                 } else {
                     // Get position of first error field
                     for(var fieldName in r.errorFields) {

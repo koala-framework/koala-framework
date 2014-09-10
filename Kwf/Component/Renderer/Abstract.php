@@ -199,7 +199,8 @@ abstract class Kwf_Component_Renderer_Abstract
             $content = $this->_getHelper($type)->render($componentId, $config);
             $content = $this->_executePlugins($content, $plugins, $componentId, array('beforeCache'));
         }
-        $content = $this->_executePlugins($content, $plugins, $componentId, array('before', 'after'));
+        $content = $this->_executePlugins($content, $plugins, $componentId, array('before'));
+        $content = $this->_addPluginPlaceholders($content, $plugins, $componentId, array('after'));
 
         return $content;
     }

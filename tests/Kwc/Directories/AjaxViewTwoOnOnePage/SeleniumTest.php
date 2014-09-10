@@ -15,7 +15,7 @@ class Kwc_Directories_AjaxViewTwoOnOnePage_SeleniumTest extends Kwf_Test_Seleniu
 
     public function testDetail()
     {
-        $this->openKwc('/directory');
+        $this->openKwc('/test');
         $this->click('link=foo1');
         $this->waitForConnections();
         $this->assertContainsText('css=.kwcDirectoriesAjaxViewTwoOnOnePageDetail', 'foo1');

@@ -9,4 +9,11 @@ class Kwc_Articles_Directory_View_Component extends Kwc_Directories_List_ViewPag
         $ret['updateTags'][] = 'fulltext';
         return $ret;
     }
+
+    public function getPartialParams()
+    {
+        $ret = parent::getPartialParams();
+        $ret['disableCache'] = true;
+        return $ret;
+    }
 }

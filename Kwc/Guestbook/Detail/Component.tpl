@@ -1,7 +1,7 @@
 <div class="<?=$this->cssClass?>">
     <div class="postData">
         <div class="postInfo">
-            <? if ($this->user) { ?>
+            <? if (!is_string($this->user)) { ?>
                 <div class="avatar">
                     <?= $this->componentLink(
                             $this->user,
