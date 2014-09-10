@@ -37,7 +37,8 @@ Ext.apply(Ext.form.VTypes, {
     emailMask : /[a-z0-9_\.\-@+]/i, //include +
 
     url: function(v) {
-        return /(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!:]*)(\.\w{2,})?)*\/?)/i.test(v);
+        //regexp copied from ext5
+        return /(((^https?)|(^ftp)):\/\/((([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*)|(localhost|LOCALHOST))\/?)/i.test(v);
     },
 
     urltel: function(v) {
