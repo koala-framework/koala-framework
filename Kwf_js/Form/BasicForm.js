@@ -46,7 +46,7 @@ Ext.apply(Ext.form.VTypes, {
         }
         return Ext.form.VTypes.url(v);
     },
-    urltelTest: trlKwf('This field should be a URL in the format "http://www.domain.com" or tel://0043 1234'),
+    urltelText: trlKwf('This field should be a URL in the format "http://www.domain.com" or tel://0043 1234'),
 
     //Ersetzt alles außer a-z, 0-9 - durch _. So wie Kwf_Filter_Ascii
     //standard-ext implementierung überschrieben um den - zu erlauben
