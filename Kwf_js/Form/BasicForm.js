@@ -41,7 +41,10 @@ Ext.apply(Ext.form.VTypes, {
     },
 
     urltel: function(v) {
-        return /^(tel:\/\/[\d\s]+|(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!:]*)(\.\w{2,})?)*\/?))+$/.test(v);
+        if (/^tel:\/\/[\d\s]+$/.test(v)) {
+            return true;
+        }
+        return Ext.form.VTypes.url(v);
     },
     urltelTest: trlKwf('This field should be a URL in the format "http://www.domain.com" or tel://0043 1234'),
 
