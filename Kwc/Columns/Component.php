@@ -108,6 +108,9 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
             if ($i == count($columns['colSpans'])) $cls .= " lineLast";
             $ret['listItems'][$key]['class'] .= $cls;
             ($i == count($columns['colSpans'])) ? $i = 1 : $i++;
+            if (!$ret['listItems'][$key]['data']->hasContent()) {
+                $ret['listItems'][$key]['class'] .= ' emptyContent';
+            }
         }
         return $ret;
     }
