@@ -32,7 +32,7 @@ class Kwf_User_Autologin
 
     public static function setCookies($authedUser)
     {
-        $cookieValue = $authedUser->id.'.'.md5($authedUser->password);
+        $cookieValue = $authedUser->id.'.'.Kwf_Util_Hash::hash($authedUser->password);
         setcookie('feAutologin', $cookieValue, time() + (100*24*60*60), '/', null, Kwf_Util_Https::supportsHttps(), true);
         setcookie('hasFeAutologin', '1', time() + (100*24*60*60), '/', null, false, true);
     }

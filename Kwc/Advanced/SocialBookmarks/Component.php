@@ -35,6 +35,7 @@ class Kwc_Advanced_SocialBookmarks_Component extends Kwc_Abstract
                 if ($icon) $icon = '/assets/kwf'.$icon;
                 $url = str_replace('{0}', $currentPage->getAbsoluteUrl(), $networks[$net->network_id]['url']);
                 $ret[] = array(
+                    'id' => $net->network_id,
                     'name' => $networks[$net->network_id]['name'],
                     'url' => $url,
                     'icon' => $icon
