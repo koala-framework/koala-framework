@@ -50,6 +50,17 @@ class Kwf_Model_Union_Events extends Kwf_Model_EventSubscriber
     {
         $eventCls = get_class($ev);
         $unionModel = $this->_getModel();
-        $this->fireEvent(new $eventCls($unionModel));
+        $key = array_search($ev->model, $unionModel->getUnionModels());
+        $ids = array();
+        if (!is_null($ev->ids)) {
+            foreach ($ev->ids as $id) {
+                $ids[] = $key.$id;
+            }
+        } else {
+            foreach ($ev->model->getIds() as $id) {
+                $ids[] = $key.$id;
+            }
+        }
+        $this->fireEvent(new $eventCls($unionModel, $ids));
     }
 }

@@ -114,9 +114,6 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                 $s->where($this->_convertExpr($expr, $m));
             }
         }
-        $select->reset(Kwf_Model_Select::ORDER);
-        $select->reset(Kwf_Model_Select::LIMIT_COUNT);
-        $select->reset(Kwf_Model_Select::LIMIT_OFFSET);
         return $s;
     }
 
@@ -147,7 +144,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         return 'id';
     }
 
-    public function getRows($where = null, $order = null, $limit = null, $start = null)
+    public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
         if (!is_object($where) || $where instanceof Kwf_Model_Select_Expr_Interface) {
             $select = $this->select($where, $order, $limit, $start);
@@ -235,6 +232,12 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                 $ids = array_slice($ids, $limitOffs, $limitCnt);
             }
         }
+        return $ids;
+    }
+
+    public function getRows($where = null, $order = null, $limit = null, $start = null)
+    {
+        $ids = $this->getIds($where, $order, $limit, $start);
         return new $this->_rowsetClass(array(
             'ids' => $ids,
             'rowClass' => $this->_rowClass,
