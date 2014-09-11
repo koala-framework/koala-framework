@@ -38,8 +38,8 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
         $html = str_replace("'", "\'", $html);
 
         $ret  = '<script type="text/javascript">';
-        $ret .= "if (Kwf == 'undefined') Kwf = {};";
-        $ret .= "if (Kwf.Statistics == 'undefined') Kwf.Statistics = {};";
+        $ret .= "if (typeof Kwf == 'undefined') Kwf = {};";
+        $ret .= "if (typeof Kwf.Statistics == 'undefined') Kwf.Statistics = {};";
         $ret .= "Kwf.Statistics.defaultOptValue = '$value';";
         $ret .= "Kwf.Statistics.reloadOnOptChanged = $reload;";
         $ret .= "Kwf.Statistics.optBoxHtml = '$html';";
