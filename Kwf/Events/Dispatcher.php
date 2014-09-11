@@ -158,7 +158,7 @@ class Kwf_Events_Dispatcher
         if ($hasFulltext) {
             $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_Fulltext');
         }
-        foreach (glob('models/*') as $m) {
+        foreach (glob('models/*.php') as $m) {
             $m = str_replace('/', '_', substr($m, 7, -4));
             if (is_instance_of($m, 'Kwf_Model_Interface')) {
                 $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($m));
