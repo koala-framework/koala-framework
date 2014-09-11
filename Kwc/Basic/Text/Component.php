@@ -58,9 +58,6 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
 
         $ret['cssClass'] = 'webStandard kwcText';
 
-        static $stylesAssets;
-        if (!isset($stylesAssets)) $stylesAssets = new Kwc_Basic_Text_StylesAsset('Kwc_Basic_Text_StylesModel');
-        $ret['assets']['files']['styles'] = $stylesAssets;
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
@@ -119,6 +116,24 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                     }
                 }
             } else {
+                if (preg_match_all('#(<[a-z]+ [^>]*)class="style(\d+)"([^>]*>)#', $part, $m)) {
+                    foreach (array_keys($m[0]) as $i) {
+                        $matched = $m[0][$i];
+                        $prefix = $m[1][$i];
+                        $styleId = $m[2][$i];
+                        $postfix = $m[3][$i];
+                        $style = '';
+                        $row = Kwf_Model_Abstract::getInstance($this->_getSetting('stylesModel'))
+                            ->getRow($styleId);
+                        if ($row) {
+                            foreach ($row->getStyles() as $k=>$v) {
+                                $style .= "$k: $v; ";
+                            }
+                        }
+                        $styleAttr = 'style="'.$style.'"';
+                        $part = str_replace($matched, $prefix.$styleAttr.$postfix, $part);
+                    }
+                }
                 $ret['contentParts'][] = $part;
             }
         }

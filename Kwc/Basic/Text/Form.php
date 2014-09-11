@@ -57,16 +57,16 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
     //für tests
     public function setAssetsPackage(Kwf_Assets_Package $package)
     {
+        $t = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getClass(), 'stylesModel'));
+
         $urls = $package->getPackageUrls('text/css', Kwf_Trl::getInstance()->getTargetLanguage());
 
-        $this->fields['content']->setCssFiles($urls);
+        $styleEditorUrl = Kwc_Admin::getInstance($this->getClass())->getControllerUrl().'/styles-content';
+        $styleEditorUrl .= '?t='.$t->getMTime();
+        $urls[] = $styleEditorUrl;
 
-        foreach ($urls as $url) {
-            if (strpos($url, 'Kwc_Basic_Text_StylesAsset')!==false) {
-                $this->fields['content']->setStylesCssFile($url);
-                break;
-            }
-        }
+        $this->fields['content']->setStylesCssFile($styleEditorUrl);
+        $this->fields['content']->setCssFiles($urls);
     }
 
     public function setHtmlEditorLabel($title)
