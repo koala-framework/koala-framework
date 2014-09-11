@@ -151,6 +151,9 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
         return array(
             'password' => new Kwf_User_Auth_PasswordFields(
                 $this
+            ),
+            'autoLogin' => new Kwf_User_Auth_AutoLoginFields(
+                $this
             )
         );
     }

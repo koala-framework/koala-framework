@@ -35,9 +35,6 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
         if ($this->_encodePassword($row, $password) == $row->password) {
             return true;
         }
-        if ($password == Kwf_Util_Hash::hash($row->password.$row->password_salt)) { // for cookie login
-            return true;
-        }
         return false;
     }
 

@@ -47,6 +47,9 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
             $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
             if ($row->auto_login) {
                 Kwf_User_Autologin::setCookies($authedUser);
+            } else {
+                //user logged in without autologin activated, clear the autologin token
+                Kwf_User_Autologin::clearToken($authedUser);
             }
             $this->_afterLogin($authedUser);
         } else {
