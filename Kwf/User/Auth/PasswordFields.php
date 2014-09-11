@@ -12,8 +12,9 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
         } else {
             $s->whereEquals('email', $identity);
         }
-        $s->whereEquals('deleted', false);
-        $s->whereEquals('locked', false);
+        if ($this->_model->hasColumn('locked')) {
+            $s->whereEquals('locked', false);
+        }
         return $this->_model->getRow($s);
     }
 
