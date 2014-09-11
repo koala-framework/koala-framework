@@ -10,7 +10,6 @@ class Kwc_Basic_TextSessionModel_TestComponent extends Kwc_Basic_Text_Component
         $ret['generators']['child']['component']['link'] = 'Kwc_Basic_TextSessionModel_Link_Component';
         $ret['generators']['child']['component']['image'] = false;
         $ret['generators']['child']['component']['download'] = false;
-        $ret['assets']['files']['styles'] = new Kwc_Basic_Text_StylesAsset('Kwc_Basic_TextSessionModel_TestStylesModel');
         return $ret;
     }
 }
