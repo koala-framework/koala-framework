@@ -67,6 +67,7 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
                             Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $this->_identity, array(trlKwf('Supplied password is invalid'))
                         );
                     }
+                    break;
                 }
             }
         }
