@@ -121,7 +121,7 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
             if ($ret->getModel() == $this) {
                 return $ret;
             }
-            throw new Kwf_Exception("Invalid union model source");
+            return null;
         }
         throw new Kwf_Exception("Can't get kwf user");
     }
