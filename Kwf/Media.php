@@ -19,6 +19,7 @@ class Kwf_Media
             $filename = $filename->filename . '.' . $filename->extension;
         }
         if ($filename == '.') $filename = '';
+
         //Replace Slashes and Backslashes with an underscore
         //Otherwise we would get a wrong url
         //e.g. $filename = foo/bar.png -> /media/FooModel/1/default/ab123/1234/foo/bar.png
@@ -28,7 +29,7 @@ class Kwf_Media
         if (substr($type, 0, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX)) == Kwf_Media::DONT_HASH_TYPE_PREFIX) {
             $checksumType = Kwf_Media::DONT_HASH_TYPE_PREFIX;
         }
-        $checksum = self::getChecksum($class, $id, $checksumType, $filename);
+        $checksum = self::getChecksum($class, $id, $checksumType, rawurlencode($filename));
         $prefix = Kwf_Setup::getBaseUrl();
         if ($r = Kwf_Component_Data_Root::getInstance()) {
             if ($r->filename) {
@@ -43,15 +44,15 @@ class Kwf_Media
                 Kwf_Media_MemoryCache::getInstance()->save($time, $cacheId);
             }
         }
-        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.urlencode($filename);
+        return $prefix.'/media/'.$class.'/'.$id.'/'.$type.'/'.$checksum.'/'.$time.'/'.rawurlencode($filename);
     }
 
-    public static function getChecksum($class, $id, $type, $filename)
+    public static function getChecksum($class, $id, $type, $encodedFilename)
     {
         if (substr($type, 0, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX)) == Kwf_Media::DONT_HASH_TYPE_PREFIX) {
             $type = Kwf_Media::DONT_HASH_TYPE_PREFIX;
         }
-        return substr(Kwf_Util_Hash::hash($class . $id . $type . urldecode($filename)), 0, 8);
+        return substr(Kwf_Util_Hash::hash($class . $id . $type . rawurldecode($filename)), 0, 8);
     }
 
     /**

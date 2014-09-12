@@ -2,8 +2,8 @@ Kwf.onContentReady(function(readyEl, param) {
     if (!param.newRender) return false;
     Ext2.select('.kwcForm > form', true, readyEl).each(function(form) {
         form = form.parent('.kwcForm', false);
-        if (form.shopBoxCartInitDone) return;
-        form.shopBoxCartInitDone = true;
+        if (form.dom.shopBoxCartInitDone) return;
+        form.dom.shopBoxCartInitDone = true;
         form.kwcForm.on('submitSuccess', function(r) {
             Ext2.select('.kwcShopBoxCartLink').each(function(el) {
                 Ext2.Ajax.request({

@@ -4532,6 +4532,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>edit account</en>
 <de>Speichern</de>
+<uk>Редагувати аккаунт</uk>
 <id>687</id>
 <ro>Salvează/editează</ro>
 <sl>Shrani</sl>
@@ -7142,6 +7143,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Apreciado señor {0} {1}</es>
 <sk>Vážený pán {0} {1}</sk>
 <ua>Шановний {0} {1}</ua>
+<fr>Cher Mr. {0} {1}</fr>
 </text>
 <text>
 <en>Dear Mrs. {0}</en>
@@ -7152,6 +7154,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Apreciada señora {0}</es>
 <sk>Vážená pani {0}</sk>
 <ua>Шановна {0} {1}</ua>
+<fr>Chère Mme. {0}</fr>
 </text>
 <text>
 <en>Excel export</en>
@@ -7236,6 +7239,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Apreciada señora {0} {1}</es>
 <sk>Vážená pani {0} {1}</sk>
 <ua>Шановна пані {0} {1}</ua>
+<fr>Chère Mme. {0} {1}</fr>
 </text>
 <text>
 <en>Dear Mr. {0}</en>
@@ -7246,6 +7250,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Apreciado señor {0}</es>
 <sk>Vážený pán {0}</sk>
 <ua>Шановний пане {0}</ua>
+<fr>Cher Mr. {0} {1}</fr>
 </text>
 <text>
 <en>Hello Mr. {0}</en>
@@ -9689,6 +9694,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Права колонка</ua>
 </text>
 <text>
+<en>Dear Sir or Madam</en>
+<de>Sehr geehrte Damen und Herren</de>
+<id>1549</id>
+<ro>Stimate doamne, stimaţi domni</ro>
+<sl>Spoštovani!</sl>
+<fr>Mesdames et Messieurs</fr>
+</text>
+<text>
 <en>Copy of</en>
 <de>Kopie von</de>
 <id>1550</id>
@@ -9846,6 +9859,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Gutschein</de>
 <sl>Bon</sl>
 <ua>Сертифікат</ua>
+<ro>Voucher</ro>
 </text>
 <text>
 <en>Vouchers</en>
@@ -9892,7 +9906,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Dear Mrs./Mr. {0} {1}</en>
 <de>Sehr geehrte/r Frau/Herr {0} {1}</de>
-<id>1549</id>
+<id>2122</id>
 </text>
 <text>
 <en>'%value%' is not a valid voucher code</en>
@@ -10088,6 +10102,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Ne sme biti negativno.</sl>
 <de>Erfolg</de>
 <ua>Успішно</ua>
+<ro>succes</ro>
 </text>
 <text>
 <en>Status Update successfully posted.</en>
@@ -10218,6 +10233,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1637</id>
 <sl>Ne sme biti negativno</sl>
 <ua>Не повинен бути від'ємним</ua>
+<ro>Nu poate fi negativ</ro>
 </text>
 <text>
 <en>value of goods</en>
@@ -11059,12 +11075,38 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>'%value%' contains characters which are not digits; but only digits are allowed</en>
 <id>1536</id>
 <ua>'%value%' містить знаки, які не є цифрами; дозволяється використовувати лише цифри</ua>
+<ro>'%valoare%' contine caractere care nu sunt cifre; sunt permise doar cifre</ro>
 </text>
 <text>
 <de>Ungültiger Typ angegeben, Wert sollte String, Integer oder Float sein</de>
 <en>Invalid type given, value should be string, integer or float</en>
 <id>1537</id>
 <ua>Невірний тип, значення має бути рядком, цілим числом, або округленим</ua>
+<ro>Eroare, valoarea trebuie sa fie sir, numar intreg sau variabil</ro>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname male</context>
+<de>Lieber {0}</de>
+<id>1604</id>
+<sl>Dragi {0}</sl>
+<ro>Draga {0}</ro>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname female</context>
+<de>Liebe {0}</de>
+<id>1785</id>
+<sl>Dragi {0}</sl>
+<ro>Draga {0}</ro>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname unknown gender</context>
+<de>Hallo {0}</de>
+<id>1786</id>
+<sl>Pozdravljeni, {0} </sl>
+<ro>Draga {0}</ro>
 </text>
 <text>
 <en>en_US</en>
@@ -11140,6 +11182,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>{0} destinatari eliminati, total {1} destinatari</ro>
 </text>
 <text>
+<en>Can only remove users from a paused newsletter</en>
+<de>Empfänger können nur von einem pausierten Newsletter entfernt werden</de>
+<id>1798</id>
+<ro>Puteti sterge doar utilizatori ai unui newsletter inactiv</ro>
+</text>
+<text>
 <en>WARNING: untagged</en>
 <de>WARNUNG: ungetaggt</de>
 <id>1799</id>
@@ -11172,6 +11220,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Eigenes Flash</de>
 <id>1803</id>
 <ua>Own Flash</ua>
+<ro>Flash propriu</ro>
 </text>
 <text>
 <en>No entries found</en>
@@ -11189,12 +11238,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>ungültig, Wert muss ein Zeichen oder eine ganze Zahl sein</de>
 <id>1805</id>
 <ua>недійсний, значення має бути цілим числом або рядом чисел.</ua>
+<ro>Eroare, valoare trebuie sa fie un sir sau un numar intreg</ro>
 </text>
 <text>
 <en>'%value%' does not appear to be an integer</en>
 <de>'%value%' ist keine ganze Zahl</de>
 <id>1806</id>
 <ua>'%value%' не є цілим числом</ua>
+<ro>'%valoare%' nu este un numar intreg</ro>
 </text>
 <text>
 <en>Publication</en>
@@ -11208,6 +11259,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>VI-Nr</de>
 <id>1808</id>
 <ua>VI-Nr</ua>
+<ro>serie de sasiu</ro>
 </text>
 <text>
 <en>Contraction</en>
@@ -11231,6 +11283,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Avtorji</sl>
 <ua>Автори</ua>
 <ro>Autori</ro>
+</text>
+<text>
+<en>New tags</en>
+<de>Neue Tags</de>
+<id>1812</id>
 </text>
 <text>
 <en>Articles</en>
@@ -11368,6 +11425,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Va rugam sa completati in ambele domenii parola pe care doriti sa o folositi pentru contul dumneavoastra</ro>
 </text>
 <text>
+<en>Do you have any questions, wishes or suggestions about this product? Send us your feedback!</en>
+<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt? Senden Sie uns dazu Ihr Feedback!</de>
+<id>1833</id>
+<ro>Aveti intrebari, solicitari sau sugestii legate de acest produs? Trimiteti-ne feedback-ul dumneavoastra.</ro>
+<hr>Imate pitanja, prijedloge ili želje u vezi ovog proizvoda? Pošaljete nam svoje mišljenje. </hr>
+<ua>Маєте запитання, побажання або пропозиції стосовно наших продуктів та серівсу? Надішліть нам їх!</ua>
+</text>
+<text>
 <en>Account activation</en>
 <de>Account aktivierung</de>
 <id>1839</id>
@@ -11479,7 +11544,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Original Subject</en>
-<de>Originaltitel</de>
+<de>Original Betreff</de>
 <id>1889</id>
 <ua>Оригінальна назва</ua>
 <ro>Subiectul original</ro>
@@ -11589,6 +11654,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Favoriten</de>
 <sl>Favoriti</sl>
 <ua>Favourites</ua>
+<uk>Вибране</uk>
 <ro>Favorite</ro>
 </text>
 <text>
@@ -11604,6 +11670,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Favorit löschen</de>
 <ua>Видалити з переліку улюблених</ua>
 <ro>Sterge favorit</ro>
+<ro>sterge din Favorite</ro>
 </text>
 <text>
 <en>Label Width</en>
@@ -11646,14 +11713,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1924</id>
 </text>
 <text>
-<en>Do you have any questions, wishes or suggestions about this product? Send us your feedback!</en>
-<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt? Senden Sie uns dazu Ihr Feedback!</de>
-<id>1925</id>
-<hr>Imate pitanja, prijedloge ili želje u vezi ovog proizvoda? Pošaljete nam svoje mišljenje. </hr>
-<ua>Маєте запитання, побажання або пропозиції стосовно наших продуктів та серівсу? Надішліть нам їх!</ua>
-<ro>Aveți întrebări, solicitări sau sugestii despre acest produs? Va rugam sa ne trimiteti feedback-ul dumneavoastră!</ro>
-</text>
-<text>
 <en>Download all images</en>
 <de>Alle Bilder herunterladen</de>
 <id>1926</id>
@@ -11663,6 +11722,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Can't create more than {0} entries.</en>
 <de>Nicht mehr als {0} Einträge können angelegt werden.</de>
+<ro>Nu pot fi create mai mult de {0} inregistrari.</ro>
 <id>1927</id>
 <ua>Не можливо створити більше, ніж {0} записів.</ua>
 <ro>Nu pot fi create mai mult de {0}</ro>
@@ -11670,7 +11730,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Send copy to User</en>
 <de>Sende Kopie an Benutzer</de>
-<id>1866</id>
+<id>2031</id>
 <sl>Pošlji kopijo uporabniku</sl>
 <ua>Відправити копію користувачу</ua>
 <ro>Trimite copie catre utilizator</ro>
@@ -11683,6 +11743,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Дякуємо за Ваш запит, він буде опрацьований найближчим часом.</ua>
 <ro>Va multumim pentru intrebarea dumneavoastra. Aceasta va fi procesata in cel mai scurt timp posibil.</ro>
 <sk>Vaša registrácia bola zaznamenaná. Ďakujeme za váš záujem.</sk>
+<ro>Va multumim pentru solicitare. O vom procesa in cel mai scurt timp posibil.</ro>
 </text>
 <text>
 <en>Setup</en>
@@ -12387,16 +12448,25 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2118</id>
 </text>
 <text>
+<id>2119</id>
 <en>Mr. {0}</en>
 <de>Herr {0}</de>
-<id>2119</id>
-<ro>Domnul</ro>
+<ro>Domnul {0}</ro>
+<sl>Gospod {0}</sl>
+<es>Señor {0}</es>
+<sk>Pán {0}</sk>
+<ua>Містер {0}</ua>
 </text>
 <text>
-<en>Mrs. {0}</en>
-<de>Frau {0}</de>
 <id>2120</id>
 <ro>Doamna</ro>
+<en>Mrs. {0}</en>
+<de>Frau {0}</de>
+<ro>Doamnă {0}</ro>
+<sl>Gospa {0}</sl>
+<es>Señora {0}</es>
+<sk>Pani {0}</sk>
+<ua>Місіс {0}</ua>
 </text>
 <text>
 <en>Paste</en>
@@ -12458,7 +12528,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Set size of video</en>
 <de>Benutzerdefinierte Videogröße setzen</de>
-<id>2031</id>
+<id>2051</id>
 <ua>Вибрати розмір відео</ua>
 <ro>Stabileste dimensiunea video-ului</ro>
 </text>
@@ -12494,13 +12564,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Cropping is not possible because image is too small.</en>
 <de>Bild kann nicht beschnitten werden, da es zu klein ist.</de>
-<id>2043</id>
+<id>2252</id>
 <ro>Imaginea nu poate fi ajustata pentru ca este prea mica.</ro>
 </text>
 <text>
 <en>Reset</en>
 <de>Zurücksetzen</de>
-<id>2044</id>
+<id>2253</id>
 <ro>Restabili</ro>
 </text>
 <text>
@@ -12542,7 +12612,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Loading image</en>
 <de>Bild wird geladen</de>
-<id>2051</id>
+<id>2254</id>
 <ro>Se incarca imaginea </ro>
 </text>
 <text>
@@ -12626,6 +12696,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Video Source Type</en>
 <de>Videoquelle</de>
+<ro>sursa video</ro>
 <id>2033</id>
 <ua>Тип джерела</ua>
 <ro>Sursa video</ro>
@@ -12683,7 +12754,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>No data received</en>
-<id>2042</id>
+<id>2126</id>
 <de>No data received</de>
 <ua>Даних не отримано</ua>
 <ro>Nu exista date primite</ro>
@@ -12830,27 +12901,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Acest instrument funcționează doar cu beneficiarii Newsletter</ro>
 </text>
 <text>
-<en>Dear {0}</en>
-<context>salutation firstname male</context>
-<id>2085</id>
-</text>
-<text>
 <en>Mrs.</en>
 <id>2086</id>
-</text>
-<text>
-<en>Dear {0}</en>
-<context>salutation firstname female</context>
-<id>2087</id>
-</text>
-<text>
-<en>Dear Sir or Madam</en>
-<id>2088</id>
-</text>
-<text>
-<en>Dear {0}</en>
-<context>salutation firstname unknown gender</context>
-<id>2089</id>
 </text>
 <text>
 <en>Carousel</en>
@@ -12919,12 +12971,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>ganzer Tag</de>
 <id>2105</id>
 <ro>toata ziua</ro>
-</text>
-<text>
-<en>Can only remove users from a paused newsletter</en>
-<de>Empfänger können nur von einem pausierten Newsletter gelöscht werden</de>
-<id>2141</id>
-<ro>Puteti elimina utilizatori doar in cazul Newsletter-elor oprite</ro>
 </text>
 <text>
 <en>Preview cannot be shown because it needs at least one recipient of this newsletter</en>
@@ -13320,26 +13366,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Parent Page Name</en>
 <id>2226</id>
-</text>
-<text>
-<en>Mr. {0}</en>
-<de>Herr {0}</de>
-<ro>Domnul {0}</ro>
-<sl>Gospod {0}</sl>
-<es>Señor {0}</es>
-<sk>Pán {0}</sk>
-<ua>Містер {0}</ua>
-<id>2107</id>
-</text>
-<text>
-<en>Mrs. {0}</en>
-<de>Frau {0}</de>
-<ro>Doamnă {0}</ro>
-<sl>Gospa {0}</sl>
-<es>Señora {0}</es>
-<sk>Pani {0}</sk>
-<ua>Місіс {0}</ua>
-<id>2108</id>
 </text>
 <text>
 <en>Do you really want to delete all logs?</en>

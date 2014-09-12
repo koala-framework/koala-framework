@@ -8,7 +8,7 @@
                 <?=$m['preHtml']?>
                 <li class="<?=$m['class'];?>">
                     <? if (is_instance_of($m['data'], 'Kwc_Basic_LinkTag_FirstChildPage_Data')) { ?>
-                        <p><?=$m['data']->name;?></p>
+                        <p><?=str_replace('{name}', $m['data']->name, $m['text']);?></p>
                     <? } else { ?>
                         <?=$this->componentLink($m['data']);?>
                     <? } ?>

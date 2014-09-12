@@ -84,7 +84,16 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
     private static function _getImagePage($data, $getChildren)
     {
         if (!$data) return null;
-        foreach ($getChildren as $c) $data = $data->getChildComponent($c);
-        return $data->getChildComponent('-linkTag')->getChildComponent('_imagePage');
+        $ret = $data;
+        foreach ($getChildren as $c) {
+            $ret = $ret->getChildComponent($c);
+        }
+        if (!$ret) return null;
+        $ret = $ret->getChildComponent('-linkTag');
+        if (is_instance_of($ret->componentClass, 'Kwc_Basic_LinkTag_Component')) {
+            $ret = $ret->getChildComponent('-child');
+        }
+        $ret = $ret->getChildComponent('_imagePage');
+        return $ret;
     }
 }
