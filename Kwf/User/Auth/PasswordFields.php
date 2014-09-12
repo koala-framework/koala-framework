@@ -6,12 +6,7 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     public function getRowByIdentity($identity)
     {
         $s = new Kwf_Model_Select();
-        if (is_numeric($identity)) {
-            //for cookie login
-            $s->whereEquals('id', $identity);
-        } else {
-            $s->whereEquals('email', $identity);
-        }
+        $s->whereEquals('email', $identity);
         if ($this->_model->hasColumn('locked')) {
             $s->whereEquals('locked', false);
         }
