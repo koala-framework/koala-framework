@@ -28,7 +28,7 @@ class Kwc_Basic_ImagePosition_Test extends Kwc_TestAbstract
                     ->getChildComponent('-image')->getComponent()->getImageDimensions();
         $this->assertRegExp('#^\s*<div class="kwcAbstractComposite kwcBasicImagePosition kwcBasicImagePositionTestComponent">'.
             '\s*<div class="posright">'
-            .'\s*<div class="kwcAbstractComposite kwcAbstractImage kwcBasicImagePositionImageTestComponent".*>'
+            .'\s*<div class="kwcAbstractComposite kwcAbstractImage kwcBasicImagePositionImageTestComponent[^"]*".*>'
             .'\s*<div class="container" .*>'
             .'\s*<noscript>'
             .'\s*<img src="/media/Kwc_Basic_ImagePosition_Image_TestComponent/1900-image/dh-'.$dim['width'].'-[0-9a-z]+/[^/]+/[0-9]+/foo.png" width="16" height="16" alt="" />'

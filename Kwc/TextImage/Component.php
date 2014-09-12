@@ -20,8 +20,8 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
         if (!$row->image) {
             $ret['image'] = false;
         } else {
+            $ret['cssClass'] .= ' imageDimension'.ucfirst($ret['image']->getComponent()->getDimensionSetting());
             $dim = $ret['image']->getComponent()->getImageDimensions();
-            $ret['imageDimensionSetting'] = $ret['image']->getComponent()->getDimensionSetting();
             $ret['imageWidth'] = false;
             if ($dim && isset($dim['width'])) {
                 $ret['imageWidth'] = $dim['width'];

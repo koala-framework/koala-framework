@@ -52,7 +52,7 @@ class Kwf_Media
         if (substr($type, 0, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX)) == Kwf_Media::DONT_HASH_TYPE_PREFIX) {
             $type = Kwf_Media::DONT_HASH_TYPE_PREFIX;
         }
-        return substr(Kwf_Util_Hash::hash($class . $id . $type . rawurldecode($filename)), 0, 8);
+        return substr(Kwf_Util_Hash::hash($class . $id . $type . rawurldecode($encodedFilename)), 0, 8);
     }
 
     /**
