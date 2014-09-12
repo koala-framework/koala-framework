@@ -4,9 +4,9 @@ Kwf.onContentReady(function(el, param) {
     if (!param.newRender) return false;
     Ext.select('.kwcForm > form', true, el).each(function(form) {
         form = form.parent('.kwcForm', false);
-        if (!form.kwcForm) {
-            form.kwcForm = new Kwc.Form.Component(form);
-        }
+        if (form.dom.formInitDone) return;
+        form.dom.formInitDone = true;
+        form.kwcForm = new Kwc.Form.Component(form);
     });
 }, this, { priority: -10 }); //initialize form very early, as many other components access it
 Ext.ns('Kwc.Form');

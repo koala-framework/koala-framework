@@ -63,7 +63,8 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
             if (isset($data->chained)) {
                 $ret = $data->chained;
             } else { // MasterAsChild (only called for inherit component which are on the page of the first found chained)
-                while (!isset($data->chained)) $data = $data->parent;
+                while (!isset($data->chained) && $data) $data = $data->parent;
+                if (!$data) return null;
                 $ret = $data->chained->getPage();
             }
         }
