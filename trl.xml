@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
 <trl>
 <text>
 <en>Visible</en>
@@ -4530,6 +4530,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>edit account</en>
 <de>Speichern</de>
+<uk>Редагувати аккаунт</uk>
 <id>687</id>
 <ro>Salvează/editează</ro>
 <sl>Shrani</sl>
@@ -7126,6 +7127,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Apreciado señor {0} {1}</es>
 <sk>Vážený pán {0} {1}</sk>
 <ua>Шановний {0} {1}</ua>
+<fr>Cher Mr. {0} {1}</fr>
 </text>
 <text>
 <en>Dear Mrs. {0}</en>
@@ -7136,6 +7138,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Apreciada señora {0}</es>
 <sk>Vážená pani {0}</sk>
 <ua>Шановна {0} {1}</ua>
+<fr>Chère Mme. {0}</fr>
 </text>
 <text>
 <en>Excel export</en>
@@ -7220,6 +7223,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Apreciada señora {0} {1}</es>
 <sk>Vážená pani {0} {1}</sk>
 <ua>Шановна пані {0} {1}</ua>
+<fr>Chère Mme. {0} {1}</fr>
 </text>
 <text>
 <en>Dear Mr. {0}</en>
@@ -7230,6 +7234,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Apreciado señor {0}</es>
 <sk>Vážený pán {0}</sk>
 <ua>Шановний пане {0}</ua>
+<fr>Cher Mr. {0} {1}</fr>
 </text>
 <text>
 <en>Hello Mr. {0}</en>
@@ -9671,6 +9676,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Права колонка</ua>
 </text>
 <text>
+<en>Dear Sir or Madam</en>
+<de>Sehr geehrte Damen und Herren</de>
+<id>1549</id>
+<ro>Stimate doamne, stimaţi domni</ro>
+<sl>Spoštovani!</sl>
+<fr>Mesdames et Messieurs</fr>
+</text>
+<text>
 <en>Copy of</en>
 <de>Kopie von</de>
 <id>1550</id>
@@ -9828,6 +9841,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Gutschein</de>
 <sl>Bon</sl>
 <ua>Сертифікат</ua>
+<ro>Voucher</ro>
 </text>
 <text>
 <en>Vouchers</en>
@@ -10065,6 +10079,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Ne sme biti negativno.</sl>
 <de>Erfolg</de>
 <ua>Успішно</ua>
+<ro>succes</ro>
 </text>
 <text>
 <en>Status Update successfully posted.</en>
@@ -10195,6 +10210,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1637</id>
 <sl>Ne sme biti negativno</sl>
 <ua>Не повинен бути від'ємним</ua>
+<ro>Nu poate fi negativ</ro>
 </text>
 <text>
 <en>value of goods</en>
@@ -10978,12 +10994,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Dieses Feld darf nur Zahlen enthalten</de>
 <sl>To polje mora vsebovati le številke</sl>
 <ua>Це поле має містити лише цифри</ua>
+<ro>Acest camp trebuie sa contina doar cifre</ro>
 </text>
 <text>
 <en>Please check your details</en>
 <de>Bitte überprüfen Sie Ihre Bestellung</de>
 <id>1767</id>
 <ua>Будь ласка, перевірте деталі</ua>
+<ro>Va rugam verificati detaliile introduse</ro>
 </text>
 <text>
 <en>Automatically sent e-mail</en>
@@ -10991,6 +11009,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Automatisch gesendetes E-Mail</de>
 <sl>Avtomatsko poslano sporočilo.</sl>
 <ua>Автоматична відправка електронного листа</ua>
+<ro>Transmite e-mail automat</ro>
 </text>
 <text>
 <en>E-Mail CC</en>
@@ -11003,6 +11022,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1770</id>
 <de>Ursprünglicher Name</de>
 <ua>Оригінальна назва</ua>
+<ro>nume initial</ro>
 </text>
 <text>
 <en>Link.to FlashMediaPlayer</en>
@@ -11016,24 +11036,52 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1774</id>
 <sl>Lastnosti obrazca</sl>
 <ua>Властивості форми</ua>
+<ro>Caracteristici formular</ro>
 </text>
 <text>
 <en>Text on successful submit</en>
 <de>Text nach Abschicken</de>
 <id>1775</id>
 <ua>Текст після успішної відправки</ua>
+<ro>Text la expedierea corecta</ro>
 </text>
 <text>
 <de>'%value%' enthält Zeichen, die keine Ziffern sind, es sind aber nur Ziffern erlaubt</de>
 <en>'%value%' contains characters which are not digits; but only digits are allowed</en>
 <id>1536</id>
 <ua>'%value%' містить знаки, які не є цифрами; дозволяється використовувати лише цифри</ua>
+<ro>'%valoare%' contine caractere care nu sunt cifre; sunt permise doar cifre</ro>
 </text>
 <text>
 <de>Ungültiger Typ angegeben, Wert sollte String, Integer oder Float sein</de>
 <en>Invalid type given, value should be string, integer or float</en>
 <id>1537</id>
 <ua>Невірний тип, значення має бути рядком, цілим числом, або округленим</ua>
+<ro>Eroare, valoarea trebuie sa fie sir, numar intreg sau variabil</ro>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname male</context>
+<de>Lieber {0}</de>
+<id>1604</id>
+<sl>Dragi {0}</sl>
+<ro>Draga {0}</ro>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname female</context>
+<de>Liebe {0}</de>
+<id>1785</id>
+<sl>Dragi {0}</sl>
+<ro>Draga {0}</ro>
+</text>
+<text>
+<en>Dear {0}</en>
+<context>salutation firstname unknown gender</context>
+<de>Hallo {0}</de>
+<id>1786</id>
+<sl>Pozdravljeni, {0} </sl>
+<ro>Draga {0}</ro>
 </text>
 <text>
 <en>en_US</en>
@@ -11042,18 +11090,21 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1787</id>
 <sl>si_SI</sl>
 <ua>ukr_UA</ua>
+<ro>ro_RO</ro>
 </text>
 <text>
 <en>Form-Paragraphs</en>
 <de>Formularabsätze</de>
 <id>1788</id>
 <ua>Форма-пункти </ua>
+<ro>sectiuni formular</ro>
 </text>
 <text>
 <en>Invalid type given. The value should be a string or a integer</en>
 <de>Ungültiger Typ angegeben. Der Wert sollte ein String oder ein Integer sein</de>
 <id>1790</id>
 <ua>Невірний тип. Значення має бути цілим числом або рядом чисел</ua>
+<ro>Eroare, valoarea trebuie sa fie un sir sau un numar intreg</ro>
 </text>
 <text>
 <en>'%value%' does not appear to be a postal code</en>
@@ -11061,6 +11112,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1791</id>
 <sl>'%value%' ni veljavna poštna številka</sl>
 <ua>'%value%' не є поштовим індексом</ua>
+<ro>'%value%' nu pare a fi un cod postal corect </ro>
 </text>
 <text>
 <en>Alt Text</en>
@@ -11073,30 +11125,42 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Füge Empfänger hinzu</de>
 <id>1793</id>
 <ua>Додати отримувачів</ua>
+<ro>Adauga destinatari</ro>
 </text>
 <text>
 <en>Adds the currently shown recipients to the newsletter</en>
 <de>Fügt die aktuell angezeigten Empfänger zum Newsletter hinzu</de>
 <id>1794</id>
 <ua>Додати отримувачів на отримання листа з новинами</ua>
+<ro>Adauga destinatarii afisati la newsletter</ro>
 </text>
 <text>
 <en>Remove Recipients</en>
 <de>Entferne Empfänger</de>
 <id>1795</id>
 <ua>Видалити отримувачів</ua>
+<ro>Sterge destinatari</ro>
 </text>
 <text>
 <en>Removes the currently shown recipients to the newsletter</en>
 <de>Entfernt die aktuell angezeigten Empfänger vom Newsletter</de>
 <id>1796</id>
 <ua>Видалити отримувачів із переліку тих, что отримує листа з новинами</ua>
+<ro>Sterge actualii destinatari ai newsletter-ului</ro>
 </text>
 <text>
 <en>{0} recipients removed, total {1} recipients.</en>
 <de>{0} Empfänger entfernt, insgesamt {1} Empfänger.</de>
 <id>1797</id>
 <ua>{0} отримувачів видалено, всього {1} отримувачів.</ua>
+<ro>{0} destinatari stersi, in total {1} destinatari.</ro>
+</text>
+<text>
+<en>Can only remove users from a paused newsletter</en>
+<de>Empfänger können nur von einem pausierten Newsletter entfernt werden</de>
+<id>1798</id>
+<ro>Puteti sterge doar utilizatori ai unui newsletter inactiv</ro>
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 3.4
 </text>
 <text>
 <en>WARNING: untagged</en>
@@ -11121,12 +11185,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>+{0}% MWSt</de>
 <id>1802</id>
 <ua>+{0}% ПДВ</ua>
+<ro>+{0}% TVA</ro>
 </text>
 <text>
 <en>Own Flash</en>
 <de>Eigenes Flash</de>
 <id>1803</id>
 <ua>Own Flash</ua>
+<ro>Flash propriu</ro>
 </text>
 <text>
 <en>No entries found</en>
@@ -11137,30 +11203,35 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Записів не знайдено</ua>
 <cs>Novinky nebyly nalezeny</cs>
 <hr>Nisu pronađeni rezultati</hr>
+<ro>Nu a fost gasita nicio inregistrare</ro>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
 <de>ungültig, Wert muss ein Zeichen oder eine ganze Zahl sein</de>
 <id>1805</id>
 <ua>недійсний, значення має бути цілим числом або рядом чисел.</ua>
+<ro>Eroare, valoare trebuie sa fie un sir sau un numar intreg</ro>
 </text>
 <text>
 <en>'%value%' does not appear to be an integer</en>
 <de>'%value%' ist keine ganze Zahl</de>
 <id>1806</id>
 <ua>'%value%' не є цілим числом</ua>
+<ro>'%valoare%' nu este un numar intreg</ro>
 </text>
 <text>
 <en>Publication</en>
 <de>Veröffentlichung</de>
 <id>1807</id>
 <ua>публікація</ua>
+<ro>publicare</ro>
 </text>
 <text>
 <en>VI-Nr</en>
 <de>VI-Nr</de>
 <id>1808</id>
 <ua>VI-Nr</ua>
+<ro>serie de sasiu</ro>
 </text>
 <text>
 <en>Contraction</en>
@@ -11181,6 +11252,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1811</id>
 <sl>Avtorji</sl>
 <ua>Автори</ua>
+<ro>autori</ro>
+</text>
+<text>
+<en>New tags</en>
+<de>Neue Tags</de>
+<id>1812</id>
 </text>
 <text>
 <en>Articles</en>
@@ -11188,6 +11265,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1813</id>
 <sl>Članek</sl>
 <ua>Статті</ua>
+<ro>articole</ro>
 </text>
 <text>
 <en>E-Mail priority</en>
@@ -11201,6 +11279,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1815</id>
 <sl>Avtor</sl>
 <ua>Автор</ua>
+<ro>autor</ro>
 </text>
 <text>
 <en>Please use this format -&gt; Year / Month</en>
@@ -11209,12 +11288,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Prosimo uporabite to obliko -&gt; leto / mesec</sl>
 <ua>Будь ласка використовуйте формат  -&gt; Year / Month</ua>
 <si>Prosimo uporabite ta zapis -&gt; leto / mesec</si>
+<ro>Va rugam folositi acest format -&gt; an / luna</ro>
 </text>
 <text>
 <en>VI-Number</en>
 <de>VI-Nummer</de>
 <id>1817</id>
 <ua>VI-Номер</ua>
+<ro>seria de sasiu</ro>
 </text>
 <text>
 <en>Required reading</en>
@@ -11233,6 +11314,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Häufigkeit</de>
 <id>1821</id>
 <ua>частота</ua>
+<ro>frecventa</ro>
 </text>
 <text>
 <en>Thumbnail</en>
@@ -11246,6 +11328,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1825</id>
 <sl>Vprašanje</sl>
 <ua>Запитання</ua>
+<ro>intrebare</ro>
 </text>
 <text>
 <en>Answer</en>
@@ -11253,6 +11336,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1826</id>
 <sl>Odgovor</sl>
 <ua>Відповідь</ua>
+<ro>raspuns</ro>
 </text>
 <text>
 <en>Questions and answers</en>
@@ -11260,18 +11344,21 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1827</id>
 <sl>Vprašanja in odgovori</sl>
 <ua>Запитання та відповіді</ua>
+<ro>intrebari si raspunsuri</ro>
 </text>
 <text>
 <en>Enter tag...</en>
 <de>Schlagwort eintippen...</de>
 <id>1828</id>
 <ua>Введіть тег...</ua>
+<ro>Introduceti simbol...</ro>
 </text>
 <text>
 <en>Please enter a tag.</en>
 <de>Bitte tragen Sie ein Schlagwort ein</de>
 <id>1829</id>
 <ua>Будь ласка, введіть тег.</ua>
+<ro>Va rugam introduceti un simbol.</ro>
 </text>
 <text>
 <en>Feedback</en>
@@ -11279,6 +11366,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1830</id>
 <hr>feedback</hr>
 <ua>Зворотній зв'язок</ua>
+<ro>Feedback</ro>
 </text>
 <text>
 <en>Top-Article</en>
@@ -11292,18 +11380,29 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1835</id>
 <hr>Feedback od</hr>
 <ua>Зворотній зв'язок з</ua>
+<ro>Feedback de la</ro>
 </text>
 <text>
 <en>Plese enter in both fields the password which you want to use for your useraccount</en>
 <de>Bitte tragen Sie in beide Felder das Passwort ein, das Sie für Ihren Zugang verwenden wollen</de>
 <id>1838</id>
 <ua>Будь ласка, введіть у обидва поля пароль, який Ви будете використовувати для Вашого аккаунту.</ua>
+<ro>Va rugam introduceti in ambele campuri parola dorita pentru contul de utilizator.</ro>
+</text>
+<text>
+<en>Do you have any questions, wishes or suggestions about this product? Send us your feedback!</en>
+<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt? Senden Sie uns dazu Ihr Feedback!</de>
+<id>1833</id>
+<ro>Aveti intrebari, solicitari sau sugestii legate de acest produs? Trimiteti-ne feedback-ul dumneavoastra.</ro>
+<hr>Imate pitanja, prijedloge ili želje u vezi ovog proizvoda? Pošaljete nam svoje mišljenje. </hr>
+<ua>Маєте запитання, побажання або пропозиції стосовно наших продуктів та серівсу? Надішліть нам їх!</ua>
 </text>
 <text>
 <en>Account activation</en>
 <de>Account aktivierung</de>
 <id>1839</id>
 <ua>Активація аккаунту</ua>
+<ro>Activare cont</ro>
 </text>
 <text>
 <en>for child pages</en>
@@ -11329,12 +11428,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1858</id>
 <sl>Prioriteta</sl>
 <ua>Пріоритет</ua>
+<ro>prioritate</ro>
 </text>
 <text>
 <en>For sorting articles if they have same date</en>
 <de>Sortiert Artikel des gleichen Datums</de>
 <id>1859</id>
 <ua>Для відсортованих статей, які мають одну дату</ua>
+<ro>Sortare dupa data</ro>
 </text>
 <text>
 <en>show on all devices</en>
@@ -11342,6 +11443,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Auf allen Geräten anzeigen</de>
 <sl>Prikaži na vseh napravah</sl>
 <ua>відображати на всіх пристроях</ua>
+<ro>afiseaza pe toate dispozitivele</ro>
 </text>
 <text>
 <en>hide on mobile devices</en>
@@ -11349,6 +11451,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Auf mobilen Geräten nicht anzeigen</de>
 <sl>Ne prikaži na mobilnih napravah</sl>
 <ua>не відображати на мобільних пристроях</ua>
+<ro>ascunde pe dispozitive mobile</ro>
 </text>
 <text>
 <en>only show on mobile devices</en>
@@ -11356,6 +11459,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Nur auf mobilen Geräten anzeigen</de>
 <sl>Prikaži samo na mobilnih napravah</sl>
 <ua>відображати лише на мобільних пристроях</ua>
+<ro>afiseaza doar pe dispozitive mobile</ro>
 </text>
 <text>
 <en>No category selected.</en>
@@ -11363,12 +11467,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Keine Kategorie gewählt.</de>
 <sl>Nobena kategorija ni izbrana.</sl>
 <ua>Не обрано жодної категорії.</ua>
+<ro>nicio categorie selectata.</ro>
 </text>
 <text>
 <en>Menu settings</en>
 <id>1881</id>
 <de>Menü-Einstellungen</de>
 <ua>Налаштування меню</ua>
+<ro>setari meniu</ro>
 </text>
 <text>
 <en>Hide</en>
@@ -11376,30 +11482,35 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Verstecken</de>
 <sl>Skriti</sl>
 <ua>Приховати</ua>
+<ro>ascunde</ro>
 </text>
 <text>
 <en>Device visible</en>
 <id>1883</id>
 <de>Sichtbarkeit auf Geräten</de>
 <ua>Відображення на пристроях</ua>
+<ro>dispozitiv vizibil</ro>
 </text>
 <text>
 <en>id</en>
 <id>1887</id>
 <de>ID</de>
 <ua>ID</ua>
+<ro>id</ro>
 </text>
 <text>
 <en>Show categories</en>
 <de>Kategories anzeigen</de>
 <id>1888</id>
 <ua>Показати категорії</ua>
+<ro>afiseaza categorii</ro>
 </text>
 <text>
 <en>Original Subject</en>
-<de>Originaltitel</de>
+<de>Original Betreff</de>
 <id>1889</id>
 <ua>Оригінальна назва</ua>
+<ro>titlu original</ro>
 </text>
 <text>
 <en>Home</en>
@@ -11413,11 +11524,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1891</id>
 <de>Open Graph</de>
 <ua>Open Graph</ua>
+<ro>Deschide grafic</ro>
 </text>
 <text>
 <en>Amount of Money</en>
 <id>1892</id>
 <de>količina denarja</de>
+<ro>suma bani</ro>
 </text>
 <text>
 <en>Mp3 File</en>
@@ -11492,18 +11605,24 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Favoriten</de>
 <sl>Favoriti</sl>
 <ua>Favourites</ua>
+<de>Вибране</de>
+<uk>Вибране</uk>
+<ro>Favorite</ro>
 </text>
 <text>
 <en>save as favourite</en>
 <id>1908</id>
 <de>Als Favorit speichern</de>
 <ua>Зберегти у переліку улюблених</ua>
+<ro>salveaza la Favorite</ro>
 </text>
 <text>
 <en>delete favourite</en>
 <id>1909</id>
 <de>Favorit löschen</de>
 <ua>Видалити з переліку улюблених</ua>
+<en>delete favourite</en>
+<ro>sterge din Favorite</ro>
 </text>
 <text>
 <en>Label Width</en>
@@ -11589,34 +11708,26 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Zur Seite</de>
 <sl>Na stran</sl>
 <ua>на сторінку</ua>
-</text>
-<text>
-<en>Feedback to page </en>
-<id>1924</id>
-</text>
-<text>
-<en>Do you have any questions, wishes or suggestions about this product? Send us your feedback!</en>
-<de>Haben Sie Fragen, Wünsche, Anregungen zu diesem Produkt?Senden Sie uns dazu Ihr Feedback!</de>
-<id>1925</id>
-<hr>Imate pitanja, prijedloge ili želje u vezi ovog proizvoda? Pošaljete nam svoje mišljenje. </hr>
-<ua>Маєте запитання, побажання або пропозиції стосовно наших продуктів та серівсу? Надішліть нам їх!</ua>
+<ro>catre pagina</ro>
 </text>
 <text>
 <en>Download all images</en>
 <de>Alle Bilder herunterladen</de>
 <id>1926</id>
 <ua>Завантажити всі зображення</ua>
+<ro>descarca toate imaginile</ro>
 </text>
 <text>
 <en>Can't create more than {0} entries.</en>
 <de>Nicht mehr als {0} Einträge können angelegt werden.</de>
+<ro>Nu pot fi create mai mult de {0} inregistrari.</ro>
 <id>1927</id>
 <ua>Не можливо створити більше, ніж {0} записів.</ua>
 </text>
 <text>
 <en>Send copy to User</en>
 <de>Sende Kopie an Benutzer</de>
-<id>1866</id>
+<id>2031</id>
 <sl>Pošlji kopijo uporabniku</sl>
 <ua>Відправити копію користувачу</ua>
 </text>
@@ -11626,6 +11737,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1869</id>
 <sl>Hvala za vaše vprašanje. Potrudili se bomo, da vam odgovorimo čim hitreje.</sl>
 <ua>Дякуємо за Ваш запит, він буде опрацьований найближчим часом.</ua>
+<ro>Va multumim pentru solicitare. O vom procesa in cel mai scurt timp posibil.</ro>
 </text>
 <text>
 <en>Setup</en>
@@ -11659,6 +11771,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Originale Bild Beschriftung</de>
 <id>1933</id>
 <ua>Оригінальний опис зображення</ua>
+</text>
+<text>
+<en>Feedback to page </en>
+<id>1885</id>
+<ro>Feedback pe aceasta pagina</ro>
 </text>
 <text>
 <en>Add new newsletter</en>
@@ -12099,32 +12216,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Cookie не встановлено для цієї сторінки. Натисніть тут для активації cookies. </ua>
 </text>
 <text>
-<de>Webseite erstellt von</de>
-<en>Website produced by</en>
-<es>Sitio web creado por</es>
-<id>2009</id>
-<ua>Сайт створено</ua>
-<si>Spletno stran je izdelal</si>
-</text>
-<text>
-<de>{0} gesendet, {1} in der Warteschlange.</de>
-<en>{0} sent, {1} waiting to send.</en>
-<id>2010</id>
-<ua>{0} відправлено, {1} очікує відправки.</ua>
-</text>
-<text>
-<en>Unlimited</en>
-<de>Unbegrenzt</de>
-<id>2011</id>
-<ua>Необмежений</ua>
-</text>
-<text>
 <en>Website produced by</en>
 <de>Webseite erstellt von</de>
 <id>2009</id>
 <es>Sitio web creado por</es>
 <ua>Сайт створено</ua>
 <si>Spletno stran je izdelal</si>
+<ro>Site produs de</ro>
 </text>
 <text>
 <en>{0} sent, {1} waiting to send.</en>
@@ -12137,6 +12235,21 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Unbegrenzt</de>
 <id>2011</id>
 <ua>Необмежений</ua>
+</text>
+<text>
+<en>Send testmail to:</en>
+<de>Sende Testmail an:</de>
+<id>2042</id>
+</text>
+<text>
+<en>Send Newsletter</en>
+<de>Newsletter versenden</de>
+<id>2043</id>
+</text>
+<text>
+<en>Start</en>
+<de>Starten</de>
+<id>2044</id>
 </text>
 <text>
 <en>Resume Sending</en>
@@ -12148,78 +12261,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>One Thought on "{1}"</en>
 <en_plural>{0} Thoughts on "{1}"</en_plural>
 <id>2013</id>
-</text>
-<text>
-<en>← Previous</en>
-<de>← Voriges</de>
-<id>2014</id>
-<ua>← Попередня</ua>
-</text>
-<text>
-<en>Next →</en>
-<de>Nächstes →</de>
-<id>2015</id>
-<ua>Наступна →</ua>
-</text>
-<text>
-<en>Size of Target Image to support High Resolution Displays ("Retina")</en>
-<de>Größe des Bildes für Unterstützung hoch aufgelöster Displays ("Retina")</de>
-<id>2016</id>
-<ua>Розмір зображення для відтворення на широкоформатному дисплеї ("Retina") </ua>
-</text>
-<text>
-<en>Mails/Min</en>
-<id>2017</id>
-<de>Mails/Min</de>
-<ua>Mails/Min</ua>
-</text>
-<text>
-<en>Bookmark the {0}.</en>
-<id>2018</id>
-<de>Bookmark the {0}.</de>
-<ua>Позначити {0}.</ua>
-</text>
-<text>
-<en>or larger</en>
-<de>oder größer</de>
-<id>2019</id>
-<ua>або збільшити</ua>
-</text>
-<text>
-<en>Inherit from parent page</en>
-<de>Von übergeordneter Seite übernehmen</de>
-<id>2020</id>
-<ua>Скопіювати з головної сторінки</ua>
-</text>
-<text>
-<en>Own settings for this page</en>
-<de>Eigene Einstellungen für diese Seite</de>
-<id>2021</id>
-<ua>Налаштування для цієї сторінки</ua>
-</text>
-<text>
-<en>No content</en>
-<de>Kein Inhalt</de>
-<id>2022</id>
-<ua>Контент відсутній</ua>
-</text>
-<text>
-<en>Insert "100%" in both fields to make it responsive.</en>
-<de>Für Responsive in beiden Feldern "100%" eintragen.</de>
-<id>2023</id>
-<ua>Введіть "100%" в обидва поля для реагування.</ua>
-</text>
-<text>
-<en>Anchor</en>
-<de>Anker</de>
-<id>2024</id>
-<ua>Кінець</ua>
-</text>
-<text>
-<en>Linked Images</en>
-<de>Verlinkte Bilder</de>
-<id>2025</id>
-<ua>Зображення з лінком</ua>
 </text>
 <text>
 <en>← Previous</en>
@@ -12326,7 +12367,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Set size of video</en>
 <de>Benutzerdefinierte Videogröße setzen</de>
-<id>2031</id>
+<id>2051</id>
 <ua>Вибрати розмір відео</ua>
 </text>
 <text>
@@ -12338,6 +12379,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <de>Videoquelle</de>
 <en>Video Source Type</en>
+<ro>sursa video</ro>
 <id>2033</id>
 <ua>Тип джерела</ua>
 </text>
@@ -12391,20 +12433,20 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>No data received</en>
-<id>2042</id>
+<id>2052</id>
 <de>No data received</de>
 <ua>Даних не отримано</ua>
 </text>
 <text>
 <en>Thank you very much for your order.</en>
-<id>2043</id>
+<id>2053</id>
 <de>Thank you very much for your order.</de>
 <ua>Дякуємо за замовлення.</ua>
 </text>
 <text>
 <en>Buy now</en>
 <de>Jetzt kaufen</de>
-<id>2044</id>
+<id>2054</id>
 <ua>Придбати зараз.</ua>
 </text>
 <text>
