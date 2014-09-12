@@ -7,9 +7,6 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     {
         $s = new Kwf_Model_Select();
         $s->whereEquals('email', $identity);
-        if ($this->_model->hasColumn('locked')) {
-            $s->whereEquals('locked', false);
-        }
         return $this->_model->getRow($s);
     }
 

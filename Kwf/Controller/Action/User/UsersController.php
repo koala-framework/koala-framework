@@ -1,8 +1,8 @@
 <?php
 class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_Auto_Grid
 {
-    protected $_buttons = array('add', 'userlock', 'userdelete', 'xls'); // original delete button entfernt
-    protected $_permissions = array('userlock' => true, 'userdelete' => true, 'xls' => true);
+    protected $_buttons = array('add', 'userdelete', 'xls'); // original delete button entfernt
+    protected $_permissions = array('userdelete' => true, 'xls' => true);
     protected $_sortable = true;
     protected $_defaultOrder = 'id';
     protected $_paging = 20;
@@ -24,14 +24,6 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         $this->_filters['text'] = array(
             'type'=>'TextField',
             'width' => 85
-        );
-        $this->_filters['lockedtoo'] = array(
-            'type'      => 'Button',
-            'skipWhere' => true,
-            'icon'      => $this->getRequest()->getBaseUrl().'/assets/silkicons/user_red.png',
-            'cls'       => 'x2-btn-text-icon',
-            'text'      => trlKwf('Show locked users'),
-            'tooltip'   => trlKwf('Show locked users too')
         );
 
         // alle erlaubten haupt-rollen in variable
@@ -71,7 +63,6 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         $this->_columns->add(new Kwf_Grid_Column('password', trlKwf('Activated'), 60))
             ->setRenderer('boolean')
             ->setShowIn(Kwf_Grid_Column::SHOW_IN_ALL ^ Kwf_Grid_Column::SHOW_IN_XLS);
-        $this->_columns->add(new Kwf_Grid_Column_Checkbox('locked', trlKwf('Locked'), 60));
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $acl = Zend_Registry::get('acl');
@@ -109,37 +100,6 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
             }
             $row->deleted = 1;
             $row->save();
-        }
-    }
-
-    public function jsonUserLockAction()
-    {
-        if (!isset($this->_permissions['userlock']) || !$this->_permissions['userlock']) {
-            throw new Kwf_Exception("userlock is not allowed.");
-        }
-        $ids = $this->getRequest()->getParam($this->_primaryKey);
-        $ids = explode(';', $ids);
-
-        $ownUserRow = $this->_model->getRowByRowByKwfUser(Kwf_Registry::get('userModel')->getAuthedUser());
-        if (in_array($ownUserRow->id, $ids)) {
-            throw new Kwf_ClientException(trlKwf("You cannot lock your own account."));
-        }
-
-        foreach ($ids as $id) {
-            $row = $this->_model->getRow($id);
-            if (!$row) {
-                throw new Kwf_ClientException("Can't find row with id '$id'.");
-            }
-            if (!$this->_hasPermissions($row, 'userlock')) {
-                throw new Kwf_Exception("You don't have the permissions to lock this user.");
-            }
-            $row->locked = $row->locked ? 0 : 1;
-            $row->save();
-
-            $this->_model->writeLog(array(
-                'user_id' => $row->id,
-                'message_type' => ($row->locked ? 'user_locked' : 'user_unlocked')
-            ));
         }
     }
 
@@ -186,10 +146,6 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
             } else {
                 $select = null;
             }
-        }
-
-        if (!$this->_getParam('query_lockedtoo')) {
-            $select->whereEquals('locked', 0);
         }
 
         if ($this->_getParam('query_role')) {

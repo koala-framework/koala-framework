@@ -5,7 +5,6 @@ class Kwf_User_Auth_AutoLoginFields extends Kwf_User_Auth_Abstract implements Kw
     {
         $s = new Kwf_Model_Select();
         $s->whereEquals('id', $id);
-        $s->whereEquals('locked', false);
         return $this->_model->getRow($s);
     }
 

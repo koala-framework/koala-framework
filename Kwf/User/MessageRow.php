@@ -77,22 +77,6 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                         $ret = trlKwf('Global user activation e-mail sent by {0}.', array($user->__toString()));
                     }
                     break;
-                case 'user_locked':
-                    if (!$this->by_user_id) {
-                        $ret = trlKwf('User locked.');
-                    } else {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('User locked by {0}.', array($user->__toString()));
-                    }
-                    break;
-                case 'user_unlocked':
-                    if (!$this->by_user_id) {
-                        $ret = trlKwf('User unlocked.');
-                    } else {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('User unlocked by {0}.', array($user->__toString()));
-                    }
-                    break;
                 case 'user_deleted':
                     if (!$this->by_user_id) {
                         $ret = trlKwf('User deleted.');
@@ -107,14 +91,6 @@ class Kwf_User_MessageRow extends Kwf_Model_Db_Row
                     } else {
                         $user = $this->getParentRow('ByUser');
                         $ret = trlKwf('Wrong login password used by {0}.', array($user->__toString()));
-                    }
-                    break;
-                case 'wrong_login_locked':
-                    if (!$this->by_user_id) {
-                        $ret = trlKwf('Tried login into locked account.');
-                    } else {
-                        $user = $this->getParentRow('ByUser');
-                        $ret = trlKwf('{0} tried to login into locked account.', array($user->__toString()));
                     }
                     break;
                 default:

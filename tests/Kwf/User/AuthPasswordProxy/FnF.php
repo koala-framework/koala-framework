@@ -4,7 +4,7 @@ class Kwf_User_AuthPasswordProxy_FnF extends Kwf_Model_FnF
     protected function _init()
     {
         $this->_data = array(
-            array('id'=>1, 'email' => 'test@vivid.com', 'password' => md5('foo'.'123'), 'password_salt' => '123', 'deleted'=>false, 'locked'=>false),
+            array('id'=>1, 'email' => 'test@vivid.com', 'password' => md5('foo'.'123'), 'password_salt' => '123', 'deleted'=>false),
         );
         parent::_init();
     }

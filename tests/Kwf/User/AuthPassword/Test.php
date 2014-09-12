@@ -36,14 +36,6 @@ class Kwf_User_AuthPassword_Test extends Kwf_Test_TestCase
         $this->assertNull($row);
     }
 
-    public function testGetRowByIdentityLocked()
-    {
-        $authMethods = $this->_m->getAuthMethods();
-        $auth = $authMethods['password'];
-        $row = $auth->getRowByIdentity('testlock@vivid.com');
-        $this->assertNull($row);
-    }
-
     public function testValidatePassword()
     {
         $authMethods = $this->_m->getAuthMethods();

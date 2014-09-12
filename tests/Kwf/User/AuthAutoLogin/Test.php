@@ -35,14 +35,6 @@ class Kwf_User_AuthAutoLogin_Test extends Kwf_Test_TestCase
         $this->assertNull($row);
     }
 
-    public function testGetRowByIdentityLocked()
-    {
-        $authMethods = $this->_m->getAuthMethods();
-        $auth = $authMethods['autoLogin'];
-        $row = $auth->getRowById('3');
-        $this->assertNull($row);
-    }
-
     public function testValidateAutoLoginToken()
     {
         $authMethods = $this->_m->getAuthMethods();
