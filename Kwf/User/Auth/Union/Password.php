@@ -33,10 +33,19 @@ class Kwf_User_Auth_Union_Password extends Kwf_User_Auth_Union_Abstract implemen
         }
     }
 
-    public function getActivationCode(Kwf_Model_Row_Interface $row)
+    public function validateActivationToken(Kwf_Model_Row_Interface $row, $token)
     {
         if ($row->getSourceRow()->getModel() == $this->_auth->_model) {
-            return $this->_auth->getActivationCode($row->getSourceRow());
+            return $this->_auth->validateActivationToken($row->getSourceRow(), $token);
+        } else {
+            return null;
+        }
+    }
+
+    public function generateActivationToken(Kwf_Model_Row_Interface $row)
+    {
+        if ($row->getSourceRow()->getModel() == $this->_auth->_model) {
+            return $this->_auth->generateActivationToken($row->getSourceRow());
         } else {
             return null;
         }

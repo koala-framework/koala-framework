@@ -122,7 +122,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         }
         $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.'/kwf/user/login/activate';
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->getAbsoluteUrl(true);
-        return $lostPassUrl.'?code='.$row->id.'-'.$row->getActivationCode();
+        return $lostPassUrl.'?code='.$row->id.'-'.$row->generateActivationToken();
     }
 
     public function getUserLoginUrl($row)

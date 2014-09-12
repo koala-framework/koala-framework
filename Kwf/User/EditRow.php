@@ -212,10 +212,16 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
         return $authMethods['password']->setPassword($this, $password);
     }
 
-    public function getActivationCode()
+    public function generateActivationToken()
     {
         $authMethods = $this->getModel()->getAuthMethods();
-        return $authMethods['password']->getActivationCode($this);
+        return $authMethods['password']->generateActivationToken($this);
+    }
+
+    public function validateActivationToken($token)
+    {
+        $authMethods = $this->getModel()->getAuthMethods();
+        return $authMethods['password']->validateActivationToken($this, $token);
     }
 
     public function getAdditionalRoles()

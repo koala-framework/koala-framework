@@ -13,15 +13,26 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return $ret;
     }
 
-    public function getActivationCode()
+    public function generateActivationToken()
     {
         foreach ($this->getModel()->getAuthMethods() as $auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Password) {
-                 $ret = $auth->getActivationCode($this);
+                 $ret = $auth->generateActivationToken($this);
                  if ($ret) return $ret;
             }
         }
         throw new Kwf_Exception();
+    }
+
+    public function validateActivationToken($token)
+    {
+        foreach ($this->getModel()->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                 $ret = $auth->validateActivationToken($this, $token);
+                 if ($ret) return $ret;
+            }
+        }
+        return false;
     }
 
     public function generateAutoLoginToken()

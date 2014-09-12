@@ -45,9 +45,27 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
         return true;
     }
 
-    public function getActivationCode(Kwf_Model_Row_Interface $row)
+    public function validateActivationToken(Kwf_Model_Row_Interface $row, $token)
     {
-        return substr(md5($row->password_salt), 0, 10);
+        if (!$row->activate_token) return false;
+        $activateToken = explode(':', $row->activate_token);
+        $expire = $activateToken[0];
+        $rowToken = $activateToken[1];
+        if ($expire < time()) return false;
+        if ($this->_encodePassword($row, $token) == $rowToken) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function generateActivationToken(Kwf_Model_Row_Interface $row)
+    {
+        $token = substr(Kwf_Util_Hash::hash(microtime(true).uniqid('', true).mt_rand()), 0, 10);
+        $expire = time()+24*60*60;
+        $row->activate_token = $expire.':'.$this->_encodePassword($row, $token);
+        $row->save();
+        return $token;
     }
 
     public function setMailTransport($value)

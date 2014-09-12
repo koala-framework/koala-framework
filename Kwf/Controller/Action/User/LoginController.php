@@ -119,7 +119,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 
         if (!$row) {
             $config['errorMsg'] = 'User not found in Web.';
-        } else if ($row->getActivationCode() != $code) {
+        } else if (!$row->validateActivationToken($code)) {
             if ($row->password) {
                 $config['errorMsg'] = trlKwf('Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.', array('<a href="/kwf/welcome">', '</a>', '<br />'));
             } else {
@@ -149,7 +149,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 
         if (!$row) {
             throw new Kwf_ClientException('User not found in Web.');
-        } else if ($row->getActivationCode() != $code) {
+        } else if (!$row->validateActivationToken($code)) {
             throw new Kwf_ClientException(trlKwf('Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?'));
         }
 
