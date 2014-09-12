@@ -408,6 +408,9 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
     _directionsCallback: function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
             this.directionsDisplay.setDirections(response);
+            (function() {
+                Kwf.callOnContentReady(this.directionsDisplay.getPanel(), { newRender: true});
+            }).defer(1, this);
         } else {
             alert(trlKwf('Entered place could not been found!'));
         }
