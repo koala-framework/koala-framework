@@ -28,7 +28,7 @@ class Kwc_Advanced_CommunityVideo_Form extends Kwc_Abstract_Form
 
         $this->add($cards);
 
-        $this->add(new Kwf_Form_Field_Select('dimensions', trlKwfStatic('Dimension')))
+        $this->add(new Kwf_Form_Field_Select('ratio', trlKwfStatic('Ratio')))
             ->setValues(array(
                 '16x9' => trlKwfStatic('16:9'),
                 '4x3' => trlKwfStatic('4:3')

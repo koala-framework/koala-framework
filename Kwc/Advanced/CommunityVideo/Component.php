@@ -19,50 +19,52 @@ class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars();
         $row = $ret['row'];
-        $ret['url'] = self::getVideoUrl($row);
+        $ret['url'] = self::getVideoUrl($row->url, $row);
+        $ret['config'] = array(
+            'ratio' => $row->ratio,
+        );
         if ($row->size === 'fullWidth') {
-            $ret['config'] = array(
-                'fullWidth' => true,
-                'ratio' => $row->dimensions
-            );
+            $ret['config']['fullWidth'] = true;
         }
         return $ret;
     }
 
-    public static function getVideoUrl($row)
+    public static function getVideoUrl($url, $settingsRow)
     {
-        $url = $row->url;
+        $ret = false;
+        $url = $settingsRow->url;
         if (!empty($url)) {
             $urlParts = parse_url($url);
             if ($urlParts && !empty($urlParts['host'])) {
                 if (preg_match('/youtube\.com$/i', $urlParts['host'])) {
                     parse_str($urlParts['query'], $queryParts);
-                    $url = '//www.youtube.com/embed/'.$queryParts['v'];
-                    if (!$row->show_similar_videos) {
-                        $url .= '?rel=0';
-                    } else {
-                        $url .= '?rel=1';
+                    if (isset($queryParts['v'])) {
+                        $ret = '//www.youtube.com/embed/'.$queryParts['v'];
+                        if (!$settingsRow->show_similar_videos) {
+                            $ret .= '?rel=0';
+                        } else {
+                            $ret .= '?rel=1';
+                        }
+                        if ($settingsRow->autoplay) {
+                            $ret .= '&autoplay=1';
+                        }
                     }
-                    if ($row->autoplay) {
-                        $url .= '&autoplay=1';
-                    }
-
                 } else if (preg_match('/vimeo\.com$/i', $urlParts['host'])) {
                     $clipId = substr($urlParts['path'], 1);
-                    $url = '//player.vimeo.com/video/'.$clipId.'?api=1&player_id=vimeoPlayer';
+                    $ret = '//player.vimeo.com/video/'.$clipId.'?api=1&player_id=vimeoPlayer';
 
-                    if ($row->autoplay) {
-                        $url .= '&autoplay=1';
+                    if ($settingsRow->autoplay) {
+                        $ret .= '&autoplay=1';
                     }
                 }
             }
         }
-        return $url;
+        return $ret;
     }
 
     public function hasContent()
     {
-        if ($this->getRow()->url) return true;
-        return false;
+        $row = $this->getRow();
+        return (bool)self::getVideoUrl($row->url, $row);
     }
 }
