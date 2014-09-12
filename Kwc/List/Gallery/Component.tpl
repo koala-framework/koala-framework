@@ -14,6 +14,9 @@
             if ($i%$this->imagesPerLine == $this->imagesPerLine-1) {
                 $class .= 'lastInLine ';
             }
+            if ($i%$this->imagesPerLine == 0) {
+                $class .= 'firstInLine ';
+            }
             $class = trim($class);
         ?>
         <div class="<?=$class;?>">
