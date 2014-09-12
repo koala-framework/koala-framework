@@ -2,6 +2,8 @@
 class Kwf_User_AuthPassword_FnF extends Kwf_Model_FnF
 {
     protected $_toStringField = 'email';
+    protected $_hasDeletedFlag = true;
+
     protected function _init()
     {
         $this->_data = array(
