@@ -36,7 +36,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
     public function __construct(array $config = array())
     {
         if (!isset($config['proxyModel']) && !$this->_proxyModel) {
-            $config['proxyModel'] = new Kwf_User_EditModel();
+            $config['proxyModel'] = 'Kwf_User_EditModel';
         }
         parent::__construct($config);
     }
