@@ -325,9 +325,11 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         }, this);
         
         this.store.on('load', function(s) {
-            var valueElement = this.el.parent('.kwcDirectoriesListViewAjax').child('.kwcDirectoriesListViewCount .totalValue');
-            if (valueElement) {
-                valueElement.update(this.store.getTotalCount());
+            var valueElements = this.el.parent('.kwcDirectoriesListViewAjax').select('.kwcDirectoriesListViewCount .totalValue', true);
+            if (valueElements.getCount()) {
+                valueElements.each(function(valueElement) {
+                    valueElement.update(this.store.getTotalCount());
+                }, this);
             }
         }, this);
 
