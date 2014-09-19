@@ -45,7 +45,7 @@ Ext2.apply(Ext2.form.VTypes, {
         if (/^tel:\/\/[\d\s]+$/.test(v)) {
             return true;
         }
-        return Ext.form.VTypes.url(v);
+        return Ext2.form.VTypes.url(v);
     },
     urltelText: trlKwf('This field should be a URL in the format "http://www.domain.com" or tel://0043 1234'),
 
