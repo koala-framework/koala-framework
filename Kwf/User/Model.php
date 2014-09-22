@@ -61,7 +61,11 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         }
 
         foreach ($this->getAuthMethods() as $auth) {
-            $row = $auth->getRowByIdentity($identd);
+            if ($auth instanceof Kwf_User_Auth_Interface_AutoLogin) {
+                $row = $auth->getRowById($identd);
+            } else {
+                $row = $auth->getRowByIdentity($identd);
+            }
             if ($row) return $row;
         }
 
@@ -151,6 +155,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
     public function lostPassword($email)
     {
         foreach ($this->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_AutoLogin) continue;
             $row = $auth->getRowByIdentity($email);
             if ($row) {
                 $auth->sendLostPasswordMail($row, $row);
