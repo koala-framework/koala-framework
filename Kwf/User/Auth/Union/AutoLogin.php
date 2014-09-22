@@ -1,5 +1,5 @@
 <?php
-class Kwf_User_Auth_Union_AutoLogin extends Kwf_User_Auth_Proxy_Abstract implements Kwf_User_Auth_Interface_AutoLogin
+class Kwf_User_Auth_Union_AutoLogin extends Kwf_User_Auth_Union_Abstract implements Kwf_User_Auth_Interface_AutoLogin
 {
     public function getRowById($id)
     {
