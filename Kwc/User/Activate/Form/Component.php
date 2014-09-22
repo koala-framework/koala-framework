@@ -58,12 +58,20 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         } else {
             $code = $this->getForm()->getRow()->code;
         }
-        $code = explode('-', $code);
+        // when primary key is varbinary and/or is in an union model
+        if (preg_match('/((.+)?[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12})-([0-9A-F]+$)/i', $code, $match)) {
+            $code = array(
+                $match[1],
+                $match[3]
+            );
+        } else {
+            $code = explode('-', $code);
+        }
         if (count($code) != 2 || empty($code[0]) || empty($code[1])) {
             $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE));
             $this->_hideForm = true;
         } else {
-            $userId = (int)$code[0];
+            $userId = $code[0];
             $code = $code[1];
             $userModel = Zend_Registry::get('userModel')->getKwfModel();
             $this->_user = $userModel->getRow($userModel->select()->whereEquals('id', $userId));
