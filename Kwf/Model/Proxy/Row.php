@@ -143,12 +143,8 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
         return $ret;
     }
 
-    /**
-     * TODO: deactivating _callObserver because it prevents clear the cache
-     */
-
-    //union must not fire events itself, it re-fires source model events
-    //protected function _callObserver($fn)
-    //{
-    //}
+    //proxy must not fire events itself, it re-fires source model events
+    protected function _callObserver($fn)
+    {
+    }
 }
