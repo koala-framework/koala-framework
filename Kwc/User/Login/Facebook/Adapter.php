@@ -31,7 +31,7 @@ class Kwc_User_Login_Facebook_Adapter implements Zend_Auth_Adapter_Interface
             return $ret;
         }
         $user = $facebook->api('/me', 'GET');
-        $users = Zend_Registry::get('userModel')->getKwfModel();
+        $users = Zend_Registry::get('userModel');
         $s = new Kwf_Model_Select();
         $s->whereEquals('deleted', false);
         $s->whereEquals('facebook_id', $user['id']);

@@ -44,7 +44,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         $result = $this->_getAuthenticateResult($row->email, $row->password);
 
         if ($result->isValid()) {
-            $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
+            $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
             if ($row->auto_login) {
                 Kwf_User_Autologin::setCookies($authedUser);
             } else {

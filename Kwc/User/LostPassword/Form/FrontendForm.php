@@ -13,7 +13,7 @@ class Kwc_User_LostPassword_Form_FrontendForm extends Kwf_Form
     }
     protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
-        Zend_Registry::get('userModel')->getKwfModel()->lostPassword($row->email);
+        Zend_Registry::get('userModel')->lostPassword($row->email);
     }
 
 

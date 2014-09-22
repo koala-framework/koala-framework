@@ -73,7 +73,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         } else {
             $userId = $code[0];
             $code = $code[1];
-            $userModel = Zend_Registry::get('userModel')->getKwfModel();
+            $userModel = Zend_Registry::get('userModel');
             $this->_user = $userModel->getRow($userModel->select()->whereEquals('id', $userId));
             if (!$this->_user) {
                 $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE));
