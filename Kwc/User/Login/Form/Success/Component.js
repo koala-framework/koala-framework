@@ -1,9 +1,7 @@
-Kwf.onContentReady(function() {
-    Ext2.query('.kwcUserLoginFormSuccess').each(function(el) {
-        if (Ext2.get(el).isVisible(true) && !el.initDone) {
-            el.initDone = true;
-            var url = Ext2.get(el).child('input.redirectTo').getValue();
-            location.href = url;
-        }
-    }, this);
+Kwf.onJElementReady('.kwcUserLoginFormSuccess', function(el) {
+    if (el.is(':visible') && !el.get(0).initDone) {
+        el.get(0).initDone = true;
+        var url = el.find('input.redirectTo').val();
+        location.href = url;
+    }
 });
