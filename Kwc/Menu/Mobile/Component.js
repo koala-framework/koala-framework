@@ -75,7 +75,10 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
 
                 el.find('.slider').replaceWith(Mustache.render(tpl, data, partials));
                 menu = el.find('ul.menu');
-                if (showMenuAfterLoad) menu.slideDown(slideDuration);
+                if (showMenuAfterLoad) {
+                    menu.slideDown(slideDuration);
+                    el.trigger('menuToggle',[slideDuration]);
+                }
 
                 menu.find('li.hasChildren ul.subMenu').prepend('<li class="back">\n' +
                     '<a href="#">\n' +
