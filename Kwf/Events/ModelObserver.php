@@ -47,19 +47,12 @@ class Kwf_Events_ModelObserver
             $row = null;
         } else {
             $row = $source;
-            if ($row instanceof Zend_Db_Table_Row_Abstract) {
-                $model = $row->getTable();
-                $primary = current($model->info('primary'));
-            } else {
-                $model = $row->getModel();
-                $primary = $model->getPrimaryKey();
-                if (get_class($model) == 'Kwf_Model_Db') $model = $model->getTable();
-            }
+            $model = $row->getModel();
+            $primary = $model->getPrimaryKey();
         }
         if (($model instanceof  Kwf_Model_Field && !$primary)) {
             return;
         }
-        if (get_class($model) == 'Kwf_Db_Table') return;
         if ($this->_skipFnF) {
             $m = $model;
             while ($m instanceof Kwf_Model_Proxy) { $m = $m->getProxyModel(); }

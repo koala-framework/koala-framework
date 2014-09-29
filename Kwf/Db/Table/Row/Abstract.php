@@ -165,28 +165,4 @@ abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
         return parent::findParentRow($parentTable, $ruleKey, $select);
     }
-
-    protected function _postUpdate()
-    {
-        parent::_postUpdate();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            Kwf_Events_ModelObserver::getInstance()->add('update', $this);
-        }
-    }
-
-    protected function _postInsert()
-    {
-        parent::_postInsert();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            Kwf_Events_ModelObserver::getInstance()->add('insert', $this);
-        }
-    }
-
-    protected function _postDelete()
-    {
-        parent::_postDelete();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            Kwf_Events_ModelObserver::getInstance()->add('delete', $this);
-        }
-    }
 }
