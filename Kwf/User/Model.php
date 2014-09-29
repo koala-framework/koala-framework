@@ -55,15 +55,12 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         if (is_null($identd)) {
             throw new Kwf_Exception("identity must not be null");
         }
-        $identdType = 'email';
         if (is_numeric($identd)) {
-            $identdType = 'id';
+            throw new Kwf_Exception("identity must not be numeric");
         }
 
         foreach ($this->getAuthMethods() as $auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_AutoLogin) {
-                $row = $auth->getRowById($identd);
-            } else {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
                 $row = $auth->getRowByIdentity($identd);
             }
             if ($row) return $row;
@@ -155,11 +152,12 @@ class Kwf_User_Model extends Kwf_Model_RowCache
     public function lostPassword($email)
     {
         foreach ($this->getAuthMethods() as $auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_AutoLogin) continue;
-            $row = $auth->getRowByIdentity($email);
-            if ($row) {
-                $auth->sendLostPasswordMail($row, $row);
-                break;
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                $row = $auth->getRowByIdentity($email);
+                if ($row) {
+                    $auth->sendLostPasswordMail($row, $row);
+                    break;
+                }
             }
         }
         if (!$row) {
