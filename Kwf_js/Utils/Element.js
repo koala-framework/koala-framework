@@ -35,7 +35,7 @@ Kwf.onContentReady(function clearCachedWidth(el, options) {
     if (options.action == 'widthChange' || options.action == 'show') {
         for (var i=0; i<Kwf.Utils.Element._cachedWidthEls.length; i++) {
             var e = Kwf.Utils.Element._cachedWidthEls[i];
-            if ($.contains(el, e)) {
+            if (el == e || $.contains(el, e)) {
                 delete e.kwfWidthCache;
                 Kwf.Utils.Element._cachedWidthEls.splice(i, 1);
                 i--; //decrement because e was removed from array
