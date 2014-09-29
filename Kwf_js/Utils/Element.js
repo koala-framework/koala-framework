@@ -42,4 +42,4 @@ Kwf.onContentReady(function clearCachedWidth(el, options) {
             }
         }
     }
-});
+}, { defer: false, priority: -10 });
