@@ -3,7 +3,6 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
 {
     protected $_rowClass = 'Kwf_User_EditRow';
 
-    protected $_proxyModel = 'Kwf_User_DbModel';
     private $_lock = null;
     protected $_maxLockTime = 10; // in seconds
 
@@ -25,7 +24,7 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
         )
     );
 
-    public function __construct($config)
+    public function __construct($config = array())
     {
         if (!isset($config['proxyModel'])) {
             $config['proxyModel'] = new Kwf_Model_Db(array(

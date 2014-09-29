@@ -75,7 +75,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     // interface Kwc_Mail_Recipient_Interface
     public function getMailGender()
     {
-        return $this->email_gender;
+        return $this->gender;
     }
 
     public function getMailTitle()
@@ -100,6 +100,6 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
 
     public function getMailFormat()
     {
-        return $this->email_format;
+        return $this->format;
     }
 }

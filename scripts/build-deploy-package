@@ -3,7 +3,8 @@
 
 $excludeDirs = array(
     '.git',
-    'tests'
+    'tests',
+    'node_modules'
 );
 $gitignorewhiteList = array(
     'vendor', 'build'
