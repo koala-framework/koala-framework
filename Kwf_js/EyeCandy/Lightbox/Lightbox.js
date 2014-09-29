@@ -54,7 +54,7 @@ Kwf.onElementReady('.kwfLightbox', function lightboxEl(el) {
     Kwf.EyeCandy.Lightbox.currentOpen = l;
 
     //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
-    Kwf.callOnContentReady(l.contentEl.dom, {newRender: false});
+    Kwf.callOnContentReady(l.contentEl.dom, {action: 'show'});
 }, { priority: 10 }); //after ResponsiveEl so lightbox can adapt to responsive content
 
 Kwf.onContentReady(function lightboxContent(readyEl, options)
@@ -327,7 +327,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
 
         this._blockOnContentReady = true; //don't resize twice
         //callOnContentReady so eg. ResponsiveEl can do it's job which might change the height of contents
-        Kwf.callOnContentReady(this.lightbox.contentEl.dom, {newRender: true});
+        Kwf.callOnContentReady(this.lightbox.contentEl.dom, {action: 'render'});
         this._blockOnContentReady = false;
     },
     onShow: Ext2.emptyFn,
