@@ -56,7 +56,7 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 
     public function isJson()
     {
-        return substr($this->getRequest()->getActionName(), 0, 4) == 'json';
+        return (bool)$this->getRequest()->getParam('jsonOutput');
     }
 
     private function _jsonFormat($json)

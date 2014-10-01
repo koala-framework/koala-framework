@@ -20,8 +20,7 @@ class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
             (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']== 'POST') ||
             isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
             $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
-        if ($prefix == 'json' &&
-            ($isXmlHttpRequest || $errors->exception instanceof Kwf_Exception_Client)) {
+        if ($this->_getParam('jsonOutput')) {
             $this->_forward('json-error');
         } else {
             throw $errors->exception; // wird von Kwf_Debug::handleException behandelt
