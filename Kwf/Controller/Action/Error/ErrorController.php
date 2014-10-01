@@ -38,10 +38,10 @@ class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
             if (!$exception instanceof Kwf_ExceptionNoMail) {
                 $exception = new Kwf_Exception_Other($exception);
             }
+            $this->view->error = trlKwf('An error has occurred. Please try again later.');
             if (Kwf_Exception::isDebug()) {
+                if ($exception->getMessage()) $this->view->message = $exception->getMessage();
                 $this->view->exception = $exception->getException()->__toString();
-            } else {
-                $this->view->error = trlKwf('An error has occurred. Please try again later.');
             }
         }
         if ($exception instanceof Kwf_Exception_Abstract) $exception->log();
