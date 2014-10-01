@@ -8,9 +8,15 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
         $this->setRender('master');
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
+        $prefix = substr($this->getRequest()->getParam('action'), 0, 4);
+        if ($prefix == 'json' || $this->_actionController instanceof Zend_Rest_Controller) {
+            $this->getRequest()->setParam('jsonOutput', true);
+        }
+
         $module = $this->getRequest()->getParam('module');
-        if ($this->isJson() || $this->_actionController instanceof Zend_Rest_Controller) {
+        if ($this->isJson()) {
             $this->setView(new Kwf_View_Json());
         } else {
             $this->setView(new Kwf_View_Ext());

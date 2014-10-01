@@ -60,10 +60,6 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        $prefix = substr($this->_getParam('action'), 0, 4);
-        if ($prefix == 'json') {
-            $this->getRequest()->setParam('jsonOutput', true);
-        }
         Kwf_Util_Https::ensureHttps();
 
         if ($this->_getParam('applicationAssetsVersion')
