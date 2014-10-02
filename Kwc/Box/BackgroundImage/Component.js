@@ -5,13 +5,8 @@ Kwf.onJElementReady('.cssClass', function(el, config) {
         var myWidth = 0, myHeight = 0, windowHeight = 0, windowWidth = 0;
         var img = innerBackground.children('img');
 
-        if (config.useParentDiv) {                          //delete this setting in master branch
-            windowWidth = el.parent().width();
-            windowHeight = el.parent().height();
-        } else {
-            windowWidth = $(window).width();
-            windowHeight = $(window).height();
-        }
+        windowWidth = el.parent().width();
+        windowHeight = el.parent().height();
 
         var factorForHeight = backgroundResizeOriginalHeight*100/backgroundResizeOriginalWidth;
         var factorForWidth = backgroundResizeOriginalWidth*100/backgroundResizeOriginalHeight;
