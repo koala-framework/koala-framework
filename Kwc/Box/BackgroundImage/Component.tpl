@@ -1,4 +1,5 @@
 <div class="<?=$this->cssClass;?>">
-    <div id="background" style="background-image: url(<?=$this->imageUrl?>);"></div>
+    <input type="hidden" class="config" value="<?=htmlspecialchars(json_encode($this->config))?>">
+    <div class="innerBackground" style="background-image: url(<?=$this->imageUrl?>);"></div>
 </div>
 

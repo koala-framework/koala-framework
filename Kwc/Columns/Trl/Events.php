@@ -4,6 +4,12 @@ class Kwc_Columns_Trl_Events extends Kwc_Abstract_Events
     public function getListeners()
     {
         $ret = parent::getListeners();
+        $generators = Kwc_Abstract::getSetting($this->_class, 'generators');
+        $ret[] = array(
+            'class' => $generators['child']['component']['child'],
+            'event' => 'Kwf_Component_Event_Component_HasContentChanged',
+            'callback' => 'onChildHasContentChange'
+        );
         $masterComponentClass = Kwc_Abstract::getSetting($this->_class, 'masterComponentClass');
         $cls = strpos($masterComponentClass, '.') ? substr($masterComponentClass, 0, strpos($masterComponentClass, '.')) : $masterComponentClass;
         $m = call_user_func(array($cls, 'createChildModel'), $masterComponentClass);
@@ -20,7 +26,17 @@ class Kwc_Columns_Trl_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
-    public function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
+    public function onChildHasContentChange(Kwf_Component_Event_Component_HasContentChanged $event)
+    {
+        $c = $event->component->parent;
+        if ($c->componentClass == $this->_class) {
+            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(
+                $this->_class, $event->component->parent
+            ));
+        }
+    }
+
+    protected function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         if ($event->isDirty('pos') || $event->isDirty('visible')) {
 

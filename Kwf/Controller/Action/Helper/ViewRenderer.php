@@ -8,9 +8,15 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
         $this->setRender('master');
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
+        $prefix = substr($this->getRequest()->getParam('action'), 0, 4);
+        if ($prefix == 'json' || $this->_actionController instanceof Zend_Rest_Controller) {
+            $this->getRequest()->setParam('jsonOutput', true);
+        }
+
         $module = $this->getRequest()->getParam('module');
-        if ($this->isJson() || $this->_actionController instanceof Zend_Rest_Controller) {
+        if ($this->isJson()) {
             $this->setView(new Kwf_View_Json());
         } else {
             $this->setView(new Kwf_View_Ext());
@@ -32,20 +38,8 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             if ($this->isJson()) {
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $this->getResponse()->setHeader('Content-Type', 'text/html');
-                } else if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-                    $this->getResponse()->setHeader('Content-Type', 'text/javascript');
                 } else {
-                    $this->getResponse()->setHeader('Content-Type', 'text/html; charset=utf-8');
-                    ob_start();
-                    Kwf_Benchmark::output();
-                    $benchmark = ob_get_contents();
-                    ob_end_clean();
-                    $out =  "<pre>";
-                    $out .= htmlspecialchars($this->_jsonFormat(Zend_Json::encode($this->view->getOutput())));
-                    $out .= "</pre>";
-                    $out .= "\n".$benchmark;
-                    $this->getResponse()->setBody($out);
-                    $this->setNoRender();
+                    $this->getResponse()->setHeader('Content-Type', 'application/javascript');
                 }
             } else {
                 $this->getResponse()->setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -56,7 +50,7 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 
     public function isJson()
     {
-        return substr($this->getRequest()->getActionName(), 0, 4) == 'json';
+        return (bool)$this->getRequest()->getParam('jsonOutput');
     }
 
     private function _jsonFormat($json)

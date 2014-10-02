@@ -202,8 +202,9 @@
 </text>
 <text>
 <en>Show Route</en>
+<de>Route anzeigen</de>
 <hr>Pokaži rutu</hr>
-<es>Show Route</es>
+<es>Mostrar Ruta</es>
 <id>33</id>
 <ro>Arată ruta</ro>
 <uk>Показати маршрут</uk>
@@ -13468,6 +13469,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Feedback to page </en>
 <id>2251</id>
+</text>
+<text>
+<en>Grey</en>
+<de>Grau</de>
+<id>2255</id>
 </text>
 </trl>
 

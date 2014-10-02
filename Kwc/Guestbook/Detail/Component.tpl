@@ -17,7 +17,7 @@
             <? if ($this->data->row->name) { ?>
                 <div class="user"><?= $this->data->row->name; ?></div>
             <? } ?>
-            <strong>#<?= $this->postNumber ?></strong>
+            <strong><?=$this->placeholder['prePostNumber']?><?= $this->postNumber ?></strong>
             <em>
                 <?=$this->data->trlKwf('on') ?> <?=$this->date($this->data->row->create_time)?>
                 <?=$this->data->trlKwf('at') ?> <?=$this->time($this->data->row->create_time)?>

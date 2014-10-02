@@ -32,7 +32,8 @@ class Kwc_Advanced_CommunityVideo_Form extends Kwc_Abstract_Form
             ->setValues(array(
                 '16x9' => trlKwfStatic('16:9'),
                 '4x3' => trlKwfStatic('4:3')
-            ));
+            ))
+            ->setAllowBlank(false);
 
         $this->fields->add(new Kwf_Form_Field_Checkbox('show_similar_videos', trlKwfStatic('Show similar videos (YouTube only)')));
         $this->fields->add(new Kwf_Form_Field_Checkbox('autoplay', trlKwfStatic('Autoplay Video')));
