@@ -1,6 +1,11 @@
 <?php
 class Kwf_Exception_AccessDenied extends Kwf_Exception_Abstract
 {
+    public function __construct($message = "Access denied")
+    {
+        parent::__construct($message);
+    }
+
     public function getHeader()
     {
         return 'HTTP/1.1 401 Access Denied';
