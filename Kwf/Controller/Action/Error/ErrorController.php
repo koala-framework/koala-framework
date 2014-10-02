@@ -31,19 +31,22 @@ class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
     {
         $errors = $this->getRequest()->getParam('error_handler');
         $exception = $errors->exception;
+        if ($exception instanceof Kwf_Exception_Abstract) {
+            $this->getResponse()->setRawHeader($exception->getHeader());
+        }
         if ($exception instanceof Kwf_Exception_Client) {
             $this->view->error = $exception->getMessage();
         } else {
-            if (!$exception instanceof Kwf_ExceptionNoMail) {
+            if (!$exception instanceof Kwf_Exception_Abstract) {
                 $exception = new Kwf_Exception_Other($exception);
             }
-            $this->view->error = trlKwf('An error has occurred. Please try again later.');
+            $this->view->error = $exception->getMessage();
+            if (!$this->view->error) $this->view->error = 'An error occurred';
             if (Kwf_Exception::isDebug()) {
-                if ($exception->getMessage()) $this->view->message = $exception->getMessage();
                 $this->view->exception = $exception->getException()->__toString();
             }
         }
-        if ($exception instanceof Kwf_Exception_Abstract) $exception->log();
+        $exception->log();
     }
 
     public function jsonMailAction()
