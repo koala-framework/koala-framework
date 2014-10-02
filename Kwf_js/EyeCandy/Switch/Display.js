@@ -85,6 +85,10 @@
             return false;
         }, this));
 
+        if (this.switchContainer.hasClass('active')) {
+            this.doOpen();
+        }
+
     }
 
     Kwf.EyeCandy.Switch.Display = function(elOrSelector, config) {
@@ -93,18 +97,23 @@
                 Kwf.EyeCandy.Switch.Display(el, config);
             }, { defer: true });
             Kwf.onJElementReady(elOrSelector, function(el, config) {
-                el.find(config.container || 'div.switchContent').hide();
+                if (!el.find(config.container || 'div.switchContent').hasClass('active')) {
+                    el.find(config.container || 'div.switchContent').hide();
+                }
             });
         } else {
             config = config || {};
             el = elOrSelector;
-            el.find(config.container || 'div.switchContent').hide();
+            if (!el.find(config.container || 'div.switchContent').hasClass('active')) {
+                el.find(config.container || 'div.switchContent').hide();
+            }
             el = elOrSelector.get(0);
 
             if(!el.switchDisplayObject) {
                 el.switchDisplayObject = new switchDisplayCls(el, config);
             }
         };
+
     };
 
     Kwf.EyeCandy.Switch.Display('.kwfSwitchDisplay');
