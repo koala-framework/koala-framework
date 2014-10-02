@@ -36,11 +36,7 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             && !$this->getResponse()->isRedirect()) {
 
             if ($this->isJson()) {
-                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    $this->getResponse()->setHeader('Content-Type', 'text/html');
-                } else {
-                    $this->getResponse()->setHeader('Content-Type', 'application/javascript');
-                }
+                $this->getResponse()->setHeader('Content-Type', 'application/json');
             } else {
                 $this->getResponse()->setHeader('Content-Type', 'text/html; charset=utf-8');
             }
