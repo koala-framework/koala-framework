@@ -4,7 +4,7 @@ class Kwf_Util_ClearCache
     /**
      * @return Kwf_Util_ClearCache
      */
-    public function getInstance()
+    public static function getInstance()
     {
         static $i;
         if (!isset($i)) {

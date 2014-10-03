@@ -64,7 +64,7 @@ class Kwf_Util_Maintenance
         }
     }
 
-    public function restoreMaintenanceBootstrapSelf($output = true)
+    public static function restoreMaintenanceBootstrapSelf($output = true)
     {
         if (!file_exists('bootstrap.php.backup')) {
             throw new Kwf_Exception("maintenance bootstrap not written");
@@ -76,7 +76,7 @@ class Kwf_Util_Maintenance
         Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/bootstrap.php'));
     }
 
-    public function restoreMaintenanceBootstrap($output = true)
+    public static function restoreMaintenanceBootstrap($output = true)
     {
         if (!Zend_Registry::get('config')->whileUpdatingShowMaintenancePage) return;
         if (!file_exists('bootstrap.php.backup')) return;
