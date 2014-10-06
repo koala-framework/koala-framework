@@ -33,7 +33,6 @@ class Kwf_Loader
 
     public static function loadClass($class)
     {
-
         static $namespaces;
         if (!isset($namespaces)) {
             $namespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
@@ -45,23 +44,29 @@ class Kwf_Loader
         if (isset($classMap[$class])) {
             $file = $classMap[$class];
         } else {
-            $pos = strpos($class, '_');
-            $ns1 = substr($class, 0, $pos+1);
-
-            $pos = strpos($class, '_', $pos+1);
-            if ($pos !== false) {
-                $ns2 = substr($class, 0, $pos+1);
-            } else {
+            if (($pos = strpos($class, '\\')) !== false) {
+                //php 5.3 namespace
+                $ns1 = substr($class, 0, $pos);
                 $ns2 = $class;
-            }
+                $file = str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+            } else {
+                $pos = strpos($class, '_');
+                $ns1 = substr($class, 0, $pos+1);
 
+                $pos = strpos($class, '_', $pos+1);
+                if ($pos !== false) {
+                    $ns2 = substr($class, 0, $pos+1);
+                } else {
+                    $ns2 = $class;
+                }
+                $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+            }
             $dirs = false;
             if (isset($namespaces[$ns2])) {
                 $dirs = $namespaces[$ns2];
             } else if (isset($namespaces[$ns1])) {
                 $dirs = $namespaces[$ns1];
             }
-            $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
             if ($dirs !== false) {
                 if (count($dirs) == 1) {
                     $file = $dirs[0].'/'.$file;
