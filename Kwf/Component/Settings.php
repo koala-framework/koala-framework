@@ -146,7 +146,7 @@ class Kwf_Component_Settings
                 $file .= '/Component';
             }
             foreach ($dirs as $dir) {
-                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.printcss') || is_file($dir.'/'.$file.'.js')) {
+                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.printcss') || is_file($dir.'/'.$file.'.js') || is_file($dir.'/'.$file.'.defer.js')) {
                     $cssClass[] = Kwf_Component_Abstract::formatCssClass($i);
                     break;
                 }
