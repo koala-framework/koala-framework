@@ -36,7 +36,7 @@ class Kwc_Columns_Trl_Events extends Kwc_Abstract_Events
         }
     }
 
-    protected function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
+    public function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         if ($event->isDirty('pos') || $event->isDirty('visible')) {
 
