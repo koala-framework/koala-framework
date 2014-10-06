@@ -32,16 +32,12 @@ Kwf.onJElementWidthChange('.kwcAdvancedCommunityVideo', function(el, config) {
 
 
 Kwf.onJElementHide('.kwcAdvancedCommunityVideo', function(el) {
-    var iframe = el.find('iframe');
-    iframe.parent().data('source', iframe.attr('src'));
-    iframe.parent().data('iframeWidth', iframe.attr('width'));
-    iframe.parent().data('iframeHeight', iframe.attr('height'));
-    iframe.remove();
+    el.data('iframeHtml', el.find('.communityVideoPlayer').html());
+    el.find('iframe').remove();
 });
 
 Kwf.onJElementShow('.kwcAdvancedCommunityVideo', function(el) {
-    var iframeParent = el.find('.communityVideoPlayer');
-    if(iframeParent.data('source')) {
-        iframeParent.html('<iframe src="'+iframeParent.data('source')+'" width="'+iframeParent.data('iframeWidth')+'" height="'+iframeParent.data('iframeHeight')+'" frameborder="0" allowfullscreen="true"></iframe>');
+    if(el.data('iframeHtml')) {
+        el.find('.communityVideoPlayer').html(el.data('iframeHtml'));
     }
 });
