@@ -121,7 +121,7 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
                     $formsForComponent[$key][] = 'gen_'.$g->getGeneratorKey();
                 }
 
-                if ($g instanceof Kwf_Component_Generator_Static) {
+                if ($g->getGeneratorFlag('static')) {
                     $classesToCheckForPagePropertiesForm = array_merge($classesToCheckForPagePropertiesForm, $g->getChildComponentClasses());
                 }
             }
