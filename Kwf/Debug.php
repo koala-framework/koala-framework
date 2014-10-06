@@ -286,9 +286,12 @@ class Kwf_Debug
     {
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
         if (defined('E_STRICT') && $errno == E_STRICT) return;
-        if (defined('E_DEPRECATED') && $errno == E_DEPRECATED
-            && (strpos($errfile, '/usr/share/php/') !== false)) {
-            return;
+        if (defined('E_DEPRECATED') && $errno == E_DEPRECATED) {
+            if (strpos($errfile, '/usr/share/php/') !== false) {
+                return;
+            } else if (strpos($errstr, 'iconv_set_encoding') !== false) {
+                return;
+            }
         }
 
         //ignore notice from iconv like "Detected an incomplete multibyte character in input string"

@@ -152,11 +152,10 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
         $paths = self::_getAllPaths();
         foreach ($paths as $i) {
-            if ($i && substr($cssClass, 0, strlen($i)) == $i) {
+            if ($i && substr($cssClass, 0, strlen($i)+1) == $i.'/') {
                 $cssClass = substr($cssClass, strlen($i)+1);
             }
         }
-
         if (substr($cssClass, -4) == '.css') {
             $cssClass = substr($cssClass, 0, -4);
         }

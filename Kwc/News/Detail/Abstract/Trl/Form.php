@@ -1,5 +1,5 @@
 <?php
-class Kwc_News_Detail_Abstract_Trl_Form extends Kwc_Directories_Item_Detail_Form
+class Kwc_News_Detail_Abstract_Trl_Form extends Kwc_Directories_Item_Detail_Trl_Form
 {
     protected function _initFields()
     {

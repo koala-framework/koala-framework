@@ -43,7 +43,7 @@ class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
             $this->view->error = $exception->getMessage();
             if (!$this->view->error) $this->view->error = 'An error occurred';
             if (Kwf_Exception::isDebug()) {
-                $this->view->exception = $exception->getException()->__toString();
+                $this->view->exception = explode("\n", $exception->getException()->__toString());
             }
         }
         $exception->log();

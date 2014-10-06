@@ -2,7 +2,7 @@ Kwf.onJElementReady('.kwcAdvancedCommunityVideo', function(el, config) {
     el.data('config', config);
 }, {priority: -1});
 
-Kwf.onJElementWidthChange('.kwcAdvancedCommunityVideo', function(el) {
+Kwf.onJElementWidthChange('.kwcAdvancedCommunityVideo', function(el, config) {
 
     var config = el.data('config');
     var iframe = el.find('iframe');
@@ -29,3 +29,15 @@ Kwf.onJElementWidthChange('.kwcAdvancedCommunityVideo', function(el) {
     }
 
 }, {defer: true});
+
+
+Kwf.onJElementHide('.kwcAdvancedCommunityVideo', function(el) {
+    el.data('iframeHtml', el.find('.communityVideoPlayer').html());
+    el.find('iframe').remove();
+});
+
+Kwf.onJElementShow('.kwcAdvancedCommunityVideo', function(el) {
+    if(el.data('iframeHtml')) {
+        el.find('.communityVideoPlayer').html(el.data('iframeHtml'));
+    }
+});
