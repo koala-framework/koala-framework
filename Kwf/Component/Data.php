@@ -1356,14 +1356,15 @@ class Kwf_Component_Data
      * @param bool if master should be rendered
      * @return string
      */
-    public function render($enableCache = null, $renderMaster = false)
+    public function render($enableCache = null, $renderMaster = false, &$hasDynamicParts = false)
     {
         $output = new Kwf_Component_Renderer();
         if ($enableCache !== null) $output->setEnableCache($enableCache);
         if ($renderMaster) {
+            $hasDynamicParts = true;
             return $output->renderMaster($this);
         } else {
-            return $output->renderComponent($this);
+            return $output->renderComponent($this, $hasDynamicParts);
         }
     }
 
