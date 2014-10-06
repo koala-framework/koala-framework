@@ -25,8 +25,7 @@ class Kwf_Connection_TestController extends Kwf_Controller_Action
     {
         $connections_counts = new Kwf_Session_Namespace('test_connection_count');
         $connections_counts->exceptions++;
-        $this->view->exception = "exceptionError";
-        $this->view->success = false;
+        throw new Kwf_Exception("exceptionError");
     }
 
     public function getTimeoutsAction()

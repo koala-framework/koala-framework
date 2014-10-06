@@ -247,16 +247,6 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
             errorMsg = e.toString()+': <br />'+response.responseText;
             var errorMsgTitle = 'Javascript Parse Exception';
         }
-        if (!errorMsg && r.exception) {
-            var p;
-            if (typeof options.params == "string") {
-                p = options.params;
-            } else {
-                p = Ext.urlEncode(options.params);
-            }
-            errorMsg = '<pre>'+r.exception+'</pre>';
-            var errorMsgTitle = 'PHP Exception';
-        }
         if (errorMsg) {
             errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />' + errorMsg;
             var sendMail = !r || !r.exception;
@@ -389,6 +379,12 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
         if (options.errorText) {
             errorText = options.errorText;
             errorMsg = options.errorText;
+        } else if (r.exception) {
+            errorMsg = '<pre>'+r.exception.join('\n')+'</pre>';
+            errorMsgTitle = 'PHP Exception';
+        } else if (r.error) {
+            errorMsg = r.error;
+            errorMsgTitle = 'PHP Exception';
         } else {
             errorMsg = trlKwf("A connection problem occured.");
             errorText = null;
