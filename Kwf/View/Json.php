@@ -41,7 +41,83 @@ class Kwf_View_Json extends Zend_View_Abstract
 
     protected function _run()
     {
-        return Zend_Json::encode($this->getOutput());
+        $ret = Zend_Json::encode($this->getOutput());
+        if ($this->exception) {
+            $ret = $this->_jsonFormat($ret);
+        }
+        return $ret;
     }
 
+
+    private function _jsonFormat($json)
+    {
+        $tab = "  ";
+        $ret = "";
+        $indentLevel = 0;
+        $inString = false;
+
+        $len = strlen($json);
+
+        for($c = 0; $c < $len; $c++)
+        {
+            $char = $json[$c];
+            switch($char)
+            {
+                case '{':
+                case '[':
+                    if(!$inString)
+                    {
+                        $ret .= $char . "\n" . str_repeat($tab, $indentLevel+1);
+                        $indentLevel++;
+                    }
+                    else
+                    {
+                        $ret .= $char;
+                    }
+                    break;
+                case '}':
+                case ']':
+                    if(!$inString)
+                    {
+                        $indentLevel--;
+                        $ret .= "\n" . str_repeat($tab, $indentLevel) . $char;
+                    }
+                    else
+                    {
+                        $ret .= $char;
+                    }
+                    break;
+                case ',':
+                    if(!$inString)
+                    {
+                        $ret .= ",\n" . str_repeat($tab, $indentLevel);
+                    }
+                    else
+                    {
+                        $ret .= $char;
+                    }
+                    break;
+                case ':':
+                    if(!$inString)
+                    {
+                        $ret .= ": ";
+                    }
+                    else
+                    {
+                        $ret .= $char;
+                    }
+                    break;
+                case '"':
+                    if($c > 0 && $json[$c-1] != '\\')
+                    {
+                        $inString = !$inString;
+                    }
+                default:
+                    $ret .= $char;
+                    break;
+            }
+        }
+
+        return $ret;
+    }
 }
