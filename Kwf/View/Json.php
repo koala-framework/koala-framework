@@ -42,7 +42,7 @@ class Kwf_View_Json extends Zend_View_Abstract
     protected function _run()
     {
         $ret = Zend_Json::encode($this->getOutput());
-        if ($this->exception) {
+        if (isset($this->exception) && $this->exception) {
             $ret = $this->_jsonFormat($ret);
         }
         return $ret;
