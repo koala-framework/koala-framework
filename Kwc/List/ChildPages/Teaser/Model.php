@@ -43,8 +43,10 @@ class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Abstract
                 $s = new Kwf_Model_Select();
 
                 $s->whereEquals('parent_id', $startPage->dbId);
-                if (!isset($whereEquals['ignore_visible']) || !$whereEquals['ignore_visible']) {
-                    $s->whereEquals('visible', true);
+                if (!$whereId) {
+                    if (!isset($whereEquals['ignore_visible']) || !$whereEquals['ignore_visible']) {
+                        $s->whereEquals('visible', true);
+                    }
                 }
                 $o = array(
                     'columns' => array('id', 'name')
@@ -83,7 +85,6 @@ class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Abstract
                     'name' => $childPage->name
                 );
             }
-
 
 
             foreach ($childPages as $childPage) {
