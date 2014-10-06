@@ -86,20 +86,29 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         }
 
 
-        $this->_sendHeader();
         if ($benchmarkEnabled) $startTime = microtime(true);
         $process = $this->_getProcessInputComponents($includeMaster);
         if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('getProcessInputComponents', microtime(true)-$startTime);
         self::_callProcessInput($process);
         if ($benchmarkEnabled) Kwf_Benchmark::checkpoint('processInput');
-        echo $this->_render($includeMaster);
+
+        $hasDynamicParts = false;
+        $out = $this->_render($includeMaster, $hasDynamicParts);
         if ($benchmarkEnabled) Kwf_Benchmark::checkpoint('render');
+
+        header('Content-Type: text/html; charset=utf-8');
+        if (!$hasDynamicParts) {
+            $lifetime = 60*60;
+            header('Cache-Control: public, max-age='.$lifetime);
+            header('Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime));
+            header('Pragma: public');
+        }
+        echo $out;
+
         self::_callPostProcessInput($process);
         if ($benchmarkEnabled) Kwf_Benchmark::checkpoint('postProcessInput');
     }
 
-    protected function _sendHeader()
-    {
-        header('Content-Type: text/html; charset=utf-8');
-    }
+    //removed, if required add _getMimeType() method
+    final protected function _sendHeader() {}
 }
