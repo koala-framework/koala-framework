@@ -82,6 +82,7 @@ deleteCacheFolder('cache/trl');
 $c = file(".gitignore", FILE_IGNORE_NEW_LINES);
 $c[] = '/build';
 $c[] = '/vendor';
+$c[] = 'bower.json';
 $c[] = '.bowerrc';
 $c = array_filter($c); //remove empty lines
 $c = array_unique($c);
