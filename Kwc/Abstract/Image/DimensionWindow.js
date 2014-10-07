@@ -314,8 +314,9 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     {
         var outHeight = -1;
         var dimension = this.dimensions[this._dimensionField.getValue()];
-        if (dimension.height == 'user' && this._heightField.getValue() != '') {
+        if (dimension.height == 'user') {
             outHeight = this._heightField.getValue();
+            if (this._heightField.getValue() === '') outHeight = 0;
         } else if (dimension.height >= 0) {
             outHeight = dimension.height;
         } else if (typeof dimension.height === 'undefined') {
@@ -334,8 +335,9 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     {
         var outWidth = -1;
         var dimension = this.dimensions[this._dimensionField.getValue()];
-        if (dimension.width == 'user' && this._widthField.getValue() != '') {
+        if (dimension.width == 'user') {
             outWidth = this._widthField.getValue();
+            if (this._widthField.getValue() === '') outWidth = 0;
         } else if (dimension.width == 'contentWidth') {
             outWidth = 0;
         } else if (dimension.width >= 0) {
