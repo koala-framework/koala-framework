@@ -16,6 +16,7 @@
 <hr>Vidljivo</hr>
 <si>vidno</si>
 <ua>Видимий</ua>
+<rs>Vidljivo</rs>
 </text>
 <text>
 <en>Error</en>
@@ -34,6 +35,7 @@
 <hr>Greška</hr>
 <si>napaka</si>
 <ua>Помилка</ua>
+<rs>Greška</rs>
 </text>
 <text>
 <en>Page not found</en>
@@ -49,6 +51,7 @@
 <hr>Stranica nije pronađena</hr>
 <si>Strani se ne najde.</si>
 <ua>Сторінку не знайдено.</ua>
+<rs>Nepostojeća strana</rs>
 </text>
 <text>
 <en>Lost password?</en>
@@ -64,6 +67,7 @@
 <si>Ste pozabili geslo?</si>
 <bg>Забравена парола?</bg>
 <ua>Забули пароль?</ua>
+<rs>Zaboravljena lozinka?</rs>
 </text>
 <text>
 <en>Login</en>
@@ -79,6 +83,7 @@
 <si>registracija</si>
 <bg>Вход</bg>
 <ua>Увійти</ua>
+<rs>Prijava</rs>
 </text>
 <text>
 <en>Hello {0}!</en>
@@ -96,6 +101,7 @@
 <si>Pozdravljeni {0}!</si>
 <bg>Здравейте {0}!</bg>
 <ua>Привіт {0}!</ua>
+<rs>Halo {O}!</rs>
 </text>
 <text>
 <en>Your account at {0} has just been created.</en>
@@ -110,6 +116,7 @@
 <si>Ustvarjen je bil račun pri  {0} </si>
 <bg>Вашият акаунт в {0} беше създаден.</bg>
 <ua>Ваш аккаунт на сайті {0} щойно створено.</ua>
+<rs>Vaš nalog na {0} je upravo kreiran.</rs>
 </text>
 <text>
 <en>Please use the following link to choose yourself a password</en>
@@ -1661,6 +1668,7 @@
 <uk>введіть адресу</uk>
 <si>Vnesite naslov. </si>
 <ua>Введіть адресу.</ua>
+<bg>Въведи адрес</bg>
 </text>
 <text>
 <en>Example</en>
@@ -1676,6 +1684,7 @@
 <uk>Приклад</uk>
 <si>primer</si>
 <ua>Приклад</ua>
+<bg>Пример</bg>
 </text>
 <text>
 <en>Unknown address</en>
@@ -1688,6 +1697,7 @@
 <uk>Невідома адреса</uk>
 <si>neznani naslov</si>
 <ua>Невірна адреса.</ua>
+<bg>Непознат адрес</bg>
 </text>
 <text>
 <en>Address could not be found</en>
@@ -1699,6 +1709,7 @@
 <uk>Адреса не знайдена</uk>
 <si>Naslova ni možno najti. </si>
 <ua>Адресу не знайдено.</ua>
+<bg>Адресът не може да бъде открит</bg>
 </text>
 <text>
 <en>Move marker while pressing mousekey.</en>
@@ -1881,6 +1892,7 @@
 <uk>Будь ласка, введіть Ваш пароль. Після натискання на кнопку нижче</uk>
 <si>Prosimo vnesite vaše geslo. Po tem ko kliknete na spodnjo ikono</si>
 <ua>Будь ласка, натисніть кнопку нижче та введіть свій пароль</ua>
+<bg>Моля въведете Вашата парола. След натискане на долния бутон</bg>
 </text>
 <text>
 <en>you are logged in automatically and may use the typed in password</en>
@@ -1891,6 +1903,7 @@
 <uk>Ви автоматично увійдете в систему і можете використовувати набраний пароль</uk>
 <si>prijavljeni ste avtomatsko in lahko uporabite vneseno geslo</si>
 <ua>Ви автоматично авторизовані та можете використовувати введений пароль</ua>
+<bg>влизате автоматично в системата и можете да ползвате въведената парола</bg>
 </text>
 <text>
 <en>for future logins.</en>
@@ -1901,6 +1914,7 @@
 <uk>для майбутніх входів.</uk>
 <si>za prihodnje prijave.</si>
 <ua>для наступної реєстрації.</ua>
+<bg>за следващи влизания.</bg>
 </text>
 <text>
 <en>Your email address:</en>
@@ -1924,7 +1938,7 @@
 <uk>Активувати та увійти в аккаунт</uk>
 <si>Aktiviranje konta in prijava</si>
 <ua>Активуйте аккаунт та зареєструйтеся</ua>
-<bg>Активиране и регистриране на протебител</bg>
+<bg>Активиране и регистриране на потребител</bg>
 </text>
 <text>
 <en>The repeated password is different - please try again.</en>
@@ -1964,6 +1978,7 @@
 <uk>Посилання не працює</uk>
 <si>Link ni možno polinkati samega nase.</si>
 <ua>Лінк не може посилатися сам на себе</ua>
+<bg>Връзката не може да води към себе си</bg>
 </text>
 <text>
 <en>Add Paragraph</en>
@@ -1986,6 +2001,7 @@
 <si>Shraniti</si>
 <hr>Spremi</hr>
 <ua>Зберегти</ua>
+<bg>Запамети</bg>
 </text>
 <text>
 <en>Cancel</en>
@@ -1998,6 +2014,7 @@
 <si>Preklicati</si>
 <hr>Prekinuti</hr>
 <ua>Скасувати</ua>
+<bg>Откажи</bg>
 </text>
 <text>
 <en>Save and Back</en>
@@ -2010,6 +2027,7 @@
 <si>Shraniti in nazaj</si>
 <hr>save and back</hr>
 <ua>Зберегти та повернутися назад</ua>
+<bg>Запамети и се върни назад</bg>
 </text>
 <text>
 <en>Delete</en>
@@ -2640,6 +2658,7 @@
 <uk>Оновити</uk>
 <si>Ponovno naložiti</si>
 <ua>оновити</ua>
+<bg>зареди наново</bg>
 </text>
 <text>
 <en>Displaying {0} - {1} of {2}</en>
@@ -2672,6 +2691,7 @@
 <uk>Мінімальна довжина цього поля - {0}</uk>
 <si>Najmanjša dolžina za to polje je {0}</si>
 <ua>Мінімальна довжина цього поля {0}</ua>
+<bg>Минималната дължина за това поле е {0}</bg>
 </text>
 <text>
 <en>The maximum length for this field is {0}</en>
@@ -2682,6 +2702,7 @@
 <uk>Максимальна довжина цього поля - {0}</uk>
 <si>Največja dolžina za to polje je {0}</si>
 <ua>Максимальна довжина цього поля {0}</ua>
+<bg>Максималната дължина за това поле е {0}</bg>
 </text>
 <text>
 <en>This field is required</en>
@@ -2693,6 +2714,7 @@
 <uk>Це поле є обов'язковим</uk>
 <si>Polje je obvezno</si>
 <ua>Дане поле є обов'язковим</ua>
+<bg>Задължително поле</bg>
 </text>
 <text>
 <en>The minimum value for this field is {0}</en>
@@ -2703,6 +2725,7 @@
 <uk>Мінімальне значення цього поля - {0}</uk>
 <si>Najnižja vrednost za to polje je {0}</si>
 <ua>Мінімальна довжина цього поля {0}</ua>
+<bg>Минималната стойност за това поле е {0}</bg>
 </text>
 <text>
 <en>The maximum value for this field is {0}</en>
@@ -2713,6 +2736,7 @@
 <uk>Максимальне значення цього поля - {0}</uk>
 <si>Najvišja vrednost za to polje je  {0}</si>
 <ua>Максимальна довжина цього поля {0}</ua>
+<bg>Максималната стойност за това поле е {0}</bg>
 </text>
 <text>
 <en>{0} is not a valid number</en>
@@ -2723,6 +2747,7 @@
 <uk>{0} - не допустиме число</uk>
 <si>{0} ni veljavno število.</si>
 <ua>{0} недійсний номер.</ua>
+<bg>{0} не е валиден номер</bg>
 </text>
 <text>
 <en>Disabled</en>
@@ -3456,6 +3481,7 @@
 <sl>Dodaj {0}</sl>
 <uk>Додати {0}</uk>
 <ua>{0} додати</ua>
+<bg>{0} добавяне</bg>
 </text>
 <text>
 <en>Edit {0}</en>
@@ -3465,6 +3491,7 @@
 <sl>Uredi {0}</sl>
 <uk>Редагувати {0}</uk>
 <ua>{0} опрацювати</ua>
+<bg>{0} редактиране</bg>
 </text>
 <text>
 <en>Saving...</en>
@@ -3475,6 +3502,7 @@
 <ru>Сохранение...</ru>
 <uk>Збереження...</uk>
 <ua>Збереження...</ua>
+<bg>Запаметяване...</bg>
 </text>
 <text>
 <en>Deleting...</en>
@@ -3485,6 +3513,7 @@
 <ru>Удаление...</ru>
 <uk>Видалення...</uk>
 <ua>Видалення...</ua>
+<bg>Изтриване...</bg>
 </text>
 <text>
 <en>Duplicating...</en>
@@ -3505,6 +3534,7 @@
 <ru>пусто</ru>
 <uk>порожній</uk>
 <ua>очистити</ua>
+<bg>празно</bg>
 </text>
 <text>
 <en>Upload File</en>
@@ -3515,6 +3545,7 @@
 <ru>Загрузить файл</ru>
 <uk>Завантажити файл</uk>
 <ua>Завантажити файл</ua>
+<bg>Качване на файл</bg>
 </text>
 <text>
 <en>Delete File</en>
@@ -3525,6 +3556,7 @@
 <ru>Удалить файл</ru>
 <uk>Видалити файл</uk>
 <ua>Видалити файл</ua>
+<bg>Изтриване на файл</bg>
 </text>
 <text>
 <en>Uploading file</en>
@@ -3534,6 +3566,7 @@
 <sl>Datoteka se nalaga.</sl>
 <uk>Завантаження файлу</uk>
 <ua>Завантаження файлу</ua>
+<bg>Файлът се качва</bg>
 </text>
 <text>
 <en>Edit Styles</en>
@@ -3572,6 +3605,7 @@
 <ru>Информация</ru>
 <uk>Інфо</uk>
 <ua>Інформація</ua>
+<bg>Информация</bg>
 </text>
 <text>
 <en>yyyy-mm-dd</en>
@@ -4268,6 +4302,7 @@
 <sl>Komentar je bil uspešno prijavljen.</sl>
 <uk>Ваш коментар був успішно розміщений.</uk>
 <ua>Ваш коментар успішно опубліковано.</ua>
+<bg>Коментарът беше изпратен успешно.</bg>
 </text>
 <text>
 <en>The form has been submitted successfully.</en>
@@ -4554,6 +4589,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Am uitat parola</ro>
 <sl>Pozabljeno geslo</sl>
 <ua>Забули пароль</ua>
+<bg>Забравена парола</bg>
 </text>
 <text>
 <en>Logged In</en>
@@ -4602,6 +4638,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Vă rugăm să vă autentificaţi</ro>
 <sl>Prijavite se.</sl>
 <ua>Будь ласка, авторизуйтеся</ua>
+<bg>Моля влезте в системата</bg>
 </text>
 <text>
 <en>You have to login to see the requested page.</en>
@@ -4678,7 +4715,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>Необхідно заповнити поле</uk>
 <mk>Во молиме внесете текст во полето</mk>
 <hu>Kérjük töltse ki a mezőt</hu>
-<bg>Во молиме внесете текст во полето</bg>
+<bg>Моля попълнете полето</bg>
 <es_CL>Por favor, rellene el campo</es_CL>
 <fr>S'il vous plaît remplir dans ce domaine</fr>
 <ua>Будь ласка, заповніть поле</ua>
