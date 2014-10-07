@@ -75,7 +75,7 @@ class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
 
             $cache->save($failedLoginsFromThisIp, $this->_getCacheId());
             $this->_sendWrongLoginMail(array('Identity' => $this->_identity));
-            sleep(3);
+            if ($failedLoginsFromThisIp > 3) sleep(3);
         }
 
         return $ret;
