@@ -1124,11 +1124,11 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
             return;
         }
 
-        if(this.mode === 'remote'){
-            this.remoteLookup.push(newItemObject);
-            this.doQuery(val,false,false,forcedAdd);
-            return;
-        }
+        //if(this.mode === 'remote'){
+        //    this.remoteLookup.push(newItemObject);
+        //    this.doQuery(val,false,false,forcedAdd);
+        //    return;
+        //}
 
         var rec = this.createRecord(newItemObject);
         this.store.add(rec);
