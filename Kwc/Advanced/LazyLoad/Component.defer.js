@@ -7,6 +7,7 @@ Kwf.onJElementReady('.kwcAdvancedLazyLoad', function(el) {
         success: function(data) {
             el.removeClass('loading');
             el.find('.content').html(data);
+            Kwf.callOnContentReady(el, { action: 'render' });
         },
         dataType: 'html'
     });
