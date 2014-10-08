@@ -228,7 +228,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                         }
                     }
                     if ($accept) {
-                        if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                        if (!isset($this->_settings['component'][$this->_pageData[$id]['component']])) {
+                            //ignore, component doesn't exist for this generator
+                        } else if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
                             $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
                             $class = $this->_settings['component'][$this->_pageData[$id]['component']];
                             if (in_array($class, $selectClasses)) {
