@@ -212,7 +212,7 @@ class Kwf_Assets_Package
             else if ($mimeType == 'text/css') $ext = 'css';
             else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
             else throw new Kwf_Exception_NotYetImplemented();
-            if ($ext == 'js') {
+            if ($ext == 'js' || $ext == 'defer.js') {
                 $ret .= "\n//# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)."\n";
             } else if ($ext == 'css' || $ext == 'printcss') {
                 $ret .= "\n/*# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)." */\n";
