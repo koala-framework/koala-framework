@@ -3,6 +3,7 @@ Kwf.onContentReady(function statisticsOptBox(body, param) {
     if (Kwf.Statistics.optBoxHtml && !Kwf.Statistics.issetUserOptValue() && !$('body').data().optbox) {
         $('body').prepend(Kwf.Statistics.optBoxHtml);
         $('body').data('optbox', true);
+        Kwf.callOnContentReady(document.body, {render: true});
     }
 }, {priority: -2}); // before Kwf.Utils.ResponsiveEl
 
