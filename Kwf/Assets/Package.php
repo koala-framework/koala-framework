@@ -168,7 +168,7 @@ class Kwf_Assets_Package
 
         //manually build json, names array can be relatively large and merging all entries would be slow
         if ($mimeType == 'text/javascript') $ext = 'js';
-        if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
+        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
         else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
         $file = $this->getPackageUrl($ext, $language);
