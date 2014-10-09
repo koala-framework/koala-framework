@@ -99,7 +99,7 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
     protected function _saveWithoutResetDirty()
     {
         $this->_beforeSave();
-        $id = $this->{$this->_getPrimaryKey()};
+        $id = $this->getCleanValue($this->_getPrimaryKey());
         if (!$id) {
             $this->_beforeInsert();
         } else {
