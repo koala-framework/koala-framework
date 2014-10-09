@@ -32,8 +32,7 @@ class Kwf_Model_Proxy_Events extends Kwf_Model_EventSubscriber
     {
         $eventCls = get_class($ev);
         $sourceRow = $ev->row;
-        $sourceModel = $sourceRow->getModel();
-        $proxyRow = $this->_getModel()->getRow($sourceRow->{$sourceModel->getPrimaryKey()});
+        $proxyRow = $this->_getModel()->getRowByProxiedRow($sourceRow);
         $this->fireEvent(new $eventCls($proxyRow));
     }
 
