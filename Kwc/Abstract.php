@@ -16,6 +16,15 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         Kwf_Benchmark::count('components', $data->componentClass.' '.$data->componentId);
     }
 
+    public static function validateSettings($settings, $componentClass)
+    {
+        if (isset($settings['throwHasContentChangedOnRowColumnsUpdate'])
+            && $settings['throwHasContentChangedOnRowColumnsUpdate'] === true
+        ) {
+            throw new Kwf_Exception("throwHasContentChangedOnRowColumnsUpdate for '$componentClass' has to match column");
+        }
+    }
+
     /**
      * Returns the data object of this component
      *
