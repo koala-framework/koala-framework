@@ -13,7 +13,8 @@
     min-height: 100px;
     background: #fff;
     margin-bottom: 40px;
-    padding: 0;
+    padding: 10px;
+    position: absolute;
 }
 .ext-ie6 .kwfLightbox .kwfLightboxInner { width: 800px; }
 
@@ -42,10 +43,6 @@
 .kwfLightbox .kwfLightboxContent {
     height: 100%;
     width: 100%;
-    padding: 10px;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
 }
 .kwfLightbox .lightboxBody {
     position: relative;
@@ -99,6 +96,8 @@
     filter: alpha(opacity=80);
     z-index: 50 !important;
     position: fixed;
+    width: 100%; height: 100%;
+    left: 0; top: 0;
 }
 
 .kwfLightbox .loading {
