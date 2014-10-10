@@ -1,4 +1,19 @@
 <?php
+class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController_FindSymlinksRecFilterIterator extends RecursiveFilterIterator
+{
+
+    public function accept()
+    {
+        if ($this->getFileName() == 'node_modules') return false;
+        if ($this->getFileName() == 'cache') return false;
+        if ($this->getFileName() == 'log') return false;
+        if ($this->getFileName() == 'temp') return false;
+        if ($this->getFileName() == '.git') return false;
+        return true;
+    }
+
+}
+
 class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
@@ -97,6 +112,23 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     }
                     posix_kill($pid, SIGINT);
                     echo "\n";
+                }
+            }
+        }
+
+
+        //inotifywait doesn't recurse into symlinks
+        //so we add all symlinks to $watchPaths
+        foreach ($watchPaths as $p) {
+            $fsi = new RecursiveIteratorIterator(
+                new Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController_FindSymlinksRecFilterIterator(
+                    new RecursiveDirectoryIterator($p)
+                ),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
+            foreach ($fsi as $fso) {
+                if ($fso->isLink()) {
+                    $watchPaths[] = $fso->__toString();
                 }
             }
         }
