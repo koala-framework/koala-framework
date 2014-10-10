@@ -47,6 +47,8 @@ Kwc.Legacy.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
         var firstElWidth = this.list.getItem(0).getWidthIncludingMargin();
 
+        this.list.el.addClass('carouselMoving');
+
         var cfg = Ext2.applyIf({
             callback: function() {
                 // push moved left element to back
@@ -64,6 +66,8 @@ Kwc.Legacy.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
                 this._currentListIndex = this.list.getActiveItem().listIndex;
                 this.list.setActiveChangeLocked(false);
+
+                this.list.el.removeClass('carouselMoving');
             },
             scope: this
         }, this.animationConfig);
@@ -75,6 +79,8 @@ Kwc.Legacy.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstra
         // rechts rausgeschobenes element vorn dran
         this.list.getLastItem().el.insertBefore(this.list.getItem(0).el);
         this.list.items.unshift(this.list.items.pop());
+
+        this.list.el.addClass('carouselMoving');
 
         //adapt listIndex property
         var idx = 0;
@@ -94,6 +100,8 @@ Kwc.Legacy.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstra
             callback: function() {
                 this._currentListIndex = this.list.getActiveItem().listIndex;
                 this.list.setActiveChangeLocked(false);
+
+                this.list.el.removeClass('carouselMoving');
             },
             scope: this
         }, this.animationConfig);

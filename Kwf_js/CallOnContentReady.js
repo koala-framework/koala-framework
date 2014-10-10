@@ -113,11 +113,11 @@ Kwf.callOnContentReady = function(renderedEl, options)
         delete options.newRender;
     }
     if (!options.action) {
-        if (console && console.warn) console.warn('Please set option action on callOnContentReady');
+        if (typeof console != 'undefined' && console.warn) console.warn('Please set option action on callOnContentReady');
         options.action = 'render';
     }
     if (!renderedEl) {
-        if (console && console && console.warn) console.warn('Please pass element argument on callOnContentReady');
+        if (typeof console != 'undefined' && console.warn) console.warn('Please pass element argument on callOnContentReady');
         renderedEl = document.body;
     }
     if (typeof Ext2 != 'undefined' && Ext2.Element && renderedEl instanceof Ext2.Element) renderedEl = renderedEl.dom;
@@ -220,13 +220,17 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 }
             }
         }
+
         for (var j = 0; j< els.length; ++j) {
 
-            if (!els[j].onReadyQueue) els[j].onReadyQueue = [];
-            var alreadyInQueue = els[j].onReadyQueue.indexOf(hndl.num) != -1;
+            var alreadyInQueue = false;
+            Kwf._onReadyElQueue.each(function(queueEntry) {
+                if (queueEntry.num == hndl.num && els[j] == queueEntry.el) {
+                    alreadyInQueue = true;
+                }
+            });
 
             if (!alreadyInQueue) {
-                els[j].onReadyQueue.push(hndl.num);
                 var parentsCount = 0;
                 var n = els[j];
                 while (n = n.parentNode) {
@@ -299,7 +303,6 @@ Kwf.callOnContentReady = function(renderedEl, options)
     {
         var queueEntry = onReadyElQueue.shift();
         var el = queueEntry.el;
-        el.onReadyQueue.splice(el.onReadyQueue.indexOf(queueEntry.num), 1);
         if (queueEntry.onAction == 'render') {
             if (queueEntry.options.checkVisibility && !Kwf.Utils.Element.isVisible(el)) {
                 return;

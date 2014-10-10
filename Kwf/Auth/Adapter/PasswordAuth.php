@@ -114,7 +114,7 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
 
             $cache->save($failedLoginsFromThisIp, $this->_getCacheId());
             $this->_sendWrongLoginMail(array('Identity' => $this->_identity));
-            sleep(3);
+            if ($failedLoginsFromThisIp > 3) sleep(3);
         }
 
         return $ret;
@@ -166,7 +166,7 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
 
     private function _getCacheId()
     {
-        return 'login_brute_force_'.str_replace(array('.', ':', ',', ' '), '_', $_SERVER['REMOTE_ADDR']);
+        return str_replace(array('.', ':', ',', ' '), '_', $_SERVER['REMOTE_ADDR']);
     }
 
     private function _getCache()
@@ -177,7 +177,8 @@ class Kwf_Auth_Adapter_PasswordAuth implements Zend_Auth_Adapter_Interface
                 'automatic_serialization'=>true
             ),
             array(
-                'cache_dir' => 'cache/config'
+                'cache_dir' => 'cache/config',
+                'file_name_prefix' => 'login_brute_force_'
             )
         );
     }
