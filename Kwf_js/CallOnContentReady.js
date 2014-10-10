@@ -88,11 +88,11 @@ Kwf.callOnContentReady = function(renderedEl, options)
         delete options.newRender;
     }
     if (!options.action) {
-        if (console && console.warn) console.warn('Please set option action on callOnContentReady');
+        if (typeof console != 'undefined' && console.warn) console.warn('Please set option action on callOnContentReady');
         options.action = 'render';
     }
     if (!renderedEl) {
-        if (console && console && console.warn) console.warn('Please pass element argument on callOnContentReady');
+        if (typeof console != 'undefined' && console.warn) console.warn('Please pass element argument on callOnContentReady');
         renderedEl = document.body;
     }
     if (Ext.Element && renderedEl instanceof Ext.Element) renderedEl = renderedEl.dom;
