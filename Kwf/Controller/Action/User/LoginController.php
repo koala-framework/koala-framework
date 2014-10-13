@@ -12,14 +12,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 
     public function indexAction()
     {
-        // ursprünglich $this->_getParam('location'), dann gehen aber GET params verloren
-        $location = $_SERVER['REQUEST_URI'];
-        if ($location == '') { $location = '/'; }
-        $config = array('location' => $location);
-        if ($this->_getUserRole() != 'guest') {
-            $config['message'] = trlKwf("You don't have enough permissions for this Action");
-        }
-        $this->view->ext('Kwf.User.Login.Index', $config);
+        $this->forward('index', 'backend-login');
     }
 
     public function jsonLoginAction()
@@ -105,69 +98,12 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 
     public function activateAction()
     {
-        $activationCode = $this->_getParam('code');
-        list($userId, $code) = explode('-', $activationCode, 2);
-
-        $users = Zend_Registry::get('userModel');
-        $row = $users->getRow($userId);
-
-        $config = array(
-            'errorMsg' => '',
-            'userId'   => $userId,
-            'code'     => $code
-        );
-
-        if (!$row) {
-            $config['errorMsg'] = 'User not found in Web.';
-        } else if (!$row->validateActivationToken($code)) {
-            if ($row->password) {
-                $config['errorMsg'] = trlKwf('Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.', array('<a href="/kwf/welcome">', '</a>', '<br />'));
-            } else {
-                $config['errorMsg'] = trlKwf('Activation code is invalid. Maybe the URL wasn\'t copied completely?');
-            }
-        }
-
-        if (empty($config['errorMsg'])) {
-            $config['email'] = $row->email;
-        }
-
-        $this->view->ext('Kwf.User.Activate.Index', $config);
+        $this->forward('index', 'backend-activate');
     }
 
-    public function jsonActivateAction()
+    public function lostPasswordAction()
     {
-        $userId = $this->getRequest()->getParam('userId');
-        $password = $this->getRequest()->getParam('password');
-        $code = $this->getRequest()->getParam('code');
-
-        if (empty($userId) || empty($password) || empty($code)) {
-            throw new Kwf_ClientException(trlKwf('Data not submitted completely.'));
-        }
-
-        $users = Zend_Registry::get('userModel');
-        $row = $users->getRow($userId);
-
-        if (!$row) {
-            throw new Kwf_ClientException('User not found in Web.');
-        } else if (!$row->validateActivationToken($code)) {
-            throw new Kwf_ClientException(trlKwf('Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?'));
-        }
-
-        $validatorClass = Kwf_Registry::get('config')->user->passwordValidator;
-        if ($validatorClass) {
-            $validator = new $validatorClass();
-            $validator->setTranslator(
-                new Kwf_Trl_ZendAdapter(Kwf_Trl::getInstance()->getTargetLanguage())
-            );
-            if (!$validator->isValid($password)) {
-                throw new Kwf_ClientException(implode('<br />', $validator->getMessages()));
-            }
-        }
-
-        $row->setPassword($password);
-        $row->save();
-
-        $this->_login($row->email, $password);
+        $this->forward('index', 'backend-lost-password');
     }
 
     public function logoutAction()
@@ -213,18 +149,6 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $adapter->setIdentity($username);
         $adapter->setCredential($password);
         return $auth->authenticate($adapter);
-    }
-
-    public function jsonLostPasswordAction()
-    {
-        $email = $this->getRequest()->getParam('email');
-        if (!$email) {
-            throw new Kwf_Exception_Client(trlKwf("Please enter your E-Mail-Address"));
-        }
-
-        Zend_Registry::get('userModel')->lostPassword($email);
-
-        $this->view->message = trlKwf('Lost password mail sent to email address.');
     }
 
     protected function _onLogin()

@@ -90,24 +90,7 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
     },
 
     lostPassword: function() {
-        Ext2.Msg.prompt(trlKwf('Password lost'), trlKwf('Please enter your email address'), function(btn, email) {
-            if (btn == 'ok') {
-                var lostPasswordResultDialog = function(response, options, result) {
-                    Ext2.Msg.show({
-                        title: 'Lost password',
-                        msg: result.message,
-                        width: 270,
-                        buttons: Ext2.MessageBox.OK
-                    }, this);
-                };
-                Ext2.Ajax.request({
-                    mask: true,
-                    url: '/kwf/user/login/json-lost-password',
-                    params: { email: email },
-                    success: lostPasswordResultDialog
-                });
-            }
-        }, this);
+        location.href = '/kwf/user/login/lost-password';
     },
 
     showLogin: function() {
