@@ -204,15 +204,22 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
                     // Scroll to top of form
                     scrollTo = this.el.getY();
                 } else {
-                    // Get position of first error field
-                    for(var fieldName in r.errorFields) {
-                        var field = this.findField(fieldName);
-                        if (field) {
-                            var pos = field.el.getY();
-                            if (scrollTo == null || scrollTo > pos) {
-                                scrollTo = pos;
+                    // Scroll to first error. If there are form-errors those are first
+                    if (!r.errorMessages.length) { // there are no form-errors
+                        // Get position of first error field
+                        for(var fieldName in r.errorFields) {
+                            var field = this.findField(fieldName);
+                            if (field) {
+                                var pos = field.el.getY();
+                                if (scrollTo == null || scrollTo > pos) {
+                                    scrollTo = pos;
+                                }
                             }
                         }
+                    }
+                    if (scrollTo == null) { // no field errors found or only form errors
+                        // form-errors are shown at the top of the form
+                        scrollTo = this.el.getY();
                     }
                 }
                 if (scrollTo != null) {
