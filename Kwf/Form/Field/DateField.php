@@ -87,21 +87,18 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
     {
         $name = $this->getFieldName();
         $value = $this->_getOutputValueFromValues($values);
-        if (!$value) $value = $this->getPlaceholderText();
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
 
         $class = '';
-        if ($value != $this->getPlaceholderText()) {
-            $v = strtotime($value);
-            if ($v) $value = date(trlKwf('Y-m-d'), $v);
-        } else {
-            $class = 'kwfClearOnFocus';
-        }
+        $v = strtotime($value);
+        if ($v) $value = date(trlKwf('Y-m-d'), $v);
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
-        $ret['html'] = "<input class=\"$class\" type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
+        $ret['html'] = "<input class=\"$class\" type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" ".
+            "style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\" ".
+            "placeholder=\"".$this->getPlaceholderText()."\" />";
         return $ret;
     }
 
