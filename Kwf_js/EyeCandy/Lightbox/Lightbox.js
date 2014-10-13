@@ -547,8 +547,8 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
 
         //if lightbox is larget than viewport don't position lightbox above, the user can only scroll down
         var m = this._getOuterMargin();
-        if (xy.left < $(document.body).scrollLeft()+m) xy.top = $(document.body).scrollLeft()+m;
-        if (xy.top < $(document.body).scrollTop()+m) xy.left = $(document.body).scrollTop()+m;
+        if (xy.left < $(document.body).scrollLeft()+m) xy.left = $(document.body).scrollLeft()+m;
+        if (xy.top < $(document.body).scrollTop()+m) xy.top = $(document.body).scrollTop()+m;
         xy.left = Math.floor(xy.left);
         xy.top = Math.floor(xy.top);
 
