@@ -5,8 +5,9 @@ Kwf.Utils.ResponsiveEl('.kwcForm.center', [{maxWidth: 500, cls: 'veryNarrow'}, {
 
 Kwf.onElementReady('.kwcForm > form', function form(form) {
     form = form.parent('.kwcForm', false);
-    if (!form.kwcForm) {
-        form.kwcForm = new Kwc.Form.Component(form);
+    if (!form.dom.kwcForm) {
+        form.dom.kwcForm = new Kwc.Form.Component(form);
+        form.kwcForm = form.dom.kwcForm;
     }
 }, { priority: -10, defer: true }); //initialize form very early, as many other components access it
 Ext.ns('Kwc.Form');
