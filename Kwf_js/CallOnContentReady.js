@@ -126,7 +126,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         return;
     }
 
-    //add entries to _onReadyElQueue, depending on renderedEl
+    //add entries to onReadyElQueue, depending on renderedEl
     var onActions;
     if (options.action == 'render') {
         onActions = ['render', 'show', 'widthChange', 'contentReady'];
@@ -224,7 +224,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         for (var j = 0; j< els.length; ++j) {
 
             var alreadyInQueue = false;
-            Kwf._onReadyElQueue.each(function(queueEntry) {
+            onReadyElQueue.each(function(queueEntry) {
                 if (queueEntry.num == hndl.num && els[j] == queueEntry.el) {
                     alreadyInQueue = true;
                 }
@@ -253,7 +253,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
     }
 
-    //sort _onReadyElQueue
+    //sort onReadyElQueue
     var t = Kwf.Utils.BenchmarkBox.now();
     onReadyElQueue.sort(function sortOnReadyElQueue(a, b) {
         if (a.priority != b.priority) {
