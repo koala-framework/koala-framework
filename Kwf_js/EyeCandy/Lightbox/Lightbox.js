@@ -476,7 +476,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
             newHeight = maxSize.height;
         } else {
             if (!dontDeleteHeight) {
-                newHeight = null;
+                newHeight = '';
             }
         }
 
