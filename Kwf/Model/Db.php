@@ -557,7 +557,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             } else {
                 $field = $this->_formatField($field, $dbSelect, $tableNameAlias);
             }
-            $format = str_replace(array('Y', 'm', 'd'), array('%Y', '%m', '%d'), $format);
+            $format = str_replace(array('Y', 'm', 'd', 'H', 'i'), array('%Y', '%m', '%d', '%H', '%i'), $format);
             return "DATE_FORMAT($field, '$format')";
         } else if ($expr instanceof Kwf_Model_Select_Expr_String) {
             $quotedString = $this->_fixStupidQuoteBug($expr->getString());
