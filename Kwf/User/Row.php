@@ -35,6 +35,17 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return false;
     }
 
+    public function isActivated()
+    {
+        foreach ($this->getModel()->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                 $ret = $auth->isActivated($this);
+                 if (!is_null($ret)) return $ret;
+            }
+        }
+        return false;
+    }
+
     public function generateAutoLoginToken()
     {
         foreach ($this->getModel()->getAuthMethods() as $auth) {

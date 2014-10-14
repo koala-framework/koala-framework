@@ -51,6 +51,15 @@ class Kwf_User_Auth_Union_Password extends Kwf_User_Auth_Union_Abstract implemen
         }
     }
 
+    public function isActivated(Kwf_Model_Row_Interface $row)
+    {
+        if ($row->getSourceRow()->getModel() == $this->_auth->_model) {
+            return $this->_auth->isActivated($row->getSourceRow());
+        } else {
+            return null;
+        }
+    }
+
     public function sendLostPasswordMail(Kwf_Model_Row_Interface $row, Kwf_User_Row $kwfUserRow)
     {
         if ($row->getSourceRow()->getModel() == $this->_auth->_model) {
