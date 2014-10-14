@@ -37,7 +37,7 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
         } else if ($expr instanceof Kwf_Model_Select_Expr_Or) {
             $queries = array();
             foreach ($expr->getExpressions() as $orExpr) {
-                $queries[] = $this->_getSearchExpression($orExpr);
+                $queries[] = $this->_getSearchQueryByExpr($orExpr);
             }
             return '('.implode(' OR ', $queries).')';
         } else {
