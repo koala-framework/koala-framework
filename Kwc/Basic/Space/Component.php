@@ -9,6 +9,8 @@ class Kwc_Basic_Space_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Space');
+        $ret['componentCategory'] = 'content';
+        $ret['componentPriority'] = 70;
         $ret['ownModel'] = 'Kwc_Basic_Space_Model';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         return $ret;

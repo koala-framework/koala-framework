@@ -7,6 +7,8 @@ class Kwc_Composite_SwitchDisplay_Component extends Kwc_Abstract_Composite_Compo
         $ret = parent::getSettings();
         $ret['componentIcon'] = new Kwf_Asset('shape_move_forwards');
         $ret['componentName'] = trlKwfStatic('Switch display');
+        $ret['componentCategory'] = 'layout';
+        $ret['componentPriority'] = 60;
         $ret['generators']['child']['component']['linktext'] =
             'Kwc_Composite_SwitchDisplay_LinkText_Component';
         $ret['generators']['child']['component']['content'] =

@@ -6,6 +6,8 @@ class Kwc_Basic_Anchor_Component extends Kwc_Abstract_Composite_Component
         $ret = parent::getSettings();
         $ret['componentIcon'] = new Kwf_Asset('anchor');
         $ret['componentName'] = trlKwfStatic('Anchor');
+        $ret['componentCategory'] = 'layout';
+        $ret['componentPriority'] = 70;
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['flags']['hasAnchors'] = true;
         return $ret;
