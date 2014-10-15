@@ -41,6 +41,17 @@ abstract class Kwf_Assets_Dependency_Abstract
     {
         $this->_dependencies[$type] = $deps;
     }
+    public function addDependencies($type, $deps)
+    {
+        if (!isset($this->_dependencies[$type])) $this->_dependencies[$type] = array();
+        $this->_dependencies[$type] = array_merge($this->_dependencies[$type], $deps);
+    }
+
+    public function addDependency($type, $dep)
+    {
+        if (!isset($this->_dependencies[$type])) $this->_dependencies[$type] = array();
+        $this->_dependencies[$type][] = $dep;
+    }
 
     public function getDependencies($type)
     {

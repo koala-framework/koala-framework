@@ -93,7 +93,7 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         //providers can return additional dependencies for this dependency
         $deps = $this->getDependenciesForDependency($dependency);
         foreach ($deps as $type=>$i) {
-            $dependency->setDependencies($type, $i);
+            $dependency->addDependencies($type, $i);
         }
     }
 
