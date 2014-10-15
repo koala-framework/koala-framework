@@ -83,11 +83,11 @@ function initResponsiveImgEl(el) {
     var sizePath = baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
             DONT_HASH_TYPE_PREFIX+width);
 
-    var img = el.find('img');
+    var img = el.append('<img />');
     img.on('load', function() {
         el.removeClass('webResponsiveImgLoading');
     });
-    img.attr('src',sizePath);
+    img.attr('src', sizePath);
 };
 
 function checkResponsiveImgEl(responsiveImgEl) {

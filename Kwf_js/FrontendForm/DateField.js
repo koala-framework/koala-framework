@@ -14,6 +14,7 @@ Kwf.FrontendForm.DateField = Ext2.extend(Kwf.FrontendForm.Field, {
                 this.showPicker();
             }, this);
         }
+        Kwf.FrontendForm.DateField.superclass.initField.call(this);
     },
     showPicker: function() {
         if (!this.menu) {

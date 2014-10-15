@@ -22,7 +22,6 @@
                     data-min-width="<?=$this->minWidth;?>"
                     data-max-width="<?=$this->maxWidth;?>"
                     data-src="<?=$this->baseUrl;?>">
-                <img />
                 <noscript>
                     <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
                 </noscript>
