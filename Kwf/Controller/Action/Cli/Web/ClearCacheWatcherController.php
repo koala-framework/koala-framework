@@ -371,7 +371,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
             if (!$cls) {
                 echo "unknown component class?!\n";
-                continue;
+                return;
             }
             if (!self::_endsWith($file, '/Component.php')) {
                 //other component file
