@@ -7,7 +7,6 @@
             data-min-width="<?=$this->minWidth;?>"
             data-max-width="<?=$this->maxWidth;?>"
             data-src="<?=$this->baseUrl;?>">
-            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" />
             <noscript>
                 <?=$this->image($this->image, $this->altText, $this->imgCssClass)?>
             </noscript>
