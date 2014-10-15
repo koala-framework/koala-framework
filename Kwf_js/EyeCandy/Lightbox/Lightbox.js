@@ -170,8 +170,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         $.ajax({
             url: Kwf.getKwcRenderUrl(),
             data: { url: 'http://'+location.host+this.href },
-            dataType: 'html'
-        }).done((function(responseText) {
+            dataType: 'html',
+            context: this
+        }).done(function(responseText) {
             this.contentEl = $(
                 '<div class="kwfLightboxContent"></div>'
             );
@@ -210,10 +211,10 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             if (imagesToLoad == 0) showContent.call(this);
 
             this.initialize();
-        }).bind(this)).fail((function() {
+        }).fail(function() {
             //fallback
             location.href = this.href;
-        }).bind(this));
+        });
     },
     show: function(options)
     {
