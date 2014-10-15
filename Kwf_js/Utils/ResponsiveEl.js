@@ -59,8 +59,9 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
 Kwf.onContentReady(function jumpToAnchor(el) {
     if(!Kwf.Utils.ResponsiveEl._anchorDone && el === document.body) {
         Kwf.Utils.ResponsiveEl._anchorDone = true;
-        if(window.location.hash) {
-            var target = $(window.location.hash);
+        var anchor = window.location.hash;
+        if (anchor && anchor.match(/^#[a-z0-9_-]+$/i)) {
+            var target = $(anchor);
             if (target.length) {
                //fix anchor target as ResponsiveEl might have changed the heights of elements
                 window.scrollTo(0, $(target).offset().top);
