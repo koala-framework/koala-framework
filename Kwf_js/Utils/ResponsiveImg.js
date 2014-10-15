@@ -83,11 +83,13 @@ function initResponsiveImgEl(el) {
     var sizePath = baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
             DONT_HASH_TYPE_PREFIX+width);
 
-    var img = el.child('img', true);
-    Ext.fly(img).on('load', function() {
+    var img = el.createChild({
+        tag: 'img'
+    });
+    img.on('load', function() {
         el.removeClass('webResponsiveImgLoading');
     }, this);
-    img.src = sizePath;
+    img.dom.src = sizePath;
 };
 
 function checkResponsiveImgEl(responsiveImgEl) {

@@ -21,7 +21,7 @@ class Kwc_Composite_Images_Test extends Kwc_TestAbstract
         $xml = simplexml_import_dom($doc);
 
         $img = $xml->xpath("//img");
-        $this->assertEquals(6, count($img));
+        $this->assertEquals(3, count($img));
         $this->assertEquals(100, (string)$img[1]['width']);
         $this->assertEquals(100, (string)$img[1]['height']);
         $src = (string)$img[1]['src'];
