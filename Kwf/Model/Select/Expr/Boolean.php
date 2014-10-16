@@ -20,7 +20,7 @@ class Kwf_Model_Select_Expr_Boolean implements Kwf_Model_Select_Expr_Interface
     public function validate()
     {
         if (!$this->_value) {
-            throw new Kwf_Exception("No Value set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("No Value set for '".get_class($this)."'");
         }
     }
 
