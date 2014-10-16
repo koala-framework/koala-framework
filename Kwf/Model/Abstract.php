@@ -692,6 +692,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             return $expr->getString();
         } else if ($expr instanceof Kwf_Model_Select_Expr_Boolean) {
             return $expr->getValue();
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Integer) {
+            return $expr->getValue();
         } else if ($expr instanceof Kwf_Model_Select_Expr_StrPad) {
             $f = $expr->getField();
             if (is_array($row)) {
