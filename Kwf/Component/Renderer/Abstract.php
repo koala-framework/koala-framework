@@ -584,6 +584,11 @@ abstract class Kwf_Component_Renderer_Abstract
         }
     }
 
+    public function getHelper($type)
+    {
+        return $this->_getHelper($type);
+    }
+
     private function _getHelper($type)
     {
         if (!isset($this->_helpers[$type])) {

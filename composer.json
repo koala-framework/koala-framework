@@ -12,7 +12,8 @@
         "koala-framework/library-htmlawed": "1.1.14",
         "koala-framework/library-css3pie": "1.0.0",
         "koala-framework/kwf-modernizr": "dev-master",
-        "koala-framework/composer-extra-assets": "dev-master"
+        "koala-framework/composer-extra-assets": "dev-master",
+        "twig/twig": "1.16.1"
     },
     "extra": {
         "require-bower": {

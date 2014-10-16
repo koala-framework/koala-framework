@@ -41,14 +41,21 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
                  $vars['cssClass'] .= ' master'.ucfirst($i);
             }
 
-            $view = new Kwf_Component_View($this->_getRenderer());
-            $view->assign($vars);
             if (Kwc_Abstract::hasSetting($component->componentClass, 'masterTemplate')) {
                 $masterTemplate = Kwc_Abstract::getSetting($component->componentClass, 'masterTemplate');
             } else {
                 $masterTemplate = $this->_getRenderer()->getTemplate($component, 'Master');
             }
-            return $view->render($masterTemplate);
+
+            if (substr($masterTemplate, -4) == '.tpl') {
+                $view = new Kwf_Component_View($this->_getRenderer());
+                $view->assign($vars);
+                $ret = $view->render($masterTemplate);
+            } else {
+                $twig = new Kwf_Component_Renderer_Twig_Environment($this->_getRenderer());
+                $ret = $twig->render($masterTemplate, $vars);
+            }
+            return $ret;
         } else if ($last['type'] == 'component') {
             $helper = new Kwf_Component_View_Helper_Component();
             $helper->setRenderer($this->_getRenderer());

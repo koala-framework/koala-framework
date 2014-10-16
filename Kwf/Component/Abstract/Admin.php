@@ -99,6 +99,8 @@ class Kwf_Component_Abstract_Admin
             $key = $filename;
         } else if ($ext == 'tpl' && !$returnClass) {
             $key = $filename.'.tpl';
+        } else if ($ext == 'twig' && !$returnClass) {
+            $key = $filename.'.twig';
         }
         if ($key) {
             Kwf_Benchmark::count('getComponentFile precomputed');
