@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?><?if($this->isPosted){?> kwfImportant<?}?>">
+<div class="<?=$this->cssClass?><?if($this->isPosted){?> kwfImportant<?}?>" data-width="100%">
     <input type="hidden" class="config" value="<?= htmlspecialchars(Zend_Json::encode($this->config)) ?>" />
 <?php
 if ($this->showSuccess) {
@@ -20,11 +20,17 @@ if ($this->showSuccess) {
     }
     ?>
     <? if ($this->form) { ?>
-    <div class="webStandard webForm kwcForm">
+    <div class="webStandard webForm kwcForm" data-width="100%">
     <form action="<?= htmlspecialchars($this->action) ?>" method="<?=$this->method?>"<? if($this->isUpload) { ?> enctype="multipart/form-data"<? } ?>>
 
         <?=$this->component($this->paragraphs)?>
 
+        <? if ($this->method != 'get') { ?>
+        <div class="spEmail">
+            <label for="<?= $this->data->componentId ?>-sp-email"><?=$this->data->trlKwf('Leave empty')?>:</label>
+            <input id="<?= $this->data->componentId ?>-sp-email" name="<?= $this->formName ?>-sp-email" /> <? /* spam protection, named email so bots think they should fill this */ ?>
+        </div>
+        <? } ?>
         <div class="submitWrapper">
             <div class="beforeButton"></div>
             <div class="button">
