@@ -17,29 +17,9 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
 
         if ($last['type'] == 'master') {
             $innerComponent = $componentWithMaster[0]['data'];
-            $vars = array();
-            $vars['component'] = $innerComponent;
-            $vars['data'] = $innerComponent;
+
+            $vars = $component->getComponent()->getMasterTemplateVars($innerComponent, $this->_getRenderer());
             $vars['componentWithMaster'] = $componentWithMaster;
-            $vars['boxes'] = array();
-            foreach ($innerComponent->getPageOrRoot()->getChildBoxes() as $box) {
-                $vars['boxes'][$box->box] = $box;
-            }
-
-            $vars['multiBoxes'] = array();
-            foreach ($innerComponent->getPageOrRoot()->getRecursiveChildComponents(array('multiBox'=>true)) as $box) {
-                $vars['multiBoxes'][$box->box][] = $box;
-            }
-            //sort by priority
-            foreach ($vars['multiBoxes'] as $box=>$components) {
-                usort($vars['multiBoxes'][$box], array('Kwf_Component_View_Helper_ComponentWithMaster', '_sortByPriority'));
-            }
-
-            $vars['cssClass'] = 'frontend';
-            $cls = Kwc_Abstract::getSetting($component->componentClass, 'processedCssClass');
-            foreach (explode(' ', $cls) as $i) {
-                 $vars['cssClass'] .= ' master'.ucfirst($i);
-            }
 
             $view = new Kwf_Component_View($this->_getRenderer());
             $view->assign($vars);

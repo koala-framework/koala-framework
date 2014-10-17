@@ -341,6 +341,38 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     }
 
     /**
+     * Returns variables that can be used in Master.tpl
+     * @param e.g. for accessing recipient in Mail_Renderer
+     * @return array
+     */
+    public function getMasterTemplateVars(Kwf_Component_Data $innerComponent, Kwf_Component_Renderer_Abstract $renderer)
+    {
+        $ret = array();
+        $ret['component'] = $innerComponent;
+        $ret['data'] = $innerComponent;
+        $ret['boxes'] = array();
+        foreach ($innerComponent->getPageOrRoot()->getChildBoxes() as $box) {
+            $ret['boxes'][$box->box] = $box;
+        }
+
+        $ret['multiBoxes'] = array();
+        foreach ($innerComponent->getPageOrRoot()->getRecursiveChildComponents(array('multiBox'=>true)) as $box) {
+            $ret['multiBoxes'][$box->box][] = $box;
+        }
+        //sort by priority
+        foreach ($ret['multiBoxes'] as $box=>$components) {
+            usort($ret['multiBoxes'][$box], array('Kwf_Component_View_Helper_ComponentWithMaster', '_sortByPriority'));
+        }
+
+        $ret['cssClass'] = 'frontend';
+        $cls = Kwc_Abstract::getSetting($this->getData()->componentClass, 'processedCssClass');
+        foreach (explode(' ', $cls) as $i) {
+            $ret['cssClass'] .= ' master'.ucfirst($i);
+        }
+        return $ret;
+    }
+
+    /**
      * Returns a placeholder text, placeholders are set in settings
      *
      * @return string
