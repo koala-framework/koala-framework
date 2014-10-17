@@ -357,6 +357,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         }
 
         if (self::_startsWith($file, getcwd().'/components')
+            || self::_startsWith($file, getcwd().'/theme')
             || self::_startsWith($file, KWF_PATH.'/Kwc')
             || (defined('VKWF_PATH') && self::_startsWith($file, VKWF_PATH.'/Vkwc'))
         ) {
