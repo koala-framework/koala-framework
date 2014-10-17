@@ -17,7 +17,9 @@ class Kwf_Util_Model_Welcome extends Kwf_Model_Db
 
     public static function getImageDimensions($type)
     {
-        if ($type == 'LoginImage') {
+        if ($type == 'LoginImageLarge') {
+            return array(350, 150, 'cover' => false);
+        } else if ($type == 'LoginImage') {
             return array(300, 80, 'cover' => false);
         } else if ($type == 'WelcomeImage') {
             return array(300, 100, 'cover' => false);
@@ -27,6 +29,9 @@ class Kwf_Util_Model_Welcome extends Kwf_Model_Db
     {
         $row = Kwf_Model_Abstract::getInstance($className)->getRow($id);
         $dim = self::getImageDimensions($type);
+        if ($type == 'LoginImageLarge') {
+            $type = 'LoginImage';
+        }
         $uploadRow = $row->getParentRow($type);
         return array(
             'contents'=>Kwf_Media_Image::scale($uploadRow, $dim, $uploadRow->id),

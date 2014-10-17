@@ -12,6 +12,38 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
 
     public function indexAction()
     {
+        $this->view->applicationName = Kwf_Config::getValue('application.name');
+        $this->view->brandingKoala = Kwf_Config::getValue('application.branding.koala');
+        $this->view->brandingVividPlanet = Kwf_Config::getValue('application.branding.vividPlanet');
+
+        try {
+            $t = new Kwf_Util_Model_Welcome();
+            $row = $t->getRow(1);
+        } catch (Zend_Db_Statement_Exception $e) {
+            //wenn tabelle nicht existiert fehler abfangen
+            $row = null;
+        }
+        if ($row && $fileRow = $row->getParentRow('LoginImage')) {
+            $this->view->image = Kwf_Media::getUrlByRow(
+                    $row, 'LoginImageLarge', 'login'
+            );
+            
+            $this->view->imageSize = Kwf_Media_Image::calculateScaleDimensions(
+                $fileRow->getImageDimensions(),
+                Kwf_Util_Model_Welcome::getImageDimensions('LoginImageLarge')
+            );
+        } else {
+            $this->view->image = false;
+        }
+        if (Kwf_Registry::get('config')->allowUntagged === true) {
+            if (file_exists('.git') && Kwf_Util_Git::web()->getActiveBranch() != 'production') {
+                $this->view->untagged = true;
+            }
+            if (file_exists(KWF_PATH.'/.git') && Kwf_Util_Git::kwf()->getActiveBranch() != 'production/'.Kwf_Registry::get('config')->application->id) {
+                $this->view->untagged = true;
+            }
+        }
+        
         $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('login');
         $this->view->lostPasswordLink = $this->getFrontController()->getRouter()->assemble(array(
             'controller' => 'login',
