@@ -45,7 +45,7 @@ class Kwf_User_AuthPassword_Test extends Kwf_Test_TestCase
         $this->assertFalse($auth->validatePassword($row, 'bar'));
     }
 
-    public function testSetPassword()
+    public function testSetPasswordMd5()
     {
         $authMethods = $this->_m->getAuthMethods();
         $auth = $authMethods['password'];
@@ -53,13 +53,31 @@ class Kwf_User_AuthPassword_Test extends Kwf_Test_TestCase
 
         $oldPasswod = $row->password;
         $oldSalt = $row->password_salt;
-
+        $auth->setPasswordHashMethod('md5');
         $auth->setPassword($row, 'blubb');
+        $this->assertTrue(!preg_match('#^\$2a\$#', $row->password));
         $this->assertFalse($auth->validatePassword($row, 'foo'));
         $this->assertTrue($auth->validatePassword($row, 'blubb'));
 
         $this->assertTrue($oldPasswod != $row->password);
         $this->assertTrue($oldSalt != $row->password_salt);
+    }
+    
+    public function testSetPasswordBcrypt()
+    {
+        $authMethods = $this->_m->getAuthMethods();
+        $auth = $authMethods['password'];
+        $row = $this->_m->getRow(1);
+        $oldPasswod = $row->password;
+        $oldSalt = $row->password_salt;
+        $auth->setPassword($row, 'blubb');
+        $this->assertTrue(!!preg_match('#^\$2a\$#', $row->password));
+        $this->assertFalse($auth->validatePassword($row, 'foo'));
+        $this->assertTrue($auth->validatePassword($row, 'blubb'));
+
+        $this->assertTrue($oldPasswod != $row->password);
+        //the bcrypt doesn't touch the password_salt
+        $this->assertTrue($oldSalt == $row->password_salt);
     }
 
     public function testSendLostPasswordMail()
