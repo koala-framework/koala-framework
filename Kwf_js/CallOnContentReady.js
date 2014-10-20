@@ -224,7 +224,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         for (var j = 0; j< els.length; ++j) {
 
             var alreadyInQueue = false;
-            onReadyElQueue.each(function(queueEntry) {
+            $.each(onReadyElQueue, function(indx, queueEntry) {
                 if (queueEntry.num == hndl.num && els[j] == queueEntry.el) {
                     alreadyInQueue = true;
                 }
