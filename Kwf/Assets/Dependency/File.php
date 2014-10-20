@@ -44,7 +44,6 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             $paths = Kwf_Cache_SimpleStatic::fetch($cacheId);
             if ($paths === false) {
                 $paths = array(
-                    'web' => '.',
                     'webComponents' => 'components',
                     'webThemes' => 'themes',
                 );
@@ -66,6 +65,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                     if (substr($type, -2) == 'js') $type = substr($type, 0, -2);
                     $paths[$type] = $i;
                 }
+                $paths['web'] = '.';
                 Kwf_Cache_SimpleStatic::add($cacheId, $paths);
             }
         }
@@ -205,6 +205,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         $fileName = self::_getAbsolutePath($fileName);
         foreach ($paths as $k=>$p) {
             if ($p == '.') $p = getcwd();
+            if (substr($p, 0, 7) == 'vendor/') $p = getcwd().'/'.$p;
             if (substr($fileName, 0, strlen($p)) == $p) {
                 return $k.substr($fileName, strlen($p));
             }
