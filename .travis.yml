@@ -19,7 +19,7 @@ before_script:
   - chmod a+w tests/cache/*
   - chmod a+w tests/temp
   - composer self-update
-  - COMPOSER_ROOT_VERSION=dev-master composer install
+  - composer install
 services:
   - memcached
 script: "php bootstrap.php test --exclude-group=slow"
