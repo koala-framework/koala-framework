@@ -61,11 +61,6 @@ class Kwc_Paragraphs_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
             }
         }
 
-        //remove empty categories
-        foreach ($componentList as $k=>$i) {
-            if (!$i) unset($componentList[$k]);
-        }
-
         //move content and none to top level
         $componentList = array_merge(
             $componentList['content>>'],
@@ -74,6 +69,11 @@ class Kwc_Paragraphs_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
         );
         unset($componentList['content>>']);
         unset($componentList['none>>']);
+
+        //remove empty categories
+        foreach ($componentList as $k=>$i) {
+            if (!$i) unset($componentList[$k]);
+        }
 
         $config = $this->_getStandardConfig('kwc.paragraphs');
         $config['showDeviceVisible'] = Kwc_Abstract::getSetting($this->_class, 'useMobileBreakpoints');
