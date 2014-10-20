@@ -66,14 +66,23 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
     {
         ini_set('xdebug.max_nesting_level', 200); //TODO required for ext4, find better solution for that
 
-        $lcDependencyName = strtolower($dependencyName);
-        if (isset($this->_dependencies[$lcDependencyName])) {
-            return $this->_dependencies[$lcDependencyName];
+        //here if getDependencyNameByAlias is not required for better performance
+        if (isset($this->_dependencies[$dependencyName])) {
+            return $this->_dependencies[$dependencyName];
+        }
+
+        foreach ($this->_providers as $p) {
+            $d = $p->getDependencyNameByAlias($dependencyName);
+            if (!is_null($d)) $dependencyName = $d;
+        }
+
+        if (isset($this->_dependencies[$dependencyName])) {
+            return $this->_dependencies[$dependencyName];
         }
         foreach ($this->_providers as $p) {
             $d = $p->getDependency($dependencyName);
             if ($d !== null) {
-                $this->_dependencies[$lcDependencyName] = $d;
+                $this->_dependencies[$dependencyName] = $d;
                 $this->_setDependenciesForDependency($d);
                 return $d;
             }

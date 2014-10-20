@@ -8,6 +8,13 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
         $this->_path = $path;
     }
 
+    public function getDependencyNameByAlias($dependencyName)
+    {
+        if (strtolower($dependencyName) == $this->_path || strtolower($dependencyName).'.js' == $this->_path) {
+            return ucfirst(strtolower($dependencyName));
+        }
+    }
+
     public function getDependency($dependencyName)
     {
         $ret = null;
