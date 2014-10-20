@@ -1,44 +1,63 @@
-Kwf.onElementReady('a', function viewAjaxFilterLink(a) {
-    a = a.dom;
-    if (a.kwfViewAjaxInitDone) return; //ignore back link
+Kwf.onJElementReady('a', function viewAjaxFilterLink(a) {
+    if (a.data('kwfViewAjaxInitDone')) return; //ignore back link
 
-    var m = a.rel.match(/kwfViewAjaxFilter({.*?})/)
+    if (!a.attr('rel')) return;
+    var m = a.attr('rel').match(/kwfViewAjaxFilter({.*?})/)
     if (m) {
-        var config = Ext2.decode(m[1]);
+        var config = $.parseJSON(m[1]);
+        a.data('kwfViewAjaxFilter', config);
 
         if (!Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId]) Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId] = [];
         Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId].push(a);
 
-        Ext2.fly(a).on('click', function(ev) {
-            var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.config.viewComponentId];
+        a.click(function(ev) {
+            var config = $(this).data('kwfViewAjaxFilter');
+            var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[config.viewComponentId];
             if (!view) return;
             view.loadView({
-                filterComponentId: this.config.componentId
+                filterComponentId: config.componentId
             });
-            if (view._getState().viewFilter != this.config.componentId) {
-                view._getState().viewFilter = this.config.componentId;
-                view._getState().menuLinkId = a.id;
-                Kwf.Utils.HistoryState.pushState(document.title, a.href);
+            if (view._getState().viewFilter != config.componentId) {
+                view._getState().viewFilter = config.componentId;
+                view._getState().menuLinkId = this.id;
+                Kwf.Utils.HistoryState.pushState(document.title, this.href);
             }
-            Kwc.Directories.List.ViewAjax.filterLinks[this.config.viewComponentId].forEach(function(i) {
-                Ext2.fly(i).removeClass('current');
-            }, this);
-            Ext2.fly(a).addClass('current');
+            $.each(Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId], function() {
+                $(this).removeClass('current');
+            });
+            $(this).addClass('current');
 
-            ev.stopEvent();
+            ev.preventDefault();
 
-        }, {config: config});
+        });
     }
 });
 
-Kwf.onElementReady('.kwcDirectoriesListViewAjax', function viewAjax(el, config) {
-    config.renderTo = el.down('.viewContainer');
-    el.select('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
-    el.kwcViewAjax = new Kwc.Directories.List.ViewAjax(config);
+Kwf.onJElementReady('.kwcDirectoriesListViewAjax', function viewAjax(el, config) {
+    config.el = el.find('.viewContainer')[0];
+    el.find('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
+    el[0].kwcViewAjax = new Kwc.Directories.List.ViewAjax(config);
+
+    var linkToTop = $('<div class="linkToTop"></div>');
+    el.append(linkToTop);
+    linkToTop.click(function() {
+        window.scrollTo(0, 0);
+    });
+
+    $(window).on('scroll', function() {
+        var scrollHeight = $(window).scrollTop();
+        if (scrollHeight >= 1700) {
+            el.addClass('scrolledDown'); //will display linkToTop
+        } else {
+            el.removeClass('scrolledDown');
+        }
+    });
+
 }, {
     priority: 0, //call *after* initializing kwcForm to have access to searchForm
     defer: true
 });
+
 
 //if there is no viewAjax that can handle the changed state reload current page
 //this can happen if a reload has been between state navigations
@@ -57,49 +76,32 @@ Kwf.Utils.HistoryState.on('popstate', function() {
 }, this);
 
 
-Ext2.ns('Kwc.Directories.List');
-Kwc.Directories.List.ViewAjax = Ext2.extend(Ext2.Panel, {
+Kwf.namespace('Kwc.Directories.List');
+Kwc.Directories.List.ViewAjax = function(config) {
+    $.extend(this, config);
+    this.init();
+};
+
+Kwc.Directories.List.ViewAjax.byComponentId = {};
+Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId = {};
+Kwc.Directories.List.ViewAjax.filterLinks = {};
+
+Kwc.Directories.List.ViewAjax.prototype = {
 
     controllerUrl: null,
-
     loadMoreBufferPx: 700,
 
-    border: false,
-    layout: 'auto',
-    cls: 'posts',
-    initComponent: function() {
+    addHistoryEntryTimer: 0,
+
+    init: function() {
+        this.$el = $(this.el);
         Kwc.Directories.List.ViewAjax.byComponentId[this.componentId] = this;
         if (this.directoryViewComponentId) {
             Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.directoryViewComponentId] = this;
         }
-        this.view = new Kwc.Directories.List.ViewAjax.View({
-            controllerUrl: this.controllerUrl,
-            directoryComponentId: this.directoryComponentId,
-            directoryComponentClass: this.directoryComponentClass,
-            baseParams: {
-                componentId: this.componentId
-            },
-            placeholder: this.placeholder,
-            loadMoreBufferPx: this.loadMoreBufferPx,
-            loadDetailAjax: this.loadDetailAjax
-        });
-        this.items = [this.view];
-
-        this.renderTo.select('.noEntriesFound').remove(); //view renders own
-
-        var records = [];
-        this.renderTo.select('.kwfViewAjaxItem').each(function(el) {
-            var id = el.dom.className.match(/kwfViewAjaxItem ([^ ]+)/);
-            if (id) {
-                id = id[1];
-                records.push(new this.view.store.recordType({
-                    id: id,
-                    content: el.dom.innerHTML
-                }, id));
-            }
-            el.remove();
-        }, this);
-        this.view.store.add(records);
+        this.baseParams = {
+            componentId: this.componentId
+        };
 
         if (this.searchFormComponentId) {
             this.searchForm = Kwc.Form.formsByComponentId[this.searchFormComponentId];
@@ -107,7 +109,7 @@ Kwc.Directories.List.ViewAjax = Ext2.extend(Ext2.Panel, {
 
         if (this.searchForm) {
 
-            this.view.applyBaseParams(this.searchForm.getValues());
+            $.extend(this.baseParams, this.searchForm.getValues());
 
             this.searchForm.on('fieldChange', function(f) {
                 if (f instanceof Kwf.FrontendForm.TextField && f.getValue().length < 3) return; //minimum length
@@ -115,28 +117,25 @@ Kwc.Directories.List.ViewAjax = Ext2.extend(Ext2.Panel, {
                 var values = this.searchForm.getValues();
                 var diffFound = false;
                 for(var i in values) {
-                    if (values[i] != this.view.getBaseParams()[i]) {
+                    if (values[i] != this.baseParams[i]) {
                         diffFound = true;
                         break;
                     }
                 }
                 if (diffFound) {
-                    this.view.applyBaseParams(values);
-                    this.view.load();
-                    this.addHistoryEntryDeleayedTask.delay(2000);
+                    $.extend(this.baseParams, values);
+                    this.load();
+                    clearTimeout(this.addHistoryEntryTimer);
+                    this.addHistoryEntryTimer = setTimeout(this.pushSearchFormHistoryState.bind(this), 2000);
                 }
             }, this, { buffer: 500 });
 
             this.searchForm.on('beforeSubmit', function(f) {
                 var values = this.searchForm.getValues();
-                this.view.applyBaseParams(values);
-                this.view.load();
+                $.extend(this.baseParams, values);
+                this.load();
                 this.pushSearchFormHistoryState();
                 return false;
-            }, this);
-
-            this.addHistoryEntryDeleayedTask = new Ext2.util.DelayedTask(function() {
-                this.pushSearchFormHistoryState();
             }, this);
         }
 
@@ -152,17 +151,15 @@ Kwc.Directories.List.ViewAjax = Ext2.extend(Ext2.Panel, {
         }
 
         //set menuLinkId to link that is current, be be able to set current again
-        Kwc.Directories.List.ViewAjax.filterLinks[this.componentId].forEach(function(i) {
-            if (Ext2.fly(i).hasClass('current')) {
+        $.each(Kwc.Directories.List.ViewAjax.filterLinks[this.componentId], (function(idx, i) {
+            if ($(i).hasClass('current')) {
                 this._getState().menuLinkId = i.id;
             }
-        }, this);
+        }).bind(this));
 
         if (this.filterComponentId) {
             this._getState().viewFilter = this.filterComponentId;
-            this.view.applyBaseParams({
-                filterComponentId: this.filterComponentId
-            });
+            this.baseParams.filterComponentId = this.filterComponentId;
             delete this.filterComponentId;
         }
 
@@ -183,54 +180,79 @@ Kwc.Directories.List.ViewAjax = Ext2.extend(Ext2.Panel, {
             } else {
                 this.loadView({});
             }
-            if (!this.view.visibleDetail && this.view._lastViewScrollPosition) {
-                Ext2.select('html, body').scrollTo('b', this.view._lastViewScrollPosition.top);
-            }
+            //commented out because it should work without manual scrolling (browser should restore scroll position)
+            //but if it fails in real-world we can re-enable it
+            //if (!this.visibleDetail && this._lastViewScrollPosition) {
+            //    $(window).scrollTop(this._lastViewScrollPosition);
+            //}
             if (this._getState().menuLinkId) {
-                Kwc.Directories.List.ViewAjax.filterLinks[this.componentId].forEach(function(i) {
-                    Ext2.fly(i).removeClass('current');
-                }, this);
-                var el = Ext2.fly(this._getState().menuLinkId);
+                $.each(Kwc.Directories.List.ViewAjax.filterLinks[this.componentId], function() {
+                    $(this).removeClass('current');
+                });
+                var el = $('#'+this._getState().menuLinkId);
                 if (el) {
                     el.addClass('current');
                 }
             }
         }, this);
 
-        Kwc.Directories.List.ViewAjax.superclass.initComponent.call(this);
+        if (this.loadMoreBufferPx) {
+            var timer = 0;
+            $(window).scroll((function() {
+                clearTimeout(timer);
+                timer = setTimeout((function() {
+                    var height = this.$el.offset().top+this.$el.height();
+                    height -= $(window).height();
+                    height = height - $(window).scrollTop();
+                    if (height < this.loadMoreBufferPx) {
+                        this.loadMore();
+                    }
+                }).bind(this), 50);
+            }).bind(this));
+        }
+
+        if (this.loadDetailAjax) {
+            this.$el.click((function(ev) {
+                var a = $(ev.target).closest('a');
+                if (!a.length) return;
+                var m = a.attr('rel').match(/kwfDetail([^ ]+)/);
+                if (!m) return;
+                var config = $.parseJSON(m[1]);
+                if (!config.directoryComponentId) return;
+                if (this.directoryComponentId) {
+                    if (config.directoryComponentId != this.directoryComponentId) return;
+                } else {
+                    if (config.directoryComponentClass != this.directoryComponentClass) return;
+                }
+
+                ev.preventDefault();
+                //more... Link clicked
+                //this._lastViewScrollPosition = $(window).scrollTop();
+                this.showDetail(a.attr('href'));
+
+            }).bind(this));
+        }
+
+        this.kwfMainContent = this.$el.closest('.kwfMainContent');
     },
 
-    afterRender: function() {
-        Kwc.Directories.List.ViewAjax.superclass.afterRender.call(this);
+    showView: function() {
+        if (!this.visibleDetail) return;
+        this.visibleDetail = null;
 
-        this.initialLoadingEl = this.el.createChild({cls:'initialLoading'});
-        this.initialLoadingEl.enableDisplayMode();
-        this.linkToTop = this.el.createChild({cls:'linkToTop'});
-        this.linkToTop.enableDisplayMode();
-        this.linkToTop.on('click', function() {
-            window.scrollTo(0, 0);
-        });
+        this.hideDetail();
 
-        this.onMenuItemChanged();
+        this.kwfMainContent.show();
     },
 
     pushSearchFormHistoryState: function()
     {
-        this.addHistoryEntryDeleayedTask.cancel();
+        clearTimeout(this.addHistoryEntryTimer);
+        this.addHistoryEntryTimer = 0;
+        if (this.visibleDetail) return;
         this._getState().searchFormValues = this.searchForm.getValues();
-        var url = location.protocol+'//'+location.host+this.viewUrl+'?'+Ext2.urlEncode(this.searchForm.getValuesIncludingPost());
+        var url = location.protocol+'//'+location.host+this.viewUrl+'?'+$.param(this.searchForm.getValuesIncludingPost());
         Kwf.Utils.HistoryState.pushState(document.title, url);
-    },
-
-    onMenuItemChanged: function()
-    {
-        /*
-        this.blockReload = true; //for filter changevalue so they won't reload too
-        if (this.searchForm) {
-            this.searchForm.clearValues();
-        }
-        this.blockReload = false;
-        */
     },
 
     _getState: function()
@@ -238,191 +260,50 @@ Kwc.Directories.List.ViewAjax = Ext2.extend(Ext2.Panel, {
         return Kwf.Utils.HistoryState.currentState.viewAjax[this.componentId];
     },
 
-    loadView: function(p)
+    loadView: function()
     {
-        var params = Ext2.applyIf(p, {
-            filterComponentId: null
-        });
+        var params = {};
         if (this.searchForm) {
-            Ext2.apply(params, this.searchForm.getValues());
+            $.extend(params, this.searchForm.getValues());
         }
         var diffFound = false;
         for(var i in params) {
-            if (params[i] != this.view.getBaseParams()[i]) {
+            if (params[i] != this.baseParams[i]) {
                 diffFound = true;
                 break;
             }
         }
         if (diffFound) {
-            this.view.applyBaseParams(params);
-            this.view.load();
+            for (var i in params) this.baseParams[i] = params[i];
+            this.load();
         }
-        this.onMenuItemChanged();
-        this.view.showView();
-    },
-
-    showSearch: function(q)
-    {
-        this.loadView('search', { query: q });
-    },
-
-    showDetail: function(id) {
-        this.view.showDetail(id);
+        this.showView();
     },
 
     loadMore: function()
     {
-        this.view.loadMore();
-    }
+        if (this.$el.find('.kwfViewAjaxItem').length<20 || this.loadingMore || this.visibleDetail) return;
 
-});
-
-Kwc.Directories.List.ViewAjax.byComponentId = {};
-Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId = {};
-Kwc.Directories.List.ViewAjax.filterLinks = {};
-
-Kwc.Directories.List.ViewAjax.View = Ext2.extend(Kwf.Binding.AbstractPanel,
-{
-    layout: 'auto',
-    border: false,
-    autoHeight: true,
-
-    initComponent : function()
-    {
-        if (!this.tpl) {
-            this.tpl = new Ext2.XTemplate(
-                '<tpl for=".">',
-                    '<div class="kwfViewAjaxItem">{content}</div>',
-                '</tpl>'
-            );
-        }
-
-        this.store = new Ext2.data.Store({
-            proxy: new Ext2.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
-            reader: new Ext2.data.JsonReader({
-                totalProperty: 'total',
-                root: 'rows',
-                id: 'id',
-                sucessProperty: 'success',
-                fields: [{
-                    name: 'content'
-                },{
-                    name: 'id'
-                }]
-            }),
-            remoteSort: true,
-            pruneModifiedRecords: true
-        });
-        if (this.baseParams) {
-            this.setBaseParams(this.baseParams);
-            delete this.baseParams;
-        }
-
-        this.store.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
-
-        this.store.on('loadexception', function(proxy, o, response, e) {
-            throw e; //re-throw
-        }, this);
-        
-        this.store.on('load', function(s) {
-            var valueElements = this.el.parent('.kwcDirectoriesListViewAjax').select('.kwcDirectoriesListViewCount .totalValue', true);
-            if (valueElements.getCount()) {
-                valueElements.each(function(valueElement) {
-                    valueElement.update(this.store.getTotalCount());
-                }, this);
-            }
-        }, this);
-
-        var viewConfig = {
-            store: this.store,
-            tpl: this.tpl,
-            cls: 'kwfView',
-            itemSelector: 'div.kwfViewAjaxItem',
-            emptyText: '<span class="noEntriesFound">'+this.placeholder.noEntriesFound+'</span>',
-            deferEmptyText: false,
-            singleSelect: false,
-            border: false,
-            autoHeight: true
-        };
-
-        this.view = new Ext2.DataView(viewConfig);
-        this.view.updateIndexes = this.view.updateIndexes.createSequence(function() {
-            Kwf.callOnContentReady(this.view.el, {newRender: true});
-        }, this);
-
-        this.view.on('click', this.onItemClick, this);
-
-        this.items = [ this.view ];
-
-        Kwc.Directories.List.ViewAjax.View.superclass.initComponent.call(this);
-
-        if (this.loadMoreBufferPx) {
-            Ext2.fly(window).on('scroll', function() {
-                var height = this.el.getTop()+this.el.getHeight();
-                height -= Ext2.getBody().getViewSize().height;
-                height = height - Ext2.getBody().getScroll().top;
-                if (height < this.loadMoreBufferPx) {
-                    this.loadMore();
-                }
-            }, this, { buffer: 50 });
-        }
-
-        Ext2.fly(window).on('scroll', function() {
-            var scrollHeight = Ext2.getBody().getScroll().top;
-            if (scrollHeight >= 1700) {
-                this.el.up('.viewContainer').addClass('scrolledDown');
-            } else {
-                this.el.up('.viewContainer').removeClass('scrolledDown');
-            }
-        }, this);
-    },
-
-    afterRender: function() {
-        Kwc.Directories.List.ViewAjax.View.superclass.afterRender.call(this);
-
-        this.kwfMainContent = this.el.parent('.kwfMainContent');
-        if (this.kwfMainContent) {
-            this.kwfMainContent.enableDisplayMode('block');
-        }
-    },
-
-    loadMore: function() {
-        if (!this.store || this.getStore().getCount()<20 || this.loadingMore || this.visibleDetail) return;
         this.loadingMore = true;
-        this.body.addClass('loadingMore');
-        this.getStore().load({
-            params: {
-                start: this.getStore().getCount(),
-                limit: 10
-            },
-            add: true,
-            callback: function(rows) {
-                this.body.removeClass('loadingMore');
-                if (rows.length) { //wenn nichts geladen sind wir bereits am ende
-                    this.loadingMore = false;
-                }
-            },
-            scope: this
-        });
-    },
-
-    getStore : function() {
-        return this.store;
-    },
-
-    //für AbstractPanel
-    reset: function() {
-        if (this.getStore()) {
-            this.getStore().modified = [];
-            this.getStore().newRecords = [];
-        }
-    },
-
-    reload: function(options) {
-        if (this.getStore()) {
-            this.getStore().reload(options);
-            this.getStore().commitChanges();
-        }
+        this.$el.addClass('loadingMore');
+        var params = $.extend({
+            start: this.$el.find('.kwfViewAjaxItem').length,
+            limit: 10
+        }, this.baseParams);
+        $.ajax({
+            data: params,
+            url: this.controllerUrl+'/json-data',
+            dataType: 'json'
+        }).done((function(data) {
+            this.$el.removeClass('loadingMore');
+            if (data.rows.length) { //wenn nichts geladen sind wir bereits am ende
+                this.loadingMore = false;
+            }
+            for (var i=0; i<data.rows.length; i++) {
+                this.$el.append("<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>");
+            }
+            Kwf.callOnContentReady(this.$el, { action: 'render' });
+        }).bind(this));
     },
 
     load : function(params) {
@@ -430,64 +311,29 @@ Kwc.Directories.List.ViewAjax.View = Ext2.extend(Kwf.Binding.AbstractPanel,
         if (!params.start) {
             params.start = 0;
         }
-        if (this.el) this.el.mask('<img src="/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif" width="66" height="66" />', 'loading');
-        this.getStore().load({
-            params: params,
-            callback: function() {
-                if (this.el) this.el.unmask();
-            },
-            scope: this
-        });
-    },
+        if (!params.limit) {
+            params.limit = 25;
+        }
+        $.extend(params, this.baseParams);
 
-    getStore : function() {
-        return this.store;
-    },
-    getBaseParams : function() {
-        if (this.getStore()) {
-            return this.getStore().baseParams;
-        } else {
-            return this.baseParams || {};
-        }
-    },
-    setBaseParams : function(baseParams) {
-        if (this.getStore()) {
-            this.getStore().baseParams = baseParams;
-        } else {
-            //no store yet, apply them later
-            this.baseParams = baseParams;
-        }
-    },
-    applyBaseParams : function(baseParams) {
-        if (this.getStore()) {
-            Ext2.apply(this.getStore().baseParams, baseParams);
-        } else {
-            //no store yet, apply them later
-            if (!this.baseParams) this.baseParams = {};
-            Ext2.apply(this.baseParams, baseParams);
-        }
-    },
-
-    onItemClick: function(view, number, target, ev) {
-        if (!this.loadDetailAjax) return;
-        var row = this.store.getAt(number);
-        var target = Ext2.get(ev.getTarget());
-        if (target.dom.tagName.toLowerCase() != 'a') target = target.up('a');
-        if (!target) return;
-        var m = target.dom.rel.match(/kwfDetail([^ ]+)/);
-        if (!m) return;
-        var config = Ext2.decode(m[1]);
-        if (!config.directoryComponentId) return;
-        if (this.directoryComponentId) {
-            if (config.directoryComponentId != this.directoryComponentId) return;
-        } else {
-            if (config.directoryComponentClass != this.directoryComponentClass) return;
-        }
-
-        ev.stopEvent();
-        //more... Link clicked
-        this._lastViewScrollPosition = Ext2.getBody().getScroll();
-        this.showDetail(target.dom.href);
+        this.$el.addClass('loading');
+        $.ajax({
+            data: params,
+            url: this.controllerUrl+'/json-data',
+            dataType: 'json'
+        }).done((function(data) {
+            this.$el.removeClass('loading');
+            var html = '';
+            if (!data.rows.length) {
+                html = '<span class="noEntriesFound">'+this.placeholder.noEntriesFound+'</span>';
+            } else {
+                for (var i=0; i<data.rows.length; i++) {
+                    html += "<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>";
+                }
+            }
+            this.$el.html(html);
+            Kwf.callOnContentReady(this.$el, { action: 'render' });
+        }).bind(this));
     },
 
     hideDetail: function()
@@ -503,61 +349,48 @@ Kwc.Directories.List.ViewAjax.View = Ext2.extend(Kwf.Binding.AbstractPanel,
         if (this.visibleDetail == href) return;
         this.visibleDetail = href;
 
-        if (this.ownerCt._getState().viewDetail != href) {
-            this.ownerCt._getState().viewDetail = href;
+        if (this._getState().viewDetail != href) {
+            this._getState().viewDetail = href;
             Kwf.Utils.HistoryState.pushState(document.title, href);
         }
 
         this.hideDetail();
 
-        this.classNames = this.el.up('.kwcDirectoriesListViewAjax').dom.className;
+        var classNames = this.$el.closest('.kwcDirectoriesListViewAjax').attr('class');
 
         this.kwfMainContent.hide();
-        this.detailEl = this.el.createChild({
-            cls: 'kwfMainContent loadingContent ' +this.classNames,
-            tag: 'div',
-            style: 'width: ' + this.kwfMainContent.getStyle('width'),
-            html: '<div class="loading"></div>'
-        }, this.kwfMainContent);
-        Ext2.Ajax.request({
+
+            //style: 'width: ' + this.kwfMainContent.getStyle('width'),
+        this.detailEl = $('<div class="kwfMainContent loadingContent '+classNames+'""><div class="loading"></div></div>');
+        this.kwfMainContent.after(this.detailEl);
+
+        $.ajax({
             url: Kwf.getKwcRenderUrl(),
-            params: { url: href },
-            success: function(response, options) {
-                if (!this.detailEl) return;
-                this.detailEl.removeClass('loadingContent '+this.classNames);
-                this.detailEl.update(response.responseText);
-                Kwf.Statistics.count(href);
+            data: { url: 'http://'+location.host+href },
+            dataType: 'html'
+        }).done((function(data) {
+            if (!this.detailEl) return;
+            this.detailEl.removeClass('loadingContent '+classNames);
+            this.detailEl.html(data);
+            Kwf.Statistics.count(href);
 
-                var directoryUrl = href.match(/(.*)\/[^/]+/)[1];
-                this.detailEl.query('a').forEach(function(el) {
-                    if (el.href == directoryUrl) {
-                        el.kwfViewAjaxInitDone = true;
-                        Ext2.fly(el).on('click', function(ev) {
-                            ev.stopEvent();
-                            if (history.length > 1) {
-                                history.back(); //keeps scroll position
-                            } else {
-                                this.showView();
-                            }
-                        }, this);
-                    }
-                }, this);
+            var directoryUrl = href.match(/(.*)\/[^/]+/)[1];
+            this.detailEl.find('a').each((function(index, el) {
+                if ($(el).attr('href') == directoryUrl) {
+                    $(el).data('kwfViewAjaxInitDone', true);
+                    $(el).click((function(ev) {
+                        ev.preventDefault();
+                        if (history.length > 1) {
+                            history.back(); //keeps scroll position
+                        } else {
+                            this.showView();
+                        }
+                    }).bind(this));
+                }
+            }).bind(this));
 
-                Kwf.callOnContentReady(this.detailEl, {newRender: true});
-            },
-            scope: this
-        });
-    },
-
-    showView: function() {
-        if (!this.visibleDetail) return;
-        this.visibleDetail = null;
-
-        this.hideDetail();
-
-        this.kwfMainContent.show();
-
-        this.ownerCt.onMenuItemChanged();
+            Kwf.callOnContentReady(this.detailEl, {newRender: true});
+        }).bind(this));
     }
-});
 
+};

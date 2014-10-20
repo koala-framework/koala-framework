@@ -7,7 +7,6 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
 
         $ret['generators']['child']['component']['paging'] = 'Kwc_Directories_List_ViewAjax_Paging_Component';
 
-        $ret['assetsDefer']['dep'][] = 'KwfAutoGrid'; //TODO: less dep
         $ret['assetsDefer']['dep'][] = 'KwfHistoryState';
         $ret['assetsDefer']['dep'][] = 'KwfStatistics';
 
