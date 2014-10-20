@@ -398,7 +398,7 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
                 title: errorMsgTitle,
                 errorText: errorText,
                 mail: false,
-                checkRetry: true,
+                checkRetry: false,
                 retry: function() {
                     this.repeatRequest(options);
                 },
