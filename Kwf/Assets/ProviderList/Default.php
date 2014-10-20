@@ -22,6 +22,7 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $providers[] = new Kwf_Assets_Provider_ExtTrl();
         $providers[] = new Kwf_Assets_Provider_DefaultAssets();
         $providers[] = new Kwf_Assets_Provider_ErrorHandler();
+        $providers[] = new Kwf_Assets_Provider_AtRequires();
         parent::__construct($providers);
     }
 }
