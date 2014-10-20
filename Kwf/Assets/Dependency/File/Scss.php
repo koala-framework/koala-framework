@@ -31,9 +31,18 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             $useCache = true;
             $sourceTimes = unserialize(file_get_contents("$cacheFile.sourcetimes"));
             foreach ($sourceTimes as $i) {
-                if (!file_exists($i['file']) || filemtime($i['file']) != $i['mtime']) {
-                    $useCache = false;
-                    break;
+                if ($i['mtime']) {
+                    if (!file_exists($i['file']) || filemtime($i['file']) != $i['mtime']) {
+                        //file was modified or deleted
+                        $useCache = false;
+                        break;
+                    }
+                } else {
+                    if (file_exists($i['file'])) {
+                        //file didn't exist, was created
+                        $useCache = false;
+                        break;
+                    }
                 }
             }
         }
@@ -72,7 +81,13 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                 }
                 $map->sources[$k] = $f;
                 $sourceFiles[] = $f;
+                if (substr($f, 0, 16) == 'web/scss/config/') {
+                    $sourceFiles[] = 'kwf/sass/Kwf/stylesheets/config/'.substr($f, 16);
+                } else if (substr($f, 0, 32) == 'kwf/sass/Kwf/stylesheets/config/') {
+                    $sourceFiles[] = 'web/scss/config/'.substr($f, 32);
+                }
             }
+
             $map->file = $cacheFile;
             file_put_contents("$cacheFile.map", json_encode($map));
 
@@ -106,9 +121,10 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             $sourceTimes = array();
             foreach ($sourceFiles as $f) {
                 $f = new Kwf_Assets_Dependency_File($f);
+                $f = $f->getAbsoluteFileName();
                 $sourceTimes[] = array(
-                    'file' => $f->getAbsoluteFileName(),
-                    'mtime' => filemtime($f->getAbsoluteFileName())
+                    'file' => $f,
+                    'mtime' => file_exists($f) ? filemtime($f) : null
                 );
             }
             file_put_contents("$cacheFile.sourcetimes", serialize($sourceTimes));
