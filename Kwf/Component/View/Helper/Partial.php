@@ -26,7 +26,11 @@ class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
         $vars['data'] = $component;
 
         $renderer = $this->_getRenderer();
-        $tpl = $renderer->getTemplate($component, 'Partial');
+        if (isset($vars['template'])) {
+            $tpl = $vars['template'];
+        } else {
+            $tpl = $renderer->getTemplate($component, 'Partial');
+        }
         if (substr($tpl, -4) == '.tpl') {
             $view = new Kwf_Component_View($renderer);
             $view->assign($vars);

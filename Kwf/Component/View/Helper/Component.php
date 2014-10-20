@@ -18,7 +18,11 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
         $vars = $component->getComponent()->getTemplateVars($renderer);
         if (is_null($vars)) throw new Kwf_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
 
-        $tpl = $renderer->getTemplate($component, 'Component');
+        if (isset($vars['template'])) {
+            $tpl = $vars['template'];
+        } else {
+            $tpl = $renderer->getTemplate($component, 'Component');
+        }
         if (substr($tpl, -4) == '.tpl') {
             $view = new Kwf_Component_View($renderer);
             $view->assign($vars);

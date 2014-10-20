@@ -39,7 +39,7 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
     {
         $menu = $this->_getMenuSource();
         $ret = $menu->getComponent()->getTemplateVars();
-        $ret['includeTemplate'] = self::getTemplateFile($menu->componentClass);
+        $ret['template'] = self::getTemplateFile($menu->componentClass);
         return $ret;
     }
 

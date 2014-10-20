@@ -115,7 +115,7 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         $ret['data'] = $data;
         $ret['chained'] = $data->chained;
         if (!is_instance_of($data->chained->componentClass, 'Kwc_Chained_Abstract_Component')) {
-            $ret['linkTemplate'] = self::getTemplateFile($data->chained->componentClass);
+            $ret['template'] = self::getTemplateFile($data->chained->componentClass);
         }
 
         $ret['componentClass'] = get_class($this);
@@ -141,7 +141,7 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
     public function getPartialVars($partial, $nr, $info)
     {
         $ret = $this->getData()->chained->getComponent()->getPartialVars($partial, $nr, $info);
-        $ret['linkTemplate'] = self::getTemplateFile($this->getData()->chained->componentClass, 'Partial');
+        $ret['template'] = self::getTemplateFile($this->getData()->chained->componentClass, 'Partial');
         return $ret;
     }
 
