@@ -48,6 +48,7 @@ class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Abstract
                         $s->whereEquals('visible', true);
                     }
                 }
+                $s->order('pos');
                 $o = array(
                     'columns' => array('id', 'name')
                 );
