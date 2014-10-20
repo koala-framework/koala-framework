@@ -7,7 +7,7 @@ class Kwf_Component_Renderer_Twig_Helper
         $this->_renderer = $renderer;
     }
 
-    public function component(Kwf_Component_Data $component)
+    public function component(Kwf_Component_Data $component = null)
     {
         return new Twig_Markup($this->_renderer->getHelper('component')->component($component), 'utf-8');
     }
