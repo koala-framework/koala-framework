@@ -5,6 +5,9 @@ class Kwf_User_AuthAutoLogin_Test extends Kwf_Test_TestCase
     {
         parent::setUp();
         $this->_m = Kwf_Model_Abstract::getInstance('Kwf_User_AuthAutoLogin_FnF');
+        $row = $this->_m->getRow(1);
+        $row->autologin = 'AAA';
+        $row->save();
     }
 
     public function testGetAuth()
@@ -40,7 +43,7 @@ class Kwf_User_AuthAutoLogin_Test extends Kwf_Test_TestCase
         $authMethods = $this->_m->getAuthMethods();
         $auth = $authMethods['autoLogin'];
         $row = $this->_m->getRow(1);
-        $validToken = 'footokenxxx';
+        $validToken = $auth->generateAutoLoginToken($row);
         $this->assertTrue($auth->validateAutoLoginToken($row, $validToken));
         $this->assertFalse($auth->validateAutoLoginToken($row, 'bar'));
     }
@@ -52,7 +55,7 @@ class Kwf_User_AuthAutoLogin_Test extends Kwf_Test_TestCase
         $row = $this->_m->getRow(1);
 
         $oldAutologin = $row->autologin;
-        $oldToken = 'footokenxxx';
+        $oldToken = $auth->generateAutoLoginToken($row);
         $this->assertTrue($auth->validateAutoLoginToken($row, $oldToken));
 
         $token = $auth->generateAutoLoginToken($row);
