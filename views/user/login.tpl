@@ -14,7 +14,7 @@
             <img src="<?= $this->image ?>" width="<?= $this->imageSize['width'] ?>" height="<?= $this->imageSize['height'] ?>" />
         </div>
     <?php } else { ?>
-        <h1><?php echo $this->applicationName; ?> <?=trlKwf('Login')?></h1>
+        <h1><?php echo $this->applicationName; ?> Login</h1>
     <?php } ?>
 
     <?=$this->errorsHtml?>
