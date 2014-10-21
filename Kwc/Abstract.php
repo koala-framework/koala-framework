@@ -414,11 +414,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
      */
     public static function getTemplateFile($componentClass, $filename = 'Component')
     {
-        $ret = Kwc_Admin::getComponentFile($componentClass, $filename, 'twig');
-        if (!$ret) {
-            $ret = Kwc_Admin::getComponentFile($componentClass, $filename, 'tpl');
-        }
-        return $ret;
+        return Kwc_Admin::getComponentFile($componentClass, $filename, array('tpl', 'twig'));
     }
 
     /**

@@ -241,12 +241,9 @@ class Kwf_Component_Settings
                 }
             } else if ($setting == 'componentFiles') {
                 $ret = Kwf_Component_Abstract_Admin::getComponentFiles($class, array(
-                    'Master.tpl' => array('filename'=>'Master', 'ext'=>'tpl', 'returnClass'=>false),
-                    'Component.tpl' => array('filename'=>'Component', 'ext'=>'tpl', 'returnClass'=>false),
-                    'Partial.tpl' => array('filename'=>'Partial', 'ext'=>'tpl', 'returnClass'=>false),
-                    'Master.twig' => array('filename'=>'Master', 'ext'=>'twig', 'returnClass'=>false),
-                    'Component.twig' => array('filename'=>'Component', 'ext'=>'twig', 'returnClass'=>false),
-                    'Partial.twig' => array('filename'=>'Partial', 'ext'=>'twig', 'returnClass'=>false),
+                    'Master.tpl' => array('filename'=>'Master', 'ext'=>array('tpl', 'twig'), 'returnClass'=>false),
+                    'Component.tpl' => array('filename'=>'Component', 'ext'=>array('tpl', 'twig'), 'returnClass'=>false),
+                    'Partial.tpl' => array('filename'=>'Partial', 'ext'=>array('tpl', 'twig'), 'returnClass'=>false),
                     'Admin' => array('filename'=>'Admin', 'ext'=>'php', 'returnClass'=>true),
                     'Controller' => array('filename'=>'Controller', 'ext'=>'php', 'returnClass'=>true),
                     'FrontendForm' => array('filename'=>'FrontendForm', 'ext'=>'php', 'returnClass'=>true),
