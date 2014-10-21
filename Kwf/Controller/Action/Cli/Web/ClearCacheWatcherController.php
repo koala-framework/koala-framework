@@ -354,6 +354,19 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
+        } else if (self::_endsWith($file, '.twig')) {
+            $loader = new Twig_Loader_Filesystem('.');
+            $twig = new Twig_Environment($loader, array(
+                'cache' => 'cache/twig'
+            ));
+            $cacheFile = $file;
+            $cacheFile = substr($cacheFile, strlen(getcwd())+1);
+            $cacheFile = $twig->getCacheFilename($cacheFile);
+
+            if (file_exists($cacheFile)) {
+                unlink($cacheFile);
+                echo "cleared twig cache file '$cacheFile' for template '$file'\n";
+            }
         }
 
         if (self::_startsWith($file, getcwd().'/components')
@@ -409,6 +422,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                        self::_endsWith($file, '/Master.tpl') ||
                        self::_endsWith($file, '/Component.tpl') ||
                        self::_endsWith($file, '/Partial.tpl') ||
+                       self::_endsWith($file, '/Master.twig') ||
+                       self::_endsWith($file, '/Component.twig') ||
+                       self::_endsWith($file, '/Partial.twig') ||
                        self::_endsWith($file, '/Controller.php') ||
                        self::_endsWith($file, '/FrontendForm.php') ||
                        self::_endsWith($file, '/Form.php') ||
@@ -436,14 +452,14 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             } else if (self::_endsWith($file, '/Component.css') || self::_endsWith($file, '/Component.scss') || self::_endsWith($file, '/Component.printcss')) {
                 //MODIFY already handled above (assets)
                 //CREATE/DELETE also handled above
-            } else if (self::_endsWith($file, '/Master.tpl')) {
+            } else if (self::_endsWith($file, '/Master.tpl') || self::_endsWith($file, '/Master.twig')) {
                 if ($event == 'MODIFY') {
                     $s = new Kwf_Model_Select();
                     //all component_classes
                     $s->whereEquals('type', 'master');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Component.tpl')) {
+            } else if (self::_endsWith($file, '/Component.tpl') || self::_endsWith($file, '/Component.twig')) {
                 if ($event == 'MODIFY') {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
@@ -451,14 +467,14 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $s->whereEquals('renderer', 'component');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Partial.tpl')) {
+            } else if (self::_endsWith($file, '/Partial.tpl') || self::_endsWith($file, '/Partial.twig')) {
                 if ($event == 'MODIFY') {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
                     $s->whereEquals('type', 'partial');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Mail.html.tpl')) {
+            } else if (self::_endsWith($file, '/Mail.html.tpl') || self::_endsWith($file, '/Mail.html.twig')) {
                 if ($event == 'MODIFY') {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
@@ -466,7 +482,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $s->whereEquals('renderer', 'mail_html');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Mail.txt.tpl')) {
+            } else if (self::_endsWith($file, '/Mail.txt.tpl') || self::_endsWith($file, '/Mail.txt.twig')) {
                 if ($event == 'MODIFY') {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);

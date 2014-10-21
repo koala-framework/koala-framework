@@ -100,7 +100,7 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
 
         $ret = $menu->getComponent()->getTemplateVars();
 
-        $ret['includeTemplate'] = self::getTemplateFile($menu->componentClass);
+        $ret['template'] = self::getTemplateFile($menu->componentClass);
 
         $ret['subMenu'] = $this->getData()->getChildComponent('-subMenu');
 

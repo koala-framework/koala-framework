@@ -203,10 +203,14 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                 'text' => '{name}',
                 'preHtml' => '',
                 'postHtml' => '',
+                'last' => false
             );
             $class = array();
             if ($i == 0) { $class[] = 'first'; }
-            if ($i == count($pages)-1) { $class[] = 'last'; }
+            if ($i == count($pages)-1) {
+                $class[] = 'last';
+                $r['last'] = true;
+            }
             if ($r['data']->getDeviceVisible() != Kwf_Component_Data::DEVICE_VISIBLE_ALL) $class[] = $r['data']->getDeviceVisible();
             $r['class'] = implode(' ', $class);
             if (Kwc_Abstract::getFlag($p->componentClass, 'hasIsVisibleDynamic')) {

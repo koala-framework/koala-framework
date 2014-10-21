@@ -1,0 +1,27 @@
+{% if menu|length %}
+    <div class="{{ cssClass }}">
+        <input type="hidden" value="{{ config|json_encode() }}" />
+        <ul class="menu">
+            {% for m in menu %}
+                <li class="{{ m.class }}">
+                    {% block menuLink %}
+                    {{ renderer.componentLink(m.data) }}
+                    {% endblock %}
+                    {% if m.submenu is defined and m.submenu|length %}
+                        <div class="dropdown">
+                            <ul>
+                                {% for sm in m.submenu %}
+                                    <li class="{{ sm.class }}">
+                                        {% block subMenuLink %}
+                                        {{ renderer.componentLink(sm.data) }}
+                                        {% endblock %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

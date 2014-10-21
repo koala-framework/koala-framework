@@ -74,6 +74,12 @@ if (!is_dir('cache/uglifyjs')) {
     system("git add cache/uglifyjs/.gitignore");
     echo "folder \"cache/uglifyjs\" created\n";
 }
+if (!is_dir('cache/twig')) {
+    mkdir('cache/twig');
+    file_put_contents('cache/twig/.gitignore', "*\n!.gitignore\n");
+    system("git add cache/twig/.gitignore");
+    echo "folder \"cache/twig\" created\n";
+}
 
 deleteCacheFolder('cache/events');
 deleteCacheFolder('cache/table');
