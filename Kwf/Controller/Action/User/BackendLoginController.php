@@ -15,6 +15,8 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $this->view->applicationName = Kwf_Config::getValue('application.name');
         $this->view->brandingKoala = Kwf_Config::getValue('application.branding.koala');
         $this->view->brandingVividPlanet = Kwf_Config::getValue('application.branding.vividPlanet');
+        $this->view->pages = Kwf_Registry::get('acl')->has('kwf_component_pages');
+        $this->view->baseUrl = Kwf_Setup::getBaseUrl();
 
         try {
             $t = new Kwf_Util_Model_Welcome();
@@ -27,7 +29,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
             $this->view->image = Kwf_Media::getUrlByRow(
                     $row, 'LoginImageLarge', 'login'
             );
-            
+
             $this->view->imageSize = Kwf_Media_Image::calculateScaleDimensions(
                 $fileRow->getImageDimensions(),
                 Kwf_Util_Model_Welcome::getImageDimensions('LoginImageLarge')
