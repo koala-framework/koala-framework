@@ -60,6 +60,11 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
         return $token;
     }
 
+    public function isActivated(Kwf_Model_Row_Interface $row)
+    {
+        return $row->password != '';
+    }
+
     public function setMailTransport($value)
     {
         $this->_mailTransport = $value;
