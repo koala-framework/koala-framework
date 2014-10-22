@@ -134,7 +134,7 @@ class Kwf_Component_Abstract_Admin
                             $ret[$kFile][] = $i;
                         } else {
                             $ret[$kFile] = $i;
-                            continue 2;
+                            continue 3;
                         }
                     }
                 }
