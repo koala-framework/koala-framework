@@ -9,9 +9,9 @@
             {% for m in menu %}
                 {{ m.preHtml }}
                 <li class="{{ m.class }}">
-                    {% if is_instance_of(m.data, 'Kwc_Basic_LinkTag_FirstChildPage_Data') %}
+                    {% if m.isFirstChildPage %}
                         <p>{{ m.data.name|replace('{name}', m.data.name) }}</p>
-                    {% elseif %}
+                    {% else %}
                         {% block menuLink %}
                         {{ renderer.componentLink(m.data) }}
                         {% endblock %}
