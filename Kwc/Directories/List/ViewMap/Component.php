@@ -20,6 +20,7 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
             'scale' => 1,
             'satelite' => 1,
             'overview' => 1,
+            'useZoomPropertyForSingleMarker' => false,
 //             'minimumResolution' => 7, // min zoomstufe wenn nötig
 //             'maximumResolution' => 12, // max zoomstufe wenn nötig
             //'latitude' => 123, //optional, if not set center of shown cooridnates is used
@@ -33,10 +34,10 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         $ret = parent::getTemplateVars();
         $ret['options'] = $this->_getSetting('mapOptions');
         if ($this->getData()->getChildComponent('_coordinates')) {
+            $ret['options']['noMarkersOptions'] = $this->_noMarkersOptions();
             $ret['options'] = array_merge(
                 $ret['options'],
-                array('markers' => $this->getData()->getChildComponent('_coordinates')->getUrl()),
-                $this->_noMarkersOptions() //TODO: don't override lat/lng from mapOptions
+                array('markers' => $this->getData()->getChildComponent('_coordinates')->getUrl())
             );
         }
         return $ret;
