@@ -215,6 +215,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             this.$el.click((function(ev) {
                 var a = $(ev.target).closest('a');
                 if (!a.length) return;
+                if (!a.attr('rel')) return;
                 var m = a.attr('rel').match(/kwfDetail([^ ]+)/);
                 if (!m) return;
                 var config = $.parseJSON(m[1]);
