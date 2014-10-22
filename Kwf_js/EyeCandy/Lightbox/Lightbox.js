@@ -244,11 +244,13 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.lightboxEl.addClass('kwfLightboxOpen');
         if (this.fetched) {
             if (!this.lightboxEl.is(':visible')) {
+                this.lightboxEl.show();
+                Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
+                this.style.afterContentShown();
+                this.lightboxEl.hide();
                 this.lightboxEl.fadeIn();
                 this.preloadLinks();
-                Kwf.callOnContentReady(this.innerLightboxEl, {action: 'show'});
             }
-            this.style.afterContentShown();
         } else {
             this.lightboxEl.show();
             this.fetchContent();
@@ -424,6 +426,17 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         this._center(false);
     },
     afterContentShown: function() {
+
+        //reset to initial size so lightbox can grow
+        var initialSize = {
+            width: null,
+            height: null
+        };
+        if (this.lightbox.options.width) initialSize.width = this.lightbox.options.width;
+        if (this.lightbox.options.height) initialSize.height = this.lightbox.options.height;
+        this.lightbox.innerLightboxEl.css(initialSize);
+
+        this._resizeContent();
         this._center(false);
     },
     _getOuterMargin: function()
