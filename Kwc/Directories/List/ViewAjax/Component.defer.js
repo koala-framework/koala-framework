@@ -1,36 +1,36 @@
-Kwf.onJElementReady('a', function viewAjaxFilterLink(a) {
+ $(document).on('click', 'a', function(event) {
+    var a = $(event.currentTarget);
+
     if (a.data('kwfViewAjaxInitDone')) return; //ignore back link
 
     if (!a.attr('rel')) return;
     var m = a.attr('rel').match(/kwfViewAjaxFilter({.*?})/)
     if (m) {
         var config = $.parseJSON(m[1]);
-        a.data('kwfViewAjaxFilter', config);
 
-        if (!Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId]) Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId] = [];
-        Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId].push(a);
-
-        a.click(function(ev) {
-            var config = $(this).data('kwfViewAjaxFilter');
-            var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[config.viewComponentId];
-            if (!view) return;
-            view.loadView({
-                filterComponentId: config.componentId
-            });
-            if (view._getState().viewFilter != config.componentId) {
-                view._getState().viewFilter = config.componentId;
-                view._getState().menuLinkId = this.id;
-                Kwf.Utils.HistoryState.pushState(document.title, this.href);
-            }
-            $.each(Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId], function() {
-                $(this).removeClass('current');
-            });
-            $(this).addClass('current');
-
-            ev.preventDefault();
-
+        var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[config.viewComponentId];
+        if (!view) return;
+        view.loadView({
+            filterComponentId: config.componentId
         });
+        if (view._getState().viewFilter != config.componentId) {
+            view._getState().viewFilter = config.componentId;
+            view._getState().menuLinkId = this.id;
+            Kwf.Utils.HistoryState.pushState(document.title, this.href);
+        }
+
+        //TODO
+        //if (!Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId]) Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId] = [];
+        //Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId].push(a);
+        //$.each(Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId], function() {
+        //    $(this).removeClass('current');
+        //});
+        $(this).addClass('current');
+
+        event.preventDefault();
+
     }
+
 });
 
 Kwf.onJElementReady('.kwcDirectoriesListViewAjax', function viewAjax(el, config) {

@@ -1,37 +1,38 @@
 Kwf.namespace('Kwf.EyeCandy.Lightbox');
 
-Kwf.onJElementReady('a', function lightboxLink(el) {
-    var rel = el.attr('rel');
+$(document).on('click', 'a', function(event) {
+    var el = event.currentTarget;
+    var rel = el.rel;
     if (!rel) return;
     var m = rel.match(/(^lightbox| lightbox)({.*?})?/);
     if (m) {
         var options = {};
         if (m[2]) options = jQuery.parseJSON(m[2]);
         var l;
-        if (Kwf.EyeCandy.Lightbox.allByUrl[el.attr('href')]) {
-            l = Kwf.EyeCandy.Lightbox.allByUrl[el.attr('href')];
+        var $el = $(el);
+        if (Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')]) {
+            l = Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')];
         } else {
-            l = new Kwf.EyeCandy.Lightbox.Lightbox(el.attr('href'), options);
+            l = new Kwf.EyeCandy.Lightbox.Lightbox($el.attr('href'), options);
         }
-        el[0].kwfLightbox = l;
-        el.click(function(event) {
-            if (Kwf.EyeCandy.Lightbox.currentOpen &&
-                Kwf.EyeCandy.Lightbox.currentOpen.href == this.href
-            ) {
-                //already open, ignore click
-                event.preventDefault();
-                return;
-            }
-            this.kwfLightbox.show({
-                clickTarget: this
-            });
-            Kwf.Utils.HistoryState.currentState.lightbox = this.href;
-            Kwf.Utils.HistoryState.pushState(document.title, this.href);
+        el.kwfLightbox = l;
 
+        if (Kwf.EyeCandy.Lightbox.currentOpen &&
+            Kwf.EyeCandy.Lightbox.currentOpen.href == $el.attr('href')
+        ) {
+            //already open, ignore click
             event.preventDefault();
+            return;
+        }
+        this.kwfLightbox.show({
+            clickTarget: this
         });
+        Kwf.Utils.HistoryState.currentState.lightbox = this.href;
+        Kwf.Utils.HistoryState.pushState(document.title, this.href);
+
+        event.preventDefault();
     }
-}, { defer: true });
+});
 
 Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
