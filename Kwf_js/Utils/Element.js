@@ -26,7 +26,26 @@ Kwf.Utils.Element.getCachedWidth = function(e) {
 Kwf.Utils.Element.isVisible = function(el) {
     if (typeof Ext2 != 'undefined' && Ext2.Element && el instanceof Ext2.Element) el = el.dom;
     var t = Kwf.Utils.BenchmarkBox.now();
-    var ret = $(el).is(':visible');
+
+    /* variant 1: Ext2: has dependency on ext2
+    //var ret = Ext2.fly(el).isVisible();
+    */
+
+    /* variant 2: jquery: not always correct
+    //var ret = $(el).is(':visible');
+    */
+
+    /* variant 3: manuallycheck visiblity+display, basically what ext2 does */
+    var ret = true;
+    while (el && el.tagName.toLowerCase() != "body") {
+        var vis = !($(el).css('visibility') == 'hidden' || $(el).css('display') == 'none');
+        if (!vis) {
+            ret = false;
+            break;
+        }
+        el = el.parentNode;
+    }
+
     Kwf.Utils.BenchmarkBox.time('isVisible uncached', Kwf.Utils.BenchmarkBox.now()-t);
     return ret;
 };
