@@ -11,8 +11,8 @@
         "koala-framework/library-silkicons": "1.3",
         "koala-framework/library-htmlawed": "1.1.14",
         "koala-framework/library-css3pie": "1.0.0",
-        "koala-framework/kwf-modernizr": "dev-master",
-        "koala-framework/composer-extra-assets": "dev-master",
+        "koala-framework/kwf-modernizr": "3.8.x-dev",
+        "koala-framework/composer-extra-assets": "1.0.0",
         "twig/twig": "1.16.1"
     },
     "extra": {
