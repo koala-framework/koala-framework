@@ -159,6 +159,11 @@ Kwf.callOnContentReady = function(renderedEl, options)
 
         if (hndl.options.checkVisibility) {
             if (renderedEl != document.body && !Kwf.Utils.Element.isVisible(renderedEl)) {
+                if (options.action == 'render' && hndl.selector && elCacheBySelector[hndl.selector]) {
+                    //mark cache as dirty as we don't query (and update the selector) as the renderedEl is invisible
+                    //TODO don't always mark as dirty especially when we have multiple handlers with same selector
+                    elCacheBySelector[hndl.selector].dirty = true;
+                }
                 continue;
             }
             //if checkVisibility is activated, don't skip based on onActions as
@@ -196,7 +201,9 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
             }
         }
-        if (useSelectorCache && elCacheBySelector[hndl.selector]) {
+
+
+        if (useSelectorCache && elCacheBySelector[hndl.selector] && !elCacheBySelector[hndl.selector].dirty) {
             Kwf.Utils.BenchmarkBox.count('queryCache');
             var els = [];
             for (var j=0; j<elCacheBySelector[hndl.selector].length; j++) {
