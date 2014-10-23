@@ -141,7 +141,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     var html = false;
     for (var i = 0; i < readyElHandlers.length; i++) {
         var hndl = readyElHandlers[i];
-        if (options.handlerNum && options.handlerNum.indexOf(hndl.num) == -1) {
+        if (options.handlerNum && $.inArray(hndl.num, options.handlerNum) == -1) {
             continue;
         }
 

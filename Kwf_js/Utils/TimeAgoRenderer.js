@@ -83,7 +83,7 @@ Kwf.Utils.TimeAgo = {
             years < 2 && String.format($l.year, 1) ||
             String.format($l.years, Math.floor(years));
 
-        return [prefix, words, suffix].join(" ").trim();
+        return [prefix, words, suffix].join(" ").replace(/^\s+|\s+$/g, '');
     }
 };
 
