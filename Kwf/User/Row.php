@@ -79,6 +79,17 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         throw new Kwf_Exception();
     }
 
+    public function validatePassword($password)
+    {
+        foreach ($this->getModel()->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                 $ret = $auth->validatePassword($this, $password);
+                 if (!is_null($ret)) return $ret;
+            }
+        }
+        throw new Kwf_Exception();
+    }
+
     //moved to model
     protected final function _allowFrontendUrls()
     {}
