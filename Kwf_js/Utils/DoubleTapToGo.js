@@ -1,4 +1,4 @@
-Ext2.ns('Kwf.Utils');
+Kwf.namespace('Kwf.Utils');
 /*
     By Osvaldas Valutis, www.osvaldas.info
     Available for use under the MIT License
