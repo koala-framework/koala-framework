@@ -39,6 +39,24 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
         menuLink.parent().toggleClass('open');
     });
 
+    _.mixin({
+        mobileMenuPartial: function(item) {
+            var partial = _.template(
+                '<li class="<%= item.class %>">' +
+                    '<a href="<%= item.url %>"><%= item.name %></a>'+
+                    '<ul class="subMenu">'+
+                        '<% if (item.children && !_.isEmpty(item.children)) { %>'+
+                            '<% _.each(item.children, function(child) { %>'+
+                                '<%= _(child).mobileMenuPartial() %>'+
+                            '<% }) %>'+
+                        '<% } %>'+
+                    '</ul>'+
+                '</li>'
+            );
+            return partial({item: item});
+        }
+    });
+
     var getMenu = function() {
         if (!ajaxRequest) {
             ajaxRequest = $.getJSON(config.controllerUrl + '/json-index', {
@@ -46,34 +64,26 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
                 componentId: config.componentId,
                 kwfSessionToken: Kwf.sessionToken
             }, function(data) {
-                var tpl = '<div class="slider">\n' +
-                    '<ul class="menu">\n' +
-                        '{{#pages}}' +
-                            '<li class="{{class}}">\n' +
-                                '<a href="{{url}}">{{name}}</a>\n' +
-                                '<ul class="subMenu">\n' +
-                                    '{{#children}}' +
-                                        '{{> children}}\n' +
-                                    '{{/children}}' +
-                                '</ul>\n' +
-                            '</li>\n' +
-                        '{{/pages}}' +
-                    '</ul>\n' +
-                '</div>';
-                var partials = {
-                    children: '<li class="{{class}}">\n' +
-                        '<a href="{{url}}">{{name}}</a>\n' +
-                        '<ul class="subMenu">\n' +
-                            '{{#children}}' +
-                                '{{> children}}\n' +
-                            '{{/children}}' +
-                        '</ul>\n' +
-                    '</li>\n'
-                };
+                var tpl = _.template(
+                    '<div class="slider">' +
+                        '<ul class="menu">' +
+                            '<% _.each(pages, function(page) { %>'+
+                                '<li class="<%= page.class %>">' +
+                                '<a href="<%= page.url %>"><%= page.name %></a>'+
+                                    '<ul class="subMenu">' +
+                                        '<% _.each(page.children, function(child) { %>'+
+                                            '<%= _(child).mobileMenuPartial() %>'+
+                                        '<% }) %>'+
+                                    '</ul>'+
+                                '</li>'+
+                            '<% }) %>'+
+                        '</ul>'+
+                    '</div>'
+                );
                 //compatibility for old templates that don't contain slider element
                 if(el.find('.slider').length == 0) el.append('<div class="slider"></div>');
 
-                el.find('.slider').replaceWith(Mustache.render(tpl, data, partials));
+                el.find('.slider').replaceWith(tpl(data));
                 menu = el.find('ul.menu');
                 if (showMenuAfterLoad) {
                     menu.slideDown(slideDuration);

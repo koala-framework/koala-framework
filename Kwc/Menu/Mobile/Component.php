@@ -10,7 +10,7 @@ class Kwc_Menu_Mobile_Component extends Kwc_Abstract
 
         $ret['showSelectedPageInList'] = true;
         $ret['assetsDefer']['dep'][] = 'jQuery';
-        $ret['assetsDefer']['dep'][] = 'mustache';
+        $ret['assetsDefer']['dep'][] = 'underscore';
         return $ret;
     }
 
