@@ -1,5 +1,5 @@
-Kwf.onElementReady('.kwcAdvancedAudioPlayer', function(el, config) {
-    $(el.dom).children('audio').mediaelementplayer({
+Kwf.onJElementReady('.kwcAdvancedAudioPlayer', function(el, config) {
+    el.children('audio').mediaelementplayer({
         //custom path to flash
         flashName: '/assets/mediaelement/build/flashmediaelement.swf',
         // if the <audio width> is not specified, this is the default

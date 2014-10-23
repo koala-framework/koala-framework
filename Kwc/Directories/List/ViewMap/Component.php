@@ -4,8 +4,8 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['dep'][] = 'KwfGoogleMap';
-        $ret['assets']['dep'][] = 'ExtUtilJson';
+        $ret['assetsDefer']['dep'][] = 'KwfGoogleMap';
+        $ret['assetsDefer']['dep'][] = 'ExtUtilJson';
         $ret['generators']['child']['component']['paging'] = null;
         $ret['generators']['coordinates'] = array( // if removed markers are loaded directly
             'class'     => 'Kwf_Component_Generator_Page_Static',
