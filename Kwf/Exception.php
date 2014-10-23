@@ -27,6 +27,9 @@ class Kwf_Exception extends Kwf_Exception_NoLog
     public function logOrThrow()
     {
         if ($this->log()) {
+            if (php_sapi_name() == 'cli') {
+                file_put_contents('php://stderr', $this->__toString()."\n");
+            }
             return;
         }
         throw $this;
