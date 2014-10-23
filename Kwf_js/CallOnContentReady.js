@@ -169,7 +169,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
             //if checkVisibility is activated, don't skip based on onActions as
             //even a widthChange action could make an element visible (media queries)
         } else {
-            if (onActions.indexOf(hndl.onAction) == -1) {
+            if ($.inArray(hndl.onAction, onActions) == -1) {
                 continue;
             }
         }
@@ -221,7 +221,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 elCacheBySelector[hndl.selector] = els;
             } else {
                 for(var j=0; j<els.length; ++j) {
-                    if (elCacheBySelector[hndl.selector].indexOf(els[j]) == -1) {
+                    if ($.inArray(els[j], elCacheBySelector[hndl.selector]) == -1) {
                         elCacheBySelector[hndl.selector].push(els[j]);
                     }
                 }
