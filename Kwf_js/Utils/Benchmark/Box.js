@@ -167,8 +167,10 @@
         Kwf.Utils.BenchmarkBox.initBox(el);
     };
     $(function() {
-        $('body').find('.benchmarkBox').each(function(i, el) {
-            Kwf.Utils.BenchmarkBox.initBox($(el));
-        });
+        setTimeout(function() {
+            $('body').find('.benchmarkBox').each(function(i, el) {
+                Kwf.Utils.BenchmarkBox.initBox($(el));
+            });
+        }, 10);
     });
 })();
