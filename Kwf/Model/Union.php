@@ -91,14 +91,26 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
         if ($p = $select->getPart(Kwf_Model_Select::WHERE_EQUALS)) {
             foreach ($p as $f=>$v) {
-                if ($f == 'id') $v = substr($v, strlen($modelKey));
+                if ($f == 'id') {
+                    if (substr($v, 0, strlen($modelKey)) == $modelKey) {
+                        $v = substr($v, strlen($modelKey));
+                    } else {
+                        return null;
+                    }
+                }
                 $f = $this->_mapColumn($m, $f);
                 $s->whereEquals($f, $v);
             }
         }
         if ($p = $select->getPart(Kwf_Model_Select::WHERE_NOT_EQUALS)) {
             foreach ($p as $f=>$v) {
-                if ($f == 'id') $v = substr($v, strlen($modelKey));
+                if ($f == 'id') {
+                    if (substr($v, 0, strlen($modelKey)) != $modelKey) {
+                        continue;
+                    } else {
+                        $v = substr($v, strlen($modelKey));
+                    }
+                }
                 $f = $this->_mapColumn($m, $f);
                 $s->whereNotEquals($f, $v);
             }
