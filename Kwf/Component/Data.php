@@ -1458,4 +1458,9 @@ class Kwf_Component_Data
     {
         return $this->generator->getDeviceVisible($this);
     }
+
+    public function getLinkDataAttributes()
+    {
+        return array();
+    }
 }
