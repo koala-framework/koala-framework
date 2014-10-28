@@ -23,7 +23,7 @@ Kwf.Utils.Element.getCachedWidth = function(e) {
     }
     return ret;
 };
-Kwf.Utils.Element.isVisible = function(el) {
+Kwf.Utils.Element.isVisible = function elementIsVisible(el) {
     if (typeof Ext2 != 'undefined' && Ext2.Element && el instanceof Ext2.Element) el = el.dom;
     var t = Kwf.Utils.BenchmarkBox.now();
 

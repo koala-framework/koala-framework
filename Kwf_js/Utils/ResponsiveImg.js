@@ -120,7 +120,7 @@ function doesElementScroll(el) {
 function isElementInView(el) {
     var threshold = 200;
 
-    if (el.is(':hidden')) return false;
+    if (!Kwf.Utils.Element.isVisible(el[0])) return false;
 
     if (doesElementScroll(el)) {
         //if img is in a scrolling element always load it.
