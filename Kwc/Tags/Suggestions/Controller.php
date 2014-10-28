@@ -32,6 +32,7 @@ class Kwc_Tags_Suggestions_Controller extends Kwf_Controller_Action
 
             $componentToTagModel = Kwf_Model_Abstract::getInstance('Kwc_Tags_ComponentToTag');
             $select = new Kwf_Model_Select();
+            $select->whereEquals('component_id', $componentId);
             $select->whereEquals('tag_id', $tag->id);
             if (!$componentToTagModel->countRows($select)) {
                 $componentToTag = $componentToTagModel->createRow();
