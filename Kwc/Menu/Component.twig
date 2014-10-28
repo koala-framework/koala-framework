@@ -11,7 +11,7 @@
         {% endif %}
         <ul class="menu">
             {% for m in menu %}
-                {{ m.preHtml }}
+                {{ m.preHtml|raw }}
                 <li class="{{ m.class }}">
                     {% block menuLink %}
                     {{ renderer.componentLink(m.data, "#{linkPrefix}#{m.text}") }}
@@ -21,7 +21,7 @@
                         {{ renderer.component(subMenu) }}
                     {% endif %}
                 </li>
-                {{ m.postHtml }}
+                {{ m.postHtml|raw }}
             {% endfor %}
         </ul>
         <div class="clear"></div>
