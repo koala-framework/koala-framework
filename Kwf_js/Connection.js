@@ -389,7 +389,7 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
             errorMsg = trlKwf("A connection problem occured.");
             errorText = null;
         }
-        var checkRetry = false;
+        var retry = false;
         if (response.status == -1) {
             //request failed not beause of error response (eg 500) but because of eg. timeout
             //allow the user to retry the request
