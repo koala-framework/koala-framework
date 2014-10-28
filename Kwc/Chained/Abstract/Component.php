@@ -114,8 +114,15 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         $ret = $data->chained->getComponent()->getTemplateVars($renderer);
         $ret['data'] = $data;
         $ret['chained'] = $data->chained;
-        if (!is_instance_of($data->chained->componentClass, 'Kwc_Chained_Abstract_Component')) {
-            $ret['template'] = self::getTemplateFile($data->chained->componentClass);
+
+        $tmpl = self::getTemplateFile($data->componentClass);
+        if ($tmpl) {
+            $ret['template'] = $tmpl;
+        } else {
+            //doesn't have own template, use from chained
+            if (!isset($ret['template']) || !$ret['template']) {
+                $ret['template'] = self::getTemplateFile($data->chained->componentClass);
+            }
         }
 
         $ret['componentClass'] = get_class($this);
