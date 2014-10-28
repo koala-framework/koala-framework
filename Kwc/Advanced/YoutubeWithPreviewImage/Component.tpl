@@ -1,7 +1,7 @@
 <div class="<?=$this->cssClass?> ratio<?=$this->config['ratio']?>">
     <div class="outerYoutubeContainer">
         <div class="image">
-            <?=$this->component($this->image)?>
+            <?=$this->component($this->previewImage)?>
             <div class="playButton">
                 <div class="innerPlayButton">
                     <?=$this->data->trlKwf('Start Video')?>

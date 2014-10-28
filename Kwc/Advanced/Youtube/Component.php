@@ -20,7 +20,8 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
         $ret['playerVars'] = array(
             'rel' => 0,
             'iv_load_policy' => 3,
-            'wmode' => 'opaque'
+            'wmode' => 'opaque',
+            'showinfo' => '0'
         );
         return $ret;
     }
