@@ -1,9 +1,11 @@
-Kwf.onJElementReady('.cssClass', function youtubePlayer(el) {
+Kwf.onJElementReady('.cssClass .outerYoutubeContainer', function youtubePlayer(el) {
     var youtubeApiLoaded = false;
     var animationFinished = false;
     var imageEl = el.children('.image');
     var youtubeContainerEl = el.children('.youtubeContainer');
     var youtubePlayerEl = youtubeContainerEl.children('.youtubePlayer');
+    var loadingEl = youtubeContainerEl.children('.outerLoading');
+
 
     imageEl.click(function(ev) {
         Kwf.Utils.YoutubePlayer.load(function() {});
@@ -12,6 +14,7 @@ Kwf.onJElementReady('.cssClass', function youtubePlayer(el) {
             youtubePlayerEl.show();
             el.addClass('youtubeActive');
             Kwf.callOnContentReady(el.parent());
+            loadingEl.css('display', 'block');
         });
     });
 });
