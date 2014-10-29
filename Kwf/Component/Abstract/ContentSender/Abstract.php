@@ -17,6 +17,8 @@ abstract class Kwf_Component_Abstract_ContentSender_Abstract
      */
     public function getLinkRel() { return ''; }
 
+    public function getLinkDataAttributes() { return array(); }
+
     abstract public function sendContent($includeMaster);
 
     protected function _render($includeMaster, &$hasDynamicParts)

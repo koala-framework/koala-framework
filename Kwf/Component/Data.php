@@ -1461,6 +1461,15 @@ class Kwf_Component_Data
 
     public function getLinkDataAttributes()
     {
-        return array();
+        $ret = array();
+        if ($this->isPage()) {
+            $contentSender = Kwc_Abstract::getSetting($this->componentClass, 'contentSender');
+            if ($contentSender != 'Kwf_Component_Abstract_ContentSender_Default') { //skip for performance
+                $contentSender = new $contentSender($this);
+                $ret = $contentSender->getLinkDataAttributes();
+            }
+        }
+        return $ret;
+
     }
 }
