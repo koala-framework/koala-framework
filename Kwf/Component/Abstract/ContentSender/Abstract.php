@@ -11,12 +11,10 @@ abstract class Kwf_Component_Abstract_ContentSender_Abstract
     }
 
     /**
-     * returned rel will be added to rel of data for component that uses this ContentSender
+     * returned attributes will be added to link for component that uses this ContentSender
      *
      * used for Lightbox
      */
-    public function getLinkRel() { return ''; }
-
     public function getLinkDataAttributes() { return array(); }
 
     abstract public function sendContent($includeMaster);

@@ -212,11 +212,6 @@ class Kwf_Component_Data
             if (/*$childs || */Kwf_Component_Abstract::getFlag($this->getPage()->componentClass, 'noIndex')) {
                 $rel .= ' nofollow';
             }
-            $contentSender = Kwc_Abstract::getSetting($page->componentClass, 'contentSender');
-            if ($contentSender != 'Kwf_Component_Abstract_ContentSender_Default') { //skip for performance
-                $contentSender = new $contentSender($page);
-                $rel .= ' '.$contentSender->getLinkRel();
-            }
             return trim($rel);
         } else if ($var == 'filename') {
             return rawurlencode($this->getPseudoPageOrRoot()->_filename);
