@@ -12,6 +12,10 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         } else if ($this->_getParam('pageId')) {
             $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('pageId'));
             $pages = $this->_getChildPagesRecursive(array($component), 2);
+            foreach ($pages as $k=>$p) {
+                unset($pages[$k]['name']);
+                unset($pages[$k]['url']);
+            }
         }
         if ($data === false) {
             $data = array(
@@ -22,7 +26,6 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                     'pages' => $pages
                 ))
             );
-            Kwf_Cache_Simple::add($cacheId, $data);
         }
 
         Kwf_Media_Output::output($data);
@@ -75,9 +78,9 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                 $ret[$i]['id'] = $page->componentId;
                 if ($levels > 0) {
                     $ret[$i]['children'] = $this->_getChildPagesRecursive($page, $levels);
-                    $ret[$i]['hasChildren'] = empty($ret[$i]['children']);
+                    $ret[$i]['hasChildren'] = !empty($ret[$i]['children']);
                 } else {
-                    foreach($component->getChildPages(array('showInMenu'=>true)) as $page) {
+                    foreach($page->getChildPages(array('showInMenu'=>true)) as $page) {
                         if ($page->getDeviceVisible() == Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE
                         ) {
                             continue;
@@ -86,6 +89,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                         break;
                     }
                 }
+
                 if ($this->_showSelectedPageInList && !empty($ret[$i]['children']) &&
                     !is_instance_of($page->componentClass, 'Kwc_Basic_LinkTag_FirstChildPage_Component')) {
                     array_unshift($ret[$i]['children'], array(
