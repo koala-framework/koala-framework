@@ -83,12 +83,10 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
         }
     }
 
-    public function getLinkRel()
+    public function getLinkDataAttributes()
     {
-        $ret = 'lightbox';
-        if ($options = $this->_getOptions()) {
-            $ret .= json_encode($options);
-        }
+        $ret = parent::getLinkDataAttributes();
+        $ret['kwc-lightbox'] = json_encode((object)$this->_getOptions());
         return $ret;
     }
 }
