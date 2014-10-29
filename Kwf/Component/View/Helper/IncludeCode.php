@@ -74,9 +74,11 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
 
             //see http://nexxar.wordpress.com/2010/10/07/speeding-up-jquery-ready-on-ie/
             $ret .= "\n";
+            $ret .= "<!--[if lt IE 9]><!-->\n";
             $ret .= "<script type=\"text/javascript\">\n";
-            $ret .= "    if (Ext2 && Ext2.isIE8 && jQuery) jQuery.ready();\n";
+            $ret .= "    jQuery.ready();\n";
             $ret .= "</script>\n";
+            $ret .= "<!--<![endif]-->\n";
 
         }
         return $ret;

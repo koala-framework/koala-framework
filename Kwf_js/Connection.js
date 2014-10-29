@@ -389,6 +389,16 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
             errorMsg = trlKwf("A connection problem occured.");
             errorText = null;
         }
+        var retry = false;
+        if (response.status == -1) {
+            //request failed not beause of error response (eg 500) but because of eg. timeout
+            //allow the user to retry the request
+            retry = true;
+        } else {
+            //request failed because of error response (eg 500), don't allow the user to
+            //retry as it would result in the same error again
+            //however if displayErrors is enabled (during development) retry is possible (this is handled in Kwf.handleError)
+        }
         if (options.ignoreErrors) {
             Ext2.callback(options.kwfCallback.failure, options.kwfCallback.scope, [response, options]);
         } else {
@@ -398,7 +408,7 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
                 title: errorMsgTitle,
                 errorText: errorText,
                 mail: false,
-                checkRetry: true,
+                checkRetry: retry,
                 retry: function() {
                     this.repeatRequest(options);
                 },

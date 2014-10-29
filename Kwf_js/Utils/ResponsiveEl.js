@@ -13,7 +13,8 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
             var changed = false;
             var elWidth = Kwf.Utils.Element.getCachedWidth(el);
             if (!elWidth) return;
-            widths.each(function(w) {
+            for (var i=0; i<widths.length; i++) {
+                var w = widths[i];
                 if (typeof w != 'object') {
                     w = {
                         higherWidth: w,
@@ -41,7 +42,7 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
                         changed = true;
                     }
                 }
-            }, this);
+            }
             if (changed) {
                 Kwf.callOnContentReady(el, { action: 'widthChange' });
             }

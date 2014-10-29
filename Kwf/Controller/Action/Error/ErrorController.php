@@ -33,6 +33,8 @@ class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
         $exception = $errors->exception;
         if ($exception instanceof Kwf_Exception_Abstract) {
             $this->getResponse()->setRawHeader($exception->getHeader());
+        } else {
+            $this->getResponse()->setRawHeader('HTTP/1.1 500 Internal Server Error');
         }
         if ($exception instanceof Kwf_Exception_Client) {
             $this->view->error = $exception->getMessage();

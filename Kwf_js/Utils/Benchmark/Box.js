@@ -153,8 +153,8 @@
                 return j.duration-i.duration;
             });
             subArray = subArray.slice(0, 5); //only top 5
-            subArray.each(function(i) {
-                html += '&nbsp;&nbsp;'+i.name+' '+i.count+' ('+(Math.round(i.duration*100)/100)+'ms)<br />';
+            $.each(subArray, function() {
+                html += '&nbsp;&nbsp;'+this.name+' '+this.count+' ('+(Math.round(this.duration*100)/100)+'ms)<br />';
             });
         }
         Kwf.Utils.BenchmarkBox._counters = {};
@@ -167,8 +167,10 @@
         Kwf.Utils.BenchmarkBox.initBox(el);
     };
     $(function() {
-        $('body').find('.benchmarkBox').each(function(i, el) {
-            Kwf.Utils.BenchmarkBox.initBox($(el));
-        });
+        setTimeout(function() {
+            $('body').find('.benchmarkBox').each(function(i, el) {
+                Kwf.Utils.BenchmarkBox.initBox($(el));
+            });
+        }, 10);
     });
 })();

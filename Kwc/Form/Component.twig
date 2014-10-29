@@ -24,7 +24,9 @@
     <form action="{{ action }}" method="{{ method }}"{% if isUpload %} enctype="multipart/form-data"{% endif %}>
 
         {% block content %}
-            {{ renderer.formField(form) }}
+            {% if form %}
+                {{ renderer.formField(form) }}
+            {% endif %}
         {% endblock %}
 
         {% if method != 'get' %}

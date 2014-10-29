@@ -10,6 +10,8 @@ class Kwf_Assets_Provider_AtRequires extends Kwf_Assets_Provider_Abstract
     {
         $deps = array();
 
+        if ($dependency->getMimeType() != 'text/javascript') return $deps;
+
         $fileContents = $dependency->getContents('en');
 
         // remove comments to avoid dependencies from docs/examples

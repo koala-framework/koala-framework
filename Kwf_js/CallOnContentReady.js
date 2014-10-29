@@ -141,7 +141,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     var html = false;
     for (var i = 0; i < readyElHandlers.length; i++) {
         var hndl = readyElHandlers[i];
-        if (options.handlerNum && options.handlerNum.indexOf(hndl.num) == -1) {
+        if (options.handlerNum && $.inArray(hndl.num, options.handlerNum) == -1) {
             continue;
         }
 
@@ -159,12 +159,17 @@ Kwf.callOnContentReady = function(renderedEl, options)
 
         if (hndl.options.checkVisibility) {
             if (renderedEl != document.body && !Kwf.Utils.Element.isVisible(renderedEl)) {
+                if (options.action == 'render' && hndl.selector && elCacheBySelector[hndl.selector]) {
+                    //mark cache as dirty as we don't query (and update the selector) as the renderedEl is invisible
+                    //TODO don't always mark as dirty especially when we have multiple handlers with same selector
+                    elCacheBySelector[hndl.selector].dirty = true;
+                }
                 continue;
             }
             //if checkVisibility is activated, don't skip based on onActions as
             //even a widthChange action could make an element visible (media queries)
         } else {
-            if (onActions.indexOf(hndl.onAction) == -1) {
+            if ($.inArray(hndl.onAction, onActions) == -1) {
                 continue;
             }
         }
@@ -196,7 +201,9 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
             }
         }
-        if (useSelectorCache && elCacheBySelector[hndl.selector]) {
+
+
+        if (useSelectorCache && elCacheBySelector[hndl.selector] && !elCacheBySelector[hndl.selector].dirty) {
             Kwf.Utils.BenchmarkBox.count('queryCache');
             var els = [];
             for (var j=0; j<elCacheBySelector[hndl.selector].length; j++) {
@@ -214,7 +221,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 elCacheBySelector[hndl.selector] = els;
             } else {
                 for(var j=0; j<els.length; ++j) {
-                    if (elCacheBySelector[hndl.selector].indexOf(els[j]) == -1) {
+                    if ($.inArray(els[j], elCacheBySelector[hndl.selector]) == -1) {
                         elCacheBySelector[hndl.selector].push(els[j]);
                     }
                 }

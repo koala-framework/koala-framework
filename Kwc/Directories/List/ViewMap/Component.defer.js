@@ -19,8 +19,15 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
         if (typeof cfg.markers == 'object') cfg.markers.push(mdata);
         cfg.lightMarkers.push(mdata);
     });
-
+    if (!cfg.lightMarkers.length) {
+        cfg = cfg.concat(cfg.noMarkersOptions);
+    }
     // mittelpunkt und zoom für die marker finden
+    var useBounds = true;
+    if ((!cfg.useZoomPropertyForSingleMarker && cfg.zoom) ||
+        (cfg.useZoomPropertyForSingleMarker && cfg.lightMarkers.length <= 1)) {
+        useBounds = false;
+    }
     if (cfg.lightMarkers.length) {
         var lowestLat = null;
         var highestLat = null;
@@ -41,9 +48,8 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
             }
         });
     }
-
     if (lowestLng && highestLng && lowestLat && highestLat) {
-        if (!cfg.zoom) {
+        if (useBounds) {
             cfg.zoom = [ highestLat, highestLng, lowestLat, lowestLng ];
         }
         if (!cfg.longitude) {

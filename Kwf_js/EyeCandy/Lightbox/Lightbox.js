@@ -1,37 +1,38 @@
 Kwf.namespace('Kwf.EyeCandy.Lightbox');
 
-Kwf.onJElementReady('a', function lightboxLink(el) {
-    var rel = el.attr('rel');
+$(document).on('click', 'a', function(event) {
+    var el = event.currentTarget;
+    var rel = el.rel;
     if (!rel) return;
     var m = rel.match(/(^lightbox| lightbox)({.*?})?/);
     if (m) {
         var options = {};
         if (m[2]) options = jQuery.parseJSON(m[2]);
         var l;
-        if (Kwf.EyeCandy.Lightbox.allByUrl[el.attr('href')]) {
-            l = Kwf.EyeCandy.Lightbox.allByUrl[el.attr('href')];
+        var $el = $(el);
+        if (Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')]) {
+            l = Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')];
         } else {
-            l = new Kwf.EyeCandy.Lightbox.Lightbox(el.attr('href'), options);
+            l = new Kwf.EyeCandy.Lightbox.Lightbox($el.attr('href'), options);
         }
-        el[0].kwfLightbox = l;
-        el.click(function(event) {
-            if (Kwf.EyeCandy.Lightbox.currentOpen &&
-                Kwf.EyeCandy.Lightbox.currentOpen.href == this.href
-            ) {
-                //already open, ignore click
-                event.preventDefault();
-                return;
-            }
-            this.kwfLightbox.show({
-                clickTarget: this
-            });
-            Kwf.Utils.HistoryState.currentState.lightbox = this.href;
-            Kwf.Utils.HistoryState.pushState(document.title, this.href);
+        el.kwfLightbox = l;
 
+        if (Kwf.EyeCandy.Lightbox.currentOpen &&
+            Kwf.EyeCandy.Lightbox.currentOpen.href == $el.attr('href')
+        ) {
+            //already open, ignore click
             event.preventDefault();
+            return;
+        }
+        this.kwfLightbox.show({
+            clickTarget: this
         });
+        Kwf.Utils.HistoryState.currentState.lightbox = this.href;
+        Kwf.Utils.HistoryState.pushState(document.title, this.href);
+
+        event.preventDefault();
     }
-}, { defer: true });
+});
 
 Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
@@ -244,11 +245,13 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.lightboxEl.addClass('kwfLightboxOpen');
         if (this.fetched) {
             if (!this.lightboxEl.is(':visible')) {
+                this.lightboxEl.show();
+                Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
+                this.style.afterContentShown();
+                this.lightboxEl.hide();
                 this.lightboxEl.fadeIn();
                 this.preloadLinks();
-                Kwf.callOnContentReady(this.innerLightboxEl, {action: 'show'});
             }
-            this.style.afterContentShown();
         } else {
             this.lightboxEl.show();
             this.fetchContent();
@@ -424,6 +427,17 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         this._center(false);
     },
     afterContentShown: function() {
+
+        //reset to initial size so lightbox can grow
+        var initialSize = {
+            width: null,
+            height: null
+        };
+        if (this.lightbox.options.width) initialSize.width = this.lightbox.options.width;
+        if (this.lightbox.options.height) initialSize.height = this.lightbox.options.height;
+        this.lightbox.innerLightboxEl.css(initialSize);
+
+        this._resizeContent();
         this._center(false);
     },
     _getOuterMargin: function()

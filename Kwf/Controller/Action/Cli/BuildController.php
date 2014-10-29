@@ -66,17 +66,26 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
         $packages = array(
             Kwf_Assets_Package_Default::getInstance('Frontend'),
         );
+        $mimeTypes = array(
+            'text/javascript',
+            'text/javascript; defer',
+            'text/css',
+            'text/css; defer',
+        );
 
         foreach ($packages as $p) {
-            echo "\n".$p->getDependencyName()."\n";
-            foreach ($p->getFilteredUniqueDependencies('text/javascript') as $i) {
-                $sizes[(string)$i] = strlen(gzencode($i->getContentsPacked('en'), 9, FORCE_GZIP));
-            }
-            arsort($sizes);
-            $sumSize = array_sum($sizes);
-            $topSizes = array_slice($sizes, 0, 10);
-            foreach ($topSizes as $name=>$size) {
-                echo "".str_pad(number_format(round(($size/$sumSize)*100, 1), 1).'%', 5).' '.str_pad(Kwf_View_Helper_FileSize::fileSize($size), 10)." $name\n";
+            foreach ($mimeTypes as $mimeType) {
+                $sizes = array();
+                echo "\n".$p->getDependencyName()." $mimeType\n";
+                foreach ($p->getFilteredUniqueDependencies($mimeType) as $i) {
+                    $sizes[(string)$i] = strlen(gzencode($i->getContentsPacked('en'), 9, FORCE_GZIP));
+                }
+                arsort($sizes);
+                $sumSize = array_sum($sizes);
+                $topSizes = array_slice($sizes, 0, 10);
+                foreach ($topSizes as $name=>$size) {
+                    echo "".str_pad(number_format(round(($size/$sumSize)*100, 1), 1).'%', 5).' '.str_pad(Kwf_View_Helper_FileSize::fileSize($size), 10)." $name\n";
+                }
             }
         }
     }

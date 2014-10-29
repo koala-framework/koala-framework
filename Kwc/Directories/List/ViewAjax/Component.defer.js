@@ -1,36 +1,50 @@
-Kwf.onJElementReady('a', function viewAjaxFilterLink(a) {
+(function() {
+
+var uniqueIdCnt = 0;
+function getUniqueIdForFilterLink(el) {
+    if (!el.id) {
+        uniqueIdCnt++;
+        el.id = 'filterLink'+uniqueIdCnt;
+    }
+    return el.id;
+}
+
+$(document).on('click', 'a', function(event) {
+    var a = $(event.currentTarget);
+
     if (a.data('kwfViewAjaxInitDone')) return; //ignore back link
 
     if (!a.attr('rel')) return;
-    var m = a.attr('rel').match(/kwfViewAjaxFilter({.*?})/)
+    var m = a.attr('rel').match(/kwfViewAjaxFilter({.*?})/);
     if (m) {
         var config = $.parseJSON(m[1]);
-        a.data('kwfViewAjaxFilter', config);
 
-        if (!Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId]) Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId] = [];
-        Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId].push(a);
-
-        a.click(function(ev) {
-            var config = $(this).data('kwfViewAjaxFilter');
-            var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[config.viewComponentId];
-            if (!view) return;
-            view.loadView({
-                filterComponentId: config.componentId
-            });
-            if (view._getState().viewFilter != config.componentId) {
-                view._getState().viewFilter = config.componentId;
-                view._getState().menuLinkId = this.id;
-                Kwf.Utils.HistoryState.pushState(document.title, this.href);
-            }
-            $.each(Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId], function() {
-                $(this).removeClass('current');
-            });
-            $(this).addClass('current');
-
-            ev.preventDefault();
-
+        var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[config.viewComponentId];
+        if (!view) return;
+        view.loadView({
+            filterComponentId: config.componentId
         });
+        if (view._getState().viewFilter != config.componentId) {
+            view._getState().viewFilter = config.componentId;
+            view._getState().menuLinkId = getUniqueIdForFilterLink(this);
+            Kwf.Utils.HistoryState.pushState(document.title, this.href);
+        }
+
+        $('a[rel*=kwfViewAjaxFilter]').each(function() {
+            var m = this.rel.match(/kwfViewAjaxFilter({.*?})/);
+            if (m) {
+                var config = $.parseJSON(m[1]);
+                if (config.viewComponentId == view.componentId) {
+                    $(this).removeClass('current');
+                }
+            }
+        });
+        $(this).addClass('current');
+
+        event.preventDefault();
+
     }
+
 });
 
 Kwf.onJElementReady('.kwcDirectoriesListViewAjax', function viewAjax(el, config) {
@@ -84,7 +98,6 @@ Kwc.Directories.List.ViewAjax = function(config) {
 
 Kwc.Directories.List.ViewAjax.byComponentId = {};
 Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId = {};
-Kwc.Directories.List.ViewAjax.filterLinks = {};
 
 Kwc.Directories.List.ViewAjax.prototype = {
 
@@ -146,14 +159,16 @@ Kwc.Directories.List.ViewAjax.prototype = {
             this._getState().searchFormValues = this.searchForm.getValues();
         }
 
-        if (!Kwc.Directories.List.ViewAjax.filterLinks[this.componentId]) {
-            Kwc.Directories.List.ViewAjax.filterLinks[this.componentId] = [];
-        }
-
         //set menuLinkId to link that is current, be be able to set current again
-        $.each(Kwc.Directories.List.ViewAjax.filterLinks[this.componentId], (function(idx, i) {
-            if ($(i).hasClass('current')) {
-                this._getState().menuLinkId = i.id;
+        $('a[rel*=kwfViewAjaxFilter]').each((function(index, linkEl) {
+            var m = linkEl.rel.match(/kwfViewAjaxFilter({.*?})/);
+            if (m) {
+                var config = $.parseJSON(m[1]);
+                if (config.viewComponentId == this.componentId) {
+                    if ($(linkEl).hasClass('current')) {
+                        this._getState().menuLinkId = getUniqueIdForFilterLink(linkEl);
+                    }
+                }
             }
         }).bind(this));
 
@@ -178,7 +193,9 @@ Kwc.Directories.List.ViewAjax.prototype = {
                     filterComponentId: this._getState().viewFilter
                 });
             } else {
-                this.loadView({});
+                this.loadView({
+                    filterComponentId: null
+                });
             }
             //commented out because it should work without manual scrolling (browser should restore scroll position)
             //but if it fails in real-world we can re-enable it
@@ -186,9 +203,16 @@ Kwc.Directories.List.ViewAjax.prototype = {
             //    $(window).scrollTop(this._lastViewScrollPosition);
             //}
             if (this._getState().menuLinkId) {
-                $.each(Kwc.Directories.List.ViewAjax.filterLinks[this.componentId], function() {
-                    $(this).removeClass('current');
-                });
+                $('a[rel*=kwfViewAjaxFilter]').each((function(i, el) {
+                    var m = el.rel.match(/kwfViewAjaxFilter({.*?})/);
+                    if (m) {
+                        var config = $.parseJSON(m[1]);
+                        if (config.viewComponentId == this.componentId) {
+                            $(el).removeClass('current');
+                        }
+                    }
+                }).bind(this));
+
                 var el = $('#'+this._getState().menuLinkId);
                 if (el) {
                     el.addClass('current');
@@ -215,6 +239,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             this.$el.click((function(ev) {
                 var a = $(ev.target).closest('a');
                 if (!a.length) return;
+                if (!a.attr('rel')) return;
                 var m = a.attr('rel').match(/kwfDetail([^ ]+)/);
                 if (!m) return;
                 var config = $.parseJSON(m[1]);
@@ -260,9 +285,9 @@ Kwc.Directories.List.ViewAjax.prototype = {
         return Kwf.Utils.HistoryState.currentState.viewAjax[this.componentId];
     },
 
-    loadView: function()
+    loadView: function(params)
     {
-        var params = {};
+        if (!params) params = {};
         if (this.searchForm) {
             $.extend(params, this.searchForm.getValues());
         }
@@ -394,3 +419,5 @@ Kwc.Directories.List.ViewAjax.prototype = {
     }
 
 };
+
+})();
