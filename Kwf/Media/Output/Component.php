@@ -139,8 +139,13 @@ class Kwf_Media_Output_Component
             //$ret can be VALID or VALID_DONT_CACHE at this point
 
             $plugins = array();
+            $onlyInherit = false;
             while ($c) {
-                foreach (Kwc_Abstract::getSetting($c->componentClass, 'plugins') as $plugin) {
+                $p = Kwc_Abstract::getSetting($c->componentClass, 'pluginsInherit');
+                if (!$onlyInherit) {
+                    $p = array_merge($p, Kwc_Abstract::getSetting($c->componentClass, 'plugins'));
+                }
+                foreach ($p as $plugin) {
                     if (is_instance_of($plugin, 'Kwf_Component_Plugin_Interface_Login')) {
                         $plugins[] = array(
                             'plugin' => $plugin,
@@ -148,7 +153,9 @@ class Kwf_Media_Output_Component
                         );
                     }
                 }
-                if ($c->isPage) break;
+                if ($c->isPage) {
+                    $onlyInherit = true;
+                }
                 $c = $c->parent;
             }
 
@@ -165,7 +172,8 @@ class Kwf_Media_Output_Component
                 $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
             } else {
                 $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id);
-                if (Kwf_Registry::get('acl')->isAllowedComponentById($id, $c->componentClass, Kwf_Registry::get('userModel')->getAuthedUser())) {
+                $userModel = Kwf_Registry::get('userModel');
+                if (Kwf_Registry::get('acl')->isAllowedComponentById($id, $c->componentClass, $userModel ? $userModel->getAuthedUser() : null)) {
                     //allow preview in backend always
                     $ret = Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE;
                 } else {
