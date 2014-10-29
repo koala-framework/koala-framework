@@ -57,4 +57,8 @@ class Kwc_Basic_LinkTag_Intern_Data extends Kwf_Component_Data
         }
     }
 
+    public function getLinkDataAttributes()
+    {
+        return $this->getLinkedData()->getLinkDataAttributes();
+    }
 }

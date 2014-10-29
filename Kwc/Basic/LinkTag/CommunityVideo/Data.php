@@ -21,4 +21,10 @@ class Kwc_Basic_LinkTag_CommunityVideo_Data extends Kwf_Component_Data
             return parent::__get($var);
         }
     }
+
+    public function getLinkDataAttributes()
+    {
+        if (!$this->_getLinkData()->getComponent()->hasContent()) return array();
+        return $this->chained->getLinkDataAttributes();
+    }
 }

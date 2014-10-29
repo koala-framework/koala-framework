@@ -17,7 +17,7 @@ class Kwc_Basic_LinkTagExtern_Test extends Kwc_TestAbstract
 
         $c = $this->_root->getComponentById(1201);
         $this->assertEquals('http://example.com', $c->url);
-        $this->assertEquals('popup_blank', $c->rel);
+        $this->assertEquals(array('kwc-popup'=>'blank'), $c->getLinkDataAttributes());
 
         $c = $this->_root->getComponentById(1202);
         $this->assertEquals('http://example.com', $c->url);
@@ -29,6 +29,6 @@ class Kwc_Basic_LinkTagExtern_Test extends Kwc_TestAbstract
         $this->assertRegExp('#<a .*?href="http://example.com">#', $html);
 
         $html = $this->_root->getComponentById(1201)->render();
-        $this->assertRegExp('#<a .*?href="http://example.com" rel="popup_blank">#', $html);
+        $this->assertRegExp('#<a .*?href="http://example.com" data-kwc-popup="blank">#', $html);
     }
 }

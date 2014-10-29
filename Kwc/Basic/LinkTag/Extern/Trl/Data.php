@@ -30,4 +30,9 @@ class Kwc_Basic_LinkTag_Extern_Trl_Data extends Kwf_Component_Data
     {
         return $this->url;
     }
+
+    public function getLinkDataAttributes()
+    {
+        return $this->chained->getLinkDataAttributes();
+    }
 }

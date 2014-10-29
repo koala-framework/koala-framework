@@ -36,4 +36,10 @@ class Kwc_Basic_LinkTag_FirstChildPage_Data extends Kwf_Component_Data
         }
         return $this->_pageCache;
     }
+
+    public function getLinkDataAttributes()
+    {
+        return $this->_getFirstChildPage()->getLinkDataAttributes();
+    }
+
 }

@@ -210,7 +210,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
 
         $html = $c->getData()->render();
         $this->assertRegExp("#^<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
-                    "<p>\n  <a .*?href=\"/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Download_TestComponent/1012-d1/default/[^/]+/[0-9]+/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
+                    "<p>\n  <a .*?href=\"/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Download_TestComponent/1012-d1/default/[^/]+/[0-9]+/foo.png\" data-kwc-popup=\"blank\">foo</a>\n</p>".
                     "</div>$#ms", $html);
     }
 
