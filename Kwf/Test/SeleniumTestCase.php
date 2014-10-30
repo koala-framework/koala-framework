@@ -158,7 +158,8 @@ class Kwf_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function waitForConnections()
     {
-        $this->waitForCondition('selenium.browserbot.getCurrentWindow().Kwf.Connection.runningRequests==0 && selenium.browserbot.getCurrentWindow().$.active==0');
+        $this->waitForCondition('selenium.browserbot.getCurrentWindow().Kwf.Connection.runningRequests==0'.
+            ' && (!selenium.browserbot.getCurrentWindow().$ || typeof selenium.browserbot.getCurrentWindow().$.active == "undefined" || selenium.browserbot.getCurrentWindow().$.active==0)');
         $this->defaultAssertions('waitForConnections');
     }
 
