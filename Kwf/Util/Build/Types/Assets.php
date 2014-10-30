@@ -8,16 +8,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         'printcss' => 'text/css; media=print'
     );
 
-    public function checkRequirements()
-    {
-        $sassc = Kwf_Config::getValue('server.sassc');
-        exec("$sassc -h 2>&1", $out, $retVal);
-        if ($retVal) {
-            throw new Kwf_Exception_Client("Can't start sassc, this is required to build scss assets.\n".
-                "install globally or set binary path in config 'server.uglifyjs'");
-        }
-    }
-
     private function _buildPackageContents($p, $extension, $language)
     {
         $mimeType = self::$_mimeTypeByExtension[$extension];

@@ -65,7 +65,6 @@ class Kwf_Util_Build
         if (is_string($excludeTypes)) $excludeTypes = explode(',', $excludeTypes);
         foreach ($types as $k=>$i) {
             if (in_array($i->getTypeName(), $excludeTypes)) unset($types[$k]);
-            $i->checkRequirements();
         }
 
         $maxTypeNameLength = 0;

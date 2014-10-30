@@ -57,8 +57,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
         if (Kwf_Cache_Simple::getBackend() == 'apc') {
             throw new Kwf_Exception_Client("clear-cache-watcher is not compatible with simple cache apc backend");
         }
-        $a = new Kwf_Util_Build_Types_Assets();
-        $a->checkRequirements();
 
         $bufferUsecs = 200*1000;
 
