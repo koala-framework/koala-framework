@@ -1,144 +1,157 @@
 Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
     var slideDuration = 400;
     var menuLink = el.children('.showMenu');
-    var menu = null;
-    var showMenuAfterLoad = false;
-    var ajaxRequest = null;
+    var left = 100;
 
-    $(window).load(function(event) {
-        showMenuAfterLoad = false;
-        getMenu();
+    // Store
+    var menuData = {};
+    var menuHtml = [];
+    var fetchedPages = {};
+
+    var template = _.template(
+        '<ul class="menu">\n' +
+            '<% if (isRoot) { %>' +
+                '<% _.each(item.pages, function(page) { %>' +
+                    '<li class="<% if (page.hasChildren) {  %>hasChildren<% } else if (page.isParent) { %>parent<% } %>">\n' +
+                        '<a href="<%= page.url %>" data-id="<%= page.id %>" data-children="<%= (page.hasChildren || page.children && page.children.length) || false %>"><%= page.name %></a>\n'+
+                    '</li>\n'+
+                '<% }) %>'+
+            '<% } else { %>'+
+                '<% if (item.children && item.children.length) { %>'+
+                    '<li class="back"><a href="#">zurück</a></li>\n'+
+                '<% } %>'+
+                '<% _.each(item.children, function(child) { %>'+
+                    '<li class="<% if (child.hasChildren) {  %>hasChildren<% } else if (child.isParent) { %>parent<% } %>">\n' +
+                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %></a>\n'+
+                    '</li>\n' +
+                '<% }) %>' +
+            '<% } %>' +
+        '</ul>\n'
+    );
+
+    var slide = function(direction, id) {
+        var menu = el.find('ul.menu');
+        var slider = el.find('.slider');
+
+        if (direction == 'left') {
+            var html = template({item: menuData[id], isRoot: false});
+            menuHtml.push(html);
+            $(html).insertAfter(menu);
+            var secondMenu = menu.next();
+            menu.animate({left: '-100%'}, function(){
+                $(this).remove();
+            });
+            slider.animate({height: secondMenu.height()}, slideDuration);
+            secondMenu.css({left: '100%'}).animate({left: 0});
+            $('html, body').stop().animate({scrollTop: 0}, 300);
+
+        } else if (direction == 'right') {
+            menuHtml.splice(-1);
+            var html = _.last(menuHtml);
+            $(html).insertBefore(menu);
+            var previousMenu = menu.prev();
+
+            menu.animate({left: '100%'}, function(){
+                $(this).remove();
+            });
+            slider.animate({height: previousMenu.height()}, slideDuration);
+            previousMenu.css({left: '-100%'}).animate({left: 0});
+        }
+
+        return false;
+    };
+
+    el.on('click', 'li.back', function(e) {
+        e.preventDefault();
+        if (el.find('.slider').is(':animated')) return false;
+        slide('right');
     });
 
-    menuLink.click(function(event) {
-        event.preventDefault();
-        if (menu && menu.is(':animated')) return;
+    el.on('click', 'a[data-children="true"]', function(e) {
+        e.preventDefault();
+        if (el.find('.slider').is(':animated')) return false;
 
-        var activeEl = $('.kwcMenuMobile').children('.showMenu.active');
-        if (activeEl.length && activeEl.get(0) != menuLink.get(0)) {
-            activeEl
-                .removeClass('active')
-                .next('.slider')
-                .children('ul.menu')
-                .slideToggle(slideDuration, function(){
-                    $(this)
-                        .parent().parent()
-                        .removeClass('open');
-                });
+        var data = $(e.target).data();
+        var responseAnimation = false;
+
+        if (!_.has(menuData, data.id)) {
+            responseAnimation = true;
+            el.addClass('loading');
+            el.find('.menu').hide();
+            el.find('.slider').removeAttr('style');
+        }
+        if (_.has(menuData, data.id)) {
+            slide('left', data.id);
         }
 
-        if (!menu) {
-            showMenuAfterLoad = true;
+        if (!_.has(fetchedPages, data.id)) {
+            fetchedPages[data.id] = true;
+            var request = $.ajax({
+                url: config.controllerUrl + '/json-index',
+                data: {
+                    pageId: data.id,
+                    componentId: config.componentId,
+                    kwfSessionToken: Kwf.sessionToken
+                }
+            });
+
+            request.done(function(res) {
+                _.each(res.pages, function(page) {
+                    menuData[parseInt(page.id)] = page;
+                });
+                if (responseAnimation) {
+                    el.removeClass('loading');
+                    slide('left', data.id);
+                }
+            });
+        }
+    });
+
+    menuLink.click(function(e) {
+        e.preventDefault();
+        var slider = el.find('.slider');
+        var menu = el.find('.menu');
+
+        slider.stop();
+
+        if (!menu.length) {
             el.addClass('loading');
-            getMenu();
-        } else {
-            menu.slideToggle(slideDuration);
-            el.trigger('menuToggle',[slideDuration]);
         }
         menuLink.toggleClass('active');
+        if (menuLink.parent().hasClass('open')) {
+            slider.animate({height: 0}, slideDuration);
+        } else {
+            slider.animate({height: menu.height()}, slideDuration);
+        }
         menuLink.parent().toggleClass('open');
     });
 
-    _.mixin({
-        mobileMenuPartial: function(item) {
-            var partial = _.template(
-                '<li class="<%= item.class %>">' +
-                    '<a href="<%= item.url %>"><%= item.name %></a>'+
-                    '<ul class="subMenu">'+
-                        '<% if (item.children && !_.isEmpty(item.children)) { %>'+
-                            '<% _.each(item.children, function(child) { %>'+
-                                '<%= _(child).mobileMenuPartial() %>'+
-                            '<% }) %>'+
-                        '<% } %>'+
-                    '</ul>'+
-                '</li>'
-            );
-            return partial({item: item});
+    // Inital Request
+    $.ajax({
+        url: config.controllerUrl + '/json-index',
+        data: {
+            subrootComponentId: config.subrootComponentId,
+            componentId: config.componentId,
+            kwfSessionToken: Kwf.sessionToken
+        },
+        dataType: 'JSON',
+        success: function(res) {
+            _.each(res.pages, function(page) {
+                page.root = true;
+                menuData[parseInt(page.id)] = page;
+            });
+
+            if(!el.find('.slider').length) el.append('<div class="slider"></div>');
+
+            var html = template({item: res, isRoot: true});
+            el.find('.slider').html(html);
+            menuHtml.push(html);
+            if (el.hasClass('loading')) {
+                el.find('.slider').animate({height: el.find('ul.menu').height()}, slideDuration);
+                el.trigger('menuToggle',[slideDuration]);
+            }
+            el.removeClass('loading');
         }
     });
 
-    var getMenu = function() {
-        if (!ajaxRequest) {
-            ajaxRequest = $.getJSON(config.controllerUrl + '/json-index', {
-                subrootComponentId: config.subrootComponentId,
-                componentId: config.componentId,
-                kwfSessionToken: Kwf.sessionToken
-            }, function(data) {
-                var tpl = _.template(
-                    '<div class="slider">' +
-                        '<ul class="menu">' +
-                            '<% _.each(pages, function(page) { %>'+
-                                '<li class="<%= page.class %>">' +
-                                '<a href="<%= page.url %>"><%= page.name %></a>'+
-                                    '<ul class="subMenu">' +
-                                        '<% _.each(page.children, function(child) { %>'+
-                                            '<%= _(child).mobileMenuPartial() %>'+
-                                        '<% }) %>'+
-                                    '</ul>'+
-                                '</li>'+
-                            '<% }) %>'+
-                        '</ul>'+
-                    '</div>'
-                );
-                //compatibility for old templates that don't contain slider element
-                if(el.find('.slider').length == 0) el.append('<div class="slider"></div>');
-
-                el.find('.slider').replaceWith(tpl(data));
-                menu = el.find('ul.menu');
-                if (showMenuAfterLoad) {
-                    menu.slideDown(slideDuration);
-                    el.trigger('menuToggle',[slideDuration]);
-                }
-
-                menu.find('li.hasChildren ul.subMenu').prepend('<li class="back">\n' +
-                    '<a href="#">\n' +
-                        trlKwf('back') + '\n' +
-                    '</a>\n' +
-                '</li>');
-
-                //after menu is loaded
-                var currentLeft = 0;
-                var left = 100;
-                el.removeClass('loading');
-                menu.find('li.hasChildren').each(function(index, child) {
-                    $(child).children('a').click(function(event) {
-                        menu.css('height', 'auto');
-                        event.preventDefault();
-                        currentLeft += left;
-                        $(child).addClass('moved');
-                        el.children('.slider').animate({
-                            left: '-' + currentLeft + '%'
-                        });
-                        menu.animate({
-                            height: $(child).find('ul.subMenu').height()
-                        });
-                    });
-                });
-                menu.find('li.back').each(function(index, child) {
-                    $(child).children('a').click(function(event) {
-                        menu.css('height', 'auto');
-                        event.preventDefault();
-                        currentLeft -= left;
-                        el.children('.slider').animate({
-                            left: '-' + currentLeft + '%'
-                        }, function() {
-                            $(child).parent().parent().removeClass('moved');
-                        });
-                        menu.animate({
-                            height: $(child).parents('ul').parents('ul').height()
-                        });
-                    });
-                });
-
-                // Hide menu if link matches hash change (anchor scroll)
-                menu.find('li > a').each(function(index, link) {
-                    if($(link).attr('href').match('^/#')) {
-                        $(link).click(function(e) {
-                            menuLink.trigger('click');
-                        });
-                    }
-                });
-            });
-        }
-    };
 }, { checkVisibility: true, defer: true });
