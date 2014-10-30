@@ -50,18 +50,6 @@ class Kwc_Menu_Mobile_Events extends Kwc_Abstract_Events
     public function onPageChanged(Kwf_Events_Event_Abstract $event)
     {
         $this->_deleteCache($event);
-        $page = $event->component->getParentPageOrRoot()->getParentPageOrRoot();
-        $d = $page;
-        while ($d) {
-            if ($d->getFlag('subroot')) {
-                Kwf_Cache_Simple::delete('kwcMenuMobile-root-'.$d->componentId);
-                break;
-            } else if ($d->isPage) {
-                Kwf_Cache_Simple::delete('kwcMenuMobile-'.$d->componentId);
-                break;
-            }
-            $d = $d->parent;
-        }
     }
 
     public function onPageChangedRecursive(Kwf_Component_Event_Component_RecursiveAbstract $event)
@@ -71,11 +59,17 @@ class Kwc_Menu_Mobile_Events extends Kwc_Abstract_Events
 
     private function _deleteCache($event)
     {
-        $components = Kwf_Component_Data_Root::getInstance()
-            ->getComponentsByClass('Kwc_Menu_Mobile_Component', array('subroot' => $event->component->getSubroot()));
-        foreach($components as $component) {
-            $cacheId = 'kwcMenuMobile-' . $component->componentId;
-            Kwf_Cache_Simple::delete($cacheId);
+        $page = $event->component->getParentPageOrRoot()->getParentPageOrRoot();
+        $d = $page;
+        while ($d) {
+            if (Kwc_Abstract::getFlag($d->componentClass, 'subroot') || $d->componentId == 'root') {
+                Kwf_Cache_Simple::delete('kwcMenuMobile-root-'.$d->componentId);
+                break;
+            } else if ($d->isPage) {
+                Kwf_Cache_Simple::delete('kwcMenuMobile-'.$d->componentId);
+                break;
+            }
+            $d = $d->parent;
         }
     }
 }
