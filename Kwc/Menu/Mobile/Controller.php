@@ -4,20 +4,23 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
     private $_showSelectedPageInList;
     public function jsonIndexAction()
     {
-        //TODO clear cache
-        $cacheId = 'kwcMenuMobile-' . $this->_getParam('componentId').'-'.$this->_getParam('pageId');
-        $data = Kwf_Cache_Simple::fetch($cacheId);
         if ($this->_getParam('subrootComponentId')) {
-            $pages = $this->_getChildPages();
+            $cacheId = 'kwcMenuMobile-root-' . $this->_getParam('subrootComponentId');
         } else if ($this->_getParam('pageId')) {
-            $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('pageId'));
-            $pages = $this->_getChildPagesRecursive(array($component), 2);
-            foreach ($pages as $k=>$p) {
-                unset($pages[$k]['name']);
-                unset($pages[$k]['url']);
-            }
+            $cacheId = 'kwcMenuMobile-' . $this->_getParam('pageId');
         }
+        $data = Kwf_Cache_Simple::fetch($cacheId);
         if ($data === false) {
+            if ($this->_getParam('subrootComponentId')) {
+                $pages = $this->_getChildPages();
+            } else if ($this->_getParam('pageId')) {
+                $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('pageId'));
+                $pages = $this->_getChildPagesRecursive(array($component), 2);
+                foreach ($pages as $k=>$p) {
+                    unset($pages[$k]['name']);
+                    unset($pages[$k]['url']);
+                }
+            }
             $data = array(
                 'lifetime' => 60*60,
                 'mimeType' => 'application/json',
@@ -26,6 +29,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                     'pages' => $pages
                 ))
             );
+            Kwf_Cache_Simple::add($cacheId, $data);
         }
 
         Kwf_Media_Output::output($data);
