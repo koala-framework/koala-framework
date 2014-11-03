@@ -21,7 +21,14 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
         $paths = self::_getAllPaths();
         $pathType = $this->getType();
         $f = $paths[$pathType].substr($this->_builtFile, strpos($this->_builtFile, '/'));
-        return file_get_contents($f);
+        $ret = file_get_contents($f);
+        $ret = rtrim($ret);
+        $ret = explode("\n", $ret);
+        if (substr($ret[count($ret)-1], 0, 21) == '//# sourceMappingURL=') {
+            //remove sourceMappingURL comment
+            unset($ret[count($ret)-1]);
+        }
+        return implode("\n", $ret);
     }
 
     public function getContentsPackedSourceMap($language)
