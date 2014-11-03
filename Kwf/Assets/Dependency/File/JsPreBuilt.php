@@ -42,7 +42,14 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
         $cacheFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$this->getFileNameWithType().'.map.'.md5($mapContents);
         if (!file_exists($cacheFile)) {
             if (!is_dir(dirname($cacheFile))) mkdir(dirname($cacheFile), 0777, true);
-            file_put_contents($cacheFile, $map->getMapContents());
+            $data = $map->getMapContentsData();
+            if (count($data->sources) != 1) {
+                throw new Kwf_Exception('map must consist only of a single source');
+            }
+            $data->sources = array(
+                $this->getFileNameWithType()
+            );
+            file_put_contents($cacheFile, json_encode($data));
         }
         return file_get_contents($cacheFile);
     }
