@@ -1,1 +1,3 @@
-<?=$this->image($this->image, '', $this->imgCssClass)?>
+<? if ($this->baseUrl) { ?>
+    <?=$this->image($this->image, '', $this->imgCssClass)?>
+<? } ?>
