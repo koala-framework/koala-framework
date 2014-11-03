@@ -3,7 +3,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceController extends Kwf_Controller
 {
     public static function getHelp()
     {
-        return 'maintenance (interal)';
+        return 'maintenance (internal)';
     }
 
     public function clearCacheAction()
