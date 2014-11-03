@@ -21,7 +21,6 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
         $paths = self::_getAllPaths();
         $pathType = $this->getType();
         $f = $paths[$pathType].substr($this->_builtFile, strpos($this->_builtFile, '/'));
-        p($f);
         return file_get_contents($f);
     }
 
