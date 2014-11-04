@@ -97,83 +97,33 @@ class Kwf_Assets_Package
             throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
         }
 
-        $retSources = '';
-        $retNames = '';
-        $retMappings = '';
-        $previousFileLast = false;
-        $previousFileSourcesCount = 0;
-        $previousFileNamesCount = 0;
-        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
-            if ($i->getIncludeInPackage()) {
-                $c = $i->getContentsPackedSourceMap($language);
-                if (!$c) {
-                    $packageContents = $i->getContentsPacked($language);
-                    $sources = array();
-                    if ($i instanceof Kwf_Assets_Dependency_File) {
-                        $sources[] = $i->getFileNameWithType();
-                    } else {
-                        $sources[] = 'dynamic/'.get_class($i).'-'.uniqid();
-                    }
-                    $data = array(
-                        "version" => 3,
-                        //"file" => ,
-                        "sources"=> $sources,
-                        "names"=> array(),
-                        "mappings" => 'AAAAA'.str_repeat(';', substr_count($packageContents, "\n")),
-                        '_x_org_koala-framework_last' => array(
-                            'source' => 0,
-                            'originalLine' => 0,
-                            'originalColumn' => 0,
-                            'name' => 0,
-                        )
-                    );
-                } else {
-                    $data = json_decode($c, true);
-                    if (!$data) {
-                        throw new Kwf_Exception("Invalid source map for '$i', json invalid: '$c'");
-                    }
-                }
-                if (!isset($data['_x_org_koala-framework_last'])) {
-                    throw new Kwf_Exception("source map for '$i' doesn't contain _x_org_koala-framework_last extension");
-                }
+        $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
 
-                foreach ($data['sources'] as &$s) {
-                    $s = '/assets/'.$s;
-                }
-                if ($data['sources']) {
-                    $retSources .= ($retSources ? ',' : '').substr(json_encode($data['sources']), 1, -1);
-                }
-                if ($data['names']) {
-                    $retNames .= ($retNames ? ',' : '').substr(json_encode($data['names']), 1, -1);
-                }
-                if ($previousFileLast) {
-                    // adjust first by previous
-                    if (substr($data['mappings'], 0, 6) == 'AAAAA,') $data['mappings'] = substr($data['mappings'], 6);
-                    $str  = Kwf_Assets_Util_Base64VLQ::encode(0);
-                    $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['source'] + $previousFileSourcesCount);
-                    $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['originalLine']);
-                    $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['originalColumn']);
-                    $str .= Kwf_Assets_Util_Base64VLQ::encode(-$previousFileLast['name'] + $previousFileNamesCount);
-                    $str .= ",";
-                    $data['mappings'] = $str . $data['mappings'];
-                }
-                $previousFileLast = $data['_x_org_koala-framework_last'];
-                $previousFileSourcesCount = count($data['sources']);
-                $previousFileNamesCount = count($data['names']);
-
-                if ($retMappings) $retMappings .= ';';
-                $retMappings .= $data['mappings'];
-            }
-        }
-
-        //manually build json, names array can be relatively large and merging all entries would be slow
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
         else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
-        $file = $this->getPackageUrl($ext, $language);
-        $ret = '{"version":3, "file": "'.$file.'", "sources": ['.$retSources.'], "names": ['.$retNames.'], "mappings": "'.$retMappings.'"}';
-        return $ret;
+        $packageMap->setFile($this->getPackageUrl($ext, $language));
+
+
+        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
+            if ($i->getIncludeInPackage()) {
+                $c = $i->getContentsPackedSourceMap($language);
+                if (!$c) {
+                    $map = Kwf_SourceMaps_SourceMap::createEmptyMap($i->getContentsPacked($language));
+                } else {
+                    $c = json_decode($c);
+                    foreach ($c->sources as &$s) {
+                        $s = '/assets/'.$s;
+                    }
+                    $map = new Kwf_SourceMaps_SourceMap($c, $i->getContentsPacked($language));
+                }
+                $packageMap->concat($map);
+            }
+        }
+
+        return $packageMap->getMapContents(false);
+        //$ret = '{"version":3, "file": "'.$file.'", "sources": ['.$retSources.'], "names": ['.$retNames.'], "mappings": "'.$retMappings.'"}';
     }
 
     public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)

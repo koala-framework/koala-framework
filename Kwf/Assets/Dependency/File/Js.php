@@ -54,7 +54,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $mapData['sources'][0] = $this->getFileNameWithType();
             file_put_contents("$buildFile.min.js.map.json", json_encode($mapData));
 
-            $map = new Kwf_Assets_Util_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
+            $map = new Kwf_SourceMaps_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
 
             if (strpos($contents, '.cssClass') !== false) {
                 $cssClass = $this->_getComponentCssClass();
@@ -131,7 +131,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 if (!file_exists($dir)) mkdir($dir, 0777, true);
 
                 if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
-                    $map = new Kwf_Assets_Util_SourceMap($ret['sourceMap'], $ret['contents']);
+                    $map = new Kwf_SourceMaps_SourceMap($ret['sourceMap'], $ret['contents']);
                     foreach ($this->_getTrlReplacements($ret, $language) as $value) {
                         $map->stringReplace($value['search'], $value['replace']);
                     }

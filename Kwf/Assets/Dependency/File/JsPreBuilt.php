@@ -37,7 +37,7 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
         $pathType = $this->getType();
         $f = $paths[$pathType].substr($this->_sourceMapFile, strpos($this->_sourceMapFile, '/'));
         $mapContents = file_get_contents($f);
-        $map = new Kwf_Assets_Util_SourceMap($mapContents, $this->getContentsPacked($language));
+        $map = new Kwf_SourceMaps_SourceMap($mapContents, $this->getContentsPacked($language));
 
         $cacheFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$this->getFileNameWithType().'.map.'.md5($mapContents);
         if (!file_exists($cacheFile)) {
