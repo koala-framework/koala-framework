@@ -12,15 +12,10 @@ class Kwc_Root_Category_FilenameFilter extends Kwf_Filter_Row_Abstract
         $value = Kwf_Filter::filterStatic($row->name, 'Ascii');
 
         $componentId = $this->_getComponentId($row);
-        if (!$componentId && isset($row->parent_id)) {
-            $parent = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($row->parent_id, array('ignoreVisible' => true));
-        } else {
-            $parent = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($componentId, array('ignoreVisible' => true))
-                ->parent;
-        }
-        $parent = $parent->getPseudoPageOrRoot();
+
+        $parent = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($row->parent_id, array('ignoreVisible' => true))
+            ->getPseudoPageOrRoot();
 
         $values = array();
         foreach ($parent->getChildPages(array('ignoreVisible' => true)) as $c) {
