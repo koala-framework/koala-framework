@@ -1,6 +1,8 @@
 Kwf.onContentReady(function statisticsOptBox(body, param) {
     if (!param.newRender) return;
-    if (Kwf.Statistics.optBoxHtml && !Kwf.Statistics.issetUserOptValue() && !$('body').data().optbox) {
+    if (Kwf.Statistics.defaultOptValue == 'out' && Kwf.Statistics.optBoxHtml
+        && !Kwf.Statistics.issetUserOptValue() && !$('body').data().optbox
+    ) {
         $('body').prepend(Kwf.Statistics.optBoxHtml);
         $('body').data('optbox', true);
         Kwf.callOnContentReady(document.body, { action: 'render' });
