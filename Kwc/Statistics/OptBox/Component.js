@@ -9,9 +9,11 @@ Kwf.onContentReady(function statisticsOptBox(body, param) {
 
 Kwf.onElementReady('.kwcStatisticsOptBox a.accept', function statisticsOptBox(link) {
     link.on('click', function(e, el) {
+        e.preventDefault();
         e.stopEvent();
         Kwf.Statistics.setUserOptValue('in');
         Kwf.fireComponentEvent('cookieOptChanged', 'in');
+        return false;
     });
 }, {priority: 10});
 
@@ -24,6 +26,7 @@ Kwf.onJElementReady('.kwcStatisticsOptBox a.decline', function(el) {
 }, {priority: 10});
 
 Kwf.onComponentEvent('cookieOptChanged', function(value) {
+    $('body').find('.cssClass').hide();
     if (Kwf.Statistics.reloadOnOptChanged) {
         document.location.reload();
     }
