@@ -75,6 +75,9 @@ class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Abstract
                 $childPagesComponentSelect[Kwf_Component_Select::IGNORE_VISIBLE] = true;
             }
             $childPagesComponentSelect['pageGenerator'] = false; //already selected by accessing model direclty
+
+/*
+Temporarily disabled for too deep stack nesting level (crashes php 5.2) and performance reasons
             foreach ($startPage->getChildPages($childPagesComponentSelect) as $childPage) {
                 if (is_numeric($childPage->dbId)) {
                     throw new Kwf_Exception("this must not happen, pages must be queried by accessing model directly");
@@ -86,7 +89,7 @@ class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Abstract
                     'name' => $childPage->name
                 );
             }
-
+*/
 
             foreach ($childPages as $childPage) {
                 $id = $childPage['id'];
