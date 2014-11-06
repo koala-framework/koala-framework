@@ -9,13 +9,11 @@ Kwf.onContentReady(function statisticsOptBox(body, param) {
     }
 }, {priority: -2}); // before Kwf.Utils.ResponsiveEl
 
-Kwf.onElementReady('.kwcStatisticsOptBox a.accept', function statisticsOptBox(link) {
+Kwf.onJElementReady('.kwcStatisticsOptBox a.accept', function statisticsOptBox(link) {
     link.on('click', function(e, el) {
         e.preventDefault();
-        e.stopEvent();
         Kwf.Statistics.setUserOptValue('in');
         Kwf.fireComponentEvent('cookieOptChanged', 'in');
-        return false;
     });
 }, {priority: 10});
 
