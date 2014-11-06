@@ -26,16 +26,23 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
     public function getIncludeCode()
     {
         $value = Kwf_Statistics::getDefaultOptValue($this->getData());
+        $optInShowBox = $this->getData()->getBaseProperty('statistics.optInShowBox');
         $reload = $this->_reloadOnOptChanged() ? 'true' : 'false';
-        $components = Kwf_Component_Data_Root::getInstance()->getComponentsByClass(
-            'Kwc_Statistics_Opt_Component', array('subroot' => $this->getData())
-        );
-        $url = isset($components[0]) ? $components[0]->url : null;
-        $html = $this->_getOptBoxInnerHtml($url);
-        if ($html) {
+
+        $html = '';
+        if ($value == 'out' || ($value == 'in' && $optInShowBox)) {
+            $components = Kwf_Component_Data_Root::getInstance()->getComponentsByClass(
+                'Kwc_Statistics_Opt_Component', array('subroot' => $this->getData())
+            );
+            $url = isset($components[0]) ? $components[0]->url : null;
+            $html = $this->_getOptBoxInnerHtml($url);
+            if (!$html) {
+                $exception = new Kwf_Exception('To disable optbox please change config.');
+                $exception->logOrThrow();
+            }
             $html = '<div class="' . self::getCssClass($this) . '"><div class="inner">' . $html . '<div></div>';
+            $html = str_replace("'", "\'", $html);
         }
-        $html = str_replace("'", "\'", $html);
 
         $ret  = '<script type="text/javascript">';
         $ret .= "if (typeof Kwf == 'undefined') Kwf = {};";
