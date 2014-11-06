@@ -118,7 +118,7 @@ function doesElementScroll(el) {
 }
 
 function isElementInView(el) {
-    var threshold = 200;
+    var threshold = 800;
 
     if (!Kwf.Utils.Element.isVisible(el[0])) return false;
 
