@@ -378,7 +378,7 @@ class Kwf_Media_Image
         return $ret;
     }
 
-    private function _createImagickFromFile($file, $mime)
+    private function _createImagickFromFile($file)
     {
         $im = new Imagick();
         $im->readImage($file);
@@ -392,7 +392,7 @@ class Kwf_Media_Image
     private function _createImagickFromBlob($blob, $mime)
     {
         $im = new Imagick();
-        $im->readImage($blob, 'foo.'.str_replace('image/', '', $mime)); //add fake filename to help imagick with format detection
+        $im->readImageBlob($blob, 'foo.'.str_replace('image/', '', $mime)); //add fake filename to help imagick with format detection
         if (method_exists($im, 'setColorspace')) {
             $im->setType(Imagick::IMGTYPE_TRUECOLORMATTE);
             $im->setColorspace($im->getImageColorspace());
