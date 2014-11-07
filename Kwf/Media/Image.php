@@ -514,6 +514,9 @@ class Kwf_Media_Image
 
     private function _processCommonImagickSettings($im)
     {
+        $im->setType(Imagick::IMGTYPE_TRUECOLORMATTE);
+        $im->setColorspace($im->getImageColorspace());
+
         if (method_exists($im, 'getImageProfiles') && $im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
             $profiles = $im->getImageProfiles('icc', false);
             $hasIccProfile = in_array('icc', $profiles);
@@ -529,7 +532,7 @@ class Kwf_Media_Image
             unset($iccRgb);
         }
 
-        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        $im->setColorspace(Imagick::COLORSPACE_RGB);
         $im->stripImage();
         $im->setImageCompressionQuality(90);
         $version = $im->getVersion();
