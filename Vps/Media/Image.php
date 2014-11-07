@@ -218,7 +218,10 @@ class Vps_Media_Image
 
     private function _processCommonImagickSettings($im)
     {
-        if ($im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
+        $im->setType(Imagick::IMGTYPE_TRUECOLORMATTE);
+        $im->setColorspace($im->getImageColorspace());
+
+        if (method_exists($im, 'getImageProfiles') && $im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
             $profiles = $im->getImageProfiles('icc', false);
             $hasIccProfile = in_array('icc', $profiles);
             // if it doesnt have a CMYK ICC profile, we add one
@@ -232,9 +235,9 @@ class Vps_Media_Image
             $im->profileImage('icc', $iccRgb);
             unset($iccRgb);
         }
+        $im->setColorspace(Imagick::COLORSPACE_RGB);
+        $im->setImageCompressionQuality(80);
 
-        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
-        $im->setCompressionQuality(80);
         $version = $im->getVersion();
         if (isset($version['versionNumber']) && (int)$version['versionNumber'] >= 1632) {
             $im->setImageProperty('date:create', null);
