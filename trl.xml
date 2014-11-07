@@ -9234,6 +9234,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <bg>Ве молиме изберете опција</bg>
 <ua>Будь ласка, оберіть опцію</ua>
 <sk>Vyberte si prosím jednu z možností</sk>
+<es>Por favor escoge una opción</es>
 </text>
 <text>
 <en>No Filedata received.</en>
@@ -11744,6 +11745,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Hvala za vaše vprašanje. Potrudili se bomo, da vam odgovorimo čim hitreje.</sl>
 <ua>Дякуємо за Ваш запит, він буде опрацьований найближчим часом.</ua>
 <ro>Va multumim pentru solicitare. O vom procesa in cel mai scurt timp posibil.</ro>
+<sk>Vaša registrácia bola zaznamenaná. Ďakujeme za váš záujem.</sk>
 </text>
 <text>
 <en>Setup</en>

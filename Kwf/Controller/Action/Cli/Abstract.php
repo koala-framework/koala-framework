@@ -7,8 +7,6 @@ class Kwf_Controller_Action_Cli_Abstract extends Kwf_Controller_Action
 
         set_time_limit(0);
 
-        Zend_Registry::get('config')->debug->error->log = false;
-
         $help = call_user_func(array(get_class($this), 'getHelp'));
         if (!$help) throw new Kwf_ClientException("This command is not avaliable");
 
