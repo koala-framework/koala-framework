@@ -27,7 +27,6 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
     {
         $value = Kwf_Statistics::getDefaultOptValue($this->getData());
         $optInShowBox = $this->getData()->getBaseProperty('statistics.optInShowBox');
-        $reload = $this->_reloadOnOptChanged() ? 'true' : 'false';
 
         $html = '';
         if ($value == 'out' || ($value == 'in' && $optInShowBox)) {
@@ -48,7 +47,6 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
         $ret .= "if (typeof Kwf == 'undefined') Kwf = {};";
         $ret .= "if (typeof Kwf.Statistics == 'undefined') Kwf.Statistics = {};";
         $ret .= "Kwf.Statistics.defaultOptValue = '$value';";
-        $ret .= "Kwf.Statistics.reloadOnOptChanged = $reload;";
         $ret .= "Kwf.Statistics.optBoxHtml = '$html';";
         $ret .= $this->_getJavascriptIncludeCode();
         $ret .= '</script>';
@@ -68,11 +66,6 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
         }
         $ret .= '<a href="" class="accept"><span>' . $this->getData()->trlKwf('Accept and continue') . '</span></a>';
         return $ret;
-    }
-
-    protected function _reloadOnOptChanged()
-    {
-        return true;
     }
 }
 

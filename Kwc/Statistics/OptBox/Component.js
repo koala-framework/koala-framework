@@ -25,8 +25,5 @@ Kwf.onJElementReady('.kwcStatisticsOptBox a.decline', function(el) {
 
 Kwf.onComponentEvent('cookieOptChanged', function(value) {
     $('body').find('.cssClass').hide();
-    if (Kwf.Statistics.reloadOnOptChanged) {
-        document.location.reload();
-    }
 });
 
