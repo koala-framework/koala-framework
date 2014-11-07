@@ -54,7 +54,7 @@ Kwf.Fade.Elements = function(cfg) {
     this.autoStart = true;
     this.direction = cfg.direction;
 
-    if (typeof cfg.template != 'undefined') this._template = cfg.template;
+    if (typeof cfg.template != 'undefined') this._template = cfg.template ? _.template(cfg.template) : false;
     if (typeof cfg.animationType != 'undefined') this.animationType = cfg.animationType;
     if (typeof cfg.elementAccessPlayPause != 'undefined') this.elementAccessPlayPause = cfg.elementAccessPlayPause;
     if (typeof cfg.elementAccessDirect != 'undefined') this.elementAccessDirect = cfg.elementAccessDirect;
@@ -371,11 +371,11 @@ Kwf.Fade.Elements.prototype = {
             }
 
             if (this.elementAccessDirect) {
-                template += '{{#elementAccessLinks}}' +
+                template += '<% _.each(elementAccessLinks, function(item) { %>' +
                     '<li>' +
                         '<a class="elementAccessLink" href="#"></a>' +
                     '</li>' +
-                '{{/elementAccessLinks}}';
+                '<% }) %>';
             }
 
             if (this.elementAccessPlayPause) {
@@ -394,7 +394,7 @@ Kwf.Fade.Elements.prototype = {
             }
 
             if (!this._template) {
-                this._template = template;
+                this._template = _.template(template);
             }
 
             var data = {
@@ -406,7 +406,8 @@ Kwf.Fade.Elements.prototype = {
                     link: index + 1
                 });
             }, this));
-            var output = Mustache.render(this._template, data);
+
+            var output = this._template(data);
             $(this.selectorRoot).append(output);
 
             var elementAccessLinks = $(this.selectorRoot).find('a.elementAccessLink');

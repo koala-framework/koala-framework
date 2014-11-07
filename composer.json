@@ -20,7 +20,7 @@
             "jquery": "1.11.1",
             "jquery.transit": "0.9.9",
             "jquery.easing": "1.3.0",
-            "mustache.js": "0.8.2",
+            "underscore": "1.7.0",
             "susy": "1.0.9",
             "compass-mixins": "1.0.2",
             "tinymce": "tinymce/tinymce#3.5.8"
