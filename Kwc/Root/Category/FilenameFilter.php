@@ -12,15 +12,8 @@ class Kwc_Root_Category_FilenameFilter extends Kwf_Filter_Row_Abstract
         $value = Kwf_Filter::filterStatic($row->name, 'Ascii');
 
         $componentId = $this->_getComponentId($row);
-        if (!$componentId && isset($row->parent_id)) {
-            $parent = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($row->parent_id, array('ignoreVisible' => true));
-        } else {
-            $parent = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($componentId, array('ignoreVisible' => true))
-                ->parent;
-        }
-        $parent = $parent->getPseudoPageOrRoot();
+
+        $parent = $this->_getParentPage($row);
 
         $values = array();
         foreach ($parent->getChildPages(array('ignoreVisible' => true)) as $c) {
@@ -45,6 +38,14 @@ class Kwc_Root_Category_FilenameFilter extends Kwf_Filter_Row_Abstract
             }
         }
         return (string)$unique;
+    }
+
+    // trl has no parent_id
+    protected function _getParentPage($row)
+    {
+        return Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($row->parent_id, array('ignoreVisible' => true))
+            ->getPseudoPageOrRoot();
     }
 
     protected function _getComponentId($row)

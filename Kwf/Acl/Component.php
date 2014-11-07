@@ -5,8 +5,8 @@ class Kwf_Acl_Component extends Kwf_Acl
     {
         parent::__construct();
 
-        $this->addRole(new Kwf_Acl_Role('superuser', trlKwf('Superuser')));
-        $this->addRole(new Kwf_Acl_Role('preview', trlKwf('Preview')));
+        $this->addRole(new Kwf_Acl_Role('superuser', trlKwfStatic('Superuser')));
+        $this->addRole(new Kwf_Acl_Role('preview', trlKwfStatic('Preview')));
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_superuser', 'superuser'), 'edit_role');
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_preview', 'preview'), 'edit_role');
 
@@ -38,16 +38,16 @@ class Kwf_Acl_Component extends Kwf_Acl
                 array('text'=>trlKwfStatic('All Enquiries'), 'icon'=>'email.png')), 'kwf_enquiries_dropdown');
 
         $this->add(new Kwf_Acl_Resource_MenuDropdown('settings',
-                    array('text'=>trlKwf('Toolbox'), 'icon'=>'wrench.png')));
+                    array('text'=>trlKwfStatic('Toolbox'), 'icon'=>'wrench.png')));
             $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_user_users',
-                    array('text'=>trlKwf('Useradministration'), 'icon'=>'user.png')), 'settings');
+                    array('text'=>trlKwfStatic('Useradministration'), 'icon'=>'user.png')), 'settings');
                 $this->add(new Zend_Acl_Resource('kwf_user_user'), 'kwf_user_users');
                 $this->add(new Zend_Acl_Resource('kwf_user_log'), 'kwf_user_users');
                 $this->add(new Zend_Acl_Resource('kwf_user_comments'), 'kwf_user_users');
             $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_component_clear-cache',
-                    array('text'=>trlKwf('Clear Cache'), 'icon'=>'database.png')), 'settings');
+                    array('text'=>trlKwfStatic('Clear Cache'), 'icon'=>'database.png')), 'settings');
             $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_redirects_redirects',
-                    array('text'=>trlKwf('Redirects'), 'icon'=>'page_white_go.png')), 'settings');
+                    array('text'=>trlKwfStatic('Redirects'), 'icon'=>'page_white_go.png')), 'settings');
                 $this->add(new Zend_Acl_Resource('kwf_redirects_redirect'), 'kwf_redirects_redirects');
                     $this->add(new Zend_Acl_Resource('kwf_redirects_pages'), 'kwf_redirects_redirect');
 

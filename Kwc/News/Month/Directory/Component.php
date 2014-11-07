@@ -17,9 +17,9 @@ class Kwc_News_Month_Directory_Component extends Kwc_Directories_Month_Directory
     public function getSelect()
     {
         $select = parent::getSelect();
-        $select->where('publish_date <= NOW()');
+        $select->where('publish_date <= CURDATE()');
         if ($this->_getItemDirectorySetting('enableExpireDate')) {
-            $select->where('expiry_date >= NOW() OR ISNULL(expiry_date)');
+            $select->where('expiry_date >= CURDATE() OR ISNULL(expiry_date)');
         }
         return $select;
     }

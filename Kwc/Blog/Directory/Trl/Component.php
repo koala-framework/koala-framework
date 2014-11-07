@@ -19,7 +19,7 @@ class Kwc_Blog_Directory_Trl_Component extends Kwc_Directories_Item_Directory_Tr
     public function getSelect()
     {
         $select = parent::getSelect();
-        $select->where('publish_date <= NOW()');
+        $select->where('publish_date <= CURDATE()');
         $select->order('publish_date', 'DESC');
         return $select;
     }
