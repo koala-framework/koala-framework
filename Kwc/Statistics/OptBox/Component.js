@@ -7,9 +7,9 @@ Kwf.onContentReady(function statisticsOptBox(body, param) {
     }
 }, {priority: -2}); // before Kwf.Utils.ResponsiveEl
 
-Kwf.onElementReady('.kwcStatisticsOptBox a.accept', function statisticsOptBox(link) {
+Kwf.onJElementReady('.kwcStatisticsOptBox a.accept', function statisticsOptBox(link) {
     link.on('click', function(e, el) {
-        e.stopEvent();
+        e.preventDefault();
         Kwf.Statistics.setUserOptValue('in');
         Kwf.fireComponentEvent('cookieOptChanged', 'in');
     });
@@ -24,8 +24,6 @@ Kwf.onJElementReady('.kwcStatisticsOptBox a.decline', function(el) {
 }, {priority: 10});
 
 Kwf.onComponentEvent('cookieOptChanged', function(value) {
-    if (Kwf.Statistics.reloadOnOptChanged) {
-        document.location.reload();
-    }
+    $('body').find('.cssClass').hide();
 });
 
