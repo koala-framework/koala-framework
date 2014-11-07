@@ -10,6 +10,7 @@ class Kwc_Statistics_Opt_Component extends Kwc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Cookie Opt In / Opt Out');
+        $ret['generators']['child']['component']['success'] = null;
         $ret['viewCache'] = false;
         return $ret;
     }
@@ -19,11 +20,6 @@ class Kwc_Statistics_Opt_Component extends Kwc_Form_Component
         $this->_form = new Kwc_Statistics_Opt_FrontendForm(
             'form', $this->getData()->componentClass, Kwf_Statistics::isUserOptIn($this->getData())
         );
-    }
-
-    public function getSuccessComponent()
-    {
-        return $this->getData()->getPage()->url;
     }
 
     protected function _beforeSave(Kwf_Model_Row_Interface $row)
