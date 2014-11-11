@@ -5,7 +5,7 @@
 
 html {
     body.backendUser {
-        .center {
+        .content {
             animation: backendUserFadein 1s, backendUserSlidein 1s;
             -moz-animation: backendUserFadein 1s, backendUserSlidein 1s; // Firefox
             -webkit-animation: backendUserFadein 1s, backendUserSlidein 1s; // Safari and Chrome
@@ -83,7 +83,7 @@ html {
         }
     }
 
-    .center {
+    .content {
         margin-left: -175px;
         margin-top: -178px;
         position: absolute;

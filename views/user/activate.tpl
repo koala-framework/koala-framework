@@ -1,4 +1,4 @@
-<div class="center">
+<div class="content">
     <h1>
         <? if ($this->isActivate) { ?>
             <?=trlKwf('Activate Useraccount')?>
