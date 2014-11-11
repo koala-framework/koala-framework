@@ -82,8 +82,14 @@ class Kwf_Component_Renderer_Twig_Helper
                 $file = $dirs[0].'/'.$componentClass;
             } else {
                 foreach ($dirs as $dir) {
-                    if (file_exists($dir.'/'.$componentClass)) {
-                        $file = $dir.'/'.$componentClass;
+                    if (file_exists($dir.'/'.str_replace('_', '/', $componentClass).'.twig')) {
+                        $dir = rtrim($dir, '/');
+                        if (VENDOR_PATH == '../vendor') { //hack for tests. proper solution would be not to change cwd into /tests
+                            if ($dir == KWF_PATH) {
+                                $dir = '..';
+                            }
+                        }
+                        $file = $dir.'/'.str_replace('_', '/', $componentClass).'.twig';
                         break;
                     }
                 }
@@ -91,7 +97,7 @@ class Kwf_Component_Renderer_Twig_Helper
         }
 
         if ($file) {
-            $ret = str_replace('_', '/', $file).'.twig';
+            $ret = $file;
         } else {
             $ret = null;
             foreach (explode(PATH_SEPARATOR, get_include_path()) as $ip) {
@@ -101,7 +107,9 @@ class Kwf_Component_Renderer_Twig_Helper
                     break;
                 }
             }
-            if (!$ret) throw new Kwf_Exception("Can't find template $componentClass");
+            if (!$ret) {
+                throw new Kwf_Exception("Can't find template $componentClass");
+            }
         }
 
 
