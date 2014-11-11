@@ -23,6 +23,7 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
         } else {
             $tpl = $renderer->getTemplate($component, 'Component');
         }
+        if (!$tpl) throw new Kwf_Exception("No template found for '$component->componentClass'");
         if (substr($tpl, -4) == '.tpl') {
             $view = new Kwf_Component_View($renderer);
             $view->assign($vars);
