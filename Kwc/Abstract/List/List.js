@@ -2,6 +2,7 @@ Ext2.namespace('Kwc.Abstract.List');
 Kwc.Abstract.List.List = Ext2.extend(Kwf.Binding.ProxyPanel,
 {
     listWidth: 300,
+    showCopyPaste: true,
 
     initComponent: function()
     {
@@ -32,7 +33,7 @@ Kwc.Abstract.List.List = Ext2.extend(Kwf.Binding.ProxyPanel,
             listeners: {
                 beforerendergrid: function(grid) {
                     var tb = grid.getTopToolbar();
-                    if (tb) {
+                    if (tb && this.showCopyPaste) {
                         tb.add({
                             cls: 'x2-btn-icon',
                             icon: '/assets/silkicons/page_white_copy.png',

@@ -1,31 +1,28 @@
 <?php
 class Kwc_List_ChildPages_Teaser_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 {
-    protected $_buttons = array();
+    protected $_buttons = array('save');
     protected $_model = 'Kwc_List_ChildPages_Teaser_Model';
     protected $_defaultOrder = array('field' => 'pos', 'direction' => 'ASC');
 
     protected function _initColumns()
     {
-        $c = Kwc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
-        $childOwnModel = Kwc_Abstract::getSetting($c, 'ownModel');
+        $cmp = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1));
+        $this->_getModel()->updatePages($cmp);
 
         $this->_columns->add(new Kwf_Grid_Column('pos'));
-        if ($childOwnModel) {
-            $this->_columns->add(new Kwf_Grid_Column_Checkbox('visible', ''))
-                ->setData(new Kwc_List_ChildPages_Teaser_ChildVisibilityData($childOwnModel, $this->_getParam('componentId')))
-                ->setRenderer('booleanTickCross')
-                ->setHeaderIcon(new Kwf_Asset('visible'))
-                ->setTooltip('Visibility');
-        }
-        $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Page name'), 200));
+        $this->_columns->add(new Kwf_Grid_Column('child_id'));
+        $this->_columns->add(new Kwf_Grid_Column('name', trlKwf('Page name'), 200))
+            ->setData(new Kwc_List_ChildPages_Teaser_ChildPageNameData());
+        $this->_columns->add(new Kwf_Grid_Column_Visible('visible'));
+
     }
 
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
-        $ret->whereEquals('parent_component_id', $this->_getParam('componentId'));
-        $ret->whereEquals('ignore_visible', true);
+        $ret->whereEquals('component_id', $this->_getParam('componentId'));
         return $ret;
     }
 }
