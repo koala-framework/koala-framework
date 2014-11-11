@@ -396,12 +396,11 @@ class Kwf_Media_Image
             if (!is_dir($dir)) mkdir($dir, 0777, true);
             $preScaleCacheFile = "$dir/$preScaleFactor";
             if (!file_exists($preScaleCacheFile)) {
-                $im = new Imagick();
                 $f = $source;
                 if ($previousCacheFile) {
                     $f = $previousCacheFile;
                 }
-                $im->readImageBlob(file_get_contents($f), 'foo.'.str_replace('image/', '', $sourceSize['mime'])); //add fake filename to help imagick with format detection
+                $im = self::_createImagickFromBlob(file_get_contents($f), $sourceSize['mime']);
                 if (!$previousCacheFile) {
                     $im = self::_processCommonImagickSettings($im); //only once
                 }
@@ -461,14 +460,13 @@ class Kwf_Media_Image
             if ($source instanceof Imagick) {
                 $im = $source;
             } else {
-                $im = new Imagick();
                 $f = $source;
                 if ($preScale['factor']) {
                     $f = $preScale['file'];
                 }
                 $blob = file_get_contents($f);
                 if (!strlen($blob)) throw new Kwf_Exception("File is empty");
-                $im->readImageBlob($blob, 'foo.'.str_replace('image/', '', $sourceSize['mime'])); //add fake filename to help imagick with format detection
+                $im = self::_createImagickFromBlob($blob, $sourceSize['mime']);
             }
             if (!$preScale['factor']) {
                 //preScale does this already
@@ -519,6 +517,28 @@ class Kwf_Media_Image
         return $ret;
     }
 
+    private function _createImagickFromFile($file)
+    {
+        $im = new Imagick();
+        $im->readImage($file);
+        if (method_exists($im, 'setColorspace')) {
+            $im->setType(Imagick::IMGTYPE_TRUECOLORMATTE);
+            $im->setColorspace($im->getImageColorspace());
+        }
+        return $im;
+    }
+
+    private function _createImagickFromBlob($blob, $mime)
+    {
+        $im = new Imagick();
+        $im->readImageBlob($blob, 'foo.'.str_replace('image/', '', $mime)); //add fake filename to help imagick with format detection
+        if (method_exists($im, 'setColorspace')) {
+            $im->setType(Imagick::IMGTYPE_TRUECOLORMATTE);
+            $im->setColorspace($im->getImageColorspace());
+        }
+        return $im;
+    }
+
     private function _processCommonImagickSettings($im)
     {
         if (method_exists($im, 'getImageProfiles') && $im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
@@ -526,17 +546,22 @@ class Kwf_Media_Image
             $hasIccProfile = in_array('icc', $profiles);
             // if it doesnt have a CMYK ICC profile, we add one
             if ($hasIccProfile === false) {
-                $iccCmyk = file_get_contents(Kwf_Config::getValue('libraryPath').'/icc/ISOuncoated.icc');
+                $iccCmyk = file_get_contents(dirname(__FILE__).'/icc/ISOuncoated.icc');
                 $im->profileImage('icc', $iccCmyk);
                 unset($iccCmyk);
             }
             // then we add an RGB profile
-            $iccRgb = file_get_contents(Kwf_Config::getValue('libraryPath').'/icc/sRGB_v4_ICC_preference.icc');
+            $iccRgb = file_get_contents(dirname(__FILE__).'/icc/sRGB_v4_ICC_preference.icc');
             $im->profileImage('icc', $iccRgb);
             unset($iccRgb);
         }
 
-        $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        if (method_exists($im, 'setColorspace')) {
+            $im->setColorspace(Imagick::COLORSPACE_RGB);
+        } else {
+            $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        }
+
         $im->stripImage();
         $im->setImageCompressionQuality(90);
         $version = $im->getVersion();

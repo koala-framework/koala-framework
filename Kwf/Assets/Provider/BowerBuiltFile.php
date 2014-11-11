@@ -36,14 +36,21 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             foreach ($files as $f) {
                 if (substr($f, -6) == '.js.js') $f = substr($f, 0, -3);
                 if (file_exists($dir.'/'.$f)) {
+                    $baseFileName = substr($f, 0, -3);
+                    if (file_exists($dir.'/'.$baseFileName.'.min.js') && file_exists($dir.'/'.$baseFileName.'.min.map')) {
+                        //use shipped minimied+map file if exists
+                        $jsDep = new Kwf_Assets_Dependency_File_JsPreBuilt($type.'/'.$f, $type.'/'.$baseFileName.'.min.js', $type.'/'.$baseFileName.'.min.map');
+                    } else {
+                        $jsDep = new Kwf_Assets_Dependency_File_Js($type.'/'.$f);
+                    }
                     if (file_exists($dir.'/'.substr($f, 0, -2).'css')) {
                         $ret = new Kwf_Assets_Dependency_Dependencies(array(
-                            new Kwf_Assets_Dependency_File_Js($type.'/'.$f),
+                            $jsDep,
                             new Kwf_Assets_Dependency_File_Css($type.'/'.substr($f, 0, -2).'css'),
                         ), $dependencyName);
                         break;
                     } else {
-                        $ret = new Kwf_Assets_Dependency_File_Js($type.'/'.$f);
+                        $ret = $jsDep;
                         break;
                     }
                 }

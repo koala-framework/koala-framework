@@ -17,6 +17,7 @@
         <? } else { ?>
         <div class="nextBtnInactive"></div>
         <? } ?>
+        <? if ($this->baseUrl) { ?>
         <div class="image" style="max-width:<?=$this->width;?>px;">
             <div class="container" style="padding-bottom:<?=$this->aspectRatio;?>%;"
                     data-min-width="<?=$this->minWidth;?>"
@@ -27,6 +28,7 @@
                 </noscript>
             </div>
         </div>
+        <? } ?>
     </div>
     <div class="lightboxFooter">
         <? if(isset($this->options->title) && $this->options->title) { ?><p class="title"><?=$this->options->title?></p><? } ?>

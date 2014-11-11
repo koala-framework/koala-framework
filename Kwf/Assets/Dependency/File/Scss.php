@@ -94,7 +94,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             $ret = file_get_contents($cacheFile);
             $ret = preg_replace("#/\*\# sourceMappingURL=.* \*/#", '', $ret);
 
-            $map = new Kwf_Assets_Util_SourceMap(file_get_contents("{$cacheFile}.map"), $ret);
+            $map = new Kwf_SourceMaps_SourceMap(file_get_contents("{$cacheFile}.map"), $ret);
 
             if (strpos($ret, 'cssClass') !== false && (strpos($ret, '$cssClass') !== false || strpos($ret, '.cssClass') !== false)) {
                 $cssClass = $this->_getComponentCssClass();

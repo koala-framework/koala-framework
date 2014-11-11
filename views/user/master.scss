@@ -5,7 +5,7 @@
 
 html {
     body.backendUser {
-        .center {
+        .content {
             animation: backendUserFadein 1s, backendUserSlidein 1s;
             -moz-animation: backendUserFadein 1s, backendUserSlidein 1s; // Firefox
             -webkit-animation: backendUserFadein 1s, backendUserSlidein 1s; // Safari and Chrome
@@ -64,7 +64,7 @@ html {
 }
 
 .backendUser {
-    font-family: 'Raleway', arial;
+    font-family: arial;
     background: $background-color;
     font-size: 16px;
     color: white;
@@ -83,7 +83,7 @@ html {
         }
     }
 
-    .center {
+    .content {
         margin-left: -175px;
         margin-top: -178px;
         position: absolute;
@@ -127,7 +127,7 @@ html {
                 margin-left: 0px;
 
                 li {
-                    font-family: 'Raleway', arial;
+                    font-family: arial;
                     margin-bottom: 10px;
                     list-style: none;
                     font-size: 16px;
@@ -163,7 +163,7 @@ html {
             }
 
             input {
-                font-family: 'Raleway', arial;
+                font-family: arial;
                 border: none;
                 border-bottom: 1px solid grey;
                 background: none transparent;
@@ -175,7 +175,7 @@ html {
         }
 
         button {
-            font-family: 'Raleway', arial;
+            font-family: arial;
             background: none $button-color;
             border-radius: 4px;
             font-weight: 700;

@@ -31,12 +31,17 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['register'] = Kwf_Component_Data_Root::getInstance()
-                        ->getComponentByClass(
-                            'Kwc_User_Register_Component',
-                            array('subroot' => $this->getData())
-                        );
+        $ret['register'] = $this->_getRegisterComponent();
         return $ret;
+    }
+
+    protected function _getRegisterComponent()
+    {
+        return Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass(
+                'Kwc_User_Register_Component',
+                array('subroot' => $this->getData())
+            );
     }
 
     protected function _afterSave(Kwf_Model_Row_Interface $row)

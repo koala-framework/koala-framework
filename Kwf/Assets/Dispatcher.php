@@ -107,7 +107,7 @@ class Kwf_Assets_Dispatcher
                     $contentUrl = substr($url, 0, -4);
                     $extension = substr($contentUrl, strrpos($contentUrl, '/')+1);
                     $replacements = self::_getBaseUrlReplacements($extension, $ret['contents']);
-                    $map = new Kwf_Assets_Util_SourceMap($ret['contents'], '');
+                    $map = new Kwf_SourceMaps_SourceMap($ret['contents'], '');
                     foreach ($replacements as $i) {
                         $map->stringReplace($i['search'], $i['replace']);
                     }

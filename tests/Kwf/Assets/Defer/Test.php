@@ -38,17 +38,6 @@ class Kwf_Assets_Defer_Test extends Kwf_Test_TestCase
         $this->assertEquals($c, 'DB');
     }
 
-    public function testPackageContentsSourceMap()
-    {
-        $c = $this->_package->getPackageContentsSourceMap('text/javascript', 'en', false);
-        $c = json_decode($c, true);
-        $this->assertCount(2, $c['sources']);
-
-        $c = $this->_package->getPackageContentsSourceMap('text/javascript; defer', 'en', false);
-        $c = json_decode($c, true);
-        $this->assertCount(2, $c['sources']);
-    }
-
     public function testGetFilteredUniqueDependencies1()
     {
         $d = $this->_list->findDependency('A')->getFilteredUniqueDependencies('text/javascript');

@@ -5,7 +5,7 @@
         <a class="frontendLink" href="/">Frontend</a>
     <? } ?>
 <? } ?>
-<div class="center">
+<div class="content">
     <? if ($this->untagged) { ?>
         <div class="untagged"><?=trlKwf('WARNING: untagged')?></div>
     <? } ?>

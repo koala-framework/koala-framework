@@ -4,7 +4,6 @@
     <title><?php echo $this->applicationName; ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
     <?php if ($this->favicon) { ?>
     <link rel="shortcut icon" href="<?php echo htmlspecialchars($this->favicon)?>" />
     <?php } ?>

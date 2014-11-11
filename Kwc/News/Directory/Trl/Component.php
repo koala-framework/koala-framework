@@ -19,9 +19,9 @@ class Kwc_News_Directory_Trl_Component extends Kwc_Directories_Item_Directory_Tr
     public function getSelect()
     {
         $select = parent::getSelect();
-        $select->where('publish_date <= NOW()');
+        $select->where('publish_date <= CURDATE()');
         if (Kwc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'enableExpireDate')) {
-            $select->where('expiry_date >= NOW() OR ISNULL(expiry_date)');
+            $select->where('expiry_date >= CURDATE() OR ISNULL(expiry_date)');
         }
         $select->order('publish_date', 'DESC');
         return $select;

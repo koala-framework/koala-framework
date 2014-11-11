@@ -16,5 +16,6 @@ class Kwc_Articles_Directory_AuthorsModel extends Kwf_Model_Db
             new Kwf_Model_Select_Expr_String(' '),
             new Kwf_Model_Select_Expr_Field('lastname')
         ));
+        $this->_exprs['articles_count'] = new Kwf_Model_Select_Expr_Child_Count('Articles');
     }
 }
