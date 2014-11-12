@@ -87,7 +87,7 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
         }
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         foreach ($ret['items'] as $k=>$i) {
-            if ($i['item'] === $this->_checkboxHiddenField) {
+            if (isset($i['item']) && $i['item'] === $this->_checkboxHiddenField) {
                 unset($ret['items'][$k]);
             }
         }
