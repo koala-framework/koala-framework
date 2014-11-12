@@ -108,7 +108,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
 
     public static function isValidMediaOutput($id, $type, $className)
     {
-        return Kwf_Media_Output_Component::isValidImage($id, $type);
+        return Kwf_Media_Output_Component::isValidImage($id, $type, $className);
     }
 
     public static function getMediaOutput($id, $type, $className)

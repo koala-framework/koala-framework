@@ -96,7 +96,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
 
     public static function isValidMediaOutput($id, $type, $className)
     {
-        return Kwf_Media_Output_Component::isValidImage($id, $type);
+        return Kwf_Media_Output_Component::isValidImage($id, $type, $className);
     }
 
     public static function getMediaOutput($id, $type, $className)

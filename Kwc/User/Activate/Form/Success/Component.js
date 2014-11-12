@@ -1,3 +1,5 @@
-Kwf.onJElementReady('.kwcUserFormSuccess', function(el) {
-    window.setTimeout("window.location.href = '/'", 3000);
+Kwf.onJElementReady('.kwcUserFormSuccess', function(el, config) {
+    window.setTimeout(function() {
+        window.location.href = config.redirectUrl;
+    }, 3000);
 });

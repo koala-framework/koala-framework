@@ -32,6 +32,19 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
         return $this;
     }
 
+    /**
+     * Set align attribute for legend
+     *
+     * Used in Frontend Forms only
+     *
+     * @param string (left|center|right)
+     * @return $this
+     */
+    public function setLegendAlign($value)
+    {
+        return $this->setProperty('legendAlign', $value);
+    }
+
     //verhindert aufrufen von validate/prepareSave/save etc fuer kinder wenn checkbox nicht gesetzt
     protected function _processChildren($method, $childField, $row, $postData)
     {
@@ -74,7 +87,7 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
         }
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         foreach ($ret['items'] as $k=>$i) {
-            if ($i['item'] === $this->_checkboxHiddenField) {
+            if (isset($i['item']) && $i['item'] === $this->_checkboxHiddenField) {
                 unset($ret['items'][$k]);
             }
         }
@@ -86,7 +99,9 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
         $ret['preHtml'] .= " class=\"{$cssClass}\"";
         $ret['preHtml'] .= '>';
         if ($this->getTitle()) {
-            $ret['preHtml'] .= "<legend>";
+            $ret['preHtml'] .= "<legend";
+            if ($this->getLegendAlign()) $ret['preHtml'] .= " align=\"{$this->getLegendAlign()}\"";
+            $ret['preHtml'] .= '>';
             if ($this->getCheckboxToggle() && $this->_checkboxHiddenField) {
                 $n = $this->_checkboxHiddenField->getFieldName();
                 $ret['preHtml'] .= "<input type=\"checkbox\" name=\"$n\" ";

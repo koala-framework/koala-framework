@@ -141,7 +141,7 @@ class Kwf_Assets_Dispatcher
             throw new Kwf_Exception_NotFound();
         }
         if (!is_instance_of($dependencyClass, 'Kwf_Assets_Interface_UrlResolvable')) {
-            throw new Kwf_Exception("invalid dependency class");
+            throw new Kwf_Exception_NotFound();
         }
         $dependency = call_user_func(array($dependencyClass, 'fromUrlParameter'), $dependencyClass, $dependencyParams);
 
@@ -154,7 +154,7 @@ class Kwf_Assets_Dispatcher
         else if ($extension == 'css') $mimeType = 'text/css';
         else if ($extension == 'printcss') $mimeType = 'text/css; media=print';
         else if ($extension == 'defer.js') $mimeType = 'text/javascript; defer';
-        else throw new Kwf_Exception_NotYetImplemented();
+        else throw new Kwf_Exception_NotFound();
 
         if (!$sourceMap) {
             if ($dependency instanceof Kwf_Assets_Package) {

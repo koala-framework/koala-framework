@@ -47,9 +47,4 @@ class Kwf_User_AuthPasswordProxy_Test extends Kwf_Test_TestCase
         $this->assertFalse($auth->validatePassword($row, 'foo'));
         $this->assertTrue($auth->validatePassword($row, 'blubb'));
     }
-
-    public function testMails()
-    {
-        $this->markTestIncomplete();
-    }
 }

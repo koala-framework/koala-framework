@@ -129,7 +129,12 @@ class Kwf_Assets_Package
     public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
     {
         if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
-            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
+            if (Kwf_Exception_Abstract::isDebug()) {
+                //proper error message on development server
+                throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
+            } else {
+                throw new Kwf_Exception_NotFound();
+            }
         }
 
         $maxMTime = 0;
