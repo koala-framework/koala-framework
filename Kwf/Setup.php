@@ -334,7 +334,9 @@ class Kwf_Setup
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: storage empty', microtime(true)-$t);
             return false;
         }
-        $ret = Kwf_Registry::get('userModel')->hasAuthedUser();
+        $m = Kwf_Registry::get('userModel');
+        if (!$m) return false;
+        $ret = $m->hasAuthedUser();
         if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: asked model', microtime(true)-$t);
         return $ret;
     }
