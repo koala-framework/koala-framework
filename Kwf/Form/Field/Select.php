@@ -94,6 +94,7 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
         $ret['html'] .= "</select>\n";
         if ($this->getSubmitOnChange())
             $ret['html'] .= '<input class="submit" type="submit" value="»" />';
+        $ret['html'] = '<div class="outerSelect">'.$ret['html'].'</div>';
         return $ret;
     }
 }
