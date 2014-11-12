@@ -5,6 +5,7 @@
 class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
 {
     private $_checkboxHiddenField = null;
+    private $_legendAlign = null;
     public function __construct($title = null)
     {
         parent::__construct();
@@ -62,6 +63,16 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
         return $ret;
     }
 
+    public function setLegendAlign($value)
+    {
+        $this->_legendAlign = $value;
+    }
+
+    public function getLegendAlign()
+    {
+        return $this->_legendAlign;
+    }
+
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         if ($this->getCheckboxToggle() && $this->_checkboxHiddenField) {
@@ -86,7 +97,9 @@ class Kwf_Form_Container_FieldSet extends Kwf_Form_Container_Abstract
         $ret['preHtml'] .= " class=\"{$cssClass}\"";
         $ret['preHtml'] .= '>';
         if ($this->getTitle()) {
-            $ret['preHtml'] .= "<legend>";
+            $ret['preHtml'] .= "<legend";
+            if ($this->getLegendAlign()) $ret['preHtml'] .= " align=\"{$this->legendAlign()}\"";
+            $ret['preHtml'] .= '>';
             if ($this->getCheckboxToggle() && $this->_checkboxHiddenField) {
                 $n = $this->_checkboxHiddenField->getFieldName();
                 $ret['preHtml'] .= "<input type=\"checkbox\" name=\"$n\" ";
