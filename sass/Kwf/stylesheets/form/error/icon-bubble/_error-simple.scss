@@ -1,28 +1,26 @@
 @mixin error-simple {
-    > div.kwcForm > form {
-        .kwfFieldErrorIconBubble {
+    .kwfFieldErrorIconBubble {
+        background: none transparent;
+        position: relative;
+        height: auto;
+        width: auto;
+        clear: left;
+
+        .message {
             background: none transparent;
+            display: block !important;
+            opacity: 1 !important;
+            filter: alpha(opacity = 100) !important;
+            color: red;
+            padding: 0;
+            margin: 0;
+            right: 0px !important;
             position: relative;
-            height: auto;
-            width: auto;
-            clear: left;
+            text-align: left;
+        }
 
-            .message {
-                background: none transparent;
-                display: block !important;
-                opacity: 1 !important;
-                filter: alpha(opacity = 100) !important;
-                color: red;
-                padding: 0;
-                margin: 0;
-                right: 0px !important;
-                position: relative;
-                text-align: left;
-            }
-
-            .arrow {
-                display: none !important;
-            }
+        .arrow {
+            display: none !important;
         }
     }
 }
