@@ -29,7 +29,7 @@ Ext2.extend(Kwf.FrontendForm.Field, Ext2.util.Observable, {
         if (!nativePlaceholderSupport) {
             this._placeholder = input.dom.getAttribute('placeholder');
             if (this._placeholder) {
-                input.dom.value = this._placeholder;
+                if (!input.dom.value) input.dom.value = this._placeholder;
                 input.on('focus', function() {
                     if (input.getValue() == this._placeholder) {
                         input.dom.value = '';
