@@ -273,6 +273,10 @@ class Kwf_Assets_Package
             array_unshift($ret, $this->getPackageUrl($ext, $language));
         }
 
+        if ($this->_dependencyName == 'Admin') {
+            $ret = array_merge($ret, Kwf_Assets_Package_Default::getInstance('Frontend')->getPackageUrls($mimeType, $language));
+        }
+
         return $ret;
     }
 
