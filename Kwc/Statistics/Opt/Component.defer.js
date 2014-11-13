@@ -7,7 +7,6 @@ Kwf.onElementReady('.kwcStatisticsOpt .webForm', function(el, config) {
             Kwf.fireComponentEvent('cookieOptChanged', 'out');
         }
     }, el);
-    el.child('.submit').hide();
     Kwf.onComponentEvent('cookieOptChanged', function(value) {
         if (value == 'in') {
             el.kwcForm.findField('form_opt').setValue(true);
