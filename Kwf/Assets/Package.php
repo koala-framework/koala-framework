@@ -141,6 +141,8 @@ class Kwf_Assets_Package
             }
             $ret = $this->getPackageContents($mimeType, $language);
             Kwf_Assets_BuildCache::getInstance()->building = false;
+        } else {
+            $ret = $ret['contents'];
         }
         return $ret;
     }
