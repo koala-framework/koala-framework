@@ -126,6 +126,25 @@ class Kwf_Assets_Package
         //$ret = '{"version":3, "file": "'.$file.'", "sources": ['.$retSources.'], "names": ['.$retNames.'], "mappings": "'.$retMappings.'"}';
     }
 
+    public function getBuildContents($mimeType, $language)
+    {
+        if ($mimeType == 'text/javascript') $ext = 'js';
+        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
+        else if ($mimeType == 'text/css') $ext = 'css';
+        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
+
+        $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($this, $ext, $language);
+        $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+        if ($ret === false || $ret === 'outdated') {
+            if ($ret === 'outdated' && Kwf_Config::getValue('assets.lazyBuild') == 'outdated') {
+                Kwf_Assets_BuildCache::getInstance()->building = true;
+            }
+            $ret = $this->getPackageContents($mimeType, $language);
+            Kwf_Assets_BuildCache::getInstance()->building = false;
+        }
+        return $ret;
+    }
+
     public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
     {
         if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
