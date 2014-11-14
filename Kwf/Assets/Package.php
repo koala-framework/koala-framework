@@ -182,11 +182,6 @@ class Kwf_Assets_Package
                 $ret);
         }
 
-        if ($this->_dependencyName == 'Admin' && $mimeType == 'text/css') {
-            $ret .= Kwf_Assets_Package_Default::getInstance('Frontend')->getPackageContents($mimeType, $language, false);
-        }
-
-
         if ($includeSourceMapComment) {
             if ($mimeType == 'text/javascript') $ext = 'js';
             else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
@@ -278,7 +273,7 @@ class Kwf_Assets_Package
             array_unshift($ret, $this->getPackageUrl($ext, $language));
         }
 
-        if ($this->_dependencyName == 'Admin' && $ext == 'css') {
+        if ($this->_dependencyName == 'Admin') {
             $ret = array_merge($ret, Kwf_Assets_Package_Default::getInstance('Frontend')->getPackageUrls($mimeType, $language));
         }
 
