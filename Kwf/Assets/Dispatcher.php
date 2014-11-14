@@ -143,7 +143,10 @@ class Kwf_Assets_Dispatcher
         if (!is_instance_of($dependencyClass, 'Kwf_Assets_Interface_UrlResolvable')) {
             throw new Kwf_Exception_NotFound();
         }
-        $dependency = call_user_func(array($dependencyClass, 'fromUrlParameter'), $dependencyClass, $dependencyParams);
+        $package = call_user_func(array($dependencyClass, 'fromUrlParameter'), $dependencyClass, $dependencyParams);
+        if (!$package instanceof Kwf_Assets_Package) {
+            throw new Kwf_Exception_NotFound();
+        }
 
         $sourceMap = false;
         if (substr($extension, -4) == '.map') {
@@ -157,22 +160,13 @@ class Kwf_Assets_Dispatcher
         else throw new Kwf_Exception_NotFound();
 
         if (!$sourceMap) {
-            if ($dependency instanceof Kwf_Assets_Package) {
-                $contents = $dependency->getPackageContents($mimeType, $language);
-                $mtime = $dependency->getMaxMTime($mimeType);
-            } else {
-                $contents = $dependency->getContents($language);
-                $mtime = $dependency->getMTime();
-            }
+            $contents = $package->getPackageContents($mimeType, $language);
+            $mtime = $package->getMaxMTime($mimeType);
             if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
             else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf8';
         } else {
-            if ($dependency instanceof Kwf_Assets_Package) {
-                $contents = $dependency->getPackageContentsSourceMap($mimeType, $language);
-                $mtime = $dependency->getMaxMTime($mimeType);
-            } else {
-                throw new Kwf_Exception("can't generate sourcemap for non-packages");
-            }
+            $contents = $package->getPackageContentsSourceMap($mimeType, $language);
+            $mtime = $package->getMaxMTime($mimeType);
             $mimeType = 'application/json';
         }
         $ret = array(

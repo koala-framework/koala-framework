@@ -259,10 +259,7 @@ class Kwf_Assets_Package
                 if ($i instanceof Kwf_Assets_Dependency_HttpUrl) {
                     $ret[] = $i->getUrl();
                 } else {
-                    if (!$i instanceof Kwf_Assets_Interface_UrlResolvable) {
-                        throw new Kwf_Exception("dependency that should not be in package must implement UrlResolvableInterface");
-                    }
-                    $ret[] = Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();
+                    throw new Kwf_Exception('Invalid dependency that should not be included in package');
                 }
             } else {
                 $hasContents = true;
