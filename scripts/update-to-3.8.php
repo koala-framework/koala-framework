@@ -1,13 +1,15 @@
 <?php
 $c = array(
     'require' => array(
-        "koala-framework/koala-framework" => "dev-3.8"
-    )
+        "koala-framework/koala-framework" => "3.8.x-dev"
+    ),
+    "minimum-stability"=> "dev",
+    "prefer-stable"=> true,
 );
 if (is_file('vkwf_branch')) {
     exec("git rm vkwf_branch");
     echo "removed kwf_branch file, composer.json is used instead\n";
-    $c['require']['vivid-planet/vkwf'] = 'dev-3.8';
+    $c['require']['vivid-planet/vkwf'] = '3.8.x-dev';
     $c['repositories'] = array(
         array(
             'type' => 'composer',
