@@ -8,7 +8,8 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
         $ret = '';
 
         if ($position == 'header') {
-            $ret .= Kwf_View_Helper_DebugData::debugData();
+            $helper = new Kwf_View_Helper_DebugData();
+            $ret .= $helper->debugData();
         }
 
         $flag = ($position == 'header') ? 'hasHeaderIncludeCode' : 'hasFooterIncludeCode';
