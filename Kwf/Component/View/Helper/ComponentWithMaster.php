@@ -1,7 +1,7 @@
 <?php
 class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_Helper_Component
 {
-    private static function _sortByPriority(Kwf_Component_Data $c1, Kwf_Component_Data $c2)
+    public static function _sortByPriority(Kwf_Component_Data $c1, Kwf_Component_Data $c2)
     {
         if ($c1->priority == $c2->priority) {
             return 0;

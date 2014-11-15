@@ -10,7 +10,7 @@ abstract class Kwf_Component_Plugin_Abstract extends Kwf_Component_Abstract
         parent::__construct($componentId);
     }
 
-    public function getInstance($pluginClass, $componentId)
+    public static function getInstance($pluginClass, $componentId)
     {
         if (!isset(self::$_instances[$pluginClass][$componentId])) {
             self::$_instances[$pluginClass][$componentId] = new $pluginClass($componentId);
