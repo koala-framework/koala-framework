@@ -213,7 +213,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             foreach ($exts as $extension) {
                 $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language);
                 $cacheContents = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-                echo "$depName $extension size: ".Kwf_View_Helper_FileSize::fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)))."\n";
+                $h = new Kwf_View_Helper_FileSize();
+                echo "$depName $extension size: ".$h->fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)))."\n";
             }
         }
         $d = Kwf_Assets_Package_Default::getDefaultProviderList()->findDependency('Frontend');

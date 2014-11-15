@@ -4,7 +4,7 @@ class Kwf_Util_Build
     /**
      * @return Kwf_Util_Build
      */
-    public function getInstance()
+    public static function getInstance()
     {
         static $i;
         if (!isset($i)) {
