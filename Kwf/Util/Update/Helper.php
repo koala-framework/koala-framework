@@ -4,21 +4,29 @@
  */
 class Kwf_Util_Update_Helper
 {
+    static private $_updateTagsCache;
+
+    //for tests
+    //this class with only static sucks (untestable)
+    public static function clearUpdateTagsCache()
+    {
+        self::$_updateTagsCache = null;
+    }
+
     /**
      * Returns all udpate tags used by this webs. They are usually set in config.ini
     **/
     public static function getUpdateTags()
     {
-        static $ret;
-        if (!isset($ret)) {
-            $ret = Kwf_Registry::get('config')->server->updateTags->toArray();
+        if (!isset(self::$_updateTagsCache)) {
+            self::$_updateTagsCache = Kwf_Registry::get('config')->server->updateTags->toArray();
             foreach (Kwf_Component_Abstract::getComponentClasses() as $class) {
                 if (Kwc_Abstract::hasSetting($class, 'updateTags')) {
-                    $ret = array_unique(array_merge($ret, Kwc_Abstract::getSetting($class, 'updateTags')));
+                    self::$_updateTagsCache = array_unique(array_merge($ret, Kwc_Abstract::getSetting($class, 'updateTags')));
                 }
             }
         }
-        return $ret;
+        return self::$_updateTagsCache;
     }
 
     public static function getUpdates($from, $to)
