@@ -121,7 +121,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
-        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.'/kwf/user/login/activate';
+        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->getAbsoluteUrl(true);
         return $lostPassUrl.'?code='.$row->id.'-'.$row->generateActivationToken();
     }

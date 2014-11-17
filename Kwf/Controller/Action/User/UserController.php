@@ -26,8 +26,6 @@ class Kwf_Controller_Action_User_UserController extends Kwf_Controller_Action_Au
         $fs->add(new Kwf_Form_Field_Panel())
             ->setHtml(trlKwf('After following actions emails are sent automatically to the respective user:').'<br />'
                      .trlKwf('Create, Delete and E-Mail change'));
-        $fs->add(new Kwf_Form_Field_ShowField('password', trlKwf('Activation link')))
-            ->setData(new Kwf_Controller_Action_User_Users_ActivationlinkData());
         $fs->add(new Kwf_Form_Field_Checkbox('avoid_mailsend', trlKwf('E-Mails')))
             ->setSave(false)
             ->setBoxLabel(trlKwf("Don't send any E-Mail when saving."));
