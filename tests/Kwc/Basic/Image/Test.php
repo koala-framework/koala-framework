@@ -112,10 +112,6 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $o = Kwc_Basic_Image_Component::getMediaOutput($c->componentId, Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-abc', $c->componentClass);
         $this->assertNotNull($o);
         $this->assertEquals('image/png', $o['mimeType']);
-        $im = new Imagick();
-        $im->readImage($o['file']);
-        $this->assertEquals(16, $im->getImageWidth());
-        $this->assertEquals(16, $im->getImageHeight());
         $this->assertContains('/EmptyImageComponent/empty.png', $o['file']);
     }
 
