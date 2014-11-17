@@ -193,6 +193,9 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                 $dbSelect->reset(Zend_Db_Select::ORDER);
                 $dbSelects[] = $dbSelect;
             }
+            if (!$dbSelects) {
+                return array();
+            }
             $sel = $m->getAdapter()->select();
             $sel->union($dbSelects);
             if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
