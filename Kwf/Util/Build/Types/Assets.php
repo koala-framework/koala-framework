@@ -213,7 +213,11 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                     echo "$depName ";
                     if ($partCount > 1) echo "part $partNumber ";
                     $h = new Kwf_View_Helper_FileSize();
-                    echo "$extension size: ".$h->fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)))."\n";
+                    echo "$extension size: ".$h->fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)));
+                    if ($extension == 'css') {
+                        echo ", rules: ".Kwf_Assets_Package::countCssRules($cacheContents['contents']);
+                    }
+                    echo "\n";
                 }
             }
         }

@@ -105,7 +105,7 @@ class Kwf_Assets_Package
         foreach ($deps as $i) {
             if ($i->getIncludeInPackage()) {
                 $c = $i->getContentsPacked($language);
-                $assetRuleCount = self::_countCssRules($c);
+                $assetRuleCount = self::countCssRules($c);
                 if ($ruleCount + $assetRuleCount > self::cssFileRuleLimit) {
                     //schen gruaß vom ie8
                     $curPartNum++;
@@ -178,7 +178,7 @@ class Kwf_Assets_Package
 
     //try to count the number of css rules
     //this is not very acurate but "good enough"
-    private static function _countCssRules($c)
+    public static function countCssRules($c)
     {
         // remove comments
         $c = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $c);
@@ -200,7 +200,7 @@ class Kwf_Assets_Package
             foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
                 if ($i->getIncludeInPackage()) {
                     $c = $i->getContentsPacked($language);
-                    $assetRuleCount = self::_countCssRules($c);
+                    $assetRuleCount = self::countCssRules($c);
                     if ($ruleCount + $assetRuleCount > self::cssFileRuleLimit) {
                         //schen gruaß vom ie8
                         $ret++;
