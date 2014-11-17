@@ -7,8 +7,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
     {
         $this->getHelper('viewRenderer')->setNoController(true);
         $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
-
-        if (!$this->_getParam('user')) {
+        if (!$this->_getParam('user') && $this->getRequest()->getActionName() != 'error') {
             $code = $this->_getParam('code');
             if (!preg_match('#^(.*)-(\w*)$#', $code, $m)) {
                 $this->getRequest()->setParam('errorMessage', trlKwf("Activation code is invalid. Maybe the URL wasn't copied completely?"));
