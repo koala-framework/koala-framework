@@ -12,7 +12,11 @@ class Kwf_Assets_Provider_AtRequires extends Kwf_Assets_Provider_Abstract
 
         if ($dependency->getMimeType() != 'text/javascript') return $deps;
 
-        $fileContents = $dependency->getContents('en');
+        if ($dependency instanceof Kwf_Assets_Dependency_File) {
+            $fileContents = file_get_contents($dependency->getAbsoluteFileName());
+        } else {
+            $fileContents = $dependency->getContents('en');
+        }
 
         // remove comments to avoid dependencies from docs/examples
         $fileContents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $fileContents);
