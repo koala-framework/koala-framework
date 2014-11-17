@@ -9,14 +9,14 @@ class Kwf_Util_Update_Helper
     **/
     public static function getUpdateTags()
     {
-        $ret = Kwf_Registry::get('config')->server->updateTags->toArray();
-        foreach (Kwf_Component_Abstract::getComponentClasses() as $class) {
-            if (Kwc_Abstract::hasSetting($class, 'updateTags')) {
-                $ret = array_unique(array_merge($ret, Kwc_Abstract::getSetting($class, 'updateTags')));
+        static $ret;
+        if (!isset($ret)) {
+            $ret = Kwf_Registry::get('config')->server->updateTags->toArray();
+            foreach (Kwf_Component_Abstract::getComponentClasses() as $class) {
+                if (Kwc_Abstract::hasSetting($class, 'updateTags')) {
+                    $ret = array_unique(array_merge($ret, Kwc_Abstract::getSetting($class, 'updateTags')));
+                }
             }
-        }
-        if (Kwf_Registry::get('db')) {
-            $ret[] = 'db';
         }
         return $ret;
     }
@@ -34,7 +34,6 @@ class Kwf_Util_Update_Helper
         }
 
         $u = self::getUpdatesForDir('Update', $from, $to);
-        foreach ($u as $i) $i->appendTag('web');
         $ret = array_merge($ret, $u);
 
         $ret = self::_sortByRevision($ret);
@@ -45,11 +44,11 @@ class Kwf_Util_Update_Helper
     {
         $ret = array();
         $processed = array();
-        foreach (Kwf_Component_Abstract::getComponentClasses() as $class) {
-            while ($class != '') {
+        foreach (Kwf_Component_Abstract::getComponentClasses() as $cmpClass) {
+            foreach (Kwc_Abstract::getSetting($cmpClass, 'parentClasses') as $class) {
                 $class = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-                if (!in_array($class, $processed)) {
-                    $processed[] = $class;
+                if (!isset($processed[$class])) {
+                    $processed[$class] = true;
                     $curClass = $class;
                     if (substr($curClass, -10) == '_Component') {
                         $curClass = substr($curClass, 0, -10);
@@ -57,7 +56,6 @@ class Kwf_Util_Update_Helper
                     $curClass .= '_Update';
                     $ret = array_merge($ret, self::getUpdatesForDir($curClass, $from, $to));
                 }
-                $class = get_parent_class($class);
             }
         }
         return $ret;
@@ -115,12 +113,10 @@ class Kwf_Util_Update_Helper
                         $update = self::createUpdate($n, $i->getPathname());
 
                         if (!$update) continue;
-                        if ($update->getTags() && !in_array('web', $update->getTags())) {
-                            $tags = $update->getTags();
-                            foreach ($tags as $tag) {
-                                if (!in_array($tag, self::getUpdateTags())) {
-                                    continue 2;
-                                }
+                        $tags = $update->getTags();
+                        if ($tags) {
+                            if (array_intersect($tags, self::getUpdateTags()) != $tags) {
+                                continue;
                             }
                         }
                         $ret[] = $update;
@@ -155,10 +151,10 @@ class Kwf_Util_Update_Helper
             if (preg_match("#\\#\\s*tags:(.*)#", $update->sql, $m)) {
                 $update->setTags(explode(' ', trim($m[1])));
             }
-            $update->appendTag('db');
         } else {
-            if (is_instance_of($class, 'Kwf_Update')) {
-                $update = new $class($nr, $class);
+            $update = new $class($nr, $class);
+            if (!$update instanceof Kwf_Update) {
+                throw new Kwf_Exception("Invalid update class: '$class'");
             }
         }
         return $update;
