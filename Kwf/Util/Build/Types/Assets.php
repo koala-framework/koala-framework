@@ -212,7 +212,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                     $cacheContents = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
                     echo "$depName ";
                     if ($partCount > 1) echo "part $partNumber ";
-                    echo "$extension size: ".Kwf_View_Helper_FileSize::fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)))."\n";
+                    $h = new Kwf_View_Helper_FileSize();
+                    echo "$extension size: ".$h->fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)))."\n";
                 }
             }
         }
