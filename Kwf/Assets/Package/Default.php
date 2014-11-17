@@ -7,6 +7,8 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package
      * Returns a Default Asset Package (using Kwf_Assets_ProviderList_Default)
      *
      * Very fast, as all expensive operations are done lazily
+     *
+     * @return self
      */
     public static function getInstance($dependencyName)
     {
