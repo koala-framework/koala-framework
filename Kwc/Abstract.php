@@ -136,10 +136,53 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
                 }
             }
             return array_unique($ret);
+
+        } else if (is_array($select) && is_string($class) && count($select) == 1 &&
+            isset($select['componentClass']) && count($select['componentClass']) == 1
+        ) {
+            //simple case no 3: looking for a single comopnentClass
+            foreach (Kwc_Abstract::getSetting($class, 'generators') as $g) {
+                if (is_array($g['component'])) {
+                    foreach ($g['component'] as $c) {
+                        if ($c == $select['componentClass']) return array($c);
+                    }
+                } else if ($g['component'] && $g['component'] == $select['componentClass']) {
+                    return array($g['component']);
+                }
+            }
+            return array();
+        } else if (is_array($select) && is_string($class) && count($select) == 1 &&
+            isset($select['generatorFlags']) && $select['generatorFlags'] == array('static'=>true)
+        ) {
+            //simple case no 4: looking for a generator by flag
+            $ret = array();
+            foreach (Kwc_Abstract::getSetting($class, 'generators') as $key=>$gSettings) {
+                $g = Kwf_Component_Generator_Abstract::getInstance($class, $key, $gSettings);
+                if ($g->getGeneratorFlag('static')) {
+                    if (is_array($gSettings['component'])) {
+                        foreach ($gSettings['component'] as $c) {
+                            if ($c) $ret[] = $c;
+                        }
+                    } else if ($gSettings['component']) {
+                        $ret[] = $gSettings['component'];
+                    }
+                }
+            }
+            return array_unique($ret);
+        } else if (is_array($select) && is_string($class) && count($select) == 2 &&
+            isset($select['generator']) && isset($select['componentKey'])
+        ) {
+            //simple case no 5: looking for a generator plus componentKey
+            $ret = array();
+            $generators = Kwc_Abstract::getSetting($class, 'generators');
+            if (isset($generators[$select['generator']]['component'][$select['componentKey']])) {
+                $ret[] = $generators[$select['generator']]['component'][$select['componentKey']];
+            }
+            return $ret;
+
         } else if (is_array($select)) {
             $select = new Kwf_Component_Select($select);
         }
-
         //not so simple, else we ask Generator_Abstract::getInstances for help
         $ret = array();
         $generators = Kwf_Component_Generator_Abstract::getInstances($class, $select);
