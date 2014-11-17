@@ -34,9 +34,10 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
 
     public static function expandAssetVariables($contents, $section = 'web', &$mtimeFiles = array())
     {
+        if (strpos($contents, 'var(')===false) return $contents;
         $assetVariables = self::getAssetVariables($section, $mtimeFiles);
         foreach ($assetVariables as $k=>$i) {
-            $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
+            //$contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
             $contents = str_replace('var('.$k.')', $i, $contents);
         }
         return $contents;
