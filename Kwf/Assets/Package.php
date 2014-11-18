@@ -155,12 +155,19 @@ class Kwf_Assets_Package
         //$ret = '{"version":3, "file": "'.$file.'", "sources": ['.$retSources.'], "names": ['.$retNames.'], "mappings": "'.$retMappings.'"}';
     }
 
-    public function getBuildContents($mimeType, $language, $partNumber)
+    /**
+     * Get built contents of a package, to be used by eg. mails
+     */
+    public function getBuildContents($mimeType, $language)
     {
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
         else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
+
+        //currently only a single part number is supported
+        //TODO support larger css with multiple parts
+        $partNumber = 0;
 
         $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($this, $ext, $language, $partNumber);
         $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
