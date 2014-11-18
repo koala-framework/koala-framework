@@ -10999,7 +10999,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>'%value%' does not appear to be a valid date</en>
-<de>'%value%' hat kein Datumsformat</de>
+<de>'%value%' ist kein gültiges Datum</de>
 <id>1756</id>
 <ro>'%value%' nu are format valid de dată</ro>
 <sl>%value%' nima oblike datuma.</sl>
