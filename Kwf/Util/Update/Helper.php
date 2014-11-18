@@ -22,7 +22,7 @@ class Kwf_Util_Update_Helper
             self::$_updateTagsCache = Kwf_Registry::get('config')->server->updateTags->toArray();
             foreach (Kwf_Component_Abstract::getComponentClasses() as $class) {
                 if (Kwc_Abstract::hasSetting($class, 'updateTags')) {
-                    self::$_updateTagsCache = array_unique(array_merge($ret, Kwc_Abstract::getSetting($class, 'updateTags')));
+                    self::$_updateTagsCache = array_unique(array_merge(self::$_updateTagsCache, Kwc_Abstract::getSetting($class, 'updateTags')));
                 }
             }
         }
