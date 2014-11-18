@@ -133,7 +133,11 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
-        $url = Kwf_Controller_Front_Component::getInstance()->getWebRouter()->getRoute('admin')->assemble();
+        $url = Kwf_Controller_Front_Component::getInstance()->getWebRouter()->getRoute('admin')->assemble(array(
+            'module'     =>'index',
+            'controller' => 'index',
+            'action'     => 'index'
+        ));
         $ret = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.'/' . $url;
 
         $root = Kwf_Component_Data_Root::getInstance();
