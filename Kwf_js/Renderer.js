@@ -223,7 +223,6 @@ Ext2.util.Format.genderText = function(value, p, record, rowIndex, colIndex, sto
     } else if (value == 'female') {
         ret = trlKwf('Female');
     }
-    console.log(value, ret);
     return ret;
 };
 
