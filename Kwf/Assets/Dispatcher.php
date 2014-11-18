@@ -133,6 +133,7 @@ class Kwf_Assets_Dispatcher
     {
         class_exists('Kwf_Trl'); //required because setup doesn't load Trl.php before dispatching assets
         $param = explode('/', $url);
+        if (count($param) != 5) throw new Kwf_Exception_NotFound();
         $dependencyClass = $param[0];
         $dependencyParams = $param[1];
         $language = $param[2];
