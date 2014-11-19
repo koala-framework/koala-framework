@@ -32,7 +32,7 @@
         },
         "require-dev-bower": {
             "qunit": "1.14.0",
-            "qunit-phantomjs-runner": "jonkemp/qunit-phantomjs-runner#1.2.0"
+            "qunit-phantomjs-runner": "vivid-planet/qunit-phantomjs-runner#e96347ee33b773160cf061d7b1b5c4ad3d1d9082"
         }
     },
     "suggest": {
