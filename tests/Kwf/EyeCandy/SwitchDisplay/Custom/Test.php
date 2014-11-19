@@ -11,7 +11,7 @@ class Kwf_EyeCandy_SwitchDisplay_Custom_Test extends PHPUnit_Framework_TestCase
             }
         }
 
-        $cmd = "phantomjs ../vendor/bower_components/qunit-phantomjs-runner/runner.js ";
+        $cmd = "phantomjs --web-security=false ../vendor/bower_components/qunit-phantomjs-runner/runner.js ";
         $cmd .= "http://".Kwf_Config::getValue('server.domain').Kwf_Setup::getBaseUrl()."/kwf/test/kwf_eye-candy_switch-display_custom_test 20";
         $cmd .= " 2>&1";
         $out = array();
