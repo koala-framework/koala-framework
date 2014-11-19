@@ -54,7 +54,7 @@ class Kwf_Form_Field_DateSelect extends Kwf_Form_Field_SimpleAbstract
             $ret['html'] .= ">{$i}</option>";
         }
         $ret['html'] .= "</select>";
-        $ret['html'] = '<div class="outerSelect">'.$ret['html'].'</div><div class="outerSelect">';
+        $ret['html'] = '<div class="outerSelect day">'.$ret['html'].'</div><div class="outerSelect month">';
 
         $months = array(
             $kwfTrl->trlKwf('January', array(), $this->_language),
@@ -79,7 +79,7 @@ class Kwf_Form_Field_DateSelect extends Kwf_Form_Field_SimpleAbstract
             $ret['html'] .= ">{$months[$i-1]}</option>";
         }
         $ret['html'] .= "</select>";
-        $ret['html'] = $ret['html'].'</div><div class="outerSelect">';
+        $ret['html'] = $ret['html'].'</div><div class="outerSelect year">';
 
         $ret['html'] .= "<select name=\"{$name}_year\">";
         $ret['html'] .= "<option value=\"\">{$kwfTrl->trlKwf('Year', array(), $this->_language)}</option>";
