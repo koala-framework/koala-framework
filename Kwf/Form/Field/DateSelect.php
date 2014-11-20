@@ -83,7 +83,7 @@ class Kwf_Form_Field_DateSelect extends Kwf_Form_Field_SimpleAbstract
 
         $ret['html'] .= "<select name=\"{$name}_year\">";
         $ret['html'] .= "<option value=\"\">{$kwfTrl->trlKwf('Year', array(), $this->_language)}</option>";
-        for($i = 1900; $i <= date('Y'); $i++) {
+        for($i = date('Y'); $i >= 1900; $i--) {
             $ret['html'] .= "<option value=\"{$i}\"";
             if ($i == $valueYear) $ret['html'] .= ' selected="selected"';
             $ret['html'] .= ">{$i}</option>";
