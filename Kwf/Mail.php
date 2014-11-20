@@ -116,7 +116,9 @@ class Kwf_Mail extends Zend_Mail
                 $image->type = $output['mimeType'];
                 $image->disposition = Zend_Mime::DISPOSITION_INLINE;
                 $image->encoding = Zend_Mime::ENCODING_BASE64;
-                $image->filename = substr(strrchr($path, '/'), 1);
+                $filename = rawurldecode(substr(strrchr($path, '/'), 1));
+                $filename = preg_replace('/([^a-z0-9\-\.]+)/i', '_', $filename);
+                $image->filename = $filename;
                 $image->id = md5($path);
                 $this->setType(Zend_Mime::MULTIPART_RELATED);
                 $this->addAttachment($image);
