@@ -63,13 +63,7 @@ Kwf.namespace('Kwf.Utils');
                 if ($(element).hasClass('kwfDoubleTapHandler')) return;
 
                 $(element).addClass('kwfDoubleTapHandler');
-                $(element).on('touchend', function(e) {
-
-                    if (touchMoved) {
-                        touchMoved = false;
-                        return;
-                    }
-
+                $(element).on('touchstart', function(e) {
                     e.stopPropagation();
 
                     var currentTarget = $(e.currentTarget);
