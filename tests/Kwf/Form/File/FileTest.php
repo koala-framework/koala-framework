@@ -220,19 +220,8 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
                 'name' => 'test.txt'
             )
         );
-        $data = $this->_field->processInput($this->_row, $post);
-        $this->assertSame($post, $data);
+        $post = $this->_field->processInput($this->_row, $post);
 
-        $post = array(
-            'File_upload_id' => '1',
-            'File_del' => '1',
-            'File' => array(
-                'error' => 0,
-                'tmp_name' => __FILE__,
-                'type' => 'plain/text',
-                'name' => 'test.txt'
-            )
-        );
         $this->_field->setAllowOnlyImages(true);
         $data = $this->_field->validate($this->_row, $post);
         $this->assertEquals(array(), $data);
