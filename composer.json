@@ -28,7 +28,7 @@
         },
         "require-npm": {
             "uglify-js": "2.4.13",
-            "node-sass": "vivid-planet/node-sass#8d6ae01363bcfb46393977417d2a78599db768c8"
+            "node-sass": "1.2.3"
         },
         "require-dev-bower": {
             "qunit": "1.14.0",
