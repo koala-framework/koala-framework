@@ -97,8 +97,6 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
     {
         $postData = parent::processInput($row, $postData);
 
-        if ($this->getSave() === false) return $postData;
-
         if (isset($postData[$this->getFieldName().'_upload_id'])
             && (!isset($postData[$this->getFieldName()])
                 || $postData[$this->getFieldName()]['error'] == UPLOAD_ERR_NO_FILE)
