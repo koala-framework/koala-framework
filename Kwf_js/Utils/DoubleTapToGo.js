@@ -26,7 +26,6 @@ Kwf.namespace('Kwf.Utils');
     });
 
     $(document).on('touchend', function(e) {
-
         //ignore if user scrolled
         if (touchMoved) {
             touchMoved = false;
@@ -59,12 +58,18 @@ Kwf.namespace('Kwf.Utils');
 
         if (Modernizr.touch) {
             $.each(el, function(i, element) {
-
                 if ($(element).hasClass('kwfDoubleTapHandler')) return;
 
                 $(element).addClass('kwfDoubleTapHandler');
-                $(element).on('touchstart', function(e) {
+
+                $(element).on('touchend', function(e) {
                     e.stopPropagation();
+
+                    if (touchMoved) {
+                        touchMoved = false;
+                        e.preventDefault();
+                        return;
+                    };
 
                     var currentTarget = $(e.currentTarget);
 
