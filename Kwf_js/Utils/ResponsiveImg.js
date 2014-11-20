@@ -13,7 +13,10 @@ Kwf.Utils.ResponsiveImg = function (selector) {
                 checkResponsiveImgEl(el);
             }
         } else {
-            deferredImages.push(el);
+            if (!el.data('responsiveImgInitDeferred')) {
+                deferredImages.push(el);
+                el.data('responsiveImgInitDeferred', true);
+            }
         }
     }, { defer: true });
 };
