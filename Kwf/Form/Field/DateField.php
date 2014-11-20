@@ -36,7 +36,10 @@ class Kwf_Form_Field_DateField extends Kwf_Form_Field_SimpleAbstract
     protected function _addValidators()
     {
         parent::_addValidators();
-        $this->addValidator(new Kwf_Validate_Date(array('outputFormat' => trlKwf('yyyy-mm-dd'))));
+        $this->addValidator(new Kwf_Validate_Date(array(
+                'outputFormat' => Zend_Locale_Format::convertPhpToIsoFormat(trlKwf('Y-m-d'))
+            ))
+        );
     }
 
     protected function _getValueFromPostData($postData)
