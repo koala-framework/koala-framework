@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_PackageTest extends Kwf_Test_TestCase
+class Kwf_Assets_Dependency_PackageTest extends Kwf_Test_TestCase
 {
     private $_list;
     public function setUp()
