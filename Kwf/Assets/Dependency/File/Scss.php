@@ -59,7 +59,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             if (substr($fileName, 0, 1) == '.') $fileName = getcwd().substr($fileName, 1);
             $bin = Kwf_Config::getValue('server.nodeSassBinary');
             if (!$bin) {
-                $bin = dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/.bin/node-sass';
+                $bin = "nodejs ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/.bin/node-sass';
             }
             $cmd = "$bin --include-path $loadPath --output-style compressed ";
             $cmd .= " --source-map ".escapeshellarg($cacheFile.'.map');
