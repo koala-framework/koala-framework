@@ -79,7 +79,7 @@ class Kwf_Component_Renderer_Twig_Helper
         }
         if ($dirs !== false) {
             if (count($dirs) == 1) {
-                $file = $dirs[0].'/'.$componentClass;
+                $file = $dirs[0].'/'.str_replace('_', '/', $componentClass).'.twig';
             } else {
                 foreach ($dirs as $dir) {
                     if (file_exists($dir.'/'.str_replace('_', '/', $componentClass).'.twig')) {
@@ -112,6 +112,9 @@ class Kwf_Component_Renderer_Twig_Helper
             }
         }
 
+        if (substr($ret, 0, strlen(getcwd())) == getcwd()) {
+            $ret = substr($ret, strlen(getcwd())+1);
+        }
 
         Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
