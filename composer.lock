@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/composer-extra-assets.git",
-                "reference": "459cf6fe10f175a4ec7e00f24e4ebd7fe45cb92b"
+                "reference": "e5248909c366167a379dd374d8893008af796c0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/composer-extra-assets/zipball/459cf6fe10f175a4ec7e00f24e4ebd7fe45cb92b",
-                "reference": "459cf6fe10f175a4ec7e00f24e4ebd7fe45cb92b",
+                "url": "https://api.github.com/repos/koala-framework/composer-extra-assets/zipball/e5248909c366167a379dd374d8893008af796c0f",
+                "reference": "e5248909c366167a379dd374d8893008af796c0f",
                 "shasum": ""
             },
             "require": {
