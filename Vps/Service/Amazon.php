@@ -3,7 +3,7 @@ class Vps_Service_Amazon extends Zend_Service_Amazon
 {
     public function __construct($appId = null, $countryCode = 'DE', $secretKey = null)
     {
-        if (!$appId || !$secretKEy) {
+        if (!$appId || !$secretKey) {
             $a = Vps_Registry::get('config')->amazon;
             if (!$a) throw new Vps_Exception("Set amazon.key and amazon.secret in config");
             if (!$appId) $appId = $a->key;
