@@ -102,16 +102,19 @@ class Kwf_Assets_Package
         $curPartNum = 0;
         $ret = array();
         $ruleCount = 0;
+        $fileCount = 0;
         foreach ($deps as $i) {
             if ($i->getIncludeInPackage()) {
                 $c = $i->getContentsPacked($language);
                 $assetRuleCount = self::countCssRules($c);
-                if ($ruleCount + $assetRuleCount > self::cssFileRuleLimit) {
+                if ($fileCount > 0 && $ruleCount + $assetRuleCount > self::cssFileRuleLimit) {
                     //schen gruaß vom ie8
                     $curPartNum++;
                     $ruleCount = 0;
+                    $fileCount = 0;
                 }
                 $ruleCount += $assetRuleCount;
+                $fileCount++;
                 if ($curPartNum == $partNumber) {
                     $ret[] = $i;
                 }
@@ -194,6 +197,11 @@ class Kwf_Assets_Package
         $c = preg_replace('#\([^\)\(]*\)#', '', $c);
         $c = preg_replace('#\([^\)\(]*\)#', '', $c); //twice to get linear-gradient(-45deg, rgba(255, 255, 255, 0.15)...)
 
+        //remove content: "x-slicer ... as used by extjs
+        $c = preg_replace('#"[^"]*\"#', '', $c);
+
+        $c = preg_replace('#box\-shadow:[^;}]+#m', '', $c);
+
         return substr_count($c, '}')  //rule blocks
              + substr_count($c, ',')  //plus additional selectors for a block
              - substr_count($c, '@'); //minus the } used by @media, @font-face etc
@@ -204,16 +212,19 @@ class Kwf_Assets_Package
         $ret = 1;
         if ($mimeType == 'text/css') {
             $ruleCount = 0;
+            $fileCount = 0;
             foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
                 if ($i->getIncludeInPackage()) {
                     $c = $i->getContentsPacked($language);
                     $assetRuleCount = self::countCssRules($c);
-                    if ($ruleCount + $assetRuleCount > self::cssFileRuleLimit) {
+                    if ($fileCount > 0 && $ruleCount + $assetRuleCount > self::cssFileRuleLimit) {
                         //schen gruaß vom ie8
                         $ret++;
                         $ruleCount = 0;
+                        $fileCount = 0;
                     }
                     $ruleCount += $assetRuleCount;
+                    $fileCount++;
                 }
             }
         }
