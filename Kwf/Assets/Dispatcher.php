@@ -165,7 +165,7 @@ class Kwf_Assets_Dispatcher
             $contents = $package->getPackageContents($mimeType, $language, $partNumber);
             $mtime = $package->getMaxMTime($mimeType);
             if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
-            else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf8';
+            else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf-8';
         } else {
             $contents = $package->getPackageContentsSourceMap($mimeType, $language, $partNumber);
             $mtime = $package->getMaxMTime($mimeType);
