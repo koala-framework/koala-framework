@@ -34,7 +34,7 @@ class Vps_Model_ProxyCache_Row extends Vps_Model_Proxy_Row
 
     public function toArray()
     {
-        return parent::$this->_getRow()->toArray();
+        return $this->_getRow()->toArray();
     }
 
     public function save()
