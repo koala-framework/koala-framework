@@ -71,7 +71,7 @@ class Kwf_Assets_Dispatcher
                 $mtime = $dependency->getMTime();
             }
             if ($extension == 'js') $mimeType = 'text/javascript; charset=utf-8';
-            else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf8';
+            else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf-8';
             $ret = array(
                 'contents' => $contents,
                 'mimeType' => $mimeType,
