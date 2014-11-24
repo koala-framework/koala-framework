@@ -1,5 +1,5 @@
 <?php
-class Kwf_EyeCandy_SwitchDisplay_Custom_Test extends PHPUnit_Framework_TestCase
+class Kwf_Js_DoubleTapToGo_Test extends PHPUnit_Framework_TestCase
 {
     public function testIt()
     {
