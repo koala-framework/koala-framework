@@ -44,7 +44,7 @@ class Vps_Exception_JavaScript extends Vps_Exception
         $body .= $this->_format('Exception', get_class($this));
         $body .= $this->_format('Thrown', $this->_url.':'.$this->_lineNumber);
         $body .= $this->_format('Message', $this->getMessage());
-        $body .= $this->_format('stack', $this->_stack);
+        $body .= $this->_format('stack', print_r($this->_stack, true));
         $body .= $this->_format('REQUEST_URI', $this->_location);
         $body .= $this->_format('HTTP_REFERER', $this->_referrer ? $this->_referrer : '(none)');
         $body .= $this->_format('User', $user);
