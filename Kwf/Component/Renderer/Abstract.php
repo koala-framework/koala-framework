@@ -192,6 +192,9 @@ abstract class Kwf_Component_Renderer_Abstract
         if ($type == 'component') {
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($componentId, array('ignoreVisible'=>true));
+            if (!$c) {
+                throw new Kwf_Exception("Didn't get '$componentId'");
+            }
             $plugins = $this->_getGroupedViewPlugins($c);
         }
         $content = $this->_executePlugins(null, $plugins, $componentId, array('replace'));
