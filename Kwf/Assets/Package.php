@@ -252,7 +252,10 @@ class Kwf_Assets_Package
                     if (strpos($c, "//@ sourceMappingURL=") !== false && strpos($c, "//# sourceMappingURL=") !== false) {
                         throw new Kwf_Exception("contents must not contain sourceMappingURL");
                     }
-                    $ret .= $c."\n";
+                    $ret .= $c;
+                    if (strlen($c) > 0 && substr($c, -1) != "\n") {
+                        $ret .= "\n";
+                    }
                 }
             }
             $mTime = $i->getMTime();
