@@ -130,6 +130,20 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     'mtime' => file_exists($f) ? filemtime($f) : null
                 );
             }
+            $files = array(
+                'assetVariables.ini',
+                'config.ini',
+                KWF_PATH.'/config.ini'
+            );
+            if (Kwf_Config::getValue('kwc.theme')) {
+                $files[] = Kwf_Config_Web::findThemeConfigIni(Kwf_Config::getValue('kwc.theme'));
+            }
+            foreach ($files as $f) {
+                $sourceTimes[] = array(
+                    'file' => $f,
+                    'mtime' => file_exists($f) ? filemtime($f) : null
+                );
+            }
             file_put_contents("$cacheFile.sourcetimes", serialize($sourceTimes));
         }
     }
