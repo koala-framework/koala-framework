@@ -16,5 +16,6 @@ if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == $img) {
 Kwf_Assets_Loader::load();
 
 $front = Kwf_Controller_Front::getInstance();
+$front->setBaseUrl('');
 $response = $front->dispatch();
 $response->sendResponse();

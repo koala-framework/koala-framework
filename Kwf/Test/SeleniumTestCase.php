@@ -43,6 +43,10 @@ class Kwf_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         }
 
         Kwf_Util_Apc::callClearCacheByCli(array('type'=>'user'));
+        Kwf_Cache::factory('Core', 'Memcached', array(
+            'lifetime'=>null,
+            'automatic_cleaning_factor' => false,
+            'automatic_serialization'=>true))->clean();
 
         $d = $this->_domain;
         if (!$d) {
