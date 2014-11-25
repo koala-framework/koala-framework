@@ -15,7 +15,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         for ($partNumber=0; $partNumber<$partCount; $partNumber++) {
             $cacheContents = array(
                 'contents' => $p->getPackageContents($mimeType, $language, $partNumber),
-                'mimeType' => $extension == 'js' ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8',
+                'mimeType' => ($extension == 'js' || $extension == 'defer.js') ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8',
                 'mtime' => $p->getMaxMTime($mimeType)
             );
 
