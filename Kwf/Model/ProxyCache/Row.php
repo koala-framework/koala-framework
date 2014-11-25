@@ -34,7 +34,7 @@ class Kwf_Model_ProxyCache_Row extends Kwf_Model_Proxy_Row
 
     public function toArray()
     {
-        return parent::$this->_getRow()->toArray();
+        return $this->_getRow()->toArray();
     }
 
     protected function _saveWithoutResetDirty()
