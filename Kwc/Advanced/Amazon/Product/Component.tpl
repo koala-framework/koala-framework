@@ -1,7 +1,7 @@
 <div class="<?=$this->cssClass?>">
     <? if ($this->product) { ?>
-    <? if ($this->product->getItem()->MediumImage) { ?>
-        <img class="cover" src="<?=$this->product->getItem()->MediumImage->Url->__toString()?>" width="<?=$this->product->getItem()->MediumImage->Width?>" height="<?=$this->product->getItem()->MediumImage->Height?>" alt="" />
+    <? if ($this->product->item->MediumImage) { ?>
+        <img class="cover" src="<?=$this->product->item->MediumImage->Url->__toString()?>" width="<?=$this->product->item->MediumImage->Width?>" height="<?=$this->product->item->MediumImage->Height?>" alt="" />
     <? } ?>
     <h4><?=$this->product->title?></h4>
     <h5><?=$this->product->author?></h5>
