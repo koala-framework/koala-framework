@@ -3,7 +3,7 @@ class Kwf_Service_Amazon extends Zend_Service_Amazon
 {
     public function __construct($appId = null, $countryCode = 'DE', $secretKey = null)
     {
-        if (!$appId || !$secretKEy) {
+        if (!$appId || !$secretKey) {
             $a = Kwf_Registry::get('config')->amazon;
             if (!$a) throw new Kwf_Exception("Set amazon.key and amazon.secret in config");
             if (!$appId) $appId = $a->key;

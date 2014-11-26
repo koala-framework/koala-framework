@@ -1,6 +1,7 @@
 <?php
 /**
  * @group slow
+ * @group selenium
  * @group Kwf_Form_MultiCheckbox
  */
 class Kwf_Form_MultiCheckbox_SelTest extends Kwf_Test_SeleniumTestCase
