@@ -1,21 +1,21 @@
-Ext.ns('Kwc.Newsletter.Detail');
-Kwc.Newsletter.Detail.TabPanel = Ext.extend(Kwf.Binding.TabPanel,
+Ext2.ns('Kwc.Newsletter.Detail');
+Kwc.Newsletter.Detail.TabPanel = Ext2.extend(Kwf.Binding.TabPanel,
 {
     initComponent : function()
     {
         this.border = false;
-        this.backButton = new Ext.Action({
+        this.backButton = new Ext2.Action({
             text: trlKwf('Back'),
             icon: '/assets/silkicons/arrow_left.png',
-            cls: 'x-btn-text-icon',
+            cls: 'x2-btn-text-icon',
             handler: this.onBack,
             disabled: true,
             scope: this
         });
-        this.nextButton = new Ext.Action({
+        this.nextButton = new Ext2.Action({
             text: trlKwf('Next'),
             icon: '/assets/silkicons/arrow_right.png',
-            cls: 'x-btn-text-icon',
+            cls: 'x2-btn-text-icon',
             handler: this.onNext,
             scope: this
         });
@@ -41,4 +41,4 @@ Kwc.Newsletter.Detail.TabPanel = Ext.extend(Kwf.Binding.TabPanel,
         if (activeItem-1 == 0) this.backButton.disable();
     }
 });
-Ext.reg('kwc.newsletter.detail.tabpanel', Kwc.Newsletter.Detail.TabPanel);
+Ext2.reg('kwc.newsletter.detail.tabpanel', Kwc.Newsletter.Detail.TabPanel);

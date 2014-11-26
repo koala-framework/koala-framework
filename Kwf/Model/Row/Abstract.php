@@ -519,7 +519,7 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
 
     protected function _callObserver($fn)
     {
-        Kwf_Component_ModelObserver::getInstance()->add($fn, $this);
+        Kwf_Events_ModelObserver::getInstance()->add($fn, $this);
     }
 
     protected function _afterSave()

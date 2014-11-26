@@ -16,7 +16,7 @@ class Kwc_List_Switch_ItemPage_ContentSender extends Kwf_Component_Abstract_Cont
         return $ret;
     }
 
-    protected function _render($includeMaster)
+    protected function _render($includeMaster, &$hasDynamicParts)
     {
         $component = $this->_data->parent->getComponent();
         $largeContent = $component->getLargeComponent($this->_data);
@@ -36,11 +36,11 @@ class Kwc_List_Switch_ItemPage_ContentSender extends Kwf_Component_Abstract_Cont
         }
 
         if ($data == $this->_data) {
-            return parent::_render($includeMaster);
+            return parent::_render($includeMaster, $hasDynamicParts);
         } else {
             $parentContentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
             $parentContentSender = new $parentContentSender($data);
-            return $parentContentSender->_render($includeMaster);
+            return $parentContentSender->_render($includeMaster, $hasDynamicParts);
         }
     }
 }

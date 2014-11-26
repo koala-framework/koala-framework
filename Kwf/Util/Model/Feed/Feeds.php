@@ -71,7 +71,6 @@ class Kwf_Util_Model_Feed_Feeds extends Kwf_Model_Abstract
         $result = @preg_match_all($pattern, $contents, $matches);
         @ini_restore('track_errors');
         if ($result === false) {
-            require_once 'Zend/Feed/Exception.php';
             throw new Zend_Feed_Exception("Internal error: $php_errormsg");
         }
         // Try to fetch a feed for each link tag that appears to refer to a feed

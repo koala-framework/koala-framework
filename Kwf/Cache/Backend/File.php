@@ -1,14 +1,14 @@
 <?php
-require_once 'Zend/Cache/Backend/File.php';
+// require_once 'Zend/Cache/Backend/File.php';
 class Kwf_Cache_Backend_File extends Zend_Cache_Backend_File
 {
     public function __construct(array $options = array())
     {
-        if (!isset($options['cache_file_umask'])) {
-            $options['cache_file_umask'] = 0666;
+        if (!isset($options['cache_file_perm'])) {
+            $options['cache_file_perm'] = 0666;
         }
-        if (!isset($options['hashed_directory_umask'])) {
-            $options['hashed_directory_umask'] = 0777;
+        if (!isset($options['hashed_directory_perm'])) {
+            $options['hashed_directory_perm'] = 0777;
         }
         $this->_options['compression'] = isset($options['compression']) ? (bool)$options['compression'] : false;
         parent::__construct($options);

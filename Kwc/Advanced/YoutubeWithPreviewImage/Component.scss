@@ -1,0 +1,51 @@
+.cssClass {
+    position: relative;
+
+    .image {
+        position: relative;
+        cursor: pointer;
+        z-index: 2;
+
+        .playButton {
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            top: 50%;
+        }
+    }
+
+    .youtubeContainer {
+        position: absolute;
+        width: auto;
+        z-index: 3;
+
+        .youtubePlayer {
+            display: none;
+        }
+    }
+
+    &.ratio16x9 {
+        .youtubeContainer {
+            padding-bottom: 56.27%;
+            height: 0;
+
+            iframe {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
+        }
+    }
+    &.ratio4x3 {
+        .youtubeContainer {
+            padding-bottom: 75%;
+            height: 0;
+
+            iframe {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
+        }
+    }
+}

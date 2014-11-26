@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Directories.Item.Directory');
-Kwc.Directories.Item.Directory.Panel = Ext.extend(Kwf.Auto.GridPanel,
+Ext2.namespace('Kwc.Directories.Item.Directory');
+Kwc.Directories.Item.Directory.Panel = Ext2.extend(Kwf.Auto.GridPanel,
 {
     initComponent: function() {
         if (this.componentPlugins) {
@@ -36,4 +36,4 @@ Kwc.Directories.Item.Directory.Panel = Ext.extend(Kwf.Auto.GridPanel,
     }
 });
 
-Ext.reg('kwc.directories.item.directory', Kwc.Directories.Item.Directory.Panel);
+Ext2.reg('kwc.directories.item.directory', Kwc.Directories.Item.Directory.Panel);

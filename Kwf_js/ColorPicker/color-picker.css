@@ -6,72 +6,72 @@ body, html {
   position: absolute;
   margin: 100px; }
 
-.x-panel-icon.x-color-wheel, .x-color-wheel {
+.x2-panel-icon.x2-color-wheel, .x2-color-wheel {
   background-image: url('../images/color_wheel.png'); }
 
-.x-color-picker.x-panel-body {
+.x2-color-picker.x2-panel-body {
   background-image: url('../images/background.jpg'); }
 
-.x-color-picker.x-panel .x-layer {
+.x2-color-picker.x2-panel .x2-layer {
   width: 100%;
   height: 100%;
   position: absolute;
   visibility: visible; }
-.x-color-picker.x-panel .blank {
+.x2-color-picker.x2-panel .blank {
   background-image: url('../images/blank.gif'); }
-.x-color-picker.x-panel .bar-brightness {
+.x2-color-picker.x2-panel .bar-brightness {
   background-image: url('../images/bar-brightness.png'); }
-.x-color-picker.x-panel .map-hue {
+.x2-color-picker.x2-panel .map-hue {
   background-image: url('../images/map-hue.png'); }
-.x-color-picker.x-panel .bar-hue {
+.x2-color-picker.x2-panel .bar-hue {
   background-image: url('../images/bar-hue.png'); }
-.x-color-picker.x-panel .map-saturation {
+.x2-color-picker.x2-panel .map-saturation {
   background-image: url('../images/map-saturation.png'); }
-.x-color-picker.x-panel .map-saturation-overlay {
+.x2-color-picker.x2-panel .map-saturation-overlay {
   background-image: url('../images/map-saturation-overlay.png'); }
-.x-color-picker.x-panel .bar-saturation {
+.x2-color-picker.x2-panel .bar-saturation {
   background-image: url('../images/bar-saturation.png'); }
-.x-color-picker.x-panel .map-brightness {
+.x2-color-picker.x2-panel .map-brightness {
   background-image: url('../images/map-brightness.png'); }
-.x-color-picker.x-panel .bar-brightness {
+.x2-color-picker.x2-panel .bar-brightness {
   background-image: url('../images/bar-brightness.png'); }
-.x-color-picker.x-panel .map-red-max {
+.x2-color-picker.x2-panel .map-red-max {
   background-image: url('../images/map-red-max.png'); }
-.x-color-picker.x-panel .map-red-min {
+.x2-color-picker.x2-panel .map-red-min {
   background-image: url('../images/map-red-min.png'); }
-.x-color-picker.x-panel .bar-red-tl {
+.x2-color-picker.x2-panel .bar-red-tl {
   background-image: url('../images/bar-red-tl.png'); }
-.x-color-picker.x-panel .bar-red-tr {
+.x2-color-picker.x2-panel .bar-red-tr {
   background-image: url('../images/bar-red-tr.png'); }
-.x-color-picker.x-panel .bar-red-br {
+.x2-color-picker.x2-panel .bar-red-br {
   background-image: url('../images/bar-red-br.png'); }
-.x-color-picker.x-panel .bar-red-bl {
+.x2-color-picker.x2-panel .bar-red-bl {
   background-image: url('../images/bar-red-bl.png'); }
-.x-color-picker.x-panel .map-green-max {
+.x2-color-picker.x2-panel .map-green-max {
   background-image: url('../images/map-green-max.png'); }
-.x-color-picker.x-panel .map-green-min {
+.x2-color-picker.x2-panel .map-green-min {
   background-image: url('../images/map-green-min.png'); }
-.x-color-picker.x-panel .bar-green-tl {
+.x2-color-picker.x2-panel .bar-green-tl {
   background-image: url('../images/bar-green-tl.png'); }
-.x-color-picker.x-panel .bar-green-tr {
+.x2-color-picker.x2-panel .bar-green-tr {
   background-image: url('../images/bar-green-tr.png'); }
-.x-color-picker.x-panel .bar-green-br {
+.x2-color-picker.x2-panel .bar-green-br {
   background-image: url('../images/bar-green-br.png'); }
-.x-color-picker.x-panel .bar-green-bl {
+.x2-color-picker.x2-panel .bar-green-bl {
   background-image: url('../images/bar-green-bl.png'); }
-.x-color-picker.x-panel .map-blue-max {
+.x2-color-picker.x2-panel .map-blue-max {
   background-image: url('../images/map-blue-max.png'); }
-.x-color-picker.x-panel .map-blue-min {
+.x2-color-picker.x2-panel .map-blue-min {
   background-image: url('../images/map-blue-min.png'); }
-.x-color-picker.x-panel .bar-blue-tl {
+.x2-color-picker.x2-panel .bar-blue-tl {
   background-image: url('../images/bar-blue-tl.png'); }
-.x-color-picker.x-panel .bar-blue-tr {
+.x2-color-picker.x2-panel .bar-blue-tr {
   background-image: url('../images/bar-blue-tr.png'); }
-.x-color-picker.x-panel .bar-blue-br {
+.x2-color-picker.x2-panel .bar-blue-br {
   background-image: url('../images/bar-blue-br.png'); }
-.x-color-picker.x-panel .bar-blue-bl {
+.x2-color-picker.x2-panel .bar-blue-bl {
   background-image: url('../images/bar-blue-bl.png'); }
-.x-color-picker.x-panel .x-map {
+.x2-color-picker.x2-panel .x2-map {
   border: 1px solid black;
   width: 255px;
   height: 255px;
@@ -79,51 +79,51 @@ body, html {
   margin: 10px;
   position: relative;
   overflow: hidden; }
-  .x-color-picker.x-panel .x-map .x-pointer {
+  .x2-color-picker.x2-panel .x2-map .x2-pointer {
     width: 15px;
     height: 15px;
     position: absolute;
     background-image: url('../images/mappoint.gif'); }
-.x-color-picker.x-panel .x-track {
+.x2-color-picker.x2-panel .x2-track {
   height: 255px;
   width: 20px;
   border: 1px solid black;
   float: left;
   margin: 10px 10px 10px 0;
   position: relative; }
-  .x-color-picker.x-panel .x-track .x-slider {
+  .x2-color-picker.x2-panel .x2-track .x2-slider {
     width: 40px;
     height: 9px;
     position: absolute;
     left: -10px;
     top: 0px;
     background-image: url('../images/rangearrows.gif'); }
-.x-color-picker.x-panel .x-console {
+.x2-color-picker.x2-panel .x2-console {
   float: left;
   width: 75px;
   margin: 0 10px 10px 0; }
-  .x-color-picker.x-panel .x-console .preview {
+  .x2-color-picker.x2-panel .x2-console .preview {
     padding-top: 0;
     margin-top: 10px;
     border: 1px solid black;
     width: 50px;
     height: 50px; }
-  .x-color-picker.x-panel .x-console li {
+  .x2-color-picker.x2-panel .x2-console li {
     position: relative;
     padding-top: 6px; }
-  .x-color-picker.x-panel .x-console .x-radio {
+  .x2-color-picker.x2-panel .x2-console .x2-radio {
     position: absolute;
     top: 8px;
     left: 1px;
     width: 20px;
     height: 20px;
     background-image: url('../images/radio/background.png'); }
-  .x-color-picker.x-panel .x-console .x-radio.x-dialed {
+  .x2-color-picker.x2-panel .x2-console .x2-radio.x2-dialed {
     background-image: url('../images/radio/over.png'); }
-  .x-color-picker.x-panel .x-console .x-form-text {
+  .x2-color-picker.x2-panel .x2-console .x2-form-text {
     width: 50px;
     padding-left: 25px;
     font-family: Courier New, Courier; }
-  .x-color-picker.x-panel .x-console .hex .x-form-text {
+  .x2-color-picker.x2-panel .x2-console .hex .x2-form-text {
     padding-left: 15px;
     width: 60px; }

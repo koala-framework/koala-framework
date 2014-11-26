@@ -53,7 +53,7 @@ abstract class Kwf_Rest_Controller extends Zend_Rest_Controller
 
     public function postDispatch()
     {
-        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Events_ModelObserver::getInstance()->process();
         Kwf_Component_Cache::getInstance()->writeBuffer();
     }
 

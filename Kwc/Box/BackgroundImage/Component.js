@@ -5,13 +5,8 @@ Kwf.onJElementReady('.cssClass', function(el, config) {
         var myWidth = 0, myHeight = 0, windowHeight = 0, windowWidth = 0;
         var img = innerBackground.children('img');
 
-        if (config.useParentDiv) {                          //delete this setting in master branch
-            windowWidth = el.parent().width();
-            windowHeight = el.parent().height();
-        } else {
-            windowWidth = $(window).width();
-            windowHeight = $(window).height();
-        }
+        windowWidth = el.parent().width();
+        windowHeight = el.parent().height();
 
         var factorForHeight = backgroundResizeOriginalHeight*100/backgroundResizeOriginalWidth;
         var factorForWidth = backgroundResizeOriginalWidth*100/backgroundResizeOriginalHeight;
@@ -43,7 +38,7 @@ Kwf.onJElementReady('.cssClass', function(el, config) {
     var backgroundResizeOriginalWidth = null;
     var backgroundResizeOriginalHeight = null;
 
-    if (Ext.isIE8 && innerBackground.length) {                  //use modernizr in master branch instead of ext
+    if (Ext2.isIE8 && innerBackground.length) {                  //use modernizr in master branch instead of ext
         var bgUrl = innerBackground.css('background-image');
         bgUrl = bgUrl.replace(/url\("?(.*?)"?\)/, '$1');
 
@@ -64,4 +59,3 @@ Kwf.onJElementReady('.cssClass', function(el, config) {
         if (image.width) image.onload(); //already loaded, call onload manually
     }
 }, { defer: true });
-

@@ -1,6 +1,6 @@
 Kwf.onContentReady(function()
 {
-    var els = Ext.query('.kwfRoundBoderBox');
+    var els = Ext2.query('.kwfRoundBoderBox');
     if (els.length) {
         throw 'Please correct the name "kwfRoundBoderBox" - there is a "R" missing in "Border"';
     }
@@ -19,9 +19,9 @@ Kwf.onContentReady(function()
 
     };
 
-    var els = Ext.query('.kwfRoundBorderBox');
-    Ext.each(els, function(el) {
-        var extEl = Ext.get(el);
+    var els = Ext2.query('.kwfRoundBorderBox');
+    Ext2.each(els, function(el) {
+        var extEl = Ext2.get(el);
         if (extEl.child('.kwfMiddleCenterContent')) {
             setSizes(extEl);
             return;

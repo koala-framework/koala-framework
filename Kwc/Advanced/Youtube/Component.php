@@ -1,5 +1,5 @@
 <?php
-class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
+class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
 {
     const REGEX = '/(?<=(?:v|i)=)[a-zA-Z0-9-]+(?=&)|(?<=(?:v|i)\/)[^&\n]+|(?<=embed\/)[^"&\n]+|(?<=(?:v|i)=)[^&\n]+|(?<=youtu.be\/)[^&\n]+/';
 
@@ -11,7 +11,7 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Youtube');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
-        $ret['assets']['dep'][] = 'KwfYoutubePlayer';
+        $ret['assetsDefer']['dep'][] = 'KwfYoutubePlayer';
         $ret['assetsAdmin']['dep'][] = 'KwfFormCards';
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
@@ -20,7 +20,8 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
         $ret['playerVars'] = array(
             'rel' => 0,
             'iv_load_policy' => 3,
-            'wmode' => 'opaque'
+            'wmode' => 'opaque',
+            'showinfo' => '0'
         );
         return $ret;
     }

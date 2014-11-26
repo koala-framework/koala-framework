@@ -143,20 +143,24 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
     public function postDispatch()
     {
-        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Events_ModelObserver::getInstance()->process();
         Kwf_Component_Cache::getInstance()->writeBuffer();
     }
 
     protected function _getUserRole()
     {
         if (php_sapi_name() == 'cli') return 'cli';
-        return Kwf_Registry::get('userModel')->getAuthedUserRole();
+        $um = Kwf_Registry::get('userModel');
+        if (!$um) return null;
+        return $um->getAuthedUserRole();
     }
 
     protected function _getAuthData()
     {
         if (php_sapi_name() == 'cli') return null;
-        return Kwf_Registry::get('userModel')->getAuthedUser();
+        $um = Kwf_Registry::get('userModel');
+        if (!$um) return null;
+        return $um->getAuthedUser();
     }
     /**
      * @return Kwf_Acl

@@ -24,7 +24,18 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
             throw new Kwf_Exception("proxyModel config is required for model '".get_class($this)."'");
         }
         if (!is_string($this->_proxyModel)) {
-            $this->_proxyModel->addProxyContainerModel($this);
+            $this->_initProxyModel();
+        }
+    }
+
+    protected function _initProxyModel()
+    {
+        $this->_proxyModel->addProxyContainerModel($this);
+        if (!$this->_proxyModel->getFactoryConfig()) {
+            $this->_proxyModel->setFactoryConfig(array(
+                'type' => 'Proxied',
+                'proxy' => $this
+            ));
         }
     }
 
@@ -39,7 +50,7 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
     {
         if (is_string($this->_proxyModel)) {
             $this->_proxyModel = Kwf_Model_Abstract::getInstance($this->_proxyModel);
-            $this->_proxyModel->addProxyContainerModel($this);
+            $this->_initProxyModel();
         }
         return $this->_proxyModel;
     }
@@ -163,17 +174,13 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
 
     public function deleteRows($where)
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
         $ret = $this->getProxyModel()->deleteRows($where);
-        Kwf_Component_ModelObserver::getInstance()->enable();
         return $ret;
     }
 
     public function updateRows($data, $where)
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
         $ret = $this->getProxyModel()->updateRows($data, $where);
-        Kwf_Component_ModelObserver::getInstance()->enable();
         return $ret;
     }
 
@@ -198,13 +205,7 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
 
     public function import($format, $data, $options = array())
     {
-        if (!isset($options['skipModelObserver']) || !$options['skipModelObserver']) {
-            Kwf_Component_ModelObserver::getInstance()->disable();
-        }
         $this->getProxyModel()->import($format, $data, $options);
-        if (!isset($options['skipModelObserver']) || !$options['skipModelObserver']) {
-            Kwf_Component_ModelObserver::getInstance()->enable();
-        }
     }
 
     public function writeBuffer()
@@ -259,5 +260,18 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
     public function afterInsert($row)
     {
         $this->getProxyModel()->afterInsert($row);
+    }
+
+    public function getEventSubscribers()
+    {
+        $ret = $this->getProxyModel()->getEventSubscribers();
+        $fc = $this->getFactoryConfig();
+        if (!$fc) {
+            throw new Kwf_Exception("Didn't find factoryConfig for '".get_class($this)."'");
+        }
+        $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwf_Model_Proxy_Events', array(
+            'modelFactoryConfig' => $fc
+        ));
+        return $ret;
     }
 }

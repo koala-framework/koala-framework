@@ -1,10 +1,10 @@
 Kwf.onContentReady(function(el, options) {
-    var flashComponents = Ext.DomQuery.select('div.kwcAbstractFlash');
-    Ext.each(flashComponents, function(flashComponent, el) {
-        var fc = Ext.get(flashComponent);
+    var flashComponents = Ext2.DomQuery.select('div.kwcAbstractFlash');
+    Ext2.each(flashComponents, function(flashComponent, el) {
+        var fc = Ext2.get(flashComponent);
         var inputEl = fc.down('input');
         if (!fc.isVisible(true) && inputEl) {
-            var cfg = Ext.decode(inputEl.dom.value);
+            var cfg = Ext2.decode(inputEl.dom.value);
             if (cfg.removeHiddenFlash && fc.down('object')) {
                 fc.down('object').remove();
                 fc.createChild({cls: 'flashWrapper'});
@@ -12,14 +12,14 @@ Kwf.onContentReady(function(el, options) {
             }
         }
     });
-    Ext.each(flashComponents, function(flashComponent, el) {
-        if (!flashComponent.so && Ext.get(flashComponent).isVisible(true)) {
-            var inputEl = Ext.get(flashComponent).down('input');
+    Ext2.each(flashComponents, function(flashComponent, el) {
+        if (!flashComponent.so && Ext2.get(flashComponent).isVisible(true)) {
+            var inputEl = Ext2.get(flashComponent).down('input');
             if (inputEl) {
-                var cfg = Ext.decode(inputEl.dom.value);
-                var flashWrapper = Ext.get(flashComponent).down('.flashWrapper');
+                var cfg = Ext2.decode(inputEl.dom.value);
+                var flashWrapper = Ext2.get(flashComponent).down('.flashWrapper');
                 if (flashWrapper) {
-                    params = Ext.apply(
+                    params = Ext2.apply(
                         cfg.data.params,
                         {
                             'quality' : 'high',
@@ -41,7 +41,7 @@ Kwf.onContentReady(function(el, options) {
                     );
 
                     if (!swfobject.hasFlashPlayerVersion(flashVersion)) {
-                        Ext.fly(flashComponent).addClass('noFlash');
+                        Ext2.fly(flashComponent).addClass('noFlash');
                     }
                 }
             }

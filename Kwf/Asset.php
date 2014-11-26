@@ -15,7 +15,24 @@ class Kwf_Asset
         $type = $this->_type;
         if (!$type) {
             static $paths;
-            if (!isset($paths)) $paths = Zend_Registry::get('config')->path->toArray();
+            if (!isset($paths)) {
+                $cacheId = 'asset-paths';
+                $paths = Kwf_Cache_SimpleStatic::fetch($cacheId);
+                if ($paths === false) {
+                    $paths = array(
+                        'web' => '.'
+                    );
+                    $vendors = glob(VENDOR_PATH."/*/*");
+                    $vendors[] = KWF_PATH; //required for kwf tests, in web kwf is twice in $vendors but that's not a problem
+                    foreach ($vendors as $i) {
+                        if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
+                            $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                            $paths[$dep->pathType] = $i;
+                        }
+                    }
+                    Kwf_Cache_SimpleStatic::add($cacheId, $paths);
+                }
+            }
             if (file_exists($paths['silkicons'].'/'.$icon)) {
                 $filename = $paths['silkicons'].'/'.$icon;
                 $type = 'silkicons';

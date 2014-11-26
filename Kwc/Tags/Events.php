@@ -6,18 +6,18 @@ class Kwc_Tags_Events extends Kwc_Abstract_Events
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => 'Kwc_Tags_ComponentToTag',
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onTagRowUpdate'
         );
         $ret[] = array(
             'class' => 'Kwc_Tags_ComponentToTag',
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onTagRowUpdate'
         );
         return $ret;
     }
 
-    public function onTagRowUpdate(Kwf_Component_Event_Row_Abstract $ev)
+    public function onTagRowUpdate(Kwf_Events_Event_Row_Abstract $ev)
     {
         $components = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($ev->row->component_id);
         foreach ($components as $component) {

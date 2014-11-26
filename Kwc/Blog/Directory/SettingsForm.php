@@ -14,7 +14,7 @@ class Kwc_Blog_Directory_SettingsForm extends Kwc_Abstract_Form
             ->setShowNoSelection(true)
             ->setPageSize(10)
             ->setTpl('<tpl for=".">'.
-                        '<div class="x-combo-list-item changeuser-list-item">'.
+                        '<div class="x2-combo-list-item changeuser-list-item">'.
                             '<h3>{lastname} {firstname}</h3>'.
                             '{email}<tpl if="role"> <span class="changeuser-role">({role})</span></tpl>'.
                         '</div>'.

@@ -1,50 +1,44 @@
 <?php
-
-//instanceof operator geht für strings ned korrekt, von php.net gfladad
+//instanceof operator doesn't work for strings correctly, found on php.net
 function is_instance_of($sub, $super)
 {
     $sub = is_object($sub) ? get_class($sub) : (string)$sub;
     $sub = strpos($sub, '.') ? substr($sub, 0, strpos($sub, '.')) : $sub;
     $super = is_object($super) ? get_class($super) : (string)$super;
-    Zend_Loader::loadClass($sub);
-    Zend_Loader::loadClass($super);
 
-    switch(true)
-    {
-        case $sub === $super:
-        case is_subclass_of($sub, $super):
-        case in_array($super, class_implements($sub)):
-            return true;
-        default:
-            return false;
+    $ret = false;
+    if ($sub === $super) {
+        $ret = true;
+    //} else if (is_subclass_of($sub, $super)) { disabled because of https://bugs.php.net/bug.php?id=50360, fixed for php 5.3
+    } else if (in_array($super, class_parents($sub))) {
+        $ret = true;
+    } else if (in_array($super, class_implements($sub))) {
+        $ret = true;
     }
+    return $ret;
 }
 
 class Kwf_Setup
 {
     public static $configClass;
     public static $configSection;
-    const CACHE_SETUP_VERSION = 3; //increase version if incompatible changes to generated file are made
+    const CACHE_SETUP_VERSION = 4; //increase version if incompatible changes to generated file are made
 
     public static function setUp($configClass = 'Kwf_Config_Web')
     {
         error_reporting(E_ALL & ~E_STRICT);
         define('APP_PATH', getcwd());
         Kwf_Setup::$configClass = $configClass;
-        if (!@include('./cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
-            if (!file_exists('cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
+        if (!@include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
+            if (!file_exists(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
                 require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
                 Kwf_Util_Setup::minimalBootstrapAndGenerateFile();
             }
-            include('cache/setup'.self::CACHE_SETUP_VERSION.'.php');
+            include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php');
         }
-        if (!defined('VKWF_PATH') && self::getBaseUrl() === null) {
+        if (!defined('VKWF_PATH') && php_sapi_name() != 'cli' && self::getBaseUrl() === null) {
             //if server.baseUrl is not set try to auto detect it and generate config.local.ini accordingly
             //this code is not used if server.baseUrl is set to "" in vkwf
-            if (php_sapi_name() == 'cli') {
-                echo "Please create config.local.ini with server.domain and server.baseUrl\n";
-                exit(1);
-            }
             if (!isset($_SERVER['PHP_SELF'])) {
                 echo "Can't detect baseUrl, PHP_SELF is not set\n";
                 exit(1);
@@ -251,27 +245,7 @@ class Kwf_Setup
             }
             $root->setCurrentPage($data);
 
-            if (isset($_COOKIE['feAutologin']) && !Kwf_Auth::getInstance()->getStorage()->read()) {
-                Kwf_Util_Https::ensureHttp();
-                $feAutologin = explode('.', $_COOKIE['feAutologin']);
-                if (count($feAutologin) == 2) {
-                    $adapter = new Kwf_Auth_Adapter_Service();
-                    $adapter->setIdentity($feAutologin[0]);
-                    $adapter->setCredential($feAutologin[1]);
-                    $auth = Kwf_Auth::getInstance();
-                    $auth->clearIdentity();
-                    $result = $auth->authenticate($adapter);
-                    if (!$result->isValid()) {
-                        setcookie('feAutologin', '', time() - 3600, '/', null, Kwf_Util_Https::supportsHttps(), true);
-                        setcookie('hasFeAutologin', '', time() - 3600, '/', null, false, true);
-                    }
-                }
-            }
-            if (isset($_COOKIE['hasFeAutologin'])) {
-                //feAutologin cookie is set with https-only (for security reasons)
-                //hasFeAutologin is seth without https-only
-                Kwf_Util_Https::ensureHttp();
-            }
+            Kwf_User_Autologin::processCookies();
 
             $contentSender = Kwf_Component_Settings::getSetting($data->componentClass, 'contentSender');
             $contentSender = new $contentSender($data);
@@ -289,6 +263,7 @@ class Kwf_Setup
             exit;
 
         } else if ($requestPath == '/kwf/util/kwc/render') {
+            Kwf_User_Autologin::processCookies();
             Kwf_Util_Component::dispatchRender();
         }
     }
@@ -358,7 +333,9 @@ class Kwf_Setup
             if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: storage empty', microtime(true)-$t);
             return false;
         }
-        $ret = Kwf_Registry::get('userModel')->hasAuthedUser();
+        $m = Kwf_Registry::get('userModel');
+        if (!$m) return false;
+        $ret = $m->hasAuthedUser();
         if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('hasAuthedUser: asked model', microtime(true)-$t);
         return $ret;
     }

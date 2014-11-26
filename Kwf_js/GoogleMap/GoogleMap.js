@@ -1,4 +1,4 @@
-Ext.namespace('Kwf.GoogleMap');
+Ext2.namespace('Kwf.GoogleMap');
 Kwf.GoogleMap.isLoaded = false;
 Kwf.GoogleMap.isCallbackCalled = false;
 Kwf.GoogleMap.callbacks = [];
@@ -104,7 +104,7 @@ Kwf.GoogleMap.Map = function(config) {
         'useFrom': true
     });
 
-    this.mapContainer = Ext.get(config.mapContainer);
+    this.mapContainer = Ext2.get(config.mapContainer);
     this.config = config;
     if (typeof this.config.width == 'undefined') this.config.width = 350;
     if (typeof this.config.height == 'undefined') this.config.height = 300;
@@ -198,7 +198,7 @@ Kwf.GoogleMap.Map = function(config) {
 
 };
 
-Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
+Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
 
     markers: [ ],
     show : function()
@@ -285,7 +285,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         params.highestLat = bounds.getNorthEast().lat();
 
         if (!this.gmapLoader) {
-            this.gmapLoader = Ext.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
+            this.gmapLoader = Ext2.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
             this.gmapLoader.dom.innerHTML = trlKwf('Loading...');
             this.gmapLoader.alignTo(this.mapContainer, 'tr-tr', [ -10, 50 ]);
         }
@@ -294,7 +294,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         this.lastReloadMarkersRequestId = this.ajax.request({
             url: this.config.markers,
             success: function(response, options) {
-                var ret = Ext.decode(response.responseText);
+                var ret = Ext2.decode(response.responseText);
                 ret.markers.each(function(m) {
                     var doAdd = true;
                     for (var i = 0; i < this.markers.length; i++) {

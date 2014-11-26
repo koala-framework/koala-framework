@@ -1,4 +1,4 @@
-Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
+Kwf.Auto.GridPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
 {
     layout: 'fit',
 
@@ -23,70 +23,70 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             'rowdblclick'
         );
 
-        this.actions.reload = new Ext.Action({
+        this.actions.reload = new Ext2.Action({
             icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
-            cls     : 'x-btn-icon',
+            cls     : 'x2-btn-icon',
             tooltip : trlKwf('Reload'),
             handler : this.reload,
             scope   : this
         });
-        this.actions.save = new Ext.Action({
+        this.actions.save = new Ext2.Action({
             text    : trlKwf('Save'),
             icon    : '/assets/silkicons/table_save.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             disabled: true,
             handler : this.onSave,
             scope   : this
         });
-        this.actions.add = new Ext.Action({
+        this.actions.add = new Ext2.Action({
             text    : trlKwf('Add'),
             icon    : '/assets/silkicons/table_add.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             handler : this.onAdd,
             scope: this
         });
-        this.actions['delete'] = new Ext.Action({
+        this.actions['delete'] = new Ext2.Action({
             text    : trlKwf('Delete'),
             icon    : '/assets/silkicons/table_delete.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             handler : this.onDelete,
             scope: this,
             needsSelection: true
         });
-        this.actions.edit = new Ext.Action({
+        this.actions.edit = new Ext2.Action({
             text    : trlKwf('Edit'),
             icon    : '/assets/silkicons/table_edit.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             handler : this.onEdit,
             scope: this,
             needsSelection: true
         });
-        this.actions.duplicate = new Ext.Action({
+        this.actions.duplicate = new Ext2.Action({
             text    : trlKwf('Duplicate'),
             icon    : '/assets/silkicons/table_go.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             handler : this.onDuplicate,
             scope: this,
             needsSelection: true
         });
-        this.actions.pdf = new Ext.Action({
+        this.actions.pdf = new Ext2.Action({
             text    : trlKwf('Print'),
             icon    : '/assets/silkicons/printer.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             handler : this.onPdf,
             scope: this
         });
-        this.actions.csv = new Ext.Action({
+        this.actions.csv = new Ext2.Action({
             text    : trlKwf('CSV Export'),
             icon    : '/assets/silkicons/page_code.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             handler : this.onCsv,
             scope: this
         });
-        this.actions.xls = new Ext.Action({
+        this.actions.xls = new Ext2.Action({
             text    : trlKwf('Excel Export'),
             icon    : '/assets/silkicons/page_excel.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             handler : this.onXls,
             scope: this
         });
@@ -124,8 +124,8 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             if (meta.paging) remoteSort = true;
             if (!meta.sortable) remoteSort = true;
             var storeConfig = {
-                proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
-                reader: new Ext.data.JsonReader({
+                proxy: new Ext2.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
+                reader: new Ext2.data.JsonReader({
                     totalProperty: meta.totalProperty,
                     root: meta.root,
                     id: meta.id,
@@ -137,12 +137,12 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                 pruneModifiedRecords: true
             };
             if (meta.grouping) {
-                var storeType = Ext.data.GroupingStore;
+                var storeType = Ext2.data.GroupingStore;
                 storeConfig.groupField = meta.grouping.groupField;
                 storeConfig.remoteGroup = meta.grouping.remoteGroup;
                 delete meta.grouping.groupField;
             } else {
-                var storeType = Ext.data.Store;
+                var storeType = Ext2.data.Store;
             }
             this.store = new storeType(storeConfig);
             if (this.baseParams) {
@@ -153,7 +153,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 
         this.store.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
         this.store.on('update', function(store, record, operation) {
-            if (operation == Ext.data.Record.EDIT) {
+            if (operation == Ext2.data.Record.EDIT) {
                 if (this.isDirty()) {
                     this.getAction('save').enable();
                 } else {
@@ -182,9 +182,9 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 
         var alwaysKeepTbar = (typeof this.gridConfig.tbar != 'undefined');
 
-        var gridConfig = Ext.applyIf(this.gridConfig, {
+        var gridConfig = Ext2.applyIf(this.gridConfig, {
             store: this.store,
-            selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
+            selModel: new Ext2.grid.RowSelectionModel({singleSelect:true}),
             clicksToEdit: 1,
             border: false,
             loadMask: true,
@@ -216,30 +216,30 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 
         if (meta.grouping) {
             if (!gridConfig.view) {
-                gridConfig.view = new Ext.grid.GroupingView(Ext.applyIf(meta.grouping,
+                gridConfig.view = new Ext2.grid.GroupingView(Ext2.applyIf(meta.grouping,
                 {}));
             }
 
             if (!meta.grouping.noGroupSummary) {
                 var found = false;
                 gridConfig.plugins.each(function(p) {
-                    if (p instanceof Ext.grid.GroupSummary) {
+                    if (p instanceof Ext2.grid.GroupSummary) {
                         found = true;
                         return false;
                     }
                 });
                 if (!found) {
-                    gridConfig.plugins.push(new Ext.grid.GroupSummary());
+                    gridConfig.plugins.push(new Ext2.grid.GroupSummary());
                 }
             }
         } else if (!gridConfig.view) {
-            gridConfig.view = new Ext.grid.GridView();
+            gridConfig.view = new Ext2.grid.GridView();
         }
 
         this.comboBoxes = [];
 
         var config = this.gridConfig.colModel || [];
-        if (Ext.grid.CheckboxSelectionModel && this.gridConfig.selModel instanceof Ext.grid.CheckboxSelectionModel) {
+        if (Ext2.grid.CheckboxSelectionModel && this.gridConfig.selModel instanceof Ext2.grid.CheckboxSelectionModel) {
             config.push(this.gridConfig.selModel);
         }
         for (var i=0; i<meta.columns.length; i++) {
@@ -248,11 +248,11 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 
             if (column['class'] && column['class'] != '') {
                 var cl = eval(column['class']);
-                column = new cl(Ext.apply({'header' : column.header}, column.config));
+                column = new cl(Ext2.apply({'header' : column.header}, column.config));
             } else if (typeof column.renderer == 'function') {
                 //do nothing
-            } else if (Ext.util.Format[column.renderer]) {
-                column.renderer = Ext.util.Format[column.renderer];
+            } else if (Ext2.util.Format[column.renderer]) {
+                column.renderer = Ext2.util.Format[column.renderer];
             } else if (column.renderer) {
                 try {
                     column.renderer = eval(column.renderer);
@@ -260,13 +260,13 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                     throw "invalid renderer: "+column.renderer;
                 }
             } else if (column.showDataIndex) {
-                column.renderer = Ext.util.Format.showField(column.showDataIndex);
+                column.renderer = Ext2.util.Format.showField(column.showDataIndex);
             } else {
-                column.renderer = Ext.util.Format.htmlEncode;
+                column.renderer = Ext2.util.Format.htmlEncode;
             }
             if (column.summaryRenderer) {
-                if (Ext.util.Format[column.summaryRenderer]) {
-                    column.summaryRenderer = Ext.util.Format[column.summaryRenderer];
+                if (Ext2.util.Format[column.summaryRenderer]) {
+                    column.summaryRenderer = Ext2.util.Format[column.summaryRenderer];
                 } else {
                     try {
                         column.summaryRenderer = eval(column.summaryRenderer);
@@ -278,13 +278,13 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 
             if (column.editor && column.editor.xtype == 'checkbox') {
                 delete column.editor;
-                column = new Ext.grid.CheckColumn(column);
+                column = new Ext2.grid.CheckColumn(column);
                 gridConfig.plugins.push(column);
             } else if (column.editor) {
-                Ext.applyIf(column.editor, { msgTarget: 'qtip' });
-                var editorField = Ext.ComponentMgr.create(column.editor, 'textfield');
+                Ext2.applyIf(column.editor, { msgTarget: 'qtip' });
+                var editorField = Ext2.ComponentMgr.create(column.editor, 'textfield');
                 var editorConfig = {};
-                if(editorField instanceof Ext.form.ComboBox) {
+                if(editorField instanceof Ext2.form.ComboBox) {
                     this.comboBoxes.push({
                         field: editorField,
                         column: column
@@ -292,7 +292,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                 } else if (Kwf.Form.AbstractSelect && editorField instanceof Kwf.Form.AbstractSelect) {
                     editorConfig.allowBlur = true;
                 }
-                column.editor = new Ext.grid.GridEditor(editorField, editorConfig);
+                column.editor = new Ext2.grid.GridEditor(editorField, editorConfig);
             }
 
             if (column.columnType == 'button') {
@@ -314,12 +314,12 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             if (typeof column.sortable == 'undefined') column.sortable = meta.sortable;
 
             if (this.columnsConfig && this.columnsConfig[column.dataIndex]) {
-                Ext.apply(column, this.columnsConfig[column.dataIndex]);
+                Ext2.apply(column, this.columnsConfig[column.dataIndex]);
             }
             config.push(column);
         }
         if (config instanceof Array) {
-            gridConfig.colModel = new Ext.grid.ColumnModel(config);
+            gridConfig.colModel = new Ext2.grid.ColumnModel(config);
         } else {
             gridConfig.colModel = config;
         }
@@ -342,7 +342,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 
 
         /* * Für DD
-        var ddrow = new Ext.dd.DropTarget(this.grid.container, {
+        var ddrow = new Ext2.dd.DropTarget(this.grid.container, {
             ddGroup : 'GridDD',
             copy:false,
             notifyDrop : function(dd, e, data){
@@ -377,16 +377,16 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                     }
                     this.pagingType = meta.paging.type;
                 } else {
-                    this.pagingType = 'Ext.PagingToolbar';
-                    t = Ext.PagingToolbar;
+                    this.pagingType = 'Ext2.PagingToolbar';
+                    t = Ext2.PagingToolbar;
                 }
                 delete meta.paging.type;
                 var pagingConfig = meta.paging;
                 pagingConfig.store = this.store;
                 gridConfig.bbar = new t(pagingConfig);
             } else {
-                this.pagingType = 'Ext.PagingToolbar';
-                gridConfig.bbar = new Ext.PagingToolbar({
+                this.pagingType = 'Ext2.PagingToolbar';
+                gridConfig.bbar = new Ext2.PagingToolbar({
                         store: this.store,
                         pageSize: meta.paging,
                         displayInfo: true
@@ -501,11 +501,11 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
 
         if (meta.helpText) {
             gridConfig.tbar.add('->');
-            gridConfig.tbar.add(new Ext.Action({
+            gridConfig.tbar.add(new Ext2.Action({
                 icon : '/assets/silkicons/information.png',
-                cls : 'x-btn-icon',
+                cls : 'x2-btn-icon',
                 handler : function (a) {
-                    var helpWindow = new Ext.Window({
+                    var helpWindow = new Ext2.Window({
                         html: meta.helpText,
                         width: 400,
                         bodyStyle: 'padding: 10px; background-color: white;',
@@ -529,7 +529,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             gridConfig.filters = this.filters;
         }
 
-        this.grid = new Ext.grid.EditorGridPanel(gridConfig);
+        this.grid = new Ext2.grid.EditorGridPanel(gridConfig);
         this.relayEvents(this.grid, ['beforeedit', 'aftereditcomplete', 'validateedit']);
 
         this.grid.on('cellclick', function(grid, rowIndex, columnIndex, e) {
@@ -595,7 +595,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
         if (editDialog instanceof Kwf.Auto.FormPanel) {
             editDialog = new Kwf.Auto.Form.Window({ autoForm: editDialog });
         }
-        if (editDialog && !(editDialog instanceof Ext.Window)) {
+        if (editDialog && !(editDialog instanceof Ext2.Window)) {
             var d = Kwf.Auto.Form.Window;
             if (editDialog.type) {
                 try {
@@ -647,7 +647,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
         this.el.mask(trlKwf('Saving...'));
 
         var params = this.getBaseParams() || {};
-        params.data = Ext.util.JSON.encode(data);
+        params.data = Ext2.util.JSON.encode(data);
         return params;
     },
     onSave : function()
@@ -665,7 +665,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
         this.getAction('save').disable();
 
         var params = this.getSaveParams();
-        if (options.params) Ext.apply(params, options.params);
+        if (options.params) Ext2.apply(params, options.params);
 
         //gibts da keine bessere l�sung?
         var empty = true;
@@ -682,7 +682,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             scope: options.scope || this
         };
 
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl+'/json-save',
             params: params,
             success: function(response, options, r) {
@@ -816,7 +816,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
         params[this.store.reader.meta.id] = ids.join(';');
 
         this.el.mask(trlKwf('Deleting...'));
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl+'/json-delete',
             params: params,
             success: function(response, options, r) {
@@ -839,10 +839,10 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
         });
     },
     onDelete : function() {
-        Ext.Msg.show({
+        Ext2.Msg.show({
             title: trlKwf('Delete'),
             msg: trlKwf('Do you really wish to remove this entry / these entries?'),
-            buttons: Ext.Msg.YESNO,
+            buttons: Ext2.Msg.YESNO,
             scope: this,
             fn: function(button) {
                 if (button == 'yes') {
@@ -862,7 +862,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             }
         }, this);
         if (!ids.length) {
-            Ext.Msg.show({
+            Ext2.Msg.show({
                 title: trlKwf('Duplicate'),
                 msg: trlKwf('No entries are selected')
             });
@@ -871,7 +871,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
         params[this.store.reader.meta.id] = ids.join(';');
 
         this.el.mask(trlKwf('Duplicating...'));
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl+'/json-duplicate',
             params: params,
             success: function(response, options, r) {
@@ -899,29 +899,29 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
     },
     onPdf : function()
     {
-        window.open(this.controllerUrl+'/pdf?'+Ext.urlEncode(this.getStore().baseParams));
+        window.open(this.controllerUrl+'/pdf?'+Ext2.urlEncode(this.getStore().baseParams));
     },
     onCsv : function()
     {
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url : this.controllerUrl+'/json-csv',
             params  : this.getStore().baseParams,
             timeout: 600000, // 10 minuten
             progress: true,
             progressTitle : trlKwf('CSV export'),
             success: function(response, opt, r) {
-                if (Ext.isIE) {
-                    Ext.Msg.show({
+                if (Ext2.isIE) {
+                    Ext2.Msg.show({
                         title: trlKwf('Your download is ready'),
                         msg: trlKwf('Please click on the following link to download your CSV file.')
                             +'<br /><br />'
                             +'<a class="xlsExportLink" href="'+this.controllerUrl+'/download-csv-export-file?downloadkey='+r.downloadkey+'" target="_blank">'
                             +trlKwf('CSV export file')+'</a>',
-                        icon: Ext.Msg.INFO,
+                        icon: Ext2.Msg.INFO,
                         buttons: { ok: trlKwf('Close') }
                     });
                 } else {
-                    Ext.getBody().createChild({
+                    Ext2.getBody().createChild({
                         html: '<iframe width="0" height="0" src="'+this.controllerUrl+'/download-csv-export-file?downloadkey='+r.downloadkey+'"></iframe>'
                     });
                 }
@@ -938,7 +938,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             params[pn["dir"]] = this.getStore().sortInfo.direction;
         }
 
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url : this.controllerUrl+'/json-xls',
             params  : params,
             timeout: 600000, // 10 minuten
@@ -949,18 +949,18 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
                 for (var i in params) {
                     downloadUrl += '&' + i + '=' + params[i];
                 }
-                if (Ext.isIE) {
-                    Ext.Msg.show({
+                if (Ext2.isIE) {
+                    Ext2.Msg.show({
                         title: trlKwf('Your download is ready'),
                         msg: trlKwf('Please click on the following link to download your Excel file.')
                             +'<br /><br />'
                             +'<a class="xlsExportLink" href="'+downloadUrl+'" target="_blank">'
                             +trlKwf('Excel export file')+'</a>',
-                        icon: Ext.Msg.INFO,
+                        icon: Ext2.Msg.INFO,
                         buttons: { ok: trlKwf('Close') }
                     });
                 } else {
-                    Ext.getBody().createChild({
+                    Ext2.getBody().createChild({
                         html: '<iframe width="0" height="0" src="'+downloadUrl+'"></iframe>'
                     });
                 }
@@ -1024,7 +1024,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
         }
         if (!params) params = {};
         if (!this.getStore()) {
-            Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
+            Ext2.applyIf(params, Ext2.apply({ meta: true }, this.baseParams));
             if (!this.metaConn) this.metaConn = new Kwf.Connection({ autoAbort: true });
             this.metaConn.request({
                 mask: this.el,
@@ -1085,11 +1085,11 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             this.editDialog.applyBaseParams(baseParams);
         }
         if (this.getStore()) {
-            Ext.apply(this.getStore().baseParams, baseParams);
+            Ext2.apply(this.getStore().baseParams, baseParams);
         } else {
             //no store yet, apply them later
             if (!this.baseParams) this.baseParams = {};
-            Ext.apply(this.baseParams, baseParams);
+            Ext2.apply(this.baseParams, baseParams);
         }
     },
     resetFilters: function() {
@@ -1108,4 +1108,4 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
     }
 });
 
-Ext.reg('kwf.autogrid', Kwf.Auto.GridPanel);
+Ext2.reg('kwf.autogrid', Kwf.Auto.GridPanel);

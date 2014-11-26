@@ -730,6 +730,9 @@ abstract class Kwf_Component_Generator_Abstract
                     $c = $c->parent;
                 }
                 $parentLevel = 0;
+                if (!is_object($parentData)) {
+                    $parentData = Kwf_Component_Data_Root::getInstance()->getComponentById($parentData, array('ignoreVisible'=>true));
+                }
                 $c = $parentData;
                 while ($c) {
                     $parentLevel++;

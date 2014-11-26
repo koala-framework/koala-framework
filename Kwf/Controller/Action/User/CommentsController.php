@@ -24,20 +24,15 @@ class Kwf_Controller_Action_User_CommentsController extends Kwf_Controller_Actio
         return $ret;
     }
 
-    protected function _beforeSave(Kwf_Model_Row_Interface $row, $submitRow)
+    protected function _beforeInsert(Kwf_Model_Row_Interface $row, $submitRow)
     {
-        parent::_beforeSave($row, $submitRow);
+        parent::_beforeInsert($row, $submitRow);
         $row->user_id = $this->_getParam('user_id');
         $row->create_type = 'manual';
     }
 
     protected function _hasPermissions($row, $action)
     {
-        $userId = $this->_getParam('user_id');
-        if (!$userId) {
-            return false;
-        }
-
         $acl = Kwf_Registry::get('acl');
         $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
 
@@ -46,11 +41,7 @@ class Kwf_Controller_Action_User_CommentsController extends Kwf_Controller_Actio
             $roles[$role->getRoleId()] = $role->getRoleName();
         }
         if (!$roles) return false;
-
-        $userModel = Kwf_Registry::get('userModel')->getKwfModel();
-        $userRow = $userModel->getRow($userId);
-
-        if (!$userRow || !array_key_exists($userRow->role, $roles)) {
+        if (!array_key_exists($row->getParentRow('User')->role, $roles)) {
             return false;
         }
 

@@ -7,8 +7,8 @@
  * http://extjs.com/license
  */
 
-Ext.grid.RowExpander = function(config){
-    Ext.apply(this, config);
+Ext2.grid.RowExpander = function(config){
+    Ext2.apply(this, config);
 
     this.addEvents({
         beforeexpand : true,
@@ -17,11 +17,11 @@ Ext.grid.RowExpander = function(config){
         collapse: true
     });
 
-    Ext.grid.RowExpander.superclass.constructor.call(this);
+    Ext2.grid.RowExpander.superclass.constructor.call(this);
 
     if(this.tpl){
         if(typeof this.tpl == 'string'){
-            this.tpl = new Ext.Template(this.tpl);
+            this.tpl = new Ext2.Template(this.tpl);
         }
         this.tpl.compile();
     }
@@ -30,7 +30,7 @@ Ext.grid.RowExpander = function(config){
     this.bodyContent = {};
 };
 
-Ext.extend(Ext.grid.RowExpander, Ext.util.Observable, {
+Ext2.extend(Ext2.grid.RowExpander, Ext2.util.Observable, {
     header: "",
     width: 20,
     sortable: false,
@@ -49,7 +49,7 @@ Ext.extend(Ext.grid.RowExpander, Ext.util.Observable, {
         if(content){
             p.body = content;
         }
-        return this.state[record.id] ? 'x-grid3-row-expanded' : 'x-grid3-row-collapsed';
+        return this.state[record.id] ? 'x2-grid3-row-expanded' : 'x2-grid3-row-collapsed';
     },
 
     init : function(grid){
@@ -78,16 +78,16 @@ Ext.extend(Ext.grid.RowExpander, Ext.util.Observable, {
     },
 
     onMouseDown : function(e, t){
-        if(t.className == 'x-grid3-row-expander'){
+        if(t.className == 'x2-grid3-row-expander'){
             e.stopEvent();
-            var row = e.getTarget('.x-grid3-row');
+            var row = e.getTarget('.x2-grid3-row');
             this.toggleRow(row);
         }
     },
 
     renderer : function(v, p, record){
         p.cellAttr = 'rowspan="2"';
-        return '<div class="x-grid3-row-expander">&#160;</div>';
+        return '<div class="x2-grid3-row-expander">&#160;</div>';
     },
 
     beforeExpand : function(record, body, rowIndex){
@@ -105,7 +105,7 @@ Ext.extend(Ext.grid.RowExpander, Ext.util.Observable, {
         if(typeof row == 'number'){
             row = this.grid.view.getRow(row);
         }
-        this[Ext.fly(row).hasClass('x-grid3-row-collapsed') ? 'expandRow' : 'collapseRow'](row);
+        this[Ext2.fly(row).hasClass('x2-grid3-row-collapsed') ? 'expandRow' : 'collapseRow'](row);
     },
 
     expandRow : function(row){
@@ -113,10 +113,10 @@ Ext.extend(Ext.grid.RowExpander, Ext.util.Observable, {
             row = this.grid.view.getRow(row);
         }
         var record = this.grid.store.getAt(row.rowIndex);
-        var body = Ext.DomQuery.selectNode('tr:nth(2) div.x-grid3-row-body', row);
+        var body = Ext2.DomQuery.selectNode('tr:nth(2) div.x2-grid3-row-body', row);
         if(this.beforeExpand(record, body, row.rowIndex)){
             this.state[record.id] = true;
-            Ext.fly(row).replaceClass('x-grid3-row-collapsed', 'x-grid3-row-expanded');
+            Ext2.fly(row).replaceClass('x2-grid3-row-collapsed', 'x2-grid3-row-expanded');
             this.fireEvent('expand', this, record, body, row.rowIndex);
         }
     },
@@ -126,10 +126,10 @@ Ext.extend(Ext.grid.RowExpander, Ext.util.Observable, {
             row = this.grid.view.getRow(row);
         }
         var record = this.grid.store.getAt(row.rowIndex);
-        var body = Ext.fly(row).child('tr:nth(1) div.x-grid3-row-body', true);
+        var body = Ext2.fly(row).child('tr:nth(1) div.x2-grid3-row-body', true);
         if(this.fireEvent('beforcollapse', this, record, body, row.rowIndex) !== false){
             this.state[record.id] = false;
-            Ext.fly(row).replaceClass('x-grid3-row-expanded', 'x-grid3-row-collapsed');
+            Ext2.fly(row).replaceClass('x2-grid3-row-expanded', 'x2-grid3-row-collapsed');
             this.fireEvent('collapse', this, record, body, row.rowIndex);
         }
     }

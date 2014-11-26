@@ -12,7 +12,7 @@ Kwf.onElementReady('div.kwfFormContainerFieldSet fieldset > legend > input', fun
     }, c);
 });
 
-Kwf.FrontendForm.FieldSet = Ext.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.FieldSet = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         var inp = this.el.child('fieldset > legend > input');
         if (inp) {

@@ -1,22 +1,22 @@
-Ext.ns('Kwc.Newsletter.Detail');
-Kwc.Newsletter.Detail.RecipientsQueuePanel = Ext.extend(Kwf.Auto.GridPanel, {
+Ext2.ns('Kwc.Newsletter.Detail');
+Kwc.Newsletter.Detail.RecipientsQueuePanel = Ext2.extend(Kwf.Auto.GridPanel, {
 
     initComponent: function() {
-        this.actions.deleteAll = new Ext.Action({
+        this.actions.deleteAll = new Ext2.Action({
             text: trlKwf('Delete All'),
             icon: '/assets/silkicons/bin_empty.png',
-            cls: 'x-btn-text-icon',
+            cls: 'x2-btn-text-icon',
             handler: function(){
-                Ext.Msg.confirm(
+                Ext2.Msg.confirm(
                     trlKwf('Are you sure?'),
                     trlKwf('Do you really want to delete all receivers with status "queued"?'),
                     function(result) {
                         if (result == 'yes') {
-                            Ext.Ajax.request({
+                            Ext2.Ajax.request({
                                 url : this.controllerUrl + '/json-delete-all',
                                 params: this.getBaseParams(),
                                 success: function(response, options, r) {
-                                    Ext.MessageBox.alert(trlKwf('Status'), r.message);
+                                    Ext2.MessageBox.alert(trlKwf('Status'), r.message);
                                     this.reload();
                                 },
                                 scope: this
@@ -31,4 +31,4 @@ Kwc.Newsletter.Detail.RecipientsQueuePanel = Ext.extend(Kwf.Auto.GridPanel, {
         Kwc.Newsletter.Detail.RecipientsQueuePanel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwc.newsletter.recipients.queue', Kwc.Newsletter.Detail.RecipientsQueuePanel);
+Ext2.reg('kwc.newsletter.recipients.queue', Kwc.Newsletter.Detail.RecipientsQueuePanel);

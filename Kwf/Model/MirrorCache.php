@@ -115,7 +115,7 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
             $this->_observedRows = array();
             foreach ($observedRows as $action => $rows) {
                 foreach ($rows as $row) {
-                    Kwf_Component_ModelObserver::getInstance()->add($action, $row);
+                    Kwf_Events_ModelObserver::getInstance()->add($action, $row);
                 }
             }
         }

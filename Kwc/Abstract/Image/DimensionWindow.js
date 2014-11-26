@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Abstract.Image');
-Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
+Ext2.namespace('Kwc.Abstract.Image');
+Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
 
     _scaleFactor: null,
     _dpr2Check: false,
@@ -36,33 +36,33 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             vertical: false,
             items: radios
         });
-        this._widthField = new Ext.form.NumberField({
+        this._widthField = new Ext2.form.NumberField({
             width: 45,
             enableKeyEvents: true,
             validateOnBlur: false,
             validationEvent: false,
             allowNegative: false
         });
-        this._heightField = new Ext.form.NumberField({
+        this._heightField = new Ext2.form.NumberField({
             width: 45,
             enableKeyEvents: true,
             validateOnBlur: false,
             validationEvent: false,
             allowNegative: false
         });
-        this._xField = new Ext.BoxComponent({
+        this._xField = new Ext2.BoxComponent({
             autoEl: {
                 html: 'x',
                 style: 'line-height:20px;text-align:center;padding-left:2px;padding-right:2px;'
             }
         });
-        this._pxField = new Ext.BoxComponent({
+        this._pxField = new Ext2.BoxComponent({
             autoEl: {
                 html: 'px',
                 style: 'line-height:20px;text-align:center;padding-left:2px;'
             }
         });
-        this._userSelection = new Ext.Panel({
+        this._userSelection = new Ext2.Panel({
             xtype: 'panel',
             layout: 'column',
             cls: 'kwc-abstract-image-dimension-window-userselection',
@@ -98,19 +98,19 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         }
         this._enableDisableFields();
 
-        var resolutionField = new Ext.BoxComponent({
+        var resolutionField = new Ext2.BoxComponent({
             autoEl: {
                 html: this.imageData.imageWidth+'x'+this.imageData.imageHeight+'px',
                 hideBorders: true
             }
         });
-        var filenameField = new Ext.BoxComponent({
+        var filenameField = new Ext2.BoxComponent({
             autoEl: {
                 html: this.imageData.filename+'.'+this.imageData.extension,
                 hideBorders: true
             }
         });
-        var filesizeField = new Ext.BoxComponent({
+        var filesizeField = new Ext2.BoxComponent({
             autoEl: {
                 html: Math.round((this.imageData.fileSize/10.24))/100+' KB',
                 hideBorders: true
@@ -129,7 +129,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             ]
         };
 
-        var showDimensionField = new Ext.BoxComponent({
+        var showDimensionField = new Ext2.BoxComponent({
             autoEl: {
                 html: '<div class="only-dimension">'+trlKwf('Dimension')+': '+Kwc.Abstract.Image.DimensionField
                     .getDimensionString(this.dimensions[this._dimensionField.getValue()], this._dpr2Check)+'</div>',
@@ -137,7 +137,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             }
         });
 
-        this._configPanel = new Ext.Panel({
+        this._configPanel = new Ext2.Panel({
             region: 'west',
             bodyStyle: 'padding: 10px',
             width: 270,
@@ -167,7 +167,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         var cropPanelItems = new Array();
         if (this._cropImage.isCropDisabled()) {
             // show information for not able to crop
-            var cropDisabledInfo = new Ext.BoxComponent({
+            var cropDisabledInfo = new Ext2.BoxComponent({
                 autoEl: {
                     tag: 'div',
                     cls: 'information',
@@ -178,16 +178,16 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
         }
         cropPanelItems.add(this._cropImage);
 
-        this._errorMessage = new Ext.Toolbar.TextItem({
+        this._errorMessage = new Ext2.Toolbar.TextItem({
             text: '&nbsp;'
         });
-        this._cropPanel = new Ext.Panel({
+        this._cropPanel = new Ext2.Panel({
             tbar: [{
                 text: trlKwf('Reset'),
                 handler: function () {
                     this._cropImage.setCropDataAndPreserveRatio(null, this._getPreserveRatio());
                 },
-                cls:"x-btn-text-icon",
+                cls:"x2-btn-text-icon",
                 hideLabel: true,
                 icon: '/assets/silkicons/arrow_out.png',
                 tooltip: trlKwf('Reset to default (maximum)'),
@@ -204,7 +204,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
             items: cropPanelItems
         });
 
-        this.items = new Ext.FormPanel({
+        this.items = new Ext2.FormPanel({
             border: false,
             bodyStyle: 'padding: 10px',
             layout: 'border',
@@ -227,7 +227,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                         this.fireEvent('save', this.value);
                         this.close();
                     } else {
-                        Ext.Msg.alert(trlKwf('Error'), trlKwf('Please fill the marked fields correctly.'));
+                        Ext2.Msg.alert(trlKwf('Error'), trlKwf('Please fill the marked fields correctly.'));
                     }
                 },
                 scope: this
@@ -278,14 +278,14 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
                 cropData: cropData
             };
             var scaleFactor = this._scaleFactor;
-            var errorMessageEl = Ext.get(this._errorMessage.getEl());
+            var errorMessageEl = Ext2.get(this._errorMessage.getEl());
             errorMessageEl.addClass('kwc-abstract-image-dimensionwindow-errorMessage');
             if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, this.dimensions, scaleFactor, this._dpr2Check)) {
                 errorMessageEl.addClass('error');
                 errorMessageEl.update(trlKwf('Selection too small!'));
                 this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').addClass('error');
             } else {
-                var errorMessageEl = Ext.get(this._errorMessage.getEl());
+                var errorMessageEl = Ext2.get(this._errorMessage.getEl());
                 errorMessageEl.removeClass('error');
                 errorMessageEl.update('');
                 this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').removeClass('error');
@@ -437,4 +437,4 @@ Kwc.Abstract.Image.DimensionWindow = Ext.extend(Ext.Window, {
     }
 });
 
-Ext.reg('kwc.image.dimensionwindow', Kwc.Abstract.Image.DimensionWindow);
+Ext2.reg('kwc.image.dimensionwindow', Kwc.Abstract.Image.DimensionWindow);

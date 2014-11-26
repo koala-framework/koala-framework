@@ -17,7 +17,7 @@ class Kwc_Guestbook_SettingsForm extends Kwf_Form
             ->setShowNoSelection(true)
             ->setPageSize(10)
             ->setTpl('<tpl for=".">'.
-                        '<div class="x-combo-list-item changeuser-list-item<tpl if="locked != 0"> changeuser-locked</tpl>">'.
+                        '<div class="x2-combo-list-item changeuser-list-item">'.
                             '<h3><tpl if="lastname">{lastname}&nbsp;</tpl><tpl if="firstname">{firstname}</tpl></h3>'.
                             '{email} <tpl if="role"><span class="changeuser-role">({role})</span></tpl>'.
                         '</div>'.

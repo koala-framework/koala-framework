@@ -1,7 +1,7 @@
 
-Ext.namespace("Kwf.Enquiries");
+Ext2.namespace("Kwf.Enquiries");
 
-Kwf.Enquiries.Index = Ext.extend(Kwf.Auto.GridPanel,
+Kwf.Enquiries.Index = Ext2.extend(Kwf.Auto.GridPanel,
 {
     initComponent: function() {
         // Edit form
@@ -28,4 +28,4 @@ Kwf.Enquiries.Index = Ext.extend(Kwf.Auto.GridPanel,
     }
 });
 
-Ext.reg('kwf.enquiries.index', Kwf.Enquiries.Index);
+Ext2.reg('kwf.enquiries.index', Kwf.Enquiries.Index);

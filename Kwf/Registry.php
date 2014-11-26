@@ -8,7 +8,6 @@ class Kwf_Registry extends Zend_Registry
             $this->offsetSet('db', $v);
             return $v;
         } else if ($index == 'config' && !parent::offsetExists($index)) {
-            require_once 'Kwf/Config/Web.php';
             $v = Kwf_Config_Web::getInstance();
             $this->offsetSet('config', $v);
             return $v;
@@ -25,7 +24,10 @@ class Kwf_Registry extends Zend_Registry
             $this->offsetSet('acl', $v);
             return $v;
         } else if ($index == 'userModel' && !parent::offsetExists($index)) {
-            $v = Kwf_Model_Abstract::getInstance(self::get('config')->user->model);
+            $v = self::get('config')->user->model;
+            if ($v) {
+                $v = Kwf_Model_Abstract::getInstance($v);
+            }
             $this->offsetSet('userModel', $v);
             return $v;
         } else if ($index == 'trl' && !parent::offsetExists($index)) {

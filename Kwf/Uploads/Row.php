@@ -93,7 +93,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
                 $ret = $finfo->buffer($contents);
                 $ret = str_replace('; charset=binary', '', $ret);
                 if($ret == 'application/zip') {
-                    $path = Kwf_Config::getValue('externLibraryPath.file');
+                    $path = dirname(__FILE__).'/magic';
                     $finfo = new finfo(FILEINFO_MIME, $path);
                     $ret = $finfo->buffer($contents);
                     $ret = str_replace('; charset=binary', '', $ret);

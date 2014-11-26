@@ -25,7 +25,6 @@ class Kwc_Blog_Directory_UsersController extends Kwf_Controller_Action_Auto_Grid
     {
         $ret = parent::_getSelect();
         $ret->whereEquals('deleted', false);
-        $ret->whereEquals('locked', false);
         return $ret;
     }
 }

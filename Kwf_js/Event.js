@@ -1,4 +1,4 @@
-Ext.namespace('Kwf.Event');
+Ext2.namespace('Kwf.Event');
 
 /**
  * Ermöglicht Kwf.Event.on(el, 'mouseEnter') oder auch 'mouseLeave'.
@@ -22,7 +22,7 @@ Kwf.Event.addListener = function(el, eventName, handler, scope, options) {
             var secondEvent = 'mouseover';
         }
 
-        Ext.EventManager.addListener(el, firstEvent, function() {
+        Ext2.EventManager.addListener(el, firstEvent, function() {
             el.kwfEvent[eventName] = true;
             (function(handler, scope, el) {
                 if (el.kwfEvent[eventName] && !el.kwfEvent[eventName+'_current']) {
@@ -32,7 +32,7 @@ Kwf.Event.addListener = function(el, eventName, handler, scope, options) {
             }).defer(1, scope, [ handler, scope, el ]);
         }, scope, options);
 
-        Ext.EventManager.addListener(el, secondEvent, function() {
+        Ext2.EventManager.addListener(el, secondEvent, function() {
             el.kwfEvent[eventName] = false;
             (function(el) {
                 if (!el.kwfEvent[eventName]) {

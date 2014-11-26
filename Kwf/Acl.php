@@ -291,6 +291,8 @@ class Kwf_Acl extends Zend_Acl
      */
     public function loadKwcResources()
     {
+        if (!Kwf_Registry::get('db')) return; //if we don't have a db configured yet skip kwc resources. required to be able to build assets without db
+
         if ($this->_kwcResourcesLoaded) return;
         $this->_kwcResourcesLoaded = true;
 
@@ -370,7 +372,7 @@ class Kwf_Acl extends Zend_Acl
             } else if ($resource instanceof Kwf_Acl_Resource_MenuEvent) {
                 $menu['type'] = 'event';
                 $menu['eventConfig'] = $resource->getMenuEventConfig();
-            } else if ($resource instanceof Kwf_Acl_Resource_MenuUrl) {
+            } else if ($resource instanceof Kwf_Acl_Resource_Interface_Url) {
                 $menu['type'] = 'url';
                 $menu['url'] = $resource->getMenuUrl();
             } else if ($resource instanceof Kwf_Acl_Resource_MenuCommandDialog) {
@@ -383,15 +385,41 @@ class Kwf_Acl extends Zend_Acl
                 $menu['commandConfig'] = $resource->getMenuCommandConfig();
             } else if ($resource instanceof Kwf_Acl_Resource_MenuSeparator) {
                 $menu['type'] = 'separator';
-            } else if ($resource instanceof Kwf_Acl_Resource_MenuExt4) {
-                $menu['type'] = 'url';
-                $menu['url'] = '/kwf/ext4/'.$resource->getResourceId();
             } else {
                 $menu = $menu['menuConfig'];
             }
             $menus[] = $menu;
         }
-        return $menus;
+        return $this->_orderResources($menus);
+    }
+
+    private function _orderResources($resources)
+    {
+        foreach ($resources as $k=>$i) {
+            $resources[$k]['num'] = $k;
+        }
+        usort($resources, array(get_class($this), '_compareMenuConfigOrder'));
+        foreach ($resources as $k=>$i) {
+            unset($resources[$k]['num']);
+        }
+        return $resources;
+    }
+    public static function _compareMenuConfigOrder($first, $second)
+    {
+        $orderFirst = 0;
+        $orderSecond = 0;
+        if (isset($first['menuConfig']['order'])) {
+            $orderFirst = $first['menuConfig']['order'];
+        }
+        if (isset($second['menuConfig']['order'])) {
+            $orderSecond = $second['menuConfig']['order'];
+        }
+        $ret = $orderFirst - $orderSecond;
+        if ($ret == 0) {
+            //no ordner defined, keep order as it is
+            $ret = $first['num'] - $second['num'];
+        }
+        return $ret;
     }
 
     public function getComponentAcl()
@@ -526,14 +554,12 @@ class Kwf_Acl extends Zend_Acl
         }
 
         if (!$resource instanceof Zend_Acl_Resource_Interface) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception('addResource() expects $resource to be of type Zend_Acl_Resource_Interface');
         }
 
         $resourceId = $resource->getResourceId();
 
         if (!$this->has($resourceId)) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception("Resource id '$resourceId' doesn't exists in the ACL");
         }
 
@@ -554,7 +580,6 @@ class Kwf_Acl extends Zend_Acl
                 }
                 $resourceParent = $this->get($resourceParentId);
             } catch (Zend_Acl_Exception $e) {
-                require_once 'Zend/Acl/Exception.php';
                 throw new Zend_Acl_Exception("Parent Resource id '$resourceParentId' does not exist", 0, $e);
             }
             $this->_resources[$resourceParentId]['children'][$resourceId] = $resource;

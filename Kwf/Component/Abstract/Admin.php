@@ -97,7 +97,7 @@ class Kwf_Component_Abstract_Admin
         //precomputed aus Kwf/Component/Abstract.php
         if ($ext == 'php' && $returnClass) {
             $key = $filename;
-        } else if ($ext == 'tpl' && !$returnClass) {
+        } else if ($ext == array('tpl', 'twig') && !$returnClass) {
             $key = $filename.'.tpl';
         }
         if ($key) {
@@ -120,18 +120,22 @@ class Kwf_Component_Abstract_Admin
                 $ret[$kFile] = false;
             }
             foreach ($paths as $path => $c) {
-                $f = $path.'/'.$file['filename'].'.'.$file['ext'];
-                if (file_exists($f)) {
-                    if ($file['returnClass']) {
-                        $i = $c.'_'.str_replace('/', '_', $file['filename']);
-                    } else {
-                        $i = $f;
-                    }
-                    if (isset($file['multiple']) && $file['multiple']) {
-                        $ret[$kFile][] = $i;
-                    } else {
-                        $ret[$kFile] = $i;
-                        continue 2;
+                $exts = $file['ext'];
+                if (!is_array($exts)) $exts = array($exts);
+                foreach ($exts as $ext) {
+                    $f = $path.'/'.$file['filename'].'.'.$ext;
+                    if (file_exists($f)) {
+                        if ($file['returnClass']) {
+                            $i = $c.'_'.str_replace('/', '_', $file['filename']);
+                        } else {
+                            $i = $f;
+                        }
+                        if (isset($file['multiple']) && $file['multiple']) {
+                            $ret[$kFile][] = $i;
+                        } else {
+                            $ret[$kFile] = $i;
+                            continue 3;
+                        }
                     }
                 }
             }

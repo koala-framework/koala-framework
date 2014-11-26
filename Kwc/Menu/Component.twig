@@ -1,0 +1,29 @@
+{% if menu|length %}
+    <div class="{{ cssClass }}">
+        {% if parentPageLink %}
+            {% block parentPage %}
+            <h2 class="parentPageName">{{ renderer.componentLink(parentPage) }}</h2>
+            {% endblock %}
+        {% elseif parentPage %}
+            {% block parentPageName %}
+            <h2 class="parentPageName">{{ parentPage.name }}</h2>
+            {% endblock %}
+        {% endif %}
+        <ul class="menu">
+            {% for m in menu %}
+                {{ m.preHtml|raw }}
+                <li class="{{ m.class }}">
+                    {% block menuLink %}
+                    {{ renderer.componentLink(m.data, "#{linkPrefix}#{m.text}") }}
+                    {% endblock %}
+                    {% if not m.last %}{{ separator }}{% endif %}
+                    {% if subMenu is defined and m.current is defined and m.current %}
+                        {{ renderer.component(subMenu) }}
+                    {% endif %}
+                </li>
+                {{ m.postHtml|raw }}
+            {% endfor %}
+        </ul>
+        <div class="clear"></div>
+    </div>
+{% endif %}

@@ -55,12 +55,12 @@ class Kwf_Trl_JsLoaderTest extends Kwf_Test_TestCase
     public function testTrlcp()
     {
         $input = "trlcp('anycontext', 'undefined word', 'undefined words', 2)";
-        $expected = "trlp( 'undefined word', 'undefined words', 2)";
+        $expected = "trlp('undefined word', 'undefined words', 2)";
         $result = $this->_jsLoader->trlLoad($input, Kwf_Trl::getInstance()->parse($input, 'js'), 'en');
         $this->assertEquals($expected, $result);
 
         $input = "trlcp(\"anycontext\", \"undefined word\", \"undefined words\", 2)";
-        $expected = "trlp( \"undefined word\", \"undefined words\", 2)";
+        $expected = "trlp(\"undefined word\", \"undefined words\", 2)";
         $result = $this->_jsLoader->trlLoad($input, Kwf_Trl::getInstance()->parse($input, 'js'), 'en');
         $this->assertEquals($expected, $result);
     }

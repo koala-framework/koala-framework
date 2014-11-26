@@ -19,6 +19,6 @@ class Kwf_Component_SharedData_SeleniumTest extends Kwf_Test_SeleniumTestCase
     {
         $this->openKwcEdit('Kwf_Component_SharedData_Detail_SharedData_Component', 'root');
         $this->waitForConnections();
-        $this->assertElementValueEquals("css=input.x-form-text", 'foo');
+        $this->assertElementValueEquals("css=input.x2-form-text", 'foo');
     }
 }

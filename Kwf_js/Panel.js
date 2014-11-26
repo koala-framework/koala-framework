@@ -1,4 +1,4 @@
-Ext.Panel.prototype.mabySubmit = function(cb, options) {
+Ext2.Panel.prototype.mabySubmit = function(cb, options) {
     var ret = true;
     if (this.items) {
         this.items.each(function(i) {
@@ -19,7 +19,7 @@ Ext.Panel.prototype.mabySubmit = function(cb, options) {
  * vor, dass man bei der äußeren scrollbar nicht nach ganz oben scrollen
  * kann und somit auch nicht mehr speichern kann.
  */
-Ext.Panel.override({
+Ext2.Panel.override({
     setAutoScroll: function() {
         if (this.rendered && this.autoScroll) {
             var el = this.body || this.el;

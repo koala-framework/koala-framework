@@ -31,12 +31,17 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['register'] = Kwf_Component_Data_Root::getInstance()
-                        ->getComponentByClass(
-                            'Kwc_User_Register_Component',
-                            array('subroot' => $this->getData())
-                        );
+        $ret['register'] = $this->_getRegisterComponent();
         return $ret;
+    }
+
+    protected function _getRegisterComponent()
+    {
+        return Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass(
+                'Kwc_User_Register_Component',
+                array('subroot' => $this->getData())
+            );
     }
 
     protected function _afterSave(Kwf_Model_Row_Interface $row)
@@ -44,11 +49,12 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         $result = $this->_getAuthenticateResult($row->email, $row->password);
 
         if ($result->isValid()) {
-            $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
+            $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
             if ($row->auto_login) {
-                $cookieValue = $authedUser->id.'.'.Kwf_Util_Hash::hash($authedUser->password);
-                setcookie('feAutologin', $cookieValue, time() + (100*24*60*60), '/', null, Kwf_Util_Https::supportsHttps(), true);
-                setcookie('hasFeAutologin', '1', time() + (100*24*60*60), '/', null, false, true);
+                Kwf_User_Autologin::setCookies($authedUser);
+            } else {
+                //user logged in without autologin activated, clear the autologin token
+                Kwf_User_Autologin::clearToken($authedUser);
             }
             $this->_afterLogin($authedUser);
         } else {
@@ -62,7 +68,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
 
     private function _getAuthenticateResult($identity, $credential)
     {
-        $adapter = new Kwf_Auth_Adapter_Service();
+        $adapter = new Kwf_Auth_Adapter_PasswordAuth();
         $adapter->setIdentity($identity);
         $adapter->setCredential($credential);
 

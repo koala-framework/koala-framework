@@ -1,4 +1,19 @@
 <?php
+class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController_FindSymlinksRecFilterIterator extends RecursiveFilterIterator
+{
+
+    public function accept()
+    {
+        if ($this->getFileName() == 'node_modules') return false;
+        if ($this->getFileName() == 'cache') return false;
+        if ($this->getFileName() == 'log') return false;
+        if ($this->getFileName() == 'temp') return false;
+        if ($this->getFileName() == '.git') return false;
+        return true;
+    }
+
+}
+
 class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Controller_Action_Cli_Abstract
 {
     public static function getHelp()
@@ -45,11 +60,13 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
         $bufferUsecs = 200*1000;
 
-        $watchPaths = array(
-            getcwd(),
-            KWF_PATH,
-        );
-        if (defined('VKWF_PATH')) $watchPaths[] = VKWF_PATH;
+        $watchPaths = array();
+        if (Kwf_Config::getValue('application.id') == 'kwf') {
+            //for ccw in kwf itself (where cwd is tests subdir)
+            $watchPaths[] = realpath(getcwd().'/..');
+        } else {
+            $watchPaths[] = getcwd();
+        }
 
         $ret = array();
         exec('ps ax -o pid,ppid,user,args', $out);
@@ -97,7 +114,24 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             }
         }
 
-        $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor --exclude 'magick|\.nfs|\.git|.*\.kate-swp|~|/cache/|/log/|/temp/|data/index|benchmarklog|querylog|eventlog' ".implode(' ', $watchPaths);
+
+        //inotifywait doesn't recurse into symlinks
+        //so we add all symlinks to $watchPaths
+        foreach ($watchPaths as $p) {
+            $fsi = new RecursiveIteratorIterator(
+                new Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController_FindSymlinksRecFilterIterator(
+                    new RecursiveDirectoryIterator($p)
+                ),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
+            foreach ($fsi as $fso) {
+                if ($fso->isLink()) {
+                    $watchPaths[] = $fso->__toString();
+                }
+            }
+        }
+
+        $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor --exclude 'magick|\.nfs|\.git|.*\.kate-swp|~|/cache/|/log/|/temp/|data/index|benchmarklog|querylog|eventlog|/build/|/Gruntfile.js' ".implode(' ', $watchPaths);
         echo $cmd."\n";
         $descriptorspec = array(
             1 => array("pipe", "w"),
@@ -257,6 +291,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 $assetsType = substr($file, strrpos($file, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
+                if ($assetsType == 'js') self::_clearAssetsAll('defer.js');
 
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
 
@@ -267,6 +302,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 $assetsType = substr($file, strrpos($file, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
+                if ($assetsType == 'js') self::_clearAssetsAll('defer.js');
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
 
@@ -316,9 +352,23 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
+        } else if (self::_endsWith($file, '.twig')) {
+            $loader = new Twig_Loader_Filesystem('.');
+            $twig = new Twig_Environment($loader, array(
+                'cache' => 'cache/twig'
+            ));
+            $cacheFile = $file;
+            $cacheFile = substr($cacheFile, strlen(getcwd())+1);
+            $cacheFile = $twig->getCacheFilename($cacheFile);
+
+            if (file_exists($cacheFile)) {
+                unlink($cacheFile);
+                echo "cleared twig cache file '$cacheFile' for template '$file'\n";
+            }
         }
 
         if (self::_startsWith($file, getcwd().'/components')
+            || self::_startsWith($file, getcwd().'/theme')
             || self::_startsWith($file, KWF_PATH.'/Kwc')
             || (defined('VKWF_PATH') && self::_startsWith($file, VKWF_PATH.'/Vkwc'))
         ) {
@@ -333,7 +383,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
             if (!$cls) {
                 echo "unknown component class?!\n";
-                continue;
+                return;
             }
             if (!self::_endsWith($file, '/Component.php')) {
                 //other component file
@@ -370,6 +420,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                        self::_endsWith($file, '/Master.tpl') ||
                        self::_endsWith($file, '/Component.tpl') ||
                        self::_endsWith($file, '/Partial.tpl') ||
+                       self::_endsWith($file, '/Master.twig') ||
+                       self::_endsWith($file, '/Component.twig') ||
+                       self::_endsWith($file, '/Partial.twig') ||
                        self::_endsWith($file, '/Controller.php') ||
                        self::_endsWith($file, '/FrontendForm.php') ||
                        self::_endsWith($file, '/Form.php') ||
@@ -394,36 +447,17 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $s->whereEquals('component_class', $matchingClasses);
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Component.yml')) {
-                $classFile = 'cache/generated/'.str_replace('_', '/', $cls).'.php';
-                if ($event == 'MODIFY') {
-                    if (file_exists($classFile)) unlink($classFile); //generate, base setting might have changed
-                    Kwf_Component_Settings::$_rebuildingSettings = true;
-                    //generates it
-                    Kwf_Component_Abstract::hasSetting($cls, 'componentName');
-                    Kwf_Component_Settings::$_rebuildingSettings = false;
-                    echo "generated $classFile\n";
-
-                    self::_clearComponentSettingsCache($matchingClasses);
-                } else if ($event == 'DELETE') {
-                    echo "delete $classFile";
-                    if (file_exists($classFile)) {
-                        unlink($classFile);
-                        echo " [DELETED]";
-                    }
-                    echo "\n";
-                }
             } else if (self::_endsWith($file, '/Component.css') || self::_endsWith($file, '/Component.scss') || self::_endsWith($file, '/Component.printcss')) {
                 //MODIFY already handled above (assets)
                 //CREATE/DELETE also handled above
-            } else if (self::_endsWith($file, '/Master.tpl')) {
+            } else if (self::_endsWith($file, '/Master.tpl') || self::_endsWith($file, '/Master.twig')) {
                 if ($event == 'MODIFY') {
                     $s = new Kwf_Model_Select();
                     //all component_classes
                     $s->whereEquals('type', 'master');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Component.tpl')) {
+            } else if (self::_endsWith($file, '/Component.tpl') || self::_endsWith($file, '/Component.twig')) {
                 if ($event == 'MODIFY') {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
@@ -431,14 +465,14 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $s->whereEquals('renderer', 'component');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Partial.tpl')) {
+            } else if (self::_endsWith($file, '/Partial.tpl') || self::_endsWith($file, '/Partial.twig')) {
                 if ($event == 'MODIFY') {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
                     $s->whereEquals('type', 'partial');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Mail.html.tpl')) {
+            } else if (self::_endsWith($file, '/Mail.html.tpl') || self::_endsWith($file, '/Mail.html.twig')) {
                 if ($event == 'MODIFY') {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
@@ -446,7 +480,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $s->whereEquals('renderer', 'mail_html');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Mail.txt.tpl')) {
+            } else if (self::_endsWith($file, '/Mail.txt.tpl') || self::_endsWith($file, '/Mail.txt.twig')) {
                 if ($event == 'MODIFY') {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
@@ -487,8 +521,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     {
         Kwf_Component_Abstract::resetSettingsCache();
 
-        $cacheId = 'componentSettings_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
-        $settings = Kwf_Component_Settings::getAllSettingsCache()->load($cacheId);
+        $settings = Kwf_Component_Settings::_getSettingsCached();
 
         $dependenciesChanged = false;
         $generatorssChanged = false;
@@ -525,7 +558,6 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             $settings[$c] = $newSettings;
         }
 
-        Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
         echo "refreshed component settings cache...\n";
 
         if ($dependenciesChanged) {
@@ -556,15 +588,15 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             foreach ($newChildComponentClasses as $cmpClass) {
                 if (!in_array($cmpClass, Kwc_Abstract::getComponentClasses())) {
                     self::_loadSettingsRecursive($settings, $cmpClass);
-                    Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
                 }
             }
             $removedComponentClasses = array_diff($oldChildComponentClasses, $newChildComponentClasses);
             foreach ($removedComponentClasses as $removedCls) {
                 self::_removeSettingsRecursive($settings, $removedCls);
-                Kwf_Component_Settings::getAllSettingsCache()->save($settings, $cacheId);
             }
         }
+        file_put_contents('build/component/settings', serialize($settings));
+
         echo "cleared component settings apc cache...\n";
         self::_clearApcCache(array(
             'clearCacheSimpleStatic' => $clearCacheSimpleStatic,
@@ -661,34 +693,48 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
     {
         if (!$fileType) {
             self::_clearAssetsAll('js');
+            self::_clearAssetsAll('defer.js');
             self::_clearAssetsAll('css');
             self::_clearAssetsAll('printcss');
             return;
         }
-        $fileName = 'cache/assets/output-cache-ids-'.$fileType;
+        $fileNames = array(
+            'cache/assets/output-cache-ids-'.$fileType,
+            'build/assets/output-cache-ids-'.$fileType,
+        );
+        foreach ($fileNames as $fileName) {
+            if (file_exists($fileName)) {
+                $cacheIds = file($fileName);
+                unlink($fileName);
+                foreach ($cacheIds as $cacheId) {
+                    $cacheId = trim($cacheId);
+                    echo $cacheId;
+                    if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) echo " [DELETED]";
+                    if (Kwf_Assets_BuildCache::getInstance()->remove($cacheId)) echo " [build DELETED]";
+                    if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_gzip', 'as_'.$cacheId.'_deflate'))) echo " [gzip DELETED]";
+                    if (Kwf_Assets_Cache::getInstance()->remove($cacheId.'_map')) echo " [map DELETED]";
+                    if (Kwf_Assets_BuildCache::getInstance()->remove($cacheId.'_map')) echo " [build map DELETED]";
+                    if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_map_gzip', 'as_'.$cacheId.'_map_deflate'))) echo " [map_gzip DELETED]";
+                    echo "\n";
+                }
+            }
+        }
+
+        $fileName = 'build/assets/package-max-mtime-'.$fileType;
         if (file_exists($fileName)) {
             $cacheIds = file($fileName);
             unlink($fileName);
             foreach ($cacheIds as $cacheId) {
                 $cacheId = trim($cacheId);
                 echo $cacheId;
-                if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) echo " [DELETED]";
-                if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_gzip', 'as_'.$cacheId.'_deflate'))) echo " [gzip DELETED]";
+                if (Kwf_Assets_BuildCache::getInstance()->remove($cacheId)) echo " [DELETED]";
                 echo "\n";
             }
         }
 
-        $fileName = 'cache/assets/package-max-mtime-'.$fileType;
-        if (file_exists($fileName)) {
-            $cacheIds = file($fileName);
-            unlink($fileName);
-            foreach ($cacheIds as $cacheId) {
-                $cacheId = trim($cacheId);
-                echo $cacheId;
-                if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) echo " [DELETED]";
-                echo "\n";
-            }
-        }
+        $a = new Kwf_Util_Build_Types_Assets();
+        $a->flagAllPackagesOutdated($fileType);
+
         self::_informDuckcast($fileType);
     }
 }

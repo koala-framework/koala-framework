@@ -1,8 +1,8 @@
 (function(){
 
-var T = Ext.Toolbar;
+var T = Ext2.Toolbar;
 
-Ext.override(T, {
+Ext2.override(T, {
     insertItem: function(index, item) {
         var td = document.createElement("td");
         this.tr.insertBefore(td, this.tr.childNodes[index]);
@@ -34,7 +34,7 @@ Ext.override(T, {
                 return this.insertElement(idx, el);
             }else if(typeof el == "object"){ // must be button config?
                 if(el.xtype){
-                    return this.insertField(idx, Ext.ComponentMgr.create(el, 'button'));
+                    return this.insertField(idx, Ext2.ComponentMgr.create(el, 'button'));
                 }else{
                     return this.insertButton(idx, el);
                 }
@@ -59,7 +59,7 @@ Ext.override(T, {
     insertDom : function(index, config){
         var td = document.createElement("td");
         this.tr.insertBefore(td, this.tr.childNodes[index]);
-        Ext.DomHelper.overwrite(td, config);
+        Ext2.DomHelper.overwrite(td, config);
         var ti = new T.Item(td.firstChild);
         ti.render(td);
         this.items.add(ti);

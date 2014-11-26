@@ -1,8 +1,8 @@
-Ext.namespace('Kwc.Mail.Editable');
-Kwc.Mail.Editable.Panel = Ext.extend(Ext.Panel, {
+Ext2.namespace('Kwc.Mail.Editable');
+Kwc.Mail.Editable.Panel = Ext2.extend(Ext2.Panel, {
     layout: 'border',
     initComponent: function() {
-        var settings = new Ext.Panel({
+        var settings = new Ext2.Panel({
             layout: 'card',
             title: trlKwf('Settings')
         });
@@ -70,4 +70,4 @@ Kwc.Mail.Editable.Panel = Ext.extend(Ext.Panel, {
         Kwc.Mail.Editable.Panel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwc.mail.editable', Kwc.Mail.Editable.Panel);
+Ext2.reg('kwc.mail.editable', Kwc.Mail.Editable.Panel);

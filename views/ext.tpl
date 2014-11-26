@@ -31,7 +31,7 @@
     <script type="text/javascript">
         document.write('<div id="loading">');
           document.write('<div class="loading-indicator">');
-            document.write('<?=$this->image('/assets/ext/resources/images/default/shared/large-loading.gif')?>');
+            document.write('<?=$this->image('/assets/ext2/resources/images/default/shared/large-loading.gif')?>');
             document.write('<?= addslashes($this->applicationName) ?><br /><span id="loading-msg"><?= trlKwf('Loading...') ?></span></div>');
         document.write('</div>');
         var Kwf = {isApp: true};
@@ -75,11 +75,11 @@
                     items: [panel]
                 });
             }
-            if((!Kwf.Connection || Kwf.Connection.masks == 0)  && Ext.get('loading')) {
-                Ext.get('loading').fadeOut({remove: true});
+            if((!Kwf.Connection || Kwf.Connection.masks == 0)  && Ext2.get('loading')) {
+                Ext2.get('loading').fadeOut({remove: true});
             }
         };
-        Ext.onReady(function() {
+        Ext2.onReady(function() {
             Kwf.main();
         });
     })();

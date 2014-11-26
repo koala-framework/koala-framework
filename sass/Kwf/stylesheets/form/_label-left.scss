@@ -1,6 +1,5 @@
-@mixin label-left {
+@mixin form-label-left {
     label {
-        text-align: right;
         float: left;
     }
 
@@ -8,9 +7,9 @@
     .kwfFormFieldRadioVertical {
         label {
             display: inline-block; 
+            margin-left: 0px;
             float: none;
             width: auto;
-            margin-left: 0px;
         }
     }
 
@@ -18,9 +17,9 @@
     .kwfFormFieldMultiCheckboxVertical {
         label {
             display: inline-block; 
+            margin-left: 0px;
             float: none;
             width: auto;
-            margin-left: 0px;
         }
     }
 
@@ -35,8 +34,8 @@
     .kwfFormFieldMultiCheckbox {
         .kwfFormFieldMultiCheckbox {
             label {
-                width: auto;
                 margin-right: 0;
+                width: auto;
             }
         }
     }

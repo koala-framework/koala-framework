@@ -26,7 +26,7 @@ Kwf.onElementReady('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
         }
 }, { defer: true });
 
-Kwf.FrontendForm.MultiCheckbox = Ext.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.MultiCheckbox = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {
     },
     getValue: function() { //has no value itself

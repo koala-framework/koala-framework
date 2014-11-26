@@ -50,6 +50,10 @@ function p($src, $Type = 'LOG')
         }
     }
     if ($isToDebug) {
+        if (php_sapi_name() == 'cli') {
+            $src = str_replace('<pre>', '', $src);
+            $src = str_replace('</pre>', '', $src);
+        }
         echo $src;
     } else if (function_exists('xdebug_var_dump')
         && !($src instanceof Zend_Db_Select ||
@@ -298,6 +302,9 @@ class Kwf_Debug
 
     public static function handleException($exception)
     {
+        if ($exception instanceof Zend_Controller_Exception && $exception->getPrevious()) {
+            $exception = $exception->getPrevious();
+        }
         if (!$exception instanceof Kwf_Exception_Abstract) {
             $exception = new Kwf_Exception_Other($exception);
         }

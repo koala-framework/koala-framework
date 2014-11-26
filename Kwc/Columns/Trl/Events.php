@@ -11,14 +11,16 @@ class Kwc_Columns_Trl_Events extends Kwc_Abstract_Events
             'callback' => 'onChildHasContentChange'
         );
         $masterComponentClass = Kwc_Abstract::getSetting($this->_class, 'masterComponentClass');
+        $cls = strpos($masterComponentClass, '.') ? substr($masterComponentClass, 0, strpos($masterComponentClass, '.')) : $masterComponentClass;
+        $m = call_user_func(array($cls, 'createChildModel'), $masterComponentClass);
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($masterComponentClass, 'childModel'),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'class' => $m,
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onMasterRowUpdate'
         );
         $ret[] = array(
-            'class' => Kwc_Abstract::getSetting($masterComponentClass, 'childModel'),
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'class' => $m,
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onMasterRowDelete'
         );
         return $ret;
@@ -34,7 +36,7 @@ class Kwc_Columns_Trl_Events extends Kwc_Abstract_Events
         }
     }
 
-    protected function onMasterRowUpdate(Kwf_Component_Event_Row_Abstract $event)
+    public function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         if ($event->isDirty('pos') || $event->isDirty('visible')) {
 
@@ -51,7 +53,7 @@ class Kwc_Columns_Trl_Events extends Kwc_Abstract_Events
         }
     }
 
-    protected function onMasterRowDelete(Kwf_Component_Event_Row_Abstract $event)
+    public function onMasterRowDelete(Kwf_Events_Event_Row_Abstract $event)
     {
         $chainedType = 'Trl';
 

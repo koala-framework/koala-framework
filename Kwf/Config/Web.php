@@ -1,6 +1,4 @@
 <?php
-require_once 'Kwf/Config/Ini.php';
-
 class Kwf_Config_Web extends Kwf_Config_Ini
 {
     private $_section;
@@ -10,19 +8,16 @@ class Kwf_Config_Web extends Kwf_Config_Ini
     public static function getInstance($section = null)
     {
         if (!$section) {
-            require_once str_replace('_', '/', Kwf_Setup::$configClass).'.php';
             $section = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         }
         if (!isset(self::$_instances[$section])) {
             $cacheId = 'config_'.str_replace('-', '_', $section);
             $configClass = Kwf_Setup::$configClass;
-            require_once str_replace('_', '/', $configClass).'.php';
             if (extension_loaded('apc')) {
                 $apcCacheId = $cacheId.getcwd();
                 $ret = apc_fetch($apcCacheId);
                 if (!$ret) {
                     //two level cache
-                    require_once 'Kwf/Config/Cache.php';
                     $cache = Kwf_Config_Cache::getInstance();
                     $ret = $cache->load($cacheId);
                     if ($ret) {
@@ -42,7 +37,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                     apc_add($apcCacheId.'mtime', $cache->test($cacheId));
                 }
             } else {
-                require_once 'Kwf/Config/Cache.php';
                 $cache = Kwf_Config_Cache::getInstance();
                 if(!$ret = $cache->load($cacheId)) {
                     $ret = new $configClass($section);
@@ -83,7 +77,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
             $cacheId .= getcwd();
             return apc_fetch($cacheId.'mtime');
         } else {
-            require_once 'Kwf/Config/Cache.php';
             $cache = Kwf_Config_Cache::getInstance();
             return $cache->test('config_'.str_replace('-', '_', $section));
         }
@@ -116,7 +109,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
         $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
         $kwfSection = $this->_getKwfSection($section, $webPath, $kwfPath);
         if (!$kwfSection) {
-            require_once 'Kwf/Exception.php';
             throw new Kwf_Exception("Add either '$section' to kwf/config.ini or set kwfConfigSection in web config.ini");
         }
 
@@ -125,37 +117,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                         array('allowModifications'=>true));
 
         $this->_mergeWebConfig($section, $webPath);
-
-        if (!$this->libraryPath) {
-            $p = trim(file_get_contents(KWF_PATH.'/include_path'));
-            if (preg_match('#(.*)/zend/%version%$#', $p, $m)) {
-                $this->libraryPath = $m[1];
-            } else {
-                require_once 'Kwf/Exception.php';
-                throw new Kwf_Exception("Can't detect libraryPath");
-            }
-        }
-
-        foreach ($this->path as $k=>$i) {
-            $this->path->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
-                                            array($this->libraryPath, $kwfPath),
-                                            $i);
-        }
-        foreach ($this->includepath as $k=>$i) {
-            $this->includepath->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
-                                            array($this->libraryPath, $kwfPath),
-                                            $i);
-        }
-        foreach ($this->externLibraryPath as $k=>$i) {
-            $this->externLibraryPath->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
-                                            array($this->libraryPath, $kwfPath),
-                                            $i);
-        }
-        foreach ($this->assets->dependencies as $k=>$i) {
-            $this->assets->dependencies->$k = str_replace(array('%libraryPath%', '%kwfPath%'),
-                                            array($this->libraryPath, $kwfPath),
-                                            $i);
-        }
     }
 
     public function getMasterFiles()
@@ -213,20 +174,40 @@ class Kwf_Config_Web extends Kwf_Config_Ini
         return $kwfSection;
     }
 
-    protected function _mergeWebConfig($section, $webPath)
+    public static function findThemeConfigIni($theme)
+    {
+        //theme added using composer
+        $ns = require 'vendor/composer/autoload_namespaces.php';
+        foreach ($ns as $k=>$paths) {
+            if (substr($theme, 0, strlen($k)) == $k) {
+                if (count($paths) != 1) throw new Kwf_Exception("Failed merging theme config, only one path to theme supported");
+                return $paths[0].'/'.str_replace('_', '/', substr($theme, 0, strpos($theme, '_'))).'/config.ini';
+            }
+        }
+        foreach (explode(PATH_SEPARATOR, get_include_path()) as $ip) {
+            if (file_exists($ip.'/'.str_replace('_', '/', $theme).'.php')) {
+                return $ip.'/'.str_replace('_', '/', substr($theme, 0, strpos($theme, '_'))).'/config.ini';
+            }
+        }
+        return null;
+    }
+
+    private function _mergeThemeConfig($section, $webPath)
     {
         $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
 
         //merge theme config.ini
         $ini = new Zend_Config_Ini($webPath.'/config.ini', $webSection);
         if ($ini->kwc && $t = $ini->kwc->theme) {
-            foreach (explode(PATH_SEPARATOR, get_include_path()) as $ip) {
-                if (file_exists($ip.'/'.str_replace('_', '/', $t).'.php')) {
-                    $dir = $ip.'/'.str_replace('_', '/', substr($t, 0, strpos($t, '_')));
-                    self::mergeConfigs($this, new Kwf_Config_Ini($dir.'/config.ini', 'production'));
-                }
-            }
+            self::mergeConfigs($this, new Kwf_Config_Ini(self::findThemeConfigIni($t), 'production'));
         }
+    }
+
+    protected function _mergeWebConfig($section, $webPath)
+    {
+        $this->_mergeThemeConfig($section, $webPath);
+
+        $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
 
         $this->_masterFiles[] = $webPath.'/config.ini';
         self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.ini', $webSection));

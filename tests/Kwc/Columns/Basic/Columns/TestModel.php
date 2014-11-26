@@ -3,7 +3,6 @@ class Kwc_Columns_Basic_Columns_TestModel extends Kwf_Model_FnF
 {
     public function __construct(array $config = array())
     {
-        $this->_dependentModels['Children'] = 'Kwc_Columns_Basic_Columns_TestChildModel';
         $config = array(
             'primaryKey' => 'component_id',
             'data' => array(

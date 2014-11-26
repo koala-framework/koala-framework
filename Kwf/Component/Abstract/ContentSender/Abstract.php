@@ -19,9 +19,9 @@ abstract class Kwf_Component_Abstract_ContentSender_Abstract
 
     abstract public function sendContent($includeMaster);
 
-    protected function _render($includeMaster)
+    protected function _render($includeMaster, &$hasDynamicParts)
     {
-        return $this->_data->render(null, $includeMaster);
+        return $this->_data->render(null, $includeMaster, $hasDynamicParts);
     }
 
     protected function _getProcessInputComponents($includeMaster)

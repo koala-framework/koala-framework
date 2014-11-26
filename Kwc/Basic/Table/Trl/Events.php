@@ -4,26 +4,26 @@ class Kwc_Basic_Table_Trl_Events extends Kwc_Chained_Trl_Events
     public function getListeners()
     {
         $ret = parent::getListeners();
-        $childModel = Kwc_Abstract::getSetting($this->_class, 'childModel');
+        $m = Kwc_Abstract::createChildModel($this->_class);
         $ret[] = array(
-            'class' => $childModel,
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'class' => $m,
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onOwnRowEvent'
         );
         $ret[] = array(
-            'class' => $childModel,
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'class' => $m,
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onOwnRowEvent'
         );
         $ret[] = array(
-            'class' => $childModel,
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'class' => $m,
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onOwnRowEvent'
         );
         return $ret;
     }
 
-    public function onOwnRowEvent(Kwf_Component_Event_Row_Abstract $event)
+    public function onOwnRowEvent(Kwf_Events_Event_Row_Abstract $event)
     {
         $components = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
             $event->row->component_id, array('ignoreVisible'=>true)

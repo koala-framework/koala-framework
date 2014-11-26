@@ -76,7 +76,8 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
     {
         $insert =
             !is_array($this->_getPrimaryKey())
-            && !$this->{$this->_getPrimaryKey()};
+            && !$this->getCleanValue($this->_getPrimaryKey());
+
         if ($insert) {
             $this->_beforeInsert();
         } else {

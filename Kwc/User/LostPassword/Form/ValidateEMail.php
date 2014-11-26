@@ -10,7 +10,7 @@ class Kwc_User_LostPassword_Form_ValidateEMail extends Zend_Validate_Abstract
     {
         $value = (string) $value;
         $this->_setValue($value);
-        if (!Kwf_Registry::get('userModel')->getKwfModel()->mailExists($value)) {
+        if (!Kwf_Registry::get('userModel')->mailExists($value)) {
             $this->_error(self::NOTFOUND);
             return false;
         }

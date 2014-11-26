@@ -23,12 +23,8 @@ class Kwf_Test
 
     public static function setup()
     {
-        $include_path  = get_include_path();
-        $include_path .= PATH_SEPARATOR . KWF_PATH;
-        set_include_path($include_path);
-
-        require_once 'Kwf/Loader.php';
-        require_once 'Kwf/Setup.php';
+        require_once KWF_PATH.'/Kwf/Loader.php';
+        require_once KWF_PATH.'/Kwf/Setup.php';
         Kwf_Loader::registerAutoload();
 
         date_default_timezone_set('Europe/Berlin');

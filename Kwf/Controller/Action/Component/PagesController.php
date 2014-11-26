@@ -322,7 +322,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
     protected function _changeVisibility(Kwf_Model_Row_Interface $row)
     {
         parent::_changeVisibility($row);
-        $row->getData()->selfVisible = $row->visible;
+        $row->getData()->visible = $row->visible;
         $config = $row->getData()->generator->getPagesControllerConfig($row->getData());
         $icon = new Kwf_Asset($config['icon']);
         $this->view->icon = $icon->toString($config['iconEffects']);
@@ -419,10 +419,10 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         );
 
         ini_set('memory_limit', '256M');
-        Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
+        Kwf_Events_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
         $newPage = Kwf_Util_Component::duplicate($source, $target, $progressBar);
         Kwf_Util_Component::afterDuplicate($source, $newPage);
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        Kwf_Events_ModelObserver::getInstance()->enable();
 
         $progressBar->finish();
 

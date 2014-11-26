@@ -8,7 +8,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
         foreach ($this->_getCreatingClasses($this->_class) as $class) {
             $ret[] = array(
                 'class' => $class,
-                'event' => 'Kwf_Component_Event_Media_Changed',
+                'event' => 'Kwf_Events_Event_Media_Changed',
                 'callback' => 'onMediaChanged'
             );
             $ret[] = array(
@@ -112,7 +112,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Events extends Kwc_Abstract_Ev
         ));
     }
 
-    public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
+    public function onMediaChanged(Kwf_Events_Event_Media_Changed $event)
     {
         $components = $event->component
             ->getChildComponents(array('componentClass' => $this->_class));

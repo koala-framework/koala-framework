@@ -89,7 +89,6 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
 
             // Ensure that the query profile has not already ended
             if ($this->_lastQuery->hasEnded()) {
-                require_once 'Zend/Db/Profiler/Exception.php';
                 throw new Zend_Db_Profiler_Exception("Query with profiler handle '$queryId' has already ended.");
             }
 

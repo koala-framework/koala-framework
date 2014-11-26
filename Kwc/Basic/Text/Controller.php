@@ -53,4 +53,17 @@ class Kwc_Basic_Text_Controller extends Kwf_Controller_Action_Auto_Kwc_Form
         $m = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->_getParam('class'), 'stylesModel'));
         $this->view->styles = $m->getStyles($ownStyles);
     }
+
+    protected function _isAllowedComponent()
+    {
+        $actionName = $this->getRequest()->getActionName();
+        if ($actionName == 'styles-content') return true;
+        return parent::_isAllowedComponent();
+    }
+    public function stylesContentAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+        $c = Kwc_Basic_Text_StylesModel::getStylesContents(Kwc_Abstract::getSetting($this->_getParam('class'), 'stylesModel'));
+        $this->getResponse()->setBody($c);
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 class Kwc_Abstract_Cards_Events extends Kwc_Abstract_Composite_Events // extends composite for childHasContent handlers
 {
-    protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
+    protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Events_Event_Row_Abstract $event)
     {
         parent::_onOwnRowUpdate($c, $event);
         if ($event->isDirty('component')) {

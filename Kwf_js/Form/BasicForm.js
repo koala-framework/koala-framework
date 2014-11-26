@@ -1,4 +1,4 @@
-Ext.form.BasicForm.override({
+Ext2.form.BasicForm.override({
     resetDirty: function() {
         this.items.each(function(field) {
             field.resetDirty();
@@ -29,7 +29,7 @@ Ext.form.BasicForm.override({
     }
 });
 
-Ext.apply(Ext.form.VTypes, {
+Ext2.apply(Ext2.form.VTypes, {
     //E-Mail Validierung darf ab Ext 2.2 keine Bindestriche mehr haben, jetzt schon wieder
     email:  function(v) {
         return /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/.test(v);
@@ -45,7 +45,7 @@ Ext.apply(Ext.form.VTypes, {
         if (/^tel:\+?[\d\s-\.]+$/.test(v)) {
             return true;
         }
-        return Ext.form.VTypes.url(v);
+        return Ext2.form.VTypes.url(v);
     },
     urltelText: trlKwf('This field should be a URL in the format "http://www.domain.com" or tel:0043 1234'),
 

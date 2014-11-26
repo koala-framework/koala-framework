@@ -1,4 +1,5 @@
 <?php
+//to use this field add package "koala-framework/recaptcha-php": "1.11"
 class Kwf_Form_Field_Recaptcha extends Kwf_Form_Field_Abstract
 {
     public function validate($row, $postData)
@@ -16,7 +17,7 @@ class Kwf_Form_Field_Recaptcha extends Kwf_Form_Field_Abstract
             );
             return $ret;
         }
-        require_once(Kwf_Config::getValue('externLibraryPath.recaptcha').'/recaptchalib.php');
+        require_once('vendor/koala-framework/recaptcha-php/recaptchalib.php');
         $resp = recaptcha_check_answer (Kwf_Config::getValue('recaptcha.privateKey'),
                                 $_SERVER["REMOTE_ADDR"],
                                 $_POST["recaptcha_challenge_field"],
@@ -40,7 +41,7 @@ class Kwf_Form_Field_Recaptcha extends Kwf_Form_Field_Abstract
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
-        require_once(Kwf_Config::getValue('externLibraryPath.recaptcha').'/recaptchalib.php');
+        require_once('vendor/koala-framework/recaptcha-php/recaptchalib.php');
 
         $ret['html'] = "<div data-fieldname=\"".$this->getFieldName().$fieldNamePostfix."\">"
             .recaptcha_get_html(Kwf_Config::getValue('recaptcha.publicKey'))

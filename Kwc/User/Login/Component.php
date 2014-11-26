@@ -13,16 +13,26 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['register'] = Kwf_Component_Data_Root::getInstance()
-                        ->getComponentByClass(
-                            'Kwc_User_Register_Component',
-                            array('subroot' => $this->getData())
-                        );
-        $ret['lostPassword'] = Kwf_Component_Data_Root::getInstance()
-                        ->getComponentByClass(
-                            'Kwc_User_LostPassword_Component',
-                            array('subroot' => $this->getData())
-                        );
+        $ret['register'] = $this->_getRegisterComponent();
+        $ret['lostPassword'] = $this->_getLostPasswordComponent();
         return $ret;
+    }
+
+    protected function _getRegisterComponent()
+    {
+        return Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass(
+                'Kwc_User_Register_Component',
+                array('subroot' => $this->getData())
+            );
+    }
+
+    protected function _getLostPasswordComponent()
+    {
+        return Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass(
+                'Kwc_User_LostPassword_Component',
+                array('subroot' => $this->getData())
+            );
     }
 }

@@ -1,7 +1,7 @@
-Kwf.Welcome = Ext.extend(Ext.Panel,
+Kwf.Welcome = Ext2.extend(Ext2.Panel,
 {
     afterRender: function() {
-        this.welcomePanel = new Ext.Panel({
+        this.welcomePanel = new Ext2.Panel({
             cls: 'kwf-welcome',
             width: 304,
             autoLoad: '/kwf/welcome/content',

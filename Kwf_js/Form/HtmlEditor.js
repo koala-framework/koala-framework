@@ -1,4 +1,4 @@
-Kwf.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
+Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
     enableUndoRedo: true,
     enableInsertChar: true,
     enablePastePlain: true,
@@ -66,7 +66,7 @@ Kwf.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
         //wann text mit maus markiert wird muss die toolbar upgedated werden (link einfügen enabled)
         //dazu auch auf mouseup schauen
-        Ext.EventManager.on(this.doc, {
+        Ext2.EventManager.on(this.doc, {
             'mouseup': this.onEditorEvent,
             buffer:100,
             scope: this
@@ -138,7 +138,7 @@ Kwf.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     // private
     // überschrieben wegen spezieller ENTER behandlung im IE die wir nicht wollen
     fixKeys : function(){ // load time branching for fastest keydown performance
-        if(Ext.isIE){
+        if(Ext2.isIE){
             return function(e){
                 var k = e.getKey(), r;
                 if(k == e.TAB){
@@ -153,7 +153,7 @@ Kwf.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     //entfernt, wir wollen dieses verhalten genau so wie der IE es macht
                 }
             };
-        }else if(Ext.isOpera){
+        }else if(Ext2.isOpera){
             return function(e){
                 var k = e.getKey();
                 if(k == e.TAB){
@@ -163,7 +163,7 @@ Kwf.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     this.deferFocus();
                 }
             };
-        }else if(Ext.isWebKit){
+        }else if(Ext2.isWebKit){
             return function(e){
                 var k = e.getKey();
                 if(k == e.TAB){
@@ -224,8 +224,8 @@ Kwf.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     //basiert auf Editor::nodeChanged
     getParents: function() {
         var s = this.tinymceEditor.selection;
-        var n = (Ext.isIE ? s.getNode() : s.getStart()) || this.tinymceEditor.getBody();
-        n = Ext.isIE && n.ownerDocument != this.tinymceEditor.getDoc() ? this.tinymceEditor.getBody() : n; // Fix for IE initial state
+        var n = (Ext2.isIE ? s.getNode() : s.getStart()) || this.tinymceEditor.getBody();
+        n = Ext2.isIE && n.ownerDocument != this.tinymceEditor.getDoc() ? this.tinymceEditor.getBody() : n; // Fix for IE initial state
         var parents = [];
         this.tinymceEditor.dom.getParent(n, function(node) {
             if (node.nodeName == 'BODY')
@@ -245,4 +245,4 @@ Kwf.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
     }
 });
-Ext.reg('htmleditor', Kwf.Form.HtmlEditor);
+Ext2.reg('htmleditor', Kwf.Form.HtmlEditor);

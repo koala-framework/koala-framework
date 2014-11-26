@@ -36,8 +36,6 @@ class Kwf_Model_Select_Expr_Child_Contains implements Kwf_Model_Select_Expr_Inte
 
     public function toArray()
     {
-        $field = $this->_field;
-        if ($field instanceof Kwf_Model_Select_Expr_Interface) $field = $field->toArray();
         return array(
             'exprType' => str_replace('Kwf_Model_Select_Expr_', '', get_class($this)),
             'child' => $this->_child,

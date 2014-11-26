@@ -6,7 +6,6 @@
 Kwf.Utils.ResponsiveEl = function(selector, widths, options)
 {
     var initEl;
-
     if (typeof(widths) != "function") {
 
         if (!(widths instanceof Array)) widths = [widths];
@@ -14,7 +13,8 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
             var changed = false;
             var elWidth = Kwf.Utils.Element.getCachedWidth(el);
             if (!elWidth) return;
-            widths.each(function(w) {
+            for (var i=0; i<widths.length; i++) {
+                var w = widths[i];
                 if (typeof w != 'object') {
                     w = {
                         higherWidth: w,
@@ -42,29 +42,30 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
                         changed = true;
                     }
                 }
-            }, this);
+            }
             if (changed) {
-                Kwf.callOnContentReady(el.dom, { action: 'widthChange' });
+                Kwf.callOnContentReady(el, { action: 'widthChange' });
             }
         };
 
     } else {
-
         initEl = widths;
-
     }
 
-    Kwf.onElementWidthChange(selector, initEl, options);
+    if (!options) options = {};
+    if (typeof options.defer == 'undefined') options.defer = false;
+    Kwf.onJElementWidthChange(selector, initEl, options);
 };
 
 Kwf.onContentReady(function jumpToAnchor(el) {
     if(!Kwf.Utils.ResponsiveEl._anchorDone && el === document.body) {
         Kwf.Utils.ResponsiveEl._anchorDone = true;
-        if(window.location.hash) {
-            var target = Ext.get(window.location.hash.replace('#', ''));
-            if (target) {
+        var anchor = window.location.hash;
+        if (anchor && anchor.match(/^#[a-z0-9_-]+$/i)) {
+            var target = $(anchor);
+            if (target.length) {
                //fix anchor target as ResponsiveEl might have changed the heights of elements
-                window.scrollTo(0, target.getTop());
+                window.scrollTo(0, $(target).offset().top);
             }
         }
     }

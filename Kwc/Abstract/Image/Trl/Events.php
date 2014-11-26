@@ -12,7 +12,7 @@ class Kwc_Abstract_Image_Trl_Events extends Kwc_Abstract_Composite_Trl_Events
         );
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'masterComponentClass'),
-            'event' => 'Kwf_Component_Event_Media_Changed',
+            'event' => 'Kwf_Events_Event_Media_Changed',
             'callback' => 'onMasterMediaChanged'
         );
         return $ret;
@@ -35,10 +35,10 @@ class Kwc_Abstract_Image_Trl_Events extends Kwc_Abstract_Composite_Trl_Events
         ));
     }
 
-    public function onMasterMediaChanged(Kwf_Component_Event_Media_Changed $event)
+    public function onMasterMediaChanged(Kwf_Events_Event_Media_Changed $event)
     {
         foreach (Kwc_Chained_Abstract_Component::getAllChainedByMaster($event->component, 'Trl') as $c) {
-            $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+            $this->fireEvent(new Kwf_Events_Event_Media_Changed(
                 $this->_class, $c, $event->type
             ));
         }

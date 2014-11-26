@@ -20,6 +20,9 @@ class Kwf_Cache_SimpleStatic
     private static function _getFileNameForCacheId($cacheId)
     {
         $cacheId = preg_replace('#[^a-zA-Z0-9_-]#', '_', $cacheId);
+        if (strlen($cacheId) > 50) {
+            $cacheId = substr($cacheId, 0, 50).md5($cacheId);
+        }
         return "cache/simple/".$cacheId;
     }
 

@@ -1,5 +1,5 @@
-Ext.ns('Kwc.Shop.Cart.Checkout');
-Kwc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
+Ext2.ns('Kwc.Shop.Cart.Checkout');
+Kwc.Shop.Cart.Checkout.OrdersPanel = Ext2.extend(Ext2.Panel, {
     layout: 'border',
 
     createItems: function()
@@ -27,7 +27,7 @@ Kwc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                 invoice: {
                     clickHandler: function(grid, index, button, event) {
                         var row = grid.getStore().getAt(index);
-                        window.open(this.ordersControllerUrl+'/pdf?'+Ext.urlEncode(this.baseParams)+'&id='+row.id);
+                        window.open(this.ordersControllerUrl+'/pdf?'+Ext2.urlEncode(this.baseParams)+'&id='+row.id);
                         (function() {
                             this.order.reload(); //invoice_date wurde wom�glich gesetzt
                         }).defer(500, this);
@@ -45,7 +45,7 @@ Kwc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                 shipped: {
                     renderer: function(value, p, record, rowIndex, colIndex, store, column) {
                         if (!record.get('shipped')) {
-                            return Ext.util.Format.cellButton.apply(this, arguments);
+                            return Ext2.util.Format.cellButton.apply(this, arguments);
                         }
                     },
                     clickHandler: function(grid, index, button, event) {
@@ -53,7 +53,7 @@ Kwc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
                         if (row.get('shipped')) return;
                         var p = Kwf.clone(this.baseParams);
                         p.id = row.id;
-                        Ext.Ajax.request({
+                        Ext2.Ajax.request({
                             url: this.ordersControllerUrl+'/json-shipped',
                             params: p,
                             scope: this,
@@ -78,7 +78,7 @@ Kwc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
     },
     initComponent: function() {
         this.createItems();
-        Ext.TaskMgr.start({
+        Ext2.TaskMgr.start({
             run: function() {
                 this.orders.reload();
             },
@@ -89,5 +89,5 @@ Kwc.Shop.Cart.Checkout.OrdersPanel = Ext.extend(Ext.Panel, {
         Kwc.Shop.Cart.Checkout.OrdersPanel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwc.shop.cart.checkout.orders', Kwc.Shop.Cart.Checkout.OrdersPanel);
+Ext2.reg('kwc.shop.cart.checkout.orders', Kwc.Shop.Cart.Checkout.OrdersPanel);
 

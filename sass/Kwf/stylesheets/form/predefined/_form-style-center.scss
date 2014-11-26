@@ -1,0 +1,21 @@
+@import "form/form-styles";
+
+@mixin form-style-center {
+    &.veryNarrow {
+        $form-label-position  : top;
+        $form-label-align  : center;
+        $form-label-width  : 100%;
+        $form-input-width  : 100%;
+        $form-margin  : 0%;
+        $form-error-style  : simple;
+    }
+
+    &.gt350 {
+        $form-label-position  : top;
+        $form-label-align  : center;
+        $form-label-width  : 100%;
+        $form-input-width  : 100%;
+        $form-margin  : 0%;
+        $form-error-style  : simple;
+    }
+}

@@ -10,6 +10,8 @@ class Kwc_Basic_Headline_Component extends Kwc_Abstract
             'cssClass'      => 'webStandard',
             'extConfig'     => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
+        $ret['componentCategory'] = 'content';
+        $ret['componentPriority'] = 60;
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = array('headline1', 'headline2', 'headline_type');
         $ret['headlines'] = array(
             'h1' => array(
