@@ -126,6 +126,21 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         }
     }
 
+    public function jsonGenerateActivationLinkAction()
+    {
+        $userId = $this->getRequest()->getParam('user_id');
+        $row = $this->_model->getRow($userId);
+        if (!$row) {
+            throw new Kwf_Exception("User row not found");
+        }
+        if (!$this->_hasPermissions($row, 'link')) {
+            throw new Kwf_Exception("Don't have permissions");
+        }
+
+        $kwfRow = $row->getModel()->getKwfUserRowById($row->id);
+        $this->view->url = '/kwf/user/login/activate?code='.$kwfRow->id.'-'.$kwfRow->generateActivationToken();
+    }
+
     protected function _getSelect()
     {
         $select = parent::_getSelect();

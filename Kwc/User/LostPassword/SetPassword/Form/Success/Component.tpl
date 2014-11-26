@@ -1,4 +1,5 @@
 <div class="kwcUserFormSuccess <?=$this->cssClass?>">
+    <input type="hidden" value="<?=htmlspecialchars(json_encode($this->config))?>" />
     <p>
         <strong><?=$this->data->trlKwf('Your new password has been set.')?></strong>
     </p>

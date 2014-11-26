@@ -216,6 +216,16 @@ Ext2.util.Format.genderIcon = function(value, p, record, rowIndex, colIndex, sto
     return '';
 };
 
+Ext2.util.Format.genderText = function(value, p, record, rowIndex, colIndex, store, column) {
+    var ret = '';
+    if (value == 'male') {
+        ret = trlKwf('Male');
+    } else if (value == 'female') {
+        ret = trlKwf('Female');
+    }
+    return ret;
+};
+
 Ext2.util.Format.fileSize = function(size) {
     var unit;
     if (!parseInt(size) && size !== 0) return '';

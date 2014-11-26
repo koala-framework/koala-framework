@@ -48,7 +48,6 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         }
         if (!$useCache) {
             $fileName = $this->getAbsoluteFileName();
-            $sassc = Kwf_Config::getValue('server.sassc');
             $loadPath = array(
                 VENDOR_PATH.'/bower_components/compass-mixins/lib',
                 VENDOR_PATH.'/bower_components/susy/sass',
@@ -58,14 +57,18 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 
             $loadPath = escapeshellarg(implode(PATH_SEPARATOR, $loadPath));
             if (substr($fileName, 0, 1) == '.') $fileName = getcwd().substr($fileName, 1);
-            $cmd = "$sassc --load-path $loadPath --style compressed ";
-            $cmd .= "--sourcemap ";
-            $cmd .= "$fileName ".escapeshellarg($cacheFile);
+            $bin = Kwf_Config::getValue('server.nodeSassBinary');
+            if (!$bin) {
+                $bin = "node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/node-sass/bin/node-sass';
+            }
+            $cmd = "$bin --include-path $loadPath --output-style compressed ";
+            $cmd .= " --source-map ".escapeshellarg($cacheFile.'.map');
+            $cmd .= " ".escapeshellarg($fileName)." ".escapeshellarg($cacheFile);
             $cmd .= " 2>&1";
             $out = array();
             exec($cmd, $out, $retVal);
             if ($retVal) {
-                throw new Kwf_Exception("sassc failed: ".implode("\n", $out));
+                throw new Kwf_Exception("compiling sass failed: ".implode("\n", $out));
             }
             $map = json_decode(file_get_contents("{$cacheFile}.map"));
             $sourceFiles = array();
@@ -122,6 +125,20 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             foreach ($sourceFiles as $f) {
                 $f = new Kwf_Assets_Dependency_File($f);
                 $f = $f->getAbsoluteFileName();
+                $sourceTimes[] = array(
+                    'file' => $f,
+                    'mtime' => file_exists($f) ? filemtime($f) : null
+                );
+            }
+            $files = array(
+                'assetVariables.ini',
+                'config.ini',
+                KWF_PATH.'/config.ini'
+            );
+            if (Kwf_Config::getValue('kwc.theme')) {
+                $files[] = Kwf_Config_Web::findThemeConfigIni(Kwf_Config::getValue('kwc.theme'));
+            }
+            foreach ($files as $f) {
                 $sourceTimes[] = array(
                     'file' => $f,
                     'mtime' => file_exists($f) ? filemtime($f) : null

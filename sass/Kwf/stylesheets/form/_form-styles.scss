@@ -16,9 +16,9 @@
     $margin  : $form-margin,                                    //px or %
     $error-style  : $form-error-style                           //bubbles, simple-right, simple
 ) {
-    @if $label-position == 'left' {
+    @if $label-position == left {
         @include form-label-left;
-    } @else if $label-position == 'right' {
+    } @else if $label-position == right {
         @include form-label-right;
     } @else {
         label {
@@ -26,23 +26,27 @@
         }
     }
 
-    @include form-label-align($label-align);
+    @if $label-align != false {
+        @include form-label-align($label-align);
+    }
 
-    @include form-label-width($label-width);
+    @if $label-width != false {
+        @include form-label-width($label-width);
+    }
 
-    @if $input-width == 'false' {
-        @include form-input-width($input-width);
-    } @else {
+    @if $input-width != false {
         @include form-input-width($input-width);
     }
 
-    @include form-margin($margin, $label-position);
+    @if $margin != false {
+        @include form-margin($margin, $label-position);
+    }
 
-    @if $error-style == 'bubbles' {
+    @if $error-style == bubbles {
         @include error-bubbles;
-    } @else if $error-style == 'simple-right' {
+    } @else if $error-style == simple-right {
         @include error-simple-align-right;
-    } @else if $error-style == 'simple' {
+    } @else if $error-style == simple {
         @include error-simple;
     }
 }

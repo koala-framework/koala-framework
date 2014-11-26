@@ -143,6 +143,7 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
 
         $this->_fillRowInsert($row, $data);
         $this->_beforeInsert($row);
+        $this->_beforeSave($row);
         $row->save();
         $this->_afterSave($row, $data);
         $this->_afterInsert($row, $data);
@@ -183,6 +184,7 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
 
         $this->_fillRow($row, $data);
         $this->_beforeUpdate($row);
+        $this->_beforeSave($row);
         $row->save();
         $this->_afterSave($row, $data);
         $this->_afterUpdate($row, $data);
@@ -206,6 +208,10 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
     }
 
     protected function _beforeUpdate(Kwf_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
     }
 

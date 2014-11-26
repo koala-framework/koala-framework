@@ -3610,7 +3610,7 @@
 </text>
 <text>
 <en>yyyy-mm-dd</en>
-<de>dd.mm.yyyy</de>
+<de>tt.mm.jjjj</de>
 <id>493</id>
 <ro>dd.mm.yyyy</ro>
 <sl>dd.mm.yyyy</sl>
@@ -4549,7 +4549,7 @@
 </text>
 <text>
 <en>Your Account has been created successfully. You will receive a confirmation e-mail soon.</en>
-<de>Ihr Account wurde erfolgreich erstellt. Sie erhalten in Kürze eine Email mit einem Aktivierungslink.Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie künftig für Ihren Account verwenden möchten.</de>
+<de>Ihr Account wurde erfolgreich erstellt. Sie erhalten in Kürze eine E-Mail mit einem Aktivierungslink. Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie künftig für Ihren Account verwenden möchten.</de>
 <id>685</id>
 <ro>Contul dumneavoastră a fost creat cu succes. Veţi primi în scurt timp un e-mail de confirmare.</ro>
 <sl>Vaš račun je bil uspešno ustvarjen.
@@ -10999,7 +10999,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>'%value%' does not appear to be a valid date</en>
-<de>'%value%' hat kein Datumsformat</de>
+<de>'%value%' ist kein gültiges Datum</de>
 <id>1756</id>
 <ro>'%value%' nu are format valid de dată</ro>
 <sl>%value%' nima oblike datuma.</sl>
@@ -13513,6 +13513,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Grey</en>
 <de>Grau</de>
 <id>2255</id>
+</text>
+<text>
+<en>Year</en>
+<de>Jahr</de>
+<id>2256</id>
 </text>
 </trl>
 

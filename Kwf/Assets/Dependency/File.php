@@ -162,6 +162,9 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         if (substr($cssClass, -5) == '.scss') {
             $cssClass = substr($cssClass, 0, -5);
         }
+        if (substr($cssClass, -9) == '.defer.js') {
+            $cssClass = substr($cssClass, 0, -9);
+        }
         if (substr($cssClass, -3) == '.js') {
             $cssClass = substr($cssClass, 0, -3);
         }

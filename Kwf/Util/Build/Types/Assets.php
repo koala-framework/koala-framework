@@ -8,46 +8,41 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         'printcss' => 'text/css; media=print'
     );
 
-    public function checkRequirements()
-    {
-        $sassc = Kwf_Config::getValue('server.sassc');
-        exec("$sassc -h 2>&1", $out, $retVal);
-        if ($retVal) {
-            throw new Kwf_Exception_Client("Can't start sassc, this is required to build scss assets.\n".
-                "install globally or set binary path in config 'server.uglifyjs'");
-        }
-    }
-
     private function _buildPackageContents($p, $extension, $language)
     {
         $mimeType = self::$_mimeTypeByExtension[$extension];
-        $cacheContents = array(
-            'contents' => $p->getPackageContents($mimeType, $language),
-            'mimeType' => $extension == 'js' ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf8',
-            'mtime' => $p->getMaxMTime($mimeType)
-        );
+        $partCount = $p->getPackageContentsPartCount($mimeType, $language);
+        for ($partNumber=0; $partNumber<$partCount; $partNumber++) {
+            $cacheContents = array(
+                'contents' => $p->getPackageContents($mimeType, $language, $partNumber),
+                'mimeType' => ($extension == 'js' || $extension == 'defer.js') ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8',
+                'mtime' => $p->getMaxMTime($mimeType)
+            );
 
-        $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language);
-        Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
+            $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language, $partNumber);
+            Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
 
-        //save generated caches for clear-cache-watcher
-        $fileName = 'build/assets/output-cache-ids-'.$extension;
-        if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
-            file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+            //save generated caches for clear-cache-watcher
+            $fileName = 'build/assets/output-cache-ids-'.$extension;
+            if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
+                file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+            }
         }
     }
 
     private function _buildPackageSourceMap($p, $extension, $language)
     {
         $mimeType = self::$_mimeTypeByExtension[$extension];
-
-        $cacheContents = array(
-            'contents' => $p->getPackageContentsSourceMap($mimeType, $language),
-            'mimeType' => 'application/json',
-            'mtime' => $p->getMaxMTime($mimeType)
-        );
-        $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension.'.map', $language);
-        Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
+        $partCount = $p->getPackageContentsPartCount($mimeType, $language);
+        for ($partNumber=0; $partNumber<$partCount; $partNumber++) {
+            $cacheContents = array(
+                'contents' => $p->getPackageContentsSourceMap($mimeType, $language, $partNumber),
+                'mimeType' => 'application/json',
+                'mtime' => $p->getMaxMTime($mimeType)
+            );
+            $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension.'.map', $language, $partNumber);
+            Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
+        }
     }
 
     private function _getAllPackages()
@@ -58,6 +53,9 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         );
         if (Kwf_Controller_Front::getInstance()->getControllerDirectory('kwf_controller_action_maintenance')) {
             $packages[] = Kwf_Assets_Package_Maintenance::getInstance('Maintenance');
+        }
+        foreach (Kwf_Config::getValueArray('assets.packages') as $i) {
+            $packages[] = Kwf_Assets_Package_Default::getInstance($i);
         }
         return $packages;
     }
@@ -93,11 +91,14 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $packages = $this->_getAllPackages();
         foreach ($packages as $p) {
             foreach ($langs as $language) {
-                $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language);
-                Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                $partCount = $p->getPackageContentsPartCount(self::$_mimeTypeByExtension[$extension], $language);
+                for ($partNumber=0; $partNumber<$partCount; $partNumber++) {
+                    $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language, $partNumber);
+                    Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
 
-                $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension.'.map', $language);
-                Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                    $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension.'.map', $language, $partNumber);
+                    Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                }
             }
         }
     }
@@ -208,9 +209,19 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             $depName = $p->getDependencyName();
             $language = $langs[0];
             foreach ($exts as $extension) {
-                $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language);
-                $cacheContents = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-                echo "$depName $extension size: ".Kwf_View_Helper_FileSize::fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)))."\n";
+                $partCount = $p->getPackageContentsPartCount(self::$_mimeTypeByExtension[$extension], $language);
+                for ($partNumber=0; $partNumber<$partCount; $partNumber++) {
+                    $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language, $partNumber);
+                    $cacheContents = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+                    echo "$depName ";
+                    if ($partCount > 1) echo "part $partNumber ";
+                    $h = new Kwf_View_Helper_FileSize();
+                    echo "$extension size: ".$h->fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)));
+                    if ($extension == 'css') {
+                        echo ", rules: ".Kwf_Assets_Package::countCssRules($cacheContents['contents']);
+                    }
+                    echo "\n";
+                }
             }
         }
         $d = Kwf_Assets_Package_Default::getDefaultProviderList()->findDependency('Frontend');

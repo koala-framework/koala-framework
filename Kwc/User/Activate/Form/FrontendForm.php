@@ -8,7 +8,7 @@ class Kwc_User_Activate_Form_FrontendForm extends Kwf_Form
 
         $validatorClass = Kwf_Registry::get('config')->user->passwordValidator;
         if ($validatorClass) {
-            $passwordField->addValidator(new $validatorClass());
+            $passwordField->getChildren()->getByName('password')->addValidator(new $validatorClass());
         }
     }
 }

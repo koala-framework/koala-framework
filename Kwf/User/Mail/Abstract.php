@@ -1,7 +1,7 @@
 <?php
 class Kwf_User_Mail_Abstract
 {
-    private $_mail;
+    protected $_mail;
 
     public function __construct($tpl, $subject, Kwf_User_Row $row)
     {

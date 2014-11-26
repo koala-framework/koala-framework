@@ -54,6 +54,7 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
         } else {
             throw new Kwf_Exception_NotYetImplemented('hashing type not yet implemented');
         }
+        $row->activate_token = '';
         return true;
     }
 

@@ -34,9 +34,10 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
 
     public static function expandAssetVariables($contents, $section = 'web', &$mtimeFiles = array())
     {
+        if (strpos($contents, 'var(')===false) return $contents;
         $assetVariables = self::getAssetVariables($section, $mtimeFiles);
         foreach ($assetVariables as $k=>$i) {
-            $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
+            //$contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
             $contents = str_replace('var('.$k.')', $i, $contents);
         }
         return $contents;
@@ -49,12 +50,14 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         if ($pathType == 'ext2') {
             //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
             $ret = str_replace('../images/', '/assets/ext2/resources/images/', $ret);
-        } else if ($pathType == 'mediaelement') {
-            //hack to get the correct paths for the mediaelement pictures
-            $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
-        } else if ($pathType == 'socialshareprivacy') {
-            $ret = str_replace('url(', 'url(/assets/socialshareprivacy/socialshareprivacy/', $ret);
         }
+
+        //convert relative paths (as in bower dependencies; example: jquery.socialshareprivacy, mediaelement
+        $fn = $this->getFileNameWithType();
+        $fnDir = substr($fn, 0, strrpos($fn, '/'));
+        $ret = preg_replace('#url\(([^/])#', 'url(/assets/'.$fnDir.'/\1', $ret);
+
+
         if ($baseUrl = Kwf_Setup::getBaseUrl()) {
             $ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
         }

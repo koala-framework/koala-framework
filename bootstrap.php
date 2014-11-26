@@ -38,5 +38,6 @@ if ($router instanceof Kwf_Controller_Router) {
                     'action' => 'index')));
 }
 
+$front->setBaseUrl('');
 $response = $front->dispatch();
 $response->sendResponse();

@@ -1,22 +1,21 @@
 <?php
-//instanceof operator geht für strings ned korrekt, von php.net gfladad
+//instanceof operator doesn't work for strings correctly, found on php.net
 function is_instance_of($sub, $super)
 {
     $sub = is_object($sub) ? get_class($sub) : (string)$sub;
     $sub = strpos($sub, '.') ? substr($sub, 0, strpos($sub, '.')) : $sub;
     $super = is_object($super) ? get_class($super) : (string)$super;
-//     Zend_Loader::loadClass($sub);
-//     Zend_Loader::loadClass($super);
 
-    switch(true)
-    {
-        case $sub === $super:
-        case is_subclass_of($sub, $super):
-        case in_array($super, class_implements($sub)):
-            return true;
-        default:
-            return false;
+    $ret = false;
+    if ($sub === $super) {
+        $ret = true;
+    //} else if (is_subclass_of($sub, $super)) { disabled because of https://bugs.php.net/bug.php?id=50360, fixed for php 5.3
+    } else if (in_array($super, class_parents($sub))) {
+        $ret = true;
+    } else if (in_array($super, class_implements($sub))) {
+        $ret = true;
     }
+    return $ret;
 }
 
 class Kwf_Setup

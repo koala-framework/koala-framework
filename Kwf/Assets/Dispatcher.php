@@ -65,9 +65,9 @@ class Kwf_Assets_Dispatcher
         return str_replace(array(':', '/', '.', ','), '_', $url);
     }
 
-    public static function getCacheIdByPackage($package, $ext, $language)
+    public static function getCacheIdByPackage($package, $ext, $language, $partNumber)
     {
-        $ret = $package->getPackageUrl($ext, $language);
+        $ret = $package->getPackageUrl($ext, $language, $partNumber);
         if (Kwf_Setup::getBaseUrl()) $ret = substr($ret, strlen(Kwf_Setup::getBaseUrl()));
         if (substr($ret, 0, 21) != '/assets/dependencies/') throw new Kwf_Exception("invalid url: '$url'");
         $ret = substr($ret, 21);
@@ -133,17 +133,22 @@ class Kwf_Assets_Dispatcher
     {
         class_exists('Kwf_Trl'); //required because setup doesn't load Trl.php before dispatching assets
         $param = explode('/', $url);
+        if (count($param) != 5) throw new Kwf_Exception_NotFound();
         $dependencyClass = $param[0];
         $dependencyParams = $param[1];
         $language = $param[2];
-        $extension = $param[3];
+        $partNumber = $param[3];
+        $extension = $param[4];
         if (!class_exists($dependencyClass)) {
             throw new Kwf_Exception_NotFound();
         }
         if (!is_instance_of($dependencyClass, 'Kwf_Assets_Interface_UrlResolvable')) {
             throw new Kwf_Exception_NotFound();
         }
-        $dependency = call_user_func(array($dependencyClass, 'fromUrlParameter'), $dependencyClass, $dependencyParams);
+        $package = call_user_func(array($dependencyClass, 'fromUrlParameter'), $dependencyClass, $dependencyParams);
+        if (!$package instanceof Kwf_Assets_Package) {
+            throw new Kwf_Exception_NotFound();
+        }
 
         $sourceMap = false;
         if (substr($extension, -4) == '.map') {
@@ -157,22 +162,13 @@ class Kwf_Assets_Dispatcher
         else throw new Kwf_Exception_NotFound();
 
         if (!$sourceMap) {
-            if ($dependency instanceof Kwf_Assets_Package) {
-                $contents = $dependency->getPackageContents($mimeType, $language);
-                $mtime = $dependency->getMaxMTime($mimeType);
-            } else {
-                $contents = $dependency->getContents($language);
-                $mtime = $dependency->getMTime();
-            }
+            $contents = $package->getPackageContents($mimeType, $language, $partNumber);
+            $mtime = $package->getMaxMTime($mimeType);
             if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
-            else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf8';
+            else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf-8';
         } else {
-            if ($dependency instanceof Kwf_Assets_Package) {
-                $contents = $dependency->getPackageContentsSourceMap($mimeType, $language);
-                $mtime = $dependency->getMaxMTime($mimeType);
-            } else {
-                throw new Kwf_Exception("can't generate sourcemap for non-packages");
-            }
+            $contents = $package->getPackageContentsSourceMap($mimeType, $language, $partNumber);
+            $mtime = $package->getMaxMTime($mimeType);
             $mimeType = 'application/json';
         }
         $ret = array(

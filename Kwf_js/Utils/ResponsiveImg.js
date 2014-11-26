@@ -13,7 +13,10 @@ Kwf.Utils.ResponsiveImg = function (selector) {
                 checkResponsiveImgEl(el);
             }
         } else {
-            deferredImages.push(el);
+            if (!el.data('responsiveImgInitDeferred')) {
+                deferredImages.push(el);
+                el.data('responsiveImgInitDeferred', true);
+            }
         }
     }, { defer: true });
 };
@@ -118,7 +121,7 @@ function doesElementScroll(el) {
 }
 
 function isElementInView(el) {
-    var threshold = 200;
+    var threshold = 800;
 
     if (!Kwf.Utils.Element.isVisible(el[0])) return false;
 

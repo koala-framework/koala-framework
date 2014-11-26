@@ -60,7 +60,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             $rev = $this->_getParam('rev');
 
             if (!$skipClearCache) {
-                Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>false, 'refresh'=>false));
+                Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>true, 'refresh'=>false));
             }
 
             $from = 1;
