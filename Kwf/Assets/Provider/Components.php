@@ -99,6 +99,9 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
     {
         $ret = array();
         $assets = Kwc_Abstract::getSetting($class, $setting);
+        if (!is_array($assets['dep'])) {
+            throw new Kwf_Exception("Invalid dep dependency for '$class'");
+        }
         foreach ($assets['dep'] as $i) {
             $d = $this->_providerList->findDependency(trim($i));
             if (!$d) {
