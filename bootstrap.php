@@ -11,5 +11,6 @@ if (isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] == '/') {
 }
 
 $front = Kwf_Controller_Front::getInstance();
+$front->setBaseUrl('');
 $response = $front->dispatch();
 $response->sendResponse();

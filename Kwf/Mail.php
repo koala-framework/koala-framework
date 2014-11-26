@@ -114,7 +114,7 @@ class Kwf_Mail extends Zend_Mail
                 } else if (isset($output['file'])) {
                     $contents = file_get_contents($output['file']);
                 } else {
-                    throw new Kwf_Exception("didn't image contents");
+                    throw new Kwf_Exception("didn't get image contents");
                 }
                 $image = new Zend_Mime_Part($contents);
                 $image->type = $output['mimeType'];
