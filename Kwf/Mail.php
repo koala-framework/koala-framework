@@ -103,14 +103,18 @@ class Kwf_Mail extends Zend_Mail
                     $output = Kwf_Media::getOutputWithoutCheckingIsValid($class, $id, $type);
                 } else {
                     $f = new Kwf_Assets_Dependency_File(substr($path, 8));
-                    $output = $f->getContents(null);
+                    $size = getimagesize($f->getFileName());
+                    $output = array(
+                        'contents' => $f->getContents(null),
+                        'mimeType' => $size['mime']
+                    );
                 }
                 if (isset($output['contents'])) {
                     $contents = $output['contents'];
                 } else if (isset($output['file'])) {
                     $contents = file_get_contents($output['file']);
                 } else {
-                    throw new Kwf_Exception("didn't image contents");
+                    throw new Kwf_Exception("didn't get image contents");
                 }
                 $image = new Zend_Mime_Part($contents);
                 $image->type = $output['mimeType'];
