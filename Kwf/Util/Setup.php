@@ -69,6 +69,9 @@ class Kwf_Util_Setup
         $ret .= "Kwf_Benchmark::\$startTime = microtime(true);\n";
         $ret .= "\n";
 
+        //override the default cache (/tmp) dir used by Zend_Cache_Backend to have the cache per web
+        $ret .= "\$_SERVER['TMP'] = 'cache/zend';\n";
+
         //only replace configured value to avoid spoofing
         //required eg. behind load balancers
         if (Kwf_Config::getValueArray('server.replaceVars.remoteAddr')) {

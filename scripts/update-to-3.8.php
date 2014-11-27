@@ -82,6 +82,12 @@ if (!is_dir('cache/twig')) {
     system("git add cache/twig/.gitignore");
     echo "folder \"cache/twig\" created\n";
 }
+if (!is_dir('cache/zend')) {
+    mkdir('cache/zend');
+    file_put_contents('cache/zend/.gitignore', "*\n!.gitignore\n");
+    system("git add cache/zend/.gitignore");
+    echo "folder \"cache/zend\" created\n";
+}
 
 deleteCacheFolder('cache/events');
 deleteCacheFolder('cache/table');
