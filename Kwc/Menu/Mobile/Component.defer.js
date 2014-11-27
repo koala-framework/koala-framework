@@ -112,6 +112,13 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
         var slider = el.find('.slider');
         var menu = el.find('.menu');
 
+        var sliders = $('.kwcMenuMobile .slider').not(slider);
+        if (sliders.length) {
+            sliders.parent().find('.active').removeClass('active');
+            sliders.parent().removeClass('open');
+            sliders.animate({height: 0}, slideDuration);
+        }
+
         slider.stop();
 
         if (!menu.length) {
