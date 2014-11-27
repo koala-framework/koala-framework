@@ -199,7 +199,10 @@ class Kwf_Config_Web extends Kwf_Config_Ini
         //merge theme config.ini
         $ini = new Zend_Config_Ini($webPath.'/config.ini', $webSection);
         if ($ini->kwc && $t = $ini->kwc->theme) {
-            self::mergeConfigs($this, new Kwf_Config_Ini(self::findThemeConfigIni($t), 'production'));
+            $ini = self::findThemeConfigIni($t);
+            if ($ini) {
+                self::mergeConfigs($this, new Kwf_Config_Ini($ini, 'production'));
+            }
         }
     }
 
