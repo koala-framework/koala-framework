@@ -1,1 +1,1 @@
-REPLACE INTO  `kwf_welcome` SET id=1;
+REPLACE INTO  `kwf_welcome` SET id=1, content='';

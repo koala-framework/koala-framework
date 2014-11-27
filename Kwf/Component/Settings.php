@@ -185,10 +185,10 @@ class Kwf_Component_Settings
             } else if ($setting == 'parentFilePaths') {
                 //value = klasse, key=pfad
                 $ret = array();
-                $cwd = realpath(getcwd());
+                $cwd = str_replace(DIRECTORY_SEPARATOR, '/', realpath(getcwd()));
                 foreach (self::getSetting($class, 'parentClasses') as $c) {
                     $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
-                    $file = str_replace('_', DIRECTORY_SEPARATOR, $c) . '.php';
+                    $file = str_replace('_', '/', $c) . '.php';
                     static $dirs;
                     if (!isset($dirs)) {
                         $dirs = explode(PATH_SEPARATOR, get_include_path());
@@ -206,6 +206,7 @@ class Kwf_Component_Settings
                                 continue;
                             }
                             $dir = realpath($dir);
+                            $dir = str_replace(DIRECTORY_SEPARATOR, '/', $dir);
                             if (substr($dir, 0, strlen($cwd)) != $cwd) {
                                 if (VENDOR_PATH == '../vendor') { //required to support running kwf tests in tests subfolder
                                     $parentCwd = substr($cwd, 0, strrpos($cwd, '/'));
@@ -230,7 +231,7 @@ class Kwf_Component_Settings
                     foreach ($dirs as $dir) {
                         $path = $dir . ($dir ? '/' : '') . $file;
                         if (is_file($path)) {
-                            if (substr($path, -14) == DIRECTORY_SEPARATOR.'Component.php') {
+                            if (substr($path, -14) == '/Component.php') {
                                 $ret[substr($path, 0, -14)] = substr($c, 0, -10);
                             } else {
                                 $ret[substr($path, 0, -4)] = $c; //nur .php

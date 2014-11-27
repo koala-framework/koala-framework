@@ -28,7 +28,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$fileName.'.'.md5(file_get_contents($this->getAbsoluteFileName()));
         if (!file_exists("$buildFile.min.js")) {
 
-            $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
+            $dir = dirname($buildFile);
             if (!file_exists($dir)) mkdir($dir, 0777, true);
             file_put_contents($buildFile, $this->_getRawContents(null));
             $uglifyjs = "node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/uglify-js/bin/uglifyjs';
@@ -127,7 +127,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
             if (isset($ret['sourceMap'])) {
                 $buildFile = "cache/assets/".$this->getFileNameWithType().'-'.$language;
-                $dir = substr($buildFile, 0, strrpos($buildFile, '/'));
+                $dir = dirname($buildFile);
                 if (!file_exists($dir)) mkdir($dir, 0777, true);
 
                 if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
