@@ -11,6 +11,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     protected $_dependentModels = array();
     protected $_referenceMap = array();
     protected $_toStringField;
+    
+    protected $_hasDeletedFlag = false;
     /**
      * Row-Filters für automatisch befüllte Spalten
      *
@@ -55,6 +57,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         if (isset($config['filters'])) $this->_filters = (array)$config['filters'];
         if (isset($config['toStringField'])) $this->_toStringField = (string)$config['toStringField'];
         if (isset($config['exprs'])) $this->_exprs = (array)$config['exprs'];
+        if (isset($config['hasDeletedFlag'])) $this->_hasDeletedFlag = $config['hasDeletedFlag'];
         self::$instanceCount[spl_object_hash($this)] = get_class($this);
         self::$_allInstances[] = $this;
         $this->_init();
@@ -707,6 +710,15 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                 $v = $row->$field;
             }
             return date($format, strtotime($v));
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Date_Format) {
+            $field = $expr->getField();
+            $format = $expr->getFormat();
+            if (is_array($row)) {
+                $v = $row[$field];
+            } else {
+                $v = $row->$field;
+            }
+            return date($format, strtotime($v));
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
             $f = $expr->getField();
             if (is_array($row)) {
@@ -797,6 +809,24 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             }
             if (!$ret) $ret = 0;
             return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Subtract) {
+            $ret = null;
+            foreach ($expr->getExpressions() as $e) {
+                $value = $this->getExprValue($row, $e);
+                if ($ret == null) {
+                    $ret = $value;
+                } else {
+                    $ret -= $value;
+                }
+            }
+            if (!$ret) $ret = 0;
+            return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Add) {
+            $ret = 0;
+            foreach ($expr->getExpressions() as $e) {
+                $ret += $this->getExprValue($row, $e);
+            }
+            return $ret;
         } else if ($expr instanceof Kwf_Model_Select_Expr_And) {
             foreach ($expr->getExpressions() as $e) {
                 if (!$this->getExprValue($row, $e)) { return false; }
@@ -879,6 +909,13 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                 $ret = min($ret, $r->$f);
             }
             return $ret;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_GroupConcat) {
+            $f = $expr->getField();
+            $ret = array();
+            foreach ($rowset as $r) {
+                $ret[] = $r->$f;
+            }
+            return implode($expr->getSeparator(), $ret);
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
             if (!count($rowset)) {
                 return null;
@@ -1018,5 +1055,30 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function hasColumnMappings($mapping) {
         return isset($this->_columnMappings[$mapping]);
+    }
+    
+    public function hasDeletedFlag()
+    {
+        return $this->_hasDeletedFlag;
+    }
+
+    public static function convertValueToType($value, $type)
+    {
+        if (is_null($value)) return $value;
+
+        if ($type == Kwf_Model_Abstract::TYPE_STRING) {
+            $value = (string)$value;
+        } else if ($type == Kwf_Model_Abstract::TYPE_BOOLEAN) {
+            $value = (bool)$value;
+        } else if ($type == Kwf_Model_Abstract::TYPE_INTEGER) {
+            $value = (int)$value;
+        } else if ($type == Kwf_Model_Abstract::TYPE_DATE) {
+            $value = (string)$value;
+        } else if ($type == Kwf_Model_Abstract::TYPE_DATETIME) {
+            $value = (string)$value;
+        } else if ($type == Kwf_Model_Abstract::TYPE_FLOAT) {
+            $value = (float)$value;
+        }
+        return $value;
     }
 }

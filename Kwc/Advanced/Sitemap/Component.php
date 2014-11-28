@@ -18,13 +18,14 @@ class Kwc_Advanced_Sitemap_Component extends Kwc_Abstract
             ->getComponentByDbId($this->getRow()->target, array('limit'=>1));
         $ret['listHtml'] = '';
         if ($ret['target']) {
-            $ret['listHtml'] = $this->_getListHtml($renderer, $ret['target'], 0);
+            $ret['listHtml'] = self::getListHtml($renderer, $ret['target'], 0, $ret['levels']);
         }
         return $ret;
     }
 
     //not in template for easier recursion
-    private function _getListHtml(Kwf_Component_Renderer_Abstract $renderer, Kwf_Component_Data $c, $level)
+    // public because for trl
+    public static function getListHtml(Kwf_Component_Renderer_Abstract $renderer, Kwf_Component_Data $c, $level, $levels)
     {
         $ret = '';
         $level++;
@@ -32,36 +33,21 @@ class Kwc_Advanced_Sitemap_Component extends Kwc_Abstract
         $select->whereShowInMenu(true);
         $ret .= "<ul>\n";
         foreach ($c->getChildPages($select) as $child) {
-            $ret .= "<li>\n";
+            $noChild = '';
+            if (!$child->getChildPages($select)) {
+                $noChild = 'noChild';
+            }
+            $ret .= '<li class="' . $noChild . '">';
             $helper = new Kwf_Component_View_Helper_ComponentLink();
             $helper->setRenderer($renderer);
             $ret .= $helper->componentLink($child);
             $ret .= "\n";
-            if ($level < $this->getRow()->levels) {
-                $ret .= $this->_getListHtml($renderer, $child, $level);
+            if ($level < $levels) {
+                $ret .= self::getListHtml($renderer, $child, $level, $levels);
             }
             $ret .= "</li>\n";
         }
         $ret .= "</ul>\n";
-        return $ret;
-    }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        foreach (Kwc_Abstract::getComponentClasses() as $class) {
-            foreach (Kwc_Abstract::getSetting($class, 'generators') as $key => $generator) {
-                if (!isset($generator['showInMenu']) || !$generator['showInMenu']) continue;
-                $generator = current(Kwf_Component_Generator_Abstract::getInstances(
-                    $class, array('generator' => $key))
-                );
-                if (!$generator->getGeneratorFlag('page') || !$generator->getGeneratorFlag('table')) continue;
-                $ret[] = new Kwf_Component_Cache_Meta_Static_Model($generator->getModel());
-            }
-        }
-
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwf_Component_Model');
-
         return $ret;
     }
 }

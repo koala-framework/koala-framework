@@ -3,13 +3,17 @@
 
     .youtubeContainer {
         background-color: white;
-        width: 900px;
-        height: 0px;
         position: relative;
-        top: 0px;
-        left: 0px;
         overflow: hidden;
+        height: 0px;
         z-index: 1;
+
+        &.ratio16x9 {
+            padding-bottom: 56.25%;
+        }
+        &.ratio4x3 {
+            padding-bottom: 75%;
+        }
 
         .outerLoading {
             position: absolute;
@@ -18,19 +22,20 @@
             top: 50%;
             left: 50%;
             margin: -33px 0px 0px -33px;
-            background: url('/assets/web/images/loadingLightboxBg.png') no-repeat center center;
 
             .loading {
                 width: 66px;
                 height: 66px;
-                background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif');
+                background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif') no-repeat center center;
             }
         }
 
-        .youtubePlayer {
-            position: relative;
-            width: 100%;
+        .youtubePlayer iframe {
+            position: absolute;
             height: 100%;
+            width: 100%;
+            left: 0;
+            top: 0;
         }
     }
 }

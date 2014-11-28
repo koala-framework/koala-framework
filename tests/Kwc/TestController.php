@@ -14,6 +14,7 @@ class Kwc_TestController extends Kwf_Controller_Action
 
         //FnF models setzen damit tests nicht in echte tabellen schreiben
         Kwf_Component_Cache::setInstance(Kwf_Component_Cache::CACHE_BACKEND_FNF);
+        Kwf_Component_Cache_Memory::setInstance(new Kwf_Component_Cache_MemoryBlackHole());
 
         /*
         if (class_exists('APCIterator')) {
@@ -68,6 +69,6 @@ class Kwc_TestController extends Kwf_Controller_Action
         Kwf_Benchmark::output();
 
 
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
 }

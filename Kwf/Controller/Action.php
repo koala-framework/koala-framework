@@ -46,20 +46,8 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         $this->_helper->notifyPostDispatch();
     }
 
-    public function preDispatch()
+    protected function _validateSessionToken()
     {
-        Kwf_Util_Https::ensureHttps();
-
-        if ($this->_getParam('application_max_assets_mtime')
-                && $this->getHelper('ViewRenderer')->isJson()) {
-            $l = new Kwf_Assets_Loader();
-            if ($l->getDependencies()->getMaxFileMTime()!= $this->_getParam('application_max_assets_mtime')) {
-                $this->_forward('json-wrong-version', 'error',
-                                    'kwf_controller_action_error');
-                return;
-            }
-        }
-
         if ($this->_helper->getHelper('viewRenderer')->isJson() && Kwf_Util_SessionToken::getSessionToken()) {
             if (!$this->_getParam('kwfSessionToken')) {
                 throw new Kwf_Exception("Missing sessionToken parameter");
@@ -68,6 +56,22 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
                 throw new Kwf_Exception("Invalid kwfSessionToken");
             }
         }
+    }
+
+    public function preDispatch()
+    {
+        Kwf_Util_Https::ensureHttps();
+
+        if ($this->_getParam('applicationAssetsVersion')
+                && $this->getHelper('ViewRenderer')->isJson()) {
+            if (Kwf_Assets_Dispatcher::getAssetsVersion() != $this->_getParam('applicationAssetsVersion')) {
+                $this->_forward('json-wrong-version', 'error',
+                                    'kwf_controller_action_error');
+                return;
+            }
+        }
+
+        $this->_validateSessionToken();
 
         $t = microtime(true);
         $allowed = false;

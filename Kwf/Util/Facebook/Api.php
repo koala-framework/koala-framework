@@ -13,12 +13,12 @@ class Kwf_Util_Facebook_Api extends Kwf_Util_Facebook_FacebookZendSession
 
     public function __construct()
     {
-        $config = Kwf_Config::getValueArray('kwc.fbAppData');
+        $config = Kwf_Config::getValueArray('fbAppData');
         if (!isset($config['appId'])) {
-            throw new Kwf_Exception('kwc.fbAppData.appId has to be set in config');
+            throw new Kwf_Exception('fbAppData.appId has to be set in config');
         }
         if (!isset($config['secret'])) {
-            throw new Kwf_Exception('kwc.fbAppData.secret has to be set in config');
+            throw new Kwf_Exception('fbAppData.secret has to be set in config');
         }
         $fbConfig['appId'] = $config['appId'];
         $fbConfig['secret'] = $config['secret'];

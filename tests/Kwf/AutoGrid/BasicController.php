@@ -5,7 +5,7 @@ class Kwf_AutoGrid_BasicController extends Kwf_Controller_Action_Auto_Grid
 
     public function indexAction()
     {
-        $this->view->assetsType = 'Kwf_AutoGrid:Test';
+        $this->view->assetsPackage = new Kwf_Assets_Package_TestPackage('Kwf_AutoGrid');
         $this->view->viewport = 'Kwf.Test.Viewport';
         parent::indexAction();
     }

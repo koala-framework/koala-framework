@@ -1,14 +1,14 @@
 <?php
-class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Component
+class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
+    implements Kwf_Media_Output_IsValidInterface
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Enlarge Image');
-        $ret['alternativePreviewImage'] = true;
         $ret['fullSizeDownloadable'] = false;
         $ret['imageTitle'] = true;
-        $ret['dimensions'] = array(array('width'=>800, 'height'=>600, 'scale'=>Kwf_Media_Image::SCALE_BESTFIT));
+        $ret['dimension'] = array('width'=>1920, 'height'=>1440, 'cover' => false);
 
         $ret['generators']['imagePage'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
@@ -16,17 +16,27 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
             'component' => 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component'
         );
 
-        $ret['assets']['files'][] = 'kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/Component.js';
-        $ret['assets']['dep'][] = 'ExtElement';
-        $ret['assets']['dep'][] = 'ExtConnection';
-        $ret['assets']['dep'][] = 'ExtDomHelper';
-        $ret['assets']['dep'][] = 'ExtUtilJson';
-        $ret['assets']['dep'][] = 'ExtFx';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
 
         return $ret;
     }
 
-    
+    /**
+     * This function is used by Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component
+     * to get the dimension-values defined in getSettings and the crop-values
+     * if use_crop was checked.
+     */
+    public function getImageDimensions()
+    {
+        $dimension = $this->_getSetting('dimension');
+        if ($this->getRow()->use_crop) {
+            $parentDimension = $this->_getImageEnlargeComponent()->getImageDimensions();
+            $dimension['crop'] = $parentDimension['crop'];
+        }
+        $data = $this->getImageData();
+        return Kwf_Media_Image::calculateScaleDimensions($data['file'], $dimension);
+    }
+
     public static function validateSettings($settings, $componentClass)
     {
         parent::validateSettings($settings, $componentClass);
@@ -34,7 +44,6 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
             throw new Kwf_Exception("'showInactiveSwitchLinks' setting got removed; style them using css");
         }
     }
-
 
     public function getTemplateVars()
     {
@@ -60,49 +69,87 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract_Image_Com
         return $ret;
     }
 
+    /**
+     * This function is called by Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component
+     */
     public final function getOptions()
     {
         return $this->_getOptions();
     }
 
-    private function _getImageEnlargeComponentData()
+    private function _getImageEnlargeComponent()
     {
         $d = $this->getData();
         while (!is_instance_of($d->componentClass, 'Kwc_Basic_Image_Component')) {
             $d = $d->parent;
         }
-        return $d;
+        return $d->getComponent();
+    }
+
+    /**
+     * This function is used by Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component
+     * to get the url to show the image from parent with dimension defined through
+     * this component.
+     */
+    public function getImageUrl()
+    {
+        $baseUrl = $this->getBaseImageUrl();
+        if ($baseUrl) {
+            $dimensions = $this->getImageDimensions();
+            $imageData = $this->getImageData();
+            $width = Kwf_Media_Image::getResponsiveWidthStep($dimensions['width'],
+                    Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageData['file']));
+            return str_replace('{width}', $width, $baseUrl);
+        }
+        return null;
+    }
+
+    public function getBaseType()
+    {
+        $type = Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}';
+        $type .= '-'.substr(md5(json_encode($this->_getSetting('dimension'))), 0, 6);
+        return $type;
+    }
+
+    public function getBaseImageUrl()
+    {
+        $data = $this->_getImageEnlargeComponent()->getImageData();
+        if ($data) {
+            $id = $this->getData()->componentId;
+            return Kwf_Media::getUrl($this->getData()->componentClass, $id, $this->getBaseType(), $data['filename']);
+        }
+        return null;
     }
 
     public function getImageData()
     {
-        $d = $this->_getImageEnlargeComponentData();
-        return $d->getComponent()->getOwnImageData();
+        return $this->_getImageEnlargeComponent()->getImageData();
     }
 
-    public function getAlternativePreviewImageData()
+    public final function getImageDataOrEmptyImageData()
     {
-        return parent::getImageData();
+        return $this->_getImageEnlargeComponent()->getImageDataOrEmptyImageData();
+    }
+
+    public static function isValidMediaOutput($id, $type, $className)
+    {
+        return Kwf_Media_Output_Component::isValidImage($id, $type);
     }
 
     public static function getMediaOutput($id, $type, $className)
     {
-        if ($type == 'original') {
-            $data = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByDbId($id, array('limit'=>1, 'ignoreVisible' => true))
-                ->getComponent()->getImageData();
-            if (!$data || !$data['file']) {
-                return null;
-            }
-            return array(
-                'file' => $data['file'],
-                'mimeType' => 'application/octet-stream',
-                'downloadFilename' => $data['filename']
-            );
-        } else {
-            return parent::getMediaOutput($id, $type, $className);
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
+        if (!$component) return null;
+
+        $data = $component->getComponent()->getImageData();
+        if (!$data) {
+            return null;
         }
-    }
+        $dimension = $component->getComponent()->getImageDimensions();
+
+        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dimension, $type);
+     }
+
 
     public function getFulltextContent()
     {

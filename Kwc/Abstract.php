@@ -551,13 +551,13 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if ($this->_hasSetting('contentWidth')) return $this->_getSetting('contentWidth');
 
         if ($this->getData()->isPage) {
-            $p = $this->getData();
-            //if we have several Master.tpl stop at the first and get the contentWidth
-            while ($p->parent) {
-                if (Kwc_Abstract::getFlag($p->componentClass, 'resetMaster')) {
-                    break;
-                }
-                $p = $p->parent;
+            $componentWithMaster = Kwf_Component_View_Helper_Master::
+                getComponentsWithMasterTemplate($this->getData());
+            $last = array_pop($componentWithMaster);
+            if ($last && $last['type'] == 'master') {
+                $p = $last['data'];
+            } else {
+                $p = Kwf_Component_Data_Root::getInstance(); // for tests
             }
             return $p->getComponent()->_getMasterChildContentWidth($this->getData());
         } else {
@@ -587,22 +587,26 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         }
         return $ret;
     }
-    
+
     protected function _getMasterChildContentWidth(Kwf_Component_Data $sourcePage)
     {
         if (!$this->_hasSetting('contentWidth')) {
             throw new Kwf_Exception('contentWidth has to be set');
         }
         $ret = $this->_getSetting('contentWidth');
+        if (!$this->_hasSetting('contentWidthBoxSubtract')) return $ret;
+
         $boxes = array();
         foreach ($sourcePage->getChildBoxes() as $box) {
             $boxes[$box->box] = $box;
         }
-        foreach ($this->_getSetting('contentWidthBoxSubtract') as $box=>$width) {
-            if (!isset($boxes[$box])) continue;
-            $c = $boxes[$box];
-            if ($c && $c->hasContent()) {
-                $ret -= $width;
+        if ($this->_hasSetting('contentWidthBoxSubtract')) {
+            foreach ($this->_getSetting('contentWidthBoxSubtract') as $box=>$width) {
+                if (!isset($boxes[$box])) continue;
+                $c = $boxes[$box];
+                if ($c && $c->hasContent()) {
+                    $ret -= $width;
+                }
             }
         }
         return $ret;

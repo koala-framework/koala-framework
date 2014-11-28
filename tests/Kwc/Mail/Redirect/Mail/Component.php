@@ -8,6 +8,7 @@ class Kwc_Mail_Redirect_Mail_Component extends Kwc_Mail_Component
         $ret['ownModel'] = 'Kwc_Mail_Redirect_Mail_Model';
         $ret['recipientSources']['test'] = 'Kwc_Mail_Redirect_Mail_Recipients';
         $ret['generators']['redirect']['component'] = 'Kwc_Mail_Redirect_Mail_Redirect_Component';
+        $ret['docType'] = false;
         return $ret;
     }
 }

@@ -3,6 +3,7 @@
  * @group slow
  * @group selenium
  * @group Composite_ImagesEnlarge
+ * @group Image
  */
 class Kwc_Composite_ImagesEnlarge_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {

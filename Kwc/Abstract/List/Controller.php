@@ -4,12 +4,16 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
     protected $_buttons = array('save', 'add', 'delete');
     protected $_position = 'pos';
 
+    protected $_showChildComponentGridColumns = true;
+
     protected function _initColumns()
     {
         parent::_initColumns();
-        $c = Kwc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
-        foreach (Kwc_Admin::getInstance($c)->gridColumns() as $i) {
-            $this->_columns->add($i);
+        if ($this->_showChildComponentGridColumns) {
+            $c = Kwc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
+            foreach (Kwc_Admin::getInstance($c)->gridColumns() as $i) {
+                $this->_columns->add($i);
+            }
         }
         $this->_columns->add(new Kwf_Grid_Column_Visible());
     }

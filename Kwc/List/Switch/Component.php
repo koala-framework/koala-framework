@@ -4,7 +4,6 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['files'][] = 'kwf/Kwc/List/Switch/Component.js';
         $ret['assets']['dep'][] = 'KwfList';
         $ret['assets']['dep'][] = 'ExtFx';
         $ret['generators']['child']['component'] = 'Kwc_List_Switch_Preview_Component';
@@ -59,5 +58,24 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
             $item['largePage'] = $this->getData()->getChildComponent('_'.$item['data']->id);
         }
         return $ret;
+    }
+
+    public function getDefaultItemPage()
+    {
+        return $this->getData()
+            ->getChildComponent(array('generator'=>'itemPages', 'limit'=>1));
+    }
+
+    public function getLargeComponent($itemPageComponent)
+    {
+        return $this->getData()
+            ->getChildComponent('-'.$itemPageComponent->id)
+            ->getChildComponent('-large');
+    }
+
+    public function getPreviewComponent($itemPageComponent)
+    {
+        return $this->getData()
+            ->getChildComponent('-'.$itemPageComponent->id);
     }
 }

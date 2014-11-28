@@ -5,11 +5,10 @@
  */
 class Kwf_Trl_JsLoader
 {
-    public function trlLoad($contents, $language)
+    public function trlLoad($contents, $parsedElements, $language)
     {
-        $elements = Kwf_Trl::getInstance()->parse($contents, 'js');
         $trl = Kwf_Trl::getInstance();
-        foreach ($elements as $i=>$trlelement) {
+        foreach ($parsedElements as $i=>$trlelement) {
             $values = array();
             if (!isset($trlelement['error'])) {
                 if ($trlelement['source'] == Kwf_Trl::SOURCE_KWF) {
@@ -24,20 +23,20 @@ class Kwf_Trl_JsLoader
                 if ($trlelement['type'] == 'trl') {
                     $values['before'] = $trlelement['before'];
                     $values['tochange'] = $trlelement['text'];
-                    $method = $trlelement['type'];
-                    $values['now'] = $trl->$method($values['tochange'], array(), $source, $language);
+                    $method = $trlelement['type'].$mode;
+                    $values['now'] = $trl->$method($values['tochange'], array(), $language);
                     $values['now'] = str_replace("'", "\'", $values['now']);
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace($method.$mode, "trl", $values['now']);
+                    $values['now'] = str_replace($method, "trl", $values['now']);
 
                 } else if ($trlelement['type'] == 'trlc') {
                     $values['context'] = $trlelement['context'];
                     $values['before'] = $trlelement['before'];
                     $values['tochange'] = $trlelement['text'];
-                    $method = $trlelement['type'];
-                    $values['now'] = $trl->$method($values['context'],$values['tochange'], array(), $source, $language);
+                    $method = $trlelement['type'].$mode;
+                    $values['now'] = $trl->$method($values['context'],$values['tochange'], array(), $language);
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace($method.$mode, 'trl', $values['now']);
+                    $values['now'] = str_replace($method, 'trl', $values['now']);
                     $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
                     $values['now'] = str_replace('"'.$values['context'].'", ', '', $values['now']);
 

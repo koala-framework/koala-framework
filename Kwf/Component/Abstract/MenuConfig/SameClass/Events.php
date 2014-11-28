@@ -11,7 +11,17 @@ class Kwf_Component_Abstract_MenuConfig_SameClass_Events extends Kwf_Component_A
         );
         $ret[] = array(
             'class' => $this->_class,
+            'event' => 'Kwf_Component_Event_Component_RecursiveAdded',
+            'callback' => 'onComponentAddedRemoved'
+        );
+        $ret[] = array(
+            'class' => $this->_class,
             'event' => 'Kwf_Component_Event_Component_Removed',
+            'callback' => 'onComponentAddedRemoved'
+        );
+        $ret[] = array(
+            'class' => $this->_class,
+            'event' => 'Kwf_Component_Event_Component_RecursiveRemoved',
             'callback' => 'onComponentAddedRemoved'
         );
         $ret[] = array(
@@ -27,7 +37,7 @@ class Kwf_Component_Abstract_MenuConfig_SameClass_Events extends Kwf_Component_A
         return $ret;
     }
 
-    public function onComponentAddedRemoved(Kwf_Component_Event_Component_Abstract $ev)
+    public function onComponentAddedRemoved(Kwf_Component_Event_Abstract $ev)
     {
         Kwf_Acl::clearCache();
     }

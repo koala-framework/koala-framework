@@ -294,3 +294,8 @@ Ext.util.Format.newsletterState = function(v, p, record){
     }
     return v;
 };
+
+Ext.util.Format.raw = function(v, p)
+{
+    return v;
+};

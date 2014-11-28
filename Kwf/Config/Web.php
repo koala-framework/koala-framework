@@ -92,10 +92,10 @@ class Kwf_Config_Web extends Kwf_Config_Ini
     public static function getDefaultConfigSection()
     {
         if (file_exists('config_section')) {
-            return trim(file_get_contents('config_section'));
-        } else {
-            return 'production';
+            $ret = trim(file_get_contents('config_section'));
+            if ($ret) return $ret;
         }
+        return 'production';
     }
 
     public function __construct($section, $options = array())

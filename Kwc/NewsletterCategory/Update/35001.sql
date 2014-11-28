@@ -4,7 +4,7 @@ ALTER TABLE `kwc_newsletter_subscribecategories` CHANGE `kwf_pool_id` `category_
   
 CREATE TABLE IF NOT EXISTS `kwc_newsletter_categories` (
   `id` int(10) unsigned NOT NULL auto_increment,
-  `pos` tinyint(4) NOT NULL,
+  `pos` smallint(6) NOT NULL,
   `category` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -1,14 +1,18 @@
 <?php
 class Kwf_Media_Output
 {
+    const ENCODING_NONE = 'none';
+    const ENCODING_GZIP = 'gzip';
+    const ENCODING_DEFLATE = 'deflate';
+
     public static function getEncoding()
     {
         if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
             $encoding = strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')
-                        ? 'gzip' : (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate')
-                        ? 'deflate' : 'none');
+                        ? self::ENCODING_GZIP : (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate')
+                        ? self::ENCODING_DEFLATE : self::ENCODING_NONE);
         } else {
-            $encoding = 'none';
+            $encoding = self::ENCODING_NONE;
         }
         return $encoding;
     }
@@ -16,6 +20,8 @@ class Kwf_Media_Output
     public static function outputWithoutShutdown($file)
     {
         $headers = array();
+        if (isset($_SERVER['HTTPS'])) $headers['Https'] = $_SERVER['HTTPS'];
+        if (isset($_SERVER['HTTP_USER_AGENT'])) $headers['User-Agent'] = $_SERVER['HTTP_USER_AGENT'];
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) $headers['If-Modified-Since'] = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
         if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) $headers['If-None-Match'] = $_SERVER['HTTP_IF_NONE_MATCH'];
         if (isset($_SERVER['HTTP_RANGE'])) $headers['Range'] = $_SERVER['HTTP_RANGE'];
@@ -78,34 +84,48 @@ class Kwf_Media_Output
                 $lifetime = $file['lifetime'];
             }
         }
+        // According to following link it's not possible in IE<9 to download
+        // any file with Pragma set to "no-cache" or order of Cache-Control other
+        // than "no-store, no-cache" when using a SSL connection.
+        // http://blogs.msdn.com/b/ieinternals/archive/2009/10/02/internet-explorer-cannot-download-over-https-when-no-cache.aspx
+
+        // The order of Cache-Control is correct in default-implementation so
+        // it's only required to reset Pragma to nothing.
+
+        // The definition of Pragma can be found here (http://www.ietf.org/rfc/rfc2616.txt)
+        // at chapter 14.32
         if ($lifetime) {
-            $ret['headers'][] = 'Cache-Control: public, max-age='.$lifetime;
-            $ret['headers'][] = 'Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime);
-            $ret['headers'][] = 'Pragma: public';
+            if (isset($headers['Https']) && preg_match('/msie [6-8]/i', $headers['User-Agent'])) {
+                $ret['headers'][] = 'Cache-Control: private, max-age='.$lifetime;
+                $ret['headers'][] = 'Pragma:';
+            } else {
+                $ret['headers'][] = 'Cache-Control: public, max-age='.$lifetime;
+                $ret['headers'][] = 'Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime);
+                $ret['headers'][] = 'Pragma: public';
+            }
         } else {
-            // According to following link it's not possible in IE<9 to download
-            // any file with Pragma set to "no-cache" or order of Cache-Control other
-            // than "no-store, no-cache" when using a SSL connection.
-            // http://blogs.msdn.com/b/ieinternals/archive/2009/10/02/internet-explorer-cannot-download-over-https-when-no-cache.aspx
-
-            // The order of Cache-Control is correct in default-implementation so
-            // it's only required to reset Pragma to nothing.
-
-            // The definition of Pragma can be found here (http://www.ietf.org/rfc/rfc2616.txt)
-            // at chapter 14.32
+            $ret['headers'][] = 'Cache-Control: private';
             $ret['headers'][] = 'Pragma:';
         }
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
                 $headers['If-Modified-Since'] == $lastModifiedString) {
             $ret['responseCode'] = 304;
             $ret['contentLength'] = 0;
-            $ret['headers'][] = array('Not Modified', true, 304);
+            if (php_sapi_name() == 'cgi-fcgi') {
+                $ret['headers'][] = "Status: 304 Not Modified";
+            } else {
+                $ret['headers'][] = array('Not Modified', true, 304);
+            }
             $ret['headers'][] = 'Last-Modified: '.$headers['If-Modified-Since'];
         } else if (isset($file['etag']) && isset($headers['If-None-Match']) &&
                 $headers['If-None-Match'] == $file['etag']) {
             $ret['responseCode'] = 304;
             $ret['contentLength'] = 0;
-            $ret['headers'][] = array('Not Modified', true, 304);
+            if (php_sapi_name() == 'cgi-fcgi') {
+                $ret['headers'][] = "Status: 304 Not Modified";
+            } else {
+                $ret['headers'][] = array('Not Modified', true, 304);
+            }
             $ret['headers'][] = 'ETag: '.$headers['If-None-Match'];
         } else {
             if (substr($file['mimeType'], 0, 12) != 'application/') {
@@ -136,7 +156,7 @@ class Kwf_Media_Output
             if (isset($file['filename']) && $file['filename']) {
                 $ret['headers'][] = 'Content-Disposition: inline; filename="' . $file['filename'] . '"';
             }
-            $encoding = 'none';
+            $encoding = self::ENCODING_NONE;
             if (isset($file['encoding'])) {
                 $encoding = $file['encoding'];
             } else {
@@ -219,8 +239,8 @@ class Kwf_Media_Output
 
     static public function encode($contents, $encoding)
     {
-        if ($encoding != 'none') {
-            return gzencode($contents, 9, ($encoding=='gzip') ? FORCE_GZIP : FORCE_DEFLATE);
+        if ($encoding != self::ENCODING_NONE) {
+            return gzencode($contents, 9, ($encoding==self::ENCODING_GZIP) ? FORCE_GZIP : FORCE_DEFLATE);
         } else {
             return $contents;
         }

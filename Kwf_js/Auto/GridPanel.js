@@ -139,6 +139,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             if (meta.grouping) {
                 var storeType = Ext.data.GroupingStore;
                 storeConfig.groupField = meta.grouping.groupField;
+                storeConfig.remoteGroup = meta.grouping.remoteGroup;
                 delete meta.grouping.groupField;
             } else {
                 var storeType = Ext.data.Store;
@@ -789,6 +790,54 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
         this.fireEvent('addaction', this);
     },
 
+    _deleteSelectedRows : function() {
+        var selectedRows = this.getGrid().getSelectionModel().getSelections();
+        if (!selectedRows.length) return;
+
+        var ids = [];
+        var params = this.getBaseParams() || {};
+        var newNewRecords = [];
+        selectedRows.each(function(selectedRow)
+        {
+            if (selectedRow.data.id == 0) {
+                this.store.remove(selectedRow);
+                this.store.newRecords.each(function(r) {
+                    if (selectedRow != r) {
+                        newNewRecords.push(r);
+                    }
+                });
+            } else {
+                ids.push(selectedRow.id);
+            }
+        }, this);
+        this.store.newRecords = newNewRecords;
+        if (!ids.length) return;
+
+        params[this.store.reader.meta.id] = ids.join(';');
+
+        this.el.mask(trlKwf('Deleting...'));
+        Ext.Ajax.request({
+            url: this.controllerUrl+'/json-delete',
+            params: params,
+            success: function(response, options, r) {
+                this.activeId = null;
+                //wenn gelöscht alle anderen disablen
+                this.bindings.each(function(i) {
+                    i.item.disable();
+                    i.item.reset();
+                }, this);
+
+                this.reload();
+                this.fireEvent('deleterow', this.grid);
+                this.fireEvent('datachange', r);
+
+            },
+            callback: function() {
+                this.el.unmask();
+            },
+            scope : this
+        });
+    },
     onDelete : function() {
         Ext.Msg.show({
             title: trlKwf('Delete'),
@@ -797,52 +846,7 @@ Kwf.Auto.GridPanel = Ext.extend(Kwf.Binding.AbstractPanel,
             scope: this,
             fn: function(button) {
                 if (button == 'yes') {
-                    var selectedRows = this.getGrid().getSelectionModel().getSelections();
-                    if (!selectedRows.length) return;
-
-                    var ids = [];
-                    var params = this.getBaseParams() || {};
-                    var newNewRecords = [];
-                    selectedRows.each(function(selectedRow)
-                    {
-                        if (selectedRow.data.id == 0) {
-                            this.store.remove(selectedRow);
-                            this.store.newRecords.each(function(r) {
-                                if (selectedRow != r) {
-                                    newNewRecords.push(r);
-                                }
-                            });
-                        } else {
-                            ids.push(selectedRow.id);
-                        }
-                    }, this);
-                    this.store.newRecords = newNewRecords;
-                    if (!ids.length) return;
-
-                    params[this.store.reader.meta.id] = ids.join(';');
-
-                    this.el.mask(trlKwf('Deleting...'));
-                    Ext.Ajax.request({
-                        url: this.controllerUrl+'/json-delete',
-                        params: params,
-                        success: function(response, options, r) {
-                            this.activeId = null;
-                            //wenn gelöscht alle anderen disablen
-                            this.bindings.each(function(i) {
-                                i.item.disable();
-                                i.item.reset();
-                            }, this);
-
-                            this.reload();
-                            this.fireEvent('deleterow', this.grid);
-                            this.fireEvent('datachange', r);
-
-                        },
-                        callback: function() {
-                            this.el.unmask();
-                        },
-                        scope : this
-                    });
+                    this._deleteSelectedRows();
                 }
             }
         });

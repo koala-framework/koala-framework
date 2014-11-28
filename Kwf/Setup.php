@@ -38,6 +38,40 @@ class Kwf_Setup
             }
             include('cache/setup'.self::CACHE_SETUP_VERSION.'.php');
         }
+        if (!defined('VKWF_PATH') && self::getBaseUrl() === null) {
+            //if server.baseUrl is not set try to auto detect it and generate config.local.ini accordingly
+            //this code is not used if server.baseUrl is set to "" in vkwf
+            if (php_sapi_name() == 'cli') {
+                echo "Please create config.local.ini with server.domain and server.baseUrl\n";
+                exit(1);
+            }
+            if (!isset($_SERVER['PHP_SELF'])) {
+                echo "Can't detect baseUrl, PHP_SELF is not set\n";
+                exit(1);
+            }
+            $baseUrl = substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
+            $cfg  = "[production]\n";
+            $cfg .= "server.domain = \"$_SERVER[HTTP_HOST]\"\n";
+            $cfg .= "server.baseUrl = \"$baseUrl\"\n";
+            $cfg .= "setupFinished = false\n";
+
+            if (file_exists('config.local.ini') && filesize('config.local.ini')>0) {
+                echo "config.local.ini already exists but server.baseUrl is not set\n";
+                exit(1);
+            }
+            if (!is_writable('.')) {
+                echo "'".getcwd()."' is not writable, can't create config.local.ini\n";
+                exit(1);
+            }
+            file_put_contents('config.local.ini', $cfg);
+            Kwf_Config_Web::reload();
+            Kwf_Config::deleteValueCache('server.domain');
+            Kwf_Config::deleteValueCache('server.baseUrl');
+            unlink('cache/setup'.self::CACHE_SETUP_VERSION.'.php');
+            echo "<h1>".Kwf_Config::getValue('application.name')."</h1>\n";
+            echo "<a href=\"$baseUrl/kwf/maintenance/setup\">[start setup]</a>\n";
+            exit;
+        }
 
         if (isset($_SERVER['REQUEST_URI']) && substr($_SERVER['REQUEST_URI'], 0, 5) == '/kwf/') {
             if (substr($_SERVER['REQUEST_URI'], 0, 9) == '/kwf/pma/' || $_SERVER['REQUEST_URI'] == '/kwf/pma') {
@@ -73,6 +107,26 @@ class Kwf_Setup
 
     public static function shutDown()
     {
+        chdir(APP_PATH);
+        $error = error_get_last();
+        if ($error !== null) {
+            ini_set('memory_limit', memory_get_usage()+16*1024*1024); //in case it was an memory limit error make sure we have enough memory for error handling
+            $ignore = false;
+            if (preg_match('#^include\(\).*Failed opening \'[^\']*cache/setup\d+.php\' for inclusion#', $error['message'])) {
+                //ignore error that can happen before creating setup the first time
+                $ignore = true;
+            }
+            if (defined('E_STRICT') && $error["type"] == E_STRICT) {
+                $ignore = true;
+            }
+            if (defined('E_DEPRECATED') && $error["type"] == E_DEPRECATED) {
+                $ignore = true;
+            }
+            if (!$ignore) {
+                $e = new ErrorException($error["message"], 0, $error["type"], $error["file"], $error["line"]);
+                Kwf_Debug::handleException($e);
+            }
+        }
         Kwf_Benchmark::shutDown();
     }
 
@@ -131,10 +185,9 @@ class Kwf_Setup
 
     public static function getBaseUrl()
     {
+        static $ret;
+        if (isset($ret)) return $ret;
         $ret = Kwf_Config::getValue('server.baseUrl');
-        if ($ret === null && isset($_SERVER['PHP_SELF']) && php_sapi_name() != 'cli') {
-            return substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
-        }
         return $ret;
     }
 
@@ -167,7 +220,7 @@ class Kwf_Setup
             $sitemap = new Kwf_Component_Sitemap();
             $sitemap->outputSitemap(Kwf_Component_Data_Root::getInstance());
         }
-        if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf'))) {
+        if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf', 'api'))) {
             if (!isset($_SERVER['HTTP_HOST'])) {
                 $requestUrl = 'http://'.Kwf_Config::getValue('server.domain').$fullRequestPath;
             } else {
@@ -245,12 +298,15 @@ class Kwf_Setup
         $requestPath = self::getRequestPath();
         if ($requestPath === false) return;
 
+        $baseUrl = Kwf_Setup::getBaseUrl();
+        if ($baseUrl) {
+            if (substr($requestPath, 0, strlen($baseUrl)) != $baseUrl) {
+                throw new Kwf_Exception_NotFound();
+            }
+            $requestPath = substr($requestPath, strlen($baseUrl));
+        }
         $urlParts = explode('/', substr($requestPath, 1));
-        if (is_array($urlParts) && count($urlParts) == 2 && $urlParts[0] == 'media'
-            && $urlParts[1] == 'headline'
-        ) {
-            Kwf_Media_Headline::outputHeadline($_GET['selector'], $_GET['text'], $_GET['assetsType']);
-        } else if (is_array($urlParts) && $urlParts[0] == 'media') {
+        if (is_array($urlParts) && $urlParts[0] == 'media') {
             if (sizeof($urlParts) != 7) {
                 throw new Kwf_Exception_NotFound();
             }

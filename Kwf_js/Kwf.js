@@ -117,8 +117,6 @@ Ext.onReady(function()
 });
 
 
-Kwf.application = { maxAssetsMTime: '{$application.maxAssetsMTime}' };
-
 //log das auch ohne irgendwelche abh�nigkeiten funktioniert (zB im Selenium)
 Kwf.log = function(msg) {
     if (!Kwf.debugDiv) {

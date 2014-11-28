@@ -1,11 +1,22 @@
 <?php
-class Kwc_Basic_Text_StylesAsset implements Kwf_Assets_Dynamic_Interface
+class Kwc_Basic_Text_StylesAsset extends Kwf_Assets_Dependency_Abstract
+    implements Kwf_Assets_Interface_UrlResolvable
 {
     private $_stylesModel;
-    public function __construct(Kwf_Assets_Loader $loader, $assetsType, $rootComponent, $arguments)
+    public function __construct($stylesModel)
     {
-        if (!isset($arguments[0])) throw new Kwf_Exception_NotFound();
-        $this->_stylesModel = $arguments[0];
+        $this->_stylesModel = $stylesModel;
+    }
+
+    public function toUrlParameter()
+    {
+        return $this->_stylesModel;
+    }
+
+    public static function fromUrlParameter($class, $parameter)
+    {
+        $param = explode(':', $parameter);
+        return new $class($param[0]);
     }
 
     public function getContents()
@@ -13,22 +24,17 @@ class Kwc_Basic_Text_StylesAsset implements Kwf_Assets_Dynamic_Interface
         return Kwf_Model_Abstract::getInstance($this->_stylesModel)->getStylesContents();
     }
 
-    public function getMTimeFiles()
-    {
-        return array();
-    }
-
     public function getMTime()
     {
         return Kwf_Model_Abstract::getInstance($this->_stylesModel)->getMTime();
     }
 
-    public function getType()
+    public function getMimeType()
     {
-        return 'css';
+        return 'text/css';
     }
 
-    public function getIncludeInAll()
+    public function getIncludeInPackage()
     {
         return false;
     }

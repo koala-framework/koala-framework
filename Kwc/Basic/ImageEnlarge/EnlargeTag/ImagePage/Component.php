@@ -6,6 +6,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['contentSender'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_ContentSender';
         $ret['assets']['dep'][] = 'KwfLightbox';
+        $ret['assets']['dep'][] = 'KwfResponsiveImg';
         $ret['cssClass'] = 'webStandard';
         return $ret;
     }
@@ -15,6 +16,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars();
 
         $c = $this->getData()->parent->getComponent();
+
         $size = $c->getImageDimensions();
         $ret['width'] = $size['width'];
         $ret['height'] = $size['height'];
@@ -23,7 +25,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
 
         // Next-Previous Links
         $imageEnlarge = $this->getData()->parent->parent;
-        if (is_instance_of($imageEnlarge->componentClass, 'Kwc_Basic_ImageEnlarge_Component')) {
+        if (is_instance_of($imageEnlarge->componentClass, 'Kwc_Basic_ImageEnlarge_Component') ||
+            is_instance_of($imageEnlarge->componentClass, 'Kwc_Basic_ImageEnlargeParent_Component')) {
             // Only show links when it's an ImageEnlarge (no LinkTag)
             $parent = $imageEnlarge->parent;
             $getChildren = array();
@@ -45,6 +48,12 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
             $ret['previous'] = null;
         }
 
+        $imageData = $c->getImageData();
+        $ret = array_merge($ret,
+            Kwf_Media_Output_Component::getResponsiveImageVars($size, $imageData['file'])
+        );
+
+        $ret['baseUrl'] = $c->getBaseImageUrl();
         return $ret;
     }
 

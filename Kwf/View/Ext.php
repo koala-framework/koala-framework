@@ -28,16 +28,14 @@ class Kwf_View_Ext extends Kwf_View
         }
 
         // View einrichten
-        $loader = new Kwf_Assets_Loader();
-        $dep = $loader->getDependencies();
         $ext['class'] = $class;
         if (!isset($config->id)) $config->id = 'mainPanel';
         if (!isset($config->region)) $config->region = 'center';
-        if (isset($config->assetsType)) {
-            $ext['assetsType'] = $config->assetsType;
-            unset($config->assetsType);
+        if (isset($config->assetsPackage)) {
+            $ext['assetsPackage'] = $config->assetsPackage;
+            unset($config->assetsPackage);
         } else {
-            $ext['assetsType'] = 'Admin';
+            $ext['assetsPackage'] = Kwf_Assets_Package_Default::getInstance('Admin');
         }
         $ext['config'] = $config;
 
@@ -51,6 +49,10 @@ class Kwf_View_Ext extends Kwf_View
         $ext['viewport'] = $viewport;
 
         $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
+        $user = Zend_Registry::get('userModel')->getAuthedUser();
+        if ($user) {
+            $ext['user'] = "$user->email, id $user->id, $user->role";
+        }
         $this->ext = $ext;
         $this->extTemplate = 'ext.tpl';
         if (Kwf_Util_SessionToken::getSessionToken()) {

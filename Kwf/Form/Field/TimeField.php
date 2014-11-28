@@ -9,8 +9,16 @@ class Kwf_Form_Field_TimeField extends Kwf_Form_Field_SimpleAbstract
         parent::__construct($field_name, $field_label);
         $this->setXtype('timefield');
         $this->setFormat('H:i');
-        $this->setWidth(70);
+        $this->setSaveSeconds(true);
     }
+
+    public function getMetaData($model)
+    {
+        $ret = parent::getMetaData($model);
+        if (!isset($ret['width'])) $ret['width'] = 70;
+        return $ret;
+    }
+
 
     protected function _addValidators()
     {
@@ -32,6 +40,15 @@ class Kwf_Form_Field_TimeField extends Kwf_Form_Field_SimpleAbstract
         if ($ret == trlKwf('hh:mm')) $ret = null;
         if ($ret == '') $ret = null;
         if ($ret) $ret = str_replace('"', '', $ret);
+        return $ret;
+    }
+
+    protected function _getValueToSaveFromPostData($postData)
+    {
+        $ret = parent::_getValueToSaveFromPostData($postData);
+        if ($this->getSaveSeconds()) {
+            $ret .= ':00';
+        }
         return $ret;
     }
 

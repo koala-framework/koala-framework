@@ -52,34 +52,33 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
     public function onDirectoryRowInsert(Kwc_Directories_List_EventItemInserted $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
-        if (!$this->_usesPartialId()) {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
-        }
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
     }
 
     public function onDirectoryRowDelete(Kwc_Directories_List_EventItemDeleted $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
         if ($this->_usesPartialId()) {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
-        } else {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
         }
     }
 
     public function onDirectoryRowUpdate(Kwc_Directories_List_EventItemUpdated $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
         if ($this->_usesPartialId()) {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
         } else {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class));
         }
     }
 
     public function onDirectoryModelUpdate(Kwc_Directories_List_EventItemsUpdated $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class));
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
     }
 }

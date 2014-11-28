@@ -3,7 +3,9 @@ class Kwf_Controller_Action_Component_PreviewController extends Kwf_Controller_A
 {
     public function indexAction()
     {
-        $this->view->config = Kwf_Registry::get('config')->preview->toArray();
+        $this->view->config = array(
+            'responsive' => Kwf_Config::getValue('kwc.responsive')
+        );
         $this->view->xtype = 'kwf.component.preview';
         $this->view->initialUrl = $this->_getParam('url');
         if (!$this->view->initialUrl) {

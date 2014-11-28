@@ -56,13 +56,50 @@ class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_S
             }
             if (!$continue) return array();
         }
-        $data = $this->_createData($parentData, $this->getGeneratorKey(), $select);
-        if (!$data) return array();
-
-        if ($select->hasPart('whereId')) {
-            if ('-' . $data->id != $select->getPart('whereId')) return array();
+        if (!$parentData) {
+            if (!$select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                throw new Kwf_Exception_NotYetImplemented();
+            }
+            $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
+            $possibleClasses = $this->getChildComponentClasses();
+            if (in_array(array_shift($possibleClasses), $selectClasses)) {
+                throw new Kwf_Exception("You can't search for component which is first (=default) in StaticSelect");
+            }
+            $searchFor = array();
+            foreach ($selectClasses as $c) {
+                $searchFor[] = array_search($c, $possibleClasses);
+            }
+            $s = new Kwf_Model_Select();
+            $s->whereEquals('component', $searchFor);
+            $s->where(new Kwf_Model_Select_Expr_Like('component_id', '%-'.$this->getGeneratorKey()));
+            $rows = $this->_getModel()->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
+            $parentDatas = array();
+            foreach ($rows as $row) {
+                $id = substr($row['component_id'], 0, -(strlen($this->getGeneratorKey())+1));
+                $s = new Kwf_Component_Select();
+                $s->copyParts(array(Kwf_Component_Select::IGNORE_VISIBLE, Kwf_Component_Select::WHERE_SUBROOT), $select);
+                $d = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, $s);
+                if ($d) {
+                    $parentDatas[] = $d;
+                }
+            }
+        } else {
+            $parentDatas = array(
+                $parentData
+            );
         }
-        return array($data);
+
+        $ret = array();
+        foreach ($parentDatas as $parentData) {
+            $data = $this->_createData($parentData, $this->getGeneratorKey(), $select);
+            if (!$data) continue;
+
+            if ($select->hasPart('whereId')) {
+                if ('-' . $data->id != $select->getPart('whereId')) continue;
+            }
+            $ret[] = $data;
+        }
+        return $ret;
     }
 
     public function getBoxes()

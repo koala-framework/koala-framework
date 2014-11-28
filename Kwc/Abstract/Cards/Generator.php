@@ -90,12 +90,15 @@ class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
 
     protected function _formatSelect($parentData, $select = array())
     {
-
         if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
             $cc = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
-            if (is_array($parentData)) {
-            } else {
-                $component = $this->_getModel()->fetchColumnByPrimaryId('component', $parentData->dbId);
+            if (!is_array($parentData) || count($parentData) == 1) {
+                if (is_array($parentData)) {
+                    $pd = $parentData[0];
+                } else {
+                    $pd = $parentData;
+                }
+                $component = $this->_getModel()->fetchColumnByPrimaryId('component', $pd->dbId);
                 if (!$component || !in_array($this->_settings['component'][$component], $cc)) return null;
             }
         }
@@ -129,10 +132,15 @@ class Kwc_Abstract_Cards_Generator extends Kwf_Component_Generator_Static
             $dbId = $parentData->dbId . $this->_idSeparator;
         }
         $dbId .= $componentKey;
+        $components = array_keys($this->getChildComponentClasses());
         $component = $this->_getModel()->fetchColumnByPrimaryId('component', $parentData->dbId);
-        if (!$component) {
-            $components = array_keys($this->getChildComponentClasses()); //sollte eigentlich nicht vorkommen
-            $component = $components[0];
+        if (!$component || !in_array($component, $components)) {
+            $default = $this->_getModel()->getDefault();
+            if (isset($default['component']) && in_array($default['component'], $components)) {
+                $component = $default['component'];
+            } else {
+                $component = $components[0];
+            }
         }
         return array(
             'componentId' => $componentId,

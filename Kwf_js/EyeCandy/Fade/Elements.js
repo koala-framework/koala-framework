@@ -1,36 +1,39 @@
-Kwf.onContentReady(function(el)
-{
-    var fadeComponents = $(el).find('div.kwfFadeElements');
-    fadeComponents.each(function(index, element) {
-        var elementWrapper = $(element);
-        if (element.fadeElementsObject) return; // nur einmal initialisieren
+Kwf.onJElementReady('div.kwfFadeElements', function fadeElements(element) {
+    var fadeClass = element.find('.fadeClass');
+    var selector = element.find('.fadeSelector')[0].value;
+    var config = element.find('.fadeConfig'); // optional
+    if (config && config[0]) {
+        config = $.parseJSON(config[0].value);
+    } else {
+        config = { };
+    }
+    var textSelector = element.find('.textSelector'); // optional
+    if (textSelector && textSelector[0]) {
+        config.textSelector = textSelector[0].value;
+    }
 
-        var fadeClass = elementWrapper.find('.fadeClass');
-        var selector = elementWrapper.find('.fadeSelector')[0].value;
-        var config = elementWrapper.find('.fadeConfig'); // optional
-        if (config && config[0]) {
-            config = $.parseJSON(config[0].value);
-        } else {
-            config = { };
-        }
-        var textSelector = elementWrapper.find('.textSelector'); // optional
-        if (textSelector && textSelector[0]) {
-            config.textSelector = textSelector[0].value;
-        }
+    config.selector = selector;
+    config.selectorRoot = element;
 
-        config.selector = selector;
-        config.selectorRoot = element;
+    var cls = Kwf.Fade.Elements;
+    if (fadeClass.length) {
+        cls = eval(fadeClass[0].value);
+        delete fadeClass;
+    }
 
-        var cls = Kwf.Fade.Elements;
-        if (fadeClass.length) {
-            cls = eval(fadeClass[0].value);
-            delete fadeClass;
-        }
-
-        element.fadeElementsObject = new cls(config);
-        element.fadeElementsObject.start();
-    });
+    element = element.get(0);
+    element.fadeElementsObject = new cls(config);
+    element.fadeElementsObject.start();
 });
+
+
+Kwf.onJElementWidthChange('div.kwfFadeElements', function fadeElementsWidthChange(element) {
+    element = element.get(0);
+    if (element.fadeElementsObject) {
+        element.fadeElementsObject.calculateMaxHeight();
+    }
+}, {priority: 10}); /* after ResponsiveEl */
+
 
 if (!Kwf.Fade) Kwf.Fade = {};
 
@@ -48,6 +51,7 @@ Kwf.Fade.Elements = function(cfg) {
     this.easingFadeIn = 'ease';
     this.fadeEvery = 7;
     this.startRandom = true;
+    this.autoStart = true;
     this.direction = cfg.direction;
 
     if (typeof cfg.template != 'undefined') this._template = cfg.template;
@@ -65,13 +69,15 @@ Kwf.Fade.Elements = function(cfg) {
     if (typeof cfg.easingFadeIn != 'undefined') this.easingFadeIn = cfg.easingFadeIn;
     if (typeof cfg.fadeEvery != 'undefined') this.fadeEvery = cfg.fadeEvery;
     if (typeof cfg.startRandom != 'undefined') this.startRandom = cfg.startRandom;
+    if (typeof cfg.autoStart != 'undefined') this.autoStart = cfg.autoStart;
 
     this._elementAccessLinkEls = [];
 
     this.fadeElements = $(this.selectorRoot).find(this.selector);
 
-    $(this.selectorRoot).append('<div class="components"></div>');
-    $(this.selectorRoot).children('.components').append(this.fadeElements);
+    $(this.selectorRoot).append('<div class="outerComponents"></div>');
+    $(this.selectorRoot).children('.outerComponents').append('<div class="components"></div>');
+    $(this.selectorRoot).find('.components').append(this.fadeElements);
 
     if (this.startRandom) {
         this.active = Math.floor(Math.random() * this.fadeElements.length);
@@ -101,7 +107,10 @@ Kwf.Fade.Elements = function(cfg) {
             if (i != this.active) {
                 ee.css('opacity', 0);
             } else {
-                ee.css('opacity', 1);
+                ee.css({
+                    opacity: 1,
+                    zIndex: 10
+                });
             }
             ee.css({
                 display: 'block',
@@ -140,13 +149,10 @@ Kwf.Fade.Elements.prototype = {
     _isAnimating: false,
 
     start: function() {
-        this._components = $(this.selectorRoot).children('.components');
+        this._components = $(this.selectorRoot).find('.components');
         this.calculateMaxHeight();
-        $(window).resize($.proxy(function() {
-            this.calculateMaxHeight();
-        }, this));
         if (this.fadeElements.length <= 1) return;
-        if (this.startRandom) {
+        if (this.autoStart) {
             this._timeoutId = setTimeout($.proxy(this.doFade, this), this._getDeferTime());
         }
     },
@@ -200,7 +206,7 @@ Kwf.Fade.Elements.prototype = {
                     left: left,
                     zIndex: 10
                 });
-                Kwf.callOnContentReady(nextEl);
+                Kwf.callOnContentReady(nextEl.get(0), {action: 'show'});
                 if ($.support.transition || $.support.transform) {
                     this._components.transition({ x: width }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         this._components.css({ x: 0 });
@@ -238,7 +244,7 @@ Kwf.Fade.Elements.prototype = {
                     top: top,
                     zIndex: 10
                 });
-                Kwf.callOnContentReady(nextEl);
+                Kwf.callOnContentReady(nextEl.get(0), {action: 'show'});
                 if ($.support.transition || $.support.transform) {
                     this._components.transition({ y: height }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         this._components.css({ y: 0 });

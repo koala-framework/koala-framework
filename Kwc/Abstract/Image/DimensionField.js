@@ -1,218 +1,193 @@
 Ext.namespace('Kwc.Abstract.Image');
-Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.TriggerField, {
-    triggerClass: 'x-form-search-trigger',
-    width: 300,
-    readOnly: true,
-    initComponent: function() {
-        Kwc.Abstract.Image.DimensionField.superclass.initComponent.call(this);
+Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
+    _scaleFactor: null,
+    resolvedDimensions: null,
+
+    autoEl: {
+        tag: 'div',
+        cls: 'kwc-abstract-image-dimension',
+        children: [{
+            tag: 'div',
+            cls: 'kwc-abstract-image-dimension-name'
+        }]
     },
+    imageData: null,
+
     getValue: function() {
         return this.value || {};
     },
 
     setValue: function(v) {
-        this.value = v;
-        if (this.rendered) {
-            if (v.dimension) {
-                this.setRawValue(this._getDimensionString(v));
-            } else {
-                this.setRawValue('');
+        if (v == '') {
+            for (i in this.dimensions) {
+                v = this.dimensions[i];
+                v.dimension = i;
+                break;
             }
         }
+        this.value = v;
+        if (this.rendered) {
+            var pixelString = '';
+            if (v.dimension) {
+                pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.resolvedDimensions[v.dimension], v, this.dpr2Check);
+            }
+            if (pixelString) {
+                this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('At least: ')+pixelString);
+            } else {
+                this.getEl().child('.kwc-abstract-image-dimension-name').update('&nbsp;');
+            }
+        }
+        this.fireEvent('change', this.value);
     },
+
+    initComponent: function() {
+        this.resolvedDimensions = Kwf.clone(this.dimensions);
+        Kwc.Abstract.Image.DimensionField.superclass.initComponent.call(this);
+    },
+
     afterRender: function() {
         Kwc.Abstract.Image.DimensionField.superclass.afterRender.call(this);
+        this._cropButton = new Ext.Button({
+            text: trlKwf('Edit'),
+            cls: 'x-btn-text-icon kwc-abstract-image-dimension-cropbutton',
+            icon: '/assets/silkicons/shape_handles.png',
+            renderTo: this.getEl(),
+            scope: this,
+            handler: this._onButtonClick
+        });
+
         if (this.value) {
             this.setValue(this.value);
         }
     },
 
-    _validateSizes: function()
-    {
-        var dim = this.dimensionField.getValue();
-        if (this.dimensions[dim].scale == 'crop' || this.dimensions[dim].scale == 'bestfit') {
-            if (this.widthField.getValue() < 1 && this.dimensions[dim].width == 'user'
-                && this.heightField.getValue() < 1 && this.dimensions[dim].height == 'user'
-            ) {
-                if (this.widthField.getValue() < 1) {
-                    this.widthField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
+    _onButtonClick: function() {
+        this._sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
+            dimensions: this.resolvedDimensions,
+            value: this.getValue(),
+            imageData: this.imageData,
+            selectDimensionDisabled: this.selectDimensionDisabled,
+            _scaleFactor: this._scaleFactor,
+            _dpr2Check: this.dpr2Check
+        });
+        this._sizeWindow.on('save', function(value) {
+            this.setValue(value);
+            // Height and Width could be set from user. resolvedDimensions have
+            // to be updated.
+            for (i in this.resolvedDimensions) {
+                var dimension = this.dimensions[i];
+                var resolvedDimension = this.resolvedDimensions[i];
+                if (resolvedDimension.width == 'user') {
+                    resolvedDimension.width = dimension.width;
                 }
-                if (this.heightField.getValue() < 1) {
-                    this.heightField.markInvalid(trlKwf('Width or height must be higher than 0 when using crop or bestfit.'));
+                if (resolvedDimension.height == 'user') {
+                    resolvedDimension.height = dimension.height;
                 }
-                return false;
             }
-        }
-
-        this.widthField.clearInvalid();
-        this.heightField.clearInvalid();
-
-        return true;
+        }, this);
+        this._sizeWindow.show();
     },
 
-    onTriggerClick: function() {
-        if (!this.sizeWindow) {
-            var radios = [];
-            for (var i in this.dimensions) {
-                radios.push({
-                    inputValue: i,
-                    boxLabel: this._getDimensionString({dimension: i}),
-                    name: 'dimension',
-                    listeners: {
-                        check: this._enableDisableFields,
-                        scope: this
-                    }
-                });
+    setContentWidth: function (contentWidth) {
+        // ContentWidth is used through this array at
+        //  + isValidImageSize (used by DimensionWindow)
+        //  + getDimensionPixelString
+        //  + getDimensionString (is using getDimensionPixelString)
+        this.resolvedDimensions = Kwf.clone(this.dimensions);
+        for (i in this.resolvedDimensions) {
+            var dimension = this.resolvedDimensions[i];
+            if (dimension.width == 'contentWidth') {
+                dimension.width = contentWidth;
             }
-            this.dimensionField = new Kwf.Form.RadioGroup({
-                columns: 1,
-                hideLabel: true,
-                vertical: false,
-                items: radios
-            });
-            this.widthField = new Ext.form.NumberField({
-                fieldLabel: trlKwf('Width'),
-                width: 50,
-                enableKeyEvents: true,
-                validateOnBlur: false,
-                validationEvent: false,
-                allowNegative: false
-            });
-            this.heightField = new Ext.form.NumberField({
-                fieldLabel: trlKwf('Height'),
-                width: 50,
-                enableKeyEvents: true,
-                validateOnBlur: false,
-                validationEvent: false,
-                allowNegative: false
-            });
-
-            this.widthField.on('blur', this._validateSizes, this);
-            this.widthField.on('keyup', this._validateSizes, this);
-            this.heightField.on('blur', this._validateSizes, this);
-            this.heightField.on('keyup', this._validateSizes, this);
-            this.dimensionField.on('change', this._validateSizes, this);
-
-            this.sizeWindow = new Ext.Window({
-                title: trlKwf('Image Size'),
-                closeAction: 'hide',
-                modal: true,
-                width: 350,
-                height: 350,
-                layout: 'fit',
-                items: new Ext.FormPanel({
-                    bodyStyle: 'padding: 10px',
-                    items: [
-                        this.dimensionField,
-                        {
-                            xtype: 'fieldset',
-                            autoHeight: true,
-                            title: trlKwf('Size'),
-                            items: [
-                                this.widthField,
-                                this.heightField
-                            ]
-                        }
-                    ]
-                }),
-                buttons: [{
-                    text: trlKwf('OK'),
-                    handler: function() {
-                        if (this._validateSizes()) {
-                            this.sizeWindow.hide();
-                            this.setValue({
-                                dimension: this.dimensionField.getValue(),
-                                width: this.widthField.getValue(),
-                                height: this.heightField.getValue()
-                            });
-                        } else {
-                            Ext.Msg.alert(trlKwf('Error'), trlKwf('Please fill the marked fields correctly.'));
-                        }
-                    },
-                    scope: this
-                },{
-                    text: trlKwf('Cancel'),
-                    handler: function() {
-                        this.sizeWindow.hide();
-                    },
-                    scope: this
-                }]
-            });
         }
-
-        var v = this.getValue();
-        if (v && v.dimension) {
-            this.dimensionField.setValue(v.dimension);
-            this.widthField.setValue(v.width);
-            this.heightField.setValue(v.height);
-        } else {
-            for (var i in this.dimensions) {
-                break;
-            }
-            this.dimensionField.setValue(i);
-        }
-        this._enableDisableFields();
-        this.sizeWindow.show();
-
-        this._validateSizes();
     },
 
-    _enableDisableFields: function()
-    {
-        var dim = this.dimensions[this.dimensionField.getValue()];
-        this.widthField.setDisabled(!(dim && dim.width == 'user'));
-        this.heightField.setDisabled(!(dim && dim.height == 'user'));
+    setScaleFactor: function (scaleFactor) {
+        this._scaleFactor = scaleFactor;
     },
 
-    _getDimensionString: function(v)
-    {
-        var ret;
-        if (this.dimensions[v.dimension] && this.dimensions[v.dimension].text) {
-            ret = this.dimensions[v.dimension].text;
-        } else {
-            ret = v.dimension;
+    newImageUploaded: function (value) {
+        this._cropButton.setVisible(value != '');
+        if (this.imageData != null && this.imageData != "") {
+            var dimensionValue = this.getValue();
+            if (dimensionValue.cropData) {
+                dimensionValue.cropData = null;
+                this.setValue(dimensionValue);
+            }
         }
-        if (this.dimensions[v.dimension]) {
-            var d = this.dimensions[v.dimension];
-            ret += ' (';
-            if (d.width == 'user') {
-                if (v.width) {
-                    ret += String(v.width);
-                } else {
-                    ret += '?';
-                }
-            } else if (d.width) {
-                ret += String(d.width);
-            } else {
-                ret += '?';
-            }
-            ret += 'x';
-            if (d.height == 'user') {
-                if (v.height) {
-                    ret += String(v.height);
-                } else {
-                    ret += '?';
-                }
-            } else if (d.height) {
-                ret += String(d.height);
-            } else {
-                ret += '?';
-            }
-            ret += ' ';
-            var scaleModes = {
-                bestfit: trlKwf('Bestfit'),
-                crop: trlKwf('Crop'),
-                deform: trlKwf('Deform'),
-                original: trlKwf('Original')
-            };
-            if (d.scale && scaleModes[d.scale]) {
-                ret += scaleModes[d.scale];
-            }
-            ret = ret.trim() + ')';
-        }
-        return ret;
+        this.imageData = value;
     }
 });
+
+Kwc.Abstract.Image.DimensionField.isValidImageSize = function(value, dimensions, scaleFactor, dpr2)
+{
+    if (!value.cropData)
+        return true;
+    var dimension = dimensions[value.dimension];
+    var width =  dimension.width == 'user' ? value.width : dimension.width;
+    var height = dimension.height == 'user' ? value.height : dimension.height;
+    var dprFactor = 1;
+    if (dpr2) {
+        dprFactor = 2;
+    }
+    if (width * dprFactor > value.cropData.width * scaleFactor
+        || height * dprFactor > value.cropData.height * scaleFactor) {
+        return false;
+    }
+    return true;
+};
+
+Kwc.Abstract.Image.DimensionField.getDimensionPixelString = function(dimension, v, dpr2)
+{
+    var dprFactor = 1;
+    if (dpr2) dprFactor = 2;
+    var width = null;
+    if (!isNaN(parseInt(dimension.width))) {
+        width = dimension.width;
+    } else if (dimension.width == 'user' && v) {
+        width = v.width;
+    }
+    var height = null;
+    if (!isNaN(parseInt(dimension.height))) {
+        height = dimension.height;
+    } else if (dimension.height == 'user' && v) {
+        height = v.height;
+    }
+    height *= dprFactor;
+    width *= dprFactor;
+    var ret = '';
+    if (height && width) {
+        ret = width + 'x' + height+'px';
+    } else if (height) {
+        ret = trlKwf('{0}px high', height);
+    } else if (width) {
+        ret = trlKwf('{0}px wide', width);
+    }
+    return ret;
+};
+
+Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v, dpr2)
+{
+    var ret;
+    if (!dimension) return;
+
+    if (dimension.text) {
+        ret = dimension.text;
+    } else {
+        ret = '';
+    }
+
+    var pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(dimension, v, dpr2);
+    if (ret) {
+        if (pixelString) {
+            ret += ' ('+pixelString+')';
+        }
+    } else {
+        ret = pixelString;
+    }
+    if (!ret) ret = '&nbsp;';
+    return ret;
+};
 
 
 Ext.reg('kwc.image.dimensionfield', Kwc.Abstract.Image.DimensionField);

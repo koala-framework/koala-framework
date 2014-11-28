@@ -11,7 +11,19 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
 
     protected function _putFileContents($contents)
     {
-        file_put_contents($this->getFileSource(), $contents);
+        $filename  = $this->getFileSource();
+        $handle = fopen($filename, "w");
+        $pointer = 0;
+        $length = 1024;
+        $bytesWritten = 0;
+        while ($contentPart = substr($contents, $pointer, $length)) {
+            $bytesWritten += fwrite($handle, $contentPart);
+            $pointer = $pointer+$length;
+        }
+        fclose($handle);
+        if ($bytesWritten != strlen($contents)) {
+            throw new Kwf_Exception("Writing file failed");
+        }
     }
 
     public function writeFile($contents, $filename, $extension, $mimeType = null)
@@ -136,8 +148,12 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         $size = @getimagesize($this->getFileSource());
         if ($size) {
             $ret['image'] = true;
+            if (abs(Kwf_Media_Image::getExifRotation($this->getFileSource())) == 90) {
+                $size = array($size[1], $size[0]);
+            }
             $ret['imageWidth'] = $size[0];
             $ret['imageHeight'] = $size[1];
+            $ret['imageHandyScaleFactor'] = Kwf_Media_Image::getHandyScaleFactor($this->getFileSource());
         } else {
             $ret['image'] = false;
         }

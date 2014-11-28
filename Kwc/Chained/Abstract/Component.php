@@ -155,6 +155,11 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         return $this->getData()->chained->getComponent()->getContentWidth();
     }
 
+    public function hasContent()
+    {
+        return $this->getData()->chained->hasContent();
+    }
+
     public function getPdfWriter($pdf)
     {
         if (!isset($this->_pdfWriter)) {
@@ -162,14 +167,6 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
             $this->_pdfWriter = new $class($this, $pdf);
         }
         return $this->_pdfWriter;
-    }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $sourceComponentClass = substr($componentClass, strpos($componentClass, '.')+1);
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Chained($sourceComponentClass);
-        return $ret;
     }
 
     public static function getChainedByMaster($masterData, $chainedData, $chainedType, $select = array())

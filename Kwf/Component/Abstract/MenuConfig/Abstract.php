@@ -17,7 +17,7 @@ abstract class Kwf_Component_Abstract_MenuConfig_Abstract
         static $instances = array();
         if (!isset($instances[$componentClass])) {
             $c = Kwc_Abstract::getSetting($componentClass, 'menuConfig');
-            if (!$c) throw new Kwf_Exception("extConfig not set");
+            if (!$c) throw new Kwf_Exception("menuConfig not set for '$componentClass'");
             $instances[$componentClass] = new $c($componentClass);
         }
         return $instances[$componentClass];

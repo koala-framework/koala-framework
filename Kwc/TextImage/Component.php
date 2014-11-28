@@ -8,8 +8,6 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
         $ret['ownModel'] = 'Kwc_TextImage_Model';
         $ret['generators']['child']['component']['text'] = 'Kwc_Basic_Text_Component';
         $ret['generators']['child']['component']['image'] = 'Kwc_TextImage_ImageEnlarge_Component';
-        $ret['assets']['files'][] = 'kwf/Kwc/TextImage/Component.js';
-        $ret['assets']['dep'][] = 'KwfResponsiveEl';
         $ret['mailImageVAlign'] = 'center'; // valign von Image
         return $ret;
     }
@@ -22,6 +20,7 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
         if (!$row->image) {
             $ret['image'] = false;
         } else {
+            $ret['cssClass'] .= ' imageDimension'.ucfirst($ret['image']->getComponent()->getDimensionSetting());
             $dim = $ret['image']->getComponent()->getImageDimensions();
             $ret['imageWidth'] = false;
             if ($dim && isset($dim['width'])) {

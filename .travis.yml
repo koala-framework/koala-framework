@@ -13,6 +13,7 @@ before_script:
   - echo "`pwd`/library/zend/%version%" > include_path
   - echo "[production]" > tests/config.local.ini
   - echo "server.domain = localhost" >> tests/config.local.ini
+  - echo 'server.baseUrl = ""' >> tests/config.local.ini
   - echo "libraryPath = `pwd`/library" >> tests/config.local.ini
   - chmod a+w tests/cache/*
   - chmod a+w tests/temp

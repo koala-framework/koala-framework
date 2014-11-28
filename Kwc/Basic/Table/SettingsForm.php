@@ -10,8 +10,14 @@ class Kwc_Basic_Table_SettingsForm extends Kwc_Abstract_Form
         $tableStyles = Kwc_Abstract::getSetting($this->getClass(), 'tableStyles');
         if (count($tableStyles)) {
             $this->add(new Kwf_Form_Field_Select('table_style', trlKwf('Table style')))
-                ->setShowNoSelection(true)
                 ->setValues($tableStyles);
+        }
+        if (Kwf_Config::getValue('kwc.responsive')) {
+            $this->add(new Kwf_Form_Field_Select('responsive_style', trlKwf('Responsive style')))
+                ->setValues(array(
+                    'none' => '-',
+                    'flipScroll' => trlKwf('Flip Scroll')
+                ));
         }
     }
 }

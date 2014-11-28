@@ -3,62 +3,69 @@
  *
  * Basically simulates media queries for elements
  */
-Kwf.Utils.ResponsiveEl = function(selector, widths)
+Kwf.Utils.ResponsiveEl = function(selector, widths, options)
 {
-    if (!widths instanceof Array) widths = [widths];
+    var initEl;
 
-    var initEl = function(el) {
-        var changed = false;
-        widths.each(function(w) {
-            if (typeof w != 'object') {
-                w = {
-                    minWidth: w,
-                    cls: 'gt'+w
-                };
-            }
-            var match = true;
-            if (w.minWidth && !(el.getWidth() > w.minWidth)) {
-                match = false;
-            }
-            if (match && w.maxWidth && !(el.getWidth() < w.maxWidth)) {
-                match = false;
-            }
-            if (match) {
-                if (!el.hasClass(w.cls)) {
-                    el.addClass(w.cls);
-                    changed = true;
+    if (typeof(widths) != "function") {
+
+        if (!(widths instanceof Array)) widths = [widths];
+        initEl = function responsiveEl(el) {
+            var changed = false;
+            var elWidth = Kwf.Utils.Element.getCachedWidth(el);
+            if (!elWidth) return;
+            widths.each(function(w) {
+                if (typeof w != 'object') {
+                    w = {
+                        higherWidth: w,
+                        cls: 'gt'+w
+                    };
                 }
-            } else {
-                if (el.hasClass(w.cls)) {
-                    el.removeClass(w.cls);
-                    changed = true;
+                var match = true;
+                if (w.higherWidth && !(elWidth > w.higherWidth)) {
+                    match = false;
                 }
+                if (w.minWidth && !(elWidth >= w.minWidth)) {
+                    match = false;
+                }
+                if (match && w.maxWidth && !(elWidth <= w.maxWidth)) {
+                    match = false;
+                }
+                if (match) {
+                    if (!el.hasClass(w.cls)) {
+                        el.addClass(w.cls);
+                        changed = true;
+                    }
+                } else {
+                    if (el.hasClass(w.cls)) {
+                        el.removeClass(w.cls);
+                        changed = true;
+                    }
+                }
+            }, this);
+            if (changed) {
+                Kwf.callOnContentReady(el.dom, { action: 'widthChange' });
             }
-        }, this);
+        };
 
-        if (changed && !Kwf.Utils.ResponsiveEl._initialCall) {
-            Kwf.callOnContentReady(el.dom, {newRender: false});
-        }
-    };
+    } else {
 
-    Kwf.Utils.ResponsiveEl._els.push({
-        selector: selector,
-        fn: initEl
-    });
+        initEl = widths;
+
+    }
+
+    Kwf.onElementWidthChange(selector, initEl, options);
 };
 
-Kwf.Utils.ResponsiveEl._els = [];
-
-Kwf.onContentReady(function(el) {
-    Kwf.Utils.ResponsiveEl._initialCall = true; //don't callOnContentReady on initial evaluation
-    Kwf.Utils.ResponsiveEl._els.each(function(i) {
-        Ext.fly(el).select(i.selector).each(i.fn);
-    });
-    Kwf.Utils.ResponsiveEl._initialCall = false;
-}, this, {priority: -1});
-
-Ext.fly(window).on('resize', function() {
-    Kwf.Utils.ResponsiveEl._els.each(function(i) {
-        Ext.select(i.selector).each(i.fn);
-    });
-});
+Kwf.onContentReady(function jumpToAnchor(el) {
+    if(!Kwf.Utils.ResponsiveEl._anchorDone && el === document.body) {
+        Kwf.Utils.ResponsiveEl._anchorDone = true;
+        if(window.location.hash) {
+            var target = Ext.get(window.location.hash.replace('#', ''));
+            if (target) {
+               //fix anchor target as ResponsiveEl might have changed the heights of elements
+                window.scrollTo(0, target.getTop());
+            }
+        }
+    }
+}, {defer: true, priority: 50});

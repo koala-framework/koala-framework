@@ -64,7 +64,11 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
         $componentClass = $component->componentClass;
         $c = strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass;
         $partialClass = call_user_func(array($c, 'getPartialClass'), $componentClass);
-        $useViewCache = call_user_func(array($partialClass, 'useViewCache'));
+        $params = array();
+        if (method_exists($component->getComponent(), 'getPartialParams')) {
+            $params = $component->getComponent()->getPartialParams();
+        }
+        $useViewCache = call_user_func(array($partialClass, 'useViewCache'), $componentId, $params);
         return array(
             'enabled' => $useViewCache,
             'lifetime' => null

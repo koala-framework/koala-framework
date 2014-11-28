@@ -61,6 +61,11 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
 
     public function importToQueue(Kwf_Model_Abstract $model, Kwf_Model_Select $select)
     {
+        $newsletter = $this->getData()->row;
+        if (in_array($newsletter->status, array('start', 'stop', 'finished', 'sending'))) {
+            throw new Kwf_ClientException(trlKwf('Can only add users to a paused newsletter'));
+        }
+
         $ret = array('rtrExcluded' => array());
 
         // check if the necessary modelShortcut is set in 'mail' childComponent
@@ -81,19 +86,23 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
         if ($model->hasColumn('activated')) {
             $select->whereEquals('activated', 1);
         }
-        $newsletter = $this->getData()->row;
         $mapping = $model->getColumnMappings('Kwc_Mail_Recipient_Mapping');
         $import = array();
         $emails = array();
         foreach ($model->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select) as $e) {
+            $searchArray = array();
+            foreach ($e as $k => $field) {
+                if ($k == 'firstname' || $k == 'lastname' || $k == 'email') {
+                    $searchArray[] = $field;
+                }
+            }
+            $searchText = implode(' ', $searchArray);
             $import[] = array(
                 'newsletter_id' => $newsletter->id,
                 'recipient_model' => get_class($model),
                 'recipient_id' => $e['id'],
                 'searchtext' =>
-                    $e[$mapping['firstname']] . ' ' .
-                    $e[$mapping['lastname']] . ' ' .
-                    $e[$mapping['email']]
+                    $searchText
             );
             $emails[] = $e[$mapping['email']];
         }

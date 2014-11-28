@@ -42,7 +42,7 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
     {
         if ($type == 'Component') {
             $mailType = 'Mail.' . $this->getRenderFormat();
-        } else if ($file == 'Partial') {
+        } else if ($type == 'Partial') {
             $mailType = 'Partial.' . $this->getRenderFormat();
         }
         $template = Kwc_Abstract::getTemplateFile($component->componentClass, $mailType);
@@ -56,8 +56,6 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
     {
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
-
-        $this->_renderComponent = $component;
 
         $content = false;
         if ($this->_enableCache && $component->isPage) { //use fullPage cache only for pages
@@ -75,7 +73,7 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
             $content = $helper->component($component);
 
             $pass1Cacheable = true;
-            $content = $this->_render(1, $content, $pass1Cacheable);
+            $content = $this->_renderPass1($content, $pass1Cacheable);
             Kwf_Benchmark::checkpoint('render pass 1');
 
             if (strpos($content, '<kwc2 ') === false) {
@@ -93,7 +91,7 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
         }
         $hasPass2Placeholders = strpos($content, '<kwc2 ')!==false;
 
-        $content = $this->_render(2, $content);
+        $content = $this->_renderPass2($content);
         Kwf_Benchmark::checkpoint('render pass 2');
 
         //if there where components that needed second render cycle the HtmlParser wasn't started yet

@@ -9,7 +9,7 @@ class Kwc_Advanced_Team_Member_Image_Component extends Kwc_Abstract_Image_Compon
                 'text' => trlKwf('default'),
                 'width' => 90,
                 'height' => 120,
-                'scale' => Kwf_Media_Image::SCALE_CROP
+                'cover' => true,
             )
         );
         return $ret;

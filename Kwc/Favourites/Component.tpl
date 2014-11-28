@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->cssClass?>" id="<?=$this->data->componentId?>">
     <?=$this->hiddenOptions($this->config)?>
 
     <? if ($this->linkType == 'graphical') { ?>

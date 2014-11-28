@@ -1,5 +1,8 @@
 <?php
 //test similar to Kwc_List_GalleryBasic_Test but with composite before ImageEnlarge
+/**
+ * @group Image
+ */
 class Kwc_List_GalleryComposite_Test extends Kwc_TestAbstract
 {
     public function setUp()

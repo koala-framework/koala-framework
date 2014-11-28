@@ -27,7 +27,7 @@ class Kwf_Form_CheckboxFieldsetInFieldset_TestController extends Kwf_Controller_
             $config,
             array(
                 'controllerUrl' => $this->getRequest()->getPathInfo(),
-                'assetsType' => 'Kwf_Form_CheckboxFieldsetInFieldset:Test',
+                'assetsPackage' => new Kwf_Assets_Package_TestPackage('Kwf_Form_CheckboxFieldsetInFieldset'),
             )
         );
         $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');

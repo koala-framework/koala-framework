@@ -13,6 +13,7 @@ class Kwc_Basic_Headline_Trl_Component extends Kwc_Chained_Trl_Component
     {
         $ret = parent::getTemplateVars();
         $ret['headline1'] = $this->_getRow()->headline1;
+        $ret['headline2'] = $this->_getRow()->headline2;
         return $ret;
     }
 }

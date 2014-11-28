@@ -1,8 +1,13 @@
 <?php
 class Kwf_DateTime extends Kwf_Date
 {
-    public function format($format = 'Y-m-d H:i:s')
+    public static function create($date)
     {
-        return parent::format($format);
+        return new self($date);
+    }
+
+    public function format($format = 'Y-m-d H:i:s', $language = null)
+    {
+        return parent::format($format, $language);
     }
 }

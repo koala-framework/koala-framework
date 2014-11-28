@@ -1,0 +1,15 @@
+.cssClass {
+    .innerBackground {
+        background-position: center top;
+        background-attachment: scroll;
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: fixed;
+        display: block;
+        height: 100%;
+        z-index: -1;
+        width:100%;
+        left: 0;
+        top: 0;
+    }
+}

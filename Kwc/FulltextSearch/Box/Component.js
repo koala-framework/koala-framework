@@ -1,7 +1,8 @@
-Kwf.onElementReady('.kwcFulltextSearchBox', function(el, config) {
+Kwf.onElementReady('.kwcFulltextSearchBox', function fulltextSearchBox(el, config) {
     new Kwc.FulltextSearch.Box.Component(el, config);
-}, this, {
-    priority: 0 //call *after* initializing kwcForm to have access to searchForm
+}, {
+    priority: 0, //call *after* initializing kwcForm to have access to searchForm
+    defer: true
 });
 
 Ext.ns('Kwc.FulltextSearch.Box');
@@ -136,7 +137,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
                     html: response.responseText
                 }, this.previousMainContent);
                 this.searchMainContent.enableDisplayMode('block');
-                Kwf.callOnContentReady(this.searchMainContent);
+                Kwf.callOnContentReady(this.searchMainContent, {newRender: true});
 
                 if (params && params.success) params.success.call(params.scope || this);
             },

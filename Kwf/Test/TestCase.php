@@ -8,6 +8,14 @@ class Kwf_Test_TestCase extends PHPUnit_Framework_TestCase
         Kwf_Component_Data_Root::setComponentClass(false);
         Kwf_Component_Cache::setInstance(Kwf_Component_Cache::CACHE_BACKEND_FNF);
         Kwf_Component_ModelObserver::getInstance()->setSkipFnF(false);
+
+        //clear cache as tests use new upload ids
+        $dir = Kwf_Config::getValue('uploads') . "/mediaprescale";
+        if (file_exists($dir)) {
+            foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+                $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
+            }
+        }
     }
 
     public function tearDown()

@@ -47,23 +47,4 @@ class Kwc_Menu_BreadCrumbs_Component extends Kwc_Menu_Abstract_Component
         }
         return $ret;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
-            foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $key => $generator) {
-                if (!is_instance_of($generator['class'], 'Kwf_Component_Generator_PseudoPage_Table') &&
-                    !is_instance_of($generator['class'], 'Kwc_Root_Category_Generator')
-                ) continue;
-                $generator = current(Kwf_Component_Generator_Abstract::getInstances(
-                    $componentClass, array('generator' => $key))
-                );
-                $ret[] = new Kwf_Component_Cache_Meta_Static_Model($generator->getModel());
-            }
-        }
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwf_Component_Model', '{componentId}');
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Root_Category_GeneratorModel', '{id}');
-        return $ret;
-    }
 }

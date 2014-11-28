@@ -24,7 +24,11 @@ class Kwc_Directories_TopChoose_Component extends Kwc_Directories_Top_Component
     {
         $row = $this->_getRow();
         if ($row && $row->directory_component_id) {
-            return Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->directory_component_id);
+            $component = Kwf_Component_Data_Root::getInstance()
+                ->getComponentByDbId($row->directory_component_id);
+            if (is_instance_of($component->componentClass, 'Kwc_Directories_Item_DirectoryNoAdmin_Component')) {
+                return $component;
+            }
         }
         return null;
     }

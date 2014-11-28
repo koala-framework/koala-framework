@@ -8,49 +8,71 @@
     }
 }
 
-.cssClass.largeText {
-    .kwcBasicImageEnlarge {
-        img {
-            display: block;
-        }
-    }
-
-    .noFlow.smallImage {
-        .image,
-        .text {
-            display: table-cell;
-        }
-    }
-
-    .center .image {
-        display: block;
-        text-align: center;
-
-        img {
-            display: inline;
-        }
-    }
-
-    .positionLeft .smallImage .image { float: left; margin-right: 18px; }
-    .positionRight .smallImage .image { float: right; margin-left: 18px; }
-    .center .kwcTextImageImageEnlarge { padding: 0px; }
-
+.cssClass {
     &.gt420 {
+        .image {
+            margin-bottom: 3px;
+            display: inline;
+            max-width: 50%;
+        }
+    }
+
+    &.gt420, &.largeText {
+        .kwcBasicImageEnlarge {
+            img {
+                display: block;
+            }
+        }
+
         .noFlow {
-            .image,
-            .text {
+            .image {
                 display: table-cell;
             }
-        }
 
-        .center {
-            .image,
-            .text {
-                display: inline;
+            &.positionLeft, &.positionRight {
+                .text {
+                    display: table-cell;
+                }
             }
         }
 
+        .positionLeft, .positionRight { .imageCaption { text-align: left; }}
         .positionLeft .image { float: left; margin-right: 18px; }
         .positionRight .image { float: right; margin-left: 18px; }
+        .positionCenter {
+            .image {
+                text-align: center;
+                display: inline;
+
+                > .kwcBasicImageEnlarge {
+                    img {
+                        margin-bottom: -3px;
+                        display: inline;
+                    }
+                }
+            }
+
+            .text { display: block; }
+        }
+
+        .imageCaption {
+            padding: 3px 0 5px 0;
+        }
+    }
+
+    .kwcBasicImageEnlarge {
+        margin: 0 auto;
+    }
+
+    .image {
+        > .kwcAbstractImage {
+            max-width: 100% !important;
+        }
+    }
+
+    .imageCaption {
+        padding: 0 0 5px 0;
+        text-align: center;
+        margin: 0 auto;
     }
 }

@@ -1,7 +1,7 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <?=$this->assets('Kwc_Directories_AjaxViewTwoOnOnePage:Test')?>
+        <?=$this->assets(new Kwf_Assets_Package_TestPackage('Kwc_Directories_AjaxViewTwoOnOnePage'))?>
         <?=$this->debugData()?>
     </head>
     <body>

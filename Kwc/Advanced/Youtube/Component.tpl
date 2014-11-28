@@ -1,5 +1,5 @@
-<div class="<?=$this->cssClass?>">
-    <div class="youtubeContainer" style="width: <?=$this->config['width']?>px;height: <?=$this->config['height']?>px">
+<div class="<?=$this->cssClass?>" style="width: <?=$this->config['width']?>px;">
+    <div class="youtubeContainer ratio<?=$this->config['ratio']?>">
         <div class="outerLoading">
             <div class="loading"></div>
         </div>

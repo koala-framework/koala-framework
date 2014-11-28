@@ -42,13 +42,6 @@ abstract class Kwf_Form_Container_Abstract extends Kwf_Form_Field_Abstract
 
     public function getMetaData($model)
     {
-        $iterator = new RecursiveIteratorIterator(new Kwf_Collection_Iterator_Recursive($this->fields));
-        foreach ($iterator as $field) {
-            if ($field->getLoadAfterSave()) {
-                $ret['loadAfterSave'] = true;
-            }
-        }
-
         $fieldWidth = $this->getDefaultFieldWidth();
         if ($fieldWidth) {
             foreach ($this->fields as $field) {
@@ -61,8 +54,19 @@ abstract class Kwf_Form_Container_Abstract extends Kwf_Form_Field_Abstract
         }
 
         $ret = parent::getMetaData($model);
+
+        $iterator = new RecursiveIteratorIterator(new Kwf_Collection_Iterator_Recursive($this->fields));
+        foreach ($iterator as $field) {
+            if ($field->getLoadAfterSave()) {
+                $ret['loadAfterSave'] = true;
+            }
+        }
+        if ($this->getLoadAfterSave()) {
+            $ret['loadAfterSave'] = true;
+        }
         $ret['items'] = $this->fields->getMetaData($model);
         if (!count($ret['items'])) unset($ret['items']);
+
         return $ret;
     }
 

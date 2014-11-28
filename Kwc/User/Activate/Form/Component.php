@@ -15,6 +15,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         $ret['generators']['child']['component']['success'] = 'Kwc_User_Activate_Form_Success_Component';
         $ret['useAjaxRequest'] = true;
         $ret['viewCache'] = false;
+        unset($ret['plugins']['useViewCache']);
         return $ret;
     }
 

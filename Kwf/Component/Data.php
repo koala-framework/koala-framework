@@ -874,7 +874,7 @@ class Kwf_Component_Data
     {
         $select = $this->_formatSelect($select);
         $select->limit(1);
-        $cc = $this->getRecursiveChildComponents($select);
+        $cc = $this->getRecursiveChildComponents($select, $childSelect);
         if (!$cc) return null;
         return current($cc);
     }
@@ -1304,42 +1304,42 @@ class Kwf_Component_Data
 
     public function trl($string, $text = array())
     {
-        return Kwf_Trl::getInstance()->trl($string, $text, Kwf_Trl::SOURCE_WEB, $this->getLanguage());
+        return Kwf_Trl::getInstance()->trl($string, $text, $this->getLanguage());
     }
 
     public function trlc($context, $string, $text = array())
     {
-        return Kwf_Trl::getInstance()->trlc($context, $string, $text, Kwf_Trl::SOURCE_WEB, $this->getLanguage());
+        return Kwf_Trl::getInstance()->trlc($context, $string, $text, $this->getLanguage());
     }
 
     public function trlp($single, $plural, $text =  array())
     {
-        return Kwf_Trl::getInstance()->trlp($single, $plural, $text, Kwf_Trl::SOURCE_WEB, $this->getLanguage());
+        return Kwf_Trl::getInstance()->trlp($single, $plural, $text, $this->getLanguage());
     }
 
     public function trlcp($context, $single, $plural, $text = array())
     {
-        return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text, Kwf_Trl::SOURCE_WEB, $this->getLanguage());
+        return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text, $this->getLanguage());
     }
 
     public function trlKwf($string, $text = array())
     {
-        return Kwf_Trl::getInstance()->trl($string, $text, Kwf_Trl::SOURCE_KWF, $this->getLanguage());
+        return Kwf_Trl::getInstance()->trlKwf($string, $text, $this->getLanguage());
     }
 
     public function trlcKwf($context, $string, $text = array())
     {
-        return Kwf_Trl::getInstance()->trlc($context, $string, $text, Kwf_Trl::SOURCE_KWF, $this->getLanguage());
+        return Kwf_Trl::getInstance()->trlcKwf($context, $string, $text, $this->getLanguage());
     }
 
     public function trlpKwf($single, $plural, $text =  array())
     {
-        return Kwf_Trl::getInstance()->trlp($single, $plural, $text, Kwf_Trl::SOURCE_KWF, $this->getLanguage());
+        return Kwf_Trl::getInstance()->trlpKwf($single, $plural, $text, $this->getLanguage());
     }
 
     public function trlcpKwf($context, $single, $plural, $text = array())
     {
-        return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text, Kwf_Trl::SOURCE_KWF, $this->getLanguage());
+        return Kwf_Trl::getInstance()->trlcpKwf($context, $single, $plural, $text, $this->getLanguage());
     }
 
     /**
@@ -1429,6 +1429,10 @@ class Kwf_Component_Data
         if (isset($this->parent) && $this->parent) {
             $this->_lazyParent = $this->parent->componentId;
             unset($this->parent);
+        }
+        if (isset($this->chained)) {
+            $this->_lazyChained = $this->chained->componentId;
+            unset($this->chained);
         }
         if (isset($this->_component)) {
             $this->_component->freeMemory();

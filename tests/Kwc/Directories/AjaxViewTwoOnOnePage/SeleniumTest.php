@@ -1,7 +1,7 @@
 <?php
 /**
  * @group slow
- * @group seleniuim
+ * @group selenium
  * http://kwf.niko.vivid/kwf/kwctest/Kwc_Directories_AjaxViewTwoOnOnePage_Root/directory
  * http://kwf.niko.vivid/kwf/kwctest/Kwc_Directories_AjaxViewTwoOnOnePage_Root/test
  */
@@ -15,7 +15,7 @@ class Kwc_Directories_AjaxViewTwoOnOnePage_SeleniumTest extends Kwf_Test_Seleniu
 
     public function testDetail()
     {
-        $this->openKwc('/directory');
+        $this->openKwc('/test');
         $this->click('link=foo1');
         $this->waitForConnections();
         $this->assertContainsText('css=.kwcDirectoriesAjaxViewTwoOnOnePageDetail', 'foo1');

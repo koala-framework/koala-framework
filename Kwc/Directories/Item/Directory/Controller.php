@@ -29,6 +29,9 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
         if ($this->_columns[0] instanceof Kwf_Grid_Column_Button) {
             throw new Kwf_Exception("Override Controller and add at least one column (button must not be first)");
         }
+        if ($this->_columns[0] instanceof Kwf_Grid_Column && $this->_columns[0]->getName() == 'component_class') {
+            throw new Kwf_Exception("Override Controller and add at least one column (component_class must not be first)");
+        }
     }
 
     protected function _initColumns()
@@ -72,6 +75,9 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
                     ->setTooltip(trlKwf('Edit {0}', $name));
                 $i++;
             }
+        }
+        if ($this->_model->hasColumn('component')) {
+            $this->_columns->add(new Kwf_Grid_Column('component'));
         }
         $this->_columns->add(new Kwf_Grid_Column('component_class'))
             ->setData(new Kwf_Data_Kwc_ComponentClass($this->_getParam('class'), 'detail'));
@@ -130,5 +136,50 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
             $msg .= Kwf_Util_Component::getHtmlLocations($components);
             throw new Kwf_ClientException($msg);
         }
+    }
+
+    public function jsonDuplicateAction()
+    {
+        if (!isset($this->_permissions['duplicate']) || !$this->_permissions['duplicate']) {
+            throw new Kwf_Exception("Duplicate is not allowed.");
+        }
+
+        $ids = $this->getRequest()->getParam($this->_primaryKey);
+        $ids = explode(';', $ids);
+
+        $progressBar = null;
+
+        $this->view->data = array('duplicatedIds' => array());
+        ignore_user_abort(true);
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
+        $dir = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
+            $this->_getParam('componentId'),
+            array('ignoreVisible'=>true, 'limit'=>1)
+        );
+        foreach ($ids as $id) {
+            $child = $dir->getChildComponent(array('id'=>'-'.$id, 'ignoreVisible'=>true));
+            $newChild = Kwf_Util_Component::duplicate($child, $dir, $progressBar);
+            $newChild->row->save();
+            $this->view->data['duplicatedIds'][] = $newChild->id;
+        }
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
+    }
+
+    public function jsonMultiUploadAction()
+    {
+        $componentId = $this->_getParam('componentId');
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
+        if (Kwc_Abstract::getSetting($component->componentClass, 'multiFileUpload')) {
+            $uploadIds = $this->_getParam('uploadIds');
+            $uploadIds = explode(',', $uploadIds);
+            foreach ($uploadIds as $uploadId) {
+                $this->_createNewDetailComponentFromUpload($uploadId, $component);
+            }
+        }
+    }
+
+    protected function _createNewDetailComponentFromUpload($uploadId, $component)
+    {
+        throw new Kwf_Exception_NotYetImplemented('You have to override _createNewDetailComponentFormUpload function to create child components on multiFileUpload');
     }
 }

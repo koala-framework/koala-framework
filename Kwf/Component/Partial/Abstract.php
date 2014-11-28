@@ -21,8 +21,30 @@ class Kwf_Component_Partial_Abstract
         return $this->_params[$param];
     }
 
-    public static function useViewCache()
+    public static function useViewCache($componentId, $params)
     {
-        return false;
+        if (isset($params['disableCache']) && $params['disableCache']) {
+            return false;
+        }
+        if (isset($params['disableCacheParams'])) {
+            return array(
+                'callback' => array(
+                    'Kwf_Component_Partial_Abstract',
+                    '_useViewCacheDynamic'
+                ),
+                'args' => array(
+                    $params['disableCacheParams']
+                )
+            );
+        }
+        return true;
+    }
+
+    public function _useViewCacheDynamic($disableCacheParams)
+    {
+        foreach ($disableCacheParams as $param) {
+            if (isset($_REQUEST[$param])) return false;
+        }
+        return true;
     }
 }

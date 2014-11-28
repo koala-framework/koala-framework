@@ -340,7 +340,9 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         $helper = new Kwf_View_Helper_FormField();
-        $ret['html'] = '<div class="kwfFormFieldMultiCheckbox kwfFormFieldMultiCheckbox'.ucfirst($this->getOutputType()).'">';
+        $ret['html']  = '<div class="kwfFormFieldMultiCheckbox kwfFormFieldMultiCheckbox'.ucfirst($this->getOutputType()).'"';
+        $ret['html'] .= ' data-fieldname="'.$this->getFieldName().$fieldNamePostfix.'"';
+        $ret['html'] .= '>';
         $fields = $this->_getFields()->getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         $i = 0;
         foreach ($fields as $field) {

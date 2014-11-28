@@ -1,6 +1,15 @@
 <?php
 class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 {
+    protected function _validateSessionToken()
+    {
+        if ($this->getRequest()->getActionName() != 'json-logout-user'
+            && $this->getRequest()->getActionName() != 'json-login-user'
+        ) {
+            parent::_validateSessionToken();
+        }
+    }
+
     public function indexAction()
     {
         // ursprünglich $this->_getParam('location'), dann gehen aber GET params verloren
@@ -22,6 +31,9 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $this->view->role = $this->_getParam('role');
         $this->view->login = true;
         $this->view->success = false;
+
+        $this->getResponse()->setRawHeader('HTTP/1.0 401 Access Denied');
+        $this->getResponse()->setHttpResponseCode(401);
     }
 
 
@@ -171,6 +183,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         if (!$result->isValid()) {
             $this->view->error = implode("<br />", $result->getMessages());
         }
+        $this->view->sessionToken = Kwf_Util_SessionToken::getSessionToken();
     }
 
     public function jsonLogoutUserAction()

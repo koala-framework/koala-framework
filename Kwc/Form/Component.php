@@ -29,22 +29,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $ret['plugins'] = $plugins;
         }
 
-        //todo: wenn mehrere verbessern
-        $ret['assets']['dep'][] = 'ExtElement';
-        $ret['assets']['dep'][] = 'ExtFx'; //for .fadeIn()
-        $ret['assets']['dep'][] = 'ExtDomHelper';
-        $ret['assets']['dep'][] = 'ExtConnection';
-        $ret['assets']['dep'][] = 'ExtDateMenu';
-        $ret['assets']['dep'][] = 'KwfEvents';
-        $ret['assets']['dep'][] = 'KwfClearOnFocus';
-        $ret['assets']['dep'][] = 'KwfOnReady';
-        $ret['assets']['dep'][] = 'jQuery';
-        $ret['assets']['dep'][] = 'KwfResponsiveEl';
-        $ret['assets']['files'][] = 'kwf/Kwc/Form/Component.js';
-        $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/Field.js';
-        $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/ErrorStyle/Abstract.js';
-        $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/ErrorStyle/Above.js';
-        $ret['assets']['files'][] = 'kwf/Kwf_js/FrontendForm/*';
+        $ret['assets']['dep'][] = 'KwcFrontendForm';
 
         $ret['useAjaxRequest'] = true;
         $ret['hideFormOnSuccess'] = true; // works only when useAjaxRequest==true
@@ -58,7 +43,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
         $ret['errorStyle'] = null; //default from config.ini: kwc.form.errorStyle
 
-        $ret['cssClass'] = 'responsive';
+        $ret['cssClass'] = 'default';
 
         return $ret;
     }
@@ -191,7 +176,13 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     //can be overriden to implement custom validation logic
     protected function _validate($postData)
     {
-        return $this->_form->validate(null, $postData);
+        $ret = $this->_form->validate(null, $postData);
+        if (!empty($postData[$this->getData()->componentId.'-sp-email'])) {
+            $ret[] = array(
+                'message' => $this->getData()->trlKwf("Please don't fill 'Leave empty' field")
+            );
+        }
+        return $ret;
     }
 
     //can be overriden to *not* log specific exceptions or adapt error

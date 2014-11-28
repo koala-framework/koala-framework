@@ -27,8 +27,8 @@
 }
 
 .kwfLightbox.mobile .closeButton {
-    top: 0;
     right: 0;
+    top: 0;
 }
 .kwfLightbox.mobile .kwfLightboxInner {
     margin-bottom: 0;
@@ -37,7 +37,6 @@
 .kwfLightbox .closeButton:hover { text-decoration: none; }
 
 .kwfLightbox .kwfLightboxContent {
-    overflow: hidden;
     height: 100%;
     width: 100%;
     padding: 10px;
@@ -106,4 +105,10 @@
     filter: alpha(opacity=80);
     z-index: 50 !important;
     position: fixed;
+}
+
+@media (max-width: 650px) {
+    body .lightboxMask {
+        opacity: 1;
+    }
 }

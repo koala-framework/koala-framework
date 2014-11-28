@@ -3,6 +3,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
 {
     public function preDispatch()
     {
+        Kwf_Exception_Abstract::$logErrors = false;
         //don't call parent, no acl required
 
         if (file_exists('downloader.php')) {
@@ -47,7 +48,12 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         $this->view->appVersion = Kwf_Config::getValue('application.name');
         $this->view->baseUrl = Kwf_Setup::getBaseUrl();
         $this->view->defaultDbName = Kwf_Config::getValue('application.id');
-        $this->view->assetsType = 'Kwf_Controller_Action_Maintenance:Setup';
+        $this->view->possibleConfigSections = array();
+        $cfg = new Kwf_Config_Ini('config.ini');
+        foreach ($cfg as $k=>$i) {
+            $this->view->possibleConfigSections[] = array($k, $k);
+        }
+        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('Setup');
         $this->view->viewport = 'Kwf.Maintenance.Viewport';
         $this->view->xtype = 'kwf.maintenance.setup';
     }
@@ -57,7 +63,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         //TODO check for web running in root of domain
         //TODO alternative for maintenance mode: current one needs write perm on bootstrap.php plus sucks across multiple servers
         $this->view->checks = Kwf_Util_Check_Config::getCheckResults();
-        if (!is_writable('config.local.ini')) {
+        if (!is_writable('config.local.ini') && !is_writable('.')) {
             $this->view->checks[] = array(
                 'checkText' => 'config.local.ini writeable',
                 'status' => Kwf_Util_Check_Config::RESULT_FAILED,
@@ -66,6 +72,19 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         } else {
             $this->view->checks[] = array(
                 'checkText' => 'config.local.ini writeable',
+                'status' => Kwf_Util_Check_Config::RESULT_OK,
+                'message' => ''
+            );
+        }
+        if (!is_writable('config_section') && !is_writable('.')) {
+            $this->view->checks[] = array(
+                'checkText' => 'config_section writeable',
+                'status' => Kwf_Util_Check_Config::RESULT_FAILED,
+                'message' => 'config_section must be writeable during installation',
+            );
+        } else {
+            $this->view->checks[] = array(
+                'checkText' => 'config_section writeable',
                 'status' => Kwf_Util_Check_Config::RESULT_OK,
                 'message' => ''
             );
@@ -85,6 +104,8 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         $cfg .= "\n";
         $cfg .= "debug.error.log = ".(!$this->_getParam('display_errors') ? 'true' : 'false')."\n";
         file_put_contents('config.local.ini', $cfg);
+
+        file_put_contents('config_section', $this->_getParam('config_section'));
 
         //re-create config to load changed config.local.ini
         Kwf_Config::deleteValueCache('database');
@@ -106,12 +127,8 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
 
         $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates(0, 9999999));
 
-        $file = 'setup/setup.sql'; //initial setup for web
-        if (file_exists($file)) {
-            $update = new Kwf_Update_Sql(0, null);
-            $update->sql = file_get_contents($file);
-            $updates[] = $update;
-        }
+        $updates[] = new Kwf_Update_Setup_InitialDb();
+        $updates[] = new Kwf_Update_Setup_InitialUploads();
 
         $update = new Kwf_Update_Sql(0, null);
         $db = Kwf_Registry::get('db');
@@ -133,7 +150,9 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         if (!$runner->checkUpdatesSettings()) {
             throw new Kwf_Exception_Client("checkSettings failed, setup stopped");
         }
-        $doneNames = $runner->executeUpdates();
+        $doneNames = $runner->executeUpdates(array(
+            'refreshCache' => false
+        ));
         $runner->writeExecutedUpdates($doneNames);
  
         $errors = $runner->getErrors();

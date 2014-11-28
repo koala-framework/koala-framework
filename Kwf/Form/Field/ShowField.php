@@ -9,6 +9,7 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
         parent::__construct($field_name, $field_label);
         $this->setXtype('showfield');
     }
+
     public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
     {
     }

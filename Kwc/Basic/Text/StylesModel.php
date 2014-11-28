@@ -30,7 +30,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
                 'name' => $m[5][$i],
                 'tagName' => $tagName,
                 'className' => $m[3][$i],
-                'styles' => Kwf_Assets_Loader::expandAssetVariables($m[4][$i], 'web'),
+                'styles' => Kwf_Assets_Dependency_File_Css::expandAssetVariables($m[4][$i], 'web'),
             );
         }
         return $styles;
@@ -42,17 +42,11 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if ($ret !== false) return $ret;
 
-        $loader = new Kwf_Assets_Loader();
-        $dep = $loader->getDependencies();
-        $files = $dep->getAssetFiles('Frontend', 'css', 'web', Kwf_Component_Data_Root::getComponentClass());
-        unset($files['mtime']);
+        $package = Kwf_Assets_Package_Default::getInstance('Frontend');
         $ret = array();
-        foreach ($files as $file) {
-            if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
-            } else if (substr($file, 0, 8) == 'dynamic/') {
-            } else {
-                $c = file_get_contents($loader->getDependencies()->getAssetPath($file));
-                $ret = array_merge($ret, self::parseMasterStyles($c));
+        foreach ($package->getDependency()->getFilteredUniqueDependencies('text/css') as $dep) {
+            if ($dep instanceof Kwf_Assets_Dependency_File) {
+                $ret = array_merge($ret, self::parseMasterStyles(file_get_contents($dep->getFileName())));
             }
         }
         Kwf_Cache_SimpleStatic::add($cacheId, $ret);
@@ -114,6 +108,50 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
 
     public function removeCache()
     {
+        //copy from Kwf_Util_ClearCache_Types_Assets
+        //TODO implement better in kwf 3.8
+        $config = Zend_Registry::get('config');
+        $langs = array();
+        if ($config->webCodeLanguage) $langs[] = $config->webCodeLanguage;
+
+        if ($config->languages) {
+            foreach ($config->languages as $lang=>$name) {
+                $langs[] = $lang;
+            }
+        }
+
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            $lngClasses = array();
+            foreach(Kwc_Abstract::getComponentClasses() as $c) {
+                if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
+                    in_array('language', Kwc_Abstract::getSetting($c, 'baseProperties'))
+                ) {
+                    $lngClasses[] = $c;
+                }
+            }
+            $lngs = Kwf_Component_Data_Root::getInstance()
+                ->getComponentsBySameClass($lngClasses, array('ignoreVisible'=>true));
+            foreach ($lngs as $c) {
+                $langs[] = $c->getLanguage();
+            }
+        }
+        $langs = array_unique($langs);
+        //end copy
+
+        $dep = new Kwc_Basic_Text_StylesAsset(get_class($this));
+        foreach ($langs as $language) {
+            $url = get_class($dep).'/'.$dep->toUrlParameter().'/'.$language.'/css';
+
+            $cacheId = str_replace(array(':', '/', '.', ','), '_', $url);
+            Kwf_Assets_Cache::getInstance()->remove($cacheId);
+
+            $cacheId = 'as_'.str_replace(array(':', '/', ','), '_', $url).'_'.Kwf_Media_Output::ENCODING_GZIP;
+            Kwf_Cache_SimpleStatic::_delete($cacheId);
+            $cacheId = 'as_'.str_replace(array(':', '/', ','), '_', $url).'_'.Kwf_Media_Output::ENCODING_DEFLATE;
+            Kwf_Cache_SimpleStatic::_delete($cacheId);
+        }
+
+
         return self::_getCache()->remove('RteStyles'.$this->getUniqueIdentifier());
     }
 

@@ -70,8 +70,7 @@ class Kwf_Component_Abstract_Admin
             'componentController' => $class,
             'action' => ''
         );
-        $router = Kwf_Controller_Front::getInstance()->getRouter();
-
+        $router = Kwf_Controller_Front::getInstance()->getWebRouter();
         if (Zend_Registry::isRegistered('testRootComponentClass')) {
             $urlOptions['root'] = Zend_Registry::get('testRootComponentClass');
             $name = 'kwf_test_componentedit';

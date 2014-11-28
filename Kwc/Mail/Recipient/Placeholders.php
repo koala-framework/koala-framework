@@ -18,21 +18,21 @@ class Kwc_Mail_Recipient_Placeholders
                 $recipient->getMailTitle(),
                 $recipient->getMailLastname()
             );
-            $politeM = $trl->trl('Dear Mr. {0} {1}', $replace, Kwf_Trl::SOURCE_KWF, $language);
-            $politeF = $trl->trl('Dear Mrs. {0} {1}', $replace, Kwf_Trl::SOURCE_KWF, $language);
+            $politeM = $trl->trlKwf('Dear Mr. {0} {1}', $replace, $language);
+            $politeF = $trl->trlKwf('Dear Mrs. {0} {1}', $replace, $language);
             if ($recipient->getMailGender() == 'male' && $recipient->getMailLastname()) {
-                $t = $trl->trl('Dear Mr. {0} {1}', $replace, Kwf_Trl::SOURCE_KWF, $language);
+                $t = $trl->trlKwf('Dear Mr. {0} {1}', $replace, $language);
             } else if ($recipient->getMailGender() == 'female' && $recipient->getMailLastname()) {
-                $t = $trl->trl('Dear Mrs. {0} {1}', $replace, Kwf_Trl::SOURCE_KWF, $language);
+                $t = $trl->trlKwf('Dear Mrs. {0} {1}', $replace, $language);
             } else {
-                $t = $trl->trl('Dear Sir or Madam', array(), Kwf_Trl::SOURCE_KWF, $language);
+                $t = $trl->trlKwf('Dear Mrs./Mr. {0} {1}', $replace, $language);
             }
             $ret['salutation_polite'] = trim(str_replace('  ', ' ', $t));
 
             if ($recipient->getMailGender() == 'male') {
-                $t = $trl->trl('Mr. {0}', $recipient->getMailTitle(), Kwf_Trl::SOURCE_KWF, $language);
+                $t = $trl->trlKwf('Mr. {0}', $recipient->getMailTitle(), $language);
             } else if ($recipient->getMailGender() == 'female') {
-                $t = $trl->trl('Mrs. {0}', $recipient->getMailTitle(), Kwf_Trl::SOURCE_KWF, $language);
+                $t = $trl->trlKwf('Mrs. {0}', $recipient->getMailTitle(), $language);
             } else {
                 $t = $recipient->getMailTitle();
             }
@@ -43,27 +43,27 @@ class Kwc_Mail_Recipient_Placeholders
         if ($recipient instanceof Kwc_Mail_Recipient_GenderInterface) {
             $replace = array($recipient->getMailLastname());
             if ($recipient->getMailGender() == 'male') {
-                $ret['salutation_polite_notitle'] = $trl->trl('Dear Mr. {0}', $replace, Kwf_Trl::SOURCE_KWF, $language);
-                $ret['salutation_hello'] = $trl->trl('Hello Mr. {0}', $replace, Kwf_Trl::SOURCE_KWF, $language);
-                $ret['salutation'] = $trl->trl('Mr.', array(), Kwf_Trl::SOURCE_KWF, $language);
-                $ret['salutation_firstname'] = $trl->trlc('salutation firstname male', 'Dear {0}', array($recipient->getMailFirstname()), Kwf_Trl::SOURCE_KWF, $language);
+                $ret['salutation_polite_notitle'] = $trl->trlKwf('Dear Mr. {0}', $replace, $language);
+                $ret['salutation_hello'] = $trl->trlKwf('Hello Mr. {0}', $replace, $language);
+                $ret['salutation'] = $trl->trlKwf('Mr.', array(), $language);
+                $ret['salutation_firstname'] = $trl->trlcKwf('salutation firstname male', 'Dear {0}', array($recipient->getMailFirstname()), $language);
             } else if ($recipient->getMailGender() == 'female') {
-                $ret['salutation_polite_notitle'] = $trl->trl('Dear Mrs. {0}', $replace, Kwf_Trl::SOURCE_KWF, $language);
-                $ret['salutation_hello'] = $trl->trl('Hello Mrs. {0}', $replace, Kwf_Trl::SOURCE_KWF, $language);
-                $ret['salutation'] = $trl->trl('Mrs.', array(), Kwf_Trl::SOURCE_KWF, $language);
-                $ret['salutation_firstname'] = $trl->trlc('salutation firstname female', 'Dear {0}', array($recipient->getMailFirstname()), Kwf_Trl::SOURCE_KWF, $language);
+                $ret['salutation_polite_notitle'] = $trl->trlKwf('Dear Mrs. {0}', $replace, $language);
+                $ret['salutation_hello'] = $trl->trlKwf('Hello Mrs. {0}', $replace, $language);
+                $ret['salutation'] = $trl->trlKwf('Mrs.', array(), $language);
+                $ret['salutation_firstname'] = $trl->trlcKwf('salutation firstname female', 'Dear {0}', array($recipient->getMailFirstname()), $language);
             } else {
                 $replace = array(
                     $recipient->getMailFirstname(),
                     $recipient->getMailLastname()
                 );
                 if ($recipient->getMailFirstname() && $recipient->getMailLastname()) {
-                    $ret['salutation_polite_notitle'] = trim($trl->trl('Dear {0} {1}', $replace, Kwf_Trl::SOURCE_KWF, $language));
+                    $ret['salutation_polite_notitle'] = trim($trl->trlKwf('Dear {0} {1}', $replace, $language));
                 } else {
-                    $ret['salutation_polite_notitle'] = $trl->trl('Dear Sir or Madam', array(), Kwf_Trl::SOURCE_KWF, $language);
+                    $ret['salutation_polite_notitle'] = $trl->trlKwf('Dear Sir or Madam', array(), $language);
                 }
-                $ret['salutation_hello'] = trim($trl->trl('Hello {0} {1}', $replace, Kwf_Trl::SOURCE_KWF, $language));
-                $ret['salutation_firstname'] = $trl->trlc('salutation firstname unknown gender', 'Dear {0}', array($recipient->getMailFirstname()), Kwf_Trl::SOURCE_KWF, $language);
+                $ret['salutation_hello'] = trim($trl->trlKwf('Hello {0} {1}', $replace, $language));
+                $ret['salutation_firstname'] = $trl->trlcKwf('salutation firstname unknown gender', 'Dear {0}', array($recipient->getMailFirstname()), $language);
             }
         }
         return $ret;

@@ -53,37 +53,37 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
 
     public function countRows($where = array())
     {
-        $this->_synchronize();
+        $syncDone = $this->_synchronize();
         $ret = parent::countRows($where);
         $this->_unlockSync();
-        $this->_afterSync();
+        if ($syncDone) $this->_afterSync();
         return $ret;
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
-        $this->_synchronize();
+        $syncDone = $this->_synchronize();
         $ret = parent::getIds($where, $order, $limit, $start);
         $this->_unlockSync();
-        $this->_afterSync();
+        if ($syncDone) $this->_afterSync();
         return $ret;
     }
 
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
-        $this->_synchronize();
+        $syncDone = $this->_synchronize();
         $ret = parent::getRows($where, $order, $limit, $start);
         $this->_unlockSync();
-        $this->_afterSync();
+        if ($syncDone) $this->_afterSync();
         return $ret;
     }
 
     public function getRow($select)
     {
-        $this->_synchronize();
+        $syncDone = $this->_synchronize();
         $ret = parent::getRow($select);
         $this->_unlockSync();
-        $this->_afterSync();
+        if ($syncDone) $this->_afterSync();
         return $ret;
     }
 
@@ -275,9 +275,9 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
 
     public final function synchronize($overrideMaxSyncDelay = self::SYNC_AFTER_DELAY)
     {
-        $this->_synchronize($overrideMaxSyncDelay);
+        $syncDone = $this->_synchronize($overrideMaxSyncDelay);
         $this->_unlockSync();
-        $this->_afterSync();
+        if ($syncDone) $this->_afterSync();
     }
 
     /**
@@ -352,7 +352,10 @@ class Kwf_Model_MirrorCache extends Kwf_Model_Proxy
             $msg .= ' import: '.round($importTime, 2).'s';
             //$msg .= ' SELECT: '.str_replace("\n", " ", print_r($select, true));
             file_put_contents('log/mirrorcache', $msg."\n", FILE_APPEND);
+
+            return true;
         }
+        return false;
     }
 
     private function _getMaxSyncDelay()

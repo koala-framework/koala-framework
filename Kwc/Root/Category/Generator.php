@@ -400,7 +400,9 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $ret['page'] = true;
         $ret['table'] = true;
         $ret['pageGenerator'] = true;
-        $ret['hasHome'] = true;
+        if (!isset($this->_settings['hasHome']) || $this->_settings['hasHome']) {
+            $ret['hasHome'] = true;
+        }
         return $ret;
     }
 

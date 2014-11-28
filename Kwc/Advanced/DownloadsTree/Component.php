@@ -8,12 +8,10 @@ class Kwc_Advanced_DownloadsTree_Component extends Kwc_Abstract_Composite_Compon
         $ret['componentIcon'] = new Kwf_Asset('application_side_tree');
 
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Advanced/DownloadsTree/AdminPanel.js';
-        $ret['assets']['files'][] = 'kwf/Kwc/Advanced/DownloadsTree/Component.js';
         $ret['assets']['dep'][] = 'KwfAutoTree';
         $ret['assets']['dep'][] = 'KwfAutoGrid';
         $ret['assets']['dep'][] = 'ExtBorderLayout';
         $ret['assets']['dep'][] = 'ExtDate';
-        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['projectsModel'] = 'Kwc_Advanced_DownloadsTree_Projects';
         $ret['downloadsModel'] = 'Kwc_Advanced_DownloadsTree_Downloads';
 

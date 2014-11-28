@@ -3,13 +3,10 @@
     position: relative;
 }
 
-
 .kwcForm div.kwcFormFieldMultiCheckbox .checkboxItem input {
-    display: inline-block;
     float: none;
 }
 
 .kwcForm div.kwcFormFieldMultiCheckbox .checkboxItem label {
-    display: inline-block;
     float: none;
 }

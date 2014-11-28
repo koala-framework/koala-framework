@@ -1,14 +1,10 @@
 <?php
-class Kwc_User_Detail_GeneralCommunity_Avatar_Small_Component extends Kwc_User_Detail_GeneralCommunity_Avatar_Component
+class Kwc_User_Detail_GeneralCommunity_Avatar_Small_Component extends Kwc_Basic_ImageParent_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['dimensions'] = array(
-            array('width'=>40, 'height'=>40, 'scale'=>Kwf_Media_Image::SCALE_CROP)
-        );
-        unset($ret['generators']['small']);
-        $ret['useParentImage'] = true;
+        $ret['dimension'] = array('width'=>40, 'height'=>40, 'cover' => true);
         return $ret;
     }
 }

@@ -56,15 +56,6 @@ class Kwc_Basic_ParentContent_Component extends Kwc_Abstract
         return $c->hasContent();
     }
 
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $generator) {
-            $ret[] = new Kwc_Basic_ParentContent_CacheMeta($generator->getModel());
-        }
-        return $ret;
-    }
-
     public function getContentWidth()
     {
         return $this->_getParentContentData()->getComponent()->getContentWidth();

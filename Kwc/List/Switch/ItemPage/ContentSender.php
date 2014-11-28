@@ -18,14 +18,15 @@ class Kwc_List_Switch_ItemPage_ContentSender extends Kwf_Component_Abstract_Cont
 
     protected function _render($includeMaster)
     {
-        $largeContent = $this->_data->parent
-            ->getChildComponent('-'.$this->_data->id)
-            ->getChildComponent('-large');
+        $component = $this->_data->parent->getComponent();
+        $largeContent = $component->getLargeComponent($this->_data);
 
         if ($includeMaster) {
-            $plugin = Kwf_Component_Plugin_Abstract
-                ::getInstance('Kwc_List_Switch_LargeContentPlugin', $this->_data->parent->componentId);
+            $plugin = Kwf_Component_Plugin_Abstract::getInstance(
+                'Kwc_List_Switch_LargeContentPlugin', $this->_data->parent->componentId
+            );
             $plugin->setCurrentItem($largeContent);
+            $plugin->setCurrentPreview($component->getPreviewComponent($this->_data));
 
             //render parent, will include largeContent
             $data = $this->_data->getParentPage();
@@ -34,8 +35,12 @@ class Kwc_List_Switch_ItemPage_ContentSender extends Kwf_Component_Abstract_Cont
             $data = $largeContent;
         }
 
-        $parentContentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
-        $parentContentSender = new $parentContentSender($data);
-        return $parentContentSender->_render($includeMaster);
+        if ($data == $this->_data) {
+            return parent::_render($includeMaster);
+        } else {
+            $parentContentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
+            $parentContentSender = new $parentContentSender($data);
+            return $parentContentSender->_render($includeMaster);
+        }
     }
 }

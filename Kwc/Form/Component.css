@@ -62,11 +62,6 @@
     margin-top: 3px;
 }
 .cssClass label {
-    margin-right: 20px;
-    text-align: right;
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: var(typo);
     line-height: 18px;
 }
 .cssClass .kwcLabelPositionAbove .kwfFormFieldWrapper.hasLabel {
@@ -101,40 +96,20 @@
     clear: none;
 }
 .cssClass form .kwfFormFieldRadio input { margin: 0px; padding: 0px; }
-.cssClass form .kwfFormFieldRadioHorizontal span { white-space: nowrap; }
+.cssClass form .kwfFormFieldRadioHorizontal span { display: inline-block; }
 .cssClass form .kwfFormFieldRadioVertical span { display: block; }
 .cssClass form .kwfFormFieldRadioVertical span label { margin-left: 0px; }
 .cssClass form .kwfFormFieldRadioVertical label { float: none; }
 
-.cssClass form .kwfFormFieldMultiCheckboxHorizontal label { display: inline-block; float: none; width: auto; margin-left: 0px; }
+.cssClass form .kwfFormFieldMultiCheckboxHorizontal label { float: none; width: auto; margin-left: 0px; }
 .cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; padding-right: 10px; }
 .cssClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
 
-.cssClass form .kwfFormContainerColumns .kwfFormContainerColumn { float: left; clear: none; }
-.cssClass form .kwfFormContainerColumns .kwfFormContainerColumn .kwfField { clear: none; }
+.cssClass form .kwfFormContainerColumns .kwfFormContainerColumn { float: left; clear: none; margin-bottom: 0px; }
+.cssClass form .kwfFormContainerColumns .kwfFormContainerColumn .kwfField { clear: none; margin-bottom: 0px; }
 
-.cssClass .kwcFormError {
-    padding: 10px 10px 5px 10px;
-    background: var(errorBg) url('/assets/kwf/images/stripes.png') repeat left 3px;
-    border: 1px solid var(errorBorder) ;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    margin-right: 40px;
-}
-.cssClass .kwcFormError p.error {
-    color: var(errorText) ;
-    margin-bottom: 5px;
-    padding-left: 20px;
-    background: url('/assets/kwf/images/iconAlert.png') no-repeat left center;
-}
-
-.cssClass .kwcFormError ul li {
-    color: var(errorText);
-}
 .cssClass span.comment { margin-left: 10px; color: #999; }
-.cssClass .kwfField { clear: both; position: relative; }
+.cssClass .kwfField { clear: both; position: relative; margin-bottom: 4px; }
 
 .cssClass .kwcLabelPositionAbove label {
     display: block;
@@ -142,4 +117,8 @@
     margin-left: 0px;
     text-align: left;
     width: 100%;
+}
+
+.cssClass .spEmail {
+    display: none;
 }

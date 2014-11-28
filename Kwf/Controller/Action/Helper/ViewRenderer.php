@@ -8,7 +8,13 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
         $this->setRender('master');
     }
 
-    public function preDispatch() {
+    public function preDispatch()
+    {
+        $prefix = substr($this->getRequest()->getParam('action'), 0, 4);
+        if ($prefix == 'json' || $this->_actionController instanceof Zend_Rest_Controller) {
+            $this->getRequest()->setParam('jsonOutput', true);
+        }
+
         $module = $this->getRequest()->getParam('module');
         if ($this->isJson()) {
             $this->setView(new Kwf_View_Json());
@@ -32,17 +38,8 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             if ($this->isJson()) {
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $this->getResponse()->setHeader('Content-Type', 'text/html');
-                } else if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-                    $this->getResponse()->setHeader('Content-Type', 'text/javascript');
                 } else {
-                    if (!headers_sent()) {
-                        header('Content-Type: text/html');
-                    }
-                    Kwf_Benchmark::output();
-                    echo "<pre>";
-                    echo htmlspecialchars($this->_jsonFormat(Zend_Json::encode($this->view->getOutput())));
-                    echo "</pre>";
-                    $this->setNoRender();
+                    $this->getResponse()->setHeader('Content-Type', 'application/javascript');
                 }
             } else {
                 $this->getResponse()->setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -53,78 +50,6 @@ class Kwf_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 
     public function isJson()
     {
-        return substr($this->getRequest()->getActionName(), 0, 4) == 'json';
-    }
-
-    private function _jsonFormat($json)
-    {
-        $tab = "  ";
-        $ret = "";
-        $indentLevel = 0;
-        $inString = false;
-
-        $len = strlen($json);
-
-        for($c = 0; $c < $len; $c++)
-        {
-            $char = $json[$c];
-            switch($char)
-            {
-                case '{':
-                case '[':
-                    if(!$inString)
-                    {
-                        $ret .= $char . "\n" . str_repeat($tab, $indentLevel+1);
-                        $indentLevel++;
-                    }
-                    else
-                    {
-                        $ret .= $char;
-                    }
-                    break;
-                case '}':
-                case ']':
-                    if(!$inString)
-                    {
-                        $indentLevel--;
-                        $ret .= "\n" . str_repeat($tab, $indentLevel) . $char;
-                    }
-                    else
-                    {
-                        $ret .= $char;
-                    }
-                    break;
-                case ',':
-                    if(!$inString)
-                    {
-                        $ret .= ",\n" . str_repeat($tab, $indentLevel);
-                    }
-                    else
-                    {
-                        $ret .= $char;
-                    }
-                    break;
-                case ':':
-                    if(!$inString)
-                    {
-                        $ret .= ": ";
-                    }
-                    else
-                    {
-                        $ret .= $char;
-                    }
-                    break;
-                case '"':
-                    if($c > 0 && $json[$c-1] != '\\')
-                    {
-                        $inString = !$inString;
-                    }
-                default:
-                    $ret .= $char;
-                    break;
-            }
-        }
-
-        return $ret;
+        return (bool)$this->getRequest()->getParam('jsonOutput');
     }
 }

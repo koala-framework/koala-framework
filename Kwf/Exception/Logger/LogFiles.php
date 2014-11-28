@@ -13,15 +13,19 @@ class Kwf_Exception_Logger_LogFiles extends Kwf_Exception_Logger_Abstract
             fclose($fp);
         } catch(Exception $e) {
             $to = array();
-            foreach (Kwf_Registry::get('config')->developers as $dev) {
-                if (isset($dev->sendException) && $dev->sendException) {
-                    $to[] = $dev->email;
+            if (Kwf_Registry::get('config')->developers) {
+                foreach (Kwf_Registry::get('config')->developers as $dev) {
+                    if (isset($dev->sendException) && $dev->sendException) {
+                        $to[] = $dev->email;
+                    }
                 }
             }
-            mail(implode('; ', $to),
-                'Error while trying to write error file',
-                $e->__toString()."\n\n---------------------------\n\nOriginal Exception:\n\n".$content
-                );
+            if ($to) {
+                mail(implode('; ', $to),
+                    'Error while trying to write error file',
+                    $e->__toString()."\n\n---------------------------\n\nOriginal Exception:\n\n".$content
+                    );
+            }
         }
         return true;
     }

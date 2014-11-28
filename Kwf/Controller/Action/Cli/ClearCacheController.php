@@ -8,11 +8,18 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
 
     public function indexAction()
     {
-        $options = array();
+        $options = array(
+            'types' => $this->_getParam('type'),
+            'output' => true,
+            'refresh' => true,
+        );
         if ($this->_getParam('skip-other-servers')) {
             $options['skipOtherServers'] = true;
         }
-        Kwf_Util_ClearCache::getInstance()->clearCache($this->_getParam('type'), true, true, $options);
+        if (is_string($this->_getParam('exclude-type'))) {
+            $options['excludeTypes'] = $this->_getParam('exclude-type');
+        }
+        Kwf_Util_ClearCache::getInstance()->clearCache($options);
         exit;
     }
 
@@ -33,6 +40,14 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
             exit;
         }
         exit(1);
+    }
+
+    public function mediaAction()
+    {
+        echo "clearing media cache, this can take some time...\n";
+        Kwf_Media_MemoryCache::getInstance()->clean();
+        echo "done\n";
+        exit;
     }
 
     public function writeMaintenanceAction()

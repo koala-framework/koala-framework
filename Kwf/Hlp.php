@@ -18,8 +18,8 @@ class Kwf_Hlp {
         }
     }
     
-    function hlp($key) {
-        $language = Kwf_Trl::getInstance()->getTargetLanguage();
+    function hlp($key, $language = null) {
+        if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
         if ($this->_xml) {
             $element = $this->_xml->xpath("/hlp/text[@key='$key']/$language");
             if ($element) {
@@ -29,8 +29,8 @@ class Kwf_Hlp {
         return null;
     }
 
-    function hlpKwf($key) {
-        $language = Kwf_Trl::getInstance()->getTargetLanguage();
+    function hlpKwf($key, $language = null) {
+        if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
         if ($this->_xml) {
             $element = $this->_xmlKwf->xpath("/hlp/text[@key='$key']/$language");
             if ($element) {

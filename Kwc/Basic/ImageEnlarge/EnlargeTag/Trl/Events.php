@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Abstract_Image_Trl_Events
+class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Events
 {
 
     private function _canCreateUsIndirectly($class)
@@ -23,8 +23,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Abstract_Image_Tr
                 $imageClass = Kwc_Abstract::getChildComponentClass($class, 'image');
                 $ret[] = array(
                     'class' => $imageClass,
-                    'event' => 'Kwf_Component_Event_Media_Changed',
-                    'callback' => 'onMediaChanged'
+                    'event' => 'Kwc_Abstract_Image_ImageChangedEvent',
+                    'callback' => 'onImageChanged'
                 );
                 $ret[] = array(
                     'class' => $imageClass,
@@ -35,11 +35,22 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Abstract_Image_Tr
                 $masterComponentClass = Kwc_Abstract::getSetting($class, 'masterComponentClass');
                 $ret[] = array(
                     'class' => $masterComponentClass,
-                    'event' => 'Kwf_Component_Event_Media_Changed',
-                    'callback' => 'onMasterMediaChanged'
+                    'event' => 'Kwc_Abstract_Image_ImageChangedEvent',
+                    'callback' => 'onMasterImageChanged'
                 );
                 $ret[] = array(
                     'class' => $masterComponentClass,
+                    'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
+                    'callback' => 'onClassContentChanged'
+                );
+
+                $ret[] = array(
+                    'class' => $class,
+                    'event' => 'Kwf_Component_Event_Component_ContentChanged',
+                    'callback' => 'onImageContentChanged'
+                );
+                $ret[] = array(
+                    'class' => $class,
                     'event' => 'Kwf_Component_Event_ComponentClass_ContentChanged',
                     'callback' => 'onClassContentChanged'
                 );
@@ -55,44 +66,71 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Abstract_Image_Tr
         ));
     }
 
-    public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
+    public function onImageContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
+    {
+        $childComponents = $event->component->getChildComponents(array(
+            'componentClass' => $this->_class
+        ));
+        foreach ($childComponents as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+                $this->_class, $c
+            ));
+
+            $imageData = $c->getComponent()->getImageData();
+            if ($imageData) {
+                $dim = $c->getComponent()->getImageDimensions();
+                $typeBase = $c->getComponent()->getBaseType();
+                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
+                foreach ($steps as $step) {
+                    $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                        $this->_class, $c, str_replace('{width}', $step, $typeBase)
+                    ));
+                }
+            }
+        }
+    }
+
+    public function onImageChanged(Kwc_Abstract_Image_ImageChangedEvent $event)
     {
         $components = $event->component->parent
             ->getRecursiveChildComponents(array('componentClass' => $this->_class));
         foreach ($components as $component) {
-            $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                $this->_class, $component
-            ));
+            $imageData = $component->getComponent()->getImageData();
+            if ($imageData) {
+                $dim = $component->getComponent()->getImageDimensions();
+                $typeBase = $component->getComponent()->getBaseType();
+                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
+                foreach ($steps as $step) {
+                    $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                        $this->_class, $component, str_replace('{width}', $step, $typeBase)
+                    ));
+                }
+            }
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                 $this->_class, $component
             ));
         }
     }
 
-    public function onMasterMediaChanged(Kwf_Component_Event_Media_Changed $event)
+    public function onMasterImageChanged(Kwc_Abstract_Image_ImageChangedEvent $event)
     {
         $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($event->component, 'Trl');
         foreach ($chained as $c) {
             $components = $c->getRecursiveChildComponents(array('componentClass' => $this->_class));
             foreach ($components as $component) {
-                $this->fireEvent(new Kwf_Component_Event_Media_Changed(
-                    $this->_class, $component
-                ));
+                $imageData = $component->getComponent()->getImageData();
+                $dim = $component->getComponent()->getImageDimensions();
+                $typeBase = $component->getComponent()->getBaseType();
+                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
+                foreach ($steps as $step) {
+                    $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                        $this->_class, $component, str_replace('{width}', $step, $typeBase)
+                    ));
+                }
                 $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                     $this->_class, $component
                 ));
             }
-        }
-    }
-
-    //gets called when own row gets updated, weather component is visible or not
-    protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
-    {
-        //don't call parent, as it would fire Media_Changed which we don't need in that case (as our own image in the alternative preview image)
-        if ($event->isDirty(array('own_image'))) {
-            $this->fireEvent(new Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_AlternativePreviewChangedEvent(
-                $this->_class, $c
-            ));
         }
     }
 }

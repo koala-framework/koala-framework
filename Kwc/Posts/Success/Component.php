@@ -3,7 +3,7 @@ class Kwc_Posts_Success_Component extends Kwc_Form_Success_Component
 {
     protected function _getTargetPage()
     {
-        return $this->getData()->getParentPage();
+        return $this->getData()->getPage();
     }
     public function getTemplateVars()
     {

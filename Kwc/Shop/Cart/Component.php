@@ -24,9 +24,7 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret['placeholder']['checkout'] = trlKwfStatic('To checkout');
         $ret['placeholder']['headline'] = trlKwfStatic('Your cart contains');
 
-        $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Component.js';
         $ret['assets']['files'][] = 'kwf/Kwc/Shop/Cart/Keepalive.js';
-        $ret['assets']['dep'][] = 'KwfOnReady';
         $ret['assets']['dep'][] = 'ExtConnection';
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
@@ -59,6 +57,17 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret['countProducts'] = $this->getData()->countChildComponents(array('generator'=>'detail'));
         $ret['checkout'] = $this->getData()->getChildComponent('_checkout');
         $ret['shop'] = $this->getData()->getParentPage();
+
+        $ret['order'] = Kwf_Model_Abstract::getInstance($this->_getSetting('childModel'))
+        ->getReferencedModel('Order')
+        ->getCartOrder();
+        $ret['subTotal'] = $ret['order']->getSubTotal();
+        $ret['total'] = $ret['order']->getTotal();
+
+        $ret['sumRows'] = $ret['order']->getSumRows();
+        foreach ($ret['sumRows'] as $k=>$i) {
+            $ret['sumRows'][$k]['text'] = $this->getData()->trlStaticExecute($i['text']);
+        }
         return $ret;
     }
 

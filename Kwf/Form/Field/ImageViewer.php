@@ -43,10 +43,10 @@ class Kwf_Form_Field_ImageViewer extends Kwf_Form_Field_Abstract
             $size = array(
                 'width' => 150,
                 'height' => 200,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
+                'cover' => false,
             );
             return array(
-                'contents' => Kwf_Media_Image::scale($uploadRow->getFileSource(), $size),
+                'contents' => Kwf_Media_Image::scale($uploadRow->getFileSource(), $size, $uploadRow->id),
                 'mimeType' => $uploadRow->mime_type
             );
         } else {

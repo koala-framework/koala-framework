@@ -38,8 +38,8 @@ abstract class Kwc_Abstract_Feed_Component extends Kwc_Abstract
             //'author' => ,
             //'email' => ,
             'copyright' => Zend_Registry::get('config')->application->name,
-            'generator' => 'Vivid Planet Software GmbH',
-            'language' => 'de', //TODO
+            'generator' => 'Koala Framework',
+            'language' => $this->getData()->getLanguage(),
             'entries' => $this->_getRssEntries()
         );
         $feed = Zend_Feed::importArray($feedArray, 'rss');

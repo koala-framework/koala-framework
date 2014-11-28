@@ -1,9 +1,8 @@
 <?php
 class Kwf_Util_Setup
 {
-    public static function minimalBootstrapAndGenerateFile()
+    private static function _getZendPath()
     {
-        if (!defined('KWF_PATH')) define('KWF_PATH', realpath(dirname(__FILE__).'/../..'));
         if (file_exists(KWF_PATH.'/include_path')) {
             $zendPath = trim(file_get_contents(KWF_PATH.'/include_path'));
             $zendPath = str_replace(
@@ -14,9 +13,16 @@ class Kwf_Util_Setup
         } else {
             die ('zend not found');
         }
+        return $zendPath;
+    }
+
+    public static function minimalBootstrapAndGenerateFile()
+    {
+        if (!defined('KWF_PATH')) define('KWF_PATH', realpath(dirname(__FILE__).'/../..'));
 
         //reset include path, don't use anything from php.ini
-        set_include_path(get_include_path() . PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . $zendPath);
+        set_include_path('.' . PATH_SEPARATOR . KWF_PATH . PATH_SEPARATOR . self::_getZendPath());
+        if (defined('VKWF_PATH')) set_include_path(get_include_path().PATH_SEPARATOR . VKWF_PATH);
 
         require_once 'Kwf/Loader.php';
         Kwf_Loader::registerAutoload();
@@ -52,11 +58,15 @@ class Kwf_Util_Setup
 
     public static function generateCode()
     {
-        $ip = get_include_path();
-        $ip = explode(PATH_SEPARATOR, $ip);
+        $ip = array(
+            '.',
+            KWF_PATH,
+            self::_getZendPath()
+        );
+        if (defined('VKWF_PATH')) $ip[] = VKWF_PATH;
         $ip[] = 'cache/generated';
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
-            $ip[] = $p;
+            if ($p) $ip[] = $p;
         }
         $ip = array_unique($ip);
 
@@ -103,7 +113,8 @@ class Kwf_Util_Setup
         if (Kwf_Setup::getBaseUrl()) {
             $ret .= "if (\$requestUri !== null) {\n";
             $ret .= "    if (substr(\$requestUri, 0, ".strlen(Kwf_Setup::getBaseUrl()).") != '".Kwf_Setup::getBaseUrl()."') {\n";
-            $ret .= "        throw new Exception('Invalid baseUrl');\n";
+            $ret .= "        echo 'Invalid baseUrl, expected \'".Kwf_Setup::getBaseUrl()."\'';\n";
+            $ret .= "        exit;\n";
             $ret .= "    }\n";
             $ret .= "    \$requestUri = substr(\$requestUri, ".strlen(Kwf_Setup::getBaseUrl()).");\n";
             $ret .= "}\n";
@@ -147,13 +158,21 @@ class Kwf_Util_Setup
         $ret .= "    }\n";
         $ret .= "}\n";
 
+        if (Kwf_Config::getValue('debug.error.log')) {
+            $ret .= "ini_set('display_errors', false);\n";
+        }
+
         $ret .= "date_default_timezone_set('Europe/Berlin');\n";
 
         if (function_exists('mb_internal_encoding')) {
             $ret .= "mb_internal_encoding('UTF-8');\n";
         }
-        if (function_exists('iconv_set_encoding')) {
-            $ret .= "iconv_set_encoding('internal_encoding', 'utf-8');\n";
+        if (PHP_VERSION_ID < 50600) {
+            if (function_exists('iconv_set_encoding')) {
+                $ret .= "iconv_set_encoding('internal_encoding', 'utf-8');\n";
+            }
+        } else {
+            $ret .= "ini_set('default_charset', 'UTF-8');\n";
         }
 
         $ret .= "umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen\n";
@@ -168,12 +187,9 @@ class Kwf_Util_Setup
                 $ret .= "    FirePHP::init();\n";
                 $ret .= "    ob_start();\n";
             }
-
-            if (Kwf_Config::getValue('debug.querylog')) {
-                $ret .= "    register_shutdown_function(array('Kwf_Setup', 'shutDown'));\n";
-            }
             $ret .= "}\n";
         }
+        $ret .= "register_shutdown_function(array('Kwf_Setup', 'shutDown'));\n";
 
 
         $ret .= "if (!class_exists('Kwf_Config', false)) {\n";
@@ -214,7 +230,6 @@ class Kwf_Util_Setup
         $ret .= "    } else {\n";
         $preloadClasses = array();
         $preloadClasses[] = 'Kwf_Assets_Loader';
-        $preloadClasses[] = 'Kwf_Assets_Dependencies';
         $preloadClasses[] = 'Kwf_Media_Output';
         $ret .= self::_generatePreloadClassesCode($preloadClasses, $ip);
         $ret .= "    }\n";
@@ -252,13 +267,12 @@ class Kwf_Util_Setup
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
 
         if (Kwf_Config::getValue('debug.checkBranch') && is_file('kwf_branch')) {
-            $ret .= "if (trim(file_get_contents('kwf_branch')) != Kwf_Config::getValue('application.kwf.version')) {\n";
-            $ret .= "    \$validCommands = array('shell', 'export', 'copy-to-test');\n";
-            $ret .= "    if (php_sapi_name() != 'cli' || !isset(\$_SERVER['argv'][1]) || !in_array(\$_SERVER['argv'][1], \$validCommands)) {\n";
-            $ret .= "        \$required = trim(file_get_contents('kwf_branch'));\n";
-            $ret .= "        throw new Kwf_Exception_Client(\"Invalid Kwf branch. Required: '\$required', used: '\".Kwf_Config::getValue('application.kwf.version').\"'\");\n";
+            $ret .= "    \$requiredBranch = trim(file_get_contents('kwf_branch'));\n";
+            $ret .= "    \$configContents = file_get_contents(Kwf_Config::getValue('path.kwf').'/config.ini'); //don't use Kwf_Config as that might be cached\n";
+            $ret .= "    if (strpos(\$configContents, \"application.kwf.version = \$requiredBranch\n\") === false) {\n";
+            $ret .= "        preg_match(\"#application\.kwf\.version = (.*)\\n#\", \$configContents, \$m);\n";
+            $ret .= "        throw new Kwf_Exception_Client(\"Invalid Kwf branch. Required: '\$requiredBranch', used: '\".\$m[1].\"'\n\");\n";
             $ret .= "    }\n";
-            $ret .= "}\n";
         }
 
         $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
@@ -397,7 +411,7 @@ class Kwf_Util_Setup
             $ret .= "set_time_limit($tl);\n";
         }
 
-        $locale = Kwf_Trl::getInstance()->trlc('locale', 'C', array(), Kwf_Trl::SOURCE_KWF, Kwf_Trl::getInstance()->getWebCodeLanguage());
+        $locale = Kwf_Trl::getInstance()->trlcKwf('locale', 'C', array(), Kwf_Trl::getInstance()->getWebCodeLanguage());
         $ret .= "setlocale(LC_ALL, explode(', ', '".$locale."'));\n";
         /*
             Das LC_NUMERIC wird absichtlich ausgenommen weil:

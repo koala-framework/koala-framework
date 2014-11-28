@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Kwc_Image
+ * @group Image
  */
 class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
 {
@@ -35,10 +36,11 @@ class Kwc_Basic_Image_Cache_Test extends Kwc_TestAbstract
 
         $this->_process();
         $html = $this->_root->render();
+        $dim = $this->_root->getChildComponent('-1')->getComponent()->getImageDimensions();
 
         $this->assertContains('kwcBasicImageCacheRootImagesEnlargeComponent', $html);
         $this->assertContains('kwcBasicImageCacheRootImageEnlargeComponent', $html);
-        $this->assertRegExp("#/media/Kwc_Basic_Image_Cache_Root_ImageEnlargeComponent/root-1/default/[^/]+/[0-9]+/foo.png#ms", $html);
+        $this->assertRegExp("#/media/Kwc_Basic_Image_Cache_Root_ImageEnlargeComponent/root-1/dh-".$dim['width']."-[^/]+/[^/]+/[0-9]+/foo.png#ms", $html);
     }
 
     public function testNextPreviousLinks()

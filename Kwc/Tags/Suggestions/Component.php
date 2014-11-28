@@ -5,8 +5,6 @@ class Kwc_Tags_Suggestions_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['assets']['dep'][] = 'KwfClearOnFocus';
-        $ret['assets']['dep'][] = 'KwfOnReady';
-        $ret['assets']['files'][] = 'kwf/Kwc/Tags/Suggestions/Component.js';
         $ret['menuConfig'] = 'Kwc_Tags_Suggestions_MenuConfig';
         $ret['componentName'] = trlKwfStatic('New Tags');
         return $ret;

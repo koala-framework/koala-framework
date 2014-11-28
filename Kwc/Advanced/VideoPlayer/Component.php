@@ -12,11 +12,10 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             'componentIcon' => new Kwf_Asset('film'),
             'extConfig' => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
-        $ret['assets']['files'][] = 'kwf/Kwc/Advanced/VideoPlayer/Component.js';
+        $ret['assetsAdmin']['dep'][] = 'KwfFormCards';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assets']['dep'][] = 'jQuery';
         $ret['assets']['dep'][] = 'mediaelement';
-        $ret['assets']['dep'][] = 'KwfOnReady';
 
         $ret['generators']['child']['component']['previewImage'] = 'Kwc_Advanced_VideoPlayer_PreviewImage_Component';
 
@@ -48,9 +47,9 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['sources'] = array();
 
         //mp4
@@ -100,6 +99,15 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         }
 
         return $ret;
+    }
+
+    public function getContentWidth()
+    {
+        $dimensions = $this->getVideoDimensions();
+        if ($dimensions['width'] == '100%') {
+            return parent::getContentWidth();
+        }
+        return $dimensions['width'];
     }
 
     public function getVideoDimensions()

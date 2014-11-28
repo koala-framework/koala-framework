@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Kwc_Image
+ * @group Image
  */
 class Kwc_Basic_Image_Test extends Kwc_TestAbstract
 {
@@ -17,7 +18,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $url = explode('/', trim($url, '/'));
         $this->assertEquals('Kwc_Basic_Image_FixDimensionComponent', $url[1]);
         $this->assertEquals('1600', $url[2]);
-        $this->assertEquals('default', $url[3]);
+        $this->assertContains(Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-', $url[3]);
         $this->assertEquals('foo.png', $url[6]);
     }
 
@@ -34,26 +35,36 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('1600');
         $this->assertTrue($c->hasContent());
 
-        $this->assertEquals(array('width'=>100, 'height'=>100, 'scale'=>Kwf_Media_Image::SCALE_DEFORM, 'rotate' => null),
+        $this->assertEquals(array('width'=>100, 'height'=>100, 'rotate' => 0,
+            'crop' => array(
+                'x' => 0,
+                'y' => 0,
+                'width' => 16,
+                'height' => 16
+            )
+        ),
         $c->getComponent()->getImageDimensions());
     }
 
     public function testGetMediaOutput()
     {
-        $o = Kwc_Basic_Image_Component::getMediaOutput('1600', 'default', 'Kwc_Basic_Image_FixDimensionComponent');
+        $o = Kwc_Basic_Image_Component::getMediaOutput('1600', 'dh-16-76b7ff', 'Kwc_Basic_Image_FixDimensionComponent');
         $this->assertEquals('image/png', $o['mimeType']);
-        $im = new Imagick();
-        $im->readImageBlob($o['contents']);
-        $this->assertEquals(100, $im->getImageWidth());
-        $this->assertEquals(100, $im->getImageHeight());
+        $im = new Imagick($o['file']);
+        // File can be maximum original-size or dpr2 of dimension
+        $this->assertEquals(16, $im->getImageWidth());
+        $this->assertEquals(16, $im->getImageHeight());
     }
 
     public function testHtml()
     {
         $html = $this->_root->getComponentById(1600)->render();
-
-        $this->assertRegExp('#^\s*<div class="kwcAbstractImage kwcBasicImageFixDimensionComponent".*>'.
-            '\s*<img src="/media/Kwc_Basic_Image_FixDimensionComponent/1600/default/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'.
+        $this->assertRegExp('#^\s*<div class="kwcAbstractComposite kwcAbstractImage kwcBasicImageFixDimensionComponent[^"]*".*>'.
+            '\s*<div class="container" .*>'.
+            '\s*<noscript>'.
+            '\s*<img src="/media/Kwc_Basic_Image_FixDimensionComponent/1600/'.Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-[^/]+/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'.
+            '\s*</noscript>'.
+            '\s*</div>'.
             '\s*</div>\s*$#ms', $html);
     }
 
@@ -63,14 +74,21 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $this->assertFalse($c->hasContent());
 
         $html = $c->render();
-        $this->assertRegExp('#^\s*<div class="kwcAbstractImage kwcBasicImageFixDimensionComponent".*>\s*</div>\s*$#ms', $html);
+        $this->assertRegExp('#^\s*<div class="kwcAbstractComposite kwcAbstractImage kwcBasicImageFixDimensionComponent[^"]*".*>\s*</div>\s*$#ms', $html);
     }
 
     public function testDimensionSetByRow()
     {
         $c = $this->_root->getComponentById('1603');
 
-        $this->assertEquals(array('width'=>10, 'height'=>10, 'scale'=>Kwf_Media_Image::SCALE_DEFORM, 'rotate' => null),
+        $this->assertEquals(array('width'=>10, 'height'=>10, 'rotate' => 0,
+            'crop' => array(
+                'x' => 0,
+                'y' => 0,
+                'width' => 16,
+                'height' => 16
+            )
+        ),
         $c->getComponent()->getImageDimensions());
     }
 
@@ -80,11 +98,18 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $this->assertTrue($c->hasContent());
         $url = $c->getComponent()->getImageUrl();
         $this->assertNotNull($url);
+        $assertion = array('width'=>16, 'height'=>16, 'rotate'=>0,
+            'crop'=> array (
+                'width' => 16,
+                'height' => 16,
+                'x' => 0,
+                'y' => 0
+            ),
+            'keepOriginal'=>true
+        );
+        $this->assertEquals($assertion, $c->getComponent()->getImageDimensions());
 
-        $this->assertEquals(array('width'=>16, 'height'=>16, 'scale'=>Kwf_Media_Image::SCALE_DEFORM, 'rotate'=>null),
-        $c->getComponent()->getImageDimensions());
-
-        $o = Kwc_Basic_Image_Component::getMediaOutput($c->componentId, 'default', $c->componentClass);
+        $o = Kwc_Basic_Image_Component::getMediaOutput($c->componentId, Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-abc', $c->componentClass);
         $this->assertNotNull($o);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -97,6 +122,8 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
     public function testParentImage()
     {
         $c = $this->_root->getComponentById('1605-child');
+        $this->assertEquals(Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}-551aa9', $c->getComponent()->getBaseType());
+
         $this->assertTrue($c->hasContent());
         $url = $c->getComponent()->getImageUrl();
         $this->assertNotNull($url);
@@ -104,8 +131,7 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $class = $url[1];
         $id = $url[2];
         $type = $url[3];
-
-        $o = Kwc_Basic_Image_Component::getMediaOutput($id, $type, $class);
+        $o = Kwf_Media::getOutput($class, $id, $type);
         $this->assertNotNull($o);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -113,38 +139,46 @@ class Kwc_Basic_Image_Test extends Kwc_TestAbstract
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
 
-        Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
+        Kwf_Media::clearCache('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-551aa9');
+
+        Kwc_Basic_Image_ParentImageComponent_Child_Component::$getMediaOutputCalled = 0;
+        $o = Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-551aa9');
+        $this->assertEquals(1, Kwc_Basic_Image_ParentImageComponent_Child_Component::$getMediaOutputCalled);
         $c = $this->_root->getComponentById('1605');
         $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_TestModel')->getRow('1605');
         $row->kwf_upload_id = 2;
         $row->save();
         Kwf_Component_ModelObserver::getInstance()->process();
-        Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_ParentImageComponent_Child_Component', '1605-child', Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-551aa9');
         $this->assertEquals(2, Kwc_Basic_Image_ParentImageComponent_Child_Component::$getMediaOutputCalled);
     }
 
     public function testClearOutputCache()
     {
-        Kwf_Media::clearCache('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        $c = $this->_root->getComponentById('1600');
+        $this->assertEquals(Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}-76b7ff', $c->getComponent()->getBaseType());
+
+        Kwf_Media::clearCache('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-76b7ff');
 
         Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled = 0;
 
-        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-76b7ff');
         $this->assertEquals(1, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
-        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-76b7ff');
         $this->assertEquals(1, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
-        Kwf_Media::clearCache('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
-        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        Kwf_Media::clearCache('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-76b7ff');
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX.'16-76b7ff');
         $this->assertEquals(2, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
-        $c = $this->_root->getComponentById('1600');
         $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_TestModel')->getRow('1600');
         $row->kwf_upload_id = 2;
         $row->save();
         Kwf_Component_ModelObserver::getInstance()->process();
-        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        Kwf_Component_Data_Root::reset();
+
+        Kwf_Media::getOutput('Kwc_Basic_Image_FixDimensionComponent', '1600', Kwf_Media::DONT_HASH_TYPE_PREFIX.'100-76b7ff');
         $this->assertEquals(3, Kwc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
     }
 

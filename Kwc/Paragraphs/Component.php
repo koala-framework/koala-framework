@@ -16,6 +16,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/DataView.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/AddParagraphButton.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/Panel.css';
+        $ret['assetsAdmin']['dep'][] = 'KwfOnReadyCore';
         $ret['assetsAdmin']['dep'][] = 'KwfAutoGrid';
         $ret['generators']['paragraphs'] = array(
             'class' => 'Kwf_Component_Generator_Table',
@@ -44,6 +45,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
             $cssClass = 'kwcParagraphItem';
             $row = $paragraph->getRow();
             if ($this->_getSetting('useMobileBreakpoints') && $row->device_visible) $cssClass .= ' ' . $row->device_visible;
+            $cssClass .= ' outer'.ucfirst(Kwf_Component_Abstract::formatCssClass($paragraph->componentClass));
             $ret['paragraphs'][] = array(
                 'data' => $paragraph,
                 'class' => $cssClass
@@ -59,12 +61,5 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
             if ($c->hasContent()) return true;
         }
         return false;
-    }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_ChildModel();
-        return $ret;
     }
 }

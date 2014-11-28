@@ -1,23 +1,19 @@
 <?php
-class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Abstract_Image_Trl_Component
+class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Component
+    implements Kwf_Media_Output_IsValidInterface
 {
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['generators']['image']['component'] =
-            'Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Image_Component.'.$masterComponentClass;
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-
-        $childImageComponent = $this->getData()->getChildComponent('-image')->getComponent();
-        $ret['imageUrl'] = $childImageComponent->getImageUrl();
-
+        $ret['imageUrl'] = $this->getImageUrl();
         $ret['imagePage'] = $this->getData()->getChildComponent('_imagePage');
-
         return $ret;
     }
 
@@ -29,39 +25,103 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Abstract_Image
         }
 
         $masterComponentClass = Kwc_Abstract::getSetting(
-            $this->_getImageEnlargeComponentData()->componentClass, 'masterComponentClass'
+            $this->_getImageEnlargeComponent()->getData()->componentClass, 'masterComponentClass'
         );
         if (Kwc_Abstract::getSetting($masterComponentClass, 'imageCaption')) {
-            $ret['imageCaption'] = $this->_getImageEnlargeComponentData()->getComponent()
+            $ret['imageCaption'] = $this->_getImageEnlargeComponent()
                 ->getRow()->image_caption;
         }
         //TODO implement fullSizeDownloadable
         return $ret;
     }
 
+    /**
+     * This function is called by Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component
+     */
     public final function getOptions()
     {
         return $this->_getOptions();
     }
 
-    private function _getImageEnlargeComponentData()
+    /**
+     * This function is called by Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component
+     */
+    public function getImageDimensions()
+    {
+        $dimension = $this->getData()->chained->getComponent()->_getSetting('dimension');
+        if ($this->getData()->chained->getComponent()->getRow()->use_crop) {
+            $parentDimensions = $this->_getImageEnlargeComponent()->getImageDimensions();
+            $dimension['crop'] = $parentDimensions['crop'];
+        }
+        $data = $this->getImageData();
+        return Kwf_Media_Image::calculateScaleDimensions($data['file'], $dimension);
+    }
+
+    public function getImageData()
+    {
+        return $this->_getImageEnlargeComponent()->getImageData();
+    }
+
+    public final function getImageDataOrEmptyImageData()
+    {
+        return $this->_getImageEnlargeComponent()->getImageDataOrEmptyImageData();
+    }
+
+    /**
+     * This function is called by Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component
+     */
+    public function getImageUrl()
+    {
+        $dimensions = $this->getImageDimensions();
+        $baseUrl = $this->getBaseImageUrl();
+        if ($baseUrl) {
+            return str_replace('{width}', $dimensions['width'], $this->getBaseImageUrl());
+        }
+        return null;
+    }
+
+    public function getBaseType()
+    {
+        return $this->getData()->chained->getComponent()->getBaseType();
+    }
+
+    public function getBaseImageUrl()
+    {
+        $data = $this->getImageData();
+        if ($data) {
+            return Kwf_Media::getUrl($this->getData()->componentClass,
+                        $this->getData()->componentId,
+                        $this->getBaseType(),
+                        $data['filename']);
+        }
+        return null;
+    }
+
+    private function _getImageEnlargeComponent()
     {
         $d = $this->getData();
         while (!is_instance_of($d->componentClass, 'Kwc_Basic_ImageEnlarge_Trl_Component')) {
             $d = $d->parent;
         }
-        return $d;
+        return $d->getComponent();
     }
 
-    public function getCacheMeta()
+    public static function isValidMediaOutput($id, $type, $className)
     {
-        $ret = parent::getCacheMeta();
+        return Kwf_Media_Output_Component::isValidImage($id, $type);
+    }
 
-        //own_image checkbox kann sich aendern
-        $row = $this->_getImageEnlargeComponentData()->getComponent()->getRow();
-        $model = $row->getModel();
-        $primaryKey = $model->getPrimaryKey();
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model($model);
-        return $ret;
+    public static function getMediaOutput($id, $type, $className)
+    {
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
+        if (!$component) return null;
+
+        $data = $component->getComponent()->getImageDataOrEmptyImageData();
+        if (!$data) {
+            return null;
+        }
+        $dimension = $component->getComponent()->getImageDimensions();
+
+        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dimension, $type);
     }
 }

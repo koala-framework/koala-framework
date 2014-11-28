@@ -73,11 +73,11 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         $html = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master_table')->render();
         $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-en_table')->render();
         $this->assertNotEquals($html, $html2);
-        $this->assertRegExp("#.*<td class=\"col1 first\">Abc</td>.*#", $html);
-        $this->assertRegExp("#.*<td class=\"col2\">1234</td>.*#", $html);
-        $this->assertRegExp("#.*<td class=\"col3 last\">1234</td>.*#", $html);
-        $this->assertRegExp("#.*<td class=\"col2\">4321</td>.*#", $html2);
-        $this->assertRegExp("#.*<td class=\"col3 last\">234</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col1 first\">(\s)*Abc(\s)*</td>.*#", $html);
+        $this->assertRegExp("#.*<td class=\"col2\">\s*1234\s*</td>.*#", $html);
+        $this->assertRegExp("#.*<td class=\"col3 last\">\s*1234\s*</td>.*#", $html);
+        $this->assertRegExp("#.*<td class=\"col2\">\s*4321\s*</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col3 last\">\s*234\s*</td>.*#", $html2);
     }
 
     public function insertDefaultEntriesForGermanAndReturnModel()
@@ -106,11 +106,11 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         //check cache after create trl-data
         $this->_process();
         $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
-        preg_match_all("#.*<td class=\"col1 first\">.*</td>.*#", $html2, $matches);
+        preg_match_all("#.*<td class=\"col1 first\">\s*.*\s*</td>.*#", $html2, $matches);
         $this->assertEquals(count($matches[0]), 1);
         //check for 4312-value and first master-data
-        $this->assertRegExp("#.*<td class=\"col2\">4312</td>.*#", $html2);
-        $this->assertRegExp("#.*<td class=\"col1 first\">Abc</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col2\">\s*4312\s*</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col1 first\">\s*Abc\s*</td>.*#", $html2);
     }
 
     public function testHtmlChangedAfterTrlDataChanged()
@@ -130,11 +130,11 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         //check cache after trl-data change
         $this->_process();
         $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
-        preg_match_all("#.*<td class=\"col1 first\">.*</td>.*#", $html2, $matches);
+        preg_match_all("#.*<td class=\"col1 first\">\s*.*\s*</td>.*#", $html2, $matches);
         $this->assertEquals(count($matches[0]), 1);
         //check for abcdef-value and first master-data
-        $this->assertRegExp("#.*<td class=\"col2\">abcdef</td>.*#", $html2);
-        $this->assertRegExp("#.*<td class=\"col1 first\">Abc</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col2\">\s*abcdef\s*</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col1 first\">\s*Abc\s*</td>.*#", $html2);
     }
 
     public function testHtmlChangedAfterMasterDataChanged()
@@ -152,11 +152,11 @@ class Kwc_Trl_Table_Test extends Kwc_TestAbstract
         //check cache after master-data change
         $this->_process();
         $html2 = Kwf_Component_Data_Root::getInstance()->getComponentById('root-de_table')->render();
-        preg_match_all("#.*<td class=\"col1 first\">.*</td>.*#", $html2, $matches);
+        preg_match_all("#.*<td class=\"col1 first\">\s*.*\s*</td>.*#", $html2, $matches);
         $this->assertEquals(count($matches[0]), 1);
         //check for 4312-value and first master-data and changed master-data
-        $this->assertRegExp("#.*<td class=\"col2\">4312</td>.*#", $html2);
-        $this->assertRegExp("#.*<td class=\"col1 first\">Abc</td>.*#", $html2);
-        $this->assertRegExp("#.*<td class=\"col3 last\">123</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col2\">\s*4312\s*</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col1 first\">\s*Abc\s*</td>.*#", $html2);
+        $this->assertRegExp("#.*<td class=\"col3 last\">\s*123\s*</td>.*#", $html2);
     }
 }

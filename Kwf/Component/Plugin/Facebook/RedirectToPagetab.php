@@ -8,8 +8,8 @@ class Kwf_Component_Plugin_Facebook_RedirectToPagetab extends Kwf_Component_Plug
 {
     public function replaceOutput($renderer)
     {
-        if (!Kwf_Config::getValue('kwc.fbAppData.pageTabUrl')) {
-            throw new Kwf_Exception('kwc.fbAppData.pageTabUrl has to be set in config');
+        if (!Kwf_Config::getValue('fbAppData.pageTabUrl')) {
+            throw new Kwf_Exception('fbAppData.pageTabUrl has to be set in config');
         }
         $facebook = Kwf_Util_Facebook_Api::getInstance();
         $userId = $facebook->getUser();
@@ -17,7 +17,7 @@ class Kwf_Component_Plugin_Facebook_RedirectToPagetab extends Kwf_Component_Plug
         // check, if user is authed, or if we are on the right pagetab
         //(that information is provided by the signedRequest)
         if (isset($_REQUEST['request_ids'])) {
-            echo '<script>top.location.href = "'.Kwf_Config::getValue('kwc.fbAppData.pageTabUrl').'";</script>';
+            echo '<script>top.location.href = "'.Kwf_Config::getValue('fbAppData.pageTabUrl').'";</script>';
             exit;
         } else {
             return false;

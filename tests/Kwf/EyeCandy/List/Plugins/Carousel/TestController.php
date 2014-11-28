@@ -4,7 +4,7 @@ class Kwf_EyeCandy_List_Plugins_Carousel_TestController extends Kwf_Controller_A
     public function indexAction()
     {
         $view = new Kwf_View();
-        echo $view->render(dirname(__FILE__).'/Test.tpl');
+        $this->getResponse()->setBody($view->render(dirname(__FILE__).'/Test.tpl'));
         $this->_helper->viewRenderer->setNoRender(true);
     }
 }

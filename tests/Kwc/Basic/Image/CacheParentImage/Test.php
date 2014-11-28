@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Kwc_Image
+ * @group Image
  */
 class Kwc_Basic_Image_CacheParentImage_Test extends Kwc_TestAbstract
 {
@@ -20,7 +21,7 @@ class Kwc_Basic_Image_CacheParentImage_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', $url, $m));
         $this->assertEquals($m[1], 'Kwc_Basic_Image_CacheParentImage_Image_Component');
         $this->assertEquals($m[2], 'root_image');
-        $this->assertEquals($m[3], 'default');
+        $this->assertContains('dh-10-', $m[3]);
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
         $im = new Imagick();
         $im->readImageBlob($o['contents']);
@@ -43,7 +44,7 @@ class Kwc_Basic_Image_CacheParentImage_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', $url, $m));
         $this->assertEquals($m[1], 'Kwc_Basic_Image_CacheParentImage_Image_Component');
         $this->assertEquals($m[2], 'root_image');
-        $this->assertEquals($m[3], 'default');
+        $this->assertContains('dh-10-', $m[3]);
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
         $im = new Imagick();
         $im->readImageBlob($o['contents']);
@@ -62,12 +63,11 @@ class Kwc_Basic_Image_CacheParentImage_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', $url, $m));
         $this->assertEquals($m[1], 'Kwc_Basic_Image_CacheParentImage_ParentImage_Component');
         $this->assertEquals($m[2], 'root_image-parentImage');
-        $this->assertEquals($m[3], 'default');
+        $this->assertContains('dh-16-', $m[3]);
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
-        $im = new Imagick();
-        $im->readImageBlob($o['contents']);
-        $this->assertEquals(20, $im->getImageWidth());
-        $this->assertEquals(20, $im->getImageHeight());
+        $im = new Imagick($o['file']);
+        $this->assertEquals(16, $im->getImageWidth());
+        $this->assertEquals(16, $im->getImageHeight());
 
         $model = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_CacheParentImage_Image_TestModel');
         $row = $model->getRow('root_image');
@@ -85,7 +85,8 @@ class Kwc_Basic_Image_CacheParentImage_Test extends Kwc_TestAbstract
         $this->assertTrue(!!preg_match('#/media/([^/]+)/([^/]+)/([^/]+)#', $url, $m));
         $this->assertEquals($m[1], 'Kwc_Basic_Image_CacheParentImage_ParentImage_Component');
         $this->assertEquals($m[2], 'root_image-parentImage');
-        $this->assertEquals($m[3], 'default');
+
+        $this->assertContains('dh-20-', $m[3]);
         $o = Kwf_Media::getOutput($m[1], $m[2], $m[3]);
         $im = new Imagick();
         $im->readImageBlob($o['contents']);

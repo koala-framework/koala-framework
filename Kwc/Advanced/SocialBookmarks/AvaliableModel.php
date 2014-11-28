@@ -111,6 +111,11 @@ class Kwc_Advanced_SocialBookmarks_AvaliableModel extends Kwf_Model_FnF
                 'url' => 'http://www.linkedin.com/shareArticle?url={0}',
                 'name' => 'Linkedin'
             ),
+            array(
+                'id' => 'pinterest',
+                'url' => 'http://pinterest.com/pin/create/button/?url={0}',
+                'name' => 'Pinterest'
+            ),
         );
         parent::__construct($config);
     }

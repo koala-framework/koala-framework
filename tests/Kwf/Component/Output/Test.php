@@ -30,6 +30,10 @@ class Kwf_Component_Output_Test extends Kwc_TestAbstract
         $value = $view->renderComponent($root->getChildComponent('-child'));
         $this->assertEquals('plugin(plugin(c1_child c1_childchild))', $value);
 
+        //re-render, now cached
+        $value = $view->renderComponent($root->getChildComponent('-child'));
+        $this->assertEquals('plugin(plugin(c1_child c1_childchild))', $value);
+
         $value = $view->renderMaster($root);
         $this->assertRegExp('#c1_rootmaster c1_box .*c1_root plugin\(plugin\(c1_child c1_childchild\)\).*#s', $value);
 
@@ -105,7 +109,7 @@ class Kwf_Component_Output_Test extends Kwc_TestAbstract
 
         $output = new Kwf_Component_Renderer();
         $html = $output->renderComponent(Kwf_Component_Data_Root::getInstance());
-        $this->assertEquals('<a href="/c1" rel="">C1</a> <a href="/foo?&amp;f1=1#a2" rel="bar" class="Bar">Foo</a>', $html);
+        $this->assertEquals('<a href="/c1" rel=""><span>C1</span></a> <a href="/foo?&amp;f1=1#a2" rel="bar" class="Bar"><span>Foo</span></a>', $html);
     }
 
     public function testHasContent()

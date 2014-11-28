@@ -8,7 +8,8 @@ class Kwc_Basic_LinkTag_Extern_Form extends Kwc_Abstract_Form
         $this->add(new Kwf_Form_Field_UrlField('target', trlKwf('Url')))
             ->setWidth(450)
             ->setHelpText(hlpKwf('kwc_basic_linktag_extern_target'))
-            ->setAllowBlank(false);
+            ->setAllowBlank(false)
+            ->setVtype('urltel');
 
         if (Kwc_Abstract::getSetting($class, 'hasPopup')) {
 
@@ -26,11 +27,11 @@ class Kwc_Basic_LinkTag_Extern_Form extends Kwc_Abstract_Form
                 $card->setName('popup');
 
                 $card->add(new Kwf_Form_Field_TextField('width', 'Width'))
-                    ->setValue(400)
+                    ->setDefaultValue(400)
                     ->setAllowBlank(false)
                     ->setVtype('alphanum');
                 $card->add(new Kwf_Form_Field_TextField('height', 'Height'))
-                    ->setValue(400)
+                    ->setDefaultValue(400)
                     ->setAllowBlank(false)
                     ->setVtype('alphanum');
                 $card->add(new Kwf_Form_Field_Checkbox('menubar', 'Menubar'));

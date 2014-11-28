@@ -220,6 +220,11 @@ class Kwf_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         $this->assertEquals($search, $this->getText('//body'));
     }
 
+    public function assertBodyTextContains($search)
+    {
+        $this->assertContains($search, $this->getText('//body'));
+    }
+
     public function assertTitleContains($title, $message = '')
     {
         $this->assertContains($title, $this->getTitle(), $message);

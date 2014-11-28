@@ -1,1 +1,1 @@
-columnContent <?=$this->data->componentId?>
+<?=$this->data->componentId?>

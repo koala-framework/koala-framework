@@ -4,11 +4,13 @@ class Kwc_Abstract_Cards_Form extends Kwc_Abstract_Form
     protected function _init()
     {
         parent::_init();
+        $this->setLoadAfterSave(true);
 
         $gen = Kwc_Abstract::getSetting($this->getClass(), 'generators');
         $classes = $gen['child']['component'];
         $cards = $this->add(new Kwf_Form_Container_Cards('component', trlKwf('Type')))
             ->setDefaultValue(key($classes));
+
         $cards->getCombobox()
             ->setWidth(250)
             ->setListWidth(250)

@@ -1,13 +1,9 @@
-Kwf.onContentReady(function()
-{
-    var els = Ext.query('.kwfSwitchHoverFade');
-    els.each(function(el) {
-        var hoverFade = new Kwf.Switch.HoverFade({
-            wrapper: el
-        });
+// deprecated, please don't use me
+Kwf.onElementReady('.kwfSwitchHoverFade', function(el) {
+    var hoverFade = new Kwf.Switch.HoverFade({
+        wrapper: el.dom
     });
-});
-
+}, this, {defer: true});
 
 Ext.namespace("Kwf.Switch.HoverFade");
 
@@ -30,9 +26,9 @@ Kwf.Switch.HoverFade = function(cfg) {
     this.switchContent = Ext.get(Ext.query('.switchContent', cfg.wrapper)[0]);
     this.fadeWrapper = Ext.get(cfg.wrapper);
 
-    this.switchContent.setStyle('display', 'none');
-
     if (this.switchLink && this.switchContent) {
+        this.switchContent.setStyle('display', 'none');
+
         this.switchLink.on('mouseover', function(e) {
             this.linkOver = true;
             this.fadeIn();

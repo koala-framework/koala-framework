@@ -57,7 +57,9 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
             options.scope = this;
         }
         if (!options.params) options.params = {};
-        options.params.application_max_assets_mtime = Kwf.application.maxAssetsMTime;
+        if (Kwf.isApp) {
+            options.params.applicationAssetsVersion = Kwf.application.assetsVersion;
+        }
         if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
         if (!options.url.match(':\/\/')) {
             //absolute url incl. http:// erstellen
@@ -212,6 +214,7 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
     repeatRequest: function(options) {
         Kwf.Connection.runningRequests++;
         delete options.kwfIsSuccess;
+        delete options.kwfLogin;
 
         //session token might have changed if user had to login -> update it
         if (Kwf.sessionToken) options.params.kwfSessionToken = Kwf.sessionToken;
@@ -244,16 +247,6 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
             errorMsg = e.toString()+': <br />'+response.responseText;
             var errorMsgTitle = 'Javascript Parse Exception';
         }
-        if (!errorMsg && r.exception) {
-            var p;
-            if (typeof options.params == "string") {
-                p = options.params;
-            } else {
-                p = Ext.urlEncode(options.params);
-            }
-            errorMsg = '<pre>'+r.exception+'</pre>';
-            var errorMsgTitle = 'PHP Exception';
-        }
         if (errorMsg) {
             errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />' + errorMsg;
             var sendMail = !r || !r.exception;
@@ -284,60 +277,11 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
             return;
         }
 
-        if (!r.success) {
-            if (r.wrongversion && !options.ignoreErrors) {
-                var dlg = new Ext.Window({
-                    autoCreate : true,
-                    title: trlKwf('Error - wrong version'),
-                    resizable: false,
-                    modal: true,
-                    buttonAlign:"center",
-                    width:250,
-                    height:100,
-                    plain:true,
-                    closable: false,
-                    html: trlKwf('Because of an application update the application has to be reloaded.'),
-                    buttons: [{
-                        text: trlKwf('OK'),
-                        handler: function() {
-                            location.reload();
-                        },
-                        scope: this
-                    }, {
-                        text: trlKwf('Ignore'),
-                        handler: function() {
-                            Kwf.application.maxAssetsMTime = r.maxAssetsMTime;
-                            options.params.application_max_assets_mtime = Kwf.application.maxAssetsMTime;
-                            this.repeatRequest(options);
-                            dlg.hide();
-                        },
-                        scope: this
-                    }]
-                });
-                dlg.show();
-                dlg.getEl().addClass('x-window-dlg');
-                return;
-            }
-            if (r.login && !options.ignoreErrors) {
-                options.kwfLogin = true;
-                var dlg = new Kwf.User.Login.Dialog({
-                    message: r.message,
-                    success: function() {
-                        //redo action...
-                        this.repeatRequest(options);
-                    },
-                    scope: this
-                });
-                Ext.getBody().unmask();
-                dlg.showLogin();
-                return;
-            }
-            if (!options.ignoreErrors) {
-                if (r.error) {
-                    Ext.Msg.alert(trlKwf('Error'), r.error);
-                } else {
-                    Ext.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
-                }
+        if (!r.success && !options.ignoreErrors) {
+            if (r.error) {
+                Ext.Msg.alert(trlKwf('Error'), r.error);
+            } else {
+                Ext.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
             }
             Ext.callback(options.kwfCallback.failure, options.kwfCallback.scope, [response, options]);
             return;
@@ -367,13 +311,93 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
 
         options.kwfIsSuccess = false;
 
-        errorMsgTitle = trlKwf('Error');
+        var r = Ext.decode(response.responseText);
+
+        if (r && r.wrongversion && !options.ignoreErrors) {
+            var dlg = new Ext.Window({
+                autoCreate : true,
+                title: trlKwf('Error - wrong version'),
+                resizable: false,
+                modal: true,
+                buttonAlign:"center",
+                width:250,
+                height:100,
+                plain:true,
+                closable: false,
+                html: trlKwf('Because of an application update the application has to be reloaded.'),
+                buttons: [{
+                    text: trlKwf('OK'),
+                    handler: function() {
+                        location.reload();
+                    },
+                    scope: this
+                }, {
+                    text: trlKwf('Ignore'),
+                    handler: function() {
+                        Kwf.application.assetsVersion = r.assetsVersion;
+                        options.params.applicationAssetsVersion = Kwf.application.assetsVersion;
+                        this.repeatRequest(options);
+                        dlg.hide();
+                    },
+                    scope: this
+                }]
+            });
+            dlg.show();
+            dlg.getEl().addClass('x-window-dlg');
+            return;
+        }
+        if (r && r.login && !options.ignoreErrors) {
+            options.kwfLogin = true;
+            if (!Kwf.Connection._loginDialog) {
+                Kwf.Connection._afterLoginRequests = [];
+                Kwf.Connection._loginDialog = new Kwf.User.Login.Dialog({
+                    message: r.message,
+                    success: function() {
+
+                        Kwf.Connection._loginDialog.destroy();
+                        delete Kwf.Connection._loginDialog;
+
+                        //redo requests...
+                        Kwf.Connection._afterLoginRequests.each(function(i) {
+                            this.repeatRequest(i);
+                        }, this);
+
+                        Kwf.Connection._afterLoginRequests.length = 0;
+                    },
+                    scope: this
+                });
+                Ext.getBody().unmask();
+                Kwf.Connection._loginDialog.showLogin();
+            }
+            Kwf.Connection._afterLoginRequests.push(options); //redo after login
+            return;
+        }
+
+
+        var errorText, errorMsg;
+        var errorMsgTitle = trlKwf('Error');
         if (options.errorText) {
             errorText = options.errorText;
             errorMsg = options.errorText;
+        } else if (r.exception) {
+            errorMsg = '<pre>'+r.exception.join('\n')+'</pre>';
+            errorMsgTitle = 'PHP Exception';
+        } else if (r.error) {
+            errorMsg = r.error;
+            errorMsgTitle = 'PHP Exception';
         } else {
             errorMsg = trlKwf("A connection problem occured.");
             errorText = null;
+        }
+        var retry = false;
+        if (response.status == -1) {
+            //request failed not beause of error response (eg 500) but because of eg. timeout
+            //allow the user to retry the request
+            retry = true;
+        } else {
+            //request failed because of error response (eg 500), don't allow the user to
+            //retry as it would result in the same error again
+            //however if displayErrors is enabled (during development) retry is possible (this is handled in Kwf.handleError)
         }
         if (options.ignoreErrors) {
             Ext.callback(options.kwfCallback.failure, options.kwfCallback.scope, [response, options]);
@@ -384,7 +408,7 @@ Kwf.Connection = Ext.extend(Ext.data.Connection, {
                 title: errorMsgTitle,
                 errorText: errorText,
                 mail: false,
-                checkRetry: true,
+                checkRetry: retry,
                 retry: function() {
                     this.repeatRequest(options);
                 },

@@ -53,13 +53,6 @@ class Kwc_Newsletter_Subscribe_FrontendForm extends Kwf_Form
             ->setWidth(255)
             ->setVtype('email')
             ->setAllowBlank(false);
-        $this->add(new Kwf_Form_Field_Radio('format', trlKwfStatic('Format')))
-            ->setAllowBlank(false)
-            ->setValues(array(
-                'html' => trlKwfStatic('HTML-Format'),
-                'text' => trlKwfStatic('Text-Format')
-            ))
-            ->setCls('kwf-radio-group-transparent');
 
         $this->_addEmailValidator();
     }

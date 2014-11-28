@@ -3,6 +3,7 @@
  * @group slow
  * @group Kwc_Trl
  * @group Kwc_Trl_ImageEnlarge
+ * @group Image
  *
  * Was wo angezeigt werden soll siehe Kwc_Trl_ImageEnlarge_Master
  *
@@ -29,6 +30,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
                 array('component_id'=>'root-master_test4', 'kwf_upload_id'=>'1'),
                 array('component_id'=>'root-master_test5', 'kwf_upload_id'=>'1'),
                 array('component_id'=>'root-master_test6', 'kwf_upload_id'=>'1'),
+                array('component_id'=>'root-master_test7', 'kwf_upload_id'=>'1'),
             ));
 
         //image trl
@@ -40,6 +42,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
                 array('component_id'=>'root-en_test4', 'own_image'=>1),
                 array('component_id'=>'root-en_test5', 'own_image'=>1),
                 array('component_id'=>'root-en_test6', 'own_image'=>0),
+                array('component_id'=>'root-en_test7', 'own_image'=>0),
             ));
 
         //image trl own image
@@ -51,40 +54,45 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
                 array('component_id'=>'root-en_test4-image', 'kwf_upload_id'=>'6'),
                 array('component_id'=>'root-en_test5-image', 'kwf_upload_id'=>'6'),
                 array('component_id'=>'root-en_test6-image', 'kwf_upload_id'=>null),
+                array('component_id'=>'root-en_test7-image', 'kwf_upload_id'=>'3'),
+                array('component_id'=>'root-en_test7-image', 'kwf_upload_id'=>'3'),
             ));
 
 
         //master enlarge tag
         Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_TestModel')
             ->getProxyModel()->setData(array(
-                array('component_id'=>'root-master_test1-linkTag', 'kwf_upload_id'=>null, 'preview_image' => 0),
-                array('component_id'=>'root-master_test2-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
-                array('component_id'=>'root-master_test3-linkTag', 'kwf_upload_id'=>null, 'preview_image' => 0),
-                array('component_id'=>'root-master_test4-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
-                array('component_id'=>'root-master_test5-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
-                array('component_id'=>'root-master_test6-linkTag', 'kwf_upload_id'=>'2', 'preview_image' => 1),
+                array('component_id'=>'root-master_test1-linkTag'),
+                array('component_id'=>'root-master_test2-linkTag'),
+                array('component_id'=>'root-master_test3-linkTag'),
+                array('component_id'=>'root-master_test4-linkTag'),
+                array('component_id'=>'root-master_test5-linkTag'),
+                array('component_id'=>'root-master_test6-linkTag'),
+                array('component_id'=>'root-master_test7-linkTag'),
             ));
 
         //enlarge tag trl
         Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_TestModel')
             ->getProxyModel()->setData(array(
-                array('component_id'=>'root-en_test1-linkTag', 'own_image'=>0),
-                array('component_id'=>'root-en_test2-linkTag', 'own_image'=>0),
-                array('component_id'=>'root-en_test3-linkTag', 'own_image'=>0),
-                array('component_id'=>'root-en_test4-linkTag', 'own_image'=>0),
-                array('component_id'=>'root-en_test5-linkTag', 'own_image'=>1),
-                array('component_id'=>'root-en_test6-linkTag', 'own_image'=>1),
+                array('component_id'=>'root-en_test1-linkTag'),
+                array('component_id'=>'root-en_test2-linkTag'),
+                array('component_id'=>'root-en_test3-linkTag'),
+                array('component_id'=>'root-en_test4-linkTag'),
+                array('component_id'=>'root-en_test5-linkTag'),
+                array('component_id'=>'root-en_test6-linkTag'),
+                array('component_id'=>'root-en_test7-linkTag'),
             ));
 
         //enlarge tag trl own image
         Kwf_Model_Abstract::getInstance('Kwc_Trl_ImageEnlarge_ImageEnlarge_EnlargeTag_Trl_Image_TestModel')
             ->getProxyModel()->setData(array(
-                array('component_id'=>'root-en_test1-linkTag-image', 'kwf_upload_id'=>null),
-                array('component_id'=>'root-en_test2-linkTag-image', 'kwf_upload_id'=>null),
-                array('component_id'=>'root-en_test3-linkTag-image', 'kwf_upload_id'=>null),
-                array('component_id'=>'root-en_test4-linkTag-image', 'kwf_upload_id'=>null),
-                array('component_id'=>'root-en_test5-linkTag-image', 'kwf_upload_id'=>'5'),
-                array('component_id'=>'root-en_test6-linkTag-image', 'kwf_upload_id'=>'5'),
+                array('component_id'=>'root-en_test1-linkTag-image'),
+                array('component_id'=>'root-en_test2-linkTag-image'),
+                array('component_id'=>'root-en_test3-linkTag-image'),
+                array('component_id'=>'root-en_test4-linkTag-image'),
+                array('component_id'=>'root-en_test5-linkTag-image'),
+                array('component_id'=>'root-en_test6-linkTag-image'),
+                array('component_id'=>'root-en_test7-linkTag-image'),
             ));
     }
 
@@ -94,19 +102,19 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
 
         $c = $this->_root->getComponentById('root-master_test2');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
 
         $c = $this->_root->getComponentById('root-master_test3');
         $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
 
         $c = $this->_root->getComponentById('root-master_test4');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
 
         $c = $this->_root->getComponentById('root-master_test5');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
 
         $c = $this->_root->getComponentById('root-master_test6');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
     }
 
     public function testEn()
@@ -115,75 +123,27 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
 
         $c = $this->_root->getComponentById('root-en_test2');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
 
         $c = $this->_root->getComponentById('root-en_test3');
         $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
 
         $c = $this->_root->getComponentById('root-en_test4');
-        $this->_checkTheSizes($c->render(), 6, 180, 330, 2, 120, 101);
+        $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
 
         $c = $this->_root->getComponentById('root-en_test5');
-        $this->_checkTheSizes($c->render(), 6, 180, 330, 5, 95, 120);
+        $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
 
         $c = $this->_root->getComponentById('root-en_test6');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 5, 95, 120);
-    }
-
-    public function testDeClearCacheNoCustomPreviewImage()
-    {
-        $c = $this->_root->getComponentById('root-master_test1');
         $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
-        $row = $c->getComponent()->getRow();
-        $row->kwf_upload_id = '6';
-        $row->save();
-        $this->_process();
-        $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
     }
 
-    public function testDeClearCacheCustomPreviewImage()
+    public function testDeImageEnlargeDimensions()
     {
-        $c = $this->_root->getComponentById('root-master_test2');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
-        $row = $c->getComponent()->getRow();
-        $row->kwf_upload_id = '6';
-        $row->save();
-        $this->_process();
-        $this->_checkTheSizes($c->render(), 6, 180, 330, 2, 120, 101);
-    }
-
-    public function testDeClearCacheChangePreviewImage()
-    {
-        $c = $this->_root->getComponentById('root-master_test2');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
-        $row = $c->getChildComponent('-linkTag')->getComponent()->getRow();
-        $row->kwf_upload_id = '6';
-        $row->save();
-        $this->_process();
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 6, 65, 120);
-    }
-
-    public function testDeClearCacheAddPreviewImage()
-    {
-        $c = $this->_root->getComponentById('root-master_test1');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
-        $row = $c->getChildComponent('-linkTag')->getComponent()->getRow();
-        $row->preview_image = true;
-        $row->kwf_upload_id = '6';
-        $row->save();
-        $this->_process();
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 6, 65, 120);
-    }
-
-    public function testDeClearCacheRemovePreviewImage()
-    {
-        $c = $this->_root->getComponentById('root-master_test2');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
-        $row = $c->getChildComponent('-linkTag')->getComponent()->getRow();
-        $row->preview_image = false;
-        $row->save();
-        $this->_process();
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
+        $c = $this->_root->getComponentById('root-master_test2-linkTag');
+        $dim = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(560, $dim['width']);
+        $this->assertEquals(560, $dim['height']);
     }
 
     public function testEnClearCacheAddOwnImage()
@@ -199,50 +159,8 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $row->save();
         $this->_process();
         $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
-    }
 
-    /**
-     * root
-     *  master
-     *    test1 (has image)
-     *      enlargeTag
-     *  en
-     *    test1  (<- must display 6 after upload)
-     *      enlargeTag (gets own_image set)
-     *        image    (gets image uploaded)
-     *      image
-     */
-    public function testEnClearCacheAddOwnPreviewImage()
-    {
-        $c = $this->_root->getComponentById('root-en_test1');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
-
-        //change own_image setting plus image
-        $row = $c->getChildComponent('-linkTag')->getComponent()->getRow();
-        $row->own_image = 1;
-        $row->save();
-        $row = $c->getChildComponent('-linkTag')->getChildComponent('-image')->getComponent()->getRow();
-        $row->kwf_upload_id = '6';
-        $row->save();
-        $this->_process();
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 6, 65, 120);
-
-        //change only the image
-        $row = $c->getChildComponent('-linkTag')->getChildComponent('-image')->getComponent()->getRow();
-        $row->kwf_upload_id = '1';
-        $row->save();
-        $this->_process();
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 1, 120, 120);
-
-        //change the image back again
-        $row = $c->getChildComponent('-linkTag')->getChildComponent('-image')->getComponent()->getRow();
-        $row->kwf_upload_id = '6';
-        $row->save();
-        $this->_process();
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 6, 65, 120);
-
-        //change own_image back to false, without changing kwf_upload_id
-        $row = $c->getChildComponent('-linkTag')->getComponent()->getRow();
+        $row = $c->getComponent()->getRow();
         $row->own_image = 0;
         $row->save();
         $this->_process();
@@ -261,16 +179,134 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->_checkTheSizes($c->render(), 6, 180, 330, 6, 65, 120);
     }
 
-    public function testEnClearCacheChangeMasterPreviewImage()
+    private function _getImageFromHtml($html)
     {
-        $c = $this->_root->getComponentById('root-en_test2');
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 2, 120, 101);
+        preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $html, $matches);
+        foreach ($matches[0] as $key => $m) {
+            if (substr($matches[3][$key], 0, 10) == 'dh-{width}') continue;
+            return Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
+        }
+        return null;
+    }
 
-        $row = $this->_root->getComponentById('root-master_test2-linkTag')->getComponent()->getRow();
-        $row->kwf_upload_id = '6';
+    public function testDeChangeImageMedia_CacheOfEnlargeTagTrlDeletedWithSameWidth()
+    {
+        $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test1');
+        $c = $imageEnlargeTrlComponent
+                ->getChildComponent('-linkTag')
+                ->getChildComponent('_imagePage');
+        $imageWithNumber1 = $this->_getImageFromHtml($c->render());
+
+        // Gets row of Master-Component, changes images
+        $row = $imageEnlargeTrlComponent->chained->getComponent()->getRow();
+        $row->kwf_upload_id = 3;
         $row->save();
         $this->_process();
-        $this->_checkTheSizes($c->render(), 1, 560, 560, 6, 65, 120);
+        $imageWithNumber3 = $this->_getImageFromHtml($c->render());
+
+        $image1 = new Imagick($imageWithNumber1['file']);
+        $image3 = new Imagick($imageWithNumber3['file']);
+
+        $this->assertEquals(560, $image1->getImageWidth());
+        $this->assertEquals(320, $image3->getImageHeight());
+    }
+
+    public function testDeChangeImageMedia_CacheOfEnlargeTagTrlDeletedWithSameWidth2()
+    {
+        $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test1');
+        $c = $imageEnlargeTrlComponent
+                ->getChildComponent('-linkTag')
+                ->getChildComponent('_imagePage');
+        $imageWithNumber1 = $this->_getImageFromHtml($c->render());
+
+        $row = $imageEnlargeTrlComponent->getComponent()->getRow();
+        $row->own_image = 1;
+        $row->save();
+        $row = $imageEnlargeTrlComponent->getChildComponent('-image')->getComponent()->getRow(); //own preview image in en
+        $row->kwf_upload_id = '3';
+        $row->save();
+        $this->_process();
+        $imageWithNumber3FromTrl = $this->_getImageFromHtml($c->render());
+
+        $image1 = new Imagick($imageWithNumber1['file']);
+        $image3 = new Imagick($imageWithNumber3FromTrl['file']);
+
+        $this->assertEquals(560, $image1->getImageWidth());
+        $this->assertEquals(560, $image3->getImageWidth());
+        $this->assertEquals(320, $image3->getImageHeight());
+    }
+
+    public function testEnChangeOwnImageMedia_CacheOfEnlargeTagTrlDeletedWhenSameWidth()
+    {
+        $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test7');
+        $c = $imageEnlargeTrlComponent
+                ->getChildComponent('-linkTag')
+                ->getChildComponent('_imagePage');
+        $imageWithNumber1 = $this->_getImageFromHtml($c->render());
+
+        // Gets row of trl-component, adds image
+        $row = $imageEnlargeTrlComponent->getComponent()->getRow();
+        $row->own_image = 1;
+        $row->save();
+        $this->_process();
+        $imageWithNumber3 = $this->_getImageFromHtml($c->render());
+
+        $image1 = new Imagick($imageWithNumber1['file']);
+        $image3 = new Imagick($imageWithNumber3['file']);
+        $this->assertEquals($image1->getImageWidth(), 560);
+        $this->assertEquals($image1->getImageHeight(), 560);
+        $this->assertEquals($image3->getImageWidth(), 560);
+        $this->assertEquals($image3->getImageHeight(), 320);
+    }
+
+    public function testEnChangeOwnImageMedia_CacheOfEnlargeTagTrlDeletedWhenSameWidth2()
+    {
+        $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test3');
+        $c = $imageEnlargeTrlComponent
+                ->getChildComponent('-linkTag')
+                ->getChildComponent('_imagePage');
+        $imageWithNumber6 = $this->_getImageFromHtml($c->render());
+
+        // Gets row of trl-component, adds image
+        $row = $imageEnlargeTrlComponent->getComponent()->getRow();
+        $row->own_image = 0;
+        $row->save();
+        $this->_process();
+        $imageWithNumber1 = $this->_getImageFromHtml($c->render());
+
+        $image6 = new Imagick($imageWithNumber6['file']);
+        $image1 = new Imagick($imageWithNumber1['file']);
+        $this->assertEquals($image6->getImageWidth(), 180);
+        $this->assertEquals($image6->getImageHeight(), 330);
+        $this->assertEquals($image1->getImageWidth(), 560);
+        $this->assertEquals($image1->getImageHeight(), 560);
+    }
+
+    public function testEnChangeOwnImageAndSetUploadMedia_CacheOfEnlargeTagTrlDeletedWhenSameWidth()
+    {
+        $imageEnlargeTrlComponent = $this->_root->getComponentById('root-en_test1');
+        $c = $imageEnlargeTrlComponent
+                ->getChildComponent('-linkTag')
+                ->getChildComponent('_imagePage');
+        $imageWithNumber1 = $this->_getImageFromHtml($c->render());
+
+        // Gets row of trl-component, adds image
+        $row = $imageEnlargeTrlComponent->getComponent()->getRow();
+        $row->own_image = 1;
+        $row->save();
+        $row = $imageEnlargeTrlComponent->getChildComponent('-image')->getComponent()->getRow(); //own preview image in en
+        $row->kwf_upload_id = '3';
+        $row->save();
+        $this->_process();
+        $imageWithNumber3 = $this->_getImageFromHtml($c->render());
+
+        $image1 = new Imagick($imageWithNumber1['file']);
+        $image3 = new Imagick($imageWithNumber3['file']);
+        $this->assertNotEquals($image1->getImageHeight(), $image3->getImageHeight());
+        $this->assertEquals($image1->getImageWidth(), 560);
+        $this->assertEquals($image1->getImageHeight(), 560);
+        $this->assertEquals($image3->getImageWidth(), 560);
+        $this->assertEquals($image3->getImageHeight(), 320);
     }
 
     private function _checkTheSizes($html, $largeImageNum, $largeWidth, $largeHeight, $smallImageNum, $smallWidth, $smallHeight)
@@ -278,8 +314,9 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         // getMediaOutput aufrufen, damit Cache-Meta geschrieben wird (wegen d0cf3812b20fa19c40617ac5b08ed08a18ff808d)
         // muss so gemacht werden, weil der request über getimagesize weiter unten
         // nicht das FnF-Cache Model dieses Request schreiben kann
-        preg_match_all('/.*\/media\/([\w\.]+)\/([\w\-]+)\/(\w+)\/.*/', $html, $matches);
+        preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $html, $matches);
         foreach ($matches[0] as $key => $m) {
+            if (substr($matches[3][$key], 0, 10) == 'dh-{width}') continue;
             Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
         }
         preg_match('#^.*?<a.+?&quot;width&quot;:(\d+),&quot;height&quot;:(\d+).+?<img.+?src=".+?(\d+)\.jpg.+width="(\d+)".+height="(\d+)".+$#ms', $html, $matches);
@@ -289,7 +326,7 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $this->assertEquals($matches[4], $smallWidth);
         $this->assertEquals($matches[5], $smallHeight);
 
-        preg_match('#href="(.+?)".*?src="(.+?)"#ms', $html, $matches);
+        preg_match('#href="(.+?)".*? src="(.+?)"#ms', $html, $matches);
         $smallSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[2]);
         $this->assertEquals($smallWidth, $smallSrcSize[0]);
         $this->assertEquals($smallHeight, $smallSrcSize[1]);
@@ -305,6 +342,5 @@ class Kwc_Trl_ImageEnlarge_Test extends Kwc_TestAbstract
         $largeSrcSize = getimagesize('http://'.Kwf_Registry::get('testDomain').$matches[1]);
         $this->assertEquals($largeWidth, $largeSrcSize[0]);
         $this->assertEquals($largeHeight, $largeSrcSize[1]);
-
     }
 }

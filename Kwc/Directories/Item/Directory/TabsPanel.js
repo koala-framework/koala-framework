@@ -4,13 +4,17 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
     initComponent: function()
     {
         this.layout = 'border';
-        
-        this.grid = new Kwf.Auto.GridPanel(Ext.applyIf({
+
+        this.grid = new Kwc.Directories.Item.Directory.GridPanel(Ext.applyIf({
             controllerUrl: this.controllerUrl,
             region: 'west',
             width: this.width,
-            split: true
+            split: true,
+            baseParams: this.baseParams,
+            multiFileUpload: this.multiFileUpload
         }, this.gridConfig));
+        this.grid.on('selectionchange', this._displayTabsUsedByTheSelectedRow, this);
+        this.grid.on('load', this._displayTabsUsedByTheSelectedRow, this);
 
         if (this.componentPlugins) {
             this.plugins = [ ];
@@ -28,12 +32,39 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
             activeTab: 0,
             items: this.editPanels
         });
+        if (this.hasMultipleDetailComponents) {
+            this.tabs.on('render', function(){
+                for (var i=1; i<this.editPanels.length; i++) {
+                    this.tabs.hideTabStripItem(i);
+                }
+            }, this);
+        }
+
         this.proxyItem = this.grid;
         this.items = [this.grid, this.tabs];
 
         Kwc.Directories.Item.Directory.TabsPanel.superclass.initComponent.call(this);
     },
-
+    _displayTabsUsedByTheSelectedRow: function()
+    {
+        if (this.hasMultipleDetailComponents
+            && this.grid.grid.getSelected()
+            && this.grid.grid.getSelected().get('component')
+        ) {
+            this.editPanels.each(function(panel){
+                var componentType = this.grid.grid.getSelected().get('component');
+                if (panel.componentType
+                    && panel.componentType != componentType) {
+                    this.tabs.hideTabStripItem(panel);
+                    if (this.tabs.getActiveTab() == panel) {
+                        this.tabs.setActiveTab(0);
+                    }
+                } else {
+                    this.tabs.unhideTabStripItem(panel);
+                }
+            }, this);
+        }
+    },
     initEditPanels: function() {
         this.editPanels = [];
         if (!this.hideDetailsController) {
@@ -45,11 +76,11 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
             this.grid.addBinding(this.detailsForm);
             this.editPanels.push(this.detailsForm);
         }
-
         this.contentEditComponents.each(function(ec) {
             this.editPanels.push(Kwf.Binding.AbstractPanel.createFormOrComponentPanel(
                 this.componentConfigs, ec, {}, this.grid
             ));
+            this.editPanels[this.editPanels.length-1].componentType = ec.component;
         }, this);
     },
     applyBaseParams: function(baseParams) {

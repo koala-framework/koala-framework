@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Kwc_Image
+ * @group Image
  */
 class Kwc_Basic_Image_CacheSimple_Test extends Kwc_TestAbstract
 {
@@ -37,6 +38,7 @@ class Kwc_Basic_Image_CacheSimple_Test extends Kwc_TestAbstract
 
         $this->_process();
         $html = $this->_root->render();
+        $html = str_replace($html, '<img />', '');
         $this->assertNotContains('<img', $html);
 
         // check uploaded

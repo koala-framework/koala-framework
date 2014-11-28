@@ -5,6 +5,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component extends Kwc_Chai
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['contentSender'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_ContentSender';
+        $ret['assets']['dep'][] = 'KwfResponsiveImg';
         return $ret;
     }
     public function getTemplateVars()
@@ -12,14 +13,12 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component extends Kwc_Chai
         $ret = parent::getTemplateVars();
 
         $c = $this->getData()->parent->getComponent();
-        $ret['options'] = (object)$c->getOptions();
 
-        $c = $this->getData()->parent->getChildComponent('-image')->getComponent();
         $size = $c->getImageDimensions();
         $ret['width'] = $size['width'];
         $ret['height'] = $size['height'];
-
         $ret['imageUrl'] = $c->getImageUrl();
+        $ret['options'] = (object)$c->getOptions();
 
         if (isset($ret['previous'])) {
             $ret['previous'] = self::getChainedByMaster($ret['previous'], $this->getData());
@@ -27,6 +26,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component extends Kwc_Chai
         if (isset($ret['next'])) {
             $ret['next'] = self::getChainedByMaster($ret['next'], $this->getData());
         }
+        $ret['baseUrl'] = $c->getBaseImageUrl();
+        $ret['aspectRatio'] = $ret['height'] / $ret['width'] * 100;
         return $ret;
     }
 }

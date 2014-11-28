@@ -10,6 +10,8 @@ class Kwf_Js_OnReadyPriority_SeleniumTest extends Kwf_Test_SeleniumTestCase
 {
     public function testJsEvent()
     {
+        $this->markTestIncomplete();
+
         // Checking priority set for elementReady and contentReady
         $this->open('/kwf/test/kwf_js_on-ready-priority_test');
         $this->assertEquals('7 6 5 4 3 2 1', $this->getText('css=#result'));

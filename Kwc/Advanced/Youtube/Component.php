@@ -2,17 +2,21 @@
 class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
 {
     const REGEX = '/(?<=(?:v|i)=)[a-zA-Z0-9-]+(?=&)|(?<=(?:v|i)\/)[^&\n]+|(?<=embed\/)[^"&\n]+|(?<=(?:v|i)=)[^&\n]+|(?<=youtu.be\/)[^&\n]+/';
+
+    const USER_SELECT = 'user';
+    const CONTENT_WIDTH = 'contentWidth';
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Youtube');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['assets']['dep'][] = 'KwfYoutubePlayer';
-        $ret['assets']['files'][] = 'kwf/Kwc/Advanced/Youtube/Component.js';
-        
+        $ret['assetsAdmin']['dep'][] = 'KwfFormCards';
+
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
 
-        $ret['videoWidth'] = 900;
+        $ret['videoWidth'] = self::USER_SELECT;
         $ret['playerVars'] = array(
             'rel' => 0,
             'iv_load_policy' => 3,
@@ -36,17 +40,36 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars();
 
-        preg_match(self::REGEX, $ret['row']->url, $matches);
+        if (preg_match(self::REGEX, $ret['row']->url, $matches)) {
+            $videoId = $matches[0];
+        } else {
+            $videoId = null;
+        }
+
+        $width = $this->_getSetting('videoWidth');
+        if ($width === self::USER_SELECT) {
+            if ($ret['row']->size == 'fullWidth') {
+                $width = null;
+            } else {
+                $width = (int)$ret['row']->video_width;
+            }
+        } else if ($width === self::CONTENT_WIDTH) {
+            $width = null;
+        }
         $config = array(
-            'videoId' => $matches[0],
-            'width' => ($ret['row']->videoWidth) ? $ret['row']->videoWidth : $this->_getSetting('videoWidth'),
-            'height' => 0
+            'videoId' => $videoId,
+            'size' => $ret['row']->size,
+            'width' => $width,
+            'height' => null,
+            'ratio' => '16x9'
         );
         if ($d = $ret['row']->dimensions) {
             if ($d == '16x9') {
-                $config['height'] = ($config['width'] / 16) * 9;
+                if ($config['width']) $config['height'] = ($config['width'] / 16) * 9;
+                $config['ratio'] = $d;
             } else if ($d == '4x3') {
-                $config['height'] = ($config['width'] / 4) * 3;
+                if ($config['width']) $config['height'] = ($config['width'] / 4) * 3;
+                $config['ratio'] = $d;
             }
         }
         $ret['config'] = array_merge($config, array('playerVars' => $this->_getSetting('playerVars')));

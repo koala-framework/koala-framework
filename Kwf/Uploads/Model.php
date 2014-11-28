@@ -28,7 +28,9 @@ class Kwf_Uploads_Model extends Kwf_Model_Db_Proxy
             if (!$this->_uploadDir) {
                 throw new Kwf_Exception(('Param "uploads" has to be set in the file config.ini.'));
             }
-            if (!is_dir($this->_uploadDir) || !is_writable($this->_uploadDir)) {
+            if (!is_dir($this->_uploadDir)) {
+                throw new Kwf_Exception("Path for uploads do not exist: {$this->_uploadDir}");
+            } else if (!is_writable($this->_uploadDir)) {
                 throw new Kwf_Exception("Path for uploads is not writeable: {$this->_uploadDir}");
             }
         }

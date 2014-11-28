@@ -48,6 +48,6 @@ class Kwf_Controller_Action_Component_ShowComponentController extends Kwf_Contro
         echo $c->render();
 
         Kwf_Benchmark::output();
-        $this->_helper->viewRenderer->setNoRender(true);
+        exit;
     }
 }

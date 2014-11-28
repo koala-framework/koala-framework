@@ -17,18 +17,21 @@ Kwf.Utils.YoutubePlayer.load = function(callback, scope)
 
     Kwf.Utils.YoutubePlayer.isLoaded = true;
 
-    var tag = document.createElement('script');
-    tag.setAttribute('type', 'text/javascript');
-    tag.setAttribute('src', 'http://www.youtube.com/iframe_api');
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-};
-
-if (typeof window.onYouTubePlayerAPIReady == 'undefined') {
+    //workaround mediaelementjs also defining onYouTubePlayerAPIReady
+    //placed here in load() so we are called after mediaelementjs
+    var origOnYouTubePlayerAPIReady = window.onYouTubePlayerAPIReady;
     window.onYouTubePlayerAPIReady = function() {
+        if (origOnYouTubePlayerAPIReady) origOnYouTubePlayerAPIReady();
         Kwf.Utils.YoutubePlayer.isCallbackCalled = true;
         Kwf.Utils.YoutubePlayer.callbacks.forEach(function(i) {
             i.callback.call(i.scope || window);
         });
-    }
-}
+    };
+
+    var tag = document.createElement('script');
+    tag.setAttribute('type', 'text/javascript');
+    tag.setAttribute('src', '//www.youtube.com/iframe_api');
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+};
+

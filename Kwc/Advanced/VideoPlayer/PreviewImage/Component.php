@@ -5,16 +5,17 @@ class Kwc_Advanced_VideoPlayer_PreviewImage_Component extends Kwc_Basic_Image_Co
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Preview image');
-        $ret['dimensions'] = array();
+        $ret['dimensions'] = array(
+            'default' => array(
+                'width' => self::CONTENT_WIDTH,
+                'height' => 0,
+                'cover' => true
+            )
+        );
         return $ret;
     }
 
-    // Deactivated this because no dimensions are set
-    public static function validateSettings($settings, $componentClass)
-    {
-    }
-
-    protected function _getImageDimensions()
+    public function getConfiguredImageDimensions()
     {
         $parentComponent = $this->getData()->parent->getComponent();
         $ret = $parentComponent->getVideoDimensions();
@@ -27,7 +28,7 @@ class Kwc_Advanced_VideoPlayer_PreviewImage_Component extends Kwc_Basic_Image_Co
                 $ret['height'] = (int)(($ret['width'] / 16) * 9);
             }
         }
-        $ret['scale'] = Kwf_Media_Image::SCALE_CROP;
+        $ret['cover'] = true;
         return $ret;
     }
 }

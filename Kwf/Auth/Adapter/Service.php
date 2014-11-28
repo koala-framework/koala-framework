@@ -29,9 +29,19 @@ class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
     public function authenticate()
     {
         if (empty($this->_identity)) {
-            throw new Kwf_Exception('A value for the identity was not provided prior to authentication with Kwf_Auth_Adapter_Service.');
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity,
+                array(
+                    trlKwf('Please specify a user name.'),
+                )
+            );
         } else if ($this->_credential === null) {
-            throw new Kwf_Exception('A credential value was not provided prior to authentication with Kwf_Auth_Adapter_Service.');
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, $this->_identity,
+                array(
+                    trlKwf('Please specify a password.'),
+                )
+            );
         }
 
         $cache = $this->_getCache();
@@ -65,7 +75,7 @@ class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
 
             $cache->save($failedLoginsFromThisIp, $this->_getCacheId());
             $this->_sendWrongLoginMail(array('Identity' => $this->_identity));
-            sleep(3);
+            if ($failedLoginsFromThisIp > 3) sleep(3);
         }
 
         return $ret;
@@ -117,7 +127,7 @@ class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
 
     private function _getCacheId()
     {
-        return 'login_brute_force_'.str_replace(array('.', ':', ',', ' '), '_', $_SERVER['REMOTE_ADDR']);
+        return str_replace(array('.', ':', ',', ' '), '_', $_SERVER['REMOTE_ADDR']);
     }
 
     private function _getCache()
@@ -128,7 +138,8 @@ class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
                 'automatic_serialization'=>true
             ),
             array(
-                'cache_dir' => 'cache/config'
+                'cache_dir' => 'cache/config',
+                'file_name_prefix' => 'login_brute_force_'
             )
         );
     }

@@ -7,7 +7,7 @@ class Kwf_AutoForm_TestController extends Kwf_Controller_Action_Auto_Form
 
     public function indexAction()
     {
-        $this->view->assetsType = 'Kwf_AutoForm:Test';
+        $this->view->assetsPackage = new Kwf_Assets_Package_TestPackage('Kwf_AutoForm');
         $this->view->viewport = 'Kwf.Test.Viewport';
         parent::indexAction();
     }
@@ -23,8 +23,7 @@ class Kwf_AutoForm_TestController extends Kwf_Controller_Action_Auto_Form
         $session = new Kwf_Session_Namespace('Kwf_AutoForm_Test');
         if ($session->count == 0) {
             $session->count++;
-            $this->view->exception = "error";
-            $this->view->success = false;
+            throw new Kwf_Exception('error');
         }
     }
 

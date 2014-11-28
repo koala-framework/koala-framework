@@ -73,8 +73,14 @@ class Kwf_Util_Check_Config
         $checks['tidy'] = array(
             'name' => 'tidy Php extension'
         );
+        $checks['json'] = array(
+            'name' => 'json Php extension'
+        );
         $checks['pdo_mysql'] = array(
             'name' => 'pdo_mysql Php extension'
+        );
+        $checks['short_open_tag'] = array(
+            'name' => 'short_open_tag setting'
         );
         $checks['system'] = array(
             'name' => 'executing system commands'
@@ -98,9 +104,6 @@ class Kwf_Util_Check_Config
         );
         $checks['db_connection'] = array(
             'name' => 'db connection'
-        );
-        $checks['git'] = array(
-            'name' => 'git >= 1.5'
         );
         $checks['uploads'] = array(
             'name' => 'uploads'
@@ -229,27 +232,34 @@ class Kwf_Util_Check_Config
             );
         }
 
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
-        if ($mime != 'image/png') {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "fileinfo returned wrong information: $mime"
-            );
-        }
+        try {
+            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
+            if ($mime != 'image/png') {
+                return array(
+                    'status' => self::RESULT_WARNING,
+                    'message' => "fileinfo returned wrong information: $mime"
+                );
+            }
 
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
-        if (!($mime == 'application/msword' || $mime == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "fileinfo returned wrong information: $mime"
-            );
-        }
+            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
+            if (!($mime == 'application/msword' || $mime == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+                return array(
+                    'status' => self::RESULT_WARNING,
+                    'message' => "fileinfo returned wrong information: $mime"
+                );
+            }
 
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
-        if ($mime != 'application/vnd.oasis.opendocument.text') {
+            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
+            if ($mime != 'application/vnd.oasis.opendocument.text') {
+                return array(
+                    'status' => self::RESULT_WARNING,
+                    'message' => "fileinfo returned wrong information: $mime"
+                );
+            }
+        } catch (Exception $e) {
             return array(
                 'status' => self::RESULT_WARNING,
-                'message' => "fileinfo returned wrong information: $mime"
+                'message' => "fileinfo failed: ".$e->getMessage()
             );
         }
         return array(
@@ -280,6 +290,19 @@ class Kwf_Util_Check_Config
         );
     }
 
+    private static function _json()
+    {
+        if (!function_exists('json_decode')) {
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "Extension 'json' is not loaded."
+            );
+        }
+        return array(
+            'status' => self::RESULT_OK,
+        );
+    }
+
     private static function _pdo_mysql()
     {
         if (!extension_loaded('pdo_mysql')) {
@@ -290,11 +313,24 @@ class Kwf_Util_Check_Config
         );
     }
 
+    private static function _short_open_tag()
+    {
+        if (!ini_get('short_open_tag')) {
+            return array(
+                'status' => self::RESULT_FAILED,
+                'message' => "short_open_tag must be enabled"
+            );
+        }
+        return array(
+            'status' => self::RESULT_OK,
+        );
+    }
+
     private static function _system()
     {
-        $out = shell_exec("ls");
+        $out = shell_exec(Kwf_Config::getValue('server.phpCli')." --version 2>&1");
         if (!$out) {
-            throw new Kwf_Exception("executing 'ls' returned nothing");
+            throw new Kwf_Exception("executing '".Kwf_Config::getValue('server.phpCli')." --version' returned nothing");
         }
         return array(
             'status' => self::RESULT_OK,
@@ -345,27 +381,6 @@ class Kwf_Util_Check_Config
     {
         if (Kwf_Registry::get('db')) {
             Kwf_Registry::get('db')->query("SHOW TABLES")->fetchAll();
-        }
-        return array(
-            'status' => self::RESULT_OK,
-        );
-    }
-
-    private static function _git()
-    {
-        $gitVersion = exec("git --version", $out, $ret);
-        if ($ret) {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "Git command is not available."
-            );
-        }
-        if (!preg_match('#^git version ([0-9\\.]+)$#', $gitVersion, $m)) {
-            throw new Kwf_Exception("Invalid git --version response");
-        }
-        $gitVersion = $m[1];
-        if (version_compare($gitVersion, "1.5.0") < 0) {
-            throw new Kwf_Exception("Invalid git version '$gitVersion', >= 1.5.0 is required");
         }
         return array(
             'status' => self::RESULT_OK,
@@ -460,9 +475,12 @@ class Kwf_Util_Check_Config
     {
         $locale = setlocale(LC_ALL, 0); //backup locale
 
-        $l = Kwf_Trl::getInstance()->trlc('locale', 'C', array(), Kwf_Trl::SOURCE_KWF, 'de');
+        $l = Kwf_Trl::getInstance()->trlcKwf('locale', 'C', array(), 'de');
         if (!setlocale(LC_ALL, explode(', ', $l))) {
-            throw new Kwf_Exception("Locale not installed, tried: ".$l);
+            return array(
+                'status' => self::RESULT_WARNING,
+                'message' => "Locale not installed, tried: ".$l
+            );
         }
 
         if (is_string($locale) && strpos($locale, ';')) {
@@ -517,6 +535,9 @@ class Kwf_Util_Check_Config
         }
         if (!apc_delete('foobar')) {
             throw new Kwf_Exception("apc_delete returned false");
+        }
+        if (extension_loaded('apcu') && function_exists('apc_delete_file')) {
+            throw new Kwf_Exception("apc and apcu loaded");
         }
         return array(
             'status' => self::RESULT_OK,

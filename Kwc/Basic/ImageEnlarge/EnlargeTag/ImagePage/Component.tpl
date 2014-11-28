@@ -17,9 +17,18 @@
         <? } else { ?>
         <div class="nextBtnInactive"></div>
         <? } ?>
-        <div class="image">
-            <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
+        <? if ($this->baseUrl) { ?>
+        <div class="image" style="max-width:<?=$this->width;?>px;">
+            <div class="container" style="padding-bottom:<?=$this->aspectRatio;?>%;"
+                    data-min-width="<?=$this->minWidth;?>"
+                    data-max-width="<?=$this->maxWidth;?>"
+                    data-src="<?=$this->baseUrl;?>">
+                <noscript>
+                    <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
+                </noscript>
+            </div>
         </div>
+        <? } ?>
     </div>
     <div class="lightboxFooter">
         <? if(isset($this->options->title) && $this->options->title) { ?><p class="title"><?=$this->options->title?></p><? } ?>

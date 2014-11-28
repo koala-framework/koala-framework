@@ -13,6 +13,10 @@ Kwf.FrontendForm.Checkbox = Ext.extend(Kwf.FrontendForm.Field, {
     setValue: function(value) {
         var inp = this.el.child('input');
         inp.dom.checked = !!value;
+    },
+    getValue: function(value) {
+        var inp = this.el.child('input');
+        return inp.dom.checked;
     }
 });
 

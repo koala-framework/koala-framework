@@ -36,7 +36,7 @@ class Kwf_Form_ComboBoxFilter_RemoteTestController extends Kwf_Controller_Action
         $config = array();
         $config['baseParams']['id'] = 1;
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $config['assetsType'] = 'Kwf_Form_ComboBoxFilter:Test';
+        $config['assetsPackage'] = new Kwf_Assets_Package_TestPackage('Kwf_Form_ComboBoxFilter');
         $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 }

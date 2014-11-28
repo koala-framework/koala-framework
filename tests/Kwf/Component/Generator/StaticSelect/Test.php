@@ -42,4 +42,11 @@ class Kwf_Component_Generator_StaticSelect_Test extends Kwc_TestAbstract
         $box = $page->getChildComponent(array('id' => '-box', 'componentClass' => 'foo'));
         $this->assertNull($box);
     }
+
+    public function testCmpByClass()
+    {
+        $boxes = $this->_root->getComponentsByClass('Kwf_Component_Generator_StaticSelect_Banner_Component');
+        $this->assertEquals(1, count($boxes));
+        $this->assertEquals($boxes[0]->componentId, 'root_page2-box');
+    }
 }

@@ -10,6 +10,8 @@ class Kwc_Guestbook_Detail_Component extends Kwc_Posts_Detail_Component
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         $ret['extConfigControllerIndex'] = 'Kwf_Component_Abstract_ExtConfig_None';
 
+        $ret['placeholder']['prePostNumber'] = '#';
+
         return $ret;
     }
 }

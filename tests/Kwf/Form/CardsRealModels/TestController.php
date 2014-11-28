@@ -24,7 +24,7 @@ class Kwf_Form_CardsRealModels_TestController extends Kwf_Controller_Action_Auto
         $config = array();
         $config['baseParams']['id'] = $this->_getParam('id');
         $config['controllerUrl'] = $this->getRequest()->getPathInfo();
-        $config['assetsType'] = 'Kwf_Form_CardsRealModels:Test';
+        $config['assetsPackage'] = new Kwf_Assets_Package_TestPackage('Kwf_Form_CardsRealModels');
         $this->view->ext('Kwf.Auto.FormPanel', $config, 'Kwf.Test.Viewport');
     }
 }

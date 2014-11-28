@@ -4,7 +4,7 @@ class Kwf_Controller_Action_Maintenance_ClearCacheController extends Kwf_Control
     public function indexAction()
     {
         $this->view->typeNames = Kwf_Util_ClearCache::getInstance()->getTypeNames();
-        $this->view->assetsType = 'Kwf_Controller_Action_Maintenance:ClearCache';
+        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('ClearCache');
         $this->view->xtype = 'kwf.maintenance.clearCache';
     }
 
@@ -17,7 +17,10 @@ class Kwf_Controller_Action_Maintenance_ClearCacheController extends Kwf_Control
 
         $c = new Kwf_Util_ProgressBar_Adapter_Cache($request->getParam('progressNum'));
         $options['progressAdapter'] = $c;
-        $types = Kwf_Util_ClearCache::getInstance()->clearCache($request->getParam('type'), false, true, $options);
+        $options['types'] = $request->getParam('type');
+        $options['output'] = false;
+        $options['refresh'] = true;
+        $types = Kwf_Util_ClearCache::getInstance()->clearCache($options);
         $message = '';
         foreach ($types as $t) {
             if (!$t->getSuccess()) {

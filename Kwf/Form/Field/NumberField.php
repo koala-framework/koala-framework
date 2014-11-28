@@ -38,7 +38,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     public function trlStaticExecute($language = null)
     {
         parent::trlStaticExecute($language);
-        $locale = Kwf_Trl::getInstance()->trlc('locale', 'C', array(), Kwf_Trl::SOURCE_KWF, $language);
+        $locale = Kwf_Trl::getInstance()->trlcKwf('locale', 'C', array(), $language);
         if ($locale == 'C') $locale = 'en_US';
         $l = Zend_Locale::findLocale($locale);
         $this->_floatValidator->setLocale($l);
@@ -58,7 +58,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             $this->addValidator(new Kwf_Validate_NotNegative());
         }
         if ($this->getAllowDecimals() === false) {
-            $this->addValidator(new Kwf_Validate_Digits());
+            $this->addValidator(new Kwf_Validate_Int());
         } else {
             $this->addValidator($this->_floatValidator);
         }
@@ -90,16 +90,6 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
         return $ret;
     }
 
-    protected function _getOutputValueFromValues($values)
-    {
-        $ret = parent::_getOutputValueFromValues($values);
-        if (!$ret) return '';
-        if ($this->getAllowDecimals() !== false) {
-            $ret = number_format((float)$ret, $this->getDecimalPrecision(), $this->getDecimalSeparator(), '');
-        }
-        return $ret;
-    }
-
     protected function _getInputProperties($values, $fieldNamePostfix, $idPrefix)
     {
         $ret = parent::_getInputProperties($values, $fieldNamePostfix, $idPrefix);
@@ -122,7 +112,7 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
             //$ret['step'] = 'any';
             unset($ret['max']);
             unset($ret['min']);
-            $ret['pattern'] = '\d*'.preg_quote($this->getDecimalSeparator()).'\d*'; //instead of type=number; will however NOT show number keyboard on iPad
+            $ret['pattern'] = '\d*('.preg_quote($this->getDecimalSeparator()).'\d*)?'; //instead of type=number; will however NOT show number keyboard on iPad
         }
         return $ret;
 

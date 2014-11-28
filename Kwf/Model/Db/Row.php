@@ -42,6 +42,7 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
         $n = $this->_transformColumnName($name);
         if (isset($this->_row->$n)) {
             $value = $this->_row->$n;
+            $value = $this->getModel()->convertValueType($name, $value);
             if (is_string($value) && substr($value, 0, 13) =='kwfSerialized') {
                 $value = unserialize(substr($value, 13));
             }
@@ -58,6 +59,8 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
             if (is_array($value) || is_object($value)) {
                 $value = 'kwfSerialized'.serialize($value);
             }
+            $value = $this->getModel()->convertValueType($name, $value);
+
             // scheis php... bei $this->$name sucht er nur nach einem property
             // und vergisst, dass es __get() auch gibt
             if ($this->__get($name) !== $value) {
@@ -109,13 +112,22 @@ class Kwf_Model_Db_Row extends Kwf_Model_Row_Abstract
     {
         parent::delete();
         $this->_beforeDelete();
-        $this->_row->delete();
+        if ($this->_model->hasDeletedFlag()) {
+            $this->_row->deleted = true;
+            $this->_row->save();
+        } else {
+            $this->_row->delete();
+        }
         $this->_afterDelete();
     }
 
     public function toDebug()
     {
-        return $this->_row->toDebug();
+        $i = get_class($this);
+        $ret = print_r($this->toArray(), true);
+        $ret = preg_replace('#^Array#', $i, $ret);
+        $ret = "<pre>$ret</pre>";
+        return $ret;
     }
     public function __toString()
     {

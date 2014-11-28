@@ -40,6 +40,11 @@ class Kwc_Trl_ImageEnlarge_Master extends Kwc_Abstract
             'component' => 'Kwc_Trl_ImageEnlarge_ImageEnlarge_Component',
             'name' => 'test6',
         );
+        $ret['generators']['test7'] = array(
+            'class' => 'Kwf_Component_Generator_Page_Static',
+            'component' => 'Kwc_Trl_ImageEnlarge_ImageEnlarge_Component',
+            'name' => 'test7',
+        );
         $ret['flags']['chainedType'] = 'Trl';
         return $ret;
     }

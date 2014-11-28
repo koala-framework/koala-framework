@@ -87,9 +87,7 @@ class Kwc_Mail_HtmlParser
             if (self::_matchesStyle($stack, $s)) {
                 $appendTags = array();
                 if (isset($s['appendTags'])) {
-                    foreach ($s['appendTags'] as $t => $v) {
-                        $appendTags[$t] = $v;
-                    }
+                    $appendTags = $s['appendTags'];
                 }
                 if (isset($s['styles'])) {
                     foreach ($s['styles'] as $style=>$value) {
@@ -111,7 +109,7 @@ class Kwc_Mail_HtmlParser
                         } else if ($style == 'text-align') {
                             if ($value == 'center') {
                                 $appendTags[$value] = array();
-                            } else if ($value != 'left') {
+                            } else {
                                 $attributes['align'] = $value;
                             }
                         } else {
@@ -148,13 +146,21 @@ class Kwc_Mail_HtmlParser
             'class' => $class,
             'appendedTags' => array()
         );
-        foreach ($appendTags as $t=>$attr) {
-            $stackItem['appendedTags'][] = $t;
+        foreach ($appendTags as $tagOrIndex=>$attr) {
+            $t = isset($attr['tag']) ? $attr['tag'] : $tagOrIndex;
+            if (!in_array($t, $this->_noCloseTags)) {
+                $stackItem['appendedTags'][] = $t;
+            }
             $this->_ret .= "<$t";
             foreach ($attr as $k=>$v) {
+                if ($k == 'tag') continue;
                 $this->_ret .= " $k=\"$v\"";
             }
-            $this->_ret .= ">";
+            if (in_array($t, $this->_noCloseTags)) {
+                $this->_ret .= "/>";
+            } else {
+                $this->_ret .= ">";
+            }
         }
         array_push($this->_stack, $stackItem);
     }
@@ -172,37 +178,9 @@ class Kwc_Mail_HtmlParser
         $html = preg_replace('#<((kwc|/?plugin)[^>]*)>#', '+\1$', $html);
 
         //before sending to xml parser make sure we have valid xml by tidying it up
-        $config = array(
-            'indent'         => true,
-            'output-xhtml'   => true,
-            'clean'          => false,
-            'wrap'           => '86',
-            'doctype'        => 'omit',
-            'drop-proprietary-attributes' => false,
-            'word-2000'      => true,
-            'show-body-only' => true,
-            'bare'           => true,
-            'enclose-block-text'=>true,
-            'enclose-text'   => true,
-            'join-styles'    => false,
-            'join-classes'   => false,
-            'logical-emphasis' => true,
-            'lower-literals' => true,
-            'literal-attributes' => false,
-            'indent-spaces' => 2,
-            'quote-nbsp'     => true,
-            'output-bom'     => false,
-            'char-encoding'  =>'utf8',
-            'newline'        =>'LF',
-            'uppercase-tags' => false,
-            'drop-font-tags' => false,
-        );
-        if (class_exists('tidy')) {
-            $tidy = new tidy;
-            $tidy->parseString($html, $config, 'utf8');
-            $tidy->cleanRepair();
-            $html = $tidy->value;
-        }
+        $html = Kwf_Util_Tidy::repairHtml($html, array(
+            'show-body-only' => false,
+        ));
 
         $this->_stack = array();
         $this->_ret = '';

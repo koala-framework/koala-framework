@@ -27,14 +27,19 @@ class Kwc_Abstract_Image_Trl_Events extends Kwc_Abstract_Composite_Trl_Events
         }
     }
 
+    public function onMasterContentChanged(Kwf_Component_Event_Component_ContentChanged $event)
+    {
+        parent::onMasterContentChanged();
+        $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
+            $this->_class, $event->component
+        ));
+    }
+
     public function onMasterMediaChanged(Kwf_Component_Event_Media_Changed $event)
     {
         foreach (Kwc_Chained_Abstract_Component::getAllChainedByMaster($event->component, 'Trl') as $c) {
             $this->fireEvent(new Kwf_Component_Event_Media_Changed(
                 $this->_class, $c, $event->type
-            ));
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-                $this->_class, $c
             ));
         }
     }

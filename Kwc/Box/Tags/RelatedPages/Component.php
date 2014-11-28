@@ -36,11 +36,4 @@ class Kwc_Box_Tags_RelatedPages_Component extends Kwc_Abstract
     {
         return !!$this->_getRelatedPages();
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwf_Component_Generator_Plugin_Tags_ComponentsToTagsModel');
-        return $ret;
-    }
 }

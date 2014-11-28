@@ -1,0 +1,19 @@
+@import "compass/css3/box-sizing";
+
+@mixin label-X-margin-X-input-X($label, $margin, $input) {
+    .kwfField {
+        > label {
+            @include box-sizing(border-box);
+            margin-right: $margin;
+            max-width: $label;
+            min-width: $label;
+        }
+    }
+
+    .kwfFormFieldWrapper.hasLabel {
+        input, textarea, select, {
+            @include box-sizing(border-box);
+            max-width: $input;
+        }
+    }
+}

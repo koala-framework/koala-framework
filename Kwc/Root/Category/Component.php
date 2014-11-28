@@ -26,4 +26,43 @@ class Kwc_Root_Category_Component extends Kwc_Abstract
         $ret['flags']['menuCategory'] = true;
         return $ret;
     }
+
+    private static function _getParentsWithHasHomeFlagComponentClasses($cls)
+    {
+        $ret = array();
+        foreach (Kwc_Abstract::getComponentClasses() as $c) {
+            if (in_array($cls, Kwc_Abstract::getChildComponentClasses($c))) {
+                if (Kwc_Abstract::getFlag($c, 'hasHome')) {
+                    $ret[] = $c;
+                }
+                $ret = array_merge($ret, self::_getParentsWithHasHomeFlagComponentClasses($c));
+            }
+        }
+        return $ret;
+    }
+
+    private static function _validateHasNotChildWithStaticHome($cls, array &$validated = array())
+    {
+        if (in_array($cls, $validated)) return;
+
+        $validated[] = $cls;
+        foreach (Kwf_Component_Generator_Abstract::getOwnInstances($cls) as $g) {
+            if ($g instanceof Kwf_Component_Generator_Page_StaticHome) {
+                throw new Kwf_Exception("'$cls' must not have StaticHome, either remove StaticHome, remove category generator or disable hasHome for Category/Generator");
+            }
+        }
+        foreach (Kwc_Abstract::getChildComponentClasses($cls) as $c) {
+            self::_validateHasNotChildWithStaticHome($c, $validated);
+        }
+    }
+
+    public static function validateSettings($settings, $componentClass)
+    {
+        parent::validateSettings($settings, $componentClass);
+
+        $parentsWithHasHomeFlag = self::_getParentsWithHasHomeFlagComponentClasses($componentClass);
+        foreach ($parentsWithHasHomeFlag as $i) {
+            self::_validateHasNotChildWithStaticHome($i);
+        }
+    }
 }

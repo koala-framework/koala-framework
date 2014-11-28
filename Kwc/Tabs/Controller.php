@@ -1,6 +1,8 @@
 <?php
 class Kwc_Tabs_Controller extends Kwc_Abstract_List_ListEditButtonController
 {
+    protected $_showChildComponentGridColumns = false;
+
     protected function _initColumns()
     {
         parent::_initColumns();

@@ -18,6 +18,6 @@ class Kwc_User_LostPassword_SetPassword_Form_Component
         ) {
             return trlKwf('Maybe you have already set your password, or the link was not copied correct out of the email.');
         }
-        return null;
+        return parent::_getErrorMessage($type);
     }
 }

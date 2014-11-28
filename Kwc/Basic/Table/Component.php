@@ -42,6 +42,9 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         $ret['settingsRow'] = $this->_getRow();
         $ret['tableStyle'] = $this->_getRow()->table_style;
         $ret['columnCount'] = $this->getColumnCount();
+        if (Kwf_Config::getValue('kwc.responsive')) {
+            $ret['cssClass'] .= ' responsive'.ucfirst($this->_getRow()->responsive_style);
+        }
 
         $dataSelect = new Kwf_Model_Select();
         $dataSelect->whereEquals('visible', 1);
@@ -57,6 +60,10 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
             $ret['dataRows'][] = $rowData;
         }
         $ret['dataRows'] = Kwc_Basic_Table_Component::addDefaultCssClasses($ret['dataRows'], $this->_getSetting('rowStyles'));
+        $ret['headerRows'] = array();
+        if (isset($ret['dataRows'][0]['htmlTag']) && $ret['dataRows'][0]['htmlTag'] == 'th') {
+            $ret['headerRows'] = array(array_shift($ret['dataRows']));
+        }
         return $ret;
     }
 

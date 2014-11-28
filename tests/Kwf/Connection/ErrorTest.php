@@ -88,6 +88,6 @@ class Kwf_Connection_ErrorTest extends Kwf_Test_SeleniumTestCase
         $this->click("//button[text()='testD']");
         $this->waitForConnections();
         $text = $this->getText("//*[contains(text(), 'Kwf_Exception')]");
-        $this->assertTrue((bool)strpos($text, 'Connection/TestController.php:50'));
+        $this->assertTrue((bool)strpos($text, 'Connection/TestController.php:49'));
     }
 }

@@ -1,43 +1,43 @@
-Kwf.onContentReady(function(el) {
-    Ext.fly(el).query('a').forEach(function(a) {
-        var m = a.rel.match(/kwfViewAjaxFilter({.*?})/)
-        if (m) {
-            if (a.kwfViewAjaxInitDone) return;
-            a.kwfViewAjaxInitDone = true;
-            var config = Ext.decode(m[1]);
+Kwf.onElementReady('a', function viewAjaxFilterLink(a) {
+    a = a.dom;
+    if (a.kwfViewAjaxInitDone) return; //ignore back link
 
-            if (!Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId]) Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId] = [];
-            Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId].push(a);
+    var m = a.rel.match(/kwfViewAjaxFilter({.*?})/)
+    if (m) {
+        var config = Ext.decode(m[1]);
 
-            Ext.fly(a).on('click', function(ev) {
-                var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.config.viewComponentId];
-                if (!view) return
-                view.loadView({
-                    filterComponentId: this.config.componentId
-                });
-                if (view._getState().viewFilter != this.config.componentId) {
-                    view._getState().viewFilter = this.config.componentId;
-                    view._getState().menuLinkId = a.id;
-                    Kwf.Utils.HistoryState.pushState(document.title, a.href);
-                }
-                Kwc.Directories.List.ViewAjax.filterLinks[this.config.viewComponentId].forEach(function(i) {
-                    Ext.fly(i).removeClass('current');
-                }, this);
-                Ext.fly(a).addClass('current');
+        if (!Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId]) Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId] = [];
+        Kwc.Directories.List.ViewAjax.filterLinks[config.viewComponentId].push(a);
 
-                ev.stopEvent();
+        Ext.fly(a).on('click', function(ev) {
+            var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.config.viewComponentId];
+            if (!view) return;
+            view.loadView({
+                filterComponentId: this.config.componentId
+            });
+            if (view._getState().viewFilter != this.config.componentId) {
+                view._getState().viewFilter = this.config.componentId;
+                view._getState().menuLinkId = a.id;
+                Kwf.Utils.HistoryState.pushState(document.title, a.href);
+            }
+            Kwc.Directories.List.ViewAjax.filterLinks[this.config.viewComponentId].forEach(function(i) {
+                Ext.fly(i).removeClass('current');
+            }, this);
+            Ext.fly(a).addClass('current');
 
-            }, {config: config});
-        }
-    }, this);
+            ev.stopEvent();
+
+        }, {config: config});
+    }
 });
 
-Kwf.onElementReady('.kwcDirectoriesListViewAjax', function(el, config) {
+Kwf.onElementReady('.kwcDirectoriesListViewAjax', function viewAjax(el, config) {
     config.renderTo = el.down('.viewContainer');
     el.select('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
     el.kwcViewAjax = new Kwc.Directories.List.ViewAjax(config);
-}, this, {
-    priority: 0 //call *after* initializing kwcForm to have access to searchForm
+}, {
+    priority: 0, //call *after* initializing kwcForm to have access to searchForm
+    defer: true
 });
 
 //if there is no viewAjax that can handle the changed state reload current page
@@ -62,20 +62,20 @@ Kwc.Directories.List.ViewAjax = Ext.extend(Ext.Panel, {
 
     controllerUrl: null,
 
-    directoryUrl: null, //needed to implement back-link in detail without page load
-
     loadMoreBufferPx: 700,
 
     border: false,
-    layout: 'fit',
+    layout: 'auto',
     cls: 'posts',
     initComponent: function() {
         Kwc.Directories.List.ViewAjax.byComponentId[this.componentId] = this;
-        Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.directoryViewComponentId] = this;
+        if (this.directoryViewComponentId) {
+            Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.directoryViewComponentId] = this;
+        }
         this.view = new Kwc.Directories.List.ViewAjax.View({
             controllerUrl: this.controllerUrl,
-            directoryUrl: this.directoryUrl,
             directoryComponentId: this.directoryComponentId,
+            directoryComponentClass: this.directoryComponentClass,
             baseParams: {
                 componentId: this.componentId
             },
@@ -283,7 +283,7 @@ Kwc.Directories.List.ViewAjax.filterLinks = {};
 
 Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
 {
-    layout: 'fit',
+    layout: 'auto',
     border: false,
     autoHeight: true,
 
@@ -325,9 +325,11 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         }, this);
         
         this.store.on('load', function(s) {
-            var valueElement = this.el.parent('.kwcDirectoriesListViewAjax').child('.kwcDirectoriesListViewCount .totalValue');
-            if (valueElement) {
-                valueElement.update(this.store.getTotalCount());
+            var valueElements = this.el.parent('.kwcDirectoriesListViewAjax').select('.kwcDirectoriesListViewCount .totalValue', true);
+            if (valueElements.getCount()) {
+                valueElements.each(function(valueElement) {
+                    valueElement.update(this.store.getTotalCount());
+                }, this);
             }
         }, this);
 
@@ -476,7 +478,11 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
         if (!m) return;
         var config = Ext.decode(m[1]);
         if (!config.directoryComponentId) return;
-        if (config.directoryComponentId != this.directoryComponentId) return;
+        if (this.directoryComponentId) {
+            if (config.directoryComponentId != this.directoryComponentId) return;
+        } else {
+            if (config.directoryComponentClass != this.directoryComponentClass) return;
+        }
 
         ev.stopEvent();
         //more... Link clicked
@@ -522,8 +528,9 @@ Kwc.Directories.List.ViewAjax.View = Ext.extend(Kwf.Binding.AbstractPanel,
                 this.detailEl.update(response.responseText);
                 Kwf.Statistics.count(href);
 
+                var directoryUrl = href.match(/(.*)\/[^/]+/)[1];
                 this.detailEl.query('a').forEach(function(el) {
-                    if (el.href == location.protocol+'//'+location.host+this.directoryUrl) {
+                    if (el.href == directoryUrl) {
                         el.kwfViewAjaxInitDone = true;
                         Ext.fly(el).on('click', function(ev) {
                             ev.stopEvent();

@@ -1,17 +1,14 @@
 // um flackern zu unterbinden
 document.write('<style type="text/css"> div.kwfSwitchDisplay div.switchContent { display: none; } </style>');
 
-Kwf.onContentReady(function() {
-    var els = Ext.query('div.kwfSwitchDisplay');
-    els.forEach(function(el) {
-        el = Ext.get(el);
-        // Attach Switch.Display-Object to dom because ext-element is still existent even though
-        // it's no part of dom anymore when html is changed e.g. because of ajax-view
-        if (!el.dom.switchDisplayObject) {
-            el.dom.switchDisplayObject = new Kwf.Switch.Display(el);
-        }
-    });
-});
+Kwf.onElementReady('div.kwfSwitchDisplay', function switchDisplay(el) {
+    el = Ext.get(el);
+    // Attach Switch.Display-Object to dom because ext-element is still existent even though
+    // it's no part of dom anymore when html is changed e.g. because of ajax-view
+    if (!el.dom.switchDisplayObject) {
+        el.dom.switchDisplayObject = new Kwf.Switch.Display(el);
+    }
+}, {defer: true});
 
 Kwf.Switch.Display = function(el, config) {
     this.addEvents({
@@ -32,6 +29,7 @@ Kwf.Switch.Display = function(el, config) {
     this.switchLink = Ext.get(Ext.query('.switchLink', this.el.dom)[0]);
     if (!this.switchLink) this.switchLink = Ext.get(Ext.query('.switchLinkHover', this.el.dom)[0]);
     this.switchContent = Ext.get(Ext.query('.switchContent', this.el.dom)[0]);
+    if(!this.switchContent) return;
     this.kwfSwitchCloseLink = Ext.query('.switchCloseLink', this.el.dom);
     if (this.kwfSwitchCloseLink.length) {
         this.kwfSwitchCloseLink = Ext.get(this.kwfSwitchCloseLink[0]);
@@ -49,8 +47,9 @@ Kwf.Switch.Display = function(el, config) {
         this.switchContent.setStyle('display', 'none');
     }
 
-    // if it is important, show on startup
-    if (this.switchContent.child('.kwfImportant')) {
+    // if it is important or active, show on startup
+    if (this.switchContent.child('.kwfImportant')
+        || this.switchContent.hasClass('active')) {
         this.switchContent.setStyle('display', 'block');
         this.switchContent.setStyle('height', 'auto');
         this.switchLink.addClass('switchLinkOpened');
@@ -122,6 +121,7 @@ Ext.extend(Kwf.Switch.Display, Ext.util.Observable, {
         this.fireEvent('beforeOpen', this);
         this.switchContent.stopFx();
         this.switchContent.setStyle('display', 'block');
+        Kwf.callOnContentReady(this.el.dom, {newRender: false});
         this.switchContent.scale(undefined, this.switchContent.scaleHeight,
             { easing: 'easeOut', duration: this.config.animation.duration, afterStyle: "display:block;height:auto;",
                 callback: function() {

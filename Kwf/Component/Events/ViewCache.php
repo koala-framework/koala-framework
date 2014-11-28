@@ -52,12 +52,16 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onComponentClassContentChanged'
         );
         $ret[] = array(
-            'event' => 'Kwf_Component_Event_ComponentClass_PartialsChanged',
-            'callback' => 'onComponentClassPartialsChanged'
+            'event' => 'Kwf_Component_Event_ComponentClass_AllPartialChanged',
+            'callback' => 'onComponentClassAllPartialChanged'
         );
         $ret[] = array(
             'event' => 'Kwf_Component_Event_ComponentClass_PartialChanged',
             'callback' => 'onComponentClassPartialChanged'
+        );
+        $ret[] = array(
+            'event' => 'Kwf_Component_Event_ComponentClass_PartialsChanged',
+            'callback' => 'onComponentClassPartialsChanged'
         );
         $ret[] = array(
             'event' => 'Kwf_Component_Event_ComponentClassPage_ContentChanged',
@@ -202,7 +206,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     }
 
     // namechanged and filnamechanged-events
-    public function onPageChanged(Kwf_Component_Event_Page_ContentChanged $event)
+    public function onPageChanged(Kwf_Component_Event_Component_Abstract $event)
     {
         $this->_updates[] = array(
             'type' => 'componentLink',
@@ -268,7 +272,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         }
     }
 
-    public function onComponentClassPartialsChanged(Kwf_Component_Event_ComponentClass_PartialsChanged $event)
+    public function onComponentClassAllPartialChanged(Kwf_Component_Event_ComponentClass_AllPartialChanged $event)
     {
         $this->_updates[] = array(
             'type' => 'partial',
@@ -285,6 +289,15 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'value' => $event->id
         );
         $this->_log("type=partial component_class=$event->class value=$event->id");
+    }
+
+    public function onComponentClassPartialsChanged(Kwf_Component_Event_ComponentClass_PartialsChanged $event)
+    {
+        $this->_updates[] = array(
+            'type' => 'partials',
+            'component_class' => $event->class
+        );
+        $this->_log("type=partials component_class=$event->class");
     }
 
     public function onComponentClassPageContentChanged(Kwf_Component_Event_ComponentClassPage_ContentChanged $event)

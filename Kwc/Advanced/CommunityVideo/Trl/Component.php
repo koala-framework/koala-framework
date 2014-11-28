@@ -1,5 +1,5 @@
 <?php
-class Kwc_Advanced_CommunityVideo_Trl_Component extends Kwc_Abstract_Flash_Trl_Component
+class Kwc_Advanced_CommunityVideo_Trl_Component extends Kwc_Chained_Trl_Component
 {
     public static function getSettings($masterComponentClass)
     {
@@ -14,21 +14,20 @@ class Kwc_Advanced_CommunityVideo_Trl_Component extends Kwc_Abstract_Flash_Trl_C
     {
         $ret = parent::getTemplateVars();
 
-        $url = $this->getRow()->url;
-        if ($url) {
-            $ret['flash']['data']['url'] = Kwc_Advanced_CommunityVideo_Component::getFlashUrl($this->getRow());
-            if ($this->getRow()->width) $ret['flash']['data']['width'] = $this->getRow()->width;
-            if ($this->getRow()->height) $ret['flash']['data']['height'] = $this->getRow()->height;
+        if ($this->getRow()->own_url) {
+            $ret['url'] = Kwc_Advanced_CommunityVideo_Component::getVideoUrl($this->getRow()->url, $ret['row']);
         }
-
         return $ret;
     }
 
     public function hasContent()
     {
-        if (Kwc_Advanced_CommunityVideo_Component::getFlashUrl($this->getRow())) {
-            return true;
+        if ($this->getRow()->own_url) {
+            if (Kwc_Advanced_CommunityVideo_Component::getVideoUrl($this->getRow()->url, $this->getData()->chained->getComponent()->getRow())) return true;
+
+            return false;
         }
-        return false;
+
+        return parent::hasContent();
     }
 }

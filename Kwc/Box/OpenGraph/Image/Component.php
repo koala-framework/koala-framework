@@ -8,9 +8,9 @@ class Kwc_Box_OpenGraph_Image_Component extends Kwc_Abstract_Image_Component
         $ret['dimensions'] = array(
             'default'=>array(
                 'text' => trlKwf('default'),
-                'width' => 200,
-                'height' => 200,
-                'scale' => Kwf_Media_Image::SCALE_CROP
+                'width' => 1800,
+                'height' => 1200,
+                'cover' => false,
             ),
         );
         $ret['altText'] = false;

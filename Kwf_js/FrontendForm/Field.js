@@ -82,6 +82,8 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
     },
     show: function() {
         this.el.show();
+    },
+    onError: function(message) {
     }
 });
 

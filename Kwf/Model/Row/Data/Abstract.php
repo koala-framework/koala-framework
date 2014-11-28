@@ -136,16 +136,22 @@ class Kwf_Model_Row_Data_Abstract extends Kwf_Model_Row_Abstract
     public function delete()
     {
         parent::delete();
+        if ($this->_model->hasDeletedFlag()) {
+            $this->_beforeDelete();
+            $this->deleted = true;
+            $this->save();
+            $this->_afterDelete();
+        } else {
+            $this->_beforeDelete();
+            $id = $this->{$this->_getPrimaryKey()};
+            $this->_model->delete($this);
+            $this->_afterDelete();
 
-        $this->_beforeDelete();
-        $id = $this->{$this->_getPrimaryKey()};
-        $this->_model->delete($this);
-        $this->_afterDelete();
-
-        $this->_data = array_combine(
-            array_keys($this->_data),
-            array_fill(0, count($this->_data), null)
-        );
+            $this->_data = array_combine(
+                array_keys($this->_data),
+                array_fill(0, count($this->_data), null)
+            );
+        }
     }
 
 }

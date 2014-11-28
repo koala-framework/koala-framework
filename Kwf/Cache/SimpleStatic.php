@@ -61,7 +61,7 @@ class Kwf_Cache_SimpleStatic
     {
         if (extension_loaded('apc')) {
             if (php_sapi_name() == 'cli') {
-                Kwf_Util_Apc::callClearCacheByCli(array('clearCacheSimpleStatic'=>array($cacheIdPrefix)));
+                Kwf_Util_Apc::callClearCacheByCli(array('clearCacheSimpleStatic'=>$cacheIdPrefix));
             } else {
                 if (!class_exists('APCIterator')) {
                     throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
@@ -72,7 +72,11 @@ class Kwf_Cache_SimpleStatic
                     if ($it->getTotalCount() && !$it->current()) {
                         //APCIterator is borked, delete everything
                         //see https://bugs.php.net/bug.php?id=59938
-                        apc_clear_cache('user');
+                        if (extension_loaded('apcu')) {
+                            apc_clear_cache();
+                        } else {
+                            apc_clear_cache('user');
+                        }
                     } else {
                         //APCIterator seems to work, use it for deletion
                         apc_delete($it);

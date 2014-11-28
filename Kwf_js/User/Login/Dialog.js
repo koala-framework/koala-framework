@@ -3,7 +3,7 @@ Kwf.User.Login.Dialog = Ext.extend(Ext.Window,
 {
     initComponent: function()
     {
-        this.height = 255;
+        this.height = 275;
         this.width = 310;
         this.modal = true;
         this.title = trlKwf('Login');

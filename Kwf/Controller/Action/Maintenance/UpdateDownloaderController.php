@@ -3,7 +3,7 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
 {
     public function indexAction()
     {
-        $this->view->assetsType = 'Kwf_Controller_Action_Maintenance:UpdateDownloader';
+        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('UpdateDownloader');
         $this->view->xtype = 'kwf.maintenance.updateDownloader';
 
         $this->view->defaultLibraryUrl = 'https://github.com/vivid-planet/library/archive/master.tar.gz';
@@ -156,7 +156,7 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
             unlink($target);
         }
 
-        Kwf_Util_ClearCache::getInstance()->clearCache('all', false, true);
+        Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>false, 'refresh'=>true));
     }
 
     public function jsonExecuteUpdatesAction()

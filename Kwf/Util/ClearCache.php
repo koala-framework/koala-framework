@@ -4,7 +4,7 @@ class Kwf_Util_ClearCache
     /**
      * @return Kwf_Util_ClearCache
      */
-    public function getInstance()
+    public static function getInstance()
     {
         static $i;
         if (!isset($i)) {
@@ -22,6 +22,9 @@ class Kwf_Util_ClearCache
             if ($d->isDir() && substr($d->getFilename(), 0, 1) != '.') {
                 if ($d->getFilename() == 'searchindex') continue;
                 if ($d->getFilename() == 'fulltext') continue;
+                if ($d->getFilename() == 'scss') continue; //never clear scss, too expensive to regenerate
+                if ($d->getFilename() == 'media') continue; //never clear media, too expensive to regenerate
+                if ($d->getFilename() == 'mediameta') continue; //never clear mediameta, too expensive to regenerate
                 $ret[] = $d->getFilename();
             }
         }
@@ -84,6 +87,7 @@ class Kwf_Util_ClearCache
             if ($d != 'config'    //handled in Types_Config
                 && $d != 'assets' //handled in Types_Assets
                 && $d != 'trl' //handled in Types_Trl
+                && $d != 'view' //removed indirectly by Types_TableComponentView
             ) {
                 $types[] = new Kwf_Util_ClearCache_Types_Dir($d);
             }
@@ -102,7 +106,7 @@ class Kwf_Util_ClearCache
         if (Kwf_Config::getValue('assetsCacheUrl')) {
             $types[] = new Kwf_Util_ClearCache_Types_AssetsServer();
         }
- 
+
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
         if (Kwf_Component_Data_Root::getComponentClass()) {
@@ -144,13 +148,15 @@ class Kwf_Util_ClearCache
     }
 
     /**
-     * @param string types of caches that should be cleared
-     * @param bool if output should shown (for cli)
-     * @param bool if caches should be refreshed (warmed up)
-     * @param array possible options: skipMaintenanceBootstrap, skipOtherServers
+     * @param array possible options: types(=all), output(=false), refresh(=true), excludeTypes, skipMaintenanceBootstrap, skipOtherServers
      */
-    public final function clearCache($typeNames = 'all', $output = false, $refresh = true, $options = array())
+    public final function clearCache(array $options)
     {
+        $typeNames = $options['types'];
+        $output = isset($options['output']) ? $options['output'] : false;
+        $refresh = isset($options['refresh']) ? $options['refresh'] : false;
+        $excludeTypes = isset($options['excludeTypes']) ? $options['excludeTypes'] : array();
+
         Kwf_Component_ModelObserver::getInstance()->disable();
 
         ini_set('memory_limit', '512M');
@@ -170,6 +176,11 @@ class Kwf_Util_ClearCache
                     $types[] = $t;
                 }
             }
+        }
+
+        if (is_string($excludeTypes)) $excludeTypes = explode(',', $excludeTypes);
+        foreach ($types as $k=>$i) {
+            if (in_array($i->getTypeName(), $excludeTypes)) unset($types[$k]);
         }
 
         $maxTypeNameLength = 0;

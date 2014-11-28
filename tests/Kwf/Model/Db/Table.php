@@ -9,8 +9,14 @@ class Kwf_Model_Db_Table extends Kwf_Db_Table_Abstract
         'id' => array(
             'DATA_TYPE' => 'int'
         ),
-        'foo' => array(),
-        'bar' => array(),
-        'orderKey' => array()
+        'foo' => array(
+            'DATA_TYPE' => 'string'
+        ),
+        'bar' => array(
+            'DATA_TYPE' => 'string'
+        ),
+        'orderKey' => array(
+            'DATA_TYPE' => 'string'
+        )
     );
 }

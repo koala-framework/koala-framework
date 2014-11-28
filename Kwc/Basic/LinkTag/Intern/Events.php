@@ -53,12 +53,14 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
     {
         foreach ($this->_getPageIdsFromRecursiveEvent($event) as $pageId) {
             $this->_deleteCacheForTarget($pageId, true);
+            $this->_changeHasContentForTarget($pageId, true);
         }
     }
 
     public function onPageRemovedAdded(Kwf_Component_Event_Component_AbstractFlag $event)
     {
         $this->_deleteCacheForTarget($event->component->dbId, false);
+        $this->_changeHasContentForTarget($event->component->dbId, false);
     }
 
     //usually child componets can be deleted using %, but not those from pages table as the ids always start with numeric
@@ -80,9 +82,17 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
     {
         foreach (self::getComponentsForTarget($this->_class, $targetId, $includeSubpages) as $c) {
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+            //$this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c));
             if ($c->isPage) {
                 $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
             }
+        }
+    }
+
+    private function _changeHasContentForTarget($targetId, $includeSubpages)
+    {
+        foreach (self::getComponentsForTarget($this->_class, $targetId, $includeSubpages) as $c) {
+            $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c));
         }
     }
 

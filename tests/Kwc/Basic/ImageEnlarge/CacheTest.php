@@ -1,6 +1,7 @@
 <?php
 /**
  * @group Kwc_Image
+ * @group Image
  */
 class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
 {
@@ -31,7 +32,7 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         $this->assertEquals($smallImage['width'], $im->getImageWidth());
         $this->assertEquals($smallImage['height'], $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/'.$smallImage['uploadId'],
-                                    array($smallImage['width'], $smallImage['height'], Kwf_Media_Image::SCALE_DEFORM)), $o['contents']);
+                                    array('width'=>$smallImage['width'], 'height'=>$smallImage['height'], 'cover' => true), $smallImage['uploadId']), $o['contents']);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
@@ -57,7 +58,7 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         $this->assertEquals($largeImage['width'], $im->getImageWidth());
         $this->assertEquals($largeImage['height'], $im->getImageHeight());
         $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/'.$largeImage['uploadId'],
-                                    array($largeImage['width'], $largeImage['height'], Kwf_Media_Image::SCALE_DEFORM)), file_get_contents($o['file']));
+                                    array($largeImage['width'], $largeImage['height'], 'cover' => true)), file_get_contents($o['file']));
     }
 
     public function testWithoutSmallImageComponentHtml()
@@ -80,86 +81,35 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         );
     }
 
-    public function testWithoutSmallImageComponentAddSmall()
+    public function testEnlargeCacheDeletedOnBaseImageChanged()
     {
-        $this->_assert(
-            '1800',
-            array('width'=>10, 'height'=>10, 'uploadId'=>1, 'mimeType' => 'image/png'),
-            array('width'=>16, 'height'=>16, 'uploadId'=>1, 'mimeType' => 'image/png', 'pageUrl'=>'/foo1/image')
-        );
+        // Image and Enlarge have to define different dimensions because else it
+        // could happen that the parent has the same types as the child.
+        // Get EnlargeComponent
+        $component = $this->_root->getChildComponent('1804')
+                                 ->getChildComponent('-linkTag')
+                                 ->getChildComponent('_imagePage');
+        // Render EnlargeComponent. Request Enlarge-Image (image has to be big enough)
+        preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $component->render(), $matches);
+        foreach ($matches[0] as $key => $m) {
+            if (strpos($matches[3][$key], '{width}')!==false) continue;
+            $fileWithGreaterHeight = Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
+        }
 
-        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_TestModel')->createRow();
-        $row->component_id = '1800-linkTag';
-        $row->kwf_upload_id = 2;
-        $row->preview_image = 1;
+        // Change basis-bild
+        $row = $this->_root->getChildComponent('1804')->getComponent()->getRow();
+        $row->kwf_upload_id = 5;
         $row->save();
         $this->_process();
 
-        $this->_assert(
-            '1800',
-            array('width'=>10, 'height'=>10, 'uploadId'=>2, 'mimeType' => 'image/gif'),
-            array('width'=>16, 'height'=>16, 'uploadId'=>1, 'mimeType' => 'image/png', 'pageUrl'=>'/foo1/image')
-        );
+        // Assert if image cache was changed
+        preg_match_all('#/media/([^/]+)/([^/]+)/([^/]+)#', $component->render(), $matches);
+        foreach ($matches[0] as $key => $m) {
+            if (strpos($matches[3][$key], '{width}')!==false) continue;
+            $fileWithSmallerHeight = Kwf_Media::getOutput($matches[1][$key], $matches[2][$key], $matches[3][$key]);
+        }
+        $image1 = new Imagick($fileWithGreaterHeight['file']);
+        $image2 = new Imagick($fileWithSmallerHeight['file']);
+        $this->assertNotEquals($image1->getImageHeight(), $image2->getImageHeight());
     }
-
-    public function testWithSmallImageComponentRemoveSmall1()
-    {
-        $this->_assert(
-            '1802',
-            array('width'=>10, 'height'=>10, 'uploadId'=>1, 'mimeType' => 'image/png'),
-            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
-        );
-
-        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_TestModel')->getRow('1802-linkTag');
-        $row->preview_image = 0;
-        $row->save();
-        $this->_process();
-
-        $this->_assert(
-            '1802',
-            array('width'=>10, 'height'=>10, 'uploadId'=>2, 'mimeType' => 'image/gif'),
-            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
-        );
-    }
-
-    public function testWithSmallImageComponentRemoveSmall2()
-    {
-        $this->_assert(
-            '1802',
-            array('width'=>10, 'height'=>10, 'uploadId'=>1, 'mimeType' => 'image/png'),
-            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
-        );
-
-        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_TestModel')->getRow('1802-linkTag');
-        $row->kwf_upload_id = null;
-        $row->save();
-        $this->_process();
-
-        $this->_assert(
-            '1802',
-            array('width'=>10, 'height'=>10, 'uploadId'=>2, 'mimeType' => 'image/gif'),
-            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
-        );
-    }
-
-    public function testWithSmallImageComponentChangeSmall()
-    {
-        $this->_assert(
-            '1802',
-            array('width'=>10, 'height'=>10, 'uploadId'=>1, 'mimeType' => 'image/png'),
-            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
-        );
-
-        $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_TestModel')->getRow('1802-linkTag');
-        $row->kwf_upload_id = 3;
-        $row->save();
-        $this->_process();
-
-        $this->_assert(
-            '1802',
-            array('width'=>10, 'height'=>10, 'uploadId'=>3, 'mimeType' => 'image/png'),
-            array('width'=>210, 'height'=>70, 'uploadId'=>2, 'mimeType' => 'image/gif', 'pageUrl'=>'/foo3/image')
-        );
-    }
-
 }

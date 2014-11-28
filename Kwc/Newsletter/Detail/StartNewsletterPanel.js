@@ -176,23 +176,27 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
 
     _updateButtons: function(info)
     {
-        this.newsletterStartButton.dom.disabled = false;
-        if (info.state == 'start' || info.state == 'startLater' || info.state == 'sending') {
-            this.newsletterStartButtonContainer.hide();
-            this.newsletterPauseButtonContainer.show();
-        } else if (info.state == 'pause') {
-            this.newsletterStartButtonContainer.show();
-            this.newsletterPauseButtonContainer.hide();
-            this.newsletterStartButton.update(trlKwf('Resume Sending'));
-        } else if (info.state == 'finished') {
-            this.newsletterStartButtonContainer.show();
-            this.newsletterPauseButtonContainer.hide();
-            this.newsletterStartButton.update(trlKwf('Sending finished'));
+        if (parseInt(info.queued) == 0 && parseInt(info.sent) == 0) {
             this.newsletterStartButton.dom.disabled = true;
         } else {
-            this.newsletterStartButtonContainer.show();
-            this.newsletterPauseButtonContainer.hide();
-            this.newsletterStartButton.update(trlKwf('Send Newsletter'));
+            this.newsletterStartButton.dom.disabled = false;
+            if (info.state == 'start' || info.state == 'startLater' || info.state == 'sending') {
+                this.newsletterStartButtonContainer.hide();
+                this.newsletterPauseButtonContainer.show();
+            } else if (info.state == 'pause') {
+                this.newsletterStartButtonContainer.show();
+                this.newsletterPauseButtonContainer.hide();
+                this.newsletterStartButton.update(trlKwf('Resume Sending'));
+            } else if (info.state == 'finished') {
+                this.newsletterStartButtonContainer.show();
+                this.newsletterPauseButtonContainer.hide();
+                this.newsletterStartButton.update(trlKwf('Sending finished'));
+                this.newsletterStartButton.dom.disabled = true;
+            } else {
+                this.newsletterStartButtonContainer.show();
+                this.newsletterPauseButtonContainer.hide();
+                this.newsletterStartButton.update(trlKwf('Send Newsletter'));
+            }
         }
     }
 });

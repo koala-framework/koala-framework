@@ -1,5 +1,5 @@
 <?=$this->component($this->downloadAll); ?>
-<div class="<?=$this->cssClass;?>">
+<div class="<?=$this->cssClass;?>" data-width="100%">
     <? $i = 0; ?>
     <? foreach ($this->children as $child) { ?>
         <?
@@ -20,11 +20,7 @@
             <?=$this->component($child);?>
         </div>
         <?
-            if ($i%$this->imagesPerLine == $this->imagesPerLine-1) {
-                echo '<div class="clear"></div>';
-            }
             $i++;
         ?>
     <? } ?>
-    <div class="clear"></div>
 </div>

@@ -20,11 +20,4 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Trl_Component extends Kwc_Abstract_
         if ($this->getRow()->visible) return true;
         return false;
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_Model('Kwc_Root_Category_Trl_GeneratorModel');
-        return $ret;
-    }
 }

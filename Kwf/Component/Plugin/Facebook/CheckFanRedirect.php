@@ -4,8 +4,8 @@ class Kwf_Component_Plugin_Facebook_CheckFanRedirect extends Kwf_Component_Plugi
 {
     public function replaceOutput($renderer)
     {
-        if (!Kwf_Config::getValue('kwc.fbAppData.siteId')) {
-            throw new Kwf_Exception('kwc.fbAppData.siteId has to be set in config');
+        if (!Kwf_Config::getValue('fbAppData.siteId')) {
+            throw new Kwf_Exception('fbAppData.siteId has to be set in config');
         }
         $facebook = Kwf_Util_Facebook_Api::getInstance();
         $userId = $facebook->getUser();
@@ -19,7 +19,7 @@ class Kwf_Component_Plugin_Facebook_CheckFanRedirect extends Kwf_Component_Plugi
         } else {
             $like = false;
             $likes = $facebook->api('/'.$userId.'/likes');
-            $fanSiteId = trim(Kwf_Config::getValue('kwc.fbAppData.siteId'));
+            $fanSiteId = trim(Kwf_Config::getValue('fbAppData.siteId'));
             foreach ($likes['data'] as $l) {
                 if ($l['id'] == $fanSiteId) {
                     $like = true;
@@ -33,9 +33,9 @@ class Kwf_Component_Plugin_Facebook_CheckFanRedirect extends Kwf_Component_Plugi
     }
     protected function _getRedirectPage()
     {
-        if (!Kwf_Config::getValue('kwc.fbAppData.pageTabUrl')) {
+        if (!Kwf_Config::getValue('fbAppData.pageTabUrl')) {
             throw new Kwf_Exception('kwc.fbApp.Data.pageTabUrl has to be set in config');
         }
-        return Kwf_Config::getValue('kwc.fbAppData.pageTabUrl');
+        return Kwf_Config::getValue('fbAppData.pageTabUrl');
     }
 }

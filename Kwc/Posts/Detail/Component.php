@@ -106,11 +106,4 @@ class Kwc_Posts_Detail_Component extends Kwc_Abstract_Composite_Component
 
         return nl2br($content);
     }
-
-    public static function getStaticCacheMeta($componentClass)
-    {
-        $ret = parent::getStaticCacheMeta($componentClass);
-        $ret[] = new Kwf_Component_Cache_Meta_Static_GeneratorRow();
-        return $ret;
-    }
 }

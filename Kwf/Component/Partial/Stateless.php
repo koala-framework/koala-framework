@@ -10,9 +10,4 @@ class Kwf_Component_Partial_Stateless extends Kwf_Component_Partial_Paging
         }
         return $ret;
     }
-
-    public static function useViewCache()
-    {
-        return true;
-    }
 }

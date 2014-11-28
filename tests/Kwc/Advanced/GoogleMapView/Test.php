@@ -48,7 +48,7 @@ class Kwc_Advanced_GoogleMapView_Test extends Kwc_TestAbstract
     public function testHtml()
     {
         $html = $this->_root->getComponentById(2002)->render(false);
-        $this->assertContains('<div class="webStandard webForm kwcAdvancedGoogleMapView kwcAdvancedGoogleMapViewTestComponent">', $html);
+        $this->assertContains('<div class="webStandard webForm kwcAbstractComposite kwcAdvancedGoogleMapView kwcAdvancedGoogleMapViewTestComponent">', $html);
 
         $this->assertEquals(1, preg_match('#value="([^"]+)"#', $html, $m));
         $options = Zend_Json::decode((str_replace("'", '"', htmlspecialchars_decode($m[1]))));

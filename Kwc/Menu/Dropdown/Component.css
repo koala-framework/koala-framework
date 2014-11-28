@@ -1,11 +1,9 @@
-.cssClass ul li { display: block; float: left; position: relative; }
+.cssClass ul li { display: block; float: left; }
 .cssClass ul li a { display: block; width: auto; }
 
 .cssClass ul div.dropdown {
     position: absolute;
-    margin-left: -7px;
     display: none;
-    z-index: 1000;
 }
 .cssClass ul li:hover div.dropdown,
 .cssClass ul li.hover div.dropdown { display: block; }

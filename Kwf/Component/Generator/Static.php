@@ -4,20 +4,7 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
 {
     protected $_idSeparator = '-';
     protected $_eventsClass = 'Kwf_Component_Generator_Events_Static';
-    private $_hasHome = false;
     protected $_addUrlPart = true;
-
-    protected function _init()
-    {
-        parent::_init();
-        foreach ($this->_settings['component'] as $class) {
-            if (Kwc_Abstract::hasSetting($class, 'dataClass') &&
-                Kwc_Abstract::getSetting($class, 'dataClass') == 'Kwf_Component_Data_Home'
-            ) {
-                $this->_hasHome = true;
-            }
-        }
-    }
 
     protected function _idMatches($id)
     {
@@ -201,19 +188,7 @@ class Kwf_Component_Generator_Static extends Kwf_Component_Generator_Abstract
     {
         $ret = parent::getGeneratorFlags();
         $ret['static'] = true;
-        if ($this->_hasHome) {
-            $ret['hasHome'] = true;
-        }
         return $ret;
-    }
-
-    protected function _formatSelectHome(Kwf_Component_Select $select)
-    {
-        if ($this->_hasHome) {
-            return $select;
-        } else {
-            return parent::_formatSelectHome($select);
-        }
     }
 
     public function getStaticChildComponentIds()

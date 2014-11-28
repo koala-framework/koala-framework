@@ -2,7 +2,7 @@
 class Kwf_Pdf_TcPdf extends TCPDF
 {
 
-    protected $_font = 'helvetica';
+    protected $_font = 'freesans';
     protected $_fontsize = 10;
     protected $_component;
 

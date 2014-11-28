@@ -32,33 +32,55 @@
         document.write('<div id="loading">');
           document.write('<div class="loading-indicator">');
             document.write('<?=$this->image('/assets/ext/resources/images/default/shared/large-loading.gif')?>');
-            document.write('<?= $this->applicationName ?><br /><span id="loading-msg"><?= trlKwf('Loading...') ?></span></div>');
+            document.write('<?= addslashes($this->applicationName) ?><br /><span id="loading-msg"><?= trlKwf('Loading...') ?></span></div>');
         document.write('</div>');
         var Kwf = {isApp: true};
     </script>
 
-    <?= $this->debugData() ?>
-    <?= $this->assets($this->ext['assetsType']) ?>
+    <?php echo $this->debugData() ?>
+    <?php echo $this->assets($this->ext['assetsPackage']) ?>
 
     <script type="text/javascript">
+    (function() {
+        var Ext = (window.Ext4 || window.Ext);
+        <?php if (isset($this->ext['user'])) { ?>
+        Kwf.user = '<?= $this->ext['user'] ?>';
+        <?php } ?>
         Kwf.userRole = '<?= $this->ext['userRole'] ?>';
-        <? if (isset($this->sessionToken)) { ?>
+        <?php if (isset($this->sessionToken)) { ?>
         Kwf.sessionToken = '<?= $this->sessionToken ?>';
-        <? } ?>
+        <?php } ?>
         Kwf.main = function() {
-            <? if ($this->ext['class']) { ?>
+            <?php if ($this->ext['class']) { ?>
             var panel = new <?= $this->ext['class'] ?>(<?= Zend_Json::encode($this->ext['config']) ?>);
-            <? } else { ?>
+            <?php } else { ?>
             var panel = <?= Zend_Json::encode($this->ext['config']) ?>;
-            <? } ?>
-            Kwf.currentViewport = new <?= $this->ext['viewport'] ?>({
-                items: [panel]
-            });
-            if(Kwf.Connection.masks == 0  && Ext.get('loading')) {
+            <?php } ?>
+            var isExt4Panel = false;
+            if (window.Ext4) {
+                if (Ext4.panel && Ext4.panel.Panel && panel instanceof Ext4.panel.Panel) {
+                    isExt4Panel = true;
+                } else if (Ext4.ClassManager.getNameByAlias('widget.'+panel.xtype)) {
+                    isExt4Panel = true;
+                }
+            }
+            if (!isExt4Panel) {
+                //Ext 2
+                Kwf.currentViewport = new <?= $this->ext['viewport'] ?>({
+                    items: [panel]
+                });
+            } else {
+                //Ext 4
+                Kwf.currentViewport = new Ext4.create('Kwf.Ext4.Viewport', {
+                    items: [panel]
+                });
+            }
+            if((!Kwf.Connection || Kwf.Connection.masks == 0)  && Ext.get('loading')) {
                 Ext.get('loading').fadeOut({remove: true});
             }
         };
         Ext.onReady(function() {
             Kwf.main();
         });
+    })();
     </script>

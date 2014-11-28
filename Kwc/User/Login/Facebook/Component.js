@@ -2,7 +2,7 @@ Kwf.onElementReady('.kwcUserLoginFacebook', function(el, config){
     if (!Ext.get('fb-root')) {
         el.createChild({id: 'fb-root'});
     }
-    Kwf.Facebook.on('afterinit', function(){
+    Kwf.Facebook.onReady(function(){
         el.child('.kwfFbLoginButton').on('click', function(ev){
             loginInit();
         }, this);
@@ -17,7 +17,7 @@ Kwf.onElementReady('.kwcUserLoginFacebook', function(el, config){
                     url: config.controllerUrl + '/json-auth',
                     success: function(response, options, r) {
                         el.child('.success').show();
-                        Kwf.callOnContentReady(el.dom);
+                        Kwf.callOnContentReady(el.dom, {newRender: false});
                     },
                     scope: this
                 });
@@ -29,4 +29,4 @@ Kwf.onElementReady('.kwcUserLoginFacebook', function(el, config){
         }
     });
     }
-}, this);
+});

@@ -5,7 +5,6 @@ class Kwc_User_Login_Facebook_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['assets']['dep'][] = 'KwfFacebook';
-        $ret['assets']['files'][] = 'kwf/Kwc/User/Login/Facebook/Component.js';
         $ret['generators']['child']['component']['success'] = 'Kwc_User_Login_Form_Success_Component';
         return $ret;
     }

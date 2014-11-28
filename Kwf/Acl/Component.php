@@ -5,12 +5,14 @@ class Kwf_Acl_Component extends Kwf_Acl
     {
         parent::__construct();
 
-        $this->addRole(new Kwf_Acl_Role('superuser', trlKwf('Superuser')));
-        $this->addRole(new Kwf_Acl_Role('preview', trlKwf('Preview')));
+        $this->addRole(new Kwf_Acl_Role('superuser', trlKwfStatic('Superuser')));
+        $this->addRole(new Kwf_Acl_Role('preview', trlKwfStatic('Preview')));
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_superuser', 'superuser'), 'edit_role');
         $this->add(new Kwf_Acl_Resource_EditRole('edit_role_preview', 'preview'), 'edit_role');
 
         $this->add(new Zend_Acl_Resource('kwf_debug_class-tree'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_logs'), 'kwf_debug');
+        $this->add(new Zend_Acl_Resource('kwf_debug_logs-form'), 'kwf_debug_logs');
         $this->add(new Zend_Acl_Resource('kwf_component_web'));
         $this->add(new Zend_Acl_Resource('kwf_component_media'));
         $this->add(new Zend_Acl_Resource('kwf_component_benchmark'));
@@ -26,6 +28,31 @@ class Kwf_Acl_Component extends Kwf_Acl
 
         $this->add(new Zend_Acl_Resource('kwf_component_root')); //Komponenten können hier resourcen anhängen
 
+        $this->addResource(
+            new Kwf_Acl_Resource_MenuDropdown(
+                'kwf_enquiries_dropdown', array('text'=>trlKwfStatic('Enquiries'), 'icon'=>'email.png')
+            )
+        );
+
+        $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_enquiries_enquiries',
+                array('text'=>trlKwfStatic('All Enquiries'), 'icon'=>'email.png')), 'kwf_enquiries_dropdown');
+
+        $this->add(new Kwf_Acl_Resource_MenuDropdown('settings',
+                    array('text'=>trlKwfStatic('Toolbox'), 'icon'=>'wrench.png')));
+            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_user_users',
+                    array('text'=>trlKwfStatic('Useradministration'), 'icon'=>'user.png')), 'settings');
+                $this->add(new Zend_Acl_Resource('kwf_user_user'), 'kwf_user_users');
+                $this->add(new Zend_Acl_Resource('kwf_user_log'), 'kwf_user_users');
+                $this->add(new Zend_Acl_Resource('kwf_user_comments'), 'kwf_user_users');
+            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_component_clear-cache',
+                    array('text'=>trlKwfStatic('Clear Cache'), 'icon'=>'database.png')), 'settings');
+            $this->add(new Kwf_Acl_Resource_MenuUrl('kwf_redirects_redirects',
+                    array('text'=>trlKwfStatic('Redirects'), 'icon'=>'page_white_go.png')), 'settings');
+                $this->add(new Zend_Acl_Resource('kwf_redirects_redirect'), 'kwf_redirects_redirects');
+                    $this->add(new Zend_Acl_Resource('kwf_redirects_pages'), 'kwf_redirects_redirect');
+
+
+
         $this->add(new Zend_Acl_Resource('kwc_structure')); // Create Structure Resource for all classes
         foreach(Kwc_Abstract::getComponentClasses() as $class) {
             $this->add(new Kwf_Acl_Resource_Component_Structure($class), 'kwc_structure');
@@ -40,6 +67,11 @@ class Kwf_Acl_Component extends Kwf_Acl
         $this->allow('superuser', 'kwf_component');
         $this->allow('superuser', 'edit_role_superuser');
         $this->allow('superuser', 'edit_role_preview');
+
+        $this->allow('admin', null);
+        $this->allow('superuser', 'settings');
+        //$this->allow('superuser', 'kwf_enquiries_enquiries');
+        $this->deny('superuser', 'kwf_component_clear-cache');
 
         $this->allow('admin', 'kwf_component_show-component');
         $this->allow('admin', 'kwf_component_pages');

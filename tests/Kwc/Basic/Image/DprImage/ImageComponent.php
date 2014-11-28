@@ -9,7 +9,7 @@ class Kwc_Basic_Image_DprImage_ImageComponent extends Kwc_Basic_Image_Component
             array(
                 'width' => 32,
                 'height' => 32,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
+                'cover' => false,
             )
         );
         return $ret;

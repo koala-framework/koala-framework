@@ -45,4 +45,4 @@ Kwf.onElementReady('.kwcAdvancedAudioPlayer', function(el, config) {
             }
         }
     });
-}, this, { checkVisibility: true });
+}, { checkVisibility: true });

@@ -16,7 +16,7 @@ class Kwc_Root_Abstract extends Kwc_Abstract
             'inherit' => true,
             'priority' => 0
         );
-        $ret['componentName'] = trlKwf('Root');
+        $ret['componentName'] = trlKwfStatic('Root');
         $ret['contentWidth'] = 600;
         $ret['contentWidthBoxSubtract'] = array();
         $ret['flags']['hasBaseProperties'] = true;
@@ -25,7 +25,8 @@ class Kwc_Root_Abstract extends Kwc_Abstract
 
     public function formatPath($parsedUrl)
     {
-        if (!Kwf_Config::getValue('server.domain')) {
+        if (!Kwf_Config::getValue('server.domain')
+            || !Kwf_Config::getValue('server.redirectToDomain')) {
             //domain is optional (but recommended)
             //for easy setup of examples just ignore the domain (as we don't have anything to compare to anyway)
             return $parsedUrl['path'];
@@ -75,8 +76,6 @@ class Kwc_Root_Abstract extends Kwc_Abstract
             return Kwf_Trl::getInstance()->getWebCodeLanguage();
         } else if ($propertyName == 'domain') {
             return Kwf_Config::getValue('server.domain');
-        } else if ($propertyName == 'money.decimals') {
-            return 2;
         } else if ($propertyName == 'money.decimalSeparator') {
             return trlcKwf('decimal separator', ".");
         } else if ($propertyName == 'money.thousandSeparator') {

@@ -3,3 +3,4 @@
 .cssClass .entry p { margin-bottom: 0px; }
 .cssClass .entry .teaser { margin: 10px 0px; padding: 10px; background: var(lightGray); }
 .cssClass .entry .readMoreLink { text-align: right; }
+.cssClass .entry .prevImage { float: left; margin-right: 10px; }

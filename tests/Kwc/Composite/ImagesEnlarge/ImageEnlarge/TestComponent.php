@@ -7,7 +7,7 @@ class Kwc_Composite_ImagesEnlarge_ImageEnlarge_TestComponent extends Kwc_Basic_I
         $ret['generators']['child']['component']['linkTag'] = 'Kwc_Composite_ImagesEnlarge_ImageEnlarge_EnlargeTag_TestComponent';
         $ret['ownModel'] = 'Kwc_Composite_ImagesEnlarge_ImageEnlarge_TestModel';
         $ret['dimensions'] = array(
-            array('width'=>100, 'height'=>100, 'scale'=>Kwf_Media_Image::SCALE_CROP)
+            array('width'=>100, 'height'=>100, 'cover' => true)
         );
         return $ret;
     }

@@ -2,20 +2,26 @@
 /**
  * Cache for view cache used in front of database
  *
- * If aws.simpleCacheCluster used it will NOT get deleted on clear-cache
+ * Will NOT get deleted on clear-cache
  */
 class Kwf_Component_Cache_Memory
 {
     private static $_zendCache = null;
+    private static $_instance;
     const CACHE_VERSION = 1; //increase when incompatible changes to cache contents are made, additionally cache_component table needs to be truncated by update script
+
 
     public static function getInstance()
     {
-        static $i;
-        if (!isset($i)) {
-            $i = new self();
+        if (!isset(self::$_instance)) {
+            self::$_instance = new self();
         }
-        return $i;
+        return self::$_instance;
+    }
+
+    public static function setInstance($instance)
+    {
+        self::$_instance = $instance;
     }
 
     public static function getZendCache()
@@ -98,8 +104,33 @@ class Kwf_Component_Cache_Memory
             static $prefix;
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-'.self::CACHE_VERSION.'-';
             return Kwf_Cache_Simple::getMemcache()->set($prefix.$id, $microtime);
+        } else if ($be == 'file') {
+            $file = self::_getFileNameForCacheId($id);
+            if (!file_exists($file)) return false;
+            unlink($file);
+            return true;
         } else {
             return self::getZendCache()->save('kwf-timestamp' . $microtime, $id);
+        }
+    }
+
+    /**
+     * Internal function only ment to be used by unit tests
+     *
+     * @internal
+     */
+    public function _clean()
+    {
+        $be = Kwf_Cache_Simple::getBackend();
+        if ($be == 'memcache') {
+            return Kwf_Cache_Simple::getMemcache()->flush();
+        } else if ($be == 'file') {
+            foreach (glob('cache/view/*') as $i) {
+                unlink($i);
+            }
+            return true;
+        } else {
+            return self::getZendCache()->clean();
         }
     }
 

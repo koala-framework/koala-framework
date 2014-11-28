@@ -36,6 +36,19 @@ Ext.apply(Ext.form.VTypes, {
     },
     emailMask : /[a-z0-9_\.\-@+]/i, //include +
 
+    url: function(v) {
+        //regexp copied from ext5
+        return /(((^https?)|(^ftp)):\/\/((([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*)|(localhost|LOCALHOST))\/?)/i.test(v);
+    },
+
+    urltel: function(v) {
+        if (/^tel:\+?[\d\s-\.]+$/.test(v)) {
+            return true;
+        }
+        return Ext.form.VTypes.url(v);
+    },
+    urltelText: trlKwf('This field should be a URL in the format "http://www.domain.com" or tel:0043 1234'),
+
     //Ersetzt alles außer a-z, 0-9 - durch _. So wie Kwf_Filter_Ascii
     //standard-ext implementierung überschrieben um den - zu erlauben
     alphanum:  function(v) {

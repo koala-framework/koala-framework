@@ -43,6 +43,6 @@ class Kwc_User_BoxWithoutLogin_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentByClass('Kwc_User_BoxWithoutLogin_Box_Component');
         $html = str_replace("\n", '', $c->render());
         $html = str_replace(' ', '', $html);
-        $this->assertRegExp("#<divclass=\"kwcUserBoxWithoutLoginBox\"><ul></ul></div>#", $html, 'Isn\'t empty but should be because no user is logged in...');
+        $this->assertRegExp("#<divclass=\"kwcAbstractCompositekwcUserBoxWithoutLoginBox\"><ul></ul></div>#", $html, 'Isn\'t empty but should be because no user is logged in...');
     }
 }

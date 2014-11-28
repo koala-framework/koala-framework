@@ -3,7 +3,7 @@ class Kwc_Advanced_Team_Member_Data_Vcard_ContentSender extends Kwf_Component_Ab
 {
     public function sendContent($includeMaster)
     {
-        $dataRow = (object)$this->getData()->parent->getComponent()->getRow()->toArray();
+        $dataRow = (object)$this->_data->parent->getComponent()->getRow()->toArray();
         if (!isset($dataRow->lastname) || !isset($dataRow->firstname)) {
             throw new Kwf_Exception_NotFound();
         }

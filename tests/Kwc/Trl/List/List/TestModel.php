@@ -9,7 +9,7 @@ class Kwc_Trl_List_List_TestModel extends Kwc_Abstract_List_Model
             'columns' => array('id', 'component_id', 'pos', 'visible', 'data'),
             'primaryKey' => 'id',
             'data'=> array(
-                array('id'=>1, 'component_id'=>'root-master_test', 'pos' => 1, 'visible' => 1),
+                array('id'=>1, 'component_id'=>'root-master_test', 'pos' => 1, 'visible' => 0),
                 array('id'=>2, 'component_id'=>'root-master_test', 'pos' => 2, 'visible' => 1),
                 array('id'=>3, 'component_id'=>'root-master_test', 'pos' => 3, 'visible' => 1),
             ),

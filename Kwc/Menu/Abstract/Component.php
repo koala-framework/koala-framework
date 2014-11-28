@@ -6,7 +6,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Menu');
         $ret['componentIcon'] = new Kwf_Asset('layout');
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'webStandard webMenu webListNone printHidden';
         $ret['showParentPage'] = false;
         $ret['showParentPageLink'] = false;
         $ret['level'] = 'main';
@@ -189,7 +189,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    protected function _getMenuData($parentData = null, $select = array())
+    protected function _getMenuData($parentData = null, $select = array(), $editableClass = 'Kwc_Menu_EditableItems_Component')
     {
         $i = 0;
         $ret = array();
@@ -213,12 +213,18 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
             $ret[] = $r;
             $i++;
         }
+        $this->_attachEditableToMenuData($ret, $editableClass);
+
+        return $ret;
+    }
+
+    protected function _attachEditableToMenuData(&$menuData, $editableClass)
+    {
         foreach ($this->_getSetting('generators') as $key => $generator) {
-            if (is_instance_of($generator['component'], 'Kwc_Menu_EditableItems_Component')) {
+            if (is_instance_of($generator['component'], $editableClass)) {
                 $c = $this->getData()->getChildComponent('-'.$key);
-                $c->getComponent()->attachEditableToMenuData($ret);
+                $c->getComponent()->attachEditableToMenuData($menuData);
             }
         }
-        return $ret;
     }
 }

@@ -98,7 +98,8 @@ class Kwf_Component_Settings
     {
         foreach ($settings as $k=>$i) {
             if (is_string($i) && preg_match('#^\\s*(trl|trlKwf)\\(\'(.*)\'\\)\s*$#', $i, $m)) {
-                $settings[$k] = Kwf_Trl::getInstance()->trl($m[2], array(), $m[1]=='trlKwf' ? Kwf_Trl::SOURCE_KWF : Kwf_Trl::SOURCE_WEB);
+                $fn = $m[1]; //trl or trlKwf
+                $settings[$k] = Kwf_Trl::getInstance()->$fn($m[2], array());
             } else if (is_string($i) && preg_match('#^\\.\'(.*)\'$#', $i, $m)) {
                 if (isset($settings[$k])) {
                     $settings[$k] = $settings[$k] . $m[1];
@@ -249,14 +250,15 @@ class Kwf_Component_Settings
             self::_verifyComponentClass($class);
             if ($setting == 'parentClasses') {
                 $p = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-                $ret = array();
-                do {
+                $ret = array($class);
+                while ($p = get_parent_class($p)) {
                     $ret[] = $p;
-                } while ($p = get_parent_class($p));
+                }
             } else if ($setting == 'parentFilePaths') {
                 //value = klasse, key=pfad
                 $ret = array();
                 foreach (self::getSetting($class, 'parentClasses') as $c) {
+                    $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
                     if (method_exists($c, '_getYamlConfigFile')) {
                         $file = call_user_func(array($c, '_getYamlConfigFile'));
                     } else {
@@ -296,6 +298,7 @@ class Kwf_Component_Settings
                     'scss' => array('filename'=>'Component', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
                     'masterCss' => array('filename'=>'Master', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
                     'masterScss' => array('filename'=>'Master', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
+                    'js' => array('filename'=>'Component', 'ext'=>'js', 'returnClass'=>false, 'multiple'=>true),
                 ));
             } else {
 

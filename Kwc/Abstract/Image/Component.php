@@ -13,34 +13,27 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $ret['dimensions'] = array(
             'default'=>array(
-                'text' => trlKwf('default'),
                 'width' => 300,
                 'height' => 200,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
-            ),
-            'original'=>array(
-                'text' => trlKwf('original'),
-                'width' => 0,
-                'height' => 0,
-                'scale' => Kwf_Media_Image::SCALE_ORIGINAL
-            ),
-            'custombestfit'=>array(
-                'text' => trlKwf('user-defined'),
-                'width' => self::USER_SELECT,
-                'height' => self::USER_SELECT,
-                'scale' => Kwf_Media_Image::SCALE_BESTFIT
-            ),
-            'customcrop'=>array(
-                'text' => trlKwf('user-defined'),
-                'width' => self::USER_SELECT,
-                'height' => self::USER_SELECT,
-                'scale' => Kwf_Media_Image::SCALE_CROP
+                'cover' => true
+              // cover = true means image will be scaled up to match size.
+                //  so the aspect ratio will be fixed when croping so that scaling wont deform image
+                // cover = false means image wont be scaled up if smaller than size.
             ),
             'fullWidth'=>array(
                 'text' => trlKwf('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
-                'scale' => Kwf_Media_Image::SCALE_DEFORM
+                'cover' => true
+            ),
+            'original'=>array(
+                'text' => trlKwf('original')
+            ),
+            'custom'=>array(
+                'text' => trlKwf('user-defined'),
+                'width' => self::USER_SELECT,
+                'height' => self::USER_SELECT,
+                'cover' => true
             ),
         );
 
@@ -54,13 +47,24 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['allowBlank'] = true;
         $ret['showHelpText'] = false;
         $ret['useDataUrl'] = false;
+        $ret['lazyLoadOutOfViewport'] = true; // Set to false to load image also when not in view
         $ret['flags']['hasFulltext'] = true;
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.css';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionField.js';
-        $ret['assets']['files'][] = 'kwf/Kwc/Abstract/Image/Component.js';
-        $ret['assets']['dep'][] = 'KwfOnReady';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionWindow.css';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/DimensionWindow.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropImage.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/CropImage.css';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageUploadField.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageUploadField.scss';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwf_js/Utils/Resizable.js';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageFile.js';
+        $ret['assets']['dep'][] = 'KwfResponsiveImg';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
+
+        $ret['defineWidth'] = false;
         return $ret;
     }
 
@@ -76,36 +80,9 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             if (!is_array($d)) {
                 throw new Kwf_Exception('Dimension setting must contain array of arrays');
             }
-            if (!array_key_exists('width', $d)) {
-                throw new Kwf_Exception('Dimension \''.$k.'\' must contain width');
+            if (isset($d['scale'])) {
+                throw new Kwf_Exception('Scale does not exist anymore. Use cover = false|true instead.');
             }
-            if (!array_key_exists('height', $d)) {
-                throw new Kwf_Exception('Dimension \''.$k.'\' must contain height');
-            }
-            if (!array_key_exists('scale', $d)) {
-                throw new Kwf_Exception('Dimension \''.$k.'\' must contain scale');
-            }
-            $validScales = array(Kwf_Media_Image::SCALE_BESTFIT, Kwf_Media_Image::SCALE_CROP, Kwf_Media_Image::SCALE_ORIGINAL, Kwf_Media_Image::SCALE_DEFORM);
-            if (!in_array($d['scale'], $validScales)) {
-                throw new Kwf_Exception("Invalid Scale '$d[scale]' for Dimension \''.$k.'\'");
-            }
-            if ($d['scale'] != Kwf_Media_Image::SCALE_ORIGINAL) {
-                if (!$d['width'] && !$d['height']) {
-                    throw new Kwf_Exception('Dimension \''.$k.'\' must contain width or height');
-                }
-            }
-        }
-
-        //wenn erste dimension (=standard wert!) bestfit oder crop ist, müssen
-        //width oder height gesetzt sein
-        reset($settings['dimensions']);
-        $firstDimension = current($settings['dimensions']);
-        if (($firstDimension['scale'] === Kwf_Media_Image::SCALE_BESTFIT ||
-            $firstDimension['scale'] === Kwf_Media_Image::SCALE_CROP) &&
-            empty($firstDimension['width']) &&
-            empty($firstDimension['height'])
-        ) {
-            throw new Kwf_Exception('The first dimension must contain width or height if bestfit or crop is used');
         }
     }
 
@@ -126,26 +103,40 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             $ret['showImageCaption'] = $imageCaptionSetting;
         }
 
-        //image src for high device pixel ratio (retina) displays
-        $ret['imageDpr2'] = null;
-        $data = $this->_getImageDataOrEmptyImageData();
-        if ($data) {
-            if (isset($data['image'])) {
-                $sourceSize = array($data['image']->getImageWidth(), $data['image']->getImageHeight());
-            } else {
-                $sourceSize = @getimagesize($data['file']);
-            }
-            $targetSize = $this->getImageDimensions();
-            if ($sourceSize[0] > $targetSize['width']*1.1 || $sourceSize[1] > $targetSize['height']*1.1) {
-                $id = $this->getData()->componentId;
-                $type = 'dpr2-'.$this->getImageUrlType();
-                $ret['imageDpr2'] = Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
-            }
-        }
-
+        $ret['cssClass'] .= ' dimension'.ucfirst($this->getDimensionSetting());
         $ret['altText'] = $this->_getAltText();
 
+        $imageData = $this->getImageDataOrEmptyImageData();
+        $ret = array_merge($ret,
+            Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['file'])
+        );
+
+        $ret['baseUrl'] = $this->getBaseImageUrl();
+        $ret['defineWidth'] = $this->_getSetting('defineWidth');
+        $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
         return $ret;
+    }
+
+    public function getDimensionSetting()
+    {
+        $dimensions = $this->_getSetting('dimensions');
+        $row = $this->getRow();
+        if (sizeof($dimensions) > 1) {
+            if ($row && isset($dimensions[$row->dimension])) {
+                return $row->dimension;
+            } else {
+                reset($dimensions);
+                return key($dimensions);
+            }
+        } else {
+            reset($dimensions);
+            return key($dimensions);
+        }
+    }
+
+    public final function getAltText()
+    {
+        return $this->_getAltText();
     }
 
     protected function _getAltText()
@@ -166,26 +157,17 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return false;
     }
 
-    //only for events
-    public function getImageUrlType()
-    {
-        $type = 'default';
-        $s = $this->_getImageDimensions();
-        if ($s['width'] === self::CONTENT_WIDTH) {
-            //use the contentWidth as type so we have an unique media cacheId depending on the width
-            //that way it's not necessary to delete the media cache when content with changes
-            $type = $this->getContentWidth();
-        }
-        return $type;
-    }
-
     public function getImageUrl()
     {
         $data = $this->_getImageDataOrEmptyImageData();
         if ($data) {
-            $id = $this->getData()->componentId;
-            $type = $this->getImageUrlType();
+            $s = $this->getImageDimensions();
+            $imageData = $this->_getImageDataOrEmptyImageData();
+            $width = Kwf_Media_Image::getResponsiveWidthStep($s['width'],
+                                Kwf_Media_Image::getResponsiveWidthSteps($s, $imageData['file']));
             if (Kwc_Abstract::getSetting($this->getData()->componentClass, 'useDataUrl')) {
+                $id = $this->getData()->componentId;
+                $type = str_replace('{width}', $width, $this->getBaseType());
                 $data = self::getMediaOutput($id, $type, $this->getData()->componentClass);
                 if (isset($data['file'])) {
                     $c = file_get_contents($data['file']);
@@ -198,7 +180,26 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                     return "data:$mime;base64,$base64";
                 }
             }
-            return Kwf_Media::getUrl($this->getData()->componentClass, $id, $type, $data['filename']);
+            return str_replace('{width}', $width, $this->getBaseImageUrl());
+        }
+        return null;
+    }
+
+    public function getBaseType()
+    {
+        $type = Kwf_Media::DONT_HASH_TYPE_PREFIX.'{width}';
+        $type .= '-'.substr(md5(json_encode($this->_getSetting('dimensions'))), 0, 6);
+        return $type;
+    }
+
+    public function getBaseImageUrl()
+    {
+        $data = $this->_getImageDataOrEmptyImageData();
+        if ($data) {
+            return Kwf_Media::getUrl($this->getData()->componentClass,
+                $this->getData()->componentId,
+                $this->getBaseType(),
+                $data['filename']);
         }
         return null;
     }
@@ -224,7 +225,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             'filename' => $filename,
             'file' => $file,
             'mimeType' => $fileRow->mime_type,
-            'row' => $row
+            'row' => $row,
+            'uploadId' => $fileRow->id
         );
     }
 
@@ -250,7 +252,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return null;
     }
 
-    protected function _getImageDimensions()
+    public function getConfiguredImageDimensions()
     {
         $row = $this->getRow();
         $dimension = $this->_getSetting('dimensions');
@@ -292,14 +294,26 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         } else {
             $s['height'] = $d['height'];
         }
-        $s['scale'] = $d['scale'];
+        if (isset($d['cover'])) {
+            $s['cover'] = $d['cover'];
+        }
         if (isset($d['aspectRatio'])) $s['aspectRatio'] = $d['aspectRatio'];
+
+        if ($row) {
+            if ($row->crop_width && $row->crop_height) {
+                $s['crop']['x'] = $row->crop_x;
+                $s['crop']['y'] = $row->crop_y;
+                $s['crop']['width'] = $row->crop_width;
+                $s['crop']['height'] = $row->crop_height;
+            }
+        }
+
         return $s;
     }
 
     public function getImageDimensions()
     {
-        $size = $this->_getImageDimensions();
+        $size = $this->getConfiguredImageDimensions();
         if ($size['width'] === self::CONTENT_WIDTH) {
             $size['width'] = $this->getContentWidth();
         }
@@ -314,7 +328,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
     public static function isValidMediaOutput($id, $type, $className)
     {
-        return Kwf_Media_Output_Component::isValid($id);
+        return Kwf_Media_Output_Component::isValidImage($id, $type);
     }
 
     public static function getMediaOutput($id, $type, $className)
@@ -327,52 +341,15 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             return null;
         }
 
-        if (substr($type, 0, 5) == 'dpr2-') {
-            //display pixel ratio 2
-            $dim = $component->getComponent()->getImageDimensions(); //take actual image size as base
-            $dim['width'] *= 2;
-            $dim['height'] *= 2;
-            if ($dim['scale'] === Kwf_Media_Image::SCALE_BESTFIT) {
-                //don't cause rounding errors
-                $dim['scale'] = Kwf_Media_Image::SCALE_DEFORM;
-            }
-        } else {
-            //default size; display pixel ratio 1
-            $dim = $component->getComponent()->_getImageDimensions();
-            if ($dim['width'] === self::CONTENT_WIDTH) {
-                $dim['width'] = $component->getComponent()->getContentWidth();
-            }
-        }
-        $ret = array();
-        if (isset($data['image'])) {
-            $output = Kwf_Media_Image::scale($data['image'], $dim);
-            $ret['contents'] = $output;
-        } else {
-            $sourceSize = @getimagesize($data['file']);
-            $scalingNeeded = true;
-            $resultingSize = Kwf_Media_Image::calculateScaleDimensions($data['file'], $dim);
-            if ($sourceSize && array($resultingSize['width'], $resultingSize['height']) == array($sourceSize[0], $sourceSize[1])) {
-                $scalingNeeded = false;
-            }
-            if ($scalingNeeded) {
-                //NOTE: don't pass actual size of the resulting image, scale() will calculate that on it's own
-                //else size is calculated twice and we get rounding errors
-                $output = Kwf_Media_Image::scale($data['file'], $dim);
-                $ret['contents'] = $output;
-            } else {
-                $ret['file'] = $data['file'];
-            }
-        }
-        $ret['mimeType'] = $data['mimeType'];
+        $dim = $component->getComponent()->getImageDimensions();
 
-        $ret['mtime'] = filemtime($data['file']);
-        return $ret;
+        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dim, $type);
     }
 
     public function getContentWidth()
     {
         $data = $this->_getImageDataOrEmptyImageData();
-        $s = $this->_getImageDimensions();
+        $s = $this->getConfiguredImageDimensions();
         if ($s['width'] === self::CONTENT_WIDTH) {
             return parent::getContentWidth();
         }
@@ -385,6 +362,15 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             return $s['width'];
         }
         return 0;
+    }
+
+    /**
+     * This function is needed because getContentWidth returns the width of uploaded
+     * image.
+     */
+    public function getMaxContentWidth()
+    {
+        return parent::getContentWidth();
     }
 
     public function getFulltextContent()

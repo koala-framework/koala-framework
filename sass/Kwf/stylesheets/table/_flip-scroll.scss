@@ -1,0 +1,29 @@
+@mixin flip-scroll {
+    display: block;
+
+    th, td {
+        display: block;
+    }
+
+    thead {
+        display: block;
+        float: left;
+
+        th {
+            text-align: right;
+        }
+    }
+
+    tbody {
+        display: block;
+        overflow-x: auto;
+        position: relative;
+        white-space: nowrap;
+        width: auto;
+
+        tr {
+            display: inline-block;
+            vertical-align: top;
+        }
+    }
+}

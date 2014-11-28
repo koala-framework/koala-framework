@@ -99,6 +99,21 @@ class Kwf_Component_Abstract
         if (isset($settings['formModel'])) {
             throw new Kwf_Exception("formModel is no longer supported. Set the model in the FrontendForm.php. Component: '$componentClass'");
         }
+        if (isset($settings['assets'])) {
+            $f = strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass;
+            $f = str_replace('_', '/', $f);
+            foreach ($settings['assets']['files'] as $i) {
+                if (substr($i, -strlen($f)-3) == $f.'.js') {
+                    throw new Kwf_Exception("Remove Component.js from assets setting, it's found automatically.");
+                }
+                if (substr($i, -strlen($f)-4) == $f.'.css') {
+                    throw new Kwf_Exception("Remove Component.css from assets setting, it's found automatically.");
+                }
+                if (substr($i, -strlen($f)-5) == $f.'.scss') {
+                    throw new Kwf_Exception("Remove Component.scss from assets setting, it's found automatically.");
+                }
+            }
+        }
     }
 
     /**

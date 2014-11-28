@@ -77,7 +77,8 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
         if ($this->getWidth()) {
             $style = " style=\"width: ".$this->getWidth()."px\"";
         }
-        $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\"$style>";
+        $cssClass = $this->getCls();
+        $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\"$style class=\"$cssClass\">";
         //todo: andere values varianten ermöglichen
         //todo: html wählt ersten wert vor-aus - ext galub ich nicht
         //      => sollte sich gleich verhalten.

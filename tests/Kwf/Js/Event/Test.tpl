@@ -1,6 +1,6 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head><?=$this->assets('Kwf_Js_Event:Test')?></head>
+    <head><?=$this->assets(new Kwf_Assets_Package_TestPackage('Kwf_Js_Event'))?></head>
     <body>
         <div style="margin: 20px; padding: 10px;">
             <div id="eventTest" style="width: 200px; height: 80px; background-color: #0ad;">

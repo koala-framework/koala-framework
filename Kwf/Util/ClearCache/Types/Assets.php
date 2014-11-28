@@ -8,25 +8,53 @@ class Kwf_Util_ClearCache_Types_Assets extends Kwf_Util_ClearCache_Types_Abstrac
 
     protected function _refreshCache($options)
     {
-        $loader = new Kwf_Assets_Loader();
-        $loader->getDependencies()->getMaxFileMTime(); //this is expensive and gets cached in filesystem
+        if (!Zend_Registry::get('db')) {
+            $this->_output("skipped, no db configured ");
+            return;
+        }
+        $config = Zend_Registry::get('config');
 
-        $webCodeLanguage = Kwf_Registry::get('config')->webCodeLanguage;
-        $_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip';
-        $assets = Kwf_Registry::get('config')->assets->toArray();
-        $assetTypes = array();
-        foreach ($assets as $assetsType => $v) {
-            if ($assetsType == 'dependencies') continue;
-            $this->_output($assetsType.' ');
-            $urls = $loader->getDependencies()->getAssetUrls($assetsType, 'js', 'web', Kwf_Component_Data_Root::getComponentClass(), $webCodeLanguage);
-            $urls = array_merge($urls, $loader->getDependencies()->getAssetUrls($assetsType, 'css', 'web', Kwf_Component_Data_Root::getComponentClass(), $webCodeLanguage));
-            foreach ($urls as $url) {
-                if (substr($url, 0, 7) == 'http://' || substr($url, 0, 8) == 'https://') {
-                    continue;
+        $langs = array();
+        if ($config->webCodeLanguage) $langs[] = $config->webCodeLanguage;
+
+        if ($config->languages) {
+            foreach ($config->languages as $lang=>$name) {
+                $langs[] = $lang;
+            }
+        }
+
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            $lngClasses = array();
+            foreach(Kwc_Abstract::getComponentClasses() as $c) {
+                if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
+                    in_array('language', Kwc_Abstract::getSetting($c, 'baseProperties'))
+                ) {
+                    $lngClasses[] = $c;
                 }
-                $url = preg_replace('#^'.Kwf_Setup::getBaseUrl().'/assets/#', '', $url);
-                $url = preg_replace('#\\?v=\d+(&t=\d+)?$#', '', $url);
-                $loader->getFileContents($url);
+            }
+            $lngs = Kwf_Component_Data_Root::getInstance()
+                ->getComponentsBySameClass($lngClasses, array('ignoreVisible'=>true));
+            foreach ($lngs as $c) {
+                $langs[] = $c->getLanguage();
+            }
+        }
+        $langs = array_unique($langs);
+
+        $dependencyName = array('Frontend', 'Admin');
+        foreach ($dependencyName as $depName) {
+
+            $p = Kwf_Assets_Package_Default::getInstance($depName);
+            $urls = array();
+            foreach ($langs as $language) {
+                $urls = array_merge($urls, $p->getPackageUrls('text/javascript', $language));
+                $urls = array_merge($urls, $p->getPackageUrls('text/css', $language));
+                $urls = array_merge($urls, $p->getPackageUrls('text/css; media=print', $language));
+            }
+            foreach ($urls as $url) {
+                if (substr($url, 0, 1) == '/') {
+                    if (Kwf_Setup::getBaseUrl()) $url = substr($url, strlen(Kwf_Setup::getBaseUrl()));
+                    Kwf_Assets_Dispatcher::getOutputForUrl($url, Kwf_Media_Output::ENCODING_NONE); //this will fill cache
+                }
             }
         }
     }

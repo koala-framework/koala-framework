@@ -23,7 +23,7 @@ function hlpKwf($string) {
  * @package Trl
  */
 function trl($string, $text = array()) {
-    return Kwf_Trl::getInstance()->trl($string, $text, Kwf_Trl::SOURCE_WEB);
+    return Kwf_Trl::getInstance()->trl($string, $text);
 }
 
 /**
@@ -35,7 +35,7 @@ function trl($string, $text = array()) {
  * @package Trl
  */
 function trlc($context, $string, $text = array()) {
-    return Kwf_Trl::getInstance()->trlc($context, $string, $text, Kwf_Trl::SOURCE_WEB);
+    return Kwf_Trl::getInstance()->trlc($context, $string, $text);
 }
 
 /**
@@ -47,7 +47,7 @@ function trlc($context, $string, $text = array()) {
  * @package Trl
  */
 function trlp($single, $plural, $text =  array()) {
-    return Kwf_Trl::getInstance()->trlp($single, $plural, $text, Kwf_Trl::SOURCE_WEB);
+    return Kwf_Trl::getInstance()->trlp($single, $plural, $text);
 }
 
 /**
@@ -60,7 +60,7 @@ function trlp($single, $plural, $text =  array()) {
  * @package Trl
  */
 function trlcp($context, $single, $plural, $text = array()) {
-    return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text, Kwf_Trl::SOURCE_WEB);
+    return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text);
 }
 
 /**
@@ -68,7 +68,7 @@ function trlcp($context, $single, $plural, $text = array()) {
  * @package Trl
  */
 function trlKwf($string, $text = array()) {
-    return Kwf_Trl::getInstance()->trl($string, $text, Kwf_Trl::SOURCE_KWF);
+    return Kwf_Trl::getInstance()->trlKwf($string, $text);
 }
 
 /**
@@ -76,7 +76,7 @@ function trlKwf($string, $text = array()) {
  * @package Trl
  */
 function trlcKwf($context, $string, $text = array()) {
-    return Kwf_Trl::getInstance()->trlc($context, $string, $text, Kwf_Trl::SOURCE_KWF);
+    return Kwf_Trl::getInstance()->trlcKwf($context, $string, $text);
 }
 
 /**
@@ -84,7 +84,7 @@ function trlcKwf($context, $string, $text = array()) {
  * @package Trl
  */
 function trlpKwf($single, $plural, $text =  array()) {
-    return Kwf_Trl::getInstance()->trlp($single, $plural, $text, Kwf_Trl::SOURCE_KWF);
+    return Kwf_Trl::getInstance()->trlpKwf($single, $plural, $text);
 }
 
 /**
@@ -92,7 +92,7 @@ function trlpKwf($single, $plural, $text =  array()) {
  * @package Trl
  */
 function trlcpKwf($context, $single, $plural, $text = array()) {
-    return Kwf_Trl::getInstance()->trlcp($context, $single, $plural, $text, Kwf_Trl::SOURCE_KWF);
+    return Kwf_Trl::getInstance()->trlcpKwf($context, $single, $plural, $text);
 }
 
 // trl functions for e.g. placeholders
@@ -347,12 +347,6 @@ class Kwf_Trl
                     );
                     $trlStaticData = substr($ret, $l['start']+15, $l['end']-$l['start']-15);
                     $trlStaticData = unserialize($trlStaticData);
-                    if (strtolower(substr($trlStaticData['type'], -3)) == 'kwf') {
-                        $trlStaticData['type'] = substr($trlStaticData['type'], 0, -3);
-                        $source = Kwf_Trl::SOURCE_KWF;
-                    } else {
-                        $source = Kwf_Trl::SOURCE_WEB;
-                    }
 
                     $args = $trlStaticData['args'];
                     if ($args[1]) {
@@ -364,7 +358,6 @@ class Kwf_Trl
                             $args[1] = $this->trlStaticExecute($args[1], $language);
                         }
                     }
-                    $args[] = $source;
                     $args[] = $language;
                     $replace = call_user_func_array(
                         array($this, $trlStaticData['type']), $args
@@ -384,12 +377,26 @@ class Kwf_Trl
         return $ret;
     }
 
-    public function trl($string, $params, $source, $language = null)
+    public function trlKwf($string, $params = array(), $language = null)
     {
-        return $this->trlc('', $string, $params, $source, $language);
+        return $this->_trlc('', $string, $params, self::SOURCE_KWF, $language);
     }
 
-    public function trlc($context, $string, $params, $source, $language = null)
+    public function trl($string, $params = array(), $language = null)
+    {
+        return $this->_trlc('', $string, $params, self::SOURCE_WEB, $language);
+    }
+    public function trlcKwf($context, $string, $params = array(), $language = null)
+    {
+        return $this->_trlc($context, $string, $params, self::SOURCE_KWF, $language);
+    }
+
+    public function trlc($context, $string, $params = array(), $language = null)
+    {
+        return $this->_trlc($context, $string, $params, self::SOURCE_WEB, $language);
+    }
+
+    private function _trlc($context, $string, $params, $source, $language = null)
     {
         $params = $this->_makeArray($params);
         $text = $this->_findElement($string, $source, $context, $language);
@@ -399,12 +406,27 @@ class Kwf_Trl
         return $text;
     }
 
-    public function trlp($single, $plural, $params, $source, $language = null)
+    public function trlp($single, $plural, $params,  $language = null)
     {
-        return $this->trlcp('', $single, $plural, $params, $source, $language);
+        return $this->_trlcp('', $single, $plural, $params, self::SOURCE_WEB, $language);
     }
 
-    function trlcp($context, $single, $plural, $params, $source, $language = null)
+    public function trlpKwf($single, $plural, $params,  $language = null)
+    {
+        return $this->_trlcp('', $single, $plural, $params, self::SOURCE_KWF, $language);
+    }
+
+    public function trlcp($context, $single, $plural, $params, $language = null)
+    {
+        return $this->_trlcp($context, $single, $plural, $params, self::SOURCE_WEB, $language);
+    }
+
+    public function trlcpKwf($context, $single, $plural, $params, $language = null)
+    {
+        return $this->_trlcp($context, $single, $plural, $params, self::SOURCE_KWF, $language);
+    }
+
+    private function _trlcp($context, $single, $plural, $params, $source, $language = null)
     {
         $params = $this->_makeArray($params);
         if ($params[0] != 1){
@@ -440,7 +462,7 @@ class Kwf_Trl
                 'caching' => !isset($this->_modelKwf) && !isset($this->_modelWeb)
             ),
             array(
-                'cache_dir' => 'cache/model'
+                'cache_dir' => 'cache/trl'
             )
         );
         $cacheId = 'trl_'.$source.$target.$plural;

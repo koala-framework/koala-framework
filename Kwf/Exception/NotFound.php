@@ -1,6 +1,11 @@
 <?php
 class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
 {
+    public function __construct($message = "Not found")
+    {
+        parent::__construct($message);
+    }
+
     public function getHeader()
     {
         return 'HTTP/1.1 404 Not Found';
@@ -49,9 +54,9 @@ class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
                     exit;
                 }
             }
-            parent::render($ignoreCli);
         } catch (Exception $e) {
             Kwf_Debug::handleException($e);
         }
+        parent::render($ignoreCli);
     }
 }

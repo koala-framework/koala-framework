@@ -17,7 +17,28 @@ Kwf.GoogleMap.load = function(callback, scope)
 
     Kwf.GoogleMap.isLoaded = true;
 
-    var url = 'http:/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key={Kwf_Assets_GoogleMapsApiKey::getKey()}&c&libraries=places&async=2&language='+trlKwf('en');
+    //try find the correct api key
+    //Kwf.GoogleMap.apiKeys is set by Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys
+    //and contains possibly multiple api keys (to support multiple domains)
+    var apiKeyIndex;
+
+    var hostParts = location.host.split('.');
+    if (hostParts.length <= 1) {
+        apiKeyIndex = location.host;
+    } else {
+        apiKeyIndex = hostParts[hostParts.length-2]  // eg. 'koala-framework'
+                     +hostParts[hostParts.length-1]; // eg. 'org'
+    }
+    if (['orat', 'coat', 'gvat', 'couk'].indexOf(apiKeyIndex) != -1) {
+        //one part more for those
+        apiKeyIndex = hostParts[hostParts.length-3]+apiKeyIndex;
+    }
+
+    var key = '';
+    if (apiKeyIndex in Kwf.GoogleMap.apiKeys) {
+        key = Kwf.GoogleMap.apiKeys[apiKeyIndex];
+    }
+    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+trlKwf('en');
     url += '&callback=Kwf.GoogleMap._loaded';
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
@@ -94,6 +115,9 @@ Kwf.GoogleMap.Map = function(config) {
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
+    if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
+    if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
+    if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';
 
 
     if (!this.config.markers) this.config.markers = [ ];
@@ -169,8 +193,8 @@ Kwf.GoogleMap.Map = function(config) {
     }
 
     var container = this.mapContainer.down(".container");
-    container.setWidth(parseInt(this.config.width));
-    container.setHeight(parseInt(this.config.height));
+    container.setWidth(this.config.width);
+    container.setHeight(this.config.height);
 
 };
 
@@ -182,7 +206,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         this.directionsService = new google.maps.DirectionsService();
         this.directionsDisplay = new google.maps.DirectionsRenderer();
         //CONTROLLS
-        if (parseInt(this.map_type == 'satellite')) {
+        if (parseInt(this.config.satelite)) {
             this.config.map_type = true;
         } else {
             this.config.map_type = false;
@@ -190,11 +214,19 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         var mapOptions = {
             center: new google.maps.LatLng(parseFloat(this.config.latitude), parseFloat(this.config.longitude)),
             zoom: parseInt(this.config.zoom),
+            panControl: this.config.pan_control,
             zoomControl: this.config.zoom_properties,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle[this.config.zoomControlStyle],
+                position: google.maps.ControlPosition[this.config.zoomControlPosition]
+            },
             scaleControl: this.config.scale,
             mapTypeControl: this.config.map_type,
-            overviewMapControl: this.config.overview
+            overviewMapControl: this.config.overview,
+            streetViewControl: this.config.street_view,
+            scrollwheel: this.config.scrollwheel
         };
+
         this.gmap = new google.maps.Map(this.mapContainer.down(".container").dom,
             mapOptions);
         if (this.mapContainer.down(".mapDir")) {
@@ -219,10 +251,9 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         }
 
         if (typeof this.config.markers == 'string') {
-            google.maps.event.addListener(this.gmap, "moveend", this._reloadMarkers.createDelegate(
+            google.maps.event.addListener(this.gmap, "idle", this._reloadMarkers.createDelegate(
                 this, [ ]
             ));
-            this._reloadMarkers();
         } else {
             this.config.markers.each(function(marker) {
                 this.addMarker(marker);
@@ -276,6 +307,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
                     }
                     if (doAdd) this.addMarker(m);
                 }, this);
+                Kwf.callOnContentReady(this.mapContainer, {newRender: true});
                 this.gmapLoader.hide();
             },
             params: params,
@@ -331,6 +363,11 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         return false;
     },
 
+    /** For images in marker popup **/
+    markerWindowReady: function() {
+        Kwf.callOnContentReady(this.mapContainer, {newRender: true});
+    },
+
     /**
      * @param marker: The marker with 'kwfConfig' property inside
      */
@@ -342,12 +379,15 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
             marker.infoWindow.setContent(marker.kwfConfig.infoHtml);
             marker.infoWindow.open(marker.map, marker);
         }
+        google.maps.event.addListener(marker.infoWindow, 'domready', this.markerWindowReady.createDelegate(
+            this, [ marker ]
+        ));
     },
     closeWindow: function(marker) {
         marker.infoWindow.close();
     },
     toggleWindow: function(marker) {
-        if (marker.infoWindow.getMap() !== null && typeof marker.infoWindow.getMap() !== "undefined") {
+        if (marker.infoWindow && marker.infoWindow.getMap() !== null && typeof marker.infoWindow.getMap() !== "undefined") {
             this.closeWindow(marker);
         } else {
             this.showWindow(marker);

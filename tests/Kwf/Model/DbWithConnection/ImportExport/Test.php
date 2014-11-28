@@ -102,25 +102,25 @@ class Kwf_Model_DbWithConnection_ImportExport_Test extends Kwf_Test_TestCase
 
         // zweimal das export hernehmen, da die tabelle ja gleich heißen muss
 
-        $r = $ex->getRow(1);
+        $r = $ex->getRow(array('id'=>1));
         $this->assertEquals(1, $r->id);
 
         $ex->deleteRows(array());
 
-        $r = $ex->getRow(1);
-        $this->assertEquals(null, $r);
+        $r = $ex->getRow(array('id'=>1));
+        $this->assertNull($r);
 
         $ex->import(Kwf_Model_Interface::FORMAT_SQL, $data);
-        $r = $ex->getRow(1);
+        $r = $ex->getRow(array('id'=>1));
 
         $this->assertEquals(1, $r->id);
         $this->assertEquals('aaabbbccc', $r->foo);
         $this->assertEquals('abcd', $r->bar);
-        $r = $ex->getRow(2);
+        $r = $ex->getRow(array('id'=>2));
         $this->assertEquals(2, $r->id);
         $this->assertEquals('bam', $r->foo);
         $this->assertEquals('bum', $r->bar);
-        $r = $ex->getRow(3);
+        $r = $ex->getRow(array('id'=>3));
         $this->assertEquals(3, $r->id);
         $this->assertEquals('bäm', $r->foo);
         $this->assertEquals('büm', $r->bar);
@@ -135,25 +135,25 @@ class Kwf_Model_DbWithConnection_ImportExport_Test extends Kwf_Test_TestCase
 
         // zweimal das export hernehmen, da die tabelle ja gleich heißen muss
 
-        $r = $ex->getRow(1);
+        $r = $ex->getRow(array('id'=>1));
         $this->assertEquals(1, $r->id);
 
         $ex->deleteRows(array());
 
-        $r = $ex->getRow(1);
+        $r = $ex->getRow(array('id'=>1));
         $this->assertEquals(null, $r);
 
         $ex->import(Kwf_Model_Interface::FORMAT_CSV, $data);
 
-        $r = $ex->getRow(1);
+        $r = $ex->getRow(array('id'=>1));
         $this->assertEquals(1, $r->id);
         $this->assertEquals('aaabbbccc', $r->foo);
         $this->assertEquals('abcd', $r->bar);
-        $r = $ex->getRow(2);
+        $r = $ex->getRow(array('id'=>2));
         $this->assertEquals(2, $r->id);
         $this->assertEquals('bam', $r->foo);
         $this->assertEquals('bum', $r->bar);
-        $r = $ex->getRow(3);
+        $r = $ex->getRow(array('id'=>3));
         $this->assertEquals(3, $r->id);
         $this->assertEquals('bäm', $r->foo);
         $this->assertEquals('büm', $r->bar);
@@ -177,19 +177,19 @@ class Kwf_Model_DbWithConnection_ImportExport_Test extends Kwf_Test_TestCase
             "table" => $this->_tableName
         ));
         $im->deleteRows(array());
-        $r = $im->getRow(1);
+        $r = $im->getRow(array('id'=>1));
         $this->assertEquals(null, $r);
 
         $im->import(Kwf_Model_Interface::FORMAT_ARRAY, $data);
-        $r = $im->getRow(1);
+        $r = $im->getRow(array('id'=>1));
         $this->assertEquals(1, $r->id);
         $this->assertEquals('aaabbbccc', $r->foo);
         $this->assertEquals('abcd', $r->bar);
-        $r = $im->getRow(2);
+        $r = $im->getRow(array('id'=>2));
         $this->assertEquals(2, $r->id);
         $this->assertEquals('bam', $r->foo);
         $this->assertEquals('bum', $r->bar);
-        $r = $im->getRow(3);
+        $r = $im->getRow(array('id'=>3));
         $this->assertEquals(3, $r->id);
         $this->assertEquals('bäm', $r->foo);
         $this->assertEquals('büm', $r->bar);

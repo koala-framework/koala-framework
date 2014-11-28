@@ -102,16 +102,19 @@ class Kwf_Mail extends Zend_Mail
                     }
                     $output = Kwf_Media::getOutputWithoutCheckingIsValid($class, $id, $type);
                 } else {
-                    $loader = new Kwf_Assets_Loader();
-                    $image = $loader->getDependencies()->getAssetPath(substr($path, 8));
-                    $output = $loader->getFileContents($image);
+                    try {
+                        $f = new Kwf_Assets_Loader();
+                        $output = $f->getFileContents(substr($path, 8));
+                    } catch (Kwf_Exception_NotFound $e) {
+                        throw new Kwf_Exception('Asset not found: ' . $path);
+                    }
                 }
                 if (isset($output['contents'])) {
                     $contents = $output['contents'];
                 } else if (isset($output['file'])) {
                     $contents = file_get_contents($output['file']);
                 } else {
-                    throw new Kwf_Exception("didn't image contents");
+                    throw new Kwf_Exception("didn't get image contents");
                 }
                 $image = new Zend_Mime_Part($contents);
                 $image->type = $output['mimeType'];

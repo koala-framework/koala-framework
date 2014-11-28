@@ -38,6 +38,8 @@ class Kwf_Controller_Front extends Zend_Controller_Front
                                         'kwf_controller_action_redirects');
         $this->addControllerDirectory(KWF_PATH . '/Kwf/Controller/Action/Maintenance',
                                         'kwf_controller_action_maintenance');
+        $this->addControllerDirectory(KWF_PATH . '/Kwf/Controller/Action/Ext4',
+                                        'kwf_controller_action_ext4');
         $this->addControllerDirectory(KWF_PATH . '/tests', 'kwf_test');
         $this->addControllerDirectory('tests', 'web_test');
         $this->addControllerDirectory(KWF_PATH . '/Kwf/Controller/Action/Trl',
@@ -133,6 +135,9 @@ class Kwf_Controller_Front extends Zend_Controller_Front
             } else {
                 $request = new Kwf_Controller_Request_Http();
             }
+        }
+        if ($response === null) {
+            $response = new Kwf_Controller_Response_Http();
         }
         $ret = parent::dispatch($request, $response);
         Kwf_Benchmark::shutDown();

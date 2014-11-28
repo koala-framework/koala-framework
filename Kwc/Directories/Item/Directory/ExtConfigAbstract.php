@@ -36,7 +36,8 @@ abstract class Kwc_Directories_Item_Directory_ExtConfigAbstract extends Kwf_Comp
         $config['componentPlugins'] = $componentPlugins;
         $config['needsComponentPanel'] = true;
         $config['countDetailClasses'] = count($detailClasses);
-        $config['idSeparator'] = '_';
+        $config['idSeparator'] = $gen->getIdSeparator();
+        $config['multiFileUpload'] = Kwc_Abstract::getSetting($this->_class, 'multiFileUpload');
         return array(
             'items' => $config
         );

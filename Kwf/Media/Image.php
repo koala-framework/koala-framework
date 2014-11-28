@@ -1,10 +1,47 @@
 <?php
 class Kwf_Media_Image
 {
-    const SCALE_BESTFIT = 'bestfit';
-    const SCALE_CROP = 'crop';
-    const SCALE_DEFORM = 'deform';
-    const SCALE_ORIGINAL = 'original';
+    /**
+     * Returns next supported image-width
+     */
+    public static function getResponsiveWidthStep($width, $widths)
+    {
+        foreach ($widths as $cachedWidth) {
+            if ($width <= $cachedWidth) {
+                return $cachedWidth;
+            }
+        }
+        return end($widths);
+    }
+
+    /**
+     * Returns supported image-widths of specific image with given base-dimensions
+     */
+    public static function getResponsiveWidthSteps($dim, $imagepath)
+    {
+        $ret = array();
+        $size = getimagesize($imagepath);
+
+        $maxWidth = $dim['width'] * 2;
+        if ($size[0] < $dim['width'] * 2) {
+            $maxWidth = $size[0];
+        }
+        $calculateWidth = $dim['width'];
+        if ($size[0] < $dim['width']) {
+            $calculateWidth = $size[0];
+        }
+
+        $width = $calculateWidth % 100; // startwidth or minwidth
+        if ($width == 0) $width = 100;
+        do {
+            $ret[] = $width;
+            $width += 100;
+        } while ($width < $maxWidth);
+        if ($width - 100 != $maxWidth) {
+            $ret[] = $maxWidth;
+        }
+        return $ret;
+    }
 
     private static function _generateIntValue($high, $low, $reversed)
     {
@@ -15,38 +52,59 @@ class Kwf_Media_Image
      * Got information from http://www.media.mit.edu/pia/Research/deepview/exif.html
      * and http://www.impulseadventure.com/photo/exif-orientation.html
      */
-    public static function getExifRotationFallback($source)
+    public static function getExifRotation($source)
     {
+        if (!Kwf_Registry::get('config')->image->autoExifRotate) {
+            return 0;
+        }
+
+        $handle = fopen($source, 'rb'); // b for windows compatibility
+        // Check if image is jpg file
+        if (fread($handle, 2) != chr('0xFF').chr('0xD8')) {
+            fclose($handle);
+            return 0;
+        }
+
+        $fileSize = filesize($source);
+        $count = 0;
         $rotation = 0;
-        $handle = fopen($source, "rb"); // b for windows compatibility
-        $fileHeaderSize = min(5000, filesize($source));
-        $contents = fread($handle, $fileHeaderSize);
-        if (self::_generateIntValue($contents[0], $contents[1], false) == 0XFFD8) { //Marks jpg file
-            // could be dynamically changed if exif-data-block start at
-                        // different location (documentation not clear about this)
-            for ($count = 2; $count < $fileHeaderSize-1; $count++) {
-                $marker = self::_generateIntValue($contents[$count], $contents[$count+1], false);
-                if ($marker == 0xFFE1) {//marks start exif-data-block
-                    $type = self::_generateIntValue($contents[$count+10], $contents[$count+11], false);
-                    if ($type == 0x4D4D) {//Motorola, reverse byte-order
-                        $reversed = true;
-                    } else if ($type == 0x4949) { //Intel
-                        $reversed = false;
-                    }
-                    //number of directory entries in IFD0
-                    $propertyCount = self::_generateIntValue($contents[$count+19],
-                                            $contents[$count+18], $reversed);
-                    $dataPos = $count+20;
-                    for ($p = 0; $p < $propertyCount; $p++) {
-                        $tag = self::_generateIntValue($contents[$dataPos+($p*12)+1],
-                                        $contents[$dataPos+($p*12)], $reversed);
-                        if ($tag == 0x0112) { //Orientation-Tag
+        while ($count < 3) { // Run through marker
+            $count++;
+            $marker = fread($handle, 2);
+            // Marks start of stream (SOS)
+            if ($marker == chr(0xFF).chr(0xDA)) break;
+
+            $size = self::_generateIntValue(fread($handle, 1), fread($handle, 1), false);
+            if ($marker == chr(0xFF).chr(0xE1)) { // Start of exif-data-block
+                if (fread($handle, 6) != 'Exif'.chr(0).chr(0)) break;
+
+                $tiffHeaderBytes = fread($handle, 4); // should be 0x49492A00 or 0x4D4D002A
+                if ($tiffHeaderBytes == 'II'.chr('0x2A').chr('0x00')) { // Motorola
+                    $reversed = true;
+                } else if ($tiffHeaderBytes == 'MM'.chr('0x00').chr('0x2A')) { // Intel
+                    $reversed = false;
+                } else { // this case should not exist
+                    break;
+                }
+
+                $count = 0;
+                while ($count < 5) {
+                    $count++;
+                    // IFD = Image File Directory => Image properties
+                    // check offset from tiffHeader-Start to IFD's, if 0 end of all IFD-Blocks
+                    if (fread($handle, 4) == chr(0x00).chr(0x00).chr(0x00).chr(0x00)) break 2;
+
+                    $ifdCount = self::_generateIntValue(fread($handle, 1), fread($handle, 1), $reversed);
+                    if ($fileSize < ftell($handle) + $ifdCount * 12 + 6) break 2; // check to handle eof
+                    if ($ifdCount > 100) break 2; // check if ifdCount is a possible value
+                    for ($i = 0; $i < $ifdCount; $i++) {
+                        $ifdBytes = fread($handle, 12);
+                        $tag = self::_generateIntValue($ifdBytes[0], $ifdBytes[1], $reversed);
+                        if ($tag == 0x0112) {
                             // reversed saved in this form: 00 06 | 00 00 should be 00 00 | 00 06
                             // normally saved in this form: 06 00 | 00 00
-                            $highBytes = self::_generateIntValue($contents[$dataPos+($p*12)+11],
-                                            $contents[$dataPos+($p*12)+10], $reversed);
-                            $lowBytes = self::_generateIntValue($contents[$dataPos+($p*12)+9],
-                                            $contents[$dataPos+($p*12)+8], $reversed);
+                            $highBytes = self::_generateIntValue($ifdBytes[10], $ifdBytes[11], $reversed);
+                            $lowBytes = self::_generateIntValue($ifdBytes[8], $ifdBytes[9], $reversed);
                             $exifOrientation = $highBytes * pow(16, 4) + $lowBytes;
                             switch ($exifOrientation) {
                                 case 1:
@@ -62,49 +120,48 @@ class Kwf_Media_Image
                                     $rotation = 90;
                                     break;
                             }
-                            break;
+                            break 3;
                         }
                     }
-                    break;
                 }
+
+            } else { // Any other marker (e.g. JFIF-0xFFE0, Photoshop-Stuff), not supported. Set file-pointer to end of marker-data
+                fseek($handle, $size -2, SEEK_CUR);
             }
         }
         fclose($handle);
         return $rotation;
     }
 
-    public static function getExifRotation($source)
+    /**
+     * Returns an image with a size which should be good to work with.
+     * Acutally this is a 600x600 max-width. If it's smaller in both dimensions
+     * it will keep it's original size.
+     */
+    public static function getHandyScaleFactor($originalPath)
     {
-        $rotate = 0;
-        if (Kwf_Registry::get('config')->image->autoExifRotate) {
-            if (class_exists('Imagick') && method_exists(new Imagick(), 'getImageOrientation')) {
-                if (is_string($source)) {
-                    $source = new Imagick($source);
-                }
-                $orientation = $source->getImageOrientation();
-                switch ($orientation) {
-                    case Imagick::ORIENTATION_BOTTOMRIGHT:
-                        $rotate = 180;
-                        break;
-                    case Imagick::ORIENTATION_RIGHTTOP:
-                        $rotate = 90;
-                        break;
-                    case Imagick::ORIENTATION_LEFTBOTTOM:
-                        $rotate = -90;
-                        break;
-                }
-            } else {
-                $rotate = self::getExifRotationFallback($source);
-            }
+        $targetSize = array(600, 600, 'cover' => false);
+        $original = @getimagesize($originalPath);
+        if (abs(self::getExifRotation($originalPath)) == 90) {
+            $original = array($original[1], $original[0]);
         }
-        return $rotate;
+        $original['width'] = $original[0];
+        $original['height'] = $original[1];
+        $target = Kwf_Media_Image::calculateScaleDimensions($originalPath, $targetSize);
+
+        if ($original['width'] <= $target['width'] && $original['height'] <= $target['height']) {
+            return 1;
+        } else {
+            return $original['width'] / $target['width'];
+        }
     }
 
     /**
-     * targetSize options: width, height, scale, aspectRatio (if SCALE_CROP and width or height is 0)
+     * targetSize options: width, height, cover, aspectRatio
      */
     public static function calculateScaleDimensions($source, $targetSize)
     {
+        // Get size of image (handle different param-possibilities)
         if (is_string($source)) {
             $sourceSize = @getimagesize($source);
         } else if ($source instanceof Imagick) {
@@ -116,164 +173,253 @@ class Kwf_Media_Image
         }
 
         if (!$sourceSize) return false;
-        $w = null;
-        if (isset($sourceSize['width'])) $w = $sourceSize['width'];
-        if (isset($sourceSize[0])) $w = $sourceSize[0];
-        $h = null;
-        if (isset($sourceSize['height'])) $h = $sourceSize['height'];
-        if (isset($sourceSize[1])) $h = $sourceSize[1];
-        $size = array($w, $h);
 
-        $rotate = null;
+        $w = null;
+        if (isset($sourceSize[0])) $w = $sourceSize[0];
+        if (isset($sourceSize['width'])) $w = $sourceSize['width'];
+
+        $h = null;
+        if (isset($sourceSize[1])) $h = $sourceSize[1];
+        if (isset($sourceSize['height'])) $h = $sourceSize['height'];
+
+        if (!$w || !$h) return false;
+
+        $originalSize = array($w, $h);
+
+        // get output-width
+        $outputWidth = 0;
+        if (isset($targetSize[0])) $outputWidth = $targetSize[0];
+        if (isset($targetSize['width'])) $outputWidth = $targetSize['width'];
+
+        // get output-height
+        $outputHeight = 0;
+        if (isset($targetSize[1])) $outputHeight = $targetSize[1];
+        if (isset($targetSize['height'])) $outputHeight = $targetSize['height'];
+
+        // get crop-data
+        $crop = isset($targetSize['crop']) ? $targetSize['crop'] : null;
+
+        // get cover
+        $cover = isset($targetSize['cover']) ? $targetSize['cover'] : true;
+
+        if ($outputWidth == 0 && $outputHeight == 0) {
+            if ($crop) {
+                return array(
+                    'width' => $crop['width'],
+                    'height' => $crop['height'],
+                    'rotate' => 0,
+                    'crop' => array(
+                        'x' => $crop['x'],
+                        'y' => $crop['y'],
+                        'width' => $crop['width'],
+                        'height' => $crop['height']
+                    ),
+                );
+            } else {
+                // Handle keep original
+                return array(
+                    'width' => $originalSize[0],
+                    'height' => $originalSize[1],
+                    'rotate' => 0,
+                    'crop' => array(
+                        'x' => 0,
+                        'y' => 0,
+                        'width' => $originalSize[0],
+                        'height' => $originalSize[1]
+                    ),
+                    'keepOriginal' => true,
+                );
+            }
+        }
+
+        // Check if image has to be rotated
+        $rotate = 0;
         if ($source) {
             $rotate = self::getExifRotation($source);
             if (abs($rotate) == 90) {
-                $size = array($h, $w);
-            }
-            if (!$rotate) {
-                $rotate = null;
+                $originalSize = array($originalSize[1], $originalSize[0]);
             }
         }
 
-        if (!$size[0] || !$size[1]) return false;
-
-        if (isset($targetSize['width'])) $width = $targetSize['width'];
-        else if (isset($targetSize[0])) $width = $targetSize[0];
-        else $width = 0;
-
-        if (isset($targetSize['height'])) $height = $targetSize['height'];
-        else if (isset($targetSize[1])) $height = $targetSize[1];
-        else $height = 0;
-
-        if (isset($targetSize['scale'])) $scale = $targetSize['scale'];
-        else if (isset($targetSize[2])) $scale = $targetSize[2];
-        else $scale = self::SCALE_BESTFIT;
-        if (!$scale) $scale = self::SCALE_BESTFIT;
-
-        if ($width == 0 && $height == 0 && $scale != self::SCALE_ORIGINAL) {
-            return false;
+        // Calculate missing dimension
+        $calculateWidth = $originalSize[0];
+        $calculateHeight = $originalSize[1];
+        if ($crop) {
+            $calculateWidth = $crop['width'];
+            $calculateHeight = $crop['height'];
         }
 
-        if ($scale != self::SCALE_ORIGINAL && $scale != self::SCALE_BESTFIT) {
-            if ($width == 0) {
+        if ($cover) { // image will always have defined size
+
+            if ($outputWidth == 0) {
                 if (isset($targetSize['aspectRatio'])) {
-                    $width = round($height * $targetSize['aspectRatio']);
+                    $outputWidth = round($outputHeight * $targetSize['aspectRatio']);
                 } else {
-                    $width = round($height * ($size[0]/$size[1]));
+                    $outputWidth = round($outputHeight * ($calculateWidth / $calculateHeight));
                 }
-                if ($width <= 0) $width = 1;
+                if ($outputWidth <= 0) $outputWidth = 1;
             }
-            if ($height == 0) {
+            if ($outputHeight == 0) {
                 if (isset($targetSize['aspectRatio']) && $targetSize['aspectRatio']) {
-                    $height = round($width * $targetSize['aspectRatio']);
+                    $outputHeight = round($outputWidth * $targetSize['aspectRatio']);
                 } else {
-                    $height = round($width * ($size[1]/$size[0]));
+                    $outputHeight = round($outputWidth * ($calculateHeight / $calculateWidth));
                 }
-                if ($height <= 0) $height = 1;
+                if ($outputHeight <= 0) $outputHeight = 1;
             }
-        }
-
-        if ($scale == self::SCALE_CROP) {
-            // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
-
-            if (!$width || !$height) {
-                throw new Kwf_Exception("width and height must be set higher than 0 "
-                    ."if Kwf_Media_Image::SCALE_CROP is used. Maybe "
-                    ."Kwf_Media_Image::SCALE_BESTFIT would be better?");
-            }
-
-            if (($width / $height) >= ($size[0] / $size[1])) {
-                $resizeWidth  = $width;
-                $resizeHeight = 0;
-                $cropFromWidth  = $resizeWidth;
-                $cropFromHeight = $size[1] * ($width / $size[0]);
-            } else {
-                $resizeWidth  = 0;
-                $resizeHeight = $height;
-                $cropFromWidth  = $size[0] * ($height / $size[1]);
-                $cropFromHeight = $resizeHeight;
-            }
-
-            if ($cropFromWidth > $width) { // Wenn hochgeladenes Bild breiter als anzuzeigendes Bild ist
-                $x = ($cropFromWidth - $width) / 2; // Ursprungs-X berechnen
-            } else {
-                $x = 0; // Bei 0 mit Beschneiden beginnen
-                $width = $cropFromWidth; // Breite auf Originalgröße begrenzen
-            }
-            if ($cropFromHeight > $height) {
-                $y = ($cropFromHeight - $height) / 2;
-            } else {
-                $y = 0;
-                $height = $cropFromHeight;
-            }
-
-            return array('width'        => round($width),
-                         'height'       => round($height),
-                         'x'            => round($x),
-                         'y'            => round($y),
-                         'resizeWidth'  => $resizeWidth,
-                         'resizeHeight' => $resizeHeight,
-                         'scale'        => $scale,
-                         'rotate'       => $rotate
-            );
-
-        } elseif ($scale == self::SCALE_BESTFIT) {
-
-            // Bild wird auf größte Maximale Ausdehnung skaliert
-            // Bild wird NICHT vergrößert! (kann also auch kleiner ausgegeben werden als angefordert)
-
-            // $width / $height => target size
-            // $size => original size
-
-            // 3 if abfragen um zu verhindern, dass das bild vergrößert wird
-            if ($size[0] <= $width && $size[1] <= $height) {
-                $width = $size[0];
-                $height = $size[1];
-            } else {
-                if ($size[0] < $width) {
-                    $width = $size[0];
+            if (!$crop) { // crop from complete image
+                $crop = array();
+                // calculate crop depending on target-size
+                if (($outputWidth / $outputHeight) >= ($originalSize[0] / $originalSize[1])) {
+                    $crop['width'] = $originalSize[0];
+                    $crop['height'] = $originalSize[0] * ($outputHeight / $outputWidth);
+                } else {
+                    $crop['height'] = $originalSize[1];
+                    $crop['width'] = $originalSize[1] * ($outputWidth / $outputHeight);
                 }
-                if ($size[1] < $height) {
-                    $height = $size[1];
+                // calculate x and y of crop
+                $xDiff = $originalSize[0] - $crop['width'];
+                $crop['x'] = $xDiff > 0 ? $xDiff / 2 : 0;
+                $yDiff = $originalSize[1] - $crop['height'];
+                $crop['y'] = $yDiff > 0 ? $yDiff / 2 : 0;
+            } else {
+                $oldCrop['width'] = $crop['width'];
+                $oldCrop['height'] = $crop['height'];
+                if (($outputWidth / $outputHeight) >= ($crop['width'] / $crop['height'])) {
+                    $crop['width'] = $crop['width'];
+                    $crop['height'] = $crop['width'] * ($outputHeight / $outputWidth);
+                } else {
+                    $crop['height'] = $crop['height'];
+                    $crop['width'] = $crop['height'] * ($outputWidth / $outputHeight);
+                }
+                $xDiff = $oldCrop['width'] - $crop['width'];
+                $crop['x'] += $xDiff > 0 ? $xDiff / 2 : 0;
+                $yDiff = $oldCrop['height'] - $crop['height'];
+                $crop['y'] += $yDiff > 0 ? $yDiff / 2 : 0;
+            }
+
+        } elseif (!$cover) { // image keeps aspectratio and will not be scaled up
+
+            // calculateWidth is cropWidth if existing else originalWidth.
+            // prevent image scale up
+            if (!$crop) {
+                $crop = array(
+                    'x' => 0,
+                    'y' => 0,
+                    'width' => $originalSize[0],
+                    'height' => $originalSize[1]
+                );
+            }
+            if ($calculateWidth <= $outputWidth && $calculateHeight <= $outputHeight) {
+                $outputWidth = $calculateWidth;
+                $outputHeight = $calculateHeight;
+            } else {
+                if ($calculateWidth < $outputWidth) {
+                    $outputWidth = $calculateWidth;
+                }
+                if ($calculateHeight < $outputHeight) {
+                    $outputHeight = $calculateHeight;
                 }
             }
-
-            $widthRatio = $width ? $size[0] / $width : null;
-            $heightRatio = $height ? $size[1] / $height : null;
-
+            $widthRatio = $outputWidth ? $calculateWidth / $outputWidth : null;
+            $heightRatio = $outputHeight ? $calculateHeight / $outputHeight : null;
             if ($widthRatio > $heightRatio) {
-                $width = $size[0] / $widthRatio;
-                $height = $size[1] / $widthRatio;
+                $outputWidth = $calculateWidth / $widthRatio;
+                $outputHeight = $calculateHeight / $widthRatio;
             } else if ($heightRatio > $widthRatio) {
-                $width = $size[0] / $heightRatio;
-                $height = $size[1] / $heightRatio;
+                $outputWidth = $calculateWidth / $heightRatio;
+                $outputHeight = $calculateHeight / $heightRatio;
             }
 
-        } elseif ($scale == self::SCALE_DEFORM) {
-
-            //width und height sind schon korrekt gesetzt
-
-        } elseif ($scale == self::SCALE_ORIGINAL) {
-
-            $width = $size[0];
-            $height = $size[1];
-
-        } else {
-            return false;
         }
-        $width = round($width);
-        $height = round($height);
-        if ($width <= 0) $width = 1;
-        if ($height <= 0) $height = 1;
+
+        $outputWidth = round($outputWidth);
+        if ($outputWidth <= 0) $outputWidth = 1;
+        $outputHeight = round($outputHeight);
+        if ($outputHeight <= 0) $outputHeight = 1;
+
+        $ret = array(
+            'width' => round($outputWidth),
+            'height' => round($outputHeight),
+            'rotate' => $rotate,
+            'crop' => $crop
+        );
+
+        //Set values to match original-parameters when original won't change
+        if ($ret['crop']['x'] == 0
+            && $ret['crop']['y'] == 0
+            && $ret['crop']['width'] == $originalSize[0]
+            && $ret['crop']['height'] == $originalSize[1]
+            && $ret['width'] == $originalSize[0]
+            && $ret['height'] == $originalSize[1]
+        ) {
+            $ret['rotate'] = 0;
+            $ret['keepOriginal'] = true;
+        }
+
+        return $ret;
+    }
+
+    private static function _preScale($source, $sourceSize, $size, $uploadId)
+    {
+        $preScaleFactor = 0;
+        $preScaleCacheFile = null;
+
+        $preScaleWidth = $sourceSize[0];
+        $preScaleHeight = $sourceSize[1];
+        if (isset($size['rotate'])
+            && ($size['rotate'] == 90 || $size['rotate'] == -90)
+        ) {
+            list($preScaleWidth, $preScaleHeight) = array($preScaleHeight, $preScaleWidth); //swap
+        }
+        $preScaleTargetWidth = $size['width'];
+        $preScaleTargetHeight = $size['height'];
+        if (isset($size['crop']['width'])) {
+            $preScaleTargetWidth *= $preScaleWidth / $size['crop']['width'];
+            $preScaleTargetHeight *= $preScaleHeight / $size['crop']['height'];
+        }
+
+        $previousCacheFile = null;
+        while ($preScaleWidth/2 > $preScaleTargetWidth && $preScaleHeight/2 > $preScaleTargetHeight) {
+            //generate pre scaled versions of the image, every versions half the size of the previous
+            $preScaleWidth /= 2;
+            $preScaleHeight /= 2;
+            $preScaleFactor++;
+            $dir = Kwf_Config::getValue('uploads') . "/mediaprescale/$uploadId";
+            if (!is_dir($dir)) mkdir($dir, 0777, true);
+            $preScaleCacheFile = "$dir/$preScaleFactor";
+            if (!file_exists($preScaleCacheFile)) {
+                $f = $source;
+                if ($previousCacheFile) {
+                    $f = $previousCacheFile;
+                }
+                $im = self::_createImagickFromBlob(file_get_contents($f), $sourceSize['mime']);
+                if (!$previousCacheFile) {
+                    $im = self::_processCommonImagickSettings($im); //only once
+                }
+                $realWidth = $preScaleWidth;
+                $realHeight = $preScaleHeight;
+                if (isset($size['rotate'])
+                    && ($size['rotate'] == 90 || $size['rotate'] == -90)
+                ) {
+                    $realWidth = $preScaleHeight;
+                    $realHeight = $preScaleWidth;
+                }
+                $im->resizeImage($realWidth, $realHeight, Imagick::FILTER_LANCZOS, 1);
+                $blob = $im->getImageBlob();
+                if (!strlen($blob)) throw new Kwf_Exception("imageblob is empty");
+                file_put_contents($preScaleCacheFile, $blob);
+                $im->destroy();
+            }
+            $previousCacheFile = $preScaleCacheFile;
+        }
         return array(
-            'width' => $width,
-            'height' => $height,
-            'scale' => $scale,
-            'rotate' => $rotate
+            'factor' => $preScaleFactor,
+            'file' => $preScaleCacheFile
         );
     }
 
-    public static function scale($source, $size)
+    public static function scale($source, $size, $uploadId = null)
     {
         if ($source instanceof Kwf_Uploads_Row) {
             $source = $source->getFileSource();
@@ -282,98 +428,84 @@ class Kwf_Media_Image
             return false;
         }
 
+        $sourceSize = @getimagesize($source);
+
         $size = self::calculateScaleDimensions($source, $size);
         if ($size === false) return false;
 
-        // wenn bild schon der angeforderten größe entspricht, original ausgeben
-        // nötig für zB animierte gifs, da sonst die animation verloren geht
-        if (($size['scale'] == self::SCALE_CROP || $size['scale'] == self::SCALE_BESTFIT || $size['scale'] == self::SCALE_DEFORM)) {
-            if ($source instanceof Imagick) {
-                $originalSize = array($source->getImageWidth(), $source->getImageHeight());
-            } else {
-                $originalSize = getimagesize($source);
-            }
-            if ($originalSize[0] == $size['width'] && $originalSize[1] == $size['height']) {
-                $size['scale'] = self::SCALE_ORIGINAL;
-            }
-        }
-
-        if ($size['scale'] == self::SCALE_CROP) {
-
-            // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
-            if (class_exists('Imagick')) {
-                if ($source instanceof Imagick) {
-                    $im = $source;
-                } else {
-                    $im = self::_createImagickFromFile($source);
-                }
-                $im = self::_processCommonImagickSettings($im);
-                if (isset($size['rotate']) && $size['rotate']) {
-                    $im->rotateImage('#FFF', $size['rotate']);
-                }
-                $im->scaleImage($size['resizeWidth'], $size['resizeHeight']);
-                $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
-                $im->setImagePage(0, 0, 0, 0);
-    //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
-                $ret = $im->getImageBlob();
-                $im->destroy();
-            }
-
-        } elseif ($size['scale'] == self::SCALE_BESTFIT || $size['scale'] == self::SCALE_DEFORM) {
-
-            if (class_exists('Imagick')) {
-                if ($source instanceof Imagick) {
-                    $im = $source;
-                } else {
-                    $im = self::_createImagickFromFile($source);
-                }
-                $im = self::_processCommonImagickSettings($im);
-                if (isset($size['rotate']) && $size['rotate']) {
-                    $im->rotateImage('#FFF', $size['rotate']);
-                }
-                $im->thumbnailImage($size['width'], $size['height']);
-                $ret = $im->getImageBlob();
-                $im->destroy();
-            } else {
-                $srcSize = getimagesize($source);
-                if ($srcSize[2] == 1) {
-                    $source = imagecreatefromgif($source);
-                } elseif ($srcSize[2] == 2) {
-                    $source = imagecreatefromjpeg($source);
-                } elseif ($srcSize[2] == 3) {
-                    $source = imagecreatefrompng($source);
-                }
-                if (isset($size['rotate']) && $size['rotate']) {
-                    $source = imagerotate($source, $size['rotate'], 0);
-                }
-                $destination = imagecreatetruecolor($size['width'], $size['height']);
-                imagecopyresampled($destination, $source, 0, 0, 0, 0,
-                                    $size['width'], $size['height'],
-                                    $srcSize[0], $srcSize[1]);
-                ob_start();
-                if ($srcSize[2] == 1) {
-                    $source = imagegif($destination);
-                } elseif ($srcSize[2] == 2) {
-                    $source = imagejpeg($destination);
-                } elseif ($srcSize[2] == 3) {
-                    $source = imagepng($destination);
-                }
-                $ret = ob_get_contents();
-                ob_end_clean();
-            }
-
-        } elseif ($size['scale'] == self::SCALE_ORIGINAL) {
-
+        // if image already has the correct size return original
+        // needed e.g. for animated gifs because they will lose animation if changed
+        if (isset($size['keepOriginal']) && $size['keepOriginal']) {
             if ($source instanceof Imagick) {
                 $ret = $source->getImageBlob();
             } else {
                 $ret = file_get_contents($source);
             }
+            return $ret;
+        }
 
+        if (class_exists('Imagick')) {
+            $preScale = array('factor'=>0);
+            if ($uploadId && !$source instanceof Imagick) {
+                $preScale = self::_preScale($source, $sourceSize, $size, $uploadId);
+            }
+
+            if ($source instanceof Imagick) {
+                $im = $source;
+            } else {
+                $f = $source;
+                if ($preScale['factor']) {
+                    $f = $preScale['file'];
+                }
+                $blob = file_get_contents($f);
+                if (!strlen($blob)) throw new Kwf_Exception("File is empty");
+                $im = self::_createImagickFromBlob($blob, $sourceSize['mime']);
+            }
+            if (!$preScale['factor']) {
+                //preScale does this already
+                $im = self::_processCommonImagickSettings($im);
+            }
+            if (isset($size['rotate']) && $size['rotate']) {
+                $im->rotateImage('#FFF', $size['rotate']);
+            }
+
+            $factor = pow(2, $preScale['factor']); //1 if factor==0
+            $im->cropImage($size['crop']['width']/$factor,
+                           $size['crop']['height']/$factor,
+                           $size['crop']['x']/$factor,
+                           $size['crop']['y']/$factor);
+            $im->resizeImage($size['width'], $size['height'], Imagick::FILTER_LANCZOS, 1);
+            $im->setImagePage(0, 0, 0, 0);
+//             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
+            $ret = $im->getImageBlob();
+            $im->destroy();
         } else {
-
-            return false;
-
+            $srcSize = getimagesize($source);
+            if ($srcSize[2] == 1) {
+                $source = imagecreatefromgif($source);
+            } elseif ($srcSize[2] == 2) {
+                $source = imagecreatefromjpeg($source);
+            } elseif ($srcSize[2] == 3) {
+                $source = imagecreatefrompng($source);
+            }
+            if (isset($size['rotate']) && $size['rotate']) {
+                $source = imagerotate($source, $size['rotate'], 0);
+            }
+            $destination = imagecreatetruecolor($size['width'], $size['height']);
+            imagefill($destination, 0, 0, imagecolorallocate($destination, 255, 255, 255));
+            imagecopyresampled($destination, $source, 0, 0, $size['crop']['x'], $size['crop']['y'],
+                                $size['width'], $size['height'],
+                                $size['crop']['width'], $size['crop']['height']);
+            ob_start();
+            if ($srcSize[2] == 1) {
+                imagegif($destination);
+            } elseif ($srcSize[2] == 2) {
+                imagejpeg($destination);
+            } elseif ($srcSize[2] == 3) {
+                imagepng($destination);
+            }
+            $ret = ob_get_contents();
+            ob_end_clean();
         }
         return $ret;
     }

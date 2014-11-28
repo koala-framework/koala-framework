@@ -1,14 +1,15 @@
-Kwf.Utils.ResponsiveEl('.kwcForm', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.kwcForm.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.kwcForm.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.kwcForm.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.kwcForm.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
-Kwf.onContentReady(function(el, param) {
-    if (!param.newRender) return false;
-    Ext.select('.kwcForm > form', true, el).each(function(form) {
-        form = form.parent('.kwcForm', false);
-        if (form.dom.formInitDone) return;
-        form.dom.formInitDone = true;
-        form.kwcForm = new Kwc.Form.Component(form);
-    });
-}, this, { priority: -10 }); //initialize form very early, as many other components access it
+Kwf.onElementReady('.kwcForm > form', function form(form) {
+    form = form.parent('.kwcForm', false);
+    if (!form.dom.kwcForm) {
+        form.dom.kwcForm = new Kwc.Form.Component(form);
+        form.kwcForm = form.dom.kwcForm;
+    }
+}, { priority: -10, defer: true }); //initialize form very early, as many other components access it
 Ext.ns('Kwc.Form');
 Kwc.Form.findForm = function(el) {
     var formEl = el.child('.kwcForm > form');
@@ -165,6 +166,11 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     errorPlaceholder: r.errorPlaceholder
                 });
 
+                for (var fieldName in r.errorFields) {
+                    var field = this.findField(fieldName);
+                    field.onError(r.errorFields[fieldName]);
+                }
+
                 var hasErrors = false;
                 if (r.errorMessages && r.errorMessages.length) {
                     hasErrors = true;
@@ -189,7 +195,7 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     } else {
                         (function(el) {
                             el.remove();
-                            Kwf.callOnContentReady(this.el.dom);
+                            Kwf.callOnContentReady(this.el.dom, {newRender: false});
                         }).defer(5000, this, [el]);
                     }
                     Kwf.callOnContentReady(el.dom, {newRender: true});
@@ -197,14 +203,13 @@ Ext.extend(Kwc.Form.Component, Ext.util.Observable, {
                     document.location.href = r.successUrl;
                 } else {
                     //errors are shown, lightbox etc needs to resize
-                    Kwf.callOnContentReady(this.el.dom);
+                    Kwf.callOnContentReady(this.el.dom, {newRender: false});
                 }
 
                 var scrollTo = null;
                 if (!hasErrors) {
                     // Scroll to top of form
                     scrollTo = this.el.getY();
-                    this.fireEvent('submitSuccess', this, r);
                 } else {
                     // Get position of first error field
                     for(var fieldName in r.errorFields) {

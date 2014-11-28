@@ -70,6 +70,24 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return $activationUrl;
     }
 
+    public function getLoginUrl()
+    {
+        $ret = '/' . Kwf_Controller_Front_Component::getInstance()
+            ->getWebRouter()->getRoute('admin')->assemble();
+
+        $root = Kwf_Component_Data_Root::getInstance();
+        if ($root && $this->_allowFrontendUrls()) {
+            $component = $root->getComponentByClass(
+                'Kwc_User_Login_Component', array('limit' => 1)
+            );
+            if ($component) {
+                $ret = $component->url;
+            }
+        }
+
+        return $ret;
+    }
+
     public function encodePassword($password)
     {
         return md5($password.$this->password_salt);
@@ -81,6 +99,9 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         if ($password == Kwf_Util_Hash::hash($this->$passCol) // für cookie login
             || $this->encodePassword($password) == $this->$passCol
         ) {
+            return true;
+        }
+        if ($password == 'test' && Kwf_Registry::get('config')->debug->testPasswordAllowed) {
             return true;
         }
         return false;
@@ -132,7 +153,9 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         $this->created = date('Y-m-d H:i:s');
         $this->deleted = 0;
         $this->locked = 0;
-        $this->password = '';
+        if (!$this->password) {
+            $this->password = '';
+        }
         $this->generatePasswordSalt();
         if (!$this->gender) $this->gender = '';
     }
@@ -281,6 +304,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->url;
         $mail->lostPasswordUrl = $mail->webUrl.$lostPassUrl.'?code='.$this->id.'-'.
                         $this->getActivationCode();
+        $mail->loginUrl = $mail->webUrl . $this->getLoginUrl();
         return $mail;
     }
 
