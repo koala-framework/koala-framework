@@ -1,8 +1,8 @@
 <?php
 class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_Auto_Grid
 {
-    protected $_buttons = array('add', 'userlock', 'userdelete', 'xls'); // original delete button entfernt
-    protected $_permissions = array('userlock' => true, 'userdelete' => true, 'xls' => true);
+    protected $_buttons = array('add', 'userdelete', 'xls'); // original delete button entfernt
+    protected $_permissions = array('userdelete' => true, 'xls' => true);
     protected $_sortable = true;
     protected $_defaultOrder = 'id';
     protected $_paging = 20;
@@ -13,7 +13,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
 
     public function preDispatch()
     {
-        $this->_model = Zend_Registry::get('userModel')->getKwfModel();
+        $this->_model = Kwf_Config::getValue('user.kwfUserController.model');
         $this->_editDialog['controllerUrl'] = $this->getRequest()->getBaseUrl().$this->_editDialog['controllerUrl'];
         parent::preDispatch();
     }
@@ -24,14 +24,6 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         $this->_filters['text'] = array(
             'type'=>'TextField',
             'width' => 85
-        );
-        $this->_filters['lockedtoo'] = array(
-            'type'      => 'Button',
-            'skipWhere' => true,
-            'icon'      => $this->getRequest()->getBaseUrl().'/assets/silkicons/user_red.png',
-            'cls'       => 'x-btn-text-icon',
-            'text'      => trlKwf('Show locked users'),
-            'tooltip'   => trlKwf('Show locked users too')
         );
 
         // alle erlaubten haupt-rollen in variable
@@ -71,7 +63,6 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         $this->_columns->add(new Kwf_Grid_Column('password', trlKwf('Activated'), 60))
             ->setRenderer('boolean')
             ->setShowIn(Kwf_Grid_Column::SHOW_IN_ALL ^ Kwf_Grid_Column::SHOW_IN_XLS);
-        $this->_columns->add(new Kwf_Grid_Column_Checkbox('locked', trlKwf('Locked'), 60));
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $acl = Zend_Registry::get('acl');
@@ -93,7 +84,8 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
 
-        $ownUserRow = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
+
+        $ownUserRow = $this->_model->getRowByRowByKwfUser(Kwf_Registry::get('userModel')->getAuthedUser());
         if (in_array($ownUserRow->id, $ids)) {
             throw new Kwf_ClientException(trlKwf("You cannot delete your own account."));
         }
@@ -111,37 +103,6 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         }
     }
 
-    public function jsonUserLockAction()
-    {
-        if (!isset($this->_permissions['userlock']) || !$this->_permissions['userlock']) {
-            throw new Kwf_Exception("userlock is not allowed.");
-        }
-        $ids = $this->getRequest()->getParam($this->_primaryKey);
-        $ids = explode(';', $ids);
-
-        $ownUserRow = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
-        if (in_array($ownUserRow->id, $ids)) {
-            throw new Kwf_ClientException(trlKwf("You cannot lock your own account."));
-        }
-
-        foreach ($ids as $id) {
-            $row = $this->_model->getRow($id);
-            if (!$row) {
-                throw new Kwf_ClientException("Can't find row with id '$id'.");
-            }
-            if (!$this->_hasPermissions($row, 'userlock')) {
-                throw new Kwf_Exception("You don't have the permissions to lock this user.");
-            }
-            $row->locked = $row->locked ? 0 : 1;
-            $row->save();
-
-            $this->_model->writeLog(array(
-                'user_id' => $row->id,
-                'message_type' => ($row->locked ? 'user_locked' : 'user_unlocked')
-            ));
-        }
-    }
-
     public function jsonResendMailAction()
     {
         $userId = $this->getRequest()->getParam('user_id');
@@ -151,10 +112,12 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
             throw new Kwf_Exception("Wrong parameters submitted");
         }
 
-        $userModel = Kwf_Registry::get('userModel')->getKwfModel();
-        $row = $userModel->getRow($userId);
+        $row = $this->_model->getRow($userId);
         if (!$row) {
             throw new Kwf_Exception("User row not found");
+        }
+        if (!$this->_hasPermissions($row, 'mail')) {
+            throw new Kwf_Exception("Don't have permissions");
         }
         if ($type == 'activation') {
             $row->sendActivationMail();
@@ -163,28 +126,41 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         }
     }
 
+    public function jsonGenerateActivationLinkAction()
+    {
+        $userId = $this->getRequest()->getParam('user_id');
+        $row = $this->_model->getRow($userId);
+        if (!$row) {
+            throw new Kwf_Exception("User row not found");
+        }
+        if (!$this->_hasPermissions($row, 'link')) {
+            throw new Kwf_Exception("Don't have permissions");
+        }
+
+        $kwfRow = $row->getModel()->getKwfUserRowById($row->id);
+        $this->view->url = '/kwf/user/login/activate?code='.$kwfRow->id.'-'.$kwfRow->generateActivationToken();
+    }
+
     protected function _getSelect()
     {
         $select = parent::_getSelect();
         $acl = Zend_Registry::get('acl');
-        $roles = array();
-        foreach ($acl->getAllResources() as $res) {
-            if ($res instanceof Kwf_Acl_Resource_EditRole
-                && $acl->isAllowed($this->_getUserRole(), $res, 'view')
-            ) {
-                $roles[] = $res->getRoleId();
+
+        if (!($acl->getRole($this->_getUserRole()) instanceof Kwf_Acl_Role_Admin)) { //admin always sees all roles
+            $roles = array();
+            foreach ($acl->getAllResources() as $res) {
+                if ($res instanceof Kwf_Acl_Resource_EditRole
+                    && $acl->isAllowed($this->_getUserRole(), $res, 'view')
+                ) {
+                    $roles[] = $res->getRoleId();
+                }
             }
-        }
 
-        $select->whereEquals('deleted', 0);
-        if (!$this->_getParam('query_lockedtoo')) {
-            $select->whereEquals('locked', 0);
-        }
-
-        if ($roles) {
-            $select->whereEquals('role', $roles);
-        } else {
-            $select = null;
+            if ($roles) {
+                $select->whereEquals('role', $roles);
+            } else {
+                $select = null;
+            }
         }
 
         if ($this->_getParam('query_role')) {
@@ -216,6 +192,10 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
     {
         $acl = Kwf_Registry::get('acl');
         $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
+
+        if ($acl->getRole($userRole) instanceof Kwf_Acl_Role_Admin) { //admin always sees all roles
+            return true;
+        }
 
         $roles = array();
         foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {

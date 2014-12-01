@@ -1,4 +1,4 @@
-Kwf.Form.HtmlEditor.InsertChar = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.InsertChar = Ext2.extend(Ext2.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -16,11 +16,11 @@ Kwf.Form.HtmlEditor.InsertChar = Ext.extend(Ext.util.Observable, {
             handler: this.onInsertChar,
             scope: this,
             tooltip: {
-                cls: 'x-html-editor-tip',
+                cls: 'x2-html-editor-tip',
                 title: trlKwf('Character'),
                 text: trlKwf('Insert a custom character.')
             },
-            cls: 'x-btn-icon',
+            cls: 'x2-btn-icon',
             clickEvent: 'mousedown',
             tabIndex: -1
         });

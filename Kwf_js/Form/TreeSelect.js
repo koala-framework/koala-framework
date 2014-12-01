@@ -1,4 +1,4 @@
-Kwf.Form.TreeSelect = Ext.extend(Kwf.Form.AbstractSelect,
+Kwf.Form.TreeSelect = Ext2.extend(Kwf.Form.AbstractSelect,
 {
     // mandatory parameters
     // controllerUrl (for the tree)
@@ -41,4 +41,4 @@ Kwf.Form.TreeSelect = Ext.extend(Kwf.Form.AbstractSelect,
         return this._windowItem;
     }
 });
-Ext.reg('treeselect', Kwf.Form.TreeSelect);
+Ext2.reg('treeselect', Kwf.Form.TreeSelect);

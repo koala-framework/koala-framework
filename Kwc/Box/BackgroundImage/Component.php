@@ -13,7 +13,6 @@ class Kwc_Box_BackgroundImage_Component extends Kwc_Basic_Image_Component
                 'cover' => true
             ),
         );
-        $ret['useParentDivForDimensions'] = false;                  //this setting is needed for IE8
         return $ret;
     }
 
@@ -21,7 +20,6 @@ class Kwc_Box_BackgroundImage_Component extends Kwc_Basic_Image_Component
     {
         $ret = parent::getTemplateVars();
         $ret['imageUrl'] = $this->getImageUrl();
-        $ret['config']['useParentDiv'] = $this->_getSetting('useParentDivForDimensions');
         return $ret;
     }
 }

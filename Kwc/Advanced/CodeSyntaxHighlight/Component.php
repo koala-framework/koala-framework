@@ -1,4 +1,5 @@
 <?php
+//requires easybook/geshi package
 class Kwc_Advanced_CodeSyntaxHighlight_Component extends Kwc_Abstract
 {
     public static function getSettings()
@@ -15,7 +16,6 @@ class Kwc_Advanced_CodeSyntaxHighlight_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        require_once Kwf_Config::getValue('externLibraryPath.geshi').'/geshi.php';
 
         $row = $this->getRow();
         if ($row->language) {

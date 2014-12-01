@@ -20,6 +20,13 @@ class Kwf_View_Helper_Assets
         foreach ($assetsPackage->getPackageUrls('text/javascript', $language) as $file) {
             $ret .= "$indent<script type=\"text/javascript\" src=\"".htmlspecialchars($file)."\"></script>\n";
         }
+        foreach ($assetsPackage->getPackageUrls('text/javascript; defer', $language) as $file) {
+            $ret .= "<script type=\"text/javascript\">
+                var se=document.createElement('script');se.type='text/javascript';se.async=true;
+                se.src='".$file."';
+                var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(se,s);
+            </script>";
+        }
         return $ret;
     }
 }

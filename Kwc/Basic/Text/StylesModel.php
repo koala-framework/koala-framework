@@ -46,7 +46,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         $ret = array();
         foreach ($package->getDependency()->getFilteredUniqueDependencies('text/css') as $dep) {
             if ($dep instanceof Kwf_Assets_Dependency_File) {
-                $ret = array_merge($ret, self::parseMasterStyles(file_get_contents($dep->getFileName())));
+                $ret = array_merge($ret, self::parseMasterStyles(file_get_contents($dep->getAbsoluteFileName())));
             }
         }
         Kwf_Cache_SimpleStatic::add($cacheId, $ret);
@@ -108,50 +108,6 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
 
     public function removeCache()
     {
-        //copy from Kwf_Util_ClearCache_Types_Assets
-        //TODO implement better in kwf 3.8
-        $config = Zend_Registry::get('config');
-        $langs = array();
-        if ($config->webCodeLanguage) $langs[] = $config->webCodeLanguage;
-
-        if ($config->languages) {
-            foreach ($config->languages as $lang=>$name) {
-                $langs[] = $lang;
-            }
-        }
-
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            $lngClasses = array();
-            foreach(Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
-                    in_array('language', Kwc_Abstract::getSetting($c, 'baseProperties'))
-                ) {
-                    $lngClasses[] = $c;
-                }
-            }
-            $lngs = Kwf_Component_Data_Root::getInstance()
-                ->getComponentsBySameClass($lngClasses, array('ignoreVisible'=>true));
-            foreach ($lngs as $c) {
-                $langs[] = $c->getLanguage();
-            }
-        }
-        $langs = array_unique($langs);
-        //end copy
-
-        $dep = new Kwc_Basic_Text_StylesAsset(get_class($this));
-        foreach ($langs as $language) {
-            $url = get_class($dep).'/'.$dep->toUrlParameter().'/'.$language.'/css';
-
-            $cacheId = str_replace(array(':', '/', '.', ','), '_', $url);
-            Kwf_Assets_Cache::getInstance()->remove($cacheId);
-
-            $cacheId = 'as_'.str_replace(array(':', '/', ','), '_', $url).'_'.Kwf_Media_Output::ENCODING_GZIP;
-            Kwf_Cache_SimpleStatic::_delete($cacheId);
-            $cacheId = 'as_'.str_replace(array(':', '/', ','), '_', $url).'_'.Kwf_Media_Output::ENCODING_DEFLATE;
-            Kwf_Cache_SimpleStatic::_delete($cacheId);
-        }
-
-
         return self::_getCache()->remove('RteStyles'.$this->getUniqueIdentifier());
     }
 
@@ -172,7 +128,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
                 foreach ($style['styles'] as $k => $v) {
                     $styles .= "$k: $v; ";
                 }
-                $ret .= ".kwcText $tag.$class { {$styles}} /* {$style['name']} */\n";
+                $ret .= ".kwcText $tag.$class { {$styles}} /"."* {$style['name']} *"."/\n";
             }
         }
         return $ret;
@@ -195,29 +151,9 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         if (!$styles = $cache->load($cacheId)) {
             $styles = array();
             foreach ($this->getRows() as $row) {
-                $css = array();
-                foreach ($row->getSiblingRow('styles')->toArray() as $name=>$value) {
-                    if (!$value) continue;
-                    if ($name == 'id') continue;
-                    $name = str_replace('_', '-', $name);
-                    if ($name == 'additional') {
-                        foreach (explode(';', $value) as $i) {
-                            if (preg_match('#^\s*([a-z-]+)\s*:\s*(.*)\s*$#', $i, $m)) {
-                                $css[$m[1]] = $m[2];
-                            }
-                        }
-                        continue;
-                    } else if ($name == 'margin-top' || $name == 'margin-bottom'
-                            || $name=='font-size') {
-                        $value .= 'px';
-                    } else if ($name == 'color') {
-                        $value = '#'.$value;
-                    }
-                    $css[$name] = $value;
-                }
                 $styles[$row->tag]['style' . $row->id] = array(
                     'name' => $row->name,
-                    'styles' => $css
+                    'styles' => $row->getStyles()
                 );
             }
             $styles = array('content' => $styles);

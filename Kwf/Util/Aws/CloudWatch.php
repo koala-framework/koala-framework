@@ -1,5 +1,4 @@
 <?php
-require_once Kwf_Config::getValue('externLibraryPath.aws').'/sdk.class.php';
 class Kwf_Util_Aws_CloudWatch extends AmazonCloudWatch
 {
     public function __construct(array $options = array())

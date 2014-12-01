@@ -8,7 +8,8 @@ class Kwf_Util_ClearCache_Types_Users extends Kwf_Util_ClearCache_Types_Table
 
     protected function _refreshCache($options)
     {
-        Kwf_Registry::get('userModel')->getKwfModel()->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
+        Kwf_Model_Abstract::getInstance(Kwf_Config::getValue('user.kwfUserController.model'))
+            ->synchronize(Kwf_Model_MirrorCache::SYNC_ALWAYS);
     }
 
     public function getTypeName()

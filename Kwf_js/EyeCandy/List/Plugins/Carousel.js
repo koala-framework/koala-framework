@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     //animationConfig: { duration: 0.25 },
     //fadeAnimationConfig: { duration: 0.25 }, //optional, by default animationConfig will be used
     useFade: true, //if elements will be faded in/out in addition to the moving
@@ -12,7 +12,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
         var numberShown = Math.floor(this.list.el.getWidth()/firstChild.el.getWidth());
 
-        Ext.applyIf(this, {
+        Ext2.applyIf(this, {
             animationConfig: { duration: 0.25 }
         });
         if (!this.fadeAnimationConfig) {
@@ -26,7 +26,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
             this.moveElement = this.moveElement.child(this.moveElementSelector);
         }
 
-        Ext.fly(window).on('resize', function() {
+        Ext2.fly(window).on('resize', function() {
             this.updateButtons();
         }, this, { buffer: 101 }); //buffer 101 to get called after ResponsiveEl
     },
@@ -89,7 +89,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
         // fade out first one
         if (this.useFade) {
-            var cfg = Ext.applyIf({
+            var cfg = Ext2.applyIf({
                 endOpacity: 0.01
             }, this.fadeAnimationConfig);
             this.list.getItem(0).el.fadeOut(cfg);
@@ -97,7 +97,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
         // fade in new one
         if (this.useFade) {
-            var cfg = Ext.applyIf({
+            var cfg = Ext2.applyIf({
                 endOpacity: 0.99
             }, this.fadeAnimationConfig);
             this.list.getItem(numberShown).el.fadeIn(cfg);
@@ -109,7 +109,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
         var firstElWidth = this.list.getItem(0).getWidthIncludingMargin();
 
-        var cfg = Ext.applyIf({
+        var cfg = Ext2.applyIf({
             callback: function() {
                 if (this.useFade) {
                     //fully hide & show (as we have endOpacity)
@@ -160,7 +160,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
         // fade in first
         if (this.useFade) {
-            var cfg = Ext.applyIf({
+            var cfg = Ext2.applyIf({
                 useDisplay: false,
                 endOpacity: 0.99
             }, this.fadeAnimationConfig);
@@ -172,14 +172,14 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstra
 
         // fade out last
         if (this.useFade) {
-            var cfg = Ext.applyIf({
+            var cfg = Ext2.applyIf({
                 useDisplay: false,
                 endOpacity: 0.01
             }, this.fadeAnimationConfig);
             this.list.getItem(numberShown).el.fadeOut(cfg);
         }
 
-        var cfg = Ext.applyIf({
+        var cfg = Ext2.applyIf({
             callback: function() {
                 this._moveActive = false;
                 if (this.useFade) {

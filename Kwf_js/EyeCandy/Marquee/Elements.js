@@ -1,10 +1,10 @@
 Kwf.onContentReady(function()
 {
-    var MarqueeComponents = Ext.query('div.kwfMarqueeElements');
-    Ext.each(MarqueeComponents, function(c) {
+    var MarqueeComponents = Ext2.query('div.kwfMarqueeElements');
+    Ext2.each(MarqueeComponents, function(c) {
         if (!c.kwfMarqueeInitDone) {
-            var config = Ext.decode(Ext.query('> input.settings', c)[0].value);
-            config.selectorRoot = new Ext.Element(c);
+            var config = Ext2.decode(Ext2.query('> input.settings', c)[0].value);
+            config.selectorRoot = new Ext2.Element(c);
             var Marquee = new Kwf.Marquee.Elements(config);
             Marquee.start();
             c.kwfMarqueeInitDone = true;
@@ -12,7 +12,7 @@ Kwf.onContentReady(function()
     });
 });
 
-Ext.namespace("Kwf.Marquee");
+Ext2.namespace("Kwf.Marquee");
 Kwf.Marquee.Elements = function(cfg) {
     this.selector = cfg.selector;
     this.selectorRoot = cfg.selectorRoot;
@@ -36,7 +36,7 @@ Kwf.Marquee.Elements.prototype = {
         this.sumSize = 0;
         this.elements = [];
         this.selectorRoot.query(this.selector).each(function(el) {
-            el = new Ext.Element(el);
+            el = new Ext2.Element(el);
             this.elements.push({
                 el: el,
                 size: this._elSize(el)

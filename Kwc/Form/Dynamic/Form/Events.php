@@ -12,7 +12,7 @@ class Kwc_Form_Dynamic_Form_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
-    public function onContentChange(Kwf_Component_Event_Abstract $event)
+    public function onContentChange(Kwf_Events_Event_Abstract $event)
     {
         $c = $event->component->getChildComponent('-form');
         $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));

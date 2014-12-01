@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Abstract.Image');
-Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
+Ext2.namespace('Kwc.Abstract.Image');
+Kwc.Abstract.Image.ImageUploadField = Ext2.extend(Ext2.Panel, {
 
     _scaleFactor: null,
     baseParams: null,
@@ -137,13 +137,13 @@ Kwc.Abstract.Image.ImageUploadField = Ext.extend(Ext.Panel, {
         }
 
         this._getFileUploadField().setPreviewUrl(this.previewUrl+'?'
-            +Ext.urlEncode(previewParams)+'&'
+            +Ext2.urlEncode(previewParams)+'&'
         );
     },
 
     setFormBaseParams: function(params) {
-        Ext.apply(this.baseParams, params);
+        Ext2.apply(this.baseParams, params);
     }
 });
 
-Ext.reg('kwc.image.imageuploadfield', Kwc.Abstract.Image.ImageUploadField);
+Ext2.reg('kwc.image.imageuploadfield', Kwc.Abstract.Image.ImageUploadField);

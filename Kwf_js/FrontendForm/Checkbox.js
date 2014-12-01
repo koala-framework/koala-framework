@@ -1,4 +1,4 @@
-Kwf.FrontendForm.Checkbox = Ext.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.Checkbox = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         this.el.select('input').each(function(input) {
             input.on('click', function() {

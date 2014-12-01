@@ -4,7 +4,7 @@ Kwf.Auto.Filter.ButtonGroup = function(config)
 	this.toggleButtons = new Array();
 	for (var i in config.buttons) {
 		var cfg = config.buttons[i];
-		this.toggleButtons[i] = new Ext.Button({
+		this.toggleButtons[i] = new Ext2.Button({
 	        icon: cfg.icon,
 	        text: cfg.text,
 	        cls: cfg.cls,
@@ -15,7 +15,7 @@ Kwf.Auto.Filter.ButtonGroup = function(config)
 	    this.toggleButtons[i].on('toggle', function(button, pressed) {
 			if (pressed) {
 	            for (var g in this.toggleButtons) {
-	                if (this.toggleButtons[g] instanceof Ext.Button && this.toggleButtons[g] != button) {
+	                if (this.toggleButtons[g] instanceof Ext2.Button && this.toggleButtons[g] != button) {
 	                     this.toggleButtons[g].toggle(false);
 	                };
 	            }
@@ -26,7 +26,7 @@ Kwf.Auto.Filter.ButtonGroup = function(config)
     }
 };
 
-Ext.extend(Kwf.Auto.Filter.ButtonGroup, Kwf.Auto.Filter.Abstract, {
+Ext2.extend(Kwf.Auto.Filter.ButtonGroup, Kwf.Auto.Filter.Abstract, {
     getParams: function() {
         var params = {};
         var value = '';

@@ -1,4 +1,4 @@
-Kwf.Form.InsertCharWindow = Ext.extend(Ext.Window,
+Kwf.Form.InsertCharWindow = Ext2.extend(Ext2.Window,
 {
     initComponent: function() {
         this.addEvents('insertchar');

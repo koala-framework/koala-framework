@@ -23,7 +23,7 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
             'type'=>'Button',
             'text' => trl('only empty'),
             'icon' => new Kwf_Asset('textfield'),
-            'cls' => 'x-btn-text-icon',
+            'cls' => 'x2-btn-text-icon',
             'skipWhere' => true
         );
 

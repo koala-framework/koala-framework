@@ -1,6 +1,6 @@
-Ext.namespace('Kwc.Advanced.DownloadsTree.Downloads');
+Ext2.namespace('Kwc.Advanced.DownloadsTree.Downloads');
 
-Kwc.Advanced.DownloadsTree.AdminPanelProjects = Ext.extend(Kwf.Auto.TreePanel, {
+Kwc.Advanced.DownloadsTree.AdminPanelProjects = Ext2.extend(Kwf.Auto.TreePanel, {
     border: false,
     initComponent: function() {
         Kwc.Advanced.DownloadsTree.AdminPanelProjects.superclass.initComponent.call(this);
@@ -37,7 +37,7 @@ Kwc.Advanced.DownloadsTree.AdminPanelProjects = Ext.extend(Kwf.Auto.TreePanel, {
     }
 });
 
-Kwc.Advanced.DownloadsTree.AdminPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
+Kwc.Advanced.DownloadsTree.AdminPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
     initComponent: function() {
         this.downloads = new Kwf.Auto.GridPanel({
             controllerUrl: this.downloadsUrl,
@@ -79,4 +79,4 @@ Kwc.Advanced.DownloadsTree.AdminPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
         return Kwc.Advanced.DownloadsTree.AdminPanel.superclass.setBaseParams.apply(this, arguments);
     }
 });
-Ext.reg('kwc.advanced.downloadstree', Kwc.Advanced.DownloadsTree.AdminPanel);
+Ext2.reg('kwc.advanced.downloadstree', Kwc.Advanced.DownloadsTree.AdminPanel);

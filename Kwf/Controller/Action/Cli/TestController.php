@@ -148,7 +148,7 @@ class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli
         }
 
         //nur temporär deaktiviert, damit ich selenium-verbindungs-probleme besser debuggen kann
-        PHPUnit_Util_Filter::setFilter(false);
+//         PHPUnit_Util_Filter::setFilter(false);
 
         $runner = new Kwf_Test_TestRunner();
         $suite = new Kwf_Test_TestSuite();

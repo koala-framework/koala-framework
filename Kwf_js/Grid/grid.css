@@ -1,4 +1,4 @@
-/* für Ext.util.Format.booleanTickCross */
+/* für Ext2.util.Format.booleanTickCross */
 .kwf-check-tick-cross-col-on {
     background-image:url(/assets/silkicons/tick.png);
 }
@@ -6,16 +6,16 @@
     background-image:url(/assets/silkicons/cross.png);
 }
 
-.kwf-cell-icon div.x-grid3-cell-inner,
-.kwf-cell-button div.x-grid3-cell-inner {
+.kwf-cell-icon div.x2-grid3-cell-inner,
+.kwf-cell-button div.x2-grid3-cell-inner {
     background-image: url(/assets/silkicons/page_edit.png);
     background-position: center; background-repeat: no-repeat;
 }
-.kwf-cell-button div.x-grid3-cell-inner {
+.kwf-cell-button div.x2-grid3-cell-inner {
     cursor: pointer;
 }
 
-.kwf-cell-button-text div.x-grid3-cell-inner {
+.kwf-cell-button-text div.x2-grid3-cell-inner {
     cursor: pointer;
     padding: 3px 4px 3px 18px;
     background-position: left center;

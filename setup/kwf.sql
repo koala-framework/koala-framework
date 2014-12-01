@@ -43,7 +43,6 @@ CREATE TABLE IF NOT EXISTS `kwf_users` (
   `lastname` varchar(255) NOT NULL,
   `created` datetime DEFAULT NULL,
   `deleted` tinyint NOT NULL,
-  `locked` tinyint NOT NULL,
   `logins` int NOT NULL,
   `last_login` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),

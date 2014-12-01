@@ -193,6 +193,9 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
                 $row->saved = 1;
             }
         }
+
+        //for clearing text view cache when styles change
+        $this->uses_styles = (bool)preg_match('#(<[a-z]+ [^>]*)class="style(\d+)"([^>]*>)#', $this->content);
     }
 
     public function tidy($html, Kwc_Basic_Text_Parser $parser = null)

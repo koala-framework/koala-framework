@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_Generator_Events extends Kwf_Component_Events
+class Kwf_Component_Generator_Events extends Kwf_Events_Subscriber
 {
     protected $_class;
 

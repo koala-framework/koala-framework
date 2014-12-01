@@ -5,7 +5,7 @@
  *
  * (ungetestet, nicht in dependencies, nicht als enableBlock setting in HtmlEditor)
  */
-Kwf.Form.HtmlEditor.FormatBlock = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.FormatBlock = Ext2.extend(Ext2.util.Observable, {
     formatBlocks : {
         'h1': 'Heading 1',
         'h2': 'Heading 2',
@@ -27,12 +27,12 @@ Kwf.Form.HtmlEditor.FormatBlock = Ext.extend(Ext.util.Observable, {
         var tb = this.cmp.getToolbar();
         this.blockSelect = tb.el.createChild({
             tag:'select',
-            cls:'x-font-select',
+            cls:'x2-font-select',
             html: this.createBlockOptions()
         });
         this.blockSelect.on('change', function(){
             var v = this.blockSelect.dom.value;
-            if (Ext.isIE) {
+            if (Ext2.isIE) {
                 v = '<'+v+'>';
             }
             this.cmp.relayCmd('formatblock', v);
@@ -57,7 +57,7 @@ Kwf.Form.HtmlEditor.FormatBlock = Ext.extend(Ext.util.Observable, {
 
     // private
     updateToolbar: function() {
-        if (Ext.isIE) {
+        if (Ext2.isIE) {
             var selectedBlock = false;
             var el = this.cmp.getFocusElement();
             while (el) {

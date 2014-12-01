@@ -4,7 +4,7 @@ class Kwc_Box_InheritContent_Trl_Cc_Component extends Kwc_Chained_Cc_Component
     public function getTemplateVars()
     {
         $ret = Kwc_Abstract::getTemplateVars();
-        $ret['linkTemplate'] = self::getTemplateFile($this->getData()->chained->chained->componentClass);
+        $ret['template'] = self::getTemplateFile($this->getData()->chained->chained->componentClass);
         $ret['child'] = $this->_getContentChild();
         return $ret;
     }

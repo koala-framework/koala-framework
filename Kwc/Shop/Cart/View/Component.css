@@ -1,1 +1,1 @@
-.$cssClass .products { color: $typo; }
+.$cssClass .products { color: var(typo); }

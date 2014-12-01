@@ -37,7 +37,6 @@ abstract class Kwf_Controller_Action_Auto_Import extends Kwf_Controller_Action_A
         $source = $uploadsRow->getFileSource();
         $target = 'temp/xlsimport_' . date('YmdHis') . '.' . $uploadsRow->extension;
         copy($source, $target); // copy with extension for xlsimport
-        require_once Kwf_Config::getValue('externLibraryPath.phpexcel').'/PHPExcel.php';
         $excel = PHPExcel_IOFactory::load($target);
         if (!$excel) throw new Kwf_Exception_Client(trlKwf('Could not read excel'));
         $excel = $excel->getActiveSheet();

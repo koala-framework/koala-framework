@@ -6,7 +6,6 @@ class Kwc_Favourites_Page_Component extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Favourites');
         $ret['viewCache'] = false;
-        $ret['assets']['dep'][] = 'KwfOnReadyJQuery';
         $ret['flags']['skipFulltextRecursive'] = true;
         $ret['flags']['hasComponentLinkModifiers'] = true;
         $ret['favouritesModel'] = 'Kwc_Favourites_Model';

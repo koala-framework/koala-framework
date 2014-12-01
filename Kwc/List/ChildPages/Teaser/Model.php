@@ -29,33 +29,78 @@ class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Abstract
                 $whereId = $whereEquals['id'];
             }
 
-            $childPagesComponentSelect = array();
+            $childPages = array();
 
+            $startPage = Kwf_Component_Data_Root::getInstance()
+                ->getComponentById($whereEquals['parent_component_id'], array(
+                    Kwf_Component_Select::IGNORE_VISIBLE => true
+                ))
+                ->getPage();
+
+            //first access kwf_pages table directly to avoid creating data objects
+            $generators = Kwf_Component_Data_Root::getInstance()->getPageGenerators();
+            if ($generators) {
+                $s = new Kwf_Model_Select();
+
+                $s->whereEquals('parent_id', $startPage->dbId);
+                if (!$whereId) {
+                    if (!isset($whereEquals['ignore_visible']) || !$whereEquals['ignore_visible']) {
+                        $s->whereEquals('visible', true);
+                    }
+                }
+                $s->order('pos');
+                $o = array(
+                    'columns' => array('id', 'name')
+                );
+                                  //only the first
+                $rows = $generators[0]->getModel()->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, $o);
+                foreach ($rows as $row) {
+                    $id = $row['id'];
+                    $childPages[] = array(
+                        'id' => $id,
+                        'target_page_id' => $id,
+                        'target_page_db_id' => $id,
+                        'name' => $row['name']
+                    );
+
+                }
+            }
+
+            //then ask all other generators for additional pages
+            //(you can not change the order currently)
+            $childPagesComponentSelect = array();
             if ($whereId ||
                 (isset($whereEquals['ignore_visible']) && $whereEquals['ignore_visible'])
             ) {
                 $childPagesComponentSelect[Kwf_Component_Select::IGNORE_VISIBLE] = true;
             }
-            $childPages = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($whereEquals['parent_component_id'], array(
-                    Kwf_Component_Select::IGNORE_VISIBLE => true
-                ))
-                ->getPage()
-                ->getChildPages($childPagesComponentSelect);
-            foreach ($childPages as $childPage) {
+            $childPagesComponentSelect['pageGenerator'] = false; //already selected by accessing model direclty
+
+/*
+Temporarily disabled for too deep stack nesting level (crashes php 5.2) and performance reasons
+            foreach ($startPage->getChildPages($childPagesComponentSelect) as $childPage) {
                 if (is_numeric($childPage->dbId)) {
-                    $id = $childPage->dbId;
-                } else {
-                    $id = substr(md5($childPage->dbId), 0, 5);
+                    throw new Kwf_Exception("this must not happen, pages must be queried by accessing model directly");
                 }
+                $childPages[] = array(
+                    'id' => substr(md5($childPage->dbId), 0, 5),
+                    'target_page_id' => $childPage->componentId,
+                    'target_page_db_id' => $childPage->dbId,
+                    'name' => $childPage->name
+                );
+            }
+*/
+
+            foreach ($childPages as $childPage) {
+                $id = $childPage['id'];
                 if (!$whereId || $id == $whereId) {
                     $i = 0;
                     $this->_data[$id] = array(
                         'id' => $id,
                         'pos' => $i++,
-                        'target_page_id' => $childPage->componentId,
-                        'target_page_db_id' => $childPage->dbId,
-                        'name' => $childPage->name
+                        'target_page_id' => $childPage['target_page_id'],
+                        'target_page_db_id' => $childPage['target_page_db_id'],
+                        'name' => $childPage['name'],
                     );
                     $dataKeys[] = $id;
                 }

@@ -20,10 +20,10 @@ class Kwf_Loader
 
     public static function registerAutoload()
     {
-        require_once 'Kwf/Benchmark.php';
+        if (!class_exists('Kwf_Benchmark', false)) require KWF_PATH.'/Kwf/Benchmark.php';
         if (Kwf_Benchmark::isEnabled()) {
             $class = 'Kwf_Loader_Benchmark';
-            require_once 'Kwf/Loader/Benchmark.php';
+            if (!class_exists($class, false)) require KWF_PATH.'/Kwf/Loader/Benchmark.php';
         } else {
             //für performance
             $class = 'Kwf_Loader';
@@ -33,42 +33,61 @@ class Kwf_Loader
 
     public static function loadClass($class)
     {
-        if ($class == 'TCPDF') {
-            require_once Kwf_Config::getValue('externLibraryPath.tcpdf').'/tcpdf.php';
+        static $namespaces;
+        if (!isset($namespaces)) {
+            $namespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
+        }
+        static $classMap;
+        if (!isset($classMap)) {
+            $classMap = include VENDOR_PATH.'/composer/autoload_classmap.php';
+        }
+        if (isset($classMap[$class])) {
+            $file = $classMap[$class];
         } else {
-            $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
-            $start = substr($file, 0, 4);
-            if ($start == 'Kwf/' || $start == 'Kwc/') {
-                //use absolute path for optimal performance
-                $absolutePathUsed = true;
-                $file = KWF_PATH.'/'.$file;
-            }
-            try {
-                include $file;
-            } catch (Exception $e) {
-                if ($fp = @fopen($file, 'r', true)) {
-                    //if file exists re-throw exception
-                    //(file_exists accepts unfortunately no use_include_path parameter)
-                    fclose($fp);
-                    throw $e;
+            if (($pos = strpos($class, '\\')) !== false) {
+                //php 5.3 namespace
+                $ns1 = substr($class, 0, $pos);
+                $ns2 = $class;
+                $file = str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+            } else {
+                $pos = strpos($class, '_');
+                $ns1 = substr($class, 0, $pos+1);
+
+                $pos = strpos($class, '_', $pos+1);
+                if ($pos !== false) {
+                    $ns2 = substr($class, 0, $pos+1);
+                } else {
+                    $ns2 = $class;
                 }
-
-                if (!isset($absolutePathUsed)) return;
-
-                //not found, try again without absolute KWF_PATH
                 $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
-                try {
-                    include $file;
-                } catch (Exception $e) {
-                    if ($fp = @fopen($file, 'r', true)) {
-                        //if file exists re-throw exception
-                        //(file_exists accepts unfortunately no use_include_path parameter)
-                        fclose($fp);
-                        throw $e;
+            }
+            $dirs = false;
+            if (isset($namespaces[$ns2])) {
+                $dirs = $namespaces[$ns2];
+            } else if (isset($namespaces[$ns1])) {
+                $dirs = $namespaces[$ns1];
+            }
+            if ($dirs !== false) {
+                if (count($dirs) == 1) {
+                    $file = $dirs[0].'/'.$file;
+                } else {
+                    foreach ($dirs as $dir) {
+                        if (file_exists($dir.'/'.$file)) {
+                            $file = $dir.'/'.$file;
+                        }
                     }
-                    //if file does not exist don't throw exception
-                    //required for class_exists to return false
                 }
+            }
+        }
+
+        try {
+            include $file;
+        } catch (Exception $e) {
+            if ($fp = @fopen($file, 'r', true)) {
+                //if file exists re-throw exception
+                //(file_exists accepts unfortunately no use_include_path parameter)
+                fclose($fp);
+                throw $e;
             }
         }
     }
@@ -86,13 +105,7 @@ class Kwf_Loader
         if (preg_match('#^[a-z]+-lib#i', $class)) return false;
         if (preg_match('#^lib#i', $class)) return false;
 
-        $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
-        foreach (explode(PATH_SEPARATOR, self::$_includePath) as $ip) {
-            if (file_exists($ip.DIRECTORY_SEPARATOR.$file)) {
-                return class_exists($class);
-            }
-        }
-        return false;
+        return class_exists($class);
     }
 
 }

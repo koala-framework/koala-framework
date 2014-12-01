@@ -532,9 +532,6 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             if (!$row) {
                 throw new Kwf_Exception("Can't find row with id '$id'.");
             }
-            if (!$this->_hasPermissions($row, 'save')) {
-                throw new Kwf_Exception("You don't have the permissions to save this row.");
-            }
             foreach ($this->_columns as $column) {
                 if (!($column->getShowIn() & Kwf_Grid_Column::SHOW_IN_GRID)) continue;
                 $invalid = $column->validate($row, $submitRow);
@@ -548,6 +545,9 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                 $this->_beforeInsert($row, $submitRow);
             }
             $this->_beforeSave($row, $submitRow);
+            if (!$this->_hasPermissions($row, 'save')) {
+                throw new Kwf_Exception("You don't have the permissions to save this row.");
+            }
 
 
             $row->save();
@@ -928,7 +928,6 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
         $data = $this->_getExportData(Kwf_Grid_Column::SHOW_IN_XLS, 'xls', 640);
 
-        require_once Kwf_Config::getValue('externLibraryPath.phpexcel').'/PHPExcel.php';
         $xls = new PHPExcel();
         $xls->getProperties()->setCreator("Vivid Planet Software GmbH");
         $xls->getProperties()->setLastModifiedBy("Vivid Planet Software GmbH");

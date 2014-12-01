@@ -8,11 +8,15 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
 
     public function indexAction()
     {
+        if (Kwf_Setup::getBaseUrl() === null || !Kwf_Config::getValue('server.domain')) {
+            throw new Kwf_Exception_Client("Before running setup please set server.domain and server.baseUrl in config.local.ini");
+        }
 
         if (file_exists('update')) {
             //for pre 3.3 webs, update file got replaced by kwf_update table
             throw new Kwf_Exception_Client("Application seems to be set up already. (update file exists)");
         }
+
 
         try {
             Kwf_Registry::get('db');

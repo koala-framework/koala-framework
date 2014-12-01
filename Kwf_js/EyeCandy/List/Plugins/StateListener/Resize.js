@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.StateListener.Resize = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.StateListener.Resize = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     //animationConfig = {}
     //sizes = { state: {width:123, height:123}}
     init: function() {

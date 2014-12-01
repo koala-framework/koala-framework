@@ -1,13 +1,13 @@
-Ext.namespace('Kwf.Auto.Grid');
+Ext2.namespace('Kwf.Auto.Grid');
 
-Kwf.Auto.Grid.Window = Ext.extend(Ext.Window, {
+Kwf.Auto.Grid.Window = Ext2.extend(Ext2.Window, {
     layout: 'fit',
     modal: true,
     closeAction: 'hide',
     queryParam: 'id',
     initComponent : function()
     {
-        var cfg = Ext.apply({
+        var cfg = Ext2.apply({
             controllerUrl: this.controllerUrl,
             autoLoad: false,
             baseParams: this.baseParams
@@ -46,4 +46,4 @@ Kwf.Auto.Grid.Window = Ext.extend(Ext.Window, {
     }
 });
 
-Ext.reg('kwf.autogridwindow', Kwf.Auto.Grid.Window);
+Ext2.reg('kwf.autogridwindow', Kwf.Auto.Grid.Window);

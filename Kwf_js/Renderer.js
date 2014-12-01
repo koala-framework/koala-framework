@@ -1,41 +1,41 @@
-Ext.util.Format['boolean'] = function(v, p, record) {
-    p.css += ' x-grid3-check-col-td';
-    return '<div class="x-grid3-check-col'+(v?'-on':'')+'">&#160;</div>';
+Ext2.util.Format['boolean'] = function(v, p, record) {
+    p.css += ' x2-grid3-check-col-td';
+    return '<div class="x2-grid3-check-col'+(v?'-on':'')+'">&#160;</div>';
 };
-Ext.util.Format.booleanTickCross = function(v, p, record) {
-    p.css += ' x-grid3-check-col-td';
-    return '<div class="x-grid3-check-col kwf-check-tick-cross-col'+(v?'-on':'')+'">&#160;</div>';
+Ext2.util.Format.booleanTickCross = function(v, p, record) {
+    p.css += ' x2-grid3-check-col-td';
+    return '<div class="x2-grid3-check-col kwf-check-tick-cross-col'+(v?'-on':'')+'">&#160;</div>';
 };
-Ext.util.Format.booleanRtr = function(v, p, record) {
-    p.css += ' x-grid3-check-col-td';
-    return '<div class="x-grid3-check-col kwf-check-rtr-col'+(v?'-on':'')+'">&#160;</div>';
+Ext2.util.Format.booleanRtr = function(v, p, record) {
+    p.css += ' x2-grid3-check-col-td';
+    return '<div class="x2-grid3-check-col kwf-check-rtr-col'+(v?'-on':'')+'">&#160;</div>';
 };
-Ext.util.Format.booleanText = function(v, p, record) {
+Ext2.util.Format.booleanText = function(v, p, record) {
     return v && v != '0' ? trlKwf('Yes') : trlKwf('No');
 };
-Ext.util.Format.booleanIcon = function(value, p, record, rowIndex, colIndex, store, column) {
+Ext2.util.Format.booleanIcon = function(value, p, record, rowIndex, colIndex, store, column) {
     if (value && value != '0') {
         if (column && column.tooltip) {
             p.attr += ' title="'+column.tooltip+'"';
         }
         if (column && column.icon) {
-            return '<div class="x-grid3-check-col" style="background-image:url('+column.icon+')">&#160;</div>';
+            return '<div class="x2-grid3-check-col" style="background-image:url('+column.icon+')">&#160;</div>';
         }
     }
     return '';
 };
 
-Ext.util.Format.password = function(value)
+Ext2.util.Format.password = function(value)
 {
     return value||true ? '******' : '';
 };
 
-Ext.util.Format.euroMoney = function(v, p)
+Ext2.util.Format.euroMoney = function(v, p)
 {
-    return Ext.util.Format.money(v,p) + " €";
+    return Ext2.util.Format.money(v,p) + " €";
 };
 
-Ext.util.Format.decimal = function(v, p)
+Ext2.util.Format.decimal = function(v, p)
 {
     if (p) {
         if (p.css) {
@@ -46,7 +46,7 @@ Ext.util.Format.decimal = function(v, p)
     }
     if (v === null || v == undefined) return "";
 
-    v = Ext.util.Format.htmlEncode(v);
+    v = Ext2.util.Format.htmlEncode(v);
 
     v = v.toString().replace(",", ".");
     v = (Math.round((v-0)*100))/100;
@@ -55,9 +55,9 @@ Ext.util.Format.decimal = function(v, p)
     return v;
 };
 
-Ext.util.Format.money = function(v, p)
+Ext2.util.Format.money = function(v, p)
 {
-    v = Ext.util.Format.decimal(v, p);
+    v = Ext2.util.Format.decimal(v, p);
     var preSign = v.substr(0, 1) == '-' ? '-' : '';
     var x = '';
     x = v.substr(0, v.lastIndexOf(','));
@@ -72,39 +72,39 @@ Ext.util.Format.money = function(v, p)
     return ret;
 };
 
-Ext.util.Format.percent = function(v)
+Ext2.util.Format.percent = function(v)
 {
     return Number(v).toFixed(1) + "%";
 };
 
-Ext.util.Format.showField = function(fieldName) {
+Ext2.util.Format.showField = function(fieldName) {
     return function(value, p, record) {
-        return Ext.util.Format.htmlEncode(record.data[fieldName]);
+        return Ext2.util.Format.htmlEncode(record.data[fieldName]);
     };
 };
 
-if (Ext.util.Format.nl2br) {
+if (Ext2.util.Format.nl2br) {
     //ab ext 2.2, hat aber anderen namen
-    Ext.util.Format.nl2Br = Ext.util.Format.nl2br;
+    Ext2.util.Format.nl2Br = Ext2.util.Format.nl2br;
 } else {
-    Ext.util.Format.nl2Br = function(v) {
-        return Ext.util.Format.htmlEncode(v).replace(/\n/g, "<br />");
+    Ext2.util.Format.nl2Br = function(v) {
+        return Ext2.util.Format.htmlEncode(v).replace(/\n/g, "<br />");
     };
 }
 
-Ext.util.Format.AutoNl2Br = function(v) {
+Ext2.util.Format.AutoNl2Br = function(v) {
     //span wird in v gesetzt, da er sonst wieder überschrieben wird
-    return "<span class=\'kwf-renderer-linebreak\'>"+Ext.util.Format.nl2Br(v)+"</span>";
+    return "<span class=\'kwf-renderer-linebreak\'>"+Ext2.util.Format.nl2Br(v)+"</span>";
 };
 
-Ext.util.Format.component = function(v, f) {
+Ext2.util.Format.component = function(v, f) {
     f.css += 'content';
     f.attr += 'style="overflow: visible; white-space: normal;"';
     return v;
 };
 
 //date-funktion überschreiben, damit Y-m-d als eingabeformat verwendet werden kann
-Ext.util.Format.date = function(v, format) {
+Ext2.util.Format.date = function(v, format) {
     if(!v){
         return '';
     }
@@ -122,22 +122,22 @@ Ext.util.Format.date = function(v, format) {
 };
 
 
-Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer(trlKwf('Y-m-d'));
-Ext.util.Format.localizedDatetime = Ext.util.Format.dateRenderer(trlKwf('Y-m-d H:i'));
-Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');
-Ext.util.Format.germanDay = function(value, p) {
+Ext2.util.Format.localizedDate = Ext2.util.Format.dateRenderer(trlKwf('Y-m-d'));
+Ext2.util.Format.localizedDatetime = Ext2.util.Format.dateRenderer(trlKwf('Y-m-d H:i'));
+Ext2.util.Format.germanDate = Ext2.util.Format.dateRenderer('d.m.Y');
+Ext2.util.Format.germanDay = function(value, p) {
     p.css += 'kwf-renderer-bright';
-    return Ext.util.Format.date(value, 'd.m.');
+    return Ext2.util.Format.date(value, 'd.m.');
 };
-Ext.util.Format.time = function(value) {
+Ext2.util.Format.time = function(value) {
     var time = /^..:..:..$/.exec(value); //regex by Michael "regex noob" Freudenthaler
     if (time) {
         value = value.split(':');
         return value[0]+':'+value[1];
     }
-    return Ext.util.Format.date(value, 'H:i');
+    return Ext2.util.Format.date(value, 'H:i');
 }
-Ext.util.Format.secondsToTime = function(v, format) {
+Ext2.util.Format.secondsToTime = function(v, format) {
     format.css += 'secondsToTimeRight';
 
     if(!v){
@@ -155,16 +155,16 @@ Ext.util.Format.secondsToTime = function(v, format) {
     return ret;
 };
 
-Ext.util.Format.mouseoverPic = function(v, p, record){
+Ext2.util.Format.mouseoverPic = function(v, p, record){
     if (!v) return '';
     p.css += 'kwf-cell-button';
-    v = Ext.util.Format.htmlEncode(v);
+    v = Ext2.util.Format.htmlEncode(v);
     p.attr += 'style="background-image:url('+v+');"';
     p.attr += ' ext:qtip="&lt;img src=\''+record.data.pic_large+'\' /&gt;"';
     return '';
 };
 
-Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, store, column) {
+Ext2.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, store, column) {
     if (value != 'invisible') {
         if (column && column.noIconWhenNew && !record.data.id) {
             p.attr += 'style="background-image:none;" ';
@@ -181,7 +181,7 @@ Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, stor
     return '';
 };
 
-Ext.util.Format.cellButtonText = function(value, p, record, rowIndex, colIndex, store, column) {
+Ext2.util.Format.cellButtonText = function(value, p, record, rowIndex, colIndex, store, column) {
     var name = '';
     if (value != 'invisible') {
         if (column && column.noIconWhenNew && !record.data.id) {
@@ -201,7 +201,7 @@ Ext.util.Format.cellButtonText = function(value, p, record, rowIndex, colIndex, 
     return name;
 };
 
-Ext.util.Format.genderIcon = function(value, p, record, rowIndex, colIndex, store, column) {
+Ext2.util.Format.genderIcon = function(value, p, record, rowIndex, colIndex, store, column) {
     p.css += 'kwf-cell-button';
     if (value == 'male') {
         p.attr += 'style="background-image:url(/assets/silkicons/male.png); cursor: auto;"" ';
@@ -216,7 +216,17 @@ Ext.util.Format.genderIcon = function(value, p, record, rowIndex, colIndex, stor
     return '';
 };
 
-Ext.util.Format.fileSize = function(size) {
+Ext2.util.Format.genderText = function(value, p, record, rowIndex, colIndex, store, column) {
+    var ret = '';
+    if (value == 'male') {
+        ret = trlKwf('Male');
+    } else if (value == 'female') {
+        ret = trlKwf('Female');
+    }
+    return ret;
+};
+
+Ext2.util.Format.fileSize = function(size) {
     var unit;
     if (!parseInt(size) && size !== 0) return '';
     size = parseInt(size);
@@ -232,14 +242,14 @@ Ext.util.Format.fileSize = function(size) {
     return size.toString().replace(".", ",") + ' ' + unit;
 };
 
-Ext.util.Format.notEditable = function(v, p)
+Ext2.util.Format.notEditable = function(v, p)
 {
     p.css += 'kwf-renderer-noteditable';
-    v = Ext.util.Format.htmlEncode(v);
+    v = Ext2.util.Format.htmlEncode(v);
     return v;
 };
 
-Ext.util.Format.image = function(v, p, record){
+Ext2.util.Format.image = function(v, p, record){
     if (!v) return '';
     p.css += 'kwf-cell-icon';
     p.attr += 'style="';
@@ -261,29 +271,29 @@ Ext.util.Format.image = function(v, p, record){
     return '';
 };
 
-Ext.util.Format.clickableLink = function(v, p, record){
+Ext2.util.Format.clickableLink = function(v, p, record){
     if (!v) return '';
-    v = Ext.util.Format.htmlEncode(v);
+    v = Ext2.util.Format.htmlEncode(v);
     return '<a href="'+v+'" target="_blank">'+v+'</a>';
 };
 
-Ext.util.Format.clickableMailLink = function(v, p, record){
+Ext2.util.Format.clickableMailLink = function(v, p, record){
     if (!v) return '';
-    v = Ext.util.Format.htmlEncode(v);
+    v = Ext2.util.Format.htmlEncode(v);
     return '<a href="mailto:'+v+'" target="_blank">'+v+'</a>';
 };
 
-Ext.util.Format.tableTrl = function(v, p, record, rowIndex, colIndex, store, column){
+Ext2.util.Format.tableTrl = function(v, p, record, rowIndex, colIndex, store, column){
     if (!v || v == '') {
         v = record.data[column.dataIndex+'data'];
-        v = Ext.util.Format.htmlEncode(v);
+        v = Ext2.util.Format.htmlEncode(v);
         p.attr += 'style="background: url(/assets/silkicons/link.png) no-repeat right center; border: 1px solid #b4e889; padding-right: 20px;"';
     } else {
         p.attr += 'style="background: url(/assets/silkicons/link_break.png) no-repeat right center; border: 1px solid #f16565; padding-right: 20px;"';
     }
     return v;
 };
-Ext.util.Format.newsletterState = function(v, p, record){
+Ext2.util.Format.newsletterState = function(v, p, record){
     if (!v) return '';
     if (v == trlKwf('unsubscribed')) {
         return '<span class="unsubscribed">'+v+'</span>';
@@ -295,7 +305,7 @@ Ext.util.Format.newsletterState = function(v, p, record){
     return v;
 };
 
-Ext.util.Format.raw = function(v, p)
+Ext2.util.Format.raw = function(v, p)
 {
     return v;
 };

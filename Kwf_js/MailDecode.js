@@ -1,14 +1,14 @@
-Kwf.onElementReady('a', function decodeMailHref(el)
-{
+$(document).on('click', 'a', function(event) {
+    var el = event.currentTarget;
     var atDecoding = '(kwfat)';
     var dotDecoding = '(kwfdot)';
 
-    el = el.dom;
     if (el.href && el.href.match(/^mailto:/)) {
         el.href = el.href.replace(atDecoding, '@');
         el.href = el.href.replace(dotDecoding, '.');
     }
-}, { defer: true });
+});
+
 Kwf.onElementReady('span.kwfEncodedMail', function decodeMail(el)
 {
     var atDecoding = '(kwfat)';
@@ -18,4 +18,4 @@ Kwf.onElementReady('span.kwfEncodedMail', function decodeMail(el)
     var txt = el.innerHTML;
     txt = txt.replace(atDecoding, '@');
     el.innerHTML = txt.replace(dotDecoding, '.');
-});
+}, { defer: false, checkVisibility: true });

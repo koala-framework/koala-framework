@@ -7,7 +7,7 @@ class Kwf_Form_Container_Column extends Kwf_Form_Container_Abstract
     public function __construct($name = null)
     {
         parent::__construct($name);
-        $this->setBaseCls('x-plain');
+        $this->setBaseCls('x2-plain');
         $this->setStyle('margin: 0px 10px;');
     }
 

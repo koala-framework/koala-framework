@@ -6,7 +6,23 @@ abstract class Kwf_Assets_Dependency_Abstract
     const DEPENDENCY_TYPE_USES = 'uses';
     protected $_dependencies = array();
 
-    public function getContents()
+    private $_deferLoad = false;
+
+    public function __construct()
+    {
+    }
+
+    public function getDeferLoad()
+    {
+        return $this->_deferLoad;
+    }
+
+    public function setDeferLoad($v)
+    {
+        $this->_deferLoad = $v;
+    }
+
+    public function getContents($language)
     {
         return null;
     }
@@ -16,9 +32,25 @@ abstract class Kwf_Assets_Dependency_Abstract
         return $this->getContents($language);
     }
 
+    public function getContentsPackedSourceMap($language)
+    {
+        return false;
+    }
+
     public function setDependencies($type, $deps)
     {
         $this->_dependencies[$type] = $deps;
+    }
+    public function addDependencies($type, $deps)
+    {
+        if (!isset($this->_dependencies[$type])) $this->_dependencies[$type] = array();
+        $this->_dependencies[$type] = array_merge($this->_dependencies[$type], $deps);
+    }
+
+    public function addDependency($type, $dep)
+    {
+        if (!isset($this->_dependencies[$type])) $this->_dependencies[$type] = array();
+        $this->_dependencies[$type][] = $dep;
     }
 
     public function getDependencies($type)
@@ -54,6 +86,10 @@ abstract class Kwf_Assets_Dependency_Abstract
         return null;
     }
 
+    public function warmupCaches()
+    {
+    }
+
     public function __toString()
     {
         return get_class($this);
@@ -62,6 +98,19 @@ abstract class Kwf_Assets_Dependency_Abstract
     public function toDebug()
     {
         return get_class($this).': '.$this->__toString()."\n";
+    }
+
+    public function getRecursiveDependencies()
+    {
+        $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_UniqueFilter(new Kwf_Assets_Dependency_Iterator_Recursive($this, Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL)), RecursiveIteratorIterator::CHILD_FIRST);
+        $array = array();
+        $array[] = $this;
+        foreach ($it as $i) {
+            if ($i !== $this) {
+                $array[] = $i;
+            }
+        }
+        return $array;
     }
 
     public function getRecursiveFiles()
@@ -107,41 +156,83 @@ abstract class Kwf_Assets_Dependency_Abstract
     public final function getFilteredUniqueDependencies($mimeType)
     {
         $processed = array();
-        $ret = array();
-        $uses = array($this);
-        while ($i = array_shift($uses)) {
-            $deps = $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed);
-            if ($deps) {
-                $ret = array_merge($ret, $deps['requires']);
-                $uses = array_merge($uses, $deps['uses']);
+        $ret = $this->_getFilteredUniqueDependenciesProcessDep($this, $mimeType, $processed, array());
+
+        //filter out deferred
+        if ($mimeType == 'text/javascript; defer') {
+            $nonDefer = array();
+            $this->_getDependenciesNonDefer($this, $nonDefer, array());
+            foreach ($ret as $k=>$i) {
+                if (in_array($i, $nonDefer, true)) {
+                    unset($ret[$k]);
+                }
             }
         }
         return $ret;
     }
 
-    private function _getFilteredUniqueDependenciesProcessDep($dep, $mimeType, &$processed)
+    private function _getDependenciesNonDefer($dep, &$processed, $stack)
     {
-        $ret = array(
-            'requires' => array(),
-            'uses' => array()
-        );
         if (in_array($dep, $processed, true)) {
             return;
         }
-        $processed[] = $dep;
-        foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES) as $i) {
-            $ret['uses'][] = $i;
+        $stack[] = $dep;
+        if (!$dep->getDeferLoad()) {
+            $requires = $dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL);
+            foreach ($requires as $i) {
+                if (!in_array($i, $stack, true)) {
+                    $this->_getDependenciesNonDefer($i, $processed, $stack);
+                }
+            }
+            if (in_array($dep, $processed, true)) {
+                return;
+            }
+
+            $processed[] = $dep;
         }
+    }
+
+    private function _getFilteredUniqueDependenciesProcessDep($dep, $mimeType, &$processed, $stack)
+    {
+        if (in_array($dep, $processed, true)) {
+            return array();
+        }
+        $stack[] = $dep;
+
+        $ret = array();
+        if ($mimeType == 'text/javascript' && $dep->getDeferLoad()) {
+            return array();
+        }
+
+        if ($mimeType == 'text/javascript; defer' && $dep->getDeferLoad()) {
+            $mimeType = 'text/javascript; defer2';
+        }
+
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES) as $i) {
-            if ($childDep = $this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed)) {
-                $ret['requires'] = array_merge($ret['requires'], $childDep['requires']);
-                $ret['uses'] = array_merge($ret['uses'], $childDep['uses']);
+            if (!in_array($i, $stack, true)) {
+                foreach ($this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, $stack) as $j) {
+                    $ret[] = $j;
+                }
             }
         }
-        if ($dep->getMimeType() == $mimeType) {
-            $ret['requires'][] = $dep;
+
+        if (in_array($dep, $processed, true)) {
+            return $ret;
+        }
+
+        $processed[] = $dep;
+
+        $mimeMatches = $dep->getMimeType() == $mimeType
+            || ($mimeType == 'text/javascript; defer2' && $dep->getMimeType() == 'text/javascript');
+        if ($mimeMatches) {
+            $ret[] = $dep;
+        }
+
+        foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES) as $i) {
+            foreach ($this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, array()) as $j) {
+                $ret[] = $j;
+            }
         }
         return $ret;
     }
-
 }

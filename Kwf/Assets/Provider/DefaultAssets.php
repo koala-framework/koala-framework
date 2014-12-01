@@ -8,9 +8,18 @@ class Kwf_Assets_Provider_DefaultAssets extends Kwf_Assets_Provider_Abstract
 
     public function getDefaultDependencies()
     {
-        return array(
-            new Kwf_Assets_Dependency_File_Js(KWF_PATH.'/Kwf_js/AssetsVersion.js'),
-            new Kwf_Assets_Dependency_File_Js(KWF_PATH.'/Kwf_js/Trl.js'),
+        $deps = array(
+            'Kwf.AssetsVersion',
+            'Kwf.Trl'
         );
+        $ret = array();
+        foreach ($deps as $i)  {
+            $j = $this->_providerList->findDependency($i);
+            if (!$j) {
+                throw new Kwf_Exception("Didn't find dependency '$i'");
+            }
+            $ret[] = $j;
+        }
+        return $ret;
     }
 }

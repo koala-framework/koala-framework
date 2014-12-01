@@ -36,8 +36,10 @@ class Kwf_Exception_JavaScript extends Kwf_Exception
 
         $user = "guest";
         try {
-            if ($u = Zend_Registry::get('userModel')->getAuthedUser()) {
-                $user = "$u, id $u->id, $u->role";
+            if (Zend_Registry::get('userModel')) {
+                if ($u = Zend_Registry::get('userModel')->getAuthedUser()) {
+                    $user = "$u, id $u->id, $u->role";
+                }
             }
         } catch (Exception $e) {
             $user = "error getting user";

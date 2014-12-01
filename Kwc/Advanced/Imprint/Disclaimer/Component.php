@@ -8,7 +8,8 @@ class Kwc_Advanced_Imprint_Disclaimer_Component extends Kwc_Abstract
             'ownModel' => 'Kwf_Component_FieldModel',
             'cssClass' => 'webStandard'
         ));
-        $ret['assets']['dep'][] = 'KwfSwitchDisplay';
+        $ret['componentCategory'] = 'admin';
+        $ret['assetsDefer']['dep'][] = 'KwfSwitchDisplay';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         return $ret;
     }

@@ -1,4 +1,4 @@
-Kwf.Form.ShowField = Ext.extend(Ext.form.Field,
+Kwf.Form.ShowField = Ext2.extend(Ext2.form.Field,
 {
     defaultAutoCreate : {tag: 'div', cls: 'kwf-form-show-field'},
     /**
@@ -13,7 +13,7 @@ Kwf.Form.ShowField = Ext.extend(Ext.form.Field,
     },
     afterRender : function(){
         Kwf.Form.ShowField.superclass.afterRender.call(this);
-        if (typeof this.tpl == 'string') this.tpl = new Ext.XTemplate(this.tpl);
+        if (typeof this.tpl == 'string') this.tpl = new Ext2.XTemplate(this.tpl);
         this.tpl.compile();
         this.setRawValue("&nbsp;"); //bugfix für IE 7 -> /kwf/test/kwf_form_show-field_value-overlaps-error
     },
@@ -46,4 +46,4 @@ Kwf.Form.ShowField = Ext.extend(Ext.form.Field,
         }
     }
 });
-Ext.reg('showfield', Kwf.Form.ShowField);
+Ext2.reg('showfield', Kwf.Form.ShowField);

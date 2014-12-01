@@ -183,7 +183,7 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             throw new Kwf_Exception_Client(trlKwf('Source and target paragraphs are not compatible.'));
         }
 
-        Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
+        Kwf_Events_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
         $progressBar = null;
 
@@ -196,6 +196,6 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         $row->save();
 
         Kwf_Util_Component::afterDuplicate($source, $target);
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        Kwf_Events_ModelObserver::getInstance()->enable();
     }
 }

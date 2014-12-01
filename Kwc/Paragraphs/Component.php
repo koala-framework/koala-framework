@@ -34,6 +34,18 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         $ret['showCopyPaste'] = true;
         $ret['extConfig'] = 'Kwc_Paragraphs_ExtConfig';
         $ret['useMobileBreakpoints'] = Kwf_Config::getValue('kwc.mobileBreakpoints');
+
+        $ret['categories'] = array(
+            'content'      => 'content',
+            'none'         => 'none',
+            'layout'       => trlKwfStatic('Layout'),
+            'media'        => trlKwfStatic('Media'),
+            'callToAction' => trlKwfStatic('Call to Action'),
+            'childPages'   => trlKwfStatic('Child Pages'),
+            'special'      => trlKwfStatic('Special'),
+            'model'        => trlKwfStatic('Model'),
+            'admin'        => trlKwfStatic('Admin'),
+        );
         return $ret;
     }
 

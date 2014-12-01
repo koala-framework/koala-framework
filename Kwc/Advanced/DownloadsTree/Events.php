@@ -6,23 +6,23 @@ class Kwc_Advanced_DownloadsTree_Events extends Kwc_Abstract_Events
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'downloadsModel'),
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onRowInsertOrDelete'
         );
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'downloadsModel'),
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onRowInsertOrDelete'
         );
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'downloadsModel'),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onRowUpdate'
         );
         return $ret;
     }
 
-    public function onRowInsertOrDelete(Kwf_Component_Event_Row_Abstract $event)
+    public function onRowInsertOrDelete(Kwf_Events_Event_Row_Abstract $event)
     {
         $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
             $event->row->getParentRow('Project')->component_id
@@ -36,7 +36,7 @@ class Kwc_Advanced_DownloadsTree_Events extends Kwc_Abstract_Events
         }
     }
 
-    public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onRowUpdate(Kwf_Events_Event_Row_Updated $event)
     {
         if ($event->isDirty('visible')) {
 

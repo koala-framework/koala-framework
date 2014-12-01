@@ -1,10 +1,10 @@
-Ext.namespace('Kwf.Component');
-Kwf.Component.Preview = Ext.extend(Ext.Panel, {
+Ext2.namespace('Kwf.Component');
+Kwf.Component.Preview = Ext2.extend(Ext2.Panel, {
     autoScroll: true,
     initComponent: function() {
         this.previewMode = false;
 
-        var params = Ext.urlDecode(location.search.substr(1));
+        var params = Ext2.urlDecode(location.search.substr(1));
         if (params && params.url) {
             if (params.url.indexOf('kwcPreview') !== -1) {
                 this.previewMode = true;
@@ -14,7 +14,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
         this.classNames = ['desktop', 'notebook', 'smartphonePortrait', 'smartphoneLandscape', 'tabletPortrait', 'tabletLandscape'];
         this.tbar = [];
 
-        this.kwfComponentPreviewUrl = new Ext.form.TextField({
+        this.kwfComponentPreviewUrl = new Ext2.form.TextField({
             name: 'kwfComponentPreviewUrl',
             cls: 'kwfComponentPreviewUrl',
             width: 400,
@@ -30,7 +30,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
                         } else {
                             this.previewMode = true;
                         }
-                        Ext.getBody().child('.kwfComponentPreviewIframe').dom.src = url;
+                        Ext2.getBody().child('.kwfComponentPreviewIframe').dom.src = url;
                     }
                 },
                 scope: this
@@ -43,8 +43,8 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             this.addResponsiveButtons();
         }
         
-        var previewButton = new Ext.Button({
-            cls: 'x-btn-text',
+        var previewButton = new Ext2.Button({
+            cls: 'x2-btn-text',
             enableToggle: true,
             text: trlKwf('Preview Modus'),
             pressed: this.previewMode,
@@ -61,7 +61,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
                             }
                         }
                     }
-                    Ext.getBody().child('.kwfComponentPreviewIframe').dom.src = iframeUrl;
+                    Ext2.getBody().child('.kwfComponentPreviewIframe').dom.src = iframeUrl;
                 },
                 scope: this
             }
@@ -70,8 +70,8 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
         this.tbar.add('->');
         this.tbar.add(previewButton);
 
-        var reloadButton = new Ext.Button({
-            cls: 'x-btn-icon',
+        var reloadButton = new Ext2.Button({
+            cls: 'x2-btn-icon',
             icon: '/assets/silkicons/arrow_rotate_clockwise.png',
             handler: function() {
                 window.frames['kwfComponentPreviewIframe'].location.reload();
@@ -85,62 +85,62 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
     
     addResponsiveButtons: function() {
         var buttonGroup = [
-            new Ext.Button({
-                cls: 'x-btn-text',
+            new Ext2.Button({
+                cls: 'x2-btn-text',
                 enableToggle: true,
                 text: trlKwf('Desktop'),
                 handler: function() {
-                    var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
+                    var kwfComponentPreview = Ext2.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('desktop');
                 },
                 scope: this
             }, this),
-            new Ext.Button({
-                cls: 'x-btn-text',
+            new Ext2.Button({
+                cls: 'x2-btn-text',
                 enableToggle: true,
                 text: trlKwf('Notebook'),
                 handler: function() {
-                    var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
+                    var kwfComponentPreview = Ext2.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('notebook');
                 },
                 scope: this
             }, this),
-            new Ext.Button({
-                cls: 'x-btn-text',
+            new Ext2.Button({
+                cls: 'x2-btn-text',
                 enableToggle: true,
                 text: trlKwf('Tablet Portrait'),
                 handler: function() {
-                    var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
+                    var kwfComponentPreview = Ext2.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('tabletPortrait');
                 },
                 scope: this
             }, this),
-            new Ext.Button({
-                cls: 'x-btn-text',
+            new Ext2.Button({
+                cls: 'x2-btn-text',
                 enableToggle: true,
                 text: trlKwf('Tablet Landscape'),
                 handler: function() {
-                    var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
+                    var kwfComponentPreview = Ext2.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('tabletLandscape');
                 },
                 scope: this
             }, this),
-            new Ext.Button({
-                cls: 'x-btn-text',
+            new Ext2.Button({
+                cls: 'x2-btn-text',
                 enableToggle: true,
                 text: trlKwf('Smartphone Portrait'),
                 handler: function() {
-                    var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
+                    var kwfComponentPreview = Ext2.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('smartphonePortrait');
                 },
                 scope: this
             }, this),
-            new Ext.Button({
-                cls: 'x-btn-text',
+            new Ext2.Button({
+                cls: 'x2-btn-text',
                 enableToggle: true,
                 text: trlKwf('Smartphone Landscape'),
                 handler: function() {
-                    var kwfComponentPreview = Ext.getBody().child('.kwfComponentPreview');
+                    var kwfComponentPreview = Ext2.getBody().child('.kwfComponentPreview');
                     kwfComponentPreview.removeClass(this.classNames).addClass('smartphoneLandscape');
                 },
                 scope: this
@@ -150,7 +150,7 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
             extButton.on('toggle', function(button, pressed) {
                 if (pressed) {
                     buttonGroup.each(function(innerExtButton) {
-                        if (innerExtButton instanceof Ext.Button && innerExtButton != button) {
+                        if (innerExtButton instanceof Ext2.Button && innerExtButton != button) {
                             innerExtButton.toggle(false);
                         };
                     }, this);
@@ -199,4 +199,4 @@ Kwf.Component.Preview = Ext.extend(Ext.Panel, {
         return link;
     }
 });
-Ext.reg('kwf.component.preview', Kwf.Component.Preview);
+Ext2.reg('kwf.component.preview', Kwf.Component.Preview);

@@ -23,6 +23,7 @@ class Kwf_Util_ClearCache
                 if ($d->getFilename() == 'searchindex') continue;
                 if ($d->getFilename() == 'fulltext') continue;
                 if ($d->getFilename() == 'scss') continue; //never clear scss, too expensive to regenerate
+                if ($d->getFilename() == 'uglifyjs') continue; //never clear uglifyjs, too expensive to regenerate
                 if ($d->getFilename() == 'media') continue; //never clear media, too expensive to regenerate
                 if ($d->getFilename() == 'mediameta') continue; //never clear mediameta, too expensive to regenerate
                 $ret[] = $d->getFilename();
@@ -109,14 +110,7 @@ class Kwf_Util_ClearCache
 
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            $types[] = new Kwf_Util_ClearCache_Types_ComponentSettings();
-        }
-        $types[] = new Kwf_Util_ClearCache_Types_Trl();
         $types[] = new Kwf_Util_ClearCache_Types_Assets();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            $types[] = new Kwf_Util_ClearCache_Types_Events();
-        }
 
         try {
             $db = Kwf_Registry::get('db');
@@ -131,7 +125,7 @@ class Kwf_Util_ClearCache
                 }
             }
         }
-        if (Kwf_Config::getValueArray('processControl')) {
+        if (!Kwf_Config::getValue('clearCacheSkipProcessControl') && Kwf_Config::getValueArray('processControl')) {
             $types[] = new Kwf_Util_ClearCache_Types_ProcessControl();
         }
 
@@ -157,7 +151,7 @@ class Kwf_Util_ClearCache
         $refresh = isset($options['refresh']) ? $options['refresh'] : false;
         $excludeTypes = isset($options['excludeTypes']) ? $options['excludeTypes'] : array();
 
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
         ini_set('memory_limit', '512M');
         if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
@@ -283,7 +277,7 @@ class Kwf_Util_ClearCache
             Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
         }
 
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        Kwf_Events_ModelObserver::getInstance()->enable();
         return $types;
     }
 }

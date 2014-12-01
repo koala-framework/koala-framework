@@ -1,7 +1,7 @@
-Kwf.ColorPickerWindow = Ext.extend(Ext.Window,
+Kwf.ColorPickerWindow = Ext2.extend(Ext2.Window,
 {
     initComponent: function() {
-        this.content = new Ext.Panel({
+        this.content = new Ext2.Panel({
             cls: 'kwf-overview-panel',
             border: false,
             autoScroll: true,

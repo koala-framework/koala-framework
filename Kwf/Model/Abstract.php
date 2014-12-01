@@ -37,16 +37,15 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     protected $_rows = array();
 
-    private static $_instances = array();
     private static $_allInstances = array();
     private $_hasColumnsCache = array();
+    private $_factoryConfig = null;
 
     protected $_proxyContainerModels = array();
 
-    public static $instanceCount = array();
+    //public static $instanceCount = array();
 
     protected $_columnMappings = array();
-
 
     public function __construct(array $config = array())
     {
@@ -58,14 +57,14 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         if (isset($config['toStringField'])) $this->_toStringField = (string)$config['toStringField'];
         if (isset($config['exprs'])) $this->_exprs = (array)$config['exprs'];
         if (isset($config['hasDeletedFlag'])) $this->_hasDeletedFlag = $config['hasDeletedFlag'];
-        self::$instanceCount[spl_object_hash($this)] = get_class($this);
+        //self::$instanceCount[spl_object_hash($this)] = get_class($this);
         self::$_allInstances[] = $this;
         $this->_init();
     }
 
     public function __destruct()
     {
-        unset(self::$instanceCount[spl_object_hash($this)]);
+        //unset(self::$instanceCount[spl_object_hash($this)]);
     }
 
     /**
@@ -82,22 +81,14 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             if (!$config[$modelName]) return null;
             $modelName = $config[$modelName];
         }
-        if (!isset(self::$_instances[$modelName])) {
-            self::$_instances[$modelName] = new $modelName();
-        }
-        return self::$_instances[$modelName];
+        return Kwf_Model_Factory_ClassName::getModelInstance($modelName);
     }
 
     //für unit-tests
     public static function clearInstances()
     {
-        self::$_instances = array();
+        Kwf_Model_Factory_ClassName::clearInstances();
         self::$_allInstances = array();
-    }
-
-    public static function getInstances()
-    {
-        return self::$_instances;
     }
 
     protected function _init()
@@ -196,7 +187,12 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $select = clone $select;
         }
         $select->limit(1);
-        return $this->getRows($select)->current();
+        $rows = $this->getRows($select);
+        if ($rows->valid()) {
+            return $rows->current();
+        } else {
+            return null;
+        }
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
@@ -344,6 +340,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     {
         $models = array($this);
         $models = array_merge($models, $this->_proxyContainerModels);
+        $m = $this;
+        while ($m instanceof Kwf_Model_Proxy) {
+            $m = $m->getProxyModel();
+            $models[] = $m;
+        }
         foreach ($models as $m) {
             $matchingRules = $m->getReferenceRulesByModelClass($modelClassName);
 
@@ -374,6 +375,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     {
         $models = array($this);
         $models = array_merge($models, $this->_proxyContainerModels);
+        $m = $this;
+        while ($m instanceof Kwf_Model_Proxy) {
+            $m = $m->getProxyModel();
+            $models[] = $m;
+        }
         foreach ($models as $m) {
             if (isset($m->_referenceMap[$rule])) {
                 $ret = $m->_referenceMap[$rule];
@@ -469,6 +475,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         }
         $models = $this->_proxyContainerModels;
         $models[] = $this;
+        $m = $this;
+        while ($m instanceof Kwf_Model_Proxy) {
+            $m = $m->getProxyModel();
+            $models[] = $m;
+        }
         foreach ($models as $m) {
             if (isset($m->_dependentModels[$rule])) {
                 $ret = $m->_dependentModels[$rule];
@@ -573,11 +584,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             if (isset($options['replace']) && $options['replace']) {
                 throw new Kwf_Exception_NotYetImplemented();
             }
-            Kwf_Component_ModelObserver::getInstance()->disable();
+            Kwf_Events_ModelObserver::getInstance()->disable();
             foreach ($data as $k => $v) {
                 $this->createRow($v)->save();
             }
-            Kwf_Component_ModelObserver::getInstance()->enable();
+            Kwf_Events_ModelObserver::getInstance()->enable();
             $this->_afterImport($format, $data, $options);
         } else {
             throw new Kwf_Exception_NotYetImplemented();
@@ -680,6 +691,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         } else if ($expr instanceof Kwf_Model_Select_Expr_String) {
             return $expr->getString();
         } else if ($expr instanceof Kwf_Model_Select_Expr_Boolean) {
+            return $expr->getValue();
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Integer) {
             return $expr->getValue();
         } else if ($expr instanceof Kwf_Model_Select_Expr_StrPad) {
             $f = $expr->getField();
@@ -859,6 +872,13 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                     "CompareField-Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
                 );
             }
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Parent_Contains) {
+            if (!$row instanceof Kwf_Model_Row_Interface) {
+                $row = $this->getRow($row[$this->getPrimaryKey()]);
+            }
+            $refModel = $this->getReferencedModel($expr->getParent());
+            $ref = $this->getReference($expr->getParent());
+            return in_array($row->{$ref['column']}, $refModel->getIds($expr->getSelect()));
         } else {
             throw new Kwf_Exception_NotYetImplemented(
                 "Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
@@ -1006,13 +1026,18 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         return $this->_exprs[$name];
     }
 
+    public function freeMemory()
+    {
+        foreach ($this->_rows as $row) {
+            if (is_object($row)) $row->freeMemory();
+        }
+        $this->_rows = array();
+    }
+
     public static function clearAllRows()
     {
         foreach (self::$_allInstances as $i) {
-            foreach ($i->_rows as $row) {
-                if (is_object($row)) $row->freeMemory();
-            }
-            $i->_rows = array();
+            $i->freeMemory();
         }
     }
 
@@ -1036,25 +1061,61 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
     public function getColumnMapping($mapping, $column)
     {
-        if (!isset($this->_columnMappings[$mapping])) {
-            throw new Kwf_Exception("unknown mapping: '$mapping'");
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+
+        foreach ($models as $model) {
+            foreach ($model->_columnMappings as $map=>$columns) {
+                do {
+                    if (isset($model->_columnMappings[$map])) {
+                        if (!array_key_exists($column, $model->_columnMappings[$map])) {
+                            throw new Kwf_Exception("unknown mapping column: '$column' for mapping '$mapping' in model '".get_class($model)."'");
+                        }
+                        return $model->_columnMappings[$map][$column];
+                    }
+                } while ($map = get_parent_class($map));
+            }
         }
-        if (!isset($this->_columnMappings[$mapping][$column])) {
-            throw new Kwf_Exception("unknown mapping column: '$column' for mapping '$mapping'");
-        }
-        return $this->_columnMappings[$mapping][$column];
+
+        throw new Kwf_Exception("unknown mapping '$mapping' for '".get_class($this)."'");
     }
 
     public function getColumnMappings($mapping)
     {
-        if (!$this->hasColumnMappings($mapping)) {
-            throw new Kwf_Exception("unknown mapping: '$mapping'");
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+
+        foreach ($models as $model) {
+
+            foreach ($model->_columnMappings as $map=>$columns) {
+                do {
+                    if (isset($model->_columnMappings[$map])) {
+                        return $model->_columnMappings[$map];
+                    }
+                } while ($map = get_parent_class($map));
+            }
+
         }
-        return $this->_columnMappings[$mapping];
+
+        throw new Kwf_Exception("unknown mapping '$mapping' for '".get_class($this)."'");
     }
 
-    public function hasColumnMappings($mapping) {
-        return isset($this->_columnMappings[$mapping]);
+    public function hasColumnMappings($mapping)
+    {
+        $models = array($this);
+        $models = array_merge($models, $this->_proxyContainerModels);
+
+        foreach ($models as $model) {
+
+            foreach ($model->_columnMappings as $map=>$columns) {
+                do {
+                    if (isset($model->_columnMappings[$map])) {
+                        return true;
+                    }
+                } while ($map = get_parent_class($map));
+            }
+        }
+        return false;
     }
     
     public function hasDeletedFlag()
@@ -1080,5 +1141,30 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $value = (float)$value;
         }
         return $value;
+    }
+
+    public function getEventSubscribers()
+    {
+        return array();
+    }
+
+    public function setFactoryConfig(array $factoryConfig)
+    {
+        $this->_factoryConfig = $factoryConfig;
+    }
+
+    public function getFactoryId()
+    {
+        $c = $this->getFactoryConfig();
+        if (!$c) return null;
+        return $c['id'];
+    }
+
+    public function getFactoryConfig()
+    {
+        if ($this->_factoryConfig && !isset($this->_factoryConfig['id'])) {
+            $this->_factoryConfig = call_user_func(array('Kwf_Model_Factory_'.$this->_factoryConfig['type'], 'processConfig'), $this->_factoryConfig);
+        }
+        return $this->_factoryConfig;
     }
 }

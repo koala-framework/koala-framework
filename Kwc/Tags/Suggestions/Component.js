@@ -1,15 +1,15 @@
 Kwf.onContentReady(function(el) {
-    Ext.query('.kwcTagsSuggestions', el).each(function(el) {
+    Ext2.query('.kwcTagsSuggestions', el).each(function(el) {
         if (el.initDone) return;
         el.initDone = true;
-        el = Ext.get(el);
-        var config = Ext.decode(el.child('input.config').getValue());
+        el = Ext2.get(el);
+        var config = Ext2.decode(el.child('input.config').getValue());
         el.child('form').on('submit', function(ev) {
             ev.stopEvent();
             var tag = el.child('input[name="tag"]').getValue();
-            tag = Ext.util.Format.trim(tag);
+            tag = Ext2.util.Format.trim(tag);
             if (tag && tag != trlKwf('Enter tag...')) {
-                Ext.Ajax.request({
+                Ext2.Ajax.request({
                     url: config.controllerUrl+'/json-suggest',
                     params: {
                         tag: tag,

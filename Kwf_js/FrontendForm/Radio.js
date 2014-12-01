@@ -1,4 +1,4 @@
-Kwf.FrontendForm.Radio = Ext.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.Radio = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         this.el.select('input').each(function(input) {
             input.on('click', function() {

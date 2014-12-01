@@ -1,4 +1,6 @@
 <?php
+//add dependency bower mediaelement to use this component
+//TODO move this into own repository
 class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Component
     implements Kwf_Media_Output_IsValidInterface
 {
@@ -14,8 +16,9 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         ));
         $ret['assetsAdmin']['dep'][] = 'KwfFormCards';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
-        $ret['assets']['dep'][] = 'jQuery';
-        $ret['assets']['dep'][] = 'mediaelement';
+        $ret['assetsDefer']['dep'][] = 'jQuery';
+        $ret['assetsDefer']['files'][] = 'mediaelement/build/mediaelement-and-player.js';
+        $ret['assetsDefer']['files'][] = 'mediaelement/build/mediaelementplayer.css';
 
         $ret['generators']['child']['component']['previewImage'] = 'Kwc_Advanced_VideoPlayer_PreviewImage_Component';
 

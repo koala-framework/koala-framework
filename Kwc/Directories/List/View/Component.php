@@ -161,6 +161,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         $ret['componentId'] = $this->getData()->componentId;
         $ret['count'] = $this->getPagingCount($select);
         $ret['disableCache'] = false;
+        $ret['cacheLifetime'] = $this->getViewCacheLifetime();
         $ret['disableCacheParams'] = array();
         $paging = $this->_getPagingComponent();
         if ($paging) {

@@ -9,7 +9,7 @@
  *     -Added colors config property so you can overide the default color palette * 
  * 
  * @class Kwf.Form.ColorField
- * @extends Ext.form.TriggerField
+ * @extends Ext2.form.TriggerField
  * Provides a very simple color form field with a ColorMenu dropdown.
  * Values are stored as a six-character hex value without the '#'.
  * I.e. 'ffffff'
@@ -17,7 +17,7 @@
  * Create a new ColorField
  * <br />Example:
  * <pre><code>
-var cf = new Ext.form.ColorField({
+var cf = new Ext2.form.ColorField({
     fieldLabel: 'Color',
     hiddenName:'pref_sales'
 });
@@ -26,12 +26,12 @@ var cf = new Ext.form.ColorField({
  */
 
 
-Kwf.Form.ColorField =  Ext.extend(function(config){
+Kwf.Form.ColorField =  Ext2.extend(function(config){
     
-    this.menu = new Ext.menu.ColorMenu();
+    this.menu = new Ext2.menu.ColorMenu();
     this.menu.palette.on('select', this.handleSelect, this );
 
-    this.menu.on(Ext.apply({}, this.menuListeners, {
+    this.menu.on(Ext2.apply({}, this.menuListeners, {
         scope:this
     }));
     
@@ -42,15 +42,15 @@ Kwf.Form.ColorField =  Ext.extend(function(config){
   
     Kwf.Form.ColorField.superclass.constructor.call(this, config);
   
-},Ext.form.TriggerField,  {
+},Ext2.form.TriggerField,  {
 
     /**
        * @cfg {String} triggerClass
        * An additional CSS class used to style the trigger button.  The trigger will always get the
-       * class 'x-form-trigger' and triggerClass will be <b>appended</b> if specified (defaults to 'x-form-color-trigger'
+       * class 'x2-form-trigger' and triggerClass will be <b>appended</b> if specified (defaults to 'x2-form-color-trigger'
        * which displays a color icon).
     * */
-    triggerClass : 'x-form-color-trigger',
+    triggerClass : 'x2-form-color-trigger',
     
     /**
      * @cfg {String/Object} autoCreate
@@ -133,7 +133,7 @@ Kwf.Form.ColorField =  Ext.extend(function(config){
     markInvalid : function( msg ) {
         Kwf.Form.ColorField.superclass.markInvalid.call(this, msg);
         this.colorPreview.setStyle({
-            'background-image': 'url(/assets/ext/resources/images/default/grid/invalid_line.gif)'
+            'background-image': 'url(/assets/ext2/resources/images/default/grid/invalid_line.gif)'
         });
     },
 
@@ -203,4 +203,4 @@ Kwf.Form.ColorField =  Ext.extend(function(config){
   }
 });
 
-Ext.reg('colorfield', Kwf.Form.ColorField);
+Ext2.reg('colorfield', Kwf.Form.ColorField);

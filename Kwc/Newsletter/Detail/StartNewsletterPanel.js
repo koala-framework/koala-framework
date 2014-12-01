@@ -1,9 +1,9 @@
-Ext.ns('Kwc.Newsletter.Detail');
-Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
+Ext2.ns('Kwc.Newsletter.Detail');
+Kwc.Newsletter.Detail.StartNewsletterPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
 
     initComponent: function()
     {
-        Ext.applyIf(this, {
+        Ext2.applyIf(this, {
             title: trlKwf('Mailing'),
             layout: 'column',
             border: false,
@@ -14,7 +14,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             }
         });
 
-        this.newsletterButtonsContainer = new Ext.Element(document.createElement('div'));
+        this.newsletterButtonsContainer = new Ext2.Element(document.createElement('div'));
         this.newsletterButtonsContainer.addClass('kwcNewsletterButtons');
 
         this.newsletterPauseButtonContainer = this.newsletterButtonsContainer.createChild({
@@ -31,9 +31,9 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             html: trlKwf('Pause')
         });
         this.newsletterPauseButton.on('click', function(ev) {
-            Ext.Ajax.request({
+            Ext2.Ajax.request({
                 url: this.controllerUrl + '/json-change-status',
-                params : Ext.apply(Kwf.clone(this.getBaseParams()), {
+                params : Ext2.apply(Kwf.clone(this.getBaseParams()), {
                     status: 'pause'
                 }),
                 success: function(response, options, r) {
@@ -67,12 +67,12 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             this.mailingFormWindow.showEdit(this.baseParams.newsletterId);
         }, this);
 
-        this.mailingSettingsPanel = new Ext.Panel({
+        this.mailingSettingsPanel = new Ext2.Panel({
             columnWidth: .3,
             items: [this.newsletterButtonsContainer]
         });
 
-        this.newsletterProgressContainer = new Ext.Element(document.createElement('div'));
+        this.newsletterProgressContainer = new Ext2.Element(document.createElement('div'));
         this.newsletterProgressContainer.addClass('kwcNewsletterProgress');
 
         this.newsletterProgressText = this.newsletterProgressContainer.createChild({
@@ -92,16 +92,16 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             cls: 'kwcNewsletterInfoSpeed'
         });
 
-        this.progress = new Ext.ProgressBar({
+        this.progress = new Ext2.ProgressBar({
             renderTo: this.newsletterProgressContainer
         });
-        this.progress.setSize = Ext.ProgressBar.superclass.setSize;
+        this.progress.setSize = Ext2.ProgressBar.superclass.setSize;
         this.progress.onResize =  function(w, h) {
-            var inner = Ext.get(this.el.child('.x-progress-inner')),
-                bar = inner.child('.x-progress-bar'),
-                pt = inner.child('.x-progress-text'),
-                ptb = inner.child('.x-progress-text-back');
-            Ext.ProgressBar.superclass.onResize.apply(this, arguments);
+            var inner = Ext2.get(this.el.child('.x2-progress-inner')),
+                bar = inner.child('.x2-progress-bar'),
+                pt = inner.child('.x2-progress-text'),
+                ptb = inner.child('.x2-progress-text-back');
+            Ext2.ProgressBar.superclass.onResize.apply(this, arguments);
             inner.setHeight(h);
             bar.setHeight(h);
             this.textEl.setHeight('auto');
@@ -113,7 +113,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         };
         this.progress.setSize('90%', 16);
 
-        this.mailingSendingPanel = new Ext.Panel({
+        this.mailingSendingPanel = new Ext2.Panel({
             columnWidth: .7,
             items: [this.newsletterProgressContainer]
         });
@@ -159,7 +159,7 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
             this._deferedUpdateStatus();
             return;
         }
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             mask: (options && options.mask) ? options.mask : false,
             url: this.controllerUrl + '/json-status',
             params : this.getBaseParams(),
@@ -200,4 +200,4 @@ Kwc.Newsletter.Detail.StartNewsletterPanel = Ext.extend(Kwf.Binding.AbstractPane
         }
     }
 });
-Ext.reg('kwc.newsletter.startNewsletter', Kwc.Newsletter.Detail.StartNewsletterPanel);
+Ext2.reg('kwc.newsletter.startNewsletter', Kwc.Newsletter.Detail.StartNewsletterPanel);

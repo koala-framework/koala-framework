@@ -1,5 +1,5 @@
-Ext.ns('Kwf.Maintenance');
-Kwf.Maintenance.ClearCache = Ext.extend(Ext.Panel, {
+Ext2.ns('Kwf.Maintenance');
+Kwf.Maintenance.ClearCache = Ext2.extend(Ext2.Panel, {
     border: false,
     initComponent: function() {
         this.layout = 'border';
@@ -36,7 +36,7 @@ Kwf.Maintenance.ClearCache = Ext.extend(Ext.Panel, {
                             success: function(response, options, r) {
                                 if (r.message) {
                                     var msg = r.message.replace("\n", "<br />");
-                                    Ext.Msg.alert(trlKwf('Clear Cache'), msg);
+                                    Ext2.Msg.alert(trlKwf('Clear Cache'), msg);
                                 }
                             },
                             scope: this
@@ -50,4 +50,4 @@ Kwf.Maintenance.ClearCache = Ext.extend(Ext.Panel, {
         Kwf.Maintenance.ClearCache.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwf.maintenance.clearCache', Kwf.Maintenance.ClearCache);
+Ext2.reg('kwf.maintenance.clearCache', Kwf.Maintenance.ClearCache);

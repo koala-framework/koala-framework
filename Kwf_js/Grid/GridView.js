@@ -1,7 +1,7 @@
 //zusätzliche headerCss-einstellung für ColumnModel
-Ext.grid.GridView.baseGetColumnStyle = Ext.grid.GridView.prototype.getColumnStyle;
-Ext.grid.GridView.prototype.getColumnStyle = function(col, isHeader){
-    var style = Ext.grid.GridView.baseGetColumnStyle.apply(this, arguments);
+Ext2.grid.GridView.baseGetColumnStyle = Ext2.grid.GridView.prototype.getColumnStyle;
+Ext2.grid.GridView.prototype.getColumnStyle = function(col, isHeader){
+    var style = Ext2.grid.GridView.baseGetColumnStyle.apply(this, arguments);
     if (isHeader && this.cm.config[col].headerCss) {
         style += this.cm.config[col].headerCss;
     }
@@ -17,7 +17,7 @@ Ext.grid.GridView.prototype.getColumnStyle = function(col, isHeader){
 //Workaround für Bug beschrieben hier:
 //http://extjs.com/forum/showthread.php?p=205062#post205062
 //!!!! entfernen wenn in ext behoben
-Ext.grid.GridView.prototype.afterRender = function(){
+Ext2.grid.GridView.prototype.afterRender = function(){
     this.mainBody.dom.innerHTML = this.renderBody();
     this.processRows(0, true);
 

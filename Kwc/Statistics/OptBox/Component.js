@@ -8,7 +8,7 @@ Kwf.onContentReady(function statisticsOptBox(body, param) {
 }, {priority: -2}); // before Kwf.Utils.ResponsiveEl
 
 Kwf.onJElementReady('.kwcStatisticsOptBox a.accept', function statisticsOptBox(link) {
-    link.on('click', function(e, el) {
+    link.click(function(e) {
         e.preventDefault();
         Kwf.Statistics.setUserOptValue('in');
         Kwf.fireComponentEvent('cookieOptChanged', 'in');

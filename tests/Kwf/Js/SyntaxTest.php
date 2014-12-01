@@ -21,13 +21,15 @@ class Kwf_Js_SyntaxTest extends Kwf_Test_TestCase
     // wenn im kwf getestet wird, gibts den kwf pfad zurück
     // wenn im web getestet wird, den web pfad
     private function _getScanPath() {
-        return getcwd();
+        return KWF_PATH;
     }
 
     public function testJsFailures()
     {
         $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->_getScanPath()));
         foreach ($it as $file) {
+            if (preg_match('#/(cache|tests|vendor|build|node_modules)/#', $file->getPathname())) continue;
+            if (preg_match('#/Form/BasicForm\.js$#', $file->getPathname())) continue;
             if (!preg_match('/\.js$/i', $file->getFilename())) continue;
 
             if (($errors = $this->_fileHasErrors($file->getPathname())) !== false) {

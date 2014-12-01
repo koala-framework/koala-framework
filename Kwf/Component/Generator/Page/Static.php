@@ -16,6 +16,7 @@ class Kwf_Component_Generator_Page_Static extends Kwf_Component_Generator_Pseudo
     {
         $ret = parent::getGeneratorFlags();
         $ret['page'] = true;
+        $ret['showInLinkInternAdmin'] = true;
         return $ret;
     }
 }

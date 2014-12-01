@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_Events_Fulltext extends Kwf_Component_Events
+class Kwf_Component_Events_Fulltext extends Kwf_Events_Subscriber
 {
     public function getListeners()
     {

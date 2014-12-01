@@ -13,8 +13,8 @@ class Kwf_Assets_Cache
             ));
             $ret->setBackend(new Zend_Cache_Backend_File(array(
                 'cache_dir' => 'cache/assets',
-                'cache_file_umask' => 0666,
-                'hashed_directory_umask' => 0777,
+                'cache_file_perm' => 0666,
+                'hashed_directory_perm' => 0777,
                 'hashed_directory_level' => 2,
             )));
         }

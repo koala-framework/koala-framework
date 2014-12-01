@@ -1,5 +1,5 @@
-Ext.namespace('Kwf.Pool');
-Kwf.Pool.Panel = Ext.extend(Ext.Panel,
+Ext2.namespace('Kwf.Pool');
+Kwf.Pool.Panel = Ext2.extend(Ext2.Panel,
 {
     initComponent : function()
     {

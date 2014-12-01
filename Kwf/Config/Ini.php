@@ -1,6 +1,4 @@
 <?php
-require_once 'Zend/Config/Ini.php';
-
 class Kwf_Config_Ini extends Zend_Config_Ini
 {
     private function _fixValues(&$data)
@@ -45,7 +43,6 @@ class Kwf_Config_Ini extends Zend_Config_Ini
                     /**
                      * @see Zend_Config_Exception
                      */
-                    require_once 'Zend/Config/Exception.php';
                     throw new Zend_Config_Exception("Section '$thisSection' may not extend multiple sections in $filename");
             }
         }

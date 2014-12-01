@@ -36,7 +36,7 @@ class Kwf_Media_Output_Component
         $width = substr($width, 0, strpos($width, '-'));
         if ($width) {
             $width = Kwf_Media_Image::getResponsiveWidthStep($width,
-                        Kwf_Media_Image::getResponsiveWidthSteps($dim, $data['file']));
+                        Kwf_Media_Image::getResponsiveWidthSteps($dim, isset($data['image']) ? $data['image'] : $data['file']));
             $dim['height'] = $width / $dim['width'] * $dim['height'];
             $dim['width'] = $width;
         }
@@ -77,7 +77,7 @@ class Kwf_Media_Output_Component
      * Checks if given type (starting with Kwf_Media::DONT_HASH_TYPE_PREFIX) should
      * return an image by checking Kwf_Media_Image::getResponsiveWidthSteps of image
      */
-    public static function isValidImage($id, $type)
+    public static function isValidImage($id, $type, $className)
     {
         $isValid = Kwf_Media_Output_Component::isValid($id);
         if ($isValid == Kwf_Media_Output_IsValidInterface::VALID
@@ -87,10 +87,12 @@ class Kwf_Media_Output_Component
             // not allowed to show Kwf_Media_Output_Component::isValid would return
             // invalid or access_denied
             $c = Kwf_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible' => true));
+            if (!$c) return Kwf_Media_Output_IsValidInterface::INVALID;
+            if ($c->componentClass != $className) return Kwf_Media_Output_IsValidInterface::INVALID;
             $baseType = $c->getComponent()->getBaseType();
             $dim = $c->getComponent()->getImageDimensions();
             $imageData = $c->getComponent()->getImageDataOrEmptyImageData();
-            $widths = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
+            $widths = Kwf_Media_Image::getResponsiveWidthSteps($dim, isset($imageData['image']) ? $imageData['image'] : $imageData['file']);
             $ok = false;
             foreach ($widths as $w) {
                 if (str_replace('{width}', $w, $baseType) == $type) {

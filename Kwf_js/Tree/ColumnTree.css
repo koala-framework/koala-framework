@@ -1,32 +1,32 @@
-.x-column-tree .x-tree-node {
+.x2-column-tree .x2-tree-node {
     zoom:1;
 }
-.x-column-tree .x-tree-node-el {
+.x2-column-tree .x2-tree-node-el {
     /*border-bottom:1px solid #eee; borders? */
     zoom:1;
 }
-.x-column-tree .x-tree-selected {
+.x2-column-tree .x2-tree-selected {
     background: #d9e8fb;
 }
-.x-column-tree  .x-tree-node a {
+.x2-column-tree  .x2-tree-node a {
     line-height:18px;
     vertical-align:middle;
 }
-.x-column-tree  .x-tree-node a span{
+.x2-column-tree  .x2-tree-node a span{
     
 }
-.x-column-tree  .x-tree-node .x-tree-selected a span{
+.x2-column-tree  .x2-tree-node .x2-tree-selected a span{
     background:transparent;
     color:#000;
 }
-.x-tree-col {
+.x2-tree-col {
     float:left;
     overflow:hidden;
     padding:0 1px;
     zoom:1;
 }
 
-.x-tree-col-text, .x-tree-hd-text {
+.x2-tree-col-text, .x2-tree-hd-text {
     overflow:hidden;
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
@@ -35,19 +35,19 @@
     font:normal 11px arial, tahoma, helvetica, sans-serif;
 }
 
-.x-tree-col-buttons, .x-tree-hd-buttons {
+.x2-tree-col-buttons, .x2-tree-hd-buttons {
     float:left;
     overflow:hidden;
     white-space: nowrap;
 }
 
-.x-tree-headers {
+.x2-tree-headers {
     background: #f9f9f9 url(../../resources/images/default/grid/grid3-hrow.gif) repeat-x 0 bottom;
     cursor:default;
     zoom:1;
 }
 
-.x-tree-hd {
+.x2-tree-hd {
     float:left;
     overflow:hidden;
     border-left:1px solid #eee;

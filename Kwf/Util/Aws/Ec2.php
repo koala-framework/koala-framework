@@ -1,5 +1,4 @@
 <?php
-require_once Kwf_Config::getValue('externLibraryPath.aws').'/sdk.class.php';
 class Kwf_Util_Aws_Ec2 extends AmazonEC2
 {
     public function __construct(array $options = array())

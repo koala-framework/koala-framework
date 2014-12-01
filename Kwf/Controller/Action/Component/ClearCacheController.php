@@ -96,7 +96,18 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
             $select->where(new Kwf_Model_Select_Expr_Like('expanded_component_id', $this->_getParam('expandedId')));
         }
         if ($this->_getParam('class')) {
-            $select->where(new Kwf_Model_Select_Expr_Like('component_class', $this->_getParam('class')));
+            $c = $this->_getParam('class');
+            if (strpos($c, '%') === false) {
+                $whereClass = array($c);
+                foreach (Kwc_Abstract::getComponentClasses() as $cls) {
+                    if (in_array($c, Kwc_Abstract::getSetting($cls, 'parentClasses'))) {
+                        $whereClass[] = $cls;
+                    }
+                }
+                $select->whereEquals('component_class', $whereClass);
+            } else {
+                $select->where(new Kwf_Model_Select_Expr_Like('component_class', $this->_getParam('class')));
+            }
         }
         if ($this->_getParam('type')) {
             $select->where(new Kwf_Model_Select_Expr_Like('type', $this->_getParam('type')));

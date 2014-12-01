@@ -204,7 +204,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                 //echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
                 //echo " data: ".Kwf_Component_Data::$objectsCount.', ';
                 //echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
-                //p(Kwf_Component_ModelObserver::getInstance()->getProcess());
                 //var_dump(Kwf_Model_Row_Abstract::$objectsByModel);
                 //var_dump(Kwf_Component_Data::$objectsById);
                 //echo "\n";
@@ -579,12 +578,13 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function startSolrAction()
     {
-        if (!Kwf_Config::getValue('fulltext.solr.allowStart')) {
+        $path = Kwf_Config::getValue('fulltext.solr.startServerPath');
+        if (!$path) {
             throw new Kwf_Exception_Client("Solr is not ment to be started manually from cli on this section.");
         }
 
         $solrHome = getcwd().'/solr';
-        chdir(Kwf_Config::getValue('externLibraryPath.solrServer'));
+        chdir($path);
         $cmd = "java -Dsolr.solr.home=$solrHome -jar start.jar";
         passthru($cmd, $ret);
         exit($ret);

@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Abstract.List');
-Kwc.Abstract.List.EditButton = Ext.extend(Ext.form.Field, {
+Ext2.namespace('Kwc.Abstract.List');
+Kwc.Abstract.List.EditButton = Ext2.extend(Ext2.form.Field, {
     //bodyStyle: 'margin-left: 110px',
     defaultAutoCreate : {tag: "input", type: "hidden"},
 
@@ -12,11 +12,11 @@ Kwc.Abstract.List.EditButton = Ext.extend(Ext.form.Field, {
 
     afterRender: function() {
         Kwc.Abstract.List.EditButton.superclass.afterRender.apply(this, arguments);
-        this.button = new Ext.Button({
+        this.button = new Ext2.Button({
             text: this.editButtonText,
             renderTo: this.el.parent(),
             icon: '/assets/silkicons/page_white_edit.png',
-            cls: 'x-btn-text-icon',
+            cls: 'x2-btn-text-icon',
             scope: this,
             enabled: false,
             handler: function() {
@@ -38,4 +38,4 @@ Kwc.Abstract.List.EditButton = Ext.extend(Ext.form.Field, {
         this.button.setDisabled(!v);
     }
 });
-Ext.reg('kwc.listeditbutton', Kwc.Abstract.List.EditButton);
+Ext2.reg('kwc.listeditbutton', Kwc.Abstract.List.EditButton);

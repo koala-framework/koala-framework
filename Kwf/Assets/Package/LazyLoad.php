@@ -2,6 +2,21 @@
 class Kwf_Assets_Package_LazyLoad extends Kwf_Assets_Package
 {
     protected $_loadedDependencies;
+    static private $_instances = array();
+
+    /**
+     * Returns a Default Asset Package (using Kwf_Assets_ProviderList_Default)
+     *
+     * Very fast, as all expensive operations are done lazily
+     */
+    public static function getInstance($dependencyName, array $loadedDependencies)
+    {
+        $k = $dependencyName . '_' . implode('_', $loadedDependencies);
+        if (!isset(self::$_instances[$k])) {
+            self::$_instances[$k] = new self(Kwf_Assets_Package_Default::getDefaultProviderList(), $dependencyName, $loadedDependencies);
+        }
+        return self::$_instances[$k];
+    }
 
     public function __construct($providerList, $dependencyName, array $loadedDependencies)
     {
@@ -15,10 +30,15 @@ class Kwf_Assets_Package_LazyLoad extends Kwf_Assets_Package
 
         $loadedDeps = array();
         foreach ($this->_loadedDependencies as $d) {
-            $pkg = new Kwf_Assets_Package($this->_providerList, $d);
+            if ($this->_providerList === Kwf_Assets_Package_Default::getDefaultProviderList()) {
+                $pkg = Kwf_Assets_Package_Default::getInstance($d);
+            } else {
+                $pkg = new Kwf_Assets_Package($this->_providerList, $d);
+            }
 
             $loadedDeps = array_merge($loadedDeps, $pkg->_getFilteredUniqueDependencies($mimeType));
         }
+
         foreach ($ret as $k=>$i) {
             if (in_array($i, $loadedDeps, true)) {
                 unset($ret[$k]);
@@ -26,14 +46,12 @@ class Kwf_Assets_Package_LazyLoad extends Kwf_Assets_Package
         }
 
         $ret = array_values($ret);
+
         return $ret;
     }
 
     public function toUrlParameter()
     {
-        if ($this->_providerList !== Kwf_Assets_Package_Default::getDefaultProviderList()) {
-            throw new Kwf_Exception("Can only convert to url parameter with default provider list");
-        }
         return get_class($this->_providerList).':'.$this->_dependencyName.':'.implode(',', $this->_loadedDependencies);
     }
 
@@ -41,15 +59,23 @@ class Kwf_Assets_Package_LazyLoad extends Kwf_Assets_Package
     {
         $params = explode(':', $parameter);
         $providerList = $params[0];
-        if ($providerList == 'Kwf_Assets_Package_Default') {
-            $providerList = Kwf_Assets_Package_Default::getDefaultProviderList();
-        } else {
-            $providerList = new $providerList();
-        }
         $dependencyName = $params[1];
         $loadedDependencies = array();
         if ($params[2]) $loadedDependencies = explode(',', $params[2]);
+        if ($providerList == 'Kwf_Assets_ProviderList_Default') {
+            return self::getInstance($dependencyName, $loadedDependencies);
+        } else {
+            $providerList = new $providerList();
+            return new self($providerList, $dependencyName, $loadedDependencies);
+        }
+    }
 
-        return new self($providerList, $dependencyName, $loadedDependencies);
+    protected function _getCacheId($mimeType)
+    {
+        if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for this class, so cacheId doesn't have to contain only dependencyName
+            return str_replace(array('.'), '_', $this->_dependencyName.implode('_', $this->_loadedDependencies))
+                .'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+        }
+        return null;
     }
 }

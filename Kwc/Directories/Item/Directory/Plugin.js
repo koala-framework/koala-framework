@@ -1,8 +1,8 @@
-Ext.namespace('Kwc.Directories.Plugin');
+Ext2.namespace('Kwc.Directories.Plugin');
 Kwc.Directories.Plugin.GridWindow = function(config) {
-    Ext.apply(this, config);
+    Ext2.apply(this, config);
 };
-Ext.extend(Kwc.Directories.Plugin.GridWindow, Ext.util.Observable,
+Ext2.extend(Kwc.Directories.Plugin.GridWindow, Ext2.util.Observable,
 {
     init: function(gridPanel)
     {
@@ -16,7 +16,7 @@ Ext.extend(Kwc.Directories.Plugin.GridWindow, Ext.util.Observable,
             grid.getTopToolbar().add({
                 text    : this.text,
                 handler : function(o, p) {
-                    var dlg = new Ext.Window({
+                    var dlg = new Ext2.Window({
                         width:  this.width || 450,
                         height: this.height || 370,
                         layout: 'fit',

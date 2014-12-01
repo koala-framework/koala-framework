@@ -445,7 +445,12 @@ class Kwf_Trl
         return is_array($placeolders) ? $placeolders : array($placeolders);
     }
 
-    private function _loadCache($source, $target, $plural)
+    public function clearCache()
+    {
+        $this->_cache = array();
+    }
+
+    public function _loadCache($source, $target, $plural, &$cacheFileName = null)
     {
         if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
         else $codeLanguage = "en";
@@ -456,18 +461,11 @@ class Kwf_Trl
         }
 
         if ($plural) $target = $target.'_plural';
-        $cache = Kwf_Cache::factory('Core', 'File',
-            array(
-                'automatic_serialization'=>true,
-                'caching' => !isset($this->_modelKwf) && !isset($this->_modelWeb)
-            ),
-            array(
-                'cache_dir' => 'cache/trl'
-            )
-        );
-        $cacheId = 'trl_'.$source.$target.$plural;
-
-        if (($c = $cache->load($cacheId)) === false) {
+        $cacheId = $source.$target;
+        $cacheFileName = 'build/trl/'.$cacheId;
+        if (!isset($this->_modelKwf) && !isset($this->_modelWeb) && file_exists($cacheFileName)) {
+            $c = unserialize(file_get_contents($cacheFileName));
+        } else {
             $c = array();
             $m = $this->_getModel($source);
             if ($m instanceof Kwf_Model_Xml) {
@@ -485,9 +483,9 @@ class Kwf_Trl
                     $c[$row->{$codeLanguage.($plural ? '_plural' : '')}.'-'.$ctx] = (string)$row->$target;
                 }
             }
-            $cache->save($c, $cacheId);
         }
         $this->_cache[$source][$target] = $c;
+        return $c;
     }
 
     protected function _findElement($needle, $source, $context, $language = null)

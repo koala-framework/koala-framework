@@ -44,7 +44,7 @@
                     border: 1px solid #5B992B;
                     border-bottom: 1px solid #538C27;
                     @include box-shadow-pie(#548c29 0px 0px 8px 4px inset);
-                },
+                }
 
                 &[disabled=disabled], &[disabled] {
                     @include opacity(0.6);
@@ -100,10 +100,10 @@
         }
     }
 
-    .x-progress-wrap {
+    .x2-progress-wrap {
         margin: 0px 5% 20px 5%;
 
-        .x-progress-text {
+        .x2-progress-text {
             text-align: left;
             width: 100%;
             padding: 0px 0px 0px 15px;

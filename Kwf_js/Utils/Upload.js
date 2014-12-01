@@ -27,7 +27,7 @@ Kwf.Utils.Upload = {
                     errorMsg = 'response is empty';
                 } else {
                     try {
-                        var r = Ext.decode(xhr.responseText);
+                        var r = Ext2.decode(xhr.responseText);
                     } catch(e) {
                         errorMsg = e.toString()+': <br />'+xhr.responseText;
                     }
@@ -52,9 +52,9 @@ Kwf.Utils.Upload = {
 
                 if (!r.success) {
                     if (r.error) {
-                        Ext.Msg.alert(trlKwf('Error'), r.error);
+                        Ext2.Msg.alert(trlKwf('Error'), r.error);
                     } else {
-                        Ext.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
+                        Ext2.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
                     }
                     if (config.failure) {
                         config.failure.call(config.scope, r);

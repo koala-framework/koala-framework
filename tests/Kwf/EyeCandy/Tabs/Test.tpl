@@ -12,8 +12,8 @@
                     <p>Naruto uzumaki catwoman curse ultron, mister freeze. Vanisher red hulk beta ray bill, general zod, wasp spider-man thunderbird penguin wonder girl azrael. Gary bell stardust boomer white queen. Ra's al ghul huntress minna murray maverick batman.</p>
                     <p>Wondra husk omega red domino deadman bolt binary white queen, gog gambit thanos angel donna troy, moonstone black cat. Phantom girl metallo yellow claw metron, doctor doom wildfire onslaught penance siryn superboy-prime naruto uzumaki magog elastigirl darkstar blink hawkeye.</p>
                     <p>Cypher! Miss martian billy kincaid matt parkman triplicate girl, deadpool phoenix sylar overtkill beast rogue psylocke hancock. Harley quinn sunspot black abbott, ando masahashi stargirl. Ra's al ghul energy skaar hellstorm, anti-venom mysterio, doctor octopus plastic lad, chamber morlun abomination giant-man atom, daphne powell. Alex woolsly bumblebee sunspot vindicator jj powell.</p>
-                    <a href="#" onclick="Ext.get('foo').show(); return false;">Show hidden region</a>
-                    <p id="foo" style="display:none;">Faora exodus hawkwoman dazzler billy kincaid adam strange black widow. Cerebra justice agent 13 angel, x-man exodus sandman power man, synch.</p>
+                    <a href="#" onclick="Ext2.get('foo').show(); return false;">Show hidden region</a>
+                    <p id="foo" style="display:none;">Faora exodus hawkwoman dazzler billy kincaid adam strange black widow. Cerebra justice agent 13 angel, x2-man exodus sandman power man, synch.</p>
                 </div>
             </div>
             <div class="kwfTabsLink ">Tab #2</div>
@@ -23,6 +23,6 @@
                 </div>
             </div>
         </div>
-        Donna troy oracle wonder woman deadshot cat kraven boomer green arrow wildfire maya herrera. Wonder man, x-man doppelganger callisto nathan petrelli aurora, snowbird namor! Mogo hancock lyja jack-jack power man dr manhattan, kevin 11. Magneto cannonball green arrow sub-mariner, elongated man stardust brother voodoo angel salvadore spawn jim powell. Colossus flash gordon, nightcrawler namora elongated man cyclops moon knight dr manhattan. Maya herrera spider-carnage zoom nightcrawler nite owl namor dl hawkins beetle century scarecrow siren! Loki demogoblin, giganta redeemer plastic man cyborg.
+        Donna troy oracle wonder woman deadshot cat kraven boomer green arrow wildfire maya herrera. Wonder man, x2-man doppelganger callisto nathan petrelli aurora, snowbird namor! Mogo hancock lyja jack-jack power man dr manhattan, kevin 11. Magneto cannonball green arrow sub-mariner, elongated man stardust brother voodoo angel salvadore spawn jim powell. Colossus flash gordon, nightcrawler namora elongated man cyclops moon knight dr manhattan. Maya herrera spider-carnage zoom nightcrawler nite owl namor dl hawkins beetle century scarecrow siren! Loki demogoblin, giganta redeemer plastic man cyborg.
     </body>
 </html>

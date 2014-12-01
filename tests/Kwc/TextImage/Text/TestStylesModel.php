@@ -10,8 +10,14 @@ class Kwc_TextImage_Text_TestStylesModel extends Kwc_Basic_Text_StylesModel
             ));
         parent::__construct($config);
     }
+
     public static function getMasterStyles()
     {
         return array();
+    }
+
+    public function getUniqueIdentifier()
+    {
+        return get_class($this);
     }
 }

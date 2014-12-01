@@ -29,7 +29,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $ret['plugins'] = $plugins;
         }
 
-        $ret['assets']['dep'][] = 'KwcFrontendForm';
+        $ret['assetsDefer']['dep'][] = 'KwcFrontendForm';
 
         $ret['useAjaxRequest'] = true;
         $ret['hideFormOnSuccess'] = true; // works only when useAjaxRequest==true

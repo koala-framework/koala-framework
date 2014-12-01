@@ -15,13 +15,11 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
             $url = $this->_getRedirectUrl();
             $component = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($this->_componentId);
-            if ($component->url != '/') {
-                $connector = '?';
-                if (strstr($url, '?')) {
-                    $connector = '&';
-                }
-                $url .= $connector.'redirect=' . urlencode($component->url);
+            $connector = '?';
+            if (strstr($url, '?')) {
+                $connector = '&';
             }
+            $url .= $connector.'redirect=' . urlencode($component->url);
             header('Location: ' . $url);
             exit;
         }
