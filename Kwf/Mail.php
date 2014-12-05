@@ -169,6 +169,8 @@ class Kwf_Mail extends Zend_Mail
                         'auth' => Kwf_Config::getValue('email.smtp.auth'),
                         'username' => Kwf_Config::getValue('email.smtp.username'),
                         'password' => Kwf_Config::getValue('email.smtp.password'),
+                        'ssl' => Kwf_Config::getValue('email.smtp.ssl'),
+                        'port' => Kwf_Config::getValue('email.smtp.port'),
                     )
                 );
             } else {
