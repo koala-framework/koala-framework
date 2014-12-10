@@ -185,8 +185,9 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                     if (count($p) != 1) throw new Kwf_Exception_NotYetImplemented();
                     foreach ($p as $v) {
                         $v['field'] = $this->_mapColumn($m, $v['field']);
+                        $expr = $m->_formatField($v['field'], $dbSelect);
                         $columns[] = array(
-                            '', $m->_formatField($v['field'], $dbSelect), 'orderField'
+                            '', new Zend_Db_Expr($expr), 'orderField'
                         );
                     }
                 }
