@@ -44,6 +44,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
             'childPages'   => trlKwfStatic('Child Pages'),
             'special'      => trlKwfStatic('Special'),
             'model'        => trlKwfStatic('Model'),
+            'contact'      => trlKwfStatic('Contact'),
             'admin'        => trlKwfStatic('Admin'),
         );
         return $ret;

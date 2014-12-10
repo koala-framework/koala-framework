@@ -13519,5 +13519,35 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Jahr</de>
 <id>2256</id>
 </text>
+<text>
+<en>Media</en>
+<de>Bilder &amp; Medien</de>
+<id>2257</id>
+</text>
+<text>
+<en>Child Pages</en>
+<de>Unterseiten</de>
+<id>2258</id>
+</text>
+<text>
+<en>Special</en>
+<de>Spezial</de>
+<id>2259</id>
+</text>
+<text>
+<en>Model</en>
+<de>Modell</de>
+<id>2260</id>
+</text>
+<text>
+<en>Contact</en>
+<de>Kontakt</de>
+<id>2261</id>
+</text>
+<text>
+<en>Admin</en>
+<de>Administrator</de>
+<id>2262</id>
+</text>
 </trl>
 
