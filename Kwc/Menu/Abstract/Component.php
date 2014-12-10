@@ -166,9 +166,9 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
     /**
      * Used by chained and Events
      */
-    public function getMenuData($parentData = null, $select = array())
+    public function getMenuData($parentData = null, $select = array(), $editableClass = 'Kwc_Menu_EditableItems_Component')
     {
-        return $this->_getMenuData($parentData, $select);
+        return $this->_getMenuData($parentData, $select, $editableClass);
     }
 
     protected function _getMenuPages($parentData, $select)
