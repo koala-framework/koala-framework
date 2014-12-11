@@ -27,9 +27,6 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
         );
         $m = Kwc_Abstract::createChildModel($this->_class);
         if ($m) {
-            if ($m->getPrimaryKey() != 'component_id') {
-                throw new Kwf_Exception("chained generator model: primary key is not component_id ({$m->getPrimaryKey()}) for {$this->_class}  {$this->_getGenerator()->getGeneratorKey()}");
-            }
             $ret[] = array(
                 'class' => get_class($m),
                 'event' => 'Kwf_Events_Event_Row_Updated',
