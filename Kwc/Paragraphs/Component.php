@@ -39,7 +39,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
             'content'      => 'content',
             'none'         => 'none',
             'layout'       => trlKwfStatic('Layout'),
-            'media'        => trlKwfStatic('Pictures &amp; Media'),
+            'media'        => trlKwfStatic('Pictures & Media'),
             'callToAction' => trlKwfStatic('Call to Action'),
             'childPages'   => trlKwfStatic('Child Pages'),
             'special'      => trlKwfStatic('Special'),
