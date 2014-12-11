@@ -55,7 +55,10 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                         $c = new Zend_Config_Ini($i.'/dependencies.ini');
                         if ($c->config) {
                             $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
-                            $paths[$dep->pathType] = $i;
+                            $pathType = (string)$dep->pathType;
+                            if ($pathType) {
+                                $paths[$pathType] = $i;
+                            }
                         }
                     }
                 }
@@ -86,6 +89,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             throw new Kwf_Exception("Unknown path type: '$pathType' for '$this->_fileName'");
         }
         $this->_fileNameCache = $f;
+
         return $f;
     }
 
@@ -199,16 +203,23 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                 $absolutes[] = $part;
             }
         }
-        return DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $absolutes);
+        if (DIRECTORY_SEPARATOR == '\\') {
+            //windows
+            return implode(DIRECTORY_SEPARATOR, $absolutes);
+        } else {
+            return DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $absolutes);
+        }
     }
 
     public static function getPathWithTypeByFileName($fileName)
     {
         $paths = self::_getAllPaths();
         $fileName = self::_getAbsolutePath($fileName);
+        $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
         foreach ($paths as $k=>$p) {
             if ($p == '.') $p = getcwd();
             if (substr($p, 0, 7) == 'vendor/') $p = getcwd().'/'.$p;
+            $p = str_replace(DIRECTORY_SEPARATOR, '/', $p);
             if (substr($fileName, 0, strlen($p)) == $p) {
                 return $k.substr($fileName, strlen($p));
             }
