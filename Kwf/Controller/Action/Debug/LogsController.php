@@ -41,9 +41,9 @@ class Kwf_Controller_Action_Debug_LogsController extends Kwf_Controller_Action_A
         $columns->add(new Kwf_Grid_Column_Datetime('date'));
         $columns->add(new Kwf_Grid_Column('type', trlKwf('Type'), 80));
         $columns->add(new Kwf_Grid_Column('message', trlKwf('Message'), 300));
-        $columns->add(new Kwf_Grid_Column('request_uri', trlKwf('Uri'), 200))
+        $columns->add(new Kwf_Grid_Column('request_uri', 'Uri', 200))
             ->setRenderer('clickableLink');
-        $columns->add(new Kwf_Grid_Column('http_referer', trlKwf('Referer'), 200))
+        $columns->add(new Kwf_Grid_Column('http_referer', 'Referer', 200))
             ->setRenderer('clickableLink');
         $columns->add(new Kwf_Grid_Column('user', trlKwf('User'), 200));
     }
