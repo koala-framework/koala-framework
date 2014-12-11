@@ -33,6 +33,6 @@
         ?>
     <? } ?>
     <? if ($this->showPics) { ?>
-        <div class="moreButton"><div class="innerMoreButton"><span><?=$this->data->trl('more');?></span></div></div>
+        <div class="moreButton"><div class="innerMoreButton"><span><?=$this->moreButton;?></span></div></div>
     <? } ?>
 </div>
