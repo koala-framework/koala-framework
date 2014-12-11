@@ -14847,46 +14847,55 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Year</en>
+<ru>Год</ru>
 <de>Jahr</de>
 <id>2256</id>
 </text>
 <text>
 <en>Pictures &amp; Media</en>
+<ru>Изображения &amp; Медиа</ru>
 <de>Bilder &amp; Medien</de>
 <id>2257</id>
 </text>
 <text>
 <en>Child Pages</en>
 <de>Unterseiten</de>
+<ru>Подстраницы</ru>
 <id>2258</id>
 </text>
 <text>
 <en>Special</en>
+<ru>Специальный</ru>
 <de>Spezial</de>
 <id>2259</id>
 </text>
 <text>
 <en>Model</en>
+<ru>Модель</ru>
 <de>Modell</de>
 <id>2260</id>
 </text>
 <text>
 <en>Contact</en>
+<ru>Контакт</ru>
 <de>Kontakt</de>
 <id>2261</id>
 </text>
 <text>
 <en>Admin</en>
+<ru>Администратор</ru>
 <de>Administrator</de>
 <id>2262</id>
 </text>
 <text>
 <en>Visible Pictures</en>
+<ru>Выдимые изображения</ru>
 <de>Sichtbare Bilder</de>
 <id>2263</id>
 </text>
 <text>
 <en>Choose a number to just show this number of items and hide the others behind a "more"-button</en>
+<ru>Выберите номер, чтобы показать количество элементов и скрыть другие за кнопкой "больше"</ru>
 <de>Wähle eine Zahl wie viele Listeneinträge sichtbar sein sollen und verstecke die anderen hinter einem "more"-button</de>
 <id>2264</id>
 </text>
