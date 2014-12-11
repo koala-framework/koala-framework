@@ -113,7 +113,8 @@ Kwc.Directories.List.ViewAjax.prototype = {
             Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.directoryViewComponentId] = this;
         }
         this.baseParams = {
-            componentId: this.componentId
+            componentId: this.componentId,
+            kwfSessionToken: Kwf.sessionToken
         };
 
         if (this.searchFormComponentId) {
