@@ -13549,5 +13549,15 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Administrator</de>
 <id>2262</id>
 </text>
+<text>
+<en>Visible Pictures</en>
+<de>Sichtbare Bilder</de>
+<id>2263</id>
+</text>
+<text>
+<en>Choose a number to just show this number of items and hide the others behind a "more"-button</en>
+<de>Wähle eine Zahl wie viele Listeneinträge sichtbar sein sollen und verstecke die anderen hinter einem "more"-button</de>
+<id>2264</id>
+</text>
 </trl>
 
