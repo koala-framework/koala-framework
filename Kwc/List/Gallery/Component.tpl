@@ -19,11 +19,20 @@
             }
             $class = trim($class);
         ?>
+        <? if ($i == $this->showPics && $this->showPics) { ?>
+            <div class="morePics">
+        <? } ?>
         <div class="<?=$class;?>">
             <?=$this->component($child);?>
         </div>
+        <? if ($i == count($this->children)-1 && $this->showPics) { ?>
+            </div>
+        <? } ?>
         <?
             $i++;
         ?>
+    <? } ?>
+    <? if ($this->showPics) { ?>
+        <div class="moreButton"><div class="innerMoreButton"><span><?=$this->placeholder['moreButton'];?></span></div></div>
     <? } ?>
 </div>
