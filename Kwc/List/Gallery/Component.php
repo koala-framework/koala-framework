@@ -30,17 +30,15 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $listItems = count($this->getData()->getChildComponents());
-        $show_pics = $this->_getRow()->show_pics;
-        $ret['moreButton'] = $this->_getPlaceholder('moreButton');
+        $showPics = $this->_getRow()->show_pics;
         $ret['cssClass'] .= ' col'.$this->_getGalleryColumns();
         $ret['imagesPerLine'] = $this->_getGalleryColumns();
         if (!$ret['imagesPerLine']) $ret['imagesPerLine'] = 1;
         $ret['downloadAll'] = $this->getData()->getChildComponent('-downloadAll');
-        if ($this->_getGalleryColumns() <= $show_pics && $listItems <= $show_pics) {
+        if ($this->_getGalleryColumns() <= $showPics && count($ret['children']) <= $showPics) {
             $ret['showPics'] = null;
         } else {
-            $ret['showPics'] = $show_pics;
+            $ret['showPics'] = $showPics;
         }
         return $ret;
     }
