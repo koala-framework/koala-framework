@@ -2639,7 +2639,7 @@
 <id>343</id>
 <ro>l/z/a</ro>
 <sl>d.m.Y</sl>
-<ru>д.м.г</ru>
+<ru>d.m.Y</ru>
 <uk>м/д/р</uk>
 <si>m/d/l</si>
 <ua>м/д/р</ua>
@@ -3478,7 +3478,7 @@
 <id>447</id>
 <ro>d.m.Y</ro>
 <sl>d.m.Y</sl>
-<ru>д.м.г</ru>
+<ru>d.m.Y</ru>
 <uk>Y-m-d</uk>
 <ua>Р.М.Д.</ua>
 </text>
@@ -3488,7 +3488,7 @@
 <id>448</id>
 <ro>d.m.Y H:i</ro>
 <sl>d.m.Y H:i</sl>
-<ru>д.м.г ч:м</ru>
+<ru>d.m.Y H:i</ru>
 <uk>Y-m-d H:i</uk>
 <ua>д.м.р г:хв</ua>
 </text>
