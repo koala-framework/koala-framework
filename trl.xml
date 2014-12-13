@@ -2635,14 +2635,14 @@
 </text>
 <text>
 <en>m/d/y</en>
-<de>m/t/j</de>
+<de>m/d/y</de>
 <id>343</id>
 <ro>l/z/a</ro>
 <sl>d.m.Y</sl>
 <ru>d.m.Y</ru>
-<uk>м/д/р</uk>
-<si>m/d/l</si>
-<ua>м/д/р</ua>
+<uk>m/d/y</uk>
+<si>m/d/y</si>
+<ua>m/d/y</ua>
 </text>
 <text>
 <en>of {0}</en>
@@ -3480,7 +3480,7 @@
 <sl>d.m.Y</sl>
 <ru>d.m.Y</ru>
 <uk>Y-m-d</uk>
-<ua>Р.М.Д.</ua>
+<ua>d.m.Y</ua>
 </text>
 <text>
 <en>Y-m-d H:i</en>
@@ -3490,7 +3490,7 @@
 <sl>d.m.Y H:i</sl>
 <ru>d.m.Y H:i</ru>
 <uk>Y-m-d H:i</uk>
-<ua>д.м.р г:хв</ua>
+<ua>d.m.Y H:i</ua>
 </text>
 <text>
 <en>no selection</en>
@@ -3737,13 +3737,13 @@
 </text>
 <text>
 <en>yyyy-mm-dd</en>
-<de>tt.mm.jjjj</de>
+<de>dd.mm.yyyy</de>
 <id>493</id>
 <ro>dd.mm.yyyy</ro>
 <sl>dd.mm.yyyy</sl>
-<ru>дд.мм.гггг</ru>
-<uk>рррр-мм-дд</uk>
-<ua>д.м.р.</ua>
+<ru>dd.mm.yyyy</ru>
+<uk>yyyy-mm-dd</uk>
+<ua>dd.mm.yyyy</ua>
 </text>
 <text>
 <en>Margin top</en>
