@@ -57,10 +57,6 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         $fnDir = substr($fn, 0, strrpos($fn, '/'));
         $ret = preg_replace('#url\((\'?)([^/\'])#', 'url(\1/assets/'.$fnDir.'/\2', $ret);
 
-        if ($baseUrl = Kwf_Setup::getBaseUrl()) {
-            $ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
-        }
-
         $ret = self::expandAssetVariables($ret);
 
 
