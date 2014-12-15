@@ -55,11 +55,8 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         //convert relative paths (as in bower dependencies; example: jquery.socialshareprivacy, mediaelement
         $fn = $this->getFileNameWithType();
         $fnDir = substr($fn, 0, strrpos($fn, '/'));
+        $ret = preg_replace('#url\(\s*([^)]+?)\s*\)#', 'url(\1)', $ret); //remove spaces inside url()
         $ret = preg_replace('#url\((\'?)([^/\'])#', 'url(\1/assets/'.$fnDir.'/\2', $ret);
-
-        if ($baseUrl = Kwf_Setup::getBaseUrl()) {
-            $ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
-        }
 
         $ret = self::expandAssetVariables($ret);
 
