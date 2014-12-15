@@ -45,6 +45,7 @@ class Kwf_Dao
             $dbConfig = $this->getDbConfig($db);
             $this->_db[$db] = Zend_Db::factory('PDO_MYSQL', $dbConfig);
             $this->_db[$db]->query('SET names UTF8');
+            $this->_db[$db]->query('SET SESSION sql_mode=\'\'');
             if (Kwf_Config::getValue('debug.disableMysqlQueryCache')) {
                 $this->_db[$db]->query('SET SESSION query_cache_type=0');
             }
