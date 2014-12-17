@@ -87,19 +87,6 @@ class Kwf_Events_Dispatcher
             }
         }
 
-        $cls = strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass;
-        $m = call_user_func(array($cls, 'createOwnModel'), $componentClass);
-        if ($m) $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($m));
-
-        $m = call_user_func(array($cls, 'createChildModel'), $componentClass);
-        if ($m) $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($m));
-
-        foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $g) {
-            if (isset($g['model'])) {
-                $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($g['model']));
-            }
-        }
-
         return $subscribers;
     }
 
@@ -158,15 +145,8 @@ class Kwf_Events_Dispatcher
         if ($hasFulltext) {
             $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_Fulltext');
         }
-        foreach (glob('models/*.php') as $m) {
-            $m = str_replace('/', '_', substr($m, 7, -4));
-            if (is_instance_of($m, 'Kwf_Model_Interface')) {
-                $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($m));
-            }
-        }
-
-        if (Kwf_Config::getValue('user.model')) {
-            $subscribers = array_merge($subscribers, self::_getSubscribersFromModel(Kwf_Config::getValue('user.model')));
+        foreach (Kwf_Model_Abstract::findAllInstances() as $m) {
+            $subscribers[] = array_merge($subscribers, self::_getSubscribersFromModel($m));
         }
 
         $ret = array();

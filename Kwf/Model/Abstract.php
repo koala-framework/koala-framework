@@ -1167,4 +1167,39 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         }
         return $this->_factoryConfig;
     }
+
+    /**
+     * Try to find all used models in the current app
+     */
+    public static function findAllInstances()
+    {
+        $ret = array();
+        foreach (glob('models/*.php') as $m) {
+            $m = str_replace('/', '_', substr($m, 7, -4));
+            if (is_instance_of($m, 'Kwf_Model_Interface')) {
+                $ret[] = Kwf_Model_Abstract::getInstance($m);
+            }
+        }
+
+        if (Kwf_Config::getValue('user.model')) {
+            $ret[] = Kwf_Model_Abstract::getInstance(Kwf_Config::getValue('user.model'));
+        }
+
+        foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
+            $cls = strpos($componentClass, '.') ? substr($componentClass, 0, strpos($componentClass, '.')) : $componentClass;
+            $m = call_user_func(array($cls, 'createOwnModel'), $componentClass);
+            if ($m) $ret[] = $m;
+
+            $m = call_user_func(array($cls, 'createChildModel'), $componentClass);
+            if ($m) $ret[] = $m;
+
+            foreach (Kwc_Abstract::getSetting($componentClass, 'generators') as $g) {
+                if (isset($g['model'])) {
+                    $ret[] = Kwf_Model_Abstract::getInstance($g['model']);
+                }
+            }
+
+        }
+        return $ret;
+    }
 }
