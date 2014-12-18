@@ -104,22 +104,7 @@ class Kwf_Events_Dispatcher
         }
         self::$_subscribedModels[$id] = true;
 
-        $ret = $model->getEventSubscribers();
-        //foreach ($ret as $i) $i->getListeners(); //TODO REMOVE
-
-        foreach ($model->getDependentModels() as $m) {
-            $ret = array_merge($ret, self::_getSubscribersFromModel($m));
-        }
-        foreach ($model->getDependentModels() as $m) {
-            $ret = array_merge($ret, self::_getSubscribersFromModel($m));
-        }
-        foreach ($model->getSiblingModels() as $m) {
-            $ret = array_merge($ret, self::_getSubscribersFromModel($m));
-        }
-        foreach ($model->getReferences() as $rule) {
-            $ret = array_merge($ret, self::_getSubscribersFromModel($model->getReferencedModel($rule)));
-        }
-        return $ret;
+        return $model->getEventSubscribers();
     }
 
     private static function _getAllListeners()
