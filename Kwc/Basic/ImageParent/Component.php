@@ -38,6 +38,8 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $ret['baseUrl'] = $this->_getBaseImageUrl();
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
+
+        $ret['template'] = Kwf_Component_Renderer_Twig_TemplateLocator::getComponentTemplate('Kwc_Abstract_Image_Component');
         return $ret;
     }
 
