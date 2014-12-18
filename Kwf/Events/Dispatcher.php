@@ -146,7 +146,7 @@ class Kwf_Events_Dispatcher
             $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_Fulltext');
         }
         foreach (Kwf_Model_Abstract::findAllInstances() as $m) {
-            $subscribers[] = array_merge($subscribers, self::_getSubscribersFromModel($m));
+            $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($m));
         }
 
         $ret = array();
