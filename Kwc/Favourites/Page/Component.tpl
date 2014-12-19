@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?>">
-    <h2><?=$this->data->trl('Favourites');?></h2>
+    <h2><?=$this->data->trlKwf('Favourites');?></h2>
     <? if ($this->favourites) { ?>
         <ul>
             <? foreach ($this->favourites as $favourite) { ?>
@@ -9,6 +9,6 @@
             <? } ?>
         </ul>
     <? } else { ?>
-        <?=$this->data->trl('You have no favourites!'); ?>
+        <?=$this->data->trlKwf('You have no favourites!'); ?>
     <? } ?>
 </div>
