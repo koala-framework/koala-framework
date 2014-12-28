@@ -54,10 +54,9 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
     public function indexAction()
     {
-        if (Kwf_Cache_Simple::getBackend() == 'apc') {
-            throw new Kwf_Exception_Client("clear-cache-watcher is not compatible with simple cache apc backend");
+        if (Kwf_Config::getValue('whileUpdatingShowMaintenancePage')) {
+            throw new Kwf_Exception_Client("Disable whileUpdatingShowMaintenancePage in config to use clear-cache-watcher");
         }
-
         $bufferUsecs = 200*1000;
 
         $watchPaths = array();
@@ -68,52 +67,54 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             $watchPaths[] = getcwd();
         }
 
-        $ret = array();
-        exec('ps ax -o pid,ppid,user,args', $out);
-        $processesByParent = array();
-        foreach ($out as $o) {
-            if (preg_match('#^\s*([0-9]+)\s+([0-9]+)\s+([a-zA-Z0-9-_]+)\s+(.*)#', $o, $m)) {
-                $pid = (int)$m[1];
-                $ppid = (int)$m[2];
-                if (!isset($processesByParent[$ppid])) $processesByParent[$ppid] = array();
-                $processesByParent[$ppid][] = $pid;
-            }
-        }
-        foreach ($out as $o) {
-            if (preg_match('#^\s*([0-9]+)\s+([0-9]+)\s+([a-zA-Z0-9-_]+)\s+(.*)#', $o, $m)) {
-                $pid = (int)$m[1];
-                $cmd = $m[4];
-                $user = $m[3];
-                if (getmypid() == $pid) continue;
-                $cmd = explode(' ', $cmd);
-                if (substr(trim($cmd[0]), -3) != 'php') continue;
-                unset($cmd[0]);
-                if (substr($cmd[1], -13) != 'bootstrap.php' && $cmd[1] != '/usr/local/bin/vps') continue;
-                unset($cmd[1]);
-                $cmdWithoutArgs= '';
-                $args = '';
-                foreach ($cmd as $i=>$c) {
-                    if (substr($c, 0, 2)=='--') {
-                        $args = implode(' ', $cmd);
-                        break;
-                    }
-                    $cmdWithoutArgs .= $c.' ';
-                    unset($cmd[$i]);
-                }
-                if (substr(trim($cmdWithoutArgs), 0, 19)=='clear-cache-watcher') {
-                    echo "there is already a clear-cache-watcher running for your user: ".trim(`pwdx $pid`)."\n";
-                    echo "klling it...\n";
-                    if (isset($processesByParent[$pid])) {
-                        foreach ($processesByParent[$pid] as $i) {
-                            posix_kill($i, SIGINT);
-                        }
-                    }
-                    posix_kill($pid, SIGINT);
-                    echo "\n";
-                }
-            }
-        }
+        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
 
+            $ret = array();
+            exec('ps ax -o pid,ppid,user,args', $out);
+            $processesByParent = array();
+            foreach ($out as $o) {
+                if (preg_match('#^\s*([0-9]+)\s+([0-9]+)\s+([a-zA-Z0-9-_]+)\s+(.*)#', $o, $m)) {
+                    $pid = (int)$m[1];
+                    $ppid = (int)$m[2];
+                    if (!isset($processesByParent[$ppid])) $processesByParent[$ppid] = array();
+                    $processesByParent[$ppid][] = $pid;
+                }
+            }
+            foreach ($out as $o) {
+                if (preg_match('#^\s*([0-9]+)\s+([0-9]+)\s+([a-zA-Z0-9-_]+)\s+(.*)#', $o, $m)) {
+                    $pid = (int)$m[1];
+                    $cmd = $m[4];
+                    $user = $m[3];
+                    if (getmypid() == $pid) continue;
+                    $cmd = explode(' ', $cmd);
+                    if (substr(trim($cmd[0]), -3) != 'php') continue;
+                    unset($cmd[0]);
+                    if (substr($cmd[1], -13) != 'bootstrap.php' && $cmd[1] != '/usr/local/bin/vps') continue;
+                    unset($cmd[1]);
+                    $cmdWithoutArgs= '';
+                    $args = '';
+                    foreach ($cmd as $i=>$c) {
+                        if (substr($c, 0, 2)=='--') {
+                            $args = implode(' ', $cmd);
+                            break;
+                        }
+                        $cmdWithoutArgs .= $c.' ';
+                        unset($cmd[$i]);
+                    }
+                    if (substr(trim($cmdWithoutArgs), 0, 19)=='clear-cache-watcher') {
+                        echo "there is already a clear-cache-watcher running for your user: ".trim(`pwdx $pid`)."\n";
+                        echo "klling it...\n";
+                        if (isset($processesByParent[$pid])) {
+                            foreach ($processesByParent[$pid] as $i) {
+                                posix_kill($i, SIGINT);
+                            }
+                        }
+                        posix_kill($pid, SIGINT);
+                        echo "\n";
+                    }
+                }
+            }
+        }
 
         //inotifywait doesn't recurse into symlinks
         //so we add all symlinks to $watchPaths
@@ -126,21 +127,97 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
             );
             foreach ($fsi as $fso) {
                 if ($fso->isLink()) {
+                    foreach ($watchPaths as $p2) {
+                        if (substr($fso->__toString(), 0, strlen($p2)) == $p2) {
+                            continue 2;
+                        }
+                    }
                     $watchPaths[] = $fso->__toString();
                 }
             }
         }
 
-        $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor --exclude 'magick|\.nfs|\.git|.*\.kate-swp|~|/cache/|/log/|/temp/|data/index|benchmarklog|querylog|eventlog|/build/|/Gruntfile.js' ".implode(' ', $watchPaths);
-        echo $cmd."\n";
-        $descriptorspec = array(
-            1 => array("pipe", "w"),
+        $exclude = array(
+            '*magick*',
+            '.nfs*',
+            '/.git/*',
+            '*.kate-swp',
+            '~',
+            '/cache/*',
+            '/log/*',
+            '/temp/*',
+            '/data/index/*',
+            '/benchmarklog',
+            '/querylog',
+            '/eventlog',
+            '/build/*',
+            '/Gruntfile.js'
         );
-        $proc = new Kwf_Util_Proc($cmd, $descriptorspec);
-        $pipe = $proc->pipe(1);
+        $backend = null;
+        $out = array();
+        exec("watchmedo --version 2>&1", $out, $ret);
+        if (!$ret) {
+            foreach ($exclude as &$e) {
+                $e = '*'.$e;
+            }
+            $cmd = "watchmedo log --recursive --ignore-directories ".
+                " --ignore-patterns ".escapeshellarg(implode(';', $exclude)).
+                ' '.implode(' ', $watchPaths);
+            if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+                //disble output bufferering
+                $cmd = "PYTHONUNBUFFERED=1 $cmd";
+            } else {
+                //on windows disable output buffering using -u
+                //the above doesn't work
+                $cmd = "python -u -m watchdog.$cmd";
+            }
+            $backend = 'watchmedo';
+        } else {
+            $out = array();
+            $str = exec("inotifywait --help 2>&1", $out, $ret);
+            if ($ret > 1 || substr($out[0], 0, 12) != 'inotifywait ') {
+                if (stristr(PHP_OS, 'LINUX')) {
+                    throw new Kwf_Exception_Client(
+                        "To use clear-cache-watcher you need either inotifywait or watchmedo installed and in your \$PATH:\n".
+                        "- install inotify-tools package to get inotifywait (see https://github.com/rvoicilas/inotify-tools/wiki)\n".
+                        "- install python-watchdog (see http://pythonhosted.org/watchdog/#easy-installation)"
+                    );
+                } else {
+                    throw new Kwf_Exception_Client(
+                        "To use clear-cache-watcher you need watchmedo installed and in your \$PATH:\n".
+                        "- install python-watchdog (see http://pythonhosted.org/watchdog/#easy-installation)"
+                    );
+                }
+            }
+            $excludeRegEx = array();
+            foreach ($exclude as $e) {
+                if (substr($e, -1) == '*') $e = substr($e, 0, -1); //not needed
+                $excludeRegEx[] = str_replace(
+                    array(
+                        '.',
+                        '*',
+                    ),
+                    array(
+                        '\\.',
+                        '.*'
+                    ),
+                    $e);
+            }
+            $excludeRegEx = implode('|', $excludeRegEx);
+            $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor ".
+                "--exclude '$excludeRegEx' ".
+                implode(' ', $watchPaths);
+            $backend = 'inotifywait';
+        }
+        echo $cmd."\n";
+
+        require 'vendor/autoload.php';
+        $proc = new Symfony\Component\Process\Process($cmd, null, null, null, null, array());
+        $proc->start();
+
         $eventsQueue = array();
         $lastChange = false;
-        while(!feof($pipe)) {
+        while(true) {
 
             if ($lastChange && $lastChange+($bufferUsecs/1000000) < microtime(true)) {
                 $eventsQueue = array_unique($eventsQueue);
@@ -162,125 +239,120 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                     $proc->close(false);
                     exit;
                 }
-                foreach ($eventsQueue as $k=>$event) {
-                    if (!preg_match('#^([^ ]+) ([A-Z,_]+) ([^ ]+)$#', trim($event), $m)) {
-                        echo "unknown event: $event\n";
-                        continue;
+                if ($backend == 'inotifywait') {
+                    foreach ($eventsQueue as $k=>$event) {
+                        if (!preg_match('#^([^ ]+) ([A-Z,_]+) ([^ ]+)$#', trim($event), $m)) {
+                            echo "unknown event: $event\n";
+                            continue;
+                        }
+                        $eventsQueue[$k] = array(
+                            'event' => $m[2],
+                            'file' => $m[1].$m[3],
+                        );
+                        unset($m);
                     }
-                    $eventsQueue[$k] = array(
-                        'event' => $m[2],
-                        'file' => $m[1].$m[3],
-                    );
-                    unset($m);
+
+                    //inotifywait reports move a two individual events, compress into one MOVE
+                    foreach ($eventsQueue as $k=>$event) {
+                        if ($eventsQueue[$k]['event'] == 'MOVED_TO' && $k >= 1) {
+                            $eventsQueue[$k]['event'] = 'MOVE';
+                            if ($eventsQueue[$k-1]['event'] != 'MOVED_FROM') {
+                                throw new Kwf_Exception('MOVED_FROM event is not followed by a MOVED_TO');
+                            }
+                            $eventsQueue[$k]['dest'] = $eventsQueue[$k]['file'];
+                            $eventsQueue[$k]['file'] = $eventsQueue[$k-1]['file'];
+                            unset($eventsQueue[$k-1]);
+                        }
+                    }
+                    $eventsQueue = array_values($eventsQueue);
+
+                } else if ($backend == 'watchmedo') {
+                    foreach ($eventsQueue as $k=>$event) {
+                        if (!preg_match('#^on_([a-z]+)\(.*event=.*src_path=u?\'([^\']+)\'(, dest_path=u?\'([^\']+)\')?#', trim($event), $m)) {
+                            echo "unknown event: $event\n";
+                            continue;
+                        }
+                        $ev = $m[1];
+                        if ($ev == 'modified') $ev = 'MODIFY';
+                        if ($ev == 'created') $ev = 'CREATE';
+                        if ($ev == 'deleted') $ev = 'DELETE';
+                        if ($ev == 'moved') $ev = 'MOVE';
+                        $m[2] = str_replace('\\\\', '/', $m[2]); //windows
+                        $eventsQueue[$k] = array(
+                            'event' => $ev,
+                            'file' => $m[2]
+                        );
+                        if ($ev == 'MOVE') {
+                            $m[4] = str_replace('\\\\', '/', $m[4]);
+                            $eventsQueue[$k]['dest'] = $m[4];
+                        }
+                        unset($m);
+                    }
                 }
 
                 // compress the following into into one event:
                 // CREATE web.scssdx1493.new
                 // MODIFY web.scssdx1493.new
-                // MOVED_FROM web.scssdx1493.new
-                // MOVED_TO web.scss
+                // (or in other order, which can happen
                 $eventsQueue = array_values($eventsQueue);
                 foreach ($eventsQueue as $k=>$event) {
-                    $f = $eventsQueue[$k]['file'];
-                    if ($event['event'] == 'MOVED_TO' && $k >= 3) {
-                        if ($eventsQueue[$k-1]['event'] == 'MOVED_FROM'
-                            && $eventsQueue[$k-2]['event'] == 'MODIFY'
-                            && $eventsQueue[$k-3]['event'] == 'CREATE'
+                    if (($event['event'] == 'MODIFY' || $event['event'] == 'CREATE') && $k >= 1) {
+                        $f = $eventsQueue[$k]['file'];
+                        if (($eventsQueue[$k-1]['event'] == 'CREATE' || $eventsQueue[$k-1]['event'] == 'MODIFY')
                             && substr($eventsQueue[$k-1]['file'], 0, strlen($f)) == $f
-                            && substr($eventsQueue[$k-2]['file'], 0, strlen($f)) == $f
-                            && substr($eventsQueue[$k-3]['file'], 0, strlen($f)) == $f
+                        ) {
+                            $eventsQueue[$k]['event'] = 'MODIFY';
+                            unset($eventsQueue[$k-1]);
+                        }
+                    }
+                }
+
+                // compress the following into into one event:
+                // MODIFY web.scssdx1493.new
+                // MOVED web.scssdx1493.new web.scss
+                $eventsQueue = array_values($eventsQueue);
+                foreach ($eventsQueue as $k=>$event) {
+                    if ($event['event'] == 'MOVE' && $k >= 1) {
+                        $f = $eventsQueue[$k]['dest'];
+                        if ($eventsQueue[$k-1]['event'] == 'MODIFY'
+                            && substr($eventsQueue[$k]['file'], 0, strlen($f)) == $f
+                            && substr($eventsQueue[$k-1]['file'], 0, strlen($f)) == $f
                         ) {
                             unset($eventsQueue[$k-1]);
-                            unset($eventsQueue[$k-2]);
-                            unset($eventsQueue[$k-3]);
                             $eventsQueue[$k]['event'] = 'MODIFY';
+                            $eventsQueue[$k]['file'] = $f;
+                            unset($eventsQueue[$k]['dest']);
                         }
                     }
                 }
                 foreach ($eventsQueue as $event) {
-                    self::_handleEventFork($event['file'], $event['event']);
+                    $eventStart = microtime(true);
+                    self::_handleEvent($event['file'], $event['event']);
+                    echo "finished in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
                 }
                 $eventsQueue = array();
                 $lastChange = false;
             }
 
-            $t = microtime(true);
-            $read = array($pipe);
-            $write = array();
-            $except = array();
-            if (!stream_select($read, $write, $except, 0, $bufferUsecs)) {
-                //echo "NO waited for ".round(microtime(true)-$t, 2)."s\n";
-                continue;
-            }
-            //echo "YES waited for ".round(microtime(true)-$t, 2)."s\n";
-            $event = trim(fgets($pipe));
+            $event = trim($proc->getIncrementalOutput());
+
             if (!$event) {
+                usleep($bufferUsecs/2);
                 continue;
             }
-            $eventsQueue[] = $event;
+            $eventsQueue = array_merge($eventsQueue, explode("\n", $event));
 
-            //if (!$lastChange) $lastChange = microtime(true);
             $lastChange = microtime(true);
-
 
         }
         $proc->close();
         exit;
     }
 
-    private static $_queue = array();
-
-    private static function _handleEventFork($file, $event)
-    {
-        Kwf_Cache_Simple::resetZendCache(); //reset to re-fetch namespace
-
-        $eventStart = microtime(true);
-        $pid = pcntl_fork();
-        if ($pid == -1) {
-            die('Konnte nicht verzweigen');
-        } else if ($pid) {
-            self::$_queue = array();
-            // Wir sind der Vater
-            pcntl_wait($status); //Schützt uns vor Zombie Kindern
-            if (!$status) {
-                self::$_queue = unserialize(file_get_contents('temp/clear-cache-watcher-queue'));
-            }
-            //if ($status) exit($status);
-        } else {
-            $queue = self::$_queue;
-            self::$_queue = array();
-            // Wir sind das Kind
-            self::_handleEvent($file, $event);
-            if ($queue) {
-                echo "\nprocess queued events: \n";
-                foreach ($queue as $i) {
-                    //adds it back to queue if still fails
-                    self::_handleEvent($i['file'], $i['event']);
-                }
-            }
-            file_put_contents('temp/clear-cache-watcher-queue', serialize(self::$_queue));
-            if (count(self::$_queue)) {
-                echo "queued events: ".count(self::$_queue)."\n";
-            }
-            exit(0);
-        }
-        echo "forked process finished in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
-    }
-/*
-    //called as sub process (NOT forked)
-    public function classExistsAction()
-    {
-        $class = $this->_getParam('class');
-        if (@class_exists($class)) {
-            exit(0);
-        } else {
-            exit(1);
-        }
-    }
-*/
     private static function _handleEvent($file, $event)
     {
         echo "\n$event $file\n";
+        Kwf_Cache_Simple::resetZendCache(); //reset to re-fetch namespace
         $eventStart = microtime(true);
         if (substr($file, -4)=='.css' || substr($file, -3)=='.js' || substr($file, -9)=='.printcss' || substr($file, -5)=='.scss') {
             echo "asset modified: $event $file\n";
@@ -295,7 +367,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
 
                 echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
 
-            } else if ($event == 'CREATE' || $event == 'DELETE' || $event == 'MOVED_TO' || $event == 'MOVED_FROM') {
+            } else if ($event == 'CREATE' || $event == 'DELETE' || $event == 'MOVE') {
 
                 self::_clearAssetsDependencies();
 
@@ -395,18 +467,7 @@ class Kwf_Controller_Action_Cli_Web_ClearCacheWatcherController extends Kwf_Cont
                 echo "parse error: $cls\n";
                 return;
             }
-/*
-            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache-watcher class-exists --class=$cls";
-            system($cmd, $classExists);
-            if ($classExists != 0) {
-                echo "parse error: $cls\n";
-                self::$_queue[] = array(
-                    'file' => $file,
-                    'event' => $event
-                );
-                return;
-            }
-*/
+
             $matchingClasses = array();
             try {
                 foreach (Kwc_Abstract::getComponentClasses() as $c) {
