@@ -32,7 +32,7 @@ Kwf.onJElementWidthChange('div.kwfFadeElements', function fadeElementsWidthChang
     if (element.fadeElementsObject) {
         element.fadeElementsObject.calculateMaxHeight();
     }
-}, {priority: 10}); /* after ResponsiveEl */
+}, {priority: 10, checkVisibility: true}); /* after ResponsiveEl */
 
 
 if (!Kwf.Fade) Kwf.Fade = {};
