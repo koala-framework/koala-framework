@@ -14,7 +14,8 @@
         "koala-framework/kwf-modernizr": "3.8.x-dev",
         "koala-framework/composer-extra-assets": "1.0.x-dev",
         "twig/twig": "1.16.1",
-        "koala-framework/sourcemaps": "0.1.x-dev"
+        "koala-framework/sourcemaps": "0.1.x-dev",
+        "symfony/process": "2.7.*"
     },
     "extra": {
         "require-bower": {
