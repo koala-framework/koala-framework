@@ -110,7 +110,7 @@ function checkResponsiveImgEl(responsiveImgEl) {
 function doesElementScroll(el) {
     var i = el.get(0);
 
-    while (i != document.body) {
+    while (i && i != document.body) {
         var overflow = $(i).css('overflow-y');
         if (overflow == 'auto' || overflow == 'scroll') {
             return true;
