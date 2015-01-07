@@ -61,6 +61,21 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
         return $ret;
     }
 
+    protected function _createData($parentData, $row, $select)
+    {
+        //needed if multiple category generators exist in the same web
+        $idParent = $parentData;
+        while ($idParent->componentClass != $this->_class) {
+            $idParent = $idParent->parent;
+            if (!$idParent) {
+                return null;
+            }
+        }
+
+        $ret = parent::_createData($parentData, $row, $select);
+        return $ret;
+    }
+
     protected function _formatConfig($parentData, $row)
     {
         $ret = parent::_formatConfig($parentData, $row);
