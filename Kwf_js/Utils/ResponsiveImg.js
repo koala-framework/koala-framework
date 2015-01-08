@@ -101,16 +101,16 @@ function checkResponsiveImgEl(responsiveImgEl) {
             responsiveImgEl.minWidth, responsiveImgEl.maxWidth);
     if (width > responsiveImgEl.loadedWidth) {
         responsiveImgEl.loadedWidth = width;
-        responsiveImgEl.find('img').attr('src')
-            = responsiveImgEl.baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
-                    DONT_HASH_TYPE_PREFIX+width);
+        responsiveImgEl.find('img').attr('src',
+             responsiveImgEl.baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
+                    DONT_HASH_TYPE_PREFIX+width));
     }
 };
 
 function doesElementScroll(el) {
     var i = el.get(0);
 
-    while (i != document.body) {
+    while (i && i != document.body) {
         var overflow = $(i).css('overflow-y');
         if (overflow == 'auto' || overflow == 'scroll') {
             return true;

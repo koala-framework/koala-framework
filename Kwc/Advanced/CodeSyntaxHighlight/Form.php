@@ -5,6 +5,7 @@ class Kwc_Advanced_CodeSyntaxHighlight_Form extends Kwc_Abstract_Form
     {
         parent::_initFields();
         $this->add(new Kwf_Form_Field_TextArea('code'))
+            ->setAllowTags(true)
             ->setFieldLabel(trlKwf('Code'))
             ->setHeight(225)
             ->setWidth(450);

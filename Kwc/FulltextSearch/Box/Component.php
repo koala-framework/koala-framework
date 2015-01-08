@@ -14,20 +14,21 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
     public function getForwardProcessInputComponents()
     {
         return array(
-            Kwf_Component_Data_Root::getInstance()
-                ->getComponentByClass('Kwc_FulltextSearch_Search_Directory_Component',
-                                    array('subroot'=>$this->getData()))
-                ->getChildComponent('-view')->getChildComponent('-searchForm')
-            );
+            $this->_getSearchDirectory()->getChildComponent('-view')->getChildComponent('-searchForm')
+        );
     }
 
+    protected function _getSearchDirectory()
+    {
+        return Kwf_Component_Data_Root::getInstance()
+                ->getComponentByClass('Kwc_FulltextSearch_Search_Directory_Component',
+                                    array('subroot'=>$this->getData()));
+    }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $searchPage = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_FulltextSearch_Search_Directory_Component',
-                                   array('subroot'=>$this->getData()));
+        $searchPage = $this->_getSearchDirectory();
         $ret['searchForm'] = $searchPage->getChildComponent('-view')->getChildComponent('-searchForm');
         $ret['config'] = array(
             'searchTitle' => $searchPage->getTitle(),

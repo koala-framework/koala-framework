@@ -1,1 +1,0 @@
-Kwf.Utils.DoubleTapToGo('.cssClass > ul > li', {targetToOpen: '> div.dropdown'});

@@ -98,7 +98,7 @@ class Kwf_Controller_Action_Debug_AssetsDependenciesController extends Kwf_Contr
                 $curClass = substr($curClass, 0, -10);
             }
             $curClass =  $curClass . '_Component';
-            $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass);
+            $file = str_replace('_', '/', $curClass);
             foreach ($this->_config->path as $type=>$dir) {
                 if ($dir == '.') $dir = getcwd();
                 if (is_file($dir . '/' . $file.'.css')) {

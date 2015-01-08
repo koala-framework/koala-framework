@@ -6,6 +6,7 @@ class Kwf_Util_Proc
 {
     private $_process;
     private $_pipes;
+    private $_terminateOnDestruct = false;
 
     public function __construct($cmd, $descriptorspec, $cwd = null, $env = null)
     {
@@ -15,9 +16,16 @@ class Kwf_Util_Proc
         }
     }
 
+    public function setTerminateOnDestruct($v)
+    {
+        $this->_terminateOnDestruct = (bool)$v;
+    }
+
     public function __destruct()
     {
-//         $this->terminate();
+        if ($this->_terminateOnDestruct && $this->isRunning()) {
+            $this->terminate();
+        }
     }
 
     public function pipe($nr)

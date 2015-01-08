@@ -4,7 +4,7 @@
     "homepage": "http://www.koala-framework.org/",
     "license": "BSD-2-Clause",
     "require": {
-        "koala-framework/zendframework1": "1.12.6",
+        "koala-framework/zendframework1": "1.12.6.*",
 
         "koala-framework/extjs2": "2.3.0.*",
         "koala-framework/library-swfupload": "2.2.0.1",
@@ -14,7 +14,8 @@
         "koala-framework/kwf-modernizr": "3.8.x-dev",
         "koala-framework/composer-extra-assets": "1.0.x-dev",
         "twig/twig": "1.16.1",
-        "koala-framework/sourcemaps": "0.1.x-dev"
+        "koala-framework/sourcemaps": "0.1.x-dev",
+        "symfony/process": "2.7.*"
     },
     "extra": {
         "require-bower": {

@@ -68,6 +68,8 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             }
             $cls = get_class($expr);
             return new $cls($exprs);
+        } else if ($expr instanceof Kwf_Model_Select_Expr_String || $expr instanceof Kwf_Model_Select_Expr_Boolean || $expr instanceof Kwf_Model_Select_Expr_Integer) {
+            return $expr;
         } else {
             throw new Kwf_Exception_NotImplemented();
         }
@@ -183,8 +185,9 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                     if (count($p) != 1) throw new Kwf_Exception_NotYetImplemented();
                     foreach ($p as $v) {
                         $v['field'] = $this->_mapColumn($m, $v['field']);
+                        $expr = $m->_formatField($v['field'], $dbSelect);
                         $columns[] = array(
-                            '', $m->_formatField($v['field'], $dbSelect), 'orderField'
+                            '', new Zend_Db_Expr($expr), 'orderField'
                         );
                     }
                 }

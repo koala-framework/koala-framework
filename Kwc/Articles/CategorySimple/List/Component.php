@@ -18,9 +18,13 @@ class Kwc_Articles_CategorySimple_List_Component
 
     public static function getItemDirectoryClasses($directoryClass)
     {
-        $component = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_Articles_Directory_Component', array('limit' => 1));
-        return array($component->componentClass);
+        $ret = array();
+        foreach (Kwc_Abstract::getComponentClasses() as $c) {
+            if (is_instance_of($c, 'Kwc_Articles_Directory_Component')) {
+                $ret[] = $c;
+            }
+        }
+        return $ret;
     }
 
     public static function countArticles($componentId)

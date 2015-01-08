@@ -48,6 +48,7 @@ class Kwf_Util_Build
         Kwf_Events_ModelObserver::getInstance()->disable();
 
         ini_set('memory_limit', '512M');
+        Kwf_Registry::set('db', false);
 
         if ($typeNames == 'all') {
             $types = $this->getTypes();

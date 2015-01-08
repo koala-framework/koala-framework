@@ -4,7 +4,7 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
     public function jsonIndexAction()
     {
         if ($this->_getParam('subrootComponentId')) {
-            $cacheId = 'kwcMenuMobile-root-' . $this->_getParam('subrootComponentId');
+            $cacheId = 'kwcMenuMobile-root-' . $this->_getParam('subrootComponentId').'-'.$this->_getParam('class');
         } else if ($this->_getParam('pageId')) {
             $cacheId = 'kwcMenuMobile-' . $this->_getParam('pageId');
         }

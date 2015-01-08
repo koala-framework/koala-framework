@@ -29,7 +29,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
             ));
             foreach ($files as $i) {
                 foreach ($i as $j) {
-                    $j = getcwd().'/'.$j;
+                    $j = str_replace(DIRECTORY_SEPARATOR, '/', getcwd()).'/'.$j;
                     $jj = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($j);
                     if (!$jj) {
                         throw new Kwf_Exception("Can't find path type for '$j'");

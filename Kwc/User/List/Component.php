@@ -11,8 +11,10 @@ class Kwc_User_List_Component extends Kwc_Directories_List_Component
     public static function getItemDirectoryClasses($directoryClass)
     {
         $ret = array();
-        foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass('Kwc_User_Directory_Component') as $component) {
-            $ret[] = $component->componentClass;
+        foreach (Kwc_Abstract::getComponentClasses() as $cls) {
+            if (is_instance_of($cls, 'Kwc_User_Directory_Component')) {
+                $ret[] = $cls;
+            }
         }
         return $ret;
     }

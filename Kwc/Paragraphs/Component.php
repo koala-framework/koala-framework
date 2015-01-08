@@ -39,11 +39,12 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
             'content'      => 'content',
             'none'         => 'none',
             'layout'       => trlKwfStatic('Layout'),
-            'media'        => trlKwfStatic('Media'),
+            'media'        => trlKwfStatic('Pictures & Media'),
             'callToAction' => trlKwfStatic('Call to Action'),
             'childPages'   => trlKwfStatic('Child Pages'),
             'special'      => trlKwfStatic('Special'),
             'model'        => trlKwfStatic('Model'),
+            'contact'      => trlKwfStatic('Contact'),
             'admin'        => trlKwfStatic('Admin'),
         );
         return $ret;
