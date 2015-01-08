@@ -83,7 +83,7 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
             ),
             array('api')
         );
-        $chainedRoute = new Zend_Controller_Router_Route_Chain();
+        $chainedRoute = new Kwf_Controller_Router_Route_Chain();
         $chainedRoute->chain($apiRoute)
                     ->chain($restRoute);
         $this->addRoute('api', $chainedRoute);
