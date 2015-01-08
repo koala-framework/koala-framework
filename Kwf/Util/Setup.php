@@ -6,7 +6,7 @@ class Kwf_Util_Setup
         return VENDOR_PATH.'/koala-framework/zendframework1/library';
     }
 
-    public static function minimalBootstrapAndGenerateFile()
+    public static function minimalBootstrap()
     {
         $kwfPath = realpath(dirname(__FILE__).'/../..');
         if (!defined('KWF_PATH')) define('KWF_PATH', $kwfPath);
@@ -25,6 +25,11 @@ class Kwf_Util_Setup
         class_exists('Kwf_Trl'); //trigger autoload
 
         umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen
+    }
+
+    public static function minimalBootstrapAndGenerateFile()
+    {
+        self::minimalBootstrap();
 
         file_put_contents('cache/setup'.Kwf_Setup::CACHE_SETUP_VERSION.'.php', self::generateCode());
 
