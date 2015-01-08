@@ -32,6 +32,7 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
                 'src/'.$path.'.js',
                 'js/'.$path.'.js',
                 $path.'/'.$path.'.js',
+                'bin/js/'.$path.'.js',
             );
             foreach ($files as $f) {
                 if (substr($f, -6) == '.js.js') $f = substr($f, 0, -3);
