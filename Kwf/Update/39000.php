@@ -3,8 +3,9 @@ class Kwf_Update_39000 extends Kwf_Update
 {
     public function update()
     {
-        $uploadsDir = $dir = Kwf_Config::getValue('uploads');
         $db = Kwf_Registry::get('db');
+        $uploadsModel = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
+        $uploadsDir = $dir = Kwf_Config::getValue('uploads');
 
         $idColumn = reset($db->fetchAll("SHOW FIELDS FROM `kwf_uploads` WHERE `Field` = 'id'"));
         if ($idColumn['Type'] != 'varbinary(36)') {
@@ -59,10 +60,9 @@ class Kwf_Update_39000 extends Kwf_Update
             echo "Move uploads...\n";
             rename($uploadsDir . '/mediaprescale', $uploadsDir . '/mediaprescaleold');
             mkdir($uploadsDir . '/mediaprescale');
-            $model = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
             $select = new Kwf_Model_Select();
             $it = new Kwf_Model_Iterator_Packages(
-                new Kwf_Model_Iterator_Rows($model, $select)
+                new Kwf_Model_Iterator_Rows($uploadsModel, $select)
             );
             $it = new Kwf_Iterator_ConsoleProgressBar($it);
             foreach ($it as $row) {
@@ -77,15 +77,14 @@ class Kwf_Update_39000 extends Kwf_Update
         $db->query("ALTER TABLE  `kwf_uploads` ADD  `md5_hash` VARCHAR( 32 ) NOT NULL");
         $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
         $s = new Kwf_Model_Select();
-        $s->whereEquals('md5_hash', '');
         $it = new Kwf_Model_Iterator_Packages(
-            new Kwf_Model_Iterator_Rows(Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model'), $s)
+            new Kwf_Model_Iterator_Rows($uploadsModel, $s)
         );
         $it = new Kwf_Iterator_ConsoleProgressBar($it);
         foreach ($it as $row) {
             if (file_exists($row->getFileSource())) {
-                $row->md5_hash = md5_file($row->getFileSource());
-                $row->save();
+                $md5Hash = md5_file($row->getFileSource());
+                $db->query("UPDATE  `kwf_uploads` SET  `md5_hash` =  '{$md5Hash}' WHERE  `id` = '{$row->id}';");
             }
         }
 
