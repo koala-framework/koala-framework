@@ -4,8 +4,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
     public function jsonUploadAction()
     {
         ini_set('memory_limit', '1024M');
-        $fileRow = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model')
-            ->createRow();
+        $uploadModel = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
 
         if (isset($_FILES['Filedata'])) {
             $file = $_FILES['Filedata'];
@@ -30,10 +29,10 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
                 $fileData = Kwf_Media_Image::scale($file['tmp_name'], array('width' => $maxResolution, 'height' => $maxResolution, 'cover' => false));
                 $filename = substr($file['name'], 0, strrpos($file['name'], '.'));
                 $extension = substr(strrchr($file['name'], '.'), 1);
-                $fileRow->verifyUpload($file);
-                $fileRow->writeFile($fileData, $filename, $extension, $file['type']);
+                Kwf_Uploads_Model::verifyUpload($file);
+                $fileRow = $uploadModel->writeFile($fileData, $filename, $extension, $file['type']);
             } else {
-                $fileRow->uploadFile($file);
+                $fileRow = $uploadModel->uploadFile($file);
             }
         } else if (isset($_SERVER['HTTP_X_UPLOAD_NAME'])) {
             $fileData = file_get_contents("php://input");
@@ -61,9 +60,9 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
                 file_put_contents($tempFile, $fileData);
                 $fileData = Kwf_Media_Image::scale($tempFile, array('width' => $maxResolution, 'height' => $maxResolution, 'cover' => false));
                 unlink($tempFile);
-                $fileRow->writeFile($fileData, $filename, $extension, $mimeType);
+                $fileRow = $uploadModel->writeFile($fileData, $filename, $extension, $mimeType);
             } else {
-                $fileRow->writeFile($fileData, $filename, $extension, $mimeType);
+                $fileRow = $uploadModel->writeFile($fileData, $filename, $extension, $mimeType);
             }
         } else {
             throw new Kwf_Exception_Client(trlKwf("No Filedata received."));

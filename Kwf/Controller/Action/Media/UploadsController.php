@@ -24,8 +24,7 @@ class Kwf_Controller_Action_Media_UploadsController extends Kwf_Rest_Controller_
             if (!isset($_FILES['file'])) {
                 throw new Kwf_Exception_NotFound();
             }
-            $row = $this->_model->createRow();
-            $row->uploadFile($_FILES['file']);
+            $row = $this->_model->uploadFile($_FILES['file']);
 
             $this->view->data = $this->_loadDataFromRow($row);
 

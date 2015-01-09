@@ -5,20 +5,21 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
 
     protected function _initFields()
     {
-        if (Kwc_Abstract::getSetting($this->getClass(), 'editFilename')) {
-            $this->add(new Kwf_Form_Field_TextField('filename', trlKwf('Filename')))
-                ->setVtype('alphanum');
-        }
 
         $this->add($this->_createImageUploadField(Kwc_Abstract::getSetting($this->getClass(), 'imageLabel')));
 
-        if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
-            $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))
-                ->setWidth(300);
+        if (Kwc_Abstract::getSetting($this->getClass(), 'editFilename')) {
+            $this->add(new Kwf_Form_Field_TextField('filename', trlKwf('Filename')))
+                ->setAutoFillWithFilename('filename') //to find it by MultiFileUpload and in JavaScript
+                ->setVtype('alphanum');
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
             $this->add(new Kwf_Form_Field_TextField('alt_text', trlKwf('Alt Text')))
                 ->setHelpText(trlKwf('Optional: Describe this image for visually handicapped people and search engines.'))
+                ->setWidth(300);
+        }
+        if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
+            $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))
                 ->setWidth(300);
         }
 
