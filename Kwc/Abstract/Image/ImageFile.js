@@ -3,7 +3,7 @@ Kwc.Abstract.Image.ImageFile = Ext2.extend(Kwf.Form.File, {
     _completeValue: null,
 
     initComponent: function() {
-        Kwc.Basic.DownloadTag.Panel.superclass.initComponent.call(this);
+        Kwc.Abstract.Image.ImageFile.superclass.initComponent.call(this);
         this.on('uploaded', function(field, value) {
             if (value) {
                 var fs = this.ownerCt.ownerCt.items.find(function(i){return i.xtype=='fieldset'});
