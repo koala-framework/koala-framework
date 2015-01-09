@@ -12,6 +12,8 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
     protected function _putFileContents($contents)
     {
         $filename  = $this->getFileSource();
+        $uploadsDir = $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2);
+        if (!is_dir($uploadsDir)) mkdir($uploadsDir);
         $handle = fopen($filename, "w");
         $pointer = 0;
         $length = 1024;
@@ -104,7 +106,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         if (!$this->id) {
             return null;
         }
-        return $this->getModel()->getUploadDir() . '/' . $this->id;
+        return $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2) . '/' . $this->id;
     }
     public function getFileSize()
     {

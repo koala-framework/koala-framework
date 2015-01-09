@@ -3,6 +3,9 @@ class Kwf_Uploads_Model extends Kwf_Model_Db_Proxy
 {
     protected $_table = 'kwf_uploads';
     protected $_rowClass = 'Kwf_Uploads_Row';
+    protected $_filters = array(
+        'id' => 'Kwf_Filter_Row_GenerateUuid'
+    );
     private $_uploadDir;
 
     protected function _init()
