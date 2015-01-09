@@ -90,6 +90,7 @@ class Kwf_Update_39000 extends Kwf_Update
 
         if (in_array('kwc_basic_image', $db->listTables())) {
             $m = Kwf_Model_Abstract::getInstance('Kwc_Abstract_Image_Model');
+            $s = new Kwf_Model_Select();
             $s->whereEquals('filename', '');
             $it = new Kwf_Model_Iterator_Packages(
                 new Kwf_Model_Iterator_Rows(Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model'), $s)
