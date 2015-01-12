@@ -1,6 +1,16 @@
 <?php
 class Kwf_Update_39000 extends Kwf_Update
 {
+
+    public function getProgressSteps()
+    {
+        $ret = count(Kwf_Model_Abstract::findAllInstances());
+        if (in_array('kwf_uploads', Kwf_Registry::get('db')->listTables())) {
+            $ret += Kwf_Registry::get('db')->query('SELECT COUNT(*) FROM kwf_uploads')*2;
+        }
+        return $ret;
+    }
+
     public function update()
     {
         $db = Kwf_Registry::get('db');
@@ -14,7 +24,6 @@ class Kwf_Update_39000 extends Kwf_Update
             $db->query("ALTER TABLE  `kwf_uploads` DROP PRIMARY KEY");
             $db->query("ALTER TABLE  `kwf_uploads` ADD  `id` VARBINARY( 36 ) NOT NULL FIRST");
 
-            echo "Create new upload ID's...\n";
             $uploadIds = array();
             foreach ($db->query("SELECT id_old FROM `kwf_uploads`")->fetchAll() as $data) {
                 $id = Kwf_Filter_GenerateUuid::filter(null);
@@ -23,8 +32,8 @@ class Kwf_Update_39000 extends Kwf_Update
             }
             $db->query('ALTER TABLE `kwf_uploads` ADD PRIMARY KEY(`id`)');
 
-            echo "Change upload ID's...\n";
             foreach (Kwf_Model_Abstract::findAllInstances() as $model) {
+                $this->_progressBar->next(1, 'updating uploads '.get_class($model));
                 foreach ($model->getReferences() as $rule) {
                     $reference = $model->getReference($rule);
                     $refModel = '';
@@ -57,20 +66,23 @@ class Kwf_Update_39000 extends Kwf_Update
                 }
             }
 
-            echo "Move uploads...\n";
-            rename($uploadsDir . '/mediaprescale', $uploadsDir . '/mediaprescaleold');
+            if (file_exists($uploadsDir . '/mediaprescale')) {
+                rename($uploadsDir . '/mediaprescale', $uploadsDir . '/mediaprescaleold');
+            } else {
+                mkdir($uploadsDir . '/mediaprescaleold');
+            }
             mkdir($uploadsDir . '/mediaprescale');
             $select = new Kwf_Model_Select();
             $it = new Kwf_Model_Iterator_Packages(
                 new Kwf_Model_Iterator_Rows($uploadsModel, $select)
             );
-            $it = new Kwf_Iterator_ConsoleProgressBar($it);
             foreach ($it as $row) {
+                $this->_progressBar->next(1, 'renaming upload '.$row->id);
                 $this->_renameUploads($uploadsDir . '/', $row->id_old, $row->id);
             }
             rmdir($uploadsDir . '/mediaprescaleold');
 
-            $db->query('ALTER TABLE `kwf_uploads` DROP `id_old`');
+            //$db->query('ALTER TABLE `kwf_uploads` DROP `id_old`');
             $db->query("SET FOREIGN_KEY_CHECKS = 1\n");
         }
 
@@ -80,8 +92,8 @@ class Kwf_Update_39000 extends Kwf_Update
         $it = new Kwf_Model_Iterator_Packages(
             new Kwf_Model_Iterator_Rows($uploadsModel, $s)
         );
-        $it = new Kwf_Iterator_ConsoleProgressBar($it);
         foreach ($it as $row) {
+            $this->_progressBar->next(1, 'calculating md5 '.$row->id);
             if (file_exists($row->getFileSource())) {
                 $md5Hash = md5_file($row->getFileSource());
                 $db->query("UPDATE  `kwf_uploads` SET  `md5_hash` =  '{$md5Hash}' WHERE  `id` = '{$row->id}';");
@@ -95,7 +107,6 @@ class Kwf_Update_39000 extends Kwf_Update
             $it = new Kwf_Model_Iterator_Packages(
                 new Kwf_Model_Iterator_Rows(Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model'), $s)
             );
-            $it = new Kwf_Iterator_ConsoleProgressBar($it);
             foreach ($it as $row) {
                 $pr = $row->getParentRow('Image');
                 if ($pr) {
