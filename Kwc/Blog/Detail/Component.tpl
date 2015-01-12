@@ -13,7 +13,7 @@
         <h1 class="title"><?=$this->componentLink($this->item, $this->title)?></h1>
         <div class="postInfo">
             <?=$this->data->trlKwf('Posted on {0}', $this->date($this->row->publish_date))?>
-            <?=$this->data->trlKwf('by {0}', $this->item->author)?>
+            <span class="author"><?=$this->data->trlKwf('by {0}', $this->item->author)?></span>
         </div>
         <div class="content">
             <?=$this->component($this->content);?>
