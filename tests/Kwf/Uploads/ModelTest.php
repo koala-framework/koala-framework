@@ -124,12 +124,12 @@ class Kwf_Uploads_ModelTest extends Kwf_Test_TestCase
         $row = $this->_uploadsModel->createRow();
         $row->writeFile('foo', 'foo', 'txt');
         $dir = $this->_uploadsModel->getUploadDir();
-        $this->assertEquals($dir.'/1', $row->getFileSource());
+        $this->assertRegExp('#^'.$dir.'/[a-z0-9]{2}/.+$#', $row->getFileSource());
         $this->assertEquals(3, $row->getFileSize());
 
         $row = $this->_uploadsModel->createRow();
         $row->save();
-        $this->assertEquals($dir.'/2', $row->getFileSource());
+        $this->assertRegExp('#^'.$dir.'/[a-z0-9]{2}/.+$#', $row->getFileSource());
         $this->assertEquals(null, $row->getFileSize());
     }
 
@@ -138,7 +138,7 @@ class Kwf_Uploads_ModelTest extends Kwf_Test_TestCase
         $row = $this->_uploadsModel->createRow();
         $row->writeFile('foo', 'foo', 'txt');
         $info = $row->getFileInfo();
-        $this->assertEquals(1, $info['uploadId']);
+        $this->assertRegExp('#^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$#', $info['uploadId']);
         $this->assertContains('text/plain', $info['mimeType']);
         $this->assertEquals('foo', $info['filename']);
         $this->assertEquals('txt', $info['extension']);
@@ -148,7 +148,7 @@ class Kwf_Uploads_ModelTest extends Kwf_Test_TestCase
         $row = $this->_uploadsModel->createRow();
         $row->copyFile(KWF_PATH.'/images/welcome/ente.jpg', 'foo', 'jpg');
         $info = $row->getFileInfo();
-        $this->assertEquals(2, $info['uploadId']);
+        $this->assertRegExp('#^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$#', $info['uploadId']);
         $this->assertContains('image/jpeg', $info['mimeType']);
         $this->assertEquals('foo', $info['filename']);
         $this->assertEquals('jpg', $info['extension']);
