@@ -5,6 +5,7 @@ class Kwc_ListChildPages_Teaser_Teaser_Component extends Kwc_List_ChildPages_Tea
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component'] = 'Kwc_Basic_Empty_Component';
+        $ret['childModel'] = 'Kwc_ListChildPages_Teaser_TestModel';
         return $ret;
     }
 }

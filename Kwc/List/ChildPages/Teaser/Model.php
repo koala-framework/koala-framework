@@ -1,5 +1,5 @@
 <?php
-class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Db
+class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Db_Proxy
 {
     protected $_table = 'kwc_childpages_teaser';
 
@@ -7,8 +7,7 @@ class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Db
     {
         $s = new Kwf_Model_Select();
         $s->whereEquals('component_id', $cmp->dbId);
-        $rows = Kwf_Model_Abstract::getInstance('Kwc_List_ChildPages_Teaser_Model')
-            ->getRows($s);
+        $rows = $this->getRows($s);
         $rowsByTargetPageId = array();
         foreach ($rows as $r) {
             $rowsByTargetPageId[$r->target_page_id] = $r;
@@ -29,7 +28,7 @@ class Kwc_List_ChildPages_Teaser_Model extends Kwf_Model_Db
                 $row = $rowsByTargetPageId[$childPage->dbId];
                 unset($rowsByTargetPageId[$childPage->dbId]);
             } else {
-                $row = Kwf_Model_Abstract::getInstance('Kwc_List_ChildPages_Teaser_Model')->createRow();
+                $row = $this->createRow();
                 $row->target_page_id = $childPage->dbId;
                 $row->visible = false;
             }
