@@ -95,17 +95,7 @@ class Kwf_Cache_Simple
 
     private static function _processId($cacheId)
     {
-        if (function_exists('quoted_printable_encode')) {
-            //php 5.3+
-            $cacheId = quoted_printable_encode($cacheId);
-        } else if (function_exists('imap_8bit')) {
-            //imap module
-            $cacheId = imap_8bit($cacheId);
-        } else {
-            //fallback
-            $cacheId = base64_encode($cacheId);
-        }
-        return $cacheId;
+        return base64_encode($cacheId);
     }
 
     public static function getMemcache()
@@ -139,16 +129,7 @@ class Kwf_Cache_Simple
     //for 'file' backend
     public static function _getFileNameForCacheId($cacheId)
     {
-        if (function_exists('quoted_printable_encode')) {
-            //php 5.3+
-            $cacheId = quoted_printable_encode($cacheId);
-        } else if (function_exists('imap_8bit')) {
-            //imap module
-            $cacheId = imap_8bit($cacheId);
-        } else {
-            //fallback
-            $cacheId = base64_encode($cacheId);
-        }
+        $cacheId = base64_encode($cacheId);
         if (strlen($cacheId) > 50) {
             $cacheId = substr($cacheId, 0, 50).md5($cacheId);
         }
