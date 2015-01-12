@@ -392,7 +392,8 @@ class Kwf_Media_Image
             $preScaleWidth /= 2;
             $preScaleHeight /= 2;
             $preScaleFactor++;
-            $dir = Kwf_Config::getValue('uploads') . "/mediaprescale/$uploadId";
+            $folderId = substr($uploadId, 0, 2);
+            $dir = Kwf_Config::getValue('uploads') . "/mediaprescale/$folderId/$uploadId";
             if (!is_dir($dir)) mkdir($dir, 0777, true);
             $preScaleCacheFile = "$dir/$preScaleFactor";
             if (!file_exists($preScaleCacheFile)) {

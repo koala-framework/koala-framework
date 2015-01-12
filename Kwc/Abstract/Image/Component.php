@@ -41,7 +41,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['maxResolution'] = null;
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
-        $ret['editFilename'] = false;
+        $ret['editFilename'] = true;
         $ret['imageCaption'] = false;
         $ret['altText'] = true;
         $ret['allowBlank'] = true;

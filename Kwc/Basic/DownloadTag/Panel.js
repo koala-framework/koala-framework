@@ -5,7 +5,7 @@ Kwc.Basic.DownloadTag.Panel = Ext2.extend(Ext2.Panel, {
         this.findByType('kwf.file')[0].on('uploaded', function(field, value) {
             if (value) {
                 this.ownerCt.find('autoFillWithFilename', 'filename').forEach(function (f) {
-                    var v = value.filename;
+                    var v = value.uploaded_filename || value.filename;
                     v = v.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe')
                         .replace(/ü/g, 'ue').replace(/ß/g, 'ss')
                         .replace(/[^a-z0-9]/g, '_').replace(/__+/g, '_');

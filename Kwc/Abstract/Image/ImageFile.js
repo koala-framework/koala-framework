@@ -2,6 +2,24 @@ Kwc.Abstract.Image.ImageFile = Ext2.extend(Kwf.Form.File, {
 
     _completeValue: null,
 
+    initComponent: function() {
+        Kwc.Abstract.Image.ImageFile.superclass.initComponent.call(this);
+        this.on('uploaded', function(field, value) {
+            if (value) {
+                var fs = this.ownerCt.ownerCt.items.find(function(i){return i.xtype=='fieldset'});
+                if (fs) {
+                    fs.find('autoFillWithFilename', 'filename').forEach(function (f) {
+                        var v = value.uploaded_filename || value.filename;
+                        v = v.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe')
+                            .replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+                            .replace(/[^a-z0-9]/g, '_').replace(/__+/g, '_');
+                        f.setValue(v);
+                    }, this);
+                }
+            }
+        }, this);
+    },
+
     afterRender: function() {
         Kwc.Abstract.Image.ImageFile.superclass.afterRender.call(this);
         this.deleteButton.setText(trlKwf('delete'));

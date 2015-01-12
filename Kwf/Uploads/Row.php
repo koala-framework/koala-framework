@@ -12,6 +12,8 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
     protected function _putFileContents($contents)
     {
         $filename  = $this->getFileSource();
+        $uploadsDir = $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2);
+        if (!is_dir($uploadsDir)) mkdir($uploadsDir);
         $handle = fopen($filename, "w");
         $pointer = 0;
         $length = 1024;
@@ -32,6 +34,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         $this->extension = $extension;
         $mimeType = self::detectMimeType($mimeType, $contents);
         $this->mime_type = $mimeType;
+        $this->md5_hash = md5($contents);
         $this->save();
         $this->_putFileContents($contents);
         return $this;
@@ -48,7 +51,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
 
     public function uploadFile($filedata)
     {
-        $this->verifyUpload($filedata);
+        Kwf_Uploads_Model::verifyUpload($filedata);
 
         $filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
         $extension = substr(strrchr($filedata['name'], '.'), 1);
@@ -56,23 +59,12 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         return $this;
     }
 
+    /**
+     * @deprecated use Kwf_Uploads_Model::verifyUpload instead
+     */
     public function verifyUpload($filedata)
     {
-        if ($filedata['error'] == UPLOAD_ERR_NO_FILE || !$filedata['tmp_name'] || !file_exists($filedata['tmp_name'])) {
-            throw new Kwf_Exception('No File was uploaded.');
-        }
-
-        if ($filedata['error'] == UPLOAD_ERR_INI_SIZE || $filedata['error'] == UPLOAD_ERR_FORM_SIZE) {
-            throw new Kwf_ClientException(trlKwf('The file is larger than the maximum upload amount.'));
-        }
-
-        if ($filedata['error'] == UPLOAD_ERR_PARTIAL) {
-            throw new Kwf_ClientException(trlKwf('The file was not uploaded completely.'));
-        }
-
-        if ($filedata['error'] != UPLOAD_ERR_OK) {
-            throw new Kwf_Exception('An Error when processing file upload happend: '.$filedata['error']);
-        }
+        return Kwf_Uploads_Model::verifyUpload($filedata);
     }
 
     public static function detectMimeType($mimeType, $contents)
@@ -114,7 +106,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         if (!$this->id) {
             return null;
         }
-        return $this->getModel()->getUploadDir() . '/' . $this->id;
+        return $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2) . '/' . $this->id;
     }
     public function getFileSize()
     {
