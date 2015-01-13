@@ -32,22 +32,45 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         }
 
         foreach ($langs as $l) {
-            $cacheFileName = null;
-            $c = Kwf_Trl::getInstance()->_loadCache(Kwf_Trl::SOURCE_WEB, $l, true, $cacheFileName);
-            if ($cacheFileName) file_put_contents($cacheFileName, serialize($c));
+            if ($l != $config->webCodeLanguage) {
+                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_WEB, $l, true);
+                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_WEB, $l, true), serialize($c));
 
-            $cacheFileName = null;
-            $c = Kwf_Trl::getInstance()->_loadCache(Kwf_Trl::SOURCE_WEB, $l, false, $cacheFileName);
-            if ($cacheFileName) file_put_contents($cacheFileName, serialize($c));
+                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_WEB, $l, false);
+                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_WEB, $l, false), serialize($c));
+            }
 
-            $cacheFileName = null;
-            $c = Kwf_Trl::getInstance()->_loadCache(Kwf_Trl::SOURCE_KWF, $l, true, $cacheFileName);
-            if ($cacheFileName) file_put_contents($cacheFileName, serialize($c));
+            if ($l != 'en') {
+                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_KWF, $l, true);
+                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_KWF, $l, true), serialize($c));
 
-            $cacheFileName = null;
-            $c = Kwf_Trl::getInstance()->_loadCache(Kwf_Trl::SOURCE_KWF, $l, false, $cacheFileName);
-            if ($cacheFileName) file_put_contents($cacheFileName, serialize($c));
+                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_KWF, $l, false);
+                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_KWF, $l, false), serialize($c));
+            }
         }
+    }
+
+    private function _loadTrlArray($source, $target, $plural)
+    {
+        $poParser = $this->_getPoParser($target);
+        foreach ($poParser->entries() as $entry) {
+            $ctx = isset($entry['msgctxt']) ? $entry['msgctxt'][0] : '';
+            $translation = $entry['msgstr'][0];
+            if (isset($entry['msgid_plural'])) {
+                $translation = $entry['msgstr'][1];
+            }
+            if ($translation == '') continue;
+            $c[(isset($entry['msgid_plural']) ? $entry['msgid_plural'][0] : $entry['msgid'][0]).'-'.$ctx] = $translation;
+        }
+        return $c;
+    }
+
+    protected function _getPoParser($targetLanguage)
+    {
+        require_once VENDOR_PATH.'/autoload.php';
+        $poParser = new \Sepia\PoParser;
+        $poParser->parseFile('trl/'.$targetLanguage.'.po');
+        return $poParser;
     }
 
     public function getTypeName()

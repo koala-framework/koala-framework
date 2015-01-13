@@ -450,7 +450,7 @@ class Kwf_Trl
         $this->_cache = array();
     }
 
-    public function _loadCache($source, $target, $plural, &$cacheFileName = null)
+    public function _loadCache($source, $target, $plural)
     {
         if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
         else $codeLanguage = "en";
@@ -460,32 +460,19 @@ class Kwf_Trl
             return;
         }
 
-        if ($plural) $target = $target.'_plural';
-        $cacheId = $source.$target;
-        $cacheFileName = 'build/trl/'.$cacheId;
-        if (!isset($this->_modelKwf) && !isset($this->_modelWeb) && file_exists($cacheFileName)) {
-            $c = unserialize(file_get_contents($cacheFileName));
+        $buildFileName = Kwf_Trl::generateBuildFileName($source, $target, $plural);
+        if (file_exists($buildFileName)) {
+            $c = unserialize(file_get_contents($buildFileName));
         } else {
-            $c = array();
-            $m = $this->_getModel($source);
-            if ($m instanceof Kwf_Model_Xml) {
-                $rows = array();
-                if (file_exists($m->getFilePath())) {
-                    $xml = simplexml_load_file($m->getFilePath());
-                    $rows = $xml->text;
-                }
-            } else {
-                $rows = $m->getRows();
-            }
-            foreach ($rows as $row) {
-                if ($row->$target != '' && $row->$target != '_') {
-                    $ctx = isset($row->context) ? $row->context : '';
-                    $c[$row->{$codeLanguage.($plural ? '_plural' : '')}.'-'.$ctx] = (string)$row->$target;
-                }
-            }
+            throw new Kwf_Exception("$buildFileName was not created in build");
         }
-        $this->_cache[$source][$target] = $c;
+        $this->_cache[$source][$target.($plural ? '_plural' : '')] = $c;
         return $c;
+    }
+
+    public static function generateBuildFileName($source, $target, $plural)
+    {
+        return 'build/trl/'.$source.$target.($plural ? '_plural' : '');
     }
 
     protected function _findElement($needle, $source, $context, $language = null)
