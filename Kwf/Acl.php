@@ -106,6 +106,7 @@ class Kwf_Acl extends Zend_Acl
         $this->deny('guest', 'kwf_user_self');
         $this->allow('admin', 'kwf_debug');
         $this->allow(null, 'kwf_media_upload');
+        $this->deny('guest', 'kwf_media_upload');
         $this->allow('admin', 'edit_role');
         $this->allow(null, 'kwf_spam_set');
         $this->allow(null, 'kwf_debug_session-restart');
