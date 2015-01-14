@@ -95,7 +95,7 @@ class Kwf_Cache_Simple
 
     private static function _processId($cacheId)
     {
-        return base64_encode($cacheId);
+        return str_replace(array('/', '+', '='), array('_', '__', ''), base64_encode($cacheId));
     }
 
     public static function getMemcache()
@@ -129,7 +129,7 @@ class Kwf_Cache_Simple
     //for 'file' backend
     public static function _getFileNameForCacheId($cacheId)
     {
-        $cacheId = base64_encode($cacheId);
+        $cacheId = str_replace('/', '_', base64_encode($cacheId));
         if (strlen($cacheId) > 50) {
             $cacheId = substr($cacheId, 0, 50).md5($cacheId);
         }
