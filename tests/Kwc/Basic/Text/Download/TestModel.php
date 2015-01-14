@@ -9,7 +9,7 @@ class Kwc_Basic_Text_Download_TestModel extends Kwc_Basic_DownloadTag_Model
             'columns' => array('component_id', 'kwf_upload_id', 'filename'),
             'primaryKey' => 'component_id',
             'data'=> array(
-                array('component_id'=>'1013-d1', 'kwf_upload_id'=>1)
+                array('component_id'=>'1013-d1', 'kwf_upload_id'=>'b7715975-0252-4d31-ae9c-589a5f11620a')
             )
         ));
         parent::__construct($config);

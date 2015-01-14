@@ -128,6 +128,9 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
 
     public function testCreatesImageComponentx()
     {
+        $uploadsModel = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Image_UploadsModel');
+        $upload1 = $uploadsModel->getRows()->current();
+
         $c = $this->_root->getComponentById(1008)->getComponent();
         $row = $c->getRow();
         $html = '<p><img src="http://www.vivid-planet.com/assets/web/images/structure/logo.png" /></p>';
@@ -145,19 +148,20 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $this->assertEquals('image', $row->component);
         $this->assertEquals('1', $row->nr);
 
+        $s = new Kwf_Model_Select();
+        $s->whereNotEquals('id', $upload1->id);
+        $upload2 = $uploadsModel->getRows($s)->current();
+        $this->assertEquals('image/png', $upload2->mime_type);
+        $this->assertEquals('png', $upload2->extension);
+        $this->assertEquals('logo', $upload2->filename);
+        $this->assertEquals(file_get_contents($upload2->getFileSource()),
+                            file_get_contents('http://www.vivid-planet.com/assets/web/images/structure/logo.png'));
+
         $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Image_TestModel');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1008-i1'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
-        $this->assertEquals(2, $row->kwf_upload_id);
-
-        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Image_UploadsModel');
-        $row = $m->getRow(2);
-        $this->assertEquals('image/png', $row->mime_type);
-        $this->assertEquals('png', $row->extension);
-        $this->assertEquals('logo', $row->filename);
-        $this->assertEquals(file_get_contents($m->getUploadDir().'/2'),
-                            file_get_contents('http://www.vivid-planet.com/assets/web/images/structure/logo.png'));
+        $this->assertEquals($upload2->id, $row->kwf_upload_id);
     }
 
     public function testCreatesImageComponentHtml()
