@@ -9,7 +9,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
     {
         return 'text/javascript';
     }
-//
+
     public function __construct($fileName)
     {
         parent::__construct($fileName);
@@ -61,8 +61,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
 
             if ($useTrl) {
-                $trlElements = Kwf_Trl::getInstance()->parse($contents, 'js');
-                file_put_contents("$buildFile.min.js.trl", serialize($trlElements));
+                file_put_contents("$buildFile.min.js.trl", serialize(Kwf_Trl_Parser_JsParser::parseContent($contents)));
             }
         }
 
@@ -95,7 +94,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $contents = $this->_getRawContents(null);
             $ret = array(
                 'contents' => $contents,
-                'trlElements' => Kwf_Trl::getInstance()->parse($contents, 'js')
+                'trlElements' => Kwf_Trl_Parser_JsParser::parseContent($contents)
             );
             unset($contents);
         }
