@@ -83,6 +83,7 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         $row->addTo($settings['recipient']);
         $row->addCc($settings['recipient_cc']);
         $row->setSubject(str_replace('%number%', $row->id, $settings['subject']));
+        $row->setCheckSpam($settings['check_spam']);
         $msg = '';
         $formFieldComponents = self::_findFormFields($this->getData()->parent->getChildComponent('-paragraphs'));
         foreach ($formFieldComponents as $c) {
