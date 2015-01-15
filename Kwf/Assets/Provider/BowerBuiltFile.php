@@ -25,45 +25,58 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             $type = $path;
             if (substr($type, -2) == 'js') $type = substr($type, 0, -2);
             if (substr($path, -3) == '-js') $path = substr($path, 0, -3);
-            $files = array(
-                array(
-                    'file' => $path.'.js',
-                    'additionalFiles' => array(
-                        $path.'.css',
+
+            $paths = array($path);
+            if (strpos($path, '-')!==false) $paths[] = str_replace('-', '.', $path);
+
+            $files = array();
+            foreach ($paths as $p) {
+                $files = array_merge(array(
+                    array(
+                        'file' => $p.'.js',
+                        'additionalFiles' => array(
+                            $p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'dist/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'dist/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'build/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'build/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'src/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'src/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'js/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'js/'.$p.'.css',
+                            'css/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'lib/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'lib/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => $p.'/'.$p.'.js',
+                        'additionalFiles' => array(
+                            $p.'/'.$p.'.css',
+                        )
                     )
-                ),
-                array(
-                    'file' => 'dist/'.$path.'.js',
-                    'additionalFiles' => array(
-                        'dist/'.$path.'.css',
-                    )
-                ),
-                array(
-                    'file' => 'build/'.$path.'.js',
-                    'additionalFiles' => array(
-                        'build/'.$path.'.css',
-                    )
-                ),
-                array(
-                    'file' => 'src/'.$path.'.js',
-                    'additionalFiles' => array(
-                        'src/'.$path.'.css',
-                    )
-                ),
-                array(
-                    'file' => 'js/'.$path.'.js',
-                    'additionalFiles' => array(
-                        'js/'.$path.'.css',
-                        'css/'.$path.'.css',
-                    )
-                ),
-                array(
-                    'file' => $path.'/'.$path.'.js',
-                    'additionalFiles' => array(
-                        $path.'/'.$path.'.css',
-                    )
-                )
-            );
+                ));
+            }
             foreach ($files as $f) {
                 if (file_exists($dir.'/'.$f['file'])) {
                     $baseFileName = substr($f['file'], 0, -3);
