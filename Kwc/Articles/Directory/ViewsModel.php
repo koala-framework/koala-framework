@@ -6,8 +6,13 @@ class Kwc_Articles_Directory_ViewsModel extends Kwf_Model_Db
     // referenceModel Users has to be set in project
     protected $_referenceMap = array(
         'Acticle' => 'article_id->Kwc_Articles_Directory_Model',
-        'User' => 'user_id->Users',
     );
+
+    public function __construct(array $config = array())
+    {
+        $this->_referenceMap['User'] = 'user_id->'.get_class(Kwf_Registry::get('userModel'));
+        parent::__construct($config);
+    }
 
     protected function _init()
     {
