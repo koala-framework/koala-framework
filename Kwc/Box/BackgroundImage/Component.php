@@ -7,7 +7,7 @@ class Kwc_Box_BackgroundImage_Component extends Kwc_Basic_Image_Component
         $ret['componentName'] = trlKwfStatic('Background Image');
         $ret['dimensions'] = array(
             'original'=>array(
-                'text' => trlKwf('Original'),
+                'text' => trlKwfStatic('Original'),
                 'width' => 0,
                 'height' => 0,
                 'cover' => true

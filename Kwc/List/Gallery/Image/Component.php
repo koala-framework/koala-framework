@@ -9,7 +9,7 @@ class Kwc_List_Gallery_Image_Component extends Kwc_Basic_ImageEnlarge_Component
 
         $ret['dimensions'] = array(
             'fullWidth'=>array(
-                'text' => trlKwf('full width'),
+                'text' => trlKwfStatic('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
                 'cover' => true,

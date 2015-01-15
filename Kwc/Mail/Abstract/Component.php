@@ -33,7 +33,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $ret['replyEmail'] = null;
         $ret['bcc'] = null;
         $ret['returnPath'] = null;
-        $ret['subject'] = trlKwf('Automatically sent e-mail');
+        $ret['subject'] = trlKwfStatic('Automatically sent e-mail');
         $ret['attachImages'] = false;
         $ret['trackViews'] = false;
         $ret['docType'] = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';

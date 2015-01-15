@@ -8,7 +8,7 @@ class Kwc_News_Month_Directory_Component extends Kwc_Directories_Month_Directory
         $ret['generators']['detail']['model'] = 'Kwc_News_Directory_Model';
 
         //für News-Kategorien Box
-        $ret['categoryName'] = trlKwf('Months');
+        $ret['categoryName'] = trlKwfStatic('Months');
 
         $ret['dateColumn'] = 'publish_date';
 

@@ -11,7 +11,7 @@ class Kwc_Basic_FullWidthImage_Component extends Kwc_TextImage_ImageEnlarge_Comp
         $ret['defineWidth'] = false;
         $ret['dimensions'] = array(
             'default'=>array(
-                'text' => trlKwf('full width'),
+                'text' => trlKwfStatic('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
                 'cover' => true
