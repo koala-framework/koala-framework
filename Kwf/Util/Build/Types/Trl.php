@@ -21,13 +21,37 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
                 $langs[] = $lang;
             }
         }
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            foreach(Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::getFlag($c, 'hasAvailableLanguages')) {
-                    foreach (call_user_func(array($c, 'getAvailableLanguages'), $c) as $i) {
-                        if (!in_array($i, $langs)) $langs[] = $i;
+        try {
+            if (Kwf_Component_Data_Root::getComponentClass()) {
+                foreach(Kwc_Abstract::getComponentClasses() as $c) {
+                    if (Kwc_Abstract::getFlag($c, 'hasAvailableLanguages')) {
+                        foreach (call_user_func(array($c, 'getAvailableLanguages'), $c) as $i) {
+                            if (!in_array($i, $langs)) $langs[] = $i;
+                        }
                     }
                 }
+            }
+        } catch(Kwf_Exception $e) {
+            $exceptionLocation = null;
+            foreach ($e->getTrace() as $trace) {
+                if (strpos($trace['file'], 'Kwf/Trl.php') === false
+                    && (
+                        $trace['function'] == 'trlKwf' || $trace['function'] == 'trl'
+                        || $trace['function'] == 'trlcKwf' || $trace['function'] == 'trlc'
+                        || $trace['function'] == 'trlpKwf' || $trace['function'] == 'trlp'
+                        || $trace['function'] == 'trlcpKwf' || $trace['function'] == 'trlcp'
+                    )
+                ) {
+                    $exceptionLocation = $trace;
+                    break;
+                }
+            }
+            if ($exceptionLocation) {
+                $file = $exceptionLocation['file'];
+                $line = $exceptionLocation['line'];
+                throw new Kwf_Exception("In getSettings-method only static version of trl is allowed $file:$line");
+            } else {
+                throw $e;
             }
         }
 
