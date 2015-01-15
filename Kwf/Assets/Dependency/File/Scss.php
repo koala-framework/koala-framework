@@ -52,13 +52,21 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             if (!isset($loadPath)) {
                 $loadPath = array();
                 foreach (glob(VENDOR_PATH.'/bower_components/*') as $p) {
-                    if (!file_exists($p.'/bower.json')) continue;
-                    $bower = json_decode(file_get_contents($p.'/bower.json'));
-                    if (!isset($bower->main) || !is_string($bower->main)) continue;
-                    $mainExt = substr($bower->main, -5);
-                    if ($mainExt != '.scss' && $mainExt != '.sass') continue;
-                    $mainDir = substr($bower->main, 0, strrpos($bower->main, '/'));
-                    $loadPath[] = $p.'/'.$mainDir;
+                    $bowerMain = null;
+                    $mainExt = null;
+                    if (file_exists($p.'/bower.json')) {
+                        $bower = json_decode(file_get_contents($p.'/bower.json'));
+                        if (isset($bower->main) && !is_string($bower->main)) {
+                            $bowerMain = $bower->main;
+                            $mainExt = substr($bowerMain, -5);
+                        }
+                    }
+                    if ($mainExt == '.scss' || $mainExt == '.sass') {
+                        $mainDir = substr($bowerMain, 0, strrpos($bowerMain, '/'));
+                        $loadPath[] = $p.'/'.$mainDir;
+                    } else if (file_exists($p.'/scss')) {
+                        $loadPath[] = $p.'/scss';
+                    }
                 }
                 $loadPath[] = './scss';
                 $loadPath[] = KWF_PATH.'/sass/Kwf/stylesheets';
