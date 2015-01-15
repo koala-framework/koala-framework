@@ -56,7 +56,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     $mainExt = null;
                     if (file_exists($p.'/bower.json')) {
                         $bower = json_decode(file_get_contents($p.'/bower.json'));
-                        if (isset($bower->main) && !is_string($bower->main)) {
+                        if (isset($bower->main) && is_string($bower->main)) {
                             $bowerMain = $bower->main;
                             $mainExt = substr($bowerMain, -5);
                         }
