@@ -26,28 +26,66 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             if (substr($type, -2) == 'js') $type = substr($type, 0, -2);
             if (substr($path, -3) == '-js') $path = substr($path, 0, -3);
             $files = array(
-                $path.'.js',
-                'dist/'.$path.'.js',
-                'build/'.$path.'.js',
-                'src/'.$path.'.js',
-                'js/'.$path.'.js',
-                $path.'/'.$path.'.js',
+                array(
+                    'file' => $path.'.js',
+                    'additionalFiles' => array(
+                        $path.'.css',
+                    )
+                ),
+                array(
+                    'file' => 'dist/'.$path.'.js',
+                    'additionalFiles' => array(
+                        'dist/'.$path.'.css',
+                    )
+                ),
+                array(
+                    'file' => 'build/'.$path.'.js',
+                    'additionalFiles' => array(
+                        'build/'.$path.'.css',
+                    )
+                ),
+                array(
+                    'file' => 'src/'.$path.'.js',
+                    'additionalFiles' => array(
+                        'src/'.$path.'.css',
+                    )
+                ),
+                array(
+                    'file' => 'js/'.$path.'.js',
+                    'additionalFiles' => array(
+                        'js/'.$path.'.css',
+                        'css/'.$path.'.css',
+                    )
+                ),
+                array(
+                    'file' => $path.'/'.$path.'.js',
+                    'additionalFiles' => array(
+                        $path.'/'.$path.'.css',
+                    )
+                )
             );
             foreach ($files as $f) {
-                if (substr($f, -6) == '.js.js') $f = substr($f, 0, -3);
-                if (file_exists($dir.'/'.$f)) {
-                    $baseFileName = substr($f, 0, -3);
+                if (file_exists($dir.'/'.$f['file'])) {
+                    $baseFileName = substr($f['file'], 0, -3);
                     if (file_exists($dir.'/'.$baseFileName.'.min.js') && file_exists($dir.'/'.$baseFileName.'.min.map')) {
                         //use shipped minimied+map file if exists
-                        $jsDep = new Kwf_Assets_Dependency_File_JsPreBuilt($type.'/'.$f, $type.'/'.$baseFileName.'.min.js', $type.'/'.$baseFileName.'.min.map');
+                        $jsDep = new Kwf_Assets_Dependency_File_JsPreBuilt($type.'/'.$f['file'], $type.'/'.$baseFileName.'.min.js', $type.'/'.$baseFileName.'.min.map');
                     } else {
-                        $jsDep = new Kwf_Assets_Dependency_File_Js($type.'/'.$f);
+                        $jsDep = new Kwf_Assets_Dependency_File_Js($type.'/'.$f['file']);
                     }
-                    if (file_exists($dir.'/'.substr($f, 0, -2).'css')) {
-                        $ret = new Kwf_Assets_Dependency_Dependencies(array(
-                            $jsDep,
-                            new Kwf_Assets_Dependency_File_Css($type.'/'.substr($f, 0, -2).'css'),
-                        ), $dependencyName);
+                    $deps = array();
+                    foreach ($f['additionalFiles'] as $i) {
+                        if (file_exists($dir.'/'.$i)) {
+                            if (substr($i, -4) == '.css') {
+                                $deps[] = new Kwf_Assets_Dependency_File_Css($type.'/'.$i);
+                            } else if (substr($i, -3) == '.js') {
+                                $deps[] = new Kwf_Assets_Dependency_File_Js($type.'/'.$i);
+                            }
+                        }
+                    }
+                    if ($deps) {
+                        array_unshift($deps, $jsDep);
+                        $ret = new Kwf_Assets_Dependency_Dependencies($deps, $dependencyName);
                         break;
                     } else {
                         $ret = $jsDep;
