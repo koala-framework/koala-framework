@@ -11,7 +11,7 @@ Ext.extend(Kwc.Directories.CategorySimple.Plugin, Ext.util.Observable,
         if (gridPanel instanceof Kwc.Directories.Item.Directory.TabsPanel) {
             gridPanel = gridPanel.grid;
         }
-        gridPanel.on('beforerendergrid', function(grid) {
+        gridPanel.grid.on('beforerendergrid', function(grid) {
             grid.getTopToolbar().add({
                 text    : this.text,
                 handler : function(o, p) {
