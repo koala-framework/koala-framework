@@ -8,17 +8,7 @@ class Kwc_Trl_StaticTextsForm_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        Kwf_Registry::get('config')->languages = array('de', 'en');
-        Kwf_Trl::getInstance()->setWebCodeLanguage('de');
-        Kwf_Trl::getInstance()->setModel(new Kwc_Trl_StaticTextsForm_TrlModelWeb(), Kwf_Trl::SOURCE_WEB);
         parent::setUp('Kwc_Trl_StaticTextsForm_Root');
-    }
-
-    public function tearDown()
-    {
-        Kwf_Trl::getInstance()->setWebCodeLanguage(null);
-        Kwf_Trl::getInstance()->setModel(null, Kwf_Trl::SOURCE_WEB);
-        parent::tearDown();
     }
 
     public function testFormTranslate()

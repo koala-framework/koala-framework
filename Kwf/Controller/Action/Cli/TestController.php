@@ -154,8 +154,6 @@ class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli
         $suite = new Kwf_Test_TestSuite();
 
         Kwf_Model_Abstract::clearInstances();
-        Kwf_Trl::getInstance()->setModel(null, 'web');
-        Kwf_Trl::getInstance()->setModel(null, 'kwf');
 
         $result = $runner->doRun(
             $suite,
