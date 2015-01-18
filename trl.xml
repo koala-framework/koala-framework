@@ -478,7 +478,7 @@
 <mk>Комент</mk>
 <sl>Komentar</sl>
 <es>Comentario</es>
-<ru>Коментарий</ru>
+<ru>Комментарий</ru>
 <es_CL>Comentario</es_CL>
 <hr>Komentar</hr>
 <uk>Коментарі</uk>
@@ -659,7 +659,7 @@
 <de>E-Mail</de>
 <fr>E-mail</fr>
 <es>E-Mail</es>
-<ru>Электронная почта</ru>
+<ru>E-mail</ru>
 <id>85</id>
 <ro>E-mail</ro>
 <mk>E-Mail</mk>
@@ -765,7 +765,7 @@
 <de>E-Mail</de>
 <fr>E-mail</fr>
 <es>E-Mail</es>
-<ru>Электронная почта</ru>
+<ru>E-mail</ru>
 <id>99</id>
 <ro>E-mail</ro>
 <sl>E-naslov</sl>
@@ -3808,7 +3808,7 @@
 <id>501</id>
 <ro>Poziţie</ro>
 <sl>Položaj</sl>
-<ru>Положение</ru>
+<ru>Позиция</ru>
 <uk>Положення</uk>
 <ua>Розміщення</ua>
 </text>
@@ -3898,7 +3898,7 @@
 <id>518</id>
 <ro>Caracteristici font</ro>
 <sl>Pisava</sl>
-<ru>Стиль шрифта</ru>
+<ru>Насыщенность шрифта</ru>
 <uk>Стиль шрифту</uk>
 <ua>Стиль шрифта</ua>
 </text>
@@ -5693,7 +5693,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Telefon</de>
 <fr>Téléphone</fr>
 <es>Teléfono</es>
-<ru>телефон</ru>
+<ru>Телефон</ru>
 <id>807</id>
 <ro>Telefon</ro>
 <sl>Telefon</sl>
@@ -14889,7 +14889,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Visible Pictures</en>
-<ru>Выдимые изображения</ru>
+<ru>Видимые изображения</ru>
 <de>Sichtbare Bilder</de>
 <id>2263</id>
 </text>
@@ -14899,5 +14899,18 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Wähle eine Zahl wie viele Listeneinträge sichtbar sein sollen und verstecke die anderen hinter einem "more"-button</de>
 <id>2264</id>
 </text>
+<text>
+<en>Done</en>
+<id>2265</id>
+<de>Fertig</de>
+<ro>Finalizat</ro>
+<sl>Končano</sl>
+<ru>Готово</ru>
+<ua>Готово</ua>
+</text>
+<text>
+<en>Action</en>
+<id>2266</id>
+<ru>Действие</ru>
+</text>
 </trl>
-
