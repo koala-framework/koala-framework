@@ -123,13 +123,14 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             //eg. FontFaceIcomoon, FontFaceFontAwesome, FontFaceIonicons
             $bowerName = substr($dependencyName, 8);
             $bowerName[0] = strtolower($bowerName[0]);
-
             if (file_exists('vendor/bower_components/'.$bowerName.'/fonts.css')) {
                 $ret = new Kwf_Assets_Dependency_File_Css($bowerName.'/fonts.css');
             } else if (file_exists('vendor/bower_components/'.$bowerName.'-font/fonts.css')) {
                 $ret = new Kwf_Assets_Dependency_File_Css($bowerName.'-font/fonts.css');
             } else if (file_exists('vendor/bower_components/'.$bowerName.'-fonts/fonts.css')) {
-                $ret = new Kwf_Assets_Dependency_File_Css($bowerName.'-fonts/fonts.css');
+                $ret = new Kwf_Assets_Dependency_File_Css($bowerName . '-fonts/fonts.css');
+            } else if (file_exists('vendor/bower_components/'.$bowerName.'-font/css/'.$bowerName.'-font.css')) {
+                $ret = new Kwf_Assets_Dependency_File_Css($bowerName.'-font/css/'.$bowerName.'-font.css');
 
             } else if (file_exists('vendor/bower_components/'.$bowerName)) {
                 $ret = new Kwf_Assets_Dependency_FontFace($bowerName, $bowerName);
