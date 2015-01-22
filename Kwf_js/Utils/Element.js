@@ -37,7 +37,7 @@ Kwf.Utils.Element.isVisible = function elementIsVisible(el) {
 
     /* variant 3: manuallycheck visiblity+display, basically what ext2 does */
     var ret = true;
-    while (el && el.tagName.toLowerCase() != "body") {
+    while (el && el.tagName && el.tagName.toLowerCase() != "body") {
         var vis = !($(el).css('visibility') == 'hidden' || $(el).css('display') == 'none');
         if (!vis) {
             ret = false;
