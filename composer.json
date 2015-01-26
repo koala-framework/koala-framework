@@ -1,10 +1,6 @@
 {
     "name": "koala-framework/koala-framework",
     "description": "Framework and CMS based on Zend Framework and ExtJS",
-    "repositories": [{
-        "type": "vcs",
-        "url": "https://github.com/Ben-Ho/PHP-po-parser"
-    }],
     "homepage": "http://www.koala-framework.org/",
     "license": "BSD-2-Clause",
     "require": {
@@ -22,7 +18,7 @@
         "koala-framework/file-watcher": "*",
         "symfony/console": "~2.5",
         "symfony/process": "~2.5",
-        "sepia/po-parser": "dev-master"
+        "sepia/po-parser": "4.2.0"
     },
     "extra": {
         "require-bower": {
