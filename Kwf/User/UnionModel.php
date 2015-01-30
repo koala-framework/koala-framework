@@ -18,6 +18,10 @@ class Kwf_User_UnionModel extends Kwf_Model_Union
                         $this->_authMethods[$km.'_'.$ka] = new Kwf_User_Auth_Union_AutoLogin(
                             $auth, $this
                         );
+                    } else if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+                        $this->_authMethods[$km.'_'.$ka] = new Kwf_User_Auth_Union_Redirect(
+                            $auth, $this
+                        );
                     } else {
                         throw new Kwf_Exception_NotYetImplemented();
                     }
