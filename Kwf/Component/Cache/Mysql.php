@@ -179,6 +179,9 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         if ($checkIncludeIds) {
             $ids = array_keys($this->_fetchIncludesTree(array_keys($checkIncludeIds)));
             if ($ids) {
+                foreach ($ids as &$id) {
+                    $id = (string)$id;
+                }
                 $s->whereEquals('component_id', $ids);
                 if ($log) {
                     foreach ($ids as $id) {
