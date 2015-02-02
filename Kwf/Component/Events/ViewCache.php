@@ -227,7 +227,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
         //the component itself
         $this->_updates[] = array(
             //remove all types
-            'component_id' => $event->component->componentId
+            'component_id' => (string)$event->component->componentId
         );
         $this->_log("component_id={$event->component->componentId}");
 

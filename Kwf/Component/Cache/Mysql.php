@@ -74,7 +74,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         if ($data === false || !is_array($data)) {
             Kwf_Benchmark::count('comp cache mysql');
             $select = $this->getModel('cache')->select()
-                ->whereEquals('component_id', $componentId)
+                ->whereEquals('component_id', (string)$componentId)
                 ->whereEquals('renderer', $renderer)
                 ->whereEquals('type', $type)
                 ->whereEquals('deleted', false)
@@ -195,7 +195,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         foreach ($partialIds as $componentId => $values) {
             $select = $model->select();
             $select->where(new Kwf_Model_Select_Expr_And(array(
-                new Kwf_Model_Select_Expr_Equals('component_id', $componentId),
+                new Kwf_Model_Select_Expr_Equals('component_id', (string)$componentId),
                 new Kwf_Model_Select_Expr_Equals('type', 'partial'),
                 new Kwf_Model_Select_Expr_Equals('value', $values),
                 new Kwf_Model_Select_Expr_LowerEqual('microtime', $microtime)
@@ -226,7 +226,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
         foreach ($componentIds as $componentId) {
 
-            $i = $componentId;
+            $i = (string)$componentId;
             if (!isset($checkedIds[$i])) {
                 $checkedIds[$i] = true;
                 $ids[] = $i;
