@@ -85,7 +85,7 @@ abstract class Kwf_Component_Abstract_ExtConfig_Abstract
             if ($pos !== false && substr($title, $pos + 1, 1) !== ' ') $title = substr(strrchr($title, '.'), 1);
         }
 
-        if (!$icon) $icon = $this->_getSetting('componentIcon');
+        if (!$icon) $icon = new Kwf_Asset($this->_getSetting('componentIcon'));
         if ($icon instanceof Kwf_Asset) $icon = $icon->__toString();
         $ret = array(
             'xtype' => $xtype,

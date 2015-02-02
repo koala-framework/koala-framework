@@ -9,7 +9,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlKwfStatic('Paragraphs'),
-            'componentIcon' => new Kwf_Asset('page')
+            'componentIcon' => 'page'
         ));
         $ret['childModel'] = 'Kwc_Paragraphs_Model';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/Panel.js';

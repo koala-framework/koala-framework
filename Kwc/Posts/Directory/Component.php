@@ -5,7 +5,7 @@ class Kwc_Posts_Directory_Component extends Kwc_Directories_Item_Directory_Compo
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Posts');
-        $ret['componentIcon'] = new Kwf_Asset('comments');
+        $ret['componentIcon'] = 'comments';
         $ret['childModel'] = 'Kwc_Posts_Directory_Model';
 
         $ret['generators']['detail']['class'] = 'Kwf_Component_Generator_PseudoPage_Table';
