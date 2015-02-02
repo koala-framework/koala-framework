@@ -6,8 +6,8 @@ class Kwc_Legacy_List_Carousel_Component extends Kwc_Abstract_List_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Stage');
         $ret['generators']['child']['component'] = 'Kwc_Legacy_List_Carousel_Image_Component';
-        $ret['assets']['files'][] = 'kwf/Kwc/List/Carousel/Carousel.js';
-        $ret['assets']['files'][] = 'kwf/Kwc/List/Carousel/NextPreviousLinks.js';
+        $ret['assetsDefer']['files'][] = 'kwf/Kwc/Legacy/List/Carousel/Carousel.js';
+        $ret['assetsDefer']['files'][] = 'kwf/Kwc/Legacy/List/Carousel/NextPreviousLinks.js';
         $ret['assetsDefer']['dep'][] = 'KwfList';
         return $ret;
     }
