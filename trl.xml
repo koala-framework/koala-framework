@@ -2685,15 +2685,15 @@
 </text>
 <text>
 <en>m/d/y</en>
-<de>m/d/y</de>
+<de>d.m.Y</de>
 <id>343</id>
-<ro>l/z/a</ro>
+<ro>m/d/Y</ro>
 <sl>d.m.Y</sl>
-<ru>д.м.г</ru>
-<uk>м/д/р</uk>
-<si>m/d/l</si>
-<ua>м/д/р</ua>
-<hr>m/d/g</hr>
+<ru>d.m.Y</ru>
+<uk>m/d/Y</uk>
+<si>m/d/Y</si>
+<ua>m/d/Y</ua>
+<hr>m/d/Y</hr>
 </text>
 <text>
 <en>of {0}</en>
@@ -3550,9 +3550,9 @@
 <id>447</id>
 <ro>d.m.Y</ro>
 <sl>d.m.Y</sl>
-<ru>д.м.г</ru>
+<ru>d.m.Y</ru>
 <uk>Y-m-d</uk>
-<ua>Р.М.Д.</ua>
+<ua>d.m.Y.</ua>
 </text>
 <text>
 <en>Y-m-d H:i</en>
@@ -3560,9 +3560,9 @@
 <id>448</id>
 <ro>d.m.Y H:i</ro>
 <sl>d.m.Y H:i</sl>
-<ru>д.м.г ч:м</ru>
+<ru>Y.m.d H:i</ru>
 <uk>Y-m-d H:i</uk>
-<ua>д.м.р г:хв</ua>
+<ua>Y.m.d H:i</ua>
 </text>
 <text>
 <en>no selection</en>
