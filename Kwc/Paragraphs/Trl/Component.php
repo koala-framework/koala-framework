@@ -5,7 +5,7 @@ class Kwc_Paragraphs_Trl_Component extends Kwc_Chained_Trl_Component
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['componentIcon'] = new Kwf_Asset('page');
+        $ret['componentIcon'] = 'page';
         $ret['generators']['paragraphs']['class'] = 'Kwc_Paragraphs_Trl_Generator';
         $ret['childModel'] = 'Kwc_Paragraphs_Trl_Model';
         $ret['extConfig'] = 'Kwc_Paragraphs_Trl_ExtConfig';

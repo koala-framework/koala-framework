@@ -5,7 +5,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Menu');
-        $ret['componentIcon'] = new Kwf_Asset('layout');
+        $ret['componentIcon'] = 'layout';
         $ret['cssClass'] = 'webStandard webMenu webListNone printHidden';
         $ret['showParentPage'] = false;
         $ret['showParentPageLink'] = false;

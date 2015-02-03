@@ -5,7 +5,7 @@ class Kwc_Basic_Image_Component extends Kwc_Abstract_Image_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Image');
-        $ret['componentIcon'] = new Kwf_Asset('picture');
+        $ret['componentIcon'] = 'picture';
         $ret['imgCssClass'] = '';
         $ret['emptyImage'] = false; // eg. 'Empty.jpg' in same folder
         return $ret;

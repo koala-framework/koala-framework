@@ -16,6 +16,7 @@ class Kwf_Data_Kwc_ComponentIcon extends Kwf_Data_Abstract
             return '';
         }        $class = $classes[$row->component];
         $name = Kwc_Abstract::getSetting($class, 'componentIcon');
+        $name = new Kwf_Asset($name);
         return (string)$name;
     }
 }

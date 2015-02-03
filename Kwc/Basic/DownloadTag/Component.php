@@ -7,7 +7,7 @@ class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Compone
         $ret = array_merge(parent::getSettings(), array(
             'ownModel'     => 'Kwc_Basic_DownloadTag_Model',
             'componentName' => trlKwfStatic('Download'),
-            'componentIcon' => new Kwf_Asset('folder_link'),
+            'componentIcon' => 'folder_link',
         ));
         $ret['dataClass'] = 'Kwc_Basic_DownloadTag_Data';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
