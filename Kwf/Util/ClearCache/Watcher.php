@@ -212,7 +212,7 @@ class Kwf_Util_ClearCache_Watcher
 
         $eventsQueue = array();
         $lastChange = false;
-        while(true) {
+        while($proc->isRunning()) {
 
             if ($lastChange && $lastChange+($bufferUsecs/1000000) < microtime(true)) {
                 $eventsQueue = array_unique($eventsQueue);
@@ -330,6 +330,7 @@ class Kwf_Util_ClearCache_Watcher
             }
 
             $event = trim($proc->getIncrementalOutput());
+            echo $proc->getIncrementalErrorOutput();
 
             if (!$event) {
                 usleep($bufferUsecs/2);
@@ -339,8 +340,9 @@ class Kwf_Util_ClearCache_Watcher
 
             $lastChange = microtime(true);
 
+
         }
-        $proc->close();
+        echo $proc->getIncrementalErrorOutput();
         exit;
     }
 
