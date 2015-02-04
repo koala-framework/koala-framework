@@ -38,16 +38,18 @@ class Kwf_Loader
             $namespaces = array();
             $composerNamespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
             foreach ($composerNamespaces as $namespace => $path) {
+                $namespaces[$namespace] = $path;
                 if (strpos($namespace, '\\') === false && substr($namespace, -1) != '_') {
                     $namespace = $namespace.'_';
+                    $namespaces[$namespace] = $path;
                 }
-                $namespaces[$namespace] = $path;
             }
         }
         static $classMap;
         if (!isset($classMap)) {
             $classMap = include VENDOR_PATH.'/composer/autoload_classmap.php';
         }
+
         if (isset($classMap[$class])) {
             $file = $classMap[$class];
         } else {
