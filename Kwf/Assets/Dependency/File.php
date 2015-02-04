@@ -14,6 +14,9 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             throw new Kwf_Exception("Invalid filename");
         }
         $this->_fileName = $fileNameWithType;
+        if (strpos($fileNameWithType, '\\') !== false) {
+            throw new Kwf_Exception("Infalid filename, must not contain \\, use / instead");
+        }
 
         //check commented out, only required for debugging
         //if (!file_exists($this->getAbsoluteFileName())) {
@@ -134,7 +137,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             foreach ($it as $file) {
                 $f = $file->getPathname();
                 $f = substr($f, strlen($paths[$pathType]));
-                $f = $pathType . $f;
+                $f = $pathType . str_replace('\\', '/', $f);
                 $files[] = self::createDependency($f, $providerList);
             }
             $ret = new Kwf_Assets_Dependency_Dependencies($files, $fileName.'*');
