@@ -817,6 +817,7 @@
 <si>kliknite tukaj</si>
 <ua>Натисніть сюди</ua>
 <bg>натисни тук</bg>
+<hu>Kattintson ide</hu>
 </text>
 <text>
 <en>Name</en>
@@ -2065,7 +2066,7 @@
 <ru>Сохранить и Вернуться</ru>
 <uk>Зберегти та Повернутися на попередню сторінку</uk>
 <si>Shraniti in nazaj</si>
-<hr>save and back</hr>
+<hr>Spremi i natrag</hr>
 <ua>Зберегти та повернутися назад</ua>
 <bg>Запамети и се върни назад</bg>
 </text>
@@ -2312,6 +2313,7 @@
 <si>Zapri ta tab</si>
 <ua>Закрийте вікно</ua>
 <hr>Zatvara ovaj tab</hr>
+<hu>Bezárás</hu>
 </text>
 <text>
 <en>The value in this field is invalid</en>
@@ -3963,6 +3965,7 @@
 <es_CL>Color</es_CL>
 <uk>Колір</uk>
 <ua>Колір</ua>
+<hu>Szín</hu>
 </text>
 <text>
 <en>Font Weight</en>
@@ -4091,6 +4094,7 @@
 <ru>Категории</ru>
 <uk>Категорії</uk>
 <ua>Категорії</ua>
+<hu>Katergóriák</hu>
 </text>
 <text>
 <en>Request password</en>
@@ -5264,6 +5268,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Trenutno izbrana kategorija:</sl>
 <ru>Текущая категория:</ru>
 <ua>Актуальна категорія:</ua>
+<hu>Aktuális kategória:</hu>
 </text>
 <text>
 <en>Search term</en>
@@ -5418,6 +5423,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Zapri</sl>
 <ru>Закрыть</ru>
 <ua>Закрити</ua>
+<hu>Bezárás</hu>
 </text>
 <text>
 <en>Link</en>
@@ -5580,6 +5586,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Košarica</sl>
 <ru>Корзина</ru>
 <ua>Корзина</ua>
+<hu>Kosár</hu>
 </text>
 <text>
 <en>To cart</en>
@@ -5607,6 +5614,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Vaša košarica je prazna.</sl>
 <ru>Ваша корзина пуста</ru>
 <ua>Ваша корзина порожня</ua>
+<hu>A kosár üres</hu>
 </text>
 <text>
 <en>add to cart</en>
@@ -5885,6 +5893,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Вернуться в магазин</ru>
 <hr>Povratak na trgovinu</hr>
 <ua>Повернутися до магазину</ua>
+<hu>Vissza a shop-hoz</hu>
 </text>
 <text>
 <en>Back to cart</en>
@@ -5895,6 +5904,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Вернуться в корзину</ru>
 <ua>Повернутися до корзини</ua>
 <si>Nazaj v koš</si>
+<hu>Vissza a kosárhoz</hu>
 </text>
 <text>
 <en>Shop.Cart</en>
@@ -6157,6 +6167,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Colores</es>
 <es_CL>Colores</es_CL>
 <ua>Кольори</ua>
+<hu>Színek </hu>
 </text>
 <text>
 <en>Color small 1</en>
@@ -6333,6 +6344,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Kategorija</sl>
 <ru>Категория</ru>
 <ua>Категорія</ua>
+<hu>Kategória</hu>
 </text>
 <text>
 <en>Domain</en>
@@ -6771,6 +6783,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Prenosi</sl>
 <ru>Загрузки</ru>
 <ua>Завантаження</ua>
+<hu>Letöltések</hu>
 </text>
 <text>
 <en>Image Size</en>
@@ -7194,6 +7207,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Podrobnosti</sl>
 <ru>Детали</ru>
 <ua>Деталі</ua>
+<hu>Részletek</hu>
 </text>
 <text>
 <en>User '%value%' does already exist</en>
@@ -7345,6 +7359,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Повернутися на головну</ua>
 <si>Nazaj na domačo stran</si>
 <bg>Обратно към началната страница</bg>
+<hu>Vissza a főoldalra</hu>
 </text>
 <text>
 <en>Customer added by {0}</en>
@@ -7426,6 +7441,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Vsi</sl>
 <ru>все</ru>
 <ua>всі</ua>
+<hu>összes</hu>
 </text>
 <text>
 <en>Color hex values must be either 3 or 6 characters.</en>
@@ -8211,6 +8227,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>povratak na...</hr>
 <ua>Повернутися до...</ua>
 <si>nazaj k</si>
+<hu>vissza a..</hu>
 </text>
 <text>
 <en>Order at {0}</en>
@@ -9048,6 +9065,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Trenutna cena</sl>
 <ru>Актуальная цена</ru>
 <ua>Актуальна ціна</ua>
+<hu>Aktuális ár</hu>
 </text>
 <text>
 <en>Shop Shipped Mail</en>
@@ -9976,6 +9994,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es_CL>Más »</es_CL>
 <ua>Читати далі »</ua>
 <hr>Više »</hr>
+<hu>Bővebben »</hu>
 </text>
 <text>
 <en>Please insert the web address to your YouTube or Vimeo video.</en>
@@ -10010,10 +10029,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1410</id>
 <ro>« înapoi</ro>
 <sl>« Nazaj</sl>
-<hr>« povratak</hr>
+<hr>« natrag</hr>
 <ru>« назад</ru>
 <ua>« назад</ua>
 <si>"nazaj</si>
+<hu>« vissza</hu>
 </text>
 <text>
 <en>Link to parent page</en>
@@ -10077,6 +10097,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Kategorija</sl>
 <ru>Категория</ru>
 <ua>Категорії</ua>
+<hu>Kategória</hu>
 </text>
 <text>
 <en>Remember password on this computer</en>
@@ -10104,6 +10125,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Vse</sl>
 <ru>Все</ru>
 <ua>Всі</ua>
+<hu>Összes</hu>
 </text>
 <text>
 <en>Can't delete translated pages.</en>
@@ -10469,6 +10491,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es_CL>Más</es_CL>
 <ua>Читати більше</ua>
 <hr>Više</hr>
+<hu>Bővebben</hu>
 </text>
 <text>
 <en>Original Category</en>
@@ -11290,6 +11313,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Назад</ru>
 <hr>Povratak</hr>
 <ua>Назад</ua>
+<hu>Vissza</hu>
 </text>
 <text>
 <en>Shop.ProductList</en>
@@ -11520,9 +11544,10 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Назад к обзору</ru>
 <fr>Retour au sommaire</fr>
 <es>Volver a Información general</es>
-<hr>Povratak na preglednik</hr>
+<hr>Natrag na pregled</hr>
 <ua>Назад до огляду</ua>
 <si>Nazaj na pregled</si>
+<hu>Vissza az áttekintéshez</hu>
 </text>
 <text>
 <en>Guestbook Detail</en>
@@ -12369,6 +12394,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Nisu pronađeni rezultati</hr>
 <ro>Nu a fost gasita nicio inregistrare</ro>
 <uk>Записів не знайдено</uk>
+<hu>Nincs találat</hu>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
@@ -12593,7 +12619,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1833</id>
 <ru>У вас есть вопросы, пожелания или предложения о наших продуктах или сервисе? Отправьте нам отзыв!</ru>
 <ro>Aveti intrebari, solicitari sau sugestii legate de acest produs? Trimiteti-ne feedback-ul dumneavoastra.</ro>
-<hr>Imate pitanja, prijedloge ili želje u vezi ovog proizvoda? Pošaljete nam svoje mišljenje. </hr>
+<hr>Imate pitanja, prijedloge ili želje u vezi ovog proizvoda? Pošaljite nam svoje mišljenje. </hr>
 <ua>Маєте запитання, побажання або пропозиції стосовно наших продуктів та серівсу? Надішліть нам їх!</ua>
 </text>
 <text>
@@ -13358,6 +13384,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Продовжити читання</ua>
 <ro>Citeste mai mult</ro>
 <hr>Više</hr>
+<hu>Bővebben</hu>
 </text>
 <text>
 <en>said</en>
@@ -14352,6 +14379,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2095</id>
 <ro>Inapoi</ro>
 <hr>natrag</hr>
+<hu>vissza</hu>
 </text>
 <text>
 <en>A new comment has been written in your Blog.</en>
