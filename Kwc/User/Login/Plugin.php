@@ -18,7 +18,6 @@ class Kwc_User_Login_Plugin extends Kwf_Component_Plugin_Abstract
             foreach (Kwf_Registry::get('userModel')->getAuthMethods() as $auth) {
                 if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
                     $sampleLinks = array_merge($sampleLinks, $auth->createSampleLoginLinks($absoluteUrl));
-                    break;
                 }
             }
             $sampleLogin = '';
