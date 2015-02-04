@@ -13,7 +13,6 @@ class Kwc_User_Login_Plugin extends Kwf_Component_Plugin_Abstract
         if (strpos($output, '%sampleLogin%') !== false) {
             $absoluteUrl = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($this->_componentId, array('ignoreVisible'=>true))
-                ->getChildComponent('-login')
                 ->getAbsoluteUrl();
             $sampleLinks = array();
             foreach (Kwf_Registry::get('userModel')->getAuthMethods() as $auth) {
