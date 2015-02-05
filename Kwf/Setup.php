@@ -44,6 +44,9 @@ class Kwf_Setup
                 exit(1);
             }
             $baseUrl = substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
+            if (substr($baseUrl, -16) == '/kwf/maintenance') {
+                $baseUrl = substr($baseUrl, 0, -16);
+            }
             $cfg  = "[production]\n";
             $cfg .= "server.domain = \"$_SERVER[HTTP_HOST]\"\n";
             $cfg .= "server.baseUrl = \"$baseUrl\"\n";
