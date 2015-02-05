@@ -48,14 +48,31 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         }
         if (!$useCache) {
             $fileName = $this->getAbsoluteFileName();
-            $loadPath = array(
-                VENDOR_PATH.'/bower_components/compass-mixins/lib',
-                VENDOR_PATH.'/bower_components/susy/sass',
-                './scss',
-                KWF_PATH.'/sass/Kwf/stylesheets',
-            );
+            static $loadPath;
+            if (!isset($loadPath)) {
+                $loadPath = array();
+                foreach (glob(VENDOR_PATH.'/bower_components/*') as $p) {
+                    $bowerMain = null;
+                    $mainExt = null;
+                    if (file_exists($p.'/bower.json')) {
+                        $bower = json_decode(file_get_contents($p.'/bower.json'));
+                        if (isset($bower->main) && is_string($bower->main)) {
+                            $bowerMain = $bower->main;
+                            $mainExt = substr($bowerMain, -5);
+                        }
+                    }
+                    if ($mainExt == '.scss' || $mainExt == '.sass') {
+                        $mainDir = substr($bowerMain, 0, strrpos($bowerMain, '/'));
+                        $loadPath[] = $p.'/'.$mainDir;
+                    } else if (file_exists($p.'/scss')) {
+                        $loadPath[] = $p.'/scss';
+                    }
+                }
+                $loadPath[] = './scss';
+                $loadPath[] = KWF_PATH.'/sass/Kwf/stylesheets';
+                $loadPath = escapeshellarg(implode(PATH_SEPARATOR, $loadPath));
+            }
 
-            $loadPath = escapeshellarg(implode(PATH_SEPARATOR, $loadPath));
             if (substr($fileName, 0, 1) == '.') $fileName = getcwd().substr($fileName, 1);
             $bin = Kwf_Config::getValue('server.nodeSassBinary');
             if (!$bin) {

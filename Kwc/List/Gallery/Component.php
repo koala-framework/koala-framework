@@ -5,7 +5,7 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Gallery');
-        $ret['componentIcon'] = new Kwf_Asset('images.png');
+        $ret['componentIcon'] = 'images.png';
         $ret['componentCategory'] = 'content';
         $ret['generators']['child']['component'] = 'Kwc_List_Gallery_Image_Component';
         $ret['extConfig'] = 'Kwc_List_Gallery_ExtConfig';

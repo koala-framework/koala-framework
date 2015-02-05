@@ -5,7 +5,7 @@ class Kwc_Basic_ImageEnlarge_Component extends Kwc_Basic_Image_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Image Enlarge');
-        $ret['componentIcon'] = new Kwf_Asset('imageEnlarge');
+        $ret['componentIcon'] = 'imageEnlarge';
         $ret['generators']['child']['component']['linkTag'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_Component';
         $ret['generators']['child']['addUrlPart'] = false;
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/ImageEnlarge/ImageUploadField.js';

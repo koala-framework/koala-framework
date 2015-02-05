@@ -13,6 +13,7 @@ class Kwc_Box_BackgroundImage_Component extends Kwc_Basic_Image_Component
                 'cover' => true
             ),
         );
+        $ret['assets']['dep'][] = 'ModernizrCssBackgroundsizecover';
         return $ret;
     }
 

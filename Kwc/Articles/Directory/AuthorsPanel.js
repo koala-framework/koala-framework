@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Articles.Directory');
-Kwc.Articles.Directory.AuthorsPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
+Ext2.namespace('Kwc.Articles.Directory');
+Kwc.Articles.Directory.AuthorsPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
     initComponent: function() {
         this.articlesGrid = new Kwf.Auto.GridPanel({
             controllerUrl: this.articlesControllerUrl,
@@ -31,4 +31,4 @@ Kwc.Articles.Directory.AuthorsPanel = Ext.extend(Kwf.Binding.ProxyPanel, {
         Kwc.Articles.Directory.AuthorsPanel.superclass.setBaseParams.apply(this, arguments);
     }
 }, this);
-Ext.reg('kwc.articles.directory.authorsPanel', Kwc.Articles.Directory.AuthorsPanel);
+Ext2.reg('kwc.articles.directory.authorsPanel', Kwc.Articles.Directory.AuthorsPanel);

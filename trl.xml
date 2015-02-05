@@ -478,7 +478,7 @@
 <mk>Комент</mk>
 <sl>Komentar</sl>
 <es>Comentario</es>
-<ru>Коментарий</ru>
+<ru>Комментарий</ru>
 <es_CL>Comentario</es_CL>
 <hr>Komentar</hr>
 <uk>Коментарі</uk>
@@ -659,7 +659,7 @@
 <de>E-Mail</de>
 <fr>E-mail</fr>
 <es>E-Mail</es>
-<ru>Электронная почта</ru>
+<ru>E-mail</ru>
 <id>85</id>
 <ro>E-mail</ro>
 <mk>E-Mail</mk>
@@ -765,7 +765,7 @@
 <de>E-Mail</de>
 <fr>E-mail</fr>
 <es>E-Mail</es>
-<ru>Электронная почта</ru>
+<ru>E-mail</ru>
 <id>99</id>
 <ro>E-mail</ro>
 <sl>E-naslov</sl>
@@ -817,6 +817,7 @@
 <si>kliknite tukaj</si>
 <ua>Натисніть сюди</ua>
 <bg>натисни тук</bg>
+<hu>Kattintson ide</hu>
 </text>
 <text>
 <en>Name</en>
@@ -1919,6 +1920,7 @@
 <si>Prosimo vnesite vaše geslo. Po tem ko kliknete na spodnjo ikono</si>
 <ua>Будь ласка, натисніть кнопку нижче та введіть свій пароль</ua>
 <bg>Моля въведете Вашата парола. След натискане на долния бутон</bg>
+<hr>Molimo Vas upišite lozinku. Nakon klika na gumb ispod</hr>
 </text>
 <text>
 <en>you are logged in automatically and may use the typed in password</en>
@@ -1931,6 +1933,7 @@
 <si>prijavljeni ste avtomatsko in lahko uporabite vneseno geslo</si>
 <ua>Ви автоматично авторизовані та можете використовувати введений пароль</ua>
 <bg>влизате автоматично в системата и можете да ползвате въведената парола</bg>
+<hr>biti ćete automatski prijavljeni, upisanu lozinku možete koristiti</hr>
 </text>
 <text>
 <en>for future logins.</en>
@@ -1943,6 +1946,7 @@
 <si>za prihodnje prijave.</si>
 <ua>для наступної реєстрації.</ua>
 <bg>за следващи влизания.</bg>
+<hr>za buduće prijave.</hr>
 </text>
 <text>
 <en>Your email address:</en>
@@ -1969,6 +1973,7 @@
 <si>Aktiviranje konta in prijava</si>
 <ua>Активуйте аккаунт та зареєструйтеся</ua>
 <bg>Активиране и регистриране на потребител</bg>
+<hr>Aktiviranje računa i prijava</hr>
 </text>
 <text>
 <en>The repeated password is different - please try again.</en>
@@ -1981,6 +1986,7 @@
 <si>Ponovljeno geslo se razlikuje - prosimo vnesite ga ponolno.</si>
 <ua>Введений пароль відрізняється від попереднього - будь ласка, спробуйте ще раз.</ua>
 <bg>Повторената парола не съвпада, моля, опитайте отново. </bg>
+<hr>Ponovljena lozinka je drugačija - molimo pokušajte ponovo.</hr>
 </text>
 <text>
 <en>An error has occurred</en>
@@ -2011,6 +2017,7 @@
 <si>Link ni možno polinkati samega nase.</si>
 <ua>Лінк не може посилатися сам на себе</ua>
 <bg>Връзката не може да води към себе си</bg>
+<hr>Link ne može voditi sam na sebe</hr>
 </text>
 <text>
 <en>Add Paragraph</en>
@@ -2022,6 +2029,7 @@
 <uk>Додати абзац</uk>
 <si>Vstavite odsatvek</si>
 <ua>Додати розділ</ua>
+<hr>Dodaj odlomak</hr>
 </text>
 <text>
 <en>Save</en>
@@ -2058,7 +2066,7 @@
 <ru>Сохранить и Вернуться</ru>
 <uk>Зберегти та Повернутися на попередню сторінку</uk>
 <si>Shraniti in nazaj</si>
-<hr>save and back</hr>
+<hr>Spremi i natrag</hr>
 <ua>Зберегти та повернутися назад</ua>
 <bg>Запамети и се върни назад</bg>
 </text>
@@ -2120,6 +2128,7 @@
 <uk>Дублювати</uk>
 <si>Podvajati</si>
 <ua>Копіювати</ua>
+<hr>Dupliciraj</hr>
 </text>
 <text>
 <en>Print</en>
@@ -2143,6 +2152,7 @@
 <uk>Експорт в CSV</uk>
 <si>CSV izvoz</si>
 <ua>Експорт CSV</ua>
+<hr>CSV Export</hr>
 </text>
 <text>
 <en>Excel Export</en>
@@ -2154,6 +2164,7 @@
 <uk>Експорт в Excel</uk>
 <si>Excel izvoz</si>
 <ua>Експорт Excel</ua>
+<hr>Excel Export</hr>
 </text>
 <text>
 <en>Do you really wish to remove this entry / these entries?</en>
@@ -2165,6 +2176,7 @@
 <uk>Ви впевнені, що хочете видалити цей запис / ці записи?</uk>
 <si>Želite ta vnos (vnose) res zbrisati?</si>
 <ua>Ви дійсно бажаєте видалити дані?</ua>
+<hr>Želite li ovaj unos/unose stavrno izbrisati?</hr>
 </text>
 <text>
 <en>Add</en>
@@ -2176,6 +2188,7 @@
 <uk>Додати</uk>
 <si>Dodati</si>
 <ua>Додати</ua>
+<hr>Dodaj</hr>
 </text>
 <text>
 <en>Toggle Visibility</en>
@@ -2187,6 +2200,7 @@
 <uk>Перемкнути видимість</uk>
 <si>Preklop vidljivosti </si>
 <ua>Змінити видимість</ua>
+<hr>Uključi/isključi prikaz</hr>
 </text>
 <text>
 <en>Search</en>
@@ -2214,6 +2228,7 @@
 <uk>Можливі призначення</uk>
 <si>Možna destinacija</si>
 <ua>Можливе призначення</ua>
+<hr>Moguće odredište</hr>
 </text>
 <text>
 <en>Hyperlink</en>
@@ -2225,6 +2240,7 @@
 <uk>Гіперпосилання</uk>
 <si>Hyperlink</si>
 <ua>Гіперлінк</ua>
+<hr>Hyperlink</hr>
 </text>
 <text>
 <en>Undo (Ctrl+Z)</en>
@@ -2236,6 +2252,7 @@
 <uk>Відмінити (Ctrl+Z)</uk>
 <si>Razveljavitev (Ctrl+Z)</si>
 <ua>Відмінити (Ctrl+Z)</ua>
+<hr>Undo (Ctrl+Z)</hr>
 </text>
 <text>
 <en>Redo</en>
@@ -2247,6 +2264,7 @@
 <uk>Повторити</uk>
 <si>Ponoviti</si>
 <ua>Повторити</ua>
+<hr>Redo</hr>
 </text>
 <text>
 <en>Character</en>
@@ -2258,6 +2276,7 @@
 <uk>Знак Зодіаку</uk>
 <si>Znak</si>
 <ua>Символ</ua>
+<hr>Znak</hr>
 </text>
 <text>
 <en>Loading...</en>
@@ -2269,6 +2288,7 @@
 <uk>Завантаження...</uk>
 <si>Naložiti...</si>
 <ua>Завантаження...</ua>
+<hr>Učitavanje...</hr>
 </text>
 <text>
 <en>{0} selected row(s)</en>
@@ -2280,6 +2300,7 @@
 <uk>{0} обраний рядок(ки)</uk>
 <si>{0} označene vrste</si>
 <ua>{0} обрані рядки</ua>
+<hr>{0} označeni red</hr>
 </text>
 <text>
 <en>Close this tab</en>
@@ -2291,6 +2312,8 @@
 <uk>Закрити вкладку</uk>
 <si>Zapri ta tab</si>
 <ua>Закрийте вікно</ua>
+<hr>Zatvara ovaj tab</hr>
+<hu>Bezárás</hu>
 </text>
 <text>
 <en>The value in this field is invalid</en>
@@ -2303,6 +2326,7 @@
 <si>Vrednost v polju je neveljavna</si>
 <ua>Значення недійсне</ua>
 <bg>невалидна стойност</bg>
+<hr>Vrijednost ovog polja je nevažeća</hr>
 </text>
 <text>
 <en>January</en>
@@ -2315,6 +2339,7 @@
 <si>januar</si>
 <ua>Січень</ua>
 <bg>януари</bg>
+<hr>Siječanj</hr>
 </text>
 <text>
 <en>February</en>
@@ -2327,6 +2352,7 @@
 <si>februar</si>
 <ua>Лютий</ua>
 <bg>февруари</bg>
+<hr>Veljača</hr>
 </text>
 <text>
 <en>March</en>
@@ -2339,6 +2365,7 @@
 <si>marc</si>
 <ua>Березень</ua>
 <bg>март</bg>
+<hr>Ožujak</hr>
 </text>
 <text>
 <en>April</en>
@@ -2351,6 +2378,7 @@
 <si>april</si>
 <ua>Квітень</ua>
 <bg>април</bg>
+<hr>Travanj</hr>
 </text>
 <text>
 <en>May</en>
@@ -2363,6 +2391,7 @@
 <si>mai</si>
 <ua>Травень</ua>
 <bg>май</bg>
+<hr>Svibanj</hr>
 </text>
 <text>
 <en>June</en>
@@ -2375,6 +2404,7 @@
 <si>juni</si>
 <ua>Червень</ua>
 <bg>юни</bg>
+<hr>Lipanj</hr>
 </text>
 <text>
 <en>July</en>
@@ -2387,6 +2417,7 @@
 <si>juli</si>
 <ua>Липень</ua>
 <bg>юли</bg>
+<hr>Srpanj</hr>
 </text>
 <text>
 <en>August</en>
@@ -2399,6 +2430,7 @@
 <si>avgust</si>
 <ua>Серпень</ua>
 <bg>август</bg>
+<hr>Kolovoz</hr>
 </text>
 <text>
 <en>September</en>
@@ -2411,6 +2443,7 @@
 <si>september</si>
 <ua>Вересень</ua>
 <bg>септември</bg>
+<hr>Rujan</hr>
 </text>
 <text>
 <en>October</en>
@@ -2423,6 +2456,7 @@
 <si>oktober</si>
 <ua>Жовтень</ua>
 <bg>октомври</bg>
+<hr>Listopad</hr>
 </text>
 <text>
 <en>November</en>
@@ -2435,6 +2469,7 @@
 <si>november</si>
 <ua>Листопад</ua>
 <bg>ноември</bg>
+<hr>Studeni</hr>
 </text>
 <text>
 <en>December</en>
@@ -2447,6 +2482,7 @@
 <si>december</si>
 <ua>Грудень</ua>
 <bg>декември</bg>
+<hr>Prosinac</hr>
 </text>
 <text>
 <en>Sunday</en>
@@ -2459,6 +2495,7 @@
 <si>nedelja</si>
 <ua>Неділя</ua>
 <bg>неделя</bg>
+<hr>Nedjelja</hr>
 </text>
 <text>
 <en>Monday</en>
@@ -2471,6 +2508,7 @@
 <si>ponedeljek</si>
 <ua>Понеділок</ua>
 <bg>понеделник</bg>
+<hr>Ponedjeljak</hr>
 </text>
 <text>
 <en>Tuesday</en>
@@ -2483,6 +2521,7 @@
 <si>torek</si>
 <ua>Вівторок</ua>
 <bg>вторник</bg>
+<hr>Utorak</hr>
 </text>
 <text>
 <en>Wednesday</en>
@@ -2495,6 +2534,7 @@
 <si>sreda</si>
 <ua>Середа</ua>
 <bg>сряда</bg>
+<hr>Srijeda</hr>
 </text>
 <text>
 <en>Thursday</en>
@@ -2507,6 +2547,7 @@
 <si>četrtek</si>
 <ua>Четвер</ua>
 <bg>четвъртък</bg>
+<hr>Četvrtak</hr>
 </text>
 <text>
 <en>Friday</en>
@@ -2519,6 +2560,7 @@
 <si>petek</si>
 <ua>П'ятниця</ua>
 <bg>петък</bg>
+<hr>Petak</hr>
 </text>
 <text>
 <en>OK</en>
@@ -2530,6 +2572,7 @@
 <uk>ОК</uk>
 <si>OK</si>
 <ua>ОК</ua>
+<hr>OK</hr>
 </text>
 <text>
 <en>Yes</en>
@@ -2542,6 +2585,7 @@
 <si>Ja</si>
 <ua>Так</ua>
 <bg>да</bg>
+<hr>Da</hr>
 </text>
 <text>
 <en>No</en>
@@ -2554,6 +2598,7 @@
 <si>Ne</si>
 <ua>Ні</ua>
 <bg>не</bg>
+<hr>Ne</hr>
 </text>
 <text>
 <en>Today</en>
@@ -2566,6 +2611,7 @@
 <si>Danes</si>
 <ua>Сьогодні</ua>
 <bg>днес</bg>
+<hr>Danas</hr>
 </text>
 <text>
 <en>This date is before the minimum date</en>
@@ -2577,6 +2623,7 @@
 <uk>Ця дата до мінімальної дати</uk>
 <si>Datum je pred najnižjim  datumom</si>
 <ua>Ця дата настане раніше необхідної</ua>
+<hr>Datum je ispred min. datuma</hr>
 </text>
 <text>
 <en>This date is after the maximum date</en>
@@ -2588,6 +2635,7 @@
 <uk>Ця дата після максимальної дати</uk>
 <si>Datum je za najvišjim datumom</si>
 <ua>Ця дата настане після необхідної</ua>
+<hr>Datum je nakon maks. datuma.</hr>
 </text>
 <text>
 <en>Next Month (Control+Right)</en>
@@ -2599,6 +2647,7 @@
 <uk>Наступний місяць (Ctrl + ➝)</uk>
 <si>naslednji mesec (Control + ➝)</si>
 <ua>Наступний місяць (Control + ➝)</ua>
+<hr>idući mjesec (Ctrl + ➝)</hr>
 </text>
 <text>
 <en>Previous Month (Control+Left)</en>
@@ -2610,6 +2659,7 @@
 <uk>Попередній місяць (Ctrl + ←)</uk>
 <si>zadnji mesec (Control + ←)</si>
 <ua>Попередній місяць (Control + ←) </ua>
+<hr>Prethodni mjesec (Ctrl + ←)</hr>
 </text>
 <text>
 <en>Choose a month (Control+Up/Down to move years)</en>
@@ -2621,6 +2671,7 @@
 <uk>Оберіть місяць (Ctrl + ↑/↓ змінити рік)</uk>
 <si>Izberite mesec (Control + ↑/↓ za premik let)</si>
 <ua>Оберіть місяць (Control+Up/Down для зміни року)</ua>
+<hr>Izaberite mjesec (Ctrl + + ↑/↓ za mijenjanje godina)</hr>
 </text>
 <text>
 <en>{0} (Spacebar)</en>
@@ -2632,17 +2683,19 @@
 <uk>{0} (Пробіл)</uk>
 <si>{0} (tipka presledek)</si>
 <ua>{0} (Пробіл)</ua>
+<hr>{0} (Spacebar)</hr>
 </text>
 <text>
 <en>m/d/y</en>
-<de>m/d/y</de>
+<de>d.m.Y</de>
 <id>343</id>
-<ro>l/z/a</ro>
+<ro>m/d/Y</ro>
 <sl>d.m.Y</sl>
 <ru>d.m.Y</ru>
-<uk>m/d/y</uk>
-<si>m/d/y</si>
-<ua>m/d/y</ua>
+<uk>m/d/Y</uk>
+<si>m/d/Y</si>
+<ua>m/d/Y</ua>
+<hr>m/d/Y</hr>
 </text>
 <text>
 <en>of {0}</en>
@@ -2654,6 +2707,7 @@
 <uk>з {0}</uk>
 <si>od  {0}</si>
 <ua>з {0}</ua>
+<hr>od {0}</hr>
 </text>
 <text>
 <en>First Page</en>
@@ -2666,6 +2720,7 @@
 <si>Prva stran</si>
 <ua>Перша сторінка</ua>
 <bg>първа страница</bg>
+<hr>Prva stranica</hr>
 </text>
 <text>
 <en>Previous Page</en>
@@ -2678,6 +2733,7 @@
 <si>Prejšna stran</si>
 <ua>Попередня сторінка</ua>
 <bg>предишна страница</bg>
+<hr>Prethodna stranica</hr>
 </text>
 <text>
 <en>Next Page</en>
@@ -2690,6 +2746,7 @@
 <si>Naslednja stran</si>
 <ua>Наступна сторінка</ua>
 <bg>следваща страница</bg>
+<hr>Sljedeća stranica</hr>
 </text>
 <text>
 <en>Last Page</en>
@@ -2702,6 +2759,7 @@
 <si>Zadnja stran</si>
 <ua>Остання сторінка</ua>
 <bg>последна страница</bg>
+<hr>Posljednja stranica</hr>
 </text>
 <text>
 <en>Refresh</en>
@@ -2714,6 +2772,7 @@
 <si>Ponovno naložiti</si>
 <ua>оновити</ua>
 <bg>зареди наново</bg>
+<hr>Ponovo učitaj</hr>
 </text>
 <text>
 <en>Displaying {0} - {1} of {2}</en>
@@ -2725,6 +2784,7 @@
 <uk>Показано {0} - {1} з {2}</uk>
 <si>Prikaz {0} - {1} od {2}</si>
 <ua>Відобразити {0} - {1} з {2}</ua>
+<hr>Prikaži {0} - {1} od {2}</hr>
 </text>
 <text>
 <en>No data to display</en>
@@ -2736,6 +2796,7 @@
 <uk>Немає даних для відображення</uk>
 <si>Za prikaz ni podatkov </si>
 <ua>Відсутні дані для відображення</ua>
+<hr>Nema podataka za prikaz.</hr>
 </text>
 <text>
 <en>The minimum length for this field is {0}</en>
@@ -2772,6 +2833,7 @@
 <si>Polje je obvezno</si>
 <ua>Дане поле є обов'язковим</ua>
 <bg>Задължително поле</bg>
+<hr>Ovo polje je obavezno</hr>
 </text>
 <text>
 <en>The minimum value for this field is {0}</en>
@@ -2808,6 +2870,7 @@
 <si>{0} ni veljavno število.</si>
 <ua>{0} недійсний номер.</ua>
 <bg>{0} не е валиден номер</bg>
+<hr>{0} nije važeći broj.</hr>
 </text>
 <text>
 <en>Disabled</en>
@@ -2909,6 +2972,7 @@
 <uk>Напівжирний (Ctrl+B)</uk>
 <si>Krepko (Ctrl+B)</si>
 <ua>(Ctrl+B)</ua>
+<hr>Bold (Ctrl+B)</hr>
 </text>
 <text>
 <en>Make the selected text bold.</en>
@@ -2920,6 +2984,7 @@
 <uk>Зробити виділений текст напівжирним.</uk>
 <si>Napišite označeni tekst krepko:</si>
 <ua>Виділити вибраний текст.</ua>
+<hr>Make the selected text bold.</hr>
 </text>
 <text>
 <en>Italic (Ctrl+I)</en>
@@ -2931,6 +2996,7 @@
 <uk>Курсив (Ctrl+I)</uk>
 <si>Italic (Ctrl+I)</si>
 <ua>Курсив (Ctrl+I)</ua>
+<hr>Italic (Ctrl+I)</hr>
 </text>
 <text>
 <en>Make the selected text italic.</en>
@@ -2942,6 +3008,7 @@
 <uk>Зробити виділений текст курсивом.</uk>
 <si>Napišite označeni tekst italic.</si>
 <ua>Виділити вибраний текст курсивом.</ua>
+<hr>Make the selected text italic.</hr>
 </text>
 <text>
 <en>Underline (Ctrl+U)</en>
@@ -2953,6 +3020,7 @@
 <uk>Підкреслений (Ctrl+U)</uk>
 <si>Podčrtati (Ctrl+U)</si>
 <ua>Підкреслити (Ctrl+U)</ua>
+<hr>Underline (Ctrl+U)</hr>
 </text>
 <text>
 <en>Underline the selected text.</en>
@@ -2964,6 +3032,7 @@
 <uk>Підкреслити виділений текст.</uk>
 <si>Podčrtaj označeni tekst.</si>
 <ua>Підкреслити вибраний текст.</ua>
+<hr>Underline the selected text.</hr>
 </text>
 <text>
 <en>Grow Text</en>
@@ -2975,6 +3044,7 @@
 <uk>Збільшити текст</uk>
 <si>Tekst povečati.</si>
 <ua>Збільшити шрифт.</ua>
+<hr>Povećaj tekst</hr>
 </text>
 <text>
 <en>Increase the font size.</en>
@@ -3191,6 +3261,7 @@
 <ru>Сортировать по возрастанию</ru>
 <uk>Сортувати за зростанням</uk>
 <ua>Сортування від меншого до більшого</ua>
+<hr>Sortiraj uzlazno</hr>
 </text>
 <text>
 <en>Sort Descending</en>
@@ -3201,6 +3272,7 @@
 <ru>Сортировать по убыванию</ru>
 <uk>Сортувати за спаданням</uk>
 <ua>Сортування від більшого до меншого</ua>
+<hr>Sortiraj silazno</hr>
 </text>
 <text>
 <en>Lock Column</en>
@@ -3241,6 +3313,7 @@
 <ru>(Пусто)</ru>
 <uk>(Немає)</uk>
 <ua>(Жодного)</ua>
+<hr>(nema)</hr>
 </text>
 <text>
 <en>Group By This Field</en>
@@ -3361,6 +3434,7 @@
 <ru>Выход</ru>
 <uk>Вийти</uk>
 <ua>Вийти</ua>
+<hr>Odjava</hr>
 </text>
 <text>
 <en>Line</en>
@@ -3480,7 +3554,7 @@
 <sl>d.m.Y</sl>
 <ru>d.m.Y</ru>
 <uk>Y-m-d</uk>
-<ua>d.m.Y</ua>
+<ua>d.m.Y.</ua>
 </text>
 <text>
 <en>Y-m-d H:i</en>
@@ -3488,9 +3562,9 @@
 <id>448</id>
 <ro>d.m.Y H:i</ro>
 <sl>d.m.Y H:i</sl>
-<ru>d.m.Y H:i</ru>
+<ru>Y.m.d H:i</ru>
 <uk>Y-m-d H:i</uk>
-<ua>d.m.Y H:i</ua>
+<ua>Y.m.d H:i</ua>
 </text>
 <text>
 <en>no selection</en>
@@ -3741,9 +3815,9 @@
 <id>493</id>
 <ro>dd.mm.yyyy</ro>
 <sl>dd.mm.yyyy</sl>
-<ru>dd.mm.yyyy</ru>
-<uk>yyyy-mm-dd</uk>
-<ua>dd.mm.yyyy</ua>
+<ru>дд.мм.гггг</ru>
+<uk>рррр-мм-дд</uk>
+<ua>д.м.р.</ua>
 </text>
 <text>
 <en>Margin top</en>
@@ -3808,7 +3882,7 @@
 <id>501</id>
 <ro>Poziţie</ro>
 <sl>Položaj</sl>
-<ru>Положение</ru>
+<ru>Позиция</ru>
 <uk>Положення</uk>
 <ua>Розміщення</ua>
 </text>
@@ -3891,6 +3965,7 @@
 <es_CL>Color</es_CL>
 <uk>Колір</uk>
 <ua>Колір</ua>
+<hu>Szín</hu>
 </text>
 <text>
 <en>Font Weight</en>
@@ -3898,7 +3973,7 @@
 <id>518</id>
 <ro>Caracteristici font</ro>
 <sl>Pisava</sl>
-<ru>Стиль шрифта</ru>
+<ru>Насыщенность шрифта</ru>
 <uk>Стиль шрифту</uk>
 <ua>Стиль шрифта</ua>
 </text>
@@ -4019,6 +4094,7 @@
 <ru>Категории</ru>
 <uk>Категорії</uk>
 <ua>Категорії</ua>
+<hu>Katergóriák</hu>
 </text>
 <text>
 <en>Request password</en>
@@ -5192,6 +5268,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Trenutno izbrana kategorija:</sl>
 <ru>Текущая категория:</ru>
 <ua>Актуальна категорія:</ua>
+<hu>Aktuális kategória:</hu>
 </text>
 <text>
 <en>Search term</en>
@@ -5346,6 +5423,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Zapri</sl>
 <ru>Закрыть</ru>
 <ua>Закрити</ua>
+<hu>Bezárás</hu>
 </text>
 <text>
 <en>Link</en>
@@ -5508,6 +5586,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Košarica</sl>
 <ru>Корзина</ru>
 <ua>Корзина</ua>
+<hu>Kosár</hu>
 </text>
 <text>
 <en>To cart</en>
@@ -5535,6 +5614,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Vaša košarica je prazna.</sl>
 <ru>Ваша корзина пуста</ru>
 <ua>Ваша корзина порожня</ua>
+<hu>A kosár üres</hu>
 </text>
 <text>
 <en>add to cart</en>
@@ -5693,7 +5773,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Telefon</de>
 <fr>Téléphone</fr>
 <es>Teléfono</es>
-<ru>телефон</ru>
+<ru>Телефон</ru>
 <id>807</id>
 <ro>Telefon</ro>
 <sl>Telefon</sl>
@@ -5813,6 +5893,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Вернуться в магазин</ru>
 <hr>Povratak na trgovinu</hr>
 <ua>Повернутися до магазину</ua>
+<hu>Vissza a shop-hoz</hu>
 </text>
 <text>
 <en>Back to cart</en>
@@ -5823,6 +5904,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Вернуться в корзину</ru>
 <ua>Повернутися до корзини</ua>
 <si>Nazaj v koš</si>
+<hu>Vissza a kosárhoz</hu>
 </text>
 <text>
 <en>Shop.Cart</en>
@@ -6085,6 +6167,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Colores</es>
 <es_CL>Colores</es_CL>
 <ua>Кольори</ua>
+<hu>Színek </hu>
 </text>
 <text>
 <en>Color small 1</en>
@@ -6261,6 +6344,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Kategorija</sl>
 <ru>Категория</ru>
 <ua>Категорія</ua>
+<hu>Kategória</hu>
 </text>
 <text>
 <en>Domain</en>
@@ -6699,6 +6783,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Prenosi</sl>
 <ru>Загрузки</ru>
 <ua>Завантаження</ua>
+<hu>Letöltések</hu>
 </text>
 <text>
 <en>Image Size</en>
@@ -7122,6 +7207,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Podrobnosti</sl>
 <ru>Детали</ru>
 <ua>Деталі</ua>
+<hu>Részletek</hu>
 </text>
 <text>
 <en>User '%value%' does already exist</en>
@@ -7273,6 +7359,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Повернутися на головну</ua>
 <si>Nazaj na domačo stran</si>
 <bg>Обратно към началната страница</bg>
+<hu>Vissza a főoldalra</hu>
 </text>
 <text>
 <en>Customer added by {0}</en>
@@ -7354,6 +7441,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Vsi</sl>
 <ru>все</ru>
 <ua>всі</ua>
+<hu>összes</hu>
 </text>
 <text>
 <en>Color hex values must be either 3 or 6 characters.</en>
@@ -8139,6 +8227,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>povratak na...</hr>
 <ua>Повернутися до...</ua>
 <si>nazaj k</si>
+<hu>vissza a..</hu>
 </text>
 <text>
 <en>Order at {0}</en>
@@ -8976,6 +9065,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Trenutna cena</sl>
 <ru>Актуальная цена</ru>
 <ua>Актуальна ціна</ua>
+<hu>Aktuális ár</hu>
 </text>
 <text>
 <en>Shop Shipped Mail</en>
@@ -9903,6 +9993,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Читать дальше »</ru>
 <es_CL>Más »</es_CL>
 <ua>Читати далі »</ua>
+<hr>Više »</hr>
+<hu>Bővebben »</hu>
 </text>
 <text>
 <en>Please insert the web address to your YouTube or Vimeo video.</en>
@@ -9937,10 +10029,11 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1410</id>
 <ro>« înapoi</ro>
 <sl>« Nazaj</sl>
-<hr>« povratak</hr>
+<hr>« natrag</hr>
 <ru>« назад</ru>
 <ua>« назад</ua>
 <si>"nazaj</si>
+<hu>« vissza</hu>
 </text>
 <text>
 <en>Link to parent page</en>
@@ -10004,6 +10097,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Kategorija</sl>
 <ru>Категория</ru>
 <ua>Категорії</ua>
+<hu>Kategória</hu>
 </text>
 <text>
 <en>Remember password on this computer</en>
@@ -10031,6 +10125,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Vse</sl>
 <ru>Все</ru>
 <ua>Всі</ua>
+<hu>Összes</hu>
 </text>
 <text>
 <en>Can't delete translated pages.</en>
@@ -10395,6 +10490,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Читать далее</ru>
 <es_CL>Más</es_CL>
 <ua>Читати більше</ua>
+<hr>Više</hr>
+<hu>Bővebben</hu>
 </text>
 <text>
 <en>Original Category</en>
@@ -10800,6 +10897,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Sehr geehrte/r Frau/Herr {0} {1}</de>
 <ru>Дорогая(ой) {0} {1}</ru>
 <id>2122</id>
+<hr>Poštovana/i gospođo/gospodine {0} {1}</hr>
 </text>
 <text>
 <en>'%value%' is not a valid voucher code</en>
@@ -11215,6 +11313,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Назад</ru>
 <hr>Povratak</hr>
 <ua>Назад</ua>
+<hu>Vissza</hu>
 </text>
 <text>
 <en>Shop.ProductList</en>
@@ -11445,9 +11544,10 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Назад к обзору</ru>
 <fr>Retour au sommaire</fr>
 <es>Volver a Información general</es>
-<hr>Povratak na preglednik</hr>
+<hr>Natrag na pregled</hr>
 <ua>Назад до огляду</ua>
 <si>Nazaj na pregled</si>
+<hu>Vissza az áttekintéshez</hu>
 </text>
 <text>
 <en>Guestbook Detail</en>
@@ -12294,6 +12394,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Nisu pronađeni rezultati</hr>
 <ro>Nu a fost gasita nicio inregistrare</ro>
 <uk>Записів не знайдено</uk>
+<hu>Nincs találat</hu>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
@@ -12518,7 +12619,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1833</id>
 <ru>У вас есть вопросы, пожелания или предложения о наших продуктах или сервисе? Отправьте нам отзыв!</ru>
 <ro>Aveti intrebari, solicitari sau sugestii legate de acest produs? Trimiteti-ne feedback-ul dumneavoastra.</ro>
-<hr>Imate pitanja, prijedloge ili želje u vezi ovog proizvoda? Pošaljete nam svoje mišljenje. </hr>
+<hr>Imate pitanja, prijedloge ili želje u vezi ovog proizvoda? Pošaljite nam svoje mišljenje. </hr>
 <ua>Маєте запитання, побажання або пропозиції стосовно наших продуктів та серівсу? Надішліть нам їх!</ua>
 </text>
 <text>
@@ -13125,6 +13226,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Сохранение</ru>
 <ua>Збереження</ua>
 <ro>Salveaza</ro>
+<hr>Spremi</hr>
 </text>
 <text>
 <en>QuickWrite</en>
@@ -13281,6 +13383,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Продолжить чтение</ru>
 <ua>Продовжити читання</ua>
 <ro>Citeste mai mult</ro>
+<hr>Više</hr>
+<hu>Bővebben</hu>
 </text>
 <text>
 <en>said</en>
@@ -13345,6 +13449,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>нет идентификатора пользователя</ru>
 <ua>no user id</ua>
 <ro>Niciun ID de utilizator</ro>
+<hr>Nema User-Id</hr>
 </text>
 <text>
 <en>Original headline</en>
@@ -13353,6 +13458,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Оригинальное название</ru>
 <ua>Оригінальна назва</ua>
 <ro>Titlul original</ro>
+<hr>Originalni naslov</hr>
 </text>
 <text>
 <en>Your email address will not be published.</en>
@@ -13362,6 +13468,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Ваш электронный адрес не будет опубликован.</ru>
 <ua>Ваша електронна адреса не буде опублікована.</ua>
 <ro>Adresa dumneavoastra de e-mail nu va fi publicata </ro>
+<hr>Vaša E-mail adresa neće biti javno prikazana.</hr>
 </text>
 <text>
 <en>Post Comment</en>
@@ -13370,6 +13477,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Оставить комментарий</ru>
 <ua>Відправити коментар</ua>
 <ro>Trimite comentariu</ro>
+<hr>Pošalji komentar</hr>
 </text>
 <text>
 <en>Blog</en>
@@ -13378,6 +13486,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Блог</ru>
 <ua>Блог</ua>
 <ro>Blog</ro>
+<hr>Blog</hr>
 </text>
 <text>
 <en>Posted on {0}</en>
@@ -13387,6 +13496,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Опубликовано на {0}</ru>
 <ua>Опубліковано {0}</ua>
 <ro>Postat pe {0}</ro>
+<hr>Objevljano {0}</hr>
 </text>
 <text>
 <en>by {0}</en>
@@ -13401,6 +13511,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Эта запись была опубликована в</ru>
 <ua>Цей запис було опубліковано </ua>
 <ro>Acest articol a fost postat in </ro>
+<hr>Ovaj unos izrađen je</hr>
 </text>
 <text>
 <en>This website uses cookies to help us give you the best experience when you visit our website.</en>
@@ -13414,6 +13525,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Ми використовуємо Cookies для найкращої якості роботи сайту.</ua>
 <si>Za pravilno delovanje in preprostejšo uporabo te strani uporabljamo piškotke. </si>
 <ro>Aecst website foloseste cookies pentru a ne ajuat sa va oferim cea mai buna experienta cand ne vizitati website-ul.</ro>
+<hr>Ova stranica koristi kolačiće (Cookies) da nam pomogne da vam pružili bolje korisničko iskustvo.</hr>
 </text>
 <text>
 <en>More information about the use of cookies</en>
@@ -13441,6 +13553,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Прийняти та продовжити</ua>
 <si>Sprejmi in nadaljuj.</si>
 <ro>Accepta&amp;Continua</ro>
+<hr>Prihvati i nastavi</hr>
 </text>
 <text>
 <en>Cookie Opt In / Opt Out</en>
@@ -13451,6 +13564,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Cookie Opt In / Opt Out</ua>
 <si>Piškotki Opt-In/Opt-Out</si>
 <ro>Cookie Opt-In / Opt-Out</ro>
+<hr>Cookie Opt In / Opt Out</hr>
 </text>
 <text>
 <en>Cookies are set when visiting this webpage. Click to deactivate cookies.</en>
@@ -13493,6 +13607,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Сайт створено</ua>
 <si>Spletno stran je izdelal</si>
 <ro>Website dezvoltat de </ro>
+<hr>Stranica izrađena</hr>
 </text>
 <text>
 <en>{0} sent, {1} waiting to send.</en>
@@ -13501,6 +13616,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>{0} отправлено, {1} ожидает отправки.</ru>
 <ua>{0} відправлено, {1} очікує відправки.</ua>
 <ro>{0} trimise, {1} asteapta sa fie trimise</ro>
+<hr>{0} poslano, {1} čeka na slanje.</hr>
 </text>
 <text>
 <en>Unlimited</en>
@@ -13509,6 +13625,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Неограниченный</ru>
 <ua>Необмежений</ua>
 <ro>Nelimitat</ro>
+<hr>Neograničeno</hr>
 </text>
 <text>
 <en>Send testmail to:</en>
@@ -13530,6 +13647,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2109</id>
 <ru>Начать</ru>
 <ro>Start</ro>
+<hr>Pokreni</hr>
 </text>
 <text>
 <en>Resume Sending</en>
@@ -13552,6 +13670,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>← Предыдущий</ru>
 <ua>← Попередня</ua>
 <ro>Anterior</ro>
+<hr>← Prethodni</hr>
 </text>
 <text>
 <en>Next →</en>
@@ -13560,6 +13679,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Следующий →</ru>
 <ua>Наступна →</ua>
 <ro>Urmatoarea</ro>
+<hr>Sljedeći →</hr>
 </text>
 <text>
 <en>Size of Target Image to support High Resolution Displays ("Retina")</en>
@@ -13615,6 +13735,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Содержимое отсутствует</ru>
 <ua>Контент відсутній</ua>
 <ro>Niciun continut</ro>
+<hr>Nema sadržaja</hr>
 </text>
 <text>
 <en>Insert "100%" in both fields to make it responsive.</en>
@@ -13638,6 +13759,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2025</id>
 <ru>Связанные изображения</ru>
 <ro>Imagini legate</ro>
+<hr>Polinkane slike</hr>
 </text>
 <text>
 <en>Links for Footer Logos</en>
@@ -13689,6 +13811,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Señor {0}</es>
 <sk>Pán {0}</sk>
 <ua>Містер {0}</ua>
+<hr>Gospodin {0}</hr>
 </text>
 <text>
 <id>2120</id>
@@ -13708,6 +13831,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2121</id>
 <ru>Вставить</ru>
 <ro>Copiaza</ro>
+<hr>Umetni</hr>
 </text>
 <text>
 <en>Must not include newlines</en>
@@ -13745,6 +13869,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2029</id>
 <ru>Зона изображения</ru>
 <ro>Zona de imagini</ro>
+<hr>Područje slike</hr>
 </text>
 <text>
 <en>Stretch video to maximum width</en>
@@ -13782,6 +13907,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2036</id>
 <ru>Предварительный просмотр</ru>
 <ro>Previzualizare imagine </ro>
+<hr>Predpregled</hr>
 </text>
 <text>
 <en>Caution! Image size of uploaded image does not match minimum requirement.</en>
@@ -13796,6 +13922,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2039</id>
 <ru>Как минимум: </ru>
 <ro>Cel putin:</ro>
+<hr>Najmanje:</hr>
 </text>
 <text>
 <en>don\'t Crop</en>
@@ -13900,6 +14027,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2055</id>
 <ru>Заголовок {0}</ru>
 <ro>Titlul {0}</ro>
+<hr>Naslov {0}</hr>
 </text>
 <text>
 <en>Text 1</en>
@@ -13907,6 +14035,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2056</id>
 <ru>Текст 1</ru>
 <ro>Text 1</ro>
+<hr>Text 1</hr>
 </text>
 <text>
 <en>Text 2</en>
@@ -13914,6 +14043,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2057</id>
 <ru>Текст 2</ru>
 <ro>Text 2</ro>
+<hr>Text 2</hr>
 </text>
 <text>
 <en>Original text 1</en>
@@ -13980,6 +14110,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Імпорт</ua>
 <ru>Импорт</ru>
 <ro>Import</ro>
+<hr>Import</hr>
 </text>
 <text>
 <en>Pasting...</en>
@@ -13988,6 +14119,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Вставка...</ru>
 <ua>Копіювання...</ua>
 <ro>Pasting..</ro>
+<hr>Umetanje...</hr>
 </text>
 <text>
 <en>What sheet do you want to import?</en>
@@ -14039,6 +14171,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Данные не получены</ru>
 <ua>Даних не отримано</ua>
 <ro>Nu exista date primite</ro>
+<hr>Nisu primljeni podaci</hr>
 </text>
 <text>
 <en>Thank you very much for your order.</en>
@@ -14104,12 +14237,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2204</id>
 <de>Recent Posts</de>
 <ua>Нещодавні публікації</ua>
+<hr>Nedavni postovi</hr>
 </text>
 <text>
 <en>Saturday</en>
 <de>Samstag</de>
 <ru>Суббота</ru>
 <id>2065</id>
+<hr>Subota</hr>
 </text>
 <text>
 <en>{0} selected row{1}</en>
@@ -14121,6 +14256,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Bitte warten...</de>
 <ru>Пожалуйста, подождите...</ru>
 <id>2067</id>
+<hr>Molimo pričekajte...</hr>
 </text>
 <text>
 <en>This field should be an e-mail address in the format "user@example.com"</en>
@@ -14209,6 +14345,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Vorschau funktioniert nur mit Empfängern im Newsletter</de>
 <id>2084</id>
 <ro>Acest instrument funcționează doar cu beneficiarii Newsletter</ro>
+<hr>Pregled funkcionira samo sa primaocima newslettera</hr>
 </text>
 <text>
 <en>Mrs.</en>
@@ -14241,6 +14378,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>назад</ru>
 <id>2095</id>
 <ro>Inapoi</ro>
+<hr>natrag</hr>
+<hu>vissza</hu>
 </text>
 <text>
 <en>A new comment has been written in your Blog.</en>
@@ -14283,6 +14422,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>24</de>
 <ru>24</ru>
 <id>2103</id>
+<hr>24</hr>
 </text>
 <text>
 <en>to</en>
@@ -14290,6 +14430,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>до</ru>
 <id>2104</id>
 <ro>la</ro>
+<hr>do</hr>
 </text>
 <text>
 <en>All day</en>
@@ -14297,6 +14438,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>ganzer Tag</de>
 <id>2105</id>
 <ro>toata ziua</ro>
+<hr>cijeli dan</hr>
 </text>
 <text>
 <en>Preview cannot be shown because it needs at least one recipient of this newsletter</en>
@@ -14316,6 +14458,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Datei nicht gefunden</de>
 <id>2106</id>
 <ro>Fisier negasit</ro>
+<hr>Datoteka nije pronađena</hr>
 </text>
 <text>
 <en>(No title)</en>
@@ -14323,6 +14466,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>(Kein Titel)</de>
 <id>2144</id>
 <ro>Niciun titlu</ro>
+<hr>(Bez naslova)</hr>
 </text>
 <text>
 <en>Create event for {0}</en>
@@ -14330,6 +14474,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Создать событие для {0}</ru>
 <id>2145</id>
 <ro>Creeaza eveniment pentru {0}</ro>
+<hr>Izradi termin za {0}</hr>
 </text>
 <text>
 <en>Move event to {0}</en>
@@ -14337,6 +14482,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Termin verschieben nach {0}</de>
 <id>2146</id>
 <ro>Muta eveniment la {0}</ro>
+<hr>Prebaci termin na {0}</hr>
 </text>
 <text>
 <en>Update event to {0}</en>
@@ -14344,6 +14490,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Termin updaten nach {0}</de>
 <id>2147</id>
 <ro>Actualizeaza eveniment la </ro>
+<hr>Promjeni termin na {0}</hr>
 </text>
 <text>
 <en>+{0} more...</en>
@@ -14351,6 +14498,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>+{0} mehr...</de>
 <id>2148</id>
 <ro>+{0} mai mult...</ro>
+<hr>+{0} više...</hr>
 </text>
 <text>
 <en>Day</en>
@@ -14358,6 +14506,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>День</ru>
 <id>2149</id>
 <ro>Zi</ro>
+<hr>Dan</hr>
 </text>
 <text>
 <en>Week</en>
@@ -14365,6 +14514,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Woche</de>
 <id>2150</id>
 <ro>Saptamana</ro>
+<hr>Tjedan</hr>
 </text>
 <text>
 <en>Month</en>
@@ -14372,6 +14522,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Monat</de>
 <id>2151</id>
 <ro>Luna</ro>
+<hr>Mjesec</hr>
 </text>
 <text>
 <en>Jump to:</en>
@@ -14379,12 +14530,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Springe zu:</de>
 <id>2152</id>
 <ro>Mergi direct la:</ro>
+<hr>Skoči na:</hr>
 </text>
 <text>
 <en>Go</en>
 <ru>Переход</ru>
 <de>Los</de>
 <id>2153</id>
+<hr>Kreni</hr>
 </text>
 <text>
 <en>{0} Days</en>
@@ -14392,6 +14545,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>{0} Tage</de>
 <id>2154</id>
 <ro>{0} Zile</ro>
+<hr>{0} dana</hr>
 </text>
 <text>
 <en>{0} Weeks</en>
@@ -14399,6 +14553,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>{0} Wochen</de>
 <id>2155</id>
 <ro>{0} Saptamani</ro>
+<hr>{0} tjedana</hr>
 </text>
 <text>
 <en>Add Event</en>
@@ -14406,6 +14561,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Termin hinzufügen</de>
 <id>2156</id>
 <ro>Adauga eveniment</ro>
+<hr>Dodaj termin</hr>
 </text>
 <text>
 <en>Edit Event</en>
@@ -14413,6 +14569,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Termin bearbeiten</de>
 <id>2157</id>
 <ro>Modifica eveniment</ro>
+<hr>Obradi termin</hr>
 </text>
 <text>
 <en>Saving changes...</en>
@@ -14420,6 +14577,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Änderungen werden gespeichert...</de>
 <id>2158</id>
 <ro>Salveaza modificarile...</ro>
+<hr>Spremanje promjena...</hr>
 </text>
 <text>
 <en>Deleting event...</en>
@@ -14427,6 +14585,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Lösche Termin...</de>
 <id>2159</id>
 <ro>Sterge eveniment...</ro>
+<hr>Brisanje termina...</hr>
 </text>
 <text>
 <en>Edit Details...</en>
@@ -14434,6 +14593,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Details bearbeiten...</de>
 <id>2160</id>
 <ro>Modifica detaliile</ro>
+<hr>Obrada detalja...</hr>
 </text>
 <text>
 <en>When</en>
@@ -14441,6 +14601,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Wann</de>
 <id>2161</id>
 <ro>Cand</ro>
+<hr>Kada</hr>
 </text>
 <text>
 <en>Calendar</en>
@@ -14448,6 +14609,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Kalender</de>
 <id>2162</id>
 <ro>Calendar</ro>
+<hr>Kalendar</hr>
 </text>
 <text>
 <en>Calendars</en>
@@ -14455,6 +14617,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Kalender</de>
 <id>2163</id>
 <ro>Calendare</ro>
+<hr>Kalendar</hr>
 </text>
 <text>
 <en>Edit Details</en>
@@ -14462,6 +14625,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Details bearbeiten</de>
 <id>2164</id>
 <ro>Modifica detaliile</ro>
+<hr>Obradi detalje</hr>
 </text>
 <text>
 <en>Move to...</en>
@@ -14469,6 +14633,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Verschieben nach...</de>
 <id>2165</id>
 <ro>Deplasati-va la...</ro>
+<hr>Prebaci u...</hr>
 </text>
 <text>
 <en>Sun</en>
@@ -14476,6 +14641,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Son</de>
 <id>2166</id>
 <ro>Duminica</ro>
+<hr>Ned</hr>
 </text>
 <text>
 <en>Mon</en>
@@ -14483,6 +14649,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Mon</de>
 <id>2167</id>
 <ro>Luni</ro>
+<hr>Pon</hr>
 </text>
 <text>
 <en>Tue</en>
@@ -14490,6 +14657,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Die</de>
 <id>2168</id>
 <ro>Marti</ro>
+<hr>Uto</hr>
 </text>
 <text>
 <en>Wed</en>
@@ -14497,6 +14665,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Mit</de>
 <id>2169</id>
 <ro>Miercuri</ro>
+<hr>Sri</hr>
 </text>
 <text>
 <en>Thu</en>
@@ -14504,6 +14673,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Don</de>
 <id>2170</id>
 <ro>Joi</ro>
+<hr>Čet</hr>
 </text>
 <text>
 <en>Fri</en>
@@ -14511,6 +14681,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Fre</de>
 <id>2171</id>
 <ro>Vineri</ro>
+<hr>Pet</hr>
 </text>
 <text>
 <en>Sat</en>
@@ -14518,6 +14689,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Sam</de>
 <id>2172</id>
 <ro>Sambata</ro>
+<hr>Sub</hr>
 </text>
 <text>
 <en>first</en>
@@ -14525,6 +14697,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2173</id>
 <ru>первый</ru>
 <ro>primul</ro>
+<hr>prvo</hr>
 </text>
 <text>
 <en>second</en>
@@ -14532,6 +14705,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2174</id>
 <ru>второй</ru>
 <ro>al doilea</ro>
+<hr>drugo</hr>
 </text>
 <text>
 <en>third</en>
@@ -14539,6 +14713,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>dritte</de>
 <id>2175</id>
 <ro>al treilea</ro>
+<hr>treće</hr>
 </text>
 <text>
 <en>fourth</en>
@@ -14546,6 +14721,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>vierte</de>
 <id>2176</id>
 <ro>al patrulea</ro>
+<hr>četvrto</hr>
 </text>
 <text>
 <en>fifth</en>
@@ -14553,6 +14729,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>fünfte</de>
 <id>2177</id>
 <ro>al cincilea</ro>
+<hr>peto</hr>
 </text>
 <text>
 <en>sixth</en>
@@ -14560,6 +14737,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>sechste</de>
 <id>2178</id>
 <ro>al saselea</ro>
+<hr>šesto</hr>
 </text>
 <text>
 <en>Do you really wish to remove this entry?</en>
@@ -14567,6 +14745,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Wollten sie diesen Eintrag wirklich löschen?</de>
 <id>2179</id>
 <ro>Sigur doriti sa stergeti aceasta intrare?</ro>
+<hr>Želite li ovaj unos stvarno izbrisati?</hr>
 </text>
 <text>
 <en>Please Login</en>
@@ -14574,6 +14753,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Bitte einloggen</de>
 <id>2180</id>
 <ro>Va rugam autentificati-va</ro>
+<hr>Molimo prijavite se</hr>
 </text>
 <text>
 <en>Invisible</en>
@@ -14581,6 +14761,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Unsichtbar</de>
 <id>2181</id>
 <ro>invizibil</ro>
+<hr>Nevidljivo</hr>
 </text>
 <text>
 <en>It is not possible to delete a column in first row</en>
@@ -14613,6 +14794,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>1</ru>
 <context>start day of week</context>
 <id>2186</id>
+<hr>1</hr>
 </text>
 <text>
 <en>Copy to...</en>
@@ -14625,18 +14807,21 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Сессия истекла, пожалуйста, перезайдите.</ru>
 <de>Session abgelaufen, bitte neu einloggen.</de>
 <id>2188</id>
+<hr>Sesija je istekla, molimo prijavite se ponovo</hr>
 </text>
 <text>
 <en>Please specify a user name.</en>
 <ru>Пожалуйста, укажите имя пользователя.</ru>
 <de>Bitte geben Sie einen Benutzernamen an.</de>
 <id>2189</id>
+<hr>Molimo dodijelite si korisničko ime.</hr>
 </text>
 <text>
 <en>Please specify a password.</en>
 <ru>Пожалуйста, укажите пароль.</ru>
 <de>Bitte geben Sie ein Passwort an.</de>
 <id>2190</id>
+<hr>Molimo odredite si lozinku.</hr>
 </text>
 <text>
 <en>Export</en>
@@ -14657,48 +14842,57 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Related Products</en>
 <ru>Связанные продукты</ru>
 <id>2208</id>
+<hr>Povezani proizvodi</hr>
 </text>
 <text>
 <en>Social Media</en>
 <ru>Социальные медиа</ru>
 <id>2209</id>
+<hr>Društvene mreže</hr>
 </text>
 <text>
 <en>Facebook</en>
 <ru>Facebook</ru>
 <id>2210</id>
+<hr>Facebook</hr>
 </text>
 <text>
 <en>Twitter</en>
 <ru>Твиттер</ru>
 <id>2211</id>
+<hr>Twitter</hr>
 </text>
 <text>
 <en>Google+</en>
 <ru>Google+</ru>
 <id>2212</id>
+<hr>Google+</hr>
 </text>
 <text>
 <en>2 click social media buttons</en>
 <de>2 Klick Social Media Buttons</de>
 <id>2213</id>
+<hr>Društvene mreže - princip 2 klika</hr>
 </text>
 <text>
 <en>2 clicks for more privacy: When you click here the button will be activated and you can send your recommendation. As soon as the button is activated data will be sent to third parties.</en>
 <de>2 Klicks für mehr Datenschutz: Erst wenn Sie hier klicken, wird der Button aktiv und Sie können Ihre Empfehlung senden. Schon beim Aktivieren werden Daten an Dritte übertragen.</de>
 <id>2214</id>
+<hr>2 klika za više zaštite: Tek nakon što ovdje odobrite korištenje dodataka oni postaju aktivni. Nakon aktivacije dodataka podaci mogu biti poslani trećim stranama.</hr>
 </text>
 <text>
 <en>not connected to Facebook</en>
 <de>nicht mit Facebook verbunden</de>
 <ru>нет соединения с Facebook</ru>
 <id>2215</id>
+<hr>Facebook nije povezan</hr>
 </text>
 <text>
 <en>connected to Facebook</en>
 <de>mit Facebook verbunden</de>
 <ru>соединен с Facebook</ru>
 <id>2216</id>
+<hr>Facebook povezan</hr>
 </text>
 <text>
 <en>Recommend</en>
@@ -14706,6 +14900,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2217</id>
 <ru>Рекомендовать</ru>
 <ro>Recomanda</ro>
+<hr>Preporuči</hr>
 </text>
 <text>
 <en>not connected to Twitter</en>
@@ -14713,6 +14908,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2218</id>
 <ro>Neconectat la Twitter</ro>
 <ru>нет соединения с Твиттер</ru>
+<hr>Twitter nije povezan</hr>
 </text>
 <text>
 <en>connected to Twitter</en>
@@ -14720,36 +14916,42 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2219</id>
 <ro>Conectat la Twitter</ro>
 <ru>соединен с Твиттер</ru>
+<hr>Twitter povezan</hr>
 </text>
 <text>
 <en>Tweet</en>
 <de>Twittern</de>
 <ru>Твит</ru>
 <id>2220</id>
+<hr>Tweet</hr>
 </text>
 <text>
 <en>not connected to Google+</en>
 <de>nicht mit Google+ verbunden</de>
 <ru>нет соединения с Google+</ru>
 <id>2221</id>
+<hr>Google+ nije povezan</hr>
 </text>
 <text>
 <en>connected to Google+</en>
 <de>mit Google+ verbunden</de>
 <ru>соединен с Google+</ru>
 <id>2222</id>
+<hr>Google+ povezan</hr>
 </text>
 <text>
 <en>If you activate these buttons with a click informations will be sent to Facebook, Twitter or Google in the USA and may be stored there.</en>
 <de>Wenn Sie diese Felder durch einen Klick aktivieren, werden Informationen an Facebook, Twitter oder Google in die USA übertragen und unter Umständen auch dort gespeichert.</de>
 <ru>Если вы активируете эти кнопки кликом мыши, информация будет отправлена в Facebook, Twitter или Google в США и может храниться там.</ru>
 <id>2223</id>
+<hr>Ako klikom aktivirate ova polja, informacije će biti poslane na Facebook, Twitter ili Google u Americi i možda tamo budu spremljene.</hr>
 </text>
 <text>
 <en>Agree permanent activation and data transfer:</en>
 <ru>Согласиться с постоянной активацией и отправкой данных:</ru>
 <de>Dauerhaft aktivieren und Datenüber&amp;shy;tragung zustimmen:</de>
 <id>2224</id>
+<hr>Dugoročno aktiviraj i dopusti razmjenu podataka:</hr>
 </text>
 <text>
 <en>settings</en>
@@ -14757,6 +14959,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Настройки</ru>
 <id>2225</id>
 <ro>Setari</ro>
+<hr>Postavke</hr>
 </text>
 <text>
 <en>Parent Page Name</en>
@@ -14807,11 +15010,13 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Time</en>
 <ru>Время</ru>
 <id>2237</id>
+<hr>Vrijeme</hr>
 </text>
 <text>
 <en>Detail</en>
 <ru>Подробно</ru>
 <id>2240</id>
+<hr>Detalj</hr>
 </text>
 <text>
 <en>Original Url</en>
@@ -14833,6 +15038,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Events</en>
 <ru>События</ru>
 <id>2250</id>
+<hr>Događaji</hr>
 </text>
 <text>
 <en>Feedback to page </en>
@@ -14889,7 +15095,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Visible Pictures</en>
-<ru>Выдимые изображения</ru>
+<ru>Видимые изображения</ru>
 <de>Sichtbare Bilder</de>
 <id>2263</id>
 </text>
@@ -14899,5 +15105,18 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Wähle eine Zahl wie viele Listeneinträge sichtbar sein sollen und verstecke die anderen hinter einem "more"-button</de>
 <id>2264</id>
 </text>
+<text>
+<en>Done</en>
+<id>2265</id>
+<de>Fertig</de>
+<ro>Finalizat</ro>
+<sl>Končano</sl>
+<ru>Готово</ru>
+<ua>Готово</ua>
+</text>
+<text>
+<en>Action</en>
+<id>2266</id>
+<ru>Действие</ru>
+</text>
 </trl>
-

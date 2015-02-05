@@ -56,10 +56,9 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         $fn = $this->getFileNameWithType();
         $fnDir = substr($fn, 0, strrpos($fn, '/'));
         $ret = preg_replace('#url\(\s*([^)]+?)\s*\)#', 'url(\1)', $ret); //remove spaces inside url()
-        $ret = preg_replace('#url\((\'?)([^/\'])#', 'url(\1/assets/'.$fnDir.'/\2', $ret);
-
+        $ret = preg_replace('#url\((\'|")(?![a-z]+:)([^/\'"])#', 'url(\1/assets/'.$fnDir.'/\2', $ret);
+        $ret = preg_replace('#url\((?![a-z]+:)([^/\'"])#', 'url(/assets/'.$fnDir.'/\1', $ret);
         $ret = self::expandAssetVariables($ret);
-
 
         if (strpos($ret, 'cssClass') !== false && (strpos($ret, '$cssClass') !== false || strpos($ret, '.cssClass') !== false)) {
             $cssClass = $this->_getComponentCssClass();

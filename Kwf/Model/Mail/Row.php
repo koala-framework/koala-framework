@@ -7,6 +7,7 @@ class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
 {
     protected $_mail;
     private $_mailData = array();
+    private $_checkSpam = true;
     protected $_additionalMailVarsRow = null;
 
     const MAIL_CONTENT_AUTO = 'auto'; // html if possible, otherwise text
@@ -140,6 +141,8 @@ class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
 
     protected function _checkIsSpam()
     {
+        if (!$this->_checkSpam) return false;
+
         if (!$this->id) throw new Kwf_Exception("row wurde noch nie gespeichert, daher spam check nicht möglich da keine id vorhanden");
 
         $siblingRows = $this->_getSiblingRows();
@@ -195,6 +198,11 @@ class Kwf_Model_Mail_Row extends Kwf_Model_Proxy_Row
     {
         $row = $this->_getEssentialsRow();
         $row->spamFields = serialize($spamFields);
+    }
+
+    public function setCheckSpam($v)
+    {
+        $this->_checkSpam = (bool)$v;
     }
 
     public function setMailerClass($mailerClass)

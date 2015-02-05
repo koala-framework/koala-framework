@@ -12,7 +12,7 @@ class Kwc_Menu_Expanded_EditableItems_Component extends Kwc_Abstract
         $ret['childModel'] = 'Kwc_Menu_Expanded_EditableItems_Model';
 
         $ret['componentName'] = trlKwfStatic('Menu');
-        $ret['componentIcon'] = new Kwf_Asset('layout');
+        $ret['componentIcon'] = 'layout';
         $ret['cssClass'] = 'webStandard';
         $ret['assetsAdmin']['dep'][] = 'KwfProxyPanel';
         $ret['assetsAdmin']['dep'][] = 'ExtGroupingGrid';

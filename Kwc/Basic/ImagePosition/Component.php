@@ -5,7 +5,7 @@ class Kwc_Basic_ImagePosition_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Image Positionable');
-        $ret['componentIcon'] = new Kwf_Asset('picture');
+        $ret['componentIcon'] = 'picture';
         $ret['generators']['child']['component'] = array(
             'image' => 'Kwc_Basic_Image_Component'
         );

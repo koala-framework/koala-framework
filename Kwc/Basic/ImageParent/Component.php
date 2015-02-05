@@ -40,7 +40,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
 
         $ret['containerClass'] = 'container';
-        if ($ret['width'] > 100) $ret['containerClass'] .= ' webResponsiveImgLoading';
+        if (isset($ret['width']) && $ret['width'] > 100) $ret['containerClass'] .= ' webResponsiveImgLoading';
         if (!$this->_getSetting('lazyLoadOutOfViewport')) $ret['containerClass'] .= ' loadImmediately';
 
 

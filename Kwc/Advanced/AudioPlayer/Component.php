@@ -9,7 +9,7 @@ class Kwc_Advanced_AudioPlayer_Component extends Kwc_Abstract_Composite_Componen
         $ret = array_merge(parent::getSettings(), array(
             'ownModel'     => 'Kwc_Advanced_AudioPlayer_Model',
             'componentName' => trlKwfStatic('Audio'),
-            'componentIcon' => new Kwf_Asset('sound'),
+            'componentIcon' => 'sound',
             'extConfig' => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';

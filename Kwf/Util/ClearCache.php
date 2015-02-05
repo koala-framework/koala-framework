@@ -76,7 +76,7 @@ class Kwf_Util_ClearCache
             $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
         }
         $hasApc = extension_loaded('apc');
-        if (!$hasApc) {
+        if (!$hasApc && php_sapi_name() == 'cli') {
             //apc might be enabled in webserver only, not in cli
             $hasApc = Kwf_Util_Apc::callUtil('is-loaded', array(), array('returnBody'=>true)) == 1;
         }

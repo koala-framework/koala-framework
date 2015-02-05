@@ -1,0 +1,4 @@
+body { background-image: url('foo.png'); }
+body { background-image: url( 'foo.png' ); }
+body { background-image: url('/assets/web/images/foo.png'); }
+body { background-image: url( '/assets/web/images/foo.png' ); }

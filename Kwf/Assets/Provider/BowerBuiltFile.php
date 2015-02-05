@@ -25,30 +25,86 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             $type = $path;
             if (substr($type, -2) == 'js') $type = substr($type, 0, -2);
             if (substr($path, -3) == '-js') $path = substr($path, 0, -3);
-            $files = array(
-                $path.'.js',
-                'dist/'.$path.'.js',
-                'build/'.$path.'.js',
-                'src/'.$path.'.js',
-                'js/'.$path.'.js',
-                $path.'/'.$path.'.js',
-                'bin/js/'.$path.'.js',
-            );
+
+            $paths = array($path);
+            if (strpos($path, '-')!==false) $paths[] = str_replace('-', '.', $path);
+
+            $files = array();
+            foreach ($paths as $p) {
+                $files = array_merge(array(
+                    array(
+                        'file' => $p.'.js',
+                        'additionalFiles' => array(
+                            $p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'dist/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'dist/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'dist/js/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'dist/css/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'build/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'build/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'src/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'src/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'js/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'js/'.$p.'.css',
+                            'css/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'lib/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'lib/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => $p.'/'.$p.'.js',
+                        'additionalFiles' => array(
+                            $p.'/'.$p.'.css',
+                        )
+                    )
+                ));
+            }
             foreach ($files as $f) {
-                if (substr($f, -6) == '.js.js') $f = substr($f, 0, -3);
-                if (file_exists($dir.'/'.$f)) {
-                    $baseFileName = substr($f, 0, -3);
+                if (file_exists($dir.'/'.$f['file'])) {
+                    $baseFileName = substr($f['file'], 0, -3);
                     if (file_exists($dir.'/'.$baseFileName.'.min.js') && file_exists($dir.'/'.$baseFileName.'.min.map')) {
                         //use shipped minimied+map file if exists
-                        $jsDep = new Kwf_Assets_Dependency_File_JsPreBuilt($type.'/'.$f, $type.'/'.$baseFileName.'.min.js', $type.'/'.$baseFileName.'.min.map');
+                        $jsDep = new Kwf_Assets_Dependency_File_JsPreBuilt($type.'/'.$f['file'], $type.'/'.$baseFileName.'.min.js', $type.'/'.$baseFileName.'.min.map');
                     } else {
-                        $jsDep = new Kwf_Assets_Dependency_File_Js($type.'/'.$f);
+                        $jsDep = new Kwf_Assets_Dependency_File_Js($type.'/'.$f['file']);
                     }
-                    if (file_exists($dir.'/'.substr($f, 0, -2).'css')) {
-                        $ret = new Kwf_Assets_Dependency_Dependencies(array(
-                            $jsDep,
-                            new Kwf_Assets_Dependency_File_Css($type.'/'.substr($f, 0, -2).'css'),
-                        ), $dependencyName);
+                    $deps = array();
+                    foreach ($f['additionalFiles'] as $i) {
+                        if (file_exists($dir.'/'.$i)) {
+                            if (substr($i, -4) == '.css') {
+                                $deps[] = new Kwf_Assets_Dependency_File_Css($type.'/'.$i);
+                            } else if (substr($i, -3) == '.js') {
+                                $deps[] = new Kwf_Assets_Dependency_File_Js($type.'/'.$i);
+                            }
+                        }
+                    }
+                    if ($deps) {
+                        array_unshift($deps, $jsDep);
+                        $ret = new Kwf_Assets_Dependency_Dependencies($deps, $dependencyName);
                         break;
                     } else {
                         $ret = $jsDep;
@@ -73,13 +129,14 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             //eg. FontFaceIcomoon, FontFaceFontAwesome, FontFaceIonicons
             $bowerName = substr($dependencyName, 8);
             $bowerName[0] = strtolower($bowerName[0]);
-
             if (file_exists('vendor/bower_components/'.$bowerName.'/fonts.css')) {
                 $ret = new Kwf_Assets_Dependency_File_Css($bowerName.'/fonts.css');
             } else if (file_exists('vendor/bower_components/'.$bowerName.'-font/fonts.css')) {
                 $ret = new Kwf_Assets_Dependency_File_Css($bowerName.'-font/fonts.css');
             } else if (file_exists('vendor/bower_components/'.$bowerName.'-fonts/fonts.css')) {
-                $ret = new Kwf_Assets_Dependency_File_Css($bowerName.'-fonts/fonts.css');
+                $ret = new Kwf_Assets_Dependency_File_Css($bowerName . '-fonts/fonts.css');
+            } else if (file_exists('vendor/bower_components/'.$bowerName.'-font/css/'.$bowerName.'-font.css')) {
+                $ret = new Kwf_Assets_Dependency_File_Css($bowerName.'-font/css/'.$bowerName.'-font.css');
 
             } else if (file_exists('vendor/bower_components/'.$bowerName)) {
                 $ret = new Kwf_Assets_Dependency_FontFace($bowerName, $bowerName);
