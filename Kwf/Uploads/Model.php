@@ -85,8 +85,7 @@ class Kwf_Uploads_Model extends Kwf_Model_Db_Proxy
 
         $filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
         $extension = substr(strrchr($filedata['name'], '.'), 1);
-        $this->copyFile($filedata['tmp_name'], $filename, $extension, $filedata['type']);
-        return $this;
+        return $this->copyFile($filedata['tmp_name'], $filename, $extension, $filedata['type']);
     }
 
     public static function verifyUpload($filedata)
