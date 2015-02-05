@@ -9,7 +9,15 @@ class Kwf_Util_ClearCache_Types_ApcUser extends Kwf_Util_ClearCache_Types_Abstra
     protected function _clearCache($options)
     {
         $options['outputFn'] = array($this, 'outputFn');
-        Kwf_Util_Apc::callClearCacheByCli(array('type' => 'user'), $options);
+        if (php_sapi_name() == 'cli') {
+            Kwf_Util_Apc::callClearCacheByCli(array('type' => 'user'), $options);
+        } else {
+            if (extension_loaded('apcu')) {
+                apc_clear_cache();
+            } else {
+                apc_clear_cache('user');
+            }
+        }
     }
 
     public function getTypeName()
