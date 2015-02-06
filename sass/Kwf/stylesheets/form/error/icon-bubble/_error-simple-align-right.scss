@@ -1,4 +1,8 @@
+@import "form/error/icon-bubble/error-simple";
+
 @mixin error-simple-align-right {
+    @include error-simple;
+
     .kwfFieldErrorIconBubble {
         .message {
             text-align: right;
