@@ -45,7 +45,6 @@ class Kwf_Acl extends Zend_Acl
     {
         $this->addRole(new Zend_Acl_Role('guest'));
         $this->addRole(new Kwf_Acl_Role_Admin('admin', 'Administrator'));
-        $this->addRole(new Zend_Acl_Role('cli'));
 
         $this->add(new Zend_Acl_Resource('default_index'));
         $this->add(new Zend_Acl_Resource('kwf_user_menu'));
@@ -66,7 +65,6 @@ class Kwf_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('kwf_debug_benchmark-counter'));
         $this->add(new Zend_Acl_Resource('kwf_media_upload'));
         $this->add(new Zend_Acl_Resource('kwf_media_post-back'));
-        $this->add(new Zend_Acl_Resource('kwf_test'));
         $this->add(new Zend_Acl_Resource('kwf_maintenance_setup'));
         $this->add(new Zend_Acl_Resource('kwf_maintenance_update'));
         $this->add(new Zend_Acl_Resource('kwf_maintenance_clear-cache'));
@@ -79,20 +77,7 @@ class Kwf_Acl extends Zend_Acl
 
         $this->add(new Zend_Acl_Resource('kwf_spam_set'));
 
-        $this->add(new Zend_Acl_Resource('kwf_cli'));
-        $this->add(new Zend_Acl_Resource('kwf_cli_help'));
-        $this->add(new Zend_Acl_Resource('kwf_cli_index'));
-        $this->add(new Zend_Acl_Resource('kwf_cli_trlparse'));
-        $this->add(new Zend_Acl_Resource('kwf_cli_hlpparse'));
-        $this->add(new Zend_Acl_Resource('kwf_test_connectionerror'));
-        $this->allow('cli', 'kwf_cli');
-        $this->allow('cli', 'kwf_cli_help');
-        $this->allow('cli', 'kwf_cli_index');
-        $this->allow('cli', 'kwf_cli_trlparse');
-        $this->allow('cli', 'kwf_cli_hlpparse');
-
         $this->allow(null, 'default_index');
-        $this->allow(null, 'kwf_test_connectionerror');
         $this->deny('guest', 'default_index');
         $this->allow(null, 'kwf_user_menu');
         $this->allow(null, 'kwf_user_login');
@@ -113,8 +98,6 @@ class Kwf_Acl extends Zend_Acl
         $this->allow('admin', 'edit_role');
         $this->allow(null, 'kwf_spam_set');
         $this->allow(null, 'kwf_debug_session-restart');
-        $this->allow(null, 'kwf_test');
-        $this->allow(null, 'kwf_maintenance_setup'); //allow for everyone, as there are no users yet during setup
         $this->allow('admin', 'kwf_maintenance_update');
         $this->allow('admin', 'kwf_maintenance_clear-cache');
         $this->allow('admin', 'kwf_maintenance_update-downloader');
