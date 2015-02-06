@@ -996,9 +996,9 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             $this->_progressBar->next(1, trlKwf('Writing data. Please be patient.'));
         }
         // write the file
-        $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+        $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel2007');
         $downloadkey = uniqid();
-        $objWriter->save('temp/'.$downloadkey.'.xls');
+        $objWriter->save('temp/'.$downloadkey.'.xlsx');
 
         $this->_progressBar->finish();
 
@@ -1010,15 +1010,15 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
         if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
             throw new Kwf_Exception("XLS is not allowed.");
         }
-        if (!file_exists('temp/'.$this->_getParam('downloadkey').'.xls')) {
+        if (!file_exists('temp/'.$this->_getParam('downloadkey').'.xlsx')) {
             throw new Kwf_Exception('Wrong downloadkey submitted');
         }
         Kwf_Util_TempCleaner::clean();
 
         $file = array(
-            'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.xls'),
-            'mimeType' => 'application/msexcel',
-            'downloadFilename' => 'export_'.date('Ymd-Hi').'.xls'
+            'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.xlsx'),
+            'mimeType' => 'application/octet-stream',
+            'downloadFilename' => 'export_'.date('Ymd-Hi').'.xlsx'
         );
         Kwf_Media_Output::output($file);
         $this->_helper->viewRenderer->setNoRender();
