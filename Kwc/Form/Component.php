@@ -105,7 +105,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         $this->_postData = $postData;
 
         if (!isset($postData[$this->getData()->componentId.'-post']) && !isset($postData[$this->getData()->componentId])) {
-            $this->_postData = array();
+            $postData = array();
             $this->_posted = false;
             return;
         } else {
