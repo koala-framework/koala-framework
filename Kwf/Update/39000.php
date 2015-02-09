@@ -6,7 +6,7 @@ class Kwf_Update_39000 extends Kwf_Update
     {
         $ret = count(Kwf_Model_Abstract::findAllInstances());
         if (in_array('kwf_uploads', Kwf_Registry::get('db')->listTables())) {
-            $ret += Kwf_Registry::get('db')->query('SELECT COUNT(*) FROM kwf_uploads')*2;
+            $ret += Kwf_Registry::get('db')->query('SELECT COUNT(*) FROM kwf_uploads')->fetchColumn()*2;
         }
         return $ret;
     }
