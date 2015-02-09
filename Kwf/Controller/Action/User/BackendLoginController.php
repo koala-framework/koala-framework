@@ -57,7 +57,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $this->view->redirects = array();
         $users = Zend_Registry::get('userModel');
         foreach ($users->getAuthMethods() as $k=>$auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect && $auth->showInBackend()) {
                 $url = $this->getFrontController()->getRouter()->assemble(array(
                     'controller' => 'backend-login',
                     'action' => 'redirect',

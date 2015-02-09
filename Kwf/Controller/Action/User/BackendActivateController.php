@@ -88,7 +88,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         }
 
         foreach ($users->getAuthMethods() as $k=>$auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect && $auth->showInBackend()) {
                 $url = $this->getFrontController()->getRouter()->assemble(array(
                     'controller' => 'backend-activate',
                     'action' => 'redirect',

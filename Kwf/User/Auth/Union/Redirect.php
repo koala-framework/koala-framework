@@ -1,6 +1,16 @@
 <?php
 class Kwf_User_Auth_Union_Redirect extends Kwf_User_Auth_Union_Abstract implements Kwf_User_Auth_Interface_Redirect
 {
+    public function showInFrontend()
+    {
+        return $this->_auth->showInFrontend();
+    }
+
+    public function showInBackend()
+    {
+        return $this->_auth->showInBackend();
+    }
+
     public function getLoginRedirectLabel()
     {
         return $this->_auth->getLoginRedirectLabel();

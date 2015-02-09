@@ -1,6 +1,8 @@
 <?php
 interface Kwf_User_Auth_Interface_Redirect
 {
+    public function showInFrontend();
+    public function showInBackend();
     public function getLoginRedirectLabel();
     public function getLoginRedirectUrl($redirectBackUrl, $state);
     public function getUserToLoginByParams($redirectBackUrl, array $params);

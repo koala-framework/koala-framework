@@ -58,7 +58,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
 
         $ret['redirectLinks'] = array();
         foreach (Kwf_Registry::get('userModel')->getAuthMethods() as $authKey=>$auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect && $auth->showInFrontend()) {
                 $label = $auth->getLoginRedirectLabel();
                 $ret['redirectLinks'][] = array(
                     'url' => $this->getData()->url.'?redirectAuth='.$authKey.'&redirect=%redirect%',
