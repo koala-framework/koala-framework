@@ -898,7 +898,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
         $file = array(
             'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.csv'),
-            'mimeType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'mimeType' => 'application/octet-stream',
             'downloadFilename' => 'export_'.date('Ymd-Hi').'.csv'
         );
         Kwf_Media_Output::output($file);
@@ -1017,7 +1017,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
         $file = array(
             'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.xlsx'),
-            'mimeType' => 'application/octet-stream',
+            'mimeType' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'downloadFilename' => 'export_'.date('Ymd-Hi').'.xlsx'
         );
         Kwf_Media_Output::output($file);
