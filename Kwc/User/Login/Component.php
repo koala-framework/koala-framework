@@ -36,8 +36,6 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
                 Kwf_Registry::get('userModel')->loginUserRow($user, false);
                 $url = $this->_getUrlForRedirect($postData, $user);
                 Kwf_Util_Redirect::redirect($url);
-            } else {
-                throw new Kwf_Exception('Login-Link is invalid.');
             }
         }
     }

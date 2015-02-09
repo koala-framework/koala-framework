@@ -14879,6 +14879,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>2 Klicks für mehr Datenschutz: Erst wenn Sie hier klicken, wird der Button aktiv und Sie können Ihre Empfehlung senden. Schon beim Aktivieren werden Daten an Dritte übertragen.</de>
 <id>2214</id>
 <hr>2 klika za više zaštite: Tek nakon što ovdje odobrite korištenje dodataka oni postaju aktivni. Nakon aktivacije dodataka podaci mogu biti poslani trećim stranama.</hr>
+<hu>2 kattintás a nagyobb adatvédelemért: Ha ide kattint a gomb aktiválódik, és elküldheti az ajánlást. Amint a gomb aktiválódik adatokat fog küldeni a harmadik félnek</hu>
 </text>
 <text>
 <en>not connected to Facebook</en>
@@ -14901,6 +14902,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Рекомендовать</ru>
 <ro>Recomanda</ro>
 <hr>Preporuči</hr>
+<hu>Ajánlom</hu>
 </text>
 <text>
 <en>not connected to Twitter</en>
@@ -14945,6 +14947,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Если вы активируете эти кнопки кликом мыши, информация будет отправлена в Facebook, Twitter или Google в США и может храниться там.</ru>
 <id>2223</id>
 <hr>Ako klikom aktivirate ova polja, informacije će biti poslane na Facebook, Twitter ili Google u Americi i možda tamo budu spremljene.</hr>
+<hu>Ha egy kattintással aktiválja ezeket a gombokat, információkat fog küldeni a Facebook, a Twitter vagy a Google felé (az USA-ban), melyeket ott tárolhatnak.</hu>
 </text>
 <text>
 <en>Agree permanent activation and data transfer:</en>
