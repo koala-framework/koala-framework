@@ -34,13 +34,6 @@ class Kwf_Controller_Action_User_UserController extends Kwf_Controller_Action_Au
             $this->_getPermissionFieldset()->add($roleField);
         }
 
-        $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
-        if (Kwf_Registry::get('acl')->getRole($authedRole) instanceof Kwf_Acl_Role_Admin) {
-            $this->_getPermissionFieldset()->add(new Kwf_Form_Field_Checkbox('webcode', trlKwf('Only for this web')))
-                ->setData(new Kwf_Controller_Action_User_Users_WebcodeData())
-                ->setHelpText(trlKwf('If this box is checked, the account may only be used for this web. If you wish to use the same account for another web, do not check this box.'));
-        }
-
         $fs = $this->_form->add(new Kwf_Form_Container_FieldSet(trlKwf('Statistics')));
         $fs->setLabelWidth(100);
         $fs->add(new Kwf_Form_Field_ShowField('logins', trlKwf('Logins')));

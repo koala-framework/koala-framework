@@ -21,6 +21,6 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
         parent::_afterSave($row);
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
         $user->setPassword($this->_form->getRow()->new_password);
-        $user->save();
+        $user->clearActivationToken();
     }
 }

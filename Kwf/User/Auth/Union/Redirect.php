@@ -6,14 +6,14 @@ class Kwf_User_Auth_Union_Redirect extends Kwf_User_Auth_Union_Abstract implemen
         return $this->_auth->getLoginRedirectLabel();
     }
 
-    public function getLoginRedirectUrl($redirectBackUrl)
+    public function getLoginRedirectUrl($redirectBackUrl, $state)
     {
-        return $this->_auth->getLoginRedirectUrl($redirectBackUrl);
+        return $this->_auth->getLoginRedirectUrl($redirectBackUrl, $state);
     }
 
-    public function getUserToLoginByParams(array $params)
+    public function getUserToLoginByParams($redirectBackUrl, array $params)
     {
-        $row = $this->_auth->getUserToLoginByParams($params);
+        $row = $this->_auth->getUserToLoginByParams($redirectBackUrl, $params);
         if (!$row) return null;
 
         foreach ($this->_model->getUnionModels() as $k=>$m) {
@@ -23,6 +23,11 @@ class Kwf_User_Auth_Union_Redirect extends Kwf_User_Auth_Union_Abstract implemen
             }
         }
         return null;
+    }
+
+    public function associateUserByParams(Kwf_Model_Row_Interface $user, $redirectBackUrl, array $params)
+    {
+        $this->_auth->associateUserByParams($user->getSourceRow(), $redirectBackUrl, $params);
     }
 
     public function createSampleLoginLinks($absoluteUrl)

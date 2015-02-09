@@ -274,6 +274,10 @@ class Kwf_User_Model extends Kwf_Model_RowCache
                     $this->_authMethods[$k] = new Kwf_User_Auth_Proxy_Redirect(
                         $auth, $this
                     );
+                } else if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
+                    $this->_authMethods[$k] = new Kwf_User_Auth_Proxy_Activation(
+                        $auth, $this
+                    );
                 } else {
                     throw new Kwf_Exception_NotYetImplemented();
                 }

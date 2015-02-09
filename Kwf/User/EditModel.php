@@ -89,9 +89,8 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
 
     /**
      * @param string E-Mail address of user
-     * @param string webcode parameter used for Service Model (that can have global users)
      */
-    public function createUserRow($email, $webcode = null)
+    public function createUserRow($email)
     {
         $row = parent::createRow(array('email' => $email));
         $this->_resetPermissions($row);
@@ -158,6 +157,9 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
                 $this
             ),
             'autoLogin' => new Kwf_User_Auth_AutoLoginFields(
+                $this
+            ),
+            'activation' => new Kwf_User_Auth_ActivationFields(
                 $this
             )
         );

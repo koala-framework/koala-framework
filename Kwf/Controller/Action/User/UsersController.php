@@ -64,13 +64,6 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
             ->setRenderer('boolean')
             ->setShowIn(Kwf_Grid_Column::SHOW_IN_ALL ^ Kwf_Grid_Column::SHOW_IN_XLS);
 
-        $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
-        $acl = Zend_Registry::get('acl');
-        if ($acl->getRole($authedRole) instanceof Kwf_Acl_Role_Admin && $this->_model instanceof Kwf_User_Service_Model) {
-            $this->_columns->add(new Kwf_Grid_Column_Checkbox('webcode', trlKwf('Only for this web'), 110))
-                 ->setData(new Kwf_Controller_Action_User_Users_WebcodeData())
-                 ->setShowIn(Kwf_Grid_Column::SHOW_IN_ALL ^ Kwf_Grid_Column::SHOW_IN_XLS);
-        }
         $this->_columns->add(new Kwf_Grid_Column_Button('resend_mails', trlKwf('E-Mails')))
             ->setTooltip(trlKwf('Sent E-Mail again'))
             ->setButtonIcon(new Kwf_Asset('email_go.png'));

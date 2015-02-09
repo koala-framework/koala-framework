@@ -1,14 +1,20 @@
 <?php
-class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controller_Action_Form_Controller
+class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controller_Action
 {
-    protected $_form = 'Kwc_User_Activate_Form_FrontendForm';
-
     public function preDispatch()
     {
         $this->getHelper('viewRenderer')->setNoController(true);
         $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
         if (!$this->_getParam('user') && $this->getRequest()->getActionName() != 'error') {
-            $code = $this->_getParam('code');
+
+            if ($this->getRequest()->getActionName() == 'redirect-callback') {
+                $state = explode('_', $this->_getParam('state'));
+                if (count($state) != 3) throw new Kwf_Exception_NotFound();
+                $code = $state[2];
+            } else {
+                $code = $this->_getParam('code');
+            }
+
             if (!preg_match('#^(.*)-(\w*)$#', $code, $m)) {
                 $this->getRequest()->setParam('errorMessage', trlKwf("Activation code is invalid. Maybe the URL wasn't copied completely?"));
                 $this->forward('error');
@@ -30,7 +36,9 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
                 }
             }
         }
-        parent::preDispatch();
+        $this->view->dep = Kwf_Assets_Package_Default::getInstance('Admin');
+
+        //parent::preDispatch();
     }
 
 
@@ -40,28 +48,93 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         $this->_form->setModel(new Kwf_Model_FnF());
     }
 
-
     public function indexAction()
     {
         $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('activate');
         $this->view->email = $this->_getParam('user')->email;
         $this->view->isActivate = $this->_getParam('user')->isActivated();
-        parent::indexAction();
+
+        $this->view->redirects = array();
+        $url = $this->getFrontController()->getRouter()->assemble(array(
+            'controller' => 'backend-change-password',
+            'action' => 'index',
+        ), 'kwf_user');
+        $url .= '?code='.$this->_getParam('code');
+        $this->view->redirects[] = array(
+            'url' => $url,
+            'name' => trlKwf('Password')
+        );
+
+        $users = Zend_Registry::get('userModel');
+        foreach ($users->getAuthMethods() as $k=>$auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+                $url = $this->getFrontController()->getRouter()->assemble(array(
+                    'controller' => 'backend-activate',
+                    'action' => 'redirect',
+                ), 'kwf_user');
+                $this->view->redirects[] = array(
+                    'url' => $url.'?authMethod='.$k.'&code='.$this->_getParam('code'),
+                    'name' => Kwf_Trl::getInstance()->trlStaticExecute($auth->getLoginRedirectLabel())
+                );
+            }
+        }
     }
 
-
-    protected function _afterSave($row)
+    private function _getRedirectBackUrl()
     {
+        $redirectBackUrl = $this->getFrontController()->getRouter()->assemble(array(
+            'controller' => 'backend-activate',
+            'action' => 'redirect-callback',
+        ), 'kwf_user');
+        $redirectBackUrl = 'http'.(isset($_SERVER['HTTPS']) ? 's' : '').'://'
+            .$_SERVER['HTTP_HOST']
+            .$redirectBackUrl;
+        return $redirectBackUrl;
+    }
+
+    public function redirectAction()
+    {
+        $authMethod = $this->_getParam('authMethod');
+        $users = Zend_Registry::get('userModel');
+        $authMethods = $users->getAuthMethods();
+        if (!isset($authMethods[$authMethod])) {
+            throw new Kwf_Exception_NotFound();
+        }
+
+        $f = new Kwf_Filter_StrongRandom();
+        $state = $authMethod.'_'.$f->filter(null).'_'.$this->_getParam('code');
+
+        //save state in namespace to validate it later
+        $ns = new Kwf_Session_Namespace('kwf-backend-activate');
+        $ns->state = $state;
+
+        $url = $authMethods[$authMethod]->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state);
+        $this->redirect($url);
+    }
+
+    public function redirectCallbackAction()
+    {
+        $state = $this->_getParam('state');
+
+        $ns = new Kwf_Session_Namespace('kwf-backend-activate');
+        if (!$ns->state || $state != $ns->state) throw new Kwf_Exception_AccessDenied();
+
+        $state = explode('_', $state);
+        if (count($state) != 3) throw new Kwf_Exception_NotFound();
+        $authMethod = $state[0];
+        $code = $state[2];
+
+        $users = Zend_Registry::get('userModel');
+        $authMethods = $users->getAuthMethods();
+        if (!isset($authMethods[$authMethod])) {
+            throw new Kwf_Exception_NotFound();
+        }
         $user = $this->_getParam('user');
-        $userModel = $user->getModel();
-        $userModel->setPassword($user, $row->password);
-        $this->redirect('/kwf/welcome');
-        parent::_afterSave($row);
-    }
+        $authMethods[$authMethod]->associateUserByParams($user, $this->_getRedirectBackUrl(), $this->getRequest()->getParams());
+        $user->clearActivationToken();
+        $users->loginUserRow($user, true);
 
-    public function successAction()
-    {
-        $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('activate-success');
+        $this->redirect('/kwf/welcome');
     }
 
     public function errorAction()

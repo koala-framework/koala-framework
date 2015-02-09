@@ -26,4 +26,13 @@
     <p>
         <a class="lostPassword" href="<?=$this->lostPasswordLink?>"><?=trlKwf('Lost password?')?></a>
     </p>
+
+    <? if ($this->redirects) { ?>
+        <p><?=trlKwf('Login with:')?></p>
+        <ul>
+        <?php foreach ($this->redirects as $r) { ?>
+            <li><a href="<?=htmlspecialchars($r['url'])?>"><?=htmlspecialchars($r['name'])?></a></li>
+        <?php } ?>
+        </ul>
+    <? } ?>
 </div>

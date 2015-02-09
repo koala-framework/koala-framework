@@ -43,7 +43,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
     public function __set($columnName, $value)
     {
         $noLog = $this->getModel()->getNoLogColumns();
-        $noLog = array_merge($noLog, array('webcode', 'created', 'logins', 'last_login', 'last_modified', 'password1', 'password2', 'password', 'password_salt'));
+        $noLog = array_merge($noLog, array('created', 'logins', 'last_login', 'last_modified', 'password1', 'password2', 'password', 'password_salt'));
         if (!in_array($columnName, $noLog)) {
             if ($value != $this->__get($columnName)) {
                 $this->_logChangedUser = true;
@@ -220,13 +220,13 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
     public function generateActivationToken()
     {
         $authMethods = $this->getModel()->getAuthMethods();
-        return $authMethods['password']->generateActivationToken($this);
+        return $authMethods['activation']->generateActivationToken($this);
     }
 
     public function validateActivationToken($token)
     {
         $authMethods = $this->getModel()->getAuthMethods();
-        return $authMethods['password']->validateActivationToken($this, $token);
+        return $authMethods['activation']->validateActivationToken($this, $token);
     }
 
     public function getAdditionalRoles()

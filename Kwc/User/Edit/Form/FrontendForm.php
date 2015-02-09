@@ -33,7 +33,7 @@ class Kwc_User_Edit_Form_FrontendForm extends Kwf_Form
                 }
 
                 $this->_newUserRow = $this->_model->createUserRow(
-                    $email, null
+                    $email
                 );
             }
         }

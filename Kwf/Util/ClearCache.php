@@ -93,8 +93,8 @@ class Kwf_Util_ClearCache
                 $types[] = new Kwf_Util_ClearCache_Types_TableComponentView();
             } else if ($t == 'cache_component_includes') {
                 //never completely clear that table as it would break clearing fullPage cache
-            } else if ($t == 'cache_users') { //handled in Types_Users
-                 $types[] = new Kwf_Util_ClearCache_Types_Users();
+            } else if ($t == 'cache_users') {
+                //skip, needed during update
             } else {
                 $types[] = new Kwf_Util_ClearCache_Types_Table($t);
             }

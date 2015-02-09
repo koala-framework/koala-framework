@@ -16,7 +16,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     public function generateActivationToken()
     {
         foreach ($this->getModel()->getAuthMethods() as $auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
                  $ret = $auth->generateActivationToken($this);
                  if ($ret) return $ret;
             }
@@ -27,7 +27,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     public function validateActivationToken($token)
     {
         foreach ($this->getModel()->getAuthMethods() as $auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
                  $ret = $auth->validateActivationToken($this, $token);
                  if ($ret) return $ret;
             }
@@ -38,7 +38,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     public function isActivated()
     {
         foreach ($this->getModel()->getAuthMethods() as $auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
                  $ret = $auth->isActivated($this);
                  if (!is_null($ret)) return $ret;
             }
@@ -62,6 +62,17 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         foreach ($this->getModel()->getAuthMethods() as $auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_AutoLogin) {
                  $ret = $auth->clearAutoLoginToken($this);
+                 if ($ret) return $ret;
+            }
+        }
+        throw new Kwf_Exception();
+    }
+
+    public function clearActivationToken()
+    {
+        foreach ($this->getModel()->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
+                 $ret = $auth->clearActivationToken($this);
                  if ($ret) return $ret;
             }
         }
