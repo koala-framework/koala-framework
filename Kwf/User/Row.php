@@ -82,6 +82,13 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     public function setPassword($password)
     {
         foreach ($this->getModel()->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+                 if (!$auth->allowPasswordForUser($this)) {
+                    throw new Kwf_Exception("This user must not have a password for his account");
+                 }
+            }
+        }
+        foreach ($this->getModel()->getAuthMethods() as $auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Password) {
                  $ret = $auth->setPassword($this, $password);
                  if ($ret) return $ret;

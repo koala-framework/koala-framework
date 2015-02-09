@@ -27,4 +27,9 @@ class Kwf_User_Auth_Proxy_Redirect extends Kwf_User_Auth_Proxy_Abstract implemen
     {
         return $this->_auth->createSampleLoginLinks($absoluteUrl);
     }
+
+    public function allowPasswordForUser(Kwf_Model_Row_Interface $user)
+    {
+        return $this->_auth->allowPasswordForUser($user->getProxiedRow());
+    }
 }

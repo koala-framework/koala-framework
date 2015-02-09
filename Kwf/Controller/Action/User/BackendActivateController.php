@@ -54,18 +54,39 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         $this->view->email = $this->_getParam('user')->email;
         $this->view->isActivate = $this->_getParam('user')->isActivated();
 
-        $this->view->redirects = array();
-        $url = $this->getFrontController()->getRouter()->assemble(array(
-            'controller' => 'backend-change-password',
-            'action' => 'index',
-        ), 'kwf_user');
-        $url .= '?code='.$this->_getParam('code');
-        $this->view->redirects[] = array(
-            'url' => $url,
-            'name' => trlKwf('Password')
-        );
-
         $users = Zend_Registry::get('userModel');
+
+        $showPassword = false;
+
+        //is there a password auth?
+        foreach ($users->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                $showPassword = true;
+            }
+        }
+
+        //if a redirect auth doesn't allow password hide it
+        foreach ($users->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+                if (!$auth->allowPasswordForUser($this->getParam('user'))) {
+                    $showPassword = false;
+                }
+            }
+        }
+
+        $this->view->redirects = array();
+        if ($showPassword) {
+            $url = $this->getFrontController()->getRouter()->assemble(array(
+                'controller' => 'backend-change-password',
+                'action' => 'index',
+            ), 'kwf_user');
+            $url .= '?code='.$this->_getParam('code');
+            $this->view->redirects[] = array(
+                'url' => $url,
+                'name' => trlKwf('Password')
+            );
+        }
+
         foreach ($users->getAuthMethods() as $k=>$auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
                 $url = $this->getFrontController()->getRouter()->assemble(array(
@@ -77,6 +98,10 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
                     'name' => Kwf_Trl::getInstance()->trlStaticExecute($auth->getLoginRedirectLabel())
                 );
             }
+        }
+
+        if (count($this->view->redirects) == 1 && $showPassword) {
+            $this->redirect($this->view->redirects[0]['url']);
         }
     }
 
