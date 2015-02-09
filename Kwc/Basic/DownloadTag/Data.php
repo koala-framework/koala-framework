@@ -15,9 +15,6 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
             }
             $filename .= '.'.$fRow->extension;
             return Kwf_Media::getUrl($this->componentClass, $this->componentId, 'default', $filename);
-        } else if ($var == 'rel') {
-            $ret = 'popup_blank';
-            return $ret;
         } else {
             return parent::__get($var);
         }
@@ -26,5 +23,12 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
     public function getAbsoluteUrl()
     {
         return $this->url;
+    }
+
+    public function getLinkDataAttributes()
+    {
+        $ret = parent::getLinkDataAttributes();
+        $ret['kwc-popup'] = 'blank';
+        return $ret;
     }
 }

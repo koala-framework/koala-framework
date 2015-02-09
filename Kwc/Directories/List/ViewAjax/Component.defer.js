@@ -14,10 +14,8 @@ $(document).on('click', 'a', function(event) {
 
     if (a.data('kwfViewAjaxInitDone')) return; //ignore back link
 
-    if (!a.attr('rel')) return;
-    var m = a.attr('rel').match(/kwfViewAjaxFilter({.*?})/);
-    if (m) {
-        var config = $.parseJSON(m[1]);
+    if (a.data('kwc-view-ajax-filter')) {
+        var config = $.parseJSON(a.data('kwc-view-ajax-filter'));
 
         var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[config.viewComponentId];
         if (!view) return;
@@ -30,13 +28,10 @@ $(document).on('click', 'a', function(event) {
             Kwf.Utils.HistoryState.pushState(document.title, this.href);
         }
 
-        $('a[rel*=kwfViewAjaxFilter]').each(function() {
-            var m = this.rel.match(/kwfViewAjaxFilter({.*?})/);
-            if (m) {
-                var config = $.parseJSON(m[1]);
-                if (config.viewComponentId == view.componentId) {
-                    $(this).removeClass('current');
-                }
+        $('a[kwc-view-ajax-filter]').each(function() {
+            var config = $.parseJSON($(this).data('kwc-view-ajax-filter'));
+            if (config.viewComponentId == view.componentId) {
+                $(this).removeClass('current');
             }
         });
         $(this).addClass('current');
@@ -161,14 +156,11 @@ Kwc.Directories.List.ViewAjax.prototype = {
         }
 
         //set menuLinkId to link that is current, be be able to set current again
-        $('a[rel*=kwfViewAjaxFilter]').each((function(index, linkEl) {
-            var m = linkEl.rel.match(/kwfViewAjaxFilter({.*?})/);
-            if (m) {
-                var config = $.parseJSON(m[1]);
-                if (config.viewComponentId == this.componentId) {
-                    if ($(linkEl).hasClass('current')) {
-                        this._getState().menuLinkId = getUniqueIdForFilterLink(linkEl);
-                    }
+        $('a[kwc-view-ajax-filter]').each((function(index, linkEl) {
+            var config = $.parseJSON($(linkEl).data('kwc-view-ajax-filter'));
+            if (config.viewComponentId == this.componentId) {
+                if ($(linkEl).hasClass('current')) {
+                    this._getState().menuLinkId = getUniqueIdForFilterLink(linkEl);
                 }
             }
         }).bind(this));
@@ -204,13 +196,10 @@ Kwc.Directories.List.ViewAjax.prototype = {
             //    $(window).scrollTop(this._lastViewScrollPosition);
             //}
             if (this._getState().menuLinkId) {
-                $('a[rel*=kwfViewAjaxFilter]').each((function(i, el) {
-                    var m = el.rel.match(/kwfViewAjaxFilter({.*?})/);
-                    if (m) {
-                        var config = $.parseJSON(m[1]);
-                        if (config.viewComponentId == this.componentId) {
-                            $(el).removeClass('current');
-                        }
+                $('a[kwc-view-ajax-filter]').each((function(i, el) {
+                    var config = $.parseJSON($(el).data('kwc-view-ajax-filter'));
+                    if (config.viewComponentId == this.componentId) {
+                        $(el).removeClass('current');
                     }
                 }).bind(this));
 
@@ -240,10 +229,8 @@ Kwc.Directories.List.ViewAjax.prototype = {
             this.$el.click((function(ev) {
                 var a = $(ev.target).closest('a');
                 if (!a.length) return;
-                if (!a.attr('rel')) return;
-                var m = a.attr('rel').match(/kwfDetail([^ ]+)/);
-                if (!m) return;
-                var config = $.parseJSON(m[1]);
+                if (!a.data('kwc-detail')) return;
+                var config = $.parseJSON(a.data('kwc-detail'));
                 if (!config.directoryComponentId) return;
                 if (this.directoryComponentId) {
                     if (config.directoryComponentId != this.directoryComponentId) return;

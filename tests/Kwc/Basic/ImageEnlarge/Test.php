@@ -57,7 +57,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('lightbox{"width":16,"height":16,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['rel']);
+        $this->assertEquals('{"width":16,"height":16,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['data-kwc-lightbox']);
         $this->assertEquals('/foo1/image', (string)$a[0]['href']);
 
 
@@ -128,7 +128,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('lightbox{"width":16,"height":16,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['rel']);
+        $this->assertEquals('{"width":16,"height":16,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['data-kwc-lightbox']);
         $this->assertEquals('/foo2/image', (string)$a[0]['href']);
 
 
@@ -207,7 +207,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('lightbox{"width":210,"height":70,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['rel']);
+        $this->assertEquals('{"width":210,"height":70,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['data-kwc-lightbox']);
         $this->assertEquals('/foo3/image', (string)$a[0]['href']);
 
 

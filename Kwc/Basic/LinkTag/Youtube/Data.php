@@ -9,4 +9,9 @@ class Kwc_Basic_LinkTag_Youtube_Data extends Kwf_Component_Data
             return parent::__get($var);
         }
     }
+
+    public function getLinkDataAttributes()
+    {
+        return $this->getChildComponent('_video')->getLinkDataAttributes();
+    }
 }

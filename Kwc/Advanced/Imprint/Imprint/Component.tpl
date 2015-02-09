@@ -18,7 +18,7 @@
     <? if($this->row->email || $this->row->website) {?>
         <p>
             <? if($this->row->email) echo "<a href='mailto:".$this->row->email."'>".$this->row->email."</a><br/>"?>
-            <? if($this->row->website) echo "<a href='".$this->row->website."' rel='popup_blank'>".$this->row->website."</a>"?>
+            <? if($this->row->website) echo "<a href='".$this->row->website."' data-kwc-popup='blank'>".$this->row->website."</a>"?>
         </p>
     <? } ?>
     <? if($this->row->crn) {?>
@@ -88,7 +88,7 @@
     <? if($this->row->link_company_az) {?>
         <span class="imprintHeadline"><?=$this->data->trlKwf('Entry at WK Austria');?></span>
         <p>
-            <a href="<?=$this->row->link_company_az;?>" rel="popup_blank"><?=$this->data->trlKwf('Company A-Z');?></a>
+            <a href="<?=$this->row->link_company_az;?>" data-kwc-popup="blank"><?=$this->data->trlKwf('Company A-Z');?></a>
         </p>
     <? } ?>
 </div>

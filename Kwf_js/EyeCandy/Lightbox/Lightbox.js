@@ -1,37 +1,30 @@
 Kwf.namespace('Kwf.EyeCandy.Lightbox');
 
-$(document).on('click', 'a', function(event) {
+$(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     var el = event.currentTarget;
-    var rel = el.rel;
-    if (!rel) return;
-    var m = rel.match(/(^lightbox| lightbox)({.*?})?/);
-    if (m) {
-        var options = {};
-        if (m[2]) options = jQuery.parseJSON(m[2]);
-        var l;
-        var $el = $(el);
-        if (Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')]) {
-            l = Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')];
-        } else {
-            l = new Kwf.EyeCandy.Lightbox.Lightbox($el.attr('href'), options);
-        }
-        el.kwfLightbox = l;
-
-        if (Kwf.EyeCandy.Lightbox.currentOpen &&
-            Kwf.EyeCandy.Lightbox.currentOpen.href == $el.attr('href')
-        ) {
-            //already open, ignore click
-            event.preventDefault();
-            return;
-        }
-        this.kwfLightbox.show({
-            clickTarget: this
-        });
-        Kwf.Utils.HistoryState.currentState.lightbox = this.href;
-        Kwf.Utils.HistoryState.pushState(document.title, this.href);
-
-        event.preventDefault();
+    var $el = $(el);
+    var options = jQuery.parseJSON($el.data('kwc-lightbox'));
+    if (Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')]) {
+        l = Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')];
+    } else {
+        l = new Kwf.EyeCandy.Lightbox.Lightbox($el.attr('href'), options);
     }
+    el.kwfLightbox = l;
+
+    if (Kwf.EyeCandy.Lightbox.currentOpen &&
+        Kwf.EyeCandy.Lightbox.currentOpen.href == $el.attr('href')
+    ) {
+        //already open, ignore click
+        event.preventDefault();
+        return;
+    }
+    this.kwfLightbox.show({
+        clickTarget: this
+    });
+    Kwf.Utils.HistoryState.currentState.lightbox = this.href;
+    Kwf.Utils.HistoryState.pushState(document.title, this.href);
+
+    event.preventDefault();
 });
 
 Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
