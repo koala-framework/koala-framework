@@ -624,7 +624,17 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
      */
     public function getActiveViewPlugins()
     {
-        return $this->_getSetting('plugins');
+        $ret = $this->_getSetting('plugins');
+        $d = $this->getData();
+        if ($d->isPage) {
+            while ($d) {
+                foreach (Kwc_Abstract::getSetting($d->componentClass, 'pluginsInherit') as $i) {
+                    if (!in_array($i, $ret)) $ret[] = $i;
+                }
+                $d = $d->parent;
+            }
+        }
+        return $ret;
     }
 
     /**

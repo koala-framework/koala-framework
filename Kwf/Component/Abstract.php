@@ -72,6 +72,7 @@ class Kwf_Component_Abstract
             'componentIcon' => 'paragraph_page',
             'placeholder'   => array(),
             'plugins'       => array(),
+            'pluginsInherit'=> array(),
             'generators'    => array(),
             'flags'         => array(),
             'extConfig'     => 'Kwf_Component_Abstract_ExtConfig_None'

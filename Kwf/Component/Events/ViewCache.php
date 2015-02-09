@@ -319,6 +319,34 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
             'newParentId' => $newParentId,
             'componentId' => $event->component->componentId
         );
+
+        $oldPlugins = array();
+        $c = $event->oldParent;
+        while ($c) {
+            $oldPlugins = array_merge($oldPlugins, Kwc_Abstract::getSetting($c->componentClass, 'pluginsInherit'));
+            $c = $c->parent;
+        }
+
+        $newPlugins = array();
+        $c = $event->newParent;
+        while ($c) {
+            $oldPlugins = array_merge($oldPlugins, Kwc_Abstract::getSetting($c->componentClass, 'pluginsInherit'));
+            $c = $c->parent;
+        }
+
+        $oldPlugins = array_unique($oldPlugins);
+        $newPlugins = array_unique($newPlugins);
+        sort($oldPlugins);
+        sort($newPlugins);
+
+        if ($oldPlugins != $newPlugins) {
+            //delete all components as plugins are in view cache
+            $this->_updates[] = array(
+                'type' => 'component',
+                'expanded_component_id' => $event->component->getExpandedComponentId() . '%'
+            );
+            $this->_log("type=component expanded_component_id={$event->component->getExpandedComponentId()}%");
+        }
     }
 
     private function _getParentComponentsForRecursive(Kwf_Component_Event_Component_RecursiveAbstract $event)
