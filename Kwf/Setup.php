@@ -163,7 +163,7 @@ class Kwf_Setup
         if (isset($requestPath)) return $requestPath;
         switch (php_sapi_name()) {
             case 'apache2handler':
-                $requestPath = $_SERVER['REDIRECT_URL'];
+                $requestPath = $_SERVER['REQUEST_URI'];
                 break;
             case 'cli':
                 $requestPath = false;
