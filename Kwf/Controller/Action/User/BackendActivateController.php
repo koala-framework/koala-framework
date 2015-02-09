@@ -93,9 +93,10 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
                     'controller' => 'backend-activate',
                     'action' => 'redirect',
                 ), 'kwf_user');
+                $label = $auth->getLoginRedirectLabel();
                 $this->view->redirects[] = array(
                     'url' => $url.'?authMethod='.$k.'&code='.$this->_getParam('code'),
-                    'name' => Kwf_Trl::getInstance()->trlStaticExecute($auth->getLoginRedirectLabel())
+                    'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name'])
                 );
             }
         }

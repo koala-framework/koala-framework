@@ -162,7 +162,8 @@ class Kwf_User_Model extends Kwf_Model_RowCache
                     foreach ($this->getAuthMethods() as $auth2) {
                         if ($auth2 instanceof Kwf_User_Auth_Interface_Redirect) {
                             if (!$auth2->allowPasswordForUser($row)) {
-                                $label = Kwf_Trl::getInstance()->trlStaticExecute($auth2->getLoginRedirectLabel());
+                                $label = $auth2->getLoginRedirectLabel();
+                                $label = Kwf_Trl::getInstance()->trlStaticExecute($label['name']);
                                 throw new Kwf_Exception_Client(trlKwf("This user doesn't have a password, please log in using {0}", $label));
                             }
                         }
