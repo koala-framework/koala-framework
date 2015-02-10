@@ -22,11 +22,7 @@ Kwf.Viewport = Ext2.extend(Kwf.ViewportWithoutMenu, {
                     region: 'north',
                     height: 30
                 });
-        this.items.push({
-            xtype: 'kwf.menu',
-            region: 'north',
-            height: 30
-        });
+        this.items.push(Kwf.menu);
         this.layout = 'border';
         Kwf.Viewport.superclass.initComponent.call(this);
     }
