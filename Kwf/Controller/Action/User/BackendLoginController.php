@@ -95,7 +95,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         }
 
         $f = new Kwf_Filter_StrongRandom();
-        $state = $authMethod.'_'.$f->filter(null).'_'.$this->_getParam('redirect');
+        $state = $authMethod.'-'.$f->filter(null).'-'.$this->_getParam('redirect');
 
         //save state in namespace to validate it later
         $ns = new Kwf_Session_Namespace('kwf-backend-login');
@@ -112,7 +112,8 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $ns = new Kwf_Session_Namespace('kwf-backend-login');
         if (!$ns->state || $state != $ns->state) throw new Kwf_Exception_AccessDenied();
 
-        $state = explode('_', $state);
+        $state = explode('-', $state);
+
         if (count($state) != 3) throw new Kwf_Exception_NotFound();
         $authMethod = $state[0];
         $redirect = $state[2];

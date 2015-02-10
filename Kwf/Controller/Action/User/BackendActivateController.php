@@ -8,7 +8,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         if (!$this->_getParam('user') && $this->getRequest()->getActionName() != 'error') {
 
             if ($this->getRequest()->getActionName() == 'redirect-callback') {
-                $state = explode('_', $this->_getParam('state'));
+                $state = explode('-', $this->_getParam('state'));
                 if (count($state) != 3) throw new Kwf_Exception_NotFound();
                 $code = $state[2];
             } else {
@@ -128,7 +128,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         }
 
         $f = new Kwf_Filter_StrongRandom();
-        $state = $authMethod.'_'.$f->filter(null).'_'.$this->_getParam('code');
+        $state = $authMethod.'-'.$f->filter(null).'-'.$this->_getParam('code');
 
         //save state in namespace to validate it later
         $ns = new Kwf_Session_Namespace('kwf-backend-activate');
@@ -145,7 +145,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         $ns = new Kwf_Session_Namespace('kwf-backend-activate');
         if (!$ns->state || $state != $ns->state) throw new Kwf_Exception_AccessDenied();
 
-        $state = explode('_', $state);
+        $state = explode('-', $state);
         if (count($state) != 3) throw new Kwf_Exception_NotFound();
         $authMethod = $state[0];
         $code = $state[2];
