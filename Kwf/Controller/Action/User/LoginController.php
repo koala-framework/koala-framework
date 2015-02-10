@@ -28,6 +28,28 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $this->getResponse()->setHttpResponseCode(401);
     }
 
+    public function jsonGetAuthMethodsAction()
+    {
+        $users = Zend_Registry::get('userModel');
+        $this->view->showPassword = false;
+        $this->view->redirects = array();
+        foreach ($users->getAuthMethods() as $k=>$auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                $this->view->showPassword = true;
+            }
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect && $auth->showInBackend()) {
+                $url = $this->getFrontController()->getRouter()->assemble(array(
+                    'controller' => 'backend-login',
+                    'action' => 'redirect',
+                ), 'kwf_user');
+                $label = $auth->getLoginRedirectLabel();
+                $this->view->redirects[] = array(
+                    'url' => $url.'?authMethod='.$k,
+                    'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name'])
+                );
+            }
+        }
+    }
 
     public function headerAction()
     {

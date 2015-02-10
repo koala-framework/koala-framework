@@ -130,7 +130,15 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
             throw new Kwf_Exception_AccessDenied();
         }
 
-        Kwf_Util_Redirect::redirect($redirect);
+        if ($redirect == 'jsCallback') {
+            echo "<script type=\"text/javascript\">\n";
+            echo "window.opener.ssoCallback('".Kwf_Util_SessionToken::getSessionToken()."');\n";
+            echo "window.close();\n";
+            echo "</script>\n";
+            exit;
+        } else {
+            Kwf_Util_Redirect::redirect($redirect);
+        }
     }
 
     protected function _initFields()
