@@ -16,11 +16,11 @@ $(document).on('click', 'a', function(event) {
         }
     });
 
-    if (lnk.data('kwc-popup')) {
-        if (lnk.data('kwc-popup') == 'blank') {
+    if ($(lnk).data('kwc-popup')) {
+        if ($(lnk).data('kwc-popup') == 'blank') {
             window.open(lnk.href, '_blank');
         } else {
-            window.open(lnk.href, '_blank', lnk.data('kwc-popup'));
+            window.open(lnk.href, '_blank', $(lnk).data('kwc-popup'));
         }
     }
 });
