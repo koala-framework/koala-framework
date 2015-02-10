@@ -11,5 +11,11 @@ Ext2.override(Ext2.tree.TreeLoader, {
         if(typeof callback == "function"){
             callback(this, node);
         }
+    },
+
+    getParams: function(node){
+        return Ext2.applyIf({
+            node: node.id
+        }, this.baseParams);
     }
 });
