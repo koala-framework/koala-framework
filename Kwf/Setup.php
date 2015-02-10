@@ -164,6 +164,7 @@ class Kwf_Setup
         switch (php_sapi_name()) {
             case 'apache2handler':
                 $requestPath = $_SERVER['REQUEST_URI'];
+                $requestPath = strtok($requestPath, '?');
                 break;
             case 'cli':
                 $requestPath = false;
