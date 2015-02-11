@@ -15122,4 +15122,45 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2266</id>
 <ru>Действие</ru>
 </text>
+<text>
+<en>Standard Adjustments</en>
+<de>Standardeinstellungen</de>
+<id>2257</id>
+</text>
+<text>
+<en>Background Color</en>
+<de>Hintergrundfarbe</de>
+<id>2258</id>
+</text>
+<text>
+<en>Margin Bottom</en>
+<de>Abstand unten</de>
+<id>2259</id>
+</text>
+<text>
+<en>Background Image</en>
+<de>Hintergrundbild</de>
+<id>2260</id>
+</text>
+<text>
+<en>White</en>
+<de>Weiß</de>
+<id>2261</id>
+</text>
+<text>
+<en>Black</en>
+<de>Schwarz</de>
+<id>2262</id>
+</text>
+<text>
+<en>None</en>
+<context>color</context>
+<de>Keine</de>
+<id>2263</id>
+</text>
+<text>
+<en>Optional</en>
+<de>Optional</de>
+<id>2264</id>
+</text>
 </trl>
