@@ -25,7 +25,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends Kwc_Edit
             $data['secret'] = $wirecardSecret;
             $responseFingerprintSeed  = "";
             foreach (explode(',', $data['responseFingerprintOrder']) as $key) {
-                $responseFingerprintSeed  .= utf8_encode($data[$key]);
+                $responseFingerprintSeed  .= $data[$key];
             }
             $responseFingerprint = md5($responseFingerprintSeed);
             if ($responseFingerprint == $data['responseFingerprint']) {
