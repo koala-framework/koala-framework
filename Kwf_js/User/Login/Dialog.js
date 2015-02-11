@@ -76,7 +76,14 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
                 if (r.redirects.length) {
                     var html = '<ul>';
                     Ext2.each(r.redirects, function(redirect) {
-                        html += '<li><a href="'+redirect.url+'">'+redirect.name+'</a>';
+                        html += '<li><a href="'+redirect.url+'">\n';
+                        if (redirect.icon) {
+                            html += '<img src="'+redirect.icon+'" />\n';
+                        } else {
+                            html += redirect.name;
+                        }
+                        html += '</a></li>\n';
+
                     }, this);
                     html += '</ul>';
                     this.redirectsPanel.body.update(html);

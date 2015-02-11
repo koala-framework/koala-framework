@@ -65,7 +65,8 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
                 $label = $auth->getLoginRedirectLabel();
                 $this->view->redirects[] = array(
                     'url' => $url.'?authMethod='.$k.'&redirect='.urlencode($_SERVER['REQUEST_URI']),
-                    'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name'])
+                    'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name']),
+                    'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
                 );
             }
         }

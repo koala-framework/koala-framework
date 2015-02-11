@@ -16,7 +16,15 @@
         <p><?=trlKwf('Activate with:')?></p>
         <ul>
         <?php foreach ($this->redirects as $r) { ?>
-            <li><a href="<?=htmlspecialchars($r['url'])?>"><?=htmlspecialchars($r['name'])?></a></li>
+            <li>
+                <a href="<?=htmlspecialchars($r['url'])?>">
+                    <? if ($r['icon']) { ?>
+                        <img src="<?=htmlspecialchars($r['icon'])?>" />
+                    <? } else { ?>
+                        <?=htmlspecialchars($r['name'])?>
+                    <? } ?>
+                </a>
+            </li>
         <?php } ?>
         </ul>
     <? } ?>
