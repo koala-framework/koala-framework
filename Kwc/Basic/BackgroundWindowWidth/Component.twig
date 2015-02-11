@@ -1,6 +1,8 @@
 <div class="{{ cssClass }} {{ backgroundColor }}">
     {% if image.hasContent() %}
-        {{ renderer.component(image) }}
+        <div class="background backgroundImage">
+            {{ renderer.component(image) }}
+        </div>
     {% endif %}
     <div class="background{% if image.hasContent() %} opaque{% endif %}"></div>
     <div class="content">
