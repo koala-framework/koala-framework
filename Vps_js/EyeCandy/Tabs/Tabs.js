@@ -2,8 +2,7 @@ Vps.onContentReady(function() {
     var els = Ext.query('div.vpsTabs');
     els.forEach(function(el) {
         if (!el.tabsObject) {
-            el = Ext.get(el);
-            el.tabsObject = new Vps.Tabs(el);
+            el.tabsObject = new Vps.Tabs(Ext.get(el));
         }
     });
 });
