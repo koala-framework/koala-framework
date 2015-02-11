@@ -31,7 +31,13 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
 
             $files = array();
             foreach ($paths as $p) {
-                $files = array_merge(array(
+                $files = array_merge($files, array(
+                    array(
+                        'file' => 'dist/'.$p.'.dist.js',
+                        'additionalFiles' => array(
+                            'dist/'.$p.'.dist.css',
+                        )
+                    ),
                     array(
                         'file' => $p.'.js',
                         'additionalFiles' => array(
