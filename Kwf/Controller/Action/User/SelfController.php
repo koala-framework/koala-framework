@@ -14,7 +14,7 @@ class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Au
 
         parent::preDispatch();
         $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
-        $row = $this->_form->getModel()->getRowByRowByKwfUser($authedUser);
+        $row = $this->_form->getModel()->getRowByKwfUser($authedUser);
         $this->_form->setId($row->id);
     }
 
@@ -37,7 +37,7 @@ class Kwf_Controller_Action_User_SelfController extends Kwf_Controller_Action_Au
     protected function _hasPermissions($row, $action)
     {
         $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
-        $authedUser = $this->_form->getModel()->getRowByRowByKwfUser($authedUser);
+        $authedUser = $this->_form->getModel()->getRowByKwfUser($authedUser);
         if (!$authedUser) return false;
         if ($authedUser->id != $row->id) {
             return false;

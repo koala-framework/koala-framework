@@ -17,7 +17,7 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
         }
 
         $model = Kwf_Model_Abstract::getInstance(Kwf_Config::getValue('user.kwfUserController.model'));
-        if ($this->_getAuthData() && $model->getRowByRowByKwfUser($this->_getAuthData())) {
+        if ($this->_getAuthData() && $model->getRowByKwfUser($this->_getAuthData())) {
             foreach ($acl->getAllResources() as $resource) {
                 if ($resource instanceof Kwf_Acl_Resource_UserSelf
                     && $acl->isAllowedUser($this->_getAuthData(), $resource, 'view')

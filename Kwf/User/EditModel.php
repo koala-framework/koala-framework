@@ -108,7 +108,7 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
         throw new Kwf_Exception("Can't get kwf user");
     }
 
-    public function getRowByRowByKwfUser($kwfUserRow)
+    public function getRowByKwfUser($kwfUserRow)
     {
         $userModel = Kwf_Registry::get('userModel');
         if (!is_object($kwfUserRow)) $kwfUserRow = $userModel->getRow($kwfUserRow);

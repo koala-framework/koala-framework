@@ -85,7 +85,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         $ids = explode(';', $ids);
 
 
-        $ownUserRow = $this->_model->getRowByRowByKwfUser(Kwf_Registry::get('userModel')->getAuthedUser());
+        $ownUserRow = $this->_model->getRowByKwfUser(Kwf_Registry::get('userModel')->getAuthedUser());
         if (in_array($ownUserRow->id, $ids)) {
             throw new Kwf_ClientException(trlKwf("You cannot delete your own account."));
         }
