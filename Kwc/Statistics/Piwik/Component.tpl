@@ -6,7 +6,7 @@
   <? if ($this->disableCookies) { ?>
   _paq.push(['disableCookies']);
   <? } else { ?>
-  if (!Kwf.Statistics.isUserOptIn()) { _paq.push(['disableCookies']); }
+  if (Kwf && Kwf.Statistics && !Kwf.Statistics.isUserOptIn()) { _paq.push(['disableCookies']); }
   <? } ?>
 
   <? if ($this->customTrackingDomain) { ?>
