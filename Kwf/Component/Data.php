@@ -1457,7 +1457,7 @@ class Kwf_Component_Data
     public function getLinkDataAttributes()
     {
         $ret = array();
-        if ($this->isPage()) {
+        if ($this->isPage) {
             $contentSender = Kwc_Abstract::getSetting($this->componentClass, 'contentSender');
             if ($contentSender != 'Kwf_Component_Abstract_ContentSender_Default') { //skip for performance
                 $contentSender = new $contentSender($this);
