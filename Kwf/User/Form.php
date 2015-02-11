@@ -10,7 +10,7 @@ class Kwf_User_Form extends Kwf_Form
     {
         parent::_init();
         if (!$this->getModel()) {
-            $this->setModel(Kwf_Model_Abstract::getInstance(Kwf_Config::getValue('user.kwfUserController.model')));
+            $this->setModel(Kwf_Registry::get('userModel')->getEditModel());
         }
     }
 

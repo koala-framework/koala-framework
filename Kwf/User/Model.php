@@ -294,4 +294,16 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         }
         return $this->_authMethods;
     }
+
+    public function getEditModel()
+    {
+        $m = $this->_proxyModel;
+        if ($m instanceof Kwf_User_EditModel) return $m;
+        if ($m instanceof Kwf_Model_Union) {
+            foreach ($m->getUnionModels() as $m) {
+                if ($m instanceof Kwf_User_EditModel) return $m;
+            }
+        }
+        throw new Kwf_Exception("Can't find User EditModel, override getEditModel or don't use it");
+    }
 }

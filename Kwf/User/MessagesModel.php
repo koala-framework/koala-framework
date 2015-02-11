@@ -17,7 +17,7 @@ class Kwf_User_MessagesModel extends Kwf_Model_Db
 
     protected function _init()
     {
-        $userModelClass = Kwf_Config::getValue('user.kwfUserController.model');
+        $userModelClass = get_class(Kwf_Registry::get('userModel')->getEditModel());
         $this->_referenceMap['User']['refModelClass']  = $userModelClass;
         $this->_referenceMap['ByUser']['refModelClass']  = $userModelClass;
         parent::_init();

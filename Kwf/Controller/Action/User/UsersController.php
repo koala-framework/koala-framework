@@ -13,7 +13,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
 
     public function preDispatch()
     {
-        $this->_model = Kwf_Config::getValue('user.kwfUserController.model');
+        $this->_model = Kwf_Registry::get('userModel')->getEditModel();
         $this->_editDialog['controllerUrl'] = $this->getRequest()->getBaseUrl().$this->_editDialog['controllerUrl'];
         parent::preDispatch();
     }
