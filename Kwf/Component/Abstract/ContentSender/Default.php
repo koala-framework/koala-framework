@@ -3,8 +3,8 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
 {
     private static function _getRequestWithFiles()
     {
-        $ret = $_REQUEST;
-        //in _REQUEST sind _FILES nicht mit drinnen
+        //don't use $_REQUEST, we don't want cookies
+        $ret = array_merge($_GET, $_POST);
         foreach ($_FILES as $k=>$file) {
             if (is_array($file['tmp_name'])) {
                 //wenn name[0] dann kommts in komischer form daher -> umwandeln
