@@ -39,7 +39,7 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
      *               - oder das RelationsModel selbst (Kwf_Model_Abstract)
      * @param string $relationToValuesRule Die rule vom Relationsmodel zum Values-model
      */
-    public function __construct($dependetModelRule, $relationToValuesRule, $title = null)
+    public function __construct($dependetModelRule, $relationToValuesRule, $title = null, $fieldKey = null)
     {
         if (!is_string($dependetModelRule)) {
             if (is_object($dependetModelRule) && !($dependetModelRule instanceof Kwf_Model_Abstract)) {
@@ -50,12 +50,7 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
         $this->setValuesModel($relationToValuesRule);
         $this->_relationToValuesRule = $relationToValuesRule;
 
-        $fieldKey = $relationToValuesRule;
-        $i = 2;
-        while (in_array($fieldKey, self::$_multiCheckboxes)) {
-            $fieldKey = $relationToValuesRule.$i++;
-        }
-        self::$_multiCheckboxes[] = $fieldKey;
+        if (!$fieldKey) $fieldKey = $relationToValuesRule;
 
         parent::__construct($fieldKey);
         if ($title) {
