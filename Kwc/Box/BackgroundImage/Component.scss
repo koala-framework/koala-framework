@@ -13,3 +13,17 @@
         top: 0;
     }
 }
+
+.no-bgsizecover {
+    .cssClass {
+        .innerBackground {
+            visibility: hidden;
+
+            &.loaded {
+                visibility: visible;
+            }
+        }
+    }
+}
+
+

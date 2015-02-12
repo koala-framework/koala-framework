@@ -55,6 +55,7 @@ Kwf.onJElementReady('.cssClass', function(el, config) {
             backgroundResizeOriginalHeight = image.height;
             backgroundResizeOriginalWidth = image.width;
             checkSize();
+            innerBackground.addClass('loaded');
         };
         if (image.width) image.onload(); //already loaded, call onload manually
     }
