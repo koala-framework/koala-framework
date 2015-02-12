@@ -1,4 +1,7 @@
 <?php
+/**
+ * Auth Method Interface for initial activating users by an activation token
+ */
 interface Kwf_User_Auth_Interface_Activation
 {
     public function validateActivationToken(Kwf_Model_Row_Interface $row, $token);
