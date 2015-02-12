@@ -47,6 +47,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
                     'url' => $url.'?authMethod='.$k,
                     'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name']),
                     'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
+                    'formOptions' => $auth->getLoginRedirectFormOptions(),
                 );
             }
         }

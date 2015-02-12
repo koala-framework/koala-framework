@@ -74,19 +74,34 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
                     this.loginPanelContainer.doLayout();
                 }
                 if (r.redirects.length) {
-                    var html = '<ul>';
-                    Ext2.each(r.redirects, function(redirect) {
-                        html += '<li><a href="'+redirect.url+'">\n';
-                        if (redirect.icon) {
-                            html += '<img src="'+redirect.icon+'" />\n';
-                        } else {
-                            html += redirect.name;
-                        }
-                        html += '</a></li>\n';
-
-                    }, this);
-                    html += '</ul>';
-                    this.redirectsPanel.body.update(html);
+                    var tpl = new Ext2.XTemplate([
+                        '<ul>',
+                        '<tpl for=".">',
+                            '<li>',
+                            '<form>',
+                            '<tpl for="formOptions">',
+                                '<tpl if="type == \'select\'">',
+                                    '<select name="{name}">',
+                                    '<tpl for="values">',
+                                        '<option value="{value}">{name}</option>',
+                                    '</tpl>',
+                                    '</select>',
+                                '</tpl>',
+                            '</tpl>',
+                            '<a href="{url:htmlEncode}">',
+                            '<tpl if="icon">',
+                                '<img src="{icon}" />',
+                            '</tpl>',
+                            '<tpl if="!icon">',
+                                '{name:htmlEncode}',
+                            '</tpl>',
+                            '</a>',
+                            '</form>',
+                            '</li>',
+                        '</tpl>',
+                        '</ul>'
+                    ]);
+                    tpl.overwrite(this.redirectsPanel.body, r.redirects);
                     this.redirectsPanel.body.select('a').each(function(a) {
                         a.on('click', function(ev) {
                             ev.preventDefault();
@@ -95,7 +110,10 @@ Kwf.User.Login.Dialog = Ext2.extend(Ext2.Window,
                                 this.afterLogin();
                                 delete window.ssoCallback;
                             }).bind(this);
-                            window.open(a.dom.href+'&redirect=jsCallback', 'sso', 'width=800,height=600');
+                            var values = Ext2.lib.Ajax.serializeForm(Ext2.fly(ev.getTarget()).parent('form').dom);
+                            var href = Ext2.fly(ev.getTarget()).parent('a').dom.href;
+                            href += '&redirect=jsCallback&'+values;
+                            window.open(href, 'sso', 'width=800,height=600');
                         }, this);
                     }, this);
                 } else {

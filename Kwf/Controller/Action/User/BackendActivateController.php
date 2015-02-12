@@ -98,6 +98,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
                     'url' => $url.'?authMethod='.$k.'&code='.$this->_getParam('code'),
                     'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name']),
                     'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
+                    'formOptions' => $auth->getLoginRedirectFormOptions(),
                 );
             }
         }
@@ -135,7 +136,14 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         $ns = new Kwf_Session_Namespace('kwf-backend-activate');
         $ns->state = $state;
 
-        $url = $authMethods[$authMethod]->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state);
+        $formValues = array();
+        foreach ($authMethods[$authMethod]->getLoginRedirectFormOptions() as $option) {
+            if ($option['type'] == 'select') {
+                $formValues[$option['name']] = $this->_getParam($option['name']);
+            }
+        }
+
+        $url = $authMethods[$authMethod]->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
         $this->redirect($url);
     }
 
