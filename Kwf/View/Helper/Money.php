@@ -21,7 +21,7 @@ class Kwf_View_Helper_Money
             $decimalSeparator = $component->getBaseProperty('money.decimalSeparator');
             $thousandSeparator = $component->getBaseProperty('money.thousandSeparator');
         } else {
-            $format = Kwf_Registry::get('config')->moneyFormat;
+            $format = Kwf_Config::getValue('money.format');
             $decimals = 2;
             $decimalSeparator = trlcKwf('decimal separator', ".");
             $thousandSeparator = trlcKwf('thousands separator', ",");
