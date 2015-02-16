@@ -246,7 +246,7 @@
 <mk>Кординати</mk>
 <sl>Koordinate</sl>
 <ru>Координаты</ru>
-<hr>Koordinati</hr>
+<hr>Koordinate</hr>
 <si>koordinate</si>
 <bg>Координати</bg>
 <ua>Координати</ua>
@@ -292,7 +292,7 @@
 <es>Altura</es>
 <ru>Высота</ru>
 <es_CL>Altura</es_CL>
-<hr>Visine</hr>
+<hr>Visina</hr>
 <si>višina</si>
 <bg>височина</bg>
 <ua>Висота</ua>
@@ -464,7 +464,7 @@
 <es>Imagen extendida</es>
 <ru>Увеличить изображение</ru>
 <es_CL>Imagen extendida</es_CL>
-<hr>Povečati sliku</hr>
+<hr>Povećaj sliku</hr>
 <uk>Збільшити зображення</uk>
 <si>povečati sliko</si>
 <ua>Збільшити зображення</ua>
@@ -1367,7 +1367,7 @@
 <ro>Separaţi elementele printr-un rând nou.</ro>
 <sl>Vstavi vrstico za razdelitev elementov.</sl>
 <ru>Новая строка для разделения элементов.</ru>
-<hr>Podjelite elemente pomoću dodatnog reda. </hr>
+<hr>Podijelite elemente pomoću dodatnog reda. </hr>
 <uk>Виділити елементи в одну лінію.</uk>
 <si>Ločite elemente z dodano novo vrstico.</si>
 <ua>Розділіть елементи новим рядком.</ua>
@@ -1404,7 +1404,7 @@
 <ro>Doriţi să salvaţi modificările?</ro>
 <sl>Ali želite shraniti spremembe?</sl>
 <ru>Вы хотите сохранить изменения?</ru>
-<hr>Želite pohraniti promijene?</hr>
+<hr>Želite pohraniti promjene?</hr>
 <sk>Želáte si uložiť zmeny?</sk>
 <uk>Ви хочете, щоб зберегти зміни?</uk>
 <si>Želite shraniti spremembo?</si>
@@ -1576,7 +1576,7 @@
 <ro>Măreşte aici</ro>
 <sl>Razširi tukaj</sl>
 <ru>Развернуть тут</ru>
-<hr>Ovjde proširiti</hr>
+<hr>Ovdje proširiti</hr>
 <uk>Розгорнути тут</uk>
 <si>tukaj razširiti</si>
 <ua>Збільшити </ua>
@@ -1588,7 +1588,7 @@
 <ro>Micşorează aici</ro>
 <sl>Skrči tukaj</sl>
 <ru>Свернуть тут</ru>
-<hr>Ovjde smanjiti</hr>
+<hr>Ovdje smanjiti</hr>
 <uk>Згорнути тут</uk>
 <si>tukaj skrčiti</si>
 <ua>Зжати</ua>
@@ -1613,7 +1613,7 @@
 <ro>A intervenit o eroare de server.</ro>
 <sl>Prišlo je do napake na strežniku.</sl>
 <ru>Возникла ошибка на сервере.</ru>
-<hr>Serverska pogreška. </hr>
+<hr>Greška na serveru.</hr>
 <uk>Сталася помилка сервера.</uk>
 <si>Napaka na strežniku.</si>
 <ua>Помилка серверу</ua>
@@ -5046,6 +5046,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <fr>S'il vous plaît remplir dans ce domaine</fr>
 <ua>Будь ласка, заповніть поле</ua>
 <sk>Vyplňte prosím políčko</sk>
+<hr>Molimo ispunite polje</hr>
 </text>
 <text>
 <en>'%value%' has not only alphabetic and digit characters</en>
@@ -10157,6 +10158,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Будь ласка, оберіть опцію</ua>
 <sk>Vyberte si prosím jednu z možností</sk>
 <es>Por favor escoge una opción</es>
+<hr>Molimo odaberite jednu opciju</hr>
 </text>
 <text>
 <en>No Filedata received.</en>
@@ -10261,6 +10263,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Izberite eno od možnosti</sl>
 <ru>Пожалуйста, выберите значение</ru>
 <ua>Будь ласка, оберіть значення</ua>
+<hr>Molimo odaberite jednu opciju</hr>
 </text>
 <text>
 <en>Link.First Child Page</en>
@@ -14873,6 +14876,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>2 Klick Social Media Buttons</de>
 <id>2213</id>
 <hr>Društvene mreže - princip 2 klika</hr>
+<ro>Butoane Social Media - 2 click-uri</ro>
 </text>
 <text>
 <en>2 clicks for more privacy: When you click here the button will be activated and you can send your recommendation. As soon as the button is activated data will be sent to third parties.</en>
@@ -14880,6 +14884,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2214</id>
 <hr>2 klika za više zaštite: Tek nakon što ovdje odobrite korištenje dodataka oni postaju aktivni. Nakon aktivacije dodataka podaci mogu biti poslani trećim stranama.</hr>
 <hu>2 kattintás a nagyobb adatvédelemért: Ha ide kattint a gomb aktiválódik, és elküldheti az ajánlást. Amint a gomb aktiválódik adatokat fog küldeni a harmadik félnek</hu>
+<ro>2 click-uri pentru un plus de confidențialitate: activarea acestei funcții permite trimiterea de recomandări. În acest caz, datele vor fi trimise către terți. </ro>
 </text>
 <text>
 <en>not connected to Facebook</en>
@@ -14948,6 +14953,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2223</id>
 <hr>Ako klikom aktivirate ova polja, informacije će biti poslane na Facebook, Twitter ili Google u Americi i možda tamo budu spremljene.</hr>
 <hu>Ha egy kattintással aktiválja ezeket a gombokat, információkat fog küldeni a Facebook, a Twitter vagy a Google felé (az USA-ban), melyeket ott tárolhatnak.</hu>
+<ro>Prin activarea acestor funcții, sunteți de acord cu transmiterea informațiilor către terți (Facebook, Twitter, Google).</ro>
 </text>
 <text>
 <en>Agree permanent activation and data transfer:</en>
@@ -14955,6 +14961,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Dauerhaft aktivieren und Datenüber&amp;shy;tragung zustimmen:</de>
 <id>2224</id>
 <hr>Dugoročno aktiviraj i dopusti razmjenu podataka:</hr>
+<hu>Elfogadja a folytonos aktiválást és adatátvitelt :</hu>
+<ro>Activare permanentă a transmisiei de date:</ro>
 </text>
 <text>
 <en>settings</en>
