@@ -18,7 +18,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
                 '<% }) %>'+
             '<% } else { %>'+
                 '<% if (item.children && item.children.length) { %>'+
-                    '<li class="back"><a href="#">zurück</a></li>\n'+
+                    '<li class="back"><a href="#">'+trlKwf('back')+'</a></li>\n'+
                 '<% } %>'+
                 '<% _.each(item.children, function(child) { %>'+
                     '<li class="<% if (child.hasChildren) {  %>hasChildren<% } else if (child.isParent) { %>parent<% } %>">\n' +
