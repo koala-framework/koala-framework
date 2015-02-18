@@ -103,7 +103,10 @@ Ext2.extend(Kwf.Tabs, Ext2.util.Observable, {
             oldContentEl.setVisible(true);
 
             newContentEl.fadeIn({
-                duration: this.fxDuration
+                duration: this.fxDuration,
+                callback: function(el) {
+                    el.parent().setStyle('height', 'auto');     //set the height after animation to auto because there are Components who change height when they are inside a tab
+                }
             });
             oldContentEl.fadeOut({
                 duration: this.fxDuration,
@@ -126,7 +129,10 @@ Ext2.extend(Kwf.Tabs, Ext2.util.Observable, {
         this.tabsContents.setHeight(oldContentEl.getHeight());
         this.tabsContents.scale(undefined, newContentEl.getHeight(), {
             easing: 'easeOut',
-            duration: this.fxDuration
+            duration: this.fxDuration,
+            callback: function(el) {
+                el.setStyle('height', 'auto');     //set the height after animation to auto because there are Components who change height when they are inside a tab
+            }
         });
 
         // passed arguments are: tabsObject, newIndex, oldIndex
