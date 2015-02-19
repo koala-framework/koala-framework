@@ -85,7 +85,12 @@ class Kwf_Util_Setup
         //required eg. behind load balancers
         if (Kwf_Config::getValueArray('server.replaceVars.remoteAddr')) {
             $a = Kwf_Config::getValueArray('server.replaceVars.remoteAddr');
-            $ret .= "\nif (isset(\$_SERVER['REMOTE_ADDR']) && \$_SERVER['REMOTE_ADDR'] == '$a[if]' && isset(\$_SERVER['$a[replace]'])) {\n";
+            if (substr($a['if'], -2) == '.*') {
+                $comparison = "substr(\$_SERVER['REMOTE_ADDR'], 0, ".(strlen($a['if'])-1).") == '".substr($a['if'], 0, -1)."'";
+            } else {
+                $comparison = "\$_SERVER['REMOTE_ADDR'] == '$a[if]'";
+            }
+            $ret .= "\nif (isset(\$_SERVER['REMOTE_ADDR']) && $comparison && isset(\$_SERVER['$a[replace]'])) {\n";
             $ret .= "    \$_SERVER['REMOTE_ADDR'] = \$_SERVER['$a[replace]'];\n";
             $ret .= "}\n";
         }
