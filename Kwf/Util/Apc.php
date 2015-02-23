@@ -22,6 +22,11 @@ class Kwf_Util_Apc
         return self::callUtil('clear-cache', $params, $options);
     }
 
+    public static function callSaveCacheByCli($params, $options = array())
+    {
+        return self::callUtil('save-cache', $params, $options);
+    }
+
     public static function callUtil($method, $params, $options = array())
     {
         $outputType = '';
@@ -197,6 +202,14 @@ class Kwf_Util_Apc
                 }
             }
             echo 'OK '.round((microtime(true)-$s)*1000).' ms';
+            exit;
+        } else if (substr($uri, 0, 24) == '/kwf/util/apc/save-cache') {
+            $data = unserialize($_REQUEST['data']);
+            if (apc_store($_REQUEST['id'], $data)) {
+                echo 'OK';
+            } else {
+                echo 'ERROR';
+            }
             exit;
         } else if (substr($uri, 0, 31) == '/kwf/util/apc/get-counter-value') {
             $prefix = Kwf_Cache::getUniquePrefix().'bench-';
