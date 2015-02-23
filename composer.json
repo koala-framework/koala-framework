@@ -29,7 +29,7 @@
         },
         "require-npm": {
             "uglify-js": "2.4.13",
-            "node-sass": "1.2.3"
+            "node-sass": "2.0.1"
         },
         "require-dev-bower": {
             "qunit": "1.14.0",
