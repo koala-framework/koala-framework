@@ -23,12 +23,7 @@ class Kwc_Directories_Item_Directory_Trl_FormController extends Kwf_Controller_A
     {
         $class = $this->_getParam('class');
 
-        $this->_form->setModel(new Kwc_Directories_Item_Directory_Trl_AdminModel(array(
-            'proxyModel' => Kwc_Abstract::createChildModel(
-                Kwc_Abstract::getSetting($this->_getParam('class'), 'masterComponentClass')
-            ),
-            'trlModel' => Kwc_Abstract::createChildModel($this->_getParam('class')),
-        )));
+        $this->_form->setModel(Kwc_Abstract::createChildModel($class));
 
         $gen = Kwf_Component_Generator_Abstract::getInstance($this->_getParam('class'), 'detail');
         $detailClasses = Kwc_Abstract::getChildComponentClasses($class, 'detail');
@@ -36,9 +31,9 @@ class Kwc_Directories_Item_Directory_Trl_FormController extends Kwf_Controller_A
         foreach ($detailClasses as $key => $detailClass) {
             $formClass = Kwc_Admin::getComponentClass($detailClass, 'Form');
             $form = new $formClass($key, $detailClass, $class);
-            $form->setIdTemplate($this->_getParam('componentId').$gen->getIdSeparator().'{0}');
+            $form->setIdTemplate('{0}');
             $form->setCreateMissingRow(true);
-            $form->setModel(Kwc_Abstract::createChildModel($class));
+            $form->setModel($this->_form->getModel());
             $forms[$key] = $form;
         }
 
