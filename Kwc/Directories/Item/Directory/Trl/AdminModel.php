@@ -68,6 +68,7 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
                 ->getComponentByDbId($id, array('ignoreVisible'=>true));
             $select->whereEquals('component_id', $c->parent->chained->dbId);
             $select->whereEquals('id', $c->id);
+            $componentId = $c->parent->dbId;
         } else if ($componentId && $id) {
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
@@ -111,7 +112,10 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
 
     protected function _getTrlRow($proxiedRow, $componentId)
     {
-        $proxyId = $componentId . '_' . $proxiedRow->id;
+        $c = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
+        $sep = $c->getGenerator('child')->getIdSeparator();
+        $proxyId = $componentId . $sep . $proxiedRow->id;
         $trlRow = $this->_trlModel->getRow($proxyId);
         if (!$trlRow) {
             $trlRow = $this->_trlModel->createRow();

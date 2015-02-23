@@ -14,8 +14,8 @@ class Kwc_Directories_Item_Directory_Trl_FormController extends Kwf_Controller_A
     public function preDispatch()
     {
         parent::preDispatch();
-                                                            //idSeparator dynam. holen?
-        $this->_form->setId($this->_getParam('componentId').'_'.$this->_getParam('id'));
+        $gen = Kwf_Component_Generator_Abstract::getInstance($this->_getParam('class'), 'detail');
+        $this->_form->setId($this->_getParam('componentId').$gen->getIdSeparator().$this->_getParam('id'));
         $this->_form->setCreateMissingRow(true);
     }
 
@@ -30,12 +30,13 @@ class Kwc_Directories_Item_Directory_Trl_FormController extends Kwf_Controller_A
             'trlModel' => Kwc_Abstract::createChildModel($this->_getParam('class')),
         )));
 
+        $gen = Kwf_Component_Generator_Abstract::getInstance($this->_getParam('class'), 'detail');
         $detailClasses = Kwc_Abstract::getChildComponentClasses($class, 'detail');
         $forms = array();
         foreach ($detailClasses as $key => $detailClass) {
             $formClass = Kwc_Admin::getComponentClass($detailClass, 'Form');
             $form = new $formClass($key, $detailClass, $class);
-            $form->setIdTemplate($this->_getParam('componentId').'_{0}');
+            $form->setIdTemplate($this->_getParam('componentId').$gen->getIdSeparator().'{0}');
             $form->setCreateMissingRow(true);
             $form->setModel(Kwc_Abstract::createChildModel($class));
             $forms[$key] = $form;
