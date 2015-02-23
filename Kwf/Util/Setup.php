@@ -42,10 +42,20 @@ class Kwf_Util_Setup
             foreach ($ip as $path) {
                 $file = $path.'/'.str_replace('_', '/', $cls).'.php';
                 if (file_exists($file)) {
-                    if (substr($file, 0, strlen(getcwd())) != getcwd()) {
-                        throw new Kwf_Exception("'$file' not in cwd");
+                    if (VENDOR_PATH == '../vendor') {
+                        $cwd = getcwd();
+                        $cwd = substr($cwd, 0, strrpos($cwd, '/'));
+                        if (substr($file, 0, strlen($cwd)) != $cwd) {
+                            throw new Kwf_Exception("'$file' not in cwd");
+                        }
+                        $file = '../'.substr($file, strlen($cwd)+1);
+                    } else {
+                        if (substr($file, 0, strlen(getcwd())) != getcwd()) {
+                            throw new Kwf_Exception("'$file' not in cwd");
+                        }
+                        $file = substr($file, strlen(getcwd())+1);
                     }
-                    $ret .= "require(\$cwd.'/".substr($file, strlen(getcwd())+1)."');\n";
+                    $ret .= "require(\$cwd.'/".$file."');\n";
                     break;
                 }
             }
@@ -112,10 +122,22 @@ class Kwf_Util_Setup
 
         $ip = array();
         foreach (include VENDOR_PATH.'/composer/include_paths.php' as $p) {
-            if (substr($p, 0, strlen(getcwd())) != getcwd()) {
-                throw new Kwf_Exception("'$p' not in cwd");
+
+
+            if (VENDOR_PATH == '../vendor') {
+                $cwd = getcwd();
+                $cwd = substr($cwd, 0, strrpos($cwd, '/'));
+                if (substr($p, 0, strlen($cwd)) != $cwd) {
+                    throw new Kwf_Exception("'$p' not in cwd");
+                }
+                $p = '../'.substr($p, strlen($cwd)+1);
+            } else {
+                if (substr($p, 0, strlen(getcwd())) != getcwd()) {
+                    throw new Kwf_Exception("'$p' not in cwd");
+                }
+                $p = substr($p, strlen(getcwd())+1);
             }
-            $ip[] = "'.\$cwd.'/".substr($p, strlen(getcwd())+1);
+            $ip[] = "'.\$cwd.'/".$p;
         }
         $ip[] = '.';
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
