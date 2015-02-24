@@ -114,7 +114,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
                 if ($uploadsRow->getHashKey() != $splited[1]) {
                     throw new Kwf_Exception('Posted hashKey does not match file-hashkey.');
                 }
-                $postData[$this->getFieldName()] = (int)$postData[$this->getFieldName().'_upload_id'];
+                $postData[$this->getFieldName()] = $splited[0];
             }
             unset($postData[$this->getFieldName().'_upload_id']);
         }

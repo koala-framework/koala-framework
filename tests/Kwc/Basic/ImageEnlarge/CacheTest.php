@@ -31,7 +31,7 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         $im->readImageBlob($o['contents']);
         $this->assertEquals($smallImage['width'], $im->getImageWidth());
         $this->assertEquals($smallImage['height'], $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/'.$smallImage['uploadId'],
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getRow($smallImage['uploadId'])->getFileSource(),
                                     array('width'=>$smallImage['width'], 'height'=>$smallImage['height'], 'cover' => true), $smallImage['uploadId']), $o['contents']);
 
         $a = $xml->xpath("//a");
@@ -57,7 +57,7 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
         $im->readImage($o['file']);
         $this->assertEquals($largeImage['width'], $im->getImageWidth());
         $this->assertEquals($largeImage['height'], $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/'.$largeImage['uploadId'],
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getRow($largeImage['uploadId'])->getFileSource(),
                                     array($largeImage['width'], $largeImage['height'], 'cover' => true)), file_get_contents($o['file']));
     }
 

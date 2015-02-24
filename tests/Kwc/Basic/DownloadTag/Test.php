@@ -34,7 +34,8 @@ class Kwc_Basic_DownloadTag_Test extends Kwc_TestAbstract
     {
         $o = Kwc_Basic_DownloadTag_Component::getMediaOutput('1700', 'default', 'Kwc_Basic_DownloadTag_TestComponent');
         $this->assertEquals('image/png', $o['mimeType']);
-        $this->assertEquals(Kwf_Model_Abstract::getInstance('Kwc_Basic_DownloadTag_UploadsModel')->getUploadDir().'/1', $o['file']);
+        $m = Kwf_Model_Abstract::getInstance('Kwc_ImageResponsive_MediaOutput_Image_UploadsModel');
+        $this->assertTrue(file_exists($o['file']));
     }
 
     public function testHtml()

@@ -27,6 +27,8 @@ class Kwf_Media_Image
                 $image->getImageWidth(),
                 $image->getImageHeight()
             );
+        } else {
+            throw new Kwf_Exception("Image is required");
         }
 
         $maxWidth = $dim['width'] * 2;
