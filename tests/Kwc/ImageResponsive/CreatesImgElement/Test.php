@@ -13,19 +13,19 @@ class Kwc_ImageResponsive_CreatesImgElement_Test extends Kwf_Test_SeleniumTestCa
      * and especially behaviour for different screensizes
      *
      * Abstract-Image-Component:
-     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_Root_Component/imageabstract1
-     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_Root_Component/imageabstract2
-     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_Root_Component/imageabstract3
-     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_Root_Component/imageabstract4
+     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/imageabstract1
+     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/imageabstract2
+     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/imageabstract3
+     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/imageabstract4
      *
      * Basic-Image-Component:
-     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_Root_Component/imagebasic1
+     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/imagebasic1
      *
      * Basic-Image-Enlarge-Component:
-     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_Root_Component/imageenlarge1
+     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/imageenlarge1
      *
      * TextImage-Component:
-     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_Root_Component/textimage1
+     *   http://kwf.benjamin.vivid/kwf/kwctest/Kwc_ImageResponsive_CreatesImgElement_Root_Component/textimage1
      */
     public function setUp()
     {
