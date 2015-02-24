@@ -159,6 +159,9 @@ class Kwf_Setup
 
     public static function getConfigSection()
     {
+        if (is_null(self::$configSection)) {
+            throw new Kwf_Exception("Config Section not yet set");
+        }
         return self::$configSection;
     }
 

@@ -20,6 +20,9 @@ class Kwf_Util_Setup
 
         Zend_Registry::setClassName('Kwf_Registry');
 
+        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
+        Kwf_Setup::$configSection = $configSection;
+
         error_reporting(E_ALL^E_STRICT);
 
         class_exists('Kwf_Trl'); //trigger autoload
