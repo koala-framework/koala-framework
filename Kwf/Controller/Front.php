@@ -73,11 +73,7 @@ class Kwf_Controller_Front extends Zend_Controller_Front
         if (null === self::$_instance) {
             $class = Kwf_Config::getValue('frontControllerClass');
             if (!$class) {
-                $validCommands = array('shell', 'export', 'copy-to-test'); //für ältere branches
-                if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
-                    throw new Kwf_Exception("frontControllerClass must be set in config.ini");
-                }
-                $class = 'Kwf_Controller_Front';
+                throw new Kwf_Exception("frontControllerClass must be set in config.ini");
             }
             self::$_instance = new $class();
             self::$_instance->_init();
