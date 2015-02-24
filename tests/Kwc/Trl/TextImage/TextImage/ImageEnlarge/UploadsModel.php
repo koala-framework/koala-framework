@@ -5,6 +5,6 @@ class Kwc_Trl_TextImage_TextImage_ImageEnlarge_UploadsModel extends Kwf_Test_Upl
     {
         parent::__construct($config);
 
-        $this->createRow()->copyFile(KWF_PATH.'/images/information.png', 'foo', 'png', 'image/png');
+        $this->createRow(array('id'=>'1'))->copyFile(KWF_PATH.'/images/information.png', 'foo', 'png', 'image/png');
     }
 }
