@@ -45,6 +45,12 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
                         )
                     ),
                     array(
+                        'file' => 'jquery.'.$p.'.js',
+                        'additionalFiles' => array(
+                            'jquery.'.$p.'.css',
+                        )
+                    ),
+                    array(
                         'file' => 'dist/'.$p.'.js',
                         'additionalFiles' => array(
                             'dist/'.$p.'.css',
