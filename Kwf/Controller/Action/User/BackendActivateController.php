@@ -21,7 +21,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
             } else {
                 $userId = $m[1];
                 $code = $m[2];
-                $userModel = Zend_Registry::get('userModel');
+                $userModel = Kwf_Registry::get('userModel');
                 $user = $userModel->getRow($userId);
                 $this->getRequest()->setParam('user', $user);
                 if (!$user) {
@@ -54,7 +54,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         $this->view->email = $this->_getParam('user')->email;
         $this->view->isActivate = $this->_getParam('user')->isActivated();
 
-        $users = Zend_Registry::get('userModel');
+        $users = Kwf_Registry::get('userModel');
 
         $showPassword = false;
 
@@ -123,7 +123,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
     public function redirectAction()
     {
         $authMethod = $this->_getParam('authMethod');
-        $users = Zend_Registry::get('userModel');
+        $users = Kwf_Registry::get('userModel');
         $authMethods = $users->getAuthMethods();
         if (!isset($authMethods[$authMethod])) {
             throw new Kwf_Exception_NotFound();
@@ -159,7 +159,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         $authMethod = $state[0];
         $code = $state[2];
 
-        $users = Zend_Registry::get('userModel');
+        $users = Kwf_Registry::get('userModel');
         $authMethods = $users->getAuthMethods();
         if (!isset($authMethods[$authMethod])) {
             throw new Kwf_Exception_NotFound();
