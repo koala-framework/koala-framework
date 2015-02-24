@@ -34,7 +34,7 @@ class Kwc_Composite_Images_Test extends Kwc_TestAbstract
         $this->assertEquals(16, $im->getImageHeight());
         $this->assertEquals(
             Kwf_Media_Image::scale(
-                Kwf_Model_Abstract::getInstance('Kwc_Composite_Images_Image_UploadsModel')->getUploadDir().'/1',
+                Kwf_Model_Abstract::getInstance('Kwc_Composite_Images_Image_UploadsModel')->getRow(1)->getFileSource(),
                                     array(16, 16, 'cover' => true)), file_get_contents($o['file']));
     }
 

@@ -39,8 +39,8 @@ class Kwf_View_Helper_Link
             }
         }
 
-        $attrs = " href=\"".htmlspecialchars($url)."\"";
         if (!empty($config['anchor'])) $url .= "#".$config['anchor'];
+        $attrs = " href=\"".htmlspecialchars($url)."\"";
         if (!empty($config['cssClass'])) {
             $cssClass = $config['cssClass'];
             if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
