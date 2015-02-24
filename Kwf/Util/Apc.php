@@ -17,6 +17,18 @@ class Kwf_Util_Apc
         }
     }
 
+    public static function isAvailable()
+    {
+        static $hasApc;
+        if (isset($hasApc)) return $hasApc;
+        $hasApc = extension_loaded('apc');
+        if (!$hasApc && php_sapi_name() == 'cli') {
+            //apc might be enabled in webserver only, not in cli
+            $hasApc = Kwf_Util_Apc::callUtil('is-loaded', array(), array('returnBody'=>true)) == 'OK1';
+        }
+        return $hasApc;
+    }
+
     public static function callClearCacheByCli($params, $options = array())
     {
         return self::callUtil('clear-cache', $params, $options);
@@ -220,10 +232,11 @@ class Kwf_Util_Apc
         } else if ($uri == '/kwf/util/apc/iterate') {
             self::iterate();
         } else if ($uri == '/kwf/util/apc/is-loaded') {
+
             if (extension_loaded('apc')) {
-                echo '1';
+                echo 'OK1';
             } else {
-                echo '0';
+                echo 'OK0';
             }
             exit;
         } else if ($uri == '/kwf/util/apc/get-hostname') {
