@@ -112,6 +112,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             file_put_contents("$cacheFile.map", json_encode($map));
 
             $ret = file_get_contents($cacheFile);
+            $ret = str_replace("@charset \"UTF-8\";\n", '', $ret); //remove charset, no need to adjust sourcemap as sourcemap doesn't include that (bug in libsass)
             $ret = preg_replace("#/\*\# sourceMappingURL=.* \*/#", '', $ret);
 
             $map = new Kwf_SourceMaps_SourceMap(file_get_contents("{$cacheFile}.map"), $ret);
