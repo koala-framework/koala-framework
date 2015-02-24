@@ -292,13 +292,14 @@ class Kwf_Setup
             $class = $urlParts[1];
             $id = $urlParts[2];
             $type = $urlParts[3];
-            $checksum = $urlParts[4];
+            $checksum = urlencode($urlParts[4]);
             // time() wäre der 5er, wird aber nur wegen browsercache benötigt
             $filename = $urlParts[6];
 
             if ($checksum != Kwf_Media::getChecksum($class, $id, $type, $filename)) {
                 throw new Kwf_Exception_AccessDenied('Access to file not allowed.');
             }
+            $class = rawurldecode($class);
             Kwf_Media_Output::output(Kwf_Media::getOutput($class, $id, $type));
         }
     }
