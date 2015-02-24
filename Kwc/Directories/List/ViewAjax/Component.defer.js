@@ -15,7 +15,7 @@ $(document).on('click', 'a', function(event) {
     if (a.data('kwfViewAjaxInitDone')) return; //ignore back link
 
     if (a.data('kwc-view-ajax-filter')) {
-        var config = $.parseJSON(a.data('kwc-view-ajax-filter'));
+        var config = a.data('kwc-view-ajax-filter');
 
         var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[config.viewComponentId];
         if (!view) return;
@@ -29,7 +29,7 @@ $(document).on('click', 'a', function(event) {
         }
 
         $('a[kwc-view-ajax-filter]').each(function() {
-            var config = $.parseJSON($(this).data('kwc-view-ajax-filter'));
+            var config = $(this).data('kwc-view-ajax-filter');
             if (config.viewComponentId == view.componentId) {
                 $(this).removeClass('current');
             }
@@ -157,7 +157,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
         //set menuLinkId to link that is current, be be able to set current again
         $('a[kwc-view-ajax-filter]').each((function(index, linkEl) {
-            var config = $.parseJSON($(linkEl).data('kwc-view-ajax-filter'));
+            var config = $(linkEl).data('kwc-view-ajax-filter');
             if (config.viewComponentId == this.componentId) {
                 if ($(linkEl).hasClass('current')) {
                     this._getState().menuLinkId = getUniqueIdForFilterLink(linkEl);
@@ -197,7 +197,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             //}
             if (this._getState().menuLinkId) {
                 $('a[kwc-view-ajax-filter]').each((function(i, el) {
-                    var config = $.parseJSON($(el).data('kwc-view-ajax-filter'));
+                    var config = $(el).data('kwc-view-ajax-filter');
                     if (config.viewComponentId == this.componentId) {
                         $(el).removeClass('current');
                     }
@@ -230,7 +230,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
                 var a = $(ev.target).closest('a');
                 if (!a.length) return;
                 if (!a.data('kwc-detail')) return;
-                var config = $.parseJSON(a.data('kwc-detail'));
+                var config = a.data('kwc-detail');
                 if (!config.directoryComponentId) return;
                 if (this.directoryComponentId) {
                     if (config.directoryComponentId != this.directoryComponentId) return;
