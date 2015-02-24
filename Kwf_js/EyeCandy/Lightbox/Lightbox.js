@@ -3,7 +3,7 @@ Kwf.namespace('Kwf.EyeCandy.Lightbox');
 $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     var el = event.currentTarget;
     var $el = $(el);
-    var options = jQuery.parseJSON($el.data('kwc-lightbox'));
+    var options = $el.data('kwc-lightbox');
     if (Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')]) {
         l = Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')];
     } else {
