@@ -16,7 +16,8 @@ class Kwf_User_AuthPassword_FnF extends Kwf_Model_FnF
     public function getAuthMethods()
     {
         return array(
-            'password' => new Kwf_User_Auth_PasswordFields($this)
+            'password' => new Kwf_User_Auth_PasswordFields($this),
+            'activation' => new Kwf_User_Auth_ActivationFields($this),
         );
     }
 }
