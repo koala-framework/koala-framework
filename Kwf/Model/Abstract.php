@@ -625,6 +625,12 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         return $c;
     }
 
+    public function convertValueType($column, $value)
+    {
+        $type = $this->getColumnType($column);
+        return self::convertValueToType($value, $type);
+    }
+
     public function getUniqueIdentifier()
     {
         throw new Kwf_Exception_NotYetImplemented();

@@ -68,4 +68,5 @@ class Kwf_Model_FnF extends Kwf_Model_Data_Abstract
     }
 
     public function afterInsert($row) {}
+    public function beforeDelete($row) {}
 }
