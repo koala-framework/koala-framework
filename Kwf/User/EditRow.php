@@ -241,6 +241,11 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
         $this->_sendMails = $value;
     }
 
+    public function getSendMails()
+    {
+        return $this->_sendMails;
+    }
+
     public function sendLostPasswordMail()
     {
         $kwfRow = $this->getModel()->getKwfUserRowById($this->id);
