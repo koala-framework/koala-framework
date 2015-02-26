@@ -59,6 +59,20 @@ abstract class Kwf_Model_Union_Abstract_Test extends Kwf_Test_TestCase
         $this->assertEquals(2, $this->_m->countRows($s));
     }
 
+    public function testCountSelectWhereEqualsId()
+    {
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('id', '1m1');
+        $this->assertEquals(1, $this->_m->countRows($s));
+    }
+
+    public function testCountSelectWhereExprEqualsId()
+    {
+        $s = new Kwf_Model_Select();
+        $s->where(new Kwf_Model_Select_Expr_Equal('id', '1m1'));
+        $this->assertEquals(1, $this->_m->countRows($s));
+    }
+
     public function testGetRowsSelectWhereEquals()
     {
         $s = new Kwf_Model_Select();
@@ -67,6 +81,14 @@ abstract class Kwf_Model_Union_Abstract_Test extends Kwf_Test_TestCase
         $this->assertEquals(1, count($rows));
         $this->assertEquals('aa', $rows[0]->foo);
         $this->assertEquals('1m1', $rows[0]->id);
+    }
+
+    public function testGetRowsSelectWhereExprEqualsId()
+    {
+        $s = new Kwf_Model_Select();
+        $s->where(new Kwf_Model_Select_Expr_Equal('id', '2m2'));
+        $rows = $this->_m->getRows($s);
+        $this->assertEquals('2m2', $rows[0]->id);
     }
 
     public function testGetRowsOrder()

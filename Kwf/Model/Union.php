@@ -53,18 +53,28 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         return $this->_models;
     }
 
-    private function _convertExpr($expr, $targetModel)
+    private function _convertExpr($expr, $modelKey, $targetModel)
     {
         if ($expr instanceof Kwf_Model_Select_Expr_CompareField_Abstract) {
-            $f = $targetModel->getColumnMapping($this->_columnMapping, $expr->getField());
+            $v = $expr->getValue();
+            if ($expr->getField() == 'id') {
+                if (substr($v, 0, strlen($modelKey)) == $modelKey) {
+                    $v = substr($v, strlen($modelKey));
+                } else {
+                    $v = null;
+                }
+                $f = $targetModel->getPrimaryKey();
+            } else {
+                $f = $targetModel->getColumnMapping($this->_columnMapping, $expr->getField());
+            }
             $cls = get_class($expr);
-            return new $cls($f, $expr->getValue());
+            return new $cls($f, $v);
         } else if ($expr instanceof Kwf_Model_Select_Expr_Not) {
-            return new Kwf_Model_Select_Expr_Not($this->_convertExpr($expr->getExpression(), $targetModel));
+            return new Kwf_Model_Select_Expr_Not($this->_convertExpr($expr->getExpression(), $modelKey, $targetModel));
         } else if ($expr instanceof Kwf_Model_Select_Expr_Unary_Abstract) {
             $exprs = array();
             foreach ($expr->getExpressions() as $i) {
-                $exprs[] = $this->_convertExpr($i, $targetModel);
+                $exprs[] = $this->_convertExpr($i, $modelKey, $targetModel);
             }
             $cls = get_class($expr);
             return new $cls($exprs);
@@ -125,7 +135,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
         if ($p = $select->getPart(Kwf_Model_Select::WHERE_EXPRESSION)) {
             foreach ($p as $expr) {
-                $s->where($this->_convertExpr($expr, $m));
+                $s->where($this->_convertExpr($expr, $modelKey, $m));
             }
         }
         return $s;
