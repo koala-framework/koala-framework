@@ -1069,21 +1069,18 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     {
         $models = array($this);
         $models = array_merge($models, $this->_proxyContainerModels);
-
         foreach ($models as $model) {
             foreach ($model->_columnMappings as $map=>$columns) {
                 do {
-                    if (isset($model->_columnMappings[$map])) {
-                        if (!array_key_exists($column, $model->_columnMappings[$map])) {
-                            throw new Kwf_Exception("unknown mapping column: '$column' for mapping '$mapping' in model '".get_class($model)."'");
-                        }
+                    if (isset($model->_columnMappings[$map]) &&
+                        array_key_exists($column, $model->_columnMappings[$map])
+                    ) {
                         return $model->_columnMappings[$map][$column];
                     }
                 } while ($map = get_parent_class($map));
             }
         }
-
-        throw new Kwf_Exception("unknown mapping '$mapping' for '".get_class($this)."'");
+        throw new Kwf_Exception("unknown mapping column: '$column' for mapping '$mapping' in model '".get_class($model)."'");
     }
 
     public function getColumnMappings($mapping)
