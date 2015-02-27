@@ -36,6 +36,7 @@
 <si>napaka</si>
 <ua>Помилка</ua>
 <rs>Greška</rs>
+<hu>Hiba</hu>
 </text>
 <text>
 <en>Page not found</en>
@@ -52,6 +53,7 @@
 <si>Strani se ne najde.</si>
 <ua>Сторінку не знайдено.</ua>
 <rs>Nepostojeća strana</rs>
+<hu>Az oldal nem található</hu>
 </text>
 <text>
 <en>Lost password?</en>
@@ -1629,6 +1631,7 @@
 <uk>Error - wrong version</uk>
 <si>Napaka - napačna verzija.</si>
 <ua>Помилка - неправильна версія.</ua>
+<hu>Hiba - rossz verzió</hu>
 </text>
 <text>
 <en>Because of an application update the application has to be reloaded.</en>
@@ -4312,6 +4315,7 @@
 <ru>Запрошенный адрес "{0}" не найден.</ru>
 <uk>Запитувана сторінка "{0}" не знайдена.</uk>
 <ua>На цьому сервері адресу "{0}" не знайдено.</ua>
+<hu>A kért URL "{0}" nem található a szerveren.</hu>
 </text>
 <text>
 <en>Version</en>
@@ -7407,6 +7411,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Preverite stran, s katere ste prišli.</sl>
 <ru>Проверьте страницу, с которой Вы зашли</ru>
 <ua>Перевірте сторінку, яку Ви залишаєте</ua>
+<hu>Ellenőrizze az oldalt, ahonnan érkezett.</hu>
 </text>
 <text>
 <en>401 - You are not authorized to view this page</en>
@@ -8666,6 +8671,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Če ste naslov vnesli ročno, preverite zapis.</sl>
 <ru>Если Вы вводите адрес, проверьте правильность написания.</ru>
 <ua>Якщо Ви ввели адресу, переконайтеся, що вона корректна.</ua>
+<hu>Amennyiben az oldal címét Ön gépelte be, kérjük ellenőrizze, hogy helyesen írta-e a címet!</hu>
 </text>
 <text>
 <en>Enquiry</en>
@@ -15172,3 +15178,4 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2264</id>
 </text>
 </trl>
+
