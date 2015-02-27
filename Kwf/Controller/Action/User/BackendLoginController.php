@@ -118,10 +118,18 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
 
     public function redirectCallbackAction()
     {
+        if ($this->_getParam('error')) {
+            $this->getRequest()->setParam('errorMessage', $this->_getParam('error_description'));
+            $this->forward('error');
+            return;
+        }
+
         $state = $this->_getParam('state');
 
         $ns = new Kwf_Session_Namespace('kwf-backend-login');
-        if (!$ns->state || $state != $ns->state) throw new Kwf_Exception_AccessDenied();
+        if (!$ns->state || $state != $ns->state) {
+            throw new Kwf_Exception("Invalid state");
+        }
 
         $state = explode('-', $state);
 
@@ -134,22 +142,39 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         if (!isset($authMethods[$authMethod])) {
             throw new Kwf_Exception_NotFound();
         }
-        $user = $authMethods[$authMethod]->getUserToLoginByParams($this->_getRedirectBackUrl(), $this->getRequest()->getParams());
+        try {
+            $user = $authMethods[$authMethod]->getUserToLoginByParams($this->_getRedirectBackUrl(), $this->getRequest()->getParams());
+        } catch (Kwf_Exception_Client $e) {
+            $this->getRequest()->setParam('redirect', $redirect);
+            $this->getRequest()->setParam('errorMessage', $e->getMessage());
+            $this->forward('error');
+            return;
+        }
         if ($user) {
             $users->loginUserRow($user, true);
+            if ($redirect == 'jsCallback') {
+                echo "<script type=\"text/javascript\">\n";
+                echo "window.opener.ssoCallback('".Kwf_Util_SessionToken::getSessionToken()."');\n";
+                echo "window.close();\n";
+                echo "</script>\n";
+                exit;
+            } else {
+                Kwf_Util_Redirect::redirect($redirect);
+            }
         } else {
-            throw new Kwf_Exception_AccessDenied();
+            $label = $authMethods[$authMethod]->getLoginRedirectLabel();
+            $this->getRequest()->setParam('redirect', $redirect);
+            $this->getRequest()->setParam('errorMessage',
+                trlKwf("Can't login user, {0} account is not associated with {1}.",
+                    array(
+                        Kwf_Config::getValue('application.name'),
+                        Kwf_Trl::getInstance()->trlStaticExecute($label['name'])
+                    )
+                )
+            );
+            $this->forward('error');
         }
 
-        if ($redirect == 'jsCallback') {
-            echo "<script type=\"text/javascript\">\n";
-            echo "window.opener.ssoCallback('".Kwf_Util_SessionToken::getSessionToken()."');\n";
-            echo "window.close();\n";
-            echo "</script>\n";
-            exit;
-        } else {
-            Kwf_Util_Redirect::redirect($redirect);
-        }
     }
 
     protected function _initFields()
@@ -184,5 +209,16 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
 
             $this->_showForm();
         }
+    }
+
+    public function errorAction()
+    {
+        $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('login-error');
+        $this->view->errorMessage = $this->_getParam('errorMessage');
+        $redirect = $this->_getParam('redirect');
+        if ($redirect == 'jsCallback') {
+            $redirect = 'javascript:window.close();';
+        }
+        $this->view->redirect = $redirect;
     }
 }
