@@ -262,6 +262,11 @@ class Kwf_Model_Proxy extends Kwf_Model_Abstract
         $this->getProxyModel()->afterInsert($row);
     }
 
+    public function beforeDelete($row)
+    {
+        $this->getProxyModel()->beforeDelete($row);
+    }
+
     public function getEventSubscribers()
     {
         $ret = $this->getProxyModel()->getEventSubscribers();

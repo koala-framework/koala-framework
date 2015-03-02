@@ -20,9 +20,12 @@ class Kwf_View_Helper_Money
             $decimals = $component->getBaseProperty('money.decimals');
             $decimalSeparator = $component->getBaseProperty('money.decimalSeparator');
             $thousandSeparator = $component->getBaseProperty('money.thousandSeparator');
+
+            if (is_null($decimalSeparator)) $decimalSeparator = $component->trlcKwf('decimal separator', ".");
+            if (is_null($thousandSeparator)) $thousandSeparator = $component->trlcKwf('thousands separator', ",");
         } else {
-            $format = Kwf_Registry::get('config')->moneyFormat;
-            $decimals = 2;
+            $format = Kwf_Config::getValue('money.format');
+            $decimals = Kwf_Config::getValue('money.decimals');
             $decimalSeparator = trlcKwf('decimal separator', ".");
             $thousandSeparator = trlcKwf('thousands separator', ",");
         }

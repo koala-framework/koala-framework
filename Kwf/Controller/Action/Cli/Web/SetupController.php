@@ -40,7 +40,10 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
             throw new Kwf_Exception_Client("Fetching Tables failed: ".$e->getMessage());
         }
         if (in_array('kwf_update', $tables)) {
-            throw new Kwf_Exception_Client("Application seems to be set up already. (kwf_update table exists)");
+            echo "Application seems to be set up already. (kwf_update table exists)\n";
+            echo "Executing update...\n";
+            $this->forward('index', 'update');
+            return;
         }
         if ($tables) {
             throw new Kwf_Exception_Client("Database not empty, incomplete kwf installation or other application already exists in this database.");

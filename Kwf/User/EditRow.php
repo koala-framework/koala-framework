@@ -133,14 +133,20 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
         if (!$this->gender) $this->gender = '';
     }
 
+    public function save()
+    {
+        $isInsert = !$this->getCleanValue($this->_getPrimaryKey());
+        $ret = parent::save();
+        if ($isInsert) {
+            $this->sendActivationMail();
+        }
+        return $ret;
+    }
+
     protected function _afterInsert()
     {
         parent::_afterInsert();
         $this->getModel()->unlockCreateUser();
-
-        if (!$this->password) {
-            $this->sendActivationMail();
-        }
 
         $this->getModel()->writeLog(array(
             'user_id' => $this->id,
@@ -239,6 +245,11 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
     public function setSendMails($value)
     {
         $this->_sendMails = $value;
+    }
+
+    public function getSendMails()
+    {
+        return $this->_sendMails;
     }
 
     public function sendLostPasswordMail()

@@ -14,6 +14,11 @@ class Kwc_Tags_Events extends Kwc_Abstract_Events
             'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onTagRowUpdate'
         );
+        $ret[] = array(
+            'class' => 'Kwc_Tags_Suggestions_Model',
+            'event' => 'Kwf_Component_Event_Row_Updated',
+            'callback' => 'onTagRowUpdate'
+        );
         return $ret;
     }
 

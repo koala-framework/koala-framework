@@ -1,16 +1,10 @@
 <?php
-class Kwf_Component_Cache_Fnf_Model extends Kwf_Component_Cache_Mysql_Model
+class Kwf_Component_Cache_Fnf_Model extends Kwf_Model_FnF
 {
-    public function __construct(array $config = array())
-    {
-        $config['proxyModel'] = new Kwf_Model_FnF(array(
-            'primaryKey' => 'fakeId',
-            'columns' => array('fakeId', 'component_id', 'db_id', 'page_db_id', 'expanded_component_id', 'component_class', 'renderer', 'type', 'value', 'microtime', 'expire', 'deleted', 'content'),
-            'uniqueColumns' => array('component_id', 'type', 'value'),
-            'default' => array('deleted' => false)
-        ));
-        parent::__construct($config);
-    }
+    protected $_primaryKey = 'fakeId';
+    protected $_columns = array('fakeId', 'component_id', 'db_id', 'page_db_id', 'expanded_component_id', 'component_class', 'renderer', 'type', 'value', 'microtime', 'expire', 'deleted', 'content');
+    protected $_uniqueColumns = array('component_id', 'type', 'value');
+    protected $_default = array('deleted' => false);
 
     // zum Testen
     public function countActiveRows()

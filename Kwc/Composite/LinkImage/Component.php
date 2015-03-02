@@ -5,7 +5,7 @@ class Kwc_Composite_LinkImage_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName'     => trlKwfStatic('Link Image'),
-            'componentIcon'     => new Kwf_Asset('image')
+            'componentIcon'     => 'image'
         ));
         $ret['generators']['child']['component']['image'] = 'Kwc_Basic_Image_Component';
         $ret['generators']['child']['component']['link'] = 'Kwc_Basic_LinkTag_Component';

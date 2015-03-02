@@ -393,18 +393,26 @@ class Kwf_Util_ClearCache_Watcher
                 echo "removed config cache\n";
 
                 $apcCacheId = $cacheId.getcwd();
-                $cacheIds = array();
-                $cacheIds[] = $apcCacheId;
-                $cacheIds[] = $apcCacheId.'mtime';
+                $cacheIds = array(
+                    $apcCacheId,
+                    $apcCacheId.'mtime',
+                );
+                $simpleCacheStaticPrefixes = array(
+                    'config-',
+                    'configAr-',
+                );
 
-                self::_clearApcCache(array(
-                    'cacheIds' => $cacheIds,
-                    'clearCacheSimpleStatic' => array(
-                        'config-',
-                        'configAr-',
-                    )
-                ));
-                echo "cleared apc config cache\n";
+                if (Kwf_Util_Apc::isAvailable()) {
+                    self::_clearApcCache(array(
+                        'cacheIds' => $cacheIds,
+                        'clearCacheSimpleStatic' => $simpleCacheStaticPrefixes
+                    ));
+                    echo "cleared apc config cache\n";
+                } else {
+                    foreach ($simpleCacheStaticPrefixes as $i) {
+                        Kwf_Cache_SimpleStatic::clear($i);
+                    }
+                }
 
                 $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache --type=setup";
                 exec($cmd, $out, $ret);
@@ -656,9 +664,15 @@ class Kwf_Util_ClearCache_Watcher
         file_put_contents('build/component/settings', serialize($settings));
 
         echo "cleared component settings apc cache...\n";
-        self::_clearApcCache(array(
-            'clearCacheSimpleStatic' => $clearCacheSimpleStatic,
-        ));
+        if (Kwf_Util_Apc::isAvailable()) {
+            self::_clearApcCache(array(
+                'clearCacheSimpleStatic' => $clearCacheSimpleStatic,
+            ));
+        } else {
+            foreach ($clearCacheSimpleStatic as $i) {
+                Kwf_Cache_SimpleStatic::clear($i);
+            }
+        }
         echo "\n";
 
         if ($dimensionsChanged) {

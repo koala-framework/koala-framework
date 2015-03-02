@@ -39,7 +39,9 @@ class Kwf_Model_Union_Events extends Kwf_Model_EventSubscriber
         foreach ($unionModel->getUnionModels() as $modelKey => $m) {
             if ($m === $sourceModel) {
                 $unionRow = $unionModel->getRow($modelKey.$sourceRow->{$sourceModel->getPrimaryKey()});
-                $this->fireEvent(new $eventCls($unionRow));
+                if ($unionRow) {
+                    $this->fireEvent(new $eventCls($unionRow));
+                }
                 return;
             }
         }

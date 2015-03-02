@@ -201,6 +201,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             }
         }
 
+        Kwf_Assets_Cache::getInstance()->clean();
+
         Kwf_Assets_BuildCache::getInstance()->building = false;
 
 

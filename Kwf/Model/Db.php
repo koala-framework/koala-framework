@@ -1169,7 +1169,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         }
     }
 
-    private function _updateModelObserver($options, array $ids = null)
+    protected function _updateModelObserver($options, array $ids = null)
     {
         if (isset($options['skipModelObserver']) && $options['skipModelObserver']) return;
 

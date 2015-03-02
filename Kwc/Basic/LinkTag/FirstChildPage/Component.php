@@ -9,6 +9,7 @@ class Kwc_Basic_LinkTag_FirstChildPage_Component extends Kwc_Basic_LinkTag_Abstr
             'dataClass' => 'Kwc_Basic_LinkTag_FirstChildPage_Data'
         ));
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
+        $ret['flags']['skipFulltext'] = true;
         return $ret;
     }
 

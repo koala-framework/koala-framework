@@ -3,6 +3,21 @@ abstract class Kwf_Model_Union_Abstract_Test extends Kwf_Test_TestCase
 {
     protected $_m;
 
+    public function testSiblingValue()
+    {
+        $this->assertEquals($this->_m->getRow('1m1')->sib, 's1');
+        $this->assertEquals($this->_m->getRow('1m2')->sib, 'ss2');
+        $this->assertEquals($this->_m->getRow('2m2')->sib, 'sss3');
+        $this->assertEquals(isset($this->_m->getRow('2m2')->sib), true);
+    }
+
+    public function testSiblingValueSet()
+    {
+        $r = $this->_m->getRow('1m1');
+        $r->sib = 'foo';
+        $r->save();
+    }
+
     public function testCountAll()
     {
         $this->assertEquals(6, $this->_m->countRows());
@@ -59,6 +74,36 @@ abstract class Kwf_Model_Union_Abstract_Test extends Kwf_Test_TestCase
         $this->assertEquals(2, $this->_m->countRows($s));
     }
 
+    public function testCountSelectWhereEqualsId()
+    {
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('id', '1m1');
+        $this->assertEquals(1, $this->_m->countRows($s));
+    }
+
+    public function testCountSelectWhereExprEqualsId()
+    {
+        $s = new Kwf_Model_Select();
+        $s->where(new Kwf_Model_Select_Expr_Equal('id', '1m1'));
+        $this->assertEquals(1, $this->_m->countRows($s));
+    }
+
+    public function testCountSiblingEquals()
+    {
+        $this->markTestIncomplete();
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('sib', 'ss2');
+        $this->assertEquals(1, $this->_m->countRows($s));
+    }
+
+    public function testCountSiblingExprEquals()
+    {
+        $this->markTestIncomplete();
+        $s = new Kwf_Model_Select();
+        $s->where(new Kwf_Model_Select_Expr_Equal('sib', 'ss2'));
+        $this->assertEquals(1, $this->_m->countRows($s));
+    }
+
     public function testGetRowsSelectWhereEquals()
     {
         $s = new Kwf_Model_Select();
@@ -67,6 +112,15 @@ abstract class Kwf_Model_Union_Abstract_Test extends Kwf_Test_TestCase
         $this->assertEquals(1, count($rows));
         $this->assertEquals('aa', $rows[0]->foo);
         $this->assertEquals('1m1', $rows[0]->id);
+    }
+
+    public function testGetRowsSelectWhereExprEqualsId()
+    {
+        $s = new Kwf_Model_Select();
+        $s->where(new Kwf_Model_Select_Expr_Equal('id', '2m2'));
+        $rows = $this->_m->getRows($s);
+        $this->assertEquals(1, count($rows));
+        $this->assertEquals('2m2', $rows[0]->id);
     }
 
     public function testGetRowsOrder()
@@ -81,6 +135,16 @@ abstract class Kwf_Model_Union_Abstract_Test extends Kwf_Test_TestCase
         $this->assertEquals('aa3', $rows[3]->foo);
         $this->assertEquals('xx', $rows[4]->foo);
         $this->assertEquals('zz', $rows[5]->foo);
+    }
+
+    public function testGetRowsSiblingEquals()
+    {
+        $this->markTestIncomplete();
+        $s = new Kwf_Model_Select();
+        $s->where(new Kwf_Model_Select_Expr_Equal('sib', 'ss2'));
+        $rows = $this->_m->getRows($s);
+        $this->assertEquals(1, count($rows));
+        $this->assertEquals('2m2', $rows[0]->id);
     }
 
     public function testGetIdsOrder()

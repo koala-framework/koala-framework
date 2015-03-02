@@ -40,8 +40,11 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 
     public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
-        if (php_sapi_name() == 'cli') return true;
         $id = $this->_processId($id);
+        if (php_sapi_name() == 'cli') {
+            $lifetime = $this->getLifetime($specificLifetime);
+            Kwf_Util_Apc::callSaveCacheByCli(array('id' => $id, 'data' => serialize(array($data, time(), $lifetime))));
+        }
         parent::save($data, $id, $tags, $specificLifetime);
         return true; //silently ignore apc_store returning false
     }

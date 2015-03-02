@@ -714,7 +714,7 @@ class Kwf_Trl
                     'message' => $this->_errorMessages[self::ERROR_WRONG_NR_OF_ARGUMENTS].
                     ' TRLP needs at least two arguments');
             }
-        } elseif ($type == self::TRLC) {
+        } elseif ($type == self::TRLCP) {
             if (count($words) < 3) {
                 return array('error' => true, 'error_short' =>self::ERROR_WRONG_NR_OF_ARGUMENTS,
                     'message' => $this->_errorMessages[self::ERROR_WRONG_NR_OF_ARGUMENTS].
