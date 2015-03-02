@@ -52,6 +52,11 @@ class Kwc_Tags_Suggestions_Controller extends Kwf_Controller_Action
         $select->whereEquals('component_id', $componentId);
         $this->view->tags = array();
         foreach ($componentToTagModel->getRows($select) as $tag) {
+            if ($tag->countChildRows('Suggestions') > 0) {
+                $suggestion = $tag->getChildRows('Suggestions')->current();
+                if ($suggestion->status != 'accepted') continue;
+            }
+
             $this->view->tags[] = $tag->tag_name;
         }
         $this->view->tags = implode(', ', $this->view->tags);
