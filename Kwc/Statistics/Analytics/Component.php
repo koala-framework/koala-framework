@@ -17,11 +17,7 @@ class Kwc_Statistics_Analytics_Component extends Kwc_Abstract
     protected function _getAnalyticsCode()
     {
         $ret = null;
-        if (!$this->getData()->getBaseProperty('statistics.ignore') &&
-            !$this->getData()->getBaseProperty('statistics.analytics.ignore')
-        ) {
-            $ret = $this->getData()->getBaseProperty('statistics.analytics.code');
-        }
+        $ret = $this->getData()->getBaseProperty('statistics.analytics.code');
         return $ret;
     }
 
@@ -31,6 +27,12 @@ class Kwc_Statistics_Analytics_Component extends Kwc_Abstract
         $ret['code'] = $this->_getAnalyticsCode();
         if ($ret['code'] && !is_string($ret['code'])) {
             throw new Kwf_Exception("AnalyticsCode must be a string, '".gettype($ret['code'])."' given");
+        }
+        $ret['ignoreCode'] = false;
+        if ($this->getData()->getBaseProperty('statistics.ignore') ||
+            $this->getData()->getBaseProperty('statistics.analytics.ignore')
+        ) {
+            $ret['ignoreCode'] = true;
         }
         return $ret;
     }
