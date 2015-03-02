@@ -1,3 +1,3 @@
 <?
-include('Kwc/Abstract/Image/Mail.html.tpl');
+include(KWF_PATH.'/Kwc/Abstract/Image/Mail.html.tpl');
 ?>

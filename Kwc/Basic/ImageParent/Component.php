@@ -44,7 +44,9 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         if (!$this->_getSetting('lazyLoadOutOfViewport')) $ret['containerClass'] .= ' loadImmediately';
 
 
-        $ret['template'] = Kwf_Component_Renderer_Twig_TemplateLocator::getComponentTemplate('Kwc_Abstract_Image_Component');
+        if (!$renderer instanceof Kwf_Component_Renderer_Mail) { //TODO this check is a hack
+            $ret['template'] = Kwf_Component_Renderer_Twig_TemplateLocator::getComponentTemplate('Kwc_Abstract_Image_Component');
+        }
         return $ret;
     }
 
