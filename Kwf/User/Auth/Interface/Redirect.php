@@ -71,13 +71,6 @@ interface Kwf_User_Auth_Interface_Redirect
     public function associateUserByParams(Kwf_Model_Row_Interface $user, $redirectBackUrl, array $params);
 
     /**
-     * Return example links that can be used for development.
-     *
-     * @return array usually an empty array
-     */
-    public function createSampleLoginLinks($absoluteUrl);
-
-    /**
      * If password should be allowed for this user.
      *
      * Can return false if a user exists in sso service and we want to prevent he creates his own password in our app.

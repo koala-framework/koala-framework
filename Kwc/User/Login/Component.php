@@ -6,7 +6,6 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['form'] = 'Kwc_User_Login_Form_Component';
 //         $ret['generators']['child']['component']['facebook'] = 'Kwc_User_Login_Facebook_Component';
-        $ret['showSampleLoginLink'] = false;
         $ret['cssClass'] = 'webStandard';
         $ret['plugins'] = array('Kwc_User_Login_Plugin');
         $ret['flags']['processInput'] = true;
@@ -54,7 +53,6 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
         $ret = parent::getTemplateVars();
         $ret['register'] = $this->_getRegisterComponent();
         $ret['lostPassword'] = $this->_getLostPasswordComponent();
-        $ret['showSampleLoginLink'] = $this->_getSetting('showSampleLoginLink');
 
         $ret['redirectLinks'] = array();
         foreach (Kwf_Registry::get('userModel')->getAuthMethods() as $authKey=>$auth) {

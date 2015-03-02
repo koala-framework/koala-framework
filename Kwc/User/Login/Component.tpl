@@ -17,8 +17,5 @@
     <? foreach ($this->redirectLinks as $link) { ?>
         <a href="<?=$link['url']?>"><?=$link['name']?></a>
     <? } ?>
-    <? if ($this->showSampleLoginLink) { ?>
-    %sampleLogin%
-    <? } ?>
     <?=$this->component($this->form)?>
 </div>
