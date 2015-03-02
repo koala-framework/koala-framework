@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group slow
+ */
 class Kwf_Model_Union_Db_Test extends Kwf_Model_Union_Abstract_Test
 {
     public function setUp()
