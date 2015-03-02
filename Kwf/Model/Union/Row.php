@@ -24,6 +24,8 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
     {
         if ($name == 'id') return true;
         $mapping = $this->_model->getUnionColumnMapping();
+        $columns = get_class_vars($mapping);
+        $columns = $columns['columns'];
         if (in_array($name, $columns)) {
             $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
             return $this->_sourceRow->__isset($name);
@@ -36,6 +38,7 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
         if ($name == 'id') throw new Kwf_Exception('unable to unset id');
         $mapping = $this->_model->getUnionColumnMapping();
         $columns = get_class_vars($mapping);
+        $columns = $columns['columns'];
         if (in_array($name, $columns)) {
             $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
             $this->_sourceRow->_unset($name);
@@ -49,6 +52,7 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
         if ($name == 'id') return $this->_id;
         $mapping = $this->_model->getUnionColumnMapping();
         $columns = get_class_vars($mapping);
+        $columns = $columns['columns'];
         if (in_array($name, $columns)) {
             $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
             return $this->_sourceRow->$name;
@@ -61,6 +65,7 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
         if ($name == 'id') throw new Kwf_Exception('unable to change id');
         $mapping = $this->_model->getUnionColumnMapping();
         $columns = get_class_vars($mapping);
+        $columns = $columns['columns'];
         if (in_array($name, $columns)) {
             $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
             $this->_sourceRow->$name = $value;
@@ -75,6 +80,7 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
     {
         $mapping = $this->_model->getUnionColumnMapping();
         $columns = get_class_vars($mapping);
+        $columns = $columns['columns'];
         if (in_array($name, $columns)) {
             $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
             $this->_sourceRow->_setDirty($name);
