@@ -149,9 +149,21 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
 
     public function toArray()
     {
+        $ret = array();
+        $mapping = $this->_model->getUnionColumnMapping();
+        $columns = get_class_vars($mapping);
+        foreach ($columns['columns'] as $c) {
+            $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $c);
+            if ($name) {
+                $ret[$c] = $this->_sourceRow->$name;
+            } else {
+                $ret[$c] = null;
+            }
+        }
+
         $ret = array_merge(
-            parent::toArray(),
-            $this->_sourceRow->toArray()
+            $ret,
+            parent::toArray()
         );
         return $ret;
     }

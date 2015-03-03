@@ -273,4 +273,15 @@ abstract class Kwf_Model_Union_Abstract_Test extends Kwf_Test_TestCase
         $s = new Kwf_Model_Select();
         $this->assertEquals(7, $this->_m->countRows($s));
     }
+
+    public function testToArray()
+    {
+        $row = $this->_m->getRow('1m2');
+        $a = $row->toArray();
+        $this->assertEquals(array('id' => '1m2', 'foo' => '2', 'bar' => '2', 'baz' => '2', 'sib' => 'ss2'), $a);
+
+        $row = $this->_m->getRow('2m2');
+        $a = $row->toArray();
+        $this->assertEquals(array('id' => '2m2', 'foo' => '333', 'bar' => 'yy1', 'baz' => null, 'sib' => 'sss3'), $a);
+    }
 }
