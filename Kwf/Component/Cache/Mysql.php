@@ -182,6 +182,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 foreach ($ids as &$id) {
                     $id = (string)$id;
                 }
+                unset($id);
                 $s->whereEquals('component_id', $ids);
                 if ($log) {
                     foreach ($ids as $id) {
