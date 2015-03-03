@@ -16,9 +16,7 @@ class Kwc_Statistics_Analytics_Component extends Kwc_Abstract
 
     protected function _getAnalyticsCode()
     {
-        $ret = null;
-        $ret = $this->getData()->getBaseProperty('statistics.analytics.code');
-        return $ret;
+        return $this->getData()->getBaseProperty('statistics.analytics.code');
     }
 
     public function getTemplateVars()
