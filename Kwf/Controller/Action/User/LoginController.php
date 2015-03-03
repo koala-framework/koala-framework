@@ -129,6 +129,106 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $this->forward('index', 'backend-lost-password');
     }
 
+    private function _getRedirectBackUrl()
+    {
+        $redirectBackUrl = $this->getFrontController()->getRouter()->assemble(array(
+            'controller' => 'login',
+            'action' => 'redirect-callback',
+        ), 'kwf_user');
+        $redirectBackUrl = 'http'.(isset($_SERVER['HTTPS']) ? 's' : '').'://'
+            .$_SERVER['HTTP_HOST']
+            .$redirectBackUrl;
+        return $redirectBackUrl;
+    }
+
+    public function redirectCallbackAction()
+    {
+        if ($this->_getParam('error')) {
+            $this->getRequest()->setParam('errorMessage', $this->_getParam('error_description'));
+            $this->forward('error');
+            return;
+        }
+
+        $state = $this->_getParam('state');
+
+        $ns = new Kwf_Session_Namespace('kwf-login-redirect');
+        if (!$ns->state || $state != $ns->state) {
+            throw new Kwf_Exception("Invalid state");
+        }
+
+        $state = explode('-', $state);
+
+        if (count($state) != 3) throw new Kwf_Exception_NotFound();
+        $authMethod = $state[0];
+        $redirect = $state[2];
+
+        $users = Zend_Registry::get('userModel');
+        $authMethods = $users->getAuthMethods();
+        if (!isset($authMethods[$authMethod])) {
+            throw new Kwf_Exception_NotFound();
+        }
+        try {
+            $user = $authMethods[$authMethod]->getUserToLoginByCallbackParams($this->_getRedirectBackUrl(), $this->getRequest()->getParams());
+        } catch (Kwf_Exception_Client $e) {
+            $this->getRequest()->setParam('redirect', $redirect);
+            $this->getRequest()->setParam('errorMessage', $e->getMessage());
+            $this->forward('error');
+            return;
+        }
+        if ($user) {
+            $users->loginUserRow($user, true);
+            if ($redirect == 'jsCallback') {
+                echo "<script type=\"text/javascript\">\n";
+                echo "window.opener.ssoCallback('".Kwf_Util_SessionToken::getSessionToken()."');\n";
+                echo "window.close();\n";
+                echo "</script>\n";
+                exit;
+            } else {
+                Kwf_Util_Redirect::redirect($redirect);
+            }
+        } else {
+            $label = $authMethods[$authMethod]->getLoginRedirectLabel();
+            $this->getRequest()->setParam('redirect', $redirect);
+            $this->getRequest()->setParam('errorMessage',
+                trlKwf("Can't login user, {0} account is not associated with {1}.",
+                    array(
+                        Kwf_Config::getValue('application.name'),
+                        Kwf_Trl::getInstance()->trlStaticExecute($label['name'])
+                    )
+                )
+            );
+            $this->forward('error');
+        }
+    }
+
+    public function authAction()
+    {
+        $state = $this->_getParam('state');
+        if ($state) {
+            //we got a state, validate it like it is a backend login
+            $this->forward('redirect-callback', 'backend-login');
+            return;
+        }
+
+        $users = Zend_Registry::get('userModel');
+        foreach ($users->getAuthMethods() as $authMethod) {
+            if ($authMethod instanceof Kwf_User_Auth_Interface_Redirect) {
+                $user = $authMethod->getUserToLoginByParams($this->getRequest()->getParams());
+                if ($user) {
+                    break;
+                }
+            }
+        }
+        if ($user) {
+            $users->loginUserRow($user, true);
+            $redirect = $this->_getParam('redirect');
+            if (!$redirect) $redirect = Kwf_Setup::getBaseUrl().'/';
+            Kwf_Util_Redirect::redirect($redirect);
+        } else {
+            throw new Kwf_Exception_AccessDenied();
+        }
+    }
+
     public function logoutAction()
     {
         Kwf_Auth::getInstance()->clearIdentity();
@@ -185,5 +285,19 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
     public function jsonKeepAliveAction()
     {
         //do nothing
+    }
+
+    public function errorAction()
+    {
+        $this->getHelper('viewRenderer')->setNoController(true);
+        $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
+        $this->view->dep = Kwf_Assets_Package_Default::getInstance('Admin');
+        $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('login-error');
+        $this->view->errorMessage = $this->_getParam('errorMessage');
+        $redirect = $this->_getParam('redirect');
+        if ($redirect == 'jsCallback') {
+            $redirect = 'javascript:window.close();';
+        }
+        $this->view->redirect = $redirect;
     }
 }

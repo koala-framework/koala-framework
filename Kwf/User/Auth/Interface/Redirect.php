@@ -56,10 +56,24 @@ interface Kwf_User_Auth_Interface_Redirect
      * Returns the (existing) user that should be logged in by $params. The User must be already associated
      * to this sso account.
      *
+     * Use this method when the user should be logged in directly by an sso provider.
+     *
+     * The following url must be called with params to login: /kwf/user/login/auth
+     *
+     * @param array Request params as posted to the $redirectBackUrl
+     */
+    public function getUserToLoginByParams(array $params);
+
+    /**
+     * Returns the (existing) user that should be logged in by $params. The User must be already associated
+     * to this sso account.
+     *
+     * This method is used when the user is redirected back (to a callback) after he started the sso process using getLoginRedirectUrl.
+     *
      * @param string Url the user should be redirected back after login. Can be caused for OAuth2 calls.
      * @param array Request params as posted to the $redirectBackUrl
      */
-    public function getUserToLoginByParams($redirectBackUrl, array $params);
+    public function getUserToLoginByCallbackParams($redirectBackUrl, array $params);
 
     /**
      * Associate an (existing) user to an sso account by $params.
@@ -68,7 +82,7 @@ interface Kwf_User_Auth_Interface_Redirect
      * @param string Url the user should be redirected back after login. Can be caused for OAuth2 calls.
      * @param array Request params as posted to the $redirectBackUrl
      */
-    public function associateUserByParams(Kwf_Model_Row_Interface $user, $redirectBackUrl, array $params);
+    public function associateUserByCallbackParams(Kwf_Model_Row_Interface $user, $redirectBackUrl, array $params);
 
     /**
      * If password should be allowed for this user.

@@ -12,6 +12,18 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
+    private function _getRedirectBackUrl()
+    {
+        $redirectBackUrl = Kwf_Controller_Front::getInstance()->getRouter()->assemble(array(
+            'controller' => 'login',
+            'action' => 'redirect-callback',
+        ), 'kwf_user');
+        $redirectBackUrl = 'http'.(isset($_SERVER['HTTPS']) ? 's' : '').'://'
+            .$_SERVER['HTTP_HOST']
+            .$redirectBackUrl;
+        return $redirectBackUrl;
+    }
+
     public function preProcessInput($postData)
     {
         if (isset($postData['redirectAuth'])) {
@@ -20,7 +32,16 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             $auth = $authMethods[$postData['redirectAuth']];
             if (!$auth instanceof Kwf_User_Auth_Interface_Redirect) throw new Kwf_Exception_NotFound();
             $redirectBackUrl = $_GET['redirect'];
-            $url = $auth->getLoginRedirectUrl($redirectBackUrl);
+            $formValues = array(); //TODO
+
+            $f = new Kwf_Filter_StrongRandom();
+            $state = $postData['redirectAuth'].'-'.$f->filter(null).'-'.$redirectBackUrl;
+
+            //save state in namespace to validate it later
+            $ns = new Kwf_Session_Namespace('kwf-login-redirect');
+            $ns->state = $state;
+
+            $url = $auth->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
             header("Location: ".$url);
             exit;
         }
@@ -28,7 +49,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             $user = null;
             foreach (Kwf_Registry::get('userModel')->getAuthMethods() as $auth) {
                 if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
-                    $user = $auth->getUserToLoginByParams($postData);
+                    $user = $auth->getUserToLoginByCallbackParams($postData);
                 }
             }
             if ($user) {

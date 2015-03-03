@@ -26,9 +26,9 @@ class Kwf_User_Auth_Union_Redirect extends Kwf_User_Auth_Union_Abstract implemen
         return $this->_auth->getLoginRedirectUrl($redirectBackUrl, $state, $formValues);
     }
 
-    public function getUserToLoginByParams($redirectBackUrl, array $params)
+    public function getUserToLoginByParams(array $params)
     {
-        $row = $this->_auth->getUserToLoginByParams($redirectBackUrl, $params);
+        $row = $this->_auth->getUserToLoginByParams($params);
         if (!$row) return null;
 
         foreach ($this->_model->getUnionModels() as $k=>$m) {
@@ -40,9 +40,23 @@ class Kwf_User_Auth_Union_Redirect extends Kwf_User_Auth_Union_Abstract implemen
         return null;
     }
 
-    public function associateUserByParams(Kwf_Model_Row_Interface $user, $redirectBackUrl, array $params)
+    public function getUserToLoginByCallbackParams($redirectBackUrl, array $params)
     {
-        $this->_auth->associateUserByParams($user->getSourceRow(), $redirectBackUrl, $params);
+        $row = $this->_auth->getUserToLoginByCallbackParams($redirectBackUrl, $params);
+        if (!$row) return null;
+
+        foreach ($this->_model->getUnionModels() as $k=>$m) {
+            if ($m == $row->getModel()) {
+                $id = $k.$row->{$m->getPrimaryKey()};
+                return $this->_model->getRowById($id);
+            }
+        }
+        return null;
+    }
+
+    public function associateUserByCallbackParams(Kwf_Model_Row_Interface $user, $redirectBackUrl, array $params)
+    {
+        $this->_auth->associateUserByCallbackParams($user->getSourceRow(), $redirectBackUrl, $params);
     }
 
     public function allowPasswordForUser(Kwf_Model_Row_Interface $user)

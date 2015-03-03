@@ -165,7 +165,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
             throw new Kwf_Exception_NotFound();
         }
         $user = $this->_getParam('user');
-        $authMethods[$authMethod]->associateUserByParams($user, $this->_getRedirectBackUrl(), $this->getRequest()->getParams());
+        $authMethods[$authMethod]->associateUserByCallbackParams($user, $this->_getRedirectBackUrl(), $this->getRequest()->getParams());
         $user->clearActivationToken();
         $users->loginUserRow($user, true);
 
