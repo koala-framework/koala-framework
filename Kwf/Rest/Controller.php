@@ -13,14 +13,7 @@ abstract class Kwf_Rest_Controller extends Zend_Rest_Controller
             }
         }
 
-        if (Kwf_Util_SessionToken::getSessionToken()) {
-            if (!$this->_getParam('kwfSessionToken')) {
-                throw new Kwf_Exception("Missing sessionToken parameter");
-            }
-            if ($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken()) {
-                throw new Kwf_Exception("Invalid kwfSessionToken");
-            }
-        }
+        $this->_validateSessionToken();
 
         $allowed = false;
         if ($this->_getUserRole() == 'cli') {
@@ -49,6 +42,18 @@ abstract class Kwf_Rest_Controller extends Zend_Rest_Controller
         }
 
         parent::preDispatch();
+    }
+
+    protected function _validateSessionToken()
+    {
+        if (Kwf_Util_SessionToken::getSessionToken()) {
+            if (!$this->_getParam('kwfSessionToken')) {
+                throw new Kwf_Exception("Missing sessionToken parameter");
+            }
+            if ($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken()) {
+                throw new Kwf_Exception("Invalid kwfSessionToken");
+            }
+        }
     }
 
     public function postDispatch()
