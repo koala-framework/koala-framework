@@ -3,6 +3,7 @@
 
     <? if ($this->ignoreCode) { ?>
       <!--
+      Ignore Code, because of config setting statistics.ignore or statistics.piwik.ignore
     <? } ?>
 
     <script type="text/javascript">

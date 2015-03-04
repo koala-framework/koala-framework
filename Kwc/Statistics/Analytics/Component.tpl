@@ -1,6 +1,7 @@
 <? if ($this->code) { ?>
     <? if ($this->ignoreCode) { ?>
         <!--
+        Ignore Code, because of config setting statistics.ignore or statistics.analytics.ignore
     <? } ?>
     <script type="text/javascript">
 
