@@ -28,6 +28,5 @@ class Kwc_Shop_AddToCart_Component extends Kwc_Shop_AddToCartAbstract_Component
             return $this->getData()->row;
         }
         return $this->getData()->parent->getComponent()->getProductRow();
-        return $this->getData()->parent->chained->parent->row;
     }
 }
