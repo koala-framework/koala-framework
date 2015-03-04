@@ -8,9 +8,13 @@ class Kwf_Util_Setup
 
     public static function minimalBootstrapAndGenerateFile()
     {
-        $kwfPath = realpath(dirname(__FILE__).'/../..');
-        if (!defined('KWF_PATH')) define('KWF_PATH', $kwfPath);
         if (!defined('VENDOR_PATH')) define('VENDOR_PATH', 'vendor');
+        if (VENDOR_PATH == '../vendor') {
+            $kwfPath = '..';
+        } else {
+            $kwfPath = VENDOR_PATH.'/koala-framework/koala-framework';
+        }
+        if (!defined('KWF_PATH')) define('KWF_PATH', $kwfPath);
 
         //reset include path, don't use anything from php.ini
         set_include_path('.' . PATH_SEPARATOR . $kwfPath . PATH_SEPARATOR . self::_getZendPath());
@@ -38,7 +42,20 @@ class Kwf_Util_Setup
             foreach ($ip as $path) {
                 $file = $path.'/'.str_replace('_', '/', $cls).'.php';
                 if (file_exists($file)) {
-                    $ret .= "require('".$file."');\n";
+                    if (VENDOR_PATH == '../vendor') {
+                        $cwd = getcwd();
+                        $cwd = substr($cwd, 0, strrpos($cwd, '/'));
+                        if (substr($file, 0, strlen($cwd)) != $cwd) {
+                            throw new Kwf_Exception("'$file' not in cwd");
+                        }
+                        $file = '../'.substr($file, strlen($cwd)+1);
+                    } else {
+                        if (substr($file, 0, strlen(getcwd())) != getcwd()) {
+                            throw new Kwf_Exception("'$file' not in cwd");
+                        }
+                        $file = substr($file, strlen(getcwd())+1);
+                    }
+                    $ret .= "require(\$cwd.'/".$file."');\n";
                     break;
                 }
             }
@@ -56,6 +73,8 @@ class Kwf_Util_Setup
         }
 
         $ret = "<?php\n";
+
+        $ret .= "\$cwd = getcwd();\n";
 
         $preloadClasses = array(
             'Kwf_Benchmark',
@@ -76,7 +95,12 @@ class Kwf_Util_Setup
         //required eg. behind load balancers
         if (Kwf_Config::getValueArray('server.replaceVars.remoteAddr')) {
             $a = Kwf_Config::getValueArray('server.replaceVars.remoteAddr');
-            $ret .= "\nif (isset(\$_SERVER['REMOTE_ADDR']) && \$_SERVER['REMOTE_ADDR'] == '$a[if]' && isset(\$_SERVER['$a[replace]'])) {\n";
+            if (substr($a['if'], -2) == '.*') {
+                $comparison = "substr(\$_SERVER['REMOTE_ADDR'], 0, ".(strlen($a['if'])-1).") == '".substr($a['if'], 0, -1)."'";
+            } else {
+                $comparison = "\$_SERVER['REMOTE_ADDR'] == '$a[if]'";
+            }
+            $ret .= "\nif (isset(\$_SERVER['REMOTE_ADDR']) && $comparison && isset(\$_SERVER['$a[replace]'])) {\n";
             $ret .= "    \$_SERVER['REMOTE_ADDR'] = \$_SERVER['$a[replace]'];\n";
             $ret .= "}\n";
         }
@@ -88,10 +112,33 @@ class Kwf_Util_Setup
         $ret .= "    \$_SERVER['HTTPS'] = 'on';\n";
         $ret .= "}\n";
 
-        $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '".realpath(dirname(__FILE__).'/../..')."');\n";
+        if (VENDOR_PATH == '../vendor') {
+            $kwfPath = '..';
+        } else {
+            $kwfPath = VENDOR_PATH.'/koala-framework/koala-framework';
+        }
+        $ret .= "if (!defined('KWF_PATH')) define('KWF_PATH', '$kwfPath');\n";
         $ret .= "if (!defined('VENDOR_PATH')) define('VENDOR_PATH', 'vendor');\n";
 
-        $ip = include VENDOR_PATH.'/composer/include_paths.php';
+        $ip = array();
+        foreach (include VENDOR_PATH.'/composer/include_paths.php' as $p) {
+
+
+            if (VENDOR_PATH == '../vendor') {
+                $cwd = getcwd();
+                $cwd = substr($cwd, 0, strrpos($cwd, '/'));
+                if (substr($p, 0, strlen($cwd)) != $cwd) {
+                    throw new Kwf_Exception("'$p' not in cwd");
+                }
+                $p = '../'.substr($p, strlen($cwd)+1);
+            } else {
+                if (substr($p, 0, strlen(getcwd())) != getcwd()) {
+                    throw new Kwf_Exception("'$p' not in cwd");
+                }
+                $p = substr($p, strlen(getcwd())+1);
+            }
+            $ip[] = "'.\$cwd.'/".$p;
+        }
         $ip[] = '.';
         foreach (Kwf_Config::getValueArray('includepath') as $t=>$p) {
             if ($p) $ip[] = $p;
