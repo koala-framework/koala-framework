@@ -31,28 +31,15 @@ class Kwf_Controller_Action_Cli_HelpController extends Kwf_Controller_Action_Cli
 
     private function _getCommands($controllerName = null)
     {
+        $d = $this->getFrontController()->getDispatcher();
+
         $commands = $this->_processModule('cli');
-        foreach ($this->_processModule('kwf_controller_action_cli', $controllerName) as $cmd=>$class) {
-            if (!isset($commands[$cmd])) {
-                $commands[$cmd] = $class;
-            }
-        }
-        foreach ($this->_processModule('kwf_e2_controller_cli', $controllerName) as $cmd=>$class) {
-            if (!isset($commands[$cmd])) {
-                $commands[$cmd] = $class;
-            }
-        }
-        if (Kwf_Registry::get('config')->application->id != 'kwf') {
-            foreach ($this->_processModule('kwf_controller_action_cli_web', $controllerName) as $cmd=>$class) {
-                if (!isset($commands[$cmd])) {
-                    $commands[$cmd] = $class;
-                }
-            }
-        }
-        if (file_exists(getcwd() . '/.svn')) {
-            foreach ($this->_processModule('kwf_controller_action_cli_svn', $controllerName) as $cmd=>$class) {
-                if (!isset($commands[$cmd])) {
-                    $commands[$cmd] = $class;
+        foreach ($d->getControllerDirectory() as $module=>$dir)  {
+            if (preg_match('#action_cli#', $module)) {
+                foreach ($this->_processModule($module, $controllerName) as $cmd=>$class) {
+                    if (!isset($commands[$cmd])) {
+                        $commands[$cmd] = $class;
+                    }
                 }
             }
         }
