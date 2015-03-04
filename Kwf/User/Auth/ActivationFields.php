@@ -1,4 +1,9 @@
 <?php
+/**
+ * Implements an activation token that is saved to activate_token field in user model.
+ *
+ * Token times out after 24h
+ */
 class Kwf_User_Auth_ActivationFields extends Kwf_User_Auth_Abstract implements Kwf_User_Auth_Interface_Activation
 {
     private function _encodePasswordBcrypt(Kwf_Model_Row_Interface $row, $password)

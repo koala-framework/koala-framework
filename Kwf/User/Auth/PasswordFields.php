@@ -1,4 +1,12 @@
 <?php
+/**
+ * Implements login by username/password
+ *
+ * Required model fields:
+ * - email
+ * - password
+ * - password_salt
+ */
 class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf_User_Auth_Interface_Password
 {
     private $_mailTransport = null;

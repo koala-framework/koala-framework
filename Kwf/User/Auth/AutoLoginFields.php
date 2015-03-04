@@ -1,4 +1,9 @@
 <?php
+/**
+ * Implements an auto login token that is saved to autologin field in user model.
+ *
+ * Token times out after 100 days
+ */
 class Kwf_User_Auth_AutoLoginFields extends Kwf_User_Auth_Abstract implements Kwf_User_Auth_Interface_AutoLogin
 {
     public function getRowById($id)
