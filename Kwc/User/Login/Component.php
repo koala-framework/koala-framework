@@ -31,7 +31,13 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             $auth = $authMethods[$postData['redirectAuth']];
             if (!$auth instanceof Kwf_User_Auth_Interface_Redirect) throw new Kwf_Exception_NotFound();
             $redirectBackUrl = $_GET['redirect'];
-            $formValues = array(); //TODO
+
+            $formValues = array();
+            foreach ($auth->getLoginRedirectFormOptions() as $option) {
+                if ($option['type'] == 'select') {
+                    $formValues[$option['name']] = $postData[$option['name']];
+                }
+            }
 
             $f = new Kwf_Filter_StrongRandom();
             $state = $postData['redirectAuth'].'-'.$f->filter(null).'-'.$redirectBackUrl;
@@ -48,7 +54,8 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             $user = null;
             foreach (Kwf_Registry::get('userModel')->getAuthMethods() as $auth) {
                 if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
-                    $user = $auth->getUserToLoginByCallbackParams($postData);
+                    $user = $auth->getUserToLoginByParams($postData);
+                    if ($user) break;
                 }
             }
             if ($user) {
@@ -74,13 +81,17 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
         $ret['register'] = $this->_getRegisterComponent();
         $ret['lostPassword'] = $this->_getLostPasswordComponent();
 
-        $ret['redirectLinks'] = array();
+        $ret['redirects'] = array();
         foreach (Kwf_Registry::get('userModel')->getAuthMethods() as $authKey=>$auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Redirect && $auth->showInFrontend()) {
                 $label = $auth->getLoginRedirectLabel();
-                $ret['redirectLinks'][] = array(
-                    'url' => $this->getData()->url.'?redirectAuth='.$authKey.'&redirect=%redirect%',
-                    'name' => $this->getData()->trlStaticExecute($label['linkText'])
+                $ret['redirects'][] = array(
+                    'url' => $this->getData()->url,
+                    'authMethod' => $authKey,
+                    'redirect' => '%redirect%',
+                    'name' => $this->getData()->trlStaticExecute($label['name']),
+                    'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
+                    'formOptions' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
                 );
             }
         }
