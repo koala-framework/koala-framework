@@ -29,7 +29,13 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
     {
         $cls = $this->_imageUploadFieldClass;
         $imageUploadField = new $cls($imageLabel);
-        $imageUploadField->setDimensions(Kwc_Abstract::getSetting($this->getClass(), 'dimensions'));
+        $dimensions = Kwc_Abstract::getSetting($this->getClass(), 'dimensions');
+        foreach ($dimensions as &$dimension) {
+            if (isset($dimension['text'])) {
+                $dimension['text'] = Kwf_Trl::getInstance()->trlStaticExecute($dimension['text']);
+            }
+        }
+        $imageUploadField->setDimensions($dimensions);
         $imageUploadField
             ->setAllowBlankImage(Kwc_Abstract::getSetting($this->getClass(), 'allowBlank'))
             ->setShowHelptext(Kwc_Abstract::getSetting($this->getClass(), 'showHelpText'))
