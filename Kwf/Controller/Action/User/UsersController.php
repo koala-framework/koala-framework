@@ -115,6 +115,15 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         if ($type == 'activation') {
             $row->sendActivationMail();
         } else if ($type == 'lost_password') {
+            foreach ($this->_model->getAuthMethods() as $auth) {
+                if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+                    if (!$auth->allowPasswordForUser($row)) {
+                        $label = $auth->getLoginRedirectLabel();
+                        $label = Kwf_Trl::getInstance()->trlStaticExecute($label['name']);
+                        throw new Kwf_Exception_Client(trlKwf("This user doesn't have a password, he must log in using {0}", $label));
+                    }
+                }
+            }
             $row->sendLostPasswordMail();
         }
     }
