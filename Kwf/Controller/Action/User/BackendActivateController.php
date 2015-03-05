@@ -102,7 +102,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
                     'url' => $url.'?authMethod='.$k.'&code='.$this->_getParam('code'),
                     'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name']),
                     'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
-                    'formOptions' => $auth->getLoginRedirectFormOptions(),
+                    'formOptions' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
                 );
             }
         }
