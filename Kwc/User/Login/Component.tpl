@@ -11,9 +11,6 @@
         <?=$this->componentLink($this->lostPassword, $this->data->trlKwf('request a new one here'))?>.
         </p>
     <? } ?>
-    <? if ($this->facebook) { ?>
-        <?=$this->component($this->facebook)?>.
-    <? } ?>
     <? foreach ($this->redirectLinks as $link) { ?>
         <a href="<?=$link['url']?>"><?=$link['name']?></a>
     <? } ?>
