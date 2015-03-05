@@ -104,11 +104,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         } else {
             $acl = $this->_getAcl();
             $resource = $this->getRequest()->getResourceName();
-            if ($resource == 'kwf_user_changeuser') {
-                //spezielle berechtigungsabfrage für Benutzerwechsel
-                $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
-                $allowed = $acl->isAllowed($role, $resource, 'view');
-            } else if ($resource == 'kwf_component') {
+            if ($resource == 'kwf_component') {
                 $allowed = $this->_isAllowedComponent();
             } else {
                 if (!$acl->has($resource)) {

@@ -4,6 +4,18 @@ class Kwf_Controller_Action_User_ChangeuserController extends Kwf_Controller_Act
     protected $_defaultOrder = 'lastname';
     protected $_paging = 10;
 
+    protected function _isAllowedResource()
+    {
+        $acl = $this->_getAcl();
+
+        $resource = $this->getRequest()->getResourceName();
+
+        $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
+        $allowed = $acl->isAllowed($role, $resource, 'view');
+
+        return $allowed;
+    }
+
     protected function _getSelect()
     {
         $ret = parent::_getSelect();
