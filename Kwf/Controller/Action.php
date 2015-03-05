@@ -74,37 +74,13 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         $this->_validateSessionToken();
 
         $t = microtime(true);
-        $allowed = false;
-        if ($this->_getUserRole() == 'cli') {
-            $allowed = true;
-        } else {
-            $acl = $this->_getAcl();
-            $resource = $this->getRequest()->getResourceName();
-            if ($resource == 'kwf_user_changeuser') {
-                //spezielle berechtigungsabfrage für Benutzerwechsel
-                $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
-                $allowed = $acl->isAllowed($role, $resource, 'view');
-            } else if ($resource == 'kwf_component') {
-                $allowed = $this->_isAllowedComponent(); // Bei Test ist niemand eingeloggt und deshalb keine Prüfung
-            } else {
-                if (!$acl->has($resource)) {
-                    throw new Kwf_Exception_NotFound();
-                } else {
-                    if ($this->_getAuthData()) {
-                        $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
-                    } else {
-                        $allowed = $acl->isAllowed($this->_getUserRole(), $resource, 'view');
-                    }
-                }
-            }
-            if ($allowed) {
-                $allowed = $this->_isAllowed($this->_getAuthData());
-            }
+        $allowed = $this->_isAllowedResource();
+        if ($allowed) {
+            $allowed = $this->_isAllowed($this->_getAuthData());
         }
 
         if (!$allowed) {
             $params = array(
-                'resource' => $resource,
                 'role' => $this->_getUserRole()
             );
             if ($this->getHelper('ViewRenderer')->isJson()) {
@@ -118,6 +94,35 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         }
 
         Kwf_Benchmark::subCheckpoint('check acl', microtime(true)-$t);
+    }
+
+    protected function _isAllowedResource()
+    {
+        $allowed = false;
+        if ($this->_getUserRole() == 'cli') {
+            $allowed = true;
+        } else {
+            $acl = $this->_getAcl();
+            $resource = $this->getRequest()->getResourceName();
+            if ($resource == 'kwf_user_changeuser') {
+                //spezielle berechtigungsabfrage für Benutzerwechsel
+                $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
+                $allowed = $acl->isAllowed($role, $resource, 'view');
+            } else if ($resource == 'kwf_component') {
+                $allowed = $this->_isAllowedComponent();
+            } else {
+                if (!$acl->has($resource)) {
+                    throw new Kwf_Exception_NotFound();
+                } else {
+                    if ($this->_getAuthData()) {
+                        $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
+                    } else {
+                        $allowed = $acl->isAllowed($this->_getUserRole(), $resource, 'view');
+                    }
+                }
+            }
+        }
+        return $allowed;
     }
 
     protected function _isAllowed($user)
