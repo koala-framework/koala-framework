@@ -13,6 +13,7 @@ class Kwf_Controller_Action_Form_Controller extends Kwf_Controller_Action
         }
         $this->view->dep = Kwf_Assets_Package_Default::getInstance('Admin');
 
+        parent::preDispatch();
     }
 
     protected function _initFields()

@@ -10,6 +10,11 @@ class Kwf_Controller_Action_User_BackendLostPasswordController extends Kwf_Contr
         parent::preDispatch();
     }
 
+    protected function _isAllowedResource()
+    {
+        return true;
+    }
+
     public function indexAction()
     {
         $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('lost-password');

@@ -10,6 +10,11 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         parent::preDispatch();
     }
 
+    protected function _isAllowedResource()
+    {
+        return true;
+    }
+
     public function indexAction()
     {
         $this->view->applicationName = Kwf_Config::getValue('application.name');

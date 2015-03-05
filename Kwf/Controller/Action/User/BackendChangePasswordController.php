@@ -33,6 +33,10 @@ class Kwf_Controller_Action_User_BackendChangePasswordController extends Kwf_Con
         parent::preDispatch();
     }
 
+    protected function _isAllowedResource()
+    {
+        return true;
+    }
 
     protected function _initFields()
     {

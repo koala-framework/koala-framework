@@ -10,6 +10,11 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         }
     }
 
+    protected function _isAllowedResource()
+    {
+        return true;
+    }
+
     public function indexAction()
     {
         $this->forward('index', 'backend-login');
