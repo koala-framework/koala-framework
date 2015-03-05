@@ -78,19 +78,17 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
             }
         }
 
-        $this->view->redirects = array();
+        $this->view->showPassword = $showPassword;
         if ($showPassword) {
             $url = $this->getFrontController()->getRouter()->assemble(array(
                 'controller' => 'backend-change-password',
                 'action' => 'index',
             ), 'kwf_user');
             $url .= '?code='.$this->_getParam('code');
-            $this->view->redirects[] = array(
-                'url' => $url,
-                'name' => trlKwf('Password')
-            );
+            $this->view->passwordUrl = $url;
         }
 
+        $this->view->redirects = array();
         foreach ($users->getAuthMethods() as $k=>$auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Redirect && $auth->showInBackend()) {
                 $url = $this->getFrontController()->getRouter()->assemble(array(
@@ -99,7 +97,10 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
                 ), 'kwf_user');
                 $label = $auth->getLoginRedirectLabel();
                 $this->view->redirects[] = array(
-                    'url' => $url.'?authMethod='.$k.'&code='.$this->_getParam('code'),
+                    'url' => $url,
+                    'authMethod' => $k,
+                    'code' => $this->_getParam('code'),
+                    'redirect' => $_SERVER['REQUEST_URI'],
                     'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name']),
                     'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
                     'formOptions' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
