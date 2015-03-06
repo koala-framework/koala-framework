@@ -104,7 +104,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         }
 
         $f = new Kwf_Filter_StrongRandom();
-        $state = $authMethod.'-'.$f->filter(null).'-'.$this->_getParam('redirect');
+        $state = 'login-'.$authMethod.'-'.$f->filter(null).'-'.$this->_getParam('redirect');
 
         //save state in namespace to validate it later
         $ns = new Kwf_Session_Namespace('kwf-login-redirect');
@@ -119,12 +119,6 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
 
         $url = $authMethods[$authMethod]->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
         $this->redirect($url);
-    }
-
-    public function redirectCallbackAction()
-    {
-
-
     }
 
     protected function _initFields()

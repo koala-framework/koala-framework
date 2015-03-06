@@ -163,23 +163,52 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
 
         $state = explode('-', $state);
 
-        if (count($state) != 3) throw new Kwf_Exception_NotFound();
-        $authMethod = $state[0];
-        $redirect = $state[2];
+        if (count($state) < 3) throw new Kwf_Exception_NotFound();
+        $action = $state[0]; //login or activate
 
+        $authMethod = $state[1];
         $users = Zend_Registry::get('userModel');
         $authMethods = $users->getAuthMethods();
         if (!isset($authMethods[$authMethod])) {
             throw new Kwf_Exception_NotFound();
         }
-        try {
-            $user = $authMethods[$authMethod]->getUserToLoginByCallbackParams($this->_getRedirectBackUrl(), $this->getRequest()->getParams());
-        } catch (Kwf_Exception_Client $e) {
-            $this->getRequest()->setParam('redirect', $redirect);
-            $this->getRequest()->setParam('errorMessage', $e->getMessage());
-            $this->forward('error');
-            return;
+
+        $user = null;
+        if ($action == 'login') {
+            if (count($state) != 4) throw new Kwf_Exception_NotFound();
+            $redirect = $state[3];
+            try {
+                $user = $authMethods[$authMethod]->getUserToLoginByCallbackParams($this->_getRedirectBackUrl(), $this->getRequest()->getParams());
+            } catch (Kwf_Exception_Client $e) {
+                $this->getRequest()->setParam('redirect', $redirect);
+                $this->getRequest()->setParam('errorMessage', $e->getMessage());
+                $this->forward('error');
+                return;
+            }
+        } else if ($action == 'activate') {
+            if (count($state) != 6) throw new Kwf_Exception_NotFound();
+            $userId = $state[3];
+            $code = $state[4];
+            $redirect = $state[5];
+            $user = $users->getRow($userId);
+            $this->getRequest()->setParam('user', $user);
+            if (!$user) {
+                $this->getRequest()->setParam('errorMessage', trlKwf("Activation code is invalid. Maybe the URL wasn't copied completely?"));
+                $this->forward('error');
+                return;
+            } else if (!$user->validateActivationToken($code) && $user->isActivated()) {
+                $this->getRequest()->setParam('errorMessage', trlKwf("This account has already been activated."));
+                $this->forward('error');
+                return;
+            } else if (!$user->validateActivationToken($code)) {
+                $this->getRequest()->setParam('errorMessage', trlKwf("Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?"));
+                $this->forward('error');
+                return;
+            }
+            $authMethods[$authMethod]->associateUserByCallbackParams($user, $this->_getRedirectBackUrl(), $this->getRequest()->getParams());
+            $user->clearActivationToken();
         }
+
         if ($user) {
             $users->loginUserRow($user, true);
             if ($redirect == 'jsCallback') {
@@ -210,8 +239,8 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
     {
         $state = $this->_getParam('state');
         if ($state) {
-            //we got a state, validate it like it is a backend login
-            $this->forward('redirect-callback', 'backend-login');
+            //we got a state, validate it like it is a redirect-callback
+            $this->forward('redirect-callback');
             return;
         }
 

@@ -106,6 +106,29 @@ class Kwf_User_Model extends Kwf_Model_RowCache
     public function getUserActivationUrl($row)
     {
         $root = Kwf_Component_Data_Root::getInstance();
+        $activateComponent = null;
+        if ($root && $this->_allowFrontendUrls($row)) {
+            // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
+            // für den Benutzer auswählen
+            // oder man leitet auf eine redirect seite um und schaut auf die
+            // browser accept language
+            $activateComponent = $root
+                ->getComponentByClass('Kwc_User_Activate_Component', array('limit' => 1));
+        }
+
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = Kwf_Registry::get('config')->server->domain;
+        }
+        $activateUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
+        if ($activateComponent) $activateUrl = $activateComponent->getAbsoluteUrl(true);
+        return $activateUrl.'?code='.$row->id.'-'.$row->generateActivationToken();
+    }
+
+    public function getUserLostPasswordUrl($row)
+    {
+        $root = Kwf_Component_Data_Root::getInstance();
         $lostPasswortComponent = null;
         if ($root && $this->_allowFrontendUrls($row)) {
             // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
@@ -121,7 +144,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
-        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
+        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/lost-password';
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->getAbsoluteUrl(true);
         return $lostPassUrl.'?code='.$row->id.'-'.$row->generateActivationToken();
     }

@@ -7,14 +7,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
         if (!$this->_getParam('user') && $this->getRequest()->getActionName() != 'error') {
 
-            if ($this->getRequest()->getActionName() == 'redirect-callback') {
-                $state = explode('-', $this->_getParam('state'));
-                if (count($state) != 3) throw new Kwf_Exception_NotFound();
-                $code = $state[2];
-            } else {
-                $code = $this->_getParam('code');
-            }
-
+            $code = $this->_getParam('code');
             if (!preg_match('#^(.*)-(\w*)$#', $code, $m)) {
                 $this->getRequest()->setParam('errorMessage', trlKwf("Activation code is invalid. Maybe the URL wasn't copied completely?"));
                 $this->forward('error');
@@ -116,7 +109,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
     private function _getRedirectBackUrl()
     {
         $redirectBackUrl = $this->getFrontController()->getRouter()->assemble(array(
-            'controller' => 'backend-activate',
+            'controller' => 'login',
             'action' => 'redirect-callback',
         ), 'kwf_user');
         $redirectBackUrl = 'http'.(isset($_SERVER['HTTPS']) ? 's' : '').'://'
@@ -135,10 +128,10 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         }
 
         $f = new Kwf_Filter_StrongRandom();
-        $state = $authMethod.'-'.$f->filter(null).'-'.$this->_getParam('code');
+        $state = 'activate-'.$authMethod.'-'.$f->filter(null).'-'.$this->_getParam('code').'-'.Kwf_Setup::getBaseUrl().'/kwf/welcome';
 
         //save state in namespace to validate it later
-        $ns = new Kwf_Session_Namespace('kwf-backend-activate');
+        $ns = new Kwf_Session_Namespace('kwf-login-redirect');
         $ns->state = $state;
 
         $formValues = array();
@@ -150,31 +143,6 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
 
         $url = $authMethods[$authMethod]->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
         $this->redirect($url);
-    }
-
-    public function redirectCallbackAction()
-    {
-        $state = $this->_getParam('state');
-
-        $ns = new Kwf_Session_Namespace('kwf-backend-activate');
-        if (!$ns->state || $state != $ns->state) throw new Kwf_Exception_AccessDenied();
-
-        $state = explode('-', $state);
-        if (count($state) != 3) throw new Kwf_Exception_NotFound();
-        $authMethod = $state[0];
-        $code = $state[2];
-
-        $users = Kwf_Registry::get('userModel');
-        $authMethods = $users->getAuthMethods();
-        if (!isset($authMethods[$authMethod])) {
-            throw new Kwf_Exception_NotFound();
-        }
-        $user = $this->_getParam('user');
-        $authMethods[$authMethod]->associateUserByCallbackParams($user, $this->_getRedirectBackUrl(), $this->getRequest()->getParams());
-        $user->clearActivationToken();
-        $users->loginUserRow($user, true);
-
-        $this->redirect('/kwf/welcome');
     }
 
     public function errorAction()

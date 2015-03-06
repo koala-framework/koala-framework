@@ -1,5 +1,5 @@
 <?php
-class Kwc_User_LostPassword_SetPassword_Component extends Kwc_User_Activate_Component
+class Kwc_User_LostPassword_SetPassword_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {

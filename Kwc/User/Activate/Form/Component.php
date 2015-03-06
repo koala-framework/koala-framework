@@ -45,6 +45,11 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         return $ret;
     }
 
+    public function getUserRow()
+    {
+        return $this->_user;
+    }
+
     public function processInput(array $postData)
     {
         parent::processInput($postData);
