@@ -11,6 +11,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         $ret['componentName'] = trlKwfStatic('Table');
         $ret['componentIcon'] = 'table';
         $ret['componentCategory'] = 'content';
+        $ret['componentPriority'] = 35;
         $ret['ownModel'] = 'Kwc_Basic_Table_Model';
         $ret['childModel'] = 'Kwc_Basic_Table_ModelData';
 

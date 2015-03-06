@@ -8,6 +8,7 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwc_Basic_Download_Model';
         $ret['componentName'] = trlKwfStatic('Download');
+        $ret['componentCategory'] = 'special';
         $ret['componentIcon'] = 'folder_link';
         $ret['showFilesize'] = true;
         $ret['showIcon'] = true;
