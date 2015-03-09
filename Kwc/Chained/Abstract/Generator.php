@@ -191,6 +191,9 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
         if (isset($row->isHome)) {
             $data['isHome'] = $row->isHome;
         }
+        if (isset($row->invisible)) {
+            $data['invisible'] = $row->invisible;
+        }
         return $data;
     }
 
