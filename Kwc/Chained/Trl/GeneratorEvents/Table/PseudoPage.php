@@ -3,7 +3,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table_PseudoPage extends Kwc_Chained_Trl_G
 {
     protected $_nameColumn;
 
-    public function onRowUpdate(Kwf_Events_Event_Row_Updated $event)
+    public function onRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         parent::onRowUpdate($event);
 
