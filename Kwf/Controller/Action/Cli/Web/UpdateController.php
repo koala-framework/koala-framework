@@ -57,33 +57,17 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             if (!$update) { echo 'could not create update.'; exit(1); }
             $updates = array($update);
         } else {
-            $rev = $this->_getParam('rev');
+            if ($this->_getParam('rev')) {
+                throw new Kwf_Exception("rev parameter is not supported anymore");
+            }
+            $rev = null;
 
             if (!$skipClearCache) {
                 Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>true, 'refresh'=>false));
             }
 
-            $from = 1;
-            $to = 9999999;
-            if ($rev) {
-                $ex = explode(':', $rev, 2);
-                $ex1 = $ex[0];
-                if (!isset($ex[1])) {
-                    $ex2 = null;
-                } else {
-                    $ex2 = $ex[1];
-                }
-                $from = $ex1;
-                if (!$ex2) {
-                    $to = $from + 1;
-                } else if ($ex1 == $ex2) {
-                    $to = $ex2 + 1;
-                } else {
-                    $to = $ex2;
-                }
-            }
-            echo "Looking for update-scripts from revision $from to {$to}...";
-            $updates = Kwf_Util_Update_Helper::getUpdates($from, $to);
+            echo "Looking for update-scripts...";
+            $updates = Kwf_Util_Update_Helper::getUpdates();
             foreach ($updates as $k=>$u) {
                 if ($u->getRevision() && in_array($u->getUniqueName(), $doneNames) && !$rev) {
                     unset($updates[$k]);

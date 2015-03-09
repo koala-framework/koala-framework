@@ -18,7 +18,7 @@ class Kwf_Controller_Action_Maintenance_UpdateController extends Kwf_Controller_
     protected function _initColumns()
     {
         $doneNames = Kwf_Util_Update_Helper::getExecutedUpdatesNames();
-        $updates = Kwf_Util_Update_Helper::getUpdates(0, 9999999);
+        $updates = Kwf_Util_Update_Helper::getUpdates();
         $data = array();
         $id = 0;
         foreach ($updates as $k=>$u) {
@@ -53,7 +53,7 @@ class Kwf_Controller_Action_Maintenance_UpdateController extends Kwf_Controller_
     public static function executeUpdates($request, $view)
     {
         $doneNames = Kwf_Util_Update_Helper::getExecutedUpdatesNames();
-        $updates = Kwf_Util_Update_Helper::getUpdates(0, 9999999);
+        $updates = Kwf_Util_Update_Helper::getUpdates();
         foreach ($updates as $k=>$u) {
             if (in_array($u->getUniqueName(), $doneNames)) {
                 unset($updates[$k]);
