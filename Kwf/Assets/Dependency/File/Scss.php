@@ -69,7 +69,11 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     }
                 }
                 $loadPath[] = './scss';
-                $loadPath[] = KWF_PATH.'/sass/Kwf/stylesheets';
+                if (KWF_PATH == '..') {
+                    $loadPath[] = substr(getcwd(), 0, strrpos(getcwd(), '/')).'/sass/Kwf/stylesheets';
+                } else {
+                    $loadPath[] = KWF_PATH.'/sass/Kwf/stylesheets';
+                }
                 $loadPath = escapeshellarg(implode(PATH_SEPARATOR, $loadPath));
             }
 

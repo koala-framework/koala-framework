@@ -221,6 +221,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
         foreach ($paths as $k=>$p) {
             if ($p == '.') $p = getcwd();
+            if ($p == '..') $p = substr(getcwd(), 0, strrpos(getcwd(), '/'));
             if (substr($p, 0, 7) == 'vendor/') $p = getcwd().'/'.$p;
             if (substr($p, 0, 10) == '../vendor/') {
                 $p = substr(getcwd(), 0, strrpos(getcwd(), '/')).'/'.substr($p, 3);
