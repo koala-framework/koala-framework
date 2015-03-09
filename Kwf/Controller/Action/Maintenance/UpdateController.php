@@ -24,9 +24,8 @@ class Kwf_Controller_Action_Maintenance_UpdateController extends Kwf_Controller_
         foreach ($updates as $k=>$u) {
             $data[] = array(
                 'id' => ++$id,
-                'revision' => $u->getRevision(),
                 'name' => $u->getUniqueName(),
-                'executed' => in_array($u->getUniqueName(), $doneNames)
+                'executed' => in_array($u->getUniqueName(), $doneNames) || ($u->getLegacyName() && in_array($u->getLegacyName(), $doneNames))
             );
         }
         $this->_model = new Kwf_Model_FnF(array(
@@ -55,7 +54,7 @@ class Kwf_Controller_Action_Maintenance_UpdateController extends Kwf_Controller_
         $doneNames = Kwf_Util_Update_Helper::getExecutedUpdatesNames();
         $updates = Kwf_Util_Update_Helper::getUpdates();
         foreach ($updates as $k=>$u) {
-            if (in_array($u->getUniqueName(), $doneNames)) {
+            if (in_array($u->getUniqueName(), $doneNames) || ($u->getLegacyName() && in_array($u->getLegacyName(), $doneNames))) {
                 unset($updates[$k]);
             }
         }

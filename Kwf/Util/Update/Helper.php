@@ -44,7 +44,7 @@ class Kwf_Util_Update_Helper
         $u = self::getUpdatesForDir('Update');
         $ret = array_merge($ret, $u);
 
-        $ret = self::_sortByRevision($ret);
+        $ret = self::_sortUpdates($ret);
         return $ret;
     }
 
@@ -114,10 +114,10 @@ class Kwf_Util_Update_Helper
                     $fileType = substr($f, -4);
                     if ($fileType != '.php' && $fileType != '.sql') continue;
                     $f = substr($f, 0, -4);
-                    if (!is_numeric($f)) continue;
-                    $nr = (int)$f;
-                    $n = $classPrefix.'_'.$nr;
-                    $update = self::createUpdate($n, $i->getPathname());
+                    if (is_numeric($f)) {
+                        throw new Kwf_Exception("Invalid update script name: ".$f->getPathname()." Please use the new syntax.");
+                    }
+                    $update = self::createUpdate($classPrefix.'_'.$f, $i->getPathname());
 
                     if (!$update) continue;
                     $tags = $update->getTags();
@@ -130,7 +130,7 @@ class Kwf_Util_Update_Helper
                 }
             }
         }
-        $ret = self::_sortByRevision($ret);
+        $ret = self::_sortUpdates($ret);
         return $ret;
     }
 
@@ -149,16 +149,15 @@ class Kwf_Util_Update_Helper
         } else {
             $isSql = substr($filename, -4) == '.sql';
         }
-        $nr = (int)substr(strrchr($class, '_'), 1);
         $update = null;
         if ($isSql) {
-            $update = new Kwf_Update_Sql($nr, $class);
+            $update = new Kwf_Update_Sql($class);
             $update->sql = file_get_contents($filename);
             if (preg_match("#\\#\\s*tags:(.*)#", $update->sql, $m)) {
                 $update->setTags(explode(' ', trim($m[1])));
             }
         } else {
-            $update = new $class($nr, $class);
+            $update = new $class($class);
             if (!$update instanceof Kwf_Update) {
                 throw new Kwf_Exception("Invalid update class: '$class'");
             }
@@ -166,21 +165,28 @@ class Kwf_Util_Update_Helper
         return $update;
     }
 
-    private static function _sortByRevision($updates)
+    private static function _cmpSortUpdates($a, $b)
     {
-        $revisions = array();
-        foreach ($updates as $k=>$u) {
-            $revisions[$k] = $u->getRevision();
-            if (is_null($revisions[$k])) {
-                $revisions[$k] = 99999999;
-            }
+        $revA = $a->getLegacyRevision();
+        $revB = $b->getLegacyRevision();
+        $nameA = $a->getUniqueName();
+        $nameB = $b->getUniqueName();
+        if ($revA && $revB) {
+            if ($revA == $revB) return 0;
+            return ($revA < $revB) ? -1 : 1;
+        } else if ($revA) {
+            return -1;
+        } else if ($revB) {
+            return 1;
+        } else {
+            return ($nameA < $nameB) ? -1 : 1;
         }
-        asort($revisions, SORT_NUMERIC);
-        $ret = array();
-        foreach (array_keys($revisions) as $k) {
-            $ret[] = $updates[$k];
-        }
-        return $ret;
+    }
+
+    private static function _sortUpdates($updates)
+    {
+        usort($updates, array('Kwf_Util_Update_Helper', '_cmpSortUpdates'));
+        return $updates;
     }
 
     public static function getExecutedUpdatesNames()
@@ -213,7 +219,7 @@ class Kwf_Util_Update_Helper
             $r = trim($doneNames);
             $doneNames = array();
             foreach (Kwf_Util_Update_Helper::getUpdates() as $u) {
-                if ($u->getRevision() <= $r) {
+                if ($u->getLegacyRevision() && $u->getLegacyRevision() <= $r) {
                     $doneNames[] = $u->getUniqueName();
                 }
             }
@@ -224,8 +230,8 @@ class Kwf_Util_Update_Helper
                 if (!isset($doneNames['done'])) {
                     $doneNames['done'] = array();
                     foreach (Kwf_Util_Update_Helper::getUpdates() as $u) {
-                        if ($u->getRevision() <= $doneNames['start']) {
-                            $doneNames['done'][] = $u->getRevision();
+                        if ($u->getLegacyRevision() && $u->getLegacyRevision() <= $doneNames['start']) {
+                            $doneNames['done'][] = $u->getLegacyRevision();
                         }
                     }
                 }
@@ -240,8 +246,10 @@ class Kwf_Util_Update_Helper
                     if (!isset($allUpdates)) {
                         $allUpdates = array();
                         foreach (Kwf_Util_Update_Helper::getUpdates() as $u) {
-                            if (!isset($allUpdates[$u->getRevision()])) $allUpdates[$u->getRevision()] = array();
-                            $allUpdates[$u->getRevision()][] = $u;
+                            if ($u->getLegacyRevision()) {
+                                if (!isset($allUpdates[$u->getLegacyRevision()])) $allUpdates[$u->getLegacyRevision()] = array();
+                                $allUpdates[$u->getLegacyRevision()][] = $u;
+                            }
                         }
                     }
                     if (isset($allUpdates[$i])) {

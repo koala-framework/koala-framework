@@ -60,7 +60,6 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             if ($this->_getParam('rev')) {
                 throw new Kwf_Exception("rev parameter is not supported anymore");
             }
-            $rev = null;
 
             if (!$skipClearCache) {
                 Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>true, 'refresh'=>false));
@@ -69,7 +68,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             echo "Looking for update-scripts...";
             $updates = Kwf_Util_Update_Helper::getUpdates();
             foreach ($updates as $k=>$u) {
-                if ($u->getRevision() && in_array($u->getUniqueName(), $doneNames) && !$rev) {
+                if (in_array($u->getUniqueName(), $doneNames) || ($u->getLegacyName() && in_array($u->getLegacyName(), $doneNames))) {
                     unset($updates[$k]);
                 }
             }
