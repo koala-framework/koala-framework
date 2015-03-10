@@ -10,15 +10,15 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
 
     public function getDependencyNameByAlias($dependencyName)
     {
-        if (strtolower($dependencyName) == $this->_path || strtolower($dependencyName).'.js' == $this->_path) {
-            return ucfirst(strtolower($dependencyName));
+        if (strtolower($dependencyName) == strtolower($this->_path) || strtolower($dependencyName).'.js' == $this->_path) {
+            return ucfirst($this->_path);
         }
     }
 
     public function getDependency($dependencyName)
     {
         $ret = null;
-        if (strtolower($dependencyName) == $this->_path || strtolower($dependencyName).'.js' == $this->_path) {
+        if (strtolower($dependencyName) == strtolower($this->_path) || strtolower($dependencyName).'.js' == $this->_path) {
             $dir = VENDOR_PATH.'/bower_components/'.$this->_path;
             $path = $this->_path;
             if (substr($path, -3) == '.js') $path = substr($path, 0, -3);
@@ -28,7 +28,7 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
 
             $paths = array($path);
             if (strpos($path, '-')!==false) $paths[] = str_replace('-', '.', $path);
-
+            if ($path != ucfirst($path)) $paths[] = ucfirst($path);
             $files = array();
             foreach ($paths as $p) {
                 $files = array_merge($files, array(
