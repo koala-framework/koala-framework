@@ -21,12 +21,12 @@ class Kwf_Update_Tags_Test extends Kwf_Test_TestCase
         Kwf_Registry::get('config')->server->updateTags = array(
             'kwf', 'foo'
         );
-        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf_Update_Tags_Update', 1, 1100);
+        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf_Update_Tags_Update');
         $this->assertEquals(2, count($updates));
-        $this->assertEquals(100, $updates[0]->getRevision());
+        $this->assertEquals(100, $updates[0]->getLegacyRevision());
         $this->assertEquals(array('kwf', 'foo'), $updates[0]->getTags());
 
-        $this->assertEquals(101, $updates[1]->getRevision());
+        $this->assertEquals(101, $updates[1]->getLegacyRevision());
         $this->assertEquals(array('kwf'), $updates[1]->getTags());
     }
 
@@ -35,9 +35,9 @@ class Kwf_Update_Tags_Test extends Kwf_Test_TestCase
         Kwf_Registry::get('config')->server->updateTags = array(
             'kwf'
         );
-        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf_Update_Tags_Update', 1, 1100);
+        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf_Update_Tags_Update');
         $this->assertEquals(1, count($updates));
-        $this->assertEquals(101, $updates[0]->getRevision());
+        $this->assertEquals(101, $updates[0]->getLegacyRevision());
         $this->assertEquals(array('kwf'), $updates[0]->getTags());
     }
 }
