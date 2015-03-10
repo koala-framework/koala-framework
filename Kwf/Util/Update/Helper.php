@@ -44,6 +44,10 @@ class Kwf_Util_Update_Helper
         $u = self::getUpdatesForDir('Update');
         $ret = array_merge($ret, $u);
 
+        foreach (Kwf_Model_Abstract::findAllInstances() as $m) {
+            $ret = array_merge($ret, $m->getUpdates());
+        }
+
         $ret = self::_sortUpdates($ret);
         return $ret;
     }

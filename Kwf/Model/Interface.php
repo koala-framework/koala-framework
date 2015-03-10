@@ -65,6 +65,7 @@ interface Kwf_Model_Interface
     public function getColumnMappings($mapping);
 
     public function getEventSubscribers();
+    public function getUpdates();
 
 
     //deprecated
