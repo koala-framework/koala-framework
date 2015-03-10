@@ -122,8 +122,8 @@ class Kwf_Util_ClearCache_Watcher
             );
             foreach ($fsi as $fso) {
                 if ($fso->isLink()) {
-                    foreach ($watchPaths as $p2) {
-                        if (substr($fso->__toString(), 0, strlen($p2)) == $p2) {
+                    foreach ($watchPaths as $k=>$p2) {
+                        if ($k > 0 && substr($fso->__toString(), 0, strlen($p2)) == $p2) {
                             continue 2;
                         }
                     }
