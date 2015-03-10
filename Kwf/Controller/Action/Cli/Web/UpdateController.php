@@ -9,16 +9,10 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
     {
         return array(
             array(
-                'param'=> 'rev',
-                'value' => '12300[:12305]',
+                'param'=> 'name',
+                'value' => '20150310Foo',
                 'allowBlank' => true,
-                'help' => 'Executes update for a given revision'
-            ),
-            array(
-                'param'=> 'class',
-                'value' => 'Kwc_..._Update_2',
-                'allowBlank' => true,
-                'help' => 'Executes specific update (also .sql)'
+                'help' => 'Executes specific update'
             ),
             array(
                 'param'=> 'skip-clear-cache',
@@ -48,18 +42,27 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             unlink('config.db.ini');
         }
 
+        if ($this->_getParam('rev')) {
+            throw new Kwf_Exception("rev parameter is not supported anymore");
+        }
+        if ($this->_getParam('class')) {
+            throw new Kwf_Exception("class parameter is not supported anymore");
+        }
+
         $skipClearCache = $this->_getParam('skip-clear-cache');
 
         $doneNames = Kwf_Util_Update_Helper::getExecutedUpdatesNames();
 
-        if ($this->_getParam('class')) {
-            $update = Kwf_Util_Update_Helper::createUpdate($this->_getParam('class'));
-            if (!$update) { echo 'could not create update.'; exit(1); }
-            $updates = array($update);
-        } else {
-            if ($this->_getParam('rev')) {
-                throw new Kwf_Exception("rev parameter is not supported anymore");
+        if ($this->_getParam('name')) {
+            $updates = Kwf_Util_Update_Helper::getUpdates();
+            foreach ($updates as $k=>$u) {
+                $n = $u->getUniqueName();
+                $n = substr($n, strrpos($n, '_')+1);
+                if ($n != $this->_getParam('name')) {
+                    unset($updates[$k]);
+                }
             }
+        } else {
 
             if (!$skipClearCache) {
                 Kwf_Util_ClearCache::getInstance()->clearCache(array('types'=>'all', 'output'=>true, 'refresh'=>false));
