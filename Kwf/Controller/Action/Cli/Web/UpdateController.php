@@ -120,7 +120,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
 
         $errors = $runner->getErrors();
         if ($errors) {
-            echo "\n\n================\n";
+            echo "\n\n".str_repeat('=', 16)."\n";
             echo count($errors)." update script(s) failed:\n";
             foreach ($errors as $error) {
                 echo $error['name'].": \n";

@@ -109,7 +109,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     public function getFilters()
     {
         if (is_string($this->_filters)) $this->_filters = array($this->_filters);
-        foreach($this->_filters as $k=>$f) {
+        foreach ($this->_filters as $k=>$f) {
             if (is_int($k)) {
                 unset($this->_filters[$k]);
                 $k = $f;
