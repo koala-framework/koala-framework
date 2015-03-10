@@ -173,8 +173,8 @@ class Kwf_Util_Update_Helper
     {
         $revA = $a->getLegacyRevision();
         $revB = $b->getLegacyRevision();
-        $nameA = $a->getUniqueName();
-        $nameB = $b->getUniqueName();
+        $nameA = substr($a->getUniqueName(), strrpos($a->getUniqueName(), '_')+1);
+        $nameB = substr($b->getUniqueName(), strrpos($b->getUniqueName(), '_')+1);
         if ($revA && $revB) {
             if ($revA == $revB) return 0;
             return ($revA < $revB) ? -1 : 1;
