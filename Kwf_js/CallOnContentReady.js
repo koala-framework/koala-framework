@@ -202,12 +202,14 @@ Kwf.callOnContentReady = function(renderedEl, options)
             }
         }
 
-
         if (useSelectorCache && elCacheBySelector[hndl.selector] && !elCacheBySelector[hndl.selector].dirty) {
             Kwf.Utils.BenchmarkBox.count('queryCache');
             var els = [];
             for (var j=0; j<elCacheBySelector[hndl.selector].length; j++) {
-                if (renderedEl == document.body || $.contains(renderedEl, elCacheBySelector[hndl.selector][j])) {
+                if (renderedEl == document.body ||
+                    renderedEl == elCacheBySelector[hndl.selector][j] ||
+                    $.contains(renderedEl, elCacheBySelector[hndl.selector][j])
+                ) {
                     els.push(elCacheBySelector[hndl.selector][j]);
                 }
             }
@@ -216,6 +218,9 @@ Kwf.callOnContentReady = function(renderedEl, options)
         } else {
             var t = Kwf.Utils.BenchmarkBox.now();
             var els = $.makeArray($(renderedEl).find(hndl.selector));
+            if (window.matchesSelector(renderedEl, hndl.selector)) {
+                els.push(renderedEl);
+            }
             Kwf.Utils.BenchmarkBox.time('query', Kwf.Utils.BenchmarkBox.now() - t);
             if (!elCacheBySelector[hndl.selector]) {
                 elCacheBySelector[hndl.selector] = els;
