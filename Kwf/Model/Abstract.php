@@ -1227,4 +1227,19 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         }
         return $ret;
     }
+
+    public function getUpdates()
+    {
+        if ($this->_factoryConfig['type'] == 'ClassName') {
+            $id = $this->_factoryConfig['id'];
+            if (strpos($id, '_') === false) {
+                $classPrefix = 'Update_'.$id;
+            } else {
+                $classPrefix = substr($id, 0, strrpos($id, '_')).'_Update_'.substr($id, strrpos($id, '_')+1);
+            }
+            return Kwf_Util_Update_Helper::getUpdatesForDir($classPrefix);
+        } else {
+            return array();
+        }
+    }
 }
