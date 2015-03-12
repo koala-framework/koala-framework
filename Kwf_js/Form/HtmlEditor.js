@@ -143,36 +143,36 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
     },
     // private
     // überschrieben wegen spezieller ENTER behandlung im IE die wir nicht wollen
-    fixKeys : function(){ // load time branching for fastest keydown performance
-        if(Ext2.isIE){
-            return function(e){
+    fixKeys : function() { // load time branching for fastest keydown performance
+        if (Ext2.isIE) {
+            return function(e) {
                 var k = e.getKey(), r;
-                if(k == e.TAB){
+                if (k == e.TAB){
                     e.stopEvent();
                     r = this.doc.selection.createRange();
-                    if(r){
+                    if (r) {
                         r.collapse(true);
                         r.pasteHTML('&nbsp;&nbsp;&nbsp;&nbsp;');
                         this.deferFocus();
                     }
-                //}else if(k == e.ENTER){
+                //} else if (k == e.ENTER) {
                     //entfernt, wir wollen dieses verhalten genau so wie der IE es macht
                 }
             };
-        }else if(Ext2.isOpera){
-            return function(e){
+        } else if (Ext2.isOpera) {
+            return function(e) {
                 var k = e.getKey();
-                if(k == e.TAB){
+                if (k == e.TAB) {
                     e.stopEvent();
                     this.win.focus();
                     this.execCmd('InsertHTML','&nbsp;&nbsp;&nbsp;&nbsp;');
                     this.deferFocus();
                 }
             };
-        }else if(Ext2.isWebKit){
-            return function(e){
+        } else if (Ext2.isWebKit) {
+            return function(e) {
                 var k = e.getKey();
-                if(k == e.TAB){
+                if (k == e.TAB) {
                     e.stopEvent();
                     this.execCmd('InsertText','\t');
                     this.deferFocus();

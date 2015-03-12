@@ -22,9 +22,9 @@ Kwf.Form.HtmlEditor.Tidy = Ext2.extend(Ext2.util.Observable, {
     // private
     onInit: function(){
         Ext2.EventManager.on(this.cmp.doc, 'keydown', function(e) {
-            if(e.ctrlKey){
+            if (e.ctrlKey) {
                 var c = e.getCharCode();
-                if(c > 0){
+                if (c > 0) {
                     c = String.fromCharCode(c).toLowerCase();
                     if (c == 'v') {
                         if (!this.pasteDelayTask) {
