@@ -109,7 +109,8 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
             contentStyles: [],
             translate: function(text) {
                 return text;
-            }
+            },
+            addVisual: function() {}
         };
 
         tinymce.util.Tools.extend(KwfEditor.prototype, tinymce.EditorObservable);
@@ -132,7 +133,11 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
         this.tinymceEditor.selection = new tinymce.dom.Selection(this.tinymceEditor.dom, this.win, this.tinymceEditor.serializer, this.tinymceEditor);
         this.tinymceEditor.formatter = new tinymce.Formatter(this.tinymceEditor);
         this.tinymceEditor.shortcuts = new tinymce.Shortcuts(this.tinymceEditor);
-        this.tinymceEditor.quirks = tinymce.util.Quirks(this.tinymceEditor);
+        this.tinymceEditor.quirks = new tinymce.util.Quirks(this.tinymceEditor);
+        this.tinymceEditor.editorCommands = new tinymce.EditorCommands(this.tinymceEditor);
+
+        this.tinymceEditor.fire('PreInit');
+        this.tinymceEditor.fire('init');
 
         this.tinymceEditor.dom.addStyle(this.tinymceEditor.contentStyles.join('\n'));
 
