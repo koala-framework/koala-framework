@@ -29,7 +29,7 @@ Kwf.Form.HtmlEditor.Tidy = Ext2.extend(Ext2.util.Observable, {
                             };
                             this.pasteDelayTask = new Ext2.util.DelayedTask(pasteClean, this);
                         }
-                        this.pasteDelayTask.delay(1);
+                        this.pasteDelayTask.delay(100);
                     }
                 }
             }
