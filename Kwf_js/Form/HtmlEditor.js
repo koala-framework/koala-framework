@@ -249,6 +249,29 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
         if (!this.sourceEditMode) {
             Kwf.Form.HtmlEditor.superclass.syncValue.call(this);
         }
+    },
+
+    //parent overridden to fix chrome insert
+    //chrome also needs InsertHTML (not InsertText)
+    //see http://www.sencha.com/forum/showthread.php?70942-FIXED-3.0.0-Ext.HtmlEditor.insertAtCursor-and-Chrome&s=dda103fb028aff831e6e06a3f941a873
+    insertAtCursor : function(text) {
+        if (!this.activated) {
+            return;
+        }
+        if (Ext2.isIE) {
+            this.win.focus();
+            var r = this.doc.selection.createRange();
+            if (r) {
+                r.collapse(true);
+                r.pasteHTML(text);
+                this.syncValue();
+                this.deferFocus();
+            }
+        } else {
+            this.win.focus();
+            this.execCmd('InsertHTML', text);
+            this.deferFocus();
+        }
     }
 });
 Ext2.reg('htmleditor', Kwf.Form.HtmlEditor);
