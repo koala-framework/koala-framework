@@ -72,7 +72,8 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
             scope: this
         });
 
-        this.tinymceEditor = {
+        var KwfEditor = function() {};
+        KwfEditor.prototype = {
             settings: {
                 forced_root_block: 'p'
             },
@@ -105,9 +106,15 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
             setContent: function(content, args) {
                 return tinymce.Editor.prototype.setContent.apply(this, arguments);
             },
-            contentStyles: []
-
+            contentStyles: [],
+            translate: function(text) {
+                return text;
+            }
         };
+
+        tinymce.util.Tools.extend(KwfEditor.prototype, tinymce.EditorObservable);
+        this.tinymceEditor = new KwfEditor();
+
         this.tinymceEditor.dom = new tinymce.dom.DOMUtils(this.doc, {
             /*
             keep_values : true,
@@ -124,8 +131,7 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
         this.tinymceEditor.serializer = new tinymce.dom.Serializer(this.tinymceEditor.settings, this.tinymceEditor.dom, this.tinymceEditor.schema);
         this.tinymceEditor.selection = new tinymce.dom.Selection(this.tinymceEditor.dom, this.win, this.tinymceEditor.serializer, this.tinymceEditor);
         this.tinymceEditor.formatter = new tinymce.Formatter(this.tinymceEditor);
-        tinymce.Editor.prototype.setupEvents.call(this.tinymceEditor);
-        tinymce.Editor.prototype.bindNativeEvents.call(this.tinymceEditor);
+        this.tinymceEditor.shortcuts = new tinymce.Shortcuts(this.tinymceEditor);
         this.tinymceEditor.quirks = tinymce.util.Quirks(this.tinymceEditor);
 
         this.tinymceEditor.dom.addStyle(this.tinymceEditor.contentStyles.join('\n'));
