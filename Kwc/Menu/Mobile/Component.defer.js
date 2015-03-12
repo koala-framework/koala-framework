@@ -108,6 +108,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
     });
 
     menuLink.click(function(e) {
+        menuLink.trigger('menuToggle', slideDuration);
         e.preventDefault();
         var slider = el.find('.slider');
         var menu = el.find('.menu');
@@ -148,14 +149,14 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
                 menuData[parseInt(page.id)] = page;
             });
 
-            if(!el.find('.slider').length) el.append('<div class="slider"></div>');
+            if (!el.find('.slider').length) el.append('<div class="slider"></div>');
 
             var html = template({item: res, isRoot: true});
             el.find('.slider').html(html);
             menuHtml.push(html);
             if (el.hasClass('loading')) {
                 el.find('.slider').animate({height: el.find('ul.menu').height()}, slideDuration);
-                el.trigger('menuToggle',[slideDuration]);
+                el.trigger('menuToggle', slideDuration);
             }
             el.removeClass('loading');
         }
