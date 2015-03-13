@@ -20,6 +20,7 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
         if (this.enablePastePlain) {
             this.plugins.push(new Kwf.Form.HtmlEditor.PastePlain());
         }
+        this.plugins.push(new Kwf.Form.HtmlEditor.Indent());
         if (this.linkComponentConfig) {
             this.plugins.push(new Kwf.Form.HtmlEditor.InsertLink({
                 componentConfig: this.linkComponentConfig
@@ -110,7 +111,10 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
             translate: function(text) {
                 return text;
             },
-            addVisual: function() {}
+            addVisual: function() {},
+            _isHidden: function() { return false; },
+            getParam: function(p) {
+            }
         };
 
         tinymce.util.Tools.extend(KwfEditor.prototype, tinymce.EditorObservable);
