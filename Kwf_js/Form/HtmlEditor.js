@@ -73,15 +73,7 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
             scope: this
         });
 
-        var KwfEditor = function() {};
-        KwfEditor.prototype = {
-            settings: {
-                forced_root_block: 'p'
-            },
-            schema: new tinymce.html.Schema(),
-            nodeChanged: function(o) {
-                //TODO this.onEditorEvent ?
-            },
+        var KwfEditor = Ext2.extend(tinymce.Editor, {
             extEditor: this,
             getDoc: function() {
                 return this.extEditor.getDoc();
@@ -95,9 +87,6 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
             getElement: function() {
                 return this.extEditor.el.dom;
             },
-            addShortcut: function() {},
-            addCommand: function() {},
-            _refreshContentEditable: function() {},
             focus: function(skip_focus) {
                 tinyMCE.activeEditor = this;
                 if (!skip_focus) {
@@ -106,50 +95,25 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
             },
             setContent: function(content, args) {
                 return tinymce.Editor.prototype.setContent.apply(this, arguments);
-            },
-            contentStyles: [],
-            translate: function(text) {
-                return text;
-            },
-            addVisual: function() {},
-            _isHidden: function() { return false; },
-            getParam: function(p) {
             }
-        };
-
-        tinymce.util.Tools.extend(KwfEditor.prototype, tinymce.EditorObservable);
-        this.tinymceEditor = new KwfEditor();
-
-        this.tinymceEditor.dom = new tinymce.dom.DOMUtils(this.doc, {
-            /*
-            keep_values : true,
-            url_converter : self.convertURL,
-            url_converter_scope : self,
-            hex_colors : settings.force_hex_style_colors,
-            class_filter : settings.class_filter,
-            update_styles : true,
-            root_element : settings.content_editable ? self.id : null,
-            */
-            schema : this.tinymceEditor.schema
         });
-        this.tinymceEditor.parser = new tinymce.html.DomParser(this.tinymceEditor.settings, this.tinymceEditor.schema);
-        this.tinymceEditor.serializer = new tinymce.dom.Serializer(this.tinymceEditor.settings, this.tinymceEditor.dom, this.tinymceEditor.schema);
-        this.tinymceEditor.selection = new tinymce.dom.Selection(this.tinymceEditor.dom, this.win, this.tinymceEditor.serializer, this.tinymceEditor);
-        this.tinymceEditor.formatter = new tinymce.Formatter(this.tinymceEditor);
-        this.tinymceEditor.shortcuts = new tinymce.Shortcuts(this.tinymceEditor);
-        this.tinymceEditor.quirks = new tinymce.util.Quirks(this.tinymceEditor);
-        this.tinymceEditor.editorCommands = new tinymce.EditorCommands(this.tinymceEditor);
 
-        this.tinymceEditor.fire('PreInit');
-        this.tinymceEditor.fire('init');
+        var mceSettings = {
+            forced_root_block: 'p'
+        };
+        this.tinymceEditor = new KwfEditor(this.el.id, mceSettings, tinymce.EditorManager);
+        this.tinymceEditor.initContentBody(true);
 
-        this.tinymceEditor.dom.addStyle(this.tinymceEditor.contentStyles.join('\n'));
+        this.tinymceEditor.on('nodeChange', (function(e) {
+            this.updateToolbar();
+        }).bind(this));
 
 
         this.formatter = this.tinymceEditor.formatter;
 
         this.originalValue = this.getEditorBody().innerHTML; // wegen isDirty, es wird der html vom browser dom mit dem originalValue verglichen, wo dann zB aus <br /> ein <br> wird
     },
+
     // private
     // überschrieben wegen spezieller ENTER behandlung im IE die wir nicht wollen
     fixKeys : function() { // load time branching for fastest keydown performance
@@ -195,7 +159,7 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
             '<style type="text/css">'+
                 'body{border:0;margin:0;padding:3px;height:98%;cursor:text;}'+
             '</style>\n';
-        ret += '</head><body class="webStandard kwcText"></body></html>';
+        ret += '</head><body class="webStandard kwcText mce-content-body" id="tinymce" data-id="content"></body></html>';
         return ret;
     },
     setValue : function(v) {
@@ -252,35 +216,27 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
     },
 
     //syncValue schreibt den inhalt vom iframe in die textarea
-    //das darf aber nur gemacht werden wenn wir nicht in der html-code ansicht sind!
-    //behebt also einen bug von ext
     syncValue : function(){
-        if (!this.sourceEditMode) {
-            Kwf.Form.HtmlEditor.superclass.syncValue.call(this);
+        if (!this.sourceEditMode && this.initialized) {
+            var html = this.tinymceEditor.getContent();
+            html = this.cleanHtml(html);
+            if (this.fireEvent('beforesync', this, html) !== false) {
+                this.el.dom.value = html;
+                this.fireEvent('sync', this, html);
+            }
         }
     },
 
-    //parent overridden to fix chrome insert
-    //chrome also needs InsertHTML (not InsertText)
-    //see http://www.sencha.com/forum/showthread.php?70942-FIXED-3.0.0-Ext.HtmlEditor.insertAtCursor-and-Chrome&s=dda103fb028aff831e6e06a3f941a873
     insertAtCursor : function(text) {
         if (!this.activated) {
             return;
         }
-        if (Ext2.isIE) {
-            this.win.focus();
-            var r = this.doc.selection.createRange();
-            if (r) {
-                r.collapse(true);
-                r.pasteHTML(text);
-                this.syncValue();
-                this.deferFocus();
-            }
-        } else {
-            this.win.focus();
-            this.execCmd('InsertHTML', text);
-            this.deferFocus();
-        }
+        this.tinymceEditor.editorCommands.execCommand('mceInsertContent', false, text);
+    },
+
+    execCmd : function(cmd, value) {
+        this.tinymceEditor.editorCommands.execCommand(cmd, false, value);
+        this.syncValue();
     }
 });
 Ext2.reg('htmleditor', Kwf.Form.HtmlEditor);
