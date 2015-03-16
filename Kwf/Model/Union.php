@@ -89,6 +89,15 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             return new $cls($exprs);
         } else if ($expr instanceof Kwf_Model_Select_Expr_String || $expr instanceof Kwf_Model_Select_Expr_Boolean || $expr instanceof Kwf_Model_Select_Expr_Integer) {
             return $expr;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_IsNull) {
+            $f = $expr->getField();
+            if (in_array($f, $this->_getOwnColumns())) {
+                $f = $targetModel->getColumnMapping($this->_columnMapping, $f);
+                $cls = get_class($expr);
+                return new $cls($f);
+            } else {
+                return null;
+            }
         } else {
             throw new Kwf_Exception_NotImplemented();
         }
