@@ -43,7 +43,7 @@ var recursiveCheckForTrl = function(node, translations) {
             context: null
         };
         if (calledFunction == 'trlKwf' || calledFunction == 'trl') {
-            if (node.arguments.length != 1 && node.arguments.length != 2) {
+            if (node.arguments.length != 1 && node.arguments.length != 2) { // singular[, variables]
                 translation.error_short = ERROR_WRONG_NR_OF_ARGUMENTS
             } else if (node.arguments[0].type != 'Literal') {
                 translation.error_short = ERROR_WRONG_ARGUMENT_TYPE;
@@ -53,7 +53,7 @@ var recursiveCheckForTrl = function(node, translations) {
                 translation.source = node.callee.name.indexOf('Kwf') > -1 ? 'kwf' : 'web';
             }
         } else if (calledFunction == 'trlpKwf' || calledFunction == 'trlp') {
-            if (node.arguments.length != 3 && node.arguments.length != 4) {
+            if (node.arguments.length != 3) { // singular, plural, variables
                 translation.error_short = ERROR_WRONG_NR_OF_ARGUMENTS
             } else if (node.arguments[0].type != 'Literal' || node.arguments[1].type != 'Literal') {
                 translation.error_short = ERROR_WRONG_ARGUMENT_TYPE;
@@ -64,7 +64,7 @@ var recursiveCheckForTrl = function(node, translations) {
                 translation.source = node.callee.name.indexOf('Kwf') > -1 ? 'kwf' : 'web';
             }
         } else if (calledFunction == 'trlcKwf' || calledFunction == 'trlc') {
-            if (node.arguments.length != 2 && arguments.length != 3) {
+            if (node.arguments.length != 2 && arguments.length != 3) { // context, singular[, variables]
                 translation.error_short = ERROR_WRONG_NR_OF_ARGUMENTS
             } else if ((node.arguments[0].type != 'Literal' || node.arguments[1].type != 'Literal')) {
                 translation.error_short = ERROR_WRONG_ARGUMENT_TYPE;
@@ -75,7 +75,7 @@ var recursiveCheckForTrl = function(node, translations) {
                 translation.source = node.callee.name.indexOf('Kwf') > -1 ? 'kwf' : 'web';
             }
         } else if (calledFunction == 'trlcpKwf' || calledFunction == 'trlcp') {
-            if (node.arguments.length != 4 && node.arguments.length != 5) {
+            if (node.arguments.length != 4) { // context, singular, plural, variables
                 translation.error_short = ERROR_WRONG_NR_OF_ARGUMENTS
             } else if (node.arguments[0].type != 'Literal'
                 || node.arguments[1].type != 'Literal'
