@@ -39,7 +39,7 @@ class Kwf_Model_Union_Dependent_Model1 extends Kwf_Model_Db
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
                         (id, parent_id, foo, bar, baz) VALUES (2, 2, '2', '2', '2')");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, parent_id, foo, bar, baz) VALUES (3, 2, 'aa3', 'bb3', 'cc3')");
+                        (id, parent_id, foo, bar, baz) VALUES (3, 2, 'xx', 'bb3', 'cc3')");
     }
 
     public function dropTable()

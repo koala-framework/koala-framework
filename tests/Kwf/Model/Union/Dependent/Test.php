@@ -21,20 +21,35 @@ class Kwf_Model_Union_Dependent_Test extends Kwf_Test_TestCase
         Kwf_Model_Abstract::getInstance('Kwf_Model_Union_Dependent_Model2')->dropTable();
     }
 
-    public function testChildContains()
+    public function testChildContains1()
     {
-        $this->markTestIncomplete();
-
         $model = Kwf_Model_Abstract::getInstance('Kwf_Model_Union_Dependent_Parent');
 
         $childSelect = new Kwf_Model_Select();
-        $childSelect->whereEquals('parent_id', 1);
+        $childSelect->whereEquals('foo', 'aa');
 
         $select = new Kwf_Model_Select();
         $select->where(new Kwf_Model_Select_Expr_Child_Contains(
             'TestModel', $childSelect
         ));
 
-        $this->assertEquals(4, $model->countRows($select));
+        $this->assertEquals(1, count($model->getRows($select)));
+        $this->assertEquals(1, $model->countRows($select));
+    }
+
+    public function testChildContains2()
+    {
+        $model = Kwf_Model_Abstract::getInstance('Kwf_Model_Union_Dependent_Parent');
+
+        $childSelect = new Kwf_Model_Select();
+        $childSelect->whereEquals('foo', 'xx');
+
+        $select = new Kwf_Model_Select();
+        $select->where(new Kwf_Model_Select_Expr_Child_Contains(
+            'TestModel', $childSelect
+        ));
+
+        $this->assertEquals(2, count($model->getRows($select)));
+        $this->assertEquals(2, $model->countRows($select));
     }
 }

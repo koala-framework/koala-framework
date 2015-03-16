@@ -287,6 +287,59 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
     }
 
+    public function getDbSelects($select)
+    {
+        if (!$this->_allDb) {
+            throw new Kwf_Exception("dbSelect can only be created if all models are db model");
+        }
+
+        $this->_selectIdsFromSiblingModels($select);
+
+        $dbSelects = array();
+        $order = null;
+        foreach ($this->_models as $modelKey => $m) {
+            $s = $this->_convertSelect($select, $modelKey, $m);
+            if (!$s) continue;
+            $options = array(
+                'columns' => array($m->getPrimaryKey())
+            );
+            while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
+            $dbSelect = $m->_createDbSelectWithColumns($s, $options);
+            $columns = $dbSelect->getPart(Zend_Db_Select::COLUMNS);
+            $columns[1] = array(
+                '', new Zend_Db_Expr("CONCAT('$modelKey', id)"), 'id'
+            );
+            if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
+                if (count($p) != 1) throw new Kwf_Exception_NotYetImplemented();
+                foreach ($p as $v) {
+                    $v['field'] = $this->_mapColumn($m, $v['field']);
+                    $expr = $m->_formatField($v['field'], $dbSelect);
+                    $columns[] = array(
+                        '', new Zend_Db_Expr($expr), 'orderField'
+                    );
+                }
+            }
+            $dbSelect->setPart(Zend_Db_Select::COLUMNS, $columns);
+            if (!isset($order)) $order = $dbSelect->getPart(Zend_Db_Select::ORDER);
+            $dbSelect->reset(Zend_Db_Select::ORDER);
+            $dbSelects[] = $dbSelect;
+        }
+        if (!$dbSelects) {
+            return array();
+        }
+        $sel = $m->getAdapter()->select();
+        $sel->union($dbSelects);
+
+        if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
+            $sel->order('orderField '. $p[0]['direction']);
+        }
+        if ($limitCnt = $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
+            $limitOffs = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
+            $sel->limit($limitCnt, $limitOffs);
+        }
+        return $sel;
+    }
+
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
         if (!is_object($where) || $where instanceof Kwf_Model_Select_Expr_Interface) {
@@ -296,54 +349,12 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
         if ($this->_allDb) {
 
-            $this->_selectIdsFromSiblingModels($select);
+            $sel = $this->getDbSelects($select);
 
-            $dbSelects = array();
-            $order = null;
-            foreach ($this->_models as $modelKey => $m) {
-                $s = $this->_convertSelect($select, $modelKey, $m);
-                if (!$s) continue;
-                $options = array(
-                    'columns' => array($m->getPrimaryKey())
-                );
-                while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
-                $dbSelect = $m->_createDbSelectWithColumns($s, $options);
-                $columns = $dbSelect->getPart(Zend_Db_Select::COLUMNS);
-                $columns[1][2] = 'id';
-                $columns[] = array(
-                    '', new Zend_Db_Expr("'$modelKey'"), 'modelKey'
-                );
-                if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
-                    if (count($p) != 1) throw new Kwf_Exception_NotYetImplemented();
-                    foreach ($p as $v) {
-                        $v['field'] = $this->_mapColumn($m, $v['field']);
-                        $expr = $m->_formatField($v['field'], $dbSelect);
-                        $columns[] = array(
-                            '', new Zend_Db_Expr($expr), 'orderField'
-                        );
-                    }
-                }
-                $dbSelect->setPart(Zend_Db_Select::COLUMNS, $columns);
-                if (!isset($order)) $order = $dbSelect->getPart(Zend_Db_Select::ORDER);
-                $dbSelect->reset(Zend_Db_Select::ORDER);
-                $dbSelects[] = $dbSelect;
-            }
-            if (!$dbSelects) {
-                return array();
-            }
-            $sel = $m->getAdapter()->select();
-            $sel->union($dbSelects);
-            if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
-                $sel->order('orderField '. $p[0]['direction']);
-            }
-            if ($limitCnt = $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
-                $limitOffs = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
-                $sel->limit($limitCnt, $limitOffs);
-            }
-            $rows = $m->getAdapter()->query($sel)->fetchAll();
+            $rows = Kwf_Registry::get('db')->query($sel)->fetchAll();
             $ids = array();
             foreach ($rows as $row) {
-                $ids[] = $row['modelKey'].$row['id'];
+                $ids[] = $row['id'];
             }
         } else {
             $orderValues = array();

@@ -11,8 +11,6 @@ class Kwf_Model_Union_Dependent_Parent extends Kwf_Model_Db
 
     protected function _init()
     {
-        $this->_dependentModels['Model1'] = 'Kwf_Model_Union_Dependent_Model1';
-        $this->_dependentModels['Model2'] = 'Kwf_Model_Union_Dependent_Model2';
         $this->_dependentModels['TestModel'] = 'Kwf_Model_Union_Dependent_TestModel';
         parent::_init();
     }

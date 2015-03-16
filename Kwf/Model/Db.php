@@ -624,14 +624,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $i = $depOf->getDependentModelWithDependentOf($expr->getChild());
             $depM = $i['model'];
             $depOf = $i['dependentOf'];
-            $depM = Kwf_Model_Abstract::getInstance($depM);
-            $dbDepM = $depM;
-            while ($dbDepM instanceof Kwf_Model_Proxy) {
-                $dbDepM = $dbDepM->getProxyModel();
-            }
-            if (!$dbDepM instanceof Kwf_Model_Db) {
-                throw new Kwf_Exception_NotYetImplemented();
-            }
+
             $dbDepOf = $depOf;
             while ($dbDepOf instanceof Kwf_Model_Proxy) {
                 $dbDepOf = $dbDepOf->getProxyModel();
@@ -639,15 +632,29 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             if (!$dbDepOf instanceof Kwf_Model_Db) {
                 throw new Kwf_Exception_NotYetImplemented();
             }
+
+            $depM = Kwf_Model_Abstract::getInstance($depM);
+            $dbDepM = $depM;
+            while ($dbDepM instanceof Kwf_Model_Proxy) {
+                $dbDepM = $dbDepM->getProxyModel();
+            }
+            if (!$dbDepM instanceof Kwf_Model_Db && !$dbDepM instanceof Kwf_Model_Union) {
+                throw new Kwf_Exception_NotYetImplemented();
+            }
+
             $d = $depOf->getDependentModelWithDependentOf($expr->getChild());
             $ref = $d['model']->getReferenceByModelClass(get_class($d['dependentOf']), isset($d['rule']) ? $d['rule'] : null);
             $depSelect = $expr->getSelect();
-            if (!$depSelect) $depSelect = $dbDepM->select();
-            $col1 = $dbDepM->_formatField($ref['column'], null /* select fehlt - welches ist das korrekte?*/);
-            $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
-            $depDbSelect = $dbDepM->_getDbSelect($depSelect);
-            $depDbSelect->reset(Zend_Db_Select::COLUMNS);
-            $depDbSelect->from(null, $col1);
+            if (!$depSelect) $depSelect = new Kwf_Model_Select();
+
+            if ($dbDepM instanceof Kwf_Model_Union) {
+                $depDbSelect = $dbDepM->getDbSelects($depSelect);
+            } elseif ($dbDepM instanceof Kwf_Model_Db) {
+                $col1 = $dbDepM->_formatField($ref['column'], null /* select fehlt - welches ist das korrekte?*/);
+                $depDbSelect = $dbDepM->_getDbSelect($depSelect);
+                $depDbSelect->reset(Zend_Db_Select::COLUMNS);
+                $depDbSelect->from(null, $col1);
+            }
             return $this->_fieldWithTableName($this->getPrimaryKey(), $tableNameAlias)." IN ($depDbSelect)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Child_First) {
             $depM = $depOf->getDependentModel($expr->getChild());
