@@ -5,6 +5,7 @@ var pathModule = require('path');
 
 var args = process.argv.slice(2);
 var content = args[0];
+var contentLines = content.split("\n");
 
 var ERROR_WRONG_NR_OF_ARGUMENTS = 'wrongNrOfArguments';
 var ERROR_WRONG_ARGUMENT_TYPE = 'wrongArgumentType';
@@ -15,8 +16,25 @@ var recursiveCheckForTrl = function(node, translations) {
     var key, child, calledFunction;
     if (node.type == 'CallExpression') {
         calledFunction = node.callee.name;
+
+        // Get original source code via start and end
+        var lines = [];
+        for (var i = node.loc.start.line-1; i < node.loc.end.line; i++) {
+            var startIndex = 0;
+            if (i == node.loc.start.line-1) {
+                startIndex = node.loc.start.column;
+            }
+            var endIndex = contentLines[i].length;
+            if (i == node.loc.end.line-1) {
+                endIndex = node.loc.end.column;
+            }
+            lines.push(contentLines[i].slice(startIndex, endIndex));
+        }
+        var rawCode = lines.join("\n");
+
         var translation = {
             linenr: node.loc.start.line,
+            before: rawCode,
             source: '',
             type: null,
             error_short: null,
