@@ -30,7 +30,7 @@ class Kwc_Guestbook_Component extends Kwc_Posts_Directory_Component
     public function getSelect()
     {
         $ret = parent::getSelect();
-        $ret->order('id', 'DESC');
+        $ret->order('create_time', 'DESC');
         return $ret;
     }
 }
