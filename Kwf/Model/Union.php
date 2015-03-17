@@ -287,7 +287,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
     }
 
-    public function getDbSelects($select)
+    public function getDbSelects($select, $colums = array('id'))
     {
         if (!$this->_allDb) {
             throw new Kwf_Exception("dbSelect can only be created if all models are db model");
@@ -301,25 +301,36 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             $s = $this->_convertSelect($select, $modelKey, $m);
             if (!$s) continue;
             $options = array(
-                'columns' => array($m->getPrimaryKey())
+                'columns' => array()
             );
+            foreach ($colums as $col) {
+                if ($col == 'id') {
+                    $col = $m->getPrimaryKey();
+                } else {
+                    $col = $m->getColumnMapping($this->_columnMapping, $col);
+                }
+                $options['columns'][] = $col;
+            }
             while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
             $dbSelect = $m->_createDbSelectWithColumns($s, $options);
-            $columns = $dbSelect->getPart(Zend_Db_Select::COLUMNS);
-            $columns[1] = array(
-                '', new Zend_Db_Expr("CONCAT('$modelKey', id)"), 'id'
-            );
+            $dbSelectColumns = array_values($dbSelect->getPart(Zend_Db_Select::COLUMNS));
+            foreach ($colums as $kCol=>$col) {
+                $dbSelectColumns[$kCol][2] = $col;
+                if ($col == 'id') {
+                    $dbSelectColumns[$kCol][1] = new Zend_Db_Expr("CONCAT('$modelKey', ".$dbSelectColumns[$kCol][1].")");
+                }
+            }
             if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
                 if (count($p) != 1) throw new Kwf_Exception_NotYetImplemented();
                 foreach ($p as $v) {
                     $v['field'] = $this->_mapColumn($m, $v['field']);
                     $expr = $m->_formatField($v['field'], $dbSelect);
-                    $columns[] = array(
+                    $dbSelectColumns[] = array(
                         '', new Zend_Db_Expr($expr), 'orderField'
                     );
                 }
             }
-            $dbSelect->setPart(Zend_Db_Select::COLUMNS, $columns);
+            $dbSelect->setPart(Zend_Db_Select::COLUMNS, $dbSelectColumns);
             if (!isset($order)) $order = $dbSelect->getPart(Zend_Db_Select::ORDER);
             $dbSelect->reset(Zend_Db_Select::ORDER);
             $dbSelects[] = $dbSelect;

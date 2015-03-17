@@ -648,7 +648,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             if (!$depSelect) $depSelect = new Kwf_Model_Select();
 
             if ($dbDepM instanceof Kwf_Model_Union) {
-                $depDbSelect = $dbDepM->getDbSelects($depSelect);
+                $depDbSelect = $dbDepM->getDbSelects($depSelect, array($ref['column']));
             } elseif ($dbDepM instanceof Kwf_Model_Db) {
                 $col1 = $dbDepM->_formatField($ref['column'], null /* select fehlt - welches ist das korrekte?*/);
                 $depDbSelect = $dbDepM->_getDbSelect($depSelect);
