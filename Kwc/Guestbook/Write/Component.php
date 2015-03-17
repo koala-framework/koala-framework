@@ -8,4 +8,14 @@ class Kwc_Guestbook_Write_Component extends Kwc_Posts_Write_Component
         $ret['plugins'] = array();
         return $ret;
     }
+
+    public function getSettingsRow()
+    {
+        return $this->getData()->parent->getComponent()->getRow();
+    }
+
+    public function getInfoMailComponent()
+    {
+        return $this->getData()->parent->getChildComponent('-mail');
+    }
 }

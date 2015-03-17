@@ -118,7 +118,7 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
         }
 
         if (isset($ret['chained']->filename)) {
-            if (isset($detailGen['filenameColumn'])) {
+            if (isset($detailGen['filenameColumn']) && isset($ret['row'])) {
                 $fn = $ret['row']->{$detailGen['filenameColumn']};
             } else if (isset($ret['name'])) {
                 $fn = $ret['name'];
