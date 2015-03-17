@@ -19,6 +19,7 @@ class Kwc_List_Gallery_SettingsForm extends Kwc_Abstract_Form
             ->setShowNoSelection(true)
             ->setEmptyText(trlKwf('Show all'))
             ->setValues(array(
+                '1' => '1',
                 '2' => '2',
                 '3' => '3',
                 '4' => '4',
