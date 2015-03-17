@@ -77,6 +77,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
     private function _loadTrlArray($source, $target, $plural)
     {
         $poParser = $this->_getPoParser($target);
+        $c = array();
         foreach ($poParser->entries() as $entry) {
             $ctx = isset($entry['msgctxt']) ? $entry['msgctxt'][0] : '';
             $translation = $entry['msgstr'][0];
