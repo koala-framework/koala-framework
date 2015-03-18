@@ -91,13 +91,17 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $packages = $this->_getAllPackages();
         foreach ($packages as $p) {
             foreach ($langs as $language) {
-                $partCount = $p->getPackageContentsPartCount(self::$_mimeTypeByExtension[$extension], $language);
+                $partCount = 10; //don't call getPackageContentsPartCount as that would rebuild contents
                 for ($partNumber=0; $partNumber<$partCount; $partNumber++) {
                     $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language, $partNumber);
-                    Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                    if (Kwf_Assets_BuildCache::getInstance()->load($cacheId) !== false) {
+                        Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                    }
 
                     $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension.'.map', $language, $partNumber);
-                    Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                    if (Kwf_Assets_BuildCache::getInstance()->load($cacheId) !== false) {
+                        Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                    }
                 }
             }
         }
