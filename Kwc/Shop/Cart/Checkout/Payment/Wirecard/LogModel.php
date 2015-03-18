@@ -27,7 +27,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_LogModel extends Kwf_Model_Db
         $data = base64_encode($data);
         $ret .= $data;
         if (strlen($ret) > 256) {
-            throw new Kwf_Exception("PayPal custom field does not support more than 256 characters");
+            throw new Kwf_Exception("Wirecard custom field does not support more than 256 characters");
         }
         return $ret;
     }
