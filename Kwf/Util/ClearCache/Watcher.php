@@ -213,7 +213,7 @@ class Kwf_Util_ClearCache_Watcher
 
         $eventsQueue = array();
         $lastChange = false;
-        while($proc->isRunning()) {
+        while ($proc->isRunning()) {
 
             if ($lastChange && $lastChange+($bufferUsecs/1000000) < microtime(true)) {
                 $eventsQueue = array_unique($eventsQueue);
@@ -225,8 +225,8 @@ class Kwf_Util_ClearCache_Watcher
                     $ppid = $proc->getPid();
                     //use ps to get all the children of this process, and kill them
                     $pids = preg_split('/\s+/', `ps -o pid --no-heading --ppid $ppid`);
-                    foreach($pids as $pid) {
-                        if(is_numeric($pid)) {
+                    foreach ($pids as $pid) {
+                        if (is_numeric($pid)) {
                             echo "Killing $pid\n";
                             posix_kill($pid, 9); //9 is the SIGKILL signal
                         }
