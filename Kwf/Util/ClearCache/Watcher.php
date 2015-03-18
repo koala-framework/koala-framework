@@ -146,7 +146,8 @@ class Kwf_Util_ClearCache_Watcher
             '/querylog',
             '/eventlog',
             '/build/*',
-            '/Gruntfile.js'
+            '/Gruntfile.js',
+            '/node_modules/'
         );
         $backend = null;
         $out = array();
