@@ -44,4 +44,39 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component extends Kwc_Shop_Cart_Ch
         $ret['paymentType'] = 'SELECT';
         return $ret;
     }
+
+    public function processIpn(Kwc_Shop_Cart_Checkout_Payment_Wirecard_LogRow $row, $param)
+    {
+        if ($row->paymentState == 'SUCCESS') {
+            $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->parent->parent->componentClass, 'childModel'))
+                ->getReferencedModel('Order')->getRow($param['orderId']);
+            if (!$order) {
+                throw new Kwf_Exception("Order not found!");
+            }
+
+            $order->payment_component_id = $this->getData()->componentId;
+            $order->checkout_component_id = $this->getData()->parent->componentId;
+            $order->cart_component_class = $this->getData()->parent->parent->componentClass;
+
+            $order->status = 'payed';
+            $order->date = date('Y-m-d H:i:s');
+            $order->payed = date('Y-m-d H:i:s');
+            $order->save();
+
+            foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
+                $p->orderConfirmed($order);
+            }
+            foreach ($order->getChildRows('Products') as $p) {
+                $addComponent = Kwf_Component_Data_Root::getInstance()
+                    ->getComponentByDbId($p->add_component_id);
+                $addComponent->getComponent()->orderConfirmed($p);
+            }
+            $this->sendConfirmMail($order);
+
+            return true;
+        } else {
+            throw new Kwf_Exception('Error by processing ipn');
+        }
+        return false;
+    }
 }
