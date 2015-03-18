@@ -62,18 +62,25 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                 if (substr($v, 0, strlen($modelKey)) == $modelKey) {
                     $v = substr($v, strlen($modelKey));
                 } else {
-                    $v = null;
+                    return new Kwf_Model_Select_Expr_Boolean(false);
                 }
-                $f = $targetModel->getPrimaryKey();
+                $mappedField = $targetModel->getPrimaryKey();
             } else {
                 if (in_array($f, $this->_getOwnColumns())) {
-                    $f = $targetModel->getColumnMapping($this->_columnMapping, $f);
+                    $mappedField = $targetModel->getColumnMapping($this->_columnMapping, $f);
+                    if (!$mappedField) {
+                        if ($expr instanceof Kwf_Model_Select_Expr_Equal || $expr instanceof Kwf_Model_Select_Expr_Like) {
+                            return new Kwf_Model_Select_Expr_Boolean(false);
+                        } else {
+                            throw new Kwf_Exception_NotImplemented();
+                        }
+                    }
                 } else {
                     return null;
                 }
             }
             $cls = get_class($expr);
-            return new $cls($f, $v);
+            return new $cls($mappedField, $v);
         } else if ($expr instanceof Kwf_Model_Select_Expr_Not) {
             $e = $this->_convertExpr($expr->getExpression(), $modelKey, $targetModel);
             if (!$e) return null;
@@ -92,9 +99,13 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         } else if ($expr instanceof Kwf_Model_Select_Expr_IsNull) {
             $f = $expr->getField();
             if (in_array($f, $this->_getOwnColumns())) {
-                $f = $targetModel->getColumnMapping($this->_columnMapping, $f);
-                $cls = get_class($expr);
-                return new $cls($f);
+                $mappedField = $targetModel->getColumnMapping($this->_columnMapping, $f);
+                if (!$mappedField) {
+                    return new Kwf_Model_Select_Expr_Boolean(true);
+                } else {
+                    $cls = get_class($expr);
+                    return new $cls($mappedField);
+                }
             } else {
                 return null;
             }
