@@ -273,4 +273,27 @@ abstract class Kwf_Model_Union_Abstract_Test extends Kwf_Test_TestCase
         $s = new Kwf_Model_Select();
         $this->assertEquals(7, $this->_m->countRows($s));
     }
+
+    public function testEmptyMappingColumn()
+    {
+        $this->markTestIncomplete();
+
+        $s = new Kwf_Model_Select();
+        $s->where(new Kwf_Model_Select_Expr_Equal('baz', 'cc'));
+        $this->assertEquals(1, $this->_m->countRows($s));
+
+        $s = new Kwf_Model_Select();
+        $s->where(new Kwf_Model_Select_Expr_And(array(
+            new Kwf_Model_Select_Expr_Equal('foo', 'aa'),
+            new Kwf_Model_Select_Expr_Equal('baz', 'cc')
+        )));
+        $this->assertEquals(1, $this->_m->countRows($s));
+
+        $s = new Kwf_Model_Select();
+        $s->where(new Kwf_Model_Select_Expr_Or(array(
+            new Kwf_Model_Select_Expr_Equal('baz', 'cc'),
+            new Kwf_Model_Select_Expr_Equal('baz', 'cc3')
+        )));
+        $this->assertEquals(2, $this->_m->countRows($s));
+    }
 }
