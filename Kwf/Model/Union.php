@@ -176,6 +176,9 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                 }
             }
         }
+        if ($p = $select->getPart(Kwf_Model_Select::IGNORE_DELETED)) {
+            $s->ignoreDeleted($p);
+        }
         return $s;
     }
 
