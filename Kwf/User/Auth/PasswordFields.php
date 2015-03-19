@@ -74,7 +74,7 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     public function generateActivationToken(Kwf_Model_Row_Interface $row)
     {
         $token = substr(Kwf_Util_Hash::hash(microtime(true).uniqid('', true).mt_rand()), 0, 10);
-        $expire = time()+24*60*60;
+        $expire = time()+7*24*60*60;
         $row->activate_token = $expire.':'.$this->_encodePasswordBcrypt($row, $token);
         $row->save();
         return $token;
