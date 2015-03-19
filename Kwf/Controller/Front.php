@@ -136,7 +136,17 @@ class Kwf_Controller_Front extends Zend_Controller_Front
         if ($response === null) {
             $response = new Kwf_Controller_Response_Http();
         }
-        $ret = parent::dispatch($request, $response);
+        try {
+            $ret = parent::dispatch($request, $response);
+        } catch (Zend_Controller_Router_Exception $e) {
+            if ($e->getCode() == 404) {
+                //fired by Zend_Controller_Router_Rewrite::route, transform into proper 404
+                throw new Kwf_Exception_NotFound();
+            } else {
+                throw $e;
+            }
+        }
+
         Kwf_Benchmark::shutDown();
         return $ret;
     }
