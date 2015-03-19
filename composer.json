@@ -15,7 +15,8 @@
         "koala-framework/composer-extra-assets": "1.0.1",
         "twig/twig": "1.16.1",
         "koala-framework/sourcemaps": "0.2.0",
-        "symfony/process": "2.6.*"
+        "koala-framework/file-watcher": "*",
+        "symfony/console": "~2.5"
     },
     "extra": {
         "require-bower": {
@@ -35,6 +36,13 @@
         "require-dev-bower": {
             "qunit": "1.14.0",
             "qunit-phantomjs-runner": "vivid-planet/qunit-phantomjs-runner#e96347ee33b773160cf061d7b1b5c4ad3d1d9082"
+        },
+        "kwf": {
+            "exclude-production": [
+                "symfony/console",
+                "koala-framework/file-watcher",
+                "koala-framework/sourcemaps"
+            ]
         }
     },
     "suggest": {
