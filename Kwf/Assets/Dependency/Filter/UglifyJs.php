@@ -5,7 +5,7 @@ class Kwf_Assets_Dependency_Filter_UglifyJs
     {
         $dir = dirname($buildFile);
         if (!file_exists($dir)) mkdir($dir, 0777, true);
-        $uglifyjs = "node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/uglify-js/bin/uglifyjs';
+        $uglifyjs = "./vendor/bin/node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/uglify-js/bin/uglifyjs';
         $cmd = "$uglifyjs ";
         $cmd .= "--source-map ".escapeshellarg("$buildFile.min.js.map.json").' ';
         $cmd .= "--prefix 2 ";

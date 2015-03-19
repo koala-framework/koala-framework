@@ -12,7 +12,7 @@
         "koala-framework/library-htmlawed": "1.1.14",
         "koala-framework/library-css3pie": "1.0.0",
         "koala-framework/kwf-modernizr": "3.8.x-dev",
-        "koala-framework/composer-extra-assets": "1.0.1",
+        "koala-framework/composer-extra-assets": "1.1.*",
         "twig/twig": "1.16.1",
         "koala-framework/sourcemaps": "0.2.0",
         "koala-framework/file-watcher": "*",
@@ -41,7 +41,9 @@
             "exclude-production": [
                 "symfony/console",
                 "koala-framework/file-watcher",
-                "koala-framework/sourcemaps"
+                "koala-framework/sourcemaps",
+                "koala-framework/composer-extra-assets",
+                "nodejs/nodejs"
             ]
         }
     },
