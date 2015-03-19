@@ -117,13 +117,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/kwf-modernizr.git",
-                "reference": "0e62ee2164f14b2262af4a7e443c11fcb4e8d5ba"
+                "reference": "99cbe42d0ff5cb302c490bbf259fa331b1e9d8e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/kwf-modernizr/zipball/0e62ee2164f14b2262af4a7e443c11fcb4e8d5ba",
-                "reference": "0e62ee2164f14b2262af4a7e443c11fcb4e8d5ba",
+                "url": "https://api.github.com/repos/koala-framework/kwf-modernizr/zipball/99cbe42d0ff5cb302c490bbf259fa331b1e9d8e2",
+                "reference": "99cbe42d0ff5cb302c490bbf259fa331b1e9d8e2",
                 "shasum": ""
+            },
+            "require": {
+                "koala-framework/composer-extra-assets": "~1.1"
             },
             "require-dev": {
                 "koala-framework/koala-framework": "3.8.x-dev",
@@ -148,7 +151,7 @@
             ],
             "description": "Modernizr Integration for Koala Framework",
             "homepage": "http://www.koala-framework.org/",
-            "time": "2014-11-25 17:01:59"
+            "time": "2015-03-19 17:25:14"
         },
         {
             "name": "koala-framework/library-css3pie",
