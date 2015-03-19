@@ -73,7 +73,7 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
             '5col-20_20_20_20_20' => array(
                 'columns' => 5,
                 'colSpans' => array(1,1,1,1,1),
-                'name' => "5 $columnsTrl (20% - 20% - 20% - 20%)"
+                'name' => "5 $columnsTrl (20% - 20% - 20% - 20% - 20%)"
             )
         );
         return $ret;
