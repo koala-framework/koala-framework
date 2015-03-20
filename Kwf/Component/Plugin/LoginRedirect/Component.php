@@ -13,22 +13,18 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
     {
         if (!$this->isLoggedIn()) {
             $url = $this->_getRedirectUrl();
-            $component = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($this->_componentId);
-            $connector = '?';
-            if (strstr($url, '?')) {
-                $connector = '&';
-            }
-            $url .= $connector.'redirect=' . urlencode($component->url . $this->_applyGetParams());
+            $connector = (strstr($url, '?')) ? '&' : '?';
+            $url .= $connector.'redirect=' . urlencode($this->_getRedirectParam());
             header('Location: ' . $url);
             exit;
         }
         return false;
     }
 
-    protected function _applyGetParams()
+    protected function _getRedirectParam()
     {
-        return '';
+        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId);
+        return $component->url;
     }
 
     protected function _getRedirectUrl()
