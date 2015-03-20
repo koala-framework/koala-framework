@@ -19,11 +19,16 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
             if (strstr($url, '?')) {
                 $connector = '&';
             }
-            $url .= $connector.'redirect=' . urlencode($component->url);
+            $url .= $connector.'redirect=' . urlencode($component->url . $this->_applyGetParams());
             header('Location: ' . $url);
             exit;
         }
         return false;
+    }
+
+    protected function _applyGetParams()
+    {
+        return '';
     }
 
     protected function _getRedirectUrl()
