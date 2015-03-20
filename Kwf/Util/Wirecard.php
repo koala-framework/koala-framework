@@ -95,7 +95,7 @@ class Kwf_Util_Wirecard
                         $row->$i = $_POST[$i];
                     }
                 }
-                $row->custom_order_id = $_POST['order_id'];
+                $row->custom = $_POST['custom'];
                 $row->save();
 
                 // e.g.  something like
