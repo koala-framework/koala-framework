@@ -17,6 +17,7 @@
 <si>vidno</si>
 <ua>Видимий</ua>
 <rs>Vidljivo</rs>
+<al>E dukshme</al>
 </text>
 <text>
 <en>Error</en>
@@ -37,6 +38,7 @@
 <ua>Помилка</ua>
 <rs>Greška</rs>
 <hu>Hiba</hu>
+<al>Gabim</al>
 </text>
 <text>
 <en>Page not found</en>
@@ -54,6 +56,7 @@
 <ua>Сторінку не знайдено.</ua>
 <rs>Nepostojeća strana</rs>
 <hu>Az oldal nem található</hu>
+<al>Faqja nuk u gjet</al>
 </text>
 <text>
 <en>Lost password?</en>
@@ -71,6 +74,7 @@
 <ua>Забули пароль?</ua>
 <rs>Zaboravljena lozinka?</rs>
 <hu>Elfelejtette jelszavát?</hu>
+<al>Harruar passwordin?</al>
 </text>
 <text>
 <en>Login</en>
@@ -87,6 +91,8 @@
 <bg>Вход</bg>
 <ua>Увійти</ua>
 <rs>Prijava</rs>
+<hu>Bejelentkezés</hu>
+<al>Logohu</al>
 </text>
 <text>
 <en>Hello {0}!</en>
@@ -105,6 +111,7 @@
 <bg>Здравейте {0}!</bg>
 <ua>Привіт {0}!</ua>
 <rs>Halo {O}!</rs>
+<al>Përshëndetje {0}!</al>
 </text>
 <text>
 <en>Your account at {0} has just been created.</en>
@@ -426,6 +433,7 @@
 <si>datoteka</si>
 <bg>документ</bg>
 <ua>Файл</ua>
+<al>Dokumenti</al>
 </text>
 <text>
 <en>Content</en>
@@ -440,6 +448,7 @@
 <si>vsebina</si>
 <bg>съдържание</bg>
 <ua>Зміст</ua>
+<al>Përmbajtja</al>
 </text>
 <text>
 <en>Image</en>
@@ -456,6 +465,7 @@
 <si>slika</si>
 <bg>снимка</bg>
 <ua>Зображення</ua>
+<al>Foto</al>
 </text>
 <text>
 <en>Image Enlarge</en>
@@ -842,7 +852,7 @@
 <en>Latest online</en>
 <de>Zuletzt online</de>
 <id>126</id>
-<ro>Ultimul online</ro>
+<ro>Ultima dată online</ro>
 <sl>Datum zadnje prijave</sl>
 <ru>Последний раз онлайн</ru>
 <hr>Zadnji put online</hr>
@@ -1021,7 +1031,7 @@
 <en>Female</en>
 <de>Weiblich</de>
 <id>165</id>
-<ro>Doamna</ro>
+<ro>Feminin</ro>
 <uk>Жіноча</uk>
 <hu>Nő</hu>
 <sl>Ženski</sl>
@@ -1040,7 +1050,7 @@
 <en>Male</en>
 <de>Männlich</de>
 <id>166</id>
-<ro>Domnul</ro>
+<ro>Masculin</ro>
 <mk>Машки</mk>
 <uk>Чоловіча</uk>
 <hu>Férfi</hu>
@@ -1059,7 +1069,7 @@
 <en>Gender</en>
 <de>Geschlecht</de>
 <id>167</id>
-<ro>Formula de adresare</ro>
+<ro>Gen</ro>
 <mk>Пол</mk>
 <uk>Стать</uk>
 <hu>Nem</hu>
@@ -1728,6 +1738,7 @@
 <si>Naslova ni možno najti. </si>
 <ua>Адресу не знайдено.</ua>
 <bg>Адресът не може да бъде открит</bg>
+<hu>A cím nem található</hu>
 </text>
 <text>
 <en>Move marker while pressing mousekey.</en>
@@ -3440,6 +3451,7 @@
 <uk>Вийти</uk>
 <ua>Вийти</ua>
 <hr>Odjava</hr>
+<hu>Kijelentkezés</hu>
 </text>
 <text>
 <en>Line</en>
@@ -4307,6 +4319,7 @@
 <ru>Не найдено</ru>
 <uk>Не знайдено</uk>
 <ua>Не знайдено</ua>
+<hu>Nem található</hu>
 </text>
 <text>
 <en>The requested URL "{0}" was not found on this server.</en>
@@ -4917,6 +4930,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Prijavljen</sl>
 <ru>Вы зашли на свою страницу</ru>
 <ua>Ви увійшли на свою сторінку</ua>
+<hu>Bejelentkezve</hu>
 </text>
 <text>
 <en>You have been logged in sucessfully.</en>
@@ -7355,6 +7369,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>404 - Fişierul nu a putut fi găsit</ro>
 <ru>404 - Файл не найден</ru>
 <ua>404 - File not found</ua>
+<hu>404 - a fájl nem található</hu>
 </text>
 <text>
 <en>Sorry, that address</en>
@@ -7529,6 +7544,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>По запросу &amp;quot;{0}&amp;quot; не найдено ни одной записи.</ru>
 <ua>Жодного запису не знайдено</ua>
 <uk>Записів не знайдено щодо цього запиту</uk>
+<hu>Nincs találat az alábbi keresésre: &amp;quot;{0}&amp;quot; </hu>
 </text>
 <text>
 <en>Show All</en>
@@ -10981,6 +10997,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Prijava:</sl>
 <ru>Логин:</ru>
 <ua>Логін:</ua>
+<hu>Bejelentkezés:</hu>
 </text>
 <text>
 <en>Set a new password</en>
@@ -11922,6 +11939,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Datoteka ni najdena.</sl>
 <ru>Файл не найден.</ru>
 <ua>Файл не знайдено.</ua>
+<hu>A fájl nem található</hu>
 </text>
 <text>
 <en>Could not read excel</en>
@@ -12426,7 +12444,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Nisu pronađeni rezultati</hr>
 <ro>Nu a fost gasita nicio inregistrare</ro>
 <uk>Записів не знайдено</uk>
-<hu>Nincs találat</hu>
+<hu>Nem található bejegyzés</hu>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
@@ -13537,6 +13555,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2000</id>
 <sl>od {0}</sl>
 <ru>по {0}</ru>
+<hu> {0}</hu>
 </text>
 <text>
 <en>This entry was posted in</en>
@@ -13615,6 +13634,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hu>Ha megnyitja ezt a honlapot, akkor oda sütik települnek. Kattintson ide, ha deaktiválni szeretné a sütiket.</hu>
 <id>2007</id>
 <ua>Cookie встановлено для цієї сторінки. Натисніть тут для деактивації cookies. </ua>
+<al>Ruatja e 'cookies' është aktivizuar. Kliko këtu për ta çaktivizuar.</al>
 </text>
 <text>
 <en>No cookies are set when visiting this webpage. Click to activate cookies.</en>
@@ -13631,6 +13651,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hu>Ha megnyitja ezt a honlapot, oda pillanatnyilag nem települnek sütik. Kattintson ide, ha jóváhagyja a sütik alkalmazását.</hu>
 <id>2008</id>
 <ua>Cookie не встановлено для цієї сторінки. Натисніть тут для активації cookies. </ua>
+<al>Ruatja e 'cookies' është çaktivizuar. Kliko këtu për ta riaktivizuar.</al>
 </text>
 <text>
 <en>Website produced by</en>
@@ -14494,6 +14515,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2106</id>
 <ro>Fisier negasit</ro>
 <hr>Datoteka nije pronađena</hr>
+<hu>A fájl nem található</hu>
 </text>
 <text>
 <en>(No title)</en>
