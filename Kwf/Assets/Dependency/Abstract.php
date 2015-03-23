@@ -209,6 +209,7 @@ abstract class Kwf_Assets_Dependency_Abstract
         }
 
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES) as $i) {
+            if (!$i) throw new Kwf_Exception("$dep returned invalid dependency");
             if (!in_array($i, $stack, true)) {
                 foreach ($this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, $stack) as $j) {
                     $ret[] = $j;
@@ -229,6 +230,7 @@ abstract class Kwf_Assets_Dependency_Abstract
         }
 
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES) as $i) {
+            if (!$i) throw new Kwf_Exception("$dep returned invalid dependency");
             foreach ($this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, array()) as $j) {
                 $ret[] = $j;
             }
