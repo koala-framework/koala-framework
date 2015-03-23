@@ -34,9 +34,11 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
             $dir = dirname($buildFile);
             if (!file_exists($dir)) mkdir($dir, 0777, true);
-            $contents = $this->_getRawContents(null);
-            file_put_contents($buildFile, $contents);
+            file_put_contents($buildFile, $this->_getRawContents(null));
 
+            $map = Kwf_Assets_Dependency_Filter_UglifyJs::build($buildFile, $this->getFileNameWithType());
+
+            $contents = file_get_contents("$buildFile.min.js");
             $replacements = array();
             if ($pathType == 'ext2') {
                 $replacements['../images/'] = '/assets/ext2/resources/images/';
@@ -53,9 +55,11 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                     }
                 }
             }
-            Kwf_Assets_Dependency_Filter_UglifyJs::build($buildFile, $this->getFileNameWithType(), $replacements);
+            foreach ($replacements as $search=>$replace) {
+                $map->stringReplace($search, $replace);
+            }
+            $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
 
-            $contents = file_get_contents("$buildFile.min.js");
             if ($useTrl) {
                 $trlElements = Kwf_Trl::getInstance()->parse($contents, 'js');
                 file_put_contents("$buildFile.min.js.trl", serialize($trlElements));

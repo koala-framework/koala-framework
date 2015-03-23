@@ -1,7 +1,7 @@
 <?php
 class Kwf_Assets_Dependency_Filter_UglifyJs
 {
-    public static function build($buildFile, $sourceFileUrl, array $replacements)
+    public static function build($buildFile, $sourceFileUrl)
     {
         $dir = dirname($buildFile);
         if (!file_exists($dir)) mkdir($dir, 0777, true);
@@ -29,12 +29,7 @@ class Kwf_Assets_Dependency_Filter_UglifyJs
         file_put_contents("$buildFile.min.js.map.json", json_encode($mapData));
 
         $map = new Kwf_SourceMaps_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
-
-        foreach ($replacements as $search=>$replace) {
-            $map->stringReplace($search, $replace);
-        }
-
         $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
-        unset($map);
+        return $map;
     }
 }
