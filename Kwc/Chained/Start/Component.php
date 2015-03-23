@@ -21,6 +21,12 @@ class Kwc_Chained_Start_Component extends Kwc_Abstract
         if (Kwc_Abstract::getFlag($componentClass, 'chainedType') != $chainedType) return array();
         $ret = array();
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($componentClass, $parentDataSelect) as $chainedStart) {
+            //if additional subroots are above trl subroot (eg. domains)
+            if ($sr = $chainedStart->parent->getSubroot()) {
+                if ($sr != $master->getSubroot()->parent->getSubroot()) {
+                    continue;
+                }
+            }
             $i = Kwc_Chained_Abstract_Component::getChainedByMaster($master, $chainedStart, $chainedType, $parentDataSelect);
             if ($i) $ret[] = $i;
         }
