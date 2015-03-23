@@ -85,6 +85,16 @@ $grid-padding   : 0em;
         }
     }
 
+    &.col5col-20_20_20_20_20 {
+        > .listItem.span1 {
+            @include span-columns(1, 5);
+
+            &.emptyContent {
+                display: none;
+            }
+        }
+    }
+
     > .listItem.kwcLast,
     > .listItem.lineLast {
         @include omega;

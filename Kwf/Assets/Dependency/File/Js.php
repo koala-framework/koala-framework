@@ -3,6 +3,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 {
     private $_parsedElementsCache;
     private $_contentsCache;
+    private $_contentsCacheSourceMap;
 
     public function getMimeType()
     {
@@ -21,62 +22,43 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     public function warmupCaches()
     {
+        if (isset($this->_contentsCache)) return;
+
         $fileName = $this->getFileNameWithType();
 
         $pathType = $this->getType();
-        $useTrl = !in_array($pathType, array('ext2', 'ext', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
         $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$fileName.'.'.md5(file_get_contents($this->getAbsoluteFileName()));
+        $useTrl = !in_array($pathType, array('ext2', 'ext', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
 
         if (!file_exists("$buildFile.min.js") || ($useTrl && !file_exists("$buildFile.min.js.trl"))) {
 
             $dir = dirname($buildFile);
             if (!file_exists($dir)) mkdir($dir, 0777, true);
             file_put_contents($buildFile, $this->_getRawContents(null));
-            $uglifyjs = "node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/uglify-js/bin/uglifyjs';
-            $cmd = "$uglifyjs ";
-            $cmd .= "--source-map ".escapeshellarg("$buildFile.min.js.map.json").' ';
-            $cmd .= "--prefix 2 ";
-            $cmd .= "--output ".escapeshellarg("$buildFile.min.js").' ';
-            $cmd .= escapeshellarg($buildFile);
-            $cmd .= " 2>&1";
-            $out = array();
-            exec($cmd, $out, $retVal);
-            if ($retVal) {
-                throw new Kwf_Exception("uglifyjs failed: ".implode("\n", $out));
-            }
+
+            $map = Kwf_Assets_Dependency_Filter_UglifyJs::build($buildFile, $this->getFileNameWithType());
+
             $contents = file_get_contents("$buildFile.min.js");
-            $contents = str_replace("\n//# sourceMappingURL=$buildFile.min.js.map.json", '', $contents);
-
-            $mapData = json_decode(file_get_contents("$buildFile.min.js.map.json"), true);
-            if (count($mapData['sources']) > 1) {
-                throw new Kwf_Exception("uglifyjs must not return multiple sources, ".count($mapData['sources'])." returned for '$this'");
+            $replacements = array();
+            if ($pathType == 'ext2') {
+                $replacements['../images/'] = '/assets/ext2/resources/images/';
+            } else if ($pathType == 'mediaelement') {
+                $replacements['url('] = 'url(/assets/mediaelement/build/';
             }
-            unset($mapData['file']);
-            $mapData['sources'][0] = $this->getFileNameWithType();
-            file_put_contents("$buildFile.min.js.map.json", json_encode($mapData));
-
-            $map = new Kwf_SourceMaps_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
-
             if (strpos($contents, '.cssClass') !== false) {
                 $cssClass = $this->_getComponentCssClass();
                 if ($cssClass) {
                     if (preg_match_all('#([\'"])\.cssClass([\s\'"\.])#', $contents, $m)) {
                         foreach ($m[0] as $k=>$i) {
-                            $map->stringReplace($i, $m[1][$k].'.'.$cssClass.$m[2][$k]);
+                            $replacements[$i] = $m[1][$k].'.'.$cssClass.$m[2][$k];
                         }
                     }
                 }
             }
-
-            if ($pathType == 'ext2') {
-                $map->stringReplace('../images/', '/assets/ext2/resources/images/');
-            } else if ($pathType == 'mediaelement') {
-                $map->stringReplace('url(', 'url(/assets/mediaelement/build/');
+            foreach ($replacements as $search=>$replace) {
+                $map->stringReplace($search, $replace);
             }
-
-
             $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
-            unset($map);
 
             if ($useTrl) {
                 $trlElements = Kwf_Trl::getInstance()->parse($contents, 'js');
@@ -91,12 +73,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         } else {
             $this->_parsedElementsCache = array();
         }
-
-        return array(
-            'contents' => $this->_contentsCache,
-            'sourceMap' => $this->_contentsCacheSourceMap,
-            'trlElements' => $this->_parsedElementsCache
-        );
     }
 
     private function _getCompliedContents()

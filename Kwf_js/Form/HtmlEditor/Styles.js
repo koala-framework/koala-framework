@@ -190,6 +190,7 @@ Ext2.extend(Kwf.Form.HtmlEditor.Styles, Ext2.util.Observable, {
                 })
             });
             select.select.on('select', function(combo) {
+                var val = combo.getValue();
                 combo.blur();
                 combo.triggerBlur(); //hack für ext hack: da wir den focus in einen anderen frame setzen bekommt die combobox das nicht mit
                                      //mit diesem aufruf wird ihr gesagt dass sie keinen focus mehr hat
@@ -204,7 +205,7 @@ Ext2.extend(Kwf.Form.HtmlEditor.Styles, Ext2.util.Observable, {
                         this.cmp.formatter.remove(style.id);
                     }
                 }, this);
-                this.cmp.formatter.apply(combo.getValue());
+                this.cmp.formatter.apply(val);
                 this.cmp.deferFocus();
                 this.cmp.updateToolbar();
             }, this, {delay: 1}); //delay ist notwendig da sonst der focus erneut beim select landet wenn ein item angeklickt wird

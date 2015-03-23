@@ -46,9 +46,7 @@ class Kwc_Shop_Cart_Checkout_Form_FrontendForm extends Kwf_Form
             ->setHideFieldWhenOnePayment(true)
             ->setAllowBlank(false);
 
-        $this->add(new Kwf_Form_Field_TextArea('comment', trlKwfStatic('Other comments, questions or suggestions')))
-            ->setHeight(80)
-            ->setWidth(200);
+        $this->add(new Kwf_Form_Field_TextArea('comment', trlKwfStatic('Other comments, questions or suggestions')));
     }
 
     protected function _getTrlProperties()

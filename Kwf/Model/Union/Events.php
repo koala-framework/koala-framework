@@ -38,10 +38,11 @@ class Kwf_Model_Union_Events extends Kwf_Model_EventSubscriber
         $sourceModel = $sourceRow->getModel();
         foreach ($unionModel->getUnionModels() as $modelKey => $m) {
             if ($m === $sourceModel) {
-                $unionRow = $unionModel->getRow($modelKey.$sourceRow->{$sourceModel->getPrimaryKey()});
-                if ($unionRow) {
-                    $this->fireEvent(new $eventCls($unionRow));
-                }
+                $s = new Kwf_Model_Select();
+                $s->whereId($modelKey.$sourceRow->{$sourceModel->getPrimaryKey()});
+                $s->ignoreDeleted();
+                $unionRow = $unionModel->getRow($s);
+                $this->fireEvent(new $eventCls($unionRow));
                 return;
             }
         }

@@ -3,9 +3,10 @@ class Kwc_Basic_LinkTag_ComponentClass_Data extends Kwc_Basic_LinkTag_Intern_Dat
 {
     protected function _getData()
     {
-        if (($row = $this->_getRow()) && $row->target_component_id) {
+        $m = Kwc_Abstract::createOwnModel($this->componentClass);
+        if ($column = $m->fetchColumnByPrimaryId('target_component_id', $this->dbId)) {
             return Kwf_Component_Data_Root::getInstance()
-                ->getComponentByDbId($row->target_component_id, array('subroot' => $this));
+                ->getComponentByDbId($column, array('subroot' => $this));
         }
         return false;
     }

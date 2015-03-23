@@ -118,6 +118,8 @@ class Kwf_Form extends Kwf_Form_NonTableForm
 
         if (!$this->getId()) {
             $this->_beforeInsert($row);
+        } else {
+            $this->_beforeUpdate($row);
         }
         $this->_beforeSave($row);
 
@@ -131,6 +133,8 @@ class Kwf_Form extends Kwf_Form_NonTableForm
 
         if (!$this->getId()) {
             $this->_afterInsert($row);
+        } else {
+            $this->_afterUpdate($row);
         }
         $this->_afterSave($row);
 
@@ -296,6 +300,14 @@ class Kwf_Form extends Kwf_Form_NonTableForm
     }
 
     protected function _afterInsert(Kwf_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _beforeUpdate(Kwf_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _afterUpdate(Kwf_Model_Row_Interface $row)
     {
     }
 

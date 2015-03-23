@@ -62,18 +62,25 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                 if (substr($v, 0, strlen($modelKey)) == $modelKey) {
                     $v = substr($v, strlen($modelKey));
                 } else {
-                    $v = null;
+                    return new Kwf_Model_Select_Expr_Boolean(false);
                 }
-                $f = $targetModel->getPrimaryKey();
+                $mappedField = $targetModel->getPrimaryKey();
             } else {
                 if (in_array($f, $this->_getOwnColumns())) {
-                    $f = $targetModel->getColumnMapping($this->_columnMapping, $f);
+                    $mappedField = $targetModel->getColumnMapping($this->_columnMapping, $f);
+                    if (!$mappedField) {
+                        if ($expr instanceof Kwf_Model_Select_Expr_Equal || $expr instanceof Kwf_Model_Select_Expr_Like) {
+                            return new Kwf_Model_Select_Expr_Boolean(false);
+                        } else {
+                            throw new Kwf_Exception_NotImplemented();
+                        }
+                    }
                 } else {
                     return null;
                 }
             }
             $cls = get_class($expr);
-            return new $cls($f, $v);
+            return new $cls($mappedField, $v);
         } else if ($expr instanceof Kwf_Model_Select_Expr_Not) {
             $e = $this->_convertExpr($expr->getExpression(), $modelKey, $targetModel);
             if (!$e) return null;
@@ -89,6 +96,19 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             return new $cls($exprs);
         } else if ($expr instanceof Kwf_Model_Select_Expr_String || $expr instanceof Kwf_Model_Select_Expr_Boolean || $expr instanceof Kwf_Model_Select_Expr_Integer) {
             return $expr;
+        } else if ($expr instanceof Kwf_Model_Select_Expr_IsNull) {
+            $f = $expr->getField();
+            if (in_array($f, $this->_getOwnColumns())) {
+                $mappedField = $targetModel->getColumnMapping($this->_columnMapping, $f);
+                if (!$mappedField) {
+                    return new Kwf_Model_Select_Expr_Boolean(true);
+                } else {
+                    $cls = get_class($expr);
+                    return new $cls($mappedField);
+                }
+            } else {
+                return null;
+            }
         } else {
             throw new Kwf_Exception_NotImplemented();
         }
@@ -166,6 +186,9 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                     $s->where($e);
                 }
             }
+        }
+        if ($p = $select->getPart(Kwf_Model_Select::IGNORE_DELETED)) {
+            $s->ignoreDeleted($p);
         }
         return $s;
     }
@@ -287,6 +310,70 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
     }
 
+    public function getDbSelects($select, $colums = array('id'))
+    {
+        if (!$this->_allDb) {
+            throw new Kwf_Exception("dbSelect can only be created if all models are db model");
+        }
+
+        $this->_selectIdsFromSiblingModels($select);
+
+        $dbSelects = array();
+        $order = null;
+        foreach ($this->_models as $modelKey => $m) {
+            $s = $this->_convertSelect($select, $modelKey, $m);
+            if (!$s) continue;
+            $options = array(
+                'columns' => array()
+            );
+            foreach ($colums as $col) {
+                if ($col == 'id') {
+                    $col = $m->getPrimaryKey();
+                } else {
+                    $col = $m->getColumnMapping($this->_columnMapping, $col);
+                }
+                $options['columns'][] = $col;
+            }
+            while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
+            $dbSelect = $m->_createDbSelectWithColumns($s, $options);
+            $dbSelectColumns = array_values($dbSelect->getPart(Zend_Db_Select::COLUMNS));
+            foreach ($colums as $kCol=>$col) {
+                $dbSelectColumns[$kCol][2] = $col;
+                if ($col == 'id') {
+                    $dbSelectColumns[$kCol][1] = new Zend_Db_Expr("CONCAT('$modelKey', ".$dbSelectColumns[$kCol][1].")");
+                }
+            }
+            if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
+                if (count($p) != 1) throw new Kwf_Exception_NotYetImplemented();
+                foreach ($p as $v) {
+                    $v['field'] = $this->_mapColumn($m, $v['field']);
+                    $expr = $m->_formatField($v['field'], $dbSelect);
+                    $dbSelectColumns[] = array(
+                        '', new Zend_Db_Expr($expr), 'orderField'
+                    );
+                }
+            }
+            $dbSelect->setPart(Zend_Db_Select::COLUMNS, $dbSelectColumns);
+            if (!isset($order)) $order = $dbSelect->getPart(Zend_Db_Select::ORDER);
+            $dbSelect->reset(Zend_Db_Select::ORDER);
+            $dbSelects[] = $dbSelect;
+        }
+        if (!$dbSelects) {
+            return array();
+        }
+        $sel = $m->getAdapter()->select();
+        $sel->union($dbSelects);
+
+        if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
+            $sel->order('orderField '. $p[0]['direction']);
+        }
+        if ($limitCnt = $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
+            $limitOffs = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
+            $sel->limit($limitCnt, $limitOffs);
+        }
+        return $sel;
+    }
+
     public function getIds($where=null, $order=null, $limit=null, $start=null)
     {
         if (!is_object($where) || $where instanceof Kwf_Model_Select_Expr_Interface) {
@@ -296,54 +383,12 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
         if ($this->_allDb) {
 
-            $this->_selectIdsFromSiblingModels($select);
+            $sel = $this->getDbSelects($select);
 
-            $dbSelects = array();
-            $order = null;
-            foreach ($this->_models as $modelKey => $m) {
-                $s = $this->_convertSelect($select, $modelKey, $m);
-                if (!$s) continue;
-                $options = array(
-                    'columns' => array($m->getPrimaryKey())
-                );
-                while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
-                $dbSelect = $m->_createDbSelectWithColumns($s, $options);
-                $columns = $dbSelect->getPart(Zend_Db_Select::COLUMNS);
-                $columns[1][2] = 'id';
-                $columns[] = array(
-                    '', new Zend_Db_Expr("'$modelKey'"), 'modelKey'
-                );
-                if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
-                    if (count($p) != 1) throw new Kwf_Exception_NotYetImplemented();
-                    foreach ($p as $v) {
-                        $v['field'] = $this->_mapColumn($m, $v['field']);
-                        $expr = $m->_formatField($v['field'], $dbSelect);
-                        $columns[] = array(
-                            '', new Zend_Db_Expr($expr), 'orderField'
-                        );
-                    }
-                }
-                $dbSelect->setPart(Zend_Db_Select::COLUMNS, $columns);
-                if (!isset($order)) $order = $dbSelect->getPart(Zend_Db_Select::ORDER);
-                $dbSelect->reset(Zend_Db_Select::ORDER);
-                $dbSelects[] = $dbSelect;
-            }
-            if (!$dbSelects) {
-                return array();
-            }
-            $sel = $m->getAdapter()->select();
-            $sel->union($dbSelects);
-            if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
-                $sel->order('orderField '. $p[0]['direction']);
-            }
-            if ($limitCnt = $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
-                $limitOffs = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
-                $sel->limit($limitCnt, $limitOffs);
-            }
-            $rows = $m->getAdapter()->query($sel)->fetchAll();
+            $rows = Kwf_Registry::get('db')->query($sel)->fetchAll();
             $ids = array();
             foreach ($rows as $row) {
-                $ids[] = $row['modelKey'].$row['id'];
+                $ids[] = $row['id'];
             }
         } else {
             $orderValues = array();

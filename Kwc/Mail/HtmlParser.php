@@ -180,6 +180,7 @@ class Kwc_Mail_HtmlParser
         //before sending to xml parser make sure we have valid xml by tidying it up
         $html = Kwf_Util_Tidy::repairHtml($html, array(
             'show-body-only' => false,
+            'wrap'           => false,
         ));
 
         $this->_stack = array();

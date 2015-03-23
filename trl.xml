@@ -17,6 +17,7 @@
 <si>vidno</si>
 <ua>Видимий</ua>
 <rs>Vidljivo</rs>
+<al>E dukshme</al>
 </text>
 <text>
 <en>Error</en>
@@ -37,6 +38,7 @@
 <ua>Помилка</ua>
 <rs>Greška</rs>
 <hu>Hiba</hu>
+<al>Gabim</al>
 </text>
 <text>
 <en>Page not found</en>
@@ -54,6 +56,7 @@
 <ua>Сторінку не знайдено.</ua>
 <rs>Nepostojeća strana</rs>
 <hu>Az oldal nem található</hu>
+<al>Faqja nuk u gjet</al>
 </text>
 <text>
 <en>Lost password?</en>
@@ -70,6 +73,8 @@
 <bg>Забравена парола?</bg>
 <ua>Забули пароль?</ua>
 <rs>Zaboravljena lozinka?</rs>
+<hu>Elfelejtette jelszavát?</hu>
+<al>Harruar passwordin?</al>
 </text>
 <text>
 <en>Login</en>
@@ -86,6 +91,8 @@
 <bg>Вход</bg>
 <ua>Увійти</ua>
 <rs>Prijava</rs>
+<hu>Bejelentkezés</hu>
+<al>Logohu</al>
 </text>
 <text>
 <en>Hello {0}!</en>
@@ -104,6 +111,7 @@
 <bg>Здравейте {0}!</bg>
 <ua>Привіт {0}!</ua>
 <rs>Halo {O}!</rs>
+<al>Përshëndetje {0}!</al>
 </text>
 <text>
 <en>Your account at {0} has just been created.</en>
@@ -407,7 +415,7 @@
 <es_CL>Nombre de archivo</es_CL>
 <hr>Naziv datoteke</hr>
 <si>ime datoteke</si>
-<bg>име на документа</bg>
+<bg>Име на документа</bg>
 <ua>Назва файлу</ua>
 </text>
 <text>
@@ -425,6 +433,7 @@
 <si>datoteka</si>
 <bg>документ</bg>
 <ua>Файл</ua>
+<al>Dokumenti</al>
 </text>
 <text>
 <en>Content</en>
@@ -439,6 +448,7 @@
 <si>vsebina</si>
 <bg>съдържание</bg>
 <ua>Зміст</ua>
+<al>Përmbajtja</al>
 </text>
 <text>
 <en>Image</en>
@@ -455,6 +465,7 @@
 <si>slika</si>
 <bg>снимка</bg>
 <ua>Зображення</ua>
+<al>Foto</al>
 </text>
 <text>
 <en>Image Enlarge</en>
@@ -835,13 +846,13 @@
 <uk>Ім'я</uk>
 <si>ime</si>
 <ua>Ім'я</ua>
-<bg>име</bg>
+<bg>Име</bg>
 </text>
 <text>
 <en>Latest online</en>
 <de>Zuletzt online</de>
 <id>126</id>
-<ro>Ultimul online</ro>
+<ro>Ultima dată online</ro>
 <sl>Datum zadnje prijave</sl>
 <ru>Последний раз онлайн</ru>
 <hr>Zadnji put online</hr>
@@ -1020,7 +1031,7 @@
 <en>Female</en>
 <de>Weiblich</de>
 <id>165</id>
-<ro>Doamna</ro>
+<ro>Feminin</ro>
 <uk>Жіноча</uk>
 <hu>Nő</hu>
 <sl>Ženski</sl>
@@ -1039,7 +1050,7 @@
 <en>Male</en>
 <de>Männlich</de>
 <id>166</id>
-<ro>Domnul</ro>
+<ro>Masculin</ro>
 <mk>Машки</mk>
 <uk>Чоловіча</uk>
 <hu>Férfi</hu>
@@ -1058,7 +1069,7 @@
 <en>Gender</en>
 <de>Geschlecht</de>
 <id>167</id>
-<ro>Formula de adresare</ro>
+<ro>Gen</ro>
 <mk>Пол</mk>
 <uk>Стать</uk>
 <hu>Nem</hu>
@@ -1727,6 +1738,7 @@
 <si>Naslova ni možno najti. </si>
 <ua>Адресу не знайдено.</ua>
 <bg>Адресът не може да бъде открит</bg>
+<hu>A cím nem található</hu>
 </text>
 <text>
 <en>Move marker while pressing mousekey.</en>
@@ -2931,6 +2943,7 @@
 <si>To polje mora imeti e-mail naslov v obliki "uporabnik@domain.com"</si>
 <hr>Ovo polje bi trebalo sadržavati e-mail adresu u sljedećem formatu "korisnik@domain.com".</hr>
 <ua>У цьому полі необхідно ввести електронну адресу у форматі "user@domain.com".</ua>
+<bg>Това поле трябва да съдържа мейл адрес с формат "user@domain.com"</bg>
 </text>
 <text>
 <en>This field should only contain letters and _</en>
@@ -3438,6 +3451,7 @@
 <uk>Вийти</uk>
 <ua>Вийти</ua>
 <hr>Odjava</hr>
+<hu>Kijelentkezés</hu>
 </text>
 <text>
 <en>Line</en>
@@ -4305,6 +4319,7 @@
 <ru>Не найдено</ru>
 <uk>Не знайдено</uk>
 <ua>Не знайдено</ua>
+<hu>Nem található</hu>
 </text>
 <text>
 <en>The requested URL "{0}" was not found on this server.</en>
@@ -4915,6 +4930,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Prijavljen</sl>
 <ru>Вы зашли на свою страницу</ru>
 <ua>Ви увійшли на свою сторінку</ua>
+<hu>Bejelentkezve</hu>
 </text>
 <text>
 <en>You have been logged in sucessfully.</en>
@@ -4951,6 +4967,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>E-naslov ali geslo nista pravilna, poskusite ponovno.</sl>
 <ru>Неверный e-mail или пароль, пожалуйста, попробуйте еще раз.</ru>
 <ua>Невірний е-мail або пароль, будь ласка, спробуйте ще раз.</ua>
+<bg>Невалиден мейл или парола, моля опитайте отново.</bg>
 </text>
 <text>
 <en>Please login</en>
@@ -5044,7 +5061,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Izpolnite polje</sl>
 <uk>Необхідно заповнити поле</uk>
 <mk>Во молиме внесете текст во полето</mk>
-<hu>Kérjük töltse ki a mezőt</hu>
+<hu>Kérjük töltse ki a mezőt!</hu>
 <bg>Моля попълнете полето</bg>
 <es_CL>Por favor, rellene el campo</es_CL>
 <fr>S'il vous plaît remplir dans ce domaine</fr>
@@ -5283,6 +5300,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Iskani pojem</sl>
 <ru>Ключевое слово</ru>
 <ua>Ключове слово</ua>
+<hu>Keresési idő</hu>
 </text>
 <text>
 <en>Please type at least two characters.</en>
@@ -5292,6 +5310,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Vnesite najmanj 2 znaka.</sl>
 <ru>Пожалуйста, введите минимум две цифры.</ru>
 <ua>Будь ласка, введіть мінімум дві цифри.</ua>
+<bg>Въведете минимум 2 символа.</bg>
 </text>
 <text>
 <en>With a free {0} account you can take part actively in the forum and write own posts. In addition, you have the possibility to observe single discussions and get informed by e-mail about new posts on the subject.</en>
@@ -5555,6 +5574,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Ni naloženih datotek, izberite ustrezno datoteko.</sl>
 <ru>Нет загруженных файлов, пожалуйста, выберите файл.</ru>
 <ua>Жодного файлу не завантажено, будь ласка, оберіть файл.</ua>
+<bg>Не е качен файл, моля изберете файл. </bg>
 </text>
 <text>
 <en>Download original image</en>
@@ -5751,6 +5771,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Poštanski broj</hr>
 <ua>Індекс</ua>
 <si>Poštna številka</si>
+<bg>пощ. код</bg>
+<hu>Irányítószám</hu>
 </text>
 <text>
 <en>City</en>
@@ -5786,6 +5808,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Telefon</hr>
 <ua>Телефон</ua>
 <si>Telefon</si>
+<bg>Телефон</bg>
+<hu>Telefon</hu>
 </text>
 <text>
 <en>Checkout</en>
@@ -6109,6 +6133,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Išči kraj</sl>
 <ru>Поиск по местоположению</ru>
 <ua>Шукати місце розташування</ua>
+<hu>Keresés helye</hu>
 </text>
 <text>
 <en>Adresses</en>
@@ -7065,6 +7090,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Poštanski broj</hr>
 <ua>Індекс</ua>
 <bg>пощ. код</bg>
+<hu>Irányítószám</hu>
 </text>
 <text>
 <en>Fon</en>
@@ -7343,6 +7369,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>404 - Fişierul nu a putut fi găsit</ro>
 <ru>404 - Файл не найден</ru>
 <ua>404 - File not found</ua>
+<hu>404 - a fájl nem található</hu>
 </text>
 <text>
 <en>Sorry, that address</en>
@@ -7517,6 +7544,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>По запросу &amp;quot;{0}&amp;quot; не найдено ни одной записи.</ru>
 <ua>Жодного запису не знайдено</ua>
 <uk>Записів не знайдено щодо цього запиту</uk>
+<hu>Nincs találat az alábbi keresésre: &amp;quot;{0}&amp;quot; </hu>
 </text>
 <text>
 <en>Show All</en>
@@ -7536,6 +7564,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Пользователь</ru>
 <sk>Užívateľ</sk>
 <ua>Користувач</ua>
+<bg>Потребител</bg>
 </text>
 <text>
 <en>Statistics</en>
@@ -7722,6 +7751,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Пожалуйста, выберите</ru>
 <ua>Будь ласка, оберіть</ua>
 <sk>Prosím vyberte si</sk>
+<bg>Моля изберете</bg>
+<hu>Kérjük válasszon!</hu>
 </text>
 <text>
 <en>Root</en>
@@ -9291,6 +9322,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Пожалуйста, правильно заполните поля.</ru>
 <fr>S'il vous plaît compléter les champs en surbrillance correctement.</fr>
 <ua>Будь ласка, правильно заповніть поля.</ua>
+<bg>Моля попълнете вярно маркираните полета.</bg>
 </text>
 <text>
 <en>user-defined</en>
@@ -9378,6 +9410,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Vnesite svoj e-naslov.</sl>
 <ru>Пожалуйста, введите Ваш адрес электронной почты</ru>
 <ua>Будь ласка, введіть Вашу електронну адресу</ua>
+<bg>Моля въведете мейл адрес.</bg>
 </text>
 <text>
 <en>To</en>
@@ -10160,11 +10193,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Izberite eno od možnosti</sl>
 <ru>Пожалуйста, выберите опцию</ru>
 <mk>Ве молиме изберете опција</mk>
-<bg>Ве молиме изберете опција</bg>
+<bg>Моля, изберете един от вариантите</bg>
 <ua>Будь ласка, оберіть опцію</ua>
 <sk>Vyberte si prosím jednu z možností</sk>
 <es>Por favor escoge una opción</es>
 <hr>Molimo odaberite jednu opciju</hr>
+<hu>Kérjük válasszon!</hu>
 </text>
 <text>
 <en>No Filedata received.</en>
@@ -10224,6 +10258,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Označite s kljukico.</sl>
 <ru>Пожалуйста, отметьте</ru>
 <ua>Будь ласка, відмітьте прапорці</ua>
+<bg>Моля маркирайте полето</bg>
 </text>
 <text>
 <en>Guestbook Settings</en>
@@ -10270,6 +10305,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Пожалуйста, выберите значение</ru>
 <ua>Будь ласка, оберіть значення</ua>
 <hr>Molimo odaberite jednu opciju</hr>
+<hu>Kérjük válasszon az alábbiak közül!</hu>
 </text>
 <text>
 <en>Link.First Child Page</en>
@@ -10379,6 +10415,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <fr>Rechercher:</fr>
 <uk>Пошук</uk>
 <ua>Пошук:</ua>
+<hu>Keresés:</hu>
 </text>
 <text>
 <en>copy/paste</en>
@@ -10960,6 +10997,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Prijava:</sl>
 <ru>Логин:</ru>
 <ua>Логін:</ua>
+<hu>Bejelentkezés:</hu>
 </text>
 <text>
 <en>Set a new password</en>
@@ -11556,6 +11594,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Natrag na pregled</hr>
 <ua>Назад до огляду</ua>
 <si>Nazaj na pregled</si>
+<bg>Назад</bg>
 <hu>Vissza az áttekintéshez</hu>
 </text>
 <text>
@@ -11691,6 +11730,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Izberite datoteko</sl>
 <ru>Пожалуйста, выберите файл</ru>
 <ua>Будь ласка, оберіть файл</ua>
+<bg>Моля изберете файл</bg>
 </text>
 <text>
 <en>This field should only contain letters, numbers, - and _</en>
@@ -11899,6 +11939,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Datoteka ni najdena.</sl>
 <ru>Файл не найден.</ru>
 <ua>Файл не знайдено.</ua>
+<hu>A fájl nem található</hu>
 </text>
 <text>
 <en>Could not read excel</en>
@@ -12403,7 +12444,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Nisu pronađeni rezultati</hr>
 <ro>Nu a fost gasita nicio inregistrare</ro>
 <uk>Записів не знайдено</uk>
-<hu>Nincs találat</hu>
+<hu>Nem található bejegyzés</hu>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
@@ -12504,6 +12545,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Будь ласка використовуйте формат  -&gt; Year / Month</ua>
 <si>Prosimo uporabite ta zapis -&gt; leto / mesec</si>
 <ro>Va rugam sa folositi acest format -&gt; An / Luna</ro>
+<bg>Моля използвайте този формат: година / месец</bg>
 </text>
 <text>
 <en>VI-Number</en>
@@ -13158,6 +13200,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>Пошук</uk>
 <ua>Пошук...</ua>
 <ro>Cauta...</ro>
+<hu>Keresés...</hu>
 </text>
 <text>
 <en>view rate</en>
@@ -13512,6 +13555,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2000</id>
 <sl>od {0}</sl>
 <ru>по {0}</ru>
+<hu> {0}</hu>
 </text>
 <text>
 <en>This entry was posted in</en>
@@ -13590,6 +13634,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hu>Ha megnyitja ezt a honlapot, akkor oda sütik települnek. Kattintson ide, ha deaktiválni szeretné a sütiket.</hu>
 <id>2007</id>
 <ua>Cookie встановлено для цієї сторінки. Натисніть тут для деактивації cookies. </ua>
+<al>Ruatja e 'cookies' është aktivizuar. Kliko këtu për ta çaktivizuar.</al>
 </text>
 <text>
 <en>No cookies are set when visiting this webpage. Click to activate cookies.</en>
@@ -13606,6 +13651,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hu>Ha megnyitja ezt a honlapot, oda pillanatnyilag nem települnek sütik. Kattintson ide, ha jóváhagyja a sütik alkalmazását.</hu>
 <id>2008</id>
 <ua>Cookie не встановлено для цієї сторінки. Натисніть тут для активації cookies. </ua>
+<al>Ruatja e 'cookies' është çaktivizuar. Kliko këtu për ta riaktivizuar.</al>
 </text>
 <text>
 <en>Website produced by</en>
@@ -14266,6 +14312,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Пожалуйста, подождите...</ru>
 <id>2067</id>
 <hr>Molimo pričekajte...</hr>
+<bg>Моля изчакайте</bg>
 </text>
 <text>
 <en>This field should be an e-mail address in the format "user@example.com"</en>
@@ -14468,6 +14515,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2106</id>
 <ro>Fisier negasit</ro>
 <hr>Datoteka nije pronađena</hr>
+<hu>A fájl nem található</hu>
 </text>
 <text>
 <en>(No title)</en>

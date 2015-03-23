@@ -32,6 +32,11 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
                 'event' => 'Kwf_Events_Event_Row_Updated',
                 'callback' => 'onRowUpdate'
             );
+            $ret[] = array(
+                'class' => get_class($m),
+                'event' => 'Kwf_Events_Event_Row_Inserted',
+                'callback' => 'onRowUpdate'
+            );
         }
         return $ret;
     }
@@ -43,7 +48,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
         $this->fireEvent(new $cls($c->componentClass, $c, $flag));
     }
 
-    public function onRowUpdate(Kwf_Events_Event_Row_Updated $event)
+    public function onRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         $dbId = $event->row->component_id;
 

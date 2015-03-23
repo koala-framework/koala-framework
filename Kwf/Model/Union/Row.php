@@ -28,6 +28,7 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
         $columns = $columns['columns'];
         if (in_array($name, $columns)) {
             $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
+            if (!$name) return false;
             return $this->_sourceRow->__isset($name);
         }
         return parent::__isset($name);
@@ -55,6 +56,7 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
         $columns = $columns['columns'];
         if (in_array($name, $columns)) {
             $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
+            if (!$name) return null;
             return $this->_sourceRow->$name;
         }
         return parent::__get($name);

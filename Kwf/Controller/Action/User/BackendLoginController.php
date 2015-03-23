@@ -17,6 +17,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $this->view->brandingVividPlanet = Kwf_Config::getValue('application.branding.vividPlanet');
         $this->view->pages = Kwf_Registry::get('acl')->has('kwf_component_pages');
         $this->view->baseUrl = Kwf_Setup::getBaseUrl();
+        $this->view->favicon = Kwf_View_Ext::getFavicon();
 
         try {
             $t = new Kwf_Util_Model_Welcome();

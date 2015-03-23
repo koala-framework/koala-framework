@@ -28,4 +28,14 @@ class Kwc_Posts_Write_Component extends Kwc_Abstract_Composite_Component
         $posts = $this->getData()->parent;
         return self::getChildComponentClass($posts, 'detail');
     }
+
+    public function getPostsModel()
+    {
+        return $this->getData()->parent->getComponent()->getChildModel();
+    }
+
+    public function getPostsDirectory()
+    {
+        return $this->getData()->parent;
+    }
 }

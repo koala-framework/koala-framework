@@ -8,6 +8,7 @@ class Kwc_List_Links_Component extends Kwc_Abstract_List_Component
         $ret['componentName'] = trlKwfStatic('Links');
         $ret['componentIcon'] = 'links';
         $ret['componentCategory'] = 'content';
+        $ret['componentPriority'] = 30;
         $ret['cssClass'] = 'webStandard';
         return $ret;
     }

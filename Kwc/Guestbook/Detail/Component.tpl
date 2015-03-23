@@ -14,13 +14,13 @@
                     <?=$this->component($this->user->getChildComponent('-general')->getChildComponent('-rating'))?>
                 </div>
             <? } ?>
-            <? if ($this->data->row->name) { ?>
-                <div class="user"><?= $this->data->row->name; ?></div>
+            <? if ($this->row->name) { ?>
+                <div class="user"><?= $this->row->name; ?></div>
             <? } ?>
             <strong><?=$this->placeholder['prePostNumber']?><?= $this->postNumber ?></strong>
             <em>
-                <?=$this->data->trlKwf('on') ?> <?=$this->date($this->data->row->create_time)?>
-                <?=$this->data->trlKwf('at') ?> <?=$this->time($this->data->row->create_time)?>
+                <?=$this->data->trlKwf('on') ?> <?=$this->date($this->row->create_time)?>
+                <?=$this->data->trlKwf('at') ?> <?=$this->time($this->row->create_time)?>
             </em><br />
             <? if($this->actions) { ?>
                 <?=$this->data->trlKwf('Post')?>:

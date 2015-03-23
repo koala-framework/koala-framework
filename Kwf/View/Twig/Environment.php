@@ -17,6 +17,10 @@ class Kwf_View_Twig_Environment extends Twig_Environment
         $this->addFilter(new Twig_SimpleFilter('money',
             array('Kwf_Component_Renderer_Twig_Environment', 'money'),
             array('needs_context' => true)));
+        $this->addFilter(new Twig_SimpleFilter('mailEncodeText',
+            array('Kwf_Component_Renderer_Twig_Environment', 'mailEncodeText')));
+        $this->addFilter(new Twig_SimpleFilter('mailLink',
+            array('Kwf_Component_Renderer_Twig_Environment', 'mailLink')));
     }
 
     public static function date($context, $date, $format = null)
@@ -77,5 +81,17 @@ class Kwf_View_Twig_Environment extends Twig_Environment
 
         $number = number_format($amount, $decimals, $decimalSeparator, $thousandSeparator);
         return str_replace('{0}', $number, $format);
+    }
+
+    public function mailEncodeText($text)
+    {
+        $helper = new Kwf_View_Helper_MailEncodeText();
+        return $helper->mailEncodeText($text);
+    }
+
+    public function mailLink($mailAddress, $linkText = null, $cssClass = null)
+    {
+        $helper = new Kwf_View_Helper_MailLink();
+        return new Twig_Markup($helper->mailLink($mailAddress, $linkText, $cssClass), 'utf-8');
     }
 }

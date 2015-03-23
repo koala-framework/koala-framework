@@ -19,6 +19,10 @@ class Kwf_Component_Events_UrlCache extends Kwf_Events_Subscriber
             'callback' => 'onPageUrlChanged'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_Page_NameChanged',
+            'callback' => 'onPageNameChanged'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_Component_RecursiveRemoved',
             'callback' => 'onComponentRecursiveRemoved'
         );
@@ -48,6 +52,12 @@ class Kwf_Component_Events_UrlCache extends Kwf_Events_Subscriber
     {
         $c = $event->component->getPageOrRoot();
         $this->_orExpr[] = new Kwf_Model_Select_Expr_Equal('expanded_page_id', $c->getExpandedComponentId());
+    }
+
+    public function onPageNameChanged(Kwf_Component_Event_Page_NameChanged $event)
+    {
+        $c = $event->component->getPageOrRoot();
+        $this->_orExpr[] = new Kwf_Model_Select_Expr_Equal('page_id', $c->componentId);
     }
 
     public function onPageRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
