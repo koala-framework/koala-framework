@@ -12,7 +12,9 @@ class Kwf_Assets_TinyMce_Provider extends Kwf_Assets_Provider_Abstract
     {
         $deps = array();
         if ($dependency instanceof Kwf_Assets_TinyMce_BuildDependency) {
-            $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = $this->_providerList->findDependency('jQuery');
+            $d = $this->_providerList->findDependency('jQuery');
+            if (!$d) throw new Kwf_Exception("Didn't find dependency");
+            $deps[Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES][] = $d;
 
         }
         return $deps;
