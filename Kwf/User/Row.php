@@ -13,11 +13,11 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return $ret;
     }
 
-    public function generateActivationToken()
+    public function generateActivationToken($type)
     {
         foreach ($this->getModel()->getAuthMethods() as $auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
-                 $ret = $auth->generateActivationToken($this);
+                 $ret = $auth->generateActivationToken($this, $type);
                  if ($ret) return $ret;
             }
         }

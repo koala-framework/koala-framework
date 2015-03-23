@@ -6,9 +6,9 @@ class Kwf_User_Auth_Proxy_Activation extends Kwf_User_Auth_Proxy_Abstract implem
         return $this->_auth->validateActivationToken($row->getProxiedRow(), $token);
     }
 
-    public function generateActivationToken(Kwf_Model_Row_Interface $row)
+    public function generateActivationToken(Kwf_Model_Row_Interface $row, $type)
     {
-        return $this->_auth->generateActivationToken($row->getProxiedRow());
+        return $this->_auth->generateActivationToken($row->getProxiedRow(), $type);
     }
 
     public function isActivated(Kwf_Model_Row_Interface $row)

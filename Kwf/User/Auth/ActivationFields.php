@@ -40,10 +40,11 @@ class Kwf_User_Auth_ActivationFields extends Kwf_User_Auth_Abstract implements K
         return false;
     }
 
-    public function generateActivationToken(Kwf_Model_Row_Interface $row)
+    public function generateActivationToken(Kwf_Model_Row_Interface $row, $type)
     {
         $token = substr(Kwf_Util_Hash::hash(microtime(true).uniqid('', true).mt_rand()), 0, 10);
-        $expire = time()+7*24*60*60;
+        $days = ($type == self::TYPE_ACTIVATE) ? 7 : 1;
+        $expire = time()+$days*24*60*60;
         $row->activate_token = $expire.':'.$this->_encodePasswordBcrypt($row, $token);
         $row->save();
         return $token;

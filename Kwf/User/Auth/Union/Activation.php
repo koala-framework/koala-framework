@@ -10,10 +10,10 @@ class Kwf_User_Auth_Union_Activation extends Kwf_User_Auth_Union_Abstract implem
         }
     }
 
-    public function generateActivationToken(Kwf_Model_Row_Interface $row)
+    public function generateActivationToken(Kwf_Model_Row_Interface $row, $type)
     {
         if ($row->getSourceRow()->getModel() == $this->_auth->_model) {
-            return $this->_auth->generateActivationToken($row->getSourceRow());
+            return $this->_auth->generateActivationToken($row->getSourceRow(), $type);
         } else {
             return null;
         }
