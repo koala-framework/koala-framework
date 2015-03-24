@@ -3,13 +3,17 @@ class Kwc_Root_Category_FilenameFilter extends Kwf_Filter_Row_Abstract
 {
     public function skipFilter($row, $column)
     {
-        if ($row->custom_filename) return true;
         return parent::skipFilter($row, $column);
     }
 
     public function filter($row)
     {
-        $value = Kwf_Filter::filterStatic($row->name, 'Ascii');
+        if ($row->custom_filename) {
+            $value = $row->filename;
+        } else {
+            $value = $row->name;
+        }
+        $value = Kwf_Filter::filterStatic($value, 'Ascii');
 
         $componentId = $this->_getComponentId($row);
 
