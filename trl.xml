@@ -12445,6 +12445,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Nu a fost gasita nicio inregistrare</ro>
 <uk>Записів не знайдено</uk>
 <hu>Nem található bejegyzés</hu>
+<es>no se encontraron entradas</es>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
