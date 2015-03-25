@@ -150,6 +150,7 @@
 <ru>Место вылета: почтовый код, Город, Улица</ru>
 <es_CL>Place of departure: zip code, Town, Street</es_CL>
 <hr>Početno mjesto: Pošt. br., Mjesto, Ulica</hr>
+<al>Pikënisja.  Kodi postar, vendi, rruga.</al>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -174,6 +175,7 @@
 <sl>Prikaz poti</sl>
 <ru>Показать маршрут</ru>
 <es_CL>Show Route</es_CL>
+<al>Shfaq rrugën. </al>
 </text>
 <text>
 <en>Suggestions</en>
@@ -509,6 +511,7 @@
 <hu>Küldés</hu>
 <es_CL>enviar</es_CL>
 <hr>Pošalji</hr>
+<al>Dërgo</al>
 </text>
 <text>
 <en>Validator</en>
@@ -5777,6 +5780,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Nu au fost găsite înregistrări pentru textul căutat &amp;quot;{0}&amp;quot;.</ro>
 <sl>Sistemi ni našel ustreznih zadetkov za iskani pojem &amp;quot;{0}&amp;quot;.</sl>
 <uk>Нічого не знайдено</uk>
+<al>Nuk u gjet asnjë informacion për tekstin &amp;quot;{0}&amp;quot;</al>
 </text>
 <text>
 <en>Show All</en>
@@ -9567,6 +9571,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <cs>Novinky nebyly nalezeny</cs>
 <hr>Nisu pronađeni rezultati</hr>
 <ro>Nu a fost gasita nicio inregistrare</ro>
+<al>Nuk u gjet asnjë informacion.</al>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
