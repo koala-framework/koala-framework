@@ -32,11 +32,7 @@ class Kwf_View_Helper_Link
         if (!is_array($config)) $config = array('cssClass' => $config); //compatibility
 
         if (!empty($config['get'])) {
-            $url .= '?';
-            foreach ($config['get'] as $key => $val) {
-                $url .= "&$key";
-                if ($val) { $url .= "=$val"; }
-            }
+            $url .= '?' . http_build_query($config['get']);
         }
 
         if (!empty($config['anchor'])) $url .= "#".$config['anchor'];
@@ -52,10 +48,10 @@ class Kwf_View_Helper_Link
         if (!empty($config['target'])) {
             $attrs .= ' target="'.htmlspecialchars($config['target']).'"';
         }
-        if(!empty($config['title'])) {
+        if (!empty($config['title'])) {
             $attrs .= ' title="'.htmlspecialchars($config['title']).'"';
         }
-        if(!empty($rel)) {
+        if (!empty($rel)) {
             $attrs .= ' rel="'.htmlspecialchars($rel).'"';
         }
 
