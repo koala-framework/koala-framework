@@ -3,7 +3,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
 {
     public function jsonUploadAction()
     {
-        ini_set('memory_limit', '1024M');
+        Kwf_Util_MemoryLimit::set(1024);
         $uploadModel = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
 
         $uploadedFile = array(
