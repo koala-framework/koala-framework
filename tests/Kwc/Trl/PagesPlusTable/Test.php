@@ -19,7 +19,7 @@ class Kwc_Trl_PagesPlusTable_Test extends Kwc_TestAbstract
         $this->assertEquals(1, count($c));
 
         $c = $this->_root->getComponentsByClass('Kwc_Trl_PagesPlusTable_TestTableComponent_Child_Component');
-        $this->assertEquals(3, count($c));
+        $this->assertEquals(2, count($c));
     }
 
     public function testComponentCountsTrl()
@@ -76,13 +76,14 @@ class Kwc_Trl_PagesPlusTable_Test extends Kwc_TestAbstract
 
     public function testComponentByIdTrl7()
     {
-//         $c = $this->_root->getComponentsByClass('Kwc_Chained_Trl_Component.Kwc_Trl_PagesPlusTable_TestTableComponent_Child_Component', array('ignoreVisible'=>true));
-//         $this->assertEquals(count($c), 3*2);
+        $c = $this->_root->getComponentsByClass('Kwc_Chained_Trl_Component.Kwc_Trl_PagesPlusTable_TestTableComponent_Child_Component', array('ignoreVisible'=>true));
+        $this->assertEquals(count($c), 3*2);
 
         $c = $this->_root->getComponentById('root-en-main_1', array('ignoreVisible'=>true));
         $this->assertEquals($c->componentId, 'root-en-main_1');
         $this->assertEquals($c->componentClass, 'Kwc_Chained_Trl_Component.Kwc_Trl_PagesPlusTable_TestTableComponent_Component');
-Kwf_Debug::enable();
+
         $childPages = $c->getChildPages();
+        $this->assertEquals(count($childPages), 3+2);
     }
 }
