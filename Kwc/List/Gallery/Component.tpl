@@ -25,14 +25,14 @@
         <div class="<?=$class;?>">
             <?=$this->component($child);?>
         </div>
-        <? if ($i == count($this->children)-1 && $this->showPics) { ?>
+        <? if ($i == count($this->children)-1 && count($this->children) > $this->showPics) { ?>
             </div>
         <? } ?>
         <?
             $i++;
         ?>
     <? } ?>
-    <? if ($this->showPics) { ?>
+    <? if ($this->showPics && count($this->children) > $this->showPics) { ?>
         <div class="moreButton"><div class="innerMoreButton"><span><?=$this->placeholder['moreButton'];?></span></div></div>
     <? } ?>
 </div>

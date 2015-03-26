@@ -52,8 +52,9 @@ abstract class Kwf_Component_Abstract_ContentSender_Abstract
                             'componentId' => $c->componentId
                         );
                     }
+                    $isPage = $c->isPage;
                     $c = $c->parent;
-                } while($c && !$c->isPage);
+                } while ($c && !$isPage);
                 $datas[] = array(
                     'data' => $p,
                     'plugins' => $plugins,

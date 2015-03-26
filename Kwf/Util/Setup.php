@@ -43,6 +43,15 @@ class Kwf_Util_Setup
         Zend_Registry::_unsetInstance(); //cache/setup?.php will call setClassName again
     }
 
+    private static function _verifyPathInParentPath($path, $parentPath)
+    {
+        $path = realpath($path);
+        $parentPath = realpath($parentPath);
+        if (substr($path, 0, strlen($parentPath)) != $parentPath) {
+            throw new Kwf_Exception("'$path' not in '$parentPath'");
+        }
+    }
+
     private static function _generatePreloadClassesCode($preloadClasses, $ip)
     {
         $ret = '';
@@ -53,14 +62,10 @@ class Kwf_Util_Setup
                     if (VENDOR_PATH == '../vendor') {
                         $cwd = getcwd();
                         $cwd = substr($cwd, 0, strrpos($cwd, '/'));
-                        if (substr($file, 0, strlen($cwd)) != $cwd) {
-                            throw new Kwf_Exception("'$file' not in cwd");
-                        }
+                        self::_verifyPathInParentPath($file, $cwd);
                         $file = '../'.substr($file, strlen($cwd)+1);
                     } else {
-                        if (substr($file, 0, strlen(getcwd())) != getcwd()) {
-                            throw new Kwf_Exception("'$file' not in cwd");
-                        }
+                        self::_verifyPathInParentPath($file, getcwd());
                         $file = substr($file, strlen(getcwd())+1);
                     }
                     $ret .= "require(\$cwd.'/".$file."');\n";
@@ -130,19 +135,13 @@ class Kwf_Util_Setup
 
         $ip = array();
         foreach (include VENDOR_PATH.'/composer/include_paths.php' as $p) {
-
-
             if (VENDOR_PATH == '../vendor') {
                 $cwd = getcwd();
                 $cwd = substr($cwd, 0, strrpos($cwd, '/'));
-                if (substr($p, 0, strlen($cwd)) != $cwd) {
-                    throw new Kwf_Exception("'$p' not in cwd");
-                }
+                self::_verifyPathInParentPath($p, $cwd);
                 $p = '../'.substr($p, strlen($cwd)+1);
             } else {
-                if (substr($p, 0, strlen(getcwd())) != getcwd()) {
-                    throw new Kwf_Exception("'$p' not in cwd");
-                }
+                self::_verifyPathInParentPath($p, getcwd());
                 $p = substr($p, strlen(getcwd())+1);
             }
             $ip[] = "'.\$cwd.'/".$p;

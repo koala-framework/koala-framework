@@ -18,7 +18,7 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
     {
         if ($this->_contentsCache) return;
 
-        $cmd = "./vendor/bin/node ".__DIR__."/build.js";
+        $cmd = getcwd()."/".VENDOR_PATH."/bin/node ".__DIR__."/build.js";
         putenv("NODE_PATH=".KWF_PATH."/node_modules");
         exec($cmd, $out, $ret);
         putenv("NODE_PATH=");
