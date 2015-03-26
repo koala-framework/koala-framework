@@ -49,6 +49,10 @@
                 "koala-framework/composer-extra-assets",
                 "nodejs/nodejs"
             ]
+        },
+        "kwf-lingohub": {
+            "account": "koala-framework",
+            "project": "koala-framework"
         }
     },
     "suggest": {
