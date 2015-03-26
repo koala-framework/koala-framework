@@ -10,7 +10,7 @@ class Kwf_Trl_ChainedByMaster_Root extends Kwc_Root_TrlRoot_Component
             'en' => 'English'
         ));
         $ret['generators']['master']['component'] = 'Kwf_Trl_ChainedByMaster_Master_Component';
-        $ret['generators']['chained']['component'] = 'Kwc_Root_TrlRoot_Chained_Component.Kwf_Trl_ChainedByMaster_Master_Component';
+        $ret['generators']['chained']['component'] = 'Kwf_Trl_ChainedByMaster_Chained_Component.Kwf_Trl_ChainedByMaster_Master_Component';
 
         $ret['generators']['box'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',

@@ -10,6 +10,23 @@ class Kwf_Trl_ChainedByMaster_Test extends Kwc_TestAbstract
         parent::setUp('Kwf_Trl_ChainedByMaster_Root');
     }
 
+    public function testChildPage1()
+    {
+        $root = Kwf_Component_Data_Root::getInstance();
+        $c = $root->getComponentById('root-en');
+        Kwf_Debug::enable();
+        $c = $c->getChildComponent('_1');
+        $this->assertEquals('root-en_1', $c->componentId);
+    }
+
+    public function testChildPage2()
+    {
+        $root = Kwf_Component_Data_Root::getInstance();
+        $c = $root->getComponentById('root-en');
+        $c = $c->getChildComponent('_2');
+        $this->assertEquals('root-en_2', $c->componentId);
+    }
+
     public function testMenuForPage1()
     {
         $this->assertEquals('root-en_1', $this->_getChainedId('1'));

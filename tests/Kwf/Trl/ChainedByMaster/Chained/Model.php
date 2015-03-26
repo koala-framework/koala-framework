@@ -1,5 +1,5 @@
 <?php
-class Kwf_Trl_ChainedByMaster_Master_Trl_Model extends Kwc_Root_Category_Trl_GeneratorModel
+class Kwf_Trl_ChainedByMaster_Chained_Model extends Kwc_Root_Category_Trl_GeneratorModel
 {
     public function __construct($config = array())
     {
