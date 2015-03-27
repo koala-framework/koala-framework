@@ -4,6 +4,14 @@
  */
 class Kwf_Form_NumberField_PhpTest extends Kwf_Test_TestCase
 {
+    public function setUp()
+    {
+        $cache = array();
+        $cache['kwf']['de']['.-decimal separator'] = ',';
+        $cache['kwf']['de']['C-locale'] = 'de_AT.UTF-8, de.UTF-8, de_DE.UTF-8';
+        Kwf_Trl::getInstance()->setCache($cache);
+    }
+
     public function testValuesFrontendEn()
     {
         $this->_assertPostedValue(0, 0, 'en', '0');

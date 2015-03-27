@@ -11,6 +11,20 @@ class Kwc_Trl_StaticTextsPlaceholder_Test extends Kwc_TestAbstract
         Kwf_Registry::get('config')->languages = array('de', 'en');
         Kwf_Trl::getInstance()->setWebCodeLanguage('de');
         parent::setUp('Kwc_Trl_StaticTextsPlaceholder_Root');
+
+        $cache = array();
+        $cache['web']['en'] = array();
+        $cache['web']['en_plural'] = array();
+        $cache['web']['en']['Sichtbar-'] = 'Visible';
+        $cache['web']['en']['Am-time'] = 'On';
+        $cache['web']['en']['Antwort-'] = 'reply';
+        $cache['web']['en_plural']['Antworten-'] = 'replies';
+        $cache['web']['en']['Antwort-test'] = 'reply';
+        $cache['web']['en_plural']['Antworten-test'] = 'replies';
+        $cache['kwf']['de'] = array();
+        $cache['kwf']['de_plural'] = array();
+
+        Kwf_Trl::getInstance()->setCache($cache);
     }
 
     public function tearDown()

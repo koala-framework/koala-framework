@@ -16,6 +16,9 @@ class Kwc_Trl_News_Test extends Kwc_TestAbstract
     public function setUp()
     {
         parent::setUp('Kwc_Trl_News_Root');
+        $cache = array();
+        $cache['kwf']['de'] = array();
+        Kwf_Trl::getInstance()->setCache($cache);
     }
 
     public function testDe()

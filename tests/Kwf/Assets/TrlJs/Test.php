@@ -1,6 +1,15 @@
 <?php
 class Kwf_Assets_TrlJs_Test extends Kwf_Test_TestCase
 {
+    public function setUp()
+    {
+        $cache = array();
+        $cache['kwf']['de']['Yes-'] = 'Ja';
+        $cache['kwf']['de']['.-decimal separator'] = ',';
+        $cache['kwf']['de'][',-thousands separator'] = '.';
+        Kwf_Trl::getInstance()->setCache($cache);
+    }
+
     public function testIt()
     {
         $f = new Kwf_Assets_Dependency_File_Js('kwf/tests/Kwf/Assets/TrlJs/foo.js');

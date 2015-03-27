@@ -383,6 +383,11 @@ class Kwf_Trl
         $this->_cache = array();
     }
 
+    public function setCache($cache)
+    {
+        $this->_cache = $cache;
+    }
+
     public function _loadCache($source, $target, $plural)
     {
         if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
