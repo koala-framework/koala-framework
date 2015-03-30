@@ -12,7 +12,7 @@ class Kwf_Db_Profiler extends Zend_Db_Profiler
     {
         parent::__construct($enable);
 
-        $writer = new Zend_Log_Writer_Stream(APP_PATH . '/querylog', 'w');
+        $writer = new Kwf_Log_Writer_Stream(APP_PATH . '/querylog', 'w');
         $writer->setFormatter(new Zend_Log_Formatter_Simple("%message%\n"));
         $this->_logger = new Zend_Log($writer);
 

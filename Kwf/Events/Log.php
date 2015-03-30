@@ -21,7 +21,7 @@ class Kwf_Events_Log extends Zend_Log
 
     public function __construct()
     {
-        $writer = new Zend_Log_Writer_Stream('eventlog', 'w');
+        $writer = new Kwf_Log_Writer_Stream(APP_PATH . '/eventlog', 'w');
         $writer->setFormatter(new Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
         parent::__construct($writer);
     }
