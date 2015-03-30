@@ -303,7 +303,7 @@ class Kwf_Util_Apc
             die();
         }
         $start = microtime(true);
-        ini_set('memory_limit', '256M');
+        Kwf_Util_MemoryLimit::set(256);
         ini_set('display_errors', 'on');
         set_time_limit(90);
 

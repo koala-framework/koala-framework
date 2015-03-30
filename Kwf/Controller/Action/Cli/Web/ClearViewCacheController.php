@@ -8,7 +8,7 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
 
     public function indexAction()
     {
-        ini_set('memory_limit', '512M');
+        Kwf_Util_MemoryLimit::set(512);
 
         $select = new Kwf_Model_Select();
         if ($this->_getParam('all')) {
