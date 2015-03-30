@@ -8,7 +8,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function optimizeAction()
     {
-        ini_set('memory_limit', '512M');
+        Kwf_Util_MemoryLimit::set(512);
         if ($this->_getParam('debug')) echo "\noptimize index...\n";
         Kwf_Util_Fulltext_Backend_Abstract::getInstance()->optimize($this->_getParam('debug'));
         if ($this->_getParam('debug')) echo "done.\n";
@@ -124,8 +124,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
     //internal
     public function rebuildWorkerAction()
     {
-        ini_set('memory_limit', '512M');
-
+        Kwf_Util_MemoryLimit::set(512);
 
         $pageClassesThatCanHaveFulltext = array();
         foreach (self::_getAllPossiblePageComponentClasses() as $c) {
@@ -223,7 +222,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function rebuildAction()
     {
-        ini_set('memory_limit', '512M');
+        Kwf_Util_MemoryLimit::set(512);
         if (!$this->_getParam('skip-check-for-invalid')) {
             $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-for-invalid";
             if ($this->_getParam('debug')) $cmd .= " --debug";
@@ -433,7 +432,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function checkContentsSubrootAction()
     {
-        ini_set('memory_limit', '256M');
+        Kwf_Util_MemoryLimit::set(256);
 
         $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
         if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
@@ -484,7 +483,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
     public function checkPagesSubrootAction()
     {
-        ini_set('memory_limit', '256M');
+        Kwf_Util_MemoryLimit::set(256);
 
         $pageClassesThatCanHaveFulltext = array();
         foreach (self::_getAllPossiblePageComponentClasses() as $c) {
