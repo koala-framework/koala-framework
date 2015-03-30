@@ -127,6 +127,9 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
                     $currentPds = $currentPd;
                 }
                 foreach ($currentPds as $currentPd) {
+                    if (!$currentPd) {
+                        throw new Kwf_Exception("No parentData returned in '".get_class($this)."'");
+                    }
                     $data = $this->_createData($currentPd, $row, $s);
                     if ($data) {
                         $ret[] = $data;
