@@ -19,6 +19,5 @@ class Kwc_Articles_Directory_ViewsModel extends Kwf_Model_Db
         parent::_init();
         $this->_exprs['article_is_top'] = new Kwf_Model_Select_Expr_Parent('Acticle', 'is_top');
         $this->_exprs['article_visible'] = new Kwf_Model_Select_Expr_Parent('Acticle', 'visible');
-        $this->_exprs['article_autheduser_visible'] = new Kwf_Model_Select_Expr_Parent('Acticle', 'autheduser_visible');
     }
 }
