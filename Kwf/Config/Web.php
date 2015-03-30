@@ -2,7 +2,6 @@
 class Kwf_Config_Web extends Kwf_Config_Ini
 {
     private $_section;
-    protected $_masterFiles = array();
 
     static private $_instances = array();
     public static function getInstance($section = null)
@@ -20,15 +19,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
                     //two level cache
                     $cache = Kwf_Config_Cache::getInstance();
                     $ret = $cache->load($cacheId);
-                    if ($ret) {
-                        $mtime = $cache->test($cacheId);
-                        foreach ($ret->getMasterFiles() as $f) {
-                            if (filemtime($f) > $mtime) {
-                                $ret = false;
-                                break;
-                            }
-                        }
-                    }
                     if(!$ret) {
                         $ret = new $configClass($section);
                         $cache->save($ret, $cacheId);
@@ -112,16 +102,10 @@ class Kwf_Config_Web extends Kwf_Config_Ini
             throw new Kwf_Exception("Add either '$section' to kwf/config.ini or set kwfConfigSection in web config.ini");
         }
 
-        $this->_masterFiles[] = $kwfPath.'/config.ini';
         parent::__construct($kwfPath.'/config.ini', $kwfSection,
                         array('allowModifications'=>true));
 
         $this->_mergeWebConfig($section, $webPath);
-    }
-
-    public function getMasterFiles()
-    {
-        return $this->_masterFiles;
     }
 
     public function getSection()
@@ -212,11 +196,9 @@ class Kwf_Config_Web extends Kwf_Config_Ini
 
         $webSection = $this->_getWebSection($section, $webPath.'/config.ini');
 
-        $this->_masterFiles[] = $webPath.'/config.ini';
         self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.ini', $webSection));
         if (file_exists($webPath.'/config.local.ini') && filesize($webPath.'/config.local.ini')) {
             $webSection = $this->_getWebSection($section, $webPath.'/config.local.ini');
-            $this->_masterFiles[] = $webPath.'/config.local.ini';
             self::mergeConfigs($this, new Kwf_Config_Ini($webPath.'/config.local.ini', $webSection));
         }
     }
