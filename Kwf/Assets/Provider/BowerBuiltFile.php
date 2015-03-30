@@ -18,7 +18,7 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
     public function getDependency($dependencyName)
     {
         $ret = null;
-        if (strtolower($dependencyName) == $this->_path || strtolower($dependencyName).'.js' == $this->_path) {
+        if (strtolower($dependencyName) == strtolower($this->_path) || strtolower($dependencyName).'.js' == strtolower($this->_path)) {
             $dir = VENDOR_PATH.'/bower_components/'.$this->_path;
             $path = $this->_path;
             if (substr($path, -3) == '.js') $path = substr($path, 0, -3);
