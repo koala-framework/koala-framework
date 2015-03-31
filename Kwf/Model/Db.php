@@ -16,6 +16,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     private $_importBuffer;
     private $_importBufferOptions;
+    private $_bufferLogFileName;
 
     public function __construct($config = array())
     {
@@ -1267,6 +1268,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                     $this->_importBufferOptions = $options;
                     $this->_importBuffer = $data;
                 }
+                if ($this->_getBufferLogFileName()) {
+                    file_put_contents($this->_getBufferLogFileName(), count($this->_importBuffer));
+                }
                 if ($options['buffer'] !== true && count($this->_importBuffer) > $options['buffer']) {
                     $this->writeBuffer();
                 }
@@ -1297,11 +1301,34 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $ret;
     }
 
+    private function _getBufferLogFileName()
+    {
+        if (!isset($this->_bufferLogFileName)) {
+            if (Kwf_Config::getValue('debug.dbBuffer')) {
+                foreach (glob('cache/model/db-buffer-*') as $i) {
+                    $time = (int)substr($i, 15);
+                    if (time() - $time > 15) {
+                        $bufferSize = file_get_contents($i);
+                        $e = new Kwf_Exception("Not written import buffer with size '$bufferSize' found (age: ".(time()-$time)."): '$i'");
+                        $e->logOrThrow();
+                    }
+                }
+                $this->_bufferLogFileName = 'cache/model/db-buffer-'.time().'-'.uniqid();
+            } else {
+                $this->_bufferLogFileName = false;
+            }
+        }
+        return $this->_bufferLogFileName;
+    }
+
     public function writeBuffer()
     {
         parent::writeBuffer();
         if (isset($this->_importBuffer)) {
             $this->_importArray($this->_importBuffer, $this->_importBufferOptions);
+            if ($this->_getBufferLogFileName()) {
+                unlink($this->_getBufferLogFileName());
+            }
             unset($this->_importBuffer);
             unset($this->_importBufferOptions);
         }
