@@ -22,8 +22,6 @@ abstract class Kwf_Test_Kwc_TestCase extends Kwf_Test_TestCase
         if (function_exists('apc_clear_cache')) apc_clear_cache('user');
         Kwf_Component_Cache_Memory::getInstance()->_clean();
         Kwf_Cache_Simple::resetZendCache();
-        Kwf_Registry::get('config')->debug->componentCache->disable = false;
-        Kwf_Config::deleteValueCache('debug.componentCache.disable');
         Kwc_FulltextSearch_MetaModel::setInstance(new Kwf_Model_FnF(array(
             'primaryKey' => 'page_id',
         )));

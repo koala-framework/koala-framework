@@ -20,7 +20,7 @@ abstract class Kwf_Component_Renderer_Abstract
 
     public function __construct()
     {
-        $this->_enableCache = !Kwf_Config::getValue('debug.componentCache.disable');
+        $this->_enableCache = true;
         if (Kwf_Component_Data_Root::getShowInvisible()) {
             $this->_enableCache = false;
         }
