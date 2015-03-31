@@ -11,11 +11,10 @@
     z-index: 11;
     background: #000000;
     visibility: hidden;
-    @include opacity(0);
+    @include opacity(0.7);
 
     &.visible {
         visibility: visible;
-        @include opacity(0.7);
     }
     &.notBody {
         position: absolute;
