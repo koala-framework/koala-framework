@@ -7,6 +7,5 @@ class Kwc_Feedback_Model extends Kwf_Model_Db
     {
         parent::_init();
         $this->_referenceMap['User'] = 'user_id->' . Kwf_Registry::get('config')->user->model;
-        $this->_exprs['user_email'] = new Kwf_Model_Select_Expr_Parent('User', 'email');
     }
 }
