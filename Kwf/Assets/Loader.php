@@ -90,7 +90,6 @@ class Kwf_Assets_Loader
                         call_user_func(array('Kwf_Assets_Effects', $i), $im, $params);
                     }
                     $cacheData['mtime'] = $file->getMTime();
-                    $cacheData['mtimeFiles'] = array($file->getAbsoluteFileName());
                     $cacheData['contents'] = $im->getImagesBlob();;
                     $im->destroy();
                     $cache->save($cacheData, $cacheId);

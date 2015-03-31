@@ -111,8 +111,7 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             $size = 'default';
         }
 
-        static $cache = null;
-        if (!$cache) $cache = new Kwf_Assets_Cache(array('checkComponentSettings'=>false));
+        $cache = Kwf_Assets_Cache::getInstance();
         $cacheId = $size.'_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();
