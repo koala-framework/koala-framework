@@ -14,10 +14,12 @@ abstract class Kwf_Rest_Controller extends Zend_Rest_Controller
         }
 
         if (Kwf_Util_SessionToken::getSessionToken()) {
-            if (!$this->_getParam('kwfSessionToken')) {
-                throw new Kwf_Exception("Missing sessionToken parameter");
+            if (!$this->_getParam('kwfSessionToken') && !$this->getRequest()->getHeader('X-Kwf-Session-Token')) {
+                throw new Kwf_Exception("Missing sessionToken parameter or X-Kwf-Session-Token header");
             }
-            if ($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken()) {
+            if (($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken())
+                &&  ($this->getRequest()->getHeader('X-Kwf-Session-Token') != Kwf_Util_SessionToken::getSessionToken())
+            ) {
                 throw new Kwf_Exception("Invalid kwfSessionToken");
             }
         }
