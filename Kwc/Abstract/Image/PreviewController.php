@@ -23,7 +23,7 @@ class Kwc_Abstract_Image_PreviewController extends Kwf_Controller_Action
         }
         //Scale dimensions
         $dimensions = array($previewWidth, $previewHeight, 'cover' => false);
-        $cache = new Kwf_Assets_Cache(array('checkComponentSettings'=>false));
+        $cache = Kwf_Assets_Cache::getInstance();
         $cacheId = 'previewLarge_'.$fileRow->id;
         if (!$output = $cache->load($cacheId)) {
             $output = array();

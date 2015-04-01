@@ -7,7 +7,6 @@ class Kwc_Mail_Placeholder_Test extends Kwc_TestAbstract
     public function setUp()
     {
         parent::setUp('Kwc_Mail_Placeholder_Mail_Component');
-        Kwf_Registry::get('config')->debug->componentCache->disable = true;
     }
 
     public function testMail()

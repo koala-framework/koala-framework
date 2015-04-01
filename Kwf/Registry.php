@@ -11,10 +11,6 @@ class Kwf_Registry extends Zend_Registry
             $v = Kwf_Config_Web::getInstance();
             $this->offsetSet('config', $v);
             return $v;
-        } else if ($index == 'configMtime' && !parent::offsetExists($index)) {
-            $v = Kwf_Config_Web::getInstanceMtime(self::get('config')->getSection());
-            $this->offsetSet('configMtime', $v);
-            return $v;
         } else if ($index == 'dao' && !parent::offsetExists($index)) {
             $v = Kwf_Setup::createDao();
             $this->offsetSet('dao', $v);
@@ -44,7 +40,7 @@ class Kwf_Registry extends Zend_Registry
 
     public function offsetExists($index)
     {
-        if (in_array($index, array('db', 'config', 'configMtime', 'dao', 'acl', 'userModel', 'trl', 'hlp'))) {
+        if (in_array($index, array('db', 'config', 'dao', 'acl', 'userModel', 'trl', 'hlp'))) {
             return true;
         }
         return parent::offsetExists($index);

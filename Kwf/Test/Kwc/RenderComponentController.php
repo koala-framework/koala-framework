@@ -3,7 +3,6 @@ class Kwf_Test_Kwc_RenderComponentController extends Zend_Controller_Action
 {
     public function indexAction()
     {
-//         Zend_Registry::get('config')->debug->componentCache->disable = true;
         Zend_Registry::set('db', false);
         Kwf_Test_SeparateDb::setDbFromCookie(); // setzt es nur wenn es das cookie wirklich gibt
 

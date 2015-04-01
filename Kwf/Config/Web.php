@@ -57,7 +57,6 @@ class Kwf_Config_Web extends Kwf_Config_Ini
 
         Kwf_Config_Web::clearInstances();
         Kwf_Registry::set('config', $config);
-        Kwf_Registry::set('configMtime', Kwf_Config_Cache::getInstance()->test($cacheId));
     }
 
     public static function getInstanceMtime($section)
