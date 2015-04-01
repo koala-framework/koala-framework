@@ -1,8 +1,18 @@
 <? if ($this->pages) { ?>
     <? if ($this->baseUrl) { ?>
-        <a class="frontendLink" href="<?=$this->baseUrl;?>">Frontend</a>
+        <a class="frontendLink" href="/">
+            <div class="innerFrontendLink">
+                <div class="front"><?=trlKwf('Go to<br>Website');?></div>
+                <div class="back"></div>
+            </div>
+        </a>
     <? } else { ?>
-        <a class="frontendLink" href="/">Frontend</a>
+        <a class="frontendLink" href="/">
+            <div class="innerFrontendLink">
+                <div class="front"><?=trlKwf('Go to<br>Website');?></div>
+                <div class="back"></div>
+            </div>
+        </a>
     <? } ?>
 <? } ?>
 <div class="content">
