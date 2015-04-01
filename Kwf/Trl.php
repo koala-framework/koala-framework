@@ -166,7 +166,7 @@ function trlcpKwfStatic($context, $single, $plural, $text = array()) {
  */
 class Kwf_Trl
 {
-    private $_cache = array();
+    private $_trlElements = array();
 
     private $_languages; //cache
     private $_useUserLanguage = true;
@@ -378,23 +378,23 @@ class Kwf_Trl
         return is_array($placeolders) ? $placeolders : array($placeolders);
     }
 
-    public function clearCache()
+    public function unsetTrlElements()
     {
-        $this->_cache = array();
+        $this->_trlElements = array();
     }
 
-    public function setCache($cache)
+    public function setTrlElements($trlElements)
     {
-        $this->_cache = $cache;
+        $this->_trlElements = $trlElements;
     }
 
-    public function _loadCache($source, $target, $plural)
+    public function _loadTrlElements($source, $target, $plural)
     {
         if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
         else $codeLanguage = "en";
 
         if ($codeLanguage == $target) {
-            $this->_cache[$source][$target] = array();
+            $this->_trlElements[$source][$target] = array();
             return;
         }
 
@@ -404,7 +404,7 @@ class Kwf_Trl
         } else {
             throw new Kwf_Exception("$buildFileName was not created in build");
         }
-        $this->_cache[$source][$target.($plural ? '_plural' : '')] = $c;
+        $this->_trlElements[$source][$target.($plural ? '_plural' : '')] = $c;
         return $c;
     }
 
@@ -424,11 +424,11 @@ class Kwf_Trl
             return $ret;
         }
 
-        if (!isset($this->_cache[$source][$target])) {
-            $this->_loadCache($source, $target, false);
+        if (!isset($this->_trlElements[$source][$target])) {
+            $this->_loadTrlElements($source, $target, false);
         }
-        if (isset($this->_cache[$source][$target][$needle.'-'.$context])) {
-            $ret = $this->_cache[$source][$target][$needle.'-'.$context];
+        if (isset($this->_trlElements[$source][$target][$needle.'-'.$context])) {
+            $ret = $this->_trlElements[$source][$target][$needle.'-'.$context];
         } else {
             $ret = $needle;
         }
@@ -448,11 +448,11 @@ class Kwf_Trl
             return $ret;
         }
 
-        if (!isset($this->_cache[$source][$target.'_plural'])) {
-            $this->_loadCache($source, $target, true);
+        if (!isset($this->_trlElements[$source][$target.'_plural'])) {
+            $this->_loadTrlElements($source, $target, true);
         }
-        if (isset($this->_cache[$source][$target.'_plural'][$plural.'-'.$context])) {
-            $ret = $this->_cache[$source][$target.'_plural'][$plural.'-'.$context];
+        if (isset($this->_trlElements[$source][$target.'_plural'][$plural.'-'.$context])) {
+            $ret = $this->_trlElements[$source][$target.'_plural'][$plural.'-'.$context];
         } else {
             $ret = $plural;
         }

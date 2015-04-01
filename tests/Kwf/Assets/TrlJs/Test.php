@@ -3,11 +3,11 @@ class Kwf_Assets_TrlJs_Test extends Kwf_Test_TestCase
 {
     public function setUp()
     {
-        $cache = array();
-        $cache['kwf']['de']['Yes-'] = 'Ja';
-        $cache['kwf']['de']['.-decimal separator'] = ',';
-        $cache['kwf']['de'][',-thousands separator'] = '.';
-        Kwf_Trl::getInstance()->setCache($cache);
+        $trlElements = array();
+        $trlElements['kwf']['de']['Yes-'] = 'Ja';
+        $trlElements['kwf']['de']['.-decimal separator'] = ',';
+        $trlElements['kwf']['de'][',-thousands separator'] = '.';
+        Kwf_Trl::getInstance()->setTrlElements($trlElements);
     }
 
     public function testIt()

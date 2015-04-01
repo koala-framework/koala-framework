@@ -6,10 +6,10 @@ class Kwf_Form_NumberField_PhpTest extends Kwf_Test_TestCase
 {
     public function setUp()
     {
-        $cache = array();
-        $cache['kwf']['de']['.-decimal separator'] = ',';
-        $cache['kwf']['de']['C-locale'] = 'de_AT.UTF-8, de.UTF-8, de_DE.UTF-8';
-        Kwf_Trl::getInstance()->setCache($cache);
+        $trlElements = array();
+        $trlElements['kwf']['de']['.-decimal separator'] = ',';
+        $trlElements['kwf']['de']['C-locale'] = 'de_AT.UTF-8, de.UTF-8, de_DE.UTF-8';
+        Kwf_Trl::getInstance()->setTrlElements($trlElements);
     }
 
     public function testValuesFrontendEn()

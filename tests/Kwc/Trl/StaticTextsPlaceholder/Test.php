@@ -12,19 +12,19 @@ class Kwc_Trl_StaticTextsPlaceholder_Test extends Kwc_TestAbstract
         Kwf_Trl::getInstance()->setWebCodeLanguage('de');
         parent::setUp('Kwc_Trl_StaticTextsPlaceholder_Root');
 
-        $cache = array();
-        $cache['web']['en'] = array();
-        $cache['web']['en_plural'] = array();
-        $cache['web']['en']['Sichtbar-'] = 'Visible';
-        $cache['web']['en']['Am-time'] = 'On';
-        $cache['web']['en']['Antwort-'] = 'reply';
-        $cache['web']['en_plural']['Antworten-'] = 'replies';
-        $cache['web']['en']['Antwort-test'] = 'reply';
-        $cache['web']['en_plural']['Antworten-test'] = 'replies';
-        $cache['kwf']['de'] = array();
-        $cache['kwf']['de_plural'] = array();
+        $trlElements = array();
+        $trlElements['web']['en'] = array();
+        $trlElements['web']['en_plural'] = array();
+        $trlElements['web']['en']['Sichtbar-'] = 'Visible';
+        $trlElements['web']['en']['Am-time'] = 'On';
+        $trlElements['web']['en']['Antwort-'] = 'reply';
+        $trlElements['web']['en_plural']['Antworten-'] = 'replies';
+        $trlElements['web']['en']['Antwort-test'] = 'reply';
+        $trlElements['web']['en_plural']['Antworten-test'] = 'replies';
+        $trlElements['kwf']['de'] = array();
+        $trlElements['kwf']['de_plural'] = array();
 
-        Kwf_Trl::getInstance()->setCache($cache);
+        Kwf_Trl::getInstance()->setTrlElements($trlElements);
     }
 
     public function tearDown()
