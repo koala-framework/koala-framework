@@ -109,7 +109,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     public function getFilters()
     {
         if (is_string($this->_filters)) $this->_filters = array($this->_filters);
-        foreach($this->_filters as $k=>$f) {
+        foreach ($this->_filters as $k=>$f) {
             if (is_int($k)) {
                 unset($this->_filters[$k]);
                 $k = $f;
@@ -1086,8 +1086,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
             foreach ($model->_columnMappings as $map=>$columns) {
                 do {
-                    if (isset($model->_columnMappings[$map])) {
-                        return $model->_columnMappings[$map];
+                    if (isset($model->_columnMappings[$mapping])) {
+                        return $model->_columnMappings[$mapping];
                     }
                 } while ($map = get_parent_class($map));
             }
