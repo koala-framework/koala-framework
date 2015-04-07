@@ -8,7 +8,7 @@ class Kwc_Newsletter_Detail_SubscriberData extends Kwf_Data_Abstract
                 return $row->getMailFirstname();
             } else if ($this->getFieldname() == 'lastname') {
                 return $row->getMailLastname();
-            } else if ($this->getFieldname() == 'lastname') {
+            } else if ($this->getFieldname() == 'email') {
                 return $row->getMailEmail();
             }
         }
