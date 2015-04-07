@@ -71,7 +71,7 @@ class Kwc_Newsletter_Detail_StatisticsController extends Kwf_Controller_Action_A
             'percent' => '',
         );
         $sql = "
-            SELECT r.value, r.type, r.title, count(*) c
+            SELECT r.value, r.type, r.title, count(DISTINCT(s.recipient_id)) c
             FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
             WHERE s.redirect_id=r.id AND mail_component_id=?
             GROUP BY redirect_id
