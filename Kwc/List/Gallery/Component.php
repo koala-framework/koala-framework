@@ -36,7 +36,8 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         $ret['imagesPerLine'] = $this->_getGalleryColumns();
         if (!$ret['imagesPerLine']) $ret['imagesPerLine'] = 1;
         $ret['downloadAll'] = $this->getData()->getChildComponent('-downloadAll');
-        if ($this->_getGalleryColumns() <= $showPics && count($ret['children']) <= $showPics) {
+
+        if (($this->_getGalleryColumns() <= $showPics || $ret['imagesPerLine'] >= $showPics) && count($ret['children']) <= $showPics) {
             $ret['showPics'] = null;
         } else {
             $ret['showPics'] = $showPics;
