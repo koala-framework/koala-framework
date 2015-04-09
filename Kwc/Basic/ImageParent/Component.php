@@ -39,7 +39,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
 
-        $ret['style'] = 'max-width:'.$ret['width'].'px;';
+        if (isset($ret['width'])) $ret['style'] = 'max-width:'.$ret['width'].'px;';
         if ($this->_getSetting('defineWidth')) $ret['style'] .= 'width:'.$ret['width'].'px;';
 
         $ret['containerClass'] = 'container';
