@@ -12,6 +12,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
 
         $ret['loadMoreBufferPx'] = 700; //if false infinite scrolling is disabled, you still can call loadMore() manually
         $ret['loadDetailAjax'] = true; //true by default - the detail will be loaded via ajax
+        $ret['ajaxItemLimit'] = 20;
         $ret['partialClass'] = 'Kwf_Component_Partial_Id';
 
         return $ret;
@@ -31,6 +32,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
             ),
             'loadMoreBufferPx' => $this->_getSetting('loadMoreBufferPx'),
             'loadDetailAjax' => $this->_getSetting('loadDetailAjax'),
+            'ajaxItemLimit' => $this->_getSetting('ajaxItemLimit'),
         );
         $itemDir = $this->getData()->parent->getComponent()->getItemDirectory();
         if (is_string($itemDir)) {
