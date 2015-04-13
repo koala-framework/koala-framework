@@ -103,7 +103,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
     controllerUrl: null,
     loadMoreBufferPx: 700,
-    ajaxItemLimit: 20,
+    initialPageSize: null,
 
     addHistoryEntryTimer: 0,
 
@@ -309,15 +309,13 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
     loadMore: function()
     {
-        var kwfViewAjaxItems = this.$el.find('.kwfViewAjaxItem').length;
-        var countPages = Math.ceil(kwfViewAjaxItems / this.ajaxItemLimit);
-        if (kwfViewAjaxItems < (this.ajaxItemLimit*countPages) || this.loadingMore || this.visibleDetail) return;
+        if (this.$el.find('.kwfViewAjaxItem').length<this.initialPageSize || this.loadingMore || this.visibleDetail) return;
 
         this.loadingMore = true;
         this.$el.addClass('loadingMore');
         var params = $.extend({
-            start: kwfViewAjaxItems,
-            limit: this.ajaxItemLimit
+            start: this.$el.find('.kwfViewAjaxItem').length,
+            limit: 10
         }, this.baseParams);
         $.ajax({
             data: params,
@@ -341,7 +339,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             params.start = 0;
         }
         if (!params.limit) {
-            params.limit = this.ajaxItemLimit;
+            params.limit = this.initialPageSize;
         }
         $.extend(params, this.baseParams);
 
