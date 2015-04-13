@@ -43,8 +43,11 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
             $ret['config']['directoryComponentClass'] = $itemDir->componentClass;
         }
 
+
         $paging = $this->getData()->getChildComponent('-paging');
-        $ret['config']['initialPageSize'] = Kwc_Abstract::getSetting($paging->componentClass, 'pagesize');
+        if (isset($paging)) {
+            $ret['config']['initialPageSize'] = Kwc_Abstract::getSetting($paging->componentClass, 'pagesize');
+        }
 
         return $ret;
     }
