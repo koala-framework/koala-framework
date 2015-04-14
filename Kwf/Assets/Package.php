@@ -177,6 +177,13 @@ class Kwf_Assets_Package
         if ($ret === false || $ret === 'outdated') {
             if ($ret === 'outdated' && Kwf_Config::getValue('assets.lazyBuild') == 'outdated') {
                 Kwf_Assets_BuildCache::getInstance()->building = true;
+            } else if (Kwf_Config::getValue('assets.lazyBuild') !== true) {
+                if (Kwf_Exception_Abstract::isDebug()) {
+                    //proper error message on development server
+                    throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please include package in build.");
+                } else {
+                    throw new Kwf_Exception_NotFound();
+                }
             }
             $ret = $this->getPackageContents($mimeType, $language, $partNumber);
             Kwf_Assets_BuildCache::getInstance()->building = false;
