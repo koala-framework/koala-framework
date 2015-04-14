@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6903963be1fe0146b31945fb9bed1045",
+    "hash": "742337fc55784e95ca07aaa967f8de8d",
     "packages": [
         {
             "name": "koala-framework/composer-extra-assets",
@@ -258,16 +258,16 @@
         },
         {
             "name": "koala-framework/library-swfupload",
-            "version": "v2.2.0.1",
+            "version": "v2.2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/library-swfupload.git",
-                "reference": "7eb7c5c2a7a0d7144c2acd35131367c8fcb6683c"
+                "reference": "72c8bd35d50cc7fb85603a2ec77e5699e9e00da2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/library-swfupload/zipball/7eb7c5c2a7a0d7144c2acd35131367c8fcb6683c",
-                "reference": "7eb7c5c2a7a0d7144c2acd35131367c8fcb6683c",
+                "url": "https://api.github.com/repos/koala-framework/library-swfupload/zipball/72c8bd35d50cc7fb85603a2ec77e5699e9e00da2",
+                "reference": "72c8bd35d50cc7fb85603a2ec77e5699e9e00da2",
                 "shasum": ""
             },
             "require": {
@@ -280,7 +280,7 @@
             ],
             "description": "SWFUpload JavaScript Library",
             "homepage": "http://code.google.com/p/swfupload/",
-            "time": "2014-06-02 08:22:41"
+            "time": "2015-04-01 10:23:10"
         },
         {
             "name": "koala-framework/sourcemaps",
@@ -363,16 +363,16 @@
         },
         {
             "name": "mouf/nodejs-installer",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/nodejs-installer.git",
-                "reference": "aef43666f68f676e414f3e2e791b524baadbb6c9"
+                "reference": "f16187efd7b8b7160a4f718c852af2933ca003c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thecodingmachine/nodejs-installer/zipball/aef43666f68f676e414f3e2e791b524baadbb6c9",
-                "reference": "aef43666f68f676e414f3e2e791b524baadbb6c9",
+                "url": "https://api.github.com/repos/thecodingmachine/nodejs-installer/zipball/f16187efd7b8b7160a4f718c852af2933ca003c8",
+                "reference": "f16187efd7b8b7160a4f718c852af2933ca003c8",
                 "shasum": ""
             },
             "require": {
@@ -415,7 +415,7 @@
                 "nodejs",
                 "npm"
             ],
-            "time": "2015-03-24 14:31:17"
+            "time": "2015-04-12 16:32:03"
         },
         {
             "name": "psr/log",
@@ -457,17 +457,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.6.5",
+            "version": "v2.6.6",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "53f86497ccd01677e22435cfb7262599450a90d1"
+                "reference": "5b91dc4ed5eb08553f57f6df04c4730a73992667"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/53f86497ccd01677e22435cfb7262599450a90d1",
-                "reference": "53f86497ccd01677e22435cfb7262599450a90d1",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/5b91dc4ed5eb08553f57f6df04c4730a73992667",
+                "reference": "5b91dc4ed5eb08553f57f6df04c4730a73992667",
                 "shasum": ""
             },
             "require": {
@@ -511,11 +511,11 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-13 17:37:22"
+            "time": "2015-03-30 15:54:10"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.6.5",
+            "version": "v2.6.6",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
@@ -574,17 +574,17 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v2.6.5",
+            "version": "v2.6.6",
             "target-dir": "Symfony/Component/Finder",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "bebc7479c566fa4f14b9bcef9e32e719eabec74e"
+                "reference": "5dbe2e73a580618f5b4880fda93406eed25de251"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/bebc7479c566fa4f14b9bcef9e32e719eabec74e",
-                "reference": "bebc7479c566fa4f14b9bcef9e32e719eabec74e",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/5dbe2e73a580618f5b4880fda93406eed25de251",
+                "reference": "5dbe2e73a580618f5b4880fda93406eed25de251",
                 "shasum": ""
             },
             "require": {
@@ -620,21 +620,21 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-12 10:28:44"
+            "time": "2015-03-30 15:54:10"
         },
         {
             "name": "symfony/process",
-            "version": "v2.6.5",
+            "version": "v2.6.6",
             "target-dir": "Symfony/Component/Process",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "4d717f34f3d1d6ab30fbe79f7132960a27f4a0dc"
+                "reference": "a8bebaec1a9dc6cde53e0250e32917579b0be552"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/4d717f34f3d1d6ab30fbe79f7132960a27f4a0dc",
-                "reference": "4d717f34f3d1d6ab30fbe79f7132960a27f4a0dc",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/a8bebaec1a9dc6cde53e0250e32917579b0be552",
+                "reference": "a8bebaec1a9dc6cde53e0250e32917579b0be552",
                 "shasum": ""
             },
             "require": {
@@ -670,7 +670,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-12 10:28:44"
+            "time": "2015-03-30 15:54:10"
         },
         {
             "name": "twig/twig",
@@ -844,31 +844,33 @@
         },
         {
             "name": "phpunit/php-file-iterator",
-            "version": "1.3.4",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
-                "reference": "acd690379117b042d1c8af1fafd61bde001bf6bb"
+                "reference": "a923bb15680d0089e2316f7a4af8f437046e96bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/acd690379117b042d1c8af1fafd61bde001bf6bb",
-                "reference": "acd690379117b042d1c8af1fafd61bde001bf6bb",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/a923bb15680d0089e2316f7a4af8f437046e96bb",
+                "reference": "a923bb15680d0089e2316f7a4af8f437046e96bb",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4.x-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
-                    "File/"
+                    "src/"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                ""
-            ],
             "license": [
                 "BSD-3-Clause"
             ],
@@ -885,7 +887,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2013-10-10 15:34:57"
+            "time": "2015-04-02 05:19:05"
         },
         {
             "name": "phpunit/php-text-template",
@@ -1268,16 +1270,16 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "5843509fed39dee4b356a306401e9dd1a931fec7"
+                "reference": "863df9687835c62aa423a22412d26fa2ebde3fd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/5843509fed39dee4b356a306401e9dd1a931fec7",
-                "reference": "5843509fed39dee4b356a306401e9dd1a931fec7",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/863df9687835c62aa423a22412d26fa2ebde3fd3",
+                "reference": "863df9687835c62aa423a22412d26fa2ebde3fd3",
                 "shasum": ""
             },
             "require": {
@@ -1289,7 +1291,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2-dev"
+                    "dev-master": "1.3-dev"
                 }
             },
             "autoload": {
@@ -1316,7 +1318,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2014-08-15 10:29:00"
+            "time": "2015-02-22 15:13:53"
         },
         {
             "name": "sebastian/exporter",
@@ -1439,17 +1441,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.6.5",
+            "version": "v2.6.6",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "0cd8e72071e46e15fc072270ae39ea1b66b10a9d"
+                "reference": "174f009ed36379a801109955fc5a71a49fe62dd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/0cd8e72071e46e15fc072270ae39ea1b66b10a9d",
-                "reference": "0cd8e72071e46e15fc072270ae39ea1b66b10a9d",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/174f009ed36379a801109955fc5a71a49fe62dd4",
+                "reference": "174f009ed36379a801109955fc5a71a49fe62dd4",
                 "shasum": ""
             },
             "require": {
@@ -1485,7 +1487,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-12 10:28:44"
+            "time": "2015-03-30 15:54:10"
         }
     ],
     "aliases": [],
