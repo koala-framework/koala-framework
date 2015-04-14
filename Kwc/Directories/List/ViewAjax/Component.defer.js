@@ -366,6 +366,8 @@ Kwc.Directories.List.ViewAjax.prototype = {
     hideDetail: function()
     {
         if (this.detailEl) {
+            this.detailEl.hide();
+            Kwf.callOnContentReady(this.detailEl, {action: 'hide'});
             this.detailEl.remove();
             this.detailEl = null;
         }
