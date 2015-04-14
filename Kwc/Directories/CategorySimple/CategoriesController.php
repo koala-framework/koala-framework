@@ -1,7 +1,6 @@
 <?php
 class Kwc_Directories_CategorySimple_CategoriesController extends Kwf_Controller_Action_Auto_Synctree
 {
-    protected $_model = 'Kwc_Directories_CategorySimple_CategoriesModel';
     protected $_textField = 'name';
     protected $_editDialog = array(
         'width' => 400,
@@ -9,7 +8,19 @@ class Kwc_Directories_CategorySimple_CategoriesController extends Kwf_Controller
     );
     protected $_buttons = array('add', 'edit', 'delete');
 
-    protected function _init() {
+    public function preDispatch()
+    {
+        $categoryToItemModel = Kwf_Model_Abstract::getInstance(
+            Kwc_Abstract::getSetting($this->_getParam('class'), 'categoryToItemModelName')
+        );
+        $this->_model = $categoryToItemModel->getReferencedModel('Category');
+
+        parent::preDispatch();
+    }
+
+
+    protected function _init()
+    {
         $this->_editDialog['controllerUrl'] =
             Kwc_Admin::getInstance($this->_getParam('class'))->getControllerUrl('Category');
     }
