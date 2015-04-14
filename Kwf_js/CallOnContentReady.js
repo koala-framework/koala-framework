@@ -17,44 +17,6 @@ var onReadyIsCalling = false; //true while callOnContentReady is processing onRe
 var onReadyElQueue = []; //queue for onElementReady/Show/Hide/WidthChange calls
 var elCacheBySelector = {};
 
-if (!Kwf.isApp) {
-    $(document).ready(function() {
-        if (!document.body) {
-            //this happens if a redirect by changing location in JS is done
-            //in that case no contentReady needs to be called
-            return;
-        }
-        var t = Kwf.Utils.BenchmarkBox.now();
-        if (enableOnReadyConsoleProfile) console.profile("callOnContentReady body");
-        onReadyState = 'callNonDefer';
-        Kwf.callOnContentReady(document.body, { action: 'render' });
-        onReadyState = 'calledNonDefer';
-        if (enableOnReadyConsoleProfile) console.profileEnd();
-        Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
-        Kwf.Utils.BenchmarkBox.create({
-            counters: Kwf._onReadyStats,
-            type: 'onReady'
-        });
-        setTimeout(function() {
-            deferredStart = Kwf.Utils.BenchmarkBox.now();
-            if (enableOnReadyConsoleProfile) console.profile("callOnContentReady body deferred");
-            onReadyState = 'callDefer';
-            Kwf.callOnContentReady(document.body, { action: 'render' });
-            onReadyState = 'calledDefer';
-        }, 10);
-
-        var timeoutId;
-        $(window).resize(function() {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
-            timeoutId = setTimeout(function() {
-                Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
-            }, 100);
-        });
-    });
-}
-
 /**
  * Register a function that will be called when content is loaded or shown
  * @param callback function (passed arguments: el, options (newRender=bool))
@@ -379,5 +341,44 @@ Kwf.callOnContentReady = function(renderedEl, options)
     }
 
 };
+
+
+if (!Kwf.isApp) {
+    $(document).ready(function() {
+        if (!document.body) {
+            //this happens if a redirect by changing location in JS is done
+            //in that case no contentReady needs to be called
+            return;
+        }
+        var t = Kwf.Utils.BenchmarkBox.now();
+        if (enableOnReadyConsoleProfile) console.profile("callOnContentReady body");
+        onReadyState = 'callNonDefer';
+        Kwf.callOnContentReady(document.body, { action: 'render' });
+        onReadyState = 'calledNonDefer';
+        if (enableOnReadyConsoleProfile) console.profileEnd();
+        Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
+        Kwf.Utils.BenchmarkBox.create({
+            counters: Kwf._onReadyStats,
+            type: 'onReady'
+        });
+        setTimeout(function() {
+            deferredStart = Kwf.Utils.BenchmarkBox.now();
+            if (enableOnReadyConsoleProfile) console.profile("callOnContentReady body deferred");
+            onReadyState = 'callDefer';
+            Kwf.callOnContentReady(document.body, { action: 'render' });
+            onReadyState = 'calledDefer';
+        }, 10);
+
+        var timeoutId;
+        $(window).resize(function() {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            timeoutId = setTimeout(function() {
+                Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
+            }, 100);
+        });
+    });
+}
 
 })();
