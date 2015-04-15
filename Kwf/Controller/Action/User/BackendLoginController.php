@@ -72,7 +72,11 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $adapter->setCredential($row->password);
         $result = $auth->authenticate($adapter);
         if ($result->isValid()) {
-            $this->redirect($this->getRequest()->getPathInfo());
+            $redirectUrl = $this->getRequest()->getPathInfo();
+            if ($this->_getParam('redirect') && substr($this->_getParam('redirect'), 0, 1) == '/') {
+                $redirectUrl = $this->_getParam('redirect');
+            }
+            $this->redirect($redirectUrl);
         } else {
             $errors = $this->getRequest()->getParam('formErrors');
             foreach ($result->getMessages() as $msg) {

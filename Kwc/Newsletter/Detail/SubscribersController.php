@@ -34,7 +34,7 @@ class Kwc_Newsletter_Detail_SubscribersController extends Kwf_Controller_Action_
         }
         $mailComponent = $this->_getMailComponent();
         $rs = $mailComponent->getComponent()->getRecipientSources();
-        foreach(array_keys($rs) as $key) {
+        foreach (array_keys($rs) as $key) {
             if (isset($rs[$key]['select']) && ($rs[$key]['model'] == get_class($this->_getModel()))) {
                 $ret->merge($rs[$key]['select']);
             }
@@ -47,9 +47,12 @@ class Kwc_Newsletter_Detail_SubscribersController extends Kwf_Controller_Action_
         parent::_initColumns();
         $columns = $this->_columns;
         $columns->add(new Kwf_Grid_Column('id'));
-        $columns->add(new Kwf_Grid_Column('firstname'));
-        $columns->add(new Kwf_Grid_Column('lastname'));
-        $columns->add(new Kwf_Grid_Column('email'));
+        $columns->add(new Kwf_Grid_Column('firstname'))
+            ->setData(new Kwc_Newsletter_Detail_SubscriberData());
+        $columns->add(new Kwf_Grid_Column('lastname'))
+            ->setData(new Kwc_Newsletter_Detail_SubscriberData());
+        $columns->add(new Kwf_Grid_Column('email'))
+            ->setData(new Kwc_Newsletter_Detail_SubscriberData());
     }
 
     protected function _getMailComponent()

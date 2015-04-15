@@ -14,6 +14,5 @@ class Kwc_Directories_CategorySimple_CategoriesModel extends Kwf_Model_Tree
     protected function _init()
     {
         parent::_init();
-        $this->_exprs['count_categories'] = new Kwf_Model_Select_Expr_Child_Count('Categories');
     }
 }

@@ -25,7 +25,7 @@
         <div class="<?=$class;?>">
             <?=$this->component($child);?>
         </div>
-        <? if ($i == count($this->children)-1 && count($this->children) > $this->showPics) { ?>
+        <? if ($i == count($this->children)-1 && $this->showPics) { ?>
             </div>
         <? } ?>
         <?

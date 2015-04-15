@@ -197,7 +197,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
                 'message' => $e->getMessage()
             );
         } else {
-            if (!$e instanceof Kwf_Exception_Abstract) $e = new Kwf_Exception_Other($e);
+            if (!$e instanceof Kwf_Exception) $e = new Kwf_Exception_Other($e);
             $e->logOrThrow();
             $this->_errors[] = array(
                 'message' => trlKwf('An error occured while processing the form. Please try to submit again later.')

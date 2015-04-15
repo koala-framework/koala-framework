@@ -11,7 +11,7 @@ Kwf.onContentReady(function(readyEl, param) {
                     url: Kwf.getKwcRenderUrl(),
                     success: function(response, options) {
                         this.replaceWith({ html: response.responseText });
-                        Kwf.callOnContentReady(this, {newRender: true});
+                        Kwf.callOnContentReady(this.dom, {newRender: true});
                     },
                     scope: el
                 });

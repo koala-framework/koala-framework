@@ -7,7 +7,7 @@ var deferredImages = [];
 Kwf.Utils.ResponsiveImg = function (selector) {
     Kwf.onJElementWidthChange(selector, function responsiveImg(el) {
         if (el.hasClass('loadImmediately') || isElementInView(el)) {
-            if (!el.data('responsiveImgInitDone')) {
+            if (!el[0].responsiveImgInitDone) {
                 initResponsiveImgEl(el);
             } else {
                 checkResponsiveImgEl(el);
@@ -70,7 +70,7 @@ function getResponsiveWidthSteps(minWidth, maxWidth) {
 function initResponsiveImgEl(el) {
     var elWidth = Kwf.Utils.Element.getCachedWidth(el);
     if (elWidth == 0) return;
-    el.data('responsiveImgInitDone', true);
+    el[0].responsiveImgInitDone = true; //don't save as el.data to avoid getting it copied when cloning elements
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
     var baseUrl = el.data("src");
     var minWidth = parseInt(el.data("minWidth"));
