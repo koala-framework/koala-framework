@@ -39,16 +39,23 @@ abstract class Kwf_Assets_Dependency_Abstract
 
     public function setDependencies($type, $deps)
     {
+        foreach ($deps as $dep) {
+            if (!$dep) throw new Kwf_Exception("Not a valid dependency");
+        }
         $this->_dependencies[$type] = $deps;
     }
     public function addDependencies($type, $deps)
     {
+        foreach ($deps as $dep) {
+            if (!$dep) throw new Kwf_Exception("Not a valid dependency");
+        }
         if (!isset($this->_dependencies[$type])) $this->_dependencies[$type] = array();
         $this->_dependencies[$type] = array_merge($this->_dependencies[$type], $deps);
     }
 
     public function addDependency($type, $dep)
     {
+        if (!$dep) throw new Kwf_Exception("Not a valid dependency");
         if (!isset($this->_dependencies[$type])) $this->_dependencies[$type] = array();
         $this->_dependencies[$type][] = $dep;
     }

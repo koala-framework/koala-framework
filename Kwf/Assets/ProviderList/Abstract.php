@@ -121,6 +121,9 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
                 if (!is_array($i)) {
                     throw new Kwf_Exception("invalid dependency, expected array");
                 }
+                foreach ($i as $j) {
+                    if (!$j) throw new Kwf_Exception("invalid dependency returned by '".get_class($p)."' for '$dependency'");
+                }
                 if (!isset($ret[$type])) $ret[$type] = array();
                 $ret[$type] = array_merge($ret[$type], $i);
             }
