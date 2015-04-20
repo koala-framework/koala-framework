@@ -69,6 +69,22 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
         }
     }
 
+    protected function _hasFilterParam($filterName)
+    {
+        $ret = false;
+        $filter = $this->_getParam('filter');
+        if ($filter) {
+            $filter = json_decode($filter);
+            foreach ($filter as $f) {
+                if ($f->property == $filterName) {
+                    $ret = true;
+                    break;
+                }
+            }
+        }
+        return $ret;
+    }
+
     protected function _applySelectQuery($select, $query)
     {
         $ors = array();
@@ -127,6 +143,7 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
         }
         $s->whereId($this->_getParam('id'));
         $row = $this->_model->getRow($s);
+//        d($s);
         if (!$row) throw new Kwf_Exception_NotFound();
         $this->view->data = $this->_loadDataFromRow($row);
     }
