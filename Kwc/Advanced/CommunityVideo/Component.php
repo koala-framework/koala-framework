@@ -48,6 +48,8 @@ class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract
                         if ($settingsRow->autoplay) {
                             $ret .= '&autoplay=1';
                         }
+
+                        $ret.= '&wmode=transparent';
                     }
                 } else if (preg_match('/vimeo\.com$/i', $urlParts['host'])) {
                     $clipId = substr($urlParts['path'], 1);
