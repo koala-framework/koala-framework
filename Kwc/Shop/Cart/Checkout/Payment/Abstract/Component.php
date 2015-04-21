@@ -70,6 +70,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Component extends Kwc_Abstract_Com
         $order->checkout_component_id = $this->getData()->parent->componentId;
         $order->cart_component_class = $this->getData()->parent->parent->componentClass;
         $order->status = 'ordered';
+        $order->confirm_mail_sent = date('Y-m-d H:i:s');
         $order->date = date('Y-m-d H:i:s');
         $order->save();
 
