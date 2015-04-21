@@ -314,7 +314,7 @@ class Kwf_Debug
     {
         if (!Kwf_Debug::isEnabled()) return;
         if (php_sapi_name() == 'cli' || $file) {
-            $ret = btString();
+            $ret = self::btString();
             if ($file) {
                 $ret = str_repeat("=", 45)."\n".
                     php_sapi_name().' '.(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '').

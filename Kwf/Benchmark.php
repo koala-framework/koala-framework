@@ -132,7 +132,7 @@ class Kwf_Benchmark
                         (isset($i['line']) ? $i['line'] : '?') . ' - ' .
                         ((isset($i['object']) && $i['object'] instanceof Kwf_Component_Data) ? $i['object']->componentId . '->' : '') .
                         (isset($i['function']) ? $i['function'] : '') . '(' .
-                        _btArgsString($i['args']) . ')' . "<br />";
+                        Kwf_Debug::_btArgsString($i['args']) . ')' . "<br />";
                 }
             }
             $counter[$name][] = array(

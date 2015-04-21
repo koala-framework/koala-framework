@@ -258,14 +258,14 @@ class Kwf_Model_Select_Expr_LowerEquals implements Kwf_Model_Select_Expr_Or
                         if (!is_int($k)) $out .= $k.' => ';
                         $out .= _pArray($i, '    ');
                     } else {
-                        $out .= $k.' => '._btArgString($i);
+                        $out .= $k.' => '.Kwf_Debug::_btArgString($i);
                     }
                     $out .= ",\n";
                 }
                 $out .= "),\n";
             } else {
                 $out .= "\n";
-                $out .= "$type => "._btArgString($p).", ";
+                $out .= "$type => ".Kwf_Debug::_btArgString($p).", ";
             }
         }
         $out = trim($out, ', ');
