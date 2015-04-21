@@ -143,7 +143,6 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
         }
         $s->whereId($this->_getParam('id'));
         $row = $this->_model->getRow($s);
-//        d($s);
         if (!$row) throw new Kwf_Exception_NotFound();
         $this->view->data = $this->_loadDataFromRow($row);
     }
