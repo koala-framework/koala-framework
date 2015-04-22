@@ -14946,6 +14946,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>2 klika za više zaštite: Tek nakon što ovdje odobrite korištenje dodataka oni postaju aktivni. Nakon aktivacije dodataka podaci mogu biti poslani trećim stranama.</hr>
 <hu>2 kattintás a nagyobb adatvédelemért: Ha ide kattint a gomb aktiválódik, és elküldheti az ajánlást. Amint a gomb aktiválódik adatokat fog küldeni a harmadik félnek</hu>
 <ro>2 click-uri pentru un plus de confidențialitate: activarea acestei funcții permite trimiterea de recomandări. În acest caz, datele vor fi trimise către terți. </ro>
+<sl>2 klika za večjo varnost: Ko kliknete nanj, se bo gumb aktiviral in lahko boste poslali svoje priporočilo. Z aktivacijo gumba se prenesejo tudi podatki.</sl>
 </text>
 <text>
 <en>not connected to Facebook</en>
@@ -14969,6 +14970,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ro>Recomanda</ro>
 <hr>Preporuči</hr>
 <hu>Ajánlom</hu>
+<sl>Priporoči</sl>
 </text>
 <text>
 <en>not connected to Twitter</en>
@@ -15015,6 +15017,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Ako klikom aktivirate ova polja, informacije će biti poslane na Facebook, Twitter ili Google u Americi i možda tamo budu spremljene.</hr>
 <hu>Ha egy kattintással aktiválja ezeket a gombokat, információkat fog küldeni a Facebook, a Twitter vagy a Google felé (az USA-ban), melyeket ott tárolhatnak.</hu>
 <ro>Prin activarea acestor funcții, sunteți de acord cu transmiterea informațiilor către terți (Facebook, Twitter, Google).</ro>
+<sl>Z aktivacijo teh gumbov se bodo podati prenesli k Facebooku, Twitterju ali Googlu v ZDA in se tam morda tudi shranili.</sl>
 </text>
 <text>
 <en>Agree permanent activation and data transfer:</en>
@@ -15024,6 +15027,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Dugoročno aktiviraj i dopusti razmjenu podataka:</hr>
 <hu>Elfogadja a folytonos aktiválást és adatátvitelt :</hu>
 <ro>Activare permanentă a transmisiei de date:</ro>
+<sl>Strinjam se s stalno aktiviranostjo in prenosom podatkov.</sl>
 </text>
 <text>
 <en>settings</en>
