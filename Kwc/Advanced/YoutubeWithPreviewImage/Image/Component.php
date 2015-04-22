@@ -6,7 +6,7 @@ class Kwc_Advanced_YoutubeWithPreviewImage_Image_Component extends Kwc_Abstract_
         $ret = parent::getSettings();
         $ret['dimensions'] = array(
             'fullwidth'=>array(
-                'text' => trlKwf('full width'),
+                'text' => trlKwfStatic('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
                 'cover' => true

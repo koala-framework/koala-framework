@@ -4,6 +4,9 @@ class Kwc_Trl_StaticPage_Test extends Kwc_TestAbstract
     public function setUp()
     {
         parent::setUp('Kwc_Trl_StaticPage_Root_Component');
+        $trlElements = array();
+        $trlElements['kwf']['de']['Visible-'] = 'Sichtbar';
+        Kwf_Trl::getInstance()->setTrlElements($trlElements);
     }
 
     public function testLanguage()

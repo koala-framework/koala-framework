@@ -8,7 +8,7 @@ class Kwc_Trl_Image_Image_Component extends Kwc_Basic_Image_Component
 
         $ret['dimensions'] = array(
             'default'=>array(
-                'text' => trlKwf('default'),
+                'text' => trlKwfStatic('default'),
                 'width' => 120,
                 'height' => 120,
                 'cover' => false,

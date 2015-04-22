@@ -448,30 +448,6 @@ class Kwf_Util_Setup
             $ret .= "set_time_limit($tl);\n";
         }
 
-        $locale = Kwf_Trl::getInstance()->trlcKwf('locale', 'C', array(), Kwf_Trl::getInstance()->getWebCodeLanguage());
-        $ret .= "setlocale(LC_ALL, explode(', ', '".$locale."'));\n";
-        /*
-            Das LC_NUMERIC wird absichtlich ausgenommen weil:
-            Wenn locale auf DE gesetzt ist und man aus der DB Kommazahlen
-            ausliest, dann kommen die als string mit Beistrich (,) an und mit
-            dem lässt sich nicht weiter rechnen.
-            PDO oder Zend machen da wohl den Fehler und ändern irgendwo die
-            PHP-Float repräsentation in einen String um und so steht er dann mit
-            Beistrich drin.
-            Beispiel:
-                setlocale(LC_ALL, 'de_DE');
-                $a = 2.3;
-                echo $a; // gibt 2,3 aus
-                echo $a * 2; // gibt 4,6 aus
-            Problem ist es dann, wenn die kommazahl in string gecastet wird:
-                setlocale(LC_ALL, 'de_DE');
-                $a = 2.3;
-                $b = "$a";
-                echo $b; // gibt 2,3 aus
-                echo $b * 2; // gibt 4 aus -> der teil hinterm , wird einfach ignoriert
-        */
-        $ret .= "setlocale(LC_NUMERIC, 'C');\n";
-
         $ret .= "if (substr(\$requestUri, 0, 9) == '/kwf/pma/' || \$requestUri == '/kwf/pma') {\n";
         $ret .= "    Kwf_Util_Pma::dispatch();\n";
         $ret .= "}\n";

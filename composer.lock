@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6903963be1fe0146b31945fb9bed1045",
+    "hash": "2656015e4c8aa7bebbef59319fa1af5f",
     "packages": [
         {
             "name": "koala-framework/composer-extra-assets",
@@ -113,23 +113,23 @@
         },
         {
             "name": "koala-framework/kwf-modernizr",
-            "version": "3.8.x-dev",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/kwf-modernizr.git",
-                "reference": "5c79adc6fa215358bd026941f3f096c386f251a9"
+                "reference": "c4f729fe1d9236d81e1658dbdf16991130d31939"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/kwf-modernizr/zipball/5c79adc6fa215358bd026941f3f096c386f251a9",
-                "reference": "5c79adc6fa215358bd026941f3f096c386f251a9",
+                "url": "https://api.github.com/repos/koala-framework/kwf-modernizr/zipball/c4f729fe1d9236d81e1658dbdf16991130d31939",
+                "reference": "c4f729fe1d9236d81e1658dbdf16991130d31939",
                 "shasum": ""
             },
             "require": {
                 "koala-framework/composer-extra-assets": "~1.1"
             },
             "require-dev": {
-                "koala-framework/koala-framework": "3.8.x-dev",
+                "koala-framework/koala-framework": "dev-master",
                 "phpunit/phpunit": "3.7.*"
             },
             "type": "library",
@@ -151,7 +151,7 @@
             ],
             "description": "Modernizr Integration for Koala Framework",
             "homepage": "http://www.koala-framework.org/",
-            "time": "2015-03-26 09:43:27"
+            "time": "2015-03-20 09:54:57"
         },
         {
             "name": "koala-framework/library-css3pie",
@@ -454,6 +454,54 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "sepia/po-parser",
+            "version": "4.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/raulferras/PHP-po-parser.git",
+                "reference": "8e5c3d5d6d5a4c6584249d82dc75eb1490cb8470"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/raulferras/PHP-po-parser/zipball/8e5c3d5d6d5a4c6584249d82dc75eb1490cb8470",
+                "reference": "8e5c3d5d6d5a4c6584249d82dc75eb1490cb8470",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*",
+                "squizlabs/php_codesniffer": "1.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Sepia": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raúl Ferràs",
+                    "email": "raul.ferras@gmail.com",
+                    "role": "developer"
+                }
+            ],
+            "description": "Gettext *.PO file parser for PHP.",
+            "homepage": "https://github.com/raulferras/PHP-po-parser",
+            "keywords": [
+                "gettext",
+                "i10n",
+                "i18n",
+                "po"
+            ],
+            "time": "2015-01-22 11:03:32"
         },
         {
             "name": "symfony/console",

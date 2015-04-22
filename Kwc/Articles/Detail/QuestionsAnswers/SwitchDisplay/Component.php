@@ -6,10 +6,10 @@ class Kwc_Articles_Detail_QuestionsAnswers_SwitchDisplay_Component extends Kwc_C
         $ret = parent::getSettings();
         $ret['childSettings'] = array(
             'child_linktext' => array(
-                'componentName' => trlKwf('Question')
+                'componentName' => trlKwfStatic('Question')
             ),
             'child_content' => array(
-                'componentName' => trlKwf('Answer')
+                'componentName' => trlKwfStatic('Answer')
             )
         );
         return $ret;

@@ -21,7 +21,7 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
         );
         $this->_filters['empty'] = array(
             'type'=>'Button',
-            'text' => trl('only empty'),
+            'text' => trlKwf('only empty'),
             'icon' => new Kwf_Asset('textfield'),
             'cls' => 'x2-btn-text-icon',
             'skipWhere' => true

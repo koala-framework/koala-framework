@@ -10,16 +10,26 @@ class Kwc_Trl_StaticTextsPlaceholder_Test extends Kwc_TestAbstract
     {
         Kwf_Registry::get('config')->languages = array('de', 'en');
         Kwf_Trl::getInstance()->setWebCodeLanguage('de');
-        Kwf_Trl::getInstance()->setModel(new Kwc_Trl_StaticTextsPlaceholder_TrlModelWeb(), Kwf_Trl::SOURCE_WEB);
-        Kwf_Trl::getInstance()->setModel(new Kwf_Model_FnF(), Kwf_Trl::SOURCE_KWF);
         parent::setUp('Kwc_Trl_StaticTextsPlaceholder_Root');
+
+        $trlElements = array();
+        $trlElements['web']['en'] = array();
+        $trlElements['web']['en_plural'] = array();
+        $trlElements['web']['en']['Sichtbar-'] = 'Visible';
+        $trlElements['web']['en']['Am-time'] = 'On';
+        $trlElements['web']['en']['Antwort-'] = 'reply';
+        $trlElements['web']['en_plural']['Antworten-'] = 'replies';
+        $trlElements['web']['en']['Antwort-test'] = 'reply';
+        $trlElements['web']['en_plural']['Antworten-test'] = 'replies';
+        $trlElements['kwf']['de'] = array();
+        $trlElements['kwf']['de_plural'] = array();
+
+        Kwf_Trl::getInstance()->setTrlElements($trlElements);
     }
 
     public function tearDown()
     {
         Kwf_Trl::getInstance()->setWebCodeLanguage(null);
-        Kwf_Trl::getInstance()->setModel(null, Kwf_Trl::SOURCE_WEB);
-        Kwf_Trl::getInstance()->setModel(null, Kwf_Trl::SOURCE_KWF);
         parent::tearDown();
     }
 
