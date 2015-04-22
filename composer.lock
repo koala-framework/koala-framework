@@ -117,12 +117,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/kwf-modernizr.git",
-                "reference": "c4f729fe1d9236d81e1658dbdf16991130d31939"
+                "reference": "f43b47f2bcc6edc207ee36dfc89600e9eca5a06d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/kwf-modernizr/zipball/c4f729fe1d9236d81e1658dbdf16991130d31939",
-                "reference": "c4f729fe1d9236d81e1658dbdf16991130d31939",
+                "url": "https://api.github.com/repos/koala-framework/kwf-modernizr/zipball/f43b47f2bcc6edc207ee36dfc89600e9eca5a06d",
+                "reference": "f43b47f2bcc6edc207ee36dfc89600e9eca5a06d",
                 "shasum": ""
             },
             "require": {
