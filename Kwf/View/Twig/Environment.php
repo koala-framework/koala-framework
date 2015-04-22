@@ -100,6 +100,6 @@ class Kwf_View_Twig_Environment extends Twig_Environment
     public function hiddenOptions($options, $class = 'options')
     {
         $helper = new Kwf_View_Helper_HiddenOptions();
-        return new Twig_Markup($helper->hiddenOptions($options), 'utf-8');
+        return new Twig_Markup($helper->hiddenOptions($options, $class), 'utf-8');
     }
 }
