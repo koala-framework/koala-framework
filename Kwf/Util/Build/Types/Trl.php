@@ -10,8 +10,6 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         foreach (glob('build/trl/*') as $f) {
             unlink($f);
         }
-        Kwf_Trl::getInstance()->clearCache();
-
         $config = Zend_Registry::get('config');
         $langs = array();
         if ($config->webCodeLanguage) $langs[] = $config->webCodeLanguage;
