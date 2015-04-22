@@ -106,6 +106,29 @@ class Kwf_User_Model extends Kwf_Model_RowCache
     public function getUserActivationUrl($row)
     {
         $root = Kwf_Component_Data_Root::getInstance();
+        $activateComponent = null;
+        if ($root && $this->_allowFrontendUrls($row)) {
+            // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
+            // für den Benutzer auswählen
+            // oder man leitet auf eine redirect seite um und schaut auf die
+            // browser accept language
+            $activateComponent = $root
+                ->getComponentByClass('Kwc_User_Activate_Component', array('limit' => 1));
+        }
+
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = Kwf_Registry::get('config')->server->domain;
+        }
+        $activateUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
+        if ($activateComponent) $activateUrl = $activateComponent->getAbsoluteUrl(true);
+        return $activateUrl.'?code='.$row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE);
+    }
+
+    public function getUserLostPasswordUrl($row)
+    {
+        $root = Kwf_Component_Data_Root::getInstance();
         $lostPasswortComponent = null;
         if ($root && $this->_allowFrontendUrls($row)) {
             // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
@@ -121,9 +144,9 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
-        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
+        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/lost-password';
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->getAbsoluteUrl(true);
-        return $lostPassUrl.'?code='.$row->id.'-'.$row->generateActivationToken();
+        return $lostPassUrl.'?code='.$row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_LOSTPASSWORD);
     }
 
     public function getUserLoginUrl($row)
@@ -159,6 +182,15 @@ class Kwf_User_Model extends Kwf_Model_RowCache
             if ($auth instanceof Kwf_User_Auth_Interface_Password) {
                 $row = $auth->getRowByIdentity($email);
                 if ($row) {
+                    foreach ($this->getAuthMethods() as $auth2) {
+                        if ($auth2 instanceof Kwf_User_Auth_Interface_Redirect) {
+                            if (!$auth2->allowPasswordForUser($row)) {
+                                $label = $auth2->getLoginRedirectLabel();
+                                $label = Kwf_Trl::getInstance()->trlStaticExecute($label['name']);
+                                throw new Kwf_Exception_Client(trlKwf("This user doesn't have a password, please log in using {0}", $label));
+                            }
+                        }
+                    }
                     $auth->sendLostPasswordMail($row, $row);
                     break;
                 }
@@ -274,11 +306,27 @@ class Kwf_User_Model extends Kwf_Model_RowCache
                     $this->_authMethods[$k] = new Kwf_User_Auth_Proxy_Redirect(
                         $auth, $this
                     );
+                } else if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
+                    $this->_authMethods[$k] = new Kwf_User_Auth_Proxy_Activation(
+                        $auth, $this
+                    );
                 } else {
                     throw new Kwf_Exception_NotYetImplemented();
                 }
             }
         }
         return $this->_authMethods;
+    }
+
+    public function getEditModel()
+    {
+        $m = $this->_proxyModel;
+        if ($m instanceof Kwf_User_EditModel) return $m;
+        if ($m instanceof Kwf_Model_Union) {
+            foreach ($m->getUnionModels() as $m) {
+                if ($m instanceof Kwf_User_EditModel) return $m;
+            }
+        }
+        throw new Kwf_Exception("Can't find User EditModel, override getEditModel or don't use it");
     }
 }

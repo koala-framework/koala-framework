@@ -18,21 +18,6 @@ class Kwf_User_Auth_Proxy_Password extends Kwf_User_Auth_Proxy_Abstract implemen
         return $this->_auth->setPassword($row->getProxiedRow(), $password);
     }
 
-    public function validateActivationToken(Kwf_Model_Row_Interface $row, $token)
-    {
-        return $this->_auth->validateActivationToken($row->getProxiedRow(), $token);
-    }
-
-    public function generateActivationToken(Kwf_Model_Row_Interface $row)
-    {
-        return $this->_auth->generateActivationToken($row->getProxiedRow());
-    }
-
-    public function isActivated(Kwf_Model_Row_Interface $row)
-    {
-        return $this->_auth->isActivated($row->getProxiedRow());
-    }
-
     public function sendLostPasswordMail(Kwf_Model_Row_Interface $row, Kwf_User_Row $kwfUserRow)
     {
         return $this->_auth->sendLostPasswordMail($row->getProxiedRow(), $kwfUserRow);

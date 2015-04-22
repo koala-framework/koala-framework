@@ -6,7 +6,7 @@ class Kwc_User_Edit_Form_FrontendForm extends Kwf_Form
     protected function _init()
     {
         parent::_init();
-        $this->setModel(Kwf_Model_Abstract::getInstance(Kwf_Config::getValue('user.kwfUserController.model')));
+        $this->setModel(Kwf_Registry::get('userModel')->getEditModel());
     }
 
     public function getRow($parentRow = null)
@@ -33,7 +33,7 @@ class Kwc_User_Edit_Form_FrontendForm extends Kwf_Form
                 }
 
                 $this->_newUserRow = $this->_model->createUserRow(
-                    $email, null
+                    $email
                 );
             }
         }

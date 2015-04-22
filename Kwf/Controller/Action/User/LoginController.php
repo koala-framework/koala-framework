@@ -10,6 +10,11 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         }
     }
 
+    protected function _isAllowedResource()
+    {
+        return true;
+    }
+
     public function indexAction()
     {
         $this->forward('index', 'backend-login');
@@ -28,6 +33,30 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $this->getResponse()->setHttpResponseCode(401);
     }
 
+    public function jsonGetAuthMethodsAction()
+    {
+        $users = Zend_Registry::get('userModel');
+        $this->view->showPassword = false;
+        $this->view->redirects = array();
+        foreach ($users->getAuthMethods() as $k=>$auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                $this->view->showPassword = true;
+            }
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect && $auth->showInBackend()) {
+                $url = $this->getFrontController()->getRouter()->assemble(array(
+                    'controller' => 'backend-login',
+                    'action' => 'redirect',
+                ), 'kwf_user');
+                $label = $auth->getLoginRedirectLabel();
+                $this->view->redirects[] = array(
+                    'url' => $url.'?authMethod='.$k,
+                    'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name']),
+                    'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
+                    'formOptions' => $auth->getLoginRedirectFormOptions(),
+                );
+            }
+        }
+    }
 
     public function headerAction()
     {
@@ -105,6 +134,135 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $this->forward('index', 'backend-lost-password');
     }
 
+    private function _getRedirectBackUrl()
+    {
+        $redirectBackUrl = $this->getFrontController()->getRouter()->assemble(array(
+            'controller' => 'login',
+            'action' => 'redirect-callback',
+        ), 'kwf_user');
+        $redirectBackUrl = 'http'.(isset($_SERVER['HTTPS']) ? 's' : '').'://'
+            .$_SERVER['HTTP_HOST']
+            .$redirectBackUrl;
+        return $redirectBackUrl;
+    }
+
+    public function redirectCallbackAction()
+    {
+        if ($this->_getParam('error')) {
+            $this->getRequest()->setParam('errorMessage', $this->_getParam('error_description'));
+            $this->forward('error');
+            return;
+        }
+
+        $state = $this->_getParam('state');
+
+        $ns = new Kwf_Session_Namespace('kwf-login-redirect');
+        if (!$ns->state || $state != $ns->state) {
+            throw new Kwf_Exception("Invalid state");
+        }
+
+        $state = explode('-', $state);
+
+        if (count($state) < 3) throw new Kwf_Exception_NotFound();
+        $action = $state[0]; //login or activate
+
+        $authMethod = $state[1];
+        $users = Zend_Registry::get('userModel');
+        $authMethods = $users->getAuthMethods();
+        if (!isset($authMethods[$authMethod])) {
+            throw new Kwf_Exception_NotFound();
+        }
+
+        $user = null;
+        if ($action == 'login') {
+            if (count($state) != 4) throw new Kwf_Exception_NotFound();
+            $redirect = $state[3];
+            try {
+                $user = $authMethods[$authMethod]->getUserToLoginByCallbackParams($this->_getRedirectBackUrl(), $this->getRequest()->getParams());
+            } catch (Kwf_Exception_Client $e) {
+                $this->getRequest()->setParam('redirect', $redirect);
+                $this->getRequest()->setParam('errorMessage', $e->getMessage());
+                $this->forward('error');
+                return;
+            }
+        } else if ($action == 'activate') {
+            if (count($state) != 6) throw new Kwf_Exception_NotFound();
+            $userId = $state[3];
+            $code = $state[4];
+            $redirect = $state[5];
+            $user = $users->getRow($userId);
+            $this->getRequest()->setParam('user', $user);
+            if (!$user) {
+                $this->getRequest()->setParam('errorMessage', trlKwf("Activation code is invalid. Maybe the URL wasn't copied completely?"));
+                $this->forward('error');
+                return;
+            } else if (!$user->validateActivationToken($code) && $user->isActivated()) {
+                $this->getRequest()->setParam('errorMessage', trlKwf("This account has already been activated."));
+                $this->forward('error');
+                return;
+            } else if (!$user->validateActivationToken($code)) {
+                $this->getRequest()->setParam('errorMessage', trlKwf("Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?"));
+                $this->forward('error');
+                return;
+            }
+            $authMethods[$authMethod]->associateUserByCallbackParams($user, $this->_getRedirectBackUrl(), $this->getRequest()->getParams());
+            $user->clearActivationToken();
+        }
+
+        if ($user) {
+            $users->loginUserRow($user, true);
+            if ($redirect == 'jsCallback') {
+                echo "<script type=\"text/javascript\">\n";
+                echo "window.opener.ssoCallback('".Kwf_Util_SessionToken::getSessionToken()."');\n";
+                echo "window.close();\n";
+                echo "</script>\n";
+                exit;
+            } else {
+                Kwf_Util_Redirect::redirect($redirect);
+            }
+        } else {
+            $label = $authMethods[$authMethod]->getLoginRedirectLabel();
+            $this->getRequest()->setParam('redirect', $redirect);
+            $this->getRequest()->setParam('errorMessage',
+                trlKwf("Can't login user, {0} account is not associated with {1}.",
+                    array(
+                        Kwf_Config::getValue('application.name'),
+                        Kwf_Trl::getInstance()->trlStaticExecute($label['name'])
+                    )
+                )
+            );
+            $this->forward('error');
+        }
+    }
+
+    public function authAction()
+    {
+        $state = $this->_getParam('state');
+        if ($state) {
+            //we got a state, validate it like it is a redirect-callback
+            $this->forward('redirect-callback');
+            return;
+        }
+
+        $users = Zend_Registry::get('userModel');
+        foreach ($users->getAuthMethods() as $authMethod) {
+            if ($authMethod instanceof Kwf_User_Auth_Interface_Redirect) {
+                $user = $authMethod->getUserToLoginByParams($this->getRequest()->getParams());
+                if ($user) {
+                    break;
+                }
+            }
+        }
+        if ($user) {
+            $users->loginUserRow($user, true);
+            $redirect = $this->_getParam('redirect');
+            if (!$redirect) $redirect = Kwf_Setup::getBaseUrl().'/';
+            Kwf_Util_Redirect::redirect($redirect);
+        } else {
+            throw new Kwf_Exception_AccessDenied();
+        }
+    }
+
     public function logoutAction()
     {
         Kwf_Auth::getInstance()->clearIdentity();
@@ -161,5 +319,19 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
     public function jsonKeepAliveAction()
     {
         //do nothing
+    }
+
+    public function errorAction()
+    {
+        $this->getHelper('viewRenderer')->setNoController(true);
+        $this->getHelper('viewRenderer')->setViewScriptPathNoControllerSpec('user/:action.:suffix');
+        $this->view->dep = Kwf_Assets_Package_Default::getInstance('Admin');
+        $this->view->contentScript = $this->getHelper('viewRenderer')->getViewScript('login-error');
+        $this->view->errorMessage = $this->_getParam('errorMessage');
+        $redirect = $this->_getParam('redirect');
+        if ($redirect == 'jsCallback') {
+            $redirect = 'javascript:window.close();';
+        }
+        $this->view->redirect = $redirect;
     }
 }

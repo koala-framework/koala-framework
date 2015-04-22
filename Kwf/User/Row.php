@@ -13,11 +13,11 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         return $ret;
     }
 
-    public function generateActivationToken()
+    public function generateActivationToken($type)
     {
         foreach ($this->getModel()->getAuthMethods() as $auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
-                 $ret = $auth->generateActivationToken($this);
+            if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
+                 $ret = $auth->generateActivationToken($this, $type);
                  if ($ret) return $ret;
             }
         }
@@ -27,7 +27,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     public function validateActivationToken($token)
     {
         foreach ($this->getModel()->getAuthMethods() as $auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
                  $ret = $auth->validateActivationToken($this, $token);
                  if ($ret) return $ret;
             }
@@ -38,7 +38,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     public function isActivated()
     {
         foreach ($this->getModel()->getAuthMethods() as $auth) {
-            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
                  $ret = $auth->isActivated($this);
                  if (!is_null($ret)) return $ret;
             }
@@ -68,8 +68,26 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
         throw new Kwf_Exception();
     }
 
+    public function clearActivationToken()
+    {
+        foreach ($this->getModel()->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
+                 $ret = $auth->clearActivationToken($this);
+                 if ($ret) return $ret;
+            }
+        }
+        throw new Kwf_Exception();
+    }
+
     public function setPassword($password)
     {
+        foreach ($this->getModel()->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+                 if (!$auth->allowPasswordForUser($this)) {
+                    throw new Kwf_Exception("This user must not have a password for his account");
+                 }
+            }
+        }
         foreach ($this->getModel()->getAuthMethods() as $auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Password) {
                  $ret = $auth->setPassword($this, $password);

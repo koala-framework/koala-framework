@@ -33,33 +33,6 @@ class Kwf_User_Auth_Union_Password extends Kwf_User_Auth_Union_Abstract implemen
         }
     }
 
-    public function validateActivationToken(Kwf_Model_Row_Interface $row, $token)
-    {
-        if ($row->getSourceRow()->getModel() == $this->_auth->_model) {
-            return $this->_auth->validateActivationToken($row->getSourceRow(), $token);
-        } else {
-            return null;
-        }
-    }
-
-    public function generateActivationToken(Kwf_Model_Row_Interface $row)
-    {
-        if ($row->getSourceRow()->getModel() == $this->_auth->_model) {
-            return $this->_auth->generateActivationToken($row->getSourceRow());
-        } else {
-            return null;
-        }
-    }
-
-    public function isActivated(Kwf_Model_Row_Interface $row)
-    {
-        if ($row->getSourceRow()->getModel() == $this->_auth->_model) {
-            return $this->_auth->isActivated($row->getSourceRow());
-        } else {
-            return null;
-        }
-    }
-
     public function sendLostPasswordMail(Kwf_Model_Row_Interface $row, Kwf_User_Row $kwfUserRow)
     {
         if ($row->getSourceRow()->getModel() == $this->_auth->_model) {

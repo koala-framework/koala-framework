@@ -8,7 +8,7 @@ class Kwf_User_Mail_LostPassword extends Kwf_User_Mail_Abstract
         $subject .= ' - '.trlKwf('lost password');
         parent::__construct($tpl, $subject, $row);
 
-        $this->lostPasswordUrl = $row->getModel()->getUserActivationUrl($row);
+        $this->lostPasswordUrl = $row->getModel()->getUserLostPasswordUrl($row);
 
     }
 }

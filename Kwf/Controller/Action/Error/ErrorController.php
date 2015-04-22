@@ -1,9 +1,9 @@
 <?php
 class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
 {
-    public function preDispatch()
+    protected function _isAllowedResource()
     {
-        //don't call parent, we don't need to check acl
+        return true;
     }
 
     public function errorAction()

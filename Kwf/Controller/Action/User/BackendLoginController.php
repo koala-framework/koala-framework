@@ -10,6 +10,11 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         parent::preDispatch();
     }
 
+    protected function _isAllowedResource()
+    {
+        return true;
+    }
+
     public function indexAction()
     {
         $this->view->applicationName = Kwf_Config::getValue('application.name');
@@ -52,9 +57,69 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
             'controller' => 'login',
             'action' => 'lost-password',
         ), 'kwf_user');
+
+
+        $this->view->redirects = array();
+        $users = Zend_Registry::get('userModel');
+        foreach ($users->getAuthMethods() as $k=>$auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect && $auth->showInBackend()) {
+                $url = $this->getFrontController()->getRouter()->assemble(array(
+                    'controller' => 'backend-login',
+                    'action' => 'redirect',
+                ), 'kwf_user');
+                $label = $auth->getLoginRedirectLabel();
+                $this->view->redirects[] = array(
+                    'url' => $url,
+                    'authMethod' => $k,
+                    'redirect' => $_SERVER['REQUEST_URI'],
+                    'name' => Kwf_Trl::getInstance()->trlStaticExecute($label['name']),
+                    'icon' => isset($label['icon']) ? '/assets/'.$label['icon'] : false,
+                    'formOptions' => Kwf_User_Auth_Helper::getRedirectFormOptionsHtml($auth->getLoginRedirectFormOptions()),
+                );
+            }
+        }
+
         parent::indexAction();
     }
 
+    private function _getRedirectBackUrl()
+    {
+        $redirectBackUrl = $this->getFrontController()->getRouter()->assemble(array(
+            'controller' => 'login',
+            'action' => 'redirect-callback',
+        ), 'kwf_user');
+        $redirectBackUrl = 'http'.(isset($_SERVER['HTTPS']) ? 's' : '').'://'
+            .$_SERVER['HTTP_HOST']
+            .$redirectBackUrl;
+        return $redirectBackUrl;
+    }
+
+    public function redirectAction()
+    {
+        $authMethod = $this->_getParam('authMethod');
+        $users = Zend_Registry::get('userModel');
+        $authMethods = $users->getAuthMethods();
+        if (!isset($authMethods[$authMethod])) {
+            throw new Kwf_Exception_NotFound();
+        }
+
+        $f = new Kwf_Filter_StrongRandom();
+        $state = 'login-'.$authMethod.'-'.$f->filter(null).'-'.$this->_getParam('redirect');
+
+        //save state in namespace to validate it later
+        $ns = new Kwf_Session_Namespace('kwf-login-redirect');
+        $ns->state = $state;
+
+        $formValues = array();
+        foreach ($authMethods[$authMethod]->getLoginRedirectFormOptions() as $option) {
+            if ($option['type'] == 'select') {
+                $formValues[$option['name']] = $this->_getParam($option['name']);
+            }
+        }
+
+        $url = $authMethods[$authMethod]->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
+        $this->redirect($url);
+    }
 
     protected function _initFields()
     {

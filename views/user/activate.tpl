@@ -7,17 +7,35 @@
         <? } ?>
     </h1>
     <p>
-        <?=trlKwf('Please type in your password. After clicking the button below')?>
-        <?=trlKwf('you are logged in automatically and may use the typed in password')?>
-        <?=trlKwf('for future logins.')?>
-    </p>
-    <p>
         <?=trlKwf('Your email address:')?> <strong><?=$this->email?></strong>
     </p>
 
     <?=$this->errorsHtml?>
-    <form action="<?= htmlspecialchars($this->action) ?>" method="<?=$this->method?>">
-        <?php $this->formField($this->form) ?>
-        <button class="submit" type="submit" name="<?= $this->formName ?>" value="submit"><?=trlKwf('Activate and login account')?></button>
-    </form>
+
+    <? if ($this->redirects) { ?>
+        <p><?=trlKwf('Activate with:')?></p>
+        <ul>
+            <? if ($this->showPassword) { ?>
+                <li>
+                    <a href="<?=$this->passwordUrl?>"><?=trlKwf('Password')?></a>
+                </li>
+            <? } ?>
+            <?php foreach ($this->redirects as $r) { ?>
+                <li>
+                    <form method="GET" action="<?=htmlspecialchars($r['url'])?>">
+                    <input type="hidden" name="authMethod" value="<?=htmlspecialchars($r['authMethod'])?>" />
+                    <input type="hidden" name="code" value="<?=htmlspecialchars($r['code'])?>" />
+                    <?=$r['formOptions']?>
+                    <button>
+                        <? if ($r['icon']) { ?>
+                            <img src="<?=htmlspecialchars($r['icon'])?>" />
+                        <? } else { ?>
+                            <?=htmlspecialchars($r['name'])?>
+                        <? } ?>
+                    </button>
+                    </form>
+                </li>
+            <?php } ?>
+        </ul>
+    <? } ?>
 </div>

@@ -7,6 +7,7 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
         $ret['placeholder']['submitButton'] = trlKwfStatic('Change Password');
         $ret['generators']['child']['component']['success'] = 'Kwc_User_ChangePassword_Form_Success_Component';
         $ret['plugins'] = array('Kwf_Component_Plugin_Login_Component');
+        $ret['viewCache'] = false;
         return $ret;
     }
 
@@ -16,11 +17,42 @@ class Kwc_User_ChangePassword_Form_Component extends Kwc_Form_Component
         $this->_form->setModel(new Kwf_Model_FnF());
     }
 
+    protected function _processInput($postData)
+    {
+
+        $users = Kwf_Registry::get('userModel');
+
+        $showPassword = false;
+        //is there a password auth?
+        foreach ($users->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                $showPassword = true;
+            }
+        }
+        if (!$showPassword) throw new Kwf_Exception("No password auth method found");
+
+        //if a redirect auth doesn't allow password hide it
+        foreach ($users->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+                if (true || !$auth->allowPasswordForUser($users->getAuthedUser())) {
+                    $label = $auth->getLoginRedirectLabel();
+                    $label = Kwf_Trl::getInstance()->trlStaticExecute($label['name']);
+                    $msg = $this->getData()->trlKwf("This user doesn't have a password, he must log in using {0}", $label);
+                    $this->_errors[] = array(
+                        'messages' => array($msg)
+                    );
+                    break;
+                }
+            }
+        }
+        parent::_processInput($postData);
+    }
+
     protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
         parent::_afterSave($row);
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
         $user->setPassword($this->_form->getRow()->new_password);
-        $user->save();
+        $user->clearActivationToken();
     }
 }

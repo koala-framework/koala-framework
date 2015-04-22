@@ -13,6 +13,7 @@ class Kwf_Controller_Action_Form_Controller extends Kwf_Controller_Action
         }
         $this->view->dep = Kwf_Assets_Package_Default::getInstance('Admin');
 
+        parent::preDispatch();
     }
 
     protected function _initFields()
@@ -50,14 +51,20 @@ class Kwf_Controller_Action_Form_Controller extends Kwf_Controller_Action
         if (isset($postData[$this->_form->getName()])) {
 
             $errors = $this->_form->validate(null, $postData);
-            $this->getRequest()->setParam('formErrors', $errors);
             if (!$errors) {
                 ignore_user_abort(true);
-                $this->_form->prepareSave(null, $postData);
-                $this->_form->save(null, $postData);
-                $this->_form->afterSave(null, $postData);
-                $this->_afterSave($this->_form->getRow());
+                try {
+                    $this->_form->prepareSave(null, $postData);
+                    $this->_form->save(null, $postData);
+                    $this->_form->afterSave(null, $postData);
+                    $this->_afterSave($this->_form->getRow());
+                } catch (Kwf_Exception_Client $e) {
+                    $errors[] = array(
+                        'message' => $e->getMessage()
+                    );
+                }
             }
+            $this->getRequest()->setParam('formErrors', $errors);
         }
 
         $this->_showForm();

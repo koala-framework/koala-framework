@@ -93,6 +93,6 @@ class Kwf_User_AuthPassword_Test extends Kwf_Test_TestCase
         $auth->sendLostPasswordMail($row, $kwfUserRow);
 
         $this->assertEquals('test@vivid.com', $transport->recipients);
-        $this->assertContains('activate', $transport->body);
+        $this->assertContains('lost-password', $transport->body);
     }
 }

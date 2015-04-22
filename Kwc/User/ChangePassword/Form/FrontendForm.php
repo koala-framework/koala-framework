@@ -11,7 +11,7 @@ class Kwc_User_ChangePassword_Form_FrontendForm extends Kwf_Form
         $newPasswordField = $this->add(new Kwf_Form_Field_DoublePassword('new_password', trlKwfStatic('New Password')));
         $validatorClass = Kwf_Registry::get('config')->user->passwordValidator;
         if ($validatorClass) {
-            $newPasswordField->getChildren()->getByName('password')->addValidator(new $validatorClass());
+            $newPasswordField->getChildren()->getByName('new_password')->addValidator(new $validatorClass());
         }
         $this->add($newPasswordField);
     }

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Implements login by username/password
+ *
+ * Required model fields:
+ * - email
+ * - password
+ * - password_salt
+ */
 class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf_User_Auth_Interface_Password
 {
     private $_mailTransport = null;
@@ -58,33 +66,6 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
         return true;
     }
 
-    public function validateActivationToken(Kwf_Model_Row_Interface $row, $token)
-    {
-        if (!$row->activate_token) return false;
-        $activateToken = explode(':', $row->activate_token);
-        $expire = $activateToken[0];
-        $rowToken = $activateToken[1];
-        if ($expire < time()) return false;
-        if ($this->_validateActivateTokenBcrypt($row, $token) == $rowToken) {
-            return true;
-        }
-        return false;
-    }
-
-    public function generateActivationToken(Kwf_Model_Row_Interface $row)
-    {
-        $token = substr(Kwf_Util_Hash::hash(microtime(true).uniqid('', true).mt_rand()), 0, 10);
-        $expire = time()+7*24*60*60;
-        $row->activate_token = $expire.':'.$this->_encodePasswordBcrypt($row, $token);
-        $row->save();
-        return $token;
-    }
-
-    public function isActivated(Kwf_Model_Row_Interface $row)
-    {
-        return $row->password != '';
-    }
-
     public function setMailTransport($value)
     {
         $this->_mailTransport = $value;
@@ -122,13 +103,7 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
 
     private function _validatePasswordBcrypt($row, $password)
     {
-        $string = $this->_gethashHmacStringForBCrypt($row, $password);
+        $string = $this->_getHashHmacStringForBCrypt($row, $password);
         return crypt($string, substr($row->password, 0, 30));
-    }
-    private function _validateActivateTokenBcrypt($row, $token)
-    {
-        $activateToken = explode(':', $row->activate_token);
-        $string = $this->_gethashHmacStringForBCrypt($row, $token);
-        return crypt($string, substr($activateToken[1], 0, 30));
     }
 }

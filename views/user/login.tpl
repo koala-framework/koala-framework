@@ -26,4 +26,26 @@
     <p>
         <a class="lostPassword" href="<?=$this->lostPasswordLink?>"><?=trlKwf('Lost password?')?></a>
     </p>
+
+    <? if ($this->redirects) { ?>
+        <p><?=trlKwf('Login with:')?></p>
+        <ul>
+        <?php foreach ($this->redirects as $r) { ?>
+            <li>
+                <form method="GET" action="<?=htmlspecialchars($r['url'])?>">
+                <input type="hidden" name="authMethod" value="<?=htmlspecialchars($r['authMethod'])?>" />
+                <input type="hidden" name="redirect" value="<?=htmlspecialchars($r['redirect'])?>" />
+                <?=$r['formOptions']?>
+                <button>
+                    <? if ($r['icon']) { ?>
+                        <img src="<?=htmlspecialchars($r['icon'])?>" />
+                    <? } else { ?>
+                        <?=htmlspecialchars($r['name'])?>
+                    <? } ?>
+                </button>
+                </form>
+            </li>
+        <?php } ?>
+        </ul>
+    <? } ?>
 </div>

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Auth Method Interface for auto logging in users by auto login cookie
+ */
 interface Kwf_User_Auth_Interface_AutoLogin
 {
     public function getRowById($id);
