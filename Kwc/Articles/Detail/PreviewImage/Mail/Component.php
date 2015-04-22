@@ -6,7 +6,7 @@ class Kwc_Articles_Detail_PreviewImage_Mail_Component extends Kwc_Basic_ImagePar
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
         $ret['dimension'] = array(
-            'text' => trlKwf('default'),
+            'text' => trlKwfStatic('default'),
             'width' => 230,
             'height' => 0,
             'cover' => true,

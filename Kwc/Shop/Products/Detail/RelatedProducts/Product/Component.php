@@ -4,7 +4,7 @@ class Kwc_Shop_Products_Detail_RelatedProducts_Product_Component extends Kwc_Abs
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Related Products');
+        $ret['componentName'] = trlKwfStatic('Related Products');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
     }

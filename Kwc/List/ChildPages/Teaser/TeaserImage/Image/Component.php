@@ -5,7 +5,7 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Image_Component extends Kwc_Basic_I
     {
         $ret = parent::getSettings();
         $ret['dimensions']['default'] = array(
-            'text' => trlKwf('default'),
+            'text' => trlKwfStatic('default'),
             'width' => 100,
             'height' => 75,
             'cover' => false,

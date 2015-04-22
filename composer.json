@@ -16,7 +16,9 @@
         "twig/twig": "1.16.1",
         "koala-framework/sourcemaps": "0.2.0",
         "koala-framework/file-watcher": "*",
-        "symfony/console": "~2.5"
+        "symfony/console": "~2.5",
+        "symfony/process": "~2.5",
+        "sepia/po-parser": "4.2.0"
     },
     "extra": {
         "require-bower": {
@@ -32,7 +34,8 @@
         "require-npm": {
             "uglify-js": "2.4.13",
             "node-sass": "2.0.1",
-            "amdlc": "0.1.5"
+            "amdlc": "0.1.5",
+            "esprima": "1.2.2"
         },
         "require-dev-bower": {
             "qunit": "1.18.0",
@@ -46,6 +49,10 @@
                 "koala-framework/composer-extra-assets",
                 "nodejs/nodejs"
             ]
+        },
+        "kwf-lingohub": {
+            "account": "koala-framework",
+            "project": "koala-framework"
         }
     },
     "suggest": {

@@ -6,7 +6,7 @@ class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
     {
         $ret = parent::getSettings();
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Unsubscribe Newsletter')
+            'componentName' => trlKwfStatic('Unsubscribe Newsletter')
         ));
         return $ret;
     }

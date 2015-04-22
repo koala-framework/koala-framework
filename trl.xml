@@ -6375,6 +6375,12 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Категория</ru>
 <ua>Категорія</ua>
 <hu>Kategória</hu>
+<de_plural>Kategorien</de_plural>
+<en_plural>Categories</en_plural>
+<ro_plural>Categorii</ro_plural>
+<sl_plural>Kategorije</sl_plural>
+<uk_plural>Категорії</uk_plural>
+<ua_plural>Категорії</ua_plural>
 </text>
 <text>
 <en>Domain</en>
@@ -15224,7 +15230,21 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>Optional</en>
 <de>Optional</de>
-<id>2264</id>
+<id>2270</id>
+</text>
+<text>
+<id>2267</id>
+<en>Restore</en>
+<de>Wiederherstellen</de>
+</text>
+<text>
+<id>2268</id>
+<de>Wollen Sie diesen Eintrag (diese Einträge) wirklich wiederherstellen?</de>
+<en>Do you really want to restore this entry (entries)?</en>
+</text>
+<text>
+<id>2269</id>
+<en>Restoring...</en>
+<de>Wiederherstellen...</de>
 </text>
 </trl>
-

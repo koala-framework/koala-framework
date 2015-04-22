@@ -12,16 +12,16 @@ class Kwc_ImageResponsive_CreatesImgElement_Components_ImageAbstract_Component e
                 'cover' => true
            ),
             'fullWidth'=>array(
-                'text' => trlKwf('full width'),
+                'text' => trlKwfStatic('full width'),
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
                 'cover' => true
            ),
             'original'=>array(
-                'text' => trlKwf('original')
+                'text' => trlKwfStatic('original')
              ),
             'custom'=>array(
-                'text' => trlKwf('user-defined'),
+                'text' => trlKwfStatic('user-defined'),
                 'width' => self::USER_SELECT,
                 'height' => self::USER_SELECT,
                 'cover' => true
