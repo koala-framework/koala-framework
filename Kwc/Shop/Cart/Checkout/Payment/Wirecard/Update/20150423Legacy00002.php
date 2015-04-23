@@ -1,5 +1,5 @@
 <?php
-class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Update_2 extends Kwf_Update
+class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Update_20150423Legacy00002 extends Kwf_Update
 {
     public function update()
     {
