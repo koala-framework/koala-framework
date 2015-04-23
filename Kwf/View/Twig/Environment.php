@@ -21,6 +21,8 @@ class Kwf_View_Twig_Environment extends Twig_Environment
             array('Kwf_Component_Renderer_Twig_Environment', 'mailEncodeText')));
         $this->addFilter(new Twig_SimpleFilter('mailLink',
             array('Kwf_Component_Renderer_Twig_Environment', 'mailLink')));
+        $this->addFilter(new Twig_SimpleFilter('hiddenOptions',
+            array('Kwf_Component_Renderer_Twig_Environment', 'hiddenOptions')));
     }
 
     public static function date($context, $date, $format = null)
@@ -93,5 +95,11 @@ class Kwf_View_Twig_Environment extends Twig_Environment
     {
         $helper = new Kwf_View_Helper_MailLink();
         return new Twig_Markup($helper->mailLink($mailAddress, $linkText, $cssClass), 'utf-8');
+    }
+
+    public function hiddenOptions($options, $class = 'options')
+    {
+        $helper = new Kwf_View_Helper_HiddenOptions();
+        return new Twig_Markup($helper->hiddenOptions($options, $class), 'utf-8');
     }
 }

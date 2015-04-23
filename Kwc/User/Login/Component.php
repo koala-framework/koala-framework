@@ -66,11 +66,16 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
         }
     }
 
+    public final function getUrlForRedirect($postData, $user) {
+        return $this->_getUrlForRedirect($postData, $user);
+    }
+
     protected function _getUrlForRedirect($postData, $user)
     {
-        $url = NULL;
         if (!empty($postData['redirect']) && substr($postData['redirect'], 0, 1) == '/') {
             $url = $postData['redirect'];
+        } else {
+            $url = '/';
         }
         return $url;
     }

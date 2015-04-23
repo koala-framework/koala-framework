@@ -7,38 +7,15 @@ class Kwc_User_Login_Form_Success_Component extends Kwc_Form_Success_Component
         $ret['viewCache'] = false;
         return $ret;
     }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['redirectTo'] = $this->_getRedirectToPage();
-        if (!is_string($ret['redirectTo'])) {
-            $ret['redirectToUrl'] = $ret['redirectTo']->url;
-        } else {
-            $ret['redirectToUrl'] =$ret['redirectTo'];
-        }
+        $user = Kwf_Registry::get('userModel')->getAuthedUser();
+        $ret['redirectToUrl'] = $this->getData()
+            ->getParentByClass('Kwc_User_Login_Component')
+            ->getComponent()
+            ->getUrlForRedirect($_REQUEST, $user);
         return $ret;
-    }
-
-    protected function _getRedirectToPage()
-    {
-        if (!empty($_REQUEST['redirect']) && substr($_REQUEST['redirect'], 0, 1) == '/') {
-            return $_REQUEST['redirect'];
-        }
-        if (is_instance_of($this->getData()->getPage()->componentClass, 'Kwc_User_Login_Component') || is_instance_of($this->getData()->getPage()->componentClass, 'Kwc_User_Login_Trl_Component')) {
-            $user = Kwf_Registry::get('userModel')->getAuthedUser();
-            $userDir = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByClass(
-                    'Kwc_User_Directory_Component',
-                    array('subroot' => $this->getData())
-                );
-            if ($userDir) {
-                return $userDir->getChildComponent('_' . $user->id);
-            } else {
-                return Kwf_Component_Data_Root::getInstance()
-                    ->getChildPage(array('home' => true, 'subroot'=>$this->getData()), array());
-            }
-        } else {
-            return $this->getData()->getPage();
-        }
     }
 }
