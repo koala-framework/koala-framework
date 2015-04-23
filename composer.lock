@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "742337fc55784e95ca07aaa967f8de8d",
+    "hash": "e89d10b47ebf7c75554c48a3581abc39",
     "packages": [
         {
             "name": "koala-framework/composer-extra-assets",
@@ -110,48 +110,6 @@
             "description": "Library for watching for file system changes",
             "homepage": "http://www.koala-framework.org/",
             "time": "2015-03-25 08:35:54"
-        },
-        {
-            "name": "koala-framework/kwf-modernizr",
-            "version": "3.8.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/koala-framework/kwf-modernizr.git",
-                "reference": "5c79adc6fa215358bd026941f3f096c386f251a9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/kwf-modernizr/zipball/5c79adc6fa215358bd026941f3f096c386f251a9",
-                "reference": "5c79adc6fa215358bd026941f3f096c386f251a9",
-                "shasum": ""
-            },
-            "require": {
-                "koala-framework/composer-extra-assets": "~1.1"
-            },
-            "require-dev": {
-                "koala-framework/koala-framework": "3.8.x-dev",
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "extra": {
-                "require-npm": {
-                    "grunt": "0.4.*",
-                    "grunt-cli": "0.1.*",
-                    "grunt-modernizr": "0.5.2"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Kwf_Modernizr_": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "description": "Modernizr Integration for Koala Framework",
-            "homepage": "http://www.koala-framework.org/",
-            "time": "2015-03-26 09:43:27"
         },
         {
             "name": "koala-framework/library-css3pie",
@@ -1492,9 +1450,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "koala-framework/kwf-modernizr": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
