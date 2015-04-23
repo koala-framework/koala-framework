@@ -15230,5 +15230,20 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Optional</de>
 <id>2264</id>
 </text>
+<text>
+<en>Articles required for reading</en>
+<de>Lesepflichtige Artikel</de>
+<id>2265</id>
+</text>
+<text>
+<en>{0} articles are not read but required for reading - please read!</en>
+<de>Sie haben {0} lesepflichtige Artikel - bitte lesen!</de>
+<id>2266</id>
+</text>
+<text>
+<en>Mark as read</en>
+<de>Als gelesen markieren</de>
+<id>2267</id>
+</text>
 </trl>
 
