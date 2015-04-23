@@ -28,7 +28,11 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
         $pathType = $this->getType();
         $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$fileName.'.'.md5(file_get_contents($this->getAbsoluteFileName()));
-        $useTrl = !in_array($pathType, array('ext2', 'ext', 'extensible', 'ravenJs', 'jquery', 'tinymce', 'mediaelement', 'mustache', 'modernizr'));
+        $useTrl = !in_array($pathType, array('ext2'));
+        if (substr($this->getAbsoluteFileName(), 0, 24) == 'vendor/bower_components/') {
+            //dependencies loaded via bower never use kwf translation system
+            $useTrl = false;
+        }
 
         if (!file_exists("$buildFile.min.js") || ($useTrl && !file_exists("$buildFile.min.js.trl"))) {
 
