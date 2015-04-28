@@ -22,7 +22,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         } else if (strtolower(substr($maxSize, -1))=='g') {
             $maxSize = substr($maxSize, 0, -1)*1024*1024*1024;
         }
-        $this->setFileSizeLimit($maxSize.' B');
+        $this->setFileSizeLimit($maxSize);
         $this->setEmptyMessage(trlKwfStatic("Please choose a file"));
     }
 
@@ -162,9 +162,11 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
 
     public function getTemplateVars($values, $namePostfix = '', $idPrefix = '')
     {
+
         $name = $this->getFieldName();
         $value = isset($values[$name]) ? $values[$name] : null;
         $ret = parent::getTemplateVars($values, $namePostfix, $idPrefix);
+        $fileSizeLimit = $this->getFileSizeLimit();
 
         $name = htmlspecialchars($name);
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$namePostfix);
@@ -181,9 +183,10 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         $ret['html'] .= "<div class=\"kwfFormFieldFileInnerContent\">\n";
         $ret['html'] .= "<div class=\"imagePath kwfFormFieldFileUploadWrapper\">\n";
             $ret['html'] .= "<input class=\"fileSelector\" type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
+                            " data-file-size-limit=\"$fileSizeLimit\" ".
                             " style=\"width: {$this->getWidth()}px\" onchange=\"document.getElementById(this.id+'_underlayText').value = this.value;\" />";
             $ret['html'] .= '<div class="underlayFileSelector">';
-            $ret['html'] .= '<input type="text" id="'.$ret['id'].'_underlayText" style="width: '.$this->getWidth().'px;" />';
+            $ret['html'] .= '<input type="text" id="'.$ret['id'].'_underlayText" class="kwfFormFieldFileUnderlayText" style="width: '.$this->getWidth().'px;" />';
             $ret['html'] .= ' <a href="#" class="kwfFormFieldFileUploadButton" onclick="return false;">'.$this->getFrontendButtonText().'</a>';
             $ret['html'] .= '</div>';
         $ret['html'] .= '</div>';
@@ -200,7 +203,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
             $uploadId = '0';
             $hashKey = '';
         }
-        $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
+        $ret['html'] .= "<input type=\"hidden\" class=\"kwfUploadIdField\" name=\"{$name}_upload_id{$namePostfix}\" ".
                     " value=\"$uploadId$hashKey\" />";
         $ret['html'] .= '</div>';
         return $ret;
