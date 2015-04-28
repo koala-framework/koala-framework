@@ -84,7 +84,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
                 $finfo = new finfo(FILEINFO_MIME, $path);
                 $ret = $finfo->buffer($contents);
                 $ret = str_replace('; charset=binary', '', $ret);
-                if($ret == 'application/zip') {
+                if ($ret == 'application/zip') {
                     $path = dirname(__FILE__).'/magic';
                     $finfo = new finfo(FILEINFO_MIME, $path);
                     $ret = $finfo->buffer($contents);
@@ -106,7 +106,11 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         if (!$this->id) {
             return null;
         }
-        return $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2) . '/' . $this->id;
+        $ret = $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2) . '/' . $this->id;
+        if (!is_file($ret)) {
+            $ret = $this->getModel()->getUploadDir() . '/' . $this->id_old;
+        }
+        return $ret;
     }
     public function getFileSize()
     {

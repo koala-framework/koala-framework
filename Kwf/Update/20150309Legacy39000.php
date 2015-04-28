@@ -1,105 +1,110 @@
 <?php
 class Kwf_Update_20150309Legacy39000 extends Kwf_Update
 {
+    private $_countUploads;
 
     public function getProgressSteps()
     {
         $ret = count(Kwf_Model_Abstract::findAllInstances());
-        if (in_array('kwf_uploads', Kwf_Registry::get('db')->listTables())) {
-            $ret += Kwf_Registry::get('db')->query('SELECT COUNT(*) FROM kwf_uploads')->fetchColumn()*2;
+        if ($this->countUploads() < 50000) {
+            $ret += $this->countUploads()*2;
         }
+        $ret++; // Image filenames
         return $ret;
+    }
+
+    public function countUploads()
+    {
+        if (is_null($this->_countUploads)) {
+            if (in_array('kwf_uploads', Kwf_Registry::get('db')->listTables())) {
+                $this->_countUploads = Kwf_Registry::get('db')->query('SELECT COUNT(*) FROM kwf_uploads')->fetchColumn()*2;
+            } else {
+                $this->_countUploads = 0;
+            }
+        }
+        return $this->_countUploads;
     }
 
     public function update()
     {
         $db = Kwf_Registry::get('db');
-        $uploadsModel = Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model');
-        $uploadsDir = $dir = Kwf_Config::getValue('uploads');
 
-        $idColumn = reset($db->fetchAll("SHOW FIELDS FROM `kwf_uploads` WHERE `Field` = 'id'"));
-        if ($idColumn['Type'] != 'varbinary(36)') {
-            $db->query("SET FOREIGN_KEY_CHECKS = 0\n");
-            $db->query("ALTER TABLE  `kwf_uploads` CHANGE  `id`  `id_old` INT( 11 ) NOT NULL");
-            $db->query("ALTER TABLE  `kwf_uploads` DROP PRIMARY KEY");
-            $db->query("ALTER TABLE  `kwf_uploads` ADD  `id` VARBINARY( 36 ) NOT NULL FIRST");
-
-            $uploadIds = array();
-            foreach ($db->query("SELECT id_old FROM `kwf_uploads`")->fetchAll() as $data) {
-                $id = Kwf_Filter_GenerateUuid::filter(null);
-                if (!isset($uploadIds[$data['id_old']])) $uploadIds[$data['id_old']] = $id;
-                $db->query("UPDATE  `kwf_uploads` SET  `id` =  '{$id}' WHERE  `id_old` = {$data['id_old']} LIMIT 1 ;");
+        $db->query("SET FOREIGN_KEY_CHECKS = 0");
+        $field = $db->fetchRow("SHOW FIELDS FROM `kwf_uploads` WHERE `Field` = 'id'");
+        if ($field['Type'] != 'varbinary(36)') {
+            $indexes = $db->fetchAll("SELECT
+                TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME
+                FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+                WHERE TABLE_SCHEMA = DATABASE() AND REFERENCED_TABLE_NAME='kwf_uploads' AND REFERENCED_COLUMN_NAME='id'");
+            foreach ($indexes as $index) {
+                $sql = "ALTER TABLE {$index['TABLE_NAME']} DROP FOREIGN KEY `{$index['CONSTRAINT_NAME']}`";
+                $db->query($sql);
             }
-            $db->query('ALTER TABLE `kwf_uploads` ADD PRIMARY KEY(`id`)');
+            $indexes = $db->fetchAll("SELECT
+                TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME
+                FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+                WHERE TABLE_SCHEMA = DATABASE() AND REFERENCED_TABLE_NAME='kwf_uploads' AND REFERENCED_COLUMN_NAME='id'");
+            foreach ($indexes as $index) {
+                $sql = "ALTER TABLE {$index['TABLE_NAME']} DROP FOREIGN KEY `{$index['CONSTRAINT_NAME']}`";
+                $db->query($sql);
+            }
+            $db->query("ALTER TABLE `kwf_uploads` CHANGE  `id`  `id_old` INT( 11 ) NOT NULL");
+            $db->query("ALTER TABLE `kwf_uploads` DROP PRIMARY KEY");
+            $db->query("ALTER TABLE `kwf_uploads` ADD  `id` VARBINARY( 36 ) NOT NULL FIRST");
+            $db->query("UPDATE `kwf_uploads` SET `id` = UUID()");
+            $db->query("ALTER TABLE `kwf_uploads` ADD PRIMARY KEY(`id`)");
+        }
 
-            foreach (Kwf_Model_Abstract::findAllInstances() as $model) {
-                $this->_progressBar->next(1, 'updating uploads '.get_class($model));
-                foreach ($model->getReferences() as $rule) {
-                    $reference = $model->getReference($rule);
-                    $refModel = '';
-                    if (isset($reference['refModel'])) {
-                        $refModel = $reference['refModel'];
-                    } else if (isset($reference['refModelClass'])) {
-                        $refModel = $reference['refModelClass'];
+        $uploadIds = $db->fetchPairs('SELECT id_old, id FROM kwf_uploads');
+        foreach (Kwf_Model_Abstract::findAllInstances() as $model) {
+            $this->_progressBar->next(1, 'updating uploads '.get_class($model));
+            foreach ($model->getReferences() as $rule) {
+                $reference = $model->getReference($rule);
+                $refModel = '';
+                if (isset($reference['refModel'])) {
+                    $refModel = $reference['refModel'];
+                } else if (isset($reference['refModelClass'])) {
+                    $refModel = $reference['refModelClass'];
+                }
+                if (!is_instance_of($refModel, 'Kwf_Uploads_Model')) continue;
+
+                $tableName = '';
+                if (is_instance_of($model, 'Kwf_Model_Proxy')) {
+                    $tableName = $model->getProxyModel()->getTableName();
+                } else {
+                    $tableName = $model->getTableName();
+                }
+                $oldColumnName = $reference['column'] . '_old';
+                $columnName = $reference['column'];
+                $field = $db->fetchRow("SHOW FIELDS FROM `$tableName` WHERE `Field` = '$columnName'");
+                if ($field['Type'] != 'varbinary(36)') {
+                    $db->beginTransaction();
+                    try {
+                        $db->query("ALTER TABLE `{$tableName}` CHANGE  `{$columnName}`  `{$oldColumnName}` INT( 11 ) NULL;");
+                        $db->query("ALTER TABLE  `{$tableName}` ADD  `{$columnName}` VARBINARY( 36 ) NULL AFTER  `{$oldColumnName}`");
+                        $existingIds = $db->fetchCol("SELECT {$oldColumnName} FROM `{$tableName}` WHERE {$oldColumnName}!=''");
+                        $ids = array_intersect_key($uploadIds, $existingIds);
+                        foreach (array_chunk($ids, 1000, true) as $chunkedIds) {
+                            $values = array();
+                            foreach ($chunkedIds as $key => $val) {
+                                $values[] = "WHEN '$key' THEN '$val'";
+                            }
+                            $sql = "UPDATE {$tableName} SET {$columnName}=CASE {$oldColumnName} " . implode(' ', $values) . " END WHERE {$oldColumnName} IN (" . implode(', ', array_keys($chunkedIds)) . ")";
+                            $db->query($sql);
+                        }
+                        $db->query("ALTER TABLE `{$tableName}` DROP `{$oldColumnName}`");
+                        $db->query("ALTER TABLE `{$tableName}` ADD INDEX (`{$columnName}`)");
+                        $db->query("ALTER TABLE `$tableName` ADD FOREIGN KEY (`$columnName`) REFERENCES `kwf_uploads` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE");
+                        $db->commit();
+                    } catch (Zend_Db_Exception $e) {
+                        $db->rollBack();
                     }
-                    if (!is_instance_of($refModel, 'Kwf_Uploads_Model')) continue;
-
-                    $oldColumnName = $reference['column'] . '_old';
-                    $columnName = $reference['column'];
-
-                    $tableName = '';
-                    if (is_instance_of($model, 'Kwf_Model_Proxy')) {
-                        $tableName = $model->getProxyModel()->getTableName();
-                    } else {
-                        $tableName = $model->getTableName();
-                    }
-                    $db->query("ALTER TABLE `{$tableName}` CHANGE  `{$columnName}`  `{$oldColumnName}` INT( 11 ) NULL;");
-                    $db->query("ALTER TABLE  `{$tableName}` ADD  `{$columnName}` VARBINARY( 36 ) NULL AFTER  `{$oldColumnName}`");
-
-                    foreach ($db->query("SELECT {$oldColumnName} FROM `{$tableName}`")->fetchAll() as $data) {
-                        if (!$data[$oldColumnName]) continue;
-
-                        $id = $uploadIds[$data[$oldColumnName]];
-                        $db->query("UPDATE  `{$tableName}` SET  `{$columnName}` =  '{$id}' WHERE  `{$oldColumnName}` = {$data[$oldColumnName]};");
-                    }
-                    $db->query("ALTER TABLE `{$tableName}` DROP `{$oldColumnName}`");
                 }
             }
-
-            if (file_exists($uploadsDir . '/mediaprescale')) {
-                rename($uploadsDir . '/mediaprescale', $uploadsDir . '/mediaprescaleold');
-            } else {
-                mkdir($uploadsDir . '/mediaprescaleold');
-            }
-            mkdir($uploadsDir . '/mediaprescale');
-            $select = new Kwf_Model_Select();
-            $it = new Kwf_Model_Iterator_Packages(
-                new Kwf_Model_Iterator_Rows($uploadsModel, $select)
-            );
-            foreach ($it as $row) {
-                $this->_progressBar->next(1, 'renaming upload '.$row->id);
-                $this->_renameUploads($uploadsDir . '/', $row->id_old, $row->id);
-            }
-            rmdir($uploadsDir . '/mediaprescaleold');
-
-            //$db->query('ALTER TABLE `kwf_uploads` DROP `id_old`');
-            $db->query("SET FOREIGN_KEY_CHECKS = 1\n");
         }
+        $db->query("SET FOREIGN_KEY_CHECKS = 1\n");
 
-        $db->query("ALTER TABLE  `kwf_uploads` ADD  `md5_hash` VARCHAR( 32 ) NOT NULL");
-        $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
-        $s = new Kwf_Model_Select();
-        $it = new Kwf_Model_Iterator_Packages(
-            new Kwf_Model_Iterator_Rows($uploadsModel, $s)
-        );
-        foreach ($it as $row) {
-            $this->_progressBar->next(1, 'calculating md5 '.$row->id);
-            if (file_exists($row->getFileSource())) {
-                $md5Hash = md5_file($row->getFileSource());
-                $db->query("UPDATE  `kwf_uploads` SET  `md5_hash` =  '{$md5Hash}' WHERE  `id` = '{$row->id}';");
-            }
-        }
-
+        $this->_progressBar->next(1, 'updating Image filenames');
         if (in_array('kwc_basic_image', $db->listTables())) {
             $m = Kwf_Model_Abstract::getInstance('Kwc_Abstract_Image_Model');
             $s = new Kwf_Model_Select();
@@ -108,13 +113,38 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
                 new Kwf_Model_Iterator_Rows(Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model'), $s)
             );
             foreach ($it as $row) {
-                $pr = $row->getParentRow('Image');
+                $pr = $m->getRow($m->select()->whereEquals('kwf_upload_id', $row->id));
                 if ($pr) {
                     $row->filename = $pr->filename;
                     $row->save();
                 }
             }
         }
+
+        if ($this->countUploads() < 50000) {
+            $this->renameUploads();
+            $this->createHashes();
+        } else {
+            echo "Mehr als 50000 Uploads. Umbenennen bitte manuell ausführen:\n\"vps update-to39 rename-uploads\"\n\"vps update-to39 create-hashes\"\n";
+        }
+    }
+
+    public function renameUploads()
+    {
+        $db = Kwf_Registry::get('db');
+        $uploadsDir = Kwf_Config::getValue('uploads');
+        if (file_exists($uploadsDir . '/mediaprescale')) {
+            rename($uploadsDir . '/mediaprescale', $uploadsDir . '/mediaprescaleold');
+        } else {
+            mkdir($uploadsDir . '/mediaprescaleold');
+        }
+        mkdir($uploadsDir . '/mediaprescale');
+        $uploadIds = $db->fetchPairs('SELECT id_old, id FROM kwf_uploads');
+        foreach ($uploadIds as $oldId => $id) {
+            $this->_progressBar->next(1, 'renaming upload '.$id);
+            $this->_renameUploads($uploadsDir . '/', $oldId, $id);
+        }
+        rmdir($uploadsDir . '/mediaprescaleold');
     }
 
     private function _renameUploads($path, $oldName, $newName)
@@ -141,6 +171,28 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
                 }
 
                 rename($path . 'mediaprescaleold/' . $oldName, $path . 'mediaprescale/' . $foldername . '/' . $newName);
+            }
+        }
+    }
+
+    public function createHashes()
+    {
+        $db = Kwf_Registry::get('db');
+        $field = $db->fetchRow("SHOW FIELDS FROM `kwf_uploads` WHERE `Field` = 'md5_hash'");
+        if (!$field) {
+            $db->query("ALTER TABLE  `kwf_uploads` ADD  `md5_hash` VARCHAR( 32 ) NOT NULL");
+            $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
+        }
+        $s = new Kwf_Model_Select();
+        $s->whereEquals('md5_hash', '');
+        $it = new Kwf_Model_Iterator_Packages(
+            new Kwf_Model_Iterator_Rows(Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model'), $s)
+        );
+        foreach ($it as $row) {
+            $this->_progressBar->next(1, 'calculating md5 '.$row->id);
+            if (file_exists($row->getFileSource())) {
+                $md5Hash = md5_file($row->getFileSource());
+                $db->query("UPDATE `kwf_uploads` SET  `md5_hash` =  '{$md5Hash}' WHERE  `id` = '{$row->id}';");
             }
         }
     }
