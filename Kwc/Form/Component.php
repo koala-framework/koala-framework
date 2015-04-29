@@ -361,7 +361,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         if (!$errorStyle) $errorStyle = Kwf_Config::getValue('kwc.form.errorStyle');
         $ret['config'] = array(
             'controllerUrl' => $controllerUrl,
-            'useAjaxRequest' => $this->_getSetting('useAjaxRequest') && !$ret['isUpload'],
+            'useAjaxRequest' => $this->_getSetting('useAjaxRequest'),
             'hideFormOnSuccess' => $this->_getSetting('hideFormOnSuccess'),
             'componentId' => $this->getData()->componentId,
             'hideForValue' => $hideForValue,

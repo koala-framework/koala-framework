@@ -34,6 +34,22 @@ Kwc.Form.Component = function(form)
 
     Kwc.Form.formsByComponentId[this.config.componentId] = this;
 
+
+    if (this.el.down('form').dom.enctype == 'multipart/form-data' && this.config.useAjaxRequest) {
+        var supportsHtml5Upload = false;
+        if (XMLHttpRequest) {
+            var xhr = new XMLHttpRequest();
+            if (xhr.upload) {
+                supportsHtml5Upload = true;
+
+            }
+        }
+        if (supportsHtml5Upload) {
+            this.el.down('form').dom.enctype = '';
+        }
+        this.config.useAjaxRequest = supportsHtml5Upload;
+    }
+
     this.fields = [];
     form.select('.kwfField', true).each(function(fieldEl) {
         var classes = fieldEl.dom.className.split(' ');
