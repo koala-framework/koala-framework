@@ -27,6 +27,9 @@ Kwf.FrontendForm.File = Ext2.extend(Kwf.FrontendForm.Field, {
         this.form.disableSubmit();
 
         var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
+
+        if (!files.length) return;
+
         var file = files[0];
 
         if (file.size > this.fileSizeLimit) {
@@ -87,7 +90,7 @@ Kwf.FrontendForm.File = Ext2.extend(Kwf.FrontendForm.Field, {
 
                 this.dropContainer.find('input.kwfFormFieldFileUnderlayText').val(response.value.filename);
                 uploadIdField.val(response.value.uploadId+'_'+response.value.hashKey);
-                
+
             } else if (xhr.readyState == 4 && xhr.status !== 200) {
                 this.form.enableSubmit();
                 return alert(trl('An error occured, please try again later'));
