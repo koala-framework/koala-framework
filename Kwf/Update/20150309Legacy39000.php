@@ -40,6 +40,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
                 $sql = "ALTER TABLE {$index['TABLE_NAME']} DROP FOREIGN KEY `{$index['CONSTRAINT_NAME']}`";
                 $db->query($sql);
             }
+
             $indexes = $db->fetchAll("SELECT
                 TABLE_NAME,COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME
                 FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
@@ -74,8 +75,16 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
                 } else {
                     $tableName = $model->getTableName();
                 }
+
+                $tableExists = $db->fetchOne("SHOW TABLES LIKE '{$tableName}'");
+                if (!$tableExists) continue;
+
                 $oldColumnName = $reference['column'] . '_old';
                 $columnName = $reference['column'];
+
+                $columnExists = $db->fetchOne("SHOW COLUMNS FROM `{$tableName}` LIKE '{$columnName}'");
+                if (!$columnExists) continue;
+
                 $field = $db->fetchRow("SHOW FIELDS FROM `$tableName` WHERE `Field` = '$columnName'");
                 if ($field['Type'] != 'varbinary(36)') {
                     $db->beginTransaction();
