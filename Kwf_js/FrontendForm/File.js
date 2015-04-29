@@ -24,6 +24,8 @@ Kwf.FrontendForm.File = Ext2.extend(Kwf.FrontendForm.Field, {
         e.stopPropagation();
         e.preventDefault();
 
+        this.form.disableSubmit();
+
         var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
         var file = files[0];
 
@@ -43,58 +45,54 @@ Kwf.FrontendForm.File = Ext2.extend(Kwf.FrontendForm.Field, {
 
         var uploadIdField = this.uploadIdField;
 
-        this.dropContainer.find('input.kwfFormFieldFileUnderlayText').val(file.name);
-
-        var reader = new FileReader();
-
-        reader.onload = function(e) {
-            var xhr = new XMLHttpRequest();
-            var url = '/kwf/media/upload/json-upload';
-            if (Kwf.sessionToken) url += '?kwfSessionToken='+Kwf.sessionToken;
-            xhr.open('POST', url);
-            xhr.setRequestHeader('X-Upload-Name', encodeURIComponent(file.name));
-            xhr.setRequestHeader('X-Upload-Size', file.size);
-            xhr.setRequestHeader('X-Upload-Type', file.type);
-            xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+        var xhr = new XMLHttpRequest();
+        var url = '/kwf/media/upload/json-upload';
+        if (Kwf.sessionToken) url += '?kwfSessionToken='+Kwf.sessionToken;
+        xhr.open('POST', url);
+        xhr.setRequestHeader('X-Upload-Name', encodeURIComponent(file.name));
+        xhr.setRequestHeader('X-Upload-Size', file.size);
+        xhr.setRequestHeader('X-Upload-Type', file.type);
+        xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
 
 
-            xhr.upload.onprogress = function(data) {
-                if (data.lengthComputable) {
-                    var progress = (data.loaded / data.total) * 100;
-                    if (progress < 100) {
-                        progressbar.find('span.progress').css('width', progress+'%');
-                    } else {
-                        progressbar.find('span.progress').css('width', '100%');
-                        progressbar.find('span.progress').hide();
-                        progressbar.find('span.processing').addClass('visible');
-                    }
-                }
-            };
-
-            xhr.send(file);
-
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    progressbar.fadeOut(function() {
-                        $(this).remove();
-                    });
-
-                    var response;
-                    try {
-                        response = JSON.parse(xhr.response);
-                    } catch (e) {};
-
-                    if (response) {
-                        uploadIdField.val(response.value.uploadId+'_'+response.value.hashKey);
-                    }
-                } else if (xhr.readyState == 4 && xhr.status !== 200) {
-                    return alert(trl('An error occured, please try again later'));
+        xhr.upload.onprogress = (function(data) {
+            if (data.lengthComputable) {
+                var progress = (data.loaded / data.total) * 100;
+                if (progress < 100) {
+                    progressbar.find('span.progress').css('width', progress+'%');
+                } else {
+                    progressbar.find('span.progress').css('width', '100%');
+                    progressbar.find('span.progress').hide();
+                    progressbar.find('span.processing').addClass('visible');
                 }
             }
-        };
+        }).bind(this);
 
-        reader.readAsDataURL(file);
+        xhr.send(file);
 
+        xhr.onreadystatechange = (function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                this.form.enableSubmit();
+
+                progressbar.fadeOut(function() {
+                    $(this).remove();
+                });
+
+                var response;
+                try {
+                    response = JSON.parse(xhr.response);
+                } catch (e) {
+                    return alert(trl('An error occured, please try again later'));
+                }
+
+                this.dropContainer.find('input.kwfFormFieldFileUnderlayText').val(response.value.filename);
+                uploadIdField.val(response.value.uploadId+'_'+response.value.hashKey);
+                
+            } else if (xhr.readyState == 4 && xhr.status !== 200) {
+                this.form.enableSubmit();
+                return alert(trl('An error occured, please try again later'));
+            }
+        }).bind(this);
     },
     getFieldName: function() {
         var inp = this.el.child('input.fileSelector');

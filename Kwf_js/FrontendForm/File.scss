@@ -2,6 +2,7 @@
     margin-top: -20px;
 }
 .kwfFormFieldFileInnerContent {
+    position: relative;
     .kwfFormFieldFileUploadWrapper {
         position: relative;
         .fileSelector, > input {
@@ -23,6 +24,10 @@
             }
 
         }
+    }
+
+    .kwfFormFieldFieldDropText {
+        position: absolute;
     }
 }
 

@@ -13,6 +13,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->setAllowOnlyImages(false);
         $this->setMaxResolution(false);
+        $this->setDropText(trlKwfStatic('Drop your file here'));
         $this->setXtype('kwf.file');
         $maxSize = ini_get('upload_max_filesize');
         if (strtolower(substr($maxSize, -1))=='k') {
@@ -30,6 +31,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
     {
         $ret = parent::_getTrlProperties();
         $ret[] = 'frontendButtonText';
+        $ret[] = 'dropText';
         return $ret;
     }
 
@@ -181,6 +183,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         }
         $ret['html'] .= '</div>';
         $ret['html'] .= "<div class=\"kwfFormFieldFileInnerContent\">\n";
+        $ret['html'] .= '<div class="kwfFormFieldFieldDropText">'.$this->getDropText().'</div>';
         $ret['html'] .= "<div class=\"imagePath kwfFormFieldFileUploadWrapper\">\n";
             $ret['html'] .= "<input class=\"fileSelector\" type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
                             " data-file-size-limit=\"$fileSizeLimit\" ".
