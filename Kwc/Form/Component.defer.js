@@ -46,7 +46,7 @@ Kwc.Form.Component = function(form)
             }
         }
         if (supportsHtml5Upload) {
-            this.el.down('form').dom.enctype = '';
+            this.el.down('form').dom.enctype = 'application/x-www-form-urlencoded';
         }
         this.config.useAjaxRequest = supportsHtml5Upload;
     }
