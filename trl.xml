@@ -183,6 +183,7 @@
 <si>Kraj odhoda: poštna številka, kraj, ulica</si>
 <bg>Място на отпътуване: пощенски код, населено място, улица</bg>
 <ua>Місце відправки: індекс, місто, вулиця</ua>
+<al>Pikënisja.  Kodi postar, vendi, rruga.</al>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -214,6 +215,7 @@
 <si>pokaži pot</si>
 <bg>Покажи маршрут</bg>
 <ua>Показати маршрут</ua>
+<al>Shfaq rrugën. </al>
 </text>
 <text>
 <en>Suggestions</en>
@@ -631,6 +633,7 @@
 <hr>Pošalji</hr>
 <si>poslati</si>
 <ua>Надіслати</ua>
+<al>Dërgo</al>
 </text>
 <text>
 <en>Validator</en>
@@ -6867,6 +6870,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Sistemi ni našel ustreznih zadetkov za iskani pojem &amp;quot;{0}&amp;quot;.</sl>
 <uk>Нічого не знайдено</uk>
 <ua>Жодного запису не знайдено</ua>
+<al>Nuk u gjet asnjë informacion për tekstin &amp;quot;{0}&amp;quot;</al>
 </text>
 <text>
 <en>Show All</en>
@@ -11205,6 +11209,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <cs>Novinky nebyly nalezeny</cs>
 <hr>Nisu pronađeni rezultati</hr>
 <ro>Nu a fost gasita nicio inregistrare</ro>
+<al>Nuk u gjet asnjë informacion.</al>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
