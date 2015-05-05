@@ -17,6 +17,7 @@ class Kwf_Config
             }
             $cfg = $cfg->$i;
         }
+
         if ($cfg) {
             $ret = $cfg->toArray();
         } else {

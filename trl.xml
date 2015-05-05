@@ -200,6 +200,7 @@
 <si>Kraj odhoda: poštna številka, kraj, ulica</si>
 <bg>Място на отпътуване: пощенски код, населено място, улица</bg>
 <ua>Місце відправки: індекс, місто, вулиця</ua>
+<al>Pikënisja.  Kodi postar, vendi, rruga.</al>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -232,6 +233,7 @@
 <si>pokaži pot</si>
 <bg>Покажи маршрут</bg>
 <ua>Показати маршрут</ua>
+<al>Shfaq rrugën. </al>
 </text>
 <text>
 <en>Suggestions</en>
@@ -652,6 +654,7 @@
 <hr>Pošalji</hr>
 <si>poslati</si>
 <ua>Надіслати</ua>
+<al>Dërgo</al>
 </text>
 <text>
 <en>Validator</en>
@@ -7545,6 +7548,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Жодного запису не знайдено</ua>
 <uk>Записів не знайдено щодо цього запиту</uk>
 <hu>Nincs találat az alábbi keresésre: &amp;quot;{0}&amp;quot; </hu>
+<al>Nuk u gjet asnjë informacion për tekstin &amp;quot;{0}&amp;quot;</al>
 </text>
 <text>
 <en>Show All</en>
@@ -12446,6 +12450,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <uk>Записів не знайдено</uk>
 <hu>Nem található bejegyzés</hu>
 <es>no se encontraron entradas</es>
+<al>Nuk u gjet asnjë informacion.</al>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
