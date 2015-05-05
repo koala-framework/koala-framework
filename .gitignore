@@ -14,4 +14,4 @@ automagic-checkout.log
 /node_modules
 /.bowerrc
 /bower.json
-
+/trl

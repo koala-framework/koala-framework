@@ -27,6 +27,10 @@
     position: relative;
 }
 
+.cssClass .submitWrapper .button.disabled {
+    opacity: 0.3;
+}
+
 .cssClass input,
 .cssClass textarea,
 .cssClass select {

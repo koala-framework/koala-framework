@@ -119,7 +119,7 @@ class Kwf_Util_Update_Helper
                     if ($fileType != '.php' && $fileType != '.sql') continue;
                     $f = substr($f, 0, -4);
                     if (is_numeric($f)) {
-                        throw new Kwf_Exception("Invalid update script name: ".$f->getPathname()." Please use the new syntax.");
+                        throw new Kwf_Exception("Invalid update script name: ".$i->getPathname()." Please use the new syntax.");
                     }
                     $update = self::createUpdate($classPrefix.'_'.$f, $i->getPathname());
 

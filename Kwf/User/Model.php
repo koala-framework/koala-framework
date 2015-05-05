@@ -320,7 +320,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
 
     public function getEditModel()
     {
-        $m = $this->_proxyModel;
+        $m = $this->getProxyModel();
         if ($m instanceof Kwf_User_EditModel) return $m;
         if ($m instanceof Kwf_Model_Union) {
             foreach ($m->getUnionModels() as $m) {

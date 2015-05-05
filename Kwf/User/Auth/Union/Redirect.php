@@ -63,4 +63,9 @@ class Kwf_User_Auth_Union_Redirect extends Kwf_User_Auth_Union_Abstract implemen
     {
         return $this->_auth->allowPasswordForUser($user->getSourceRow());
     }
+
+    public function isRedirectCompatibleWith(Kwf_User_Auth_Interface_Redirect $auth)
+    {
+        return $this->_auth->isRedirectCompatibleWith($auth);
+    }
 }

@@ -22,11 +22,30 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
         return $ret;
     }
 
+    protected function _getComponentIdFromRow($parentData, $row)
+    {
+        while ($parentData->componentClass != $this->getClass()) {
+           $parentData = $parentData->parent;
+        }
+        return $parentData->componentId.$this->getIdSeparator().$this->_getIdFromRow($row);
+    }
+
     public function getChildData($parentData, $select = array())
     {
         if (is_array($select)) {
             $select = new Kwf_Component_Select($select);
         }
+
+        if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
+            $select->whereId(substr($id, 1));
+        }
+
+        if ($parentData) {
+            if ($parentData->generator != $this && $parentData->componentClass != $this->getClass()) {
+                return array();
+            }
+        }
+
 
         $filename = null;
         $limit = null;
