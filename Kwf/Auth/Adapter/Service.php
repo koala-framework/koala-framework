@@ -127,7 +127,7 @@ class Kwf_Auth_Adapter_Service implements Zend_Auth_Adapter_Interface
 
     private function _getCacheId()
     {
-        return str_replace(array('.', ':', ',', ' '), '_', $_SERVER['REMOTE_ADDR']);
+        return preg_replace('/[^0-9a-z_]/', '_', $_SERVER['REMOTE_ADDR']);
     }
 
     private function _getCache()

@@ -58,21 +58,27 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Chec
             $order->checkout_component_id = $this->getData()->parent->componentId;
             $order->cart_component_class = $this->getData()->parent->parent->componentClass;
 
-            $order->status = 'payed';
-            $order->date = date('Y-m-d H:i:s');
-            $order->payed = date('Y-m-d H:i:s');
+            if ($row->payment_status == 'Completed') {
+                $order->status = 'payed';
+                $order->payed = date('Y-m-d H:i:s');
+            }
+
+            if (!$order->confirm_mail_sent) {
+                foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
+                    $p->orderConfirmed($order);
+                }
+                foreach ($order->getChildRows('Products') as $p) {
+                    $addComponent = Kwf_Component_Data_Root::getInstance()
+                        ->getComponentByDbId($p->add_component_id);
+                    $addComponent->getComponent()->orderConfirmed($p);
+                }
+                $this->sendConfirmMail($order);
+
+                $order->date = date('Y-m-d H:i:s');
+                $order->confirm_mail_sent = date('Y-m-d H:i:s');
+            }
+
             $order->save();
-
-            foreach ($this->getData()->parent->parent->getComponent()->getShopCartPlugins() as $p) {
-                $p->orderConfirmed($order);
-            }
-            foreach ($order->getChildRows('Products') as $p) {
-                $addComponent = Kwf_Component_Data_Root::getInstance()
-                    ->getComponentByDbId($p->add_component_id);
-                $addComponent->getComponent()->orderConfirmed($p);
-            }
-            $this->sendConfirmMail($order);
-
             return true;
         } else {
             $mail = new Zend_Mail('utf-8');

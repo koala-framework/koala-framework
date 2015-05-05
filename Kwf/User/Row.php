@@ -96,8 +96,8 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     public function validatePassword($password)
     {
         $passCol = $this->getModel()->getPasswordColumn();
-        if ($password == Kwf_Util_Hash::hash($this->$passCol) // für cookie login
-            || $this->encodePassword($password) == $this->$passCol
+        if ($password === Kwf_Util_Hash::hash($this->$passCol) // für cookie login
+            || $this->encodePassword($password) === $this->$passCol
         ) {
             return true;
         }
