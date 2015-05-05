@@ -211,8 +211,8 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
 
             // Login nur zählen wenn richtig normal eingeloggt
             $passCol = $this->getPasswordColumn();
-            if ($credential == md5($row->$passCol)
-                || $row->encodePassword($credential) == $row->$passCol
+            if ($credential === md5($row->$passCol)
+                || $row->encodePassword($credential) === $row->$passCol
             ) {
                 $this->_realLoginModifyRow($row);
             }
