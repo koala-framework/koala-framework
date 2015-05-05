@@ -38,7 +38,7 @@ Kwf.GoogleMap.load = function(callback, scope)
     if (apiKeyIndex in Kwf.GoogleMap.apiKeys) {
         key = Kwf.GoogleMap.apiKeys[apiKeyIndex];
     }
-    var url = 'http:/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+trlKwf('en');
+    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+trlKwf('en');
     url += '&callback=Kwf.GoogleMap._loaded';
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
