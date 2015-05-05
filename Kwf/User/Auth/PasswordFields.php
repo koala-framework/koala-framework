@@ -33,11 +33,11 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     public function validatePassword(Kwf_Model_Row_Interface $row, $password)
     {
         if (preg_match('#^\$2a\$#', $row->password)) {
-            if ($this->_validatePasswordBcrypt($row, $password) == $row->password) {
+            if ($this->_validatePasswordBcrypt($row, $password) === $row->password) {
                 return true;
             }
         } else {
-            if ($this->_encodePasswordMd5($row, $password) == $row->password) {
+            if ($this->_encodePasswordMd5($row, $password) === $row->password) {
                 return true;
             }
         }
@@ -65,7 +65,7 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
         $expire = $activateToken[0];
         $rowToken = $activateToken[1];
         if ($expire < time()) return false;
-        if ($this->_validateActivateTokenBcrypt($row, $token) == $rowToken) {
+        if ($this->_validateActivateTokenBcrypt($row, $token) === $rowToken) {
             return true;
         }
         return false;
