@@ -44,7 +44,7 @@ class Kwf_User_Auth_AutoLoginFields extends Kwf_User_Auth_Abstract implements Kw
         $expire = $autologin[0];
         $rowToken = $autologin[1];
         if ($expire < time()) return false;
-        if ($this->_validateTokenBcrypt($row, $token) == $rowToken) {
+        if ($this->_validateTokenBcrypt($row, $token) === $rowToken) {
             return true;
         }
         return false;

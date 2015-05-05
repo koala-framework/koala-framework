@@ -133,7 +133,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             $it = new RecursiveDirectoryIterator($path);
             $it = new Kwf_Iterator_Filter_HiddenFiles($it);
             $it = new RecursiveIteratorIterator($it);
-            $it = new Kwf_Iterator_Filter_FileExtension($it, array('js', 'css'));
+            $it = new Kwf_Iterator_Filter_FileExtension($it, array('js', 'css', 'scss'));
             foreach ($it as $file) {
                 $f = $file->getPathname();
                 $f = substr($f, strlen($paths[$pathType]));

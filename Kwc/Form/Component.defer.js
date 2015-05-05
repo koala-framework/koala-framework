@@ -31,8 +31,25 @@ Kwc.Form.Component = function(form)
     config = Ext2.decode(config.value);
     if (!config) return;
     this.config = config;
+    this._submitDisabled = 0;
 
     Kwc.Form.formsByComponentId[this.config.componentId] = this;
+
+
+    if (this.el.down('form').dom.enctype == 'multipart/form-data' && this.config.useAjaxRequest) {
+        var supportsHtml5Upload = false;
+        if (XMLHttpRequest) {
+            var xhr = new XMLHttpRequest();
+            if (xhr.upload) {
+                supportsHtml5Upload = true;
+
+            }
+        }
+        if (supportsHtml5Upload) {
+            this.el.down('form').dom.enctype = 'application/x-www-form-urlencoded';
+        }
+        this.config.useAjaxRequest = supportsHtml5Upload;
+    }
 
     this.fields = [];
     form.select('.kwfField', true).each(function(fieldEl) {
@@ -122,14 +139,34 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
         }, this);
     },
     setValues: function(values) {
-        for(var i in values) {
+        for (var i in values) {
             var f = this.findField(i);
             if (f) f.setValue(values[i]);
         }
     },
+    disableSubmit: function() {
+        this._submitDisabled++;
+        this.el.child('.submitWrapper .button button').dom.disabled = true;
+        this.el.child('.submitWrapper .button').addClass('disabled');
+    },
+    enableSubmit: function() {
+        this._submitDisabled--;
 
+        if (this._submitDisabled === 0) {
+            this.el.child('.submitWrapper .button button').dom.disabled = false;
+            this.el.child('.submitWrapper .button').removeClass('disabled');
+        }
+    },
+    isSubmitDisabled: function() {
+        return this._submitDisabled > 0;
+    },
     onSubmit: function(e)
     {
+        if (this.isSubmitDisabled()) {
+            e.stopEvent();
+            return;
+        }
+
         //return false to cancel submit
         if (this.fireEvent('beforeSubmit', this, e) === false) {
             e.stopEvent();
@@ -176,7 +213,7 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
                 if (r.errorMessages && r.errorMessages.length) {
                     hasErrors = true;
                 }
-                for(var fieldName in r.errorFields) {
+                for (var fieldName in r.errorFields) {
                     hasErrors = true;
                 }
 
@@ -215,7 +252,7 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
                     // Scroll to first error. If there are form-errors those are first
                     if (!r.errorMessages.length) { // there are no form-errors
                         // Get position of first error field
-                        for(var fieldName in r.errorFields) {
+                        for (var fieldName in r.errorFields) {
                             var field = this.findField(fieldName);
                             if (field) {
                                 var pos = field.el.getY();

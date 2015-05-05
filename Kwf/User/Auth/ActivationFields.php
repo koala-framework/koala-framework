@@ -34,7 +34,7 @@ class Kwf_User_Auth_ActivationFields extends Kwf_User_Auth_Abstract implements K
         $expire = $activateToken[0];
         $rowToken = $activateToken[1];
         if ($expire < time()) return false;
-        if ($this->_validateActivateTokenBcrypt($row, $token) == $rowToken) {
+        if ($this->_validateActivateTokenBcrypt($row, $token) === $rowToken) {
             return true;
         }
         return false;

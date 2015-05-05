@@ -121,18 +121,19 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
     //overrridden in Kwc_Root_Category_GeneratorEvents
     protected function _getComponentsFromRow($row, $select)
     {
+        $primaryKey = $row->getModel()->getPrimaryKey();
         if ($this->_getGenerator()->hasSetting('dbIdShortcut') && $this->_getGenerator()->getSetting('dbIdShortcut')) {
             $dbId = $this->_getGenerator()->getSetting('dbIdShortcut') .
-                $row->id;
+                $row->$primaryKey;
             $ret = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, $select);
         } else if ($row->getModel()->hasColumn('component_id')) {
             $dbId = $row->component_id .
                 $this->_getGenerator()->getIdSeparator() .
-                $row->id;
+                $row->$primaryKey;
             $ret = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, $select);
         } else {
             $cls = $this->_getClassFromRow($row);
-            $select['id'] = $this->_getGenerator()->getIdSeparator().$row->id;
+            $select['id'] = $this->_getGenerator()->getIdSeparator().$row->$primaryKey;
             $ret = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($cls, $select);
         }
