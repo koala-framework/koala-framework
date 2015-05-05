@@ -210,7 +210,7 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
     private function _matchSelect($data, $select)
     {
         foreach ($data as &$d) {
-            if (!is_object($d) && !is_null($d)) $d = (string)$d;
+            if (!is_object($d) && !is_null($d) && !is_array($d)) $d = (string)$d;
         }
         if ($id = $select->getPart(Kwf_Model_Select::WHERE_ID)) {
             if ($data[$this->getPrimaryKey()] != (string)$id) return false;
