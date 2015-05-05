@@ -60,6 +60,7 @@ class Kwf_Mail extends Zend_Mail
 
     public function addTo($email, $name='')
     {
+        if (is_array($email)) $email = implode(';', $email);
         $this->_ownTo[] = trim("$name <$email>");
         if (Kwf_Registry::get('config')->debug->sendAllMailsTo) {
             if ($name) {
@@ -68,6 +69,7 @@ class Kwf_Mail extends Zend_Mail
                 $this->addHeader('X-Real-Recipient', $email);
             }
         } else {
+            if (strpos($email, ';') !== false) $email = explode(';', $email);
             parent::addTo($email, $name);
         }
         return $this;

@@ -9,10 +9,15 @@ class Kwf_Config
             return $ret;
         }
 
-        $cfg = Kwf_Registry::get('config');
+        $cfg = Kwf_Config_Web::getInstance();
         foreach (explode('.', $var) as $i) {
+            if (!isset($cfg->$i)) {
+                $cfg = null;
+                break;
+            }
             $cfg = $cfg->$i;
         }
+
         if ($cfg) {
             $ret = $cfg->toArray();
         } else {
@@ -32,7 +37,7 @@ class Kwf_Config
             return $ret;
         }
 
-        $cfg = Kwf_Registry::get('config');
+        $cfg = Kwf_Config_Web::getInstance();
         foreach (explode('.', $var) as $i) {
             if (!isset($cfg->$i)) {
                 $cfg = null;
