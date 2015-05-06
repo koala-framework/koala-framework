@@ -48,6 +48,7 @@ class Kwf_Model_Proxy_Rowset implements Kwf_Model_Rowset_Interface
     {
         return $this->_rowset->count();
     }
+
     public function seek($position)
     {
         $this->_rowset->seek($position);
@@ -61,7 +62,8 @@ class Kwf_Model_Proxy_Rowset implements Kwf_Model_Rowset_Interface
 
     public function offsetGet($offset)
     {
-        return $this->_rowset->offsetGet($offset);
+        $row = $this->_rowset->offsetGet($offset);
+        return $this->_model->getRowByProxiedRow($row);
     }
 
     public function offsetSet($offset, $value)
