@@ -1,18 +1,14 @@
 var esprima = require('esprima');
 var fs = require('fs');
 var pathModule = require('path');
-
-
-var args = process.argv.slice(2);
-var content = args[0];
-var contentLines = content.split("\n");
+process.stdin.setEncoding('utf8');
 
 var ERROR_WRONG_NR_OF_ARGUMENTS = 'wrongNrOfArguments';
 var ERROR_WRONG_ARGUMENT_TYPE = 'wrongArgumentType';
 
 var translations = [];
 
-var recursiveCheckForTrl = function(node, translations) {
+var recursiveCheckForTrl = function(node, translations, contentLines) {
     var key, child, calledFunction;
     if (node.type == 'CallExpression') {
         calledFunction = node.callee.name;
@@ -98,17 +94,23 @@ var recursiveCheckForTrl = function(node, translations) {
         if (node.hasOwnProperty(key)) {
             child = node[key];
             if (typeof child === 'object' && child !== null) {
-                recursiveCheckForTrl(child, translations);
+                recursiveCheckForTrl(child, translations, contentLines);
             }
         }
     }
 }
 
-var parseContent = function(content, translations) {
-    recursiveCheckForTrl(esprima.parse(content, {loc: true}), translations);
+var parseContent = function(content, translations, contentLines) {
+    recursiveCheckForTrl(esprima.parse(content, {loc: true}), translations, contentLines);
 };
 
-parseContent(content, translations);
-
-console.log(JSON.stringify(translations));
-process.exit(0);
+process.stdin.on('readable', function() {
+    var content = process.stdin.read();
+    if (content == null) return;
+    var contentLines = content.split("\n");
+    parseContent(content, translations, contentLines);
+});
+process.stdin.on('end', function() {
+    console.log(JSON.stringify(translations));
+    process.exit(0);
+});
