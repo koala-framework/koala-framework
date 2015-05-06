@@ -99,7 +99,7 @@ class Kwf_User_Auth_Union_Redirects extends Kwf_User_Auth_Abstract implements Kw
     public function allowPasswordForUser(Kwf_Model_Row_Interface $user)
     {
         foreach ($this->_auths as $auth) {
-            if ($auth->showInBackend()) return false;
+            if (!$auth->allowPasswordForUser($user->getSourceRow())) return false;
         }
         return true;
     }
