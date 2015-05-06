@@ -59,6 +59,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
             throw new Kwf_Exception("identity must not be numeric");
         }
 
+        $row = null;
         foreach ($this->getAuthMethods() as $auth) {
             if ($auth instanceof Kwf_User_Auth_Interface_Password) {
                 $row = $auth->getRowByIdentity($identd);
@@ -144,7 +145,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
-        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/lost-password';
+        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
         if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->getAbsoluteUrl(true);
         return $lostPassUrl.'?code='.$row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_LOSTPASSWORD);
     }

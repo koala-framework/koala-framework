@@ -21,7 +21,7 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
                  if ($ret) return $ret;
             }
         }
-        throw new Kwf_Exception();
+        throw new Kwf_Exception("No Activation Auth found");
     }
 
     public function validateActivationToken($token)
