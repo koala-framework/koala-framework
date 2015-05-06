@@ -53,10 +53,24 @@ class Kwf_Loader
         if (isset($classMap[$class])) {
             $file = $classMap[$class];
         } else {
+            $ns3 = null;
             if (($pos = strpos($class, '\\')) !== false) {
                 //php 5.3 namespace
                 $ns1 = substr($class, 0, $pos);
-                $ns2 = $class;
+
+                $pos = strpos($class, '\\', $pos+1);
+                if ($pos !== false) {
+                    $ns2 = substr($class, 0, $pos+1);
+                } else {
+                    $ns2 = $class;
+                }
+
+                $pos = strpos($class, '\\', $pos+1);
+                if ($pos !== false) {
+                    $ns3 = substr($class, 0, $pos+1);
+                } else {
+                    $ns3 = $class;
+                }
                 $file = str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
             } else {
                 $pos = strpos($class, '_');
@@ -71,7 +85,9 @@ class Kwf_Loader
                 $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
             }
             $dirs = false;
-            if (isset($namespaces[$ns2])) {
+            if ($ns3 && isset($namespaces[$ns3])) {
+                $dirs = $namespaces[$ns3];
+            } else if (isset($namespaces[$ns2])) {
                 $dirs = $namespaces[$ns2];
             } else if (isset($namespaces[$ns1])) {
                 $dirs = $namespaces[$ns1];
