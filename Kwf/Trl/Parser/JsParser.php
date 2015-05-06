@@ -3,7 +3,7 @@ class Kwf_Trl_Parser_JsParser
 {
     public static function parseContent($content)
     {
-        $cmd = 'node '.__DIR__.'/JsParser.js '.escapeshellarg($content);
+        $cmd = getcwd().'/'.VENDOR_PATH.'/bin/node '.__DIR__.'/JsParser.js '.escapeshellarg($content);
         exec($cmd, $cmdOutput, $retVal);
         if ($retVal) {
             throw new Kwf_Exception("Parsing js file failed: $content".implode("\n", $cmdOutput));
