@@ -46,6 +46,29 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     el[0].kwfLightbox = l;
     Kwf.EyeCandy.Lightbox.currentOpen = l;
 
+    var transformName = Modernizr.prefixed('transform');
+    l.lightboxEl.hide();
+    l.lightboxEl.removeClass('kwfLightboxOpen');
+    l.lightboxEl.width(); //trigger layout
+    l.lightboxEl.show();
+    var matrix = l.innerLightboxEl.css(transformName);
+    l.lightboxEl.hide();
+    l.lightboxEl.addClass('kwfLightboxOpen');
+    l.lightboxEl.width(); //trigger layout
+    l.lightboxEl.show();
+    var values = matrix.match(/-?[\d\.]+/g);
+    if (values != null) {
+        if (values[4] && values[4] == l.innerLightboxEl.outerWidth()) {
+            //translatex
+            l.innerLightboxEl.magicTransform = true;
+            l.innerLightboxEl.magicTransformX = true;
+        }
+        if (values[5] && values[5] == l.innerLightboxEl.outerHeight()) {
+            //translateY
+            l.innerLightboxEl.magicTransform = true;
+            l.innerLightboxEl.magicTransformY = true;
+        }
+    }
     //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
     Kwf.callOnContentReady(l.contentEl, {action: 'show'});
 }, { priority: 10 }); //after ResponsiveEl so lightbox can adapt to responsive content
@@ -144,6 +167,38 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.innerLightboxEl = lightbox.find('.kwfLightboxInner');
         var el = this.innerLightboxEl;
 
+
+        var transformName = Modernizr.prefixed('transform');
+        var matrix = el.css(transformName);
+        var values = matrix.match(/-?[\d\.]+/g);
+        if (values != null && values[4] && values[4] == el.outerWidth()) {
+            //translatex
+            this.innerLightboxEl.magicTransform = true;
+            this.innerLightboxEl.magicTransformX = true;
+            values[4] = ($(window).width()-el.outerWidth())/2 + el.outerWidth();
+            var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
+            this.innerLightboxEl.css(transformName, newMatrix);
+        }
+        if (values != null && values[5] && values[5] == el.outerWidth()) {
+            //translateY
+            this.innerLightboxEl.magicTransform = true;
+            this.innerLightboxEl.magicTransformY = true;
+            values[5] = ($(window).height()-el.outerHeight())/2 + el.outerHeight();
+            var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
+            this.innerLightboxEl.css(transformName, newMatrix);
+        }
+        if (this.innerLightboxEl.magicTransform) {
+            this.innerLightboxEl.magicScale = true;
+            if (values[0] == 0) {
+                values[0] = 0.001;
+            }
+            if (values[3] == 0) {
+                values[3] = 0.001;
+            }
+            var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
+            this.innerLightboxEl.css(transformName, newMatrix);
+        }
+
         if (this.options.width) {
             el.width(parseInt(this.options.width) /*+ el.getBorderWidth("lr") + el.getPadding("lr")*/);
         }
@@ -187,7 +242,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 self.innerLightboxEl.removeClass('kwfLightboxLoading');
                 self.innerLightboxEl.find('.loading').remove();
                 if (self.lightboxEl.is(':visible')) {
-                    self.contentEl.fadeIn();
+                    self.contentEl.show();
                 }
                 self.style.afterContentShown();
                 if (self.lightboxEl.is(':visible')) {
@@ -213,7 +268,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     show: function(options)
     {
         this.createLightboxEl();
-
         this.style.onShow(options);
 
         if (!this.closeHref) {
@@ -232,23 +286,45 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             Kwf.EyeCandy.Lightbox.currentOpen.close(closeOptions);
         }
         Kwf.EyeCandy.Lightbox.currentOpen = this;
-
         this.showOptions = options;
-
-        this.lightboxEl.addClass('kwfLightboxOpen');
-        if (this.fetched) {
-            if (!this.lightboxEl.is(':visible')) {
-                this.lightboxEl.show();
-                Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
-                this.style.afterContentShown();
-                this.lightboxEl.hide();
-                this.lightboxEl.fadeIn();
-                this.preloadLinks();
-            }
-        } else {
-            this.lightboxEl.show();
+        if (!this.fetched) {
             this.fetchContent();
         }
+
+        var transEndEventNames = {
+            'WebkitTransition' : 'webkitTransitionEnd',
+            'MozTransition'    : 'transitionend',
+            'transition'       : 'transitionend'
+        };
+        var transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
+        if (!this.lightboxEl.is(':visible')) {
+            this.lightboxEl.show();
+            this.lightboxEl.width(); //TODO BESSER LÖSEN!!! DAMIT display block vor addClass gemacht wird
+            if (this.innerLightboxEl.magicTransform) {
+                var transformName = Modernizr.prefixed('transform');
+                var matrix = this.innerLightboxEl.css(transformName);
+                var values = matrix.match(/-?[\d\.]+/g);
+                if (this.innerLightboxEl.magicScale) {
+                    values[0] = 1;
+                    values[3] = 1;
+                }
+                var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+',0,0)';
+                this.innerLightboxEl.css(transformName, newMatrix);
+            }
+            var transitionDurationName = Modernizr.prefixed('transitionDuration');
+            var duration = this.innerLightboxEl.css(transitionDurationName);
+            if (parseFloat(duration)>0) {
+                $('body').addClass('kwfLightboxAnimate');
+                this.innerLightboxEl.one(transEndEventName,
+                    (function() {
+                        $('body').removeClass('kwfLightboxAnimate');
+                        Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
+                        this.style.afterContentShown();
+                        this.preloadLinks();
+                    }).bind(this));
+            }
+        }
+        this.lightboxEl.addClass('kwfLightboxOpen');
         this.style.afterShow(options);
 
         Kwf.Statistics.count(this.href);
@@ -261,6 +337,21 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 
         this.style.onClose(options);
         this.lightboxEl.removeClass('kwfLightboxOpen');
+        if (this.innerLightboxEl.magicTransform) {
+            var transformName = Modernizr.prefixed('transform');
+            var matrix = this.innerLightboxEl.css(transformName);
+            var values = matrix.match(/-?[\d\.]+/g);
+            if (this.innerLightboxEl.magicTransformX) {
+                values[4] = ($(window).width()-this.innerLightboxEl.outerWidth())/2 + this.innerLightboxEl.outerWidth();
+            }
+            if (this.innerLightboxEl.magicTransformY) {
+                values[5] = ($(window).height()-this.innerLightboxEl.outerHeight())/2 + this.innerLightboxEl.outerHeight();
+            }
+            values[0] = 0.001;
+            values[3] = 0.001;
+            var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
+            this.innerLightboxEl.css(transformName, newMatrix);
+        }
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     closeAndPushState: function() {
@@ -361,12 +452,9 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     unmask: function() {
         Kwf.EyeCandy.Lightbox.Styles.Abstract.masks--;
         if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 0) return;
-        $(document.body).find('.lightboxMask').fadeOut({
-            complete: function() {
-                $(document.body).removeClass('kwfLightboxTheaterMode');
-                $(document.body).find('.lightboxMask').hide();
-            }
-        });
+        $(document.body).find('.lightboxMask').hide();
+        $(document.body).removeClass('kwfLightboxTheaterMode');
+        $(document.body).find('.lightboxMask').hide();
     },
     onMaskClick: function()
     {
@@ -417,7 +505,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         }
         this.lightbox.innerLightboxEl.width(originalWidth);
         this.lightbox.innerLightboxEl.height(originalHeight);
-        this._center(false);
+        this._center();
     },
     afterContentShown: function() {
 
@@ -431,7 +519,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         this.lightbox.innerLightboxEl.css(initialSize);
 
         this._resizeContent();
-        this._center(false);
+        this._center();
     },
     _getOuterMargin: function()
     {
@@ -513,22 +601,18 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
             this.lightbox.innerLightboxEl.css(newSize);
             if (this.lightbox.innerLightboxEl.css('backgroundColor')) {
                 //animate size only if backgroundColor is set - else it doesn't make sense
-                this._center(true);
+                this._center();
                 this.lightbox.innerLightboxEl.width(originalWidth);
                 this.lightbox.innerLightboxEl.height(originalHeight);
-                this.lightbox.innerLightboxEl.animate(newSize, {
-                    complete: (function() {
-                        var newSize = this._getContentSize();
-                        this.lightbox.innerLightboxEl.css(newSize);
-                    }).bind(this)
-                });
+                var newSize = this._getContentSize();
+                this.lightbox.innerLightboxEl.css(newSize);
             } else {
-                this._center(false);
+                this._center();
             }
         } else {
             var newSize = this._getContentSize();
             this.lightbox.innerLightboxEl.css(newSize);
-            this._center(false);
+            this._center();
             this.lightbox.lightboxEl.hide();
         }
     },
@@ -539,11 +623,26 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         this._center();
     },
     onClose: function(options) {
-        this.lightbox.lightboxEl.fadeOut({
-            complete: (function() {
-                this.afterClose();
-            }).bind(this)
-        });
+        var transEndEventNames = {
+            'WebkitTransition' : 'webkitTransitionEnd',
+            'MozTransition'    : 'transitionend',
+            'transition'       : 'transitionend'
+        };
+        var transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
+        var transitionDurationName = Modernizr.prefixed('transitionDuration');
+        var duration = this.lightbox.innerLightboxEl.css(transitionDurationName);
+        if (parseFloat(duration)>0) {
+            $('body').addClass('kwfLightboxAnimate');
+            this.lightbox.innerLightboxEl.one(transEndEventName,
+                (function() {
+                    $('body').removeClass('kwfLightboxAnimate');
+                    this.lightbox.lightboxEl.hide();
+                    this.afterClose();
+                }).bind(this));
+        } else {
+            this.lightbox.lightboxEl.hide();
+            this.afterClose();
+        }
         this.unmask();
     },
     _getCenterXy: function() {
@@ -562,9 +661,9 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
 
         return xy;
     },
-    _center: function(anim) {
+    _center: function() {
         if (!this.lightbox.lightboxEl.is(':visible')) return;
-        this.lightbox.innerLightboxEl[anim ? 'animate' : 'css'](this._getCenterXy());
+        this.lightbox.innerLightboxEl.css(this._getCenterXy());
     },
 
     //called if element *inside* lightbox did fire callOnContentReady
