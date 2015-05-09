@@ -102,9 +102,6 @@ class Kwf_Util_Check_Config
         $checks['uploads'] = array(
             'name' => 'uploads'
         );
-        $checks['setlocale'] = array(
-            'name' => 'setlocale'
-        );
         $checks['apc'] = array(
             'name' => 'apc'
         );
@@ -417,33 +414,6 @@ class Kwf_Util_Check_Config
                 'status' => self::RESULT_FAILED,
                 'message' => "Uploads path '$dir' is not writeable"
             );
-        }
-        return array(
-            'status' => self::RESULT_OK,
-        );
-    }
-
-    private static function _setlocale()
-    {
-        $locale = setlocale(LC_ALL, 0); //backup locale
-
-        $l = Kwf_Trl::getInstance()->trlcKwf('locale', 'C', array(), 'de');
-        if (!setlocale(LC_ALL, explode(', ', $l))) {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "Locale not installed, tried: ".$l
-            );
-        }
-
-        if (is_string($locale) && strpos($locale, ';')) {
-            $locales = array();
-            foreach (explode(';', $locale) as $l) {
-                $tmp = explode('=', $l);
-                $locales[$tmp[0]] = $tmp[1];
-            }
-            setlocale(LC_ALL, $locales);
-        } else {
-            setlocale(LC_ALL, $locale);
         }
         return array(
             'status' => self::RESULT_OK,
