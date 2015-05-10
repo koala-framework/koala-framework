@@ -134,7 +134,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
             $this->renameUploads();
             $this->createHashes();
         } else {
-            echo "Mehr als 50000 Uploads. Umbenennen bitte manuell ausführen:\n\"vps update-to39 rename-uploads\"\n\"vps update-to39 create-hashes\"\n";
+            echo "More than 50000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-to39 rename-uploads\"\n\"php bootstrap.php update-to39 create-hashes\"\n";
         }
     }
 
