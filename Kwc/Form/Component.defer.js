@@ -1,3 +1,5 @@
+// @require ModernizrNetworkXhr2
+
 Kwf.Utils.ResponsiveEl('.kwcForm.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
 Kwf.Utils.ResponsiveEl('.kwcForm.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
 Kwf.Utils.ResponsiveEl('.kwcForm.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
@@ -37,18 +39,10 @@ Kwc.Form.Component = function(form)
 
 
     if (this.el.down('form').dom.enctype == 'multipart/form-data' && this.config.useAjaxRequest) {
-        var supportsHtml5Upload = false;
-        if (XMLHttpRequest) {
-            var xhr = new XMLHttpRequest();
-            if (xhr.upload) {
-                supportsHtml5Upload = true;
-
-            }
-        }
-        if (supportsHtml5Upload) {
+        if (Modernizr.xhr2) {
             this.el.down('form').dom.enctype = 'application/x-www-form-urlencoded';
         }
-        this.config.useAjaxRequest = supportsHtml5Upload;
+        this.config.useAjaxRequest = Modernizr.xhr2;
     }
 
     this.fields = [];

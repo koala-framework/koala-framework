@@ -1,5 +1,12 @@
+// @require ModernizrNetworkXhr2
+
 Kwf.FrontendForm.File = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {
+        if (!Modernizr.xhr2) {
+            return;
+        }
+
+        this.el.addClass('dropField');
         this.dropContainer = $(this.el.dom);
         this.fileInput = $(this.el.dom).find('input[type="file"]');
         this.uploadIdField = this.dropContainer.find('input.kwfUploadIdField');
