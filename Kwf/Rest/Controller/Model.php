@@ -85,6 +85,22 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
         return $ret;
     }
 
+    protected function _getFilterParam($filterName)
+    {
+        $ret = null;
+        $filter = $this->_getParam('filter');
+        if ($filter) {
+            $filter = json_decode($filter);
+            foreach ($filter as $f) {
+                if ($f->property == $filterName && $f->value) {
+                    $ret = $f->value;
+                    break;
+                }
+            }
+        }
+        return $ret;
+    }
+
     protected function _applySelectQuery($select, $query)
     {
         $ors = array();
