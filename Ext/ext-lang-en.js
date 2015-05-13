@@ -173,7 +173,7 @@ Ext2.onReady(function() {
   if (Ext2 && Ext2.form.VTypes) {
     Ext2.apply(Ext2.form.VTypes, {
       emailText: trlKwf('This field should be an e-mail address in the format "user@domain.com"'),
-      urlText: trlKwf('This field should be a URL in the format "http:/' + '/www.domain.com"'),
+      urlText: trlKwf('This field should be a URL in the format "http://www.domain.com"'),
       alphaText: trlKwf('This field should only contain letters and _'),
       alphanumText: trlKwf('This field should only contain letters, numbers and _')
     });
