@@ -15250,5 +15250,16 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Als gelesen markieren</de>
 <id>2267</id>
 </text>
+<text>
+<en>Generate a new activation link</en>
+<id>2268</id>
+</text>
+<text>
+<en>Warning: this invalidates all previously generated activation links.</en>
+<id>2269</id>
+</text>
+<text>
+<en>Generate</en>
+<id>2270</id>
+</text>
 </trl>
-
