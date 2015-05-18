@@ -4,7 +4,7 @@ if (!Kwf.Utils.Element) Kwf.Utils.Element = {};
 Kwf.Utils.Element._cachedWidthEls = [];
 Kwf.Utils.Element.getCachedWidth = function(e) {
     if (typeof Ext2 != 'undefined' && Ext2.Element && e instanceof Ext2.Element) e = e.dom;
-    if (e instanceof jQuery) e = e.get(0);
+    if (e instanceof $) e = e.get(0);
     var ret = false;
     while (e) {
         if (e.getAttribute('data-width') == '100%') {

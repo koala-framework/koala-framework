@@ -83,7 +83,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         renderedEl = document.body;
     }
     if (typeof Ext2 != 'undefined' && Ext2.Element && renderedEl instanceof Ext2.Element) renderedEl = renderedEl.dom;
-    if (jQuery && renderedEl instanceof jQuery) {
+    if ($ && renderedEl instanceof $) {
         renderedEl.each(function(){ Kwf.callOnContentReady(this, options); });
         return;
     }
