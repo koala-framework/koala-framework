@@ -106,34 +106,3 @@ Kwf.getKwcRenderUrl = function() {
     if (location.search.match(/[\?&]kwcPreview/)) url += '?kwcPreview';
     return url;
 }
-
-Kwf.include =  function(url, restart)
-{
-    if (url.substr(-4) == '.css') {
-        var s = document.createElement('link');
-        s.setAttribute('type', 'text/css');
-        s.setAttribute('href', url+'?'+Math.random());
-        s.setAttribute('rel', 'stylesheet');
-    } else {
-        var s = document.createElement('script');
-        s.setAttribute('type', 'text/javascript');
-        s.setAttribute('src', url+'?'+Math.random());
-    }
-    s.onload = function () {
-        if (restart) Kwf.restart();
-    };
-    document.getElementsByTagName("head")[0].appendChild(s);
-};
-
-Kwf.restart = function()
-{
-    Ext2.getBody().unmask();
-    if (Kwf.currentViewport) {
-        Kwf.currentViewport.onDestroy();
-        delete Kwf.currentViewport;
-    }
-    Kwf.main();
-};
-
-var restart = Kwf.restart;
-var include = Kwf.include;
