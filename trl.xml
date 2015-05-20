@@ -15164,8 +15164,8 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 </text>
 <text>
 <en>Admin</en>
-<ru>Администратор</ru>
-<de>Administrator</de>
+<ru>Админ</ru>
+<de>Admin</de>
 <id>2262</id>
 </text>
 <text>
@@ -15198,68 +15198,88 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Standard Adjustments</en>
 <de>Standardeinstellungen</de>
 <id>2257</id>
+<ru>Стандартные установки</ru>
 </text>
 <text>
 <en>Background Color</en>
 <de>Hintergrundfarbe</de>
 <id>2258</id>
+<ru>Цвет фона</ru>
 </text>
 <text>
 <en>Margin Bottom</en>
 <de>Abstand unten</de>
 <id>2259</id>
+<ru>Внешний отступ снизу</ru>
 </text>
 <text>
 <en>Background Image</en>
 <de>Hintergrundbild</de>
 <id>2260</id>
+<ru>Фоновое изображение</ru>
 </text>
 <text>
 <en>White</en>
 <de>Weiß</de>
 <id>2261</id>
+<ru>Белый</ru>
 </text>
 <text>
 <en>Black</en>
 <de>Schwarz</de>
 <id>2262</id>
+<ru>Черный</ru>
 </text>
 <text>
 <en>None</en>
 <context>color</context>
 <de>Keine</de>
 <id>2263</id>
+<ru>Без цвета</ru>
 </text>
 <text>
 <en>Optional</en>
 <de>Optional</de>
 <id>2264</id>
+<ru>Необязательно</ru>
 </text>
 <text>
 <en>Articles required for reading</en>
 <de>Lesepflichtige Artikel</de>
 <id>2265</id>
+<ru>Статей требуется для прочтения</ru>
 </text>
 <text>
 <en>{0} articles are not read but required for reading - please read!</en>
 <de>Sie haben {0} lesepflichtige Artikel - bitte lesen!</de>
 <id>2266</id>
+<ru>{0} статей не прочтено, но необходимо прочесть - пожалуйста, прочтите!</ru>
 </text>
 <text>
 <en>Mark as read</en>
 <de>Als gelesen markieren</de>
 <id>2267</id>
+<ru>Пометить как прочитанное</ru>
 </text>
 <text>
 <en>Generate a new activation link</en>
 <id>2268</id>
+<ru>Сгенерировать новую ссылку активации</ru>
 </text>
 <text>
 <en>Warning: this invalidates all previously generated activation links.</en>
 <id>2269</id>
+<ru>Предупреждение: это сделает недействительными все ранее созданные ссылки активации.</ru>
 </text>
 <text>
 <en>Generate</en>
 <id>2270</id>
+<ru>Сгенерировать</ru>
+</text>
+<text>
+<en>Administrator</en>
+<id>2271</id>
+<ru>Администратор</ru>
+<de>Administrator</de>
 </text>
 </trl>
