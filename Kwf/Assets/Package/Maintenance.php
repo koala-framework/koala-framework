@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_Package_Maintenance extends Kwf_Assets_Package
+class Kwf_Assets_Package_Maintenance extends Kwf_Assets_Package implements Kwf_Assets_Package_FactoryInterface
 {
     private static $_defaultProviderList;
 
@@ -48,5 +48,12 @@ class Kwf_Assets_Package_Maintenance extends Kwf_Assets_Package
             return 'maint_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
         }
         return null;
+    }
+
+    public static function createPackages()
+    {
+        return array(
+            self::getInstance('Maintenance')
+        );
     }
 }

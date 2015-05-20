@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_Package_Default extends Kwf_Assets_Package
+class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Assets_Package_FactoryInterface
 {
     private static $_defaultProviderList;
     static private $_instances = array();
@@ -54,4 +54,17 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package
         }
         return null;
     }
+
+    public static function createPackages()
+    {
+        $packages = array(
+            self::getInstance('Frontend'),
+            self::getInstance('Admin')
+        );
+        foreach (Kwf_Config::getValueArray('assets.packages') as $i) {
+            $packages[] = self::getInstance($i);
+        }
+        return $packages;
+    }
+
 }

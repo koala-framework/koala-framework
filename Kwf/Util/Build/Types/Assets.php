@@ -47,15 +47,13 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
     private function _getAllPackages()
     {
-        $packages = array(
-            Kwf_Assets_Package_Default::getInstance('Frontend'),
-            Kwf_Assets_Package_Default::getInstance('Admin')
-        );
-        if (Kwf_Controller_Front::getInstance()->getControllerDirectory('kwf_controller_action_maintenance')) {
-            $packages[] = Kwf_Assets_Package_Maintenance::getInstance('Maintenance');
-        }
-        foreach (Kwf_Config::getValueArray('assets.packages') as $i) {
-            $packages[] = Kwf_Assets_Package_Default::getInstance($i);
+        $packages = array();
+        foreach (Kwf_Config::getValueArray('assets.packageFactories') as $i) {
+            if (!$i) continue;
+            if (!is_instance_of($i, 'Kwf_Assets_Package_FactoryInterface')) {
+                throw new Kwf_Exception("'$i' doesn't implement Kwf_Assets_Package_FactoryInterface");
+            }
+            $packages = array_merge($packages, call_user_func(array($i, 'createPackages')));
         }
         return $packages;
     }
