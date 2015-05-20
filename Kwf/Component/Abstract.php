@@ -53,7 +53,12 @@ class Kwf_Component_Abstract
             $c = substr($c, 0, -10);
         }
         $c = str_replace('_', '', $c);
-        return strtolower(substr($c, 0, 1)) . substr($c, 1);
+        if (Kwf_Config::getValue('application.uniquePrefix')) {
+            $c = Kwf_Config::getValue('application.uniquePrefix').$c;
+        } else {
+            $c = strtolower(substr($c, 0, 1)) . substr($c, 1);
+        }
+        return $c;
     }
 
     public static function getParentClasses($c)
