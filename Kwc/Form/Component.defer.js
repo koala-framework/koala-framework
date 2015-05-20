@@ -1,10 +1,10 @@
-Kwf.Utils.ResponsiveEl('.kwcForm.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
-Kwf.Utils.ResponsiveEl('.kwcForm.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
-Kwf.Utils.ResponsiveEl('.kwcForm.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
-Kwf.Utils.ResponsiveEl('.kwcForm.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.cssClass.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.cssClass.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.cssClass.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.cssClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
-Kwf.onElementReady('.kwcForm > form', function form(form) {
-    form = form.parent('.kwcForm', false);
+Kwf.onElementReady('.cssClass > form', function form(form) {
+    form = form.parent('.cssClass', false);
     if (!form.dom.kwcForm) {
         form.dom.kwcForm = new Kwc.Form.Component(form);
         form.kwcForm = form.dom.kwcForm;
@@ -13,9 +13,9 @@ Kwf.onElementReady('.kwcForm > form', function form(form) {
 
 Ext2.ns('Kwc.Form');
 Kwc.Form.findForm = function(el) {
-    var formEl = el.child('.kwcForm > form');
+    var formEl = el.child('.cssClass > form');
     if (formEl) {
-        formEl = formEl.parent('.kwcForm');
+        formEl = formEl.parent('.cssClass');
         return formEl.kwcForm;
     }
     return null;
@@ -305,8 +305,8 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
     }
 });
 
-Kwf.onElementReady('.kwcForm > form', function form(form) {
-    form = form.parent('.kwcForm', false);
+Kwf.onElementReady('.cssClass > form', function form(form) {
+    form = form.parent('.cssClass', false);
     if (!form.kwcForm) {
         form.kwcForm = new Kwc.Form.Component(form);
     }
