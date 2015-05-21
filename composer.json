@@ -4,7 +4,7 @@
     "homepage": "http://www.koala-framework.org/",
     "license": "BSD-2-Clause",
     "require": {
-        "koala-framework/zendframework1": "1.12.6.*",
+        "koala-framework/zendframework1": "1.12.13.*",
 
         "koala-framework/extjs2": "2.3.0.*",
         "koala-framework/library-swfupload": "2.2.*",
