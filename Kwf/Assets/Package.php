@@ -165,9 +165,11 @@ class Kwf_Assets_Package
                 '{$application.assetsVersion}',
                 Kwf_Assets_Dispatcher::getAssetsVersion()
             );
+            $prefix = (string)Kwf_Config::getValue('application.uniquePrefix');
+            if ($prefix) $prefix .= '-';
             $packageMap->stringReplace(
                 '{$application.uniquePrefix}',
-                (string)Kwf_Config::getValue('application.uniquePrefix')
+                $prefix
             );
         }
 

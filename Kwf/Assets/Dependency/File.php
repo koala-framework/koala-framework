@@ -188,10 +188,9 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         }
         if ($cssClass) {
             $cssClass = str_replace('/', '', $cssClass);
+            $cssClass = strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
             if (Kwf_Config::getValue('application.uniquePrefix')) {
-                $cssClass = Kwf_Config::getValue('application.uniquePrefix').$cssClass;
-            } else {
-                $cssClass = strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
+                $cssClass = Kwf_Config::getValue('application.uniquePrefix').'-'.$cssClass;
             }
             return $cssClass;
         }
