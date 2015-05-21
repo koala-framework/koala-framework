@@ -165,6 +165,10 @@ class Kwf_Assets_Package
                 '{$application.assetsVersion}',
                 Kwf_Assets_Dispatcher::getAssetsVersion()
             );
+            $packageMap->stringReplace(
+                '{$application.uniquePrefix}',
+                (string)Kwf_Config::getValue('application.uniquePrefix')
+            );
         }
 
         if ($includeSourceMapComment) {
