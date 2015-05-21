@@ -44,6 +44,9 @@ class Kwf_Setup
                 exit(1);
             }
             $baseUrl = substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
+            if (substr($baseUrl, -16) == '/kwf/maintenance') {
+                $baseUrl = substr($baseUrl, 0, -16);
+            }
             $cfg  = "[production]\n";
             $cfg .= "server.domain = \"$_SERVER[HTTP_HOST]\"\n";
             $cfg .= "server.baseUrl = \"$baseUrl\"\n";
@@ -160,7 +163,8 @@ class Kwf_Setup
         if (isset($requestPath)) return $requestPath;
         switch (php_sapi_name()) {
             case 'apache2handler':
-                $requestPath = $_SERVER['REDIRECT_URL'];
+                $requestPath = $_SERVER['REQUEST_URI'];
+                $requestPath = strtok($requestPath, '?');
                 break;
             case 'cli':
                 $requestPath = false;
@@ -288,13 +292,14 @@ class Kwf_Setup
             $class = $urlParts[1];
             $id = $urlParts[2];
             $type = $urlParts[3];
-            $checksum = $urlParts[4];
+            $checksum = urlencode($urlParts[4]);
             // time() wäre der 5er, wird aber nur wegen browsercache benötigt
             $filename = $urlParts[6];
 
             if ($checksum != Kwf_Media::getChecksum($class, $id, $type, $filename)) {
                 throw new Kwf_Exception_AccessDenied('Access to file not allowed.');
             }
+            $class = rawurldecode($class);
             Kwf_Media_Output::output(Kwf_Media::getOutput($class, $id, $type));
         }
     }

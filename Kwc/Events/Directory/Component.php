@@ -6,7 +6,7 @@ class Kwc_Events_Directory_Component extends Kwc_News_Directory_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Events');
         $ret['componentCategory'] = 'admin';
-        $ret['componentIcon'] = new Kwf_Asset('date');
+        $ret['componentIcon'] = 'date';
         $ret['childModel'] = 'Kwc_Events_Directory_Model';
 
         $ret['generators']['detail']['class'] = 'Kwc_Events_Directory_Generator';

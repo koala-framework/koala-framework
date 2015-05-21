@@ -15,6 +15,9 @@ class Kwc_Posts_Detail_Component extends Kwc_Abstract_Composite_Component
         $ret = parent::getTemplateVars();
         $data = $this->getData();
 
+
+        $ret['row'] = $data->row;
+
         $ret['content'] = self::replaceCodes($data->row->content);
         $ret['user'] = null;
         $ret['avatar'] = null;

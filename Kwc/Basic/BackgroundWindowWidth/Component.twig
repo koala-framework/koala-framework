@@ -1,0 +1,14 @@
+<div class="{{ cssClass }} {{ backgroundColor }}">
+    {% if image.hasContent() %}
+        <div class="background backgroundImage">
+            {{ renderer.component(image) }}
+        </div>
+    {% endif %}
+    <div class="background{% if image.hasContent() %} opaque{% endif %}"></div>
+    <div class="content">
+        {{ renderer.component(paragraphs) }}
+    </div>
+</div>
+{% if marginBottom %}
+<div class="space" style="height: {{ marginBottom }}px"></div>
+{% endif %}

@@ -25,6 +25,9 @@ class Kwf_Util_PayPal_Ipn_LogModel extends Kwf_Model_Db
         $ret .= substr(Kwf_Util_Hash::hash($data), 0, 10);
         $data = base64_encode($data);
         $ret .= $data;
+        if (strlen($ret) > 256) {
+            throw new Kwf_Exception("PayPal custom field does not support more than 256 characters");
+        }
         return $ret;
     }
 

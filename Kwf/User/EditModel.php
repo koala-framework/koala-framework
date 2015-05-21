@@ -17,7 +17,7 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
             'firstname' => 'firstname',
             'lastname' => 'lastname',
             'email' => 'email',
-            'format' => null,
+            'format' => 'format',
             'gender' => 'gender',
             'title' => 'title',
             'role' => 'role',
@@ -33,6 +33,12 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
             ));
         }
         parent::__construct($config);
+    }
+
+    protected function _init()
+    {
+        parent::_init();
+        $this->_exprs['format'] = new Kwf_Model_Select_Expr_String('html');
     }
 
     // wenn createRow benötigt wird weil man ein anderes userModel (db?) hat,

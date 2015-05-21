@@ -16,7 +16,7 @@
   <? } ?>
 
   <? foreach ($this->customVariables as $cv) { ?>
-  _paq.push(["setCustomVariable", <?=$cv['index']?>, "<?=$cv['name']?>", "<?=$cv['value']?>", "<?=$cv['scope']?>"]);
+  _paq.push(<?=json_encode(array("setCustomVariable", $cv['index'], $cv['name'], $cv['value'], $cv['scope']))?>);
   <? } ?>
 
   <? foreach ($this->additionalConfiguration as $key => $val) { ?>

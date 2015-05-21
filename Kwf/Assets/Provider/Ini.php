@@ -52,6 +52,7 @@ class Kwf_Assets_Provider_Ini extends Kwf_Assets_Provider_Abstract implements Se
 
             $files = array();
             foreach ($depFiles as $i) {
+                if (!$i) continue;
                 $i = Kwf_Assets_Dependency_File::createDependency(trim($i), $this->_providerList);
                 if ($i instanceof Kwf_Assets_Dependency_File && $i->getFileNameWithType()) {
                     $files[$i->getFileNameWithType()] = true;

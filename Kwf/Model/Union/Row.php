@@ -24,39 +24,69 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
     {
         if ($name == 'id') return true;
         $mapping = $this->_model->getUnionColumnMapping();
-        $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
-        return $this->_sourceRow->__isset($value);
+        $columns = get_class_vars($mapping);
+        $columns = $columns['columns'];
+        if (in_array($name, $columns)) {
+            $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
+            if (!$name) return false;
+            return $this->_sourceRow->__isset($name);
+        }
+        return parent::__isset($name);
     }
 
     public function __unset($name)
     {
         if ($name == 'id') throw new Kwf_Exception('unable to unset id');
         $mapping = $this->_model->getUnionColumnMapping();
-        $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
-        $this->_sourceRow->__unset($value);
+        $columns = get_class_vars($mapping);
+        $columns = $columns['columns'];
+        if (in_array($name, $columns)) {
+            $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
+            $this->_sourceRow->_unset($name);
+            return;
+        }
+        return parent::__unset($name);
     }
 
     public function __get($name)
     {
         if ($name == 'id') return $this->_id;
         $mapping = $this->_model->getUnionColumnMapping();
-        $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
-        return $this->_sourceRow->$name;
+        $columns = get_class_vars($mapping);
+        $columns = $columns['columns'];
+        if (in_array($name, $columns)) {
+            $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
+            if (!$name) return null;
+            return $this->_sourceRow->$name;
+        }
+        return parent::__get($name);
     }
 
     public function __set($name, $value)
     {
         if ($name == 'id') throw new Kwf_Exception('unable to change id');
         $mapping = $this->_model->getUnionColumnMapping();
-        $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
-        $this->_sourceRow->$name = $value;
+        $columns = get_class_vars($mapping);
+        $columns = $columns['columns'];
+        if (in_array($name, $columns)) {
+            $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
+            $this->_sourceRow->$name = $value;
+            return;
+        }
+        return parent::__set($name, $value);
     }
 
 
     //für forceSave
-    protected function _setDirty($column)
+    protected function _setDirty($name)
     {
-        $this->_sourceRow->_setDirty($column);
+        $mapping = $this->_model->getUnionColumnMapping();
+        $columns = get_class_vars($mapping);
+        $columns = $columns['columns'];
+        if (in_array($name, $columns)) {
+            $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $name);
+            $this->_sourceRow->_setDirty($name);
+        }
     }
 
     protected function _resetDirty()

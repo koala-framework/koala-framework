@@ -231,7 +231,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
             //html kommentare löschen, löscht auch word schas mit
             $html = preg_replace('#<!--.*?-->#s', '', $html);
 
-            $html = str_replace('_mce_type="bookmark"', 'class="_mce_type-bookmark"', $html);
+            $html = str_replace('data-mce-type="bookmark"', 'class="_mce_type-bookmark"', $html);
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
 
             $html = Kwf_Util_Tidy::repairHtml($html, $config);
@@ -244,7 +244,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
             $parser->setEnableStyles(Kwc_Abstract::getSetting($this->_componentClass, 'enableStyles'));
             $html = $parser->parse($html);
             $html = Kwf_Util_Tidy::repairHtml($html, $config);
-            $html = str_replace('class="_mce_type-bookmark"', '_mce_type="bookmark"', $html);
+            $html = str_replace('class="_mce_type-bookmark"', 'data-mce-type="bookmark"', $html);
             $html = str_replace('#nbsp#', '&nbsp;', $html);
         }
 

@@ -1,5 +1,5 @@
 <?php
-class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_Abstract_Composite_Component
+class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -38,6 +38,10 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
             throw new Kwf_Exception('Set wirecard settings (customerId & secret) in config!');
         }
 
+        $custom = Kwc_Shop_Cart_Checkout_Payment_Wirecard_LogModel::getEncodedCallback(
+            $this->getData()->parent->componentId, array('orderId' => $order->id)
+        );
+
         $payment = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component');
         $orderDescription = $order->firstname . ' ' . $order->lastname . ' (' . $order->zip . '), Bestellung: ' . $order->id;
         $params = array(
@@ -55,7 +59,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
             'cancelURL' => $payment->getChildComponent('_cancel')->getAbsoluteUrl(),
             'requestFingerprintOrder' => '',
             'paymentType' => Kwc_Abstract::getSetting($payment->componentClass, 'paymentType'),
-            'order_id' => $order->id
+            'custom' => $custom
         );
         if ($shopId = $this->getData()->getBaseProperty('wirecard.shopId')) $params['shopId'] = $shopId;
 

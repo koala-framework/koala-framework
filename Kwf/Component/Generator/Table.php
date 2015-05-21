@@ -127,6 +127,9 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
                     $currentPds = $currentPd;
                 }
                 foreach ($currentPds as $currentPd) {
+                    if (!$currentPd) {
+                        throw new Kwf_Exception("No parentData returned in '".get_class($this)."'");
+                    }
                     $data = $this->_createData($currentPd, $row, $s);
                     if ($data) {
                         $ret[] = $data;
@@ -355,7 +358,8 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         }
 
         $id = $this->_idSeparator . $newRow->{$this->_getModel()->getPrimaryKey()};
-        $target = array_pop($this->getChildData($parentTarget, array('id'=>$id, 'ignoreVisible'=>true, 'limit'=>1)));
+        $targetGen = Kwf_Component_Generator_Abstract::getInstance($parentTarget->componentClass, $this->getGeneratorKey());
+        $target = array_pop($targetGen->getChildData($parentTarget, array('id'=>$id, 'ignoreVisible'=>true, 'limit'=>1)));
         if (!$target) {
             return null;
         }
@@ -367,6 +371,13 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
     {
         $ret = null;
         if ($this->_getUseComponentId()) { //only duplicate rows that are scoped to source component (using component_id)
+            if (count($this->_settings['component']) > 1) {
+                $targetGen = Kwf_Component_Generator_Abstract::getInstance($parentTarget->componentClass, $this->getGeneratorKey());
+                if (!array_key_exists($source->row->component, $targetGen->_settings['component'])) {
+                    //ignore, component doesn't exist in target generator (we have incompatible generators)
+                    return null;
+                }
+            }
             $ret = $source->row->duplicate(array('component_id' => $parentTarget->dbId));
         } else {
             $ret = $source->row;

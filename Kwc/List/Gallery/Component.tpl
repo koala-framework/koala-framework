@@ -32,7 +32,7 @@
             $i++;
         ?>
     <? } ?>
-    <? if ($this->showPics) { ?>
+    <? if ($this->showPics && count($this->children) > $this->showPics) { ?>
         <div class="moreButton"><div class="innerMoreButton"><span><?=$this->placeholder['moreButton'];?></span></div></div>
     <? } ?>
 </div>

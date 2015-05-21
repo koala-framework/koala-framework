@@ -36,7 +36,7 @@ Kwf.Form.HtmlEditor.PastePlain = Ext2.extend(Ext2.util.Observable, {
                     text = text.replace(/\r/g, '');
                     text = text.replace(/\n/g, '</p>\n<p>');
                     text = String.format('<p>{0}</p>', text);
-                    this.cmp.insertAtCursor(text);
+                    this.cmp.tinymceEditor.editorCommands.execCommand('mceInsertContent', false, text);
                 }
             },
             scope : this,

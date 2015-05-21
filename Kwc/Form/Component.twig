@@ -21,46 +21,46 @@
     {% block formHeader %}
     {% if header %}{{ renderer.component(header) }}{% endif %}
     {% endblock %}
-    <form action="{{ action }}" method="{{ method }}"{% if isUpload %} enctype="multipart/form-data"{% endif %}>
+    {% if form %}
+        <form action="{{ action }}" method="{{ method }}"{% if isUpload %} enctype="multipart/form-data"{% endif %}>
 
-        {% block content %}
-            {% if form %}
+            {% block content %}
                 {{ renderer.formField(form) }}
-            {% endif %}
-        {% endblock %}
+            {% endblock %}
 
-        {% if method != 'get' %}
-        <div class="spEmail">
-            <label for="{{ data.componentId }}-sp-email">{{ data.trlKwf('Leave empty') }}:</label>
-            <input id="{{ data.componentId }}-sp-email" name="{{ formName }}-sp-email" /> {# spam protection, named email so bots think they should fill this #}
-        </div>
-        {% endif %}
-        <div class="submitWrapper {{ buttonClass }}">
-            <div class="beforeButton"></div>
-            <div class="button">
-                <div class="saving"></div>
-                <button class="submit" type="submit" name="{{ formName }}" value="submit">
-                    <span>{{ placeholder.submitButton }}</span>
-                </button>
+            {% if method != 'get' %}
+            <div class="spEmail">
+                <label for="{{ data.componentId }}-sp-email">{{ data.trlKwf('Leave empty') }}:</label>
+                <input id="{{ data.componentId }}-sp-email" name="{{ formName }}-sp-email" /> {# spam protection, named email so bots think they should fill this #}
             </div>
-            <div class="afterButton"></div>
+            {% endif %}
+            <div class="submitWrapper {{ buttonClass }}">
+                <div class="beforeButton"></div>
+                <div class="button">
+                    <div class="saving"></div>
+                    <button class="submit" type="submit" name="{{ formName }}" value="submit">
+                        <span>{{ placeholder.submitButton }}</span>
+                    </button>
+                </div>
+                <div class="afterButton"></div>
+                <div class="clear"></div>
+            </div>
             <div class="clear"></div>
-        </div>
-        <div class="clear"></div>
-        {% if method == 'get' %}
-            {# IE schickt bei enter-taste den submit-value nicht mit #}
-            <input type="hidden" name="{{ formName }}" value="submit" />
-        {% endif %}
+            {% if method == 'get' %}
+                {# IE schickt bei enter-taste den submit-value nicht mit #}
+                <input type="hidden" name="{{ formName }}" value="submit" />
+            {% endif %}
 
-        {# damit wir wissen ob gepostet wurde und ob wir laden sollen #}
-        <input type="hidden" name="{{ formName }}-post" value="post" />
+            {# damit wir wissen ob gepostet wurde und ob wir laden sollen #}
+            <input type="hidden" name="{{ formName }}-post" value="post" />
 
-        {% if formId %}
-            {# to pass id's even if we send by ajax #}
-            <input type="hidden" name="{{ formName }}-id" value="{{ formId }}" />
-            <input type="hidden" name="{{ formName }}-idHash" value="{{ formIdHash }}" />
-        {% endif %}
-    </form>
+            {% if formId %}
+                {# to pass id's even if we send by ajax #}
+                <input type="hidden" name="{{ formName }}-id" value="{{ formId }}" />
+                <input type="hidden" name="{{ formName }}-idHash" value="{{ formIdHash }}" />
+            {% endif %}
+        </form>
+    {% endif %}
     {% block formFooter %}
     {% if footer %}{{ renderer.component(footer) }}{% endif %}
     {% endblock %}

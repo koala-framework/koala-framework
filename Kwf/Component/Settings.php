@@ -107,9 +107,6 @@ class Kwf_Component_Settings
                     self::_mergeSettings($settings, $cs[$childSettingsKey]);
                 }
             }
-            if (isset($settings['componentIcon']) && is_string($settings['componentIcon'])) {
-                $settings['componentIcon'] = new Kwf_Asset($settings['componentIcon']);
-            }
             self::$_cacheSettings[$c][$param] = $settings;
         }
         return self::$_cacheSettings[$c][$param];

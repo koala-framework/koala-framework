@@ -22,6 +22,7 @@ class Kwf_Model_Db_Proxy extends Kwf_Model_Proxy
             $config['proxyModel'] = new Kwf_Model_Db(
                 array(
                     'table' => $table,
+                    'hasDeletedFlag' => $this->_hasDeletedFlag
                 )
             );
         }

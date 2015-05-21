@@ -31,12 +31,14 @@ class Kwf_Assets_Package_TestPackage extends Kwf_Assets_Package
         $providers[] = new Kwf_Assets_Provider_IniNoFiles();
         $providers[] = new Kwf_Assets_Provider_Components($rootComponentClass);
         $providers[] = new Kwf_Assets_Provider_Dynamic();
+        $providers[] = new Kwf_Assets_TinyMce_Provider();
         $providers[] = new Kwf_Assets_Provider_KwfUtils();
         $providers[] = new Kwf_Assets_Provider_DefaultAssets();
         $providers[] = new Kwf_Assets_Provider_AtRequires();
         $providers[] = new Kwf_Assets_Provider_ViewsUser();
         $providers[] = new Kwf_Assets_Provider_ErrorHandler();
         $providers[] = new Kwf_Assets_Provider_JsClassKwf();
+        $providers[] = new Kwf_Assets_Modernizr_Provider();
         $providerList = new Kwf_Assets_ProviderList_Abstract($providers);
         parent::__construct($providerList, $dependencyName);
     }

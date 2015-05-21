@@ -147,6 +147,7 @@ class Kwf_Media_Image
      */
     public static function getHandyScaleFactor($originalPath)
     {
+        if (!file_exists($originalPath)) return 1;
         $targetSize = array(600, 600, 'cover' => false);
         $original = @getimagesize($originalPath);
         if (abs(self::getExifRotation($originalPath)) == 90) {

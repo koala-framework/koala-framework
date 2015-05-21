@@ -17,49 +17,25 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends Kwc_Edit
 
     public function processInput($data)
     {
-        if (isset($data['paymentState']) && $data['paymentState'] == 'SUCCESS') {
-            $wirecardSecret = $this->getData()->getBaseProperty('wirecard.secret');
-            if (!$wirecardSecret) {
-                throw new Kwf_Exception('Set wirecard setting secret in config!');
-            }
-            $data['secret'] = $wirecardSecret;
-            $responseFingerprintSeed  = "";
-            foreach (explode(',', $data['responseFingerprintOrder']) as $key) {
-                $responseFingerprintSeed  .= $data[$key];
-            }
-            $responseFingerprint = md5($responseFingerprintSeed);
-            if ($responseFingerprint == $data['responseFingerprint']) {
-                $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting(
-                    $this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'
-                ))->getReferencedModel('Order')->getRow($data['order_id']);
-                if (!$order) {
-                    throw new Kwf_Exception("Order not found!");
-                }
-
+        $custom = isset($data['custom']) ? rawurldecode($data['custom']) : null;
+        $data = Kwc_Shop_Cart_Checkout_Payment_Wirecard_LogModel::decodeCallback($custom);
+        if ($data) {
+            $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting(
+                $this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'
+            ))->getReferencedModel('Order')->getRow($data['data']['orderId']);
+            if ($order->status == 'processing' || $order->status == 'cart') {
                 $order->payment_component_id = $this->getData()->parent->componentId;
                 $order->checkout_component_id = $this->getData()->parent->parent->componentId;
                 $order->cart_component_class = $this->getData()->parent->parent->parent->componentClass;
 
-                $order->status = 'payed';
+                $order->status = 'ordered';
                 $order->date = date('Y-m-d H:i:s');
-                $order->payed = date('Y-m-d H:i:s');
                 $order->save();
-
-                foreach ($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->getComponent()->getShopCartPlugins() as $p) {
-                    $p->orderConfirmed($order);
-                }
-                foreach ($order->getChildRows('Products') as $p) {
-                    $addComponent = Kwf_Component_Data_Root::getInstance()
-                        ->getComponentByDbId($p->add_component_id);
-                    $addComponent->getComponent()->orderConfirmed($p);
-                }
-
-                $this->getData()->parent->getComponent()->sendConfirmMail($order);
-            } else {
-                throw new Kwf_Exception('Error by validation of payment');
             }
-        } else {
-            Kwf_Util_Redirect::redirect($this->getData()->getParentByClass('Kwc_Shop_Component')->url);
+            Kwc_Shop_Cart_Orders::setOverriddenCartOrderId($order->id);
+            if (Kwc_Shop_Cart_Orders::getCartOrderId() == $order->id) {
+                Kwc_Shop_Cart_Orders::resetCartOrderId();
+            }
         }
     }
 }

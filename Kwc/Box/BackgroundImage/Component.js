@@ -38,7 +38,7 @@ Kwf.onJElementReady('.cssClass', function(el, config) {
     var backgroundResizeOriginalWidth = null;
     var backgroundResizeOriginalHeight = null;
 
-    if (Ext2.isIE8 && innerBackground.length) {                  //use modernizr in master branch instead of ext
+    if (!Modernizr.bgsizecover && innerBackground.length) {
         var bgUrl = innerBackground.css('background-image');
         bgUrl = bgUrl.replace(/url\("?(.*?)"?\)/, '$1');
 
@@ -55,6 +55,7 @@ Kwf.onJElementReady('.cssClass', function(el, config) {
             backgroundResizeOriginalHeight = image.height;
             backgroundResizeOriginalWidth = image.width;
             checkSize();
+            innerBackground.addClass('loaded');
         };
         if (image.width) image.onload(); //already loaded, call onload manually
     }

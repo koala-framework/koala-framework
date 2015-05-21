@@ -996,9 +996,14 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             $this->_progressBar->next(1, trlKwf('Writing data. Please be patient.'));
         }
         // write the file
-        $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
         $downloadkey = uniqid();
-        $objWriter->save('temp/'.$downloadkey.'.xls');
+        if (class_exists('XMLWriter')) {
+            $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel2007');
+            $objWriter->save('temp/'.$downloadkey.'.xlsx');
+        } else {
+            $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+            $objWriter->save('temp/'.$downloadkey.'.xls');
+        }
 
         $this->_progressBar->finish();
 
@@ -1010,15 +1015,22 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
         if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
             throw new Kwf_Exception("XLS is not allowed.");
         }
-        if (!file_exists('temp/'.$this->_getParam('downloadkey').'.xls')) {
+        if (class_exists('XMLWriter')) {
+            $suffix = 'xlsx';
+            $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        } else {
+            $suffix = 'xls';
+            $mimeType = 'application/msexcel';
+        }
+        if (!file_exists('temp/'.$this->_getParam('downloadkey').'.'.$suffix)) {
             throw new Kwf_Exception('Wrong downloadkey submitted');
         }
         Kwf_Util_TempCleaner::clean();
 
         $file = array(
-            'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.xls'),
-            'mimeType' => 'application/msexcel',
-            'downloadFilename' => 'export_'.date('Ymd-Hi').'.xls'
+            'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.'.$suffix),
+            'mimeType' => $mimeType,
+            'downloadFilename' => 'export_'.date('Ymd-Hi').'.'.$suffix
         );
         Kwf_Media_Output::output($file);
         $this->_helper->viewRenderer->setNoRender();

@@ -18,7 +18,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
                 '<% }) %>'+
             '<% } else { %>'+
                 '<% if (item.children && item.children.length) { %>'+
-                    '<li class="back"><a href="#">zurück</a></li>\n'+
+                    '<li class="back"><a href="#">'+trlKwf('back')+'</a></li>\n'+
                 '<% } %>'+
                 '<% _.each(item.children, function(child) { %>'+
                     '<li class="<% if (child.hasChildren) {  %>hasChildren<% } else if (child.isParent) { %>parent<% } %>">\n' +
@@ -108,6 +108,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
     });
 
     menuLink.click(function(e) {
+        menuLink.trigger('menuToggle', slideDuration);
         e.preventDefault();
         var slider = el.find('.slider');
         var menu = el.find('.menu');
@@ -116,6 +117,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
         if (sliders.length) {
             sliders.parent().find('.active').removeClass('active');
             sliders.parent().removeClass('open');
+            $('body').removeClass('kwcMobileMenuOpen');
             sliders.animate({height: 0}, slideDuration);
         }
 
@@ -125,6 +127,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
             el.addClass('loading');
         }
         menuLink.toggleClass('active');
+        $('body').toggleClass('kwcMobileMenuOpen');
         if (menuLink.parent().hasClass('open')) {
             slider.animate({height: 0}, slideDuration);
         } else {
@@ -148,14 +151,14 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
                 menuData[parseInt(page.id)] = page;
             });
 
-            if(!el.find('.slider').length) el.append('<div class="slider"></div>');
+            if (!el.find('.slider').length) el.append('<div class="slider"></div>');
 
             var html = template({item: res, isRoot: true});
             el.find('.slider').html(html);
             menuHtml.push(html);
             if (el.hasClass('loading')) {
                 el.find('.slider').animate({height: el.find('ul.menu').height()}, slideDuration);
-                el.trigger('menuToggle',[slideDuration]);
+                el.trigger('menuToggle', slideDuration);
             }
             el.removeClass('loading');
         }

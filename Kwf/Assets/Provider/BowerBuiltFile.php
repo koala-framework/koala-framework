@@ -18,7 +18,7 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
     public function getDependency($dependencyName)
     {
         $ret = null;
-        if (strtolower($dependencyName) == $this->_path || strtolower($dependencyName).'.js' == $this->_path) {
+        if (strtolower($dependencyName) == strtolower($this->_path) || strtolower($dependencyName).'.js' == strtolower($this->_path)) {
             $dir = VENDOR_PATH.'/bower_components/'.$this->_path;
             $path = $this->_path;
             if (substr($path, -3) == '.js') $path = substr($path, 0, -3);
@@ -31,7 +31,13 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
 
             $files = array();
             foreach ($paths as $p) {
-                $files = array_merge(array(
+                $files = array_merge($files, array(
+                    array(
+                        'file' => 'dist/'.$p.'.dist.js',
+                        'additionalFiles' => array(
+                            'dist/'.$p.'.dist.css',
+                        )
+                    ),
                     array(
                         'file' => $p.'.js',
                         'additionalFiles' => array(
@@ -39,9 +45,21 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
                         )
                     ),
                     array(
+                        'file' => 'jquery.'.$p.'.js',
+                        'additionalFiles' => array(
+                            'jquery.'.$p.'.css',
+                        )
+                    ),
+                    array(
                         'file' => 'dist/'.$p.'.js',
                         'additionalFiles' => array(
                             'dist/'.$p.'.css',
+                        )
+                    ),
+                    array(
+                        'file' => 'dist/js/'.$p.'.js',
+                        'additionalFiles' => array(
+                            'dist/css/'.$p.'.css',
                         )
                     ),
                     array(

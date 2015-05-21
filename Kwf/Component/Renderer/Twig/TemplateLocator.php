@@ -65,7 +65,18 @@ class Kwf_Component_Renderer_Twig_TemplateLocator
             }
         }
 
-        if (substr($ret, 0, strlen(getcwd())) == getcwd()) {
+
+        if (VENDOR_PATH == '../vendor') {
+            $cwd = getcwd();
+            $cwd = substr($cwd, 0, strrpos($cwd, '/'));
+            if (substr($ret, 0, strlen($cwd)) != $cwd) {
+                throw new Kwf_Exception("'$ret' not in cwd");
+            }
+            $ret = '../'.substr($ret, strlen($cwd)+1);
+        } else {
+            if (substr($ret, 0, strlen(getcwd())) != getcwd()) {
+                throw new Kwf_Exception("'$ret' not in cwd");
+            }
             $ret = substr($ret, strlen(getcwd())+1);
         }
 

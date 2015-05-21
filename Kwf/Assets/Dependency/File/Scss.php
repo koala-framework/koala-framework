@@ -69,14 +69,18 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     }
                 }
                 $loadPath[] = './scss';
-                $loadPath[] = KWF_PATH.'/sass/Kwf/stylesheets';
+                if (KWF_PATH == '..') {
+                    $loadPath[] = substr(getcwd(), 0, strrpos(getcwd(), '/')).'/sass/Kwf/stylesheets';
+                } else {
+                    $loadPath[] = KWF_PATH.'/sass/Kwf/stylesheets';
+                }
                 $loadPath = escapeshellarg(implode(PATH_SEPARATOR, $loadPath));
             }
 
-            if (substr($fileName, 0, 1) == '.') $fileName = getcwd().substr($fileName, 1);
+            if (substr($fileName, 0, 2) == './') $fileName = getcwd().substr($fileName, 1);
             $bin = Kwf_Config::getValue('server.nodeSassBinary');
             if (!$bin) {
-                $bin = "node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/node-sass/bin/node-sass';
+                $bin = getcwd()."/".VENDOR_PATH."/bin/node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/node-sass/bin/node-sass';
             }
             $cmd = "$bin --include-path $loadPath --output-style compressed ";
             $cmd .= " --source-map ".escapeshellarg($cacheFile.'.map');
@@ -112,6 +116,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             file_put_contents("$cacheFile.map", json_encode($map));
 
             $ret = file_get_contents($cacheFile);
+            $ret = str_replace("@charset \"UTF-8\";\n", '', $ret); //remove charset, no need to adjust sourcemap as sourcemap doesn't include that (bug in libsass)
             $ret = preg_replace("#/\*\# sourceMappingURL=.* \*/#", '', $ret);
 
             $map = new Kwf_SourceMaps_SourceMap(file_get_contents("{$cacheFile}.map"), $ret);
@@ -127,11 +132,14 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     }
                 }
             }
+
+            $usesVars = false;
             $assetVars = self::getAssetVariables();
             foreach ($assetVars as $k=>$i) {
                 $search = 'var('.$k.')';
                 if (strpos($ret, $search) !== false) {
                     $map->stringReplace($search, $i);
+                    $usesVars = true;
                 }
             }
 
@@ -147,19 +155,22 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     'mtime' => file_exists($f) ? filemtime($f) : null
                 );
             }
-            $files = array(
-                'assetVariables.ini',
-                'config.ini',
-                KWF_PATH.'/config.ini'
-            );
-            if (Kwf_Config::getValue('kwc.theme')) {
-                $files[] = Kwf_Config_Web::findThemeConfigIni(Kwf_Config::getValue('kwc.theme'));
-            }
-            foreach ($files as $f) {
-                $sourceTimes[] = array(
-                    'file' => $f,
-                    'mtime' => file_exists($f) ? filemtime($f) : null
+
+            if ($usesVars) {
+                $files = array(
+                    'assetVariables.ini',
+                    'config.ini',
+                    KWF_PATH.'/config.ini'
                 );
+                if (Kwf_Config::getValue('kwc.theme')) {
+                    $files[] = Kwf_Config_Web::findThemeConfigIni(Kwf_Config::getValue('kwc.theme'));
+                }
+                foreach ($files as $f) {
+                    $sourceTimes[] = array(
+                        'file' => $f,
+                        'mtime' => file_exists($f) ? filemtime($f) : null
+                    );
+                }
             }
             file_put_contents("$cacheFile.sourcetimes", serialize($sourceTimes));
         }

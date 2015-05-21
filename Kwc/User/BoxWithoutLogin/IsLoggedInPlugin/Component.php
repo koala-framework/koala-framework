@@ -19,7 +19,7 @@ class Kwc_User_BoxWithoutLogin_IsLoggedInPlugin_Component extends Kwf_Component_
         return $parts[1];
     }
 
-    private function _isLoggedIn()
+    protected function _isLoggedIn()
     {
         return Kwf_Setup::hasAuthedUser();
     }

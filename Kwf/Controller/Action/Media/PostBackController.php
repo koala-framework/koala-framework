@@ -27,6 +27,9 @@ class Kwf_Controller_Action_Media_PostBackController extends Kwf_Controller_Acti
         }
         $key = time().uniqid();
         $tempNam = 'temp/postback-'.$key;
+        if ($this->_getParam('upload-type') == 'base64') {
+            $contents = base64_decode($contents);
+        }
         file_put_contents($tempNam, $contents);
         $data = array(
             'file' => $tempNam,

@@ -5,7 +5,7 @@ class Kwc_Blog_Directory_Component extends Kwc_Directories_ItemPage_Directory_Co
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Blog');
-        $ret['componentIcon'] = new Kwf_Asset('newspaper');
+        $ret['componentIcon'] = 'newspaper';
         $ret['componentCategory'] = 'admin';
         $ret['childModel'] = 'Kwc_Blog_Directory_Model';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';

@@ -7,15 +7,15 @@
         "koala-framework/zendframework1": "1.12.6.*",
 
         "koala-framework/extjs2": "2.3.0.*",
-        "koala-framework/library-swfupload": "2.2.0.1",
+        "koala-framework/library-swfupload": "2.2.*",
         "koala-framework/library-silkicons": "1.3",
         "koala-framework/library-htmlawed": "1.1.14",
         "koala-framework/library-css3pie": "1.0.0",
-        "koala-framework/kwf-modernizr": "3.8.x-dev",
-        "koala-framework/composer-extra-assets": "1.0.x-dev",
+        "koala-framework/composer-extra-assets": "1.1.*",
         "twig/twig": "1.16.1",
-        "koala-framework/sourcemaps": "0.1.x-dev",
-        "symfony/process": "2.7.*"
+        "koala-framework/sourcemaps": "0.2.0",
+        "koala-framework/file-watcher": "*",
+        "symfony/console": "~2.5"
     },
     "extra": {
         "require-bower": {
@@ -25,15 +25,29 @@
             "underscore": "1.7.0",
             "susy": "vivid-planet/susy#8161395e8ad5d75a0a15a0355feb9853ebaad369",
             "compass-mixins": "1.0.2",
-            "tinymce": "tinymce/tinymce#3.5.8"
+            "tinymce": "tinymce/tinymce#4.1.9"
         },
         "require-npm": {
             "uglify-js": "2.4.13",
-            "node-sass": "1.2.3"
+            "node-sass": "2.0.1",
+            "amdlc": "0.1.5",
+
+            "grunt": "0.4.*",
+            "grunt-cli": "0.1.*",
+            "grunt-modernizr": "0.5.2"
         },
         "require-dev-bower": {
-            "qunit": "1.14.0",
+            "qunit": "1.18.0",
             "qunit-phantomjs-runner": "vivid-planet/qunit-phantomjs-runner#e96347ee33b773160cf061d7b1b5c4ad3d1d9082"
+        },
+        "kwf": {
+            "exclude-production": [
+                "symfony/console",
+                "koala-framework/file-watcher",
+                "koala-framework/sourcemaps",
+                "koala-framework/composer-extra-assets",
+                "nodejs/nodejs"
+            ]
         }
     },
     "suggest": {

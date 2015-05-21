@@ -1,5 +1,5 @@
 <?php
-class Kwc_News_Detail_Abstract_Trl_Cc_Component extends Kwc_Directories_Item_Detail_Trl_Cc_Component
+class Kwc_Blog_Detail_Abstract_Trl_Cc_Component extends Kwc_Directories_Item_Detail_Trl_Cc_Component
 {
     public static function modifyItemData(Kwf_Component_Data $new)
     {

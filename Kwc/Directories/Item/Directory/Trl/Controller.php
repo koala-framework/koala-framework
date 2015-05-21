@@ -54,6 +54,7 @@ class Kwc_Directories_Item_Directory_Trl_Controller extends Kwf_Controller_Actio
         foreach ($extConfig['contentEditComponents'] as $ec) {
             $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($ec['componentClass'], 'componentName'));
             $icon = Kwc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
+            $icon = new Kwf_Asset($icon);
             $this->_columns->add(new Kwc_Directories_Item_Directory_Trl_ControllerEditButton('edit_'.$i, ' ', 20))
                 ->setColumnType('editContent')
                 ->setEditComponentClass($ec['componentClass'])

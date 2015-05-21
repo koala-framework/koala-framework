@@ -6,7 +6,7 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Columns');
-        $ret['componentIcon'] = new Kwf_Asset('application_tile_horizontal');
+        $ret['componentIcon'] = 'application_tile_horizontal';
         $ret['componentCategory'] = 'layout';
         $ret['componentPriority'] = 100;
         $ret['childModel'] = 'Kwc_Columns_Model';
@@ -69,6 +69,11 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
                 'columns' => 4,
                 'colSpans' => array(1,1,1,1),
                 'name' => "4 $columnsTrl (25% - 25% - 25% - 25%)"
+            ),
+            '5col-20_20_20_20_20' => array(
+                'columns' => 5,
+                'colSpans' => array(1,1,1,1,1),
+                'name' => "5 $columnsTrl (20% - 20% - 20% - 20% - 20%)"
             )
         );
         return $ret;

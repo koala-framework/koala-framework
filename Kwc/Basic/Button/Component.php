@@ -6,7 +6,7 @@ class Kwc_Basic_Button_Component extends Kwc_Basic_Link_Component
         $ret = parent::getSettings();
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['componentName'] = trlKwfStatic('Button');
-        $ret['componentIcon'] = new Kwf_Asset('link_add');
+        $ret['componentIcon'] = 'link_add';
         $ret['styles'] = array(
             'default' => trlKwfStatic('Default'),
         );

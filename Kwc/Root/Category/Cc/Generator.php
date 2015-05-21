@@ -8,6 +8,24 @@ class Kwc_Root_Category_Cc_Generator extends Kwc_Chained_Cc_Generator
         return $ret;
     }
 
+    public function getChildData($parentData, $select = array())
+    {
+        if (is_array($select)) {
+            $select = new Kwf_Component_Select($select);
+        }
+
+        if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
+            $select->whereId(substr($id, 1));
+        }
+
+        if ($parentData) {
+            if ($parentData->generator != $this && $parentData->componentClass != $this->getClass()) {
+                return array();
+            }
+        }
+        return parent::getChildData($parentData, $select);
+    }
+
     protected function _getDataClass($config, $id)
     {
         if (isset($config['isHome']) && $config['isHome']) {
@@ -17,6 +35,13 @@ class Kwc_Root_Category_Cc_Generator extends Kwc_Chained_Cc_Generator
         }
     }
 
+    protected function _getComponentIdFromRow($parentData, $row)
+    {
+        while ($parentData->componentClass != $this->getClass()) {
+           $parentData = $parentData->parent;
+        }
+        return $parentData->componentId.$this->getIdSeparator().$this->_getIdFromRow($row);
+    }
 
     protected function _formatConfig($parentData, $row)
     {

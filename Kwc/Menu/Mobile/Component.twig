@@ -4,5 +4,7 @@
     <a class="showMenu" href="#">
         {{ placeholder.menuLink }}
     </a>
+    {% block beforeSlider %}{% endblock %}
     <div class="slider"></div>
+    {% block afterSlider %}{% endblock %}
 </div>

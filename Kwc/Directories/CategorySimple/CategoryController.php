@@ -1,8 +1,17 @@
 <?php
 class Kwc_Directories_CategorySimple_CategoryController extends Kwf_Controller_Action_Auto_Form
 {
-    protected $_model = 'Kwc_Directories_CategorySimple_CategoriesModel';
     protected $_permissions = array('add', 'save');
+
+    public function preDispatch()
+    {
+        $categoryToItemModel = Kwf_Model_Abstract::getInstance(
+            Kwc_Abstract::getSetting($this->_getParam('class'), 'categoryToItemModelName')
+        );
+        $this->_model = $categoryToItemModel->getReferencedModel('Category');
+
+        parent::preDispatch();
+    }
 
     protected function _initFields()
     {

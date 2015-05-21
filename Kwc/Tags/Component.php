@@ -22,6 +22,11 @@ class Kwc_Tags_Component extends Kwc_Abstract_Composite_Component
         $select->expr('tag_name');
         $ret['tags'] = array();
         foreach ($model->getRows($select) as $tag) {
+            if ($tag->countChildRows('Suggestions') > 0) {
+                $suggestion = $tag->getChildRows('Suggestions')->current();
+                if ($suggestion->status != 'accepted') continue;
+            }
+
             $ret['tags'][] = $tag->tag_name;
         }
         $ret['headline'] = $this->getData()->trlStaticExecute($this->_getSetting('componentName'));

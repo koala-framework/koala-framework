@@ -5,8 +5,9 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Gallery');
-        $ret['componentIcon'] = new Kwf_Asset('images.png');
+        $ret['componentIcon'] = 'images.png';
         $ret['componentCategory'] = 'content';
+        $ret['componentPriority'] = 45;
         $ret['generators']['child']['component'] = 'Kwc_List_Gallery_Image_Component';
         $ret['extConfig'] = 'Kwc_List_Gallery_ExtConfig';
         $ret['placeholder']['moreButton'] = trlKwfStatic('more');
@@ -35,7 +36,8 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         $ret['imagesPerLine'] = $this->_getGalleryColumns();
         if (!$ret['imagesPerLine']) $ret['imagesPerLine'] = 1;
         $ret['downloadAll'] = $this->getData()->getChildComponent('-downloadAll');
-        if ($this->_getGalleryColumns() <= $showPics && count($ret['children']) <= $showPics) {
+
+        if (($this->_getGalleryColumns() <= $showPics || $ret['imagesPerLine'] >= $showPics) && count($ret['children']) <= $showPics) {
             $ret['showPics'] = null;
         } else {
             $ret['showPics'] = $showPics;

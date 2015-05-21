@@ -3,7 +3,7 @@ class Kwc_Guestbook_Write_Form_Component extends Kwc_Posts_Write_Form_Component
 {
     protected function _getSettingsRow()
     {
-        return $this->_getPostsComponent()->getComponent()->getRow();
+        return $this->getData()->parent->getComponent()->getSettingsRow();
     }
 
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
@@ -26,8 +26,8 @@ class Kwc_Guestbook_Write_Form_Component extends Kwc_Posts_Write_Form_Component
         if ($settingsRow->new_post_mail) {
             $userRow = Kwf_Registry::get('userModel')->getRow($settingsRow->new_post_mail);
             if ($userRow) {
-                $guestbookComponent = $this->_getPostsComponent();
-                $mailComponent = $guestbookComponent->getChildComponent('-mail');
+                $mailComponent = $this->getData()->parent->getComponent()->getInfoMailComponent();
+                $guestbookComponent = $mailComponent->getParentByClass('Kwc_Guestbook_Component');
 
                 if ($settingsRow->post_activation_type == Kwc_Guestbook_Component::INACTIVE_ON_SAVE) {
                     $activationChildId = 'activate';
@@ -40,7 +40,7 @@ class Kwc_Guestbook_Write_Form_Component extends Kwc_Posts_Write_Form_Component
                     array(
                         'name'  => $row->name,
                         'email' => $row->email,
-                        'url'   => 'http://' . $_SERVER['HTTP_HOST'] . $guestbookComponent->getUrl(),
+                        'url'   => $guestbookComponent->getAbsoluteUrl(),
                         'text'  => $row->content,
                         'activateId' => $guestbookComponent->getChildComponent("-$activationChildId")->componentId,
                         'activatePostId' => $row->id,

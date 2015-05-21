@@ -61,6 +61,6 @@ Kwf.onElementReady('.kwcLegacyListCarousel', function(el, config){
 
     responsiveContent(el);
 
-    Kwf.Utils.ResponsiveEl('.kwcLegacyListCarousel', responsiveContent);
+    Kwf.onElementWidthChange('.kwcLegacyListCarousel', responsiveContent);
 
 });

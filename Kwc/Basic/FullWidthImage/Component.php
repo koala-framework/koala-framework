@@ -6,7 +6,7 @@ class Kwc_Basic_FullWidthImage_Component extends Kwc_TextImage_ImageEnlarge_Comp
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Picture 100% width');
         $ret['componentCategory'] = 'content';
-        $ret['componentPriority'] = 90;
+        $ret['componentPriority'] = 50;
         $ret['showHelpText'] = true;
         $ret['defineWidth'] = false;
         $ret['dimensions'] = array(

@@ -1,0 +1,1 @@
+ALTER TABLE  `kwc_favourites` CHANGE  `user_id`  `user_id` VARCHAR( 255 ) NOT NULL;

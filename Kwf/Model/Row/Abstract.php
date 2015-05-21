@@ -328,17 +328,13 @@ abstract class Kwf_Model_Row_Abstract implements Kwf_Model_Row_Interface, Serial
     }
 
     //override _saveWithoutResetDirty instead, or better _afterSave/_beforeSave
-    public final function save()
+    public function save()
     {
         $ret = $this->_saveWithoutResetDirty();
 
         $this->_resetDirty();
 
         return $ret;
-    }
-
-    protected function _postInsert()
-    {
     }
 
     public function delete()

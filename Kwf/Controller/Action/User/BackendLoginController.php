@@ -17,6 +17,7 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $this->view->brandingVividPlanet = Kwf_Config::getValue('application.branding.vividPlanet');
         $this->view->pages = Kwf_Registry::get('acl')->has('kwf_component_pages');
         $this->view->baseUrl = Kwf_Setup::getBaseUrl();
+        $this->view->favicon = Kwf_View_Ext::getFavicon();
 
         try {
             $t = new Kwf_Util_Model_Welcome();
@@ -71,7 +72,11 @@ class Kwf_Controller_Action_User_BackendLoginController extends Kwf_Controller_A
         $adapter->setCredential($row->password);
         $result = $auth->authenticate($adapter);
         if ($result->isValid()) {
-            $this->redirect($this->getRequest()->getPathInfo());
+            $redirectUrl = $this->getRequest()->getPathInfo();
+            if ($this->_getParam('redirect') && substr($this->_getParam('redirect'), 0, 1) == '/') {
+                $redirectUrl = $this->_getParam('redirect');
+            }
+            $this->redirect($redirectUrl);
         } else {
             $errors = $this->getRequest()->getParam('formErrors');
             foreach ($result->getMessages() as $msg) {

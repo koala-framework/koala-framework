@@ -56,7 +56,7 @@ Ext2.extend(Kwf.Utils.SwfUpload, Ext2.util.Observable, {
             custom_settings: {component: this},
             upload_url: location.protocol+'/'+'/'+location.host+'/kwf/media/upload/json-upload',
             flash_url: '/assets/swfupload/Flash/swfupload.swf',
-            file_size_limit: this.fileSizeLimit,
+            file_size_limit: this.fileSizeLimit+' B',
             file_types: fileTypes,
             file_types_description: fileTypesDescription,
             post_params: params,

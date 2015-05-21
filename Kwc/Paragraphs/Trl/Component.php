@@ -5,7 +5,7 @@ class Kwc_Paragraphs_Trl_Component extends Kwc_Chained_Trl_Component
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['componentIcon'] = new Kwf_Asset('page');
+        $ret['componentIcon'] = 'page';
         $ret['generators']['paragraphs']['class'] = 'Kwc_Paragraphs_Trl_Generator';
         $ret['childModel'] = 'Kwc_Paragraphs_Trl_Model';
         $ret['extConfig'] = 'Kwc_Paragraphs_Trl_ExtConfig';
@@ -22,6 +22,7 @@ class Kwc_Paragraphs_Trl_Component extends Kwc_Chained_Trl_Component
             if (Kwc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'useMobileBreakpoints') && $row->device_visible) {
                 $cssClass .= ' ' . $row->device_visible;
             }
+            $cssClass .= ' outer'.ucfirst(Kwf_Component_Abstract::formatCssClass($paragraph->chained->componentClass));
             $ret['paragraphs'][] = array(
                 'data' => $paragraph,
                 'class' => $cssClass

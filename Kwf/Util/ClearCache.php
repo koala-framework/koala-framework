@@ -75,12 +75,7 @@ class Kwf_Util_ClearCache
         if ($simpleCacheBackend == 'memcache' || $simpleCacheBackend == 'elastiCache') {
             $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
         }
-        $hasApc = extension_loaded('apc');
-        if (!$hasApc) {
-            //apc might be enabled in webserver only, not in cli
-            $hasApc = Kwf_Util_Apc::callUtil('is-loaded', array(), array('returnBody'=>true)) == 1;
-        }
-        if ($hasApc) {
+        if (Kwf_Util_Apc::isAvailable()) {
             $types[] = new Kwf_Util_ClearCache_Types_ApcUser();
             $types[] = new Kwf_Util_ClearCache_Types_ApcOptcode();
         }

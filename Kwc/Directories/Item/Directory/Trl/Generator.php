@@ -74,17 +74,16 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
 
     protected function _createData($parentData, $row, $select)
     {
+        $ret = parent::_createData($parentData, $row, $select);
         //visible überprüfung wird _getChainedChildComponents auch schon gemacht
         //aber nur wenn parentData dort schon verfügbar ist
         //für fälle wo es das nicht war hier unten nochmal überprüfen
-        $m = $this->getModel();
-        if ($m && $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE) !== true) {
-            $r = $this->_getRow($parentData->dbId.$this->getIdSeparator().$this->_getIdFromRow($row));
-            if (!$r || !$r->visible) {
-                return null;
+        if ($select->getPart(Kwf_Component_Select::IGNORE_VISIBLE) !== true) {
+            if (isset($ret->invisible) && $ret->invisible) {
+                $ret = null;
             }
         }
-        return parent::_createData($parentData, $row, $select);
+        return $ret;
     }
 
     protected function _formatConfig($parentData, $row)
@@ -98,6 +97,10 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
                 $ret['row'] = $m->createRow();
                 $ret['row']->component_id = $id;
             }
+            if (!$ret['row']->visible) {
+                $ret['invisible'] = true;
+            }
+
         } else {
             unset($ret['row']);
         }
@@ -115,7 +118,7 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
         }
 
         if (isset($ret['chained']->filename)) {
-            if (isset($detailGen['filenameColumn'])) {
+            if (isset($detailGen['filenameColumn']) && isset($ret['row'])) {
                 $fn = $ret['row']->{$detailGen['filenameColumn']};
             } else if (isset($ret['name'])) {
                 $fn = $ret['name'];

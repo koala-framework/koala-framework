@@ -14,6 +14,7 @@ class Kwc_Guestbook_Component extends Kwc_Posts_Directory_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Guestbook');
+        $ret['componentCategory'] = 'admin';
         $ret['generators']['detail']['component'] = 'Kwc_Guestbook_Detail_Component';
         $ret['generators']['write']['component'] = 'Kwc_Guestbook_Write_Component';
         $ret['generators']['child']['component']['mail'] = 'Kwc_Guestbook_Mail_Component';
@@ -29,7 +30,7 @@ class Kwc_Guestbook_Component extends Kwc_Posts_Directory_Component
     public function getSelect()
     {
         $ret = parent::getSelect();
-        $ret->order('id', 'DESC');
+        $ret->order('create_time', 'DESC');
         return $ret;
     }
 }

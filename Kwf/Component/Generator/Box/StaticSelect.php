@@ -111,6 +111,7 @@ class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_S
     {
         $ret = parent::getGeneratorFlags();
         $ret['box'] = true;
+        $ret['staticSelect'] = true;
         return $ret;
     }
 

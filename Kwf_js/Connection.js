@@ -109,6 +109,7 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
         this.request({
             url: '/kwf/json-progress-status',
             params: { progressNum: progressNum },
+            ignoreErrors: true,
             success: function(response, options, r) {
                 var progressNum = options.params.progressNum;
                 if (!this._progressData[progressNum]) return;

@@ -85,7 +85,8 @@ class Kwf_Cache_SimpleStatic
                 }
             }
         } else {
-            foreach (glob(self::_getFileNameForCacheId($cacheIdPrefix).'*') as $f) {
+            //don't use $cacheIdPrefix as filenames are base64 encoded
+            foreach (glob('cache/simple/*') as $f) {
                 unlink($f);
             }
         }

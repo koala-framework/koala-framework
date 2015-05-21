@@ -1,19 +1,5 @@
 <?php
-class Kwf_Util_ClearCache_Watcher_FindSymlinksRecFilterIterator extends RecursiveFilterIterator
-{
-
-    public function accept()
-    {
-        if ($this->getFileName() == 'node_modules') return false;
-        if ($this->getFileName() == 'cache') return false;
-        if ($this->getFileName() == 'log') return false;
-        if ($this->getFileName() == 'temp') return false;
-        if ($this->getFileName() == '.git') return false;
-        return true;
-    }
-
-}
-
+use Kwf\FileWatcher\Event;
 class Kwf_Util_ClearCache_Watcher
 {
     private static function _startsWith($str, $startWith)
@@ -111,28 +97,9 @@ class Kwf_Util_ClearCache_Watcher
             }
         }
 
-        //inotifywait doesn't recurse into symlinks
-        //so we add all symlinks to $watchPaths
-        foreach ($watchPaths as $p) {
-            $fsi = new RecursiveIteratorIterator(
-                new Kwf_Util_ClearCache_Watcher_FindSymlinksRecFilterIterator(
-                    new RecursiveDirectoryIterator($p)
-                ),
-                RecursiveIteratorIterator::SELF_FIRST
-            );
-            foreach ($fsi as $fso) {
-                if ($fso->isLink()) {
-                    foreach ($watchPaths as $p2) {
-                        if (substr($fso->__toString(), 0, strlen($p2)) == $p2) {
-                            continue 2;
-                        }
-                    }
-                    $watchPaths[] = $fso->__toString();
-                }
-            }
-        }
-
-        $exclude = array(
+        require VENDOR_PATH.'/autoload.php';
+        $watcher = Kwf\FileWatcher\Watcher::create($watchPaths);
+        $watcher->setExcludePatterns(array(
             '*magick*',
             '.nfs*',
             '/.git/*',
@@ -146,244 +113,89 @@ class Kwf_Util_ClearCache_Watcher
             '/querylog',
             '/eventlog',
             '/build/*',
-            '/Gruntfile.js'
+            '/Gruntfile.js',
+            '/node_modules/',
+            '/.idea/'
+        ));
+        $watcher->setQueueSizeLimit(100);
+        $watcher->setFollowLinks(true);
+
+        $output = new Symfony\Component\Console\Output\ConsoleOutput();
+        $verbosityLevelMap = array(
+            Psr\Log\LogLevel::NOTICE => Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL,
+            Psr\Log\LogLevel::INFO   => Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL,
+            //Psr\Log\LogLevel::DEBUG  => Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL,
         );
-        $backend = null;
-        $out = array();
-        exec("watchmedo --version 2>&1", $out, $ret);
-        if (!$ret) {
-            foreach ($exclude as &$e) {
-                $e = '*'.$e;
-            }
-            $cmd = "watchmedo log --recursive --ignore-directories ".
-                " --ignore-patterns ".escapeshellarg(implode(';', $exclude)).
-                ' '.implode(' ', $watchPaths);
-            if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
-                //disble output bufferering
-                $cmd = "PYTHONUNBUFFERED=1 $cmd";
+        $watcher->setLogger(new Symfony\Component\Console\Logger\ConsoleLogger($output, $verbosityLevelMap));
+
+
+        if ($watcher instanceof Kwf\FileWatcher\Backend\Poll) {
+            //don't use poll backend, that's too slow
+            if (stristr(PHP_OS, 'LINUX')) {
+                throw new Kwf_Exception_Client(
+                    "To use clear-cache-watcher you need either inotifywait or watchmedo installed and in your \$PATH:\n".
+                    "- install inotify-tools package to get inotifywait (see https://github.com/rvoicilas/inotify-tools/wiki)\n".
+                    "- install python-watchdog (see http://pythonhosted.org/watchdog/#easy-installation)"
+                );
             } else {
-                //on windows disable output buffering using -u
-                //the above doesn't work
-                $cmd = "python -u -m watchdog.$cmd";
+                throw new Kwf_Exception_Client(
+                    "To use clear-cache-watcher you need watchmedo installed and in your \$PATH:\n".
+                    "- install python-watchdog (see http://pythonhosted.org/watchdog/#easy-installation)"
+                );
             }
-            $backend = 'watchmedo';
-        } else {
-            $out = array();
-            $str = exec("inotifywait --help 2>&1", $out, $ret);
-            if ($ret > 1 || substr($out[0], 0, 12) != 'inotifywait ') {
-                if (stristr(PHP_OS, 'LINUX')) {
-                    throw new Kwf_Exception_Client(
-                        "To use clear-cache-watcher you need either inotifywait or watchmedo installed and in your \$PATH:\n".
-                        "- install inotify-tools package to get inotifywait (see https://github.com/rvoicilas/inotify-tools/wiki)\n".
-                        "- install python-watchdog (see http://pythonhosted.org/watchdog/#easy-installation)"
-                    );
-                } else {
-                    throw new Kwf_Exception_Client(
-                        "To use clear-cache-watcher you need watchmedo installed and in your \$PATH:\n".
-                        "- install python-watchdog (see http://pythonhosted.org/watchdog/#easy-installation)"
-                    );
-                }
-            }
-            $excludeRegEx = array();
-            foreach ($exclude as $e) {
-                if (substr($e, -1) == '*') $e = substr($e, 0, -1); //not needed
-                $excludeRegEx[] = str_replace(
-                    array(
-                        '.',
-                        '*',
-                    ),
-                    array(
-                        '\\.',
-                        '.*'
-                    ),
-                    $e);
-            }
-            $excludeRegEx = implode('|', $excludeRegEx);
-            $cmd = "inotifywait -e modify -e create -e delete -e move -e moved_to -e moved_from -r --monitor ".
-                "--exclude '$excludeRegEx' ".
-                implode(' ', $watchPaths);
-            $backend = 'inotifywait';
         }
-        echo $cmd."\n";
 
-        require VENDOR_PATH.'/autoload.php';
-        $proc = new Symfony\Component\Process\Process($cmd, null, null, null, null, array());
-        $proc->start();
+        $watcher->addListener('filewatcher.queue_full', function($e) {
+            echo "more than 100 events (".count($e->eventsQueue)."), did you switch branches or something?\n";
+            echo "I'm giving up.\n";
+            //TODO: clear-cache and restart clear-cache-watcher
+            $watcher->stop();
+        });
 
-        $eventsQueue = array();
-        $lastChange = false;
-        while(true) {
+        $watcher->addListener('filewatcher.delete', array(__CLASS__, '_handleEvent'));
+        $watcher->addListener('filewatcher.create', array(__CLASS__, '_handleEvent'));
+        $watcher->addListener('filewatcher.modify', array(__CLASS__, '_handleEvent'));
+        $watcher->addListener('filewatcher.move',   array(__CLASS__, '_handleEvent'));
 
-            if ($lastChange && $lastChange+($bufferUsecs/1000000) < microtime(true)) {
-                $eventsQueue = array_unique($eventsQueue);
-                if (count($eventsQueue) > 100) {
-                    echo "more than 100 events (".count($eventsQueue)."), did you switch branches or something?\n";
-                    echo "I'm giving up.\n";
-                    //TODO: clear-cache and restart clear-cache-watcher
-
-                    $ppid = $proc->getPid();
-                    //use ps to get all the children of this process, and kill them
-                    $pids = preg_split('/\s+/', `ps -o pid --no-heading --ppid $ppid`);
-                    foreach($pids as $pid) {
-                        if(is_numeric($pid)) {
-                            echo "Killing $pid\n";
-                            posix_kill($pid, 9); //9 is the SIGKILL signal
-                        }
-                    }
-                    $proc->terminate();
-                    $proc->close(false);
-                    exit;
-                }
-                if ($backend == 'inotifywait') {
-                    foreach ($eventsQueue as $k=>$event) {
-                        if (!preg_match('#^([^ ]+) ([A-Z,_]+) ([^ ]+)$#', trim($event), $m)) {
-                            echo "unknown event: $event\n";
-                            continue;
-                        }
-                        $eventsQueue[$k] = array(
-                            'event' => $m[2],
-                            'file' => $m[1].$m[3],
-                        );
-                        unset($m);
-                    }
-
-                    //inotifywait reports move a two individual events, compress into one MOVE
-                    foreach ($eventsQueue as $k=>$event) {
-                        if ($eventsQueue[$k]['event'] == 'MOVED_TO' && $k >= 1) {
-                            $eventsQueue[$k]['event'] = 'MOVE';
-                            if ($eventsQueue[$k-1]['event'] != 'MOVED_FROM') {
-                                throw new Kwf_Exception('MOVED_FROM event is not followed by a MOVED_TO');
-                            }
-                            $eventsQueue[$k]['dest'] = $eventsQueue[$k]['file'];
-                            $eventsQueue[$k]['file'] = $eventsQueue[$k-1]['file'];
-                            unset($eventsQueue[$k-1]);
-                        }
-                    }
-                    $eventsQueue = array_values($eventsQueue);
-
-                } else if ($backend == 'watchmedo') {
-                    foreach ($eventsQueue as $k=>$event) {
-                        if (!preg_match('#^on_([a-z]+)\(.*event=.*src_path=u?\'([^\']+)\'(, dest_path=u?\'([^\']+)\')?#', trim($event), $m)) {
-                            echo "unknown event: $event\n";
-                            continue;
-                        }
-                        $ev = $m[1];
-                        if ($ev == 'modified') $ev = 'MODIFY';
-                        if ($ev == 'created') $ev = 'CREATE';
-                        if ($ev == 'deleted') $ev = 'DELETE';
-                        if ($ev == 'moved') $ev = 'MOVE';
-                        $m[2] = str_replace('\\\\', '/', $m[2]); //windows
-                        $eventsQueue[$k] = array(
-                            'event' => $ev,
-                            'file' => $m[2]
-                        );
-                        if ($ev == 'MOVE') {
-                            $m[4] = str_replace('\\\\', '/', $m[4]);
-                            $eventsQueue[$k]['dest'] = $m[4];
-                        }
-                        unset($m);
-                    }
-                }
-
-                // compress the following into into one event:
-                // CREATE web.scssdx1493.new
-                // MODIFY web.scssdx1493.new
-                // (or in other order, which can happen
-                $eventsQueue = array_values($eventsQueue);
-                foreach ($eventsQueue as $k=>$event) {
-                    if (($event['event'] == 'MODIFY' || $event['event'] == 'CREATE') && $k >= 1) {
-                        $f = $eventsQueue[$k]['file'];
-                        if (($eventsQueue[$k-1]['event'] == 'CREATE' || $eventsQueue[$k-1]['event'] == 'MODIFY')
-                            && substr($eventsQueue[$k-1]['file'], 0, strlen($f)) == $f
-                        ) {
-                            $eventsQueue[$k]['event'] = 'MODIFY';
-                            unset($eventsQueue[$k-1]);
-                        }
-                    }
-                }
-
-                // compress the following into into one event:
-                // MODIFY web.scssdx1493.new
-                // MOVED web.scssdx1493.new web.scss
-                $eventsQueue = array_values($eventsQueue);
-                foreach ($eventsQueue as $k=>$event) {
-                    if ($event['event'] == 'MOVE' && $k >= 1) {
-                        $f = $eventsQueue[$k]['dest'];
-                        if ($eventsQueue[$k-1]['event'] == 'MODIFY'
-                            && substr($eventsQueue[$k]['file'], 0, strlen($f)) == $f
-                            && substr($eventsQueue[$k-1]['file'], 0, strlen($f)) == $f
-                        ) {
-                            unset($eventsQueue[$k-1]);
-                            $eventsQueue[$k]['event'] = 'MODIFY';
-                            $eventsQueue[$k]['file'] = $f;
-                            unset($eventsQueue[$k]['dest']);
-                        }
-                    }
-                }
-                foreach ($eventsQueue as $event) {
-                    $eventStart = microtime(true);
-                    self::_handleEvent($event['file'], $event['event']);
-                    echo "finished in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
-                }
-                $eventsQueue = array();
-                $lastChange = false;
-            }
-
-            $event = trim($proc->getIncrementalOutput());
-
-            if (!$event) {
-                usleep($bufferUsecs/2);
-                continue;
-            }
-            $eventsQueue = array_merge($eventsQueue, explode("\n", $event));
-
-            $lastChange = microtime(true);
-
-        }
-        $proc->close();
+        $watcher->start();
         exit;
     }
 
-    private static function _handleEvent($file, $event)
+    public static function _handleEvent($event)
     {
-        echo "\n$event $file\n";
-        Kwf_Cache_Simple::resetZendCache(); //reset to re-fetch namespace
         $eventStart = microtime(true);
-        if (substr($file, -4)=='.css' || substr($file, -3)=='.js' || substr($file, -9)=='.printcss' || substr($file, -5)=='.scss') {
-            echo "asset modified: $event $file\n";
-            if ($event == 'MODIFY') {
+        Kwf_Cache_Simple::resetZendCache(); //reset to re-fetch namespace
+        if (substr($event->filename, -4)=='.css' || substr($event->filename, -3)=='.js' || substr($event->filename, -9)=='.printcss' || substr($event->filename, -5)=='.scss') {
+            echo "asset modified\n";
+            if ($event instanceof Event\Modify) {
 
                 //there is no cache for individual files, scss cache is handled in Kwf_Assets_Dependency_File_Scss using mtime
 
-                $assetsType = substr($file, strrpos($file, '.')+1);
+                $assetsType = substr($event->filename, strrpos($event->filename, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
                 if ($assetsType == 'js') self::_clearAssetsAll('defer.js');
 
-                echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
 
-            } else if ($event == 'CREATE' || $event == 'DELETE' || $event == 'MOVE') {
+            } else if ($event instanceof Event\Create || $event instanceof Event\Delete || $event instanceof Event\Move) {
 
                 self::_clearAssetsDependencies();
 
-                $assetsType = substr($file, strrpos($file, '.')+1);
+                $assetsType = substr($event->filename, strrpos($event->filename, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
                 if ($assetsType == 'js') self::_clearAssetsAll('defer.js');
-                echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
 
-        } else if (self::_endsWith($file, '/dependencies.ini')) {
-            if ($event == 'MODIFY') {
+        } else if (self::_endsWith($event->filename, '/dependencies.ini')) {
+            if ($event instanceof Event\Modify) {
 
                 self::_clearAssetsDependencies();
 
                 self::_clearAssetsAll();
-
-                echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
-        } else if (preg_match('#/config([^/]*)?\.ini$#', $file)) { //config.ini, configPoi.ini, config.local.ini (in any directory)
-            if ($event == 'MODIFY') {
+        } else if (preg_match('#/config([^/]*)?\.ini$#', $event->filename)) { //config.ini, configPoi.ini, config.local.ini (in any directory)
+            if ($event instanceof Event\Modify) {
 
                 $section = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
                 $cacheId = 'config_'.str_replace('-', '_', $section);
@@ -391,60 +203,64 @@ class Kwf_Util_ClearCache_Watcher
                 echo "removed config cache\n";
 
                 $apcCacheId = $cacheId.getcwd();
-                $cacheIds = array();
-                $cacheIds[] = $apcCacheId;
-                $cacheIds[] = $apcCacheId.'mtime';
+                $cacheIds = array(
+                    $apcCacheId,
+                    $apcCacheId.'mtime',
+                );
+                $simpleCacheStaticPrefixes = array(
+                    'config-',
+                    'configAr-',
+                );
 
-                self::_clearApcCache(array(
-                    'cacheIds' => $cacheIds,
-                    'clearCacheSimpleStatic' => array(
-                        'config-',
-                        'configAr-',
-                    )
-                ));
-                echo "cleared apc config cache\n";
+                if (Kwf_Util_Apc::isAvailable()) {
+                    self::_clearApcCache(array(
+                        'cacheIds' => $cacheIds,
+                        'clearCacheSimpleStatic' => $simpleCacheStaticPrefixes
+                    ));
+                    echo "cleared apc config cache\n";
+                } else {
+                    foreach ($simpleCacheStaticPrefixes as $i) {
+                        Kwf_Cache_SimpleStatic::clear($i);
+                    }
+                }
 
                 $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache --type=setup";
                 exec($cmd, $out, $ret);
                 echo "cleared setup.php cache";
                 if ($ret) echo " [FAILED]";
                 echo "\n";
-
-                echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
-        } else if (preg_match('#(Acl|MenuConfig)\.php$#', $file)) {
-            if ($event == 'MODIFY') {
+        } else if (preg_match('#(Acl|MenuConfig)\.php$#', $event->filename)) {
+            if ($event instanceof Event\Modify) {
                 Kwf_Acl::clearCache();
                 echo "cleared acl cache...\n";
-
-                echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
             }
-        } else if (self::_endsWith($file, '.twig')) {
+        } else if (self::_endsWith($event->filename, '.twig')) {
             $loader = new Twig_Loader_Filesystem('.');
             $twig = new Twig_Environment($loader, array(
                 'cache' => 'cache/twig'
             ));
-            $cacheFile = $file;
+            $cacheFile = $event->filename;
             $cacheFile = substr($cacheFile, strlen(getcwd())+1);
             $cacheFile = $twig->getCacheFilename($cacheFile);
 
             if (file_exists($cacheFile)) {
                 unlink($cacheFile);
-                echo "cleared twig cache file '$cacheFile' for template '$file'\n";
+                echo "cleared twig cache file '$cacheFile' for template '$event->filename'\n";
             }
         }
 
-        if (self::_startsWith($file, getcwd().'/components')
-            || self::_startsWith($file, getcwd().'/theme')
-            || self::_startsWith($file, KWF_PATH.'/Kwc')
-            || (defined('VKWF_PATH') && self::_startsWith($file, VKWF_PATH.'/Vkwc'))
+        if (self::_startsWith($event->filename, getcwd().'/components')
+            || self::_startsWith($event->filename, getcwd().'/theme')
+            || self::_startsWith($event->filename, KWF_PATH.'/Kwc')
+            || (defined('VKWF_PATH') && self::_startsWith($event->filename, VKWF_PATH.'/Vkwc'))
         ) {
             $cls = null;
             foreach (explode(PATH_SEPARATOR, get_include_path()) as $ip) {
                 if (substr($ip, 0, 1) == '.') $ip = getcwd().substr($ip, 1);
                 if (substr($ip, 0, 1) != '/') $ip = getcwd().'/'.$ip;
-                if (self::_startsWith($file, $ip)) {
-                    $cls = str_replace('/', '_', substr($file, strlen($ip)+1, -4));
+                if (self::_startsWith($event->filename, $ip)) {
+                    $cls = str_replace('/', '_', substr($event->filename, strlen($ip)+1, -4));
                 }
             }
 
@@ -452,7 +268,7 @@ class Kwf_Util_ClearCache_Watcher
                 echo "unknown component class?!\n";
                 return;
             }
-            if (!self::_endsWith($file, '/Component.php')) {
+            if (!self::_endsWith($event->filename, '/Component.php')) {
                 //other component file
                 $cls = substr($cls, 0, strrpos($cls, '_')).'_Component';
             }
@@ -472,30 +288,30 @@ class Kwf_Util_ClearCache_Watcher
                 }
             } catch (Exception $e) {}
 
-            if (self::_endsWith($file, '/Admin.php') ||
-                       self::_endsWith($file, '/Master.tpl') ||
-                       self::_endsWith($file, '/Component.tpl') ||
-                       self::_endsWith($file, '/Partial.tpl') ||
-                       self::_endsWith($file, '/Master.twig') ||
-                       self::_endsWith($file, '/Component.twig') ||
-                       self::_endsWith($file, '/Partial.twig') ||
-                       self::_endsWith($file, '/Controller.php') ||
-                       self::_endsWith($file, '/FrontendForm.php') ||
-                       self::_endsWith($file, '/Form.php') ||
-                       self::_endsWith($file, '/Component.css') ||
-                       self::_endsWith($file, '/Component.scss') ||
-                       self::_endsWith($file, '/Component.printcss')
+            if (self::_endsWith($event->filename, '/Admin.php') ||
+                       self::_endsWith($event->filename, '/Master.tpl') ||
+                       self::_endsWith($event->filename, '/Component.tpl') ||
+                       self::_endsWith($event->filename, '/Partial.tpl') ||
+                       self::_endsWith($event->filename, '/Master.twig') ||
+                       self::_endsWith($event->filename, '/Component.twig') ||
+                       self::_endsWith($event->filename, '/Partial.twig') ||
+                       self::_endsWith($event->filename, '/Controller.php') ||
+                       self::_endsWith($event->filename, '/FrontendForm.php') ||
+                       self::_endsWith($event->filename, '/Form.php') ||
+                       self::_endsWith($event->filename, '/Component.css') ||
+                       self::_endsWith($event->filename, '/Component.scss') ||
+                       self::_endsWith($event->filename, '/Component.printcss')
             ) {
-                if ($event == 'CREATE' || $event == 'DELETE') {
+                if ($event instanceof Event\Create || $event instanceof Event\Delete) {
                     echo "recalculate 'componentFiles' setting because comopnent file got removed/added...\n";
                     self::_clearComponentSettingsCache($matchingClasses, 'componentFiles');
                 }
             }
 
-            if (   self::_endsWith($file, '/Component.php') ||
-                self::_endsWith($file, '/FrontendForm.php') //viewCache for forms is enabled
+            if (   self::_endsWith($event->filename, '/Component.php') ||
+                self::_endsWith($event->filename, '/FrontendForm.php') //viewCache for forms is enabled
             ) {
-                if ($event == 'MODIFY') {
+                if ($event instanceof Event\Modify) {
                     self::_clearComponentSettingsCache($matchingClasses);
 
                     //view cache can depend on settings
@@ -503,41 +319,41 @@ class Kwf_Util_ClearCache_Watcher
                     $s->whereEquals('component_class', $matchingClasses);
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Component.css') || self::_endsWith($file, '/Component.scss') || self::_endsWith($file, '/Component.printcss')) {
+            } else if (self::_endsWith($event->filename, '/Component.css') || self::_endsWith($event->filename, '/Component.scss') || self::_endsWith($event->filename, '/Component.printcss')) {
                 //MODIFY already handled above (assets)
                 //CREATE/DELETE also handled above
-            } else if (self::_endsWith($file, '/Master.tpl') || self::_endsWith($file, '/Master.twig')) {
-                if ($event == 'MODIFY') {
+            } else if (self::_endsWith($event->filename, '/Master.tpl') || self::_endsWith($event->filename, '/Master.twig')) {
+                if ($event instanceof Event\Modify) {
                     $s = new Kwf_Model_Select();
                     //all component_classes
                     $s->whereEquals('type', 'master');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Component.tpl') || self::_endsWith($file, '/Component.twig')) {
-                if ($event == 'MODIFY') {
+            } else if (self::_endsWith($event->filename, '/Component.tpl') || self::_endsWith($event->filename, '/Component.twig')) {
+                if ($event instanceof Event\Modify) {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
                     $s->whereEquals('type', 'component');
                     $s->whereEquals('renderer', 'component');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Partial.tpl') || self::_endsWith($file, '/Partial.twig')) {
-                if ($event == 'MODIFY') {
+            } else if (self::_endsWith($event->filename, '/Partial.tpl') || self::_endsWith($event->filename, '/Partial.twig')) {
+                if ($event instanceof Event\Modify) {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
                     $s->whereEquals('type', 'partial');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Mail.html.tpl') || self::_endsWith($file, '/Mail.html.twig')) {
-                if ($event == 'MODIFY') {
+            } else if (self::_endsWith($event->filename, '/Mail.html.tpl') || self::_endsWith($event->filename, '/Mail.html.twig')) {
+                if ($event instanceof Event\Modify) {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
                     $s->whereEquals('type', 'component');
                     $s->whereEquals('renderer', 'mail_html');
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($file, '/Mail.txt.tpl') || self::_endsWith($file, '/Mail.txt.twig')) {
-                if ($event == 'MODIFY') {
+            } else if (self::_endsWith($event->filename, '/Mail.txt.tpl') || self::_endsWith($event->filename, '/Mail.txt.twig')) {
+                if ($event instanceof Event\Modify) {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
                     $s->whereEquals('type', 'component');
@@ -545,8 +361,8 @@ class Kwf_Util_ClearCache_Watcher
                     self::_deleteViewCache($s);
                 }
             }
-            echo "handled event in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n";
         }
+        echo "finished in ".round((microtime(true)-$eventStart)*1000, 2)."ms\n\n";
     }
 
     private static function _clearApcCache($params)
@@ -654,9 +470,15 @@ class Kwf_Util_ClearCache_Watcher
         file_put_contents('build/component/settings', serialize($settings));
 
         echo "cleared component settings apc cache...\n";
-        self::_clearApcCache(array(
-            'clearCacheSimpleStatic' => $clearCacheSimpleStatic,
-        ));
+        if (Kwf_Util_Apc::isAvailable()) {
+            self::_clearApcCache(array(
+                'clearCacheSimpleStatic' => $clearCacheSimpleStatic,
+            ));
+        } else {
+            foreach ($clearCacheSimpleStatic as $i) {
+                Kwf_Cache_SimpleStatic::clear($i);
+            }
+        }
         echo "\n";
 
         if ($dimensionsChanged) {

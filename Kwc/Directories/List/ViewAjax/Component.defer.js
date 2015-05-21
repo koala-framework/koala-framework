@@ -103,6 +103,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
     controllerUrl: null,
     loadMoreBufferPx: 700,
+    initialPageSize: null,
 
     addHistoryEntryTimer: 0,
 
@@ -130,7 +131,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
                 var values = this.searchForm.getValues();
                 var diffFound = false;
-                for(var i in values) {
+                for (var i in values) {
                     if (values[i] != this.baseParams[i]) {
                         diffFound = true;
                         break;
@@ -293,7 +294,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             $.extend(params, this.searchForm.getValues());
         }
         var diffFound = false;
-        for(var i in params) {
+        for (var i in params) {
             if (params[i] != this.baseParams[i]) {
                 diffFound = true;
                 break;
@@ -308,7 +309,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
     loadMore: function()
     {
-        if (this.$el.find('.kwfViewAjaxItem').length<20 || this.loadingMore || this.visibleDetail) return;
+        if (this.$el.find('.kwfViewAjaxItem').length<this.initialPageSize || this.loadingMore || this.visibleDetail) return;
 
         this.loadingMore = true;
         this.$el.addClass('loadingMore');
@@ -338,7 +339,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             params.start = 0;
         }
         if (!params.limit) {
-            params.limit = 25;
+            params.limit = this.initialPageSize;
         }
         $.extend(params, this.baseParams);
 
@@ -365,6 +366,8 @@ Kwc.Directories.List.ViewAjax.prototype = {
     hideDetail: function()
     {
         if (this.detailEl) {
+            this.detailEl.hide();
+            Kwf.callOnContentReady(this.detailEl, {action: 'hide'});
             this.detailEl.remove();
             this.detailEl = null;
         }

@@ -23,6 +23,10 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         ) {
             throw new Kwf_Exception("throwHasContentChangedOnRowColumnsUpdate for '$componentClass' has to match column");
         }
+
+        if (isset($settings['componentIcon']) && !is_string($settings['componentIcon'])) {
+            throw new Kwf_Exception("componentIcon must be string");
+        }
     }
 
     /**

@@ -111,11 +111,6 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
         Kwf_Benchmark::count('GenChained::getChildData');
         $ret = array();
         if (is_array($select)) $select = new Kwf_Component_Select($select);
-        if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
-            if ($this->_getChainedGenerator() instanceof Kwc_Root_Category_Generator) {
-                $select->whereId(substr($id, 1));
-            }
-        }
 
         $chainedType = $this->getGeneratorFlag('chainedType');
 
@@ -196,6 +191,9 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
         if (isset($row->isHome)) {
             $data['isHome'] = $row->isHome;
         }
+        if (isset($row->invisible)) {
+            $data['invisible'] = $row->invisible;
+        }
         return $data;
     }
 
@@ -229,7 +227,7 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
         $ret = parent::getGeneratorFlags();
         $flags = $this->_getChainedGenerator()->getGeneratorFlags();
 
-        $copyFlags = array('pageGenerator', 'showInLinkInternAdmin', 'showInPageTreeAdmin', 'page', 'pseudoPage', 'box', 'multiBox', 'table', 'static', 'hasHome');
+        $copyFlags = array('pageGenerator', 'showInLinkInternAdmin', 'showInPageTreeAdmin', 'page', 'pseudoPage', 'box', 'multiBox', 'table', 'static', 'staticSelect', 'hasHome');
         foreach ($copyFlags as $f) {
             if (isset($flags[$f])) {
                 $ret[$f] = $flags[$f];

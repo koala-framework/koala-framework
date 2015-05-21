@@ -42,6 +42,7 @@ class Kwc_Paragraphs_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
             $name = Kwf_Registry::get('trl')->trlStaticExecute($name);
             $icon = Kwc_Abstract::getSetting($component, 'componentIcon');
             if ($icon) {
+                $icon = new Kwf_Asset($icon);
                 $icon = $icon->__toString();
             }
             if ($name) {

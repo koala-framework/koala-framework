@@ -5,7 +5,7 @@ class Kwc_Advanced_DownloadsTree_Component extends Kwc_Abstract_Composite_Compon
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Downloads');
-        $ret['componentIcon'] = new Kwf_Asset('application_side_tree');
+        $ret['componentIcon'] = 'application_side_tree';
 
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Advanced/DownloadsTree/AdminPanel.js';
         $ret['assetsDefer']['dep'][] = 'KwfAutoTree';

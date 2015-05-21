@@ -1,7 +1,7 @@
 <?php
 class Kwc_Legacy_Columns_Trl_Events extends Kwc_Abstract_List_Trl_Events
 {
-    protected function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
+    public function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         parent::onMasterRowUpdate($event);
 

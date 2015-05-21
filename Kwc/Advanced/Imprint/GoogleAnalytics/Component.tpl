@@ -1,27 +1,5 @@
 <div class="<?=$this->cssClass?>">
     <span class="imprintHeadline"><?=$this->data->trlKwf('Google Analytics');?></span>
-    <p>
-        Diese Website verwendet Google Analytics, einen Webanalysedienst von Google Inc.
-        Google Analytics verwendet "Cookies", Textdateien, die auf Ihrem Computer
-        gespeichert werden und die eine Analyse der Nutzung dieser Website ermöglicht.
-        Diese Informationen betr. Nutzung dieser Website wird an einen Server der
-        Google in den USA übertragen und dort gespeichert. Google verwendet diese
-        Informationen, um Ihre Nutzung der Website auszuwerten. Google überträgt
-        diese Informationen gegebenenfalls an Dritte, sofern dies gesetzlich vorgeschrieben
-        oder soweit Dritte diese Daten im Auftrag von Google verarbeiten. Google
-        wird in keinem Fall Ihre IP-Adresse (Ihren individuellen Internet Zugang)
-        mit anderen Daten von Google in Verbindung bringen. Sie können die
-        Installation der Cookies durch eine entsprechende Einstellung Ihrer Browser
-        Software verhindern; wir weisen Sie jedoch darauf hin, dass Sie in diesem
-        Fall gegebenenfalls nicht sämtliche Funktionen dieser Website voll
-        umfänglich nutzen können. Durch die Nutzung dieser Website erklären Sie
-        sich mit der Bearbeitung der über Sie erhobenen Daten durch Google in der
-        zuvor beschriebenen Art und Weise und zu dem zuvor benannten Zweck
-        einverstanden. Der Datenerhebung und -speicherung kann jederzeit mit Wirkung 
-        für die Zukunft <a href="https://tools.google.com/dlpage/gaoptout?hl=de" rel="popup_blank">widersprochen</a> 
-        werden. Diese Website verwendet Google Analytics mit der Erweiterung 
-        „_anonymizeIp()“, dadurch werden IP-Adressen nur gekürzt weiterverarbeitet, 
-        um eine direkte Personenbeziehbarkeit auszuschließen.
-    </p>
+    <p><?=$this->content?></p>
 </div>
 

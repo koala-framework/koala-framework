@@ -48,7 +48,7 @@ class Kwc_Abstract_List_Trl_Events extends Kwc_Abstract_Events
         }
     }
 
-    protected function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
+    public function onMasterRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         if ($event->isDirty('pos')) {
 
@@ -65,7 +65,7 @@ class Kwc_Abstract_List_Trl_Events extends Kwc_Abstract_Events
         }
     }
 
-    protected function onMasterRowDelete(Kwf_Events_Event_Row_Abstract $event)
+    public function onMasterRowDelete(Kwf_Events_Event_Row_Abstract $event)
     {
         $chainedType = 'Trl';
 

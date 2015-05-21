@@ -16,6 +16,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     private $_importBuffer;
     private $_importBufferOptions;
+    private $_bufferLogFileName;
 
     public function __construct($config = array())
     {
@@ -624,14 +625,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $i = $depOf->getDependentModelWithDependentOf($expr->getChild());
             $depM = $i['model'];
             $depOf = $i['dependentOf'];
-            $depM = Kwf_Model_Abstract::getInstance($depM);
-            $dbDepM = $depM;
-            while ($dbDepM instanceof Kwf_Model_Proxy) {
-                $dbDepM = $dbDepM->getProxyModel();
-            }
-            if (!$dbDepM instanceof Kwf_Model_Db) {
-                throw new Kwf_Exception_NotYetImplemented();
-            }
+
             $dbDepOf = $depOf;
             while ($dbDepOf instanceof Kwf_Model_Proxy) {
                 $dbDepOf = $dbDepOf->getProxyModel();
@@ -639,15 +633,29 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             if (!$dbDepOf instanceof Kwf_Model_Db) {
                 throw new Kwf_Exception_NotYetImplemented();
             }
+
+            $depM = Kwf_Model_Abstract::getInstance($depM);
+            $dbDepM = $depM;
+            while ($dbDepM instanceof Kwf_Model_Proxy) {
+                $dbDepM = $dbDepM->getProxyModel();
+            }
+            if (!$dbDepM instanceof Kwf_Model_Db && !$dbDepM instanceof Kwf_Model_Union) {
+                throw new Kwf_Exception_NotYetImplemented();
+            }
+
             $d = $depOf->getDependentModelWithDependentOf($expr->getChild());
             $ref = $d['model']->getReferenceByModelClass(get_class($d['dependentOf']), isset($d['rule']) ? $d['rule'] : null);
             $depSelect = $expr->getSelect();
-            if (!$depSelect) $depSelect = $dbDepM->select();
-            $col1 = $dbDepM->_formatField($ref['column'], null /* select fehlt - welches ist das korrekte?*/);
-            $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
-            $depDbSelect = $dbDepM->_getDbSelect($depSelect);
-            $depDbSelect->reset(Zend_Db_Select::COLUMNS);
-            $depDbSelect->from(null, $col1);
+            if (!$depSelect) $depSelect = new Kwf_Model_Select();
+
+            if ($dbDepM instanceof Kwf_Model_Union) {
+                $depDbSelect = $dbDepM->getDbSelects($depSelect, array($ref['column']));
+            } elseif ($dbDepM instanceof Kwf_Model_Db) {
+                $col1 = $dbDepM->_formatField($ref['column'], null /* select fehlt - welches ist das korrekte?*/);
+                $depDbSelect = $dbDepM->_getDbSelect($depSelect);
+                $depDbSelect->reset(Zend_Db_Select::COLUMNS);
+                $depDbSelect->from(null, $col1);
+            }
             return $this->_fieldWithTableName($this->getPrimaryKey(), $tableNameAlias)." IN ($depDbSelect)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Child_First) {
             $depM = $depOf->getDependentModel($expr->getChild());
@@ -1169,7 +1177,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         }
     }
 
-    private function _updateModelObserver($options, array $ids = null)
+    protected function _updateModelObserver($options, array $ids = null)
     {
         if (isset($options['skipModelObserver']) && $options['skipModelObserver']) return;
 
@@ -1260,6 +1268,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                     $this->_importBufferOptions = $options;
                     $this->_importBuffer = $data;
                 }
+                if ($this->_getBufferLogFileName()) {
+                    file_put_contents($this->_getBufferLogFileName(), count($this->_importBuffer));
+                }
                 if ($options['buffer'] !== true && count($this->_importBuffer) > $options['buffer']) {
                     $this->writeBuffer();
                 }
@@ -1290,11 +1301,34 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $ret;
     }
 
+    private function _getBufferLogFileName()
+    {
+        if (!isset($this->_bufferLogFileName)) {
+            if (Kwf_Config::getValue('debug.dbBuffer')) {
+                foreach (glob('cache/model/db-buffer-*') as $i) {
+                    $time = (int)substr($i, 15);
+                    if (time() - $time > 15) {
+                        $bufferSize = file_get_contents($i);
+                        $e = new Kwf_Exception("Not written import buffer with size '$bufferSize' found (age: ".(time()-$time)."): '$i'");
+                        $e->logOrThrow();
+                    }
+                }
+                $this->_bufferLogFileName = 'cache/model/db-buffer-'.time().'-'.uniqid();
+            } else {
+                $this->_bufferLogFileName = false;
+            }
+        }
+        return $this->_bufferLogFileName;
+    }
+
     public function writeBuffer()
     {
         parent::writeBuffer();
         if (isset($this->_importBuffer)) {
             $this->_importArray($this->_importBuffer, $this->_importBufferOptions);
+            if ($this->_getBufferLogFileName()) {
+                unlink($this->_getBufferLogFileName());
+            }
             unset($this->_importBuffer);
             unset($this->_importBufferOptions);
         }

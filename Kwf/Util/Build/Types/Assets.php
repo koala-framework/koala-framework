@@ -73,7 +73,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             }
         }
         if (Kwf_Component_Data_Root::getComponentClass()) {
-            foreach(Kwc_Abstract::getComponentClasses() as $c) {
+            foreach (Kwc_Abstract::getComponentClasses() as $c) {
                 if (Kwc_Abstract::getFlag($c, 'hasAvailableLanguages')) {
                     foreach (call_user_func(array($c, 'getAvailableLanguages'), $c) as $i) {
                         if (!in_array($i, $langs)) $langs[] = $i;
@@ -91,13 +91,17 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $packages = $this->_getAllPackages();
         foreach ($packages as $p) {
             foreach ($langs as $language) {
-                $partCount = $p->getPackageContentsPartCount(self::$_mimeTypeByExtension[$extension], $language);
+                $partCount = 10; //don't call getPackageContentsPartCount as that would rebuild contents
                 for ($partNumber=0; $partNumber<$partCount; $partNumber++) {
                     $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language, $partNumber);
-                    Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                    if (Kwf_Assets_BuildCache::getInstance()->load($cacheId) !== false) {
+                        Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                    }
 
                     $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension.'.map', $language, $partNumber);
-                    Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                    if (Kwf_Assets_BuildCache::getInstance()->load($cacheId) !== false) {
+                        Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
+                    }
                 }
             }
         }
@@ -145,17 +149,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
                     file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
                 }
-
-                foreach ($langs as $language) {
-                    $urls = $p->getPackageUrls(self::$_mimeTypeByExtension[$extension], $language);
-                    if (Kwf_Setup::getBaseUrl()) {
-                        foreach ($urls as $k=>$i) {
-                            $urls[$k] = substr($i, strlen(Kwf_Setup::getBaseUrl()));
-                        }
-                    }
-                    $cacheId = $p->getPackageUrlsCacheId(self::$_mimeTypeByExtension[$extension], $language);
-                    Kwf_Assets_BuildCache::getInstance()->save($urls, $cacheId);
-                }
             }
         }
         $progress->finish();
@@ -179,7 +172,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $progress->finish();
 
         echo "generating packages...\n";
-        $steps = count($packages) * count($langs) * count($exts) * 2;
+        $steps = count($packages) * count($langs) * count($exts) * 3;
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
@@ -197,9 +190,23 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
                     $progress->next(1, "$depName $extension $language map");
                     $this->_buildPackageSourceMap($p, $extension, $language);
+
+                    $progress->next(1, "$depName $extension $language url");
+                    $urls = $p->getPackageUrls(self::$_mimeTypeByExtension[$extension], $language);
+                    if (Kwf_Setup::getBaseUrl()) {
+                        foreach ($urls as $k=>$i) {
+                            $urls[$k] = substr($i, strlen(Kwf_Setup::getBaseUrl()));
+                        }
+                    }
+                    $cacheId = $p->getPackageUrlsCacheId(self::$_mimeTypeByExtension[$extension], $language);
+                    Kwf_Assets_BuildCache::getInstance()->save($urls, $cacheId);
                 }
+
             }
         }
+
+
+        Kwf_Assets_Cache::getInstance()->clean();
 
         Kwf_Assets_BuildCache::getInstance()->building = false;
 

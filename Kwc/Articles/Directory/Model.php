@@ -15,21 +15,6 @@ class Kwc_Articles_Directory_Model extends Kwf_Model_Db
     protected function _init()
     {
         parent::_init();
-        $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
-        if ($authedUser) {
-            $s = new Kwf_Model_Select();
-            $s->whereEquals('user_id', $authedUser->id);
-            if ($authedUser->__get('role') == 'external') { // $authedUser->role throws error when role is an expression (PHP Bug?)
-                $this->_exprs['autheduser_visible'] = new Kwf_Model_Select_Expr_Not(new Kwf_Model_Select_Expr_Field('only_intern'));
-            } else {
-                $this->_exprs['autheduser_visible'] = new Kwf_Model_Select_Expr_Boolean(true);
-            }
-            $this->_exprs['autheduser_read'] = new Kwf_Model_Select_Expr_Child_Contains('Views', $s);
-        } else {
-            $this->_exprs['autheduser_visible'] = new Kwf_Model_Select_Expr_Boolean(false);
-            $this->_exprs['autheduser_read'] = new Kwf_Model_Select_Expr_Boolean(false);
-        }
-
         $this->_exprs['name'] = new Kwf_Model_Select_Expr_Concat(array(
             new Kwf_Model_Select_Expr_Field('date'),
             new Kwf_Model_Select_Expr_String(': '),

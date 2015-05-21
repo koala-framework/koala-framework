@@ -6,7 +6,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         $ret = array_merge(parent::getSettings(), array(
             'ownModel'          => 'Kwc_Basic_Text_Model',
             'componentName'     => trlKwfStatic('Text'),
-            'componentIcon'     => new Kwf_Asset('paragraph_page'),
+            'componentIcon'     => 'paragraph_page',
             'width'             => 550,
             'height'            => 400,
             'enableAlignments'  => false,
@@ -138,7 +138,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                                 $style .= "$k: $v; ";
                             }
                         }
-                        $styleAttr = 'style="'.$style.'"';
+                        $styleAttr = 'style="'.htmlspecialchars($style).'"';
                         $part = str_replace($matched, $prefix.$styleAttr.$postfix, $part);
                     }
                 }

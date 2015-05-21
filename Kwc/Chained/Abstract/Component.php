@@ -22,7 +22,8 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
 
         $ret['alternativeComponents'] = array();
         if (Kwc_Abstract::getFlag($masterComponentClass, 'hasAlternativeComponent')) {
-            $alternativeComponents = call_user_func(array($masterComponentClass, 'getAlternativeComponents'), $masterComponentClass);
+            $masterCCCls = strpos($masterComponentClass, '.') ? substr($masterComponentClass, 0, strpos($masterComponentClass, '.')) : $masterComponentClass;
+            $alternativeComponents = call_user_func(array($masterCCCls, 'getAlternativeComponents'), $masterComponentClass);
             foreach ($alternativeComponents as $acKey => $alternativeComponent) {
                 $ret['alternativeComponents'][$acKey] = self::getChainedComponentClass($alternativeComponent, $prefix);
             }
@@ -64,7 +65,8 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
 
             // Für jede Unterkomponente mit einer AlternativeComponent muss es auch einen Eintrag in der masterComponentsMap geben
             if (Kwc_Abstract::getFlag($masterC, 'hasAlternativeComponent')) {
-                $alternativeComponents = call_user_func(array($masterC, 'getAlternativeComponents'), $masterC);
+                $masterCCls = strpos($masterC, '.') ? substr($masterC, 0, strpos($masterC, '.')) : $masterC;
+                $alternativeComponents = call_user_func(array($masterCCls, 'getAlternativeComponents'), $masterC);
                 foreach ($alternativeComponents as $alternativeComponent) {
                     $g['masterComponentsMap'][$alternativeComponent] = self::getChainedComponentClass($alternativeComponent, $prefix);
                 }

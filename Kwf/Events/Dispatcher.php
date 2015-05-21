@@ -255,7 +255,7 @@ class Kwf_Events_Dispatcher
                 $callback['config']
             );
             if ($logger) {
-                $msg = '-> '.$callback['class'] . '::' . $callback['method'] . '(' . _btArgsString($callback['config']) . ')';
+                $msg = '-> '.$callback['class'] . '::' . $callback['method'] . '(' . Kwf_Debug::_btArgsString($callback['config']) . ')';
                 $logger->info($msg . ':');
                 $start = microtime(true);
             }

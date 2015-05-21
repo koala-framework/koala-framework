@@ -6,4 +6,5 @@ class Kwf_Model_Union_FnF_TestModel extends Kwf_Model_Union
         '1m' => 'Kwf_Model_Union_FnF_Model1',
         '2m' => 'Kwf_Model_Union_FnF_Model2',
     );
+    protected $_siblingModels = array('Kwf_Model_Union_FnF_ModelSibling');
 }

@@ -22,7 +22,7 @@ class Kwc_Articles_Directory_Component extends Kwc_Directories_ItemPage_Director
         $ret['menuConfig'] = 'Kwc_Articles_Directory_MenuConfig';
 
         $ret['componentName'] = trlKwfStatic('Articles');
-        $ret['componentIcon'] = new Kwf_Asset('newspaper');
+        $ret['componentIcon'] = 'newspaper';
         $ret['componentCategory'] = 'admin';
 
         $ret['contentSender'] = 'Kwc_Articles_Directory_ContentSender';
@@ -32,7 +32,10 @@ class Kwc_Articles_Directory_Component extends Kwc_Directories_ItemPage_Director
     public function getSelect()
     {
         $ret = parent::getSelect();
-        $ret->whereEquals('autheduser_visible', 1);
+        $user = Kwf_Registry::get('userModel')->getAuthedUser();
+        if (!$user || $user->role == 'external') {
+            $ret->whereEquals('only_intern', 0);
+        }
         return $ret;
     }
 }

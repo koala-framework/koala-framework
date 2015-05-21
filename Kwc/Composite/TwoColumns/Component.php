@@ -5,7 +5,7 @@ class Kwc_Composite_TwoColumns_Component extends Kwc_Abstract_Composite_Componen
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('2 Columns');
-        $ret['componentIcon'] = new Kwf_Asset('application_tile_horizontal');
+        $ret['componentIcon'] = 'application_tile_horizontal';
         $ret['generators']['child']['component']['leftColumn'] = 'Kwc_Composite_TwoColumns_Left_Component';
         $ret['generators']['child']['component']['rightColumn'] = 'Kwc_Composite_TwoColumns_Right_Component';
 

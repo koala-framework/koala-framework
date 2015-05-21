@@ -36,7 +36,7 @@ abstract class Kwf_Model_Select_Expr_CompareField_Abstract implements Kwf_Model_
     public function validate()
     {
         if (!$this->_field) {
-            throw new Kwf_Exception("No Field-Value set for '"+get_class($this)+"'");
+            throw new Kwf_Exception("No Field-Value set for '".get_class($this)."'");
         }
     }
 

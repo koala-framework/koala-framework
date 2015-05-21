@@ -231,16 +231,16 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
         //the component itself
         $this->_updates[] = array(
             //remove all types
-            'component_id' => $event->component->componentId
+            'component_id' => (string)$event->component->componentId
         );
         $this->_log("component_id={$event->component->componentId}");
 
         //all child components
         $changedComponent = $event->component;
-        $changedChildIdPostfix = substr($changedComponent->componentId, strlen($changedComponent->getPageOrRoot()->componentId));
 
         foreach ($this->_getParentComponentsForRecursive($event) as $component) {
             $pattern = $component->getExpandedComponentId() . '%';
+            $changedChildIdPostfix = substr($changedComponent->componentId, strlen($component->componentId));
             if ($changedChildIdPostfix) {
                 $pattern .= $changedChildIdPostfix . '%';
             }

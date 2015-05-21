@@ -14,6 +14,9 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             throw new Kwf_Exception("Invalid filename");
         }
         $this->_fileName = $fileNameWithType;
+        if (strpos($fileNameWithType, '\\') !== false) {
+            throw new Kwf_Exception("Infalid filename, must not contain \\, use / instead");
+        }
 
         //check commented out, only required for debugging
         //if (!file_exists($this->getAbsoluteFileName())) {
@@ -130,11 +133,11 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             $it = new RecursiveDirectoryIterator($path);
             $it = new Kwf_Iterator_Filter_HiddenFiles($it);
             $it = new RecursiveIteratorIterator($it);
-            $it = new Kwf_Iterator_Filter_FileExtension($it, array('js', 'css'));
+            $it = new Kwf_Iterator_Filter_FileExtension($it, array('js', 'css', 'scss'));
             foreach ($it as $file) {
                 $f = $file->getPathname();
                 $f = substr($f, strlen($paths[$pathType]));
-                $f = $pathType . $f;
+                $f = $pathType . str_replace('\\', '/', $f);
                 $files[] = self::createDependency($f, $providerList);
             }
             $ret = new Kwf_Assets_Dependency_Dependencies($files, $fileName.'*');
@@ -218,7 +221,11 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
         foreach ($paths as $k=>$p) {
             if ($p == '.') $p = getcwd();
+            if ($p == '..') $p = substr(getcwd(), 0, strrpos(getcwd(), '/'));
             if (substr($p, 0, 7) == 'vendor/') $p = getcwd().'/'.$p;
+            if (substr($p, 0, 10) == '../vendor/') {
+                $p = substr(getcwd(), 0, strrpos(getcwd(), '/')).'/'.substr($p, 3);
+            }
             $p = str_replace(DIRECTORY_SEPARATOR, '/', $p);
             if (substr($fileName, 0, strlen($p)) == $p) {
                 return $k.substr($fileName, strlen($p));

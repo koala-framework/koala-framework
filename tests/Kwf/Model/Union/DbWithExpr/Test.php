@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group slow
+ */
 class Kwf_Model_Union_DbWithExpr_Test extends Kwf_Model_Union_Abstract_Test
 {
     public function setUp()
@@ -6,6 +9,7 @@ class Kwf_Model_Union_DbWithExpr_Test extends Kwf_Model_Union_Abstract_Test
         parent::setUp();
         Kwf_Model_Abstract::getInstance('Kwf_Model_Union_DbWithExpr_Model1')->setUp();
         Kwf_Model_Abstract::getInstance('Kwf_Model_Union_DbWithExpr_Model2')->setUp();
+        Kwf_Model_Abstract::getInstance('Kwf_Model_Union_DbWithExpr_ModelSibling')->setUp();
         $this->_m = Kwf_Model_Abstract::getInstance('Kwf_Model_Union_DbWithExpr_TestModel');
     }
 
@@ -14,6 +18,7 @@ class Kwf_Model_Union_DbWithExpr_Test extends Kwf_Model_Union_Abstract_Test
         parent::tearDown();
         Kwf_Model_Abstract::getInstance('Kwf_Model_Union_DbWithExpr_Model1')->dropTable();
         Kwf_Model_Abstract::getInstance('Kwf_Model_Union_DbWithExpr_Model2')->dropTable();
+        Kwf_Model_Abstract::getInstance('Kwf_Model_Union_DbWithExpr_ModelSibling')->dropTable();
     }
 
     public function testGetRowsWithExprOrder()

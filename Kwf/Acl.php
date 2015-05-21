@@ -33,10 +33,6 @@ class Kwf_Acl extends Zend_Acl
 
     public static function clearCache()
     {
-        static $cleared = false;
-        if ($cleared) return; //only clear single time
-        $cleared = true;
-
         $cacheId = 'acl';
         Kwf_Cache_Simple::delete($cacheId);
     }
@@ -44,7 +40,7 @@ class Kwf_Acl extends Zend_Acl
     public function __construct()
     {
         $this->addRole(new Zend_Acl_Role('guest'));
-        $this->addRole(new Kwf_Acl_Role_Admin('admin', 'Administrator'));
+        $this->addRole(new Kwf_Acl_Role_Admin('admin', trlKwfStatic('Administrator')));
         $this->addRole(new Zend_Acl_Role('cli'));
 
         $this->add(new Zend_Acl_Resource('default_index'));

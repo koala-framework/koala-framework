@@ -5,10 +5,11 @@ class Kwc_Basic_LinkTag_FirstChildPage_Component extends Kwc_Basic_LinkTag_Abstr
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlKwfStatic('Link.First Child Page'),
-            'componentIcon' => new Kwf_Asset('page_go'),
+            'componentIcon' => 'page_go',
             'dataClass' => 'Kwc_Basic_LinkTag_FirstChildPage_Data'
         ));
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
+        $ret['flags']['skipFulltext'] = true;
         return $ret;
     }
 
