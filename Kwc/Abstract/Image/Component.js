@@ -1,1 +1,1 @@
-Kwf.Utils.ResponsiveImg('.kwcAbstractImage .container');
+Kwf.Utils.ResponsiveImg('.cssClass .container');
