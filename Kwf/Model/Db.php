@@ -964,9 +964,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         if ($dbSelect->getPart('group')) {
             $group = current($dbSelect->getPart('group'));
             $dbSelect->reset(Zend_Db_Select::GROUP);
-            $dbSelect->from(null, "COUNT(DISTINCT $group) c");
+            $dbSelect->from(null, new Zend_Db_Expr("COUNT(DISTINCT $group) c"));
         } else {
-            $dbSelect->from(null, 'COUNT(*) c');
+            $dbSelect->from(null, new Zend_Db_Expr('COUNT(*) c'));
         }
         return $this->getTable()->getAdapter()->query($dbSelect)->fetchColumn();
     }
