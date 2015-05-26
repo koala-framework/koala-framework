@@ -117,6 +117,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
         if (sliders.length) {
             sliders.parent().find('.active').removeClass('active');
             sliders.parent().removeClass('open');
+            $('body').removeClass('kwcMobileMenuOpen');
             sliders.animate({height: 0}, slideDuration);
         }
 
@@ -126,6 +127,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
             el.addClass('loading');
         }
         menuLink.toggleClass('active');
+        $('body').toggleClass('kwcMobileMenuOpen');
         if (menuLink.parent().hasClass('open')) {
             slider.animate({height: 0}, slideDuration);
         } else {
