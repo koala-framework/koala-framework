@@ -27,10 +27,10 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         $rawContents = $this->_getRawContents(null);
 
 
-        $hasCssClass = strpos($rawContents, '.cssClass') !== false;
+        $usesUniquePrefix = strpos($rawContents, '.cssClass') !== false || strpos($rawContents, 'kwfup-') !== false;
 
         $pathType = $this->getType();
-        if ($hasCssClass) {
+        if ($usesUniquePrefix) {
             //when contents contain .cssClass we must cache per app
             $buildFile = 'cache/uglifyjs/'.$fileName.'.'.md5(file_get_contents($this->getAbsoluteFileName()));
         } else {
@@ -57,13 +57,20 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             } else if ($pathType == 'mediaelement') {
                 $replacements['url('] = 'url(/assets/mediaelement/build/';
             }
-            if ($hasCssClass) {
+            if ($usesUniquePrefix) {
                 $cssClass = $this->_getComponentCssClass();
                 if ($cssClass) {
                     if (preg_match_all('#([\'"])\.cssClass([\s\'"\.])#', $contents, $m)) {
                         foreach ($m[0] as $k=>$i) {
                             $replacements[$i] = $m[1][$k].'.'.$cssClass.$m[2][$k];
                         }
+                    }
+                }
+                if (strpos($rawContents, 'kwfup-') !== false) {
+                    if (Kwf_Config::getValue('application.uniquePrefix')) {
+                        $replacements['kwfup-'] = Kwf_Config::getValue('application.uniquePrefix').'-';
+                    } else {
+                        $replacements['kwfup-'] = '';
                     }
                 }
             }

@@ -132,6 +132,13 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     }
                 }
             }
+            if (strpos($ret, 'kwfup-') !== false) {
+                if (Kwf_Config::getValue('application.uniquePrefix')) {
+                    $map->stringReplace('kwfup-', Kwf_Config::getValue('application.uniquePrefix').'-');
+                } else {
+                    $map->stringReplace('kwfup-', '');
+                }
+            }
 
             $usesVars = false;
             $assetVars = self::getAssetVariables();

@@ -35,6 +35,7 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
                 $twig = new Kwf_Component_Renderer_Twig_Environment($this->_getRenderer());
                 $ret = $twig->render($masterTemplate, $vars);
             }
+            $ret = $this->_replaceKwfUp($ret);
             return $ret;
         } else if ($last['type'] == 'component') {
             $helper = new Kwf_Component_View_Helper_Component();
