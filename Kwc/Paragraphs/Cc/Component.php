@@ -4,7 +4,6 @@ class Kwc_Paragraphs_Cc_Component extends Kwc_Chained_Cc_Component
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['editComponents'] = array('paragraphs');
 
         //don't allow endless recursion
         if (isset($ret['generators']['paragraphs'])) {
