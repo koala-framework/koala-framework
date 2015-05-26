@@ -414,7 +414,8 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $ret['cssClass'] = 'frontend';
         $cls = Kwc_Abstract::getSetting($this->getData()->componentClass, 'processedCssClass');
         foreach (explode(' ', $cls) as $i) {
-            $ret['cssClass'] .= ' master'.ucfirst($i);
+            $i = 'kwfup-master'.ucfirst($i);
+            $ret['cssClass'] .= ' '.$i;
         }
         return $ret;
     }

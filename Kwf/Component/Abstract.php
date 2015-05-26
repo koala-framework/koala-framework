@@ -54,9 +54,7 @@ class Kwf_Component_Abstract
         }
         $c = str_replace('_', '', $c);
         $c = strtolower(substr($c, 0, 1)) . substr($c, 1);
-        if (Kwf_Config::getValue('application.uniquePrefix')) {
-            $c = Kwf_Config::getValue('application.uniquePrefix').'-'.$c;
-        }
+        $c = 'kwfup-'.$c;
         return $c;
     }
 
