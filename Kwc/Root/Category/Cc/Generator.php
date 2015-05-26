@@ -14,6 +14,10 @@ class Kwc_Root_Category_Cc_Generator extends Kwc_Chained_Cc_Generator
             $select = new Kwf_Component_Select($select);
         }
 
+        if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
+            $select->whereId(substr($id, 1));
+        }
+
         if ($parentData) {
             if ($parentData->generator != $this && $parentData->componentClass != $this->getClass()) {
                 return array();
