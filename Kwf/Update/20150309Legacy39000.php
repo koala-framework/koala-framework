@@ -193,7 +193,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
             $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
         }
         $s = new Kwf_Model_Select();
-        $s->whereEquals('md5_hash', '');
+        $s->where("md5_hash = ''");
         $it = new Kwf_Model_Iterator_Packages(
             new Kwf_Model_Iterator_Rows(Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model'), $s)
         );
