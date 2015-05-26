@@ -154,16 +154,26 @@ class Kwf_Pdf_TcPdf extends TCPDF
 
     public function AddFont($family, $style='', $fontfile='')
     {
-
-        $config = Zend_Registry::get('config');
-        $filetmp = $config->path->tcpdf_fonts."/".strtolower($family.$style).".php";
-        if (!$fontfile && file_exists($filetmp)) {
-            $fontfile = $filetmp;
-            //$family = $family.$style;
-            //$style = '';
+        if (!$fontfile) {
+            $fontfile = $this->_getFontFromVendor($family, $style);
         }
-
         return parent::AddFont($family, $style, $fontfile);
+    }
+
+    protected function _getFontFromVendor($family, $style)
+    {
+        foreach (glob('vendor/*/*/composer.json') as $cj) {
+            $json = json_decode(file_get_contents($cj), true);
+            if (isset($json['extra']) && isset($json['extra']['kwf-tcpdf-fonts'])
+                && $json['extra']['kwf-tcpdf-fonts']
+            ) {
+                $fontfile = 'vendor/'.$json['name'].'/'.strtolower($family.$style).".php";
+                if (file_exists($fontfile)) {
+                    return $fontfile;
+                }
+            }
+        }
+        return '';
     }
 
 

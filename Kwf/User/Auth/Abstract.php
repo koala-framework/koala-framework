@@ -7,4 +7,9 @@ class Kwf_User_Auth_Abstract
     {
         $this->_model = $model;
     }
+
+    public function getModel()
+    {
+        return $this->_model;
+    }
 }

@@ -1,10 +1,12 @@
-Kwf.Utils.ResponsiveEl('.kwcForm.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
-Kwf.Utils.ResponsiveEl('.kwcForm.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
-Kwf.Utils.ResponsiveEl('.kwcForm.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
-Kwf.Utils.ResponsiveEl('.kwcForm.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
+// @require ModernizrNetworkXhr2
 
-Kwf.onElementReady('.kwcForm > form', function form(form) {
-    form = form.parent('.kwcForm', false);
+Kwf.Utils.ResponsiveEl('.cssClass.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.cssClass.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.cssClass.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
+Kwf.Utils.ResponsiveEl('.cssClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
+
+Kwf.onElementReady('.cssClass > form', function form(form) {
+    form = form.parent('.cssClass', false);
     if (!form.dom.kwcForm) {
         form.dom.kwcForm = new Kwc.Form.Component(form);
         form.kwcForm = form.dom.kwcForm;
@@ -13,9 +15,9 @@ Kwf.onElementReady('.kwcForm > form', function form(form) {
 
 Ext2.ns('Kwc.Form');
 Kwc.Form.findForm = function(el) {
-    var formEl = el.child('.kwcForm > form');
+    var formEl = el.child('.cssClass > form');
     if (formEl) {
-        formEl = formEl.parent('.kwcForm');
+        formEl = formEl.parent('.cssClass');
         return formEl.kwcForm;
     }
     return null;
@@ -37,18 +39,10 @@ Kwc.Form.Component = function(form)
 
 
     if (this.el.down('form').dom.enctype == 'multipart/form-data' && this.config.useAjaxRequest) {
-        var supportsHtml5Upload = false;
-        if (XMLHttpRequest) {
-            var xhr = new XMLHttpRequest();
-            if (xhr.upload) {
-                supportsHtml5Upload = true;
-
-            }
-        }
-        if (supportsHtml5Upload) {
+        if (Modernizr.xhr2) {
             this.el.down('form').dom.enctype = 'application/x-www-form-urlencoded';
         }
-        this.config.useAjaxRequest = supportsHtml5Upload;
+        this.config.useAjaxRequest = Modernizr.xhr2;
     }
 
     this.fields = [];
@@ -305,8 +299,8 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
     }
 });
 
-Kwf.onElementReady('.kwcForm > form', function form(form) {
-    form = form.parent('.kwcForm', false);
+Kwf.onElementReady('.cssClass > form', function form(form) {
+    form = form.parent('.cssClass', false);
     if (!form.kwcForm) {
         form.kwcForm = new Kwc.Form.Component(form);
     }

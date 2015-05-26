@@ -55,8 +55,8 @@ class Kwf_Component_Renderer_Twig_TemplateLocator
             $ret = null;
             foreach (explode(PATH_SEPARATOR, get_include_path()) as $ip) {
                 $file = $ip.'/'.str_replace('_', '/', $componentClass).'.twig';
-                if (file_exists($file)) {
-                    $ret = $file;
+                if (file_exists(getcwd().'/'.$file)) {
+                    $ret = getcwd().'/'.$file;
                     break;
                 }
             }

@@ -49,7 +49,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
                 $sql = "ALTER TABLE {$index['TABLE_NAME']} DROP FOREIGN KEY `{$index['CONSTRAINT_NAME']}`";
                 $db->query($sql);
             }
-            $db->query("ALTER TABLE `kwf_uploads` CHANGE  `id`  `id_old` INT( 11 ) NOT NULL");
+            $db->query("ALTER TABLE `kwf_uploads` CHANGE  `id`  `id_old` INT( 11 ) NULL");
             $db->query("ALTER TABLE `kwf_uploads` DROP PRIMARY KEY");
             $db->query("ALTER TABLE `kwf_uploads` ADD  `id` VARBINARY( 36 ) NOT NULL FIRST");
             $db->query("UPDATE `kwf_uploads` SET `id` = UUID()");
@@ -132,9 +132,9 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
 
         if ($this->countUploads() < 50000) {
             $this->renameUploads();
-//            $this->createHashes();
+            $this->createHashes();
         } else {
-            echo "Mehr als 50000 Uploads. Umbenennen bitte manuell ausführen:\n\"vps update-to39 rename-uploads\"\n\"vps update-to39 create-hashes\"\n";
+            echo "More than 50000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-to39 rename-uploads\"\n\"php bootstrap.php update-to39 create-hashes\"\n";
         }
     }
 
@@ -193,7 +193,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
             $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
         }
         $s = new Kwf_Model_Select();
-        $s->whereEquals('md5_hash', '');
+        $s->where("md5_hash = ''");
         $it = new Kwf_Model_Iterator_Packages(
             new Kwf_Model_Iterator_Rows(Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model'), $s)
         );

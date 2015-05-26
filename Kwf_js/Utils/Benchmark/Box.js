@@ -94,7 +94,7 @@
         Kwf.Utils.BenchmarkBox._subTimers[name][subName].duration += duration;
     };
     Kwf.Utils.BenchmarkBox.initBox = function(el) {
-        if (el instanceof jQuery) el = el.get(0);
+        if (el instanceof $) el = el.get(0);
         if (el.initDone) return;
         el.initDone = true;
         var container = $('.benchmarkContainer');

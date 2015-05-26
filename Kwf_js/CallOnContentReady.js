@@ -5,7 +5,6 @@ var enableOnReadyConsoleProfile = false;
 /* fn: fn,
  * scope: scope,
  * options: options || {},
- * type: [jquery|ext],
  * num: unique number, //used to mark in initDone
  * selector: selector, // null if onContentReady
  * */
@@ -28,12 +27,12 @@ Kwf.onContentReady = function(fn, options) {
         var options = arguments[2];
         options.scope = scope;
     }
-    Kwf._addReadyHandler(null, 'contentReady', null, fn, options);
+    Kwf._addReadyHandler('contentReady', null, fn, options);
 };
 
 
 var deferHandlerNum = null;
-Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
+Kwf._addReadyHandler = function(onAction, selector, fn, options)
 {
     if (!options) options = {};
     if (typeof options.defer == 'undefined') options.defer = true; //default defer=true
@@ -42,7 +41,6 @@ Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
         fn: fn,
         options: options,
         num: readyElHandlers.length, //unique number
-        type: type,
         onAction: onAction
     });
     //if initial call is already done redo for new added handlers
@@ -82,8 +80,8 @@ Kwf.callOnContentReady = function(renderedEl, options)
         if (typeof console != 'undefined' && console.warn) console.warn('Please pass element argument on callOnContentReady');
         renderedEl = document.body;
     }
-    if (typeof Ext2 != 'undefined' && Ext2.Element && renderedEl instanceof Ext2.Element) renderedEl = renderedEl.dom;
-    if (jQuery && renderedEl instanceof jQuery) {
+    if (renderedEl.dom) renderedEl = renderedEl.dom; //ExtJS Element (hopefully)
+    if ($ && renderedEl instanceof $) {
         renderedEl.each(function(){ Kwf.callOnContentReady(this, options); });
         return;
     }
@@ -216,7 +214,6 @@ Kwf.callOnContentReady = function(renderedEl, options)
                     fn: hndl.fn,
                     options: hndl.options,
                     num: hndl.num,
-                    type: hndl.type,
                     callerOptions: options,
                     onAction: hndl.onAction,
                     selector: hndl.selector,
@@ -252,10 +249,8 @@ Kwf.callOnContentReady = function(renderedEl, options)
     function callQueueFn(queueEntry, config)
     {
         var t = Kwf.Utils.BenchmarkBox.now();
-        var el = queueEntry.el;
-        if (queueEntry.type == 'ext2') {
-            el = Ext2.get(el);
-        } else if (queueEntry.type == 'jquery') {
+        var el = $(queueEntry.el);
+        if (queueEntry.onAction != 'contentReady') {
             el = $(el);
         }
         queueEntry.fn.call(queueEntry.options.scope || window, el, config);

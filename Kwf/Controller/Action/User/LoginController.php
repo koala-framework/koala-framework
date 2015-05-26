@@ -161,7 +161,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             throw new Kwf_Exception("Invalid state");
         }
 
-        $state = explode('-', $state);
+        $state = explode('.', $state);
 
         if (count($state) < 3) throw new Kwf_Exception_NotFound();
         $action = $state[0]; //login or activate
@@ -186,10 +186,14 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
                 return;
             }
         } else if ($action == 'activate') {
-            if (count($state) != 6) throw new Kwf_Exception_NotFound();
-            $userId = $state[3];
-            $code = $state[4];
-            $redirect = $state[5];
+            if (count($state) != 5) throw new Kwf_Exception_NotFound();
+            $userIdAndCode = $state[3];
+            if (!preg_match('#^(.*)-(\w*)$#', $userIdAndCode, $m)) {
+                throw new Kwf_Exception_NotFound();
+            }
+            $userId = $m[1];
+            $code = $m[2];
+            $redirect = $state[4];
             $user = $users->getRow($userId);
             $this->getRequest()->setParam('user', $user);
             if (!$user) {

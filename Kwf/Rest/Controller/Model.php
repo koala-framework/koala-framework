@@ -5,6 +5,7 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
     protected $_saveColumns;
     protected $_loadColumns;
     protected $_queryColumns;
+    protected $_querySplit = false;
 
     public function preDispatch()
     {
@@ -85,16 +86,53 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
         return $ret;
     }
 
+    protected function _getFilterParam($filterName)
+    {
+        $ret = null;
+        $filter = $this->_getParam('filter');
+        if ($filter) {
+            $filter = json_decode($filter);
+            foreach ($filter as $f) {
+                if ($f->property == $filterName && $f->value) {
+                    $ret = $f->value;
+                    break;
+                }
+            }
+        }
+        return $ret;
+    }
+
     protected function _applySelectQuery($select, $query)
     {
-        $ors = array();
+        $exprs = array();
         if (!$this->_queryColumns) {
             throw new Kwf_Exception("_queryColumns are required");
         }
-        foreach ($this->_queryColumns as $c) {
-            $ors[] = new Kwf_Model_Select_Expr_Like($c, '%'.$query.'%');
+
+        if ($this->_querySplit) {
+            $query = explode(' ', $query);
+        } else {
+            $query = array($query);
         }
-        $select->where(new Kwf_Model_Select_Expr_Or($ors));
+
+        foreach ($query as $q) {
+            $e = array();
+            foreach ($this->_queryColumns as $c) {
+                $e[] = new Kwf_Model_Select_Expr_Like($c, '%'.$q.'%');
+            }
+
+            if (count($e) > 1) {
+                $exprs[] = new Kwf_Model_Select_Expr_Or($e);
+            } else {
+                $exprs[] = $e[0];
+            }
+        }
+
+        if (count($exprs) > 1) {
+            $select->where(new Kwf_Model_Select_Expr_And($exprs));
+        } else {
+            $select->where($exprs[0]);
+        }
     }
 
     protected function _loadDataFromRow($row)

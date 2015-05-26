@@ -1,10 +1,9 @@
 .kwfFormFieldFileInner img {
     margin-top: -20px;
 }
-.kwfFormFieldFileInnerContent {
-    position: relative;
-    .kwfFormFieldFileUploadWrapper {
-        position: relative;
+
+.kwfFormFieldFile {
+    .kwfFormFieldFileInnerContent {
         .fileSelector, > input {
             position: absolute;
             width: 100%;
@@ -18,16 +17,49 @@
 
         .underlayFileSelector {
             z-index: 1;
-
             a.kwfFormFieldFileUploadButton {
                 float: right;
             }
+        }
 
+        .kwfFormFieldFieldDropText {
+            display: none;
         }
     }
 
-    .kwfFormFieldFieldDropText {
-        position: absolute;
+    &.dropField {
+        .kwfFormFieldFileInnerContent {
+            position: relative;
+            width: 100%;
+            border: 1px solid;
+            display: block;
+            height: 90px;
+            .kwfFormFieldFileUploadWrapper {
+                position: relative;
+
+                input {
+                    width: 100%;
+                    height: 90px;
+                    background: none;
+                    border: none;
+                }
+
+                .underlayFileSelector {
+                    position: absolute;
+                    width: 100%;
+
+                    a.kwfFormFieldFileUploadButton {
+                        position: absolute;
+                        right: 0;
+                    }
+                }
+            }
+
+            .kwfFormFieldFieldDropText {
+                position: absolute;
+                display: block;
+            }
+        }
     }
 }
 

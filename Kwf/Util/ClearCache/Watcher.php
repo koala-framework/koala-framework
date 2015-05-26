@@ -114,7 +114,8 @@ class Kwf_Util_ClearCache_Watcher
             '/eventlog',
             '/build/*',
             '/Gruntfile.js',
-            '/node_modules/'
+            '/node_modules/',
+            '/.idea/'
         ));
         $watcher->setQueueSizeLimit(100);
         $watcher->setFollowLinks(true);

@@ -134,7 +134,6 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             if (!$this->_errors) {
                 try {
                     $this->_form->prepareSave(null, $postData);
-                    $this->_beforeSave($this->_form->getRow());
                     $isInsert = false;
                     if (!$this->_form->getRow()->{$this->_form->getModel()->getPrimaryKey()}) {
                         $isInsert = true;
@@ -142,14 +141,15 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
                     } else {
                         $this->_beforeUpdate($this->_form->getRow());
                     }
+                    $this->_beforeSave($this->_form->getRow());
                     $this->_form->save(null, $postData);
-                    $this->_form->afterSave(null, $postData);
-                    $this->_afterSave($this->_form->getRow());
                     if ($isInsert) {
                         $this->_afterInsert($this->_form->getRow());
                     } else {
                         $this->_afterUpdate($this->_form->getRow());
                     }
+                    $this->_form->afterSave(null, $postData);
+                    $this->_afterSave($this->_form->getRow());
                     $this->_isSaved = true;
                 } catch (Exception $e) {
                     $this->_handleProcessException($e);

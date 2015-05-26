@@ -1,4 +1,4 @@
-<?
+<?php
 class Kwf_Util_MemoryLimit
 {
     private static $_maxLimit;

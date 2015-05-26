@@ -295,4 +295,16 @@ class Kwf_Util_Update_Helper
         }
         return $doneNames;
     }
+
+    public static function countPendingUpdates()
+    {
+        $updates = self::getUpdates(0, 9999999);
+        $doneNames = self::getExecutedUpdatesNames();
+        foreach ($updates as $k=>$u) {
+            if ($u->getRevision() && in_array($u->getUniqueName(), $doneNames)) {
+                unset($updates[$k]);
+            }
+        }
+        return count($updates);
+    }
 }

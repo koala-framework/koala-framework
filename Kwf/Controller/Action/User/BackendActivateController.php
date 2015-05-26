@@ -100,8 +100,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
                 );
             }
         }
-
-        if (count($this->view->redirects) == 1 && $showPassword) {
+        if (count($this->view->redirects) == 1 && !$showPassword) {
             $this->redirect($this->view->redirects[0]['url']);
         }
     }
@@ -128,7 +127,7 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
         }
 
         $f = new Kwf_Filter_StrongRandom();
-        $state = 'activate-'.$authMethod.'-'.$f->filter(null).'-'.$this->_getParam('code').'-'.Kwf_Setup::getBaseUrl().'/kwf/welcome';
+        $state = 'activate.'.$authMethod.'.'.$f->filter(null).'.'.$this->_getParam('code').'.'.Kwf_Setup::getBaseUrl().'/kwf/welcome';
 
         //save state in namespace to validate it later
         $ns = new Kwf_Session_Namespace('kwf-login-redirect');
