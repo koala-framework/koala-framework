@@ -1,4 +1,4 @@
-<div class="webStandard" id="error401">
+<div class="kwfup-webStandard" id="error401">
     <div class="left">
         <h1><?=$this->data->trlKwf('401 - You are not authorized to view this page');?></h1>
         <p><?=$this->data->trlKwf('You do not have permission to view this directory or page using the credentials you supplied');?>.</p>

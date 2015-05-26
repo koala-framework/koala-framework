@@ -4,7 +4,7 @@ class Kwc_Directories_List_View_Count_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'kwfup-webStandard';
         $ret['placeholder']['total'] = trlKwfStatic('total').': ';
         return $ret;
     }

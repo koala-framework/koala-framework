@@ -31,7 +31,7 @@
                 <? $c++;
             } ?>
             </div>
-            <ul class="moneyInfo webListNone">
+            <ul class="moneyInfo kwfup-webListNone">
                 <? foreach ($this->sumRows as $row) { ?>
                     <li<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
                         <span class="text"><?=$this->data->trlStaticExecute($row['text'])?></span>

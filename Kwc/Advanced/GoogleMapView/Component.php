@@ -7,7 +7,7 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
         $ret['assetsDefer']['dep'][] = 'KwfGoogleMap';
         $ret['assetsDefer']['dep'][] = 'ExtUtilJson';
         $ret['placeholder']['noCoordinates'] = ''; //leer, wird in GoogleMap benötgit damit man im backend sieht was falsch ist
-        $ret['cssClass'] = 'webStandard webForm';
+        $ret['cssClass'] = 'kwfup-webStandard kwfup-webForm';
         return $ret;
     }
 

@@ -6,7 +6,7 @@ class Kwc_User_BoxWithoutLogin_LoggedIn_Component extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
         $ret['linkPostfix'] = '';
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'kwfup-webStandard';
         return $ret;
     }
 

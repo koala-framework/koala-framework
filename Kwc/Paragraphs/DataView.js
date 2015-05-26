@@ -19,7 +19,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
             '<tpl for=".">',
                 '<div class="paragraph-wrap<tpl if="!visible"> kwc-paragraph-invisible</tpl>" id="kwc-paragraphs-{id}" style="width:'+this.width+'px">',
                     '<div class="kwc-paragraphs-toolbar"></div>',
-                    '<div class="webStandard kwc-paragraphs-preview">{preview}</div>',
+                    '<div class="kwfup-webStandard kwc-paragraphs-preview">{preview}</div>',
                 '</div>',
             '</tpl>',
             '<div class="x2-clear"></div>'

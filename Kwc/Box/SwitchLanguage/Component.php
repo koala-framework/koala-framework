@@ -4,7 +4,7 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'kwfup-webStandard';
         $ret['separator'] = ' / ';
         $ret['showCurrent'] = true;
         $ret['plugins'] = array('Kwc_Box_SwitchLanguage_Plugin');

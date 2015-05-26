@@ -25,7 +25,7 @@ class Kwc_Advanced_Team_Member_Data_Component extends Kwc_Abstract
         $ret['placeholder']['emailLabel'] = trlKwfStatic('E-Mail');
         $ret['placeholder']['vcardLabel'] = trlKwfStatic('vCard');
 
-        $ret['cssClass'] = 'webStandard webListNone';
+        $ret['cssClass'] = 'kwfup-webStandard kwfup-webListNone';
 
         $ret['faxPerPerson'] = false;
 

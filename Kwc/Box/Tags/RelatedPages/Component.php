@@ -4,7 +4,7 @@ class Kwc_Box_Tags_RelatedPages_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['cssClass'] = 'webStandard webListNone';
+        $ret['cssClass'] = 'kwfup-webStandard kwfup-webListNone';
         $ret['placeholder']['headline'] = trlKwfStatic('More about this Topic');
         return $ret;
     }

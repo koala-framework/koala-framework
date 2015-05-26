@@ -21,8 +21,8 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
     public static function parseMasterStyles($masterContent)
     {
         $styles = array();
-        if (strpos($masterContent, '.webStandard')===false) return $styles;
-        preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{([^}]*)} */\\* +(.*?) +\\*/#m', $masterContent, $m);
+        if (strpos($masterContent, '.kwfup-webStandard')===false) return $styles;
+        preg_match_all('#^ *.kwfup-webStandard *((span|p|h[1-6])\\.?([^ ]*)) *{([^}]*)} */\\* +(.*?) +\\*/#m', $masterContent, $m);
         foreach (array_keys($m[1]) as $i) {
             $tagName = $m[2][$i];
             $styles[] = array(
