@@ -5,14 +5,6 @@ Kwf.Utils.ResponsiveEl('.cssClass.centerDefault', [{maxWidth: 500, cls: 'veryNar
 Kwf.Utils.ResponsiveEl('.cssClass.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 Kwf.Utils.ResponsiveEl('.cssClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
-Kwf.onElementReady('.cssClass > form', function form(form) {
-    form = form.parent('.cssClass', false);
-    if (!form.dom.kwcForm) {
-        form.dom.kwcForm = new Kwc.Form.Component(form);
-        form.kwcForm = form.dom.kwcForm;
-    }
-}, { priority: -10, defer: true }); //initialize form very early, as many other components access it
-
 Ext2.ns('Kwc.Form');
 Kwc.Form.findForm = function(el) {
     var formEl = el.child('.cssClass > form');
@@ -303,8 +295,9 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
 
 Kwf.onElementReady('.cssClass > form', function form(form) {
     form = form.parent('.cssClass', false);
-    if (!form.kwcForm) {
-        form.kwcForm = new Kwc.Form.Component(form);
+    if (!form.dom.kwcForm) {
+        form.dom.kwcForm = new Kwc.Form.Component(form);
+        form.kwcForm = form.dom.kwcForm;
     }
 }, { priority: -10, defer: true }); //initialize form very early, as many other components access it
 
