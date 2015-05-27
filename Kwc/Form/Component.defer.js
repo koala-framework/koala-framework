@@ -46,7 +46,9 @@ Kwc.Form.Component = function(form)
     }
 
     this.fields = [];
-    form.select('.kwfField', true).each(function(fieldEl) {
+    var fieldEls = $(form.dom).find('.kwfField');
+    for (var fieldElIndex=0; fieldElIndex<fieldEls.length; fieldElIndex++) {
+        var fieldEl = Ext2.get(fieldEls[fieldElIndex]);
         var classes = fieldEl.dom.className.split(' ');
         var fieldConstructor = false;
         classes.each(function (c) {
@@ -58,7 +60,7 @@ Kwc.Form.Component = function(form)
             var field = new fieldConstructor(fieldEl, this);
             this.fields.push(field);
         }
-    }, this);
+    }
 
     this.fields.forEach(function(f) {
         f.initField();
