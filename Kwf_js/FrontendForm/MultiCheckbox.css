@@ -1,12 +1,12 @@
-.kwcForm div.kwfFormFieldMultiCheckboxVertical { 
+.kwfup-kwcForm div.kwfFormFieldMultiCheckboxVertical {
     display: inline-block;
     position: relative;
 }
 
-.kwcForm div.kwcFormFieldMultiCheckbox .checkboxItem input {
+.kwfup-kwcForm div.kwcFormFieldMultiCheckbox .checkboxItem input {
     float: none;
 }
 
-.kwcForm div.kwcFormFieldMultiCheckbox .checkboxItem label {
+.kwfup-kwcForm div.kwcFormFieldMultiCheckbox .checkboxItem label {
     float: none;
 }

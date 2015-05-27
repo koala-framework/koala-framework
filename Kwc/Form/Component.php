@@ -370,6 +370,9 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             'baseParams' => $baseParams
         );
 
+        $ret['uniquePrefix'] = Kwf_Config::getValue('application.uniquePrefix');
+        if ($ret['uniquePrefix']) $ret['uniquePrefix'] .= '-';
+
         return $ret;
     }
 
