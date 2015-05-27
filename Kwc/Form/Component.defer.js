@@ -7,9 +7,9 @@ Kwf.Utils.ResponsiveEl('.cssClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, 
 
 Ext2.ns('Kwc.Form');
 Kwc.Form.findForm = function(el) {
-    var formEl = el.child('.cssClass > form');
+    var formEl = el.child('.kwcForm > form');
     if (formEl) {
-        formEl = formEl.parent('.cssClass');
+        formEl = formEl.parent('.kwcForm');
         return formEl.kwcForm;
     }
     return null;
@@ -293,8 +293,8 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
     }
 });
 
-Kwf.onElementReady('.cssClass > form', function form(form) {
-    form = form.parent('.cssClass', false);
+Kwf.onElementReady('.kwcForm > form', function form(form) {
+    form = form.parent('.kwcForm', false);
     if (!form.dom.kwcForm) {
         form.dom.kwcForm = new Kwc.Form.Component(form);
         form.kwcForm = form.dom.kwcForm;
