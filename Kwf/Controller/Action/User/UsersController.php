@@ -179,7 +179,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
     public function indexAction()
     {
         $config = array(
-            'controllerUrl' => $this->getRequest()->getBaseUrl().$this->getRequest()->getPathInfo()
+            'controllerUrl' => $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/')
         );
         if (Kwf_Registry::get('acl')->has('kwf_user_log')) {
             $config['logControllerUrl'] = $this->getRequest()->getBaseUrl().'/kwf/user/log';

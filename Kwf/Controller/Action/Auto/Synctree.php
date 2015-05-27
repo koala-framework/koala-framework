@@ -70,7 +70,7 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
     */
     public function indexAction()
     {
-        $this->view->controllerUrl = $this->getRequest()->getBaseUrl().$this->getRequest()->getPathInfo();
+        $this->view->controllerUrl = $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/');
         $this->view->xtype = 'kwf.autotreesync';
     }
 
