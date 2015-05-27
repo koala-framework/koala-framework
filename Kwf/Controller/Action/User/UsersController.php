@@ -164,7 +164,9 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         }
 
         if ($this->_getParam('query_role')) {
-            if (in_array($this->_getParam('query_role'), $roles)) {
+            if (($acl->getRole($this->_getUserRole()) instanceof Kwf_Acl_Role_Admin)) { //admin always sees all roles, no need to validate it
+                $select->whereEquals('role', $this->_getParam('query_role'));
+            } else if (in_array($this->_getParam('query_role'), $roles)) {
                 $select->whereEquals('role', $this->_getParam('query_role'));
             } else {
                 return null;
