@@ -192,7 +192,7 @@ class Kwf_Assets_Dispatcher
                 );
             }
         }
-        if ($extension == 'js') {
+        if ($extension == 'js' || $extension == 'defer.js') {
             if (preg_match_all('#([\'"])/(kwf|vkwf|admin|assets)/#', $contents, $m)) {
                 foreach ($m[0] as $k=>$i) {
                     $ret[] = array(
