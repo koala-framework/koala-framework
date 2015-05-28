@@ -7,6 +7,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
     protected $_rowsetClass = 'Kwf_Model_Union_Rowset';
     protected $_sourceRows = array();
     protected $_allDb = false;
+    protected $_mergeSelects = array();
     
     public function __construct(array $config = array())
     {
@@ -24,6 +25,13 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                 if ($key != $k && substr($k, 0, strlen($key)) == $key) {
                     throw new Kwf_Exception("Invalid key '$k', another key ('$key') also starts with this string");
                 }
+            }
+            if (is_array($i)) {
+                if (!isset($i['model'])) throw new Kwf_Exception("model key for models setting is required");
+                if (isset($i['select'])) {
+                    $this->_mergeSelects[$k] = $i['select'];
+                }
+                $i = $i['model'];
             }
             $i = Kwf_Model_Abstract::getInstance($i);
             $this->_models[$k] = $i;
@@ -189,6 +197,9 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
         if ($p = $select->getPart(Kwf_Model_Select::IGNORE_DELETED)) {
             $s->ignoreDeleted($p);
+        }
+        if (isset($this->_mergeSelects[$modelKey])) {
+            $s->merge($this->_mergeSelects[$modelKey]);
         }
         return $s;
     }
