@@ -153,6 +153,7 @@ class Kwf_Acl extends Zend_Acl
                 && $r->getParentRoleId() == $role
             ) {
                 $ret[] = $r->getRoleId();
+                $ret = array_merge($ret, $this->_getAdditionalRolesByRole($r->getRoleId()));
             }
         }
         return $ret;
