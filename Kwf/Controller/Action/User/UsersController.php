@@ -140,7 +140,7 @@ class Kwf_Controller_Action_User_UsersController extends Kwf_Controller_Action_A
         }
 
         $kwfRow = $row->getModel()->getKwfUserRowById($row->id);
-        $this->view->url = '/kwf/user/login/activate?code='.$kwfRow->id.'-'.$kwfRow->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE);
+        $this->view->url = Kwf_Setup::getBaseUrl().'/kwf/user/login/activate?code='.$kwfRow->id.'-'.$kwfRow->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE);
     }
 
     protected function _getSelect()
