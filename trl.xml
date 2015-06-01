@@ -655,6 +655,7 @@
 <si>poslati</si>
 <ua>Надіслати</ua>
 <al>Dërgo</al>
+<rs>Poslati</rs>
 </text>
 <text>
 <en>Validator</en>
@@ -2217,8 +2218,9 @@
 <uk>Пошук</uk>
 <si>Iskati</si>
 <ua>Пошук</ua>
-<hr>Traži</hr>
+<hr>Pretraži</hr>
 <cs>Vyhledat</cs>
+<rs>Pretraži</rs>
 </text>
 <text>
 <en>Possible Destinations</en>
