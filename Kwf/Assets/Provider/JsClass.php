@@ -27,4 +27,14 @@ class Kwf_Assets_Provider_JsClass extends Kwf_Assets_Provider_Abstract
         }
         return null;
     }
+
+    public function getDependencyNameByAlias($aliasDependencyName)
+    {
+        if (strpos($aliasDependencyName, '/') !== false &&  substr($aliasDependencyName, 0, strlen($this->_basePathWithType)) === $this->_basePathWithType) {
+            $aliasDependencyName = substr($aliasDependencyName, strlen($this->_basePathWithType)+1);
+            $aliasDependencyName = str_replace('/', '.', $aliasDependencyName);
+            return ($this->_namespace ? '/' : '') . $aliasDependencyName;
+        }
+        return null;
+    }
 }

@@ -178,6 +178,10 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
                         $ret->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $d);
                     }
                 }
+                $deps = $ret->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL);
+                if (count($deps) == 1) {
+                    $ret = $deps[0];
+                }
             } else {
                 $ret = $this->_guessMainFiles($dependencyName);
             }

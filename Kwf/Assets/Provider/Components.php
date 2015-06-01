@@ -13,6 +13,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
     {
         if (!isset($this->_componentFiles[$file])) {
             $this->_componentFiles[$file] = Kwf_Assets_Dependency_File::createDependency($file, $this->_providerList);
+            $this->_componentFiles[$file]->setIsEntry(true);
         }
         return $this->_componentFiles[$file];
     }

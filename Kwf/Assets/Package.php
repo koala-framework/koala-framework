@@ -21,6 +21,9 @@ class Kwf_Assets_Package
         return $this->_dependencyName;
     }
 
+    /**
+     * @return Kwf_Assets_Dependency_Abstract
+     */
     public function getDependency()
     {
         if (!isset($this->_dependency)) {
@@ -122,6 +125,30 @@ class Kwf_Assets_Package
         return $ret;
     }
 
+    private function _getCommonJsDeps($i, $language)
+    {
+        $ret = array(
+            'deps' => array(),
+            'data' => array()
+        );
+        foreach ($i->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS) as $depName=>$dep) {
+            $ret['deps'][$depName] = $dep->__toString();
+            $commonJsDeps = $this->_getCommonJsDeps($dep, $language);
+            $ret['data'][$dep->__toString()] = array(
+                'id' => $dep->__toString(),
+                'source' => $c = $dep->getContentsPacked($language),
+                'deps' => $commonJsDeps['deps'],
+                'entry' => false
+            );
+            foreach ($commonJsDeps['data'] as $i=>$j) {
+                if (!isset($ret['data'][$i])) {
+                    $ret['data'][$i] = $j;
+                }
+            }
+        }
+        return $ret;
+    }
+
     public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
     {
         if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
@@ -141,23 +168,63 @@ class Kwf_Assets_Package
         $packageMap->setFile($this->getPackageUrl($ext, $language));
 
         $maxMTime = 0;
+        $commonJsData = array();
+        $commonJsDeps = array();
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
-                $map = $i->getContentsPacked($language);
-                if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
-                    throw new Kwf_Exception("contents must not contain sourceMappingURL");
+                if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript') && $i->isEntry()) {
+                    $c = $i->getContentsPacked($language)->getFileContents();
+                    $commonJsDeps = $this->_getCommonJsDeps($i, $language);
+                    $commonJsData[$i->__toString()] = array(
+                        'id' => $i->__toString(),
+                        'source' => $c,
+                        'deps' => $commonJsDeps['deps'],
+                        'entry' => true
+                    );
+                    foreach ($commonJsDeps['data'] as $k=>$j) {
+                        if (!isset($commonJsData[$k])) {
+                            $commonJsData[$k] = $j;
+                        }
+                    }
+                } else {
+                    $map = $i->getContentsPacked($language);
+                    if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
+                        throw new Kwf_Exception("contents must not contain sourceMappingURL");
+                    }
+                    foreach ($map->getMapContentsData(false)->sources as &$s) {
+                        $s = '/assets/'.$s;
+                    }
+                    // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
+                    $packageMap->concat($map);
                 }
-                foreach ($map->getMapContentsData(false)->sources as &$s) {
-                    $s = '/assets/'.$s;
-                }
-                // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
-                $packageMap->concat($map);
-
             }
             $mTime = $i->getMTime();
             if ($mTime) {
                 $maxMTime = max($maxMTime, $mTime);
             }
+        }
+
+        if ($commonJsData) {
+            if ($mimeType == 'text/javascript; defer') {
+                //in defer.js don't include deps that are already loaded in non-defer
+                foreach ($this->_getFilteredUniqueDependencies('text/javascript') as $i) {
+                    $commonJsDeps = $this->_getCommonJsDeps($i, $language);
+                    foreach (array_keys($commonJsDeps['data']) as $key) {
+                        if (isset($commonJsData[$key])) {
+                            unset($commonJsData[$key]);
+                        }
+                    }
+                    $commonJsData[$i->__toString()] = array(
+                        'id' => $i->__toString(),
+                        'source' => $c,
+                        'deps' => $commonJsDeps['deps'],
+                        'entry' => true
+                    );
+                }
+            }
+            $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData));
+            $map = Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
+            $packageMap->concat($map);
         }
 
         if ($mimeType == 'text/javascript') {
