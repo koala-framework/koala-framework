@@ -204,11 +204,12 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             this.innerLightboxEl.css(transformName, newMatrix);
         }
         if (this.innerLightboxEl.magicTransform) {
-            this.innerLightboxEl.magicScale = true;
             if (values[0] == 0) {
+                this.innerLightboxEl.magicScale = true;
                 values[0] = 0.001;
             }
             if (values[3] == 0) {
+                this.innerLightboxEl.magicScale = true;
                 values[3] = 0.001;
             }
             var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
@@ -358,8 +359,10 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             if (this.innerLightboxEl.magicTransformY) {
                 values[5] = ($(window).height()-this.innerLightboxEl.outerHeight())/2 + this.innerLightboxEl.outerHeight();
             }
-            values[0] = 0.001;
-            values[3] = 0.001;
+            if (this.magicScale) {
+                values[0] = 0.001;
+                values[3] = 0.001;
+            }
             var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
             this.innerLightboxEl.css(transformName, newMatrix);
         }
