@@ -36,14 +36,6 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     Kwf.Utils.HistoryState.updateState();
     l.lightboxEl = el;
     l.innerLightboxEl = el.find('.kwfLightboxInner');
-    l.innerLightboxEl.getTransitionEndName = function() {
-        var transEndEventNames = {
-            'WebkitTransition' : 'webkitTransitionEnd',
-            'MozTransition'    : 'transitionend',
-            'transition'       : 'transitionend'
-        };
-        return transEndEventNames[ Modernizr.prefixed('transition') ];
-    };
     l.fetched = true;
     l.initialize();
     l.closeHref = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
@@ -174,15 +166,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.lightboxEl = lightbox;
         this.innerLightboxEl = lightbox.find('.kwfLightboxInner');
         var el = this.innerLightboxEl;
-        el.getTransitionEndName = function() {
-            var transEndEventNames = {
-                'WebkitTransition' : 'webkitTransitionEnd',
-                'MozTransition'    : 'transitionend',
-                'transition'       : 'transitionend'
-            };
-            return transEndEventNames[ Modernizr.prefixed('transition') ];
-        };
-
 
         var transformName = Modernizr.prefixed('transform');
         var matrix = el.css(transformName);
@@ -245,38 +228,49 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             this.closeButtonEl = $(
                 '<a href="#" class="closeButton"></a>'
             );
-            this.innerLightboxEl.append(this.contentEl);
-            this.innerLightboxEl.append(this.closeButtonEl);
-
-            this.style.updateContent(responseText);
-
-            if (this.lightboxEl.is(':visible')) {
-                this.contentEl.hide();
-            }
-
             var self = this;
-            var showContent = function() {
-                self.innerLightboxEl.removeClass('kwfLightboxLoading');
-                self.innerLightboxEl.find('.loading').remove();
-                if (self.lightboxEl.is(':visible')) {
-                    self.contentEl.show();
-                }
-                self.style.afterContentShown();
-                if (self.lightboxEl.is(':visible')) {
-                    self.preloadLinks();
-                }
-            };
-            var imagesToLoad = 0;
-            this.contentEl.find('img.hideWhileLoading').each(function() {
-                imagesToLoad++;
-                $(this).on('load', function() {
-                    imagesToLoad--;
-                    if (imagesToLoad <= 0) showContent.call(this);
-                });
-            });
-            if (imagesToLoad == 0) showContent.call(this);
+            var appendContent = function() {
+                self.innerLightboxEl.append(self.contentEl);
+                self.innerLightboxEl.append(self.closeButtonEl);
 
-            this.initialize();
+                self.style.updateContent(responseText);
+
+                if (self.lightboxEl.is(':visible')) {
+                    self.contentEl.hide();
+                }
+
+                var showContent = function() {
+                    self.innerLightboxEl.removeClass('kwfLightboxLoading');
+                    self.innerLightboxEl.find('.loading').remove();
+                    if (self.lightboxEl.is(':visible')) {
+                        self.contentEl.show();
+                    }
+                    self.style.afterContentShown();
+                    if (self.lightboxEl.is(':visible')) {
+                        self.preloadLinks();
+                    }
+                };
+                var imagesToLoad = 0;
+                self.contentEl.find('img.hideWhileLoading').each(function() {
+                    imagesToLoad++;
+                    $(this).on('load', function() {
+                        imagesToLoad--;
+                        if (imagesToLoad <= 0) showContent.call(this);
+                    });
+                });
+                if (imagesToLoad == 0) showContent.call(this);
+
+                self.initialize();
+            };
+            var transEndEventName = this.getTransitionEndName();
+            if ($('body').hasClass('kwfLightboxAnimate'))  {
+                this.innerLightboxEl.one(transEndEventName,
+                    (function() {
+                        appendContent();
+                    }).bind(this));
+            } else {
+                appendContent();
+            }
         }).fail(function() {
             //fallback
             location.href = this.href;
@@ -308,7 +302,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             this.fetchContent();
         }
 
-        var transEndEventName = this.innerLightboxEl.getTransitionEndName();
+        var transEndEventName = this.getTransitionEndName();
         if (!this.lightboxEl.is(':visible')) {
             this.lightboxEl.show();
             this.lightboxEl.width(); //TODO layout trigger hack
@@ -414,10 +408,16 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     preload: function() {
         this.createLightboxEl();
         this.fetchContent();
+    },
+    getTransitionEndName: function() {
+        var transEndEventNames = {
+            'WebkitTransition' : 'webkitTransitionEnd',
+            'MozTransition'    : 'transitionend',
+            'transition'       : 'transitionend'
+        };
+        return transEndEventNames[ Modernizr.prefixed('transition') ];
     }
 };
-
-
 
 Kwf.EyeCandy.Lightbox.Styles = {};
 Kwf.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
@@ -473,7 +473,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
         if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 0) return;
         var lightboxMaskEl = $(document.body).find('.kwfLightboxMask');
         $(document.body).removeClass('kwfLightboxTheaterMode');
-        var transEndEventName = this.lightbox.innerLightboxEl.getTransitionEndName();
+        var transEndEventName = this.lightbox.getTransitionEndName();
         var transitionDurationName = Modernizr.prefixed('transitionDuration');
         var duration = lightboxMaskEl.css(transitionDurationName);
         lightboxMaskEl.removeClass('kwfLightboxMaskOpen');
@@ -653,7 +653,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         this._center();
     },
     onClose: function(options) {
-        var transEndEventName = this.lightbox.innerLightboxEl.getTransitionEndName();
+        var transEndEventName = this.lightbox.getTransitionEndName();
         var transitionDurationName = Modernizr.prefixed('transitionDuration');
         var duration = this.lightbox.innerLightboxEl.css(transitionDurationName);
         if (parseFloat(duration)>0) {
