@@ -133,8 +133,11 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         Kwf_Benchmark::checkpoint('html: render');
         $ret = $this->_processPlaceholder($ret, $recipient);
         Kwf_Benchmark::checkpoint('html: placeholder');
-        $redirectComponent = $this->getData()->getChildComponent('_redirect')->getComponent();
-        $ret = $redirectComponent->replaceLinks($ret, $recipient);
+        $redirectComponent = $this->getData()->getChildComponent('_redirect');
+        if ($redirectComponent) {
+            $redirectComponent = $redirectComponent->getComponent();
+            $ret = $redirectComponent->replaceLinks($ret, $recipient);
+        }
         Kwf_Benchmark::checkpoint('html: replaceLinks');
         if ($addViewTracker && $this->_getSetting('trackViews')) {
             $params = array();
@@ -169,7 +172,10 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $ret = $this->_processPlaceholder($ret, $recipient);
         Kwf_Benchmark::checkpoint('text: placeholder');
         $ret = str_replace('&nbsp;', ' ', $ret);
-        $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
+        $redirect = $this->getData()->getChildComponent('_redirect');
+        if ($redirect) {
+            $ret = $redirect->getComponent()->replaceLinks($ret, $recipient);
+        }
         Kwf_Benchmark::checkpoint('text: replaceLinks');
         return $ret;
     }

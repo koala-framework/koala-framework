@@ -101,7 +101,9 @@ class Kwf_Controller_Action_User_BackendActivateController extends Kwf_Controlle
             }
         }
         if (count($this->view->redirects) == 1 && !$showPassword) {
-            $this->redirect($this->view->redirects[0]['url']);
+            $this->redirect($this->view->redirects[0]['url'], array('prependBase'=>false));
+        } else if (count($this->view->redirects) == 0 && $showPassword) {
+            $this->redirect($this->view->passwordUrl, array('prependBase'=>false));
         }
     }
 

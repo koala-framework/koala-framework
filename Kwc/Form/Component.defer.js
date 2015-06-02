@@ -5,19 +5,11 @@ Kwf.Utils.ResponsiveEl('.cssClass.centerDefault', [{maxWidth: 500, cls: 'veryNar
 Kwf.Utils.ResponsiveEl('.cssClass.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 Kwf.Utils.ResponsiveEl('.cssClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
-Kwf.onElementReady('.cssClass > form', function form(form) {
-    form = form.parent('.cssClass', false);
-    if (!form.dom.kwcForm) {
-        form.dom.kwcForm = new Kwc.Form.Component(form);
-        form.kwcForm = form.dom.kwcForm;
-    }
-}, { priority: -10, defer: true }); //initialize form very early, as many other components access it
-
 Ext2.ns('Kwc.Form');
 Kwc.Form.findForm = function(el) {
-    var formEl = el.child('.cssClass > form');
+    var formEl = el.child('.kwcForm > form');
     if (formEl) {
-        formEl = formEl.parent('.cssClass');
+        formEl = formEl.parent('.kwcForm');
         return formEl.kwcForm;
     }
     return null;
@@ -46,7 +38,9 @@ Kwc.Form.Component = function(form)
     }
 
     this.fields = [];
-    form.select('.kwfField', true).each(function(fieldEl) {
+    var fieldEls = $(form.dom).find('.kwfField');
+    for (var fieldElIndex=0; fieldElIndex<fieldEls.length; fieldElIndex++) {
+        var fieldEl = Ext2.get(fieldEls[fieldElIndex]);
         var classes = fieldEl.dom.className.split(' ');
         var fieldConstructor = false;
         classes.each(function (c) {
@@ -58,7 +52,7 @@ Kwc.Form.Component = function(form)
             var field = new fieldConstructor(fieldEl, this);
             this.fields.push(field);
         }
-    }, this);
+    }
 
     this.fields.forEach(function(f) {
         f.initField();
@@ -299,10 +293,11 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
     }
 });
 
-Kwf.onElementReady('.cssClass > form', function form(form) {
-    form = form.parent('.cssClass', false);
-    if (!form.kwcForm) {
-        form.kwcForm = new Kwc.Form.Component(form);
+Kwf.onElementReady('.kwcForm > form', function form(form) {
+    form = form.parent('.kwcForm', false);
+    if (!form.dom.kwcForm) {
+        form.dom.kwcForm = new Kwc.Form.Component(form);
+        form.kwcForm = form.dom.kwcForm;
     }
 }, { priority: -10, defer: true }); //initialize form very early, as many other components access it
 

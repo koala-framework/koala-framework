@@ -4,10 +4,10 @@ class Kwc_Basic_BackgroundWindowWidth_Image_Component extends Kwc_Basic_Image_Co
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwf('Background Image').' ('.trlKwf('Optional').')';
+        $ret['componentName'] = trlKwfStatic('Background Image').' ('.trlKwfStatic('Optional').')';
         $ret['dimensions'] = array(
             'fullWidth'=>array(
-                'text' => trlKwf('full width'),
+                'text' => trlKwfStatic('full width'),
                 'width' => 2560,
                 'height' => 0,
                 'cover' => true

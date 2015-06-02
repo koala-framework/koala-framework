@@ -110,7 +110,7 @@ class Kwf_Controller_Action_Trl_KwfController extends Kwf_Controller_Action_Auto
     public function indexAction ()
     {
         $config = array(
-            'controllerUrl' => $this->getRequest()->getBaseUrl().$this->getRequest()->getPathInfo(),
+            'controllerUrl' => $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/'),
             'language' => $this->_getLanguage()
         );
         $this->view->ext('Kwf.Trl.Grid', $config);

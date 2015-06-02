@@ -89,7 +89,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
                 $this->_forward('json-login', 'login',
                                     'kwf_controller_action_user', $params);
             } else {
-                $params = array('location' => $this->getRequest()->getBaseUrl().$this->getRequest()->getPathInfo());
+                $params = array('location' => $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/'));
                 $this->_forward('index', 'login',
                                     'kwf_controller_action_user', $params);
             }

@@ -803,7 +803,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $ret = null;
             foreach ($expr->getExpressions() as $e) {
                 $value = $this->getExprValue($row, $e);
-                if ($ret == null) {
+                if ($ret === null) {
                     $ret = $value;
                 } else {
                     if ($value == 0) {
@@ -819,7 +819,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $ret = null;
             foreach ($expr->getExpressions() as $e) {
                 $value = $this->getExprValue($row, $e);
-                if ($ret == null) {
+                if ($ret === null) {
                     $ret = $value;
                 } else {
                     $ret *= $value;
@@ -831,7 +831,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             $ret = null;
             foreach ($expr->getExpressions() as $e) {
                 $value = $this->getExprValue($row, $e);
-                if ($ret == null) {
+                if ($ret === null) {
                     $ret = $value;
                 } else {
                     $ret -= $value;
