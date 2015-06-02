@@ -109,7 +109,6 @@ Kwf.onContentReady(function lightboxContent(readyEl, options)
             Kwf.EyeCandy.Lightbox.currentOpen.style.onContentReady();
         }
     }
-    $(document.body).find('.lightboxMask').addClass('kwfLightboxOpenMask');                                             //ToDo: Michael bitte an die richtige Stelle
 });
 
 Kwf.Utils.HistoryState.on('popstate', function() {
@@ -321,7 +320,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         var transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
         if (!this.lightboxEl.is(':visible')) {
             this.lightboxEl.show();
-            this.lightboxEl.width(); //TODO BESSER LÖSEN!!! DAMIT display block vor addClass gemacht wird
+            this.lightboxEl.width(); //TODO layout trigger hack
             if (this.innerLightboxEl.magicTransform) {
                 var transformName = Modernizr.prefixed('transform');
                 var matrix = this.innerLightboxEl.css(transformName);
@@ -457,14 +456,18 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
         Kwf.EyeCandy.Lightbox.Styles.Abstract.masks++;
         if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 1) return;
         $(document.body).addClass('kwfLightboxTheaterMode');
-        var maskEl = $(document.body).find('.lightboxMask');
+        var maskEl = $(document.body).find('.kwfLightboxMask');
         if (maskEl.length) {
             maskEl.show();
+            maskEl.width(); //TODO layout trigger hack
+            maskEl.addClass('kwfLightboxMaskOpen');
         } else {
-            maskEl = $(document.body).append('<div class="lightboxMask"></div>');
-
+            var maskEl = $('<div class="kwfLightboxMask"></div>');
+            $(document.body).append(maskEl);
+            maskEl.width(); //TODO layout trigger hack
+            maskEl.addClass('kwfLightboxMaskOpen');
             maskEl.click(function(ev) {
-                if ($(document.body).find('.lightboxMask').is(ev.target)) {
+                if ($(document.body).find('.kwfLightboxMask').is(ev.target)) {
                     if (Kwf.EyeCandy.Lightbox.currentOpen) {
                         Kwf.EyeCandy.Lightbox.currentOpen.style.onMaskClick();
                     }
@@ -475,9 +478,25 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     unmask: function() {
         Kwf.EyeCandy.Lightbox.Styles.Abstract.masks--;
         if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 0) return;
-        $(document.body).find('.lightboxMask').hide();
+        var lightboxMaskEl = $(document.body).find('.kwfLightboxMask');
         $(document.body).removeClass('kwfLightboxTheaterMode');
-        $(document.body).find('.lightboxMask').hide();
+        var transEndEventNames = {
+            'WebkitTransition' : 'webkitTransitionEnd',
+            'MozTransition'    : 'transitionend',
+            'transition'       : 'transitionend'
+        };
+        var transEndEventName = transEndEventNames[ Modernizr.prefixed('transition') ];
+        var transitionDurationName = Modernizr.prefixed('transitionDuration');
+        var duration = lightboxMaskEl.css(transitionDurationName);
+        lightboxMaskEl.removeClass('kwfLightboxMaskOpen');
+        if (parseFloat(duration)>0) {
+            lightboxMaskEl.one(transEndEventName,
+                (function() {
+                    lightboxMaskEl.hide();
+                }).bind(this));
+        } else {
+            lightboxMaskEl.hide();
+        }
     },
     onMaskClick: function()
     {
