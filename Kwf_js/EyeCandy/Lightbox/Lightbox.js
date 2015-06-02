@@ -109,6 +109,7 @@ Kwf.onContentReady(function lightboxContent(readyEl, options)
             Kwf.EyeCandy.Lightbox.currentOpen.style.onContentReady();
         }
     }
+    $(document.body).find('.lightboxMask').addClass('kwfLightboxOpenMask');                                             //ToDo: Michael bitte an die richtige Stelle
 });
 
 Kwf.Utils.HistoryState.on('popstate', function() {
@@ -461,6 +462,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
             maskEl.show();
         } else {
             maskEl = $(document.body).append('<div class="lightboxMask"></div>');
+
             maskEl.click(function(ev) {
                 if ($(document.body).find('.lightboxMask').is(ev.target)) {
                     if (Kwf.EyeCandy.Lightbox.currentOpen) {
