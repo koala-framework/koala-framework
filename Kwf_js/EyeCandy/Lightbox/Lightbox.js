@@ -326,7 +326,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         var transEndEventName = this.getTransitionEndName();
         if (!this.lightboxEl.is(':visible')) {
             this.lightboxEl.show();
-            this.lightboxEl.width(); //TODO layout trigger hack
             if (this.innerLightboxEl.magicTransform) {
                 var transformName = Modernizr.prefixed('transform');
                 var matrix = this.innerLightboxEl.css(transformName);
@@ -473,13 +472,15 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
         var maskEl = $(document.body).find('.kwfLightboxMask');
         if (maskEl.length) {
             maskEl.show();
-            maskEl.width(); //TODO layout trigger hack
-            maskEl.addClass('kwfLightboxMaskOpen');
+            setTimeout(function(){
+                maskEl.addClass('kwfLightboxMaskOpen');
+            }, 0);
         } else {
             var maskEl = $('<div class="kwfLightboxMask"></div>');
             $(document.body).append(maskEl);
-            maskEl.width(); //TODO layout trigger hack
-            maskEl.addClass('kwfLightboxMaskOpen');
+            setTimeout(function(){
+                maskEl.addClass('kwfLightboxMaskOpen');
+            }, 0);
             maskEl.click(function(ev) {
                 if ($(document.body).find('.kwfLightboxMask').is(ev.target)) {
                     if (Kwf.EyeCandy.Lightbox.currentOpen) {
