@@ -1,6 +1,13 @@
 Kwf.namespace('Kwf.EyeCandy.Lightbox');
 
 $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
+    var innerContent = $('body').children('.innerContent');                                                             //ToDo für michi - alle divs parallel zu kwfLightbox div
+    var topScroll = $(document).scrollTop();
+
+    innerContent.data('setTopScroll', topScroll);
+    innerContent.css('top', (topScroll * (-1)) + 'px');
+    innerContent.addClass('fixedContent');
+
     var el = event.currentTarget;
     var $el = $(el);
     var options = $el.data('kwc-lightbox');
@@ -33,6 +40,7 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
 
 Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
+
     if (el[0].kwfLightbox) return;
     var options = jQuery.parseJSON(el.find('input.options').val());
     var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
@@ -178,7 +186,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         if (this.options.cssClass) cls += ' '+this.options.cssClass;
         var lightbox = $(
             '<div class="'+cls+'">'+
-                '<div class="kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'+
+                '<div class="kwfLightboxBetween">'+
+                    '<div class="kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'+
+                '</div>'+
             '</div>'
         );
         $(document.body).append(lightbox);
@@ -415,9 +425,25 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     initialize: function()
     {
         var closeButtons = this.innerLightboxEl.find('.closeButton');
+
+
         closeButtons.click((function(ev) {
+
+            var innerContent = $('body').children('.innerContent');                                                     //ToDo für michi - alle divs parallel zu kwfLightbox div
+
+            var removeContentFixed = function() {
+                innerContent.removeClass('fixedContent');
+            };
+            setTimeout(removeContentFixed, 0);
+
+            var scrollContentBack = function() {
+                $(window).scrollTop( innerContent.data('setTopScroll') );
+            };
+            setTimeout(scrollContentBack, 0);
+
             ev.preventDefault();
             this.closeAndPushState();
+
         }).bind(this));
     },
     preloadLinks: function() {
@@ -710,7 +736,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
     },
     _center: function() {
         if (!this.lightbox.lightboxEl.is(':visible')) return;
-        this.lightbox.innerLightboxEl.css(this._getCenterXy());
+        //this.lightbox.innerLightboxEl.css(this._getCenterXy());
     },
 
     //called if element *inside* lightbox did fire callOnContentReady
