@@ -5,6 +5,7 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Kwc_Form_Dynamic_Form_Success_Component';
+        $ret['fromMailAdress'] = null;
         return $ret;
     }
 
@@ -78,10 +79,18 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         if (substr($host, 0, 4) == 'www.') {
             $host = substr($host, 4);
         }
-        $row->setFrom("noreply@$host");
+
+        $fromMailAddress = $this->_getSetting('fromMailAdress');
+        if ($fromMailAddress) {
+            $row->setFrom($fromMailAddress);
+        } else {
+            $row->setFrom("noreply@$host");
+        }
         $settings = $this->getData()->parent->getComponent()->getMailSettings();
         $row->addTo($settings['recipient']);
-        $row->addCc($settings['recipient_cc']);
+        if ($settings['recipient_cc']) {
+            $row->addCc($settings['recipient_cc']);
+        }
         $row->setSubject(str_replace('%number%', $row->id, $settings['subject']));
         $row->setCheckSpam($settings['check_spam']);
         $msg = '';
