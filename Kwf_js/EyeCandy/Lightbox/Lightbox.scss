@@ -4,8 +4,56 @@
 @import "compass/css3/transition";
 @import "compass/css3/transform";
 
+html {
+    overflow-y: scroll;
+}
+
+body {
+    .innerContent {
+        &.fixedContent {
+            position: fixed;
+        }
+    }
+
+    div.kwfLightbox {
+        display: table;
+        height: 100% !important;
+        table-layout: fixed;
+        width: 100%;
+        left: 0;
+        min-height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        &.kwfLightboxOpen {
+            display: table !important;
+        }
+
+        .kwfLightboxBetween {
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+            width: 100%;
+
+            .kwfLightboxInner {
+                position: static;
+                text-align: left;
+                display: inline-block;
+
+                .closeButton {
+                    right: 10px;
+                    top: 10px;
+                }
+            }
+        }
+    }
+}
+
 body.kwfLightboxAnimate {
-    overflow: hidden;
+    .kwfLightbox {
+        position: fixed;
+    }
 }
 
 @if $animation-style == fadeIn {
