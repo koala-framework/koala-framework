@@ -103,6 +103,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
                 "        $lightboxContent\n".
                 "    </div>\n".
                 "</div>\n</div>\n";
+            $lightboxContent .= "<div class=\"kwfLightboxMask kwfLightboxMaskOpen\"></div>\n";
             return preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
         } else {
             return $lightboxContent;
