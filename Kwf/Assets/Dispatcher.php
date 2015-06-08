@@ -65,9 +65,9 @@ class Kwf_Assets_Dispatcher
         return str_replace(array(':', '/', '.', ','), '_', $url);
     }
 
-    public static function getCacheIdByPackage($package, $ext, $language, $partNumber)
+    public static function getCacheIdByPackage($package, $ext, $language)
     {
-        $ret = $package->getPackageUrl($ext, $language, $partNumber);
+        $ret = $package->getPackageUrl($ext, $language);
         if (Kwf_Setup::getBaseUrl()) $ret = substr($ret, strlen(Kwf_Setup::getBaseUrl()));
         if (substr($ret, 0, 21) != '/assets/dependencies/') throw new Kwf_Exception("invalid url: '$url'");
         $ret = substr($ret, 21);
@@ -133,12 +133,11 @@ class Kwf_Assets_Dispatcher
     {
         class_exists('Kwf_Trl'); //required because setup doesn't load Trl.php before dispatching assets
         $param = explode('/', $url);
-        if (count($param) != 5) throw new Kwf_Exception_NotFound();
+        if (count($param) != 4) throw new Kwf_Exception_NotFound();
         $dependencyClass = $param[0];
         $dependencyParams = $param[1];
         $language = $param[2];
-        $partNumber = $param[3];
-        $extension = $param[4];
+        $extension = $param[3];
         if (!class_exists($dependencyClass)) {
             throw new Kwf_Exception_NotFound();
         }
@@ -162,12 +161,12 @@ class Kwf_Assets_Dispatcher
         else throw new Kwf_Exception_NotFound();
 
         if (!$sourceMap) {
-            $contents = $package->getPackageContents($mimeType, $language, $partNumber);
+            $contents = $package->getPackageContents($mimeType, $language);
             $mtime = $package->getMaxMTime($mimeType);
             if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
             else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf-8';
         } else {
-            $contents = $package->getPackageContentsSourceMap($mimeType, $language, $partNumber);
+            $contents = $package->getPackageContentsSourceMap($mimeType, $language);
             $mtime = $package->getMaxMTime($mimeType);
             $mimeType = 'application/json';
         }
