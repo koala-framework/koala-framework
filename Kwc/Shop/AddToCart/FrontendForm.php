@@ -25,39 +25,4 @@ class Kwc_Shop_AddToCart_FrontendForm extends Kwc_Shop_AddToCartAbstract_Fronten
     {
         $this->_product = $product;
     }
-
-    protected function _beforeInsert(&$row)
-    {
-        $select = $this->_getCheckProductRowExistsSelect($row);
-        $existingRow = null;
-        foreach ($row->getModel()->getRows($select) as $i) {
-            $match = true;
-            foreach ($row->getSiblingRow(0)->toArray() as $key => $val) {
-                if ($key != 'amount' && $i->$key != $row->$key) {
-                    $match = false;
-                    break;
-                }
-            }
-            if ($match) {
-                $existingRow = $i;
-                break;
-            }
-        }
-        if ($existingRow) {
-            $existingRow->amount += $row->amount;
-            $row = $existingRow;
-        }
-    }
-
-    protected function _getCheckProductRowExistsSelect($row)
-    {
-        if (!$row->shop_order_id) return false; //happens for replacements (babytuch)
-
-        $select = $row->getModel()->select()
-            ->whereEquals('shop_order_id', $row->shop_order_id)
-            ->whereEquals('shop_product_price_id', $row->shop_product_price_id)
-            ->whereEquals('add_component_id', $row->add_component_id)
-            ->whereEquals('add_component_class', $row->add_component_class);
-        return $select;
-    }
 }

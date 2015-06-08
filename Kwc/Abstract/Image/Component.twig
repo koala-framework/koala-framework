@@ -11,7 +11,7 @@
             </div>
         </div>
         {% if showImageCaption %}
-            <div class="imageCaption" style="max-width:{{ renderer.imageParam(image, 'width', 'default') }}px;">{{ image_caption }}</div>
+            <div class="imageCaption" style="max-width:{{ renderer.imageParam(image, 'width', 'default') }}px;"><span>{{ image_caption }}</span></div>
         {% endif %}
     {% endif %}
 </div>

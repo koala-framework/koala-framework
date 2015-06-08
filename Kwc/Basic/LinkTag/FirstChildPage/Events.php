@@ -45,11 +45,14 @@ class Kwc_Basic_LinkTag_FirstChildPage_Events extends Kwc_Abstract_Events
     public function onPositionChanged(Kwf_Component_Event_Page_PositionChanged $event)
     {
         $component = $event->component;
-        if (isset($component->chained)) {
-            $pos = $component->chained->row->pos;
-        } else {
-            $pos = $component->row->pos;
+
+        //for trl or cc only master has pos
+        $masterData = $component;
+        while (isset($masterData->chained)) {
+            $masterData = $masterData->chained;
         }
+        $pos = $masterData->row->pos;
+
         if ($pos == 1) {
             $this->_fireUrlChanged($component->parent);
         }
