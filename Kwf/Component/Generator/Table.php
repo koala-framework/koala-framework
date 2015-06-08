@@ -333,6 +333,11 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         return $row->{$this->_idColumn};
     }
 
+    public function getIdColumn()
+    {
+        return $this->_idColumn;
+    }
+
     public function hasMultipleComponents()
     {
         return (count($this->_settings['component']) > 1);
