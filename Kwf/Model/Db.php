@@ -658,12 +658,29 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
             return $this->_fieldWithTableName($this->getPrimaryKey(), $tableNameAlias)." IN ($depDbSelect)";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Child_First) {
-            $depM = $depOf->getDependentModel($expr->getChild());
-            $dbDepM = self::_getInnerDbModel($depM);
-            $dbDepOf = self::_getInnerDbModel($depOf);
+            $i = $depOf->getDependentModelWithDependentOf($expr->getChild());
+            $depM = $i['model'];
+            $depOf = $i['dependentOf'];
 
-            $depTableName = $dbDepM->getTableName();
-            $ref = $depM->getReferenceByModelClass(get_class($depOf), null/*todo*/);
+            $dbDepOf = $depOf;
+            while ($dbDepOf instanceof Kwf_Model_Proxy) {
+                $dbDepOf = $dbDepOf->getProxyModel();
+            }
+            if (!$dbDepOf instanceof Kwf_Model_Db) {
+                throw new Kwf_Exception_NotYetImplemented();
+            }
+
+            $depM = Kwf_Model_Abstract::getInstance($depM);
+            $dbDepM = $depM;
+            while ($dbDepM instanceof Kwf_Model_Proxy) {
+                $dbDepM = $dbDepM->getProxyModel();
+            }
+            if (!$dbDepM instanceof Kwf_Model_Db && !$dbDepM instanceof Kwf_Model_Union) {
+                throw new Kwf_Exception_NotYetImplemented();
+            }
+
+            $d = $depOf->getDependentModelWithDependentOf($expr->getChild());
+            $ref = $d['model']->getReferenceByModelClass(get_class($d['dependentOf']), isset($d['rule']) ? $d['rule'] : null);
             $depSelect = $expr->getSelect();
             if (!$depSelect) {
                 $depSelect = $dbDepM->select();
@@ -673,9 +690,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             }
             $col1 = $dbDepM->transformColumnName($ref['column']);
             $col2 = $dbDepOf->transformColumnName($dbDepOf->getPrimaryKey());
-            $depSelect->where("$depTableName.$col1={$dbDepOf->getTableName()}.$col2");
+            $depSelect->where("{$dbDepM->_formatField($col1)}={$dbDepOf->_formatField($col2)}");
             $depDbSelect = $dbDepM->_getDbSelect($depSelect);
-            $exprStr = $dbDepM->_formatField($expr->getField(), $depDbSelect);
+            $exprStr = new Zend_Db_Expr($dbDepM->_formatField($expr->getField(), $depDbSelect));
             $depDbSelect->reset(Zend_Db_Select::COLUMNS);
             $depDbSelect->from(null, $exprStr);
             $depDbSelect->limit(1);

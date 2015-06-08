@@ -490,6 +490,16 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         ));
     }
 
+    public function getRowBySourceRow(Kwf_Model_Row_Interface $row)
+    {
+        foreach ($this->getUnionModels() as $k=>$m) {
+            if ($row->getModel() == $m) {
+                return $this->getRowById($k.$row->{$m->getPrimaryKey()});
+            }
+        }
+        throw new Kwf_Exception("Model '".get_class($row->getModel())."' doesn't exist as unionModel in '".get_class($this)."'");
+    }
+
     public function createRow(array $data = array())
     {
         throw new Kwf_Exception_NotYetImplemented();

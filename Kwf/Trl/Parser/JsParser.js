@@ -106,7 +106,7 @@ var parseContent = function(content, translations, contentLines) {
 
 var content = '';
 process.stdin.resume();
-prcoess.stdin.on('data', function (buf) { content += buf.toString(); });
+process.stdin.on('data', function (buf) { content += buf.toString(); });
 process.stdin.on('end', function() {
     var contentLines = content.split("\n");
     parseContent(content, translations, contentLines);

@@ -2,7 +2,7 @@
     <div class="{{ cssClass }}">
         {% for item in items %}
             {{ renderer.componentLink(item.data, '{name}', item.class) }}
-            {% if not item.last %}{{ separator}}{% endif %}
+            {% if not item.last %}{{ separator|raw }}{% endif %}
         {% endfor %}
     </div>
 {% endif %}

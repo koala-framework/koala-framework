@@ -13,6 +13,13 @@ class Kwc_Basic_Anchor_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['name'] = $this->getRow()->anchor ? $this->getRow()->anchor : null;
+        return $ret;
+    }
+
     public function getAnchors()
     {
         return array($this->getData()->componentId => $this->getRow()->anchor);
