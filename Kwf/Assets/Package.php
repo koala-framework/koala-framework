@@ -108,15 +108,9 @@ class Kwf_Assets_Package
 
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
-                $c = $i->getContentsPackedSourceMap($language);
-                if (!$c) {
-                    $map = Kwf_SourceMaps_SourceMap::createEmptyMap($i->getContentsPacked($language));
-                } else {
-                    $c = json_decode($c);
-                    foreach ($c->sources as &$s) {
-                        $s = '/assets/'.$s;
-                    }
-                    $map = new Kwf_SourceMaps_SourceMap($c, $i->getContentsPacked($language));
+                $map = $i->getContentsPacked($language);
+                foreach ($map->getMapContentsData(false)->sources as &$s) {
+                    $s = '/assets/'.$s;
                 }
                 $packageMap->concat($map);
             }
@@ -172,15 +166,14 @@ class Kwf_Assets_Package
         $ret = '';
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
-                if ($c = $i->getContentsPacked($language)) {
-                    // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
-                    if (strpos($c, "//@ sourceMappingURL=") !== false && strpos($c, "//# sourceMappingURL=") !== false) {
-                        throw new Kwf_Exception("contents must not contain sourceMappingURL");
-                    }
-                    $ret .= $c;
-                    if (strlen($c) > 0 && substr($c, -1) != "\n") {
-                        $ret .= "\n";
-                    }
+                $c = $i->getContentsPacked($language)->getFileContents();
+                // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
+                if (strpos($c, "//@ sourceMappingURL=") !== false && strpos($c, "//# sourceMappingURL=") !== false) {
+                    throw new Kwf_Exception("contents must not contain sourceMappingURL");
+                }
+                $ret .= $c;
+                if (strlen($c) > 0 && substr($c, -1) != "\n") {
+                    $ret .= "\n";
                 }
             }
             $mTime = $i->getMTime();

@@ -188,13 +188,10 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 
     public function getContentsPacked($language)
     {
-        return $this->getContents($language);
-    }
-
-    public function getContentsPackedSourceMap($language)
-    {
-        $this->getContents($language);
-        $cacheFile = $this->_getCacheFileName(); //generates map if not existing or outdated
-        return file_get_contents($cacheFile.'.map');
+        $cacheFile = $this->_getCacheFileName();
+        if (!file_exists("$cacheFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$cacheFile.buildtime")) {
+            $this->warmupCaches();
+        }
+        return new Kwf_SourceMaps_SourceMap(file_get_contents($cacheFile.'.map'), file_get_contents($cacheFile));
     }
 }

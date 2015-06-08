@@ -89,6 +89,6 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
             $this->_cacheContents = $contents;
         }
 
-        return $this->_cacheContents;
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($this->_cacheContents);
     }
 }

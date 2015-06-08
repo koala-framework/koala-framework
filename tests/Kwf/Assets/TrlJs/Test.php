@@ -23,13 +23,13 @@ class Kwf_Assets_TrlJs_Test extends Kwf_Test_TestCase
         $c = $f->getContents('de');
         $this->assertEquals("trl(',');", trim($c));
 
-        $c = $f->getContentsPacked('de');
+        $c = $f->getContentsPacked('de')->getFileContents();
         $this->assertEquals("trl(\",\");", trim($c));
 
         $c = $f->getContents('en');
         $this->assertEquals("trl('.');", trim($c));
 
-        $c = $f->getContentsPacked('en');
+        $c = $f->getContentsPacked('en')->getFileContents();
         $this->assertEquals("trl(\".\");", trim($c));
     }
 
@@ -39,13 +39,13 @@ class Kwf_Assets_TrlJs_Test extends Kwf_Test_TestCase
         $c = $f->getContents('de');
         $this->assertEquals("trl('.');", trim($c));
 
-        $c = $f->getContentsPacked('de');
+        $c = $f->getContentsPacked('de')->getFileContents();
         $this->assertEquals("trl(\".\");", trim($c));
 
         $c = $f->getContents('en');
         $this->assertEquals("trl(',');", trim($c));
 
-        $c = $f->getContentsPacked('en');
+        $c = $f->getContentsPacked('en')->getFileContents();
         $this->assertEquals("trl(\",\");", trim($c));
     }
 }

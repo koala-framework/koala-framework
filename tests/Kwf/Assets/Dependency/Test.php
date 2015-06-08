@@ -13,7 +13,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
         $f = new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Kwf.js');
         $this->assertEquals('text/javascript', $f->getMimeType());
         $c = $f->getContents('en');
-        $cPacked = $f->getContentsPacked('en');
+        $cPacked = $f->getContentsPacked('en')->getFileContents();
         $this->assertContains('Kwf.log', $cPacked);
         $this->assertTrue(strlen($c) > strlen($cPacked));
     }

@@ -21,26 +21,23 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
         $paths = self::_getAllPaths();
         $pathType = $this->getType();
         $f = $paths[$pathType].substr($this->_builtFile, strpos($this->_builtFile, '/'));
-        $ret = file_get_contents($f);
-        $ret = rtrim($ret);
-        $ret = explode("\n", $ret);
-        if (substr($ret[count($ret)-1], 0, 21) == '//# sourceMappingURL=') {
+        $contents = file_get_contents($f);
+        $contents = rtrim($contents);
+        $contents = explode("\n", $contents);
+        if (substr($contents[count($contents)-1], 0, 21) == '//# sourceMappingURL=') {
             //remove sourceMappingURL comment
-            unset($ret[count($ret)-1]);
+            unset($contents[count($contents)-1]);
         }
-        return implode("\n", $ret);
-    }
+        $contents = implode("\n", $contents);
 
-    public function getContentsPackedSourceMap($language)
-    {
         $paths = self::_getAllPaths();
         $pathType = $this->getType();
         $f = $paths[$pathType].substr($this->_sourceMapFile, strpos($this->_sourceMapFile, '/'));
         $mapContents = file_get_contents($f);
-        $map = new Kwf_SourceMaps_SourceMap($mapContents, $this->getContentsPacked($language));
 
         $cacheFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$this->getFileNameWithType().'.map.'.md5($mapContents);
         if (!file_exists($cacheFile)) {
+            $map = new Kwf_SourceMaps_SourceMap($mapContents, $contents);
             if (!is_dir(dirname($cacheFile))) mkdir(dirname($cacheFile), 0777, true);
             $data = $map->getMapContentsData();
             if (count($data->sources) != 1) {
@@ -49,8 +46,10 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
             $data->sources = array(
                 $this->getFileNameWithType()
             );
-            file_put_contents($cacheFile, json_encode($data));
+            $map->save($cacheFile);
+        } else {
+            $map = new Kwf_SourceMaps_SourceMap(file_get_contents($cacheFile), $contents);
         }
-        return file_get_contents($cacheFile);
+        return $map;
     }
 }

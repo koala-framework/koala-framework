@@ -29,12 +29,8 @@ abstract class Kwf_Assets_Dependency_Abstract
 
     public function getContentsPacked($language)
     {
-        return $this->getContents($language);
-    }
-
-    public function getContentsPackedSourceMap($language)
-    {
-        return false;
+        $contents = $this->getContents($language);
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
     }
 
     public function setDependencies($type, $deps)

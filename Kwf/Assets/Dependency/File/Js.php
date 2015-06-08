@@ -2,7 +2,6 @@
 class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 {
     private $_parsedElementsCache;
-    private $_contentsCache;
     private $_contentsCacheSourceMap;
 
     public function getMimeType()
@@ -67,10 +66,11 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             if ($useTrl) {
                 file_put_contents("$buildFile.min.js.trl", serialize(Kwf_Trl_Parser_JsParser::parseContent($contents)));
             }
+        } else {
+            $map = new Kwf_SourceMaps_SourceMap(file_get_contents("$buildFile.min.js.map.json"), file_get_contents("$buildFile.min.js"));
         }
 
-        $this->_contentsCacheSourceMap = file_get_contents("$buildFile.min.js.map.json");
-        $this->_contentsCache = file_get_contents("$buildFile.min.js");
+        $this->_contentsCache = $map;
         if ($useTrl) {
             $this->_parsedElementsCache = unserialize(file_get_contents("$buildFile.min.js.trl"));
         } else {
@@ -85,7 +85,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         }
         return array(
             'contents' => $this->_contentsCache,
-            'sourceMap' => $this->_contentsCacheSourceMap,
             'trlElements' => $this->_parsedElementsCache
         );
     }
@@ -93,53 +92,47 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
     protected function _getContents($language, $pack)
     {
         if ($pack) {
-            $ret = $this->_getCompliedContents();
+            $compiledContents = $this->_getCompliedContents();
+            $map = $compiledContents['contents'];
+            $trlElements = $compiledContents['trlElements'];
         } else {
             $contents = $this->_getRawContents(null);
-            $ret = array(
-                'contents' => $contents,
-                'trlElements' => Kwf_Trl_Parser_JsParser::parseContent($contents)
-            );
+            $map = Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
+            $trlElements = Kwf_Trl_Parser_JsParser::parseContent($contents);
             unset($contents);
         }
 
-        if ($ret['trlElements']) {
+        if ($trlElements) {
 
-            if (isset($ret['sourceMap'])) {
+            $buildFile = false;
+            if ($pack) {
                 $buildFile = "cache/assets/".$this->getFileNameWithType().'-'.$language;
                 $dir = dirname($buildFile);
                 if (!file_exists($dir)) mkdir($dir, 0777, true);
+            }
 
-                if (!file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
-                    $map = new Kwf_SourceMaps_SourceMap($ret['sourceMap'], $ret['contents']);
-                    foreach ($this->_getTrlReplacements($ret, $language) as $value) {
-                        $map->stringReplace($value['search'], $value['replace']);
-                    }
+            if (!$buildFile || !file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
+                foreach ($this->_getTrlReplacements($trlElements, $map->getFileContents(), $language) as $value) {
+                    $map->stringReplace($value['search'], $value['replace']);
+                }
+                if ($buildFile) {
                     $map->save("$buildFile.map", $buildFile);
-                    unset($map);
                     file_put_contents("$buildFile.buildtime", filemtime($this->getAbsoluteFileName()));
                 }
-                $ret = array(
-                    'contents' => file_get_contents($buildFile),
-                    'sourceMap' => file_get_contents("$buildFile.map"),
-                );
             } else {
-                foreach ($this->_getTrlReplacements($ret, $language) as $value) {
-                    $ret['contents'] = str_replace($value['search'], $value['replace'], $ret['contents']);
-                }
-                unset($ret['trlElements']);
+                $map = new Kwf_SourceMaps_SourceMap(file_get_contents("$buildFile.map"), file_get_contents("$buildFile"));
             }
         }
 
-        return $ret;
+        return $map;
     }
 
-    private function _getTrlReplacements($ret, $language)
+    private function _getTrlReplacements($trlElements, $contents, $language)
     {
         static $jsLoader;
         if (!isset($jsLoader)) $jsLoader = new Kwf_Trl_JsLoader();
-        $replacements = $jsLoader->getReplacements($ret['trlElements'], $language);
-        $replacements = array_merge($replacements, $this->_getHelpReplacements($ret['contents'], $language));
+        $replacements = $jsLoader->getReplacements($trlElements, $language);
+        $replacements = array_merge($replacements, $this->_getHelpReplacements($contents, $language));
         return $replacements;
     }
 
@@ -168,9 +161,8 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
     public final function getContents($language)
     {
-
         $c = $this->_getContents($language, false);
-        return $c['contents'];
+        return $c->getFileContents();
     }
 
     private function _getHelpReplacements($contents, $language)
@@ -189,12 +181,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
     public final function getContentsPacked($language)
     {
         $c = $this->_getContents($language, true);
-        return $c['contents'];
-    }
-
-    public final function getContentsPackedSourceMap($language)
-    {
-        $c = $this->_getContents($language, true);
-        return $c['sourceMap'];
+        return $c;
     }
 }
