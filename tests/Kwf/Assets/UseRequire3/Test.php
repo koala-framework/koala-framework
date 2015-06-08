@@ -28,7 +28,7 @@ class Kwf_Assets_UseRequire3_Test extends Kwf_Test_TestCase
     public function testPackageContents()
     {
         $package = new Kwf_Assets_Package($this->_list, 'A');
-        $c = $package->getPackageContents('text/javascript', 'en', 0, false);
-        $this->assertEquals("B\nA\nC\n", $c);
+        $c = $package->getPackageContents('text/javascript', 'en', 0, false)->getFileContents();
+        $this->assertEquals("B\nA\nC", $c);
     }
 }

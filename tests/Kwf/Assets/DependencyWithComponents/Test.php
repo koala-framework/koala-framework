@@ -27,12 +27,12 @@ class Kwf_Assets_DependencyWithComponents_Test extends Kwc_TestAbstract
     {
         $package = new Kwf_Assets_Package($this->_list, 'Frontend');
 
-        $contents = $package->getPackageContents('text/javascript', 'en', 0, false);
+        $contents = $package->getPackageContents('text/javascript', 'en', 0, false)->getFileContents();
         $contents = trim($contents);
         $contents = str_replace("\n\n", "\n", $contents);
         $this->assertEquals("foo;\nbar;", $contents);
 
-        $contents = $package->getPackageContents('text/css', 'en', 0, false);
+        $contents = $package->getPackageContents('text/css', 'en', 0, false)->getFileContents();
         $contents = trim($contents);
         $contents = str_replace("\n\n", "\n", $contents);
         $this->assertEquals("testComponentCss", $contents);

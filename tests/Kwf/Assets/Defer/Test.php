@@ -29,11 +29,11 @@ class Kwf_Assets_Defer_Test extends Kwf_Test_TestCase
 
     public function testPackageContents()
     {
-        $c = $this->_package->getPackageContents('text/javascript', 'en', 0, false);
+        $c = $this->_package->getPackageContents('text/javascript', 'en', 0, false)->getFileContents();
         $c = str_replace("\n", '', $c);
         $this->assertEquals($c, 'CA');
 
-        $c = $this->_package->getPackageContents('text/javascript; defer', 'en', 0, false);
+        $c = $this->_package->getPackageContents('text/javascript; defer', 'en', 0, false)->getFileContents();
         $c = str_replace("\n", '', $c);
         $this->assertEquals($c, 'DB');
     }

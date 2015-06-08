@@ -161,12 +161,12 @@ class Kwf_Assets_Dispatcher
         else throw new Kwf_Exception_NotFound();
 
         if (!$sourceMap) {
-            $contents = $package->getPackageContents($mimeType, $language);
+            $contents = $package->getPackageContents($mimeType, $language)->getFileContents();
             $mtime = $package->getMaxMTime($mimeType);
             if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
             else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf-8';
         } else {
-            $contents = $package->getPackageContentsSourceMap($mimeType, $language);
+            $contents = $package->getPackageContents($mimeType, $language)->getMapContents(false);
             $mtime = $package->getMaxMTime($mimeType);
             $mimeType = 'application/json';
         }

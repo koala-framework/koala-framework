@@ -91,35 +91,6 @@ class Kwf_Assets_Package
         return $this->_cacheFilteredUniqueDependencies[$mimeType];
     }
 
-    public function getPackageContentsSourceMap($mimeType, $language)
-    {
-        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
-            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
-        }
-
-        $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
-
-        if ($mimeType == 'text/javascript') $ext = 'js';
-        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
-        else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
-        $packageMap->setFile($this->getPackageUrl($ext, $language));
-
-
-        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
-            if ($i->getIncludeInPackage()) {
-                $map = $i->getContentsPacked($language);
-                foreach ($map->getMapContentsData(false)->sources as &$s) {
-                    $s = '/assets/'.$s;
-                }
-                $packageMap->concat($map);
-            }
-        }
-
-        return $packageMap->getMapContents(false);
-        //$ret = '{"version":3, "file": "'.$file.'", "sources": ['.$retSources.'], "names": ['.$retNames.'], "mappings": "'.$retMappings.'"}';
-    }
-
     /**
      * Get built contents of a package, to be used by eg. mails
      */
@@ -143,7 +114,7 @@ class Kwf_Assets_Package
                     throw new Kwf_Exception_NotFound();
                 }
             }
-            $ret = $this->getPackageContents($mimeType, $language);
+            $ret = $this->getPackageContents($mimeType, $language)->getFileContents();
             Kwf_Assets_BuildCache::getInstance()->building = false;
         } else {
             $ret = $ret['contents'];
@@ -162,19 +133,26 @@ class Kwf_Assets_Package
             }
         }
 
+        $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
+        if ($mimeType == 'text/javascript') $ext = 'js';
+        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
+        else if ($mimeType == 'text/css') $ext = 'css';
+        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
+        $packageMap->setFile($this->getPackageUrl($ext, $language));
+
         $maxMTime = 0;
-        $ret = '';
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
-                $c = $i->getContentsPacked($language)->getFileContents();
-                // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
-                if (strpos($c, "//@ sourceMappingURL=") !== false && strpos($c, "//# sourceMappingURL=") !== false) {
+                $map = $i->getContentsPacked($language);
+                if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
                     throw new Kwf_Exception("contents must not contain sourceMappingURL");
                 }
-                $ret .= $c;
-                if (strlen($c) > 0 && substr($c, -1) != "\n") {
-                    $ret .= "\n";
+                foreach ($map->getMapContentsData(false)->sources as &$s) {
+                    $s = '/assets/'.$s;
                 }
+                // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
+                $packageMap->concat($map);
+
             }
             $mTime = $i->getMTime();
             if ($mTime) {
@@ -183,26 +161,28 @@ class Kwf_Assets_Package
         }
 
         if ($mimeType == 'text/javascript') {
-            $ret = str_replace(
+            $packageMap->stringReplace(
                 '{$application.assetsVersion}',
-                Kwf_Assets_Dispatcher::getAssetsVersion(),
-                $ret);
+                Kwf_Assets_Dispatcher::getAssetsVersion()
+            );
         }
 
         if ($includeSourceMapComment) {
+            $contents = $packageMap->getFileContents();
             if ($mimeType == 'text/javascript') $ext = 'js';
             else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
             else if ($mimeType == 'text/css') $ext = 'css';
             else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
             else throw new Kwf_Exception_NotYetImplemented();
             if ($ext == 'js' || $ext == 'defer.js') {
-                $ret .= "\n//# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)."\n";
+                $contents .= "\n//# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)."\n";
             } else if ($ext == 'css' || $ext == 'printcss') {
-                $ret .= "\n/*# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)." */\n";
+                $contents .= "\n/*# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)." */\n";
             }
+            $packageMap->setFileContents($contents);
         }
 
-        return $ret;
+        return $packageMap;
     }
 
     public function toUrlParameter()
