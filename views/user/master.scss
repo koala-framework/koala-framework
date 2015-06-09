@@ -1,0 +1,317 @@
+@import "compass/utilities/general/clearfix";
+@import "kwf/background-image-dpr2";
+@import "compass/css3/transition";
+@import "compass/css3/box-sizing";
+@import "config/user/master";
+
+@if $background-color != #aaaaaa {
+    $colorIcon: mix($background-color, #aaaaaa);
+} @else if $background-color != #aaa {
+    $colorIcon: mix($background-color, #aaaaaa);
+} @else {
+    $colorIcon: mix($background-color, #cccccc);
+}
+
+@font-face {
+    font-family: "frontendIcon";
+    src:url("/assets/kwf/views/user/icon/frontendIcon.eot");
+    src:url("/assets/kwf/views/user/icon/frontendIcon.eot?#iefix") format("embedded-opentype"),
+    url("/assets/kwf/views/user/icon/frontendIcon.woff") format("woff"),
+    url("/assets/kwf/views/user/icon/frontendIcon.ttf") format("truetype"),
+    url("/assets/kwf/views/user/icon/frontendIcon.svg#frontendIcon") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+html {
+    body.backendUser {
+        .content {
+            animation: backendUserFadein 1s, backendUserSlidein 1s;
+            -moz-animation: backendUserFadein 1s, backendUserSlidein 1s; // Firefox
+            -webkit-animation: backendUserFadein 1s, backendUserSlidein 1s; // Safari and Chrome
+            animation-timing-function: ease;
+        }
+    }
+
+}
+@keyframes backendUserFadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-moz-keyframes backendUserFadein { // Firefox
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-webkit-keyframes backendUserFadein { // Safari and Chrome
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@keyframes backendUserSlidein {
+    from {
+        margin-top: -158px;
+    }
+    to {
+        margin-top: -178px;
+    }
+}
+@-moz-keyframes backendUserSlidein {
+    from {
+        margin-top: -158px;
+    }
+    to {
+        margin-top: -178px;
+    }
+}
+@-webkit-keyframes backendUserSlidein {
+    from {
+        margin-top: -158px;
+    }
+    to {
+        margin-top: -178px;
+    }
+}
+
+.backendUser {
+    font-family: arial;
+    background: $background-color;
+    font-size: 16px;
+    color: white;
+
+    a.frontendLink {
+        text-decoration: none;
+        padding-left: 0px;
+        margin-top: 5px;
+        display: block;
+        float: left;
+        clear: both;
+
+        .innerFrontendLink {
+            .front {
+                @include box-sizing(border-box);
+                text-transform: uppercase;
+                color: $button-color;
+                position: absolute;
+                padding-top: 4px;
+                left: -50px;
+                z-index: 1;
+                @include transition-property(all);
+                @include transition-duration(0.3s);
+                @include transition-timing-function(ease);
+            }
+
+            .back {
+                background: none $background-color;
+                position: relative;
+                padding-left: 10px;
+                width: 50px;
+                z-index: 2;
+
+                &:before {
+                    font-family: "frontendIcon";
+                    font-size: 45px;
+                    color: $colorIcon;
+                    content: "b";
+                    @include transition-property(all);
+                    @include transition-duration(0.3s);
+                    @include transition-timing-function(ease);
+                }
+            }
+        }
+
+        &:hover {
+            .innerFrontendLink {
+                .front {
+                    left: 60px;
+                }
+
+                .back {
+                    &:before {
+                        color: $button-color;
+                    }
+                }
+            }
+        }
+    }
+
+    .content {
+        margin-left: -175px;
+        margin-top: -178px;
+        position: absolute;
+        padding: 30px;
+        width: 350px;
+        left: 50%;
+        top: 50%;
+
+        &.lostPasswordSuccess, &.activateUseraccount {
+            p {
+                text-align: center;
+            }
+        }
+
+        .untagged {
+            padding: 0 10px 0 10px;
+            background: #cc2b00;
+            line-height: 28px;
+            right: 0; top: 0;
+            position: fixed;
+            height: 28px;
+        }
+
+        .image {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .webFormError.webStandard {
+            opacity: 0.7;
+            left: 130px;
+            top: 131px;
+
+            p {
+                display: none;
+            }
+
+            ul {
+                margin-bottom: 20px;
+                margin-top: -20px;
+                margin-left: 0px;
+
+                li {
+                    font-family: arial;
+                    margin-bottom: 10px;
+                    list-style: none;
+                    font-size: 16px;
+                    color: #ff0000;
+                }
+            }
+        }
+
+        h1 {
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: 300;
+            font-size: 30px;
+            color: $h1-color;
+        }
+
+        > p {
+            margin-bottom: 20px;
+            font-weight: 300;
+            color: $p-color;
+        }
+
+        .kwfField {
+            @include pie-clearfix;
+            margin-bottom: 10px;
+
+            label {
+                line-height: 26px;
+                font-weight: 300;
+                width: 100px !important;
+                float: left;
+                color: $label-color;
+            }
+
+            input {
+                font-family: arial;
+                border: none;
+                border-bottom: 1px solid grey;
+                background: none transparent;
+                line-height: 26px;
+                font-size: 16px;
+                color: $input-color;
+                width: 250px !important;
+            }
+        }
+
+        button {
+            font-family: arial;
+            background: none $button-color;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-top: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            color: white;
+            height: 40px;
+            border: none;
+            width: 100%;
+            @include transition-property(all);
+            @include transition-duration(0.25s);
+
+            &:hover {
+                background: none $button-color-hover;
+                font-size: 16px;
+            }
+        }
+
+        a.lostPassword {
+            text-decoration: none;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
+            display: block;
+            color: #555;
+
+            &:hover {
+                color: $button-color;
+            }
+        }
+    }
+
+    .footer {
+        position: absolute;
+        text-align: center;
+        font-weight: 300;
+        bottom: 50px;
+        width: 100%;
+
+        span {
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 20px;
+            font-style: italic;
+            line-height: 20px;
+            font-size: 14px;
+            color: #4e4e4e;
+            height: 26px;
+        }
+
+        a.logo {
+            display: inline-block;
+
+            &.vividPlanet {
+                @include background-image-dpr2('/assets/kwf/views/user/images', 'logo.png', 120px, 26px, no-repeat left center transparent);
+                margin-right: 15px;
+                width: 120px;
+                height: 26px;
+
+                &:hover {
+                    @include background-image-dpr2('/assets/kwf/views/user/images', 'logoColored.png', 120px, 26px, no-repeat left center transparent);
+                }
+            }
+
+            &.koala {
+                @include background-image-dpr2('/assets/kwf/views/user/images', 'kwfLogo.png', 112px, 26px, no-repeat left center transparent);
+                width: 120px;
+                height: 26px;
+
+                &:hover {
+                    @include background-image-dpr2('/assets/kwf/views/user/images', 'kwfLogoColored.png', 112px, 26px, no-repeat left center transparent);
+                }
+            }
+        }
+    }
+}

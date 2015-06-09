@@ -1,17 +1,17 @@
-Ext.namespace('Kwc.PostsWritePreview');
+Ext2.namespace('Kwc.PostsWritePreview');
 
-Ext.onReady(function()
+Ext2.onReady(function()
 {
-    var previews = Ext.query('div.kwcPostsWritePreview');
-    Ext.each(previews, function(preview)
+    var previews = Ext2.query('div.kwcPostsWritePreview');
+    Ext2.each(previews, function(preview)
     {
-        var previewTarget = Ext.query('div.previewBox', preview)[0];
+        var previewTarget = Ext2.query('div.previewBox', preview)[0];
 
-        var sourceSelector = Ext.query('input.sourceSelector', preview)[0].value;
+        var sourceSelector = Ext2.query('input.sourceSelector', preview)[0].value;
         var previewSource = null;
         var rootNode = preview.parentNode;
         while (!previewSource) {
-            previewSource = Ext.query(sourceSelector, rootNode)[0];
+            previewSource = Ext2.query(sourceSelector, rootNode)[0];
             if (rootNode.tagName == 'BODY') break;
             rootNode = rootNode.parentNode;
         }
@@ -20,7 +20,7 @@ Ext.onReady(function()
             previewTarget.innerHTML = Kwc.PostsWritePreview.replaceText(previewSource.value);
             Kwc.PostsWritePreview.scrollToBottom(previewTarget, 140);
 
-            previewSource = Ext.get(previewSource);
+            previewSource = Ext2.get(previewSource);
 
             previewSource.on('keyup', function(event, el) {
                 previewTarget.innerHTML = Kwc.PostsWritePreview.replaceText(el.value);
@@ -31,7 +31,7 @@ Ext.onReady(function()
 });
 
 Kwc.PostsWritePreview.scrollToBottom = function(el, maxHeight) {
-    var extEl = Ext.get(el);
+    var extEl = Ext2.get(el);
     if (extEl.getHeight() > maxHeight) {
         extEl.setHeight(maxHeight);
     }

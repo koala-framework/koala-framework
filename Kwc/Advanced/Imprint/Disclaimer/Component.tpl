@@ -21,7 +21,7 @@
             <p><a href="#" class="switchLink">5. Rechtswirksamkeit dieses Haftungsausschlusses</a></p>
             <div class="switchContent">Dieser Haftungsausschluss ist als Teil des Internetangebotes zu betrachten, von dem aus auf diese Seite verwiesen wurde. Sofern Teile oder einzelne Formulierungen dieses Textes der geltenden Rechtslage nicht, nicht mehr oder nicht vollständig entsprechen sollten, bleiben die übrigen Teile des Dokumentes in ihrem Inhalt und ihrer Gültigkeit davon unberührt.
             Der vorliegende Haftungsauschlusstext basiert auf dem kostenlosen Dienst von
-            <a href="http://www.disclaimer.de/" rel="popup_blank">www.disclaimer.de</a></div>
+            <a href="http://www.disclaimer.de/" data-kwc-popup="blank">www.disclaimer.de</a></div>
         </div>
     <? } ?>
 </div>

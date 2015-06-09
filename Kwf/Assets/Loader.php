@@ -31,10 +31,13 @@ class Kwf_Assets_Loader
             $ret['mimeType'] = 'video/webm';
         } else if (substr($file, -4)=='.css' || substr($file, -5)=='.scss') {
             $ret['mimeType'] = 'text/css; charset=utf-8';
+            if (!Kwf_Assets_Dispatcher::allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
         } else if (substr($file, -9)=='.printcss') {
             $ret['mimeType'] = 'text/css; charset=utf-8';
+            if (!Kwf_Assets_Dispatcher::allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
         } else if (substr($file, -3)=='.js') {
             $ret['mimeType'] = 'text/javascript; charset=utf-8';
+            if (!Kwf_Assets_Dispatcher::allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
         } else if (substr($file, -4)=='.swf') {
             $ret['mimeType'] = 'application/flash';
         } else if (substr($file, -4)=='.ico') {
@@ -50,7 +53,7 @@ class Kwf_Assets_Loader
         } else if (substr($file, -4)=='.ttf') { // für Schriften
             $ret['mimeType'] = 'application/octet-stream';
         } else if (substr($file, -5)=='.woff') { // für Schriften
-            $ret['mimeType'] = 'application/x-woff';
+            $ret['mimeType'] = 'application/font-woff';
         } else if (substr($file, -4)=='.htc') { // für ie css3
             $ret['mimeType'] = 'text/x-component';
         } else if (substr($file, -4)=='.pdf') {
@@ -62,7 +65,7 @@ class Kwf_Assets_Loader
         if (substr($ret['mimeType'], 0, 5) == 'text/') {
             $ret['mtime'] = time();
             $file = new Kwf_Assets_Dependency_File($file);
-            if (!$file->getFileName() || !file_exists($file->getFileName())) throw new Kwf_Exception_NotFound();
+            if (!$file->getAbsoluteFileName() || !file_exists($file->getAbsoluteFileName())) throw new Kwf_Exception_NotFound();
             $ret['contents'] = $file->getContents(null);
         } else {
             $fx = substr($file, 0, strpos($file, '/'));
@@ -76,7 +79,7 @@ class Kwf_Assets_Loader
                     $im = new Imagick();
                     if (substr($file, -4)=='.ico') $im->setFormat('ico'); //required because imagick can't autodetect ico format
                     $file = new Kwf_Assets_Dependency_File(substr($file, strpos($file, '/')+1));
-                    $im->readImage($file->getFileName());
+                    $im->readImage($file->getAbsoluteFileName());
                     $fx = explode('_', substr($fx, 3));
                     foreach ($fx as $i) {
                         $params = array();
@@ -87,7 +90,6 @@ class Kwf_Assets_Loader
                         call_user_func(array('Kwf_Assets_Effects', $i), $im, $params);
                     }
                     $cacheData['mtime'] = $file->getMTime();
-                    $cacheData['mtimeFiles'] = array($file->getFileName());
                     $cacheData['contents'] = $im->getImagesBlob();;
                     $im->destroy();
                     $cache->save($cacheData, $cacheId);
@@ -97,7 +99,7 @@ class Kwf_Assets_Loader
             } else {
                 $ret['mtime'] = time();
                 $file = new Kwf_Assets_Dependency_File($file);
-                if (!file_exists($file->getFileName())) {
+                if (!file_exists($file->getAbsoluteFileName())) {
                     throw new Kwf_Exception_NotFound();
                 }
                 $ret['contents'] = $file->getContents(null);

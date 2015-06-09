@@ -52,10 +52,10 @@ class Kwc_Newsletter_Subscribe_ApiController extends Kwf_Controller_Action
 
         $inserted = $this->_insertSubscription($row);
         if ($inserted) {
-            $this->view->message = $this->_subscribe->trl('The subscription has been saved successfully.');
+            $this->view->message = $this->_subscribe->trlKwf('The subscription has been saved successfully.');
         } else {
             //atm this message is also shown when the user is already subscribed but not in the given category (which he is added to)
-            $this->view->message = $this->_subscribe->trl('You are already subscribed to new newsletter.');
+            $this->view->message = $this->_subscribe->trlKwf('You are already subscribed to new newsletter.');
         }
     }
 

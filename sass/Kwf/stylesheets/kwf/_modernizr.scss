@@ -1,0 +1,12 @@
+// Modernizr mixin to create html.modernizr selector
+
+@mixin modernizr($feature) {
+    html.#{$feature} & {
+        @content;
+    }
+}
+@mixin modernizr-no($feature, $no: true) {
+    html.no-#{$feature} & {
+        @content;
+    }
+}

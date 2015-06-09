@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.StateChanger.HoverOthers = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.StateChanger.HoverOthers = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     state: 'tiny',
     skipItems: 0,
     init: function() {

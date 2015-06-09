@@ -60,8 +60,8 @@ class Kwc_Form_FrontendFormController extends Kwf_Controller_Action
                             $i->getComponent()->processInput($postData);
                         }
                     }
-                    if (class_exists('Kwf_Component_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
-                        Kwf_Component_ModelObserver::getInstance()->process(false);
+                    if (class_exists('Kwf_Events_ModelObserver', false)) { //Nur wenn klasse jemals geladen wurde kann auch was zu processen drin sein
+                        Kwf_Events_ModelObserver::getInstance()->process(false);
                     }
                     $renderer = new Kwf_Component_Renderer();
                     $this->view->successContent = $renderer->renderComponent($success);

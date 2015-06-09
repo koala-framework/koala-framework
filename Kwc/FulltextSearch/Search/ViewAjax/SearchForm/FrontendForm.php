@@ -8,6 +8,7 @@ class Kwc_FulltextSearch_Search_ViewAjax_SearchForm_FrontendForm extends Kwf_For
         $this->fields->add(new Kwf_Form_Field_TextField('query', 'Query'))
             ->setAutoComplete(false)
             ->setHideLabel(true)
-            ->setEmptyText(trlKwfStatic('Search'));
+            ->setEmptyText(trlKwfStatic('Search'))
+            ->setNamePrefix(''); // to get "default" parameter "search" which is automatically excluded on user tracking systems
     }
 }

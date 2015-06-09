@@ -1,5 +1,5 @@
 Kwf.onContentReady(function() {
-    if (Ext.isIE6) return;
+    if (Ext2.isIE6) return;
 
     var getElementText = function(element) {
         if(typeof element == "string")
@@ -24,9 +24,9 @@ Kwf.onContentReady(function() {
     };
     var selectors = Kwf.Headline.selectors;
     selectors.each(function(selector) {
-        var elements = Ext.DomQuery.select(selector);
+        var elements = Ext2.DomQuery.select(selector);
         elements.each(function(element) {
-            var element = new Ext.Element(element);
+            var element = new Ext2.Element(element);
             var text = getElementText(element.dom);
             element.dom.innerHTML = '<img src="/media/headline?selector='
                                         +encodeURIComponent(selector)+

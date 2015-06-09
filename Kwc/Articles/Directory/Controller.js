@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Articles.Directory');
-Kwc.Articles.Directory.TabsPanel = Ext.extend(Kwc.Directories.Item.Directory.TabsPanel,
+Ext2.namespace('Kwc.Articles.Directory');
+Kwc.Articles.Directory.TabsPanel = Ext2.extend(Kwc.Directories.Item.Directory.TabsPanel,
 {
     actionText: '',
 
@@ -24,10 +24,10 @@ Kwc.Articles.Directory.TabsPanel = Ext.extend(Kwc.Directories.Item.Directory.Tab
     onDelete: function()
     {
         if (this.getFilter('deleted').getParams('deleted').deleted == 1) {
-            Ext.Msg.show({
-                title: trl('Wiederherstellen'),
-                msg: trl('Wollen Sie diesen Eintrag (diese Einträge) wirklich wiederherstellen?'),
-                buttons: Ext.Msg.YESNO,
+            Ext2.Msg.show({
+                title: trlKwf('Restore'),
+                msg: trlKwf('Do you really want to restore this entry (entries)?'),
+                buttons: Ext2.Msg.YESNO,
                 scope: this,
                 fn: function(button) {
                     if (button == 'yes') {
@@ -55,8 +55,8 @@ Kwc.Articles.Directory.TabsPanel = Ext.extend(Kwc.Directories.Item.Directory.Tab
 
                         params[this.store.reader.meta.id] = ids.join(';');
 
-                        this.el.mask(trl('Wiederherstellen...'));
-                        Ext.Ajax.request({
+                        this.el.mask(trlKwf('Restoring...'));
+                        Ext2.Ajax.request({
                             url: this.controllerUrl+'/json-restore',
                             params: params,
                             success: function(response, options, r) {
@@ -86,4 +86,4 @@ Kwc.Articles.Directory.TabsPanel = Ext.extend(Kwc.Directories.Item.Directory.Tab
     }
 });
 
-Ext.reg('kwc.articles.directory.tabs', Kwc.Articles.Directory.TabsPanel);
+Ext2.reg('kwc.articles.directory.tabs', Kwc.Articles.Directory.TabsPanel);

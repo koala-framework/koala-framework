@@ -1,5 +1,5 @@
-Ext.namespace('Kwf.Component');
-Kwf.Component.PagesNode = Ext.extend(Kwf.Tree.Node, {
+Ext2.namespace('Kwf.Component');
+Kwf.Component.PagesNode = Ext2.extend(Kwf.Tree.Node, {
     onDblClick : function(e){
         e.preventDefault();
         this.fireEvent("dblclick", this.node, e);

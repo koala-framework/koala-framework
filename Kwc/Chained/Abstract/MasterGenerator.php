@@ -21,6 +21,7 @@ class Kwc_Chained_Abstract_MasterGenerator extends Kwf_Component_Generator_Pseud
     {
         $ret = parent::getGeneratorFlags();
         $ret['showInPageTreeAdmin'] = true;
+        $ret['showInLinkInternAdmin'] = true;
         return $ret;
     }
 }

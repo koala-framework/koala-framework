@@ -1,4 +1,4 @@
-Ext.namespace('Kwf.Utils.YoutubePlayer');
+Ext2.namespace('Kwf.Utils.YoutubePlayer');
 Kwf.Utils.YoutubePlayer.isLoaded = false;
 Kwf.Utils.YoutubePlayer.isCallbackCalled = false;
 Kwf.Utils.YoutubePlayer.callbacks = [];

@@ -9,7 +9,7 @@ class Kwc_Newsletter_Month_Directory_Component extends Kwc_Directories_Month_Dir
 
         //für News-Kategorien Box
         $ret['categoryChildId'] = 'month';
-        $ret['categoryName'] = trlKwf('Months');
+        $ret['categoryName'] = trlKwfStatic('Months');
 
         $ret['dateColumn'] = 'create_date';
 

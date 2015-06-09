@@ -1,5 +1,5 @@
-Ext.ns('Kwf.Maintenance');
-Kwf.Maintenance.Fulltext = Ext.extend(Ext.Panel, {
+Ext2.ns('Kwf.Maintenance');
+Kwf.Maintenance.Fulltext = Ext2.extend(Ext2.Panel, {
     border: false,
     initComponent: function() {
         this.buttons = [{
@@ -11,9 +11,9 @@ Kwf.Maintenance.Fulltext = Ext.extend(Ext.Panel, {
                     scope: this,
                     success: function(response, options, r) {
                         if (r.errMsg) {
-                            Ext.Msg.alert(trlKwf('Error'), r.message+"<br />"+r.errMsg.replace("\n", "<br />"));
+                            Ext2.Msg.alert(trlKwf('Error'), r.message+"<br />"+r.errMsg.replace("\n", "<br />"));
                         } else if (r.message) {
-                            Ext.Msg.alert(trlKwf('Finished'), r.message);
+                            Ext2.Msg.alert(trlKwf('Finished'), r.message);
                         }
                     }
                 });
@@ -23,4 +23,4 @@ Kwf.Maintenance.Fulltext = Ext.extend(Ext.Panel, {
         Kwf.Maintenance.Fulltext.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwf.maintenance.fulltext', Kwf.Maintenance.Fulltext);
+Ext2.reg('kwf.maintenance.fulltext', Kwf.Maintenance.Fulltext);

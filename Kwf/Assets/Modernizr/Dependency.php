@@ -2,12 +2,12 @@
 class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
 {
     private $_features = array();
-    private $_fileNameCache;
+    private $_contentsCache;
 
     public function addFeature($feature)
     {
         $this->_features[] = $feature;
-        unset($this->_fileNameCache);
+        unset($this->_contentsCache);
     }
 
     public function getFeatures()
@@ -20,36 +20,100 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         return 'text/javascript';
     }
 
-    public function getContents($language)
+    public function warmupCaches()
     {
-        return file_get_contents($this->getFileName());
+        $this->getContents('en');
     }
 
-    public function getFileName()
+    public function getContents($language)
     {
-        if (isset($this->_fileNameCache)) return $this->_fileNameCache;
+        if (isset($this->_contentsCache)) return $this->_contentsCache;
 
         if (!$this->_features) return null;
 
-        $requiredFeatures = $this->_features;
-        sort($requiredFeatures);
+        $outputFile = getcwd().'/temp/modernizr-'.implode('-', $this->_features);
+        if (file_exists("$outputFile.buildtime") && (time() - file_get_contents("$outputFile.buildtime") < 24*60*60)) {
+            $ret = file_get_contents($outputFile);
+            $this->_contentsCache = $ret;
+            return $ret;
+        }
 
-        $path = Kwf_Config::getValue('path.modernizr');
-        $builds = json_decode(file_get_contents($path.'/builds.json'), true);
-        foreach ($builds as $build) {
-            $features = $build['features'];
-            sort($features);
-            if ($requiredFeatures == $features) {
-                $this->_fileNameCache = $path.'/'.$build['file'];
-                return $this->_fileNameCache;
+        $extensibility = array(
+            "addtest"      => false,
+            "prefixed"     => false,
+            "teststyles"   => false,
+            "testprops"    => false,
+            "testallprops" => false,
+            "hasevents"    => false,
+            "prefixes"     => false,
+            "domprefixes"  => false
+        );
+        $tests = array();
+        foreach ($this->_features as $f) {
+            if (isset($extensibility[strtolower($f)])) {
+                $extensibility[strtolower($f)] = true;
+            } else {
+                //add two versions of the test
+                //requried to support core detects (eg. CssAnimations) and non-core detects (css_mediaqueries)
+
+                $tests[] = strtolower($f);
+
+                $filter = new Zend_Filter_Word_CamelCaseToUnderscore();
+                $tests[] = strtolower($filter->filter($f));
             }
         }
-        throw new Kwf_Exception("Can't find generated Modernizr file with following ".count($this->_features)." features: ".implode(', ', $this->_features));
+        $config = array(
+            'modernizr' => array(
+                'dist' => array(
+                    'devFile' => false,
+                    'outputFile' => $outputFile,
+                    'extra' => array(
+                        "shiv"       => false,
+                        "printshiv"  => false,
+                        "load"       => false,
+                        "mq"         => true,
+                        "cssclasses" => true
+                    ),
+                    'extensibility' => $extensibility,
+                    'uglify' => true,
+                    'tests' => $tests,
+                    'parseFiles' => false,
+                    'matchCommunityTests' => false,
+                    'customTests' => array()
+                )
+            )
+        );
+
+        $gruntfile  = "    module.exports = function(grunt) {\n";
+        $gruntfile .= "    grunt.initConfig(";
+        $gruntfile .= json_encode($config);
+        $gruntfile .= ");\n";
+        $gruntfile .= "    grunt.loadNpmTasks(\"grunt-modernizr\");\n";
+        $gruntfile .= "    grunt.registerTask('default', ['modernizr']);\n";
+        $gruntfile .= "};\n";
+
+        $cwd = getcwd();
+        chdir(dirname(dirname(dirname(dirname(__FILE__)))));
+        file_put_contents('Gruntfile.js', $gruntfile);
+        $cmd = $cwd."/".VENDOR_PATH."/bin/node ./node_modules/grunt-cli/bin/grunt 2>&1";
+        exec($cmd, $out, $retVar);
+        unlink('Gruntfile.js');
+        if (file_exists($outputFile)) $ret = file_get_contents($outputFile);
+        chdir($cwd);
+        if ($retVar) {
+            throw new Kwf_Exception("Grunt failed: ".implode("\n", $out));
+        }
+        file_put_contents("$outputFile.buildtime", time());
+
+        $this->_contentsCache = $ret;
+        return $ret;
     }
 
     public function getMTime()
     {
-        return filemtime($this->getFileName());
+        $outputFile = getcwd().'/temp/modernizr-'.implode('-', $this->_features);
+        if (!file_exists("$outputFile.buildtime")) $this->getContents(null);
+        return (int)file_get_contents("$outputFile.buildtime");
     }
 
     public function __toString()

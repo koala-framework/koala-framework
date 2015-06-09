@@ -99,16 +99,14 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
     protected function _saveWithoutResetDirty()
     {
         $this->_beforeSave();
-        $id = $this->{$this->_getPrimaryKey()};
+        $id = $this->getCleanValue($this->_getPrimaryKey());
         if (!$id) {
             $this->_beforeInsert();
         } else {
             $this->_beforeUpdate();
         }
         $this->_beforeSaveSiblingMaster();
-        Kwf_Component_ModelObserver::getInstance()->disable();
         $ret = $this->_row->_saveWithoutResetDirty();
-        Kwf_Component_ModelObserver::getInstance()->enable();
         parent::_saveWithoutResetDirty();
         $this->_afterSave();
         if (!$id) {
@@ -123,9 +121,7 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
     {
         parent::delete();
         $this->_beforeDelete();
-        Kwf_Component_ModelObserver::getInstance()->disable();
         $this->_row->delete();
-        Kwf_Component_ModelObserver::getInstance()->enable();
         $this->_afterDelete();
     }
 
@@ -145,5 +141,10 @@ class Kwf_Model_Proxy_Row extends Kwf_Model_Row_Abstract
             $ret = array_merge($r->_toArrayWithoutPrimaryKeys(), $ret);
         }
         return $ret;
+    }
+
+    //proxy must not fire events itself, it re-fires source model events
+    protected function _callObserver($fn)
+    {
     }
 }

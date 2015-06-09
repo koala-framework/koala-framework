@@ -1,24 +1,25 @@
-Ext.namespace('Kwc.Abstract.List');
-Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
+Ext2.namespace('Kwc.Abstract.List');
+Kwc.Abstract.List.List = Ext2.extend(Kwf.Binding.ProxyPanel,
 {
     listWidth: 300,
+    showCopyPaste: true,
 
     initComponent: function()
     {
         this.layout = 'border';
 
-        this.actions.copy = new Ext.Action({
+        this.actions.copy = new Ext2.Action({
             text    : trlKwf('Copy'),
             icon: '/assets/silkicons/page_white_copy.png',
-            //cls     : 'x-btn-text-icon',
+            //cls     : 'x2-btn-text-icon',
             handler : this.onCopy,
             disabled: true,
             scope   : this
         });
-        this.actions.paste = new Ext.Action({
+        this.actions.paste = new Ext2.Action({
             text    : trlKwf('Paste'),
             icon: '/assets/silkicons/page_white_copy.png',
-            //cls     : 'x-btn-text-icon',
+            //cls     : 'x2-btn-text-icon',
             handler : this.onPaste,
             scope   : this
         });
@@ -32,9 +33,9 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
             listeners: {
                 beforerendergrid: function(grid) {
                     var tb = grid.getTopToolbar();
-                    if (tb) {
+                    if (tb && this.showCopyPaste) {
                         tb.add({
-                            cls: 'x-btn-icon',
+                            cls: 'x2-btn-icon',
                             icon: '/assets/silkicons/page_white_copy.png',
                             menu: [
                                    this.actions.copy,
@@ -73,7 +74,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
         } else {
             this.editForms.each(function(ef) {
                 ef.baseParams = Kwf.clone(this.getBaseParams());
-                var panel = Ext.ComponentMgr.create(ef);
+                var panel = Ext2.ComponentMgr.create(ef);
                 this.grid.addBinding(panel);
                 this.editPanels.push(panel);
             }, this);
@@ -82,7 +83,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
                     this.componentConfigs, ec, {}, this.grid
                 ));
             }, this);
-            this.childPanel = new Ext.TabPanel({
+            this.childPanel = new Ext2.TabPanel({
                 region: 'center',
                 activeTab: 0,
                 items: this.editPanels
@@ -92,7 +93,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
         // MultiFileUpload hinzufügen falls konfiguriert
         var westItems = [this.grid];
         if (this.multiFileUpload) {
-            this.multiFileUploadPanel = new Kwf.Utils.MultiFileUploadPanel(Ext.applyIf({
+            this.multiFileUploadPanel = new Kwf.Utils.MultiFileUploadPanel(Ext2.applyIf({
                 border: false,
                 region: 'south',
                 height: 50,
@@ -115,7 +116,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
             }, this);
         }
 
-        this.westPanel = new Ext.Panel({
+        this.westPanel = new Ext2.Panel({
             layout: 'border',
             region: 'west',
             width: this.listWidth,
@@ -150,7 +151,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
 
     onAdd : function()
     {
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             mask: true,
             url: this.controllerUrl + '/json-insert',
             params: this.getBaseParams(),
@@ -187,7 +188,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
     {
         var params = Kwf.clone(this.getBaseParams());
         params.id = this.grid.getSelectedId();
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl+'/json-copy',
             params: params,
             mask: this.el
@@ -195,7 +196,7 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
     },
     onPaste: function()
     {
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl+'/json-paste',
             params: this.getBaseParams(),
             mask: this.el,
@@ -216,4 +217,4 @@ Kwc.Abstract.List.List = Ext.extend(Kwf.Binding.ProxyPanel,
         });
     }
 });
-Ext.reg('kwc.list.list', Kwc.Abstract.List.List);
+Ext2.reg('kwc.list.list', Kwc.Abstract.List.List);

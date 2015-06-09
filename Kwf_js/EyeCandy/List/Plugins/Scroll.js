@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.Scroll = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.Scroll = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     numberShown: 5,
     moveElementSelector: false, //if false list.el, else list.child(moveElementSelector)
     createMoveElementSelectorWrapper: false,
@@ -8,7 +8,7 @@ Kwf.EyeCandy.List.Plugins.Scroll = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract
 
     _moveActive: false,
     init: function() {
-        Ext.applyIf(this, {
+        Ext2.applyIf(this, {
             animationConfig: { concurrent: true, duration: 0.25 }
         });
         this.moveElement = this.list.el;

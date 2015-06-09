@@ -46,7 +46,7 @@ class Kwf_Form_Field_TimeField extends Kwf_Form_Field_SimpleAbstract
     protected function _getValueToSaveFromPostData($postData)
     {
         $ret = parent::_getValueToSaveFromPostData($postData);
-        if ($this->getSaveSeconds()) {
+        if ($ret && $this->getSaveSeconds()) {
             $ret .= ':00';
         }
         return $ret;

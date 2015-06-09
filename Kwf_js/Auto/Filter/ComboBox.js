@@ -3,11 +3,11 @@ Kwf.Auto.Filter.ComboBox = function(config)
     Kwf.Auto.Filter.ComboBox.superclass.constructor.call(this, config);
 
     if (config.field) {
-        this.combo = Ext.ComponentMgr.create(config.field);
+        this.combo = Ext2.ComponentMgr.create(config.field);
     } else {
-        var record = Ext.data.Record.create(['id', 'name', 'displayname']);
+        var record = Ext2.data.Record.create(['id', 'name', 'displayname']);
         var filterData = config.data;
-        Ext.each(filterData, function(item, i){
+        Ext2.each(filterData, function(item, i){
             filterData[i][2] = filterData[i][1];
             filterData[i][1] = filterData[i][1].toString();
             var a = [];
@@ -16,8 +16,8 @@ Kwf.Auto.Filter.ComboBox = function(config)
             }
             filterData[i][1] = a.join('') + filterData[i][1].substr(a.length);
         });
-        var filterStore = new Ext.data.Store({
-            reader: new Ext.data.ArrayReader({}, record),
+        var filterStore = new Ext2.data.Store({
+            reader: new Ext2.data.ArrayReader({}, record),
             data: filterData
         });
         if (!config['default'] && filterStore.find('id', 0) == -1) {
@@ -29,7 +29,7 @@ Kwf.Auto.Filter.ComboBox = function(config)
             })]);
             config['default'] = 0;
         }
-        this.combo = new Ext.form.ComboBox({
+        this.combo = new Ext2.form.ComboBox({
             store: filterStore,
             displayField: 'displayname',
             valueField: 'id',
@@ -39,9 +39,9 @@ Kwf.Auto.Filter.ComboBox = function(config)
             forceSelection: true,
             width: config.width || 200,
             listWidth: config.listWidth,
-            tpl: new Ext.XTemplate(
+            tpl: new Ext2.XTemplate(
                 '<tpl for=".">',
-                    '<div class="x-combo-list-item">{name}</div>',
+                    '<div class="x2-combo-list-item">{name}</div>',
                 '</tpl>'
             )
         });
@@ -53,7 +53,7 @@ Kwf.Auto.Filter.ComboBox = function(config)
     this.toolbarItems.add(this.combo);
 };
 
-Ext.extend(Kwf.Auto.Filter.ComboBox, Kwf.Auto.Filter.Abstract, {
+Ext2.extend(Kwf.Auto.Filter.ComboBox, Kwf.Auto.Filter.Abstract, {
     reset: function() {
         this.combo.setValue(0);
     },

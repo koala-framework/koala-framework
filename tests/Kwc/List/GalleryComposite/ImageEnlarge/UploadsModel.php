@@ -5,6 +5,6 @@ class Kwc_List_GalleryComposite_ImageEnlarge_UploadsModel extends Kwf_Test_Uploa
     {
         parent::__construct($config);
 
-        $this->createRow()->copyFile(KWF_PATH.'/images/information.png', 'foo', 'png', 'image/png');
+        $this->createRow(array('id'=>'1'))->copyFile(KWF_PATH.'/images/information.png', 'foo', 'png', 'image/png');
     }
 }

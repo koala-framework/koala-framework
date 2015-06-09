@@ -67,10 +67,12 @@ class Kwf_Component_Abstract
     {
         return array(
             'assets'        => array('files'=>array(), 'dep'=>array()),
+            'assetsDefer'   => array('files'=>array(), 'dep'=>array()),
             'assetsAdmin'   => array('files'=>array(), 'dep'=>array()),
-            'componentIcon' => new Kwf_Asset('paragraph_page'),
+            'componentIcon' => 'paragraph_page',
             'placeholder'   => array(),
             'plugins'       => array(),
+            'pluginsInherit'=> array(),
             'generators'    => array(),
             'flags'         => array(),
             'extConfig'     => 'Kwf_Component_Abstract_ExtConfig_None'

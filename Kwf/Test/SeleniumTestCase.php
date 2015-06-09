@@ -6,6 +6,25 @@ class Kwf_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     protected $_unitTestCookie;
     protected $_domain = null;
 
+    public function __construct($name = NULL, array $data = array(), $dataName = '', array $browser = array())
+    {
+        $this->testId = md5(uniqid(rand(), TRUE));
+
+        if (Kwf_Registry::get('config')->server->testBrowser) {
+            $browsers = Kwf_Registry::get('config')->server->testBrowser->toArray();
+            if (count($browsers) != 1) {
+                throw new Kwf_Exception("only a single browser is supported");
+            }
+            $browser = reset($browsers);
+            $browser = array(
+                'host' => $browser['host'],
+                'port' => (int)$browser['port'],
+                'browser' => $browser['browser'],
+            );
+        }
+        parent::__construct($name, $data, $dataName, $browser);
+    }
+
     protected function initTestDb($bootstrapFile)
     {
         Kwf_Test_SeparateDb::createSeparateTestDb($bootstrapFile);
@@ -13,21 +32,6 @@ class Kwf_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         $this->createCookie('test_special_db='.$dbName, 'path=/, max_age=60*5');
         Kwf_Registry::set('db', Kwf_Test::getTestDb($dbName));
         Kwf_Model_Abstract::clearInstances();
-    }
-
-    public static function suite($className)
-    {
-        self::$browsers = array();
-        if (Kwf_Registry::get('config')->server->testBrowser) { 
-            foreach (Kwf_Registry::get('config')->server->testBrowser as $b) {
-                if (!$b->browser) continue; //deaktiviert
-                $b = $b->toArray();
-                if (isset($b['port'])) $b['port'] = (int)$b['port'];
-                if (isset($b['timeout'])) $b['timeout'] = (int)$b['timeout'];
-                self::$browsers[] = $b;
-            }
-        }
-        return parent::suite($className);
     }
 
     public function tearDown()
@@ -154,7 +158,8 @@ class Kwf_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function waitForConnections()
     {
-        $this->waitForCondition('selenium.browserbot.getCurrentWindow().Kwf.Connection.runningRequests==0');
+        $this->waitForCondition('(!selenium.browserbot.getCurrentWindow().Kwf.Connection || selenium.browserbot.getCurrentWindow().Kwf.Connection.runningRequests==0)'.
+            ' && (!selenium.browserbot.getCurrentWindow().$ || typeof selenium.browserbot.getCurrentWindow().$.active == "undefined" || selenium.browserbot.getCurrentWindow().$.active==0)');
         $this->defaultAssertions('waitForConnections');
     }
 

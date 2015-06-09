@@ -4,7 +4,7 @@ class Kwc_Basic_LinkTag_Youtube_Video_Component extends Kwc_Advanced_Youtube_Com
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['dep'][] = 'KwfLightbox';
+        $ret['assetsDefer']['dep'][] = 'KwfLightbox';
         $ret['contentSender'] = 'Kwc_Basic_LinkTag_Youtube_Video_ContentSender';
         $ret['playerVars']['showinfo'] = 0;
         return $ret;

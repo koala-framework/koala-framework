@@ -32,32 +32,35 @@ class Kwf_View_Helper_Link
         if (!is_array($config)) $config = array('cssClass' => $config); //compatibility
 
         if (!empty($config['get'])) {
-            $url .= '?';
-            foreach ($config['get'] as $key => $val) {
-                $url .= "&$key";
-                if ($val) { $url .= "=$val"; }
-            }
+            $url .= '?' . http_build_query($config['get']);
         }
 
         if (!empty($config['anchor'])) $url .= "#".$config['anchor'];
-        $cssClass = '';
+        $attrs = " href=\"".htmlspecialchars($url)."\"";
         if (!empty($config['cssClass'])) {
             $cssClass = $config['cssClass'];
             if (is_array($cssClass)) $cssClass = implode(' ', $cssClass);
-            $cssClass = " class=\"$cssClass\"";
+            $attrs .= " class=\"$cssClass\"";
         }
         if (!empty($config['style'])) {
-            $cssClass .= " style=\"".$config['style']."\"";
+            $attrs .= " style=\"".htmlspecialchars($config['style'])."\"";
         }
-        $target = '';
         if (!empty($config['target'])) {
-            $target = ' target="'.htmlspecialchars($config['target']).'"';
+            $attrs .= ' target="'.htmlspecialchars($config['target']).'"';
         }
-        $title = '';
-        if(!empty($config['title'])) {
-            $title = ' title="'.htmlspecialchars($config['title']).'"';
+        if (!empty($config['title'])) {
+            $attrs .= ' title="'.htmlspecialchars($config['title']).'"';
+        }
+        if (!empty($rel)) {
+            $attrs .= ' rel="'.htmlspecialchars($rel).'"';
         }
 
-        return "<a href=\"".htmlspecialchars($url)."\"$title$target rel=\"".htmlspecialchars($rel)."\"$cssClass><span>$text</span></a>";
+        if (!empty($config['dataAttributes'])) {
+            foreach ($config['dataAttributes'] as $k=>$i) {
+                $attrs .= ' data-'.htmlspecialchars($k).'="' . htmlspecialchars($i) . '"';
+            }
+        }
+
+        return "<a{$attrs}><span>$text</span></a>";
     }
 }

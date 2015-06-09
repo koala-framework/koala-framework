@@ -1,3 +1,5 @@
+@import "config/default-loading-animation-big";
+
 .cssClass {
     position: relative;
 
@@ -16,17 +18,8 @@
         }
 
         .outerLoading {
-            position: absolute;
-            width: 66px;
-            height: 66px;
-            top: 50%;
-            left: 50%;
-            margin: -33px 0px 0px -33px;
-
             .loading {
-                width: 66px;
-                height: 66px;
-                background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/loading.gif') no-repeat center center;
+                @include default-loading-animation-big;
             }
         }
 

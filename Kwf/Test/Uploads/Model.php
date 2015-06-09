@@ -4,7 +4,7 @@ class Kwf_Test_Uploads_Model extends Kwf_Uploads_Model
     public function __construct($config = array())
     {
         $config['proxyModel'] = new Kwf_Model_FnF(array(
-                'columns' => array('id', 'filename', 'extension', 'mime_type'),
+                'columns' => array('id', 'filename', 'extension', 'mime_type', 'md5_hash'),
                 'data'=> array(
                 )
             ));

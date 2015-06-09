@@ -23,7 +23,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
 
     public function indexAction()
     {
-        ini_set('memory_limit', '1024M');
+        Kwf_Util_MemoryLimit::set(1024);
         set_time_limit(0);
 
         $source = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('source'), array('ignoreVisible'=>true));
@@ -31,7 +31,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
         $target = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($this->_getParam('target'), array('ignoreVisible'=>true));
         if (!$target) throw new Kwf_Exception_Client("target not found");
 
-        Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
+        Kwf_Events_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
         echo "counting pages...";
         $steps = Kwc_Admin::getInstance($source->componentClass)->getDuplicateProgressSteps($source);
@@ -125,7 +125,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentDeepCopyController extends Kwf_Cont
         if (!$parentTarget) throw new Kwf_Exception_Client("target not found");
 
 
-        Kwf_Component_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
+        Kwf_Events_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
         echo "counting pages...";
         $steps = Kwf_Util_Component::getDuplicateProgressSteps($source);

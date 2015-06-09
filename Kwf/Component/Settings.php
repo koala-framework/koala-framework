@@ -10,6 +10,8 @@ class Kwf_Component_Settings
     public static $_rebuildingSettings = false;
     private static $_cacheSettings = array();
 
+    public static $_rootComponentClassSet;
+
     public static function hasSettings($class)
     {
         $cacheId = 'hasSettings-'.$class;
@@ -54,62 +56,8 @@ class Kwf_Component_Settings
     private static function _verifyComponentClass($class)
     {
         $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
-        $file = 'components/'.str_replace('_', '/', $c).'.yml';
-        if (substr($class, 0, 4) != 'Kwc_' && file_exists($file)) {
-            if (file_exists('components/'.str_replace('_', '/', $c).'.php')) {
-                throw new Kwf_Exception("both yml and php exist for '$c'");
-            }
-            $classFile = 'cache/generated/'.str_replace('_', '/', $c).'.php';
-            if (!file_exists($classFile)) {
-                $input = file_get_contents($file);
-                require_once Kwf_Config::getValue('externLibraryPath.sfYaml').'/sfYamlParser.php';
-                $yaml = new sfYamlParser();
-                try {
-                    $settings = $yaml->parse($input);
-                } catch (Exception $e) {
-                    throw new Kwf_Exception(sprintf('Unable to parse %s: %s', $file, $e->getMessage()));
-                }
-                if (!isset($settings['base'])) {
-                    throw new Kwf_Exception("'base' setting is required in '$file'");
-                }
-                if (!class_exists($settings['base'])) {
-                    throw new Kwf_Exception("'$file' base class '$settings[base]' does not exist");
-                }
-                $code = "<?php\nclass $c extends $settings[base]\n{\n";
-                $code .= "    public static function _getYamlConfigFile() { return '$file'; }\n";
-                $code .= "}\n";
-                $dir = substr($classFile, 0, strrpos($classFile, '/'));
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0777, true);
-                }
-                file_put_contents($classFile, $code);
-                if (!class_exists($c)) {
-                    throw new Kwf_Exception("just generated class still does not exist");
-                }
-            }
-        } else {
-            if (!class_exists($c)) {
-                throw new Kwf_Exception("Invalid component '$c'");
-            }
-        }
-    }
-
-    private static function _processYamlSettings(&$settings)
-    {
-        foreach ($settings as $k=>$i) {
-            if (is_string($i) && preg_match('#^\\s*(trl|trlKwf)\\(\'(.*)\'\\)\s*$#', $i, $m)) {
-                $fn = $m[1]; //trl or trlKwf
-                $settings[$k] = Kwf_Trl::getInstance()->$fn($m[2], array());
-            } else if (is_string($i) && preg_match('#^\\.\'(.*)\'$#', $i, $m)) {
-                if (isset($settings[$k])) {
-                    $settings[$k] = $settings[$k] . $m[1];
-                } else {
-                    $settings[$k] = $m[1];
-                }
-            }
-            if (is_array($i)) {
-                self::_processYamlSettings($settings[$k]);
-            }
+        if (!class_exists($c)) {
+            throw new Kwf_Exception("Invalid component '$c'");
         }
     }
 
@@ -150,29 +98,6 @@ class Kwf_Component_Settings
         $param = strpos($class, '.') ? substr($class, strpos($class, '.')+1) : null;
         if (!isset(self::$_cacheSettings[$c][$param])) {
             $settings = call_user_func(array($c, 'getSettings'), $param);
-            if (method_exists($c, '_getYamlConfigFile')) {
-                $file = call_user_func(array($c, '_getYamlConfigFile'));
-                require_once Kwf_Config::getValue('externLibraryPath.sfYaml').'/sfYamlParser.php';
-                $input = file_get_contents($file);
-                $yaml = new sfYamlParser();
-                try {
-                    $mergeSettings = $yaml->parse($input);
-                } catch (Exception $e) {
-                    throw new Kwf_Exception(sprintf('Unable to parse %s: %s', $file, $e->getMessage()));
-                }
-                if (isset($mergeSettings['settings'])) {
-                    self::_processYamlSettings($mergeSettings['settings']);
-                    self::_mergeSettings($settings, $mergeSettings['settings']);
-                }
-                if (isset($mergeSettings['childSettings'])) {
-                    if (isset($settings['childSettings'])) {
-                        self::_processYamlSettings($mergeSettings['childSettings']);
-                        self::_mergeSettings($settings['childSettings'], $mergeSettings['childSettings']);
-                    } else {
-                        $settings['childSettings'] = $mergeSettings['childSettings'];
-                    }
-                }
-            }
             if (substr($param, 0, 2)=='cs') { //child settings
                 $childSettingsComponentClass = substr($param, 2, strpos($param, '>')-2);
                 $childSettingsKey = substr($param, strpos($param, '>')+1);
@@ -181,9 +106,6 @@ class Kwf_Component_Settings
                 if (isset($cs[$childSettingsKey])) {
                     self::_mergeSettings($settings, $cs[$childSettingsKey]);
                 }
-            }
-            if (isset($settings['componentIcon']) && is_string($settings['componentIcon'])) {
-                $settings['componentIcon'] = new Kwf_Asset($settings['componentIcon']);
             }
             self::$_cacheSettings[$c][$param] = $settings;
         }
@@ -211,6 +133,9 @@ class Kwf_Component_Settings
         }
         $cssClass = array(Kwf_Component_Abstract::formatCssClass($c));
         $dirs = explode(PATH_SEPARATOR, get_include_path());
+        foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
+            $dirs = array_merge($dirs, $i);
+        }
         foreach ($settings['parentClasses'] as $i) {
             if ($i == $c) continue;
             $file = str_replace('_', '/', $i);
@@ -218,7 +143,7 @@ class Kwf_Component_Settings
                 $file .= '/Component';
             }
             foreach ($dirs as $dir) {
-                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.printcss') || is_file($dir.'/'.$file.'.js')) {
+                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.printcss') || is_file($dir.'/'.$file.'.js') || is_file($dir.'/'.$file.'.defer.js')) {
                     $cssClass[] = Kwf_Component_Abstract::formatCssClass($i);
                     break;
                 }
@@ -257,23 +182,53 @@ class Kwf_Component_Settings
             } else if ($setting == 'parentFilePaths') {
                 //value = klasse, key=pfad
                 $ret = array();
+                $cwd = str_replace(DIRECTORY_SEPARATOR, '/', realpath(getcwd()));
                 foreach (self::getSetting($class, 'parentClasses') as $c) {
                     $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
-                    if (method_exists($c, '_getYamlConfigFile')) {
-                        $file = call_user_func(array($c, '_getYamlConfigFile'));
-                    } else {
-                        $file = str_replace('_', DIRECTORY_SEPARATOR, $c) . '.php';
-                    }
-                    $dirs = explode(PATH_SEPARATOR, get_include_path());
-                    foreach ($dirs as $dir) {
-                        if ($dir == '.') $dir = getcwd();
-                        if (!preg_match('#^(/|\w\:\\\\)#i', $dir)) {
-                            //relative path, make it absolute
-                            $dir = getcwd().'/'.$dir;
+                    $file = str_replace('_', '/', $c) . '.php';
+                    static $dirs;
+                    if (!isset($dirs)) {
+                        $dirs = explode(PATH_SEPARATOR, get_include_path());
+                        foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
+                            $dirs = array_merge($dirs, $i);
                         }
-                        $path = $dir . '/' . $file;
+                        foreach ($dirs as $k=>$dir) {
+                            if ($dir == '.') $dir = $cwd;
+                            if (!preg_match('#^(/|\w\:\\\\)#i', $dir)) {
+                                //relative path, make it absolute
+                                $dir = $cwd.'/'.$dir;
+                            }
+                            if (!$dir || !file_exists($dir)) {
+                                unset($dirs[$k]);
+                                continue;
+                            }
+                            $dir = realpath($dir);
+                            $dir = str_replace(DIRECTORY_SEPARATOR, '/', $dir);
+                            if (substr($dir, 0, strlen($cwd)) != $cwd) {
+                                if (VENDOR_PATH == '../vendor') { //required to support running kwf tests in tests subfolder
+                                    $parentCwd = substr($cwd, 0, strrpos($cwd, '/'));
+                                    if (substr($dir, 0, strlen($parentCwd)) != $parentCwd) {
+                                        throw new Kwf_Exception("'$dir' is not in web directory '$parentCwd'");
+                                    }
+                                    if ($dir == $parentCwd) {
+                                        $dir = '..';
+                                    } else {
+                                        $dir = '../'.substr($dir, strlen($parentCwd)+1);
+                                    }
+                                } else {
+                                    throw new Kwf_Exception("'$dir' is not in web directory '$cwd'");
+                                }
+                            } else {
+                                $dir = substr($dir, strlen($cwd)+1);
+                            }
+                            $dirs[$k] = $dir;
+                        }
+                        $dirs = array_unique($dirs);
+                    }
+                    foreach ($dirs as $dir) {
+                        $path = $dir . ($dir ? '/' : '') . $file;
                         if (is_file($path)) {
-                            if (substr($path, -14) == DIRECTORY_SEPARATOR.'Component.php' || substr($path, -14) == DIRECTORY_SEPARATOR.'Component.yml') {
+                            if (substr($path, -14) == '/Component.php') {
                                 $ret[substr($path, 0, -14)] = substr($c, 0, -10);
                             } else {
                                 $ret[substr($path, 0, -4)] = $c; //nur .php
@@ -284,9 +239,9 @@ class Kwf_Component_Settings
                 }
             } else if ($setting == 'componentFiles') {
                 $ret = Kwf_Component_Abstract_Admin::getComponentFiles($class, array(
-                    'Master.tpl' => array('filename'=>'Master', 'ext'=>'tpl', 'returnClass'=>false),
-                    'Component.tpl' => array('filename'=>'Component', 'ext'=>'tpl', 'returnClass'=>false),
-                    'Partial.tpl' => array('filename'=>'Partial', 'ext'=>'tpl', 'returnClass'=>false),
+                    'Master.tpl' => array('filename'=>'Master', 'ext'=>array('tpl', 'twig'), 'returnClass'=>false),
+                    'Component.tpl' => array('filename'=>'Component', 'ext'=>array('tpl', 'twig'), 'returnClass'=>false),
+                    'Partial.tpl' => array('filename'=>'Partial', 'ext'=>array('tpl', 'twig'), 'returnClass'=>false),
                     'Admin' => array('filename'=>'Admin', 'ext'=>'php', 'returnClass'=>true),
                     'Controller' => array('filename'=>'Controller', 'ext'=>'php', 'returnClass'=>true),
                     'FrontendForm' => array('filename'=>'FrontendForm', 'ext'=>'php', 'returnClass'=>true),
@@ -299,6 +254,7 @@ class Kwf_Component_Settings
                     'masterCss' => array('filename'=>'Master', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
                     'masterScss' => array('filename'=>'Master', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
                     'js' => array('filename'=>'Component', 'ext'=>'js', 'returnClass'=>false, 'multiple'=>true),
+                    'defer.js' => array('filename'=>'Component', 'ext'=>'defer.js', 'returnClass'=>false, 'multiple'=>true),
                 ));
             } else {
 
@@ -437,32 +393,19 @@ class Kwf_Component_Settings
         self::$_cacheSettings = array();
     }
 
-    public static function getAllSettingsCache()
+    public static function setAllSettings($settings)
     {
-        static $cache;
-        if (!isset($cache)) {
-            $cache = new Kwf_Cache_Core(array(
-                'checkComponentSettings' => false,
-                'lifetime' => null,
-                'automatic_serialization' => true,
-                'automatic_cleaning_factor' => 0,
-            ));
-            $cache->setBackend(new Zend_Cache_Backend_File(array(
-                'cache_dir' => 'cache/component',
-                'cache_file_umask' => 0666,
-                'hashed_directory_umask' => 0777,
-            )));
-        }
-        return $cache;
+        self::$_settings = $settings;
+        self::$_cacheSettings = array();
     }
 
     public static function &_getSettingsCached()
     {
         self::$_cacheSettings = array();
         if (!self::$_settings) {
-            $cacheId = 'componentSettings_'.str_replace('.', '_', Kwf_Component_Data_Root::getComponentClass());
-            self::$_settings = self::getAllSettingsCache()->load($cacheId);
-            if (!self::$_settings) {
+            if (!self::$_rootComponentClassSet && file_exists('build/component/settings')) {
+                self::$_settings = unserialize(file_get_contents('build/component/settings'));
+            } else {
                 $fullT = microtime(true);
 
                 self::$_rebuildingSettings = true;
@@ -485,12 +428,11 @@ class Kwf_Component_Settings
                         throw new Kwf_Exception("$c: ".$e->getMessage());
                     }
                 }
-
-                self::getAllSettingsCache()->save(self::$_settings, $cacheId);
             }
         }
         return self::$_settings;
     }
+
     public static function getComponentClasses()
     {
         $root = Kwf_Component_Data_Root::getComponentClass();

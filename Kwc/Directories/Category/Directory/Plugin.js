@@ -1,8 +1,8 @@
-Ext.namespace('Kwc.Directories.Category.Directory');
+Ext2.namespace('Kwc.Directories.Category.Directory');
 Kwc.Directories.Category.Directory.Plugin = function(config) {
     config.text = trlKwf('Categories');
-    Ext.apply(this, config);
+    Ext2.apply(this, config);
 };
-Ext.extend(Kwc.Directories.Category.Directory.Plugin, Kwc.Directories.Plugin.GridWindow,
+Ext2.extend(Kwc.Directories.Category.Directory.Plugin, Kwc.Directories.Plugin.GridWindow,
 {
 });

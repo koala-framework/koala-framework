@@ -1,4 +1,4 @@
-Kwc.Directories.Item.Directory.GridPanel = Ext.extend(Kwf.Binding.ProxyPanel,
+Kwc.Directories.Item.Directory.GridPanel = Ext2.extend(Kwf.Binding.ProxyPanel,
 {
     layout: 'border',
 
@@ -14,7 +14,7 @@ Kwc.Directories.Item.Directory.GridPanel = Ext.extend(Kwf.Binding.ProxyPanel,
 
         // Add multiFileUpload field if set
         if (this.multiFileUpload) {
-            this.multiFileUploadPanel = new Kwf.Utils.MultiFileUploadPanel(Ext.applyIf({
+            this.multiFileUploadPanel = new Kwf.Utils.MultiFileUploadPanel(Ext2.applyIf({
                 border: false,
                 region: 'south',
                 height: 50,

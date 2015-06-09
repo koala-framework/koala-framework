@@ -6,6 +6,10 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         Kwf_Exception_Abstract::$logErrors = false;
         //don't call parent, no acl required
 
+        if (!file_exists('build/assets')) {
+            throw new Kwf_Exception_Client("Installation incomplete: 'build' folder does not exist. You can generate it by calling 'php bootstrap.php build' on commandline. On production servers you should upload locally generated build.");
+        }
+
         if (file_exists('downloader.php')) {
             throw new Kwf_Exception_Client("downloader.php still exists, please delete before starting setup");
         }
@@ -53,7 +57,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         foreach ($cfg as $k=>$i) {
             $this->view->possibleConfigSections[] = array($k, $k);
         }
-        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('Setup');
+        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('Maintenance');
         $this->view->viewport = 'Kwf.Maintenance.Viewport';
         $this->view->xtype = 'kwf.maintenance.setup';
     }
@@ -112,8 +116,6 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
         Kwf_Config_Web::reload();
         Zend_Registry::getInstance()->offsetUnset('db');
         Zend_Registry::getInstance()->offsetSet('dao', new Kwf_Dao());
-        Kwf_Component_Settings::getAllSettingsCache()->clean();
-        Kwf_Cache_SimpleStatic::_delete('componentClasses-'.Kwf_Component_Data_Root::getComponentClass());
 
         $updates = array();
         foreach (Kwf_Util_Update_Helper::getUpdateTags() as $tag) {
@@ -125,7 +127,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
             }
         }
 
-        $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates(0, 9999999));
+        $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates());
 
         $updates[] = new Kwf_Update_Setup_InitialDb();
         $updates[] = new Kwf_Update_Setup_InitialUploads();

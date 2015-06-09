@@ -38,10 +38,6 @@ class Kwf_Controller_Front extends Zend_Controller_Front
                                         'kwf_controller_action_redirects');
         $this->addControllerDirectory(KWF_PATH . '/Kwf/Controller/Action/Maintenance',
                                         'kwf_controller_action_maintenance');
-        $this->addControllerDirectory(KWF_PATH . '/Kwf/Controller/Action/Ext4',
-                                        'kwf_controller_action_ext4');
-        $this->addControllerDirectory(KWF_PATH . '/tests', 'kwf_test');
-        $this->addControllerDirectory('tests', 'web_test');
         $this->addControllerDirectory(KWF_PATH . '/Kwf/Controller/Action/Trl',
                                 'kwf_controller_action_trl');
         if (file_exists('controllers/Cli')) {
@@ -77,11 +73,7 @@ class Kwf_Controller_Front extends Zend_Controller_Front
         if (null === self::$_instance) {
             $class = Kwf_Config::getValue('frontControllerClass');
             if (!$class) {
-                $validCommands = array('shell', 'export', 'copy-to-test'); //für ältere branches
-                if (php_sapi_name() != 'cli' || !isset($_SERVER['argv'][1]) || !in_array($_SERVER['argv'][1], $validCommands)) {
-                    throw new Kwf_Exception("frontControllerClass must be set in config.ini");
-                }
-                $class = 'Kwf_Controller_Front';
+                throw new Kwf_Exception("frontControllerClass must be set in config.ini");
             }
             self::$_instance = new $class();
             self::$_instance->_init();
@@ -113,7 +105,8 @@ class Kwf_Controller_Front extends Zend_Controller_Front
         if (isset($this->_webRouter)) {
             return $this->_webRouter;
         } else {
-            return $this->_getDefaultWebRouter();
+            $this->_webRouter = $this->_getDefaultWebRouter();
+            return $this->_webRouter;
         }
     }
 

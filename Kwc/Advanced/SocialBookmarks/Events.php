@@ -4,29 +4,29 @@ class Kwc_Advanced_SocialBookmarks_Events extends Kwf_Component_Abstract_Events
     public function getListeners()
     {
         $ret = array();
-        $ownModel = Kwc_Abstract::getSetting($this->_class, 'ownModel');
+        $ownModel = Kwc_Abstract::createOwnModel($this->_class);
         $models = Kwf_Model_Abstract::getInstance($ownModel)
             ->getDependentModels();
         $model = $models['Networks'];
         $ret[] = array(
             'class' => $model,
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onNetworksRowUpdate'
         );
         $ret[] = array(
-            'class' => $models['Networks'],
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'class' => $model,
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onNetworksRowUpdate'
         );
         $ret[] = array(
-            'class' => $models['Networks'],
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'class' => $model,
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onNetworksRowUpdate'
         );
         return $ret;
     }
 
-    public function onNetworksRowUpdate(Kwf_Component_Event_Row_Abstract $event)
+    public function onNetworksRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         $dbId = $event->row->component_id;
         $alternativeCmps = call_user_func(array($this->_class, 'getAlternativeComponents'));

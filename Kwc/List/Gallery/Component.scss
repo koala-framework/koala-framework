@@ -1,4 +1,4 @@
-@import "susy";
+@import "kwf/susyone";
 @import "compass/css3/box-sizing";
 @import "compass/utilities/general/clearfix";
 
@@ -11,21 +11,48 @@ div.cssClass {
     @include pie-clearfix;
     margin-right: -$contentMargin;
 
-    > .listItem {
+    > .morePics {
+        clear: both;
+    }
+
+    > .listItem, > .morePics > .listItem {
         @include box-sizing(border-box);
         padding: 0 $contentMargin 7px 0;
         position: relative;
         margin: 0;
+
+        a .imageCaption {
+            text-overflow: ellipsis;
+            background: transparent;
+            white-space: nowrap;
+            position: absolute;
+            line-height: 16px;
+            overflow: hidden;
+            display: none;
+            bottom: -17px;
+            height: 16px;
+            width: 100%;
+            color: #333;
+        }
+
+        &:hover {
+            a .imageCaption {
+                white-space: normal;
+                position: absolute;
+                background: white;
+                height: auto;
+            }
+        }
     }
 
     @for $i from 3 through 10 {
         &.col#{$i} {
             @if $i % 2 == 0 {
-                > .listItem {
+                > .listItem, > .morePics > .listItem {
                     @include span-columns(1, 4);
                 }
             } @else {
-                > .listItem {
+                > .listItem, > .morePics > .listItem {
                     @include span-columns(1, 3);
                 }
             }
@@ -33,20 +60,20 @@ div.cssClass {
     }
 
     &.col2, &.col4 {
-        > .listItem {
+        > .listItem, > .morePics > .listItem {
             @include span-columns(1, 2);
         }
     }
 
     &.col6 {
-        > .listItem {
+        > .listItem, > .morePics > .listItem {
             @include span-columns(1, 3);
         }
     }
 
     &.gt360 {
         &.col4 {
-            > .listItem {
+            > .listItem, > .morePics > .listItem {
                 @include span-columns(1, 4);
             }
         }
@@ -55,8 +82,20 @@ div.cssClass {
     &.gt#{$breakpoint} {
         @for $i from 1 through 10 {
             &.col#{$i} {
-                > .listItem {
+                > .listItem, > .morePics > .listItem {
                     @include span-columns(1, $i);
+
+                    a .imageCaption {
+                        display: block;
+                    }
+
+                    .kwcAbstractImage.showImageCaption {
+                        padding-bottom: 17px;
+                    }
+
+                    &.firstInLine {
+                        clear: left;
+                    }
 
                     &.lastInLine {
                         @include pie-clearfix;

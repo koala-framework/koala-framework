@@ -38,7 +38,7 @@ class Kwf_Util_Tidy
 
         } else {
 
-            require_once Kwf_Config::getValue('externLibraryPath.htmLawed').'/htmLawed.php';
+            require_once VENDOR_PATH.'/koala-framework/library-htmlawed/htmLawed.php';
             $ret = htmLawed($html);
 
         }

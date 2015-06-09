@@ -21,7 +21,7 @@ window.Kwf.Loader.require = function(expression, fn, scope)
         _callbacks[expression].push({fn: fn, scope: scope});
         return;
     }
-    var src = '/assets/dependencies/Kwf_Assets_Package_LazyLoad/'+config.providerList+':'+expression+':'+_loaded.join(',')+'/en/js';
+    var src = '/assets/dependencies/Kwf_Assets_Package_LazyLoad/'+config.providerList+':'+expression+':'+_loaded.join(',')+'/en/0/js';
     _callbacks[expression] = [];
     _callbacks[expression].push({fn: fn, scope: scope});
 
@@ -39,7 +39,7 @@ window.Kwf.Loader.require = function(expression, fn, scope)
     };
     head.appendChild(scriptEl);
 
-    src = '/assets/dependencies/Kwf_Assets_Package_LazyLoad/'+config.providerList+':'+expression+':'+_loaded.join(',')+'/en/css';
+    src = '/assets/dependencies/Kwf_Assets_Package_LazyLoad/'+config.providerList+':'+expression+':'+_loaded.join(',')+'/en/0/css';
     var styleEl = document.createElement('link');
     styleEl.type = 'text/css';
     styleEl.rel = 'stylesheet';

@@ -33,7 +33,7 @@ abstract class Kwc_Newsletter_Subscribe_AbstractRecipientsController extends Kwf
     public function jsonRemoveRecipientsAction()
     {
         set_time_limit(60*10);
-        ini_set('memory_limit', '384M');
+        Kwf_Util_MemoryLimit::set(384);
 
         $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
             $this->_getParam('componentId'), array('ignoreVisible'=>true)
@@ -74,7 +74,7 @@ abstract class Kwc_Newsletter_Subscribe_AbstractRecipientsController extends Kwf
     public function jsonSaveRecipientsAction()
     {
         set_time_limit(60*10);
-        ini_set('memory_limit', '384M');
+        Kwf_Util_MemoryLimit::set(384);
 
         $component = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
             $this->_getParam('componentId'), array('ignoreVisible'=>true)

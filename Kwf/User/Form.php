@@ -10,7 +10,7 @@ class Kwf_User_Form extends Kwf_Form
     {
         parent::_init();
         if (!$this->getModel()) {
-            $this->setModel(Kwf_Registry::get('userModel')->getKwfModel());
+            $this->setModel(Kwf_Registry::get('userModel')->getEditModel());
         }
     }
 
@@ -34,7 +34,7 @@ class Kwf_User_Form extends Kwf_Form
         }
 
         $config = Zend_Registry::get('config');
-        $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
+        $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
         if (isset($authedUser->language) && $config->languages){
             $data = array();
             foreach ($config->languages as $key => $value){
@@ -59,22 +59,8 @@ class Kwf_User_Form extends Kwf_Form
     {
         $id = $this->_getIdByParentRow($parentRow);
         if ($id === 0 || $id === '0' || is_null($id)) {
-            $webcodeField = $this->getByName('webcode');
-            // webcode = null setzt sich von selbst wenn er gewünscht ist (config)
-            if (!$webcodeField) {
-                // normaler benutzer der das hakerl im backend nicht setzen darf
-                $webcode = null;
-            } else if ($postData[$webcodeField->getFieldName()]) {
-                // hakerl darf gesetzt werden und ist auch gesetzt
-                $webcode = null;
-            } else {
-                // hakerl darf gesetzt werden und ist nicht gesetzt
-                // webcode = '' bedeutet global
-                $webcode = '';
-            }
             $this->_newUserRow = $this->_model->createUserRow(
-                $postData[$this->getByName('email')->getFieldName()],
-                $webcode
+                $postData[$this->getByName('email')->getFieldName()]
             );
         }
 

@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_Text_Image_Controller extends Kwc_Basic_Image_Controller
+class Kwc_Basic_Text_Image_Controller extends Kwc_Abstract_Image_Controller
 {
     protected $_formName = 'Kwc_Basic_Text_Image_Form';
 

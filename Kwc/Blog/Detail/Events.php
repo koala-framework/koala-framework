@@ -6,13 +6,13 @@ class Kwc_Blog_Detail_Events extends Kwc_Directories_Item_Detail_Events
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => 'Kwc_Blog_Category_Directory_BlogPostsToCategoriesModel',
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onRowInsertDelete',
         );
 
         $ret[] = array(
             'class' => 'Kwc_Blog_Category_Directory_BlogPostsToCategoriesModel',
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onRowInsertDelete',
         );
 
@@ -33,7 +33,7 @@ class Kwc_Blog_Detail_Events extends Kwc_Directories_Item_Detail_Events
         return $ret;
     }
 
-    public function onRowInsertDelete(Kwf_Component_Event_Row_Abstract $ev)
+    public function onRowInsertDelete(Kwf_Events_Event_Row_Abstract $ev)
     {
         $components = Kwf_Component_Data_Root::getInstance()->getComponentsBySameClass(
             $this->_class, array(

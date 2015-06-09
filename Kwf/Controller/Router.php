@@ -62,10 +62,6 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/kwf/redirects/:controller/:action',
                     array('module'     => 'kwf_controller_action_redirects',
                           'action'     =>'index')));
-        $this->AddRoute('kwf_util', new Zend_Controller_Router_Route(
-                    '/kwf/util/:controller/:action',
-                    array('module'     => 'kwf_controller_action_util',
-                          'action'     =>'index')));
         $this->AddRoute('kwf_maintenance', new Zend_Controller_Router_Route(
                     '/kwf/maintenance/:controller/:action',
                     array('module'     => 'kwf_controller_action_maintenance',
@@ -73,11 +69,6 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
         $this->AddRoute('kwf_component', new Zend_Controller_Router_Route(
                     '/kwf/component/:controller/:action',
                     array('module'     => 'kwf_controller_action_component',
-                          'action'     =>'index')));
-        $this->AddRoute('kwf_ext4', new Zend_Controller_Router_Route(
-                    '/kwf/ext4/:resource',
-                    array('module'     => 'kwf_controller_action_ext4',
-                          'controller' => 'ext4',
                           'action'     =>'index')));
 
         $apiRoute = new Zend_Controller_Router_Route('api');
@@ -88,38 +79,10 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
             ),
             array('api')
         );
-        $chainedRoute = new Zend_Controller_Router_Route_Chain();
+        $chainedRoute = new Kwf_Controller_Router_Route_Chain();
         $chainedRoute->chain($apiRoute)
                     ->chain($restRoute);
         $this->addRoute('api', $chainedRoute);
-
-        if (Kwf_Registry::get('config')->includepath->kwfTests) {
-            //für selenium-tests von sachen die im kwf liegen
-            $this->AddRoute('kwf_test', new Zend_Controller_Router_Route(
-                        '/kwf/test/:controller/:action',
-                        array('module'     => 'kwf_test',
-                            'action'     =>'index')));
-            $this->AddRoute('kwf_kwctest', new Zend_Controller_Router_Route_Regex(
-                        'kwf/kwctest/([^/]+)/(.*)',
-                        array('module'     => 'kwf_test',
-                            'controller' => 'kwc_test',
-                            'action'     => 'index',
-                            'url'        => ''),
-                        array('root'=>1, 'url'=>2)));
-            $this->AddRoute('kwf_test_componentedit', new Zend_Controller_Router_Route(
-                        '/kwf/componentedittest/:root/:class/:componentController/:action',
-                        array('module' => 'component_test',
-                            'controller' => 'component_test',
-                            'action' => 'index')));
-        }
-
-        if (Kwf_Registry::get('config')->includepath->webTests) {
-            //für selenium-tests von sachen die im web liegen
-            $this->AddRoute('web_test', new Zend_Controller_Router_Route(
-                        '/kwf/webtest/:controller/:action',
-                        array('module'     => 'web_test',
-                            'action'     =>'index')));
-        }
 
         //Komponenten routes
         if ($prefix) {

@@ -6,7 +6,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         $ret = array_merge(parent::getSettings(), array(
             'ownModel'          => 'Kwc_Basic_Text_Model',
             'componentName'     => trlKwfStatic('Text'),
-            'componentIcon'     => new Kwf_Asset('paragraph_page'),
+            'componentIcon'     => 'paragraph_page',
             'width'             => 550,
             'height'            => 400,
             'enableAlignments'  => false,
@@ -41,8 +41,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                 'image'         => false,
                 'link'          => 'Kwc_Basic_LinkTag_Component',
                 'download'      => 'Kwc_Basic_DownloadTag_Component'
-            ),
-            'model' => 'Kwc_Basic_Text_ChildComponentsModel'
+            )
         );
 
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Text/StylesEditor.js';
@@ -54,11 +53,10 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         $ret['assetsAdmin']['dep'][] = 'ExtSimpleStore';
         $ret['assetsAdmin']['dep'][] = 'KwfColorField';
 
-        $ret['assets']['dep'][] = 'KwfMailDecode';
+        $ret['assetsDefer']['dep'][] = 'KwfMailDecode';
 
         $ret['cssClass'] = 'webStandard kwcText';
 
-        $ret['assets']['files']['styles'] = new Kwc_Basic_Text_StylesAsset('Kwc_Basic_Text_StylesModel');
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
@@ -73,17 +71,26 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
 
     public function getOwnModel()
     {
-        return self::getTextModel(get_class($this));
+        return self::createOwnModel($this->getData()->componentClass);
     }
 
-    public static function getTextModel($componentClass)
+    public function getChildModel()
     {
-        static $models = array();
-        if (!isset($models[$componentClass])) {
-            $m = Kwc_Abstract::getSetting($componentClass, 'ownModel');
-            $models[$componentClass] = new $m(array('componentClass' => $componentClass));
-        }
-        return $models[$componentClass];
+        return self::createChildModel($this->getData()->componentClass);
+    }
+
+    public static function createOwnModel($class)
+    {
+        return Kwc_Basic_Text_ModelFactory::getModelInstance(array(
+            'componentClass' => $class
+        ));
+    }
+
+    public static function createChildModel($class)
+    {
+        return Kwc_Basic_Text_ChildComponentsModelFactory::getModelInstance(array(
+            'componentClass' => $class
+        ));
     }
 
     protected function _getContentParts()
@@ -117,6 +124,24 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                     }
                 }
             } else {
+                if (preg_match_all('#(<[a-z]+ [^>]*)class="style(\d+)"([^>]*>)#', $part, $m)) {
+                    foreach (array_keys($m[0]) as $i) {
+                        $matched = $m[0][$i];
+                        $prefix = $m[1][$i];
+                        $styleId = $m[2][$i];
+                        $postfix = $m[3][$i];
+                        $style = '';
+                        $row = Kwf_Model_Abstract::getInstance($this->_getSetting('stylesModel'))
+                            ->getRow($styleId);
+                        if ($row) {
+                            foreach ($row->getStyles() as $k=>$v) {
+                                $style .= "$k: $v; ";
+                            }
+                        }
+                        $styleAttr = 'style="'.htmlspecialchars($style).'"';
+                        $part = str_replace($matched, $prefix.$styleAttr.$postfix, $part);
+                    }
+                }
                 $ret['contentParts'][] = $part;
             }
         }

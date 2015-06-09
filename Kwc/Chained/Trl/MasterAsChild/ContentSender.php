@@ -12,11 +12,12 @@ class Kwc_Chained_Trl_MasterAsChild_ContentSender extends Kwf_Component_Abstract
         $contentSender->sendContent($includeMaster);
     }
 
-    public function getLinkRel()
+    public function getLinkDataAttributes()
     {
         $data = $this->_data->getChildComponent('-child');
         $contentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
         $contentSender = new $contentSender($data);
-        return $contentSender->getLinkRel();
+        return $contentSender->getLinkDataAttributes();
     }
+
 }

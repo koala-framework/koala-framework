@@ -15,6 +15,9 @@ class Kwc_Posts_Detail_Component extends Kwc_Abstract_Composite_Component
         $ret = parent::getTemplateVars();
         $data = $this->getData();
 
+
+        $ret['row'] = $data->row;
+
         $ret['content'] = self::replaceCodes($data->row->content);
         $ret['user'] = null;
         $ret['avatar'] = null;
@@ -98,7 +101,7 @@ class Kwc_Posts_Detail_Component extends Kwc_Abstract_Composite_Component
                 .$truncate->truncate($matches[5][0], 60, '...', true);
 
             $replace = "<a href=\"{$matches[1][0]}{$matches[5][0]}\" "
-                ."title=\"{$matches[1][0]}{$matches[5][0]}\" rel=\"popup_blank\">$showUrl</a>";
+                ."title=\"{$matches[1][0]}{$matches[5][0]}\" data-kwc-popup=\"blank\">$showUrl</a>";
             $content = substr($content, 0, $matches[0][1])
                 .$replace.substr($content, $matches[0][1] + strlen($matches[0][0]));
             $offset = $matches[0][1] + strlen($replace);

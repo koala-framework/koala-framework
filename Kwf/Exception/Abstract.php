@@ -51,15 +51,15 @@ abstract class Kwf_Exception_Abstract extends Exception
                 exit(1);
             }
 
-            require_once 'Kwf/Trl.php';
+            class_exists('Kwf_Trl'); //eventually trigger autoloader
             $view = Kwf_Debug::getView();
             $view->exception = $msg;
             $view->message = $exception->getMessage();
             $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
                 htmlspecialchars($_SERVER['REQUEST_URI']) : '' ;
-            $view->debug = Kwf_Exception::isDebug();
+            $view->debug = Kwf_Exception::isDebug() || !Kwf_Registry::get('config')->setupFinished;
             try {
-                if (Kwf_Registry::get('userModel')->getAuthedUserRole() == 'admin') {
+                if (Kwf_Registry::get('userModel') && Kwf_Registry::get('userModel')->getAuthedUserRole() == 'admin') {
                     $view->debug = true;
                 }
             } catch (Exception $e) {}
@@ -69,7 +69,9 @@ abstract class Kwf_Exception_Abstract extends Exception
                 if (isset($_SERVER['HTTP_HOST'])) {
                     //try to get the page of current domain to get correct language
                     $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
-                    $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', $acceptLanguage);
+                    try {
+                        $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', $acceptLanguage);
+                    } catch (Exception $e) {}
                 }
                 if (!$data) $data = Kwf_Component_Data_Root::getInstance();
                 $view->data = $data; //can be used for trl
@@ -88,8 +90,6 @@ abstract class Kwf_Exception_Abstract extends Exception
                 header($header);
                 header('Content-Type: text/html; charset=utf-8');
             }
-
-            while(@ob_end_flush()) {} //end all output buffers to avoid exception output getting into output buffer
 
             echo $view->render($template);
         } catch (Exception $e) {

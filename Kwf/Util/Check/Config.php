@@ -61,9 +61,6 @@ class Kwf_Util_Check_Config
         $checks['imagick'] = array(
             'name' => 'imagick Php extension'
         );
-        $checks['exif'] = array(
-            'name' => 'read EXIF data'
-        );
         $checks['fileinfo'] = array(
             'name' => 'fileinfo Php extension'
         );
@@ -99,17 +96,11 @@ class Kwf_Util_Check_Config
         $checks['setup_kwf'] = array(
             'name' => 'loading kwf'
         );
-        $checks['kwf_version'] = array(
-            'name' => 'kwf version'
-        );
         $checks['db_connection'] = array(
             'name' => 'db connection'
         );
         $checks['uploads'] = array(
             'name' => 'uploads'
-        );
-        $checks['setlocale'] = array(
-            'name' => 'setlocale'
         );
         $checks['apc'] = array(
             'name' => 'apc'
@@ -210,19 +201,6 @@ class Kwf_Util_Check_Config
         );
     }
 
-    private static function _exif()
-    {
-        if (!function_exists('exif_read_data')) {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "Function exif_read_data is not available, rotating images according to exif data won't be possible"
-            );
-        }
-        return array(
-            'status' => self::RESULT_OK,
-        );
-    }
-
     private static function _fileinfo()
     {
         if (!function_exists('finfo_file')) {
@@ -241,7 +219,7 @@ class Kwf_Util_Check_Config
                 );
             }
 
-            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
+            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/Kwf/Util/Check/Config/sample.docx'));
             if (!($mime == 'application/msword' || $mime == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
                 return array(
                     'status' => self::RESULT_WARNING,
@@ -249,7 +227,7 @@ class Kwf_Util_Check_Config
                 );
             }
 
-            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
+            $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/Kwf/Util/Check/Config/sample.odt'));
             if ($mime != 'application/vnd.oasis.opendocument.text') {
                 return array(
                     'status' => self::RESULT_WARNING,
@@ -348,35 +326,6 @@ class Kwf_Util_Check_Config
         );
     }
 
-    private static function _kwf_version()
-    {
-        //don't use Kwf_Config_Web::getInstance or Kwf_Registry::get('cache') as that would cache
-        $configClass = Kwf_Setup::$configClass;
-        $section = call_user_func(array($configClass, 'getDefaultConfigSection'));
-        $config = new $configClass($section);
-
-        if (file_exists('kwf_branch')) {
-            $v = trim(file_get_contents('kwf_branch'));
-        } else if (file_exists('vkwf_branch')) {
-            $v = trim(file_get_contents('vkwf_branch'));
-        } else {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "Can't check kwf version, kwf_branch file not found"
-            );
-        }
-        $kwfVersion = $config->application->kwf->version;
-        if ($v != $kwfVersion) {
-            return array(
-                'status' => self::RESULT_FAILED,
-                'message' => "Wrong kwf version, '$v' expected, '$kwfVersion' used"
-            );
-        }
-        return array(
-            'status' => self::RESULT_OK,
-        );
-    }
-
     private static function _db_connection()
     {
         if (Kwf_Registry::get('db')) {
@@ -465,33 +414,6 @@ class Kwf_Util_Check_Config
                 'status' => self::RESULT_FAILED,
                 'message' => "Uploads path '$dir' is not writeable"
             );
-        }
-        return array(
-            'status' => self::RESULT_OK,
-        );
-    }
-
-    private static function _setlocale()
-    {
-        $locale = setlocale(LC_ALL, 0); //backup locale
-
-        $l = Kwf_Trl::getInstance()->trlcKwf('locale', 'C', array(), 'de');
-        if (!setlocale(LC_ALL, explode(', ', $l))) {
-            return array(
-                'status' => self::RESULT_WARNING,
-                'message' => "Locale not installed, tried: ".$l
-            );
-        }
-
-        if (is_string($locale) && strpos($locale, ';')) {
-            $locales = array();
-            foreach (explode(';', $locale) as $l) {
-                $tmp = explode('=', $l);
-                $locales[$tmp[0]] = $tmp[1];
-            }
-            setlocale(LC_ALL, $locales);
-        } else {
-            setlocale(LC_ALL, $locale);
         }
         return array(
             'status' => self::RESULT_OK,

@@ -14,13 +14,12 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         return $ret;
     }
 
-    public static function expandAssetVariables($contents, $section = 'web', &$mtimeFiles = array())
+    public static function getAssetVariables($section = 'web')
     {
         static $assetVariables = array();
         if (!isset($assetVariables[$section])) {
             $assetVariables[$section] = Kwf_Config::getValueArray('assetVariables');
             if (file_exists('assetVariables.ini')) {
-                $mtimeFiles[] = 'assetVariables.ini';
                 $cfg = new Zend_Config_Ini('assetVariables.ini', $section);
                 $assetVariables[$section] = array_merge($assetVariables[$section], $cfg->toArray());
             }
@@ -29,8 +28,15 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
                 if (strtolower($k) != $k) $assetVariables[$section][strtolower($k)] = $i;
             }
         }
-        foreach ($assetVariables[$section] as $k=>$i) {
-            $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
+        return $assetVariables[$section];
+    }
+
+    public static function expandAssetVariables($contents, $section = 'web')
+    {
+        if (strpos($contents, 'var(')===false) return $contents;
+        $assetVariables = self::getAssetVariables($section);
+        foreach ($assetVariables as $k=>$i) {
+            //$contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
             $contents = str_replace('var('.$k.')', $i, $contents);
         }
         return $contents;
@@ -38,23 +44,20 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
 
     protected function _processContents($ret)
     {
-        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+        $pathType = $this->getType();
 
-        if ($pathType == 'ext') {
+        if ($pathType == 'ext2') {
             //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
-            $ret = str_replace('../images/', '/assets/ext/resources/images/', $ret);
-        } else if ($pathType == 'mediaelement') {
-            //hack to get the correct paths for the mediaelement pictures
-            $ret = str_replace('url(', 'url(/assets/mediaelement/build/', $ret);
-        } else if ($pathType == 'socialshareprivacy') {
-            $ret = str_replace('url(', 'url(/assets/socialshareprivacy/socialshareprivacy/', $ret);
-        }
-        if ($baseUrl = Kwf_Setup::getBaseUrl()) {
-            $ret = preg_replace('#url\\((\s*[\'"]?)/assets/#', 'url($1'.$baseUrl.'/assets/', $ret);
+            $ret = str_replace('../images/', '/assets/ext2/resources/images/', $ret);
         }
 
+        //convert relative paths (as in bower dependencies; example: jquery.socialshareprivacy, mediaelement
+        $fn = $this->getFileNameWithType();
+        $fnDir = substr($fn, 0, strrpos($fn, '/'));
+        $ret = preg_replace('#url\(\s*([^)]+?)\s*\)#', 'url(\1)', $ret); //remove spaces inside url()
+        $ret = preg_replace('#url\((\'|")(?![a-z]+:)([^/\'"])#', 'url(\1/assets/'.$fnDir.'/\2', $ret);
+        $ret = preg_replace('#url\((?![a-z]+:)([^/\'"])#', 'url(/assets/'.$fnDir.'/\1', $ret);
         $ret = self::expandAssetVariables($ret);
-
 
         if (strpos($ret, 'cssClass') !== false && (strpos($ret, '$cssClass') !== false || strpos($ret, '.cssClass') !== false)) {
             $cssClass = $this->_getComponentCssClass();
@@ -86,6 +89,6 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
             $this->_cacheContents = $contents;
         }
 
-        return $this->_cacheContents;
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($this->_cacheContents);
     }
 }

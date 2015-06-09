@@ -490,7 +490,7 @@ abstract class Kwf_Component_Generator_Abstract
                         continue;
                     }
                 } else {
-                    if ($g instanceof Kwf_Component_Generator_Box_StaticSelect) {
+                    if ($g->getGeneratorFlag('staticSelect')) {
                         if (!in_array($g->getGeneratorKey(), $editComponents)) {
                             //oder ein static generator (wenn er nur eine unter komponente hat)
                             continue;
@@ -730,6 +730,9 @@ abstract class Kwf_Component_Generator_Abstract
                     $c = $c->parent;
                 }
                 $parentLevel = 0;
+                if (!is_object($parentData)) {
+                    $parentData = Kwf_Component_Data_Root::getInstance()->getComponentById($parentData, array('ignoreVisible'=>true));
+                }
                 $c = $parentData;
                 while ($c) {
                     $parentLevel++;

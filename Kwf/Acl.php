@@ -33,10 +33,6 @@ class Kwf_Acl extends Zend_Acl
 
     public static function clearCache()
     {
-        static $cleared = false;
-        if ($cleared) return; //only clear single time
-        $cleared = true;
-
         $cacheId = 'acl';
         Kwf_Cache_Simple::delete($cacheId);
     }
@@ -44,15 +40,11 @@ class Kwf_Acl extends Zend_Acl
     public function __construct()
     {
         $this->addRole(new Zend_Acl_Role('guest'));
-        $this->addRole(new Kwf_Acl_Role_Admin('admin', 'Administrator'));
-        $this->addRole(new Zend_Acl_Role('cli'));
+        $this->addRole(new Kwf_Acl_Role_Admin('admin', trlKwfStatic('Administrator')));
 
         $this->add(new Zend_Acl_Resource('default_index'));
         $this->add(new Zend_Acl_Resource('kwf_user_menu'));
-        $this->add(new Zend_Acl_Resource('kwf_user_login'));
         $this->add(new Zend_Acl_Resource('kwf_user_changeuser'));
-        $this->add(new Zend_Acl_Resource('kwf_user_logout'));
-        $this->add(new Zend_Acl_Resource('kwf_error_error'));
         $this->add(new Zend_Acl_Resource('kwf_user_about'));
         $this->add(new Zend_Acl_Resource('kwf_welcome_index'));
         $this->add(new Zend_Acl_Resource('kwf_welcome_content'));
@@ -65,7 +57,7 @@ class Kwf_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('kwf_debug_benchmark'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_debug_benchmark-counter'));
         $this->add(new Zend_Acl_Resource('kwf_media_upload'));
-        $this->add(new Zend_Acl_Resource('kwf_test'));
+        $this->add(new Zend_Acl_Resource('kwf_media_post-back'));
         $this->add(new Zend_Acl_Resource('kwf_maintenance_setup'));
         $this->add(new Zend_Acl_Resource('kwf_maintenance_update'));
         $this->add(new Zend_Acl_Resource('kwf_maintenance_clear-cache'));
@@ -78,25 +70,9 @@ class Kwf_Acl extends Zend_Acl
 
         $this->add(new Zend_Acl_Resource('kwf_spam_set'));
 
-        $this->add(new Zend_Acl_Resource('kwf_cli'));
-        $this->add(new Zend_Acl_Resource('kwf_cli_help'));
-        $this->add(new Zend_Acl_Resource('kwf_cli_index'));
-        $this->add(new Zend_Acl_Resource('kwf_cli_trlparse'));
-        $this->add(new Zend_Acl_Resource('kwf_cli_hlpparse'));
-        $this->add(new Zend_Acl_Resource('kwf_test_connectionerror'));
-        $this->allow('cli', 'kwf_cli');
-        $this->allow('cli', 'kwf_cli_help');
-        $this->allow('cli', 'kwf_cli_index');
-        $this->allow('cli', 'kwf_cli_trlparse');
-        $this->allow('cli', 'kwf_cli_hlpparse');
-
         $this->allow(null, 'default_index');
-        $this->allow(null, 'kwf_test_connectionerror');
         $this->deny('guest', 'default_index');
         $this->allow(null, 'kwf_user_menu');
-        $this->allow(null, 'kwf_user_login');
-        $this->allow(null, 'kwf_user_logout');
-        $this->allow(null, 'kwf_error_error');
         $this->allow(null, 'kwf_user_about');
         $this->allow(null, 'kwf_welcome_index');
         $this->allow(null, 'kwf_welcome_content');
@@ -106,11 +82,12 @@ class Kwf_Acl extends Zend_Acl
         $this->deny('guest', 'kwf_user_self');
         $this->allow('admin', 'kwf_debug');
         $this->allow(null, 'kwf_media_upload');
+        $this->allow(null, 'kwf_media_post-back');
+        $this->deny('guest', 'kwf_media_upload');
+        $this->deny('guest', 'kwf_media_post-back');
         $this->allow('admin', 'edit_role');
         $this->allow(null, 'kwf_spam_set');
         $this->allow(null, 'kwf_debug_session-restart');
-        $this->allow(null, 'kwf_test');
-        $this->allow(null, 'kwf_maintenance_setup'); //allow for everyone, as there are no users yet during setup
         $this->allow('admin', 'kwf_maintenance_update');
         $this->allow('admin', 'kwf_maintenance_clear-cache');
         $this->allow('admin', 'kwf_maintenance_update-downloader');
@@ -176,6 +153,7 @@ class Kwf_Acl extends Zend_Acl
                 && $r->getParentRoleId() == $role
             ) {
                 $ret[] = $r->getRoleId();
+                $ret = array_merge($ret, $this->_getAdditionalRolesByRole($r->getRoleId()));
             }
         }
         return $ret;
@@ -291,6 +269,8 @@ class Kwf_Acl extends Zend_Acl
      */
     public function loadKwcResources()
     {
+        if (!Kwf_Registry::get('db')) return; //if we don't have a db configured yet skip kwc resources. required to be able to build assets without db
+
         if ($this->_kwcResourcesLoaded) return;
         $this->_kwcResourcesLoaded = true;
 
@@ -370,7 +350,7 @@ class Kwf_Acl extends Zend_Acl
             } else if ($resource instanceof Kwf_Acl_Resource_MenuEvent) {
                 $menu['type'] = 'event';
                 $menu['eventConfig'] = $resource->getMenuEventConfig();
-            } else if ($resource instanceof Kwf_Acl_Resource_MenuUrl) {
+            } else if ($resource instanceof Kwf_Acl_Resource_Interface_Url) {
                 $menu['type'] = 'url';
                 $menu['url'] = $resource->getMenuUrl();
             } else if ($resource instanceof Kwf_Acl_Resource_MenuCommandDialog) {
@@ -383,15 +363,41 @@ class Kwf_Acl extends Zend_Acl
                 $menu['commandConfig'] = $resource->getMenuCommandConfig();
             } else if ($resource instanceof Kwf_Acl_Resource_MenuSeparator) {
                 $menu['type'] = 'separator';
-            } else if ($resource instanceof Kwf_Acl_Resource_MenuExt4) {
-                $menu['type'] = 'url';
-                $menu['url'] = '/kwf/ext4/'.$resource->getResourceId();
             } else {
                 $menu = $menu['menuConfig'];
             }
             $menus[] = $menu;
         }
-        return $menus;
+        return $this->_orderResources($menus);
+    }
+
+    private function _orderResources($resources)
+    {
+        foreach ($resources as $k=>$i) {
+            $resources[$k]['num'] = $k;
+        }
+        usort($resources, array(get_class($this), '_compareMenuConfigOrder'));
+        foreach ($resources as $k=>$i) {
+            unset($resources[$k]['num']);
+        }
+        return $resources;
+    }
+    public static function _compareMenuConfigOrder($first, $second)
+    {
+        $orderFirst = 0;
+        $orderSecond = 0;
+        if (isset($first['menuConfig']['order'])) {
+            $orderFirst = $first['menuConfig']['order'];
+        }
+        if (isset($second['menuConfig']['order'])) {
+            $orderSecond = $second['menuConfig']['order'];
+        }
+        $ret = $orderFirst - $orderSecond;
+        if ($ret == 0) {
+            //no ordner defined, keep order as it is
+            $ret = $first['num'] - $second['num'];
+        }
+        return $ret;
     }
 
     public function getComponentAcl()
@@ -526,14 +532,12 @@ class Kwf_Acl extends Zend_Acl
         }
 
         if (!$resource instanceof Zend_Acl_Resource_Interface) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception('addResource() expects $resource to be of type Zend_Acl_Resource_Interface');
         }
 
         $resourceId = $resource->getResourceId();
 
         if (!$this->has($resourceId)) {
-            require_once 'Zend/Acl/Exception.php';
             throw new Zend_Acl_Exception("Resource id '$resourceId' doesn't exists in the ACL");
         }
 
@@ -554,7 +558,6 @@ class Kwf_Acl extends Zend_Acl
                 }
                 $resourceParent = $this->get($resourceParentId);
             } catch (Zend_Acl_Exception $e) {
-                require_once 'Zend/Acl/Exception.php';
                 throw new Zend_Acl_Exception("Parent Resource id '$resourceParentId' does not exist", 0, $e);
             }
             $this->_resources[$resourceParentId]['children'][$resourceId] = $resource;

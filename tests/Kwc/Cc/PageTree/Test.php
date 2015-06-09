@@ -50,33 +50,33 @@ class Kwc_Cc_PageTree_Test extends Kwc_TestAbstract
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main-mainMenu');
         $html = $c->render(true, false);
         //TODO: home url is apperently the same for slave and master
-        $this->assertContains('<a href="/slave/2" rel=""><span>Seite 2</span></a>', $html);
-        $this->assertContains('<a href="/slave/3" rel=""><span>Seite 3</span></a>', $html);
+        $this->assertContains('<a href="/slave/2"><span>Seite 2</span></a>', $html);
+        $this->assertContains('<a href="/slave/3"><span>Seite 3</span></a>', $html);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_2-mainMenu'); //level 1
         $html = $c->render(true, false);
-        $this->assertContains('<a href="/slave/2" rel=""><span>Seite 2</span></a>', $html);
-        $this->assertContains('<a href="/slave/3" rel=""><span>Seite 3</span></a>', $html);
+        $this->assertContains('<a href="/slave/2"><span>Seite 2</span></a>', $html);
+        $this->assertContains('<a href="/slave/3"><span>Seite 3</span></a>', $html);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_4-mainMenu'); //level 2
         $html = $c->render(true, false);
-        $this->assertContains('<a href="/slave/2" rel=""><span>Seite 2</span></a>', $html);
-        $this->assertContains('<a href="/slave/3" rel=""><span>Seite 3</span></a>', $html);
+        $this->assertContains('<a href="/slave/2"><span>Seite 2</span></a>', $html);
+        $this->assertContains('<a href="/slave/3"><span>Seite 3</span></a>', $html);
     }
 
     public function testBottomMenuCc()
     {
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main-bottomMenu');
         $html = $c->render(true, false);
-        $this->assertContains('<a href="/slave/5" rel=""><span>Seite 5</span></a>', $html);
+        $this->assertContains('<a href="/slave/5"><span>Seite 5</span></a>', $html);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_2-bottomMenu'); //level 1
         $html = $c->render(true, false);
-        $this->assertContains('<a href="/slave/5" rel=""><span>Seite 5</span></a>', $html);
+        $this->assertContains('<a href="/slave/5"><span>Seite 5</span></a>', $html);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_4-bottomMenu'); //level 2
         $html = $c->render(true, false);
-        $this->assertContains('<a href="/slave/5" rel=""><span>Seite 5</span></a>', $html);
+        $this->assertContains('<a href="/slave/5"><span>Seite 5</span></a>', $html);
     }
 
     public function testMenuCcClearCacheNameAndFilenameChanged()
@@ -98,18 +98,18 @@ class Kwc_Cc_PageTree_Test extends Kwc_TestAbstract
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main-mainMenu');
         $html = $c->render(true, false);
-        $this->assertContains('<a href="/slave/seite_2_xy" rel=""><span>Seite 2 xy</span></a>', $html);
-        $this->assertContains('<a href="/slave/3" rel=""><span>Seite 3</span></a>', $html);
+        $this->assertContains('<a href="/slave/seite_2_xy"><span>Seite 2 xy</span></a>', $html);
+        $this->assertContains('<a href="/slave/3"><span>Seite 3</span></a>', $html);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_2-mainMenu'); //level 1
         $html = $c->render(true, false);
-        $this->assertContains('<a href="/slave/seite_2_xy" rel=""><span>Seite 2 xy</span></a>', $html);
-        $this->assertContains('<a href="/slave/3" rel=""><span>Seite 3</span></a>', $html);
+        $this->assertContains('<a href="/slave/seite_2_xy"><span>Seite 2 xy</span></a>', $html);
+        $this->assertContains('<a href="/slave/3"><span>Seite 3</span></a>', $html);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_4-mainMenu'); //level 2
         $html = $c->render(true, false);
-        $this->assertContains('<a href="/slave/seite_2_xy" rel=""><span>Seite 2 xy</span></a>', $html);
-        $this->assertContains('<a href="/slave/3" rel=""><span>Seite 3</span></a>', $html);
+        $this->assertContains('<a href="/slave/seite_2_xy"><span>Seite 2 xy</span></a>', $html);
+        $this->assertContains('<a href="/slave/3"><span>Seite 3</span></a>', $html);
     }
 
     public function testMenuCcClearCacheParentChanged()
@@ -133,15 +133,15 @@ class Kwc_Cc_PageTree_Test extends Kwc_TestAbstract
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main-mainMenu');
         $html = $c->render(true, false);
 
-        $this->assertContains('<a href="/slave/seite_4" rel=""><span>Seite 4</span></a>', $html);
+        $this->assertContains('<a href="/slave/seite_4"><span>Seite 4</span></a>', $html);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_2-mainMenu'); //level 1
         $html = $c->render(true, false);
-        $this->assertContains('<a href="/slave/seite_4" rel=""><span>Seite 4</span></a>', $html);
+        $this->assertContains('<a href="/slave/seite_4"><span>Seite 4</span></a>', $html);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_4-mainMenu'); //level 2
         $html = $c->render(true, false);
-        $this->assertContains('<a href="/slave/seite_4" rel=""><span>Seite 4</span></a>', $html);
+        $this->assertContains('<a href="/slave/seite_4"><span>Seite 4</span></a>', $html);
     }
 
     public function testMenuCcClearCachePositionChanged()
@@ -163,14 +163,14 @@ class Kwc_Cc_PageTree_Test extends Kwc_TestAbstract
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main-mainMenu');
         $html = $c->render(true, false);
-        $this->assertRegExp('#<a href="/slave/3" rel=""><span>Seite 3</span></a>.*<a href="/slave/seite_2" rel=""><span>Seite 2</span></a>#s', $html);
+        $this->assertRegExp('#<a href="/slave/3"><span>Seite 3</span></a>.*<a href="/slave/seite_2"><span>Seite 2</span></a>#s', $html);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_2-mainMenu'); //level 1
         $html = $c->render(true, false);
-        $this->assertRegExp('#<a href="/slave/3" rel=""><span>Seite 3</span></a>.*<a href="/slave/seite_2" rel=""><span>Seite 2</span></a>#s', $html);
+        $this->assertRegExp('#<a href="/slave/3"><span>Seite 3</span></a>.*<a href="/slave/seite_2"><span>Seite 2</span></a>#s', $html);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('root-slave-main_4-mainMenu'); //level 2
         $html = $c->render(true, false);
-        $this->assertRegExp('#<a href="/slave/3" rel=""><span>Seite 3</span></a>.*<a href="/slave/seite_2" rel=""><span>Seite 2</span></a>#s', $html);
+        $this->assertRegExp('#<a href="/slave/3"><span>Seite 3</span></a>.*<a href="/slave/seite_2"><span>Seite 2</span></a>#s', $html);
     }
 }

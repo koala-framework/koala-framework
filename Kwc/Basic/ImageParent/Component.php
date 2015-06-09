@@ -25,17 +25,30 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
+        $ret['style'] = '';
+        $ret['containerClass'] = 'container';
         $ret['image'] = $this->getData();
-        $ret['altText'] = $this->_getImageComponent()->getAltText();
+        $imageComponent = $this->_getImageComponent();
+        if ($imageComponent) {
+            $ret['altText'] = $imageComponent->getAltText();
 
-        $imageData = $this->getImageData();
-        $ret = array_merge($ret,
-            Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['file'])
-        );
-
+            $imageData = $this->getImageData();
+            $ret = array_merge($ret,
+                Kwf_Media_Output_Component::getResponsiveImageVars($this->getImageDimensions(), $imageData['file'])
+            );
+            $ret['style'] .= 'max-width:'.$ret['width'].'px;';
+            if ($this->_getSetting('defineWidth')) $ret['style'] .= 'width:'.$ret['width'].'px;';
+            if ($ret['width'] > 100) $ret['containerClass'] .= ' webResponsiveImgLoading';
+        }
         $ret['baseUrl'] = $this->_getBaseImageUrl();
-        $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
+        $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
+
+        if (!$this->_getSetting('lazyLoadOutOfViewport')) $ret['containerClass'] .= ' loadImmediately';
+
+        if (!$renderer instanceof Kwf_Component_Renderer_Mail) { //TODO this check is a hack
+            $ret['template'] = Kwf_Component_Renderer_Twig_TemplateLocator::getComponentTemplate('Kwc_Abstract_Image_Component');
+        }
         return $ret;
     }
 
@@ -58,6 +71,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
 
     public function getImageData()
     {
+        if (!$this->_getImageComponent()) return null;
         return $this->_getImageComponent()->getImageData();
     }
 
@@ -93,7 +107,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
 
     public static function isValidMediaOutput($id, $type, $className)
     {
-        return Kwf_Media_Output_Component::isValidImage($id, $type);
+        return Kwf_Media_Output_Component::isValidImage($id, $type, $className);
     }
 
     public static function getMediaOutput($id, $type, $className)

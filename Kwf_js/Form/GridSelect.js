@@ -1,4 +1,4 @@
-Kwf.Form.GridSelect = Ext.extend(Kwf.Form.AbstractSelect,
+Kwf.Form.GridSelect = Ext2.extend(Kwf.Form.AbstractSelect,
 {
     _getWindowItem: function()
     {
@@ -17,4 +17,4 @@ Kwf.Form.GridSelect = Ext.extend(Kwf.Form.AbstractSelect,
     }
 
 });
-Ext.reg('gridselect', Kwf.Form.GridSelect);
+Ext2.reg('gridselect', Kwf.Form.GridSelect);

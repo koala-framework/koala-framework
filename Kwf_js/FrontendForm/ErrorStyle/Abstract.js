@@ -1,4 +1,4 @@
-Ext.ns('Kwf.FrontendForm.ErrorStyle');
+Ext2.ns('Kwf.FrontendForm.ErrorStyle');
 Kwf.FrontendForm.ErrorStyle.Abstract = function(form) {
     this.form = form;
 };

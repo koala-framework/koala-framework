@@ -1,4 +1,4 @@
-Kwf.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
+Kwf.Form.FieldSet = Ext2.extend(Ext2.form.FieldSet, {
     checkboxToggle: false,
     checkboxCollapse: true,
     initComponent: function() {
@@ -65,7 +65,7 @@ Kwf.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
             }, this.getEl().down('legend'));
             this.helpEl.on('click', function(e) {
                 e.stopEvent();
-                var helpWindow = new Ext.Window({
+                var helpWindow = new Ext2.Window({
                     html: this.helpText,
                     width: 400,
                     bodyStyle: 'padding: 10px; background-color: white;',
@@ -88,4 +88,4 @@ Kwf.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
     }
 });
 
-Ext.reg('fieldset', Kwf.Form.FieldSet);
+Ext2.reg('fieldset', Kwf.Form.FieldSet);

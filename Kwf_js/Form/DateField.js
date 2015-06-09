@@ -1,4 +1,4 @@
-Kwf.Form.DateField = Ext.extend(Ext.form.DateField,
+Kwf.Form.DateField = Ext2.extend(Ext2.form.DateField,
 {
     format: trlKwf('Y-m-d'),
     width: 90,
@@ -19,4 +19,4 @@ Kwf.Form.DateField = Ext.extend(Ext.form.DateField,
         }, this);
     }
 });
-Ext.reg('datefield', Kwf.Form.DateField);
+Ext2.reg('datefield', Kwf.Form.DateField);

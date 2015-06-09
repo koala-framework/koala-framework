@@ -1,4 +1,4 @@
-Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.Above, {
+Kwf.FrontendForm.ErrorStyle.IconBubble = Ext2.extend(Kwf.FrontendForm.ErrorStyle.Above, {
     showErrors: function(r) {
 
         var firstField = null;
@@ -23,7 +23,7 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                 field.errorEl.enableDisplayMode('block');
                 field.errorEl.hide();
 
-                Kwf.Event.on(Ext.get(field.el), 'mouseEnter', function() {
+                Kwf.Event.on(Ext2.get(field.el), 'mouseEnter', function() {
                     if (firstField) {
                         firstField.errorEl.child('.message').stopFx().fadeOut({duration: 0.4});
                         firstField.errorEl.child('.arrow').stopFx().fadeOut({duration: 0.4});
@@ -31,7 +31,7 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.
                     this.errorEl.child('.message').stopFx().fadeIn({duration: 0.4});
                     this.errorEl.child('.arrow').stopFx().fadeIn({duration: 0.4});
                 }, field);
-                Kwf.Event.on(Ext.get(field.el), 'mouseLeave', function() {
+                Kwf.Event.on(Ext2.get(field.el), 'mouseLeave', function() {
                     this.errorEl.child('.message').stopFx().fadeOut({duration: 0.2});
                     this.errorEl.child('.arrow').stopFx().fadeOut({duration: 0.2});
                 }, field);

@@ -14,6 +14,6 @@ class Kwf_Assets_Dependency_Dynamic_RavenJsDsn extends Kwf_Assets_Dependency_Abs
         $data = array(
             'dsn' => Kwf_Config::getValue('ravenJs.dsn')
         );
-        return "Kwf.RavenJsConfig = ".json_encode($data).";\n";
+        return "Kwf.RavenJsConfig = ".json_encode($data).";";
     }
 }

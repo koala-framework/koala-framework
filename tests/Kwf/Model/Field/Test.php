@@ -194,4 +194,30 @@ class Kwf_Model_Field_Test extends Kwf_Test_TestCase
         // delete nicht gecheckt, data row kann selbst nicht gelöscht werden,
         // die wird sowieso von der hauptrow mitgerissen
     }
+
+    public function testDirtyColumnsOnChange()
+    {
+        $model = new Kwf_Model_FnF(array(
+            'columns' => array('id', 'foo', 'data'),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>json_encode(array('blub'=>'blub')))),
+            'siblingModels' => array(new Kwf_Model_Field_FieldModel(array('fieldName'=>'data')))
+        ));
+        $row = $model->getRow(1);
+        $row->blub = 'blub2';
+        $this->assertEquals($row->getDirtyColumns(), array('blub'));
+    }
+
+    public function testDirtyColumnsOnCreateRow()
+    {
+        $model = new Kwf_Model_FnF(array(
+            'columns' => array('id', 'foo', 'data'),
+            'siblingModels' => array(new Kwf_Model_Field_FieldModel(array('fieldName'=>'data')))
+        ));
+        $row = $model->createRow(array(
+            'id' => 2,
+            'foo' => 'bar2',
+            'blub' => 'blub2'
+        ));
+        $this->assertEquals($row->getDirtyColumns(), array('id', 'foo', 'blub'));
+    }
 }

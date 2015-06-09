@@ -1,4 +1,4 @@
-Kwf.FrontendForm.Select = Ext.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.Select = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         this.el.select('select').each(function(input) {
             input.on('change', function() {

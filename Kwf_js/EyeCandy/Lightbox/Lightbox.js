@@ -1,71 +1,66 @@
-Kwf.onElementReady('a', function lightboxLink(el) {
-    el = el.dom;
-    if (el.kwfLightbox) return;
-    var m = el.rel.match(/(^lightbox| lightbox)({.*?})?/);
-    if (m) {
-        var options = {};
-        if (m[2]) options = Ext.decode(m[2]);
-        var l;
-        if (Kwf.EyeCandy.Lightbox.allByUrl[el.href]) {
-            l = Kwf.EyeCandy.Lightbox.allByUrl[el.href];
-        } else {
-            l = new Kwf.EyeCandy.Lightbox.Lightbox(el.href, options);
-        }
-        el.kwfLightbox = l;
-        Ext.EventManager.addListener(el, 'click', function(ev) {
-            if (Kwf.EyeCandy.Lightbox.currentOpen &&
-                Kwf.EyeCandy.Lightbox.currentOpen.href == this.href
-            ) {
-                //already open, ignore click
-                ev.stopEvent();
-                return;
-            }
-            this.kwfLightbox.show({
-                clickTarget: Ext.get(this)
-            });
-            Kwf.Utils.HistoryState.currentState.lightbox = this.href;
-            Kwf.Utils.HistoryState.pushState(document.title, this.href);
-            ev.stopEvent();
-        }, el, { stopEvent: true });
-    }
-}, { defer: true });
+Kwf.namespace('Kwf.EyeCandy.Lightbox');
 
-Kwf.onElementReady('.kwfLightbox', function lightboxEl(el) {
+$(document).on('click', 'a[data-kwc-lightbox]', function(event) {
+    var el = event.currentTarget;
+    var $el = $(el);
+    var options = $el.data('kwc-lightbox');
+    if (Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')]) {
+        l = Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')];
+    } else {
+        l = new Kwf.EyeCandy.Lightbox.Lightbox($el.attr('href'), options);
+    }
+    el.kwfLightbox = l;
+
+    if (Kwf.EyeCandy.Lightbox.currentOpen &&
+        Kwf.EyeCandy.Lightbox.currentOpen.href == $el.attr('href')
+    ) {
+        //already open, ignore click
+        event.preventDefault();
+        return;
+    }
+    this.kwfLightbox.show({
+        clickTarget: this
+    });
+    Kwf.Utils.HistoryState.currentState.lightbox = this.href;
+    Kwf.Utils.HistoryState.pushState(document.title, this.href);
+
+    event.preventDefault();
+});
+
+Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
-    if (el.dom.kwfLightbox) return;
-    var lightboxEl = Ext.get(el);
-    var options = Ext.decode(lightboxEl.child('input.options').dom.value);
+    if (el[0].kwfLightbox) return;
+    var options = jQuery.parseJSON(el.find('input.options').val());
     var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
     Kwf.Utils.HistoryState.currentState.lightbox = window.location.href;
     Kwf.Utils.HistoryState.updateState();
-    lightboxEl.enableDisplayMode('block');
-    l.lightboxEl = lightboxEl;
-    l.innerLightboxEl = lightboxEl.down('.kwfLightboxInner');
+    l.lightboxEl = el;
+    l.innerLightboxEl = el.find('.kwfLightboxInner');
     l.fetched = true;
     l.initialize();
     l.closeHref = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
-    l.contentEl = l.innerLightboxEl.down('.kwfLightboxContent');
+    l.contentEl = l.innerLightboxEl.find('.kwfLightboxContent');
     l.style.afterCreateLightboxEl();
     l.style.onShow();
     l.style.onContentReady();
-    el.dom.kwfLightbox = l;
+    el[0].kwfLightbox = l;
     Kwf.EyeCandy.Lightbox.currentOpen = l;
 
     //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
-    Kwf.callOnContentReady(l.contentEl.dom, {newRender: false});
+    Kwf.callOnContentReady(l.contentEl, {action: 'show'});
 }, { priority: 10 }); //after ResponsiveEl so lightbox can adapt to responsive content
 
 Kwf.onContentReady(function lightboxContent(readyEl, options)
 {
     if (!Kwf.EyeCandy.Lightbox.currentOpen) return;
 
-    readyEl = Ext.get(readyEl);
-    if (readyEl.isVisible()) {
+    readyEl = $(readyEl);
+    if (readyEl.is(':visible')) {
         //callOnContentReady was called for an element inside the lightbox, style can update the lightbox size
         if (Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl
-            && Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl.isVisible()
-            && (Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl.contains(readyEl)
-            || readyEl.contains(Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl))
+            && Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl.is(':visible')
+            && ($.contains(Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl, readyEl)
+            || $.contains(readyEl, Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl))
         ) {
             Kwf.EyeCandy.Lightbox.currentOpen.style.onContentReady();
         }
@@ -95,22 +90,26 @@ Kwf.Utils.HistoryState.on('popstate', function() {
     }
 });
 
-if (!(Ext.isMac && 'ontouchstart' in document.documentElement)) {
-    Ext.fly(window).on('resize', function(ev) {
-        if (Kwf.EyeCandy.Lightbox.currentOpen) {
-            Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
-        }
-    }, this, {buffer: 100});
+if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
+    var timer = 0;
+    $(window).resize(function(ev) {
+        clearTimeout(timer);
+        timer = setTimeout(function(){
+            if (Kwf.EyeCandy.Lightbox.currentOpen) {
+                Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
+            }
+        }, 100);
+    });
+
 } else {
     //on iOS listen to orientationchange as resize event triggers randomly when scrolling
-    Ext.fly(window).on('orientationchange', function(ev) {
+    $(window).on('orientationchange', function(ev) {
         if (Kwf.EyeCandy.Lightbox.currentOpen) {
             Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
         }
-    }, this);
+    });
 }
 
-Ext.ns('Kwf.EyeCandy.Lightbox');
 Kwf.EyeCandy.Lightbox.currentOpen = null;
 Kwf.EyeCandy.Lightbox.allByUrl = {};
 Kwf.EyeCandy.Lightbox.Lightbox = function(href, options) {
@@ -133,22 +132,23 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         var cls = 'kwfLightbox';
         if (this.options.style) cls += ' kwfLightbox'+this.options.style;
         if (this.options.cssClass) cls += ' '+this.options.cssClass;
-        var lightbox = Ext.getBody().createChild({
-            cls: cls,
-            html: '<div class="kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'
-        });
-        lightbox.dom.kwfLightbox = this; //don't initialize again in onContentReady
-        lightbox.enableDisplayMode('block');
-        this.lightboxEl = lightbox;
-        this.innerLightboxEl = lightbox.down('.kwfLightboxInner');
+        var lightbox = $(
+            '<div class="'+cls+'">'+
+                '<div class="kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'+
+            '</div>'
+        );
+        $(document.body).append(lightbox);
+        lightbox[0].kwfLightbox = this; //don't initialize again in onContentReady
 
+        this.lightboxEl = lightbox;
+        this.innerLightboxEl = lightbox.find('.kwfLightboxInner');
         var el = this.innerLightboxEl;
 
         if (this.options.width) {
-            el.setWidth(parseInt(this.options.width) + el.getBorderWidth("lr") + el.getPadding("lr"));
+            el.width(parseInt(this.options.width) /*+ el.getBorderWidth("lr") + el.getPadding("lr")*/);
         }
         if (this.options.height) {
-            el.setHeight(parseInt(this.options.height) + el.getBorderWidth("tb") + el.getPadding("tb"));
+            el.height(parseInt(this.options.height) /*+ el.getBorderWidth("tb") + el.getPadding("tb")*/);
         }
         if (this.options.adaptHeight) {
             this.lightboxEl.addClass('adaptHeight');
@@ -161,51 +161,53 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         if (this.fetched) return;
         this.fetched = true;
 
-        Ext.Ajax.request({
-            params: { url: this.href },
+        $.ajax({
             url: Kwf.getKwcRenderUrl(),
-            success: function(response, options) {
-                this.contentEl = this.innerLightboxEl.createChild({
-                    cls: 'kwfLightboxContent'
+            data: { url: 'http://'+location.host+this.href },
+            dataType: 'html',
+            context: this
+        }).done(function(responseText) {
+            this.contentEl = $(
+                '<div class="kwfLightboxContent"></div>'
+            );
+            this.closeButtonEl = $(
+                '<a href="#" class="closeButton"></a>'
+            );
+            this.innerLightboxEl.append(this.contentEl);
+            this.innerLightboxEl.append(this.closeButtonEl);
+
+            this.style.updateContent(responseText);
+
+            if (this.lightboxEl.is(':visible')) {
+                this.contentEl.hide();
+            }
+
+            var self = this;
+            var showContent = function() {
+                self.innerLightboxEl.removeClass('kwfLightboxLoading');
+                self.innerLightboxEl.find('.loading').remove();
+                if (self.lightboxEl.is(':visible')) {
+                    self.contentEl.fadeIn();
+                }
+                self.style.afterContentShown();
+                if (self.lightboxEl.is(':visible')) {
+                    self.preloadLinks();
+                }
+            };
+            var imagesToLoad = 0;
+            this.contentEl.find('img.hideWhileLoading').each(function() {
+                imagesToLoad++;
+                $(this).on('load', function() {
+                    imagesToLoad--;
+                    if (imagesToLoad <= 0) showContent.call(this);
                 });
-                this.closeButtonEl = this.innerLightboxEl.createChild({
-                    cls: 'closeButton',
-                    tag: 'a',
-                    href: '#'
-                });
+            });
+            if (imagesToLoad == 0) showContent.call(this);
 
-                this.style.updateContent(response.responseText);
-
-                if (this.lightboxEl.isVisible()) this.contentEl.hide();
-
-                var showContent = function() {
-                    this.innerLightboxEl.removeClass('kwfLightboxLoading');
-                    this.innerLightboxEl.child('.loading').remove();
-                    if (this.lightboxEl.isVisible()) {
-                        this.contentEl.fadeIn();
-                    }
-                    this.style.afterContentShown();
-                    if (this.lightboxEl.isVisible()) {
-                        this.preloadLinks();
-                    }
-                };
-                var imagesToLoad = 0;
-                this.contentEl.query('img.hideWhileLoading').each(function(imgEl) {
-                    imagesToLoad++;
-                    Ext.fly(imgEl).on('load', function() {
-                        imagesToLoad--;
-                        if (imagesToLoad <= 0) showContent.call(this);
-                    }, this);
-                }, this);
-                if (imagesToLoad == 0) showContent.call(this);
-
-                this.initialize();
-            },
-            failure: function() {
-                //fallback
-                location.href = this.href;
-            },
-            scope: this
+            this.initialize();
+        }).fail(function() {
+            //fallback
+            location.href = this.href;
         });
     },
     show: function(options)
@@ -235,17 +237,20 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 
         this.lightboxEl.addClass('kwfLightboxOpen');
         if (this.fetched) {
-            if (!this.lightboxEl.isVisible()) {
+            if (!this.lightboxEl.is(':visible')) {
+                this.lightboxEl.show();
+                Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
+                this.style.afterContentShown();
+                this.lightboxEl.hide();
                 this.lightboxEl.fadeIn();
                 this.preloadLinks();
-                Kwf.callOnContentReady(this.innerLightboxEl.dom, {action: 'show'});
             }
-            this.style.afterContentShown();
         } else {
             this.lightboxEl.show();
             this.fetchContent();
         }
         this.style.afterShow(options);
+
         Kwf.Statistics.count(this.href);
     },
     close: function(options) {
@@ -290,17 +295,15 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     initialize: function()
     {
-        var closeButtons = this.innerLightboxEl.select('.closeButton');
-        closeButtons.each(function(el) {
-            el.on('click', function(ev) {
-                ev.stopEvent();
-                this.closeAndPushState();
-            }, this);
-        }, this);
+        var closeButtons = this.innerLightboxEl.find('.closeButton');
+        closeButtons.click((function(ev) {
+            ev.preventDefault();
+            this.closeAndPushState();
+        }).bind(this));
     },
     preloadLinks: function() {
-        this.innerLightboxEl.query('a.preload').each(function(el) {
-            if (el.kwfLightbox) el.kwfLightbox.preload();
+        this.innerLightboxEl.find('a.preload').each(function() {
+            if (this.kwfLightbox) this.kwfLightbox.preload();
         }, this);
     },
     preload: function() {
@@ -318,50 +321,51 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
 };
 Kwf.EyeCandy.Lightbox.Styles.Abstract.masks = 0;
 Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
-    init: Ext.emptyFn,
-    afterCreateLightboxEl: Ext.emptyFn,
-    afterContentShown: Ext.emptyFn,
+    init: function() {},
+    afterCreateLightboxEl: function() {},
+    afterContentShown: function() {},
     updateContent: function(responseText) {
-        this.lightbox.contentEl.update(responseText);
+        this.lightbox.contentEl.html(responseText);
 
         this._blockOnContentReady = true; //don't resize twice
         //callOnContentReady so eg. ResponsiveEl can do it's job which might change the height of contents
-        Kwf.callOnContentReady(this.lightbox.contentEl.dom, {newRender: true});
+        Kwf.callOnContentReady(this.lightbox.contentEl, {action: 'render'});
         this._blockOnContentReady = false;
     },
-    onShow: Ext.emptyFn,
-    afterShow: Ext.emptyFn,
-    onClose: Ext.emptyFn,
-    afterClose: Ext.emptyFn,
-    onContentReady: Ext.emptyFn,
-    onResizeWindow: Ext.emptyFn,
+    onShow: function() {},
+    afterShow: function() {},
+    onClose: function() {},
+    afterClose: function() {},
+    onContentReady: function() {},
+    onResizeWindow: function() {},
 
     mask: function() {
         //calling mask multiple times in valid, unmask must be called exactly often
         Kwf.EyeCandy.Lightbox.Styles.Abstract.masks++;
         if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 1) return;
-        Ext.getBody().addClass('kwfLightboxTheaterMode');
-        var maskEl = Ext.getBody().mask();
-        Ext.getBody().removeClass('x-masked');
-        Ext.getBody().removeClass('x-masked-relative');
-        maskEl.addClass('lightboxMask');
-        maskEl.dom.style.height = '';
-        maskEl.dom.style.width = '';
-
-        //maskEl.setHeight(Math.max(Ext.lib.Dom.getViewHeight(), Ext.lib.Dom.getDocumentHeight()));
-
-        maskEl.on('click', this.onMaskClick, this);
+        $(document.body).addClass('kwfLightboxTheaterMode');
+        var maskEl = $(document.body).find('.lightboxMask');
+        if (maskEl.length) {
+            maskEl.show();
+        } else {
+            maskEl = $(document.body).append('<div class="lightboxMask"></div>');
+            maskEl.click(function(ev) {
+                if ($(document.body).find('.lightboxMask').is(ev.target)) {
+                    if (Kwf.EyeCandy.Lightbox.currentOpen) {
+                        Kwf.EyeCandy.Lightbox.currentOpen.style.onMaskClick();
+                    }
+                }
+            });
+        }
     },
     unmask: function() {
         Kwf.EyeCandy.Lightbox.Styles.Abstract.masks--;
         if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 0) return;
-        Ext.getBody()._mask.fadeOut({
-            concurrent: true,
-            callback: function() {
-                Ext.getBody().removeClass('kwfLightboxTheaterMode');
-                Ext.getBody()._mask.remove();
-            },
-            scope: this
+        $(document.body).find('.lightboxMask').fadeOut({
+            complete: function() {
+                $(document.body).removeClass('kwfLightboxTheaterMode');
+                $(document.body).find('.lightboxMask').hide();
+            }
         });
     },
     onMaskClick: function()
@@ -370,18 +374,19 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     }
 };
 
-Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
+Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
     init: function()
     {
-        this._previousWindowSize = Ext.getBody().getViewSize();
+        this._previousWindowWidth = $(window).width();
+        this._previousWindowHeight = $(window).height();
     },
 
     afterCreateLightboxEl: function() {
-        this.lightbox.lightboxEl.on('click', function(ev) {
-            if (ev.getTarget() == this.lightbox.lightboxEl.dom) {
+        this.lightbox.lightboxEl.click((function(ev) {
+            if (this.lightbox.lightboxEl.is(ev.target)) {
                 this.lightbox.closeAndPushState();
             }
-        }, this);
+        }).bind(this));
 
         this._resizeContent();
     },
@@ -390,30 +395,42 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         this._updateMobile();
 
         //if content is larger than window, resize accordingly
-        var originalSize = this.lightbox.innerLightboxEl.getSize();
+        var originalWidth = this.lightbox.innerLightboxEl.width();
+        var originalHeight = this.lightbox.innerLightboxEl.height();
 
         var maxSize = this._getMaxContentSize();
 
-        if (originalSize.width > maxSize.width) {
-            var ratio = originalSize.height / originalSize.width;
-            var offs = originalSize.width-maxSize.width;
-            originalSize.width -= offs;
-            if (this.lightbox.options.adaptHeight) originalSize.height -= offs*ratio;
+        if (originalWidth > maxSize.width) {
+            var ratio = originalHeight / originalWidth;
+            var offs = originalWidth-maxSize.width;
+            originalWidth -= offs;
+            if (this.lightbox.options.adaptHeight) originalHeight -= offs*ratio;
         }
-        if (this.lightbox.options.adaptHeight && originalSize.height > maxSize.height) {
-            var ratio = originalSize.width / originalSize.height;
-            var offs = originalSize.height-maxSize.height;
-            originalSize.height -= offs;
-            originalSize.width -= offs*ratio;
+        if (this.lightbox.options.adaptHeight && originalHeight > maxSize.height) {
+            var ratio = originalWidth / originalHeight;
+            var offs = originalHeight-maxSize.height;
+            originalHeight -= offs;
+            originalWidth -= offs*ratio;
         }
-        if (!this.lightbox.options.adaptHeight && originalSize.height > maxSize.height) {
-            //delete originalSize.height;
+        if (!this.lightbox.options.adaptHeight && originalHeight > maxSize.height) {
+            //delete originalHeight;
         }
-        this.lightbox.innerLightboxEl.setSize(originalSize);
-
+        this.lightbox.innerLightboxEl.width(originalWidth);
+        this.lightbox.innerLightboxEl.height(originalHeight);
         this._center(false);
     },
     afterContentShown: function() {
+
+        //reset to initial size so lightbox can grow
+        var initialSize = {
+            width: null,
+            height: null
+        };
+        if (this.lightbox.options.width) initialSize.width = this.lightbox.options.width;
+        if (this.lightbox.options.height) initialSize.height = this.lightbox.options.height;
+        this.lightbox.innerLightboxEl.css(initialSize);
+
+        this._resizeContent();
         this._center(false);
     },
     _getOuterMargin: function()
@@ -438,74 +455,79 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         }
     },
     _getMaxContentSize: function(subtractOuterMargin) {
-        this.lightbox.lightboxEl.dom.style.overflow = 'hidden';
+        this.lightbox.lightboxEl.css('overflow', 'hidden');
         var maxSize = {
-            width: this.lightbox.lightboxEl.dom.clientWidth,
-            height: this.lightbox.lightboxEl.dom.clientHeight
+            width: this.lightbox.lightboxEl.innerWidth(),
+            height: this.lightbox.lightboxEl.innerHeight()
         };
-        this.lightbox.lightboxEl.dom.style.overflow = '';
+        this.lightbox.lightboxEl.css('overflow', '');
         if (subtractOuterMargin !== false) {
             maxSize.width -= this._getOuterMargin()*2;
             maxSize.height -= this._getOuterMargin()*2;
         }
+        maxSize.width -= parseInt(this.lightbox.innerLightboxEl.css('paddingLeft'))
+                            + parseInt(this.lightbox.innerLightboxEl.css('paddingRight'));
+        maxSize.height -= parseInt(this.lightbox.innerLightboxEl.css('paddingTop'))
+                            + parseInt(this.lightbox.innerLightboxEl.css('paddingBottom'));
+
         return maxSize;
     },
 
     _getContentSize: function(dontDeleteHeight)
     {
-        var newSize = this.lightbox.contentEl.getSize();
-        newSize.height += this.lightbox.innerLightboxEl.getBorderWidth("tb")+this.lightbox.innerLightboxEl.getPadding("tb");
-        newSize.width += this.lightbox.innerLightboxEl.getBorderWidth("lr")+this.lightbox.innerLightboxEl.getPadding("lr");
-        if (this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter')) {
-            newSize.height -= this.lightbox.contentEl.child('> .kwfRoundBorderBox > .kwfMiddleCenter').getPadding('tb');
-        }
+        var newWidth = this.lightbox.contentEl.width();
+        var newHeight = this.lightbox.contentEl.height();
         var maxSize = this._getMaxContentSize();
-        if (newSize.width > maxSize.width) newSize.width = maxSize.width;
+        if (newWidth > maxSize.width) newWidth = maxSize.width;
 
-        if (this.lightbox.options.adaptHeight && newSize.height > maxSize.height) {
-            newSize.height = maxSize.height;
+        if (this.lightbox.options.adaptHeight && newHeight > maxSize.height) {
+            newHeight = maxSize.height;
         } else {
             if (!dontDeleteHeight) {
-                delete newSize.height;
+                newHeight = '';
             }
         }
 
-        return newSize;
+        return {
+            width: newWidth,
+            height: newHeight
+        };
     },
 
     //update the lightbox content which was loaded using ajax
     updateContent: function(responseText)
     {
-        var isVisible = this.lightbox.lightboxEl.isVisible();
+        var isVisible = this.lightbox.lightboxEl.is(':visible');
         this.lightbox.lightboxEl.show(); //to mesaure
 
-        var originalSize = this.lightbox.innerLightboxEl.getSize();
+        var originalHeight = this.lightbox.innerLightboxEl.height();
+        var originalWidth = this.lightbox.innerLightboxEl.width();
 
         //do the actual update + callOnContentReady
         Kwf.EyeCandy.Lightbox.Styles.CenterBox.superclass.updateContent.apply(this, arguments);
 
-        if (!this.lightbox.options.height) this.lightbox.innerLightboxEl.dom.style.height = '';
-        if (!this.lightbox.options.width) this.lightbox.innerLightboxEl.dom.style.width = '';
+        if (!this.lightbox.options.height) this.lightbox.innerLightboxEl.css('height', '');
+        if (!this.lightbox.options.width) this.lightbox.innerLightboxEl.css('width', '');
         if (isVisible) {
             var newSize = this._getContentSize(true);
-            this.lightbox.innerLightboxEl.setSize(newSize);
-            if (this.lightbox.innerLightboxEl.getColor('backgroundColor')) {
+            this.lightbox.innerLightboxEl.css(newSize);
+            if (this.lightbox.innerLightboxEl.css('backgroundColor')) {
                 //animate size only if backgroundColor is set - else it doesn't make sense
                 this._center(true);
-                this.lightbox.innerLightboxEl.setSize(originalSize);
-                this.lightbox.innerLightboxEl.setSize(newSize, null, {
-                    callback: function() {
+                this.lightbox.innerLightboxEl.width(originalWidth);
+                this.lightbox.innerLightboxEl.height(originalHeight);
+                this.lightbox.innerLightboxEl.animate(newSize, {
+                    complete: (function() {
                         var newSize = this._getContentSize();
-                        this.lightbox.innerLightboxEl.setSize(newSize);
-                    },
-                    scope: this
+                        this.lightbox.innerLightboxEl.css(newSize);
+                    }).bind(this)
                 });
             } else {
                 this._center(false);
             }
         } else {
             var newSize = this._getContentSize();
-            this.lightbox.innerLightboxEl.setSize(newSize);
+            this.lightbox.innerLightboxEl.css(newSize);
             this._center(false);
             this.lightbox.lightboxEl.hide();
         }
@@ -518,33 +540,31 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
     },
     onClose: function(options) {
         this.lightbox.lightboxEl.fadeOut({
-            concurrent: true,
-            callback: function() {
+            complete: (function() {
                 this.afterClose();
-            },
-            scope: this
+            }).bind(this)
         });
         this.unmask();
     },
     _getCenterXy: function() {
         var winSize = this._getMaxContentSize(false);
-        var xy = [
-            (winSize.width - this.lightbox.innerLightboxEl.getSize().width) / 2 + Ext.getBody().getScroll().left,
-            (winSize.height - this.lightbox.innerLightboxEl.getSize().height) / 2 + Ext.getBody().getScroll().top
-        ];
+        var xy = {
+            left: (winSize.width - this.lightbox.innerLightboxEl.width()) / 2 + $(window).scrollLeft(),
+            top: (winSize.height - this.lightbox.innerLightboxEl.height()) / 2 + $(window).scrollTop()
+        };
 
         //if lightbox is larget than viewport don't position lightbox above, the user can only scroll down
         var m = this._getOuterMargin();
-        if (xy[0] < Ext.getBody().getScroll().left+m) xy[0] = Ext.getBody().getScroll().left+m;
-        if (xy[1] < Ext.getBody().getScroll().top+m) xy[1] = Ext.getBody().getScroll().top+m;
-        xy[0] = Math.floor(xy[0]);
-        xy[1] = Math.floor(xy[1]);
+        if (xy.left < $(window).scrollLeft()+m) xy.left = $(window).scrollLeft()+m;
+        if (xy.top < $(window).scrollTop()+m) xy.top = $(window).scrollTop()+m;
+        xy.left = Math.floor(xy.left);
+        xy.top = Math.floor(xy.top);
 
         return xy;
     },
     _center: function(anim) {
-        if (!this.lightbox.lightboxEl.isVisible(true)) return;
-        this.lightbox.innerLightboxEl.setXY(this._getCenterXy(), anim);
+        if (!this.lightbox.lightboxEl.is(':visible')) return;
+        this.lightbox.innerLightboxEl[anim ? 'animate' : 'css'](this._getCenterXy());
     },
 
     //called if element *inside* lightbox did fire callOnContentReady
@@ -556,32 +576,34 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
 
         //adjust size if height changed
         var newSize = this._getContentSize();
-        var originalSize = this.lightbox.innerLightboxEl.getSize();
-        this.lightbox.innerLightboxEl.setSize(newSize); //set to new size so centering works (no animation)
+        var originalHeight = this.lightbox.innerLightboxEl.height();
+        var originalWidth = this.lightbox.innerLightboxEl.width();
+        this.lightbox.innerLightboxEl.css(newSize); //set to new size so centering works (no animation)
         var centerXy = this._getCenterXy();
 
-        var xy = this.lightbox.innerLightboxEl.getXY();
-        xy[0] = centerXy[0];
-        if (centerXy[1] < xy[1]) xy[1] = centerXy[1]; //move up, but not down
+        var position = this.lightbox.innerLightboxEl.position();
+        position.left = centerXy.left;
+        if (centerXy.top < position.top) position.top = centerXy.top; //move up, but not down
         /*
         //animation to new position disabled, buggy
         this.lightbox.innerLightboxEl.setXY(xy, true);
-        this.lightbox.innerLightboxEl.setSize(originalSize); //set back to previous size for animation
+        this.lightbox.innerLightboxEl.width(originalWidth); //set back to previous size for animation
+        this.lightbox.innerLightboxEl.height(originalHeight);
         this.lightbox.innerLightboxEl.setSize(newSize, null, true); //now animate to new size
         */
 
         //instead center unanimated
-        this.lightbox.innerLightboxEl.setXY(xy);
+        this.lightbox.innerLightboxEl.css(position);
     },
 
     //the browser window resized, the lightbox content might be responsive - update lightbox size
     onResizeWindow: function(ev)
     {
-        var s = Ext.getBody().getViewSize();
-        if (s.width == this._previousWindowSize.width && s.height == this._previousWindowSize.height) {
+        if ($(window).width() == this._previousWindowWidth && $(window).height() == this._previousWindowHeight) {
             return;
         }
-        this._previousWindowSize = s;
+        this._previousWindowWidth = $(window).width();
+        this._previousWindowHeight = $(window).height();
 
         //reset to initial size so lightbox can grow
         var initialSize = {
@@ -590,7 +612,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext.extend(Kwf.EyeCandy.Lightbox.Styles
         };
         if (this.lightbox.options.width) initialSize.width = this.lightbox.options.width;
         if (this.lightbox.options.height) initialSize.height = this.lightbox.options.height;
-        this.lightbox.innerLightboxEl.setSize(initialSize);
+        this.lightbox.innerLightboxEl.css(initialSize);
 
         this._resizeContent();
     }

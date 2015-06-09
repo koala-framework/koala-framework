@@ -16,7 +16,7 @@ class Kwf_Component_Cache_PageMove_Test extends Kwc_TestAbstract
         $row->save();
         $this->_process();
 
-        Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Component_RecursiveContentChanged(
+        Kwf_Events_Dispatcher::fireEvent(new Kwf_Component_Event_Component_RecursiveContentChanged(
             'Kwc_Basic_Empty_Component', Kwf_Component_Data_Root::getInstance()->getComponentById(3)
         ));
         $this->_process();

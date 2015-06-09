@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Abstract.Image');
-Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
+Ext2.namespace('Kwc.Abstract.Image');
+Kwc.Abstract.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
     src: null,//image path
     width: 0,//width of image,
     height: 0,//height of image
@@ -106,14 +106,14 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         this._wrapEl = this.el.down('.kwc-abstract-image-crop-image-wrapper');
         this._wrapEl.setSize(this.width, this.height);
 
-        this._image = new Ext.BoxComponent({
+        this._image = new Ext2.BoxComponent({
             opacity: 1.0,
             autoEl: {
                 tag: 'div',
                 src: this.src
             },
             renderTo: this.el,
-            src: Ext.BLANK_IMAGE_URL,
+            src: Ext2.BLANK_IMAGE_URL,
             x: 0,
             y: 0,
             height: this.height,
@@ -148,7 +148,7 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
             this.fireEvent('cropChanged', res);
         }, this);
 
-        var dragDrop = new Ext.dd.DD(this._image.getEl(), '');
+        var dragDrop = new Ext2.dd.DD(this._image.getEl(), '');
         dragDrop.startDrag = (function (x, y) {
             this._hideCropShadow();
             dragDrop.constrainTo(this.getEl());
@@ -194,11 +194,11 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
         Kwc.Abstract.Image.CropImage.superclass.afterRender.call(this);
 
         // Loading-Mask while loading down-sampled image
-        this.getEl().mask(trlKwf('Loading image'), 'x-mask-loading');
+        this.getEl().mask(trlKwf('Loading image'), 'x2-mask-loading');
         var imgLoad = new Image();
         imgLoad.onerror = (function() {
             this.getEl().unmask();
-            Ext.Msg.alert(trlKwf('Error'), trlKwf("Couldn't load image."));
+            Ext2.Msg.alert(trlKwf('Error'), trlKwf("Couldn't load image."));
         }).createDelegate(this);
 
         imgLoad.onload = (function(){
@@ -261,8 +261,8 @@ Kwc.Abstract.Image.CropImage = Ext.extend(Ext.BoxComponent, {
 
     _styleHandles: function() {
         if (this._centerHandle) {
-            if (!(this._centerHandle instanceof Ext.XTemplate)) {
-                this._centerHandle = new Ext.XTemplate(this._centerHandle);
+            if (!(this._centerHandle instanceof Ext2.XTemplate)) {
+                this._centerHandle = new Ext2.XTemplate(this._centerHandle);
             }
             this._centerHandle.compile();
         }
@@ -331,4 +331,4 @@ Kwc.Abstract.Image.CropImage.calculateDefaultCrop = function (outWidth, outHeigh
     return cropData;
 };
 
-Ext.reg('kwc.image.cropimage', Kwc.Abstract.Image.CropImage);
+Ext2.reg('kwc.image.cropimage', Kwc.Abstract.Image.CropImage);

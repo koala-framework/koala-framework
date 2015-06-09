@@ -1,4 +1,4 @@
-Kwf.Form.Cards = Ext.extend(Ext.Panel,
+Kwf.Form.Cards = Ext2.extend(Ext2.Panel,
 {
     afterRender: function() {
         Kwf.Form.Cards.superclass.afterRender.call(this);
@@ -34,4 +34,4 @@ Kwf.Form.Cards = Ext.extend(Ext.Panel,
     }
 
 });
-Ext.reg('kwf.cards', Kwf.Form.Cards);
+Ext2.reg('kwf.cards', Kwf.Form.Cards);

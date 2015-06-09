@@ -25,8 +25,8 @@
             <? } ?>
             <strong>#<?= $this->postNumber ?></strong>
             <em>
-                <?=$this->data->trlKwf('on') ?> <?=$this->date($this->data->row->create_time)?>
-                <?=$this->data->trlKwf('at') ?> <?=$this->time($this->data->row->create_time)?>
+                <?=$this->data->trlKwf('on') ?> <?=$this->date($this->row->create_time)?>
+                <?=$this->data->trlKwf('at') ?> <?=$this->time($this->row->create_time)?>
             </em><br />
             <?if ($this->actions->hasContent()){?>
                 <?=$this->data->trlKwf('Post')?>:

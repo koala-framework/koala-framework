@@ -1,23 +1,23 @@
-table.x-date-inner {
+table.x2-date-inner {
     width:auto;
 }
-.frontend .x-date-middle, .x-date-left, .x-date-right {
+.frontend .x2-date-middle, .x2-date-left, .x2-date-right {
     background: none;
 }
-.frontend .x-date-left a {
+.frontend .x2-date-left a {
     background-image: url('/assets/kwf/images/datepicker/arrowDatepickerLeft.gif');
 }
-.frontend .x-date-right a {
+.frontend .x2-date-right a {
     background-image: url('/assets/kwf/images/datepicker/arrowDatepickerRight.gif');
 }
-.frontend .x-date-inner {
+.frontend .x2-date-inner {
     width: 100%;
     a {
         font-size: 12px;
         padding: 4px 5px;
     }
 }
-.frontend .x-date-inner th {
+.frontend .x2-date-inner th {
     background: var(datePickerSelectedBackground);
     color: var(datePickerSelectedColor);
     font-weight: bold;
@@ -25,63 +25,63 @@ table.x-date-inner {
     border-bottom: none;
 }
 
-.frontend .x-date-bottom {
+.frontend .x2-date-bottom {
     background: none;
     border-top: 1px solid var(datePickerBorderColor);
 }
 
-.frontend .x-date-inner .x-date-today a {
+.frontend .x2-date-inner .x2-date-today a {
     border: none;
 }
 
-.frontend .x-date-inner .x-date-selected a {
+.frontend .x2-date-inner .x2-date-selected a {
     background: var(datePickerSelectedBackground);
     border: medium none;
     color: var(datePickerSelectedColor);
     padding: 4px 5px;
 }
-.frontend .x-date-inner a:hover, .frontend .x-date-inner .x-date-disabled a:hover, .frontend td.x-date-mp-month a:hover, .frontend td.x-date-mp-year a:hover {
+.frontend .x2-date-inner a:hover, .frontend .x2-date-inner .x2-date-disabled a:hover, .frontend td.x2-date-mp-month a:hover, .frontend td.x2-date-mp-year a:hover {
     background: var(datePickerHoverBackground);
     color: var(datePickerHoverColor);
 }
 
-.frontend .x-date-selected a:hover {
+.frontend .x2-date-selected a:hover {
     color: var(datePickerHoverColor);
 }
 
-.frontend td.x-date-mp-sep {
+.frontend td.x2-date-mp-sep {
     border-right: var(datePickerSelectedBackground);
 }
 
-.frontend .x-date-mp-btns {
+.frontend .x2-date-mp-btns {
     background: none;
 }
 
-.frontend .x-date-picker .x-btn button {
+.frontend .x2-date-picker .x2-btn button {
     font-weight: bold;
     text-transform: uppercase;
     color: var(datePickerTextColor);
     text-shadow: 1px 0 white;
     cursor: pointer;
 }
-.frontend .x-date-mp td {
+.frontend .x2-date-mp td {
     font-size: 12px;
 }
 
-.frontend .x-date-mp-btns td {
+.frontend .x2-date-mp-btns td {
     border-top: 1px solid var(datePickerBorderColor);
 }
-.frontend .x-date-mp-ybtn a.x-date-mp-prev {
+.frontend .x2-date-mp-ybtn a.x2-date-mp-prev {
     background-position: 0 0;
     background-image: url('/assets/kwf/images/datepicker/arrowDatepickerLeft.gif');
 }
 
-.frontend .x-date-mp-ybtn a.x-date-mp-next {
+.frontend .x2-date-mp-ybtn a.x2-date-mp-next {
     background-position: 0 0;
     background-image: url('/assets/kwf/images/datepicker/arrowDatepickerRight.gif');
 }
 
-.frontend .x-date-mp-btns button {
+.frontend .x2-date-mp-btns button {
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
     border: medium none;
     color: var(datePickerTextColor);
@@ -90,37 +90,37 @@ table.x-date-inner {
     cursor: pointer;
 }
 
-.frontend td.x-date-mp-sel a {
+.frontend td.x2-date-mp-sel a {
     background: var(datePickerSelectedBackground);
     border: none;
     padding: 4px 5px;
     
 }
-.frontend .x-date-middle .x-btn .x-btn-text {
+.frontend .x2-date-middle .x2-btn .x2-btn-text {
     color: #333;
     color: var(datePickerTextColor);
 }
-.frontend .x-menu {
+.frontend .x2-menu {
     padding: 0px;
     box-shadow: 0 9px 14px -4px #333333;
     border: 1px solid var(datePickerBorderColor);
 }
-.frontend .x-date-picker {
+.frontend .x2-date-picker {
     background:none;
     width: 175px;
 }
-.frontend .x-btn-left, .frontend .x-btn-right, .frontend .x-btn-center {
+.frontend .x2-btn-left, .frontend .x2-btn-right, .frontend .x2-btn-center {
     background: none;
 }
-.frontend td.x-date-mp-year.x-date-mp-sel a, .frontend td.x-date-mp-month.x-date-mp-sel a {
+.frontend td.x2-date-mp-year.x2-date-mp-sel a, .frontend td.x2-date-mp-month.x2-date-mp-sel a {
     color: var(datePickerSelectedColor);
 }
-.frontend td.x-date-mp-month a, .frontend td.x-date-mp-year a {
+.frontend td.x2-date-mp-month a, .frontend td.x2-date-mp-year a {
     color: var(datePickerTextColor);
     padding: 4px 5px;
 }
 
-.frontend .x-date-middle .x-btn-with-menu .x-btn-center em {
+.frontend .x2-date-middle .x2-btn-with-menu .x2-btn-center em {
     background: url('/assets/kwf/images/datepicker/arrowDatepickerDown.gif');
     background-repeat: no-repeat;
     background-position: right 0;

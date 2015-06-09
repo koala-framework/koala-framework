@@ -16,7 +16,7 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
 
         parent::__construct($name);
         $this->setFieldLabel($fieldLabel);
-        $this->setBaseCls('x-plain');
+        $this->setBaseCls('x2-plain');
         $this->setXtype('kwf.cards');
         $this->setLayout('form');
     }
@@ -108,7 +108,7 @@ class Kwf_Form_Container_Cards extends Kwf_Form_Container_Abstract
             $this->_combobox->getMetaData($model),
             array(
                 'layout' => 'card',
-                'baseCls' => 'x-plain',
+                'baseCls' => 'x2-plain',
                 'border' => false,
                 'items' => $cardItems
             )

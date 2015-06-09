@@ -1,6 +1,6 @@
 Kwf.onContentReady(function kwcPreviewLink(el) {
     if (location.search.match(/[\?&]kwcPreview/)) {
-        Ext.get(el).select('a', true).each(function(a) {
+        Ext2.get(el).select('a', true).each(function(a) {
             if (a.dom.href.indexOf(window.location.host) !== -1) { // intern
                 var separator = '?';
                 var link = a.dom.href;

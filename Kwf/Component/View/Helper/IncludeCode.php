@@ -8,7 +8,8 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
         $ret = '';
 
         if ($position == 'header') {
-            $ret .= Kwf_View_Helper_DebugData::debugData();
+            $helper = new Kwf_View_Helper_DebugData();
+            $ret .= $helper->debugData();
         }
 
         $flag = ($position == 'header') ? 'hasHeaderIncludeCode' : 'hasFooterIncludeCode';
@@ -51,7 +52,7 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
             if (!$assetsBoxUsed) {
                 //add default assets if there was no box
                 $a = new Kwf_View_Helper_Assets();
-                $ret .= $a->assets(Kwf_Assets_Package_Default::getInstance('Frontend'));
+                $ret .= $a->assets(Kwf_Assets_Package_Default::getInstance('Frontend'), null);
             }
 
             $helper = new Kwf_Component_View_Helper_Dynamic();
@@ -74,9 +75,11 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
 
             //see http://nexxar.wordpress.com/2010/10/07/speeding-up-jquery-ready-on-ie/
             $ret .= "\n";
+            $ret .= "<!--[if lt IE 9]>\n";
             $ret .= "<script type=\"text/javascript\">\n";
-            $ret .= "    if (Ext && Ext.isIE8 && jQuery) jQuery.ready();\n";
+            $ret .= "    jQuery.ready();\n";
             $ret .= "</script>\n";
+            $ret .= "<![endif]-->\n";
 
         }
         return $ret;

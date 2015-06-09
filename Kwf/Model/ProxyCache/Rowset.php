@@ -99,7 +99,6 @@ class Kwf_Model_ProxyCache_Rowset extends Kwf_Model_Proxy_Rowset
         if (!is_null($this->_cacheData)) {
           $position = (int) $position;
           if ($position < 0 || $position > $this->count()) {
-              require_once 'Zend/Db/Table/Rowset/Exception.php';
               throw new Zend_Db_Table_Rowset_Exception("Illegal index $position");
           }
           $this->_pointer = $position;

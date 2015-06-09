@@ -24,4 +24,9 @@ class Kwc_Basic_LinkTag_Data extends Kwf_Component_Data
     {
         return $this->_getLinkData()->getAbsoluteUrl();
     }
+
+    public function getLinkDataAttributes()
+    {
+        return $this->_getLinkData()->getLinkDataAttributes();
+    }
 }

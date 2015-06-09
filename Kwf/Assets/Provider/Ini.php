@@ -52,17 +52,18 @@ class Kwf_Assets_Provider_Ini extends Kwf_Assets_Provider_Abstract implements Se
 
             $files = array();
             foreach ($depFiles as $i) {
+                if (!$i) continue;
                 $i = Kwf_Assets_Dependency_File::createDependency(trim($i), $this->_providerList);
-                if ($i instanceof Kwf_Assets_Dependency_File && $i->getFileName()) {
-                    $files[] = $i->getFileName();
+                if ($i instanceof Kwf_Assets_Dependency_File && $i->getFileNameWithType()) {
+                    $files[$i->getFileNameWithType()] = true;
                 } else if ($i instanceof Kwf_Assets_Dependency_Dependencies) {
                     //filter out dependencies that are already returned as individual files
                     //happens when using *
                     foreach (array(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES) as $type) {
                         $deps = $i->getDependencies($type);
                         foreach ($deps as $k=>$j) {
-                            if ($j instanceof Kwf_Assets_Dependency_File && $j->getFileName()) {
-                                if (in_array($j->getFileName(), $files)) {
+                            if ($j instanceof Kwf_Assets_Dependency_File && $j->getFileNameWithType()) {
+                                if (isset($files[$j->getFileNameWithType()])) {
                                     unset($deps[$k]);
                                 }
                             }

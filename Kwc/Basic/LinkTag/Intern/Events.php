@@ -36,7 +36,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
-    protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
+    protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Events_Event_Row_Abstract $event)
     {
         parent::_onOwnRowUpdate($c, $event);
         self::$_pageIds[$this->_class] = null;

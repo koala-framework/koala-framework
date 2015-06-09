@@ -70,7 +70,7 @@ class Kwf_Acl_Component extends Kwf_Acl
 
         $this->allow('admin', null);
         $this->allow('superuser', 'settings');
-        //$this->allow('superuser', 'kwf_enquiries_enquiries');
+        $this->allow('superuser', 'kwf_enquiries_enquiries');
         $this->deny('superuser', 'kwf_component_clear-cache');
 
         $this->allow('admin', 'kwf_component_show-component');

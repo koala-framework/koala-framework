@@ -20,17 +20,17 @@ Kwf.onJElementReady = function(selector, fn, options) {
         var options = arguments[3];
         options.scope = scope;
     }
-    Kwf._addReadyHandler('jquery', 'render', selector, fn, options);
+    Kwf._addReadyHandler('render', selector, fn, options);
 };
 
 Kwf.onJElementShow = function(selector, fn,  options) {
-    Kwf._addReadyHandler('jquery', 'show', selector, fn, options);
+    Kwf._addReadyHandler('show', selector, fn, options);
 };
 
 Kwf.onJElementHide = function(selector, fn, options) {
-    Kwf._addReadyHandler('jquery', 'hide', selector, fn, options);
+    Kwf._addReadyHandler('hide', selector, fn, options);
 };
 
 Kwf.onJElementWidthChange = function(selector, fn, options) {
-    Kwf._addReadyHandler('jquery', 'widthChange', selector, fn, options);
+    Kwf._addReadyHandler('widthChange', selector, fn, options);
 };

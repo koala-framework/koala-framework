@@ -16,12 +16,65 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         return $this->_providers;
     }
 
+    public static function getVendorProviders()
+    {
+        $cacheId = 'assets-vendor-providers';
+        $cachedProviders = Kwf_Cache_SimpleStatic::fetch($cacheId);
+        if ($cachedProviders === false) {
+            $cachedProviders = array();
+            foreach (glob(VENDOR_PATH."/*/*") as $i) {
+                if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
+                    $config = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                    if ($config->provider) {
+                        $provider = $config->provider;
+                        if (is_string($provider)) $provider = array($provider);
+                        foreach ($provider as $p) {
+                            $cachedProviders[] = array(
+                                'cls' => $p,
+                                'file' => $i.'/dependencies.ini'
+                            );
+                        }
+                    }
+                }
+            }
+            foreach (glob(VENDOR_PATH.'/bower_components/*') as $i) {
+                $cachedProviders[] = array(
+                    'cls' => 'Kwf_Assets_Provider_BowerBuiltFile',
+                    'file' => $i
+                );
+            }
+            Kwf_Cache_SimpleStatic::add($cacheId, $cachedProviders);
+        }
+
+        $providers = array();
+        foreach ($cachedProviders as $p) {
+            $cls = $p['cls'];
+            $providers[] = new $cls($p['file']);
+        }
+
+        if (VENDOR_PATH=='../vendor') {
+            $providers[] = new Kwf_Assets_Provider_Ini('../dependencies.ini');
+        }
+
+        return $providers;
+    }
+
     /**
      * @return Kwf_Assets_Dependency_Abstract
      */
     public function findDependency($dependencyName)
     {
         ini_set('xdebug.max_nesting_level', 200); //TODO required for ext4, find better solution for that
+
+        //here if getDependencyNameByAlias is not required for better performance
+        if (isset($this->_dependencies[$dependencyName])) {
+            return $this->_dependencies[$dependencyName];
+        }
+
+        foreach ($this->_providers as $p) {
+            $d = $p->getDependencyNameByAlias($dependencyName);
+            if (!is_null($d)) $dependencyName = $d;
+        }
 
         if (isset($this->_dependencies[$dependencyName])) {
             return $this->_dependencies[$dependencyName];
@@ -50,7 +103,7 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         //providers can return additional dependencies for this dependency
         $deps = $this->getDependenciesForDependency($dependency);
         foreach ($deps as $type=>$i) {
-            $dependency->setDependencies($type, $i);
+            $dependency->addDependencies($type, $i);
         }
     }
 
@@ -68,6 +121,9 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
                 if (!is_array($i)) {
                     throw new Kwf_Exception("invalid dependency, expected array");
                 }
+                foreach ($i as $j) {
+                    if (!$j) throw new Kwf_Exception("invalid dependency returned by '".get_class($p)."' for '$dependency'");
+                }
                 if (!isset($ret[$type])) $ret[$type] = array();
                 $ret[$type] = array_merge($ret[$type], $i);
             }
@@ -79,7 +135,10 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
     {
         $ret = array();
         foreach ($this->_providers as $p) {
-            $ret = array_merge($ret, $p->getDefaultDependencies());
+            foreach ($p->getDefaultDependencies() as $i) {
+                if (!$i) throw new Kwf_Exception("got null as defaultDependency from ".get_class($p));
+                $ret[] = $i;
+            }
         }
         return $ret;
     }

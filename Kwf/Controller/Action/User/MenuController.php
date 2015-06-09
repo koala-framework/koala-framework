@@ -16,22 +16,24 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
             $showLogout = false;
         }
 
-        foreach ($acl->getAllResources() as $resource) {
-            if ($resource instanceof Kwf_Acl_Resource_UserSelf
-                && $acl->isAllowedUser($this->_getAuthData(), $resource, 'view')
-            ) {
+        $model = Kwf_Registry::get('userModel')->getEditModel();
+        if ($this->_getAuthData() && $model->getRowByKwfUser($this->_getAuthData())) {
+            foreach ($acl->getAllResources() as $resource) {
+                if ($resource instanceof Kwf_Acl_Resource_UserSelf
+                    && $acl->isAllowedUser($this->_getAuthData(), $resource, 'view')
+                ) {
 
-                $this->view->userSelfControllerUrl = $resource->getControllerUrl();
-                break;
+                    $this->view->userSelfControllerUrl = $resource->getControllerUrl();
+                    break;
+                }
             }
         }
 
         $authData = $this->_getAuthData();
-        $user = $authData ? $authData->getKwfUser() : null;
 
         $this->view->menus = $menus;
         $this->view->showLogout = $showLogout;
-        $this->view->userId = $user ? $user->id : null;
+        $this->view->userId = $authData ? $authData->id : null;
         $this->view->fullname = $authData ? $authData->__toString() : '';
 
         $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();

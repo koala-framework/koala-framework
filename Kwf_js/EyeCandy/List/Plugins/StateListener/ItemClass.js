@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.StateListener.ItemClass = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.StateListener.ItemClass = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
         this.list.on('childStateChanged', this._change, this);
     },

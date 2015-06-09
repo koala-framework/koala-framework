@@ -1,4 +1,4 @@
-Kwf.Auto.TreePanel = Ext.extend(Kwf.Auto.SyncTreePanel, {
+Kwf.Auto.TreePanel = Ext2.extend(Kwf.Auto.SyncTreePanel, {
 
     onSaved : function (response)
     {
@@ -8,7 +8,7 @@ Kwf.Auto.TreePanel = Ext.extend(Kwf.Auto.SyncTreePanel, {
             parentNode = this.tree.getNodeById(response.data.parent_id);
             if (parentNode.isExpanded()) {
                 response.uiProvider = eval(response.uiProvider);
-                node = new Ext.tree.AsyncTreeNode(response);
+                node = new Ext2.tree.AsyncTreeNode(response);
                 if (parentNode.firstChild) {
                     parentNode.insertBefore(node, parentNode.firstChild);
                 } else {
@@ -41,4 +41,4 @@ Kwf.Auto.TreePanel = Ext.extend(Kwf.Auto.SyncTreePanel, {
 
 });
 
-Ext.reg('kwf.autotree', Kwf.Auto.TreePanel);
+Ext2.reg('kwf.autotree', Kwf.Auto.TreePanel);

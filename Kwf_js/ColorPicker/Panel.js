@@ -5,7 +5,7 @@ Kwf.ColorPicker.Radio = {
     registerGroup: function(group)
     {
         if(!group.radioGroupId) {
-            group.radioGroupId = Ext.id();
+            group.radioGroupId = Ext2.id();
         }
         if(!this.groups[group.radioGroupId]) {
             this.groups[group.radioGroupId] = {
@@ -19,7 +19,7 @@ Kwf.ColorPicker.Radio = {
     {
         this.registerGroup(group);
         if(!member.radioGroupMemberId) {
-            member.radioGroupMemberId = Ext.id();
+            member.radioGroupMemberId = Ext2.id();
         }
         if (this.groups[group.radioGroupId].members.indexOf(member.radioGroupMemberId) === -1) {
             this.groups[group.radioGroupId].members.push(member.radioGroupMemberId);
@@ -30,7 +30,7 @@ Kwf.ColorPicker.Radio = {
     unregisterMember: function(group, member)
     {
         var members = this.groups[group.radioGroupId].members;
-        Ext.each(members, function(member, i)
+        Ext2.each(members, function(member, i)
         {
             if(member === member.radioGroupMember.id) {
                 members = members.splice(i, 1);
@@ -41,7 +41,7 @@ Kwf.ColorPicker.Radio = {
     dial: function(group, member)
     {
         this.groups[group.radioGroupId].dialed = member.radioGroupMemberId;
-        Ext.each(this.groups[group.radioGroupId].members, function(member)
+        Ext2.each(this.groups[group.radioGroupId].members, function(member)
         {
             this.callbacks[member].un();
         }, this);
@@ -81,7 +81,7 @@ Kwf.ColorPicker.Radio = {
 */
 
 /**
- * @class Ext.ux.color.ColorPickerPanel
+ * @class Ext2.ux.color.ColorPickerPanel
  * Experimental Color class. Supports and converts between RGB, HSV and HEX
  * @cfg {Object} hex A hexidecimal value to start the colorpicker with.
  * @constructor
@@ -96,7 +96,7 @@ Kwf.ColorPicker.Panel = function()
     Kwf.Form.ColorPicker.Panel.superclass.constructor.apply(this, arguments);
 };
 
-Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
+Ext2.extend(Kwf.ColorPicker.Panel, Ext2.Panel,
 {
     width: 400,
     height: 305,
@@ -104,8 +104,8 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
 
     mode: 'saturation',
 
-    baseCls: 'x-color-picker x-panel',
-    iconCls: 'x-color-wheel',
+    baseCls: 'x2-color-picker x2-panel',
+    iconCls: 'x2-color-wheel',
 
 
     images:
@@ -319,9 +319,9 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
     setMode: function(name)
     {
         this.mode = name;
-        Ext.each(this.layers.map.concat(this.layers.track), function(layer)
+        Ext2.each(this.layers.map.concat(this.layers.track), function(layer)
         {
-            this.setClass(layer, 'x-layer');
+            this.setClass(layer, 'x2-layer');
             this.setAlpha(layer, 100);
             this.setBackground(layer, null);
         }, this);
@@ -416,19 +416,19 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
     initMarkup: function()
     {
             this.body.dom.innerHTML += [
-                '<div class="x-map">',
-                    '<div class="x-layer"></div>',
-                    '<div class="x-layer"></div>',
-                    '<div class="x-pointer"></div>',
+                '<div class="x2-map">',
+                    '<div class="x2-layer"></div>',
+                    '<div class="x2-layer"></div>',
+                    '<div class="x2-pointer"></div>',
                 '</div>',
-                '<div class="x-track">',
-                    '<div class="x-layer"></div>',
-                    '<div class="x-layer"></div>',
-                    '<div class="x-layer"></div>',
-                    '<div class="x-layer"></div>',
-                    '<div class="x-slider"></div>',
+                '<div class="x2-track">',
+                    '<div class="x2-layer"></div>',
+                    '<div class="x2-layer"></div>',
+                    '<div class="x2-layer"></div>',
+                    '<div class="x2-layer"></div>',
+                    '<div class="x2-slider"></div>',
                 '</div>',
-                '<ul class="x-console">',
+                '<ul class="x2-console">',
                     '<li class="preview"></li>',
                     '<li class="hue"></li>',
                     '<li class="saturation"></li>',
@@ -443,9 +443,9 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
 
     initConsole: function()
     {
-        var _console = this.body.first('.x-console'),
+        var _console = this.body.first('.x2-console'),
             radio,
-            group = Ext.id(),
+            group = Ext2.id(),
             slot, mode,
             that = this;
 
@@ -455,15 +455,15 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
             (function(mode){
                 el = _console.first('.' + mode.name);
 
-                radio = new Ext.Element(document.createElement('div'));
-                radio.addClass('x-radio');
+                radio = new Ext2.Element(document.createElement('div'));
+                radio.addClass('x2-radio');
 
-                Ext.ux.Radio.registerMember(that, radio.dom, {
+                Ext2.ux.Radio.registerMember(that, radio.dom, {
                     dial: function(){
-                        Ext.fly(this).addClass('x-dialed');
+                        Ext2.fly(this).addClass('x2-dialed');
                     }.createDelegate(radio),
                     un: function(){
-                        Ext.fly(this).removeClass('x-dialed');
+                        Ext2.fly(this).removeClass('x2-dialed');
                     }.createDelegate(radio)
                 });
 
@@ -472,17 +472,17 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
                 el.appendChild(radio);
 
                 if (that.mode === mode.name) {
-                    Ext.ux.Radio.dial(that, radio.dom);
+                    Ext2.ux.Radio.dial(that, radio.dom);
                 }
 
                 radio.on({
                     'click': function(event, radio){
                         that.setMode(radio.mode);
-                        Ext.ux.Radio.dial(that, radio);
+                        Ext2.ux.Radio.dial(that, radio);
                     }
                 });
 
-                that.modeFields[mode.name] = new Ext.form.NumberField({
+                that.modeFields[mode.name] = new Ext2.form.NumberField({
                     allowBlank: false,
                     allowNegative: false,
                     allowDecimals: false,
@@ -507,14 +507,14 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
             })(that.modes[slot]);
         };
 
-        this.hex = new Ext.form.TextField({
+        this.hex = new Ext2.form.TextField({
             renderTo: _console.first('.hex'),
             allowBlank: false,
             fieldLabel: 'hex',
             label: true,
             validator: function(value)
             {
-                this.setRawValue("#"+Ext.ux.color.Color.prototype.validateHex(value.replace(/^#/, '')));
+                this.setRawValue("#"+Ext2.ux.color.Color.prototype.validateHex(value.replace(/^#/, '')));
                 return true;
             }
         });
@@ -523,17 +523,17 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
     initMap: function()
     {
         var that = this;
-        var map = this.body.first('.x-map');
-        map.dom.id = Ext.id();
+        var map = this.body.first('.x2-map');
+        map.dom.id = Ext2.id();
 
-        var pointer = map.first('.x-pointer');
-        pointer.dom.id = Ext.id();
+        var pointer = map.first('.x2-pointer');
+        pointer.dom.id = Ext2.id();
 
-        this.map = new Ext.dd.DragDrop({
+        this.map = new Ext2.dd.DragDrop({
             id: map.dom.id
         });
 
-        Ext.apply(this.map, {
+        Ext2.apply(this.map, {
             onMouseDown: function(event) {
                 this.onDrag(event);
             },
@@ -568,17 +568,17 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
     {
         var that = this;
 
-        var track = this.body.first('.x-track');
-        track.dom.id = Ext.id();
+        var track = this.body.first('.x2-track');
+        track.dom.id = Ext2.id();
 
-        var slider = track.first('.x-slider');
-        slider.dom.id = Ext.id();
+        var slider = track.first('.x2-slider');
+        slider.dom.id = Ext2.id();
 
-        this.track = new Ext.dd.DragDrop({
+        this.track = new Ext2.dd.DragDrop({
             id: track.dom.id
         });
 
-        Ext.apply(this.track, {
+        Ext2.apply(this.track, {
             onMouseDown: function(event) {
                 this.onDrag(event);
             },
@@ -604,16 +604,16 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
 
     setAlpha: function(layer, value)
     {
-        Ext.fly(layer).setOpacity(value/100);
+        Ext2.fly(layer).setOpacity(value/100);
     },
 
     setClass: function(layer, name)
     {
-        layer.className = 'x-layer ' + name;
+        layer.className = 'x2-layer ' + name;
     },
     setBackground: function(layer, hex)
     {
-        Ext.fly(layer).setStyle({
+        Ext2.fly(layer).setStyle({
             backgroundColor: (hex==null ? 'transparent' : "#" + hex)
         });
     },
@@ -621,15 +621,15 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
     initLayers: function()
     {
         this.layers = {
-            track: this.body.query('.x-track > .x-layer'),
-            map: this.body.query('.x-map > .x-layer')
+            track: this.body.query('.x2-track > .x2-layer'),
+            map: this.body.query('.x2-map > .x2-layer')
         };
     },
 
     preloadImages: function()
     {
         var img;
-        Ext.each(this.images, function(image)
+        Ext2.each(this.images, function(image)
         {
             img = new Image();
             img.src = "/images/" + image + ".png";
@@ -650,7 +650,7 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
         switch(this.mode) {
             case 'hue':
                 // fake color with only hue
-                var color = new Ext.ux.color.Color();
+                var color = new Ext2.ux.color.Color();
                 color.setHsv({hue:this.color.hue, saturation:100, brightness:100});
                 this.setBackground(this.layers.map[0], color.hex);
                 break;
@@ -684,13 +684,13 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
                 break;
 
             case 'saturation':
-                var saturatedColor = new Ext.ux.color.Color();
+                var saturatedColor = new Ext2.ux.color.Color();
                 saturatedColor.setHsv({hue:this.color.hue, saturation:100, brightness:this.color.brightness});
                 this.setBackground(this.layers.track[2], saturatedColor.hex);
                 break;
 
             case 'brightness':
-                var brightnessColor = new Ext.ux.color.Color();
+                var brightnessColor = new Ext2.ux.color.Color();
                 brightnessColor.setHsv({hue:this.color.hue, saturation:this.color.saturation, brightness:100});
                 this.setBackground(this.layers.track[2], brightnessColor.hex);
                 break;
@@ -750,7 +750,7 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
         sliderValue = modeValue - this.color[this.mode];
 
         this.track.onDrag({
-            xy:[0, (255 * (sliderValue / modeValue)) + Ext.fly(this.track.getEl()).getTop()]
+            xy:[0, (255 * (sliderValue / modeValue)) + Ext2.fly(this.track.getEl()).getTop()]
         }, true);
 
         var mapTop = 0, mapLeft = 0;
@@ -789,8 +789,8 @@ Ext.extend(Kwf.ColorPicker.Panel, Ext.Panel,
 
         this.map.onDrag({
             xy: [
-                mapLeft + Ext.fly(this.map.getEl()).getLeft(),
-                mapTop + Ext.fly(this.map.getEl()).getTop()
+                mapLeft + Ext2.fly(this.map.getEl()).getLeft(),
+                mapTop + Ext2.fly(this.map.getEl()).getTop()
             ]
         }, true);
 //            mapPointValues = {

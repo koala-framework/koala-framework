@@ -42,7 +42,7 @@ class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             if (!$className) {
                 return false;
             }
-            Zend_Loader::loadClass($className);
+            class_exists($className); //trigger autoloader
 
         } else {
 
@@ -70,16 +70,27 @@ class Kwf_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         }
         if (substr($className, 0, 5) == 'Vkwf_' || substr($className, 0, 5) == 'Vkwc_'
                 || substr($className, 0, 4) == 'Kwc_' || substr($className, 0, 4) == 'Kwf_'
-                || $this->_curModule == 'web_test'
         ) {
-            try {
-                Zend_Loader::loadClass($className);
-            } catch (Zend_Exception $e) {
+            if (!class_exists($className)) {
                 throw new Zend_Controller_Dispatcher_Exception("Invalid controller class '$className'");
             }
             return $className;
         } else {
             return parent::loadClass($className);
+        }
+    }
+
+    public function formatClassName($moduleName, $className)
+    {
+        // this control make it possible to add an own IndexController in web controllers
+        if ($this->_curModule == 'kwf_controller_action_welcome' && $className == 'WelcomeController' && class_exists('WelcomeController')) {
+            return $className;
+        }
+
+        if ($moduleName == 'kwf_test' || $moduleName == 'tests') {
+            return $className;
+        } else {
+            return parent::formatClassName($moduleName, $className);
         }
     }
 }

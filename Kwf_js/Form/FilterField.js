@@ -1,7 +1,7 @@
-Kwf.Form.FilterField = Ext.extend(Ext.Panel, {
+Kwf.Form.FilterField = Ext2.extend(Ext2.Panel, {
     layout: 'form',
     border: false,
-    baseCls: 'x-form-item',
+    baseCls: 'x2-form-item',
     initComponent: function() {
         Kwf.Form.FilterField.superclass.initComponent.call(this);
 
@@ -63,5 +63,5 @@ Kwf.Form.FilterField = Ext.extend(Ext.Panel, {
         }, this);
     }
 });
-Ext.reg('filterfield', Kwf.Form.FilterField);
+Ext2.reg('filterfield', Kwf.Form.FilterField);
 

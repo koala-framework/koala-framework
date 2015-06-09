@@ -30,6 +30,14 @@ class Kwf_Component_Model extends Kwf_Model_Abstract
         return false;
     }
 
+    protected function _getPages($page)
+    {
+        return $page->getChildComponents(array(
+            'ignoreVisible' => true,
+            'generatorFlags' => array('showInPageTreeAdmin' => true)
+        ));
+    }
+
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
         if (!is_object($where)) {
@@ -92,10 +100,7 @@ class Kwf_Component_Model extends Kwf_Model_Abstract
             if (!$page) {
                 throw new Kwf_Exception("Can't find page with id '{$where['parent_id']}'");
             }
-            $rowset = $page->getChildComponents(array(
-                'ignoreVisible' => true,
-                'generatorFlags' => array('showInPageTreeAdmin' => true)
-            ));
+            $rowset = $this->_getPages($page);
             $rowset = array_values($rowset);
         } else if (isset($where['componentId'])) {
             $rowset = array(Kwf_Component_Data_Root::getInstance()->getComponentById($where['componentId'], array('ignoreVisible' => true)));

@@ -14,8 +14,13 @@ class Kwc_Posts_Directory_Model extends Kwf_Model_Db_Proxy
 
     protected function _init()
     {
-        $userModelClass = get_class(Kwf_Registry::get('userModel'));
-        $this->_referenceMap['User']['refModelClass']  = $userModelClass;
+        $um = Kwf_Registry::get('userModel');
+        if ($um) {
+            $userModelClass = get_class($um);
+            $this->_referenceMap['User']['refModelClass']  = $userModelClass;
+        } else {
+            unset($this->_referenceMap['User']);
+        }
 
         $this->_siblingModels = array(
             new Kwf_Model_Field(array(

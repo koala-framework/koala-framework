@@ -5,9 +5,12 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Gallery');
-        $ret['componentIcon'] = new Kwf_Asset('images.png');
+        $ret['componentIcon'] = 'images.png';
+        $ret['componentCategory'] = 'content';
+        $ret['componentPriority'] = 45;
         $ret['generators']['child']['component'] = 'Kwc_List_Gallery_Image_Component';
         $ret['extConfig'] = 'Kwc_List_Gallery_ExtConfig';
+        $ret['placeholder']['moreButton'] = trlKwfStatic('more');
         $ret['breakpoint'] = '600';
         return $ret;
     }
@@ -28,10 +31,17 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $showPics = $this->_getRow()->show_pics;
         $ret['cssClass'] .= ' col'.$this->_getGalleryColumns();
         $ret['imagesPerLine'] = $this->_getGalleryColumns();
         if (!$ret['imagesPerLine']) $ret['imagesPerLine'] = 1;
         $ret['downloadAll'] = $this->getData()->getChildComponent('-downloadAll');
+
+        if (($this->_getGalleryColumns() <= $showPics || $ret['imagesPerLine'] >= $showPics) && count($ret['children']) <= $showPics) {
+            $ret['showPics'] = null;
+        } else {
+            $ret['showPics'] = $showPics;
+        }
         return $ret;
     }
 
@@ -45,6 +55,7 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
 
         if (!$columns) $columns = 1;
         if ($columns >=5 && $columns <= 10) {
+            $originColumnWidth = (int)floor($ownWidth / $columns);
             if ($columns == 6) {
                 $columns = 3;
             }
@@ -54,6 +65,9 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
                 $columns = 3;
             }
             $ret = (int)floor((($breakpoint - $contentMargin) - ($columns-1) * $contentMargin) / $columns);
+            if ($ret < $originColumnWidth) {
+                $ret = $originColumnWidth;
+            }
         } else {
             $ret = (int)floor($ownWidth / $columns);
         }

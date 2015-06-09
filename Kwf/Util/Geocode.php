@@ -32,21 +32,11 @@ class Kwf_Util_Geocode
         $client->setParameterGet($getParams);
         $body = utf8_encode($client->request()->getBody());
 
-        // da gibts einen php bug in älteren versionen, der verursacht,
-        // dass json_decode() bei gesetztem "setlocale(LC_NUMERIC, 'de_DE');"
-        // float zahlen mit punkt als integer interpretiert.
-        // php bugtracker: http://bugs.php.net/bug.php?id=41403
-        if (version_compare(PHP_VERSION, '5.2.3') == -1) {
-            setlocale(LC_NUMERIC, 'C');
+        try {
             $result = Zend_Json::decode($body);
-            setlocale(LC_NUMERIC, explode(', ', trlcKwf('locale', 'C')));
-        } else {
-            try {
-                $result = Zend_Json::decode($body);
-            } catch (Zend_Json_Exception $e) {
-                $e = new Kwf_Exception_Other($e);
-                $e->logOrThrow();
-            }
+        } catch (Zend_Json_Exception $e) {
+            $e = new Kwf_Exception_Other($e);
+            $e->logOrThrow();
         }
 
         if (isset($result['results'][0]['geometry']['location']['lat'])

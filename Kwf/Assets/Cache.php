@@ -13,8 +13,8 @@ class Kwf_Assets_Cache
             ));
             $ret->setBackend(new Zend_Cache_Backend_File(array(
                 'cache_dir' => 'cache/assets',
-                'cache_file_umask' => 0666,
-                'hashed_directory_umask' => 0777,
+                'cache_file_perm' => 0666,
+                'hashed_directory_perm' => 0777,
                 'hashed_directory_level' => 2,
             )));
         }
@@ -34,7 +34,7 @@ class Kwf_Assets_Cache
     {
         $ret = Kwf_Cache_SimpleStatic::fetch('as-'.$cacheId);
         if ($ret === false) {
-            $ret = self::_getSlowCache()->load($cacheId);
+            $ret = self::_getSlowCache()->load(str_replace('-', '_', $cacheId));
             if ($ret !== false) {
                 Kwf_Cache_SimpleStatic::add('as-'.$cacheId, $ret);
             }
@@ -46,14 +46,14 @@ class Kwf_Assets_Cache
     public function save($cacheData, $cacheId)
     {
         $ret = Kwf_Cache_SimpleStatic::add('as-'.$cacheId, $cacheData);
-        return $ret && self::_getSlowCache()->save($cacheData, $cacheId);
+        return $ret && self::_getSlowCache()->save($cacheData, str_replace('-', '_', $cacheId));
     }
 
     public function test($cacheId)
     {
         $ret = Kwf_Cache_SimpleStatic::fetch('as-mtime-'.$cacheId);
         if ($ret === false) {
-            $ret = self::_getSlowCache()->test($cacheId);
+            $ret = self::_getSlowCache()->test(str_replace('-', '_', $cacheId));
             if ($ret !== false) {
                 Kwf_Cache_SimpleStatic::add('as-mtime-'.$cacheId, $ret);
             }
@@ -70,6 +70,6 @@ class Kwf_Assets_Cache
     public function remove($cacheId)
     {
         Kwf_Cache_SimpleStatic::_delete('as-'.$cacheId);
-        return self::_getSlowCache()->remove($cacheId);
+        return self::_getSlowCache()->remove(str_replace('-', '_', $cacheId));
     }
 }

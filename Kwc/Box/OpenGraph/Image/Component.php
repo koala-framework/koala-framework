@@ -7,7 +7,7 @@ class Kwc_Box_OpenGraph_Image_Component extends Kwc_Abstract_Image_Component
         $ret['componentName'] = trlKwfStatic('Image');
         $ret['dimensions'] = array(
             'default'=>array(
-                'text' => trlKwf('default'),
+                'text' => trlKwfStatic('default'),
                 'width' => 1800,
                 'height' => 1200,
                 'cover' => false,

@@ -7,13 +7,13 @@ class Kwc_Box_BackgroundImage_Component extends Kwc_Basic_Image_Component
         $ret['componentName'] = trlKwfStatic('Background Image');
         $ret['dimensions'] = array(
             'original'=>array(
-                'text' => trlKwf('Original'),
+                'text' => trlKwfStatic('Original'),
                 'width' => 0,
                 'height' => 0,
                 'cover' => true
             ),
         );
-        $ret['useParentDivForDimensions'] = false;                  //this setting is needed for IE8
+        $ret['assets']['dep'][] = 'ModernizrCssBackgroundsizecover';
         return $ret;
     }
 
@@ -21,7 +21,6 @@ class Kwc_Box_BackgroundImage_Component extends Kwc_Basic_Image_Component
     {
         $ret = parent::getTemplateVars();
         $ret['imageUrl'] = $this->getImageUrl();
-        $ret['config']['useParentDiv'] = $this->_getSetting('useParentDivForDimensions');
         return $ret;
     }
 }

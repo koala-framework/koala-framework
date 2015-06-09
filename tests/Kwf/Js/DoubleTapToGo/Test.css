@@ -1,0 +1,68 @@
+#qunit {
+    padding-top: 220px;
+}
+
+.mainMenu {
+    width: 100%;
+    display: block;
+    position: relative;
+}
+
+.mainMenu > ul.menu {
+    list-style: none;
+    display: block;
+    position: relative;
+    width: 100%;
+}
+
+.mainMenu > ul.menu > li {
+    display: inline-block;
+    margin-left: 10px;
+    float: left;
+    width: 200px;
+}
+
+.mainMenu > ul.menu > li:first-child {
+    margin-left: 0;
+}
+
+/* Level 1 */
+.mainMenu > ul.menu > li > div.dropdown {
+    display: none;
+    position: absolute;
+}
+
+html.no-touch .mainMenu > ul.menu > li.hasSubmenu:hover > div.dropdown {
+    display: block;
+}
+
+.mainMenu > ul.menu > li.hasSubmenu.hover > div.dropdown {
+    display: block;
+}
+
+/* Level 2 */
+.mainMenu > ul.menu > li > div.dropdown > ul > li > div.dropdown {
+    display: none;
+}
+
+html.no-touch .mainMenu > ul.menu > li > div.dropdown > ul > li.hasSubmenu:hover > div.dropdown{
+    display: block;
+}
+
+.mainMenu > ul.menu > li > div.dropdown > ul > li.hasSubmenu.hover > div.dropdown {
+    display: block;
+}
+
+
+/* Level 3 */
+.mainMenu > ul.menu > li > div.dropdown > ul > li > div.dropdown > ul > li > div.dropdown {
+    display: none;
+}
+
+html.no-touch .mainMenu > ul.menu > li > div.dropdown > ul > li > div.dropdown > ul > li.hasSubmenu:hover > div.dropdown {
+    display: block;
+}
+
+.mainMenu > ul.menu > li > div.dropdown > ul > li > div.dropdown > ul > li.hasSubmenu.hover > div.dropdown {
+    display: block;
+}

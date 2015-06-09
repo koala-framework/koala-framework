@@ -21,7 +21,7 @@ abstract class Kwf_Form_Container_Abstract extends Kwf_Form_Field_Abstract
         $this->setLayout('form');
         $this->setBorder(false);
         $this->setLabelAlign('right');
-        $this->setBaseCls('x-plain');
+        $this->setBaseCls('x2-plain');
     }
 
     /**

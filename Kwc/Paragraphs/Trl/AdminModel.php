@@ -21,7 +21,7 @@ class Kwc_Paragraphs_Trl_AdminModel extends Kwf_Model_Data_Abstract
                 'component_id' => $componentId,
                 'component_class' => $c->componentClass,
                 'component_name' => Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($c->componentClass, 'componentName')),
-                'component_icon' => (string)Kwc_Abstract::getSetting($c->componentClass, 'componentIcon'),
+                'component_icon' => (string)(new Kwf_Asset(Kwc_Abstract::getSetting($c->componentClass, 'componentIcon'))),
                 'row' => $chainedRow,
                 'visible' => $chainedRow->visible,
                 'pos' => $c->chained->row->pos

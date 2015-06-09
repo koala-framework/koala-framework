@@ -88,7 +88,14 @@ abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
                 }
             }
             if (!$targetReached) continue;
-            $chained = $chainedStart; //->getChildComponent('-target');
+            $chainedTarget = $chainedStart->getChildComponent('-target');
+            if ($chainedTarget->chained == $target) {
+                //targetComponent or child of targetComponent
+                $chained = $chainedTarget;
+            } else {
+                //created by PagesGenerator (which is not child of target comopnent)
+                $chained = $chainedStart;
+            }
             foreach (array_reverse($ids) as $id) {
                 $parentDataSelect->whereId($id);
                 $chained = $chained->getChildComponent($parentDataSelect);

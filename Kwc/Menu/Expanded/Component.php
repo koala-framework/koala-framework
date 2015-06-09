@@ -28,6 +28,7 @@ class Kwc_Menu_Expanded_Component extends Kwc_Menu_Abstract_Component
         $ret['menu'] = $this->_getMenuData();
         foreach ($ret['menu'] as $k=>$m) {
             $ret['menu'][$k]['submenu'] = $this->_getMenuData($m['data'], array(), 'Kwc_Menu_Expanded_EditableItems_Component');
+            $ret['menu'][$k]['isFirstChildPage'] = is_instance_of($m['data']->componentClass, 'Kwc_Basic_LinkTag_FirstChildPage_Data');
         }
         $ret['level'] = $this->_getSetting('level');
 

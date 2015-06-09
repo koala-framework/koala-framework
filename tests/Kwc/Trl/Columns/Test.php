@@ -4,7 +4,7 @@ class Kwc_Trl_Columns_Test extends Kwc_TestAbstract
     public function setUp()
     {
         parent::setUp('Kwc_Trl_Columns_Root');
-        Kwc_Columns_Component::getColumnsModel('Kwc_Trl_Columns_Columns_Component.Kwc_Trl_Columns_German')
+        Kwc_Columns_Component::createChildModel('Kwc_Trl_Columns_Columns_Component.Kwc_Trl_Columns_German')
             ->getProxyModel()->setData(array(
                 array('id' => 1, 'component_id' => 'root-master_test', 'pos' => 1, 'visible' => 1),
                 array('id' => 2, 'component_id' => 'root-master_test', 'pos' => 2, 'visible' => 0),

@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Basic.ImageEnlarge');
-Kwc.Basic.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Abstract.Image.ImageUploadField, {
+Ext2.namespace('Kwc.Basic.ImageEnlarge');
+Kwc.Basic.ImageEnlarge.ImageUploadField = Ext2.extend(Kwc.Abstract.Image.ImageUploadField, {
 
     _findUseCropCheckbox: function () {
         var useCropCheckboxes = this.findParentBy(function (component, container){
@@ -85,4 +85,4 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Abstract.Image.ImageUpl
     }
 });
 
-Ext.reg('kwc.basic.imageenlarge.imageuploadfield', Kwc.Basic.ImageEnlarge.ImageUploadField);
+Ext2.reg('kwc.basic.imageenlarge.imageuploadfield', Kwc.Basic.ImageEnlarge.ImageUploadField);

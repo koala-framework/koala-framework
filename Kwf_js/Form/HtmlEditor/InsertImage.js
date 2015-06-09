@@ -1,8 +1,8 @@
 Kwf.Form.HtmlEditor.InsertImage = function(config) {
-    Ext.apply(this, config);
+    Ext2.apply(this, config);
 
-    var panel = Ext.ComponentMgr.create(Ext.applyIf(this.componentConfig, {
-        baseCls: 'x-plain',
+    var panel = Ext2.ComponentMgr.create(Ext2.applyIf(this.componentConfig, {
+        baseCls: 'x2-plain',
         formConfig: {
             tbar: false
         },
@@ -15,7 +15,7 @@ Kwf.Form.HtmlEditor.InsertImage = function(config) {
     });
 
 };
-Ext.extend(Kwf.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
+Ext2.extend(Kwf.Form.HtmlEditor.InsertImage, Ext2.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -29,11 +29,11 @@ Ext.extend(Kwf.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
             handler: this.onInsertImage,
             scope: this,
             tooltip: {
-                cls: 'x-html-editor-tip',
+                cls: 'x2-html-editor-tip',
                 title: trlKwf('Image'),
                 text: trlKwf('Insert new image or edit selected image.')
             },
-            cls: 'x-btn-icon',
+            cls: 'x2-btn-icon',
             clickEvent: 'mousedown',
             tabIndex: -1
         });
@@ -58,7 +58,7 @@ Ext.extend(Kwf.Form.HtmlEditor.InsertImage, Ext.util.Observable, {
                 return;
             }
         }
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             params: {componentId: this.cmp.componentId},
             url: this.cmp.controllerUrl+'/json-add-image',
             success: function(response, options, r) {

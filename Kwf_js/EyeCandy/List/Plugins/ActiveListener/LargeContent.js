@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContent = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContent = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     largeContentSelector: '.largeContent',
     largeContainerSelector: '.listSwitchLargeContent',
     transition: 'fade',
@@ -33,25 +33,25 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContent = Ext.extend(Kwf.EyeCandy.
         } else {
             if (this.transition == 'fade') {
                 activeEl.dom.style.zIndex = 2;
-                activeEl.fadeOut(Ext.applyIf({
+                activeEl.fadeOut(Ext2.applyIf({
                     useDisplay: true
                 }, this.transitionConfig));
 
                 nextEl.dom.style.zIndex = 1;
-                nextEl.fadeIn(Ext.applyIf({
+                nextEl.fadeIn(Ext2.applyIf({
                     useDisplay: true
                 }, this.transitionConfig));
             } else if (this.transition == 'slide') {
                 activeEl.slideOut(
                     this.activeItem.listIndex < item.listIndex ? 'l' : 'r',
-                    Ext.applyIf({
+                    Ext2.applyIf({
                       remove: false,
                       useDisplay: true
                     }, this.transitionConfig)
                 );
                 nextEl.slideIn(
                     this.activeItem.listIndex < item.listIndex ? 'r' : 'l',
-                    Ext.applyIf({
+                    Ext2.applyIf({
                       remove: false,
                       useDisplay: true
                     }, this.transitionConfig)

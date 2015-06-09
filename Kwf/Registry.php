@@ -8,13 +8,8 @@ class Kwf_Registry extends Zend_Registry
             $this->offsetSet('db', $v);
             return $v;
         } else if ($index == 'config' && !parent::offsetExists($index)) {
-            require_once 'Kwf/Config/Web.php';
             $v = Kwf_Config_Web::getInstance();
             $this->offsetSet('config', $v);
-            return $v;
-        } else if ($index == 'configMtime' && !parent::offsetExists($index)) {
-            $v = Kwf_Config_Web::getInstanceMtime(self::get('config')->getSection());
-            $this->offsetSet('configMtime', $v);
             return $v;
         } else if ($index == 'dao' && !parent::offsetExists($index)) {
             $v = Kwf_Setup::createDao();
@@ -25,7 +20,10 @@ class Kwf_Registry extends Zend_Registry
             $this->offsetSet('acl', $v);
             return $v;
         } else if ($index == 'userModel' && !parent::offsetExists($index)) {
-            $v = Kwf_Model_Abstract::getInstance(self::get('config')->user->model);
+            $v = self::get('config')->user->model;
+            if ($v) {
+                $v = Kwf_Model_Abstract::getInstance($v);
+            }
             $this->offsetSet('userModel', $v);
             return $v;
         } else if ($index == 'trl' && !parent::offsetExists($index)) {
@@ -42,7 +40,7 @@ class Kwf_Registry extends Zend_Registry
 
     public function offsetExists($index)
     {
-        if (in_array($index, array('db', 'config', 'configMtime', 'dao', 'acl', 'userModel', 'trl', 'hlp'))) {
+        if (in_array($index, array('db', 'config', 'dao', 'acl', 'userModel', 'trl', 'hlp'))) {
             return true;
         }
         return parent::offsetExists($index);

@@ -10,7 +10,12 @@ class Kwc_Root_Category_Trl_GeneratorEvents extends Kwc_Chained_Trl_GeneratorEve
         $m = $this->_getGenerator()->getModel();
         $ret[] = array(
             'class' => get_class($m),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
+            'callback' => 'onRowUpdate'
+        );
+        $ret[] = array(
+            'class' => get_class($m),
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onRowUpdate'
         );
         return $ret;

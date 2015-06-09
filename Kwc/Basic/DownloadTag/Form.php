@@ -13,6 +13,7 @@ class Kwc_Basic_DownloadTag_Form extends Kwc_Abstract_Form
             ->setVtype('alphanum')
             ->setAutoFillWithFilename('filename') //um es beim MultiFileUpload und im JavaScript zu finde
             ->setHelpText(hlpKwf('kwf_download_filename'))
+            ->setWidth(300)
             ->setAllowBlank(false);
     }
 }

@@ -1,14 +1,10 @@
 @import "compass/utilities/general/clearfix";
+@import "kwf/background-image-dpr2";
+@import "config/default-loading-animation-small";
 @import "compass/css3/box-sizing";
-@import "kwf/form/label-top-input-all";
-@import "kwf/form/label-center-input-all";
-@import "kwf/form/label-left-input-all";
-@import "kwf/form/label-34-input-60";
-@import "kwf/form/label-left";
-@import "kwf/form/label-120";
-@import "kwf/form/error/icon-bubble/error-simple";
-@import "kwf/form/error/icon-bubble/error-simple-align-right";
-@import "kwf/form/error/icon-bubble/error-bubbles";
+@import "form/predefined/form-style-default";
+@import "form/predefined/form-style-default-center";
+@import "form/predefined/form-style-center";
 
 .cssClass {
     .kwfFormFieldWrapper {
@@ -17,68 +13,32 @@
 
 /* ------------------------------------------ Styles --------------------------------------*/
     &.center {
-        &.veryNarrow {
-            @include label-center-input-all;
-            @include error-simple;
-        }
-
-        &.gt350 {
-            @include label-center-input-all;
-            @include error-simple;
-        }
-    }
-
-    &.smallBox {
-        &.veryNarrow {
-            @include label-left-input-all;
-            @include error-simple;
-        }
-
-        &.gt350 {
-            @include label-left-input-all;
-            @include error-simple;
-        }
+        @include form-style-center;
     }
 
     &.centerDefault {
-        &.veryNarrow {
-            @include label-center-input-all;
-            @include error-simple;
-        }
-
-        &.veryNarrow.gt350 {
-            @include label-34-input-60;
-            @include error-simple-align-right;
-        }
-
-        &.gt350 {
-            @include label-left;
-        }
-
-        &.gt500 {
-            @include label-120;
-            @include error-bubbles;
-        }
+        @include form-style-default-center;
     }
 
     &.default {
-        &.veryNarrow {
-            @include label-top-input-all;
-            @include error-simple;
-        }
+        @include form-style-default;
+    }
+}
 
-        &.veryNarrow.gt350 {
-            @include label-34-input-60;
-            @include error-simple-align-right;
-        }
+/* ------------------------------------ Button Loading ------------------------------------*/
 
-        &.gt350 {
-            @include label-left;
-        }
-
-        &.gt500 {
-            @include label-120;
-            @include error-bubbles;
+.cssClass {
+    .submitWrapper {
+        .saving {
+            @include default-loading-animation-small;
+            visibility: hidden;
+            position: absolute;
+            margin-left: -12px;
+            margin-top: -12px;
+            height: 24px;
+            width: 24px;
+            left: 50%;
+            top: 50%;
         }
     }
 }

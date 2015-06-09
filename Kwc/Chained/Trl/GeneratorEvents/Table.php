@@ -7,32 +7,34 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
         $masterGeneratorModel = $this->_getChainedGenerator()->getModel();
         $ret[] = array(
             'class' => get_class($masterGeneratorModel),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onMasterRowUpdate'
         );
         $ret[] = array(
             'class' => get_class($masterGeneratorModel),
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onMasterRowAdd'
         );
         $ret[] = array(
             'class' => get_class($masterGeneratorModel),
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onMasterRowDelete'
         );
         $ret[] = array(
             'class' => get_class($masterGeneratorModel),
-            'event' => 'Kwf_Component_Event_Model_Updated',
+            'event' => 'Kwf_Events_Event_Model_Updated',
             'callback' => 'onMasterModelUpdate'
         );
         $m = Kwc_Abstract::createChildModel($this->_class);
         if ($m) {
-            if ($m->getPrimaryKey() != 'component_id') {
-                throw new Kwf_Exception("chained generator model: primary key is not component_id ({$m->getPrimaryKey()}) for {$this->_class}  {$this->_getGenerator()->getGeneratorKey()}");
-            }
             $ret[] = array(
                 'class' => get_class($m),
-                'event' => 'Kwf_Component_Event_Row_Updated',
+                'event' => 'Kwf_Events_Event_Row_Updated',
+                'callback' => 'onRowUpdate'
+            );
+            $ret[] = array(
+                'class' => get_class($m),
+                'event' => 'Kwf_Events_Event_Row_Inserted',
                 'callback' => 'onRowUpdate'
             );
         }
@@ -46,7 +48,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
         $this->fireEvent(new $cls($c->componentClass, $c, $flag));
     }
 
-    public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         $dbId = $event->row->component_id;
 
@@ -83,7 +85,7 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
         }
     }
 
-    public function onMasterRowUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onMasterRowUpdate(Kwf_Events_Event_Row_Updated $event)
     {
         $dc = array_flip($event->row->getDirtyColumns());
         if (isset($dc['visible'])) {
@@ -113,21 +115,21 @@ class Kwc_Chained_Trl_GeneratorEvents_Table extends Kwc_Chained_Trl_GeneratorEve
         }
     }
 
-    public function onMasterRowAdd(Kwf_Component_Event_Row_Inserted $event)
+    public function onMasterRowAdd(Kwf_Events_Event_Row_Inserted $event)
     {
         foreach ($this->_getComponentsFromMasterRow($event->row, array('ignoreVisible'=>false)) as $c) {
             $this->_fireComponentEvent('Added', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
         }
     }
 
-    public function onMasterRowDelete(Kwf_Component_Event_Row_Deleted $event)
+    public function onMasterRowDelete(Kwf_Events_Event_Row_Deleted $event)
     {
         foreach ($this->_getComponentsFromMasterRow($event->row, array('ignoreVisible'=>false)) as $c) {
             $this->_fireComponentEvent('Removed', $c, Kwf_Component_Event_Component_AbstractFlag::FLAG_ROW_ADDED_REMOVED);
         }
     }
 
-    public function onMasterModelUpdate(Kwf_Component_Event_Model_Updated $event)
+    public function onMasterModelUpdate(Kwf_Events_Event_Model_Updated $event)
     {
         //now it's getting inefficient (but this event will /usually/ not be  called at all)
 

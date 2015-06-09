@@ -1,5 +1,5 @@
 <a name="<?=$this->item->componentId;?>"></a>
-<div class="entry <?=$this->dynamic('FirstLast')?>">
+<div class="entry">
     <h1 class="title">
         <? if ($this->hasContent($this->item)) { ?>
             <?=$this->componentLink($this->item)?>

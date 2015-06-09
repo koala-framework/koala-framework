@@ -365,6 +365,8 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
                 } else {
                     $v = "(object) ".get_class($v);
                 }
+            } else if (is_array($v)) {
+                $v = "(array)";
             }
             $ret .= "$ind  $n: $v\n";
         }

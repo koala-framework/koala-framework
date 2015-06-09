@@ -5,7 +5,7 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
     {
         $ret = parent::getSettings();
         $ret['assets']['dep'][] = 'KwfList';
-        $ret['assets']['dep'][] = 'ExtFx';
+        $ret['assetsDefer']['dep'][] = 'ExtFx';
         $ret['generators']['child']['component'] = 'Kwc_List_Switch_Preview_Component';
         $ret['previewCssClass'] = '';
 

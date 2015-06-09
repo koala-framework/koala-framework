@@ -20,7 +20,7 @@ abstract class Kwf_Component_Renderer_Abstract
 
     public function __construct()
     {
-        $this->_enableCache = !Kwf_Config::getValue('debug.componentCache.disable');
+        $this->_enableCache = true;
         if (Kwf_Component_Data_Root::getShowInvisible()) {
             $this->_enableCache = false;
         }
@@ -35,13 +35,13 @@ abstract class Kwf_Component_Renderer_Abstract
     /**
      * Renders a single component without master
      */
-    public function renderComponent($component)
+    public function renderComponent($component, &$hasDynamicParts = false)
     {
         $helper = new Kwf_Component_View_Helper_Component();
         $helper->setRenderer($this);
         $content = $helper->component($component);
 
-        $ret = $this->_renderPass2($content);
+        $ret = $this->_renderPass2($content, $hasDynamicParts);
         Kwf_Component_Cache::getInstance()->writeBuffer();
         return $ret;
     }
@@ -58,16 +58,17 @@ abstract class Kwf_Component_Renderer_Abstract
 
     public function render($ret)
     {
-        $ret = $this->_renderPass2($ret);
+        $ret = $this->_renderPass2($ret, $hasDynamicParts);
         return $ret;
     }
 
-    private function _findAndExecutePlugins($ret, $pluginType)
+    private function _findAndExecutePlugins($ret, $pluginType, &$hasDynamicParts)
     {
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
 
         while (($start = strpos($ret, '<plugin'.$pluginType.' ')) !== false) {
+            $hasDynamicParts = true;
             $startEnd = strpos($ret, '>', $start);
             $args = explode(' ', substr($ret, $start+9, $startEnd-$start-9));
             $end = strpos($ret, '</plugin'.$pluginType.' '.$args[0].'>');
@@ -191,6 +192,9 @@ abstract class Kwf_Component_Renderer_Abstract
         if ($type == 'component') {
             $c = Kwf_Component_Data_Root::getInstance()
                 ->getComponentById($componentId, array('ignoreVisible'=>true));
+            if (!$c) {
+                throw new Kwf_Exception("Didn't get '$componentId'");
+            }
             $plugins = $this->_getGroupedViewPlugins($c);
         }
         $content = $this->_executePlugins(null, $plugins, $componentId, array('replace'));
@@ -346,13 +350,14 @@ abstract class Kwf_Component_Renderer_Abstract
         return $ret;
     }
 
-    private function _findAndExecuteUseCacheDynamic($ret)
+    private function _findAndExecuteUseCacheDynamic($ret, $hasDynamicParts)
     {
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
 
         //'<useCacheDynamic '.$componentId.' '.serialize($viewCacheSettings['enabled']).'>'.$content.'</useCacheDynamic '.$componentId.'>'
         while (($start = strpos($ret, '<useCacheDynamic ')) !== false) {
+            $hasDynamicParts = true;
             $startEnd = strpos($ret, '>', $start);
             $args = explode(' ', substr($ret, $start+17, $startEnd-$start-17));
             //args: 0: componentId, 1: type, 2: config, 3: serialized cache enabled callback fn
@@ -378,13 +383,13 @@ abstract class Kwf_Component_Renderer_Abstract
      * 2 for everything else. 2 includes 1, so calling just with 2 also works
      * @param string render content
      */
-    protected function _renderPass2($ret)
+    protected function _renderPass2($ret, &$hasDynamicParts = false)
     {
         //execute all plugins that where added in pass 1
-        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_USECACHE);
-        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_BEFORE);
-        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_REPLACE);
-        $ret = $this->_findAndExecuteUseCacheDynamic($ret);
+        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_USECACHE, $hasDynamicParts);
+        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_BEFORE, $hasDynamicParts);
+        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_REPLACE, $hasDynamicParts);
+        $ret = $this->_findAndExecuteUseCacheDynamic($ret, $hasDynamicParts);
 
         static $benchmarkEnabled;
         if (!isset($benchmarkEnabled)) $benchmarkEnabled = Kwf_Benchmark::isEnabled();
@@ -394,6 +399,7 @@ abstract class Kwf_Component_Renderer_Abstract
             if ($benchmarkEnabled) $startTime = microtime(true);
 
             if ($target['type'] == 'dynamic' && $target['config']['class'] == 'Kwf_Component_Dynamic_SessionToken' && !Kwf_Setup::hasAuthedUser()) {
+                $hasDynamicParts = true;
                 //yes, this is cheating, but a very common case that's worth optimizing using this hack
                 $ret = substr($ret, 0, $target['start']).''.substr($ret, $target['end']+1);
                 continue;
@@ -413,6 +419,7 @@ abstract class Kwf_Component_Renderer_Abstract
 
                 //look for UseViewCache plugin in $content
                 if ($p = $this->_findSinglePlugin(self::PLUGIN_TYPE_USECACHE, $content)) {
+                    $hasDynamicParts = true;
                     if (!$p['plugin']->useViewCache($this)) {
                         //re-render, without <pluginC
                         $content = $this->_renderUncached($target['componentId'], $target['type'], $target['config']);
@@ -423,6 +430,7 @@ abstract class Kwf_Component_Renderer_Abstract
                 } else {
                     //execute replace and before plugin
                     if ($p = $this->_findSinglePlugin(self::PLUGIN_TYPE_REPLACE, $content)) {
+                        $hasDynamicParts = true;
                         $r = $p['plugin']->replaceOutput($this);
                         if ($r !== false) {
                             $content = $r;
@@ -430,10 +438,10 @@ abstract class Kwf_Component_Renderer_Abstract
                             $content = $p['content'];
                         }
                     }
-                    $content = $this->_findAndExecutePlugins($content, self::PLUGIN_TYPE_BEFORE);
+                    $content = $this->_findAndExecutePlugins($content, self::PLUGIN_TYPE_BEFORE, $hasDynamicParts);
                 }
 
-                $content = $this->_findAndExecuteUseCacheDynamic($content);
+                $content = $this->_findAndExecuteUseCacheDynamic($content, $hasDynamicParts);
 
             } else {
                 if ($this->_enableCache && $target['isCacheable']) {
@@ -444,6 +452,7 @@ abstract class Kwf_Component_Renderer_Abstract
                     );
 
                 } else {
+                    $hasDynamicParts = true;
                     //view cache disabled
                     $statType = 'noviewcache';
                     $content = $this->_renderUncached($target['componentId'], $target['type'], $target['config']);
@@ -464,6 +473,7 @@ abstract class Kwf_Component_Renderer_Abstract
 
         //execute Render Cached Dynamic, used eg for callback link modifier in componentLink
         while (($start = strpos($ret, '<rcd ')) !== false) {
+            $hasDynamicParts = true;
             $startEnd = strpos($ret, '>', $start);
             $args = explode(' ', substr($ret, $start+5, $startEnd-$start-5));
             $end = strpos($ret, '</rcd '.$args[0].'>');
@@ -477,7 +487,7 @@ abstract class Kwf_Component_Renderer_Abstract
             $ret = substr($ret, 0, $start).$content.substr($ret, $end+7+strlen($args[0]));
         }
 
-        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_AFTER);
+        $ret = $this->_findAndExecutePlugins($ret, self::PLUGIN_TYPE_AFTER, $hasDynamicParts);
 
         return $ret;
     }
@@ -575,6 +585,11 @@ abstract class Kwf_Component_Renderer_Abstract
                 $this->_minLifetime = min($this->_minLifetime, $settings['lifetime']);
             }
         }
+    }
+
+    public function getHelper($type)
+    {
+        return $this->_getHelper($type);
     }
 
     private function _getHelper($type)

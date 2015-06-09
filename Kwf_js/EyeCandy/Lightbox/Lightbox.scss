@@ -1,0 +1,111 @@
+@import "config/default-loading-animation-big";
+@import "kwf/background-image-dpr2";
+
+.kwfLightbox {
+    position: absolute;
+    z-index: 100;
+    top: 0; left: 0;
+    height: 100%;
+    width: 100%;
+}
+.kwfLightbox .kwfLightboxInner {
+    min-width: 100px;
+    min-height: 100px;
+    background: #fff;
+    margin-bottom: 40px;
+    padding: 10px;
+    position: absolute;
+}
+.ext-ie6 .kwfLightbox .kwfLightboxInner { width: 800px; }
+
+.kwfLightbox .lightboxHeader { position: relative; z-index: 102; }
+.kwfLightbox .closeButton {
+    position: absolute;
+    right: -25px;
+    top: -25px;
+    display: block;
+    width: 42px;
+    height: 42px;
+    background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
+    z-index: 102;
+}
+
+.kwfLightbox.mobile .closeButton {
+    right: 0;
+    top: 0;
+}
+.kwfLightbox.mobile .kwfLightboxInner {
+    margin-bottom: 0;
+}
+
+.kwfLightbox .closeButton:hover { text-decoration: none; }
+
+.kwfLightbox .kwfLightboxContent {
+    height: 100%;
+    width: 100%;
+}
+.kwfLightbox .lightboxBody {
+    position: relative;
+    height: 100%; 
+    width: 100%;
+    z-index: 101;
+}
+.kwfLightbox .lightboxBody .nextBtn,
+.kwfLightbox .lightboxBody .nextBtn a,
+.kwfLightbox .lightboxBody .prevBtn,
+.kwfLightbox .lightboxBody .prevBtn a {
+    text-decoration: none;
+    position: absolute;
+    top: 0px;
+    width: 40%;
+    height: 100%;
+    background: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/transparentPixel.gif); /* WORKAROUND: IE kann keinen link ohne inhalt darstellen, deswegen transparentPixel bgImage*/
+    background-repeat: repeat;
+    background-position: top left;
+}
+.kwfLightbox .lightboxBody .nextBtn, .kwfLightbox .lightboxBody .nextBtn a { right: 0px; }
+.kwfLightbox .lightboxBody .prevBtn, .kwfLightbox .lightboxBody .prevBtn a { lef: 0px; }
+.kwfLightbox .lightboxBody .nextBtn a,
+.kwfLightbox .lightboxBody .prevBtn a { width: 100%; }
+.kwfLightbox .lightboxBody .nextBtn a:hover {
+    background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/next.png);
+    background-repeat: no-repeat;
+    background-position: right 50%;
+}
+.kwfLightbox .lightboxBody .nextBtn img.nextImgBtn { position: absolute; top: 100px; right: 0px; }
+
+.kwfLightbox .lightboxBody .prevBtn a:hover {
+    background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/previous.png);
+    background-repeat: no-repeat;
+    background-position: left 50%;
+}
+.kwfLightbox .lightboxBody .prevBtn img.previousImgBtn { position: absolute; top: 100px; left: 0px; }
+
+.kwfLightbox .lightboxBody .image { z-index: 1; }
+
+.kwfLightbox .lightboxFooter p { text-align: left; margin-bottom: 0px; }
+.kwfLightbox .lightboxFooter p.imageCaption { margin-top: 10px; }
+.kwfLightbox .lightboxFooter p.imageCaptionTitle { margin: 10px 0px -10px 0px; }
+.kwfLightbox .lightboxFooter p.title { margin-top: 10px; }
+.kwfLightbox .lightboxFooter p.fullSizeLink { margin-top: 10px; }
+
+.lightboxMask {
+    background: #000;
+    opacity: 0.8;
+    -moz-opacity: 0.8;
+    filter: alpha(opacity=80);
+    z-index: 50 !important;
+    position: fixed;
+    width: 100%; height: 100%;
+    left: 0; top: 0;
+}
+
+.kwfLightbox .loading {
+    @include default-loading-animation-big;
+}
+
+@media (max-width: 650px) {
+    body .lightboxMask {
+        opacity: 1;
+    }
+}

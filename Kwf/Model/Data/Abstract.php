@@ -499,19 +499,11 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
         throw new Kwf_Exception_NotYetImplemented();
     }
 
-    private function _updateModelObserver($options)
+    private function _updateModelObserver($options, array $ids = null)
     {
         if (isset($options['skipModelObserver']) && $options['skipModelObserver']) return;
 
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            if ($this->_proxyContainerModels) {
-                foreach ($this->_proxyContainerModels as $m) {
-                    Kwf_Component_ModelObserver::getInstance()->add('update', $m);
-                }
-            } else {
-                Kwf_Component_ModelObserver::getInstance()->add('update', $this);
-            }
-        }
+        Kwf_Events_ModelObserver::getInstance()->add('update', $this, $ids);
     }
 
     public function import($format, $data, $options = array())
@@ -520,8 +512,15 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
             if (isset($options['replace']) && $options['replace'] && !isset($this->_uniqueColumns)) {
                 throw new Kwf_Exception('You must set uniqueColumns for this model if you use replace');
             }
-            Kwf_Component_ModelObserver::getInstance()->disable();
+            $ids = array();
+            Kwf_Events_ModelObserver::getInstance()->disable();
             foreach ($data as $k => $v) {
+                if (is_array($ids) && isset($v[$this->getPrimaryKey()])) {
+                    $ids[] = $v[$this->getPrimaryKey()];
+                } else {
+                    //if we don't know all imported ids, pass null
+                    $ids = null;
+                }
                 if (isset($options['replace']) && $options['replace']) {
                     $s = $this->select();
                     foreach ($this->_uniqueColumns as $c) {
@@ -543,8 +542,8 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
                 }
                 $row->save();
             }
-            Kwf_Component_ModelObserver::getInstance()->enable();
-            $this->_updateModelObserver($options);
+            Kwf_Events_ModelObserver::getInstance()->enable();
+            $this->_updateModelObserver($options, $ids);
             $this->_afterImport($format, $data, $options);
         } else {
             throw new Kwf_Exception_NotYetImplemented();

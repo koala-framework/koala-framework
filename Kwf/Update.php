@@ -4,14 +4,18 @@ abstract class Kwf_Update
     protected $_tags = array();
 
     protected $_actions = array();
-    protected $_revision;
+    protected $_legacyRevision;
+    protected $_legacyName;
     protected $_uniqueName;
-    
+
     protected $_progressBar = null;
 
-    public function __construct($revision, $uniqueName)
+    public function __construct($uniqueName)
     {
-        $this->_revision = (int)$revision;
+        if (preg_match('#(.*?)[0-9]+Legacy([0-9]+)#', $uniqueName, $m)) {
+            $this->_legacyRevision = (int)$m[2];
+            $this->_legacyName = $m[1].(int)$m[2];
+        }
         $this->_uniqueName = $uniqueName;
         $this->_init();
     }
@@ -33,14 +37,19 @@ abstract class Kwf_Update
         return $this;
     }
 
-    public function getRevision()
+    public function getLegacyRevision()
     {
-        return $this->_revision;
+        return $this->_legacyRevision;
     }
 
     public function getUniqueName()
     {
         return $this->_uniqueName;
+    }
+
+    public function getLegacyName()
+    {
+        return $this->_legacyName;
     }
 
     protected function _init()

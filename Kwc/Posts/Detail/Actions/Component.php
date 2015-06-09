@@ -48,6 +48,7 @@ class Kwc_Posts_Detail_Actions_Component extends Kwc_Abstract_Composite_Componen
 
     public function mayEditPost()
     {
+        if (!Zend_Registry::get('userModel')) return false;
         $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
         if (!$authedUser) return false;
         if ($authedUser->role == 'admin') return true;

@@ -5,7 +5,7 @@ class Kwc_Trl_DownloadTag_DownloadTag_UploadsModel extends Kwf_Test_Uploads_Mode
     {
         parent::__construct($config);
 
-        $this->createRow()->copyFile(KWF_PATH.'/images/information.png', 'foo', 'png', 'image/png');
-        $this->createRow()->copyFile(KWF_PATH.'/images/vividplanet.gif', 'vivid', 'gif', 'image/gif');
+        $this->createRow(array('id'=>'1'))->copyFile(KWF_PATH.'/images/information.png', 'foo', 'png', 'image/png');
+        $this->createRow(array('id'=>'2'))->copyFile(KWF_PATH.'/images/vividplanet.gif', 'vivid', 'gif', 'image/gif');
     }
 }

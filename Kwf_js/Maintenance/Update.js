@@ -1,5 +1,5 @@
-Ext.ns('Kwf.Maintenance');
-Kwf.Maintenance.Update = Ext.extend(Ext.Panel, {
+Ext2.ns('Kwf.Maintenance');
+Kwf.Maintenance.Update = Ext2.extend(Ext2.Panel, {
     border: false,
     initComponent: function() {
         this.layout = 'border';
@@ -16,9 +16,9 @@ Kwf.Maintenance.Update = Ext.extend(Ext.Panel, {
                         success: function(response, options, r) {
                             this.grid.reload();
                             if (r.errMsg) {
-                                Ext.Msg.alert(trlKwf('Error'), r.message+"<br />"+r.errMsg.replace("\n", "<br />"));
+                                Ext2.Msg.alert(trlKwf('Error'), r.message+"<br />"+r.errMsg.replace("\n", "<br />"));
                             } else if (r.message) {
-                                Ext.Msg.alert(trlKwf('Finished'), r.message);
+                                Ext2.Msg.alert(trlKwf('Finished'), r.message);
                             }
                         }
                     });
@@ -33,4 +33,4 @@ Kwf.Maintenance.Update = Ext.extend(Ext.Panel, {
         Kwf.Maintenance.Update.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwf.maintenance.update', Kwf.Maintenance.Update);
+Ext2.reg('kwf.maintenance.update', Kwf.Maintenance.Update);

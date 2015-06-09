@@ -1,7 +1,7 @@
 <?php
 class Kwf_Component_Generator_PseudoPage_Events_Table extends Kwf_Component_Generator_Events_Table
 {
-    public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onRowUpdate(Kwf_Events_Event_Row_Updated $event)
     {
         parent::onRowUpdate($event);
         $nameChanged = false;

@@ -3,7 +3,7 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
 {
     public function __construct($name, $class, $id = null)
     {
-        $this->setModel(Kwc_Basic_Text_Component::getTextModel($class));
+        $this->setModel(Kwc_Basic_Text_Component::createOwnModel($class));
         parent::__construct($name, $class, $id);
         $field = new Kwf_Form_Field_HtmlEditor('content', trlKwf('Text'));
         $field->setData(new Kwf_Data_Kwc_ComponentIds('content'));
@@ -11,7 +11,7 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
 
         $ignoreSettings = array('tablename', 'componentName',
                 'default', 'assets', 'assetsAdmin',
-                'placeholder');
+                'placeholder', 'plugins');
         $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
         foreach (call_user_func(array($c, 'getSettings')) as $key => $val) {
             if (!in_array($key, $ignoreSettings)) {
@@ -57,16 +57,16 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
     //für tests
     public function setAssetsPackage(Kwf_Assets_Package $package)
     {
+        $t = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getClass(), 'stylesModel'));
+
         $urls = $package->getPackageUrls('text/css', Kwf_Trl::getInstance()->getTargetLanguage());
 
-        $this->fields['content']->setCssFiles($urls);
+        $styleEditorUrl = Kwc_Admin::getInstance($this->getClass())->getControllerUrl().'/styles-content';
+        $styleEditorUrl .= '?t='.$t->getMTime();
+        $urls[] = $styleEditorUrl;
 
-        foreach ($urls as $url) {
-            if (strpos($url, 'Kwc_Basic_Text_StylesAsset')!==false) {
-                $this->fields['content']->setStylesCssFile($url);
-                break;
-            }
-        }
+        $this->fields['content']->setStylesCssFile($styleEditorUrl);
+        $this->fields['content']->setCssFiles($urls);
     }
 
     public function setHtmlEditorLabel($title)

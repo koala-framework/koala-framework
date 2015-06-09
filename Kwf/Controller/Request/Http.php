@@ -7,7 +7,7 @@ class Kwf_Controller_Request_Http extends Zend_Controller_Request_Http
             $ret = 'kwf_component';
         } else if ($this->getControllerName() == 'component_test') {
             $ret = 'kwf_test';
-        } else if ($this->getModuleName() == 'kwf_test' || $this->getModuleName() == 'web_test') {
+        } else if ($this->getModuleName() == 'kwf_test') {
             $ret = 'kwf_test';
         } else {
             $ret = strtolower($this->getModuleName().'_'.$this->getControllerName());

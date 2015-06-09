@@ -52,12 +52,12 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $im->readImageBlob($contents);
         $this->assertEquals(10, $im->getImageWidth());
         $this->assertEquals(10, $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getRow('1')->getFileSource(),
                                     array(10, 10, 'cover' => true)), $contents);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('lightbox{"width":16,"height":16,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['rel']);
+        $this->assertEquals('{"width":16,"height":16,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['data-kwc-lightbox']);
         $this->assertEquals('/foo1/image', (string)$a[0]['href']);
 
 
@@ -81,7 +81,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $im->readImageBlob($contents);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getRow('1')->getFileSource(),
                                     array(16, 16, 'cover' => true)), $contents);
     }
 
@@ -123,12 +123,12 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $im->readImageBlob($contents);
         $this->assertEquals(10, $im->getImageWidth());
         $this->assertEquals(10, $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getRow('1')->getFileSource(),
                                     array(10, 10, 'cover' => true)), $contents);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('lightbox{"width":16,"height":16,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['rel']);
+        $this->assertEquals('{"width":16,"height":16,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['data-kwc-lightbox']);
         $this->assertEquals('/foo2/image', (string)$a[0]['href']);
 
 
@@ -153,7 +153,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $im->readImageBlob($contents);
         $this->assertEquals(16, $im->getImageWidth());
         $this->assertEquals(16, $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1',
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getRow('1')->getFileSource(),
                                     array(16, 16, 'cover' => true)), $contents);
     }
 
@@ -202,12 +202,12 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $im->readImageBlob($contents);
         $this->assertEquals(10, $im->getImageWidth());
         $this->assertEquals(10, $im->getImageHeight());
-        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/2',
+        $this->assertEquals(Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getRow('2')->getFileSource(),
                                     array(10, 10, 'cover' => true), 2), $contents);
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('lightbox{"width":210,"height":70,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['rel']);
+        $this->assertEquals('{"width":210,"height":70,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['data-kwc-lightbox']);
         $this->assertEquals('/foo3/image', (string)$a[0]['href']);
 
 
@@ -232,7 +232,7 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $im->readImageBlob($contents);
 
         // crop is set, because show_selection is set and else compare will fail
-        $content = Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/2',
+        $content = Kwf_Media_Image::scale(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getRow('2')->getFileSource(),
             array(210, 70, 'cover' => false, 'crop' => array ('height' => 70, 'width' => 210, 'x' => 0, 'y' => 0)));
         $image = new Imagick();
         $image->readimageblob($content);
@@ -257,6 +257,6 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
         $o = call_user_func(array($m[1], 'getMediaOutput'), $m[2], $m[3], $m[1]);
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
-        $this->assertEquals(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getUploadDir().'/1', $o['file']);
+        $this->assertEquals(Kwf_Model_Abstract::getInstance('Kwc_Basic_ImageEnlarge_UploadsModel')->getRow('1')->getFileSource(), $o['file']);
     }
 }

@@ -22,7 +22,7 @@ class Kwf_Model_Select_Expr_Sum implements Kwf_Model_Select_Expr_Interface
 
     public function getResultType()
     {
-        return Kwf_Model_Interface::TYPE_INTEGER;
+        return Kwf_Model_Interface::TYPE_FLOAT;
     }
 
     public function toArray()

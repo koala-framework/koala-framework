@@ -1,4 +1,4 @@
-Kwf.Binding.ProxyPanel = Ext.extend(Kwf.Binding.AbstractPanel,
+Kwf.Binding.ProxyPanel = Ext2.extend(Kwf.Binding.AbstractPanel,
 {
     initComponent: function()
     {

@@ -17,8 +17,6 @@ class Kwf_Exception_Logger_Raven extends Kwf_Exception_Logger_Abstract
         if (!$dsn) {
             throw new Kwf_Exception("Can't submit exception using raven: ravenPhp.dsn not configured");
         }
-        require_once Kwf_Config::getValue('externLibraryPath.ravenPhp').'/lib/Raven/Autoloader.php';
-        Raven_Autoloader::register();
         $client = new Raven_Client($dsn);
 
         $user = "guest";

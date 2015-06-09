@@ -78,6 +78,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
      */
     public static function setComponentClass($componentClass)
     {
+        Kwf_Component_Settings::$_rootComponentClassSet = true;
         self::$_rootComponentClass = $componentClass;
         self::reset();
     }
@@ -108,7 +109,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         self::$_instance = null;
         Kwf_Component_Generator_Abstract::clearInstances();
         Kwf_Component_Abstract::clearModelInstances();
-        Kwf_Component_Events::clearCache();
+        Kwf_Events_Dispatcher::clearCache();
         if ($resetCache) Kwf_Component_Abstract::resetSettingsCache();
     }
 

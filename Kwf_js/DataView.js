@@ -1,4 +1,4 @@
-Ext.DataView.prototype.onAdd = function(ds, records, index)
+Ext2.DataView.prototype.onAdd = function(ds, records, index)
 {
     if(this.all.getCount() == 0){
         this.refresh();

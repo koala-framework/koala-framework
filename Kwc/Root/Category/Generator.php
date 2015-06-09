@@ -34,7 +34,6 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 $ret = $this->_getModel()->fetchColumnsByPrimaryId($cols, $id);
                 if ($ret) {
                     if ($ret['is_home']) $ret['visible'] = 1;
-                    $ret['self_visible'] = $ret['visible'];
                     $ret['parent_visible'] = $ret['visible'];
                     $i = $ret['parent_id'];
                     $ret['parent_ids'] = array($i);
@@ -45,7 +44,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                             if (count($ret['parent_ids']) > 20) {
                                 throw new Kwf_Exception('probably endless recursion with parents');
                             }
-                            $ret['visible'] = $ret['parent_visible'] && $pd['visible'];
+                            $ret['parent_visible'] = $ret['parent_visible'] && $pd['visible'];
                             $i = $pd['parent_id'];
                         } else {
                             //page seems to be floating (without parent)
@@ -338,17 +337,23 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $page = $this->_getPageData($id);
 
         if (!$parentData || ($parentData->componentClass == $this->_class && $page['parent_id'])) {
-            $c = array();
-            if ($select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
-                $c['ignoreVisible'] = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
-            }
-            $parentData = Kwf_Component_Data_Root::getInstance()
-                                ->getComponentById($page['parent_id'], $c);
-            if (!$parentData) return null; // Kommt vor wenn data gefunden wird, parentData aber invisible ist
+            $parentData = $page['parent_id'];
         }
-        $pData = $parentData;
-        while (is_numeric($pData->componentId)) $pData = $pData->parent;
-        if ($pData->componentClass != $this->_class) return null;
+
+        foreach ($page['parent_ids'] as $i) {
+            if (!is_numeric($i)) {
+                $c = array();
+                if ($select->hasPart(Kwf_Component_Select::IGNORE_VISIBLE)) {
+                    $c['ignoreVisible'] = $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE);
+                }
+                $pData = Kwf_Component_Data_Root::getInstance()
+                                    ->getComponentById($i, $c);
+                if ($pData->componentClass != $this->_class) {
+                    return null;
+                }
+            }
+        }
+
         return parent::_createData($parentData, $id, $select);
     }
 
@@ -369,9 +374,12 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         $data['componentId'] = $this->_getComponentIdFromRow($parentData, $id);
         $data['componentClass'] = $this->_getChildComponentClass($page['component'], $parentData);
         $data['row'] = (object)$page;
-        $data['parent'] = $parentData;
+        if (!is_object($parentData)) {
+            $data['_lazyParent'] = $parentData;
+        } else {
+            $data['parent'] = $parentData;
+        }
         $data['isHome'] = $page['is_home'];
-        $data['selfVisible'] = $page['self_visible'];
         if (!$page['visible']) {
             $data['invisible'] = true;
         }
@@ -396,6 +404,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
     {
         $ret = parent::getGeneratorFlags();
         $ret['showInPageTreeAdmin'] = true;
+        $ret['showInLinkInternAdmin'] = true;
         $ret['pseudoPage'] = true;
         $ret['page'] = true;
         $ret['table'] = true;
@@ -432,7 +441,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
         if ($component->isHome) {
             $ret['iconEffects'][] = 'home';
-        } else if (!$component->selfVisible) {
+        } else if (!$component->visible) {
             $ret['iconEffects'][] = 'invisible';
         }
         $ret['allowDrag'] = true;
@@ -537,7 +546,6 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
         echo " data: ".Kwf_Component_Data::$objectsCount.', ';
         echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
-        //p(Kwf_Component_ModelObserver::getInstance()->getProcess());
         //var_dump(Kwf_Model_Row_Abstract::$objectsByModel);
         //var_dump(Kwf_Component_Data::$objectsById);
         echo "\n";

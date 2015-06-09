@@ -1,2 +1,2 @@
 .$cssClass { margin-bottom: 5px; }
-.$cssClass span { color: $typo; }
+.$cssClass span { color: var(typo); }

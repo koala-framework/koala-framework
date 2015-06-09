@@ -26,21 +26,12 @@ class Kwf_Controller_Action_User_UserController extends Kwf_Controller_Action_Au
         $fs->add(new Kwf_Form_Field_Panel())
             ->setHtml(trlKwf('After following actions emails are sent automatically to the respective user:').'<br />'
                      .trlKwf('Create, Delete and E-Mail change'));
-        $fs->add(new Kwf_Form_Field_ShowField('password', trlKwf('Activation link')))
-            ->setData(new Kwf_Controller_Action_User_Users_ActivationlinkData());
         $fs->add(new Kwf_Form_Field_Checkbox('avoid_mailsend', trlKwf('E-Mails')))
             ->setSave(false)
             ->setBoxLabel(trlKwf("Don't send any E-Mail when saving."));
 
         if ($roleField = $this->_getRoleField()) {
             $this->_getPermissionFieldset()->add($roleField);
-        }
-
-        $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
-        if (Kwf_Registry::get('acl')->getRole($authedRole) instanceof Kwf_Acl_Role_Admin) {
-            $this->_getPermissionFieldset()->add(new Kwf_Form_Field_Checkbox('webcode', trlKwf('Only for this web')))
-                ->setData(new Kwf_Controller_Action_User_Users_WebcodeData())
-                ->setHelpText(trlKwf('If this box is checked, the account may only be used for this web. If you wish to use the same account for another web, do not check this box.'));
         }
 
         $fs = $this->_form->add(new Kwf_Form_Container_FieldSet(trlKwf('Statistics')));
@@ -72,7 +63,7 @@ class Kwf_Controller_Action_User_UserController extends Kwf_Controller_Action_Au
     {
         $acl = Kwf_Registry::get('acl');
         $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
-        $authedUser = Kwf_Registry::get('userModel')->getKwfModel()->getAuthedUser();
+        $authedUser = Kwf_Registry::get('userModel')->getAuthedUser();
 
         // alle erlaubten haupt-rollen in variable
         $roles = array();
@@ -137,14 +128,17 @@ class Kwf_Controller_Action_User_UserController extends Kwf_Controller_Action_Au
         $acl = Kwf_Registry::get('acl');
         $userRole = Kwf_Registry::get('userModel')->getAuthedUserRole();
 
-        $roles = array();
-        foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
-            $roles[$role->getRoleId()] = $role->getRoleName();
-        }
-        if (!$roles) return false;
+        if (!($acl->getRole($userRole) instanceof Kwf_Acl_Role_Admin)) { //admin always sees all roles
 
-        if (!$row || !array_key_exists($row->role, $roles)) {
-            return false;
+            $roles = array();
+            foreach ($acl->getAllowedEditRolesByRole($userRole) as $role) {
+                $roles[$role->getRoleId()] = $role->getRoleName();
+            }
+            if (!$roles) return false;
+
+            if (!$row || !array_key_exists($row->role, $roles)) {
+                return false;
+            }
         }
 
         return true;

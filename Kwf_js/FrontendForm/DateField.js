@@ -1,4 +1,4 @@
-Kwf.FrontendForm.DateField = Ext.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.DateField = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         if (!this.form.getFieldConfig(this.getFieldName()).hideTrigger) {
             var icon = this.el.child('.kwfFormFieldWrapper').createChild({
@@ -18,7 +18,7 @@ Kwf.FrontendForm.DateField = Ext.extend(Kwf.FrontendForm.Field, {
     },
     showPicker: function() {
         if (!this.menu) {
-            this.menu = new Ext.menu.DateMenu({
+            this.menu = new Ext2.menu.DateMenu({
                 cls: 'kwfFrontendFormDatePicker',
                 shadow: false,
                 format: trlKwf('Y-m-d')

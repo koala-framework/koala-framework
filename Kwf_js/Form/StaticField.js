@@ -1,4 +1,4 @@
-Kwf.Form.StaticField = Ext.extend(Ext.BoxComponent, {
+Kwf.Form.StaticField = Ext2.extend(Ext2.BoxComponent, {
     autoEl: {tag: 'div', cls:'kwf-form-static-field'},
     isFormField : true,
     initComponent: function() {
@@ -24,4 +24,4 @@ Kwf.Form.StaticField = Ext.extend(Ext.BoxComponent, {
     setFormBaseParams: function() { },
     setDefaultValue: function() { }
 });
-Ext.reg('staticfield', Kwf.Form.StaticField);
+Ext2.reg('staticfield', Kwf.Form.StaticField);

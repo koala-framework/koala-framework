@@ -18,7 +18,7 @@ Kwf.Auto.Filter.DateRange = function(config)
     this.paramName = config.paramName;
 
     if (config.button) {
-        this.toolbarItems.add(new Ext.Button({
+        this.toolbarItems.add(new Ext2.Button({
             text: trlKwf('Search'),
             handler: function() {
                 this.fireEvent('filter', this, this.getParams());
@@ -51,7 +51,7 @@ Kwf.Auto.Filter.DateRange = function(config)
 
 
 
-Ext.extend(Kwf.Auto.Filter.DateRange, Kwf.Auto.Filter.Abstract, {
+Ext2.extend(Kwf.Auto.Filter.DateRange, Kwf.Auto.Filter.Abstract, {
     reset: function() {
         this.fieldFrom.reset();
         this.fieldTo.reset();

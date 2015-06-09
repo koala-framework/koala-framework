@@ -20,7 +20,7 @@ abstract class Kwc_Abstract_Feed_Component extends Kwc_Abstract
         $cache = Kwf_Component_Cache::getInstance();
         if (!$xml = $cache->load($this->getData())) {
             $xml = $this->_getFeedXml();
-            $cache->save($this->getData(), $xml, 'component', 'component', '', 60*60);
+            $cache->save($this->getData(), $xml);
             Kwf_Component_Cache::getInstance()->writeBuffer();
         }
         return $xml;

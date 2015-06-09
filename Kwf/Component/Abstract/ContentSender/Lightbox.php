@@ -50,14 +50,14 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
         return $ret;
     }
 
-    protected function _render($includeMaster)
+    protected function _render($includeMaster, &$hasDynamicParts)
     {
-        $lightboxContent = $this->_data->render(null, false);
+        $lightboxContent = $this->_data->render(null, false, $hasDynamicParts);
         if ($includeMaster) {
             $parent = $this->_getParent();
             $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
             $parentContentSender = new $parentContentSender($parent);
-            $parentContent = $parentContentSender->_render($includeMaster);
+            $parentContent = $parentContentSender->_render($includeMaster, $hasDynamicParts);
 
             //append lightbox after <body> in parent
             $options = $this->_getOptions();
@@ -83,12 +83,10 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
         }
     }
 
-    public function getLinkRel()
+    public function getLinkDataAttributes()
     {
-        $ret = 'lightbox';
-        if ($options = $this->_getOptions()) {
-            $ret .= json_encode($options);
-        }
+        $ret = parent::getLinkDataAttributes();
+        $ret['kwc-lightbox'] = json_encode((object)$this->_getOptions());
         return $ret;
     }
 }

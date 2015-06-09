@@ -1,12 +1,12 @@
 //from http://extjs.com/forum/showthread.php?t=20802
 
-Ext.ns("Ext.grid.GridSummary"); // namespace Ext.grid.GridSummary
+Ext2.ns("Ext2.grid.GridSummary"); // namespace Ext2.grid.GridSummary
 
-Ext.grid.GridSummary = function(config) {
-    Ext.apply(this, config);
+Ext2.grid.GridSummary = function(config) {
+    Ext2.apply(this, config);
 };
 
-Ext.extend(Ext.grid.GridSummary, Ext.util.Observable, {
+Ext2.extend(Ext2.grid.GridSummary, Ext2.util.Observable, {
   init : function(grid) {
     this.grid = grid;
     this.cm = grid.getColumnModel();
@@ -25,9 +25,9 @@ Ext.extend(Ext.grid.GridSummary, Ext.util.Observable, {
     v.afterMethod('onRemove', this.refreshSummary, this);
 
     if (!this.rowTpl) {
-      this.rowTpl = new Ext.Template(
-        '<div class="x-grid3-summary-row x-grid3-gridsummary-row-offset">',
-          '<table class="x-grid3-summary-table" border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
+      this.rowTpl = new Ext2.Template(
+        '<div class="x2-grid3-summary-row x2-grid3-gridsummary-row-offset">',
+          '<table class="x2-grid3-summary-table" border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
             '<tbody><tr>{cells}</tr></tbody>',
           '</table>',
         '</div>'
@@ -37,9 +37,9 @@ Ext.extend(Ext.grid.GridSummary, Ext.util.Observable, {
     this.rowTpl.compile();
 
     if (!this.cellTpl) {
-      this.cellTpl = new Ext.Template(
-        '<td class="x-grid3-col x-grid3-cell x-grid3-td-{id} {css}" style="{style}">',
-          '<div class="x-grid3-cell-inner x-grid3-col-{id}" unselectable="on">{value}</div>',
+      this.cellTpl = new Ext2.Template(
+        '<td class="x2-grid3-col x2-grid3-cell x2-grid3-td-{id} {css}" style="{style}">',
+          '<div class="x2-grid3-cell-inner x2-grid3-col-{id}" unselectable="on">{value}</div>',
         "</td>"
       );
       this.cellTpl.disableFormats = true;
@@ -55,7 +55,7 @@ Ext.extend(Ext.grid.GridSummary, Ext.util.Observable, {
         c = cs[i];
         cf = cfg[i];
         if (cf && cf.summaryType) {
-          data[c.name] = Ext.grid.GridSummary.Calculations[cf.summaryType](data[c.name] || 0, r, c.name, data);
+          data[c.name] = Ext2.grid.GridSummary.Calculations[cf.summaryType](data[c.name] || 0, r, c.name, data);
         }
       }
     }
@@ -106,7 +106,7 @@ Ext.extend(Ext.grid.GridSummary, Ext.util.Observable, {
       cf = cfg[i];
       p.id = c.id;
       p.style = c.style;
-      p.css = i == 0 ? 'x-grid3-cell-first ' : (i == last ? 'x-grid3-cell-last ' : '');
+      p.css = i == 0 ? 'x2-grid3-cell-first ' : (i == last ? 'x2-grid3-cell-last ' : '');
       if (cf.summaryType || cf.summaryRenderer) {
         p.value = (cf.summaryRenderer || c.renderer)(o.data[c.name], p, o);
       } else {
@@ -130,9 +130,9 @@ Ext.extend(Ext.grid.GridSummary, Ext.util.Observable, {
     var buf = this.renderSummary({data: data}, cs);
 
     if (!this.view.summaryWrap) {
-      this.view.summaryWrap = Ext.DomHelper.insertAfter(this.view.scroller, {
+      this.view.summaryWrap = Ext2.DomHelper.insertAfter(this.view.scroller, {
         tag: 'div',
-        cls: 'x-grid3-gridsummary-row-inner'
+        cls: 'x2-grid3-gridsummary-row-inner'
       }, true);
     } else {
       this.view.summary.remove();
@@ -144,9 +144,9 @@ Ext.extend(Ext.grid.GridSummary, Ext.util.Observable, {
     var el = this.grid.getGridEl();
     if (el) {
       if (visible === undefined) {
-        visible = el.hasClass('x-grid-hide-gridsummary');
+        visible = el.hasClass('x2-grid-hide-gridsummary');
       }
-      el[visible ? 'removeClass' : 'addClass']('x-grid-hide-gridsummary');
+      el[visible ? 'removeClass' : 'addClass']('x2-grid-hide-gridsummary');
     }
 
     this.view.layout();
@@ -157,7 +157,7 @@ Ext.extend(Ext.grid.GridSummary, Ext.util.Observable, {
   }
 });
 
-Ext.grid.GridSummary.Calculations = {
+Ext2.grid.GridSummary.Calculations = {
   'sum' : function(v, record, field) {
     return v + (record.data[field]||0);
   },

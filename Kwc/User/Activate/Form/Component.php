@@ -45,6 +45,11 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         return $ret;
     }
 
+    public function getUserRow()
+    {
+        return $this->_user;
+    }
+
     public function processInput(array $postData)
     {
         parent::processInput($postData);
@@ -58,22 +63,22 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         } else {
             $code = $this->getForm()->getRow()->code;
         }
-        $code = explode('-', $code);
-        if (count($code) != 2 || empty($code[0]) || empty($code[1])) {
+
+        if (!preg_match('#^(.*)-(\w*)$#', $code, $m)) {
             $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE));
             $this->_hideForm = true;
         } else {
-            $userId = (int)$code[0];
-            $code = $code[1];
-            $userModel = Zend_Registry::get('userModel')->getKwfModel();
-            $this->_user = $userModel->getRow($userModel->select()->whereEquals('id', $userId));
+            $userId = $m[1];
+            $code = $m[2];
+            $userModel = Zend_Registry::get('userModel');
+            $this->_user = $userModel->getRow($userId);
             if (!$this->_user) {
                 $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_DATA_NOT_COMPLETE));
                 $this->_hideForm = true;
-            } else if ($this->_user->getActivationCode() != $code && $this->_user->password) {
+            } else if (!$this->_user->validateActivationToken($code) && $this->_user->isActivated()) {
                 $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_ALREADY_ACTIVATED));
                 $this->_hideForm = true;
-            } else if ($this->_user->getActivationCode() != $code && !$this->_user->password) {
+            } else if (!$this->_user->validateActivationToken($code)) {
                 $this->_errors[] = array('message' => $this->_getErrorMessage(self::ERROR_CODE_WRONG));
                 $this->_hideForm = true;
             }
@@ -81,6 +86,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
 
         if ($this->_user && $this->isSaved()) {
             $userModel->setPassword($this->_user, $this->_form->getRow()->password);
+            $this->_user->clearActivationToken();
             $this->_afterLogin(Kwf_Registry::get('userModel')->getAuthedUser());
         }
     }

@@ -4,7 +4,7 @@
  * @group Model_Db
  * @group Model_DbWithConnection
  */
-class Kwf_Model_DbWithConnection_Test extends PHPUnit_Extensions_OutputTestCase
+class Kwf_Model_DbWithConnection_Test extends Kwf_Test_TestCase
 {
     protected $backupStaticAttributes = false;
     private $_tableName;

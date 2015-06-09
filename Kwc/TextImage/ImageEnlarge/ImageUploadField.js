@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.TextImage.ImageEnlarge');
-Kwc.TextImage.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Basic.ImageEnlarge.ImageUploadField, {
+Ext2.namespace('Kwc.TextImage.ImageEnlarge');
+Kwc.TextImage.ImageEnlarge.ImageUploadField = Ext2.extend(Kwc.Basic.ImageEnlarge.ImageUploadField, {
 
     afterRender: function() {
         Kwc.TextImage.ImageEnlarge.ImageUploadField.superclass.afterRender.call(this);
@@ -35,4 +35,4 @@ Kwc.TextImage.ImageEnlarge.ImageUploadField = Ext.extend(Kwc.Basic.ImageEnlarge.
     }
 });
 
-Ext.reg('kwc.textimage.imageenlarge.imageuploadfield', Kwc.TextImage.ImageEnlarge.ImageUploadField);
+Ext2.reg('kwc.textimage.imageenlarge.imageuploadfield', Kwc.TextImage.ImageEnlarge.ImageUploadField);

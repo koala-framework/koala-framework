@@ -1,4 +1,4 @@
-Kwf.FrontendForm.ErrorStyle.Bubble = Ext.extend(Kwf.FrontendForm.ErrorStyle.Above, {
+Kwf.FrontendForm.ErrorStyle.Bubble = Ext2.extend(Kwf.FrontendForm.ErrorStyle.Above, {
     showErrors: function(r) {
 
         for (var fieldName in r.errorFields) {

@@ -11,7 +11,7 @@ class Kwf_Assets_Dependency_DispatcherTest extends Kwf_Test_TestCase
     public function testPackageContents()
     {
         $package = new Kwf_Assets_Package($this->_list, 'Test');
-        $contents = $package->getPackageContents('text/javascript', 'en');
+        $contents = $package->getPackageContents('text/javascript', 'en', 0, false)->getFileContents();
         $contents = trim($contents);
         $contents = str_replace("\n\n", "\n", $contents);
         $this->assertEquals("foo2;\nbar2;\nfoo;\nbar;", $contents);
@@ -36,29 +36,6 @@ class Kwf_Assets_Dependency_DispatcherTest extends Kwf_Test_TestCase
 
         $contents = trim($output['contents']);
         $contents = str_replace("\n\n", "\n", $contents);
-        $this->assertEquals("foo2;\nbar2;\nfoo;\nbar;", $contents);
+        $this->assertRegExp("/^foo2;\nbar2;\nfoo;\nbar;\n\/\/# sourceMappingURL=/", $contents);
     }
-
-    public function testPackageDispatchDynamicNotInAll()
-    {
-        $package = new Kwf_Assets_Package($this->_list, 'TestWithDynamic');
-        $urls = $package->getPackageUrls('text/javascript', 'en');
-        $this->assertEquals(2, count($urls));
-
-        $url = $urls[0];
-        $output = Kwf_Assets_Dispatcher::getOutputForUrl($url, Kwf_Media_Output::ENCODING_NONE);
-
-        $contents = trim($output['contents']);
-        $contents = str_replace("\n\n", "\n", $contents);
-        $this->assertEquals("foo2;\nbar2;", $contents);
-
-        $url = $urls[1];
-        $output = Kwf_Assets_Dispatcher::getOutputForUrl($url, Kwf_Media_Output::ENCODING_NONE);
-
-        $contents = trim($output['contents']);
-        $contents = str_replace("\n\n", "\n", $contents);
-        $this->assertEquals("dynamic", $contents);
-    }
-
-
 }

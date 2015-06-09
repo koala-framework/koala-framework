@@ -8,7 +8,7 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
 
     public function indexAction()
     {
-        ini_set('memory_limit', '512M');
+        Kwf_Util_MemoryLimit::set(512);
 
         $select = new Kwf_Model_Select();
         if ($this->_getParam('all')) {
@@ -26,7 +26,18 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
             $select->where(new Kwf_Model_Select_Expr_Like('type', $this->_getParam('type')));
         }
         if ($this->_getParam('class')) {
-            $select->where(new Kwf_Model_Select_Expr_Like('component_class', $this->_getParam('class')));
+            $c = $this->_getParam('class');
+            if (strpos($c, '%') === false) {
+                $whereClass = array($c);
+                foreach (Kwc_Abstract::getComponentClasses() as $cls) {
+                    if (in_array($c, Kwc_Abstract::getSetting($cls, 'parentClasses'))) {
+                        $whereClass[] = $cls;
+                    }
+                }
+                $select->whereEquals('component_class', $whereClass);
+            } else {
+                $select->where(new Kwf_Model_Select_Expr_Like('component_class', $this->_getParam('class')));
+            }
         }
         if (!$this->_getParam('all') && !$this->_getParam('dbId') && !$this->_getParam('id') && !$this->_getParam('expandedId') && !$this->_getParam('type') && !$this->_getParam('class')) {
             throw new Kwf_Exception_Client("required parameter: --all, --id, --dbId, --expandedId, --type or --class");

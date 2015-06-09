@@ -50,6 +50,10 @@ function p($src, $Type = 'LOG')
         }
     }
     if ($isToDebug) {
+        if (php_sapi_name() == 'cli') {
+            $src = str_replace('<pre>', '', $src);
+            $src = str_replace('</pre>', '', $src);
+        }
         echo $src;
     } else if (function_exists('xdebug_var_dump')
         && !($src instanceof Zend_Db_Select ||
@@ -150,127 +154,6 @@ function pHex($s)
 }
 
 /**
- * @internal
- */
-function _btString($bt)
-{
-    $ret = '';
-    if (isset($bt['class'])) {
-        $ret .= $bt['class'].'::';
-    }
-    if (isset($bt['function'])) {
-        $ret .= $bt['function'].'('._btArgsString($bt['args']).')';
-    }
-    return $ret;
-}
-
-/**
- * @internal
- */
-function _btArgsString($args)
-{
-    $ret = array();
-    foreach ($args as $arg) {
-        $ret[] = _btArgString($arg);
-    }
-    return implode(', ', $ret);
-}
-
-/**
- * @internal
- */
-function _btArgString($arg)
-{
-    $ret = array();
-    if ($arg instanceof Kwf_Model_Select) {
-        $r = array();
-        foreach ($arg->getParts() as $key =>$val) {
-            $val = _btArgString($val);
-            $r[] = "$key => $val";
-        }
-        $ret[] = 'select(' . implode(', ', $r) . ')';
-    } else if ($arg instanceof Kwf_Component_Data) {
-        $ret[] = get_class($arg).'('.$arg->componentId.')';
-    } else if (is_object($arg)) {
-        $ret[] = get_class($arg);
-    } else if (is_array($arg)) {
-        $arrayString = array();
-        foreach ($arg as $k=>$i) {
-            $i = _btArgString($i);
-            if (!is_int($k)) {
-                $arrayString[] = "$k => $i";
-            } else {
-                $arrayString[] = $i;
-            }
-        }
-        $ret[] = 'array('.implode(', ', $arrayString).')';
-    } else if (is_null($arg)) {
-        $ret[] = 'null';
-    } else if (is_string($arg)) {
-        if (strlen($arg) > 200) $arg = substr($arg, 0, 197)."...";
-        $ret[] = '"'.$arg.'"';
-    } else if (is_bool($arg)) {
-        $ret[] = $arg ? 'true' : 'false';
-    } else {
-        $ret[] = $arg;
-    }
-    return current($ret);
-}
-
-/**
- * @package Debug
- */
-function btString()
-{
-    $bt = debug_backtrace();
-    $ret = '';
-    foreach ($bt as $i) {
-        if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') break;
-        if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') break;
-        if (isset($i['file']) && substr($i['file'], 0, 16) == '/www/public/niko/phpunit') break;
-        $ret .=
-            (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
-            (isset($i['line']) ? $i['line'] : '?') . ' - ' .
-            ((isset($i['object']) && $i['object'] instanceof Kwf_Component_Data) ? $i['object']->componentId . '->' : '') .
-            (isset($i['function']) ? $i['function'] : '') . '(' .
-            _btArgsString($i['args']) . ')' . "\n";
-    }
-    $ret .= "\n";
-    return $ret;
-}
-
-/**
- * @package Debug
- */
-function bt($file = false)
-{
-    if (!Kwf_Debug::isEnabled()) return;
-    if (php_sapi_name() == 'cli' || $file) {
-        $ret = btString();
-        if ($file) {
-            $ret = str_repeat("=", 45)."\n".
-                php_sapi_name().' '.(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '').
-                "\n".$ret;
-            file_put_contents('backtrace', $ret, FILE_APPEND);
-        } else {
-            echo $ret;
-        }
-    } else {
-        $bt = debug_backtrace();
-        unset($bt[0]);
-        $out = array(array('File', 'Line', 'Function', 'Args'));
-        foreach ($bt as $i) {
-            $out[] = array(
-                isset($i['file']) ? $i['file'] : '', isset($i['line']) ? $i['line'] : '',
-                isset($i['function']) ? $i['function'] : null,
-                _btArgsString($i['args']),
-            );
-        }
-        p(array('Backtrace for '._btString($bt[1]), $out), 'TABLE');
-    }
-}
-
-/**
  * @package Debug
  */
 class Kwf_Debug
@@ -298,6 +181,9 @@ class Kwf_Debug
 
     public static function handleException($exception)
     {
+        if ($exception instanceof Zend_Controller_Exception && $exception->getPrevious()) {
+            $exception = $exception->getPrevious();
+        }
         if (!$exception instanceof Kwf_Exception_Abstract) {
             $exception = new Kwf_Exception_Other($exception);
         }
@@ -335,4 +221,121 @@ class Kwf_Debug
     {
         return self::$_enabled > 0;
     }
+
+
+    /**
+    * @internal
+    */
+    public static function _btString($bt)
+    {
+        $ret = '';
+        if (isset($bt['class'])) {
+            $ret .= $bt['class'].'::';
+        }
+        if (isset($bt['function'])) {
+            $ret .= $bt['function'].'('.self::_btArgsString($bt['args']).')';
+        }
+        return $ret;
+    }
+
+    /**
+    * @internal
+    */
+    public static function _btArgsString($args)
+    {
+        $ret = array();
+        foreach ($args as $arg) {
+            $ret[] = self::_btArgString($arg);
+        }
+        return implode(', ', $ret);
+    }
+
+    /**
+    * @internal
+    */
+    public static function _btArgString($arg)
+    {
+        $ret = array();
+        if ($arg instanceof Kwf_Model_Select) {
+            $r = array();
+            foreach ($arg->getParts() as $key =>$val) {
+                $val = self::_btArgString($val);
+                $r[] = "$key => $val";
+            }
+            $ret[] = 'select(' . implode(', ', $r) . ')';
+        } else if ($arg instanceof Kwf_Component_Data) {
+            $ret[] = get_class($arg).'('.$arg->componentId.')';
+        } else if (is_object($arg)) {
+            $ret[] = get_class($arg);
+        } else if (is_array($arg)) {
+            $arrayString = array();
+            foreach ($arg as $k=>$i) {
+                $i = self::_btArgString($i);
+                if (!is_int($k)) {
+                    $arrayString[] = "$k => $i";
+                } else {
+                    $arrayString[] = $i;
+                }
+            }
+            $ret[] = 'array('.implode(', ', $arrayString).')';
+        } else if (is_null($arg)) {
+            $ret[] = 'null';
+        } else if (is_string($arg)) {
+            if (strlen($arg) > 200) $arg = substr($arg, 0, 197)."...";
+            $ret[] = '"'.$arg.'"';
+        } else if (is_bool($arg)) {
+            $ret[] = $arg ? 'true' : 'false';
+        } else {
+            $ret[] = $arg;
+        }
+        return current($ret);
+    }
+
+    public static function btString()
+    {
+        $bt = debug_backtrace();
+        $ret = '';
+        foreach ($bt as $i) {
+            if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') break;
+            if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') break;
+            if (isset($i['file']) && substr($i['file'], 0, 16) == '/www/public/niko/phpunit') break;
+            $ret .=
+                (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
+                (isset($i['line']) ? $i['line'] : '?') . ' - ' .
+                ((isset($i['object']) && $i['object'] instanceof Kwf_Component_Data) ? $i['object']->componentId . '->' : '') .
+                (isset($i['function']) ? $i['function'] : '') . '(' .
+                self::_btArgsString($i['args']) . ')' . "\n";
+        }
+        $ret .= "\n";
+        return $ret;
+    }
+
+    public static function bt($file = false)
+    {
+        if (!Kwf_Debug::isEnabled()) return;
+        if (php_sapi_name() == 'cli' || $file) {
+            $ret = self::btString();
+            if ($file) {
+                $ret = str_repeat("=", 45)."\n".
+                    php_sapi_name().' '.(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '').
+                    "\n".$ret;
+                file_put_contents('backtrace', $ret, FILE_APPEND);
+            } else {
+                echo $ret;
+            }
+        } else {
+            $bt = debug_backtrace();
+            unset($bt[0]);
+            $out = array(array('File', 'Line', 'Function', 'Args'));
+            foreach ($bt as $i) {
+                $out[] = array(
+                    isset($i['file']) ? $i['file'] : '', isset($i['line']) ? $i['line'] : '',
+                    isset($i['function']) ? $i['function'] : null,
+                    self::_btArgsString($i['args']),
+                );
+            }
+            p(array('Backtrace for '.self::_btString($bt[1]), $out), 'TABLE');
+        }
+    }
+
 }

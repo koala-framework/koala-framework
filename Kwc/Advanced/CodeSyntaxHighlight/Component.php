@@ -1,11 +1,12 @@
 <?php
+//requires easybook/geshi package
 class Kwc_Advanced_CodeSyntaxHighlight_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Code Syntax Highlighted');
-        $ret['componentIcon'] = new Kwf_Asset('page_code');
+        $ret['componentIcon'] = 'page_code';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['cssClass'] = ' webListNone';
@@ -15,7 +16,6 @@ class Kwc_Advanced_CodeSyntaxHighlight_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        require_once Kwf_Config::getValue('externLibraryPath.geshi').'/geshi.php';
 
         $row = $this->getRow();
         if ($row->language) {

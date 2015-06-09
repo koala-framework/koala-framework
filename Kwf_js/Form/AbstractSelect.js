@@ -1,6 +1,6 @@
-Kwf.Form.AbstractSelect = Ext.extend(Ext.form.TriggerField,
+Kwf.Form.AbstractSelect = Ext2.extend(Ext2.form.TriggerField,
 {
-    triggerClass : 'x-form-search-trigger',
+    triggerClass : 'x2-form-search-trigger',
     readOnly: true,
     width: 200,
     _windowItem: null,
@@ -18,7 +18,7 @@ Kwf.Form.AbstractSelect = Ext.extend(Ext.form.TriggerField,
 
     _getSelectWin: function() {
         if (!this._selectWin) {
-            this._selectWin = new Ext.Window({
+            this._selectWin = new Ext2.Window({
                 width: this.windowWidth || 535,
                 height: this.windowHeight || 500,
                 modal: true,

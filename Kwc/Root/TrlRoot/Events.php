@@ -8,13 +8,13 @@ class Kwc_Root_TrlRoot_Events extends Kwc_Abstract_Events
         $siblingModels = $model->getSiblingModels();
         $ret[] = array(
             'class' => get_class($siblingModels[0]),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onLanguageUpdate'
         );
         return $ret;
     }
 
-    public function onLanguageUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onLanguageUpdate(Kwf_Events_Event_Row_Updated $event)
     {
         if ($event->isDirty('visible')) {
             $c = Kwf_Component_Data_Root::getInstance()->getChildComponent(

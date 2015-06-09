@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.ActiveChanger.Hash = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.ActiveChanger.Hash = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     _hashDelimiter: ':',
 
     init: function() {
@@ -9,7 +9,7 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.Hash = Ext.extend(Kwf.EyeCandy.List.Plug
             this._addHashPart(this._getItemId(item));
         }, this);
 
-        Ext.History.on('change', function(token) {
+        Ext2.History.on('change', function(token) {
             this._setActiveItemByToken(token);
         }, this);
     },
@@ -35,7 +35,7 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.Hash = Ext.extend(Kwf.EyeCandy.List.Plug
             if (!found) newHashes.push(hashes[i]);
         }
         newHashes.push(hashPart);
-        Ext.History.add(newHashes.join(this._hashDelimiter));
+        Ext2.History.add(newHashes.join(this._hashDelimiter));
     },
 
     _getItemId: function(item) {
@@ -45,7 +45,7 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.Hash = Ext.extend(Kwf.EyeCandy.List.Plug
     },
 
     _getHashes: function(token) {
-        var hash = token || Ext.History.getToken();
+        var hash = token || Ext2.History.getToken();
         if (!hash) return '';
         return hash.split(this._hashDelimiter);
     },

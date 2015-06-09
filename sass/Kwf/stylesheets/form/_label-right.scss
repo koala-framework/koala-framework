@@ -1,0 +1,42 @@
+@mixin form-label-right {
+    label {
+        float: right;
+    }
+
+    .kwfFormFieldRadioHorizontal,
+    .kwfFormFieldRadioVertical {
+        label {
+            display: inline-block; 
+            margin-left: 0px;
+            float: none;
+            width: auto;
+        }
+    }
+
+    .kwfFormFieldMultiCheckboxHorizontal,
+    .kwfFormFieldMultiCheckboxVertical {
+        label {
+            display: inline-block; 
+            margin-left: 0px;
+            float: none;
+            width: auto;
+        }
+    }
+
+    .kwcFormFieldRadio {
+        .kwfFormFieldWrapper {
+            &.hasLabel {
+                display: inline-block;
+            }
+        }
+    }
+
+    .kwfFormFieldMultiCheckbox {
+        .kwfFormFieldMultiCheckbox {
+            label {
+                margin-right: 0;
+                width: auto;
+            }
+        }
+    }
+}

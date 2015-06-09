@@ -39,7 +39,6 @@ class Kwf_Model_RowCache_Row extends Kwf_Model_Proxy_Row
     protected function _saveWithoutResetDirty()
     {
         $this->_loadRow();
-        $this->_model->clearRowCache($this->{$this->_model->getPrimaryKey()});
         return parent::_saveWithoutResetDirty();
     }
 
@@ -56,8 +55,13 @@ class Kwf_Model_RowCache_Row extends Kwf_Model_Proxy_Row
     public function delete()
     {
         $this->_loadRow();
-        $this->_model->clearRowCache($this->{$this->_model->getPrimaryKey()});
         return parent::delete();
+    }
+
+    public function getProxiedRow()
+    {
+        $this->_loadRow();
+        return parent::getProxiedRow();
     }
 
     private function _loadRow()

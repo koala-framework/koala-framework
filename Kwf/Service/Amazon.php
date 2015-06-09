@@ -36,7 +36,6 @@ class Kwf_Service_Amazon extends Zend_Service_Amazon
             /**
              * @see Zend_Service_Exception
              */
-            require_once 'Zend/Service/Exception.php';
             throw new Zend_Service_Exception('An error occurred sending request. Status code: '
                                            . $response->getStatus());
         }
@@ -75,7 +74,6 @@ class Kwf_Service_Amazon extends Zend_Service_Amazon
             /**
              * @see Zend_Service_Exception
              */
-            require_once 'Zend/Service/Exception.php';
             throw new Zend_Service_Exception(
                 'An error occurred sending request. Status code: ' . $response->getStatus()
             );
@@ -121,7 +119,6 @@ class Kwf_Service_Amazon extends Zend_Service_Amazon
             /**
              * @see Zend_Service_Exception
              */
-            require_once 'Zend/Service/Exception.php';
             throw new Zend_Service_Exception('An error occurred sending request. Status code: '
                                            . $response->getStatus());
         }

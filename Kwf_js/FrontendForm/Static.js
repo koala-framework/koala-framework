@@ -1,4 +1,4 @@
-Kwf.FrontendForm.Static = Ext.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.Static = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {
     },
     getValue: function() {

@@ -23,10 +23,10 @@ class Kwc_Shop_Cart_Checkout_InvoicePdf extends Kwf_Pdf_TcPdf
         if($order->title) { $order->title .= " "; }
         $this->MultiCell(0, 0, $order->title.$order->firstname." ".$order->lastname, 0, 'L');
 
-        $this->MultiCell(0, 0, "\n".$data->trl('Order Number').":\n$order->order_number\n".
-        "\n".$data->trl('Customer Number').":\n$order->customer_number\n".
-        "\n".$data->trl('Invoice Number').":\n$order->invoice_number\n".
-        "\n".$data->trl('Invoice Date').":\n".$dateHelper->date($order->invoice_date), 0, 'L');
+        $this->MultiCell(0, 0, "\n".$data->trlKwf('Order Number').":\n$order->order_number\n".
+        "\n".$data->trlKwf('Customer Number').":\n$order->customer_number\n".
+        "\n".$data->trlKwf('Invoice Number').":\n$order->invoice_number\n".
+        "\n".$data->trlKwf('Invoice Date').":\n".$dateHelper->date($order->invoice_date), 0, 'L');
 
         foreach ($order->getProductsData() as $item) {
             $text = $item->amount."x ".$item->text;

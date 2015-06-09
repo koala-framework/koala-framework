@@ -17,12 +17,12 @@
     border: none;
 }
 
-.x-form-radio-group .x-form-element.error {
+.x2-form-radio-group .x2-form-element.error {
     background-color: #ff0000;
     color: #ffffff;
 }
 
-.x-window .kwc-abstract-image-crop-image-wrapper.error {
+.x2-window .kwc-abstract-image-crop-image-wrapper.error {
     background-image: url('/assets/kwf/images/cropimage/redPx85.png');
 }
 

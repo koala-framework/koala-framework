@@ -15,7 +15,7 @@
                 <?=$this->image('/assets/kwf/images/rating/ratingStarEmpty.jpg', 'StarEmpty', 'ratingStar');?>
             <? } ?></p>
         <? } ?>
-        <a class="order" href="<?=$this->product->detailPageURL?>" rel="popup_blank"><?=$this->data->trlKwf('order now at amazon')?></a>
+        <a class="order" href="<?=$this->product->detailPageURL?>" data-kwc-popup="blank"><?=$this->data->trlKwf('order now at amazon')?></a>
         <div class="clear"></div>
     </div>
 

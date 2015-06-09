@@ -1,11 +1,11 @@
-Kwf.Form.FileCheckBox = Ext.extend(Ext.form.Checkbox,
+Kwf.Form.FileCheckBox = Ext2.extend(Ext2.form.Checkbox,
 {
     setValue : function(value)
     {
         if (typeof value == 'object') {
             this.setDisabled(!value.uploaded);
 
-            var el = Ext.get(this.name + '_show');
+            var el = Ext2.get(this.name + '_show');
             if (value.url) {
                 var text = '<span id="' + this.name + '_show' + '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 text += '<a href="' + value.url + '" target="#blank">';
@@ -13,16 +13,16 @@ Kwf.Form.FileCheckBox = Ext.extend(Ext.form.Checkbox,
                 text += '</a>&nbsp;'+trlKwf('Show Original');
                 text += '</span>';
                 if (this.node) {
-                    Ext.DomHelper.overwrite(this.node, text);
+                    Ext2.DomHelper.overwrite(this.node, text);
                 } else {
-                    this.node = Ext.DomHelper.insertAfter(this.container.dom.lastChild.lastChild, text);
+                    this.node = Ext2.DomHelper.insertAfter(this.container.dom.lastChild.lastChild, text);
                 }
             } else if (el) {
-                Ext.DomHelper.overwrite(el, '');
+                Ext2.DomHelper.overwrite(el, '');
             }
         } else {
             Kwf.Form.FileCheckBox.superclass.setValue.call(this, value);
         }
     }
 });
-Ext.reg('filecheckbox', Kwf.Form.FileCheckBox);
+Ext2.reg('filecheckbox', Kwf.Form.FileCheckBox);

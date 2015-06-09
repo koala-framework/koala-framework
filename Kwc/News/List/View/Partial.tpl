@@ -20,9 +20,9 @@
             <p>
                 <?=nl2br($this->item->row->teaser);?>
                 <? if($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
-                    <span class="readMoreLink">
+                    <div class="readMoreLink">
                         <?=$this->componentLink($this->item, $this->placeholder['readMore']);?>
-                    </span>
+                    </div>
                 <? } ?>
             </p>
         </div>

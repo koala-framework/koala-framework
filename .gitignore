@@ -10,3 +10,8 @@ eventlog
 nbproject
 automagic-checkout.log
 .idea/
+/vendor
+/node_modules
+/.bowerrc
+/bower.json
+/trl

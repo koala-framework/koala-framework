@@ -1,5 +1,5 @@
-Ext.data.Store.prototype.originalLoad = Ext.data.Store.prototype.load;
-Ext.override(Ext.data.Store, {
+Ext2.data.Store.prototype.originalLoad = Ext2.data.Store.prototype.load;
+Ext2.override(Ext2.data.Store, {
 	load : function(options) {
 		this.paramNames.dir = 'direction'; //hack, weil wir keinen eigenen store haben
 

@@ -20,3 +20,7 @@ der beim schließen die Bilder nicht sofort verschwinden ließ, sondern
 die steuerung (zoom +/-) einer GoogleMap in einem switchDisplay zerstören würde.
 */
 /* div.kwfSwitchDisplay div.switchContent img { position: relative; z-index: 500;} */
+
+
+/* avoid flicker */
+html.js div.kwfSwitchDisplay div.switchContent { display: none; }

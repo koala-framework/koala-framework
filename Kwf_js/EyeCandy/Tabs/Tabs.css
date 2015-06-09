@@ -4,6 +4,7 @@
 .kwfTabsContent {
     border: 1px solid #bbb;
     padding: 3px 10px;
+    width: 100%;
     clear: both;
 }
 .kwfTabsLink {

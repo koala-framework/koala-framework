@@ -19,7 +19,7 @@ class Kwf_Uploads_S3Test extends Kwf_Test_TestCase
     {
         $model = new Kwf_Uploads_Model(array(
             'proxyModel' => new Kwf_Model_FnF(array(
-                'columns' => array('id', 'filename', 'extension', 'mime_type'),
+                'columns' => array('id', 'filename', 'extension', 'mime_type', 'md5_hash'),
                 'data'=> array(
                 )
             ))

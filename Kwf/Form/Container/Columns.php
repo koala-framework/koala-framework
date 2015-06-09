@@ -10,7 +10,7 @@ class Kwf_Form_Container_Columns extends Kwf_Form_Container_Abstract
         parent::__construct($name);
         $this->setLayout('column');
         $this->setBorder(false);
-        $this->setBaseCls('x-plain');
+        $this->setBaseCls('x2-plain');
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '', $idPrefix = '')

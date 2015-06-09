@@ -5,39 +5,101 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     private $_mtimeCache;
     private $_fileNameCache;
 
-    public function __construct($fileName)
+    public function __construct($fileNameWithType)
     {
-        $this->_fileName = $fileName;
+        if (substr($fileNameWithType, 0, 1) == '/') {
+            throw new Kwf_Exception('Don\'t use absolute file names');
+        }
+        if (!$fileNameWithType) {
+            throw new Kwf_Exception("Invalid filename");
+        }
+        $this->_fileName = $fileNameWithType;
+        if (strpos($fileNameWithType, '\\') !== false) {
+            throw new Kwf_Exception("Infalid filename, must not contain \\, use / instead");
+        }
+
+        //check commented out, only required for debugging
+        //if (!file_exists($this->getAbsoluteFileName())) {
+        //    throw new Kwf_Exception("File not found: '$this->_fileName' ('{$this->getAbsoluteFileName()}')");
+        //}
     }
 
     public function getContents($language)
     {
-        return file_get_contents($this->getFileName());
+        return file_get_contents($this->getAbsoluteFileName());
     }
 
-    public function getFileName()
+    public function getType()
+    {
+        return substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+    }
+
+    public function getFileNameWithType()
+    {
+        return $this->_fileName;
+    }
+
+    protected static function _getAllPaths()
+    {
+        static $paths;
+        if (!isset($paths)) {
+            $cacheId = 'assets-file-paths';
+            $paths = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            if ($paths === false) {
+                $paths = array(
+                    'webComponents' => 'components',
+                    'webThemes' => 'themes',
+                );
+                $vendors[] = KWF_PATH; //required for kwf tests, in web kwf is twice in $vendors but that's not a problem
+                $vendors[] = '.';
+                $vendors = array_merge($vendors, glob(VENDOR_PATH."/*/*"));
+                foreach ($vendors as $i) {
+                    if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
+                        $c = new Zend_Config_Ini($i.'/dependencies.ini');
+                        if ($c->config) {
+                            $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                            $pathType = (string)$dep->pathType;
+                            if ($pathType) {
+                                $paths[$pathType] = $i;
+                            }
+                        }
+                    }
+                }
+                foreach (glob(VENDOR_PATH.'/bower_components/*') as $i) {
+                    $type = substr($i, strlen(VENDOR_PATH.'/bower_components/'));
+                    if (substr($type, -3) == '.js') $type = substr($type, 0, -3);
+                    if (substr($type, -2) == 'js') $type = substr($type, 0, -2);
+                    $paths[$type] = $i;
+                }
+                $paths['web'] = '.';
+                Kwf_Cache_SimpleStatic::add($cacheId, $paths);
+            }
+        }
+        return $paths;
+    }
+
+    public function getAbsoluteFileName()
     {
         if (isset($this->_fileNameCache)) return $this->_fileNameCache;
-        static $paths;
-        if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
-
-        $pathType = substr($this->_fileName, 0, strpos($this->_fileName, '/'));
+        $paths = self::_getAllPaths();
+        $pathType = $this->getType();
         $f = substr($this->_fileName, strpos($this->_fileName, '/'));
         if (isset($paths[$pathType])) {
             $f = $paths[$pathType].$f;
         } else if (file_exists($this->_fileName)) {
             $f = $this->_fileName;
         } else {
-            $f = false;
+            throw new Kwf_Exception("Unknown path type: '$pathType' for '$this->_fileName'");
         }
         $this->_fileNameCache = $f;
+
         return $f;
     }
 
     public function getMTime()
     {
         if (!isset($this->_mtimeCache)) {
-            $f = $this->getFileName();
+            $f = $this->getAbsoluteFileName();
             if ($f) {
                 $this->_mtimeCache = filemtime($f);
             }
@@ -62,8 +124,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             $fileName = substr($fileName, strpos($fileName, '/')); //pathtype abschneiden
             $fileName = substr($fileName, 0, -1); // /* abschneiden
 
-            static $paths;
-            if (!isset($paths)) $paths = Kwf_Config::getValueArray('path');
+            $paths = self::_getAllPaths();
             $path = $paths[$pathType].$fileName;
             if (!file_exists($path)) {
                 throw new Kwf_Exception("Path '$path' does not exist.");
@@ -72,11 +133,11 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             $it = new RecursiveDirectoryIterator($path);
             $it = new Kwf_Iterator_Filter_HiddenFiles($it);
             $it = new RecursiveIteratorIterator($it);
-            $it = new Kwf_Iterator_Filter_FileExtension($it, array('js', 'css'));
+            $it = new Kwf_Iterator_Filter_FileExtension($it, array('js', 'css', 'scss'));
             foreach ($it as $file) {
                 $f = $file->getPathname();
                 $f = substr($f, strlen($paths[$pathType]));
-                $f = $pathType . $f;
+                $f = $pathType . str_replace('\\', '/', $f);
                 $files[] = self::createDependency($f, $providerList);
             }
             $ret = new Kwf_Assets_Dependency_Dependencies($files, $fileName.'*');
@@ -88,27 +149,15 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     public function __toString()
     {
-        $ret = $this->_fileName;
-        if (!$ret) {
-            $ret = parent::__toString();
-        }
-        return $ret;
+        return $this->_fileName;
     }
 
     protected function _getComponentCssClass()
     {
-        $cssClass = realpath($this->getFileName());
+        $cssClass = $this->getAbsoluteFileName();
+        if (substr($cssClass, 0, 2) == './') $cssClass = substr($cssClass, 2);
 
-        static $paths;
-        if (!isset($paths)) {
-            $paths = Kwf_Config::getValueArray('path');
-            foreach ($paths as &$p) {
-                if (substr($p, 0, 1) == '.') $p = getcwd().substr($p, 1);
-                $p = realpath($p);
-            }
-            unset($paths['web']);
-            $paths['webComponents'] = getcwd().'/components';
-        }
+        $paths = self::_getAllPaths();
         foreach ($paths as $i) {
             if ($i && substr($cssClass, 0, strlen($i)+1) == $i.'/') {
                 $cssClass = substr($cssClass, strlen($i)+1);
@@ -119,6 +168,9 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         }
         if (substr($cssClass, -5) == '.scss') {
             $cssClass = substr($cssClass, 0, -5);
+        }
+        if (substr($cssClass, -9) == '.defer.js') {
+            $cssClass = substr($cssClass, 0, -9);
         }
         if (substr($cssClass, -3) == '.js') {
             $cssClass = substr($cssClass, 0, -3);
@@ -139,5 +191,46 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             return strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
         }
         return null;
+    }
+
+    private static function _getAbsolutePath($path)
+    {
+        if (substr($path, 0, 1)=='.') $path = getcwd().'/'.$path;
+        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+        $absolutes = array();
+        foreach ($parts as $part) {
+            if ('.' == $part) continue;
+            if ('..' == $part) {
+                array_pop($absolutes);
+            } else {
+                $absolutes[] = $part;
+            }
+        }
+        if (DIRECTORY_SEPARATOR == '\\') {
+            //windows
+            return implode(DIRECTORY_SEPARATOR, $absolutes);
+        } else {
+            return DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $absolutes);
+        }
+    }
+
+    public static function getPathWithTypeByFileName($fileName)
+    {
+        $paths = self::_getAllPaths();
+        $fileName = self::_getAbsolutePath($fileName);
+        $fileName = str_replace(DIRECTORY_SEPARATOR, '/', $fileName);
+        foreach ($paths as $k=>$p) {
+            if ($p == '.') $p = getcwd();
+            if ($p == '..') $p = substr(getcwd(), 0, strrpos(getcwd(), '/'));
+            if (substr($p, 0, 7) == 'vendor/') $p = getcwd().'/'.$p;
+            if (substr($p, 0, 10) == '../vendor/') {
+                $p = substr(getcwd(), 0, strrpos(getcwd(), '/')).'/'.substr($p, 3);
+            }
+            $p = str_replace(DIRECTORY_SEPARATOR, '/', $p);
+            if (substr($fileName, 0, strlen($p)) == $p) {
+                return $k.substr($fileName, strlen($p));
+            }
+        }
+        return false;
     }
 }

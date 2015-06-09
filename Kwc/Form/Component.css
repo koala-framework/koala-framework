@@ -26,16 +26,9 @@
 .cssClass .submitWrapper .button {
     position: relative;
 }
-.cssClass .submitWrapper .saving {
-    width: 24px;
-    height: 24px;
-    background-image: url(/assets/kwf/Kwc/Form/loading.gif);
-    visibility: hidden;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-top: -12px;
-    margin-left: -12px;
+
+.cssClass .submitWrapper .button.disabled {
+    opacity: 0.3;
 }
 
 .cssClass input,

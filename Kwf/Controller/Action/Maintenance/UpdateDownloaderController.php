@@ -3,7 +3,7 @@ class Kwf_Controller_Action_Maintenance_UpdateDownloaderController extends Kwf_C
 {
     public function indexAction()
     {
-        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('UpdateDownloader');
+        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('Maintenance');
         $this->view->xtype = 'kwf.maintenance.updateDownloader';
 
         $this->view->defaultLibraryUrl = 'https://github.com/vivid-planet/library/archive/master.tar.gz';

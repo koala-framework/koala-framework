@@ -8,7 +8,6 @@ class Kwc_Favourites_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['assets']['dep'][] = 'KwfSwitchHoverFade';
-        $ret['assets']['dep'][] = 'KwfOnReadyJQuery';
 
         $ret['placeholder']['saveFavourite'] = trlKwfStatic('save as favourite');
         $ret['placeholder']['deleteFavourite'] = trlKwfStatic('delete favourite');

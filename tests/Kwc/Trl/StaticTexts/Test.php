@@ -9,14 +9,43 @@ class Kwc_Trl_StaticTexts_Test extends Kwc_TestAbstract
     {
         Kwf_Registry::get('config')->languages = array('de', 'en');
         Kwf_Trl::getInstance()->setWebCodeLanguage('de');
-        Kwf_Trl::getInstance()->setModel(new Kwc_Trl_StaticTexts_TrlModelWeb(), Kwf_Trl::SOURCE_WEB);
         parent::setUp('Kwc_Trl_StaticTexts_Root');
+        $trlElements = array();
+        $trlElements['web']['de']['Sichtbar-'] = 'Sichtbar';
+        $trlElements['web']['de']['Am-time'] = 'Am';
+        $trlElements['web']['de']['Antwort-'] = 'Antwort';
+        $trlElements['web']['de_plural']['Antworten-'] = 'Antworten';
+        $trlElements['web']['de']['Antwort-test'] = 'Antwort';
+        $trlElements['web']['de_plural']['Antworten-test'] = 'Antworten';
+
+        $trlElements['kwf']['de']['Visible-'] = 'Sichtbar';
+        $trlElements['kwf']['de']['On-time'] = 'Am';
+        $trlElements['kwf']['de']['reply-'] = 'Antwort';
+        $trlElements['kwf']['de_plural']['replies-'] = 'Antworten';
+        $trlElements['kwf']['de']['reply-test'] = 'Antwort';
+        $trlElements['kwf']['de_plural']['replies-test'] = 'Antworten';
+
+        $trlElements['web']['en'] = array();
+        $trlElements['web']['en']['Sichtbar-'] = 'Visible';
+        $trlElements['web']['en']['Am-time'] = 'On';
+        $trlElements['web']['en']['Antwort-'] = 'reply';
+        $trlElements['web']['en_plural']['Antworten-'] = 'replies';
+        $trlElements['web']['en']['Antwort-test'] = 'reply';
+        $trlElements['web']['en_plural']['Antworten-test'] = 'replies';
+
+        $trlElements['kwf']['en']['Visible-'] = 'Visible';
+        $trlElements['kwf']['en']['On-time'] = 'On';
+        $trlElements['kwf']['en']['reply-'] = 'reply';
+        $trlElements['kwf']['en_plural']['replies-'] = 'replies';
+        $trlElements['kwf']['en']['reply-test'] = 'reply';
+        $trlElements['kwf']['en_plural']['replies-test'] = 'replies';
+
+        Kwf_Trl::getInstance()->setTrlElements($trlElements);
     }
 
     public function tearDown()
     {
         Kwf_Trl::getInstance()->setWebCodeLanguage(null);
-        Kwf_Trl::getInstance()->setModel(null, Kwf_Trl::SOURCE_WEB);
         parent::tearDown();
     }
 

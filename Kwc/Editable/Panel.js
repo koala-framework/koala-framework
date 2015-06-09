@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Editable');
-Kwc.Editable.Panel = Ext.extend(Ext.Panel, {
+Ext2.namespace('Kwc.Editable');
+Kwc.Editable.Panel = Ext2.extend(Ext2.Panel, {
     layout: 'border',
     initComponent: function() {
         var componentsGrid = new Kwf.Auto.GridPanel({
@@ -37,4 +37,4 @@ Kwc.Editable.Panel = Ext.extend(Ext.Panel, {
         Kwc.Editable.Panel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwc.editable', Kwc.Editable.Panel);
+Ext2.reg('kwc.editable', Kwc.Editable.Panel);

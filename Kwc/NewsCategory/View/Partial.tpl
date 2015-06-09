@@ -6,7 +6,7 @@
             <span class="publishDate"><?=$this->date($this->item->publish_date)?>
                 <?
                 if ($this->item->categories) { ?>
-                    | <?= trlp('Kategorie', 'Kategorien', count($this->item->categories)); ?>
+                    | <?= trlpKwf('Category', 'Categories', count($this->item->categories)); ?>
                     <? $nci = 0;
                     foreach ($this->item->categories as $nc) {
                         if ($nci++ >= 1) echo ', ';
@@ -25,7 +25,7 @@
     <? } ?>
     <div class="teaser">
         <p><?=$this->item->row->teaser?></p>
-        <?=$this->componentLink($this->item,trl('weiterlesen').' »');?>
+        <?=$this->componentLink($this->item,trlKwf('Read more').' »');?>
     </div>
     <div class="clear"></div>
 </div>

@@ -1,10 +1,10 @@
-Ext.ns('Kwf.Maintenance');
-Kwf.Maintenance.SetupSteps = Ext.extend(Ext.Panel, {
+Ext2.ns('Kwf.Maintenance');
+Kwf.Maintenance.SetupSteps = Ext2.extend(Ext2.Panel, {
     currentStep: 'welcome',
     border: false,
     cls: 'kwfSetupSteps',
     initComponent: function() {
-        this.stepsTemplate = new Ext.XTemplate(
+        this.stepsTemplate = new Ext2.XTemplate(
             '<ul>',
             '<tpl for="steps">',
                 '<li class="<tpl if="step == parent.currentStep">current</tpl>"><span class="num">{num}.</span> {text}</li>',

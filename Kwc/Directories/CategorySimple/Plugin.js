@@ -1,10 +1,10 @@
-Ext.namespace('Kwc.Directories.CategorySimple');
+Ext2.namespace('Kwc.Directories.CategorySimple');
 Kwc.Directories.CategorySimple.Plugin = function(config) {
     config.text = trlKwf('Categories');
-    Ext.apply(this, config);
+    Ext2.apply(this, config);
 };
 
-Ext.extend(Kwc.Directories.CategorySimple.Plugin, Ext.util.Observable,
+Ext2.extend(Kwc.Directories.CategorySimple.Plugin, Ext2.util.Observable,
 {
     init: function(gridPanel)
     {
@@ -15,7 +15,7 @@ Ext.extend(Kwc.Directories.CategorySimple.Plugin, Ext.util.Observable,
             grid.getTopToolbar().add({
                 text    : this.text,
                 handler : function(o, p) {
-                    var dlg = new Ext.Window({
+                    var dlg = new Ext2.Window({
                         width:  this.width || 600,
                         height: this.height || 600,
                         layout: 'fit',

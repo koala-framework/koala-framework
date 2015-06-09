@@ -1,0 +1,13 @@
+@mixin form-margin($margin, $position) {
+    label {
+        @if $position == left {
+            margin-right: $margin;
+            margin-left: 0px;
+        } @else if $position == right {
+            margin-left: $margin;
+            margin-right: 0px;
+        } @else {
+            margin: 0px;
+        }
+    }
+}

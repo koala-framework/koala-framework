@@ -5,6 +5,7 @@ class Kwc_Root_LanguageRoot_Generator extends Kwf_Component_Generator_PseudoPage
     {
         $ret = parent::getGeneratorFlags();
         $ret['showInPageTreeAdmin'] = true;
+        $ret['showInLinkInternAdmin'] = true;
         return $ret;
     }
 }

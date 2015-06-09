@@ -1,4 +1,4 @@
-@import "susy";
+@import "kwf/susyone";
 @import "compass/css3/box-sizing";
 @import "compass/utilities/general/clearfix";
 $gutter-width   : 0em;
@@ -13,6 +13,10 @@ $grid-padding   : 0em;
                     text-align: left;
                 }
             }
+        }
+
+        &.emptyContent {
+            display: none;
         }
     }
 }
@@ -74,6 +78,20 @@ $grid-padding   : 0em;
     &.col4col-25_25_25_25 {
         > .listItem.span1 {
             @include span-columns(1, 2);
+
+            &.emptyContent {
+                display: none;
+            }
+        }
+    }
+
+    &.col5col-20_20_20_20_20 {
+        > .listItem.span1 {
+            @include span-columns(1, 5);
+
+            &.emptyContent {
+                display: none;
+            }
         }
     }
 
@@ -91,6 +109,10 @@ $grid-padding   : 0em;
     &.col4col-25_25_25_25 {
         > .listItem.span1 {
             @include span-columns(1, 4);
+
+            &.emptyContent {
+                display: inline;
+            }
         }
     }
 }

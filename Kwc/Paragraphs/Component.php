@@ -9,7 +9,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlKwfStatic('Paragraphs'),
-            'componentIcon' => new Kwf_Asset('page')
+            'componentIcon' => 'page'
         ));
         $ret['childModel'] = 'Kwc_Paragraphs_Model';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/Panel.js';
@@ -34,6 +34,19 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         $ret['showCopyPaste'] = true;
         $ret['extConfig'] = 'Kwc_Paragraphs_ExtConfig';
         $ret['useMobileBreakpoints'] = Kwf_Config::getValue('kwc.mobileBreakpoints');
+
+        $ret['categories'] = array(
+            'content'      => 'content',
+            'none'         => 'none',
+            'layout'       => trlKwfStatic('Layout'),
+            'media'        => trlKwfStatic('Pictures & Media'),
+            'callToAction' => trlKwfStatic('Call to Action'),
+            'childPages'   => trlKwfStatic('Child Pages'),
+            'special'      => trlKwfStatic('Special'),
+            'model'        => trlKwfStatic('Model'),
+            'contact'      => trlKwfStatic('Contact'),
+            'admin'        => trlKwfStatic('Admin'),
+        );
         return $ret;
     }
 

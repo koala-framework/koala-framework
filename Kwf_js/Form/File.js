@@ -1,4 +1,4 @@
-Kwf.Form.File = Ext.extend(Ext.form.Field, {
+Kwf.Form.File = Ext2.extend(Ext2.form.Field, {
     allowOnlyImages: false,
     fileSizeLimit: 0,
     showPreview: true,
@@ -24,8 +24,8 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     },
     previewTpl: ['<div class="hover-background"></div><a href="{href}" target="_blank" class="previewImage" ',
                  'style="width: {previewWidth}px; height: {previewHeight}px; display: block; background-repeat: no-repeat; background-position: center; background-image: url({preview});"></a>'],
-    // also usable in infoTpl: {href}
-    infoTpl: ['<div class="filedescription"><div class="filename">{filename}.{extension}</div>',
+    // also usable in infoTpl: {href} {filename}.{extension}
+    infoTpl: ['<div class="filedescription">',
               '<div class="filesize"><tpl if="image">{imageWidth}x{imageHeight}px, </tpl>',
               '{fileSize:fileSize}</div></div>'],
     emptyTpl: ['<div class="empty" style="height: {previewHeight}px; width: {previewWidth}px; text-align: center;line-height:{previewHeight}px">('+trlKwf('empty')+')</div>'],
@@ -34,19 +34,19 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         this.addEvents(['uploaded']);
 
         if (this.showPreview) {
-            if (!(this.previewTpl instanceof Ext.XTemplate)) {
-                this.previewTpl = new Ext.XTemplate(this.previewTpl);
+            if (!(this.previewTpl instanceof Ext2.XTemplate)) {
+                this.previewTpl = new Ext2.XTemplate(this.previewTpl);
             }
             this.previewTpl.compile();
 
-            if (!(this.emptyTpl instanceof Ext.XTemplate)) {
-                this.emptyTpl = new Ext.XTemplate(this.emptyTpl);
+            if (!(this.emptyTpl instanceof Ext2.XTemplate)) {
+                this.emptyTpl = new Ext2.XTemplate(this.emptyTpl);
             }
             this.emptyTpl.compile();
         }
 
-        if (!(this.infoTpl instanceof Ext.XTemplate)) {
-            this.infoTpl = new Ext.XTemplate(this.infoTpl);
+        if (!(this.infoTpl instanceof Ext2.XTemplate)) {
+            this.infoTpl = new Ext2.XTemplate(this.infoTpl);
         }
         this.infoTpl.compile();
 
@@ -96,9 +96,9 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
         this.createUploadButton();
         if (this.showDeleteButton) {
-            this.deleteButton = new Ext.Button({
+            this.deleteButton = new Ext2.Button({
                 text: trlKwf('Delete File'),
-                cls: 'x-btn-text-icon',
+                cls: 'x2-btn-text-icon',
                 icon: '/assets/silkicons/delete.png',
                 renderTo: this.el.createChild({cls: 'deleteButton'}),
                 scope: this,
@@ -131,14 +131,14 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
                 this.uploadButtonContainer.show();
             }, this);
             this.swfu.on('fileQueued', function(file) {
-                this.progress = Ext.MessageBox.show({
+                this.progress = Ext2.MessageBox.show({
                     title : trlKwf('Upload'),
                     msg : trlKwf('Uploading file'),
                     buttons: false,
                     progress:true,
                     closable:false,
                     minWidth: 250,
-                    buttons: Ext.MessageBox.CANCEL,
+                    buttons: Ext2.MessageBox.CANCEL,
                     scope: this,
                     fn: function(button) {
                         this.swfu.cancelUpload(file.id);
@@ -185,9 +185,9 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
         while (this.uploadButtonContainer.last()) {
             this.uploadButtonContainer.last().remove();
         }
-        this.uploadButton = new Ext.Button({
+        this.uploadButton = new Ext2.Button({
             text: trlKwf('Upload File'),
-            cls: 'x-btn-text-icon',
+            cls: 'x2-btn-text-icon',
             icon: '/assets/silkicons/add.png',
             renderTo: this.uploadButtonContainer,
             scope: this,
@@ -236,14 +236,14 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
     html5UploadFile: function(file)
     {
-        this.progress = Ext.MessageBox.show({
+        this.progress = Ext2.MessageBox.show({
             title : trlKwf('Upload'),
             msg : trlKwf('Uploading file'),
             buttons: false,
             progress:true,
             closable:false,
             minWidth: 250,
-            buttons: Ext.MessageBox.CANCEL,
+            buttons: Ext2.MessageBox.CANCEL,
             scope: this,
             fn: function(button) {
                 xhr.abort();
@@ -337,7 +337,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             return;
         }
         if (this.getEl().child('.previewImage') && this.imageData) {
-            this.getEl().child('.box').setStyle('background-image', 'url(/assets/ext/resources/images/default/grid/loading.gif)');
+            this.getEl().child('.box').setStyle('background-image', 'url(/assets/ext2/resources/images/default/grid/loading.gif)');
             var img = new Image();
             img.onload = (function () {
                 this.getEl().child('.box').setStyle('background-image', 'none');
@@ -365,7 +365,7 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
 
 
 
-Ext.reg('kwf.file', Kwf.Form.File);
+Ext2.reg('kwf.file', Kwf.Form.File);
 
 
 

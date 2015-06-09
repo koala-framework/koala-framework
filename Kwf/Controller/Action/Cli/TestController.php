@@ -66,7 +66,7 @@ class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli
     public static function initForTests()
     {
         Kwf_Session::start();
-        ini_set('memory_limit', '512M');
+        Kwf_Util_MemoryLimit::set(512);
 
         Kwf_Component_Data_Root::setComponentClass(false);
         Zend_Registry::set('db', Kwf_Test::getTestDb());
@@ -148,14 +148,12 @@ class Kwf_Controller_Action_Cli_TestController extends Kwf_Controller_Action_Cli
         }
 
         //nur temporär deaktiviert, damit ich selenium-verbindungs-probleme besser debuggen kann
-        PHPUnit_Util_Filter::setFilter(false);
+//         PHPUnit_Util_Filter::setFilter(false);
 
         $runner = new Kwf_Test_TestRunner();
         $suite = new Kwf_Test_TestSuite();
 
         Kwf_Model_Abstract::clearInstances();
-        Kwf_Trl::getInstance()->setModel(null, 'web');
-        Kwf_Trl::getInstance()->setModel(null, 'kwf');
 
         $result = $runner->doRun(
             $suite,

@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Abstract.Image');
-Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
+Ext2.namespace('Kwc.Abstract.Image');
+Kwc.Abstract.Image.DimensionField = Ext2.extend(Ext2.form.Field, {
     _scaleFactor: null,
     resolvedDimensions: null,
 
@@ -47,9 +47,9 @@ Kwc.Abstract.Image.DimensionField = Ext.extend(Ext.form.Field, {
 
     afterRender: function() {
         Kwc.Abstract.Image.DimensionField.superclass.afterRender.call(this);
-        this._cropButton = new Ext.Button({
+        this._cropButton = new Ext2.Button({
             text: trlKwf('Edit'),
-            cls: 'x-btn-text-icon kwc-abstract-image-dimension-cropbutton',
+            cls: 'x2-btn-text-icon kwc-abstract-image-dimension-cropbutton',
             icon: '/assets/silkicons/shape_handles.png',
             renderTo: this.getEl(),
             scope: this,
@@ -190,4 +190,4 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v, dp
 };
 
 
-Ext.reg('kwc.image.dimensionfield', Kwc.Abstract.Image.DimensionField);
+Ext2.reg('kwc.image.dimensionfield', Kwc.Abstract.Image.DimensionField);

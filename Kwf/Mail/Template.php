@@ -184,7 +184,7 @@ class Kwf_Mail_Template
         return $this->_view->renderHtml();
     }
 
-    public function send()
+    public function send($transport = null)
     {
         // txt mail
         $this->_mail->setBodyText($this->_getTextMailContent());
@@ -199,6 +199,6 @@ class Kwf_Mail_Template
             $this->setSubject($this->_view->subject);
         }
 
-        return $this->_mail->send();
+        return $this->_mail->send($transport);
     }
 }

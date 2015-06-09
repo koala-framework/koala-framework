@@ -1,17 +1,6 @@
 <?php
 class Kwf_Rest_Route extends Zend_Rest_Route
 {
-    protected function _checkRestfulModule($moduleName)
-    {
-        if ($this->_allRestful()) {
-            return true;
-        }
-        if ($this->_fullRestfulModule($moduleName)) {
-            return true;
-        }
-        return false;
-    }
-
     public function match($request, $partial = false)
     {
         if (!$request instanceof Zend_Controller_Request_Http) {

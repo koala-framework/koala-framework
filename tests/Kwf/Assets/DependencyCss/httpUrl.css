@@ -1,0 +1,6 @@
+body { background-image: url(http://vivid.com/foo.png); }
+body { background-image: url( http://vivid.com/foo.png ); }
+body { background-image: url("http://vivid.com/foo.png"); }
+body { background-image: url( "http://vivid.com/foo.png" ); }
+body { background-image: url('http://vivid.com/foo.png'); }
+body { background-image: url( 'http://vivid.com/foo.png' ); }

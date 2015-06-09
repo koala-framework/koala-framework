@@ -1,8 +1,8 @@
-Kwf.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
+Kwf.Form.ComboBoxFilter = Ext2.extend(Ext2.Panel, {
 
     layout: 'form',
     border: false,
-    baseCls: 'x-form-item',
+    baseCls: 'x2-form-item',
 
     initComponent : function()
     {
@@ -91,4 +91,4 @@ Kwf.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
 
 
 });
-Ext.reg('comboboxfilter', Kwf.Form.ComboBoxFilter);
+Ext2.reg('comboboxfilter', Kwf.Form.ComboBoxFilter);

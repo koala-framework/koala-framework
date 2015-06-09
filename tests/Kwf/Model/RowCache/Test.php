@@ -14,15 +14,19 @@ class Kwf_Model_RowCache_Test extends Kwf_Test_TestCase
             'automatic_serialization'=>true))->clean();
         Kwf_Cache_Simple::resetZendCache();
         parent::setUp();
+        Kwf_Events_Dispatcher::addListeners('Kwf_Model_RowCache_RowCacheModel');
+        Kwf_Model_Abstract::getInstance('Kwf_Model_RowCache_SourceModel')->setData(array(
+            array('id' => 1, 'foo' => 1, 'bar'=>'x1'),
+            array('id' => 2, 'foo' => 2, 'bar'=>'x2'),
+            array('id' => 3, 'foo' => 3, 'bar'=>'x3'),
+            array('id' => 4, 'foo' => 4, 'bar'=>'x4'),
+        ));
     }
 
     private function _createModelInstance()
     {
         Kwf_Model_Abstract::clearInstances();
-        return new Kwf_Model_RowCache(array(
-            'proxyModel' => Kwf_Model_Abstract::getInstance('Kwf_Model_RowCache_SourceModel'),
-            'cacheColumns' => array('foo')
-        ));
+        return Kwf_Model_Abstract::getInstance('Kwf_Model_RowCache_RowCacheModel');
     }
 
     public function testRead()
@@ -62,12 +66,10 @@ class Kwf_Model_RowCache_Test extends Kwf_Test_TestCase
         $this->assertEquals(1, $source->called['getRows']);
         $r->save(); //muss cache löschen
 
-        /*
-        //kann nicht gesetet werden, weil innerhalb eines requests der apc cache nicht gelöscht werden kann
         $m = $this->_createModelInstance();
         $source = Kwf_Model_Abstract::getInstance('Kwf_Model_RowCache_SourceModel');
+        $r = $m->getRow(1);
         $this->assertEquals(1, $source->called['getRows']);
-        $this->assertEquals($m->getRow(1)->foo, 'asdf'); //nicht mehr gecached, da cache gelöscht wurde
-        */
+        $this->assertEquals('asdf', $r->foo); //nicht mehr gecached, da cache gelöscht wurde
     }
 }

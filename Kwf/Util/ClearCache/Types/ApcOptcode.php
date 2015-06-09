@@ -9,7 +9,13 @@ class Kwf_Util_ClearCache_Types_ApcOptcode extends Kwf_Util_ClearCache_Types_Abs
     protected function _clearCache($options)
     {
         $options['outputFn'] = array($this, 'outputFn');
-        Kwf_Util_Apc::callClearCacheByCli(array('type' => 'file'), $options);
+        if (php_sapi_name() == 'cli') {
+            Kwf_Util_Apc::callClearCacheByCli(array('type' => 'file'), $options);
+        } else {
+            if (!extension_loaded('apcu')) {
+                apc_clear_cache('file');
+            }
+        }
     }
 
     public function getTypeName()

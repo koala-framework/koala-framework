@@ -1,6 +1,6 @@
 Kwf.onElementReady('.kwfClearOnFocus', function(xel)
 {
-    var Event = Ext.EventManager;
+    var Event = Ext2.EventManager;
 
         el = xel.dom;
         if (el.value == '') return;
@@ -10,7 +10,7 @@ Kwf.onElementReady('.kwfClearOnFocus', function(xel)
 
         Event.on(el, 'focus', function() {
             if (this.value == '' || this.value == initText) {
-                Ext.fly(this).removeClass('kwfClearOnFocusBlurred');
+                Ext2.fly(this).removeClass('kwfClearOnFocusBlurred');
                 this.value = '';
             }
         }, el);
@@ -18,7 +18,7 @@ Kwf.onElementReady('.kwfClearOnFocus', function(xel)
         Event.on(el, 'blur', function() {
             if (this.value == '') {
                 this.value = initText;
-                Ext.fly(this).addClass('kwfClearOnFocusBlurred');
+                Ext2.fly(this).addClass('kwfClearOnFocusBlurred');
             }
         }, el);
 

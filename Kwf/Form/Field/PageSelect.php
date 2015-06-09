@@ -22,7 +22,13 @@ class Kwf_Form_Field_PageSelect extends Kwf_Form_Field_SimpleAbstract
                 $id, array('ignoreVisible'=>true)
             );
             if ($cmp) {
-                $ret[$this->getFieldName()]['name'] = $cmp->getTitle();
+                $title = array();
+                do {
+                    if ($cmp->generator->getGeneratorFlag('showInPageTreeAdmin') && $cmp->name)  {
+                        $title[] = $cmp->name;
+                    }
+                } while (($cmp = $cmp->parent) && $cmp->componentId != 'root');
+                $ret[$this->getFieldName()]['name'] = implode(' - ', $title);
             } else {
                 $ret[$this->getFieldName()]['id'] = null;
                 $ret[$this->getFieldName()]['name'] = '';

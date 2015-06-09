@@ -24,7 +24,7 @@
     OTHER DEALINGS IN THE SOFTWARE.
 */
 
-Ext.namespace("Kwf.ColorPicker.color");
+Ext2.namespace("Kwf.ColorPicker.color");
 
 /*
     todo:
@@ -34,7 +34,7 @@ Ext.namespace("Kwf.ColorPicker.color");
 */
 
 /**
- * @class Ext.ux.Color
+ * @class Ext2.ux.Color
  * Experimental Color class. Supports and converts between RGB, HSV and HEX
  * @cfg {Number} red Red value, between 0 and 255
  * @cfg {Number} green Green value, between 0 and 255
@@ -48,8 +48,8 @@ Ext.namespace("Kwf.ColorPicker.color");
  */
 
 Kwf.ColorPicker.color.Color = function(config) {
-    Ext.apply(this, this.defaultValues);
-    Ext.apply(this, config);
+    Ext2.apply(this, this.defaultValues);
+    Ext2.apply(this, config);
 };
 
 Kwf.ColorPicker.color.Color.prototype = {

@@ -34,6 +34,12 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
             $v = $values[$name];
             if ($this->getTpl() == '{value:nl2br}') {
                 $v = nl2br($v);
+            } else if ($this->getTpl() == '{value:localizedDatetime}') {
+                $date = new Kwf_Date($v);
+                $v = $date->format(trlKwf('Y-m-d H:i'));
+            } else if ($this->getTpl() == '{value:localizedDate}') {
+                $date = new Kwf_Date($v);
+                $v = $date->format(trlKwf('Y-m-d'));
             }
             $ret['html'] = '<span class="fieldContent">'.$v.'</span>';
         }

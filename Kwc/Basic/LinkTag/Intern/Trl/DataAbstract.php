@@ -40,4 +40,10 @@ abstract class Kwc_Basic_LinkTag_Intern_Trl_DataAbstract extends Kwf_Component_D
             return parent::__get($var);
         }
     }
+
+    public function getLinkDataAttributes()
+    {
+        return $this->getLinkedData()->getLinkDataAttributes();
+    }
+
 }

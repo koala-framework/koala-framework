@@ -20,7 +20,7 @@ class Kwc_Directories_List_View_Count_Component extends Kwc_Abstract
         $ret['totalLabel'] = $this->_getPlaceholder('total');
         return $ret;
     }
-    
+
     public function getViewCacheSettings()
     {
         $ret = parent::getViewCacheSettings();

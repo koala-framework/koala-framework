@@ -46,10 +46,10 @@ class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controlle
                 ->getComponentByDbId($sourceId);
 
             // Switch off observer due to performance - it's not necessary here
-            Kwf_Component_ModelObserver::getInstance()->disable();
+            Kwf_Events_ModelObserver::getInstance()->disable();
             $newDetail = Kwf_Util_Component::duplicate($source, $parentTarget);
             Kwf_Util_Component::afterDuplicate($source, $newDetail);
-            Kwf_Component_ModelObserver::getInstance()->enable();
+            Kwf_Events_ModelObserver::getInstance()->enable();
 
             $newDetailRow = $newDetail->row;
             $newDetailRow->create_date = date('Y-m-d H:i:s');

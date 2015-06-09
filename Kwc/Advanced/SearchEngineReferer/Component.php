@@ -61,7 +61,7 @@ class Kwc_Advanced_SearchEngineReferer_Component extends Kwc_Abstract_Composite_
                     foreach ($deleteRows as $deleteRow) {
                         $deleteRow->delete();
                     }
-                    Kwf_Component_ModelObserver::getInstance()->process();
+                    Kwf_Events_ModelObserver::getInstance()->process();
                 }
             } else {
                 file_put_contents('log/unknownsearchenginereferer', $referer. "\n", FILE_APPEND);

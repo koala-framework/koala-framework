@@ -9,6 +9,7 @@ class Kwc_Root_DomainRoot_Component extends Kwc_Root_Abstract
             'component' => 'Kwc_Root_DomainRoot_Domain_Component',
             'model' => 'Kwc_Root_DomainRoot_Model'
         );
+        $ret['flags']['hasAvailableLanguages'] = true;
         return $ret;
     }
 
@@ -24,5 +25,21 @@ class Kwc_Root_DomainRoot_Component extends Kwc_Root_Abstract
             $domain->id .
             $parsedUrl['path'];
         return $path;
+    }
+
+    public static function getAvailableLanguages($componentClass)
+    {
+        $ret = array();
+        foreach (Kwf_Config::getValueArray('kwc.domains') as $d) {
+            if (isset($d['language'])) {
+                if (is_array($d['language'])) {
+                    $ret = array_merge($ret, $d['language']);
+                } else {
+                    $ret[] = $d['language'];
+                }
+            }
+        }
+        $ret = array_unique($ret);
+        return $ret;
     }
 }

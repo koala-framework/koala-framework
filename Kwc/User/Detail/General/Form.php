@@ -5,7 +5,7 @@ class Kwc_User_Detail_General_Form extends Kwc_Abstract_Composite_Form
     protected $_generalFieldset;
     protected function _init()
     {
-        $this->setModel(Zend_Registry::get('userModel')->getKwfModel());
+        $this->setModel(Kwf_Registry::get('userModel')->getEditModel());
         parent::_init();
     }
 

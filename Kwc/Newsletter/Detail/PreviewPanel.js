@@ -1,5 +1,5 @@
-Ext.ns('Kwc.Newsletter.Detail');
-Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
+Ext2.ns('Kwc.Newsletter.Detail');
+Kwc.Newsletter.Detail.PreviewPanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
     border: false,
     autoScroll: true,
     bodyCssClass: 'mailPreviewPanel',
@@ -11,9 +11,9 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
 
     initComponent : function()
     {
-        this.button['html'] = new Ext.Toolbar.Button ({
+        this.button['html'] = new Ext2.Toolbar.Button ({
             icon    : '/assets/silkicons/html.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             text    : trlKwf('HTML'),
             enableToggle: true,
             toggleGroup: 'format',
@@ -22,9 +22,9 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             scope: this,
             name : 'html'
         });
-        this.button['text'] = new Ext.Toolbar.Button ({
+        this.button['text'] = new Ext2.Toolbar.Button ({
             icon    : '/assets/silkicons/page_white_text.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             text    : trlKwf('Text'),
             enableToggle: true,
             toggleGroup: 'format',
@@ -34,21 +34,21 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             name: 'text'
         });
 
-        this.sendButton = new Ext.Toolbar.Button ({
+        this.sendButton = new Ext2.Toolbar.Button ({
             icon    : '/assets/silkicons/email_go.png',
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             text    : trlKwf('Send'),
             handler : function(a, b, c) {
-                Ext.Ajax.request({
+                Ext2.Ajax.request({
                     url : this.controllerUrl + '/json-send-mail',
                     mask: this.el,
                     maskText: trlKwf('Sending...'),
-                    params: Ext.apply(this.baseParams, {
+                    params: Ext2.apply(this.baseParams, {
                         address: this.addressField.getValue(),
                         format: this.button['html'].pressed ? 'html' : 'text'
                     }),
                     success: function(response, options, r) {
-                        Ext.MessageBox.alert(trlKwf('Status'), r.message);
+                        Ext2.MessageBox.alert(trlKwf('Status'), r.message);
                     },
                     scope: this
                 });
@@ -56,7 +56,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             scope   : this
         });
 
-        this.addressField = new Ext.form.TextField({
+        this.addressField = new Ext2.form.TextField({
             width: 200,
             emptyText: trlKwf('Send testmail to...'),
             value: this.authedUserEmail,
@@ -84,7 +84,7 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             listeners: {
                 select: function(combo, record, index) {
                     var object = { subscribeModelKey: record.data.id };
-                    Ext.apply(this.baseParams, object);
+                    Ext2.apply(this.baseParams, object);
                     this.recipientComboBox.setFormBaseParams(object);
                     if (this.recipientComboBox.disabled) this.recipientComboBox.enable();
                     delete this.recipientComboBox.lastQuery;
@@ -118,9 +118,9 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             selectOnFocus: true,
             forceSelection: true,
             loadingText: trlKwf('Searching...'),
-            tpl: new Ext.XTemplate(
+            tpl: new Ext2.XTemplate(
                 '<tpl for=".">',
-                    '<div class="x-combo-list-item changeuser-list-item">',
+                    '<div class="x2-combo-list-item changeuser-list-item">',
                         '<h3>{lastname}&nbsp;{firstname}</h3>',
                         '{email}',
                     '</div>',
@@ -152,13 +152,13 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
                 object.subscribeModelKey = key;
             }
         }
-        Ext.apply(this.baseParams, object);
+        Ext2.apply(this.baseParams, object);
     },
 
     load: function(params, options) {
         this.body.dom.style.backgroundColor = '#FFFFFF';
         this.body.dom.innerHTML = '';
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl + '/json-data',
             params:  this.baseParams,
             mask: this.el,
@@ -184,4 +184,4 @@ Kwc.Newsletter.Detail.PreviewPanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         }
     }
 });
-Ext.reg('kwc.newsletter.detail.preview', Kwc.Newsletter.Detail.PreviewPanel);
+Ext2.reg('kwc.newsletter.detail.preview', Kwc.Newsletter.Detail.PreviewPanel);

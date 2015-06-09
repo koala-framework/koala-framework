@@ -117,7 +117,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $microtime = $this->_getMicrotime();
         $select->whereEquals('deleted', false);
         $model = $this->getModel();
-        $log = Kwf_Component_Events_Log::getInstance();
+        $log = Kwf_Events_Log::getInstance();
         $cacheIds = array();
         $options = array(
             'columns' => array('component_id', 'renderer', 'type', 'value'),
@@ -219,7 +219,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $this->_afterDatabaseDelete($select); // For unit testing - DO NOT DELETE!
 
         if ($progress) $progress->finish();
-        file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Component_Events::$eventsCount.' events; '.count($deleteIds).' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'')."\n", FILE_APPEND);
+        file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Events_Dispatcher::$eventsCount.' events; '.count($deleteIds).' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'')."\n", FILE_APPEND);
         return count($cacheIds);
     }
 

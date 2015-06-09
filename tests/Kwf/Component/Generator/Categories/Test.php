@@ -91,9 +91,9 @@ class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
         $target = $this->_root->getComponentById('4');
         $this->assertEquals(0, count($target->getChildPages()));
 
-        Kwf_Component_ModelObserver::getInstance()->disable(); //PagesController also does that (for performance reasons)
+        Kwf_Events_ModelObserver::getInstance()->disable(); //PagesController also does that (for performance reasons)
         Kwf_Util_Component::duplicate($source, $target);
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        Kwf_Events_ModelObserver::getInstance()->enable();
 
         $new = $this->_root->getComponentById('5');
         $this->assertEquals(false, $new->isHome);
@@ -105,9 +105,9 @@ class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
         $target = $this->_root->getComponentById('4');
         $this->assertEquals(0, count($target->getChildPages()));
 
-        Kwf_Component_ModelObserver::getInstance()->disable(); //PagesController also does that (for performance reasons)
+        Kwf_Events_ModelObserver::getInstance()->disable(); //PagesController also does that (for performance reasons)
         Kwf_Util_Component::duplicate($source, $target);
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        Kwf_Events_ModelObserver::getInstance()->enable();
 
         $this->assertEquals(1, count($target->getChildPages()));
         $this->assertEquals(1, count($target->getChildPage()->getChildPages()));

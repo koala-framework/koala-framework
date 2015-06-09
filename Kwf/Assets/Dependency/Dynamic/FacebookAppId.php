@@ -1,11 +1,6 @@
 <?php
-class Kwf_Assets_Dependency_Dynamic_FacebookAppId extends Kwf_Assets_Dependency_File
+class Kwf_Assets_Dependency_Dynamic_FacebookAppId extends Kwf_Assets_Dependency_Abstract
 {
-    public function __construct()
-    {
-        parent::__construct(null);
-    }
-
     public function getMimeType()
     {
         return 'text/javascript';
@@ -28,10 +23,4 @@ class Kwf_Assets_Dependency_Dynamic_FacebookAppId extends Kwf_Assets_Dependency_
 
         return "Kwf.FacebookAppIds = " . json_encode($appIds) . ";\n";
     }
-
-    public function getFileName()
-    {
-        return null;
-    }
-
 }

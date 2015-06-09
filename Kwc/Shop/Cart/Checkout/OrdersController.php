@@ -73,7 +73,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
         $this->_filters['canceled'] = array(
             'type'      => 'Button',
             'skipWhere' => true,
-            'cls'       => 'x-btn-text-icon',
+            'cls'       => 'x2-btn-text-icon',
             'icon'      => '/assets/silkicons/stop.png',
             'text'      => trlKwf('canceled'),
             'tooltip'   => trlKwf('Show canceled orders')
@@ -81,7 +81,7 @@ class Kwc_Shop_Cart_Checkout_OrdersController extends Kwf_Controller_Action_Auto
         $this->_filters['shipped'] = array(
             'type'      => 'Button',
             'skipWhere' => true,
-            'cls'       => 'x-btn-text-icon',
+            'cls'       => 'x2-btn-text-icon',
             'icon'      => '/assets/silkicons/package.png',
             'text'      => trlKwf('shipped'),
             'tooltip'   => trlKwf('Show shipped orders')

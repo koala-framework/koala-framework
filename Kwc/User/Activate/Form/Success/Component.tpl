@@ -1,4 +1,5 @@
 <div class="kwcUserFormSuccess <?=$this->cssClass?>">
+    <input type="hidden" value="<?=htmlspecialchars(json_encode($this->config))?>" />
     <p>
         <strong><?=$this->data->trlKwf('Your useraccount was successfully activated.')?></strong>
     </p>

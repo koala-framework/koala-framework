@@ -34,13 +34,14 @@ class Kwc_Basic_DownloadTag_Test extends Kwc_TestAbstract
     {
         $o = Kwc_Basic_DownloadTag_Component::getMediaOutput('1700', 'default', 'Kwc_Basic_DownloadTag_TestComponent');
         $this->assertEquals('image/png', $o['mimeType']);
-        $this->assertEquals(Kwf_Model_Abstract::getInstance('Kwc_Basic_DownloadTag_UploadsModel')->getUploadDir().'/1', $o['file']);
+        $m = Kwf_Model_Abstract::getInstance('Kwc_ImageResponsive_MediaOutput_Image_UploadsModel');
+        $this->assertTrue(file_exists($o['file']));
     }
 
     public function testHtml()
     {
         $html = $this->_root->getComponentById(1700)->render();
-        $this->assertRegExp('#^<a .*?href="/kwf/kwctest/Kwc_Basic_DownloadTag_Root/media/Kwc_Basic_DownloadTag_TestComponent/1700/default/[^/]+/[0-9]+/foo.png" rel="popup_blank">$#ms', $html);
+        $this->assertRegExp('#^<a .*?href="/kwf/kwctest/Kwc_Basic_DownloadTag_Root/media/Kwc_Basic_DownloadTag_TestComponent/1700/default/[^/]+/[0-9]+/foo.png" data-kwc-popup="blank">$#ms', $html);
     }
 
     public function testEmpty()

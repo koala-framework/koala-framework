@@ -18,9 +18,11 @@ class Kwc_Basic_Table_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $this->_columns->add(new Kwf_Grid_Column("column$i"."data"))
                 ->setData(new Kwc_Basic_Table_Trl_ControllerIsTrlData("column$i"));
 
+            $ed = new Kwf_Form_Field_TextField();
+            $ed->setAllowTags(true);
             $this->_columns->add(new Kwf_Grid_Column("column$i", $this->_getColumnLetterByIndex($i-1), 150))
                 ->setRenderer('tableTrl')
-                ->setEditor(new Kwf_Form_Field_TextField());
+                ->setEditor($ed);
         }
     }
 

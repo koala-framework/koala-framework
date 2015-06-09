@@ -1,7 +1,8 @@
 (function() {
-    Ext.ns('Kwf.Utils.BenchmarkBox');
+    if (!Kwf.Utils) Kwf.Utils = {};
+    if (!Kwf.Utils.BenchmarkBox) Kwf.Utils.BenchmarkBox = {};
 
-    var benchmarkEnabled = Kwf.Debug.benchmark;
+    var benchmarkEnabled = Kwf.Debug && Kwf.Debug.benchmark;
     if (!benchmarkEnabled) {
         benchmarkEnabled = location.search.match(/[\?&]KWF_BENCHMARK/);
     }
@@ -93,37 +94,34 @@
         Kwf.Utils.BenchmarkBox._subTimers[name][subName].duration += duration;
     };
     Kwf.Utils.BenchmarkBox.initBox = function(el) {
-        if (el.dom.initDone) return;
-        el.dom.initDone = true;
-        var container = Ext.getBody().child('.benchmarkContainer');
-        if (!container) {
-            container = Ext.getBody().createChild({
-                cls: 'benchmarkContainer'
-            });
+        if (el instanceof $) el = el.get(0);
+        if (el.initDone) return;
+        el.initDone = true;
+        var container = $('.benchmarkContainer');
+        if (!container.length) {
+            container = $('<div class="benchmarkContainer"></div>');
+            $('body').append($(container));
         }
-        container.appendChild(el);
+        container.append($(el));
 
-        var benchmarkType = el.dom.getAttribute('data-benchmark-type');
+        var benchmarkType = $(el).data('benchmarkType');
         if (getCookie('benchmarkBox-'+benchmarkType)=='1') {
-            el.addClass('visible');
+            $(el).addClass('visible');
         }
-        var showLink = el.insertFirst({
-            tag: 'a',
-            href: '#',
-            cls: 'showContent',
-            html: '['+benchmarkType+']'
-        });
+        var showLink = $('<a href="#" class="showContent">['+benchmarkType+']</a>');
+        $(showLink).prependTo($(el));
+
         showLink.on('click', function(ev) {
-            ev.stopEvent();
-            var el = Ext.get(this);
-            if (!el.hasClass('visible')) {
-                el.addClass('visible');
+            ev.preventDefault();
+            var el = $(this);
+            if (!el.parent().hasClass('visible')) {
+                el.parent().addClass('visible');
                 setCookie('benchmarkBox-'+benchmarkType, '1');
             } else {
-                el.removeClass('visible');
+                el.parent().removeClass('visible');
                 setCookie('benchmarkBox-'+benchmarkType, '0');
             }
-        }, el.dom);
+        });
     };
     Kwf.Utils.BenchmarkBox.create = function(options) {
         if (!benchmarkEnabled) return;
@@ -155,24 +153,24 @@
                 return j.duration-i.duration;
             });
             subArray = subArray.slice(0, 5); //only top 5
-            subArray.each(function(i) {
-                html += '&nbsp;&nbsp;'+i.name+' '+i.count+' ('+(Math.round(i.duration*100)/100)+'ms)<br />';
+            $.each(subArray, function() {
+                html += '&nbsp;&nbsp;'+this.name+' '+this.count+' ('+(Math.round(this.duration*100)/100)+'ms)<br />';
             });
         }
         Kwf.Utils.BenchmarkBox._counters = {};
         Kwf.Utils.BenchmarkBox._timers = {};
         Kwf.Utils.BenchmarkBox._subTimers = {};
         html = '<div class="benchmarkBoxContent">'+html+'</div>';
-        var el = Ext.getBody().createChild({
-            cls: 'benchmarkBox',
-            'data-benchmark-type': options.type,
-            html: html
-        });
+        html = '<div class="benchmarkBox" data-benchmark-type="'+options.type+'">'+html+'</div>';
+        el = $(html);
+        $('body').append(el);
         Kwf.Utils.BenchmarkBox.initBox(el);
     };
-    Ext.onReady(function() {
-        Ext.select('.benchmarkBox').each(function(el) {
-            Kwf.Utils.BenchmarkBox.initBox(el);
-        });
-    }, this, { delay: 110 });
+    $(function() {
+        setTimeout(function() {
+            $('body').find('.benchmarkBox').each(function(i, el) {
+                Kwf.Utils.BenchmarkBox.initBox($(el));
+            });
+        }, 10);
+    });
 })();

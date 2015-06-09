@@ -142,7 +142,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
     public function sendAction()
     {
         $this->_helper->viewRenderer->setNoRender(true);
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
         $newsletterId = $this->_getParam('newsletterId');
         $nlRow = Kwf_Model_Abstract::getInstance('Kwc_Newsletter_Model')->getRow($newsletterId);
@@ -281,7 +281,7 @@ class Kwf_Controller_Action_Cli_Web_NewsletterController extends Kwf_Controller_
             echo $info['text'] . "\n";
         }
 
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        Kwf_Events_ModelObserver::getInstance()->enable();
     }
 
 }

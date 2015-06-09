@@ -35,7 +35,7 @@ class Kwc_Basic_Image_Crop_Test extends Kwc_TestAbstract
         $row = Kwf_Model_Abstract::getInstance('Kwc_Basic_Image_Crop_TestModel')->getRow('root_page');
         $row->crop_x = 20;
         $row->save();
-        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Events_ModelObserver::getInstance()->process();
         Kwf_Media::getOutput('Kwc_Basic_Image_Crop_ImageComponent', 'root_page',
             Kwf_Media::DONT_HASH_TYPE_PREFIX.$dim['width'].'-dc16b9');
         $this->assertEquals(2, Kwc_Basic_Image_Crop_ImageComponent::$getMediaOutputCalled);

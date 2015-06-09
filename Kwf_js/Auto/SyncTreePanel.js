@@ -1,5 +1,5 @@
-Ext.namespace('Kwf.Auto');
-Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
+Ext2.namespace('Kwf.Auto');
+Kwf.Auto.SyncTreePanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
 
     layout: 'fit',
 
@@ -16,38 +16,38 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
             'editaction',
             'addaction'
         );
-        this.actions['delete'] = new Ext.Action({
+        this.actions['delete'] = new Ext2.Action({
             text    : trlKwf('Delete'),
             handler : this.onDelete,
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             disabled: true,
             scope   : this
         });
-        this.actions.add = new Ext.Action({
+        this.actions.add = new Ext2.Action({
             text    : trlKwf('Add'),
             handler : this.onAdd,
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             scope   : this
         });
-        this.actions.edit = new Ext.Action({
+        this.actions.edit = new Ext2.Action({
             text    : trlKwf('Edit'),
             handler : this.onEdit,
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             disabled: true,
             scope   : this
         });
-        this.actions.invisible = new Ext.Action({
+        this.actions.invisible = new Ext2.Action({
             text    : trlKwf('Toggle Visibility'),
             handler : this.onVisible,
-            cls     : 'x-btn-text-icon',
+            cls     : 'x2-btn-text-icon',
             disabled: true,
             scope   : this
         });
-        this.actions.reload = new Ext.Action({
+        this.actions.reload = new Ext2.Action({
             text    : '',
             handler : function () { this.reload(); },
             icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
-            cls     : 'x-btn-icon',
+            cls     : 'x2-btn-icon',
             tooltip : trlKwf('Reload'),
             scope   : this
         });
@@ -67,7 +67,7 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     {
         if (!this.metaConn) this.metaConn = new Kwf.Connection({ autoAbort: true });
         this.metaConn.request({
-            mask: this.el || Ext.getBody(),
+            mask: this.el || Ext2.getBody(),
             url: this.controllerUrl + '/json-meta',
             params: this.baseParams,
             success: this.onMetaChange,
@@ -128,7 +128,7 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         this.tree = new Kwf.Auto.Tree.Panel({
             border      : false,
 //            animate     : true,
-            loader      : new Ext.tree.TreeLoader({
+            loader      : new Ext2.tree.TreeLoader({
                 baseParams  : baseParams,
                 dataUrl     : this.controllerUrl + '/json-data'
             }),
@@ -140,7 +140,7 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         });
 
         this.tree.setRootNode(
-            new Ext.tree.AsyncTreeNode({
+            new Ext2.tree.AsyncTreeNode({
                 text: meta.rootText,
                 id: '0',
                 allowDrag: false
@@ -225,10 +225,10 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
 
     onSave : function (id)
     {
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl + '/json-node-data',
             mask: this.body,
-            params: Ext.apply({node:id}, this.getBaseParams()),
+            params: Ext2.apply({node:id}, this.getBaseParams()),
             success: function(response, options, result) {
                 this.onSaved(result.data);
             },
@@ -250,13 +250,13 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     },
 
     onDelete: function (o, e) {
-        Ext.MessageBox.confirm(trlKwf('Delete'), trlKwf('Do you really want to delete this entry:\n\n"') + this.tree.getSelectionModel().getSelectedNode().text + '"',
+        Ext2.MessageBox.confirm(trlKwf('Delete'), trlKwf('Do you really want to delete this entry:\n\n"') + this.tree.getSelectionModel().getSelectedNode().text + '"',
             function  (button) {
                 if (button == 'yes') {
-                    Ext.Ajax.request({
+                    Ext2.Ajax.request({
                         url: this.controllerUrl + '/json-delete',
                         mask: this.body,
-                        params: Ext.apply({id:this.getSelectedId()}, this.getBaseParams()),
+                        params: Ext2.apply({id:this.getSelectedId()}, this.getBaseParams()),
                         success: function(response, options, result) {
                             this.onDeleted(result);
                         },
@@ -273,7 +273,7 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
         params.source = dropEvent.dropNode.id;
         params.target = dropEvent.target.id;
         params.point = dropEvent.point;
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl + '/json-move',
             mask: this.body,
             params: params,
@@ -292,27 +292,27 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
 
     onCollapseNode : function(node) {
     	if (!node.attributes.filter) {
-            Ext.Ajax.request({
+            Ext2.Ajax.request({
                 url: this.controllerUrl + '/json-collapse',
-                params: Ext.apply({id:node.id}, this.getBaseParams())
+                params: Ext2.apply({id:node.id}, this.getBaseParams())
             });
     	}
     },
 
     onExpandNode : function(node) {
         if (node.attributes.children && node.attributes.children.length > 0 && !node.attributes.filter) {
-            Ext.Ajax.request({
+            Ext2.Ajax.request({
                 url: this.controllerUrl + '/json-expand',
-                params: Ext.apply({id:node.id}, this.getBaseParams())
+                params: Ext2.apply({id:node.id}, this.getBaseParams())
             });
         }
     },
 
     onVisible : function (o, e) {
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: this.controllerUrl + '/json-visible',
             mask: this.body,
-            params: Ext.apply({id:this.getSelectedId()}, this.getBaseParams()),
+            params: Ext2.apply({id:this.getSelectedId()}, this.getBaseParams()),
             success: function(response, options, result) {
                 node = this.tree.getNodeById(result.id);
                 node.attributes.visible = result.visible;
@@ -395,4 +395,4 @@ Kwf.Auto.SyncTreePanel = Ext.extend(Kwf.Binding.AbstractPanel, {
     }
 
 });
-Ext.reg('kwf.autotreesync', Kwf.Auto.SyncTreePanel);
+Ext2.reg('kwf.autotreesync', Kwf.Auto.SyncTreePanel);

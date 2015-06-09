@@ -5,6 +5,7 @@ class Kwf_Assets_Dependency_HttpUrl extends Kwf_Assets_Dependency_Abstract
     public function __construct($url)
     {
         $this->_url = $url;
+        parent::__construct();
     }
 
     public function getIncludeInPackage()

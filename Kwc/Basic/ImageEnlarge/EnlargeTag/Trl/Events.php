@@ -82,7 +82,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
                 $typeBase = $c->getComponent()->getBaseType();
                 $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
                 foreach ($steps as $step) {
-                    $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                    $this->fireEvent(new Kwf_Events_Event_Media_Changed(
                         $this->_class, $c, str_replace('{width}', $step, $typeBase)
                     ));
                 }
@@ -101,7 +101,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
                 $typeBase = $component->getComponent()->getBaseType();
                 $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
                 foreach ($steps as $step) {
-                    $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                    $this->fireEvent(new Kwf_Events_Event_Media_Changed(
                         $this->_class, $component, str_replace('{width}', $step, $typeBase)
                     ));
                 }
@@ -123,7 +123,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Events extends Kwc_Chained_Trl_Event
                 $typeBase = $component->getComponent()->getBaseType();
                 $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
                 foreach ($steps as $step) {
-                    $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                    $this->fireEvent(new Kwf_Events_Event_Media_Changed(
                         $this->_class, $component, str_replace('{width}', $step, $typeBase)
                     ));
                 }

@@ -1,4 +1,4 @@
-Kwc.Basic.Text.StylesEditorTab = Ext.extend(Ext.Panel,
+Kwc.Basic.Text.StylesEditorTab = Ext2.extend(Ext2.Panel,
 {
     layout: 'border',
     initComponent: function()

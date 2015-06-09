@@ -1,8 +1,8 @@
 Kwf.Form.HtmlEditor.InsertLink = function(config) {
-    Ext.apply(this, config);
+    Ext2.apply(this, config);
 
-    var panel = Ext.ComponentMgr.create(Ext.applyIf(this.componentConfig, {
-        baseCls: 'x-plain',
+    var panel = Ext2.ComponentMgr.create(Ext2.applyIf(this.componentConfig, {
+        baseCls: 'x2-plain',
         formConfig: {
             tbar: false
         },
@@ -14,7 +14,7 @@ Kwf.Form.HtmlEditor.InsertLink = function(config) {
         height: 400
     });
 };
-Ext.extend(Kwf.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
+Ext2.extend(Kwf.Form.HtmlEditor.InsertLink, Ext2.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('createToolbar', this.afterCreateToolbar, this);
@@ -25,16 +25,16 @@ Ext.extend(Kwf.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
     afterCreateToolbar: function() {
         var tb = this.cmp.getToolbar();
         tb.insert(5, '-');
-        this.action = new Ext.Action({
+        this.action = new Ext2.Action({
             testId: 'createlink',
             handler: this.onInsertLink,
             scope: this,
             tooltip: {
-                cls: 'x-html-editor-tip',
+                cls: 'x2-html-editor-tip',
                 title: trlKwf('Hyperlink'),
                 text: trlKwf('Create new Link for the selected text or edit selected Link.')
             },
-            cls: 'x-btn-icon x-edit-createlink',
+            cls: 'x2-btn-icon x2-edit-createlink',
             clickEvent: 'mousedown',
             tabIndex: -1
         });
@@ -58,7 +58,7 @@ Ext.extend(Kwf.Form.HtmlEditor.InsertLink, Ext.util.Observable, {
             }
         }
         this.beforeFocusBookmark = this.cmp.tinymceEditor.selection.getBookmark(1);
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             params: {componentId: this.cmp.componentId},
             url: this.cmp.controllerUrl+'/json-add-link',
             success: function(response, options, r) {

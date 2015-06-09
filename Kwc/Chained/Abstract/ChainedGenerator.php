@@ -47,6 +47,7 @@ class Kwc_Chained_Abstract_ChainedGenerator extends Kwf_Component_Generator_Pseu
     {
         $ret = parent::getGeneratorFlags();
         $ret['showInPageTreeAdmin'] = true;
+        $ret['showInLinkInternAdmin'] = true;
         return $ret;
     }
 }

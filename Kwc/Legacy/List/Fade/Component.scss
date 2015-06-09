@@ -1,0 +1,17 @@
+.cssClass {
+    .components {
+        position: relative;
+        top: 0px;
+        left: 0px;
+    }
+
+    > .subComponents {
+        position: absolute;
+        width: 100%;
+        top: 0;
+
+        &.kwcFirst {
+            position: static;
+        }
+    }
+}

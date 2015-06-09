@@ -7,6 +7,10 @@ class Kwc_Trl_DateHelper_Test extends Kwc_TestAbstract
     public function setUp()
     {
         parent::setUp('Kwc_Trl_DateHelper_Root');
+        $trlElements = array();
+        $trlElements['kwf']['de']['Y-m-d-'] = 'd.m.Y';
+        $trlElements['kwf']['de']['Y-m-d H:i-'] = 'd.m.Y H:i';
+        Kwf_Trl::getInstance()->setTrlElements($trlElements);
     }
 
     public function testDe()

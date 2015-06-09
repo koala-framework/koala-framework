@@ -1,5 +1,4 @@
 <?php
-require_once Kwf_Config::getValue('externLibraryPath.solr').'/Apache/Solr/Service.php';
 class Kwf_Util_Fulltext_Solr_Service extends Apache_Solr_Service
 {
     public function getAllDocuments()

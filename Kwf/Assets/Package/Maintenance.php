@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_Package_Maintenance extends Kwf_Assets_Package
+class Kwf_Assets_Package_Maintenance extends Kwf_Assets_Package implements Kwf_Assets_Package_FactoryInterface
 {
     private static $_defaultProviderList;
 
@@ -40,5 +40,20 @@ class Kwf_Assets_Package_Maintenance extends Kwf_Assets_Package
     {
         $dependencyName = $parameter;
         return self::getInstance($dependencyName);
+    }
+
+    protected function _getCacheId($mimeType)
+    {
+        if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Maintenance') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
+            return 'maint_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+        }
+        return null;
+    }
+
+    public static function createPackages()
+    {
+        return array(
+            self::getInstance('Maintenance')
+        );
     }
 }

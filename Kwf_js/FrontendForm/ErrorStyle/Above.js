@@ -1,4 +1,4 @@
-Kwf.FrontendForm.ErrorStyle.Above = Ext.extend(Kwf.FrontendForm.ErrorStyle.Abstract, {
+Kwf.FrontendForm.ErrorStyle.Above = Ext2.extend(Kwf.FrontendForm.ErrorStyle.Abstract, {
     showErrors: function(r) {
         var errorMessages = r.errorMessages;
         for (var fieldName in r.errorFields) {

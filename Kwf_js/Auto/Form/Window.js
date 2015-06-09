@@ -1,6 +1,6 @@
-Ext.namespace('Kwf.Auto.Form');
+Ext2.namespace('Kwf.Auto.Form');
 
-Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
+Kwf.Auto.Form.Window = Ext2.extend(Ext2.Window, {
     saveText: trlKwf('Save'),
     cancelText: trlKwf('Cancel'),
     closeText: trlKwf('Close'),
@@ -22,8 +22,8 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
         if (!this.autoForm) {
             if (!this.formConfig) this.formConfig = {};
 
-            Ext.applyIf(this.formConfig, {
-                baseCls: 'x-plain',
+            Ext2.applyIf(this.formConfig, {
+                baseCls: 'x2-plain',
                 controllerUrl: this.controllerUrl,
                 autoLoad: false,
                 checkDirty: false
@@ -36,7 +36,7 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
                 throw new Error("Invalid autoForm \'"+this.autoForm+"': "+e);
             }
             this.autoForm = new d({
-                baseCls: 'x-plain',
+                baseCls: 'x2-plain',
                 controllerUrl: this.controllerUrl,
                 autoLoad: false,
                 checkDirty: false
@@ -57,12 +57,12 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
         if (this.initialConfig['close']) {
             buttons = [this.getAction('close')];
         }
-        Ext.applyIf(this, {
+        Ext2.applyIf(this, {
             layout: 'fit',
             bodyStyle:'padding:5px;',
             plain: true,
             modal: true,
-            baseCls: 'x-plain',
+            baseCls: 'x2-plain',
             buttons: buttons
         });
         this.closeAction = 'hide';
@@ -85,7 +85,7 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
         if (this.actions[type]) return this.actions[type];
 
         if (type == 'save') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : this.saveText,
                 handler : function() {
                     this.getAutoForm().submit({
@@ -98,7 +98,7 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
                 scope   : this
             });
         } else if (type == 'cancel') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : this.cancelText,
                 handler : function() {
                     this.hide();
@@ -106,7 +106,7 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
                 scope   : this
             });
         } else if (type == 'close') {
-            this.actions[type] = new Ext.Action({
+            this.actions[type] = new Ext2.Action({
                 text    : this.closeText,
                 handler : function() {
                     this.hide();
@@ -154,8 +154,8 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
 
     _kwfResize : function()
     {
-        var maxHeight = Math.ceil(Ext.getBody().getHeight() * 0.9);
-        var maxWidth = Math.ceil(Ext.getBody().getWidth() * 0.9);
+        var maxHeight = Math.ceil(Ext2.getBody().getHeight() * 0.9);
+        var maxWidth = Math.ceil(Ext2.getBody().getWidth() * 0.9);
 
         if (this.el.getHeight() > maxHeight) {
             this.setSize(this.el.getWidth(), maxHeight);
@@ -190,4 +190,4 @@ Kwf.Auto.Form.Window = Ext.extend(Ext.Window, {
         this.getAutoForm().applyBaseParams(p);
     }
 });
-Ext.reg('kwf.autoformwindow', Kwf.Auto.Form.Window);
+Ext2.reg('kwf.autoformwindow', Kwf.Auto.Form.Window);

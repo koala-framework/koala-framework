@@ -16,6 +16,11 @@ class Kwf_Assets_Package
         $this->_dependencyName = $dependencyName;
     }
 
+    public function getDependencyName()
+    {
+        return $this->_dependencyName;
+    }
+
     public function getDependency()
     {
         if (!isset($this->_dependency)) {
@@ -28,12 +33,29 @@ class Kwf_Assets_Package
         return $this->_dependency;
     }
 
+    public function getMaxMTimeCacheId($mimeType)
+    {
+        $ret = $this->_getCacheId($mimeType);
+        if (!$ret) return $ret;
+        return 'mtime_'.$ret;
+    }
+
+    //default impl doesn't cache, overriden in Package_Default
+    protected function _getCacheId($mimeType)
+    {
+        return null;
+    }
+
     public function getMaxMTime($mimeType)
     {
-        if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
-            $cacheId = 'depPckMaxMTime_'.str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
-            $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
+        $cacheId = $this->getMaxMTimeCacheId($mimeType);
+        if ($cacheId) {
+            $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
             if ($ret !== false) return $ret;
+        }
+
+        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
+            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
         }
 
         $maxMTime = 0;
@@ -44,20 +66,12 @@ class Kwf_Assets_Package
             }
         }
 
-        if (isset($cacheId)) {
-            Kwf_Assets_Cache::getInstance()->save($maxMTime, $cacheId);
-
-            //save generated caches for clear-cache-watcher
-            if ($mimeType == 'text/javascript') $ext = 'js';
-            else if ($mimeType == 'text/css') $ext = 'css';
-            else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
-            else throw new Kwf_Exception_NotYetImplemented();
-            $fileName = 'cache/assets/package-max-mtime-'.$ext;
-            if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
-                file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
-            }
-        }
         return $maxMTime;
+    }
+
+    public function getFilteredUniqueDependencies($mimeType)
+    {
+        return $this->_getFilteredUniqueDependencies($mimeType);
     }
 
     protected function _getFilteredUniqueDependencies($mimeType)
@@ -77,16 +91,68 @@ class Kwf_Assets_Package
         return $this->_cacheFilteredUniqueDependencies[$mimeType];
     }
 
-    public function getPackageContents($mimeType, $language)
+    /**
+     * Get built contents of a package, to be used by eg. mails
+     */
+    public function getBuildContents($mimeType, $language)
     {
+        if ($mimeType == 'text/javascript') $ext = 'js';
+        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
+        else if ($mimeType == 'text/css') $ext = 'css';
+        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
+
+        $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($this, $ext, $language);
+        $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+        if ($ret === false || $ret === 'outdated') {
+            if ($ret === 'outdated' && Kwf_Config::getValue('assets.lazyBuild') == 'outdated') {
+                Kwf_Assets_BuildCache::getInstance()->building = true;
+            } else if (Kwf_Config::getValue('assets.lazyBuild') !== true) {
+                if (Kwf_Exception_Abstract::isDebug()) {
+                    //proper error message on development server
+                    throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please include package in build.");
+                } else {
+                    throw new Kwf_Exception_NotFound();
+                }
+            }
+            $ret = $this->getPackageContents($mimeType, $language)->getFileContents();
+            Kwf_Assets_BuildCache::getInstance()->building = false;
+        } else {
+            $ret = $ret['contents'];
+        }
+        return $ret;
+    }
+
+    public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
+    {
+        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
+            if (Kwf_Exception_Abstract::isDebug()) {
+                //proper error message on development server
+                throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
+            } else {
+                throw new Kwf_Exception_NotFound();
+            }
+        }
+
+        $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
+        if ($mimeType == 'text/javascript') $ext = 'js';
+        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
+        else if ($mimeType == 'text/css') $ext = 'css';
+        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
+        $packageMap->setFile($this->getPackageUrl($ext, $language));
+
         $maxMTime = 0;
-        $ret = '';
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
-                if ($c = $i->getContentsPacked($language)) {
-                    //$ret .= "/* *** ".$i->getFileName()." *"."/\n";
-                    $ret .= $c."\n";
+                $map = $i->getContentsPacked($language);
+                if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
+                    throw new Kwf_Exception("contents must not contain sourceMappingURL");
                 }
+                foreach ($map->getMapContentsData(false)->sources as &$s) {
+                    $s = '/assets/'.$s;
+                }
+                // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
+                $packageMap->concat($map);
+
             }
             $mTime = $i->getMTime();
             if ($mTime) {
@@ -95,13 +161,28 @@ class Kwf_Assets_Package
         }
 
         if ($mimeType == 'text/javascript') {
-            $ret = str_replace(
+            $packageMap->stringReplace(
                 '{$application.assetsVersion}',
-                Kwf_Assets_Dispatcher::getAssetsVersion(),
-                $ret);
+                Kwf_Assets_Dispatcher::getAssetsVersion()
+            );
         }
 
-        return $ret;
+        if ($includeSourceMapComment) {
+            $contents = $packageMap->getFileContents();
+            if ($mimeType == 'text/javascript') $ext = 'js';
+            else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
+            else if ($mimeType == 'text/css') $ext = 'css';
+            else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
+            else throw new Kwf_Exception_NotYetImplemented();
+            if ($ext == 'js' || $ext == 'defer.js') {
+                $contents .= "\n//# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)."\n";
+            } else if ($ext == 'css' || $ext == 'printcss') {
+                $contents .= "\n/*# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)." */\n";
+            }
+            $packageMap->setFileContents($contents);
+        }
+
+        return $packageMap;
     }
 
     public function toUrlParameter()
@@ -116,24 +197,45 @@ class Kwf_Assets_Package
         return new $class(new $providerList, $param[1]);
     }
 
+    public function getPackageUrl($ext, $language)
+    {
+        return Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
+            .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
+    }
+
+    public function getPackageUrlsCacheId($mimeType, $language)
+    {
+        $ret = $this->_getCacheId($mimeType);
+        if (!$ret) return $ret;
+        return 'depPckUrls_'.$ret.'_'.$language;
+    }
+
     public function getPackageUrls($mimeType, $language)
     {
-        if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
-            $cacheId = 'depPckUrls_'.$this->_dependencyName.'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType).'_'.$language;
-            $ret = Kwf_Assets_Cache::getInstance()->load($cacheId);
-            if ($ret !== false) return $ret;
+        $cacheId = $this->getPackageUrlsCacheId($mimeType, $language);
+        $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+        if ($ret !== false) {
+            if (Kwf_Setup::getBaseUrl()) {
+                foreach ($ret as $k=>$i) {
+                    $ret[$k] = Kwf_Setup::getBaseUrl().$i;
+                }
+            }
+            return $ret;
+        }
+
+        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
+            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
         }
 
         if ($mimeType == 'text/javascript') $ext = 'js';
+        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
         else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
         else throw new Kwf_Exception_NotYetImplemented();
 
         $ret = array();
-        $ret[] = Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
-            .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
+        $hasContents = false;
         $includesDependencies = array();
-        $maxMTime = 0;
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if (!$i->getIncludeInPackage()) {
                 if (in_array($i, $includesDependencies, true)) {
@@ -144,21 +246,17 @@ class Kwf_Assets_Package
                 if ($i instanceof Kwf_Assets_Dependency_HttpUrl) {
                     $ret[] = $i->getUrl();
                 } else {
-                    if (!$i instanceof Kwf_Assets_Interface_UrlResolvable) {
-                        throw new Kwf_Exception("dependency that should not be in package must implement UrlResolvableInterface");
-                    }
-                    $ret[] = Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($i).'/'.$i->toUrlParameter().'/'.$language.'/'.$ext.'?t='.$i->getMTime();
+                    throw new Kwf_Exception('Invalid dependency that should not be included in package');
                 }
-            }
-            $mTime = $i->getMTime();
-            if ($mTime) {
-                $maxMTime = max($maxMTime, $mTime);
+            } else {
+                $hasContents = true;
             }
         }
 
-        if (isset($cacheId)) {
-            Kwf_Assets_Cache::getInstance()->save($ret, $cacheId);
+        if ($hasContents) {
+            array_unshift($ret, $this->getPackageUrl($ext, $language));
         }
+
         return $ret;
     }
 

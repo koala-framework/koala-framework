@@ -9,8 +9,8 @@ class Kwc_Menu_Mobile_Component extends Kwc_Abstract
         $ret['placeholder']['menuLink'] = trlKwfStatic('Menu');
 
         $ret['showSelectedPageInList'] = true;
-        $ret['assets']['dep'][] = 'jQuery';
-        $ret['assets']['dep'][] = 'mustache';
+        $ret['assetsDefer']['dep'][] = 'jQuery';
+        $ret['assetsDefer']['dep'][] = 'underscore';
         return $ret;
     }
 

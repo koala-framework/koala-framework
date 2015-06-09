@@ -3,7 +3,7 @@
  *
  * @author <a href="mailto:dan.humphrey@technomedia.co.uk">Dan Humphrey</a>
  * @class Kwf.Form.SuperBoxSelect
- * @extends Ext.form.ComboBox
+ * @extends Ext2.form.ComboBox
  * @constructor
  * @component
  * @version 1.0
@@ -75,7 +75,7 @@ Kwf.Form.SuperBoxSelect = function(config) {
 /**
  * @private hide from doc gen
  */
-Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,{
+Kwf.Form.SuperBoxSelect = Ext2.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,{
     /**
      * @cfg {Boolean} addNewDataOnBlur Allows adding new items when the user tabs from the input element.
      */
@@ -121,7 +121,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
     extraItemCls: '',
 
     /**
-     * @cfg {String/Object/Function} extraItemStyle Additional css style(s) to apply to each item. Should be a valid argument to Ext.Element.applyStyles.
+     * @cfg {String/Object/Function} extraItemStyle Additional css style(s) to apply to each item. Should be a valid argument to Ext2.Element.applyStyles.
      */
     extraItemStyle: '',
 
@@ -146,7 +146,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
      * @cfg {Number} itemDelimiterKey A key code which terminates keying in of individual items, and adds the current
      * item to the list. Defaults to the ENTER key.
      */
-    itemDelimiterKey: Ext.EventObject.ENTER,
+    itemDelimiterKey: Ext2.EventObject.ENTER,
     /**
      * @cfg {Boolean} navigateItemsWithTab When set to true the tab key will navigate between selected items. Defaults to true.
      */
@@ -209,9 +209,9 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
      */
     valueDelimiter: ',',
     initComponent:function() {
-       Ext.apply(this, {
-            items            : new Ext.util.MixedCollection(false),
-            usedRecords      : new Ext.util.MixedCollection(false),
+       Ext2.apply(this, {
+            items            : new Ext2.util.MixedCollection(false),
+            usedRecords      : new Ext2.util.MixedCollection(false),
             addedRecords     : [],
             remoteLookup     : [],
             hideTrigger      : true,
@@ -223,7 +223,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
 
         });
         if(this.queryFilterRe){
-            if(Ext.isString(this.queryFilterRe)){
+            if(Ext2.isString(this.queryFilterRe)){
                 this.queryFilterRe = new RegExp(this.queryFilterRe);
             }
         }
@@ -251,11 +251,11 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         this.hiddenName = h;
         this.manageNameAttribute();
 
-        var extraClass = (this.stackItems === true) ? 'x-superboxselect-stacked' : '';
+        var extraClass = (this.stackItems === true) ? 'x2-superboxselect-stacked' : '';
         if(this.renderFieldBtns){
-            extraClass += ' x-superboxselect-display-btns';
+            extraClass += ' x2-superboxselect-display-btns';
         }
-        this.el.removeClass('x-form-text').addClass('x-superboxselect-input-field');
+        this.el.removeClass('x2-form-text').addClass('x2-superboxselect-input-field');
 
         this.wrapEl = this.el.wrap({
             tag : 'ul'
@@ -263,12 +263,12 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
 
         this.outerWrapEl = this.wrapEl.wrap({
             tag : 'div',
-            cls: 'x-form-text x-superboxselect ' + extraClass
+            cls: 'x2-form-text x2-superboxselect ' + extraClass
         });
 
         this.inputEl = this.el.wrap({
             tag : 'li',
-            cls : 'x-superboxselect-input'
+            cls : 'x2-superboxselect-input'
         });
 
         if(this.renderFieldBtns){
@@ -278,12 +278,12 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         this.setupFormInterception();
     },
     doTransform : function() {
-        var s = Ext.getDom(this.transform), transformValues = [];
+        var s = Ext2.getDom(this.transform), transformValues = [];
             if(!this.store){
                 this.mode = 'local';
                 var d = [], opts = s.options;
                 for(var i = 0, len = opts.length;i < len; i++){
-                    var o = opts[i], oe = Ext.get(o),
+                    var o = opts[i], oe = Ext2.get(o),
                         value = oe.getAttributeNS(null,'value') || '',
                         cls = oe.getAttributeNS(null,'className') || '',
                         style = oe.getAttributeNS(null,'style') || '';
@@ -292,12 +292,12 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
                     }
                     d.push([value, o.text, cls, typeof(style) === "string" ? style : style.cssText]);
                 }
-                this.store = new Ext.data.SimpleStore({
+                this.store = new Ext2.data.SimpleStore({
                     'id': 0,
                     fields: ['value', 'text', 'cls', 'style'],
                     data : d
                 });
-                Ext.apply(this,{
+                Ext2.apply(this,{
                     valueField: 'value',
                     displayField: 'text',
                     classField: 'cls',
@@ -311,18 +311,18 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
     },
     setupFieldButtons : function(){
         this.buttonWrap = this.outerWrapEl.createChild({
-            cls: 'x-superboxselect-btns'
+            cls: 'x2-superboxselect-btns'
         });
 
         this.buttonClear = this.buttonWrap.createChild({
             tag:'div',
-            cls: 'x-superboxselect-btn-clear ' + this.clearBtnCls
+            cls: 'x2-superboxselect-btn-clear ' + this.clearBtnCls
         });
 
         if(this.allowQueryAll){
             this.buttonExpand = this.buttonWrap.createChild({
                 tag:'div',
-                cls: 'x-superboxselect-btn-expand ' + this.expandBtnCls
+                cls: 'x2-superboxselect-btn-expand ' + this.expandBtnCls
             });
         }
 
@@ -331,7 +331,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         return this;
     },
     initButtonEvents : function() {
-        this.buttonClear.addClassOnOver('x-superboxselect-btn-over').on('click', function(e) {
+        this.buttonClear.addClassOnOver('x2-superboxselect-btn-over').on('click', function(e) {
             e.stopEvent();
             if (this.disabled) {
                 return;
@@ -341,7 +341,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         }, this);
 
         if(this.allowQueryAll){
-            this.buttonExpand.addClassOnOver('x-superboxselect-btn-over').on('click', function(e) {
+            this.buttonExpand.addClassOnOver('x2-superboxselect-btn-over').on('click', function(e) {
                 e.stopEvent();
                 if (this.disabled) {
                     return;
@@ -395,7 +395,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
 
         Kwf.Form.SuperBoxSelect.superclass.initEvents.call(this);
 
-        Ext.apply(this.keyNav, {
+        Ext2.apply(this.keyNav, {
             tab: function(e) {
                 if (this.fixFocusOnTabSelect && this.isExpanded()) {
                     e.stopEvent();
@@ -441,7 +441,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
                 this.fireNewItemEvent(v);
             }
         }
-        Ext.form.ComboBox.superclass.beforeBlur.call(this);
+        Ext2.form.ComboBox.superclass.beforeBlur.call(this);
     },
 
     onFocus: function() {
@@ -485,16 +485,16 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
 
         switch (this.msgTarget) {
             case 'qtip':
-                Ext.apply(this.el.dom, {
+                Ext2.apply(this.el.dom, {
                     qtip    : msg,
-                    qclass  : 'x-form-invalid-tip'
+                    qclass  : 'x2-form-invalid-tip'
                 });
-                Ext.apply(this.wrapEl.dom, {
+                Ext2.apply(this.wrapEl.dom, {
                     qtip    : msg,
-                    qclass  : 'x-form-invalid-tip'
+                    qclass  : 'x2-form-invalid-tip'
                 });
-                if (Ext.QuickTips) { // fix for floating editors interacting with DND
-                    Ext.QuickTips.enable();
+                if (Ext2.QuickTips) { // fix for floating editors interacting with DND
+                    Ext2.QuickTips.enable();
                 }
                 break;
             case 'title':
@@ -509,11 +509,11 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
                         this.el.dom.title = msg;
                         break;
                     }
-                    this.errorEl = elp.createChild({cls:'x-form-invalid-msg'});
+                    this.errorEl = elp.createChild({cls:'x2-form-invalid-msg'});
                     this.errorEl.setWidth(elp.getWidth(true) - 20);
                 }
                 this.errorEl.update(msg);
-                Ext.form.Field.msgFx[this.msgFx].show(this.errorEl, this);
+                Ext2.form.Field.msgFx[this.msgFx].show(this.errorEl, this);
                 break;
             case 'side':
                 if (!this.errorIcon) {
@@ -522,18 +522,18 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
                         this.el.dom.title = msg;
                         break;
                     }
-                    this.errorIcon = elp.createChild({cls:'x-form-invalid-icon'});
+                    this.errorIcon = elp.createChild({cls:'x2-form-invalid-icon'});
                 }
                 this.alignErrorIcon();
-                Ext.apply(this.errorIcon.dom, {
+                Ext2.apply(this.errorIcon.dom, {
                     qtip    : msg,
-                    qclass  : 'x-form-invalid-tip'
+                    qclass  : 'x2-form-invalid-tip'
                 });
                 this.errorIcon.show();
                 this.on('resize', this.alignErrorIcon, this);
                 break;
             default:
-                t = Ext.getDom(this.msgTarget);
+                t = Ext2.getDom(this.msgTarget);
                 t.innerHTML = msg;
                 t.style.display = this.msgDisplay;
                 break;
@@ -557,7 +557,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
                 break;
             case 'under':
                 if(this.errorEl){
-                    Ext.form.Field.msgFx[this.msgFx].hide(this.errorEl, this);
+                    Ext2.form.Field.msgFx[this.msgFx].hide(this.errorEl, this);
                 }
                 break;
             case 'side':
@@ -568,7 +568,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
                 }
                 break;
             default:
-                var t = Ext.getDom(this.msgTarget);
+                var t = Ext2.getDom(this.msgTarget);
                 t.innerHTML = '';
                 t.style.display = 'none';
                 break;
@@ -577,7 +577,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
     },
     alignErrorIcon : function(){
         if(this.wrap){
-            this.errorIcon.alignTo(this.wrap, 'tl-tr', [Ext.isIE ? 5 : 2, 3]);
+            this.errorIcon.alignTo(this.wrap, 'tl-tr', [Ext2.isIE ? 5 : 2, 3]);
         }
     },
     expand : function(){
@@ -590,7 +590,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         }
         this.list.alignTo(this.outerWrapEl, this.listAlign).show();
         this.innerList.setOverflow('auto'); // necessary for FF 2.0/Mac
-        this.mon(Ext.getDoc(), {
+        this.mon(Ext2.getDoc(), {
             scope: this,
             mousewheel: this.collapseIf,
             mousedown: this.collapseIf
@@ -606,8 +606,8 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
 
         var pad = list.getFrameWidth('tb')+(this.resizable?this.handleHeight:0)+this.assetHeight,
             h = Math.max(inner.clientHeight, inner.offsetHeight, inner.scrollHeight),
-            ha = this.getPosition()[1]-Ext.getBody().getScroll().top,
-            hb = Ext.lib.Dom.getViewHeight()-ha-this.getSize().height,
+            ha = this.getPosition()[1]-Ext2.getBody().getScroll().top,
+            hb = Ext2.lib.Dom.getViewHeight()-ha-this.getSize().height,
             space = Math.max(ha, hb, this.minHeight || 0)-list.shadowOffset-pad-5;
 
         h = Math.min(h, space, this.maxHeight);
@@ -661,12 +661,12 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
                 if(this.forceFormValue && this.items.getCount() === 0){
                     vals[this.name] = '';
                 }
-                return asString ? Ext.urlEncode(vals) : vals ;
+                return asString ? Ext2.urlEncode(vals) : vals ;
             }.createDelegate(this);
         }
     },
     onResize : function(w, h, rw, rh) {
-        var reduce = Ext.isIE6 ? 4 : Ext.isIE7 ? 1 : Ext.isIE8 ? 1 : 0;
+        var reduce = Ext2.isIE6 ? 4 : Ext2.isIE7 ? 1 : Ext2.isIE8 ? 1 : 0;
         if(this.wrapEl){
             this._width = w;
             this.outerWrapEl.setWidth(w - reduce);
@@ -722,11 +722,11 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         }
         this.fireEvent('newitem', this, val, this.filteredQueryData);
         if (this.addNewItemUrl) {
-            var params = Ext.apply({
+            var params = Ext2.apply({
                     val: val
                 }, this.store.baseParams
             );
-            Ext.Ajax.request({
+            Ext2.Ajax.request({
                 url: this.addNewItemUrl,
                 params: params,
                 success: function(request, options, r) {
@@ -957,7 +957,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         }
     },
     setFormBaseParams: function(params) {
-        Ext.apply(this.store.baseParams, params);
+        Ext2.apply(this.store.baseParams, params);
     },
     onKeyUpBuffered : function(e){
         if(!e.isNavKeyPress()){
@@ -1030,9 +1030,9 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
     },
     getCaption: function(dataObject){
         if(typeof this.displayFieldTpl === 'string') {
-            this.displayFieldTpl = new Ext.XTemplate(this.displayFieldTpl);
+            this.displayFieldTpl = new Ext2.XTemplate(this.displayFieldTpl);
         }
-        var caption, recordData = dataObject instanceof Ext.data.Record ? dataObject.data : dataObject;
+        var caption, recordData = dataObject instanceof Ext2.data.Record ? dataObject.data : dataObject;
 
         if(this.displayFieldTpl) {
             caption = this.displayFieldTpl.apply(recordData);
@@ -1069,7 +1069,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
             if(this.styleField){
                 recordFields.push({name: this.styleField});
             }
-            this.recordConstructor = Ext.data.Record.create(recordFields);
+            this.recordConstructor = Ext2.data.Record.create(recordFields);
         }
         return new this.recordConstructor(recordData);
     },
@@ -1080,8 +1080,8 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
      * @param {Array} newItemObjects An Array of object literals containing the property names and values for an item. The property names must match those specified in {@link #Kwf.Form.SuperBoxSelect-displayField}, {@link #Kwf.Form.SuperBoxSelect-valueField} and {@link #Kwf.Form.SuperBoxSelect-classField}
      */
     addItems : function(newItemObjects){
-        if (Ext.isArray(newItemObjects)) {
-            Ext.each(newItemObjects, function(item) {
+        if (Ext2.isArray(newItemObjects)) {
+            Ext2.each(newItemObjects, function(item) {
                 this.addItem(item);
             }, this);
         } else {
@@ -1152,7 +1152,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
                     ret = s + ';';
             }
             return ret;
-        }, itemKey = Ext.id(null,'sbx-item'), box = new Kwf.Form.SuperBoxSelectItem({
+        }, itemKey = Ext2.id(null,'sbx-item'), box = new Kwf.Form.SuperBoxSelectItem({
             owner: this,
             disabled: this.disabled,
             renderTo: this.wrapEl,
@@ -1199,7 +1199,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         };
 
         if(this.disabled){
-            Ext.apply(hConfig,{
+            Ext2.apply(hConfig,{
                disabled : 'disabled'
             })
         }
@@ -1212,7 +1212,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         if (!this.renderFieldBtns || !this.rendered) {
             return this;
         }
-        var cls = 'x-superboxselect-btn-hide';
+        var cls = 'x2-superboxselect-btn-hide';
         if (this.items.getCount() === 0) {
             this.buttonClear.addClass(cls);
         } else {
@@ -1242,7 +1242,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
             this.items.each(function(item){
                 vals.push(item.value);
             });
-            Ext.each(vals,function(val){
+            Ext2.each(vals,function(val){
                 ret.push(this.findInStore(val));
             },this);
         }
@@ -1345,7 +1345,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
     },
     // private
     initValue : function(){
-        if(Ext.isObject(this.value) || Ext.isArray(this.value)){
+        if(Ext2.isObject(this.value) || Ext2.isArray(this.value)){
             this.setValueEx(this.value);
             this.originalValue = this.getValue();
         }else{
@@ -1363,17 +1363,17 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
      */
     addValue : function(value){
 
-        if(Ext.isEmpty(value)){
+        if(Ext2.isEmpty(value)){
             return;
         }
 
         var values = value;
-        if(!Ext.isArray(value)){
+        if(!Ext2.isArray(value)){
             value = '' + value;
             values = value.split(this.valueDelimiter);
         }
 
-        Ext.each(values,function(val){
+        Ext2.each(values,function(val){
             var record = this.findRecord(this.valueField, val);
             if(record){
                 this.addRecord(record);
@@ -1416,20 +1416,20 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         }
         this.removeAllItems().resetStore();
 
-        if(!Ext.isArray(data)){
+        if(!Ext2.isArray(data)){
             data = [data];
         }
         this.remoteLookup = [];
 
         if(this.allowAddNewData && this.mode === 'remote'){ // no need to query
-            Ext.each(data, function(d){
+            Ext2.each(data, function(d){
                 var r = this.findRecord(this.valueField, d[this.valueField]) || this.createRecord(d);
                 this.addRecord(r);
             },this);
             return;
         }
 
-        Ext.each(data,function(item){
+        Ext2.each(data,function(item){
             this.addItem(item);
         },this);
     },
@@ -1475,16 +1475,16 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         this.items.purgeListeners();
         this.killItems();
         if(this.allowQueryAll){
-            Ext.destroy(this.buttonExpand);
+            Ext2.destroy(this.buttonExpand);
         }
         if (this.renderFieldBtns) {
-            Ext.destroy(
+            Ext2.destroy(
                 this.buttonClear,
                 this.buttonWrap
             );
         }
 
-        Ext.destroy(
+        Ext2.destroy(
             this.inputEl,
             this.wrapEl,
             this.outerWrapEl
@@ -1497,7 +1497,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
             return this;
         }
         if(!this.metrics){
-            this.metrics = Ext.util.TextMetrics.createInstance(this.el);
+            this.metrics = Ext2.util.TextMetrics.createInstance(this.el);
         }
         var el = this.el,
             v = el.dom.value,
@@ -1516,7 +1516,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         }
         this.el.setWidth(w);
 
-        if(Ext.isIE){
+        if(Ext2.isIE){
             this.el.dom.style.top='0';
         }
         this.fireEvent('autosize', this, w);
@@ -1534,7 +1534,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         return true;
     },
     doQuery : function(q, forceAll,valuesQuery, forcedAdd){
-        q = Ext.isEmpty(q) ? '' : q;
+        q = Ext2.isEmpty(q) ? '' : q;
         if(this.queryFilterRe){
             this.filteredQueryData = '';
             var m = q.match(this.queryFilterRe);
@@ -1557,7 +1557,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         }
         q = qe.query;
         forceAll = qe.forceAll;
-        if(forceAll === true || (q.length >= this.minChars) || valuesQuery && !Ext.isEmpty(q)){
+        if(forceAll === true || (q.length >= this.minChars) || valuesQuery && !Ext2.isEmpty(q)){
             if(forcedAdd || this.forceSameValueQuery || this.shouldQuery(q) ){
                 this.lastQuery = q;
                 if(this.mode == 'local'){
@@ -1601,7 +1601,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
         if(isValuesQuery){
 
             var params = q.split(this.queryValuesDelimiter);
-            Ext.each(params,function(p){
+            Ext2.each(params,function(p){
                 this.remoteLookup.remove(p);
                  var rec = this.findRecord(this.valueField,p);
                  if(rec){
@@ -1617,7 +1617,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
 
         //queried display (autocomplete) & addItem
         if(q !== '' && this.allowAddNewData){
-            Ext.each(this.remoteLookup,function(r){
+            Ext2.each(this.remoteLookup,function(r){
                 if(typeof r === "object" && r[this.valueField] === q){
                     this.remoteLookup.remove(r);
                     if(records.length && records[0].get(this.valueField) === q) {
@@ -1640,7 +1640,7 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
 
         var toAdd = [];
         if(q === ''){
-            Ext.each(this.addedRecords,function(rec){
+            Ext2.each(this.addedRecords,function(rec){
                 if(this.preventDuplicates && this.usedRecords.containsKey(rec.get(this.valueField))){
                     return;
                 }
@@ -1649,8 +1649,8 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
             },this);
 
         }else{
-            var re = new RegExp(Ext.escapeRe(q) + '.*','i');
-            Ext.each(this.addedRecords,function(rec){
+            var re = new RegExp(Ext2.escapeRe(q) + '.*','i');
+            Ext2.each(this.addedRecords,function(rec){
                 if(this.preventDuplicates && this.usedRecords.containsKey(rec.get(this.valueField))){
                     return;
                 }
@@ -1676,18 +1676,18 @@ Kwf.Form.SuperBoxSelect = Ext.extend(Kwf.Form.SuperBoxSelect, Kwf.Form.ComboBox,
     }
 
 });
-Ext.reg('superboxselect', Kwf.Form.SuperBoxSelect);
+Ext2.reg('superboxselect', Kwf.Form.SuperBoxSelect);
 /*
  * @private
  */
 Kwf.Form.SuperBoxSelectItem = function(config){
-    Ext.apply(this,config);
+    Ext2.apply(this,config);
     Kwf.Form.SuperBoxSelectItem.superclass.constructor.call(this);
 };
 /*
  * @private
  */
-Kwf.Form.SuperBoxSelectItem = Ext.extend(Kwf.Form.SuperBoxSelectItem,Ext.Component, {
+Kwf.Form.SuperBoxSelectItem = Ext2.extend(Kwf.Form.SuperBoxSelectItem,Ext2.Component, {
     initComponent : function(){
         Kwf.Form.SuperBoxSelectItem.superclass.initComponent.call(this);
     },
@@ -1716,19 +1716,19 @@ Kwf.Form.SuperBoxSelectItem = Ext.extend(Kwf.Form.SuperBoxSelectItem,Ext.Compone
         }
     },
     onLnkFocus : function(){
-        this.el.addClass("x-superboxselect-item-focus");
-        this.owner.outerWrapEl.addClass("x-form-focus");
+        this.el.addClass("x2-superboxselect-item-focus");
+        this.owner.outerWrapEl.addClass("x2-form-focus");
     },
 
     onLnkBlur : function(){
-        this.el.removeClass("x-superboxselect-item-focus");
-        this.owner.outerWrapEl.removeClass("x-form-focus");
+        this.el.removeClass("x2-superboxselect-item-focus");
+        this.owner.outerWrapEl.removeClass("x2-form-focus");
     },
 
     enableElListeners : function() {
         this.el.on('click', this.onElClick, this, {stopEvent:true});
 
-        this.el.addClassOnOver('x-superboxselect-item x-superboxselect-item-hover');
+        this.el.addClassOnOver('x2-superboxselect-item x2-superboxselect-item-hover');
     },
 
     enableLnkListeners : function() {
@@ -1760,14 +1760,14 @@ Kwf.Form.SuperBoxSelectItem = Ext.extend(Kwf.Form.SuperBoxSelectItem,Ext.Compone
         }
 
         this.el = el = ct.createChild({ tag: 'li' }, ct.last());
-        el.addClass('x-superboxselect-item');
+        el.addClass('x2-superboxselect-item');
 
-        var btnEl = this.owner.navigateItemsWithTab ? ( Ext.isSafari ? 'button' : 'a') : 'span';
+        var btnEl = this.owner.navigateItemsWithTab ? ( Ext2.isSafari ? 'button' : 'a') : 'span';
         var itemKey = this.key;
 
-        Ext.apply(el, {
+        Ext2.apply(el, {
             focus: function(){
-                var c = this.down(btnEl +'.x-superboxselect-item-close');
+                var c = this.down(btnEl +'.x2-superboxselect-item-close');
                 if(c){
                     c.focus();
                 }
@@ -1783,7 +1783,7 @@ Kwf.Form.SuperBoxSelectItem = Ext.extend(Kwf.Form.SuperBoxSelectItem,Ext.Compone
 
         var cfg = {
             tag: btnEl,
-            'class': 'x-superboxselect-item-close',
+            'class': 'x2-superboxselect-item-close',
             tabIndex : this.owner.navigateItemsWithTab ? '0' : '-1'
         };
         if(btnEl === 'a'){
@@ -1807,19 +1807,19 @@ Kwf.Form.SuperBoxSelectItem = Ext.extend(Kwf.Form.SuperBoxSelectItem,Ext.Compone
         this.setupKeyMap();
     },
     setupKeyMap : function(){
-        this.keyMap = new Ext.KeyMap(this.lnk, [
+        this.keyMap = new Ext2.KeyMap(this.lnk, [
             {
                 key: [
-                    Ext.EventObject.BACKSPACE,
-                    Ext.EventObject.DELETE,
-                    Ext.EventObject.SPACE
+                    Ext2.EventObject.BACKSPACE,
+                    Ext2.EventObject.DELETE,
+                    Ext2.EventObject.SPACE
                 ],
                 fn: this.preDestroy,
                 scope: this
             }, {
                 key: [
-                    Ext.EventObject.RIGHT,
-                    Ext.EventObject.DOWN
+                    Ext2.EventObject.RIGHT,
+                    Ext2.EventObject.DOWN
                 ],
                 fn: function(){
                     this.moveFocus('right');
@@ -1827,14 +1827,14 @@ Kwf.Form.SuperBoxSelectItem = Ext.extend(Kwf.Form.SuperBoxSelectItem,Ext.Compone
                 scope: this
             },
             {
-                key: [Ext.EventObject.LEFT,Ext.EventObject.UP],
+                key: [Ext2.EventObject.LEFT,Ext2.EventObject.UP],
                 fn: function(){
                     this.moveFocus('left');
                 },
                 scope: this
             },
             {
-                key: [Ext.EventObject.HOME],
+                key: [Ext2.EventObject.HOME],
                 fn: function(){
                     var l = this.owner.items.get(0).el.focus();
                     if(l){
@@ -1844,14 +1844,14 @@ Kwf.Form.SuperBoxSelectItem = Ext.extend(Kwf.Form.SuperBoxSelectItem,Ext.Compone
                 scope: this
             },
             {
-                key: [Ext.EventObject.END],
+                key: [Ext2.EventObject.END],
                 fn: function(){
                     this.owner.el.focus();
                 },
                 scope: this
             },
             {
-                key: Ext.EventObject.ENTER,
+                key: Ext2.EventObject.ENTER,
                 fn: function(){
                 }
             }
@@ -1908,7 +1908,7 @@ Kwf.Form.SuperBoxSelectItem = Ext.extend(Kwf.Form.SuperBoxSelectItem,Ext.Compone
         Kwf.Form.SuperBoxSelectItem.superclass.onEnable.call(this);
     },
     onDestroy : function() {
-        Ext.destroy(
+        Ext2.destroy(
             this.lnk,
             this.el
         );

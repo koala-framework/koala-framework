@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_Package_Default extends Kwf_Assets_Package
+class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Assets_Package_FactoryInterface
 {
     private static $_defaultProviderList;
     static private $_instances = array();
@@ -7,6 +7,8 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package
      * Returns a Default Asset Package (using Kwf_Assets_ProviderList_Default)
      *
      * Very fast, as all expensive operations are done lazily
+     *
+     * @return self
      */
     public static function getInstance($dependencyName)
     {
@@ -44,4 +46,25 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package
         $dependencyName = $parameter;
         return self::getInstance($dependencyName);
     }
+
+    protected function _getCacheId($mimeType)
+    {
+        if (get_class($this->_providerList) == 'Kwf_Assets_ProviderList_Default') { //only cache for default providerList, so cacheId doesn't have to contain only dependencyName
+            return str_replace(array('.'), '_', $this->_dependencyName).'_'.str_replace(array('/', ' ', ';', '='), '_', $mimeType);
+        }
+        return null;
+    }
+
+    public static function createPackages()
+    {
+        $packages = array(
+            self::getInstance('Frontend'),
+            self::getInstance('Admin')
+        );
+        foreach (Kwf_Config::getValueArray('assets.packages') as $i) {
+            $packages[] = self::getInstance($i);
+        }
+        return $packages;
+    }
+
 }

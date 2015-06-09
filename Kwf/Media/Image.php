@@ -17,10 +17,19 @@ class Kwf_Media_Image
     /**
      * Returns supported image-widths of specific image with given base-dimensions
      */
-    public static function getResponsiveWidthSteps($dim, $imagepath)
+    public static function getResponsiveWidthSteps($dim, $image)
     {
         $ret = array();
-        $size = getimagesize($imagepath);
+        if (is_string($image)) {
+            $size = getimagesize($image);
+        } else if ($image instanceof Imagick) {
+            $size = array(
+                $image->getImageWidth(),
+                $image->getImageHeight()
+            );
+        } else {
+            throw new Kwf_Exception("Image is required");
+        }
 
         $maxWidth = $dim['width'] * 2;
         if ($size[0] < $dim['width'] * 2) {
@@ -140,6 +149,7 @@ class Kwf_Media_Image
      */
     public static function getHandyScaleFactor($originalPath)
     {
+        if (!file_exists($originalPath)) return 1;
         $targetSize = array(600, 600, 'cover' => false);
         $original = @getimagesize($originalPath);
         if (abs(self::getExifRotation($originalPath)) == 90) {
@@ -385,7 +395,8 @@ class Kwf_Media_Image
             $preScaleWidth /= 2;
             $preScaleHeight /= 2;
             $preScaleFactor++;
-            $dir = Kwf_Config::getValue('uploads') . "/mediaprescale/$uploadId";
+            $folderId = substr($uploadId, 0, 2);
+            $dir = Kwf_Config::getValue('uploads') . "/mediaprescale/$folderId/$uploadId";
             if (!is_dir($dir)) mkdir($dir, 0777, true);
             $preScaleCacheFile = "$dir/$preScaleFactor";
             if (!file_exists($preScaleCacheFile)) {
@@ -539,12 +550,12 @@ class Kwf_Media_Image
             $hasIccProfile = in_array('icc', $profiles);
             // if it doesnt have a CMYK ICC profile, we add one
             if ($hasIccProfile === false) {
-                $iccCmyk = file_get_contents(Kwf_Config::getValue('libraryPath').'/icc/ISOuncoated.icc');
+                $iccCmyk = file_get_contents(dirname(__FILE__).'/icc/ISOuncoated.icc');
                 $im->profileImage('icc', $iccCmyk);
                 unset($iccCmyk);
             }
             // then we add an RGB profile
-            $iccRgb = file_get_contents(Kwf_Config::getValue('libraryPath').'/icc/sRGB_v4_ICC_preference.icc');
+            $iccRgb = file_get_contents(dirname(__FILE__).'/icc/sRGB_v4_ICC_preference.icc');
             $im->profileImage('icc', $iccRgb);
             unset($iccRgb);
         }

@@ -39,7 +39,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
     public function indexAction()
     {
-        $this->view->controllerUrl = $this->getRequest()->getBaseUrl().$this->getRequest()->getPathInfo();
+        $this->view->controllerUrl = $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/');
         if ($this->_getParam('componentId')) {
             $this->view->baseParams = array(
                 'componentId' => $this->_getParam('componentId')
@@ -532,9 +532,6 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             if (!$row) {
                 throw new Kwf_Exception("Can't find row with id '$id'.");
             }
-            if (!$this->_hasPermissions($row, 'save')) {
-                throw new Kwf_Exception("You don't have the permissions to save this row.");
-            }
             foreach ($this->_columns as $column) {
                 if (!($column->getShowIn() & Kwf_Grid_Column::SHOW_IN_GRID)) continue;
                 $invalid = $column->validate($row, $submitRow);
@@ -548,6 +545,9 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
                 $this->_beforeInsert($row, $submitRow);
             }
             $this->_beforeSave($row, $submitRow);
+            if (!$this->_hasPermissions($row, 'save')) {
+                throw new Kwf_Exception("You don't have the permissions to save this row.");
+            }
 
 
             $row->save();
@@ -852,7 +852,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             throw new Kwf_Exception("CSV is not allowed.");
         }
 
-        ini_set('memory_limit', "384M");
+        Kwf_Util_MemoryLimit::set(384);
         set_time_limit(600); // 10 minuten
 
         $data = $this->_getExportData(Kwf_Grid_Column::SHOW_IN_CSV, 'csv', 0);
@@ -919,8 +919,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
     public function jsonXlsAction()
     {
-        // e.g.: Stargate customer export: 128M memory_limit exhaust at 1500 lines
-        ini_set('memory_limit', "768M");
+        Kwf_Util_MemoryLimit::set(768);
         set_time_limit(600); // 10 minuten
         if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
             throw new Kwf_Exception("XLS is not allowed.");
@@ -928,7 +927,6 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
 
         $data = $this->_getExportData(Kwf_Grid_Column::SHOW_IN_XLS, 'xls', 640);
 
-        require_once Kwf_Config::getValue('externLibraryPath.phpexcel').'/PHPExcel.php';
         $xls = new PHPExcel();
         $xls->getProperties()->setCreator("Vivid Planet Software GmbH");
         $xls->getProperties()->setLastModifiedBy("Vivid Planet Software GmbH");
@@ -997,9 +995,14 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             $this->_progressBar->next(1, trlKwf('Writing data. Please be patient.'));
         }
         // write the file
-        $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
         $downloadkey = uniqid();
-        $objWriter->save('temp/'.$downloadkey.'.xls');
+        if (class_exists('XMLWriter')) {
+            $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel2007');
+            $objWriter->save('temp/'.$downloadkey.'.xlsx');
+        } else {
+            $objWriter = PHPExcel_IOFactory::createWriter($xls, 'Excel5');
+            $objWriter->save('temp/'.$downloadkey.'.xls');
+        }
 
         $this->_progressBar->finish();
 
@@ -1011,15 +1014,22 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
         if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
             throw new Kwf_Exception("XLS is not allowed.");
         }
-        if (!file_exists('temp/'.$this->_getParam('downloadkey').'.xls')) {
+        if (class_exists('XMLWriter')) {
+            $suffix = 'xlsx';
+            $mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        } else {
+            $suffix = 'xls';
+            $mimeType = 'application/msexcel';
+        }
+        if (!file_exists('temp/'.$this->_getParam('downloadkey').'.'.$suffix)) {
             throw new Kwf_Exception('Wrong downloadkey submitted');
         }
         Kwf_Util_TempCleaner::clean();
 
         $file = array(
-            'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.xls'),
-            'mimeType' => 'application/msexcel',
-            'downloadFilename' => 'export_'.date('Ymd-Hi').'.xls'
+            'contents' => file_get_contents('temp/'.$this->_getParam('downloadkey').'.'.$suffix),
+            'mimeType' => $mimeType,
+            'downloadFilename' => 'export_'.date('Ymd-Hi').'.'.$suffix
         );
         Kwf_Media_Output::output($file);
         $this->_helper->viewRenderer->setNoRender();

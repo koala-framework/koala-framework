@@ -1,15 +1,15 @@
-Ext.ns('Kwc.Newsletter.Detail');
+Ext2.ns('Kwc.Newsletter.Detail');
 
-Kwc.Newsletter.Detail.RecipientsAction = Ext.extend(Ext.Action, {
+Kwc.Newsletter.Detail.RecipientsAction = Ext2.extend(Ext2.Action, {
     constructor: function(config){
-        config = Ext.apply({
+        config = Ext2.apply({
         icon    : '/assets/silkicons/database_add.png',
-        cls     : 'x-btn-text-icon',
+        cls     : 'x2-btn-text-icon',
         text    : trlKwf('Add Recipients'),
         tooltip : trlKwf('Adds the currently shown recipients to the newsletter'),
         scope   : this,
         handler : function(a, b, c) {
-            if (Ext.grid.CheckboxSelectionModel && this.getGrid().getSelectionModel() instanceof Ext.grid.CheckboxSelectionModel) {
+            if (Ext2.grid.CheckboxSelectionModel && this.getGrid().getSelectionModel() instanceof Ext2.grid.CheckboxSelectionModel) {
                 var selectedRows = this.getGrid().getSelectionModel().getSelections();
                 var ids = [];
                 selectedRows.each(function(selectedRow) { ids.push(selectedRow.id); }, this);
@@ -22,7 +22,7 @@ Kwc.Newsletter.Detail.RecipientsAction = Ext.extend(Ext.Action, {
                     var params = this.getStore().baseParams;
                 }
             }
-            Ext.Ajax.request({
+            Ext2.Ajax.request({
                 url : this.controllerUrl + '/json-save-recipients',
                 params: params,
                 success: function(response, options, r) {
@@ -32,7 +32,7 @@ Kwc.Newsletter.Detail.RecipientsAction = Ext.extend(Ext.Action, {
                         msgText += trlKwf('The following E-Mail addresses were excluded due to the RTR-ECG-Check (see {0})', ['<a href="http://www.rtr.at/ecg" target="_blank">www.rtr.at/ecg</a>']);
                         msgText += ':<div class="recipientsStatusRtr">'+r.rtrExcluded.join('<br />')+'</div>';
                     }
-                    Ext.MessageBox.alert(trlKwf('Status'), msgText, function() {
+                    Ext2.MessageBox.alert(trlKwf('Status'), msgText, function() {
                         this.findParentBy(function (container) {
                             if (container instanceof Kwc.Newsletter.Detail.RecipientsPanel) {
                                 return true;
@@ -50,16 +50,16 @@ Kwc.Newsletter.Detail.RecipientsAction = Ext.extend(Ext.Action, {
     }
 });
 
-Kwc.Newsletter.Detail.RemoveRecipientsAction = Ext.extend(Ext.Action, {
+Kwc.Newsletter.Detail.RemoveRecipientsAction = Ext2.extend(Ext2.Action, {
     constructor: function(config){
-        config = Ext.apply({
+        config = Ext2.apply({
         icon    : '/assets/silkicons/database_delete.png',
-        cls     : 'x-btn-text-icon',
+        cls     : 'x2-btn-text-icon',
         text    : trlKwf('Remove Recipients'),
         tooltip : trlKwf('Removes the currently shown recipients to the newsletter'),
         scope   : this,
         handler : function(a, b, c) {
-            if (Ext.grid.CheckboxSelectionModel && this.getGrid().getSelectionModel() instanceof Ext.grid.CheckboxSelectionModel) {
+            if (Ext2.grid.CheckboxSelectionModel && this.getGrid().getSelectionModel() instanceof Ext2.grid.CheckboxSelectionModel) {
                 var selectedRows = this.getGrid().getSelectionModel().getSelections();
                 var ids = [];
                 selectedRows.each(function(selectedRow) { ids.push(selectedRow.id); }, this);
@@ -72,12 +72,12 @@ Kwc.Newsletter.Detail.RemoveRecipientsAction = Ext.extend(Ext.Action, {
                     var params = this.getStore().baseParams;
                 }
             }
-            Ext.Ajax.request({
+            Ext2.Ajax.request({
                 url : this.controllerUrl + '/json-remove-recipients',
                 params: params,
                 success: function(response, options, r) {
                     var msgText = trlKwf('{0} recipients removed, total {1} recipients.', [r.removed, r.after]);
-                    Ext.MessageBox.alert(trlKwf('Status'), msgText, function() {
+                    Ext2.MessageBox.alert(trlKwf('Status'), msgText, function() {
                         this.findParentByType('kwc.newsletter.recipients').fireEvent('queueChanged');
                     }, this);
                 },

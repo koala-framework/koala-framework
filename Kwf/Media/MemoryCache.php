@@ -112,9 +112,6 @@ class Kwf_Media_MemoryCache
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-media-';
             return Kwf_Cache_Simple::getMemcache()->delete($prefix.$id);
         } else if ($be == 'file') {
-            $file = self::_getFileNameForCacheId($id);
-            if (!file_exists($file)) return false;
-            unlink($file);
             return true;
         } else {
             return Kwf_Cache_Simple::delete('media-'.$id);

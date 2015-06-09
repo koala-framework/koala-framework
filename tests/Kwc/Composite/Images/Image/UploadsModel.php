@@ -5,6 +5,6 @@ class Kwc_Composite_Images_Image_UploadsModel extends Kwf_Test_Uploads_Model
     {
         parent::__construct($config);
 
-        $this->createRow()->copyFile(KWF_PATH.'/images/information.png', 'foo', 'png', 'image/png');
+        $this->createRow(array('id'=>'1'))->copyFile(KWF_PATH.'/images/information.png', 'foo', 'png', 'image/png');
     }
 }

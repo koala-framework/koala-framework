@@ -1,5 +1,5 @@
-Kwf.onContentReady(function() {
-    Ext.query('.kwcUserFormSuccess').each(function(el) {
-        window.setTimeout("window.location.href = '/'", 3000);
-    }, this);
+Kwf.onJElementReady('.kwcUserFormSuccess', function(el, config) {
+    window.setTimeout(function() {
+        window.location.href = config.redirectUrl;
+    }, 3000);
 });

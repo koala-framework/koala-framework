@@ -95,7 +95,9 @@ class Kwf_Media_Output
         // The definition of Pragma can be found here (http://www.ietf.org/rfc/rfc2616.txt)
         // at chapter 14.32
         if ($lifetime) {
-            if (isset($headers['Https']) && preg_match('/msie [6-8]/i', $headers['User-Agent'])) {
+            if (isset($headers['Https']) && isset($headers['User-Agent'])
+                && preg_match('/msie [6-8]/i', $headers['User-Agent'])
+            ) {
                 $ret['headers'][] = 'Cache-Control: private, max-age='.$lifetime;
                 $ret['headers'][] = 'Pragma:';
             } else {
@@ -108,7 +110,7 @@ class Kwf_Media_Output
             $ret['headers'][] = 'Pragma:';
         }
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
-                $headers['If-Modified-Since'] == $lastModifiedString) {
+                $file['mtime'] <= strtotime($headers['If-Modified-Since'])) {
             $ret['responseCode'] = 304;
             $ret['contentLength'] = 0;
             if (php_sapi_name() == 'cgi-fcgi') {

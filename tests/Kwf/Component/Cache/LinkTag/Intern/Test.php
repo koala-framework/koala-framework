@@ -65,7 +65,7 @@ class Kwf_Component_Cache_LinkTag_Intern_Test extends Kwc_TestAbstract
     public function testComponentLinkCache()
     {
         $this->assertRegExp(
-            '#<a .*?href="/kwf/kwctest/Kwf_Component_Cache_LinkTag_Intern_Root_Component/f1" rel=""><span>link</span></a>#',
+            '#<a .*?href="/kwf/kwctest/Kwf_Component_Cache_LinkTag_Intern_Root_Component/f1"><span>link</span></a>#',
             $this->_root->render(true, false)
         );
 
@@ -75,7 +75,7 @@ class Kwf_Component_Cache_LinkTag_Intern_Test extends Kwc_TestAbstract
         $this->_process();
 
         $this->assertRegExp(
-            '#<a .*?href="/kwf/kwctest/Kwf_Component_Cache_LinkTag_Intern_Root_Component/g1" rel=""><span>link</span></a>#',
+            '#<a .*?href="/kwf/kwctest/Kwf_Component_Cache_LinkTag_Intern_Root_Component/g1"><span>link</span></a>#',
             $this->_root->render(true, false)
         );
     }
@@ -113,7 +113,7 @@ class Kwf_Component_Cache_LinkTag_Intern_Test extends Kwc_TestAbstract
         $this->_process();
 
         $this->assertRegExp(
-            '#<a .*?href="/kwf/kwctest/Kwf_Component_Cache_LinkTag_Intern_Root_Component/1_p1/child" rel=""><span>link</span></a>#',
+            '#<a .*?href="/kwf/kwctest/Kwf_Component_Cache_LinkTag_Intern_Root_Component/1_p1/child"><span>link</span></a>#',
             $this->_root->render(true, false)
         );
 
@@ -123,7 +123,7 @@ class Kwf_Component_Cache_LinkTag_Intern_Test extends Kwc_TestAbstract
         $this->_process();
 
         $this->assertRegExp(
-            '#<a .*?href="/kwf/kwctest/Kwf_Component_Cache_LinkTag_Intern_Root_Component/1_q1/child" rel=""><span>link</span></a>#',
+            '#<a .*?href="/kwf/kwctest/Kwf_Component_Cache_LinkTag_Intern_Root_Component/1_q1/child"><span>link</span></a>#',
             $this->_root->render(true, false)
         );
     }

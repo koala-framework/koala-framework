@@ -89,6 +89,7 @@ class Kwc_Directories_AjaxView_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->waitForConnections();
         $this->refreshAndWait();
         $this->goBackAndWait();
+        sleep(2);
         $this->waitForConnections();
         sleep(3);
         $this->assertVisible('link=foo2');

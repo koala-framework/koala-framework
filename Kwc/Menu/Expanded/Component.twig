@@ -1,0 +1,38 @@
+{% if menu|length %}
+    <div class="{{ cssClass }}">
+        {% if parentPage %}
+            {% block parentPageName %}
+            <h2 class="parentPageName">{{ parentPage.name }}</h2>
+            {% endblock %}
+        {% endif %}
+        <ul class="menu">
+            {% for m in menu %}
+                {{ m.preHtml }}
+                <li class="{{ m.class }}">
+                    {% if m.isFirstChildPage %}
+                        <p>{{ m.data.name|replace('{name}', m.data.name) }}</p>
+                    {% else %}
+                        {% block menuLink %}
+                        {{ renderer.componentLink(m.data) }}
+                        {% endblock %}
+                    {% endif %}
+                    {% if m.submenu|length %}
+                        <ul class="subMenu">
+                            {% for sm in m.submenu %}
+                                {{ sm.preHtml }}
+                                <li class="{{ sm.class }}">
+                                    {% block subMenuLink %}
+                                    {{ renderer.componentLink(sm.data, sm.text) }}
+                                    {% endblock %}
+                                </li>
+                                {{ sm.postHtml }}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+                {{ m.postHtml }}
+            {% endfor %}
+        </ul>
+        <div class="clear"></div>
+    </div>
+{% endif %}

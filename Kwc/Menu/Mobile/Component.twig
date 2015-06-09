@@ -1,0 +1,10 @@
+<div class="{{ cssClass }}">
+    <div class="loadingMenu"><div class="innerLoading"></div></div>
+    <input type="hidden" value="{{ config|json_encode() }}" />
+    <a class="showMenu" href="#">
+        {{ placeholder.menuLink }}
+    </a>
+    {% block beforeSlider %}{% endblock %}
+    <div class="slider"></div>
+    {% block afterSlider %}{% endblock %}
+</div>

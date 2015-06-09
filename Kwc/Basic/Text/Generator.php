@@ -3,8 +3,7 @@ class Kwc_Basic_Text_Generator extends Kwf_Component_Generator_Table
 {
     protected function _getModel()
     {
-        return Kwc_Basic_Text_Component::getTextModel($this->_class)
-                ->getDependentModel('ChildComponents');
+        return Kwc_Basic_Text_Component::createChildModel($this->_class);
     }
 
     protected function _getIdFromRow($row)

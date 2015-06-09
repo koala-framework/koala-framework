@@ -2,7 +2,7 @@
 /*global Ext */
 /**
  * @class Kwf.Form.DateTime
- * @extends Ext.form.Field
+ * @extends Ext2.form.Field
  *
  * DateTime field, combination of DateField and TimeField
  *
@@ -36,7 +36,7 @@
  * @constructor
  * @param {Object} config A config object
  */
-Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
+Kwf.Form.DateTime = Ext2.extend(Ext2.form.Field, {
     /**
      * @cfg {Function} dateValidator A custom validation function to be called during date field
      * validation (defaults to null)
@@ -117,9 +117,9 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
         Kwf.Form.DateTime.superclass.initComponent.call(this);
 
         // create DateField
-        var dateConfig = Ext.apply({}, {
+        var dateConfig = Ext2.apply({}, {
              id:this.id + '-date'
-            ,format:this.dateFormat || Ext.form.DateField.prototype.format
+            ,format:this.dateFormat || Ext2.form.DateField.prototype.format
             ,width:this.dateWidth
             ,selectOnFocus:this.selectOnFocus
             ,validator:this.dateValidator
@@ -128,14 +128,14 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
                  ,focus:{scope:this, fn:this.onFocus}
             }
         }, this.dateConfig);
-        this.df = new Ext.form.DateField(dateConfig);
+        this.df = new Ext2.form.DateField(dateConfig);
         this.df.ownerCt = this;
         delete(this.dateFormat);
 
         // create TimeField
-        var timeConfig = Ext.apply({}, {
+        var timeConfig = Ext2.apply({}, {
              id:this.id + '-time'
-            ,format:this.timeFormat || Ext.form.TimeField.prototype.format
+            ,format:this.timeFormat || Ext2.form.TimeField.prototype.format
             ,width:this.timeWidth
             ,selectOnFocus:this.selectOnFocus
             ,validator:this.timeValidator
@@ -144,7 +144,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
                  ,focus:{scope:this, fn:this.onFocus}
             }
         }, this.timeConfig);
-        this.tf = new Ext.form.TimeField(timeConfig);
+        this.tf = new Ext2.form.TimeField(timeConfig);
         this.tf.ownerCt = this;
         delete(this.timeFormat);
         
@@ -176,13 +176,13 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
         // create bounding table
         var t;
         if('below' === this.timePosition || 'bellow' === this.timePosition) {
-            t = Ext.DomHelper.append(ct, {tag:'table',style:'border-collapse:collapse',children:[
+            t = Ext2.DomHelper.append(ct, {tag:'table',style:'border-collapse:collapse',children:[
                  {tag:'tr',children:[{tag:'td', style:'padding-bottom:1px', cls:'ux-datetime-date'}]}
                 ,{tag:'tr',children:[{tag:'td', cls:'ux-datetime-time'}]}
             ]}, true);
         }
         else {
-            t = Ext.DomHelper.append(ct, {tag:'table',style:'border-collapse:collapse',children:[
+            t = Ext2.DomHelper.append(ct, {tag:'table',style:'border-collapse:collapse',children:[
                 {tag:'tr',children:[
                     {tag:'td',style:'padding-right:4px', cls:'ux-datetime-date'},{tag:'td', cls:'ux-datetime-time'}
                 ]}
@@ -190,7 +190,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
         }
 
         this.tableEl = t;
-        this.wrap = t.wrap({cls:'x-form-field-wrap'});
+        this.wrap = t.wrap({cls:'x2-form-field-wrap'});
 //        this.wrap = t.wrap();
         this.wrap.on("mousedown", this.onMouseDown, this, {delay:10});
 
@@ -200,7 +200,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
 
         // workaround for IE trigger misalignment bug
         // see http://extjs.com/forum/showthread.php?p=341075#post341075
-//        if(Ext.isIE && Ext.isStrict) {
+//        if(Ext2.isIE && Ext2.isStrict) {
 //            t.select('input').applyStyles({top:0});
 //        }
 
@@ -210,16 +210,16 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
 
         // create icon for side invalid errorIcon
         if('side' === this.msgTarget) {
-            var elp = this.el.findParent('.x-form-element', 10, true);
-            this.errorIcon = elp.createChild({cls:'x-form-invalid-icon'});
+            var elp = this.el.findParent('.x2-form-element', 10, true);
+            this.errorIcon = elp.createChild({cls:'x2-form-invalid-icon'});
 
             var o = {
                  errorIcon:this.errorIcon
                 ,msgTarget:'side'
                 ,alignErrorIcon:this.alignErrorIcon.createDelegate(this)
             };
-            Ext.apply(this.df, o);
-            Ext.apply(this.tf, o);
+            Ext2.apply(this.df, o);
+            Ext2.apply(this.tf, o);
 //            this.df.errorIcon = this.errorIcon;
 //            this.tf.errorIcon = this.errorIcon;
         }
@@ -243,7 +243,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
     /**
      * @private
      */
-    ,adjustSize:Ext.BoxComponent.prototype.adjustSize
+    ,adjustSize:Ext2.BoxComponent.prototype.adjustSize
     // }}}
     // {{{
     /**
@@ -300,7 +300,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
     // {{{
     /**
      * Disable this component.
-     * @return {Ext.Component} this
+     * @return {Ext2.Component} this
      */
     ,disable:function() {
         if(this.isRendered) {
@@ -318,7 +318,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
     // {{{
     /**
      * Enable this component.
-     * @return {Ext.Component} this
+     * @return {Ext2.Component} this
      */
     ,enable:function() {
         if(this.rendered){
@@ -469,7 +469,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
     // {{{
     /**
      * Resets the current field value to the originally loaded value
-     * and clears any validation messages. See Ext.form.BasicForm.trackResetOnLoad
+     * and clears any validation messages. See Ext2.form.BasicForm.trackResetOnLoad
      */
     ,reset:function() {
         this.df.reset();
@@ -505,7 +505,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
         if('below' === this.timePosition) {
             this.df.setSize(w, h);
             this.tf.setSize(w, h);
-            if(Ext.isIE) {
+            if(Ext2.isIE) {
                 this.df.el.up('td').setWidth(w);
                 this.tf.el.up('td').setWidth(w);
             }
@@ -514,7 +514,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
             this.df.setSize(w - this.timeWidth - 4, h);
             this.tf.setSize(this.timeWidth, h);
 
-            if(Ext.isIE) {
+            if(Ext2.isIE) {
                 this.df.el.up('td').setWidth(w - this.timeWidth - 4);
                 this.tf.el.up('td').setWidth(this.timeWidth);
             }
@@ -548,7 +548,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
         if(val instanceof Date) {
             this.setDate(val);
             this.setTime(val);
-            this.dateValue = new Date(Ext.isIE ? val.getTime() : val);
+            this.dateValue = new Date(Ext2.isIE ? val.getTime() : val);
         }
         else {
             da = val.split(this.dtSeparator);
@@ -567,7 +567,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
     // {{{
     /**
      * Hide or show this component by boolean
-     * @return {Ext.Component} this
+     * @return {Ext2.Component} this
      */
     ,setVisible: function(visible){
         if(visible) {
@@ -685,7 +685,7 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
         var format = field.editor.dateFormat || Kwf.Form.DateTime.prototype.dateFormat;
         format += ' ' + (field.editor.timeFormat || Kwf.Form.DateTime.prototype.timeFormat);
         var renderer = function(val) {
-            var retval = Ext.util.Format.date(val, format);
+            var retval = Ext2.util.Format.date(val, format);
             return retval;
         };
         return renderer;
@@ -695,6 +695,6 @@ Kwf.Form.DateTime = Ext.extend(Ext.form.Field, {
 }); // eo extend
 
 // register xtype
-Ext.reg('kwf.datetime', Kwf.Form.DateTime);
+Ext2.reg('kwf.datetime', Kwf.Form.DateTime);
 
 // eof

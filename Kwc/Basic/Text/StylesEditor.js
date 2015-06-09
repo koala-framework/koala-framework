@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Basic.Text');
-Kwc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
+Ext2.namespace('Kwc.Basic.Text');
+Kwc.Basic.Text.StylesEditor = Ext2.extend(Ext2.Window,
 {
     title: trlKwf('Edit Styles'),
     modal: true,
@@ -17,7 +17,7 @@ Kwc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
                 title: trlKwf('Inline-Styles'),
                 controllerUrl: this.inlineStyleUrl
             });
-        this.items = new Ext.TabPanel({
+        this.items = new Ext2.TabPanel({
             items: [this.block, this.inline],
             activeTab: 0
         });
@@ -45,7 +45,7 @@ Kwc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
         }, this);
         this.form.on('loadform', this._reloadPreview, this);
 
-        this.preview = new Ext.Panel({
+        this.preview = new Ext2.Panel({
             region: 'south',
             width: 150,
             split: true,
@@ -59,7 +59,7 @@ Kwc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
             if (i.isFormField && i.getValue()) {
                 if (i instanceof Kwf.Form.ColorField) {
                     values[i.getName()] = '#'+i.getValue();
-                } else if (i instanceof Ext.form.NumberField) {
+                } else if (i instanceof Ext2.form.NumberField) {
                     values[i.getName()] = i.getValue()+'px';
                 } else {
                     values[i.getName()] = i.getValue();
@@ -82,5 +82,5 @@ Kwc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
 */
 });
 
-Ext.reg('kwc.basic.text.styleseditor', Kwc.Basic.Text.StylesEditor);
+Ext2.reg('kwc.basic.text.styleseditor', Kwc.Basic.Text.StylesEditor);
 

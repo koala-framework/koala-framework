@@ -25,12 +25,12 @@ class Kwc_Favourites_Events extends Kwf_Component_Abstract_Events
 
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'favouritesModel'),
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onFavouriteRemove'
         );
         $ret[] = array(
             'class' => Kwc_Abstract::getSetting($this->_class, 'favouritesModel'),
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onFavouriteInserted'
         );
         return $ret;
@@ -53,7 +53,7 @@ class Kwc_Favourites_Events extends Kwf_Component_Abstract_Events
                     $key = array_search($componentId, $componentIds);
                     unset($componentIds[$key]);
                     Kwf_Cache_Simple::add('favCIds'.$userId['user_id'], $componentIds);
-                    $log = Kwf_Component_Events_Log::getInstance();
+                    $log = Kwf_Events_Log::getInstance();
                     if ($log) {
                         $log->log("favourites cache clear $componentId", Zend_Log::INFO);
                     }
@@ -95,7 +95,7 @@ class Kwc_Favourites_Events extends Kwf_Component_Abstract_Events
                     Kwf_Cache_Simple::delete('favCIds'.$userId['user_id']);
                     $componentIds[] = $componentId;
                     Kwf_Cache_Simple::add('favCIds'.$userId['user_id'], $componentIds);
-                    $log = Kwf_Component_Events_Log::getInstance();
+                    $log = Kwf_Events_Log::getInstance();
                     if ($log) {
                         $log->log("favourites cache clear $componentId", Zend_Log::INFO);
                     }
@@ -104,7 +104,7 @@ class Kwc_Favourites_Events extends Kwf_Component_Abstract_Events
         }
     }
 
-    public function onFavouriteInserted(Kwf_Component_Event_Row_Abstract $event)
+    public function onFavouriteInserted(Kwf_Events_Event_Row_Abstract $event)
     {
         $favourite = $event->row;
         $cacheIdUser = 'favCIds'.$favourite->user_id;
@@ -116,7 +116,7 @@ class Kwc_Favourites_Events extends Kwf_Component_Abstract_Events
         }
     }
 
-    public function onFavouriteRemove(Kwf_Component_Event_Row_Abstract $event)
+    public function onFavouriteRemove(Kwf_Events_Event_Row_Abstract $event)
     {
         $favourite = $event->row;
         $cacheIdUser = 'favCIds'.$favourite->user_id;

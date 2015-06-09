@@ -4,10 +4,10 @@ class Kwc_Articles_Detail_PreviewImage_Component extends Kwc_Basic_Image_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['imageLabel'] = trlKwf('Thumbnail');
+        $ret['imageLabel'] = trlKwfStatic('Thumbnail');
         $ret['dimensions'] = array(
             'default'=>array(
-                'text' => trlKwf('default'),
+                'text' => trlKwfStatic('default'),
                 'width' => 150,
                 'height' => 0,
                 'cover' => true,

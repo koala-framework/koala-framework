@@ -1,6 +1,6 @@
 
 Kwf.onContentReady(function() {
-    var testEl = Ext.DomQuery.select('#eventTest')[0];
+    var testEl = Ext2.DomQuery.select('#eventTest')[0];
 
     Kwf.Event.on(testEl, 'mouseEnter', function() {
         document.getElementById('result').innerHTML += 'mouseEnter: '+this.testScope+' ---';

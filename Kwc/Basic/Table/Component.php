@@ -9,7 +9,9 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Table/TableGridPanel.js';
 
         $ret['componentName'] = trlKwfStatic('Table');
-        $ret['componentIcon'] = new Kwf_Asset('table');
+        $ret['componentIcon'] = 'table';
+        $ret['componentCategory'] = 'content';
+        $ret['componentPriority'] = 35;
         $ret['ownModel'] = 'Kwc_Basic_Table_Model';
         $ret['childModel'] = 'Kwc_Basic_Table_ModelData';
 
@@ -21,7 +23,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         // complex arrayexample: 'headline' => array('name' => trlKwf('Headline'), 'tag'  => 'th')
         $ret['rowStyles'] = array(
             'headline' => array(
-                'name' => trlKwf('Headline'),
+                'name' => trlKwfStatic('Headline'),
                 'tag'  => 'th'
             )
         );
@@ -29,7 +31,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         // tableStyles: the key is the table-css-class, the value the name for
         // settings page in backend
         // e.g.: 'green' => trlKwf('Green')
-        $ret['tableStyles'] = array('standard' => trlKwf('Standard'));
+        $ret['tableStyles'] = array('standard' => trlKwfStatic('Standard'));
         $ret['cssClass'] = 'webStandard';
 
         $ret['extConfig'] = 'Kwc_Basic_Table_ExtConfig';

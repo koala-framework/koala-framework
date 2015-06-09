@@ -1,5 +1,5 @@
 
-Ext.namespace("Kwc.Box.Dogear");
+Ext2.namespace("Kwc.Box.Dogear");
 
 Kwc.Box.Dogear.initDone = false;
 
@@ -22,9 +22,9 @@ Kwc.Box.Dogear.init = function() {
     Kwc.Box.Dogear.smallDiv.style.display = 'block';
     Kwc.Box.Dogear.bigDiv.style.display = 'block';
 
-    var optionsEl = Ext.query(".dogearOptions");
+    var optionsEl = Ext2.query(".dogearOptions");
     if (!optionsEl) return;
-    var options = Ext.decode(optionsEl[0].value);
+    var options = Ext2.decode(optionsEl[0].value);
 
     if (options.urlSmall && options.urlBig) {
 
@@ -83,15 +83,15 @@ Kwf.onContentReady(function() {
     Kwc.Box.Dogear.bigDiv = document.getElementById('dogearBig');
 
     if (Kwc.Box.Dogear.smallDiv && Kwc.Box.Dogear.bigDiv) {
-        if (Ext.getBody().getWidth() >= 990) {
+        if (Ext2.getBody().getWidth() >= 990) {
             Kwc.Box.Dogear.init();
         } else {
             Kwc.Box.Dogear.smallDiv.style.display = 'none';
             Kwc.Box.Dogear.bigDiv.style.display = 'none';
         }
 
-        Ext.EventManager.addListener(window, 'resize', function() {
-            if (Ext.getBody().getWidth() >= 990) {
+        Ext2.EventManager.addListener(window, 'resize', function() {
+            if (Ext2.getBody().getWidth() >= 990) {
                 Kwc.Box.Dogear.smallDiv.style.display = 'block';
                 Kwc.Box.Dogear.bigDiv.style.display = 'block';
                 if (!Kwc.Box.Dogear.initDone) {

@@ -19,22 +19,22 @@ class Kwf_Form_CheckboxFieldsetInCards_Test extends Kwf_Test_SeleniumTestCase
     {
         $this->open('/kwf/test/kwf_form_checkbox-fieldset-in-cards_test');
         $this->waitForConnections();
-        $this->click("//div[@class='x-column-inner']/div[2]//img[@class='x-form-radio']");
+        $this->click("//div[@class='x2-column-inner']/div[2]//img[@class='x2-form-radio']");
         $this->click('//input[@type="checkbox"]');
-        $this->click("//div[@class='x-column-inner']/div[1]//img[@class='x-form-radio']");
-        $this->click("//div[@class='x-column-inner']/div[2]//img[@class='x-form-radio']");
+        $this->click("//div[@class='x2-column-inner']/div[1]//img[@class='x2-form-radio']");
+        $this->click("//div[@class='x2-column-inner']/div[2]//img[@class='x2-form-radio']");
         $this->click("//button[text()='".trlKwf('Save')."']");
         $this->waitForConnections();
         $this->assertTextNotPresent(trlKwf("Can't save, please fill all red underlined fields correctly."));
 
         $this->open('/kwf/test/kwf_form_checkbox-fieldset-in-cards_test');
         $this->waitForConnections();
-        $this->click("//div[@class='x-column-inner']/div[3]//img[@class='x-form-radio']");
+        $this->click("//div[@class='x2-column-inner']/div[3]//img[@class='x2-form-radio']");
         $this->assertElementNotPresent('.kwf-test-subcards[disabled]');
 
         $this->open('/kwf/test/kwf_form_checkbox-fieldset-in-cards_test');
         $this->waitForConnections();
-        $this->click("//div[@class='x-column-inner']/div[4]//img[@class='x-form-radio']");
+        $this->click("//div[@class='x2-column-inner']/div[4]//img[@class='x2-form-radio']");
         $this->assertElementNotPresent('.kwf-test-text4[disabled]');
     }
 

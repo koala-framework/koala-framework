@@ -1,17 +1,17 @@
 
 Kwf.onContentReady(function() {
 
-    var searchBoxes = Ext.DomQuery.select('.kwcBoxSearch');
-    Ext.each(searchBoxes, function(searchBox) {
+    var searchBoxes = Ext2.DomQuery.select('.kwcBoxSearch');
+    Ext2.each(searchBoxes, function(searchBox) {
         var els = {
-            searchField  : Ext.get(Ext.DomQuery.select('.searchField', searchBox)[0]),
-            searchResult : Ext.get(Ext.DomQuery.select('.searchResult', searchBox)[0]),
-            ajaxUrl      : Ext.get(Ext.DomQuery.select('.ajaxUrl', searchBox)[0]),
-            submitParam  : Ext.get(Ext.DomQuery.select('.submitParam', searchBox)[0]),
-            searchSettings: Ext.get(Ext.DomQuery.select('.searchSettings', searchBox)[0])
+            searchField  : Ext2.get(Ext2.DomQuery.select('.searchField', searchBox)[0]),
+            searchResult : Ext2.get(Ext2.DomQuery.select('.searchResult', searchBox)[0]),
+            ajaxUrl      : Ext2.get(Ext2.DomQuery.select('.ajaxUrl', searchBox)[0]),
+            submitParam  : Ext2.get(Ext2.DomQuery.select('.submitParam', searchBox)[0]),
+            searchSettings: Ext2.get(Ext2.DomQuery.select('.searchSettings', searchBox)[0])
         };
         if (els.searchSettings) {
-            var searchSettings = Ext.decode(els.searchSettings.getValue());
+            var searchSettings = Ext2.decode(els.searchSettings.getValue());
         }
         var aligning = 'tl-bl';
         if (searchSettings && searchSettings.searchResultBoxAlign) {
@@ -63,7 +63,7 @@ Kwf.onContentReady(function() {
             }
             focused = false;
         });
-        Ext.get(document.body).on('click', function() {
+        Ext2.get(document.body).on('click', function() {
             if (!mouseover && !focused) {
                 if (searchSettings && searchSettings.searchResultBoxFade) {
                     els.searchResult.fadeOut({ duration: .35, useDisplay: true });

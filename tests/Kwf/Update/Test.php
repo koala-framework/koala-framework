@@ -35,35 +35,13 @@ class Kwf_Update_Test extends Kwf_Test_TestCase
         $update->postUpdate();
     }
 
-    public function testGetUpdatesForDir()
-    {
-        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf/Update/UpdateDir', 50, 110);
-        $this->assertEquals(1, count($updates));
-        $this->assertTrue($updates[0] instanceof Kwf_Update_UpdateDir_Update_100);
-
-        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf/Update/UpdateDir', 50, 100);
-        $this->assertEquals(0, count($updates));
-
-        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf/Update/UpdateDir', 50, 101);
-        $this->assertEquals(1, count($updates));
-
-        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf/Update/UpdateDir', 99, 101);
-        $this->assertEquals(1, count($updates));
-
-        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf/Update/UpdateDir', 100, 101);
-        $this->assertEquals(1, count($updates));
-
-        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf/Update/UpdateDir', 101, 110);
-        $this->assertEquals(0, count($updates));
-    }
-
     public function testGetUpdatesForMultipleDir()
     {
-        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf/Update/UpdateMultiple', 1, 1100);
+        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf_Update_UpdateMultiple_Update');
         $this->assertEquals(3, count($updates));
-        $this->assertEquals(20, $updates[0]->getRevision());
-        $this->assertEquals(100, $updates[1]->getRevision());
-        $this->assertEquals(1000, $updates[2]->getRevision());
+        $this->assertEquals(20, $updates[0]->getLegacyRevision());
+        $this->assertEquals(100, $updates[1]->getLegacyRevision());
+        $this->assertEquals(1000, $updates[2]->getLegacyRevision());
     }
 
     public function testGetUpdatesSql()
@@ -71,9 +49,9 @@ class Kwf_Update_Test extends Kwf_Test_TestCase
         Kwf_Registry::get('config')->server->updateTags = array(
             'db'
         );
-        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf/Update/UpdateSql', 1, 1100);
+        $updates = Kwf_Util_Update_Helper::getUpdatesForDir('Kwf_Update_UpdateSql_Update');
         $this->assertEquals(1, count($updates));
-        $this->assertEquals(100, $updates[0]->getRevision());
+        $this->assertEquals(100, $updates[0]->getLegacyRevision());
         $this->assertEquals('foo bar;', $updates[0]->sql);
     }
 }

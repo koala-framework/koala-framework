@@ -11,8 +11,25 @@
         <?=$this->componentLink($this->lostPassword, $this->data->trlKwf('request a new one here'))?>.
         </p>
     <? } ?>
-    <? if ($this->facebook) { ?>
-        <?=$this->component($this->facebook)?>.
+    <? if ($this->redirects) { ?>
+        <ul class="redirects">
+        <?php foreach ($this->redirects as $r) { ?>
+            <li>
+                <form method="GET" action="<?=htmlspecialchars($r['url'])?>">
+                <input type="hidden" name="redirectAuth" value="<?=htmlspecialchars($r['authMethod'])?>" />
+                <input type="hidden" name="redirect" value="<?=htmlspecialchars($r['redirect'])?>" />
+                <?=$r['formOptions']?>
+                <button>
+                    <? if ($r['icon']) { ?>
+                        <img src="<?=htmlspecialchars($r['icon'])?>" />
+                    <? } else { ?>
+                        <?=htmlspecialchars($r['name'])?>
+                    <? } ?>
+                </button>
+                </form>
+            </li>
+        <?php } ?>
+        </ul>
     <? } ?>
     <?=$this->component($this->form)?>
 </div>

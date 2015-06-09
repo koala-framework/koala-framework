@@ -1,51 +1,20 @@
-Kwf.enableOnReadyConsoleProfile = false;
+(function() {
+
+var enableOnReadyConsoleProfile = false;
 
 /* fn: fn,
  * scope: scope,
  * options: options || {},
- * type: [jquery|ext],
  * num: unique number, //used to mark in initDone
  * selector: selector, // null if onContentReady
  * */
-Kwf._readyElHandlers = []; //for onElement*
-Kwf._skipDeferred; //if callOnContentReady should skip 'defer' callbacks or execute only 'defer' callbacks
+var readyElHandlers = []; //for onElement*
+var onReadyState;  //if callOnContentReady should skip 'defer' callbacks or execute only 'defer' callbacks
                    //used on initial ready
-Kwf._deferredStart = null; //used for timing deferred, required here because of multiple chunks
-Kwf._onReadyIsCalling = false; //true while callOnContentReady is processing onReadyElQueue and we can add more to queue
-Kwf._onReadyElQueue = []; //queue for onElementReady/Show/Hide/WidthChange calls
-Kwf._elCacheBySelector = {};
-
-if (!Kwf.isApp) {
-    $(document).ready(function() {
-        if (!document.body) {
-            //this happens if a redirect by changing location in JS is done
-            //in that case no contentReady needs to be called
-            return;
-        }
-        var t = Kwf.Utils.BenchmarkBox.now();
-        if (Kwf.enableOnReadyConsoleProfile) console.profile("callOnContentReady body");
-        Kwf._skipDeferred = true;
-        Kwf.callOnContentReady(document.body, { action: 'render' });
-        delete Kwf._skipDeferred;
-        if (Kwf.enableOnReadyConsoleProfile) console.profileEnd();
-        Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
-        Kwf.Utils.BenchmarkBox.create({
-            counters: Kwf._onReadyStats,
-            type: 'onReady'
-        });
-        (function() {
-            Kwf._deferredStart = Kwf.Utils.BenchmarkBox.now();
-            if (Kwf.enableOnReadyConsoleProfile) console.profile("callOnContentReady body deferred");
-            Kwf._skipDeferred = false;
-            Kwf.callOnContentReady(document.body, { action: 'render' });
-            delete Kwf._skipDeferred;
-        }).defer(10);
-
-        Ext.fly(window).on('resize', function() {
-            Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
-        }, this, { buffer: 100 });
-    });
-}
+var deferredStart = null; //used for timing deferred, required here because of multiple chunks
+var onReadyIsCalling = false; //true while callOnContentReady is processing onReadyElQueue and we can add more to queue
+var onReadyElQueue = []; //queue for onElementReady/Show/Hide/WidthChange calls
+var elCacheBySelector = {};
 
 /**
  * Register a function that will be called when content is loaded or shown
@@ -58,20 +27,36 @@ Kwf.onContentReady = function(fn, options) {
         var options = arguments[2];
         options.scope = scope;
     }
-    Kwf._addReadyHandler(null, 'contentReady', null, fn, options);
+    Kwf._addReadyHandler('contentReady', null, fn, options);
 };
 
 
-Kwf._addReadyHandler = function(type, onAction, selector, fn, options)
+var deferHandlerNum = null;
+Kwf._addReadyHandler = function(onAction, selector, fn, options)
 {
-    Kwf._readyElHandlers.push({
+    if (!options) options = {};
+    if (typeof options.defer == 'undefined') options.defer = true; //default defer=true
+    readyElHandlers.push({
         selector: selector,
         fn: fn,
-        options: options || {},
-        num: Kwf._readyElHandlers.length, //unique number
-        type: type,
+        options: options,
+        num: readyElHandlers.length, //unique number
         onAction: onAction
     });
+    //if initial call is already done redo for new added handlers
+    if (onReadyState == 'calledDefer' || (!(options && options.defer) && onReadyState == 'calledNonDefer')) {
+        if (!deferHandlerNum) {
+            deferHandlerNum = [];
+            setTimeout(function() {
+                //additionally added handlers need to be called async so priorty can be used correctly (we wait to get more handlers added)
+                //needed for Frontend.defer.js
+                var hndlerNum = deferHandlerNum;
+                deferHandlerNum = null; //set to null before calling callOnContentReady as that might cause _addReadyHandler calls
+                Kwf.callOnContentReady(document.body, { action: 'render', handlerNum: hndlerNum });
+            }, 1);
+        }
+        deferHandlerNum.push(readyElHandlers.length-1);
+    }
 };
 
 /**
@@ -95,13 +80,13 @@ Kwf.callOnContentReady = function(renderedEl, options)
         if (typeof console != 'undefined' && console.warn) console.warn('Please pass element argument on callOnContentReady');
         renderedEl = document.body;
     }
-    if (Ext.Element && renderedEl instanceof Ext.Element) renderedEl = renderedEl.dom;
-    if (jQuery && renderedEl instanceof jQuery) {
+    if (renderedEl.dom) renderedEl = renderedEl.dom; //ExtJS Element (hopefully)
+    if ($ && renderedEl instanceof $) {
         renderedEl.each(function(){ Kwf.callOnContentReady(this, options); });
         return;
     }
 
-    //add entries to _onReadyElQueue, depending on renderedEl
+    //add entries to onReadyElQueue, depending on renderedEl
     var onActions;
     if (options.action == 'render') {
         onActions = ['render', 'show', 'widthChange', 'contentReady'];
@@ -114,16 +99,19 @@ Kwf.callOnContentReady = function(renderedEl, options)
     }
 
     var html = false;
-    for (var i = 0; i < Kwf._readyElHandlers.length; i++) {
-        var hndl = Kwf._readyElHandlers[i];
+    for (var i = 0; i < readyElHandlers.length; i++) {
+        var hndl = readyElHandlers[i];
+        if (options.handlerNum && $.inArray(hndl.num, options.handlerNum) == -1) {
+            continue;
+        }
 
-        //Kwf._skipDeferred gets set before callOnContentReady(body)
+        //onReadyState gets set before callOnContentReady(body)
         //can not be part of options as it would be missing in recursive calls
-        if (Kwf._skipDeferred === true) {
+        if (onReadyState == 'callNonDefer') {
             if (hndl.options.defer) {
                 continue;
             }
-        } else if (Kwf._skipDeferred === false) {
+        } else if (onReadyState == 'callDefer') {
             if (!hndl.options.defer) {
                 continue;
             }
@@ -131,12 +119,17 @@ Kwf.callOnContentReady = function(renderedEl, options)
 
         if (hndl.options.checkVisibility) {
             if (renderedEl != document.body && !Kwf.Utils.Element.isVisible(renderedEl)) {
+                if (options.action == 'render' && hndl.selector && elCacheBySelector[hndl.selector]) {
+                    //mark cache as dirty as we don't query (and update the selector) as the renderedEl is invisible
+                    //TODO don't always mark as dirty especially when we have multiple handlers with same selector
+                    elCacheBySelector[hndl.selector].dirty = true;
+                }
                 continue;
             }
             //if checkVisibility is activated, don't skip based on onActions as
             //even a widthChange action could make an element visible (media queries)
         } else {
-            if (onActions.indexOf(hndl.onAction) == -1) {
+            if ($.inArray(hndl.onAction, onActions) == -1) {
                 continue;
             }
         }
@@ -151,7 +144,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         if (options.action != 'render' || !hndl.selector) {
             useSelectorCache = true;
         } else {
-            if (Kwf._skipDeferred === false && renderedEl == document.body && Kwf._elCacheBySelector[hndl.selector]) {
+            if (onReadyState == 'callDefer' && renderedEl == document.body && elCacheBySelector[hndl.selector]) {
                 useSelectorCache = true;
             } else {
                 var t = Kwf.Utils.BenchmarkBox.now();
@@ -159,8 +152,8 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 //do a stupid text search on the selector, using that we can skip query for many selectors that don't exist in the current el
                 if (m && html.indexOf(m[1]) == -1) {
                     useSelectorCache = true;
-                    if (!Kwf._elCacheBySelector[hndl.selector]) {
-                        Kwf._elCacheBySelector[hndl.selector] = [];
+                    if (!elCacheBySelector[hndl.selector]) {
+                        elCacheBySelector[hndl.selector] = [];
                     }
                 } else {
                     useSelectorCache = false;
@@ -168,12 +161,16 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
             }
         }
-        if (useSelectorCache && Kwf._elCacheBySelector[hndl.selector]) {
+
+        if (useSelectorCache && elCacheBySelector[hndl.selector] && !elCacheBySelector[hndl.selector].dirty) {
             Kwf.Utils.BenchmarkBox.count('queryCache');
             var els = [];
-            for (var j=0; j<Kwf._elCacheBySelector[hndl.selector].length; j++) {
-                if (renderedEl == document.body || $.contains(renderedEl, Kwf._elCacheBySelector[hndl.selector][j])) {
-                    els.push(Kwf._elCacheBySelector[hndl.selector][j]);
+            for (var j=0; j<elCacheBySelector[hndl.selector].length; j++) {
+                if (renderedEl == document.body ||
+                    renderedEl == elCacheBySelector[hndl.selector][j] ||
+                    $.contains(renderedEl, elCacheBySelector[hndl.selector][j])
+                ) {
+                    els.push(elCacheBySelector[hndl.selector][j]);
                 }
             }
         } else if (!hndl.selector) {
@@ -181,22 +178,25 @@ Kwf.callOnContentReady = function(renderedEl, options)
         } else {
             var t = Kwf.Utils.BenchmarkBox.now();
             var els = $.makeArray($(renderedEl).find(hndl.selector));
+            if (window.matchesSelector(renderedEl, hndl.selector)) {
+                els.push(renderedEl);
+            }
             Kwf.Utils.BenchmarkBox.time('query', Kwf.Utils.BenchmarkBox.now() - t);
-            if (!Kwf._elCacheBySelector[hndl.selector]) {
-                Kwf._elCacheBySelector[hndl.selector] = els;
+            if (!elCacheBySelector[hndl.selector]) {
+                elCacheBySelector[hndl.selector] = els;
             } else {
-                els.each(function(i) {
-                    if (Kwf._elCacheBySelector[hndl.selector].indexOf(i) == -1) {
-                        Kwf._elCacheBySelector[hndl.selector].push(i);
+                for(var j=0; j<els.length; ++j) {
+                    if ($.inArray(els[j], elCacheBySelector[hndl.selector]) == -1) {
+                        elCacheBySelector[hndl.selector].push(els[j]);
                     }
-                }, this);
+                }
             }
         }
 
         for (var j = 0; j< els.length; ++j) {
 
             var alreadyInQueue = false;
-            Kwf._onReadyElQueue.each(function(queueEntry) {
+            $.each(onReadyElQueue, function(indx, queueEntry) {
                 if (queueEntry.num == hndl.num && els[j] == queueEntry.el) {
                     alreadyInQueue = true;
                 }
@@ -209,12 +209,11 @@ Kwf.callOnContentReady = function(renderedEl, options)
                     parentsCount++;
                 }
                 Kwf.Utils.BenchmarkBox.count('readyEl');
-                Kwf._onReadyElQueue.push({
+                onReadyElQueue.push({
                     el: els[j],
                     fn: hndl.fn,
                     options: hndl.options,
                     num: hndl.num,
-                    type: hndl.type,
                     callerOptions: options,
                     onAction: hndl.onAction,
                     selector: hndl.selector,
@@ -225,9 +224,9 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
     }
 
-    //sort _onReadyElQueue
+    //sort onReadyElQueue
     var t = Kwf.Utils.BenchmarkBox.now();
-    Kwf._onReadyElQueue.sort(function sortOnReadyElQueue(a, b) {
+    onReadyElQueue.sort(function sortOnReadyElQueue(a, b) {
         if (a.priority != b.priority) {
             return a.priority - b.priority;
         } else {
@@ -240,20 +239,18 @@ Kwf.callOnContentReady = function(renderedEl, options)
     });
     Kwf.Utils.BenchmarkBox.time('sort', Kwf.Utils.BenchmarkBox.now() - t);
 
-    if (Kwf._onReadyIsCalling) {
+    if (onReadyIsCalling) {
         return;
     }
 
-    Kwf._onReadyIsCalling = true;
+    onReadyIsCalling = true;
 
     //call the callback of an element ready handler
     function callQueueFn(queueEntry, config)
     {
         var t = Kwf.Utils.BenchmarkBox.now();
-        var el = queueEntry.el;
-        if (queueEntry.type == 'ext') {
-            el = Ext.get(el);
-        } else if (queueEntry.type == 'jquery') {
+        var el = $(queueEntry.el);
+        if (queueEntry.onAction != 'contentReady') {
             el = $(el);
         }
         queueEntry.fn.call(queueEntry.options.scope || window, el, config);
@@ -273,7 +270,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     //own function so it can be called in sync or in deferred chunks
     function processOnReadyElQueueEntry()
     {
-        var queueEntry = Kwf._onReadyElQueue.shift();
+        var queueEntry = onReadyElQueue.shift();
         var el = queueEntry.el;
         if (queueEntry.onAction == 'render') {
             if (queueEntry.options.checkVisibility && !Kwf.Utils.Element.isVisible(el)) {
@@ -316,19 +313,19 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
     }
 
-    if (Kwf._skipDeferred === false) {
+    if (onReadyState == 'callDefer') {
         var processNext = function processNext() {
             Kwf.Utils.BenchmarkBox.count('chunks');
             var t = Kwf.Utils.BenchmarkBox.now();
-            while (Kwf._onReadyElQueue.length && Kwf.Utils.BenchmarkBox.now()-t < 50) {
+            while (onReadyElQueue.length && Kwf.Utils.BenchmarkBox.now()-t < 50) {
                 processOnReadyElQueueEntry();
             }
-            if (Kwf._onReadyElQueue.length) {
-                processNext.defer(this, 1);
+            if (onReadyElQueue.length) {
+                setTimeout(processNext, 1);
             } else {
-                Kwf._onReadyIsCalling = false;
-                Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-Kwf._deferredStart);
-                if (Kwf.enableOnReadyConsoleProfile) console.profileEnd();
+                onReadyIsCalling = false;
+                Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-deferredStart);
+                if (enableOnReadyConsoleProfile) console.profileEnd();
                 Kwf.Utils.BenchmarkBox.create({
                     counters: Kwf._onReadyStats,
                     type: 'onReady defer'
@@ -337,11 +334,51 @@ Kwf.callOnContentReady = function(renderedEl, options)
         };
         processNext();
     } else {
-        while (Kwf._onReadyElQueue.length) {
+        while (onReadyElQueue.length) {
             processOnReadyElQueueEntry();
         }
-        Kwf._onReadyIsCalling = false;
+        onReadyIsCalling = false;
     }
 
 };
 
+
+if (!Kwf.isApp) {
+    $(document).ready(function() {
+        if (!document.body) {
+            //this happens if a redirect by changing location in JS is done
+            //in that case no contentReady needs to be called
+            return;
+        }
+        var t = Kwf.Utils.BenchmarkBox.now();
+        if (enableOnReadyConsoleProfile) console.profile("callOnContentReady body");
+        onReadyState = 'callNonDefer';
+        Kwf.callOnContentReady(document.body, { action: 'render' });
+        onReadyState = 'calledNonDefer';
+        if (enableOnReadyConsoleProfile) console.profileEnd();
+        Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
+        Kwf.Utils.BenchmarkBox.create({
+            counters: Kwf._onReadyStats,
+            type: 'onReady'
+        });
+        setTimeout(function() {
+            deferredStart = Kwf.Utils.BenchmarkBox.now();
+            if (enableOnReadyConsoleProfile) console.profile("callOnContentReady body deferred");
+            onReadyState = 'callDefer';
+            Kwf.callOnContentReady(document.body, { action: 'render' });
+            onReadyState = 'calledDefer';
+        }, 10);
+
+        var timeoutId;
+        $(window).resize(function() {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            timeoutId = setTimeout(function() {
+                Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
+            }, 100);
+        });
+    });
+}
+
+})();

@@ -1,20 +1,20 @@
-Ext.ns('Kwf.Maintenance');
-Kwf.Maintenance.UpdateDownloader = Ext.extend(Ext.Panel, {
+Ext2.ns('Kwf.Maintenance');
+Kwf.Maintenance.UpdateDownloader = Ext2.extend(Ext2.Panel, {
     border: false,
     initComponent: function() {
-        this.libraryUrl = new Ext.form.TextField({
+        this.libraryUrl = new Ext2.form.TextField({
             name: 'libraryUrl',
             fieldLabel: 'Library Url',
             value: this.defaultLibraryUrl,
             width: 600
         });
-        this.kwfUrl = new Ext.form.TextField({
+        this.kwfUrl = new Ext2.form.TextField({
             name: 'kwfUrl',
             fieldLabel: 'Kwf Url',
             value: this.defaultKwfUrl,
             width: 600
         });
-        this.appUrl = new Ext.form.TextField({
+        this.appUrl = new Ext2.form.TextField({
             name: 'appUrl',
             fieldLabel: 'App Url',
             value: this.defaultAppUrl,
@@ -49,9 +49,9 @@ Kwf.Maintenance.UpdateDownloader = Ext.extend(Ext.Panel, {
                             timeout: 10*60*1000,
                             success: function(response, options, r) {
                                 if (r.errMsg) {
-                                    Ext.Msg.alert(trlKwf('Update Error'), r.message+"<br />"+r.errMsg.replace("\n", "<br />"));
+                                    Ext2.Msg.alert(trlKwf('Update Error'), r.message+"<br />"+r.errMsg.replace("\n", "<br />"));
                                 } else if (r.message) {
-                                    Ext.Msg.alert(trlKwf('Updates Finished'), r.message, function() {
+                                    Ext2.Msg.alert(trlKwf('Updates Finished'), r.message, function() {
                                         location.href = '/kwf/welcome';
                                     }, scope);
                                 }
@@ -65,4 +65,4 @@ Kwf.Maintenance.UpdateDownloader = Ext.extend(Ext.Panel, {
         Kwf.Maintenance.UpdateDownloader.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwf.maintenance.updateDownloader', Kwf.Maintenance.UpdateDownloader);
+Ext2.reg('kwf.maintenance.updateDownloader', Kwf.Maintenance.UpdateDownloader);

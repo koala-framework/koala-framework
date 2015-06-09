@@ -1,11 +1,11 @@
-Ext.namespace('Kwc.Directories.Item.Directory');
-Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
+Ext2.namespace('Kwc.Directories.Item.Directory');
+Kwc.Directories.Item.Directory.TabsPanel = Ext2.extend(Kwf.Binding.ProxyPanel,
 {
     initComponent: function()
     {
         this.layout = 'border';
 
-        this.grid = new Kwc.Directories.Item.Directory.GridPanel(Ext.applyIf({
+        this.grid = new Kwc.Directories.Item.Directory.GridPanel(Ext2.applyIf({
             controllerUrl: this.controllerUrl,
             region: 'west',
             width: this.width,
@@ -27,7 +27,7 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
 
         this.initEditPanels();
 
-        this.tabs = new Ext.TabPanel({
+        this.tabs = new Ext2.TabPanel({
             region: 'center',
             activeTab: 0,
             items: this.editPanels
@@ -68,7 +68,7 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
     initEditPanels: function() {
         this.editPanels = [];
         if (!this.hideDetailsController) {
-            this.detailsForm = Ext.ComponentMgr.create(Ext.applyIf({
+            this.detailsForm = Ext2.ComponentMgr.create(Ext2.applyIf({
                 xtype: this.detailsXtype,
                 controllerUrl: this.detailsControllerUrl,
                 title: trlKwf('Details')
@@ -96,4 +96,4 @@ Kwc.Directories.Item.Directory.TabsPanel = Ext.extend(Kwf.Binding.ProxyPanel,
 
 });
 
-Ext.reg('kwc.directories.item.directory.tabs', Kwc.Directories.Item.Directory.TabsPanel);
+Ext2.reg('kwc.directories.item.directory.tabs', Kwc.Directories.Item.Directory.TabsPanel);

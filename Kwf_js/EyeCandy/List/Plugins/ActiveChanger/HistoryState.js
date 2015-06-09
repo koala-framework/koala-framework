@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.ActiveChanger.HistoryState = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.ActiveChanger.HistoryState = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
         this.list.on('activeChanged', function(item) {
             this._activate(item);

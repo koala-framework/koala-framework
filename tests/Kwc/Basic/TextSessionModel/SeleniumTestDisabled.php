@@ -23,12 +23,12 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->typeKeys("document.getElementsByTagName('iframe')[0].contentDocument.body", 'lalalulu');
 
         //assert createlink action is disabled
-        $this->runScript("window.action = null; Ext.ComponentMgr.all.each(function(c) { if (c.initialConfig.testId == 'createlink') { action = c; return false; } });");
+        $this->runScript("window.action = null; Ext2.ComponentMgr.all.each(function(c) { if (c.initialConfig.testId == 'createlink') { action = c; return false; } });");
         $this->assertEquals('true', $this->getEval('window.action.disabled'));
 
         //select some text
         $this->runScript('var editor = null;
-            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
+            Ext2.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
             var rng = editor.tinymceEditor.selection.getRng();
             rng.setStart(rng.startContainer, 4);
             editor.tinymceEditor.selection.setRng(rng);
@@ -44,7 +44,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->waitForConnections();
 
         //select extern link
-        $this->runScript("Ext.ComponentMgr.all.each(function(c) {
+        $this->runScript("Ext2.ComponentMgr.all.each(function(c) {
             if (c instanceof Kwf.Form.ComboBox && c.name == 'component_component_cards_component') {
                 c.setValue('extern');
                 c.fireEvent('select');
@@ -53,7 +53,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
         ");
 
         $this->type('css=input[name="component_component_cards_extern_target"]', 'http://orf.at');
-        $this->click("css=.x-window button:contains('Save')");
+        $this->click("css=.x2-window button:contains('Save')");
         $this->waitForConnections();
 
         //assert inserted a tag
@@ -76,15 +76,15 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
         //select link
         $this->runScript('var editor = null;
-            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
+            Ext2.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
             editor.onEditorEvent();
-            var a = Ext.fly(editor.getDoc()).child("a").dom;
+            var a = Ext2.fly(editor.getDoc()).child("a").dom;
             editor.tinymceEditor.selection.select(a);
             editor.onEditorEvent();
         ');
 
         //assert createlink action is enabled
-        $this->runScript("window.action = null; Ext.ComponentMgr.all.each(function(c) { if (c.initialConfig.testId == 'createlink') { action = c; return false; } });");
+        $this->runScript("window.action = null; Ext2.ComponentMgr.all.each(function(c) { if (c.initialConfig.testId == 'createlink') { action = c; return false; } });");
         $this->assertEquals('false', $this->getEval('window.action.disabled'));
 
         //open create link dialog
@@ -111,7 +111,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
         //select some text
         $this->runScript('var editor = null;
-            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
+            Ext2.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
             var rng = editor.tinymceEditor.selection.getRng();
             rng.setStart(rng.startContainer, 4);
             editor.tinymceEditor.selection.setRng(rng);
@@ -120,7 +120,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
         //choose style
         $this->runScript('
-            Ext.ComponentMgr.all.each(function(c) {
+            Ext2.ComponentMgr.all.each(function(c) {
                 if (c.testId=="inlineStyleSelect") {
                     c.setValue("style3");
                     c.fireEvent("select", c);
@@ -136,7 +136,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
         //choose style
         $this->runScript('
-            Ext.ComponentMgr.all.each(function(c) {
+            Ext2.ComponentMgr.all.each(function(c) {
                 if (c.testId=="inlineStyleSelect") {
                     c.setValue("inlinedefault");
                     c.fireEvent("select", c);
@@ -164,7 +164,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
         //choose style
         $this->runScript('
-            Ext.ComponentMgr.all.each(function(c) {
+            Ext2.ComponentMgr.all.each(function(c) {
                 if (c.testId=="blockStyleSelect") {
                     c.setValue("style1");
                     c.fireEvent("select", c);
@@ -180,7 +180,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
         //choose style
         $this->runScript('
-            Ext.ComponentMgr.all.each(function(c) {
+            Ext2.ComponentMgr.all.each(function(c) {
                 if (c.testId=="blockStyleSelect") {
                     c.setValue("blockdefault");
                     c.fireEvent("select", c);
@@ -213,7 +213,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
 
         //select some text
         $this->runScript('var editor = null;
-            Ext.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
+            Ext2.ComponentMgr.all.each(function(c) { if (c instanceof Kwf.Form.HtmlEditor) { editor = c; return false; } });
             var bookmark = {
                 start: [0,0,0],
                 end: [3,0,1]
@@ -225,7 +225,7 @@ class Kwc_Basic_TextSessionModel_SeleniumTest extends Kwf_Test_SeleniumTestCase
         //choose style
         $this->runScript('
             window.blockStyleSelect = null;
-            Ext.ComponentMgr.all.each(function(c) {
+            Ext2.ComponentMgr.all.each(function(c) {
                 if (c.testId=="blockStyleSelect") {
                     window.blockStyleSelect = c;
                     c.setValue("style1");

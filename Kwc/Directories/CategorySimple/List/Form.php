@@ -14,7 +14,7 @@ class Kwc_Directories_CategorySimple_List_Form extends Kwc_Abstract_Composite_Fo
             $val['value'] = $row->getTreePath();
             $values[] = $val;
         }
-        $this->add(new Kwf_Form_Field_Select('category_id', trl('Kategorie')))
+        $this->add(new Kwf_Form_Field_Select('category_id', trlKwf('Category')))
             ->setValues($values)
             ->setAllowBlank(false)
             ->setWidth(400);

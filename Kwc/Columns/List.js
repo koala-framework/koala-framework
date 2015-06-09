@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Columns');
-Kwc.Columns.List = Ext.extend(Kwc.Abstract.List.List,
+Ext2.namespace('Kwc.Columns');
+Kwc.Columns.List = Ext2.extend(Kwc.Abstract.List.List,
 {
     initComponent: function()
     {
@@ -18,4 +18,4 @@ Kwc.Columns.List = Ext.extend(Kwc.Abstract.List.List,
         }, this);
     }
 });
-Ext.reg('kwc.columns.list', Kwc.Columns.List);
+Ext2.reg('kwc.columns.list', Kwc.Columns.List);

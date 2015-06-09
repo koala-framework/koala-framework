@@ -1,5 +1,5 @@
 Kwf.Debug.sentErrors = [];
-Ext.ux.ErrorHandler.on('error', function(ex) {
+Ext2.ux.ErrorHandler.on('error', function(ex) {
     var ownPrefix = location.protocol+'//'+location.host;
     if (ex.url && ex.url.substr(0, ownPrefix.length) != ownPrefix) {
         //ignore errors out of our control (other server, chrome://)
@@ -11,17 +11,17 @@ Ext.ux.ErrorHandler.on('error', function(ex) {
     var params = {
         url: ex.url,
         lineNumber: ex.lineNumber,
-        stack: Ext.encode(ex.stack),
+        stack: Ext2.encode(ex.stack),
         message: ex.message,
         location: location.href,
         referrer: document.referrer
     };
-    if (Kwf.Debug.sentErrors.indexOf(Ext.encode(params)) != -1) {
+    if (Kwf.Debug.sentErrors.indexOf(Ext2.encode(params)) != -1) {
         //this error has been sent alrady, don't send again
         return;
     }
-    Kwf.Debug.sentErrors.push(Ext.encode(params));
-    Ext.Ajax.request({
+    Kwf.Debug.sentErrors.push(Ext2.encode(params));
+    Ext2.Ajax.request({
         url: '/kwf/error/error/json-mail',
         ignoreErrors: true,
         params: params
@@ -29,13 +29,13 @@ Ext.ux.ErrorHandler.on('error', function(ex) {
 });
 
 if (!Kwf.Debug.displayErrors) {
-    Ext.ux.ErrorHandler.init();
+    Ext2.ux.ErrorHandler.init();
 }
 
 //called by Kwf.handleError to log the error
 Kwf.ErrorHandler.log = function(error)
 {
-    Ext.Ajax.request({
+    Ext2.Ajax.request({
         url: '/kwf/error/error/json-mail',
         params: {
             url: error.url,

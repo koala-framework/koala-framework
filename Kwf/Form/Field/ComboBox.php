@@ -34,7 +34,7 @@ class Kwf_Form_Field_ComboBox extends Kwf_Form_Field_SimpleAbstract
 
     //setTpl
         //string mit template, standardwert in ext definiert:
-        //'<tpl for="."><div class="x-combo-list-item">{' + this.displayField + '}</div></tpl>';
+        //'<tpl for="."><div class="x2-combo-list-item">{' + this.displayField + '}</div></tpl>';
 
     //setShowNoSelection
         //keine auswahl anbieten

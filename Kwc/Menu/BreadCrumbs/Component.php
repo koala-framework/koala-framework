@@ -45,6 +45,22 @@ class Kwc_Menu_BreadCrumbs_Component extends Kwc_Menu_Abstract_Component
         if (count($ret['links']) && !$this->_getSetting('showCurrentPage')) {
             array_pop($ret['links']);
         }
+
+        $ret['items'] = array();
+        $i = 0;
+        foreach ($ret['links'] as $l) {
+            $class = '';
+            if ($i == 0) $class .= 'first ';
+            if ($i == count($ret['links'])-1) {
+                $class .= 'last ';
+            }
+            $ret['items'][] = array(
+                'data' => $l,
+                'class' => trim($class),
+                'last' => $i == count($ret['links'])-1
+            );
+            $i++;
+        }
         return $ret;
     }
 }

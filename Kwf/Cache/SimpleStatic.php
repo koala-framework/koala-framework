@@ -11,15 +11,16 @@ class Kwf_Cache_SimpleStatic
 {
     private static function _processId($cacheId)
     {
-        $cacheId = str_replace('-', '__', $cacheId);
-        $cacheId = preg_replace('#[^a-zA-Z0-9_]#', '_', $cacheId);
-        return $cacheId;
+        return str_replace(array('/', '+', '='), array('_', '__', ''), base64_encode($cacheId));
     }
 
     //for 'file' backend
     private static function _getFileNameForCacheId($cacheId)
     {
-        $cacheId = preg_replace('#[^a-zA-Z0-9_-]#', '_', $cacheId);
+        $cacheId = str_replace('/', '_', base64_encode($cacheId));
+        if (strlen($cacheId) > 50) {
+            $cacheId = substr($cacheId, 0, 50).md5($cacheId);
+        }
         return "cache/simple/".$cacheId;
     }
 
@@ -84,7 +85,8 @@ class Kwf_Cache_SimpleStatic
                 }
             }
         } else {
-            foreach (glob(self::_getFileNameForCacheId($cacheIdPrefix).'*') as $f) {
+            //don't use $cacheIdPrefix as filenames are base64 encoded
+            foreach (glob('cache/simple/*') as $f) {
                 unlink($f);
             }
         }

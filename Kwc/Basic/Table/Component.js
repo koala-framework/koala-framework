@@ -1,9 +1,8 @@
-Kwf.Utils.ResponsiveEl('.kwcBasicTable.responsiveFlipScroll', function(el) {
-
+Kwf.onJElementWidthChange('.kwcBasicTable.responsiveFlipScroll', function(el) {
     var addArrow = function(el) {
         if (el.hasClass('flipScroll')) {
-            var tbody = el.child('tbody');
-            if (tbody.dom.scrollLeft == 0 && tbody.dom.scrollWidth > el.getWidth()) {
+            var tbody = el.children('tbody');
+            if (tbody.scrollLeft() == 0 && tbody.width() > el.width()) {
                 el.addClass('arrowRight');
             } else {
                 el.removeClass('arrowRight');
@@ -12,20 +11,18 @@ Kwf.Utils.ResponsiveEl('.kwcBasicTable.responsiveFlipScroll', function(el) {
     };
 
     if (el.hasClass('flipScroll')) {
-        if (el.getWidth() > el.dom.flipScrollSetAt) {
+        if (el.width() > el.data('flipScrollSetAt')) {
             el.removeClass('flipScroll');
         }
     }
-    if (el.getWidth() < el.child('table').getWidth() && !el.hasClass('flipScroll')) {
+    if (el.width() < el.children('table').width() && !el.hasClass('flipScroll')) {
         el.addClass('flipScroll');
         addArrow(el);
-        if (!el.dom.flipScrollSetAt) {
-            el.child('tbody').on('scroll', function(ev) {
-                addArrow(Ext.fly(ev.getTarget()).up('.kwcBasicTable'));
+        if (!el.flipScrollSetAt) {
+            el.children('tbody').on('scroll', function(ev) {
+                addArrow($(this).closest('.kwcBasicTable'));
             });
         }
-        el.dom.flipScrollSetAt = el.getWidth();
+        el.data('flipScrollSetAt', el.width());
     }
-
-
 });

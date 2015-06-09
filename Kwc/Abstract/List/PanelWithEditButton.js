@@ -1,5 +1,5 @@
-Ext.namespace('Kwc.Abstract.List');
-Kwc.Abstract.List.PanelWithEditButton = Ext.extend(Kwf.Auto.FormPanel, {
+Ext2.namespace('Kwc.Abstract.List');
+Kwc.Abstract.List.PanelWithEditButton = Ext2.extend(Kwf.Auto.FormPanel, {
     initComponent: function() {
         this.addEvents('editcomponent', 'gotComponentConfigs');
         this.fireEvent('gotComponentConfigs', this.componentConfigs);
@@ -13,4 +13,4 @@ Kwc.Abstract.List.PanelWithEditButton = Ext.extend(Kwf.Auto.FormPanel, {
     }
 });
 
-Ext.reg('kwc.listwitheditbutton', Kwc.Abstract.List.PanelWithEditButton);
+Ext2.reg('kwc.listwitheditbutton', Kwc.Abstract.List.PanelWithEditButton);

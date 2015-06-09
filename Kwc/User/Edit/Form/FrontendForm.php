@@ -6,7 +6,7 @@ class Kwc_User_Edit_Form_FrontendForm extends Kwf_Form
     protected function _init()
     {
         parent::_init();
-        $this->setModel(Zend_Registry::get('userModel')->getKwfModel());
+        $this->setModel(Kwf_Registry::get('userModel')->getEditModel());
     }
 
     public function getRow($parentRow = null)
@@ -24,7 +24,7 @@ class Kwc_User_Edit_Form_FrontendForm extends Kwf_Form
 
     public function processInput($parentRow, $postData = array())
     {
-        if ($this->_model instanceof Kwf_User_Model) {
+        if ($this->_model instanceof Kwf_User_EditModel) {
             $id = $this->_getIdByParentRow($parentRow);
             if ($id === 0 || $id === '0' || is_null($id)) {
                 $email = null;
@@ -33,7 +33,7 @@ class Kwc_User_Edit_Form_FrontendForm extends Kwf_Form
                 }
 
                 $this->_newUserRow = $this->_model->createUserRow(
-                    $email, null
+                    $email
                 );
             }
         }

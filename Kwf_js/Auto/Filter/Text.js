@@ -2,9 +2,9 @@ Kwf.Auto.Filter.Text = function(config)
 {
     Kwf.Auto.Filter.Text.superclass.constructor.call(this, config);
 
-    this.textField = new Ext.form.TriggerField({
+    this.textField = new Ext2.form.TriggerField({
         width:config.width,
-        triggerClass:'x-form-clear-trigger',
+        triggerClass:'x2-form-clear-trigger',
         onTriggerClick: this.clear.createDelegate(this)
     });
     this.paramName = config.paramName;
@@ -26,7 +26,7 @@ Kwf.Auto.Filter.Text = function(config)
     this.toolbarItems.add(this.textField);
 };
 
-Ext.extend(Kwf.Auto.Filter.Text, Kwf.Auto.Filter.Abstract, {
+Ext2.extend(Kwf.Auto.Filter.Text, Kwf.Auto.Filter.Abstract, {
     clear: function()
     {
         if (this.textField.getValue()) {

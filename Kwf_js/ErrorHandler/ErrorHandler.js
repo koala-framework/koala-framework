@@ -1,4 +1,4 @@
-Ext.ns('Kwf.ErrorHandler');
+Ext2.ns('Kwf.ErrorHandler');
 
 /**
  * message
@@ -36,12 +36,12 @@ Kwf.handleError = function(error) {
                 });
             }
         }
-        if (!Ext.Window) {
+        if (!Ext2.Window) {
             if (Kwf.Debug.displayErrors) {
                 throw msg;
             }
         } else {
-            var win = new Ext.Window({
+            var win = new Ext2.Window({
                 autoCreate : true,
                 title:title,
                 resizable:true,
@@ -76,16 +76,16 @@ Kwf.handleError = function(error) {
             win.show();
         }
     } else if (Kwf.Debug.displayErrors) {
-        Ext.Msg.show({
+        Ext2.Msg.show({
             title: error.title,
             msg: error.message,
-            buttons: Ext.Msg.OK,
+            buttons: Ext2.Msg.OK,
             modal: true,
             width: 800
         });
         if (error.abort) error.abort.call(error.scope || window); //there is no possibility to retry, so just abort
     } else {
-        Ext.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
+        Ext2.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
         if (error.mail || (typeof error.mail == 'undefined')) {
             Kwf.ErrorHandler.log({
                 url: error.url,

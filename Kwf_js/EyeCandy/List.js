@@ -1,9 +1,9 @@
-Ext.namespace("Kwf.EyeCandy");
+Ext2.namespace("Kwf.EyeCandy");
 
 Kwf.onElementShow('.kwfEyeCandyList', function eyeCandyList(el) {
-    var opts = Ext.fly(el).down('.options', true);
+    var opts = Ext2.fly(el).down('.options', true);
     if (opts) {
-        opts = Ext.decode(opts.value);
+        opts = Ext2.decode(opts.value);
         var cls = Kwf.EyeCandy.List;
         if (opts['class']) {
             cls = eval(opts['class']);
@@ -15,11 +15,11 @@ Kwf.onElementShow('.kwfEyeCandyList', function eyeCandyList(el) {
 }, { defer: true });
 
 Kwf.EyeCandy.List = function(cfg) {
-    Ext.apply(this, cfg);
+    Ext2.apply(this, cfg);
     this._init();
 };
 
-Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
+Ext2.extend(Kwf.EyeCandy.List, Ext2.util.Observable, {
     //el
     //plugins[]
     //states[]
@@ -36,14 +36,14 @@ Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
             'childStateChanged': true,
             'activeChanged': true
         });
-        Ext.applyIf(this, {
+        Ext2.applyIf(this, {
             plugins: [],
             states: []
         });
 
         if (!this.el) throw 'el required';
 
-        this.el = Ext.get(this.el);
+        this.el = Ext2.get(this.el);
 
         this.items = [];
         var items = this.el.query(this.childSelector);
@@ -52,8 +52,8 @@ Ext.extend(Kwf.EyeCandy.List, Ext.util.Observable, {
 
             var item = new Kwf.EyeCandy.List.Item({
                 list: this,
-                id: Ext.id(el),
-                el: Ext.get(el),
+                id: Ext2.id(el),
+                el: Ext2.get(el),
                 listIndex: idx
             });
             item.on('mouseEnter', function(item) {

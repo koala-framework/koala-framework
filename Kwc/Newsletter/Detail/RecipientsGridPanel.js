@@ -1,5 +1,5 @@
-Ext.ns('Kwc.Newsletter.Detail');
-Kwc.Newsletter.Detail.RecipientsGridPanel = Ext.extend(Kwf.Auto.GridPanel, {
+Ext2.ns('Kwc.Newsletter.Detail');
+Kwc.Newsletter.Detail.RecipientsGridPanel = Ext2.extend(Kwf.Auto.GridPanel, {
 
     initComponent: function() {
         this.actions.saveRecipients = new Kwc.Newsletter.Detail.RecipientsAction({scope: this});
@@ -14,4 +14,4 @@ Kwc.Newsletter.Detail.RecipientsGridPanel = Ext.extend(Kwf.Auto.GridPanel, {
         Kwc.Newsletter.Detail.RecipientsGridPanel.superclass.initComponent.call(this);
     }
 });
-Ext.reg('kwc.newsletter.recipients.grid', Kwc.Newsletter.Detail.RecipientsGridPanel);
+Ext2.reg('kwc.newsletter.recipients.grid', Kwc.Newsletter.Detail.RecipientsGridPanel);

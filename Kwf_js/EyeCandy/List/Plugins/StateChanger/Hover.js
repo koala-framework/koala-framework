@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.StateChanger.Hover = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.StateChanger.Hover = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     state: 'large',
     init: function() {
         this.list.on('childMouseEnter', function(item) {

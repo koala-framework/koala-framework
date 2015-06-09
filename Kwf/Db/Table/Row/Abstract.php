@@ -140,7 +140,6 @@ abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
             try {
                 Zend_Loader::loadClass($parentTable);
             } catch (Zend_Exception $e) {
-                require_once 'Zend/Db/Table/Row/Exception.php';
                 throw new Zend_Db_Table_Row_Exception($e->getMessage());
             }
             $parentTable = new $parentTable(array('db' => $db));
@@ -150,7 +149,6 @@ abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
             if ($type == 'object') {
                 $type = get_class($parentTable);
             }
-            require_once 'Zend/Db/Table/Row/Exception.php';
             throw new Zend_Db_Table_Row_Exception("Parent table must be a Zend_Db_Table_Abstract, but it is $type");
         }
 
@@ -166,29 +164,5 @@ abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         }
 
         return parent::findParentRow($parentTable, $ruleKey, $select);
-    }
-
-    protected function _postUpdate()
-    {
-        parent::_postUpdate();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            Kwf_Component_ModelObserver::getInstance()->add('update', $this);
-        }
-    }
-
-    protected function _postInsert()
-    {
-        parent::_postInsert();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            Kwf_Component_ModelObserver::getInstance()->add('insert', $this);
-        }
-    }
-
-    protected function _postDelete()
-    {
-        parent::_postDelete();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            Kwf_Component_ModelObserver::getInstance()->add('delete', $this);
-        }
     }
 }

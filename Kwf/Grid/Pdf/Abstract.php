@@ -1,6 +1,4 @@
 <?php
-require_once 'tcpdf.php';
-
 abstract class Kwf_Grid_Pdf_Abstract extends Kwf_Pdf_TcPdf
 {
 
@@ -19,8 +17,8 @@ abstract class Kwf_Grid_Pdf_Abstract extends Kwf_Pdf_TcPdf
 
     public function Header()
     {
-        $date = new Kwf_Date();
-        $headStr = $date->get(Kwf_Date::WEEKDAY).', '.date('d.m.Y, H:i');
+        $date = new Kwf_Date('now');
+        $headStr = $date->format('l, d.m.Y, H:i');
 
         $yBefore = $this->GetY();
         $this->SetY(10);

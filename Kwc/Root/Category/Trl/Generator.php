@@ -36,7 +36,7 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
             $select = new Kwf_Component_Select($select);
         }
 
-        if ($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) {
+        if (($id = $select->getPart(Kwf_Component_Select::WHERE_ID)) && substr($id, 0, 1) == '_') {
             $select->whereId(substr($id, 1));
         }
 
@@ -124,7 +124,6 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
         $ret['name'] = $dbRow->name;
         $ret['filename'] = $dbRow->filename;
         $ret['visible'] = $row->isHome ? true : $dbRow->visible;
-        $ret['selfVisible'] = $dbRow->visible;
         $ret['isHome'] = $row->isHome;
         return $ret;
     }

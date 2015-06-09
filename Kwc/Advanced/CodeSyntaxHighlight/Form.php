@@ -5,12 +5,12 @@ class Kwc_Advanced_CodeSyntaxHighlight_Form extends Kwc_Abstract_Form
     {
         parent::_initFields();
         $this->add(new Kwf_Form_Field_TextArea('code'))
+            ->setAllowTags(true)
             ->setFieldLabel(trlKwf('Code'))
             ->setHeight(225)
             ->setWidth(450);
 
         $values = array();
-        require_once Kwf_Config::getValue('externLibraryPath.geshi').'/geshi.php';
         $geshi = new GeSHi();
         foreach (new DirectoryIterator($geshi->language_path) as $i) {
             if ($i->isDir()) continue;

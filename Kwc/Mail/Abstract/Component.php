@@ -33,7 +33,7 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $ret['replyEmail'] = null;
         $ret['bcc'] = null;
         $ret['returnPath'] = null;
-        $ret['subject'] = trlKwf('Automatically sent e-mail');
+        $ret['subject'] = trlKwfStatic('Automatically sent e-mail');
         $ret['attachImages'] = false;
         $ret['trackViews'] = false;
         $ret['docType'] = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
@@ -133,8 +133,11 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         Kwf_Benchmark::checkpoint('html: render');
         $ret = $this->_processPlaceholder($ret, $recipient);
         Kwf_Benchmark::checkpoint('html: placeholder');
-        $redirectComponent = $this->getData()->getChildComponent('_redirect')->getComponent();
-        $ret = $redirectComponent->replaceLinks($ret, $recipient);
+        $redirectComponent = $this->getData()->getChildComponent('_redirect');
+        if ($redirectComponent) {
+            $redirectComponent = $redirectComponent->getComponent();
+            $ret = $redirectComponent->replaceLinks($ret, $recipient);
+        }
         Kwf_Benchmark::checkpoint('html: replaceLinks');
         if ($addViewTracker && $this->_getSetting('trackViews')) {
             $params = array();
@@ -169,7 +172,10 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         $ret = $this->_processPlaceholder($ret, $recipient);
         Kwf_Benchmark::checkpoint('text: placeholder');
         $ret = str_replace('&nbsp;', ' ', $ret);
-        $ret = $this->getData()->getChildComponent('_redirect')->getComponent()->replaceLinks($ret, $recipient);
+        $redirect = $this->getData()->getChildComponent('_redirect');
+        if ($redirect) {
+            $ret = $redirect->getComponent()->replaceLinks($ret, $recipient);
+        }
         Kwf_Benchmark::checkpoint('text: replaceLinks');
         return $ret;
     }

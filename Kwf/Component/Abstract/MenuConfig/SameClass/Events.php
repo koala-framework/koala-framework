@@ -37,7 +37,7 @@ class Kwf_Component_Abstract_MenuConfig_SameClass_Events extends Kwf_Component_A
         return $ret;
     }
 
-    public function onComponentAddedRemoved(Kwf_Component_Event_Abstract $ev)
+    public function onComponentAddedRemoved(Kwf_Events_Event_Abstract $ev)
     {
         Kwf_Acl::clearCache();
     }

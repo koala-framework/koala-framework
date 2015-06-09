@@ -1,4 +1,4 @@
-Ext.namespace('Kwf.FrontendForm');
+Ext2.namespace('Kwf.FrontendForm');
 Kwf.FrontendForm.Field = function(fieldEl, form) {
     Kwf.FrontendForm.Field.superclass.constructor.call(this);
     this.el = fieldEl;
@@ -9,7 +9,7 @@ Kwf.FrontendForm.Field = function(fieldEl, form) {
         this.form.errorStyle.hideFieldError(this);
     }, this);
 };
-Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
+Ext2.extend(Kwf.FrontendForm.Field, Ext2.util.Observable, {
     initField: function() {
         var inp = this.el.child('input');
         if (inp) {
@@ -29,7 +29,10 @@ Ext.extend(Kwf.FrontendForm.Field, Ext.util.Observable, {
         if (!nativePlaceholderSupport) {
             this._placeholder = input.dom.getAttribute('placeholder');
             if (this._placeholder) {
-                input.dom.value = this._placeholder;
+                if (!input.dom.value) {
+                    input.dom.value = this._placeholder;
+                    input.addClass('placeholderVisible');
+                }
                 input.on('focus', function() {
                     if (input.getValue() == this._placeholder) {
                         input.dom.value = '';

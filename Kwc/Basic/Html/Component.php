@@ -9,9 +9,10 @@ class Kwc_Basic_Html_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlKwfStatic('Html'),
-            'componentIcon' => new Kwf_Asset('tag'),
+            'componentIcon' => 'tag',
             'ownModel'     => 'Kwc_Basic_Html_Model'
         ));
+        $ret['componentCategory'] = 'admin';
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'content';

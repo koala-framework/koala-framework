@@ -1,5 +1,5 @@
-Ext.namespace("Kwf.Redirects");
-Kwf.Redirects.Index = Ext.extend(Ext.Panel, {
+Ext2.namespace("Kwf.Redirects");
+Kwf.Redirects.Index = Ext2.extend(Ext2.Panel, {
     initComponent: function() {
         var form = new Kwf.Auto.FormPanel({
             controllerUrl: '/kwf/redirects/redirect',

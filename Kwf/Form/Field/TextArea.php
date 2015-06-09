@@ -35,11 +35,24 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
         //todo: escapen
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<textarea id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" ";
+
         $width = $this->getWidth();
         if (is_numeric($width)) {
             $width .= 'px';
         }
-        $ret['html'] .= "style=\"width: $width; height: {$this->getHeight()}px\"";
+
+        $style = '';
+        if ($width) {
+            $style .= 'width: '.$width.';';
+        }
+
+        if ($this->getHeight()) {
+            $style .= 'height: '.$this->getHeight().'px;';
+        }
+
+        if ($style !== '') {
+            $ret['html'] .= "style=\"$style\"";
+        }
 
         $cls = $this->getCls();
         if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {

@@ -10,7 +10,7 @@ class Kwc_Trl_ImageEnlarge_ImageEnlarge_Component extends Kwc_Basic_ImageEnlarge
 
         $ret['dimensions'] = array(
             'default'=>array(
-                'text' => trlKwf('default'),
+                'text' => trlKwfStatic('default'),
                 'width' => 120,
                 'height' => 120,
                 'cover' => false,

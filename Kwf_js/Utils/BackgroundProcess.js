@@ -4,7 +4,7 @@ Kwf.Utils.BackgroundProcess = {
         var progressNum = Math.floor(Math.random() * 1000000000) + 1;
         options.progressNum = progressNum;
         options.params.progressNum = progressNum;
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             url: options.url,
             params: options.params,
             bgOptions: options,
@@ -16,7 +16,7 @@ Kwf.Utils.BackgroundProcess = {
                     //no background process was started, request finished
                     if (o.bgOptions.progressBar) o.bgOptions.progressBar.destroy();
                     if (o.bgOptions.currentStatusRequest) {
-                        Ext.Ajax.abort(o.bgOptions.currentStatusRequest);
+                        Ext2.Ajax.abort(o.bgOptions.currentStatusRequest);
                     }
                     if (o.bgOptions.success) o.bgOptions.success.call(o.bgOptions.scope || window, response, o, r);
                     o.bgOptions.finished = true;
@@ -25,7 +25,7 @@ Kwf.Utils.BackgroundProcess = {
             failure: function() {
                 if (o.bgOptions.progressBar) o.bgOptions.progressBar.destroy();
                 if (o.bgOptions.currentStatusRequest) {
-                    Ext.Ajax.abort(o.bgOptions.currentStatusRequest);
+                    Ext2.Ajax.abort(o.bgOptions.currentStatusRequest);
                 }
                 if (o.bgOptions.failure) o.bgOptions.failure.call(o.bgOptions.scope || window);
                 o.bgOptions.finished = true;
@@ -55,14 +55,14 @@ Kwf.Utils.BackgroundProcess = {
         };
         if (options.pid) params.pid = options.pid;
         if (options.outputFile) params.outputFile = options.outputFile;
-        options.currentStatusRequest = Ext.Ajax.request({
+        options.currentStatusRequest = Ext2.Ajax.request({
             url: '/kwf/json-progress-status',
             params: params,
             bgOptions: options,
             success: function(response, o, r) {
                 if (r.bgFinished) {
                     o.bgOptions.progressBar.destroy();
-                    if (r.bgError) Ext.Msg.alert(trlKwf('Error'), r.bgError);
+                    if (r.bgError) Ext2.Msg.alert(trlKwf('Error'), r.bgError);
                     if (r.bgResponse && r.bgResponse.success) {
                         //call success cb
                         if (o.bgOptions.success) options.success.call(o.bgOptions.scope || window, response, null, r.bgResponse);
@@ -96,11 +96,11 @@ Kwf.Utils.BackgroundProcess = {
 
     _createProgressDialog: function(cfg)
     {
-        var progressBar = new Ext.ProgressBar({
+        var progressBar = new Ext2.ProgressBar({
             text:'0%',
             animate: true
         });
-        cfg = Ext.applyIf(cfg, {
+        cfg = Ext2.applyIf(cfg, {
             title: trlKwf('Progress'),
             autoCreate : true,
             resizable:false,
@@ -117,7 +117,7 @@ Kwf.Utils.BackgroundProcess = {
             footer:true,
             closable:false
         });
-        var dlg = new Ext.Window(cfg);
+        var dlg = new Ext2.Window(cfg);
 
         dlg.render(document.body);
         dlg.myEls = { };
@@ -125,14 +125,14 @@ Kwf.Utils.BackgroundProcess = {
             html:'<div class="kwf-progress-content"><span class="kwf-progress-text"></span><br /></div>'
         });
         dlg.myEls.bodyEl.addClass('kwf-progress-window');
-        dlg.myEls.msgEl = Ext.get(dlg.myEls.bodyEl.dom.childNodes[0].firstChild);
+        dlg.myEls.msgEl = Ext2.get(dlg.myEls.bodyEl.dom.childNodes[0].firstChild);
 
-        dlg.progressBar = new Ext.ProgressBar({
+        dlg.progressBar = new Ext2.ProgressBar({
             renderTo:dlg.myEls.bodyEl,
             text: '0%',
             animate: true
         });
-        dlg.myEls.bodyEl.createChild({cls:'x-clear'});
+        dlg.myEls.bodyEl.createChild({cls:'x2-clear'});
 
         dlg.updateProgress = function(num, progressBarText, text)
         {

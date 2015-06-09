@@ -10,9 +10,9 @@ class Kwc_Trl_StaticTextsForm_Translate_FrontendForm extends Kwf_Form
     {
         $this->setModel(new Kwf_Model_FnF());
 
-        $this->add(new Kwf_Form_Field_TextField('firstname', trlStatic('Vorname')));
-        $this->add(new Kwf_Form_Field_TextField('lastname', trlStatic('Nachname')));
-        $this->add(new Kwf_Form_Field_TextField('company', trlStatic('Firma')));
+        $this->add(new Kwf_Form_Field_TextField('firstname', trlStatic('Firstname')));
+        $this->add(new Kwf_Form_Field_TextField('lastname', trlStatic('Lastname')));
+        $this->add(new Kwf_Form_Field_TextField('company', trlStatic('Company')));
 
         $this->add(new Kwf_Form_Field_TextField('firstname2', trlKwfStatic('Firstname')));
         $this->add(new Kwf_Form_Field_TextField('lastname2', trlKwfStatic('Lastname')));

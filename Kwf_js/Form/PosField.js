@@ -8,7 +8,7 @@ Kwf.Form.PosField = function(config)
         this
     );
 };
-Ext.extend(Kwf.Form.PosField, Ext.form.TextField,
+Ext2.extend(Kwf.Form.PosField, Ext2.form.TextField,
 {
 });
-Ext.reg('posfield', Kwf.Form.PosField);
+Ext2.reg('posfield', Kwf.Form.PosField);

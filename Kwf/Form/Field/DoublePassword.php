@@ -10,10 +10,6 @@ class Kwf_Form_Field_DoublePassword extends Kwf_Form_Field_Abstract
     {
         $this->_passwordField1 = new Kwf_Form_Field_Password($fieldName, $fieldLabel);
         $this->_passwordField1->setAllowBlank(false);
-        $validatorClass = Kwf_Registry::get('config')->user->passwordValidator;
-        if ($validatorClass) {
-            $this->_passwordField1->addValidator(new $validatorClass());
-        }
         $this->_passwordField2 = new Kwf_Form_Field_Password($fieldName.'_repeat', trlKwfStatic('Repeat {0}'));
         $this->_passwordField2->setSave(false);
         parent::__construct(null, null);

@@ -1,6 +1,6 @@
-Kwf.Form.ColorPicker = Ext.extend(Ext.form.TriggerField,
+Kwf.Form.ColorPicker = Ext2.extend(Ext2.form.TriggerField,
 {
-    triggerClass : 'x-form-search-trigger',
+    triggerClass : 'x2-form-search-trigger',
     readOnly : true,
     width : 200,
     onTriggerClick : function(){
@@ -17,4 +17,4 @@ Kwf.Form.ColorPicker = Ext.extend(Ext.form.TriggerField,
         win.focus();
     }
 });
-Ext.reg('colorpickerfield', Kwf.ColorPicker.Window);
+Ext2.reg('colorpickerfield', Kwf.ColorPicker.Window);

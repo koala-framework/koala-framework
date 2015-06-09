@@ -1,0 +1,1 @@
+trlcKwf('thousands separator', ',');

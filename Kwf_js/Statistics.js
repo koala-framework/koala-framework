@@ -1,5 +1,5 @@
-Ext.ns('Kwf.Statistics');
-
+if (!Kwf) Kwf = {}
+if (!Kwf.Statistics) Kwf.Statistics = {}
 Kwf.Statistics.counter = [];
 
 Kwf.Statistics.onCount = function(fn) {
@@ -37,7 +37,7 @@ Kwf.Statistics.getUserOptValue = function() {
     var cookieName = "cookieOpt=";
     var cookies = document.cookie.split(';');
     for(var i=0; i < cookies.length; i++) {
-        var c = cookies[i].trim();
+        var c = cookies[i].replace(/^\s+|\s+$/g, '');
         while (c.charAt(0)==' ') c = c.substring(1, c.length);
         if (c.indexOf(cookieName) == 0) {
             opt = c.substring(cookieName.length, c.length);

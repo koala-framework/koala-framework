@@ -8,6 +8,8 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
     private $_uploadsModel;
     private $_row;
     private $_field;
+    private $_uploadId1;
+    private $_uploadId2;
 
     public function setUp()
     {
@@ -23,7 +25,9 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
             )
         ));
         $fRow = $this->_uploadsModel->createRow()->writeFile('asdf', 'foo', 'txt');
-        $this->_uploadsModel->createRow()->writeFile('asdf1', 'foo1', 'txt');
+        $this->_uploadId1 = $fRow->id;
+        $r = $this->_uploadsModel->createRow()->writeFile('asdf1', 'foo1', 'txt');
+        $this->_uploadId2 = $r->id;
 
         $this->_row = $this->_model->createRow();
         $this->_row->upload_id = $fRow->id;
@@ -33,13 +37,13 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
 
     public function testProcessInputNothingUploaded()
     {
-        $uploadRow = $this->_uploadsModel->getRow(1);
+        $uploadRow = $this->_uploadsModel->getRow($this->_uploadId1);
         $input = array(
             'File_upload_id' => $uploadRow->id.'_'.$uploadRow->getHashKey()
         );
         $data = $this->_field->processInput($this->_row, $input);
 
-        $this->assertEquals($data, array('File' => '1'));
+        $this->assertEquals($data, array('File' => $this->_uploadId1));
 
         $input = array(
             'File_upload_id' => $uploadRow->id.'_'.$uploadRow->getHashKey(),
@@ -49,7 +53,7 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
             )
         );
         $data = $this->_field->processInput($this->_row, $input);
-        $this->assertEquals($data, array('File' => '1'));
+        $this->assertEquals($data, array('File' => $this->_uploadId1));
     }
 
     public function testProcessInputNothingUploadedEmpty()
@@ -73,7 +77,7 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
         $file = tempnam('/tmp', 'uploadtest');
         file_put_contents($file, 'foo');
         $input = array(
-            'File_upload_id' => '1',
+            'File_upload_id' => $this->_uploadId1,
             'File' => array(
                 'error' => 0,
                 'tmp_name' => $file,
@@ -82,7 +86,10 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
             )
         );
         $data = $this->_field->processInput($this->_row, $input);
-        $this->assertEquals($data, array('File' => '3'));
+        $s = new Kwf_Model_Select();
+        $s->whereNotEquals('id', array($this->_uploadId1, $this->_uploadId2));
+        $r = $this->_uploadsModel->getRow($s);
+        $this->assertEquals($data, array('File' => $r->id));
     }
 
     public function testProcessInputFileUploadedNothingExisting()
@@ -98,12 +105,15 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
             )
         );
         $data = $this->_field->processInput($this->_row, $input);
-        $this->assertEquals($data, array('File' => '3'));
+        $s = new Kwf_Model_Select();
+        $s->whereNotEquals('id', array($this->_uploadId1, $this->_uploadId2));
+        $r = $this->_uploadsModel->getRow($s);
+        $this->assertEquals($data, array('File' => $r->id));
     }
 
     public function testProcessInputFileDelete()
     {
-        $uploadRow = $this->_uploadsModel->getRow(1);
+        $uploadRow = $this->_uploadsModel->getRow($this->_uploadId1);
         $input = array(
             'File_upload_id' => $uploadRow->id.'_'.$uploadRow->getHashKey(),
             'File_del' => '1',
@@ -118,7 +128,7 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
         file_put_contents($file, 'foo');
 
         $input = array(
-            'File_upload_id' => '1',
+            'File_upload_id' => $this->_uploadId1,
             'File_del' => '1',
             'File' => array(
                 'error' => 0,
@@ -134,11 +144,11 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
     public function testProcessInputBackend()
     {
         $input = array(
-            'File' => '1',
+            'File' => $this->_uploadId1,
 
         );
         $data = $this->_field->processInput($this->_row, $input);
-        $this->assertEquals($data, array('File' => 1));
+        $this->assertEquals($data, array('File' => $this->_uploadId1));
     }
 
     public function testProcessInputBackendEmpty()
@@ -153,10 +163,10 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
     public function testValidate()
     {
         $row = $this->_model->createRow();
-        $this->assertEquals(array(), $this->_field->validate($row, array('File'=>1)));
+        $this->assertEquals(array(), $this->_field->validate($row, array('File'=>$this->_uploadId1)));
 
         $this->_field->setAllowOnlyImages(true);
-        $this->assertEquals(1, count($this->_field->validate($row, array('File'=>1))));
+        $this->assertEquals(1, count($this->_field->validate($row, array('File'=>$this->_uploadId1))));
 
         $fRow = $this->_uploadsModel->createRow()->writeFile('', 'foo', 'jpg', 'image/jpeg');
         $this->assertEquals(array(), $this->_field->validate($row, array('File'=>$fRow->id)));
@@ -165,17 +175,17 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
     public function testLoad()
     {
         $post = array(
-            'File' => '1'
+            'File' => $this->_uploadId1
         );
         $data = $this->_field->load($this->_row, $post);
-        $i = $this->_uploadsModel->getRow(1)->getFileInfo();
+        $i = $this->_uploadsModel->getRow($this->_uploadId1)->getFileInfo();
         $this->assertEquals(array('File'=>$i), $data);
 
         $post = array(
-            'File' => '2'
+            'File' => $this->_uploadId2
         );
         $data = $this->_field->load($this->_row, $post);
-        $i = $this->_uploadsModel->getRow(2)->getFileInfo();
+        $i = $this->_uploadsModel->getRow($this->_uploadId2)->getFileInfo();
         $this->assertEquals(array('File'=>$i), $data);
 
         $post = array(
@@ -188,16 +198,16 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
     public function testPrepareSave()
     {
         $post = array(
-            'File' => '1'
+            'File' => $this->_uploadId1
         );
         $this->_field->prepareSave($this->_row, $post);
-        $this->assertEquals(1, $this->_row->upload_id);
+        $this->assertEquals($this->_uploadId1, $this->_row->upload_id);
 
         $post = array(
-            'File' => '2'
+            'File' => $this->_uploadId2
         );
         $this->_field->prepareSave($this->_row, $post);
-        $this->assertEquals(2, $this->_row->upload_id);
+        $this->assertEquals($this->_uploadId2, $this->_row->upload_id);
 
         $post = array(
             'File' => null
@@ -211,7 +221,7 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
         $this->_field->setSave(false);
 
         $post = array(
-            'File_upload_id' => '1',
+            'File_upload_id' => $this->_uploadId1,
             'File_del' => 1,
             'File' => array(
                 'error' => 0,
@@ -230,9 +240,9 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
         $this->assertEquals(array(), $data);
 
         $post = array(
-            'File' => '2'
+            'File' => $this->_uploadId2
         );
         $data = $this->_field->prepareSave($this->_row, $post);
-        $this->assertEquals(1, $this->_row->upload_id);
+        $this->assertEquals($this->_uploadId1, $this->_row->upload_id);
     }
 }

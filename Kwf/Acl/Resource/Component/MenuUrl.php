@@ -31,6 +31,10 @@ class Kwf_Acl_Resource_Component_MenuUrl extends Kwf_Acl_Resource_MenuUrl
 
     public function getComponent()
     {
+        if (is_string($this->_component)) {
+            $this->_component = Kwf_Component_Data_Root::getInstance()
+                ->getComponentById($this->_component, array('ignoreVisible'=>true));
+        }
         return $this->_component;
     }
 
@@ -39,7 +43,7 @@ class Kwf_Acl_Resource_Component_MenuUrl extends Kwf_Acl_Resource_MenuUrl
         $ret = array();
         foreach (get_object_vars($this) as $k=>$i) {
             if ($k == '_component') {
-                $i = $i->kwfSerialize();
+                $i = $i->componentId;
             }
             $ret[$k] = $i;
         }
@@ -49,9 +53,6 @@ class Kwf_Acl_Resource_Component_MenuUrl extends Kwf_Acl_Resource_MenuUrl
     public function unserialize($serialized)
     {
         foreach (unserialize($serialized) as $k=>$i) {
-            if ($k == '_component') {
-                $i = Kwf_Component_Data::kwfUnserialize($i);
-            }
             $this->$k = $i;
         }
     }

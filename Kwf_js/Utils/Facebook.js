@@ -1,9 +1,9 @@
-Ext.namespace('Kwf.Facebook');
+Ext2.namespace('Kwf.Facebook');
 Kwf.FacebookClass = function() {
     this.addEvents('afterinit'); //deprecated
     this._onReadyCallbacks = [];
 };
-Ext.extend(Kwf.FacebookClass, Ext.util.Observable, {
+Ext2.extend(Kwf.FacebookClass, Ext2.util.Observable, {
     loadedSubroot: null,
     isReady: false,
     onReady: function(options) {

@@ -13,6 +13,7 @@ class Kwc_ImageResponsive_MediaOutput_Root_Component extends Kwc_Root_Component
         );
         unset($ret['generators']['title']);
         unset($ret['generators']['box']);
+        unset($ret['generators']['category']);
         return $ret;
     }
 }

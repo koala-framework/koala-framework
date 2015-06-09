@@ -24,10 +24,20 @@ class Kwf_Model_RowCache extends Kwf_Model_Proxy
         return parent::getRowByProxiedRow($proxiedRow);
     }
 
-    //aufgerufen von row beim speichern
+    //called by Events when saving
     public function clearRowCache($id)
     {
         Kwf_Cache_Simple::delete($this->_getCacheId($id));
+    }
+
+    //called by Events when saving
+    public function clearRowsCache($select)
+    {
+        $cacheIds = array();
+        foreach ($this->getIds($select) as $id) {
+            $cacheIds[] = $this->_getCacheId($id);
+        }
+        Kwf_Cache_Simple::delete($cacheIds);
     }
 
     private function _getCacheId($id)
@@ -84,29 +94,12 @@ class Kwf_Model_RowCache extends Kwf_Model_Proxy
         return $ret;
     }
 
-    public function clearRows()
+    public function freeMemory()
     {
-        parent::clearRows();
-        $this->_cacheRows = array();
-    }
-
-    protected function _afterImport($format, $data, $options)
-    {
-        if ($format == self::FORMAT_ARRAY) {
-            foreach ($data as $r) {
-                $this->clearRowCache($r[$this->getPrimaryKey()]);
-            }
-        } else {
-            //this is very inefficient as we have to iterate all ids
-            //but there is no way to delete all ids
-            $cacheIds = array();
-            $s = new Kwf_Model_Select();
-            foreach ($this->getIds($s) as $id) {
-                $cacheIds[] = $this->_getCacheId($id);
-            }
-            Kwf_Cache_Simple::delete($cacheIds);
+        foreach ($this->_cacheRows as $row) {
+            if (is_object($row)) $row->freeMemory();
         }
-        parent::_afterImport($format, $data, $options);
+        $this->_cacheRows = array();
     }
 
     protected function _afterDeleteRows($where)
@@ -117,5 +110,14 @@ class Kwf_Model_RowCache extends Kwf_Model_Proxy
             $cacheIds[] = $this->_getCacheId($id);
         }
         Kwf_Cache_Simple::delete($cacheIds);
+    }
+
+    public function getEventSubscribers()
+    {
+        $ret = parent::getEventSubscribers();
+        $ret[] = Kwf_Model_EventSubscriber::getInstance('Kwf_Model_RowCache_Events', array(
+            'modelFactoryConfig' => $this->getFactoryConfig()
+        ));
+        return $ret;
     }
 }

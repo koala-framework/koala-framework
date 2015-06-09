@@ -24,7 +24,7 @@ Kwf.onJElementReady('div.kwfFadeElements', function fadeElements(element) {
     element = element.get(0);
     element.fadeElementsObject = new cls(config);
     element.fadeElementsObject.start();
-});
+}, { defer: true });
 
 
 Kwf.onJElementWidthChange('div.kwfFadeElements', function fadeElementsWidthChange(element) {
@@ -32,7 +32,7 @@ Kwf.onJElementWidthChange('div.kwfFadeElements', function fadeElementsWidthChang
     if (element.fadeElementsObject) {
         element.fadeElementsObject.calculateMaxHeight();
     }
-}, {priority: 10}); /* after ResponsiveEl */
+}, {priority: 10, checkVisibility: true}); /* after ResponsiveEl */
 
 
 if (!Kwf.Fade) Kwf.Fade = {};
@@ -54,7 +54,7 @@ Kwf.Fade.Elements = function(cfg) {
     this.autoStart = true;
     this.direction = cfg.direction;
 
-    if (typeof cfg.template != 'undefined') this._template = cfg.template;
+    if (typeof cfg.template != 'undefined') this._template = cfg.template ? _.template(cfg.template) : false;
     if (typeof cfg.animationType != 'undefined') this.animationType = cfg.animationType;
     if (typeof cfg.elementAccessPlayPause != 'undefined') this.elementAccessPlayPause = cfg.elementAccessPlayPause;
     if (typeof cfg.elementAccessDirect != 'undefined') this.elementAccessDirect = cfg.elementAccessDirect;
@@ -217,8 +217,8 @@ Kwf.Fade.Elements.prototype = {
                         });
                         this._isAnimating = false;
 
-                        Kwf.fireComponentEvent('componentSlideOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
-                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideOut', Ext2.get(activeEl.parent().get(0)), Ext2.get(activeEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                     }, this));
                 } else {
                     activeEl.animate({
@@ -228,14 +228,14 @@ Kwf.Fade.Elements.prototype = {
                             left: 0,
                             zIndex: 0
                         });
-                        Kwf.fireComponentEvent('componentSlideOut', Ext.get($(this).parent().get(0)), Ext.get(this));
+                        Kwf.fireComponentEvent('componentSlideOut', Ext2.get($(this).parent().get(0)), Ext2.get(this));
                     });
                     nextEl.animate({
                         left: 0
                     }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         nextEl.css('left', '0px');
                         this._isAnimating = false;
-                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                     }, this));
                 }
             } else if (dir == 't' || dir == 'b') {
@@ -255,8 +255,8 @@ Kwf.Fade.Elements.prototype = {
                         });
                         this._isAnimating = false;
 
-                        Kwf.fireComponentEvent('componentSlideOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
-                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideOut', Ext2.get(activeEl.parent().get(0)), Ext2.get(activeEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                     }, this));
                 } else {
                     activeEl.animate({
@@ -266,14 +266,14 @@ Kwf.Fade.Elements.prototype = {
                             top: 0,
                             zIndex: 0
                         });
-                        Kwf.fireComponentEvent('componentSlideOut', Ext.get($(this).parent().get(0)), Ext.get(this));
+                        Kwf.fireComponentEvent('componentSlideOut', Ext2.get($(this).parent().get(0)), Ext2.get(this));
                     });
                     nextEl.animate({
                         top: '+='+height
                     }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                         nextEl.css('top', '0px');
                         this._isAnimating = false;
-                        Kwf.fireComponentEvent('componentSlideIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                        Kwf.fireComponentEvent('componentSlideIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                     }, this));
                 }
             }
@@ -284,23 +284,23 @@ Kwf.Fade.Elements.prototype = {
             });
             if ($.support.transition || $.support.transform) {
                 activeEl.transition({ opacity: 0 }, this.fadeDuration * 500, this.easingFadeOut, $.proxy(function() {
-                    Kwf.fireComponentEvent('componentFadeOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
+                    Kwf.fireComponentEvent('componentFadeOut', Ext2.get(activeEl.parent().get(0)), Ext2.get(activeEl.get(0)));
                 }, this));
                 nextEl.transition({ opacity: 1 }, this.fadeDuration * 1000, this.easingFadeIn, $.proxy(function() {
                     nextEl.css({zIndex: 10});
                     activeEl.css({zIndex: 0});
                     this._isAnimating = false;
-                    Kwf.fireComponentEvent('componentFadeIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                    Kwf.fireComponentEvent('componentFadeIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                 }, this));
             } else {
                 activeEl.fadeTo(this.fadeDuration * 500, 0, this.easingFadeOut, $.proxy(function() {
-                    Kwf.fireComponentEvent('componentFadeOut', Ext.get(activeEl.parent().get(0)), Ext.get(activeEl.get(0)));
+                    Kwf.fireComponentEvent('componentFadeOut', Ext2.get(activeEl.parent().get(0)), Ext2.get(activeEl.get(0)));
                 }, this));
                 nextEl.fadeTo(this.fadeDuration * 1000, 1, this.easingFadeIn, $.proxy(function() {
                     nextEl.css({zIndex: 10});
                     activeEl.css({zIndex: 0});
                     this._isAnimating = false;
-                    Kwf.fireComponentEvent('componentFadeIn', Ext.get(nextEl.parent().get(0)), Ext.get(nextEl.get(0)));
+                    Kwf.fireComponentEvent('componentFadeIn', Ext2.get(nextEl.parent().get(0)), Ext2.get(nextEl.get(0)));
                 }, this));
             }
         }
@@ -371,11 +371,11 @@ Kwf.Fade.Elements.prototype = {
             }
 
             if (this.elementAccessDirect) {
-                template += '{{#elementAccessLinks}}' +
+                template += '<% _.each(elementAccessLinks, function(item) { %>' +
                     '<li>' +
                         '<a class="elementAccessLink" href="#"></a>' +
                     '</li>' +
-                '{{/elementAccessLinks}}';
+                '<% }) %>';
             }
 
             if (this.elementAccessPlayPause) {
@@ -394,7 +394,7 @@ Kwf.Fade.Elements.prototype = {
             }
 
             if (!this._template) {
-                this._template = template;
+                this._template = _.template(template);
             }
 
             var data = {
@@ -406,7 +406,8 @@ Kwf.Fade.Elements.prototype = {
                     link: index + 1
                 });
             }, this));
-            var output = Mustache.render(this._template, data);
+
+            var output = this._template(data);
             $(this.selectorRoot).append(output);
 
             var elementAccessLinks = $(this.selectorRoot).find('a.elementAccessLink');

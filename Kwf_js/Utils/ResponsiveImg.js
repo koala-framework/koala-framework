@@ -1,19 +1,22 @@
 (function(){
-
+    
 var DONT_HASH_TYPE_PREFIX = 'dh-';
 var $w = $(window);
 var deferredImages = [];
 
 Kwf.Utils.ResponsiveImg = function (selector) {
-    Kwf.onElementWidthChange(selector, function responsiveImg(el) {
+    Kwf.onJElementWidthChange(selector, function responsiveImg(el) {
         if (el.hasClass('loadImmediately') || isElementInView(el)) {
-            if (!el.responsiveImgInitDone) {
+            if (!el[0].responsiveImgInitDone) {
                 initResponsiveImgEl(el);
             } else {
                 checkResponsiveImgEl(el);
             }
         } else {
-            deferredImages.push(el);
+            if (!el.data('responsiveImgInitDeferred')) {
+                deferredImages.push(el);
+                el.data('responsiveImgInitDeferred', true);
+            }
         }
     }, { defer: true });
 };
@@ -67,11 +70,11 @@ function getResponsiveWidthSteps(minWidth, maxWidth) {
 function initResponsiveImgEl(el) {
     var elWidth = Kwf.Utils.Element.getCachedWidth(el);
     if (elWidth == 0) return;
-    el.responsiveImgInitDone = true;
+    el[0].responsiveImgInitDone = true; //don't save as el.data to avoid getting it copied when cloning elements
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
-    var baseUrl = el.dom.getAttribute("data-src");
-    var minWidth = parseInt(el.dom.getAttribute("data-min-width"));
-    var maxWidth = parseInt(el.dom.getAttribute("data-max-width"));
+    var baseUrl = el.data("src");
+    var minWidth = parseInt(el.data("minWidth"));
+    var maxWidth = parseInt(el.data("maxWidth"));
 
     el.loadedWidth = elWidth;
     el.baseUrl = baseUrl;
@@ -82,14 +85,12 @@ function initResponsiveImgEl(el) {
             el.loadedWidth * devicePixelRatio, minWidth, maxWidth);
     var sizePath = baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
             DONT_HASH_TYPE_PREFIX+width);
-
-    var img = el.createChild({
-        tag: 'img'
-    });
+    var img = $('<img />');
+    el.append(img);
     img.on('load', function() {
         el.removeClass('webResponsiveImgLoading');
-    }, this);
-    img.dom.src = sizePath;
+    });
+    img.attr('src', sizePath);
 };
 
 function checkResponsiveImgEl(responsiveImgEl) {
@@ -100,17 +101,16 @@ function checkResponsiveImgEl(responsiveImgEl) {
             responsiveImgEl.minWidth, responsiveImgEl.maxWidth);
     if (width > responsiveImgEl.loadedWidth) {
         responsiveImgEl.loadedWidth = width;
-        responsiveImgEl.child('img', true).src
-            = responsiveImgEl.baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
-                    DONT_HASH_TYPE_PREFIX+width);
+        responsiveImgEl.find('img').attr('src',
+             responsiveImgEl.baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
+                    DONT_HASH_TYPE_PREFIX+width));
     }
 };
 
-function doesElementScroll(el)
-{
-    var i = el;
-    var ret = false;
-    while (i != document.body) {
+function doesElementScroll(el) {
+    var i = el.get(0);
+
+    while (i && i != document.body) {
         var overflow = $(i).css('overflow-y');
         if (overflow == 'auto' || overflow == 'scroll') {
             return true;
@@ -120,14 +120,12 @@ function doesElementScroll(el)
     return false;
 }
 
-function isElementInView(el)
-{
-    var $e = $(el.dom);
-    var threshold = 200;
+function isElementInView(el) {
+    var threshold = 800;
 
-    if ($e.is(":hidden")) return false;
+    if (!Kwf.Utils.Element.isVisible(el[0])) return false;
 
-    if (doesElementScroll(el.dom)) {
+    if (doesElementScroll(el)) {
         //if img is in a scrolling element always load it.
         //this could be improved but usually it's not needed
         return true;
@@ -135,8 +133,8 @@ function isElementInView(el)
 
     var wt = $w.scrollTop(),
         wb = wt + $w.height(),
-        et = $e.offset().top,
-        eb = et + el.dom.clientHeight;
+        et = el.offset().top,
+        eb = et + el.innerHeight();
     return eb >= wt - threshold && et <= wb + threshold;
 }
 

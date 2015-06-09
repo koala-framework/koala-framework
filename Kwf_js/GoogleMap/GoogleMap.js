@@ -1,4 +1,4 @@
-Ext.namespace('Kwf.GoogleMap');
+Ext2.namespace('Kwf.GoogleMap');
 Kwf.GoogleMap.isLoaded = false;
 Kwf.GoogleMap.isCallbackCalled = false;
 Kwf.GoogleMap.callbacks = [];
@@ -101,10 +101,11 @@ Kwf.GoogleMap.Map = function(config) {
 
     this.addEvents({
         'show': true,
-        'useFrom': true
+        'useFrom': true,
+        'reload': true
     });
 
-    this.mapContainer = Ext.get(config.mapContainer);
+    this.mapContainer = Ext2.get(config.mapContainer);
     this.config = config;
     if (typeof this.config.width == 'undefined') this.config.width = 350;
     if (typeof this.config.height == 'undefined') this.config.height = 300;
@@ -112,30 +113,33 @@ Kwf.GoogleMap.Map = function(config) {
     if (typeof this.config.scale == 'undefined') this.config.scale = 1;
     if (typeof this.config.zoom_properties == 'undefined') this.config.zoom_properties = 0;
     if (typeof this.config.overview == 'undefined') this.config.overview = 1;
-    if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
+    if (typeof this.config.zoom == 'undefined' || this.config.zoom == null) this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
     if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
     if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
     if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';
-
+    if (typeof this.config.panControl == 'undefined') this.config.panControl = false;
+    if (typeof this.config.streetViewControl == 'undefined') this.config.streetViewControl = false;
 
     if (!this.config.markers) this.config.markers = [ ];
     if (typeof this.config.markers[0] == 'undefined' &&
         (this.config.markers.longitude || this.config.markers.coordinates)
-        ) {
+    ) {
         this.config.markers = [ this.config.markers ];
     }
 
-    for (var i = 0; i < this.config.markers.length; i++) {
-        if (this.config.markers[i] && typeof this.config.markers[i].coordinates != 'undefined') {
-            if (typeof this.config.markers[i].latitude == 'undefined') {
-                var splits = this.config.markers[i].coordinates.split(',');
-                this.config.markers[i].latitude = splits[0];
-            }
-            if (typeof this.config.markers[i].longitude == 'undefined') {
-                var splits = this.config.markers[i].coordinates.split(',');
-                this.config.markers[i].longitude = splits[1];
+    if (typeof this.config.markers == 'object') {
+        for (var i = 0; i < this.config.markers.length; i++) {
+            if (this.config.markers[i] && typeof this.config.markers[i].coordinates != 'undefined') {
+                if (typeof this.config.markers[i].latitude == 'undefined') {
+                    var splits = this.config.markers[i].coordinates.split(',');
+                    this.config.markers[i].latitude = splits[0];
+                }
+                if (typeof this.config.markers[i].longitude == 'undefined') {
+                    var splits = this.config.markers[i].coordinates.split(',');
+                    this.config.markers[i].longitude = splits[1];
+                }
             }
         }
     }
@@ -143,19 +147,21 @@ Kwf.GoogleMap.Map = function(config) {
     if (!this.config.lightMarkers) this.config.lightMarkers = [ ];
     if (typeof this.config.lightMarkers[0] == 'undefined' &&
         (this.config.lightMarkers.longitude || this.config.lightMarkers.coordinates)
-        ) {
+    ) {
         this.config.lightMarkers = [ this.config.lightMarkers ];
     }
 
-    for (var i = 0; i < this.config.lightMarkers.length; i++) {
-        if (this.config.lightMarkers[i].coordinates) {
-            if (typeof this.config.lightMarkers[i].latitude == 'undefined') {
-                var splits = this.config.lightMarkers[i].coordinates.split(',');
-                this.config.lightMarkers[i].latitude = splits[0];
-            }
-            if (typeof this.config.lightMarkers[i].longitude == 'undefined') {
-                var splits = this.config.lightMarkers[i].coordinates.split(',');
-                this.config.lightMarkers[i].longitude = splits[1];
+    if (typeof this.config.ligthMarkers == 'object') {
+        for (var i = 0; i < this.config.lightMarkers.length; i++) {
+            if (this.config.lightMarkers[i].coordinates) {
+                if (typeof this.config.lightMarkers[i].latitude == 'undefined') {
+                    var splits = this.config.lightMarkers[i].coordinates.split(',');
+                    this.config.lightMarkers[i].latitude = splits[0];
+                }
+                if (typeof this.config.lightMarkers[i].longitude == 'undefined') {
+                    var splits = this.config.lightMarkers[i].coordinates.split(',');
+                    this.config.lightMarkers[i].longitude = splits[1];
+                }
             }
         }
     }
@@ -195,10 +201,9 @@ Kwf.GoogleMap.Map = function(config) {
     var container = this.mapContainer.down(".container");
     container.setWidth(this.config.width);
     container.setHeight(this.config.height);
-
 };
 
-Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
+Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
 
     markers: [ ],
     show : function()
@@ -213,8 +218,8 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         }
         var mapOptions = {
             center: new google.maps.LatLng(parseFloat(this.config.latitude), parseFloat(this.config.longitude)),
-            zoom: parseInt(this.config.zoom),
-            panControl: this.config.pan_control,
+            zoom: (typeof this.config.zoom == 'number')? parseInt(this.config.zoom) : 13, //initial zoom has to be set
+            panControl: this.config.panControl,
             zoomControl: this.config.zoom_properties,
             zoomControlOptions: {
                 style: google.maps.ZoomControlStyle[this.config.zoomControlStyle],
@@ -223,7 +228,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
             scaleControl: this.config.scale,
             mapTypeControl: this.config.map_type,
             overviewMapControl: this.config.overview,
-            streetViewControl: this.config.street_view,
+            streetViewControl: this.config.streetViewControl,
             scrollwheel: this.config.scrollwheel
         };
 
@@ -241,9 +246,10 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         }
 
         if (typeof this.config.zoom == 'object'
+            && this.config.zoom != null
             && this.config.zoom[0] && this.config.zoom[1]
             && this.config.zoom[2] && this.config.zoom[3]
-            ) {
+        ) {
             var bounds = new google.maps.LatLngBounds();
             bounds.extend(new google.maps.LatLng(this.config.zoom[0], this.config.zoom[1]));
             bounds.extend(new google.maps.LatLng(this.config.zoom[2], this.config.zoom[3]));
@@ -251,7 +257,8 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         }
 
         if (typeof this.config.markers == 'string') {
-            google.maps.event.addListener(this.gmap, "idle", this._reloadMarkers.createDelegate(
+            if (this.config.dynamicStartPos) this.focusAllLightMarkers();
+            google.maps.event.addListener(this.gmap, "idle", this._reloadMarkersOnMapChange.createDelegate(
                 this, [ ]
             ));
         } else {
@@ -276,16 +283,54 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
         this.fireEvent('show', this);
     },
 
-    _reloadMarkers: function() {
+    _focusAllLightMarkers: false,
+    _focusAllLightMarkersHasListener: false,
+    _alreadyLoaded: false,
+    focusAllLightMarkers: function () {
+        if (!this._focusAllLightMarkersHasListener) {
+            this._focusAllLightMarkersHasListener = true;
+            this.on('reload', function () {
+                if (this._focusAllLightMarkers) {
+                    this._focusAllLightMarkers = false;
+                    this._alreadyLoaded = true;
+
+                    // Calculate center of all markers via gmap
+                    var latlngbounds = new google.maps.LatLngBounds();
+                    this.markers.each(function(n){
+                        if (n.kwfConfig.isLightMarker) latlngbounds.extend(n.getPosition());
+                    });
+                    this.gmap.setCenter(latlngbounds.getCenter());
+                    this.gmap.fitBounds(latlngbounds);
+                }
+            }, this);
+        }
+        this._focusAllLightMarkers = true;
+        this._reloadMarkers(this._reloadParams);
+    },
+
+    _reloadParams: {},
+    setReloadParams: function (params) {
+        this._reloadParams = params;
+    },
+
+    _reloadMarkersOnMapChange: function() {
+        if (this._alreadyLoaded) {
+            this._alreadyLoaded = false;
+            return;
+        }
+        var params = this._reloadParams;
         var bounds = this.gmap.getBounds();
-        var params = { };
         params.lowestLng = bounds.getSouthWest().lng();
         params.lowestLat = bounds.getSouthWest().lat();
         params.highestLng = bounds.getNorthEast().lng();
         params.highestLat = bounds.getNorthEast().lat();
+        this._reloadMarkers(params);
+    },
 
+    _reloadMarkers: function(params) {
+        params.componentId = this.config.componentId;
         if (!this.gmapLoader) {
-            this.gmapLoader = Ext.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
+            this.gmapLoader = Ext2.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
             this.gmapLoader.dom.innerHTML = trlKwf('Loading...');
             this.gmapLoader.alignTo(this.mapContainer, 'tr-tr', [ -10, 50 ]);
         }
@@ -293,22 +338,39 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
 
         this.lastReloadMarkersRequestId = this.ajax.request({
             url: this.config.markers,
-            success: function(response, options) {
-                var ret = Ext.decode(response.responseText);
-                ret.markers.each(function(m) {
+            success: function(response, options, result) {
+                for (var i = 0; i < this.markers.length; i++) {
+                    this.markers[i].keep = false;
+                }
+
+                result.markers.each(function(m) {
                     var doAdd = true;
                     for (var i = 0; i < this.markers.length; i++) {
                         if (this.markers[i].kwfConfig.latitude == m.latitude
                             && this.markers[i].kwfConfig.longitude == m.longitude
-                            ) {
+                            && this.markers[i].kwfConfig.isLightMarker == m.isLightMarker
+                        ) {
+                            this.markers[i].keep = true;
                             doAdd = false;
                             break;
                         }
                     }
                     if (doAdd) this.addMarker(m);
                 }, this);
+
+                var removeMarkers = [];
+                for (var i = 0; i < this.markers.length; i++) {
+                    if (!this.markers[i].keep) {
+                        this.markers[i].setMap(null);
+                        removeMarkers.push(this.markers[i]);
+                    }
+                }
+                for (var i = 0; i < removeMarkers.length; i++) {
+                    this.markers.remove(removeMarkers[i]);
+                }
                 Kwf.callOnContentReady(this.mapContainer, {newRender: true});
                 this.gmapLoader.hide();
+                this.fireEvent('reload', this);
             },
             params: params,
             scope: this
@@ -319,6 +381,7 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
     {
         var marker = this.createMarker(markerConfig);
         marker.kwfConfig = markerConfig;
+        marker.keep = true;
         marker.setMap(this.gmap);
         this.markers.push(marker);
         if (markerConfig.infoHtml) {
@@ -343,24 +406,12 @@ Ext.extend(Kwf.GoogleMap.Map, Ext.util.Observable, {
     getMarkerIcon : function(markerConfig)
     {
         var image = '';
-        if (this._isLightMarker(markerConfig.latitude, markerConfig.longitude)
-            && this.config.lightMarkerSrc
-            ) {
+        if (markerConfig.isLightMarker && this.config.lightMarkerSrc) {
             image = this.config.lightMarkerSrc;
         } else if (this.config.markerSrc) {
             image = this.config.markerSrc;
         }
         return image;
-    },
-
-    _isLightMarker : function(lat, lng) {
-        for (var i = 0; i < this.config.lightMarkers.length; i++) {
-            var m = this.config.lightMarkers[i];
-            if (m.latitude == lat && m.longitude == lng) {
-                return true;
-            }
-        }
-        return false;
     },
 
     /** For images in marker popup **/

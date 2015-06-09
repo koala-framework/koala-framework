@@ -1,5 +1,4 @@
 <?php
-require_once 'Kwf/Exception/Abstract.php';
 class Kwf_Exception_NoLog extends Kwf_Exception_Abstract
 {
     public function getHeader()

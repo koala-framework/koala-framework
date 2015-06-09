@@ -6,7 +6,7 @@ class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_EditSubscriber_Component
     {
         $ret = parent::getSettings();
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => trlKwf('Newsletter Subscriber settings')
+            'componentName' => trlKwfStatic('Newsletter Subscriber settings')
         ));
         return $ret;
     }

@@ -1,7 +1,7 @@
-Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
+Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
     autoHeight: true,
     multiSelect: true,
-    overClass: 'x-view-over',
+    overClass: 'x2-view-over',
     itemSelector: 'div.paragraph-wrap',
     showToolbars: true,
     showDelete: true,
@@ -15,19 +15,19 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
         this.addEvents('delete', 'edit', 'changeVisible', 'changeDeviceVisible', 'changePos',
             'addParagraphMenuShow', 'addParagraph', 'copyParagraph',
             'pasteParagraph', 'copyPasteMenuShow');
-        this.tpl = new Ext.XTemplate(
+        this.tpl = new Ext2.XTemplate(
             '<tpl for=".">',
                 '<div class="paragraph-wrap<tpl if="!visible"> kwc-paragraph-invisible</tpl>" id="kwc-paragraphs-{id}" style="width:'+this.width+'px">',
                     '<div class="kwc-paragraphs-toolbar"></div>',
                     '<div class="webStandard kwc-paragraphs-preview">{preview}</div>',
                 '</div>',
             '</tpl>',
-            '<div class="x-clear"></div>'
+            '<div class="x2-clear"></div>'
         );
 
         //buffer callOnContentReady for better performance when changing multiple rows - which happens when
         //deleting and entry and all below have to be re-numbered
-        this.callOnContentReadyTask = new Ext.util.DelayedTask(function() {
+        this.callOnContentReadyTask = new Ext2.util.DelayedTask(function() {
             Kwf.callOnContentReady(this.el, { newRender: true });
         }, this);
 
@@ -61,8 +61,8 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                 continue;
             }
             node.hasParagraphsToolbarRendered = true;
-            var tbCt = Ext.get(node).down('.kwc-paragraphs-toolbar');
-            var tb = new Ext.Toolbar({
+            var tbCt = Ext2.get(node).down('.kwc-paragraphs-toolbar');
+            var tb = new Ext2.Toolbar({
                 renderTo: tbCt
             });
             var record = this.getRecord(node);
@@ -80,7 +80,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                 this.fireEvent('changeVisible', btn.record);
             },
             icon : '/assets/silkicons/'+(record.get('visible') ? 'tick' : 'cross') + '.png',
-            cls  : 'x-btn-icon'
+            cls  : 'x2-btn-icon'
         });
         if (this.showDeviceVisible) {
             var deviceVisibleMenu = {
@@ -109,7 +109,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                         this.fireEvent('changeDeviceVisible', menu.record, 'onlyShowOnMobile');
                     }
                 }],
-                cls  : 'x-btn-icon'
+                cls  : 'x2-btn-icon'
             };
             if (record.get('device_visible') == 'onlyShowOnMobile') {
                 deviceVisibleMenu.icon = '/assets/kwf/images/devices/smartphone.png';
@@ -125,7 +125,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
             var posCombo = new Kwf.Form.ComboBox({
                 listClass: 'kwc-paragraphs-pos-list',
                 tpl: '<tpl for=".">' +
-                    '<div class="x-combo-list-item<tpl if="visible"> visible</tpl><tpl if="!visible"> invisible</tpl>">'+
+                    '<div class="x2-combo-list-item<tpl if="visible"> visible</tpl><tpl if="!visible"> invisible</tpl>">'+
                         '{pos} - {component_name}'+
                     '</div>'+
                     '</tpl>',
@@ -163,7 +163,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                     this.fireEvent('delete', btn.record);
                 },
                 icon : '/assets/silkicons/bin.png',
-                cls  : 'x-btn-icon'
+                cls  : 'x2-btn-icon'
             });
         }
         if (record.get('edit_components').length == 1) {
@@ -176,7 +176,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                     this.fireEvent('edit', btn.record, Kwf.clone(btn.record.get('edit_components')[0]));
                 },
                 icon : '/assets/silkicons/application_edit.png',
-                cls  : 'x-btn-text-icon'
+                cls  : 'x2-btn-text-icon'
             });
         } else if (record.get('edit_components').length > 1) {
             tb.add('-');
@@ -198,7 +198,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                 text: trlKwf('edit'),
                 menu: menu,
                 icon : '/assets/silkicons/application_edit.png',
-                cls  : 'x-btn-text-icon'
+                cls  : 'x2-btn-text-icon'
             });
         }
         if (this.components) {
@@ -237,7 +237,7 @@ Kwc.Paragraphs.DataView = Ext.extend(Ext.DataView, {
                         }
                     }],
                     icon: '/assets/silkicons/page_white_copy.png',
-                    cls  : 'x-btn-text-icon',
+                    cls  : 'x2-btn-text-icon',
                     record: record,
                     listeners: {
                         scope: this,

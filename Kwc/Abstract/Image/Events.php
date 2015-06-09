@@ -30,13 +30,13 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
         if ($imageData) {
             $typeBase = $c->getComponent()->getBaseType();
             // Kwc_Abstract_Image_Component->getBaseImageUrl is cached in Kwf_Media and uses therefore the base type
-            $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+            $this->fireEvent(new Kwf_Events_Event_Media_Changed(
                 $this->_class, $c, $typeBase
             ));
             $dim = $c->getComponent()->getImageDimensions();
             $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
             foreach ($steps as $step) {
-                $this->fireEvent(new Kwf_Component_Event_Media_Changed(
+                $this->fireEvent(new Kwf_Events_Event_Media_Changed(
                     $this->_class, $c, str_replace('{width}', $step, $typeBase)
                 ));
             }
@@ -50,7 +50,7 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
     }
 
     //gets called when own row gets updated, weather component is visible or not
-    protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
+    protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Events_Event_Row_Abstract $event)
     {
         parent::_onOwnRowUpdateNotVisible($c, $event);
         if ($event->isDirty(array('kwf_upload_id', 'width', 'height',

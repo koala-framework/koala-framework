@@ -1,6 +1,6 @@
-Kwf.Form.GoogleMapsField = Ext.extend(Ext.form.TriggerField,
+Kwf.Form.GoogleMapsField = Ext2.extend(Ext2.form.TriggerField,
 {
-	triggerClass : 'x-form-search-trigger',
+	triggerClass : 'x2-form-search-trigger',
 	readOnly : false,
 	width : 200,
 	onTriggerClick : function(){
@@ -34,4 +34,4 @@ Kwf.Form.GoogleMapsField = Ext.extend(Ext.form.TriggerField,
         }, this);
     }
 });
-Ext.reg('googlemapsfield', Kwf.Form.GoogleMapsField);
+Ext2.reg('googlemapsfield', Kwf.Form.GoogleMapsField);

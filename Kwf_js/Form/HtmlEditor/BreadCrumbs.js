@@ -1,4 +1,4 @@
-Kwf.Form.HtmlEditor.BreadCrumbs = Ext.extend(Ext.util.Observable, {
+Kwf.Form.HtmlEditor.BreadCrumbs = Ext2.extend(Ext2.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.afterMethod('afterRender', this.afterRender, this);
@@ -7,7 +7,7 @@ Kwf.Form.HtmlEditor.BreadCrumbs = Ext.extend(Ext.util.Observable, {
 
     afterRender: function() {
         this.el = this.cmp.wrap.createChild({
-            'class': 'x-toolbar kwf-htmleditor-breadcrumbs'
+            'class': 'x2-toolbar kwf-htmleditor-breadcrumbs'
         });
         this.el.on('click', function(e, target) {
             e.stopEvent();

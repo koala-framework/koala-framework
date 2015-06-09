@@ -1,0 +1,50 @@
+@import "kwf/modernizr";
+@import "compass/utilities/general/clearfix";
+
+.cssClass {
+    ul {
+        @include pie-clearfix;
+        li {
+            display: block;
+            float: left;
+
+            a {
+                display: block;
+                width: auto;
+            }
+            
+            &.hover {
+                div.dropdown {
+                    display: block;
+                }
+            }
+
+            @include modernizr-no(touch) {
+                &:hover {
+                    div.dropdown {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        div.dropdown {
+            position: absolute;
+            display: none;
+
+            ul {
+                margin-bottom: -1px;
+
+                li {
+                    float: none;
+                    margin: 0px;
+
+                    a {
+                        padding: 0px;
+                        float: none;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
+class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
 {
     private $_updates = array();
     private $_pageParentChanges = array();
@@ -8,7 +8,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
     {
         $ret = array();
         $ret[] = array(
-            'event' => 'Kwf_Component_Event_Row_UpdatesFinished',
+            'event' => 'Kwf_Events_Event_Row_UpdatesFinished',
             'callback' => 'onRowUpdatesFinished'
         );
         $ret[] = array(
@@ -72,13 +72,13 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'callback' => 'onPageParentChanged'
         );
         $ret[] = array(
-            'event' => 'Kwf_Component_Event_Media_Changed',
+            'event' => 'Kwf_Events_Event_Media_Changed',
             'callback' => 'onMediaChanged'
         );
         return $ret;
     }
 
-    public function onRowUpdatesFinished(Kwf_Component_Event_Row_UpdatesFinished $event)
+    public function onRowUpdatesFinished(Kwf_Events_Event_Row_UpdatesFinished $event)
     {
         if ($this->_updates) {
             $or = array();
@@ -237,10 +237,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
         //all child components
         $changedComponent = $event->component;
-        $changedChildIdPostfix = substr($changedComponent->componentId, strlen($changedComponent->getPageOrRoot()->componentId));
 
         foreach ($this->_getParentComponentsForRecursive($event) as $component) {
             $pattern = $component->getExpandedComponentId() . '%';
+            $changedChildIdPostfix = substr($changedComponent->componentId, strlen($component->componentId));
             if ($changedChildIdPostfix) {
                 $pattern .= $changedChildIdPostfix . '%';
             }
@@ -319,6 +319,34 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
             'newParentId' => $newParentId,
             'componentId' => $event->component->componentId
         );
+
+        $oldPlugins = array();
+        $c = $event->oldParent;
+        while ($c) {
+            $oldPlugins = array_merge($oldPlugins, Kwc_Abstract::getSetting($c->componentClass, 'pluginsInherit'));
+            $c = $c->parent;
+        }
+
+        $newPlugins = array();
+        $c = $event->newParent;
+        while ($c) {
+            $oldPlugins = array_merge($oldPlugins, Kwc_Abstract::getSetting($c->componentClass, 'pluginsInherit'));
+            $c = $c->parent;
+        }
+
+        $oldPlugins = array_unique($oldPlugins);
+        $newPlugins = array_unique($newPlugins);
+        sort($oldPlugins);
+        sort($newPlugins);
+
+        if ($oldPlugins != $newPlugins) {
+            //delete all components as plugins are in view cache
+            $this->_updates[] = array(
+                'type' => 'component',
+                'expanded_component_id' => $event->component->getExpandedComponentId() . '%'
+            );
+            $this->_log("type=component expanded_component_id={$event->component->getExpandedComponentId()}%");
+        }
     }
 
     private function _getParentComponentsForRecursive(Kwf_Component_Event_Component_RecursiveAbstract $event)
@@ -348,16 +376,16 @@ class Kwf_Component_Events_ViewCache extends Kwf_Component_Events
 
     private function _log($msg)
     {
-        $log = Kwf_Component_Events_Log::getInstance();
+        $log = Kwf_Events_Log::getInstance();
         if ($log) {
             $log->log("view cache clear $msg", Zend_Log::INFO);
         }
     }
 
-    public function onMediaChanged(Kwf_Component_Event_Media_Changed $event)
+    public function onMediaChanged(Kwf_Events_Event_Media_Changed $event)
     {
         Kwf_Media::clearCache($event->class, $event->component->componentId, $event->type);
-        $log = Kwf_Component_Events_Log::getInstance();
+        $log = Kwf_Events_Log::getInstance();
         if ($log) {
             $log->log("media cache clear class=$event->class id={$event->component->componentId} type=$event->type", Zend_Log::INFO);
         }

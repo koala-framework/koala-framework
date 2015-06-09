@@ -1,5 +1,5 @@
 
-Kwf.ViewportWithoutMenu = Ext.extend(Ext.Viewport, {
+Kwf.ViewportWithoutMenu = Ext2.extend(Ext2.Viewport, {
     layout: 'fit',
     mabySubmit: function(cb, options) {
         var ret = true;
@@ -14,19 +14,15 @@ Kwf.ViewportWithoutMenu = Ext.extend(Ext.Viewport, {
 
 });
 
-Kwf.Viewport = Ext.extend(Kwf.ViewportWithoutMenu, {
+Kwf.Viewport = Ext2.extend(Kwf.ViewportWithoutMenu, {
     initComponent: function()
     {
-        Kwf.menu = Ext.ComponentMgr.create({
+        Kwf.menu = Ext2.ComponentMgr.create({
                     xtype: 'kwf.menu',
                     region: 'north',
                     height: 30
                 });
-        this.items.push({
-            xtype: 'kwf.menu',
-            region: 'north',
-            height: 30
-        });
+        this.items.push(Kwf.menu);
         this.layout = 'border';
         Kwf.Viewport.superclass.initComponent.call(this);
     }

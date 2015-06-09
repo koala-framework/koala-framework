@@ -21,7 +21,8 @@ class Kwc_Basic_ImageEnlarge_Form extends Kwc_Abstract_Image_Form
 
     private static function _findDimensionByChildComponentClassRecursive($class)
     {
-        if (is_instance_of($class, 'Kwc_Basic_ImageEnlarge_EnlargeTag_Component')) {
+        $parents = Kwc_Abstract::getSetting($class, 'parentClasses');
+        if (in_array('Kwc_Basic_ImageEnlarge_EnlargeTag_Component', $parents)) {
             return Kwc_Abstract::getSetting($class, 'dimension');
         } else {
             foreach (Kwc_Abstract::getChildComponentClasses($class) as $childClass) {

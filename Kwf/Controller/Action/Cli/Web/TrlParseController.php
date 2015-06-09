@@ -32,7 +32,7 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
     private $_languages = array();
     public function indexAction()
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
         $modelKwf = new Kwf_Trl_Model_Kwf();
         $modelWeb = new Kwf_Trl_Model_Web();
@@ -88,7 +88,7 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
 
     public function checkIdsAction()
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
         $models = array(
             Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Kwf'),
@@ -125,7 +125,7 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
 
     public function checkDoubleEntriesAction()
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
         $m = Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Kwf');
         $entries = array();
@@ -156,9 +156,9 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
 
     public function copyAction()
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
         $source = $this->_getParam('source');
         $target = $this->_getParam('target');
         if (!$source || !$target) throw new Kwf_Exception_Client("source/target parameter required");
@@ -181,7 +181,7 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
 
     public function changeWebCodeLanguageAction()
     {
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
         $target = $this->_getParam('target');
         if (!$target) throw new Kwf_Exception_Client("target parameter required");

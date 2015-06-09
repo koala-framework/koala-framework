@@ -8,7 +8,7 @@ class Kwf_Form_Field_Panel extends Kwf_Form_Container_Abstract
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('panel');
-        $this->setBaseCls('x-plain');
+        $this->setBaseCls('x2-plain');
     }
     public function getTemplateVars($values, $namePostfix = '', $idPrefix = '')
     {

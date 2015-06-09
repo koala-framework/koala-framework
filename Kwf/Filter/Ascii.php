@@ -1,6 +1,6 @@
 <?php
 /**
- * Ersetzt alles außer a-z, 0-9 - durch _. So wie alphanum VType vom Ext.
+ * Ersetzt alles außer a-z, 0-9 - durch _. So wie alphanum VType vom Ext2.
  *
  * @package Filter
  */

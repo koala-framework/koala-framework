@@ -21,7 +21,7 @@ class Kwc_Form_Dynamic_Trl_Component extends Kwc_Abstract_Composite_Trl_Componen
 
         $ret['data'] = $data;
         $ret['chained'] = $data->chained;
-        $ret['linkTemplate'] = self::getTemplateFile($data->chained->componentClass);
+        $ret['template'] = self::getTemplateFile($data->chained->componentClass);
 
         $ret['form'] = $this->getData()->getChildComponent('-form');
 

@@ -1,7 +1,7 @@
 
-Ext.namespace("Kwf.User.Grid");
+Ext2.namespace("Kwf.User.Grid");
 
-Kwf.User.Grid.Index = Ext.extend(Ext.Panel, {
+Kwf.User.Grid.Index = Ext2.extend(Ext2.Panel, {
 
     initComponent: function() {
         var bindings = [];
@@ -34,7 +34,7 @@ Kwf.User.Grid.Index = Ext.extend(Ext.Panel, {
         }
 
         if (typeof commentsGrid != 'undefined' || typeof logGrid != 'undefined') {
-            var southPanel = new Ext.Panel({
+            var southPanel = new Ext2.Panel({
                 layout: 'border',
                 items: southPanelItems,
                 region: 'south',

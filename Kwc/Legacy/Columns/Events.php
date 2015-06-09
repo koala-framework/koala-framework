@@ -15,7 +15,7 @@ class Kwc_Legacy_Columns_Events extends Kwc_Abstract_List_Events
         return $ret;
     }
 
-    public function onRowInsertOrDelete(Kwf_Component_Event_Row_Abstract $event)
+    public function onRowInsertOrDelete(Kwf_Events_Event_Row_Abstract $event)
     {
         parent::onRowInsertOrDelete($event);
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(
@@ -30,7 +30,7 @@ class Kwc_Legacy_Columns_Events extends Kwc_Abstract_List_Events
         }
     }
 
-    public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onRowUpdate(Kwf_Events_Event_Row_Updated $event)
     {
         parent::onRowUpdate($event);
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId(

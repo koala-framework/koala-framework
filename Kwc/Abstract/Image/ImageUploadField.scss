@@ -13,20 +13,20 @@
     position: static;
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .previewImage {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .previewImage {
     margin-right: 0px;
     padding: 0px;
     @include box-sizing(border-box);
     border-color: #ccc;
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .box {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .box {
     width: 390px;
     height: 184px;
     border: none;
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .box {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .box {
     float: left;
     border-color: #CCCCCC;
     border-width: 4px;
@@ -35,10 +35,10 @@
     height: 176px;
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .deleteButton {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .deleteButton {
     display: none;
 }
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .deleteButton {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .deleteButton {
     position: absolute;
     bottom: 5px;
     right: 5px;
@@ -46,14 +46,14 @@
     @include opacity(0.3);
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .uploadButton,
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .swfupload  {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .uploadButton,
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .swfupload  {
     position: absolute;
     bottom: 100px;
     right: 120px;
 }
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .uploadButton,
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .swfupload {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .uploadButton,
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .swfupload {
     bottom: 5px;
     right: 85px;
     @include opacity(0.3);
@@ -67,13 +67,13 @@
 }
 
 .kwc-abstract-image-image-upload-big-preview:hover .kwc-dimensionfield-container .kwc-abstract-image-dimension-cropbutton,
-.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .uploadButton,
-.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .swfupload,
-.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .deleteButton {
+.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .uploadButton,
+.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .swfupload,
+.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .deleteButton {
     @include opacity(1);
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .info-container {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .info-container {
     position: absolute;
     top: 0px;
     right: 5px;
@@ -94,44 +94,44 @@
 .image-uploaded .kwc-abstract-image-dimension-name {
     font-weight: normal;
     width: auto;
-    top: 17px;
+    top: 3px;
     left: 110px;
     color: white;
     z-index: 1;
     display: none;
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .kwc-abstract-image-image-upload-file .box .hover-background {
     background-image: url('/assets/kwf/images/cropimage/blackPx85.png');
-    height: 35px;
+    height: 20px;
     width: 390px;
     top: 0px;
     position: absolute;
     display: none;
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background.error {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .kwc-abstract-image-image-upload-file .box .hover-background.error {
     background-image: url('/assets/kwf/images/cropimage/redPx85.png');
     height: auto;
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background .message {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .kwc-abstract-image-image-upload-file .box .hover-background .message {
     display: none;
 }
-.kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background.error .message {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .kwc-abstract-image-image-upload-file .box .hover-background.error .message {
     display: block;
     color: white;
     font-weight: bold;
-    margin-top: 30px;
+    margin-top: 15px;
     padding: 5px;
 }
 
 .kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-dimension-name,
-.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .info-container,
-.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background,,
+.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .info-container,
+.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x2-form-element .kwc-abstract-image-image-upload-file .box .hover-background,,
 .kwc-abstract-image-image-upload-big-preview.error .kwc-abstract-image-dimension-name,
-.kwc-abstract-image-image-upload-big-preview.error .kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .info-container,
-.kwc-abstract-image-image-upload-big-preview.error .kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .box .hover-background {
+.kwc-abstract-image-image-upload-big-preview.error .kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .info-container,
+.kwc-abstract-image-image-upload-big-preview.error .kwc-abstract-image-imageuploadfile-container.x2-form-element .kwc-abstract-image-image-upload-file .box .hover-background {
     display: block;
 }
 
@@ -139,7 +139,7 @@
     position: relative;
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .hint {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .hint {
     display: inline;
     position: absolute;
     color: #CCCCCC;
@@ -151,15 +151,15 @@
     top: 90px;
     text-transform: uppercase;
 }
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField.file-uploaded .hint {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .hint {
     display: none;
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .swfUploadField .box .empty {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .box .empty {
     display: none;
 }
 
-.kwc-abstract-image-imageuploadfile-container.x-form-element .kwc-abstract-image-image-upload-file .filedescription .filename {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .kwc-abstract-image-image-upload-file .filedescription .filename {
     white-space: nowrap;
     overflow: hidden;
 }

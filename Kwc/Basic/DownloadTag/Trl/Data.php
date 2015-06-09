@@ -20,8 +20,6 @@ class Kwc_Basic_DownloadTag_Trl_Data extends Kwf_Component_Data
                 return Kwf_Media::getUrl($this->componentClass, $this->componentId, 'default', $filename);
             }
             return $this->getChildComponent('-download')->url;
-        } else if ($var == 'rel') {
-            return $this->chained->rel;
         } else {
             return parent::__get($var);
         }
@@ -30,5 +28,10 @@ class Kwc_Basic_DownloadTag_Trl_Data extends Kwf_Component_Data
     public function getAbsoluteUrl()
     {
         return $this->url;
+    }
+
+    public function getLinkDataAttributes()
+    {
+        return $this->chained->getLinkDataAttributes();
     }
 }

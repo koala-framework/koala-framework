@@ -5,8 +5,12 @@ class Kwf_Controller_Action_Maintenance_UpdateController extends Kwf_Controller_
 
     public function indexAction()
     {
+        if (!file_exists('build/assets')) {
+            throw new Kwf_Exception_Client("Installation incomplete: 'build' folder does not exist. You can generate it by calling 'php bootstrap.php build' on commandline. On production servers you should upload locally generated build.");
+        }
+
         $this->view->typeNames = Kwf_Util_ClearCache::getInstance()->getTypeNames();
-        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('Update');
+        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('Maintenance');
         $this->view->xtype = 'kwf.maintenance.update';
         $this->view->useBackgroundProcess = !!Kwf_Config::getValue('server.phpCli');
     }
@@ -14,15 +18,14 @@ class Kwf_Controller_Action_Maintenance_UpdateController extends Kwf_Controller_
     protected function _initColumns()
     {
         $doneNames = Kwf_Util_Update_Helper::getExecutedUpdatesNames();
-        $updates = Kwf_Util_Update_Helper::getUpdates(0, 9999999);
+        $updates = Kwf_Util_Update_Helper::getUpdates();
         $data = array();
         $id = 0;
         foreach ($updates as $k=>$u) {
             $data[] = array(
                 'id' => ++$id,
-                'revision' => $u->getRevision(),
                 'name' => $u->getUniqueName(),
-                'executed' => in_array($u->getUniqueName(), $doneNames)
+                'executed' => in_array($u->getUniqueName(), $doneNames) || ($u->getLegacyName() && in_array($u->getLegacyName(), $doneNames))
             );
         }
         $this->_model = new Kwf_Model_FnF(array(
@@ -49,9 +52,9 @@ class Kwf_Controller_Action_Maintenance_UpdateController extends Kwf_Controller_
     public static function executeUpdates($request, $view)
     {
         $doneNames = Kwf_Util_Update_Helper::getExecutedUpdatesNames();
-        $updates = Kwf_Util_Update_Helper::getUpdates(0, 9999999);
+        $updates = Kwf_Util_Update_Helper::getUpdates();
         foreach ($updates as $k=>$u) {
-            if (in_array($u->getUniqueName(), $doneNames)) {
+            if (in_array($u->getUniqueName(), $doneNames) || ($u->getLegacyName() && in_array($u->getLegacyName(), $doneNames))) {
                 unset($updates[$k]);
             }
         }

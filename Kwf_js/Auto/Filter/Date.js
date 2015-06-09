@@ -17,7 +17,7 @@ Kwf.Auto.Filter.Date = function(config)
 
 };
 
-Ext.extend(Kwf.Auto.Filter.Date, Kwf.Auto.Filter.Abstract, {
+Ext2.extend(Kwf.Auto.Filter.Date, Kwf.Auto.Filter.Abstract, {
     reset: function() {
         this.field.reset();
     },

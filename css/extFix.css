@@ -1,25 +1,25 @@
 .ext-el-mask {
     z-index:9000;
 }
-.comboboxtext .x-form-field-wrap .x-form-trigger {
+.comboboxtext .x2-form-field-wrap .x2-form-trigger {
    background-image:url(/assets/kwf/images/gray/form/combo-box-text.gif);
 }
 
 /* Damit das Flash nicht neustartet wenn eine Mask darüber liegt */
-.x-masked object, .x-masked embed {
+.x2-masked object, .x2-masked embed {
     visibility: visible !important;
 }
-.x-masked {
+.x2-masked {
     overflow: visible !important;
 }
 
 /*
 möglicherweise für frontend wenn es da stört dass das flash neu startet
-body.x-masked-relative {
+body.x2-masked-relative {
     position: static !important;
 }
 */
 
-body.ext-gecko .x-window-body .x-form-item {
+body.ext-gecko .x2-window-body .x2-form-item {
     overflow: hidden;
 }

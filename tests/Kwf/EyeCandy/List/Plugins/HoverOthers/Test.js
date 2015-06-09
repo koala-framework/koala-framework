@@ -1,5 +1,5 @@
 Kwf.onContentReady(function() {
-    Ext.query('.testItemWrapper').forEach(function(list) {
+    Ext2.query('.testItemWrapper').forEach(function(list) {
         if (!list.kwfList) {
             list.kwfList = new Kwf.EyeCandy.List({
                 el: list,

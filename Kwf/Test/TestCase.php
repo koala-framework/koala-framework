@@ -7,7 +7,7 @@ class Kwf_Test_TestCase extends PHPUnit_Framework_TestCase
     {
         Kwf_Component_Data_Root::setComponentClass(false);
         Kwf_Component_Cache::setInstance(Kwf_Component_Cache::CACHE_BACKEND_FNF);
-        Kwf_Component_ModelObserver::getInstance()->setSkipFnF(false);
+        Kwf_Events_ModelObserver::getInstance()->setSkipFnF(false);
 
         //clear cache as tests use new upload ids
         $dir = Kwf_Config::getValue('uploads') . "/mediaprescale";
@@ -20,11 +20,14 @@ class Kwf_Test_TestCase extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        Kwf_Component_ModelObserver::getInstance()->setSkipFnF(true);
+        Kwf_Events_ModelObserver::getInstance()->setSkipFnF(true);
         Kwf_Component_Data_Root::reset();
         Kwf_Component_Cache::clearInstance();
         Kwf_Model_Abstract::clearInstances();
+        Kwf_Events_Dispatcher::clearCache();
+        Kwf_Events_Subscriber::clearInstances();
         Kwc_FulltextSearch_MetaModel::clearInstance();
+        Kwf_Trl::getInstance()->unsetTrlElements();
     }
 
     public static function assertValidHtml($uri)

@@ -15,16 +15,30 @@ class Kwf_Assets_Package_TestPackage extends Kwf_Assets_Package
         }
         $this->_rootComponentClass = $rootComponentClass;
 
-        $testDependenciesIni = KWF_PATH.'/tests/'.str_replace('_', '/', $testDependenciesIni).'/dependencies.ini';
+        $testDependenciesIni = str_replace('_', '/', $testDependenciesIni).'/dependencies.ini';
+        if (file_exists('tests/'.$testDependenciesIni)) {
+            $testDependenciesIni = 'tests/'.$testDependenciesIni;
+        } else if (file_exists(KWF_PATH.'/tests/'.$testDependenciesIni)) {
+            $testDependenciesIni = KWF_PATH.'/tests/'.$testDependenciesIni;
+        }
         $providers = array();
         $providers[] = new Kwf_Assets_Provider_Ini(KWF_PATH.'/dependencies.ini');
         $providers[] = new Kwf_Assets_Provider_Ini($testDependenciesIni);
+        $providers = array_merge($providers, Kwf_Assets_ProviderList_Abstract::getVendorProviders());
+        if (file_exists('dependencies.ini')) {
+            $providers[] = new Kwf_Assets_Provider_Ini('dependencies.ini');
+        }
         $providers[] = new Kwf_Assets_Provider_IniNoFiles();
         $providers[] = new Kwf_Assets_Provider_Components($rootComponentClass);
         $providers[] = new Kwf_Assets_Provider_Dynamic();
+        $providers[] = new Kwf_Assets_TinyMce_Provider();
         $providers[] = new Kwf_Assets_Provider_KwfUtils();
         $providers[] = new Kwf_Assets_Provider_DefaultAssets();
+        $providers[] = new Kwf_Assets_Provider_AtRequires();
+        $providers[] = new Kwf_Assets_Provider_ViewsUser();
         $providers[] = new Kwf_Assets_Provider_ErrorHandler();
+        $providers[] = new Kwf_Assets_Provider_JsClassKwf();
+        $providers[] = new Kwf_Assets_Modernizr_Provider();
         $providerList = new Kwf_Assets_ProviderList_Abstract($providers);
         parent::__construct($providerList, $dependencyName);
     }

@@ -8,11 +8,15 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
 
     public function indexAction()
     {
+        if (Kwf_Setup::getBaseUrl() === null || !Kwf_Config::getValue('server.domain')) {
+            throw new Kwf_Exception_Client("Before running setup please set server.domain and server.baseUrl in config.local.ini");
+        }
 
         if (file_exists('update')) {
             //for pre 3.3 webs, update file got replaced by kwf_update table
             throw new Kwf_Exception_Client("Application seems to be set up already. (update file exists)");
         }
+
 
         try {
             Kwf_Registry::get('db');
@@ -36,26 +40,37 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
             throw new Kwf_Exception_Client("Fetching Tables failed: ".$e->getMessage());
         }
         if (in_array('kwf_update', $tables)) {
-            throw new Kwf_Exception_Client("Application seems to be set up already. (kwf_update table exists)");
+            echo "Application seems to be set up already. (kwf_update table exists)\n";
+            echo "Executing update...\n";
+            $this->forward('index', 'update');
+            return;
         }
         if ($tables) {
             throw new Kwf_Exception_Client("Database not empty, incomplete kwf installation or other application already exists in this database.");
         }
 
         $updates = array();
-        foreach (Kwf_Util_Update_Helper::getUpdateTags() as $tag) {
-            $file = KWF_PATH.'/setup/'.$tag.'.sql';
-            if (file_exists($file)) {
-                $update = new Kwf_Update_Sql(0, null);
-                $update->sql = file_get_contents($file);
-                $updates[] = $update;
+        if (file_exists('setup/initial/dump.sql')) {
+            $updates[] = new Kwf_Update_Setup_InitialDb('setup/initial/dump.sql');
+            if (file_exists('setup/initial/uploads')) {
+                $updates[] = new Kwf_Update_Setup_InitialUploads('setup/initial/uploads');
             }
+        } else {
+
+            $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates());
+
+            foreach (Kwf_Util_Update_Helper::getUpdateTags() as $tag) {
+                $file = KWF_PATH.'/setup/'.$tag.'.sql';
+                if (file_exists($file)) {
+                    $update = new Kwf_Update_Sql(0, null);
+                    $update->sql = file_get_contents($file);
+                    $updates[] = $update;
+                }
+            }
+
+            $updates[] = new Kwf_Update_Setup_InitialDb('setup/setup.sql');
+            $updates[] = new Kwf_Update_Setup_InitialUploads('setup/uploads');
         }
-
-        $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates(0, 9999999));
-
-        $updates[] = new Kwf_Update_Setup_InitialDb();
-        $updates[] = new Kwf_Update_Setup_InitialUploads();
 
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,

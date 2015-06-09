@@ -48,10 +48,13 @@ class Kwf_View_Ext extends Kwf_View
         }
         $ext['viewport'] = $viewport;
 
-        $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
-        $user = Zend_Registry::get('userModel')->getAuthedUser();
-        if ($user) {
-            $ext['user'] = "$user->email, id $user->id, $user->role";
+        $ext['userRole'] = 'guest';
+        if (Zend_Registry::get('userModel')) {
+            $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
+            $user = Zend_Registry::get('userModel')->getAuthedUser();
+            if ($user) {
+                $ext['user'] = "$user->email, id $user->id, $user->role";
+            }
         }
         $this->ext = $ext;
         $this->extTemplate = 'ext.tpl';
@@ -60,17 +63,20 @@ class Kwf_View_Ext extends Kwf_View
         }
 
         $this->applicationName = Zend_Registry::get('config')->application->name;
+        $this->favicon = self::getFavicon();
+    }
 
+    public static function getFavicon()
+    {
         if (Kwf_Registry::get('config')->ext->favicon) {
-            $this->favicon = Kwf_Registry::get('config')->ext->favicon;
+            return Kwf_Registry::get('config')->ext->favicon;
         } else if (file_exists('images/favicon.ico')) {
             $ico = new Kwf_Asset('images/favicon.ico', 'web');
             $fx = Kwf_Registry::get('config')->ext->faviconFx;
             if (!$fx) $fx = array();
             else if (is_string($fx)) $fx = array($fx);
-            $this->favicon = $ico->toString($fx);
-        } else {
-            $this->favicon = null;
+            return $ico->toString($fx);
         }
+        return null;
     }
 }

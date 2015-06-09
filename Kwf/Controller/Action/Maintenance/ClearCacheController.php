@@ -3,8 +3,12 @@ class Kwf_Controller_Action_Maintenance_ClearCacheController extends Kwf_Control
 {
     public function indexAction()
     {
+        if (!file_exists('build/assets')) {
+            throw new Kwf_Exception_Client("Installation incomplete: 'build' folder does not exist. You can generate it by calling 'php bootstrap.php build' on commandline. On production servers you should upload locally generated build.");
+        }
+
         $this->view->typeNames = Kwf_Util_ClearCache::getInstance()->getTypeNames();
-        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('ClearCache');
+        $this->view->assetsPackage = Kwf_Assets_Package_Maintenance::getInstance('Maintenance');
         $this->view->xtype = 'kwf.maintenance.clearCache';
     }
 

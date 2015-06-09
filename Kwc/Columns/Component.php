@@ -6,7 +6,9 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Columns');
-        $ret['componentIcon'] = new Kwf_Asset('application_tile_horizontal');
+        $ret['componentIcon'] = 'application_tile_horizontal';
+        $ret['componentCategory'] = 'layout';
+        $ret['componentPriority'] = 100;
         $ret['childModel'] = 'Kwc_Columns_Model';
 
         $ret['generators']['child'] = array(
@@ -67,6 +69,11 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
                 'columns' => 4,
                 'colSpans' => array(1,1,1,1),
                 'name' => "4 $columnsTrl (25% - 25% - 25% - 25%)"
+            ),
+            '5col-20_20_20_20_20' => array(
+                'columns' => 5,
+                'colSpans' => array(1,1,1,1,1),
+                'name' => "5 $columnsTrl (20% - 20% - 20% - 20% - 20%)"
             )
         );
         return $ret;
@@ -74,17 +81,14 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
 
     public function getChildModel()
     {
-        return self::getColumnsModel($this->getData()->componentClass);
+        return self::createChildModel($this->getData()->componentClass);
     }
 
-    public static function getColumnsModel($componentClass)
+    public static function createChildModel($componentClass)
     {
-        static $models = array();
-        if (!isset($models[$componentClass])) {
-            $m = Kwc_Abstract::getSetting($componentClass, 'childModel');
-            $models[$componentClass] = new $m(array('componentClass' => $componentClass));
-        }
-        return $models[$componentClass];
+        return Kwc_Columns_ModelFactory::getModelInstance(array(
+            'componentClass' => $componentClass
+        ));
     }
 
     public function getTemplateVars()
@@ -108,6 +112,9 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
             if ($i == count($columns['colSpans'])) $cls .= " lineLast";
             $ret['listItems'][$key]['class'] .= $cls;
             ($i == count($columns['colSpans'])) ? $i = 1 : $i++;
+            if (!$ret['listItems'][$key]['data']->hasContent()) {
+                $ret['listItems'][$key]['class'] .= ' emptyContent';
+            }
         }
         return $ret;
     }

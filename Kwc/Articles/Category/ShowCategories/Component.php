@@ -5,7 +5,7 @@ class Kwc_Articles_Category_ShowCategories_Component extends Kwc_Directories_Cat
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Articles') . '.' . trlKwfStatic('Show categories');
-        $ret['componentIcon'] = new Kwf_Asset('newspaper');
+        $ret['componentIcon'] = 'newspaper';
         $ret['showDirectoryClass'] = 'Kwc_Articles_Directory_Component';
         return $ret;
     }

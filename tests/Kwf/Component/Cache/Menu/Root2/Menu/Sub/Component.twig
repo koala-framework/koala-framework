@@ -1,0 +1,16 @@
+Sub {{ data.componentId }}<br />
+<div class="{{ cssClass }}">
+    <ul class="menu">
+        {% for m in menu %}
+            <li class="{{ m.class }}">
+                {% block menuLink %}
+                {{ renderer.componentLink(m.data, "#{linkPrefix}#{m.text}") }}
+                {% endblock %}
+                {% if not m.last %}{{ separator }}{% endif %}
+                {% if subMenu is defined and m.current is defined and m.current %}
+                    {{ renderer.component(subMenu) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>

@@ -9,7 +9,9 @@ class Kwc_Columns_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
     public function preDispatch()
     {
         $masterComponentClass = Kwc_Abstract::getSetting($this->_getParam('class'), 'masterComponentClass');
-        $this->setModel(Kwc_Columns_Component::getColumnsModel($masterComponentClass));
+        $this->setModel(Kwc_Columns_ModelFactory::getModelInstance(array(
+            'componentClass' => $masterComponentClass
+        )));
         parent::preDispatch();
     }
 

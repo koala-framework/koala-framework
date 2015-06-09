@@ -1,5 +1,5 @@
 
-Kwf.Form.Hidden = Ext.extend(Ext.form.Hidden, {
+Kwf.Form.Hidden = Ext2.extend(Ext2.form.Hidden, {
     initComponent: function() {
         this.addEvents('changevalue');
         Kwf.Form.Hidden.superclass.initComponent.call(this);
@@ -9,4 +9,4 @@ Kwf.Form.Hidden = Ext.extend(Ext.form.Hidden, {
         this.fireEvent('changevalue', v);
     }
 });
-Ext.reg('hidden', Kwf.Form.Hidden);
+Ext2.reg('hidden', Kwf.Form.Hidden);

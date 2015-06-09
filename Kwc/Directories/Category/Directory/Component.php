@@ -11,7 +11,7 @@ class Kwc_Directories_Category_Directory_Component extends Kwc_Directories_ItemP
         $ret['generators']['detail']['nameColumn'] = 'name';
 
         // zB für Kategorien Box
-        $ret['categoryName'] = trlKwf('Categories');
+        $ret['categoryName'] = trlKwfStatic('Categories');
 
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Directories/Category/Directory/Plugin.js';
 

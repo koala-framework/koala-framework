@@ -7,43 +7,43 @@ class Kwc_Directories_Item_DirectoryNoAdmin_Events extends Kwc_Abstract_Events
         $generator = Kwf_Component_Generator_Abstract::getInstance($this->_class, 'detail');
         $ret[] = array(
             'class' => get_class($generator->getModel()),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onChildRowUpdate'
         );
         $ret[] = array(
             'class' => get_class($generator->getModel()),
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onChildRowInsert'
         );
         $ret[] = array(
             'class' => get_class($generator->getModel()),
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onChildRowDelete'
         );
         $ret[] = array(
             'class' => get_class($generator->getModel()),
-            'event' => 'Kwf_Component_Event_Model_Updated',
+            'event' => 'Kwf_Events_Event_Model_Updated',
             'callback' => 'onChildModelUpdated'
         );
         return $ret;
     }
 
-    public function onChildRowUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onChildRowUpdate(Kwf_Events_Event_Row_Updated $event)
     {
         $this->fireEvent(new Kwc_Directories_List_EventItemUpdated($this->_class, $event->row->{$event->row->getModel()->getPrimaryKey()}));
     }
 
-    public function onChildRowInsert(Kwf_Component_Event_Row_Inserted $event)
+    public function onChildRowInsert(Kwf_Events_Event_Row_Inserted $event)
     {
         $this->fireEvent(new Kwc_Directories_List_EventItemInserted($this->_class, $event->row->{$event->row->getModel()->getPrimaryKey()}));
     }
 
-    public function onChildRowDelete(Kwf_Component_Event_Row_Deleted $event)
+    public function onChildRowDelete(Kwf_Events_Event_Row_Deleted $event)
     {
         $this->fireEvent(new Kwc_Directories_List_EventItemDeleted($this->_class, $event->row->{$event->row->getModel()->getPrimaryKey()}));
     }
 
-    public function onChildModelUpdated(Kwf_Component_Event_Model_Updated $event)
+    public function onChildModelUpdated(Kwf_Events_Event_Model_Updated $event)
     {
         $this->fireEvent(new Kwc_Directories_List_EventItemsUpdated($this->_class));
     }

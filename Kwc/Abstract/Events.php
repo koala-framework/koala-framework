@@ -4,15 +4,17 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
     public function getListeners()
     {
         $ret = array();
-        if (Kwc_Abstract::hasSetting($this->_class, 'ownModel')) {
+        $cls = strpos($this->_class, '.') ? substr($this->_class, 0, strpos($this->_class, '.')) : $this->_class;
+        $m = call_user_func(array($cls, 'createOwnModel'), $this->_class);
+        if ($m) {
             $ret[] = array(
-                'class' => Kwc_Abstract::getSetting($this->_class, 'ownModel'),
-                'event' => 'Kwf_Component_Event_Row_Updated',
+                'class' => $m,
+                'event' => 'Kwf_Events_Event_Row_Updated',
                 'callback' => 'onOwnRowUpdate'
             );
             $ret[] = array(
-                'class' => Kwc_Abstract::getSetting($this->_class, 'ownModel'),
-                'event' => 'Kwf_Component_Event_Row_Inserted',
+                'class' => $m,
+                'event' => 'Kwf_Events_Event_Row_Inserted',
                 'callback' => 'onOwnRowUpdate'
             );
         }
@@ -20,17 +22,17 @@ class Kwc_Abstract_Events extends Kwf_Component_Abstract_Events
     }
 
     //gets called when own row gets updated and component is visible
-    protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
+    protected function _onOwnRowUpdate(Kwf_Component_Data $c, Kwf_Events_Event_Row_Abstract $event)
     {
     }
 
     //gets called when own row gets updated, weather component is visible or not
-    protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Component_Event_Row_Abstract $event)
+    protected function _onOwnRowUpdateNotVisible(Kwf_Component_Data $c, Kwf_Events_Event_Row_Abstract $event)
     {
     }
 
     //override _onOwnRowUpdate to implement custom functionality
-    public final function onOwnRowUpdate(Kwf_Component_Event_Row_Abstract $event)
+    public final function onOwnRowUpdate(Kwf_Events_Event_Row_Abstract $event)
     {
         $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
             $event->row->component_id, array('ignoreVisible'=>true)

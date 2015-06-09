@@ -1,11 +1,11 @@
-Ext.form.TriggerField.prototype.helpTextOffset = [10+13, 2]; //js ist supa :D
+Ext2.form.TriggerField.prototype.helpTextOffset = [10+13, 2]; //js ist supa :D
 
-//borrowed from http://www.sencha.com/forum/showthread.php?84612-2.x-TriggerField-width-problem-in-TabPanel-with-deferredRender-false
-Ext.form.TriggerField.override({
+//borrowed from http://www.sencha.com/forum/showthread.php?84612-2.x2-TriggerField-width-problem-in-TabPanel-with-deferredRender-false
+Ext2.form.TriggerField.override({
     defaultTriggerWidth: 17,
 
     onResize: function(w, h) {
-        Ext.form.TriggerField.superclass.onResize.call(this, w, h);
+        Ext2.form.TriggerField.superclass.onResize.call(this, w, h);
         var tw = this.getTriggerWidth();
         if(typeof w == 'number'){
             this.el.setWidth(this.adjustWidth('input', w - tw));
@@ -23,11 +23,11 @@ Ext.form.TriggerField.override({
     }
 });
 
-Ext.form.TwinTriggerField.override({
+Ext2.form.TwinTriggerField.override({
     defaultTriggerWidth: 17,
     getTriggerWidth: function() {
         var tw = 0;
-        Ext.each(this.triggers, function(t, index) {
+        Ext2.each(this.triggers, function(t, index) {
             var triggerIndex = 'Trigger' + (index + 1),
                 w = t.getWidth();
             if (w === 0 && !this['hidden' + triggerIndex]) {

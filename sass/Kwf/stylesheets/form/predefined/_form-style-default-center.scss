@@ -1,0 +1,33 @@
+@import "form/form-styles";
+
+@mixin form-style-default-center {
+    &.veryNarrow {
+        $form-label-position  : top;
+        $form-label-align  : center;
+        $form-label-width  : 100%;
+        $form-input-width  : 100%;
+        $form-margin  : 0%;
+        $form-error-style  : simple;
+    }
+
+    &.veryNarrow.gt350 {
+        $form-error-style  : simple-right;
+    }
+
+    &.gt350 {
+        $form-label-position  : left;
+        $form-label-align  : right;
+        $form-label-width  : 34%;
+        $form-input-width  : 60%;
+        $form-margin  : 6%;
+    }
+
+    &.gt500 {
+        $form-label-position  : left;
+        $form-label-align  : right;
+        $form-label-width  : 120px;
+        $form-input-width  : false;
+        $form-margin  : 20px;
+        $form-error-style  : bubbles;
+    }
+}

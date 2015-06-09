@@ -1,7 +1,10 @@
-Ext.ns('Kwf.Utils.Element');
+if (!Kwf.Utils) Kwf.Utils = {};
+if (!Kwf.Utils.Element) Kwf.Utils.Element = {};
+
 Kwf.Utils.Element._cachedWidthEls = [];
 Kwf.Utils.Element.getCachedWidth = function(e) {
-    if (e instanceof Ext.Element) e = e.dom;
+    if (e.dom) renderedEl = e.dom; //ExtJS Element (hopefully)
+    if (e instanceof $) e = e.get(0);
     var ret = false;
     while (e) {
         if (e.getAttribute('data-width') == '100%') {
@@ -10,7 +13,7 @@ Kwf.Utils.Element.getCachedWidth = function(e) {
             break;
         } else {
             var t = Kwf.Utils.BenchmarkBox.now();
-            ret = Ext.fly(e).getWidth();
+            ret = e.clientWidth;
             Kwf.Utils.BenchmarkBox.time('getWidth uncached', Kwf.Utils.BenchmarkBox.now()-t);
             e.kwfWidthCache = ret;
             Kwf.Utils.Element._cachedWidthEls.push(e);
@@ -20,10 +23,29 @@ Kwf.Utils.Element.getCachedWidth = function(e) {
     }
     return ret;
 };
-Kwf.Utils.Element.isVisible = function(el) {
-    if (el instanceof Ext.Element) el = el.dom;
+Kwf.Utils.Element.isVisible = function elementIsVisible(el) {
+    if (el.dom) renderedEl = el.dom; //ExtJS Element (hopefully)
     var t = Kwf.Utils.BenchmarkBox.now();
-    var ret = Ext.fly(el).isVisible(true);
+
+    /* variant 1: Ext2: has dependency on ext2
+    //var ret = Ext2.fly(el).isVisible();
+    */
+
+    /* variant 2: jquery: not always correct
+    //var ret = $(el).is(':visible');
+    */
+
+    /* variant 3: manuallycheck visiblity+display, basically what ext2 does */
+    var ret = true;
+    while (el && el.tagName && el.tagName.toLowerCase() != "body") {
+        var vis = !($(el).css('visibility') == 'hidden' || $(el).css('display') == 'none');
+        if (!vis) {
+            ret = false;
+            break;
+        }
+        el = el.parentNode;
+    }
+
     Kwf.Utils.BenchmarkBox.time('isVisible uncached', Kwf.Utils.BenchmarkBox.now()-t);
     return ret;
 };
@@ -32,11 +54,11 @@ Kwf.onContentReady(function clearCachedWidth(el, options) {
     if (options.action == 'widthChange' || options.action == 'show') {
         for (var i=0; i<Kwf.Utils.Element._cachedWidthEls.length; i++) {
             var e = Kwf.Utils.Element._cachedWidthEls[i];
-            if ($.contains(el, e)) {
+            if (el == e || $.contains(el, e)) {
                 delete e.kwfWidthCache;
                 Kwf.Utils.Element._cachedWidthEls.splice(i, 1);
                 i--; //decrement because e was removed from array
             }
         }
     }
-});
+}, { defer: false, priority: -10 });

@@ -27,6 +27,12 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
         $ret['disableCookies'] = $this->_getSetting('disableCookies');
         $ret['customTrackingDomain'] = $this->_getSetting('customTrackingDomain');
         $ret['additionalConfiguration'] = $this->_getAdditionalConfiguration();
+        $ret['ignoreCode'] = false;
+        if ($this->getData()->getBaseProperty('statistics.ignore') ||
+            $this->getData()->getBaseProperty('statistics.piwik.ignore')
+        ) {
+            $ret['ignoreCode'] = true;
+        }
         return $ret;
     }
 
@@ -47,12 +53,7 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
 
     protected function _getIdSite()
     {
-        $ret = null;
-        if (!$this->getData()->getBaseProperty('statistics.ignore') &&
-            !$this->getData()->getBaseProperty('statistics.piwik.ignore')
-        ) {
-            $ret = $this->getData()->getBaseProperty('statistics.piwik.id');
-        }
+        $ret = $this->getData()->getBaseProperty('statistics.piwik.id');
         return $ret;
     }
 

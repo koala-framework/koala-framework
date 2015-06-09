@@ -23,6 +23,7 @@ class Kwf_Util_ClearCache
                 if ($d->getFilename() == 'searchindex') continue;
                 if ($d->getFilename() == 'fulltext') continue;
                 if ($d->getFilename() == 'scss') continue; //never clear scss, too expensive to regenerate
+                if ($d->getFilename() == 'uglifyjs') continue; //never clear uglifyjs, too expensive to regenerate
                 if ($d->getFilename() == 'media') continue; //never clear media, too expensive to regenerate
                 if ($d->getFilename() == 'mediameta') continue; //never clear mediameta, too expensive to regenerate
                 $ret[] = $d->getFilename();
@@ -74,12 +75,7 @@ class Kwf_Util_ClearCache
         if ($simpleCacheBackend == 'memcache' || $simpleCacheBackend == 'elastiCache') {
             $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
         }
-        $hasApc = extension_loaded('apc');
-        if (!$hasApc) {
-            //apc might be enabled in webserver only, not in cli
-            $hasApc = Kwf_Util_Apc::callUtil('is-loaded', array(), array('returnBody'=>true)) == 1;
-        }
-        if ($hasApc) {
+        if (Kwf_Util_Apc::isAvailable()) {
             $types[] = new Kwf_Util_ClearCache_Types_ApcUser();
             $types[] = new Kwf_Util_ClearCache_Types_ApcOptcode();
         }
@@ -97,8 +93,8 @@ class Kwf_Util_ClearCache
                 $types[] = new Kwf_Util_ClearCache_Types_TableComponentView();
             } else if ($t == 'cache_component_includes') {
                 //never completely clear that table as it would break clearing fullPage cache
-            } else if ($t == 'cache_users') { //handled in Types_Users
-                 $types[] = new Kwf_Util_ClearCache_Types_Users();
+            } else if ($t == 'cache_users') {
+                //skip, needed during update
             } else {
                 $types[] = new Kwf_Util_ClearCache_Types_Table($t);
             }
@@ -109,29 +105,9 @@ class Kwf_Util_ClearCache
 
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            $types[] = new Kwf_Util_ClearCache_Types_ComponentSettings();
-        }
-        $types[] = new Kwf_Util_ClearCache_Types_Trl();
         $types[] = new Kwf_Util_ClearCache_Types_Assets();
-        if (Kwf_Component_Data_Root::getComponentClass()) {
-            $types[] = new Kwf_Util_ClearCache_Types_Events();
-        }
 
-        try {
-            $db = Kwf_Registry::get('db');
-        } catch (Exception $e) {
-            $db = false;
-        }
-        if ($db) {
-            $tables = Kwf_Registry::get('db')->fetchCol('SHOW TABLES');
-            if (in_array('kwf_users', $tables) && in_array('cache_users', $tables)) {
-                if (Kwf_Registry::get('config')->cleanupKwfUsersOnClearCache) {
-                    $types[] = new Kwf_Util_ClearCache_Types_UsersCleanup();
-                }
-            }
-        }
-        if (Kwf_Config::getValueArray('processControl')) {
+        if (!Kwf_Config::getValue('clearCacheSkipProcessControl') && Kwf_Config::getValueArray('processControl')) {
             $types[] = new Kwf_Util_ClearCache_Types_ProcessControl();
         }
 
@@ -157,9 +133,9 @@ class Kwf_Util_ClearCache
         $refresh = isset($options['refresh']) ? $options['refresh'] : false;
         $excludeTypes = isset($options['excludeTypes']) ? $options['excludeTypes'] : array();
 
-        Kwf_Component_ModelObserver::getInstance()->disable();
+        Kwf_Events_ModelObserver::getInstance()->disable();
 
-        ini_set('memory_limit', '512M');
+        Kwf_Util_MemoryLimit::set(512);
         if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
             Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
         }
@@ -283,7 +259,7 @@ class Kwf_Util_ClearCache
             Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
         }
 
-        Kwf_Component_ModelObserver::getInstance()->enable();
+        Kwf_Events_ModelObserver::getInstance()->enable();
         return $types;
     }
 }

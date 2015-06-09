@@ -1,6 +1,5 @@
 <?php
-require_once Kwf_Config::getValue('externLibraryPath.facebookPhpSdk').'/src/facebook.php';
-
+//requires facebook/php-sdk package
 class Kwf_Util_Facebook_FacebookZendSession extends Facebook
 {
   public function __construct($config) {

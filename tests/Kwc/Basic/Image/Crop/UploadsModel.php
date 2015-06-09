@@ -5,6 +5,6 @@ class Kwc_Basic_Image_Crop_UploadsModel extends Kwf_Test_Uploads_Model
     {
         parent::__construct($config);
 
-        $this->createRow()->copyFile(KWF_PATH.'/images/devices/macBook.jpg', 'foo2', 'jpg', 'image/jpg');
+        $this->createRow(array('id'=>'1'))->copyFile(KWF_PATH.'/images/devices/macBook.jpg', 'foo2', 'jpg', 'image/jpg');
     }
 }

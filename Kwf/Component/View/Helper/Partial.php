@@ -24,9 +24,22 @@ class Kwf_Component_View_Helper_Partial extends Kwf_Component_View_Renderer
         }
         $vars['info'] = $config['info'];
         $vars['data'] = $component;
-        $view = new Kwf_Component_View($this->_getRenderer());
-        $view->assign($vars);
-        return $view->render($this->_getRenderer()->getTemplate($component, 'Partial'));
+
+        $renderer = $this->_getRenderer();
+        if (isset($vars['template'])) {
+            $tpl = $vars['template'];
+        } else {
+            $tpl = $renderer->getTemplate($component, 'Partial');
+        }
+        if (substr($tpl, -4) == '.tpl') {
+            $view = new Kwf_Component_View($renderer);
+            $view->assign($vars);
+            $ret = $view->render($tpl);
+        } else {
+            $twig = new Kwf_Component_Renderer_Twig_Environment($renderer);
+            $ret = $twig->render($tpl, $vars);
+        }
+        return $ret;
     }
 
 

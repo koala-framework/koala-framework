@@ -6,22 +6,22 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         $ret = parent::getListeners();
         $ret[] = array(
             'class' => get_class($this->_getGenerator()->getModel()),
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onRowUpdate'
         );
         $ret[] = array(
             'class' => get_class($this->_getGenerator()->getModel()),
-            'event' => 'Kwf_Component_Event_Row_Inserted',
+            'event' => 'Kwf_Events_Event_Row_Inserted',
             'callback' => 'onRowAdd'
         );
         $ret[] = array(
             'class' => get_class($this->_getGenerator()->getModel()),
-            'event' => 'Kwf_Component_Event_Row_Deleted',
+            'event' => 'Kwf_Events_Event_Row_Deleted',
             'callback' => 'onRowDelete'
         );
         $ret[] = array(
             'class' => get_class($this->_getGenerator()->getModel()),
-            'event' => 'Kwf_Component_Event_Model_Updated',
+            'event' => 'Kwf_Events_Event_Model_Updated',
             'callback' => 'onModelUpdate'
         );
         return $ret;
@@ -34,7 +34,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         $this->fireEvent(new $cls($c->componentClass, $c, $flag));
     }
 
-    public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onRowUpdate(Kwf_Events_Event_Row_Updated $event)
     {
         $dc = array_flip($event->row->getDirtyColumns());
         if (isset($dc['visible'])) {
@@ -75,7 +75,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         }
     }
 
-    public function onRowAdd(Kwf_Component_Event_Row_Inserted $event)
+    public function onRowAdd(Kwf_Events_Event_Row_Inserted $event)
     {
         foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>true)) as $c) {
             if ($c->isVisible()) {
@@ -86,7 +86,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
         }
     }
 
-    public function onRowDelete(Kwf_Component_Event_Row_Deleted $event)
+    public function onRowDelete(Kwf_Events_Event_Row_Deleted $event)
     {
         foreach ($this->_getComponentsFromRow($event->row, array('ignoreVisible'=>true)) as $c) {
             if ($c->isVisible()) {
@@ -99,7 +99,7 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
 
     }
 
-    public function onModelUpdate(Kwf_Component_Event_Model_Updated $event)
+    public function onModelUpdate(Kwf_Events_Event_Model_Updated $event)
     {
         //now it's getting inefficient (but this event will /usually/ not be  called at all)
 
@@ -121,18 +121,19 @@ class Kwf_Component_Generator_Events_Table extends Kwf_Component_Generator_Event
     //overrridden in Kwc_Root_Category_GeneratorEvents
     protected function _getComponentsFromRow($row, $select)
     {
+        $primaryKey = $row->getModel()->getPrimaryKey();
         if ($this->_getGenerator()->hasSetting('dbIdShortcut') && $this->_getGenerator()->getSetting('dbIdShortcut')) {
             $dbId = $this->_getGenerator()->getSetting('dbIdShortcut') .
-                $row->id;
+                $row->$primaryKey;
             $ret = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, $select);
         } else if ($row->getModel()->hasColumn('component_id')) {
             $dbId = $row->component_id .
                 $this->_getGenerator()->getIdSeparator() .
-                $row->id;
+                $row->$primaryKey;
             $ret = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId, $select);
         } else {
             $cls = $this->_getClassFromRow($row);
-            $select['id'] = $this->_getGenerator()->getIdSeparator().$row->id;
+            $select['id'] = $this->_getGenerator()->getIdSeparator().$row->$primaryKey;
             $ret = Kwf_Component_Data_Root::getInstance()
                 ->getComponentsBySameClass($cls, $select);
         }

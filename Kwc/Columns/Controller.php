@@ -6,7 +6,9 @@ class Kwc_Columns_Controller extends Kwc_Abstract_List_Controller
 
     public function preDispatch()
     {
-        $this->setModel(Kwc_Columns_Component::getColumnsModel($this->_getParam('class')));
+        $this->setModel(Kwc_Columns_ModelFactory::getModelInstance(array(
+            'componentClass' => $this->_getParam('class')
+        )));
         parent::preDispatch();
     }
 

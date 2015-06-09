@@ -49,7 +49,7 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
         $fields->add(new Kwf_Form_Field_Select('component',  trlKwf('Pagetype')))
             ->setValues($componentNames)
             ->setPossibleComponentClasses($componentClasses) //just for PageController
-            ->setTpl('<tpl for="."><div class="x-combo-list-item">{name}</div></tpl>')
+            ->setTpl('<tpl for="."><div class="x2-combo-list-item">{name}</div></tpl>')
             ->setAllowBlank(false);
 
         $hideInMenuText = trlKwf('Hide in Menu');
@@ -66,7 +66,7 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
                     Kwf_Component_Data::DEVICE_VISIBLE_ONLY_SHOW_ON_MOBILE => trlKwf('only show on mobile devices')
                 ))
                 ->setTpl('<tpl for=".">
-                    <div class="x-combo-list-item">
+                    <div class="x2-combo-list-item">
                         <tpl if="id==\''.Kwf_Component_Data::DEVICE_VISIBLE_ALL.'\'"><img src="/assets/kwf/images/devices/showAll.png" class="left"/></tpl>
                         <tpl if="id==\''.Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE.'\'"><img src="/assets/kwf/images/devices/smartphoneHide.png" class="left"/></tpl>
                         <tpl if="id==\''.Kwf_Component_Data::DEVICE_VISIBLE_ONLY_SHOW_ON_MOBILE.'\'"><img src="/assets/kwf/images/devices/smartphone.png" class="left"/></tpl>

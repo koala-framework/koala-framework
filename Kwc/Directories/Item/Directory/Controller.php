@@ -64,6 +64,7 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
             foreach ($extConfig['contentEditComponents'] as $ec) {
                 $name = Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($ec['componentClass'], 'componentName'));
                 $icon = Kwc_Abstract::getSetting($ec['componentClass'], 'componentIcon');
+                $icon = new Kwf_Asset($icon);
                 $this->_columns->add(new Kwc_Directories_Item_Directory_ControllerEditButton('edit_'.$i, ' ', 20))
                     ->setColumnType('editContent')
                     ->setEditComponentClass($ec['componentClass'])
@@ -168,7 +169,8 @@ class Kwc_Directories_Item_Directory_Controller extends Kwf_Controller_Action_Au
     public function jsonMultiUploadAction()
     {
         $componentId = $this->_getParam('componentId');
-        $component = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
+        $component = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByDbId($componentId, array('ignoreVisible' => true, 'limit' => 1));
         if (Kwc_Abstract::getSetting($component->componentClass, 'multiFileUpload')) {
             $uploadIds = $this->_getParam('uploadIds');
             $uploadIds = explode(',', $uploadIds);

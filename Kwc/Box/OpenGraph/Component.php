@@ -5,7 +5,7 @@ class Kwc_Box_OpenGraph_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Open Graph');
-        $ret['componentIcon'] = new Kwf_Asset('cog');
+        $ret['componentIcon'] = 'cog';
         $ret['generators']['child']['component']['image'] = 'Kwc_Box_OpenGraph_Image_Component';
         $ret['flags']['hasHeaderIncludeCode'] = true;
         return $ret;

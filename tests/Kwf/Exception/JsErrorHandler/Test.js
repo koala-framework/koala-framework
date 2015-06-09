@@ -1,5 +1,5 @@
 if (Kwf.Debug.displayErrors) { //für lokal extra initialisieren
-    Ext.ux.ErrorHandler.init();
+    Ext2.ux.ErrorHandler.init();
     Kwf.Debug.displayErrors = false;
 }
 
@@ -28,21 +28,21 @@ function testError5() {
             var test2 = null;
             test2.arg = 5;
     } catch(e) {
-            Ext.ux.ErrorHandler.handleError(e);
+            Ext2.ux.ErrorHandler.handleError(e);
     }
 }
 function testError6() {
     try {
             throw (new Error("Goodbye"));
     } catch(e) {
-            Ext.ux.ErrorHandler.handleError(e);
+            Ext2.ux.ErrorHandler.handleError(e);
     }
 }
 function testError7() {
     try {
             throw "Goodbye again";
     } catch(e) {
-            Ext.ux.ErrorHandler.handleError(e);
+            Ext2.ux.ErrorHandler.handleError(e);
     }
 }
 function testError8() {
@@ -53,6 +53,6 @@ function testError8() {
                     anArray: [1, 2, 3]
             };
     } catch(e) {
-            Ext.ux.ErrorHandler.handleError(e);
+            Ext2.ux.ErrorHandler.handleError(e);
     }
 }

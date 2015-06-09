@@ -3,8 +3,6 @@ class Kwc_Columns_Basic_Columns_TestChildModel extends Kwc_Columns_Model
 {
     public function __construct(array $config = array())
     {
-        $this->_referenceMap['Component']['refModelClass'] = 'Kwc_Columns_Basic_Columns_TestModel';
-
         $config['proxyModel'] = new Kwf_Model_FnF(array(
             'primaryKey' => 'id',
             'columns' => array('id', 'component_id', 'pos', 'visible', 'data'),
@@ -24,6 +22,7 @@ class Kwc_Columns_Basic_Columns_TestChildModel extends Kwc_Columns_Model
                 new Kwf_Model_Field(array('fieldName'=>'data'))
             )
         ));
+        $this->_referenceMap['Component']['refModelClass'] = 'Kwc_Columns_Basic_Columns_TestModel';
         parent::__construct($config);
     }
 }

@@ -23,8 +23,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1003-l1', current($cc)->componentId);
 
-        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
-            ->getDependentModel('ChildComponents');
+        $m = Kwc_Basic_Text_Component::createChildModel($c->getData()->componentClass);
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1003'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -74,8 +73,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1014-l1', current($cc)->componentId);
 
-        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
-            ->getDependentModel('ChildComponents');
+        $m = Kwc_Basic_Text_Component::createChildModel($c->getData()->componentClass);
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1014'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
@@ -130,6 +128,9 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
 
     public function testCreatesImageComponentx()
     {
+        $uploadsModel = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Image_UploadsModel');
+        $upload1 = $uploadsModel->getRows()->current();
+
         $c = $this->_root->getComponentById(1008)->getComponent();
         $row = $c->getRow();
         $html = '<p><img src="http://www.vivid-planet.com/assets/web/images/structure/logo.png" /></p>';
@@ -140,27 +141,27 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $this->assertEquals(1, count($cc));
         $this->assertEquals('1008-i1', current($cc)->componentId);
 
-        $m = Kwc_Basic_Text_Component::getTextModel($c->getData()->componentClass)
-            ->getDependentModel('ChildComponents');
+        $m = Kwc_Basic_Text_Component::createChildModel($c->getData()->componentClass);
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1008'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
         $this->assertEquals('image', $row->component);
         $this->assertEquals('1', $row->nr);
 
+        $s = new Kwf_Model_Select();
+        $s->whereNotEquals('id', $upload1->id);
+        $upload2 = $uploadsModel->getRows($s)->current();
+        $this->assertEquals('image/png', $upload2->mime_type);
+        $this->assertEquals('png', $upload2->extension);
+        $this->assertEquals('logo', $upload2->filename);
+        $this->assertEquals(file_get_contents($upload2->getFileSource()),
+                            file_get_contents('http://www.vivid-planet.com/assets/web/images/structure/logo.png'));
+
         $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Image_TestModel');
         $rows = $m->getRows($m->select()->whereEquals('component_id', '1008-i1'));
         $this->assertEquals(1, count($rows));
         $row = $rows->current();
-        $this->assertEquals(2, $row->kwf_upload_id);
-
-        $m = Kwf_Model_Abstract::getInstance('Kwc_Basic_Text_Image_UploadsModel');
-        $row = $m->getRow(2);
-        $this->assertEquals('image/png', $row->mime_type);
-        $this->assertEquals('png', $row->extension);
-        $this->assertEquals('logo', $row->filename);
-        $this->assertEquals(file_get_contents($m->getUploadDir().'/2'),
-                            file_get_contents('http://www.vivid-planet.com/assets/web/images/structure/logo.png'));
+        $this->assertEquals($upload2->id, $row->kwf_upload_id);
     }
 
     public function testCreatesImageComponentHtml()
@@ -178,10 +179,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
                     .'\s*<div class="container" .*>'
                     .'\s*<noscript>'
                     .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1009-i1/dh-'.$dim['width'].'-[0-9a-z]+/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" />'
-                    .'\s*</noscript>'
-                    .'\s*</div>'
-                    .'\s*</div>\s*</p>'
-                    .'\s*</div>\s*$#ms', $html);
+                    .'\s*</noscript>#ms', $html);
 
     }
 
@@ -203,10 +201,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
                     .'\s*<div class="container" .*>'
                     .'\s*<noscript>'
                     .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1010-i1/dh-'.$width.'-[0-9a-z]+/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
-                    .'\s*</noscript>'
-                    .'\s*</div>'
-                    .'\s*</div>\s*</p>'
-                    .'\s*</div>\s*$#ms', $html);
+                    .'\s*</noscript>#ms', $html);
     }
 
     public function testCreatesDownloadFromOtherComponentId()
@@ -219,7 +214,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
 
         $html = $c->getData()->render();
         $this->assertRegExp("#^<div class=\"webStandard kwcText kwcBasicTextTestComponent\">\n".
-                    "<p>\n  <a .*?href=\"/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Download_TestComponent/1012-d1/default/[^/]+/[0-9]+/foo.png\" rel=\"popup_blank\">foo</a>\n</p>".
+                    "<p>\n  <a .*?href=\"/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Download_TestComponent/1012-d1/default/[^/]+/[0-9]+/foo.png\" data-kwc-popup=\"blank\">foo</a>\n</p>".
                     "</div>$#ms", $html);
     }
 
@@ -245,9 +240,6 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
                     .'\s*<div class="container" .*>'
                     .'\s*<noscript>'
                     .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1015-i1/dh-'.$width.'-[0-9a-z]+/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
-                    .'\s*</noscript>'
-                    .'\s*</div>'
-                    .'\s*</div>\s*</p>'
-                    .'\s*</div>\s*$#ms', $html);
+                    .'\s*</noscript>#ms', $html);
     }
 }

@@ -60,6 +60,7 @@ class Kwc_Root_CategoryGenerator extends Kwf_Component_Generator_Table
     {
         $ret = parent::getGeneratorFlags();
         $ret['showInPageTreeAdmin'] = true;
+        $ret['showInLinkInternAdmin'] = true;
         return $ret;
     }
 

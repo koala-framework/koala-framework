@@ -1,5 +1,5 @@
-Ext.ns('Kwf.Maintenance');
-Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
+Ext2.ns('Kwf.Maintenance');
+Kwf.Maintenance.Setup = Ext2.extend(Ext2.Panel, {
     border: false,
     initComponent: function() {
 
@@ -23,7 +23,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         });
 
         //welcome
-        this.stepWelcome = new Ext.Panel({
+        this.stepWelcome = new Ext2.Panel({
             width: 350,
             height: 200,
             border: false,
@@ -51,7 +51,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         }, this);
 
         //dbconfig
-        this.stepDatabase = new Ext.FormPanel({
+        this.stepDatabase = new Ext2.FormPanel({
             border: false,
             bodyStyle: "padding: 10px;",
             cls: 'kwfSetupForm',
@@ -82,7 +82,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
                 text: 'Continue',
                 handler: function() {
                     if (!this.stepDatabase.getForm().isValid()) return;
-                    Ext.Ajax.request({
+                    Ext2.Ajax.request({
                         url: '/kwf/maintenance/setup/json-check-db',
                         params: this.stepDatabase.getForm().getValues(),
                         success: function() {
@@ -97,7 +97,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         });
 
         //config
-        this.stepConfig = new Ext.FormPanel({
+        this.stepConfig = new Ext2.FormPanel({
             border: false,
             bodyStyle: "padding: 10px;",
             cls: 'kwfSetupForm',
@@ -128,7 +128,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         });
 
         //admin account
-        this.stepAdminAccount = new Ext.FormPanel({
+        this.stepAdminAccount = new Ext2.FormPanel({
             border: false,
             bodyStyle: "padding: 10px;",
             cls: 'kwfSetupForm',
@@ -156,7 +156,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
                 handler: function() {
                     if (!this.stepAdminAccount.getForm().isValid()) return;
                     if (this.stepAdminAccount.getForm().findField('admin_password').getValue() != this.stepAdminAccount.getForm().findField('admin_password2').getValue()) {
-                         Ext.Msg.alert('Error', 'Passwords don\'t match');
+                         Ext2.Msg.alert('Error', 'Passwords don\'t match');
                         return;
                     }
                     this._startInstallation();
@@ -166,7 +166,7 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         });
 
         //install
-        this.stepInstall = new Ext.Panel({
+        this.stepInstall = new Ext2.Panel({
             border: false,
             cls: 'kwfSetupInstalling',
             bodyStyle: "padding: 10px;",
@@ -174,14 +174,14 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         });
 
         //finished
-        this.stepFinished = new Ext.Panel({
+        this.stepFinished = new Ext2.Panel({
             border: false,
             cls: 'kwfSetupFinished',
             bodyStyle: "padding: 10px;",
             html: '<h1>Installation Finished!</h1><p>Installing '+this.appVersion+' finished.</p><p><a href="'+this.baseUrl+'/">» Proceed to your site</a></p><p>Thank you for using Koala Framework.</p>'
         });
 
-        this.cards = new Ext.Panel({
+        this.cards = new Ext2.Panel({
             region: 'center',
             layout: 'card',
             activeItem: 0,
@@ -212,10 +212,10 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         this.cards.getLayout().setActiveItem(this.stepInstall);
         this.steps.setCurrentStep('install');
         var params = {};
-        Ext.apply(params, this.stepDatabase.getForm().getValues());
-        Ext.apply(params, this.stepConfig.getForm().getValues());
-        Ext.apply(params, this.stepAdminAccount.getForm().getValues());
-        Ext.Ajax.request({
+        Ext2.apply(params, this.stepDatabase.getForm().getValues());
+        Ext2.apply(params, this.stepConfig.getForm().getValues());
+        Ext2.apply(params, this.stepAdminAccount.getForm().getValues());
+        Ext2.Ajax.request({
             url: '/kwf/maintenance/setup/json-install',
             params: params,
             progress: true,
@@ -228,4 +228,4 @@ Kwf.Maintenance.Setup = Ext.extend(Ext.Panel, {
         });
     }
 });
-Ext.reg('kwf.maintenance.setup', Kwf.Maintenance.Setup);
+Ext2.reg('kwf.maintenance.setup', Kwf.Maintenance.Setup);

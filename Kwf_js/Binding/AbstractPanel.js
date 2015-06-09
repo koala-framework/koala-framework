@@ -8,7 +8,7 @@ Kwf.Binding.AbstractPanel.createFormOrComponentPanel = function(componentConfigs
     var panel;
     var componentConfig = componentConfigs[ec.componentClass+'-'+ec.type];
     if (componentConfig.needsComponentPanel) {
-        panel = new Kwf.Component.ComponentPanel(Ext.apply({
+        panel = new Kwf.Component.ComponentPanel(Ext2.apply({
             title: componentConfig.title,
             mainComponentClass: ec.componentClass,
             mainType: ec.type,
@@ -18,7 +18,7 @@ Kwf.Binding.AbstractPanel.createFormOrComponentPanel = function(componentConfigs
         }, config));
         grid.addBinding(panel);
     } else {
-        panel = Ext.ComponentMgr.create(Ext.apply(componentConfig, config));
+        panel = Ext2.ComponentMgr.create(Ext2.apply(componentConfig, config));
         var bindingConfig = { item: panel };
         if (ec.idTemplate) {
             bindingConfig.componentId = ec.idTemplate + ec.componentIdSuffix;
@@ -30,7 +30,7 @@ Kwf.Binding.AbstractPanel.createFormOrComponentPanel = function(componentConfigs
     return panel;
 };
 
-Ext.extend(Kwf.Binding.AbstractPanel, Ext.Panel,
+Ext2.extend(Kwf.Binding.AbstractPanel, Ext2.Panel,
 {
     checkDirty: true,
 
@@ -51,7 +51,7 @@ Ext.extend(Kwf.Binding.AbstractPanel, Ext.Panel,
             'loaded'
         );
         var binds = this.bindings;
-        this.bindings = new Ext.util.MixedCollection();
+        this.bindings = new Ext2.util.MixedCollection();
         if (binds) {
             this.addBinding.apply(this, binds);
         }
@@ -97,7 +97,7 @@ Ext.extend(Kwf.Binding.AbstractPanel, Ext.Panel,
             this.activeId = id;
             this.bindings.each(function(b) {
                 b.item.enable();
-                if (b.item.ownerCt && b.item.ownerCt.getLayout && b.item.ownerCt.getLayout() instanceof Ext.layout.CardLayout) {
+                if (b.item.ownerCt && b.item.ownerCt.getLayout && b.item.ownerCt.getLayout() instanceof Ext2.layout.CardLayout) {
                     if (b.item.ownerCt.getLayout().activeItem != b.item) {
                         //dieses binding überspringen, liegt in einem
                         //tab der nicht aktiv ist
@@ -165,7 +165,7 @@ Ext.extend(Kwf.Binding.AbstractPanel, Ext.Panel,
                     //die anderen auch neu laden
                     this.bindings.each(function(b) {
                         b.item.enable();
-                        if (b.item.ownerCt && b.item.ownerCt.getLayout && b.item.ownerCt.getLayout() instanceof Ext.layout.CardLayout) {
+                        if (b.item.ownerCt && b.item.ownerCt.getLayout && b.item.ownerCt.getLayout() instanceof Ext2.layout.CardLayout) {
                             if (b.item.ownerCt.getLayout().activeItem != b.item) {
                                 //dieses binding überspringen, liegt in einem
                                 //tab der nicht aktiv ist
@@ -235,10 +235,10 @@ Ext.extend(Kwf.Binding.AbstractPanel, Ext.Panel,
     mabySubmit : function(cb, options)
     {
         if (this.checkDirty && !this.disabled && this.isDirty()) {
-            Ext.Msg.show({
+            Ext2.Msg.show({
             title:trlKwf('Save'),
             msg: trlKwf('Do you want to save the changes?'),
-            buttons: Ext.Msg.YESNOCANCEL,
+            buttons: Ext2.Msg.YESNOCANCEL,
             scope: this,
             fn: function(button) {
                 if (button == 'yes') {
@@ -281,7 +281,7 @@ Ext.extend(Kwf.Binding.AbstractPanel, Ext.Panel,
     },
     applyBaseParams : function(baseParams) {
         if (!this.baseParams) { this.baseParams = {}; }
-        Ext.apply(this.baseParams, baseParams);
+        Ext2.apply(this.baseParams, baseParams);
     },
     getBaseParams : function() {
         return this.baseParams || {};

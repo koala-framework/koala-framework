@@ -1,5 +1,5 @@
-Ext.ns('Kwc.Abstract.Cards');
-Kwc.Abstract.Cards.ComboBox = Ext.extend(Kwf.Form.ComboBox, {
+Ext2.ns('Kwc.Abstract.Cards');
+Kwc.Abstract.Cards.ComboBox = Ext2.extend(Kwf.Form.ComboBox, {
     setValue: function(v) {
         Kwc.Abstract.Cards.ComboBox.superclass.setValue.call(this, v);
     },
@@ -12,4 +12,4 @@ Kwc.Abstract.Cards.ComboBox = Ext.extend(Kwf.Form.ComboBox, {
         return Kwc.Abstract.Cards.ComboBox.superclass.doQuery.apply(this, arguments);
     }
 });
-Ext.reg('kwc.abstract.cards.combobox', Kwc.Abstract.Cards.ComboBox);
+Ext2.reg('kwc.abstract.cards.combobox', Kwc.Abstract.Cards.ComboBox);

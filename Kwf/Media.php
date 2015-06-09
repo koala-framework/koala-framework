@@ -29,6 +29,7 @@ class Kwf_Media
         if (substr($type, 0, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX)) == Kwf_Media::DONT_HASH_TYPE_PREFIX) {
             $checksumType = Kwf_Media::DONT_HASH_TYPE_PREFIX;
         }
+        $class = rawurlencode($class);
         $checksum = self::getChecksum($class, $id, $checksumType, rawurlencode($filename));
         $prefix = Kwf_Setup::getBaseUrl();
         if ($r = Kwf_Component_Data_Root::getInstance()) {

@@ -5,7 +5,7 @@ class Kwc_Shop_VoucherProduct_AddToCart_Component extends Kwc_Shop_AddToCartAbst
     {
         $ret = parent::getSettings();
         $ret['orderProductData'] = 'Kwc_Shop_VoucherProduct_AddToCart_OrderProductData';
-        $ret['productTypeText'] = trlKwf('Voucher');
+        $ret['productTypeText'] = trlKwfStatic('Voucher');
         return $ret;
     }
 }

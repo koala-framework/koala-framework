@@ -6,13 +6,13 @@ class Kwf_Component_Cache_HasContent_Root_Child_Events extends Kwf_Component_Abs
         $ret = array();
         $ret[] = array(
             'class' => 'Kwf_Component_Cache_HasContent_Root_Child_Model',
-            'event' => 'Kwf_Component_Event_Row_Updated',
+            'event' => 'Kwf_Events_Event_Row_Updated',
             'callback' => 'onRowUpdate'
         );
         return $ret;
     }
 
-    public function onRowUpdate(Kwf_Component_Event_Row_Updated $event)
+    public function onRowUpdate(Kwf_Events_Event_Row_Updated $event)
     {
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->row->component_id) as $c) {
             $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged(

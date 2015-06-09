@@ -28,21 +28,21 @@ class Kwc_Directories_Category_Detail_List_Events extends Kwc_Abstract_Composite
                     Kwc_Abstract::getSetting($class, 'childReferenceName') :
                     'Categories';
                 foreach (call_user_func(array($this->_class, 'getItemDirectoryClasses'), $this->_class) as $dirCls) {
-                    $dirModel = Kwc_Abstract::getSetting($dirCls, 'childModel');
-                    $relModel = Kwf_Model_Abstract::getInstance($dirModel)->getDependentModel($childReference);
+                    $dirModel = Kwc_Abstract::createChildModel($dirCls);
+                    $relModel = $dirModel->getDependentModel($childReference);
                     $ret[] = array(
                         'class' => $relModel,
-                        'event' => 'Kwf_Component_Event_Row_Updated',
+                        'event' => 'Kwf_Events_Event_Row_Updated',
                         'callback' => 'onUpdateRow'
                     );
                     $ret[] = array(
                         'class' => $relModel,
-                        'event' => 'Kwf_Component_Event_Row_Inserted',
+                        'event' => 'Kwf_Events_Event_Row_Inserted',
                         'callback' => 'onUpdateRow'
                     );
                     $ret[] = array(
                         'class' => $relModel,
-                        'event' => 'Kwf_Component_Event_Row_Deleted',
+                        'event' => 'Kwf_Events_Event_Row_Deleted',
                         'callback' => 'onUpdateRow'
                     );
                 }
@@ -51,7 +51,7 @@ class Kwc_Directories_Category_Detail_List_Events extends Kwc_Abstract_Composite
         return $ret;
     }
 
-    public function onUpdateRow(Kwf_Component_Event_Row_Abstract $ev)
+    public function onUpdateRow(Kwf_Events_Event_Row_Abstract $ev)
     {
         foreach (call_user_func(array($this->_class, 'getItemDirectoryClasses'), $this->_class) as $dirCls) {
             $item = $ev->row->getModel()->getReference('Item');

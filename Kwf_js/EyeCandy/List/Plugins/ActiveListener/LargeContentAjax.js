@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
         this.activeItem = null;
         this.list.on('activeChanged', function(item) {
@@ -29,7 +29,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
             this.largeContent[item.id].hide();
         }
 
-        Ext.Ajax.request({
+        Ext2.Ajax.request({
             params: { url: item.el.child('a').dom.href },
             url: Kwf.getKwcRenderUrl(),
             success: function(response) {
@@ -152,13 +152,13 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext.extend(Kwf.EyeCa
         } else if (this.transition == 'slide') {
             activeEl.slideOut(
                 this.activeItem.listIndex < nextItem.listIndex ? 'l' : 'r',
-                Ext.applyIf({
+                Ext2.applyIf({
                     remove: false
                 }, this.transitionConfig)
             );
             nextEl.slideIn(
                 this.activeItem.listIndex < nextItem.listIndex ? 'r' : 'l',
-                Ext.applyIf({
+                Ext2.applyIf({
                     remove: false
                 }, this.transitionConfig)
             );

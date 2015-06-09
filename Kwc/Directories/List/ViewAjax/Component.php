@@ -7,9 +7,8 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
 
         $ret['generators']['child']['component']['paging'] = 'Kwc_Directories_List_ViewAjax_Paging_Component';
 
-        $ret['assets']['dep'][] = 'KwfAutoGrid'; //TODO: less dep
-        $ret['assets']['dep'][] = 'KwfHistoryState';
-        $ret['assets']['dep'][] = 'KwfStatistics';
+        $ret['assetsDefer']['dep'][] = 'KwfHistoryState';
+        $ret['assetsDefer']['dep'][] = 'KwfStatistics';
 
         $ret['loadMoreBufferPx'] = 700; //if false infinite scrolling is disabled, you still can call loadMore() manually
         $ret['loadDetailAjax'] = true; //true by default - the detail will be loaded via ajax
@@ -43,6 +42,13 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
             $ret['config']['directoryComponentId'] = $itemDir->componentId;
             $ret['config']['directoryComponentClass'] = $itemDir->componentClass;
         }
+
+
+        $paging = $this->getData()->getChildComponent('-paging');
+        if (isset($paging)) {
+            $ret['config']['initialPageSize'] = Kwc_Abstract::getSetting($paging->componentClass, 'pagesize');
+        }
+
         return $ret;
     }
 

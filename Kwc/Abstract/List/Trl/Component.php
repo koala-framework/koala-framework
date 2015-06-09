@@ -4,7 +4,7 @@ class Kwc_Abstract_List_Trl_Component extends Kwc_Chained_Trl_Component
     public static function getSettings($masterComponentClass)
     {
         $ret = parent::getSettings($masterComponentClass);
-        $ret['componentIcon'] = new Kwf_Asset('page');
+        $ret['componentIcon'] = 'page';
         $ret['generators']['child']['class'] = 'Kwc_Abstract_List_Trl_Generator';
         $ret['childModel'] = 'Kwc_Abstract_List_Trl_Model';
 

@@ -1,4 +1,4 @@
-Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = Ext.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
         if (!this.interval) this.interval = 5000;
 

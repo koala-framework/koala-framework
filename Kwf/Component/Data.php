@@ -212,11 +212,6 @@ class Kwf_Component_Data
             if (/*$childs || */Kwf_Component_Abstract::getFlag($this->getPage()->componentClass, 'noIndex')) {
                 $rel .= ' nofollow';
             }
-            $contentSender = Kwc_Abstract::getSetting($page->componentClass, 'contentSender');
-            if ($contentSender != 'Kwf_Component_Abstract_ContentSender_Default') { //skip for performance
-                $contentSender = new $contentSender($page);
-                $rel .= ' '.$contentSender->getLinkRel();
-            }
             return trim($rel);
         } else if ($var == 'filename') {
             return rawurlencode($this->getPseudoPageOrRoot()->_filename);
@@ -479,12 +474,9 @@ class Kwf_Component_Data
         }
 
         if ($staticGeneratorComponentClasses) {
-            $pdSelect = array(
-                'componentClasses' => $staticGeneratorComponentClasses
-            );
-            if ($select->hasPart('ignoreVisible')) {
-                $pdSelect['ignoreVisible'] = $select->getPart('ignoreVisible');
-            }
+            $pdSelect = clone $childSelect;
+            $pdSelect->whereComponentClasses($staticGeneratorComponentClasses);
+            $pdSelect->copyParts(array('ignoreVisible'), $select);
             $pd = $this->getRecursiveChildComponents($pdSelect, $childSelect);
             foreach ($generators as $k=>$g) {
                 if ($g['type'] == 'static') {
@@ -1359,14 +1351,15 @@ class Kwf_Component_Data
      * @param bool if master should be rendered
      * @return string
      */
-    public function render($enableCache = null, $renderMaster = false)
+    public function render($enableCache = null, $renderMaster = false, &$hasDynamicParts = false)
     {
         $output = new Kwf_Component_Renderer();
         if ($enableCache !== null) $output->setEnableCache($enableCache);
         if ($renderMaster) {
+            $hasDynamicParts = true;
             return $output->renderMaster($this);
         } else {
-            return $output->renderComponent($this);
+            return $output->renderComponent($this, $hasDynamicParts);
         }
     }
 
@@ -1459,5 +1452,19 @@ class Kwf_Component_Data
     final public function getDeviceVisible()
     {
         return $this->generator->getDeviceVisible($this);
+    }
+
+    public function getLinkDataAttributes()
+    {
+        $ret = array();
+        if ($this->isPage) {
+            $contentSender = Kwc_Abstract::getSetting($this->componentClass, 'contentSender');
+            if ($contentSender != 'Kwf_Component_Abstract_ContentSender_Default') { //skip for performance
+                $contentSender = new $contentSender($this);
+                $ret = $contentSender->getLinkDataAttributes();
+            }
+        }
+        return $ret;
+
     }
 }

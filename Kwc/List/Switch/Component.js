@@ -1,6 +1,6 @@
-Ext.namespace('Kwc.List.Switch');
+Ext2.namespace('Kwc.List.Switch');
 
-Kwc.List.Switch.Component = Ext.extend(Kwf.EyeCandy.List,
+Kwc.List.Switch.Component = Ext2.extend(Kwf.EyeCandy.List,
 {
     //transition: {},
     showArrows: true,

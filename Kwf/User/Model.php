@@ -1,13 +1,9 @@
 <?php
-class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterface
+class Kwf_User_Model extends Kwf_Model_RowCache
 {
     protected $_rowClass = 'Kwf_User_Row';
     protected $_authedUser;
     protected $_passwordColumn = 'password';
-    protected $_maxLockTime = 10; // in seconds
-    protected $_logActions = true;
-
-    protected $_mailClass = 'Kwf_Mail_Template';
 
     protected function _init()
     {
@@ -18,28 +14,18 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
             new Kwf_Model_Select_Expr_Field('lastname'),
         ));
     }
-
-    protected $_dependentModels = array(
-        'Messages' => 'Kwf_User_MessagesModel'
-    );
     protected $_cacheColumns = array('email', 'role');
 
-    private $_lock = null;
-
-    protected $_noLogColumns = array();
     protected $_columnMappings = array(
-        'Kwc_Mail_Recipient_Mapping' => array(
+        'Kwf_User_UserMapping' => array(
             'firstname' => 'firstname',
             'lastname' => 'lastname',
             'email' => 'email',
-            'format' => 'email_format'
-        ),
-        'Kwc_Mail_Recipient_GenderMapping' => array(
-            'gender' => 'email_gender'
-        ),
-        'Kwc_Mail_Recipient_TitleMapping' => array(
-            'title' => 'title'
-        ),
+            'format' => 'format',
+            'gender' => 'gender',
+            'title' => 'title',
+            'role' => 'role'
+        )
     );
 
     public function getUniqueIdentifier()
@@ -49,88 +35,10 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
 
     public function __construct(array $config = array())
     {
-        if (!isset($config['proxyModel'])) {
-            $config['proxyModel'] = new Kwf_Model_Db(array('table'=>'kwf_users'));
-        }
-        if (isset($config['mailClass'])) {
-            $this->_mailClass = $config['mailClass'];
-        }
-        if (isset($config['log'])) {
-            $this->_logActions = $config['log'];
+        if (!isset($config['proxyModel']) && !$this->_proxyModel) {
+            $config['proxyModel'] = 'Kwf_User_EditModel';
         }
         parent::__construct($config);
-    }
-
-    public static function version()
-    {
-        return 1;
-    }
-
-    public function getMailClass()
-    {
-        return $this->_mailClass;
-    }
-
-    // wenn createRow benötigt wird weil man ein anderes userModel (db?) hat,
-    // dann kann man diese hier überschreiben und return Kwf_Model_Proxy::createRow($data);
-    // zurückgeben
-    public function createRow(array $data=array())
-    {
-        throw new Kwf_Exception("createRow is not allowed in Kwf_User_Model. Use createUserRow() instead.");
-    }
-
-    public static function isLockedCreateUser()
-    {
-        $lock = fopen("temp/create-user.lock", "w");
-        $ret = !flock($lock, LOCK_EX | LOCK_NB);
-        fclose($lock);
-        return $ret;
-    }
-
-    public function unlockCreateUser()
-    {
-        fclose($this->_lock);
-        $this->_lock = null;
-    }
-    public function lockCreateUser()
-    {
-        if ($this->_lock) {
-            throw new Kwf_Exception('Already locked');
-        }
-        $this->_lock = fopen("temp/create-user.lock", "w");
-
-        $startTime = microtime(true);
-        while(true) {
-            if (flock($this->_lock, LOCK_EX | LOCK_NB)) {
-                break;
-            }
-            if (microtime(true)-$startTime > $this->_maxLockTime) {
-                throw new Kwf_Exception("Lock Failed, locked by");
-            }
-            usleep(rand(0, 100)*100);
-        }
-        fwrite($this->_lock, getmypid());
-    }
-
-    /**
-     * @param string E-Mail address of user
-     * @param string webcode parameter used for Service Model (that can have global users)
-     */
-    public function createUserRow($email, $webcode = null)
-    {
-        $row = parent::createRow(array('email' => $email));
-        $this->_resetPermissions($row);
-        return $row;
-    }
-
-    /**
-     * Setzt die rechte eines neuen users zurück. Meistens wird dies beim Anlegen
-     * aus einer Form sowieso überschrieben, aber sicher ist sicher. Hier könnte
-     * man zB auch additionalRoles löschen.
-     */
-    protected function _resetPermissions($row)
-    {
-        $row->role = 'guest';
     }
 
     /**
@@ -147,15 +55,17 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         if (is_null($identd)) {
             throw new Kwf_Exception("identity must not be null");
         }
-        $identdType = 'email';
         if (is_numeric($identd)) {
-            $identdType = 'id';
+            throw new Kwf_Exception("identity must not be numeric");
         }
 
-        $select = $this->select()
-            ->whereEquals($identdType, $identd)
-            ->whereEquals('deleted', 0);
-        $row = $this->getRow($select);
+        $row = null;
+        foreach ($this->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                $row = $auth->getRowByIdentity($identd);
+            }
+            if ($row) return $row;
+        }
 
         return $row;
     }
@@ -168,118 +78,134 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
     
     public function loginUserRow($row, $logLogin)
     {
-        if ($row->locked) {
-            $this->writeLog(array(
-                'user_id' => $row->id,
-                'message_type' => 'wrong_login_locked'
-            ));
-            return array(
-                'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
-                'identity'           => $row->email,
-                'messages'           => array(trlKwf('Account is locked'))
-            );
-        }
         Kwf_Auth::getInstance()->getStorage()->write(array(
             'userId' => $row->id
         ));
         if ($logLogin) {
             $this->_logLogin($row);
         }
-
-        return array(
-            'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
-            'identity'           => $row->email,
-            'messages'           => array(trlKwf('Authentication successful')),
-            'userId'             => $row->id
-        );
-    }
-
-    public function login($identity, $credential)
-    {
-        if (Kwf_Util_Https::supportsHttps() && !isset($_SERVER['HTTPS'])) {
-            throw new Kwf_Exception('not on https');
-        }
-
-        $row = $this->getRowByIdentity($identity);
-        if (!$row) {
-            return array(
-                'zendAuthResultCode' => Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND,
-                'identity'           => $identity,
-                'messages'           => array(trlKwf('User not existent in this web'))
-            );
-        }
-
-        if ($row->validatePassword($credential)) {
-            if ($row->locked) {
-                $this->writeLog(array(
-                    'user_id' => $row->id,
-                    'message_type' => 'wrong_login_locked'
-                ));
-                return array(
-                    'zendAuthResultCode' => Zend_Auth_Result::FAILURE_UNCATEGORIZED,
-                    'identity'           => $identity,
-                    'messages'           => array(trlKwf('Account is locked'))
-                );
-            }
-
-            // Login nur zählen wenn richtig normal eingeloggt
-            $passCol = $this->getPasswordColumn();
-            if ($credential == md5($row->$passCol)
-                || $row->encodePassword($credential) == $row->$passCol
-            ) {
-                return $this->loginUserRow($row, true);
-            } else {
-                return $this->loginUserRow($row, false);
-            }
-        } else {
-            $this->writeLog(array(
-                'user_id' => $row->id,
-                'message_type' => 'wrong_login_password'
-            ));
-            return array(
-                'zendAuthResultCode' => Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
-                'identity'           => $identity,
-                'messages'           => array(trlKwf('Supplied password is invalid'))
-            );
-        }
     }
 
     // if the login didn't happen with the test credentials this function has to be called
-    protected function _logLogin($row)
+    protected function _logLogin(Kwf_Model_Row_Interface $row)
     {
-        if (!$row->logins) $row->logins = 0;
-        $row->logins = $row->logins + 1;
-        $row->last_login = date('Y-m-d H:i:s');
-        $row->save();
+        $this->getProxyModel()->logLogin($row->getProxiedRow());
+    }
+
+    /**
+     * Overwrite to not use Activate- or Change Password-Component in Frontend
+     *
+     * e.g. some roles only see backend urls
+     *
+     * @return boolean
+     */
+    protected function _allowFrontendUrls($row)
+    {
+        return true;
+    }
+
+    public function getUserActivationUrl($row)
+    {
+        $root = Kwf_Component_Data_Root::getInstance();
+        $activateComponent = null;
+        if ($root && $this->_allowFrontendUrls($row)) {
+            // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
+            // für den Benutzer auswählen
+            // oder man leitet auf eine redirect seite um und schaut auf die
+            // browser accept language
+            $activateComponent = $root
+                ->getComponentByClass('Kwc_User_Activate_Component', array('limit' => 1));
+        }
+
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = Kwf_Registry::get('config')->server->domain;
+        }
+        $activateUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
+        if ($activateComponent) $activateUrl = $activateComponent->getAbsoluteUrl(true);
+        return $activateUrl.'?code='.$row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE);
+    }
+
+    public function getUserLostPasswordUrl($row)
+    {
+        $root = Kwf_Component_Data_Root::getInstance();
+        $lostPasswortComponent = null;
+        if ($root && $this->_allowFrontendUrls($row)) {
+            // todo: ganz korrekt müsste der Benutzer der anlegt eine Sprache
+            // für den Benutzer auswählen
+            // oder man leitet auf eine redirect seite um und schaut auf die
+            // browser accept language
+            $lostPasswortComponent = $root
+                ->getComponentByClass('Kwc_User_LostPassword_SetPassword_Component', array('limit' => 1));
+        }
+
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = Kwf_Registry::get('config')->server->domain;
+        }
+        $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
+        if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->getAbsoluteUrl(true);
+        return $lostPassUrl.'?code='.$row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_LOSTPASSWORD);
+    }
+
+    public function getUserLoginUrl($row)
+    {
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        } else {
+            $host = Kwf_Registry::get('config')->server->domain;
+        }
+        $url = Kwf_Controller_Front_Component::getInstance()->getWebRouter()->getRoute('admin')->assemble(array(
+            'module'     =>'index',
+            'controller' => 'index',
+            'action'     => 'index'
+        ));
+        $ret = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.'/' . $url;
+
+        $root = Kwf_Component_Data_Root::getInstance();
+        if ($root && $this->_allowFrontendUrls($row)) {
+            $component = $root->getComponentByClass(
+                'Kwc_User_Login_Component', array('limit' => 1)
+            );
+            if ($component) {
+                $ret = $component->getAbsoluteUrl(true);
+            }
+        }
+
+        return $ret;
     }
 
     public function lostPassword($email)
     {
-        $row = $this->getRow($this->select()
-            ->whereEquals('email', $email)
-            ->whereEquals('deleted', 0)
-        );
+        foreach ($this->getAuthMethods() as $auth) {
+            if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                $row = $auth->getRowByIdentity($email);
+                if ($row) {
+                    foreach ($this->getAuthMethods() as $auth2) {
+                        if ($auth2 instanceof Kwf_User_Auth_Interface_Redirect) {
+                            if (!$auth2->allowPasswordForUser($row)) {
+                                $label = $auth2->getLoginRedirectLabel();
+                                $label = Kwf_Trl::getInstance()->trlStaticExecute($label['name']);
+                                throw new Kwf_Exception_Client(trlKwf("This user doesn't have a password, please log in using {0}", $label));
+                            }
+                        }
+                    }
+                    $auth->sendLostPasswordMail($row, $row);
+                    break;
+                }
+            }
+        }
         if (!$row) {
             throw new Kwf_Exception_Client(trlKwf('User not existent in this web.'));
-        }
-        if ($row->locked) {
-            throw new Kwf_Exception_Client(trlKwf('User is currently locked.'));
-        }
-
-        if ($row->sendLostPasswordMail()) {
-            return trlKwf('Activation link sent to email address.');
-        } else {
-            return trlKwf('Error sending the mail.');
         }
     }
 
     public function setPassword($user, $password)
     {
-        Kwf_Auth::getInstance()->clearIdentity();
         $user->setPassword($password);
-        $this->_logLogin($user);
-        $auth = Kwf_Auth::getInstance();
-        $auth->getStorage()->write(array('userId' => $user->id));
+        $this->loginUserRow($user, true);
         return null;
     }
 
@@ -364,30 +290,44 @@ class Kwf_User_Model extends Kwf_Model_RowCache implements Kwf_User_ModelInterfa
         $storage->write($loginData);
     }
 
-    public function synchronize($overrideMaxSyncDelay = Kwf_Model_MirrorCache::SYNC_AFTER_DELAY)
+    public function getAuthMethods()
     {
-        //NOOP, implemented in Service_Model
-    }
-
-    public function writeLog(array $data)
-    {
-        if ($this->_logActions) {
-            $this->getDependentModel('Messages')->createRow($data)->save();
+        if (!isset($this->_authMethods)) {
+            $this->_authMethods = array();
+            foreach ($this->getProxyModel()->getAuthMethods($this) as $k=>$auth) {
+                if ($auth instanceof Kwf_User_Auth_Interface_Password) {
+                    $this->_authMethods[$k] = new Kwf_User_Auth_Proxy_Password(
+                        $auth, $this
+                    );
+                } else if ($auth instanceof Kwf_User_Auth_Interface_AutoLogin) {
+                    $this->_authMethods[$k] = new Kwf_User_Auth_Proxy_AutoLogin(
+                        $auth, $this
+                    );
+                } else if ($auth instanceof Kwf_User_Auth_Interface_Redirect) {
+                    $this->_authMethods[$k] = new Kwf_User_Auth_Proxy_Redirect(
+                        $auth, $this
+                    );
+                } else if ($auth instanceof Kwf_User_Auth_Interface_Activation) {
+                    $this->_authMethods[$k] = new Kwf_User_Auth_Proxy_Activation(
+                        $auth, $this
+                    );
+                } else {
+                    throw new Kwf_Exception_NotYetImplemented();
+                }
+            }
         }
+        return $this->_authMethods;
     }
 
-    public function getPasswordColumn()
+    public function getEditModel()
     {
-        return $this->_passwordColumn;
-    }
-
-    public function getNoLogColumns()
-    {
-        return $this->_noLogColumns;
-    }
-
-    public function getKwfModel()
-    {
-        return $this;
+        $m = $this->getProxyModel();
+        if ($m instanceof Kwf_User_EditModel) return $m;
+        if ($m instanceof Kwf_Model_Union) {
+            foreach ($m->getUnionModels() as $m) {
+                if ($m instanceof Kwf_User_EditModel) return $m;
+            }
+        }
+        throw new Kwf_Exception("Can't find User EditModel, override getEditModel or don't use it");
     }
 }

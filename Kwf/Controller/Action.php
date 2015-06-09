@@ -49,10 +49,12 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
     protected function _validateSessionToken()
     {
         if ($this->_helper->getHelper('viewRenderer')->isJson() && Kwf_Util_SessionToken::getSessionToken()) {
-            if (!$this->_getParam('kwfSessionToken')) {
-                throw new Kwf_Exception("Missing sessionToken parameter");
+            if (!$this->_getParam('kwfSessionToken') && !$this->getRequest()->getHeader('X-Kwf-Session-Token')) {
+                throw new Kwf_Exception("Missing sessionToken parameter or X-Kwf-Session-Token header");
             }
-            if ($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken()) {
+            if (($this->_getParam('kwfSessionToken') != Kwf_Util_SessionToken::getSessionToken())
+                &&  ($this->getRequest()->getHeader('X-Kwf-Session-Token') != Kwf_Util_SessionToken::getSessionToken())
+            ) {
                 throw new Kwf_Exception("Invalid kwfSessionToken");
             }
         }
@@ -74,18 +76,38 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
         $this->_validateSessionToken();
 
         $t = microtime(true);
+        $allowed = $this->_isAllowedResource();
+        if ($allowed) {
+            $allowed = $this->_isAllowed($this->_getAuthData());
+        }
+
+        if (!$allowed) {
+            $params = array(
+                'role' => $this->_getUserRole()
+            );
+            if ($this->getHelper('ViewRenderer')->isJson()) {
+                $this->_forward('json-login', 'login',
+                                    'kwf_controller_action_user', $params);
+            } else {
+                $params = array('location' => $this->getRequest()->getBaseUrl().'/'.ltrim($this->getRequest()->getPathInfo(), '/'));
+                $this->_forward('index', 'login',
+                                    'kwf_controller_action_user', $params);
+            }
+        }
+
+        Kwf_Benchmark::subCheckpoint('check acl', microtime(true)-$t);
+    }
+
+    protected function _isAllowedResource()
+    {
         $allowed = false;
         if ($this->_getUserRole() == 'cli') {
             $allowed = true;
         } else {
             $acl = $this->_getAcl();
             $resource = $this->getRequest()->getResourceName();
-            if ($resource == 'kwf_user_changeuser') {
-                //spezielle berechtigungsabfrage für Benutzerwechsel
-                $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
-                $allowed = $acl->isAllowed($role, $resource, 'view');
-            } else if ($resource == 'kwf_component') {
-                $allowed = $this->_isAllowedComponent(); // Bei Test ist niemand eingeloggt und deshalb keine Prüfung
+            if ($resource == 'kwf_component') {
+                $allowed = $this->_isAllowedComponent();
             } else {
                 if (!$acl->has($resource)) {
                     throw new Kwf_Exception_NotFound();
@@ -97,27 +119,8 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
                     }
                 }
             }
-            if ($allowed) {
-                $allowed = $this->_isAllowed($this->_getAuthData());
-            }
         }
-
-        if (!$allowed) {
-            $params = array(
-                'resource' => $resource,
-                'role' => $this->_getUserRole()
-            );
-            if ($this->getHelper('ViewRenderer')->isJson()) {
-                $this->_forward('json-login', 'login',
-                                    'kwf_controller_action_user', $params);
-            } else {
-                $params = array('location' => $this->getRequest()->getBaseUrl().$this->getRequest()->getPathInfo());
-                $this->_forward('index', 'login',
-                                    'kwf_controller_action_user', $params);
-            }
-        }
-
-        Kwf_Benchmark::subCheckpoint('check acl', microtime(true)-$t);
+        return $allowed;
     }
 
     protected function _isAllowed($user)
@@ -143,20 +146,24 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
     public function postDispatch()
     {
-        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Events_ModelObserver::getInstance()->process();
         Kwf_Component_Cache::getInstance()->writeBuffer();
     }
 
     protected function _getUserRole()
     {
         if (php_sapi_name() == 'cli') return 'cli';
-        return Kwf_Registry::get('userModel')->getAuthedUserRole();
+        $um = Kwf_Registry::get('userModel');
+        if (!$um) return null;
+        return $um->getAuthedUserRole();
     }
 
     protected function _getAuthData()
     {
         if (php_sapi_name() == 'cli') return null;
-        return Kwf_Registry::get('userModel')->getAuthedUser();
+        $um = Kwf_Registry::get('userModel');
+        if (!$um) return null;
+        return $um->getAuthedUser();
     }
     /**
      * @return Kwf_Acl
