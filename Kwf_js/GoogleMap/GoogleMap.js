@@ -106,7 +106,7 @@ Kwf.GoogleMap.Map = function(config) {
     });
 
     this.mapContainer = Ext2.get(config.mapContainer);
-    this._baseParams = Ext.apply({}, config.baseParams);
+    this._baseParams = Ext2.applyIf({}, config.baseParams);
     this.markers = [];
     this.config = config;
     if (typeof this.config.width == 'undefined') this.config.width = 350;
@@ -295,7 +295,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             return;
         }
         var bounds = this.gmap.getBounds();
-        this._baseParams = Ext.apply({
+        this._baseParams = Ext2.applyIf({
             lowestLng: bounds.getSouthWest().lng(),
             lowestLat: bounds.getSouthWest().lat(),
             highestLng: bounds.getNorthEast().lng(),

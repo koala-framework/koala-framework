@@ -37,7 +37,7 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
             }
             $ret['options']['searchFormComponentId'] = $this->_getSearchForm()->componentId;
         }
-        $ret['options']['componentId'] = $this->getData()->componentId;
+        $ret['options']['baseParams']['componentId'] = $this->getData()->componentId;
         $ret['options']['markers'] = Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl('Markers').'/json-index';
         return $ret;
     }
