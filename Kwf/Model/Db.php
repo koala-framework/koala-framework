@@ -945,7 +945,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                     ) {
                         $o['field'] = $this->_formatField($o['field'], $dbSelect);
                     }
-                    $dbSelect->order($o['field'].' '.$o['direction']);
+                    $dbSelect->order(new Zend_Db_Expr($o['field'].' '.$o['direction']));
                 }
             }
         }
