@@ -136,7 +136,8 @@ class Kwf_Assets_Package
             $commonJsDeps = $this->_getCommonJsDeps($dep, $language);
             $ret['data'][$dep->__toString()] = array(
                 'id' => $dep->__toString(),
-                'source' => $c = $dep->getContentsPacked($language),
+                'source' => $c = $dep->getContentsPacked($language)->getFileContentsInlineMap(false),
+                'sourceFile' => $dep->__toString(), //TODO
                 'deps' => $commonJsDeps['deps'],
                 'entry' => false
             );
@@ -173,11 +174,12 @@ class Kwf_Assets_Package
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript') && $i->isEntry()) {
-                    $c = $i->getContentsPacked($language)->getFileContents();
+                    $c = $i->getContentsPacked($language)->getFileContentsInlineMap(false);
                     $commonJsDeps = $this->_getCommonJsDeps($i, $language);
                     $commonJsData[$i->__toString()] = array(
                         'id' => $i->__toString(),
                         'source' => $c,
+                        'sourceFile' => $i->__toString(), //TODO
                         'deps' => $commonJsDeps['deps'],
                         'entry' => true
                     );
@@ -214,16 +216,18 @@ class Kwf_Assets_Package
                             unset($commonJsData[$key]);
                         }
                     }
+                    $c = $i->getContentsPacked($language)->getFileContentsInlineMap(false);
                     $commonJsData[$i->__toString()] = array(
                         'id' => $i->__toString(),
                         'source' => $c,
+                        'sourceFile' => $i->__toString(), //TODO
                         'deps' => $commonJsDeps['deps'],
                         'entry' => true
                     );
                 }
             }
             $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData));
-            $map = Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
+            $map = Kwf_SourceMaps_SourceMap::createFromInline($contents);
             $packageMap->concat($map);
         }
 
