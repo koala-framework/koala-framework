@@ -106,6 +106,8 @@ Kwf.GoogleMap.Map = function(config) {
     });
 
     this.mapContainer = Ext2.get(config.mapContainer);
+    this._baseParams = Ext.apply({}, config.baseParams);
+    this.markers = [];
     this.config = config;
     if (typeof this.config.width == 'undefined') this.config.width = 350;
     if (typeof this.config.height == 'undefined') this.config.height = 300;
@@ -183,7 +185,7 @@ Kwf.GoogleMap.Map = function(config) {
 
 Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
 
-    markers: [ ],
+    markers: null,
     show : function()
     {
         this.directionsService = new google.maps.DirectionsService();
@@ -284,12 +286,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             }, this);
         }
         this._focusAllLightMarkers = true;
-        this._reloadMarkers(this._reloadParams);
-    },
-
-    _reloadParams: {},
-    setReloadParams: function (params) {
-        this._reloadParams = params;
+        this._reloadMarkers();
     },
 
     _reloadMarkersOnMapChange: function() {
@@ -297,17 +294,18 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             this._alreadyLoaded = false;
             return;
         }
-        var params = this._reloadParams;
         var bounds = this.gmap.getBounds();
-        params.lowestLng = bounds.getSouthWest().lng();
-        params.lowestLat = bounds.getSouthWest().lat();
-        params.highestLng = bounds.getNorthEast().lng();
-        params.highestLat = bounds.getNorthEast().lat();
-        this._reloadMarkers(params);
+        this._baseParams = Ext.apply({
+            lowestLng: bounds.getSouthWest().lng(),
+            lowestLat: bounds.getSouthWest().lat(),
+            highestLng: bounds.getNorthEast().lng(),
+            highestLat: bounds.getNorthEast().lat()
+        }, this._baseParams);
+
+        this._reloadMarkers();
     },
 
-    _reloadMarkers: function(params) {
-        params.componentId = this.config.componentId;
+    _reloadMarkers: function() {
         if (!this.gmapLoader) {
             this.gmapLoader = Ext2.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
             this.gmapLoader.dom.innerHTML = trlKwf('Loading...');
@@ -317,6 +315,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
 
         this.lastReloadMarkersRequestId = this.ajax.request({
             url: this.config.markers,
+            params: this._baseParams,
             success: function(response, options, result) {
                 for (var i = 0; i < this.markers.length; i++) {
                     this.markers[i].keep = false;
@@ -351,7 +350,6 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
                 this.gmapLoader.hide();
                 this.fireEvent('reload', this);
             },
-            params: params,
             scope: this
         });
     },
