@@ -68,7 +68,10 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
                 foreach (glob(VENDOR_PATH.'/bower_components/*') as $i) {
                     $type = substr($i, strlen(VENDOR_PATH.'/bower_components/'));
                     if (substr($type, -3) == '.js') $type = substr($type, 0, -3);
-                    if (substr($type, -2) == 'js') $type = substr($type, 0, -2);
+                    if (substr($type, -2) == 'js') {
+                        $paths[$type] = $i;
+                        $type = substr($type, 0, -2);
+                    }
                     $paths[$type] = $i;
                 }
                 $paths['web'] = '.';
