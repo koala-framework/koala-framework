@@ -4,9 +4,11 @@ abstract class Kwf_Assets_Dependency_Abstract
     const DEPENDENCY_TYPE_ALL = 'all';
     const DEPENDENCY_TYPE_REQUIRES = 'requires';
     const DEPENDENCY_TYPE_USES = 'uses';
+    const DEPENDENCY_TYPE_COMMONJS = 'commonjs';
     protected $_dependencies = array();
 
     private $_deferLoad = false;
+    private $_isCommonJsEntry = false;
 
     public function __construct()
     {
@@ -20,6 +22,17 @@ abstract class Kwf_Assets_Dependency_Abstract
     public function setDeferLoad($v)
     {
         $this->_deferLoad = $v;
+    }
+
+    public function setIsCommonJsEntry($v)
+    {
+        $this->_isCommonJsEntry = $v;
+        return $this;
+    }
+
+    public function isCommonJsEntry()
+    {
+        return $this->_isCommonJsEntry;
     }
 
     public function getContents($language)
@@ -147,6 +160,11 @@ abstract class Kwf_Assets_Dependency_Abstract
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES) as $i) {
             echo str_repeat(' ', $indent*2);
             echo 'requires ';
+            $this->_printDebugTree($i, $indent+1, $processed);
+        }
+        foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS) as $i) {
+            echo str_repeat(' ', $indent*2);
+            echo 'commonjs ';
             $this->_printDebugTree($i, $indent+1, $processed);
         }
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES) as $i) {

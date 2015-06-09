@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "84c5ac23f5245068e0d3cdf40adda92f",
+    "hash": "48cac14c1fdffbb8e065a18b8071c76c",
     "packages": [
         {
             "name": "koala-framework/composer-extra-assets",
@@ -246,12 +246,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/sourcemaps.git",
-                "reference": "661ed66a93136f5dcc837a1fa0d15e81ad1ea839"
+                "reference": "1542bf194b5236872acc1290d78cff92c6dfd088"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/sourcemaps/zipball/661ed66a93136f5dcc837a1fa0d15e81ad1ea839",
-                "reference": "661ed66a93136f5dcc837a1fa0d15e81ad1ea839",
+                "url": "https://api.github.com/repos/koala-framework/sourcemaps/zipball/1542bf194b5236872acc1290d78cff92c6dfd088",
+                "reference": "1542bf194b5236872acc1290d78cff92c6dfd088",
                 "shasum": ""
             },
             "require-dev": {
@@ -274,7 +274,7 @@
             ],
             "description": "Sourcemaps Utities",
             "homepage": "http://www.koala-framework.org/",
-            "time": "2015-06-08 16:01:46"
+            "time": "2015-06-09 11:10:12"
         },
         {
             "name": "koala-framework/zendframework1",
