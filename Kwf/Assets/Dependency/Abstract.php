@@ -8,7 +8,7 @@ abstract class Kwf_Assets_Dependency_Abstract
     protected $_dependencies = array();
 
     private $_deferLoad = false;
-    private $_entry = false;
+    private $_isCommonJsEntry = false;
 
     public function __construct()
     {
@@ -24,15 +24,15 @@ abstract class Kwf_Assets_Dependency_Abstract
         $this->_deferLoad = $v;
     }
 
-    public function setIsEntry($v)
+    public function setIsCommonJsEntry($v)
     {
-        $this->_entry = $v;
+        $this->_isCommonJsEntry = $v;
         return $this;
     }
 
-    public function isEntry()
+    public function isCommonJsEntry()
     {
-        return $this->_entry;
+        return $this->_isCommonJsEntry;
     }
 
     public function getContents($language)

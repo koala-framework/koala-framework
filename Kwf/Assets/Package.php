@@ -173,7 +173,7 @@ class Kwf_Assets_Package
         $commonJsDeps = array();
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
-                if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript') && $i->isEntry()) {
+                if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript') && $i->isCommonJsEntry()) {
                     $c = $i->getContentsPacked($language)->getFileContentsInlineMap(false);
                     $commonJsDeps = $this->_getCommonJsDeps($i, $language);
                     $commonJsData[$i->__toString()] = array(

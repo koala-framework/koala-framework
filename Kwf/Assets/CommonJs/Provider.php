@@ -15,7 +15,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
         if ($dependency->getMimeType() != 'text/javascript' && $dependency->getMimeType() != 'text/javascript; defer') {
             return array();
         }
-        if (!$dependency->isEntry()) {
+        if (!$dependency->isCommonJsEntry()) {
             return array();
         }
         if ($dependency instanceof Kwf_Assets_Dependency_File) {
