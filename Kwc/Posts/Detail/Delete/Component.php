@@ -10,7 +10,7 @@ class Kwc_Posts_Detail_Delete_Component extends Kwc_Abstract
             'name' => trlKwfStatic('confirmed')
         );
         $ret['placeholder']['deletePost'] = trlKwfStatic('Do you really want to delete this post?');
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'kwfup-webStandard';
         return $ret;
     }
 

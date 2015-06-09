@@ -55,7 +55,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
 
         $ret['assetsDefer']['dep'][] = 'KwfMailDecode';
 
-        $ret['cssClass'] = 'webStandard kwcText';
+        $ret['cssClass'] = 'kwfup-webStandard kwcText';
 
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;

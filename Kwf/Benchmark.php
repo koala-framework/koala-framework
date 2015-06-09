@@ -183,8 +183,10 @@ class Kwf_Benchmark
             $benchmarkOutput[] = "DB-Queries: (none)";
         }
         if (PHP_SAPI != 'cli' && (Kwf_Config::getValue('debug.benchmark') || isset($_REQUEST['KWF_BENCHMARK']))) {
-            echo '<div class="benchmarkBox" data-benchmark-type="server">';
-            echo '<div class="benchmarkBoxContent">';
+            $up = Kwf_Config::getValue('application.uniquePrefix');
+            if ($up) $up .= '-';
+            echo '<div class="'.$up.'benchmarkBox" data-benchmark-type="server">';
+            echo '<div class="'.$up.'benchmarkBoxContent">';
             foreach ($benchmarkOutput as $line) {
                 echo "$line<br />\n";
             }

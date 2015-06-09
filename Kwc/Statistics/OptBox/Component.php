@@ -12,7 +12,7 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'kwfup-webStandard';
         $ret['flags']['hasHeaderIncludeCode'] = true;
         return $ret;
     }

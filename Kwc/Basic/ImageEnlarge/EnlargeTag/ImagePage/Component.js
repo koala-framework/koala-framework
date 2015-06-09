@@ -1,1 +1,1 @@
-Kwf.Utils.ResponsiveImg('.kwcBasicImageEnlargeEnlargeTagImagePage .image .container');
+Kwf.Utils.ResponsiveImg('.cssClass .image .container');

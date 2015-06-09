@@ -3,12 +3,12 @@
 {% if showSuccess %}
     {{ renderer.component(success) }}
 {% elseif message %}
-    <div class="webStandard webForm kwcForm">
+    <div class="kwfup-webStandard kwfup-webForm kwcForm">
         {{ message }}
     </div>
 {% else %}
     {% if errors %}
-        <div class="webStandard kwcFormError webFormError">
+        <div class="kwfup-webStandard kwcFormError kwfup-webFormError">
         <p class="error">{{ placeholder.error }}:</p>
         <ul>
         {% for error in errors %}
@@ -17,7 +17,7 @@
         </ul>
         </div>
     {% endif %}
-    <div class="webStandard webForm kwcForm" data-width="100%">
+    <div class="kwfup-webStandard kwfup-webForm kwfup-kwcForm" data-width="100%">
     {% block formHeader %}
     {% if header %}{{ renderer.component(header) }}{% endif %}
     {% endblock %}

@@ -5,7 +5,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['form'] = 'Kwc_User_Login_Form_Component';
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'kwfup-webStandard';
         $ret['plugins'] = array('Kwc_User_Login_Plugin');
         $ret['flags']['processInput'] = true;
         return $ret;

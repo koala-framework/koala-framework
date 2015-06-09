@@ -1,7 +1,7 @@
 Kwf.onContentReady(function(readyEl, param) {
     if (!param.newRender) return false;
-    Ext2.select('.kwcForm > form', true, readyEl).each(function(form) {
-        form = form.parent('.kwcForm', false);
+    Ext2.select('.kwfup-kwcForm > form', true, readyEl).each(function(form) {
+        form = form.parent('.kwfup-kwcForm', false);
         if (form.dom.shopBoxCartInitDone) return;
         form.dom.shopBoxCartInitDone = true;
         form.kwcForm.on('submitSuccess', function(r) {

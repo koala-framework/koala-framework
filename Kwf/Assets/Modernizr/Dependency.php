@@ -62,6 +62,9 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
                 $tests[] = strtolower($filter->filter($f));
             }
         }
+        if (Kwf_Config::getValue('application.uniquePrefix')) {
+            $extensibility["cssclassprefix"] = Kwf_Config::getValue('application.uniquePrefix').'-';
+        }
         $config = array(
             'modernizr' => array(
                 'dist' => array(
@@ -72,7 +75,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
                         "printshiv"  => false,
                         "load"       => false,
                         "mq"         => true,
-                        "cssclasses" => true
+                        "cssclasses" => true,
                     ),
                     'extensibility' => $extensibility,
                     'uglify' => true,

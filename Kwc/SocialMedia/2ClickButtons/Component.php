@@ -8,7 +8,7 @@ class Kwc_SocialMedia_2ClickButtons_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwfStatic('2 click social media buttons');
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
-        $ret['cssClass'] = 'webStandard webListNone';
+        $ret['cssClass'] = 'kwfup-webStandard kwfup-webListNone';
         $ret['assetsDefer']['files'][] = 'jquery.socialshareprivacy/jquery.socialshareprivacy.min.js';
         $ret['assetsDefer']['files'][] = 'jquery.socialshareprivacy/socialshareprivacy/socialshareprivacy.css';
         $ret['assetsDefer']['dep'][] = 'jQuery';

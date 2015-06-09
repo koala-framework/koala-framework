@@ -15,7 +15,7 @@ class Kwc_Posts_Write_Preview_Component extends Kwc_Abstract
         $ret['sourceSelector'] = 'textarea';
         $ret['textClass'] = 'text';
 
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'kwfup-webStandard';
 
         return $ret;
     }

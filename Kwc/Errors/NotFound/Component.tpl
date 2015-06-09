@@ -1,4 +1,4 @@
-<div class="webStandard" id="error404">
+<div class="kwfup-webStandard" id="error404">
     <div class="left">
         <h1><?=$this->data->trlKwf('404 - File not found');?></h1>
         <p><?=$this->data->trlKwf('Sorry, that address');?> (<?=$this->requestUri;?>) <?=$this->data->trlKwf('does not exist at this site');?>.</p>

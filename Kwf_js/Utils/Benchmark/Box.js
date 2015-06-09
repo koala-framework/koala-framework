@@ -105,7 +105,7 @@
         container.append($(el));
 
         var benchmarkType = $(el).data('benchmarkType');
-        if (getCookie('benchmarkBox-'+benchmarkType)=='1') {
+        if (getCookie('kwfup-benchmarkBox-'+benchmarkType)=='1') {
             $(el).addClass('visible');
         }
         var showLink = $('<a href="#" class="showContent">['+benchmarkType+']</a>');
@@ -116,10 +116,10 @@
             var el = $(this);
             if (!el.parent().hasClass('visible')) {
                 el.parent().addClass('visible');
-                setCookie('benchmarkBox-'+benchmarkType, '1');
+                setCookie('kwfup-benchmarkBox-'+benchmarkType, '1');
             } else {
                 el.parent().removeClass('visible');
-                setCookie('benchmarkBox-'+benchmarkType, '0');
+                setCookie('kwfup-benchmarkBox-'+benchmarkType, '0');
             }
         });
     };
@@ -160,15 +160,15 @@
         Kwf.Utils.BenchmarkBox._counters = {};
         Kwf.Utils.BenchmarkBox._timers = {};
         Kwf.Utils.BenchmarkBox._subTimers = {};
-        html = '<div class="benchmarkBoxContent">'+html+'</div>';
-        html = '<div class="benchmarkBox" data-benchmark-type="'+options.type+'">'+html+'</div>';
+        html = '<div class="kwfup-benchmarkBoxContent">'+html+'</div>';
+        html = '<div class="kwfup-benchmarkBox" data-benchmark-type="'+options.type+'">'+html+'</div>';
         el = $(html);
         $('body').append(el);
         Kwf.Utils.BenchmarkBox.initBox(el);
     };
     $(function() {
         setTimeout(function() {
-            $('body').find('.benchmarkBox').each(function(i, el) {
+            $('body').find('.kwfup-benchmarkBox').each(function(i, el) {
                 Kwf.Utils.BenchmarkBox.initBox($(el));
             });
         }, 10);

@@ -53,7 +53,9 @@ class Kwf_Component_Abstract
             $c = substr($c, 0, -10);
         }
         $c = str_replace('_', '', $c);
-        return strtolower(substr($c, 0, 1)) . substr($c, 1);
+        $c = strtolower(substr($c, 0, 1)) . substr($c, 1);
+        $c = 'kwfup-'.$c;
+        return $c;
     }
 
     public static function getParentClasses($c)

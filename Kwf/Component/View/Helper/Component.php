@@ -10,6 +10,22 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
         );
     }
 
+    protected function _replaceKwfUp($ret)
+    {
+        $ret = preg_replace_callback('#((class|id)="[^"]*)"#', array('Kwf_Component_View_Helper_Component', '_replaceCb'), $ret);
+        return $ret;
+    }
+
+    public static function _replaceCb($m)
+    {
+        static $up;
+        if (!isset($up)) {
+            $up = Kwf_Config::getValue('application.uniquePrefix');
+            if ($up) $up .= '-';
+        }
+        return str_replace('kwfup-', $up, $m[0]);
+    }
+
     public function render($componentId, $config)
     {
         $renderer = $this->_getRenderer();
@@ -32,6 +48,7 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
             $twig = new Kwf_Component_Renderer_Twig_Environment($renderer);
             $ret = $twig->render($tpl, $vars);
         }
+        $ret = $this->_replaceKwfUp($ret);
         return $ret;
     }
 

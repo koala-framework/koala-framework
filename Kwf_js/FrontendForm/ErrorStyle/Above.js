@@ -14,7 +14,7 @@ Kwf.FrontendForm.ErrorStyle.Above = Ext2.extend(Kwf.FrontendForm.ErrorStyle.Abst
     hideErrors: function()
     {
         Kwf.FrontendForm.ErrorStyle.Above.superclass.hideErrors.call(this);
-        var error = this.form.el.parent().child('.webFormError');
+        var error = this.form.el.parent().child('.kwfup-webFormError');
         if (error) error.remove();
     },
 

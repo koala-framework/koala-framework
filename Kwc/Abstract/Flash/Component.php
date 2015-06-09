@@ -15,7 +15,7 @@ abstract class Kwc_Abstract_Flash_Component extends Kwc_Abstract
         $ret['assets']['dep'][] = 'ExtUtilJson';
         $ret['assets']['dep'][] = 'SwfObject';
 
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'kwfup-webStandard';
 
         $ret['removeHiddenFlash'] = true;
 

@@ -13,7 +13,7 @@ class Kwc_List_ChildPages_Teaser_Component extends Kwc_Abstract
 
         $ret['componentName'] = trlKwfStatic('List child pages');
         $ret['componentCategory'] = 'childPages';
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'kwfup-webStandard';
         $ret['assetsAdmin']['dep'][] = 'KwfProxyPanel';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/List/List.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/List/ChildPages/Teaser/Panel.js';

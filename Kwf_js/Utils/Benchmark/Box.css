@@ -1,24 +1,24 @@
-.benchmarkContainer {
+.kwfup-benchmarkContainer {
     position: absolute;
     top: 0px;
     right: 0px;
     z-index: 1000;
     width: 100px;
 }
-.benchmarkBox {
+.kwfup-benchmarkBox {
     text-align: left;
     width: 100px;
 }
 
-.benchmarkBox:hover {
+.kwfup-benchmarkBox:hover {
 }
 
-.benchmarkBox a.showContent {
+.kwfup-benchmarkBox a.showContent {
     font-family: Verdana;
     font-size: 10px;
     padding: 5px;
 }
-.benchmarkBox .benchmarkBoxContent {
+.kwfup-benchmarkBox .kwfup-benchmarkBoxContent {
     font-family: Verdana;
     font-size: 10px;
     background-color: white;
@@ -26,10 +26,10 @@
     padding: 5px; padding-top: 0;
     display: none;
 }
-.benchmarkBox.visible {
+.kwfup-benchmarkBox.visible {
     width: 200px;
     margin-left: -100px;
 }
-.benchmarkBox.visible .benchmarkBoxContent {
+.kwfup-benchmarkBox.visible .kwfup-benchmarkBoxContent {
     display: block;
 }
