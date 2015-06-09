@@ -272,6 +272,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
                     this._focusAllLightMarkers = false;
                     this._alreadyLoaded = true;
 
+                    if (this.markers.length == 0) return;
                     // Calculate center of all markers via gmap
                     var latlngbounds = new google.maps.LatLngBounds();
                     this.markers.each(function(n){
