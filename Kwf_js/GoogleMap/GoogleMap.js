@@ -80,8 +80,9 @@ Kwf.GoogleMap.maps = [];
  *     lightMarkers (optional): An object of one marker or an array of markers.
  *            Markers at these positions will have another marker color.
  *     lightMarkerSrc (optional): An url to an image that should be used as light marker.
- *     zoom (optional): The initial zoom value. Either an integer or an array of
- *            longitude / latitude values that should be visible in the map.
+ *     zoom (optional): The initial zoom value. Either an integer, an array of
+ *            longitude / latitude values that should be visible in the map or null.
+ *            If null all existing markers are centered.
  *            Default value for zoom is 13.
  *            Example for array usage:
  *            [ top, right, bottom, left ]
@@ -115,7 +116,7 @@ Kwf.GoogleMap.Map = function(config) {
     if (typeof this.config.scale == 'undefined') this.config.scale = 1;
     if (typeof this.config.zoom_properties == 'undefined') this.config.zoom_properties = 0;
     if (typeof this.config.overview == 'undefined') this.config.overview = 1;
-    if (typeof this.config.zoom == 'undefined' || this.config.zoom == null) this.config.zoom = 13;
+    if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
     if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
     if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
@@ -225,6 +226,10 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             this.gmap.setMapTypeId(google.maps.MapTypeId.HYBRID);
         }
 
+        // zoom = null: load all markers
+        // zoom = 1-13: load displayed markers
+        // zoom = [a, b, x, y]: load displayed markers, but not on first idle because we need to initialise with zoom = 1-13
+        this._loadAll = this.config.zoom == null;
         if (typeof this.config.zoom == 'object'
             && this.config.zoom != null
             && this.config.zoom[0] && this.config.zoom[1]
@@ -237,10 +242,15 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         }
 
         if (typeof this.config.markers == 'string') {
-            if (this.config.dynamicStartPos) this.focusAllLightMarkers();
             google.maps.event.addListener(this.gmap, "idle", this._reloadMarkersOnMapChange.createDelegate(
                 this, [ ]
             ));
+
+            if (typeof this.config.zoom == 'object') {
+                this.on('reload', function () {
+                    this._centerMarkersIntoView();
+                }, this, { single: true });
+            }
         } else {
             this.config.markers.each(function(marker) {
                 this.addMarker(marker);
@@ -263,49 +273,47 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         this.fireEvent('show', this);
     },
 
-    _focusAllLightMarkers: false,
-    _focusAllLightMarkersHasListener: false,
-    _alreadyLoaded: false,
-    focusAllLightMarkers: function () {
-        if (!this._focusAllLightMarkersHasListener) {
-            this._focusAllLightMarkersHasListener = true;
-            this.on('reload', function () {
-                if (this._focusAllLightMarkers) {
-                    this._focusAllLightMarkers = false;
-                    this._alreadyLoaded = true;
-
-                    if (this.markers.length == 0) return;
-                    // Calculate center of all markers via gmap
-                    var latlngbounds = new google.maps.LatLngBounds();
-                    this.markers.each(function(n){
-                        if (n.kwfConfig.isLightMarker) latlngbounds.extend(n.getPosition());
-                    });
-                    this.gmap.setCenter(latlngbounds.getCenter());
-                    this.gmap.fitBounds(latlngbounds);
-                }
-            }, this);
-        }
-        this._focusAllLightMarkers = true;
-        this._reloadMarkers();
+    _centerMarkersIntoView: function() {
+        // Listener for centering view to all shown markers on first load
+        if (this.markers.length == 0) return;
+        // Calculate center of all markers via gmap
+        var latlngbounds = new google.maps.LatLngBounds();
+        this.markers.each(function(n){
+            if (n.kwfConfig.isLightMarker) latlngbounds.extend(n.getPosition());
+        });
+        this._dontReloadOnBoundsChange = true;
+        this.gmap.setCenter(latlngbounds.getCenter());
+        this.gmap.fitBounds(latlngbounds);
     },
 
+    centerMarkersIntoView: function() {
+        this.on('reload', function () {
+            this._centerMarkersIntoView();
+        }, this, { single: true });
+        this._loadAll = true;
+        this._reloadMarkersOnMapChange();
+    },
+
+    _dontReloadOnBoundsChange: false,
     _reloadMarkersOnMapChange: function() {
-        if (this._alreadyLoaded) {
-            this._alreadyLoaded = false;
+        var params = Ext2.applyIf({}, this._baseParams);
+        if (this._loadAll) {
+            this._loadAll = false;
+        } else {
+            var bounds = this.gmap.getBounds();
+            params.lowestLng = bounds.getSouthWest().lng();
+            params.lowestLat = bounds.getSouthWest().lat();
+            params.highestLng = bounds.getNorthEast().lng();
+            params.highestLat = bounds.getNorthEast().lat();
+        }
+        if (this._dontReloadOnBoundsChange) {
+            this._dontReloadOnBoundsChange = false;
             return;
         }
-        var bounds = this.gmap.getBounds();
-        this._baseParams = Ext2.applyIf({
-            lowestLng: bounds.getSouthWest().lng(),
-            lowestLat: bounds.getSouthWest().lat(),
-            highestLng: bounds.getNorthEast().lng(),
-            highestLat: bounds.getNorthEast().lat()
-        }, this._baseParams);
-
-        this._reloadMarkers();
+        this._reloadMarkers(params);
     },
 
-    _reloadMarkers: function() {
+    _reloadMarkers: function(params) {
         if (!this.gmapLoader) {
             this.gmapLoader = Ext2.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
             this.gmapLoader.dom.innerHTML = trlKwf('Loading...');
@@ -315,7 +323,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
 
         this.lastReloadMarkersRequestId = this.ajax.request({
             url: this.config.markers,
-            params: this._baseParams,
+            params: params,
             success: function(response, options, result) {
                 var reuseMarkers = [];
                 var newMarkers = [];
@@ -349,6 +357,14 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             },
             scope: this
         });
+    },
+
+    setBaseParams: function(params) {
+        this._baseParams = params;
+    },
+
+    getBaseParams: function() {
+        return this._baseParams;
     },
 
     addMarker : function(markerConfig)

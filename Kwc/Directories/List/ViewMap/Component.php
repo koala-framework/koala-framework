@@ -15,7 +15,6 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         $ret['mapOptions']['scale'] = 1;
         $ret['mapOptions']['satelite'] = 1;
         $ret['mapOptions']['overview'] = 1;
-        $ret['mapOptions']['dynamicStartPos'] = true; // if set to true, center of shown coordinates is used
         $ret['mapOptions']['latitude'] = 47.95334614; // if dynamicStartPos = true this is center if no markers available, else this
         $ret['mapOptions']['longitude'] = 13.24444771; // point is centered
         $ret['mapOptions']['showAlwaysAllMarkers'] = true; // if true searchResults are shown blue, rest is red
