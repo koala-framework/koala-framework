@@ -1,7 +1,7 @@
 (function() {
 var kwcFavouritesComponentIds = [];
 var kwcFavouritesInitialized = false;
-Kwf.onJElementReady('.kwcFavourites', function(el, config) {
+Kwf.onJElementReady('.cssClass', function(el, config) {
     kwcFavouritesComponentIds.push(config.componentId);
 
     if (!kwcFavouritesInitialized) {

@@ -1,4 +1,4 @@
-Kwf.onJElementReady('.kwcSocialMedia2ClickButtons', function(el, config) {
+Kwf.onJElementReady('.cssClass', function(el, config) {
     el.children('.socialShareButtons').socialSharePrivacy({
         services: {
             facebook: {

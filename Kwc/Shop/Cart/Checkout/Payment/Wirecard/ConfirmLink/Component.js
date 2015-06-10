@@ -1,4 +1,4 @@
-Kwf.onElementReady('.kwcShopCartCheckoutPaymentWirecardConfirmLink', function(el, config) {
+Kwf.onElementReady('.cssClass', function(el, config) {
     var form = el.child('form');
     el.child('.submit').on('click', function(e) {
         e.preventDefault();

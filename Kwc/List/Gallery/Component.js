@@ -1,4 +1,4 @@
-Kwf.Utils.ResponsiveEl('.kwcListGallery', [600, 360]);
+Kwf.Utils.ResponsiveEl('.cssClass', [600, 360]);
 
 Kwf.onJElementReady('.cssClass', function(el) {
     var button = el.children('.moreButton');

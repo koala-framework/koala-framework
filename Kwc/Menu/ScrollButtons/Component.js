@@ -1,4 +1,4 @@
-Kwf.onJElementReady('.kwcMenuScrollButtons', function(el) {
+Kwf.onJElementReady('.cssClass', function(el) {
     var menu = $(el).find('.menu');
 
     $(menu).before('<a class="arrowLeft"></a>').before('<a class="arrowRight"></a>');

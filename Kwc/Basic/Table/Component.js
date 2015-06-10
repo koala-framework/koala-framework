@@ -1,4 +1,4 @@
-Kwf.onJElementWidthChange('.kwcBasicTable.responsiveFlipScroll', function(el) {
+Kwf.onJElementWidthChange('.cssClass.responsiveFlipScroll', function(el) {
     var addArrow = function(el) {
         if (el.hasClass('flipScroll')) {
             var tbody = el.children('tbody');
@@ -20,7 +20,7 @@ Kwf.onJElementWidthChange('.kwcBasicTable.responsiveFlipScroll', function(el) {
         addArrow(el);
         if (!el.flipScrollSetAt) {
             el.children('tbody').on('scroll', function(ev) {
-                addArrow($(this).closest('.kwcBasicTable'));
+                addArrow($(this).closest('.cssClass'));
             });
         }
         el.data('flipScrollSetAt', el.width());

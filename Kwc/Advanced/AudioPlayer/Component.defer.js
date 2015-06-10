@@ -1,4 +1,4 @@
-Kwf.onJElementReady('.kwcAdvancedAudioPlayer', function(el, config) {
+Kwf.onJElementReady('.cssClass', function(el, config) {
     el.children('audio').mediaelementplayer({
         //custom path to flash
         flashName: '/assets/mediaelement/build/flashmediaelement.swf',

@@ -1,4 +1,4 @@
-Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
+Kwf.onJElementReady('.cssClass', function mobileMenu(el, config) {
     var slideDuration = 400;
     var menuLink = el.children('.showMenu');
     var left = 100;

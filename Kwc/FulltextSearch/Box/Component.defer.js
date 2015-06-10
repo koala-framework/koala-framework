@@ -153,7 +153,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
 
 
 
-Kwf.onElementReady('.kwcFulltextSearchBox', function fulltextSearchBox(el, config) {
+Kwf.onElementReady('.cssClass', function fulltextSearchBox(el, config) {
     new Kwc.FulltextSearch.Box.Component(el, config);
 }, {
     priority: 0, //call *after* initializing kwcForm to have access to searchForm

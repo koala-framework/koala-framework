@@ -1,8 +1,8 @@
-Kwf.onJElementReady('.kwcAdvancedCommunityVideo', function(el, config) {
+Kwf.onJElementReady('.cssClass', function(el, config) {
     el.data('config', config);
 }, {priority: -1});
 
-Kwf.onJElementWidthChange('.kwcAdvancedCommunityVideo', function(el, config) {
+Kwf.onJElementWidthChange('.cssClass', function(el, config) {
 
     var config = el.data('config');
     var iframe = el.find('iframe');
@@ -31,12 +31,12 @@ Kwf.onJElementWidthChange('.kwcAdvancedCommunityVideo', function(el, config) {
 }, {defer: true});
 
 
-Kwf.onJElementHide('.kwcAdvancedCommunityVideo', function(el) {
+Kwf.onJElementHide('.cssClass', function(el) {
     el.data('iframeHtml', el.find('.communityVideoPlayer').html());
     el.find('iframe').remove();
 });
 
-Kwf.onJElementShow('.kwcAdvancedCommunityVideo', function(el) {
+Kwf.onJElementShow('.cssClass', function(el) {
     if(el.data('iframeHtml')) {
         el.find('.communityVideoPlayer').html(el.data('iframeHtml'));
     }

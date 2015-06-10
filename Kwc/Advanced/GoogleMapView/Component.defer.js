@@ -1,4 +1,4 @@
-Kwf.Utils.ResponsiveEl('.kwcAdvancedGoogleMapView', [500]);
+Kwf.Utils.ResponsiveEl('.cssClass', [500]);
 
 Ext2.namespace('Kwc.Advanced.GoogleMap');
 Kwc.Advanced.GoogleMap.renderedMaps = [];

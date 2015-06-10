@@ -1,16 +1,16 @@
-Kwf.onElementReady('.kwcAdvancedYoutube .youtubePlayer', function(el, config) {
-    var kwcAdvancedYoutube = el.findParent('.kwcAdvancedYoutube', 5, true);
+Kwf.onElementReady('.cssClass .youtubePlayer', function(el, config) {
+    var kwcAdvancedYoutube = el.findParent('.cssClass', 5, true);
     kwcAdvancedYoutube.dom.config = config;
 }, {priority: -1});
 
-Kwf.onElementHide('.kwcAdvancedYoutube', function(el) {
+Kwf.onElementHide('.cssClass', function(el) {
     if (el.dom.player) {
         el.dom.player.pauseVideo();
     }
 }, {defer: true});
 
-Kwf.onElementShow('.kwcAdvancedYoutube .youtubePlayer', function(el) {
-    var kwcAdvancedYoutube = el.findParent('.kwcAdvancedYoutube', 5, true);
+Kwf.onElementShow('.cssClass .youtubePlayer', function(el) {
+    var kwcAdvancedYoutube = el.findParent('.cssClass', 5, true);
     var config = kwcAdvancedYoutube.dom.config;
     if (kwcAdvancedYoutube.dom.player) {
         if (config.playerVars.autoplay) kwcAdvancedYoutube.dom.player.playVideo();

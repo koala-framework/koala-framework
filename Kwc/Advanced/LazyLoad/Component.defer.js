@@ -1,4 +1,4 @@
-Kwf.onJElementReady('.kwcAdvancedLazyLoad', function(el) {
+Kwf.onJElementReady('.cssClass', function(el) {
     $.ajax({
         url: Kwf.getKwcRenderUrl(),
         data: {
