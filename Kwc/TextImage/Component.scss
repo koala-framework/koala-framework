@@ -1,5 +1,5 @@
 .cssClass {
-    .kwcBasicImageEnlarge {
+    .kwfup-kwcBasicImageEnlarge {
         text-align: center;
 
         img {
@@ -18,7 +18,7 @@
     }
 
     &.gt420, &.largeText {
-        .kwcBasicImageEnlarge {
+        .kwfup-kwcBasicImageEnlarge {
             img {
                 display: block;
             }
@@ -65,7 +65,7 @@
     }
 
     .image {
-        > .kwcAbstractImage {
+        > .kwfup-kwcAbstractImage {
             max-width: 100% !important;
         }
     }

@@ -1,5 +1,5 @@
 Kwf.onJElementReady('.cssClass', function(target, config) {
-    var mask = $('<div class="kwcMenuDropdownMaskMask"></div>');
+    var mask = $('<div class="kwfup-kwcMenuDropdownMaskMask"></div>');
     var maskClone = $(mask).clone();
     var subMask;
 
@@ -30,14 +30,14 @@ Kwf.onJElementReady('.cssClass', function(target, config) {
         })
     }
 
-    $('.kwcMenuDropdownMask > ul > li').on('mouseenter', function(e){
+    $('.cssClass > ul > li').on('mouseenter', function(e){
         if ($(e.currentTarget).hasClass('hasSubmenu'))
-            $('.kwcMenuDropdownMaskMask').addClass('visible')
+            $('.kwfup-kwcMenuDropdownMaskMask').addClass('visible')
     })
 
-    $('.kwcMenuDropdownMask > ul > li').on('mouseleave', function(e){
+    $('.cssClass > ul > li').on('mouseleave', function(e){
         if ($(e.currentTarget).hasClass('hasSubmenu'))
-            $('.kwcMenuDropdownMaskMask').removeClass('visible')
+            $('.kwfup-kwcMenuDropdownMaskMask').removeClass('visible')
     })
 });
 

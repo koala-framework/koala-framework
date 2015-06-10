@@ -6,11 +6,11 @@
     a {
         display: block;
 
-        &.kwcEnlargeTag,
-        &.kwcBasicDownloadTag,
-        &.kwcBasicLinkTagIntern,
-        &.kwcBasicLinkTagExtern,
-        &.kwcBasicLinkTagMail { position: relative; display: block; }
+        &.kwfup-kwcEnlargeTag,
+        &.kwfup-kwcBasicDownloadTag,
+        &.kwfup-kwcBasicLinkTagIntern,
+        &.kwfup-kwcBasicLinkTagExtern,
+        &.kwfup-kwcBasicLinkTagMail { position: relative; display: block; }
 
         img {
             display: block;
@@ -49,23 +49,23 @@
             opacity: 0.9;
         }
 
-        &.kwcEnlargeTag .outerHoverIcon .innerHoverIcon {
+        &.kwfup-kwcEnlargeTag .outerHoverIcon .innerHoverIcon {
             background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/enlargeIcon.png) no-repeat 0 0;
         }
 
-        &.kwcBasicLinkTagIntern .outerHoverIcon .innerHoverIcon {
+        &.kwfup-kwcBasicLinkTagIntern .outerHoverIcon .innerHoverIcon {
             background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkInternIcon.png) no-repeat 0 0;
         }
 
-        &.kwcBasicLinkTagExtern .outerHoverIcon .innerHoverIcon {
+        &.kwfup-kwcBasicLinkTagExtern .outerHoverIcon .innerHoverIcon {
             background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkExternIcon.png) no-repeat 0 0;
         }
 
-        &.kwcBasicDownloadTag .outerHoverIcon .innerHoverIcon {
+        &.kwfup-kwcBasicDownloadTag .outerHoverIcon .innerHoverIcon {
             background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/downloadIcon.png) no-repeat 0 0;
         }
 
-        &.kwcBasicLinkTagMail .outerHoverIcon .innerHoverIcon {
+        &.kwfup-kwcBasicLinkTagMail .outerHoverIcon .innerHoverIcon {
             background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/mailIcon.png) no-repeat 0 0;
         }
     }
