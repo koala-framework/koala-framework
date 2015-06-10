@@ -130,6 +130,12 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
             }
         }
 
+        $field = $db->fetchRow("SHOW FIELDS FROM `kwf_uploads` WHERE `Field` = 'md5_hash'");
+        if (!$field) {
+            $db->query("ALTER TABLE  `kwf_uploads` ADD  `md5_hash` VARCHAR( 32 ) NOT NULL");
+            $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
+        }
+
         if ($this->countUploads() < 50000) {
             $this->renameUploads();
             $this->createHashes();
@@ -187,11 +193,6 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
     public function createHashes()
     {
         $db = Kwf_Registry::get('db');
-        $field = $db->fetchRow("SHOW FIELDS FROM `kwf_uploads` WHERE `Field` = 'md5_hash'");
-        if (!$field) {
-            $db->query("ALTER TABLE  `kwf_uploads` ADD  `md5_hash` VARCHAR( 32 ) NOT NULL");
-            $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
-        }
         $s = new Kwf_Model_Select();
         $s->where("md5_hash = ''");
         $it = new Kwf_Model_Iterator_Packages(
