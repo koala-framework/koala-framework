@@ -93,7 +93,7 @@ Kwf.GoogleMap.maps = [];
  *     satelite (optional): 0 or 1, whether it should be possible to switch to satelite
  *            view or not. Defaults to 1.
  *     scale (optional): 0 or 1, whether to show the scale bar or not. Defaults to 1.
- *     zoom_properties (optional): 0 to show large zoom an move controls,
+ *     zoomProperties (optional): 0 to show large zoom an move controls,
  *            1 to show small zoom an move controls. Defaults to 0.
  *     overview (optional): 0 or 1, whether to show a small overview map at the bottom.
  */
@@ -114,7 +114,7 @@ Kwf.GoogleMap.Map = function(config) {
     if (typeof this.config.height == 'undefined') this.config.height = 300;
     if (typeof this.config.satelite == 'undefined') this.config.satelite = 1;
     if (typeof this.config.scale == 'undefined') this.config.scale = 1;
-    if (typeof this.config.zoom_properties == 'undefined') this.config.zoom_properties = 0;
+    if (typeof this.config.zoomProperties == 'undefined') this.config.zoomProperties = 0;
     if (typeof this.config.overview == 'undefined') this.config.overview = 1;
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
@@ -193,21 +193,21 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         this.directionsDisplay = new google.maps.DirectionsRenderer();
         //CONTROLLS
         if (parseInt(this.config.satelite)) {
-            this.config.map_type = true;
+            this.config.mapType = true;
         } else {
-            this.config.map_type = false;
+            this.config.mapType = false;
         }
         var mapOptions = {
             center: new google.maps.LatLng(parseFloat(this.config.latitude), parseFloat(this.config.longitude)),
             zoom: (typeof this.config.zoom == 'number')? parseInt(this.config.zoom) : 13, //initial zoom has to be set
             panControl: this.config.panControl,
-            zoomControl: this.config.zoom_properties,
+            zoomControl: this.config.zoomProperties,
             zoomControlOptions: {
                 style: google.maps.ZoomControlStyle[this.config.zoomControlStyle],
                 position: google.maps.ControlPosition[this.config.zoomControlPosition]
             },
             scaleControl: this.config.scale,
-            mapTypeControl: this.config.map_type,
+            mapTypeControl: this.config.mapType,
             overviewMapControl: this.config.overview,
             streetViewControl: this.config.streetViewControl,
             scrollwheel: this.config.scrollwheel
@@ -220,9 +220,9 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             this.directionsDisplay.setPanel(this.mapContainer.down(".mapDir").dom);
         }
 
-        if (this.config.map_type == 'satellite') {
+        if (this.config.mapType == 'satellite') {
             this.gmap.setMapTypeId(google.maps.MapTypeId.SATELLITE);
-        } else if (this.config.map_type == 'hybrid') {
+        } else if (this.config.mapType == 'hybrid') {
             this.gmap.setMapTypeId(google.maps.MapTypeId.HYBRID);
         }
 

@@ -9,7 +9,7 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         $ret['assetsDefer']['dep'][] = 'ExtConnection';
         $ret['generators']['child']['component']['paging'] = null;
         $ret['mapOptions']['zoom'] = null;
-        $ret['mapOptions']['zoom_properties'] = 0;
+        $ret['mapOptions']['zoomProperties'] = 0;
         $ret['mapOptions']['height'] = 400;
         $ret['mapOptions']['width'] = 550;
         $ret['mapOptions']['scale'] = 1;
@@ -19,6 +19,13 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         $ret['mapOptions']['longitude'] = 13.24444771; // point is centered
         $ret['mapOptions']['showAlwaysAllMarkers'] = true; // if true searchResults are shown blue, rest is red
         return $ret;
+    }
+
+    public static function validateSettings($settings, $componentClass)
+    {
+        foreach ($settings['mapOptions'] as $key => $value) {
+            if (strpos('_', $key) !== false) throw new Kwf_Exception('mapOptions must be camelCase');
+        }
     }
 
     public function getSelect()
