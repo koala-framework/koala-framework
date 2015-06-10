@@ -33,9 +33,6 @@ class Kwf_Assets_Package_Filter_UniquePrefix
         })();
         ';
 
-        //hack for ext2 to avoid duplicated ids getting generated
-        $map->stringReplace('ext2-gen', $uniquePrefix.'-ext2-gen');
-
         $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
         $ret->concat(Kwf_SourceMaps_SourceMap::createEmptyMap($head));
         $ret->concat($map);

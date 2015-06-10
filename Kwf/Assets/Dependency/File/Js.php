@@ -30,6 +30,10 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         $usesUniquePrefix = strpos($rawContents, '.cssClass') !== false || strpos($rawContents, 'kwfup-') !== false;
 
         $pathType = $this->getType();
+        if ($pathType == 'ext2' && strpos($rawContents, 'ext2-gen') !== false) {
+            $usesUniquePrefix = true;
+        }
+
         if ($usesUniquePrefix) {
             //when contents contain .cssClass we must cache per app
             $buildFile = 'cache/uglifyjs/'.$fileName.'.'.md5(file_get_contents($this->getAbsoluteFileName()));
@@ -58,6 +62,13 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 $replacements['url('] = 'url(/assets/mediaelement/build/';
             }
             if ($usesUniquePrefix) {
+                if ($pathType == 'ext2') {
+                    //hack for ext2 to avoid duplicated ids getting generated
+                    $uniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
+                    if ($uniquePrefix) {
+                        $map->stringReplace('ext2-gen', $uniquePrefix.'-ext2-gen');
+                    }
+                }
                 $cssClass = $this->_getComponentCssClass();
                 if ($cssClass) {
                     if (preg_match_all('#([\'"])\.cssClass([\s\'"\.])#', $contents, $m)) {
