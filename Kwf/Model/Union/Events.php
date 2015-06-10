@@ -42,7 +42,12 @@ class Kwf_Model_Union_Events extends Kwf_Model_EventSubscriber
                 $s->whereId($modelKey.$sourceRow->{$sourceModel->getPrimaryKey()});
                 $s->ignoreDeleted();
                 $unionRow = $unionModel->getRow($s);
-                $this->fireEvent(new $eventCls($unionRow));
+                if (!$unionRow) {
+                    $unionRow = $unionModel->_getRowById($modelKey.$sourceRow->{$sourceModel->getPrimaryKey()});
+                    $this->fireEvent(new Kwf_Events_Event_Row_Deleted($unionRow));
+                } else {
+                    $this->fireEvent(new $eventCls($unionRow));
+                }
                 return;
             }
         }

@@ -25,7 +25,7 @@ class Kwf_Model_Union_Rowset implements Kwf_Model_Rowset_Interface
 
     public function current()
     {
-        return $this->_model->getRowById($this->_it->current());
+        return $this->_model->_getRowById($this->_it->current());
     }
 
     public function key()
@@ -60,7 +60,7 @@ class Kwf_Model_Union_Rowset implements Kwf_Model_Rowset_Interface
 
     public function offsetGet($offset)
     {
-        return $this->_model->getRowById($this->_it->offsetGet($offset));
+        return $this->_model->_getRowById($this->_it->offsetGet($offset));
     }
 
     public function offsetSet($offset, $value)
