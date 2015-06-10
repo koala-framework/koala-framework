@@ -231,8 +231,10 @@ class Kwf_Assets_Package
             $packageMap->concat($map);
         }
 
-        if ($uniquePrefix = Kwf_Config::getValue('application.uniquePrefix')) {
-            $packageMap = Kwf_Assets_Package_Filter_UniquePrefix::filter($packageMap, $uniquePrefix);
+        if ($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') {
+            if ($uniquePrefix = Kwf_Config::getValue('application.uniquePrefix')) {
+                $packageMap = Kwf_Assets_Package_Filter_UniquePrefix::filter($packageMap, $uniquePrefix);
+            }
         }
 
         if ($includeSourceMapComment) {
