@@ -22,7 +22,7 @@ class Kwc_Advanced_GoogleMap_Component extends Kwc_Advanced_GoogleMapView_Compon
     {
         $row = $this->_getRow();
         $fields = array('coordinates', 'zoom', 'width', 'height', 'zoom_properties',
-                        'scale', 'satelite', 'overview', 'routing', 'map_type');
+                'scale', 'satelite', 'overview', 'routing', 'map_type', 'scrollwheel');
         foreach ($fields as $f) {
             $ret[$f] = $row->$f;
         }
