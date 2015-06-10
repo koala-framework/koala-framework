@@ -9,7 +9,7 @@ class Kwf_User_Auth_Union_AutoLogin extends Kwf_User_Auth_Union_Abstract impleme
         foreach ($this->_model->getUnionModels() as $k=>$m) {
             if ($m == $row->getModel()) {
                 $i = $k.$row->{$m->getPrimaryKey()};
-                return $this->_model->getRowById($i);
+                return $this->_model->getRow($i);
             }
         }
         return null;
