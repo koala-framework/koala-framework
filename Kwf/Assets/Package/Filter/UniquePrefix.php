@@ -8,7 +8,7 @@ class Kwf_Assets_Package_Filter_UniquePrefix
             if (!window.'.$uniquePrefix.') window.'.$uniquePrefix.' = {};
             var kwfUp = window.'.$uniquePrefix.';
 
-            var kwfNamespaces = ["Kwf", "Kwc", "Ext2", "$", "jQuery", "Modernizr", "require"];
+            var kwfNamespaces = ["Kwf", "Kwc", "Ext2", "$", "jQuery", "Modernizr", "require", "trl", "trlp"];
 
             var kwfOrigExports = {};
             for (var i=0; i<kwfNamespaces.length; i++) {
@@ -26,7 +26,7 @@ class Kwf_Assets_Package_Filter_UniquePrefix
         $foot = '
         for (var i=0; i<kwfNamespaces.length; i++) {
                 var up = kwfNamespaces[i];
-                kwfUp[up] = window[up];
+                kwfUp[up] = window[up] || eval(up);
                 window[up] = kwfOrigExports[up];
                 eval("var "+up+" = kwfUp."+up+";");
             }
