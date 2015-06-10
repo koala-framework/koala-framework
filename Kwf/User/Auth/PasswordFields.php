@@ -12,9 +12,14 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     private $_mailTransport = null;
     private $_passwordHashMethod = 'bcrypt';
 
+    protected function _getModelSelect()
+    {
+        return new Kwf_Model_Select();
+    }
+
     public function getRowByIdentity($identity)
     {
-        $s = new Kwf_Model_Select();
+        $s = $this->_getModelSelect();
         $s->whereEquals('email', $identity);
         return $this->_model->getRow($s);
     }
