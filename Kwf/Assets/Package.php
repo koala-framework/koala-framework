@@ -231,13 +231,6 @@ class Kwf_Assets_Package
             $packageMap->concat($map);
         }
 
-        if ($mimeType == 'text/javascript') {
-            $packageMap->stringReplace(
-                '{$application.assetsVersion}',
-                Kwf_Assets_Dispatcher::getAssetsVersion()
-            );
-        }
-
         if ($uniquePrefix = Kwf_Config::getValue('application.uniquePrefix')) {
             $packageMap = Kwf_Assets_Package_Filter_UniquePrefix::filter($packageMap, $uniquePrefix);
         }

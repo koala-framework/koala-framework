@@ -9,7 +9,7 @@ class Kwf_Assets_Provider_DefaultAssets extends Kwf_Assets_Provider_Abstract
     public function getDefaultDependencies()
     {
         $deps = array(
-            'Kwf.AssetsVersion',
+            'KwfDynamicAssetsVersion',
             'Kwf.Trl'
         );
         $ret = array();
