@@ -9,6 +9,7 @@
     width: 100%;
 }
 .kwfLightbox .kwfLightboxInner {
+    overflow: visible !important;                                                                                       //because of flicker when lightbox open for the first time
     min-width: 100px;
     min-height: 100px;
     background: #fff;
