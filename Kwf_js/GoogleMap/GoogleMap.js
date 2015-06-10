@@ -229,7 +229,6 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         // zoom = null: load all markers
         // zoom = 1-13: load displayed markers
         // zoom = [a, b, x, y]: load displayed markers, but not on first idle because we need to initialise with zoom = 1-13
-        this._loadAll = this.config.zoom == null;
         if (typeof this.config.zoom == 'object'
             && this.config.zoom != null
             && this.config.zoom[0] && this.config.zoom[1]
@@ -242,14 +241,15 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         }
 
         if (typeof this.config.markers == 'string') {
-            google.maps.event.addListener(this.gmap, "idle", this._reloadMarkersOnMapChange.createDelegate(
-                this, [ ]
-            ));
-
-            if (typeof this.config.zoom == 'object') {
-                this.on('reload', function () {
-                    this._centerMarkersIntoView();
-                }, this, { single: true });
+            if (this.config.zoom == null) {
+                /* 1. Wait till map is ready: first idle.
+                 * 2. Then load all markers.
+                 * */
+                google.maps.event.addListenerOnce(this.gmap, "idle",
+                    this._loadAllMarkers.createDelegate(this, []));
+            } else {
+                google.maps.event.addListener(this.gmap, "idle",
+                    this._reloadMarkersOnMapChange.createDelegate(this, [ ]));
             }
         } else {
             this.config.markers.each(function(marker) {
@@ -273,47 +273,50 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         this.fireEvent('show', this);
     },
 
-    _centerMarkersIntoView: function() {
-        // Listener for centering view to all shown markers on first load
-        if (this.markers.length == 0) return;
-        // Calculate center of all markers via gmap
-        var latlngbounds = new google.maps.LatLngBounds();
-        this.markers.each(function(n){
-            if (n.kwfConfig.isLightMarker) latlngbounds.extend(n.getPosition());
-        });
-        this._dontReloadOnBoundsChange = true;
-        this.gmap.setCenter(latlngbounds.getCenter());
-        this.gmap.fitBounds(latlngbounds);
-    },
-
-    centerMarkersIntoView: function() {
+    _loadAllMarkers: function()
+    {
+        /* 1. Add listener for markers finished loading
+         * 2. Load markers
+         * 3. Center all markers
+         * 4. Add listener for further map-movements
+         */
         this.on('reload', function () {
-            this._centerMarkersIntoView();
+            // Listener for centering view to all shown markers on first load
+            if (this.markers.length == 0) return;
+            // Calculate center of all markers via gmap
+            var latlngbounds = new google.maps.LatLngBounds();
+            this.markers.each(function(n){
+                if (n.kwfConfig.isLightMarker) latlngbounds.extend(n.getPosition());
+            });
+            this.gmap.setCenter(latlngbounds.getCenter());
+            this.gmap.fitBounds(latlngbounds);
+
+            google.maps.event.addListener(this.gmap, "idle",
+                this._reloadMarkersOnMapChange.createDelegate(this, [ ]));
         }, this, { single: true });
-        this._loadAll = true;
-        this._reloadMarkersOnMapChange();
+
+        this._reloadMarkers(Ext2.applyIf({}, this._baseParams));
     },
 
-    _dontReloadOnBoundsChange: false,
-    _reloadMarkersOnMapChange: function() {
+    centerMarkersIntoView: function()
+    {
+        google.maps.event.clearListeners(this.gmap, "idle");
+        this._loadAllMarkers();
+    },
+
+    _reloadMarkersOnMapChange: function()
+    {
         var params = Ext2.applyIf({}, this._baseParams);
-        if (this._loadAll) {
-            this._loadAll = false;
-        } else {
-            var bounds = this.gmap.getBounds();
-            params.lowestLng = bounds.getSouthWest().lng();
-            params.lowestLat = bounds.getSouthWest().lat();
-            params.highestLng = bounds.getNorthEast().lng();
-            params.highestLat = bounds.getNorthEast().lat();
-        }
-        if (this._dontReloadOnBoundsChange) {
-            this._dontReloadOnBoundsChange = false;
-            return;
-        }
+        var bounds = this.gmap.getBounds();
+        params.lowestLng = bounds.getSouthWest().lng();
+        params.lowestLat = bounds.getSouthWest().lat();
+        params.highestLng = bounds.getNorthEast().lng();
+        params.highestLat = bounds.getNorthEast().lat();
         this._reloadMarkers(params);
     },
 
-    _reloadMarkers: function(params) {
+    _reloadMarkers: function(params)
+    {
         if (!this.gmapLoader) {
             this.gmapLoader = Ext2.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
             this.gmapLoader.dom.innerHTML = trlKwf('Loading...');
@@ -359,11 +362,13 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         });
     },
 
-    setBaseParams: function(params) {
+    setBaseParams: function(params)
+    {
         this._baseParams = params;
     },
 
-    getBaseParams: function() {
+    getBaseParams: function()
+    {
         return this._baseParams;
     },
 
