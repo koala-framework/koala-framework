@@ -317,10 +317,8 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             url: this.config.markers,
             params: this._baseParams,
             success: function(response, options, result) {
-                for (var i = 0; i < this.markers.length; i++) {
-                    this.markers[i].keep = false;
-                }
-
+                var reuseMarkers = [];
+                var newMarkers = [];
                 result.markers.each(function(m) {
                     var doAdd = true;
                     for (var i = 0; i < this.markers.length; i++) {
@@ -328,23 +326,22 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
                             && this.markers[i].kwfConfig.longitude == m.longitude
                             && this.markers[i].kwfConfig.isLightMarker == m.isLightMarker
                         ) {
-                            this.markers[i].keep = true;
+                            reuseMarkers.push(this.markers[i]);
                             doAdd = false;
                             break;
                         }
                     }
-                    if (doAdd) this.addMarker(m);
+                    if (doAdd) newMarkers.push(m);
                 }, this);
 
-                var removeMarkers = [];
                 for (var i = 0; i < this.markers.length; i++) {
-                    if (!this.markers[i].keep) {
+                    if (reuseMarkers.indexOf(this.markers[i]) == -1) {
                         this.markers[i].setMap(null);
-                        removeMarkers.push(this.markers[i]);
                     }
                 }
-                for (var i = 0; i < removeMarkers.length; i++) {
-                    this.markers.remove(removeMarkers[i]);
+                this.markers = reuseMarkers;
+                for (var i = 0; i < newMarkers.length; i++) {
+                    this.addMarker(newMarkers[i]);
                 }
                 Kwf.callOnContentReady(this.mapContainer, {newRender: true});
                 this.gmapLoader.hide();
@@ -358,7 +355,6 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
     {
         var marker = this.createMarker(markerConfig);
         marker.kwfConfig = markerConfig;
-        marker.keep = true;
         marker.setMap(this.gmap);
         this.markers.push(marker);
         if (markerConfig.infoHtml) {
