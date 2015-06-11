@@ -17,7 +17,11 @@ class Kwf_Assets_Package_Filter_UniquePrefix
                 if (kwfUp[up]) {
                     window[up] = kwfUp[up];
                 } else {
-                    window[up] = undefined;
+                    try {
+                        delete window[up];
+                    } catch (e) {
+                        window[up] = undefined;
+                    }
                 }
             }
             if (!window.Ext2) window.Ext2 = {};
@@ -27,7 +31,15 @@ class Kwf_Assets_Package_Filter_UniquePrefix
         for (var i=0; i<kwfNamespaces.length; i++) {
                 var up = kwfNamespaces[i];
                 kwfUp[up] = window[up] || eval(up);
-                window[up] = kwfOrigExports[up];
+                if (kwfOrigExports[up]) {
+                    window[up] = kwfOrigExports[up];
+                } else {
+                    try {
+                        delete window[up];
+                    } catch (e) {
+                        window[up] = undefined;
+                    }
+                }
                 eval("var "+up+" = kwfUp."+up+";");
             }
         })();
