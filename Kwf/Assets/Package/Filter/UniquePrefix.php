@@ -12,15 +12,15 @@ class Kwf_Assets_Package_Filter_UniquePrefix
 
             var kwfOrigExports = {};
             for (var i=0; i<kwfNamespaces.length; i++) {
-                var up = kwfNamespaces[i];
-                kwfOrigExports[up] = window[up];
-                if (kwfUp[up]) {
-                    window[up] = kwfUp[up];
+                var name = kwfNamespaces[i];
+                kwfOrigExports[name] = window[name];
+                if (kwfUp[name]) {
+                    window[name] = kwfUp[name];
                 } else {
                     try {
-                        delete window[up];
+                        delete window[name];
                     } catch (e) {
-                        window[up] = undefined;
+                        window[name] = undefined;
                     }
                 }
             }
@@ -29,18 +29,18 @@ class Kwf_Assets_Package_Filter_UniquePrefix
 
         $foot = '
         for (var i=0; i<kwfNamespaces.length; i++) {
-                var up = kwfNamespaces[i];
-                kwfUp[up] = window[up] || eval(up);
-                if (kwfOrigExports[up]) {
-                    window[up] = kwfOrigExports[up];
+                var name = kwfNamespaces[i];
+                kwfUp[name] = window[name] || eval(name);
+                if (kwfOrigExports[name]) {
+                    window[name] = kwfOrigExports[name];
                 } else {
                     try {
-                        delete window[up];
+                        delete window[name];
                     } catch (e) {
-                        window[up] = undefined;
+                        window[name] = undefined;
                     }
                 }
-                eval("var "+up+" = kwfUp."+up+";");
+                eval("var "+name+" = kwfUp."+name+";");
             }
         })();
         ';
