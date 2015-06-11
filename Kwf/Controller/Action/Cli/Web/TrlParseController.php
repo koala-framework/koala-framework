@@ -148,6 +148,30 @@ class Kwf_Controller_Action_Cli_Web_TrlParseController extends Kwf_Controller_Ac
         exit;
     }
 
+    public function checkDoubleCountryEntriesAction()
+    {
+        $models = array(
+            Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Kwf'),
+            Kwf_Model_Abstract::getInstance('Kwf_Trl_Model_Web')
+        );
+        foreach ($models as $m) {
+            while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
+            if (!file_exists($m->getFilePath())) continue;
+            $xml = simplexml_load_file($m->getFilePath());
+            foreach ($xml->text as $row) {
+                $keys = array();
+                foreach ($row->children() as $key => $val) {
+                    $key = (string)$key;
+                    if (in_array($key, $keys)) {
+                        echo "id: " . $row->id . ": " . $key . "\n";
+                    }
+                    $keys[] = $key;
+                }
+            }
+        }
+        exit;
+    }
+
     public function copyAction()
     {
         Kwf_Component_ModelObserver::getInstance()->disable();

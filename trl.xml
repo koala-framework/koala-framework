@@ -4150,7 +4150,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>,</mk>
 <cs>,</cs>
 <es_CL>,</es_CL>
-<fr>,</fr>
 </text>
 <text>
 <en>Space</en>
@@ -8915,7 +8914,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>.</mk>
 <cs>.</cs>
 <es_CL>.</es_CL>
-<fr>.</fr>
 </text>
 <text>
 <en>Back to overview</en>
@@ -9905,7 +9903,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>1860</id>
 <de>Favoriten</de>
 <sl>Favoriti</sl>
-<de>Вибране</de>
 <uk>Вибране</uk>
 <ro>Favorite</ro>
 </text>
@@ -9919,7 +9916,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>delete favourite</en>
 <id>1909</id>
 <de>Favorit löschen</de>
-<en>delete favourite</en>
 <ro>sterge din Favorite</ro>
 </text>
 <text>
