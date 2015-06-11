@@ -69,11 +69,14 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
 
     public function onDirectoryRowUpdate(Kwc_Directories_List_EventItemUpdated $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        $gen = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail');
+        $dbIdShortcut = $gen->getSetting('dbIdShortcut');
+        $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($dbIdShortcut.$event->itemId);
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $data->getSubroot()));
         if ($this->_usesPartialId()) {
             $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
         } else {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class, $data->getSubroot()));
         }
     }
 
