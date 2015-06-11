@@ -87,6 +87,8 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
 
     protected function _applySelectQuery($select, $query)
     {
+        $query = trim($query);
+        if (!$query) return;
         $ors = array();
         if (!$this->_queryColumns) {
             throw new Kwf_Exception("_queryColumns are required");
