@@ -92,7 +92,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
                         $db->query("ALTER TABLE `{$tableName}` CHANGE  `{$columnName}`  `{$oldColumnName}` INT( 11 ) NULL;");
                         $db->query("ALTER TABLE  `{$tableName}` ADD  `{$columnName}` VARBINARY( 36 ) NULL AFTER  `{$oldColumnName}`");
                         $existingIds = $db->fetchCol("SELECT {$oldColumnName} FROM `{$tableName}` WHERE {$oldColumnName}!=''");
-                        $ids = array_intersect_key($uploadIds, $existingIds);
+                        $ids = array_intersect_key($uploadIds, array_flip($existingIds));
                         foreach (array_chunk($ids, 1000, true) as $chunkedIds) {
                             $values = array();
                             foreach ($chunkedIds as $key => $val) {
