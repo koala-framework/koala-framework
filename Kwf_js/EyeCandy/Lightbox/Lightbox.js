@@ -1,3 +1,5 @@
+// @require ModernizrPrefixed
+
 Kwf.namespace('Kwf.EyeCandy.Lightbox');
 
 $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
