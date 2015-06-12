@@ -31,7 +31,7 @@ class Kwc_Advanced_GoogleMapView_Test extends Kwc_TestAbstract
         $this->assertEquals('12,13', $vars['options']['coordinates']);
         $this->assertEquals('12', $vars['options']['latitude']);
         $this->assertEquals('13', $vars['options']['longitude']);
-        $this->assertEquals('0', $vars['options']['zoom_properties']);
+        $this->assertEquals('0', $vars['options']['zoomProperties']);
         $this->assertEquals('10', $vars['options']['zoom']);
         $this->assertEquals('1', $vars['options']['routing']);
     }
@@ -40,7 +40,7 @@ class Kwc_Advanced_GoogleMapView_Test extends Kwc_TestAbstract
     {
         $c = $this->_root->getComponentById(2003)->getComponent();
         $vars = $c->getTemplateVars();
-        $this->assertEquals('1', $vars['options']['zoom_properties']);
+        $this->assertEquals('1', $vars['options']['zoomProperties']);
         $this->assertEquals('11', $vars['options']['zoom']);
         $this->assertEquals('0', $vars['options']['routing']);
     }

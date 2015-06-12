@@ -20,7 +20,7 @@ class Kwc_Advanced_GoogleMapView_TestComponent extends Kwc_Advanced_GoogleMapVie
                 'coordinates' => '12;13',
                 'routing' => 0,
                 'zoom' => 11,
-                'zoom_properties' => 1
+                'zoomProperties' => 1
             );
         }
     }
