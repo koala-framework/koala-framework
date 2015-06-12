@@ -24,7 +24,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         return $this->_models[$type];
     }
 
-    public function save(Kwf_Component_Data $component, $content, $renderer='component', $type = 'component', $value = '', $lifetime = null)
+    public function save(Kwf_Component_Data $component, $content, $renderer, $type, $value, $tag, $lifetime)
     {
         $microtime = $this->_getMicrotime();
         // MySQL
@@ -37,6 +37,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             'renderer' => $renderer,
             'type' => $type,
             'value' => (string)$value,
+            'tag' => (string)$tag,
             'microtime' => $microtime,
             'expire' => is_null($lifetime) ? null : time() + $lifetime,
             'deleted' => false,

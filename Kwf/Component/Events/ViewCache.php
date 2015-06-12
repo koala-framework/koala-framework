@@ -52,6 +52,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
             'callback' => 'onComponentClassContentChanged'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_ComponentClass_Tag_ContentChanged',
+            'callback' => 'onComponentClassTagContentChanged'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_ComponentClass_AllPartialChanged',
             'callback' => 'onComponentClassAllPartialChanged'
         );
@@ -64,8 +68,16 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
             'callback' => 'onComponentClassPartialsChanged'
         );
         $ret[] = array(
+            'event' => 'Kwf_Component_Event_ComponentClass_Tag_PartialsChanged',
+            'callback' => 'onComponentClassTagPartialsChanged'
+        );
+        $ret[] = array(
             'event' => 'Kwf_Component_Event_ComponentClassPage_ContentChanged',
             'callback' => 'onComponentClassPageContentChanged'
+        );
+        $ret[] = array(
+            'event' => 'Kwf_Component_Event_ComponentClass_Tag_AllPartialChanged',
+            'callback' => 'onComponentClassTagAllPartialChanged'
         );
         $ret[] = array(
             'event' => 'Kwf_Component_Event_Page_ParentChanged',
@@ -272,6 +284,16 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
         }
     }
 
+    public function onComponentClassTagContentChanged(Kwf_Component_Event_ComponentClass_Tag_ContentChanged $event)
+    {
+        $this->_updates[] = array(
+            'type' => 'component',
+            'component_class' => $event->class,
+            'tag' => $event->tag
+        );
+        $this->_log("type=component tag=$event->tag component_class=$event->class");
+    }
+
     public function onComponentClassAllPartialChanged(Kwf_Component_Event_ComponentClass_AllPartialChanged $event)
     {
         $subroot = null;
@@ -293,6 +315,16 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
         }
     }
 
+    public function onComponentClassTagAllPartialChanged(Kwf_Component_Event_ComponentClass_Tag_AllPartialChanged $event)
+    {
+        $this->_updates[] = array(
+            'type' => 'partial',
+            'component_class' => $event->class,
+            'tag' => $event->tag
+        );
+        $this->_log("type=partial tag=$event->tag component_class=$event->class");
+    }
+
     public function onComponentClassPartialChanged(Kwf_Component_Event_ComponentClass_PartialChanged $event)
     {
         $this->_updates[] = array(
@@ -310,6 +342,16 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
             'component_class' => $event->class
         );
         $this->_log("type=partials component_class=$event->class");
+    }
+
+    public function onComponentClassTagPartialsChanged(Kwf_Component_Event_ComponentClass_Tag_PartialsChanged $event)
+    {
+        $this->_updates[] = array(
+            'type' => 'partials',
+            'component_class' => $event->class,
+            'tag' => $event->tag
+        );
+        $this->_log("type=partials tag=$event->tag component_class=$event->class");
     }
 
     public function onComponentClassPageContentChanged(Kwf_Component_Event_ComponentClassPage_ContentChanged $event)

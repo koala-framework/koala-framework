@@ -576,6 +576,7 @@ abstract class Kwf_Component_Renderer_Abstract
             $this->_getRendererName(),
             $type,
             $value,
+            isset($settings['cacheTag']) ? $settings['cacheTag'] : '',
             isset($settings['lifetime']) ? $settings['lifetime'] : null
         );
         if ($settings['lifetime']) {

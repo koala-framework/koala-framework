@@ -86,7 +86,7 @@ class Kwf_Component_Renderer_Mail extends Kwf_Component_Renderer_Abstract
                 }
             }
             if ($this->_enableCache && $pass1Cacheable && $component->isPage) {
-                Kwf_Component_Cache::getInstance()->save($component, $content, $this->_getRendererName(), 'fullPage', '', $this->_minLifetime);
+                Kwf_Component_Cache::getInstance()->save($component, $content, $this->_getRendererName(), 'fullPage', '', '', $this->_minLifetime);
             }
         }
         $hasPass2Placeholders = strpos($content, '<kwc2 ')!==false;
