@@ -249,7 +249,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     function callQueueFn(queueEntry, config)
     {
         var t = Kwf.Utils.BenchmarkBox.now();
-        var el = $(queueEntry.el);
+        var el = queueEntry.el;
         if (queueEntry.onAction != 'contentReady') {
             el = $(el);
         }

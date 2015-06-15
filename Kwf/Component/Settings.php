@@ -248,13 +248,10 @@ class Kwf_Component_Settings
                     'Form' => array('filename'=>'Form', 'ext'=>'php', 'returnClass'=>true),
 
                     //verwendet bei dependencies
-                    'css' => array('filename'=>'Component', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
+                    'css' => array('filename'=>'Component', 'ext'=>array('css', 'scss'), 'returnClass'=>false, 'multiple'=>true),
                     'printcss' => array('filename'=>'Component', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
-                    'scss' => array('filename'=>'Component', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
-                    'masterCss' => array('filename'=>'Master', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
-                    'masterScss' => array('filename'=>'Master', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
-                    'js' => array('filename'=>'Component', 'ext'=>'js', 'returnClass'=>false, 'multiple'=>true),
-                    'defer.js' => array('filename'=>'Component', 'ext'=>'defer.js', 'returnClass'=>false, 'multiple'=>true),
+                    'masterCss' => array('filename'=>'Master', 'ext'=>array('css', 'scss'), 'returnClass'=>false, 'multiple'=>true),
+                    'js' => array('filename'=>'Component', 'ext'=>array('js', 'defer.js'), 'returnClass'=>false, 'multiple'=>true),
                 ));
             } else {
 

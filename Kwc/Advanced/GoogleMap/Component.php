@@ -21,17 +21,11 @@ class Kwc_Advanced_GoogleMap_Component extends Kwc_Advanced_GoogleMapView_Compon
     protected function _getOptions()
     {
         $row = $this->_getRow();
-        $ret = array();
-        $ret['coordinates'] = $row->coordinates;
-        $ret['zoom'] = $row->zoom;
-        $ret['width'] = $row->width;
-        $ret['height'] = $row->height;
-        $ret['zoomProperties'] = $row->zoom_properties;
-        $ret['scale'] = $row->scale;
-        $ret['satelite'] = $row->satelite;
-        $ret['overview'] = $row->overview;
-        $ret['routing'] = $row->routing;
-        $ret['mapType'] = $row->map_type;
+        $fields = array('coordinates', 'zoom', 'width', 'height', 'zoom_properties',
+                'scale', 'satelite', 'overview', 'routing', 'map_type', 'scrollwheel');
+        foreach ($fields as $f) {
+            $ret[$f] = $row->$f;
+        }
         if (!isset($ret['coordinates'])) $ret['coordinates'] = '';
         return $ret;
     }

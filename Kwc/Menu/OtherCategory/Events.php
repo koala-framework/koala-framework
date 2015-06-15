@@ -39,7 +39,7 @@ class Kwc_Menu_OtherCategory_Events extends Kwc_Abstract_Events
     public function onMenuComponentClassContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
     {
         $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-            $this->_class
+            $this->_class, $event->subroot
         ));
     }
 

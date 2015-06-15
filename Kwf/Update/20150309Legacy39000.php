@@ -92,7 +92,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
                         $db->query("ALTER TABLE `{$tableName}` CHANGE  `{$columnName}`  `{$oldColumnName}` INT( 11 ) NULL;");
                         $db->query("ALTER TABLE  `{$tableName}` ADD  `{$columnName}` VARBINARY( 36 ) NULL AFTER  `{$oldColumnName}`");
                         $existingIds = $db->fetchCol("SELECT {$oldColumnName} FROM `{$tableName}` WHERE {$oldColumnName}!=''");
-                        $ids = array_intersect_key($uploadIds, $existingIds);
+                        $ids = array_intersect_key($uploadIds, array_flip($existingIds));
                         foreach (array_chunk($ids, 1000, true) as $chunkedIds) {
                             $values = array();
                             foreach ($chunkedIds as $key => $val) {
@@ -128,6 +128,12 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
                     $row->save();
                 }
             }
+        }
+
+        $field = $db->fetchRow("SHOW FIELDS FROM `kwf_uploads` WHERE `Field` = 'md5_hash'");
+        if (!$field) {
+            $db->query("ALTER TABLE  `kwf_uploads` ADD  `md5_hash` VARCHAR( 32 ) NOT NULL");
+            $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
         }
 
         if ($this->countUploads() < 50000) {
@@ -187,11 +193,6 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
     public function createHashes()
     {
         $db = Kwf_Registry::get('db');
-        $field = $db->fetchRow("SHOW FIELDS FROM `kwf_uploads` WHERE `Field` = 'md5_hash'");
-        if (!$field) {
-            $db->query("ALTER TABLE  `kwf_uploads` ADD  `md5_hash` VARCHAR( 32 ) NOT NULL");
-            $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
-        }
         $s = new Kwf_Model_Select();
         $s->where("md5_hash = ''");
         $it = new Kwf_Model_Iterator_Packages(

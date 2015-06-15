@@ -6,9 +6,14 @@
  */
 class Kwf_User_Auth_AutoLoginFields extends Kwf_User_Auth_Abstract implements Kwf_User_Auth_Interface_AutoLogin
 {
+    protected function _getModelSelect()
+    {
+        return new Kwf_Model_Select();
+    }
+
     public function getRowById($id)
     {
-        $s = new Kwf_Model_Select();
+        $s = $this->_getModelSelect();
         $s->whereEquals('id', $id);
         return $this->_model->getRow($s);
     }

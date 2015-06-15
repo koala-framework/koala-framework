@@ -470,7 +470,10 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         ));
     }
 
-    public function getRowById($id)
+    /**
+     * @internal
+     */
+    public function _getRowById($id)
     {
         if (isset($this->_rows[$id])) {
             return $this->_rows[$id];
@@ -494,7 +497,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
     {
         foreach ($this->getUnionModels() as $k=>$m) {
             if ($row->getModel() == $m) {
-                return $this->getRowById($k.$row->{$m->getPrimaryKey()});
+                return $this->getRow($k.$row->{$m->getPrimaryKey()});
             }
         }
         throw new Kwf_Exception("Model '".get_class($row->getModel())."' doesn't exist as unionModel in '".get_class($this)."'");

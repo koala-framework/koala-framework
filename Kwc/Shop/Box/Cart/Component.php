@@ -31,14 +31,13 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
     protected function _getLinks()
     {
         $ret = array();
-        $placeholder = $this->_getSetting('placeholder');
         $ret['cart'] = array(
             'component' => $this->_getCart(),
-            'text' => $placeholder['toCart']
+            'text' => $this->_getPlaceholder('toCart')
         );
         $ret['checkout'] = array(
             'component' => $this->_getCart()->getChildComponent(array('generator' => 'checkout')),
-            'text' => $placeholder['toCheckout']
+            'text' => $this->_getPlaceholder('toCheckout')
         );
         return $ret;
     }

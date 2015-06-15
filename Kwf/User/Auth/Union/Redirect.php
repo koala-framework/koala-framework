@@ -34,7 +34,7 @@ class Kwf_User_Auth_Union_Redirect extends Kwf_User_Auth_Union_Abstract implemen
         foreach ($this->_model->getUnionModels() as $k=>$m) {
             if ($m == $row->getModel()) {
                 $id = $k.$row->{$m->getPrimaryKey()};
-                return $this->_model->getRowById($id);
+                return $this->_model->getRow($id);
             }
         }
         return null;
@@ -48,7 +48,7 @@ class Kwf_User_Auth_Union_Redirect extends Kwf_User_Auth_Union_Abstract implemen
         foreach ($this->_model->getUnionModels() as $k=>$m) {
             if ($m == $row->getModel()) {
                 $id = $k.$row->{$m->getPrimaryKey()};
-                return $this->_model->getRowById($id);
+                return $this->_model->getRow($id);
             }
         }
         return null;

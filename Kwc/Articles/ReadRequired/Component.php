@@ -58,8 +58,11 @@ class Kwc_Articles_ReadRequired_Component extends Kwc_Abstract
     public function getRedirectUrl($postData)
     {
         $allowRedirect = !isset($postData['redirect']) || $postData['redirect'] == '/';
-        if ($allowRedirect && $this->_getRequiredArticles()->count() > 0) {
-            return $this->getData()->url;
+        if ($allowRedirect) {
+            $requiredArticles = $this->_getRequiredArticles();
+            if ($requiredArticles && $requiredArticles->count() > 0) {
+                return $this->getData()->url;
+            }
         }
         return null;
     }

@@ -80,4 +80,12 @@ class Kwf_Model_DbWithConnection_ParentExprIf_Test extends Kwf_Test_TestCase
         $row = $this->_modelChild->getRow($s);
         $this->assertEquals(105, $row->sibling_value);
     }
+
+    public function testParentOrder()
+    {
+        $s = new Kwf_Model_Select();
+        $s->order('if_field', 'DESC');
+        $row = $this->_modelChild->getRow($s);
+        $this->assertEquals(207, $row->if_field);
+    }
 }

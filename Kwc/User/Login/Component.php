@@ -59,7 +59,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
                 }
             }
             if ($user) {
-                Kwf_Registry::get('userModel')->loginUserRow($user, false);
+                Kwf_Registry::get('userModel')->loginUserRow($user, true);
                 $url = $this->_getUrlForRedirect($postData, $user);
                 Kwf_Util_Redirect::redirect($url);
             }
@@ -76,7 +76,8 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             $url = $postData['redirect'];
         } else {
             $url = Kwf_Component_Data_Root::getInstance()
-            ->getChildPage(array('home' => true, 'subroot' => $this->getData()), array());
+                ->getChildPage(array('home' => true, 'subroot' => $this->getData()), array())
+                ->url;
         }
         return $url;
     }

@@ -1095,11 +1095,12 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         foreach ($models as $model) {
 
             foreach ($model->_columnMappings as $map=>$columns) {
+                $curMap = $map;
                 do {
-                    if (isset($model->_columnMappings[$mapping])) {
-                        return $model->_columnMappings[$mapping];
+                    if ($curMap == $mapping) {
+                        return $model->_columnMappings[$map];
                     }
-                } while ($map = get_parent_class($map));
+                } while ($curMap = get_parent_class($curMap));
             }
 
         }
@@ -1116,7 +1117,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
 
             foreach ($model->_columnMappings as $map=>$columns) {
                 do {
-                    if (isset($model->_columnMappings[$map])) {
+                    if ($map == $mapping) {
                         return true;
                     }
                 } while ($map = get_parent_class($map));

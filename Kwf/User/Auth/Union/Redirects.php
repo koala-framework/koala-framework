@@ -60,7 +60,7 @@ class Kwf_User_Auth_Union_Redirects extends Kwf_User_Auth_Abstract implements Kw
                 foreach ($this->_model->getUnionModels() as $k=>$m) {
                     if ($m == $row->getModel()) {
                         $id = $k.$row->{$m->getPrimaryKey()};
-                        return $this->_model->getRowById($id);
+                        return $this->_model->getRow($id);
                     }
                 }
                 throw new Kwf_Exception("Invalid User returned");
@@ -78,7 +78,7 @@ class Kwf_User_Auth_Union_Redirects extends Kwf_User_Auth_Abstract implements Kw
                 foreach ($this->_model->getUnionModels() as $k=>$m) {
                     if ($m == $row->getModel()) {
                         $id = $k.$row->{$m->getPrimaryKey()};
-                        return $this->_model->getRowById($id);
+                        return $this->_model->getRow($id);
                     }
                 }
                 throw new Kwf_Exception("Invalid User returned");

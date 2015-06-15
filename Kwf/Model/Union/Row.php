@@ -167,12 +167,24 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
             $ret,
             parent::toArray()
         );
+        $ret['id'] = $this->_id;
         return $ret;
     }
 
     protected function _toArrayWithoutPrimaryKeys()
     {
-        $ret = $this->_sourceRow->_toArrayWithoutPrimaryKeys();
+        $ret = array();
+        $mapping = $this->_model->getUnionColumnMapping();
+        $columns = get_class_vars($mapping);
+        foreach ($columns['columns'] as $c) {
+            $name = $this->_sourceRow->getModel()->getColumnMapping($mapping, $c);
+            if ($name) {
+                $ret[$c] = $this->_sourceRow->$name;
+            } else {
+                $ret[$c] = null;
+            }
+        }
+
         foreach ($this->_getSiblingRows() as $r) {
             $ret = array_merge($r->_toArrayWithoutPrimaryKeys(), $ret);
         }

@@ -274,11 +274,23 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
 
     public function onComponentClassAllPartialChanged(Kwf_Component_Event_ComponentClass_AllPartialChanged $event)
     {
-        $this->_updates[] = array(
-            'type' => 'partial',
-            'component_class' => $event->class
-        );
-        $this->_log("type=partial component_class=$event->class");
+        $subroot = null;
+        if ($event->subroot) $subroot = $event->subroot->getSubroot();
+        if ($subroot) {
+            $id = $subroot->componentId . '%';
+            $this->_updates[] = array(
+                'type' => 'partial',
+                'component_class' => $event->class,
+                'expanded_component_id' => $id
+            );
+            $this->_log("type=partial expanded_component_id=$id component_class=$event->class");
+        } else {
+            $this->_updates[] = array(
+                'type' => 'partial',
+                'component_class' => $event->class
+            );
+            $this->_log("type=partial component_class=$event->class");
+        }
     }
 
     public function onComponentClassPartialChanged(Kwf_Component_Event_ComponentClass_PartialChanged $event)
