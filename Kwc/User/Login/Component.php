@@ -76,7 +76,8 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             $url = $postData['redirect'];
         } else {
             $url = Kwf_Component_Data_Root::getInstance()
-            ->getChildPage(array('home' => true, 'subroot' => $this->getData()), array());
+                ->getChildPage(array('home' => true, 'subroot' => $this->getData()), array())
+                ->url;
         }
         return $url;
     }
