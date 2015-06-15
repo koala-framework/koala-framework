@@ -189,6 +189,7 @@
 <ru>Показать маршрут</ru>
 <es_CL>Show Route</es_CL>
 <al>Shfaq rrugën. </al>
+<ba>Pokaži rutu</ba>
 </text>
 <text>
 <en>Suggestions</en>
@@ -9870,6 +9871,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <hr>Nisu pronađeni rezultati</hr>
 <ro>Nu a fost gasita nicio inregistrare</ro>
 <al>Nuk u gjet asnjë informacion.</al>
+<ba>Nisu pronađeni rezultati</ba>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
@@ -10712,6 +10714,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Durante su visita a esta página web se colocan actualmente cookies. Haga clic aquí para desactivar las cookies.</es>
 <hu>Ha megnyitja ezt a honlapot, akkor oda sütik települnek. Kattintson ide, ha deaktiválni szeretné a sütiket.</hu>
 <id>2007</id>
+<ba>Prilikom Vašeg posjeta ovoj internetskoj stranici trenutno se pohranjuju kolačići. Kliknite ovdje kako biste deaktivirali kolačiće.</ba>
 </text>
 <text>
 <en>No cookies are set when visiting this webpage. Click to activate cookies.</en>
@@ -10726,6 +10729,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Durante su visita a esta página web no se colocan cookies actualmente. Haga clic aquí si desea aceptar el empleo de cookies.</es>
 <hu>Ha megnyitja ezt a honlapot, oda pillanatnyilag nem települnek sütik. Kattintson ide, ha jóváhagyja a sütik alkalmazását.</hu>
 <id>2008</id>
+<ba>Prilikom Vašeg posjeta ovoj internetskoj stranici trenutno se ne pohranjuju kolačići. Kliknite ovdje ako želite prihvatiti korištenje kolačića.</ba>
 </text>
 <text>
 <de>Webseite erstellt von</de>
