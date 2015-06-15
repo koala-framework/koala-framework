@@ -49,29 +49,52 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         return is_instance_of($partialClass, 'Kwf_Component_Partial_Id');
     }
 
+    private function _getSubrootFromEvent(Kwc_Directories_List_EventItemAbstract $event)
+    {
+        $gen = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail');
+        $dbIdShortcut = $gen->getSetting('dbIdShortcut');
+        $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($dbIdShortcut.$event->itemId, array('limit'=>1, 'ignoreVisible'=>true));
+        if (!$data) return null;
+        return $data->getSubroot();
+    }
+
     public function onDirectoryRowInsert(Kwc_Directories_List_EventItemInserted $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
+        $subroot = $this->_getSubrootFromEvent($event);
+        if ($subroot) {
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class, $subroot));
+            if (!$this->_usesPartialId()) {
+                $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class, $subroot));
+            }
+        }
     }
 
     public function onDirectoryRowDelete(Kwc_Directories_List_EventItemDeleted $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
-        if ($this->_usesPartialId()) {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
+        $subroot = $this->_getSubrootFromEvent($event);
+        if ($subroot) {
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class, $subroot));
+            if ($this->_usesPartialId()) {
+                $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
+            } else {
+                $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class, $subroot));
+            }
         }
     }
 
     public function onDirectoryRowUpdate(Kwc_Directories_List_EventItemUpdated $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
-        if ($this->_usesPartialId()) {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
-        } else {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class));
+        $subroot = $this->_getSubrootFromEvent($event);
+        if ($subroot) {
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class, $subroot));
+            if ($this->_usesPartialId()) {
+                $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
+            } else {
+                $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class, $subroot));
+            }
         }
     }
 
