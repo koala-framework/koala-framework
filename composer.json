@@ -17,7 +17,7 @@
         "koala-framework/file-watcher": "*",
         "symfony/console": "~2.5",
         "symfony/process": "~2.5",
-        "sepia/po-parser": "4.2.0"
+        "sepia/po-parser": "4.2.1"
     },
     "extra": {
         "require-bower": {

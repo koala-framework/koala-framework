@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "432811619c8da3d917d05d25016451aa",
+    "hash": "cbe926d969684922f04856a31ea565b7",
     "packages": [
         {
             "name": "koala-framework/composer-extra-assets",
@@ -419,16 +419,16 @@
         },
         {
             "name": "sepia/po-parser",
-            "version": "4.2.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/raulferras/PHP-po-parser.git",
-                "reference": "8e5c3d5d6d5a4c6584249d82dc75eb1490cb8470"
+                "reference": "4906b3bc357e1028b84c3cb0ee1d1d1970a21fbb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/raulferras/PHP-po-parser/zipball/8e5c3d5d6d5a4c6584249d82dc75eb1490cb8470",
-                "reference": "8e5c3d5d6d5a4c6584249d82dc75eb1490cb8470",
+                "url": "https://api.github.com/repos/raulferras/PHP-po-parser/zipball/4906b3bc357e1028b84c3cb0ee1d1d1970a21fbb",
+                "reference": "4906b3bc357e1028b84c3cb0ee1d1d1970a21fbb",
                 "shasum": ""
             },
             "require": {
@@ -463,7 +463,7 @@
                 "i18n",
                 "po"
             ],
-            "time": "2015-01-22 11:03:32"
+            "time": "2015-06-09 08:01:21"
         },
         {
             "name": "symfony/console",
