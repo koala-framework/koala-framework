@@ -111,8 +111,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         require_once VENDOR_PATH.'/autoload.php';
         $poParsers = array();
         foreach ($files as $file) {
-            $poParser = new \Sepia\PoParser;
-            $poParser->parseFile($file);
+            $poParser = \Sepia\PoParser::parseFile($file);
             array_push($poParsers, $poParser);
         }
         return $poParsers;
