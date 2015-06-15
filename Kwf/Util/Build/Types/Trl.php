@@ -78,7 +78,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         $c = array();
         foreach ($poParsers as $poParser) {
             foreach ($poParser->entries() as $entry) {
-                $ctx = isset($entry['msgctxt']) ? $entry['msgctxt'][0] : '';
+                $ctx = isset($entry['msgctxt']) ? implode($entry['msgctxt']) : '';
                 $translation = implode($entry['msgstr']);
                 if (isset($entry['msgid_plural'])) {
                     $translation = implode($entry['msgstr[1]']);
