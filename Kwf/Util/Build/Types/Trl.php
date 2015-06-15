@@ -79,13 +79,13 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         foreach ($poParsers as $poParser) {
             foreach ($poParser->entries() as $entry) {
                 $ctx = isset($entry['msgctxt']) ? implode($entry['msgctxt']) : '';
-                $translation = implode($entry['msgstr']);
+                $translation = isset($entry['msgstr']) ? implode($entry['msgstr']) : '';
                 if (isset($entry['msgid_plural'])) {
                     $translation = implode($entry['msgstr[1]']);
                 }
                 if ($translation == '') continue;
                 $msgId = implode($entry['msgid']);
-                $msgIdPlural = implode($entry['msgid_plural']);
+                $msgIdPlural =  isset($entry['msgid_plural']) ? implode($entry['msgid_plural']) : '';
                 $msgKey = ($msgIdPlural ? $msgIdPlural : $msgId).'-'.$ctx;
                 if (isset($c[$msgKey])) {
                     echo "\nDuplicate entry in trl-files: $msgKey => $translation\n";
@@ -111,8 +111,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         require_once VENDOR_PATH.'/autoload.php';
         $poParsers = array();
         foreach ($files as $file) {
-            $poParser = new \Sepia\PoParser;
-            $poParser->parseFile($file);
+            $poParser = \Sepia\PoParser::parseFile($file);
             array_push($poParsers, $poParser);
         }
         return $poParsers;
