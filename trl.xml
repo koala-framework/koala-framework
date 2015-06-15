@@ -655,6 +655,7 @@
 <si>poslati</si>
 <ua>Надіслати</ua>
 <al>Dërgo</al>
+<rs>Poslati</rs>
 </text>
 <text>
 <en>Validator</en>
@@ -2232,9 +2233,9 @@
 <uk>Пошук</uk>
 <si>Iskati</si>
 <ua>Пошук</ua>
-<hr>Traži</hr>
-<cs>Vyhledat</cs>
 <hr>Pretraži</hr>
+<cs>Vyhledat</cs>
+<rs>Pretraži</rs>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -5430,7 +5431,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>,</mk>
 <cs>,</cs>
 <es_CL>,</es_CL>
-<fr>,</fr>
 </text>
 <text>
 <en>Space</en>
@@ -11584,7 +11584,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <mk>.</mk>
 <cs>.</cs>
 <es_CL>.</es_CL>
-<fr>.</fr>
 </text>
 <text>
 <en>Back to overview</en>
@@ -12950,7 +12949,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>удалить из избранного</ru>
 <ua>Видалити з переліку улюблених</ua>
 <ro>Sterge favorit</ro>
-<ro>sterge din Favorite</ro>
 </text>
 <text>
 <en>Label Width</en>
