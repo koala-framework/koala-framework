@@ -33,7 +33,7 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
                 }
             }
             if ($user) {
-                Kwf_Registry::get('userModel')->loginUserRow($user, false);
+                Kwf_Registry::get('userModel')->loginUserRow($user, true);
                 $url = $this->_getUrlForRedirect($postData, $user);
                 Kwf_Util_Redirect::redirect($url);
             }
