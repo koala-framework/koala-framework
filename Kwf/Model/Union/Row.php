@@ -155,6 +155,7 @@ class Kwf_Model_Union_Row extends Kwf_Model_Row_Abstract
             parent::toArray(),
             $this->_sourceRow->toArray()
         );
+        $ret['id'] = $this->_id;
         return $ret;
     }
 
