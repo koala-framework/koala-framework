@@ -20,7 +20,7 @@ class Kwc_Paging_Abstract_Events extends Kwc_Abstract_Events
 
     public function onParentContentChanged(Kwf_Component_Event_ComponentClass_ContentChanged $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $event->subroot));
+        $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class, $event->subroot));
     }
 }
