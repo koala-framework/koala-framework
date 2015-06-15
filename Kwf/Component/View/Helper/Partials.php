@@ -69,9 +69,12 @@ class Kwf_Component_View_Helper_Partials extends Kwf_Component_View_Renderer
             $params = $component->getComponent()->getPartialParams();
         }
         $useViewCache = call_user_func(array($partialClass, 'useViewCache'), $componentId, $params);
+
+        $viewCacheSettings = $component->getComponent()->getViewCacheSettings();
         return array(
             'enabled' => $useViewCache,
-            'lifetime' => isset($params['cacheLifetime']) ? $params['cacheLifetime'] : null
+            'lifetime' => isset($params['cacheLifetime']) ? $params['cacheLifetime'] : null,
+            'cacheTag' => isset($viewCacheSettings['cacheTag']) ? $viewCacheSettings['cacheTag'] : null
         );
     }
 }

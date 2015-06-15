@@ -245,4 +245,16 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
             return $dir->getComponent()->getViewCacheLifetimeForView();
         }
     }
+
+    public function getViewCacheSettings()
+    {
+        $ret = parent::getViewCacheSettings();
+        $dir = $this->getData()->parent->getComponent()->getItemDirectory();
+        if (is_string($dir)) {
+            $ret['cacheTag'] = $dir;
+        } else {
+            $ret['cacheTag'] = $dir->componentId;
+        }
+        return $ret;
+    }
 }
