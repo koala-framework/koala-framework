@@ -3,13 +3,6 @@
 Kwf.namespace('Kwf.EyeCandy.Lightbox');
 
 $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
-    var innerContent = $('body').children('.innerContent');                                                             //ToDo für michi - alle divs parallel zu kwfLightbox div
-    var topScroll = $(document).scrollTop();
-
-    innerContent.data('setTopScroll', topScroll);
-    innerContent.css('top', (topScroll * (-1)) + 'px');
-    innerContent.addClass('fixedContent');
-
     var el = event.currentTarget;
     var $el = $(el);
     var options = $el.data('kwc-lightbox');
@@ -23,7 +16,15 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
         l = new Kwf.EyeCandy.Lightbox.Lightbox(href, options);
     }
     el.kwfLightbox = l;
-
+    var scrollTop = $(document).scrollTop();
+    el.kwfLightbox.scrollTop = scrollTop;
+    $('body').children().each(function(key, el){
+        var $el = $(el);
+        if (!$el.hasClass('kwfLightbox') && !$el.hasClass('kwfLightboxMask')) {
+            $el.css('top', (scrollTop * (-1)) + 'px');
+            $el.addClass('kwfup-fixedContent');
+        }
+    });
     if (Kwf.EyeCandy.Lightbox.currentOpen &&
         Kwf.EyeCandy.Lightbox.currentOpen.href == href
     ) {
@@ -311,6 +312,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     show: function(options)
     {
+        $('html').addClass('kwfup-lightboxActive');
         this.createLightboxEl();
         this.style.onShow(options);
 
@@ -430,20 +432,13 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 
 
         closeButtons.click((function(ev) {
-
-            var innerContent = $('body').children('.innerContent');                                                     //ToDo für michi - alle divs parallel zu kwfLightbox div
-
-            var removeContentFixed = function() {
-                innerContent.removeClass('fixedContent');
-            };
-            setTimeout(removeContentFixed, 0);
-
-            var scrollContentBack = function() {
-                $(window).scrollTop( innerContent.data('setTopScroll') );
-            };
-            setTimeout(scrollContentBack, 0);
-
             ev.preventDefault();
+            $('.kwfup-fixedContent').each(function(key, el){
+                $(el).removeClass('kwfup-fixedContent');
+            });
+            setTimeout(function(){
+                $(window).scrollTop( this.scrollTop );
+            }.bind(this), 0);
             this.closeAndPushState();
 
         }).bind(this));
@@ -585,7 +580,6 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         }
         this.lightbox.innerLightboxEl.width(originalWidth);
         this.lightbox.innerLightboxEl.height(originalHeight);
-        this._center();
     },
     afterContentShown: function() {
 
@@ -599,7 +593,6 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         this.lightbox.innerLightboxEl.css(initialSize);
 
         this._resizeContent();
-        this._center();
     },
     _getOuterMargin: function()
     {
@@ -681,26 +674,19 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
             this.lightbox.innerLightboxEl.css(newSize);
             if (this.lightbox.innerLightboxEl.css('backgroundColor')) {
                 //animate size only if backgroundColor is set - else it doesn't make sense
-                this._center();
                 this.lightbox.innerLightboxEl.width(originalWidth);
                 this.lightbox.innerLightboxEl.height(originalHeight);
                 var newSize = this._getContentSize();
                 this.lightbox.innerLightboxEl.css(newSize);
-            } else {
-                this._center();
             }
         } else {
             var newSize = this._getContentSize();
             this.lightbox.innerLightboxEl.css(newSize);
-            this._center();
             this.lightbox.lightboxEl.hide();
         }
     },
     onShow: function() {
         this.mask();
-    },
-    afterShow: function() {
-        this._center();
     },
     onClose: function(options) {
         var transEndEventName = this.lightbox.getTransitionEndName();
@@ -710,6 +696,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
             $('body').addClass('kwfLightboxAnimate');
             this.lightbox.innerLightboxEl.one(transEndEventName,
                 (function() {
+                    $('html').removeClass('kwfup-lightboxActive');
                     $('body').removeClass('kwfLightboxAnimate');
                     this.lightbox.lightboxEl.hide();
                     this.afterClose();
@@ -735,10 +722,6 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         xy.top = Math.floor(xy.top);
 
         return xy;
-    },
-    _center: function() {
-        if (!this.lightbox.lightboxEl.is(':visible')) return;
-        //this.lightbox.innerLightboxEl.css(this._getCenterXy());
     },
 
     //called if element *inside* lightbox did fire callOnContentReady
