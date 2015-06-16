@@ -52,7 +52,6 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     l.closeHref = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
     l.contentEl = l.innerLightboxEl.find('.kwfLightboxContent');
     l.style.afterCreateLightboxEl();
-    l.style.onShow();
     l.style.onContentReady();
     el[0].kwfLightbox = l;
     Kwf.EyeCandy.Lightbox.currentOpen = l;
@@ -349,6 +348,12 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.Statistics.count(this.href);
     },
     close: function(options) {
+        $('.kwfup-fixedContent').each(function(key, el){
+            $(el).removeClass('kwfup-fixedContent');
+        });
+        setTimeout(function(){
+            $(window).scrollTop( this.scrollTop );
+        }.bind(this), 0);
         this.lightboxEl.hide();
         //so eg. flash component can remove object
         Kwf.callOnContentReady(this.lightboxEl, {action: 'hide'});
@@ -412,12 +417,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 
         closeButtons.click((function(ev) {
             ev.preventDefault();
-            $('.kwfup-fixedContent').each(function(key, el){
-                $(el).removeClass('kwfup-fixedContent');
-            });
-            setTimeout(function(){
-                $(window).scrollTop( this.scrollTop );
-            }.bind(this), 0);
             this.closeAndPushState();
 
         }).bind(this));
@@ -446,7 +445,6 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
     this.lightbox = lightbox;
     this.init();
 };
-Kwf.EyeCandy.Lightbox.Styles.Abstract.masks = 0;
 Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     init: function() {},
     afterCreateLightboxEl: function() {},
@@ -466,12 +464,20 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     onContentReady: function() {},
     onResizeWindow: function() {},
 
+    initMask: function() {
+        var maskEl = this.lightbox.lightboxEl.find('.kwfLightboxMask');
+        maskEl.click(function(ev) {
+            if ($(document.body).find('.kwfLightboxMask').is(ev.target)) {
+                if (Kwf.EyeCandy.Lightbox.currentOpen) {
+                    Kwf.EyeCandy.Lightbox.currentOpen.style.onMaskClick();
+                }
+            }
+        });
+    },
     mask: function() {
         //calling mask multiple times in valid, unmask must be called exactly often
-        Kwf.EyeCandy.Lightbox.Styles.Abstract.masks++;
-        if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 1) return;
         $(document.body).addClass('kwfLightboxTheaterMode');
-        var maskEl = $(document.body).find('.kwfLightboxMask');
+        var maskEl = this.lightbox.lightboxEl.find('.kwfLightboxMask');
         if (maskEl.length) {
             maskEl.show();
             setTimeout(function(){
@@ -479,23 +485,15 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
             }, 0);
         } else {
             var maskEl = $('<div class="kwfLightboxMask"></div>');
-            $(document.body).append(maskEl);
+            this.lightbox.lightboxEl.find('.kwfLightboxBetween').append(maskEl);
             setTimeout(function(){
                 maskEl.addClass('kwfLightboxMaskOpen');
             }, 0);
-            maskEl.click(function(ev) {
-                if ($(document.body).find('.kwfLightboxMask').is(ev.target)) {
-                    if (Kwf.EyeCandy.Lightbox.currentOpen) {
-                        Kwf.EyeCandy.Lightbox.currentOpen.style.onMaskClick();
-                    }
-                }
-            });
+            this.initMask();
         }
     },
     unmask: function() {
-        Kwf.EyeCandy.Lightbox.Styles.Abstract.masks--;
-        if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 0) return;
-        var lightboxMaskEl = $(document.body).find('.kwfLightboxMask');
+        var lightboxMaskEl = this.lightbox.lightboxEl.find('.kwfLightboxMask');
         $(document.body).removeClass('kwfLightboxTheaterMode');
         var transEndEventName = this.lightbox.getTransitionEndName();
         var transitionDurationName = Modernizr.prefixed('transitionDuration');
@@ -686,22 +684,6 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         }
         this.unmask();
     },
-    _getCenterXy: function() {
-        var winSize = this._getMaxContentSize(false);
-        var xy = {
-            left: (winSize.width - this.lightbox.innerLightboxEl.width()) / 2 + $(window).scrollLeft(),
-            top: (winSize.height - this.lightbox.innerLightboxEl.height()) / 2 + $(window).scrollTop()
-        };
-
-        //if lightbox is larget than viewport don't position lightbox above, the user can only scroll down
-        var m = this._getOuterMargin();
-        if (xy.left < $(window).scrollLeft()+m) xy.left = $(window).scrollLeft()+m;
-        if (xy.top < $(window).scrollTop()+m) xy.top = $(window).scrollTop()+m;
-        xy.left = Math.floor(xy.left);
-        xy.top = Math.floor(xy.top);
-
-        return xy;
-    },
 
     //called if element *inside* lightbox did fire callOnContentReady
     //it might have changed it's height and we need to adapt the lightbox size
@@ -709,27 +691,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
     {
         if (this.lightbox._blockOnContentReady) return;
         if (!this.lightbox.contentEl) return;
-
-        //adjust size if height changed
-        var newSize = this._getContentSize();
-        var originalHeight = this.lightbox.innerLightboxEl.height();
-        var originalWidth = this.lightbox.innerLightboxEl.width();
-        this.lightbox.innerLightboxEl.css(newSize); //set to new size so centering works (no animation)
-        var centerXy = this._getCenterXy();
-
-        var position = this.lightbox.innerLightboxEl.position();
-        position.left = centerXy.left;
-        if (centerXy.top < position.top) position.top = centerXy.top; //move up, but not down
-        /*
-        //animation to new position disabled, buggy
-        this.lightbox.innerLightboxEl.setXY(xy, true);
-        this.lightbox.innerLightboxEl.width(originalWidth); //set back to previous size for animation
-        this.lightbox.innerLightboxEl.height(originalHeight);
-        this.lightbox.innerLightboxEl.setSize(newSize, null, true); //now animate to new size
-        */
-
-        //instead center unanimated
-        this.lightbox.innerLightboxEl.css(position);
+        this.initMask();
     },
 
     //the browser window resized, the lightbox content might be responsive - update lightbox size

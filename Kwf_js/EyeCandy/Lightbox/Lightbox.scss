@@ -35,9 +35,10 @@ body {
             width: 100%;
 
             .kwfLightboxInner {
-                position: static;
+                position: relative;
                 text-align: left;
                 display: inline-block;
+                z-index: 51;
 
                 .closeButton {
                     right: 10px;
