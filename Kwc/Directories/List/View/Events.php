@@ -52,10 +52,9 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
     private function _getSubrootFromEvent(Kwc_Directories_List_EventItemAbstract $event)
     {
         $gen = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail');
-        $dbIdShortcut = $gen->getSetting('dbIdShortcut');
-        $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($dbIdShortcut.$event->itemId, array('limit'=>1, 'ignoreVisible'=>true));
-        if (!$data) return null;
-        return $data->getSubroot();
+        $datas = $gen->getChildData(null, array('id' => $event->itemId));
+        if (!isset($datas[0])) return null;
+        return $datas[0]->getSubroot();
     }
 
     public function onDirectoryRowInsert(Kwc_Directories_List_EventItemInserted $event)
