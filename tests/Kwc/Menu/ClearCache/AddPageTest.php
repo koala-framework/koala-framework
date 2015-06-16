@@ -42,6 +42,12 @@ class Kwc_Menu_ClearCache_AddPageTest extends Kwc_TestAbstract
             2
               -menuMain
               -menuSub
+              9
+                -menuMain
+                -menuSub
+                10
+                  -menuMain
+                  -menuSub
          */
     }
 
@@ -68,14 +74,14 @@ class Kwc_Menu_ClearCache_AddPageTest extends Kwc_TestAbstract
         $this->assertContains('"/test1"', $html);
         $this->assertContains('"/test5"', $html);
 
-        $row = $m->createRow(array('id'=>9, 'pos'=>3, 'visible'=>true, 'name'=>'test9', 'filename' => 'test9', 'custom_filename' => false,
+        $row = $m->createRow(array('id'=>100, 'pos'=>3, 'visible'=>true, 'name'=>'test100', 'filename' => 'test100', 'custom_filename' => false,
                     'parent_id'=>'root-main', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id'=>'root')
         );
         $row->save();
         $this->_process();
 
         $html = $this->_root->getComponentById($menuComponentId)->render();
-        $this->assertContains('"/test9"', $html);
+        $this->assertContains('"/test100"', $html);
     }
 
 
@@ -98,14 +104,14 @@ class Kwc_Menu_ClearCache_AddPageTest extends Kwc_TestAbstract
         $this->assertContains('"/test1/test3"', $html);
         $this->assertContains('"/test1/test8"', $html);
 
-        $row = $m->createRow(array('id'=>9, 'pos'=>3, 'visible'=>true, 'name'=>'test9', 'filename' => 'test9', 'custom_filename' => false,
+        $row = $m->createRow(array('id'=>100, 'pos'=>3, 'visible'=>true, 'name'=>'test100', 'filename' => 'test100', 'custom_filename' => false,
                     'parent_id'=>'1', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id'=>'root')
         );
         $row->save();
         $this->_process();
 
         $html = $this->_root->getComponentById($menuComponentId)->render();
-        $this->assertContains('"/test1/test9"', $html);
+        $this->assertContains('"/test1/test100"', $html);
     }
 
 }

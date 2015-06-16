@@ -17,13 +17,13 @@ class Kwc_Menu_ClearCache_ChangeParentTest extends Kwc_TestAbstract
             -menuSub
             1
               -menuMain
-              -menuSub
+              -menuSub (Menu)
               3
                 -menuMain
-                -menuSub
+                -menuSub (ParentMenu)
                 4
                   -menuMain
-                  -menuSub
+                  -menuSub (ParentContent)
               8
                 -menuMain
                 -menuSub
@@ -42,26 +42,32 @@ class Kwc_Menu_ClearCache_ChangeParentTest extends Kwc_TestAbstract
             2
               -menuMain
               -menuSub
+              9
+                -menuMain
+                -menuSub
+                10
+                  -menuMain
+                  -menuSub
          */
     }
 
-    public function mainMenuComponentIds()
+    public function mainMoveFromOtherCategoryData()
     {
         return array(
-            array('root-menuMain'),
-            array('root-main-menuMain'),
-            array('root-bottom-menuMain'),
-            array('1-menuMain'),
-            array('2-menuMain'),
-            array('3-menuMain'),
-            array('4-menuMain'),
+            array('root-menuMain', null),
+            array('root-main-menuMain', null),
+            array('root-bottom-menuMain', null),
+            array('1-menuMain', '/test1'),
+            array('2-menuMain', '/test2'),
+            array('3-menuMain', '/test1'),
+            array('4-menuMain', '/test1'),
         );
     }
 
     /**
-     * @dataProvider mainMenuComponentIds
+     * @dataProvider mainMoveFromOtherCategoryData
      */
-    public function testMainMoveFromOtherCategory($menuComponentId)
+    public function testMainMoveFromOtherCategory($menuComponentId, $currentUrl)
     {
         $m = Kwf_Model_Abstract::getInstance('Kwc_Menu_ClearCache_Category_PagesModel');
         $html = $this->_root->getComponentById($menuComponentId)->render();
@@ -77,12 +83,33 @@ class Kwc_Menu_ClearCache_ChangeParentTest extends Kwc_TestAbstract
         $this->assertContains('"/test1"', $html);
         $this->assertContains('"/test5"', $html);
         $this->assertContains('"/test2"', $html);
+        if ($currentUrl) {
+            $this->assertRegExp('#<li class="[^"]*current[^"]*">\s*<a href="'.$currentUrl.'"#', $html);
+        } else {
+            $this->assertNotRegExp('#<li class="[^"]*current[^"]*">#', $html);
+        }
+    }
+
+    public function mainMoveToOtherCategoryData()
+    {
+        return array(
+            array('root-menuMain', null),
+            array('root-main-menuMain', null),
+            array('root-bottom-menuMain', null),
+            array('1-menuMain', null),
+            array('2-menuMain', null),
+            array('3-menuMain', null),
+            array('4-menuMain', null),
+            array('5-menuMain', '/test5'),
+            array('6-menuMain', '/test5'),
+            array('7-menuMain', '/test5'),
+        );
     }
 
     /**
-     * @dataProvider mainMenuComponentIds
+     * @dataProvider mainMoveToOtherCategoryData
      */
-    public function testMainMoveToOtherCategory($menuComponentId)
+    public function testMainMoveToOtherCategory($menuComponentId, $currentUrl)
     {
         $m = Kwf_Model_Abstract::getInstance('Kwc_Menu_ClearCache_Category_PagesModel');
         $html = $this->_root->getComponentById($menuComponentId)->render();
@@ -97,27 +124,69 @@ class Kwc_Menu_ClearCache_ChangeParentTest extends Kwc_TestAbstract
         $html = $this->_root->getComponentById($menuComponentId)->render();
         $this->assertNotContains('/test1"', $html);
         $this->assertContains('"/test5"', $html);
+        if ($currentUrl) {
+            $this->assertRegExp('#<li class="[^"]*current[^"]*">\s*<a href="'.$currentUrl.'"#', $html);
+        } else {
+            $this->assertNotRegExp('#<li class="[^"]*current[^"]*">#', $html);
+        }
+    }
+
+    public function mainMoveFromChildData()
+    {
+        $initialMenuComponentIds = array(
+            'root-menuMain',
+            'root-main-menuMain',
+            'root-bottom-menuMain',
+            '1-menuMain',
+            '2-menuMain',
+            '3-menuMain',
+            '4-menuMain',
+        );
+        return array(
+            array(3, 'root-main', $initialMenuComponentIds, array()),
+
+            array(10, 'root-main', $initialMenuComponentIds, array('10-menuMain')),
+            array(9, 'root-main', $initialMenuComponentIds, array('9-menuMain', '10-menuMain')),
+            array(2, 'root-main', $initialMenuComponentIds, array('2-menuMain', '9-menuMain', '10-menuMain')),
+
+            array(10, '1', $initialMenuComponentIds, array('10-menuMain')),
+            array(9, '1', $initialMenuComponentIds, array('9-menuMain', '10-menuMain')),
+            array(2, '1', $initialMenuComponentIds, array('2-menuMain', '9-menuMain', '10-menuMain')),
+
+            array(10, '3', $initialMenuComponentIds, array('10-menuMain')),
+            array(9, '3', $initialMenuComponentIds, array('9-menuMain', '10-menuMain')),
+            array(2, '3', $initialMenuComponentIds, array('2-menuMain', '9-menuMain', '10-menuMain')),
+        );
     }
 
     /**
-     * @dataProvider mainMenuComponentIds
+     * @dataProvider mainMoveFromChildData
      */
-    public function testMainMoveFromChild($menuComponentId)
+    public function testMainMoveFromChild($sourceId, $targetId, $initialMenuComponentIds, $movedMenuComponentIds)
     {
         $m = Kwf_Model_Abstract::getInstance('Kwc_Menu_ClearCache_Category_PagesModel');
-        $html = $this->_root->getComponentById($menuComponentId)->render();
-        $this->assertContains('"/test1"', $html);
-        $this->assertContains('"/test5"', $html);
+        foreach ($initialMenuComponentIds as $i) {
+            $html = $this->_root->getComponentById($i)->render();
+            $this->assertContains('"/test1"', $html);
+            $this->assertContains('"/test5"', $html);
+        }
+        foreach ($movedMenuComponentIds as $i) {
+            $html = $this->_root->getComponentById($i)->render(); //just render to fill cache
+        }
 
-        $row = $m->getRow(3);
-        $row->parent_id = 'root-main';
+        $row = $m->getRow($sourceId);
+        $row->parent_id = $targetId;
         $row->save();
         $this->_process();
 
-        $html = $this->_root->getComponentById($menuComponentId)->render();
-        $this->assertContains('"/test1"', $html);
-        $this->assertContains('"/test5"', $html);
-        $this->assertContains('"/test3"', $html);
+        foreach (array_merge($initialMenuComponentIds, $movedMenuComponentIds) as $i) {
+            $html = $this->_root->getComponentById($i)->render();
+            $this->assertContains('"/test1"', $html);
+            $this->assertContains('"/test5"', $html);
+            if ($targetId == 'root-main') {
+                $this->assertContains('"/test'.$sourceId.'"', $html);
+            }
+        }
     }
 
 

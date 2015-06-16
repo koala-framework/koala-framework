@@ -21,6 +21,10 @@ class Kwc_Menu_ClearCache_Category_PagesModel extends Kwc_Root_Category_Generato
                             'parent_id'=>'6', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id'=>'root'),
                 array('id'=>2, 'pos'=>1, 'visible'=>true, 'name'=>'test2', 'filename' => 'test2', 'custom_filename' => false,
                     'parent_id'=>'root-bottom', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id'=>'root'),
+                    array('id'=>9, 'pos'=>1, 'visible'=>true, 'name'=>'test9', 'filename' => 'test9', 'custom_filename' => false,
+                        'parent_id'=>'2', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id'=>'root'),
+                        array('id'=>10, 'pos'=>1, 'visible'=>true, 'name'=>'test10', 'filename' => 'test10', 'custom_filename' => false,
+                            'parent_id'=>'9', 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id'=>'root'),
             )
         ));
         parent::__construct($config);

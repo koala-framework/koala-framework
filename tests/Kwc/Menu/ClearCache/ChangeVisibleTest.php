@@ -42,6 +42,12 @@ class Kwc_Menu_ClearCache_ChangeVisibleTest extends Kwc_TestAbstract
             2
               -menuMain
               -menuSub
+              9
+                -menuMain
+                -menuSub
+                10
+                  -menuMain
+                  -menuSub
          */
     }
 
