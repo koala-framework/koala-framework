@@ -124,7 +124,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                     }
                 }
             } else {
-                if (preg_match_all('#(<[a-z]+ [^>]*)class="style(\d+)"([^>]*>)#', $part, $m)) {
+                if (preg_match_all('#(<[a-z]+\s[^>]*)class\s*=\s*"style(\d+)"([^>]*>)#', $part, $m)) {
                     foreach (array_keys($m[0]) as $i) {
                         $matched = $m[0][$i];
                         $prefix = $m[1][$i];
