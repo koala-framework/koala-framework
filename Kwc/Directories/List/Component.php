@@ -17,17 +17,20 @@ abstract class Kwc_Directories_List_Component extends Kwc_Abstract_Composite_Com
         if ($this->_itemDirectory === false) {
             $this->_itemDirectory = $this->_getItemDirectory();
             if (!$this->_itemDirectory) return $this->_itemDirectory;
+            $isData = call_user_func(array(get_class($this), 'getItemDirectoryIsData'), $this->getData()->componentClass);
             if (is_string($this->_itemDirectory)) {
+                if ($isData) {
+                    throw new Kwf_Exception("_getItemDirectory returns string, so getItemDirectoryIsData must return false; componentClass is ".get_class($this));
+                }
                 $c = $this->_itemDirectory;
             } else {
+                if (!$isData) {
+                    throw new Kwf_Exception("_getItemDirectory returns data, so getItemDirectoryIsData must return true; componentClass is ".get_class($this));
+                }
                 $c = $this->_itemDirectory->componentClass;
             }
             if (!is_instance_of($c, 'Kwc_Directories_Item_DirectoryNoAdmin_Component')) {
                 throw new Kwf_Exception("_getItemDirectory must return an Kwc_Directories_Item_DirectoryNoAdmin_Component data object or class-name, '{$c}' given; componentClass is ".get_class($this));
-            }
-            $isData = call_user_func(array(get_class($this), 'getItemDirectoryIsData'), $this->getData()->componentClass);
-            if (is_string($this->_itemDirectory) && $isData) {
-                throw new Kwf_Exception("_getItemDirectory returns string, so getItemDirectoryIsData must return false; componentClass is ".get_class($this));
             }
         }
         return $this->_itemDirectory;
