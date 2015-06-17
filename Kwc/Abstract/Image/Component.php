@@ -15,7 +15,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
             'default'=>array(
                 'width' => 300,
                 'height' => 200,
-                'cover' => true
+                'cover' => false
               // cover = true means image will be scaled up to match size.
                 //  so the aspect ratio will be fixed when croping so that scaling wont deform image
                 // cover = false means image wont be scaled up if smaller than size.
