@@ -5,6 +5,9 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
     {
         $ret = array();
 
+        $processedDirectories = array();
+        $processedDetails = array();
+
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
             if (in_array('Kwc_Directories_List_Component', Kwc_Abstract::getParentClasses($class)) || in_array('Kwc_Directories_List_Trl_Component', Kwc_Abstract::getParentClasses($class))) {
                 if (Kwc_Abstract::hasChildComponentClass($class, 'child', 'view')
@@ -14,7 +17,17 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
                         array(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class, 'getItemDirectoryClasses'), $class
                     );
                     foreach ($directoryClasses as $directoryClass) {
+                        if (in_array($directoryClass, $processedDirectories)) {
+                            //add only once
+                            continue;
+                        }
+                        $processedDirectories[] = $directoryClass;
                         foreach (Kwc_Abstract::getChildComponentClasses($directoryClass, 'detail') as $detailClass) {
+                            if (in_array($detailClass, $processedDetails)) {
+                                //add only once
+                                continue;
+                            }
+                            $processedDetails[] = $detailClass;
                             $ret[] = array(
                                 'class' => $directoryClass,
                                 'event' => 'Kwf_Component_Event_Component_Added',
