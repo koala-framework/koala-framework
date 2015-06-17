@@ -55,13 +55,12 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
 
     public function onParentChanged(Kwf_Component_Event_Page_ParentChanged $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged(
-            $this->_class, $event->component
-        ));
+        $this->_onPageChanged($event, $event->component, $event->newParent);
+        $this->_onPageChanged($event, $event->component, $event->oldParent);
     }
 
     //overridden in Kwc_Menu_Events to fire HasContentChanged
-    protected function _onMenuChanged(Kwf_Component_Event_Component_Abstract $event, Kwf_Component_Data $menu)
+    protected function _onMenuChanged(Kwf_Events_Event_Abstract $event, Kwf_Component_Data $menu)
     {
         $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
             $this->_class, $menu
@@ -70,9 +69,13 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
 
     public function onPageChanged(Kwf_Component_Event_Component_Abstract $event)
     {
-        $menuLevel = $this->_level;
-
         $data = $event->component;
+        $this->_onPageChanged($event, $data, $data->parent);
+    }
+
+    private function _onPageChanged($event, Kwf_Component_Data $data, Kwf_Component_Data $parentData)
+    {
+        $menuLevel = $this->_level;
 
         if (!$event instanceof Kwf_Component_Event_Page_ShowInMenuChanged
             && !$data->isShownInMenu()
@@ -83,8 +86,9 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
 
         //find category + level the changed page is in
         $level = 0;
-        $categoryData = $data;
+        $categoryData = $parentData;
 
+        if ($data->isPage) $level++;
         while ($categoryData && !Kwc_Abstract::getFlag($categoryData->componentClass, 'menuCategory')) {
             if ($categoryData->isPage) $level++;
             $categoryData = $categoryData->parent;
@@ -94,12 +98,18 @@ class Kwc_Menu_Abstract_Events extends Kwc_Abstract_Events
             //numeric menu level
             if ($level+1 >= $menuLevel && $level+1 <= $menuLevel+$this->_numLevels) {
                 $l = $level + 1;
-                while ($data) {
-                    if ($l == $menuLevel) {
-                        break;
-                    }
+                if ($l != $menuLevel) {
                     if ($data->isPage) $l--;
-                    $data = $data->parent;
+                    $data = $parentData;
+                    while ($data) {
+                        if ($l == $menuLevel) {
+                            break;
+                        }
+                        if ($data->isPage) $l--;
+                        $data = $data->parent;
+                    }
+                } else {
+                    $data = $parentData;
                 }
                 $data = $data->getPageOrRoot();
                 $menus = $data->getRecursiveChildComponents(array('componentClass'=>$this->_class));

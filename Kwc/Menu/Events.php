@@ -11,7 +11,7 @@ class Kwc_Menu_Events extends Kwc_Menu_Abstract_Events
     }
 
     //fire HasContentChanged here because hasContent is implemented in this component
-    protected function _onMenuChanged(Kwf_Component_Event_Component_Abstract $event, Kwf_Component_Data $menu)
+    protected function _onMenuChanged(Kwf_Events_Event_Abstract $event, Kwf_Component_Data $menu)
     {
         parent::_onMenuChanged($event, $menu);
         $newCount = count($menu->getComponent()->getMenuData());
