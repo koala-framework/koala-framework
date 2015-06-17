@@ -74,11 +74,9 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
 Kwf.onElementReady('div.kwcDirectoriesListViewMap', function(map) {
     var up = map.up('div.kwfSwitchDisplay');
     if (up) {
-        (function(up, map) {
-            Ext2.get(up).dom.switchDisplayObject.on('opened', function() {
-                Kwc.Directories.List.ViewMap.renderMap(map);
-            });
-        }).defer(1, this, [up, map.dom]);
+        Kwf.onElementShow('div.kwfSwitchDisplay div.kwcDirectoriesListViewMap', function() {
+            Kwc.Directories.List.ViewMap.renderMap(map);
+        });
     } else {
         Kwc.Directories.List.ViewMap.renderMap(map.dom);
     }
