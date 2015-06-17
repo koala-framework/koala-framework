@@ -82,6 +82,10 @@ $grid-padding   : 0em;
             &.emptyContent {
                 display: none;
             }
+
+            &.kwcEven {
+                clear: left;
+            }
         }
     }
 
@@ -112,6 +116,10 @@ $grid-padding   : 0em;
 
             &.emptyContent {
                 display: inline;
+            }
+
+            &.kwcEven {
+                clear: none;
             }
         }
     }
