@@ -29,12 +29,12 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
                             }
                             $processedDetails[] = $detailClass;
                             $ret[] = array(
-                                'class' => $directoryClass,
+                                'class' => $detailClass,
                                 'event' => 'Kwf_Component_Event_Component_Added',
                                 'callback' => 'onDirectoryDetailAdded'
                             );
                             $ret[] = array(
-                                'class' => $directoryClass,
+                                'class' => $detailClass,
                                 'event' => 'Kwf_Component_Event_Component_Removed',
                                 'callback' => 'onDirectoryDetailRemoved'
                             );
