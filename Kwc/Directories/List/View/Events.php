@@ -5,6 +5,9 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
     {
         $ret = array();
 
+        $processedDirectories = array();
+        $processedDetails = array();
+
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
             if (in_array('Kwc_Directories_List_Component', Kwc_Abstract::getParentClasses($class)) || in_array('Kwc_Directories_List_Trl_Component', Kwc_Abstract::getParentClasses($class))) {
                 if (Kwc_Abstract::hasChildComponentClass($class, 'child', 'view')
@@ -14,16 +17,28 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
                         array(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class, 'getItemDirectoryClasses'), $class
                     );
                     foreach ($directoryClasses as $directoryClass) {
-                        $ret[] = array(
-                            'class' => $directoryClass,
-                            'event' => 'Kwc_Directories_List_EventItemInserted',
-                            'callback' => 'onDirectoryRowInsert'
-                        );
-                        $ret[] = array(
-                            'class' => $directoryClass,
-                            'event' => 'Kwc_Directories_List_EventItemDeleted',
-                            'callback' => 'onDirectoryRowDelete'
-                        );
+                        if (in_array($directoryClass, $processedDirectories)) {
+                            //add only once
+                            continue;
+                        }
+                        $processedDirectories[] = $directoryClass;
+                        foreach (Kwc_Abstract::getChildComponentClasses($directoryClass, 'detail') as $detailClass) {
+                            if (in_array($detailClass, $processedDetails)) {
+                                //add only once
+                                continue;
+                            }
+                            $processedDetails[] = $detailClass;
+                            $ret[] = array(
+                                'class' => $detailClass,
+                                'event' => 'Kwf_Component_Event_Component_Added',
+                                'callback' => 'onDirectoryDetailAdded'
+                            );
+                            $ret[] = array(
+                                'class' => $detailClass,
+                                'event' => 'Kwf_Component_Event_Component_Removed',
+                                'callback' => 'onDirectoryDetailRemoved'
+                            );
+                        }
                         $ret[] = array(
                             'class' => $directoryClass,
                             'event' => 'Kwc_Directories_List_EventItemUpdated',
@@ -49,50 +64,90 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         return is_instance_of($partialClass, 'Kwf_Component_Partial_Id');
     }
 
-    private function _getSubrootFromEvent(Kwc_Directories_List_EventItemAbstract $event)
+    private function _fireTagEvent($event, $directory, $itemId = null)
     {
-        $gen = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail');
-        $datas = $gen->getChildData(null, array('id' => $event->itemId));
-        if (!isset($datas[0])) return null;
-        return $datas[0]->getSubroot();
-    }
+        $cacheId = 'kwc-dirlistview-isdata-'.$this->_class;
+        $dirIs = Kwf_Cache_SimpleStatic::fetch($cacheId);
+        if ($dirIs === false) {
+            $dirIs = array(
+                'data' => false,
+                'string' => false
+            );
+            foreach (Kwc_Abstract::getComponentClasses() as $class) {
+                if (in_array('Kwc_Directories_List_Component', Kwc_Abstract::getParentClasses($class)) || in_array('Kwc_Directories_List_Trl_Component', Kwc_Abstract::getParentClasses($class))) {
+                    if (Kwc_Abstract::hasChildComponentClass($class, 'child', 'view')
+                        && $this->_class == Kwc_Abstract::getChildComponentClass($class, 'child', 'view')
+                    ) {
+                        $isData = call_user_func(
+                            array(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class, 'getItemDirectoryIsData'), $class
+                        );
+                        if ($isData) {
+                            $dirIs['data'] = true;
+                        } else {
+                            $dirIs['string'] = true;
+                        }
+                    }
+                }
+            }
+            Kwf_Cache_SimpleStatic::add($cacheId, $dirIs);
+        }
 
-    public function onDirectoryRowInsert(Kwc_Directories_List_EventItemInserted $event)
-    {
-        $subroot = $this->_getSubrootFromEvent($event);
-        if ($subroot) {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class, $subroot));
-            if (!$this->_usesPartialId()) {
-                $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class, $subroot));
+        $event = "Kwf_Component_Event_ComponentClass_Tag_$event";
+        if ($itemId) {
+            if ($dirIs['data']) {
+                $this->fireEvent(new $event($this->_class, $directory->componentId, $itemId));
+            }
+            if ($dirIs['string']) {
+                $this->fireEvent(new $event($this->_class, $directory->componentClass, $itemId));
+            }
+        } else {
+            if ($dirIs['data']) {
+                $this->fireEvent(new $event($this->_class, $directory->componentId));
+            }
+            if ($dirIs['string']) {
+                $this->fireEvent(new $event($this->_class, $directory->componentClass));
             }
         }
     }
 
-    public function onDirectoryRowDelete(Kwc_Directories_List_EventItemDeleted $event)
+    public function onDirectoryDetailAdded(Kwf_Component_Event_Component_Added $event)
     {
-        $subroot = $this->_getSubrootFromEvent($event);
-        if ($subroot) {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class, $subroot));
-            if ($this->_usesPartialId()) {
-                $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
-            } else {
-                $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class, $subroot));
-            }
+        $subroot = $event->data->getSubroot();
+        $directory = $event->data->parent;
+        $this->_fireTagEvent('ContentChanged', $directory);
+        $this->_fireTagEvent('PartialsChanged', $directory);
+        if (!$this->_usesPartialId()) {
+            $this->_fireTagEvent('AllPartialChanged', $directory);
+        }
+    }
+
+    public function onDirectoryDetailRemoved(Kwf_Component_Event_Component_Removed $event)
+    {
+        $subroot = $event->data->getSubroot();
+        $directory = $event->data->parent;
+        $this->_fireTagEvent('ContentChanged', $directory);
+        $this->_fireTagEvent('PartialsChanged', $directory);
+        if ($this->_usesPartialId()) {
+            $this->_fireTagEvent('PartialChanged', $directory, $event->itemId);
+        } else {
+            $this->_fireTagEvent('AllPartialChanged', $directory);
         }
     }
 
     public function onDirectoryRowUpdate(Kwc_Directories_List_EventItemUpdated $event)
     {
-        $subroot = $this->_getSubrootFromEvent($event);
-        if ($subroot) {
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
-            $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialsChanged($this->_class, $subroot));
+        $gen = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail');
+        $datas = $gen->getChildData(null, array('id' => $event->itemId));
+        if (isset($datas[0])) {
+            $data = $datas[0];
+            $subroot = $data->getSubroot();
+            $directory = $event->data->parent;
+            $this->_fireTagEvent('ContentChanged', $directory);
+            $this->_fireTagEvent('PartialsChanged', $directory);
             if ($this->_usesPartialId()) {
-                $this->fireEvent(new Kwf_Component_Event_ComponentClass_PartialChanged($this->_class, $event->itemId));
+                $this->_fireTagEvent('PartialChanged', $directory, $event->itemId);
             } else {
-                $this->fireEvent(new Kwf_Component_Event_ComponentClass_AllPartialChanged($this->_class, $subroot));
+                $this->_fireTagEvent('AllPartialChanged', $directory);
             }
         }
     }
