@@ -66,13 +66,47 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
 
     private function _fireTagEvent($event, $directory, $itemId = null)
     {
+        $cacheId = 'kwc-dirlistview-isdata-'.$this->_class;
+        $dirIs = Kwf_Cache_SimpleStatic::fetch($cacheId);
+        if ($dirIs === false) {
+            $dirIs = array(
+                'data' => false,
+                'string' => false
+            );
+            foreach (Kwc_Abstract::getComponentClasses() as $class) {
+                if (in_array('Kwc_Directories_List_Component', Kwc_Abstract::getParentClasses($class)) || in_array('Kwc_Directories_List_Trl_Component', Kwc_Abstract::getParentClasses($class))) {
+                    if (Kwc_Abstract::hasChildComponentClass($class, 'child', 'view')
+                        && $this->_class == Kwc_Abstract::getChildComponentClass($class, 'child', 'view')
+                    ) {
+                        $isData = call_user_func(
+                            array(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class, 'getItemDirectoryIsData'), $class
+                        );
+                        if ($isData) {
+                            $dirIs['data'] = true;
+                        } else {
+                            $dirIs['string'] = true;
+                        }
+                    }
+                }
+            }
+            Kwf_Cache_SimpleStatic::add($cacheId, $dirIs);
+        }
+
         $event = "Kwf_Component_Event_ComponentClass_Tag_$event";
         if ($itemId) {
-            $this->fireEvent(new $event($this->_class, $directory->componentId, $itemId));
-            $this->fireEvent(new $event($this->_class, $directory->componentClass, $itemId));
+            if ($dirIs['data']) {
+                $this->fireEvent(new $event($this->_class, $directory->componentId, $itemId));
+            }
+            if ($dirIs['string']) {
+                $this->fireEvent(new $event($this->_class, $directory->componentClass, $itemId));
+            }
         } else {
-            $this->fireEvent(new $event($this->_class, $directory->componentId));
-            $this->fireEvent(new $event($this->_class, $directory->componentClass));
+            if ($dirIs['data']) {
+                $this->fireEvent(new $event($this->_class, $directory->componentId));
+            }
+            if ($dirIs['string']) {
+                $this->fireEvent(new $event($this->_class, $directory->componentClass));
+            }
         }
     }
 
