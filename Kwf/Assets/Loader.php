@@ -54,6 +54,8 @@ class Kwf_Assets_Loader
             $ret['mimeType'] = 'application/octet-stream';
         } else if (substr($file, -5)=='.woff') { // für Schriften
             $ret['mimeType'] = 'application/font-woff';
+        } else if (substr($file, -6)=='.woff2') { // für Schriften
+            $ret['mimeType'] = 'application/font-woff2';
         } else if (substr($file, -4)=='.htc') { // für ie css3
             $ret['mimeType'] = 'text/x-component';
         } else if (substr($file, -4)=='.pdf') {
