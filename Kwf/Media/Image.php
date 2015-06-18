@@ -474,7 +474,7 @@ class Kwf_Media_Image
                 $im = self::_processCommonImagickSettings($im);
             }
             if (isset($size['rotate']) && $size['rotate']) {
-                $im->rotateImage('#FFF', $size['rotate']);
+                $im->rotateImage(new ImagickPixel('#FFF'), $size['rotate']);
             }
 
             $factor = pow(2, $preScale['factor']); //1 if factor==0
