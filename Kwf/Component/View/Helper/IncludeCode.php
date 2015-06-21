@@ -46,6 +46,7 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
 
         if ($position == 'header') {
             if ($v = Kwf_Config::getValue('kwc.favicon')) {
+                $v = Kwf_Setup::getBaseUrl().$v;
                 $ret .= "<link rel=\"shortcut icon\" href=\"{$v}\" />\n";
             }
 
