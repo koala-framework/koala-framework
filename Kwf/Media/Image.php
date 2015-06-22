@@ -360,8 +360,8 @@ class Kwf_Media_Image
             && $ret['crop']['height'] == $originalSize[1]
             && $ret['width'] == $originalSize[0]
             && $ret['height'] == $originalSize[1]
+            && !$ret['rotate']
         ) {
-            $ret['rotate'] = 0;
             $ret['keepOriginal'] = true;
         }
 
