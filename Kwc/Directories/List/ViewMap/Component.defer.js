@@ -70,14 +70,6 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
     }, myMap);
 };
 
-
 Kwf.onElementReady('div.kwcDirectoriesListViewMap', function(map) {
-    var up = map.up('div.kwfSwitchDisplay');
-    if (up) {
-        Kwf.onElementShow('div.kwfSwitchDisplay div.kwcDirectoriesListViewMap', function() {
-            Kwc.Directories.List.ViewMap.renderMap(map);
-        });
-    } else {
-        Kwc.Directories.List.ViewMap.renderMap(map.dom);
-    }
-});
+    Kwc.Directories.List.ViewMap.renderMap(map.dom);
+}, { checkVisibility: true });
