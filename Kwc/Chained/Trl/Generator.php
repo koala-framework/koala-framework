@@ -19,6 +19,9 @@ class Kwc_Chained_Trl_Generator extends Kwc_Chained_Abstract_Generator
         if ($select->hasPart(Kwf_Model_Select::LIMIT_COUNT)) {
             $select->unsetPart(Kwf_Model_Select::LIMIT_COUNT);
         }
+        if ($select->hasPart(Kwf_Model_Select::LIMIT_OFFSET)) {
+            $select->unsetPart(Kwf_Model_Select::LIMIT_OFFSET);
+        }
 
         if ($this->_getChainedGenerator() instanceof Kwf_Component_Generator_PseudoPage_Static) {
             //filename is translated, unset, checked in _createData
