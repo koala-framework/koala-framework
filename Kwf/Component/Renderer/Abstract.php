@@ -9,7 +9,7 @@ abstract class Kwf_Component_Renderer_Abstract
 
     public function includedComponent($targetComponentId, $targetType)
     {
-        $this->_includedComponents[] = $targetComponentId;
+        $this->_includedComponents[] = $targetComponentId.':'.$targetType;
     }
 
     public function __construct()
@@ -216,30 +216,31 @@ abstract class Kwf_Component_Renderer_Abstract
 
                     $m = Kwf_Component_Cache::getInstance()->getModel('includes');
                     $s = $m->select()
-                        ->whereEquals('component_id', $componentId)
-                        ->whereEquals('type', $type);
+                        ->whereEquals('type', $type)
+                        ->whereEquals('component_id', $componentId);
                     $existingTargetIds = array();
-                    foreach ($m->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('target_id'))) as $i) {
-                        $existingTargetIds[] = $i['target_id'];
+                    foreach ($m->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('id', 'target_id', 'type'))) as $i) {
+                        $existingTargetIds[$i['id']] = $i['target_id'].':'.$i['type'];
                     }
                     $newTargetIds = array();
                     if ($this->_includedComponents) {
                         $data = array();
-                        foreach ($this->_includedComponents as $includedComponentId) {
+                        foreach ($this->_includedComponents as $includedComponent) {
                             $cmp = Kwf_Component_Data_Root::getInstance()
                                 ->getComponentById($componentId, array('ignoreVisible' => true));
+                            $id = substr($includedComponent, 0, strrpos($includedComponent, ':'));
                             $targetCmp = Kwf_Component_Data_Root::getInstance()
-                                ->getComponentById($includedComponentId, array('ignoreVisible' => true));
+                                ->getComponentById($id, array('ignoreVisible' => true));
                             if ($cmp->getPage() !== $targetCmp->getPage()) {
-                                if (!in_array($includedComponentId, $existingTargetIds)) {
+                                if (!in_array($includedComponent, $existingTargetIds)) {
                                     $c = array(
-                                        'target_id' => $includedComponentId,
+                                        'target_id' => $includedComponent,
                                         'type' => $type,
                                         'component_id' => $componentId,
                                     );
                                     $data[] = $c;
                                 }
-                                $newTargetIds[] = $includedComponentId;
+                                $newTargetIds[] = $includedComponent;
                             }
                         }
                         $m->import(Kwf_Model_Abstract::FORMAT_ARRAY, $data);
@@ -250,9 +251,7 @@ abstract class Kwf_Component_Renderer_Abstract
                         //delete not anymore included
                         $m = Kwf_Component_Cache::getInstance()->getModel('includes');
                         $s = $m->select()
-                            ->whereEquals('component_id', $componentId)
-                            ->whereEquals('type', $type)
-                            ->whereEquals('target_id', $diffTargetIds);
+                            ->whereEquals('id', array_keys($diffTargetIds));
                         $m->deleteRows($s);
                     }
 

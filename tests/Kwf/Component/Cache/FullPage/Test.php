@@ -6,6 +6,11 @@ class Kwf_Component_Cache_FullPage_Test extends Kwc_TestAbstract
         parent::setUp('Kwf_Component_Cache_FullPage_Root');
     }
 
+    /*
+    test1 -> embeds test2 -> links test4
+          -> links test3
+    */
+
     private function _getViewCacheCount()
     {
         $s = new Kwf_Model_Select();
@@ -68,8 +73,22 @@ class Kwf_Component_Cache_FullPage_Test extends Kwc_TestAbstract
         - root_test3:component       [delete]
         - root_test3:fullPage        [delete]
         */
+/*
+$s = new Kwf_Model_Select();
+foreach (Kwf_Component_Cache::getInstance()->getModel('includes')->getRows($s) as $row) {
+    echo $row->component_id.':'.$row->type.' -> '.$row->target_id;
+    echo "\n";
+}
+echo "\n";
 
-        $this->markTestIncomplete();
+$s = new Kwf_Model_Select();
+foreach (Kwf_Component_Cache::getInstance()->getModel()->getRows($s) as $row) {
+    echo $row->component_id.':'.$row->type;
+    if ($row->deleted) echo " [deleted]";
+    echo "\n";
+}
+*/
+
         $this->assertEquals(7+4-2, $this->_getViewCacheCount());
         $html = $this->_root->getChildComponent('_test1')->render(null, true);
         $this->assertContains('content2', $html);
@@ -92,6 +111,7 @@ class Kwf_Component_Cache_FullPage_Test extends Kwc_TestAbstract
         - root_test3:componentLink   [delete]
         - root_test1:fullPage        [delete]
         */
+
         Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Page_UrlChanged('Kwf_Component_Cache_FullPage_Test3_Component', $this->_root->getChildComponent('_test3')));
         $this->_process();
 
@@ -120,6 +140,7 @@ class Kwf_Component_Cache_FullPage_Test extends Kwc_TestAbstract
 
 
         $this->_root->getChildComponent('_test2')->render(null, true);
+
         /*
         - root_test2:page
         - root_test2:master
