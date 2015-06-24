@@ -172,6 +172,8 @@ class Kwf_Trl
     private $_useUserLanguage = true;
     private $_webCodeLanguage;
 
+    private $_authedUserTargetLanguageCache;
+
     /**
      * @internal
      */
@@ -223,21 +225,27 @@ class Kwf_Trl
             return $this->getWebCodeLanguage();
         }
 
-        //abkürzung
+        //shortcut
         if (count($this->getLanguages()) == 1) {
             return $this->getWebCodeLanguage();
         }
 
-        //TODO: das benötigt IMMER eine datenbankverbindung, sollte in session gespeichert werden
-        $userModel = Kwf_Registry::get('userModel');
-        if (!$userModel || !$userModel->getAuthedUser() ||
-            !isset($userModel->getAuthedUser()->language) ||
-            !$userModel->getAuthedUser()->language ||
-            !in_array($userModel->getAuthedUser()->language, $this->getLanguages()))
-        {
+        if (!Kwf_Setup::hasAuthedUser()) {
             return $this->getWebCodeLanguage();
         } else {
-            return $userModel->getAuthedUser()->language;
+            if ($this->_authedUserTargetLanguageCache) return $this->_authedUserTargetLanguageCache;
+            //TODO: this ALWAYS requires a db connection, should be saved in session
+            $userModel = Kwf_Registry::get('userModel');
+            $authedUser = $userModel->getAuthedUser();
+            if (!isset($userModel->getAuthedUser()->language) ||
+                !($userLanguage = $userModel->getAuthedUser()->language) ||
+                !in_array($userLanguage, $this->getLanguages())
+            ) {
+                $this->_authedUserTargetLanguageCache = $this->getWebCodeLanguage();
+                return $this->_authedUserTargetLanguageCache;
+            }
+            $this->_authedUserTargetLanguageCache = $userLanguage;
+            return $this->_authedUserTargetLanguageCache;
         }
     }
 
