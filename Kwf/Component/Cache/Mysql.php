@@ -206,7 +206,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 new Kwf_Model_Select_Expr_Equals('value', $values),
                 new Kwf_Model_Select_Expr_LowerEqual('microtime', $microtime)
             )));
-//             $model->updateRows(array('deleted' => true), $select);
+            $model->updateRows(array('deleted' => true), $select);
         }
         if ($progress) { $progress->next(1, "deleteIds"); }
         foreach ($deleteIds as $type => $componentIds) {
@@ -217,13 +217,9 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                 new Kwf_Model_Select_Expr_Equals('type', $type),
                 new Kwf_Model_Select_Expr_LowerEqual('microtime', $microtime)
             )));
-//             $model->updateRows(array('deleted' => true), $select);
+            $model->updateRows(array('deleted' => true), $select);
         }
         $this->_afterDatabaseDelete($select); // For unit testing - DO NOT DELETE!
-        if ($recordBenchmark) {
-            Kwf_Benchmark::subCheckpoint('deleteViewCache remove from database', microtime(true)-$t);
-            $t = microtime(true);
-        }
 
         if ($progress) $progress->finish();
         file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Component_Events::$eventsCount.' events; '.$deletedCount.' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?substr($_SERVER['REQUEST_URI'], 0, 100):'')."\n", FILE_APPEND);
