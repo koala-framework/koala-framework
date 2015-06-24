@@ -67,7 +67,7 @@ class Kwf_Media_Image
 
         $handle = fopen($source, 'rb'); // b for windows compatibility
         // Check if image is jpg file
-        if (fread($handle, 2) != chr('0xFF').chr('0xD8')) {
+        if (fread($handle, 2) != chr(0xFF).chr(0xD8)) {
             fclose($handle);
             return 0;
         }
@@ -86,9 +86,9 @@ class Kwf_Media_Image
                 if (fread($handle, 6) != 'Exif'.chr(0).chr(0)) break;
 
                 $tiffHeaderBytes = fread($handle, 4); // should be 0x49492A00 or 0x4D4D002A
-                if ($tiffHeaderBytes == 'II'.chr('0x2A').chr('0x00')) { // Motorola
+                if ($tiffHeaderBytes == 'II'.chr(0x2A).chr(0x00)) { // Motorola
                     $reversed = true;
-                } else if ($tiffHeaderBytes == 'MM'.chr('0x00').chr('0x2A')) { // Intel
+                } else if ($tiffHeaderBytes == 'MM'.chr(0x00).chr(0x2A)) { // Intel
                     $reversed = false;
                 } else { // this case should not exist
                     break;
@@ -360,8 +360,8 @@ class Kwf_Media_Image
             && $ret['crop']['height'] == $originalSize[1]
             && $ret['width'] == $originalSize[0]
             && $ret['height'] == $originalSize[1]
+            && !$ret['rotate']
         ) {
-            $ret['rotate'] = 0;
             $ret['keepOriginal'] = true;
         }
 
@@ -474,7 +474,7 @@ class Kwf_Media_Image
                 $im = self::_processCommonImagickSettings($im);
             }
             if (isset($size['rotate']) && $size['rotate']) {
-                $im->rotateImage('#FFF', $size['rotate']);
+                $im->rotateImage(new ImagickPixel('#FFF'), $size['rotate']);
             }
 
             $factor = pow(2, $preScale['factor']); //1 if factor==0
