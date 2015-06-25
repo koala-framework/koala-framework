@@ -215,7 +215,7 @@ Kwf.Form.File = Ext2.extend(Ext2.form.Field, {
 
         var accept = '*';
         if (this.allowOnlyImages) {
-            accept = 'image/\*';
+            accept = 'image/png,image/jpg,image/jpeg,image/gif';
         }
         var fileInput = fileInputContainer.createChild({
             tag: 'input',
