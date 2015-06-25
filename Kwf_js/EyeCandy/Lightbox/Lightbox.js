@@ -241,8 +241,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 this.lightboxEl.show();
                 Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
                 this.style.afterContentShown();
-                this.lightboxEl.hide();
-                this.lightboxEl.fadeIn();
                 this.preloadLinks();
             }
         } else {
