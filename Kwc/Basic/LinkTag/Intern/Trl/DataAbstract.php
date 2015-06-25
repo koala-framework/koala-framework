@@ -2,6 +2,7 @@
 abstract class Kwc_Basic_LinkTag_Intern_Trl_DataAbstract extends Kwf_Component_Data
 {
     private $_data;
+    private $_anchor = null;
     protected $_type = null; // 'cc' oder 'trl'
 
     public final function getLinkedData()
@@ -25,6 +26,9 @@ abstract class Kwc_Basic_LinkTag_Intern_Trl_DataAbstract extends Kwf_Component_D
                 }
             }
         }
+        $m = Kwc_Abstract::createModel($this->chained->componentClass);
+        $result = $m->fetchColumnsByPrimaryId(array('anchor'), $this->chained->dbId);
+        if ($result['anchor']) $this->_anchor = $result['anchor'];
         return $this->_data;
     }
 
@@ -32,7 +36,11 @@ abstract class Kwc_Basic_LinkTag_Intern_Trl_DataAbstract extends Kwf_Component_D
     {
         if ($var == 'url') {
             if (!$this->getLinkedData()) return '';
-            return $this->getLinkedData()->url;
+            $ret = $this->getLinkedData()->url;
+            if ($this->_anchor) {
+                $ret .= '#' . $this->_anchor;
+            }
+            return $ret;
         } else if ($var == 'rel') {
             if (!$this->getLinkedData()) return '';
             return $this->getLinkedData()->rel;
