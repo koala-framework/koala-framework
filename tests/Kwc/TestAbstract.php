@@ -35,6 +35,7 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
         )));
         Kwf_Component_LogDuplicateModel::setInstance(new Kwf_Model_FnF(array(
         )));
+        Kwf_Component_Events::clearInstances();
         return $this->_root;
     }
 
