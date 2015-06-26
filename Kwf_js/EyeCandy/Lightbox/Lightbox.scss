@@ -13,7 +13,7 @@ body {
             position: fixed;
         }
 
-    div.kwfLightbox {
+    div.kwfLightboxCenterBox {
         display: table;
         height: 100% !important;
         table-layout: fixed;
@@ -265,7 +265,7 @@ body.kwfLightboxAnimate {
 .kwfLightbox .lightboxFooter p.title { margin-top: 10px; }
 .kwfLightbox .lightboxFooter p.fullSizeLink { margin-top: 10px; }
 
-.kwfLightboxMask {
+.kwfLightboxCenterBox .kwfLightboxMask {
     background: #000;
     z-index: 50 !important;
     position: fixed;
