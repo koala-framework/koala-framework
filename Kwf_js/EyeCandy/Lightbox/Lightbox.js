@@ -12,15 +12,7 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
         l = new Kwf.EyeCandy.Lightbox.Lightbox($el.attr('href'), options);
     }
     el.kwfLightbox = l;
-    var scrollTop = $(document).scrollTop();
-    el.kwfLightbox.scrollTop = scrollTop;
-    $('body').children().each(function(key, el){
-        var $el = $(el);
-        if (!$el.hasClass('kwfLightbox') && !$el.hasClass('kwfLightboxMask')) {
-            $el.css('top', (scrollTop * (-1)) + 'px');
-            $el.addClass('kwfup-fixedContent');
-        }
-    });
+    this.kwfLightbox.style.fixContent();
     if (Kwf.EyeCandy.Lightbox.currentOpen &&
         Kwf.EyeCandy.Lightbox.currentOpen.href == $el.attr('href')
     ) {
@@ -53,6 +45,7 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     l.contentEl = l.innerLightboxEl.find('.kwfLightboxContent');
     l.style.afterCreateLightboxEl();
     l.style.onContentReady();
+    l.style.fixContent();
     el[0].kwfLightbox = l;
     Kwf.EyeCandy.Lightbox.currentOpen = l;
 
@@ -511,7 +504,8 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     onMaskClick: function()
     {
         this.lightbox.closeAndPushState();
-    }
+    },
+    fixContent: function() {}
 };
 
 Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
@@ -713,5 +707,16 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         this.lightbox.innerLightboxEl.css(initialSize);
 
         this._resizeContent();
+    },
+    fixContent: function() {
+        var scrollTop = $(document).scrollTop();
+        this.lightbox.scrollTop = scrollTop;
+        $('body').children().each(function(key, el){
+            var $el = $(el);
+            if (!$el.hasClass('kwfLightbox') && !$el.hasClass('kwfLightboxMask')) {
+                $el.css('top', (scrollTop * (-1)) + 'px');
+                $el.addClass('kwfup-fixedContent');
+            }
+        });
     }
 });
