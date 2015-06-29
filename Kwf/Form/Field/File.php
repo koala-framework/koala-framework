@@ -84,9 +84,11 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
             if ($data) {
                 $fileModel = $row->getModel()->getReferencedModel($this->getName());
                 $row = $fileModel->getRow($data);
-                if ($this->getAllowOnlyImages() && substr($row->mime_type, 0, 6) !=  'image/') {
+                if ($this->getAllowOnlyImages()
+                    && !in_array($row->mime_type, array('image/png', 'image/gif', 'image/jpeg', 'image/jpg'))
+                ) {
                     $ret[] = array(
-                        'message' => trlKwf('This is not an image.'),
+                        'message' => trlKwf('Only png, gif and jpeg supported.'),
                         'field' => $this
                     );
                 }
