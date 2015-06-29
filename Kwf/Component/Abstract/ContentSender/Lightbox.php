@@ -7,6 +7,9 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
         if (Kwc_Abstract::hasSetting($this->_data->componentClass, 'lightboxOptions')) {
             $ret =  Kwc_Abstract::getSetting($this->_data->componentClass, 'lightboxOptions');
         }
+        if (!isset($ret['style'])) {
+            $ret['style'] = 'CenterBox';
+        }
         $ret['width'] = $this->_data->getComponent()->getContentWidth();
         return $ret;
     }
@@ -65,18 +68,20 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             if (isset($options['width'])) $style .= "width: $options[width]px;";
             if (isset($options['height'])) $style .= "height: $options[height]px";
             $class = 'kwfLightbox';
-            if (isset($options['style'])) $class .= " kwfLightbox$options[style]";
+            $class .= " kwfLightbox$options[style]";
             if (isset($options['cssClass'])) $class .= " $options[cssClass]";
             if (isset($options['adaptHeight']) && $options['adaptHeight']) $class .= " adaptHeight";
             $options = htmlspecialchars(json_encode($options));
-            $lightboxContent = "<div class=\"$class\">\n".
-                "<div class=\"kwfLightboxInner\" style=\"$style\">\n".
-                "    <input type=\"hidden\" class=\"options\" value=\"$options\" />\n".
-                "    <a class=\"closeButton\" href=\"$parent->url\"></a>\n".
-                "    <div class=\"kwfLightboxContent\">\n".
-                "        $lightboxContent\n".
-                "    </div>\n".
-                "</div>\n</div>\n";
+            $lightboxContent = "<div class=\"$class kwfLightboxOpen\">\n".
+                "<div class=\"kwfLightboxBetween\" style=\"$style\">\n".
+                "    <div class=\"kwfLightboxMask kwfLightboxMaskOpen\"></div>\n".
+                "    <div class=\"kwfLightboxInner\" style=\"$style\">\n".
+                "        <input type=\"hidden\" class=\"options\" value=\"$options\" />\n".
+                "        <a class=\"closeButton\" href=\"$parent->url\"></a>\n".
+                "        <div class=\"kwfLightboxContent\">\n".
+                "            $lightboxContent\n".
+                "        </div>\n".
+                "</div>\n</div>\n</div>";
             return preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
         } else {
             return $lightboxContent;
