@@ -49,70 +49,17 @@ Ext2.extend(Kwf.Utils.HistoryStateHtml5, Kwf.Utils.HistoryStateAbstract, {
     }
 });
 
-Kwf.Utils.HistoryStateHash = function() {
-    Kwf.Utils.HistoryStateHtml5.superclass.constructor.call(this);
-    if (window != top) { this.disabled = true; }
-    this.states = {};
-    if (!this.disabled) {
-        //IE fallback, using # urls
-        this.states[location.pathname + location.search] = {}; //initial state
-        var token = Ext2.History.getToken();
-        if (token && token.substr(0, 1) == '/') {
-            location.replace(token);
-        }
-        Ext2.History.on('change', function(token) {
-            if (!token) token = location.pathname + location.search;
-            if (token == this.ignoreNextChange) {
-                //changed because we just added to history -> ignore
-                this.ignoreNextChange = null;
-                return;
-            }
-            if (this.states[token]) {
-                this.currentState = Kwf.clone(this.states[token]);
-                this.fireEvent('popstate');
-                this.entries--;
-            }
-        }, this);
-        Kwf.onContentReady(function() {
-            Kwf.History.init();
-        });
-    }
+// Fallback for <IE10
+// always triggers a page load
+Kwf.Utils.HistoryStateFallback = function() {
+    Kwf.Utils.HistoryStateFallback.superclass.constructor.call(this);
 };
-Ext2.extend(Kwf.Utils.HistoryStateHash, Kwf.Utils.HistoryStateAbstract, {
+Ext2.extend(Kwf.Utils.HistoryStateFallback, Kwf.Utils.HistoryStateAbstract, {
     ignoreNextChange: null,
     pushState: function(title, href) {
-        if (this.disabled) return;
-        if (Ext2.isIE6 || Ext2.isIE7) {
-            //don't use history state at all, simply open the new url
-            location.href = href;
-            return;
-        }
-
-        var prefix = location.protocol+'//'+location.host;
-        if (href.substr(0, prefix.length) == prefix) {
-            href = href.substr(prefix.length);
-        }
-
-        this.states[href] = Kwf.clone(this.currentState);
-
-        var token = Ext2.History.getToken();
-        if (token == null) token = location.pathname + location.search;
-        if (href != token) {
-            if (href == location.pathname + location.search) {
-                Ext2.History.add('', false);
-            } else {
-                Ext2.History.add(href, false);
-            }
-            this.ignoreNextChange = href;
-        }
-        this.entries++;
+        location.href = href; //this will trigger a page load
     },
     updateState: function() {
-        if (this.disabled) return;
-
-        var token = Ext2.History.getToken();
-        if (token == null) token = location.pathname + location.search;
-        this.states[token] = Kwf.clone(this.currentState);
     },
     replaceState: function(title, href) {
         if (this.disabled) return;
@@ -122,5 +69,5 @@ Ext2.extend(Kwf.Utils.HistoryStateHash, Kwf.Utils.HistoryStateAbstract, {
 if (window.history.pushState) {
     Kwf.Utils.HistoryState = new Kwf.Utils.HistoryStateHtml5();
 } else {
-    Kwf.Utils.HistoryState = new Kwf.Utils.HistoryStateHash();
+    Kwf.Utils.HistoryState = new Kwf.Utils.HistoryStateFallback();
 }
