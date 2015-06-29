@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f6f912767fd084db810ec0f1f12a4265",
+    "hash": "0641be8aa16eee9bae5891eb0e4e8a27",
     "packages": [
         {
             "name": "koala-framework/composer-extra-assets",
@@ -325,20 +325,20 @@
         },
         {
             "name": "mouf/nodejs-installer",
-            "version": "v1.0.5",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/nodejs-installer.git",
-                "reference": "68dfb4432ce10a72d610d8e86b4f97bd12504d51"
+                "reference": "473ddea36b9e5428e776cd9b08ad074b493fb8ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thecodingmachine/nodejs-installer/zipball/68dfb4432ce10a72d610d8e86b4f97bd12504d51",
-                "reference": "68dfb4432ce10a72d610d8e86b4f97bd12504d51",
+                "url": "https://api.github.com/repos/thecodingmachine/nodejs-installer/zipball/473ddea36b9e5428e776cd9b08ad074b493fb8ca",
+                "reference": "473ddea36b9e5428e776cd9b08ad074b493fb8ca",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "~1.0.0",
+                "composer-plugin-api": "^1.0.0",
                 "ext-openssl": "*",
                 "php": ">=5.3.0"
             },
@@ -377,7 +377,7 @@
                 "nodejs",
                 "npm"
             ],
-            "time": "2015-04-27 08:15:25"
+            "time": "2015-06-15 14:48:26"
         },
         {
             "name": "psr/log",
@@ -897,16 +897,16 @@
         },
         {
             "name": "phpunit/php-text-template",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-text-template.git",
-                "reference": "206dfefc0ffe9cebf65c413e3d0e809c82fbf00a"
+                "reference": "31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
-                "reference": "206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/31f8b717e51d9a2afca6c9f046f5d69fc27c8686",
+                "reference": "31f8b717e51d9a2afca6c9f046f5d69fc27c8686",
                 "shasum": ""
             },
             "require": {
@@ -915,20 +915,17 @@
             "type": "library",
             "autoload": {
                 "classmap": [
-                    "Text/"
+                    "src/"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                ""
-            ],
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sb@sebastian-bergmann.de",
+                    "email": "sebastian@phpunit.de",
                     "role": "lead"
                 }
             ],
@@ -937,7 +934,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2014-01-30 17:20:04"
+            "time": "2015-06-21 13:50:34"
         },
         {
             "name": "phpunit/php-timer",
