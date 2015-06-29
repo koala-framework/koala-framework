@@ -29,35 +29,35 @@
 
     &.col2col-50_50 {
         > .listItem.span1 {
-            width: 100%/2;
+            width: percentage(1/2);
         }
     }
 
     &.col2col-33_66,
     &.col2col-66_33 {
         > .listItem.span1 {
-            width: 100%/3;
+            width: percentage(1/3);
         }
 
         > .listItem.span2 {
-            width: 100%/3*2;
+            width: percentage(1/3*2);
         }
     }
 
     &.col2col-25_75,
     &.col2col-75_25 {
         > .listItem.span1 {
-            width: 100%/4;
+            width: percentage(1/4);
         }
 
         > .listItem.span3 {
-            width: 100%/4*3;
+            width: percentage(1/4*3);
         }
     }
 
     &.col3col-33_33_33 {
         > .listItem.span1 {
-            width: 100%/3;
+            width: percentage(1/3);
         }
     }
 
@@ -65,17 +65,17 @@
     &.col3col-25_50_25,
     &.col3col-25_25_50 {
         > .listItem.span1 {
-            width: 100%/4;
+            width: percentage(1/4);
         }
 
         > .listItem.span2 {
-            width: 100%/4*2;
+            width: percentage(1/4*2);
         }
     }
 
     &.col4col-25_25_25_25 {
         > .listItem.span1 {
-            width: 100%/2;
+            width: percentage(1/2);
 
             &.emptyContent {
                 display: none;
@@ -85,7 +85,7 @@
 
     &.col5col-20_20_20_20_20 {
         > .listItem.span1 {
-            width: 100%/5;
+            width: percentage(1/5);
 
             &.emptyContent {
                 display: none;
@@ -108,7 +108,7 @@
 .cssClass.gt620 {
     &.col4col-25_25_25_25 {
         > .listItem.span1 {
-            width: 100%/4;
+            width: percentage(1/4);
 
             &.emptyContent {
                 display: inline;

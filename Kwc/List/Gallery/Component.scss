@@ -48,11 +48,11 @@ div.cssClass {
         &.col#{$i} {
             @if $i % 2 == 0 {
                 > .listItem, > .morePics > .listItem {
-                    width: 100%/4;
+                    width: percentage(1/4);
                 }
             } @else {
                 > .listItem, > .morePics > .listItem {
-                    width: 100%/3;
+                    width: percentage(1/3);
                 }
             }
         }
@@ -60,20 +60,20 @@ div.cssClass {
 
     &.col2, &.col4 {
         > .listItem, > .morePics > .listItem {
-            width: 100%/2;
+            width: percentage(1/2);
         }
     }
 
     &.col6 {
         > .listItem, > .morePics > .listItem {
-            width: 100%/3;
+            width: percentage(1/3);
         }
     }
 
     &.gt360 {
         &.col4 {
             > .listItem, > .morePics > .listItem {
-                width: 100%/4;
+                width: percentage(1/4);
             }
         }
     }
@@ -82,7 +82,7 @@ div.cssClass {
         @for $i from 1 through 10 {
             &.col#{$i} {
                 > .listItem, > .morePics > .listItem {
-                   width: 100%/$i;
+                   width: percentage(1/$i);
 
                     a .imageCaption {
                         display: block;
