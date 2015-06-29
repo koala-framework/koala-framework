@@ -25,7 +25,7 @@ class Kwc_Menu_Expanded_EditableItems_Component extends Kwc_Abstract
     public function attachEditableToMenuData(&$menuData)
     {
         $children = array();
-        foreach ($this->getData()->getChildComponents(array('generator'=>'child')) as $c) {
+        foreach ($this->getData()->getChildComponents(array('generator'=>'child', 'ignoreVisible'=>true)) as $c) {
             $children[$c->row->target_page_id] = $c;
         }
         foreach ($menuData as $k=>$i) {

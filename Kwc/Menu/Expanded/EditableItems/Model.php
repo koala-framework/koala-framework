@@ -33,7 +33,8 @@ class Kwc_Menu_Expanded_EditableItems_Model extends Kwf_Model_Abstract
             $childPagesComponentSelect['showInMenu'] = true;
 
             if ($whereId ||
-                (isset($whereEquals['ignore_visible']) && $whereEquals['ignore_visible'])
+                (isset($whereEquals['ignore_visible']) && $whereEquals['ignore_visible']) ||
+                $select->getPart(Kwf_Component_Select::IGNORE_VISIBLE)
             ) {
                 $childPagesComponentSelect[Kwf_Component_Select::IGNORE_VISIBLE] = true;
             }
