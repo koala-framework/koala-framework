@@ -1,9 +1,6 @@
-@import "kwf/susyone";
 @import "compass/css3/box-sizing";
 @import "compass/utilities/general/clearfix";
 
-$gutter-width   : 0em;
-$grid-padding   : 0em;
 $contentMargin  : 10px;
 $breakpoint     : 600;
 
@@ -20,6 +17,8 @@ div.cssClass {
         padding: 0 $contentMargin 7px 0;
         position: relative;
         margin: 0;
+        float:left;
+        display:inline
 
         a .imageCaption {
             text-overflow: ellipsis;
@@ -49,11 +48,11 @@ div.cssClass {
         &.col#{$i} {
             @if $i % 2 == 0 {
                 > .listItem, > .morePics > .listItem {
-                    @include span-columns(1, 4);
+                    width: 100%/4;
                 }
             } @else {
                 > .listItem, > .morePics > .listItem {
-                    @include span-columns(1, 3);
+                    width: 100%/3;
                 }
             }
         }
@@ -61,20 +60,20 @@ div.cssClass {
 
     &.col2, &.col4 {
         > .listItem, > .morePics > .listItem {
-            @include span-columns(1, 2);
+            width: 100%/2;
         }
     }
 
     &.col6 {
         > .listItem, > .morePics > .listItem {
-            @include span-columns(1, 3);
+            width: 100%/3;
         }
     }
 
     &.gt360 {
         &.col4 {
             > .listItem, > .morePics > .listItem {
-                @include span-columns(1, 4);
+                width: 100%/4;
             }
         }
     }
@@ -83,7 +82,7 @@ div.cssClass {
         @for $i from 1 through 10 {
             &.col#{$i} {
                 > .listItem, > .morePics > .listItem {
-                    @include span-columns(1, $i);
+                   width: 100%/$i;
 
                     a .imageCaption {
                         display: block;
