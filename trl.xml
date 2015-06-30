@@ -15663,4 +15663,14 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Администратор</ru>
 <de>Administrator</de>
 </text>
+<text>
+<en>Article</en>
+<id>2272</id>
+<de>Artikel</de>
+</text>
+<text>
+<en>Article Views</en>
+<id>2273</id>
+<de>Artikel Statistik</de>
+</text>
 </trl>
