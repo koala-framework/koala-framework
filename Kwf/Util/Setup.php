@@ -418,6 +418,9 @@ class Kwf_Util_Setup
                 if (substr($i, -1)=='*') {
                     $i = substr($i, 0, -1);
                     $ret .= "    if (substr(\$_SERVER['REMOTE_ADDR'], 0, ".strlen($i).") == '$i') \$ignore = true;\n";
+                } else if (substr($i, 0, 1)=='*') {
+                    $i = substr($i, 1);
+                    $ret .= "    if (substr(\$_SERVER['REMOTE_ADDR'], ".strlen($i).") == '$i') \$ignore = true;\n";
                 } else {
                     $ret .= "    if (\$_SERVER['REMOTE_ADDR'] == '$i') \$ignore = true;\n";
                 }
