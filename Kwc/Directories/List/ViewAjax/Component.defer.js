@@ -382,7 +382,6 @@ Kwc.Directories.List.ViewAjax.prototype = {
             this._getState().viewDetail = href;
             Kwf.Utils.HistoryState.pushState(document.title, href);
         }
-
         this.hideDetail();
 
         var classNames = this.$el.closest('.kwcDirectoriesListViewAjax').attr('class');
@@ -410,7 +409,11 @@ Kwc.Directories.List.ViewAjax.prototype = {
                     $(el).click((function(ev) {
                         ev.preventDefault();
                         if (history.length > 1) {
-                            history.back(); //keeps scroll position
+                            if (document.referrer.indexOf(document.domain) >= 0) {
+                                history.back(); //keeps scroll position
+                            } else {
+                                window.location.replace($(ev.currentTarget).attr('href'));
+                            }
                         } else {
                             this.showView();
                         }
@@ -419,6 +422,8 @@ Kwc.Directories.List.ViewAjax.prototype = {
             }).bind(this));
 
             Kwf.callOnContentReady(this.detailEl, {newRender: true});
+            $(window).scrollTop(0);
+
         }).bind(this));
     }
 
