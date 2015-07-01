@@ -114,7 +114,7 @@ class Kwc_Directories_Item_Directory_Trl_AdminModel extends Kwf_Model_Proxy
     {
         $c = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($componentId, array('ignoreVisible'=>true));
-        $sep = $c->getGenerator('child')->getIdSeparator();
+        $sep = $c->getGenerator('detail')->getIdSeparator();
         $proxyId = $componentId . $sep . $proxiedRow->id;
         $trlRow = $this->_trlModel->getRow($proxyId);
         if (!$trlRow) {
