@@ -89,19 +89,6 @@ class Kwf_Loader
             }
         }
 
-        static $classmap;
-        if (!isset($namespaces)) {
-            $namespaces = array();
-            $composerNamespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
-            foreach ($composerNamespaces as $namespace => $path) {
-                $namespaces[$namespace] = $path;
-                if (strpos($namespace, '\\') === false && substr($namespace, -1) != '_') {
-                    $namespace = $namespace.'_';
-                    $namespaces[$namespace] = $path;
-                }
-            }
-        }
-
         try {
             include $file;
         } catch (Exception $e) {
