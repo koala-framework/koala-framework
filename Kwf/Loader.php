@@ -72,7 +72,7 @@ class Kwf_Loader
             $ns3 = null;
             if (($pos = strpos($class, '\\')) !== false) {
                 //php 5.3 namespace
-                $ns1 = substr($class, 0, $pos);
+                $ns1 = substr($class, 0, $pos+1);
 
                 $pos = strpos($class, '\\', $pos+1);
                 if ($pos !== false) {
