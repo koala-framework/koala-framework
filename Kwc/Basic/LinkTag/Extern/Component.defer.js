@@ -22,5 +22,6 @@ $(document).on('click', 'a', function(event) {
         } else {
             window.open(lnk.href, '_blank', $(lnk).data('kwc-popup'));
         }
+        event.preventDefault();
     }
 });
