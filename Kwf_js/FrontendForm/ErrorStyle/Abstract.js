@@ -1,4 +1,4 @@
-Ext2.ns('Kwf.FrontendForm.ErrorStyle');
+Kwf.namespace('Kwf.FrontendForm.ErrorStyle');
 Kwf.FrontendForm.ErrorStyle.Abstract = function(form) {
     this.form = form;
 };
@@ -13,8 +13,8 @@ Kwf.FrontendForm.ErrorStyle.Abstract.prototype = {
         }
         html += '</ul>';
         html += '</div>';
-        this.form.el.parent().createChild(html, this.form.el.down('form'));
-        Kwf.callOnContentReady(this.form.el.dom, {newRender: true});
+        $(html).insertAfter(this.form.el.find('form'));
+        Kwf.callOnContentReady(this.form.el, {newRender: true});
     },
     showErrors: function() {
     },

@@ -1,9 +1,9 @@
 /* TODO commonjs
-var onReady = require('kwf/on-ready-ext2');
+var onReady = require('kwf/on-ready');
 
 onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
-        var checkAll = mc.child('a.kwfMultiCheckboxCheckAll');
-        var checkNone = mc.child('a.kwfMultiCheckboxCheckNone');
+        var checkAll = mc.find('a.kwfMultiCheckboxCheckAll');
+        var checkNone = mc.find('a.kwfMultiCheckboxCheckNone');
 
         if (checkAll) {
             checkAll.on('click', function(ev) {
@@ -30,7 +30,7 @@ onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
 }, { defer: true });
 */
 
-Kwf.FrontendForm.MultiCheckbox = Ext2.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.MultiCheckbox = Kwf.extend(Kwf.FrontendForm.Field, {
     initField: function() {
     },
     getValue: function() { //has no value itself
@@ -41,7 +41,7 @@ Kwf.FrontendForm.MultiCheckbox = Ext2.extend(Kwf.FrontendForm.Field, {
     setValue: function() {
     },
     getFieldName: function() {
-        return this.el.child('.kwfFormFieldMultiCheckbox').dom.getAttribute('data-fieldname');
+        return this.el.find('.kwfFormFieldMultiCheckbox').get(0).getAttribute('data-fieldname');
     }
 });
 

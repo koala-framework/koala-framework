@@ -1,6 +1,6 @@
-Kwf.FrontendForm.Recaptcha = Ext2.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.Recaptcha = Kwf.extend(Kwf.FrontendForm.Field, {
     getFieldName: function() {
-        return this.el.child('div[data-fieldname]').dom.getAttribute('data-fieldname');
+        return this.el.find('div[data-fieldname]').get(0).getAttribute('data-fieldname');
     },
     onError: function(message) {
         Recaptcha.reload(); //there can be only a single Recaptcha on the page

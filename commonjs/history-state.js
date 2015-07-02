@@ -1,28 +1,31 @@
 var onReady = require('kwf/on-ready');
 
 var HistoryStateAbstract = function() {
-    this.addEvents('popstate');
     this.disabled = false; //functionality can be disabled, so it behaves like a browser that doesn't support history states
     this.currentState = {};
 };
-Ext2.extend(HistoryStateAbstract, Ext2.util.Observable, {
+HistoryStateAbstract.prototype = {
     /**
      * Number of entries in the history of the current page
      **/
     entries: 0,
-    pushState: Ext2.emptyFn,
-    updateState: Ext2.emptyFn,
+    pushState: function() {},
+    updateState: function() {},
     /**
      * Replace the current state, don't use is possible as it will do a new page request in non-html5-browsers
      **/
-    replaceState: Ext2.emptyFn
-});
+    replaceState: function() {},
+
+    on: function(event, cb) {
+        $(window).on('kwf-history-state-'+event, cb);
+    }
+};
 
 var HistoryStateHtml5 = function() {
     HistoryStateHtml5.superclass.constructor.call(this);
-    Ext2.onReady(function() {
+    $((function() {
         //in onReady to avoid getting initial popstate event that chrome sends on load
-        Ext2.EventManager.on(window, 'popstate', function(event) {
+        $(window).on('popstate', function(event) {
             if (this.disabled) return;
             this.entries--;
             if (event.browserEvent.state) {
@@ -30,11 +33,11 @@ var HistoryStateHtml5 = function() {
             } else {
                 this.currentState = {};
             }
-            this.fireEvent('popstate');
+            $(window).trigger('kwf-history-state-popstate');
         }, this);
-    }, this);
+    }).bind(this));
 };
-Ext2.extend(HistoryStateHtml5, HistoryStateAbstract, {
+Kwf.extend(HistoryStateHtml5, HistoryStateAbstract, {
     pushState: function(title, href) {
         if (this.disabled) return;
         window.history.pushState(this.currentState, title, href);
@@ -52,15 +55,10 @@ Ext2.extend(HistoryStateHtml5, HistoryStateAbstract, {
 
 // Fallback for <IE10
 // always triggers a page load
-var HistoryStateFallback = function() {
-    HistoryStateFallback.superclass.constructor.call(this);
-};
-Ext2.extend(HistoryStateFallback, HistoryStateAbstract, {
-    ignoreNextChange: null,
+var HistoryStateFallback = Kwf.extend(HistoryStateAbstract, {
     pushState: function(title, href) {
+        if (this.disabled) return;
         location.href = href; //this will trigger a page load
-    },
-    updateState: function() {
     },
     replaceState: function(title, href) {
         if (this.disabled) return;

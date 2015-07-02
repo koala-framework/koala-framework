@@ -1,4 +1,4 @@
-Kwf.FrontendForm.Cards = Ext2.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.Cards = Kwf.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         var config = this.form.getFieldConfig(this.getFieldName());
         var combobox = this.form.findField(config.combobox);
@@ -9,7 +9,7 @@ Kwf.FrontendForm.Cards = Ext2.extend(Kwf.FrontendForm.Field, {
         }, this);
     },
     getFieldName: function() {
-        var classNames = this.el.dom.className.split(' ');
+        var classNames = this.el.get(0).className.split(' ');
         return classNames[classNames.length-1];
     },
     getValue: function() {

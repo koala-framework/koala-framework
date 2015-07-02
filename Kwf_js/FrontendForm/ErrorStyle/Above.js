@@ -1,4 +1,4 @@
-Kwf.FrontendForm.ErrorStyle.Above = Ext2.extend(Kwf.FrontendForm.ErrorStyle.Abstract, {
+Kwf.FrontendForm.ErrorStyle.Above = Kwf.extend(Kwf.FrontendForm.ErrorStyle.Abstract, {
     showErrors: function(r) {
         var errorMessages = r.errorMessages;
         for (var fieldName in r.errorFields) {
@@ -14,7 +14,7 @@ Kwf.FrontendForm.ErrorStyle.Above = Ext2.extend(Kwf.FrontendForm.ErrorStyle.Abst
     hideErrors: function()
     {
         Kwf.FrontendForm.ErrorStyle.Above.superclass.hideErrors.call(this);
-        var error = this.form.el.parent().child('.kwfup-webFormError');
+        var error = this.form.el.parent().find('.kwfup-webFormError');
         if (error) error.remove();
     },
 

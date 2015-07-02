@@ -1,31 +1,31 @@
-Kwf.FrontendForm.Radio = Ext2.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.Radio = Kwf.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         this.el.select('input').each(function(input) {
             input.on('click', function() {
-                this.fireEvent('change', this.getValue());
+                this.el.trigger('kwf-form-change', this.getValue());
             }, this);
         }, this);
     },
     getValue: function() {
         var ret = null;
         this.el.select('input').each(function(input) {
-            if (input.dom.checked) {
-                ret = input.dom.value;
+            if (input.get(0).checked) {
+                ret = input.get(0).value;
             }
         }, this);
         return ret;
     },
     clearValue: function() {
         this.el.select('input').each(function(input) {
-            input.dom.checked = false;
+            input.get(0).checked = false;
         }, this);
     },
     setValue: function(value) {
         this.el.select('input').each(function(input) {
-            if (input.dom.value == value) {
-                input.dom.checked = true;
+            if (input.get(0).value == value) {
+                input.get(0).checked = true;
             } else {
-                input.dom.checked = false;
+                input.get(0).checked = false;
             }
         }, this);
     }

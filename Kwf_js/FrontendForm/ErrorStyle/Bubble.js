@@ -1,37 +1,29 @@
-Kwf.FrontendForm.ErrorStyle.Bubble = Ext2.extend(Kwf.FrontendForm.ErrorStyle.Above, {
+Kwf.FrontendForm.ErrorStyle.Bubble = Kwf.extend(Kwf.FrontendForm.ErrorStyle.Above, {
     showErrors: function(r) {
 
         for (var fieldName in r.errorFields) {
             var field = this.form.findField(fieldName);
             field.el.addClass('kwfFieldError');
             if (!field.errorEl) {
-                field.errorEl = field.el.createChild({
-                    cls: 'kwfFieldErrorBubble'
-                });
-                field.errorEl.createChild({
-                    cls: 'message'
-                });
-                var closeButton = field.errorEl.createChild({
-                    tag: 'a',
-                    cls: 'closeButton'
-                });
+                field.errorEl = field.el.append('<div class="kwfFieldErrorBubble"></div>');
+                field.errorEl.append('<div class="message"></div>');
+                var closeButton = field.errorEl.append('<a class="closeButton"></a>');
                 closeButton.on('click', function(ev) {
-                    ev.stopEvent();
+                    ev.preventDefault();
                     this.fadeOut();
                 }, field.errorEl);
                 if (field instanceof Kwf.FrontendForm.TextArea) {
-                    field.errorEl.alignTo(field.el.child('textarea'), 'bl');
-                } else if (field.el.child('input')) {
-                    field.errorEl.alignTo(field.el.child('input'), 'bl');
-                } else if (field.el.child('select')) {
-                    field.errorEl.alignTo(field.el.child('select'), 'bl');
+                    field.errorEl.alignTo(field.el.find('textarea'), 'bl');
+                } else if (field.el.find('input')) {
+                    field.errorEl.alignTo(field.el.find('input'), 'bl');
+                } else if (field.el.find('select')) {
+                    field.errorEl.alignTo(field.el.find('select'), 'bl');
                 } else {
                     field.errorEl.alignTo(field.el, 'bl');
                 }
-                field.errorEl.enableDisplayMode('block');
                 field.errorEl.hide();
             }
-            field.errorEl.child('.message').update(r.errorFields[fieldName]);
+            field.errorEl.find('.message').update(r.errorFields[fieldName]);
             field.errorEl.clearOpacity();
             field.errorEl.fadeIn({
                 endOpacity: 0.8 //TODO read from css (but that's hard for IE)

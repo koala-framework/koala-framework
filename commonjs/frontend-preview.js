@@ -2,13 +2,13 @@ var onReady = require('kwf/on-ready');
 
 onReady.onContentReady(function kwcPreviewLink(el) {
     if (location.search.match(/[\?&]kwcPreview/)) {
-        Ext2.get(el).select('a', true).each(function(a) {
-            if (a.dom.href.indexOf(window.location.host) !== -1) { // intern
+        $('a').each(function() {
+            if (this.href.indexOf(window.location.host) !== -1) { // intern
                 var separator = '?';
-                var link = a.dom.href;
+                var link = this.href;
                 if (link.indexOf('?') !== -1) separator = '&';
                 if (link.indexOf('kwcPreview') === -1) link += separator + 'kwcPreview';
-                a.set({ href: link });
+                this.href = link;
             }
         }, this);
     }

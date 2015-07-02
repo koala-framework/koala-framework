@@ -1,13 +1,13 @@
-var onReady = require('kwf/on-ready-ext2');
+var onReady = require('kwf/on-ready');
 
 if (window.devicePixelRatio && window.devicePixelRatio > 1) {
     onReady.onRender('.kwfReplaceImageDpr2', function(el) {
-        if (el.dom.tagName.toLowerCase() == 'img') {
-            el.dom.src = el.dom.src.replace('/images/', '/images/dpr2/');
+        if (el.get(0).tagName.toLowerCase() == 'img') {
+            el.get(0).src = el.get(0).src.replace('/images/', '/images/dpr2/');
         } else {
             var url = el.getStyle('background-image');
             url = url.replace('/images/', '/images/dpr2/');
-            el.setStyle('background-image', url);
+            el.css('background-image', url);
         }
     });
 }

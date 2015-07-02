@@ -93,6 +93,7 @@ historyState.on('popstate', function() {
     }
 });
 
+/* TODO commonjs
 if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
     var timer = 0;
     $(window).resize(function(ev) {
@@ -105,13 +106,14 @@ if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
     });
 
 } else {
+*/
     //on iOS listen to orientationchange as resize event triggers randomly when scrolling
     $(window).on('orientationchange', function(ev) {
         if (Kwf.EyeCandy.Lightbox.currentOpen) {
             Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
         }
     });
-}
+// }
 
 Kwf.EyeCandy.Lightbox.currentOpen = null;
 Kwf.EyeCandy.Lightbox.allByUrl = {};
@@ -375,7 +377,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     }
 };
 
-Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
+Kwf.EyeCandy.Lightbox.Styles.CenterBox = Kwf.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
     init: function()
     {
         this._previousWindowWidth = $(window).width();

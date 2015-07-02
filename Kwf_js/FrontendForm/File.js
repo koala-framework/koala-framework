@@ -1,14 +1,14 @@
 // @require ModernizrNetworkXhr2
 
-Kwf.FrontendForm.File = Ext2.extend(Kwf.FrontendForm.Field, {
+Kwf.FrontendForm.File = Kwf.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         if (!Modernizr.xhr2) {
             return;
         }
 
         this.el.addClass('dropField');
-        this.dropContainer = $(this.el.dom);
-        this.fileInput = $(this.el.dom).find('input[type="file"]');
+        this.dropContainer = this.el;
+        this.fileInput = this.el.find('input[type="file"]');
         this.uploadIdField = this.dropContainer.find('input.kwfUploadIdField');
         this.fileSizeLimit = this.fileInput.data('fileSizeLimit');
 
@@ -105,23 +105,23 @@ Kwf.FrontendForm.File = Ext2.extend(Kwf.FrontendForm.Field, {
         }).bind(this);
     },
     getFieldName: function() {
-        var inp = this.el.child('input.fileSelector');
+        var inp = this.el.find('input.fileSelector');
         if (!inp) return null;
-        return inp.dom.name;
+        return inp.get(0).name;
     },
     getValue: function() {
-        var inp = this.el.child('input[type="hidden"]');
+        var inp = this.el.find('input[type="hidden"]');
         if (!inp) return null;
-        var ret = inp.dom.value;
+        var ret = inp.get(0).value;
         return ret;
     },
     clearValue: function() {
-        var inp = this.el.child('input[type="hidden"]');
-        inp.dom.value = '';
+        var inp = this.el.find('input[type="hidden"]');
+        inp.get(0).value = '';
     },
     setValue: function(value) {
-        var inp = this.el.child('input[type="hidden"]');
-        inp.dom.value = value;
+        var inp = this.el.find('input[type="hidden"]');
+        inp.get(0).value = value;
     }
 });
 

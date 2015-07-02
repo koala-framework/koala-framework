@@ -44,7 +44,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
 
     private function _showExtDep($d, $stack)
     {
-        if ($d->getDeferLoad()) return;
+        //if ($d->getDeferLoad()) return;
         $stack[] = $d;
         if ($d instanceof Kwf_Assets_Dependency_File && $d->getType() == 'ext2' || $d->__toString() == 'KwfOnReady') {
             $i = 0;

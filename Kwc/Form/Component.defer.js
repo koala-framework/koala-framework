@@ -1,17 +1,17 @@
 // @require ModernizrNetworkXhr2
 
-var onReady = require('kwf/on-ready-ext2');
+var onReady = require('kwf/on-ready');
 var responsiveEl = require('kwf/responsive-el');
 responsiveEl('.cssClass.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
 responsiveEl('.cssClass.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
 responsiveEl('.cssClass.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 responsiveEl('.cssClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
-Ext2.ns('Kwc.Form');
+Kwf.namespace('Kwc.Form');
 Kwc.Form.findForm = function(el) {
-    var formEl = el.child('.kwfup-kwcForm > form');
+    var formEl = el.find('.kwfup-kwcForm > form');
     if (formEl) {
-        formEl = formEl.parent('.kwcForm');
+        formEl = formEl.closest('.kwcForm');
         return formEl.kwcForm;
     }
     return null;
@@ -22,9 +22,9 @@ Kwc.Form.Component = function(form)
 {
     this.addEvents('beforeSubmit', 'submitSuccess', 'fieldChange');
     this.el = form;
-    var config = form.parent().down('.config', true);
+    var config = form.parent().find('.config', true);
     if (!config) return;
-    config = Ext2.decode(config.value);
+    config = $.parseJSON(config.value);
     if (!config) return;
     this.config = config;
     this._submitDisabled = 0;
@@ -32,18 +32,18 @@ Kwc.Form.Component = function(form)
     Kwc.Form.formsByComponentId[this.config.componentId] = this;
 
 
-    if (this.el.down('form').dom.enctype == 'multipart/form-data' && this.config.useAjaxRequest) {
+    if (this.el.find('form').get(0).enctype == 'multipart/form-data' && this.config.useAjaxRequest) {
         if (Modernizr.xhr2) {
-            this.el.down('form').dom.enctype = 'application/x-www-form-urlencoded';
+            this.el.find('form').get(0).enctype = 'application/x-www-form-urlencoded';
         }
         this.config.useAjaxRequest = Modernizr.xhr2;
     }
 
     this.fields = [];
-    var fieldEls = $(form.dom).find('.kwfField');
+    var fieldEls = form.find('.kwfField');
     for (var fieldElIndex=0; fieldElIndex<fieldEls.length; fieldElIndex++) {
-        var fieldEl = Ext2.get(fieldEls[fieldElIndex]);
-        var classes = fieldEl.dom.className.split(' ');
+        var fieldEl = fieldEls[fieldElIndex];
+        var classes = fieldEl.get(0).className.split(' ');
         var fieldConstructor = false;
         classes.each(function (c) {
             if (Kwf.FrontendForm.fields[c]) {
@@ -78,7 +78,7 @@ Kwc.Form.Component = function(form)
         }, this);
     }
 
-    var button = form.child('form button.submit');
+    var button = form.find('form button.submit');
     if (button) {
         button.on('click', this.onSubmit, this);
     }
@@ -91,7 +91,14 @@ Kwc.Form.Component = function(form)
 
     this.errorStyle = new Kwf.FrontendForm.errorStyles[this.config.errorStyle](this);
 };
-Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
+Kwc.Form.Component.prototype = {
+
+    on: function(event, cb, scope)
+    {
+        if (typeof scope != 'undefined') cb.bind(scope);
+        this.el.on(event, cb);
+    },
+
     getFieldConfig: function(fieldName)
     {
         if (this.config.fieldConfig[fieldName]) {
@@ -136,15 +143,15 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
     },
     disableSubmit: function() {
         this._submitDisabled++;
-        this.el.child('.submitWrapper .button button').dom.disabled = true;
-        this.el.child('.submitWrapper .button').addClass('disabled');
+        this.el.find('.submitWrapper .button button').get(0).disabled = true;
+        this.el.find('.submitWrapper .button').addClass('disabled');
     },
     enableSubmit: function() {
         this._submitDisabled--;
 
         if (this._submitDisabled === 0) {
-            this.el.child('.submitWrapper .button button').dom.disabled = false;
-            this.el.child('.submitWrapper .button').removeClass('disabled');
+            this.el.find('.submitWrapper .button button').get(0).disabled = false;
+            this.el.find('.submitWrapper .button').removeClass('disabled');
         }
     },
     isSubmitDisabled: function() {
@@ -170,23 +177,25 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
     
     submit: function()
     {
-        var button = this.el.child('.submitWrapper .button');
-        button.down('.saving').show();
-        button.down('.submit').hide();
+        var button = this.el.find('.submitWrapper .button');
+        button.find('.saving').show();
+        button.find('.submit').hide();
 
         this.errorStyle.hideErrors();
 
-        Ext2.Ajax.request({
+        var data = this.el.find('form').serialize();
+        $.extend(data, this.config.baseParams);
+        $.ajax({
             url: this.config.controllerUrl + '/json-save',
             ignoreErrors: true,
-            params: this.config.baseParams,
-            form: this.el.down('form'),
-            failure: function() {
+            data: data,
+            dataType: 'json',
+            error: function() {
                 //on failure try a plain old post of the form
                 this.ajaxRequestSubmitted = true; //avoid endless recursion
-                button.down('.submit').dom.click();
+                button.find('.submit').get(0).click();
             },
-            success: function(response, options, r) {
+            success: function(r) {
 
                 this.errorStyle.showErrors({
                     errorFields: r.errorFields,
@@ -208,30 +217,27 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
                 }
 
                 if (!r.successUrl) {
-                    button.down('.saving').hide();
-                    button.down('.submit').show();
+                    button.find('.saving').hide();
+                    button.find('.submit').show();
                 }
 
                 // show success content
                 if (r.successContent) {
-                    var el = this.el.parent().createChild({
-                        html: r.successContent
-                    });
+                    var el = this.el.parent().append(r.successContent);
                     if (this.config.hideFormOnSuccess) {
-                        this.el.enableDisplayMode('block');
                         this.el.hide();
                     } else {
                         (function(el) {
                             el.remove();
-                            Kwf.callOnContentReady(this.el.dom, {newRender: false});
+                            Kwf.callOnContentReady(this.el, {newRender: false});
                         }).defer(5000, this, [el]);
                     }
-                    Kwf.callOnContentReady(el.dom, {newRender: true});
+                    Kwf.callOnContentReady(el, {newRender: true});
                 } else if (r.successUrl) {
                     document.location.href = r.successUrl;
                 } else {
                     //errors are shown, lightbox etc needs to resize
-                    Kwf.callOnContentReady(this.el.dom, {newRender: false});
+                    Kwf.callOnContentReady(this.el, {newRender: false});
                 }
 
                 var scrollTo = null;
@@ -293,13 +299,13 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
             scope: this
         });
     }
-});
+};
 
 onReady.onRender('.kwfup-kwcForm > form', function form(form) {
     form = form.parent('.kwfup-kwcForm', false);
-    if (!form.dom.kwcForm) {
-        form.dom.kwcForm = new Kwc.Form.Component(form);
-        form.kwcForm = form.dom.kwcForm;
+    if (!form.get(0).kwcForm) {
+        form.get(0).kwcForm = new Kwc.Form.Component(form);
+        form.kwcForm = form.get(0).kwcForm;
     }
 }, { priority: -10, defer: true }); //initialize form very early, as many other components access it
 
