@@ -1,9 +1,12 @@
+var onReady = require('kwf/on-ready');
+var getCachedWith = require('kwf/element/get-cached-width');
+
 /**
  * Helper function that dynamically adds eg. gt480 class to element if it's width is >480px
  *
  * Basically simulates media queries for elements
  */
-Kwf.Utils.ResponsiveEl = function(selector, widths, options)
+module.exports = function responsiveEl(selector, widths, options)
 {
     var initEl;
     if (typeof(widths) != "function") {
@@ -11,7 +14,7 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
         if (!(widths instanceof Array)) widths = [widths];
         initEl = function responsiveEl(el) {
             var changed = false;
-            var elWidth = Kwf.Utils.Element.getCachedWidth(el);
+            var elWidth = getCachedWidth(el);
             if (!elWidth) return;
             for (var i=0; i<widths.length; i++) {
                 var w = widths[i];
@@ -44,7 +47,7 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
                 }
             }
             if (changed) {
-                Kwf.callOnContentReady(el, { action: 'widthChange' });
+                onReady.callOnContentReady(el, { action: 'widthChange' });
             }
         };
 
@@ -54,12 +57,13 @@ Kwf.Utils.ResponsiveEl = function(selector, widths, options)
 
     if (!options) options = {};
     if (typeof options.defer == 'undefined') options.defer = false;
-    Kwf.onJElementWidthChange(selector, initEl, options);
+    onReady.onResize(selector, initEl, options);
 };
 
-Kwf.onContentReady(function jumpToAnchor(el) {
-    if(!Kwf.Utils.ResponsiveEl._anchorDone && el === document.body) {
-        Kwf.Utils.ResponsiveEl._anchorDone = true;
+var anchorDone = false;
+onReady.onContentReady(function jumpToAnchor(el) {
+    if(!anchorDone && el === document.body) {
+        anchorDone = true;
         var anchor = window.location.hash;
         if (anchor && anchor.match(/^#[a-z0-9_-]+$/i)) {
             var target = $(anchor);

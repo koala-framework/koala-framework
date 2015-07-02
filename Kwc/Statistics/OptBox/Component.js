@@ -1,4 +1,6 @@
-Kwf.onContentReady(function statisticsOptBox(body, param) {
+var onReady = require('kwf/on-ready');
+
+onReady.onContentReady(function statisticsOptBox(body, param) {
     if (!param.newRender) return;
     if (Kwf.Statistics.optBoxHtml && !Kwf.Statistics.issetUserOptValue() && !$('body').data().optbox) {
         var optBox = $(Kwf.Statistics.optBoxHtml);
@@ -16,7 +18,7 @@ Kwf.onContentReady(function statisticsOptBox(body, param) {
             Kwf.fireComponentEvent('cookieOptChanged', 'out');
         });
     }
-}, {priority: -2}); // before Kwf.Utils.ResponsiveEl
+}, {priority: -2}); // before ResponsiveEl
 
 
 Kwf.onComponentEvent('cookieOptChanged', function(value) {

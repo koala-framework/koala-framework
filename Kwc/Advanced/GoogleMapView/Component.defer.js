@@ -1,4 +1,7 @@
-Kwf.Utils.ResponsiveEl('.cssClass', [500]);
+var responsiveEl = require('kwf/responsive-el');
+var onReady = require('kwf/on-ready');
+
+responsiveEl('.cssClass', [500]);
 
 Ext2.namespace('Kwc.Advanced.GoogleMap');
 Kwc.Advanced.GoogleMap.renderedMaps = [];
@@ -32,7 +35,7 @@ Kwc.Advanced.GoogleMap.renderMap = function(map) {
     return myMap;
 };
 
-Kwf.onContentReady(function(el, options) {
+onReady.onContentReady(function(el, options) {
     (function(el) {
         var maps = Ext2.DomQuery.select('div.kwcAdvancedGoogleMapView', el);
         Ext2.each(maps, function(map) {

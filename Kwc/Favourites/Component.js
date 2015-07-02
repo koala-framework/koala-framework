@@ -1,7 +1,9 @@
+var onReady = require('kwf/on-ready');
+
 (function() {
 var kwcFavouritesComponentIds = [];
 var kwcFavouritesInitialized = false;
-Kwf.onJElementReady('.cssClass', function(el, config) {
+onReady.onRender('.cssClass', function(el, config) {
     kwcFavouritesComponentIds.push(config.componentId);
 
     if (!kwcFavouritesInitialized) {

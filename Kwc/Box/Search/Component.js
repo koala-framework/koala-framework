@@ -1,5 +1,6 @@
+var onReady = require('kwf/on-ready');
 
-Kwf.onContentReady(function() {
+onReady.onContentReady(function() {
 
     var searchBoxes = Ext2.DomQuery.select('.kwcBoxSearch');
     Ext2.each(searchBoxes, function(searchBox) {

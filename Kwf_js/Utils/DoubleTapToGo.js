@@ -1,5 +1,7 @@
 // @require ModernizrTouch
 
+var onReady = require('kwf/on-ready');
+
 Kwf.namespace('Kwf.Utils');
 
 (function() {
@@ -50,7 +52,7 @@ Kwf.namespace('Kwf.Utils');
         }
 
         if (typeof el === 'string') {
-            Kwf.onJElementReady(el, function(el) {
+            onReady.onRender(el, function(el) {
                 Kwf.Utils.DoubleTapToGo(el, params);
             });
             return;

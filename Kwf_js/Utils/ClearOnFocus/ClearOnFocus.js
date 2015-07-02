@@ -1,4 +1,6 @@
-Kwf.onElementReady('.kwfClearOnFocus', function(xel)
+var onReady = require('kwf/on-ready-ext2');
+
+onReady.onRender('.kwfClearOnFocus', function(xel)
 {
     var Event = Ext2.EventManager;
 

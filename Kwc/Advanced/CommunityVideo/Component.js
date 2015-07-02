@@ -1,8 +1,11 @@
-Kwf.onJElementReady('.cssClass', function(el, config) {
+var onReady = require('kwf/on-ready');
+
+
+onReady.onRender('.cssClass', function(el, config) {
     el.data('config', config);
 }, {priority: -1});
 
-Kwf.onJElementWidthChange('.cssClass', function(el, config) {
+onReady.onResize('.cssClass', function(el, config) {
 
     var config = el.data('config');
     var iframe = el.find('iframe');
@@ -31,12 +34,12 @@ Kwf.onJElementWidthChange('.cssClass', function(el, config) {
 }, {defer: true});
 
 
-Kwf.onJElementHide('.cssClass', function(el) {
+onReady.onHide('.cssClass', function(el) {
     el.data('iframeHtml', el.find('.communityVideoPlayer').html());
     el.find('iframe').remove();
 });
 
-Kwf.onJElementShow('.cssClass', function(el) {
+onReady.onShow('.cssClass', function(el) {
     if(el.data('iframeHtml')) {
         el.find('.communityVideoPlayer').html(el.data('iframeHtml'));
     }

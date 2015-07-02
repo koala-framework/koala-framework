@@ -1,4 +1,7 @@
-Kwf.onElementReady('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
+/* TODO commonjs
+var onReady = require('kwf/on-ready-ext2');
+
+onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
         var checkAll = mc.child('a.kwfMultiCheckboxCheckAll');
         var checkNone = mc.child('a.kwfMultiCheckboxCheckNone');
 
@@ -25,6 +28,7 @@ Kwf.onElementReady('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
             }, mc);
         }
 }, { defer: true });
+*/
 
 Kwf.FrontendForm.MultiCheckbox = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {

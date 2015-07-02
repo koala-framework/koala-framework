@@ -1,20 +1,20 @@
-(function() {
-    if (!Kwf.Utils) Kwf.Utils = {};
-    if (!Kwf.Utils.BenchmarkBox) Kwf.Utils.BenchmarkBox = {};
+var BenchmarkBox = {};
+module.exports = BenchmarkBox;
 
-    var benchmarkEnabled = Kwf.Debug && Kwf.Debug.benchmark;
-    if (!benchmarkEnabled) {
-        benchmarkEnabled = location.search.match(/[\?&]KWF_BENCHMARK/);
-    }
-    if (!benchmarkEnabled) {
-        //noop implementation if not enabled
-        Kwf.Utils.BenchmarkBox.now = function() { return 0; };
-        Kwf.Utils.BenchmarkBox.count = function() { };
-        Kwf.Utils.BenchmarkBox.time = function() { };
-        Kwf.Utils.BenchmarkBox.subTime = function() { };
-        Kwf.Utils.BenchmarkBox.create = function() { };
-        return;
-    }
+var benchmarkEnabled = Kwf.Debug && Kwf.Debug.benchmark;
+if (!benchmarkEnabled) {
+    benchmarkEnabled = location.search.match(/[\?&]KWF_BENCHMARK/);
+}
+if (!benchmarkEnabled) {
+
+    //noop implementation if not enabled
+    BenchmarkBox.now = function() { return 0; };
+    BenchmarkBox.count = function() { };
+    BenchmarkBox.time = function() { };
+    BenchmarkBox.subTime = function() { };
+    BenchmarkBox.create = function() { };
+
+} else {
 
     var setCookie = function(name, value){
         var argv = arguments,
@@ -54,7 +54,7 @@
     };
 
     if (window.performance && window.performance.now) {
-        Kwf.Utils.BenchmarkBox.now = function() {
+        BenchmarkBox.now = function() {
             return window.performance.now();
         };
     } else {
@@ -64,36 +64,36 @@
         if (window.performance && window.performance.timing && window.performance.timing.navigationStart){
             nowOffset = window.performance.timing.navigationStart
         }
-        Kwf.Utils.BenchmarkBox.now = function now(){
+        BenchmarkBox.now = function now(){
             return dateNow() - nowOffset;
         };
     }
-    Kwf.Utils.BenchmarkBox._counters = {};
-    Kwf.Utils.BenchmarkBox.count = function(name) {
-        if (!Kwf.Utils.BenchmarkBox._counters[name]) Kwf.Utils.BenchmarkBox._counters[name] = 0;
-        Kwf.Utils.BenchmarkBox._counters[name]++;
+    BenchmarkBox._counters = {};
+    BenchmarkBox.count = function(name) {
+        if (!BenchmarkBox._counters[name]) BenchmarkBox._counters[name] = 0;
+        BenchmarkBox._counters[name]++;
     };
-    Kwf.Utils.BenchmarkBox._timers = {};
-    Kwf.Utils.BenchmarkBox.time = function(name, duration) {
-        if (!Kwf.Utils.BenchmarkBox._timers[name]) Kwf.Utils.BenchmarkBox._timers[name] = 0;
-        Kwf.Utils.BenchmarkBox._timers[name] += duration;
-        Kwf.Utils.BenchmarkBox.count(name);
+    BenchmarkBox._timers = {};
+    BenchmarkBox.time = function(name, duration) {
+        if (!BenchmarkBox._timers[name]) BenchmarkBox._timers[name] = 0;
+        BenchmarkBox._timers[name] += duration;
+        BenchmarkBox.count(name);
     };
-    Kwf.Utils.BenchmarkBox._subTimers = {};
-    Kwf.Utils.BenchmarkBox.subTime = function(name, subName, duration) {
-        if (!Kwf.Utils.BenchmarkBox._subTimers[name]) {
-            Kwf.Utils.BenchmarkBox._subTimers[name] = {};
+    BenchmarkBox._subTimers = {};
+    BenchmarkBox.subTime = function(name, subName, duration) {
+        if (!BenchmarkBox._subTimers[name]) {
+            BenchmarkBox._subTimers[name] = {};
         }
-        if (!Kwf.Utils.BenchmarkBox._subTimers[name][subName]) {
-            Kwf.Utils.BenchmarkBox._subTimers[name][subName] = {
+        if (!BenchmarkBox._subTimers[name][subName]) {
+            BenchmarkBox._subTimers[name][subName] = {
                 count: 0,
                 duration: 0
             };
         }
-        Kwf.Utils.BenchmarkBox._subTimers[name][subName].count++;
-        Kwf.Utils.BenchmarkBox._subTimers[name][subName].duration += duration;
+        BenchmarkBox._subTimers[name][subName].count++;
+        BenchmarkBox._subTimers[name][subName].duration += duration;
     };
-    Kwf.Utils.BenchmarkBox.initBox = function(el) {
+    BenchmarkBox.initBox = function(el) {
         if (el instanceof $) el = el.get(0);
         if (el.initDone) return;
         el.initDone = true;
@@ -123,23 +123,23 @@
             }
         });
     };
-    Kwf.Utils.BenchmarkBox.create = function(options) {
+    BenchmarkBox.create = function(options) {
         if (!benchmarkEnabled) return;
         var html = '';
-        if (Kwf.Utils.BenchmarkBox._timers.time) {
-            html += (Math.round(Kwf.Utils.BenchmarkBox._timers.time*100)/100) + 'ms<br />';
+        if (BenchmarkBox._timers.time) {
+            html += (Math.round(BenchmarkBox._timers.time*100)/100) + 'ms<br />';
         }
-        for (var i in Kwf.Utils.BenchmarkBox._counters) {
+        for (var i in BenchmarkBox._counters) {
             if (i == 'time') continue;
-            var c = Kwf.Utils.BenchmarkBox._counters[i];
-            var t = Kwf.Utils.BenchmarkBox._timers[i];
+            var c = BenchmarkBox._counters[i];
+            var t = BenchmarkBox._timers[i];
             if (t) {
                 c += ' ('+(Math.round(t*100)/100) + 'ms)';
             }
             html += i+': '+c+'<br />';
         }
-        for (var name in Kwf.Utils.BenchmarkBox._subTimers) {
-            var st = Kwf.Utils.BenchmarkBox._subTimers[name];
+        for (var name in BenchmarkBox._subTimers) {
+            var st = BenchmarkBox._subTimers[name];
             var subArray = [];
             for (var subName in st) {
                 subArray.push({
@@ -157,20 +157,20 @@
                 html += '&nbsp;&nbsp;'+this.name+' '+this.count+' ('+(Math.round(this.duration*100)/100)+'ms)<br />';
             });
         }
-        Kwf.Utils.BenchmarkBox._counters = {};
-        Kwf.Utils.BenchmarkBox._timers = {};
-        Kwf.Utils.BenchmarkBox._subTimers = {};
+        BenchmarkBox._counters = {};
+        BenchmarkBox._timers = {};
+        BenchmarkBox._subTimers = {};
         html = '<div class="kwfup-benchmarkBoxContent">'+html+'</div>';
         html = '<div class="kwfup-benchmarkBox" data-benchmark-type="'+options.type+'">'+html+'</div>';
         el = $(html);
         $('body').append(el);
-        Kwf.Utils.BenchmarkBox.initBox(el);
+        BenchmarkBox.initBox(el);
     };
     $(function() {
         setTimeout(function() {
             $('body').find('.kwfup-benchmarkBox').each(function(i, el) {
-                Kwf.Utils.BenchmarkBox.initBox($(el));
+                BenchmarkBox.initBox($(el));
             });
         }, 10);
     });
-})();
+}

@@ -1,10 +1,11 @@
-Ext2.ns('Kwf.Utils');
-Kwf.Utils.HistoryStateAbstract = function() {
+var onReady = require('kwf/on-ready');
+
+var HistoryStateAbstract = function() {
     this.addEvents('popstate');
     this.disabled = false; //functionality can be disabled, so it behaves like a browser that doesn't support history states
     this.currentState = {};
 };
-Ext2.extend(Kwf.Utils.HistoryStateAbstract, Ext2.util.Observable, {
+Ext2.extend(HistoryStateAbstract, Ext2.util.Observable, {
     /**
      * Number of entries in the history of the current page
      **/
@@ -17,8 +18,8 @@ Ext2.extend(Kwf.Utils.HistoryStateAbstract, Ext2.util.Observable, {
     replaceState: Ext2.emptyFn
 });
 
-Kwf.Utils.HistoryStateHtml5 = function() {
-    Kwf.Utils.HistoryStateHtml5.superclass.constructor.call(this);
+var HistoryStateHtml5 = function() {
+    HistoryStateHtml5.superclass.constructor.call(this);
     Ext2.onReady(function() {
         //in onReady to avoid getting initial popstate event that chrome sends on load
         Ext2.EventManager.on(window, 'popstate', function(event) {
@@ -33,7 +34,7 @@ Kwf.Utils.HistoryStateHtml5 = function() {
         }, this);
     }, this);
 };
-Ext2.extend(Kwf.Utils.HistoryStateHtml5, Kwf.Utils.HistoryStateAbstract, {
+Ext2.extend(HistoryStateHtml5, HistoryStateAbstract, {
     pushState: function(title, href) {
         if (this.disabled) return;
         window.history.pushState(this.currentState, title, href);
@@ -51,10 +52,10 @@ Ext2.extend(Kwf.Utils.HistoryStateHtml5, Kwf.Utils.HistoryStateAbstract, {
 
 // Fallback for <IE10
 // always triggers a page load
-Kwf.Utils.HistoryStateFallback = function() {
-    Kwf.Utils.HistoryStateFallback.superclass.constructor.call(this);
+var HistoryStateFallback = function() {
+    HistoryStateFallback.superclass.constructor.call(this);
 };
-Ext2.extend(Kwf.Utils.HistoryStateFallback, Kwf.Utils.HistoryStateAbstract, {
+Ext2.extend(HistoryStateFallback, HistoryStateAbstract, {
     ignoreNextChange: null,
     pushState: function(title, href) {
         location.href = href; //this will trigger a page load
@@ -67,7 +68,7 @@ Ext2.extend(Kwf.Utils.HistoryStateFallback, Kwf.Utils.HistoryStateAbstract, {
     }
 });
 if (window.history.pushState) {
-    Kwf.Utils.HistoryState = new Kwf.Utils.HistoryStateHtml5();
+    module.exports = new HistoryStateHtml5();
 } else {
-    Kwf.Utils.HistoryState = new Kwf.Utils.HistoryStateFallback();
+    module.exports = new HistoryStateFallback();
 }

@@ -13,7 +13,6 @@ class Kwc_Basic_LinkTag_Mail_Component extends Kwc_Basic_LinkTag_Abstract_Compon
             'componentName' => 'Link.E-Mail',
             'default' => array()
         ));
-        $ret['assetsDefer']['dep'][] = 'KwfMailDecode';
         return $ret;
     }
 }

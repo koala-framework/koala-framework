@@ -1,4 +1,6 @@
-Kwf.onJElementWidthChange('.cssClass.responsiveFlipScroll', function(el) {
+var onReady = require('kwf/on-ready');
+
+onReady.onResize('.cssClass.responsiveFlipScroll', function(el) {
     var addArrow = function(el) {
         if (el.hasClass('flipScroll')) {
             var tbody = el.children('tbody');

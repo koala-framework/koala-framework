@@ -1,4 +1,6 @@
-Kwf.onElementReady('div.kwfTabs', function tabs(el) {
+var onReady = require('kwf/on-ready-ext2');
+
+onReady.onRender('div.kwfTabs', function tabs(el) {
     el.tabsObject = new Kwf.Tabs(el);
 });
 

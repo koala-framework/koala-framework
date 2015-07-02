@@ -1,4 +1,6 @@
-Kwf.onContentReady(function(readyEl, param) {
+var onReady = require('kwf/on-ready');
+
+onReady.onContentReady(function(readyEl, param) {
     if (!param.newRender) return false;
     Ext2.select('.kwfup-kwcForm > form', true, readyEl).each(function(form) {
         form = form.parent('.kwfup-kwcForm', false);

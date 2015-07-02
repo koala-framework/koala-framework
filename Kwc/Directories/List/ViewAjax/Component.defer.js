@@ -1,3 +1,6 @@
+var onReady = require('kwf/on-ready');
+var historyState = require('kwf/history-state');
+
 (function() {
 
 var uniqueIdCnt = 0;
@@ -25,7 +28,7 @@ $(document).on('click', 'a', function(event) {
         if (view._getState().viewFilter != config.componentId) {
             view._getState().viewFilter = config.componentId;
             view._getState().menuLinkId = getUniqueIdForFilterLink(this);
-            Kwf.Utils.HistoryState.pushState(document.title, this.href);
+            historyState.pushState(document.title, this.href);
         }
 
         $('a[kwc-view-ajax-filter]').each(function() {
@@ -42,7 +45,7 @@ $(document).on('click', 'a', function(event) {
 
 });
 
-Kwf.onJElementReady('.cssClass', function viewAjax(el, config) {
+onReady.onRender('.cssClass', function viewAjax(el, config) {
     config.el = el.find('.viewContainer')[0];
     el.find('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
     el[0].kwcViewAjax = new Kwc.Directories.List.ViewAjax(config);
@@ -70,10 +73,10 @@ Kwf.onJElementReady('.cssClass', function viewAjax(el, config) {
 
 //if there is no viewAjax that can handle the changed state reload current page
 //this can happen if a reload has been between state navigations
-Kwf.Utils.HistoryState.on('popstate', function() {
-    if (Kwf.Utils.HistoryState.currentState.viewAjax) {
+historyState.on('popstate', function() {
+    if (historyState.currentState.viewAjax) {
         var found = false;
-        for (var componentId in Kwf.Utils.HistoryState.currentState.viewAjax) {
+        for (var componentId in historyState.currentState.viewAjax) {
             if (Kwc.Directories.List.ViewAjax.byComponentId[componentId]) {
                 found = true;
             }
@@ -149,8 +152,8 @@ Kwc.Directories.List.ViewAjax.prototype = {
             }, this);
         }
 
-        if (!Kwf.Utils.HistoryState.currentState.viewAjax) Kwf.Utils.HistoryState.currentState.viewAjax = {};
-        Kwf.Utils.HistoryState.currentState.viewAjax[this.componentId] = {};
+        if (!historyState.currentState.viewAjax) historyState.currentState.viewAjax = {};
+        historyState.currentState.viewAjax[this.componentId] = {};
 
         if (this.searchForm) {
             this._getState().searchFormValues = this.searchForm.getValues();
@@ -172,10 +175,10 @@ Kwc.Directories.List.ViewAjax.prototype = {
             delete this.filterComponentId;
         }
 
-        Kwf.Utils.HistoryState.updateState();
+        historyState.updateState();
 
 
-        Kwf.Utils.HistoryState.on('popstate', function() {
+        historyState.on('popstate', function() {
             if (!this._getState()) return;
             if (this.searchForm) {
                 this.searchForm.setValues(this._getState().searchFormValues);
@@ -266,12 +269,12 @@ Kwc.Directories.List.ViewAjax.prototype = {
         if (this.visibleDetail) return;
         this._getState().searchFormValues = this.searchForm.getValues();
         var url = location.protocol+'//'+location.host+this.viewUrl+'?'+$.param(this.searchForm.getValuesIncludingPost());
-        Kwf.Utils.HistoryState.pushState(document.title, url);
+        historyState.pushState(document.title, url);
     },
 
     _getState: function()
     {
-        return Kwf.Utils.HistoryState.currentState.viewAjax[this.componentId];
+        return historyState.currentState.viewAjax[this.componentId];
     },
 
     loadView: function(params)
@@ -367,7 +370,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
         if (this._getState().viewDetail != href) {
             this._getState().viewDetail = href;
-            Kwf.Utils.HistoryState.pushState(document.title, href);
+            historyState.pushState(document.title, href);
         }
 
         this.hideDetail();

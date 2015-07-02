@@ -1,4 +1,7 @@
-(function() {
+var $ = require('jquery');
+var matchesSelector = require('matches-selector');
+var elementIsVisible = require('kwf/element/is-visible');
+var benchmarkBox = require('kwf/benchmark/box');
 
 var enableOnReadyConsoleProfile = false;
 
@@ -16,23 +19,8 @@ var onReadyIsCalling = false; //true while callOnContentReady is processing onRe
 var onReadyElQueue = []; //queue for onElementReady/Show/Hide/WidthChange calls
 var elCacheBySelector = {};
 
-/**
- * Register a function that will be called when content is loaded or shown
- * @param callback function (passed arguments: el, options (newRender=bool))
- * @param options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
- */
-Kwf.onContentReady = function(fn, options) {
-    if (arguments.length == 3) {
-        var scope = arguments[1];
-        var options = arguments[2];
-        options.scope = scope;
-    }
-    Kwf._addReadyHandler('contentReady', null, fn, options);
-};
-
-
 var deferHandlerNum = null;
-Kwf._addReadyHandler = function(onAction, selector, fn, options)
+var addReadyHandler = function(onAction, selector, fn, options)
 {
     if (!options) options = {};
     if (typeof options.defer == 'undefined') options.defer = true; //default defer=true
@@ -51,21 +39,17 @@ Kwf._addReadyHandler = function(onAction, selector, fn, options)
                 //additionally added handlers need to be called async so priorty can be used correctly (we wait to get more handlers added)
                 //needed for Frontend.defer.js
                 var hndlerNum = deferHandlerNum;
-                deferHandlerNum = null; //set to null before calling callOnContentReady as that might cause _addReadyHandler calls
-                Kwf.callOnContentReady(document.body, { action: 'render', handlerNum: hndlerNum });
+                deferHandlerNum = null; //set to null before calling callOnContentReady as that might cause addReadyHandler calls
+                callOnContentReady(document.body, { action: 'render', handlerNum: hndlerNum });
             }, 1);
         }
         deferHandlerNum.push(readyElHandlers.length-1);
     }
 };
 
-/**
- * @param element the added/changed dom element
- * @param options newRender (bool): if new elements have been added to the dom or just visiblity/width changed
- */
-Kwf.callOnContentReady = function(renderedEl, options)
+var callOnContentReady = function(renderedEl, options)
 {
-    Kwf.Utils.BenchmarkBox.count('callOnContentReady');
+    benchmarkBox.count('callOnContentReady');
     if (!options) options = {};
     if (typeof options.newRender != 'undefined') {
         //backwards compatibility, for callOnContentReady call
@@ -82,7 +66,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     }
     if (renderedEl.dom) renderedEl = renderedEl.dom; //ExtJS Element (hopefully)
     if ($ && renderedEl instanceof $) {
-        renderedEl.each(function(){ Kwf.callOnContentReady(this, options); });
+        renderedEl.each(function(){ callOnContentReady(this, options); });
         return;
     }
 
@@ -118,7 +102,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
 
         if (hndl.options.checkVisibility) {
-            if (renderedEl != document.body && !Kwf.Utils.Element.isVisible(renderedEl)) {
+            if (renderedEl != document.body && !elementIsVisible(renderedEl)) {
                 if (options.action == 'render' && hndl.selector && elCacheBySelector[hndl.selector]) {
                     //mark cache as dirty as we don't query (and update the selector) as the renderedEl is invisible
                     //TODO don't always mark as dirty especially when we have multiple handlers with same selector
@@ -135,9 +119,9 @@ Kwf.callOnContentReady = function(renderedEl, options)
         }
 
         if (options.action == 'render' && !html) {
-            var t = Kwf.Utils.BenchmarkBox.now();
+            var t = benchmarkBox.now();
             html = renderedEl.innerHTML;
-            Kwf.Utils.BenchmarkBox.time('innerHTML', Kwf.Utils.BenchmarkBox.now()-t);
+            benchmarkBox.time('innerHTML', benchmarkBox.now()-t);
         }
 
         var useSelectorCache;
@@ -147,7 +131,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
             if (onReadyState == 'callDefer' && renderedEl == document.body && elCacheBySelector[hndl.selector]) {
                 useSelectorCache = true;
             } else {
-                var t = Kwf.Utils.BenchmarkBox.now();
+                var t = benchmarkBox.now();
                 var m = hndl.selector.match(/^[a-z]*\.([a-z]+)/i);
                 //do a stupid text search on the selector, using that we can skip query for many selectors that don't exist in the current el
                 if (m && html.indexOf(m[1]) == -1) {
@@ -158,12 +142,12 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 } else {
                     useSelectorCache = false;
                 }
-                Kwf.Utils.BenchmarkBox.time('checkInnerHtml', Kwf.Utils.BenchmarkBox.now()-t);
+                benchmarkBox.time('checkInnerHtml', benchmarkBox.now()-t);
             }
         }
 
         if (useSelectorCache && elCacheBySelector[hndl.selector] && !elCacheBySelector[hndl.selector].dirty) {
-            Kwf.Utils.BenchmarkBox.count('queryCache');
+            benchmarkBox.count('queryCache');
             var els = [];
             for (var j=0; j<elCacheBySelector[hndl.selector].length; j++) {
                 if (renderedEl == document.body ||
@@ -176,12 +160,12 @@ Kwf.callOnContentReady = function(renderedEl, options)
         } else if (!hndl.selector) {
             var els = $.makeArray($(renderedEl));
         } else {
-            var t = Kwf.Utils.BenchmarkBox.now();
+            var t = benchmarkBox.now();
             var els = $.makeArray($(renderedEl).find(hndl.selector));
             if (window.matchesSelector(renderedEl, hndl.selector)) {
                 els.push(renderedEl);
             }
-            Kwf.Utils.BenchmarkBox.time('query', Kwf.Utils.BenchmarkBox.now() - t);
+            benchmarkBox.time('query', benchmarkBox.now() - t);
             if (!elCacheBySelector[hndl.selector]) {
                 elCacheBySelector[hndl.selector] = els;
             } else {
@@ -208,7 +192,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
                 while (n = n.parentNode) {
                     parentsCount++;
                 }
-                Kwf.Utils.BenchmarkBox.count('readyEl');
+                benchmarkBox.count('readyEl');
                 onReadyElQueue.push({
                     el: els[j],
                     fn: hndl.fn,
@@ -225,7 +209,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     }
 
     //sort onReadyElQueue
-    var t = Kwf.Utils.BenchmarkBox.now();
+    var t = benchmarkBox.now();
     onReadyElQueue.sort(function sortOnReadyElQueue(a, b) {
         if (a.priority != b.priority) {
             return a.priority - b.priority;
@@ -237,7 +221,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
             }
         }
     });
-    Kwf.Utils.BenchmarkBox.time('sort', Kwf.Utils.BenchmarkBox.now() - t);
+    benchmarkBox.time('sort', benchmarkBox.now() - t);
 
     if (onReadyIsCalling) {
         return;
@@ -248,7 +232,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
     //call the callback of an element ready handler
     function callQueueFn(queueEntry, config)
     {
-        var t = Kwf.Utils.BenchmarkBox.now();
+        var t = benchmarkBox.now();
         var el = queueEntry.el;
         if (queueEntry.onAction != 'contentReady') {
             el = $(el);
@@ -259,10 +243,10 @@ Kwf.callOnContentReady = function(renderedEl, options)
             fnName = 'unknown';
         }
 
-        Kwf.Utils.BenchmarkBox.subTime(
+        benchmarkBox.subTime(
             'on'+queueEntry.onAction.charAt(0).toUpperCase() + queueEntry.onAction.slice(1),
             'fn: '+fnName,
-            Kwf.Utils.BenchmarkBox.now()-t
+            benchmarkBox.now()-t
         );
     };
 
@@ -273,7 +257,7 @@ Kwf.callOnContentReady = function(renderedEl, options)
         var queueEntry = onReadyElQueue.shift();
         var el = queueEntry.el;
         if (queueEntry.onAction == 'render') {
-            if (queueEntry.options.checkVisibility && !Kwf.Utils.Element.isVisible(el)) {
+            if (queueEntry.options.checkVisibility && !elementIsVisible(el)) {
                 return;
             }
             if (!el.initDone) el.initDone = {};
@@ -293,15 +277,15 @@ Kwf.callOnContentReady = function(renderedEl, options)
             }
             callQueueFn(queueEntry, config);
         } else if (queueEntry.onAction == 'show') {
-            if (Kwf.Utils.Element.isVisible(el)) {
+            if (elementIsVisible(el)) {
                 callQueueFn(queueEntry);
             }
         } else if (queueEntry.onAction == 'hide') {
-            if (!Kwf.Utils.Element.isVisible(el)) {
+            if (!elementIsVisible(el)) {
                 callQueueFn(queueEntry);
             }
         } else if (queueEntry.onAction == 'widthChange') {
-            if (!queueEntry.options.checkVisibility || Kwf.Utils.Element.isVisible(el)) {
+            if (!queueEntry.options.checkVisibility || elementIsVisible(el)) {
                 callQueueFn(queueEntry);
             }
         } else if (queueEntry.onAction == 'contentReady') {
@@ -315,19 +299,18 @@ Kwf.callOnContentReady = function(renderedEl, options)
 
     if (onReadyState == 'callDefer') {
         var processNext = function processNext() {
-            Kwf.Utils.BenchmarkBox.count('chunks');
-            var t = Kwf.Utils.BenchmarkBox.now();
-            while (onReadyElQueue.length && Kwf.Utils.BenchmarkBox.now()-t < 50) {
+            benchmarkBox.count('chunks');
+            var t = benchmarkBox.now();
+            while (onReadyElQueue.length && benchmarkBox.now()-t < 50) {
                 processOnReadyElQueueEntry();
             }
             if (onReadyElQueue.length) {
                 setTimeout(processNext, 1);
             } else {
                 onReadyIsCalling = false;
-                Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-deferredStart);
+                benchmarkBox.time('time', benchmarkBox.now()-deferredStart);
                 if (enableOnReadyConsoleProfile) console.profileEnd();
-                Kwf.Utils.BenchmarkBox.create({
-                    counters: Kwf._onReadyStats,
+                benchmarkBox.create({
                     type: 'onReady defer'
                 });
             }
@@ -343,29 +326,28 @@ Kwf.callOnContentReady = function(renderedEl, options)
 };
 
 
-if (!Kwf.isApp) {
+if ($(document.body).is('.frontend')) {
     $(document).ready(function() {
         if (!document.body) {
             //this happens if a redirect by changing location in JS is done
             //in that case no contentReady needs to be called
             return;
         }
-        var t = Kwf.Utils.BenchmarkBox.now();
+        var t = benchmarkBox.now();
         if (enableOnReadyConsoleProfile) console.profile("callOnContentReady body");
         onReadyState = 'callNonDefer';
-        Kwf.callOnContentReady(document.body, { action: 'render' });
+        callOnContentReady(document.body, { action: 'render' });
         onReadyState = 'calledNonDefer';
         if (enableOnReadyConsoleProfile) console.profileEnd();
-        Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
-        Kwf.Utils.BenchmarkBox.create({
-            counters: Kwf._onReadyStats,
+        benchmarkBox.time('time', benchmarkBox.now()-t);
+        benchmarkBox.create({
             type: 'onReady'
         });
         setTimeout(function() {
-            deferredStart = Kwf.Utils.BenchmarkBox.now();
+            deferredStart = benchmarkBox.now();
             if (enableOnReadyConsoleProfile) console.profile("callOnContentReady body deferred");
             onReadyState = 'callDefer';
-            Kwf.callOnContentReady(document.body, { action: 'render' });
+            callOnContentReady(document.body, { action: 'render' });
             onReadyState = 'calledDefer';
         }, 10);
 
@@ -375,10 +357,68 @@ if (!Kwf.isApp) {
                 clearTimeout(timeoutId);
             }
             timeoutId = setTimeout(function() {
-                Kwf.callOnContentReady(document.body, { action: 'widthChange' } );
+                callOnContentReady(document.body, { action: 'widthChange' } );
             }, 100);
         });
     });
 }
 
-})();
+
+
+module.exports = {
+
+    /**
+    * Add a callback function that gets called once for every element that appears
+    * in the dom tree
+    *
+    * If an input type="hidden" is found directly under the element it's value gets passed
+    * as config (json decoded)
+    *
+    * @param element selector
+    * @param callback function
+    * @param options see onContentReady options, additionally checkVisibility (boolean, only call onElementReady when element is visible)
+    */
+    onRender: function(selector, fn, options) {
+        if (arguments.length == 4) {
+            var scope = arguments[2];
+            var options = arguments[3];
+            options.scope = scope;
+        }
+        addReadyHandler('render', selector, fn, options);
+    },
+
+    onShow: function(selector, fn,  options) {
+        addReadyHandler('show', selector, fn, options);
+    },
+
+    onHide: function(selector, fn, options) {
+        addReadyHandler('hide', selector, fn, options);
+    },
+
+    onResize: function(selector, fn, options) {
+        addReadyHandler('widthChange', selector, fn, options);
+    },
+
+    /**
+    * Register a function that will be called when content is loaded or shown
+    * @param callback function (passed arguments: el, options (newRender=bool))
+    * @param options supported are: priority (integer, higher number means it's called after all with lower number, default 0)
+    */
+    onContentReady: function(fn, options) {
+        if (arguments.length == 3) {
+            var scope = arguments[1];
+            var options = arguments[2];
+            options.scope = scope;
+        }
+        addReadyHandler('contentReady', null, fn, options);
+    },
+
+    /**
+    * @param element the added/changed dom element
+    * @param options newRender (bool): if new elements have been added to the dom or just visiblity/width changed
+    */
+    callOnContentReady: function(renderedEl, options)
+    {
+        callOnContentReady(renderedEl, options);
+    }
+};

@@ -1,3 +1,5 @@
+var onReady = require('kwf/on-ready-ext2');
+
 Ext2.ns('Kwc.FulltextSearch.Box');
 Kwc.FulltextSearch.Box.Component = function(el, config) {
     this.el = el;
@@ -153,7 +155,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
 
 
 
-Kwf.onElementReady('.cssClass', function fulltextSearchBox(el, config) {
+onReady.onRender('.cssClass', function fulltextSearchBox(el, config) {
     new Kwc.FulltextSearch.Box.Component(el, config);
 }, {
     priority: 0, //call *after* initializing kwcForm to have access to searchForm

@@ -1,4 +1,6 @@
-Kwf.onContentReady(function(el) {
+var onReady = require('kwf/on-ready');
+
+onReady.onContentReady(function(el) {
     Ext2.query('.kwcTagsSuggestions', el).each(function(el) {
         if (el.initDone) return;
         el.initDone = true;

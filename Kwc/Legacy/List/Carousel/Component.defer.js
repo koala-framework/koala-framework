@@ -1,3 +1,5 @@
+var onReady = require('kwf/on-ready-ext2');
+
 Ext2.namespace("Kwc.Legacy.List.Carousel");
 Kwc.Legacy.List.Carousel.Component = Ext2.extend(Kwf.EyeCandy.List, {
     childSelector: '.listItem',
@@ -23,7 +25,7 @@ Kwc.Legacy.List.Carousel.Component = Ext2.extend(Kwf.EyeCandy.List, {
 
 
 
-Kwf.onElementReady('.cssClass', function(el, config){
+onReady.onRender('.cssClass', function(el, config){
 
     el.setStyle('max-width', config.contentWidth+'px');
     var wrapper = el.child('.listWrapper') ? el.child('.listWrapper') : el.child('.imageWrapper');
@@ -61,6 +63,6 @@ Kwf.onElementReady('.cssClass', function(el, config){
 
     responsiveContent(el);
 
-    Kwf.onElementWidthChange('.cssClass', responsiveContent);
+    onReady.onResize('.cssClass', responsiveContent);
 
 });

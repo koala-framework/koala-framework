@@ -40,8 +40,8 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
             $d = $this->_providerList->findDependency($dep);
             if (!$d) throw new Kwf_Exception("Can't resolve dependency: require '$dep' for $dependency");
             $ret[$dep] = $d;
-            foreach ($this->_parseDependencies($d) as $i) {
-                $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, $i);
+            foreach ($this->_parseDependencies($d) as $index=>$i) {
+                $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, $i, $index);
             }
         }
         return $ret;

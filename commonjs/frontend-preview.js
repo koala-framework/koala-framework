@@ -1,4 +1,6 @@
-Kwf.onContentReady(function kwcPreviewLink(el) {
+var onReady = require('kwf/on-ready');
+
+onReady.onContentReady(function kwcPreviewLink(el) {
     if (location.search.match(/[\?&]kwcPreview/)) {
         Ext2.get(el).select('a', true).each(function(a) {
             if (a.dom.href.indexOf(window.location.host) !== -1) { // intern

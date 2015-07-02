@@ -1,4 +1,6 @@
-Kwf.onElementReady('.cssClass', function(el, config) {
+var onReady = require('kwf/on-ready-ext2');
+
+onReady.onRender('.cssClass', function(el, config) {
     var form = el.child('form');
     el.child('.submit').on('click', function(e) {
         e.preventDefault();

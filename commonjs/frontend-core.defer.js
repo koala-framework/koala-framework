@@ -1,0 +1,1 @@
+require('kwf/mail-decode');

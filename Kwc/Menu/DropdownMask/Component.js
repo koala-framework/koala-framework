@@ -1,4 +1,6 @@
-Kwf.onJElementReady('.cssClass', function(target, config) {
+var onReady = require('kwf/on-ready');
+
+onReady.onRender('.cssClass', function(target, config) {
     var mask = $('<div class="kwfup-kwcMenuDropdownMaskMask"></div>');
     var maskClone = $(mask).clone();
     var subMask;

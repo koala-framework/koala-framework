@@ -1,11 +1,13 @@
-(function(){
-    
+var onReady = require('kwf/on-ready');
+var isVisible = require('kwf/element/is-visible');
+var getCachedWidth = require('kwf/element/get-cached-width');
+
 var DONT_HASH_TYPE_PREFIX = 'dh-';
 var $w = $(window);
 var deferredImages = [];
 
-Kwf.Utils.ResponsiveImg = function (selector) {
-    Kwf.onJElementWidthChange(selector, function responsiveImg(el) {
+module.exports = function (selector) {
+    onReady.onResize(selector, function responsiveImg(el) {
         if (el.hasClass('loadImmediately') || isElementInView(el)) {
             if (!el[0].responsiveImgInitDone) {
                 initResponsiveImgEl(el);
@@ -68,7 +70,7 @@ function getResponsiveWidthSteps(minWidth, maxWidth) {
 };
 
 function initResponsiveImgEl(el) {
-    var elWidth = Kwf.Utils.Element.getCachedWidth(el);
+    var elWidth = getCachedWidth(el);
     if (elWidth == 0) return;
     el[0].responsiveImgInitDone = true; //don't save as el.data to avoid getting it copied when cloning elements
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
@@ -94,7 +96,7 @@ function initResponsiveImgEl(el) {
 };
 
 function checkResponsiveImgEl(responsiveImgEl) {
-    var elWidth = Kwf.Utils.Element.getCachedWidth(responsiveImgEl);
+    var elWidth = getCachedWidth(responsiveImgEl);
     if (elWidth == 0) return;
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
     var width = getResponsiveWidthStep(elWidth * devicePixelRatio,
@@ -123,7 +125,7 @@ function doesElementScroll(el) {
 function isElementInView(el) {
     var threshold = 800;
 
-    if (!Kwf.Utils.Element.isVisible(el[0])) return false;
+    if (!isVisible(el[0])) return false;
 
     if (doesElementScroll(el)) {
         //if img is in a scrolling element always load it.
@@ -137,5 +139,3 @@ function isElementInView(el) {
         eb = et + el.innerHeight();
     return eb >= wt - threshold && et <= wb + threshold;
 }
-
-})();

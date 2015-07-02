@@ -1,4 +1,5 @@
-Kwf.onElementReady('.cssClass .content', function(i) {
+var onReady = require('kwf/on-ready-ext2');
+onReady.onRender('.cssClass .content', function(i) {
         var options = Ext2.decode(Ext2.get(i).down('.options').dom.value);
         this.downloads = new Kwf.Auto.GridPanel({
             controllerUrl: options.downloadsUrl,

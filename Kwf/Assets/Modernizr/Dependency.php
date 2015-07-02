@@ -25,6 +25,14 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         $this->getContents('en');
     }
 
+    //TODO commonjs: is this really needed? we don't have to load modernizr thru commonjs
+    private function _processContents($ret)
+    {
+        //see https://github.com/Modernizr/Modernizr/issues/1431
+        $ret = preg_replace('#\(this,this\.document\);$#', '(window,window.document);', $ret);
+        return $ret;
+    }
+
     public function getContents($language)
     {
         if (isset($this->_contentsCache)) return $this->_contentsCache;
@@ -34,6 +42,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         $outputFile = getcwd().'/temp/modernizr-'.implode('-', $this->_features);
         if (file_exists("$outputFile.buildtime") && (time() - file_get_contents("$outputFile.buildtime") < 24*60*60)) {
             $ret = file_get_contents($outputFile);
+            $ret = $this->_processContents($ret);
             $this->_contentsCache = $ret;
             return $ret;
         }
@@ -102,12 +111,14 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         exec($cmd, $out, $retVar);
         unlink('Gruntfile.js');
         if (file_exists($outputFile)) $ret = file_get_contents($outputFile);
+
         chdir($cwd);
         if ($retVar) {
             throw new Kwf_Exception("Grunt failed: ".implode("\n", $out));
         }
         file_put_contents("$outputFile.buildtime", time());
 
+        $ret = $this->_processContents($ret);
         $this->_contentsCache = $ret;
         return $ret;
     }

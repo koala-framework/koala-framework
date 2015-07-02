@@ -1,3 +1,5 @@
+var onReady = require('kwf/on-ready-ext2');
+
 $(document).on('click', 'a', function(event) {
     var el = event.currentTarget;
     var atDecoding = '(kwfat)';
@@ -9,7 +11,7 @@ $(document).on('click', 'a', function(event) {
     }
 });
 
-Kwf.onElementReady('span.kwfEncodedMail', function decodeMail(el)
+onReady.onRender('span.kwfEncodedMail', function decodeMail(el)
 {
     var atDecoding = '(kwfat)';
     var dotDecoding = '(kwfdot)';

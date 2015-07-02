@@ -1,3 +1,5 @@
+var onReady = require('kwf/on-ready');
+
 (function() {
 
     Kwf.namespace('Kwf.EyeCandy.Switch.Display');
@@ -93,10 +95,10 @@
 
     Kwf.EyeCandy.Switch.Display = function(elOrSelector, config) {
         if (typeof elOrSelector == 'string') {
-            Kwf.onJElementReady(elOrSelector, function(el) {
+            onReady.onRender(elOrSelector, function(el) {
                 Kwf.EyeCandy.Switch.Display(el, config);
             }, { defer: true });
-            Kwf.onJElementReady(elOrSelector, function(el, config) {
+            onReady.onRender(elOrSelector, function(el, config) {
                 if (!el.find(config.container || 'div.switchContent').hasClass('active')) {
                     el.find(config.container || 'div.switchContent').hide();
                 }

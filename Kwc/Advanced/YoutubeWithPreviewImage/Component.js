@@ -1,4 +1,6 @@
-Kwf.onJElementReady('.cssClass .outerYoutubeContainer', function youtubePlayer(el) {
+var onReady = require('kwf/on-ready');
+
+onReady.onRender('.cssClass .outerYoutubeContainer', function youtubePlayer(el) {
     var youtubeApiLoaded = false;
     var animationFinished = false;
     var imageEl = el.children('.image');

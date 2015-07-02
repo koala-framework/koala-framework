@@ -1,4 +1,6 @@
-Kwf.onJElementReady('.cssClass', function(el) {
+var onReady = require('kwf/on-ready');
+
+onReady.onRender('.cssClass', function(el) {
     $.ajax({
         url: Kwf.getKwcRenderUrl(),
         data: {

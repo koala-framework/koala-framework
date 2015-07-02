@@ -1,6 +1,8 @@
-Kwf.Utils.ResponsiveEl('.cssClass', [600, 360]);
+var onReady = require('kwf/on-ready');
+var responsiveEl = require('kwf/responsive-el');
+responsiveEl('.cssClass', [600, 360]);
 
-Kwf.onJElementReady('.cssClass', function(el) {
+onReady.onRender('.cssClass', function(el) {
     var button = el.children('.moreButton');
     var hiddenPics = el.children('.morePics');
 

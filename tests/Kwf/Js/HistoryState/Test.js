@@ -1,4 +1,6 @@
-Kwf.onContentReady(function() {
+var onReady = require('kwf/on-ready');
+
+onReady.onContentReady(function() {
     Ext2.get('testBtn1').on('click', function() {
         Kwf.Utils.HistoryState.currentState.result = 'sub';
         Ext2.get('result').update(Kwf.Utils.HistoryState.currentState.result);

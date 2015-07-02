@@ -1,4 +1,7 @@
-Kwf.onElementReady('div.kwfFormContainerFieldSet fieldset > legend > input', function fieldSet(c)
+/* TODO commonjs
+var onReady = require('kwf/on-ready-ext2');
+
+onReady.onRender('div.kwfFormContainerFieldSet fieldset > legend > input', function fieldSet(c)
 {
     if (!c.dom.checked) {
         c.up('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
@@ -11,6 +14,7 @@ Kwf.onElementReady('div.kwfFormContainerFieldSet fieldset > legend > input', fun
         }
     }, c);
 });
+*/
 
 Kwf.FrontendForm.FieldSet = Ext2.extend(Kwf.FrontendForm.Field, {
     initField: function() {

@@ -1,3 +1,5 @@
+var onReady = require('kwf/on-ready');
+
 $(function() {
     $('#show').click(function() {
         $('.foo').show();
@@ -9,9 +11,9 @@ $(function() {
     });
 });
 
-Kwf.onJElementShow('.foo', function(el) {
+onReady.onShow('.foo', function(el) {
     $('#log').append('show');
 });
-Kwf.onJElementHide('.foo', function(el) {
+onReady.onHide('.foo', function(el) {
     $('#log').append('hide');
 });

@@ -5,7 +5,6 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_Component extends Kwc_Chai
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['contentSender'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Trl_ContentSender';
-        $ret['assets']['dep'][] = 'KwfResponsiveImg';
         return $ret;
     }
     public function getTemplateVars()

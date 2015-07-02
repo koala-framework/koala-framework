@@ -1,3 +1,5 @@
+var onReady = require('kwf/on-ready');
+
 Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
         if (!this.interval) this.interval = 5000;
@@ -27,7 +29,7 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = Ext2.extend(Kwf.EyeCandy
                 this.play.defer(this.interval, this);
                 this._playQueued = true;
             }
-            Kwf.onContentReady(function() {
+            onReady.onContentReady(function() {
                 if (this._isPlaying && this.list.el.isVisible(true)) {
                     if (!this._playQueued) {
                         this.play.defer(this.interval, this);

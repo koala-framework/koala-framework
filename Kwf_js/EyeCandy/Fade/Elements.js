@@ -1,4 +1,6 @@
-Kwf.onJElementReady('div.kwfFadeElements', function fadeElements(element) {
+var onReady = require('kwf/on-ready');
+
+onReady.onRender('div.kwfFadeElements', function fadeElements(element) {
     var fadeClass = element.find('.fadeClass');
     var selector = element.find('.fadeSelector')[0].value;
     var config = element.find('.fadeConfig'); // optional
@@ -27,7 +29,7 @@ Kwf.onJElementReady('div.kwfFadeElements', function fadeElements(element) {
 }, { defer: true });
 
 
-Kwf.onJElementWidthChange('div.kwfFadeElements', function fadeElementsWidthChange(element) {
+onReady.onResize('div.kwfFadeElements', function fadeElementsWidthChange(element) {
     element = element.get(0);
     if (element.fadeElementsObject) {
         element.fadeElementsObject.calculateMaxHeight();

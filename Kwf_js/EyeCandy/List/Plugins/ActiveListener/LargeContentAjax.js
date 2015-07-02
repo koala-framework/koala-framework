@@ -1,3 +1,5 @@
+var onReady = require('kwf/on-ready');
+
 Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
         this.activeItem = null;
@@ -5,7 +7,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeC
             this._activate(item);
         }, this);
 
-        Kwf.onContentReady(function(el) {
+        onReady.onContentReady(function(el) {
             //recalculate container height as the content height might have changed due to ResponsiveEl
             var h = this._getLargeContentHeight(this.list.getActiveItem());
             this.largeContainer.setHeight(h);

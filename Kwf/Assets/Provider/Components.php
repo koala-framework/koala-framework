@@ -97,6 +97,19 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                 $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assetsAdmin'));
             }
             return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
+        } else if ($dependencyName == 'FrontendCore') {
+            $deps = array();
+
+            $dep = new Kwf_Assets_Dependency_File_Js('kwf/commonjs/frontend-core.js');
+            $dep->setIsCommonJsEntry(true);
+            $deps[] = $dep;
+
+            $dep = new Kwf_Assets_Dependency_File_Js('kwf/commonjs/frontend-core.defer.js');
+            $dep->setIsCommonJsEntry(true);
+            $dep->setDeferLoad(true);
+            $deps[] = $dep;
+
+            return new Kwf_Assets_Dependency_Dependencies($deps, 'FrontendCore');
         }
         return null;
     }

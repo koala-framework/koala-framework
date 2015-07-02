@@ -1,6 +1,8 @@
+var onReady = require('kwf/on-ready-ext2');
+
 Ext2.namespace("Kwf.EyeCandy");
 
-Kwf.onElementShow('.kwfEyeCandyList', function eyeCandyList(el) {
+onReady.onShow('.kwfEyeCandyList', function eyeCandyList(el) {
     var opts = Ext2.fly(el).down('.options', true);
     if (opts) {
         opts = Ext2.decode(opts.value);

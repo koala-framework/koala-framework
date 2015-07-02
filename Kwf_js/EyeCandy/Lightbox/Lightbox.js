@@ -1,3 +1,6 @@
+var onReady = require('kwf/on-ready');
+var historyState = require('kwf/history-state');
+
 Kwf.namespace('Kwf.EyeCandy.Lightbox');
 
 $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
@@ -21,19 +24,19 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     this.kwfLightbox.show({
         clickTarget: this
     });
-    Kwf.Utils.HistoryState.currentState.lightbox = this.href;
-    Kwf.Utils.HistoryState.pushState(document.title, this.href);
+    historyState.currentState.lightbox = this.href;
+    historyState.pushState(document.title, this.href);
 
     event.preventDefault();
 });
 
-Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
+onReady.onRender('.kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
     if (el[0].kwfLightbox) return;
     var options = jQuery.parseJSON(el.find('input.options').val());
     var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
-    Kwf.Utils.HistoryState.currentState.lightbox = window.location.href;
-    Kwf.Utils.HistoryState.updateState();
+    historyState.currentState.lightbox = window.location.href;
+    historyState.updateState();
     l.lightboxEl = el;
     l.innerLightboxEl = el.find('.kwfLightboxInner');
     l.fetched = true;
@@ -50,7 +53,7 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     Kwf.callOnContentReady(l.contentEl, {action: 'show'});
 }, { priority: 10 }); //after ResponsiveEl so lightbox can adapt to responsive content
 
-Kwf.onContentReady(function lightboxContent(readyEl, options)
+onReady.onContentReady(function lightboxContent(readyEl, options)
 {
     if (!Kwf.EyeCandy.Lightbox.currentOpen) return;
 
@@ -67,7 +70,7 @@ Kwf.onContentReady(function lightboxContent(readyEl, options)
     }
 });
 
-Kwf.Utils.HistoryState.on('popstate', function() {
+historyState.on('popstate', function() {
     if (Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate) {
         //onlyCloseOnPopstate is set in closeAndPushState
         //if multiple lightboxes are in history and we close current one we go back in history until none is open
@@ -77,7 +80,7 @@ Kwf.Utils.HistoryState.on('popstate', function() {
         }
         return;
     }
-    var lightbox = Kwf.Utils.HistoryState.currentState.lightbox;
+    var lightbox = historyState.currentState.lightbox;
     if (lightbox) {
         if (!Kwf.EyeCandy.Lightbox.allByUrl[lightbox]) return;
         if (Kwf.EyeCandy.Lightbox.currentOpen != Kwf.EyeCandy.Lightbox.allByUrl[lightbox]) {
@@ -262,20 +265,20 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.EyeCandy.Lightbox.currentOpen = null;
     },
     closeAndPushState: function() {
-        if (Kwf.Utils.HistoryState.entries > 0) {
+        if (historyState.entries > 0) {
             Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate = true; //required to avoid flicker on closing, see popstate handler
-            var previousEntries = Kwf.Utils.HistoryState.entries;
+            var previousEntries = historyState.entries;
             history.back();
             var closeLightbox = (function() {
                 //didn't change yet, wait a bit longer
-                if (previousEntries == Kwf.Utils.HistoryState.entries) {
+                if (previousEntries == historyState.entries) {
                     closeLightbox.defer(10, this);
                     return;
                 }
                 //check if there is still a lightbox open
                 //has to be defered because closing happens in 'popstate' event which is async in IE
-                if (Kwf.Utils.HistoryState.currentState.lightbox) {
-                    previousEntries = Kwf.Utils.HistoryState.entries;
+                if (historyState.currentState.lightbox) {
+                    previousEntries = historyState.entries;
                     history.back();
                     closeLightbox.defer(1, this);
                 } else {
@@ -285,8 +288,8 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             });
             closeLightbox.defer(1, this);
         } else {
-            delete Kwf.Utils.HistoryState.currentState.lightbox;
-            Kwf.Utils.HistoryState.replaceState(document.title, this.closeHref);
+            delete historyState.currentState.lightbox;
+            historyState.replaceState(document.title, this.closeHref);
             //location.replace(this.closeHref);
             this.close();
         }
