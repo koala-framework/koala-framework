@@ -31,7 +31,10 @@ class Kwf_Loader
         spl_autoload_register(array($class, 'loadClass'));
     }
 
-    public static function prepareNamespaces($composerNamespaces, $psr4Namespaces)
+    /**
+     * @internal public for unit tests
+     */
+    public static function _prepareNamespaces($composerNamespaces, $psr4Namespaces)
     {
         $namespaces = array();
 
@@ -59,7 +62,10 @@ class Kwf_Loader
         return $namespaces;
     }
 
-    public static function findFile($class, $namespaces, $classMap)
+    /**
+     * @internal public for unit tests
+     */
+    public static function _findFile($class, $namespaces, $classMap)
     {
         if (isset($classMap[$class])) {
             $file = $classMap[$class];
@@ -130,7 +136,7 @@ class Kwf_Loader
         if (!isset($namespaces)) {
             $composerNamespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
             $psr4Namespaces = include VENDOR_PATH.'/composer/autoload_psr4.php';
-            $namespaces = self::prepareNamespaces($composerNamespaces, $psr4Namespaces);
+            $namespaces = self::_prepareNamespaces($composerNamespaces, $psr4Namespaces);
         }
 
         static $classMap;
@@ -138,7 +144,7 @@ class Kwf_Loader
             $classMap = include VENDOR_PATH.'/composer/autoload_classmap.php';
         }
 
-        $file = self::findFile($class, $namespaces, $classMap);
+        $file = self::_findFile($class, $namespaces, $classMap);
         try {
             include $file;
         } catch (Exception $e) {
