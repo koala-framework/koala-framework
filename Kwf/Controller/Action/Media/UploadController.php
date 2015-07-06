@@ -18,6 +18,8 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
                     throw new Kwf_Exception_Client(trlKwf("No File uploaded, please select a file."));
                 } else if ($file['error'] == UPLOAD_ERR_PARTIAL) {
                     throw new Kwf_Exception_Client(trlKwf("The uploaded file was only partially uploaded."));
+                } else if ($file['error'] == UPLOAD_ERR_INI_SIZE) {
+                    throw new Kwf_Exception_Client(trlKwf("The uploaded file is too large."));
                 } else {
                     throw new Kwf_Exception("Upload error $file[error]");
                 }

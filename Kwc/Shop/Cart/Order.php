@@ -172,6 +172,7 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
         foreach ($items as $i) {
             $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($i->add_component_class);
             $r = array(
+                'id' => $i->id,
                 'additionalOrderData' => $data->getAdditionalOrderData($i),
                 'price' => $this->_getProductPrice($i),
                 'amount' => $data->getAmount($i),
@@ -179,7 +180,7 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
             );
             if ($subroot) {
                 $addComponent = Kwf_Component_Data_Root::getInstance()
-                                ->getComponentByDbId($i->add_component_id/*, array('subroot' => $subroot)*/);
+                                ->getComponentByDbId($i->add_component_id, array('subroot' => $subroot));
                 if (!$addComponent) {
                     //product doesn't exist anymore, also delete from cart
                     $i->delete();

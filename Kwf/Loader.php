@@ -31,48 +31,49 @@ class Kwf_Loader
         spl_autoload_register(array($class, 'loadClass'));
     }
 
-    public static function loadClass($class)
+    /**
+     * @internal public for unit tests
+     */
+    public static function _prepareNamespaces($composerNamespaces, $psr4Namespaces)
     {
-        static $namespaces;
-        if (!isset($namespaces)) {
-            $namespaces = array();
-            $composerNamespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
-            foreach ($composerNamespaces as $namespace => $dirs) {
-                // convert paths to psr4 style
-                $namespacePath = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
-                $namespacePath = str_replace('_', DIRECTORY_SEPARATOR, $namespacePath);
-                if ($namespacePath[strlen($namespacePath)-1] == DIRECTORY_SEPARATOR) {
-                    // Path must not end with /
-                    $namespacePath = substr($namespacePath, 0, -1);
-                }
-                $preparedDirs = array();
-                foreach ($dirs as $dir) {
-                    $preparedDirs[] = $dir.DIRECTORY_SEPARATOR.$namespacePath;
-                }
+        $namespaces = array();
+
+        foreach ($composerNamespaces as $namespace => $dirs) {
+            // convert paths to psr4 style
+            $namespacePath = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
+            $namespacePath = str_replace('_', DIRECTORY_SEPARATOR, $namespacePath);
+            if ($namespacePath[strlen($namespacePath)-1] == DIRECTORY_SEPARATOR) {
+                // Path must not end with /
+                $namespacePath = substr($namespacePath, 0, -1);
+            }
+            $preparedDirs = array();
+            foreach ($dirs as $dir) {
+                $preparedDirs[] = $dir.DIRECTORY_SEPARATOR.$namespacePath;
+            }
+            $namespaces[$namespace] = $preparedDirs;
+            if (strpos($namespace, '\\') === false && substr($namespace, -1) != '_') {
+                $namespace = $namespace.DIRECTORY_SEPARATOR;
                 $namespaces[$namespace] = $preparedDirs;
-                if (strpos($namespace, '\\') === false && substr($namespace, -1) != '_') {
-                    $namespace = $namespace.DIRECTORY_SEPARATOR;
-                    $namespaces[$namespace] = $preparedDirs;
-                }
-            }
-            $psr4Namespaces = include VENDOR_PATH.'/composer/autoload_psr4.php';
-            foreach ($psr4Namespaces as $psr4Namespace => $dirs) {
-                $namespaces[$psr4Namespace] = $dirs;
             }
         }
-
-        static $classMap;
-        if (!isset($classMap)) {
-            $classMap = include VENDOR_PATH.'/composer/autoload_classmap.php';
+        foreach ($psr4Namespaces as $psr4Namespace => $dirs) {
+            $namespaces[$psr4Namespace] = $dirs;
         }
+        return $namespaces;
+    }
 
+    /**
+     * @internal public for unit tests
+     */
+    public static function _findFile($class, $namespaces, $classMap)
+    {
         if (isset($classMap[$class])) {
             $file = $classMap[$class];
         } else {
             $ns3 = null;
             if (($pos = strpos($class, '\\')) !== false) {
                 //php 5.3 namespace
-                $ns1 = substr($class, 0, $pos);
+                $ns1 = substr($class, 0, $pos+1);
 
                 $pos = strpos($class, '\\', $pos+1);
                 if ($pos !== false) {
@@ -126,20 +127,24 @@ class Kwf_Loader
                 }
             }
         }
+        return $file;
+    }
 
-        static $classmap;
+    public static function loadClass($class)
+    {
+        static $namespaces;
         if (!isset($namespaces)) {
-            $namespaces = array();
             $composerNamespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
-            foreach ($composerNamespaces as $namespace => $path) {
-                $namespaces[$namespace] = $path;
-                if (strpos($namespace, '\\') === false && substr($namespace, -1) != '_') {
-                    $namespace = $namespace.'_';
-                    $namespaces[$namespace] = $path;
-                }
-            }
+            $psr4Namespaces = include VENDOR_PATH.'/composer/autoload_psr4.php';
+            $namespaces = self::_prepareNamespaces($composerNamespaces, $psr4Namespaces);
         }
 
+        static $classMap;
+        if (!isset($classMap)) {
+            $classMap = include VENDOR_PATH.'/composer/autoload_classmap.php';
+        }
+
+        $file = self::_findFile($class, $namespaces, $classMap);
         try {
             include $file;
         } catch (Exception $e) {

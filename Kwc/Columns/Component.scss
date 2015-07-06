@@ -80,6 +80,10 @@
             &.emptyContent {
                 display: none;
             }
+
+            &.kwcEven {
+                clear: left;
+            }
         }
     }
 
@@ -112,6 +116,10 @@
 
             &.emptyContent {
                 display: inline;
+            }
+
+            &.kwcEven {
+                clear: none;
             }
         }
     }

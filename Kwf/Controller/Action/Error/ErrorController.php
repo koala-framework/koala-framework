@@ -6,6 +6,10 @@ class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
         return true;
     }
 
+    protected function _validateSessionToken()
+    {
+    }
+
     public function errorAction()
     {
         $errors = $this->getRequest()->getParam('error_handler');

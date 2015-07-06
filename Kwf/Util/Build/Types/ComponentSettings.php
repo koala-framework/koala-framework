@@ -11,7 +11,15 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
 
         $fileName = 'build/component/settings';
         if (file_exists($fileName)) unlink($fileName);
-        $data = Kwf_Component_Settings::_getSettingsCached();
+        try {
+            $data = Kwf_Component_Settings::_getSettingsCached();
+        } catch (Kwf_Trl_BuildFileMissingException $e) {
+            $originatingException = $e->getSettingsNonStaticTrlException();
+            if ($originatingException) {
+                throw $originatingException;
+            }
+            throw $e;
+        }
         foreach ($data as $cmp=>$settings) {
             self::_checkSettings($cmp, $settings);
         }

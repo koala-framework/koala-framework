@@ -99,6 +99,8 @@ class Kwc_Directories_Item_Directory_Trl_Generator extends Kwc_Chained_Trl_Gener
             }
             if (!$ret['row']->visible) {
                 $ret['invisible'] = true;
+            } else {
+                unset($ret['invisible']);
             }
 
         } else {

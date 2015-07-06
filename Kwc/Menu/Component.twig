@@ -10,6 +10,7 @@
             {% endblock %}
         {% endif %}
         <ul class="menu">
+            {% block menuItems %}
             {% for m in menu %}
                 {{ m.preHtml|raw }}
                 <li class="{{ m.class }}">
@@ -23,6 +24,7 @@
                 </li>
                 {{ m.postHtml|raw }}
             {% endfor %}
+            {% endblock %}
         </ul>
         <div class="clear"></div>
     </div>

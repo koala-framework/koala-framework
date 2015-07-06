@@ -3,7 +3,11 @@ class Kwf_Trl_Parser_JsParser
 {
     public static function parseContent($content)
     {
-        $process = new Symfony\Component\Process\Process(getcwd().'/'.VENDOR_PATH.'/bin/node '.__DIR__.'/JsParser.js');
+        $vendorPath = 'vendor';
+        if (defined('VENDOR_PATH')) {
+            $vendorPath = VENDOR_PATH;
+        }
+        $process = new Symfony\Component\Process\Process(getcwd()."/$vendorPath/bin/node ".__DIR__.'/JsParser.js');
         $process = $process->setInput($content);
         $process->run();
         if (!$process->isSuccessful()) {

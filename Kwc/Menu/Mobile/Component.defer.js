@@ -94,10 +94,9 @@ Kwf.onJElementReady('.cssClass', function mobileMenu(el, config) {
                     kwfSessionToken: Kwf.sessionToken
                 }
             });
-
             request.done(function(res) {
                 _.each(res.pages, function(page) {
-                    menuData[parseInt(page.id)] = page;
+                    menuData[page.id] = page;
                 });
                 if (responseAnimation) {
                     el.removeClass('loading');
@@ -148,7 +147,7 @@ Kwf.onJElementReady('.cssClass', function mobileMenu(el, config) {
         success: function(res) {
             _.each(res.pages, function(page) {
                 page.root = true;
-                menuData[parseInt(page.id)] = page;
+                menuData[page.id] = page;
             });
 
             if (!el.find('.slider').length) el.append('<div class="slider"></div>');

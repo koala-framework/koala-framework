@@ -29,28 +29,12 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
                     }
                 }
             }
-        } catch(Kwf_Exception $e) {
-            $exceptionLocation = null;
-            foreach ($e->getTrace() as $trace) {
-                if (strpos($trace['file'], 'Kwf/Trl.php') === false
-                    && (
-                        $trace['function'] == 'trlKwf' || $trace['function'] == 'trl'
-                        || $trace['function'] == 'trlcKwf' || $trace['function'] == 'trlc'
-                        || $trace['function'] == 'trlpKwf' || $trace['function'] == 'trlp'
-                        || $trace['function'] == 'trlcpKwf' || $trace['function'] == 'trlcp'
-                    )
-                ) {
-                    $exceptionLocation = $trace;
-                    break;
-                }
+        } catch (Kwf_Trl_BuildFileMissingException $e) {
+            $originatingException = $e->getSettingsNonStaticTrlException();
+            if ($originatingException) {
+                throw $originatingException;
             }
-            if ($exceptionLocation) {
-                $file = $exceptionLocation['file'];
-                $line = $exceptionLocation['line'];
-                throw new Kwf_Exception("In getSettings-method only static version of trl is allowed $file:$line");
-            } else {
-                throw $e;
-            }
+            throw $e;
         }
 
         foreach ($langs as $l) {

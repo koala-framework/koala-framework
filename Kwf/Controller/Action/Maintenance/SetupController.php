@@ -129,8 +129,8 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
 
         $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates());
 
-        $updates[] = new Kwf_Update_Setup_InitialDb();
-        $updates[] = new Kwf_Update_Setup_InitialUploads();
+        $updates[] = new Kwf_Update_Setup_InitialDb('setup/setup.sql');
+        $updates[] = new Kwf_Update_Setup_InitialUploads('setup/uploads');
 
         $update = new Kwf_Update_Sql(0, null);
         $db = Kwf_Registry::get('db');

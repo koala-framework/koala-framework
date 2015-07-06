@@ -410,7 +410,7 @@ class Kwf_Trl
         if (file_exists($buildFileName)) {
             $c = unserialize(file_get_contents($buildFileName));
         } else {
-            throw new Kwf_Exception("$buildFileName was not created in build");
+            throw new Kwf_Trl_BuildFileMissingException("$buildFileName was not created in build");
         }
         $this->_trlElements[$source][$target.($plural ? '_plural' : '')] = $c;
         return $c;

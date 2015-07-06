@@ -33,7 +33,8 @@ class Kwc_Advanced_DownloadsTree_ViewDownloadsController extends Kwf_Controller_
             ->setData(new Kwc_Advanced_DownloadsTree_Data_Fileicon())
             ->setRenderer('image');
         $this->_columns->add(new Kwf_Grid_Column('text', trlKwf('Document'), 320))
-            ->setData(new Kwc_Advanced_DownloadsTree_ViewDownloadsControllerDownloadData($this->_getParam('componentId')));
+            ->setData(new Kwc_Advanced_DownloadsTree_ViewDownloadsControllerDownloadData($this->_getParam('componentId')))
+            ->setRenderer('raw');
         $this->_columns->add(new Kwf_Grid_Column('filesize', trlKwf('Size'), 60))
             ->setData(new Kwc_Advanced_DownloadsTree_Data_Filesize())
             ->setRenderer('fileSize');
