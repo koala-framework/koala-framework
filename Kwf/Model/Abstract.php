@@ -868,15 +868,15 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             }
 
             if ($expr instanceof Kwf_Model_Select_Expr_Higher) {
-                return (!$value || $rowValue > $value);
+                return $rowValue > $value;
             } else if ($expr instanceof Kwf_Model_Select_Expr_Lower) {
-                return (!$value || $rowValue < $value);
+                return $rowValue < $value;
             } else if ($expr instanceof Kwf_Model_Select_Expr_HigherEqual) {
-                return (!$value || $rowValue >= $value);
+                return $rowValue >= $value;
             } else if ($expr instanceof Kwf_Model_Select_Expr_Equal) {
-                return ($rowValue == $value);
+                return $rowValue == $value;
             } else if ($expr instanceof Kwf_Model_Select_Expr_LowerEqual) {
-                return (!$value || $rowValue <= $value);
+                return $rowValue <= $value;
             } else {
                 throw new Kwf_Exception_NotYetImplemented(
                     "CompareField-Expression '".(is_string($expr) ? $expr : get_class($expr))."' is not yet implemented"
