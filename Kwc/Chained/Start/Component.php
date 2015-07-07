@@ -23,7 +23,10 @@ class Kwc_Chained_Start_Component extends Kwc_Abstract
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($componentClass, $parentDataSelect) as $chainedStart) {
             //if additional subroots are above trl subroot (eg. domains)
             if ($sr = $chainedStart->parent->getSubroot()) {
-                $masterSr = $master->getSubroot();
+                $masterSr = $master;
+                while (Kwc_Abstract::getFlag($masterSr->componentClass, 'chainedType') != $chainedType) {
+                    $masterSr = $masterSr->parent;
+                }
                 if ($masterSr->parent && $sr != $masterSr->parent->getSubroot()) {
                     continue;
                 }
