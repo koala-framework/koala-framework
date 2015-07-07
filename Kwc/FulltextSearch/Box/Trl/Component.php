@@ -14,15 +14,29 @@ class Kwc_FulltextSearch_Box_Trl_Component extends Kwc_Chained_Trl_Component
         }
     }
 
+    protected function _getSearchDirectory()
+    {
+        $ret = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByClass('Kwc_FulltextSearch_Search_Directory_Trl_Component',
+                array('subroot'=>$this->getData()));
+        if ($ret) {
+            $ret = $ret->getChildComponent('-child');
+        }
+        return $ret;
+    }
+
+    /**
+     * for Cc
+     */
+    public final function getSearchDirectory()
+    {
+        return $this->_getSearchDirectory();
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $searchPage = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByClass('Kwc_FulltextSearch_Search_Directory_Trl_Component',
-                                   array('subroot'=>$this->getData()));
-        if ($searchPage) {
-            $searchPage = $searchPage->getChildComponent('-child');
-        }
+        $searchPage = $this->_getSearchDirectory();
         $ret['searchForm'] = null;
         if ($searchPage) {
             $ret['searchForm'] =$searchPage->getChildComponent('-view')
