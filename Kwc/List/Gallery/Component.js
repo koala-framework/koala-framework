@@ -11,7 +11,7 @@ onReady.onRender('.cssClass', function(el) {
     button.on('click', function(event) {
         button.hide(300, 'swing');
         hiddenPics.show();
-        Kwf.callOnContentReady(hiddenPics, {action: 'show'});
+        onReady.callOnContentReady(hiddenPics, {action: 'show'});
         hiddenPics.hide();
         hiddenPics.show(300, 'swing');
     });

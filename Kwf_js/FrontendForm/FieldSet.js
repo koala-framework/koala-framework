@@ -20,9 +20,9 @@ Kwf.FrontendForm.FieldSet = Kwf.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         var inp = this.el.find('fieldset > legend > input');
         if (inp) {
-            inp.on('click', function() {
+            inp.on('click', (function() {
                 this.el.trigger('kwf-form-change', this.getValue());
-            }, this);
+            }).bind(this));
         }
     },
     getFieldName: function() {

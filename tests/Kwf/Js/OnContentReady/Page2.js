@@ -3,11 +3,11 @@ var onReady = require('kwf/on-ready');
 $(function() {
     $('#show').click(function() {
         $('.foo').show();
-        Kwf.callOnContentReady(document.body, { action: 'show' });
+        onReady.callOnContentReady(document.body, { action: 'show' });
     });
     $('#hide').click(function() {
         $('.foo').hide();
-        Kwf.callOnContentReady(document.body, { action: 'hide' });
+        onReady.callOnContentReady(document.body, { action: 'hide' });
     });
 });
 

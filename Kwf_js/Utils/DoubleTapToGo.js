@@ -131,7 +131,7 @@ Kwf.namespace('Kwf.Utils');
                             target.addClass('kwfDoubleTapTargetOpen');
                             currentTarget.addClass('hover');
 
-                            Kwf.callOnContentReady(e.currentTarget, {action: 'show'});
+                            onReady.callOnContentReady(e.currentTarget, {action: 'show'});
 
                             if (params && params.open) {
                                 params.onopen.call(this, e, currentTarget);

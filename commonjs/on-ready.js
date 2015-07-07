@@ -162,7 +162,7 @@ var callOnContentReady = function(renderedEl, options)
         } else {
             var t = benchmarkBox.now();
             var els = $.makeArray($(renderedEl).find(hndl.selector));
-            if (window.matchesSelector(renderedEl, hndl.selector)) {
+            if (matchesSelector(renderedEl, hndl.selector)) {
                 els.push(renderedEl);
             }
             benchmarkBox.time('query', benchmarkBox.now() - t);
@@ -326,8 +326,8 @@ var callOnContentReady = function(renderedEl, options)
 };
 
 
-if ($(document.body).is('.frontend')) {
-    $(document).ready(function() {
+$(document).ready(function() {
+    if ($(document.body).is('.frontend')) {
         if (!document.body) {
             //this happens if a redirect by changing location in JS is done
             //in that case no contentReady needs to be called
@@ -360,8 +360,8 @@ if ($(document.body).is('.frontend')) {
                 callOnContentReady(document.body, { action: 'widthChange' } );
             }, 100);
         });
-    });
-}
+    }
+});
 
 
 

@@ -98,7 +98,7 @@ Ext2.extend(Kwf.Tabs, Ext2.util.Observable, {
                 'z-index': 1,
                 'position': 'absolute'
             });
-            Kwf.callOnContentReady(this.contentEls[idx], {newRender: false});
+            onReady.callOnContentReady(this.contentEls[idx], {newRender: false});
             oldContentEl.setVisible(false);
         }
         if (this._activeTabIdx !== null) {

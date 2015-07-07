@@ -1,4 +1,5 @@
 var onReady = require('kwf/on-ready');
+var componentEvent = require('kwf/component-event');
 
 (function() {
 var kwcFavouritesComponentIds = [];
@@ -46,7 +47,7 @@ onReady.onRender('.cssClass', function(el, config) {
                 el.removeClass('loading');
                 var count = 0;
                 el.hasClass('isFavourite') ? count += 1 : count -= 1;
-                Kwf.fireComponentEvent('favouritesChanged', count);
+                componentEvent.trigger('favouritesChanged', count);
             }
         });
     });

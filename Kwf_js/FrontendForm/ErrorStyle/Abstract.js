@@ -14,14 +14,14 @@ Kwf.FrontendForm.ErrorStyle.Abstract.prototype = {
         html += '</ul>';
         html += '</div>';
         $(html).insertAfter(this.form.el.find('form'));
-        Kwf.callOnContentReady(this.form.el, {newRender: true});
+        //TODO commonjs Kwf.callOnContentReady(this.form.el, {newRender: true});
     },
     showErrors: function() {
     },
     hideErrors: function() {
-        this.form.fields.each(function(field) {
+        $.each(this.form.fields, (function(index, field) {
             this.hideFieldError(field);
-        }, this);
+        }).bind(this));
     },
     hideFieldError: function(field) {
     }

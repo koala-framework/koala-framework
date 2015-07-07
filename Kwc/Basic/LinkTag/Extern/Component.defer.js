@@ -1,3 +1,5 @@
+var $ = require('jQuery');
+
 $(document).on('click', 'a', function(event) {
     var lnk = event.currentTarget;
 

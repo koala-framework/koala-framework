@@ -1,10 +1,10 @@
 Kwf.FrontendForm.Select = Kwf.extend(Kwf.FrontendForm.Field, {
     initField: function() {
-        this.el.select('select').each(function(input) {
-            input.on('change', function() {
+        this.el.select('select').each((function(input) {
+            input.on('change', (function() {
                 this.el.trigger('kwf-form-change', this.getValue());
-            }, this);
-        }, this);
+            }).bind(this));
+        }).bind(this));
     },
     getFieldName: function() {
         return this.el.find('select').get(0).name;

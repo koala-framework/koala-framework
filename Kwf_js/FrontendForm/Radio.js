@@ -1,9 +1,9 @@
 Kwf.FrontendForm.Radio = Kwf.extend(Kwf.FrontendForm.Field, {
     initField: function() {
         this.el.select('input').each(function(input) {
-            input.on('click', function() {
+            input.on('click', (function() {
                 this.el.trigger('kwf-form-change', this.getValue());
-            }, this);
+            }).bind(this));
         }, this);
     },
     getValue: function() {

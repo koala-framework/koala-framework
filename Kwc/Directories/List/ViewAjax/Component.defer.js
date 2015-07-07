@@ -1,5 +1,6 @@
 var onReady = require('kwf/on-ready');
 var historyState = require('kwf/history-state');
+var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 
 (function() {
 
@@ -319,7 +320,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             for (var i=0; i<data.rows.length; i++) {
                 this.$el.append("<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>");
             }
-            Kwf.callOnContentReady(this.$el, { action: 'render' });
+            onReady.callOnContentReady(this.$el, { action: 'render' });
         }).bind(this));
     },
 
@@ -349,7 +350,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
                 }
             }
             this.$el.html(html);
-            Kwf.callOnContentReady(this.$el, { action: 'render' });
+            onReady.callOnContentReady(this.$el, { action: 'render' });
         }).bind(this));
     },
 
@@ -357,7 +358,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
     {
         if (this.detailEl) {
             this.detailEl.hide();
-            Kwf.callOnContentReady(this.detailEl, {action: 'hide'});
+            onReady.callOnContentReady(this.detailEl, {action: 'hide'});
             this.detailEl.remove();
             this.detailEl = null;
         }
@@ -384,7 +385,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
         this.kwfMainContent.after(this.detailEl);
 
         $.ajax({
-            url: Kwf.getKwcRenderUrl(),
+            url: getKwcRenderUrl(),
             data: { url: 'http://'+location.host+href },
             dataType: 'html'
         }).done((function(data) {
@@ -408,7 +409,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
                 }
             }).bind(this));
 
-            Kwf.callOnContentReady(this.detailEl, {newRender: true});
+            onReady.callOnContentReady(this.detailEl, {newRender: true});
         }).bind(this));
     }
 

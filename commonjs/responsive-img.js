@@ -1,3 +1,4 @@
+var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var isVisible = require('kwf/element/is-visible');
 var getCachedWidth = require('kwf/element/get-cached-width');

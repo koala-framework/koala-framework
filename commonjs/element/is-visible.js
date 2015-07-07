@@ -1,6 +1,8 @@
+var benchmarkBox = require('kwf/benchmark/box');
+
 module.exports = function elementIsVisible(el) {
     if (el.dom) renderedEl = el.dom; //ExtJS Element (hopefully)
-    var t = Kwf.Utils.BenchmarkBox.now();
+    var t = benchmarkBox.now();
 
     /* variant 1: Ext2: has dependency on ext2
     //var ret = Ext2.fly(el).isVisible();
@@ -21,6 +23,6 @@ module.exports = function elementIsVisible(el) {
         el = el.parentNode;
     }
 
-    Kwf.Utils.BenchmarkBox.time('isVisible uncached', Kwf.Utils.BenchmarkBox.now()-t);
+    benchmarkBox.time('isVisible uncached', benchmarkBox.now()-t);
     return ret;
 };

@@ -1,3 +1,5 @@
+var onReady = require('kwf/on-ready');
+
 Kwf.EyeCandy.List.Plugins.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     //animationConfig: { duration: 0.25 },
     //fadeAnimationConfig: { duration: 0.25 }, //optional, by default animationConfig will be used
@@ -105,7 +107,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstr
             this.list.getItem(numberShown).el.show();
         }
 
-        Kwf.callOnContentReady(this.list.getItem(numberShown).el, {action: 'show'});
+        onReady.callOnContentReady(this.list.getItem(numberShown).el, {action: 'show'});
 
         var firstElWidth = this.list.getItem(0).getWidthIncludingMargin();
 
@@ -168,7 +170,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstr
         } else {
             this.list.getItem(0).el.show();
         }
-        Kwf.callOnContentReady(this.list.getItem(0).el, {action: 'show'});
+        onReady.callOnContentReady(this.list.getItem(0).el, {action: 'show'});
 
         // fade out last
         if (this.useFade) {

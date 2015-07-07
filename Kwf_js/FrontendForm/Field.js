@@ -1,9 +1,7 @@
 Kwf.namespace('Kwf.FrontendForm');
 Kwf.FrontendForm.Field = function(fieldEl, form) {
-    Kwf.FrontendForm.Field.superclass.constructor.call(this);
     this.el = fieldEl;
     this.form = form;
-    this.addEvents('change');
     this.on('change', function(value) {
         this.form.errorStyle.hideFieldError(this);
     }, this);
@@ -12,12 +10,12 @@ Kwf.FrontendForm.Field.prototype = {
     initField: function() {
         var inp = this.el.find('input');
         if (inp) {
-            inp.on('change', function() {
-                this.el.trigger('kwf-form-change', this.getValue());
-            }, this);
-            inp.on('keydown', function() {
-                this.el.trigger('kwf-form-change', this.getValue());
-            }, this, { delay: 1 });
+            inp.on('change', (function() {
+                this.el.trigger('kwfup-form-change', this.getValue());
+            }).bind(this));
+            inp.on('keydown', (function() {
+                this.el.trigger('kwfup-form-change', this.getValue());
+            }).bind(this)); //, { delay: 1 }); //TODO commonjs delay
             this._initPlaceholder(this.el.find('input'));
         }
     },
@@ -25,7 +23,7 @@ Kwf.FrontendForm.Field.prototype = {
     on: function(event, cb, scope)
     {
         if (typeof scope != 'undefined') cb.bind(scope);
-        this.el.on(event, cb);
+        this.el.on('kwfup-form-'+event, cb);
     },
 
     _initPlaceholder: function(input)

@@ -27,7 +27,7 @@ var onReady = require('kwf/on-ready');
             this.switchContainer
                 .css('display', 'block')
                 .css('height', '');
-            Kwf.callOnContentReady(this.el, {action: 'show'});
+            onReady.callOnContentReady(this.el, {action: 'show'});
             this.switchContainer
                 .css('display', 'none')
 
@@ -41,7 +41,7 @@ var onReady = require('kwf/on-ready');
 
         this.doClose = function() {
             this.switchContainer.css('display', 'none');
-            Kwf.callOnContentReady(this.el, {action: 'hide'});
+            onReady.callOnContentReady(this.el, {action: 'hide'});
             this.switchContainer
                 .css('display', 'block')
 

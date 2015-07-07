@@ -20,11 +20,10 @@ Kwc.Form.formsByComponentId = {};
 
 Kwc.Form.Component = function(form)
 {
-    this.addEvents('beforeSubmit', 'submitSuccess', 'fieldChange');
     this.el = form;
     var config = form.parent().find('.config', true);
     if (!config) return;
-    config = $.parseJSON(config.value);
+    config = $.parseJSON(config.val());
     if (!config) return;
     this.config = config;
     this._submitDisabled = 0;
@@ -43,25 +42,25 @@ Kwc.Form.Component = function(form)
     var fieldEls = form.find('.kwfField');
     for (var fieldElIndex=0; fieldElIndex<fieldEls.length; fieldElIndex++) {
         var fieldEl = fieldEls[fieldElIndex];
-        var classes = fieldEl.get(0).className.split(' ');
+        var classes = fieldEl.className.split(' ');
         var fieldConstructor = false;
-        classes.each(function (c) {
-            if (Kwf.FrontendForm.fields[c]) {
+        $.each(classes, function (indx, c) {
+            if (Kwf.FrontendForm.fields[indx, c]) {
                 fieldConstructor = Kwf.FrontendForm.fields[c];
             }
-        }, this);
+        });
         if (fieldConstructor) {
-            var field = new fieldConstructor(fieldEl, this);
+            var field = new fieldConstructor($(fieldEl), this);
             this.fields.push(field);
         }
     }
 
-    this.fields.forEach(function(f) {
+    $.each(this.fields, function(i, f) {
         f.initField();
     });
 
     if (this.config.hideForValue) {
-        this.config.hideForValue.each(function(hideForValue) {
+        $.each(this.config.hideForValue, (function(indx, hideForValue) {
             var field = this.findField(hideForValue.field);
             field.on('change', function(v, f) {
                 if (v == hideForValue.value) {
@@ -75,19 +74,19 @@ Kwc.Form.Component = function(form)
             if (field.getValue() == hideForValue.value) {
                 this.findField(hideForValue.hide).hide();
             }
-        }, this);
+        }).bind(this));
     }
 
     var button = form.find('form button.submit');
     if (button) {
-        button.on('click', this.onSubmit, this);
+        button.on('click', this.onSubmit.bind(this));
     }
 
-    this.fields.forEach(function(f) {
+    $.each(this.fields, (function(i, f) {
         f.on('change', function() {
-            this.fireEvent('fieldChange', f);
+            this.el.trigger('kwfup-form-fieldChange', f);
         }, this);
-    }, this);
+    }).bind(this));
 
     this.errorStyle = new Kwf.FrontendForm.errorStyles[this.config.errorStyle](this);
 };
@@ -96,7 +95,7 @@ Kwc.Form.Component.prototype = {
     on: function(event, cb, scope)
     {
         if (typeof scope != 'undefined') cb.bind(scope);
-        this.el.on(event, cb);
+        this.el.on('kwfup-form-'+event, cb);
     },
 
     getFieldConfig: function(fieldName)
@@ -108,19 +107,19 @@ Kwc.Form.Component.prototype = {
     },
     findField: function(fieldName) {
         var ret = null;
-        this.fields.each(function(f) {
+        $.each(this.fields, function(i, f) {
             if (f.getFieldName() == fieldName) {
                 ret = f;
                 return true;
             }
-        }, this);
+        });
         return ret;
     },
     getValues: function() {
         var ret = {};
-        this.fields.each(function(f) {
+        $.each(this.fields, function(i, f) {
             ret[f.getFieldName()] = f.getValue();
-        }, this);
+        });
         return ret;
     },
     //returns values including parameters required for processInput to be considered as posted
@@ -131,7 +130,7 @@ Kwc.Form.Component.prototype = {
         return ret;
     },
     clearValues: function() {
-        this.fields.each(function(f) {
+        $.each(this.fields, function(i, f) {
             f.clearValue();
         }, this);
     },
@@ -160,19 +159,19 @@ Kwc.Form.Component.prototype = {
     onSubmit: function(e)
     {
         if (this.isSubmitDisabled()) {
-            e.stopEvent();
+            e.preventDefault();
             return;
         }
 
         //return false to cancel submit
-        if (this.fireEvent('beforeSubmit', this, e) === false) {
-            e.stopEvent();
+        if (this.el.triggerHandler('kwfup-form-beforeSubmit', this, e) === false) {
+            e.preventDefault();
             return;
         }
 
         if (!this.config.useAjaxRequest || this.ajaxRequestSubmitted) return;
         this.submit();
-        e.stopEvent();
+        e.preventDefault();
     },
     
     submit: function()
@@ -184,18 +183,19 @@ Kwc.Form.Component.prototype = {
         this.errorStyle.hideErrors();
 
         var data = this.el.find('form').serialize();
-        $.extend(data, this.config.baseParams);
+        data += '&'+$.param(this.config.baseParams);
         $.ajax({
             url: this.config.controllerUrl + '/json-save',
+            type: 'POST',
             ignoreErrors: true,
             data: data,
             dataType: 'json',
-            error: function() {
+            error: (function() {
                 //on failure try a plain old post of the form
                 this.ajaxRequestSubmitted = true; //avoid endless recursion
                 button.find('.submit').get(0).click();
-            },
-            success: function(r) {
+            }).bind(this),
+            success: (function(r) {
 
                 this.errorStyle.showErrors({
                     errorFields: r.errorFields,
@@ -229,21 +229,21 @@ Kwc.Form.Component.prototype = {
                     } else {
                         (function(el) {
                             el.remove();
-                            Kwf.callOnContentReady(this.el, {newRender: false});
+                            onReady.callOnContentReady(this.el, {newRender: false});
                         }).defer(5000, this, [el]);
                     }
-                    Kwf.callOnContentReady(el, {newRender: true});
+                    onReady.callOnContentReady(el, {newRender: true});
                 } else if (r.successUrl) {
                     document.location.href = r.successUrl;
                 } else {
                     //errors are shown, lightbox etc needs to resize
-                    Kwf.callOnContentReady(this.el, {newRender: false});
+                    onReady.callOnContentReady(this.el, {newRender: false});
                 }
 
                 var scrollTo = null;
                 if (!hasErrors) {
                     // Scroll to top of form
-                    scrollTo = this.el.getY();
+                    scrollTo = this.el.offset().top;
                 } else {
                     // Scroll to first error. If there are form-errors those are first
                     if (!r.errorMessages.length) { // there are no form-errors
@@ -251,7 +251,7 @@ Kwc.Form.Component.prototype = {
                         for (var fieldName in r.errorFields) {
                             var field = this.findField(fieldName);
                             if (field) {
-                                var pos = field.el.getY();
+                                var pos = field.el.offset().top;
                                 if (scrollTo == null || scrollTo > pos) {
                                     scrollTo = pos;
                                 }
@@ -260,7 +260,7 @@ Kwc.Form.Component.prototype = {
                     }
                     if (scrollTo == null) { // no field errors found or only form errors
                         // form-errors are shown at the top of the form
-                        scrollTo = this.el.getY();
+                        scrollTo = this.el.offset().top;
                     }
                 }
                 if (scrollTo != null) {
@@ -294,9 +294,8 @@ Kwc.Form.Component.prototype = {
                     }
                 }
 
-                this.fireEvent('submitSuccess', this, r);
-            },
-            scope: this
+                this.el.trigger('kwfup-form-submitSuccess', this, r);
+            }).bind(this)
         });
     }
 };

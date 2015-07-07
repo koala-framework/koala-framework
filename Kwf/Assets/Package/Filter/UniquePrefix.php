@@ -30,7 +30,11 @@ class Kwf_Assets_Package_Filter_UniquePrefix
         $foot = '
         for (var i=0; i<kwfNamespaces.length; i++) {
                 var name = kwfNamespaces[i];
-                kwfUp[name] = window[name] || eval(name);
+                try {
+                    kwfUp[name] = window[name] || eval(name);
+                } catch(e) {
+                    continue;
+                }
                 if (kwfOrigExports[name]) {
                     window[name] = kwfOrigExports[name];
                 } else {

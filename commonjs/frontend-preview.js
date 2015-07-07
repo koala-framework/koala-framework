@@ -1,3 +1,4 @@
+$ = require('jQuery');
 var onReady = require('kwf/on-ready');
 
 onReady.onContentReady(function kwcPreviewLink(el) {

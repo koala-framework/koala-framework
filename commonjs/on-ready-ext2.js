@@ -44,6 +44,15 @@ module.exports = {
             el = Ext2.get(el[0]);
             fn.call(this, el, config);
         }, options);
+    },
+
+    /**
+    * @param element the added/changed dom element
+    * @param options newRender (bool): if new elements have been added to the dom or just visiblity/width changed
+    */
+    callOnContentReady: function(renderedEl, options)
+    {
+        onReadyJquery.callOnContentReady(renderedEl, options);
     }
 
 };

@@ -1,3 +1,5 @@
+var $ = require('jQuery');
+
 var BenchmarkBox = {};
 module.exports = BenchmarkBox;
 

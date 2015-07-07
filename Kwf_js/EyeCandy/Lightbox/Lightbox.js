@@ -1,5 +1,6 @@
 var onReady = require('kwf/on-ready');
 var historyState = require('kwf/history-state');
+var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 
 Kwf.namespace('Kwf.EyeCandy.Lightbox');
 
@@ -50,7 +51,7 @@ onReady.onRender('.kwfLightbox', function lightboxEl(el) {
     Kwf.EyeCandy.Lightbox.currentOpen = l;
 
     //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
-    Kwf.callOnContentReady(l.contentEl, {action: 'show'});
+    onReady.callOnContentReady(l.contentEl, {action: 'show'});
 }, { priority: 10 }); //after ResponsiveEl so lightbox can adapt to responsive content
 
 onReady.onContentReady(function lightboxContent(readyEl, options)
@@ -167,7 +168,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.fetched = true;
 
         $.ajax({
-            url: Kwf.getKwcRenderUrl(),
+            url: getKwcRenderUrl(),
             data: { url: 'http://'+location.host+this.href },
             dataType: 'html',
             context: this
@@ -244,7 +245,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         if (this.fetched) {
             if (!this.lightboxEl.is(':visible')) {
                 this.lightboxEl.show();
-                Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
+                onReady.callOnContentReady(this.lightboxEl, {action: 'show'});
                 this.style.afterContentShown();
                 this.preloadLinks();
             }
@@ -259,7 +260,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     close: function(options) {
         this.lightboxEl.hide();
         //so eg. flash component can remove object
-        Kwf.callOnContentReady(this.lightboxEl, {action: 'hide'});
+        onReady.callOnContentReady(this.lightboxEl, {action: 'hide'});
         this.lightboxEl.show();
 
         this.style.onClose(options);
@@ -332,7 +333,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
 
         this._blockOnContentReady = true; //don't resize twice
         //callOnContentReady so eg. ResponsiveEl can do it's job which might change the height of contents
-        Kwf.callOnContentReady(this.lightbox.contentEl, {action: 'render'});
+        onReady.callOnContentReady(this.lightbox.contentEl, {action: 'render'});
         this._blockOnContentReady = false;
     },
     onShow: function() {},

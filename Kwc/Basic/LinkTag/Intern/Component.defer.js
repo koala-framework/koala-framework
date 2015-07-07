@@ -1,3 +1,4 @@
+var $ = require('jQuery');
 $(document).on('click', 'a', function(e) {
     var el = e.currentTarget;
     var href = $(el).attr('href');
