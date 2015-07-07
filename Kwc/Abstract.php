@@ -711,6 +711,43 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return $ret;
     }
 
+    protected function _getChildContentSpans(Kwf_Component_Data $child)
+    {
+        $ret = $this->getContentSpans();
+        return $ret;
+    }
+
+    protected function _getMasterChildContentSpans(Kwf_Component_Data $sourcePage)
+    {
+        if (!$this->_hasSetting('contentSpans')) {
+            throw new Kwf_Exception('contentSpans has to be set');
+        }
+        $ret = $this->_getSetting('contentSpans');
+        return $ret;
+    }
+
+    public function getContentSpans()
+    {
+        if ($this->_hasSetting('contentSpans')) return $this->_getSetting('contentSpans');
+
+        if ($this->getData()->isPage) {
+            $componentWithMaster = Kwf_Component_View_Helper_Master::
+                getComponentsWithMasterTemplate($this->getData());
+            $last = array_pop($componentWithMaster);
+            if ($last && $last['type'] == 'master') {
+                $p = $last['data'];
+            } else {
+                $p = Kwf_Component_Data_Root::getInstance(); // for tests
+            }
+            return $p->getComponent()->_getMasterChildContentSpans($this->getData());
+        } else {
+            if (!$this->getData()->parent) {
+                throw new Kwf_Exception("Can't detect contentSpans, use contentSpans setting for '".$this->getData()->componentClass."'");
+            }
+            return $this->getData()->parent->getComponent()->_getChildContentSpans($this->getData());
+        }
+    }
+
     /**
      * @deprecated use ContentSender instead
      * @internal
