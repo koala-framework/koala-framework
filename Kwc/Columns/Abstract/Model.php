@@ -1,7 +1,7 @@
 <?php
-class Kwc_Columns_Model extends Kwc_Abstract_List_Model
+class Kwc_Columns_Abstract_Model extends Kwc_Abstract_List_Model
 {
-    protected $_rowClass = 'Kwc_Columns_Row';
+    protected $_rowClass = 'Kwc_Columns_Abstract_Row';
     protected $_componentClass;
 
     public function __construct($config = array())
@@ -12,7 +12,7 @@ class Kwc_Columns_Model extends Kwc_Abstract_List_Model
             throw new Kwf_Exception('componentClass is required');
         }
         $this->setFactoryConfig(array(
-            'type' => 'Kwc_Columns_ModelFactory',
+            'type' => 'Kwc_Columns_Abstract_ModelFactory',
             'id' => $this->_componentClass.'.childModel',
             'componentClass' => $this->_componentClass
         ));

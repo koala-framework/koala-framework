@@ -1,12 +1,12 @@
 <?php
-class Kwc_Columns_Controller extends Kwc_Abstract_List_Controller
+class Kwc_Columns_Abstract_Controller extends Kwc_Abstract_List_Controller
 {
     protected $_buttons = array('save', 'add', 'delete');
     protected $_position = 'pos';
 
     public function preDispatch()
     {
-        $this->setModel(Kwc_Columns_ModelFactory::getModelInstance(array(
+        $this->setModel(Kwc_Columns_Abstract_ModelFactory::getModelInstance(array(
             'componentClass' => $this->_getParam('class')
         )));
         parent::preDispatch();

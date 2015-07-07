@@ -1,5 +1,5 @@
 <?php
-class Kwc_Columns_Row extends Kwc_Abstract_List_Row
+class Kwc_Columns_Abstract_Row extends Kwc_Abstract_List_Row
 {
     public function __get($name)
     {

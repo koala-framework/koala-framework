@@ -1,5 +1,5 @@
 <?php
-class Kwc_Columns_ModelFactory extends Kwf_Model_Factory_Abstract
+class Kwc_Columns_Abstract_ModelFactory extends Kwf_Model_Factory_Abstract
 {
     public static function getModelInstance($config)
     {

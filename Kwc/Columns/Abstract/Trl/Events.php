@@ -1,5 +1,5 @@
 <?php
-class Kwc_Columns_Trl_Events extends Kwc_Abstract_Events
+class Kwc_Columns_Abstract_Trl_Events extends Kwc_Abstract_Events
 {
     public function getListeners()
     {
