@@ -25,6 +25,14 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
                                     array('subroot'=>$this->getData()));
     }
 
+    /**
+    * for Cc
+    */
+    public final function getSearchDirectory()
+    {
+        return $this->_getSearchDirectory();
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
