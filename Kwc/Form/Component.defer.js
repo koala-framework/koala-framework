@@ -52,6 +52,8 @@ Kwc.Form.Component = function(form)
         }
     }, this);
 
+    this.errorStyle = new Kwf.FrontendForm.errorStyles[this.config.errorStyle](this);
+
     this.fields.forEach(function(f) {
         f.initField();
     });
@@ -84,8 +86,6 @@ Kwc.Form.Component = function(form)
             this.fireEvent('fieldChange', f);
         }, this);
     }, this);
-
-    this.errorStyle = new Kwf.FrontendForm.errorStyles[this.config.errorStyle](this);
 };
 Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
     getFieldConfig: function(fieldName)
