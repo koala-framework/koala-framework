@@ -23,6 +23,7 @@ class Kwc_Basic_ImageEnlargeParent_Component extends Kwc_Basic_ImageParent_Compo
             $ret[$c->id] = $c;
             $ret['keys'][] = $c->id;
         }
+        unset($ret['template']);
         return $ret;
     }
 
