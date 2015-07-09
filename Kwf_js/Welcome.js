@@ -18,5 +18,5 @@ Kwf.Welcome = Ext2.extend(Ext2.Panel,
         this.welcomePanel.getEl().center();
     }
 });
-var Welcome = Kwf.Welcome;
+window.Welcome = Kwf.Welcome;
 

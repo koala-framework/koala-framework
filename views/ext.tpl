@@ -42,6 +42,10 @@
 
     <script type="text/javascript">
     (function() {
+        <?php if ($this->uniquePrefix) { ?>
+        var Kwf = <?=$this->uniquePrefix?>.Kwf;
+        var Ext2 = <?=$this->uniquePrefix?>.Ext2;
+        <?php } ?>
         <?php if (isset($this->ext['user'])) { ?>
         Kwf.user = '<?= $this->ext['user'] ?>';
         <?php } ?>
