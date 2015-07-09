@@ -13,7 +13,7 @@ Kwf.onJElementReady('.cssClass .outerYoutubeContainer', function youtubePlayer(e
             youtubeContainerEl.css('position', 'relative');
             youtubePlayerEl.show();
             el.addClass('youtubeActive');
-            Kwf.callOnContentReady(el.parent());
+            Kwf.callOnContentReady(el.parent(), { action: 'show' });
             loadingEl.css('display', 'block');
         });
     });
