@@ -99,9 +99,9 @@ if (!benchmarkEnabled) {
         if (el instanceof $) el = el.get(0);
         if (el.initDone) return;
         el.initDone = true;
-        var container = $('.benchmarkContainer');
+        var container = $('.kwfup-benchmarkContainer');
         if (!container.length) {
-            container = $('<div class="benchmarkContainer"></div>');
+            container = $('<div class="kwfup-benchmarkContainer"></div>');
             $('body').append($(container));
         }
         container.append($(el));
