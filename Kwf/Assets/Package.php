@@ -216,14 +216,6 @@ class Kwf_Assets_Package
                             unset($commonJsData[$key]);
                         }
                     }
-                    $c = $i->getContentsPacked($language)->getFileContentsInlineMap(false);
-                    $commonJsData[$i->__toString()] = array(
-                        'id' => $i->__toString(),
-                        'source' => $c,
-                        'sourceFile' => $i->__toString(), //TODO
-                        'deps' => $commonJsDeps['deps'],
-                        'entry' => true
-                    );
                 }
             }
             $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData));
