@@ -17,6 +17,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/AddParagraphButton.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Paragraphs/Panel.css';
         $ret['assetsAdmin']['dep'][] = 'KwfAutoGrid';
+        $ret['assetsAdmin']['dep'][] = 'KwfLegacyOnReady';
         $ret['generators']['paragraphs'] = array(
             'class' => 'Kwf_Component_Generator_Table',
             'component' => array(

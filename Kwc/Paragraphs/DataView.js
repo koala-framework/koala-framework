@@ -1,5 +1,3 @@
-var onReady = require('kwf/on-ready-ext2');
-
 Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
     autoHeight: true,
     multiSelect: true,
@@ -30,7 +28,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
         //buffer callOnContentReady for better performance when changing multiple rows - which happens when
         //deleting and entry and all below have to be re-numbered
         this.callOnContentReadyTask = new Ext2.util.DelayedTask(function() {
-            onReady.callOnContentReady(this.el, { newRender: true });
+            Kwf.Legacy.OnReadyExt2.callOnContentReady(this.el, { newRender: true });
         }, this);
 
         Kwc.Paragraphs.DataView.superclass.initComponent.call(this);
