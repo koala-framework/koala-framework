@@ -105,6 +105,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                 }
                 $map->sources[$k] = $f;
                 $sourceFiles[] = $f;
+                $sourceFiles[] = 'config.ini'; //for uniquePrefix
                 if (substr($f, 0, 16) == 'web/scss/config/') {
                     $sourceFiles[] = 'kwf/sass/Kwf/stylesheets/config/'.substr($f, 16);
                 } else if (substr($f, 0, 32) == 'kwf/sass/Kwf/stylesheets/config/') {
