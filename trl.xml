@@ -3035,6 +3035,7 @@
 <bg>следваща страница</bg>
 <hr>Sljedeća stranica</hr>
 <ba>Sljedeća stranica</ba>
+<hu>Következő oldal</hu>
 </text>
 <text>
 <en>Last Page</en>
@@ -7404,6 +7405,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Naprej</sl>
 <ru>Далее</ru>
 <ua>Далі</ua>
+<hu>Következő</hu>
 </text>
 <text>
 <en>Marquee</en>
@@ -11771,6 +11773,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Če ste naslov vnesli ročno, preverite zapis.</sl>
 <ru>После введения адреса убедитесь, что он написан верно.</ru>
 <ua>Після введення адреси переконайтеся, що вона вірна.</ua>
+<hu>Amennyiben az oldal címét Ön gépelte be, kérjük ellenőrizze, hogy helyesen írta-e a címet!</hu>
 </text>
 <text>
 <en>Original Position</en>
@@ -14122,6 +14125,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Наступна →</ua>
 <ro>Urmatoarea</ro>
 <hr>Sljedeći →</hr>
+<hu>Következő→</hu>
 </text>
 <text>
 <en>Size of Target Image to support High Resolution Displays ("Retina")</en>
