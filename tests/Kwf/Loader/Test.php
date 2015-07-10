@@ -56,6 +56,9 @@ class Kwf_Loader_Test extends Kwf_Test_TestCase
             array(array(), array('A\\B\\C\\' => array('vendor/a/b-c')), 'A\\B\\C\\X', 'vendor/a/b-c/X.php'),
             array(array(), array('A\\B\\C\\' => array('vendor/a/b-c')), 'A\\B\\C\\X\\Y', 'vendor/a/b-c/X/Y.php'),
             array(array(), array('A\\B\\C\\' => array('vendor/a/b-c')), 'A\\B\\C\\X\\Y\\Z', 'vendor/a/b-c/X/Y/Z.php'),
+
+            array(array('PHPExcel' => array('vendor/phpoffice/phpexel/Classes')), array(), 'PHPExcel', 'vendor/phpoffice/phpexel/Classes/PHPExcel.php'),
+            array(array('Sepia' => array('vendor/sepia/po-parser/src')), array(), 'Sepia\\PoParser', 'vendor/sepia/po-parser/src/Sepia/PoParser.php'),
         );
     }
 

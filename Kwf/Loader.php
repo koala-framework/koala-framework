@@ -48,17 +48,22 @@ class Kwf_Loader
             }
             $preparedDirs = array();
             foreach ($dirs as $dir) {
+                if ($dir[strlen($dir)-1] == DIRECTORY_SEPARATOR) {
+                    $dir = substr($dir, 0, -1);
+                }
                 $preparedDirs[] = $dir.DIRECTORY_SEPARATOR.$namespacePath;
             }
             $namespaces[$namespace] = $preparedDirs;
             if (strpos($namespace, '\\') === false && substr($namespace, -1) != '_') {
-                $namespace = $namespace.DIRECTORY_SEPARATOR;
-                $namespaces[$namespace] = $preparedDirs;
+                $namespaces[$namespace.'\\'] = $preparedDirs;
+                // Needed for special case like PHPExcel.
+                $namespaces[$namespace.'_'] = $preparedDirs;
             }
         }
         foreach ($psr4Namespaces as $psr4Namespace => $dirs) {
             $namespaces[$psr4Namespace] = $dirs;
         }
+        //dirs must not end with / and have to include namespace-part
         return $namespaces;
     }
 
@@ -88,7 +93,7 @@ class Kwf_Loader
                 } else {
                     $ns3 = $class;
                 }
-                $file = str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+                $file = str_replace('\\', DIRECTORY_SEPARATOR, $class);
             } else {
                 $pos = strpos($class, '_');
                 $ns1 = substr($class, 0, $pos+1);
@@ -100,7 +105,7 @@ class Kwf_Loader
                     $ns2 = $class;
                 }
 
-                $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+                $file = str_replace('_', DIRECTORY_SEPARATOR, $class);
             }
             $dirs = false;
             $matchingNamespace = '';
@@ -117,11 +122,12 @@ class Kwf_Loader
             if ($dirs !== false) {
                 $file = substr($file, strlen($matchingNamespace));
                 if (count($dirs) == 1) {
-                    $file = $dirs[0].'/'.$file;
+                    // $file can be '' in case of PHPExcel, class PHPExcel
+                    $file = $dirs[0].($file ? '/' : '').$file.'.php';
                 } else {
                     foreach ($dirs as $dir) {
-                        if (file_exists($dir.'/'.$file)) {
-                            $file = $dir.'/'.$file;
+                        if (file_exists($dir.($file ? '/' : '').$file.'.php')) {
+                            $file = $dir.($file ? '/' : '').$file.'.php';
                         }
                     }
                 }
