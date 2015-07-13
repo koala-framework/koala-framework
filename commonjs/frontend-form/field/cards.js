@@ -1,4 +1,8 @@
-Kwf.FrontendForm.Cards = Kwf.extend(Kwf.FrontendForm.Field, {
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var Field = require('kwf/frontend-form/field/field');
+var kwfExtend = require('kwf/extend');
+
+var Cards = kwfExtend(Field, {
     initField: function() {
         var config = this.form.getFieldConfig(this.getFieldName());
         var combobox = this.form.findField(config.combobox);
@@ -21,4 +25,5 @@ Kwf.FrontendForm.Cards = Kwf.extend(Kwf.FrontendForm.Field, {
     }
 });
 
-Kwf.FrontendForm.fields['kwfFormContainerCards'] = Kwf.FrontendForm.Cards;
+fieldRegistry.register('kwfFormContainerCards', Cards);
+module.exports = Cards;

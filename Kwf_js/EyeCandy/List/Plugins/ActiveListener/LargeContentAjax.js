@@ -1,5 +1,6 @@
 var onReady = require('kwf/on-ready');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
+var statistics = require('kwf/statistics');
 
 Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
@@ -137,7 +138,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeC
 
         this._doTransition(item, activeEl, nextEl);
 
-        Kwf.Statistics.count(item.el.child('a').dom.href);
+        statistics.count(item.el.child('a').dom.href);
 
         this.activeItem = item;
     },

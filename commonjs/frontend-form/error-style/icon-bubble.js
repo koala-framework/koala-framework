@@ -1,4 +1,9 @@
-Kwf.FrontendForm.ErrorStyle.IconBubble = Kwf.extend(Kwf.FrontendForm.ErrorStyle.Above, {
+var ErrorStyleAbove = require('kwf/frontend-form/error-style/above');
+var kwfExtend = require('kwf/extend');
+var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
+var onReady = require('kwf/on-ready');
+
+var ErrorStyleIconBubble = kwfExtend(ErrorStyleAbove, {
     showErrors: function(r) {
 
         var firstField = null;
@@ -49,7 +54,7 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Kwf.extend(Kwf.FrontendForm.ErrorStyle.
         field.el.removeClass('kwfFieldError');
         if (field.errorEl && field.errorEl.isVisible() && !field.errorEl.fadingOut) {
             field.errorEl.hide();
-            Kwf.callOnContentReady(field.el, {newRender: false});
+            onReady.callOnContentReady(field.el, {newRender: false});
             field.errorEl.show();
             field.errorEl.fadeOut({
                 callback: function() {
@@ -60,4 +65,6 @@ Kwf.FrontendForm.ErrorStyle.IconBubble = Kwf.extend(Kwf.FrontendForm.ErrorStyle.
         }
     }
 });
-Kwf.FrontendForm.errorStyles['iconBubble'] = Kwf.FrontendForm.ErrorStyle.IconBubble;
+
+errorStyleRegistry.register('iconBubble', ErrorStyleIconBubble);
+module.exports = ErrorStyleIconBubble;

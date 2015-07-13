@@ -1,4 +1,6 @@
-/* TODO commonjs
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var Field = require('kwf/frontend-form/field/field');
+var kwfExtend = require('kwf/extend');
 var onReady = require('kwf/on-ready');
 
 onReady.onRender('div.kwfFormContainerFieldSet fieldset > legend > input', function fieldSet(c)
@@ -14,9 +16,8 @@ onReady.onRender('div.kwfFormContainerFieldSet fieldset > legend > input', funct
         }
     }, c);
 });
-*/
 
-Kwf.FrontendForm.FieldSet = Kwf.extend(Kwf.FrontendForm.Field, {
+var FieldSet = kwfExtend(Field, {
     initField: function() {
         var inp = this.el.find('fieldset > legend > input');
         if (inp) {
@@ -47,4 +48,5 @@ Kwf.FrontendForm.FieldSet = Kwf.extend(Kwf.FrontendForm.Field, {
     }
 });
 
-Kwf.FrontendForm.fields['kwfFormContainerFieldSet'] = Kwf.FrontendForm.FieldSet;
+fieldRegistry.register('kwfFormContainerFieldSet', FieldSet);
+module.exports = FieldSet;

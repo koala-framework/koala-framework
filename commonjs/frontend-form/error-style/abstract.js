@@ -1,8 +1,10 @@
-Kwf.namespace('Kwf.FrontendForm.ErrorStyle');
-Kwf.FrontendForm.ErrorStyle.Abstract = function(form) {
+var $ = require('jQuery');
+var onReady = require('kwf/on-ready');
+
+var ErrorStyleAbstract = function(form) {
     this.form = form;
 };
-Kwf.FrontendForm.ErrorStyle.Abstract.prototype = {
+ErrorStyleAbstract.prototype = {
     _showErrorMessagesAbove: function(messages, r)
     {
         var html = '<div class="kwfup-webStandard kwcFormError kwfup-webFormError">';
@@ -14,7 +16,7 @@ Kwf.FrontendForm.ErrorStyle.Abstract.prototype = {
         html += '</ul>';
         html += '</div>';
         $(html).insertAfter(this.form.el.find('form'));
-        //TODO commonjs Kwf.callOnContentReady(this.form.el, {newRender: true});
+        onReady.callOnContentReady(this.form.el, {newRender: true});
     },
     showErrors: function() {
     },
@@ -27,4 +29,4 @@ Kwf.FrontendForm.ErrorStyle.Abstract.prototype = {
     }
 };
 
-Kwf.FrontendForm.errorStyles = {};
+module.exports = ErrorStyleAbstract;

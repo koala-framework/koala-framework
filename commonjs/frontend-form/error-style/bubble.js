@@ -1,4 +1,9 @@
-Kwf.FrontendForm.ErrorStyle.Bubble = Kwf.extend(Kwf.FrontendForm.ErrorStyle.Above, {
+var ErrorStyleAbove = require('kwf/frontend-form/error-style/above');
+var kwfExtend = require('kwf/extend');
+var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
+var TextAreaField = require('kwf/frontend-form/field/text-area');
+
+var ErrorStyleBubble = kwfExtend(ErrorStyleAbove, {
     showErrors: function(r) {
 
         for (var fieldName in r.errorFields) {
@@ -12,7 +17,7 @@ Kwf.FrontendForm.ErrorStyle.Bubble = Kwf.extend(Kwf.FrontendForm.ErrorStyle.Abov
                     ev.preventDefault();
                     this.fadeOut();
                 }, field.errorEl);
-                if (field instanceof Kwf.FrontendForm.TextArea) {
+                if (field instanceof TextAreaField) {
                     field.errorEl.alignTo(field.el.find('textarea'), 'bl');
                 } else if (field.el.find('input')) {
                     field.errorEl.alignTo(field.el.find('input'), 'bl');
@@ -40,4 +45,7 @@ Kwf.FrontendForm.ErrorStyle.Bubble = Kwf.extend(Kwf.FrontendForm.ErrorStyle.Abov
         if (field.errorEl) field.errorEl.fadeOut();
     }
 });
-Kwf.FrontendForm.errorStyles['bubble'] = Kwf.FrontendForm.ErrorStyle.Bubble;
+
+errorStyleRegistry.register('bubble', ErrorStyleBubble);
+module.exports = ErrorStyleBubble;
+

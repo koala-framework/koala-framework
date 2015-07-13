@@ -1,28 +1,30 @@
-Kwf.namespace('Kwf.FrontendForm');
-Kwf.FrontendForm.Field = function(fieldEl, form) {
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var _ = require('underscore');
+
+var Field = function(fieldEl, form) {
     this.el = fieldEl;
     this.form = form;
     this.on('change', function(value) {
         this.form.errorStyle.hideFieldError(this);
     }, this);
 };
-Kwf.FrontendForm.Field.prototype = {
+Field.prototype = {
     initField: function() {
         var inp = this.el.find('input');
         if (inp) {
             inp.on('change', (function() {
                 this.el.trigger('kwfup-form-change', this.getValue());
             }).bind(this));
-            inp.on('keydown', (function() {
+            inp.on('keydown', _.debounce((function() {
                 this.el.trigger('kwfup-form-change', this.getValue());
-            }).bind(this)); //, { delay: 1 }); //TODO commonjs delay
+            }).bind(this), 1));
             this._initPlaceholder(this.el.find('input'));
         }
     },
 
     on: function(event, cb, scope)
     {
-        if (typeof scope != 'undefined') cb.bind(scope);
+        if (typeof scope != 'undefined') cb = cb.bind(scope);
         this.el.on('kwfup-form-'+event, cb);
     },
 
@@ -93,5 +95,6 @@ Kwf.FrontendForm.Field.prototype = {
     }
 };
 
-Kwf.FrontendForm.fields = {};
-Kwf.FrontendForm.fields['kwfField'] = Kwf.FrontendForm.Field;
+
+fieldRegistry.register('kwfField', Field);
+module.exports = Field;

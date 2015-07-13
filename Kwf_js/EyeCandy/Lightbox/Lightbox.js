@@ -1,22 +1,26 @@
 var onReady = require('kwf/on-ready');
 var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
+var kwfExtend = require('kwf/extend');
+var statistics = require('kwf/statistics');
 
-Kwf.namespace('Kwf.EyeCandy.Lightbox');
+var currentOpen = null;
+var allByUrl = {};
+var onlyCloseOnPopstate;
 
 $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     var el = event.currentTarget;
     var $el = $(el);
     var options = $el.data('kwc-lightbox');
-    if (Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')]) {
-        l = Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')];
+    if (allByUrl[$el.attr('href')]) {
+        l = allByUrl[$el.attr('href')];
     } else {
-        l = new Kwf.EyeCandy.Lightbox.Lightbox($el.attr('href'), options);
+        l = new Lightbox($el.attr('href'), options);
     }
     el.kwfLightbox = l;
 
-    if (Kwf.EyeCandy.Lightbox.currentOpen &&
-        Kwf.EyeCandy.Lightbox.currentOpen.href == $el.attr('href')
+    if (currentOpen &&
+        currentOpen.href == $el.attr('href')
     ) {
         //already open, ignore click
         event.preventDefault();
@@ -35,7 +39,7 @@ onReady.onRender('.kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
     if (el[0].kwfLightbox) return;
     var options = jQuery.parseJSON(el.find('input.options').val());
-    var l = new Kwf.EyeCandy.Lightbox.Lightbox(window.location.href, options);
+    var l = new Lightbox(window.location.href, options);
     historyState.currentState.lightbox = window.location.href;
     historyState.updateState();
     l.lightboxEl = el;
@@ -48,7 +52,7 @@ onReady.onRender('.kwfLightbox', function lightboxEl(el) {
     l.style.onShow();
     l.style.onContentReady();
     el[0].kwfLightbox = l;
-    Kwf.EyeCandy.Lightbox.currentOpen = l;
+    currentOpen = l;
 
     //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
     onReady.callOnContentReady(l.contentEl, {action: 'show'});
@@ -56,40 +60,40 @@ onReady.onRender('.kwfLightbox', function lightboxEl(el) {
 
 onReady.onContentReady(function lightboxContent(readyEl, options)
 {
-    if (!Kwf.EyeCandy.Lightbox.currentOpen) return;
+    if (!currentOpen) return;
 
     readyEl = $(readyEl);
     if (readyEl.is(':visible')) {
         //callOnContentReady was called for an element inside the lightbox, style can update the lightbox size
-        if (Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl
-            && Kwf.EyeCandy.Lightbox.currentOpen.lightboxEl.is(':visible')
-            && ($.contains(Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl, readyEl)
-            || $.contains(readyEl, Kwf.EyeCandy.Lightbox.currentOpen.innerLightboxEl))
+        if (currentOpen.lightboxEl
+            && currentOpen.lightboxEl.is(':visible')
+            && ($.contains(currentOpen.innerLightboxEl, readyEl)
+            || $.contains(readyEl, currentOpen.innerLightboxEl))
         ) {
-            Kwf.EyeCandy.Lightbox.currentOpen.style.onContentReady();
+            currentOpen.style.onContentReady();
         }
     }
 });
 
 historyState.on('popstate', function() {
-    if (Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate) {
+    if (onlyCloseOnPopstate) {
         //onlyCloseOnPopstate is set in closeAndPushState
         //if multiple lightboxes are in history and we close current one we go back in history until none is open
         //so just close current one and don't show others (required to avoid flicker on closing)
-        if (Kwf.EyeCandy.Lightbox.currentOpen) {
-            Kwf.EyeCandy.Lightbox.currentOpen.close();
+        if (currentOpen) {
+            currentOpen.close();
         }
         return;
     }
     var lightbox = historyState.currentState.lightbox;
     if (lightbox) {
-        if (!Kwf.EyeCandy.Lightbox.allByUrl[lightbox]) return;
-        if (Kwf.EyeCandy.Lightbox.currentOpen != Kwf.EyeCandy.Lightbox.allByUrl[lightbox]) {
-            Kwf.EyeCandy.Lightbox.allByUrl[lightbox].show();
+        if (!allByUrl[lightbox]) return;
+        if (currentOpen != allByUrl[lightbox]) {
+            allByUrl[lightbox].show();
         }
     } else {
-        if (Kwf.EyeCandy.Lightbox.currentOpen) {
-            Kwf.EyeCandy.Lightbox.currentOpen.close();
+        if (currentOpen) {
+            currentOpen.close();
         }
     }
 });
@@ -100,8 +104,8 @@ if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
     $(window).resize(function(ev) {
         clearTimeout(timer);
         timer = setTimeout(function(){
-            if (Kwf.EyeCandy.Lightbox.currentOpen) {
-                Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
+            if (currentOpen) {
+                currentOpen.style.onResizeWindow(ev);
             }
         }, 100);
     });
@@ -110,25 +114,23 @@ if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
 */
     //on iOS listen to orientationchange as resize event triggers randomly when scrolling
     $(window).on('orientationchange', function(ev) {
-        if (Kwf.EyeCandy.Lightbox.currentOpen) {
-            Kwf.EyeCandy.Lightbox.currentOpen.style.onResizeWindow(ev);
+        if (currentOpen) {
+            currentOpen.style.onResizeWindow(ev);
         }
     });
 // }
 
-Kwf.EyeCandy.Lightbox.currentOpen = null;
-Kwf.EyeCandy.Lightbox.allByUrl = {};
-Kwf.EyeCandy.Lightbox.Lightbox = function(href, options) {
+var Lightbox = function(href, options) {
     this.href = href;
-    Kwf.EyeCandy.Lightbox.allByUrl[href] = this;
+    allByUrl[href] = this;
     this.options = options;
     if (options.style) {
-        this.style = new Kwf.EyeCandy.Lightbox.Styles[options.style](this);
+        this.style = new LightboxStyles[options.style](this);
     } else {
-        this.style = new Kwf.EyeCandy.Lightbox.Styles.CenterBox(this);
+        this.style = new LightboxStyles.CenterBox(this);
     }
 };
-Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
+Lightbox.prototype = {
     fetched: false,
     _blockOnContentReady: false,
     createLightboxEl: function()
@@ -223,21 +225,21 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.style.onShow(options);
 
         if (!this.closeHref) {
-            if (Kwf.EyeCandy.Lightbox.currentOpen) {
-                this.closeHref = Kwf.EyeCandy.Lightbox.currentOpen.closeHref;
+            if (currentOpen) {
+                this.closeHref = currentOpen.closeHref;
             } else {
                 this.closeHref = window.location.href;
             }
         }
 
-        if (Kwf.EyeCandy.Lightbox.currentOpen) {
+        if (currentOpen) {
             var closeOptions = {};
             if (options && options.clickTarget) {
                 closeOptions.showClickTarget = options.clickTarget;
             }
-            Kwf.EyeCandy.Lightbox.currentOpen.close(closeOptions);
+            currentOpen.close(closeOptions);
         }
-        Kwf.EyeCandy.Lightbox.currentOpen = this;
+        currentOpen = this;
 
         this.showOptions = options;
 
@@ -255,7 +257,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         }
         this.style.afterShow(options);
 
-        Kwf.Statistics.count(this.href);
+        statistics.count(this.href);
     },
     close: function(options) {
         this.lightboxEl.hide();
@@ -265,11 +267,11 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 
         this.style.onClose(options);
         this.lightboxEl.removeClass('kwfLightboxOpen');
-        Kwf.EyeCandy.Lightbox.currentOpen = null;
+        currentOpen = null;
     },
     closeAndPushState: function() {
         if (historyState.entries > 0) {
-            Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate = true; //required to avoid flicker on closing, see popstate handler
+            onlyCloseOnPopstate = true; //required to avoid flicker on closing, see popstate handler
             var previousEntries = historyState.entries;
             history.back();
             var closeLightbox = (function() {
@@ -286,7 +288,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                     closeLightbox.defer(1, this);
                 } else {
                     //last entry in history that had lightbox open
-                    Kwf.EyeCandy.Lightbox.onlyCloseOnPopstate = false;
+                    onlyCloseOnPopstate = false;
                 }
             });
             closeLightbox.defer(1, this);
@@ -318,13 +320,13 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 
 
 
-Kwf.EyeCandy.Lightbox.Styles = {};
-Kwf.EyeCandy.Lightbox.Styles.Abstract = function(lightbox) {
+var LightboxStyles = {};
+LightboxStyles.Abstract = function(lightbox) {
     this.lightbox = lightbox;
     this.init();
 };
-Kwf.EyeCandy.Lightbox.Styles.Abstract.masks = 0;
-Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
+LightboxStyles.Abstract.masks = 0;
+LightboxStyles.Abstract.prototype = {
     init: function() {},
     afterCreateLightboxEl: function() {},
     afterContentShown: function() {},
@@ -345,8 +347,8 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
 
     mask: function() {
         //calling mask multiple times in valid, unmask must be called exactly often
-        Kwf.EyeCandy.Lightbox.Styles.Abstract.masks++;
-        if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 1) return;
+        LightboxStyles.Abstract.masks++;
+        if (LightboxStyles.Abstract.masks > 1) return;
         $(document.body).addClass('kwfLightboxTheaterMode');
         var maskEl = $(document.body).find('.lightboxMask');
         if (maskEl.length) {
@@ -355,16 +357,16 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
             maskEl = $(document.body).append('<div class="lightboxMask"></div>');
             maskEl.click(function(ev) {
                 if ($(document.body).find('.lightboxMask').is(ev.target)) {
-                    if (Kwf.EyeCandy.Lightbox.currentOpen) {
-                        Kwf.EyeCandy.Lightbox.currentOpen.style.onMaskClick();
+                    if (currentOpen) {
+                        currentOpen.style.onMaskClick();
                     }
                 }
             });
         }
     },
     unmask: function() {
-        Kwf.EyeCandy.Lightbox.Styles.Abstract.masks--;
-        if (Kwf.EyeCandy.Lightbox.Styles.Abstract.masks > 0) return;
+        LightboxStyles.Abstract.masks--;
+        if (LightboxStyles.Abstract.masks > 0) return;
         $(document.body).find('.lightboxMask').fadeOut({
             complete: function() {
                 $(document.body).removeClass('kwfLightboxTheaterMode');
@@ -378,7 +380,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     }
 };
 
-Kwf.EyeCandy.Lightbox.Styles.CenterBox = Kwf.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
+LightboxStyles.CenterBox = kwfExtend(LightboxStyles.Abstract, {
     init: function()
     {
         this._previousWindowWidth = $(window).width();
@@ -508,7 +510,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Kwf.extend(Kwf.EyeCandy.Lightbox.Styles
         var originalWidth = this.lightbox.innerLightboxEl.width();
 
         //do the actual update + callOnContentReady
-        Kwf.EyeCandy.Lightbox.Styles.CenterBox.superclass.updateContent.apply(this, arguments);
+        LightboxStyles.CenterBox.superclass.updateContent.apply(this, arguments);
 
         if (!this.lightbox.options.height) this.lightbox.innerLightboxEl.css('height', '');
         if (!this.lightbox.options.width) this.lightbox.innerLightboxEl.css('width', '');

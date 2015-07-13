@@ -1,4 +1,8 @@
-Kwf.FrontendForm.ErrorStyle.BelowField = Kwf.extend(Kwf.FrontendForm.ErrorStyle.Above, {
+var ErrorStyleAbove = require('kwf/frontend-form/error-style/above');
+var kwfExtend = require('kwf/extend');
+var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
+
+var ErrorStyleBelowField = kwfExtend(ErrorStyleAbove, {
     showErrors: function(r) {
 
         for (var fieldName in r.errorFields) {
@@ -26,4 +30,6 @@ Kwf.FrontendForm.ErrorStyle.BelowField = Kwf.extend(Kwf.FrontendForm.ErrorStyle.
         if (field.errorEl) field.errorEl.hide();
     }
 });
-Kwf.FrontendForm.errorStyles['belowField'] = Kwf.FrontendForm.ErrorStyle.BelowField;
+
+errorStyleRegistry.register('belowField', ErrorStyleBelowField);
+module.exports = ErrorStyleBelowField;

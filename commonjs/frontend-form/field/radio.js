@@ -1,4 +1,8 @@
-Kwf.FrontendForm.Radio = Kwf.extend(Kwf.FrontendForm.Field, {
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var Field = require('kwf/frontend-form/field/field');
+var kwfExtend = require('kwf/extend');
+
+var Radio = kwfExtend(Field, {
     initField: function() {
         this.el.select('input').each(function(input) {
             input.on('click', (function() {
@@ -31,4 +35,5 @@ Kwf.FrontendForm.Radio = Kwf.extend(Kwf.FrontendForm.Field, {
     }
 });
 
-Kwf.FrontendForm.fields['kwfFormFieldRadio'] = Kwf.FrontendForm.Radio;
+fieldRegistry.register('kwfFormFieldRadio', Radio);
+module.exports = Radio;

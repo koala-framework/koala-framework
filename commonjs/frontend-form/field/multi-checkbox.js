@@ -1,4 +1,7 @@
-/* TODO commonjs
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var Field = require('kwf/frontend-form/field/field');
+var kwfExtend = require('kwf/extend');
+
 var onReady = require('kwf/on-ready');
 
 onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
@@ -28,9 +31,8 @@ onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
             }, mc);
         }
 }, { defer: true });
-*/
 
-Kwf.FrontendForm.MultiCheckbox = Kwf.extend(Kwf.FrontendForm.Field, {
+var MultiCheckbox = kwfExtend(Field, {
     initField: function() {
     },
     getValue: function() { //has no value itself
@@ -45,5 +47,6 @@ Kwf.FrontendForm.MultiCheckbox = Kwf.extend(Kwf.FrontendForm.Field, {
     }
 });
 
-Kwf.FrontendForm.fields['kwfFormFieldMultiCheckbox'] = Kwf.FrontendForm.MultiCheckbox;
+fieldRegistry.register('kwfFormFieldMultiCheckbox', MultiCheckbox);
+module.exports = MultiCheckbox;
 

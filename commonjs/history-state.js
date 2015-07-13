@@ -1,5 +1,6 @@
 $ = require('jQuery');
 var onReady = require('kwf/on-ready');
+var kwfExtend = require('kwf/extend');
 
 var HistoryStateAbstract = function() {
     this.disabled = false; //functionality can be disabled, so it behaves like a browser that doesn't support history states
@@ -38,7 +39,7 @@ var HistoryStateHtml5 = function() {
         }, this);
     }).bind(this));
 };
-Kwf.extend(HistoryStateHtml5, HistoryStateAbstract, {
+kwfExtend(HistoryStateHtml5, HistoryStateAbstract, {
     pushState: function(title, href) {
         if (this.disabled) return;
         window.history.pushState(this.currentState, title, href);
@@ -56,7 +57,7 @@ Kwf.extend(HistoryStateHtml5, HistoryStateAbstract, {
 
 // Fallback for <IE10
 // always triggers a page load
-var HistoryStateFallback = Kwf.extend(HistoryStateAbstract, {
+var HistoryStateFallback = kwfExtend(HistoryStateAbstract, {
     pushState: function(title, href) {
         if (this.disabled) return;
         location.href = href; //this will trigger a page load

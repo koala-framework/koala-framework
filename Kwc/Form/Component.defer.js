@@ -1,24 +1,38 @@
 // @require ModernizrNetworkXhr2
+// @require KwfLoading
 
 var onReady = require('kwf/on-ready');
 var responsiveEl = require('kwf/responsive-el');
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
+
+require('kwf/frontend-form/error-style/above');
+require('kwf/frontend-form/error-style/below-field');
+require('kwf/frontend-form/error-style/bubble');
+require('kwf/frontend-form/error-style/icon-bubble');
+
+require('kwf/frontend-form/field/field');
+require('kwf/frontend-form/field/cards');
+require('kwf/frontend-form/field/checkbox');
+require('kwf/frontend-form/field/date-select');
+require('kwf/frontend-form/field/field-set');
+require('kwf/frontend-form/field/file');
+require('kwf/frontend-form/field/multi-checkbox');
+require('kwf/frontend-form/field/radio');
+require('kwf/frontend-form/field/select');
+require('kwf/frontend-form/field/static');
+require('kwf/frontend-form/field/text-area');
+require('kwf/frontend-form/field/text-field');
+
+
 responsiveEl('.cssClass.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
 responsiveEl('.cssClass.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
 responsiveEl('.cssClass.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 responsiveEl('.cssClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
-Kwf.namespace('Kwc.Form');
-Kwc.Form.findForm = function(el) {
-    var formEl = el.find('.kwfup-kwcForm > form');
-    if (formEl) {
-        formEl = formEl.closest('.kwcForm');
-        return formEl.kwcForm;
-    }
-    return null;
-};
-Kwc.Form.formsByComponentId = {};
+var formsByComponentId = {};
 
-Kwc.Form.Component = function(form)
+var FormComponent = function(form)
 {
     this.el = form;
     var config = form.parent().find('.config', true);
@@ -28,7 +42,7 @@ Kwc.Form.Component = function(form)
     this.config = config;
     this._submitDisabled = 0;
 
-    Kwc.Form.formsByComponentId[this.config.componentId] = this;
+    formsByComponentId[this.config.componentId] = this;
 
 
     if (this.el.find('form').get(0).enctype == 'multipart/form-data' && this.config.useAjaxRequest) {
@@ -45,8 +59,8 @@ Kwc.Form.Component = function(form)
         var classes = fieldEl.className.split(' ');
         var fieldConstructor = false;
         $.each(classes, function (indx, c) {
-            if (Kwf.FrontendForm.fields[indx, c]) {
-                fieldConstructor = Kwf.FrontendForm.fields[c];
+            if (fieldRegistry.fields[c]) {
+                fieldConstructor = fieldRegistry.fields[c];
             }
         });
         if (fieldConstructor) {
@@ -88,13 +102,13 @@ Kwc.Form.Component = function(form)
         }, this);
     }).bind(this));
 
-    this.errorStyle = new Kwf.FrontendForm.errorStyles[this.config.errorStyle](this);
+    this.errorStyle = new errorStyleRegistry.errorStyles[this.config.errorStyle](this);
 };
-Kwc.Form.Component.prototype = {
+FormComponent.prototype = {
 
     on: function(event, cb, scope)
     {
-        if (typeof scope != 'undefined') cb.bind(scope);
+        if (typeof scope != 'undefined') cb = cb.bind(scope);
         this.el.on('kwfup-form-'+event, cb);
     },
 
@@ -184,6 +198,7 @@ Kwc.Form.Component.prototype = {
 
         var data = this.el.find('form').serialize();
         data += '&'+$.param(this.config.baseParams);
+        if (Kwf.sessionToken) data += '&kwfSessionToken='+Kwf.sessionToken;
         $.ajax({
             url: this.config.controllerUrl + '/json-save',
             type: 'POST',
@@ -303,8 +318,8 @@ Kwc.Form.Component.prototype = {
 onReady.onRender('.kwfup-kwcForm > form', function form(form) {
     form = form.parent('.kwfup-kwcForm', false);
     if (!form.get(0).kwcForm) {
-        form.get(0).kwcForm = new Kwc.Form.Component(form);
-        form.kwcForm = form.get(0).kwcForm;
+        form.get(0).kwcForm = new FormComponent(form);
+        form.data('kwcForm', form.get(0).kwcForm);
     }
 }, { priority: -10, defer: true }); //initialize form very early, as many other components access it
 

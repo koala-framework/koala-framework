@@ -1,4 +1,8 @@
-Kwf.FrontendForm.DateSelect = Kwf.extend(Kwf.FrontendForm.Field, {
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var Field = require('kwf/frontend-form/field/field');
+var kwfExtend = require('kwf/extend');
+
+var DateSelect = kwfExtend(Field, {
     initField: function() {
         this.el.select('select').each(function(input) {
             input.on('change', function() {
@@ -33,4 +37,5 @@ Kwf.FrontendForm.DateSelect = Kwf.extend(Kwf.FrontendForm.Field, {
     }
 });
 
-Kwf.FrontendForm.fields['kwfFormFieldDateSelect'] = Kwf.FrontendForm.DateSelect;
+fieldRegistry.register('kwfFormFieldDateSelect', DateSelect);
+module.exports = DateSelect;

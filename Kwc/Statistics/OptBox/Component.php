@@ -43,10 +43,13 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
         }
 
         $ret  = '<script type="text/javascript">';
+        //TODO commonjs
+        /*
         $ret .= "if (typeof Kwf == 'undefined') Kwf = {};";
         $ret .= "if (typeof Kwf.Statistics == 'undefined') Kwf.Statistics = {};";
         $ret .= "Kwf.Statistics.defaultOptValue = '$value';";
         $ret .= "Kwf.Statistics.optBoxHtml = '$html';";
+        */
         $ret .= $this->_getJavascriptIncludeCode();
         $ret .= '</script>';
         return $ret;

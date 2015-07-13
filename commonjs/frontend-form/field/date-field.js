@@ -1,4 +1,8 @@
-Kwf.FrontendForm.DateField = Kwf.extend(Kwf.FrontendForm.Field, {
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var Field = require('kwf/frontend-form/field/field');
+var kwfExtend = require('kwf/extend');
+
+var DateField = kwfExtend(Field, {
     initField: function() {
         if (!this.form.getFieldConfig(this.getFieldName()).hideTrigger) {
             var icon = this.el.find('.kwfFormFieldWrapper').append('<a class="icon" href="#"></a>');
@@ -10,11 +14,11 @@ Kwf.FrontendForm.DateField = Kwf.extend(Kwf.FrontendForm.Field, {
                 this.showPicker();
             }, this);
         }
-        Kwf.FrontendForm.DateField.superclass.initField.call(this);
+        DateField.superclass.initField.call(this);
     },
     showPicker: function() {
         /*
-        TODO: commonjs
+        TODO commonjs
         if (!this.menu) {
             this.menu = new Ext2.menu.DateMenu({
                 cls: 'kwfFrontendFormDatePicker',
@@ -34,4 +38,5 @@ Kwf.FrontendForm.DateField = Kwf.extend(Kwf.FrontendForm.Field, {
     }
 });
 
-Kwf.FrontendForm.fields['kwfFormFieldDateField'] = Kwf.FrontendForm.DateField;
+fieldRegistry.register('kwfFormFieldDateField', DateField);
+module.exports = DateField;

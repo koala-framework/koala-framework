@@ -4,7 +4,7 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assets']['dep'][] = 'KwfStatistics';
+        $ret['assets']['dep'][] = 'KwfLegacyStatistics';
         $ret['disableCookies'] = false;
         $ret['enableLinkTracking'] = true;
         $ret['customTrackingDomain'] = false;

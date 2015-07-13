@@ -1,9 +1,5 @@
 var onReady = require('kwf/on-ready');
 
-(function() {
-
-    Kwf.namespace('Kwf.EyeCandy.Switch.Display');
-
     var switchDisplayCls = function(el, config) {
 
         this.config = {
@@ -93,10 +89,10 @@ var onReady = require('kwf/on-ready');
 
     }
 
-    Kwf.EyeCandy.Switch.Display = function(elOrSelector, config) {
+    var SwitchDisplay = function(elOrSelector, config) {
         if (typeof elOrSelector == 'string') {
             onReady.onRender(elOrSelector, function(el) {
-                Kwf.EyeCandy.Switch.Display(el, config);
+                SwitchDisplay(el, config);
             }, { defer: true });
             onReady.onRender(elOrSelector, function(el, config) {
                 if (!el.find(config.container || 'div.switchContent').hasClass('active')) {
@@ -118,12 +114,9 @@ var onReady = require('kwf/on-ready');
 
     };
 
-    Kwf.EyeCandy.Switch.Display('.kwfSwitchDisplay');
-    Kwf.EyeCandy.Switch.Display('.kwfSwitchHoverFade', {
+    SwitchDisplay('.kwfSwitchDisplay');
+    SwitchDisplay('.kwfSwitchHoverFade', {
         fade: true,
         hover: true,
         duration: 200
     });
-
-})();
-

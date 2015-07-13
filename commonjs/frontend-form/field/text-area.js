@@ -1,4 +1,8 @@
-Kwf.FrontendForm.TextArea = Kwf.extend(Kwf.FrontendForm.Field, {
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var Field = require('kwf/frontend-form/field/field');
+var kwfExtend = require('kwf/extend');
+
+var TextArea = kwfExtend(Field, {
     initField: function() {
         this.el.select('textarea').each(function(input) {
             input.on('keypress', function() {
@@ -21,4 +25,5 @@ Kwf.FrontendForm.TextArea = Kwf.extend(Kwf.FrontendForm.Field, {
     }
 });
 
-Kwf.FrontendForm.fields['kwfFormFieldTextArea'] = Kwf.FrontendForm.TextArea;
+fieldRegistry.register('kwfFormFieldTextArea', TextArea);
+module.exports = TextArea;

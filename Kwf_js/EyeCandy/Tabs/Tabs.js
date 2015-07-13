@@ -1,4 +1,5 @@
 var onReady = require('kwf/on-ready-ext2');
+var statistics = require('kwf/statistics');
 
 onReady.onRender('div.kwfTabs', function tabs(el) {
     el.tabsObject = new Kwf.Tabs(el);
@@ -139,7 +140,7 @@ Ext2.extend(Kwf.Tabs, Ext2.util.Observable, {
 
         // passed arguments are: tabsObject, newIndex, oldIndex
         this.fireEvent('tabActivate', this, idx, this._activeTabIdx);
-        Kwf.Statistics.count(document.location.href + '#tab' + (idx + 1));
+        statistics.count(document.location.href + '#tab' + (idx + 1));
 
         this._activeTabIdx = idx;
     },

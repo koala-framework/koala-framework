@@ -1,6 +1,7 @@
 var onReady = require('kwf/on-ready');
 var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
+var statistics = require('kwf/statistics');
 
 (function() {
 
@@ -392,7 +393,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             if (!this.detailEl) return;
             this.detailEl.removeClass('loadingContent '+classNames);
             this.detailEl.html(data);
-            Kwf.Statistics.count(href);
+            statistics.count(href);
 
             var directoryUrl = href.match(/(.*)\/[^/]+/)[1];
             this.detailEl.find('a').each((function(index, el) {

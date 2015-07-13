@@ -1,4 +1,8 @@
-Kwf.FrontendForm.Checkbox = Kwf.extend(Kwf.FrontendForm.Field, {
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var Field = require('kwf/frontend-form/field/field');
+var kwfExtend = require('kwf/extend');
+
+var Checkbox = kwfExtend(Field, {
     initField: function() {
         this.el.select('input').each(function(input) {
             input.on('click', function() {
@@ -20,4 +24,5 @@ Kwf.FrontendForm.Checkbox = Kwf.extend(Kwf.FrontendForm.Field, {
     }
 });
 
-Kwf.FrontendForm.fields['kwfFormFieldCheckbox'] = Kwf.FrontendForm.Checkbox;
+fieldRegistry.register('kwfFormFieldCheckbox', Checkbox);
+module.exports = Checkbox;

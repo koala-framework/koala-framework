@@ -1,6 +1,10 @@
 // @require ModernizrNetworkXhr2
 
-Kwf.FrontendForm.File = Kwf.extend(Kwf.FrontendForm.Field, {
+var fieldRegistry = require('kwf/frontend-form/field-registry');
+var Field = require('kwf/frontend-form/field/field');
+var kwfExtend = require('kwf/extend');
+
+var File = kwfExtend(Field, {
     initField: function() {
         if (!Modernizr.xhr2) {
             return;
@@ -125,4 +129,5 @@ Kwf.FrontendForm.File = Kwf.extend(Kwf.FrontendForm.Field, {
     }
 });
 
-Kwf.FrontendForm.fields['kwfFormFieldFile'] = Kwf.FrontendForm.File;
+fieldRegistry.register('kwfFormFieldFile', File);
+module.exports = File;
