@@ -128,9 +128,6 @@ class Kwf_Component_Settings
 
         //*** processedCssClass
         $settings['processedCssClass'] = '';
-        if (isset($settings['cssClass'])) {
-            $settings['processedCssClass'] .= $settings['cssClass'].' ';
-        }
         $cssClass = array(Kwf_Component_Abstract::formatCssClass($c));
         $dirs = explode(PATH_SEPARATOR, get_include_path());
         foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {

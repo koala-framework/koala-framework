@@ -474,7 +474,12 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     static public function getCssClass($component)
     {
         if (!is_string($component)) $component = $component->getData()->componentClass;
-        return self::getSetting($component, 'processedCssClass');
+        $ret = '';
+        if (self::hasSetting($component, 'cssClass')) {
+            $ret .= self::getSetting($component, 'cssClass').' ';
+        }
+        $ret .= self::getSetting($component, 'processedCssClass');
+        return $ret;
     }
 
     /**

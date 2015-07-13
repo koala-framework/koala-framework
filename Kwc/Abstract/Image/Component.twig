@@ -1,7 +1,7 @@
 <div class="{{ cssClass }}" style="{{ style }}" data-width="100%" data-max-width="{{ maxWidth }}">
     {% if baseUrl %}
-        <div class="outerContainer">
-            <div class="{{ containerClass }}" style="padding-bottom: {{aspectRatio}}%"
+        <div class="{{ "outerContainer"|bemClass }}">
+            <div class="{{ "container"|bemClass }} {{ containerClass }}" style="padding-bottom: {{aspectRatio}}%"
                 data-min-width="{{ minWidth }}"
                 data-max-width="{{ maxWidth }}"
                 data-src="{{ baseUrl }}">
@@ -11,7 +11,7 @@
             </div>
         </div>
         {% if showImageCaption %}
-            <div class="imageCaption" style="max-width:{{ renderer.imageParam(image, 'width', 'default') }}px;"><span>{{ image_caption }}</span></div>
+            <div class="{{ "imageCaption"|bemClass }}" style="max-width:{{ renderer.imageParam(image, 'width', 'default') }}px;"><span>{{ image_caption }}</span></div>
         {% endif %}
     {% endif %}
 </div>

@@ -73,6 +73,13 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
                 $ret = str_replace('kwfup-', '', $ret);
             }
         }
+        if (strpos($ret, 'kwcbem__') !== false) {
+            if (Kwf_Config::getValue('application.uniquePrefix')) {
+                $ret = str_replace('kwcbem__', $this->_getComponentCssClass().'__', $ret);
+            } else {
+                $ret = str_replace('kwcbem__', '', $ret);
+            }
+        }
         return $ret;
     }
 
