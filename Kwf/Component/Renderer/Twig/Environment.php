@@ -12,17 +12,12 @@ class Kwf_Component_Renderer_Twig_Environment extends Kwf_View_Twig_Environment
 
     public static function bemClass($context, $class)
     {
-        static $up;
-        if (!isset($up)) $up = Kwf_Config::getValue('application.uniquePrefix');
-        if (!$up) return $class;
-
-        $classes = Kwc_Abstract::getSetting($context['data']->componentClass, 'processedCssClass');;
-        $classes = explode(' ', $classes);
+        $bemClasses = $context['bemClasses'];
+        if ($bemClasses === false) return $class;
         $ret = array();
-        foreach ($classes as $i) {
-            $ret[] = $i.'__'.$class;
+        foreach ($bemClasses as $i) {
+            $ret[] = $i.$class;
         }
         return implode(' ', $ret);
     }
-
 }

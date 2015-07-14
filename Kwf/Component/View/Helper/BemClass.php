@@ -3,15 +3,11 @@ class Kwf_Component_View_Helper_BemClass extends Kwf_Component_View_Helper_Abstr
 {
     public function bemClass($class)
     {
-        static $up;
-        if (!isset($up)) $up = Kwf_Config::getValue('application.uniquePrefix');
-        if (!$up) return $class;
-
-        $classes = Kwc_Abstract::getSetting($this->_getView()->data->componentClass, 'processedCssClass');;
-        $classes = explode(' ', $classes);
+        $bemClasses = $this->_getView()->bemClasses;
+        if ($bemClasses === false) return $class;
         $ret = array();
-        foreach ($classes as $i) {
-            $ret[] = $i.'__'.$class;
+        foreach ($bemClasses as $i) {
+            $ret[] = $i.$class;
         }
         return implode(' ', $ret);
     }
