@@ -1,6 +1,7 @@
 var fieldRegistry = require('kwf/frontend-form/field-registry');
 var Field = require('kwf/frontend-form/field/field');
 var kwfExtend = require('kwf/extend');
+var trlKwf = require('kwf/trl').trlKwf;
 
 var DateField = kwfExtend(Field, {
     initField: function() {

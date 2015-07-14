@@ -168,7 +168,7 @@ class Kwf_Assets_Package
         else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
         $packageMap->setFile($this->getPackageUrl($ext, $language));
 
-        $maxMTime = 0;
+        // ***** commonjs
         $commonJsData = array();
         $commonJsDeps = array();
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
@@ -188,24 +188,9 @@ class Kwf_Assets_Package
                             $commonJsData[$k] = $j;
                         }
                     }
-                } else {
-                    $map = $i->getContentsPacked($language);
-                    if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
-                        throw new Kwf_Exception("contents must not contain sourceMappingURL");
-                    }
-                    foreach ($map->getMapContentsData(false)->sources as &$s) {
-                        $s = '/assets/'.$s;
-                    }
-                    // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
-                    $packageMap->concat($map);
                 }
             }
-            $mTime = $i->getMTime();
-            if ($mTime) {
-                $maxMTime = max($maxMTime, $mTime);
-            }
         }
-
         if ($commonJsData) {
             if ($mimeType == 'text/javascript; defer') {
                 //in defer.js don't include deps that are already loaded in non-defer
@@ -221,6 +206,23 @@ class Kwf_Assets_Package
             $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData));
             $map = Kwf_SourceMaps_SourceMap::createFromInline($contents);
             $packageMap->concat($map);
+        }
+
+        // ***** non-commonjs, css
+        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
+            if ($i->getIncludeInPackage()) {
+                if (!(($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry())) {
+                    $map = $i->getContentsPacked($language);
+                    if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
+                        throw new Kwf_Exception("contents must not contain sourceMappingURL");
+                    }
+                    foreach ($map->getMapContentsData(false)->sources as &$s) {
+                        $s = '/assets/'.$s;
+                    }
+                    // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
+                    $packageMap->concat($map);
+                }
+            }
         }
 
         if ($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') {
