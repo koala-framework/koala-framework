@@ -121,17 +121,6 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 
             $map = new Kwf_SourceMaps_SourceMap(file_get_contents("{$cacheFile}.map"), $ret);
 
-            if (strpos($ret, 'cssClass') !== false && (strpos($ret, '$cssClass') !== false || strpos($ret, '.cssClass') !== false)) {
-                $cssClass = $this->_getComponentCssClass();
-                if ($cssClass) {
-                    if (strpos($ret, '.cssClass') !== false) {
-                        $map->stringReplace('.cssClass', ".$cssClass");
-                    }
-                    if (strpos($ret, '$cssClass') !== false) {
-                        $map->stringReplace('$cssClass', ".$cssClass");
-                    }
-                }
-            }
             if (strpos($ret, 'kwfup-') !== false) {
                 if (Kwf_Config::getValue('application.uniquePrefix')) {
                     $map->stringReplace('kwfup-', Kwf_Config::getValue('application.uniquePrefix').'-');
@@ -141,9 +130,21 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             }
             if (strpos($ret, 'kwcbem__') !== false) {
                 if (Kwf_Config::getValue('application.uniquePrefix')) {
+                    $map->stringReplace('.cssClass .kwcbem__', '.kwcbem__');
                     $map->stringReplace('kwcbem__', $this->_getComponentCssClass().'__');
                 } else {
                     $map->stringReplace('kwcbem__', '');
+                }
+            }
+            if (strpos($ret, 'cssClass') !== false && (strpos($ret, '$cssClass') !== false || strpos($ret, '.cssClass') !== false)) {
+                $cssClass = $this->_getComponentCssClass();
+                if ($cssClass) {
+                    if (strpos($ret, '.cssClass') !== false) {
+                        $map->stringReplace('.cssClass', ".$cssClass");
+                    }
+                    if (strpos($ret, '$cssClass') !== false) {
+                        $map->stringReplace('$cssClass', ".$cssClass");
+                    }
                 }
             }
 
