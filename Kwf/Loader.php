@@ -131,6 +131,8 @@ class Kwf_Loader
                         }
                     }
                 }
+            } else {
+                $file = $file.'.php';
             }
         }
         return $file;
