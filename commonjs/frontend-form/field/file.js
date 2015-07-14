@@ -44,7 +44,7 @@ var File = kwfExtend(Field, {
         var file = files[0];
 
         if (file.size > this.fileSizeLimit) {
-            return alert(trl('Allowed upload size exceeded max. allowed upload size {0} MB', this.fileSizeLimit/1048576));
+            return alert(trlKwf('Allowed upload size exceeded max. allowed upload size {0} MB', this.fileSizeLimit/1048576));
         }
 
         var progressbar = $(
@@ -96,7 +96,7 @@ var File = kwfExtend(Field, {
                 try {
                     response = JSON.parse(xhr.response);
                 } catch (e) {
-                    return alert(trl('An error occured, please try again later'));
+                    return alert(trlKwf('An error occured, please try again later'));
                 }
 
                 this.dropContainer.find('input.kwfFormFieldFileUnderlayText').val(response.value.filename);
@@ -104,7 +104,7 @@ var File = kwfExtend(Field, {
 
             } else if (xhr.readyState == 4 && xhr.status !== 200) {
                 this.form.enableSubmit();
-                return alert(trl('An error occured, please try again later'));
+                return alert(trlKwf('An error occured, please try again later'));
             }
         }).bind(this);
     },
