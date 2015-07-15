@@ -80,9 +80,8 @@ class Kwf_Asset
     public function getFilename()
     {
         $d = $this->_getIconAndType();
-        static $paths;
-        if (!isset($paths)) $paths = Zend_Registry::get('config')->path->toArray();
-        return $paths[$d['type']].'/'.$d['icon'];
+        $file = new Kwf_Assets_Dependency_File($d['type'].'/'.$d['icon']);
+        return $file->getAbsoluteFileName();
     }
 
     public function toString($effects = array())
