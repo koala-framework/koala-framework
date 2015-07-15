@@ -51,6 +51,11 @@ abstract class Kwf_Component_Renderer_Abstract
     //overridden by Renderer_Mail to use mail templates
     public function getTemplate(Kwf_Component_Data $component, $type)
     {
+        if ($type == 'Master') {
+            if (Kwc_Abstract::hasSetting($component->componentClass, 'masterTemplate')) {
+                return Kwc_Abstract::getSetting($component->componentClass, 'masterTemplate');
+            }
+        }
         $template = Kwc_Abstract::getTemplateFile($component->componentClass, $type);
         if (!$template) throw new Kwf_Exception("No $type-Template found for '{$component->componentClass}'");
         return $template;

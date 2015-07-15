@@ -21,12 +21,7 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
             $vars = $component->getComponent()->getMasterTemplateVars($innerComponent, $this->_getRenderer());
             $vars['componentWithMaster'] = $componentWithMaster;
 
-            if (Kwc_Abstract::hasSetting($component->componentClass, 'masterTemplate')) {
-                $masterTemplate = Kwc_Abstract::getSetting($component->componentClass, 'masterTemplate');
-            } else {
-                $masterTemplate = $this->_getRenderer()->getTemplate($component, 'Master');
-            }
-
+            $masterTemplate = $this->_getRenderer()->getTemplate($component, 'Master');
             if (substr($masterTemplate, -4) == '.tpl') {
                 $view = new Kwf_Component_View($this->_getRenderer());
                 $view->assign($vars);

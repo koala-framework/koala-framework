@@ -426,12 +426,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
         $ret['cssClass'] = 'kwfup-frontend';
 
-        if (Kwc_Abstract::hasSetting($this->getData()->componentClass, 'masterTemplate')) {
-            $masterTemplate = Kwc_Abstract::getSetting($this->getData()->componentClass, 'masterTemplate');
-        } else {
-            $masterTemplate = $renderer->getTemplate($this->getData(), 'Master');
-        }
-        $cssClass = $this->_getMasterCssClass($masterTemplate);
+        $cssClass = $this->_getMasterCssClass($renderer->getTemplate($this->getData(), 'Master'));
         $ret['bemClasses'] = array($cssClass.'__');
 
         $ret['cssClass'] .= ' '.$cssClass;
