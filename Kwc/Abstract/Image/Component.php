@@ -64,6 +64,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
 
         $ret['defineWidth'] = false;
+        $ret['maxWidthImageWidth'] = true;
         return $ret;
     }
 
@@ -114,7 +115,12 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
 
-        $ret['style'] = 'max-width:'.$ret['width'].'px;';
+        $ret['style'] = '';
+        $ret['captionStyle'] = '';
+        if ($this->_getSetting('maxWidthImageWidth')) {
+            $ret['style'] = 'max-width:'.$ret['width'].'px;';
+            $ret['captionStyle'] = 'max-width:'.$ret['width'].'px;';
+        }
         if ($this->_getSetting('defineWidth')) $ret['style'] .= 'width:'.$ret['width'].'px;';
 
         $ret['containerClass'] = '';
