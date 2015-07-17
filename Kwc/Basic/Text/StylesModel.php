@@ -30,7 +30,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
                 'name' => $m[5][$i],
                 'tagName' => $tagName,
                 'className' => $m[3][$i],
-                'styles' => Kwf_Assets_Dependency_File_Css::expandAssetVariables($m[4][$i], 'web'),
+                'styles' => $m[4][$i],
             );
         }
         return $styles;

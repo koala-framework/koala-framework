@@ -14,34 +14,6 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         return $ret;
     }
 
-    public static function getAssetVariables($section = 'web')
-    {
-        static $assetVariables = array();
-        if (!isset($assetVariables[$section])) {
-            $assetVariables[$section] = Kwf_Config::getValueArray('assetVariables');
-            if (file_exists('assetVariables.ini')) {
-                $cfg = new Zend_Config_Ini('assetVariables.ini', $section);
-                $assetVariables[$section] = array_merge($assetVariables[$section], $cfg->toArray());
-            }
-            foreach ($assetVariables[$section] as $k=>$i) {
-                //also support lowercase variables
-                if (strtolower($k) != $k) $assetVariables[$section][strtolower($k)] = $i;
-            }
-        }
-        return $assetVariables[$section];
-    }
-
-    public static function expandAssetVariables($contents, $section = 'web')
-    {
-        if (strpos($contents, 'var(')===false) return $contents;
-        $assetVariables = self::getAssetVariables($section);
-        foreach ($assetVariables as $k=>$i) {
-            //$contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents); //deprecated syntax
-            $contents = str_replace('var('.$k.')', $i, $contents);
-        }
-        return $contents;
-    }
-
     protected function _processContents($ret)
     {
         $pathType = $this->getType();
@@ -57,7 +29,6 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         $ret = preg_replace('#url\(\s*([^)]+?)\s*\)#', 'url(\1)', $ret); //remove spaces inside url()
         $ret = preg_replace('#url\((\'|")(?![a-z]+:)([^/\'"])#', 'url(\1/assets/'.$fnDir.'/\2', $ret);
         $ret = preg_replace('#url\((?![a-z]+:)([^/\'"])#', 'url(/assets/'.$fnDir.'/\1', $ret);
-        $ret = self::expandAssetVariables($ret);
 
         if (strpos($ret, 'cssClass') !== false && (strpos($ret, '$cssClass') !== false || strpos($ret, '.cssClass') !== false)) {
             $cssClass = $this->_getComponentCssClass();
