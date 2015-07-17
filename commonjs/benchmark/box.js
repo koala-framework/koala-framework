@@ -3,7 +3,10 @@ var $ = require('jQuery');
 var BenchmarkBox = {};
 module.exports = BenchmarkBox;
 
-var benchmarkEnabled = Kwf && Kwf.Debug && Kwf.Debug.benchmark;
+var benchmarkEnabled = false;
+try {
+    benchmarkEnabled = Kwf && Kwf.Debug && Kwf.Debug.benchmark;
+} catch(e) {}
 if (!benchmarkEnabled) {
     benchmarkEnabled = location.search.match(/[\?&]KWF_BENCHMARK/);
 }
