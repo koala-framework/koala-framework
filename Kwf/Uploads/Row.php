@@ -12,7 +12,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
     protected function _putFileContents($contents)
     {
         $filename  = $this->getFileSource();
-        $uploadsDir = $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2);
+        $uploadsDir = $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2) . '/';
         if (!is_dir($uploadsDir)) mkdir($uploadsDir);
         $handle = fopen($filename, "w");
         $pointer = 0;
