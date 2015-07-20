@@ -1,0 +1,17 @@
+@import "kwf/responsive-el";
+
+.test123 {
+  @include responsive-el(350px) {
+    p  { color: red; }
+  }
+}
+.test123 {
+  @include responsive-el(400px) {
+    p  { color: blue; }
+  }
+}
+.test456 {
+  @include responsive-el(350px) {
+    p  { color: green; }
+  }
+}

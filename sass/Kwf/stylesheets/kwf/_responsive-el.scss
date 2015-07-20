@@ -1,0 +1,10 @@
+@mixin responsive-el($gtWidth) {
+    @if unit($gtWidth) != 'px' {
+      @error 'Invalid unit, only px supported';
+    }
+    $gtWidthUnitless: $gtWidth / ($gtWidth * 0 + 1);
+    &.gt#{$gtWidthUnitless} {
+      @content;
+    }
+    kwf-responsive-el-gt: $gtWidthUnitless;
+}
