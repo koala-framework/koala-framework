@@ -1,3 +1,4 @@
+@import "config/colors";
 @import "compass/css3/opacity";
 @import "compass/css3/box-sizing";
 
@@ -31,7 +32,7 @@
 
         .content {
             .kwfup-webStandard p {
-                color: var(typo);
+                color: $typo;
             }
         }
     }
@@ -43,7 +44,7 @@
 
         .content {
             .kwfup-webStandard p {
-                color: var(typo);
+                color: $typo;
             }
         }
     }

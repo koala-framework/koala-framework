@@ -1,8 +1,9 @@
+@import "config/colors";
 .cssClass {
     .entry {
         margin-bottom: 20px;
         padding-bottom: 20px;
-        .teaser { margin: 10px 0px; padding: 10px; background: var(lightGray); }
+        .teaser { margin: 10px 0px; padding: 10px; background: $lightGray; }
         .readMoreLink { text-align: right; }
     }
 }

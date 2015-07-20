@@ -1,3 +1,4 @@
+@import "config/colors";
 @import "kwf/background-image-dpr2"; 
 
 .cssClass {
@@ -23,7 +24,7 @@
                 vertical-align: middle;
             }
             &.current a {
-                color: var(secColor);
+                color: $secColor;
             }
         }
     }

@@ -1,10 +1,11 @@
+@import "config/colors";
 
 .kwfFieldErrorBubble { 
     position: absolute; 
     border: 2px solid #dddddd; 
     width: 215px;
     border-radius: 6px;
-    background-color: var(errorBg);
+    background-color: $errorBg;
     opacity: 0.8;
     color: #fff;
     z-index: 1000;
@@ -12,7 +13,7 @@
 }
 
 .kwfFieldErrorBubble:after {
-    border-color: var(errorBorder) transparent;
+    border-color: $errorBorder transparent;
     border-style: solid;
     border-width: 0px 8px 8px;
     top: -8px;
