@@ -407,12 +407,10 @@ Kwc.Directories.List.ViewAjax.prototype = {
                 if ($(el).attr('href') == directoryUrl) {
                     $(el).data('kwfViewAjaxInitDone', true);
                     $(el).click((function(ev) {
-                        ev.preventDefault();
                         if (history.length > 1) {
                             if (document.referrer.indexOf(document.domain) >= 0) {
+                                ev.preventDefault();
                                 history.back(); //keeps scroll position
-                            } else {
-                                window.location.replace($(ev.currentTarget).attr('href'));
                             }
                         } else {
                             this.showView();
