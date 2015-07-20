@@ -1,4 +1,4 @@
-@mixin responsive-el($gtWidth) {
+@mixin el-breakpoint($gtWidth) {
     @if unit($gtWidth) != 'px' {
       @error 'Invalid unit, only px supported';
     }
