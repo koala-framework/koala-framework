@@ -151,7 +151,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
         ) {
             $columnObject = new Kwf_Grid_Column($this->_position);
             $columnObject->setHeader(' ')
-                         ->setWidth(30)
+                         ->setWidth(35)
                          ->setType('int');
             if (isset($this->_permissions['save']) && $this->_permissions['save']) {
                 $columnObject->setEditor('PosField');
