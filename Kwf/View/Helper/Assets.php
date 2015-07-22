@@ -12,9 +12,7 @@ class Kwf_View_Helper_Assets
         }
         foreach ($assetsPackage->getPackageUrls('text/css; media=print', $language) as $file) {
             $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($file)."\" ";
-            if (!Kwf_Config::getValue('debug.assets.usePrintCssForAllMedia')) {
-                $ret .= "media=\"print\" ";
-            }
+            $ret .= "media=\"print\" ";
             $ret .= "/>\n";
         }
         foreach ($assetsPackage->getPackageUrls('text/javascript', $language) as $file) {
