@@ -118,7 +118,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['style'] = 'max-width:'.$ret['width'].'px;';
         if ($this->_getSetting('defineWidth')) $ret['style'] .= 'width:'.$ret['width'].'px;';
 
-        $ret['containerClass'] = 'container';
+        $ret['containerClass'] = '';
         if ($ret['width'] > 100) $ret['containerClass'] .= ' webResponsiveImgLoading';
         if (!$this->_getSetting('lazyLoadOutOfViewport')) $ret['containerClass'] .= ' loadImmediately';
         return $ret;

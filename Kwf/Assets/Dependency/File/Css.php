@@ -59,17 +59,25 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         $ret = preg_replace('#url\((?![a-z]+:)([^/\'"])#', 'url(/assets/'.$fnDir.'/\1', $ret);
         $ret = self::expandAssetVariables($ret);
 
-        if (strpos($ret, '.cssClass') !== false) {
-            $cssClass = $this->_getComponentCssClass();
-            if ($cssClass) {
-                $ret = str_replace('.cssClass', '.'.$cssClass, $ret);
-            }
-        }
         if (strpos($ret, 'kwfup-') !== false) {
             if (Kwf_Config::getValue('application.uniquePrefix')) {
                 $ret = str_replace('kwfup-', Kwf_Config::getValue('application.uniquePrefix').'-', $ret);
             } else {
                 $ret = str_replace('kwfup-', '', $ret);
+            }
+        }
+        if (strpos($ret, 'kwcbem__') !== false) {
+            if (Kwf_Config::getValue('application.uniquePrefix')) {
+                $ret = str_replace('.cssClass .kwcbem__', '.kwcbem__', $ret);
+                $ret = str_replace('kwcbem__', $this->_getComponentCssClass().'__', $ret);
+            } else {
+                $ret = str_replace('kwcbem__', '', $ret);
+            }
+        }
+        if (strpos($ret, '.cssClass') !== false) {
+            $cssClass = $this->_getComponentCssClass();
+            if ($cssClass) {
+                $ret = str_replace('.cssClass', '.'.$cssClass, $ret);
             }
         }
         return $ret;

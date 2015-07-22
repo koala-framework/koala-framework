@@ -127,10 +127,6 @@ class Kwf_Component_Settings
         $settings['parentFilePaths'] = Kwf_Component_Abstract::getSetting($c, 'parentFilePaths');
 
         //*** processedCssClass
-        $settings['processedCssClass'] = '';
-        if (isset($settings['cssClass'])) {
-            $settings['processedCssClass'] .= $settings['cssClass'].' ';
-        }
         $cssClass = array(Kwf_Component_Abstract::formatCssClass($c));
         $dirs = explode(PATH_SEPARATOR, get_include_path());
         foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
@@ -149,8 +145,7 @@ class Kwf_Component_Settings
                 }
             }
         }
-        $settings['processedCssClass'] .= implode(' ', array_reverse($cssClass));
-        $settings['processedCssClass'] = trim($settings['processedCssClass']);
+        $settings['processedCssClass'] = implode(' ', array_reverse($cssClass));
 
         //*** generators
         $settings['generators'] = Kwf_Component_Abstract::getSetting($c, 'generators');
