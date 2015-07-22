@@ -1,5 +1,5 @@
-.cssClass .tblCheckout .unitPrice { text-align: right; }
-.cssClass .tblCheckout .amount { text-align: center; }
-.cssClass .tblCheckout .price { text-align: right; }
-.cssClass .tblCheckout .tblCheckoutPrice { float: right; }
-.cssClass .tblCheckout .tblCheckoutPrice .totalAmount td { font-weight: bold; }
+.kwc-class .tblCheckout .unitPrice { text-align: right; }
+.kwc-class .tblCheckout .amount { text-align: center; }
+.kwc-class .tblCheckout .price { text-align: right; }
+.kwc-class .tblCheckout .tblCheckoutPrice { float: right; }
+.kwc-class .tblCheckout .tblCheckoutPrice .totalAmount td { font-weight: bold; }

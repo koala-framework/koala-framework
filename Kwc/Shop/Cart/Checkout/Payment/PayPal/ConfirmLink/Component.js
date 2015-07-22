@@ -1,6 +1,6 @@
 var onReady = require('kwf/on-ready-ext2');
 
-onReady.onRender('.cssClass', function(el, config) {
+onReady.onRender('.kwc-class', function(el, config) {
     var form = el.child('form');
     form.on('submit', function(e) {
         e.preventDefault();

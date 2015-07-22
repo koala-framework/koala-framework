@@ -1,8 +1,8 @@
-.cssClass {
+.kwc-class {
     position: relative;
 }
 
-.cssClass.kwfSwitchHoverFade a {
+.kwc-class.kwfSwitchHoverFade a {
     background: url("/assets/kwf/Kwc/Favourites/starDark.png") no-repeat scroll left center transparent;
     display: block;
     position: relative;
@@ -10,11 +10,11 @@
     height: 16px;
 }
 
-.cssClass.isFavourite.kwfSwitchHoverFade a {
+.kwc-class.isFavourite.kwfSwitchHoverFade a {
     background: url("/assets/kwf/Kwc/Favourites/star.png") no-repeat scroll left center transparent;
 }
 
-.cssClass.kwfSwitchHoverFade .switchContent {
+.kwc-class.kwfSwitchHoverFade .switchContent {
     background: #CED0D1;
     position: absolute;
     top: -2px;

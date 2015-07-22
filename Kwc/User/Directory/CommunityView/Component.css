@@ -1,24 +1,24 @@
-.cssClass ul {
+.kwc-class ul {
     margin-top: 10px;
     margin-bottom: 30px;
 }
-.cssClass li {
+.kwc-class li {
     border-bottom: 1px dashed #ccc;
     line-height: 30px;
     clear: both;
 }
-.cssClass li a,
-.cssClass li span.rating {
+.kwc-class li a,
+.kwc-class li span.rating {
     float: left;
     overflow: hidden;
 }
-.cssClass li a {
+.kwc-class li a {
     width: 220px;
 }
-.cssClass li span.rating {
+.kwc-class li span.rating {
     width: 90px;
 }
-.cssClass li span.memberSince {
+.kwc-class li span.memberSince {
     float: right;
     width: 160px;
     text-align: right;

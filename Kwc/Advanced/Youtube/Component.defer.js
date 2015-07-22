@@ -1,18 +1,18 @@
 var onReady = require('kwf/on-ready-ext2');
 
-onReady.onRender('.cssClass .youtubePlayer', function(el, config) {
-    var kwcAdvancedYoutube = el.findParent('.cssClass', 5, true);
+onReady.onRender('.kwc-class .youtubePlayer', function(el, config) {
+    var kwcAdvancedYoutube = el.findParent('.kwc-class', 5, true);
     kwcAdvancedYoutube.dom.config = config;
 }, {priority: -1});
 
-onReady.onHide('.cssClass', function(el) {
+onReady.onHide('.kwc-class', function(el) {
     if (el.dom.player) {
         el.dom.player.pauseVideo();
     }
 }, {defer: true});
 
-onReady.onShow('.cssClass .youtubePlayer', function(el) {
-    var kwcAdvancedYoutube = el.findParent('.cssClass', 5, true);
+onReady.onShow('.kwc-class .youtubePlayer', function(el) {
+    var kwcAdvancedYoutube = el.findParent('.kwc-class', 5, true);
     var config = kwcAdvancedYoutube.dom.config;
     if (kwcAdvancedYoutube.dom.player) {
         if (config.playerVars.autoplay) kwcAdvancedYoutube.dom.player.playVideo();

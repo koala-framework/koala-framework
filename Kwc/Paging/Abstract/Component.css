@@ -1,18 +1,18 @@
-.cssClass {
+.kwc-class {
     padding: 25px 0px;
     text-align: center;
     line-height: 20px;
     z-index: 1000;
     clear: both;
 }
-.cssClass a {
+.kwc-class a {
     padding: 1px 3px;
     color: #000;
     padding: 4px 6px;
     font-weight: bold;
 }
-.cssClass a:hover,
-.cssClass a.active {
+.kwc-class a:hover,
+.kwc-class a.active {
     color: #333;
     font-weight: bold;
     padding: 3px 5px;
@@ -20,4 +20,4 @@
     background-color: #ccc;
 }
 
-.cssClass span { font-weight: bold; }
+.kwc-class span { font-weight: bold; }

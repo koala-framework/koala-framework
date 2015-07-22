@@ -1,2 +1,2 @@
 var responsiveEl = require('kwf/responsive-el');
-responsiveEl('.cssClass', [620, 480]);
+responsiveEl('.kwc-class', [620, 480]);

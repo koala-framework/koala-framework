@@ -1,5 +1,5 @@
-.cssClass .feedback,
-.cssClass .back,
-.cssClass .icons {
+.kwc-class .feedback,
+.kwc-class .back,
+.kwc-class .icons {
     display: none;
 }

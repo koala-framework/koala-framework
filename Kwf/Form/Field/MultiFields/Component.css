@@ -1,11 +1,11 @@
-.cssClass {
+.kwc-class {
     border: 1px solid;
     margin-bottom: 50px;
     padding: 10px
 }
-.cssClass button.add,
-.cssClass button.delete,
-.cssClass button.deleteImage,
-.cssClass button.deleteImage {
+.kwc-class button.add,
+.kwc-class button.delete,
+.kwc-class button.deleteImage,
+.kwc-class button.deleteImage {
     cursor: pointer;
 }

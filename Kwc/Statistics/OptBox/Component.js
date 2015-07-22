@@ -24,6 +24,6 @@ onReady.onContentReady(function statisticsOptBox(body, param) {
 
 
 componentEvent.on('cookieOptChanged', function(value) {
-    $('body').find('.cssClass').hide();
+    $('body').find('.kwc-class').hide();
 });
 

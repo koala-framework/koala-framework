@@ -1,7 +1,7 @@
 var onReady = require('kwf/on-ready-ext2');
 var componentEvent = require('kwf/component-event');
 
-onReady.onRender('.cssClass .kwfup-webForm', function(el, config) {
+onReady.onRender('.kwc-class .kwfup-webForm', function(el, config) {
     el.kwcForm.findField('form_opt').el.on('change', function() {
         this.kwcForm.submit();
     }, el);

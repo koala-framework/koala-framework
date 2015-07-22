@@ -1,7 +1,7 @@
 var responsiveEl = require('kwf/responsive-el');
 var onReady = require('kwf/on-ready');
 
-responsiveEl('.cssClass', [500]);
+responsiveEl('.kwc-class', [500]);
 
 Ext2.namespace('Kwc.Advanced.GoogleMap');
 Kwc.Advanced.GoogleMap.renderedMaps = [];

@@ -1,6 +1,6 @@
 @import "compass/css3/transition";
 
-.cssClass {
+.kwc-class {
     position: relative;
 
     a {
@@ -20,7 +20,7 @@
 
 /* ----------------------------------------- HOVERICONS ----------------------------------------- */
 
-.cssClass {
+.kwc-class {
     a {
         .outerHoverIcon {
             width: 100%;
@@ -71,11 +71,11 @@
     }
 }
 
-.showHoverIcon.cssClass a .outerHoverIcon {
+.showHoverIcon.kwc-class a .outerHoverIcon {
     display: block;
 }
 
-body.ext2-ie8 .cssClass a {
+body.ext2-ie8 .kwc-class a {
     .outerHoverIcon {
         display: none;
     }

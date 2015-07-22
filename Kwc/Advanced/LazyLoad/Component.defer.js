@@ -2,7 +2,7 @@ var onReady = require('kwf/on-ready');
 var benchmarkBox = require('kwf/benchmark/box');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 
-onReady.onRender('.cssClass', function(el) {
+onReady.onRender('.kwc-class', function(el) {
     $.ajax({
         url: getKwcRenderUrl(),
         data: {

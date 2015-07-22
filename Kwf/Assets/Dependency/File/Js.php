@@ -27,7 +27,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         $rawContents = $this->_getRawContents(null);
 
 
-        $usesUniquePrefix = strpos($rawContents, '.cssClass') !== false
+        $usesUniquePrefix = strpos($rawContents, '.kwc-class') !== false
             || strpos($rawContents, 'kwfup-') !== false
             || strpos($rawContents, 'kwcbem__') !== false;
 
@@ -73,7 +73,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 }
                 $cssClass = $this->_getComponentCssClass();
                 if ($cssClass) {
-                    if (preg_match_all('#([\'"])\.cssClass([\s\'"\.])#', $contents, $m)) {
+                    if (preg_match_all('#([\'"])\.kwc-class([\s\'"\.])#', $contents, $m)) {
                         foreach ($m[0] as $k=>$i) {
                             $replacements[$i] = $m[1][$k].'.'.$cssClass.$m[2][$k];
                         }

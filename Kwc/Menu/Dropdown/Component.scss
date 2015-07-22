@@ -1,7 +1,7 @@
 @import "kwf/modernizr";
 @import "compass/utilities/general/clearfix";
 
-.cssClass {
+.kwc-class {
     ul {
         @include pie-clearfix;
         li {
