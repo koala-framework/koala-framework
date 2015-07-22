@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? if ($this->product) { ?>
     <? if ($this->product->item->MediumImage) { ?>
         <img class="cover" src="<?=$this->product->item->MediumImage->Url->__toString()?>" width="<?=$this->product->item->MediumImage->Width?>" height="<?=$this->product->item->MediumImage->Height?>" alt="" />

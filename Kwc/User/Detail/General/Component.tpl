@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h3>Name</h3>
     <?=$this->row->title . ' ' . $this->row->firstname . ' ' . $this->row->lastname?>
 

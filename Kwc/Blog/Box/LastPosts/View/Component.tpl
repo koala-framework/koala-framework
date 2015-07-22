@@ -1,1 +1,1 @@
-<div class="<?=$this->cssClass?>">    <h3><?=$this->data->trlKwf('Recent Posts')?></h3>    <ul>    <?=$this->partials($this->data);?>    </ul></div>
+<div class="<?=$this->rootElementClass?>">    <h3><?=$this->data->trlKwf('Recent Posts')?></h3>    <ul>    <?=$this->partials($this->data);?>    </ul></div>

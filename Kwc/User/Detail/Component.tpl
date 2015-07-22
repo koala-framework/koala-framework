@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h1 class="mainHeadline"><?=$this->data->trlKwf('Userprofile')?></h1>
     <?php foreach ($this->items as $key => $name) { ?>
         <?if ($this->hasContent($this->$key)) {?>

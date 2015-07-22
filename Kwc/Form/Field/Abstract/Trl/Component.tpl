@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <?=$this->preHtml?>
     <?=$this->html?>
     <?=$this->postHtml?>

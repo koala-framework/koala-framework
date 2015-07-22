@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <form action="<?= $this->searchPageUrl; ?>" method="get" autocomplete="off">
         <input type="hidden" class="ajaxUrl" value="<?= $this->ajaxUrl; ?>" />
         <input type="hidden" class="searchSettings" value="<?= htmlspecialchars(Zend_Json::encode($this->searchSettings)) ?>" />

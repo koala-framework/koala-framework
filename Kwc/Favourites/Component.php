@@ -28,7 +28,7 @@ class Kwc_Favourites_Component extends Kwc_Abstract
         );
         $ret['linkType'] = $this->_getSetting('linkType');
         if ($ret['linkType'] == self::LINK_TYPE_GRAPHICAL) {
-            $ret['cssClass'] .= ' kwfSwitchHoverFade';
+            $ret['rootElementClass'] .= ' kwfSwitchHoverFade';
         }
         return $ret;
     }

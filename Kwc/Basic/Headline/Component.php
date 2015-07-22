@@ -7,7 +7,7 @@ class Kwc_Basic_Headline_Component extends Kwc_Abstract
             'componentName' => trlKwfStatic('Headline'),
             'componentIcon' => 'text_padding_top',
             'ownModel'      => 'Kwc_Basic_Headline_Model',
-            'cssClass'      => 'kwfup-webStandard',
+            'rootElementClass'      => 'kwfup-webStandard',
             'extConfig'     => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
         $ret['componentCategory'] = 'content';

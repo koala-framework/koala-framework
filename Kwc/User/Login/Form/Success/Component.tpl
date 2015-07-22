@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <input type="hidden" class="redirectTo" value="<?=$this->redirectToUrl?>" />
     <h1><?=$this->data->trlKwf('Logged In')?></h1>
     <p><?=$this->data->trlKwf('You have been logged in sucessfully.')?></p>

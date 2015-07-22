@@ -10,7 +10,7 @@ class Kwc_User_LostPassword_Component extends Kwc_Abstract_Composite_Component
             'name' => trlKwfStatic('Set password')
         );
         $ret['generators']['child']['component']['form'] = 'Kwc_User_LostPassword_Form_Component';
-        $ret['cssClass'] = 'kwfup-webStandard kwfup-webForm';
+        $ret['rootElementClass'] = 'kwfup-webStandard kwfup-webForm';
         return $ret;
     }
 }

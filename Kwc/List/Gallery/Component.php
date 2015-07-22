@@ -32,7 +32,7 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
     {
         $ret = parent::getTemplateVars();
         $showPics = $this->_getRow()->show_pics;
-        $ret['cssClass'] .= ' col'.$this->_getGalleryColumns();
+        $ret['rootElementClass'] .= ' col'.$this->_getGalleryColumns();
         $ret['imagesPerLine'] = $this->_getGalleryColumns();
         if (!$ret['imagesPerLine']) $ret['imagesPerLine'] = 1;
         $ret['downloadAll'] = $this->getData()->getChildComponent('-downloadAll');

@@ -1,5 +1,5 @@
 {% if menu|length %}
-    <div class="{{ cssClass }}">
+    <div class="{{ rootElementClass }}">
         <input type="hidden" value="{{ config|json_encode() }}" />
         <ul class="menu">
             {% for m in menu %}

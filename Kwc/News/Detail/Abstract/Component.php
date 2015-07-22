@@ -5,7 +5,7 @@ abstract class Kwc_News_Detail_Abstract_Component extends Kwc_Directories_Item_D
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['content'] = 'Kwc_Paragraphs_Component';
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfup-webStandard';
         $ret['placeholder']['backLink'] = '&laquo; '.trlKwfStatic('Back to overview');
         $ret['editComponents'] = array('content');
         $ret['flags']['hasFulltext'] = true;

@@ -54,7 +54,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         $ret['assetsAdmin']['dep'][] = 'KwfColorField';
 
 
-        $ret['cssClass'] = 'kwfup-webStandard kwcText';
+        $ret['rootElementClass'] = 'kwfup-webStandard kwcText';
 
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;

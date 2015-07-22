@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? if ($this->placeholder['loginHeadline']) { ?>
         <h2><?=$this->placeholder['loginHeadline']?></h2>
     <? } ?>

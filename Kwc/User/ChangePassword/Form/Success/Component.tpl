@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <p>
         <strong><?=$this->data->trlKwf('The password was changed successfully')?>.</strong>
     </p>

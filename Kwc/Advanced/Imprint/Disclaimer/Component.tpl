@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? if ($this->row->disclaimer_type == 'de' && $this->row->disclaimer_name) { ?>
         <span class="imprintHeadline"><?=$this->data->trlKwf('Disclaimer');?></span>
         <div class="kwfSwitchDisplay">

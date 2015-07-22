@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? if (isset($this->searchForm)) echo $this->component($this->searchForm); ?>
     <? if (isset($this->paging)) echo $this->component($this->paging); ?>
     <? if ($this->formSaved && !count($this->items)) { ?>

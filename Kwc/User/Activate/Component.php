@@ -5,7 +5,7 @@ class Kwc_User_Activate_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['form'] = 'Kwc_User_Activate_Form_Component';
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfup-webStandard';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
         return $ret;

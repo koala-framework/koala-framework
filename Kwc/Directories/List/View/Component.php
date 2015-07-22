@@ -11,7 +11,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         //$ret['generators']['child']['component']['count'] = 'Kwc_Directories_List_View_Count_Component';
         $ret['placeholder']['noEntriesFound'] = trlKwfStatic('No entries found');
         $ret['groupById'] = true;
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfup-webStandard';
         $ret['searchQueryFields'] = '*';
         return $ret;
     }

@@ -12,7 +12,7 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
         $ret['componentIcon'] = 'folder_link';
         $ret['showFilesize'] = true;
         $ret['showIcon'] = true;
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfup-webStandard';
         $ret['flags']['searchContent'] = true;
         $ret['flags']['hasFulltext'] = true;
         $ret['generators']['child']['component']['downloadTag'] = 'Kwc_Basic_DownloadTag_Component';

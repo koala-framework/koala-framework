@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <div class="bookInfos">
         <? if ($this->item->MediumImage) { ?>
             <img class="cover" src="<?=$this->item->MediumImage->Url->__toString()?>" width="<?=$this->item->MediumImage->Width?>" height="<?=$this->item->MediumImage->Height?>" alt="" />

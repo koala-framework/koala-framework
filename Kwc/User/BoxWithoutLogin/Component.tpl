@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <ul>
         <? if ($this->login) { ?>
             <li><?=$this->componentLink($this->login, $this->data->trlKwf('Login'))?><?=$this->linkPostfix?></li>

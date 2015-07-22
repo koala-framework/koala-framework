@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h2><?=$this->headline?></h2>
     <div class="tags">
         <?=implode(', ', $this->tags)?>

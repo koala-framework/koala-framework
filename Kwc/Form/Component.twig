@@ -1,4 +1,4 @@
-<div class="{{ cssClass }}{% if isPosted %} kwfImportant{% endif %}" data-width="100%">
+<div class="{{ rootElementClass }}{% if isPosted %} kwfImportant{% endif %}" data-width="100%">
     <input type="hidden" class="config" value="{{ config|json_encode() }}" />
 {% if showSuccess %}
     {{ renderer.component(success) }}

@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? foreach($this->categories as $type=>$links) { ?>
     <h3><?=$type?></h3>
     <ul>

@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <div class="kwfup-webStandard">
         <h1 class="mainHeadline"><?=$this->data->trlKwf('Register')?></h1>
         <p>

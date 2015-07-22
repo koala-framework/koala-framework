@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? if($this->placeholder['headline']) {?>
     <h1><?=$this->placeholder['headline']?></h1>
     <? } ?>

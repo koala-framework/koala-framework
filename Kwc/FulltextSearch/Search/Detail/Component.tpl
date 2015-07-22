@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <a href="<?=$this->data->row->data->url?>">
         <?=$this->highlightTerms($this->queryParts, $this->data->row->data->name);?>
     </a>

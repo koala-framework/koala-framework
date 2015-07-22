@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h2><?= $this->componentLink($this->data->targetPage, null, $this->headlineComponentLinkConfig); ?></h2>
     <? if ($this->hasContent($this->image)) { ?>
         <div class="left prevImg">

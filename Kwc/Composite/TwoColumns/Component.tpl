@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <div class="left firstColumn" style="width: <?=$this->leftWidth?>px;">
         <?=$this->component($this->leftColumn);?>
     </div>

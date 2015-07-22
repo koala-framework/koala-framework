@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h2>first five:</h2>
     <?=$this->component($this->list1)?>
 

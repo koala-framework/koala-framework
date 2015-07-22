@@ -105,7 +105,7 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
         $columns = $columnTypes[$type];
 
         $i = 1;
-        $ret['cssClass'] .= " col{$type}";
+        $ret['rootElementClass'] .= " col{$type}";
         foreach($ret['listItems'] as $key => $value) {
             $cls = " span{$columns['colSpans'][$i-1]}";
             if ($i == 1) $cls .= " lineFirst";

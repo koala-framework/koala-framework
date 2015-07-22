@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <div class="postData">
         <div class="postInfo">
             <? if ($this->avatar) { ?>

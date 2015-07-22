@@ -381,13 +381,13 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     {
         $ret = array();
         $ret['placeholder'] = $this->_getPlaceholder();
-        $ret['cssClass'] = self::getCssClass($this);
+        $ret['rootElementClass'] = self::getRootElementClass($this);
 
         $up = Kwf_Config::getValue('application.uniquePrefix');
         if (!$up) {
             $ret['bemClasses'] = false;
         } else {
-            $classes = Kwc_Abstract::getSetting($this->getData()->componentClass, 'processedCssClass');;
+            $classes = Kwc_Abstract::getSetting($this->getData()->componentClass, 'processedRootElementClass');;
             $classes = explode(' ', $classes);
             $ret['bemClasses'] = array();
             foreach ($classes as $i) {
@@ -424,6 +424,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             usort($ret['multiBoxes'][$box], array('Kwf_Component_View_Helper_ComponentWithMaster', '_sortByPriority'));
         }
 
+<<<<<<< .merge_file_5FDpYB
         $ret['cssClass'] = 'kwfup-frontend';
 
         $cssClass = $this->_getMasterCssClass($renderer->getTemplate($this->getData(), 'Master'));
@@ -431,6 +432,14 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
         $ret['cssClass'] .= ' '.$cssClass;
 
+=======
+        $ret['rootElementClass'] = 'frontend';
+        $cls = Kwc_Abstract::getSetting($this->getData()->componentClass, 'processedRootElementClass');
+        foreach (explode(' ', $cls) as $i) {
+            $i = 'kwfup-master'.ucfirst($i);
+            $ret['rootElementClass'] .= ' '.$i;
+        }
+>>>>>>> .merge_file_yLzPvN
         return $ret;
     }
 
@@ -511,20 +520,24 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     }
 
     /**
-     * Returns the processed cssClass used in various places for a component
+     * Returns the processed rootElementClass used in various places for a component
      *
      * @param string|Kwf_Component_Data
      * @return string
      */
-    static public function getCssClass($component)
+    static public function getRootElementClass($component)
     {
         if (!is_string($component)) $component = $component->getData()->componentClass;
+<<<<<<< .merge_file_5FDpYB
         $ret = '';
         if (self::hasSetting($component, 'cssClass')) {
             $ret .= self::getSetting($component, 'cssClass').' ';
         }
         $ret .= self::getSetting($component, 'processedCssClass');
         return $ret;
+=======
+        return self::getSetting($component, 'processedRootElementClass');
+>>>>>>> .merge_file_yLzPvN
     }
 
     /**

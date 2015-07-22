@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? if($this->row->company || $this->row->name || $this->row->address || $this->row->zipcode || $this->row->city) {?>
         <span class="imprintHeadline"><?=$this->data->trlKwf('Operating company / Responsible for content');?></span>
         <p>

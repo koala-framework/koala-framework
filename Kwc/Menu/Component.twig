@@ -1,5 +1,5 @@
 {% if menu|length %}
-    <div class="{{ cssClass }}">
+    <div class="{{ rootElementClass }}">
         {% if parentPageLink %}
             {% block parentPage %}
             <h2 class="parentPageName">{{ renderer.componentLink(parentPage) }}</h2>

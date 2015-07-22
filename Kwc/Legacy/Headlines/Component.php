@@ -7,7 +7,7 @@ class Kwc_Legacy_Headlines_Component extends Kwc_Abstract
             'componentName' => trlKwfStatic('Headlines'),
             'componentIcon' => 'text_padding_top',
             'ownModel'      => 'Kwf_Component_FieldModel',
-            'cssClass'      => 'kwfup-webStandard',
+            'rootElementClass'      => 'kwfup-webStandard',
             'extConfig'     => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = array('headline1', 'headline2');

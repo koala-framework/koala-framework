@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
 <? if($this->data->hasContent()) { ?>
 
     <? if ($this->text && ($this->text instanceof Kwf_Component_Data)) { ?>

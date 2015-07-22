@@ -8,7 +8,7 @@ class Kwc_Basic_LinkParent_Component extends Kwc_Basic_Link_Component
         $ret['generators']['child']['component']['linkTag'] =
             'Kwc_Basic_LinkTag_ParentPage_Component';
         $ret['ownModel'] = 'Kwc_Basic_LinkParent_Model';
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfup-webStandard';
         return $ret;
     }
 }

@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h1><?=$this->placeholder['headline'];?></h1><br />
     <form action="<?= $this->data->url ?>" method="post">
         <?=$this->component($this->view)?>

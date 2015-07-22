@@ -1,4 +1,4 @@
-<span class="<?=$this->cssClass;?>">
+<span class="<?=$this->rootElementClass?>">
     <?=$this->component($this->linkTag)?>
 
         <span><?=$this->mailEncodeText($this->text)?></span>

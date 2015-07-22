@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>" id="<?=$this->data->componentId?>">
+<div class="<?=$this->rootElementClass?>" id="<?=$this->data->componentId?>">
     <div class="cartList">
         <h2><?=$this->data->trlKwf('Cart')?></h2>
         <? if (!$this->items) { ?>
