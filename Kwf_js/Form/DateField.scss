@@ -1,3 +1,4 @@
+@import "config/colors";
 table.x2-date-inner {
     width:auto;
 }
@@ -18,8 +19,8 @@ table.x2-date-inner {
     }
 }
 .frontend .x2-date-inner th {
-    background: var(datePickerSelectedBackground);
-    color: var(datePickerSelectedColor);
+    background: $datePickerSelectedBackground;
+    color: $datePickerSelectedColor;
     font-weight: bold;
     font-size: 13px;
     border-bottom: none;
@@ -27,7 +28,7 @@ table.x2-date-inner {
 
 .frontend .x2-date-bottom {
     background: none;
-    border-top: 1px solid var(datePickerBorderColor);
+    border-top: 1px solid $datePickerBorderColor;
 }
 
 .frontend .x2-date-inner .x2-date-today a {
@@ -35,22 +36,22 @@ table.x2-date-inner {
 }
 
 .frontend .x2-date-inner .x2-date-selected a {
-    background: var(datePickerSelectedBackground);
+    background: $datePickerSelectedBackground;
     border: medium none;
-    color: var(datePickerSelectedColor);
+    color: $datePickerSelectedColor;
     padding: 4px 5px;
 }
 .frontend .x2-date-inner a:hover, .frontend .x2-date-inner .x2-date-disabled a:hover, .frontend td.x2-date-mp-month a:hover, .frontend td.x2-date-mp-year a:hover {
-    background: var(datePickerHoverBackground);
-    color: var(datePickerHoverColor);
+    background: $datePickerHoverBackground;
+    color: $datePickerHoverColor;
 }
 
 .frontend .x2-date-selected a:hover {
-    color: var(datePickerHoverColor);
+    color: $datePickerHoverColor;
 }
 
 .frontend td.x2-date-mp-sep {
-    border-right: var(datePickerSelectedBackground);
+    border-right: $datePickerSelectedBackground;
 }
 
 .frontend .x2-date-mp-btns {
@@ -60,7 +61,7 @@ table.x2-date-inner {
 .frontend .x2-date-picker .x2-btn button {
     font-weight: bold;
     text-transform: uppercase;
-    color: var(datePickerTextColor);
+    color: $datePickerTextColor;
     text-shadow: 1px 0 white;
     cursor: pointer;
 }
@@ -69,7 +70,7 @@ table.x2-date-inner {
 }
 
 .frontend .x2-date-mp-btns td {
-    border-top: 1px solid var(datePickerBorderColor);
+    border-top: 1px solid $datePickerBorderColor;
 }
 .frontend .x2-date-mp-ybtn a.x2-date-mp-prev {
     background-position: 0 0;
@@ -84,26 +85,26 @@ table.x2-date-inner {
 .frontend .x2-date-mp-btns button {
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
     border: medium none;
-    color: var(datePickerTextColor);
+    color: $datePickerTextColor;
     font-weight: bold;
     text-transform: uppercase;
     cursor: pointer;
 }
 
 .frontend td.x2-date-mp-sel a {
-    background: var(datePickerSelectedBackground);
+    background: $datePickerSelectedBackground;
     border: none;
     padding: 4px 5px;
     
 }
 .frontend .x2-date-middle .x2-btn .x2-btn-text {
     color: #333;
-    color: var(datePickerTextColor);
+    color: $datePickerTextColor;
 }
 .frontend .x2-menu {
     padding: 0px;
     box-shadow: 0 9px 14px -4px #333333;
-    border: 1px solid var(datePickerBorderColor);
+    border: 1px solid $datePickerBorderColor;
 }
 .frontend .x2-date-picker {
     background:none;
@@ -113,10 +114,10 @@ table.x2-date-inner {
     background: none;
 }
 .frontend td.x2-date-mp-year.x2-date-mp-sel a, .frontend td.x2-date-mp-month.x2-date-mp-sel a {
-    color: var(datePickerSelectedColor);
+    color: $datePickerSelectedColor;
 }
 .frontend td.x2-date-mp-month a, .frontend td.x2-date-mp-year a {
-    color: var(datePickerTextColor);
+    color: $datePickerTextColor;
     padding: 4px 5px;
 }
 

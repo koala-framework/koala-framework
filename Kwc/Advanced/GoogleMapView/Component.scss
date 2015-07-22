@@ -1,10 +1,11 @@
+@import "config/colors";
 .cssClass div.text { display: none; }
 .cssClass .fromAddress { margin-top:6px; }
 .cssClass .fromAddress input { float: left; padding: 3px; }
-.cssClass .fromAddress input.textBefore { width: 98%; color: var(typo); display: block; margin-bottom: 10px;}
+.cssClass .fromAddress input.textBefore { width: 98%; color: $typo; display: block; margin-bottom: 10px;}
 .cssClass.gt500 .fromAddress input.textBefore {width: 50%; display: block;}
-.cssClass .fromAddress input.kwfClearOnFocusBlurred { color: var(gray); }
-.cssClass .fromAddress input.textOn { color: var(typo); }
+.cssClass .fromAddress input.kwfClearOnFocusBlurred { color: $gray; }
+.cssClass .fromAddress input.textOn { color: $typo; }
 .cssClass .fromAddress button {
     font-weight: bold;
     overflow: visible;

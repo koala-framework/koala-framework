@@ -1,3 +1,4 @@
+@import "config/colors";
 
 .kwfFieldErrorIconBubble { 
     position: absolute; 
@@ -16,11 +17,11 @@
     margin-top: -4px;
     margin-left: 25px;
     color: white;
-    background-color: var(errorBg);
+    background-color: $errorBg;
 }
 .kwfFieldErrorIconBubble .arrow {
     border-top: 7px solid transparent;
-    border-right: 7px solid var(errorBg);
+    border-right: 7px solid $errorBg;
     border-bottom: 7px solid transparent;
     position: absolute;
     width: 0;

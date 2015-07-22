@@ -1,3 +1,4 @@
+@import "config/colors";
 @import "compass/css3/box-sizing";
 @import "kwf/background-image-dpr2";
 @import "compass/css3/transition";
@@ -16,7 +17,7 @@
             display: block;
             position: relative;
             line-height: 40px;
-            color: var(mainColor);
+            color: $mainColor;
             float: right;
             width: 52px;
             z-index: 1;
@@ -72,7 +73,7 @@
                     a {
                         padding: 16px 0 16px 0;
                         display: block;
-                        color: var(mainColor);
+                        color: $mainColor;
                     }
                     &.last {
                         a {
