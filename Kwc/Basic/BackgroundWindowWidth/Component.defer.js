@@ -1,6 +1,6 @@
 var onReady = require('kwf/on-ready');
 
-onReady.onResize('.kwc-class', function(el) {
+onReady.onResize('.kwcClass', function(el) {
     el.find('.background').each(function(i, bg){
         $(bg).css('height', $(bg).parent().height());
     });

@@ -1,10 +1,10 @@
-.kwc-class .bookInfos {
+.kwcClass .bookInfos {
     margin-bottom: 20px;
 }
-.kwc-class .bookInfos img.cover {
+.kwcClass .bookInfos img.cover {
     float: left;
     margin-right: 20px;
 }
-.kwc-class .customerReviews li { margin-bottom: 20px; }
-.kwc-class .ratingStar { margin-right: -5px; }
-.kwc-class .summary { margin-left: 10px; font-weight: bold; }
+.kwcClass .customerReviews li { margin-bottom: 20px; }
+.kwcClass .ratingStar { margin-right: -5px; }
+.kwcClass .summary { margin-left: 10px; font-weight: bold; }

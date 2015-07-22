@@ -1,6 +1,6 @@
 var onReady = require('kwf/on-ready');
 
-onReady.onResize('.kwc-class.responsiveFlipScroll', function(el) {
+onReady.onResize('.kwcClass.responsiveFlipScroll', function(el) {
     var addArrow = function(el) {
         if (el.hasClass('flipScroll')) {
             var tbody = el.children('tbody');
@@ -22,7 +22,7 @@ onReady.onResize('.kwc-class.responsiveFlipScroll', function(el) {
         addArrow(el);
         if (!el.flipScrollSetAt) {
             el.children('tbody').on('scroll', function(ev) {
-                addArrow($(this).closest('.kwc-class'));
+                addArrow($(this).closest('.kwcClass'));
             });
         }
         el.data('flipScrollSetAt', el.width());

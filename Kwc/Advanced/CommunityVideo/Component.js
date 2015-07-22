@@ -1,11 +1,11 @@
 var onReady = require('kwf/on-ready');
 
 
-onReady.onRender('.kwc-class', function(el, config) {
+onReady.onRender('.kwcClass', function(el, config) {
     el.data('config', config);
 }, {priority: -1});
 
-onReady.onResize('.kwc-class', function(el, config) {
+onReady.onResize('.kwcClass', function(el, config) {
 
     var config = el.data('config');
     var iframe = el.find('iframe');
@@ -34,12 +34,12 @@ onReady.onResize('.kwc-class', function(el, config) {
 }, {defer: true});
 
 
-onReady.onHide('.kwc-class', function(el) {
+onReady.onHide('.kwcClass', function(el) {
     el.data('iframeHtml', el.find('.communityVideoPlayer').html());
     el.find('iframe').remove();
 });
 
-onReady.onShow('.kwc-class', function(el) {
+onReady.onShow('.kwcClass', function(el) {
     if(el.data('iframeHtml')) {
         el.find('.communityVideoPlayer').html(el.data('iframeHtml'));
     }

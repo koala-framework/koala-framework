@@ -1,12 +1,12 @@
 @import "config/colors";
-.kwc-class div.text { display: none; }
-.kwc-class .fromAddress { margin-top:6px; }
-.kwc-class .fromAddress input { float: left; padding: 3px; }
-.kwc-class .fromAddress input.textBefore { width: 98%; color: $typo; display: block; margin-bottom: 10px;}
-.kwc-class.gt500 .fromAddress input.textBefore {width: 50%; display: block;}
-.kwc-class .fromAddress input.kwfClearOnFocusBlurred { color: $gray; }
-.kwc-class .fromAddress input.textOn { color: $typo; }
-.kwc-class .fromAddress button {
+.kwcClass div.text { display: none; }
+.kwcClass .fromAddress { margin-top:6px; }
+.kwcClass .fromAddress input { float: left; padding: 3px; }
+.kwcClass .fromAddress input.textBefore { width: 98%; color: $typo; display: block; margin-bottom: 10px;}
+.kwcClass.gt500 .fromAddress input.textBefore {width: 50%; display: block;}
+.kwcClass .fromAddress input.kwfClearOnFocusBlurred { color: $gray; }
+.kwcClass .fromAddress input.textOn { color: $typo; }
+.kwcClass .fromAddress button {
     font-weight: bold;
     overflow: visible;
     cursor: pointer;
@@ -17,7 +17,7 @@
     display: block;
     float:left;
 }
-.kwc-class.gt500 .fromAddress button {
+.kwcClass.gt500 .fromAddress button {
     width: 200px;
     float: right;
     padding: 2px 5px;
@@ -25,6 +25,6 @@
     font-weight: bold;
 }
 
-.kwc-class .mapDirSuggestParent { display: none; margin-top: 30px; }
+.kwcClass .mapDirSuggestParent { display: none; margin-top: 30px; }
 
-.kwc-class .container { overflow: hidden; border: 1px solid #000; }
+.kwcClass .container { overflow: hidden; border: 1px solid #000; }

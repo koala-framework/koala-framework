@@ -1,6 +1,6 @@
 var onReady = require('kwf/on-ready');
 
-onReady.onRender('.kwc-class', function(el, config) {
+onReady.onRender('.kwcClass', function(el, config) {
     var innerBackground = el.children('.innerBackground');
 
     var checkSize = function() {

@@ -1,8 +1,8 @@
-.kwc-class .article {
+.kwcClass .article {
     position: relative;
 }
 
-.kwc-class .article .icons {
+.kwcClass .article .icons {
     position: absolute;
     z-index: 10;
     width: 16px;
@@ -10,7 +10,7 @@
     right: -20px;
 }
 
-.kwc-class .article .icons a {
+.kwcClass .article .icons a {
     margin: 0px 0px 5px 0px;
     width: 16px;
     height: 16px;
@@ -19,18 +19,18 @@
     position: relative;
 }
 
-.kwc-class .article .icons .print {
+.kwcClass .article .icons .print {
     background: url("/assets/kwf/Kwc/Articles/Detail/printer.png") no-repeat left center;
 }
 
-.kwc-class .article .icons a.feedback {
+.kwcClass .article .icons a.feedback {
     background: url("/assets/kwf/Kwc/Articles/Detail/email_edit.png") no-repeat scroll left center transparent;
 }
 
-.kwc-class .article .icons .top {
+.kwcClass .article .icons .top {
     background: url("/assets/kwf/Kwc/Articles/Detail/exclamation.png") no-repeat scroll left center transparent;
 }
 
-.kwc-class .article .icons .kwfSwitchHoverFade .switchContent {
+.kwcClass .article .icons .kwfSwitchHoverFade .switchContent {
     display: none;
 }

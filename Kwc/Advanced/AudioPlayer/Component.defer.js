@@ -1,6 +1,6 @@
 var onReady = require('kwf/on-ready');
 
-onReady.onRender('.kwc-class', function(el, config) {
+onReady.onRender('.kwcClass', function(el, config) {
     el.children('audio').mediaelementplayer({
         //custom path to flash
         flashName: '/assets/mediaelement/build/flashmediaelement.swf',

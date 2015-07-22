@@ -4,7 +4,7 @@
 $contentMargin  : 10px;
 $breakpoint     : 600;
 
-div.kwc-class {
+div.kwcClass {
     @include pie-clearfix;
     margin-right: -$contentMargin;
 

@@ -1,8 +1,8 @@
-.kwc-class,
-.kwc-class .image {
+.kwcClass,
+.kwcClass .image {
     height: 100%;
 }
-.kwc-class .image img {
+.kwcClass .image img {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -11,12 +11,12 @@
     display: block;
 }
 
-.kwc-class .container {
+.kwcClass .container {
     height: 0;
     position: relative;
     overflow: hidden;
 }
-.kwc-class .prevBtn,
-.kwc-class .nextBtn {
+.kwcClass .prevBtn,
+.kwcClass .nextBtn {
     z-index: 1;
 }

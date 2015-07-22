@@ -1,3 +1,3 @@
-.kwc-class form {
+.kwcClass form {
     display: none;
 }

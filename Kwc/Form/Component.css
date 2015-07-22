@@ -1,39 +1,39 @@
-.kwc-class .kwfFieldError label { color: var(typo); }
-.kwc-class .kwfFieldError input,
-.kwc-class .kwfFieldError textarea {
+.kwcClass .kwfFieldError label { color: var(typo); }
+.kwcClass .kwfFieldError input,
+.kwcClass .kwfFieldError textarea {
     color: var(typo);
     border-color: var(errorBorder) ;
 }
 
-.kwc-class button {
+.kwcClass button {
     cursor: pointer;
 }
 
-.kwc-class form .kwfField label,
-.kwc-class form .kwfField span.fieldContent {
+.kwcClass form .kwfField label,
+.kwcClass form .kwfField span.fieldContent {
     line-height: 20px;
 }
-.kwc-class .submitWrapper {
+.kwcClass .submitWrapper {
     text-align: center;
     clear: both;
 }
-.kwc-class .submitWrapper .beforeButton,
-.kwc-class .submitWrapper .button,
-.kwc-class .submitWrapper .saving,
-.kwc-class .submitWrapper .afterButton {
+.kwcClass .submitWrapper .beforeButton,
+.kwcClass .submitWrapper .button,
+.kwcClass .submitWrapper .saving,
+.kwcClass .submitWrapper .afterButton {
     float: left;
 }
-.kwc-class .submitWrapper .button {
+.kwcClass .submitWrapper .button {
     position: relative;
 }
 
-.kwc-class .submitWrapper .button.disabled {
+.kwcClass .submitWrapper .button.disabled {
     opacity: 0.3;
 }
 
-.kwc-class input,
-.kwc-class textarea,
-.kwc-class select {
+.kwcClass input,
+.kwcClass textarea,
+.kwcClass select {
     padding: 2px;
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 11px;
@@ -43,68 +43,68 @@
     float: left;
 }
 
-.kwc-class input.radio {
+.kwcClass input.radio {
     margin-left: 10px;
     border: none;
     background: none;
 }
-.kwc-class form .kwfFormFieldCheckbox input {
+.kwcClass form .kwfFormFieldCheckbox input {
     width: auto;
     border: none;
     background: none;
     margin-top: 3px;
 }
-.kwc-class label {
+.kwcClass label {
     line-height: 18px;
 }
-.kwc-class .kwcLabelPositionAbove .kwfFormFieldWrapper.hasLabel {
+.kwcClass .kwcLabelPositionAbove .kwfFormFieldWrapper.hasLabel {
     margin-left: 0;
     padding-left: 0;
 }
-.kwc-class .kwfFieldRequired label { font-weight: normal; }
-.kwc-class .kwfFieldRequired span label { font-weight: normal; }
-.kwc-class .kwfFieldLabelAlignTop label {
+.kwcClass .kwfFieldRequired label { font-weight: normal; }
+.kwcClass .kwfFieldRequired span label { font-weight: normal; }
+.kwcClass .kwfFieldLabelAlignTop label {
     width: auto;
     margin: 0px;
     text-align: left;
 }
-.kwc-class .kwfFieldLabelAlignLeft label {
+.kwcClass .kwfFieldLabelAlignLeft label {
     text-align: left;
 }
-.kwc-class .showField {
+.kwcClass .showField {
     font-weight: bold;
     margin-bottom: 9px;
 }
-.kwc-class fieldset {
+.kwcClass fieldset {
     margin-bottom: 20px;
     padding: 10px;
 }
-.kwc-class fieldset legend {
+.kwcClass fieldset legend {
     font-weight: bold;
     margin-left: 20px;
     padding: 5px;
 }
-.kwc-class form .kwfFormFieldRadio .kwfFormFieldWrapper label {
+.kwcClass form .kwfFormFieldRadio .kwfFormFieldWrapper label {
     margin-right: 20px;
     clear: none;
 }
-.kwc-class form .kwfFormFieldRadio input { margin: 0px; padding: 0px; }
-.kwc-class form .kwfFormFieldRadioHorizontal span { display: inline-block; }
-.kwc-class form .kwfFormFieldRadioVertical span { display: block; }
-.kwc-class form .kwfFormFieldRadioVertical span label { margin-left: 0px; }
-.kwc-class form .kwfFormFieldRadioVertical label { float: none; }
+.kwcClass form .kwfFormFieldRadio input { margin: 0px; padding: 0px; }
+.kwcClass form .kwfFormFieldRadioHorizontal span { display: inline-block; }
+.kwcClass form .kwfFormFieldRadioVertical span { display: block; }
+.kwcClass form .kwfFormFieldRadioVertical span label { margin-left: 0px; }
+.kwcClass form .kwfFormFieldRadioVertical label { float: none; }
 
-.kwc-class form .kwfFormFieldMultiCheckboxHorizontal label { float: none; width: auto; margin-left: 0px; }
-.kwc-class form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; padding-right: 10px; }
-.kwc-class form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
+.kwcClass form .kwfFormFieldMultiCheckboxHorizontal label { float: none; width: auto; margin-left: 0px; }
+.kwcClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; padding-right: 10px; }
+.kwcClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
 
-.kwc-class form .kwfFormContainerColumns .kwfFormContainerColumn { float: left; clear: none; margin-bottom: 0px; }
-.kwc-class form .kwfFormContainerColumns .kwfFormContainerColumn .kwfField { clear: none; margin-bottom: 0px; }
+.kwcClass form .kwfFormContainerColumns .kwfFormContainerColumn { float: left; clear: none; margin-bottom: 0px; }
+.kwcClass form .kwfFormContainerColumns .kwfFormContainerColumn .kwfField { clear: none; margin-bottom: 0px; }
 
-.kwc-class span.comment { margin-left: 10px; color: #999; }
-.kwc-class .kwfField { clear: both; position: relative; margin-bottom: 4px; }
+.kwcClass span.comment { margin-left: 10px; color: #999; }
+.kwcClass .kwfField { clear: both; position: relative; margin-bottom: 4px; }
 
-.kwc-class .kwcLabelPositionAbove label {
+.kwcClass .kwcLabelPositionAbove label {
     display: block;
     float: none;
     margin-left: 0px;
@@ -112,6 +112,6 @@
     width: 100%;
 }
 
-.kwc-class .spEmail {
+.kwcClass .spEmail {
     display: none;
 }

@@ -1,26 +1,26 @@
-.kwc-class h2 {
+.kwcClass h2 {
     margin-top: -15px;
     padding: 2px 10px;
     border-bottom: 2px solid #ccc;
 }
-.kwc-class .nickname h3 {
+.kwcClass .nickname h3 {
     float: left;
     font-size: 14px;
     margin-right: 10px;
     margin-bottom: 15px;
     padding-top: 1px;
 }
-.kwc-class .avatar {
+.kwcClass .avatar {
     float: right;
 }
-.kwc-class .userData {
+.kwcClass .userData {
     clear: left;
 }
-.kwc-class .userData h3 {
+.kwcClass .userData h3 {
     margin-top: 10px;
     margin-bottom: 5px;
 }
-.kwc-class .userData li {
+.kwcClass .userData li {
     list-style-type: square;
     margin-left: 15px;
 }

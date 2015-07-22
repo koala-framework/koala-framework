@@ -1,4 +1,4 @@
-.kwc-class a .outerHoverIcon {
+.kwcClass a .outerHoverIcon {
     width: 0px;
     height: 0px;
 }

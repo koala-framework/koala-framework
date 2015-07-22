@@ -1,12 +1,12 @@
-.kwc-class .deletingPost {
+.kwcClass .deletingPost {
     text-align: center;
     font-weight: bold;
     float:left;
 }
-.kwc-class .deletingPost.yes {
+.kwcClass .deletingPost.yes {
     float: right;
 }
-.kwc-class .deletingPost a {
+.kwcClass .deletingPost a {
     padding: 10px;
     line-height: 24px;
 }

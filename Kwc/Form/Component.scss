@@ -7,7 +7,7 @@
 @import "form/predefined/form-style-default-center";
 @import "form/predefined/form-style-center";
 
-.kwc-class {
+.kwcClass {
     .kwfFormFieldWrapper {
         position: relative;
     }
@@ -28,7 +28,7 @@
 
 /* ------------------------------------ Button Loading ------------------------------------*/
 
-.kwc-class {
+.kwcClass {
     .submitWrapper {
         .saving {
             @include default-loading-animation-small;

@@ -2,31 +2,31 @@
 
 .kwfViewAjaxHidden { display: none; }
 
-.kwc-class .ext-el-mask {
+.kwcClass .ext-el-mask {
     background-color: white;
 }
 
-.kwc-class .ext-el-mask-msg.loading {
+.kwcClass .ext-el-mask-msg.loading {
     @include default-loading-animation-big;
 }
 
-.kwc-class .ext-el-mask-msg.loading div {
+.kwcClass .ext-el-mask-msg.loading div {
     background: white;
     border: 0px;
     padding: 10px 10px 10px 10px;
 }
 
-.kwc-class.loadingContent {
+.kwcClass.loadingContent {
     background-color: white;
     padding: 50px 0px 50px 0px;
     behavior: url(/assets/css3pie/pie.htc);
 }
 
-.kwc-class.loadingContent .loading {
+.kwcClass.loadingContent .loading {
     @include default-loading-animation-big;
 }
 
-.kwc-class .linkToTop {
+.kwcClass .linkToTop {
     display: none;
     background: url(/assets/kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left top;
     width: 58px;
@@ -37,11 +37,11 @@
     margin-left: -29px;
 }
 
-.kwc-class .linkToTop:hover {
+.kwcClass .linkToTop:hover {
     cursor: pointer;
     background: url(/assets/kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left bottom;
 }
 
-.kwc-class.scrolledDown .linkToTop {
+.kwcClass.scrolledDown .linkToTop {
     display: block;
 }

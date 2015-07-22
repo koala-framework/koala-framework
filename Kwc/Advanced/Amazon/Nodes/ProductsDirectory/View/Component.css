@@ -1,12 +1,12 @@
-.kwc-class ul {
+.kwcClass ul {
     padding-top: 10px;
 }
-.kwc-class .products {
+.kwcClass .products {
     margin-bottom: 10px;
     padding-bottom: 10px;
 }
-.kwc-class .products img {
+.kwcClass .products img {
     float: left;
     margin-right: 20px;
 }
-.kwc-class .products h1 { margin-bottom: 0px; }
+.kwcClass .products h1 { margin-bottom: 0px; }

@@ -1,6 +1,6 @@
 var onReady = require('kwf/on-ready');
 
-onReady.onRender('.kwc-class', function(target, config) {
+onReady.onRender('.kwcClass', function(target, config) {
     var mask = $('<div class="kwfup-kwcMenuDropdownMaskMask"></div>');
     var maskClone = $(mask).clone();
     var subMask;
@@ -32,12 +32,12 @@ onReady.onRender('.kwc-class', function(target, config) {
         })
     }
 
-    $('.kwc-class > ul > li').on('mouseenter', function(e){
+    $('.kwcClass > ul > li').on('mouseenter', function(e){
         if ($(e.currentTarget).hasClass('hasSubmenu'))
             $('.kwfup-kwcMenuDropdownMaskMask').addClass('visible')
     })
 
-    $('.kwc-class > ul > li').on('mouseleave', function(e){
+    $('.kwcClass > ul > li').on('mouseleave', function(e){
         if ($(e.currentTarget).hasClass('hasSubmenu'))
             $('.kwfup-kwcMenuDropdownMaskMask').removeClass('visible')
     })

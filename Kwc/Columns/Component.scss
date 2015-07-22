@@ -1,6 +1,6 @@
 @import "compass/css3/box-sizing";
 
-.kwc-class {
+.kwcClass {
     > .listItem {
         padding-bottom: 20px;
         .kwfup-kwcTextImage {
@@ -17,7 +17,7 @@
     }
 }
 
-.kwc-class.gt480 {
+.kwcClass.gt480 {
     margin-right: -20px;
 
     > .listItem {
@@ -109,7 +109,7 @@
     }
 }
 
-.kwc-class.gt620 {
+.kwcClass.gt620 {
     &.col4col-25_25_25_25 {
         > .listItem.span1 {
             width: percentage(1/4);
