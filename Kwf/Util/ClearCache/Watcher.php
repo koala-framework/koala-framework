@@ -165,7 +165,7 @@ class Kwf_Util_ClearCache_Watcher
     {
         $eventStart = microtime(true);
         Kwf_Cache_Simple::resetZendCache(); //reset to re-fetch namespace
-        if (substr($event->filename, -4)=='.css' || substr($event->filename, -3)=='.js' || substr($event->filename, -9)=='.printcss' || substr($event->filename, -5)=='.scss') {
+        if (substr($event->filename, -4)=='.css' || substr($event->filename, -3)=='.js' || substr($event->filename, -5)=='.scss') {
             echo "asset modified\n";
             if ($event instanceof Event\Modify) {
 
@@ -299,8 +299,7 @@ class Kwf_Util_ClearCache_Watcher
                        self::_endsWith($event->filename, '/FrontendForm.php') ||
                        self::_endsWith($event->filename, '/Form.php') ||
                        self::_endsWith($event->filename, '/Component.css') ||
-                       self::_endsWith($event->filename, '/Component.scss') ||
-                       self::_endsWith($event->filename, '/Component.printcss')
+                       self::_endsWith($event->filename, '/Component.scss')
             ) {
                 if ($event instanceof Event\Create || $event instanceof Event\Delete) {
                     echo "recalculate 'componentFiles' setting because comopnent file got removed/added...\n";
@@ -319,7 +318,7 @@ class Kwf_Util_ClearCache_Watcher
                     $s->whereEquals('component_class', $matchingClasses);
                     self::_deleteViewCache($s);
                 }
-            } else if (self::_endsWith($event->filename, '/Component.css') || self::_endsWith($event->filename, '/Component.scss') || self::_endsWith($event->filename, '/Component.printcss')) {
+            } else if (self::_endsWith($event->filename, '/Component.css') || self::_endsWith($event->filename, '/Component.scss')) {
                 //MODIFY already handled above (assets)
                 //CREATE/DELETE also handled above
             } else if (self::_endsWith($event->filename, '/Master.tpl') || self::_endsWith($event->filename, '/Master.twig')) {
@@ -573,7 +572,6 @@ class Kwf_Util_ClearCache_Watcher
             self::_clearAssetsAll('js');
             self::_clearAssetsAll('defer.js');
             self::_clearAssetsAll('css');
-            self::_clearAssetsAll('printcss');
             return;
         }
         $fileNames = array(

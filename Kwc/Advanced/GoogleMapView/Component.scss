@@ -28,3 +28,10 @@
 .cssClass .mapDirSuggestParent { display: none; margin-top: 30px; }
 
 .cssClass .container { overflow: hidden; border: 1px solid #000; }
+
+@media print {
+.cssClass {
+    page-break-before: always;
+}
+
+}

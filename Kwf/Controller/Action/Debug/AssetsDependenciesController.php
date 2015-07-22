@@ -105,10 +105,6 @@ class Kwf_Controller_Action_Debug_AssetsDependenciesController extends Kwf_Contr
                     $f = $type . '/' . $file.'.css';
                     $this->_processDependencyFile($assetsType, $f);
                 }
-                if (is_file($dir . '/' . $file.'.printcss')) {
-                    $f = $type . '/' . $file.'.printcss';
-                    $this->_processDependencyFile($assetsType, $f);
-                }
             }
         }
 

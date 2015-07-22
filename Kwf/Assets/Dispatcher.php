@@ -156,7 +156,6 @@ class Kwf_Assets_Dispatcher
         }
         if ($extension == 'js') $mimeType = 'text/javascript';
         else if ($extension == 'css') $mimeType = 'text/css';
-        else if ($extension == 'printcss') $mimeType = 'text/css; media=print';
         else if ($extension == 'defer.js') $mimeType = 'text/javascript; defer';
         else throw new Kwf_Exception_NotFound();
 
@@ -164,7 +163,7 @@ class Kwf_Assets_Dispatcher
             $contents = $package->getPackageContents($mimeType, $language)->getFileContents();
             $mtime = $package->getMaxMTime($mimeType);
             if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
-            else if ($extension == 'css' || $extension == 'printcss') $mimeType = 'text/css; charset=utf-8';
+            else if ($extension == 'css') $mimeType = 'text/css; charset=utf-8';
         } else {
             $contents = $package->getPackageContents($mimeType, $language)->getMapContents(false);
             $mtime = $package->getMaxMTime($mimeType);

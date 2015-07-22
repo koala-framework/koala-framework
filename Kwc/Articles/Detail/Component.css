@@ -34,3 +34,12 @@
 .cssClass .article .icons .kwfSwitchHoverFade .switchContent {
     display: none;
 }
+
+@media print {
+.cssClass .feedback,
+.cssClass .back,
+.cssClass .icons {
+    display: none;
+}
+
+}

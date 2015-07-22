@@ -118,8 +118,6 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             $ret = new Kwf_Assets_Dependency_File_Js($fileName);
         } else if (substr($fileName, -4) == '.css') {
             $ret = new Kwf_Assets_Dependency_File_Css($fileName);
-        } else if (substr($fileName, -9) == '.printcss') {
-            $ret = new Kwf_Assets_Dependency_File_PrintCss($fileName);
         } else if (substr($fileName, -5) == '.scss') {
             $ret = new Kwf_Assets_Dependency_File_Scss($fileName);
         } else if (substr($fileName, -2) == '/*') {
@@ -177,9 +175,6 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         }
         if (substr($cssClass, -3) == '.js') {
             $cssClass = substr($cssClass, 0, -3);
-        }
-        if (substr($cssClass, -9) == '.printcss') {
-            $cssClass = substr($cssClass, 0, -9);
         }
         if (substr($cssClass, -10) == '/Component') {
             $cssClass = substr($cssClass, 0, -10);

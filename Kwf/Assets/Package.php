@@ -102,7 +102,6 @@ class Kwf_Assets_Package
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
 
         $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($this, $ext, $language);
         $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
@@ -165,7 +164,6 @@ class Kwf_Assets_Package
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
         $packageMap->setFile($this->getPackageUrl($ext, $language));
 
         // ***** commonjs
@@ -236,11 +234,10 @@ class Kwf_Assets_Package
             if ($mimeType == 'text/javascript') $ext = 'js';
             else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
             else if ($mimeType == 'text/css') $ext = 'css';
-            else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
             else throw new Kwf_Exception_NotYetImplemented();
             if ($ext == 'js' || $ext == 'defer.js') {
                 $contents .= "\n//# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)."\n";
-            } else if ($ext == 'css' || $ext == 'printcss') {
+            } else if ($ext == 'css') {
                 $contents .= "\n/*# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)." */\n";
             }
             $packageMap->setFileContents($contents);
@@ -294,7 +291,6 @@ class Kwf_Assets_Package
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
         else throw new Kwf_Exception_NotYetImplemented();
 
         $ret = array();

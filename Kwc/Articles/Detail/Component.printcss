@@ -1,5 +1,0 @@
-.cssClass .feedback,
-.cssClass .back,
-.cssClass .icons {
-    display: none;
-}

@@ -10,11 +10,6 @@ class Kwf_View_Helper_Assets
         foreach ($assetsPackage->getPackageUrls('text/css', $language) as $file) {
             $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($file)."\" />\n";
         }
-        foreach ($assetsPackage->getPackageUrls('text/css; media=print', $language) as $file) {
-            $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($file)."\" ";
-            $ret .= "media=\"print\" ";
-            $ret .= "/>\n";
-        }
         foreach ($assetsPackage->getPackageUrls('text/javascript', $language) as $file) {
             $ret .= "$indent<script type=\"text/javascript\" src=\"".htmlspecialchars($file)."\"></script>\n";
         }

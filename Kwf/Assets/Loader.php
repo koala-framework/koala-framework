@@ -32,9 +32,6 @@ class Kwf_Assets_Loader
         } else if (substr($file, -4)=='.css' || substr($file, -5)=='.scss') {
             $ret['mimeType'] = 'text/css; charset=utf-8';
             if (!Kwf_Assets_Dispatcher::allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
-        } else if (substr($file, -9)=='.printcss') {
-            $ret['mimeType'] = 'text/css; charset=utf-8';
-            if (!Kwf_Assets_Dispatcher::allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
         } else if (substr($file, -3)=='.js') {
             $ret['mimeType'] = 'text/javascript; charset=utf-8';
             if (!Kwf_Assets_Dispatcher::allowSourceAccess()) throw new Kwf_Exception_AccessDenied();

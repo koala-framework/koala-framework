@@ -139,7 +139,7 @@ class Kwf_Component_Settings
                 $file .= '/Component';
             }
             foreach ($dirs as $dir) {
-                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.printcss') || is_file($dir.'/'.$file.'.js') || is_file($dir.'/'.$file.'.defer.js')) {
+                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.js') || is_file($dir.'/'.$file.'.defer.js')) {
                     $cssClass[] = Kwf_Component_Abstract::formatCssClass($i);
                     break;
                 }
@@ -244,7 +244,6 @@ class Kwf_Component_Settings
 
                     //verwendet bei dependencies
                     'css' => array('filename'=>'Component', 'ext'=>array('css', 'scss'), 'returnClass'=>false, 'multiple'=>true),
-                    'printcss' => array('filename'=>'Component', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
                     'masterCss' => array('filename'=>'Master', 'ext'=>array('css', 'scss'), 'returnClass'=>false, 'multiple'=>true),
                     'js' => array('filename'=>'Component', 'ext'=>array('js', 'defer.js'), 'returnClass'=>false, 'multiple'=>true),
                 ));

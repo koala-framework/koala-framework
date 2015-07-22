@@ -25,7 +25,6 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
             $nonDeferDep = array();
             $files = Kwf_Component_Abstract_Admin::getComponentFiles($this->_rootComponentClass, array(
                 'css' => array('filename'=>'Web', 'ext'=>'css', 'returnClass'=>false, 'multiple'=>true),
-                'printcss' => array('filename'=>'Web', 'ext'=>'printcss', 'returnClass'=>false, 'multiple'=>true),
                 'scss' => array('filename'=>'Web', 'ext'=>'scss', 'returnClass'=>false, 'multiple'=>true),
             ));
             foreach ($files as $i) {
@@ -59,7 +58,7 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                 //alle dateien der vererbungshierache includieren
                 $files = Kwc_Abstract::getSetting($class, 'componentFiles');
                 $componentCssFiles = array();
-                foreach (array_merge($files['css'], $files['printcss'], $files['js'], $files['masterCss']) as $f) {
+                foreach (array_merge($files['css'], $files['js'], $files['masterCss']) as $f) {
                     $componentCssFiles[] = $f;
                 }
                 //reverse damit css von weiter unten in der vererbungshierachie überschreibt

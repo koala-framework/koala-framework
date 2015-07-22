@@ -84,3 +84,10 @@ body.ext2-ie8 .cssClass a {
         display: block;
     }
 }
+
+@media print {
+.cssClass a .outerHoverIcon {
+    width: 0px;
+    height: 0px;
+}
+}

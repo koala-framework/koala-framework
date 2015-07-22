@@ -21,3 +21,8 @@
 }
 
 .cssClass span { font-weight: bold; }
+
+@media print {
+.cssClass { display: none; }
+
+}
