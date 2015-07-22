@@ -1,26 +1,26 @@
-.$cssClass h2 {
+.cssClass h2 {
     margin-top: -15px;
     padding: 2px 10px;
     border-bottom: 2px solid #ccc;
 }
-.$cssClass .nickname h3 {
+.cssClass .nickname h3 {
     float: left;
     font-size: 14px;
     margin-right: 10px;
     margin-bottom: 15px;
     padding-top: 1px;
 }
-.$cssClass .avatar {
+.cssClass .avatar {
     float: right;
 }
-.$cssClass .userData {
+.cssClass .userData {
     clear: left;
 }
-.$cssClass .userData h3 {
+.cssClass .userData h3 {
     margin-top: 10px;
     margin-bottom: 5px;
 }
-.$cssClass .userData li {
+.cssClass .userData li {
     list-style-type: square;
     margin-left: 15px;
 }

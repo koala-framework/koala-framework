@@ -1,12 +1,12 @@
-.$cssClass .deletingPost {
+.cssClass .deletingPost {
     text-align: center;
     font-weight: bold;
     float:left;
 }
-.$cssClass .deletingPost.yes {
+.cssClass .deletingPost.yes {
     float: right;
 }
-.$cssClass .deletingPost a {
+.cssClass .deletingPost a {
     padding: 10px;
     line-height: 24px;
 }

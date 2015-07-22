@@ -1,1 +1,11 @@
-.$cssClass {    border: 1px solid;    margin-bottom: 50px;    padding: 10px}.$cssClass button.add,.$cssClass button.delete,.$cssClass button.deleteImage,.$cssClass button.deleteImage {    cursor: pointer;}
+.cssClass {
+    border: 1px solid;
+    margin-bottom: 50px;
+    padding: 10px
+}
+.cssClass button.add,
+.cssClass button.delete,
+.cssClass button.deleteImage,
+.cssClass button.deleteImage {
+    cursor: pointer;
+}

@@ -1,12 +1,12 @@
-.$cssClass ul {
+.cssClass ul {
     padding-top: 10px;
 }
-.$cssClass .products {
+.cssClass .products {
     margin-bottom: 10px;
     padding-bottom: 10px;
 }
-.$cssClass .products img {
+.cssClass .products img {
     float: left;
     margin-right: 20px;
 }
-.$cssClass .products h1 { margin-bottom: 0px; }
+.cssClass .products h1 { margin-bottom: 0px; }
