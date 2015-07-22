@@ -1,0 +1,17 @@
+@import "kwf/el-breakpoint";
+
+.test123 {
+  @include el-breakpoint(350px) {
+    p  { color: red; }
+  }
+}
+.test123 {
+  @include el-breakpoint(400px) {
+    p  { color: blue; }
+  }
+}
+.test456 {
+  @include el-breakpoint(350px) {
+    p  { color: green; }
+  }
+}
