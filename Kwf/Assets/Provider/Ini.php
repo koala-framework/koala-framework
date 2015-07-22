@@ -50,10 +50,18 @@ class Kwf_Assets_Provider_Ini extends Kwf_Assets_Provider_Abstract implements Se
 
             $depFiles = $this->_config[$dependencyName]['files'];
 
+            $isCommonJsEntry = false;
+            if (isset($this->_config[$dependencyName]['commonJsEntry']) && $this->_config[$dependencyName]['commonJsEntry']) {
+                $isCommonJsEntry = true;
+            }
+
             $files = array();
             foreach ($depFiles as $i) {
                 if (!$i) continue;
                 $i = Kwf_Assets_Dependency_File::createDependency(trim($i), $this->_providerList);
+                if ($i instanceof Kwf_Assets_Dependency_File_Js) {
+                    if ($isCommonJsEntry) $i->setIsCommonJsEntry(true);
+                }
                 if ($i instanceof Kwf_Assets_Dependency_File && $i->getFileNameWithType()) {
                     $files[$i->getFileNameWithType()] = true;
                 } else if ($i instanceof Kwf_Assets_Dependency_Dependencies) {

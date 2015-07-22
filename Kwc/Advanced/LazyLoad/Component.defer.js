@@ -1,17 +1,20 @@
-Kwf.onJElementReady('.cssClass', function(el) {
+var onReady = require('kwf/on-ready');
+var benchmarkBox = require('kwf/benchmark/box');
+var getKwcRenderUrl = require('kwf/get-kwc-render-url');
+
+onReady.onRender('.cssClass', function(el) {
     $.ajax({
-        url: Kwf.getKwcRenderUrl(),
+        url: getKwcRenderUrl(),
         data: {
             componentId: el.attr('data-load-id')
         },
         success: function(data) {
             el.removeClass('loading');
             el.find('.content').html(data);
-            var t = Kwf.Utils.BenchmarkBox.now();
-            Kwf.callOnContentReady(el.find('.content'), { action: 'render' });
-            Kwf.Utils.BenchmarkBox.time('time', Kwf.Utils.BenchmarkBox.now()-t);
-            Kwf.Utils.BenchmarkBox.create({
-                counters: Kwf._onReadyStats,
+            var t = benchmarkBox.now();
+            onReady.callOnContentReady(el.find('.content'), { action: 'render' });
+            benchmarkBox.time('time', benchmarkBox.now()-t);
+            benchmarkBox.create({
                 type: 'onReady lazyLoad'
             });
         },

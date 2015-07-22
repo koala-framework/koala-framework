@@ -1,6 +1,4 @@
-(function() {
-
-    Kwf.namespace('Kwf.EyeCandy.Switch.Display');
+var onReady = require('kwf/on-ready');
 
     var switchDisplayCls = function(el, config) {
 
@@ -25,7 +23,7 @@
             this.switchContainer
                 .css('display', 'block')
                 .css('height', '');
-            Kwf.callOnContentReady(this.el, {action: 'show'});
+            onReady.callOnContentReady(this.el, {action: 'show'});
             this.switchContainer
                 .css('display', 'none')
 
@@ -39,7 +37,7 @@
 
         this.doClose = function() {
             this.switchContainer.css('display', 'none');
-            Kwf.callOnContentReady(this.el, {action: 'hide'});
+            onReady.callOnContentReady(this.el, {action: 'hide'});
             this.switchContainer
                 .css('display', 'block')
 
@@ -91,12 +89,12 @@
 
     }
 
-    Kwf.EyeCandy.Switch.Display = function(elOrSelector, config) {
+    var SwitchDisplay = function(elOrSelector, config) {
         if (typeof elOrSelector == 'string') {
-            Kwf.onJElementReady(elOrSelector, function(el) {
-                Kwf.EyeCandy.Switch.Display(el, config);
+            onReady.onRender(elOrSelector, function(el) {
+                SwitchDisplay(el, config);
             }, { defer: true });
-            Kwf.onJElementReady(elOrSelector, function(el, config) {
+            onReady.onRender(elOrSelector, function(el, config) {
                 if (!el.find(config.container || 'div.switchContent').hasClass('active')) {
                     el.find(config.container || 'div.switchContent').hide();
                 }
@@ -116,12 +114,9 @@
 
     };
 
-    Kwf.EyeCandy.Switch.Display('.kwfSwitchDisplay');
-    Kwf.EyeCandy.Switch.Display('.kwfSwitchHoverFade', {
+    SwitchDisplay('.kwfSwitchDisplay');
+    SwitchDisplay('.kwfSwitchHoverFade', {
         fade: true,
         hover: true,
         duration: 200
     });
-
-})();
-

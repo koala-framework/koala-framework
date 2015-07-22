@@ -1,4 +1,5 @@
-Kwf.Statistics.onCount(function(url, config) {
+var statistics = require('kwf/statistics');
+statistics.onCount(function(url, config) {
 
     if (typeof(_paq) == 'undefined') return;
 

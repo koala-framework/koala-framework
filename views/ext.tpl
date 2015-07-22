@@ -42,7 +42,10 @@
 
     <script type="text/javascript">
     (function() {
-        var Ext = (window.Ext4 || window.Ext);
+        <?php if ($this->uniquePrefix) { ?>
+        var Kwf = <?=$this->uniquePrefix?>.Kwf;
+        var Ext2 = <?=$this->uniquePrefix?>.Ext2;
+        <?php } ?>
         <?php if (isset($this->ext['user'])) { ?>
         Kwf.user = '<?= $this->ext['user'] ?>';
         <?php } ?>
@@ -56,25 +59,9 @@
             <?php } else { ?>
             var panel = <?= Zend_Json::encode($this->ext['config']) ?>;
             <?php } ?>
-            var isExt4Panel = false;
-            if (window.Ext4) {
-                if (Ext4.panel && Ext4.panel.Panel && panel instanceof Ext4.panel.Panel) {
-                    isExt4Panel = true;
-                } else if (Ext4.ClassManager.getNameByAlias('widget.'+panel.xtype)) {
-                    isExt4Panel = true;
-                }
-            }
-            if (!isExt4Panel) {
-                //Ext 2
-                Kwf.currentViewport = new <?= $this->ext['viewport'] ?>({
-                    items: [panel]
-                });
-            } else {
-                //Ext 4
-                Kwf.currentViewport = new Ext4.create('Kwf.Ext4.Viewport', {
-                    items: [panel]
-                });
-            }
+            Kwf.currentViewport = new <?= $this->ext['viewport'] ?>({
+                items: [panel]
+            });
             if((!Kwf.Connection || Kwf.Connection.masks == 0)  && Ext2.get('loading')) {
                 Ext2.get('loading').fadeOut({remove: true});
             }

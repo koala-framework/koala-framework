@@ -1,4 +1,5 @@
-Kwf.onContentReady(function(el, options) {
+var onReady = require('kwf/on-ready');
+onReady.onContentReady(function(el, options) {
     var flashComponents = Ext2.DomQuery.select('div.kwcAbstractFlash');
     Ext2.each(flashComponents, function(flashComponent, el) {
         var fc = Ext2.get(flashComponent);

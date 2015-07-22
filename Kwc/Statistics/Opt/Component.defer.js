@@ -1,15 +1,18 @@
-Kwf.onElementReady('.cssClass .kwfup-webForm', function(el, config) {
+var onReady = require('kwf/on-ready-ext2');
+var componentEvent = require('kwf/component-event');
+
+onReady.onRender('.cssClass .kwfup-webForm', function(el, config) {
     el.kwcForm.findField('form_opt').el.on('change', function() {
         this.kwcForm.submit();
     }, el);
     el.kwcForm.on('submitSuccess', function () {
         if (el.kwcForm.findField('form_opt').getValue()) {
-            Kwf.fireComponentEvent('cookieOptChanged', 'in');
+            componentEvent.trigger('cookieOptChanged', 'in');
         } else {
-            Kwf.fireComponentEvent('cookieOptChanged', 'out');
+            componentEvent.trigger('cookieOptChanged', 'out');
         }
     }, el);
-    Kwf.onComponentEvent('cookieOptChanged', function(value) {
+    componentEvent.on('cookieOptChanged', function(value) {
         if (value == 'in') {
             el.kwcForm.findField('form_opt').setValue(true);
         } else if (value == 'out') {

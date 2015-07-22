@@ -1,3 +1,5 @@
+var onReady = require('kwf/on-ready-ext2');
+
 Ext2.namespace("Kwc.Legacy.List.Carousel");
 Kwc.Legacy.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     numberShown: 5,
@@ -43,7 +45,7 @@ Kwc.Legacy.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstra
         this.list.setActiveChangeLocked(true);
         this.list.getItem(this.numberShown).el.show();
 
-        Kwf.callOnContentReady(this.moveElement, {newRender: false});
+        onReady.callOnContentReady(this.moveElement, {newRender: false});
 
         var firstElWidth = this.list.getItem(0).getWidthIncludingMargin();
 
@@ -94,7 +96,7 @@ Kwc.Legacy.List.Carousel.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstra
         // fade in first
         this.list.getItem(0).el.show();
 
-        Kwf.callOnContentReady(this.moveElement, {newRender: false});
+        onReady.callOnContentReady(this.moveElement, {newRender: false});
 
         var cfg = Ext2.applyIf({
             callback: function() {

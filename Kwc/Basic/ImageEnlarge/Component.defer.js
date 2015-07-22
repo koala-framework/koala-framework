@@ -1,7 +1,10 @@
-Kwf.onElementReady('.cssClass.showHoverIcon > a', function imageEnlarge(el) {
-    if (el.getWidth() > 50 && el.getHeight() > 50) {
-        el.createChild({ tag: 'span', cls: 'outerHoverIcon', html: '<span class="innerHoverIcon"></span>'});
-        if (el.getWidth() < 200) {
+var $ = require('jQuery');
+var onReady = require('kwf/on-ready');
+
+onReady.onRender('.cssClass.showHoverIcon > a', function imageEnlarge(el) {
+    if (el.width() > 50 && el.height() > 50) {
+        el.append($('<span class="outerHoverIcon"><span class="innerHoverIcon"></span></span>'));
+        if (el.width() < 200) {
             el.addClass('small');
         }
     }

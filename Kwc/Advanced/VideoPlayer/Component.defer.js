@@ -1,8 +1,10 @@
-Kwf.onJElementHide('.kwcAdvancedVideoPlayer', function(el) {
+var onReady = require('kwf/on-ready');
+
+onReady.onHide('.kwcAdvancedVideoPlayer', function(el) {
     if (el.get(0).mediaElement) el.get(0).mediaElement.stop();
 }, {defer: true});
 
-Kwf.onJElementReady('.cssClass', function(el, config) {
+onReady.onRender('.cssClass', function(el, config) {
     el.find('video').mediaelementplayer({
         //custom path to flash
         flashName: '/assets/mediaelement/build/flashmediaelement.swf',

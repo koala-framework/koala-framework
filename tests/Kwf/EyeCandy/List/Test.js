@@ -1,4 +1,6 @@
-Kwf.onContentReady(function() {
+var onReady = require('kwf/on-ready');
+
+onReady.onContentReady(function() {
     var lists = Ext2.query('.testItemWrapper');
     lists.forEach(function(list) {
         if (!list.kwfList) {

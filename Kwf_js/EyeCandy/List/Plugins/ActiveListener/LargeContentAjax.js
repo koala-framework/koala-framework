@@ -1,3 +1,7 @@
+var onReady = require('kwf/on-ready');
+var getKwcRenderUrl = require('kwf/get-kwc-render-url');
+var statistics = require('kwf/statistics');
+
 Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
         this.activeItem = null;
@@ -5,7 +9,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeC
             this._activate(item);
         }, this);
 
-        Kwf.onContentReady(function(el) {
+        onReady.onContentReady(function(el) {
             //recalculate container height as the content height might have changed due to ResponsiveEl
             var h = this._getLargeContentHeight(this.list.getActiveItem());
             this.largeContainer.setHeight(h);
@@ -31,7 +35,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeC
 
         Ext2.Ajax.request({
             params: { url: item.el.child('a').dom.href },
-            url: Kwf.getKwcRenderUrl(),
+            url: getKwcRenderUrl(),
             success: function(response) {
 
                 //remove height again so height can depend on content
@@ -57,7 +61,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeC
             var previousHeight = this.largeContainer.getHeight();
             var newHeight = this._getLargeContentHeight(item);
             this.largeContainer.setHeight(newHeight); //set to new height, not animated
-            Kwf.callOnContentReady(this.largeContent[item.id].parent(), {newRender: true});
+            onReady.callOnContentReady(this.largeContent[item.id].parent(), {newRender: true});
             newHeight = this._getLargeContentHeight(item); //calculate again, might be changed by ResponsiveEl which triggers in callOnContentReady
             contentEl.hide(); //hide after callOnContentReady, will be faded in after images loaded
             this.largeContainer.setHeight(previousHeight, false); //set back to previous height, not animated
@@ -85,7 +89,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeC
         } else {
             this.largeContent[item.id].child('.loading').remove();
             this.largeContent[item.id].show();
-            Kwf.callOnContentReady(this.largeContent[item.id].dom, {newRender: true});
+            onReady.callOnContentReady(this.largeContent[item.id].dom, {newRender: true});
             this.largeContent[item.id].hide();
         }
     },
@@ -125,7 +129,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeC
             var oldHeight = this.largeContainer.getHeight();
             var newHeight = this._getLargeContentHeight(item);
             this.largeContainer.setHeight(newHeight); //set new height without animation
-            Kwf.callOnContentReady(nextEl.parent(), {newRender: false});
+            onReady.callOnContentReady(nextEl.parent(), {newRender: false});
             newHeight = this._getLargeContentHeight(item); //calculate again, might be changed by ResponsiveEl which triggers in callOnContentReady
             this.largeContainer.setHeight(oldHeight); //set previous height without animation
             this.largeContainer.setHeight(newHeight, true); //and now animate to new height
@@ -134,7 +138,7 @@ Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContentAjax = Ext2.extend(Kwf.EyeC
 
         this._doTransition(item, activeEl, nextEl);
 
-        Kwf.Statistics.count(item.el.child('a').dom.href);
+        statistics.count(item.el.child('a').dom.href);
 
         this.activeItem = item;
     },

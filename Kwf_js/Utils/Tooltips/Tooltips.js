@@ -1,4 +1,6 @@
-Kwf.onContentReady(function()
+var onReady = require('kwf/on-ready');
+
+onReady.onContentReady(function()
 {
     var tooltipWrappers = Ext2.query('.tooltipWrapper');
     Ext2.each(tooltipWrappers, function(tooltipWrapper) {

@@ -1,4 +1,6 @@
-Kwf.onContentReady(function()
+var onReady = require('kwf/on-ready');
+
+onReady.onContentReady(function()
 {
     var els = Ext2.query('.kwfRoundBoderBox');
     if (els.length) {

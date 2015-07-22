@@ -1,1 +1,2 @@
-Kwf.Utils.ResponsiveImg('.cssClass .container');
+var responsiveImg = require('kwf/responsive-img');
+responsiveImg('.cssClass .container');

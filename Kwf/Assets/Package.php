@@ -168,12 +168,12 @@ class Kwf_Assets_Package
         else if ($mimeType == 'text/css; media=print') $ext = 'printcss';
         $packageMap->setFile($this->getPackageUrl($ext, $language));
 
-        $maxMTime = 0;
+        // ***** commonjs
         $commonJsData = array();
         $commonJsDeps = array();
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
-                if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript') && $i->isCommonJsEntry()) {
+                if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry()) {
                     $c = $i->getContentsPacked($language)->getFileContentsInlineMap(false);
                     $commonJsDeps = $this->_getCommonJsDeps($i, $language);
                     $commonJsData[$i->__toString()] = array(
@@ -188,7 +188,30 @@ class Kwf_Assets_Package
                             $commonJsData[$k] = $j;
                         }
                     }
-                } else {
+                }
+            }
+        }
+        if ($commonJsData) {
+            if ($mimeType == 'text/javascript; defer') {
+                //in defer.js don't include deps that are already loaded in non-defer
+                foreach ($this->_getFilteredUniqueDependencies('text/javascript') as $i) {
+                    $commonJsDeps = $this->_getCommonJsDeps($i, $language);
+                    foreach (array_keys($commonJsDeps['data']) as $key) {
+                        if (isset($commonJsData[$key])) {
+                            unset($commonJsData[$key]);
+                        }
+                    }
+                }
+            }
+            $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData));
+            $map = Kwf_SourceMaps_SourceMap::createFromInline($contents);
+            $packageMap->concat($map);
+        }
+
+        // ***** non-commonjs, css
+        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
+            if ($i->getIncludeInPackage()) {
+                if (!(($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry())) {
                     $map = $i->getContentsPacked($language);
                     if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
                         throw new Kwf_Exception("contents must not contain sourceMappingURL");
@@ -200,35 +223,6 @@ class Kwf_Assets_Package
                     $packageMap->concat($map);
                 }
             }
-            $mTime = $i->getMTime();
-            if ($mTime) {
-                $maxMTime = max($maxMTime, $mTime);
-            }
-        }
-
-        if ($commonJsData) {
-            if ($mimeType == 'text/javascript; defer') {
-                //in defer.js don't include deps that are already loaded in non-defer
-                foreach ($this->_getFilteredUniqueDependencies('text/javascript') as $i) {
-                    $commonJsDeps = $this->_getCommonJsDeps($i, $language);
-                    foreach (array_keys($commonJsDeps['data']) as $key) {
-                        if (isset($commonJsData[$key])) {
-                            unset($commonJsData[$key]);
-                        }
-                    }
-                    $c = $i->getContentsPacked($language)->getFileContentsInlineMap(false);
-                    $commonJsData[$i->__toString()] = array(
-                        'id' => $i->__toString(),
-                        'source' => $c,
-                        'sourceFile' => $i->__toString(), //TODO
-                        'deps' => $commonJsDeps['deps'],
-                        'entry' => true
-                    );
-                }
-            }
-            $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData));
-            $map = Kwf_SourceMaps_SourceMap::createFromInline($contents);
-            $packageMap->concat($map);
         }
 
         if ($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') {

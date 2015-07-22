@@ -1,4 +1,6 @@
-Kwf.onElementReady('.kwfResizeElement', function(element) {
+var onReady = require('kwf/on-ready-ext2');
+
+onReady.onRender('.kwfResizeElement', function(element) {
     var resizer = new Kwf.Utils.Resizable(element.child('.resizeElement'), {
         handles: 'all',
         pinned: true,

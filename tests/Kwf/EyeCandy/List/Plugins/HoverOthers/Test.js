@@ -1,4 +1,6 @@
-Kwf.onContentReady(function() {
+var onReady = require('kwf/on-ready');
+
+onReady.onContentReady(function() {
     Ext2.query('.testItemWrapper').forEach(function(list) {
         if (!list.kwfList) {
             list.kwfList = new Kwf.EyeCandy.List({

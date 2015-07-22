@@ -64,6 +64,8 @@ class Kwf_View_Ext extends Kwf_View
 
         $this->applicationName = Zend_Registry::get('config')->application->name;
         $this->favicon = self::getFavicon();
+
+        $this->uniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
     }
 
     public static function getFavicon()

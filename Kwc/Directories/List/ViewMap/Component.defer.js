@@ -1,3 +1,5 @@
+var onReady = require('kwf/on-ready-ext2');
+
 Ext2.namespace('Kwc.Directories.List.ViewMap');
 Kwc.Directories.List.ViewMap.renderedMaps = [];
 
@@ -31,6 +33,6 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
     }
 };
 
-Kwf.onElementReady('div.kwcDirectoriesListViewMap', function(map) {
+onReady.onRender('div.kwcDirectoriesListViewMap', function(map) {
     Kwc.Directories.List.ViewMap.renderMap(map.dom);
 }, { checkVisibility: true });

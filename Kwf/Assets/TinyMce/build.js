@@ -7,7 +7,7 @@ amdlc.compile({
     expose: "public",
     compress: false,
     moduleOverrides: {
-        "tinymce/dom/Sizzle": "vendor/bower_components/tinymce/js/tinymce/classes/dom/Sizzle.jQuery.js"
+//         "tinymce/dom/Sizzle": "vendor/bower_components/tinymce/js/tinymce/classes/dom/Sizzle.jQuery.js"
     },
 
     from: [

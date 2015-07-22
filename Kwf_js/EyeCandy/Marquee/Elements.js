@@ -1,4 +1,6 @@
-Kwf.onContentReady(function()
+var onReady = require('kwf/on-ready');
+
+onReady.onContentReady(function()
 {
     var MarqueeComponents = Ext2.query('div.kwfMarqueeElements');
     Ext2.each(MarqueeComponents, function(c) {

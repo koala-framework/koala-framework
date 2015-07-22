@@ -1,7 +1,10 @@
+var onReady = require('kwf/on-ready');
+var componentEvent = require('kwf/component-event');
+
 (function() {
 var kwcFavouritesComponentIds = [];
 var kwcFavouritesInitialized = false;
-Kwf.onJElementReady('.cssClass', function(el, config) {
+onReady.onRender('.cssClass', function(el, config) {
     kwcFavouritesComponentIds.push(config.componentId);
 
     if (!kwcFavouritesInitialized) {
@@ -44,7 +47,7 @@ Kwf.onJElementReady('.cssClass', function(el, config) {
                 el.removeClass('loading');
                 var count = 0;
                 el.hasClass('isFavourite') ? count += 1 : count -= 1;
-                Kwf.fireComponentEvent('favouritesChanged', count);
+                componentEvent.trigger('favouritesChanged', count);
             }
         });
     });

@@ -1,5 +1,6 @@
+var onReady = require('kwf/on-ready');
 
-Kwf.onContentReady(function() {
+onReady.onContentReady(function() {
     var testEl = Ext2.DomQuery.select('#eventTest')[0];
 
     Kwf.Event.on(testEl, 'mouseEnter', function() {

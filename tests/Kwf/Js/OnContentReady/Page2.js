@@ -1,17 +1,19 @@
+var onReady = require('kwf/on-ready');
+
 $(function() {
     $('#show').click(function() {
         $('.foo').show();
-        Kwf.callOnContentReady(document.body, { action: 'show' });
+        onReady.callOnContentReady(document.body, { action: 'show' });
     });
     $('#hide').click(function() {
         $('.foo').hide();
-        Kwf.callOnContentReady(document.body, { action: 'hide' });
+        onReady.callOnContentReady(document.body, { action: 'hide' });
     });
 });
 
-Kwf.onJElementShow('.foo', function(el) {
+onReady.onShow('.foo', function(el) {
     $('#log').append('show');
 });
-Kwf.onJElementHide('.foo', function(el) {
+onReady.onHide('.foo', function(el) {
     $('#log').append('hide');
 });

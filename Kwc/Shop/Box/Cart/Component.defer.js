@@ -1,4 +1,7 @@
-Kwf.onContentReady(function(readyEl, param) {
+var onReady = require('kwf/on-ready');
+var getKwcRenderUrl = require('kwf/get-kwc-render-url');
+
+onReady.onContentReady(function(readyEl, param) {
     if (!param.newRender) return false;
     Ext2.select('.kwfup-kwcForm > form', true, readyEl).each(function(form) {
         form = form.parent('.kwfup-kwcForm', false);
@@ -8,10 +11,10 @@ Kwf.onContentReady(function(readyEl, param) {
             Ext2.select('.kwcShopBoxCart').each(function(el) {
                 Ext2.Ajax.request({
                     params: { componentId: el.dom.id },
-                    url: Kwf.getKwcRenderUrl(),
+                    url: getKwcRenderUrl(),
                     success: function(response, options) {
                         this.replaceWith({ html: response.responseText });
-                        Kwf.callOnContentReady(this.dom, {newRender: true});
+                        onReady.callOnContentReady(this.dom, {newRender: true});
                     },
                     scope: el
                 });

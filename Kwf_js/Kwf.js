@@ -1,18 +1,3 @@
-if(!Kwf) Kwf = {};
-
-Kwf.namespace = function() {
-    var a=arguments, o=null, i, j, d, rt;
-    for (i=0; i<a.length; ++i) {
-        d=a[i].split(".");
-        rt = d[0];
-        eval('if (typeof ' + rt + ' == "undefined"){' + rt + ' = {};} o = ' + rt + ';');
-        for (j=1; j<d.length; ++j) {
-            o[d[j]]=o[d[j]] || {};
-            o=o[d[j]];
-        }
-    }
-}
-
 Kwf.namespace(
 'Kwc',
 'Kwf.Component',
@@ -27,8 +12,6 @@ Kwf.namespace(
 'Kwf.Layout',
 'Kwf.Utils'
 );
-
-
 
 //http://extjs.com/forum/showthread.php?t=26644
 Kwf.clone = function(o) {
@@ -50,59 +33,3 @@ Kwf.clone = function(o) {
     }
     return c;
 };
-
-//log das auch ohne irgendwelche abh�nigkeiten funktioniert (zB im Selenium)
-Kwf.log = function(msg) {
-    if (!Kwf.debugDiv) {
-        Kwf.debugDiv = document.createElement('div');
-        document.body.appendChild(Kwf.debugDiv);
-        Kwf.debugDiv.style.position = 'absolute';
-        Kwf.debugDiv.style.zIndex = '300';
-        Kwf.debugDiv.style.top = 0;
-        Kwf.debugDiv.style.right = 0;
-        Kwf.debugDiv.style.backgroundColor = 'white';
-        Kwf.debugDiv.style.fontSize = '10px';
-    }
-    Kwf.debugDiv.innerHTML += msg+'<br />';
-};
-
-Kwf._componentEventHandlers = {};
-/**
- * Fires a component event, used in frontend.
- *
- * @param string event name
- * @param parameters[...] pass to event handler
- */
-Kwf.fireComponentEvent = function(evName) {
-    if (Kwf._componentEventHandlers[evName]) {
-        var args = [];
-        for (var i=1; i<arguments.length; i++) { //remove first
-            args.push(arguments[i]);
-        }
-        Kwf._componentEventHandlers[evName].forEach(function(i) {
-            i.cb.apply(i.scope || window, args);
-        }, this);
-    }
-};
-
-/**
- * Adds event listener to a component event, used in frontend.
- *
- * @param string event name
- * @param callback function
- * @param scope
- */
-Kwf.onComponentEvent = function(evName, cb, scope) {
-    if (!Kwf._componentEventHandlers[evName]) Kwf._componentEventHandlers[evName] = [];
-    Kwf._componentEventHandlers[evName].push({
-        cb: cb,
-        scope: scope
-    });
-};
-
-Kwf.getKwcRenderUrl = function() {
-    var url = '/kwf/util/kwc/render';
-    if (Kwf.Debug.rootFilename) url = Kwf.Debug.rootFilename + url;
-    if (location.search.match(/[\?&]kwcPreview/)) url += '?kwcPreview';
-    return url;
-}

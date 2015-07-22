@@ -1,3 +1,4 @@
+var onReady = require('kwf/on-ready');
 
 Ext2.namespace("Kwc.Box.Dogear");
 
@@ -78,7 +79,7 @@ Kwc.Box.Dogear.init = function() {
     }
 };
 
-Kwf.onContentReady(function() {
+onReady.onContentReady(function() {
     Kwc.Box.Dogear.smallDiv = document.getElementById('dogearSmall');
     Kwc.Box.Dogear.bigDiv = document.getElementById('dogearBig');
 

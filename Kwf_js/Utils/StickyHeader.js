@@ -1,6 +1,8 @@
+var onReady = require('kwf/on-ready');
+
 Kwf.Utils.StickyHeader = function(selector, minWidth)
 {
-    Kwf.onJElementReady(selector, function(target) {
+    onReady.onRender(selector, function(target) {
 
         minWidth = minWidth || 550;
 

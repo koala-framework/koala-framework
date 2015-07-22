@@ -36,7 +36,6 @@ class Kwf_Trl_JsLoader
                     $values['now'] = $trl->$method($values['tochange'], array(), $language);
                     $values['now'] = str_replace("'", "\'", $values['now']);
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace($method, "trl", $values['now']);
 
                 } else if ($trlelement['type'] == 'trlc') {
                     $values['context'] = $trlelement['context'];
@@ -46,7 +45,6 @@ class Kwf_Trl_JsLoader
                     $values['now'] = $trl->$method($values['context'],$values['tochange'], array(), $language);
                     $beforeWithoutContext = preg_replace('#[\'"]'.$values['context'].'[\'"], ?#', '', $values['before']);
                     $values['now'] = str_replace($values['tochange'], $values['now'], $beforeWithoutContext);
-                    $values['now'] = str_replace($method, 'trl', $values['now']);
 
                 } else if ($trlelement['type'] == 'trlp') {
                     $values['before'] = $trlelement['before'];
@@ -56,10 +54,8 @@ class Kwf_Trl_JsLoader
                     $newValues = Kwf_Trl::getInstance()->getTrlpValues(null, $values['single'],
                                                 $values['plural'], $trlelement['source'], $language);
 
-                    $method = $trlelement['type'];
                     $values['now'] = str_replace($values['plural'], $newValues['plural'], $values['before']);
                     $values['now'] = str_replace($values['single'], $newValues['single'], $values['now']);
-                    $values['now'] = str_replace($method.$mode, 'trlp', $values['now']);
 
 
                 } else if ($trlelement['type'] == 'trlcp') {
@@ -73,10 +69,8 @@ class Kwf_Trl_JsLoader
                                 $values['single'], $values['plural'], $trlelement['source'], $language );
 
                     $beforeWithoutContext = preg_replace('#[\'"]'.$values['context'].'[\'"], ?#', '', $values['before']);
-                    $method = 'trlcp'.$mode;
                     $values['now'] = str_replace($values['plural'], $newValues['plural'], $beforeWithoutContext);
                     $values['now'] = str_replace($values['single'], $newValues['single'], $values['now']);
-                    $values['now'] = str_replace($method, 'trlp', $values['now']);
                 }
                 $ret[] = array('search'=>$values['before'], 'replace'=>$values['now']);
             }

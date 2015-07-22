@@ -1,15 +1,17 @@
-Kwf.onElementReady('.cssClass .youtubePlayer', function(el, config) {
+var onReady = require('kwf/on-ready-ext2');
+
+onReady.onRender('.cssClass .youtubePlayer', function(el, config) {
     var kwcAdvancedYoutube = el.findParent('.cssClass', 5, true);
     kwcAdvancedYoutube.dom.config = config;
 }, {priority: -1});
 
-Kwf.onElementHide('.cssClass', function(el) {
+onReady.onHide('.cssClass', function(el) {
     if (el.dom.player) {
         el.dom.player.pauseVideo();
     }
 }, {defer: true});
 
-Kwf.onElementShow('.cssClass .youtubePlayer', function(el) {
+onReady.onShow('.cssClass .youtubePlayer', function(el) {
     var kwcAdvancedYoutube = el.findParent('.cssClass', 5, true);
     var config = kwcAdvancedYoutube.dom.config;
     if (kwcAdvancedYoutube.dom.player) {

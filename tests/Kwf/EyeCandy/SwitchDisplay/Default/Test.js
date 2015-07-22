@@ -1,4 +1,6 @@
-Kwf.onJElementReady('.asyncContent', function(el) {
+var onReady = require('kwf/on-ready');
+
+onReady.onRender('.asyncContent', function(el) {
     el.html('Bar');
 }, { checkVisibility: true });
 

@@ -1,4 +1,6 @@
-Kwf.onJElementReady('.cssClass', function(el, config) {
+var onReady = require('kwf/on-ready');
+
+onReady.onRender('.cssClass', function(el, config) {
     el.children('.socialShareButtons').socialSharePrivacy({
         services: {
             facebook: {

@@ -1,25 +1,29 @@
-Kwf.onContentReady(function statisticsOptBox(body, param) {
+var onReady = require('kwf/on-ready');
+var componentEvent = require('kwf/component-event');
+var statistics = require('kwf/statistics');
+
+onReady.onContentReady(function statisticsOptBox(body, param) {
     if (!param.newRender) return;
-    if (Kwf.Statistics.optBoxHtml && !Kwf.Statistics.issetUserOptValue() && !$('body').data().optbox) {
-        var optBox = $(Kwf.Statistics.optBoxHtml);
+    if (statistics.optBoxHtml && !statistics.issetUserOptValue() && !$('body').data().optbox) {
+        var optBox = $(statistics.optBoxHtml);
         $('body').prepend(optBox);
-        Kwf.callOnContentReady(optBox, { action: 'render' });
+        onReady.callOnContentReady(optBox, { action: 'render' });
         $('body').data('optbox', true);
         optBox.find('a.accept').click(function(e) {
             e.preventDefault();
-            Kwf.Statistics.setUserOptValue('in');
-            Kwf.fireComponentEvent('cookieOptChanged', 'in');
+            statistics.setUserOptValue('in');
+            componentEvent.trigger('cookieOptChanged', 'in');
         });
         optBox.find('a.decline').click(function(e) {
             e.preventDefault();
-            Kwf.Statistics.setUserOptValue('out');
-            Kwf.fireComponentEvent('cookieOptChanged', 'out');
+            statistics.setUserOptValue('out');
+            componentEvent.trigger('cookieOptChanged', 'out');
         });
     }
-}, {priority: -2}); // before Kwf.Utils.ResponsiveEl
+}, {priority: -2}); // before ResponsiveEl
 
 
-Kwf.onComponentEvent('cookieOptChanged', function(value) {
+componentEvent.on('cookieOptChanged', function(value) {
     $('body').find('.cssClass').hide();
 });
 
