@@ -16,3 +16,9 @@ ul.kwfup-webListNone,
     list-style-image: none !important;
     margin-bottom: 0px;
 }
+
+@media print {
+    .kwfup-outerBenchmarkBox {
+        display: none;
+    }
+}
