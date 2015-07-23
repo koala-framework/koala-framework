@@ -141,7 +141,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
             $cacheIds[] = $this->_getCacheId($row['component_id'], $row['renderer'], $row['type'], $row['value']);
             Kwf_Benchmark::countLog('viewcache-delete-'.$row['type']);
             if ($row['type'] != 'fullPage' && !isset($checkIncludeIds[$row['component_id']])) {
-                $checkIncludeIds[$row['component_id']] = true;
+                $checkIncludeIds[$row['component_id'].':'.$row['type']] = true;
             }
             if ($log) {
                 $log->log("delete view cache $row[component_id] $row[renderer] $row[type] $row[value]", Zend_Log::INFO);
@@ -195,8 +195,10 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
         // Database
         $this->_beforeDatabaseDelete($select); // For unit testing - DO NOT DELETE!
+        $deletedCount = 0;
         if ($progress) { $progress->next(1, "partialIds"); }
         foreach ($partialIds as $componentId => $values) {
+            $deletedCount += count($values);
             $select = $model->select();
             $select->where(new Kwf_Model_Select_Expr_And(array(
                 new Kwf_Model_Select_Expr_Equals('component_id', (string)$componentId),
@@ -208,6 +210,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         }
         if ($progress) { $progress->next(1, "deleteIds"); }
         foreach ($deleteIds as $type => $componentIds) {
+            $deletedCount += count($componentIds);
             $select = $model->select();
             $select->where(new Kwf_Model_Select_Expr_And(array(
                 new Kwf_Model_Select_Expr_Equals('component_id', $componentIds),
@@ -219,7 +222,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $this->_afterDatabaseDelete($select); // For unit testing - DO NOT DELETE!
 
         if ($progress) $progress->finish();
-        file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Events_Dispatcher::$eventsCount.' events; '.count($deleteIds).' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'')."\n", FILE_APPEND);
+        file_put_contents('log/clear-view-cache', date('Y-m-d H:i:s').' '.round(microtime(true)-Kwf_Benchmark::$startTime, 2).'s; '.Kwf_Component_Events::$eventsCount.' events; '.$deletedCount.' view cache entries deleted; '.(isset($_SERVER['REQUEST_URI'])?substr($_SERVER['REQUEST_URI'], 0, 100):'')."\n", FILE_APPEND);
         return count($cacheIds);
     }
 
@@ -231,15 +234,17 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         foreach ($componentIds as $componentId) {
 
             $i = (string)$componentId;
-            if (!isset($checkedIds[$i])) {
-                $checkedIds[$i] = true;
-                $ids[] = $i;
+            $type = substr($i, strrpos($i, ':')+1);
+            $i = substr($i, 0, strrpos($i, ':'));
+            if (!isset($checkedIds[$i.':'.$type])) {
+                $checkedIds[$i.':'.$type] = true;
+                $ids[] = $i.':'.$type;
             }
             while (strrpos($i, '-') && strrpos($i, '-') > strrpos($i, '_')) {
                 $i = substr($i, 0, strrpos($i, '-'));
-                if (!isset($checkedIds[$i])) {
-                    $checkedIds[$i] = true;
-                    $ids[] = $i;
+                if (!isset($checkedIds[$i.':'.$type])) {
+                    $checkedIds[$i.':'.$type] = true;
+                    $ids[] = $i.':'.$type;
                 }
             }
 
@@ -255,10 +260,11 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         $s->whereEquals('target_id', $ids);
         $imports = Kwf_Component_Cache::getInstance()
             ->getModel('includes')
-            ->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id')));
+            ->export(Kwf_Model_Abstract::FORMAT_ARRAY, $s, array('columns'=>array('component_id', 'target_id', 'type')));
         $childIds = array();
+        $childIdsDontRecurse = array();
         foreach ($imports as $row) {
-            $childIds[] = $row['component_id'];
+            $childIds[] = $row['component_id'].':'.$row['type'];
         }
         $childIds = array_unique($childIds);
 

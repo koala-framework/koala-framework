@@ -40,7 +40,9 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
         $ids = array($c->dbId);
         $c = $c->getPageOrRoot();
         foreach (Kwf_Component_Data_Root::getInstance()->getPageGenerators() as $gen) {
-            $ids = array_merge($ids, $gen->getRecursivePageChildIds($c->dbId)); //similar to master, but also invisible ones
+            foreach ($gen->getRecursivePageChildIds($c->dbId) as $id) { //similar to master, but also invisible ones
+                $ids[] = (string)$id;
+            }
         }
         return $ids;
     }
@@ -49,19 +51,19 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
     {
         if (!isset($event->component->chained)) return;
 
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
-            $masterDatas = Kwc_Basic_LinkTag_Intern_Events::getComponentsForTarget(
-                Kwc_Abstract::getSetting($this->_class, 'masterComponentClass'),
-                $childPageId,
-                true
-            );
-            foreach ($masterDatas as $c) {
-                $c = Kwc_Chained_Trl_Component::getChainedByMaster($c, $event->component);
-                if ($c) {
-                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-                    if ($c->isPage) {
-                        $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
-                    }
+        $childPageIds = $this->_getIdsFromRecursiveEvent($event);
+
+        $masterDatas = Kwc_Basic_LinkTag_Intern_Events::getComponentsForTarget(
+            Kwc_Abstract::getSetting($this->_class, 'masterComponentClass'),
+            $childPageIds,
+            true
+        );
+        foreach ($masterDatas as $c) {
+            $c = Kwc_Chained_Trl_Component::getChainedByMaster($c, $event->component);
+            if ($c) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+                if ($c->isPage) {
+                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
                 }
             }
         }
@@ -71,22 +73,23 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
     {
         if (!isset($event->component->chained)) return;
 
-        foreach ($this->_getIdsFromRecursiveEvent($event) as $childPageId) {
-            $masterDatas = Kwc_Basic_LinkTag_Intern_Events::getComponentsForTarget(
-                Kwc_Abstract::getSetting($this->_class, 'masterComponentClass'),
-                $childPageId,
-                true
-            );
-            foreach ($masterDatas as $c) {
-                $c = Kwc_Chained_Trl_Component::getChainedByMaster($c, $event->component);
-                if ($c) {
-                    $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-                    if ($c->isPage) {
-                        $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
-                    }
+        $childPageIds = $this->_getIdsFromRecursiveEvent($event);
+
+        $masterDatas = Kwc_Basic_LinkTag_Intern_Events::getComponentsForTarget(
+            Kwc_Abstract::getSetting($this->_class, 'masterComponentClass'),
+            $childPageIds,
+            true
+        );
+        foreach ($masterDatas as $c) {
+            $c = Kwc_Chained_Trl_Component::getChainedByMaster($c, $event->component);
+            if ($c) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+                if ($c->isPage) {
+                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
                 }
             }
         }
+
     }
 
     public function onPageRemovedAdded(Kwf_Component_Event_Component_AbstractFlag $event)
@@ -95,7 +98,7 @@ class Kwc_Basic_LinkTag_Intern_Trl_Events extends Kwc_Chained_Trl_Events
 
         $masterDatas = Kwc_Basic_LinkTag_Intern_Events::getComponentsForTarget(
             Kwc_Abstract::getSetting($this->_class, 'masterComponentClass'),
-            $event->component->chained->dbId,
+            array((string)$event->component->chained->dbId),
             false
         );
         foreach ($masterDatas as $c) {
