@@ -5,7 +5,7 @@ var kwfExtend = require('kwf/extend');
 var TextArea = kwfExtend(Field, {
     initField: function() {
         this.el.select('textarea').each(function(input) {
-            input.on('keypress', function() {
+            $(input).on('keypress', function() {
                 this.el.trigger('kwf-form-change', this.getValue());
             }, this);
             this._initPlaceholder(input);

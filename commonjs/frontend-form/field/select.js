@@ -5,7 +5,7 @@ var kwfExtend = require('kwf/extend');
 var Select = kwfExtend(Field, {
     initField: function() {
         this.el.select('select').each((function(input) {
-            input.on('change', (function() {
+            $(input).on('change', (function() {
                 this.el.trigger('kwf-form-change', this.getValue());
             }).bind(this));
         }).bind(this));
