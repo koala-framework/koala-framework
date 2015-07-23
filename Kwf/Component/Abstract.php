@@ -46,7 +46,7 @@ class Kwf_Component_Abstract
         Kwf_Component_Settings::resetSettingsCache();
     }
 
-    static final public function formatCssClass($c)
+    static final public function formatCssClass($c, $prefix)
     {
         $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
         if (substr($c, -10) == '_Component') {
@@ -54,7 +54,7 @@ class Kwf_Component_Abstract
         }
         $c = str_replace('_', '', $c);
         $c = strtolower(substr($c, 0, 1)) . substr($c, 1);
-        $c = 'kwfup-'.$c;
+        $c = 'kwfup-'.$prefix.$c;
         return $c;
     }
 

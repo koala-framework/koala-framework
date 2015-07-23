@@ -40,13 +40,13 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         if (strpos($ret, 'kwcbem__') !== false) {
             if (Kwf_Config::getValue('application.uniquePrefix')) {
                 $ret = str_replace('.cssClass .kwcbem__', '.kwcbem__', $ret);
-                $ret = str_replace('kwcbem__', $this->_getComponentCssClass().'__', $ret);
+                $ret = str_replace('kwcbem__', $this->_getComponentCssClass('css-').'__', $ret);
             } else {
                 $ret = str_replace('kwcbem__', '', $ret);
             }
         }
         if (strpos($ret, '.cssClass') !== false) {
-            $cssClass = $this->_getComponentCssClass();
+            $cssClass = $this->_getComponentCssClass('css-');
             if ($cssClass) {
                 $ret = str_replace('.cssClass', '.'.$cssClass, $ret);
             }

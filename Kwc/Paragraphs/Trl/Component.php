@@ -22,7 +22,7 @@ class Kwc_Paragraphs_Trl_Component extends Kwc_Chained_Trl_Component
             if (Kwc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'useMobileBreakpoints') && $row->device_visible) {
                 $cssClass .= ' ' . $row->device_visible;
             }
-            $cssClass .= ' outer'.ucfirst(Kwf_Component_Abstract::formatCssClass($paragraph->chained->componentClass));
+            $cssClass .= ' outer'.ucfirst(Kwf_Component_Abstract::formatCssClass($paragraph->chained->componentClass, ''));
             $ret['paragraphs'][] = array(
                 'data' => $paragraph,
                 'class' => $cssClass
