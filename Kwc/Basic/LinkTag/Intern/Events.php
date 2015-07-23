@@ -76,7 +76,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         return $ids;
     }
 
-    protected function _deleteCacheForTarget($targetId, $includeSubpages, $subroot)
+    protected function _deleteCacheForTarget($targetIds, $includeSubpages, $subroot)
     {
         if (!$targetIds) return;
         if (count($targetIds) > 100) {
