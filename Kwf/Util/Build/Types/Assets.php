@@ -4,8 +4,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
     private static $_mimeTypeByExtension = array(
         'js' => 'text/javascript',
         'defer.js' => 'text/javascript; defer',
-        'css' => 'text/css',
-        'printcss' => 'text/css; media=print'
+        'css' => 'text/css'
     );
 
     private function _buildPackageContents($packageContents, $maxMTime, $p, $extension, $language)
@@ -108,7 +107,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
         $langs = $this->_getAllLanguages();
         $packages = $this->_getAllPackages();
-        $exts = array('js', 'defer.js', 'css', 'printcss');
+        $exts = array('js', 'defer.js', 'css');
 
         echo "\ncalculating dependencies...\n";
         $steps = count($packages) * count($exts);

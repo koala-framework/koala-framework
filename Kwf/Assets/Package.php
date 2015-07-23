@@ -164,6 +164,7 @@ class Kwf_Assets_Package
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
+        else throw new Kwf_Exception("Invalid mimeType: '$mimeType'");
         $packageMap->setFile($this->getPackageUrl($ext, $language));
 
         // ***** commonjs
