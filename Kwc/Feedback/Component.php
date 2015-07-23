@@ -12,7 +12,7 @@ class Kwc_Feedback_Component extends Kwc_Abstract_Composite_Component
         $ret['editComponents'] = array('form');
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
 
-        $ret['rootElementClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         return $ret;
     }
 }

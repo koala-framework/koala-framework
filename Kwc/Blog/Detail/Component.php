@@ -5,7 +5,7 @@ class Kwc_Blog_Detail_Component extends Kwc_Directories_Item_Detail_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['content'] = 'Kwc_Paragraphs_Component';
-        $ret['rootElementClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['placeholder']['backLink'] = trlKwfStatic('Back to overview');
         $ret['placeholder']['nextLink'] = false;
         $ret['placeholder']['previousLink'] = false;

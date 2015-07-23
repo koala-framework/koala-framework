@@ -5,7 +5,7 @@ class Kwc_Menu_Mobile_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['level'] = array('main');
-        $ret['rootElementClass'] = 'kwfup-webListNone kwfup-webStandard kwfup-webMenu default';
+        $ret['rootElementClass'] = 'kwfUp-webListNone kwfUp-webStandard kwfUp-webMenu default';
         $ret['placeholder']['menuLink'] = trlKwfStatic('Menu');
 
         $ret['showSelectedPageInList'] = true;

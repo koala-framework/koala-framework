@@ -9,7 +9,7 @@ class Kwc_Posts_Write_Component extends Kwc_Abstract_Composite_Component
         $ret['generators']['child']['component']['lastPosts'] = 'Kwc_Posts_Write_LastPosts_Component';
         $ret['placeholder']['lastPosts'] = trlKwfStatic('Last Posts');
         $ret['flags']['noIndex'] = true;
-        $ret['rootElementClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['plugins'] = array('Kwf_Component_Plugin_Login_Component');
         $ret['viewCache'] = false; //wegen isSaved
         return $ret;

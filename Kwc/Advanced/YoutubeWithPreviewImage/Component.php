@@ -4,7 +4,7 @@ class Kwc_Advanced_YoutubeWithPreviewImage_Component extends Kwc_Advanced_Youtub
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['rootElementClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['componentName'] = trlKwfStatic('Youtube with Teaser Image');
         $ret['generators']['child']['component']['previewImage'] = 'Kwc_Advanced_YoutubeWithPreviewImage_Image_Component';
         return $ret;

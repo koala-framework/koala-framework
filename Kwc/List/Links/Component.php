@@ -9,7 +9,7 @@ class Kwc_List_Links_Component extends Kwc_Abstract_List_Component
         $ret['componentIcon'] = 'links';
         $ret['componentCategory'] = 'content';
         $ret['componentPriority'] = 30;
-        $ret['rootElementClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         return $ret;
     }
 }

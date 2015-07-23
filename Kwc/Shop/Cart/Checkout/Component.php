@@ -16,7 +16,7 @@ class Kwc_Shop_Cart_Checkout_Component extends Kwc_Abstract_Composite_Component
                 'none' => 'Kwc_Shop_Cart_Checkout_Payment_None_Component'
             )
         );
-        $ret['rootElementClass'] = 'kwfup-webForm kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webForm kwfUp-webStandard';
         $ret['placeholder']['backToCart'] = trlKwfStatic('Back to cart');
 
         $ret['shipping'] = 0;

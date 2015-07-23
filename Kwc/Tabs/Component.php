@@ -10,7 +10,7 @@ class Kwc_Tabs_Component extends Kwc_Abstract_List_Component
         $ret['componentIcon'] = 'tab.png';
         $ret['componentCategory'] = 'layout';
         $ret['componentPriority'] = 80;
-        $ret['rootElementClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['assetsDefer']['dep'][] = 'KwfTabs';
         $ret['extConfig'] = 'Kwc_Tabs_ExtConfig';
         $ret['contentWidthSubtract'] = 20;

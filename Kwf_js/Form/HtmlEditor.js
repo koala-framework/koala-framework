@@ -159,7 +159,7 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
             '<style type="text/css">'+
                 'body{border:0;margin:0;padding:3px;height:98%;cursor:text;}'+
             '</style>\n';
-        ret += '</head><body class="kwfup-webStandard kwcText mce-content-body" id="tinymce" data-id="content"></body></html>';
+        ret += '</head><body class="kwfUp-webStandard kwcText mce-content-body" id="tinymce" data-id="content"></body></html>';
         return ret;
     },
     setValue : function(v) {

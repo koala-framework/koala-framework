@@ -1,5 +1,5 @@
 module.exports = function(el) {
-    var formEl = el.find('.kwfup-kwcForm > form');
+    var formEl = el.find('.kwfUp-kwcForm > form');
     if (formEl) {
         formEl = formEl.closest('.kwcForm');
         return formEl.data('kwcForm');

@@ -13,10 +13,10 @@ Field.prototype = {
         var inp = this.el.find('input');
         if (inp) {
             inp.on('change', (function() {
-                this.el.trigger('kwfup-form-change', this.getValue());
+                this.el.trigger('kwfUp-form-change', this.getValue());
             }).bind(this));
             inp.on('keydown', _.debounce((function() {
-                this.el.trigger('kwfup-form-change', this.getValue());
+                this.el.trigger('kwfUp-form-change', this.getValue());
             }).bind(this), 1));
             this._initPlaceholder(this.el.find('input'));
         }
@@ -25,7 +25,7 @@ Field.prototype = {
     on: function(event, cb, scope)
     {
         if (typeof scope != 'undefined') cb = cb.bind(scope);
-        this.el.on('kwfup-form-'+event, cb);
+        this.el.on('kwfUp-form-'+event, cb);
     },
 
     _initPlaceholder: function(input)

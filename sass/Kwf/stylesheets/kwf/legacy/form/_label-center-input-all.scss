@@ -1,5 +1,5 @@
 @mixin label-center-input-all {
-    > div.kwfup-kwcForm > form {
+    > div.kwfUp-kwcForm > form {
         .kwfFormFieldWrapper {
             > input, textarea, select {
                 @include box-sizing(border-box);

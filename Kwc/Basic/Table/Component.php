@@ -32,7 +32,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         // settings page in backend
         // e.g.: 'green' => trlKwf('Green')
         $ret['tableStyles'] = array('standard' => trlKwfStatic('Standard'));
-        $ret['rootElementClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
 
         $ret['extConfig'] = 'Kwc_Basic_Table_ExtConfig';
         return $ret;

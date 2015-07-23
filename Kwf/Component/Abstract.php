@@ -54,7 +54,7 @@ class Kwf_Component_Abstract
         }
         $c = str_replace('_', '', $c);
         $c = strtolower(substr($c, 0, 1)) . substr($c, 1);
-        $c = 'kwfup-'.$c;
+        $c = 'kwfUp-'.$c;
         return $c;
     }
 

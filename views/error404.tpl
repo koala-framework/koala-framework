@@ -10,7 +10,7 @@
         <div id="page">
             <div id="outerContent">
                 <div id="content">
-                    <div class="kwfup-webStandard" id="innerContent">
+                    <div class="kwfUp-webStandard" id="innerContent">
                         <p><strong><?=$this->data->trlKwf('Errormessage');?></strong></p>
                         <h2>404 - <?=$this->data->trlKwf('File not found');?></h2>
                         <p><?=$this->data->trlKwf('The requested URL "{0}" was not found on this server.', $this->requestUri);?></p>

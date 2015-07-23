@@ -424,7 +424,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             usort($ret['multiBoxes'][$box], array('Kwf_Component_View_Helper_ComponentWithMaster', '_sortByPriority'));
         }
 
-        $ret['rootElementClass'] = 'kwfup-frontend';
+        $ret['rootElementClass'] = 'kwfUp-frontend';
 
         $cssClass = $this->_getMasterCssClass($renderer->getTemplate($this->getData(), 'Master'));
         $ret['bemClasses'] = array($cssClass.'__');
@@ -461,7 +461,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             throw new Kwf_Exception("Invalid master template");
         }
         $cssClass = str_replace('/', '', $cssClass);
-        $cssClass = 'kwfup-'.$cssClass;
+        $cssClass = 'kwfUp-'.$cssClass;
         return $cssClass;
     }
 
