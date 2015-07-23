@@ -112,7 +112,7 @@ foreach (Kwf_Component_Cache::getInstance()->getModel()->getRows($s) as $row) {
         - root_test1:fullPage        [delete]
         */
 
-        Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Page_UrlChanged('Kwf_Component_Cache_FullPage_Test3_Component', $this->_root->getChildComponent('_test3')));
+        Kwf_Events_Dispatcher::fireEvent(new Kwf_Component_Event_Page_UrlChanged('Kwf_Component_Cache_FullPage_Test3_Component', $this->_root->getChildComponent('_test3')));
         $this->_process();
 
         $this->assertEquals(5, $this->_getViewCacheCount());
@@ -168,7 +168,7 @@ foreach (Kwf_Component_Cache::getInstance()->getModel()->getRows($s) as $row) {
         */
         $this->assertEquals(7+3+4+4, $this->_getViewCacheCount());
 
-        Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Page_UrlChanged('Kwf_Component_Cache_FullPage_Test4_Component', $this->_root->getChildComponent('_test4')));
+        Kwf_Events_Dispatcher::fireEvent(new Kwf_Component_Event_Page_UrlChanged('Kwf_Component_Cache_FullPage_Test4_Component', $this->_root->getChildComponent('_test4')));
         $this->_process();
 
         $this->assertEquals(7+3+4+4 - 4, $this->_getViewCacheCount());
