@@ -1,4 +1,4 @@
-$ = require('jQuery');
+var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var kwfExtend = require('kwf/extend');
 
