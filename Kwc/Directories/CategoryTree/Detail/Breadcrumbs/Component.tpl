@@ -1,4 +1,4 @@
-<div class="<?= $this->cssClass; ?>">
+<div class="<?=$this->rootElementClass;?>">
     <?= $this->placeholder['currentCategories']; ?>
     <? if ($this->root) { ?>
     <?= $this->componentLink($this->root, $this->placeholder['categoryTreeRootText']); ?>
