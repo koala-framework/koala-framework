@@ -37,6 +37,8 @@ class Kwf_Assets_Package_TestPackage extends Kwf_Assets_Package
         $providers[] = new Kwf_Assets_Provider_ErrorHandler();
         $providers[] = new Kwf_Assets_Provider_JsClassKwf();
         $providers[] = new Kwf_Assets_Modernizr_Provider();
+        $providers[] = new Kwf_Assets_CommonJs_Provider();
+        $providers[] = new Kwf_Assets_Provider_KwfCommonJs();
         $providerList = new Kwf_Assets_ProviderList_Abstract($providers);
         parent::__construct($providerList, $dependencyName);
     }
