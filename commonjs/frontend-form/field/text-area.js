@@ -4,12 +4,12 @@ var kwfExtend = require('kwf/extend');
 
 var TextArea = kwfExtend(Field, {
     initField: function() {
-        this.el.select('textarea').each(function(input) {
+        this.el.select('textarea').each((function(input) {
             $(input).on('keypress', function() {
                 this.el.trigger('kwf-form-change', this.getValue());
             }, this);
             this._initPlaceholder(input);
-        }, this);
+        }).bind(this));
     },
     getFieldName: function() {
         return this.el.find('textarea').get(0).name;
