@@ -30,6 +30,7 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
         Kwf_Assets_Package_Default::clearInstances();
         Kwf_Component_LogDuplicateModel::setInstance(new Kwf_Model_FnF(array(
         )));
+        Kwf_Component_Events::clearInstances();
         return $this->_root;
     }
 
@@ -37,7 +38,7 @@ abstract class Kwc_TestAbstract extends Kwf_Test_TestCase
     {
         $filename = $this->_root->filename;
 
-        Kwf_Component_ModelObserver::getInstance()->process();
+        Kwf_Component_Events::fireEvent(new Kwf_Component_Event_Row_UpdatesFinished());
         Kwf_Component_Data_Root::reset();
         $this->_root = Kwf_Component_Data_Root::getInstance();
         $this->_root->setFilename($filename);

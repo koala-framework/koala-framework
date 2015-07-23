@@ -5,6 +5,7 @@ class Kwf_Component_Events
     public static $_indent = 0;
     private static $_listeners;
     public static $eventsCount = 0;
+    private static $_instances = array();
 
     protected function __construct($config = array())
     {
@@ -41,14 +42,18 @@ class Kwf_Component_Events
     public static final function getInstance($class, $config = array())
     {
         $id = md5(serialize(array($class, $config)));
-        static $instances = array();
-        if (!isset($instances[$id])) {
+        if (!isset(self::$_instances[$id])) {
             if (!$class) {
                 throw new Kwf_Exception("No class given");
             }
-            $instances[$id] = new $class($config);
+            self::$_instances[$id] = new $class($config);
         }
-        return $instances[$id];
+        return self::$_instances[$id];
+    }
+
+    public static function clearInstances()
+    {
+        self::$_instances = array();
     }
 
     public static final function getAllListeners()

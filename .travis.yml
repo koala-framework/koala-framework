@@ -21,4 +21,3 @@ services:
 script: "php bootstrap.php test --exclude-group=slow"
 notificaitons:
   irc: "irc.freenode.org#kwf"
-
