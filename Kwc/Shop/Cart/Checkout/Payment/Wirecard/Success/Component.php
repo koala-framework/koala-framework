@@ -5,6 +5,8 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends Kwc_Edit
     {
         $ret = parent::getSettings();
         $ret['flags']['processInput'] = true;
+        $ret['plugins']['placeholders'] = 'Kwf_Component_Plugin_Placeholders';
+        $ret['viewCache'] = false;
         $ret['generators']['content']['component'] = 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Component';
         return $ret;
     }
@@ -13,6 +15,16 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends Kwc_Edit
     {
         return trlKwf('Shop Confirmation Text') . ' (' .$this->getData()->getSubroot()->id . ') '
             . Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->getData()->parent->componentClass, 'componentName'));
+    }
+
+    protected function _getOrder()
+    {
+        $ret = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'))
+            ->getReferencedModel('Order')->getCartOrder();
+        if (!$ret || !$ret->data) {
+            return null;
+        }
+        return $ret;
     }
 
     public function processInput($data)
@@ -37,5 +49,17 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends Kwc_Edit
                 Kwc_Shop_Cart_Orders::resetCartOrderId();
             }
         }
+    }
+
+    public function getPlaceholders()
+    {
+        $o = $this->_getOrder();
+        if (!$o) return array();
+        return $o->getPlaceholders();
+    }
+
+    public final function getCurrentOrder()
+    {
+        return $this->_getOrder();
     }
 }

@@ -44,23 +44,21 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
 
     public function onRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
-        foreach ($this->_getPageIdsFromRecursiveEvent($event) as $pageId) {
-            $this->_deleteCacheForTarget($pageId, true);
-        }
+        $pageIds = $this->_getPageIdsFromRecursiveEvent($event);
+        $this->_deleteCacheForTarget($pageIds, true, $event->component->getSubroot());
     }
 
     public function onRecursiveRemovedAdded(Kwf_Component_Event_Component_RecursiveAbstract $event)
     {
-        foreach ($this->_getPageIdsFromRecursiveEvent($event) as $pageId) {
-            $this->_deleteCacheForTarget($pageId, true);
-            $this->_changeHasContentForTarget($pageId, true);
-        }
+        $pageIds = $this->_getPageIdsFromRecursiveEvent($event);
+        $this->_deleteCacheForTarget($pageIds, true, $event->component->getSubroot());
+        $this->_changeHasContentForTarget($pageIds, true, $event->component->getSubroot());
     }
 
     public function onPageRemovedAdded(Kwf_Component_Event_Component_AbstractFlag $event)
     {
-        $this->_deleteCacheForTarget($event->component->dbId, false);
-        $this->_changeHasContentForTarget($event->component->dbId, false);
+        $this->_deleteCacheForTarget(array((string)$event->component->dbId), false, $event->component->getSubroot());
+        $this->_changeHasContentForTarget(array((string)$event->component->dbId), false, $event->component->getSubroot());
     }
 
     //usually child componets can be deleted using %, but not those from pages table as the ids always start with numeric
@@ -70,34 +68,48 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         $c = $event->component;
         $ids = array();
         if ($c->isPage) {
-            $ids[] = $c->dbId;
+            $ids[] = (string)$c->dbId;
         }
         if ($c->generator instanceof Kwc_Root_Category_Generator) {
-            $ids = array_merge($ids, $c->generator->getRecursivePageChildIds($c->dbId));
+            foreach ($c->generator->getRecursivePageChildIds($c->dbId) as $id) {
+                $ids[] = (string)$id;
+            }
         }
         return $ids;
     }
 
-    protected function _deleteCacheForTarget($targetId, $includeSubpages)
+    protected function _deleteCacheForTarget($targetIds, $includeSubpages, $subroot)
     {
-        foreach (self::getComponentsForTarget($this->_class, $targetId, $includeSubpages) as $c) {
-            $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
-            //$this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c));
-            if ($c->isPage) {
-                $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+        if (!$targetIds) return;
+        if (count($targetIds) > 100) {
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
+            $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $subroot));
+            return;
+        }
+        $dbIds = self::_getComponentDbIdsForTarget($this->_class, $targetIds, $includeSubpages);
+        if (count($dbIds) > 100) {
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class, $subroot));
+            $this->fireEvent(new Kwf_Component_Event_Page_RecursiveUrlChanged($this->_class, $subroot));
+            return;
+        }
+        foreach ($dbIds as $dbId) {
+            foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId) as $c) {
+                $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged($this->_class, $c));
+                if ($c->isPage) {
+                    $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged($this->_class, $c));
+                }
             }
         }
     }
 
-    private function _changeHasContentForTarget($targetId, $includeSubpages)
+    private function _changeHasContentForTarget($targetIds, $includeSubpages, $subroot)
     {
-        foreach (self::getComponentsForTarget($this->_class, $targetId, $includeSubpages) as $c) {
+        foreach (self::getComponentsForTarget($this->_class, $targetIds, $includeSubpages) as $c) {
             $this->fireEvent(new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c));
         }
     }
 
-    //used in trl
-    public static function getComponentsForTarget($componentClass, $targetId, $includeSubpages)
+    private static function _getComponentDbIdsForTarget($componentClass, $targetIds, $includeSubpages)
     {
         if (!isset(self::$_pageIds[$componentClass])) {
             $ids = array();
@@ -113,20 +125,30 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         foreach (self::$_pageIds[$componentClass] as $targetPageId => $dbIds) {
             $ids = array();
             if ($includeSubpages) {
-                if ((string)$targetPageId == (string)$targetId
-                    || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'-'
-                    || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'_'
-                ) {
-                    $ids = $dbIds;
+                foreach ($targetIds as $targetId) {
+                    if ((string)$targetPageId == $targetId
+                        || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'-'
+                        || substr($targetPageId, 0, strlen($targetId)+1) == $targetId.'_'
+                    ) {
+                        $ret = array_merge($ret, $dbIds);
+                        break;
+                    }
                 }
             } else {
-                if ((string)$targetPageId === (string)$targetId) {
-                    $ids = $dbIds;
+                if (in_array((string)$targetPageId, $targetIds, true)) {
+                    $ret = array_merge($ret, $dbIds);
                 }
             }
-            foreach ($ids as $dbId) {
-                $ret = array_merge($ret, Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId));
-            }
+        }
+        return $ret;
+    }
+
+    //used in trl
+    public static function getComponentsForTarget($componentClass, $targetIds, $includeSubpages)
+    {
+        $ret = array();
+        foreach (self::_getComponentDbIdsForTarget($componentClass, $targetIds, $includeSubpages) as $dbId) {
+            $ret = array_merge($ret, Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($dbId));
         }
         return $ret;
     }

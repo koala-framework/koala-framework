@@ -5,6 +5,7 @@ class Kwc_Basic_BackgroundWindowWidth_Component extends Kwc_Abstract_Composite_C
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Background Window Width');
+        $ret['componentCategory'] = 'layout';
         $ret['ownModel'] = 'Kwc_Basic_BackgroundWindowWidth_Model';
         $ret['generators']['child']['component']['image'] = 'Kwc_Basic_BackgroundWindowWidth_Image_Component';
         $ret['generators']['child']['component']['paragraphs'] = 'Kwc_Paragraphs_Component';

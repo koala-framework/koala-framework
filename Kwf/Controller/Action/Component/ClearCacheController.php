@@ -70,19 +70,6 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
         $row->clear_cache_comment = '';
     }
 
-    public function jsonClearCacheAction()
-    {
-        $type = $this->_getParam('type');
-        $cc = Kwf_Util_ClearCache::getInstance();
-        if ($type == 'media') {
-            $cc->clearCache(array('types'=>'media', 'output'=>false, 'refresh'=>true));
-        } else if ($type == 'assets') {
-            $cc->clearCache(array('types'=>'assets', 'output'=>false, 'refresh'=>true));
-        } else if ($type == 'trl') {
-            $cache = new Kwf_Util_ClearCache_Types_Trl();
-            $cache->clearCache(array());
-        }
-    }
     public function jsonClearViewCacheAction()
     {
         $select = new Kwf_Model_Select();

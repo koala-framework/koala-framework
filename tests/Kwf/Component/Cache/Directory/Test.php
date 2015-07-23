@@ -105,4 +105,10 @@ class Kwf_Component_Cache_Directory_Test extends Kwc_TestAbstract
         $this->_process();
         $this->assertEquals('1 bar', $trldir->render());
     }
+
+    public function testAllChainedByMaster()
+    {
+        $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($this->_root->getChildComponent('_dir'), 'Trl');
+        $this->assertEquals(1, count($chained));
+    }
 }

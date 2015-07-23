@@ -11,9 +11,10 @@ class Kwc_Basic_LinkTag_Cc_Component extends Kwc_Chained_Cc_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['linkTag'] = $this->getData()->getChildComponent(array(
+        $ret['child'] = $this->getData()->getChildComponent(array(
             'generator' => 'child'
         ));
+        $ret['linkTag'] = $ret['child'];
         return $ret;
     }
 
