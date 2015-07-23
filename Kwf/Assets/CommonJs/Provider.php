@@ -18,19 +18,19 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
         if (!$dependency->isCommonJsEntry()) {
             return array();
         }
-        if ($dependency instanceof Kwf_Assets_Dependency_File) {
-            $ret = array(
-                Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS => $this->_parseDependencies($dependency)
-            );
-            return $ret;
-        }
-        return array();
+        $ret = array(
+            Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS => $this->_parseDependencies($dependency)
+        );
+        return $ret;
     }
 
     private function _parseDependencies($dependency)
     {
         $ret = array();
-        $deps = Kwf_Assets_CommonJs_Parser::parse($dependency->getAbsoluteFileName());
+        $deps = array();
+        if ($dependency instanceof Kwf_Assets_Dependency_File) {
+            $deps = Kwf_Assets_CommonJs_Parser::parse($dependency->getAbsoluteFileName());
+        }
         foreach ($deps as $dep) {
             if (substr($dep, 0, 2) == './') {
                 $fn = $dependency->getFileNameWithType();
