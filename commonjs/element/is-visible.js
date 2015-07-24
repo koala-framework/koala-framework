@@ -1,3 +1,4 @@
+var $ = require('jQuery');
 var benchmarkBox = require('kwf/benchmark/box');
 
 module.exports = function elementIsVisible(el) {

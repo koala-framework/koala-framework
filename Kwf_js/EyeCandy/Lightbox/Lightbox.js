@@ -1,3 +1,4 @@
+var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
