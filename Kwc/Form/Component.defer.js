@@ -1,6 +1,7 @@
 // @require ModernizrNetworkXhr2
 // @require KwfLoading
 
+var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var responsiveEl = require('kwf/responsive-el');
 var fieldRegistry = require('kwf/frontend-form/field-registry');
