@@ -127,24 +127,28 @@ class Kwf_Component_Settings
         $settings['parentFilePaths'] = Kwf_Component_Abstract::getSetting($c, 'parentFilePaths');
 
         //*** processedRootElementClass
-        $settings['processedRootElementClass'] = '';
-        if (isset($settings['rootElementClass'])) {
-            $settings['processedRootElementClass'] .= $settings['rootElementClass'].' ';
-        }
-        $cssClass = array(Kwf_Component_Abstract::formatRootElementClass($c));
+        $cssClass = array(Kwf_Component_Abstract::formatRootElementClass($c, '')); //without js- or css- prefix
         $dirs = explode(PATH_SEPARATOR, get_include_path());
         foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
             $dirs = array_merge($dirs, $i);
         }
         foreach ($settings['parentClasses'] as $i) {
-            if ($i == $c) continue;
             $file = str_replace('_', '/', $i);
             if (substr($file, -10) != '/Component') {
                 $file .= '/Component';
             }
             foreach ($dirs as $dir) {
-                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.js') || is_file($dir.'/'.$file.'.defer.js')) {
-                    $cssClass[] = Kwf_Component_Abstract::formatRootElementClass($i);
+                if (is_file($dir.'/'.$file.'.js') || is_file($dir.'/'.$file.'.defer.js')) {
+                    $cssClass[] = Kwf_Component_Abstract::formatRootElementClass($i, 'js-');
+                    break;
+                }
+            }
+            foreach ($dirs as $dir) {
+                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.override.scss')) {
+                    $cssClass[] = Kwf_Component_Abstract::formatRootElementClass($i, 'css-');
+                    if (is_file($dir.'/'.$file.'.override.scss')) {
+                        break 2; //break foreach $classes
+                    }
                     break;
                 }
             }
@@ -247,10 +251,20 @@ class Kwf_Component_Settings
                     'Form' => array('filename'=>'Form', 'ext'=>'php', 'returnClass'=>true),
 
                     //verwendet bei dependencies
-                    'css' => array('filename'=>'Component', 'ext'=>array('css', 'scss'), 'returnClass'=>false, 'multiple'=>true),
+                    'css' => array('filename'=>'Component', 'ext'=>array('css', 'scss', 'override.scss'), 'returnClass'=>false, 'multiple'=>true),
                     'masterCss' => array('filename'=>'Master', 'ext'=>array('css', 'scss'), 'returnClass'=>false, 'multiple'=>true),
                     'js' => array('filename'=>'Component', 'ext'=>array('js', 'defer.js'), 'returnClass'=>false, 'multiple'=>true),
                 ));
+                $override = false;
+                foreach ($ret['css'] as $k=>$i) {
+                    if ($override) {
+                        unset($ret['css'][$k]);
+                    } else {
+                        if (substr($i, -14) == '.override.scss') {
+                            $override = true;
+                        }
+                    }
+                }
             } else {
 
                 $settings = self::_loadCacheSettings($class);

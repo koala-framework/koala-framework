@@ -132,13 +132,13 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             if (strpos($ret, 'kwcBem__') !== false) {
                 if (Kwf_Config::getValue('application.uniquePrefix')) {
                     $map->stringReplace('.kwcClass .kwcBem__', '.kwcBem__');
-                    $map->stringReplace('kwcBem__', $this->_getComponentCssClass().'__');
+                    $map->stringReplace('kwcBem__', $this->_getComponentCssClass('css-').'__');
                 } else {
                     $map->stringReplace('kwcBem__', '');
                 }
             }
             if (strpos($ret, '.kwcClass') !== false) {
-                $cssClass = $this->_getComponentCssClass();
+                $cssClass = $this->_getComponentCssClass('css-');
                 if ($cssClass) {
                     if (strpos($ret, '.kwcClass') !== false) {
                         $map->stringReplace('.kwcClass', ".$cssClass");

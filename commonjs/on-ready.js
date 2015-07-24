@@ -327,7 +327,7 @@ var callOnContentReady = function(renderedEl, options)
 
 
 $(document).ready(function() {
-    if ($(document.body).is('.kwfup-frontend')) {
+    if ($(document.body).is('.kwfUp-frontend')) {
         if (!document.body) {
             //this happens if a redirect by changing location in JS is done
             //in that case no contentReady needs to be called

@@ -71,7 +71,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                         $map->stringReplace('ext2-gen', $uniquePrefix.'-ext2-gen');
                     }
                 }
-                $cssClass = $this->_getComponentCssClass();
+                $cssClass = $this->_getComponentCssClass('js-');
                 if ($cssClass) {
                     if (preg_match_all('#([\'"])\.kwcClass([\s\'"\.])#', $contents, $m)) {
                         foreach ($m[0] as $k=>$i) {
@@ -88,7 +88,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 }
                 if (strpos($rawContents, 'kwcBem__') !== false) {
                     if (Kwf_Config::getValue('application.uniquePrefix')) {
-                        $replacements['kwcBem__'] = $this->_getComponentCssClass().'__';
+                        $replacements['kwcBem__'] = $this->_getComponentCssClass('js-').'__';
                     } else {
                         $replacements['kwcBem__'] = '';
                     }

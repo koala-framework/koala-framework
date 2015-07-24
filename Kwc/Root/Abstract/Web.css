@@ -18,7 +18,7 @@ ul.kwfUp-webListNone,
 }
 
 @media print {
-    .kwfup-outerBenchmarkBox {
+    .kwfUp-outerBenchmarkBox {
         display: none;
     }
 }
