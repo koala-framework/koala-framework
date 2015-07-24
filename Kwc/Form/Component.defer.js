@@ -6,6 +6,7 @@ var onReady = require('kwf/on-ready');
 var responsiveEl = require('kwf/responsive-el');
 var fieldRegistry = require('kwf/frontend-form/field-registry');
 var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
+var formRegistry = require('kwf/frontend-form/form-registry');
 
 require('kwf/frontend-form/error-style/above');
 require('kwf/frontend-form/error-style/below-field');
@@ -30,8 +31,6 @@ responsiveEl('.kwcClass.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {mi
 responsiveEl('.kwcClass.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 responsiveEl('.kwcClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
-var formsByComponentId = {};
-
 var FormComponent = function(form)
 {
     this.el = form;
@@ -42,7 +41,7 @@ var FormComponent = function(form)
     this.config = config;
     this._submitDisabled = 0;
 
-    formsByComponentId[this.config.componentId] = this;
+    formRegistry.formsByComponentId[this.config.componentId] = this;
 
 
     if (this.el.find('form').get(0).enctype == 'multipart/form-data' && this.config.useAjaxRequest) {
