@@ -153,6 +153,17 @@ abstract class Kwf_Model_Union_Abstract_Test extends Kwf_Test_TestCase
         $this->assertEquals('1m2', $rows[0]->id);
     }
 
+    public function testGetRowsSiblingEqualsBool()
+    {
+        $s = new Kwf_Model_Select();
+        $s->where(new Kwf_Model_Select_Expr_Or(array(
+            new Kwf_Model_Select_Expr_Equal('sib_bool', 0),
+            new Kwf_Model_Select_Expr_IsNull('sib_bool')
+        )));
+        $this->assertEquals(4, count($this->_m->getRows($s)));
+        $this->assertEquals(4, $this->_m->countRows($s));
+    }
+
     public function testGetIdsOrder()
     {
         $s = new Kwf_Model_Select();
@@ -278,11 +289,11 @@ abstract class Kwf_Model_Union_Abstract_Test extends Kwf_Test_TestCase
     {
         $row = $this->_m->getRow('1m2');
         $a = $row->toArray();
-        $this->assertEquals(array('id' => '1m2', 'foo' => '2', 'bar' => '2', 'baz' => '2', 'sib' => 'ss2'), $a);
+        $this->assertEquals(array('id' => '1m2', 'foo' => '2', 'bar' => '2', 'baz' => '2', 'sib' => 'ss2', 'sib_bool' => false), $a);
 
         $row = $this->_m->getRow('2m2');
         $a = $row->toArray();
-        $this->assertEquals(array('id' => '2m2', 'foo' => '333', 'bar' => 'yy1', 'baz' => null, 'sib' => 'sss3'), $a);
+        $this->assertEquals(array('id' => '2m2', 'foo' => '333', 'bar' => 'yy1', 'baz' => null, 'sib' => 'sss3', 'sib_bool' => true), $a);
     }
 
     public function testEmptyMappingColumn1()
