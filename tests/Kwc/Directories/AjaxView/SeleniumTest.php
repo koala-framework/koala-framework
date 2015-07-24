@@ -65,6 +65,7 @@ class Kwc_Directories_AjaxView_SeleniumTest extends Kwf_Test_SeleniumTestCase
         $this->assertNotVisible('link=foo1');
         $this->assertNotVisible('link=foo2');
         $this->click('link=back');
+        sleep(3);
         $this->assertVisible('link=foo1');
         $this->assertVisible('link=foo2');
     }
