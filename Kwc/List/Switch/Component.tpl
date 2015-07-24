@@ -1,4 +1,4 @@
-<div class="kwfEyeCandyList <?=$this->cssClass?>">
+<div class="kwfEyeCandyList <?=$this->rootElementClass?>">
 
     <?=$this->hiddenOptions($this->options)?>
     <div class="listSwitchLargeWrapper">

@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
 
     <div class="nickname"><h3><?=htmlspecialchars($this->row->nickname)?></h3></div>
     

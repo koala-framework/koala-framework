@@ -9,7 +9,7 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Component extends Kwc_Abstract_Comp
         $ret['generators']['child']['component']['image'] =
             'Kwc_List_ChildPages_Teaser_TeaserImage_Image_Component';
         $ret['componentName'] = trlKwfStatic('Teaser image');
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['ownModel'] = 'Kwc_List_ChildPages_Teaser_TeaserImage_Model';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'visible';
 

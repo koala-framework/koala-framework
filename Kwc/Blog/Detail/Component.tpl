@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass;?>">
+<div class="<?=$this->rootElementClass?>">
     <div class="blogContent">
         <? if ($this->previousPost || $this->nextPost) { ?>
             <p class="nextPreviousLinks">

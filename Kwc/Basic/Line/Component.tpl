@@ -1,1 +1,1 @@
-<div class="<?=$this->cssClass?>"></div>
+<div class="<?=$this->rootElementClass?>"></div>

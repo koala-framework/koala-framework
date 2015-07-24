@@ -159,7 +159,7 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
         if ($create['js']['config']) {
             $content .= "    <input type=\"hidden\" value=\"<?=htmlspecialchars(json_encode(\$this->config))?>\" />\n";
         }
-        $data = "<div class=\"<?=\$this->cssClass?>\">\n";
+        $data = "<div class=\"<?=\$this->rootElementClass?>\">\n";
         $data .= $content;
         $data .= "</div>\n";
         $filename = 'components/'.$name.'/Component.tpl';

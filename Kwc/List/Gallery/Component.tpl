@@ -1,5 +1,5 @@
 <?=$this->component($this->downloadAll); ?>
-<div class="<?=$this->cssClass;?>" data-width="100%">
+<div class="<?=$this->rootElementClass?>" data-width="100%">
     <? $i = 0; ?>
     <? foreach ($this->children as $child) { ?>
         <?

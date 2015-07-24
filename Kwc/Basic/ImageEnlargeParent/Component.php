@@ -11,7 +11,7 @@ class Kwc_Basic_ImageEnlargeParent_Component extends Kwc_Basic_ImageParent_Compo
             ),
             'addUrlPart' => false
         );
-        $ret['cssClass'] = 'kwcBasicImageEnlarge ' . Kwf_Config::getValue('kwc.imageEnlarge.cssClass');
+        $ret['rootElementClass'] = 'kwcBasicImageEnlarge ' . Kwf_Config::getValue('kwc.imageEnlarge.cssClass');
         return $ret;
     }
 

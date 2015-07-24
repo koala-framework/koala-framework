@@ -1,4 +1,4 @@
-<ul class="<?=$this->cssClass?>">
+<ul class="<?=$this->rootElementClass?>">
     <? if ($this->foundNothing) { ?>
         <li class="noEntries"><?= $this->data->trlKwf('No entries found for search term &quot;{0}&quot;.', $this->queryValue) ?></li>
     <? } else { ?>

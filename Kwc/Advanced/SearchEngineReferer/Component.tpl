@@ -1,5 +1,5 @@
 <? if ($this->view) { ?>
-    <div class="<?=$this->cssClass?>">
+    <div class="<?=$this->rootElementClass?>">
         <?= $this->component($this->view); ?>
     </div>
 <? } ?>

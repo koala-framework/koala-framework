@@ -1,24 +1,24 @@
-.kwfup-benchmarkContainer {
+.kwfUp-benchmarkContainer {
     position: absolute;
     top: 0px;
     right: 0px;
     z-index: 1000;
     width: 100px;
 }
-.kwfup-benchmarkBox {
+.kwfUp-benchmarkBox {
     text-align: left;
     width: 100px;
 }
 
-.kwfup-benchmarkBox:hover {
+.kwfUp-benchmarkBox:hover {
 }
 
-.kwfup-benchmarkBox a.showContent {
+.kwfUp-benchmarkBox a.showContent {
     font-family: Verdana;
     font-size: 10px;
     padding: 5px;
 }
-.kwfup-benchmarkBox .kwfup-benchmarkBoxContent {
+.kwfUp-benchmarkBox .kwfUp-benchmarkBoxContent {
     font-family: Verdana;
     font-size: 10px;
     background-color: white;
@@ -26,10 +26,10 @@
     padding: 5px; padding-top: 0;
     display: none;
 }
-.kwfup-benchmarkBox.visible {
+.kwfUp-benchmarkBox.visible {
     width: 200px;
     margin-left: -100px;
 }
-.kwfup-benchmarkBox.visible .kwfup-benchmarkBoxContent {
+.kwfUp-benchmarkBox.visible .kwfUp-benchmarkBoxContent {
     display: block;
 }

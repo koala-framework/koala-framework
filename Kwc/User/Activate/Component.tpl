@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h1><?=$this->data->trlKwf('Activate Useraccount')?></h1>
     <? if ($this->showPassword) { ?>
     <div class="form">

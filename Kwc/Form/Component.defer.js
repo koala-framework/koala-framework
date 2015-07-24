@@ -25,11 +25,10 @@ require('kwf/frontend-form/field/static');
 require('kwf/frontend-form/field/text-area');
 require('kwf/frontend-form/field/text-field');
 
-
-responsiveEl('.cssClass.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
-responsiveEl('.cssClass.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
-responsiveEl('.cssClass.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
-responsiveEl('.cssClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
+responsiveEl('.kwcClass.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+responsiveEl('.kwcClass.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
+responsiveEl('.kwcClass.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
+responsiveEl('.kwcClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
 var formsByComponentId = {};
 
@@ -101,7 +100,7 @@ var FormComponent = function(form)
 
     $.each(this.fields, (function(i, f) {
         f.on('change', function() {
-            this.el.trigger('kwfup-form-fieldChange', f);
+            this.el.trigger('kwfUp-form-fieldChange', f);
         }, this);
     }).bind(this));
 
@@ -112,7 +111,7 @@ FormComponent.prototype = {
     on: function(event, cb, scope)
     {
         if (typeof scope != 'undefined') cb = cb.bind(scope);
-        this.el.on('kwfup-form-'+event, cb);
+        this.el.on('kwfUp-form-'+event, cb);
     },
 
     getFieldConfig: function(fieldName)
@@ -181,7 +180,7 @@ FormComponent.prototype = {
         }
 
         //return false to cancel submit
-        if (this.el.triggerHandler('kwfup-form-beforeSubmit', this, e) === false) {
+        if (this.el.triggerHandler('kwfUp-form-beforeSubmit', this, e) === false) {
             e.preventDefault();
             return;
         }
@@ -312,14 +311,14 @@ FormComponent.prototype = {
                     }
                 }
 
-                this.el.trigger('kwfup-form-submitSuccess', this, r);
+                this.el.trigger('kwfUp-form-submitSuccess', this, r);
             }).bind(this)
         });
     }
 };
 
-onReady.onRender('.kwfup-kwcForm > form', function form(form) {
-    form = form.parent('.kwfup-kwcForm', false);
+onReady.onRender('.kwfUp-kwcForm > form', function form(form) {
+    form = form.parent('.kwfUp-kwcForm', false);
     if (!form.get(0).kwcForm) {
         form.get(0).kwcForm = new FormComponent(form);
         form.data('kwcForm', form.get(0).kwcForm);

@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? if ($this->headline1) { ?>
         <h1 class="headlineH1"><?= $this->headline1 ?></h1>
     <? } ?>

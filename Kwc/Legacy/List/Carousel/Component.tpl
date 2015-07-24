@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass;?>">
+<div class="<?=$this->rootElementClass?>">
     <input type="hidden" value="<?=htmlspecialchars(json_encode($this->config))?>" />
     <div class="<? if(count($this->listItems) > 1) { ?>listWrapper<? } else { ?>imageWrapper<? } ?>">
         <? foreach ($this->listItems as $child) { ?>

@@ -1,15 +1,15 @@
-.cssClass .kwfFormFieldFile label {
+.kwcClass .kwfFormFieldFile label {
     width: auto !important;
     float: left;
 }
-.cssClass .kwfFormFieldFileInnerImg {
+.kwcClass .kwfFormFieldFileInnerImg {
     float: left;
 }
-.cssClass .kwfFormFieldFileInnerContent {
+.kwcClass .kwfFormFieldFileInnerContent {
     float: right;
     text-align: right;
 }
-.cssClass .kwfFormFieldFileInnerContent .imageTitle {
+.kwcClass .kwfFormFieldFileInnerContent .imageTitle {
     width: 250px;
     margin: 10px 0px;
     overflow: hidden;

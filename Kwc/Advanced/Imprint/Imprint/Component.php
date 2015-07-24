@@ -7,7 +7,7 @@ class Kwc_Advanced_Imprint_Imprint_Component extends Kwc_Abstract
         $ret['componentName'] = trlKwfStatic('Imprint').'.'.trlKwfStatic('Imprint');
         $ret['componentCategory'] = 'admin';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         return $ret;
     }

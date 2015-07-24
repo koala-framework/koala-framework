@@ -5,7 +5,7 @@ class Kwc_Advanced_Imprint_GoogleAnalytics_Component extends Kwc_Abstract
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlKwfStatic('Imprint').'.Google-Analytics',
-            'cssClass' => 'kwfup-webStandard'
+            'rootElementClass' => 'kwfUp-webStandard'
         ));
         $ret['componentCategory'] = 'admin';
         return $ret;

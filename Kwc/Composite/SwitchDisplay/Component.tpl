@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?> kwfSwitchDisplay">
+<div class="<?=$this->rootElementClass?> kwfSwitchDisplay">
     <a class="linktext switchLink" href="#"><?=$this->component($this->linktext)?></a>
     <?$class = '';?>
     <? if ($this->startOpened) { ?>

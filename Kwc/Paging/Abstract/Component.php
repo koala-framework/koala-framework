@@ -20,7 +20,7 @@ class Kwc_Paging_Abstract_Component extends Kwc_Abstract
             'last'     => '&raquo;',
             'prefix'   => trlKwfStatic('Page').':'
         );
-        $ret['cssClass'] = 'webPaging kwfup-webStandard';
+        $ret['rootElementClass'] = 'webPaging kwfUp-webStandard';
         $ret['plugins']['useViewCache'] = 'Kwc_Paging_Abstract_UseViewCachePlugin';
 
         return $ret;

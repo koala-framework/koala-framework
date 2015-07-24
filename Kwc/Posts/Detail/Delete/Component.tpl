@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h2><?= $this->placeholder['deletePost'] ?></h2>
     <?= $this->component($this->data->parent->parent); ?>
     <div class="deletingPost"><?= $this->componentLink($this->data->parent->parent->parent, $this->data->trlKwf('No')) ?></div>

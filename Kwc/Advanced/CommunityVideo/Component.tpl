@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <input type="hidden" value="<?=htmlspecialchars(json_encode($this->config))?>" />
     <div class="communityVideoContainer ratio<?=$this->config['ratio']?>">
         <div class="outerLoading">

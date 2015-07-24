@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?> kwfFadeElements">
+<div class="<?=$this->rootElementClass?> kwfFadeElements">
     <? /* fadeSelector ist pflicht, alles andere optional */ ?>
     <input type="hidden" name="fadeSelector" class="fadeSelector" value="<?= $this->selector; ?>" />
     <input type="hidden" name="textSelector" class="textSelector" value="<?= $this->textSelector; ?>" />

@@ -30,25 +30,25 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         $ret = preg_replace('#url\((\'|")(?![a-z]+:)([^/\'"])#', 'url(\1/assets/'.$fnDir.'/\2', $ret);
         $ret = preg_replace('#url\((?![a-z]+:)([^/\'"])#', 'url(/assets/'.$fnDir.'/\1', $ret);
 
-        if (strpos($ret, 'kwfup-') !== false) {
+        if (strpos($ret, 'kwfUp-') !== false) {
             if (Kwf_Config::getValue('application.uniquePrefix')) {
-                $ret = str_replace('kwfup-', Kwf_Config::getValue('application.uniquePrefix').'-', $ret);
+                $ret = str_replace('kwfUp-', Kwf_Config::getValue('application.uniquePrefix').'-', $ret);
             } else {
-                $ret = str_replace('kwfup-', '', $ret);
+                $ret = str_replace('kwfUp-', '', $ret);
             }
         }
-        if (strpos($ret, 'kwcbem__') !== false) {
+        if (strpos($ret, 'kwcBem__') !== false) {
             if (Kwf_Config::getValue('application.uniquePrefix')) {
-                $ret = str_replace('.cssClass .kwcbem__', '.kwcbem__', $ret);
-                $ret = str_replace('kwcbem__', $this->_getComponentCssClass().'__', $ret);
+                $ret = str_replace('.kwcClass .kwcBem__', '.kwcBem__', $ret);
+                $ret = str_replace('kwcBem__', $this->_getComponentCssClass().'__', $ret);
             } else {
-                $ret = str_replace('kwcbem__', '', $ret);
+                $ret = str_replace('kwcBem__', '', $ret);
             }
         }
-        if (strpos($ret, '.cssClass') !== false) {
+        if (strpos($ret, '.kwcClass') !== false) {
             $cssClass = $this->_getComponentCssClass();
             if ($cssClass) {
-                $ret = str_replace('.cssClass', '.'.$cssClass, $ret);
+                $ret = str_replace('.kwcClass', '.'.$cssClass, $ret);
             }
         }
         return $ret;

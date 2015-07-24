@@ -5,7 +5,7 @@ class Kwc_Trl_MenuCache_MainMenu_Component extends Kwc_Menu_Component
     {
         $ret = parent::getSettings();
         $ret['level'] = 'main';
-        $ret['cssClass'] .= ' webListNone';
+        $ret['rootElementClass'] .= ' webListNone';
 
         $ret['generators']['subMenu'] = array(
             'class' => 'Kwc_Menu_Generator',

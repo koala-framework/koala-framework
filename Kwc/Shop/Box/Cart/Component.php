@@ -5,7 +5,7 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['assets']['dep'][] = 'ExtConnection';
         $ret['placeholder']['toCart'] = trlKwfStatic('To cart');
         $ret['placeholder']['toCheckout'] = trlKwfStatic('To Checkout');

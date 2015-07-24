@@ -7,7 +7,7 @@ class Kwc_List_Images_Component extends Kwc_Abstract_List_Component
         $ret['componentName'] = trlKwfStatic('Images');
         $ret['componentIcon'] = 'pictures';
         $ret['generators']['child']['component'] = 'Kwc_Basic_Image_Component';
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['pdfColumns'] = 1;
         $ret['contentMargin'] = 10;
         return $ret;

@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>" data-width="100%">
+<div class="<?=$this->rootElementClass?>" data-width="100%">
     <div class="<?=$this->propCssClass?>">
         <div class="<? if($this->center){ echo $this->position; }?><? if($this->row->flow){?> flow<?}else{?> noFlow<?}?>
         <? if(($this->imageWidth) <= 100) {?>smallImage<? } ?>">

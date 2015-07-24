@@ -22,7 +22,7 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
         if (!$row->image) {
             $ret['image'] = false;
         } else {
-            $ret['cssClass'] .= ' imageDimension'.ucfirst($ret['image']->getComponent()->getDimensionSetting());
+            $ret['rootElementClass'] .= ' imageDimension'.ucfirst($ret['image']->getComponent()->getDimensionSetting());
             $dim = $ret['image']->getComponent()->getImageDimensions();
             $ret['imageWidth'] = false;
             if ($dim && isset($dim['width'])) {
@@ -43,7 +43,7 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
             $ret['mailImageVAlign'] = $this->_getSetting('mailImageVAlign');
         }
         if (!$ret['text']->hasContent()) {
-            $ret['cssClass'] .= ' noText';
+            $ret['rootElementClass'] .= ' noText';
         }
         return $ret;
     }

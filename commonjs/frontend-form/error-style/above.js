@@ -18,7 +18,7 @@ var ErrorStyleAbove = kwfExtend(ErrorStyleAbstract, {
     hideErrors: function()
     {
         ErrorStyleAbove.superclass.hideErrors.call(this);
-        var error = this.form.el.parent().find('.kwfup-webFormError');
+        var error = this.form.el.parent().find('.kwfUp-webFormError');
         if (error) error.remove();
     },
 

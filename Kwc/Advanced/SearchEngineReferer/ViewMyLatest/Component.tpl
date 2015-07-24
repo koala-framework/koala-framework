@@ -1,5 +1,5 @@
 <? if ($this->referers) { ?>
-    <div class="<?=$this->cssClass?>">
+    <div class="<?=$this->rootElementClass?>">
         <h3 class="refererFound"><?= $this->placeholder['header']; ?></h3>
         <ul>
             <?  $i = 0;

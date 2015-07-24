@@ -6,7 +6,7 @@ class Kwc_User_Edit_Component extends Kwc_Abstract_Composite_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['form'] = 'Kwc_User_Edit_Form_Component';
         $ret['forms'] = 'all';
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['viewCache'] = false;
         return $ret;
     }

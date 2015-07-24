@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? foreach ($this->children as $c) { ?>
         <?if ($this->hasContent($c)) { ?>
             <?= $this->component($c); ?>

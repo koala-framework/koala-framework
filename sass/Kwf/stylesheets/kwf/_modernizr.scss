@@ -1,12 +1,12 @@
 // Modernizr mixin to create html.modernizr selector
 
 @mixin modernizr($feature) {
-    html.kwfup-#{$feature} & {
+    html.kwfUp-#{$feature} & {
         @content;
     }
 }
 @mixin modernizr-no($feature, $no: true) {
-    html.kwfup-no-#{$feature} & {
+    html.kwfUp-no-#{$feature} & {
         @content;
     }
 }

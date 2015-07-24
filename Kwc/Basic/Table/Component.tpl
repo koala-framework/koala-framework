@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <table class="<?=$this->tableStyle?>" cellspacing="0" cellpadding="0">
         <? if ($this->headerRows) { ?>
         <thead>

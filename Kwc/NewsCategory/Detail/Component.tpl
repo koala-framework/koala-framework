@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h3><?= $this->title ?></h3>
     <div class="publishDate"><?=$this->date($this->row->publish_date)?>
         <? if ($this->item->categories) { ?>

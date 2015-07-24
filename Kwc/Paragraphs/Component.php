@@ -58,7 +58,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
             $cssClass = 'kwcParagraphItem';
             $row = $paragraph->getRow();
             if ($this->_getSetting('useMobileBreakpoints') && $row->device_visible) $cssClass .= ' ' . $row->device_visible;
-            $cssClass .= ' outer'.ucfirst(Kwf_Component_Abstract::formatCssClass($paragraph->componentClass));
+            $cssClass .= ' outer'.ucfirst(Kwf_Component_Abstract::formatRootElementClass($paragraph->componentClass));
             $ret['paragraphs'][] = array(
                 'data' => $paragraph,
                 'class' => $cssClass

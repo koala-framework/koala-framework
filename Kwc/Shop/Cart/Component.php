@@ -17,7 +17,7 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
             'name' => trlKwfStatic('Checkout')
         );
         $ret['viewCache'] = false;
-        $ret['cssClass'] = 'kwfup-webStandard kwfup-webForm';
+        $ret['rootElementClass'] = 'kwfUp-webStandard kwfUp-webForm';
         $ret['componentName'] = trlKwfStatic('Shop.Cart');
         $ret['componentNameShort'] = trlKwfStatic('Cart');
         $ret['componentCategory'] = 'admin';

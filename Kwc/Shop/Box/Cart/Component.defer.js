@@ -3,8 +3,8 @@ var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 
 onReady.onContentReady(function(readyEl, param) {
     if (!param.newRender) return false;
-    Ext2.select('.kwfup-kwcForm > form', true, readyEl).each(function(form) {
-        form = form.parent('.kwfup-kwcForm', false);
+    Ext2.select('.kwfUp-kwcForm > form', true, readyEl).each(function(form) {
+        form = form.parent('.kwfUp-kwcForm', false);
         if (form.dom.shopBoxCartInitDone) return;
         form.dom.shopBoxCartInitDone = true;
         form.kwcForm.on('submitSuccess', function(r) {

@@ -11,7 +11,7 @@ class Kwc_Shop_Products_Detail_Component extends Kwc_Directories_Item_Detail_Com
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwc_Shop_AddToCart_Component'
         );
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['placeholder']['back'] = trlKwfStatic('Back');
         $ret['assetsAdmin']['dep'][] = 'KwfFormDateTimeField';
         $ret['editComponents'] = array('content');

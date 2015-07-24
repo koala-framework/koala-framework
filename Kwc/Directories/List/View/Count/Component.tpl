@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <?if ($this->totalLabel){?>
         <span class="totalLabel"><?=$this->totalLabel?></span>
     <?}?>

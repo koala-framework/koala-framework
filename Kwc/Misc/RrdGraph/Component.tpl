@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? if($this->src) { ?>
     <img src="<?=$this->src?>" alt="" />
     <? } ?>

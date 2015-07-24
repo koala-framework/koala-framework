@@ -1,20 +1,20 @@
-.cssClass .tblBoxCart { width: 100%; }
-.cssClass .products { color: typo; }
-.cssClass .products td { vertical-align: top; }
-.cssClass .products td.amount { text-align: left; padding-right: 5px; }
-.cssClass .products td.price { text-align: right; white-space: nowrap; }
-.cssClass .moneyInfo .text { float: left; }
-.cssClass .moneyInfo .price { float: right; }
-.cssClass li.totalAmount span { font-weight: bold; }
+.kwcClass .tblBoxCart { width: 100%; }
+.kwcClass .products { color: typo; }
+.kwcClass .products td { vertical-align: top; }
+.kwcClass .products td.amount { text-align: left; padding-right: 5px; }
+.kwcClass .products td.price { text-align: right; white-space: nowrap; }
+.kwcClass .moneyInfo .text { float: left; }
+.kwcClass .moneyInfo .price { float: right; }
+.kwcClass li.totalAmount span { font-weight: bold; }
 
-.cssClass .cartList .tblBoxCart ul.products li {
+.kwcClass .cartList .tblBoxCart ul.products li {
     float: left;
     width: 33%;
 }
-.cssClass .cartList .tblBoxCart ul.products li.product {
+.kwcClass .cartList .tblBoxCart ul.products li.product {
     width: 100%;
     margin-bottom: 2px;
 }
-.cssClass .cartList .tblBoxCart ul.products li.price {
+.kwcClass .cartList .tblBoxCart ul.products li.price {
     text-align: right;
 }

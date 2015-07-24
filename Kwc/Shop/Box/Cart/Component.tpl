@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>" id="<?=$this->data->componentId?>">
+<div class="<?=$this->rootElementClass?>" id="<?=$this->data->componentId?>">
     <div class="cartList">
         <h2><?=$this->data->trlKwf('Cart')?></h2>
         <? if (!$this->items) { ?>
@@ -31,7 +31,7 @@
                 <? $c++;
             } ?>
             </div>
-            <ul class="moneyInfo kwfup-webListNone">
+            <ul class="moneyInfo kwfUp-webListNone">
                 <? foreach ($this->sumRows as $row) { ?>
                     <li<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
                         <span class="text"><?=$this->data->trlStaticExecute($row['text'])?></span>

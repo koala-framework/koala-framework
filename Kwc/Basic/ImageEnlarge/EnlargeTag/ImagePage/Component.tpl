@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <div class="lightboxHeader">
     </div>
     <div class="lightboxBody<? if($this->previous || $this->next) { ?> hasNextOrPrevious<? } ?>">

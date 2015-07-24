@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h1><?=$this->data->trlKwf('Please login')?></h1>
     <p><?=$this->data->trlKwf('You have to login to see the requested page.')?></p>
     <? if ($this->register) { ?>

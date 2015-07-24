@@ -126,8 +126,12 @@ class Kwf_Component_Settings
         //*** parentFilePaths
         $settings['parentFilePaths'] = Kwf_Component_Abstract::getSetting($c, 'parentFilePaths');
 
-        //*** processedCssClass
-        $cssClass = array(Kwf_Component_Abstract::formatCssClass($c));
+        //*** processedRootElementClass
+        $settings['processedRootElementClass'] = '';
+        if (isset($settings['rootElementClass'])) {
+            $settings['processedRootElementClass'] .= $settings['rootElementClass'].' ';
+        }
+        $cssClass = array(Kwf_Component_Abstract::formatRootElementClass($c));
         $dirs = explode(PATH_SEPARATOR, get_include_path());
         foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
             $dirs = array_merge($dirs, $i);
@@ -140,12 +144,12 @@ class Kwf_Component_Settings
             }
             foreach ($dirs as $dir) {
                 if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.js') || is_file($dir.'/'.$file.'.defer.js')) {
-                    $cssClass[] = Kwf_Component_Abstract::formatCssClass($i);
+                    $cssClass[] = Kwf_Component_Abstract::formatRootElementClass($i);
                     break;
                 }
             }
         }
-        $settings['processedCssClass'] = implode(' ', array_reverse($cssClass));
+        $settings['processedRootElementClass'] = implode(' ', array_reverse($cssClass));
 
         //*** generators
         $settings['generators'] = Kwf_Component_Abstract::getSetting($c, 'generators');

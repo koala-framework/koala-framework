@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass;?>">
+<div class="<?=$this->rootElementClass?>">
     <h1><?=$this->title;?></h1>
     <div class="publishDate">
         <?=$this->date($this->row->publish_date);?>

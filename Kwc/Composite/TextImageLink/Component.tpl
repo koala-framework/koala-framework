@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <div class="text">
         <h2><?=$this->component($this->link)?><?=$this->mailEncodeText($this->title)?></a></h2>
         <? if ($this->teaser) { ?>

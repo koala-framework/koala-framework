@@ -1,7 +1,7 @@
 var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 
-onReady.onRender('.cssClass.showHoverIcon > a', function imageEnlarge(el) {
+onReady.onRender('.kwcClass.showHoverIcon > a', function imageEnlarge(el) {
     if (el.width() > 50 && el.height() > 50) {
         el.append($('<span class="outerHoverIcon"><span class="innerHoverIcon"></span></span>'));
         if (el.width() < 200) {

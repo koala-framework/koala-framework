@@ -4,7 +4,7 @@ var componentEvent = require('kwf/component-event');
 (function() {
 var kwcFavouritesComponentIds = [];
 var kwcFavouritesInitialized = false;
-onReady.onRender('.cssClass', function(el, config) {
+onReady.onRender('.kwcClass', function(el, config) {
     kwcFavouritesComponentIds.push(config.componentId);
 
     if (!kwcFavouritesInitialized) {

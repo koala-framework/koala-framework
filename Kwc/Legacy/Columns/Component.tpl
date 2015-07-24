@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass;?>">
+<div class="<?=$this->rootElementClass?>">
     <? $i = 0; ?>
     <? foreach ($this->listItems as $child) { ?>
         <?

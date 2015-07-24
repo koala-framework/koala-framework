@@ -1,6 +1,6 @@
 var onReady = require('kwf/on-ready');
 
-onReady.onRender('.cssClass', function(el) {
+onReady.onRender('.kwcClass', function(el) {
     var menu = $(el).find('.menu');
 
     $(menu).before('<a class="arrowLeft"></a>').before('<a class="arrowRight"></a>');

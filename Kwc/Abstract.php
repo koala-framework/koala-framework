@@ -381,13 +381,13 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     {
         $ret = array();
         $ret['placeholder'] = $this->_getPlaceholder();
-        $ret['cssClass'] = self::getCssClass($this);
+        $ret['rootElementClass'] = self::getRootElementClass($this);
 
         $up = Kwf_Config::getValue('application.uniquePrefix');
         if (!$up) {
             $ret['bemClasses'] = false;
         } else {
-            $classes = Kwc_Abstract::getSetting($this->getData()->componentClass, 'processedCssClass');;
+            $classes = Kwc_Abstract::getSetting($this->getData()->componentClass, 'processedRootElementClass');;
             $classes = explode(' ', $classes);
             $ret['bemClasses'] = array();
             foreach ($classes as $i) {
@@ -424,12 +424,12 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             usort($ret['multiBoxes'][$box], array('Kwf_Component_View_Helper_ComponentWithMaster', '_sortByPriority'));
         }
 
-        $ret['cssClass'] = 'kwfup-frontend';
+        $ret['rootElementClass'] = 'kwfUp-frontend';
 
         $cssClass = $this->_getMasterCssClass($renderer->getTemplate($this->getData(), 'Master'));
         $ret['bemClasses'] = array($cssClass.'__');
 
-        $ret['cssClass'] .= ' '.$cssClass;
+        $ret['rootElementClass'] .= ' '.$cssClass;
 
         return $ret;
     }
@@ -461,7 +461,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             throw new Kwf_Exception("Invalid master template");
         }
         $cssClass = str_replace('/', '', $cssClass);
-        $cssClass = 'kwfup-'.$cssClass;
+        $cssClass = 'kwfUp-'.$cssClass;
         return $cssClass;
     }
 
@@ -511,19 +511,19 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     }
 
     /**
-     * Returns the processed cssClass used in various places for a component
+     * Returns the processed rootElementClass used in various places for a component
      *
      * @param string|Kwf_Component_Data
      * @return string
      */
-    static public function getCssClass($component)
+    static public function getRootElementClass($component)
     {
         if (!is_string($component)) $component = $component->getData()->componentClass;
         $ret = '';
-        if (self::hasSetting($component, 'cssClass')) {
-            $ret .= self::getSetting($component, 'cssClass').' ';
+        if (self::hasSetting($component, 'rootElementClass')) {
+            $ret .= self::getSetting($component, 'rootElementClass').' ';
         }
-        $ret .= self::getSetting($component, 'processedCssClass');
+        $ret .= self::getSetting($component, 'processedRootElementClass');
         return $ret;
     }
 

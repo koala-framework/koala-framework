@@ -15,7 +15,7 @@ class Kwc_Posts_Write_Preview_Component extends Kwc_Abstract
         $ret['sourceSelector'] = 'textarea';
         $ret['textClass'] = 'text';
 
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
 
         return $ret;
     }
@@ -23,7 +23,7 @@ class Kwc_Posts_Write_Preview_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['detailClasses'] = self::getCssClass(
+        $ret['detailClasses'] = self::getRootElementClass(
             $this->getData()->parent->getComponent()->getPostDirectoryClass()
         );
         $ret['sourceSelector'] = $this->_getSetting('sourceSelector');

@@ -102,15 +102,15 @@ if (!benchmarkEnabled) {
         if (el instanceof $) el = el.get(0);
         if (el.initDone) return;
         el.initDone = true;
-        var container = $('.kwfup-benchmarkContainer');
+        var container = $('.kwfUp-benchmarkContainer');
         if (!container.length) {
-            container = $('<div class="kwfup-benchmarkContainer"></div>');
+            container = $('<div class="kwfUp-benchmarkContainer"></div>');
             $('body').append($(container));
         }
         container.append($(el));
 
         var benchmarkType = $(el).data('benchmarkType');
-        if (getCookie('kwfup-benchmarkBox-'+benchmarkType)=='1') {
+        if (getCookie('kwfUp-benchmarkBox-'+benchmarkType)=='1') {
             $(el).addClass('visible');
         }
         var showLink = $('<a href="#" class="showContent">['+benchmarkType+']</a>');
@@ -121,10 +121,10 @@ if (!benchmarkEnabled) {
             var el = $(this);
             if (!el.parent().hasClass('visible')) {
                 el.parent().addClass('visible');
-                setCookie('kwfup-benchmarkBox-'+benchmarkType, '1');
+                setCookie('kwfUp-benchmarkBox-'+benchmarkType, '1');
             } else {
                 el.parent().removeClass('visible');
-                setCookie('kwfup-benchmarkBox-'+benchmarkType, '0');
+                setCookie('kwfUp-benchmarkBox-'+benchmarkType, '0');
             }
         });
     };
@@ -165,15 +165,15 @@ if (!benchmarkEnabled) {
         BenchmarkBox._counters = {};
         BenchmarkBox._timers = {};
         BenchmarkBox._subTimers = {};
-        html = '<div class="kwfup-benchmarkBoxContent">'+html+'</div>';
-        html = '<div class="kwfup-benchmarkBox" data-benchmark-type="'+options.type+'">'+html+'</div>';
+        html = '<div class="kwfUp-benchmarkBoxContent">'+html+'</div>';
+        html = '<div class="kwfUp-benchmarkBox" data-benchmark-type="'+options.type+'">'+html+'</div>';
         el = $(html);
         $('body').append(el);
         BenchmarkBox.initBox(el);
     };
     $(function() {
         setTimeout(function() {
-            $('body').find('.kwfup-benchmarkBox').each(function(i, el) {
+            $('body').find('.kwfUp-benchmarkBox').each(function(i, el) {
                 BenchmarkBox.initBox($(el));
             });
         }, 10);

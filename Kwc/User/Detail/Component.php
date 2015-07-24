@@ -5,7 +5,7 @@ class Kwc_User_Detail_Component extends Kwc_Directories_Item_Detail_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['general'] = 'Kwc_User_Detail_GeneralCommunity_Component';
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         return $ret;
     }
     

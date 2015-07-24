@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <div class="componentAnchor" id="<?=$this->row->component_id?>"></div>
     <<?=$this->headlineType['tag'] ?><? if ($this->headlineType['class']) { ?> class="<?=$this->headlineType['class']?>"<? } ?>>
         <span><?= $this->headline1 ?></span>

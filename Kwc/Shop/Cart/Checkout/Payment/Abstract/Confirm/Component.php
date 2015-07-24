@@ -7,7 +7,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Kwc_Edit
         $ret = parent::getSettings();
         $ret['generators']['content']['component'] = 'Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Component';
         $ret['flags']['processInput'] = true;
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['plugins']['placeholders'] = 'Kwf_Component_Plugin_Placeholders';
         $ret['viewCache'] = false;
         return $ret;

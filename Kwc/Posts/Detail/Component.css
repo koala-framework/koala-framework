@@ -1,38 +1,38 @@
-.cssClass {
+.kwcClass {
     background: #fff;
     padding: 0px;
     margin: 20px 0px;
     border: 1px solid #ccc;
     clear: both;
 }
-.cssClass .postData {
+.kwcClass .postData {
     overflow: hidden;
 }
-.cssClass .postData .postInfo {
+.kwcClass .postData .postInfo {
     padding: 3px 15px 5px 15px;
 }
-.cssClass .postData .user {
+.kwcClass .postData .user {
     float: right;
     text-align: right;
 }
-.cssClass .avatar {
+.kwcClass .avatar {
     float: right;
     margin-top: -3px;
     margin-right: -15px;
     margin-left: 10px;
 }
-.cssClass .text {
+.kwcClass .text {
     padding: 15px 20px;
     background: #fff;
     margin-top: 3px;
 }
-.cssClass .text fieldset.quote {
+.kwcClass .text fieldset.quote {
     background: #f3f2f1;
     border: 1px solid #ccc;
     font-style: italic;
     margin-top: 10px;
     padding: 10px;   
 }
-.cssClass p.signature {
+.kwcClass p.signature {
     padding: 15px 20px;
 }

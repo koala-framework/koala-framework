@@ -23,7 +23,7 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
             $up = Kwf_Config::getValue('application.uniquePrefix');
             if ($up) $up .= '-';
         }
-        return str_replace('kwfup-', $up, $m[0]);
+        return str_replace('kwfUp-', $up, $m[0]);
     }
 
     public function render($componentId, $config)

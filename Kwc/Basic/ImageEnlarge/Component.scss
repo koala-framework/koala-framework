@@ -1,16 +1,16 @@
 @import "compass/css3/transition";
 
-.cssClass {
+.kwcClass {
     position: relative;
 
     a {
         display: block;
 
-        &.kwfup-kwcEnlargeTag,
-        &.kwfup-kwcBasicDownloadTag,
-        &.kwfup-kwcBasicLinkTagIntern,
-        &.kwfup-kwcBasicLinkTagExtern,
-        &.kwfup-kwcBasicLinkTagMail { position: relative; display: block; }
+        &.kwfUp-kwcEnlargeTag,
+        &.kwfUp-kwcBasicDownloadTag,
+        &.kwfUp-kwcBasicLinkTagIntern,
+        &.kwfUp-kwcBasicLinkTagExtern,
+        &.kwfUp-kwcBasicLinkTagMail { position: relative; display: block; }
 
         img {
             display: block;
@@ -20,7 +20,7 @@
 
 /* ----------------------------------------- HOVERICONS ----------------------------------------- */
 
-.cssClass {
+.kwcClass {
     a {
         .outerHoverIcon {
             width: 100%;
@@ -49,33 +49,33 @@
             opacity: 0.9;
         }
 
-        &.kwfup-kwcEnlargeTag .outerHoverIcon .innerHoverIcon {
+        &.kwfUp-kwcEnlargeTag .outerHoverIcon .innerHoverIcon {
             background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/enlargeIcon.png) no-repeat 0 0;
         }
 
-        &.kwfup-kwcBasicLinkTagIntern .outerHoverIcon .innerHoverIcon {
+        &.kwfUp-kwcBasicLinkTagIntern .outerHoverIcon .innerHoverIcon {
             background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkInternIcon.png) no-repeat 0 0;
         }
 
-        &.kwfup-kwcBasicLinkTagExtern .outerHoverIcon .innerHoverIcon {
+        &.kwfUp-kwcBasicLinkTagExtern .outerHoverIcon .innerHoverIcon {
             background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/linkExternIcon.png) no-repeat 0 0;
         }
 
-        &.kwfup-kwcBasicDownloadTag .outerHoverIcon .innerHoverIcon {
+        &.kwfUp-kwcBasicDownloadTag .outerHoverIcon .innerHoverIcon {
             background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/downloadIcon.png) no-repeat 0 0;
         }
 
-        &.kwfup-kwcBasicLinkTagMail .outerHoverIcon .innerHoverIcon {
+        &.kwfUp-kwcBasicLinkTagMail .outerHoverIcon .innerHoverIcon {
             background: url(/assets/kwf/Kwc/Basic/ImageEnlarge/EnlargeTag/mailIcon.png) no-repeat 0 0;
         }
     }
 }
 
-.showHoverIcon.cssClass a .outerHoverIcon {
+.showHoverIcon.kwcClass a .outerHoverIcon {
     display: block;
 }
 
-body.ext2-ie8 .cssClass a {
+body.ext2-ie8 .kwcClass a {
     .outerHoverIcon {
         display: none;
     }
@@ -86,7 +86,7 @@ body.ext2-ie8 .cssClass a {
 }
 
 @media print {
-.cssClass a .outerHoverIcon {
+.kwcClass a .outerHoverIcon {
     width: 0px;
     height: 0px;
 }

@@ -5,7 +5,7 @@ class Kwc_Newsletter_Unsubscribe_Component extends Kwc_Abstract_Composite_Compon
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['generators']['child']['component']['form'] = 'Kwc_Newsletter_Unsubscribe_Form_Component';
         $ret['placeholder']['headline'] = trlKwfStatic('Unsubscribe newsletter');
         return $ret;

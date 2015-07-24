@@ -4,7 +4,7 @@
 $contentMargin  : 10px;
 $breakpoint     : 600;
 
-div.cssClass {
+div.kwcClass {
     @include pie-clearfix;
     margin-right: -$contentMargin;
 
@@ -88,7 +88,7 @@ div.cssClass {
                         display: block;
                     }
 
-                    .kwfup-kwcAbstractImage.showImageCaption {
+                    .kwfUp-kwcAbstractImage.showImageCaption {
                         padding-bottom: 17px;
                     }
 

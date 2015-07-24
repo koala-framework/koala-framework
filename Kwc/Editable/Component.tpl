@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <?php if ($this->hasContent($this->content)) {
         echo $this->component($this->content);
     } else {

@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <h2><?=$this->data->trlKwf('Favourites');?></h2>
     <? if ($this->favourites) { ?>
         <ul>

@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <? if ($this->write) { ?>
         <div class="write">
             <?=$this->componentLink($this->write, $this->placeholder['writeText'])?>

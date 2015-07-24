@@ -3,7 +3,7 @@ var _ = require('underscore');
 var $ = require('jquery');
 var trlKwf = require('kwf/trl').trlKwf;
 
-onReady.onRender('.cssClass', function mobileMenu(el, config) {
+onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     var slideDuration = 400;
     var menuLink = el.children('.showMenu');
     var left = 100;

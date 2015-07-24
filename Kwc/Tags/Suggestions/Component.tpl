@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <input type="hidden" class="config" value="<?=htmlspecialchars(json_encode($this->config))?>" />
     <form>
         <div class="kwfField">

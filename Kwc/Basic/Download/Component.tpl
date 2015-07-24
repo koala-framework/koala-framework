@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <?php
     if ($this->icon) { echo "<img src=\"{$this->icon}\" />"; }
     echo ' ';

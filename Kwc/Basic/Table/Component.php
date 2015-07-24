@@ -32,7 +32,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         // settings page in backend
         // e.g.: 'green' => trlKwf('Green')
         $ret['tableStyles'] = array('standard' => trlKwfStatic('Standard'));
-        $ret['cssClass'] = 'kwfup-webStandard';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
 
         $ret['extConfig'] = 'Kwc_Basic_Table_ExtConfig';
         return $ret;
@@ -45,7 +45,7 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         $ret['tableStyle'] = $this->_getRow()->table_style;
         $ret['columnCount'] = $this->getColumnCount();
         if (Kwf_Config::getValue('kwc.responsive')) {
-            $ret['cssClass'] .= ' responsive'.ucfirst($this->_getRow()->responsive_style);
+            $ret['rootElementClass'] .= ' responsive'.ucfirst($this->_getRow()->responsive_style);
         }
 
         $dataSelect = new Kwf_Model_Select();

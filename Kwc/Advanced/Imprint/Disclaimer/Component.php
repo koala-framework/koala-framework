@@ -6,7 +6,7 @@ class Kwc_Advanced_Imprint_Disclaimer_Component extends Kwc_Abstract
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => trlKwfStatic('Imprint').'.'.trlKwfStatic('Disclaimer'),
             'ownModel' => 'Kwf_Component_FieldModel',
-            'cssClass' => 'kwfup-webStandard'
+            'rootElementClass' => 'kwfUp-webStandard'
         ));
         $ret['componentCategory'] = 'admin';
         $ret['assetsDefer']['dep'][] = 'KwfSwitchDisplay';

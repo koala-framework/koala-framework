@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?>">
+<div class="<?=$this->rootElementClass?>">
     <input type="hidden" name="config" value="<?=htmlspecialchars(json_encode($this->config))?>" />
     <? if (isset($this->searchForm)) { ?>
         <div class="searchForm">

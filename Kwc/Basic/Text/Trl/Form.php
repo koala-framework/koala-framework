@@ -14,7 +14,7 @@ class Kwc_Basic_Text_Trl_Form extends Kwc_Abstract_Form
 
         $fs->add(new Kwf_Form_Field_ShowField('content'))
             ->setHideLabel(true)
-            ->setCls('kwfup-webStandard')
+            ->setCls('kwfUp-webStandard')
             ->setData(new Kwf_Data_Trl_OriginalComponent());
 
         if (!$this->getModel()) {

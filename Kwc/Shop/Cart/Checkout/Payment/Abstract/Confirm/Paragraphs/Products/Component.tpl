@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass;?>">
+<div class="<?=$this->rootElementClass;?>">
     <? if (isset($this->items)) { ?>
         <p><?=$this->data->trlpKwf('You ordered the following product', 'You ordered the following products', count($this->items));?>:</p>
         <table class="tblBoxCart" cellspacing="0" cellpadding="0">

@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass;?> kwfTabs">
+<div class="<?=$this->rootElementClass?> kwfTabs">
     <? $i = 0; ?>
     <? foreach ($this->listItems as $child) { ?>
         <?
