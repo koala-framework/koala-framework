@@ -91,68 +91,6 @@ Kwf.Component.ClearCache = Ext2.extend(Ext2.Panel, {
             }
         });
 
-        this.body.createChild({
-            style: 'font-size: 12px',
-            html: 'Changed translations aren\'t updated'
-        });
-        new Ext2.Button({
-            text: 'Clear Trl Cache',
-            icon: '/assets/silkicons/application_view_columns.png',
-            cls: 'x2-btn-text-icon',
-            renderTo: this.body,
-            style: 'margin-bottom: 20px',
-            scope: this,
-            handler: function() {
-                Ext2.Ajax.request({
-                    url: this.controllerUrl+'/json-clear-cache',
-                    params: { type: 'trl' },
-                    mask: true,
-                    maskText: trlKwf('clearing cache...')
-                });
-            }
-        });
-
-        this.body.createChild({
-            style: 'font-size: 12px',
-            html: 'Images or other uploads aren\'t updated or shown in the wrong dimension'
-        });
-        new Ext2.Button({
-            text: 'Clear Media Cache',
-            icon: '/assets/silkicons/image.png',
-            cls: 'x2-btn-text-icon',
-            renderTo: this.body,
-            style: 'margin-bottom: 20px',
-            scope: this,
-            handler: function() {
-                Ext2.Ajax.request({
-                    url: this.controllerUrl+'/json-clear-cache',
-                    params: { type: 'media' },
-                    mask: true,
-                    maskText: trlKwf('clearing cache...')
-                });
-            }
-        });
-
-        this.body.createChild({
-            style: 'font-size: 12px',
-            html: 'A Css or JavaScript file got changed but the change isn\'t visible'
-        });
-        new Ext2.Button({
-            text: 'Clear Assets Cache',
-            icon: '/assets/silkicons/script_code.png',
-            cls: 'x2-btn-text-icon',
-            renderTo: this.body,
-            style: 'margin-bottom: 20px',
-            scope: this,
-            handler: function() {
-                Ext2.Ajax.request({
-                    url: this.controllerUrl+'/json-clear-cache',
-                    params: { type: 'assets' },
-                    mask: true,
-                    maskText: trlKwf('clearing cache...')
-                });
-            }
-        });
         new Kwf.Auto.FormPanel({
             title: 'Yep, it was a cache issue, inform developers',
             border: true,

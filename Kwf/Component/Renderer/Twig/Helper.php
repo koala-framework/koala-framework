@@ -7,6 +7,11 @@ class Kwf_Component_Renderer_Twig_Helper
         $this->_renderer = $renderer;
     }
 
+    public function componentWithMaster(array $componentWithMaster)
+    {
+        return new Twig_Markup($this->_renderer->getHelper('componentWithMaster')->componentWithMaster($componentWithMaster), 'utf-8');
+    }
+
     public function component(Kwf_Component_Data $component = null)
     {
         return new Twig_Markup($this->_renderer->getHelper('component')->component($component), 'utf-8');
@@ -25,11 +30,6 @@ class Kwf_Component_Renderer_Twig_Helper
     public function dynamic($class)
     {
         return new Twig_Markup($this->_renderer->getHelper('dynamic')->dynamic($class), 'utf-8');
-    }
-
-    public function includeCode($position)
-    {
-        return new Twig_Markup($this->_renderer->getHelper('includeCode')->includeCode($position), 'utf-8');
     }
 
     public function image($image, $alt = '', $cssClass = null)

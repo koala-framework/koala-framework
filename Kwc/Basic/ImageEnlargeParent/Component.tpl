@@ -1,3 +1,3 @@
 <?
-include('Kwc/Basic/ImageEnlarge/Component.tpl');
+include(KWF_PATH.'/Kwc/Basic/ImageEnlarge/Component.tpl');
 ?>

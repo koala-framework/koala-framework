@@ -755,6 +755,7 @@ abstract class Kwf_Component_Generator_Abstract
         $ret = Kwf_Component_Data_Root::getInstance()->getFromDataCache($componentId);
         if (!$ret) {
             $config = $this->_formatConfig($parentData, $row);
+            if (!$config) return null;
             if (!$config['componentClass'] || !is_string($config['componentClass'])) {
                 throw new Kwf_Exception("no componentClass set (id $parentData->componentId $id)");
             }

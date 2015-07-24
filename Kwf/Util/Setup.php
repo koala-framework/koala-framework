@@ -115,6 +115,11 @@ class Kwf_Util_Setup
             }
             $ret .= "\nif (isset(\$_SERVER['REMOTE_ADDR']) && $comparison && isset(\$_SERVER['$a[replace]'])) {\n";
             $ret .= "    \$_SERVER['REMOTE_ADDR'] = \$_SERVER['$a[replace]'];\n";
+            if (isset($a['removeTrailing'])) {
+                $ret .= "    if (substr(\$_SERVER['REMOTE_ADDR'], -".strlen($a['removeTrailing']).") == '".$a['removeTrailing']."') {\n";
+                $ret .= "        \$_SERVER['REMOTE_ADDR'] = substr(\$_SERVER['REMOTE_ADDR'], 0, -".strlen($a['removeTrailing']).");\n";
+                $ret .= "    }\n";
+            }
             $ret .= "}\n";
         }
 
@@ -421,6 +426,9 @@ class Kwf_Util_Setup
                 if (substr($i, -1)=='*') {
                     $i = substr($i, 0, -1);
                     $ret .= "    if (substr(\$_SERVER['REMOTE_ADDR'], 0, ".strlen($i).") == '$i') \$ignore = true;\n";
+                } else if (substr($i, 0, 1)=='*') {
+                    $i = substr($i, 1);
+                    $ret .= "    if (substr(\$_SERVER['REMOTE_ADDR'], -".strlen($i).") == '$i') \$ignore = true;\n";
                 } else {
                     $ret .= "    if (\$_SERVER['REMOTE_ADDR'] == '$i') \$ignore = true;\n";
                 }

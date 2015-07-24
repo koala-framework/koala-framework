@@ -4,7 +4,7 @@ abstract class Kwf_Component_View_Helper_Abstract
     protected $_view;
     protected $_renderer;
 
-    public function setView(Kwf_View $view)
+    public function setView($view)
     {
         $this->_view = $view;
     }

@@ -12,6 +12,7 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         $ret['extConfig'] = 'Kwc_List_Gallery_ExtConfig';
         $ret['placeholder']['moreButton'] = trlKwfStatic('more');
         $ret['breakpoint'] = '600';
+        $ret['showMoreLink'] = true;
         return $ret;
     }
 
@@ -31,7 +32,10 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $showPics = $this->_getRow()->show_pics;
+        $showPics = null;
+        if ($this->_getSetting('showMoreLink')) {
+            $showPics = $this->_getRow()->show_pics;
+        }
         $ret['cssClass'] .= ' col'.$this->_getGalleryColumns();
         $ret['imagesPerLine'] = $this->_getGalleryColumns();
         if (!$ret['imagesPerLine']) $ret['imagesPerLine'] = 1;

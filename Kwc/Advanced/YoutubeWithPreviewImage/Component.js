@@ -15,7 +15,7 @@ onReady.onRender('.cssClass .outerYoutubeContainer', function youtubePlayer(el) 
             youtubeContainerEl.css('position', 'relative');
             youtubePlayerEl.show();
             el.addClass('youtubeActive');
-            onReady.callOnContentReady(el.parent());
+            onReady.callOnContentReady(el.parent(), { action: 'show' });
             loadingEl.css('display', 'block');
         });
     });

@@ -35,11 +35,6 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                     array('module'     => 'kwf_controller_action_pool',
                           'controller' => 'pools',
                           'action'     => 'index')));
-        $this->AddRoute('kwf_trl', new Zend_Controller_Router_Route(
-                    '/kwf/trl/:controller/:action',
-                    array('module'     => 'kwf_controller_action_trl',
-                          'controller' => 'index',
-                          'action'     => 'index')));
         $this->AddRoute('kwf_debug', new Zend_Controller_Router_Route(
                     '/kwf/debug/:controller/:action',
                     array('module'     => 'kwf_controller_action_debug',
