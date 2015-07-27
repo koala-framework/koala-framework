@@ -127,11 +127,19 @@ class Kwf_Component_Settings
         $settings['parentFilePaths'] = Kwf_Component_Abstract::getSetting($c, 'parentFilePaths');
 
         //*** processedRootElementClass
-        $cssClass = array(Kwf_Component_Abstract::formatRootElementClass($c, '')); //without js- or css- prefix
+        $cssClass = array();
+
+        //all parentClasses (including self) without js- or css- prefix
+        foreach ($settings['parentClasses'] as $i) {
+            $cssClass[] = Kwf_Component_Abstract::formatRootElementClass($i, '');
+        }
+
         $dirs = explode(PATH_SEPARATOR, get_include_path());
         foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
             $dirs = array_merge($dirs, $i);
         }
+
+        //all parentClasses (including self) where Component.(defer)?js exists with js- prefix
         foreach ($settings['parentClasses'] as $i) {
             $file = str_replace('_', '/', $i);
             if (substr($file, -10) != '/Component') {
@@ -143,11 +151,19 @@ class Kwf_Component_Settings
                     break;
                 }
             }
+        }
+
+        //all parentClasses (including self) where Component.s?css exists with css- prefix
+        foreach ($settings['parentClasses'] as $i) {
+            $file = str_replace('_', '/', $i);
+            if (substr($file, -10) != '/Component') {
+                $file .= '/Component';
+            }
             foreach ($dirs as $dir) {
                 if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.override.scss')) {
                     $cssClass[] = Kwf_Component_Abstract::formatRootElementClass($i, 'css-');
                     if (is_file($dir.'/'.$file.'.override.scss')) {
-                        break 2; //break foreach $classes
+                        break 2; //break foreach classes
                     }
                     break;
                 }
