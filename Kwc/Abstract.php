@@ -426,15 +426,18 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
         $ret['rootElementClass'] = 'kwfUp-frontend';
 
-        $cssClass = $this->_getMasterCssClass($renderer->getTemplate($this->getData(), 'Master'));
-        $ret['bemClasses'] = array($cssClass.'__');
+        $cssClasses = $this->_getMasterCssClasses($renderer->getTemplate($this->getData(), 'Master'));
+            $ret['bemClasses'] = array();
+        foreach ($cssClasses as $i) {
+            $ret['bemClasses'][] = $i.'__';
+        }
 
-        $ret['rootElementClass'] .= ' '.$cssClass;
+        $ret['rootElementClass'] .= ' '.implode(' ', $cssClasses);
 
         return $ret;
     }
 
-    private function _getMasterCssClass($masterTemplate)
+    private function _getMasterCssClasses($masterTemplate)
     {
         $cssClass = $masterTemplate;
         if (substr($cssClass, 0, 2) == './') $cssClass = substr($cssClass, 2);
@@ -461,8 +464,11 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             throw new Kwf_Exception("Invalid master template");
         }
         $cssClass = str_replace('/', '', $cssClass);
-        $cssClass = 'kwfUp-'.$cssClass;
-        return $cssClass;
+        return array(
+            'kwfUp-'.$cssClass,
+            'kwfUp-css-'.$cssClass,
+            'kwfUp-js-'.$cssClass
+        );
     }
 
     /**
