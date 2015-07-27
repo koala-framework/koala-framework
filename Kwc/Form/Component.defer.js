@@ -68,8 +68,6 @@ var FormComponent = function(form)
         }
     }
 
-    this.errorStyle = new errorStyleRegistry.errorStyles[this.config.errorStyle](this);
-
     $.each(this.fields, function(i, f) {
         f.initField();
     });
