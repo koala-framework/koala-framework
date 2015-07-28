@@ -5,7 +5,7 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
     {
         $providers = array();
         if (Kwf_Component_Data_Root::getComponentClass()) {
-            $providers[] = new Kwf_Assets_Provider_Components(Kwf_Component_Data_Root::getComponentClass());
+            $providers[] = new Kwf_Assets_Components_Provider(Kwf_Component_Data_Root::getComponentClass());
         } else {
             $providers[] = new Kwf_Assets_Provider_NoComponents();
         }

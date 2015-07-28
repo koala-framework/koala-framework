@@ -387,12 +387,8 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if (!$up) {
             $ret['bemClasses'] = false;
         } else {
-            $classes = Kwc_Abstract::getSetting($this->getData()->componentClass, 'processedRootElementClass');;
-            $classes = explode(' ', $classes);
             $ret['bemClasses'] = array();
-            foreach ($classes as $i) {
-                $ret['bemClasses'][] = $i.'__';
-            }
+            $ret['bemClasses'][] = Kwf_Component_Abstract::formatRootElementClass($i, '').'__';
         }
 
         $ret['data'] = $this->getData();
@@ -529,7 +525,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if (self::hasSetting($component, 'rootElementClass')) {
             $ret .= self::getSetting($component, 'rootElementClass').' ';
         }
-        $ret .= self::getSetting($component, 'processedRootElementClass');
+        $ret .= Kwf_Component_Abstract::formatRootElementClass($component, '');
         return $ret;
     }
 
