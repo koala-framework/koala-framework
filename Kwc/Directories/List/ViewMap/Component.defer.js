@@ -1,4 +1,5 @@
 var onReady = require('kwf/on-ready-ext2');
+var formRegistry = require('kwf/frontend-form/form-registry');
 
 Kwf.namespace('Kwc.Directories.List.ViewMap');
 Kwc.Directories.List.ViewMap.renderedMaps = [];
@@ -22,7 +23,7 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
     }, myMap);
 
     if (cfg.searchFormComponentId) {
-        var searchForm = Kwc.Form.formsByComponentId[cfg.searchFormComponentId];
+        var searchForm = formRegistry.getFormByComponentId(cfg.searchFormComponentId);
         searchForm.on('beforeSubmit', function(form, ev) {
             myMap.setBaseParams(
                 Ext2.applyIf(searchForm.getValues(), myMap.getBaseParams())
