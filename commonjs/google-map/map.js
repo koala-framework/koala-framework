@@ -58,7 +58,7 @@ var Map = function(config) {
     if (typeof this.config.overview == 'undefined') this.config.overview = 1;
     if (typeof this.config.zoom == 'undefined') this.config.zoom = 13;
     if (typeof this.config.markerSrc == 'undefined') this.config.markerSrc = null;
-    if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/google-map/markerBlue.png';
+    if (typeof this.config.lightMarkerSrc == 'undefined') this.config.lightMarkerSrc = '/assets/kwf/images/googlemap/markerBlue.png';
     if (typeof this.config.scrollwheel == 'undefined') this.config.scrollwheel = 1;
     if (typeof this.config.zoomControlStyle == 'undefined') this.config.zoomControlStyle = 'LARGE';
     if (typeof this.config.zoomControlPosition == 'undefined') this.config.zoomControlPosition = 'LEFT_TOP';
@@ -108,15 +108,6 @@ var Map = function(config) {
             this.setMapDir(input.value());
             e.stopEvent();
         }, this);
-    }
-
-    if (typeof this.config.markers == 'string') {
-        if (typeof Kwf.Connection == 'undefined') {
-            alert('Dependency ExtConnection (that includes Kwf.Connection object) must be set when you wish to reload markers in an google map');
-        }
-        this.ajax = new Kwf.Connection({
-            autoAbort : true
-        });
     }
 
     var container = this.mapContainer.find(".container");
@@ -265,6 +256,7 @@ Map.prototype = {
         this._reloadMarkers(params);
     },
 
+    lastAjaxRequest: null,
     _reloadMarkers: function(params)
     {
         if (!this.gmapLoader) {
@@ -273,13 +265,15 @@ Map.prototype = {
         }
         this.gmapLoader.show();
 
-        this.lastReloadMarkersRequestId = this.ajax.request({
+        // abort old ajax-request to prevent problems with loading markers finishing in wrong order
+        if (this.lastAjaxRequest) this.lastAjaxRequest.abort();
+        this.lastAjaxRequest = $.ajax({
             url: this.config.markers,
-            params: params,
-            success: function(response, options, result) {
+            data: params,
+            success: (function(response, options, result) {
                 var reuseMarkers = [];
                 var newMarkers = [];
-                result.markers.each(function(m) {
+                result.responseJSON.markers.each(function(m) {
                     var doAdd = true;
                     for (var i = 0; i < this.markers.length; i++) {
                         if (this.markers[i].kwfConfig.latitude == m.latitude
@@ -306,8 +300,7 @@ Map.prototype = {
                 onReady.callOnContentReady(this.mapContainer, {newRender: true});
                 this.gmapLoader.hide();
                 this.fireEvent('reload', this);
-            },
-            scope: this
+            }).bind(this)
         });
     },
 

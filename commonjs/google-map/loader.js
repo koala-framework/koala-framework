@@ -1,4 +1,4 @@
-Kwf.namespace('Kwf.GoogleMap');
+var apiKeys = require('DynamicGoogleMapsApiKeys');
 var isLoaded = false;
 var isCallbackCalled = false;
 var callbacks = [];
@@ -18,7 +18,7 @@ module.exports = function(callback, scope)
     isLoaded = true;
 
     //try find the correct api key
-    //Kwf.GoogleMap.apiKeys is set by Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys
+    //apiKeys is set by Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys
     //and contains possibly multiple api keys (to support multiple domains)
     var apiKeyIndex;
 
@@ -35,18 +35,19 @@ module.exports = function(callback, scope)
     }
 
     var key = '';
-    if (apiKeyIndex in Kwf.GoogleMap.apiKeys) {
-        key = Kwf.GoogleMap.apiKeys[apiKeyIndex];
+    if (apiKeyIndex in apiKeys) {
+        key = apiKeys[apiKeyIndex];
     }
     var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+trlKwf('en');
-    url += '&callback=Kwf.GoogleMap._loaded';
+    url += '&callback=';
+    url += 'kwfUp-KwfGoogleMapLoaded'.replace('-', '_');
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
     s.setAttribute('src', url);
     document.getElementsByTagName("head")[0].appendChild(s);
 };
 
-Kwf.GoogleMap._loaded = function()
+window['kwfUp-KwfGoogleMapLoaded'.replace('-', '_')] = function()
 {
     isCallbackCalled = true;
     callbacks.forEach(function(i) {
