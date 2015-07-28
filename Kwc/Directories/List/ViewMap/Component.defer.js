@@ -1,5 +1,7 @@
 var onReady = require('kwf/on-ready-ext2');
 var formRegistry = require('kwf/frontend-form/form-registry');
+var gmapLoader = require('kwf/google-map/loader');
+var gmapMap = require('kwf/google-map/map');
 
 Kwf.namespace('Kwc.Directories.List.ViewMap');
 Kwc.Directories.List.ViewMap.renderedMaps = [];
@@ -13,12 +15,12 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
     if (!cfg) return;
     cfg = Ext2.decode(cfg.value);
 
-    cfg.mapContainer = mapContainer;
-    var cls = eval(cfg.mapClass) || Kwf.GoogleMap.Map;
+    cfg.mapContainer = map;
+    var cls = eval(cfg.mapClass) || gmapMap;
     var myMap = new cls(cfg);
     map.map = myMap;
 
-    Kwf.GoogleMap.load(function() {
+    gmapLoader(function() {
         this.show();
     }, myMap);
 
