@@ -68,6 +68,15 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         }
         return true;
     }
+    
+    protected function _getPageData($page)
+    {
+        return array(
+            'name' => $page->name,
+            'url' => $page->url,
+            'id' => $page->componentId
+        );
+    }
 
     protected function _getChildPagesRecursive($parentPage, $levels)
     {
@@ -82,9 +91,10 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                     continue;
                 }
 
-                $ret[$i]['name'] = $page->name;
-                $ret[$i]['url'] = $page->url;
-                $ret[$i]['id'] = $page->componentId;
+                $pageData = $this->_getPageData($page);
+                $ret[$i]['name'] = $pageData['name'];
+                $ret[$i]['url'] = $pageData['url'];
+                $ret[$i]['id'] = $pageData['id'];
 
                 if ($levels > 0) {
                     $ret[$i]['children'] = $this->_getChildPagesRecursive($page, $levels);
@@ -103,8 +113,8 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                 if (Kwc_Abstract::getSetting($this->_getParam('class'), 'showSelectedPageInList') && !empty($ret[$i]['children']) &&
                     !is_instance_of($page->componentClass, 'Kwc_Basic_LinkTag_FirstChildPage_Component')) {
                     array_unshift($ret[$i]['children'], array(
-                        'name' => $page->name,
-                        'url' => $page->url,
+                        'name' => $pageData['name'],
+                        'url' => $pageData['url'],
                         'isParent' => true,
                         'hasChildren' => false
                     ));
