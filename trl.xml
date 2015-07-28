@@ -91,7 +91,6 @@
 <ru>Логин</ru>
 <sk>Prihlásiť sa</sk>
 <hr>Login</hr>
-
 <si>registracija</si>
 <bg>Вход</bg>
 <ua>Увійти</ua>
@@ -15677,4 +15676,97 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2273</id>
 <de>Artikel Statistik</de>
 </text>
+<text>
+<en>Processing</en>
+<id>2274</id>
+</text>
+<text>
+<en>Indent</en>
+<id>2275</id>
+</text>
+<text>
+<en>Increase Indent.</en>
+<id>2276</id>
+</text>
+<text>
+<en>Decrease Indent.</en>
+<id>2277</id>
+</text>
+<text>
+<en>This field should be a URL in the format "http://www.domain.com" or tel:0043 1234</en>
+<id>2278</id>
+</text>
+<text>
+<en>The uploaded file is too large.</en>
+<id>2279</id>
+</text>
+<text>
+<en>Activation code is invalid. Maybe the URL wasn't copied completely?</en>
+<id>2280</id>
+</text>
+<text>
+<en>Drop your file here</en>
+<id>2281</id>
+</text>
+<text>
+<en>Youtube with Teaser Image</en>
+<id>2282</id>
+</text>
+<text>
+<en>Start Video</en>
+<id>2283</id>
+</text>
+<text>
+<en>Ratio</en>
+<id>2284</id>
+</text>
+<text>
+<en>Autoplay Video</en>
+<id>2285</id>
+</text>
+<text>
+<en>Media.Community Video</en>
+<id>2286</id>
+</text>
+<text>
+<en>Layout</en>
+<id>2287</id>
+</text>
+<text>
+<en>Call to Action</en>
+<id>2288</id>
+</text>
+<text>
+<en>more</en>
+<id>2289</id>
+</text>
+<text>
+<en>Show all</en>
+<id>2290</id>
+</text>
+<text>
+<en>Background Settings</en>
+<id>2291</id>
+</text>
+<text>
+<en>Background Window Width</en>
+<id>2292</id>
+</text>
+<text>
+<en>Lost password mail sent to email address.</en>
+<id>2293</id>
+</text>
+<text>
+<en>Go to&lt;br /&gt;Website</en>
+<id>2294</id>
+</text>
+<text>
+<en>Reset Password</en>
+<id>2295</id>
+</text>
+<text>
+<en>This field should be a URL in the format "http://www.domain.com"</en>
+<id>2296</id>
+</text>
 </trl>
+
