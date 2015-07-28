@@ -34,6 +34,6 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
     }
 };
 
-onReady.onRender('div.kwcDirectoriesListViewMap', function(map) {
+onReady.onRender('.kwcClass', function(map) {
     Kwc.Directories.List.ViewMap.renderMap(map.dom);
 }, { checkVisibility: true });
