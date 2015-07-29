@@ -1,4 +1,5 @@
-var onReady = require('kwf/on-ready-ext2');
+var $ = require('jQuery');
+var onReady = require('kwf/on-ready');
 var formRegistry = require('kwf/frontend-form/form-registry');
 var gmapLoader = require('kwf/google-map/loader');
 var gmapMap = require('kwf/google-map/map');
@@ -9,10 +10,9 @@ var renderMap = function(map) {
     if (renderedMaps.indexOf(map) != -1) return;
     renderedMaps.push(map);
 
-    var mapContainer = new Ext2.Element(map);
-    var cfg = mapContainer.down(".options", true);
+    var cfg = map.find(".options");
     if (!cfg) return;
-    cfg = Ext2.decode(cfg.value);
+    cfg = $.parseJSON(cfg.val());
 
     cfg.mapContainer = map;
     var cls = eval(cfg.mapClass) || gmapMap;
@@ -26,9 +26,7 @@ var renderMap = function(map) {
     if (cfg.searchFormComponentId) {
         var searchForm = formRegistry.getFormByComponentId(cfg.searchFormComponentId);
         searchForm.on('beforeSubmit', function(form, ev) {
-            myMap.setBaseParams(
-                Ext2.applyIf(searchForm.getValues(), myMap.getBaseParams())
-            );
+            myMap.setBaseParams($.extend(searchForm.getValues(), myMap.getBaseParams()));
             myMap.centerMarkersIntoView();
             return false;
         }, this);
@@ -36,5 +34,5 @@ var renderMap = function(map) {
 };
 
 onReady.onRender('.kwcClass', function(map) {
-    renderMap(map.dom);
+    renderMap(map);
 }, { checkVisibility: true });
