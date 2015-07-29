@@ -3,12 +3,11 @@ var formRegistry = require('kwf/frontend-form/form-registry');
 var gmapLoader = require('kwf/google-map/loader');
 var gmapMap = require('kwf/google-map/map');
 
-Kwf.namespace('Kwc.Directories.List.ViewMap');
-Kwc.Directories.List.ViewMap.renderedMaps = [];
+var renderedMaps = [];
 
-Kwc.Directories.List.ViewMap.renderMap = function(map) {
-    if (Kwc.Directories.List.ViewMap.renderedMaps.indexOf(map) != -1) return;
-    Kwc.Directories.List.ViewMap.renderedMaps.push(map);
+var renderMap = function(map) {
+    if (renderedMaps.indexOf(map) != -1) return;
+    renderedMaps.push(map);
 
     var mapContainer = new Ext2.Element(map);
     var cfg = mapContainer.down(".options", true);
@@ -37,5 +36,5 @@ Kwc.Directories.List.ViewMap.renderMap = function(map) {
 };
 
 onReady.onRender('.kwcClass', function(map) {
-    Kwc.Directories.List.ViewMap.renderMap(map.dom);
+    renderMap(map.dom);
 }, { checkVisibility: true });
