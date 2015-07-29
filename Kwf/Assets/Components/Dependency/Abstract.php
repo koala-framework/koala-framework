@@ -3,18 +3,21 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
 {
     protected $_componentClass;
     protected $_componentDependencies;
+    protected $_isMaster;
 
-    public function __construct($componentClass, array $componentDependencies)
+    public function __construct($componentClass, array $componentDependencies, $isMaster)
     {
         $this->_componentClass = $componentClass;
         $this->_componentDependencies = $componentDependencies;
+        $this->_isMaster = $isMaster;
     }
 
     private function _getKwcClass()
     {
         $kwcClass = Kwf_Component_Abstract::formatRootElementClass($this->_componentClass, '');
+        if ($this->_isMaster) $kwcClass .= 'Master';
         if (Kwf_Config::getValue('application.uniquePrefix')) {
-            $kwcClass = str_replace('kwfUp-', Kwf_Config::getValue('application.uniquePrefix'), $kwcClass);
+            $kwcClass = str_replace('kwfUp-', Kwf_Config::getValue('application.uniquePrefix').'-', $kwcClass);
         } else {
             $kwcClass = str_replace('kwfUp-', '', $kwcClass);
         }
@@ -63,9 +66,4 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
         }
         return $ret;
     }
-
-
-
-
-
 }

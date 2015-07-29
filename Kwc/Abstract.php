@@ -387,8 +387,9 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if (!$up) {
             $ret['bemClasses'] = false;
         } else {
-            $ret['bemClasses'] = array();
-            $ret['bemClasses'][] = Kwf_Component_Abstract::formatRootElementClass($i, '').'__';
+            $ret['bemClasses'] = array(
+                Kwf_Component_Abstract::formatRootElementClass($this->getData()->componentClass, '').'__'
+            );
         }
 
         $ret['data'] = $this->getData();
@@ -420,51 +421,19 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             usort($ret['multiBoxes'][$box], array('Kwf_Component_View_Helper_ComponentWithMaster', '_sortByPriority'));
         }
 
-        $ret['rootElementClass'] = 'kwfUp-frontend';
 
-        $cssClasses = $this->_getMasterCssClasses($renderer->getTemplate($this->getData(), 'Master'));
-            $ret['bemClasses'] = array();
-        foreach ($cssClasses as $i) {
-            $ret['bemClasses'][] = $i.'__';
+        $up = Kwf_Config::getValue('application.uniquePrefix');
+        if (!$up) {
+            $ret['bemClasses'] = false;
+        } else {
+            $ret['bemClasses'] = array(
+                Kwf_Component_Abstract::formatRootElementClass($this->getData()->componentClass, '').'Master__'
+            );
         }
 
-        $ret['rootElementClass'] .= ' '.implode(' ', $cssClasses);
+        $ret['rootElementClass'] = 'kwfUp-frontend '.Kwf_Component_Abstract::formatRootElementClass($this->getData()->componentClass, '').'Master';
 
         return $ret;
-    }
-
-    private function _getMasterCssClasses($masterTemplate)
-    {
-        $cssClass = $masterTemplate;
-        if (substr($cssClass, 0, 2) == './') $cssClass = substr($cssClass, 2);
-        $paths = array(
-            'webComponents' => 'components',
-            'webThemes' => 'themes',
-            'web' => '.'
-        );
-        foreach ($paths as $i) {
-            if ($i && substr($cssClass, 0, strlen($i)+1) == $i.'/') {
-                $cssClass = substr($cssClass, strlen($i)+1);
-            }
-        }
-        if (substr($cssClass, -4) == '.tpl') {
-            $cssClass = substr($cssClass, 0, -4);
-        }
-        if (substr($cssClass, -5) == '.twig') {
-            $cssClass = substr($cssClass, 0, -5);
-        }
-        if (substr($cssClass, -7) == '/Master') {
-            $cssClass = substr($cssClass, 0, -7);
-            $cssClass = 'master'.$cssClass;
-        } else {
-            throw new Kwf_Exception("Invalid master template");
-        }
-        $cssClass = str_replace('/', '', $cssClass);
-        return array(
-            'kwfUp-'.$cssClass,
-            'kwfUp-css-'.$cssClass,
-            'kwfUp-js-'.$cssClass
-        );
     }
 
     /**

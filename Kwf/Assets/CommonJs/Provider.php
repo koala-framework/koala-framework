@@ -30,6 +30,11 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
         $deps = array();
         if ($dependency instanceof Kwf_Assets_Dependency_File) {
             $deps = Kwf_Assets_CommonJs_Parser::parse($dependency->getAbsoluteFileName());
+        } else {
+            $temp = tempnam('temp/', 'commonjs');
+            file_put_contents($temp, $dependency->getContents('en'));
+            $deps = Kwf_Assets_CommonJs_Parser::parse($temp);
+            unlink($temp);
         }
         foreach ($deps as $dep) {
             if (substr($dep, 0, 2) == './') {
