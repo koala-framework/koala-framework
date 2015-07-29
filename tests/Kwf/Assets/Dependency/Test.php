@@ -5,7 +5,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
     {
         $f = new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Kwf.js');
         $this->assertEquals('text/javascript', $f->getMimeType());
-        $this->assertContains('Kwf.log', $f->getContents('en'));
+        $this->assertContains('Kwf.clone', $f->getContents('en'));
         $this->assertEquals(array(), $f->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL));
     }
     public function testFileJsPacked()
@@ -14,7 +14,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
         $this->assertEquals('text/javascript', $f->getMimeType());
         $c = $f->getContents('en');
         $cPacked = $f->getContentsPacked('en')->getFileContents();
-        $this->assertContains('Kwf.log', $cPacked);
+        $this->assertContains('Kwf.clone', $cPacked);
         $this->assertTrue(strlen($c) > strlen($cPacked));
     }
 
@@ -23,7 +23,7 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
         $f = Kwf_Assets_Dependency_File::createDependency('kwf/Kwf_js/Kwf.js', new Kwf_Assets_Dependency_EmptyProviderList());
         $this->assertTrue($f instanceof Kwf_Assets_Dependency_File_Js);
         $this->assertEquals('text/javascript', $f->getMimeType());
-        $this->assertContains('Kwf.log', $f->getContents('en'));
+        $this->assertContains('Kwf.clone', $f->getContents('en'));
         $this->assertEquals(array(), $f->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL));
     }
 

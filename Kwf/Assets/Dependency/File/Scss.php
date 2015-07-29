@@ -4,7 +4,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
     private function _getCacheFileName()
     {
         $fileName = $this->getFileNameWithType();
-        return 'cache/scss/v3'.str_replace(array('\\', ':', '/', '.', '-'), '_', $fileName);
+        return 'cache/scss/v4'.str_replace(array('\\', ':', '/', '.', '-'), '_', $fileName);
     }
 
     private static function _getAbsolutePath($path)
@@ -127,22 +127,6 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     $map->stringReplace('kwfUp-', Kwf_Config::getValue('application.uniquePrefix').'-');
                 } else {
                     $map->stringReplace('kwfUp-', '');
-                }
-            }
-            if (strpos($ret, 'kwcBem__') !== false) {
-                if (Kwf_Config::getValue('application.uniquePrefix')) {
-                    $map->stringReplace('.kwcClass .kwcBem__', '.kwcBem__');
-                    $map->stringReplace('kwcBem__', $this->_getComponentCssClass('css-').'__');
-                } else {
-                    $map->stringReplace('kwcBem__', '');
-                }
-            }
-            if (strpos($ret, '.kwcClass') !== false) {
-                $cssClass = $this->_getComponentCssClass('css-');
-                if ($cssClass) {
-                    if (strpos($ret, '.kwcClass') !== false) {
-                        $map->stringReplace('.kwcClass', ".$cssClass");
-                    }
                 }
             }
 

@@ -1,8 +1,7 @@
 <?php
-class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
+class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 {
     private $_rootComponentClass;
-    private $_componentFiles = array();
 
     public function __construct($rootComponentClass)
     {
@@ -11,11 +10,9 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
 
     private function _createDependencyForFile($file, $isCommonJsEntry)
     {
-        if (!isset($this->_componentFiles[$file])) {
-            $this->_componentFiles[$file] = Kwf_Assets_Dependency_File::createDependency($file, $this->_providerList);
-            $this->_componentFiles[$file]->setIsCommonJsEntry($isCommonJsEntry);
-        }
-        return $this->_componentFiles[$file];
+        $ret = Kwf_Assets_Dependency_File::createDependency($file, $this->_providerList);
+        $ret->setIsCommonJsEntry($isCommonJsEntry);
+        return $ret;
     }
 
     public function getDependency($dependencyName)
@@ -51,9 +48,22 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
 
             foreach ($componentClasses as $class) {
 
-                $nonDeferDep = $this->_getComponentSettingDependencies($class, 'assets', true);
+                $deps = $this->_getComponentSettingDependencies($class, 'assetsDefer', true);
+                if ($deps) {
+                    $deps = new Kwf_Assets_Dependency_Dependencies($deps, $class.'-deps-defer');
+                    $deps->setDeferLoad(true);
+                    $ret[] = $deps;
+                }
 
-                $deferDep = $this->_getComponentSettingDependencies($class, 'assetsDefer', true);
+                $deps = $this->_getComponentSettingDependencies($class, 'assets', true);
+                if ($deps) {
+                    $deps = new Kwf_Assets_Dependency_Dependencies($deps, $class.'-deps');
+                    $ret[] = $deps;
+                }
+
+                $jsDeferDeps = array();
+                $jsDeps = array();
+                $cssDeps = array();
 
                 //alle dateien der vererbungshierache includieren
                 $files = Kwc_Abstract::getSetting($class, 'componentFiles');
@@ -64,27 +74,29 @@ class Kwf_Assets_Provider_Components extends Kwf_Assets_Provider_Abstract
                 //reverse damit css von weiter unten in der vererbungshierachie überschreibt
                 $componentCssFiles = array_reverse($componentCssFiles);
                 foreach ($componentCssFiles as $i) {
-                    $i = getcwd().'/'.$i;
-                    $i = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($i);
-                    if (!isset($this->_componentFiles[$i])) {
-                        $addedFiles[] = $i;
-                        $dep = $this->_createDependencyForFile($i, true);
-                        if (substr($i, -8) == 'defer.js') {
-                            $deferDep[] = $dep;
+                    $addedFiles[] = $i;
+                    $dep = $this->_createDependencyForFile($i, true);
+                    if (substr($i, -8) == 'defer.js') {
+                        $jsDeferDeps[] = $dep;
+                    } else {
+                        if ($dep->getMimeType() == 'text/css') {
+                            $cssDeps[] = $dep;
                         } else {
-                            $nonDeferDep[] = $dep;
+                            $jsDeps[] = $dep;
                         }
                     }
                 }
 
-                if ($deferDep) {
-                    $deferDep = new Kwf_Assets_Dependency_Dependencies($deferDep, $class.' defer');
-                    $deferDep->setDeferLoad(true);
-                    $ret[] = $deferDep;
+                if ($jsDeferDeps) {
+                    $dep = new Kwf_Assets_Components_Dependency_Js($class, $jsDeferDeps);
+                    $dep->setDeferLoad(true);
+                    $ret[] = $dep;
                 }
-                if ($nonDeferDep) {
-                    $nonDeferDep = new Kwf_Assets_Dependency_Dependencies($nonDeferDep, $class);
-                    $ret[] = $nonDeferDep;
+                if ($jsDeps) {
+                    $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $jsDeps);
+                }
+                if ($cssDeps) {
+                    $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $cssDeps);
                 }
             }
             return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);

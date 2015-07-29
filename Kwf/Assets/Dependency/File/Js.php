@@ -27,9 +27,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         $rawContents = $this->_getRawContents(null);
 
 
-        $usesUniquePrefix = strpos($rawContents, '.kwcClass') !== false
-            || strpos($rawContents, 'kwfUp-') !== false
-            || strpos($rawContents, 'kwcBem__') !== false;
+        $usesUniquePrefix = strpos($rawContents, 'kwfUp-') !== false;
 
         $pathType = $this->getType();
         if ($pathType == 'ext2' && strpos($rawContents, 'ext2-gen') !== false) {
@@ -71,26 +69,11 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                         $map->stringReplace('ext2-gen', $uniquePrefix.'-ext2-gen');
                     }
                 }
-                $cssClass = $this->_getComponentCssClass('js-');
-                if ($cssClass) {
-                    if (preg_match_all('#([\'"])\.kwcClass([\s\'"\.])#', $contents, $m)) {
-                        foreach ($m[0] as $k=>$i) {
-                            $replacements[$i] = $m[1][$k].'.'.$cssClass.$m[2][$k];
-                        }
-                    }
-                }
                 if (strpos($rawContents, 'kwfUp-') !== false) {
                     if (Kwf_Config::getValue('application.uniquePrefix')) {
                         $replacements['kwfUp-'] = Kwf_Config::getValue('application.uniquePrefix').'-';
                     } else {
                         $replacements['kwfUp-'] = '';
-                    }
-                }
-                if (strpos($rawContents, 'kwcBem__') !== false) {
-                    if (Kwf_Config::getValue('application.uniquePrefix')) {
-                        $replacements['kwcBem__'] = $this->_getComponentCssClass('js-').'__';
-                    } else {
-                        $replacements['kwcBem__'] = '';
                     }
                 }
             }
