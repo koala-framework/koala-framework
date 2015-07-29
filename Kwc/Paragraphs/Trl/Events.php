@@ -37,12 +37,14 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
             $id = $event->row->component_id;
             $id = substr($id, 0, strrpos($id, '-'));
             foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($id) as $c) {
-                $this->fireEvent(
-                    new Kwf_Component_Event_Component_ContentChanged($this->_class, $c)
-                );
-                $this->fireEvent(
-                    new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c)
-                );
+                if ($c->componentClass == $this->_class) {
+                    $this->fireEvent(
+                        new Kwf_Component_Event_Component_ContentChanged($this->_class, $c)
+                    );
+                    $this->fireEvent(
+                        new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c)
+                    );
+                }
             }
         }
     }
@@ -56,9 +58,11 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
             foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->row->component_id) as $c) {
                 $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($c, $chainedType);
                 foreach ($chained as $c) {
-                    $this->fireEvent(
-                        new Kwf_Component_Event_Component_ContentChanged($this->_class, $c)
-                    );
+                    if ($c->componentClass == $this->_class) {
+                        $this->fireEvent(
+                            new Kwf_Component_Event_Component_ContentChanged($this->_class, $c)
+                        );
+                    }
                 }
             }
         }
@@ -71,12 +75,14 @@ class Kwc_Paragraphs_Trl_Events extends Kwc_Chained_Trl_Events
         foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByDbId($event->row->component_id) as $c) {
             $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($c, $chainedType);
             foreach ($chained as $c) {
-                $this->fireEvent(
-                    new Kwf_Component_Event_Component_ContentChanged($this->_class, $c)
-                );
-                $this->fireEvent(
-                    new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c)
-                );
+                if ($c->componentClass == $this->_class) {
+                    $this->fireEvent(
+                        new Kwf_Component_Event_Component_ContentChanged($this->_class, $c)
+                    );
+                    $this->fireEvent(
+                        new Kwf_Component_Event_Component_HasContentChanged($this->_class, $c)
+                    );
+                }
             }
         }
     }
