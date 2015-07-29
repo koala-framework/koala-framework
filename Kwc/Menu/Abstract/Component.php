@@ -212,6 +212,17 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                 $r['last'] = true;
             }
             if ($r['data']->getDeviceVisible() != Kwf_Component_Data::DEVICE_VISIBLE_ALL) $class[] = $r['data']->getDeviceVisible();
+
+            $bemClass = self::getBemClass($this);
+            if ($bemClass) {
+                $newClass = array();
+                $newClass[] = $bemClass.'item';
+                foreach ($class as $c) {
+                    $newClass[] = $bemClass.'item--'.$c;
+                }
+                $class = $newClass;
+            }
+
             $r['class'] = implode(' ', $class);
             if (Kwc_Abstract::getFlag($p->componentClass, 'hasIsVisibleDynamic')) {
                 $r['preHtml'] = '<!-- start '.$p->componentId.' '.$p->componentClass.' -->';

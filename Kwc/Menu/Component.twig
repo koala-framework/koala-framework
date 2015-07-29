@@ -2,20 +2,20 @@
     <div class="{{ rootElementClass }}">
         {% if parentPageLink %}
             {% block parentPage %}
-            <h2 class="parentPageName">{{ renderer.componentLink(parentPage) }}</h2>
+            <h2 class="{{ "parentPageName"|bemClass }}">{{ renderer.componentLink(parentPage, null, '' ~ "parentPageLink"|bemClass ) }}</h2>
             {% endblock %}
         {% elseif parentPage %}
             {% block parentPageName %}
-            <h2 class="parentPageName">{{ parentPage.name }}</h2>
+            <h2 class="{{ "parentPageName"|bemClass }}">{{ parentPage.name }}</h2>
             {% endblock %}
         {% endif %}
-        <ul class="menu">
+        <ul class="{{ "menu"|bemClass }}">
             {% block menuItems %}
             {% for m in menu %}
                 {{ m.preHtml|raw }}
                 <li class="{{ m.class }}">
                     {% block menuLink %}
-                    {{ renderer.componentLink(m.data, "#{linkPrefix}#{m.text}") }}
+                    {{ renderer.componentLink(m.data, "#{linkPrefix}#{m.text}", '' ~ "link"|bemClass ) }}
                     {% endblock %}
                     {% if not m.last %}{{ separator }}{% endif %}
                     {% if subMenu is defined and m.current is defined and m.current %}
@@ -26,6 +26,6 @@
             {% endfor %}
             {% endblock %}
         </ul>
-        <div class="clear"></div>
+        <div class="kwfUp-clear"></div>
     </div>
 {% endif %}
