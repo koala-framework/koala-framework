@@ -382,18 +382,22 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $ret = array();
         $ret['placeholder'] = $this->_getPlaceholder();
         $ret['rootElementClass'] = self::getRootElementClass($this);
-
-        $up = Kwf_Config::getValue('application.uniquePrefix');
-        if (!$up) {
-            $ret['bemClasses'] = false;
-        } else {
-            $ret['bemClasses'] = array(
-                Kwf_Component_Abstract::formatRootElementClass($this->getData()->componentClass, '').'__'
-            );
-        }
+        $ret['bemClass'] = self::getBemClass($this);
 
         $ret['data'] = $this->getData();
         $ret['row'] = $this->_getRow();
+        return $ret;
+    }
+
+    protected static function getBemClass($component)
+    {
+        if (!is_string($component)) $component = $component->getData()->componentClass;
+        $up = Kwf_Config::getValue('application.uniquePrefix');
+        if (!$up) {
+            $ret = false;
+        } else {
+            $ret = Kwf_Component_Abstract::formatRootElementClass($component, '').'__';
+        }
         return $ret;
     }
 
@@ -424,11 +428,9 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
         $up = Kwf_Config::getValue('application.uniquePrefix');
         if (!$up) {
-            $ret['bemClasses'] = false;
+            $ret['bemClass'] = false;
         } else {
-            $ret['bemClasses'] = array(
-                Kwf_Component_Abstract::formatRootElementClass($this->getData()->componentClass, '').'Master__'
-            );
+            $ret['bemClass'] = Kwf_Component_Abstract::formatRootElementClass($this->getData()->componentClass, '').'Master__';
         }
 
         $ret['rootElementClass'] = 'kwfUp-frontend '.Kwf_Component_Abstract::formatRootElementClass($this->getData()->componentClass, '').'Master';

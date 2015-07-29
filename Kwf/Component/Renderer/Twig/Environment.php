@@ -17,13 +17,9 @@ class Kwf_Component_Renderer_Twig_Environment extends Kwf_View_Twig_Environment
 
     public static function bemClass($context, $class)
     {
-        $bemClasses = $context['bemClasses'];
-        if ($bemClasses === false) return $class;
-        $ret = array();
-        foreach ($bemClasses as $i) {
-            $ret[] = $i.$class;
-        }
-        return implode(' ', $ret);
+        $bemClass = $context['bemClass'];
+        if ($bemClass === false) return $class;
+        return $bemClass.$class;
     }
 
     public function includeCode($context, $position)
