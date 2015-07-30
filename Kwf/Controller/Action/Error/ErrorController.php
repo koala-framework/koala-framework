@@ -73,12 +73,6 @@ class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
         }
     }
 
-    public function jsonTimeoutAction()
-    {
-        throw new Kwf_Exception("exception");
-        sleep(50);
-    }
-
     public function jsonWrongVersionAction()
     {
         $this->view->wrongversion = true;
