@@ -380,10 +380,10 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
         if (options.errorText) {
             errorText = options.errorText;
             errorMsg = options.errorText;
-        } else if (r.exception) {
+        } else if (r && r.exception) {
             errorMsg = '<pre>'+r.exception.join('\n')+'</pre>';
             errorMsgTitle = 'PHP Exception';
-        } else if (r.error) {
+        } else if (r && r.error) {
             errorMsg = r.error;
             errorMsgTitle = 'PHP Exception';
         } else {
@@ -446,7 +446,7 @@ Kwf.Connection = Ext2.extend(Ext2.data.Connection, {
             delete this._progressData[options.params.progressNum];
         }
 
-        if(success && !options.kwfIsSuccess) {
+        if (success && !options.kwfIsSuccess) {
             success = false;
         }
         Ext2.callback(options.kwfCallback.callback, options.kwfCallback.scope, [options, success, response]);
