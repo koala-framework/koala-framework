@@ -57,18 +57,16 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
         // das hier ist die neue variante und ist besser, weil man leichter mehr daten
         // zurückgeben kann, bzw. in der übersetzung überschreiben kann
         // zB: Breite bei übersetzung von Columns
-        if (!($bemClass = self::getBemClass($this))) $bemClass = '';
-        $PropertyBemClass = $bemClass ? $bemClass.'listItem--' : '';
         $ret['listItems'] = array();
         $i = 0;
         foreach ($children as $child) {
-            $class = 'listItem ';
-            if ($i == 0) $class .= ' '.$PropertyBemClass.'kwcFirst ';
-            if ($i == count($children)-1) $class .= ' '.$PropertyBemClass.'kwcLast ';
+            $class = self::getBemClass($this, 'listItem', 'listItem').' ';
+            if ($i == 0) $class .= ' '.self::getBemClass($this, 'listItem--first', 'kwcFirst');
+            if ($i == count($children)-1) $class .= ' '.self::getBemClass($this, 'listItem--last', 'kwcLast');
             if ($i % 2 == 0) {
-                $class .= ' '.$PropertyBemClass.'kwcEven ';
+                $class .= ' '.self::getBemClass($this, 'listItem--even', 'kwcEven');
             } else {
-                $class .= ' '.$PropertyBemClass.'kwcOdd ';
+                $class .= ' '.self::getBemClass($this, 'listItem--odd', 'kwcOdd');
             }
             $class = trim($class);
             $i++;

@@ -206,21 +206,13 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                 'last' => false
             );
             $class = array();
-            if ($i == 0) { $class[] = 'first'; }
+            if ($i == 0) { $class[] = self::getBemClass($this->_getSetting('menuComponentClass'), 'item--first', 'first'); }
             if ($i == count($pages)-1) {
-                $class[] = 'last';
+                $class[] = self::getBemClass($this->_getSetting('menuComponentClass'), 'item--last', 'last');
                 $r['last'] = true;
             }
-            if ($r['data']->getDeviceVisible() != Kwf_Component_Data::DEVICE_VISIBLE_ALL) $class[] = $r['data']->getDeviceVisible();
-
-            $bemClass = self::getBemClass($this);
-            if ($bemClass) {
-                $newClass = array();
-                $newClass[] = $bemClass.'item';
-                foreach ($class as $c) {
-                    $newClass[] = $bemClass.'item--'.$c;
-                }
-                $class = $newClass;
+            if ($r['data']->getDeviceVisible() != Kwf_Component_Data::DEVICE_VISIBLE_ALL) {
+                $class[] = self::getBemClass($this->_getSetting('menuComponentClass'), 'item--'.$r['data']->getDeviceVisible(), $r['data']->getDeviceVisible());
             }
 
             $r['class'] = implode(' ', $class);

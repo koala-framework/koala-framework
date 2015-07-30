@@ -74,20 +74,11 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
         }
         foreach ($ret as $k=>$i) {
             if (in_array($i['data']->componentId, $currentPageIds)) {
-                $bemClass = self::getBemClass($this->_getSetting('menuComponentClass'));
                 $ret[$k]['current'] = true;
-                if ($bemClass) {
-                    $ret[$k]['class'] .= ' '.$bemClass.'item--current';
-                } else {
-                    $ret[$k]['class'] .= ' current';
-                }
+                $ret[$k]['class'] .= ' '.self::getBemClass($this->_getSetting('menuComponentClass'), 'item--current', 'current');
                 if ($selected == $i['data']->componentId) {
                     $ret[$k]['selected'] = true;
-                    if ($bemClass) {
-                        $ret[$k]['class'] .= ' '.$bemClass.'item--selected';
-                    } else {
-                        $ret[$k]['class'] .= ' selected';
-                    }
+                    $ret[$k]['class'] .= ' '.self::getBemClass($this->_getSetting('menuComponentClass'), 'item--selected', 'selected');
                 }
             }
         }
