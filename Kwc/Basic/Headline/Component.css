@@ -1,3 +1,3 @@
 .kwcClass { margin-bottom: 20px;}
-.kwcClass h1 { margin-bottom: 0; }
-.kwcClass span.sub { display: block; width: 100%; font-size: 80%; }
+.kwcClass .kwcBem__headline { margin-bottom: 0; }
+.kwcClass .kwcBem__sub { display: block; width: 100%; font-size: 80%; }
