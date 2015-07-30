@@ -2,22 +2,18 @@
 
 .kwcClass {
     @include pie-clearfix;
-    a {
-        span {
-            font-size: 14px;
-            padding: 12px 30px;
-            text-decoration: none;
-            text-transform: uppercase;
-            text-align: center;
-            border: none;
-            display: inline-block;
-            &.default {
-                color: white;
-                background: #333;
-                &:hover {
-                    background: #666;
-                }
-            }
+    .kwcBem__text {
+        font-size: 14px;
+        padding: 12px 30px;
+        text-decoration: none;
+        text-transform: uppercase;
+        text-align: center;
+        border: none;
+        display: inline-block;
+        color: white;
+        background: #333;
+        &:hover {
+            background: #666;
         }
     }
 }
