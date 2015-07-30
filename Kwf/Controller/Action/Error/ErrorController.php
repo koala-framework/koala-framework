@@ -10,6 +10,10 @@ class Kwf_Controller_Action_Error_ErrorController extends Kwf_Controller_Action
     {
     }
 
+    public function preDispatch()
+    {
+    }
+
     public function errorAction()
     {
         $errors = $this->getRequest()->getParam('error_handler');
