@@ -37,6 +37,12 @@ class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract
             $urlParts = parse_url($url);
             if ($urlParts && !empty($urlParts['host'])) {
                 if (preg_match('/youtube\.com$/i', $urlParts['host'])) {
+                    if (strpos($urlParts['path'], '/v/') === 0) {
+                        $urlParts['path'] = str_replace('/v/', '/watch?v=', $urlParts['path']);
+                        $newParts = parse_url($urlParts['path']);
+                        $urlParts['path'] = $newParts['path'];
+                        $urlParts['query'] = $newParts['query'];
+                    }
                     parse_str($urlParts['query'], $queryParts);
                     if (isset($queryParts['v'])) {
                         $ret = '//www.youtube.com/embed/'.$queryParts['v'];
