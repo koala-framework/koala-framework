@@ -186,7 +186,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 //js, not master, defer
                 $matchingDeps = array();
                 foreach ($deps as $i) {
-                    if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == true && $i['defer'] == false) {
+                    if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == false && $i['defer'] == true) {
                         $matchingDeps[] = $i['dep'];
                     }
                 }
@@ -199,7 +199,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 //js, master, defer
                 $matchingDeps = array();
                 foreach ($deps as $i) {
-                    if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == true && $i['defer'] == false) {
+                    if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == true && $i['defer'] == true) {
                         $matchingDeps[] = $i['dep'];
                     }
                 }
