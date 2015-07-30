@@ -268,8 +268,8 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
     private function _getComponentSettingDependencies($class, $setting, $isCommonJsEntry)
     {
         return array_merge(
-            $this->_getComponentSettingDependenciesFiles($class, $setting, $isCommonJsEntry),
-            $this->_getComponentSettingDependenciesDep($class, $setting)
+            $this->_getComponentSettingDependenciesDep($class, $setting),
+            $this->_getComponentSettingDependenciesFiles($class, $setting, $isCommonJsEntry)
         );
     }
 
