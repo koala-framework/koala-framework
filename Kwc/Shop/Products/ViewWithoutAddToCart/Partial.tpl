@@ -7,7 +7,7 @@
         <div class="previewText"><?=$this->component($this->item->previewText);?></div>
         <div class="detail"><?=$this->componentLink($this->item, $this->data->trlKwf('Detail info').' ...');?></div>
     </div>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
     <div class="orderStuff">
         <div class="productPrice"><?=$this->money($this->item->row->price)?></div>
     </div>

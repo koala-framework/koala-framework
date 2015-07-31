@@ -40,5 +40,5 @@
             <?=$this->component($this->signature)?>
         <? } ?>
     </div>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
 </div>

@@ -4,5 +4,5 @@
             <?= $this->component($c); ?>
         <?}?>
     <? } ?>
-	<div class="clear"></div>
+	<div class="kwfUp-clear"></div>
 </div>

@@ -30,5 +30,5 @@
         <? } ?>
         <?=$this->data->trlKwf('by {0}', $this->item->author)?>
     </div>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
 </div>

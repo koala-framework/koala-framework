@@ -2,7 +2,7 @@
     <h1><?=$this->placeholder['headline'];?></h1><br />
     <form action="<?= $this->data->url ?>" method="post">
         <?=$this->component($this->view)?>
-        <div class="clear"></div>
+        <div class="kwfUp-clear"></div>
         <? foreach ($this->sumRows as $row) { ?>
             <div class="amounts <?=isset($row['class']) ? $row['class'] : ''?>">
                 <span class="label"><?=$row['text']?></span>
@@ -22,7 +22,7 @@
                 </button>
             </div>
             <div class="afterButton"></div>
-            <div class="clear"></div>
+            <div class="kwfUp-clear"></div>
         </div>
 
         <? if($this->countProducts) { ?>
@@ -31,6 +31,6 @@
             </div>
         <? } ?>
         <input type="hidden" name="<?= $this->form->componentId ?>-post" value="post" />
-        <div class="clear"></div>
+        <div class="kwfUp-clear"></div>
     </form>
 </div>

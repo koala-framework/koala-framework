@@ -4,7 +4,7 @@
         <div class="kwfField">
             <input value="<?=$this->data->trlKwf('Enter tag...')?>" class="kwfClearOnFocus tag" name="tag" />
             <input type="submit" class="submit" />
-            <div class="clear"></div>
+            <div class="kwfUp-clear"></div>
         </div>
     </form>
 </div>

@@ -14,6 +14,6 @@
             <? } ?>
             <li class="logout"><a href="<?=$this->logoutLink?>"><?=$this->data->trlKwf('Logout')?></a></li>
         </ul>
-        <div class="clear"></div>
+        <div class="kwfUp-clear"></div>
     </div>
 </div>

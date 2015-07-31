@@ -14,10 +14,10 @@
                     } ?>
                 <? } ?>
             </span>
-            <div class="clear"></div>
+            <div class="kwfUp-clear"></div>
         </p>
     </div>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
     <? if (isset($this->item->previewImage)) { ?>
     <div class="image left">
         <?=$this->componentLink($this->item, $this->component($this->item->previewImage))?>
@@ -27,5 +27,5 @@
         <p><?=$this->item->row->teaser?></p>
         <?=$this->componentLink($this->item,trlKwf('Read more').' »');?>
     </div>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
 </div>

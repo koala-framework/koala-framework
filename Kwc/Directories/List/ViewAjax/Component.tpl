@@ -9,6 +9,6 @@
     <div class="viewContainer">
         <?=$this->partials($this->data);?>
     </div>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
     <? if (isset($this->paging)) echo $this->component($this->paging); ?>
 </div>

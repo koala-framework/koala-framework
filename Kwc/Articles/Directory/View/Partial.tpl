@@ -5,11 +5,11 @@
     <div class="previewCenter">
         <div class="date"><?=$this->date($this->item->date)?>:</div>
         <h3><?=$this->componentLink($this->item, $this->item->title)?></h3>
-        <div class="clear"></div>
+        <div class="kwfUp-clear"></div>
         <div class="teaser">
             <?=$this->item->teaser?>
             <?=$this->componentLink($this->item, 'weiterlesen')?>
         </div>
     </div>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
 </div>

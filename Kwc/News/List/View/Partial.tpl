@@ -31,5 +31,5 @@
             <?=$this->componentLink($this->item, $this->placeholder['readMore']);?>
         </div>
     <? } ?>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
 </div>

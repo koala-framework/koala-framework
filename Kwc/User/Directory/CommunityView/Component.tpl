@@ -1,6 +1,6 @@
 <div class="<?=$this->rootElementClass?>">
     <? if (isset($this->searchForm)) echo $this->component($this->searchForm); ?>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
     <? if (isset($this->paging)) echo $this->component($this->paging); ?>
     <ul>
     <?=$this->partials($this->data)?>

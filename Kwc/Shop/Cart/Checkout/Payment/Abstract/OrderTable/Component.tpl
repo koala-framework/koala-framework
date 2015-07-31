@@ -42,7 +42,7 @@
                         </td>
                     </tr>
                 </table>
-                <div class="clear"></div>
+                <div class="kwfUp-clear"></div>
             </td>
         </tr>
     </table>

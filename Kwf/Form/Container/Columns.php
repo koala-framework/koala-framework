@@ -17,7 +17,7 @@ class Kwf_Form_Container_Columns extends Kwf_Form_Container_Abstract
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         $ret['preHtml'] = ''; // damit ein div ausgegeben wird
-        $ret['postHtml'] = '<div class="clear"></div>';
+        $ret['postHtml'] = '<div class="kwfUp-clear"></div>';
         return $ret;
     }
 }

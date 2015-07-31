@@ -6,5 +6,5 @@
     <div class="right">
         <img src="/assets/kwf/images/errorWarning.jpg" alt="" />
     </div>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
 </div>

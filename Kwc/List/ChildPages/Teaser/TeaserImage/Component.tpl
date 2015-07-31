@@ -8,6 +8,6 @@
     <div class="text<?if ($this->hasContent($this->image)) { ?> withImage<?}?>">
         <?= $this->component($this->text); ?>
     </div>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
     <p class="goTo"><?= $this->componentLink($this->data->targetPage, $this->readMoreLinktext, $this->readMoreComponentLinkConfig); ?></p>
 </div>

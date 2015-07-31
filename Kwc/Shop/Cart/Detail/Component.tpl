@@ -4,4 +4,4 @@
 <div class="delete">
     <button type="submit" name="<?=$this->data->componentId?>-delete" value="delete"><?=$this->data->trlKwf('Delete')?></button>
 </div>
-<div class="clear"></div>
+<div class="kwfUp-clear"></div>

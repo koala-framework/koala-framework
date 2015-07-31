@@ -16,7 +16,7 @@
             <? } ?></p>
         <? } ?>
         <a class="order" href="<?=$this->product->detailPageURL?>" data-kwc-popup="blank"><?=$this->data->trlKwf('order now at amazon')?></a>
-        <div class="clear"></div>
+        <div class="kwfUp-clear"></div>
     </div>
 
     <? if (isset($this->item->EditorialReviews)) { ?>

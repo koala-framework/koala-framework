@@ -21,7 +21,7 @@
                         <li class="<?=$d['class']?>"><?=$this->data->trlStaticExecute($d['name'])?>: <?=$d['value']?></li>
                     <? } ?>
                     <li class="price"><?=$this->money($item->price)?></li>
-                    <div class="clear"></div>
+                    <div class="kwfUp-clear"></div>
                 </ul>
                 <ul class="<?=($c==$j ? 'lastline' : 'line');?>">
                     <li colspan="<?=(4+count($item->additionalOrderData))?>">
@@ -36,7 +36,7 @@
                     <li<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
                         <span class="text"><?=$this->data->trlStaticExecute($row['text'])?></span>
                         <span class="price"><?=$this->money($row['amount'],'')?></span>
-                        <div class="clear"></div>
+                        <div class="kwfUp-clear"></div>
                     </li>
                 <? } ?>
             </ul>

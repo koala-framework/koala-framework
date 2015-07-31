@@ -24,7 +24,7 @@
                 <li<? if(isset($row['class'])) {?> class="<?=$row['class']?>"<? } ?>>
                     <span class="text"><?=$this->data->trlStaticExecute($row['text'])?></span>
                     <span class="price"><?=$this->money($row['amount'],'')?></span>
-                    <div class="clear"></div>
+                    <div class="kwfUp-clear"></div>
                 </li>
             <? } ?>
             <? if ($this->tableFooterText) { ?>

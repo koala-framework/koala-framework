@@ -19,7 +19,7 @@
                 <div class="switchContent"><?=$this->data->trlKwf('Print')?></div>
             </div>
         </div>
-        <div class="clear"></div>
+        <div class="kwfUp-clear"></div>
     </div>
-    <div class="clear"></div>
+    <div class="kwfUp-clear"></div>
 </div>

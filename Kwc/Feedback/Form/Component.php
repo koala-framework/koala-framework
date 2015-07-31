@@ -31,7 +31,7 @@ abstract class Kwc_Feedback_Form_Component extends Kwc_Form_Component
         $this->_form->add(new Kwf_Form_Field_Static('<div class="footer"></div>'))    //makes the seperation(for styling) easier
             ->setCls('footer');
         $closeText = $this->_getPlaceholder('closeButtonText');
-        $closeButton = '<a class="closeButton">' . $closeText . '</a><div class="clear"></div>';    //Cancel Button
+        $closeButton = '<a class="closeButton">' . $closeText . '</a><div class="kwfUp-clear"></div>';    //Cancel Button
         $this->_form->add(new Kwf_Form_Field_Static($closeButton))
             ->setCls('cancel');
     }
