@@ -19,7 +19,7 @@
     <div class="container" style="height: <?= $this->height; ?>px;"></div>
 
     <? if ($this->options['routing']) { ?>
-        <form action="#" class="fromAddress kwfUp-printHidden">
+        <form action="#" class="fromAddress">
             <input type="text" class="textBefore kwfClearOnFocus" value="<?= $this->data->trlKwf('Place of departure: zip code, Town, Street'); ?>" />
             <button class="submitOn"><?= $this->data->trlKwf('Show Route') ?></button>
             <div class="clear"></div>

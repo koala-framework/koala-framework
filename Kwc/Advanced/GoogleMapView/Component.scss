@@ -31,6 +31,7 @@
 
 @media print {
 .kwcClass {
+    .fromAddress { display: none; }
     page-break-before: always;
 }
 }
