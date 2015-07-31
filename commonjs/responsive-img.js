@@ -9,7 +9,7 @@ var deferredImages = [];
 
 module.exports = function (selector) {
     onReady.onResize(selector, function responsiveImg(el) {
-        if (el.hasClass('loadImmediately') || isElementInView(el)) {
+        if (el.hasClass('kwfUp-loadImmediately') || isElementInView(el)) {
             if (!el[0].responsiveImgInitDone) {
                 initResponsiveImgEl(el);
             } else {
@@ -34,7 +34,7 @@ $(function() {
         }
 
         lastScrollTop = $w.scrollTop()
-        for(var i=0; i<deferredImages.length; ++i) {
+        for (var i=0; i<deferredImages.length; ++i) {
             var el = deferredImages[i];
             if (isElementInView(el)) {
                 deferredImages.splice(i, 1);
@@ -48,7 +48,7 @@ $(function() {
 
 function getResponsiveWidthStep(width,  minWidth, maxWidth) {
     var steps = getResponsiveWidthSteps(minWidth, maxWidth);
-    for(var i = 0; i < steps.length; i++) {
+    for (var i = 0; i < steps.length; i++) {
         if (width <= steps[i]) {
             return steps[i];
         }
@@ -91,7 +91,7 @@ function initResponsiveImgEl(el) {
     var img = $('<img />');
     el.append(img);
     img.on('load', function() {
-        el.removeClass('webResponsiveImgLoading');
+        el.removeClass('kwfUp-webResponsiveImgLoading');
     });
     img.attr('src', sizePath);
 };

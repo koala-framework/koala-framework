@@ -22,28 +22,22 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
         if (!$row->image) {
             $ret['image'] = false;
         } else {
-            $ret['rootElementClass'] .= ' imageDimension'.ucfirst($ret['image']->getComponent()->getDimensionSetting());
+            $ret['rootElementClass'] .= ' '.self::getBemClass($this, '--imageDimension'.ucfirst($ret['image']->getComponent()->getDimensionSetting()));
             $dim = $ret['image']->getComponent()->getImageDimensions();
             $ret['imageWidth'] = false;
             if ($dim && isset($dim['width'])) {
                 $ret['imageWidth'] = $dim['width'];
             }
-            $ret['contentWidth'] = $this->getContentWidth();
-            $pos = $row->position;
-            if($pos == 'center'){
-                $ret['center'] = ($ret['contentWidth'] - $ret['imageWidth']) / 2;
-            }
-            $ret['position'] = $pos;
-            $ret['propCssClass'] = 'position'.ucfirst($pos);
-            if ($row->flow) {
-                $ret['propCssClass'] .= ' flow';
-            } else {
-                $ret['propCssClass'] .= ' noFlow';
+            $ret['position'] = $row->position;
+            $ret['rootElementClass'] .= ' '.self::getBemClass($this, '--position'.ucfirst($pos));
+            $ret['rootElementClass'] .= ' '.self::getBemClass($this, '--'.($row->flow ? 'flow' : 'noFlow'));
+            if ($ret['imageWidth'] <= 100) {
+                $ret['rootElementClass'] .= ' '.self::getBemClass($this, '--smallImage');
             }
             $ret['mailImageVAlign'] = $this->_getSetting('mailImageVAlign');
         }
         if (!$ret['text']->hasContent()) {
-            $ret['rootElementClass'] .= ' noText';
+            $ret['rootElementClass'] .= ' '.self::getBemClass($this, '--noText');
         }
         return $ret;
     }

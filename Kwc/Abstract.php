@@ -396,6 +396,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if (!isset($up)) $up = Kwf_Config::getValue('application.uniquePrefix');
         if (!$up) {
             if ($nonBemFallback) return $nonBemFallback;
+            if (substr($class, 0, 2) == '--') $class = substr($class, 2);
             return $class;
         } else {
             return Kwf_Component_Abstract::formatRootElementClass($component, '').'__'.$class;

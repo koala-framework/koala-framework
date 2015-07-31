@@ -1,76 +1,76 @@
+@import "compass/utilities/general/clearfix";
+@import "kwf/el-breakpoint";
+
 .kwcClass {
-    .kwfUp-kwcBasicImageEnlarge {
+    @include pie-clearfix;
+    &.kwcBem__image {
         text-align: center;
 
         img {
             display: inline;
         }
     }
-}
 
-.kwcClass {
-    &.gt420 {
-        .image {
+    @include el-breakpoint(420px) {
+        .kwcBem__image {
             margin-bottom: 3px;
             display: inline;
             max-width: 50%;
         }
     }
 
-    &.gt420, &.largeText {
-        .kwfUp-kwcBasicImageEnlarge {
+    &.gt420, &.kwcBem--largeText {
+        .kwcBem__image {
             img {
                 display: block;
             }
         }
 
-        .noFlow {
-            .image {
+        &.kwcBem--noFlow {
+            .kwcBem__image {
                 display: table-cell;
             }
 
-            &.positionLeft, &.positionRight {
-                .text {
+            &.kwcBem--positionLeft, &.kwcBem--positionRight {
+                .kwcBem__text {
                     display: table-cell;
                 }
             }
         }
 
-        .positionLeft, .positionRight { .imageCaption { text-align: left; }}
-        .positionLeft .image { float: left; margin-right: 18px; }
-        .positionRight .image { float: right; margin-left: 18px; }
-        .positionCenter {
-            .image {
+        &.kwcBem--positionLeft, &.kwcBem--positionRight { .kwfUp-imageCaption { text-align: left; } }
+        &.kwcBem--positionLeft .kwcBem__image { float: left; margin-right: 18px; }
+        &.kwcBem--positionRight .kwcBem__image { float: right; margin-left: 18px; }
+        &.kwcBem--positionCenter {
+            .kwcBem__image {
                 text-align: center;
                 display: inline;
 
-                > .kwcBasicImageEnlarge {
-                    img {
-                        margin-bottom: -3px;
-                        display: inline;
-                    }
+                img {
+                    margin-bottom: -3px;
+                    display: inline;
                 }
             }
 
-            .text { display: block; }
+            .kwcBem__text { display: block; }
         }
 
-        .imageCaption {
+        .kwfUp-imageCaption {
             padding: 3px 0 5px 0;
         }
     }
 
-    .kwcBasicImageEnlarge {
+    .kwfUp-kwcImage {
         margin: 0 auto;
     }
 
-    .image {
-        > .kwfUp-kwcAbstractImage {
+    .kwcBem__image {
+        > .kwfUp-kwcImage {
             max-width: 100% !important;
         }
     }
 
-    .imageCaption {
+    .kwfUp-imageCaption {
         padding: 0 0 5px 0;
         text-align: center;
         margin: 0 auto;

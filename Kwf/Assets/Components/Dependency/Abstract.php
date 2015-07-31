@@ -39,9 +39,12 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
         foreach ($this->_componentDependencies as $dep) {
             $c = $dep->getContents($language);
             if (Kwf_Config::getValue('application.uniquePrefix')) {
+                $c = str_replace('.kwcClass .kwcBem--', '.kwcBem--', $c);
                 $c = str_replace('.kwcClass .kwcBem__', '.kwcBem__', $c);
+                $c = str_replace('kwcBem--', $this->_getKwcClass().'--', $c);
                 $c = str_replace('kwcBem__', $this->_getKwcClass().'__', $c);
             } else {
+                $c = str_replace('kwcBem--', '', $c);
                 $c = str_replace('kwcBem__', '', $c);
             }
             $c = str_replace('.kwcClass', '.'.$this->_getKwcClass(), $c);
@@ -56,9 +59,12 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
         foreach ($this->_componentDependencies as $dep) {
             $c = $dep->getContentsPacked($language);
             if (Kwf_Config::getValue('application.uniquePrefix')) {
+                $c->stringReplace('.kwcClass .kwcBem--', '.kwcBem--');
                 $c->stringReplace('.kwcClass .kwcBem__', '.kwcBem__');
+                $c->stringReplace('kwcBem--', $this->_getKwcClass().'--');
                 $c->stringReplace('kwcBem__', $this->_getKwcClass().'__');
             } else {
+                $c->stringReplace('kwcBem--', '');
                 $c->stringReplace('kwcBem__', '');
             }
             $c->stringReplace('.kwcClass', '.'.$this->_getKwcClass());
