@@ -21,7 +21,7 @@ class Kwf_Assets_CommonJs_Parser
 
     public static function parse($filename)
     {
-        if (substr($filename, 0, 5) == 'temp/') {
+        if (substr($filename, 0, strlen(getcwd().'/temp/')) == getcwd().'/temp/') {
             $cacheId = md5_file($filename);
         } else {
             $cacheId = str_replace(array('/', '.', '-'), '_', $filename).'__'.md5_file($filename);
