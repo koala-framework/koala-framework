@@ -46,26 +46,69 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
                 $c = str_replace('kwcBem__', '', $c);
             }
             $c = str_replace('.kwcClass', '.'.$this->_getKwcClass(), $c);
-            $ret .= $c;
+            $ret .= $c."\n";
         }
         return $ret;
     }
 
+    public function getContentsSource()
+    {
+        $ret = '';
+        foreach ($this->_componentDependencies as $dep) {
+            $s = $dep->getContentsSource();
+            if ($s['type'] == 'file') {
+                $ret .= file_get_contents($s['file'])."\n";
+            } else if ($s['type'] == 'contents') {
+                $ret .= $s['contents']."\n";
+            } else {
+                throw new Kwf_Exception_NotYetImplemented();
+            }
+        }
+        return array(
+            'type' => 'contents',
+            'contents' => $ret,
+        );
+    }
+
+    public function warmupCaches()
+    {
+        foreach ($this->_componentDependencies as $dep) {
+            $dep->warmupCaches();
+        }
+    }
+
     public function getContentsPacked($language)
     {
-        $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
+        $hash = '';
         foreach ($this->_componentDependencies as $dep) {
-            $c = $dep->getContentsPacked($language);
-            if (Kwf_Config::getValue('application.uniquePrefix')) {
-                $c->stringReplace('kwcBem--', $this->_getKwcClass().'--');
-                $c->stringReplace('kwcBem__', $this->_getKwcClass().'__');
+            if ($dep instanceof Kwf_Assets_Dependency_File) {
+                $hash .= md5_file($dep->getAbsoluteFileName());
             } else {
-                $c->stringReplace('kwcBem--', '');
-                $c->stringReplace('kwcBem__', '');
+                $hash .= md5($dep->getContents('en'));
             }
-            $c->stringReplace('.kwcClass', '.'.$this->_getKwcClass());
-            $ret->concat($c);
         }
+        $hash = md5($hash);
+        $cacheFile = "cache/componentassets/{$this->_componentClass}-".Kwf_Config::getValue('application.uniquePrefix')."-$hash";
+
+        if (file_exists($cacheFile)) {
+            $ret = Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));
+        } else {
+            $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
+            foreach ($this->_componentDependencies as $dep) {
+                $c = $dep->getContentsPacked($language);
+                if (Kwf_Config::getValue('application.uniquePrefix')) {
+                    $c->stringReplace('kwcBem--', $this->_getKwcClass().'--');
+                    $c->stringReplace('kwcBem__', $this->_getKwcClass().'__');
+                } else {
+                    $c->stringReplace('kwcBem--', '');
+                    $c->stringReplace('kwcBem__', '');
+                }
+                $c->stringReplace('.kwcClass', '.'.$this->_getKwcClass());
+                $ret->concat($c);
+            }
+            file_put_contents($cacheFile, $ret->getFileContentsInlineMap());
+        }
+
         return $ret;
     }
 }

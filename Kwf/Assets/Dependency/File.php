@@ -29,6 +29,14 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         return file_get_contents($this->getAbsoluteFileName());
     }
 
+    public function getContentsSource()
+    {
+        return array(
+            'type' => 'file',
+            'file' => $this->getAbsoluteFileName(),
+        );
+    }
+
     public function getType()
     {
         return substr($this->_fileName, 0, strpos($this->_fileName, '/'));

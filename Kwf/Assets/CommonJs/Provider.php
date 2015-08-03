@@ -28,14 +28,19 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
     {
         $ret = array();
         $deps = array();
-        if ($dependency instanceof Kwf_Assets_Dependency_File) {
-            $deps = Kwf_Assets_CommonJs_Parser::parse($dependency->getAbsoluteFileName());
-        } else {
+
+        $src = $dependency->getContentsSource();
+        if ($src['type'] == 'file') {
+            $deps = Kwf_Assets_CommonJs_Parser::parse($src['file']);
+        } else if ($src['type'] == 'contents') {
             $temp = tempnam('temp/', 'commonjs');
-            file_put_contents($temp, $dependency->getContents('en'));
+            file_put_contents($temp, $src['contents']);
             $deps = Kwf_Assets_CommonJs_Parser::parse($temp);
             unlink($temp);
+        } else {
+            throw new Kwf_Exception_NotYetImplemented();
         }
+
         foreach ($deps as $dep) {
             if (substr($dep, 0, 2) == './') {
                 $fn = $dependency->getFileNameWithType();

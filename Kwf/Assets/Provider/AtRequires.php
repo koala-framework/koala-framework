@@ -12,10 +12,13 @@ class Kwf_Assets_Provider_AtRequires extends Kwf_Assets_Provider_Abstract
 
         if ($dependency->getMimeType() != 'text/javascript') return $deps;
 
-        if ($dependency instanceof Kwf_Assets_Dependency_File) {
-            $fileContents = file_get_contents($dependency->getAbsoluteFileName());
+        $src = $dependency->getContentsSource();
+        if ($src['type'] == 'file') {
+            $fileContents = file_get_contents($src['file']);
+        } else if ($src['type'] == 'contents') {
+            $fileContents = $src['contents'];
         } else {
-            $fileContents = $dependency->getContents('en');
+            throw new Kwf_Exception_NotYetImplemented();
         }
 
         // remove comments to avoid dependencies from docs/examples

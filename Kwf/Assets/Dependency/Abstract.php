@@ -46,6 +46,14 @@ abstract class Kwf_Assets_Dependency_Abstract
         return Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
     }
 
+    public function getContentsSource()
+    {
+        return array(
+            'type' => 'contents',
+            'contents' => $this->getContents('en'),
+        );
+    }
+
     public function setDependencies($type, $deps)
     {
         foreach ($deps as $dep) {
