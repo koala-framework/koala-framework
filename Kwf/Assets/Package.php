@@ -124,26 +124,20 @@ class Kwf_Assets_Package
         return $ret;
     }
 
-    private function _getCommonJsDeps($i, $language)
+    private function _getCommonJsDeps($i, $language, &$data)
     {
-        $ret = array(
-            'deps' => array(),
-            'data' => array()
-        );
+        $ret = array();
         foreach ($i->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS) as $depName=>$dep) {
-            $ret['deps'][$depName] = $dep->__toString();
-            $commonJsDeps = $this->_getCommonJsDeps($dep, $language);
-            $ret['data'][$dep->__toString()] = array(
-                'id' => $dep->__toString(),
-                'source' => $c = $dep->getContentsPacked($language)->getFileContentsInlineMap(false),
-                'sourceFile' => $dep->__toString(), //TODO
-                'deps' => $commonJsDeps['deps'],
-                'entry' => false
-            );
-            foreach ($commonJsDeps['data'] as $i=>$j) {
-                if (!isset($ret['data'][$i])) {
-                    $ret['data'][$i] = $j;
-                }
+            $ret[$depName] = $dep->__toString();
+            if (!isset($data[$dep->__toString()])) {
+                $commonJsDeps = $this->_getCommonJsDeps($dep, $language, $data);
+                $data[$dep->__toString()] = array(
+                    'id' => $dep->__toString(),
+                    'source' => $c = $dep->getContentsPacked($language)->getFileContentsInlineMap(false),
+                    'sourceFile' => $dep->__toString(), //TODO
+                    'deps' => $commonJsDeps,
+                    'entry' => false
+                );
             }
         }
         return $ret;
@@ -174,19 +168,14 @@ class Kwf_Assets_Package
             if ($i->getIncludeInPackage()) {
                 if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry()) {
                     $c = $i->getContentsPacked($language)->getFileContentsInlineMap(false);
-                    $commonJsDeps = $this->_getCommonJsDeps($i, $language);
+                    $commonJsDeps = $this->_getCommonJsDeps($i, $language, $commonJsData);
                     $commonJsData[$i->__toString()] = array(
                         'id' => $i->__toString(),
                         'source' => $c,
                         'sourceFile' => $i->__toString(), //TODO
-                        'deps' => $commonJsDeps['deps'],
+                        'deps' => $commonJsDeps,
                         'entry' => true
                     );
-                    foreach ($commonJsDeps['data'] as $k=>$j) {
-                        if (!isset($commonJsData[$k])) {
-                            $commonJsData[$k] = $j;
-                        }
-                    }
                 }
             }
         }
@@ -194,8 +183,9 @@ class Kwf_Assets_Package
             if ($mimeType == 'text/javascript; defer') {
                 //in defer.js don't include deps that are already loaded in non-defer
                 foreach ($this->_getFilteredUniqueDependencies('text/javascript') as $i) {
-                    $commonJsDeps = $this->_getCommonJsDeps($i, $language);
-                    foreach (array_keys($commonJsDeps['data']) as $key) {
+                    $data = array();
+                    $commonJsDeps = $this->_getCommonJsDeps($i, $language, $data);
+                    foreach (array_keys($data) as $key) {
                         if (isset($commonJsData[$key])) {
                             unset($commonJsData[$key]);
                         }
