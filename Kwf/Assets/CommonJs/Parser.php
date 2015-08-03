@@ -21,7 +21,11 @@ class Kwf_Assets_CommonJs_Parser
 
     public static function parse($filename)
     {
-        $cacheId = str_replace(array('/', '.', '-'), '_', $filename).'__'.md5_file($filename);
+        if (substr($filename, 0, 5) == 'temp/') {
+            $cacheId = md5_file($filename);
+        } else {
+            $cacheId = str_replace(array('/', '.', '-'), '_', $filename).'__'.md5_file($filename);
+        }
         $ret = self::_getCache()->load($cacheId);
         if ($ret === false) {
             $cmd = getcwd()."/".VENDOR_PATH."/bin/node ".__DIR__."/Parser.js ".$filename;
