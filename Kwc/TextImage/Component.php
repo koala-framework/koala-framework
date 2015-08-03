@@ -29,7 +29,7 @@ class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
                 $ret['imageWidth'] = $dim['width'];
             }
             $ret['position'] = $row->position;
-            $ret['rootElementClass'] .= ' '.self::getBemClass($this, '--position'.ucfirst($pos));
+            $ret['rootElementClass'] .= ' '.self::getBemClass($this, '--position'.ucfirst($row->position));
             $ret['rootElementClass'] .= ' '.self::getBemClass($this, '--'.($row->flow ? 'flow' : 'noFlow'));
             if ($ret['imageWidth'] <= 100) {
                 $ret['rootElementClass'] .= ' '.self::getBemClass($this, '--smallImage');
