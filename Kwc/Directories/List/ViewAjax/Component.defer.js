@@ -2,6 +2,7 @@ var onReady = require('kwf/on-ready');
 var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var statistics = require('kwf/statistics');
+var formRegistry = require('kwf/frontend-form/form-registry');
 
 (function() {
 
@@ -119,7 +120,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
         };
 
         if (this.searchFormComponentId) {
-            this.searchForm = Kwc.Form.formsByComponentId[this.searchFormComponentId];
+            this.searchForm = formRegistry.getFormByComponentId(this.searchFormComponentId);
         }
 
         if (this.searchForm) {

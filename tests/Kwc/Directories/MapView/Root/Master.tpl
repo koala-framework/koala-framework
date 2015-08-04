@@ -4,7 +4,7 @@
         <?=$this->assets(new Kwf_Assets_Package_TestPackage('Kwc_Directories_MapView'))?>
         <?=$this->debugData()?>
     </head>
-    <body>
+    <body class="kwfUp-frontend">
         <?
         echo $this->componentWithMaster($this->componentWithMaster);
         ?>

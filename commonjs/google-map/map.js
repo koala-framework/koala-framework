@@ -1,68 +1,13 @@
-Ext2.namespace('Kwf.GoogleMap');
-Kwf.GoogleMap.isLoaded = false;
-Kwf.GoogleMap.isCallbackCalled = false;
-Kwf.GoogleMap.callbacks = [];
+var $ = require('jQuery');
+var onReady = require('kwf/on-ready');
 
-Kwf.GoogleMap.load = function(callback, scope)
-{
-    if (Kwf.GoogleMap.isCallbackCalled) {
-        callback.call(scope || window);
-        return;
-    }
-    Kwf.GoogleMap.callbacks.push({
-        callback: callback,
-        scope: scope
-    });
-    if (Kwf.GoogleMap.isLoaded) return;
-
-    Kwf.GoogleMap.isLoaded = true;
-
-    //try find the correct api key
-    //Kwf.GoogleMap.apiKeys is set by Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys
-    //and contains possibly multiple api keys (to support multiple domains)
-    var apiKeyIndex;
-
-    var hostParts = location.host.split('.');
-    if (hostParts.length <= 1) {
-        apiKeyIndex = location.host;
-    } else {
-        apiKeyIndex = hostParts[hostParts.length-2]  // eg. 'koala-framework'
-                     +hostParts[hostParts.length-1]; // eg. 'org'
-    }
-    if (['orat', 'coat', 'gvat', 'couk'].indexOf(apiKeyIndex) != -1) {
-        //one part more for those
-        apiKeyIndex = hostParts[hostParts.length-3]+apiKeyIndex;
-    }
-
-    var key = '';
-    if (apiKeyIndex in Kwf.GoogleMap.apiKeys) {
-        key = Kwf.GoogleMap.apiKeys[apiKeyIndex];
-    }
-    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+trlKwf('en');
-    url += '&callback=Kwf.GoogleMap._loaded';
-    var s = document.createElement('script');
-    s.setAttribute('type', 'text/javascript');
-    s.setAttribute('src', url);
-    document.getElementsByTagName("head")[0].appendChild(s);
-};
-
-Kwf.GoogleMap._loaded = function()
-{
-    Kwf.GoogleMap.isCallbackCalled = true;
-    Kwf.GoogleMap.callbacks.forEach(function(i) {
-        i.callback.call(i.scope || window);
-    });
-};
-
-
-
-Kwf.GoogleMap.maps = [];
+var maps = [];
 
 /**
  * The Kwf GoogleMaps object
  *
  * @param config The configuration object that may / must contain the following values
- *     mapContainer (mandatory): The wrapper element of the map (id, dom-element or ext-element).
+ *     mapContainer (mandatory): The wrapper element of the map (id, dom-element or jquery-element).
  *             Must contain a div with class 'container', where the google map itself will be put into-
  *     longitude (optional if coordinates is set): The longitude of the initial center point.
  *     latitude (optional if coordinates is set): The latitude of the initial center point.
@@ -97,17 +42,12 @@ Kwf.GoogleMap.maps = [];
  *            1 to show small zoom an move controls. Defaults to 0.
  *     overview (optional): 0 or 1, whether to show a small overview map at the bottom.
  */
-Kwf.GoogleMap.Map = function(config) {
+var Map = function(config) {
     if (!config.mapContainer) throw new Error('config value mapContainer not set');
 
-    this.addEvents({
-        'show': true,
-        'useFrom': true,
-        'reload': true
-    });
-
-    this.mapContainer = Ext2.get(config.mapContainer);
-    this._baseParams = Ext2.applyIf({}, config.baseParams);
+    this.mapContainer = $(config.mapContainer);
+    //this.mapContainer = Ext2.get(config.mapContainer);
+    this._baseParams = $.extend({}, config.baseParams);
     this.markers = [];
     this.config = config;
     if (typeof this.config.width == 'undefined') this.config.width = 350;
@@ -161,30 +101,21 @@ Kwf.GoogleMap.Map = function(config) {
     if (!this.config.longitude) throw new Error('Either longitude or coordinates must be set in config');
     if (!this.config.latitude) throw new Error('Either latitude or coordinates must be set in config');
 
-    var fromEl = this.mapContainer.down("form.fromAddress");
+    var fromEl = this.mapContainer.find("form.fromAddress");
     if (fromEl) {
-        var input = this.mapContainer.down("form.fromAddress input");
+        var input = this.mapContainer.find("form.fromAddress input");
         fromEl.on('submit', function(e) {
-            this.setMapDir(input.getValue());
+            this.setMapDir(input.value());
             e.stopEvent();
         }, this);
     }
 
-    if (typeof this.config.markers == 'string') {
-        if (typeof Kwf.Connection == 'undefined') {
-            alert('Dependency ExtConnection (that includes Kwf.Connection object) must be set when you wish to reload markers in an google map');
-        }
-        this.ajax = new Kwf.Connection({
-            autoAbort : true
-        });
-    }
-
-    var container = this.mapContainer.down(".container");
-    container.setWidth(this.config.width);
-    container.setHeight(this.config.height);
+    var container = this.mapContainer.find(".container");
+    container.width(this.config.width);
+    container.height(this.config.height);
 };
 
-Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
+Map.prototype = {
 
     markers: null,
     show : function()
@@ -215,11 +146,10 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         if (this.config.styles) {
             mapOptions.styles = this.config.styles;
         }
-        this.gmap = new google.maps.Map(this.mapContainer.down(".container").dom,
-            mapOptions);
-        if (this.mapContainer.down(".mapDir")) {
+        this.gmap = new google.maps.Map(this.mapContainer.find(".container")[0], mapOptions);
+        if (this.mapContainer.find(".mapDir")) {
             this.directionsDisplay.setMap(this.gmap);
-            this.directionsDisplay.setPanel(this.mapContainer.down(".mapDir").dom);
+            this.directionsDisplay.setPanel(this.mapContainer.find(".mapDir")[0]);
         }
 
         if (this.config.mapType == 'satellite') {
@@ -262,17 +192,28 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         // Opens the first InfoWindow. Must be deferred, because there were
         // problems opening InfoWindows in multiple maps on one site
         var showNextWindow = function() {
-            var map = Kwf.GoogleMap.maps.shift();
+            var map = maps.shift();
             if (!map) return;
             map.markers.each(function(m) {
                 if (m.kwfConfig.autoOpenInfoWindow) this.showWindow(m);
             }, map);
         };
-        if (Kwf.GoogleMap.maps.length == 0) {
+        if (maps.length == 0) {
             showNextWindow.defer(1, this);
         }
-        Kwf.GoogleMap.maps.push(this);
+        maps.push(this);
         this.fireEvent('show', this);
+    },
+
+    on: function(event, cb, scope)
+    {
+        if (typeof scope != 'undefined') cb = cb.bind(scope);
+        this.mapContainer.on('kwfUp-map-'+event, cb);
+    },
+
+    fireEvent: function(event, obj)
+    {
+        this.mapContainer.trigger('kwfUp-map-'+event, obj);
     },
 
     _loadAllMarkers: function()
@@ -285,7 +226,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         this.on('reload', function () {
             // Listener for centering view to all shown markers on first load
             if (this.markers.length == 0) return;
-            // Calculate center of all markers via gmap
+            // Calculate center of all markers via google-map
             var latlngbounds = new google.maps.LatLngBounds();
             this.markers.each(function(n){
                 if (n.kwfConfig.isLightMarker) latlngbounds.extend(n.getPosition());
@@ -297,7 +238,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
                 this._reloadMarkersOnMapChange.createDelegate(this, [ ]));
         }, this, { single: true });
 
-        this._reloadMarkers(Ext2.applyIf({}, this._baseParams));
+        this._reloadMarkers($.extend({}, this._baseParams));
     },
 
     centerMarkersIntoView: function()
@@ -308,7 +249,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
 
     _reloadMarkersOnMapChange: function()
     {
-        var params = Ext2.applyIf({}, this._baseParams);
+        var params = $.extend({}, this._baseParams);
         var bounds = this.gmap.getBounds();
         params.lowestLng = bounds.getSouthWest().lng();
         params.lowestLat = bounds.getSouthWest().lat();
@@ -317,22 +258,24 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         this._reloadMarkers(params);
     },
 
+    lastAjaxRequest: null,
     _reloadMarkers: function(params)
     {
         if (!this.gmapLoader) {
-            this.gmapLoader = Ext2.getBody().createChild({ tag: 'div', id: 'gmapLoader' });
-            this.gmapLoader.dom.innerHTML = trlKwf('Loading...');
-            this.gmapLoader.alignTo(this.mapContainer, 'tr-tr', [ -10, 50 ]);
+            $(this.mapContainer).append('<div id="gmapLoader">'+trlKwf('Loading...')+'</div>')
+            this.gmapLoader = this.mapContainer.find('#gmapLoader');
         }
         this.gmapLoader.show();
 
-        this.lastReloadMarkersRequestId = this.ajax.request({
+        // abort old ajax-request to prevent problems with loading markers finishing in wrong order
+        if (this.lastAjaxRequest) this.lastAjaxRequest.abort();
+        this.lastAjaxRequest = $.ajax({
             url: this.config.markers,
-            params: params,
-            success: function(response, options, result) {
+            data: params,
+            success: (function(response, options, result) {
                 var reuseMarkers = [];
                 var newMarkers = [];
-                result.markers.each(function(m) {
+                result.responseJSON.markers.each(function(m) {
                     var doAdd = true;
                     for (var i = 0; i < this.markers.length; i++) {
                         if (this.markers[i].kwfConfig.latitude == m.latitude
@@ -356,11 +299,10 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
                 for (var i = 0; i < newMarkers.length; i++) {
                     this.addMarker(newMarkers[i]);
                 }
-                Kwf.callOnContentReady(this.mapContainer, {newRender: true});
+                onReady.callOnContentReady(this.mapContainer, {newRender: true});
                 this.gmapLoader.hide();
                 this.fireEvent('reload', this);
-            },
-            scope: this
+            }).bind(this)
         });
     },
 
@@ -412,7 +354,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
 
     /** For images in marker popup **/
     markerWindowReady: function() {
-        Kwf.callOnContentReady(this.mapContainer, {newRender: true});
+        onReady.callOnContentReady(this.mapContainer, {newRender: true});
     },
 
     /**
@@ -422,7 +364,7 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         marker.infoWindow = new google.maps.InfoWindow();
         if (marker.kwfConfig.infoHtml && marker.kwfConfig.infoHtml != ""
             && "<br />" != marker.kwfConfig.infoHtml.toLowerCase()
-            ) {
+        ) {
             marker.infoWindow.setContent(marker.kwfConfig.infoHtml);
             marker.infoWindow.open(marker.map, marker);
         }
@@ -456,10 +398,12 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
         if (status == google.maps.DirectionsStatus.OK) {
             this.directionsDisplay.setDirections(response);
             (function() {
-                Kwf.callOnContentReady(this.directionsDisplay.getPanel(), { newRender: true});
+                onReady.callOnContentReady(this.directionsDisplay.getPanel(), { newRender: true});
             }).defer(1, this);
         } else {
             alert(trlKwf('Entered place could not been found!'));
         }
     }
-});
+};
+
+module.exports = Map;
