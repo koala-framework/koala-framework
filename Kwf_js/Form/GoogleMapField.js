@@ -1,11 +1,11 @@
 Kwf.Form.GoogleMapsField = Ext2.extend(Ext2.form.TriggerField,
 {
-	triggerClass : 'x2-form-search-trigger',
-	readOnly : false,
-	width : 200,
-	onTriggerClick : function(){
-        Kwf.GoogleMap.load(function(){
-        var win = Kwf.Form.GoogleMapsField.GoogleMapWindow; //statische var, nur ein window erstellen??
+    triggerClass : 'x2-form-search-trigger',
+    readOnly : false,
+    width : 200,
+    onTriggerClick : function(){
+        Kwf.GoogleMap.Loader.load(function(){
+            var win = Kwf.Form.GoogleMapsField.GoogleMapWindow; //statische var, nur ein window erstellen??
             if (!win) {
                 win = new Kwf.Form.GoogleMapWindow({
                     modal: true,

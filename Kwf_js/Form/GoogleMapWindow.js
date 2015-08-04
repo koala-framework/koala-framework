@@ -48,7 +48,7 @@ Kwf.Form.GoogleMapWindow = Ext2.extend(Ext2.Window,
     afterRender:function(){
         var startLatLng = new google.maps.LatLng(47.8904081, 13.1834356);
         Kwf.Form.GoogleMapWindow.superclass.afterRender.call(this);
-        Kwf.GoogleMap.load(function() {
+        Kwf.GoogleMap.Loader.load(function() {
             var mapOptions = {
                 center: startLatLng,
                 zoom: parseInt(8),
