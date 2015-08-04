@@ -20,6 +20,16 @@ class Kwf_Assets_CommonJs_JQueryPluginDecoratorDependency extends Kwf_Assets_Dep
         return $ret;
     }
 
+    public function usesLanguage()
+    {
+        return $this->_dep->usesLanguage();
+    }
+
+    public function getContentsSource()
+    {
+        return $this->_dep->getContentsSource();
+    }
+
     public function getContentsPacked($language)
     {
         $c = $this->_dep->getContentsPacked($language);

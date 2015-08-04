@@ -54,6 +54,11 @@ abstract class Kwf_Assets_Dependency_Abstract
         );
     }
 
+    public function usesLanguage()
+    {
+        return true;
+    }
+
     public function setDependencies($type, $deps)
     {
         foreach ($deps as $dep) {

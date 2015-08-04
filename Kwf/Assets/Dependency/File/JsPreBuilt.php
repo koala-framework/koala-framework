@@ -16,6 +16,11 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
         return 'text/javascript';
     }
 
+    public function usesLanguage()
+    {
+        return false;
+    }
+
     public function getContentsPacked($language)
     {
         $paths = self::_getAllPaths();

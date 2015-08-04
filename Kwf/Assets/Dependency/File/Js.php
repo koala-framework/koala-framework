@@ -19,6 +19,12 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         return parent::getContents($language);
     }
 
+    public function usesLanguage()
+    {
+        $this->warmupCaches();
+        return !empty($this->_parsedElementsCache);
+    }
+
     public function warmupCaches()
     {
         if (isset($this->_contentsCache)) return;

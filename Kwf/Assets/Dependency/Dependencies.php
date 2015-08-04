@@ -21,4 +21,9 @@ class Kwf_Assets_Dependency_Dependencies extends Kwf_Assets_Dependency_Abstract
         $this->_dependencies[$type][] = $dependency;
         return $this;
     }
+
+    public function usesLanguage()
+    {
+        return false;
+    }
 }

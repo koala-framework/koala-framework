@@ -23,4 +23,9 @@ class Kwf_Assets_Dependency_Dynamic_FacebookAppId extends Kwf_Assets_Dependency_
 
         return "Kwf.FacebookAppIds = " . json_encode($appIds) . ";\n";
     }
+
+    public function usesLanguage()
+    {
+        return false;
+    }
 }

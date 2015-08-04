@@ -41,4 +41,9 @@ class Kwf_Assets_Dependency_FontFace extends Kwf_Assets_Dependency_Abstract
     {
         return 'FontFace'.ucfirst($this->_name);
     }
+
+    public function usesLanguage()
+    {
+        return false;
+    }
 }

@@ -11,4 +11,9 @@ class Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys extends Kwf_Assets_Depende
         $json = json_encode(Kwf_Config::getValueArray('googleMapsApiKeys'));
         return "module.exports = $json;";
     }
+
+    public function usesLanguage()
+    {
+        return false;
+    }
 }

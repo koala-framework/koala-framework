@@ -24,4 +24,9 @@ class Kwf_Assets_Dependency_Dynamic_LoaderConfig extends Kwf_Assets_Dependency_A
         $ret .= "window.Kwf.Loader.config = ".json_encode($config).";\n";
         return $ret;
     }
+
+    public function usesLanguage()
+    {
+        return false;
+    }
 }

@@ -14,6 +14,11 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         return $ret;
     }
 
+    public function usesLanguage()
+    {
+        return false;
+    }
+
     protected function _processContents($ret)
     {
         $pathType = $this->getType();

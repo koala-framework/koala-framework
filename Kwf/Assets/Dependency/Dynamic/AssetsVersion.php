@@ -12,4 +12,9 @@ class Kwf_Assets_Dependency_Dynamic_AssetsVersion extends Kwf_Assets_Dependency_
             "Kwf.application = { assetsVersion: '".Kwf_Assets_Dispatcher::getAssetsVersion()."' };\n";
         return $ret;
     }
+
+    public function usesLanguage()
+    {
+        return false;
+    }
 }

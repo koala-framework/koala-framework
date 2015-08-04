@@ -77,18 +77,34 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
         }
     }
 
+    public function usesLanguage()
+    {
+        $ret = false;
+        foreach ($this->_componentDependencies as $dep) {
+            if ($dep->usesLanguage()) {
+                $ret = true;
+            }
+        }
+        return $ret;
+    }
+
     public function getContentsPacked($language)
     {
         $hash = '';
         foreach ($this->_componentDependencies as $dep) {
-            if ($dep instanceof Kwf_Assets_Dependency_File) {
-                $hash .= md5_file($dep->getAbsoluteFileName());
+            $src = $dep->getContentsSource();
+            if ($src['type'] == 'file') {
+                $hash .= md5_file($src['file']);
+            } else if ($src['type'] == 'contents') {
+                $hash .= md5($src['contents']);
             } else {
-                $hash .= md5($dep->getContents('en'));
+                throw new Kwf_Exception_NotYetImplemented();
             }
         }
         $hash = md5($hash);
-        $cacheFile = "cache/componentassets/{$this->_componentClass}-".Kwf_Config::getValue('application.uniquePrefix')."-$hash";
+        $cacheFile = "cache/componentassets/{$this->_componentClass}".
+            ($this->usesLanguage() ? "-$language" : '').
+            "-".Kwf_Config::getValue('application.uniquePrefix')."-$hash";
 
         if (file_exists($cacheFile)) {
             $ret = Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));

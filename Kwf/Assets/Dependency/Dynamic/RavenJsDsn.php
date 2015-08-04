@@ -16,4 +16,9 @@ class Kwf_Assets_Dependency_Dynamic_RavenJsDsn extends Kwf_Assets_Dependency_Abs
         );
         return "Kwf.RavenJsConfig = ".json_encode($data).";";
     }
+
+    public function usesLanguage()
+    {
+        return false;
+    }
 }
