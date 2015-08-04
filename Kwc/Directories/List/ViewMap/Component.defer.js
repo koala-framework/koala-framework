@@ -1,38 +1,38 @@
-var onReady = require('kwf/on-ready-ext2');
+var $ = require('jQuery');
+var onReady = require('kwf/on-ready');
+var formRegistry = require('kwf/frontend-form/form-registry');
+var gmapLoader = require('kwf/google-map/loader');
+var gmapMap = require('kwf/google-map/map');
 
-Kwf.namespace('Kwc.Directories.List.ViewMap');
-Kwc.Directories.List.ViewMap.renderedMaps = [];
+var renderedMaps = [];
 
-Kwc.Directories.List.ViewMap.renderMap = function(map) {
-    if (Kwc.Directories.List.ViewMap.renderedMaps.indexOf(map) != -1) return;
-    Kwc.Directories.List.ViewMap.renderedMaps.push(map);
+var renderMap = function(map) {
+    if (renderedMaps.indexOf(map) != -1) return;
+    renderedMaps.push(map);
 
-    var mapContainer = new Ext2.Element(map);
-    var cfg = mapContainer.down(".options", true);
+    var cfg = map.find(".options");
     if (!cfg) return;
-    cfg = Ext2.decode(cfg.value);
+    cfg = $.parseJSON(cfg.val());
 
-    cfg.mapContainer = mapContainer;
-    var cls = eval(cfg.mapClass) || Kwf.GoogleMap.Map;
+    cfg.mapContainer = map;
+    var cls = eval(cfg.mapClass) || gmapMap;
     var myMap = new cls(cfg);
     map.map = myMap;
 
-    Kwf.GoogleMap.load(function() {
+    gmapLoader(function() {
         this.show();
     }, myMap);
 
     if (cfg.searchFormComponentId) {
-        var searchForm = Kwc.Form.formsByComponentId[cfg.searchFormComponentId];
+        var searchForm = formRegistry.getFormByComponentId(cfg.searchFormComponentId);
         searchForm.on('beforeSubmit', function(form, ev) {
-            myMap.setBaseParams(
-                Ext2.applyIf(searchForm.getValues(), myMap.getBaseParams())
-            );
+            myMap.setBaseParams($.extend(searchForm.getValues(), myMap.getBaseParams()));
             myMap.centerMarkersIntoView();
             return false;
         }, this);
     }
 };
 
-onReady.onRender('div.kwcDirectoriesListViewMap', function(map) {
-    Kwc.Directories.List.ViewMap.renderMap(map.dom);
+onReady.onRender('.kwcClass', function(map) {
+    renderMap(map);
 }, { checkVisibility: true });

@@ -1,48 +1,43 @@
+var $ = require('jQuery');
 var responsiveEl = require('kwf/responsive-el');
 var onReady = require('kwf/on-ready');
+var gmapLoader = require('kwf/google-map/loader');
+var gmapMap = require('kwf/google-map/map');
 
 responsiveEl('.kwcClass', [500]);
 
-Ext2.namespace('Kwc.Advanced.GoogleMap');
-Kwc.Advanced.GoogleMap.renderedMaps = [];
+var renderedMaps = [];
 
-Kwc.Advanced.GoogleMap.renderMap = function(map) {
-    if (Kwc.Advanced.GoogleMap.renderedMaps.indexOf(map) != -1) return;
-    Kwc.Advanced.GoogleMap.renderedMaps.push(map);
+var renderMap = function(map) {
+    if (renderedMaps.indexOf(map) != -1) return;
+    renderedMaps.push(map);
 
-    var mapContainer = new Ext2.Element(map);
-    var cfg = mapContainer.down(".options", true);
+    var cfg = map.find(".options", true);
     if (!cfg) return;
-    cfg = Ext2.decode(cfg.value);
+    cfg = $.parseJSON(cfg.val());
 
-    var text = mapContainer.down("div.text");
-    cfg.mapContainer = mapContainer;
+    var text = map.find("div.text");
+    cfg.mapContainer = map;
     if (!cfg.markers) {
         cfg.markers = {
             longitude : cfg.longitude,
             latitude  : cfg.latitude,
             autoOpenInfoWindow: cfg.autoOpenInfoWindow
         };
-        if (text) cfg.markers.infoHtml = text.dom.innerHTML;
+        if (text.length) cfg.markers.infoHtml = text.html();
     }
 
-    var myMap = new Kwf.GoogleMap.Map(cfg);
+    var myMap = new gmapMap(cfg);
 
-    Kwf.GoogleMap.load(function() {
+    gmapLoader(function() {
         this.show();
     }, myMap);
 
     return myMap;
 };
 
-onReady.onContentReady(function(el, options) {
-    (function(el) {
-        var maps = Ext2.DomQuery.select('div.kwcAdvancedGoogleMapView', el);
-        Ext2.each(maps, function(map) {
-            if (!map.gmapObject && Ext2.get(map).isVisible(true)) {
-                map.gmapObject = Kwc.Advanced.GoogleMap.renderMap(map);
-            }
-        });
-    }).defer(1, this, [el]);
-});
-
+onReady.onRender('.kwcClass', function(map) {
+    if (!map.get('gmapObject') && !map.is(':hidden')) {
+        map.data('gmapObject', renderMap(map));
+    }
+}, { checkVisibility: true });

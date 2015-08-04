@@ -4,7 +4,7 @@
 .kwcClass .fromAddress input { float: left; padding: 3px; }
 .kwcClass .fromAddress input.textBefore { width: 98%; color: $typo; display: block; margin-bottom: 10px;}
 .kwcClass.gt500 .fromAddress input.textBefore {width: 50%; display: block;}
-.kwcClass .fromAddress input.kwfClearOnFocusBlurred { color: $gray; }
+.kwcClass .fromAddress input.kwfClearOnFocusBlurred { color: lighten($typo, 80); }
 .kwcClass .fromAddress input.textOn { color: $typo; }
 .kwcClass .fromAddress button {
     font-weight: bold;
