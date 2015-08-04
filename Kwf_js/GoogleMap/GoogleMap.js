@@ -212,7 +212,9 @@ Ext2.extend(Kwf.GoogleMap.Map, Ext2.util.Observable, {
             streetViewControl: this.config.streetViewControl,
             scrollwheel: this.config.scrollwheel
         };
-
+        if (this.config.styles) {
+            mapOptions.styles = this.config.styles;
+        }
         this.gmap = new google.maps.Map(this.mapContainer.down(".container").dom,
             mapOptions);
         if (this.mapContainer.down(".mapDir")) {

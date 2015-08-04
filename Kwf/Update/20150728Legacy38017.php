@@ -1,5 +1,5 @@
 <?php
-class Kwf_Update_38017 extends Kwf_Update
+class Kwf_Update_20150728Legacy38017 extends Kwf_Update
 {
     protected $_tags = array('kwc');
 
