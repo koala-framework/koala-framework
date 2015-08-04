@@ -25,7 +25,7 @@
     <? } ?>
     <div class="teaser">
         <p><?=$this->item->row->teaser?></p>
-        <?=$this->componentLink($this->item,trlKwf('Read more').' »');?>
+        <?=$this->componentLink($this->item, trlKwf('Read more').' &raquo;');?>
     </div>
     <div class="clear"></div>
 </div>
