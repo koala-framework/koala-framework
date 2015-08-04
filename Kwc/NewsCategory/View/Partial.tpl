@@ -6,7 +6,7 @@
             <span class="publishDate"><?=$this->date($this->item->publish_date)?>
                 <?
                 if ($this->item->categories) { ?>
-                    | <?= trlpKwf('Category', 'Categories', count($this->item->categories)); ?>
+                    | <?= $this->data->trlpKwf('Category', 'Categories', count($this->item->categories)); ?>
                     <? $nci = 0;
                     foreach ($this->item->categories as $nc) {
                         if ($nci++ >= 1) echo ', ';
