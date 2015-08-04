@@ -136,11 +136,11 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
             $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
         }
 
-        if ($this->countUploads() < 50000) {
+        if ($this->countUploads() < 5000) {
             $this->renameUploads();
             $this->createHashes();
         } else {
-            echo "More than 50000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-to39 rename-uploads\"\n\"php bootstrap.php update-to39 create-hashes\"\n";
+            echo "More than 5000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-to39 rename-uploads\"\n\"php bootstrap.php update-to39 create-hashes\"\n";
         }
     }
 
