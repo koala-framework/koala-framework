@@ -1,5 +1,6 @@
 var onReady = require('kwf/on-ready-ext2');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
+var historyState = require('kwf/history-state');
 
 Ext2.ns('Kwc.FulltextSearch.Box');
 Kwc.FulltextSearch.Box.Component = function(el, config) {
@@ -11,12 +12,12 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
         this.el.child('.submitWrapper').hide();
     }
 
-    Kwf.Utils.HistoryState.on('popstate', function() {
-        if (Kwf.Utils.HistoryState.currentState.searchVisible) {
+    historyState.on('popstate', function() {
+        if (historyState.currentState.searchVisible) {
             if (this.searchMainContent) {
                 this.showSearch();
             } else {
-                this.searchForm.setValues(Kwf.Utils.HistoryState.currentState.searchBoxValues);
+                this.searchForm.setValues(historyState.currentState.searchBoxValues);
                 this.loadSearch();
             }
         } else {
@@ -34,9 +35,9 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
     if (location.pathname == config.searchUrl) {
         //we are already on search page; nothing to do
         this.searchMainContent = Ext2.select('.kwfMainContent').first();
-        Kwf.Utils.HistoryState.currentState.searchBoxValues = this.searchForm.getValues();
-        Kwf.Utils.HistoryState.currentState.searchVisible = true;
-        Kwf.Utils.HistoryState.updateState();
+        historyState.currentState.searchBoxValues = this.searchForm.getValues();
+        historyState.currentState.searchVisible = true;
+        historyState.updateState();
         return;
     }
     this.previousSearchFormValues = this.searchForm.getValues();
@@ -57,7 +58,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
         }
     }, this);
 
-    Kwf.Utils.HistoryState.currentState.searchVisible = false;
+    historyState.currentState.searchVisible = false;
     this.previousMainContent = Ext2.select('.kwfMainContent').first();
 };
 
@@ -69,9 +70,9 @@ Kwc.FulltextSearch.Box.Component.prototype =
             return;
         }
 
-        Kwf.Utils.HistoryState.currentState.searchBoxValues = this.searchForm.getValues();
+        historyState.currentState.searchBoxValues = this.searchForm.getValues();
 
-        if (Kwf.Utils.HistoryState.currentState.searchVisible) return;
+        if (historyState.currentState.searchVisible) return;
 
         var values = this.searchForm.getValues();
         var diffFound = false;
@@ -96,7 +97,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
 
         this.loadSearch({
             success: function() {
-                Kwf.Utils.HistoryState.currentState.searchVisible = true;
+                historyState.currentState.searchVisible = true;
                 var ajaxViewEl = this.searchMainContent.child('.kwcDirectoriesListViewAjax');
                 if (ajaxViewEl && ajaxViewEl.kwcViewAjax) {
                     ajaxViewEl.kwcViewAjax.pushSearchFormHistoryState();

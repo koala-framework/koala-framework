@@ -1,13 +1,15 @@
+var historyState = require('kwf/history-state');
+
 Kwf.EyeCandy.List.Plugins.ActiveChanger.HistoryState = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
         this.list.on('activeChanged', function(item) {
             this._activate(item);
         }, this);
 
-        Kwf.Utils.HistoryState.on('popstate', function() {
+        historyState.on('popstate', function() {
             var activeUrl = false;
-            if (Kwf.Utils.HistoryState.currentState.eyeCandyListActive) {
-                activeUrl = Kwf.Utils.HistoryState.currentState.eyeCandyListActive;
+            if (historyState.currentState.eyeCandyListActive) {
+                activeUrl = historyState.currentState.eyeCandyListActive;
             }
             if (activeUrl) {
                 this.list.getItems().each(function(item) {
@@ -28,12 +30,12 @@ Kwf.EyeCandy.List.Plugins.ActiveChanger.HistoryState = Ext2.extend(Kwf.EyeCandy.
         if (!this.list.el.isVisible(true)) return;
         if (item.el.down('a')) {
             var href = item.el.down('a').dom.href;
-            if (!Kwf.Utils.HistoryState.currentState.eyeCandyListActive) {
-                Kwf.Utils.HistoryState.currentState.eyeCandyListActive = href;
-                Kwf.Utils.HistoryState.updateState();
+            if (!historyState.currentState.eyeCandyListActive) {
+                historyState.currentState.eyeCandyListActive = href;
+                historyState.updateState();
             } else {
-                Kwf.Utils.HistoryState.currentState.eyeCandyListActive = href;
-                Kwf.Utils.HistoryState.pushState(document.title, href);
+                historyState.currentState.eyeCandyListActive = href;
+                historyState.pushState(document.title, href);
             }
         }
     }
