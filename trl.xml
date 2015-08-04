@@ -4021,6 +4021,15 @@
 <ua>Категорії</ua>
 </text>
 <text>
+<en>Category</en>
+<de>Kategorie</de>
+<id>911</id>
+<ro>Categorie</ro>
+<sl>Kategorija</sl>
+<ru>Категория</ru>
+<ua>Категорія</ua>
+</text>
+<text>
 <en>Request password</en>
 <de>Passwort anfordern</de>
 <id>543</id>
@@ -6252,15 +6261,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Prostor za poljubno spremenljivko</sl>
 <ru>Пространство для любой переменной</ru>
 <ua>foobar</ua>
-</text>
-<text>
-<en>Category</en>
-<de>Kategorie</de>
-<id>911</id>
-<ro>Categorie</ro>
-<sl>Kategorija</sl>
-<ru>Категория</ru>
-<ua>Категорія</ua>
 </text>
 <text>
 <en>Domain</en>
@@ -9983,15 +9983,6 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Povpraševanje</sl>
 <ru>Запросы</ru>
 <ua>Запити</ua>
-</text>
-<text>
-<en>Categorie</en>
-<de>Kategorie</de>
-<id>1429</id>
-<ro>Categorie</ro>
-<sl>Kategorija</sl>
-<ru>Категория</ru>
-<ua>Категорії</ua>
 </text>
 <text>
 <en>Remember password on this computer</en>
