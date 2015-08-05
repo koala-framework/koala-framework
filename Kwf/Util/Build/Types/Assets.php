@@ -171,9 +171,9 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
                 foreach ($exts as $extension) {
 
+                    $progress->next(1, "$depName $extension $language");
                     $packageContents = $p->getPackageContents(self::$_mimeTypeByExtension[$extension], $language);
                     $maxMTime = $p->getMaxMTime(self::$_mimeTypeByExtension[$extension]);
-                    $progress->next(1, "$depName $extension $language");
 
                     $progress->next(1, "$depName $extension $language source");
                     $this->_buildPackageContents($packageContents, $maxMTime, $p, $extension, $language);
