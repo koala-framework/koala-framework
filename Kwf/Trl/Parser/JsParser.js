@@ -60,7 +60,7 @@ var recursiveCheckForTrl = function(node, translations, contentLines) {
                 translation.source = node.callee.name.indexOf('Kwf') > -1 ? 'kwf' : 'web';
             }
         } else if (calledFunction == 'trlcKwf' || calledFunction == 'trlc') {
-            if (node.arguments.length != 2 && arguments.length != 3) { // context, singular[, variables]
+            if (node.arguments.length != 2 && node.arguments.length != 3) { // context, singular[, variables]
                 translation.error_short = ERROR_WRONG_NR_OF_ARGUMENTS
             } else if ((node.arguments[0].type != 'Literal' || node.arguments[1].type != 'Literal')) {
                 translation.error_short = ERROR_WRONG_ARGUMENT_TYPE;
