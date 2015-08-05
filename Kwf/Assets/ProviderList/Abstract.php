@@ -133,19 +133,6 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         return $ret;
     }
 
-    public function getDefaultDependencies()
-    {
-        $ret = array();
-        foreach ($this->_providers as $p) {
-            foreach ($p->getDefaultDependencies() as $i) {
-                if (!$i) throw new Kwf_Exception("got null as defaultDependency from ".get_class($p));
-                $ret[] = $i;
-            }
-        }
-        return $ret;
-    }
-
-
     public function serialize()
     {
         throw new Kwf_Exception("unsupported, should not be required");

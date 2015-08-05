@@ -13,9 +13,11 @@ abstract class Kwf_Assets_Provider_Abstract
         return array();
     }
 
-    public function getDefaultDependencies()
+    /**
+     * @deprecated doesn't exist anymore
+     */
+    public final function getDefaultDependencies()
     {
-        return array();
     }
 
     public function getDependencyNameByAlias($aliasDependencyName)

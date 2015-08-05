@@ -81,15 +81,6 @@ class Kwf_Assets_Package
     {
         if (!isset($this->_cacheFilteredUniqueDependencies[$mimeType])) {
             $this->_cacheFilteredUniqueDependencies[$mimeType] = $this->getDependency()->getFilteredUniqueDependencies($mimeType);
-            $defaults = array();
-            foreach ($this->_providerList->getDefaultDependencies() as $i) {
-                foreach ($i->getFilteredUniqueDependencies($mimeType) as $dep) {
-                    if (!in_array($dep, $this->_cacheFilteredUniqueDependencies[$mimeType], true) && !in_array($dep, $defaults, true)) {
-                        $defaults[] = $dep;
-                    }
-                }
-            }
-            $this->_cacheFilteredUniqueDependencies[$mimeType] = array_merge($defaults, $this->_cacheFilteredUniqueDependencies[$mimeType]);
         }
         return $this->_cacheFilteredUniqueDependencies[$mimeType];
     }
