@@ -3,7 +3,7 @@ if (!Kwf.Utils.Element) Kwf.Utils.Element = {};
 
 Kwf.Utils.Element._cachedWidthEls = [];
 Kwf.Utils.Element.getCachedWidth = function(e) {
-    if (e.dom) renderedEl = e.dom; //ExtJS Element (hopefully)
+    if (e.dom) e = e.dom; //ExtJS Element (hopefully)
     if (e instanceof $) e = e.get(0);
     var ret = false;
     while (e) {
