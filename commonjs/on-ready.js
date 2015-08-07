@@ -1,4 +1,4 @@
-var $ = require('jquery');
+var $ = require('jQuery');
 var matchesSelector = require('matches-selector');
 var elementIsVisible = require('kwf/element/is-visible');
 var benchmarkBox = require('kwf/benchmark/box');

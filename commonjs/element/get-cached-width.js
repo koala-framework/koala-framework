@@ -1,4 +1,4 @@
-var $ = require('jquery');
+var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var benchmarkBox = require('kwf/benchmark/box');
 

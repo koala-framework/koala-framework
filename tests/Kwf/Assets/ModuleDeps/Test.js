@@ -1,3 +1,3 @@
 var f = require('./Foo');
-var j = require('jquery');
+var j = require('jQuery');
 f();

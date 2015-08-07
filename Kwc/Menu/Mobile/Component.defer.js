@@ -1,6 +1,6 @@
 var onReady = require('kwf/on-ready');
 var _ = require('underscore');
-var $ = require('jquery');
+var $ = require('jQuery');
 var trlKwf = require('kwf/trl').trlKwf;
 
 onReady.onRender('.kwcClass', function mobileMenu(el, config) {
