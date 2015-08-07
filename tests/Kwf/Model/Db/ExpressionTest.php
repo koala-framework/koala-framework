@@ -148,7 +148,7 @@ class Kwf_Model_Db_ExpressionTest extends Kwf_Test_TestCase
 
         ));
         $select = $this->_model->select()->where($expr);
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE ((testtable.foo = 'aaa') OR (testtable.foo = 'bbb'))",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (((testtable.foo = 'aaa') OR (testtable.foo = 'bbb')))",
             $this->_model->createDbSelect($select)->__toString());
     }
 
@@ -160,7 +160,7 @@ class Kwf_Model_Db_ExpressionTest extends Kwf_Test_TestCase
 
         ));
         $select = $this->_model->select()->where($expr);
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE ((testtable.foo = 'aaa') AND (testtable.foo = 'bbb'))",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (((testtable.foo = 'aaa') AND (testtable.foo = 'bbb')))",
             $this->_model->createDbSelect($select)->__toString());
     }
 
@@ -196,8 +196,8 @@ class Kwf_Model_Db_ExpressionTest extends Kwf_Test_TestCase
         $expr4 = new Kwf_Model_Select_Expr_Or(array($expr, $expr2, $expr3));
 
         $select = $this->_model->select()->where($expr4);
-        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (((testtable.foo = 'aaa') AND ".
-         "(testtable.foo = 'bbb')) OR ((testtable.foo = 'aaa') OR (testtable.foo = 'bbb')) OR (NOT (testtable.foo = 'aaa')))",
+        $this->assertEquals("SELECT \"testtable\".* FROM \"testtable\" WHERE (((((testtable.foo = 'aaa') AND ".
+         "(testtable.foo = 'bbb'))) OR (((testtable.foo = 'aaa') OR (testtable.foo = 'bbb'))) OR (NOT (testtable.foo = 'aaa'))))",
             $this->_model->createDbSelect($select)->__toString());
 
     }

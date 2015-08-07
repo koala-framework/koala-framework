@@ -73,4 +73,11 @@ class Kwf_Model_DbWithConnection_ExprChildSum_Test extends Kwf_Test_TestCase
         $sum = $row->foo_value_sum;
         $this->assertEquals(6, $sum);
     }
+
+    public function testOrExpression()
+    {
+        $select = new Kwf_Model_Select();
+        $select->whereEquals('or_expr', 0);
+        $this->assertEquals(1, $this->_modelBar->countRows($select));
+    }
 }

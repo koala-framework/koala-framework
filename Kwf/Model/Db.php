@@ -479,13 +479,13 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             foreach ($expr->getExpressions() as $expression) {
                 $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect, $depOf, $tableNameAlias).")";
             }
-            return implode(" OR ", $sqlExpressions);
+            return '(' . implode(" OR ", $sqlExpressions) . ')';
         } else if ($expr instanceof Kwf_Model_Select_Expr_And) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {
                 $sqlExpressions[] = "(".$this->_createDbSelectExpression($expression, $dbSelect, $depOf, $tableNameAlias).")";
             }
-            return implode(" AND ", $sqlExpressions);
+            return '(' . implode(" AND ", $sqlExpressions) . ')';
         } else if ($expr instanceof Kwf_Model_Select_Expr_Add) {
             $sqlExpressions = array();
             foreach ($expr->getExpressions() as $expression) {
