@@ -8,8 +8,8 @@ class Kwf_Form_Cards_NotAllowBlank_TestController extends Kwf_Controller_Action_
 
     protected function _initFields()
     {
-        $cards = $this->_form->add(new Kwf_Form_Container_Cards('type', trlKwf('Type')));
-        $cards->setCombobox(new Kwf_Form_Field_Radio('type', trlKwf('Type')));
+        $cards = $this->_form->add(new Kwf_Form_Container_Cards('type', 'Type'));
+        $cards->setCombobox(new Kwf_Form_Field_Radio('type', 'Type'));
 
         $card = $cards->add();
         $card->setTitle('foocard');
@@ -21,7 +21,7 @@ class Kwf_Form_Cards_NotAllowBlank_TestController extends Kwf_Controller_Action_
         $card = $cards->add();
         $card->setTitle('barcard');
         $card->setName("bar");
-        $fieldset = $card->add(new Kwf_Form_Container_FieldSet(trl('Fieldset legend')));
+        $fieldset = $card->add(new Kwf_Form_Container_FieldSet('Fieldset legend'));
 
         $mf = $fieldset->add(new Kwf_Form_Field_MultiFields('ToRelation'));
         $mf->setMinEntries(0);

@@ -4,6 +4,6 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Model extends Kwf_Component_FieldMo
     protected function _init()
     {
         parent::_init();
-        $this->setDefault(array('link_text' => trlKwf('Read more »')));
+        $this->setDefault(array('link_text' => trlKwf('Read more').' &raquo;'));
     }
 }
