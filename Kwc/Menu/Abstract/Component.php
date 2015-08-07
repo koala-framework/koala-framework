@@ -206,6 +206,7 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                 'last' => false
             );
             $class = array();
+            $class[] = self::getBemClass($this, 'item');
             if ($i == 0) { $class[] = self::getBemClass($this, 'item--first', 'first'); }
             if ($i == count($pages)-1) {
                 $class[] = self::getBemClass($this, 'item--last', 'last');
