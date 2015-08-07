@@ -21,6 +21,11 @@ class Kwf_Assets_Provider_AtRequires extends Kwf_Assets_Provider_Abstract
             throw new Kwf_Exception_NotYetImplemented();
         }
 
+        if (strpos($fileContents, '// @require') === false) {
+            //shortcut
+            return $deps;
+        }
+
         // remove comments to avoid dependencies from docs/examples
         $fileContents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $fileContents);
 
