@@ -1,6 +1,8 @@
 <?php
 class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
 {
+    private $_parsed = array();
+
     public function __construct()
     {
     }
@@ -26,6 +28,10 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
 
     private function _parseDependencies($dependency)
     {
+        if (in_array($dependency, $this->_parsed, true)) return array();
+
+        $this->_parsed[] = $dependency;
+
         $ret = array();
         $deps = array();
 
