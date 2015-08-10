@@ -1206,7 +1206,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         $ret = array();
         foreach (glob('models/*.php') as $m) {
             $m = str_replace('/', '_', substr($m, 7, -4));
-            if (is_instance_of($m, 'Kwf_Model_Interface')) {
+            $reflectionClass = new ReflectionClass($m);
+            if (!$reflectionClass->isAbstract() && is_instance_of($m, 'Kwf_Model_Interface')) {
                 self::_findAllInstancesProcessModel($ret, $m);
             }
         }
