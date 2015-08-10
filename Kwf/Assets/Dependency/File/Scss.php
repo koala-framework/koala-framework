@@ -1,6 +1,7 @@
 <?php
 class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 {
+    private $_cacheWarm = false;
     private function _getCacheFileName()
     {
         $fileName = $this->getFileNameWithType();
@@ -25,6 +26,8 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 
     public function warmupCaches()
     {
+        if ($this->_cacheWarm) return;
+        $this->_cacheWarm = true;
         $cacheFile = $this->_getCacheFileName();
         $useCache = false;
         if (file_exists("$cacheFile.sourcetimes")) {
