@@ -123,7 +123,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             $depName = $p->getDependencyName();
             foreach ($exts as $extension) {
                 $progress->next(1, "$depName $extension");
-                $countDependencies += count($p->getFilteredUniqueDependencies(self::$_mimeTypeByExtension[$extension]));
+                $p->getFilteredUniqueDependencies(self::$_mimeTypeByExtension[$extension]);
 
                 $cacheId = $p->getMaxMTimeCacheId(self::$_mimeTypeByExtension[$extension]);
                 if (!$cacheId) throw new Kwf_Exception("Didn't get cacheId for ".get_class($p));
@@ -135,6 +135,10 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
                     file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
                 }
+            }
+            $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_UniqueFilter(new Kwf_Assets_Dependency_Iterator_Recursive($p->getDependency(), Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL)), RecursiveIteratorIterator::CHILD_FIRST);
+            foreach ($it as $i) {
+                $countDependencies++;
             }
         }
         $progress->finish();
@@ -148,11 +152,10 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $progress = new Zend_ProgressBar($c, 0, $countDependencies);
 
         foreach ($packages as $p) {
-            foreach ($exts as $extension) {
-                foreach ($p->getFilteredUniqueDependencies(self::$_mimeTypeByExtension[$extension]) as $dep) {
-                    $progress->next(1, "$dep");
-                    $dep->warmupCaches();
-                }
+            $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_UniqueFilter(new Kwf_Assets_Dependency_Iterator_Recursive($p->getDependency(), Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL)), RecursiveIteratorIterator::CHILD_FIRST);
+            foreach ($it as $dep) {
+                $progress->next(1, "$dep");
+                $dep->warmupCaches();
             }
         }
         $progress->finish();
