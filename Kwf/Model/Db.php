@@ -280,7 +280,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $dbSelect;
     }
 
-    protected function _applySelect(Zend_Db_Select $dbSelect, Kwf_Model_Select $select)
+    public function _applySelect(Zend_Db_Select $dbSelect, Kwf_Model_Select $select)
     {
         if ($dbSelect instanceof Zend_Db_Table_Select) {
             $dbSelect->setIntegrityCheck(false);
@@ -649,7 +649,9 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             if (!$depSelect) $depSelect = new Kwf_Model_Select();
 
             if ($dbDepM instanceof Kwf_Model_Union) {
-                $depDbSelect = $dbDepM->getDbSelects($depSelect, array($ref['column']));
+                $depDbSelects = $dbDepM->getDbSelects($depSelect, array($ref['column']));
+                $depDbSelect = Kwf_Registry::get('db')->select();
+                $depDbSelect->union($depDbSelects);
             } elseif ($dbDepM instanceof Kwf_Model_Db) {
                 $col1 = $dbDepM->_formatField($ref['column'], null /* select fehlt - welches ist das korrekte?*/);
                 $depDbSelect = $dbDepM->_getDbSelect($depSelect);

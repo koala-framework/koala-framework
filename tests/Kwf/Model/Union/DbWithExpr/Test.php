@@ -39,11 +39,11 @@ class Kwf_Model_Union_DbWithExpr_Test extends Kwf_Model_Union_Abstract_Test
     {
         $row = $this->_m->getRow('1m2');
         $a = $row->toArray();
-        $this->assertEquals(array('id' => '1m2', 'foo' => '2', 'bar' => '2', 'baz' => '2', 'sib' => 'ss2'), $a);
+        $this->assertEquals(array('id' => '1m2', 'foo' => '2', 'bar' => '2', 'baz' => '2', 'sib' => 'ss2', 'sib_bool' => 0), $a);
 
         $row = $this->_m->getRow('2m2');
         $a = $row->toArray();
-        $this->assertEquals(array('id' => '2m2', 'foo' => '333', 'bar' => 'yy1', 'baz' => 'foobar', 'sib' => 'sss3'), $a);
+        $this->assertEquals(array('id' => '2m2', 'foo' => '333', 'bar' => 'yy1', 'baz' => 'foobar', 'sib' => 'sss3', 'sib_bool' => 1), $a);
     }
 }
 
