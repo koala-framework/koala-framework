@@ -43,9 +43,9 @@ class Kwc_Root_Category_Component extends Kwc_Abstract
 
     private static function _validateHasNotChildWithStaticHome($cls, array &$validated = array())
     {
-        if (in_array($cls, $validated)) return;
+        if (isset($validated[$cls])) return;
 
-        $validated[] = $cls;
+        $validated[$cls] = true;
         foreach (Kwf_Component_Generator_Abstract::getOwnInstances($cls) as $g) {
             if ($g instanceof Kwf_Component_Generator_Page_StaticHome) {
                 throw new Kwf_Exception("'$cls' must not have StaticHome, either remove StaticHome, remove category generator or disable hasHome for Category/Generator");
