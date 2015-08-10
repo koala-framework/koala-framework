@@ -1,0 +1,63 @@
+@import "compass/css3/transition";
+@import "compass/css3/transform";
+
+//fadeIn, fadeInSlideInBottom, fadeInZoom
+
+@mixin loaded-animation($animation-style) {
+    @if $animation-style == fadeIn {
+        .container {
+            &.webResponsiveImgLoading {
+                img {
+                    opacity: 0;
+                }
+            }
+
+            &:not(.webResponsiveImgLoading) {
+                img {
+                    opacity: 1;
+                    @include transition-property(all);
+                    @include transition-duration(0.4s);
+                    @include transition-timing-function(ease);
+                }
+            }
+        }
+    } @else if $animation-style == fadeInSlideInBottom {
+        .container {
+            &.webResponsiveImgLoading {
+                img {
+                    opacity: 0;
+                    @include transform(translate(0, 20px));
+                }
+            }
+
+            &:not(.webResponsiveImgLoading) {
+                img {
+                    opacity: 1;
+                    @include transition-property(all);
+                    @include transition-duration(0.4s);
+                    @include transition-timing-function(ease);
+                    @include transform(translate(0, 0));
+                }
+            }
+        }
+    } @else if $animation-style == fadeInZoom {
+        .container {
+            &.webResponsiveImgLoading {
+                img {
+                    opacity: 0;
+                    @include transform(scale(0.95));
+                }
+            }
+
+            &:not(.webResponsiveImgLoading) {
+                img {
+                    opacity: 1;
+                    @include transition-property(all);
+                    @include transition-duration(0.4s);
+                    @include transition-timing-function(ease);
+                    @include transform(scale(1));
+                }
+            }
+        }
+    }
+}
