@@ -8,7 +8,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
     protected $_sourceRows = array();
     protected $_allDb = false;
     protected $_mergeSelects = array();
-    
+
     public function __construct(array $config = array())
     {
         if (isset($config['models'])) $this->_models = (array)$config['models'];
@@ -214,6 +214,14 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             } else {
                 return null;
             }
+        } else if ($expr instanceof Kwf_Model_Select_Expr_IsNull) {
+            $f = $expr->getField();
+            if (!in_array($f, $this->_getOwnColumns()) && $targetModel->hasColumn($f)) {
+                $cls = get_class($expr);
+                return new $cls($f);
+            } else {
+                return null;
+            }
         } else if ($expr instanceof Kwf_Model_Select_Expr_Not) {
             $e = $this->_convertExprForSibling($expr->getExpression(), $targetModel);
             if (!$e) return null;
@@ -275,13 +283,17 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             $select = $this->select($select);
         }
 
-        $this->_selectIdsFromSiblingModels($select);
-
         $ret = 0;
-        foreach ($this->_models as $modelKey => $m) {
-            $s = $this->_convertSelect($select, $modelKey, $m);
-            if (!$s) continue;
-            $ret += $m->countRows($s);
+        if ($this->_allDb) {
+            $dbSelects = $this->getDbSelects($select);
+            foreach ($dbSelects as $dbSelect) {
+                $dbSelect->reset(Zend_Db_Select::COLUMNS);
+                $dbSelect->columns(array(new Zend_Db_Expr('COUNT(*)')));
+                $ret += Kwf_Registry::get('db')->fetchOne($dbSelect);
+            }
+        } else {
+            $tempModel = $this->_createTempModel($select);
+            $ret = $tempModel->countRows($select);
         }
         return $ret;
     }
@@ -299,37 +311,13 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         return 'id';
     }
 
-    private function _selectIdsFromSiblingModels(Kwf_Model_Select $select)
-    {
-        $filteredSiblingIds = null;
-        foreach ($this->getSiblingModels() as $sm) {
-            $s = $this->_convertSelectForSibling($select, $sm);
-            if ($s->getParts() == array()) {
-                //nothing to filter, skip
-                continue;
-            }
-            $ids = $sm->getIds($s);
-            if (is_null($filteredSiblingIds)) {
-                $filteredSiblingIds = $ids;
-            } else {
-                $filteredSiblingIds = array_intersect($filteredSiblingIds, $ids);
-            }
-        }
-
-        if (!is_null($filteredSiblingIds)) {
-            $select->whereEquals('id', $filteredSiblingIds);
-        }
-    }
-
-    public function getDbSelects($select, $colums = array('id'))
+    public function getDbSelects($select, $columns = array('id'))
     {
         if (!$this->_allDb) {
             throw new Kwf_Exception("dbSelect can only be created if all models are db model");
         }
 
-        $this->_selectIdsFromSiblingModels($select);
-
-        $dbSelects = array();
+        $ret = array();
         $order = null;
         foreach ($this->_models as $modelKey => $m) {
             $s = $this->_convertSelect($select, $modelKey, $m);
@@ -337,7 +325,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             $options = array(
                 'columns' => array()
             );
-            foreach ($colums as $col) {
+            foreach ($columns as $col) {
                 if ($col == 'id') {
                     $col = $m->getPrimaryKey();
                 } else {
@@ -348,12 +336,26 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             while ($m instanceof Kwf_Model_Proxy) $m = $m->getProxyModel();
             $dbSelect = $m->_createDbSelectWithColumns($s, $options);
             $dbSelectColumns = array_values($dbSelect->getPart(Zend_Db_Select::COLUMNS));
-            foreach ($colums as $kCol=>$col) {
+            foreach ($columns as $kCol=>$col) {
                 $dbSelectColumns[$kCol][2] = $col;
                 if ($col == 'id') {
                     $dbSelectColumns[$kCol][1] = new Zend_Db_Expr("CONCAT('$modelKey', ".$dbSelectColumns[$kCol][1].")");
                 }
             }
+
+            foreach ($this->getSiblingModels() as $sm) {
+                $tableName = $m->getTableName();
+                $primaryKey = $m->getPrimaryKey();
+                $siblingTableName = $sm->getTableName();
+                $siblingPrimaryKey = $this->getPrimaryKey();
+                $joinCondition = "CONCAT('$modelKey', $tableName.$primaryKey) = $siblingTableName.$siblingPrimaryKey";
+                $dbSelect->joinLeft($sm->getTablename(), $joinCondition, array());
+
+                $s = $this->_convertSelectForSibling($select, $sm);
+                $sm->_applySelect($dbSelect, $s);
+
+            }
+
             if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
                 if (count($p) != 1) throw new Kwf_Exception_NotYetImplemented();
                 foreach ($p as $v) {
@@ -365,24 +367,55 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
                 }
             }
             $dbSelect->setPart(Zend_Db_Select::COLUMNS, $dbSelectColumns);
-            if (!isset($order)) $order = $dbSelect->getPart(Zend_Db_Select::ORDER);
             $dbSelect->reset(Zend_Db_Select::ORDER);
-            $dbSelects[] = $dbSelect;
+            $ret[] = $dbSelect;
         }
-        if (!$dbSelects) {
-            return array();
-        }
-        $sel = $m->getAdapter()->select();
-        $sel->union($dbSelects);
+        return $ret;
+    }
 
-        if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
-            $sel->order('orderField '. $p[0]['direction']);
+   private function _createTempModel($select)
+   {
+        $data = array();
+        foreach ($this->_models as $modelKey => $m) {
+            $mappings = array();
+            if ($m->hasColumnMappings($this->_columnMapping)) {
+                foreach ($m->getColumnMappings($this->_columnMapping) as $source => $target) {
+                    if ($target) $mappings[$target] = $source;
+                }
+            }
+            $s = $this->_convertSelect($select, $modelKey, $m);
+            $pk = $m->getPrimaryKey();
+            foreach ($m->getRows($s) as $row) {
+                $id = $modelKey . $row->$pk;
+                if (!isset($this->_sourceRows[$id])) {
+                    $this->_sourceRows[$id] = $row;
+                }
+                $d = array();
+                foreach ($row->toArray() as $column => $val) {
+                    if ($column == $pk) $val = $id;
+                    if (isset($mappings[$column])) {
+                        $column = $mappings[$column];
+                    }
+                    $d[$column] = $val;
+                }
+                foreach ($this->getSiblingModels() as $sm) {
+                    $r = $sm->getRow($id);
+                    if ($r) {
+                        $siblingColumns = array_keys($r->toArray());
+                        unset($siblingColumns[$sm->getPrimaryKey()]);
+                        foreach ($r->toArray() as $key => $val) {
+                            if ($key == $sm->getPrimaryKey()) continue;
+                            $d[$key] = $val;
+                        }
+                    }
+                }
+                $data[] = $d;
+            }
         }
-        if ($limitCnt = $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
-            $limitOffs = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
-            $sel->limit($limitCnt, $limitOffs);
-        }
-        return $sel;
+        return new Kwf_Model_FnF(array(
+            'data' => $data,
+            'primaryKey' => $pk,
+        ));
     }
 
     public function getIds($where=null, $order=null, $limit=null, $start=null)
@@ -394,67 +427,27 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
         if ($this->_allDb) {
 
-            $sel = $this->getDbSelects($select);
-
-            $rows = Kwf_Registry::get('db')->query($sel)->fetchAll();
+            $dbSelects = $this->getDbSelects($select);
+            if (!$dbSelects) return array();
+            $dbSelect = Kwf_Registry::get('db')->select();
+            $dbSelect->union($dbSelects);
+            if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
+                $dbSelect->order('orderField '. $p[0]['direction']);
+            }
+            if ($limitCnt = $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
+                $limitOffs = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
+                $dbSelect->limit($limitCnt, $limitOffs);
+            }
+            $rows = Kwf_Registry::get('db')->query($dbSelect)->fetchAll();
             $ids = array();
             foreach ($rows as $row) {
                 $ids[] = $row['id'];
             }
+
         } else {
-            $orderValues = array();
-            foreach ($this->_models as $modelKey => $m) {
-                $s = $this->_convertSelect($select, $modelKey, $m);
-                if (!$s) continue;
-                $rows = $m->getRows($s);
-                $pk = $m->getPrimaryKey();
-                foreach ($rows as $i) {
-                    if (!isset($this->_sourceRows[$modelKey.$i->$pk])) {
-                        $this->_sourceRows[$modelKey.$i->$pk] = $i;
-                    }
-                    $id = $modelKey.$i->$pk;
-                    if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
-                        if (count($p) != 1) throw new Kwf_Exception_NotYetImplemented();
-                        $p[0]['field'] = $m->getColumnMapping($this->_columnMapping, $p[0]['field']);
-                        $orderValues[$id] = $i->{$p[0]['field']};
-                    } else {
-                        $orderValues[$id] = true;
-                    }
-                }
-            }
-            unset($m);
-
-            foreach ($this->getSiblingModels() as $sm) {
-                $s = $this->_convertSelectForSibling($select, $sm);
-                if ($s->getParts() == array()) {
-                    //nothing to filter, skip
-                    continue;
-                }
-                $filteredOrderValues = array();
-                $ids = $sm->getIds($s);
-                foreach ($ids as $i) {
-                    if (isset($orderValues[$i])) {
-                        $filteredOrderValues[$i] = $orderValues[$i];
-                    }
-                }
-                $orderValues = $filteredOrderValues;
-                unset($filteredOrderValues);
-            }
-
-            if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
-                if (count($p) != 1) throw new Kwf_Exception_NotYetImplemented();
-                if ($p[0]['direction'] == 'DESC') {
-                    arsort($orderValues);
-                } else if ($p[0]['direction'] == 'ASC') {
-                    asort($orderValues);
-                } else {
-                    throw new Kwf_Exception_NotYetImplemented();
-                }
-            }
-            $ids = array_keys($orderValues);
-            if ($limitCnt = $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
-                $limitOffs = (int)$select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
-                $ids = array_slice($ids, $limitOffs, $limitCnt);
+            $tempModel = $this->_createTempModel($select);
+            foreach ($tempModel->getRows($select) as $row) {
+                $ids[] = $row->{$this->getPrimaryKey()};
             }
         }
         return $ids;

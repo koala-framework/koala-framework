@@ -20,15 +20,16 @@ class Kwf_Model_Union_Db_ModelSibling extends Kwf_Model_Db
     {
         Kwf_Registry::get('db')->query("CREATE TABLE IF NOT EXISTS {$this->_tableName} (
             `id`  VARCHAR( 100 ) NOT NULL PRIMARY KEY ,
-            `sib` VARCHAR( 255 ) NULL
+            `sib` VARCHAR( 255 ) NULL,
+            `sib_bool` tinyint(1) NOT NULL default '0'
         ) ENGINE = INNODB");
         Kwf_Registry::get('db')->query("TRUNCATE TABLE {$this->_tableName}");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, sib) VALUES ('1m1', 's1')");
+                        (id, sib, sib_bool) VALUES ('1m1', 's1', 1)");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, sib) VALUES ('1m2', 'ss2')");
+                        (id, sib, sib_bool) VALUES ('1m2', 'ss2', 0)");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, sib) VALUES ('2m2', 'sss3')");
+                        (id, sib, sib_bool) VALUES ('2m2', 'sss3', 1)");
     }
 
     public function dropTable()
