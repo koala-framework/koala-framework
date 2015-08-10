@@ -1,4 +1,6 @@
-Ext2.namespace("Kwf.EyeCandy.List.Plugins.StateChanger",
+var kwfNs = require('kwf/namespace');
+var kwfExtend = require('kwf/extend');
+kwfNs("Kwf.EyeCandy.List.Plugins.StateChanger",
               "Kwf.EyeCandy.List.Plugins.StateListener",
               "Kwf.EyeCandy.List.Plugins.ActiveChanger",
               "Kwf.EyeCandy.List.Plugins.ActiveListener");

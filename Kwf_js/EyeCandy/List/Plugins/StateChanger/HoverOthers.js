@@ -1,4 +1,6 @@
-Kwf.EyeCandy.List.Plugins.StateChanger.HoverOthers = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+var kwfExtend = require('kwf/extend');
+
+Kwf.EyeCandy.List.Plugins.StateChanger.HoverOthers = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     state: 'tiny',
     skipItems: 0,
     init: function() {

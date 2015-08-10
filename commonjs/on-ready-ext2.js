@@ -46,6 +46,11 @@ module.exports = {
         }, options);
     },
 
+    onContentReady: function(renderedEl, options)
+    {
+        onReadyJquery.onContentReady(renderedEl, options);
+    },
+
     /**
     * @param element the added/changed dom element
     * @param options newRender (bool): if new elements have been added to the dom or just visiblity/width changed

@@ -1,4 +1,5 @@
 var onReady = require('kwf/on-ready');
+var socialshareprivacy = require('kwf-jquery-plugin/jquery.socialshareprivacy');
 
 onReady.onRender('.kwcClass', function(el, config) {
     el.children('.socialShareButtons').socialSharePrivacy({

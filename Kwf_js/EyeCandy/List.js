@@ -1,27 +1,15 @@
-var onReady = require('kwf/on-ready-ext2');
+var kwfNs = require('kwf/namespace');
+var kwfExtend = require('kwf/extend');
+var $ = require('jQuery');
 
-Ext2.namespace("Kwf.EyeCandy");
-
-onReady.onShow('.kwfEyeCandyList', function eyeCandyList(el) {
-    var opts = Ext2.fly(el).down('.options', true);
-    if (opts) {
-        opts = Ext2.decode(opts.value);
-        var cls = Kwf.EyeCandy.List;
-        if (opts['class']) {
-            cls = eval(opts['class']);
-            delete opts['class'];
-        }
-        opts.el = el;
-        el.list = new cls(opts);
-    }
-}, { defer: true });
+kwfNs("Kwf.EyeCandy");
 
 Kwf.EyeCandy.List = function(cfg) {
     Ext2.apply(this, cfg);
     this._init();
 };
 
-Ext2.extend(Kwf.EyeCandy.List, Ext2.util.Observable, {
+Kwf.EyeCandy.List.prototype = {
     //el
     //plugins[]
     //states[]
@@ -29,8 +17,21 @@ Ext2.extend(Kwf.EyeCandy.List, Ext2.util.Observable, {
     activeState: 'active',
     childSelector: '> .listItem',
 
+    on: function(event, cb, scope)
+    {
+        if (typeof scope != 'undefined') cb = cb.bind(scope);
+        $(this.el.dom).on('kwfUp-list-'+event, cb);
+    },
+
+    fireEvent: function(event)
+    {
+        var args = [].shift.call(arguments);
+        $(this.el.dom).trigger('kwfUp-list-'+event, args);
+    },
+
     _lockChangeActive: false,
     _init: function() {
+        /*
         this.addEvents({
             'childMouseEnter': true,
             'childMouseLeave': true,
@@ -38,6 +39,7 @@ Ext2.extend(Kwf.EyeCandy.List, Ext2.util.Observable, {
             'childStateChanged': true,
             'activeChanged': true
         });
+        */
         Ext2.applyIf(this, {
             plugins: [],
             states: []
@@ -154,4 +156,4 @@ Ext2.extend(Kwf.EyeCandy.List, Ext2.util.Observable, {
     setLockChangeActive: function(i) {
         this._lockChangeActive = i;
     }
-});
+};

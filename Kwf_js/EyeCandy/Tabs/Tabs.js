@@ -1,5 +1,6 @@
 var onReady = require('kwf/on-ready-ext2');
 var statistics = require('kwf/statistics');
+var $ = require('jQuery');
 
 onReady.onRender('div.kwfTabs', function tabs(el) {
     el.tabsObject = new Kwf.Tabs(el);
@@ -7,10 +8,12 @@ onReady.onRender('div.kwfTabs', function tabs(el) {
 
 
 Kwf.Tabs = function(el) {
+    /*
     this.addEvents({
         'beforeTabActivate': true,
         'tabActivate': true
     });
+    */
 
     this.el = el;
     this.el.addClass('kwfTabsFx');
@@ -71,7 +74,20 @@ Kwf.Tabs = function(el) {
     }
 };
 
-Ext2.extend(Kwf.Tabs, Ext2.util.Observable, {
+Kwf.Tabs.prototype = {
+
+    on: function(event, cb, scope)
+    {
+        if (typeof scope != 'undefined') cb = cb.bind(scope);
+        $(this.el.dom).on('kwfUp-tabs-'+event, cb);
+    },
+
+    fireEvent: function(event)
+    {
+        var args = [].shift.call(arguments);
+        $(this.el.dom).trigger('kwfUp-tabs-'+event, args);
+    },
+
     activateTab: function(idx) {
         // passed arguments are: tabsObject, newIndex, oldIndex
         this.fireEvent('beforeTabActivate', this, idx, this._activeTabIdx);
@@ -157,4 +173,4 @@ Ext2.extend(Kwf.Tabs, Ext2.util.Observable, {
         if (this.contentEls[idx]) return this.contentEls[idx];
         return null;
     }
-});
+};

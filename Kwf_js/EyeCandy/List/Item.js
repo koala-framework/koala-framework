@@ -1,20 +1,26 @@
-Ext2.namespace("Kwf.EyeCandy.List");
+var kwfNs = require('kwf/namespace');
+var kwfExtend = require('kwf/extend');
+var $ = require('jQuery');
+
+kwfNs("Kwf.EyeCandy.List");
 
 Kwf.EyeCandy.List.Item = function(cfg) {
     Ext2.apply(this, cfg);
     this._init();
 };
 
-Ext2.extend(Kwf.EyeCandy.List.Item, Ext2.util.Observable, {
+Kwf.EyeCandy.List.Item.prototype = {
     //list
     //listIndex
     //el
     _init: function() {
+        /*
         this.addEvents({
             'mouseEnter': true,
             'mouseLeave': true,
             'click': true
         });
+        */
 
         this.state = [];
 
@@ -27,6 +33,18 @@ Ext2.extend(Kwf.EyeCandy.List.Item, Ext2.util.Observable, {
         Ext2.fly(this.el).on('click', function(ev) {
             this.fireEvent('click', this, ev);
         }, this);
+    },
+
+    on: function(event, cb, scope)
+    {
+        if (typeof scope != 'undefined') cb = cb.bind(scope);
+        $(this.el.dom).on('kwfUp-list-'+event, cb);
+    },
+
+    fireEvent: function(event)
+    {
+        var args = [].shift.call(arguments);
+        $(this.el.dom).trigger('kwfUp-list-'+event, args);
     },
 
     getState: function()
@@ -78,4 +96,4 @@ Ext2.extend(Kwf.EyeCandy.List.Item, Ext2.util.Observable, {
         if (!isVisible) this.el.hide();
         return w;
     }
-});
+};

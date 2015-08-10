@@ -1,4 +1,6 @@
-Kwf.EyeCandy.List.Plugins.StateListener.NextPreviousLinks = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+var kwfExtend = require('kwf/extend');
+
+Kwf.EyeCandy.List.Plugins.StateListener.NextPreviousLinks = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     state: 'active',
     render: function() {
         this.list.el.createChild({

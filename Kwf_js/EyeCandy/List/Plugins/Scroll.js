@@ -1,4 +1,6 @@
-Kwf.EyeCandy.List.Plugins.Scroll = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+var kwfExtend = require('kwf/extend');
+
+Kwf.EyeCandy.List.Plugins.Scroll = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     numberShown: 5,
     moveElementSelector: false, //if false list.el, else list.child(moveElementSelector)
     createMoveElementSelectorWrapper: false,

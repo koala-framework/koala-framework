@@ -1,6 +1,8 @@
+var kwfExtend = require('kwf/extend');
 var onReady = require('kwf/on-ready');
+var getCachedWidth = require('kwf/element/get-cached-width');
 
-Kwf.EyeCandy.List.Plugins.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.Carousel = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     //animationConfig: { duration: 0.25 },
     //fadeAnimationConfig: { duration: 0.25 }, //optional, by default animationConfig will be used
     useFade: true, //if elements will be faded in/out in addition to the moving
@@ -55,7 +57,7 @@ Kwf.EyeCandy.List.Plugins.Carousel = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstr
         this.updateButtons();
     },
     updateButtons: function() {
-        var listWidth = Kwf.Utils.Element.getCachedWidth(this.list.el);
+        var listWidth = getCachedWidth(this.list.el.dom);
         var numberShown = 1;
         var itemWidth;
 

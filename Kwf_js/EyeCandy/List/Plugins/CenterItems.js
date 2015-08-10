@@ -1,4 +1,6 @@
-Kwf.EyeCandy.List.Plugins.CenterItems = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+var kwfExtend = require('kwf/extend');
+
+Kwf.EyeCandy.List.Plugins.CenterItems = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     render: function() {
         var listWidth = this.list.el.getWidth();
         var itemsWidth = 0;

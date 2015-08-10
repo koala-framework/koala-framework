@@ -2,7 +2,7 @@ var $ = require('jQuery');
 var benchmarkBox = require('kwf/benchmark/box');
 
 module.exports = function elementIsVisible(el) {
-    if (el.dom) renderedEl = el.dom; //ExtJS Element (hopefully)
+    if (el.dom) el = el.dom; //ExtJS Element (hopefully)
     var t = benchmarkBox.now();
 
     /* variant 1: Ext2: has dependency on ext2

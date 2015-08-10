@@ -1,8 +1,10 @@
 // @require ModernizrTouch
 
 var onReady = require('kwf/on-ready');
+var $ = require('jQuery');
+var kwfNs = require('kwf/namespace');
 
-Kwf.namespace('Kwf.Utils');
+kwfNs('Kwf.Utils');
 
 (function() {
     var isClicked = false;

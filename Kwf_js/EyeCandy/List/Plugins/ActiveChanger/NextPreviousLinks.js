@@ -1,4 +1,6 @@
-Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+var kwfExtend = require('kwf/extend');
+
+Kwf.EyeCandy.List.Plugins.ActiveChanger.NextPreviousLinks = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     stopAtEnd: false,
 
     init: function() {

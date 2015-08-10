@@ -1,4 +1,6 @@
-Kwf.EyeCandy.List.Plugins.ActiveChanger.Hash = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+var kwfExtend = require('kwf/extend');
+
+Kwf.EyeCandy.List.Plugins.ActiveChanger.Hash = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     _hashDelimiter: ':',
 
     init: function() {

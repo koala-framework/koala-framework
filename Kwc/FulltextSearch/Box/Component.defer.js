@@ -1,9 +1,10 @@
 var onReady = require('kwf/on-ready-ext2');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var historyState = require('kwf/history-state');
+var findForm = require('kwf/frontend-form/find-form');
+var kwfNs = require('kwf/namespace');
 
-Ext2.ns('Kwc.FulltextSearch.Box');
-Kwc.FulltextSearch.Box.Component = function(el, config) {
+var FulltextSearchBoxComponent = function(el, config) {
     this.el = el;
     this.config = config;
 
@@ -30,7 +31,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
         }
     }, this);
 
-    this.searchForm = Kwc.Form.findForm(el);
+    this.searchForm = findForm(el.dom);
 
     if (location.pathname == config.searchUrl) {
         //we are already on search page; nothing to do
@@ -62,7 +63,7 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
     this.previousMainContent = Ext2.select('.kwfMainContent').first();
 };
 
-Kwc.FulltextSearch.Box.Component.prototype =
+FulltextSearchBoxComponent.prototype =
 {
     doSearch: function()
     {
@@ -158,7 +159,7 @@ Kwc.FulltextSearch.Box.Component.prototype =
 
 
 onReady.onRender('.kwcClass', function fulltextSearchBox(el, config) {
-    new Kwc.FulltextSearch.Box.Component(el, config);
+    new FulltextSearchBoxComponent(el, config);
 }, {
     priority: 0, //call *after* initializing kwcForm to have access to searchForm
     defer: true

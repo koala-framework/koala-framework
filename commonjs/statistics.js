@@ -2,12 +2,12 @@ var counter = [];
 
 var Statistics = {};
 Statistics.onCount = function(fn) {
-    Statistics.counter.push(fn);
+    counter.push(fn);
 };
 
 Statistics.count = function(url, config) {
     if (!config) config = {};
-    Statistics.counter.forEach(function(c) {
+    counter.forEach(function(c) {
         c.call(this, url, config);
     }, this);
 };

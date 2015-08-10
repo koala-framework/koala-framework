@@ -1,6 +1,12 @@
-Ext2.namespace('Kwc.List.Switch');
+var kwfNs = require('kwf/namespace');
+var kwfExtend = require('kwf/extend');
+var $ = require('jQuery');
 
-Kwc.List.Switch.Component = Ext2.extend(Kwf.EyeCandy.List,
+$(function() {
+
+kwfNs('Kwc.List.Switch');
+
+Kwc.List.Switch.Component = kwfExtend(Kwf.EyeCandy.List,
 {
     //transition: {},
     showArrows: true,
@@ -39,4 +45,6 @@ Kwc.List.Switch.Component = Ext2.extend(Kwf.EyeCandy.List,
 
         Kwc.List.Switch.Component.superclass._init.call(this);
     }
+});
+
 });

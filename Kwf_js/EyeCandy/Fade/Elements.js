@@ -1,5 +1,6 @@
 var onReady = require('kwf/on-ready');
 var componentEvent = require('kwf/component-event');
+var _ = require('underscore');
 
 onReady.onRender('div.kwfFadeElements', function fadeElements(element) {
     var fadeClass = element.find('.fadeClass');

@@ -183,7 +183,7 @@ class Kwf_Assets_Package
                     }
                 }
             }
-            $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData));
+            $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData)).";\n";
             $map = Kwf_SourceMaps_SourceMap::createFromInline($contents);
             $packageMap->concat($map);
         }

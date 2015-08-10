@@ -1,4 +1,6 @@
-Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContent = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+var kwfExtend = require('kwf/extend');
+
+Kwf.EyeCandy.List.Plugins.ActiveListener.LargeContent = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     largeContentSelector: '.largeContent',
     largeContainerSelector: '.listSwitchLargeContent',
     transition: 'fade',

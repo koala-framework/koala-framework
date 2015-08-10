@@ -1,6 +1,7 @@
+var kwfExtend = require('kwf/extend');
 var onReady = require('kwf/on-ready');
 
-Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = Ext2.extend(Kwf.EyeCandy.List.Plugins.Abstract, {
+Kwf.EyeCandy.List.Plugins.ActiveChanger.PlayPauseLink = kwfExtend(Kwf.EyeCandy.List.Plugins.Abstract, {
     init: function() {
         if (!this.interval) this.interval = 5000;
 
