@@ -140,31 +140,23 @@ class Kwf_Component_Settings
         }
 
         //all parentClasses (including self) where Component.(defer)?js exists with js- prefix
-        foreach ($settings['parentClasses'] as $i) {
-            $file = str_replace('_', '/', $i);
+        foreach ($settings['parentFilePaths'] as $file=>$i) {
             if (substr($file, -10) != '/Component') {
                 $file .= '/Component';
             }
-            foreach ($dirs as $dir) {
-                if (is_file($dir.'/'.$file.'.js') || is_file($dir.'/'.$file.'.defer.js')) {
-                    $cssClass[] = Kwf_Component_Abstract::formatRootElementClass($i, 'js-');
-                    break;
-                }
+            if (is_file($file.'.js') || is_file($file.'.defer.js')) {
+                $cssClass[] = Kwf_Component_Abstract::formatRootElementClass($i, 'js-');
             }
         }
 
         //all parentClasses (including self) where Component.s?css exists with css- prefix
-        foreach ($settings['parentClasses'] as $i) {
-            $file = str_replace('_', '/', $i);
+        foreach ($settings['parentFilePaths'] as $file=>$i) {
             if (substr($file, -10) != '/Component') {
                 $file .= '/Component';
             }
-            foreach ($dirs as $dir) {
-                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.scss') || is_file($dir.'/'.$file.'.override.scss')) {
-                    $cssClass[] = Kwf_Component_Abstract::formatRootElementClass($i, 'css-');
-                    if (is_file($dir.'/'.$file.'.override.scss')) {
-                        break 2; //break foreach classes
-                    }
+            if (is_file($file.'.css') || is_file($file.'.scss') || is_file($file.'.override.scss')) {
+                $cssClass[] = Kwf_Component_Abstract::formatRootElementClass($i, 'css-');
+                if (is_file($file.'.override.scss')) {
                     break;
                 }
             }
@@ -186,6 +178,44 @@ class Kwf_Component_Settings
         return $componentClass . '.cs' . $csParam;
     }
 
+    private static function _findComponentFile($c)
+    {
+        static $cache = array();
+        if (isset($cache[$c])) return $cache[$c];
+
+        static $dirs;
+        if (!isset($dirs)) {
+            $dirs = array_reverse(explode(PATH_SEPARATOR, get_include_path()));
+        }
+
+        static $namespaces;
+        if (!isset($namespaces)) {
+            $composerNamespaces = include VENDOR_PATH.'/composer/autoload_namespaces.php';
+            $psr4Namespaces = include VENDOR_PATH.'/composer/autoload_psr4.php';
+            $namespaces = Kwf_Loader::_prepareNamespaces($composerNamespaces, $psr4Namespaces);
+        }
+
+        static $classMap;
+        if (!isset($classMap)) {
+            $classMap = include VENDOR_PATH.'/composer/autoload_classmap.php';
+        }
+
+        $file = Kwf_Loader::_findFile($c, $namespaces, $classMap);
+        if (substr($file, 0, strlen(getcwd())) == getcwd()) {
+            $path = substr($file, strlen(getcwd())+1);
+        } else {
+            $file = str_replace('_', '/', $c) . '.php';
+            foreach ($dirs as $dir) {
+                $path = $dir . ($dir ? '/' : '') . $file;
+                if (is_file($path)) {
+                    break;
+                }
+            }
+        }
+        $cache[$c] = $path;
+        return $path;
+    }
+
     public static function getSetting($class, $setting)
     {
         if (self::$_rebuildingSettings) {
@@ -204,56 +234,11 @@ class Kwf_Component_Settings
                 $cwd = str_replace(DIRECTORY_SEPARATOR, '/', realpath(getcwd()));
                 foreach (self::getSetting($class, 'parentClasses') as $c) {
                     $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
-                    $file = str_replace('_', '/', $c) . '.php';
-                    static $dirs;
-                    if (!isset($dirs)) {
-                        $dirs = explode(PATH_SEPARATOR, get_include_path());
-                        foreach (include VENDOR_PATH.'/composer/autoload_namespaces.php' as $ns=>$i) {
-                            $dirs = array_merge($dirs, $i);
-                        }
-                        foreach ($dirs as $k=>$dir) {
-                            if ($dir == '.') $dir = $cwd;
-                            if (!preg_match('#^(/|\w\:\\\\)#i', $dir)) {
-                                //relative path, make it absolute
-                                $dir = $cwd.'/'.$dir;
-                            }
-                            if (!$dir || !file_exists($dir)) {
-                                unset($dirs[$k]);
-                                continue;
-                            }
-                            $dir = realpath($dir);
-                            $dir = str_replace(DIRECTORY_SEPARATOR, '/', $dir);
-                            if (substr($dir, 0, strlen($cwd)) != $cwd) {
-                                if (VENDOR_PATH == '../vendor') { //required to support running kwf tests in tests subfolder
-                                    $parentCwd = substr($cwd, 0, strrpos($cwd, '/'));
-                                    if (substr($dir, 0, strlen($parentCwd)) != $parentCwd) {
-                                        throw new Kwf_Exception("'$dir' is not in web directory '$parentCwd'");
-                                    }
-                                    if ($dir == $parentCwd) {
-                                        $dir = '..';
-                                    } else {
-                                        $dir = '../'.substr($dir, strlen($parentCwd)+1);
-                                    }
-                                } else {
-                                    throw new Kwf_Exception("'$dir' is not in web directory '$cwd'");
-                                }
-                            } else {
-                                $dir = substr($dir, strlen($cwd)+1);
-                            }
-                            $dirs[$k] = $dir;
-                        }
-                        $dirs = array_unique($dirs);
-                    }
-                    foreach ($dirs as $dir) {
-                        $path = $dir . ($dir ? '/' : '') . $file;
-                        if (is_file($path)) {
-                            if (substr($path, -14) == '/Component.php') {
-                                $ret[substr($path, 0, -14)] = substr($c, 0, -10);
-                            } else {
-                                $ret[substr($path, 0, -4)] = $c; //nur .php
-                            }
-                            break;
-                        }
+                    $path = self::_findComponentFile($c);
+                    if (substr($path, -14) == '/Component.php') {
+                        $ret[substr($path, 0, -14)] = substr($c, 0, -10);
+                    } else {
+                        $ret[substr($path, 0, -4)] = $c; //nur .php
                     }
                 }
             } else if ($setting == 'componentFiles') {
