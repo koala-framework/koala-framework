@@ -141,6 +141,15 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             if (file_exists($dir.'/bower.json')) {
                 $ret = new Kwf_Assets_Dependency_Dependencies(array(), $dependencyName);
                 $bower = json_decode(file_get_contents($dir.'/bower.json'), true);
+                if (isset($bower['dependencies'])) {
+                    foreach ($bower['dependencies'] as $depName=>$version) {
+                        $d = $this->_providerList->findDependency($depName);
+                        if (!$d) {
+                            throw new Kwf_Exception("Can't find dependency '$depName'");
+                        }
+                        $ret->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $d);
+                    }
+                }
                 if (isset($bower['main'])) {
                     $main = $bower['main'];
                     if (is_string($main)) $main = array($main);
@@ -168,15 +177,6 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
                     }
                 } else {
                     throw new Kwf_Exception("No main property in $dir/bower.json");
-                }
-                if (isset($bower['dependencies'])) {
-                    foreach ($bower['dependencies'] as $depName=>$version) {
-                        $d = $this->_providerList->findDependency($depName);
-                        if (!$d) {
-                            throw new Kwf_Exception("Can't find dependency '$depName'");
-                        }
-                        $ret->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $d);
-                    }
                 }
             } else {
                 $ret = $this->_guessMainFiles($dependencyName);
