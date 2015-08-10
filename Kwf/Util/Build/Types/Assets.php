@@ -36,7 +36,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
     }
 
-    private function _getAllPackages()
+    public function getAllPackages()
     {
         $packages = array();
         foreach (Kwf_Config::getValueArray('assets.packageFactories') as $i) {
@@ -49,7 +49,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         return $packages;
     }
 
-    private function _getAllLanguages()
+    public function getAllLanguages()
     {
         $config = Zend_Registry::get('config');
 
@@ -76,8 +76,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
     public function flagAllPackagesOutdated($extension)
     {
-        $langs = $this->_getAllLanguages();
-        $packages = $this->_getAllPackages();
+        $langs = $this->getAllLanguages();
+        $packages = $this->getAllPackages();
         foreach ($packages as $p) {
             foreach ($langs as $language) {
                 $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language);
@@ -105,8 +105,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
         Kwf_Assets_BuildCache::getInstance()->save(time(), 'assetsVersion');
 
-        $langs = $this->_getAllLanguages();
-        $packages = $this->_getAllPackages();
+        $langs = $this->getAllLanguages();
+        $packages = $this->getAllPackages();
         $exts = array('js', 'defer.js', 'css');
 
         echo "\ncalculating dependencies...\n";
@@ -195,33 +195,9 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             }
         }
 
-
         Kwf_Assets_Cache::getInstance()->clean();
-
         Kwf_Assets_BuildCache::getInstance()->building = false;
 
-
-        $exts = array('js', 'defer.js', 'css');
-        foreach ($packages as $p) {
-            $depName = $p->getDependencyName();
-            $language = $langs[0];
-            foreach ($exts as $extension) {
-                $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language);
-                $cacheContents = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-                echo "$depName ";
-                $h = new Kwf_View_Helper_FileSize();
-                echo "$extension size: ".$h->fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)));
-                echo "\n";
-            }
-        }
-        $d = Kwf_Assets_Package_Default::getDefaultProviderList()->findDependency('Frontend');
-        foreach ($d->getFilteredUniqueDependencies('text/javascript') as $i) {
-            if ($i instanceof Kwf_Assets_Dependency_File && $i->getType() == 'ext2') {
-                echo "\n[WARNING] Frontend text/javascript contains ext2\n";
-                echo "To improve frontend performance all ext2 dependencies should be moved to defer\n\n";
-                break;
-            }
-        }
     }
 
     public function getTypeName()

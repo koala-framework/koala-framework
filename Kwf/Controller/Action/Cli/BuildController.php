@@ -89,4 +89,34 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             }
         }
     }
+
+    public function showAssetPackageSizesAction()
+    {
+        $a = new Kwf_Util_Build_Types_Assets();
+        $packages = $a->getAllPackages();
+        $langs = $a->getAllLanguages();
+
+        $exts = array('js', 'defer.js', 'css');
+        foreach ($packages as $p) {
+            $depName = $p->getDependencyName();
+            $language = $langs[0];
+            foreach ($exts as $extension) {
+                $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language);
+                $cacheContents = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
+                echo "$depName ";
+                $h = new Kwf_View_Helper_FileSize();
+                echo "$extension size: ".$h->fileSize(strlen(gzencode($cacheContents['contents'], 9, FORCE_GZIP)));
+                echo "\n";
+            }
+        }
+        $d = Kwf_Assets_Package_Default::getDefaultProviderList()->findDependency('Frontend');
+        foreach ($d->getFilteredUniqueDependencies('text/javascript') as $i) {
+            if ($i instanceof Kwf_Assets_Dependency_File && $i->getType() == 'ext2') {
+                echo "\n[WARNING] Frontend text/javascript contains ext2\n";
+                echo "To improve frontend performance all ext2 dependencies should be moved to defer\n\n";
+                break;
+            }
+        }
+        exit;
+    }
 }
