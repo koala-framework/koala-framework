@@ -76,6 +76,19 @@ class Kwf_Exception extends Kwf_Exception_NoLog
         if (isset($_SESSION)) {
             $body .= $this->_format('_SESSION', print_r($_SESSION, true));
         }
+        try {
+            if ($request = Kwf_Controller_Front::getInstance()->getRequest()) {
+                $rawBody = $request->getRawBody();
+                if ($rawBody) {
+                    if (defined('JSON_PRETTY_PRINT') && substr($rawBody, 0, 1) == '{' &&
+                        is_object(json_decode($rawBody)) && (json_last_error() == JSON_ERROR_NONE)) {
+                        $rawBody = json_encode(json_decode($rawBody), JSON_PRETTY_PRINT);
+                    }
+                    $body .= $this->_format('RawBody', $rawBody);
+                }
+            }
+        } catch (Exception $e) {
+        }
         return $body;
     }
 }
