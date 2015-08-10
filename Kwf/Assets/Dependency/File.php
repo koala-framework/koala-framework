@@ -4,6 +4,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     protected $_fileName;
     private $_mtimeCache;
     private $_fileNameCache;
+    private $_sourceStringCache;
 
     public function __construct($fileNameWithType)
     {
@@ -26,7 +27,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 
     public function getContents($language)
     {
-        return file_get_contents($this->getAbsoluteFileName());
+        return $this->getContentsSourceString();
     }
 
     public function getContentsSource()
@@ -35,6 +36,14 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             'type' => 'file',
             'file' => $this->getAbsoluteFileName(),
         );
+    }
+
+    public function getContentsSourceString()
+    {
+        if (!isset($this->_sourceStringCache)) {
+            $this->_sourceStringCache = file_get_contents($this->getAbsoluteFileName());
+        }
+        return $this->_sourceStringCache;
     }
 
     public function getType()

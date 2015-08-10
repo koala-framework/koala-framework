@@ -26,7 +26,8 @@ class Kwf_Assets_Provider_JsClassKwf extends Kwf_Assets_Provider_Abstract
                 )
             );
         }
-        $fileContents = file_get_contents($dependency->getAbsoluteFileName());
+
+        $fileContents = $dependency->getContentsSourceString();
 
         if (strpos($fileContents, 'Kwf.Loader.') === false) {
             //shortcut

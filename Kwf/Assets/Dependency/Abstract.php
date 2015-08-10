@@ -54,6 +54,18 @@ abstract class Kwf_Assets_Dependency_Abstract
         );
     }
 
+    public function getContentsSourceString()
+    {
+        $src = $this->getContentsSource();
+        if ($src['type'] == 'file') {
+            return file_get_contents($src['file']);
+        } else if ($src['type'] == 'contents') {
+            return $src['contents'];
+        } else {
+            throw new Kwf_Exception_NotYetImplemented();
+        }
+    }
+
     public function usesLanguage()
     {
         return true;
