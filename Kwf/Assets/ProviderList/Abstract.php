@@ -93,8 +93,8 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
     private function _setDependenciesForDependency(Kwf_Assets_Dependency_Abstract $dependency)
     {
         static $set = array();
-        if (in_array($dependency, $set, true)) return;
-        $set[] = $dependency;
+        if (isset($set[spl_object_hash($dependency)])) return;
+        $set[spl_object_hash($dependency)] = true;
 
         foreach ($dependency->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL) as $d) {
             $this->_setDependenciesForDependency($d);

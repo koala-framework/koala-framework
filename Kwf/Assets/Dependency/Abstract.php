@@ -215,7 +215,7 @@ abstract class Kwf_Assets_Dependency_Abstract
             $nonDefer = array();
             $this->_getDependenciesNonDefer($this, $nonDefer, array());
             foreach ($ret as $k=>$i) {
-                if (in_array($i, $nonDefer, true)) {
+                if (!isset($nonDefer[spl_object_hash($i)])) {
                     unset($ret[$k]);
                 }
             }
@@ -225,31 +225,31 @@ abstract class Kwf_Assets_Dependency_Abstract
 
     private function _getDependenciesNonDefer($dep, &$processed, $stack)
     {
-        if (in_array($dep, $processed, true)) {
+        if (isset($processed[spl_object_hash($dep)])) {
             return;
         }
-        $stack[] = $dep;
+        $stack[spl_object_hash($dep)] = true;
         if (!$dep->getDeferLoad()) {
             $requires = $dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL);
             foreach ($requires as $i) {
-                if (!in_array($i, $stack, true)) {
+                if (!isset($stack[spl_object_hash($i)])) {
                     $this->_getDependenciesNonDefer($i, $processed, $stack);
                 }
             }
-            if (in_array($dep, $processed, true)) {
+            if (isset($processed[spl_object_hash($dep)])) {
                 return;
             }
 
-            $processed[] = $dep;
+            $processed[spl_object_hash($dep)] = true;
         }
     }
 
     private function _getFilteredUniqueDependenciesProcessDep($dep, $mimeType, &$processed, $stack, $includeSelf)
     {
-        if (in_array($dep, $processed, true)) {
+        if (isset($processed[spl_object_hash($dep)])) {
             return array();
         }
-        $stack[] = $dep;
+        $stack[spl_object_hash($dep)] = true;
 
         $ret = array();
         if ($mimeType == 'text/javascript' && $dep->getDeferLoad()) {
@@ -262,7 +262,7 @@ abstract class Kwf_Assets_Dependency_Abstract
 
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES) as $i) {
             if (!$i) throw new Kwf_Exception("$dep returned invalid dependency");
-            if (!in_array($i, $stack, true)) {
+            if (!isset($stack[spl_object_hash($i)])) {
                 foreach ($this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, $stack, true) as $j) {
                     $ret[] = $j;
                 }
@@ -271,18 +271,18 @@ abstract class Kwf_Assets_Dependency_Abstract
 
         foreach ($dep->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS) as $i) {
             if (!$i) throw new Kwf_Exception("$dep returned invalid dependency");
-            if (!in_array($i, $stack, true)) {
+            if (!isset($stack[spl_object_hash($i)])) {
                 foreach ($this->_getFilteredUniqueDependenciesProcessDep($i, $mimeType, $processed, $stack, false) as $j) {
                     $ret[] = $j;
                 }
             }
         }
 
-        if (in_array($dep, $processed, true)) {
+        if (isset($processed[spl_object_hash($dep)])) {
             return $ret;
         }
 
-        $processed[] = $dep;
+        $processed[spl_object_hash($dep)] = true;
 
         $mimeMatches = $dep->getMimeType() == $mimeType
             || ($mimeType == 'text/javascript; defer2' && $dep->getMimeType() == 'text/javascript');
