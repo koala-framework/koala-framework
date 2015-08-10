@@ -18,16 +18,28 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
     {
         if ($this->_contentsCache) return;
 
-        $cmd = getcwd()."/".VENDOR_PATH."/bin/node ".__DIR__."/build.js";
-        putenv("NODE_PATH=".KWF_PATH."/node_modules");
-        exec($cmd, $out, $ret);
-        putenv("NODE_PATH=");
-        if ($ret) {
-            throw new Kwf_Exception("tinymce build failed: ".implode("\n", $out));
+        $mtime = null;
+        $it = new RecursiveDirectoryIterator('vendor/bower_components/tinymce/js/tinymce');
+        $it = new RecursiveIteratorIterator($it);
+        foreach ($it as $i) {
+            $mtime = max($mtime, $i->getMTime());
         }
-        if (!file_exists('temp/tinymce-build-out.js')) {
-            throw new Kwf_Exception("TinyMce build not found");
+
+        if (!file_exists('temp/tinymce-build-out.js.mtime') || file_get_contents('temp/tinymce-build-out.js.mtime') != $mtime) {
+            $cmd = getcwd()."/".VENDOR_PATH."/bin/node ".__DIR__."/build.js";
+            putenv("NODE_PATH=".KWF_PATH."/node_modules");
+            exec($cmd, $out, $ret);
+            putenv("NODE_PATH=");
+            if ($ret) {
+                throw new Kwf_Exception("tinymce build failed: ".implode("\n", $out));
+            }
+            if (!file_exists('temp/tinymce-build-out.js')) {
+                throw new Kwf_Exception("TinyMce build not found");
+            }
+            file_put_contents('temp/tinymce-build-out.js.mtime', $mtime);
         }
+
+
 
         $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/tinymce/'.md5(file_get_contents('temp/tinymce-build-out.js'));
 
