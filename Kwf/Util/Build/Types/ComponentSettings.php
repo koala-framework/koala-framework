@@ -28,6 +28,8 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
 
     private function _checkSettings($settingName, $settings)
     {
+        /*
+        Check disabled to improve build performance
         if (is_string($settings)) {
             if (substr($settings, 0, 1) == '/' && substr($settings, 0, 8) != '/assets/') {
                 throw new Kwf_Exception("Setting $settingName does look like an absolute path: '$settings' which must not be part of built settings");
@@ -37,6 +39,7 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
                 self::_checkSettings($settingName.'.'.$k, $i);
             }
         }
+        */
     }
 
     public function getTypeName()
