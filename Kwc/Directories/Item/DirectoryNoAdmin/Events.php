@@ -28,19 +28,39 @@ class Kwc_Directories_Item_DirectoryNoAdmin_Events extends Kwc_Abstract_Events
         return $ret;
     }
 
+    private function _getSubrootFromItemId($itemId)
+    {
+        $gen = Kwf_Component_Generator_Abstract::getInstance($this->_class, 'detail');
+        $datas = $gen->getChildData(null, array('id' => $itemId, 'ignoreVisible' => true));
+        if (!isset($datas[0])) return null;
+        return $datas[0]->getSubroot();
+    }
+
     public function onChildRowUpdate(Kwf_Events_Event_Row_Updated $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventItemUpdated($this->_class, $event->row->{$event->row->getModel()->getPrimaryKey()}));
+        $itemId = $event->row->{$event->row->getModel()->getPrimaryKey()};
+        $subroot = $this->_getSubrootFromItemId($itemId);
+        if ($subroot) {
+            $this->fireEvent(new Kwc_Directories_List_EventItemUpdated($this->_class, $itemId, $subroot));
+        }
     }
 
     public function onChildRowInsert(Kwf_Events_Event_Row_Inserted $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventItemInserted($this->_class, $event->row->{$event->row->getModel()->getPrimaryKey()}));
+        $itemId = $event->row->{$event->row->getModel()->getPrimaryKey()};
+        $subroot = $this->_getSubrootFromItemId($itemId);
+        if ($subroot) {
+            $this->fireEvent(new Kwc_Directories_List_EventItemInserted($this->_class, $itemId, $subroot));
+        }
     }
 
     public function onChildRowDelete(Kwf_Events_Event_Row_Deleted $event)
     {
-        $this->fireEvent(new Kwc_Directories_List_EventItemDeleted($this->_class, $event->row->{$event->row->getModel()->getPrimaryKey()}));
+        $itemId = $event->row->{$event->row->getModel()->getPrimaryKey()};
+        $subroot = $this->_getSubrootFromItemId($itemId);
+        if ($subroot) {
+            $this->fireEvent(new Kwc_Directories_List_EventItemDeleted($this->_class, $itemId, $subroot));
+        }
     }
 
     public function onChildModelUpdated(Kwf_Events_Event_Model_Updated $event)
