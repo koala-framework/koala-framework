@@ -365,14 +365,14 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $ret = array();
         $ret['placeholder'] = $this->_getPlaceholder();
         $ret['rootElementClass'] = self::getRootElementClass($this);
-        $ret['bemClass'] = self::getBemClass($this, '');
+        $ret['bemClass'] = $this->_getBemClass('');
 
         $ret['data'] = $this->getData();
         $ret['row'] = $this->_getRow();
         return $ret;
     }
 
-    protected static function getBemClass($component, $class, $nonBemFallback = null)
+    public static function getBemClass($component, $class, $nonBemFallback = null)
     {
         if (!is_string($component)) $component = $component->getData()->componentClass;
         static $up;
@@ -384,6 +384,11 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         } else {
             return Kwf_Component_Abstract::formatRootElementClass($component, '').'__'.$class;
         }
+    }
+
+    protected function _getBemClass($class, $nonBemFallback = null)
+    {
+        return self::getBemClass($class, $nonBemFallback);
     }
 
     /**

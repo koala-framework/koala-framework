@@ -60,13 +60,13 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
         $ret['listItems'] = array();
         $i = 0;
         foreach ($children as $child) {
-            $class = self::getBemClass($this, 'listItem', 'listItem').' ';
-            if ($i == 0) $class .= ' '.self::getBemClass($this, 'listItem--first', 'kwcFirst');
-            if ($i == count($children)-1) $class .= ' '.self::getBemClass($this, 'listItem--last', 'kwcLast');
+            $class = $this->_getBemClass('listItem', 'listItem').' ';
+            if ($i == 0) $class .= ' '.$this->_getBemClass('listItem--first', 'kwcFirst');
+            if ($i == count($children)-1) $class .= ' '.$this->_getBemClass('listItem--last', 'kwcLast');
             if ($i % 2 == 0) {
-                $class .= ' '.self::getBemClass($this, 'listItem--even', 'kwcEven');
+                $class .= ' '.$this->_getBemClass('listItem--even', 'kwcEven');
             } else {
-                $class .= ' '.self::getBemClass($this, 'listItem--odd', 'kwcOdd');
+                $class .= ' '.$this->_getBemClass('listItem--odd', 'kwcOdd');
             }
             $class = trim($class);
             $i++;

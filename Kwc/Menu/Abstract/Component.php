@@ -206,14 +206,14 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                 'last' => false
             );
             $class = array();
-            $class[] = self::getBemClass($this, 'item');
-            if ($i == 0) { $class[] = self::getBemClass($this, 'item--first', 'first'); }
+            $class[] = $this->_getBemClass('item');
+            if ($i == 0) { $class[] = $this->_getBemClass('item--first', 'first'); }
             if ($i == count($pages)-1) {
-                $class[] = self::getBemClass($this, 'item--last', 'last');
+                $class[] = $this->_getBemClass('item--last', 'last');
                 $r['last'] = true;
             }
             if ($r['data']->getDeviceVisible() != Kwf_Component_Data::DEVICE_VISIBLE_ALL) {
-                $class[] = self::getBemClass($this, 'item--'.$r['data']->getDeviceVisible(), $r['data']->getDeviceVisible());
+                $class[] = $this->_getBemClass('item--'.$r['data']->getDeviceVisible(), $r['data']->getDeviceVisible());
             }
 
             $r['class'] = implode(' ', $class);
