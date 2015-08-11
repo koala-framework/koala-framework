@@ -51,10 +51,7 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
 
     private function _getSubrootFromEvent(Kwc_Directories_List_EventItemAbstract $event)
     {
-        $gen = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail');
-        $datas = $gen->getChildData(null, array('id' => $event->itemId, 'ignoreVisible'=>true));
-        if (!isset($datas[0])) return null;
-        return $datas[0]->getSubroot();
+        return $event->subroot;
     }
 
     public function onDirectoryRowInsert(Kwc_Directories_List_EventItemInserted $event)
