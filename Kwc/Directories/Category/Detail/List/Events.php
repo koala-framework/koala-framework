@@ -51,12 +51,23 @@ class Kwc_Directories_Category_Detail_List_Events extends Kwc_Abstract_Composite
         return $ret;
     }
 
+    private function _getSubrootFromItemId($dirCls, $itemId)
+    {
+        $gen = Kwf_Component_Generator_Abstract::getInstance($dirCls, 'detail');
+        $datas = $gen->getChildData(null, array('id' => $itemId, 'ignoreVisible' => true));
+        if (!isset($datas[0])) return null;
+        return $datas[0]->getSubroot();
+    }
+
     public function onUpdateRow(Kwf_Component_Event_Row_Abstract $ev)
     {
         foreach (call_user_func(array($this->_class, 'getItemDirectoryClasses'), $this->_class) as $dirCls) {
             $item = $ev->row->getModel()->getReference('Item');
             $itemId = $ev->row->{$item['column']};
-            $this->fireEvent(new Kwc_Directories_List_EventItemUpdated($dirCls, $itemId));
+            $subroot = $this->_getSubrootFromItemId($dirCls, $itemId);
+            if ($subroot) {
+                $this->fireEvent(new Kwc_Directories_List_EventItemUpdated($dirCls, $itemId, $subroot));
+            }
         }
     }
 }
