@@ -122,6 +122,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if ($selectType == 'string' && is_string($class)) {
             //simple case no. 1: get from specific generator
             $g = Kwc_Abstract::getSetting($class, 'generators');
+            if (!isset($g[$select])) return array();
             return $g[$select]['component'];
         } else if (!$select && is_string($class)) {
             //simple case no. 2: get 'em all
