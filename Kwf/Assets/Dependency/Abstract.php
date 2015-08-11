@@ -215,7 +215,7 @@ abstract class Kwf_Assets_Dependency_Abstract
             $nonDefer = array();
             $this->_getDependenciesNonDefer($this, $nonDefer, array());
             foreach ($ret as $k=>$i) {
-                if (!isset($nonDefer[spl_object_hash($i)])) {
+                if (isset($nonDefer[spl_object_hash($i)])) {
                     unset($ret[$k]);
                 }
             }
