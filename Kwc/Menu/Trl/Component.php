@@ -32,6 +32,9 @@ class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
                 if (is_instance_of($class, 'Kwc_Menu_Expanded_EditableItems_Trl_Component')) {
                     $c = $menuComponent->getChildComponent('-'.$key);
                     $c->getComponent()->attachEditableToMenuData($menuData);
+                } else if (is_instance_of($class, 'Kwc_Menu_EditableItems_Trl_Component')) {
+                    $c = $menuComponent->getChildComponent('-'.$key);
+                    $c->getComponent()->attachEditableToMenuData($menuData);
                 }
             }
         }

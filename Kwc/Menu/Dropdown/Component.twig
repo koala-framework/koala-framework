@@ -3,7 +3,7 @@
         <input type="hidden" value="{{ config|json_encode() }}" />
         <ul class="menu">
             {% for m in menu %}
-                <li class="{{ m.class }}">
+                <li class="{{ m.class }}{% if m.submenu is defined and m.submenu|length %} hasSubMenu{% endif %}">
                     {% block menuLink %}
                     {{ renderer.componentLink(m.data) }}
                     {% endblock %}

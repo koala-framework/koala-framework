@@ -31,6 +31,10 @@ class Kwf_Model_DbWithConnection_ExprChildSum_BarModel extends Kwf_Model_Db
     {
         parent::_init();
         $this->_exprs['foo_value_sum'] = new Kwf_Model_Select_Expr_Child_Sum('FooToBar', 'foo_value');
+        $this->_exprs['or_expr'] = new Kwf_Model_Select_Expr_Or(array(
+            new Kwf_Model_Select_Expr_Equal('bar', 4),
+            new Kwf_Model_Select_Expr_Equal('bar', 2)
+        ));
     }
 
     public function dropTable()

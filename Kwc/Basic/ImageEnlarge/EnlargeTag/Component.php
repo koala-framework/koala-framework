@@ -77,7 +77,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         return $this->_getOptions();
     }
 
-    private function _getImageEnlargeComponent()
+    protected function _getImageEnlargeComponent()
     {
         $d = $this->getData();
         while (!is_instance_of($d->componentClass, 'Kwc_Basic_Image_Component')) {

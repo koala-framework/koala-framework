@@ -6,7 +6,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
     public function getProgressSteps()
     {
         $ret = count(Kwf_Model_Abstract::findAllInstances());
-        if ($this->countUploads() < 50000) {
+        if ($this->countUploads() < 5000) {
             $ret += $this->countUploads()*2;
         }
         $ret++; // Image filenames
@@ -17,7 +17,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
     {
         if (is_null($this->_countUploads)) {
             if (in_array('kwf_uploads', Kwf_Registry::get('db')->listTables())) {
-                $this->_countUploads = Kwf_Registry::get('db')->query('SELECT COUNT(*) FROM kwf_uploads')->fetchColumn()*2;
+                $this->_countUploads = Kwf_Registry::get('db')->query('SELECT COUNT(*) FROM kwf_uploads')->fetchColumn();
             } else {
                 $this->_countUploads = 0;
             }
@@ -136,11 +136,11 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
             $db->query("ALTER TABLE  `kwf_uploads` ADD INDEX  `md5_hash` (  `md5_hash` )");
         }
 
-        if ($this->countUploads() < 50000) {
+        if ($this->countUploads() < 5000) {
             $this->renameUploads();
             $this->createHashes();
         } else {
-            echo "More than 50000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-to39 rename-uploads\"\n\"php bootstrap.php update-to39 create-hashes\"\n";
+            echo "More than 5000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-to39 rename-uploads\"\n\"php bootstrap.php update-to39 create-hashes\"\n";
         }
     }
 
@@ -159,7 +159,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
             $this->_progressBar->next(1, 'renaming upload '.$id);
             $this->_renameUploads($uploadsDir . '/', $oldId, $id);
         }
-        rmdir($uploadsDir . '/mediaprescaleold');
+        $this->_deldir($uploadsDir . '/mediaprescaleold');
     }
 
     private function _renameUploads($path, $oldName, $newName)
@@ -194,16 +194,28 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
     {
         $db = Kwf_Registry::get('db');
         $s = new Kwf_Model_Select();
-        $s->where("md5_hash = ''");
         $it = new Kwf_Model_Iterator_Packages(
             new Kwf_Model_Iterator_Rows(Kwf_Model_Abstract::getInstance('Kwf_Uploads_Model'), $s)
         );
         foreach ($it as $row) {
             $this->_progressBar->next(1, 'calculating md5 '.$row->id);
-            if (file_exists($row->getFileSource())) {
+            if (!$row->md5_hash && file_exists($row->getFileSource())) {
                 $md5Hash = md5_file($row->getFileSource());
                 $db->query("UPDATE `kwf_uploads` SET  `md5_hash` =  '{$md5Hash}' WHERE  `id` = '{$row->id}';");
             }
         }
+    }
+
+    private function _deldir($dir){
+        $current_dir = opendir($dir);
+        while ($entryname = readdir($current_dir)){
+            if (is_dir("$dir/$entryname") and ($entryname != "." and $entryname!="..")) {
+                deldir("${dir}/${entryname}");
+            } else if ($entryname != "." and $entryname!="..") {
+                unlink("${dir}/${entryname}");
+            }
+        }
+        closedir($current_dir);
+        rmdir($dir);
     }
 }

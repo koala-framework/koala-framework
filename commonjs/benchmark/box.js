@@ -167,7 +167,7 @@ if (!benchmarkEnabled) {
         BenchmarkBox._subTimers = {};
         html = '<div class="kwfUp-benchmarkBoxContent">'+html+'</div>';
         html = '<div class="kwfUp-benchmarkBox" data-benchmark-type="'+options.type+'">'+html+'</div>';
-        el = $(html);
+        var el = $(html);
         $('body').append(el);
         BenchmarkBox.initBox(el);
     };

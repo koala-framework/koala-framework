@@ -65,7 +65,8 @@ class Kwf_Controller_Action_Debug_LogsController extends Kwf_Controller_Action_A
                 '** _POST **',
                 '** _SERVER **',
                 '** _FILES **',
-                '** _SESSION **'
+                '** _SESSION **',
+                '** RawBody **'
             ),
             'end' => array(
                 '-- Exception --',
@@ -81,7 +82,8 @@ class Kwf_Controller_Action_Debug_LogsController extends Kwf_Controller_Action_A
                 '-- _POST --',
                 '-- _SERVER --',
                 '-- _FILES --',
-                '-- _SESSION --'
+                '-- _SESSION --',
+                '-- RawBody --'
             )
         );
 
@@ -123,6 +125,7 @@ class Kwf_Controller_Action_Debug_LogsController extends Kwf_Controller_Action_A
                 'server' => isset($logMessage['_SERVER']) ? $logMessage['_SERVER'] : '',
                 'files' => isset($logMessage['_FILES']) ? $logMessage['_FILES'] : '',
                 'session' => isset($logMessage['_SESSION']) ? $logMessage['_SESSION'] : '',
+                'raw_body' => isset($logMessage['RawBody']) ? $logMessage['RawBody'] : '',
                 'filename' => $fileInfo['filename'],
                 'date' => $folders[2] . ' ' . $logMessage['Time']
             );

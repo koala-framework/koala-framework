@@ -34,6 +34,8 @@ class Kwf_Controller_Action_Debug_LogsFormController extends Kwf_Controller_Acti
             ->setTpl('<pre>{value:nl2Br}</pre>');
         $form->add(new Kwf_Form_Field_ShowField('server', '$_SERVER'))
             ->setTpl('<pre>{value:nl2Br}</pre>');
+        $form->add(new Kwf_Form_Field_ShowField('raw_body', 'Raw Body'))
+            ->setTpl('<pre>{value:nl2Br}</pre>');
     }
 }
 

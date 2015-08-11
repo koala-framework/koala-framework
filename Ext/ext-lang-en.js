@@ -74,7 +74,7 @@ Ext2.onReady(function() {
     trlKwf("Wednesday"),
     trlKwf("Thursday"),
     trlKwf("Friday"),
-    "Saturday"
+    trlKwf("Saturday")
   ];
 
   Date.getShortDayName = function (day) {
