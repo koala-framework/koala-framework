@@ -120,15 +120,26 @@ class Kwf_Component_Abstract_Admin
                 $ret[$kFile] = false;
             }
             foreach ($paths as $path => $c) {
+                static $filesInPath = array();
+                if (!isset($filesInPath[$path])) {
+                    $filesInPath[$path] = array();
+                    if (is_dir($path)) {
+                        foreach (new DirectoryIterator($path) as $fileInfo) {
+                            if($fileInfo->isFile()) {
+                                $filesInPath[$path][$fileInfo->getFilename()] = true;
+                            }
+                        }
+                    }
+                }
                 $exts = $file['ext'];
                 if (!is_array($exts)) $exts = array($exts);
                 foreach ($exts as $ext) {
-                    $f = $path.'/'.$file['filename'].'.'.$ext;
-                    if (file_exists($f)) {
+                    $f = $file['filename'].'.'.$ext;
+                    if (isset($filesInPath[$path][$f])) {
                         if ($file['returnClass']) {
                             $i = $c.'_'.str_replace('/', '_', $file['filename']);
                         } else {
-                            $i = $f;
+                            $i = $path.'/'.$f;
                         }
                         if (isset($file['multiple']) && $file['multiple']) {
                             $ret[$kFile][] = $i;
