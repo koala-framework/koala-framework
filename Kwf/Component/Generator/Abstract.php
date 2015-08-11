@@ -60,14 +60,6 @@ abstract class Kwf_Component_Generator_Abstract
 
     protected function _init()
     {
-        if (!is_array($this->_settings['component'])) {
-            $this->_settings['component'] = array($this->_settings['generator']
-                                            => $this->_settings['component']);
-        }
-        foreach ($this->_settings['component'] as $k=>$i) {
-            if (!$i) unset($this->_settings['component'][$k]);
-        }
-
         if (array_key_exists('addUrlPart', $this->_settings)) {
             $this->_addUrlPart = (bool)$this->_settings['addUrlPart'];
             unset($this->_settings['addUrlPart']);

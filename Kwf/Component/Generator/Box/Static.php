@@ -3,12 +3,10 @@ class Kwf_Component_Generator_Box_Static extends Kwf_Component_Generator_Static
 {
     protected function _init()
     {
-        if (is_array($this->_settings['component'])) {
+        if (count($this->_settings['component']) > 1) {
             if (isset($this->_settings['box'])) {
                 throw new Kwf_Exception("How would you put multiple components into one box?");
             }
-        } else {
-            $this->_settings['component'] = array($this->_settings['generator'] => $this->_settings['component']);
         }
         parent::_init();
     }

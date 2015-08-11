@@ -5,7 +5,7 @@ class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_S
 
     protected function _init()
     {
-        if (!is_array($this->_settings['component']) || $this->_settings['component'] < 2) {
+        if (count($this->_settings['component']) < 2) {
             throw new Kwf_Exception("You need at least two components for a Box_StaticSelect generator");
         }
         if (!isset($this->_settings['model'])) {

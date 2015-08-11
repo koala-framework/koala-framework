@@ -51,7 +51,6 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         $generators = Kwc_Abstract::getSetting($class, 'generators');
         $g = $generators[$key];
         if (!isset($g['class'])) throw new Kwf_Exception("generator class is not set for component '$class' generator '$key'");
-        if (!is_array($g['component'])) $g['component'] = array($key => $g['component']);
         foreach ($g['component'] as &$c) {
             if (!$c) continue;
             $masterC = $c;

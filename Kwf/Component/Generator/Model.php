@@ -30,21 +30,11 @@ class Kwf_Component_Generator_Model extends Kwf_Model_Abstract
             $equals = $where->getPart('whereEquals');
             $parent = $equals['parent_id'];
             foreach (Kwc_Abstract::getSetting($parent, 'generators', false) as $key => $generator) {
-                if (is_array($generator['component'])) {
-                    foreach ($generator['component'] as $component => $class) {
-                        if ($class) {
-                            $rowset[] = array(
-                                'component' => $class,
-                                'class' => $generator['class'],
-                                'name' => $component
-                            );
-                        }
-                    }
-                } else if ($generator['class']) {
+                foreach ($generator['component'] as $component => $class) {
                     $rowset[] = array(
-                        'component' => $generator['component'],
+                        'component' => $class,
                         'class' => $generator['class'],
-                        'name' => $key
+                        'name' => $component
                     );
                 }
             }

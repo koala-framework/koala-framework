@@ -287,24 +287,34 @@ class Kwf_Component_Settings
                         }
                     }
 
-                    $retModified = array();
-                    foreach ($ret as $k=>$g) {
-                        if (is_array($g['component'])) {
-                            foreach ($g['component'] as $l=>$cc) {
-                                if (!$cc) continue;
-                                $cc = strpos($cc, '.') ? substr($cc, 0, strpos($cc, '.')) : $cc;
-                                $vars = get_class_vars($cc);
-                                if (isset($vars['needsParentComponentClass']) && $vars['needsParentComponentClass']) {
-                                    $g['component'][$l] .= '.'.$class;
-                                }
+                    //normalize generator component to an array removing false values
+                    foreach ($ret as $genKey=>$gen) {
+                        if (!is_array($gen['component'])) {
+                            if (!$gen['component']) {
+                                //this generator has no component set, remove it
+                                unset($ret[$genKey]);
+                            } else {
+                                $ret[$genKey]['component'] = array($genKey=>$gen['component']);
                             }
                         } else {
-                            if (!$g['component']) continue;
-                            $cc = $g['component'];
+                            foreach ($ret[$genKey]['component'] as $k=>$i) {
+                                if (!$i) unset($ret[$genKey]['component'][$k]);
+                            }
+                            if (!$ret[$genKey]['component']) {
+                                //this generator has no component set, remove it
+                                unset($ret[$genKey]);
+                            }
+                        }
+                    }
+
+
+                    $retModified = array();
+                    foreach ($ret as $k=>$g) {
+                        foreach ($g['component'] as $l=>$cc) {
                             $cc = strpos($cc, '.') ? substr($cc, 0, strpos($cc, '.')) : $cc;
                             $vars = get_class_vars($cc);
                             if (isset($vars['needsParentComponentClass']) && $vars['needsParentComponentClass']) {
-                                $g['component'] .= '.'.$class;
+                                $g['component'][$l] .= '.'.$class;
                             }
                         }
                         $retModified[$k] = $g;
@@ -452,11 +462,7 @@ class Kwf_Component_Settings
         $tFull = microtime(true);
         $classes = array();
         foreach (Kwc_Abstract::getSetting($class, 'generators') as $generator) {
-            if (is_array($generator['component'])) {
-                $classes = array_merge($classes, $generator['component']);
-            } else {
-                $classes[] = $generator['component'];
-            }
+            $classes = array_merge($classes, $generator['component']);
             if (isset($generator['plugins'])) {
                 $classes = array_merge($classes, $generator['plugins']);
             }

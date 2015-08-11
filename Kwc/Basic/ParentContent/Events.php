@@ -27,10 +27,7 @@ class Kwc_Basic_ParentContent_Events extends Kwc_Abstract_Events
                 );
             }
             foreach (Kwc_Abstract::getSetting($class, 'generators') as $generator) {
-                if ($generator['class'] == 'Kwf_Component_Generator_Box_StaticSelect' &&
-                     is_array($generator['component']) &&
-                     in_array($this->_class, $generator['component'])
-                ) {
+                if ($generator['class'] == 'Kwf_Component_Generator_Box_StaticSelect') {
                     foreach ($generator['component'] as $componentClass) {
                         if ($componentClass == $this->_class) continue;
                         $ret[] = array(

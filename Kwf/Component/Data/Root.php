@@ -558,12 +558,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
             $generators = array();
             foreach (Kwc_Abstract::getComponentClasses() as $c) {
                 foreach (Kwc_Abstract::getSetting($c, 'generators') as $key => $generator) {
-                    if (is_array($generator['component'])) {
-                        $childClasses = $generator['component'];
-                    } else {
-                        $childClasses = array($generator['component']);
-                    }
-                    foreach ($childClasses as $childClass) {
+                    foreach ($generator['component'] as $childClass) {
                         if (in_array($childClass, $lookingForClasses)) {
                             $generators[$c.$key] = array($c, $key);
                         }

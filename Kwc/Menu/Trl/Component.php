@@ -28,7 +28,6 @@ class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
         if (!$menuComponent) $menuComponent = $this->getData();
         foreach (Kwc_Abstract::getSetting($menuComponent->componentClass, 'generators') as $key => $generator) {
             $componentClasses = $generator['component'];
-            if (!is_array($componentClasses)) $componentClasses = array($componentClasses);
             foreach ($componentClasses as $class) {
                 if (is_instance_of($class, 'Kwc_Menu_Expanded_EditableItems_Trl_Component')) {
                     $c = $menuComponent->getChildComponent('-'.$key);
