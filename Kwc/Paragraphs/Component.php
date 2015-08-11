@@ -55,10 +55,13 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars();
         $ret['paragraphs'] = array();
         foreach($this->getData()->getChildComponents(array('generator'=>'paragraphs')) as $paragraph) {
-            $cssClass = 'kwcParagraphItem';
+            $cssClass = $this->_getBemClass('kwcParagraphItem');
             $row = $paragraph->getRow();
-            if ($this->_getSetting('useMobileBreakpoints') && $row->device_visible) $cssClass .= ' ' . $row->device_visible;
-            $cssClass .= ' outer'.ucfirst(Kwf_Component_Abstract::formatRootElementClass($paragraph->componentClass, ''));
+            if ($this->_getSetting('useMobileBreakpoints') && $row->device_visible) $cssClass .= ' ' . $this->_getBemClass($row->device_visible);
+            $cssClass .= ' '.$this->_getBemClass(
+                    'outer'.ucfirst($paragraph->row->component),
+                    'outer'.ucfirst(Kwf_Component_Abstract::formatRootElementClass($paragraph->componentClass, ''))
+                );
             $ret['paragraphs'][] = array(
                 'data' => $paragraph,
                 'class' => $cssClass

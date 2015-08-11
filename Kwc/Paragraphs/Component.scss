@@ -2,19 +2,19 @@
 @import "kwf/mobile-breakpoint";
 
 .kwcClass {
-    .kwcParagraphItem {
+    .kwcBem__kwcParagraphItem {
         @include pie-clearfix;
 
-        &.onlyShowOnMobile {
+        &.kwcBem__onlyShowOnMobile {
             display: none;
         }
 
         @include mobile-breakpoint {
-            &.onlyShowOnMobile {
+            &.kwcBem__onlyShowOnMobile {
                 display: block;
             }
 
-            &.hideOnMobile {
+            &.kwcBem__hideOnMobile {
                 display: none;
             }
         }
