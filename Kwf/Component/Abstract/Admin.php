@@ -114,6 +114,8 @@ class Kwf_Component_Abstract_Admin
         $ret = array();
         $paths = Kwc_Abstract::getSetting($class, 'parentFilePaths'); //teuer, nur einmal aufrufen
         foreach ($files as $kFile => $file) {
+            $exts = $file['ext'];
+            if (!is_array($exts)) $exts = array($exts);
             if (isset($file['multiple']) && $file['multiple']) {
                 $ret[$kFile] = array();
             } else {
@@ -125,14 +127,17 @@ class Kwf_Component_Abstract_Admin
                     $filesInPath[$path] = array();
                     if (is_dir($path)) {
                         foreach (new DirectoryIterator($path) as $fileInfo) {
+                            $fn = $fileInfo->getFilename();
                             if($fileInfo->isFile()) {
-                                $filesInPath[$path][$fileInfo->getFilename()] = true;
+                                $filesInPath[$path][$fn] = true;
+                            } else if ($fn == 'Cc') {
+                                $filesInPath[$path]['Cc/Component.php'] = true;
+                            } else if ($fn == 'Trl') {
+                                $filesInPath[$path]['Trl/Component.php'] = true;
                             }
                         }
                     }
                 }
-                $exts = $file['ext'];
-                if (!is_array($exts)) $exts = array($exts);
                 foreach ($exts as $ext) {
                     $f = $file['filename'].'.'.$ext;
                     if (isset($filesInPath[$path][$f])) {
