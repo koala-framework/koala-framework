@@ -51,7 +51,7 @@ abstract class Kwf_Db_Table_Abstract extends Zend_Db_Table_Abstract
                 'automatic_serialization' => true,
                 'write_control' => false
             );
-            if (extension_loaded('apc') && php_sapi_name() != 'cli') {
+            if (extension_loaded('apc') && PHP_SAPI != 'cli') {
                 $backendOptions = array();
                 $backend = 'Apc';
             } else {

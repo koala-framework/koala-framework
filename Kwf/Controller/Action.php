@@ -152,7 +152,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
     protected function _getUserRole()
     {
-        if (php_sapi_name() == 'cli') return 'cli';
+        if (PHP_SAPI == 'cli') return 'cli';
         $um = Kwf_Registry::get('userModel');
         if (!$um) return null;
         return $um->getAuthedUserRole();
@@ -160,7 +160,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
     protected function _getAuthData()
     {
-        if (php_sapi_name() == 'cli') return null;
+        if (PHP_SAPI == 'cli') return null;
         $um = Kwf_Registry::get('userModel');
         if (!$um) return null;
         return $um->getAuthedUser();

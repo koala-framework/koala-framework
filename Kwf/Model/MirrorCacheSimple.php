@@ -38,7 +38,7 @@ class Kwf_Model_MirrorCacheSimple extends Kwf_Model_Proxy
         $count = $this->_sourceModel->countRows();
 
         $progress = null;
-        if (php_sapi_name() == 'cli' && $processInCli) {
+        if (PHP_SAPI == 'cli' && $processInCli) {
             $c = new Zend_ProgressBar_Adapter_Console();
             $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                     Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,

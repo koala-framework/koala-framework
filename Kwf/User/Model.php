@@ -218,7 +218,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
     {
         if (!Kwf_Setup::hasDb()) return null;
 
-        if (php_sapi_name() == 'cli') return null;
+        if (PHP_SAPI == 'cli') return null;
 
         $loginData = Kwf_Auth::getInstance()->getStorage()->read();
         if (!$loginData || !isset($loginData['userId']) || !$loginData['userId']) {
@@ -231,7 +231,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
     {
         if (!Kwf_Setup::hasDb()) return null;
 
-        if (php_sapi_name() == 'cli') return null;
+        if (PHP_SAPI == 'cli') return null;
 
         if (!$this->_authedUser) {
             $id = $this->getAuthedUserId();
@@ -249,7 +249,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
 
     public function getAuthedUserRole()
     {
-        if (php_sapi_name() == 'cli') return 'cli';
+        if (PHP_SAPI == 'cli') return 'cli';
         if (!Kwf_Setup::hasDb()) return 'guest';
 
         $loginData = Kwf_Auth::getInstance()->getStorage()->read();

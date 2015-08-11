@@ -8,7 +8,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 
     public function load($id, $doNotTestCacheValidity = false)
     {
-        if (php_sapi_name() == 'cli') return false;
+        if (PHP_SAPI == 'cli') return false;
 
         $id = $this->_processId($id);
         return parent::load($id, $doNotTestCacheValidity);
@@ -16,7 +16,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 
     public function loadWithMetadata($id, $doNotTestCacheValidity = false)
     {
-        if (php_sapi_name() == 'cli') return false;
+        if (PHP_SAPI == 'cli') return false;
 
         $id = $this->_processId($id);
 
@@ -32,7 +32,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 
     public function test($id)
     {
-        if (php_sapi_name() == 'cli') return false;
+        if (PHP_SAPI == 'cli') return false;
 
         $id = $this->_processId($id);
         return parent::test($id);
@@ -41,7 +41,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
     public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
         $id = $this->_processId($id);
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             $lifetime = $this->getLifetime($specificLifetime);
             Kwf_Util_Apc::callSaveCacheByCli(array('id' => $id, 'data' => serialize(array($data, time(), $lifetime))));
         }
@@ -53,7 +53,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
     {
         $id = $this->_processId($id);
         $ret = true;
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             $ret = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => $id));
         }
         return $ret && parent::remove($id);
@@ -61,7 +61,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 
     public function getMetadatas($id)
     {
-        if (php_sapi_name() == 'cli') return false;
+        if (PHP_SAPI == 'cli') return false;
 
         $id = $this->_processId($id);
         return parent::getMetadatas($id);
@@ -69,7 +69,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 
     public function touch($id, $extraLifetime)
     {
-        if (php_sapi_name() == 'cli') return false;
+        if (PHP_SAPI == 'cli') return false;
 
         $id = $this->_processId($id);
         return parent::touch($id, $extraLifetime);
@@ -80,7 +80,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
         switch ($mode) {
             case Zend_Cache::CLEANING_MODE_ALL:
                 $ret = true;
-                if (php_sapi_name() == 'cli') {
+                if (PHP_SAPI == 'cli') {
                     $ret = Kwf_Util_Apc::callClearCacheByCli(array(
                         'type' => 'user'
                     ));
@@ -114,7 +114,7 @@ class Kwf_Cache_Backend_Apc extends Zend_Cache_Backend_Apc
 
     public function getFillingPercentage()
     {
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             return 0;
         }
         return parent::getFillingPercentage();

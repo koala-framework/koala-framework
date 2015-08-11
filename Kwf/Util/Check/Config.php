@@ -8,7 +8,7 @@ class Kwf_Util_Check_Config
     public static function dispatch()
     {
         Kwf_Loader::registerAutoload();
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             $quiet = isset($_SERVER['argv'][2]) && trim($_SERVER['argv'][2]) == 'quiet';
         } else {
             $role = false;
@@ -40,12 +40,12 @@ class Kwf_Util_Check_Config
                 );
             }
             $ret[] = array(
-                'checkText' => str_replace('apache2handler', 'apache2', php_sapi_name()).' '.$i['name'],
+                'checkText' => str_replace('apache2handler', 'apache2', PHP_SAPI).' '.$i['name'],
                 'status' => $result['status'],
                 'message' => isset($result['message']) ? $result['message'] : '',
             );
         }
-//         if (php_sapi_name()!= 'cli') {
+//         if (PHP_SAPI!= 'cli') {
 //             passthru(Kwf_Config::getValue('server.phpCli')." bootstrap.php check-config quiet 2>&1", $ret);
 //             if ($ret) echo "\nFAILED CLI";
 //         }
@@ -119,7 +119,7 @@ class Kwf_Util_Check_Config
                     echo "\nWARNING: ".$i['checkText'].' '.$i['message'];
                 }
             }
-            if (php_sapi_name()!= 'cli') {
+            if (PHP_SAPI!= 'cli') {
                 passthru(Kwf_Config::getValue('server.phpCli')." bootstrap.php check-config quiet 2>&1", $ret);
                 if ($ret) echo "\nFAILED CLI";
             }
@@ -142,7 +142,7 @@ class Kwf_Util_Check_Config
                 echo "</p>";
             }
 
-            if (php_sapi_name()!= 'cli') {
+            if (PHP_SAPI!= 'cli') {
                 passthru(Kwf_Config::getValue('server.phpCli')." bootstrap.php check-config 2>&1", $ret);
                 if ($ret) {
                     echo "<span style=\"background-color:red\">FAILED CLI: $ret</span>";
@@ -429,7 +429,7 @@ class Kwf_Util_Check_Config
             );
         }
 
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             if (!ini_get('apc.enable_cli')) {
                 throw new Kwf_Exception("apc extension not enabled in cli");
             }
@@ -468,7 +468,7 @@ class Kwf_Util_Check_Config
 
     private static function _magic_quotes_gpc()
     {
-        if (php_sapi_name()!= 'cli' // nur im web testen, die cli berührt das sowieso nicht
+        if (PHP_SAPI!= 'cli' // nur im web testen, die cli berührt das sowieso nicht
             && get_magic_quotes_gpc()
         ) {
             return array(

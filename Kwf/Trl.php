@@ -221,7 +221,7 @@ class Kwf_Trl
 
     public function getTargetLanguage()
     {
-        if (php_sapi_name() == 'cli' || !$this->_useUserLanguage) {
+        if (PHP_SAPI == 'cli' || !$this->_useUserLanguage) {
             return $this->getWebCodeLanguage();
         }
 

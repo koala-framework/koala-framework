@@ -45,7 +45,7 @@ abstract class Kwf_Exception_Abstract extends Exception
                 } catch (Exception $e) {}
             }
 
-            if (!$ignoreCli && php_sapi_name() == 'cli') {
+            if (!$ignoreCli && PHP_SAPI == 'cli') {
                 $this->log();
                 file_put_contents('php://stderr', $msg."\n");
                 exit(1);

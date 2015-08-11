@@ -378,7 +378,7 @@ class Kwf_Benchmark
     {
         $prefixLen = strlen(Kwf_Setup::getBaseUrl());
         if (!isset($_SERVER['REQUEST_URI'])) {
-            if (php_sapi_name() == 'cli') $urlType = 'cli';
+            if (PHP_SAPI == 'cli') $urlType = 'cli';
             else $urlType = 'unknown';
         } else if (substr($_SERVER['REQUEST_URI'], $prefixLen, 8) == '/assets/') {
             $urlType = 'asset';

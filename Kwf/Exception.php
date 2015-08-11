@@ -9,7 +9,7 @@ class Kwf_Exception extends Kwf_Exception_NoLog
         if ($this->log()) {
             return;
         }
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             echo 'WARNING: '.$this->getMessage()."\n";
         } else if (
             Zend_Registry::get('config')->debug->firephp &&
@@ -27,7 +27,7 @@ class Kwf_Exception extends Kwf_Exception_NoLog
     public function logOrThrow()
     {
         if ($this->log()) {
-            if (php_sapi_name() == 'cli') {
+            if (PHP_SAPI == 'cli') {
                 file_put_contents('php://stderr', $this->__toString()."\n");
             }
             return;

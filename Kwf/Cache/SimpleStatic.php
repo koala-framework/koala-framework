@@ -61,7 +61,7 @@ class Kwf_Cache_SimpleStatic
     public static function clear($cacheIdPrefix)
     {
         if (extension_loaded('apc')) {
-            if (php_sapi_name() == 'cli') {
+            if (PHP_SAPI == 'cli') {
                 Kwf_Util_Apc::callClearCacheByCli(array('clearCacheSimpleStatic'=>$cacheIdPrefix));
             } else {
                 if (!class_exists('APCIterator')) {
@@ -120,7 +120,7 @@ class Kwf_Cache_SimpleStatic
                 }
                 $ids[] = $prefix.$cacheId;
             }
-            if (php_sapi_name() == 'cli' && $ids) {
+            if (PHP_SAPI == 'cli' && $ids) {
                 $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
                 if (!$result['result']) $ret = false;
             }

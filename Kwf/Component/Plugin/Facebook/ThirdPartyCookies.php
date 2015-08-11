@@ -8,7 +8,7 @@ class Kwf_Component_Plugin_Facebook_ThirdPartyCookies extends Kwf_Component_Plug
     {
         $facebook = Kwf_Util_Facebook_Api::getInstance();
         //no redirect if cli, or address contains assets, admin or kwf
-        if (php_sapi_name() != 'cli' && !preg_match('#^/admin|^/kwf|^/assets#',
+        if (PHP_SAPI != 'cli' && !preg_match('#^/admin|^/kwf|^/assets#',
             $_SERVER['REQUEST_URI'])) {
             if (!isset($_COOKIE[session_name()])) {
                 Kwf_Session::start();

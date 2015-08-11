@@ -29,7 +29,7 @@ class Kwf_Setup
         error_reporting(E_ALL & ~E_STRICT);
         define('APP_PATH', getcwd());
         Kwf_Setup::$configClass = $configClass;
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             //don't use cached setup on cli so clear-cache will always work even if eg. paths change
             require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
             Kwf_Util_Setup::minimalBootstrap();
@@ -41,7 +41,7 @@ class Kwf_Setup
             }
             include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php');
         }
-        if (!defined('VKWF_PATH') && php_sapi_name() != 'cli' && self::getBaseUrl() === null) {
+        if (!defined('VKWF_PATH') && PHP_SAPI != 'cli' && self::getBaseUrl() === null) {
             //if server.baseUrl is not set try to auto detect it and generate config.local.ini accordingly
             //this code is not used if server.baseUrl is set to "" in vkwf
             if (!isset($_SERVER['PHP_SELF'])) {
@@ -169,7 +169,7 @@ class Kwf_Setup
     {
         static $requestPath;
         if (isset($requestPath)) return $requestPath;
-        switch (php_sapi_name()) {
+        switch (PHP_SAPI) {
             case 'apache2handler':
             case 'apache':
                 $requestPath = $_SERVER['REQUEST_URI'];
@@ -185,7 +185,7 @@ class Kwf_Setup
                 $requestPath = $_SERVER['SCRIPT_URL'];
                 break;
             default:
-                throw new Kwf_Exception("unsupported sapi: ".php_sapi_name());
+                throw new Kwf_Exception("unsupported sapi: ".PHP_SAPI);
         }
         return $requestPath;
     }

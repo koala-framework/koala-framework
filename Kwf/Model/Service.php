@@ -77,7 +77,7 @@ class Kwf_Model_Service extends Kwf_Model_Abstract
                 'automatic_serialization' => true,
                 'write_control' => false,
             );
-            if (extension_loaded('apc') && php_sapi_name() != 'cli') {
+            if (extension_loaded('apc') && PHP_SAPI != 'cli') {
                 $backendOptions = array();
                 $backend = 'Apc';
             } else {

@@ -24,7 +24,7 @@ function p($src, $Type = 'LOG')
     }
     if (is_array($src)) {
         $isToDebug = true;
-        if ($Type == 'TABLE' && php_sapi_name() != 'cli') {
+        if ($Type == 'TABLE' && PHP_SAPI != 'cli') {
             $table = '';
             $i = 0;
             foreach ($src[1] as $row) {
@@ -42,7 +42,7 @@ function p($src, $Type = 'LOG')
             $src = $src[0]."<br />\n<table>\n".$table."</table>\n";
         } else {
             $src = _pArray($src);
-            if (php_sapi_name() == 'cli') {
+            if (PHP_SAPI == 'cli') {
                 $src = "\n$src";
             } else {
                 $src = "<pre>\n$src</pre>";
@@ -50,7 +50,7 @@ function p($src, $Type = 'LOG')
         }
     }
     if ($isToDebug) {
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             $src = str_replace('<pre>', '', $src);
             $src = str_replace('</pre>', '', $src);
         }
@@ -60,9 +60,9 @@ function p($src, $Type = 'LOG')
                 $src instanceof Exception)) {
         xdebug_var_dump($src);
     } else {
-        if (php_sapi_name() != 'cli') echo "<pre>";
+        if (PHP_SAPI != 'cli') echo "<pre>";
         var_dump($src);
-        if (php_sapi_name() != 'cli') echo "</pre>";
+        if (PHP_SAPI != 'cli') echo "</pre>";
     }
     if (function_exists('debug_backtrace')) {
         $bt = debug_backtrace();
@@ -70,7 +70,7 @@ function p($src, $Type = 'LOG')
         if (isset($bt[1]) && isset($bt[1]['function']) && $bt[1]['function'] == 'd') $i = 1;
         if (isset($bt[$i]) && isset($bt[$i]['function']) && $bt[$i]['function'] == 'bt') $i++;
         echo $bt[$i]['file'].':'.$bt[$i]['line'];
-        if (php_sapi_name() != 'cli') echo "<br />";
+        if (PHP_SAPI != 'cli') echo "<br />";
         echo "\n";
     }
 }
@@ -313,11 +313,11 @@ class Kwf_Debug
     public static function bt($file = false)
     {
         if (!Kwf_Debug::isEnabled()) return;
-        if (php_sapi_name() == 'cli' || $file) {
+        if (PHP_SAPI == 'cli' || $file) {
             $ret = self::btString();
             if ($file) {
                 $ret = str_repeat("=", 45)."\n".
-                    php_sapi_name().' '.(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '').
+                    PHP_SAPI.' '.(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '').
                     "\n".$ret;
                 file_put_contents('backtrace', $ret, FILE_APPEND);
             } else {

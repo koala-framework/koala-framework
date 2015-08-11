@@ -5,7 +5,7 @@ class Kwf_Util_Https
 
     public static function ensureHttps()
     {
-        if (php_sapi_name() != 'cli' && self::supportsHttps()) {
+        if (PHP_SAPI != 'cli' && self::supportsHttps()) {
             if (!isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
                 $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 header('Location: '.$redirect, true, 302);
@@ -17,7 +17,7 @@ class Kwf_Util_Https
 
     public static function ensureHttp()
     {
-        if (php_sapi_name() != 'cli') {
+        if (PHP_SAPI != 'cli') {
             if (isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST' && !Kwf_Session::sessionExists()) {
                 $redirect = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
                 header('Location: '.$redirect, true, 302);

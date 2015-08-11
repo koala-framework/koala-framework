@@ -60,7 +60,7 @@ class Kwf_Controller_Front extends Zend_Controller_Front
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
         $plugin->setErrorHandlerModule('kwf_controller_action_error');
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             $plugin->setErrorHandlerController('cli');
         }
         $this->registerPlugin($plugin);
@@ -85,7 +85,7 @@ class Kwf_Controller_Front extends Zend_Controller_Front
     public final function getRouter()
     {
         if (null == $this->_router) {
-            if (php_sapi_name() == 'cli') {
+            if (PHP_SAPI == 'cli') {
                 $this->setRouter($this->_getDefaultCliRouter());
             } else {
                 $this->setRouter($this->getWebRouter());
@@ -123,7 +123,7 @@ class Kwf_Controller_Front extends Zend_Controller_Front
     public function dispatch(Zend_Controller_Request_Abstract $request = null, Zend_Controller_Response_Abstract $response = null)
     {
         if ($request === null) {
-            if (php_sapi_name() == 'cli') {
+            if (PHP_SAPI == 'cli') {
                 $request = new Kwf_Controller_Request_Cli();
             } else {
                 $request = new Kwf_Controller_Request_Http();

@@ -113,7 +113,7 @@ class Kwf_Media_Output
                 $file['mtime'] <= strtotime($headers['If-Modified-Since'])) {
             $ret['responseCode'] = 304;
             $ret['contentLength'] = 0;
-            if (php_sapi_name() == 'cgi-fcgi') {
+            if (PHP_SAPI == 'cgi-fcgi') {
                 $ret['headers'][] = "Status: 304 Not Modified";
             } else {
                 $ret['headers'][] = array('Not Modified', true, 304);
@@ -123,7 +123,7 @@ class Kwf_Media_Output
                 $headers['If-None-Match'] == $file['etag']) {
             $ret['responseCode'] = 304;
             $ret['contentLength'] = 0;
-            if (php_sapi_name() == 'cgi-fcgi') {
+            if (PHP_SAPI == 'cgi-fcgi') {
                 $ret['headers'][] = "Status: 304 Not Modified";
             } else {
                 $ret['headers'][] = array('Not Modified', true, 304);

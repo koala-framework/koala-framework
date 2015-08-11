@@ -66,13 +66,13 @@ abstract class Kwf_Rest_Controller extends Zend_Rest_Controller
 
     protected function _getUserRole()
     {
-        if (php_sapi_name() == 'cli') return 'cli';
+        if (PHP_SAPI == 'cli') return 'cli';
         return Kwf_Registry::get('userModel')->getAuthedUserRole();
     }
 
     protected function _getAuthData()
     {
-        if (php_sapi_name() == 'cli') return null;
+        if (PHP_SAPI == 'cli') return null;
         return Kwf_Registry::get('userModel')->getAuthedUser();
     }
 }

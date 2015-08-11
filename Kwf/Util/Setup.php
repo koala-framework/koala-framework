@@ -200,7 +200,7 @@ class Kwf_Util_Setup
         $ret .= ") {\n";
         $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
         $ret .= "}\n";
-        $ret .= "if (php_sapi_name() == 'cli' && isset(\$_SERVER['argv'][1]) && \$_SERVER['argv'][1] == 'check-config') {\n";
+        $ret .= "if (PHP_SAPI == 'cli' && isset(\$_SERVER['argv'][1]) && \$_SERVER['argv'][1] == 'check-config') {\n";
         $ret .= "    Kwf_Util_Check_Config::dispatch();\n";
         $ret .= "}\n";
 
@@ -232,7 +232,7 @@ class Kwf_Util_Setup
         $ret .= "if (get_magic_quotes_gpc()) Kwf_Util_UndoMagicQuotes::undoMagicQuotes();\n";
 
         if (Kwf_Config::getValue('debug.firephp') || Kwf_Config::getValue('debug.querylog')) {
-            $ret .= "if (php_sapi_name() != 'cli') {\n";
+            $ret .= "if (PHP_SAPI != 'cli') {\n";
             if (Kwf_Config::getValue('debug.firephp')) {
                 $ret .= "    require_once '".Kwf_Config::getValue('externLibraryPath.firephp')."/FirePHPCore/FirePHP.class.php';\n";
                 $ret .= "    FirePHP::init();\n";
@@ -292,7 +292,7 @@ class Kwf_Util_Setup
         if (Kwf_Config::getValue('server.memcache.host')) {
             $host = Kwf_Config::getValue('server.memcache.host');
             if ($host == '%webserverHostname%') {
-                if (php_sapi_name() == 'cli') {
+                if (PHP_SAPI == 'cli') {
                     $host = Kwf_Util_Apc::callUtil('get-hostname', array(), array('returnBody'=>true, 'skipCache'=>true));
                 } else {
                     $host = php_uname('n');
@@ -345,7 +345,7 @@ class Kwf_Util_Setup
 
         //store session data in memcache if avaliable
         if ((Kwf_COnfig::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
-            $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
+            $ret .= "\nif (PHP_SAPI != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
         //up here to have less dependencies or broken redirect
@@ -417,7 +417,7 @@ class Kwf_Util_Setup
         }
 
         if (Kwf_Config::getValue('preLogin')) {
-            $ret .= "if (php_sapi_name() != 'cli' && Kwf_Setup::getRequestPath()!==false) {\n";
+            $ret .= "if (PHP_SAPI != 'cli' && Kwf_Setup::getRequestPath()!==false) {\n";
             $ret .= "    \$ignore = false;\n";
             foreach (Kwf_Config::getValueArray('preLoginIgnore') as $i) {
                 $ret .= "    if (substr(\$_SERVER['REDIRECT_URL'], 0, ".strlen($i).") == '$i') \$ignore = true;\n";

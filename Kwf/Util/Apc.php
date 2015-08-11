@@ -22,7 +22,7 @@ class Kwf_Util_Apc
         static $hasApc;
         if (isset($hasApc)) return $hasApc;
         $hasApc = extension_loaded('apc');
-        if (!$hasApc && php_sapi_name() == 'cli') {
+        if (!$hasApc && PHP_SAPI == 'cli') {
             //apc might be enabled in webserver only, not in cli
             $hasApc = Kwf_Util_Apc::callUtil('is-loaded', array(), array('returnBody'=>true)) == 'OK1';
         }

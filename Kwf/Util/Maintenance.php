@@ -18,7 +18,7 @@ class Kwf_Util_Maintenance
             $offlineBootstrap .= "    \$requestUri = substr(\$requestUri, ".strlen(Kwf_Setup::getBaseUrl()).");\n";
             $offlineBootstrap .= "}\n";
         }
-        $offlineBootstrap .= "if (php_sapi_name() == 'cli' || (
+        $offlineBootstrap .= "if (PHP_SAPI == 'cli' || (
             substr(\$requestUri, 0, 14) == '/kwf/util/apc/' ||
             \$requestUri == '/kwf/json-progress-status' ||
             substr(\$requestUri, 0, 8) == '/assets/'

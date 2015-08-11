@@ -215,7 +215,7 @@ class Kwf_Cache_Simple
             }
             if (!$r) $ret = false;
         }
-        if (self::getBackend() == 'apc' && php_sapi_name() == 'cli' && $ids) {
+        if (self::getBackend() == 'apc' && PHP_SAPI == 'cli' && $ids) {
             $ret = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
         }
         return $ret;

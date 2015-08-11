@@ -13,7 +13,7 @@ class Kwf_Benchmark_Counter_Apc
 
     public function getValue($name)
     {
-        if (php_sapi_name() == 'cli') {
+        if (PHP_SAPI == 'cli') {
             return (int)Kwf_Util_Apc::callUtil('get-counter-value', array('name'=>$name), array('returnBody'=>true));
         } else {
             static $prefix;
