@@ -24,6 +24,7 @@ class Kwf_View_Helper_HighlightTerms
         if (!isset($options['maxReturnBlocks'])) $options['maxReturnBlocks'] = 3;
         if (!isset($options['blockSeparator'])) $options['blockSeparator'] = ' ... ';
         if (!isset($options['cutWithinWords'])) $options['cutWithinWords'] = false;
+        if (!isset($options['highlightWordPartial'])) $options['highlightWordPartial'] = false;
 
         foreach ($terms as $k => $term) {
             if (!preg_match('/[a-zA-Z0-9]/', $term)) {
@@ -146,9 +147,15 @@ class Kwf_View_Helper_HighlightTerms
 
         // highlighting
         $c = 1;
+        $searchQueryRegEx = '';
         foreach ($terms as $term) {
+            if ($options['highlightWordPartial']) {
+                $searchQueryRegEx = '/(^|\W)('.$term.')(.|$)/i';
+            } else {
+                $searchQueryRegEx = '/(^|\W)('.$term.')(\W|$)/i';
+            }
             $ret = preg_replace(
-                "/(^|\W)($term)(\W|$)/i",
+                $searchQueryRegEx,
                 '$1<span class="highlightTerms highlightTerm'.$c.'">$2</span>$3',
                 $ret
             );
