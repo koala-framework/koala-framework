@@ -81,8 +81,9 @@ class Kwc_Directories_Item_Directory_Trl_Events extends Kwc_Chained_Trl_Events
     {
         $dbId = $event->row->component_id;
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($dbId, array('limit'=>1, 'ignoreVisible'=>true));
-        if ($c) {
-            $this->fireEvent(new Kwc_Directories_List_EventItemUpdated($this->_class, $c->id));
+        if ($c && $c->parent->componentClass == $this->_class) {
+            $this->fireEvent(new Kwc_Directories_List_EventItemUpdated($this->_class, $c->id, $c->getSubroot()));
+            $this->fireEvent(new Kwc_Directories_List_EventItemDeleted($this->_class, $c->id, $c->getSubroot()));
         }
     }
 
@@ -90,8 +91,8 @@ class Kwc_Directories_Item_Directory_Trl_Events extends Kwc_Chained_Trl_Events
     {
         $dbId = $event->row->component_id;
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($dbId, array('limit'=>1, 'ignoreVisible'=>true));
-        if ($c) {
-            $this->fireEvent(new Kwc_Directories_List_EventItemInserted($this->_class, $c->id));
+        if ($c && $c->parent->componentClass == $this->_class) {
+            $this->fireEvent(new Kwc_Directories_List_EventItemInserted($this->_class, $c->id, $c->getSubroot()));
         }
     }
 
@@ -99,8 +100,8 @@ class Kwc_Directories_Item_Directory_Trl_Events extends Kwc_Chained_Trl_Events
     {
         $dbId = $event->row->component_id;
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($dbId, array('limit'=>1, 'ignoreVisible'=>true));
-        if ($c) {
-            $this->fireEvent(new Kwc_Directories_List_EventItemDeleted($this->_class, $c->id));
+        if ($c && $c->parent->componentClass == $this->_class) {
+            $this->fireEvent(new Kwc_Directories_List_EventItemDeleted($this->_class, $c->id, $c->getSubroot()));
         }
     }
 

@@ -21,6 +21,8 @@ class Kwc_Directories_AjaxViewMultipleDirectories_SeleniumTest extends Kwf_Test_
         $this->assertNotVisible('link=foo1');
         $this->assertNotVisible('link=foo2');
         $this->click('link=back');
+        $this->waitForConnections();
+        sleep(2);
         $this->assertVisible('link=foo1');
         $this->assertVisible('link=foo2');
     }

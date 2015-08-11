@@ -86,8 +86,13 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
             $emptyText = '('.$this->getEmptyText().')';
             array_unshift($store['data'], array('', $emptyText));
         }
+
+        $disabledValues = $this->getDisabledValues();
         foreach ($store['data'] as $i) {
             $ret['html'] .= '<option value="'.$i[0].'"';
+            if ($disabledValues && in_array($i[0], $disabledValues)) {
+                $ret['html'] .= ' disabled="disabled"';
+            }
             if ($i[0] == $value) $ret['html'] .= ' selected="selected"';
             $ret['html'] .= '>'.htmlspecialchars($i[1]).'</option>';
         }

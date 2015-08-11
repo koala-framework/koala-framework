@@ -1,4 +1,4 @@
-Kwf.onElementReady('div.kwfFormContainerFieldSet fieldset > legend > input', function fieldSet(c)
+Kwf.onElementReady('div.kwfFormContainerFieldSet fieldset > legend > input[type="checkbox"]', function fieldSet(c)
 {
     if (!c.dom.checked) {
         c.up('fieldset').addClass('kwfFormContainerFieldSetCollapsed');

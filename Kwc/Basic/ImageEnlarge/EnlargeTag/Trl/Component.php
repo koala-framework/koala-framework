@@ -97,7 +97,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Trl_Component extends Kwc_Chained_Trl_Co
         return null;
     }
 
-    private function _getImageEnlargeComponent()
+    protected function _getImageEnlargeComponent()
     {
         $d = $this->getData();
         while (!is_instance_of($d->componentClass, 'Kwc_Basic_ImageEnlarge_Trl_Component')) {
