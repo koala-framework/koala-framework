@@ -388,7 +388,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
 
     protected function _getBemClass($class, $nonBemFallback = null)
     {
-        return self::getBemClass($class, $nonBemFallback);
+        return self::getBemClass($this, $class, $nonBemFallback);
     }
 
     /**
