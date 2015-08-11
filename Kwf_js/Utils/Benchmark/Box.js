@@ -162,7 +162,7 @@
         Kwf.Utils.BenchmarkBox._subTimers = {};
         html = '<div class="benchmarkBoxContent">'+html+'</div>';
         html = '<div class="benchmarkBox" data-benchmark-type="'+options.type+'">'+html+'</div>';
-        el = $(html);
+        var el = $(html);
         $('body').append(el);
         Kwf.Utils.BenchmarkBox.initBox(el);
     };
