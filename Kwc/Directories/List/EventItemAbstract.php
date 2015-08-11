@@ -2,9 +2,11 @@
 class Kwc_Directories_List_EventItemAbstract extends Kwf_Component_Event_Abstract
 {
     public $itemId;
-    public function __construct($class, $itemId)
+    public $subroot;
+    public function __construct($class, $itemId, $subroot)
     {
         parent::__construct($class);
         $this->itemId = $itemId;
+        $this->subroot = $subroot;
     }
 }
