@@ -1,5 +1,5 @@
 <?php
-class Kwc_Abstract_List_Trl_Events extends Kwc_Abstract_Events
+class Kwc_Abstract_List_Trl_Events extends Kwc_Chained_Trl_Events
 {
     public function getListeners()
     {
