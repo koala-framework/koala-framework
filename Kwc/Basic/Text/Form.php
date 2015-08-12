@@ -21,16 +21,16 @@ class Kwc_Basic_Text_Form extends Kwc_Abstract_Form
         }
         $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
         $classes = $generators['child']['component'];
-        if ($classes['link']) {
+        if (isset($classes['link']) && $classes['link']) {
             $cfg = new Kwf_Component_Abstract_ExtConfig_Form($classes['link']);
             $c = $cfg->getConfig(Kwf_Component_Abstract_ExtConfig_Abstract::TYPE_DEFAULT);
             $field->setLinkComponentConfig($c['form']);
         }
-        if ($classes['image']) {
+        if (isset($classes['image']) && $classes['image']) {
             $c = Kwc_Admin::getInstance($classes['image'])->getExtConfig();
             $field->setImageComponentConfig($c['form']);
         }
-        if ($classes['download']) {
+        if (isset($classes['download']) && $classes['download']) {
             $c = Kwc_Admin::getInstance($classes['download'])->getExtConfig();
             $field->setDownloadComponentConfig($c['form']);
         }
