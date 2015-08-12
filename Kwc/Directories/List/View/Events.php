@@ -112,8 +112,8 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
 
     public function onDirectoryDetailAdded(Kwf_Component_Event_Component_Added $event)
     {
-        $subroot = $event->data->getSubroot();
-        $directory = $event->data->parent;
+        $subroot = $event->component->getSubroot();
+        $directory = $event->component->parent;
         $this->_fireTagEvent('ContentChanged', $directory);
         $this->_fireTagEvent('PartialsChanged', $directory);
         if (!$this->_usesPartialId()) {
@@ -123,8 +123,8 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
 
     public function onDirectoryDetailRemoved(Kwf_Component_Event_Component_Removed $event)
     {
-        $subroot = $event->data->getSubroot();
-        $directory = $event->data->parent;
+        $subroot = $event->component->getSubroot();
+        $directory = $event->component->parent;
         $this->_fireTagEvent('ContentChanged', $directory);
         $this->_fireTagEvent('PartialsChanged', $directory);
         if ($this->_usesPartialId()) {
@@ -141,7 +141,7 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         if (isset($datas[0])) {
             $data = $datas[0];
             $subroot = $data->getSubroot();
-            $directory = $event->data->parent;
+            $directory = $data->parent;
             $this->_fireTagEvent('ContentChanged', $directory);
             $this->_fireTagEvent('PartialsChanged', $directory);
             if ($this->_usesPartialId()) {
