@@ -25,7 +25,7 @@
             "jquery.transit": "0.9.9",
             "jquery.easing": "1.3.0",
             "underscore": "1.7.0",
-            "compass-mixins": "1.0.2",
+            "compass-mixins": "0.12.7",
             "tinymce": "tinymce/tinymce#4.1.9",
             "matches-selector": "1.0.3"
         },
