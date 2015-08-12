@@ -24,6 +24,7 @@ class Kwc_Abstract_Composite_Form extends Kwc_Abstract_Form
 
         if (!$this->getClass()) return;
         $generators = Kwc_Abstract::getSetting($this->getClass(), 'generators');
+        if (!isset($generators['child'])) return;
         $classes = $generators['child']['component'];
         foreach ($classes as $key => $class) {
             if (!$class) continue;
