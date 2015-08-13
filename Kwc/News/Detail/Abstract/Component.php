@@ -8,7 +8,6 @@ abstract class Kwc_News_Detail_Abstract_Component extends Kwc_Directories_Item_D
         $ret['generators']['metaTags'] = array(
             'class' => 'Kwf_Component_Generator_Box_Static',
             'component' => 'Kwc_News_Detail_Abstract_MetaTags_Component',
-            'inherit' => true
         );
         $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['placeholder']['backLink'] = '&laquo; '.trlKwfStatic('Back to overview');
