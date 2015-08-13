@@ -156,6 +156,24 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns domain component for current component
+     *
+     * @return string
+     */
+    public function getDomainComponent()
+    {
+        $component = $this;
+        while ($component) {
+            if (Kwc_Abstract::getFlag($component->componentClass, 'hasBaseProperties') &&
+                $component->getComponent()->getBaseProperty('domain'))
+            {
+                return $component;
+            }
+            $component = $component->parent;
+        }
+    }
+
+    /**
      * Returns domain for current component
      *
      * @return string
