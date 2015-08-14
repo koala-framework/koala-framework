@@ -199,7 +199,8 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
         );
         foreach ($it as $row) {
             $this->_progressBar->next(1, 'calculating md5 '.$row->id);
-            if (!$row->md5_hash && file_exists($row->getFileSource())) {
+            $md5Hash = $db->query("SELECT md5_hash FROM kwf_uploads WHERE  `id` = '{$row->id}'")->fetchColumn();
+            if (!$md5Hash && file_exists($row->getFileSource())) {
                 $md5Hash = md5_file($row->getFileSource());
                 $db->query("UPDATE `kwf_uploads` SET  `md5_hash` =  '{$md5Hash}' WHERE  `id` = '{$row->id}';");
             }
