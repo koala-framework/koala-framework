@@ -397,6 +397,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $ret = array();
         $ret['component'] = $innerComponent;
         $ret['data'] = $innerComponent;
+        $ret['pageLanguage'] = $innerComponent->getLanguage();
         $ret['boxes'] = array();
         foreach ($innerComponent->getPageOrRoot()->getChildBoxes() as $box) {
             $ret['boxes'][$box->box] = $box;
