@@ -217,12 +217,7 @@ class Kwf_Setup
         if ($i) $uri = substr($uri, 0, $i);
 
         if ($uri == 'robots.txt') {
-            Kwf_Media_Output::output(array(
-                'contents' => "User-agent: *\n".
-                              "Disallow: /admin/\n".
-                              "Disallow: /kwf/util/kwc/render\n", //used to load eg. lightbox content async, we don't want getting that indexed
-                'mimeType' => 'text/plain'
-            ));
+            Kwf_Util_RobotsTxt::output();
         }
 
         if ($uri == 'sitemap.xml') {
