@@ -41,7 +41,7 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
             $helper->setRenderer($this->_getRenderer());
             return '<div class="kwfMainContent">' . "\n    " .
                 $helper->component($component) . "\n" .
-                '</div>' . "\n";
+                '</div><!--/kwfMainContent-->' . "\n";
         } else {
             throw new Kwf_Exception("invalid type");
         }

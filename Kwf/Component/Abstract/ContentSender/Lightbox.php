@@ -59,6 +59,14 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $parentContentSender = new $parentContentSender($parent);
             $parentContent = $parentContentSender->_render($includeMaster, $hasDynamicParts);
 
+            //remove main content to avoid duplicate content for search engines
+            //content will be loaded using ajax
+            $startPos = strpos($parentContent, '<div class="kwfMainContent">');
+            $endPos = strpos($parentContent, '</div><!--/kwfMainContent-->');
+            $parentContent = substr($parentContent, 0, $startPos)
+                            .'<div class="kwfMainContent" data-kwc-component-id="'.$parent->componentId.'">'
+                            .substr($parentContent, $endPos);
+
             //append lightbox after <body> in parent
             $options = $this->_getOptions();
             $style = '';

@@ -52,6 +52,23 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
 
     //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
     Kwf.callOnContentReady(l.contentEl, {action: 'show'});
+
+    //lazy load parent content
+    if (mainContent.data('kwc-component-id')) {
+        setTimeout(function() {
+            var mainContent = $('.kwfMainContent');
+            $.ajax({
+                url: Kwf.getKwcRenderUrl(),
+                data: { componentId: mainContent.data('kwc-component-id') },
+                dataType: 'html',
+                context: this
+            }).done(function(responseText) {
+                mainContent.html(responseText);
+                Kwf.callOnContentReady(mainContent, {action: 'render'});
+            });
+        }, 100);
+    }
+
 }, { priority: 10 }); //after ResponsiveEl so lightbox can adapt to responsive content
 
 Kwf.onContentReady(function lightboxContent(readyEl, options)
