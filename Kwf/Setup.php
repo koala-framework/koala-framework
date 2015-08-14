@@ -250,7 +250,7 @@ class Kwf_Setup
                 if (!$url) { // e.g. firstChildPageData without child pages
                     throw new Kwf_Exception_NotFound();
                 }
-                header('Location: ' . $url);
+                header('Location: '.$url, true, 301);
                 exit;
             }
             $root->setCurrentPage($data);
