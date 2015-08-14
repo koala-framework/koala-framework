@@ -8,7 +8,7 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     if (options.lightboxUrl) {
         href = options.lightboxUrl; //ImagePage passes lightboxUrl as href points to img directly
     }
-    if (Kwf.EyeCandy.Lightbox.allByUrl[]) {
+    if (Kwf.EyeCandy.Lightbox.allByUrl[href]) {
         l = Kwf.EyeCandy.Lightbox.allByUrl[href];
     } else {
         l = new Kwf.EyeCandy.Lightbox.Lightbox(href, options);
@@ -25,8 +25,8 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     this.kwfLightbox.show({
         clickTarget: this
     });
-    Kwf.Utils.HistoryState.currentState.lightbox = this.href;
-    Kwf.Utils.HistoryState.pushState(document.title, this.href);
+    Kwf.Utils.HistoryState.currentState.lightbox = href;
+    Kwf.Utils.HistoryState.pushState(document.title, href);
 
     event.preventDefault();
 });
@@ -54,9 +54,9 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     Kwf.callOnContentReady(l.contentEl, {action: 'show'});
 
     //lazy load parent content
+    var mainContent = $('.kwfMainContent');
     if (mainContent.data('kwc-component-id')) {
         setTimeout(function() {
-            var mainContent = $('.kwfMainContent');
             $.ajax({
                 url: Kwf.getKwcRenderUrl(),
                 data: { componentId: mainContent.data('kwc-component-id') },
