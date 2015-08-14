@@ -8,6 +8,8 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         $ret['assetsDefer']['dep'][] = 'KwfLightbox';
         $ret['assetsDefer']['dep'][] = 'KwfResponsiveImg';
         $ret['cssClass'] = 'webStandard';
+        $ret['dataClass'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Data';
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
 

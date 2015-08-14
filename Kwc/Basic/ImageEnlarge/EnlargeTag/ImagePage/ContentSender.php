@@ -12,6 +12,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_ContentSender extends Kwf_Comp
         $options['height'] = $dim['height'];
         if (!isset($options['style'])) $options['style'] = 'CenterBox'; //default style
         $options['adaptHeight'] = true;
+        $options['lightboxUrl'] = $this->_data->lightbox_url;
         return $options;
     }
 }

@@ -4,15 +4,19 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     var el = event.currentTarget;
     var $el = $(el);
     var options = $el.data('kwc-lightbox');
-    if (Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')]) {
-        l = Kwf.EyeCandy.Lightbox.allByUrl[$el.attr('href')];
+    var href = $el.attr('href');
+    if (options.lightboxUrl) {
+        href = options.lightboxUrl; //ImagePage passes lightboxUrl as href points to img directly
+    }
+    if (Kwf.EyeCandy.Lightbox.allByUrl[]) {
+        l = Kwf.EyeCandy.Lightbox.allByUrl[href];
     } else {
-        l = new Kwf.EyeCandy.Lightbox.Lightbox($el.attr('href'), options);
+        l = new Kwf.EyeCandy.Lightbox.Lightbox(href, options);
     }
     el.kwfLightbox = l;
 
     if (Kwf.EyeCandy.Lightbox.currentOpen &&
-        Kwf.EyeCandy.Lightbox.currentOpen.href == $el.attr('href')
+        Kwf.EyeCandy.Lightbox.currentOpen.href == href
     ) {
         //already open, ignore click
         event.preventDefault();
