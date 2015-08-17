@@ -36,7 +36,7 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
                 $componentLinkModifiers = $targetPage->getComponent()->getComponentLinkModifiers();
             }
         }
-        return serialize(array($targetPage->url, $targetPage->rel, $targetPage->name, $targetPage->getLinkDataAttributes(), $componentLinkModifiers));
+        return serialize(array($targetPage->url, $targetPage->rel, $targetPage->name, $targetPage->getLinkDataAttributes(), $targetPage->getLinkTitle(), $componentLinkModifiers));
     }
 
     public function renderCached($cachedContent, $componentId, $config)
@@ -46,7 +46,8 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
         $targetPage = unserialize($cachedContent);
 
         $config['dataAttributes'] = $targetPage[3];
-        $componentLinkModifiers = $targetPage[4];
+        $config['title'] = $targetPage[4];
+        $componentLinkModifiers = $targetPage[5];
         $text = $config['text'] ? $config['text'] : $targetPage[2];
         $text = str_replace('{name}', $targetPage[2], $text);
         if (!isset($config['skipAppendLinkText']) || !$config['skipAppendLinkText']) {

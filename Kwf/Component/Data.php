@@ -1467,4 +1467,9 @@ class Kwf_Component_Data
         return $ret;
 
     }
+
+    public function getLinkTitle()
+    {
+        return null;
+    }
 }
