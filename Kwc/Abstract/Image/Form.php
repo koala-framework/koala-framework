@@ -8,7 +8,7 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
 
         $this->add($this->_createImageUploadField(Kwc_Abstract::getSetting($this->getClass(), 'imageLabel')));
 
-        if (Kwc_Abstract::getSetting($this->getClass(), 'editFilename') || Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
+        if (Kwc_Abstract::getSetting($this->getClass(), 'editFilename') || Kwc_Abstract::getSetting($this->getClass(), 'altText') || Kwc_Abstract::getSetting($this->getClass(), 'titleText')) {
             $fs = $this->add(new Kwf_Form_Container_FieldSet('SEO'));
             $fs->setCollapsible(true);
             $fs->setCollapsed(true);
@@ -21,7 +21,10 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
             $fs->add(new Kwf_Form_Field_TextField('alt_text', trlKwf('Alt Text')))
-                ->setHelpText(trlKwf('Optional: Describe this image for visually handicapped people and search engines.'))
+                ->setWidth(300);
+        }
+        if (Kwc_Abstract::getSetting($this->getClass(), 'titleText')) {
+            $fs->add(new Kwf_Form_Field_TextField('title_text', trlKwf('Title')))
                 ->setWidth(300);
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {

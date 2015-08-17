@@ -91,6 +91,17 @@ function initResponsiveImgEl(el) {
         el.removeClass('webResponsiveImgLoading');
     });
     img.attr('src', sizePath);
+    var noscript = el.find('noscript').text();
+    if (noscript) { //doesn't work in ie8
+        var title = noscript.match(/title="([^"]+)"/);
+        if (title) {
+            img.attr('title', title[1]);
+        }
+        var alt = noscript.match(/alt="([^"]+)"/);
+        if (alt) {
+            img.attr('alt', alt[1]);
+        }
+    }
 };
 
 function checkResponsiveImgEl(responsiveImgEl) {
