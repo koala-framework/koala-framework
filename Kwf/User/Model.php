@@ -123,7 +123,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
             $host = Kwf_Registry::get('config')->server->domain;
         }
         $activateUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
-        if ($activateComponent) $activateUrl = $activateComponent->getAbsoluteUrl(true);
+        if ($activateComponent) $activateUrl = $activateComponent->getAbsoluteUrl();
         return $activateUrl.'?code='.$row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_ACTIVATE);
     }
 
@@ -146,7 +146,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
             $host = Kwf_Registry::get('config')->server->domain;
         }
         $lostPassUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host.Kwf_Setup::getBaseUrl().'/kwf/user/login/activate';
-        if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->getAbsoluteUrl(true);
+        if ($lostPasswortComponent) $lostPassUrl = $lostPasswortComponent->getAbsoluteUrl();
         return $lostPassUrl.'?code='.$row->id.'-'.$row->generateActivationToken(Kwf_User_Auth_Interface_Activation::TYPE_LOSTPASSWORD);
     }
 
@@ -170,7 +170,7 @@ class Kwf_User_Model extends Kwf_Model_RowCache
                 'Kwc_User_Login_Component', array('limit' => 1)
             );
             if ($component) {
-                $ret = $component->getAbsoluteUrl(true);
+                $ret = $component->getAbsoluteUrl();
             }
         }
 

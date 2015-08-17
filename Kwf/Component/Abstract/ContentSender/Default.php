@@ -63,29 +63,6 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
     {
         $benchmarkEnabled = Kwf_Benchmark::isEnabled();
 
-        if (Kwf_Util_Https::supportsHttps()) {
-
-            $foundRequestHttps = Kwf_Util_Https::doesComponentRequestHttps($this->_data);
-
-            if (isset($_SERVER['HTTPS'])) {
-                //we are on https
-                if (!$foundRequestHttps && isset($_COOKIE['kwcAutoHttps']) && !Zend_Session::sessionExists() && !Zend_Session::isStarted()) {
-                    //we where auto-redirected to https but don't need https anymore
-                    setcookie('kwcAutoHttps', '', 0, '/'); //delete cookie
-                    Kwf_Util_Https::ensureHttp();
-                }
-            } else {
-                //we are on http
-                if ($foundRequestHttps) {
-                    setcookie('kwcAutoHttps', '1', 0, '/');
-                    Kwf_Util_Https::ensureHttps();
-                }
-            }
-
-            if ($benchmarkEnabled) Kwf_Benchmark::checkpoint('check requestHttps');
-        }
-
-
         if ($benchmarkEnabled) $startTime = microtime(true);
         $process = $this->_getProcessInputComponents($includeMaster);
         if ($benchmarkEnabled) Kwf_Benchmark::subCheckpoint('getProcessInputComponents', microtime(true)-$startTime);

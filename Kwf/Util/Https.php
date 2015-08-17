@@ -1,14 +1,12 @@
 <?php
 class Kwf_Util_Https
 {
-    static $supportsHttps; //set in setup
-
     public static function ensureHttps()
     {
         if (php_sapi_name() != 'cli' && self::supportsHttps()) {
             if (!isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
                 $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-                header('Location: '.$redirect, true, 302);
+                header('Location: '.$redirect, true, 301);
                 Kwf_Benchmark::shutDown();
                 exit;
             }
@@ -18,9 +16,9 @@ class Kwf_Util_Https
     public static function ensureHttp()
     {
         if (php_sapi_name() != 'cli') {
-            if (isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST' && !Kwf_Session::sessionExists()) {
+            if (isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
                 $redirect = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-                header('Location: '.$redirect, true, 302);
+                header('Location: '.$redirect, true, 301);
                 Kwf_Benchmark::shutDown();
                 exit;
             }
@@ -28,11 +26,11 @@ class Kwf_Util_Https
     }
 
     /**
-     * Returns if the current request would support https and ensureHttps() would redirect to https
+     * Returns if the current request is https
      */
     public static function supportsHttps()
     {
-        return self::$supportsHttps;
+        return isset($_SERVER['HTTPS']);
     }
 
     /**
@@ -49,41 +47,6 @@ class Kwf_Util_Https
             return true;
         }
         return false;
-    }
-
-    /**
-     * Returns if the given component requests https
-     *
-     * Return value is cached.
-     */
-    public static function doesComponentRequestHttps(Kwf_Component_Data $data)
-    {
-        $showInvisible = Kwf_Component_Data_Root::getShowInvisible();
-
-        $foundRequestHttps = false;
-        if (!$showInvisible) { //don't cache in preview
-            $cacheId = 'reqHttps-'.$data->componentId;
-            $foundRequestHttps = Kwf_Cache_Simple::fetch($cacheId);
-        }
-
-        if ($foundRequestHttps === false) {
-            $foundRequestHttps = 0; //don't use false, false means not-cached
-            if (Kwf_Component_Abstract::getFlag($data->componentClass, 'requestHttps')) {
-                $foundRequestHttps = true;
-            }
-            if (!$foundRequestHttps && $data->getRecursiveChildComponents(array(
-                    'page' => false,
-                    'flags' => array('requestHttps' => true)
-                ))
-            ) {
-                $foundRequestHttps = true;
-            }
-            if (!$showInvisible) { //don't cache in preview
-                Kwf_Cache_Simple::add($cacheId, $foundRequestHttps);
-            }
-        }
-
-        return $foundRequestHttps;
     }
 
     /**

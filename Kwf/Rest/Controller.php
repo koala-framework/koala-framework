@@ -3,8 +3,6 @@ abstract class Kwf_Rest_Controller extends Zend_Rest_Controller
 {
     public function preDispatch()
     {
-        Kwf_Util_Https::ensureHttps();
-
         if ($this->_getParam('applicationAssetsVersion')) {
             if (Kwf_Assets_Dispatcher::getAssetsVersion() != $this->_getParam('applicationAssetsVersion')) {
                 $this->_forward('json-wrong-version', 'error',

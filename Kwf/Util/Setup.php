@@ -319,25 +319,39 @@ class Kwf_Util_Setup
 
         $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
 
-        if (Kwf_Config::getValue('server.https')) {
-            if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
-                $ret .= "\$domains = array(";
-                foreach ($domains as $d) {
-                    $ret .= "'".$d."'=>true, ";
-                }
-                $ret .= ");\n";
-                $ret .= "Kwf_Util_Https::\$supportsHttps = isset(\$_SERVER['HTTP_HOST']) && isset(\$domains[\$_SERVER['HTTP_HOST']]);\n";
+        if (Kwf_Config::getValue('server.https') !== 'unknown') {
+            if (!Kwf_Config::getValue('server.https')) {
+                $ret .= "if (isset(\$_SERVER['HTTPS'])) {\n";
+                $ret .= "    Kwf_Util_Https::ensureHttp();\n";
+                $ret .= "}\n";
             } else {
-                $ret .= "Kwf_Util_Https::\$supportsHttps = true;\n";
+                if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
+                    $ret .= "\$domains = array(";
+                    foreach ($domains as $d) {
+                        $ret .= "'".$d."'=>true, ";
+                    }
+                    $ret .= ");\n";
+                    $ret .= "\$supportsHttps = isset(\$_SERVER['HTTP_HOST']) && isset(\$domains[\$_SERVER['HTTP_HOST']]);\n";
+                    $ret .= "if (\$supportsHttps != isset(\$_SERVER['HTTPS'])) {\n";
+                    $ret .= "    if (\$supportsHttps) {\n";
+                    $ret .= "        Kwf_Util_Https::ensureHttps();\n";
+                    $ret .= "    } else {\n";
+                    $ret .= "        Kwf_Util_Https::ensureHttp();\n";
+                    $ret .= "    }\n";
+                    $ret .= "}\n";
+                } else {
+                    $ret .= "if (!isset(\$_SERVER['HTTPS'])) {\n";
+                    $ret .= "    Kwf_Util_Https::ensureHttps();\n";
+                    $ret .= "}\n";
+                }
             }
-        } else {
-            $ret .= "Kwf_Util_Https::\$supportsHttps = false;\n";
         }
+        
         $ret .= "session_set_cookie_params(\n";
         $ret .= " 0,";     //lifetime
         $ret .= " '".Kwf_Setup::getBaseUrl()."/',";   //path
         $ret .= " null,";  //domain
-        $ret .= " Kwf_Util_Https::\$supportsHttps,"; //secure
+        $ret .= " isset(\$_SERVER['HTTPS']),"; //secure
         $ret .= " true";   //httponly
         $ret .= ");\n";
 

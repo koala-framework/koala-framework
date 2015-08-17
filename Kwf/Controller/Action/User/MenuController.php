@@ -50,7 +50,7 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
                     foreach ($domains as $domain)  {
                         if ($acl->getComponentAcl()->isAllowed($authData, $domain)) {
                             $this->view->frontendUrls[] = array(
-                                'href' => Kwf_Setup::getBaseUrl().'/admin/component/preview?url='.urlencode($domain->getAbsoluteUrl(true)),
+                                'href' => Kwf_Setup::getBaseUrl().'/admin/component/preview?url='.urlencode($domain->getAbsoluteUrl()),
                                 'text' => $domain->name,
                             );
                         }

@@ -20,9 +20,9 @@ class Kwc_Basic_LinkTag_Data extends Kwf_Component_Data
         }
     }
 
-    public function getAbsoluteUrl($useHttps = false)
+    public function getAbsoluteUrl()
     {
-        return $this->_getLinkData()->getAbsoluteUrl($useHttps);
+        return $this->_getLinkData()->getAbsoluteUrl();
     }
 
     public function getLinkDataAttributes()

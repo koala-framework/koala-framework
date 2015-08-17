@@ -125,7 +125,6 @@ class Kwf_Events_Dispatcher
             $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_ViewCache');
             $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_UrlCache');
             $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_ProcessInputCache');
-            $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_RequestHttpsCache');
         }
         if ($hasFulltext) {
             $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_Fulltext');

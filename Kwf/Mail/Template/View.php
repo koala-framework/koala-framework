@@ -59,7 +59,7 @@ class Kwf_Mail_Template_View extends Kwf_View_Mail
         } else {
             $host = Kwf_Registry::get('config')->server->domain;
         }
-        $this->webUrl = (Kwf_Util_Https::supportsHttps() ? 'https' : 'http') . '://'.$host;
+        $this->webUrl = (Kwf_Util_Https::domainSupportsHttps($host) ? 'https' : 'http') . '://'.$host;
         $this->host = $host;
 
         $this->applicationName = Kwf_Registry::get('config')->application->name;
