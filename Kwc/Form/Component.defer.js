@@ -155,15 +155,15 @@ FormComponent.prototype = {
     },
     disableSubmit: function() {
         this._submitDisabled++;
-        this.el.find('.submitWrapper .button button').get(0).disabled = true;
-        this.el.find('.submitWrapper .button').addClass('disabled');
+        this.el.find('.kwfUp-submitWrapper .kwfUp-button button').get(0).disabled = true;
+        this.el.find('.kwfUp-submitWrapper .kwfUp-button').addClass('disabled');
     },
     enableSubmit: function() {
         this._submitDisabled--;
 
         if (this._submitDisabled === 0) {
-            this.el.find('.submitWrapper .button button').get(0).disabled = false;
-            this.el.find('.submitWrapper .button').removeClass('disabled');
+            this.el.find('.kwfUp-submitWrapper .kwfUp-button button').get(0).disabled = false;
+            this.el.find('.kwfUp-submitWrapper .kwfUp-button').removeClass('disabled');
         }
     },
     isSubmitDisabled: function() {
@@ -189,9 +189,9 @@ FormComponent.prototype = {
     
     submit: function()
     {
-        var button = this.el.find('.submitWrapper .button');
-        button.find('.saving').show();
-        button.find('.submit').hide();
+        var button = this.el.find('.kwfUp-submitWrapper .kwfUp-button');
+        button.find('.kwfUp-saving').show();
+        button.find('.kwfUp-submit').hide();
 
         this.errorStyle.hideErrors();
 
@@ -207,7 +207,7 @@ FormComponent.prototype = {
             error: (function() {
                 //on failure try a plain old post of the form
                 this.ajaxRequestSubmitted = true; //avoid endless recursion
-                button.find('.submit').get(0).click();
+                button.find('.kwfUp-submit').get(0).click();
             }).bind(this),
             success: (function(r) {
 
@@ -231,8 +231,8 @@ FormComponent.prototype = {
                 }
 
                 if (!r.successUrl) {
-                    button.find('.saving').hide();
-                    button.find('.submit').show();
+                    button.find('.kwfUp-saving').hide();
+                    button.find('.kwfUp-submit').show();
                 }
 
                 // show success content

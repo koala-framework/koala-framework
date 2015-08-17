@@ -34,15 +34,15 @@
                 <input id="{{ data.componentId }}-sp-email" name="{{ formName }}-sp-email" /> {# spam protection, named email so bots think they should fill this #}
             </div>
             {% endif %}
-            <div class="submitWrapper {{ buttonClass }}">
-                <div class="beforeButton"></div>
-                <div class="button">
-                    <div class="saving"></div>
-                    <button class="submit" type="submit" name="{{ formName }}" value="submit">
+            <div class="kwfUp-submitWrapper {{ 'submitWrapper'|bemClass }} {{ buttonClass }}">
+                <div class="kwfUp-beforeButton {{ 'beforeButton'|bemClass }}"></div>
+                <div class="kwfUp-button {{ 'button'|bemClass }}">
+                    <div class="kwfUp-saving {{ 'saving'|bemClass }}"></div>
+                    <button class="kwfUp-submit {{ 'submit'|bemClass }}" type="submit" name="{{ formName }}" value="submit">
                         <span>{{ placeholder.submitButton }}</span>
                     </button>
                 </div>
-                <div class="afterButton"></div>
+                <div class="kwfUp-afterButton {{ 'afterButton'|bemClass }}"></div>
                 <div class="kwfUp-clear"></div>
             </div>
             <div class="kwfUp-clear"></div>
