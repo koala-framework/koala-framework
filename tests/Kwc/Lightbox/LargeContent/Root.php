@@ -11,6 +11,7 @@ class Kwc_Lightbox_LargeContent_Root extends Kwf_Component_NoCategoriesRoot
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Lightbox_LargeContent_Test2_Component'
         );
+        $ret['assets']['dep'][] = 'ModernizrTouch';
         return $ret;
     }
 }
