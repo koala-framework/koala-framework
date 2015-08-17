@@ -256,7 +256,6 @@ class Kwf_Util_Setup
         $preloadClasses[] = 'Zend_Registry';
         $preloadClasses[] = 'Kwf_Registry';
         $preloadClasses[] = 'Kwf_Trl';
-        $preloadClasses[] = 'Kwf_Util_Https';
         $preloadClasses[] = 'Kwf_Util_SessionHandler';
         $preloadClasses[] = 'Kwf_Util_Memcache';
         $preloadClasses[] = 'Zend_Session';
@@ -320,9 +319,21 @@ class Kwf_Util_Setup
         $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
 
         if (Kwf_Config::getValue('server.https') !== 'unknown') {
+            $redirectHttpsCode  = "    if (\$_SERVER['REQUEST_METHOD'] != 'GET') {\n";
+            $redirectHttpsCode .= "        header('HTTP/1.1 400 Bad Request');\n";
+            $redirectHttpsCode .= "        echo 'Invalid protocol, https required';\n";
+            $redirectHttpsCode .= "        exit;\n";
+            $redirectHttpsCode .= "    }\n";
+            $redirectHttpsCode .= "    \$redirect = 'https://'.\$_SERVER['HTTP_HOST'].\$_SERVER['REQUEST_URI'];\n";
+            $redirectHttpsCode .= "    header('Location: '.\$redirect, true, 301);\n";
+            $redirectHttpsCode .= "    Kwf_Benchmark::shutDown();\n";
+            $redirectHttpsCode .= "    exit;\n";
+            $redirectHttpCode = str_replace('https', 'http', $redirectHttpsCode);
+
+            $ret .= "if (PHP_SAPI != 'cli') {\n";
             if (!Kwf_Config::getValue('server.https')) {
                 $ret .= "if (isset(\$_SERVER['HTTPS'])) {\n";
-                $ret .= "    Kwf_Util_Https::ensureHttp();\n";
+                $ret .= "    $redirectHttpCode";
                 $ret .= "}\n";
             } else {
                 if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
@@ -334,17 +345,18 @@ class Kwf_Util_Setup
                     $ret .= "\$supportsHttps = isset(\$_SERVER['HTTP_HOST']) && isset(\$domains[\$_SERVER['HTTP_HOST']]);\n";
                     $ret .= "if (\$supportsHttps != isset(\$_SERVER['HTTPS'])) {\n";
                     $ret .= "    if (\$supportsHttps) {\n";
-                    $ret .= "        Kwf_Util_Https::ensureHttps();\n";
+                    $ret .= "        $redirectHttpsCode";
                     $ret .= "    } else {\n";
-                    $ret .= "        Kwf_Util_Https::ensureHttp();\n";
+                    $ret .= "        $redirectHttpCode";
                     $ret .= "    }\n";
                     $ret .= "}\n";
                 } else {
                     $ret .= "if (!isset(\$_SERVER['HTTPS'])) {\n";
-                    $ret .= "    Kwf_Util_Https::ensureHttps();\n";
+                    $ret .= "$redirectHttpsCode";
                     $ret .= "}\n";
                 }
             }
+            $ret .= "}\n";
         }
         
         $ret .= "session_set_cookie_params(\n";

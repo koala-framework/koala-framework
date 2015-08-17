@@ -1,30 +1,6 @@
 <?php
 class Kwf_Util_Https
 {
-    public static function ensureHttps()
-    {
-        if (php_sapi_name() != 'cli' && self::supportsHttps()) {
-            if (!isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
-                $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-                header('Location: '.$redirect, true, 301);
-                Kwf_Benchmark::shutDown();
-                exit;
-            }
-        }
-    }
-
-    public static function ensureHttp()
-    {
-        if (php_sapi_name() != 'cli') {
-            if (isset($_SERVER['HTTPS']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
-                $redirect = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-                header('Location: '.$redirect, true, 301);
-                Kwf_Benchmark::shutDown();
-                exit;
-            }
-        }
-    }
-
     /**
      * Returns if the current request is https
      */
