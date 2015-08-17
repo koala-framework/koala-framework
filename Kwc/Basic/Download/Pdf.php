@@ -27,7 +27,8 @@ class Kwc_Basic_Download_Pdf extends Kwc_Abstract_Pdf
     {
         $downloadTagVars = $this->_component->getData()
             ->getChildComponent('-downloadTag')->getComponent()->getTemplateVars();
-        $protocol = Kwf_Config::getValue('server.https') ? 'https' : 'http';
-        return $protocol . '://' . $this->_component->getData()->getDomain() . $downloadTagVars['url'];
+        $domain = $this->_component->getData()->getDomain();
+        $protocol = Kwf_Util_Https::domainSupportsHttps($domain) ? 'https' : 'http';
+        return $protocol . '://' . $domain . $downloadTagVars['url'];
     }
 }
