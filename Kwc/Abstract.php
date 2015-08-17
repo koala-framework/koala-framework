@@ -382,7 +382,8 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             if (substr($class, 0, 2) == '--') $class = substr($class, 2);
             return $class;
         } else {
-            return Kwf_Component_Abstract::formatRootElementClass($component, '').'__'.$class;
+            if (substr($class, 0, 2) != '--') $class = '__'.$class;
+            return Kwf_Component_Abstract::formatRootElementClass($component, '').$class;
         }
     }
 
