@@ -37,8 +37,6 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
 
-        $ret['buttonClass'] = 'buttonFlat'; //um standard styles aus dem Kwf zu umgehen
-
         $ret['errorStyle'] = null; //default from config.ini: kwc.form.errorStyle
 
         $ret['rootElementClass'] = 'default';
@@ -291,7 +289,6 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             }
 
             $ret['formName'] = $this->getData()->componentId;
-            $ret['buttonClass'] = self::_getBemClass('submitWrapper--'.$this->_getSetting('buttonClass')).' kwfUp-'.$this->_getSetting('buttonClass');
 
             $ret['formId'] = $this->getForm()->getId();
             if ($ret['formId']) {
