@@ -160,8 +160,14 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         if (this.options.cssClass) cls += ' '+this.options.cssClass;
         var lightbox = $(
             '<div class="'+cls+'">'+
-                '<div class="kwfLightboxBetween">'+
-                    '<div class="kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'+
+                '<div class="kwfLightboxScrollOuter">'+
+                    '<div class="kwfLightboxScroll">'+
+                        '<div class="kwfLightboxBetween">'+
+                            '<div class="kwfLightboxBetweenInner">'+
+                                '<div class="kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
                 '</div>'+
             '</div>'
         );
@@ -236,7 +242,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             var self = this;
             var appendContent = function() {
                 self.innerLightboxEl.append(self.contentEl);
-                self.innerLightboxEl.append(self.closeButtonEl);
+                self.lightboxEl.append(self.closeButtonEl);
 
                 self.style.updateContent(responseText);
 
@@ -341,12 +347,10 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.Statistics.count(this.href);
     },
     close: function(options) {
+        $('html').removeClass('kwfup-lightboxActive');
         $('.kwfup-fixedContent').each(function(key, el){
             $(el).removeClass('kwfup-fixedContent');
         });
-        setTimeout(function(){
-            $(window).scrollTop( this.scrollTop );
-        }.bind(this), 0);
         this.lightboxEl.hide();
         //so eg. flash component can remove object
         Kwf.callOnContentReady(this.lightboxEl, {action: 'hide'});
@@ -405,7 +409,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     initialize: function()
     {
-        var closeButtons = this.innerLightboxEl.find('.closeButton');
+        var closeButtons = this.lightboxEl.find('.closeButton');
 
 
         closeButtons.click((function(ev) {
@@ -478,7 +482,10 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
             }, 0);
         } else {
             var maskEl = $('<div class="kwfLightboxMask"></div>');
-            this.lightbox.lightboxEl.find('.kwfLightboxBetween').append(maskEl);
+            this.lightbox.lightboxEl.find('.kwfLightboxBetweenInner').append(maskEl);
+            setTimeout(function(){
+                $('.kwfLightbox').scrollTop(50000);
+            }, 0);
             setTimeout(function(){
                 maskEl.addClass('kwfLightboxMaskOpen');
             }, 0);
@@ -708,15 +715,5 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
 
         this._resizeContent();
     },
-    fixContent: function() {
-        var scrollTop = $(document).scrollTop();
-        this.lightbox.scrollTop = scrollTop;
-        $('body').children().each(function(key, el){
-            var $el = $(el);
-            if (!$el.hasClass('kwfLightbox') && !$el.hasClass('kwfLightboxMask')) {
-                $el.css('top', (scrollTop * (-1)) + 'px');
-                $el.addClass('kwfup-fixedContent');
-            }
-        });
-    }
+    fixContent: function() {}
 });

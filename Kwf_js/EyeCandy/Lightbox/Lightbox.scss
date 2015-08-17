@@ -1,57 +1,85 @@
 @import "config/default-loading-animation-big";
 @import "config/lightbox-animation";
 @import "kwf/background-image-dpr2";
+@import "compass/css3/box-sizing";
 @import "compass/css3/transition";
 @import "compass/css3/transform";
 
-html.kwfup-lightboxActive {
-    overflow-y: scroll;
+html.kwfup-lightboxActive, html.kwfup-lightboxActive body {
+    overflow: hidden;
 }
 
 body {
-        .kwfup-fixedContent {
-            position: fixed;
-        }
+    .kwfLightboxScrollOuter {
+        z-index: 100;
+        width: 100%;
+        right: 0;
+        left: 0;
+    }
 
     div.kwfLightboxCenterBox {
-        display: table;
-        height: 100% !important;
-        table-layout: fixed;
-        width: 100%;
-        left: 0;
-        min-height: 100%;
-        position: absolute;
-        right: 0;
-        top: 0;
+        overflow-y: auto;
+        position: fixed;
+        height: 100%;
 
-        &.kwfLightboxOpen {
-            display: table !important;
+        .kwfLightboxScroll {
+            @include box-sizing(border-box);
+            position: absolute;
+            overflow-y: auto;
+            position: fixed;
+            padding: 10px;
+            z-index: 100;
+            height: 100%;
+            width: 100%;
+            right: 0;
+            left: 0;
+            top: 0;
         }
 
         .kwfLightboxBetween {
+            display: table;
+            height: 100%;
+            width: 100%;
+        }
+
+        .kwfLightboxBetweenInner {
+            vertical-align: middle;
             display: table-cell;
             text-align: center;
-            vertical-align: middle;
             width: 100%;
+        }
 
-            .kwfLightboxInner {
-                position: relative;
-                text-align: left;
-                display: inline-block;
-                z-index: 51;
+        .kwfLightboxInner {
+            display: inline-block;
+            position: relative;
+            text-align: left;
+            height: auto;
+            z-index: 51;
+        }
 
-                .closeButton {
-                    right: 10px;
-                    top: 10px;
-                }
+        .kwfLightboxMask {
+            height: 100%;
+            background: #000;
+            position: fixed;
+            left: 0; top: 0;
+            opacity: 0.8;
+            z-index: 50;
+            right: 0px;
+        }
+
+        &.mobile {
+            .kwfLightboxScroll {
+                padding: 0px;
             }
         }
     }
 }
 
-body.kwfLightboxAnimate {
-    .kwfLightbox {
-        position: fixed;
+@media (max-width: 1025px) {
+    html.touch {
+        .kwfLightboxScrollOuter {
+            height: 100000px;
+        }
     }
 }
 
@@ -191,24 +219,25 @@ body.kwfLightboxAnimate {
     padding: 10px;
     position: absolute;
 }
-.ext-ie6 .kwfLightbox .kwfLightboxInner { width: 800px; }
 
 .kwfLightbox .lightboxHeader { position: relative; z-index: 102; }
+
 .kwfLightbox .closeButton {
-    position: absolute;
-    right: -25px;
-    top: -25px;
-    display: block;
-    width: 42px;
-    height: 42px;
     background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
+    position: fixed;
+    display: block;
+    height: 42px;
     z-index: 102;
+    width: 42px;
+    right: 10px;
+    top: 10px;
 }
 
 .kwfLightbox.mobile .closeButton {
-    right: 0;
-    top: 0;
+    right: 2px;
+    top: 2px;
 }
+
 .kwfLightbox.mobile .kwfLightboxInner {
     margin-bottom: 0;
 }
@@ -216,14 +245,10 @@ body.kwfLightboxAnimate {
 .kwfLightbox .closeButton:hover { text-decoration: none; }
 
 .kwfLightbox .kwfLightboxContent {
-    height: 100%;
-    width: 100%;
-}
-.kwfLightbox .lightboxBody {
     position: relative;
-    height: 100%; 
+    height: 100%;
+    z-index: 60;
     width: 100%;
-    z-index: 101;
 }
 .kwfLightbox .lightboxBody .nextBtn,
 .kwfLightbox .lightboxBody .nextBtn a,
@@ -263,14 +288,6 @@ body.kwfLightboxAnimate {
 .kwfLightbox .lightboxFooter p.imageCaptionTitle { margin: 10px 0px -10px 0px; }
 .kwfLightbox .lightboxFooter p.title { margin-top: 10px; }
 .kwfLightbox .lightboxFooter p.fullSizeLink { margin-top: 10px; }
-
-.kwfLightboxCenterBox .kwfLightboxMask {
-    background: #000;
-    z-index: 50 !important;
-    position: fixed;
-    width: 100%; height: 100%;
-    left: 0; top: 0;
-}
 
 .kwfLightbox .loading {
     @include default-loading-animation-big;
