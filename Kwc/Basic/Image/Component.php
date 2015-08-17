@@ -6,7 +6,6 @@ class Kwc_Basic_Image_Component extends Kwc_Abstract_Image_Component
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Image');
         $ret['componentIcon'] = 'picture';
-        $ret['imgCssClass'] = '';
         $ret['emptyImage'] = false; // eg. 'Empty.jpg' in same folder
         return $ret;
     }
@@ -17,13 +16,6 @@ class Kwc_Basic_Image_Component extends Kwc_Abstract_Image_Component
         if (isset($settings['useParentImage'])) {
             throw new Kwf_Exception("useParentImage doesn't exist anymore for Basic_Image, use Kwc_Basic_ImageParent_Component instead");
         }
-    }
-
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
-        return $ret;
     }
 
     protected function _getEmptyImageData()

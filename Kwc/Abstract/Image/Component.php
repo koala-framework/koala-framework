@@ -49,6 +49,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['useDataUrl'] = false;
         $ret['lazyLoadOutOfViewport'] = true; // Set to false to load image also when not in view
         $ret['loadedAnimationClass'] = 'webImageLoadedAnimation';
+        $ret['imgCssClass'] = '';
         $ret['flags']['hasFulltext'] = true;
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
         $ret['assetsAdmin']['dep'][] = 'ExtFormTriggerField';
@@ -123,6 +124,10 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['containerClass'] = 'container';
         if ($ret['width'] > 100) $ret['containerClass'] .= ' webResponsiveImgLoading';
         if (!$this->_getSetting('lazyLoadOutOfViewport')) $ret['containerClass'] .= ' loadImmediately';
+
+        $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
+        $ret['imgAttributes'] = array();
+        $ret['imgAttributes']['class'] = $ret['imgCssClass'];
         return $ret;
     }
 
