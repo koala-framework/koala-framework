@@ -6,7 +6,7 @@ class Kwc_Box_MetaTagsContent_Admin extends Kwc_Abstract_Admin
         $c = $config['component'];
         if ($config['mode'] == 'add' || $c->isPage) {
             $form = new Kwc_Box_MetaTagsContent_Form(null, $this->_class);
-            $fs = new Kwf_Form_Container_FieldSet(trlKwf('Meta Tags'));
+            $fs = new Kwf_Form_Container_FieldSet(trlKwf('SEO'));
             $fs->setCollapsible(true);
             $fs->setCollapsed(true);
             foreach ($form as $f) {
