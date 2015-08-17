@@ -38,7 +38,7 @@ class Kwf_Util_Https
      */
     public static function domainSupportsHttps($domain)
     {
-        if (Kwf_Config::getValue('server.https')) {
+        if (Kwf_Config::getValue('server.https') === true) {
             if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
                 if ($domains && !in_array($domain, $domains)) {
                     return false; //current host is not in server.httpsDomains, don't use https
