@@ -1,6 +1,7 @@
 @import "kwf/susyone";
 @import "compass/css3/box-sizing";
 @import "compass/utilities/general/clearfix";
+@import "compass/css3/transition";
 
 $gutter-width   : 0em;
 $grid-padding   : 0em;
@@ -11,8 +12,25 @@ div.cssClass {
     @include pie-clearfix;
     margin-right: -$contentMargin;
 
-    > .morePics {
-        clear: both;
+    .moreButton {
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .listItem {
+        opacity: 1;
+        @include transition-property(opacity);
+        @include transition-duration(0.25s);
+        @include transition-timing-function(cubic-bezier(0.215, 0.61, 0.355, 1));
+    }
+
+    &.hidePics {
+        .showMorePic {
+            padding: 0px !important;
+            width: 0px !important;
+            opacity: 0;
+            @include transition-duration(0s);
+        }
     }
 
     > .listItem, > .morePics > .listItem {

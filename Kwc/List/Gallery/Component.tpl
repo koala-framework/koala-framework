@@ -17,17 +17,14 @@
             if ($i%$this->imagesPerLine == 0) {
                 $class .= 'firstInLine ';
             }
+            if ($i >= $this->showPics && $this->showPics) {
+                $class .= 'showMorePic ';
+            }
             $class = trim($class);
         ?>
-        <? if ($i == $this->showPics && $this->showPics) { ?>
-            <div class="morePics">
-        <? } ?>
         <div class="<?=$class;?>">
             <?=$this->component($child);?>
         </div>
-        <? if ($i == count($this->children)-1 && $this->showPics) { ?>
-            </div>
-        <? } ?>
         <?
             $i++;
         ?>
