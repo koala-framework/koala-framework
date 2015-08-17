@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     </head>
     <body>
-        <div class="innerContent" style="height: 4000px">
+        <div class="innerBody">
             <?=$this->componentWithMaster($this->componentWithMaster)?>
         </div>
     </body>
