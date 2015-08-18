@@ -53,7 +53,7 @@ abstract class Kwf_Controller_Action_Auto_Form extends Kwf_Controller_Action_Aut
             } else if (isset($this->_tableName)) {
                 $this->_form->setTable(new $this->_tableName);
             } else if (isset($this->_modelName)) {
-                $this->_form->setModel(new $this->_modelName);
+                $this->_form->setModel(Kwf_Model_Abstract::getInstance($this->_modelName));
             } else if (isset($this->_model)) {
                 if (is_string($this->_model)) {
                     $this->_form->setModel(Kwf_Model_Abstract::getInstance($this->_model));

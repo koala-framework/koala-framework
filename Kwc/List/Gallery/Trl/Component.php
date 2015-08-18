@@ -5,6 +5,7 @@ class Kwc_List_Gallery_Trl_Component extends Kwc_Abstract_List_Trl_Component
     {
         $ret = parent::getSettings($masterComponent);
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['throwContentChangedOnOwnMasterModelUpdate'] = true;
         return $ret;
     }
 }
