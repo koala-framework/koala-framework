@@ -303,7 +303,7 @@ class Kwf_Setup
             $filename = $urlParts[6];
 
             if ($checksum != Kwf_Media::getChecksum($class, $id, $type, $filename)) {
-                throw new Kwf_Exception_AccessDenied('Access to file not allowed.');
+                throw new Kwf_Exception_NotFound();
             }
             $class = rawurldecode($class);
             Kwf_Media_Output::output(Kwf_Media::getOutput($class, $id, $type));
