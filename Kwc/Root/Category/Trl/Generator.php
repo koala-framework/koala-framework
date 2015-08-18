@@ -2,6 +2,7 @@
 class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
 {
     protected $_eventsClass = 'Kwc_Root_Category_Trl_GeneratorEvents';
+    protected $_historyModel;
 
     public function getPagesControllerConfig($component)
     {
@@ -67,7 +68,8 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
         }
         $select->ignoreVisible();
         $ret = array();
-        foreach (parent::getChildData($parentData, $select) as $key => $c) {
+        $components = parent::getChildData($parentData, $select);
+        foreach ($components as $key => $c) {
             if (($ignoreVisible || $c->visible || $c->isHome) &&
                 (!$filename || $c->filename == $filename)
             ){
@@ -75,6 +77,23 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
             }
             if ($limit && count($ret) == $limit) {
                 return $ret;
+            }
+        }
+        if ($filename) {
+            $componentIds = array();
+            foreach ($components as $key => $c) $componentIds[$c->dbId] = $key;
+            $model = $this->getHistoryModel();
+            $select = $model->select()
+                ->whereEquals('component_id', array_keys($componentIds))
+                ->whereEquals('filename', $filename)
+                ->order('date', 'DESC');
+            $rows = $model->export(Kwf_Model_Interface::FORMAT_ARRAY, $select, array('columns' => array('component_id')));
+            foreach ($rows as $row) {
+                $key = $componentIds[$row['component_id']];
+                $ret[$key] = $components[$key];
+                if ($limit && count($ret) == $limit) {
+                    return $ret;
+                }
             }
         }
         return $ret;
@@ -174,5 +193,21 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
     public function getPagePropertiesForm($componentOrParent)
     {
         return new Kwc_Root_Category_Trl_GeneratorForm($this);
+    }
+
+    public function getHistoryModel()
+    {
+        if (!$this->_historyModel) {
+            if (isset($this->_settings['historyModel'])) {
+                if (is_string($this->_settings['historyModel'])) {
+                    $this->_historyModel = Kwf_Model_Abstract::getInstance($this->_settings['historyModel']);
+                } else {
+                    $this->_historyModel = $this->_settings['historyModel'];
+                }
+            } else {
+                $this->_historyModel = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_HistoryModel');
+            }
+        }
+        return $this->_historyModel;
     }
 }
