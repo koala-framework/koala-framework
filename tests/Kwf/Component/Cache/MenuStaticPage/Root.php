@@ -5,6 +5,7 @@ class Kwf_Component_Cache_MenuStaticPage_Root extends Kwf_Component_NoCategories
     {
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = 'Kwf_Component_Cache_MenuStaticPage_PagesModel';
+        $ret['generators']['page']['historyModel'] = new Kwf_Model_FnF();
         $ret['generators']['page']['component'] = array(
             'test' => 'Kwf_Component_Cache_MenuStaticPage_Paragraphs_Component',
         );

@@ -12,6 +12,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     private $_basesCache = array();
     protected $_eventsClass = 'Kwc_Root_Category_GeneratorEvents';
+    protected $_historyModel;
 
     protected function _init()
     {
@@ -205,7 +206,14 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                     foreach ($rows as $row) {
                         $pageIds[] = $row['id'];
                     }
-                    Kwf_Cache_Simple::add($cacheId, $pageIds);
+                    if (!$pageIds) {
+                        $s->order('date', 'DESC');
+                        $rows = $this->getHistoryModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns' => array('page_id')));
+                        foreach ($rows as $row) {
+                            $pageIds[] = $row['page_id'];
+                        }
+                    }
+                    Kwf_Cache_Simple::add($cacheId, array_unique($pageIds));
                 }
             } else if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
                 $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
@@ -587,5 +595,21 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         } else {
             return parent::getDeviceVisible($data);
         }
+    }
+
+    public function getHistoryModel()
+    {
+        if (!$this->_historyModel) {
+            if (isset($this->_settings['historyModel'])) {
+                if (is_string($this->_settings['historyModel'])) {
+                    $this->_historyModel = Kwf_Model_Abstract::getInstance($this->_settings['historyModel']);
+                } else {
+                    $this->_historyModel = $this->_settings['historyModel'];
+                }
+            } else {
+                $this->_historyModel = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_HistoryModel');
+            }
+        }
+        return $this->_historyModel;
     }
 }

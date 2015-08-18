@@ -14,6 +14,18 @@ class Kwc_Root_Category_GeneratorRow extends Kwf_Model_Tree_Row
         $this->parent_subroot_id = $c->getSubroot()->componentId;
     }
 
+    protected function _afterSave()
+    {
+        parent::_afterSave();
+        $model = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($this->id, array('ignoreVisible'=>true))
+            ->generator->getHistoryModel();
+        $select = $model->select()
+            ->whereEquals('parent_id', $this->parent_id)
+            ->whereEquals('filename', $this->filename);
+        $model->deleteRows($select);
+    }
+
     protected function _beforeUpdate()
     {
         parent::_beforeUpdate();
@@ -30,6 +42,18 @@ class Kwc_Root_Category_GeneratorRow extends Kwf_Model_Tree_Row
             if ($oldSubroot != $newSubroot) {
                 throw new Kwf_Exception_Client(trlKwf("Can't move Page to other Subroot"));
             }
+        }
+        if (in_array('filename', $this->getDirtyColumns())) {
+            $model = Kwf_Component_Data_Root::getInstance()
+                ->getComponentById($this->id, array('ignoreVisible'=>true))
+                ->generator->getHistoryModel();
+            $data = array(
+                'page_id' => $this->id,
+                'parent_id' => $this->parent_id,
+                'filename' => $this->getCleanValue('filename'),
+            );
+            $row = $model->createRow($data);
+            $row->save();
         }
     }
 
