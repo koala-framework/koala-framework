@@ -18,6 +18,7 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
     abstract public function indexPage(Kwf_Component_Data $page, $debugOutput = false);
     abstract public function getAllDocuments(Kwf_Component_Data $subroot);
     abstract public function documentExists(Kwf_Component_Data $page);
+    abstract public function getDocumentContent(Kwf_Component_Data $page);
     abstract public function deleteDocument(Kwf_Component_Data $subroot, $componentId);
 
     public function getAllDocumentIds(Kwf_Component_Data $subroot)
@@ -74,7 +75,7 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
         //normal content with boost=1 goes here
         $ret['normalContent'] = '';
 
-        $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow($page->componentId);
+        $row = Kwf_Component_PagesMetaModel::getInstance()->getRow($page->componentId);
         if ($row && $row->changed_date) {
             $ret['lastModified'] = new Kwf_DateTime($row->changed_date);
         }
@@ -110,13 +111,13 @@ abstract class Kwf_Util_Fulltext_Backend_Abstract
 
     protected function _afterIndex(Kwf_Component_Data $page)
     {
-        $m = Kwc_FulltextSearch_MetaModel::getInstance();
+        $m = Kwf_Component_PagesMetaModel::getInstance();
         $row = $m->getRow($page->componentId);
         if (!$row) {
             $row = $m->createRow();
-            $row->page_id = $page->componentId;
         }
-        $row->indexed_date = date('Y-m-d H:i:s');
+        $row->updateFromPage($page);
+        $row->fulltext_indexed_date = date('Y-m-d H:i:s');
         $row->save();
     }
 }

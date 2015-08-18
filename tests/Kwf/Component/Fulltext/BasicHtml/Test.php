@@ -17,7 +17,7 @@ class Kwf_Component_Fulltext_BasicHtml_Test extends Kwc_TestAbstract
 
         $this->_process();
 
-        $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'1')));
+        $row = Kwf_Component_PagesMetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'1')));
         $this->assertNotNull($row);
         $age = time() - strtotime($row->changed_date);
         $this->assertTrue($age >= 0 && $age < 5);
@@ -31,7 +31,7 @@ class Kwf_Component_Fulltext_BasicHtml_Test extends Kwc_TestAbstract
 
         $this->_process();
 
-        $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'2')));
+        $row = Kwf_Component_PagesMetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'2')));
         $this->assertNotNull($row);
         $age = time() - strtotime($row->changed_date);
         $this->assertTrue($age >= 0 && $age < 5);
@@ -49,7 +49,7 @@ class Kwf_Component_Fulltext_BasicHtml_Test extends Kwc_TestAbstract
 
         $this->_process();
 
-        $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'4')));
+        $row = Kwf_Component_PagesMetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'4')));
         $this->assertNotNull($row);
         $age = time() - strtotime($row->changed_date);
         $this->assertTrue($age >= 0 && $age < 5);
@@ -62,7 +62,7 @@ class Kwf_Component_Fulltext_BasicHtml_Test extends Kwc_TestAbstract
 
         $this->_process();
 
-        $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'1')));
+        $row = Kwf_Component_PagesMetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'1')));
         $this->assertNotNull($row);
         $age = time() - strtotime($row->changed_date);
         $this->assertTrue($age >= 0 && $age < 5);
@@ -75,7 +75,7 @@ class Kwf_Component_Fulltext_BasicHtml_Test extends Kwc_TestAbstract
 
         $this->_process();
 
-        $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'2')));
+        $row = Kwf_Component_PagesMetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'2')));
         $this->assertNotNull($row);
         $age = time() - strtotime($row->changed_date);
         $this->assertTrue($age >= 0 && $age < 5);
@@ -89,7 +89,7 @@ class Kwf_Component_Fulltext_BasicHtml_Test extends Kwc_TestAbstract
 
         $this->_process();
 
-        $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'1')));
+        $row = Kwf_Component_PagesMetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'1')));
         $this->assertNotNull($row);
         $age = time() - strtotime($row->changed_date);
         $this->assertTrue($age >= 0 && $age < 5);
@@ -103,7 +103,7 @@ class Kwf_Component_Fulltext_BasicHtml_Test extends Kwc_TestAbstract
 
         $this->_process();
 
-        $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'1')));
+        $row = Kwf_Component_PagesMetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'1')));
         $this->assertNotNull($row);
         $age = time() - strtotime($row->changed_date);
         $this->assertTrue($age >= 0 && $age < 5);
@@ -118,7 +118,7 @@ class Kwf_Component_Fulltext_BasicHtml_Test extends Kwc_TestAbstract
 
         $this->_process();
 
-        $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'2')));
+        $row = Kwf_Component_PagesMetaModel::getInstance()->getRow(array('equals'=>array('page_id'=>'2')));
         $this->assertNotNull($row);
         $age = time() - strtotime($row->changed_date);
         $this->assertTrue($age >= 0 && $age < 5);

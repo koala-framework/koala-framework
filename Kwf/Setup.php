@@ -221,8 +221,8 @@ class Kwf_Setup
         }
 
         if ($uri == 'sitemap.xml') {
-            $sitemap = new Kwf_Component_Sitemap();
-            $sitemap->outputSitemap(Kwf_Component_Data_Root::getInstance());
+            $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].Kwf_Setup::getBaseUrl().'/', null);
+            Kwf_Component_Sitemap::output($data->getDomainComponent());
         }
         if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf', 'api'))) {
             if (!isset($_SERVER['HTTP_HOST'])) {

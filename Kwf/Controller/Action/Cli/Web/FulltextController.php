@@ -37,32 +37,20 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'), array('ignoreVisible' => true));
         if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
 
+        $pagesMetaModel = Kwf_Component_PagesMetaModel::getInstance();
+
         $documentIds = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getAllDocumentIds($subroot);
         $i = 0;
         foreach ($documentIds as $documentId) {
-            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($documentId);
-            if ($page && Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
-            $c = $page;
-            while($c && $c = $c->parent) {
-                if (Kwc_Abstract::getFlag($c->componentClass, 'skipFulltextRecursive')) {
-                    $page = null;
-                    break;
-                }
-            }
-            if (!$page) {
+            $s = new Kwf_Model_Select();
+            $s->whereEquals('page_id', $documentId);
+            $s->whereEquals('fulltext_skip', false);
+            $s->whereEquals('deleted', false);
+            if ($pagesMetaModel->countRows($s) == 0) {
                 if (!$this->_getParam('slient')) {
                     echo "\n$documentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
                 }
                 Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteDocument($subroot, $documentId);
-                $m = Kwc_FulltextSearch_MetaModel::getInstance();
-                $row = $m->getRow($documentId);
-                if ($row) {
-                    $row->delete();
-                }
-            }
-            unset($page);
-            if ($i++ % 10) {
-                Kwf_Component_Data_Root::getInstance()->freeMemory();
             }
         }
         exit;
@@ -301,74 +289,30 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         exit;
     }
 
-    private function _processRecursive(Kwf_Component_Data $page)
-    {
-        static $pageClassesThatCanHaveFulltext;
-        if (!isset($pageClassesThatCanHaveFulltext)) {
-            $pageClassesThatCanHaveFulltext = array();
-            foreach (self::_getAllPossiblePageComponentClasses() as $c) {
-                if (self::_canHaveFulltext($c)) {
-                    $pageClassesThatCanHaveFulltext[] = $c;
-                }
-            }
-        }
-
-        if ($this->_getParam('debug')) echo "processing changed_recursive $page->componentId\n";
-        $childPages = $page->getChildPseudoPages(
-            array('pageGenerator' => false, 'componentClasses'=>$pageClassesThatCanHaveFulltext),
-            array('pseudoPage'=>false)
-        );
-        $ret = array();
-        foreach ($childPages as $p) {
-            $m = Kwc_FulltextSearch_MetaModel::getInstance();
-            $s = $m->select()
-                ->whereEquals('page_id', $p->componentId);
-            $r = $m->getRow($s);
-            if (!$r) {
-                $r = $m->createRow();
-                $r->page_id = $p->componentId;
-            }
-            $r->changed_date = date('Y-m-d H:i:s');
-            $r->save();
-            $this->_processRecursive($p);
-        }
-    }
-
     public function updateChangedAction()
     {
         $start = microtime(true);
-        $m = Kwc_FulltextSearch_MetaModel::getInstance();
-        $s = $m->select();
+        $pagesMetaModel = Kwf_Component_PagesMetaModel::getInstance();
+        $s = $pagesMetaModel->select();
         $s->where(new Kwf_Model_Select_Expr_Higher('changed_date', new Kwf_DateTime(time() - 5*60))); //>5min ago (for buffering!)
-        //$s->where(new Kwf_Model_Expr_Not(new Kwf_Model_Expr_Equals('changed_date', 'indexed_date')));
-        $s->where('changed_date > indexed_date OR ISNULL(indexed_date)');
-        foreach ($m->getRows($s) as $row) {
+        $s->whereEquals('fulltext_skip', false);
+        $s->where('changed_date > fulltext_indexed_date OR ISNULL(fulltext_indexed_date)');
+        foreach ($pagesMetaModel->getRows($s) as $row) {
             if ($this->_getParam('debug')) echo "changed: $row->page_id\n";
-            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id, array('ignoreVisible' => true));
+            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
             if (!$page) {
-                //we don't know the correct subroot, so try deleting from all subroots
-                foreach (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getSubroots() as $sr) {
-                    $sr = Kwf_Component_Data_Root::getInstance()->getComponentById($sr, array('ignoreVisible' => true));
-                    if (!$sr) $sr = Kwf_Component_Data_Root::getInstance();
+                if ($this->_getParam('debug')) echo "deleting $row->page_id\n";
+                $sr = Kwf_Component_Data_Root::getInstance()->getComponentById($row->subroot_component_id, array('ignoreVisible' => true));
+                if ($sr) {
                     Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteDocument($sr, $row->page_id);
                 }
-                $row->delete();
-                continue;
-            }
-            if (!$page->isPage) continue;
-            if ($row->changed_recursive) {
-                $row->changed_recursive = false;
-                $this->_processRecursive($page);
+                $row->fulltext_indexed_date = date('Y-m-d H:i:s');
+                $row->save();
             } else {
                 if ($this->_getParam('debug')) echo "indexing $page->componentId\n";
-                if (!Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page)) {
-                    //does have no fulltext content
-                    $row->changed_date = null;
-                    $row->indexed_date = null;
-                }
-                unset($page);
+                Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page);
             }
-            $row->save();
+            unset($page);
             if (microtime(true) - $start > 30) {
                 if ($this->_getParam('debug')) echo "stopped after ".round(microtime(true) - $start)."sec\n";
                 break;
@@ -398,20 +342,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             if (!$this->_getParam('silent')) echo "[$subroot] check-for-invalid finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
 
             $t = time();
-            if (!$this->_getParam('silent')) echo "\n[$subroot] check-pages...\n";
-            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-pages-subroot ";
-            if ($subroot) {
-                $cmd .= "--componentId=$subroot";
-            } else {
-                $cmd .= "--componentId=root";
-            }
-            if ($this->_getParam('debug')) $cmd .= " --debug";
-            if ($this->_getParam('silent')) $cmd .= " --silent";
-            passthru($cmd, $ret);
-            if ($ret) exit($ret);
-            if (!$this->_getParam('silent')) echo "[$subroot] check-pages finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
-
-            $t = time();
             if (!$this->_getParam('silent')) echo "\n[$subroot] check-contents...\n";
             $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-contents-subroot --subroot=$subroot";
             if ($this->_getParam('debug')) $cmd .= " --debug";
@@ -436,31 +366,34 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
         $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
         if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
-        $documents = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getAllDocuments($subroot);
-        if ($this->_getParam('debug')) echo "count: ".count($documents)."\n";
         $i = 0;
 
         $stats = array(
             'indexedPages' => 0,
             'diffPages' => 0,
         );
-        foreach ($documents as $componentId=>$doc) {
-            if ($this->_getParam('debug')) echo "checking: $i: $componentId\n";;
+        $pagesMetaModel = Kwf_Component_PagesMetaModel::getInstance();
+        $select = new Kwf_Model_Select();
+        $select->whereEquals('deleted', false);
+        $select->whereEquals('fulltext_skip', false);
+        $select->whereEquals('subroot_component_id', $subroot->componentId);
+        $it = new Kwf_Model_Iterator_Packages(
+            new Kwf_Model_Iterator_Rows($pagesMetaModel, $select)
+        );
+        foreach ($it as $row) {
+            $componentId = $row->page_id;
+            if ($this->_getParam('debug')) echo "checking: $i: $componentId\n";
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
-            if (!$page) continue;
-            if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext')) $page = null;
-            if (!$page) continue; //should not happen
-            if (Kwc_Abstract::getFlag($page->componentClass, 'skipFulltextRecursive')) $page = null;
-            if (!$page) continue; //should not happen
+            $docContent = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getDocumentContent($page);
             $newDoc = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getFulltextContentForPage($page);
             if (!$newDoc) {
                 //this can happen (if there is no content)
                 Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteDocument($subroot, $componentId);
-                $row = Kwc_FulltextSearch_MetaModel::getInstance()->getRow($componentId);
+                $row = $pagesMetaModel->getRow($componentId);
                 if ($row) $row->delete();
                 continue;
             }
-            if (trim($newDoc['content']) != trim($doc['content'])) {
+            if (trim($newDoc['content']) != $docContent) {
                 $stats['diffPages']++;
                 if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page)) {
                     $stats['indexedPages']++;
@@ -476,100 +409,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
 
         if (!$this->_getParam('silent')) {
             echo "pages with diff: $stats[diffPages]\n";
-            echo "indexed pages: $stats[indexedPages]\n";
-        }
-        exit;
-    }
-
-    public function checkPagesSubrootAction()
-    {
-        Kwf_Util_MemoryLimit::set(256);
-
-        $pageClassesThatCanHaveFulltext = array();
-        foreach (self::_getAllPossiblePageComponentClasses() as $c) {
-            if (self::_canHaveFulltext($c)) {
-                $pageClassesThatCanHaveFulltext[] = $c;
-            }
-        }
-
-
-        $startTime = microtime(true);
-
-        if (!$this->_getParam('componentId')) throw new Kwf_Exception_Client("componentId parameter required");
-
-        $componentId = $this->_getParam('componentId');
-        $queue = array($componentId);
-
-        $stats = array(
-            'pages' => 0,
-            'indexedPages' => 0
-        );
-        while ($queue) {
-
-            if (!$queue) break;
-
-            if ($this->_getParam('debug')) echo "queued: ".count($queue).' :: '.round(memory_get_usage()/1024/1024, 2)."MB\n";
-            $componentId = array_shift($queue);
-            $stats['pages']++;
-
-            //if ($this->_getParam('debug')) echo "==> ".$componentId;
-            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
-            //if ($this->_getParam('debug')) echo " :: $page->url\n";
-            if (!$page) {
-                if ($this->_getParam('debug')) echo "$componentId not found!\n";
-                continue;
-            }
-            //echo "$page->url\n";
-            if ($this->_getParam('verbose')) echo "getting child pages...";
-
-            $childPages = $page->getChildPseudoPages(
-                array('pageGenerator' => false, 'componentClasses'=>$pageClassesThatCanHaveFulltext),
-                array('pseudoPage'=>false)
-            );
-            $childPages = array_merge($childPages, $page->getChildPseudoPages(
-                array('pageGenerator' => true),
-                array('pseudoPage'=>false)
-            ));
-            if ($this->_getParam('verbose')) echo " done\n";
-            foreach ($childPages as $c) {
-                $i = $c;
-                do {
-                    if (Kwc_Abstract::getFlag($i->componentClass, 'skipFulltextRecursive')) {
-                        continue 2;
-                    }
-                } while($i = $i->parent);
-                if ($this->_getParam('verbose')) echo "queued $c->componentId\n";
-                $queue[] = $c->componentId;
-            }
-            unset($c);
-
-            $hasFulltext = false;
-            if (!Kwc_Abstract::getFlag($page->componentClass, 'skipFulltext') &&
-                $page->isPage &&
-                ($page->getRecursiveChildComponents(array('flag'=>'hasFulltext', 'inherit' => false)) || Kwc_Abstract::getFlag($page->componentClass, 'hasFulltext'))
-            ) {
-                $hasFulltext = true;
-            }
-
-            if ($hasFulltext) {
-                if (!Kwf_Util_Fulltext_Backend_Abstract::getInstance()->documentExists($page)) {
-                    if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page, $this->_getParam('debug'))) {
-                        $stats['indexedPages']++;
-                        if (!$this->_getParam('silent')) echo "not found in index: $page->componentId has content!!!!\n";
-                    } else {
-                        if ($this->_getParam('debug')) echo "not found in index: $page->componentId has NO content (that's ok)\n";
-                    }
-                }
-            }
-            unset($page);
-
-            if ($stats['pages'] % 50 == 0) {
-                Kwf_Component_Data_Root::getInstance()->freeMemory();
-            }
-        }
-
-        if (!$this->_getParam('silent')) {
-            echo "processed pages: $stats[pages]\n";
             echo "indexed pages: $stats[indexedPages]\n";
         }
         exit;

@@ -83,6 +83,19 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
         return $numFound > 0;
     }
 
+    public function search(Kwf_Component_Data $subroot, $query)
+    {
+        $ret = array();
+        foreach ($this->_getSolrService($subroot)->search($query)->response->docs as $doc) {
+            $ret[] = array(
+                'componentId' => $doc->componentId,
+                'title' => $doc->title,
+                'content' => $doc->content,
+            );
+        }
+        return $ret;
+    }
+
     public function getAllDocumentIds(Kwf_Component_Data $subroot)
     {
         return $this->_getSolrService($subroot)->getAllDocumentIds();
@@ -130,19 +143,6 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
         return false;
     }
 
-    public function search(Kwf_Component_Data $subroot, $query)
-    {
-        $ret = array();
-        foreach ($this->_getSolrService($subroot)->search($query)->response->docs as $doc) {
-            $ret[] = array(
-                'componentId' => $doc->componentId,
-                'title' => $doc->title,
-                'content' => $doc->content,
-            );
-        }
-        return $ret;
-    }
-
     public function userSearch(Kwf_Component_Data $subroot, $queryString, $offset, $limit, $params = array())
     {
         $ret = array();
@@ -173,5 +173,19 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
             'numHits' => $numHits,
             'error' => false
         );
+    }
+
+    public function getDocumentContent(Kwf_Component_Data $page)
+    {
+        $createDocs = $this->_getSolrService($page)->getCreateDocuments();
+        $this->_getSolrService($page)->setCreateDocuments(false);
+
+        $res = $this->_getSolrService($page)
+            ->search('componentId:'.$page->componentId, 0, 10, array('fl'=>'content'))
+            ->response->numFound;
+        foreach ($res->response->docs as $doc) {
+            return $doc->content;
+        }
+        return null;
     }
 }
