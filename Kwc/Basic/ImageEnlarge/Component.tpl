@@ -1,7 +1,7 @@
-<div class="<?=$this->rootElementClass?>" style="max-width:<?=$this->width;?>px;<? if ($this->defineWidth) {?> width:<?=$this->width;?>px;<? } ?>">
+<div class="<?=$this->rootElementClass?> kwfUp-kwcImage" style="<?=$this->style;?>">
 <? if ($this->baseUrl) { ?>
     <?=$this->component($this->linkTag)?>
-    <div class="container<? if ($this->width>100) { ?> webResponsiveImgLoading<? } ?>" style="padding-bottom:<?=$this->aspectRatio?>%;"
+    <div class="<?=$this->containerClass?>" style="padding-bottom:<?=$this->aspectRatio?>%;"
             data-min-width="<?=$this->minWidth;?>"
             data-max-width="<?=$this->maxWidth;?>"
             data-src="<?=$this->baseUrl;?>">
@@ -13,7 +13,7 @@
     </a>
     <?}?>
     <? if ($this->showImageCaption && !empty($this->image_caption)) { ?>
-    <div class="imageCaption" style="max-width:<?=$this->imageParam($this->image,'width','default');?>px;"><?=(!empty($this->image_caption) ? $this->image_caption : '');?></div>
+    <div class="<?=$this->bemClass('imageCaption')?> kwfUp-imageCaption" style="<?=$this->captionStyle;?>"><?=(!empty($this->image_caption) ? $this->image_caption : '');?></div>
     <? } ?>
 <? } ?>
 </div>
