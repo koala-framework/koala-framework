@@ -112,22 +112,16 @@ class Kwf_Events_Dispatcher
         Kwf_Events_ModelObserver::getInstance()->disable();
         $models = array();
         $subscribers = array();
-        $hasFulltext = false;
 
         foreach (Kwc_Abstract::getComponentClasses() as $componentClass) {
             $subscribers = array_merge($subscribers, self::_getSubscribersFromComponent($componentClass));
-            if (Kwc_Abstract::getFlag($componentClass, 'usesFulltext')) {
-                $hasFulltext = true;
-            }
         }
 
         if (Kwf_Component_Data_Root::getComponentClass()) {
             $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_ViewCache');
             $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_UrlCache');
             $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_ProcessInputCache');
-        }
-        if ($hasFulltext) {
-            $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_Fulltext');
+            $subscribers[] = Kwf_Events_Subscriber::getInstance('Kwf_Component_Events_PagesMeta');
         }
         foreach (Kwf_Model_Abstract::findAllInstances() as $m) {
             $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($m));

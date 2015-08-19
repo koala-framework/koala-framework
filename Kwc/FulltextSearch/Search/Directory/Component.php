@@ -1,5 +1,5 @@
 <?php
-class Kwc_FulltextSearch_Search_Directory_Component extends Kwc_Directories_Item_Directory_Component
+class Kwc_FulltextSearch_Search_Directory_Component extends Kwc_Directories_Item_Directory_Component implements Kwf_Util_Maintenance_JobProviderInterface
 {
     public static function getSettings()
     {
@@ -13,5 +13,13 @@ class Kwc_FulltextSearch_Search_Directory_Component extends Kwc_Directories_Item
         $ret['updateTags'] = array('fulltext');
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         return $ret;
+    }
+
+    public static function getMaintenanceJobs()
+    {
+        return array(
+            new Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_CheckContents(),
+            new Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_UpdateChanged(),
+        );
     }
 }

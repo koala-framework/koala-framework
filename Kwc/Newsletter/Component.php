@@ -1,5 +1,5 @@
 <?php
-class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Component
+class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Component implements Kwf_Util_Maintenance_JobProviderInterface
 {
     public static function getSettings()
     {
@@ -33,5 +33,12 @@ class Kwc_Newsletter_Component extends Kwc_Directories_ItemPage_Directory_Compon
 
         $ret['menuConfig'] = 'Kwc_Newsletter_MenuConfig';
         return $ret;
+    }
+
+    public static function getMaintenanceJobs()
+    {
+        return array(
+            new Kwc_Newsletter_StartMaintenanceJob(),
+        );
     }
 }
