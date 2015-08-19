@@ -5,6 +5,7 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['flags']['hasHeaderIncludeCode'] = true;
+        $ret['flags']['hasInjectIntoRenderedHtml'] = true;
         return $ret;
     }
 
@@ -96,5 +97,21 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars();
         $ret['metaTags'] = $this->_getMetaTags();
         return $ret;
+    }
+
+    public function injectIntoRenderedHtml($html)
+    {
+        return self::injectMeta($html, $this->getData()->render());
+    }
+
+    //public for trl
+    public static function injectMeta($html, $title)
+    {
+        $startPos = strpos($html, '<!-- metaTags -->');
+        $endPos = strpos($html, '<!-- /metaTags -->')+18;
+        $html = substr($html, 0, $startPos)
+                .$title
+                .substr($html, $endPos);
+        return $html;
     }
 }
