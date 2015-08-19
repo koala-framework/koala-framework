@@ -99,15 +99,22 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             if (isset($options['adaptHeight']) && $options['adaptHeight']) $class .= " adaptHeight";
             $options = htmlspecialchars(json_encode($options));
             $lightboxContent = "<div class=\"$class kwfLightboxOpen\">\n".
-                "<div class=\"kwfLightboxBetween\" style=\"$style\">\n".
-                "    <div class=\"kwfLightboxMask kwfLightboxMaskOpen\"></div>\n".
-                "    <div class=\"kwfLightboxInner\" style=\"$style\">\n".
-                "        <input type=\"hidden\" class=\"options\" value=\"$options\" />\n".
-                "        <a class=\"closeButton\" href=\"$parent->url\"></a>\n".
-                "        <div class=\"kwfLightboxContent\">\n".
-                "            $lightboxContent\n".
-                "        </div>\n".
-                "</div>\n</div>\n</div>";
+                "<div class=\"kwfLightboxScrollOuter\">\n".
+                "   <div class=\"kwfLightboxScroll\">\n".
+                "       <div class=\"kwfLightboxBetween\">\n".
+                "           <div class=\"kwfLightboxBetweenInner\">\n".
+                "               <div class=\"kwfLightboxInner\" style=\"$style\">\n".
+                "                   <input type=\"hidden\" class=\"options\" value=\"$options\" />\n".
+                "                   <div class=\"kwfLightboxContent\">\n".
+                "                       $lightboxContent\n".
+                "                   </div>\n".
+                "               </div>\n".
+                "           </div>\n".
+                "       </div>\n".
+                "    </div>\n".
+                "<a class=\"closeButton\" href=\"$parent->url\"></a>\n".
+                "</div>\n".
+                "<div class=\"kwfLightboxMask kwfLightboxMaskOpen\"></div>\n";
             return preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
         } else {
             return $lightboxContent;

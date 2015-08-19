@@ -503,7 +503,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
             }, 0);
         } else {
             var maskEl = $('<div class="kwfLightboxMask"></div>');
-            this.lightbox.lightboxEl.find('.kwfLightboxBetweenInner').append(maskEl);
+            this.lightbox.lightboxEl.find('.kwfLightboxScrollOuter').append(maskEl);
             setTimeout(function(){
                 $('.kwfLightbox').scrollTop(50000);
             }, 0);
