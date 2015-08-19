@@ -6,6 +6,7 @@ class Kwc_Box_Title_Component extends Kwc_Abstract
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Title');
         $ret['flags']['hasHeaderIncludeCode'] = true;
+        $ret['flags']['hasInjectIntoRenderedHtml'] = true;
         return $ret;
     }
 
@@ -32,5 +33,21 @@ class Kwc_Box_Title_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars();
         $ret['title'] = $this->_getTitle();
         return $ret;
+    }
+
+    public function injectIntoRenderedHtml($html)
+    {
+        return self::injectTitle($html, $this->getData()->render());
+    }
+
+    //public for trl
+    public static function injectTitle($html, $title)
+    {
+        $startPos = strpos($html, '<title>');
+        $endPos = strpos($html, '</title>')+8;
+        $html = substr($html, 0, $startPos)
+                .$title
+                .substr($html, $endPos);
+        return $html;
     }
 }

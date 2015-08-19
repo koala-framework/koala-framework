@@ -67,6 +67,12 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
                             .'<div class="kwfMainContent" data-kwc-component-id="'.$parent->componentId.'">'
                             .substr($parentContent, $endPos);
 
+            foreach ($this->_data->getChildBoxes() as $box) {
+                if (Kwc_Abstract::getFlag($box->componentClass, 'hasInjectIntoRenderedHtml')) {
+                    $parentContent = $box->getComponent()->injectIntoRenderedHtml($parentContent);
+                }
+            }
+
             //append lightbox after <body> in parent
             $options = $this->_getOptions();
             $style = '';
