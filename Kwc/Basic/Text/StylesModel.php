@@ -45,9 +45,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
         $package = Kwf_Assets_Package_Default::getInstance('Frontend');
         $ret = array();
         foreach ($package->getDependency()->getFilteredUniqueDependencies('text/css') as $dep) {
-            if ($dep instanceof Kwf_Assets_Dependency_File) {
-                $ret = array_merge($ret, self::parseMasterStyles(file_get_contents($dep->getAbsoluteFileName())));
-            }
+            $ret = array_merge($ret, self::parseMasterStyles($dep->getContentsSourceString()));
         }
         Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         return $ret;
