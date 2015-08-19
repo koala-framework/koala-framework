@@ -13,11 +13,11 @@ class Kwf_Component_Events_PagesMeta extends Kwf_Events_Subscriber
             'callback' => 'onContentChanged'
         );
         $ret[] = array(
-            'event' => 'Kwf_Component_Event_Component_Added',
+            'event' => 'Kwf_Component_Event_Page_Added',
             'callback' => 'onComponentAdded'
         );
         $ret[] = array(
-            'event' => 'Kwf_Component_Event_Component_Removed',
+            'event' => 'Kwf_Component_Event_Page_Removed',
             'callback' => 'onComponentRemoved'
         );
         $ret[] = array(
