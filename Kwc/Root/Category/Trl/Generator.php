@@ -2,7 +2,6 @@
 class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
 {
     protected $_eventsClass = 'Kwc_Root_Category_Trl_GeneratorEvents';
-    protected $_historyModel;
 
     public function getPagesControllerConfig($component)
     {
@@ -197,17 +196,6 @@ class Kwc_Root_Category_Trl_Generator extends Kwc_Chained_Trl_Generator
 
     public function getHistoryModel()
     {
-        if (!$this->_historyModel) {
-            if (isset($this->_settings['historyModel'])) {
-                if (is_string($this->_settings['historyModel'])) {
-                    $this->_historyModel = Kwf_Model_Abstract::getInstance($this->_settings['historyModel']);
-                } else {
-                    $this->_historyModel = $this->_settings['historyModel'];
-                }
-            } else {
-                $this->_historyModel = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_HistoryModel');
-            }
-        }
-        return $this->_historyModel;
+        return Kwf_Model_Abstract::getInstance($this->_settings['historyModel']);
     }
 }

@@ -12,7 +12,6 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     private $_basesCache = array();
     protected $_eventsClass = 'Kwc_Root_Category_GeneratorEvents';
-    protected $_historyModel;
 
     protected function _init()
     {
@@ -599,17 +598,6 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
 
     public function getHistoryModel()
     {
-        if (!$this->_historyModel) {
-            if (isset($this->_settings['historyModel'])) {
-                if (is_string($this->_settings['historyModel'])) {
-                    $this->_historyModel = Kwf_Model_Abstract::getInstance($this->_settings['historyModel']);
-                } else {
-                    $this->_historyModel = $this->_settings['historyModel'];
-                }
-            } else {
-                $this->_historyModel = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_HistoryModel');
-            }
-        }
-        return $this->_historyModel;
+        return Kwf_Model_Abstract::getInstance($this->_settings['historyModel']);
     }
 }
