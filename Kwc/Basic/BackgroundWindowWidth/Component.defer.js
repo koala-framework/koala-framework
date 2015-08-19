@@ -1,3 +1,4 @@
+var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 
 onReady.onResize('.kwcClass', function(el) {
