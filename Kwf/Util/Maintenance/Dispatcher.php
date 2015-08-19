@@ -28,20 +28,10 @@ class Kwf_Util_Maintenance_Dispatcher
         return ($a < $b) ? -1 : 1;
     }
 
-    public static function executeMinutely($debug)
+    public static function executeJobs($jobFrequency, $debug)
     {
         foreach (self::getAllMaintenanceJobs() as $job) {
-            if ($job->getFrequency() == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_MINUTELY) {
-                if ($debug) echo "\nexecuting ".get_class($job)."\n";
-                $job->execute($debug);
-            }
-        }
-    }
-
-    public static function executeDaily($debug)
-    {
-        foreach (self::getAllMaintenanceJobs() as $job) {
-            if ($job->getFrequency() == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY) {
+            if ($job->getFrequency() == $jobFrequency) {
                 if ($debug) echo "\nexecuting ".get_class($job)."\n";
                 $t = microtime(true);
                 $job->execute($debug);
