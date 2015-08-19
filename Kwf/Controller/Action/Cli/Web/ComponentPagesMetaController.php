@@ -168,7 +168,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         exit;
     }
 
-    public function updateChangedAction()
+    public function updateChangedJobAction()
     {
         $start = microtime(true);
         $m = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');

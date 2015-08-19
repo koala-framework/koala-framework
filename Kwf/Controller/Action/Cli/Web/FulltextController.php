@@ -289,7 +289,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         exit;
     }
 
-    public function updateChangedAction()
+    public function updateChangedJobAction()
     {
         $start = microtime(true);
         $pagesMetaModel = Kwf_Component_PagesMetaModel::getInstance();
@@ -323,40 +323,6 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         if ($this->_getParam('debug')) $cmd .= " --debug";
         system($cmd);
 
-        exit;
-    }
-
-    public function checkContentsAction()
-    {
-        $startTime = microtime(true);
-
-        foreach (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getSubroots() as $subroot) {
-
-            $t = time();
-            if (!$this->_getParam('silent')) echo "\n[$subroot] check-for-invalid...\n";
-            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-for-invalid-subroot --subroot=$subroot";
-            if ($this->_getParam('debug')) $cmd .= " --debug";
-            if ($this->_getParam('silent')) $cmd .= " --silent";
-            passthru($cmd, $ret);
-            if ($ret) exit($ret);
-            if (!$this->_getParam('silent')) echo "[$subroot] check-for-invalid finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
-
-            $t = time();
-            if (!$this->_getParam('silent')) echo "\n[$subroot] check-contents...\n";
-            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-contents-subroot --subroot=$subroot";
-            if ($this->_getParam('debug')) $cmd .= " --debug";
-            if ($this->_getParam('silent')) $cmd .= " --silent";
-            passthru($cmd, $ret);
-            if ($ret) exit($ret);
-            if (!$this->_getParam('silent')) echo "[$subroot] check-contents finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
-
-            $t = time();
-            if (!$this->_getParam('silent')) echo "\n[$subroot] optimize...\n";
-            Kwf_Util_Fulltext_Backend_Abstract::getInstance()->optimize($this->_getParam('debug'));
-            if (!$this->_getParam('silent')) echo "[$subroot] optimize finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(time()-$t)."\n\n";
-        }
-
-        if (!$this->_getParam('silent')) echo "\ncomplete fulltext check-contents finished: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(microtime(true)-$startTime)."s\n";
         exit;
     }
 

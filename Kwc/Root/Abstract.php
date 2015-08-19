@@ -1,5 +1,5 @@
 <?php
-class Kwc_Root_Abstract extends Kwc_Abstract
+class Kwc_Root_Abstract extends Kwc_Abstract implements Kwf_Util_Maintenance_JobProviderInterface
 {
     public static function getSettings()
     {
@@ -83,5 +83,14 @@ class Kwc_Root_Abstract extends Kwc_Abstract
         } else {
             return Kwf_Config::getValue($propertyName);
         }
+    }
+
+    public static function getMaintenanceJobs()
+    {
+        return array(
+            new Kwc_Root_MaintenanceJobs_PageMetaUpdate(),
+            new Kwc_Root_MaintenanceJobs_PageMetaRebuild(),
+            new Kwc_Root_MaintenanceJobs_CacheCleanup()
+        );
     }
 }
