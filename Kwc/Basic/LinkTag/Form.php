@@ -19,7 +19,8 @@ class Kwc_Basic_LinkTag_Form extends Kwc_Abstract_Cards_Form
             $fs->setCollapsed(true);
 
         $fs->add(new Kwf_Form_Field_TextField('title_text', 'Link Title')) //no trl
-            ->setWidth(300);
+            ->setWidth(300)
+            ->setHelpText(trlKwf('Optional. Description of the link or the link target. Some browsers show the text as a tooltip when the mouse pointer is hovering the link.'));
     }
 }
 

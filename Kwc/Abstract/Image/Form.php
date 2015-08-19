@@ -17,15 +17,18 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
             $fs->add(new Kwf_Form_Field_TextField('filename', trlKwf('Filename')))
                 ->setAutoFillWithFilename('filename') //to find it by MultiFileUpload and in JavaScript
                 ->setVtype('alphanum')
-                ->setWidth(300);
+                ->setWidth(300)
+                ->setHelpText(trlKwf('Talking filename ("lorem-ipsum-2015"), hyphens and underscores are allowed'));
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
             $fs->add(new Kwf_Form_Field_TextField('alt_text', 'ALT Text')) //no trl
-                ->setWidth(300);
+                ->setWidth(300)
+                ->setHelpText(trlKwf('Short, meaningful description of the image content.'));
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'titleText')) {
             $fs->add(new Kwf_Form_Field_TextField('title_text', 'IMG Title')) //no trl
-                ->setWidth(300);
+                ->setWidth(300)
+                ->setHelpText(trlKwf('Some browsers show the text as a tooltip when the mouse pointer is hovering the image.'));
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
             $this->add(new Kwf_Form_Field_TextField('image_caption', trlKwf('Image caption')))
