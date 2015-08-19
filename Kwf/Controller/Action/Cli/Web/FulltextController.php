@@ -109,161 +109,17 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         exit;
     }
 
-    //internal
-    public function rebuildWorkerAction()
-    {
-        Kwf_Util_MemoryLimit::set(512);
-
-        $pageClassesThatCanHaveFulltext = array();
-        foreach (self::_getAllPossiblePageComponentClasses() as $c) {
-            if (self::_canHaveFulltext($c)) {
-                $pageClassesThatCanHaveFulltext[] = $c;
-            }
-        }
-
-        $queueFile = 'temp/fulltextRebuildQueue';
-        $statsFile = 'temp/fulltextRebuildStats';
-
-        $stats = unserialize(file_get_contents($statsFile));
-        while (true) {
-            //child process
-
-            //echo "memory_usage (child): ".(memory_get_usage()/(1024*1024))."MB\n";
-            if (memory_get_usage() > 128*1024*1024) {
-                if ($this->_getParam('debug')) echo "new process...\n";
-                break;
-            }
-
-            $queue = file_get_contents($queueFile);
-            if (!$queue) break;
-
-            $queue = explode("\n", $queue);
-            if ($this->_getParam('debug')) echo "queued: ".count($queue).' :: '.round(memory_get_usage()/1024/1024, 2)."MB\n";
-            $componentId = array_shift($queue);
-            file_put_contents($queueFile, implode("\n", $queue));
-            $stats['pages']++;
-
-            if ($this->_getParam('debug')) echo "==> ".$componentId;
-            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
-            if (!$page) {
-                if ($this->_getParam('debug')) echo "$componentId not found!\n";
-                continue;
-            }
-            if ($this->_getParam('debug')) echo " :: $page->url\n";
-            if ($this->_getParam('verbose')) echo "getting child pages...";
-
-            $childPages = $page->getChildPseudoPages(
-                array('pageGenerator' => false, 'componentClasses'=>$pageClassesThatCanHaveFulltext),
-                array('pseudoPage'=>false)
-            );
-            $childPages = array_merge($childPages, $page->getChildPseudoPages(
-                array('pageGenerator' => true),
-                array('pseudoPage'=>false)
-            ));
-            if ($this->_getParam('verbose')) echo " done\n";
-            foreach ($childPages as $c) {
-
-                $i = $c;
-                do {
-                    if (Kwc_Abstract::getFlag($i->componentClass, 'skipFulltextRecursive')) {
-                        continue 2;
-                    }
-                } while($i = $i->parent);
-
-                if ($this->_getParam('verbose')) echo "queued $c->componentId\n";
-                $queue[] = $c->componentId;
-                file_put_contents($queueFile, implode("\n", $queue));
-            }
-            unset($c);
-
-            $pageId = $page->componentId;
-            unset($page);
-
-            if ($this->_getParam('debug')) {
-                //echo round(memory_get_usage()/1024/1024, 2)."MB";
-                //echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
-                //echo " data: ".Kwf_Component_Data::$objectsCount.', ';
-                //echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
-            }
-            //Kwf_Component_Data_Root::getInstance()->freeMemory();
-            if ($this->_getParam('debug')) {
-                //echo ' / '.round(memory_get_usage()/1024/1024, 2)."MB";
-                //echo " gen: ".Kwf_Component_Generator_Abstract::$objectsCount.', ';
-                //echo " data: ".Kwf_Component_Data::$objectsCount.', ';
-                //echo " row: ".Kwf_Model_Row_Abstract::$objectsCount.'';
-                //var_dump(Kwf_Model_Row_Abstract::$objectsByModel);
-                //var_dump(Kwf_Component_Data::$objectsById);
-                //echo "\n";
-            }
-            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($pageId);
-            if (!$page->isPage) continue;
-            if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page, !!$this->_getParam('verbose'))) {
-                $stats['indexedPages']++;
-            }
-            unset($page);
-
-        }
-        file_put_contents($statsFile, serialize($stats));
-        if ($this->_getParam('debug')) echo "child finished\n";
-        exit(0);
-    }
-
     public function rebuildAction()
     {
-        Kwf_Util_MemoryLimit::set(512);
-        if (!$this->_getParam('skip-check-for-invalid')) {
-            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext check-for-invalid";
-            if ($this->_getParam('debug')) $cmd .= " --debug";
-            system($cmd);
+        if (!$this->_getParam('skip-page-meta')) {
+            $job = new Kwc_Root_MaintenanceJobs_PageMetaRebuild();
+            $job->execute(true);
         }
 
-        $startTime = microtime(true);
-        $numProcesses = 0;
-
-        $queueFile = 'temp/fulltextRebuildQueue';
-        $statsFile = 'temp/fulltextRebuildStats';
-
-        $componentId = 'root';
-        if ($this->_getParam('componentId')) $componentId = $this->_getParam('componentId');
-        file_put_contents($queueFile, $componentId);
-
-        $stats = array(
-            'pages' => 0,
-            'indexedPages' => 0,
-        );
-        file_put_contents($statsFile, serialize($stats));
-        while(true) {
-            $numProcesses++;
-            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext rebuild-worker";
-            if ($this->_getParam('debug')) $cmd .= " --debug";
-            system($cmd, $status);
-
-            if ($status != 0) {
-                throw new Kwf_Exception("child process failed");
-            }
-
-            if ($this->_getParam('debug')) echo "memory_usage (parent): ".(memory_get_usage()/(1024*1024))."MB\n";
-            if (!file_get_contents($queueFile)) {
-                if ($this->_getParam('debug')) echo "fertig.\n";
-                break;
-            }
-        }
-
-        if (!$this->_getParam('silent')) {
-            $stats = unserialize(file_get_contents($statsFile));
-            echo "fulltext reindex finished.\n";
-            echo "duration: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(microtime(true)-$startTime)."s\n";
-            echo "used child processes: $numProcesses\n";
-            echo "processed pages: $stats[pages]\n";
-            echo "indexed pages: $stats[indexedPages]\n";
-        }
-
-        if (!$this->_getParam('skip-optimize')) {
-            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext optimize";
-            if ($this->_getParam('debug')) $cmd .= " --debug";
-            system($cmd);
-        }
-        exit;
+        $job = new Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_CheckContents(array(
+            'skipDiff' => true
+        ));
+        $job->execute(true);
     }
 
     public function searchAction()
@@ -346,11 +202,17 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         $it = new Kwf_Model_Iterator_Packages(
             new Kwf_Model_Iterator_Rows($pagesMetaModel, $select)
         );
+        if ($this->_getParam('debug')) {
+            $it = new Kwf_Iterator_ConsoleProgressBar($it);
+        }
         foreach ($it as $row) {
             $componentId = $row->page_id;
-            if ($this->_getParam('debug')) echo "checking: $i: $componentId\n";
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($componentId);
-            $docContent = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getDocumentContent($page);
+            if (!$this->_getParam('skip-diff')) {
+                $docContent = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getDocumentContent($page);
+            } else {
+                $docContent = '';
+            }
             $newDoc = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getFulltextContentForPage($page);
             if (!$newDoc) {
                 //this can happen (if there is no content)
@@ -359,12 +221,12 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
                 if ($row) $row->delete();
                 continue;
             }
-            if (trim($newDoc['content']) != $docContent) {
+            if (trim($newDoc['content']) != trim($docContent)) {
                 $stats['diffPages']++;
                 if (Kwf_Util_Fulltext_Backend_Abstract::getInstance()->indexPage($page)) {
                     $stats['indexedPages']++;
                 }
-                if (!$this->_getParam('silent')) echo "DIFF: $componentId\n";
+                if (!$this->_getParam('silent') && !$this->_getParam('skip-diff')) echo "DIFF: $componentId\n";
             }
             unset($page);
             if ($i++ % 10) {
@@ -374,7 +236,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         }
 
         if (!$this->_getParam('silent')) {
-            echo "pages with diff: $stats[diffPages]\n";
+            if (!$this->_getParam('skip-diff')) echo "pages with diff: $stats[diffPages]\n";
             echo "indexed pages: $stats[indexedPages]\n";
         }
         exit;

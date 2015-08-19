@@ -181,8 +181,7 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
         $this->_getSolrService($page)->setCreateDocuments(false);
 
         $res = $this->_getSolrService($page)
-            ->search('componentId:'.$page->componentId, 0, 10, array('fl'=>'content'))
-            ->response->numFound;
+            ->search('componentId:'.$page->componentId, 0, 10, array('fl'=>'content'));
         foreach ($res->response->docs as $doc) {
             return $doc->content;
         }
