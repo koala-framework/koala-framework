@@ -153,7 +153,9 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
         $s->where(new Kwf_Model_Select_Expr_Higher('changed_date', new Kwf_DateTime(time() - 5*60))); //>5min ago (for buffering!)
         $s->whereEquals('fulltext_skip', false);
         $s->where('changed_date > fulltext_indexed_date OR ISNULL(fulltext_indexed_date)');
+        $countIndexed = 0;
         foreach ($pagesMetaModel->getRows($s) as $row) {
+            $countIndexed++;
             if ($this->_getParam('debug')) echo "changed: $row->page_id\n";
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
             if (!$page) {
@@ -175,9 +177,11 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             }
         }
 
-        $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext optimize";
-        if ($this->_getParam('debug')) $cmd .= " --debug";
-        system($cmd);
+        if ($countIndexed > 0) {
+            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php fulltext optimize";
+            if ($this->_getParam('debug')) $cmd .= " --debug";
+            system($cmd);
+        }
 
         exit;
     }
