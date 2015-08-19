@@ -47,7 +47,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             $s->whereEquals('fulltext_skip', false);
             $s->whereEquals('deleted', false);
             if ($pagesMetaModel->countRows($s) == 0) {
-                if (!$this->_getParam('slient')) {
+                if (!$this->_getParam('silent')) {
                     echo "\n$documentId ist im index aber nicht im Seitenbaum, wird gelöscht...\n";
                 }
                 Kwf_Util_Fulltext_Backend_Abstract::getInstance()->deleteDocument($subroot, $documentId);
