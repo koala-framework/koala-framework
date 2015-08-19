@@ -5,6 +5,7 @@ class Kwf_Component_Cache_LinkTag_FirstChildPage_Root_Component extends Kwf_Comp
     {
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = 'Kwf_Component_Cache_LinkTag_FirstChildPage_Root_Model';
+        $ret['generators']['page']['historyModel'] = new Kwf_Model_FnF();
         $ret['generators']['page']['component'] = array(
             'empty' => 'Kwc_Basic_Empty_Component',
             'link' => 'Kwc_Basic_LinkTag_FirstChildPage_Component',
