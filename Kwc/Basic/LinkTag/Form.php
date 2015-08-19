@@ -18,7 +18,7 @@ class Kwc_Basic_LinkTag_Form extends Kwc_Abstract_Cards_Form
             $fs->setCollapsible(true);
             $fs->setCollapsed(true);
 
-        $fs->add(new Kwf_Form_Field_TextField('title_text', trlKwfStatic('Title')))
+        $fs->add(new Kwf_Form_Field_TextField('title_text', 'Link Title')) //no trl
             ->setWidth(300);
     }
 }

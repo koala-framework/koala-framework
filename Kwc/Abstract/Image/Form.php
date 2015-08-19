@@ -20,11 +20,11 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
                 ->setWidth(300);
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
-            $fs->add(new Kwf_Form_Field_TextField('alt_text', trlKwf('Alt Text')))
+            $fs->add(new Kwf_Form_Field_TextField('alt_text', 'ALT Text')) //no trl
                 ->setWidth(300);
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'titleText')) {
-            $fs->add(new Kwf_Form_Field_TextField('title_text', trlKwf('Title')))
+            $fs->add(new Kwf_Form_Field_TextField('title_text', 'IMG Title')) //no trl
                 ->setWidth(300);
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'imageCaption')) {
