@@ -1,5 +1,3 @@
-Ext2.form.TriggerField.prototype.helpTextOffset = [10+13, 2]; //js ist supa :D
-
 //borrowed from http://www.sencha.com/forum/showthread.php?84612-2.x2-TriggerField-width-problem-in-TabPanel-with-deferredRender-false
 Ext2.form.TriggerField.override({
     defaultTriggerWidth: 17,
