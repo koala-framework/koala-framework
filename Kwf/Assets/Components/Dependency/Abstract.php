@@ -57,7 +57,7 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
         foreach ($this->_componentDependencies as $dep) {
             $ret .= $dep->getContentsSourceString()."\n";
         }
-        $ret;
+        return $ret;
     }
 
     public function getContentsSource()
