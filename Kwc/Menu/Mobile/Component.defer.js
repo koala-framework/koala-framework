@@ -30,7 +30,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
     );
 
     var slide = function(direction, id) {
-        var menu = el.find('ul.menu');
+        var menu = el.find('.slider > ul.menu');
         var slider = el.find('.slider');
 
         if (direction == 'left') {
@@ -77,7 +77,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
         if (!_.has(menuData, data.id)) {
             responseAnimation = true;
             el.addClass('loading');
-            el.find('.menu').hide();
+            el.find('.slider > ul.menu').hide();
             el.find('.slider').removeAttr('style');
         }
         if (_.has(menuData, data.id)) {
@@ -110,7 +110,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
         menuLink.trigger('menuToggle', slideDuration);
         e.preventDefault();
         var slider = el.find('.slider');
-        var menu = el.find('.menu');
+        var menu = el.find('.slider > ul.menu');
 
         var sliders = $('.kwcMenuMobile .slider').not(slider);
         if (sliders.length) {
@@ -156,7 +156,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
             el.find('.slider').html(html);
             menuHtml.push(html);
             if (el.hasClass('loading')) {
-                el.find('.slider').animate({height: el.find('ul.menu').height()}, slideDuration);
+                el.find('.slider').animate({height: el.find('.slider > ul.menu').height()}, slideDuration);
                 el.trigger('menuToggle', slideDuration);
             }
             el.removeClass('loading');
