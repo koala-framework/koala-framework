@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS `kwf_pages_history` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `page_id` (`page_id`),
-  KEY `parent_id` (`parent_id`)
+  KEY `parent_id` (`parent_id`),
+  KEY `filename` (`filename`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 ALTER TABLE `kwf_pages_history`

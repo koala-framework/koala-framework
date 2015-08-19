@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS `kwf_pages_trl_history` (
   `filename` varchar(255) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `component_id` (`component_id`)
+  KEY `component_id` (`component_id`),
+  KEY `filename` (`filename`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
 
 ALTER TABLE `kwf_pages_trl_history`
