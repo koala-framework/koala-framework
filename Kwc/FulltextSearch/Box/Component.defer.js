@@ -1,3 +1,5 @@
+//TODO: convert to jquery
+/*
 var onReady = require('kwf/on-ready-ext2');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var historyState = require('kwf/history-state');
@@ -166,3 +168,4 @@ onReady.onRender('.kwcClass', function fulltextSearchBox(el, config) {
 });
 
 
+*/

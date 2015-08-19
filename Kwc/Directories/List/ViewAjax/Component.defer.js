@@ -1,3 +1,5 @@
+//TODO: convert to jquery
+/*
 var onReady = require('kwf/on-ready');
 var $ = require('jQuery');
 var historyState = require('kwf/history-state');
@@ -422,3 +424,4 @@ Kwc.Directories.List.ViewAjax.prototype = {
 };
 
 })();
+*/
