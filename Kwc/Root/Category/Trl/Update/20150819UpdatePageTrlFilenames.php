@@ -5,7 +5,11 @@ class Kwc_Root_Category_Trl_Update_20150819UpdatePageTrlFilenames extends Kwf_Up
     {
         $model = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_Trl_GeneratorModel');
         foreach ($model->getRows() as $row) {
-            $row->save();
+            $page = Kwf_Component_Data_Root::getInstance()
+                ->getComponentByDbId($row->component_id, array('ignoreVisible' => true));
+            if ($page) {
+                $row->save();
+            }
         }
     }
 }
