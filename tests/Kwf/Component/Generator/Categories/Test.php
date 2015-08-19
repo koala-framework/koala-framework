@@ -183,11 +183,5 @@ class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
         $this->_process();
         $page = $this->_root->getComponentById(1);
         $this->assertEquals(5, $page->getChildComponent(array('filename' => 'foo'))->componentId);
-
-        $row = $pm->getRow(5);
-        $row->delete();
-        $this->_process();
-        $page = $this->_root->getComponentById(1);
-        $this->assertNull($page->getChildComponent(array('filename' => 'foo')));
     }
 }

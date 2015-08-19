@@ -68,12 +68,5 @@ class Kwc_Cc_RootWithTrl_Test extends Kwc_TestAbstract
         $this->_process();
         $page = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master-slave-main');
         $this->assertEquals('root-master-slave-main_1', $page->getChildComponent(array('filename' => '3_trl'))->componentId);
-
-        $model = Kwf_Model_Abstract::getInstance('Kwc_Cc_RootWithTrl_Master_Master_Category_PagesModel');
-        $row = $model->getRow(1);
-        $row->delete();
-        $this->_process();
-        $page = Kwf_Component_Data_Root::getInstance()->getComponentById('root-master-slave-main');
-        $this->assertNull($page->getChildComponent(array('filename' => '3_trl')));
     }
 }

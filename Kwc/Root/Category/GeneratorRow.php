@@ -14,18 +14,6 @@ class Kwc_Root_Category_GeneratorRow extends Kwf_Model_Tree_Row
         $this->parent_subroot_id = $c->getSubroot()->componentId;
     }
 
-    protected function _afterSave()
-    {
-        parent::_afterSave();
-        $model = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($this->id, array('ignoreVisible'=>true))
-            ->generator->getHistoryModel();
-        $select = $model->select()
-            ->whereEquals('parent_id', $this->parent_id)
-            ->whereEquals('filename', $this->filename);
-        $model->deleteRows($select);
-    }
-
     protected function _beforeUpdate()
     {
         parent::_beforeUpdate();
