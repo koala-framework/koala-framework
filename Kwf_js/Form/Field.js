@@ -38,7 +38,8 @@ Ext2.form.Field.override({
                         autoHeight: true,
                         bodyBorder : false,
                         title: trlKwf('Info'),
-                        resize: false
+                        resize: false,
+                        modal: true
                     });
                     helpWindow.show();
                 }, this);
