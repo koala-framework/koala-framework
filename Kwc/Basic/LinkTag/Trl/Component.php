@@ -14,4 +14,9 @@ class Kwc_Basic_LinkTag_Trl_Component extends Kwc_Abstract_Cards_Trl_Component
         $ret['linkTag'] = $ret['child'];
         return $ret;
     }
+
+    public function getLinkTitle()
+    {
+        return $this->_getRow()->title_text;
+    }
 }

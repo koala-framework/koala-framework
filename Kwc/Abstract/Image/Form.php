@@ -18,7 +18,7 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
                 ->setAutoFillWithFilename('filename') //to find it by MultiFileUpload and in JavaScript
                 ->setVtype('alphanum')
                 ->setWidth(300)
-                ->setHelpText(trlKwf('Talking filename ("lorem-ipsum-2015"), hyphens and underscores are allowed'));
+                ->setHelpText(trlKwf('Talking filename ("lorem-ipsum-2015"), hyphens and underscores are allowed.'));
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'altText')) {
             $fs->add(new Kwf_Form_Field_TextField('alt_text', 'ALT Text')) //no trl
