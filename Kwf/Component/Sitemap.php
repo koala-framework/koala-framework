@@ -13,7 +13,6 @@ class Kwf_Component_Sitemap
                 WHERE deleted=0 AND meta_noindex=0 AND domain_component_id=?",
             array($domain->componentId)
         );
-        $i = 0;
         while ($row = $stmt->fetch()) {
             echo "<url>\n";
             echo " <loc>".htmlspecialchars($row['url'])."</loc>\n";
