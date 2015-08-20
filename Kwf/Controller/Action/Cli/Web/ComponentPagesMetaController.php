@@ -29,6 +29,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
     //internal
     public function rebuildWorkerAction()
     {
+        set_time_limit(0);
         Kwf_Util_MemoryLimit::set(512);
 
         $queueFile = 'temp/pagemetaRebuildQueue';
