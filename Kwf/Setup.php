@@ -164,8 +164,9 @@ class Kwf_Setup
         }
 
         if ($uri == 'sitemap.xml') {
+            $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', null);
             $sitemap = new Kwf_Component_Sitemap();
-            $sitemap->outputSitemap(Kwf_Component_Data_Root::getInstance());
+            $sitemap->outputSitemap($data->getDomainComponent());
         }
         if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf'))) {
             if (!isset($_SERVER['HTTP_HOST'])) {
