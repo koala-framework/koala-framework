@@ -1,4 +1,7 @@
-Kwf.onJElementReady('.cssClass', function(el) {
+var $ = require('jQuery');
+var onReady = require('kwf/on-ready');
+
+onReady.onRender('.kwcClass', function(el) {
     var button = el.children('.moreButton');
 
     el.addClass('hidePics');
