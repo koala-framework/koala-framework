@@ -3,7 +3,7 @@ class Kwf_Update_20150819UpdatePageFilenames extends Kwf_Update
 {
     protected $_tags = array('kwc');
 
-    public function update()
+    public function postUpdate()
     {
         $model = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel');
         foreach ($model->getRows() as $row) {
