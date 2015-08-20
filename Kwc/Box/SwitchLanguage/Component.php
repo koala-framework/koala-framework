@@ -8,9 +8,9 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
         $ret['separator'] = ' / ';
         $ret['showCurrent'] = true;
         $ret['plugins'] = array('Kwc_Box_SwitchLanguage_Plugin');
-        $ret['generators']['meta'] = array(
+        $ret['generators']['alternativeLanguageLinks'] = array(
             'class' => 'Kwf_Component_Generator_Static',
-            'component' => 'Kwc_Box_SwitchLanguage_Meta_Component'
+            'component' => 'Kwc_Box_SwitchLanguage_AlternativeLanguageLinks_Component'
         );
         return $ret;
     }

@@ -1,5 +1,5 @@
 <?php
-class Kwc_Box_SwitchLanguage_Meta_Events extends Kwc_Abstract_Events
+class Kwc_Box_SwitchLanguage_AlternativeLanguageLinks_Events extends Kwc_Abstract_Events
 {
     public function getListeners()
     {
@@ -25,7 +25,7 @@ class Kwc_Box_SwitchLanguage_Meta_Events extends Kwc_Abstract_Events
     public function onLanguageChanged(Kwf_Component_Event_Component_ContentChanged $ev)
     {
         $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
-            $this->_class, $ev->component->getChildComponent('-meta')
+            $this->_class, $ev->component->getChildComponent('-alternativeLanguageLinks')
         ));
     }
 

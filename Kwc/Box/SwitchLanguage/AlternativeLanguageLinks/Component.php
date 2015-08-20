@@ -1,5 +1,5 @@
 <?php
-class Kwc_Box_SwitchLanguage_Meta_Component extends Kwc_Abstract
+class Kwc_Box_SwitchLanguage_AlternativeLanguageLinks_Component extends Kwc_Abstract
 {
     public static function getSettings()
     {
@@ -23,8 +23,8 @@ class Kwc_Box_SwitchLanguage_Meta_Component extends Kwc_Abstract
 
     public function injectIntoRenderedHtml($html)
     {
-        $startPos = strpos($html, '<!-- alternate -->');
-        $endPos = strpos($html, '<!-- /alternate -->')+19;
+        $startPos = strpos($html, '<!-- alternativeLanguageLinks -->');
+        $endPos = strpos($html, '<!-- /alternativeLanguageLinks -->') + 34;
         return substr($html, 0, $startPos) .
             $this->getData()->render() .
             substr($html, $endPos);
