@@ -67,9 +67,15 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
                             .'<div class="kwfMainContent" data-kwc-component-id="'.$parent->componentId.'">'
                             .substr($parentContent, $endPos);
 
-            foreach ($this->_data->getChildBoxes() as $box) {
-                if (Kwc_Abstract::getFlag($box->componentClass, 'hasInjectIntoRenderedHtml')) {
-                    $parentContent = $box->getComponent()->injectIntoRenderedHtml($parentContent);
+            foreach ($this->_data->getRecursiveChildComponents(array('flag' => 'hasInjectIntoRenderedHtml')) as $component) {
+                $box = $component;
+                $isInBox = false;
+                while (!$isInBox && $box) {
+                    if (isset($box->box)) $isInBox = true;
+                    $box = $box->parent;
+                }
+                if ($isInBox) {
+                    $parentContent = $component->getComponent()->injectIntoRenderedHtml($parentContent);
                 }
             }
 
