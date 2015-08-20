@@ -8,6 +8,10 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
         $ret['separator'] = ' / ';
         $ret['showCurrent'] = true;
         $ret['plugins'] = array('Kwc_Box_SwitchLanguage_Plugin');
+        $ret['generators']['alternativeLanguageLinks'] = array(
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Box_SwitchLanguage_AlternativeLanguageLinks_Component'
+        );
         return $ret;
     }
 
@@ -22,14 +26,11 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
         return $languages;
     }
 
-    public function getTemplateVars()
+    public function getLanguages($showCurrent)
     {
-        $ret = parent::getTemplateVars();
-        $ret['separator'] = $this->_getSetting('separator');
-        $languages = $this->_getLanguages();
-        $ret['languages'] = array();
-        foreach ($languages as $l) {
-            if (!$this->_getSetting('showCurrent')) {
+        $ret = array();
+        foreach ($this->_getLanguages() as $l) {
+            if (!$showCurrent) {
                 if ($this->getData()->getLanguage() == $l->getLanguage()) {
                     continue;
                 }
@@ -56,7 +57,7 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
             }
             $home = $l->getChildPage(array('home'=>true));
             if ($home) {
-                $ret['languages'][] = array(
+                $ret[] = array(
                     'language' => $l->id,
                     'home' => $home,
                     'page' => $page ? $page : $home,
@@ -66,9 +67,17 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
                 );
             }
         }
-        if ($this->_getSetting('showCurrent') && count($ret['languages']) == 1) {
-            $ret['languages'] = array();
+        if ($showCurrent && count($ret) == 1) {
+            $ret = array();
         }
+        return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['separator'] = $this->_getSetting('separator');
+        $ret['languages'] = $this->getLanguages($this->_getSetting('showCurrent'));
         return $ret;
     }
 

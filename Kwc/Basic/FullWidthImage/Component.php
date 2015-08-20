@@ -15,6 +15,18 @@ class Kwc_Basic_FullWidthImage_Component extends Kwc_TextImage_ImageEnlarge_Comp
                 'width' => self::CONTENT_WIDTH,
                 'height' => 0,
                 'cover' => true
+            ),
+            '16to9'=>array(
+                'text' => trlKwfStatic('full width').' 16:9',
+                'width' => self::CONTENT_WIDTH,
+                'cover' => true,
+                'aspectRatio' => 9/16
+            ),
+            '4to3'=>array(
+                'text' => trlKwfStatic('full width').' 4:3',
+                'width' => self::CONTENT_WIDTH,
+                'cover' => true,
+                'aspectRatio' => 3/4
             )
         );
         return $ret;

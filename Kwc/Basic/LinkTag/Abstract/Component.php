@@ -16,6 +16,7 @@ abstract class Kwc_Basic_LinkTag_Abstract_Component extends Kwc_Abstract
             'data' => $this->getData(),
             'rootElementClass' => self::getRootElementClass($this),
         );
+        $ret['linkTitle'] = $ret['data']->getLinkTitle();
         return $ret;
     }
 

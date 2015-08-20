@@ -1,6 +1,5 @@
 Ext2.form.Field.prototype.afterRenderExt = Ext2.form.Field.prototype.afterRender;
 
-Ext2.form.Field.prototype.helpTextOffset = [10, 2];
 Ext2.form.Field.override({
     getName: function() {
         //http://extjs.com/forum/showthread.php?t=15236
@@ -22,12 +21,12 @@ Ext2.form.Field.override({
     afterRender: function() {
         this.afterRenderExt();
         if (this.helpText){
-            var wrapDiv = this.getEl().up('div.x2-form-item');
+            var wrapDiv = this.getEl().up('div.x2-form-element');
             if (wrapDiv) {
                 var helpEl = wrapDiv.createChild({
                     tag: 'a',
                     href: '#',
-                    style: 'display: block; width: 16px; height: 16px; margin-bottom: -16px; '+
+                    style: 'display: inline-block; width: 16px; height: 16px; left: 4px; top: 4px; position: relative;'+
                         'background-image: url(/assets/silkicons/information.png)'
                 });
                 helpEl.on('click', function(e) {
@@ -69,9 +68,6 @@ Ext2.form.Field.override({
         }
     },
     alignHelpAndComment: function() {
-        if (this.helpEl) {
-            this.helpEl.alignTo(this.getEl(), 'tr', this.helpTextOffset);
-        }
         if (this.commentEl) {
             this.commentEl.alignTo(this.getEl(), 'tr', [5, 3]);
         }

@@ -19,6 +19,10 @@ class Kwc_Chained_Abstract_MasterAsChild_Component extends Kwc_Abstract
         try {
             $ret['componentIcon'] = Kwc_Abstract::getSetting($masterComponentClass, 'componentIcon');
         } catch (Exception $e) {}
+
+        if (Kwc_Abstract::getFlag($masterComponentClass, 'hasInjectIntoRenderedHtml')) {
+            $ret['flags']['hasInjectIntoRenderedHtml'] = true;
+        }
         return $ret;
     }
 
@@ -32,5 +36,10 @@ class Kwc_Chained_Abstract_MasterAsChild_Component extends Kwc_Abstract
     public function hasContent()
     {
         return $this->getData()->getChildComponent('-child')->hasContent();
+    }
+
+    public function injectIntoRenderedHtml($html)
+    {
+        return $this->getData()->getChildComponent('-child')->getComponent()->injectIntoRenderedHtml($html);
     }
 }

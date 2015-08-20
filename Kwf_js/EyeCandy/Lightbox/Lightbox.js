@@ -13,16 +13,18 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     var el = event.currentTarget;
     var $el = $(el);
     var options = $el.data('kwc-lightbox');
-    if (allByUrl[$el.attr('href')]) {
-        l = allByUrl[$el.attr('href')];
+    var href = $el.attr('href');
+    if (options.lightboxUrl) {
+        href = options.lightboxUrl; //ImagePage passes lightboxUrl as href points to img directly
+    }
+    if (allByUrl[href]) {
+        l = allByUrl[href];
     } else {
-        l = new Lightbox($el.attr('href'), options);
+        l = new Lightbox(href, options);
     }
     el.kwfLightbox = l;
 
-    if (currentOpen &&
-        currentOpen.href == $el.attr('href')
-    ) {
+    if (currentOpen && currentOpen.href == href) {
         //already open, ignore click
         event.preventDefault();
         return;
@@ -30,8 +32,8 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     this.kwfLightbox.show({
         clickTarget: this
     });
-    historyState.currentState.lightbox = this.href;
-    historyState.pushState(document.title, this.href);
+    historyState.currentState.lightbox = href;
+    historyState.pushState(document.title, href);
 
     event.preventDefault();
 });
@@ -57,6 +59,23 @@ onReady.onRender('.kwfLightbox', function lightboxEl(el) {
 
     //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
     onReady.callOnContentReady(l.contentEl, {action: 'show'});
+
+    //lazy load parent content
+    var mainContent = $('.kwfMainContent');
+    if (mainContent.data('kwc-component-id')) {
+        setTimeout(function() {
+            $.ajax({
+                url: getKwcRenderUrl(),
+                data: { componentId: mainContent.data('kwc-component-id') },
+                dataType: 'html',
+                context: this
+            }).done(function(responseText) {
+                mainContent.html(responseText);
+                Kwf.callOnContentReady(mainContent, {action: 'render'});
+            });
+        }, 100);
+    }
+
 }, { priority: 10 }); //after ResponsiveEl so lightbox can adapt to responsive content
 
 onReady.onContentReady(function lightboxContent(readyEl, options)

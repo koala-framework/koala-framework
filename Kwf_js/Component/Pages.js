@@ -82,7 +82,7 @@ Kwf.Component.Pages = Ext2.extend(Ext2.Panel, {
     {
        this.editDialog = new Kwf.Auto.Form.Window({
             width: 620,
-            height: 400,
+            height: 700,
             controllerUrl: '/admin/component/page'
         });
         this.editDialog.on('datachange', function(test) {

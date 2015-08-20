@@ -8,6 +8,13 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
         $ret = '';
 
         if ($position == 'header') {
+            if (Kwf_Config::getValue('application.kwf.name') == 'Koala Framework') {
+                $ret .= "<!--\n";
+                $ret .= "    This website is powered by Koala Web Framework CMS Version ".Kwf_Config::getValue('application.kwf.version').".\n";
+                $ret .= "    Koala Framework is a free open source Content Management Framework licensed under BSD.\n";
+                $ret .= "    http://www.koala-framework.org\n";
+                $ret .= "-->\n";
+            }
             $helper = new Kwf_View_Helper_DebugData();
             $ret .= $helper->debugData();
         }
@@ -73,15 +80,6 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
                     throw new Kwf_Exception('To support piwik add Kwc_Statistics_Piwik_Component as a box.');
                 }
             }
-
-            //see http://nexxar.wordpress.com/2010/10/07/speeding-up-jquery-ready-on-ie/
-            $ret .= "\n";
-            $ret .= "<!--[if lt IE 9]>\n";
-            $ret .= "<script type=\"text/javascript\">\n";
-            $ret .= "    jQuery.ready();\n";
-            $ret .= "</script>\n";
-            $ret .= "<![endif]-->\n";
-
         }
         return $ret;
     }

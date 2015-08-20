@@ -7,6 +7,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_Component extends Kwc_Abstract
         $ret['contentSender'] = 'Kwc_Basic_ImageEnlarge_EnlargeTag_ImagePage_ContentSender';
         $ret['assetsDefer']['dep'][] = 'KwfLightbox';
         $ret['rootElementClass'] = 'kwfUp-webStandard';
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
 

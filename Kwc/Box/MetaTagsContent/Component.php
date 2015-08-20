@@ -13,7 +13,6 @@ class Kwc_Box_MetaTagsContent_Component extends Kwc_Box_MetaTags_Component
     {
         $ret = parent::_getMetaTags();
         $row = $this->_getRow();
-        if ($row->keywords) $ret['keywords'] = $row->keywords;
         if ($row->description) $ret['description'] = $row->description;
         return $ret;
     }

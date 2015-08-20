@@ -56,12 +56,20 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
 
     public function getContents($language)
     {
+        $this->warmupCaches();
         return $this->_contentsCache;
     }
 
     public function getContentsPacked($language)
     {
-        return new Kwf_SourceMaps_SourceMap($this->_contentsCacheSourceMap, $this->_contentsCachePacked);
+        $this->warmupCaches();
+        return $this->_contentsCachePacked;
+    }
+
+    public function getContentsPackedSourceMap($language)
+    {
+        $this->warmupCaches();
+        return $this->_contentsCacheSourceMap;
     }
 
     public function __toString()

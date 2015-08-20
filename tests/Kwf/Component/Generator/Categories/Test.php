@@ -163,34 +163,25 @@ class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
         $this->assertEquals(5, $c->componentId);
     }
 
-    public function testFileNameChangeCache()
+    public function testFileNameChangeHistory()
     {
-        $c = $this->_root->getChildComponent('-bottom')->getRecursiveChildComponent(array(
-            'filename' => 'foo3',
-            'pseudoPage'=>true,
-        ));
-        $this->assertNotNull($c);
-
         $pm = Kwf_Model_Abstract::getInstance('Kwf_Component_Generator_Categories_PagesModel');
-        $row = $pm->getRow(4);
-        $row->filename = 'bar';
+
+        $row = $pm->getRow(2);
+        $row->name = 'bar';
         $row->save();
         $this->_process();
+        $page = $this->_root->getComponentById(1);
+        $this->assertEquals(2, $page->getChildComponent(array('filename' => 'foo'))->componentId);
+        $this->assertEquals(2, $page->getChildComponent(array('filename' => 'bar'))->componentId);
 
-        $c = $this->_root->getChildComponent('-bottom')->getRecursiveChildComponent(array(
-            'filename' => 'foo3',
-            'pseudoPage'=>true,
+        $row = $pm->createRow(array(
+            'id'=>5, 'pos'=>2, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo', 'custom_filename' => false,
+            'parent_id'=>1, 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id' => 'root',
         ));
-        $this->assertNull($c);
-
-        $row->filename = 'foo3';
         $row->save();
         $this->_process();
-
-        $c = $this->_root->getChildComponent('-bottom')->getRecursiveChildComponent(array(
-            'filename' => 'foo3',
-            'pseudoPage'=>true,
-        ));
-        $this->assertNotNull($c);
+        $page = $this->_root->getComponentById(1);
+        $this->assertEquals(5, $page->getChildComponent(array('filename' => 'foo'))->componentId);
     }
 }

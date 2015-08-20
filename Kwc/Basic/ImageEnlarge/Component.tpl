@@ -6,7 +6,7 @@
             data-max-width="<?=$this->maxWidth;?>"
             data-src="<?=$this->baseUrl;?>">
         <noscript>
-            <?=$this->image($this->image, $this->altText, $this->imgCssClass)?>
+            <?=$this->image($this->image, $this->altText, $this->imgAttributes)?>
         </noscript>
     </div>
     <?if ($this->hasContent($this->linkTag)) {?>

@@ -7,6 +7,7 @@ class Kwc_Basic_BackgroundWindowWidth_Form extends Kwc_Abstract_Composite_Form
 
         $backgroundColors = Kwc_Abstract::getSetting($this->getClass(), 'backgroundColors');
         $fs = $this->add(new Kwf_Form_Container_FieldSet(trlKwf('Standard Adjustments')));
+        $fs->setName('standardAdjustments');
         $fs->add(new Kwf_Form_Field_Select('background_color', trlKwf('Background Color')))
             ->setAllowBlank(true)
             ->setValues($backgroundColors);

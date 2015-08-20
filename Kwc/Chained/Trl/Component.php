@@ -5,7 +5,7 @@ class Kwc_Chained_Trl_Component extends Kwc_Chained_Abstract_Component
     {
         $ret = parent::getSettings();
         $copySettings = array('componentName', 'componentIcon', 'editComponents', 'viewCache', 'contentSender', 'plugins', 'masterTemplate');
-        $copyFlags = array('processInput', 'menuCategory', 'chainedType', 'subroot', 'hasAlternativeComponent', 'resetMaster');
+        $copyFlags = array('processInput', 'menuCategory', 'chainedType', 'subroot', 'hasAlternativeComponent', 'resetMaster', 'noIndex');
         $ret = Kwc_Chained_Abstract_Component::getChainedSettings($ret, $masterComponentClass, 'Trl', $copySettings, $copyFlags);
         return $ret;
     }

@@ -62,8 +62,6 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        Kwf_Util_Https::ensureHttps();
-
         if ($this->_getParam('applicationAssetsVersion')
                 && $this->getHelper('ViewRenderer')->isJson()) {
             if (Kwf_Assets_Dispatcher::getAssetsVersion() != $this->_getParam('applicationAssetsVersion')) {

@@ -31,6 +31,18 @@ class Kwc_Root_Category_GeneratorRow extends Kwf_Model_Tree_Row
                 throw new Kwf_Exception_Client(trlKwf("Can't move Page to other Subroot"));
             }
         }
+        if (in_array('filename', $this->getDirtyColumns())) {
+            $model = Kwf_Component_Data_Root::getInstance()
+                ->getComponentById($this->id, array('ignoreVisible'=>true))
+                ->generator->getHistoryModel();
+            $data = array(
+                'page_id' => $this->id,
+                'parent_id' => $this->parent_id,
+                'filename' => $this->getCleanValue('filename'),
+            );
+            $row = $model->createRow($data);
+            $row->save();
+        }
     }
 
     protected function _beforeDelete()

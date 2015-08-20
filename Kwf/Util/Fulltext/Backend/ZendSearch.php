@@ -213,4 +213,14 @@ class Kwf_Util_Fulltext_Backend_ZendSearch extends Kwf_Util_Fulltext_Backend_Abs
         }
         return false;
     }
+
+    public function getDocumentContent(Kwf_Component_Data $page)
+    {
+        $index = Kwf_Util_Fulltext_Lucene::getInstance($page);
+        $term = new Zend_Search_Lucene_Index_Term($page->componentId, 'componentId');
+        foreach ($index->find(new Zend_Search_Lucene_Search_Query_Term($term)) as $doc) {
+            return $doc->content;
+        }
+        return null;
+    }
 }

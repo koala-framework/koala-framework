@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_LinkTag_Youtube_Data extends Kwf_Component_Data
+class Kwc_Basic_LinkTag_Youtube_Data extends Kwc_Basic_LinkTag_Abstract_Data
 {
     public function __get($var)
     {

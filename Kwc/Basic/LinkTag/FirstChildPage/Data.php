@@ -17,7 +17,8 @@ class Kwc_Basic_LinkTag_FirstChildPage_Data extends Kwf_Component_Data
 
     public function getAbsoluteUrl()
     {
-        return $this->_getFirstChildPage()->getAbsoluteUrl();
+        $page = $this->_getFirstChildPage();
+        return $page ? $page->getAbsoluteUrl() : '';
     }
 
     public function _getFirstChildPage()
@@ -39,7 +40,8 @@ class Kwc_Basic_LinkTag_FirstChildPage_Data extends Kwf_Component_Data
 
     public function getLinkDataAttributes()
     {
-        return $this->_getFirstChildPage()->getLinkDataAttributes();
+        $page = $this->_getFirstChildPage();
+        return $page ? $page->getLinkDataAttributes() : array();
     }
 
 }

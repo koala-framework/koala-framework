@@ -205,7 +205,15 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                     foreach ($rows as $row) {
                         $pageIds[] = $row['id'];
                     }
-                    Kwf_Cache_Simple::add($cacheId, $pageIds);
+                    if ($pageIds) {
+                        Kwf_Cache_Simple::add($cacheId, $pageIds);
+                    } else {
+                        $s->order('date', 'DESC');
+                        $rows = $this->getHistoryModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns' => array('page_id')));
+                        foreach ($rows as $row) {
+                            $pageIds[] = $row['page_id'];
+                        }
+                    }
                 }
             } else if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
                 $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
@@ -587,5 +595,10 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         } else {
             return parent::getDeviceVisible($data);
         }
+    }
+
+    public function getHistoryModel()
+    {
+        return Kwf_Model_Abstract::getInstance($this->_settings['historyModel']);
     }
 }

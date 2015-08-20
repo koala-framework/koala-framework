@@ -86,6 +86,10 @@ class Kwc_Chained_Trl_Generator extends Kwc_Chained_Abstract_Generator
                 }
                 $ret['filename'] = $parentData->trlStaticExecute($ret['filename']);
                 $ret['filename'] = Kwf_Filter::filterStatic($ret['filename'], 'Ascii');
+                if (!$ret['filename']) {
+                    $ret['filename'] = $ret['chained']->id;
+                    $ret['filename'] = Kwf_Filter::filterStatic($ret['filename'], 'Ascii');
+                }
             }
         }
         return $ret;

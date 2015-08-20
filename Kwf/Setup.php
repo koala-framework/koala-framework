@@ -217,15 +217,12 @@ class Kwf_Setup
         if ($i) $uri = substr($uri, 0, $i);
 
         if ($uri == 'robots.txt') {
-            Kwf_Media_Output::output(array(
-                'contents' => "User-agent: *\nDisallow: /admin/",
-                'mimeType' => 'text/plain'
-            ));
+            Kwf_Util_RobotsTxt::output();
         }
 
         if ($uri == 'sitemap.xml') {
-            $sitemap = new Kwf_Component_Sitemap();
-            $sitemap->outputSitemap(Kwf_Component_Data_Root::getInstance());
+            $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].Kwf_Setup::getBaseUrl().'/', null);
+            Kwf_Component_Sitemap::output($data->getDomainComponent());
         }
         if (!in_array($uri, array('media', 'kwf', 'admin', 'assets', 'vkwf', 'api'))) {
             if (!isset($_SERVER['HTTP_HOST'])) {
@@ -253,7 +250,7 @@ class Kwf_Setup
                 if (!$url) { // e.g. firstChildPageData without child pages
                     throw new Kwf_Exception_NotFound();
                 }
-                header('Location: ' . $url);
+                header('Location: '.$url, true, 301);
                 exit;
             }
             $root->setCurrentPage($data);
@@ -306,7 +303,7 @@ class Kwf_Setup
             $filename = $urlParts[6];
 
             if ($checksum != Kwf_Media::getChecksum($class, $id, $type, $filename)) {
-                throw new Kwf_Exception_AccessDenied('Access to file not allowed.');
+                throw new Kwf_Exception_NotFound();
             }
             $class = rawurldecode($class);
             Kwf_Media_Output::output(Kwf_Media::getOutput($class, $id, $type));

@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_LinkTag_Mail_Data extends Kwf_Component_Data
+class Kwc_Basic_LinkTag_Mail_Data extends Kwc_Basic_LinkTag_Abstract_Data
 {
     private $_linkRow;
     private function _getLinkRow()

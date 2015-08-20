@@ -1,5 +1,5 @@
 <?php
-class Kwc_Basic_LinkTag_CommunityVideo_Data extends Kwf_Component_Data
+class Kwc_Basic_LinkTag_CommunityVideo_Data extends Kwc_Basic_LinkTag_Abstract_Data
 {
     private $_linkData = false;
     private function _getLinkData()

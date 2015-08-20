@@ -16,7 +16,7 @@ Kwc.TextImage.ImageEnlarge.ImageUploadField = Ext2.extend(Kwc.Basic.ImageEnlarge
             }
             return false;
         }, this).findBy(function (component, container) {
-            if (component.xtype == 'kwc.abstract.cards.combobox') {
+            if (component instanceof Kwc.Abstract.Cards.ComboBox) {
                 return true;
             }
             return false;

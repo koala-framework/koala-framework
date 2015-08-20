@@ -13,7 +13,8 @@ class Kwc_Root_Category_Component extends Kwc_Abstract
                 'link' => 'Kwc_Basic_LinkTag_Component',
                 'firstChildPage' => 'Kwc_Basic_LinkTag_FirstChildPage_Component'
             ),
-            'model' => 'Kwc_Root_Category_GeneratorModel'
+            'model' => 'Kwc_Root_Category_GeneratorModel',
+            'historyModel' => 'Kwc_Root_Category_HistoryModel'
         );
         $cc = Kwf_Registry::get('config')->kwc->childComponents;
         if (isset($cc->Kwc_Root_Category_Component)) {

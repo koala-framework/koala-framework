@@ -188,13 +188,9 @@ class Kwf_Component_Data
      *
      * @return string
      */
-    public function getAbsoluteUrl($useHttps = false)
+    public function getAbsoluteUrl()
     {
         $https = Kwf_Util_Https::domainSupportsHttps($this->getDomain());
-        if ($https && !$useHttps) {
-            //if component requests https use it even if $useHttps is false
-            $https = Kwf_Util_Https::doesComponentRequestHttps($this);
-        }
         $protocol = $https ? 'https' : 'http';
         return $protocol . '://'.$this->getDomain().$this->url;
     }
@@ -206,7 +202,7 @@ class Kwf_Component_Data
      */
     public function getPreviewUrl()
     {
-        return Kwf_Setup::getBaseUrl().'/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl(true).'?kwcPreview');
+        return Kwf_Setup::getBaseUrl().'/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl().'?kwcPreview');
     }
 
     public function __get($var)
@@ -1484,5 +1480,10 @@ class Kwf_Component_Data
         }
         return $ret;
 
+    }
+
+    public function getLinkTitle()
+    {
+        return null;
     }
 }
