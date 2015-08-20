@@ -16,7 +16,7 @@ class Kwc_Box_SwitchLanguage_Meta_Component extends Kwc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['languages'] = $this->getData()->parent->getComponent()->getLanguages(false);
+        $ret['languages'] = $this->getData()->parent->getComponent()->getLanguages(true);
         return $ret;
     }
 }

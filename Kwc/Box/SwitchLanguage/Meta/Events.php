@@ -48,7 +48,6 @@ class Kwc_Box_SwitchLanguage_Meta_Events extends Kwc_Abstract_Events
         $components = Kwc_Chained_Abstract_Component::getAllChainedByMaster($master, 'Trl');
         $components[] = $master;
         foreach ($components as $c) {
-            if ($c->componentId == $component->componentId) continue;
             $s = array('componentClass' => $this->_class);
             foreach ($c->getRecursiveChildComponents($s) as $c) {
                 $this->fireEvent(new $eventClass($this->_class, $c));
