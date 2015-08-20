@@ -7,6 +7,7 @@ class Kwc_Box_MetaTagsContent_Component extends Kwc_Box_MetaTags_Component
         $ret['componentName'] = trlKwfStatic('Meta Tags');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
+        $ret['generators']['child']['component']['ogImage'] = 'Kwc_Box_MetaTagsContent_OpenGraphImage_Component';
         return $ret;
     }
     protected function _getMetaTags()

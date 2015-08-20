@@ -1,10 +1,11 @@
 <?php
-class Kwc_Box_OpenGraph_Image_Component extends Kwc_Abstract_Image_Component
+class Kwc_Box_MetaTagsContent_OpenGraphImage_Component extends Kwc_Abstract_Image_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlKwfStatic('Image');
+        $ret['componentName'] = trlKwfStatic('Open Graph').' '.trlKwfStatic('Image');
+        $ret['imageLabel'] = trlKwfStatic('Open Graph').' '.trlKwfStatic('Image');
         $ret['dimensions'] = array(
             'default'=>array(
                 'text' => trlKwfStatic('default'),
@@ -14,6 +15,9 @@ class Kwc_Box_OpenGraph_Image_Component extends Kwc_Abstract_Image_Component
             ),
         );
         $ret['altText'] = false;
+        $ret['editFilename'] = false;
+        $ret['titleText'] = false;
+        $ret['imageCaption'] = false;
         return $ret;
     }
 
