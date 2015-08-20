@@ -207,12 +207,13 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
         }
     }
 
-    private function _deldir($dir){
+    private function _deldir($dir)
+    {
         $current_dir = opendir($dir);
         while ($entryname = readdir($current_dir)){
-            if (is_dir("$dir/$entryname") and ($entryname != "." and $entryname!="..")) {
-                deldir("${dir}/${entryname}");
-            } else if ($entryname != "." and $entryname!="..") {
+            if (is_dir("$dir/$entryname") && ($entryname != "." && $entryname!="..")) {
+                $this->_deldir("${dir}/${entryname}");
+            } else if ($entryname != "." && $entryname!="..") {
                 unlink("${dir}/${entryname}");
             }
         }
