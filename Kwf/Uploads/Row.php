@@ -107,7 +107,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
             return null;
         }
         $ret = $this->getModel()->getUploadDir() . '/' . substr($this->id, 0, 2) . '/' . $this->id;
-        if (isset($this->id_old) && $this->id_old && !is_file($ret)) {
+        if (isset($this->id_old) && $this->id_old && !is_file($ret) && is_file($this->getModel()->getUploadDir() . '/' . $this->id_old)) {
             $ret = $this->getModel()->getUploadDir() . '/' . $this->id_old;
         }
         return $ret;
