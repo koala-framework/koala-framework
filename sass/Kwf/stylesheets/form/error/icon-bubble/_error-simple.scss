@@ -1,12 +1,12 @@
 @mixin error-simple {
-    .kwfFieldErrorIconBubble {
+    .kwfUp-kwfFieldErrorIconBubble {
         background: none transparent;
         position: relative;
         height: auto;
         width: auto;
         clear: left;
 
-        .message {
+        .kwfUp-message {
             background: none transparent;
             display: block !important;
             opacity: 1 !important;
@@ -19,7 +19,7 @@
             text-align: left;
         }
 
-        .arrow {
+        .kwfUp-arrow {
             display: none !important;
         }
     }

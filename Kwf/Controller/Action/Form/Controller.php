@@ -93,7 +93,7 @@ class Kwf_Controller_Action_Form_Controller extends Kwf_Controller_Action
         $this->view->errors = Kwf_Form::formatValidationErrors($errors);
         $this->view->errorsHtml = '';
         if ($this->view->errors) {
-            $this->view->errorsHtml .= '<div class="kwfUp-webStandard kwcFormError kwfUp-webFormError">';
+            $this->view->errorsHtml .= '<div class="kwfUp-webStandard kwfUp-kwcFormError kwfUp-webFormError">';
             $this->view->errorsHtml .= '<p class="error">'.trlKwf('An error has occurred').':</p>';
             $this->view->errorsHtml .= '<ul>';
             foreach ($this->view->errors as $error) {

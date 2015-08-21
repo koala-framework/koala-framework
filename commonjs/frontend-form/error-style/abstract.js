@@ -7,7 +7,7 @@ var ErrorStyleAbstract = function(form) {
 ErrorStyleAbstract.prototype = {
     _showErrorMessagesAbove: function(messages, r)
     {
-        var html = '<div class="kwfUp-webStandard kwcFormError kwfUp-webFormError">';
+        var html = '<div class="kwfUp-webStandard kwfUp-kwcFormError kwfUp-webFormError">';
         html += '<p class="error">' + r.errorPlaceholder + ':</p>';
         html += '<ul>';
         for (var i=0; i < messages.length; i++) {

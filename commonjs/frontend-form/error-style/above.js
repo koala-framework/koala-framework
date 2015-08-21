@@ -8,7 +8,7 @@ var ErrorStyleAbove = kwfExtend(ErrorStyleAbstract, {
         for (var fieldName in r.errorFields) {
             errorMessages.push(r.errorFields[fieldName]);
             var field = this.form.findField(fieldName);
-            field.el.addClass('kwfFieldError');
+            field.el.addClass('kwfUp-kwfFieldError');
         }
         if (errorMessages && errorMessages.length) {
             this._showErrorMessagesAbove(errorMessages, r);
@@ -24,7 +24,7 @@ var ErrorStyleAbove = kwfExtend(ErrorStyleAbstract, {
 
     hideFieldError: function(field)
     {
-        field.el.removeClass('kwfFieldError');
+        field.el.removeClass('kwfUp-kwfFieldError');
         if (field.errorEl) field.errorEl.hide();
     }
 });

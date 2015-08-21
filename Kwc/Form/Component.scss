@@ -8,7 +8,7 @@
 @import "form/predefined/form-style-center";
 
 .kwcClass {
-    .kwfFormFieldWrapper {
+    .kwfUp-kwfFormFieldWrapper {
         position: relative;
     }
 
@@ -44,9 +44,9 @@
     }
 }
 
-.kwcClass .kwfFieldError label { color: $typo; }
-.kwcClass .kwfFieldError input,
-.kwcClass .kwfFieldError textarea {
+.kwcClass .kwfUp-kwfFieldError label { color: $typo; }
+.kwcClass .kwfUp-kwfFieldError input,
+.kwcClass .kwfUp-kwfFieldError textarea {
     color: $typo;
     border-color: $errorBorder ;
 }
@@ -55,8 +55,8 @@
     cursor: pointer;
 }
 
-.kwcClass form .kwfField label,
-.kwcClass form .kwfField span.fieldContent {
+.kwcClass form .kwfUp-kwfField label,
+.kwcClass form .kwfUp-kwfField span.fieldContent {
     line-height: 20px;
 }
 .kwcClass .submitWrapper {
@@ -103,18 +103,18 @@
 .kwcClass label {
     line-height: 18px;
 }
-.kwcClass .kwcLabelPositionAbove .kwfFormFieldWrapper.hasLabel {
+.kwcClass .kwfUp-kwcLabelPositionAbove .kwfUp-kwfFormFieldWrapper.kwfUp-hasLabel {
     margin-left: 0;
     padding-left: 0;
 }
-.kwcClass .kwfFieldRequired label { font-weight: normal; }
-.kwcClass .kwfFieldRequired span label { font-weight: normal; }
-.kwcClass .kwfFieldLabelAlignTop label {
+.kwcClass .kwfUp-kwfFieldRequired label { font-weight: normal; }
+.kwcClass .kwfUp-kwfFieldRequired span label { font-weight: normal; }
+.kwcClass .kwfUp-kwfFieldLabelAlignTop label {
     width: auto;
     margin: 0px;
     text-align: left;
 }
-.kwcClass .kwfFieldLabelAlignLeft label {
+.kwcClass .kwfUp-kwfFieldLabelAlignLeft label {
     text-align: left;
 }
 .kwcClass .showField {
@@ -130,7 +130,7 @@
     margin-left: 20px;
     padding: 5px;
 }
-.kwcClass form .kwfFormFieldRadio .kwfFormFieldWrapper label {
+.kwcClass form .kwfFormFieldRadio .kwfUp-kwfFormFieldWrapper label {
     margin-right: 20px;
     clear: none;
 }
@@ -145,12 +145,12 @@
 .kwcClass form .kwfFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
 
 .kwcClass form .kwfFormContainerColumns .kwfFormContainerColumn { float: left; clear: none; margin-bottom: 0px; }
-.kwcClass form .kwfFormContainerColumns .kwfFormContainerColumn .kwfField { clear: none; margin-bottom: 0px; }
+.kwcClass form .kwfFormContainerColumns .kwfFormContainerColumn .kwfUp-kwfField { clear: none; margin-bottom: 0px; }
 
-.kwcClass span.comment { margin-left: 10px; color: #999; }
-.kwcClass .kwfField { clear: both; position: relative; margin-bottom: 4px; }
+.kwcClass span.kwfUp-comment { margin-left: 10px; color: #999; }
+.kwcClass .kwfUp-kwfField { clear: both; position: relative; margin-bottom: 4px; }
 
-.kwcClass .kwcLabelPositionAbove label {
+.kwcClass .kwfUp-kwcLabelPositionAbove label {
     display: block;
     float: none;
     margin-left: 0px;

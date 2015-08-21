@@ -1,12 +1,12 @@
 @import "config/colors";
 
-.kwfFieldErrorIconBubble { 
+.kwfUp-kwfFieldErrorIconBubble {
     position: absolute; 
     width: 16px; height: 16px;
     z-index: 30;
     background: url("/assets/silkicons/exclamation.png") no-repeat scroll left center transparent;
 }
-.kwfFieldErrorIconBubble .message {
+.kwfUp-kwfFieldErrorIconBubble .kwfUp-message {
     position: absolute; 
     font-size: 12px;
     text-align: center;
@@ -19,7 +19,7 @@
     color: white;
     background-color: $errorBg;
 }
-.kwfFieldErrorIconBubble .arrow {
+.kwfUp-kwfFieldErrorIconBubble .kwfUp-arrow {
     border-top: 7px solid transparent;
     border-right: 7px solid $errorBg;
     border-bottom: 7px solid transparent;

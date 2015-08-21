@@ -1,6 +1,6 @@
 var onReady = require('kwf/on-ready-ext2');
 
-onReady.onRender('.kwfClearOnFocus', function(xel)
+onReady.onRender('.kwfUp-kwfClearOnFocus', function(xel)
 {
     var Event = Ext2.EventManager;
 
@@ -8,11 +8,11 @@ onReady.onRender('.kwfClearOnFocus', function(xel)
         if (el.value == '') return;
 
         var initText = el.value;
-        xel.addClass('kwfClearOnFocusBlurred');
+        xel.addClass('kwfUp-kwfClearOnFocusBlurred');
 
         Event.on(el, 'focus', function() {
             if (this.value == '' || this.value == initText) {
-                Ext2.fly(this).removeClass('kwfClearOnFocusBlurred');
+                Ext2.fly(this).removeClass('kwfUp-kwfClearOnFocusBlurred');
                 this.value = '';
             }
         }, el);
@@ -20,7 +20,7 @@ onReady.onRender('.kwfClearOnFocus', function(xel)
         Event.on(el, 'blur', function() {
             if (this.value == '') {
                 this.value = initText;
-                Ext2.fly(this).addClass('kwfClearOnFocusBlurred');
+                Ext2.fly(this).addClass('kwfUp-kwfClearOnFocusBlurred');
             }
         }, el);
 

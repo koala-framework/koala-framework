@@ -1,15 +1,14 @@
-<div class="{{ rootElementClass }}{% if isPosted %} kwfImportant{% endif %}" data-width="100%">
-    <input type="hidden" class="config" value="{{ config|json_encode() }}" />
+<div class="{{ rootElementClass }}{% if isPosted %} kwfUp-kwfImportant{% endif %}" data-width="100%" data-config="{{ config|json_encode() }}">
 {% if showSuccess %}
     {{ renderer.component(success) }}
 {% elseif message %}
-    <div class="kwfUp-webStandard kwfUp-webForm kwcForm">
+    <div class="kwfUp-webStandard kwfUp-webForm kwfUp-kwcForm">
         {{ message }}
     </div>
 {% else %}
     {% if errors %}
-        <div class="kwfUp-webStandard kwcFormError kwfUp-webFormError">
-        <p class="error">{{ placeholder.error }}:</p>
+        <div class="kwfUp-webStandard kwfUp-kwcFormError kwfUp-webFormError">
+        <p class="{{ "error"|bemClass }}">{{ placeholder.error }}:</p>
         <ul>
         {% for error in errors %}
             <li>{{ error }}</li>
@@ -29,9 +28,9 @@
             {% endblock %}
 
             {% if method != 'get' %}
-            <div class="spEmail">
-                <label for="{{ data.componentId }}-sp-email">{{ data.trlKwf('Leave empty') }}:</label>
-                <input id="{{ data.componentId }}-sp-email" name="{{ formName }}-sp-email" /> {# spam protection, named email so bots think they should fill this #}
+            <div class="kwfUp-spEmail">
+                <label for="kwfUp-{{ data.componentId }}-sp-email">{{ data.trlKwf('Leave empty') }}:</label>
+                <input id="kwfUp-{{ data.componentId }}-sp-email" name="{{ formName }}-sp-email" /> {# spam protection, named email so bots think they should fill this #}
             </div>
             {% endif %}
             <div class="kwfUp-submitWrapper {{ 'submitWrapper'|bemClass }}">

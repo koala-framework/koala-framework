@@ -3,16 +3,16 @@
 @mixin error-simple-align-right {
     @include error-simple;
 
-    .kwfFieldErrorIconBubble {
-        .message {
+    .kwfUp-kwfFieldErrorIconBubble {
+        .kwfUp-message {
             text-align: right;
         }
     }
 
     .kwcFormFieldRadio,
     .kwcFormFieldCheckbox {
-        .kwfFieldErrorIconBubble {
-            .message {
+        .kwfUp-kwfFieldErrorIconBubble {
+            .kwfUp-message {
                 text-align: left;
             }
         }

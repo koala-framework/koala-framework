@@ -1,6 +1,6 @@
 @mixin label-top-input-all {
     > div.kwfUp-kwcForm > form {
-        .kwfFormFieldWrapper {
+        .kwfUp-kwfFormFieldWrapper {
             > input, textarea, select {
                 @include box-sizing(border-box);
                 width: 100% !important;
@@ -9,7 +9,7 @@
     }
 
     .kwfFormFieldRadio {
-        .kwfFormFieldWrapper {
+        .kwfUp-kwfFormFieldWrapper {
             label {
                 width: auto !important;
             }

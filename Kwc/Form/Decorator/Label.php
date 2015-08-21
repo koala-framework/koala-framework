@@ -18,15 +18,15 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                     }
                 }
             }
-            $class = 'kwfField';
+            $class = 'kwfUp-kwfField';
             if ($item['item'] && $item['item']->getLabelAlign()) {
-                $class .= ' kwfFieldLabelAlign'.ucfirst($item['item']->getLabelAlign());
+                $class .= ' kwfUp-kwfFieldLabelAlign'.ucfirst($item['item']->getLabelAlign());
             }
             if ($hasErrors) {
-                $class .= ' kwfFieldError';
+                $class .= ' kwfUp-kwfFieldError';
             }
             if ($item['item'] && $item['item']->getAllowBlank()===false) {
-                $class .= ' kwfFieldRequired';
+                $class .= ' kwfUp-kwfFieldRequired';
             }
             if ($item['item'] && $item['item']->getCls()) {
                 $class .= ' '.$item['item']->getCls();
@@ -40,7 +40,7 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                     $i = $c;
                     if (substr($i, -10) == '_Component') $i = substr($i, 0, -10);
                     $i = str_replace('_', '', $i);
-                    $classParts[] = ' '.strtolower(substr($i, 0, 1)).substr($i, 1);
+                    $classParts[] = ' kwfUp-'.strtolower(substr($i, 0, 1)).substr($i, 1);
                     $c = get_parent_class($c);
                     if ($c == 'Kwf_Form_Field_Abstract' || $c == 'Kwf_Form_Field_SimpleAbstract') break;
                 }
@@ -48,8 +48,8 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                 if ($item['item']->getLabelPosition()) {
                     $labelPos = $item['item']->getLabelPosition();
                 }
-                $class .= ' kwcLabelPosition'.ucfirst($labelPos);
-                $class .= ' '.$item['item']->getFieldName();
+                $class .= ' kwfUp-kwcLabelPosition'.ucfirst($labelPos);
+                $class .= ' kwfUp-'.$item['item']->getFieldName();
             }
 
             $preHtml = '<div class="'.$class.'">';
@@ -68,19 +68,19 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                      * das CSS parsen und daraus generieren welche Zeichen an welcher Stelle
                      * eingefügt werden müssen.
                      */
-                    $preHtml .= '<span class="requiredSign">*</span>';
+                    $preHtml .= '<span class="kwfUp-requiredSign">*</span>';
                 }
-                $preHtml .= '<span class="labelSeparator">'.$item['item']->getLabelSeparator().'</span>';
+                $preHtml .= '<span class="kwfUp-labelSeparator">'.$item['item']->getLabelSeparator().'</span>';
                 $preHtml .= '</label>';
                 $hasLabel = true;
             }
             $postHtml = '';
             $style = '';
-            $preHtml = $preHtml . '<div class="kwfFormFieldWrapper'.($hasLabel ? ' hasLabel' : '').'" style="'.$style.'">';
+            $preHtml = $preHtml . '<div class="kwfUp-kwfFormFieldWrapper'.($hasLabel ? ' kwfUp-hasLabel' : '').'" style="'.$style.'">';
             $postHtml = '</div>'.$postHtml;
 
             if ($item['item'] && $item['item']->getComment()) {
-                $postHtml .= '<span class="comment">'.$item['item']->getComment().'</span>';
+                $postHtml .= '<span class="kwfUp-comment">'.$item['item']->getComment().'</span>';
             }
             $postHtml .= '</div>';
             if (!isset($item['preHtml'])) $item['preHtml'] = '';

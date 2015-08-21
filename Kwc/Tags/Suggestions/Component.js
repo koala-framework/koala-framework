@@ -2,7 +2,7 @@ var onReady = require('kwf/on-ready');
 var trlKwf = require('kwf/trl').trlKwf;
 
 onReady.onContentReady(function(el) {
-    Ext2.query('.kwcTagsSuggestions', el).each(function(el) {
+    Ext2.query('.kwcClass', el).each(function(el) {
         if (el.initDone) return;
         el.initDone = true;
         el = Ext2.get(el);
@@ -29,25 +29,25 @@ onReady.onContentReady(function(el) {
                 });
             } else {
                 if(!el.errorEl) {
-                    el.errorEl = el.child('.kwfField').createChild({
-                        cls: 'kwfFieldErrorIconBubble'
+                    el.errorEl = el.child('.kwfUp-kwfField').createChild({
+                        cls: 'kwfUp-kwfFieldErrorIconBubble'
                     });
                     el.errorEl.createChild({
-                        cls: 'message'
+                        cls: 'kwfUp-message'
                     });
-                    el.errorEl.child('.message').enableDisplayMode('block');
-                    el.errorEl.child('.message').hide();
+                    el.errorEl.child('.kwfUp-message').enableDisplayMode('block');
+                    el.errorEl.child('.kwfUp-message').hide();
                     el.errorEl.alignTo(el.child('input[name="tag"]'), 'tr', [-20, 4]);
                     el.errorEl.enableDisplayMode('block');
                     el.errorEl.hide();
                     Kwf.Event.on(el.errorEl, 'mouseEnter', function() {
-                        this.errorEl.child('.message').fadeIn({duration: 0.4});
+                        this.errorEl.child('.kwfUp-message').fadeIn({duration: 0.4});
                     }, el);
                     Kwf.Event.on(el.errorEl, 'mouseLeave', function() {
-                        this.errorEl.child('.message').fadeOut({duration: 0.2});
+                        this.errorEl.child('.kwfUp-message').fadeOut({duration: 0.2});
                     }, el);
                 }
-                el.errorEl.child('.message').update(trlKwf('Please enter a tag.'));
+                el.errorEl.child('.kwfUp-message').update(trlKwf('Please enter a tag.'));
                 el.errorEl.clearOpacity();
                 el.errorEl.fadeIn({
                     endOpacity: 0.8 //TODO read from css (but that's hard for IE)

@@ -43,7 +43,7 @@ Kwf.Tabs = function(el) {
         Ext2.get(this.switchEls[i]).removeClass('kwfTabsLinkActive');
 
         // if it is important, show on startup
-        if (Ext2.get(this.contentEls[i]).child('.kwfImportant')) {
+        if (Ext2.get(this.contentEls[i]).child('.kwfUp-kwfImportant')) {
             activeTabIdx = i;
         }
 

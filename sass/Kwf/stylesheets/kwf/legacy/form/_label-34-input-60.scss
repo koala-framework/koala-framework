@@ -10,7 +10,7 @@
         }
     }
 
-    .kwfFormFieldWrapper.hasLabel {
+    .kwfUp-kwfFormFieldWrapper.kwfUp-hasLabel {
         input, textarea, select, {
             @include box-sizing(border-box);
             max-width: 60%;

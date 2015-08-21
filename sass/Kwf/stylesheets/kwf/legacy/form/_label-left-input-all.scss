@@ -2,7 +2,7 @@
 
 @mixin label-left-input-all {
     > div.kwfUp-kwcForm > form {
-        .kwfFormFieldWrapper {
+        .kwfUp-kwfFormFieldWrapper {
             display: table-cell;
             width: 100%;
 
@@ -23,7 +23,7 @@
         }
 
         .kwfFormFieldRadio {
-            .kwfFormFieldWrapper {
+            .kwfUp-kwfFormFieldWrapper {
                 label {
                     display: inline;
                     vertical-align: middle;
@@ -32,7 +32,7 @@
         }
 
         .kwcFormFieldMultiCheckbox {
-            .kwfFormFieldWrapper {
+            .kwfUp-kwfFormFieldWrapper {
                 label {
                     display: inline;
                     vertical-align: middle;

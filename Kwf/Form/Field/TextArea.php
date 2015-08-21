@@ -56,7 +56,7 @@ class Kwf_Form_Field_TextArea extends Kwf_Form_Field_TextField
 
         $cls = $this->getCls();
         if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
-            $cls .= ' kwfClearOnFocus';
+            $cls .= ' kwfUp-kwfClearOnFocus';
         }
         if ($cls) $ret['html'] .= ' class="'.trim($cls).'"';
         if ($this->getEmptyText()) {

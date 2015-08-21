@@ -8,11 +8,11 @@ var ErrorStyleBubble = kwfExtend(ErrorStyleAbove, {
 
         for (var fieldName in r.errorFields) {
             var field = this.form.findField(fieldName);
-            field.el.addClass('kwfFieldError');
+            field.el.addClass('kwfUp-kwfFieldError');
             if (!field.errorEl) {
-                field.errorEl = field.el.append('<div class="kwfFieldErrorBubble"></div>');
-                field.errorEl.append('<div class="message"></div>');
-                var closeButton = field.errorEl.append('<a class="closeButton"></a>');
+                field.errorEl = field.el.append('<div class="kwfUp-kwfFieldErrorBubble"></div>');
+                field.errorEl.append('<div class="kwfUp-message"></div>');
+                var closeButton = field.errorEl.append('<a class="kwfUp-closeButton"></a>');
                 closeButton.on('click', function(ev) {
                     ev.preventDefault();
                     this.fadeOut();
@@ -28,7 +28,7 @@ var ErrorStyleBubble = kwfExtend(ErrorStyleAbove, {
                 }
                 field.errorEl.hide();
             }
-            field.errorEl.find('.message').update(r.errorFields[fieldName]);
+            field.errorEl.find('.kwfUp-message').update(r.errorFields[fieldName]);
             field.errorEl.clearOpacity();
             field.errorEl.fadeIn({
                 endOpacity: 0.8 //TODO read from css (but that's hard for IE)
@@ -41,7 +41,7 @@ var ErrorStyleBubble = kwfExtend(ErrorStyleAbove, {
     },
     hideFieldError: function(field)
     {
-        field.el.removeClass('kwfFieldError');
+        field.el.removeClass('kwfUp-kwfFieldError');
         if (field.errorEl) field.errorEl.fadeOut();
     }
 });

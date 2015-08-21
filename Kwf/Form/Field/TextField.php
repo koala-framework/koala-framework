@@ -60,7 +60,7 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $cls = $this->getCls();
         if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
-            $cls .= ' kwfClearOnFocus';
+            $cls .= ' kwfUp-kwfClearOnFocus';
         }
         $style = '';
         if ($this->getWidth()) {

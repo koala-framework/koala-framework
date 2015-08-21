@@ -34,9 +34,7 @@ responsiveEl('.kwcClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth:
 var FormComponent = function(form)
 {
     this.el = form;
-    var config = form.parent().find('.config', true);
-    if (!config) return;
-    config = $.parseJSON(config.val());
+    var config = form.parent().data('config');
     if (!config) return;
     this.config = config;
     this._submitDisabled = 0;
@@ -52,12 +50,13 @@ var FormComponent = function(form)
     }
 
     this.fields = [];
-    var fieldEls = form.find('.kwfField');
+    var fieldEls = form.find('.kwfUp-kwfField');
     for (var fieldElIndex=0; fieldElIndex<fieldEls.length; fieldElIndex++) {
         var fieldEl = fieldEls[fieldElIndex];
         var classes = fieldEl.className.split(' ');
         var fieldConstructor = false;
         $.each(classes, function (indx, c) {
+            c = c.replace('kwfUp-', '');
             if (fieldRegistry.fields[c]) {
                 fieldConstructor = fieldRegistry.fields[c];
             }

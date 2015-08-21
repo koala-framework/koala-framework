@@ -24,8 +24,8 @@
     }
 
     .kwcFormFieldRadio {
-        .kwfFormFieldWrapper {
-            &.hasLabel {
+        .kwfUp-kwfFormFieldWrapper {
+            &.kwfUp-hasLabel {
                 display: inline-block;
             }
         }

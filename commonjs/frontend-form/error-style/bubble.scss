@@ -1,6 +1,6 @@
 @import "config/colors";
 
-.kwfFieldErrorBubble { 
+.kwfUp-kwfFieldErrorBubble {
     position: absolute; 
     border: 2px solid #dddddd; 
     width: 215px;
@@ -12,7 +12,7 @@
     behavior: url(/assets/css3pie/pie.htc);
 }
 
-.kwfFieldErrorBubble:after {
+.kwfUp-kwfFieldErrorBubble:after {
     border-color: $errorBorder transparent;
     border-style: solid;
     border-width: 0px 8px 8px;
@@ -25,11 +25,11 @@
     z-index:10;
 }
 
-.kwfFieldErrorBubble .message {
+.kwfUp-kwfFieldErrorBubble .kwfUp-message {
     padding: 5px;
 }
 
-.kwfFieldErrorBubble .closeButton {
+.kwfUp-kwfFieldErrorBubble .kwfUp-closeButton {
     width: 10px; height: 10px; position: absolute;
     top: 0; right: 0;
     background: url('/assets/kwf/images/close.png') no-repeat;

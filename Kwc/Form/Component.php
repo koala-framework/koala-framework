@@ -279,7 +279,9 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
         if (!$ret['showSuccess']) {
             $values = $this->getForm()->load(null, $this->_postData);
-            $ret['form'] = $this->getForm()->getTemplateVars($values, '', $this->getData()->componentId.'_');
+            $idPrefix = $this->getData()->componentId.'_';
+            if (Kwf_Config::getValue('application.uniquePrefix')) $idPrefix = Kwf_Config::getValue('application.uniquePrefix').'-'.$idPrefix;
+            $ret['form'] = $this->getForm()->getTemplateVars($values, '', $idPrefix);
 
             $dec = $this->_getSetting('decorator');
             if ($dec && is_string($dec)) {

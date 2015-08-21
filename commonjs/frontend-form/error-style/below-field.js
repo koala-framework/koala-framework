@@ -7,13 +7,13 @@ var ErrorStyleBelowField = kwfExtend(ErrorStyleAbove, {
 
         for (var fieldName in r.errorFields) {
             var field = this.form.findField(fieldName);
-            field.el.addClass('kwfFieldError');
+            field.el.addClass('kwfUp-kwfFieldError');
             if (!field.errorEl) {
                 if (field.el.up('.kwfFormContainerColumn')) {
                     field.errorEl = field.el.up('.kwfFormContainerColumn').up('.kwfFormContainerColumns')
-                        .append('<div class="kwfFieldErrorMessage"></div>');
+                        .append('<div class="kwfUp-kwfFieldErrorMessage"></div>');
                 } else {
-                    field.errorEl = field.el.append('<div class="kwfFieldErrorMessage"></div>');
+                    field.errorEl = field.el.append('<div class="kwfUp-kwfFieldErrorMessage"></div>');
                 }
             }
             field.errorEl.show();
@@ -26,7 +26,7 @@ var ErrorStyleBelowField = kwfExtend(ErrorStyleAbove, {
     },
     hideFieldError: function(field)
     {
-        field.el.removeClass('kwfFieldError');
+        field.el.removeClass('kwfUp-kwfFieldError');
         if (field.errorEl) field.errorEl.hide();
     }
 });
