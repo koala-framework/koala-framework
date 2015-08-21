@@ -152,14 +152,14 @@ FormComponent.prototype = {
     disableSubmit: function() {
         this._submitDisabled++;
         this.el.find('.kwfUp-submitWrapper .kwfUp-button button').get(0).disabled = true;
-        this.el.find('.kwfUp-submitWrapper .kwfUp-button').addClass('disabled');
+        this.el.find('.kwfUp-submitWrapper .kwfUp-button').addClass('kwfUp-disabled');
     },
     enableSubmit: function() {
         this._submitDisabled--;
 
         if (this._submitDisabled === 0) {
             this.el.find('.kwfUp-submitWrapper .kwfUp-button button').get(0).disabled = false;
-            this.el.find('.kwfUp-submitWrapper .kwfUp-button').removeClass('disabled');
+            this.el.find('.kwfUp-submitWrapper .kwfUp-button').removeClass('kwfUp-disabled');
         }
     },
     isSubmitDisabled: function() {
