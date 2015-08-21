@@ -3,7 +3,6 @@
 
 var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
-var responsiveEl = require('kwf/responsive-el');
 var fieldRegistry = require('kwf/frontend-form/field-registry');
 var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
 var formRegistry = require('kwf/frontend-form/form-registry');
@@ -25,11 +24,6 @@ require('kwf/frontend-form/field/select');
 require('kwf/frontend-form/field/static');
 require('kwf/frontend-form/field/text-area');
 require('kwf/frontend-form/field/text-field');
-
-responsiveEl('.kwcClass.default', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
-responsiveEl('.kwcClass.centerDefault', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 500, cls: 'gt500'}, {minWidth: 350, cls: 'gt350'}]);
-responsiveEl('.kwcClass.smallBox', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
-responsiveEl('.kwcClass.center', [{maxWidth: 500, cls: 'veryNarrow'}, {minWidth: 350, cls: 'gt350'}]);
 
 var FormComponent = function(form)
 {
