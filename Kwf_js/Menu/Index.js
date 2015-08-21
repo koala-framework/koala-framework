@@ -10,6 +10,8 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
                             '{email} <span class="changeuser-role">({role})</span>',
                         '</div>',
                       '</tpl>'],
+    changeUserHeight: 350,
+    changeUserWidth: 280,
 
     initComponent : function()
     {
@@ -156,8 +158,8 @@ Kwf.Menu.Index = Ext2.extend(Ext2.Toolbar,
                 pageSize: 10,
                 triggerAction: 'all',
                 width: 120,
-                maxHeight: 350,
-                listWidth: 280,
+                maxHeight: this.changeUserHeight,
+                listWidth: this.changeUserWidth,
                 tpl: new Ext2.XTemplate(
                         this.changeUserTpl
                       )

@@ -7,6 +7,9 @@ class Kwc_Abstract_Image_Trl_Image_Component extends Kwc_Abstract_Image_Componen
         $ret['ownModel'] = 'Kwc_Abstract_Image_Trl_Image_Model';
         //dimesion wird autom. vom master verwendet
         $ret['masterImageComponentClass'] = $masterImageComponentClass;
+        $ret['editFilename'] = false;
+        $ret['altText'] = false;
+        $ret['titleText'] = false;
         return $ret;
     }
 
@@ -23,5 +26,21 @@ class Kwc_Abstract_Image_Trl_Image_Component extends Kwc_Abstract_Image_Componen
             unset($dimension['crop']);
         }
         return $dimension;
+    }
+
+    public function getImageData()
+    {
+        $ret = parent::getImageData();
+        if ($ret && (Kwc_Abstract::getSetting($this->_getSetting('masterImageComponentClass'), 'editFilename'))) {
+            $fn = $this->getData()->parent->getComponent()->getRow()->filename;
+            if (!$fn) {
+                $fn = $this->getData()->parent->chained->getComponent()->getRow()->filename;
+            }
+            if ($fn) {
+                $fileRow = $this->getRow()->getParentRow('Image');
+                $ret['filename'] = $fn.'.'.$fileRow->extension;
+            }
+        }
+        return $ret;
     }
 }

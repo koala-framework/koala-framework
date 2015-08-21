@@ -50,6 +50,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars();
         $ret['imageUrl'] = $this->getImageUrl();
         $ret['imagePage'] = $this->getData()->getChildComponent('_imagePage', array('ignoreVisible'=>true));
+
+        $parent = $this->getData()->parent;
+        if (is_instance_of($parent->componentClass, 'Kwc_Basic_LinkTag_Component')) {
+            $ret['linkTitle'] = $this->getData()->parent->getComponent()->getLinkTitle();
+        }
         return $ret;
     }
 

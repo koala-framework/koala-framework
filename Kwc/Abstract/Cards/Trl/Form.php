@@ -23,8 +23,6 @@ class Kwc_Abstract_Cards_Trl_Form extends Kwc_Abstract_Form
     protected function _init()
     {
         parent::_init();
-        $this->_model = new Kwf_Model_FnF();
-
         $gen = Kwc_Abstract::getSetting($this->getClass(), 'generators');
         $classes = $gen['child']['component'];
         $cards = $this->add(new Kwf_Form_Container_Cards('component', trlKwf('Type')))

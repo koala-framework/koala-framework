@@ -27,6 +27,13 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
         } else {
             $data = $this->getData()->chained->getComponent()->getImageDataOrEmptyImageData();
             if ($data && $data['filename']) {
+                if (Kwc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'editFilename') && $this->_getRow()->filename) {
+                    $fn = $this->_getRow()->filename;
+                    if ($fn) {
+                        $fileRow = $this->getData()->chained->getComponent()->getRow()->getParentRow('Image');
+                        $data['filename'] = $fn.'.'.$fileRow->extension;
+                    }
+                }
                 return Kwf_Media::getUrl($this->getData()->componentClass,
                     $this->getData()->componentId,
                     $this->getBaseType(),
@@ -53,6 +60,15 @@ class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Compon
                 $ret['maxWidth'] = end($steps);
             }
         }
+
+        if (Kwc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'altText')) {
+            $ret['altText'] = $this->_getRow()->alt_text;
+        }
+
+        if (Kwc_Abstract::getSetting($this->_getSetting('masterComponentClass'), 'titleText')) {
+            $ret['imgAttributes']['title'] = $this->_getRow()->title_text;
+        }
+
         return $ret;
     }
 

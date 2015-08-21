@@ -1,5 +1,5 @@
 <?php
-abstract class Kwc_Basic_LinkTag_Intern_Trl_DataAbstract extends Kwf_Component_Data
+abstract class Kwc_Basic_LinkTag_Intern_Trl_DataAbstract extends Kwc_Basic_LinkTag_Abstract_Trl_Data
 {
     private $_data;
     private $_anchor = null;

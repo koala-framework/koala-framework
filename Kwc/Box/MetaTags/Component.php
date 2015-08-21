@@ -1,5 +1,5 @@
 <?php
-class Kwc_Box_MetaTags_Component extends Kwc_Abstract
+class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {

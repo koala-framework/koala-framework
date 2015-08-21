@@ -104,6 +104,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if ($imageCaptionSetting) {
             $ret['image_caption'] = $this->_getRow()->image_caption;
             $ret['showImageCaption'] = $imageCaptionSetting;
+            $ret['rootElementClass'] .= ' showImageCaption';
         }
 
         $ret['rootElementClass'] .= ' dimension'.ucfirst($this->getDimensionSetting());

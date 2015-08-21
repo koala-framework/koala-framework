@@ -9,11 +9,11 @@
             <?=$this->image($this->image, $this->altText, $this->imgAttributes)?>
         </noscript>
     </div>
-    <?if ($this->hasContent($this->linkTag)) {?>
-    </a>
-    <?}?>
     <? if ($this->showImageCaption && !empty($this->image_caption)) { ?>
     <div class="<?=$this->bemClass('imageCaption')?> kwfUp-imageCaption" style="<?=$this->captionStyle;?>"><?=(!empty($this->image_caption) ? $this->image_caption : '');?></div>
     <? } ?>
+    <?if ($this->hasContent($this->linkTag)) {?>
+    </a>
+    <?}?>
 <? } ?>
 </div>
