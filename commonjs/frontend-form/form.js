@@ -86,7 +86,7 @@ var FormComponent = function(form)
         }).bind(this));
     }
 
-    var button = form.find('form button.submit');
+    var button = form.find('form button.kwfUp-submit');
     if (button) {
         button.on('click', this.onSubmit.bind(this));
     }
