@@ -39,7 +39,7 @@ class Kwf_Acl extends Zend_Acl
 
     public function __construct()
     {
-        $this->addRole(new Zend_Acl_Role('guest'));
+        $this->addRole(new Kwf_Acl_Role('guest', trlKwfStatic('Guest')));
         $this->addRole(new Kwf_Acl_Role_Admin('admin', trlKwfStatic('Administrator')));
 
         $this->add(new Zend_Acl_Resource('default_index'));

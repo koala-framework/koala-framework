@@ -78,7 +78,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
                     'uglify' => true,
                     'tests' => $tests,
                     'parseFiles' => false,
-                    'matchCommunityTests' => false,
+                    'matchCommunityTests' => true,
                     'customTests' => array()
                 )
             )
@@ -91,6 +91,8 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         $gruntfile .= "    grunt.loadNpmTasks(\"grunt-modernizr\");\n";
         $gruntfile .= "    grunt.registerTask('default', ['modernizr']);\n";
         $gruntfile .= "};\n";
+
+        if (file_exists($outputFile)) unlink($outputFile);
 
         $cwd = getcwd();
         chdir(dirname(dirname(dirname(dirname(__FILE__)))));
