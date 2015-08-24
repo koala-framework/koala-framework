@@ -91,7 +91,7 @@ class Kwf_Component_Events_PagesMeta extends Kwf_Events_Subscriber
         $m = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
         if ($page = $ev->component->getPage()) {
             $row = $m->getRow($page->componentId);
-            if (!$row) {
+            if ($row) {
                 $row->deleteRecursive();
             }
         }
