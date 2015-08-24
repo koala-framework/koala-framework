@@ -120,7 +120,7 @@ class Kwf_Util_ClearCache
                 }
             }
         }
-        if (!Kwf_Config::getValue('clearCacheSkipProcessControl')) {
+        if (!Kwf_Config::getValue('clearCacheSkipProcessControl') && VENDOR_PATH != '../vendor') {
             $types[] = new Kwf_Util_ClearCache_Types_ProcessControl();
         }
 
