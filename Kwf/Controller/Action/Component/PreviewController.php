@@ -8,9 +8,10 @@ class Kwf_Controller_Action_Component_PreviewController extends Kwf_Controller_A
         );
         $this->view->xtype = 'kwf.component.preview';
         $this->view->initialUrl = null;
-        if (preg_match('#^https?://#', $this->view->initialUrl)) {
+        if (preg_match('#^https?://#', $this->_getParam('url'))) {
             $this->view->initialUrl = $this->_getParam('url');
         }
+
         if (!$this->view->initialUrl) {
             $this->view->initialUrl = 'http://'.$_SERVER['HTTP_HOST'].Kwf_Setup::getBaseUrl().'/';
         }
