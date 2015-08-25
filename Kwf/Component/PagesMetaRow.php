@@ -89,7 +89,7 @@ class Kwf_Component_PagesMetaRow extends Kwf_Model_Db_Row
             ));
             foreach ($pages as $p) {
                 $row = $this->getModel()->getRow($p->componentId);
-                $row->deleteRecursive();
+                if ($row) $row->deleteRecursive();
             }
         }
 
