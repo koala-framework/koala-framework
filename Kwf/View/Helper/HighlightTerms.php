@@ -38,7 +38,7 @@ class Kwf_View_Helper_HighlightTerms
             // get from / to block positions
             $blocksPositions = array();
             foreach ($terms as $term) {
-                preg_match_all("/(^|\W)($term)(\W|$)/i", $text, $matches, PREG_OFFSET_CAPTURE);
+                preg_match_all("/(^|\W)($term)/i", $text, $matches, PREG_OFFSET_CAPTURE);
                 $m = $matches[2];
                 $blocks = count($m) > $options['maxReturnBlocks'] ? $options['maxReturnBlocks'] : count($m);
                 if ($blocks >= 1) {
@@ -148,13 +148,12 @@ class Kwf_View_Helper_HighlightTerms
         $c = 1;
         foreach ($terms as $term) {
             $ret = preg_replace(
-                "/(^|\W)($term)(\W|$)/i",
+                '/(^|\W)('.$term.')/i',
                 '$1<span class="highlightTerms highlightTerm'.$c.'">$2</span>$3',
                 $ret
             );
             $c++;
         }
-
         return $ret;
     }
 }
