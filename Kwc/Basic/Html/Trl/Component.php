@@ -6,6 +6,7 @@ class Kwc_Basic_Html_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
         $ret = parent::getSettings($childComponentClass);
         $ret['ownModel'] = 'Kwc_Basic_Html_Model';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'content';
+        $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/Html/Trl/CopyButton.js';
         return $ret;
     }
 
