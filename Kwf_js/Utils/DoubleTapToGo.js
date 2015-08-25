@@ -1,4 +1,4 @@
-// @require ModernizrTouch
+// @require ModernizrTouchevents
 
 Kwf.namespace('Kwf.Utils');
 
@@ -56,7 +56,7 @@ Kwf.namespace('Kwf.Utils');
             return;
         }
 
-        if (Modernizr.touch) {
+        if (Modernizr.touchevents) {
             $.each(el, function(i, element) {
                 if ($(element).hasClass('kwfDoubleTapHandler')) return;
 

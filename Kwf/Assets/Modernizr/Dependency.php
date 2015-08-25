@@ -3,11 +3,13 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
 {
     private $_features = array();
     private $_contentsCache;
+    private $_outputFile;
 
     public function addFeature($feature)
     {
         $this->_features[] = $feature;
         unset($this->_contentsCache);
+        unset($this->_outputFile);
     }
 
     public function getFeatures()
@@ -31,81 +33,69 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
 
         if (!$this->_features) return null;
 
-        $outputFile = getcwd().'/temp/modernizr-'.implode('-', $this->_features);
-        if (file_exists("$outputFile.buildtime") && (time() - file_get_contents("$outputFile.buildtime") < 24*60*60)) {
-            $ret = file_get_contents($outputFile);
+        $modernizrPath = dirname(dirname(dirname(dirname(__FILE__)))).'/node_modules/modernizr';
+        $package = json_decode(file_get_contents($modernizrPath.'/package.json'), true);
+
+        $this->_outputFile = getcwd().'/temp/modernizr-'.$package['version'].'-'.implode('-', $this->_features).'/modernizr.js';
+
+        if (file_exists($this->_outputFile)) {
+            $ret = file_get_contents($this->_outputFile);
             $this->_contentsCache = $ret;
             return $ret;
         }
 
-        $extensibility = array(
-            "addtest"      => false,
-            "prefixed"     => false,
-            "teststyles"   => false,
-            "testprops"    => false,
-            "testallprops" => false,
-            "hasevents"    => false,
-            "prefixes"     => false,
-            "domprefixes"  => false
-        );
-        $tests = array();
+        $configAll = json_decode(file_get_contents($modernizrPath.'/lib/config-all.json'), true);
+
+        $allFeatureDetects = $configAll['feature-detects'];
+
+        $options = array();
+        foreach ($configAll['options'] as $i) {
+            $options[$i] = false;
+        }
+        $options['mq'] = true;
+        $options['setClasses'] = true;
+
+        $featureDetects = array();
         foreach ($this->_features as $f) {
-            if (isset($extensibility[strtolower($f)])) {
-                $extensibility[strtolower($f)] = true;
+            if (isset($options[strtolower($f)])) {
+                //for prefixed
+                $options[strtolower($f)] = true;
             } else {
-                //add two versions of the test
-                //requried to support core detects (eg. CssAnimations) and non-core detects (css_mediaqueries)
-
-                $tests[] = strtolower($f);
-
-                $filter = new Zend_Filter_Word_CamelCaseToUnderscore();
-                $tests[] = strtolower($filter->filter($f));
+                $filter = new Zend_Filter_Word_CamelCaseToSeparator('/');
+                $fFiltered = strtolower($filter->filter($f));
+                if (!in_array($fFiltered, $allFeatureDetects)) {
+                    throw new Kwf_Exception("Invalid Modernizr Dependency, test doesn't exist: '".$f."'");
+                }
+                $featureDetects[] = $fFiltered;
             }
         }
-        $config = array(
-            'modernizr' => array(
-                'dist' => array(
-                    'devFile' => false,
-                    'outputFile' => $outputFile,
-                    'extra' => array(
-                        "shiv"       => false,
-                        "printshiv"  => false,
-                        "load"       => false,
-                        "mq"         => true,
-                        "cssclasses" => true
-                    ),
-                    'extensibility' => $extensibility,
-                    'uglify' => true,
-                    'tests' => $tests,
-                    'parseFiles' => false,
-                    'matchCommunityTests' => true,
-                    'customTests' => array()
-                )
-            )
-        );
 
-        $gruntfile  = "    module.exports = function(grunt) {\n";
-        $gruntfile .= "    grunt.initConfig(";
-        $gruntfile .= json_encode($config);
-        $gruntfile .= ");\n";
-        $gruntfile .= "    grunt.loadNpmTasks(\"grunt-modernizr\");\n";
-        $gruntfile .= "    grunt.registerTask('default', ['modernizr']);\n";
-        $gruntfile .= "};\n";
-
-        if (file_exists($outputFile)) unlink($outputFile);
-
-        $cwd = getcwd();
-        chdir(dirname(dirname(dirname(dirname(__FILE__)))));
-        file_put_contents('Gruntfile.js', $gruntfile);
-        $cmd = $cwd."/".VENDOR_PATH."/bin/node ./node_modules/grunt-cli/bin/grunt 2>&1";
-        exec($cmd, $out, $retVar);
-        unlink('Gruntfile.js');
-        if (file_exists($outputFile)) $ret = file_get_contents($outputFile);
-        chdir($cwd);
-        if ($retVar) {
-            throw new Kwf_Exception("Grunt failed: ".implode("\n", $out));
+        foreach ($options as $k=>$i) {
+            if (!$i) unset($options[$k]);
         }
-        file_put_contents("$outputFile.buildtime", time());
+        $options = array_keys($options);
+
+        $classPrefix = '';
+        if (Kwf_Config::getValue('application.uniquePrefix')) {
+            $classPrefix = Kwf_Config::getValue('application.uniquePrefix').'-';
+        }
+
+        $config = array(
+            'classPrefix' => $classPrefix,
+            'options' => $options,
+            'feature-detects' => $featureDetects
+        );
+        $configFile = tempnam('temp/', 'modernizrbuild');
+        unlink($configFile);
+        $configFile .= '.json';
+        file_put_contents($configFile, json_encode($config, JSON_PRETTY_PRINT));
+        $cmd = "./".VENDOR_PATH."/bin/node $modernizrPath/bin/modernizr --config $configFile --uglify --dest ".dirname($this->_outputFile);
+        exec($cmd, $out, $retVar);
+        unlink($configFile);
+        if ($retVar) {
+            throw new Kwf_Exception("modernizr failed: ".implode("\n", $out));
+        }
+        $ret = file_get_contents($this->_outputFile);
 
         $this->_contentsCache = $ret;
         return $ret;
@@ -113,9 +103,8 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
 
     public function getMTime()
     {
-        $outputFile = getcwd().'/temp/modernizr-'.implode('-', $this->_features);
-        if (!file_exists("$outputFile.buildtime")) $this->getContents(null);
-        return (int)file_get_contents("$outputFile.buildtime");
+        if (!isset($this->_outputFile)) $this->getContents(null);
+        return filemtime($this->_outputFile);
     }
 
     public function __toString()
