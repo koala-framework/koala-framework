@@ -395,7 +395,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
                     $(el).data('kwfViewAjaxInitDone', true);
                     $(el).click((function(ev) {
                         if (history.length > 1) {
-                            if (document.referrer.indexOf(document.domain) >= 0) {
+                            if (Kwf.Utils.HistoryState.entries > 0 || document.referrer.indexOf(document.domain) >= 0) {
                                 ev.preventDefault();
                                 history.back(); //keeps scroll position
                             }

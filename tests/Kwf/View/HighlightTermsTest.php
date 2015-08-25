@@ -26,12 +26,12 @@ class Kwf_View_HighlightTermsTest extends Kwf_Test_TestCase
         $res = $h->highlightTerms($searchWord, $this->_text, array('maxReturnLength' => 0));
 
         $highlights = mb_substr_count($res, '<span ');
-        $this->assertEquals(7, $highlights);
+        $this->assertEquals(8, $highlights);
 
         $this->assertRegExp('/<span class="highlightTerms highlightTerm1">für<\/span>/', $res);
         $this->assertRegExp('/<span class="highlightTerms highlightTerm1">Für<\/span>/', $res);
         $this->assertNotRegExp('/hier<span class="highlightTerms highlightTerm1">für<\/span>/', $res);
-        $this->assertNotRegExp('/<span class="highlightTerms highlightTerm1">Für<\/span>wahr/', $res);
+        $this->assertRegExp('/<span class="highlightTerms highlightTerm1">Für<\/span>wahr/', $res);
 
         $res = $h->highlightTerms(array('Highlighten', ' '), $this->_text, array('maxReturnLength' => 0));
         $highlights = mb_substr_count($res, '<span ');
@@ -99,5 +99,21 @@ Im neuen Golf GTI können Sie sich die Freiheit nehmen, die Sie brauchen - egal,
 
         $this->assertEquals(50, mb_strlen($res));
         $this->assertEquals('Für. Dies ist ein Text für das Highlighten des Tex', $res);
+    }
+
+    public function testSearchwordInResult()
+    {
+        $searchWords = 'bau';
+        $text = 'Das Suchwort wird erst zum Schluss vorkommen. Dann können wir '
+                .'überprüfen, ob die Funktion nur einen Textteil vom Anfang ausgibt '
+                .'oder ob er richtigerweise einen Textteil ausgibt wo auch das '
+                .'Suchwort vorkommt. Das ist wichtig, damit man bei jedem Suchergebnis '
+                .'auch zumindest ein gehighlightetes Wort findet. Sonst weiß '
+                .'der Besucher nicht warum das Ergebnis überhaupt angezeigt wird'
+                .'Sodala, und jetzt endlich das Suchwort ganz am Ende drann, Baustelle';
+        $h = new Kwf_View_Helper_HighlightTerms();
+        $res = $h->highlightTerms($searchWords, $text);
+        $this->assertContains('bau', $res, '', true);
+        $this->assertContains('<span class="highlightTerms highlightTerm1">Bau</span>', $res);
     }
 }
