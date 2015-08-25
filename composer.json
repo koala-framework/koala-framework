@@ -38,10 +38,7 @@
             "browser-pack": "5.0.1",
             "module-deps": "3.8.0",
             "JSONStream": "1.0.4",
-
-            "grunt": "0.4.*",
-            "grunt-cli": "0.1.*",
-            "grunt-modernizr": "0.6.0"
+            "modernizr": "git://github.com/Modernizr/Modernizr.git#eb211bbcb"
         },
         "require-dev-bower": {
             "qunit": "1.18.0",

@@ -1,4 +1,4 @@
-// @require ModernizrTouch
+// @require ModernizrTouchevents
 
 var onReady = require('kwf/on-ready');
 var $ = require('jQuery');
@@ -60,7 +60,7 @@ kwfNs('Kwf.Utils');
             return;
         }
 
-        if (Modernizr.touch) {
+        if (Modernizr.touchevents) {
             $.each(el, function(i, element) {
                 if ($(element).hasClass('kwfDoubleTapHandler')) return;
 
