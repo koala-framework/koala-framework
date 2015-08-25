@@ -18,8 +18,8 @@ class Kwc_FulltextSearch_Search_Directory_Component extends Kwc_Directories_Item
     public static function getMaintenanceJobs()
     {
         return array(
-            new Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_CheckContents(),
-            new Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_UpdateChanged(),
+            'Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_CheckContents',
+            'Kwc_FulltextSearch_Search_Directory_MaintenanceJobs_UpdateChanged',
         );
     }
 }
