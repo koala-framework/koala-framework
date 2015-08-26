@@ -3,11 +3,13 @@ class Kwf_Assets_ResponsiveEl_JsDependency extends Kwf_Assets_Dependency_Abstrac
 {
     private $_selector;
     private $_breakpoints;
+    private $_dependencyName;
 
-    public function __construct($selector, $breakpoints)
+    public function __construct($selector, $breakpoints, $dependencyName)
     {
         $this->_selector = $selector;
         $this->_breakpoints = $breakpoints;
+        $this->_dependencyName = $dependencyName;
         $this->setIsCommonJsEntry(true);
     }
 
@@ -20,4 +22,9 @@ class Kwf_Assets_ResponsiveEl_JsDependency extends Kwf_Assets_Dependency_Abstrac
     {
         return "require('kwf/responsive-el')('".$this->_selector."', [".implode(',', $this->_breakpoints)."]);\n";
     }
+    public function __toString()
+    {
+        return $this->_dependencyName;
+    }
+
 }

@@ -15,7 +15,11 @@ class Kwf_Assets_ResponsiveEl_Provider extends Kwf_Assets_Provider_Abstract
                     $selectors[$m[1][$k]][] = $m[2][$k];
                 }
                 foreach ($selectors as $selector=>$breakpoints) {
-                    $d = new Kwf_Assets_ResponsiveEl_JsDependency(trim($selector), $breakpoints);
+                    $d = new Kwf_Assets_ResponsiveEl_JsDependency(
+                        trim($selector),
+                        $breakpoints,
+                        'ResponsiveEl-'.$dependency->__toString()
+                    );
                     $d->addDependency(
                         Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS,
                         $this->_providerList->findDependency('kwf/responsive-el'),
