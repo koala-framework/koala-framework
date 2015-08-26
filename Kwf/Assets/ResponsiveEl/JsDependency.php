@@ -8,6 +8,7 @@ class Kwf_Assets_ResponsiveEl_JsDependency extends Kwf_Assets_Dependency_Abstrac
     {
         $this->_selector = $selector;
         $this->_breakpoints = $breakpoints;
+        $this->setIsCommonJsEntry(true);
     }
 
     public function getMimeType()
@@ -17,6 +18,6 @@ class Kwf_Assets_ResponsiveEl_JsDependency extends Kwf_Assets_Dependency_Abstrac
 
     public function getContents($language)
     {
-        return "Kwf.Util.ResponsiveEl('".$this->_selector."', [".implode(',', $this->_breakpoints)."]);\n";
+        return "require('kwf/responsive-el')('".$this->_selector."', [".implode(',', $this->_breakpoints)."]);\n";
     }
 }
