@@ -215,6 +215,21 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return $ret;
     }
 
+    public function getDomainComponents()
+    {
+        $classes = array();
+
+        foreach (Kwc_Abstract::getComponentClasses() as $class) {
+            if (Kwc_Abstract::hasSetting($class, 'baseProperties') &&
+                in_array('domain', Kwc_Abstract::getSetting($class, 'baseProperties'))
+            ) {
+                $classes[] = $class;
+            }
+        }
+        return Kwf_Component_Data_Root::getInstance()
+            ->getComponentsBySameClass($classes, array('ignoreVisible'=>true));
+    }
+
     /**
      * Returns a component data by it's componentId
      *
