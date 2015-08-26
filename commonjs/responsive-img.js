@@ -9,16 +9,16 @@ var deferredImages = [];
 
 module.exports = function (selector) {
     onReady.onResize(selector, function responsiveImg(el) {
-        if (el.hasClass('kwfUp-loadImmediately') || isElementInView(el)) {
-            if (!el[0].responsiveImgInitDone) {
+        if (el[0].responsiveImgInitDone) {
+            checkResponsiveImgEl(el);
+        } else {
+            if (el.hasClass('kwfUp-loadImmediately') || isElementInView(el)) {
                 initResponsiveImgEl(el);
             } else {
-                checkResponsiveImgEl(el);
-            }
-        } else {
-            if (!el.data('responsiveImgInitDeferred')) {
-                deferredImages.push(el);
-                el.data('responsiveImgInitDeferred', true);
+                if (!el.data('responsiveImgInitDeferred')) {
+                    deferredImages.push(el);
+                    el.data('responsiveImgInitDeferred', true);
+                }
             }
         }
     }, { defer: true });
@@ -79,13 +79,13 @@ function initResponsiveImgEl(el) {
     var minWidth = parseInt(el.data("minWidth"));
     var maxWidth = parseInt(el.data("maxWidth"));
 
-    el.loadedWidth = elWidth;
-    el.baseUrl = baseUrl;
-    el.minWidth = minWidth;
-    el.maxWidth = maxWidth;
+    el.data('baseUrl', baseUrl);
+    el.data('minWidth', minWidth);
+    el.data('maxWidth', maxWidth);
 
     var width = getResponsiveWidthStep(
-            el.loadedWidth * devicePixelRatio, minWidth, maxWidth);
+            elWidth * devicePixelRatio, minWidth, maxWidth);
+    el.data('loadedWidth', width);
     var sizePath = baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
             DONT_HASH_TYPE_PREFIX+width);
     var img = $('<img />');
@@ -112,11 +112,11 @@ function checkResponsiveImgEl(responsiveImgEl) {
     if (elWidth == 0) return;
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
     var width = getResponsiveWidthStep(elWidth * devicePixelRatio,
-            responsiveImgEl.minWidth, responsiveImgEl.maxWidth);
-    if (width > responsiveImgEl.loadedWidth) {
-        responsiveImgEl.loadedWidth = width;
+            responsiveImgEl.data('minWidth'), responsiveImgEl.data('maxWidth'));
+    if (width > responsiveImgEl.data('loadedWidth')) {
+        responsiveImgEl.data('loadedWidth', width);
         responsiveImgEl.find('img').attr('src',
-             responsiveImgEl.baseUrl.replace(DONT_HASH_TYPE_PREFIX+'{width}',
+             responsiveImgEl.data('baseUrl').replace(DONT_HASH_TYPE_PREFIX+'{width}',
                     DONT_HASH_TYPE_PREFIX+width));
     }
 };

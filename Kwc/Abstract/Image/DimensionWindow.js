@@ -306,7 +306,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
 
     _getPreserveRatio: function()
     {
-        return this._getUserSelectedDimensionWidth() > 0
+        return this.dimensions[this._dimensionField.getValue()].cover
+            && this._getUserSelectedDimensionWidth() > 0
             && this._getUserSelectedDimensionHeight() > 0;
     },
 

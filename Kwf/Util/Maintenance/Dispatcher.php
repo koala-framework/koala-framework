@@ -12,9 +12,14 @@ class Kwf_Util_Maintenance_Dispatcher
             }
         }
 
-        $ret = array();
+        $jobClasses = array();
         foreach ($providerClasses as $c) {
-            $ret = array_merge($ret, call_user_func(array($c, 'getMaintenanceJobs')));
+            $jobClasses = array_merge($jobClasses, call_user_func(array($c, 'getMaintenanceJobs')));
+        }
+        $jobClasses = array_unique($jobClasses);
+        $ret = array();
+        foreach ($jobClasses as $i) {
+            $ret[] = new $i();
         }
         usort($ret, array('Kwf_Util_Maintenance_Dispatcher', '_compareJobsPriority'));
         return $ret;

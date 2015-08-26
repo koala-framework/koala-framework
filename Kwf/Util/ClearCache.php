@@ -109,7 +109,7 @@ class Kwf_Util_ClearCache
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
         $types[] = new Kwf_Util_ClearCache_Types_Assets();
 
-        if (!Kwf_Config::getValue('clearCacheSkipProcessControl') && Kwf_Config::getValueArray('processControl')) {
+        if (!Kwf_Config::getValue('clearCacheSkipProcessControl') && VENDOR_PATH != '../vendor') {
             $types[] = new Kwf_Util_ClearCache_Types_ProcessControl();
         }
 
