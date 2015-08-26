@@ -53,7 +53,8 @@ class Kwc_FormDynamic_Basic_SeleniumTest extends Kwf_Test_SeleniumTestCase
     {
         //required
         $this->openKwc('/form2');
-        $this->clickAndWait('css=button');
+        $this->click('css=button');
+        $this->waitForConnections();
         $this->assertElementPresent('css=.kwfFieldError #form_root_form2-paragraphs-8');
     }
 

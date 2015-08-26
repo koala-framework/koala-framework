@@ -217,6 +217,25 @@ abstract class Kwc_Mail_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
+    public function getTotalViews()
+    {
+        $db = Kwf_Registry::get('db');
+        $sql = "
+            SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
+            FROM kwc_mail_views WHERE mail_component_id=?";
+        return $db->fetchOne($sql, $this->getData()->componentId);
+    }
+
+    public function getTotalClicks()
+    {
+        $db = Kwf_Registry::get('db');
+        $sql = "
+            SELECT count(distinct(concat(recipient_id,recipient_model_shortcut)))
+            FROM kwc_mail_redirect_statistics s, kwc_mail_redirect r
+            WHERE s.redirect_id=r.id AND mail_component_id=?";
+        return $db->fetchOne($sql, $this->getData()->componentId);
+    }
+
     public static function getMediaOutput($id, $type, $className)
     {
         if ($type == 'views') {

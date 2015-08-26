@@ -103,6 +103,7 @@ class Kwf_Util_Build
                 }
                 echo " (".round((microtime(true)-$t)*1000)."ms)";
                 echo "\n";
+                return false;
             }
         }
 

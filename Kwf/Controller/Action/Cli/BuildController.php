@@ -32,8 +32,11 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
         if (is_string($this->_getParam('exclude-type'))) {
             $options['excludeTypes'] = $this->_getParam('exclude-type');
         }
-        Kwf_Util_Build::getInstance()->build($options);
-        exit;
+        if (!Kwf_Util_Build::getInstance()->build($options)) {
+            exit(1);
+        } else {
+            exit;
+        }
     }
 
     public function showExtDepAction()
