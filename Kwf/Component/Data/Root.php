@@ -488,11 +488,6 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         if (!isset($this->_componentsByClassCache[$cacheId])) {
 
             $lookingForChildClasses = Kwc_Abstract::getComponentClassesByParentClass($class);
-            foreach ($lookingForChildClasses as $c) {
-                if (is_instance_of($c, 'Kwc_Root_Abstract')) {
-                    return array($this);
-                }
-            }
             $ret = $this->getComponentsBySameClass($lookingForChildClasses, $select);
             $this->_componentsByClassCache[$cacheId] = $ret;
 
@@ -512,12 +507,18 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
      */
     public function getComponentsBySameClass($lookingForChildClasses, $select = array())
     {
-        if (!is_array($lookingForChildClasses) && $lookingForChildClasses == $this->componentClass) {
-            return array($this);
-        }
-
+        $ret = array();
         if (!is_array($lookingForChildClasses)) {
             $lookingForChildClasses = array($lookingForChildClasses);
+        }
+
+        foreach ($lookingForChildClasses as $c) {
+            if ($c == $this->componentClass) {
+                $ret[] = $this;
+                if (isset($limitCount) && $limitCount == 1) {
+                    return $ret;
+                }
+            }
         }
 
         if (is_array($select)) {
@@ -531,7 +532,6 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
             $limitCount = $select->getPart(Kwf_Component_Select::LIMIT_COUNT);
         }
 
-        $ret = array();
         foreach ($this->_getGeneratorsForClasses($lookingForChildClasses) as $generator) {
             foreach ($generator->getChildData(null, $select) as $data) {
                 $ret[] = $data;
