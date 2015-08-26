@@ -215,10 +215,9 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         return $ret;
     }
 
-    public function getDomainComponents()
+    public function getDomainComponents($select = array())
     {
         $classes = array();
-
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
             if (Kwc_Abstract::hasSetting($class, 'baseProperties') &&
                 in_array('domain', Kwc_Abstract::getSetting($class, 'baseProperties'))
@@ -227,7 +226,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
             }
         }
         return Kwf_Component_Data_Root::getInstance()
-            ->getComponentsBySameClass($classes, array('ignoreVisible'=>true));
+            ->getComponentsBySameClass($classes, $select);
     }
 
     /**
