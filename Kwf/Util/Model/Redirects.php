@@ -29,13 +29,20 @@ class Kwf_Util_Model_Redirects extends Kwf_Model_Db
         $s->whereEquals('source', $sources);
         $s->whereEquals('active', true);
         if ($type == 'path') {
-            foreach (Kwc_Abstract::getComponentClasses() as $c) {
-                if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
-                    in_array('domain', Kwc_Abstract::getSetting($c, 'baseProperties'))
-                ) {
-                    $domain = call_user_func(array($c, 'getComponentForHost'), $host);
-                    $s->whereEquals('domain_component_id', $domain->dbId);
-                    break;
+            $root = Kwf_Component_Data_Root::getInstance();
+            $domainComponents = $root->getDomainComponents(array('ignoreVisible' => true));
+            if (count($domainComponents) > 1) {
+                $path = $root->getComponent()->formatPath(array('host' => $host, 'path' => ''));
+                if (!is_null($path)) {
+                    $path = trim($path, '/');
+                    $component = $root->getComponent()->getPageByUrl($path, null);
+                    if ($component) {
+                        $s->whereEquals('domain_component_id', $component->getDomainComponent()->dbId);
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
                 }
             }
         }
