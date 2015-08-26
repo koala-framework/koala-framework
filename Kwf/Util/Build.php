@@ -100,10 +100,10 @@ class Kwf_Util_Build
                     echo "\033[00;32mOK\033[00m";
                 } else {
                     echo " [\033[01;31mERROR\033[00m]";
+                    return false;
                 }
                 echo " (".round((microtime(true)-$t)*1000)."ms)";
                 echo "\n";
-                return false;
             }
         }
 
