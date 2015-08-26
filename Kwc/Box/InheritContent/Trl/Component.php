@@ -7,14 +7,8 @@ class Kwc_Box_InheritContent_Trl_Component extends Kwc_Chained_Trl_Component
         $ret['viewCache'] = false;
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
 
-        $childConfig = Kwc_Admin::getInstance($ret['generators']['child']['component']['child'])->getExtConfig();
-        if (array_keys($childConfig) == array('form')) {
-            $ret['hasVisible'] = true;
-            $ret['editComponents'] = array();
-        } else {
-            $ret['hasVisible'] = false;
-            $ret['editComponents'] = array('child');
-        }
+        $ret['hasVisible'] = false; //set to true if exactly one form exists in child and visible checkbox should be added by InheritContent_Trl
+        $ret['editComponents'] = array('child');
 
         $ret['extConfig'] = 'Kwc_Box_InheritContent_Trl_ExtConfig';
 
