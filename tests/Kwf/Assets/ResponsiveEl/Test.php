@@ -25,8 +25,8 @@ class Kwf_Assets_ResponsiveEl_Test extends Kwf_Test_TestCase
     {
         $package = new Kwf_Assets_Package($this->_list, 'Foo');
         $c = $package->getPackageContents('text/javascript', 'en', 0, false)->getFileContents();
-        $this->assertContains("ResponsiveEl('.test123', [350,400])", $c);
-        $this->assertContains("ResponsiveEl('.test456', [350])", $c);
+        $this->assertContains("('kwf/responsive-el')('.test123', [350,400])", $c);
+        $this->assertContains("('kwf/responsive-el')('.test456', [350])", $c);
     }
 
 }
