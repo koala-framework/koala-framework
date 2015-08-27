@@ -3,65 +3,65 @@
 @import "compass/css3/box-sizing";
 
 .kwcClass {
-    > .background {
+    &__background {
         overflow: hidden;
         position: absolute;
         left: 0;
         width: 100%;
         z-index: 2;
 
-        &.opaque {
+        &--opaque {
             @include opacity(0.7);
         }
 
-        &.backgroundImage {
+        &--backgroundImage {
             z-index: 1;
-            .image {
-                position: relative;
-                width: 100%;
-                height: 100%;
-                background-position: center center;
+        }
+    }
+
+    &--white {
+        .kwcBem {
+            &__background {
+                background: #FFFFFF;
+            }
+
+            &__content {
+                .kwfUp-webStandard p {
+                    color: $typo;
+                }
             }
         }
     }
 
-    &.white {
-        > .background {
-            background: #FFFFFF;
-        }
+    &--grey {
+        .kwcBem {
+            &__background {
+                background: #ccd0d4;
+            }
 
-        .content {
-            .kwfUp-webStandard p {
-                color: $typo;
+            &__content {
+                .kwfUp-webStandard p {
+                    color: $typo;
+                }
             }
         }
     }
 
-    &.grey {
-        > .background {
-            background: #ccd0d4;
-        }
+    &--black {
+        .kwcBem {
+            &__background {
+                background: #000000;
+            }
 
-        .content {
-            .kwfUp-webStandard p {
-                color: $typo;
+            &__content {
+                .kwfUp-webStandard p {
+                    color: #FFFFFF;
+                }
             }
         }
     }
 
-    &.black {
-        > .background {
-            background: #000000;
-        }
-
-        .content {
-            .kwfUp-webStandard p {
-                color: #FFFFFF;
-            }
-        }
-    }
-
-    > .content {
+    &__content {
         z-index: 3;
         position: relative;
         padding: 30px 0;

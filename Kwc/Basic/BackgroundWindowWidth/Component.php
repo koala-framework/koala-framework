@@ -25,7 +25,7 @@ class Kwc_Basic_BackgroundWindowWidth_Component extends Kwc_Abstract_Composite_C
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['backgroundColor'] = $this->getRow()->background_color;
+        $ret['backgroundColor'] = self::_getBemClass('--' . $this->getRow()->background_color);
         $ret['marginBottom'] = $this->getRow()->margin_bottom;
         return $ret;
     }

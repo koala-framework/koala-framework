@@ -1,14 +1,14 @@
 <div class="{{ rootElementClass }} {{ backgroundColor }}">
     {% if image.hasContent() %}
-        <div class="background backgroundImage">
+        <div class="{{ "background"|bemClass }} {{ "background--backgroundImage"|bemClass }}">
             {{ renderer.component(image) }}
         </div>
     {% endif %}
-    <div class="background{% if image.hasContent() %} opaque{% endif %}"></div>
-    <div class="content">
+    <div class="{{ "background"|bemClass }}{% if image.hasContent() %} {{ "background--opaque"|bemClass }}{% endif %}"></div>
+    <div class="{{ "content"|bemClass }}">
         {{ renderer.component(paragraphs) }}
     </div>
 </div>
 {% if marginBottom %}
-<div class="space" style="height: {{ marginBottom }}px"></div>
+<div class="<div class="{{ "space"|bemClass }}">" style="height: {{ marginBottom }}px"></div>
 {% endif %}
