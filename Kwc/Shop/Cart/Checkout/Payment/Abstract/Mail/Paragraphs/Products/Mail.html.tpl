@@ -16,7 +16,7 @@
         <tr class="products<?=($c%2==0 ? ' row1' : ' row2');?>">
             <td class="product"><?=htmlspecialchars($item->text);?></td>
             <? foreach($item->additionalOrderData as $d) { ?>
-                <td class="<?=$d['class']?>"><?=htmlspecialchars($this->data->trlStaticExecute($d['name']));?>: <?=htmlspecialchars($d['value']);?></td>
+                <td class="<?=$d['class']?>"><?=htmlspecialchars($this->data->trlStaticExecute($d['name']));?>: <?=htmlspecialchars($this->data->trlStaticExecute($d['value']));?></td>
             <? } ?>
             <td class="price" colspan="<?=($maxAddOrderData-count($item->additionalOrderData)+1)?>" align="right"><?=htmlspecialchars($this->money($item->price));?></td>
         </tr>

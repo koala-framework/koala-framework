@@ -7,7 +7,7 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
         $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['separator'] = ' / ';
         $ret['showCurrent'] = true;
-        $ret['plugins'] = array('Kwc_Box_SwitchLanguage_Plugin');
+        $ret['plugins'] = array();
         $ret['generators']['alternativeLanguageLinks'] = array(
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwc_Box_SwitchLanguage_AlternativeLanguageLinks_Component'

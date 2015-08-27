@@ -10,7 +10,7 @@ class Kwf_Trl_BuildFileMissingException extends Kwf_Exception
     {
         $exceptionLocation = null;
         foreach ($this->getTrace() as $trace) {
-            if (strpos($trace['file'], 'Kwf/Trl.php') === false
+            if (isset($trace['file']) && strpos($trace['file'], 'Kwf/Trl.php') === false
                 && (
                     $trace['function'] == 'trlKwf' || $trace['function'] == 'trl'
                     || $trace['function'] == 'trlcKwf' || $trace['function'] == 'trlc'
