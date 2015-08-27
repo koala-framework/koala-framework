@@ -164,9 +164,10 @@ class Kwf_Component_Data
     {
         $component = $this;
         while ($component) {
-            if (Kwc_Abstract::getFlag($component->componentClass, 'hasBaseProperties') &&
-                $component->getComponent()->getBaseProperty('domain'))
-            {
+            $class = $component->componentClass;
+            if (Kwc_Abstract::hasSetting($class, 'baseProperties') &&
+                in_array('domain', Kwc_Abstract::getSetting($class, 'baseProperties'))
+            ) {
                 return $component;
             }
             $component = $component->parent;

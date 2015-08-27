@@ -10,24 +10,15 @@ class Kwf_Controller_Action_Redirects_RedirectController extends Kwf_Controller_
         if (!Kwf_Component_Data_Root::getComponentClass()) {
             return null;
         }
-        $domainComponentClasses = array();
-        foreach (Kwc_Abstract::getComponentClasses() as $c) {
-            if (Kwc_Abstract::hasSetting($c, 'baseProperties') &&
-                in_array('domain', Kwc_Abstract::getSetting($c, 'baseProperties'))
-            ) {
-                $domainComponentClasses[] = $c;
+        $ret = array();
+        $acl = Zend_Registry::get('acl');
+        $user = Kwf_Registry::get('userModel')->getAuthedUser();
+        foreach (Kwf_Component_Data_Root::getInstance()->getDomainComponents() as $component) {
+            if ($acl->getComponentAcl()->isAllowed($user, $component)) {
+                $ret[$component->dbId] = $component->name;
             }
         }
-        $domains = array();
-        foreach (Kwf_Component_Data_Root::getInstance()
-            ->getComponentsBySameClass($domainComponentClasses, array('ignoreVisible'=>true)) as $c
-        ) {
-            $acl = Zend_Registry::get('acl');
-            if ($acl->getComponentAcl()->isAllowed(Kwf_Registry::get('userModel')->getAuthedUser(), $c)) {
-                $domains[$c->dbId] = $c->name;
-            }
-        }
-        return $domains;
+        return $ret;
     }
 
     protected function _initFields()

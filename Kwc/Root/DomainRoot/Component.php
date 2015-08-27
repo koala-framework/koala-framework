@@ -10,6 +10,7 @@ class Kwc_Root_DomainRoot_Component extends Kwc_Root_Abstract
             'model' => 'Kwc_Root_DomainRoot_Model'
         );
         $ret['flags']['hasAvailableLanguages'] = true;
+        $ret['baseProperties'] = array();
         return $ret;
     }
 
