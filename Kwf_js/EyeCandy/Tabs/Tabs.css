@@ -1,16 +1,16 @@
 /* kwfTabsFx is set by javascript. So we can show all content elements if there is no javascript. */
-.kwfTabsFx .kwfTabsContents { position: relative; }
+.kwfUp-kwfTabsFx .kwfUp-kwfTabsContents { position: relative; }
 
-.kwfTabsContent {
+.kwfUp-kwfTabsContent {
     border: 1px solid #bbb;
     padding: 3px 10px;
     width: 100%;
     clear: both;
 }
-.kwfTabsLink {
+.kwfUp-kwfTabsLink {
     background-color: #ddd;
     float: left; cursor: pointer;
     padding: 3px 10px; border: 1px solid #bbb;
     border-bottom: none; margin-right: 10px;
 }
-.kwfTabsLinkActive { background-color: #fff; position: relative; bottom: -1px; z-index: 3; }
+.kwfUp-kwfTabsLinkActive { background-color: #fff; position: relative; bottom: -1px; z-index: 3; }

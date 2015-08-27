@@ -2,7 +2,7 @@ var onReady = require('kwf/on-ready-ext2');
 var statistics = require('kwf/statistics');
 var $ = require('jQuery');
 
-onReady.onRender('div.kwfTabs', function tabs(el) {
+onReady.onRender('div.kwfUp-kwfTabs', function tabs(el) {
     el.tabsObject = new Kwf.Tabs(el);
 });
 
@@ -16,17 +16,17 @@ Kwf.Tabs = function(el) {
     */
 
     this.el = el;
-    this.el.addClass('kwfTabsFx');
+    this.el.addClass('kwfUp-kwfTabsFx');
     this._activeTabIdx = null;
-    this.switchEls = Ext2.query('> .kwfTabsLink', this.el.dom);
-    this.contentEls = Ext2.query('> .kwfTabsContent', this.el.dom);
+    this.switchEls = Ext2.query('> .kwfUp-kwfTabsLink', this.el.dom);
+    this.contentEls = Ext2.query('> .kwfUp-kwfTabsContent', this.el.dom);
     this.fxDuration = .5;
 
     this.tabsContents = this.el.createChild({
-        tag: 'div', cls: 'kwfTabsContents', 'data-width': '100%'
+        tag: 'div', cls: 'kwfUp-kwfTabsContents', 'data-width': '100%'
     }, this.el.first());
     var tabsLinks = this.el.createChild({
-        tag: 'div', cls: 'kwfTabsLinks'
+        tag: 'div', cls: 'kwfUp-kwfTabsLinks'
     }, this.tabsContents);
 
     for (var i = 0; i < this.contentEls.length; i++) {
@@ -40,16 +40,16 @@ Kwf.Tabs = function(el) {
 
         Ext2.get(this.contentEls[i]).enableDisplayMode('block');
         Ext2.get(this.contentEls[i]).setVisible(false);
-        Ext2.get(this.switchEls[i]).removeClass('kwfTabsLinkActive');
+        Ext2.get(this.switchEls[i]).removeClass('kwfUp-kwfTabsLinkActive');
 
         // if it is important, show on startup
         if (Ext2.get(this.contentEls[i]).child('.kwfUp-kwfImportant')) {
             activeTabIdx = i;
         }
 
-        if (activeTabIdx === false && Ext2.get(this.contentEls[i]).hasClass('kwfTabsContentActive')) {
+        if (activeTabIdx === false && Ext2.get(this.contentEls[i]).hasClass('kwfUp-kwfTabsContentActive')) {
             activeTabIdx = i;
-            Ext2.get(this.contentEls[i]).removeClass('kwfTabsContentActive');
+            Ext2.get(this.contentEls[i]).removeClass('kwfUp-kwfTabsContentActive');
         }
 
         swEl.on('click', function() {
@@ -68,7 +68,7 @@ Kwf.Tabs = function(el) {
     }
 
     if (activeTabIdx !== false) {
-        Ext2.get(this.switchEls[activeTabIdx]).addClass('kwfTabsLinkActive');
+        Ext2.get(this.switchEls[activeTabIdx]).addClass('kwfUp-kwfTabsLinkActive');
         Ext2.get(this.contentEls[activeTabIdx]).setVisible(true);
         this._activeTabIdx = activeTabIdx;
     }
@@ -94,11 +94,11 @@ Kwf.Tabs.prototype = {
         if (this._activeTabIdx == idx) return;
 
         var newContentEl = Ext2.get(this.contentEls[idx]);
-        Ext2.get(this.switchEls[idx]).addClass('kwfTabsLinkActive');
+        Ext2.get(this.switchEls[idx]).addClass('kwfUp-kwfTabsLinkActive');
         newContentEl.setStyle('z-index', '1');
         newContentEl.setOpacity(1);
         newContentEl.setVisible(true);
-        newContentEl.addClass('kwfTabsContentActive');
+        newContentEl.addClass('kwfUp-kwfTabsContentActive');
 
         var oldContentEl = Ext2.get(this.contentEls[this._activeTabIdx]);
 
@@ -106,7 +106,7 @@ Kwf.Tabs.prototype = {
         newContentEl.stopFx();
         this.tabsContents.stopFx();
         if (this._activeTabIdx !== null) {
-            Ext2.get(this.switchEls[this._activeTabIdx]).removeClass('kwfTabsLinkActive');
+            Ext2.get(this.switchEls[this._activeTabIdx]).removeClass('kwfUp-kwfTabsLinkActive');
             oldContentEl.setStyle({
                 'z-index': 2,
                 'position': 'absolute'
@@ -131,7 +131,7 @@ Kwf.Tabs.prototype = {
                 duration: this.fxDuration,
                 callback: function(el) {
                     this.oldEl.setStyle('position', 'static');
-                    this.oldEl.removeClass('kwfTabsContentActive');
+                    this.oldEl.removeClass('kwfUp-kwfTabsContentActive');
 
                     this.newEl.setStyle('position', 'static');
                     this.newEl.setVisible(true);
