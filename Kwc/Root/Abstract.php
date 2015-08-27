@@ -20,6 +20,7 @@ class Kwc_Root_Abstract extends Kwc_Abstract implements Kwf_Util_Maintenance_Job
         $ret['contentWidth'] = 600;
         $ret['contentWidthBoxSubtract'] = array();
         $ret['flags']['hasBaseProperties'] = true;
+        $ret['baseProperties'] = array('domain', 'language');
         return $ret;
     }
 

@@ -18,18 +18,6 @@ class Kwc_Root_DomainRoot_Domain_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public static function getComponentForHost($host)
-    {
-        $root = Kwf_Component_Data_Root::getInstance();
-        $settings = Kwc_Abstract::getSetting($root->componentClass, 'generators');
-        $row = Kwf_Model_Abstract::getInstance($settings['domain']['model'])->getRowByHost($host);
-        if (!$row) throw new Kwf_Exception('Domain not found: ' . $host);
-        return $root->getComponentByClass(
-            'Kwc_Root_DomainRoot_Domain_Component',
-            array('id' => '-' . $row->id)
-        );
-    }
-
     /**
      * @param Kwf_Component_Data $component data, which is a parent domain component
      * @return Kwc_Root_DomainRoot_Domain_Component

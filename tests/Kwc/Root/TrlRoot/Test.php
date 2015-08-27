@@ -73,4 +73,11 @@ class Kwc_Root_TrlRoot_Test extends Kwc_TestAbstract
         $this->assertEquals('root-en_3', $data->componentId);
         $this->assertEquals('/en/test2_en', $data->url);
     }
+
+    public function testGetDomainComponents()
+    {
+        $c = $this->_root->getDomainComponents();
+        $this->assertEquals(1, count($c));
+        $this->assertEquals($c[0]->componentClass, 'Kwc_Root_TrlRoot_TestComponent');
+    }
 }

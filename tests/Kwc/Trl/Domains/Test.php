@@ -16,6 +16,12 @@ class Kwc_Trl_Domains_Test extends Kwc_TestAbstract
         $this->assertEquals(3, count($c));
     }
 
+    public function testGetDomainComponents()
+    {
+        $c = $this->_root->getDomainComponents();
+        $this->assertEquals(3, count($c));
+    }
+
     public function testLanguages()
     {
         $c = $this->_root->getChildComponent('-at')
