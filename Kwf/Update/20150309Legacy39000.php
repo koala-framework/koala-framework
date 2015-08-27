@@ -139,8 +139,9 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
         if ($this->countUploads() < 5000) {
             $this->renameUploads();
             $this->createHashes();
+            $this->moveOldFiles();
         } else {
-            echo "More than 5000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-to39 rename-uploads\"\n\"php bootstrap.php update-to39 create-hashes\"\n";
+            echo "More than 5000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-to39 rename-uploads\"\n\"php bootstrap.php update-to39 create-hashes\"\n\"php bootstrap.php update-to39 move-old-files\"\n";
         }
     }
 
@@ -204,6 +205,21 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
                 $md5Hash = md5_file($row->getFileSource());
                 $db->query("UPDATE `kwf_uploads` SET  `md5_hash` =  '{$md5Hash}' WHERE  `id` = '{$row->id}';");
             }
+        }
+    }
+
+    public function moveOldFiles()
+    {
+        $uploadsDir = Kwf_Config::getValue('uploads');
+        if (!is_dir($uploadsDir . '/old')) mkdir($uploadsDir . '/old');
+        if (!is_dir($uploadsDir . '/old/mediaprescale')) mkdir($uploadsDir . '/old/mediaprescale');
+        foreach (glob($uploadsDir.'/*') as $file) {
+            if (!is_file($file)) continue;
+            rename($file, $uploadsDir . '/old/' . substr($file, strrpos($file, '/')+1));
+        }
+        foreach (glob($uploadsDir.'/mediaprescale/*') as $file) {
+            if (!is_file($file)) continue;
+            rename($file, $uploadsDir . '/old/mediaprescale' . substr($file, strrpos($file, '/')+1));
         }
     }
 

@@ -32,4 +32,9 @@ class Kwf_Controller_Action_Cli_Web_UpdateTo39Controller extends Kwf_Controller_
     {
         $this->_getUpdate()->createHashes();
     }
+
+    public function moveOldFilesAction()
+    {
+        $this->_getUpdate()->moveOldFiles();
+    }
 }
