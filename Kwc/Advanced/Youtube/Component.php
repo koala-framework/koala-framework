@@ -13,7 +13,6 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
         $ret['componentCategory'] = 'content';
         $ret['componentPriority'] = 40;
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
-        $ret['assetsDefer']['dep'][] = 'KwfYoutubePlayer';
         $ret['assetsAdmin']['dep'][] = 'KwfFormCards';
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';

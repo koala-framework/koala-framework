@@ -49,7 +49,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
     {
         //if ($d->getDeferLoad()) return;
         $stack[] = $d;
-        if ($d instanceof Kwf_Assets_Dependency_File && $d->getType() == 'ext2' || $d->__toString() == 'KwfOnReady') {
+        if ($d instanceof Kwf_Assets_Dependency_File && $d->getType() == 'ext2' || $d->__toString() == 'kwf/commonjs/on-ready-ext2.js') {
             $i = 0;
             foreach ($stack as $s) {
                 $i++;
