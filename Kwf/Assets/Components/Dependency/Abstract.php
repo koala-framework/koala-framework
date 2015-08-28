@@ -5,11 +5,12 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
     protected $_componentDependencies;
     protected $_isMaster;
 
-    public function __construct($componentClass, array $componentDependencies, $isMaster)
+    public function __construct($componentClass, array $componentDependencies, $isMaster, $dependencyName)
     {
         $this->_componentClass = $componentClass;
         $this->_componentDependencies = $componentDependencies;
         $this->_isMaster = $isMaster;
+        $this->_dependencyName = $dependencyName;
     }
 
     private function _getKwcClass()
@@ -135,5 +136,10 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
         }
 
         return $ret;
+    }
+
+    public function __toString()
+    {
+        return $this->_dependencyName;
     }
 }

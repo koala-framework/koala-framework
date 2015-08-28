@@ -147,7 +147,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                     }
                 }
                 if ($matchingDeps) {
-                    $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $matchingDeps, false);
+                    $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $matchingDeps, false, $class.'-css');
                 }
 
                 //css, master
@@ -158,7 +158,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                     }
                 }
                 if ($matchingDeps) {
-                    $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $matchingDeps, true);
+                    $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $matchingDeps, true, $class.'-master-css');
                 }
 
                 //js, not master, not defer
@@ -169,7 +169,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                     }
                 }
                 if ($matchingDeps) {
-                    $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, false);
+                    $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, false, $class.'-js');
                 }
 
                 //js, master, not defer
@@ -180,7 +180,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                     }
                 }
                 if ($matchingDeps) {
-                    $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, true);
+                    $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, true, $class.'-master-js');
                 }
 
                 //js, not master, defer
@@ -191,7 +191,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                     }
                 }
                 if ($matchingDeps) {
-                    $dep = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, false);
+                    $dep = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, false, $class.'-defer-js');
                     $dep->setDeferLoad(true);
                     $ret[] = $dep;
                 }
@@ -204,7 +204,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                     }
                 }
                 if ($matchingDeps) {
-                    $dep = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, true);
+                    $dep = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, true, $class.'-master-defer-js');
                     $dep->setDeferLoad(true);
                     $ret[] = $dep;
                 }
