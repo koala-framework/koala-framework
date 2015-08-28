@@ -58,15 +58,15 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
             }
         }
 
-        $text = self::_replaceKwfUp($text);
+        $text = self::_replaceHtmlKwfUp($text);
         if (isset($config['cssClass'])) {
             if (is_array($config['cssClass'])) {
                 foreach ($config['cssClass'] as &$i) {
-                    $i = self::_replaceKwfUpCb($i);
+                    $i = self::_replaceKwfUp($i);
                 }
                 unset($i);
             } else {
-                $config['cssClass'] = self::_replaceKwfUpCb($config['cssClass']);
+                $config['cssClass'] = self::_replaceKwfUp($config['cssClass']);
             }
         }
 

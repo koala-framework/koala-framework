@@ -32,7 +32,7 @@ class Kwf_Component_View_Helper_Component extends Kwf_Component_View_Renderer
             $twig = new Kwf_Component_Renderer_Twig_Environment($renderer);
             $ret = $twig->render($tpl, $vars);
         }
-        $ret = self::_replaceKwfUp($ret);
+        $ret = self::_replaceHtmlKwfUp($ret);
         return $ret;
     }
 

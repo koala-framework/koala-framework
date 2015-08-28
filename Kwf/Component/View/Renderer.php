@@ -64,19 +64,24 @@ abstract class Kwf_Component_View_Renderer extends Kwf_Component_View_Helper_Abs
         );
     }
 
-    protected static function _replaceKwfUp($ret)
+    protected static function _replaceHtmlKwfUp($ret)
     {
-        $ret = preg_replace_callback('#((class|id)="[^"]*)"#', array('Kwf_Component_View_Helper_Component', '_replaceCb'), $ret);
+        $ret = preg_replace_callback('#((class|id)="[^"]*)"#', array('Kwf_Component_View_Helper_Component', '_replaceKwfUpCb'), $ret);
         return $ret;
     }
 
     public static function _replaceKwfUpCb($m)
+    {
+        return self::_replaceKwfUp($m[0]);
+    }
+
+    protected static function _replaceKwfUp($ret)
     {
         static $up;
         if (!isset($up)) {
             $up = Kwf_Config::getValue('application.uniquePrefix');
             if ($up) $up .= '-';
         }
-        return str_replace('kwfUp-', $up, $m[0]);
+        return str_replace('kwfUp-', $up, $ret);
     }
 }
