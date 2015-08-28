@@ -16,7 +16,8 @@ Kwc.TextImage.ImageEnlarge.ImageUploadField = Ext2.extend(Kwc.Basic.ImageEnlarge
             }
             return false;
         }, this).findBy(function (component, container) {
-            if (component instanceof Kwc.Abstract.Cards.ComboBox) {
+                                                                    //TODO why isn't the first one not enough? Kwc.Basic.LinkTag.ComboBox inherits Kwc.Abstract.Cards.ComboBox!
+            if (component instanceof Kwc.Abstract.Cards.ComboBox || component instanceof Kwc.Basic.LinkTag.ComboBox) {
                 return true;
             }
             return false;
