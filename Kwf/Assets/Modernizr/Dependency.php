@@ -27,6 +27,21 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         $this->getContents('en');
     }
 
+    private function _getOutputFile()
+    {
+        if (isset($this->_outputFile)) {
+            return $this->_outputFile;
+        }
+        $modernizrPath = dirname(dirname(dirname(dirname(__FILE__)))).'/node_modules/modernizr';
+        $package = json_decode(file_get_contents($modernizrPath.'/package.json'), true);
+
+        $this->_outputFile = getcwd().'/temp/modernizr-'.$package['version'].'-'
+            .Kwf_Config::getValue('application.uniquePrefix')
+            .'-'.implode('-', $this->_features)
+            .'/modernizr.js';
+        return $this->_outputFile;
+    }
+
     public function getContents($language)
     {
         if (isset($this->_contentsCache)) return $this->_contentsCache;
@@ -34,12 +49,10 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         if (!$this->_features) return null;
 
         $modernizrPath = dirname(dirname(dirname(dirname(__FILE__)))).'/node_modules/modernizr';
-        $package = json_decode(file_get_contents($modernizrPath.'/package.json'), true);
+        $outputFile = $this->_getOutputFile();
 
-        $this->_outputFile = getcwd().'/temp/modernizr-'.$package['version'].'-'.implode('-', $this->_features).'/modernizr.js';
-
-        if (file_exists($this->_outputFile)) {
-            $ret = file_get_contents($this->_outputFile);
+        if (file_exists($outputFile)) {
+            $ret = file_get_contents($outputFile);
             $this->_contentsCache = $ret;
             return $ret;
         }
@@ -89,13 +102,13 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         unlink($configFile);
         $configFile .= '.json';
         file_put_contents($configFile, json_encode($config, JSON_PRETTY_PRINT));
-        $cmd = "./".VENDOR_PATH."/bin/node $modernizrPath/bin/modernizr --config $configFile --uglify --dest ".dirname($this->_outputFile);
+        $cmd = "./".VENDOR_PATH."/bin/node $modernizrPath/bin/modernizr --config $configFile --uglify --dest ".dirname($outputFile);
         exec($cmd, $out, $retVar);
         unlink($configFile);
         if ($retVar) {
             throw new Kwf_Exception("modernizr failed: ".implode("\n", $out));
         }
-        $ret = file_get_contents($this->_outputFile);
+        $ret = file_get_contents($outputFile);
 
         $this->_contentsCache = $ret;
         return $ret;
@@ -103,8 +116,8 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
 
     public function getMTime()
     {
-        if (!isset($this->_outputFile)) $this->getContents(null);
-        return filemtime($this->_outputFile);
+        if (!file_exists($this->_getOutputFile())) return time();
+        return filemtime($this->_getOutputFile());
     }
 
     public function __toString()
