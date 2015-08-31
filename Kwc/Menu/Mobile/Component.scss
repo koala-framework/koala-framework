@@ -6,66 +6,54 @@
 .kwcClass {
     overflow: hidden;
 
-    &.loading {
+    &.kwfUp-loading {
         min-height: 115px;
     }
-    &.default {
+    &.kwfUp-default {
         background: white;
         width: 100%;
 
-        > a.showMenu {
-            display: block;
+        > .kwfUp-slider {
             position: relative;
-            line-height: 40px;
-            color: $mainColor;
-            float: right;
-            width: 52px;
-            z-index: 1;
-            top: 0px;
-            @include transition-delay(0.4s);
-            @include transition-property(all);
-            @include transition-duration(0s);
-            &.active {
-                background-position: left center;
-                @include transition-delay(0s);
-                @include transition-property(all);
-                @include transition-duration(0s);
-            }
-        }
-        > .slider {
-            position: relative;
+
             > ul {
                 overflow: hidden;
                 clear: left;
                 position: absolute;
                 padding-bottom: 20px;
+
                 > li {
-                    > .subMenu {
+                    > .kwfUp-subMenu {
                         top:50px;
+
                         > li {
-                            > .subMenu {
+                            > .kwfUp-subMenu {
                                 top: -1px;
                             }
                         }
                     }
                 }
             }
+
             ul {
                 display: block;
                 height: auto;
                 width: 100%;
+
                 li {
                     @include box-sizing(border-box);
                     padding: 0 15px 0 15px;
                     position: relative;
                     display: block;
-                    &.moved {
+
+                    &.kwfUp-moved {
                         position: static;
-                        > .subMenu {
+
+                        > .kwfUp-subMenu {
                             visibility: visible;
                         }
                     }
-                    &.back {
+                    &.kwfUp-back {
                         a {
                             border-top: 1px solid #ccc;
                         }
@@ -75,20 +63,20 @@
                         display: block;
                         color: $mainColor;
                     }
-                    &.last {
+                    &.kwfUp-last {
                         a {
                             border: none;
                         }
                     }
-                    &.hasChildren > a {
+                    &.kwfUp-hasChildren > a {
                         @include background-image-dpr2('/assets/kwf/Kwc/Menu/Mobile/images/', 'lightGreyArrowRight.png', 10px, 18px, no-repeat center right);
                     }
-                    .subMenu {
+                    .kwfUp-subMenu {
                         position: absolute;
                         left: 100%;
                         visibility: hidden;
                     }
-                    &.back a {
+                    &.kwfUp-back a {
                         @include background-image-dpr2('/assets/kwf/Kwc/Menu/Mobile/images/', 'lightGreyArrowLeft.png', 10px, 18px, no-repeat center left);
                         padding-left: 15px;
                         color: #999;
@@ -96,7 +84,7 @@
                 }
             }
 
-            ul.menu {
+            ul.kwfUp-menu {
                 > li.onlyShowOnMobile {
                     display: block;
                 }
@@ -104,6 +92,27 @@
                     display: none;
                 }
             }
+        }
+    }
+
+    .kwfUp-showMenu {
+        display: block;
+        position: relative;
+        line-height: 40px;
+        color: $mainColor;
+        float: right;
+        width: 52px;
+        z-index: 1;
+        top: 0px;
+        @include transition-delay(0.4s);
+        @include transition-property(all);
+        @include transition-duration(0s);
+
+        &.kwfUp-active {
+            background-position: left center;
+            @include transition-delay(0s);
+            @include transition-property(all);
+            @include transition-duration(0s);
         }
     }
 }
