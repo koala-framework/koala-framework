@@ -16,7 +16,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         $data = parent::getNodeConfig($component);
         $enabled = $acl->isAllowed($user, $component);
         if (!$enabled && !$component instanceof Kwf_Component_Data_Root/*root nicht überprüfen, die wird immar angezeigt*/) {
-            $allowedComponents = $acl->getAllowedRecursiveChildComponents($user);
+            $allowedComponents = $acl->getAllowedRecursiveChildComponents($user, $component);
             $allowed = false;
             foreach ($allowedComponents as $allowedComponent) {
                 $c = $allowedComponent;
@@ -41,7 +41,6 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
                     $c = $c->parent;
                 }
             }
-
             //wenn gar keine unterkomponente bearbeitet werden kann seite ausblenden
             if (!$allowed) return null;
         }
