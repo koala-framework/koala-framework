@@ -84,16 +84,16 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $style = '';
             if (isset($options['width'])) $style .= "width: $options[width]px;";
             if (isset($options['height'])) $style .= "height: $options[height]px";
-            $class = 'kwfLightbox';
-            if (isset($options['style'])) $class .= " kwfLightbox$options[style]";
+            $class = 'kwfUp-kwfLightbox';
+            if (isset($options['style'])) $class .= " kwfUp-kwfLightbox$options[style]";
             if (isset($options['cssClass'])) $class .= " $options[cssClass]";
             if (isset($options['adaptHeight']) && $options['adaptHeight']) $class .= " adaptHeight";
             $options = htmlspecialchars(json_encode($options));
             $lightboxContent = "<div class=\"$class\">\n".
-                "<div class=\"kwfLightboxInner\" style=\"$style\">\n".
+                "<div class=\"kwfUp-kwfLightboxInner\" style=\"$style\">\n".
                 "    <input type=\"hidden\" class=\"options\" value=\"$options\" />\n".
-                "    <a class=\"closeButton\" href=\"$parent->url\"></a>\n".
-                "    <div class=\"kwfLightboxContent\">\n".
+                "    <a class=\"kwfUp-closeButton\" href=\"$parent->url\"></a>\n".
+                "    <div class=\"kwfUp-kwfLightboxContent\">\n".
                 "        $lightboxContent\n".
                 "    </div>\n".
                 "</div>\n</div>\n";

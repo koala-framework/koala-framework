@@ -16,7 +16,7 @@
     position: relative;
     overflow: hidden;
 }
-.kwcClass .prevBtn,
-.kwcClass .nextBtn {
+.kwcClass .kwfUp-prevBtn,
+.kwcClass .kwfUp-nextBtn {
     z-index: 1;
 }

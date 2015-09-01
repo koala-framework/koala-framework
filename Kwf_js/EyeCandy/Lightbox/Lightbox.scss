@@ -1,14 +1,14 @@
 @import "config/default-loading-animation-big";
 @import "kwf/background-image-dpr2";
 
-.kwfLightbox {
+.kwfUp-kwfLightbox {
     position: absolute;
     z-index: 100;
     top: 0; left: 0;
     height: 100%;
     width: 100%;
 }
-.kwfLightbox .kwfLightboxInner {
+.kwfUp-kwfLightbox .kwfUp-kwfLightboxInner {
     overflow: visible !important;                                                                                       //because of flicker when lightbox open for the first time
     min-width: 100px;
     min-height: 100px;
@@ -17,10 +17,10 @@
     padding: 10px;
     position: absolute;
 }
-.ext-ie6 .kwfLightbox .kwfLightboxInner { width: 800px; }
+.ext-ie6 .kwfUp-kwfLightbox .kwfUp-kwfLightboxInner { width: 800px; }
 
-.kwfLightbox .lightboxHeader { position: relative; z-index: 102; }
-.kwfLightbox .closeButton {
+.kwfUp-kwfLightbox .kwfUp-lightboxHeader { position: relative; z-index: 102; }
+.kwfUp-kwfLightbox .kwfUp-closeButton {
     position: absolute;
     right: -25px;
     top: -25px;
@@ -31,30 +31,30 @@
     z-index: 102;
 }
 
-.kwfLightbox.mobile .closeButton {
+.kwfUp-kwfLightbox.mobile .kwfUp-closeButton {
     right: 0;
     top: 0;
 }
-.kwfLightbox.mobile .kwfLightboxInner {
+.kwfUp-kwfLightbox.mobile .kwfUp-kwfLightboxInner {
     margin-bottom: 0;
 }
 
-.kwfLightbox .closeButton:hover { text-decoration: none; }
+.kwfUp-kwfLightbox .kwfUp-closeButton:hover { text-decoration: none; }
 
-.kwfLightbox .kwfLightboxContent {
+.kwfUp-kwfLightbox .kwfUp-kwfLightboxContent {
     height: 100%;
     width: 100%;
 }
-.kwfLightbox .lightboxBody {
+.kwfUp-kwfLightbox .kwfUp-lightboxBody {
     position: relative;
     height: 100%; 
     width: 100%;
     z-index: 101;
 }
-.kwfLightbox .lightboxBody .nextBtn,
-.kwfLightbox .lightboxBody .nextBtn a,
-.kwfLightbox .lightboxBody .prevBtn,
-.kwfLightbox .lightboxBody .prevBtn a {
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn,
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn a,
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn,
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn a {
     text-decoration: none;
     position: absolute;
     top: 0px;
@@ -64,33 +64,33 @@
     background-repeat: repeat;
     background-position: top left;
 }
-.kwfLightbox .lightboxBody .nextBtn, .kwfLightbox .lightboxBody .nextBtn a { right: 0px; }
-.kwfLightbox .lightboxBody .prevBtn, .kwfLightbox .lightboxBody .prevBtn a { lef: 0px; }
-.kwfLightbox .lightboxBody .nextBtn a,
-.kwfLightbox .lightboxBody .prevBtn a { width: 100%; }
-.kwfLightbox .lightboxBody .nextBtn a:hover {
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn, .kwfUp-kwfLightbox .lightboxBody .kwfUp-nextBtn a { right: 0px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn, .kwfUp-kwfLightbox .lightboxBody .kwfUp-prevBtn a { lef: 0px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn a,
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn a { width: 100%; }
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn a:hover {
     background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/next.png);
     background-repeat: no-repeat;
     background-position: right 50%;
 }
-.kwfLightbox .lightboxBody .nextBtn img.nextImgBtn { position: absolute; top: 100px; right: 0px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-nextBtn img.nextImgBtn { position: absolute; top: 100px; right: 0px; }
 
-.kwfLightbox .lightboxBody .prevBtn a:hover {
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn a:hover {
     background-image: url(/assets/kwf/Kwf_js/EyeCandy/Lightbox/previous.png);
     background-repeat: no-repeat;
     background-position: left 50%;
 }
-.kwfLightbox .lightboxBody .prevBtn img.previousImgBtn { position: absolute; top: 100px; left: 0px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .kwfUp-prevBtn img.previousImgBtn { position: absolute; top: 100px; left: 0px; }
 
-.kwfLightbox .lightboxBody .image { z-index: 1; }
+.kwfUp-kwfLightbox .kwfUp-lightboxBody .image { z-index: 1; }
 
-.kwfLightbox .lightboxFooter p { text-align: left; margin-bottom: 0px; }
-.kwfLightbox .lightboxFooter p.imageCaption { margin-top: 10px; }
-.kwfLightbox .lightboxFooter p.imageCaptionTitle { margin: 10px 0px -10px 0px; }
-.kwfLightbox .lightboxFooter p.title { margin-top: 10px; }
-.kwfLightbox .lightboxFooter p.fullSizeLink { margin-top: 10px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxFooter p { text-align: left; margin-bottom: 0px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.imageCaption { margin-top: 10px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.imageCaptionTitle { margin: 10px 0px -10px 0px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.title { margin-top: 10px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.fullSizeLink { margin-top: 10px; }
 
-.lightboxMask {
+.kwfUp-lightboxMask {
     background: #000;
     opacity: 0.8;
     -moz-opacity: 0.8;
@@ -101,12 +101,12 @@
     left: 0; top: 0;
 }
 
-.kwfLightbox .loading {
+.kwfUp-kwfLightbox .loading {
     @include default-loading-animation-big;
 }
 
 @media (max-width: 650px) {
-    body .lightboxMask {
+    body .kwfUp-lightboxMask {
         opacity: 1;
     }
 }

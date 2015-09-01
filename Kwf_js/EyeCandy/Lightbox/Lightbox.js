@@ -38,7 +38,7 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     event.preventDefault();
 });
 
-onReady.onRender('.kwfLightbox', function lightboxEl(el) {
+onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
     if (el[0].kwfLightbox) return;
     var options = jQuery.parseJSON(el.find('input.options').val());
@@ -46,11 +46,11 @@ onReady.onRender('.kwfLightbox', function lightboxEl(el) {
     historyState.currentState.lightbox = window.location.href;
     historyState.updateState();
     l.lightboxEl = el;
-    l.innerLightboxEl = el.find('.kwfLightboxInner');
+    l.innerLightboxEl = el.find('.kwfUp-kwfLightboxInner');
     l.fetched = true;
     l.initialize();
     l.closeHref = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
-    l.contentEl = l.innerLightboxEl.find('.kwfLightboxContent');
+    l.contentEl = l.innerLightboxEl.find('.kwfUp-kwfLightboxContent');
     l.style.afterCreateLightboxEl();
     l.style.onShow();
     l.style.onContentReady();
@@ -157,19 +157,19 @@ Lightbox.prototype = {
     {
         if (this.lightboxEl) return;
 
-        var cls = 'kwfLightbox';
-        if (this.options.style) cls += ' kwfLightbox'+this.options.style;
+        var cls = 'kwfUp-kwfLightbox';
+        if (this.options.style) cls += ' kwfUp-kwfLightbox'+this.options.style;
         if (this.options.cssClass) cls += ' '+this.options.cssClass;
         var lightbox = $(
             '<div class="'+cls+'">'+
-                '<div class="kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'+
+                '<div class="kwfUp-kwfLightboxInner kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'+
             '</div>'
         );
         $(document.body).append(lightbox);
         lightbox[0].kwfLightbox = this; //don't initialize again in onContentReady
 
         this.lightboxEl = lightbox;
-        this.innerLightboxEl = lightbox.find('.kwfLightboxInner');
+        this.innerLightboxEl = lightbox.find('.kwfUp-kwfLightboxInner');
         var el = this.innerLightboxEl;
 
         if (this.options.width) {
@@ -196,10 +196,10 @@ Lightbox.prototype = {
             context: this
         }).done(function(responseText) {
             this.contentEl = $(
-                '<div class="kwfLightboxContent"></div>'
+                '<div class="kwfUp-kwfLightboxContent"></div>'
             );
             this.closeButtonEl = $(
-                '<a href="#" class="closeButton"></a>'
+                '<a href="#" class="kwfUp-closeButton"></a>'
             );
             this.innerLightboxEl.append(this.contentEl);
             this.innerLightboxEl.append(this.closeButtonEl);
@@ -321,14 +321,14 @@ Lightbox.prototype = {
     },
     initialize: function()
     {
-        var closeButtons = this.innerLightboxEl.find('.closeButton');
+        var closeButtons = this.innerLightboxEl.find('.kwfUp-closeButton');
         closeButtons.click((function(ev) {
             ev.preventDefault();
             this.closeAndPushState();
         }).bind(this));
     },
     preloadLinks: function() {
-        this.innerLightboxEl.find('a.preload').each(function() {
+        this.innerLightboxEl.find('a.kwfUp-preload').each(function() {
             if (this.kwfLightbox) this.kwfLightbox.preload();
         }, this);
     },
@@ -370,13 +370,13 @@ LightboxStyles.Abstract.prototype = {
         LightboxStyles.Abstract.masks++;
         if (LightboxStyles.Abstract.masks > 1) return;
         $(document.body).addClass('kwfLightboxTheaterMode');
-        var maskEl = $(document.body).find('.lightboxMask');
+        var maskEl = $(document.body).find('.kwfUp-lightboxMask');
         if (maskEl.length) {
             maskEl.show();
         } else {
-            maskEl = $(document.body).append('<div class="lightboxMask"></div>');
+            maskEl = $(document.body).append('<div class="kwfUp-lightboxMask"></div>');
             maskEl.click(function(ev) {
-                if ($(document.body).find('.lightboxMask').is(ev.target)) {
+                if ($(document.body).find('.kwfUp-lightboxMask').is(ev.target)) {
                     if (currentOpen) {
                         currentOpen.style.onMaskClick();
                     }
@@ -387,10 +387,10 @@ LightboxStyles.Abstract.prototype = {
     unmask: function() {
         LightboxStyles.Abstract.masks--;
         if (LightboxStyles.Abstract.masks > 0) return;
-        $(document.body).find('.lightboxMask').fadeOut({
+        $(document.body).find('.kwfUp-lightboxMask').fadeOut({
             complete: function() {
                 $(document.body).removeClass('kwfLightboxTheaterMode');
-                $(document.body).find('.lightboxMask').hide();
+                $(document.body).find('.kwfUp-lightboxMask').hide();
             }
         });
     },

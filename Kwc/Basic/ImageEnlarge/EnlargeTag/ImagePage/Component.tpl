@@ -1,21 +1,21 @@
 <div class="<?=$this->rootElementClass?>">
-    <div class="lightboxHeader">
+    <div class="kwfUp-lightboxHeader">
     </div>
-    <div class="lightboxBody<? if($this->previous || $this->next) { ?> hasNextOrPrevious<? } ?>">
+    <div class="kwfUp-lightboxBody<? if($this->previous || $this->next) { ?> kwfUp-hasNextOrPrevious<? } ?>">
         <? if($this->previous) { ?>
-        <div class="prevBtn">
-            <?=$this->componentLink($this->previous, '&nbsp;',  'preload')?>
+        <div class="kwfUp-prevBtn">
+            <?=$this->componentLink($this->previous, '&nbsp;',  'kwfUp-preload')?>
         </div>
         <? } else { ?>
-        <div class="prevBtnInactive"></div>
+        <div class="kwfUp-prevBtnInactive"></div>
         <? } ?>
 
         <? if($this->next) { ?>
-        <div class="nextBtn">
-            <?=$this->componentLink($this->next, '&nbsp;',  'preload')?>
+        <div class="kwfUp-nextBtn">
+            <?=$this->componentLink($this->next, '&nbsp;',  'kwfUp-preload')?>
         </div>
         <? } else { ?>
-        <div class="nextBtnInactive"></div>
+        <div class="kwfUp-nextBtnInactive"></div>
         <? } ?>
         <? if ($this->baseUrl) { ?>
         <div class="image" style="max-width:<?=$this->width;?>px;">
@@ -30,7 +30,7 @@
         </div>
         <? } ?>
     </div>
-    <div class="lightboxFooter">
+    <div class="kwfUp-lightboxFooter">
         <? if(isset($this->options->title) && $this->options->title) { ?><p class="title"><?=$this->options->title?></p><? } ?>
         <? if(isset($this->options->fullSizeUrl)) { ?>
             <p class="fullSizeLink">
