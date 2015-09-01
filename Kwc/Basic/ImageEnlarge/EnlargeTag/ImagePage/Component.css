@@ -1,8 +1,8 @@
 .kwcClass,
-.kwcClass .image {
+.kwcClass .kwfUp-image {
     height: 100%;
 }
-.kwcClass .image img {
+.kwcClass .kwfUp-image img {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -11,7 +11,7 @@
     display: block;
 }
 
-.kwcClass .container {
+.kwcClass .kwfUp-container {
     height: 0;
     position: relative;
     overflow: hidden;

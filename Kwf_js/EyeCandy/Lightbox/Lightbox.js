@@ -369,7 +369,7 @@ LightboxStyles.Abstract.prototype = {
         //calling mask multiple times in valid, unmask must be called exactly often
         LightboxStyles.Abstract.masks++;
         if (LightboxStyles.Abstract.masks > 1) return;
-        $(document.body).addClass('kwfLightboxTheaterMode');
+        $(document.body).addClass('kwfUp-kwfLightboxTheaterMode');
         var maskEl = $(document.body).find('.kwfUp-lightboxMask');
         if (maskEl.length) {
             maskEl.show();
@@ -389,7 +389,7 @@ LightboxStyles.Abstract.prototype = {
         if (LightboxStyles.Abstract.masks > 0) return;
         $(document.body).find('.kwfUp-lightboxMask').fadeOut({
             complete: function() {
-                $(document.body).removeClass('kwfLightboxTheaterMode');
+                $(document.body).removeClass('kwfUp-kwfLightboxTheaterMode');
                 $(document.body).find('.kwfUp-lightboxMask').hide();
             }
         });

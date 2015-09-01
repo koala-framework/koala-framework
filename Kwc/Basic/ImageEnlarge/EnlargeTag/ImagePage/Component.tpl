@@ -18,8 +18,8 @@
         <div class="kwfUp-nextBtnInactive"></div>
         <? } ?>
         <? if ($this->baseUrl) { ?>
-        <div class="image" style="max-width:<?=$this->width;?>px;">
-            <div class="container" style="padding-bottom:<?=$this->aspectRatio;?>%;"
+        <div class="kwfUp-image" style="max-width:<?=$this->width;?>px;">
+            <div class="kwfUp-container" style="padding-bottom:<?=$this->aspectRatio;?>%;"
                     data-min-width="<?=$this->minWidth;?>"
                     data-max-width="<?=$this->maxWidth;?>"
                     data-src="<?=$this->baseUrl;?>">
