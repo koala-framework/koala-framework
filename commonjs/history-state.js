@@ -27,16 +27,16 @@ var HistoryStateHtml5 = function() {
     HistoryStateHtml5.superclass.constructor.call(this);
     $((function() {
         //in onReady to avoid getting initial popstate event that chrome sends on load
-        $(window).on('popstate', function(event) {
+        $(window).on('popstate', (function(event) {
             if (this.disabled) return;
             this.entries--;
-            if (event.browserEvent.state) {
-                this.currentState = event.browserEvent.state;
+            if (event.originalEvent.state) {
+                this.currentState = event.originalEvent.state;
             } else {
                 this.currentState = {};
             }
             $(window).trigger('kwf-history-state-popstate');
-        }, this);
+        }).bind(this));
     }).bind(this));
 };
 kwfExtend(HistoryStateHtml5, HistoryStateAbstract, {
