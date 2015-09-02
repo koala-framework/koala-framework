@@ -211,7 +211,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
         $current_dir = opendir($dir);
         while ($entryname = readdir($current_dir)){
             if (is_dir("$dir/$entryname") and ($entryname != "." and $entryname!="..")) {
-                deldir("${dir}/${entryname}");
+                $this->_deldir("${dir}/${entryname}");
             } else if ($entryname != "." and $entryname!="..") {
                 unlink("${dir}/${entryname}");
             }
