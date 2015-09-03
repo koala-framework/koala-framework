@@ -50,7 +50,7 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Login
             //instead this should be in processInput of the LoginForm, just as Plugin_Login does it
             $session->passwords[] = $this->_getLoginPassword();
             $this->_afterLogin($session);
-            $currentPageUrl = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId)->url;
+            $currentPageUrl = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getComponentId())->url;
             if ($_SERVER['QUERY_STRING'] && isset($_SERVER['QUERY_STRING'])) {
                 $currentPageUrl .= '?'.$_SERVER['QUERY_STRING'];
             }
