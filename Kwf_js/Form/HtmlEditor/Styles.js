@@ -183,6 +183,7 @@ Ext2.extend(Kwf.Form.HtmlEditor.Styles, Ext2.util.Observable, {
                 tpl: '<tpl for="."><div class="x2-combo-list-item kwfUp-webStandard kwcText"><{tagName} class="{className}">{name}</{tagName}></div></tpl>',
                 mode: 'local',
                 width: 150,
+                listWidth: 450,
                 store: new Ext2.data.JsonStore({
                     autoDestroy: true,
                     fields: ['id', 'name', 'tagName', 'className'],
