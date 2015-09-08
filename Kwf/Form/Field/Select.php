@@ -83,7 +83,8 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
         //todo: html wählt ersten wert vor-aus - ext galub ich nicht
         //      => sollte sich gleich verhalten.
         if ($this->getShowNoSelection()) {
-            $emptyText = '('.$this->getEmptyText().')';
+            $emptyText = $this->getEmptyText();
+            if ($emptyText) $emptyText = '('.$emptyText.')';
             array_unshift($store['data'], array('', $emptyText));
         }
 
