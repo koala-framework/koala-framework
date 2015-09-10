@@ -1,17 +1,17 @@
 <? if ($this->pages) { ?>
-    <a class="frontendLink" href="<?=$this->baseUrl?>/">
-        <div class="innerFrontendLink">
-            <div class="front"><?=trlKwf('Go to<br />Website');?></div>
-            <div class="back"></div>
+    <a class="kwfUp-frontendLink" href="<?=$this->baseUrl?>/">
+        <div class="kwfUp-innerFrontendLink">
+            <div class="kwfUp-front"><?=trlKwf('Go to<br />Website');?></div>
+            <div class="kwfUp-back"></div>
         </div>
     </a>
 <? } ?>
-<div class="content">
+<div class="kwfUp-content">
     <? if ($this->untagged) { ?>
-        <div class="untagged"><?=trlKwf('WARNING: untagged')?></div>
+        <div class="kwfUp-untagged"><?=trlKwf('WARNING: untagged')?></div>
     <? } ?>
     <?php if($this->image) { ?>
-        <div class="image" style="margin-top: -<?= $this->imageSize['height'] ?>px">
+        <div class="kwfUp-image" style="margin-top: -<?= $this->imageSize['height'] ?>px">
             <img src="<?= $this->image ?>" width="<?= $this->imageSize['width'] ?>" height="<?= $this->imageSize['height'] ?>" />
         </div>
     <?php } else { ?>
@@ -24,7 +24,7 @@
         <button class="submit" type="submit" name="<?= $this->formName ?>" value="submit"><?=trlKwf('Login')?></button>
     </form>
     <p>
-        <a class="lostPassword" href="<?=$this->lostPasswordLink?>"><?=trlKwf('Lost password?')?></a>
+        <a class="kwfUp-lostPassword" href="<?=$this->lostPasswordLink?>"><?=trlKwf('Lost password?')?></a>
     </p>
 
     <? if ($this->redirects) { ?>

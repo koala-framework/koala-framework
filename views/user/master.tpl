@@ -9,18 +9,18 @@
     <?php } ?>
     <?=$this->assets($this->dep)?>
   </head>
-  <body class="backendUser">
+  <body class="kwfUp-backendUser">
     <?php echo $this->render($this->contentScript) ?>
-    <div class="footer">
-        <div class="innerFooter">
+    <div class="kwfUp-footer">
+        <div class="kwfUp-innerFooter">
             <? if ($this->brandingVividPlanet || $this->brandingKoala) { ?>
                 <span>Powered by</span>
             <? } ?>
             <? if ($this->brandingVividPlanet) { ?>
-                <a class="logo vividPlanet" href="http://www.vivid-planet.com" target="_blank"></a>
+                <a class="kwfUp-logo kwfUp-vividPlanet" href="http://www.vivid-planet.com" target="_blank"></a>
             <? } ?>
             <? if ($this->brandingKoala) { ?>
-                <a class="logo koala" href="http://www.koala-framework.org" target="_blank"></a>
+                <a class="kwfUp-logo kwfUp-koala" href="http://www.koala-framework.org" target="_blank"></a>
             <? } ?>
         </div>
     </div>

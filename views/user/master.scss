@@ -24,16 +24,16 @@
 }
 
 html {
-    body.backendUser {
-        .content {
+    body.kwfUp-backendUser {
+        .kwfUp-content {
             animation: backendUserFadein 1s, backendUserSlidein 1s;
             -moz-animation: backendUserFadein 1s, backendUserSlidein 1s; // Firefox
             -webkit-animation: backendUserFadein 1s, backendUserSlidein 1s; // Safari and Chrome
             animation-timing-function: ease;
         }
     }
-
 }
+
 @keyframes backendUserFadein {
     from {
         opacity:0;
@@ -83,13 +83,13 @@ html {
     }
 }
 
-body.backendUser {
+body.kwfUp-backendUser {
     font-family: arial;
     background: $background-color;
     font-size: 16px;
     color: white;
 
-    a.frontendLink {
+    a.kwfUp-frontendLink {
         text-decoration: none;
         padding-left: 0px;
         margin-top: 5px;
@@ -97,8 +97,8 @@ body.backendUser {
         float: left;
         clear: both;
 
-        .innerFrontendLink {
-            .front {
+        .kwfUp-innerFrontendLink {
+            .kwfUp-front {
                 @include box-sizing(border-box);
                 text-transform: uppercase;
                 color: $button-color;
@@ -111,7 +111,7 @@ body.backendUser {
                 @include transition-timing-function(ease);
             }
 
-            .back {
+            .kwfUp-back {
                 background: none $background-color;
                 position: relative;
                 padding-left: 10px;
@@ -131,12 +131,12 @@ body.backendUser {
         }
 
         &:hover {
-            .innerFrontendLink {
-                .front {
+            .kwfUp-innerFrontendLink {
+                .kwfUp-front {
                     left: 60px;
                 }
 
-                .back {
+                .kwfUp-back {
                     &:before {
                         color: $button-color;
                     }
@@ -145,7 +145,7 @@ body.backendUser {
         }
     }
 
-    .content {
+    .kwfUp-content {
         margin-left: -175px;
         margin-top: -178px;
         position: absolute;
@@ -154,13 +154,13 @@ body.backendUser {
         left: 50%;
         top: 50%;
 
-        &.lostPasswordSuccess, &.activateUseraccount {
+        &.kwfUp-lostPasswordSuccess, &.kwfUp-activateUseraccount {
             p {
                 text-align: center;
             }
         }
 
-        .untagged {
+        .kwfUp-untagged {
             padding: 0 10px 0 10px;
             background: #cc2b00;
             line-height: 28px;
@@ -169,7 +169,7 @@ body.backendUser {
             height: 28px;
         }
 
-        .image {
+        .kwfUp-image {
             margin-bottom: 40px;
             text-align: center;
         }
@@ -212,7 +212,7 @@ body.backendUser {
             color: $p-color;
         }
 
-        .kwfField {
+        .kwfUp-kwfField {
             @include pie-clearfix;
             margin-bottom: 10px;
 
@@ -257,7 +257,7 @@ body.backendUser {
             }
         }
 
-        a.lostPassword {
+        a.kwfUp-lostPassword {
             text-decoration: none;
             text-align: center;
             margin-top: 40px;
@@ -271,7 +271,7 @@ body.backendUser {
         }
     }
 
-    .footer {
+    .kwfUp-footer {
         position: absolute;
         text-align: center;
         font-weight: 300;
@@ -289,10 +289,10 @@ body.backendUser {
             height: 26px;
         }
 
-        a.logo {
+        a.kwfUp-logo {
             display: inline-block;
 
-            &.vividPlanet {
+            &.kwfUp-vividPlanet {
                 @include background-image-dpr2('/assets/kwf/views/user/images', 'logo.png', 120px, 26px, no-repeat left center transparent);
                 margin-right: 15px;
                 width: 120px;
@@ -303,7 +303,7 @@ body.backendUser {
                 }
             }
 
-            &.koala {
+            &.kwfUp-koala {
                 @include background-image-dpr2('/assets/kwf/views/user/images', 'kwfLogo.png', 112px, 26px, no-repeat left center transparent);
                 width: 120px;
                 height: 26px;
