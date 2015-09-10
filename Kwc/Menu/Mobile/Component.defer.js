@@ -91,13 +91,17 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
 
         if (!_.has(fetchedPages, data.id)) {
             fetchedPages[data.id] = true;
+            var params = {
+                pageId: data.id,
+                componentId: config.componentId
+            };
+            if (typeof Kwf != "undefined" && Kwf.sessionToken) {
+                params.kwfSessionToken = Kwf.sessionToken
+            }
+
             var request = $.ajax({
                 url: config.controllerUrl + '/json-index',
-                data: {
-                    pageId: data.id,
-                    componentId: config.componentId,
-                    kwfSessionToken: Kwf.sessionToken
-                }
+                data: params
             });
             request.done(function(res) {
                 _.each(res.pages, function(page) {
@@ -140,14 +144,17 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
         menuLink.parent().toggleClass('kwfUp-open');
     });
 
+    var params = {
+        subrootComponentId: config.subrootComponentId,
+        componentId: config.componentId
+    };
+    if (typeof Kwf != "undefined" && Kwf.sessionToken) {
+        params.kwfSessionToken = Kwf.sessionToken
+    }
     // Inital Request
     $.ajax({
         url: config.controllerUrl + '/json-index',
-        data: {
-            subrootComponentId: config.subrootComponentId,
-            componentId: config.componentId,
-            kwfSessionToken: Kwf.sessionToken
-        },
+        data: params,
         dataType: 'JSON',
         success: function(res) {
             _.each(res.pages, function(page) {
