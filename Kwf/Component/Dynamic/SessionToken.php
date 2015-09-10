@@ -6,11 +6,15 @@ class Kwf_Component_Dynamic_SessionToken extends Kwf_Component_Dynamic_Abstract
     {
         $ret = '';
         if (Kwf_Util_SessionToken::getSessionToken()) {
+            $indent = str_repeat(' ', 8);
             $ret  = "<script type=\"text/javascript\">\n";
-            if ($up = Kwf_Config::getValue('application.uniquePrefix')) {
-                $ret .= "$up.";
+            $kwf = 'Kwf';
+            if ($uniquePrefix = Kwf_Config::getValue('application.uniquePrefix')) {
+                $ret .= $indent."if (typeof $uniquePrefix == 'undefined') $uniquePrefix = {};\n";
+                $kwf = $uniquePrefix.'.'.$kwf;
             }
-            $ret .= "Kwf.sessionToken = '".Kwf_Util_SessionToken::getSessionToken()."';\n";
+            $ret .=$indent."if (typeof $kwf == 'undefined') $kwf = {};\n";
+            $ret .= "$kwf.sessionToken = '".Kwf_Util_SessionToken::getSessionToken()."';\n";
             $ret .= "</script>\n";
         }
         return $ret;
