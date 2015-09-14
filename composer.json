@@ -35,11 +35,7 @@
             "uglify-js": "2.4.13",
             "node-sass": "2.0.1",
             "amdlc": "0.1.5",
-            "esprima": "1.2.2",
-
-            "grunt": "0.4.*",
-            "grunt-cli": "0.1.*",
-            "modernizr": "3.0.0"
+            "modernizr": "git://github.com/Modernizr/Modernizr.git#eb211bbcb"
         },
         "require-dev-bower": {
             "qunit": "1.18.0",

@@ -875,6 +875,8 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                 return (!$value || $rowValue >= $value);
             } else if ($expr instanceof Kwf_Model_Select_Expr_Equal) {
                 return ($rowValue == $value);
+            } else if ($expr instanceof Kwf_Model_Select_Expr_NotEquals) {
+                return ($rowValue != $value);
             } else if ($expr instanceof Kwf_Model_Select_Expr_LowerEqual) {
                 return (!$value || $rowValue <= $value);
             } else {
