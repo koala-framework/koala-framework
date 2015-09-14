@@ -39,7 +39,7 @@
 
             "grunt": "0.4.*",
             "grunt-cli": "0.1.*",
-            "grunt-modernizr": "0.5.2"
+            "modernizr": "3.0.0"
         },
         "require-dev-bower": {
             "qunit": "1.18.0",
