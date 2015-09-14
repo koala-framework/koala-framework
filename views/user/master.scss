@@ -269,6 +269,12 @@ body.backendUser {
                 color: $button-color;
             }
         }
+
+        .externalAuthButtons {
+            button {
+                background: none;
+            }
+        }
     }
 
     .footer {

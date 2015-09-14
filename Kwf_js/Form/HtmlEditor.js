@@ -74,6 +74,7 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
         });
 
         var KwfEditor = Ext2.extend(tinymce.Editor, {
+            orgVisibility: '',
             extEditor: this,
             getDoc: function() {
                 return this.extEditor.getDoc();

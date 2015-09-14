@@ -63,7 +63,7 @@ class Kwc_Menu_Mobile_Events extends Kwc_Abstract_Events
         $d = $page;
         while ($d) {
             if (Kwc_Abstract::getFlag($d->componentClass, 'subroot') || $d->componentId == 'root') {
-                Kwf_Cache_Simple::delete('kwcMenuMobile-root-'.$d->componentId);
+                Kwf_Cache_Simple::delete('kwcMenuMobile-root-'.$d->componentId.'-'.$this->_class);
                 break;
             } else if ($d->isPage) {
                 Kwf_Cache_Simple::delete('kwcMenuMobile-'.$d->componentId);

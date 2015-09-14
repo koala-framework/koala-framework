@@ -29,6 +29,11 @@ class Kwc_List_Gallery_SettingsForm extends Kwc_Abstract_Form
                     '8' => '8',
                 ));
             $this->fields->add(new Kwf_Form_Field_Static(trlKwf('Choose a number to just show this number of items and hide the others behind a "more"-button')));
+            $this->fields->add(new Kwf_Form_Field_TextField('show_more_link_text', trlKwf('Button Link Text')));
+            $this->fields->add(new Kwf_Form_Field_Static(trlKwf('Choose a text for the "more"-Button under the pictures')));
+
         }
+
+
     }
 }

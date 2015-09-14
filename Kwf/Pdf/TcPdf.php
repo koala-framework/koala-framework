@@ -176,23 +176,6 @@ class Kwf_Pdf_TcPdf extends TCPDF
         return '';
     }
 
-
-    /*
-     * patch für tcpdf -> bei nummernzeichen werden automatish zwei
-     * zeilenumbrüche durchgeführt.
-     */
-    protected function closeHTMLTagHandler(&$dom, $key, $cell=false) {
-            $temp = $this->lasth;
-            switch($dom[$key]['value']) {
-                case 'ul':
-                case 'ol':
-                    $this->lasth = $this->lasth / 2;
-                    break;
-            }
-            parent::closeHTMLTagHandler($dom, $key, $cell);
-            $this->lasth = $temp;
-    }
-
     public function getMaxTextWidth()
     {
         return $this->getPageWidth()-$this->getRightMargin()-$this->getLeftMargin();

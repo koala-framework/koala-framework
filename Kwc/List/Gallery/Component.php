@@ -35,6 +35,8 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         $showPics = null;
         if ($this->_getSetting('showMoreLink')) {
             $showPics = $this->_getRow()->show_pics;
+            $ret['moreButtonText'] = $this->_getPlaceholder('moreButton');
+            if ($this->_getRow()->show_more_link_text) $ret['moreButtonText'] = $this->_getRow()->show_more_link_text;
         }
         $ret['rootElementClass'] .= ' col'.$this->_getGalleryColumns();
 

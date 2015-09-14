@@ -16,7 +16,7 @@ abstract class Kwf_Component_Plugin_LoginAbstract_Component extends Kwf_Componen
     {
         $templateVars = array();
         $templateVars['loginForm'] = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($this->_componentId, array('ignoreVisible' => true))->getChildComponent('-loginForm');
+            ->getComponentById($this->_getComponentId(), array('ignoreVisible' => true))->getChildComponent('-loginForm');
         $templateVars['wrongLogin'] = isset($_POST['login_password']);
         $templateVars['placeholder'] = Kwc_Abstract::getSetting(get_class($this), 'placeholder');
         return $templateVars;
@@ -39,5 +39,10 @@ abstract class Kwf_Component_Plugin_LoginAbstract_Component extends Kwf_Componen
     public function skipProcessInput()
     {
         return !$this->isLoggedIn();
+    }
+
+    protected function _getComponentId()
+    {
+        return $this->_componentId;
     }
 }
