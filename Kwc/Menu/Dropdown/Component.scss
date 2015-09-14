@@ -19,7 +19,7 @@
                 }
             }
 
-            @include modernizr-no(touch) {
+            @include modernizr-no(touchevents) {
                 &:hover {
                     div.dropdown {
                         display: block;
