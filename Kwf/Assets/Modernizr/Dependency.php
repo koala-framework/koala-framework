@@ -53,45 +53,57 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
             if (isset($extensibility[strtolower($f)])) {
                 $extensibility[strtolower($f)] = true;
             } else {
-                $filter = new Zend_Filter_Word_CamelCaseToSeparator('/');
-                $featureString = strtolower($filter->filter($f));
-                //!!TODO update dependencies in components to match correct string
-                if ($featureString == 'boxshadow') {
-                    $featureString = 'css/boxshadow';
-                } else if ($featureString == 'touch') {
-                    $featureString = 'touchevents';
-                } else if ($f == 'CssTransforms3D') {
-                    $featureString = 'css/transforms3d';
-                }
-                $tests[] = $featureString;
+                //add two versions of the test
+                //requried to support core detects (eg. CssAnimations) and non-core detects (css_mediaqueries)
+
+                $tests[] = strtolower($f);
+
+                $filter = new Zend_Filter_Word_CamelCaseToUnderscore();
+                $tests[] = strtolower($filter->filter($f));
             }
         }
-
-        $options = array();
-        foreach ($extensibility as $key => $value) {
-            if ($value) $options[] = $key;
-        }
-        $newConfig = array(
-            'minify' => true,
-            'classPrefix' => '',
-            'options' => $options,
-            'feature-detects' => $tests
+        $config = array(
+            'modernizr' => array(
+                'dist' => array(
+                    'devFile' => false,
+                    'outputFile' => $outputFile,
+                    'extra' => array(
+                        "shiv"       => false,
+                        "printshiv"  => false,
+                        "load"       => false,
+                        "mq"         => true,
+                        "cssclasses" => true
+                    ),
+                    'extensibility' => $extensibility,
+                    'uglify' => true,
+                    'tests' => $tests,
+                    'parseFiles' => false,
+                    'matchCommunityTests' => true,
+                    'customTests' => array()
+                )
+            )
         );
+
+        $gruntfile  = "    module.exports = function(grunt) {\n";
+        $gruntfile .= "    grunt.initConfig(";
+        $gruntfile .= json_encode($config);
+        $gruntfile .= ");\n";
+        $gruntfile .= "    grunt.loadNpmTasks(\"grunt-modernizr\");\n";
+        $gruntfile .= "    grunt.registerTask('default', ['modernizr']);\n";
+        $gruntfile .= "};\n";
 
         if (file_exists($outputFile)) unlink($outputFile);
 
         $cwd = getcwd();
         chdir(dirname(dirname(dirname(dirname(__FILE__)))));
-        file_put_contents('modernizr.config.json', json_encode($newConfig));
-        $cmd = $cwd."/".VENDOR_PATH."/bin/node ./node_modules/modernizr/bin/modernizr -c modernizr.config.json";
+        file_put_contents('Gruntfile.js', $gruntfile);
+        $cmd = $cwd."/".VENDOR_PATH."/bin/node ./node_modules/grunt-cli/bin/grunt 2>&1";
         exec($cmd, $out, $retVar);
-
-        rename('modernizr.js', $outputFile); // command does only accept folder where to put modernizr.js
-        unlink('modernizr.config.json');
+        unlink('Gruntfile.js');
         if (file_exists($outputFile)) $ret = file_get_contents($outputFile);
         chdir($cwd);
         if ($retVar) {
-            throw new Kwf_Exception("Modernizr failed: ".implode("\n", $out));
+            throw new Kwf_Exception("Grunt failed: ".implode("\n", $out));
         }
         file_put_contents("$outputFile.buildtime", time());
 
