@@ -20,7 +20,7 @@ class Kwc_Menu_Mobile_Component extends Kwc_Abstract
             'controllerUrl' => Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl(),
             'subrootComponentId' => $this->getData()->getSubroot()->componentId,
             'componentId' => $this->getData()->componentId,
-            'showSubmenus' => $this->getSettings()['showSubmenus']
+            'showSubmenus' => $this->getSetting($this->getData()->componentClass, 'showSubmenus')
         );
         return $ret;
     }
