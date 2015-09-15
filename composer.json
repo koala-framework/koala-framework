@@ -12,6 +12,7 @@
         "koala-framework/library-htmlawed": "1.1.14",
         "koala-framework/library-css3pie": "1.0.0",
         "koala-framework/composer-extra-assets": "1.1.*",
+        "koala-framework/kwf-trl-jsparser": "dev-master",
         "twig/twig": "1.16.1",
         "koala-framework/sourcemaps": "0.2.0",
         "koala-framework/file-watcher": "*",
