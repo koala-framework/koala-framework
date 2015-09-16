@@ -83,3 +83,23 @@ Kwf.onElementReady('div.kwcDirectoriesListViewMap', function(map) {
         Kwc.Directories.List.ViewMap.renderMap(map.dom);
     }
 });
+
+Kwf.onJElementReady('.cssClass', function (el) {
+    var mobileOverlay = el.find('.mobileOverlay');
+
+    mobileOverlay.click(function (ev) {
+        if ($(this).is(':visible')) {
+            var newEl = $(this).parent();
+            newEl.toggleClass('navigate');
+            if (newEl.hasClass('navigate')) {
+                $('html, body').animate({
+                    scrollTop: newEl.offset().top
+                });
+            } else {
+                $('html, body').animate({
+                    scrollTop: newEl.offset().top - (($(window).innerHeight() - newEl.height()) / 2)
+                });
+            }
+        }
+    });
+});
