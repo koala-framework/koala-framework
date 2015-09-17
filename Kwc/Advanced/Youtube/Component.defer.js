@@ -3,7 +3,8 @@ Kwf.onElementReady('.kwcAdvancedYoutube .youtubePlayer', function(el, config) {
     kwcAdvancedYoutube.dom.config = config;
 }, {priority: -1});
 
-Kwf.onElementHide('.kwcAdvancedYoutube', function(el) {
+Kwf.onElementHide('.kwcAdvancedYoutube .youtubePlayer', function(el) {
+    var el = el.findParent('.kwcAdvancedYoutube', 5, true);
     if (el.dom.player) {
         el.dom.player.pauseVideo();
     }
