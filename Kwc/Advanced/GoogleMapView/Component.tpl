@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?><? if (!$this->optimizedMobileUI) { ?> noOtimizedMobileUI<? } ?>">
+<div class="<?=$this->cssClass?><? if ($this->optimizedMobileUI) { ?> optimizedMobileUI<? } ?>">
     <div class="mobileOverlay">
         <img class="navigateIcon" src="/assets/kwf/Kwc/Advanced/GoogleMapView/navigateIcon.png" />
         <div class="innerMobileOverlay">
