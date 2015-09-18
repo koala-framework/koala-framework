@@ -41,10 +41,8 @@ Kwf.onContentReady(function(el, options) {
     }).defer(1, this, [el]);
 });
 
-Kwf.onJElementReady('.cssClass', function (el) {
-    var mobileOverlay = el.find('.mobileOverlay');
-
-    mobileOverlay.click(function (ev) {
+Kwf.onJElementReady('.cssClass .mobileOverlay', function (el) {
+    el.click(function (ev) {
         if ($(this).is(':visible')) {
             var newEl = $(this).parent();
             newEl.toggleClass('navigate');
