@@ -192,20 +192,27 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
     public function postAction()
     {
         $data = json_decode($this->getRequest()->getRawBody());
+        if (!is_array($data)) $data = array($data);
 
-        $row = $this->_model->createRow();
-        if ($this->_getParam('id')) {
-            $row->id = $this->_getParam('id');
+        $ret = array();
+        foreach ($data as $d) {
+            $row = $this->_model->createRow();
+            if ($d->id) {
+                $row->id = $d->id;
+            }
+
+            $this->_fillRowInsert($row, $d);
+            $this->_beforeInsert($row);
+            $this->_beforeSave($row);
+            $row->save();
+            $this->_afterSave($row, $d);
+            $this->_afterInsert($row, $d);
+
+            $ret[] = $this->_loadDataFromRow($row);
         }
+        if (count($ret) == 1) $ret = reset($ret);
 
-        $this->_fillRowInsert($row, $data);
-        $this->_beforeInsert($row);
-        $this->_beforeSave($row);
-        $row->save();
-        $this->_afterSave($row, $data);
-        $this->_afterInsert($row, $data);
-
-        $this->view->data = $this->_loadDataFromRow($row);
+        $this->view->data = $ret;
     }
 
     protected function _fillRowInsert($row, $data)
@@ -233,20 +240,27 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
     public function putAction()
     {
         $data = json_decode($this->getRequest()->getRawBody());
+        if (!is_array($data)) $data = array($data);
 
-        $s = $this->_getSelect();
-        $s->whereId($this->_getParam('id'));
-        $row = $this->_model->getRow($s);
-        if (!$row) throw new Kwf_Exception_NotFound();
+        $ret = array();
+        foreach ($data as $d) {
+            $s = $this->_getSelect();
+            $s->whereId($d->id);
+            $row = $this->_model->getRow($s);
+            if (!$row) throw new Kwf_Exception_NotFound();
 
-        $this->_fillRow($row, $data);
-        $this->_beforeUpdate($row);
-        $this->_beforeSave($row);
-        $row->save();
-        $this->_afterSave($row, $data);
-        $this->_afterUpdate($row, $data);
+            $this->_fillRow($row, $d);
+            $this->_beforeUpdate($row);
+            $this->_beforeSave($row);
+            $row->save();
+            $this->_afterSave($row, $d);
+            $this->_afterUpdate($row, $d);
 
-        $this->view->data = $this->_loadDataFromRow($row);
+            $ret[] = $this->_loadDataFromRow($row);
+        }
+        if (count($ret) == 1) $ret = reset($ret);
+
+        $this->view->data = $ret;
     }
 
     // Handle DELETE requests to delete a specific item
