@@ -26,6 +26,7 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
             //'latitude' => 123, //optional, if not set center of shown cooridnates is used
             //'longitude' => 123, //optional, if not set center of shown cooridnates is used
         );
+        $ret['optimizedMobileUI'] = false;
         return $ret;
     }
 
@@ -40,6 +41,8 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
                 array('markers' => $this->getData()->getChildComponent('_coordinates')->getUrl())
             );
         }
+
+        $ret['optimizedMobileUI'] = $this->_getSetting('optimizedMobileUI');
         return $ret;
     }
 

@@ -8,6 +8,7 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
         $ret['assetsDefer']['dep'][] = 'ExtUtilJson';
         $ret['placeholder']['noCoordinates'] = ''; //leer, wird in GoogleMap benötgit damit man im backend sieht was falsch ist
         $ret['cssClass'] = 'webStandard webForm';
+        $ret['optimizedMobileUI'] = false;
         return $ret;
     }
 
@@ -51,6 +52,8 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
 
         // wird benötigt wenn gmap in switchDisplay liegt
         $ret['height'] = $options['height'];
+
+        $ret['optimizedMobileUI'] = $this->_getSetting('optimizedMobileUI');
 
         return $ret;
     }
