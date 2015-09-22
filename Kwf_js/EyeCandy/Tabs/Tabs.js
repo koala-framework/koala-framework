@@ -102,6 +102,10 @@ Ext.extend(Kwf.Tabs, Ext.util.Observable, {
         if (this._activeTabIdx !== null) {
             oldContentEl.setVisible(true);
 
+            newContentEl.show();
+            Kwf.callOnContentReady(this.el, {action: 'show'});
+            newContentEl.hide();
+
             newContentEl.fadeIn({
                 duration: this.fxDuration
             });
