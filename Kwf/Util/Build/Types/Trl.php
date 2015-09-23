@@ -64,17 +64,25 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             foreach ($poParser->entries() as $entry) {
                 $ctx = isset($entry['msgctxt']) ? implode($entry['msgctxt']) : '';
                 $translation = isset($entry['msgstr']) ? implode($entry['msgstr']) : '';
-                if (isset($entry['msgid_plural']) && isset($entry['msgstr[1]'])) {
-                    $translation = implode($entry['msgstr[1]']);
+                if (isset($entry['msgid_plural']) && isset($entry['msgstr[0]'])) {
+                    $translation = implode($entry['msgstr[0]']);
                 }
                 if ($translation == '') continue;
                 $msgId = implode($entry['msgid']);
-                $msgIdPlural =  isset($entry['msgid_plural']) ? implode($entry['msgid_plural']) : '';
-                $msgKey = ($msgIdPlural ? $msgIdPlural : $msgId).'-'.$ctx;
+                $msgKey = $msgId.'-'.$ctx;
                 if (isset($c[$msgKey])) {
                     echo "\nDuplicate entry in trl-files: $msgKey => $translation\n";
                 }
                 $c[$msgKey] = $translation;
+
+                if (isset($entry['msgid_plural'])) {
+                    $msgIdPlural =  implode($entry['msgid_plural']);
+                    $pluralTranslation = '';
+                    if (isset($entry['msgstr[1]'])) {
+                        $pluralTranslation = implode($entry['msgstr[1]']);
+                    }
+                    $c[$msgIdPlural.'-'.$ctx] = $pluralTranslation;
+                }
             }
         }
         return $c;
