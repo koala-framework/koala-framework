@@ -28,7 +28,7 @@ class Kwc_Directories_Month_Detail_Component extends Kwc_Directories_List_Compon
 
     public static function getItemDirectoryClasses($directoryClass)
     {
-        return self::_getParentItemDirectoryClasses($directoryClass, 2);
+        return self::_getParentItemDirectoryClasses($directoryClass, 1);
     }
 
     protected function _getItemDirectory()
