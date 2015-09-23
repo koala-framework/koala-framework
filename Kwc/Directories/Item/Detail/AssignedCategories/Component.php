@@ -13,7 +13,7 @@ class Kwc_Directories_Item_Detail_AssignedCategories_Component
 
     public static function getItemDirectoryClasses($directoryClass)
     {
-        $class = self::_getParentItemDirectoryClasses($directoryClass, 2);
+        $class = self::_getParentItemDirectoryClasses($directoryClass, 1);
         return array(Kwc_Abstract::getChildComponentClass($class, 'category'));
     }
 
