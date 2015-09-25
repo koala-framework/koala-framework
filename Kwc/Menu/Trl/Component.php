@@ -24,7 +24,7 @@ class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
                 $i++;
             }
         }
-        if (!$menu[count($menu)-1]['last']) {
+        if (isset($menu[count($menu)-1]) && !$menu[count($menu)-1]['last']) {
             $menu[count($menu)-1]['last'] = true;
             $menu[count($menu)-1]['class'] .= ' last';
         }
