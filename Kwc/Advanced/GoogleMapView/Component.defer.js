@@ -1,5 +1,3 @@
-Kwf.Utils.ResponsiveEl('.kwcAdvancedGoogleMapView', [500]);
-
 Ext2.namespace('Kwc.Advanced.GoogleMap');
 Kwc.Advanced.GoogleMap.renderedMaps = [];
 
@@ -43,3 +41,20 @@ Kwf.onContentReady(function(el, options) {
     }).defer(1, this, [el]);
 });
 
+Kwf.onJElementReady('.cssClass .mobileOverlay', function (el) {
+    el.click(function (ev) {
+        if ($(this).is(':visible')) {
+            var newEl = $(this).parent();
+            newEl.toggleClass('navigate');
+            if (newEl.hasClass('navigate')) {
+                $('html, body').animate({
+                    scrollTop: newEl.offset().top
+                });
+            } else {
+                $('html, body').animate({
+                    scrollTop: newEl.offset().top - (($(window).innerHeight() - newEl.height()) / 2)
+                });
+            }
+        }
+    });
+});
