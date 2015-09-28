@@ -89,7 +89,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         unlink($configFile);
         $configFile .= '.json';
         file_put_contents($configFile, json_encode($config, JSON_PRETTY_PRINT));
-        $cmd = "./".VENDOR_PATH."/bin/node $modernizrPath/bin/modernizr --config $configFile --uglify --dest ".dirname($this->_outputFile);
+        $cmd = getcwd()."/".VENDOR_PATH."/bin/node $modernizrPath/bin/modernizr --config $configFile --uglify --dest ".dirname($this->_outputFile);
         exec($cmd, $out, $retVar);
         unlink($configFile);
         if ($retVar) {
