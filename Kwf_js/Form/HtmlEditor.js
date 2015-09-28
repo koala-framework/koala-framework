@@ -74,6 +74,7 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
         });
 
         var KwfEditor = Ext2.extend(tinymce.Editor, {
+            orgVisibility: '',
             extEditor: this,
             getDoc: function() {
                 return this.extEditor.getDoc();
@@ -224,6 +225,19 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
                 this.el.dom.value = html;
                 this.fireEvent('sync', this, html);
             }
+        }
+    },
+    /**
+     * Protected method that will not generally be called directly. Pushes the value of the textarea
+     * into the iframe editor.
+     */
+    pushValue : function(){
+        if (!this.sourceEditMode && this.tinymceEditor) {
+            var v = this.el.dom.value;
+            if(!this.activated && v.length < 1){
+                v = this.defaultValue;
+            }
+            this.tinymceEditor.setContent(v);
         }
     },
 

@@ -4,7 +4,14 @@ class Kwc_ParagraphsPassword_Plugin_Component extends Kwf_Component_Plugin_Passw
     protected function _getPassword()
     {
         $c = Kwf_Component_Data_Root::getInstance()
-            ->getComponentById($this->_componentId, array('ignoreVisible'=>true));
+            ->getComponentById($this->_getComponentId(), array('ignoreVisible'=>true));
         return $c->getComponent()->getPassword();
+    }
+
+    protected function _getComponentId()
+    {
+        return Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($this->_componentId, array('ignoreVisible'=>true))
+            ->getParentByClass('Kwc_ParagraphsPassword_Component')->componentId;
     }
 }

@@ -2,9 +2,10 @@ var onReady = require('kwf/on-ready');
 var youtubeLoader = require('kwf/youtube/loader');
 var $ = require('jQuery');
 
-onReady.onHide('.kwcClass', function(el) {
-    if (el.data('player')) {
-        el.data('player').pauseVideo();
+onReady.onHide('.kwcClass .youtubePlayer', function(el) {
+    var kwcAdvancedYoutube = el.closest('.kwcClass');
+    if (kwcAdvancedYoutube.data('player')) {
+        kwcAdvancedYoutube.data('player').pauseVideo();
     }
 }, {defer: true});
 

@@ -4,8 +4,7 @@ class Kwc_Abstract_Cards_Trl_Form_ComponentData extends Kwf_Data_Abstract
     public function load($row)
     {
         $c = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($row->id, array('ignoreVisible'=>true));
-
+            ->getComponentByDbId($row->component_id, array('ignoreVisible'=>true));
         if ($c && is_instance_of($c->componentClass, 'Kwc_Abstract_Cards_Trl_Component')) {
             return $c->chained->getComponent()->getRow()->component;
         } else {

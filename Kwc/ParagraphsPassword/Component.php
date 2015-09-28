@@ -7,7 +7,7 @@ class Kwc_ParagraphsPassword_Component extends Kwc_Paragraphs_Component
         $ret['componentName'] = trlKwfStatic('Paragraphs passwordprotected');
         $ret['extConfig'] = 'Kwc_ParagraphsPassword_ExtConfig';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
-        $ret['plugins'][] = 'Kwc_ParagraphsPassword_Plugin_Component';
+        $ret['plugins']['password'] = 'Kwc_ParagraphsPassword_Plugin_Component';
 
         $ret['flags']['skipFulltext'] = true;
         return $ret;

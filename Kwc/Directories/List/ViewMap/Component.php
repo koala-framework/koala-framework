@@ -7,6 +7,7 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         $ret['assetsDefer']['dep'][] = 'ExtUtilJson';
         $ret['assetsDefer']['dep'][] = 'ExtConnection';
         $ret['generators']['child']['component']['paging'] = null;
+
         $ret['mapOptions']['zoom'] = null;
         $ret['mapOptions']['zoomProperties'] = 0;
         $ret['mapOptions']['height'] = 400;
@@ -17,6 +18,8 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         $ret['mapOptions']['latitude'] = 47.95334614; // if dynamicStartPos = true this is center if no markers available, else this
         $ret['mapOptions']['longitude'] = 13.24444771; // point is centered
         $ret['mapOptions']['showAlwaysAllMarkers'] = true; // if true searchResults are shown blue, rest is red
+
+        $ret['optimizedMobileUI'] = false;
         return $ret;
     }
 
@@ -44,6 +47,7 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         }
         $ret['options']['baseParams']['componentId'] = $this->getData()->componentId;
         $ret['options']['markers'] = Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl('Markers').'/json-index';
+        $ret['optimizedMobileUI'] = $this->_getSetting('optimizedMobileUI');
         return $ret;
     }
 

@@ -1,37 +1,114 @@
 @import "config/colors";
-.kwcClass div.text { display: none; }
-.kwcClass .fromAddress { margin-top:6px; }
-.kwcClass .fromAddress input { float: left; padding: 3px; }
-.kwcClass .fromAddress input.textBefore { width: 98%; color: $typo; display: block; margin-bottom: 10px;}
-.kwcClass.gt500 .fromAddress input.textBefore {width: 50%; display: block;}
-.kwcClass .fromAddress input.kwfUp-kwfClearOnFocusBlurred { color: lighten($typo, 80); }
-.kwcClass .fromAddress input.textOn { color: $typo; }
-.kwcClass .fromAddress button {
-    font-weight: bold;
-    overflow: visible;
-    cursor: pointer;
-    width: 100%;
-    margin: 0;
-    float: left;
-    padding: 8px 5px;
-    display: block;
-    float:left;
-}
-.kwcClass.gt500 .fromAddress button {
-    width: 200px;
-    float: right;
-    padding: 2px 5px;
-    cursor: pointer;
-    font-weight: bold;
-}
+@import "compass/css3/transition";
 
-.kwcClass .mapDirSuggestParent { display: none; margin-top: 30px; }
-
-.kwcClass .container { overflow: hidden; border: 1px solid #000; }
-
-@media print {
 .kwcClass {
-    .fromAddress { display: none; }
-    page-break-before: always;
-}
+    .mobileOverlay {
+        display: none;
+    }
+
+    &.optimizedMobileUI {
+        margin-bottom: 20px;
+        position: relative;
+        @include transition-property(all);
+        @include transition-duration(.24s);
+
+        .mobileOverlay {
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            text-align: center;
+            display: block;
+            z-index: 1;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            top: 0;
+            @include transition-property(all);
+            @include transition-duration(.24s);
+        }
+
+        .navigateIcon {
+            position: absolute;
+            margin-left: -26px;
+            display: block;
+            height: 52px;
+            width: 52px;
+            left: 50%;
+            top: 34%;
+
+            @media (max-height: 460px) {
+                top: 29%;
+            }
+        }
+
+        .innerMobileOverlay {
+            position: absolute;
+            border-radius: 4px;
+            line-height: 40px;
+            margin-top: -20px;
+            font-size: 14px;
+            color: white;
+            height: 40px;
+            right: 20px;
+            left: 20px;
+            top: 59%;
+
+            @media (max-height: 460px) {
+                top: 62%;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .container {
+                height: 50vh !important;
+            }
+        }
+
+        .tapToScroll {
+            display: none;
+        }
+
+        &.navigate {
+            margin: 0 calc((100% - 100vw) / 2);
+            z-index: 45;
+
+            .navigateIcon {
+                display: none;
+            }
+
+            .mobileOverlay {
+                background: rgba(0, 0, 0, 0.9);
+                bottom: 35px;
+                height: 40px;
+                width: 150px;
+                left: auto;
+                right: 5px;
+                top: auto;
+            }
+
+            .innerMobileOverlay {
+                top: 50%;
+            }
+
+            .container {
+                height: 100vh !important;
+            }
+
+            .tapToNav {
+                display: none;
+            }
+
+            .tapToScroll {
+                background: url('/assets/kwf/Kwc/Advanced/GoogleMapView/closeIcon.png') no-repeat center right transparent;
+                background-size: 16px 16px;
+                padding-right: 24px;
+                display: inline;
+            }
+        }
+    }
+
+    &.gt700 {
+        .mobileOverlay {
+            display: none;
+        }
+    }
 }

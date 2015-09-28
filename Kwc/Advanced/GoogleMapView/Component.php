@@ -6,6 +6,7 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
         $ret = parent::getSettings();
         $ret['placeholder']['noCoordinates'] = ''; //leer, wird in GoogleMap benötgit damit man im backend sieht was falsch ist
         $ret['rootElementClass'] = 'kwfUp-webStandard kwfUp-webForm';
+        $ret['optimizedMobileUI'] = false;
         return $ret;
     }
 
@@ -49,6 +50,8 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
 
         // wird benötigt wenn gmap in switchDisplay liegt
         $ret['height'] = $options['height'];
+
+        $ret['optimizedMobileUI'] = $this->_getSetting('optimizedMobileUI');
 
         return $ret;
     }

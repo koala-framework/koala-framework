@@ -40,11 +40,13 @@ class Kwf_Loader
 
         foreach ($composerNamespaces as $namespace => $dirs) {
             // convert paths to psr4 style
-            $namespacePath = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
-            $namespacePath = str_replace('_', DIRECTORY_SEPARATOR, $namespacePath);
-            if ($namespacePath[strlen($namespacePath)-1] == DIRECTORY_SEPARATOR) {
-                // Path must not end with /
-                $namespacePath = substr($namespacePath, 0, -1);
+            if ($namespace) {
+                $namespacePath = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
+                $namespacePath = str_replace('_', DIRECTORY_SEPARATOR, $namespacePath);
+                if ($namespacePath[strlen($namespacePath)-1] == DIRECTORY_SEPARATOR) {
+                    // Path must not end with /
+                    $namespacePath = substr($namespacePath, 0, -1);
+                }
             }
             $preparedDirs = array();
             foreach ($dirs as $dir) {

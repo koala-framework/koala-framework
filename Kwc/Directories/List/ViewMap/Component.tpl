@@ -1,4 +1,12 @@
-<div class="<?=$this->rootElementClass?>">
+<div class="<?=$this->rootElementClass?><? if ($this->optimizedMobileUI) { ?> optimizedMobileUI<? } ?>">
+    <div class="mobileOverlay">
+        <img class="navigateIcon" src="/assets/kwf/Kwc/Directories/List/ViewMap/navigateIcon.png" />
+        <div class="innerMobileOverlay">
+            <span class="tapToNav"><?=$this->data->trlKwf('Tap to navigate');?></span>
+            <span class="tapToScroll"><?=$this->data->trlKwf('close');?></span>
+        </div>
+    </div>
+
     <? if (isset($this->searchForm)) echo $this->component($this->searchForm); ?>
 
     <input type="hidden" class="options" value="<?= htmlspecialchars(Zend_Json::encode($this->options)) ?>" />

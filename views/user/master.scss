@@ -269,6 +269,12 @@ body.kwfUp-backendUser {
                 color: $button-color;
             }
         }
+
+        .externalAuthButtons {
+            button {
+                background: none;
+            }
+        }
     }
 
     .kwfUp-footer {

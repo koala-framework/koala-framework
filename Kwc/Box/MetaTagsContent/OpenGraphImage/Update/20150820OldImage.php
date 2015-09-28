@@ -10,7 +10,7 @@ class Kwc_Box_MetaTagsContent_OpenGraphImage_Update_20150820OldImage extends Kwf
             if (is_numeric($id)) {
                 //ignore non-pages
                 $id .= '-metaTags-ogImage'; //-metaTags could be named differently, but in most (all!) cases that name is used
-                $db->query("UPDATE kwc_basic_image SET component_id=?", array($id));
+                $db->query("UPDATE kwc_basic_image SET component_id=? WHERE component_id=?", array($id, $row['component_id']));
             }
         }
     }
