@@ -18,11 +18,6 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
     {
         $components = array();
         if ($this->getData()->getPage()) {
-            /*
-            $components = $this->getData()->getPage()->getRecursiveChildComponents(array(
-                'page' => false,
-                'flags' => array('metaTags' => true)
-            ));*/
             if (Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'metaTags')) {
                 $components[] = $this->getData()->getPage();
             }
@@ -46,13 +41,7 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
         }
         foreach ($ret as &$i) $i = trim($i);
         if ($this->getData()->getPage()) {
-            /*
-            $components = $this->getData()->getPage()->getRecursiveChildComponents(array(
-                'page' => false,
-                'limit' => 1,
-                'flags' => array('noIndex' => true)
-            ));*/
-            if (/*$components || */Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'noIndex')) {
+            if (Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'noIndex')) {
                 if (isset($ret['robots'])) {
                     $ret['robots'] .= ',';
                 } else {
