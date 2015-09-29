@@ -16,6 +16,9 @@ class Kwc_Box_MetaTagsContent_Form extends Kwc_Abstract_Composite_Form
             ->setWidth(400)
             ->setHeight(50);
 
+        $this->add(new Kwf_Form_Field_Checkbox('noindex', 'noindex'))
+            ->setBoxLabel(trlKwf("Don't index this page by search engines."));
+
         parent::_initFields();
     }
 }

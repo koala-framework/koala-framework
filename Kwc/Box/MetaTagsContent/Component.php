@@ -18,6 +18,13 @@ class Kwc_Box_MetaTagsContent_Component extends Kwc_Box_MetaTags_Component
         if ($row->description) $ret['description'] = $row->description;
         if ($row->og_title) $ret['og:title'] = $row->og_title;
         if ($row->og_description) $ret['og:description'] = $row->og_description;
+        if ($row->noindex) {
+            if (isset($ret['robots']) && strpos($ret['robots'], 'noindex') === false) {
+                $ret['robots'] .= ',noindex';
+            } else {
+                $ret['robots'] = 'noindex';
+            }
+        }
         $ret['og:url'] = $this->getData()->getPage()->getAbsoluteUrl();
 
         $c = $this->getData()->parent;

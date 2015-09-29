@@ -6,6 +6,7 @@ class Kwc_Box_MetaTagsContent_Trl_Component extends Kwc_Box_MetaTags_Trl_Compone
         $ret = parent::getSettings($masterComponentClass);
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
+        $ret['throwContentChangedOnOwnMasterModelUpdate'] = true;
         return $ret;
     }
 
@@ -17,6 +18,15 @@ class Kwc_Box_MetaTagsContent_Trl_Component extends Kwc_Box_MetaTags_Trl_Compone
         if ($row->og_title) $ret['og:title'] = $row->og_title;
         if ($row->og_description) $ret['og:description'] = $row->og_description;
         $ret['og:url'] = $this->getData()->getPage()->getAbsoluteUrl();
+
+        $masterRow = $this->getData()->chained->getComponent()->getRow();
+        if ($masterRow->noindex) {
+            if (isset($ret['robots']) && strpos($ret['robots'], 'noindex') === false) {
+                $ret['robots'] .= ',noindex';
+            } else {
+                $ret['robots'] = 'noindex';
+            }
+        }
 
         $c = $this->getData()->parent;
         while ($c) {
