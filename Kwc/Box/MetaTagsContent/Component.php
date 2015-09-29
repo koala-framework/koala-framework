@@ -10,6 +10,7 @@ class Kwc_Box_MetaTagsContent_Component extends Kwc_Box_MetaTags_Component
         $ret['generators']['child']['component']['ogImage'] = 'Kwc_Box_MetaTagsContent_OpenGraphImage_Component';
         return $ret;
     }
+
     protected function _getMetaTags()
     {
         $ret = parent::_getMetaTags();
@@ -18,6 +19,23 @@ class Kwc_Box_MetaTagsContent_Component extends Kwc_Box_MetaTags_Component
         if ($row->og_title) $ret['og:title'] = $row->og_title;
         if ($row->og_description) $ret['og:description'] = $row->og_description;
         $ret['og:url'] = $this->getData()->getPage()->getAbsoluteUrl();
+
+        $c = $this->getData()->parent;
+        while ($c) {
+            if (($c->inherits && Kwc_Abstract::getFlag($c->componentClass, 'subroot')) || $c->componentId == 'root') {
+                $metaTags = $c->getChildComponent(array('id'=>'-'.$this->getData()->id, 'componentClass'=>$this->getData()->componentClass));
+                if ($metaTags && is_instance_of($metaTags->componentClass, 'Kwc_Box_MetaTagsContent_Component')) {
+                    $row = $metaTags->getComponent()->getRow();
+                    if (!isset($ret['og:title']) && $row->og_title) {
+                        $ret['og:title'] = $row->og_title;
+                    }
+                    if (!isset($ret['og:site_name']) && $row->og_site_name) {
+                        $ret['og:site_name'] = $row->og_site_name;
+                    }
+                }
+            }
+            $c = $c->parent;
+        }
         return $ret;
     }
 }

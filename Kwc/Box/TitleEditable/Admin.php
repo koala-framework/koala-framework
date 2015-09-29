@@ -11,6 +11,7 @@ class Kwc_Box_TitleEditable_Admin extends Kwc_Abstract_Admin
             //subroots/root can have title for child pages
             $ret = new Kwc_Box_TitleEditable_Form(null, $this->_class);
             $ret->fields['title']->setHelpText(null);
+            $ret->fields['title']->setWidth(350);
             $ret->fields['title']->setComment(trlKwf('for child pages'));
             return $ret;
         }
