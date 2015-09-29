@@ -14,33 +14,20 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
         return $this->getData();
     }
 
-    protected function _getMetaTagComponents()
-    {
-        $components = array();
-        if ($this->getData()->getPage()) {
-            if (Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'metaTags')) {
-                $components[] = $this->getData()->getPage();
-            }
-        }
-        return $components;
-    }
-
     protected function _getMetaTags()
     {
-        $components = $this->_getMetaTagComponents();
         $ret = array();
         if (Kwf_Config::getValue('application.kwf.name') == 'Koala Framework') {
             $ret['generator'] = 'Koala Web Framework CMS';
         }
-        foreach ($components as $component) {
-            foreach ($component->getComponent()->getMetaTags() as $name=>$content) {
-                if (!isset($ret[$name])) $ret[$name] = '';
-                //TODO: bei zB noindex,nofollow anderes trennzeichen
-                $ret[$name] .= ' '.$content;
-            }
-        }
-        foreach ($ret as &$i) $i = trim($i);
         if ($this->getData()->getPage()) {
+            if (Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'metaTags')) {
+                foreach ($this->getData()->getPage()->getComponent()->getMetaTags() as $name=>$content) {
+                    if (!isset($ret[$name])) $ret[$name] = '';
+                    //TODO: for eg noindex,nofollow other separator
+                    $ret[$name] .= ' '.$content;
+                }
+            }
             if (Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'noIndex')) {
                 if (isset($ret['robots'])) {
                     $ret['robots'] .= ',';
@@ -50,6 +37,8 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
                 $ret['robots'] .= 'noindex';
             }
         }
+        foreach ($ret as &$i) $i = trim($i);
+        unset($i);
 
         // verify-v1
         if (isset($_SERVER['HTTP_HOST'])) {
