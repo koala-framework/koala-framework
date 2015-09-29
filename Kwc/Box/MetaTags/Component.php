@@ -16,19 +16,25 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
 
     protected function _getMetaTags()
     {
+        return self::getMetaTagsForData($this->getData());
+    }
+
+    //public for trl
+    public static function getMetaTagsForData($data)
+    {
         $ret = array();
         if (Kwf_Config::getValue('application.kwf.name') == 'Koala Framework') {
             $ret['generator'] = 'Koala Web Framework CMS';
         }
-        if ($this->getData()->getPage()) {
-            if (Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'metaTags')) {
-                foreach ($this->getData()->getPage()->getComponent()->getMetaTags() as $name=>$content) {
+        if ($data->getPage()) {
+            if (Kwc_Abstract::getFlag($data->getPage()->componentClass, 'metaTags')) {
+                foreach ($data->getPage()->getComponent()->getMetaTags() as $name=>$content) {
                     if (!isset($ret[$name])) $ret[$name] = '';
                     //TODO: for eg noindex,nofollow other separator
                     $ret[$name] .= ' '.$content;
                 }
             }
-            if (Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'noIndex')) {
+            if (Kwc_Abstract::getFlag($data->getPage()->componentClass, 'noIndex')) {
                 if (isset($ret['robots'])) {
                     $ret['robots'] .= ',';
                 } else {
