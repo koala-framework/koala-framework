@@ -5,10 +5,21 @@ class Kwc_Box_MetaTagsContent_Component extends Kwc_Box_MetaTags_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Meta Tags');
-        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['ownModel'] = 'Kwc_Box_MetaTagsContent_Model';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         $ret['generators']['child']['component']['ogImage'] = 'Kwc_Box_MetaTagsContent_OpenGraphImage_Component';
+        $ret['flags']['hasPageMeta'] = true;
         return $ret;
+    }
+
+    public function getPageMeta()
+    {
+        $row = $this->getRow();
+        return array(
+            'noindex' => (bool)$row->noindex,
+            'sitemap_changefreq' => $row->sitemap_changefreq,
+            'sitemap_priority' => (float)$row->sitemap_priority
+        );
     }
 
     protected function _getMetaTags()

@@ -7,7 +7,13 @@ class Kwc_Box_MetaTagsContent_Trl_Component extends Kwc_Box_MetaTags_Trl_Compone
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         $ret['throwContentChangedOnOwnMasterModelUpdate'] = true;
+        $ret['flags']['hasPageMeta'] = true;
         return $ret;
+    }
+
+    public function getPageMeta()
+    {
+        return $this->getData()->chained->getComponent()->getPageMeta();
     }
 
     protected function _getMetaTags()
