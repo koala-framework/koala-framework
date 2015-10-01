@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "db547f116080582f862e786efe0f52ac",
+    "hash": "3e4f866482ace1c86d6c76691d586614",
+    "content-hash": "7e3e27ab3901fb1c668c4ded375168bf",
     "packages": [
         {
             "name": "jbroadway/urlify",
@@ -164,6 +165,42 @@
             "description": "Library for watching for file system changes",
             "homepage": "http://www.koala-framework.org/",
             "time": "2015-03-25 08:35:54"
+        },
+        {
+            "name": "koala-framework/kwf-trl-jsparser",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/koala-framework/kwf-trl-jsparser.git",
+                "reference": "9fde1d7d47a5329a7b35decb54baf940ef3c2d10"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/koala-framework/kwf-trl-jsparser/zipball/9fde1d7d47a5329a7b35decb54baf940ef3c2d10",
+                "reference": "9fde1d7d47a5329a7b35decb54baf940ef3c2d10",
+                "shasum": ""
+            },
+            "require": {
+                "koala-framework/composer-extra-assets": "1.1.*",
+                "symfony/process": "~2.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "extra": {
+                "require-npm": {
+                    "esprima": "1.2.2"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Kwf_TrlJsParser_": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Parses js code for trl-calls and returns list",
+            "time": "2015-10-01 13:35:27"
         },
         {
             "name": "koala-framework/library-css3pie",
@@ -524,12 +561,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Console.git",
+                "url": "https://github.com/symfony/console.git",
                 "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/d6cf02fe73634c96677e428f840704bfbcaec29e",
+                "url": "https://api.github.com/repos/symfony/console/zipball/d6cf02fe73634c96677e428f840704bfbcaec29e",
                 "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e",
                 "shasum": ""
             },
@@ -581,12 +618,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/EventDispatcher.git",
+                "url": "https://github.com/symfony/event-dispatcher.git",
                 "reference": "9310b5f9a87ec2ea75d20fec0b0017c77c66dac3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/9310b5f9a87ec2ea75d20fec0b0017c77c66dac3",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/9310b5f9a87ec2ea75d20fec0b0017c77c66dac3",
                 "reference": "9310b5f9a87ec2ea75d20fec0b0017c77c66dac3",
                 "shasum": ""
             },
@@ -1545,7 +1582,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "koala-framework/kwf-trl-jsparser": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
