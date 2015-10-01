@@ -98,7 +98,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $contents = $this->_getRawContents(null);
             $ret = array(
                 'contents' => $contents,
-                'trlElements' => Kwf_Trl_Parser_JsParser::parseContent($contents)
+                'trlElements' => Kwf_TrlJsParser_JsParser::parseContent($contents)
             );
             unset($contents);
         }
