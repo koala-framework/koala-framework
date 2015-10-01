@@ -65,7 +65,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
 
             if ($useTrl) {
-                file_put_contents("$buildFile.min.js.trl", serialize(Kwf_Trl_Parser_JsParser::parseContent($contents)));
+                file_put_contents("$buildFile.min.js.trl", serialize(Kwf_TrlJsParser_JsParser::parseContent($contents)));
             }
         }
 
