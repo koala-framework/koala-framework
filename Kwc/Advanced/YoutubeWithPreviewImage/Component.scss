@@ -1,31 +1,31 @@
 .kwcClass {
     position: relative;
 
-    .image {
+    &__image {
         position: relative;
         cursor: pointer;
         z-index: 2;
-
-        .playButton {
-            position: absolute;
-            text-align: center;
-            width: 100%;
-            top: 50%;
-        }
     }
 
-    .youtubeContainer {
+    &__playButton {
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        top: 50%;
+    }
+
+    &__youtubeContainer {
         position: absolute;
         width: auto;
         z-index: 3;
-
-        .youtubePlayer {
-            display: none;
-        }
     }
 
-    &.ratio16x9 {
-        .youtubeContainer {
+    &__youtubePlayer {
+        display: none;
+    }
+
+    &--ratio16x9 {
+        .kwcBem__youtubeContainer {
             padding-bottom: 56.27%;
             height: 0;
 
@@ -36,8 +36,8 @@
             }
         }
     }
-    &.ratio4x3 {
-        .youtubeContainer {
+    &--ratio4x3 {
+        .kwcBem__youtubeContainer {
             padding-bottom: 75%;
             height: 0;
 

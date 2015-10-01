@@ -68,10 +68,10 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
         if ($d = $ret['row']->dimensions) {
             if ($d == '16x9') {
                 if ($config['width']) $config['height'] = ($config['width'] / 16) * 9;
-                $config['ratio'] = $d;
+                $config['ratio'] = self::getBemClass($this, '--ratio'.$d);
             } else if ($d == '4x3') {
                 if ($config['width']) $config['height'] = ($config['width'] / 4) * 3;
-                $config['ratio'] = $d;
+                $config['ratio'] = self::getBemClass($this, '--ratio'.$d);
             }
         }
         $ret['config'] = array_merge($config, array('playerVars' => $this->_getSetting('playerVars')));

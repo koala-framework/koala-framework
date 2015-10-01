@@ -3,32 +3,35 @@
 .kwcClass {
     position: relative;
 
-    .youtubeContainer {
+    &__youtubeContainer {
         background-color: white;
         position: relative;
         overflow: hidden;
         height: 0px;
         z-index: 1;
+    }
 
-        &.ratio16x9 {
+    &__loading {
+        @include default-loading-animation-big;
+    }
+
+    &__youtubePlayer iframe {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
+    }
+
+    &--ratio16x9 {
+        .kwcBem__youtubeContainer {
             padding-bottom: 56.25%;
         }
-        &.ratio4x3 {
+    }
+
+    &--ratio4x3 {
+        .kwcBem__youtubeContainer {
             padding-bottom: 75%;
-        }
-
-        .outerLoading {
-            .loading {
-                @include default-loading-animation-big;
-            }
-        }
-
-        .youtubePlayer iframe {
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            left: 0;
-            top: 0;
         }
     }
 }

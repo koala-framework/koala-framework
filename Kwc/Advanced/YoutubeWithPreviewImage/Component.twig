@@ -1,0 +1,20 @@
+<div class="{{ rootElementClass }} {{ config['ratio'] }}" data-config="{{ config|json_encode() }}">
+    <div class="{{ 'outerYoutubeContainer'|bemClass }}">
+        <div class="{{ 'image'|bemClass }}">
+            {{ renderer.component(previewImage) }}
+            <div class="{{ 'playButton'|bemClass }}">
+                <div class="{{ 'innerPlayButton'|bemClass }}">
+                    {{ data.trl('Start Video') }}
+                </div>
+            </div>
+        </div>
+        <div class="{{ 'youtubeContainer'|bemClass }}">
+            <div class="{{ 'outerLoading'|bemClass }}">
+                <div class="{{ 'loading'|bemClass }}"></div>
+            </div>
+            <div class="{{ 'youtubePlayer'|bemClass }}">
+                <input type="hidden" value="{{ config|json_encode() }}" />
+            </div>
+        </div>
+    </div>
+</div>
