@@ -3,7 +3,7 @@
 .kwcClass {
     position: relative;
 
-    &__youtubeContainer {
+    .kwcBem__youtubeContainer {
         background-color: white;
         position: relative;
         overflow: hidden;
@@ -11,11 +11,11 @@
         z-index: 1;
     }
 
-    &__loading {
+    .kwcBem__loading {
         @include default-loading-animation-big;
     }
 
-    &__youtubePlayer iframe {
+    .kwcBem__youtubePlayer iframe {
         position: absolute;
         height: 100%;
         width: 100%;
@@ -23,13 +23,13 @@
         top: 0;
     }
 
-    &--ratio16x9 {
+    &.kwcBem--ratio16x9 {
         .kwcBem__youtubeContainer {
             padding-bottom: 56.25%;
         }
     }
 
-    &--ratio4x3 {
+    &.kwcBem--ratio4x3 {
         .kwcBem__youtubeContainer {
             padding-bottom: 75%;
         }
