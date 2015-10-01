@@ -41,7 +41,9 @@ class Kwc_Box_MetaTagsContent_Trl_Component extends Kwc_Box_MetaTags_Trl_Compone
                 if ($metaTags && is_instance_of($metaTags->componentClass, 'Kwc_Box_MetaTagsContent_Trl_Component')) {
                     $row = $metaTags->getComponent()->getRow();
                     if (!isset($ret['og:title']) && $row->og_title) {
-                        $ret['og:title'] = $row->og_title;
+                        $title = $this->getData()->getTitle(); //append own title
+                        if ($title) $title .= ' - ';
+                        $ret['og:title'] = $title.$row->og_title;
                     }
                     if (!isset($ret['og:site_name']) && $row->og_site_name) {
                         $ret['og:site_name'] = $row->og_site_name;
