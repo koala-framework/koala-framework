@@ -1,4 +1,4 @@
-<div class="<?=$this->rootElementClass?> ratio<?=$this->config['ratio']?>">
+<div class="<?=$this->rootElementClass?> ratio<?=$this->config['ratio']?>" data-config="<?=htmlspecialchars(json_encode($this->config))?>">
     <div class="outerYoutubeContainer">
         <div class="image">
             <?=$this->component($this->previewImage)?>

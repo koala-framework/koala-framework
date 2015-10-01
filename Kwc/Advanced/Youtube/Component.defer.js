@@ -16,7 +16,7 @@ onReady.onShow('.kwcClass .youtubePlayer', function(el) {
         if (config.playerVars.autoplay) kwcAdvancedYoutube.data('player').playVideo();
     } else if (config.videoId) {
         youtubeLoader(function() {
-            var loadingEl = kwcAdvancedYoutube.child('.outerLoading');
+            var loadingEl = kwcAdvancedYoutube.find('.outerLoading');
             loadingEl.css('display', 'nonde');
             var youtubePlayerEl = $('<div></div>');
             el.append(youtubePlayerEl);

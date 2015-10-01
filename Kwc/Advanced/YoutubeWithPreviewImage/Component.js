@@ -1,4 +1,5 @@
 var onReady = require('kwf/on-ready');
+var youtubeLoader = require('kwf/youtube/loader');
 
 onReady.onRender('.kwcClass .outerYoutubeContainer', function youtubePlayer(el) {
     var youtubeApiLoaded = false;
@@ -8,9 +9,8 @@ onReady.onRender('.kwcClass .outerYoutubeContainer', function youtubePlayer(el) 
     var youtubePlayerEl = youtubeContainerEl.children('.youtubePlayer');
     var loadingEl = youtubeContainerEl.children('.outerLoading');
 
-
     imageEl.click(function(ev) {
-        Kwf.Utils.YoutubePlayer.load(function() {});
+        youtubeLoader(function() {});
         imageEl.fadeOut(300, function() {
             youtubeContainerEl.css('position', 'relative');
             youtubePlayerEl.show();
