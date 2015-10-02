@@ -8,7 +8,7 @@ class Kwf_View_Ext extends Kwf_View
         }
 
         $ret = parent::render($name);
-        $ret = $this->_replaceKwfUp($ret);
+        $ret = self::_replaceKwfUp($ret);
         return $ret;
     }
 
