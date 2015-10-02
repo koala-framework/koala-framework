@@ -1,5 +1,5 @@
 <a name="<?=$this->item->componentId;?>"></a>
-<div class="entry <?=$this->dynamic('FirstLast')?>">
+<article class="entry <?=$this->dynamic('FirstLast')?>">
     <h2>
         <? if ($this->hasContent($this->item)) { ?>
             <?=$this->componentLink($this->item)?>
@@ -32,4 +32,4 @@
         </div>
     <? } ?>
     <div class="kwfUp-clear"></div>
-</div>
+</article>

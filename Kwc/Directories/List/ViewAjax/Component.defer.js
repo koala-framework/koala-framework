@@ -385,7 +385,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
         this.kwfMainContent.hide();
 
             //style: 'width: ' + this.kwfMainContent.getStyle('width'),
-        this.detailEl = $('<div class="kwfMainContent loadingContent '+classNames+'""><div class="loading"></div></div>');
+        this.detailEl = $('<main class="kwfMainContent loadingContent '+classNames+'""><div class="loading"></div></main>');
         this.kwfMainContent.after(this.detailEl);
 
         $.ajax({
