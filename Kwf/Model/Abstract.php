@@ -1231,8 +1231,11 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                     self::_findAllInstancesProcessModel($ret, $g['model']);
                 }
             }
-
         }
+
+        //hardcoded models that always exist
+        self::_findAllInstancesProcessModel($ret, 'Kwf_Util_Model_Welcome');
+        self::_findAllInstancesProcessModel($ret, 'Kwf_Util_Model_Redirects');
         return $ret;
     }
 
