@@ -16,6 +16,11 @@ class Kwc_Menu_Expanded_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
         }
     }
 
+    public function getMenuData()
+    {
+        return $this->getData()->chained->getComponent()->getMenuData();
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
