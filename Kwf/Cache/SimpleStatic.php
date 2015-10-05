@@ -9,6 +9,8 @@
  */
 class Kwf_Cache_SimpleStatic
 {
+    private static $_cache = array(); //only used when apc is not used (and also on cli)
+
     private static function _processId($cacheId)
     {
         return str_replace(array('/', '+', '='), array('_', '__', ''), base64_encode($cacheId));
@@ -27,29 +29,36 @@ class Kwf_Cache_SimpleStatic
     public static function fetch($cacheId, &$success = true)
     {
         static $prefix;
-        if (extension_loaded('apc')) {
+        if (extension_loaded('apc') && PHP_SAPI != 'cli') {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apc_fetch($prefix.$cacheId, $success);
         } else {
+            if (array_key_exists($cacheId, self::$_cache)) {
+                $success = true;
+                return self::$_cache[$cacheId];
+            }
             $file = self::_getFileNameForCacheId($cacheId);
             if (!file_exists($file)) {
                 $success =  false;
                 return false;
             }
             $success = true;
-            return unserialize(file_get_contents($file));
+            $ret = unserialize(file_get_contents($file));
+            self::$_cache[$cacheId] = $ret;
+            return $ret;
         }
     }
 
     public static function add($cacheId, $data)
     {
         static $prefix;
-        if (extension_loaded('apc')) {
+        if (extension_loaded('apc') && PHP_SAPI != 'cli') {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apc_add($prefix.$cacheId, $data);
         } else {
-             $file = self::_getFileNameForCacheId($cacheId);
-             return file_put_contents($file, serialize($data));
+            self::$_cache[$cacheId] = $data;
+            $file = self::_getFileNameForCacheId($cacheId);
+            return file_put_contents($file, serialize($data));
         }
     }
 
@@ -63,6 +72,7 @@ class Kwf_Cache_SimpleStatic
         if (extension_loaded('apc')) {
             if (php_sapi_name() == 'cli') {
                 Kwf_Util_Apc::callClearCacheByCli(array('clearCacheSimpleStatic'=>$cacheIdPrefix));
+                self::$_cache = array();
             } else {
                 if (!class_exists('APCIterator')) {
                     throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
@@ -85,6 +95,7 @@ class Kwf_Cache_SimpleStatic
                 }
             }
         } else {
+            self::$_cache = array();
             //don't use $cacheIdPrefix as filenames are base64 encoded
             foreach (glob('cache/simple/*') as $f) {
                 unlink($f);
@@ -104,6 +115,7 @@ class Kwf_Cache_SimpleStatic
         $ret = true;
         if (!extension_loaded('apc')) {
             foreach ($cacheIds as $cacheId) {
+                unset(self::$_cache[$cacheId]);
                 $file = self::_getFileNameForCacheId($cacheId);
                 if (!file_exists($file)) {
                     $ret = false;
@@ -121,6 +133,7 @@ class Kwf_Cache_SimpleStatic
                 $ids[] = $prefix.$cacheId;
             }
             if (php_sapi_name() == 'cli' && $ids) {
+                unset(self::$_cache[$cacheId]);
                 $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
                 if (!$result['result']) $ret = false;
             }
