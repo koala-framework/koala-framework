@@ -13,40 +13,26 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     var menuHtml = [];
     var fetchedPages = {};
 
-    var template;
-    if (config.showSubmenus) {
-        template = _.template(
-            '<ul class="kwfUp-menu">\n' +
-                '<% if (isRoot) { %>' +
-                    '<% _.each(item.pages, function(page) { %>' +
-                        '<li class="<% if (page.hasChildren) {  %>kwfUp-hasChildren<% } else if (page.isParent) { %>kwfUp-parent<% } %>">\n' +
-                            '<a href="<%= page.url %>" data-id="<%= page.id %>" data-children="<%= (page.hasChildren || page.children && page.children.length) || false %>"><%= page.name %></a>\n'+
-                        '</li>\n'+
-                    '<% }) %>'+
-                '<% } else { %>'+
-                    '<% if (item.children && item.children.length) { %>'+
-                        '<li class="kwfUp-back"><a href="#">'+trlKwf('back')+'</a></li>\n'+
-                    '<% } %>'+
-                    '<% _.each(item.children, function(child) { %>'+
-                        '<li class="<% if (child.hasChildren) {  %>kwfUp-hasChildren<% } else if (child.isParent) { %>kwfUp-parent<% } %>">\n' +
-                            '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %></a>\n'+
-                        '</li>\n' +
-                    '<% }) %>' +
-                '<% } %>' +
-            '</ul>\n'
-        );
-    } else {
-        template = _.template(
-            '<ul class="kwfUp-menu">\n' +
+    var template = _.template(
+        '<ul class="kwfUp-menu">\n' +
+            '<% if (isRoot) { %>' +
                 '<% _.each(item.pages, function(page) { %>' +
-                    '<li>\n' +
-                        '<a href="<%= page.url %>" data-id="<%= page.id %>" data-children="false"><%= page.name %></a>\n'+
+                    '<li class="<% if (page.hasChildren) {  %>kwfUp-hasChildren<% } else if (page.isParent) { %>kwfUp-parent<% } %>">\n' +
+                        '<a href="<%= page.url %>" data-id="<%= page.id %>" data-children="<%= (page.hasChildren || page.children && page.children.length) || false %>"><%= page.name %></a>\n'+
                     '</li>\n'+
                 '<% }) %>'+
-            '</ul>\n'
-        );
-    }
-
+            '<% } else { %>'+
+                '<% if (item.children && item.children.length) { %>'+
+                    '<li class="kwfUp-back"><a href="#">'+trlKwf('back')+'</a></li>\n'+
+                '<% } %>'+
+                '<% _.each(item.children, function(child) { %>'+
+                    '<li class="<% if (child.hasChildren) {  %>kwfUp-hasChildren<% } else if (child.isParent) { %>kwfUp-parent<% } %>">\n' +
+                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %></a>\n'+
+                    '</li>\n' +
+                '<% }) %>' +
+            '<% } %>' +
+        '</ul>\n'
+    );
 
     var slide = function(direction, id) {
         var menu = el.find('.kwfUp-slider > ul.kwfUp-menu');
