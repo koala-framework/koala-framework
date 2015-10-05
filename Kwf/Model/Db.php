@@ -129,7 +129,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     protected function _getUniqueId($proxiedRow)
     {
         $keys = $this->getPrimaryKey();
-        if (!is_array($keys)) $keys = array($keys);
+        if (!is_array($keys)) return $proxiedRow->$keys;
         $ids = array();
         foreach ($keys as $key) {
             $key = $this->transformColumnName($key);
