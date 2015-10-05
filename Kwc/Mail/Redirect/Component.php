@@ -11,6 +11,7 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         $ret['childModel'] = 'Kwc_Mail_Redirect_Model';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
+        $ret['flags']['noIndex'] = true;
         $ret['contentSender'] = 'Kwc_Mail_Redirect_ContentSender';
         return $ret;
     }
