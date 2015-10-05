@@ -11,6 +11,17 @@ class Kwc_Directories_List_Cc_Component extends Kwc_Abstract_Composite_Cc_Compon
         return $ret;
     }
 
+    public static function getItemDirectoryClasses($componentClass)
+    {
+        $masterCC = Kwc_Abstract::getSetting($componentClass, 'masterComponentClass');
+        $ret = array();
+        $c = strpos($masterCC, '.') ? substr($masterCC, 0, strpos($masterCC, '.')) : $masterCC;
+        foreach (call_user_func(array($c, 'getItemDirectoryClasses'), $masterCC) as $masterDirCls) {
+            $ret[] = self::getChainedComponentClass($masterDirCls, 'Cc');
+        }
+        return $ret;
+    }
+
     protected function _getChainedComponent()
     {
         return $this->getData()->chained;
