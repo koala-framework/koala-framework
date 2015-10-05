@@ -6,7 +6,10 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         $ret = array();
 
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
-            if (in_array('Kwc_Directories_List_Component', Kwc_Abstract::getParentClasses($class)) || in_array('Kwc_Directories_List_Trl_Component', Kwc_Abstract::getParentClasses($class))) {
+            if (in_array('Kwc_Directories_List_Component', Kwc_Abstract::getParentClasses($class)) ||
+                in_array('Kwc_Directories_List_Trl_Component', Kwc_Abstract::getParentClasses($class)) ||
+                in_array('Kwc_Directories_List_Cc_Component', Kwc_Abstract::getParentClasses($class))
+            ) {
                 if (Kwc_Abstract::hasChildComponentClass($class, 'child', 'view')
                     && $this->_class == Kwc_Abstract::getChildComponentClass($class, 'child', 'view')
                 ) {
