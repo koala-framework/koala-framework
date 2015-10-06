@@ -146,6 +146,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             $numProcesses++;
             $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php component-pages-meta rebuild-worker";
             if ($this->_getParam('debug')) $cmd .= " --debug";
+            if ($this->_getParam('verbose')) $cmd .= " --verbose";
             passthru($cmd, $status);
 
             if ($status != 0) {
