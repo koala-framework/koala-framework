@@ -10,6 +10,8 @@ class Kwc_Newsletter_EditSubscriber_Component extends Kwc_Form_Component
         $ret['generators']['child']['component']['success'] =
             'Kwc_Newsletter_EditSubscriber_Success_Component';
         $ret['viewCache'] = false;
+        $ret['flags']['skipFulltext'] = true;
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
 

@@ -8,6 +8,8 @@ class Kwc_Newsletter_Unsubscribe_Component extends Kwc_Abstract_Composite_Compon
         $ret['cssClass'] = 'webStandard';
         $ret['generators']['child']['component']['form'] = 'Kwc_Newsletter_Unsubscribe_Form_Component';
         $ret['placeholder']['headline'] = trlKwfStatic('Unsubscribe newsletter');
+        $ret['flags']['skipFulltext'] = true;
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
 
