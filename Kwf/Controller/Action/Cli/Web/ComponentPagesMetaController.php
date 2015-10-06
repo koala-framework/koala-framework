@@ -14,12 +14,13 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         foreach ($it as $row) {
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
             if (!$page) {
-                if (!$this->_getParam('slient')) {
+                if (!$this->_getParam('silent')) {
                     echo "\n$row->page_id is in pages_meta aber but not in page tree, deleting...\n";
                 }
                 $row->delete();
             }
-            if ($i++ % 100) {
+            if (memory_get_usage() > 128*1024*1024) {
+                if ($this->_getParam('debug')) echo "Collect garbage...\n";;
                 Kwf_Component_Data_Root::getInstance()->freeMemory();
             }
 
