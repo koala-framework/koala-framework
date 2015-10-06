@@ -40,7 +40,18 @@ class Kwf_Util_Maintenance_Dispatcher
                 if ($debug) echo "\nexecuting ".get_class($job)."\n";
                 $t = microtime(true);
                 $job->execute($debug);
-                if ($debug) echo "\nexecuted ".get_class($job)." in ".round(microtime(true)-$t, 3)."s\n";
+                $t = microtime(true)-$t;
+                if ($debug) echo "\nexecuted ".get_class($job)." in ".round($t, 3)."s\n";
+                $maxTime = 60;
+                if ($jobFrequency == FREQUENCY_DAILY) {
+                    $maxTime = 60*60;
+                }
+                if ($t > $maxTime) {
+                    $msg = "Maintenance job ".get_class($job)." took ".round($t, 3)."s to execute which is above the limit of $maxTime.";
+                    file_put_contents('php://error', $msg."\n");
+                    $e = new Kwf_Exception($msg);
+                    $e->logOrThrow();
+                }
             }
         }
     }
