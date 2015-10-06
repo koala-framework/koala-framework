@@ -66,7 +66,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
             $childPages = $page->getChildPseudoPages(
                 array('pageGenerator' => false),
-                array('pseudoPage'=>false)
+                array('pseudoPage'=>false, 'unique'=>false) //don't recurse into unique boxes, causes endless recursion if box creates page
             );
             $childPages = array_merge($childPages, $page->getChildPseudoPages(
                 array('pageGenerator' => true),
