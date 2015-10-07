@@ -29,11 +29,13 @@ class Kwf_Cache_SimpleStatic
     public static function fetch($cacheId, &$success = true)
     {
         static $prefix;
-        if (extension_loaded('apc') && PHP_SAPI != 'cli') {
+        static $extensionLoaded;
+        if (!isset($extensionLoaded)) $extensionLoaded = extension_loaded('apc');
+        if ($extensionLoaded && PHP_SAPI != 'cli') {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apc_fetch($prefix.$cacheId, $success);
         } else {
-            if (array_key_exists($cacheId, self::$_cache)) {
+            if (isset(self::$_cache[$cacheId])) {
                 $success = true;
                 return self::$_cache[$cacheId];
             }
@@ -52,7 +54,10 @@ class Kwf_Cache_SimpleStatic
     public static function add($cacheId, $data)
     {
         static $prefix;
-        if (extension_loaded('apc') && PHP_SAPI != 'cli') {
+        static $extensionLoaded;
+        if (!isset($extensionLoaded)) $extensionLoaded = extension_loaded('apc');
+
+        if ($extensionLoaded && PHP_SAPI != 'cli') {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apc_add($prefix.$cacheId, $data);
         } else {
