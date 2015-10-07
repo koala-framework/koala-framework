@@ -1,15 +1,6 @@
 <?php
 class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
 {
-    public function duplicate($data = array())
-    {
-        $data = array_merge($this->toArray(), $data);
-        unset($data['id']);
-        $new = $this->getTable()->createRow($data);
-        $new->save();
-        return $new;
-    }
-
     // Übersetzt Mysql-Datum in Timestamp
     public function getTimestamp($columnName)
     {
@@ -17,37 +8,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
         if ($parts == array("")) return null; //Bugfix, falls kein Datum vorhanden
         return mktime(0, 0, 0, $parts[1], $parts[2], $parts[0]);
     }
-
-    protected function _duplicateParentRow($tableClassname, $ruleKey = null)
-    {
-        $row = $this->findParentRow($tableClassname, $ruleKey);
-        $new = $row->duplicate();
-        $ref = $this->getTable()->getReference($tableClassname, $ruleKey);
-        $data = array();
-        foreach ($ref['columns'] as $k=>$c) {
-            $this->$c = $new->{$ref['refColumns'][$k]};
-        }
-        $this->save();
-    }
-
-    protected function _duplicateDependentTable($tableClassname, $ruleKey = null)
-    {
-        $rowset = $this->findDependentRowset($tableClassname, $ruleKey);
-        foreach ($rowset as $row) {
-            $ref = $row->getTable()->getReference($tableClassname, $ruleKey);
-            $data = array();
-            foreach ($ref['columns'] as $k=>$c) {
-                $data[$ref['refColumns'][$k]] = $this->$c;
-            }
-            $row->duplicate($data);
-        }
-    }
-
-    private function _getIdString()
-    {
-        return implode(',', $this->_getPrimaryKey());
-    }
-
 
     public function toDebug()
     {
@@ -60,21 +20,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
         $ret = "<pre>$ret</pre>";
         return $ret;
     }
-
-    //Speichern und abei die Filter nicht verwenden
-    //wird benötigt bei der Nummerierung um eine Endlusschleife zu verhindern
-    public function saveSkipFilters()
-    {
-        $this->_skipFilters = true;
-        $this->save();
-        $this->_skipFilters = false;
-    }
-
-
-
-
-
-
 
 
 
