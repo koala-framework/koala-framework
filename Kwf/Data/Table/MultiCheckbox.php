@@ -4,7 +4,7 @@ class Kwf_Data_Table_MultiCheckbox extends Kwf_Data_Abstract
     protected $_values;
     protected $_tableName;
 
-    public function __construct($tableName, Zend_Db_Table_RowSet_Abstract $values)
+    public function __construct($tableName, Kwf_Db_Table_RowSet_Abstract $values)
     {
         $this->_tableName = $tableName;
         $this->_values = $values;

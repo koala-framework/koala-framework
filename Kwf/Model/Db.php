@@ -91,7 +91,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $cache = self::_getMetadataCache();
             $cacheId = md5($this->getUniqueIdentifier()).'_columns';
             if (!$this->_columns = $cache->load($cacheId)) {
-                $this->_columns = $this->getTable()->info(Zend_Db_Table_Abstract::COLS);
+                $this->_columns = $this->getTable()->info(Kwf_Db_Table::COLS);
                 $cache->save($this->_columns, $cacheId);
             }
         }
@@ -282,7 +282,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     protected function _applySelect(Zend_Db_Select $dbSelect, Kwf_Model_Select $select)
     {
-        if ($dbSelect instanceof Zend_Db_Table_Select) {
+        if ($dbSelect instanceof Kwf_Db_Table_Select) {
             $dbSelect->setIntegrityCheck(false);
         }
 
@@ -1036,7 +1036,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     {
         if (!$this->_tableName) {
             if (is_string($this->_table)) return $this->_table;
-            return $this->_table->info(Zend_Db_Table_Abstract::NAME);
+            return $this->_table->info(Kwf_Db_Table::NAME);
         }
         return $this->_tableName;
     }

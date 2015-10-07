@@ -1,5 +1,5 @@
 <?php
-class Kwf_Model_Db_DbSibling_MasterTable extends Kwf_Db_Table_Abstract
+class Kwf_Model_Db_DbSibling_MasterTable extends Kwf_Db_Table
 {
     public $nextSelect;
 

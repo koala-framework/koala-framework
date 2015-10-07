@@ -22,8 +22,8 @@ class Kwf_Component_Model extends Kwf_Model_Abstract
 
     public function isEqual(Kwf_Model_Interface $other) {
         if ($other instanceof Kwf_Component_Model &&
-            $this->getTable()->info(Zend_Db_Table_Abstract::NAME) ==
-            $other->getTable()->info(Zend_Db_Table_Abstract::NAME)
+            $this->getTable()->info(Kwf_Db_Table::NAME) ==
+            $other->getTable()->info(Kwf_Db_Table::NAME)
         ) {
             return true;
         }
