@@ -13,7 +13,7 @@ class Kwc_User_Login_Form_Success_Component extends Kwc_Form_Success_Component
         $ret = parent::getTemplateVars();
         $user = Kwf_Registry::get('userModel')->getAuthedUser();
         $ret['redirectToUrl'] = $this->getData()
-            ->getParentByClass('Kwc_User_Login_Component')
+            ->getParentByClass(array('Kwc_User_Login_Component', 'Kwc_User_Login_Trl_Component'))
             ->getComponent()
             ->getUrlForRedirect($_REQUEST, $user);
         return $ret;
