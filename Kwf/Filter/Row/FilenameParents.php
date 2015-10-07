@@ -20,11 +20,7 @@ class Kwf_Filter_Row_FilenameParents extends Kwf_Filter_Row_Abstract
             }
             $ret = Kwf_Filter::filterStatic($row->__toString(), $this->_filter)
                 . $ret;
-            if ($row instanceof Kwf_Model_Row_Interface) {
-                $row = $row->getParentRow($this->_parentRule);
-            } else {
-                $row = $row->findParentRow(get_class($row->getTable()));
-            }
+            $row = $row->getParentRow($this->_parentRule);
         } while ($row);
 
         return $ret;
