@@ -89,7 +89,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
 
             if ($useTrl) {
-                file_put_contents("$buildFile.min.js.trl", serialize(Kwf_Trl_Parser_JsParser::parseContent($contents)));
+                file_put_contents("$buildFile.min.js.trl", serialize(Kwf_TrlJsParser_JsParser::parseContent($contents)));
             }
         } else {
             $map = new Kwf_SourceMaps_SourceMap(file_get_contents("$buildFile.min.js.map.json"), file_get_contents("$buildFile.min.js"));
@@ -123,7 +123,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         } else {
             $contents = $this->_getRawContents(null);
             $map = Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
-            $trlElements = Kwf_Trl_Parser_JsParser::parseContent($contents);
+            $trlElements = Kwf_TrlJsParser_JsParser::parseContent($contents);
             unset($contents);
         }
 

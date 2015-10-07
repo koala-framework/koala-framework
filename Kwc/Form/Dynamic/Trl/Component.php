@@ -17,8 +17,8 @@ class Kwc_Form_Dynamic_Trl_Component extends Kwc_Abstract_Composite_Trl_Componen
 
     public function getTemplateVars()
     {
+        $ret = parent::getTemplateVars();
         $data = $this->getData();
-
         $ret['data'] = $data;
         $ret['chained'] = $data->chained;
         $ret['template'] = self::getTemplateFile($data->chained->componentClass);

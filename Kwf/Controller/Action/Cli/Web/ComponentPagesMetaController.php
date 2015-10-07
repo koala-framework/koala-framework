@@ -3,6 +3,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 {
     public function checkForInvalidAction()
     {
+        set_time_limit(0);
         $model = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
         $select = new Kwf_Model_Select();
         $it = new Kwf_Model_Iterator_Packages(
@@ -13,12 +14,13 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         foreach ($it as $row) {
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
             if (!$page) {
-                if (!$this->_getParam('slient')) {
+                if (!$this->_getParam('silent')) {
                     echo "\n$row->page_id is in pages_meta aber but not in page tree, deleting...\n";
                 }
                 $row->delete();
             }
-            if ($i++ % 10) {
+            if (memory_get_usage() > 128*1024*1024) {
+                if ($this->_getParam('debug')) echo "Collect garbage...\n";;
                 Kwf_Component_Data_Root::getInstance()->freeMemory();
             }
 
@@ -65,7 +67,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
             $childPages = $page->getChildPseudoPages(
                 array('pageGenerator' => false),
-                array('pseudoPage'=>false)
+                array('pseudoPage'=>false, 'unique'=>false) //don't recurse into unique boxes, causes endless recursion if box creates page
             );
             $childPages = array_merge($childPages, $page->getChildPseudoPages(
                 array('pageGenerator' => true),
@@ -123,7 +125,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         if (!$this->_getParam('skip-check-for-invalid')) {
             $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php component-pages-meta check-for-invalid";
             if ($this->_getParam('debug')) $cmd .= " --debug";
-            system($cmd);
+            passthru($cmd);
         }
 
         $startTime = microtime(true);
@@ -141,11 +143,12 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             'addedPages' => 0,
         );
         file_put_contents($statsFile, serialize($stats));
-        while(true) {
+        while (true) {
             $numProcesses++;
             $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php component-pages-meta rebuild-worker";
             if ($this->_getParam('debug')) $cmd .= " --debug";
-            system($cmd, $status);
+            if ($this->_getParam('verbose')) $cmd .= " --verbose";
+            passthru($cmd, $status);
 
             if ($status != 0) {
                 throw new Kwf_Exception("child process failed");

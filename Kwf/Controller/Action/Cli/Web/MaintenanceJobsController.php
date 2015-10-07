@@ -6,11 +6,6 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
         return "execute mainteanance commands, should be run by process-control";
     }
 
-    public static function shutdown()
-    {
-        file_put_contents('temp/shutdown-maintenance', time());
-    }
-
     public function runAction()
     {
         $debug = $this->_getParam('debug');
@@ -63,13 +58,7 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
                 $nextDailyRun = null;
                 Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY, $debug);
             }
-            for ($i=0; $i<10; $i++) {
-                if (file_exists('temp/shutdown-maintenance')) {
-                    if ($debug) echo "shutdown\n";
-                    exit;
-                }
-                sleep(1);
-            }
+            sleep(10);
         }
     }
 

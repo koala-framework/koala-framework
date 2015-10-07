@@ -26,7 +26,7 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
         return $languages;
     }
 
-    public function getLanguages($showCurrent)
+    public function getLanguages($showCurrent, $fallbackToHome)
     {
         $ret = array();
         foreach ($this->_getLanguages() as $l) {
@@ -57,6 +57,9 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
             }
             $home = $l->getChildPage(array('home'=>true));
             if ($home) {
+                if (!$fallbackToHome && !$page) {
+                    continue;
+                }
                 $ret[] = array(
                     'language' => $l->id,
                     'home' => $home,
@@ -67,7 +70,7 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
                 );
             }
         }
-        if ($showCurrent && count($ret) == 1) {
+        if ($showCurrent && $fallbackToHome && count($ret) == 1) {
             $ret = array();
         }
         return $ret;
@@ -77,7 +80,7 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['separator'] = $this->_getSetting('separator');
-        $ret['languages'] = $this->getLanguages($this->_getSetting('showCurrent'));
+        $ret['languages'] = $this->getLanguages($this->_getSetting('showCurrent'), true);
         return $ret;
     }
 

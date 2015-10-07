@@ -14,7 +14,6 @@ class Kwc_Basic_LinkTag_Extern_Component extends Kwc_Basic_LinkTag_Abstract_Comp
             'hasPopup'      => true, //TODO: bezeichnung von diesem setting ist scheiße
             'openType'      => null, //wenn hasPopup auf false
         ));
-        $ret['flags']['noIndex'] = true; //don't include in sitemap.xml
         return $ret;
     }
 

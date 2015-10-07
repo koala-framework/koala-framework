@@ -11,6 +11,8 @@ class Kwc_User_LostPassword_Component extends Kwc_Abstract_Composite_Component
         );
         $ret['generators']['child']['component']['form'] = 'Kwc_User_LostPassword_Form_Component';
         $ret['rootElementClass'] = 'kwfUp-webStandard kwfUp-webForm';
+        $ret['flags']['skipFulltext'] = true;
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
 }

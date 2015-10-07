@@ -13,10 +13,14 @@ class Kwc_Directories_List_Trl_Component extends Kwc_Abstract_Composite_Trl_Comp
         return $ret;
     }
 
-    public static function getItemDirectoryClasses($directoryClass)
+    public static function getItemDirectoryClasses($componentClass)
     {
-        //TODO
-        return array();
+        $masterCC = Kwc_Abstract::getSetting($componentClass, 'masterComponentClass');
+        $ret = array();
+        foreach (call_user_func(array($masterCC, 'getItemDirectoryClasses'), $masterCC) as $masterDirCls) {
+            $ret[] = self::getChainedComponentClass($masterDirCls, 'Trl');
+        }
+        return $ret;
     }
 
     public function getItemDirectory()

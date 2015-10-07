@@ -97,6 +97,12 @@ class Kwf_Component_Generator_Box_StaticSelect extends Kwf_Component_Generator_S
             if ($select->hasPart('whereId')) {
                 if ('-' . $data->id != $select->getPart('whereId')) continue;
             }
+            if ($select->hasPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                $selectClasses = $select->getPart(Kwf_Component_Select::WHERE_COMPONENT_CLASSES);
+                if (!in_array($data->componentClass, $selectClasses)) {
+                    continue;
+                }
+            }
             $ret[] = $data;
         }
         return $ret;
