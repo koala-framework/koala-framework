@@ -14,7 +14,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         foreach ($it as $row) {
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
             if (!$page) {
-                if (!$this->_getParam('silent')) {
+                if ($this->_getParam('debug')) {
                     echo "\n$row->page_id is in pages_meta aber but not in page tree, deleting...\n";
                 }
                 $row->delete();
@@ -161,7 +161,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             }
         }
 
-        if (!$this->_getParam('silent')) {
+        if ($this->_getParam('debug')) {
             $stats = unserialize(file_get_contents($statsFile));
             echo "fulltext reindex finished.\n";
             echo "duration: ".Kwf_View_Helper_SecondsAsDuration::secondsAsDuration(microtime(true)-$startTime)."s\n";
