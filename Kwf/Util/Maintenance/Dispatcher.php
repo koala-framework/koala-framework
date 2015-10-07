@@ -37,13 +37,13 @@ class Kwf_Util_Maintenance_Dispatcher
     {
         foreach (self::getAllMaintenanceJobs() as $job) {
             if ($job->getFrequency() == $jobFrequency) {
-                if ($debug) echo "\nexecuting ".get_class($job)."\n";
+                if ($debug) echo "executing ".get_class($job)."\n";
                 $t = microtime(true);
                 $job->execute($debug);
                 $t = microtime(true)-$t;
-                if ($debug) echo "\nexecuted ".get_class($job)." in ".round($t, 3)."s\n";
+                if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
                 $maxTime = 60;
-                if ($jobFrequency == FREQUENCY_DAILY) {
+                if ($jobFrequency == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY) {
                     $maxTime = 60*60;
                 }
                 if ($t > $maxTime) {
@@ -52,6 +52,7 @@ class Kwf_Util_Maintenance_Dispatcher
                     $e = new Kwf_Exception($msg);
                     $e->logOrThrow();
                 }
+                if ($debug) echo "\n";
             }
         }
     }
