@@ -35,13 +35,6 @@ class Kwf_Db_Table_Row implements ArrayAccess
     protected $_table = null;
 
     /**
-     * Primary row key(s).
-     *
-     * @var array
-     */
-    protected $_primary;
-
-    /**
      * Constructor.
      *
      * Supported params for $config are:-
@@ -66,12 +59,6 @@ class Kwf_Db_Table_Row implements ArrayAccess
         }
         if (isset($config['stored']) && $config['stored'] === true) {
             $this->_cleanData = $this->_data;
-        }
-
-        // Retrieve primary keys from table schema
-        if (($table = $this->_getTable())) {
-            $info = $table->info();
-            $this->_primary = (array) $info['primary'];
         }
 
         $this->init();
@@ -260,7 +247,7 @@ class Kwf_Db_Table_Row implements ArrayAccess
             $newPrimaryKey = $primaryKey;
         } else {
             //ZF-6167 Use tempPrimaryKey temporary to avoid that zend encoding fails.
-            $tempPrimaryKey = (array) $this->_primary;
+            $tempPrimaryKey = (array) $this->_getPrimaryKey();
             $newPrimaryKey = array(current($tempPrimaryKey) => $primaryKey);
         }
 
@@ -301,7 +288,7 @@ class Kwf_Db_Table_Row implements ArrayAccess
         /**
          * Were any of the changed columns part of the primary key?
          */
-        $pkDiffData = array_intersect_key($diffData, array_flip((array)$this->_primary));
+        $pkDiffData = array_intersect_key($diffData, array_flip((array)$this->_getPrimaryKey()));
 
         /**
          * Execute the UPDATE (this may throw an exception)
@@ -324,7 +311,7 @@ class Kwf_Db_Table_Row implements ArrayAccess
          * if the key is compound or a scalar if the key
          * is a scalar.
          */
-        $primaryKey = $this->_getPrimaryKey(true);
+        $primaryKey = $this->_getPrimaryKeyValues(true);
         if (count($primaryKey) == 1) {
             return current($primaryKey);
         }
@@ -387,19 +374,21 @@ class Kwf_Db_Table_Row implements ArrayAccess
         return $this->_table;
     }
 
+    protected function _getPrimaryKey()
+    {
+        // Retrieve primary keys from table schema
+        return $this->_table->info('primary');
+    }
+
     /**
      * Retrieves an associative array of primary keys.
      *
      * @param bool $useDirty
      * @return array
      */
-    protected function _getPrimaryKey($useDirty = true)
+    protected function _getPrimaryKeyValues($useDirty = true)
     {
-        if (!is_array($this->_primary)) {
-            throw new Kwf_Exception("The primary key must be set as an array");
-        }
-
-        $primary = array_flip($this->_primary);
+        $primary = array_flip($this->_getPrimaryKey());
         if ($useDirty) {
             $array = array_intersect_key($this->_data, $primary);
         } else {
@@ -421,7 +410,7 @@ class Kwf_Db_Table_Row implements ArrayAccess
     {
         $where = array();
         $db = $this->_getTable()->getAdapter();
-        $primaryKey = $this->_getPrimaryKey($useDirty);
+        $primaryKey = $this->_getPrimaryKeyValues($useDirty);
         $info = $this->_getTable()->info();
         $metadata = $info[Kwf_Db_Table::METADATA];
 
