@@ -10,8 +10,6 @@ class Kwf_Form_Field_MultiFields extends Kwf_Form_Field_Abstract
     {
         if (is_object($reference)) {
             $model = $reference;
-        } else if (class_exists($reference) && is_instance_of($reference, 'Zend_Db_Table_Abstract')) {
-            $model = new $reference();
         } else {
             $this->setReferenceName($reference);
         }

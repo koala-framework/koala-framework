@@ -177,17 +177,6 @@ class Kwf_Form extends Kwf_Form_NonTableForm
         return $this->_primaryKey;
     }
 
-    /**
-     * @internal
-     * @deprecated
-     */
-    public function setTable(Zend_Db_Table_Abstract $table)
-    {
-        $this->_model = new Kwf_Model_Db(array(
-            'table' => $table
-        ));
-        return $this;
-    }
     public function getModel()
     {
         return $this->_model;
