@@ -12,6 +12,12 @@ class Kwf_Exception_TestView extends Kwf_View
  */
 class Kwf_Exception_ExceptionTest extends Kwf_Test_TestCase
 {
+    public function tearDown()
+    {
+        parent::tearDown();
+        Kwf_Exception_Abstract::$logErrors = null;
+    }
+
     public function testExceptions()
     {
         // Ohne Mail
@@ -22,8 +28,7 @@ class Kwf_Exception_ExceptionTest extends Kwf_Test_TestCase
         $this->assertEquals($view->template, 'error.tpl');
 
         // Mit Mail
-        Zend_Registry::get('config')->debug->error->log = true;
-        Kwf_Config::deleteValueCache('debug.error.log');
+        Kwf_Exception_Abstract::$logErrors = true;
         $exception = new Kwf_Exception();
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
@@ -31,26 +36,22 @@ class Kwf_Exception_ExceptionTest extends Kwf_Test_TestCase
         $this->assertEquals($view->template, 'error.tpl');
 
         // Nicht-Kwf_Exception mit Mail
-        Zend_Registry::get('config')->debug->error->log = true;
-        Kwf_Config::deleteValueCache('debug.error.log');
+        Kwf_Exception_Abstract::$logErrors = true;
         $e = new Zend_Exception();
         $exception = new Kwf_Exception_Other($e);
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $e->getMessage());
         $this->assertFalse($view->debug);
         $this->assertEquals($view->template, 'error.tpl');
-        Zend_Registry::get('config')->debug->error->log = false;
-        Kwf_Config::deleteValueCache('debug.error.log');
+        Kwf_Exception_Abstract::$logErrors = null;
 
         // Kwf_Exception_NoLog mit Debug
-        Zend_Registry::get('config')->debug->error->log = true;
-        Kwf_Config::deleteValueCache('debug.error.log');
+        Kwf_Exception_Abstract::$logErrors = true;
         $exception = new Kwf_Exception_NoLog();
         $view = $this->_processException($exception);
         $this->assertEquals($view->message, $exception->getMessage());
         $this->assertFalse($view->debug);
-        Zend_Registry::get('config')->debug->error->log = false;
-        Kwf_Config::deleteValueCache('debug.error.log');
+        Kwf_Exception_Abstract::$logErrors = null;
         $this->assertEquals($view->template, 'error.tpl');
 
         // Kwf_Exception_NoLog ohne Debug
