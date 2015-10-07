@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_PagesMetaRow extends Kwf_Model_Db_Row
+class Kwf_Component_PagesMetaRow extends Kwf_Model_Proxy_Row
 {
     private static function _canHaveFulltext($class)
     {

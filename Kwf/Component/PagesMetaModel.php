@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_PagesMetaModel extends Kwf_Model_Db
+class Kwf_Component_PagesMetaModel extends Kwf_Model_Db_Proxy
 {
     protected $_table = 'kwf_pages_meta';
     protected $_primaryKey = 'page_id';

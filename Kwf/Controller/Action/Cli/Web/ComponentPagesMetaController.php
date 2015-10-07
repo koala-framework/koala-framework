@@ -4,7 +4,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
     public function checkForInvalidAction()
     {
         set_time_limit(0);
-        $model = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
+        $model = Kwf_Component_PagesMetaModel::getInstance();
         $select = new Kwf_Model_Select();
         $it = new Kwf_Model_Iterator_Packages(
             new Kwf_Model_Iterator_Rows($model, $select)
@@ -102,7 +102,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             }
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($pageId);
             if (!$page->isPage) continue;
-            $model = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
+            $model = Kwf_Component_PagesMetaModel::getInstance();
             $row = $model->getRow($page->componentId);
             if (!$row) {
                 $row = $model->createRow();
@@ -175,7 +175,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
     public function updateChangedJobAction()
     {
         $start = microtime(true);
-        $m = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
+        $m = Kwf_Component_PagesMetaModel::getInstance();
         $s = $m->select();
         $s->whereEquals('changed_recursive', true);
         foreach ($m->getRows($s) as $row) {
@@ -205,7 +205,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         );
         $ret = array();
         foreach ($childPages as $p) {
-            $m = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
+            $m = Kwf_Component_PagesMetaModel::getInstance();
             $r = $m->getRow($p->componentId);
             if (!$r) {
                 $r = $m->createRow();
