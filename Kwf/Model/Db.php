@@ -833,15 +833,6 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $dbSelect->__toString();
     }
 
-    public function find($id)
-    {
-        return new $this->_rowsetClass(array(
-            'rowset' => $this->getTable()->find($id),
-            'rowClass' => $this->_rowClass,
-            'model' => $this
-        ));
-    }
-
     public function getRow($select)
     {
         if (is_string($select) || is_int($select)) {
