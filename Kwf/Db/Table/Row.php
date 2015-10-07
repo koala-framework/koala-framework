@@ -128,31 +128,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
     protected $_table = null;
 
     /**
-     * Connected is true if we have a reference to a live
-     * Kwf_Db_Table object.
-     * This is false after the Rowset has been deserialized.
-     *
-     * @var boolean
-     */
-    protected $_connected = true;
-
-    /**
-     * A row is marked read only if it contains columns that are not physically represented within
-     * the database schema (e.g. evaluated columns/Zend_Db_Expr columns). This can also be passed
-     * as a run-time config options as a means of protecting row data.
-     *
-     * @var boolean
-     */
-    protected $_readOnly = false;
-
-    /**
-     * Name of the class of the Kwf_Db_Table object.
-     *
-     * @var string
-     */
-    protected $_tableClass = null;
-
-    /**
      * Primary row key(s).
      *
      * @var array
@@ -174,9 +149,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
     {
         if (isset($config['table']) && $config['table'] instanceof Kwf_Db_Table) {
             $this->_table = $config['table'];
-            $this->_tableClass = get_class($this->_table);
-        } elseif ($this->_tableClass !== null) {
-            $this->_table = $this->_getTableFromString($this->_tableClass);
         }
 
         if (isset($config['data'])) {
@@ -187,10 +159,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
         }
         if (isset($config['stored']) && $config['stored'] === true) {
             $this->_cleanData = $this->_data;
-        }
-
-        if (isset($config['readOnly']) && $config['readOnly'] === true) {
-            $this->setReadOnly(true);
         }
 
         // Retrieve primary keys from table schema
@@ -268,7 +236,7 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
         if (!array_key_exists($columnName, $this->_data)) {
             throw new Kwf_Exception("Specified column \"$columnName\" is not in the row");
         }
-        if ($this->isConnected() && in_array($columnName, $this->_table->info('primary'))) {
+        if (in_array($columnName, $this->_table->info('primary'))) {
             throw new Kwf_Exception("Specified column \"$columnName\" is a primary key and should not be unset");
         }
         unset($this->_data[$columnName]);
@@ -285,28 +253,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
     {
         $columnName = $this->_transformColumn($columnName);
         return array_key_exists($columnName, $this->_data);
-    }
-
-    /**
-     * Store table, primary key and data in serialized object
-     *
-     * @return array
-     */
-    public function __sleep()
-    {
-        return array('_tableClass', '_primary', '_data', '_cleanData', '_readOnly' ,'_modifiedFields');
-    }
-
-    /**
-     * Setup to do on wakeup.
-     * A de-serialized Row should not be assumed to have access to a live
-     * database connection, so set _connected = false.
-     *
-     * @return void
-     */
-    public function __wakeup()
-    {
-        $this->_connected = false;
     }
 
     /**
@@ -378,87 +324,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
     }
 
     /**
-     * Set the table object, to re-establish a live connection
-     * to the database for a Row that has been de-serialized.
-     *
-     * @param Kwf_Db_Table $table
-     * @return boolean
-     * @throws Kwf_Exception
-     */
-    public function setTable(Kwf_Db_Table $table = null)
-    {
-        if ($table == null) {
-            $this->_table = null;
-            $this->_connected = false;
-            return false;
-        }
-
-        $tableClass = get_class($table);
-        if (! $table instanceof $this->_tableClass) {
-            throw new Kwf_Exception("The specified Table is of class $tableClass, expecting class to be instance of $this->_tableClass");
-        }
-
-        $this->_table = $table;
-        $this->_tableClass = $tableClass;
-
-        $info = $this->_table->info();
-
-        if ($info['cols'] != array_keys($this->_data)) {
-            throw new Kwf_Exception('The specified Table does not have the same columns as the Row');
-        }
-
-        if (! array_intersect((array) $this->_primary, $info['primary']) == (array) $this->_primary) {
-
-            throw new Kwf_Exception("The specified Table '$tableClass' does not have the same primary key as the Row");
-        }
-
-        $this->_connected = true;
-        return true;
-    }
-
-    /**
-     * Query the class name of the Table object for which this
-     * Row was created.
-     *
-     * @return string
-     */
-    public function getTableClass()
-    {
-        return $this->_tableClass;
-    }
-
-    /**
-     * Test the connected status of the row.
-     *
-     * @return boolean
-     */
-    public function isConnected()
-    {
-        return $this->_connected;
-    }
-
-    /**
-     * Test the read-only status of the row.
-     *
-     * @return boolean
-     */
-    public function isReadOnly()
-    {
-        return $this->_readOnly;
-    }
-
-    /**
-     * Set the read-only status of the row.
-     *
-     * @param boolean $flag
-     * @return boolean
-     */
-    public function setReadOnly($flag)
-    {
-        $this->_readOnly = (bool) $flag;
-    }
-
-    /**
      * Returns an instance of the parent table's Kwf_Db_Table_Select object.
      *
      * @return Kwf_Db_Table_Select
@@ -497,13 +362,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
      */
     protected function _doInsert()
     {
-        /**
-         * A read-only row cannot be saved.
-         */
-        if ($this->_readOnly === true) {
-            throw new Kwf_Exception('This row has been marked read-only');
-        }
-
         /**
          * Execute the INSERT (this may throw an exception)
          */
@@ -544,13 +402,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
      */
     protected function _doUpdate()
     {
-        /**
-         * A read-only row cannot be saved.
-         */
-        if ($this->_readOnly === true) {
-            throw new Kwf_Exception('This row has been marked read-only');
-        }
-
         /**
          * Get expressions for a WHERE clause
          * based on the primary key value(s).
@@ -604,13 +455,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
      */
     public function delete()
     {
-        /**
-         * A read-only row cannot be deleted.
-         */
-        if ($this->_readOnly === true) {
-            throw new Kwf_Exception('This row has been marked read-only');
-        }
-
         $where = $this->_getWhereQuery();
 
         /**
@@ -678,9 +522,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
      */
     protected function _getTable()
     {
-        if (!$this->_connected) {
-            throw new Kwf_Exception('Cannot save a Row unless it is connected');
-        }
         return $this->_table;
     }
 
@@ -703,7 +544,7 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
             $array = array_intersect_key($this->_cleanData, $primary);
         }
         if (count($primary) != count($array)) {
-            throw new Kwf_Exception("The specified Table '$this->_tableClass' does not have the same primary key as the Row");
+            throw new Kwf_Exception("The specified Table does not have the same primary key as the Row");
         }
         return $array;
     }

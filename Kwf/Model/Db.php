@@ -142,7 +142,6 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     {
         $id = $this->_getUniqueId($proxiedRow);
         if (!isset($this->_rows[$id])) {
-            $proxiedRow->setReadOnly(false);
             $exprValues = array();
             foreach (array_keys($this->_exprs) as $k) {
                 if (isset($proxiedRow->$k)) {

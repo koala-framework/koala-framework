@@ -134,22 +134,6 @@ class Kwf_Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess
     protected $_table;
 
     /**
-     * Connected is true if we have a reference to a live
-     * Kwf_Db_Table object.
-     * This is false after the Rowset has been deserialized.
-     *
-     * @var boolean
-     */
-    protected $_connected = true;
-
-    /**
-     * Kwf_Db_Table class name.
-     *
-     * @var string
-     */
-    protected $_tableClass;
-
-    /**
      * Kwf_Db_Table_Row_Abstract class name.
      *
      * @var string
@@ -183,11 +167,6 @@ class Kwf_Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess
     protected $_stored = false;
 
     /**
-     * @var boolean
-     */
-    protected $_readOnly = false;
-
-    /**
      * Constructor.
      *
      * @param array $config
@@ -196,16 +175,12 @@ class Kwf_Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess
     {
         if (isset($config['table'])) {
             $this->_table      = $config['table'];
-            $this->_tableClass = get_class($this->_table);
         }
         if (isset($config['rowClass'])) {
             $this->_rowClass   = $config['rowClass'];
         }
         if (isset($config['data'])) {
             $this->_data       = $config['data'];
-        }
-        if (isset($config['readOnly'])) {
-            $this->_readOnly   = $config['readOnly'];
         }
         if (isset($config['stored'])) {
             $this->_stored     = $config['stored'];
@@ -215,29 +190,6 @@ class Kwf_Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess
         $this->_count = count($this->_data);
 
         $this->init();
-    }
-
-    /**
-     * Store data, class names, and state in serialized object
-     *
-     * @return array
-     */
-    public function __sleep()
-    {
-        return array('_data', '_tableClass', '_rowClass', '_pointer', '_count', '_rows', '_stored',
-                     '_readOnly');
-    }
-
-    /**
-     * Setup to do on wakeup.
-     * A de-serialized Rowset should not be assumed to have access to a live
-     * database connection, so set _connected = false.
-     *
-     * @return void
-     */
-    public function __wakeup()
-    {
-        $this->_connected = false;
     }
 
     /**
@@ -252,16 +204,6 @@ class Kwf_Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess
     }
 
     /**
-     * Return the connected state of the rowset.
-     *
-     * @return boolean
-     */
-    public function isConnected()
-    {
-        return $this->_connected;
-    }
-
-    /**
      * Returns the table object, or null if this is disconnected rowset
      *
      * @return Kwf_Db_Table
@@ -269,41 +211,6 @@ class Kwf_Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess
     public function getTable()
     {
         return $this->_table;
-    }
-
-    /**
-     * Set the table object, to re-establish a live connection
-     * to the database for a Rowset that has been de-serialized.
-     *
-     * @param Kwf_Db_Table $table
-     * @return boolean
-     * @throws Kwf_Exception
-     */
-    public function setTable(Kwf_Db_Table $table)
-    {
-        $this->_table = $table;
-        $this->_connected = false;
-        // @todo This works only if we have iterated through
-        // the result set once to instantiate the rows.
-        foreach ($this as $row) {
-            $connected = $row->setTable($table);
-            if ($connected == true) {
-                $this->_connected = true;
-            }
-        }
-        $this->rewind();
-        return $this->_connected;
-    }
-
-    /**
-     * Query the class name of the Table object for which this
-     * Rowset was created.
-     *
-     * @return string
-     */
-    public function getTableClass()
-    {
-        return $this->_tableClass;
     }
 
     /**
@@ -505,22 +412,9 @@ class Kwf_Db_Table_Rowset implements SeekableIterator, Countable, ArrayAccess
                 array(
                     'table'    => $this->_table,
                     'data'     => $this->_data[$position],
-                    'stored'   => $this->_stored,
-                    'readOnly' => $this->_readOnly
+                    'stored'   => $this->_stored
                 )
             );
-
-            if ( $this->_table instanceof Kwf_Db_Table ) {
-                $info = $this->_table->info();
-
-                if ( $this->_rows[$position] instanceof Kwf_Db_Table_Row_Abstract ) {
-                    if ($info['cols'] == array_keys($this->_data[$position])) {
-                        $this->_rows[$position]->setTable($this->getTable());
-                    }
-                }
-            } else {
-                $this->_rows[$position]->setTable(null);
-            }
         }
 
         // return the row object

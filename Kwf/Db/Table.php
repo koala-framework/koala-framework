@@ -717,7 +717,6 @@ class Kwf_Db_Table
         $data  = array(
             'table'    => $this,
             'data'     => $rows,
-            'readOnly' => $select->isReadOnly(),
             'rowClass' => $this->getRowClass(),
             'stored'   => true
         );
@@ -764,7 +763,6 @@ class Kwf_Db_Table
         $data = array(
             'table'   => $this,
             'data'     => $rows[0],
-            'readOnly' => $select->isReadOnly(),
             'stored'  => true
         );
 
@@ -786,7 +784,6 @@ class Kwf_Db_Table
         $config = array(
             'table'    => $this,
             'data'     => $defaults,
-            'readOnly' => false,
             'stored'   => false
         );
 

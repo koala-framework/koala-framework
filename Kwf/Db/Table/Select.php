@@ -210,43 +210,6 @@ class Kwf_Db_Table_Select extends Zend_Db_Select
     }
 
     /**
-     * Tests query to determine if expressions or aliases columns exist.
-     *
-     * @return boolean
-     */
-    public function isReadOnly()
-    {
-        $readOnly = false;
-        $fields   = $this->getPart(Kwf_Db_Table_Select::COLUMNS);
-        $cols     = $this->_info[Kwf_Db_Table::COLS];
-
-        if (!count($fields)) {
-            return $readOnly;
-        }
-
-        foreach ($fields as $columnEntry) {
-            $column = $columnEntry[1];
-            $alias = $columnEntry[2];
-
-            if ($alias !== null) {
-                $column = $alias;
-            }
-
-            switch (true) {
-                case ($column == self::SQL_WILDCARD):
-                    break;
-
-                case ($column instanceof Zend_Db_Expr):
-                case (!in_array($column, $cols)):
-                    $readOnly = true;
-                    break 2;
-            }
-        }
-
-        return $readOnly;
-    }
-
-    /**
      * Adds a FROM table and optional columns to the query.
      *
      * The table name can be expressed
