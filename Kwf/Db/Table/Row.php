@@ -1,44 +1,6 @@
 <?php
-class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
+class Kwf_Db_Table_Row implements ArrayAccess
 {
-    // Übersetzt Mysql-Datum in Timestamp
-    public function getTimestamp($columnName)
-    {
-        $parts = explode('-', $this->$columnName);
-        if ($parts == array("")) return null; //Bugfix, falls kein Datum vorhanden
-        return mktime(0, 0, 0, $parts[1], $parts[2], $parts[0]);
-    }
-
-    public function toDebug()
-    {
-        $i = get_class($this);
-        if (method_exists($this, '__toString')) {
-            $i .= " (".$this->__toString().")\n";
-        }
-        $ret = print_r($this->_data, true);
-        $ret = preg_replace('#^Array#', $i, $ret);
-        $ret = "<pre>$ret</pre>";
-        return $ret;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * The data for each column in the row (column_name => value).
      * The keys must match the physical names of columns in the
@@ -116,25 +78,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
     }
 
     /**
-     * Transform a column name from the user-specified form
-     * to the physical form used in the database.
-     * You can override this method in a custom Row class
-     * to implement column name mappings, for example inflection.
-     *
-     * @param string $columnName Column name given.
-     * @return string The column name after transformation applied (none by default).
-     * @throws Kwf_Exception if the $columnName is not a string.
-     */
-    protected function _transformColumn($columnName)
-    {
-        if (!is_string($columnName)) {
-            throw new Kwf_Exception('Specified column is not a string');
-        }
-        // Perform no transformation by default
-        return $columnName;
-    }
-
-    /**
      * Retrieve row field value
      *
      * @param  string $columnName The user-specified column name.
@@ -143,7 +86,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
      */
     public function __get($columnName)
     {
-        $columnName = $this->_transformColumn($columnName);
         if (!array_key_exists($columnName, $this->_data)) {
             throw new Kwf_Exception("Specified column \"$columnName\" is not in the row");
         }
@@ -160,7 +102,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
      */
     public function __set($columnName, $value)
     {
-        $columnName = $this->_transformColumn($columnName);
         if (!array_key_exists($columnName, $this->_data)) {
             throw new Kwf_Exception("Specified column \"$columnName\" is not in the row");
         }
@@ -177,7 +118,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
      */
     public function __unset($columnName)
     {
-        $columnName = $this->_transformColumn($columnName);
         if (!array_key_exists($columnName, $this->_data)) {
             throw new Kwf_Exception("Specified column \"$columnName\" is not in the row");
         }
@@ -196,7 +136,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
      */
     public function __isset($columnName)
     {
-        $columnName = $this->_transformColumn($columnName);
         return array_key_exists($columnName, $this->_data);
     }
 
@@ -418,11 +357,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
         return $result;
     }
 
-    public function getIterator()
-    {
-        return new ArrayIterator((array) $this->_data);
-    }
-
     /**
      * Returns the column/value data as an array.
      *
@@ -431,23 +365,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
     public function toArray()
     {
         return (array)$this->_data;
-    }
-
-    /**
-     * Sets all data in the row from an array.
-     *
-     * @param  array $data
-     * @return Kwf_Db_Table_Row_Abstract Provides a fluent interface
-     */
-    public function setFromArray(array $data)
-    {
-        $data = array_intersect_key($data, $this->_data);
-
-        foreach ($data as $columnName => $value) {
-            $this->__set($columnName, $value);
-        }
-
-        return $this;
     }
 
     /**
@@ -495,17 +412,6 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
     }
 
     /**
-     * Retrieves an associative array of primary keys.
-     *
-     * @param bool $useDirty
-     * @return array
-     */
-    public function getPrimaryKey($useDirty = true)
-    {
-        return $this->_getPrimaryKey($useDirty);
-    }
-
-    /**
      * Constructs where statement for retrieving row(s).
      *
      * @param bool $useDirty
@@ -531,6 +437,23 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
     }
 
     /**
+     * Sets all data in the row from an array.
+     *
+     * @param  array $data
+     * @return Kwf_Db_Table_Row_Abstract Provides a fluent interface
+     */
+    public function setFromArray(array $data)
+    {
+        $data = array_intersect_key($data, $this->_data);
+
+        foreach ($data as $columnName => $value) {
+            $this->__set($columnName, $value);
+        }
+
+        return $this;
+    }
+
+    /**
      * Refreshes properties from the database.
      *
      * @return void
@@ -547,16 +470,5 @@ class Kwf_Db_Table_Row implements ArrayAccess, IteratorAggregate
         $this->_data = $row->toArray();
         $this->_cleanData = $this->_data;
         $this->_modifiedFields = array();
-    }
-
-    /**
-     * _getTableFromString
-     *
-     * @param string $tableName
-     * @return Kwf_Db_Table
-     */
-    protected function _getTableFromString($tableName)
-    {
-        return Kwf_Db_Table::getTableFromString($tableName, $this->_table);
     }
 }

@@ -247,22 +247,6 @@ class Kwf_Db_Table
     }
 
     /**
-     * @return string
-     */
-    public function getRowClass()
-    {
-        return $this->_rowClass;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRowsetClass()
-    {
-        return $this->_rowsetClass;
-    }
-
-    /**
      * Gets the Zend_Db_Adapter_Abstract for this particular Kwf_Db_Table object.
      *
      * @return Zend_Db_Adapter_Abstract
@@ -317,9 +301,7 @@ class Kwf_Db_Table
      */
     protected function _setupTableName()
     {
-        if (! $this->_name) {
-            $this->_name = get_class($this);
-        } else if (strpos($this->_name, '.')) {
+        if (strpos($this->_name, '.')) {
             list($this->_schema, $this->_name) = explode('.', $this->_name);
         }
     }
@@ -634,11 +616,11 @@ class Kwf_Db_Table
         $data  = array(
             'table'    => $this,
             'data'     => $rows,
-            'rowClass' => $this->getRowClass(),
+            'rowClass' => $this->_rowClass,
             'stored'   => true
         );
 
-        $rowsetClass = $this->getRowsetClass();
+        $rowsetClass = $this->_rowsetClass;
         return new $rowsetClass($data);
     }
 
@@ -683,7 +665,7 @@ class Kwf_Db_Table
             'stored'  => true
         );
 
-        $rowClass = $this->getRowClass();
+        $rowClass = $this->_rowClass;
         return new $rowClass($data);
     }
 
@@ -704,7 +686,7 @@ class Kwf_Db_Table
             'stored'   => false
         );
 
-        $rowClass = $this->getRowClass();
+        $rowClass = $this->_rowClass;
         $row = new $rowClass($config);
         $row->setFromArray($data);
         return $row;
