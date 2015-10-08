@@ -16,8 +16,8 @@ class Kwf_Data_Table_MultiCheckbox extends Kwf_Data_Abstract
         $ref = $selected->getTable()->getReference(get_class($this->_values->getTable()));
         $key = $ref['columns'][0];
 
-        $info = $this->_values->getTable()->info();
-        $pk = $info['primary'][1];
+        $pk = $this->_values->getTable()->getPrimaryKey();
+        $pk = $pk[1];
 
         $selectedIds = array();
         foreach ($selected as $i) {

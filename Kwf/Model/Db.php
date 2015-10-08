@@ -61,7 +61,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         if (isset($info['metadata'][$col])) {
             $type = $this->_getTypeFromDbType($info['metadata'][$col]['DATA_TYPE']);
             if ($col == 'pos' && $type == self::TYPE_BOOLEAN) {
-                throw new Kwf_Exception('Column "pos" must not be of type TINYINT in table "' . $info['name'] . '"');
+                throw new Kwf_Exception('Column "pos" must not be of type TINYINT in table "' . $this->getTable()->getTableName() . '"');
             }
             return $type;
         }
@@ -88,11 +88,11 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     protected function _getOwnColumns()
     {
         if (!$this->_columns) {
-            $cache = self::_getMetadataCache();
-            $cacheId = md5($this->getUniqueIdentifier()).'_columns';
-            if (!$this->_columns = $cache->load($cacheId)) {
-                $this->_columns = $this->getTable()->info(Kwf_Db_Table::COLS);
-                $cache->save($this->_columns, $cacheId);
+            $cacheId = 'db_'.md5($this->getUniqueIdentifier()).'_columns';
+            $this->_columns = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            if ($this->_columns === false) {
+                $this->_columns = $this->getTable()->getColumns();
+                Kwf_Cache_SimpleStatic::add($cacheId, $this->_columns);
             }
         }
         return $this->_columns;
@@ -991,15 +991,15 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     public function getPrimaryKey()
     {
         if (!$this->_primaryKey) {
-            $cache = self::_getMetadataCache();
-            $cacheId = md5($this->getUniqueIdentifier()).'_primaryKey';
-            if (!$this->_primaryKey = $cache->load($cacheId)) {
-                $this->_primaryKey = $this->getTable()->info('primary');
+            $cacheId = 'db_'.md5($this->getUniqueIdentifier()).'_primaryKey';
+            $this->_primaryKey = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            if ($this->_primaryKey === false) {
+                $this->_primaryKey = $this->getTable()->getPrimaryKey();
                 if (sizeof($this->_primaryKey) == 1) {
                     $this->_primaryKey = array_values($this->_primaryKey);
                     $this->_primaryKey = $this->_primaryKey[0];
                 }
-                $cache->save($this->_primaryKey, $cacheId);
+                Kwf_Cache_SimpleStatic::add($cacheId, $this->_primaryKey);
             }
         }
         return $this->_primaryKey;
@@ -1026,7 +1026,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     {
         if (!$this->_tableName) {
             if (is_string($this->_table)) return $this->_table;
-            return $this->_table->info(Kwf_Db_Table::NAME);
+            return $this->_table->getTableName();
         }
         return $this->_tableName;
     }
@@ -1434,29 +1434,6 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $ret = array_values($ret);
             return $ret;
         }
-    }
-
-    private static function _getMetadataCache()
-    {
-        static $ret;
-        if (!isset($ret)) {
-            $frontendOptions = array(
-                'automatic_serialization' => true,
-                'write_control' => false,
-            );
-            if (extension_loaded('apc') && php_sapi_name() != 'cli') {
-                $backendOptions = array();
-                $backend = 'Apc';
-            } else {
-                $backendOptions = array(
-                    'cache_dir' => 'cache/model',
-                    'file_name_prefix' => 'servicemeta'
-                );
-                $backend = 'File';
-            }
-            $ret = Kwf_Cache::factory('Core', $backend, $frontendOptions, $backendOptions);
-        }
-        return $ret;
     }
 
     public function fetchColumnByPrimaryId($column, $id)

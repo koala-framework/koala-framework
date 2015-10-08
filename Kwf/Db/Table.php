@@ -369,7 +369,7 @@ class Kwf_Db_Table
      *
      * @return array
      */
-    protected function _getCols()
+    public function getColumns()
     {
         if (null === $this->_cols) {
             $this->_setupMetadata();
@@ -411,7 +411,7 @@ class Kwf_Db_Table
             unset($this->_primary[0]);
         }
 
-        $cols = $this->_getCols();
+        $cols = $this->getColumns();
         if (! array_intersect((array) $this->_primary, $cols) == (array) $this->_primary) {
             throw new Kwf_Exception("Primary key column(s) ("
                 . implode(',', (array) $this->_primary)
@@ -446,6 +446,22 @@ class Kwf_Db_Table
     {
     }
 
+    public function getTableName()
+    {
+        return $this->_name;
+    }
+
+    public function getSchemaName()
+    {
+        return $this->_schema;
+    }
+
+    public function getPrimaryKey()
+    {
+        $this->_setupPrimaryKey();
+        return (array)$this->_primary;
+    }
+
     /**
      * Returns table information.
      *
@@ -463,8 +479,8 @@ class Kwf_Db_Table
         $info = array(
             self::SCHEMA           => $this->_schema,
             self::NAME             => $this->_name,
-            self::COLS             => $this->_getCols(),
-            self::PRIMARY          => (array) $this->_primary,
+            self::COLS             => $this->getColumns(),
+            self::PRIMARY          => $this->getPrimaryKey(),
             self::METADATA         => $this->_metadata,
             self::SEQUENCE         => $this->_sequence
         );
@@ -677,7 +693,7 @@ class Kwf_Db_Table
      */
     public function createRow(array $data = array())
     {
-        $cols     = $this->_getCols();
+        $cols     = $this->getColumns();
         $defaults = array_combine($cols, array_fill(0, count($cols), null));
 
         $config = array(

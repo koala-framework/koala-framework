@@ -108,7 +108,7 @@ class Kwf_Db_Table_Row implements ArrayAccess
         if (!array_key_exists($columnName, $this->_data)) {
             throw new Kwf_Exception("Specified column \"$columnName\" is not in the row");
         }
-        if (in_array($columnName, $this->_table->info('primary'))) {
+        if (in_array($columnName, $this->_table->getPrimaryKey())) {
             throw new Kwf_Exception("Specified column \"$columnName\" is a primary key and should not be unset");
         }
         unset($this->_data[$columnName]);
@@ -247,7 +247,7 @@ class Kwf_Db_Table_Row implements ArrayAccess
             $newPrimaryKey = $primaryKey;
         } else {
             //ZF-6167 Use tempPrimaryKey temporary to avoid that zend encoding fails.
-            $tempPrimaryKey = (array) $this->_getPrimaryKey();
+            $tempPrimaryKey = $this->_table->getPrimaryKey();
             $newPrimaryKey = array(current($tempPrimaryKey) => $primaryKey);
         }
 
@@ -288,7 +288,7 @@ class Kwf_Db_Table_Row implements ArrayAccess
         /**
          * Were any of the changed columns part of the primary key?
          */
-        $pkDiffData = array_intersect_key($diffData, array_flip((array)$this->_getPrimaryKey()));
+        $pkDiffData = array_intersect_key($diffData, array_flip($this->_table->getPrimaryKey()));
 
         /**
          * Execute the UPDATE (this may throw an exception)
@@ -374,12 +374,6 @@ class Kwf_Db_Table_Row implements ArrayAccess
         return $this->_table;
     }
 
-    protected function _getPrimaryKey()
-    {
-        // Retrieve primary keys from table schema
-        return $this->_table->info('primary');
-    }
-
     /**
      * Retrieves an associative array of primary keys.
      *
@@ -388,7 +382,7 @@ class Kwf_Db_Table_Row implements ArrayAccess
      */
     protected function _getPrimaryKeyValues($useDirty = true)
     {
-        $primary = array_flip($this->_getPrimaryKey());
+        $primary = array_flip($this->_table->getPrimaryKey());
         if ($useDirty) {
             $array = array_intersect_key($this->_data, $primary);
         } else {
@@ -417,7 +411,7 @@ class Kwf_Db_Table_Row implements ArrayAccess
         // retrieve recently updated row using primary keys
         $where = array();
         foreach ($primaryKey as $column => $value) {
-            $tableName = $db->quoteIdentifier($info[Kwf_Db_Table::NAME], true);
+            $tableName = $db->quoteIdentifier($this->_table->getTableName(), true);
             $type = $metadata[$column]['DATA_TYPE'];
             $columnName = $db->quoteIdentifier($column, true);
             $where[] = $db->quoteInto("{$tableName}.{$columnName} = ?", $value, $type);

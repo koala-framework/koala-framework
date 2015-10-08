@@ -50,14 +50,14 @@ class Kwf_Model_DbWithConnection_DbSiblingProxy_Test extends Kwf_Test_TestCase
         $r->save();
 
         $tableName = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_DbSiblingProxy_DbModel')
-                        ->getTable()->info(Kwf_Db_Table::NAME);
+                        ->getTable()->getTableName();
         $m = new Kwf_Model_Db(array('table'=>$tableName));
         $r = $m->getRow(3);
         $this->assertEquals('xxy', $r->foo);
         $this->assertEquals(null, $r->bar);
 
         $tableName = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_DbSiblingProxy_SiblingModel')
-                        ->getTable()->info(Kwf_Db_Table::NAME);
+                        ->getTable()->getTableName();
         $m = new Kwf_Model_Db(array('table'=>$tableName));
         $r = $m->getRow(3);
         $this->assertEquals('xxz', $r->baz);

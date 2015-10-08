@@ -34,12 +34,7 @@ class Kwf_Db_Table_Select extends Zend_Db_Select
 
     public function getTableName()
     {
-        return $this->_info['name'];
-    }
-
-    public function info()
-    {
-        return $this->_info;
+        return $this->_table->getTableName();
     }
 
     /**
@@ -60,10 +55,9 @@ class Kwf_Db_Table_Select extends Zend_Db_Select
         if (is_string($searchValues)) $searchValues = array('query' => $searchValues);
         if (is_string($searchFields)) $searchFields = array($searchFields);
 
-        $selectInfo = $this->info();
         foreach ($searchValues as $column => $value) {
             if (empty($value) ||
-                ($column != 'query' && !in_array($column, $selectInfo['cols']))
+                ($column != 'query' && !in_array($column, $this->_table()->getColumns()))
             ) {
                 continue;
             }
@@ -79,7 +73,7 @@ class Kwf_Db_Table_Select extends Zend_Db_Select
                         ."'searchLike' method of Kwf_Db_Table_Select object");
                     }
                     if (in_array('*', $searchFields)) {
-                        $searchFields = array_merge($searchFields, $selectInfo['cols']);
+                        $searchFields = array_merge($searchFields, $this->_table()->getColumns());
                         foreach ($searchFields as $sfk => $sfv) {
                             if ($sfv == '*') unset($searchFields[$sfk]);
                             if (substr($sfv, 0, 1) == '!') {
@@ -92,7 +86,7 @@ class Kwf_Db_Table_Select extends Zend_Db_Select
                     $wheres = array();
                     foreach ($searchFields as $field) {
                         if (strpos($field, '.') === false) {
-                            $field = $selectInfo['name'].'.'.$field;
+                            $field = $this->_table->getTableName().'.'.$field;
                         }
                         $wheres[] = Kwf_Registry::get('db')->quoteInto(
                             $field.' LIKE ?', "%$searchWord%"
@@ -135,14 +129,6 @@ class Kwf_Db_Table_Select extends Zend_Db_Select
 
 
 
-
-    /**
-     * Table schema for parent Kwf_Db_Table.
-     *
-     * @var array
-     */
-    protected $_info;
-
     /**
      * Table integrity override.
      *
@@ -166,7 +152,7 @@ class Kwf_Db_Table_Select extends Zend_Db_Select
     {
         parent::__construct($table->getAdapter());
 
-        $this->setTable($table);
+        $this->_table = $table;
     }
 
     /**
@@ -177,21 +163,6 @@ class Kwf_Db_Table_Select extends Zend_Db_Select
     public function getTable()
     {
         return $this->_table;
-    }
-
-    /**
-     * Sets the primary table name and retrieves the table schema.
-     *
-     * @param Kwf_Db_Table $table
-     * @return Zend_Db_Select This Zend_Db_Select object.
-     */
-    public function setTable(Kwf_Db_Table $table)
-    {
-        $this->_adapter = $table->getAdapter();
-        $this->_info    = $table->info();
-        $this->_table   = $table;
-
-        return $this;
     }
 
     /**
@@ -225,11 +196,8 @@ class Kwf_Db_Table_Select extends Zend_Db_Select
     public function from($name, $cols = self::SQL_WILDCARD, $schema = null)
     {
         if ($name instanceof Kwf_Db_Table) {
-            $info = $name->info();
-            $name = $info[Kwf_Db_Table::NAME];
-            if (isset($info[Kwf_Db_Table::SCHEMA])) {
-                $schema = $info[Kwf_Db_Table::SCHEMA];
-            }
+            $schema = $name->getTableName();
+            $schema = $name->getSchemaName();
         }
 
         return $this->joinInner($name, null, $cols, $schema);
@@ -244,8 +212,8 @@ class Kwf_Db_Table_Select extends Zend_Db_Select
     public function assemble()
     {
         $fields  = $this->getPart(Kwf_Db_Table_Select::COLUMNS);
-        $primary = $this->_info[Kwf_Db_Table::NAME];
-        $schema  = $this->_info[Kwf_Db_Table::SCHEMA];
+        $primary  = $this->_table->getTableName();
+        $schema  = $this->_table->getSchemaName();
 
 
         if (count($this->_parts[self::UNION]) == 0) {

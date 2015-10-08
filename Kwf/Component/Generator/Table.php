@@ -32,8 +32,8 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
 
     public function joinWithChildGenerator($select, $childGenerator)
     {
-        $table = $this->_getModel()->getTable()->info('name');
-        $childTable = $childGenerator->_getModel()->getTable()->info('name');
+        $table = $this->_getModel()->getTable()->getTableName();
+        $childTable = $childGenerator->_getModel()->getTable()->getTableName();
         $select->setIntegrityCheck(false);
         $select->join($childTable, "{$table}.cache_child_component_id={$childTable}.component_id", array());
         return $select;
@@ -41,8 +41,8 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
 
     public function joinWithParentGenerator($select, $parentGenerator, $grandParentData = null)
     {
-        $table = $this->_getModel()->getTable()->info('name');
-        $parentTable = $parentGenerator->_getModel()->getTable()->info('name');
+        $table = $this->_getModel()->getTable()->getTableName();
+        $parentTable = $parentGenerator->_getModel()->getTable()->getTableName();
         $select->setIntegrityCheck(false);
         $select->join($parentTable, "{$parentTable}.cache_child_component_id={$table}.component_id", array());
         if ($grandParentData) {
