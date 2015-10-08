@@ -53,8 +53,8 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
     {
         $c = $this->_root->getComponentById('1-mainMenu');
         $html = $c->render();
-        $this->assertContains('Home de</span></a>', $html);
-        $this->assertContains('Test</span></a>', $html);
+        $this->assertContains('Home de</a>', $html);
+        $this->assertContains('Test</a>', $html);
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_PagesTestModel')
             ->getRow(2);
@@ -64,8 +64,8 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->assertContains('Home de</span></a>', $html);
-        $this->assertContains('Testx</span></a>', $html);
+        $this->assertContains('Home de</a>', $html);
+        $this->assertContains('Testx</a>', $html);
     }
 
     public function testMenuEnNameChanged()
@@ -73,9 +73,9 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('root-en-main_1-mainMenu');
 
         $html = $c->render();
-        $this->assertContains('Home en</span></a>', $html);
-        $this->assertContains('Test</span></a>', $html);
-        $this->assertContains('Test2 en</span></a>', $html);
+        $this->assertContains('Home en</a>', $html);
+        $this->assertContains('Test</a>', $html);
+        $this->assertContains('Test2 en</a>', $html);
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
             ->getRow('root-en-main_2');
@@ -85,15 +85,15 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->assertContains('Home en</span></a>', $html);
-        $this->assertContains('Testxen</span></a>', $html);
+        $this->assertContains('Home en</a>', $html);
+        $this->assertContains('Testxen</a>', $html);
     }
 
     public function testMenuOtherCategoryDeNameChanged()
     {
         $c = $this->_root->getComponentById('root-master-bottom-mainMenu');
         $html = $c->render();
-        $this->assertContains('Home de</span></a>', $html);
+        $this->assertContains('Home de</a>', $html);
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_PagesTestModel')
             ->getRow(1);
@@ -103,14 +103,14 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->assertContains('Homex de</span></a>', $html);
+        $this->assertContains('Homex de</a>', $html);
     }
 
     public function testMenuOtherCategoryEnNameChanged()
     {
         $c = $this->_root->getComponentById('root-en-bottom-mainMenu');
         $html = $c->render();
-        $this->assertContains('Home en</span></a>', $html);
+        $this->assertContains('Home en</a>', $html);
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
             ->getRow('root-en-main_1');
@@ -120,14 +120,14 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->assertContains('Homex en</span></a>', $html);
+        $this->assertContains('Homex en</a>', $html);
     }
 
     public function testMenuOtherCategoryEnShow()
     {
         $c = $this->_root->getComponentById('root-en-bottom-mainMenu');
         $html = $c->render();
-        $this->assertNotContains('Test7 en</span></a>', $html);
+        $this->assertNotContains('Test7 en</a>', $html);
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
             ->getRow('root-en-main_7');
@@ -137,7 +137,7 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->assertContains('Test7 en</span></a>', $html);
+        $this->assertContains('Test7 en</a>', $html);
     }
 
     public function testMenuOtherCategoryEnHide()
@@ -149,7 +149,7 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
 
         $c = $this->_root->getComponentById('root-en-bottom-mainMenu');
         $html = $c->render();
-        $this->assertContains('Test7 en</span></a>', $html);
+        $this->assertContains('Test7 en</a>', $html);
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
             ->getRow('root-en-main_7');
@@ -159,14 +159,14 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->assertNotContains('Test7 en</span></a>', $html);
+        $this->assertNotContains('Test7 en</a>', $html);
     }
 
     public function testParentMenuEnShow()
     {
         $c = $this->_root->getComponentById('root-en-main_1-mainMenu');
         $html = $c->render();
-        $this->assertNotContains('Test7 en</span></a>', $html);
+        $this->assertNotContains('Test7 en</a>', $html);
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
             ->getRow('root-en-main_7');
@@ -176,7 +176,7 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->assertContains('Test7 en</span></a>', $html);
+        $this->assertContains('Test7 en</a>', $html);
     }
 
     public function testParentMenuEnHide()
@@ -189,7 +189,7 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('root-en-main_1-mainMenu');
 
         $html = $c->render();
-        $this->assertContains('Test7 en</span></a>', $html);
+        $this->assertContains('Test7 en</a>', $html);
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
             ->getRow('root-en-main_7');
@@ -199,14 +199,14 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->assertNotContains('Test7 en</span></a>', $html);
+        $this->assertNotContains('Test7 en</a>', $html);
     }
 
     public function testMenuEnShow()
     {
         $c = $this->_root->getComponentById('root-en-main-mainMenu');
         $html = $c->render();
-        $this->assertNotContains('Test7 en</span></a>', $html);
+        $this->assertNotContains('Test7 en</a>', $html);
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
             ->getRow('root-en-main_7');
@@ -216,7 +216,7 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->assertContains('Test7 en</span></a>', $html);
+        $this->assertContains('Test7 en</a>', $html);
     }
 
     public function testMenuEnHide()
@@ -229,7 +229,7 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $c = $this->_root->getComponentById('root-en-main-mainMenu');
 
         $html = $c->render();
-        $this->assertContains('Test7 en</span></a>', $html);
+        $this->assertContains('Test7 en</a>', $html);
 
         $row = Kwf_Model_Abstract::getInstance('Kwc_Trl_MenuCache_Category_Trl_PagesTrlTestModel')
             ->getRow('root-en-main_7');
@@ -239,6 +239,6 @@ class Kwc_Trl_MenuCache_Test extends Kwc_TestAbstract
         $this->_process();
 
         $html = $c->render();
-        $this->assertNotContains('Test7 en</span></a>', $html);
+        $this->assertNotContains('Test7 en</a>', $html);
     }
 }

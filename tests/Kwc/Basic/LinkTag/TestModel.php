@@ -6,8 +6,8 @@ class Kwc_Basic_LinkTag_TestModel extends Kwc_Basic_LinkTag_Model
         $config['proxyModel'] = new Kwf_Model_FnF(array(
             'primaryKey' => 'component_id',
             'data'=> array(
-                array('component_id'=>'1100', 'component'=>'test'),
-                array('component_id'=>'1101', 'component'=>'test2')
+                array('component_id'=>'1100', 'component'=>'test', 'data'=>null),
+                array('component_id'=>'1101', 'component'=>'test2', 'data'=>null)
             )
         ));
         parent::__construct($config);
