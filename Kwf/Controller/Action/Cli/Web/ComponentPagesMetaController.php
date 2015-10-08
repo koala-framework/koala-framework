@@ -1,33 +1,6 @@
 <?php
 class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Controller_Action
 {
-    public function checkForInvalidAction()
-    {
-        set_time_limit(0);
-        $model = Kwf_Component_PagesMetaModel::getInstance();
-        $select = new Kwf_Model_Select();
-        $it = new Kwf_Model_Iterator_Packages(
-            new Kwf_Model_Iterator_Rows($model, $select)
-        );
-        if ($this->_getParam('debug')) $it = new Kwf_Iterator_ConsoleProgressBar($it);
-        $i = 0;
-        foreach ($it as $row) {
-            $page = Kwf_Component_Data_Root::getInstance()->getComponentById($row->page_id);
-            if (!$page) {
-                if ($this->_getParam('debug')) {
-                    echo "\n$row->page_id is in pages_meta aber but not in page tree, deleting...\n";
-                }
-                $row->delete();
-            }
-            if (memory_get_usage() > 128*1024*1024) {
-                if ($this->_getParam('debug')) echo "Collect garbage...\n";;
-                Kwf_Component_Data_Root::getInstance()->freeMemory();
-            }
-
-        }
-        exit;
-    }
-
     //internal
     public function rebuildWorkerAction()
     {
@@ -109,6 +82,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
                 $row->changed_date = date('Y-m-d H:i:s');
             }
             $row->updateFromPage($page);
+            $row->rebuilt = true;
             $row->save();
             $stats['addedPages']++;
             unset($page);
@@ -122,11 +96,10 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
     public function rebuildAction()
     {
         Kwf_Util_MemoryLimit::set(512);
-        if (!$this->_getParam('skip-check-for-invalid')) {
-            $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php component-pages-meta check-for-invalid";
-            if ($this->_getParam('debug')) $cmd .= " --debug";
-            passthru($cmd);
-        }
+
+        $m = Kwf_Component_PagesMetaModel::getInstance();
+        $s = $m->select();
+        $m->updateRows(array('rebuilt'=>0), $s);
 
         $startTime = microtime(true);
         $numProcesses = 0;
@@ -169,6 +142,13 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             echo "processed pages: $stats[pages]\n";
             echo "indexed pages: $stats[addedPages]\n";
         }
+
+        //delete rows that have not been rebuilt
+        $m = Kwf_Component_PagesMetaModel::getInstance();
+        $s = $m->select();
+        $s->whereEquals('rebuilt', false);
+        $m->updateRows(array('deleted'=>1), $s);
+
         exit;
     }
 
