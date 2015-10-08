@@ -188,7 +188,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         if ($this->_getParam('debug')) echo "processing changed_recursive $page->componentId\n";
         $childPages = $page->getChildPseudoPages(
             array('pageGenerator' => false),
-            array('pseudoPage'=>false)
+            array('pseudoPage'=>false, 'unique'=>false) //don't recurse into unique boxes, causes endless recursion if box creates page
         );
         $ret = array();
         foreach ($childPages as $p) {
