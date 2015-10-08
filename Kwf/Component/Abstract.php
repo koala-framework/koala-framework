@@ -92,6 +92,9 @@ class Kwf_Component_Abstract
                 }
             }
         }
+        if (isset($settings['tablename'])) {
+            throw new Kwf_Exception("tablename for '$componentClass' is set - please convert to model");
+        }
         if (isset($settings['modelname'])) {
             throw new Kwf_Exception("modelname for '$componentClass' is set - please rename into ownModel or childModel");
         }
