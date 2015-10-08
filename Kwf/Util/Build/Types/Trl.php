@@ -116,6 +116,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             glob(VENDOR_PATH.'/*/*/composer.json')
         );
         $existingFiles = array();
+        $composerFiles = array_unique($composerFiles);
         foreach ($composerFiles as $composerFile) {
             $trlDir = dirname($composerFile).'/trl/';
 
