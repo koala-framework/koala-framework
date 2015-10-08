@@ -83,6 +83,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
             }
             $row->updateFromPage($page);
             $row->rebuilt = true;
+            $row->changed_recursive = false;
             $row->save();
             $stats['addedPages']++;
             unset($page);
