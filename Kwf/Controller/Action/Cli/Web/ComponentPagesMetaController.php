@@ -174,6 +174,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
     public function updateChangedJobAction()
     {
+        Kwf_Util_MemoryLimit::set(512);
         $start = microtime(true);
         $m = Kwf_Component_PagesMetaModel::getInstance();
         $s = $m->select();
@@ -198,6 +199,11 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
 
     private function _processRecursive(Kwf_Component_Data $page)
     {
+        if (memory_get_usage() > 128*1024*1024) {
+            if ($this->_getParam('debug')) echo "Collect garbage...\n";;
+            Kwf_Component_Data_Root::getInstance()->freeMemory();
+        }
+
         if ($this->_getParam('debug')) echo "processing changed_recursive $page->componentId\n";
         $childPages = $page->getChildPseudoPages(
             array('pageGenerator' => false),
