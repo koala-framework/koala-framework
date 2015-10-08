@@ -9,6 +9,8 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $ret['dimension'] = array('width'=>100, 'height'=>100, 'cover' => false);
         $ret['imgCssClass'] = '';
         $ret['lazyLoadOutOfViewport'] = true; // Set to false to load image also when not in view
+        $ret['pdfMaxWidth'] = 0;
+        $ret['pdfMaxDpi'] = 150;
         $ret['defineWidth'] = false;
         return $ret;
     }
