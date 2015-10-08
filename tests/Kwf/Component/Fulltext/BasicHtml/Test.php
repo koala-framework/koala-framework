@@ -7,6 +7,7 @@ class Kwf_Component_Fulltext_BasicHtml_Test extends Kwc_TestAbstract
     public function setUp()
     {
         parent::setUp('Kwf_Component_Fulltext_BasicHtml_Root');
+        Kwf_Component_PagesMetaModel::getInstance()->indexRecursive($this->_root);
     }
 
     public function testChangeHtml()
