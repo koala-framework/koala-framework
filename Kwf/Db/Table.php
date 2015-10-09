@@ -1,6 +1,7 @@
 <?php
 /**
  * @internal
+ * based on Zend_Db_Table_Abstract Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  */
 class Kwf_Db_Table
 {
