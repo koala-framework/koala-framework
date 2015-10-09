@@ -223,9 +223,6 @@ class Kwf_Component_Data
             $page = $this->getPage();
             if (!$page) return '';
             $rel = $page->_rel;
-            if (/*$childs || */Kwf_Component_Abstract::getFlag($this->getPage()->componentClass, 'noIndex')) {
-                $rel .= ' nofollow';
-            }
             return trim($rel);
         } else if ($var == 'filename') {
             return rawurlencode($this->getPseudoPageOrRoot()->_filename);
