@@ -33,7 +33,9 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
                                 ->getData()->getComponentConfigs();
         $c = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId($this->_getParam('componentId'), array('limit'=>1, 'ignoreVisible'=>true));
-        $this->view->contentWidth = $c->getComponent()->getContentWidth();
+        if (!Kwf_Config::getValue('kwc.responsive')) {
+            $this->view->contentWidth = $c->getComponent()->getContentWidth();
+        }
     }
 
     public function preDispatch()
