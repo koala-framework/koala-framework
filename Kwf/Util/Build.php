@@ -23,6 +23,7 @@ class Kwf_Util_Build
         }
         $types[] = new Kwf_Util_Build_Types_Trl();
         $types[] = new Kwf_Util_Build_Types_Events();
+        $types[] = new Kwf_Util_Build_Types_Twig();
         $types[] = new Kwf_Util_Build_Types_Assets();
         return $types;
     }

@@ -1,10 +1,23 @@
 <?php
 class Kwf_View_Twig_Environment extends Twig_Environment
 {
+    private $_compilerEnabled = false;
+
+    public function setCompilerEnabled($v)
+    {
+        $this->_compilerEnabled = $v;
+    }
+
+    public function compileSource($source, $name = null)
+    {
+        if (!$this->_compilerEnabled) throw new Kwf_Exception('Compiling twig templates must happen only during build');
+        return parent::compileSource($source, $name);
+    }
+
     public function __construct()
     {
         parent::__construct(new Kwf_View_Twig_FilesystemLoader('.'), array(
-            'cache' => 'cache/twig',
+            'cache' => 'build/twig',
             'auto_reload' => false
         ));
 
