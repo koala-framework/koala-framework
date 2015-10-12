@@ -1,7 +1,7 @@
 <div class="{{ rootElementClass }}">
     <div class="kwfUp-loadingMenu"><div class="kwfUp-innerLoading"></div></div>
     <input type="hidden" value="{{ config|json_encode() }}" />
-    {% block showMenu %}
+    {% block showMenuButton %}
     <a class="kwfUp-showMenu" href="#">
         {{ placeholder.menuLink }}
     </a>
