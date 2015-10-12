@@ -9,7 +9,7 @@ class Kwc_List_ChildPages_Teaser_Generator extends Kwf_Component_Generator_Table
     {
         $ret = parent::_formatConfig($parentData, $row);
         $ret['targetPage'] = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($row->target_page_id, array('subroot'=>$parentData, 'limit'=>1));
+            ->getComponentByDbId($row->target_page_id, array('subroot'=>$parentData, 'limit'=>1, 'ignoreVisible'=>true));
 
         if (!$ret['targetPage']) return null; //can happen if page was deleted but entry still exists
 

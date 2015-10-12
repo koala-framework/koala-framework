@@ -545,7 +545,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if (!is_array($class)) $class = array($class);
 
         static $prefix;
-        $cacheId = 'cclsbpc-'.implode('-', $class);
+        $cacheId = 'cclsbpc-'.implode('-', $class).'-'.Kwf_Component_Data_Root::getComponentClass();
         $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if ($success) {
             return $ret;

@@ -128,7 +128,9 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
         $ret['imgAttributes'] = array();
-        $ret['imgAttributes']['class'] = $ret['imgCssClass'];
+        if ($ret['imgCssClass']) {
+            $ret['imgAttributes']['class'] = $ret['imgCssClass'];
+        }
         if ($titleText = $this->_getTitleText()) {
             $ret['imgAttributes']['title'] = $titleText;
         }

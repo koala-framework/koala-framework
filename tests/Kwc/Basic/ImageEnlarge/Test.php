@@ -57,8 +57,8 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('{"width":16,"height":16,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['data-kwc-lightbox']);
-        $this->assertEquals('/foo1/image', (string)$a[0]['href']);
+        $this->assertEquals('{"width":16,"height":16,"style":"CenterBox","adaptHeight":true,"lightboxUrl":"\/foo1\/image"}', (string)$a[0]['data-kwc-lightbox']);
+        $this->assertContains('/media/Kwc_Basic_ImageEnlarge_EnlargeTagWithoutSmall_TestComponent/1800-linkTag', (string)$a[0]['href']);
 
 
         $html = $this->_root->getComponentById('1800-linkTag_imagePage')->render();
@@ -128,8 +128,8 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('{"width":16,"height":16,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['data-kwc-lightbox']);
-        $this->assertEquals('/foo2/image', (string)$a[0]['href']);
+        $this->assertEquals('{"width":16,"height":16,"style":"CenterBox","adaptHeight":true,"lightboxUrl":"\/foo2\/image"}', (string)$a[0]['data-kwc-lightbox']);
+        $this->assertContains('/media/Kwc_Basic_ImageEnlarge_EnlargeTag_TestComponent/1801-linkTag/', (string)$a[0]['href']);
 
 
 
@@ -207,8 +207,8 @@ class Kwc_Basic_ImageEnlarge_Test extends Kwc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('{"width":210,"height":70,"style":"CenterBox","adaptHeight":true}', (string)$a[0]['data-kwc-lightbox']);
-        $this->assertEquals('/foo3/image', (string)$a[0]['href']);
+        $this->assertEquals('{"width":210,"height":70,"style":"CenterBox","adaptHeight":true,"lightboxUrl":"\/foo3\/image"}', (string)$a[0]['data-kwc-lightbox']);
+        $this->assertContains('/media/Kwc_Basic_ImageEnlarge_EnlargeTag_TestComponent/1802-linkTag/', (string)$a[0]['href']);
 
 
         $html = $this->_root->getComponentById('1802-linkTag_imagePage')->render();

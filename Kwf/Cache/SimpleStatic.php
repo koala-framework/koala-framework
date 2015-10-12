@@ -118,7 +118,7 @@ class Kwf_Cache_SimpleStatic
         if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
 
         $ret = true;
-        if (!extension_loaded('apc')) {
+        if (!extension_loaded('apc') || PHP_SAPI == 'cli') {
             foreach ($cacheIds as $cacheId) {
                 unset(self::$_cache[$cacheId]);
                 $file = self::_getFileNameForCacheId($cacheId);

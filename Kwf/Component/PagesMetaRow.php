@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_PagesMetaRow extends Kwf_Model_Db_Row
+class Kwf_Component_PagesMetaRow extends Kwf_Model_Proxy_Row
 {
     private static function _canHaveFulltext($class)
     {
@@ -72,7 +72,8 @@ class Kwf_Component_PagesMetaRow extends Kwf_Model_Db_Row
         $this->deleted = !$page->isVisible();
         $this->page_id = $page->componentId;
         $this->expanded_component_id = $page->getExpandedComponentId();
-        $this->domain_component_id = $page->getDomainComponent()->componentId;
+        $domainCmp = $page->getDomainComponent();
+        $this->domain_component_id = $domainCmp ? $domainCmp->componentId : null;
         $this->subroot_component_id = $page->getSubroot()->componentId;
         $this->url = $page->getAbsoluteUrl();
 

@@ -13,6 +13,6 @@ class Kwf_Component_ComponentLinkModifiers_Test extends Kwc_TestAbstract
     {
         $c = $this->_root->getComponentById('root_test');
         $html = $c->render();
-        $this->assertEquals($html, '<a href="/kwf/kwctest/Kwf_Component_ComponentLinkModifiers_Root/page1"><span>page1</span></a><span class="appendText">foobar</span>');
+        $this->assertEquals($html, '<a href="/kwf/kwctest/Kwf_Component_ComponentLinkModifiers_Root/page1">page1</a><span class="appendText">foobar</span>');
     }
 }
