@@ -141,15 +141,15 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
             $ret['mimeType'] = $this->_getMimeType($this->filename);
             $ret['extension'] = substr(strrchr($this->filename, '.'), 1);
         }
-        $size = @getimagesize($this->getFileSource());
+        $size = $this->getImageDimensions();
         if ($size) {
             $ret['image'] = true;
-            if (abs(Kwf_Media_Image::getExifRotation($this->getFileSource())) == 90) {
-                $size = array($size[1], $size[0]);
+            $ret['imageHandyScaleFactor'] = Kwf_Media_Image::getHandyScaleFactor($size);
+            if (abs($size['rotation']) == 90) {
+                $size = array('width'=>$size['height'], 'height'=>$size['width']);
             }
-            $ret['imageWidth'] = $size[0];
-            $ret['imageHeight'] = $size[1];
-            $ret['imageHandyScaleFactor'] = Kwf_Media_Image::getHandyScaleFactor($this->getFileSource());
+            $ret['imageWidth'] = $size['width'];
+            $ret['imageHeight'] = $size['height'];
         } else {
             $ret['image'] = false;
         }
@@ -162,17 +162,47 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         $this->_deleteFile();
     }
 
+    protected function _beforeSave()
+    {
+        parent::_beforeSave();
+
+        if ($this->getFileSource() && is_file($this->getFileSource())) {
+            $size = @getimagesize($this->getFileSource());
+            if ($size) {
+                $this->is_image = true;
+                $this->image_width = $size[0];
+                $this->image_height = $size[1];
+                $this->image_rotation = Kwf_Media_Image::getExifRotation($this->getFileSource());
+            } else {
+                $this->is_image = false;
+            }
+        }
+    }
+
     public function getImageDimensions()
     {
-        $size = @getimagesize($this->getFileSource());
-        if ($size) {
-            $ret = array();
-            $ret['width'] = $size[0];
-            $ret['height'] = $size[1];
+        if ($this->is_image == -1) {
+            //unknown, calculate-dimensions didn't update yet
+            $size = @getimagesize($this->getFileSource());
+            if ($size) {
+                $ret = array();
+                $ret['width'] = $size[0];
+                $ret['height'] = $size[1];
+                $ret['rotation'] = Kwf_Media_Image::getExifRotation($this->getFileSource());
+            } else {
+                $ret = false;
+            }
+            return $ret;
         } else {
-            $ret = false;
+            if ($this->is_image) {
+                return array(
+                    'width' => $this->image_width,
+                    'height' => $this->image_height,
+                    'rotation' => $this->image_rotation,
+                );
+            }
+            return false;
         }
-        return $ret;
     }
 
     /*
