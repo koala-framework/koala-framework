@@ -80,10 +80,6 @@ class Kwf_Component_Abstract_Admin
         return $router->assemble($urlOptions, $name, true);
     }
 
-    public function setup()
-    {
-    }
-
     public static function getComponentFile($class, $filename = '', $ext = 'php', $returnClass = false)
     {
         if (is_object($class)) {
