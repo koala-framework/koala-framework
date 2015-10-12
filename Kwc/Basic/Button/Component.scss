@@ -2,7 +2,7 @@
 
 .kwcClass {
     @include pie-clearfix;
-    &__text {
+    .kwcBem__text {
         font-size: 14px;
         padding: 12px 30px;
         text-decoration: none;

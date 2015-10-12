@@ -3,29 +3,29 @@
 @import "compass/css3/box-sizing";
 
 .kwcClass {
-    &__background {
+    .kwcBem__background {
         overflow: hidden;
         position: absolute;
         left: 0;
         width: 100%;
         z-index: 2;
 
-        &--opaque {
+        .kwcBem--opaque {
             @include opacity(0.7);
         }
 
-        &--backgroundImage {
+        .kwcBem--backgroundImage {
             z-index: 1;
         }
     }
 
-    &--white {
+    .kwcBem--white {
         .kwcBem {
-            &__background {
+            .kwcBem__background {
                 background: #FFFFFF;
             }
 
-            &__content {
+            .kwcBem__content {
                 .kwfUp-webStandard p {
                     color: $typo;
                 }
@@ -33,13 +33,13 @@
         }
     }
 
-    &--grey {
+    .kwcBem--grey {
         .kwcBem {
-            &__background {
+            .kwcBem__background {
                 background: #ccd0d4;
             }
 
-            &__content {
+            .kwcBem__content {
                 .kwfUp-webStandard p {
                     color: $typo;
                 }
@@ -61,7 +61,7 @@
         }
     }
 
-    &__content {
+    .kwcBem__content {
         z-index: 3;
         position: relative;
         padding: 30px 0;
