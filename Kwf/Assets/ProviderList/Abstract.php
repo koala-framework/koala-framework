@@ -22,7 +22,9 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         $cachedProviders = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if ($cachedProviders === false) {
             $cachedProviders = array();
-            foreach (glob(VENDOR_PATH."/*/*") as $i) {
+            $paths = glob(VENDOR_PATH."/*/*");
+            $paths[] = '.';
+            foreach ($paths as $i) {
                 if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
                     $config = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
                     if ($config->provider) {
