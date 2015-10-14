@@ -2,6 +2,7 @@
 class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 {
     private $_rootComponentClass;
+    private $_fileDependencies = array();
 
     public function __construct($rootComponentClass)
     {
@@ -215,7 +216,17 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
             $ret = array();
             $componentClasses = $this->_getRecursiveChildClasses($this->_rootComponentClass);
             foreach ($componentClasses as $class) {
-                $ret = array_merge($ret, $this->_getComponentSettingDependencies($class, 'assetsAdmin', false));
+                //dep
+                $ret = array_merge($ret, $this->_getComponentSettingDependenciesDep($class, 'assetsAdmin'));
+
+                //files
+                $assets = Kwc_Abstract::getSetting($class, 'assetsAdmin');
+                foreach ($assets['files'] as $file) {
+                    if (!isset($this->_fileDependencies[$file])) {
+                        $this->_fileDependencies[$file] = Kwf_Assets_Dependency_File::createDependency($file, $this->_providerList);
+                    }
+                    $ret[] = $this->_fileDependencies[$file];
+                }
             }
             return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
         } else if ($dependencyName == 'FrontendCore') {
@@ -263,14 +274,6 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
             $ret[] = $d;
         }
         return $ret;
-    }
-
-    private function _getComponentSettingDependencies($class, $setting, $isCommonJsEntry)
-    {
-        return array_merge(
-            $this->_getComponentSettingDependenciesDep($class, $setting),
-            $this->_getComponentSettingDependenciesFiles($class, $setting, $isCommonJsEntry)
-        );
     }
 
     private function _getRecursiveChildClasses($class, &$processedComponents = array())
