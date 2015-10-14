@@ -128,19 +128,21 @@ class Kwf_Cache_SimpleStatic
                     if (!unlink($file)) $ret = false;
                 }
             }
+            if (extension_loaded('apc')) {
+                $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+                $ids = array();
+                foreach ($cacheIds as $cacheId) {
+                    $ids[] = $prefix.$cacheId;
+                }
+                $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
+                if (!$result['result']) $ret = false;
+            }
         } else {
             $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
-            $ids = array();
             foreach ($cacheIds as $cacheId) {
                 if (!apc_delete($prefix.$cacheId)) {
                     $ret = false;
                 }
-                $ids[] = $prefix.$cacheId;
-            }
-            if (php_sapi_name() == 'cli' && $ids) {
-                unset(self::$_cache[$cacheId]);
-                $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
-                if (!$result['result']) $ret = false;
             }
         }
         return $ret;
