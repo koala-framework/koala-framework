@@ -148,7 +148,7 @@ class Kwf_Controller_Action_Cli_Web_ComponentPagesMetaController extends Kwf_Con
         $m = Kwf_Component_PagesMetaModel::getInstance();
         $s = $m->select();
         $s->whereEquals('rebuilt', false);
-        $m->updateRows(array('deleted'=>1), $s);
+        $m->deleteRows($s);
 
         exit;
     }
