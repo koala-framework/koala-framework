@@ -12,6 +12,10 @@ Kwc.Paragraphs.PanelJsonReader = Ext2.extend(Ext2.data.JsonReader,
         if (o.contentWidth) {
             this.paragraphsPanel.dataView.setWidth(o.contentWidth + 20);
         }
+        if (o.masterLayoutContexts) {
+            this.paragraphsPanel.dataView.setMasterLayoutContexts(o.masterLayoutContexts);
+            this.paragraphsPanel.actions.addparagraph.setMasterLayoutContexts(o.masterLayoutContexts);
+        }
         return ret;
     }
 });
@@ -38,6 +42,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
             this.dataView = new Kwc.Paragraphs.DataView({
                 components: this.components,
                 componentIcons: this.componentIcons,
+                supportedMasterLayoutContexts: this.supportedMasterLayoutContexts,
                 showDelete: this.showDelete,
                 showDeviceVisible: this.showDeviceVisible,
                 showPosition: this.showPosition,
@@ -120,6 +125,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
             this.actions.addparagraph = new Kwc.Paragraphs.AddParagraphButton({
                 components: this.components,
                 componentIcons: this.componentIcons,
+                supportedMasterLayoutContexts: this.supportedMasterLayoutContexts,
                 listeners: {
                     scope: this,
                     menushow: function() {

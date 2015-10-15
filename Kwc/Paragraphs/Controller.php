@@ -36,6 +36,7 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         if (!Kwf_Config::getValue('kwc.responsive')) {
             $this->view->contentWidth = $c->getComponent()->getContentWidth();
         }
+        $this->view->masterLayoutContexts = $c->getComponent()->getMasterLayoutContexts();
     }
 
     public function preDispatch()
@@ -63,6 +64,17 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
     {
         $class = $this->_getParam('component');
         if (array_search($class, $this->_components)) {
+            $supportedMasterLayoutContexts = Kwf_Component_Layout_Abstract::getInstance($class)->getSupportedContexts();
+            if ($supportedMasterLayoutContexts !== false) {
+                $masterLayoutContexts = Kwf_Component_Data_Root::getInstance()
+                    ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true, 'limit'=>1))
+                    ->getComponent()->getMasterLayoutContexts();
+                foreach ($masterLayoutContexts as $ctx) {
+                    if (!in_array($ctx, $supportedMasterLayoutContexts)) {
+                        throw new Kwf_Exception("Supported Content Spans doesn't match"); //button is hidden in JS
+                    }
+                }
+            }
             $row = $this->_model->createRow();
             $this->_preforeAddParagraph($row);
             $generators = Kwc_Abstract::getSetting($this->_getParam('class'), 'generators');

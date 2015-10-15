@@ -310,9 +310,9 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
     {
         $masterLayouts = "\$all-master-layouts: ();\n";
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
-            if (Kwc_Abstract::hasSetting($c, 'layoutConfig')) {
-                $layoutConfig = Kwc_Abstract::getSetting($c, 'layoutConfig');
-                $f = new Kwf_Assets_Dependency_File($layoutConfig);
+            if (Kwc_Abstract::hasSetting($c, 'masterLayout')) {
+                $masterLayout = Kwc_Abstract::getSetting($c, 'masterLayout');
+                $f = new Kwf_Assets_Dependency_File($masterLayout['layoutConfig']);
                 $masterLayouts .= $f->getContents(null)."\n";
                 $masterLayouts .= "\$all-master-layouts: map-merge(\$all-master-layouts, \$master-layouts);\n";
             }

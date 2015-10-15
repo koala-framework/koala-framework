@@ -107,6 +107,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $ret = parent::getSettings();
         $ret['viewCache'] = true;
         $ret['contentSender'] = 'Kwf_Component_Abstract_ContentSender_Default';
+        $ret['layoutClass'] = 'Kwf_Component_Layout_Default';
         return $ret;
     }
 
@@ -664,7 +665,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
     {
         if ($this->_hasSetting('contentWidth')) return $this->_getSetting('contentWidth');
 
-        if ($this->getData()->isPage) {
+        if ($this->getData()->isPage || isset($this->getData()->box)) {
             $componentWithMaster = Kwf_Component_View_Helper_Master::
                 getComponentsWithMasterTemplate($this->getData());
             $last = array_pop($componentWithMaster);
@@ -673,7 +674,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             } else {
                 $p = Kwf_Component_Data_Root::getInstance(); // for tests
             }
-            return $p->getComponent()->_getMasterChildContentWidth($this->getData());
+            return Kwf_Component_MasterLayout_Abstract::getInstance($p->componentClass)->getContentWidth($this->getData());
         } else {
             if (!$this->getData()->parent) {
                 throw new Kwf_Exception("Can't detect contentWidth, use contentWidth setting for '".$this->getData()->componentClass."'");
@@ -702,65 +703,10 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         return $ret;
     }
 
-    protected function _getMasterChildContentWidth(Kwf_Component_Data $sourcePage)
+    public function getMasterLayoutContexts()
     {
-        if (!$this->_hasSetting('contentWidth')) {
-            throw new Kwf_Exception('contentWidth has to be set');
-        }
-        $ret = $this->_getSetting('contentWidth');
-        if (!$this->_hasSetting('contentWidthBoxSubtract')) return $ret;
-
-        $boxes = array();
-        foreach ($sourcePage->getChildBoxes() as $box) {
-            $boxes[$box->box] = $box;
-        }
-        if ($this->_hasSetting('contentWidthBoxSubtract')) {
-            foreach ($this->_getSetting('contentWidthBoxSubtract') as $box=>$width) {
-                if (!isset($boxes[$box])) continue;
-                $c = $boxes[$box];
-                if ($c && $c->hasContent()) {
-                    $ret -= $width;
-                }
-            }
-        }
-        return $ret;
-    }
-
-    protected function _getChildContentSpans(Kwf_Component_Data $child)
-    {
-        $ret = $this->getContentSpans();
-        return $ret;
-    }
-
-    protected function _getMasterChildContentSpans(Kwf_Component_Data $sourcePage)
-    {
-        if (!$this->_hasSetting('contentSpans')) {
-            throw new Kwf_Exception('contentSpans has to be set');
-        }
-        $ret = $this->_getSetting('contentSpans');
-        return $ret;
-    }
-
-    public function getContentSpans()
-    {
-        if ($this->_hasSetting('contentSpans')) return $this->_getSetting('contentSpans');
-
-        if ($this->getData()->isPage) {
-            $componentWithMaster = Kwf_Component_View_Helper_Master::
-                getComponentsWithMasterTemplate($this->getData());
-            $last = array_pop($componentWithMaster);
-            if ($last && $last['type'] == 'master') {
-                $p = $last['data'];
-            } else {
-                $p = Kwf_Component_Data_Root::getInstance(); // for tests
-            }
-            return $p->getComponent()->_getMasterChildContentSpans($this->getData());
-        } else {
-            if (!$this->getData()->parent) {
-                throw new Kwf_Exception("Can't detect contentSpans, use contentSpans setting for '".$this->getData()->componentClass."'");
-            }
-            return $this->getData()->parent->getComponent()->_getChildContentSpans($this->getData());
-        }
+        return Kwf_Component_Layout_Abstract::getInstance($this->getData()->componentClass)
+            ->getContexts($this->getData());
     }
 
     /**
