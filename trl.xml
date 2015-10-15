@@ -2456,6 +2456,7 @@
 <cs>Vyhledat</cs>
 <rs>Pretraži</rs>
 <ba>Traži</ba>
+<es>Buscar</es>
 </text>
 <text>
 <en>Possible Destinations</en>
@@ -4773,6 +4774,7 @@
 <ru>Уже активировано</ru>
 <uk>Вже активовано</uk>
 <ua>Вже активовано</ua>
+<hr>Već aktivirano</hr>
 </text>
 <text>
 <en>Activate / Login</en>
@@ -5032,6 +5034,7 @@
 <ru>Откройте публикацию или прочитайте её:</ru>
 <uk>Відкрити повідомлення або читати безпосередньо:</uk>
 <ua>Відкрити пост або читати:</ua>
+<hr>Otvoriti komentar ili direktno pročitati: </hr>
 </text>
 <text>
 <en>Please enter a reason for reporting this Post</en>
@@ -5062,6 +5065,7 @@
 <ru>Откройте этот адрес, чтобы перейти к публикации или прочитайте её здесь:</ru>
 <uk>Відкрийте це посилання, щоб перейти до повідомлення або читайте його тут:</uk>
 <ua>Перейти до коментаря за лінком або читати одразу:</ua>
+<hr>Otvorite ovaj link kako bi došli do komentara ili pročitajte ovdje. </hr>
 </text>
 <text>
 <en>report</en>
@@ -8249,6 +8253,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Prenos je končan.</sl>
 <ru>Загружено</ru>
 <ua>Завантажено</ua>
+<hr>Download je završen.</hr>
 </text>
 <text>
 <en>Please click on the following link to download your Excel file.</en>
@@ -11265,6 +11270,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Ta račun je bil že aktiviran.</sl>
 <ru>Этот аккаунт уже активирован.</ru>
 <ua>Цей аккаунт вже активовано.</ua>
+<hr>Ovaj račun je već aktiviran.</hr>
 </text>
 <text>
 <id>1542</id>
@@ -12832,6 +12838,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>no se encontraron entradas</es>
 <al>Nuk u gjet asnjë informacion.</al>
 <ba>Nisu pronađeni rezultati</ba>
+<es>No se encontraron descargas</es>
 </text>
 <text>
 <en>Invalid type given, value should be string or integer</en>
@@ -12949,6 +12956,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Необходимо прочитать</ru>
 <ua>Необхідно прочитати</ua>
 <ro>Lectura este necesara</ro>
+<hr>Potrebno pročitati</hr>
 </text>
 <text>
 <en>Only intern</en>
@@ -13316,6 +13324,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ua>Favourites</ua>
 <uk>Вибране</uk>
 <ro>Favorite</ro>
+<es>Favoritos</es>
 </text>
 <text>
 <en>save as favourite</en>
@@ -14388,6 +14397,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2252</id>
 <ru>Обрезка недоступна, поскольку изображение слишком маленькое.</ru>
 <ro>Imaginea nu poate fi ajustata pentru ca este prea mica.</ro>
+<hr>Slika se ne može rezati, jer je pre mala.</hr>
 </text>
 <text>
 <en>Reset</en>
@@ -14395,6 +14405,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2253</id>
 <ru>Сброс</ru>
 <ro>Restabili</ro>
+<hr>Resetiranje</hr>
 </text>
 <text>
 <en>Reset to default (maximum)</en>
@@ -14444,6 +14455,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2254</id>
 <ru>Загрузка изображения</ru>
 <ro>Se incarca imaginea </ro>
+<hr>Skida se slika</hr>
 </text>
 <text>
 <en>Use crop region</en>
@@ -15492,6 +15504,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Изображение 100% ширина</ru>
 <de>Bild mit 100% Breite</de>
 <id>2249</id>
+<hr>Slika s 100% širine</hr>
 </text>
 <text>
 <en>Events</en>
@@ -15509,6 +15522,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Серый</ru>
 <de>Grau</de>
 <id>2255</id>
+<hr>Sivo</hr>
 </text>
 <text>
 <en>Year</en>
