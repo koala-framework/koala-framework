@@ -441,6 +441,11 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     {
         var closeButtons = this.lightboxEl.find('.closeButton');
 
+        $('body').keydown((function(e) {
+            if (e.keyCode == 27) {
+                this.closeAndPushState();
+            }
+        }).bind(this));
 
         closeButtons.click((function(ev) {
             ev.preventDefault();
