@@ -319,7 +319,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     show: function(options)
     {
-        $('html').addClass('kwfup-lightboxActive');
+        $('html').addClass('kwfLightboxActive');
         this.createLightboxEl();
         this.style.onShow(options);
 
@@ -377,9 +377,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         Kwf.Statistics.count(this.href);
     },
     close: function(options) {
-        $('html').removeClass('kwfup-lightboxActive');
-        $('.kwfup-fixedContent').each(function(key, el){
-            $(el).removeClass('kwfup-fixedContent');
+        $('html').removeClass('kwfLightboxActive');
+        $('.kwfFixedContent').each(function(key, el){
+            $(el).removeClass('kwfFixedContent');
         });
         this.lightboxEl.hide();
         //so eg. flash component can remove object
@@ -709,7 +709,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
             $('body').addClass('kwfLightboxAnimate');
             this.lightbox.innerLightboxEl.one(transEndEventName,
                 (function() {
-                    $('html').removeClass('kwfup-lightboxActive');
+                    $('html').removeClass('kwfLightboxActive');
                     $('body').removeClass('kwfLightboxAnimate');
                     this.lightbox.lightboxEl.hide();
                     this.afterClose();
