@@ -77,6 +77,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                 } else {
                     $loadPath[] = KWF_PATH.'/sass/Kwf/stylesheets';
                 }
+                $loadPath[] = 'cache/scss/generated';
                 $loadPath = escapeshellarg(implode(PATH_SEPARATOR, $loadPath));
             }
 
@@ -98,13 +99,17 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             $sourceFiles = array();
             foreach ($map->sources as $k=>$i) {
                 //sources are relative to cache/sass, strip that
-                if (substr($i, 0, 6) != '../../') {
-                    throw new Kwf_Exception('source doesn\'t start with ../../');
-                }
-                $i = substr($i, 6);
-                $f = self::getPathWithTypeByFileName(getcwd().'/'.$i);
-                if (!$f) {
-                    throw new Kwf_Exception("Can't find path for '".getcwd().'/'.$i."'");
+                if (substr($i, 0, 10) == 'generated/') {
+                    $f = 'web/cache/scss/'.$i;
+                } else  {
+                    if (substr($i, 0, 6) != '../../') {
+                        throw new Kwf_Exception('source doesn\'t start with ../../');
+                    }
+                    $i = substr($i, 6);
+                    $f = self::getPathWithTypeByFileName(getcwd().'/'.$i);
+                    if (!$f) {
+                        throw new Kwf_Exception("Can't find path for '".getcwd().'/'.$i."'");
+                    }
                 }
                 $map->sources[$k] = $f;
                 $sourceFiles[] = $f;

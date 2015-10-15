@@ -109,7 +109,29 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $packages = $this->getAllPackages();
         $exts = array('js', 'defer.js', 'css');
 
-        echo "\ncalculating dependencies...\n";
+        $providers = array();
+        foreach ($packages as $p) {
+            foreach ($p->getProviderList()->getProviders() as $provider) {
+                if (!in_array($provider, $providers)) {
+                    $providers[] = $provider;
+                }
+            }
+        }
+        echo "\ninitializing providers...\n";
+        $steps = count($providers);
+        $c = new Zend_ProgressBar_Adapter_Console();
+        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+        $c->setTextWidth(50);
+        $progress = new Zend_ProgressBar($c, 0, $steps);
+        foreach ($providers as $provider) {
+            $progress->next(1, get_class($provider));
+            $provider->initialize();
+        }
+        $progress->finish();
+
+        echo "calculating dependencies...\n";
         $steps = count($packages) * count($exts);
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,

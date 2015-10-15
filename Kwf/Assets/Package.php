@@ -36,6 +36,14 @@ class Kwf_Assets_Package
         return $this->_dependency;
     }
 
+    /**
+     * @return Kwf_Assets_ProviderList_Abstract
+     */
+    public function getProviderList()
+    {
+        return $this->_providerList;
+    }
+
     public function getMaxMTimeCacheId($mimeType)
     {
         $ret = $this->_getCacheId($mimeType);
@@ -143,6 +151,10 @@ class Kwf_Assets_Package
             } else {
                 throw new Kwf_Exception_NotFound();
             }
+        }
+
+        foreach ($this->_providerList->getProviders() as $provider) {
+            $provider->initialize();
         }
 
         $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
