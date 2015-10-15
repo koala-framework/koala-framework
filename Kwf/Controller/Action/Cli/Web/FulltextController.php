@@ -434,7 +434,9 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
     {
         Kwf_Util_MemoryLimit::set(256);
 
-        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
+        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'), array('ignoreVisible'=>true));
+        if (!$subroot->isVisible()) return;
+
         if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
         $documents = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getAllDocuments($subroot);
         if ($this->_getParam('debug')) echo "count: ".count($documents)."\n";
