@@ -53,6 +53,8 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     el[0].kwfLightbox = l;
     Kwf.EyeCandy.Lightbox.currentOpen = l;
 
+    //Remove the kwfLightboxOpen class and get the transform matrix data
+    //We need that info, for future open animations
     var transformName = Modernizr.prefixed('transform');
     l.lightboxEl.hide();
     l.lightboxEl.removeClass('kwfLightboxOpen');
@@ -218,6 +220,10 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
             this.innerLightboxEl.css(transformName, newMatrix);
         }
+        //Thanks to the css-transforms specification we need to use this 0.001px fix
+        //This is, because if the transform matrix is (0, 0, 0, 0, 0, 0) it is a non-invertible matrix
+        //The spec says, that in this case the animation should fall back to a discrete animation ...
+        //Link to the bug report: https://code.google.com/p/chromium/issues/detail?id=494914
         if (this.innerLightboxEl.magicTransform) {
             if (values[0] == 0) {
                 this.innerLightboxEl.magicScale = true;
@@ -294,6 +300,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 
                 self.initialize();
             };
+            //Check if the Lightbox is currently animating
+            //If that's the case, wait till the animation is over and insert the content
+            //Otherwise the animation could look bad, if the content changes the lightbox size
             var transEndEventName = this.getTransitionEndName();
             if ($('body').hasClass('kwfLightboxAnimate'))  {
                 this.innerLightboxEl.one(transEndEventName,
