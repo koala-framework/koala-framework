@@ -8,7 +8,7 @@ class Kwc_List_GalleryBasic_TestComponent extends Kwc_List_Gallery_Component
         $ret['ownModel'] = new Kwf_Model_FnF(array(
             'primaryKey' => 'component_id',
             'data' => array(
-                array('component_id'=>'root_page1', 'columns' => 2, 'show_pics' => null)
+                array('component_id'=>'root_page1', 'columns' => 2, 'show_pics' => null, 'show_more_link_text' => '')
             )
         ));
         $ret['generators']['child']['component'] = 'Kwc_List_GalleryBasic_ImageEnlarge_TestComponent';
