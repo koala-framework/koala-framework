@@ -176,11 +176,11 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $dim = $c->getData()->getChildComponent('-i1')->getComponent()->getImageDimensions();
         $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'.
                     '\s*<p>\s*<div class="kwcAbstractComposite kwcAbstractImage kwcBasicTextImageTestComponent[^"]*".*>'
+                    .'\s*<div class="outerContainer">'
                     .'\s*<div class="container" .*>'
                     .'\s*<noscript>'
                     .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1009-i1/dh-'.$dim['width'].'-[0-9a-z]+/[0-9a-z]+/[0-9]+/logo.png" width="100" height="100" alt="" />'
                     .'\s*</noscript>#ms', $html);
-
     }
 
     public function testCreatesImageFromOtherComponentId()
@@ -198,6 +198,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
                         Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']));
         $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="kwcAbstractComposite kwcAbstractImage kwcBasicTextImageTestComponent[^"]*".*>'
+                    .'\s*<div class="outerContainer">'
                     .'\s*<div class="container" .*>'
                     .'\s*<noscript>'
                     .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1010-i1/dh-'.$width.'-[0-9a-z]+/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'
@@ -237,6 +238,7 @@ class Kwc_Basic_Text_ModelTest extends Kwc_TestAbstract
         $html = $c->getData()->render();
         $this->assertRegExp('#^\s*<div class="webStandard kwcText kwcBasicTextTestComponent">'
                     .'\s*<p>\s*<div class="kwcAbstractComposite kwcAbstractImage kwcBasicTextImageTestComponent[^"]*".*>'
+                    .'\s*<div class="outerContainer">'
                     .'\s*<div class="container" .*>'
                     .'\s*<noscript>'
                     .'\s*<img src="/kwf/kwctest/Kwc_Basic_Text_Root/media/Kwc_Basic_Text_Image_TestComponent/1015-i1/dh-'.$width.'-[0-9a-z]+/[^/]+/[0-9]+/foo.png" width="100" height="100" alt="" />'

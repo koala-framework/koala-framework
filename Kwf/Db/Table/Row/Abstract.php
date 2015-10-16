@@ -1,8 +1,6 @@
 <?php
 abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 {
-    private $_skipFilters = false; //für saveSkipFilters
-
     public function duplicate($data = array())
     {
         $data = array_merge($this->toArray(), $data);
@@ -67,56 +65,6 @@ abstract class Kwf_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     public function getPrimaryKey()
     {
         return $this->_getPrimaryKey();
-    }
-
-    protected function _insert()
-    {
-        parent::_insert();
-        $this->_updateFilters();
-    }
-
-    protected function _update()
-    {
-        parent::_update();
-        $this->_updateFilters();
-    }
-
-    private function _updateFilters($filterAfterSave = false)
-    {
-        if ($this->_skipFilters) return; //für saveSkipFilters
-
-        $filters = $this->getTable()->getFilters();
-        foreach($filters as $k=>$f) {
-            if ($f instanceof Kwf_Filter_Row_Abstract) {
-                if ($f->skipFilter($this)) continue;
-                if ($f->filterAfterSave() != $filterAfterSave) continue;
-                $this->$k = $f->filter($this);
-            } else {
-                $this->$k = $f->filter($this->__toString());
-            }
-            if ($filterAfterSave) {
-                $this->_skipFilters = true;
-                $this->save();
-            }
-        }
-    }
-
-    public function save()
-    {
-        $ret = parent::save();
-        $this->_updateFilters(true);
-        return $ret;
-    }
-
-    protected function _delete()
-    {
-        parent::_delete();
-        $filters = $this->getTable()->getFilters();
-        foreach($filters as $k=>$f) {
-            if ($f instanceof Kwf_Filter_Row_Abstract) {
-                $f->onDeleteRow($this);
-            }
-        }
     }
 
     //Speichern und abei die Filter nicht verwenden

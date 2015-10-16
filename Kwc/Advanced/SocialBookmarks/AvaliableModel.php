@@ -8,7 +8,7 @@ class Kwc_Advanced_SocialBookmarks_AvaliableModel extends Kwf_Model_FnF
         $config['data'] = array(
             array(
                 'id' => 'facebook',
-                'url' => 'http://www.facebook.com/sharer.php?u={0}',
+                'url' => 'https://www.facebook.com/sharer.php?u={0}',
                 'name' => 'Facebook'
             ),
             array(
@@ -18,17 +18,17 @@ class Kwc_Advanced_SocialBookmarks_AvaliableModel extends Kwf_Model_FnF
             ),
             array(
                 'id' => 'xing',
-                'url' => 'http://www.xing.com/',
+                'url' => 'https://www.xing.com/',
                 'name' => 'XING'
             ),
             array(
                 'id' => 'flickr',
-                'url' => 'http://www.flickr.com/',
+                'url' => 'https://www.flickr.com/',
                 'name' => 'Flickr'
             ),
             array(
                 'id' => 'twitter',
-                'url' => 'http://twitter.com/home?status={0}',
+                'url' => 'https://twitter.com/home?status={0}',
                 'name' => 'Twitter'
             ),
             array(
@@ -48,7 +48,7 @@ class Kwc_Advanced_SocialBookmarks_AvaliableModel extends Kwf_Model_FnF
             ),
             array(
                 'id' => 'google',
-                'url' => 'http://www.google.com/bookmarks/mark?op=add&hl=de&bkmk={0}',
+                'url' => 'https://www.google.com/bookmarks/mark?op=add&hl=de&bkmk={0}',
                 'name' => 'Google'
             ),
             array(

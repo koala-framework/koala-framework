@@ -34,6 +34,6 @@ class Kwc_IncludeCode_Test extends Kwc_TestAbstract
         $this->assertEquals(substr_count($html, 'foobar'), 1);
         $html = preg_replace('#<!--.*>#', '', $html);
         $html = preg_replace('#<.*?-->#', '', $html);
-        $this->assertRegExp('#foobar\s*<script type="text/javascript">.*?</script>\s*</body>#s', $html);
+        $this->assertRegExp('#foobar\s*</body>#s', $html);
     }
 }

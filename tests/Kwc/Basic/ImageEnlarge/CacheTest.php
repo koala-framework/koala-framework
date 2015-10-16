@@ -36,8 +36,8 @@ class Kwc_Basic_ImageEnlarge_CacheTest extends Kwc_TestAbstract
 
         $a = $xml->xpath("//a");
         $this->assertEquals(1, count($a));
-        $this->assertEquals('{"width":'.$largeImage['width'].',"height":'.$largeImage['height'].',"style":"CenterBox","adaptHeight":true}', (string)$a[0]['data-kwc-lightbox']);
-        $this->assertEquals($largeImage['pageUrl'], (string)$a[0]['href']);
+        $this->assertEquals('{"width":'.$largeImage['width'].',"height":'.$largeImage['height'].',"style":"CenterBox","adaptHeight":true,"lightboxUrl":"\/foo1\/image"}', (string)$a[0]['data-kwc-lightbox']);
+        $this->assertContains('/media/Kwc_Basic_ImageEnlarge_EnlargeTagWithoutSmall_TestComponent/1800-linkTag', (string)$a[0]['href']);
 
 
         $html = $this->_root->getComponentById($componentId.'-linkTag_imagePage')->render();

@@ -12,11 +12,6 @@ class Kwf_Test_TestSuite extends PHPUnit_Framework_TestSuite
             $classes = $this->_addDirectory('.', true);
         }
 
-        // damit der js test auch im web immer ausgeführt wird
-        if (!in_array('Kwf_Js_SyntaxTest', $classes)) {
-            $classes[] = 'Kwf_Js_SyntaxTest';
-        }
-
         if (file_exists("/www/testtimes")) {
             $app = Kwf_Registry::get('config')->application->id;
             if (!file_exists("/www/testtimes/failure_$app")) mkdir("/www/testtimes/failure_$app");
