@@ -16,7 +16,6 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
         l = new Kwf.EyeCandy.Lightbox.Lightbox(href, options);
     }
     el.kwfLightbox = l;
-    this.kwfLightbox.style.fixContent();
     if (Kwf.EyeCandy.Lightbox.currentOpen &&
         Kwf.EyeCandy.Lightbox.currentOpen.href == href
     ) {
@@ -49,7 +48,6 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     l.contentEl = l.innerLightboxEl.find('.kwfLightboxContent');
     l.style.afterCreateLightboxEl();
     l.style.onContentReady();
-    l.style.fixContent();
     el[0].kwfLightbox = l;
     Kwf.EyeCandy.Lightbox.currentOpen = l;
 
@@ -546,8 +544,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
     onMaskClick: function()
     {
         this.lightbox.closeAndPushState();
-    },
-    fixContent: function() {}
+    }
 };
 
 Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Styles.Abstract, {
@@ -749,6 +746,5 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
         this.lightbox.innerLightboxEl.css(initialSize);
 
         this._resizeContent();
-    },
-    fixContent: function() {}
+    }
 });
