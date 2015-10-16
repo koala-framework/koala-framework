@@ -44,7 +44,7 @@ Kwf.onJElementReady('.kwcFavourites', function(el, config) {
                 el.removeClass('loading');
                 var count = 0;
                 el.hasClass('isFavourite') ? count += 1 : count -= 1;
-                Kwf.fireComponentEvent('favouritesChanged', count);
+                Kwf.fireComponentEvent('favouritesChanged', count, el);
             }
         });
     });
