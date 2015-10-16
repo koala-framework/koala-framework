@@ -515,9 +515,10 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
             }, 0);
         } else {
             var maskEl = $('<div class="kwfLightboxMask"></div>');
-            this.lightbox.lightboxEl.find('.kwfLightboxScrollOuter').append(maskEl);
+            var lightboxEl = this.lightbox.lightboxEl;
+            lightboxEl.find('.kwfLightboxScrollOuter').append(maskEl);
             setTimeout(function(){
-                this.lightbox.lightboxEl.scrollTop(50000);
+                lightboxEl.scrollTop(50000);
             }, 0);
             setTimeout(function(){
                 maskEl.addClass('kwfLightboxMaskOpen');
