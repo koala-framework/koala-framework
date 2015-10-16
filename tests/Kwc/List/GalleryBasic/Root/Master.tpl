@@ -4,5 +4,5 @@
         <?=$this->assets(new Kwf_Assets_Package_TestPackage('Kwc_List_GalleryBasic', 'TestFiles', 'Kwc_List_GalleryBasic_Root'))?>
         <?=$this->debugData()?>
     </head>
-    <body><?=$this->componentWithMaster($this->componentWithMaster)?></body>
+    <body><div class="outerContent" style="max-width: 1000px; margin: 0 auto;"><?=$this->componentWithMaster($this->componentWithMaster)?></div></body>
 </html>
