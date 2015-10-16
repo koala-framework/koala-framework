@@ -519,7 +519,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
             var maskEl = $('<div class="kwfLightboxMask"></div>');
             this.lightbox.lightboxEl.find('.kwfLightboxScrollOuter').append(maskEl);
             setTimeout(function(){
-                $('.kwfLightbox').scrollTop(50000);
+                this.lightbox.lightboxEl.scrollTop(50000);
             }, 0);
             setTimeout(function(){
                 maskEl.addClass('kwfLightboxMaskOpen');
