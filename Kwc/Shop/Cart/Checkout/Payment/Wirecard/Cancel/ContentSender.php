@@ -8,7 +8,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Cancel_ContentSender extends Kwf_C
             Kwc_Shop_Cart_Orders::setCartOrderId($session->wirecardCartId);
             $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting($this->_data->parent->parent->parent->componentClass, 'childModel'))
                 ->getReferencedModel('Order')->getCartOrder();
-            if ($order) {
+            if ($order && $order->status == 'processing') {
                 $order->status = 'cart';
                 $order->save();
             }

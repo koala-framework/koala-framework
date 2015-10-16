@@ -60,6 +60,8 @@ class Kwf_Assets_Loader
             $ret['mimeType'] = 'text/x-component';
         } else if (substr($file, -4)=='.pdf') {
             $ret['mimeType'] = 'application/pdf';
+        } else if (substr($file, -4)=='.xml') {
+            $ret['mimeType'] = 'application/xml; charset=utf-8';
         } else {
             throw new Kwf_Assets_NotFoundException("Invalid filetype ($file)");
         }

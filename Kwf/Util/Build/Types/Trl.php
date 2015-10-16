@@ -97,7 +97,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             }
         } else if ($source == Kwf_Trl::SOURCE_KWF) {
             // check all composer packages
-            $files = $this->_checkPackagesForTrlFilesAndTryDownloadFromKoalaWebsiteIfNotExisting($targetLanguage);
+            $files = $this->_getAllLibraryTrlFiles($targetLanguage);
         }
         require_once VENDOR_PATH.'/autoload.php';
         $poParsers = array();
@@ -108,7 +108,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         return $poParsers;
     }
 
-    private function _checkPackagesForTrlFilesAndTryDownloadFromKoalaWebsiteIfNotExisting($targetLanguage)
+    private function _getAllLibraryTrlFiles($targetLanguage)
     {
         $composerFiles = array_merge(
             //Explicitly add koala-framework composer.json because of tests
@@ -116,6 +116,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             glob(VENDOR_PATH.'/*/*/composer.json')
         );
         $existingFiles = array();
+        $composerFiles = array_unique($composerFiles);
         foreach ($composerFiles as $composerFile) {
             $trlDir = dirname($composerFile).'/trl/';
 

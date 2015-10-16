@@ -18,8 +18,7 @@ class Kwf_Controller_Action_Enquiries_EnquiriesController
     {
         parent::_initColumns();
 
-        $this->_columns->add(new Kwf_Grid_Column('save_date', trlKwf('Date'), 110))
-            ->setRenderer('localizedDatetime');
+        $this->_columns->add(new Kwf_Grid_Column_Datetime('save_date', trlKwf('Date'), 110));
         $this->_columns->add(new Kwf_Grid_Column('subject', trlKwf('Subject'), 230));
         $this->_columns->add(new Kwf_Grid_Column('from_mail_data', trlKwf('From'), 180))
             ->setData(new Kwf_Controller_Action_Enquiries_EnquiryFromData());
