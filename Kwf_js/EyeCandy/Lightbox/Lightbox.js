@@ -376,9 +376,6 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     },
     close: function(options) {
         $('html').removeClass('kwfLightboxActive');
-        $('.kwfFixedContent').each(function(key, el){
-            $(el).removeClass('kwfFixedContent');
-        });
         this.lightboxEl.hide();
         //so eg. flash component can remove object
         Kwf.callOnContentReady(this.lightboxEl, {action: 'hide'});
