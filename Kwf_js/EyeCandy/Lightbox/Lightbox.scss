@@ -10,6 +10,13 @@ html.kwfLightboxActive, html.kwfLightboxActive body {
 }
 
 body {
+    .kwfLightbox {
+        opacity: 0;
+    }
+    .kwfLightboxOpen {
+        opacity: 1;
+    }
+
     .kwfLightboxScrollOuter {
         z-index: 100;
         width: 100%;
