@@ -35,9 +35,9 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
         } else if ($last['type'] == 'component') {
             $helper = new Kwf_Component_View_Helper_Component();
             $helper->setRenderer($this->_getRenderer());
-            return '<div class="kwfMainContent">' . "\n    " .
+            return '<main class="kwfMainContent">' . "\n    " .
                 $helper->component($component) . "\n" .
-                '</div><!--/kwfMainContent-->' . "\n";
+                '</main><!--/kwfMainContent-->' . "\n";
         } else {
             throw new Kwf_Exception("invalid type");
         }

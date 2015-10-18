@@ -1,4 +1,4 @@
-<div class="<?=$this->rootElementClass?> kwfUp-kwcImage" style="<?=$this->style;?>">
+<figure class="<?=$this->rootElementClass?> kwfUp-kwcImage" style="<?=$this->style;?>">
 <? if ($this->baseUrl) { ?>
     <?=$this->component($this->linkTag)?>
     <div class="<?=$this->containerClass?>" style="padding-bottom:<?=$this->aspectRatio?>%;"
@@ -10,10 +10,10 @@
         </noscript>
     </div>
     <? if ($this->showImageCaption && !empty($this->image_caption)) { ?>
-    <div class="<?=$this->bemClass('imageCaption')?> kwfUp-imageCaption" style="<?=$this->captionStyle;?>"><?=(!empty($this->image_caption) ? $this->image_caption : '');?></div>
+    <figcaption class="<?=$this->bemClass('imageCaption')?> kwfUp-imageCaption" style="<?=$this->captionStyle;?>"><?=(!empty($this->image_caption) ? $this->image_caption : '');?></figcaption>
     <? } ?>
     <?if ($this->hasContent($this->linkTag)) {?>
     </a>
     <?}?>
 <? } ?>
-</div>
+</figure>

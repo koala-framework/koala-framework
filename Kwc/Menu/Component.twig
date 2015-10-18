@@ -1,5 +1,5 @@
 {% if menu|length %}
-    <div class="{{ rootElementClass }}">
+    <nav class="{{ rootElementClass }}">
         {% if parentPageLink %}
             {% block parentPage %}
             <h2 class="{{ "parentPageName"|bemClass }}">{{ renderer.componentLink(parentPage, null, '' ~ "parentPageLink"|bemClass ) }}</h2>
@@ -26,5 +26,5 @@
             {% endfor %}
             {% endblock %}
         </ul>
-    </div>
+    </nav>
 {% endif %}
