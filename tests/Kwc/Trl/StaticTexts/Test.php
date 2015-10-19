@@ -46,12 +46,14 @@ class Kwc_Trl_StaticTexts_Test extends Kwc_TestAbstract
     public function tearDown()
     {
         Kwf_Trl::getInstance()->setWebCodeLanguage(null);
+        Kwf_Trl::getInstance()->unsetTrlElements();
+        Kwf_Cache_SimpleStatic::clear('trl-');
+        Kwf_Cache_SimpleStatic::clear('trlp-');
         parent::tearDown();
     }
 
     public function testDe()
     {
-
         $c = $this->_root->getPageByUrl('http://'.Kwf_Registry::get('config')->server->domain.'/de/test', 'de');
         $this->assertEquals('de', $c->getLanguage());
         $render = $c->render();
