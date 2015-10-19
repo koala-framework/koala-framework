@@ -15,7 +15,7 @@ Kwf.onJElementReady('.kwcFavourites', function(el, config) {
                 $.each(data.componentIds, function(index, value) {
                     var favEl = $('#' + value);
                     favEl.addClass('isFavourite');
-                    favEl.children('.switchContent').html(config.deleteFavourite);
+                    favEl.find('.switchContent').html(config.deleteFavourite);
                 });
                 kwcFavouritesComponentIds = [];
                 kwcFavouritesInitialized = false;
@@ -23,7 +23,7 @@ Kwf.onJElementReady('.kwcFavourites', function(el, config) {
         }, 10);
     }
 
-    var switchContent = el.children('.switchContent');
+    var switchContent = el.find('.switchContent');
     el.find('div.switchLink > a').on('click.kwcFavourites', function(ev) {
         ev.preventDefault();
         el.toggleClass('isFavourite loading');
@@ -44,7 +44,7 @@ Kwf.onJElementReady('.kwcFavourites', function(el, config) {
                 el.removeClass('loading');
                 var count = 0;
                 el.hasClass('isFavourite') ? count += 1 : count -= 1;
-                Kwf.fireComponentEvent('favouritesChanged', count);
+                Kwf.fireComponentEvent('favouritesChanged', count, el);
             }
         });
     });
