@@ -68,4 +68,32 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
         Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY, $debug);
         exit;
     }
+
+    public function runJobAction()
+    {
+        $debug = $this->_getParam('debug');
+        $jobClassName = $this->_getParam('job');
+        if (!$jobClassName) {
+            echo "Missing parameter job.\n";
+            exit;
+        }
+        $jobFound = false;
+        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
+            if (get_class($job) === $jobClassName) {
+                $jobFound = true;
+                break;
+            }
+        }
+        if (!$jobFound) {
+            echo "Job not found. Should be the classname.\n";
+            exit;
+        }
+
+        $t = microtime(true);
+        $job = new $jobClassName();
+        $job->execute($debug);
+        $t = microtime(true)-$t;
+        if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
+        exit;
+    }
 }
