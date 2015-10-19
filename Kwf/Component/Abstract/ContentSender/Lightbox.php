@@ -62,6 +62,8 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
     protected function _render($includeMaster, &$hasDynamicParts)
     {
         $lightboxContent = $this->_data->render(null, false, $hasDynamicParts);
+        $kwfUniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
+        if ($kwfUniquePrefix) $kwfUniquePrefix = '-'.$kwfUniquePrefix;
         if ($includeMaster) {
             $parent = $this->_getParent();
             $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
@@ -70,10 +72,10 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
 
             //remove main content to avoid duplicate content for search engines
             //content will be loaded using ajax
-            $startPos = strpos($parentContent, '<div class="kwfMainContent">');
-            $endPos = strpos($parentContent, '</div><!--/kwfMainContent-->');
+            $startPos = strpos($parentContent, '<div class="'.$kwfUniquePrefix.'kwfMainContent">');
+            $endPos = strpos($parentContent, '</div><!--/'.$kwfUniquePrefix.'kwfMainContent-->');
             $parentContent = substr($parentContent, 0, $startPos)
-                            .'<div class="kwfMainContent" data-kwc-component-id="'.$parent->componentId.'">'
+                            .'<div class="'.$kwfUniquePrefix.'kwfMainContent" data-kwc-component-id="'.$parent->componentId.'">'
                             .substr($parentContent, $endPos);
 
             foreach ($this->_data->getRecursiveChildComponents(array('flag' => 'hasInjectIntoRenderedHtml')) as $component) {
@@ -93,19 +95,19 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             $style = '';
             if (isset($options['width'])) $style .= "width: $options[width]px;";
             if (isset($options['height'])) $style .= "height: $options[height]px";
-            $class = 'kwfLightbox';
-            $class .= " kwfLightbox$options[style]";
+            $class = $kwfUniquePrefix.'kwfLightbox';
+            $class .= " ".$kwfUniquePrefix."kwfLightbox$options[style]";
             if (isset($options['cssClass'])) $class .= " $options[cssClass]";
             if (isset($options['adaptHeight']) && $options['adaptHeight']) $class .= " adaptHeight";
             $options = htmlspecialchars(json_encode($options));
-            $lightboxContent = "<div class=\"$class kwfLightboxOpen\">\n".
-                "<div class=\"kwfLightboxScrollOuter\">\n".
-                "   <div class=\"kwfLightboxScroll\">\n".
-                "       <div class=\"kwfLightboxBetween\">\n".
-                "           <div class=\"kwfLightboxBetweenInner\">\n".
-                "               <div class=\"kwfLightboxInner\" style=\"$style\">\n".
+            $lightboxContent = "<div class=\"$class ".$kwfUniquePrefix."kwfLightboxOpen\">\n".
+                "<div class=\"".$kwfUniquePrefix."kwfLightboxScrollOuter\">\n".
+                "   <div class=\"".$kwfUniquePrefix."kwfLightboxScroll\">\n".
+                "       <div class=\"".$kwfUniquePrefix."kwfLightboxBetween\">\n".
+                "           <div class=\"".$kwfUniquePrefix."kwfLightboxBetweenInner\">\n".
+                "               <div class=\"".$kwfUniquePrefix."kwfLightboxInner\" style=\"$style\">\n".
                 "                   <input type=\"hidden\" class=\"options\" value=\"$options\" />\n".
-                "                   <div class=\"kwfLightboxContent\">\n".
+                "                   <div class=\"".$kwfUniquePrefix."kwfLightboxContent\">\n".
                 "                       $lightboxContent\n".
                 "                   </div>\n".
                 "               </div>\n".
@@ -114,7 +116,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
                 "    </div>\n".
                 "<a class=\"closeButton\" href=\"$parent->url\"></a>\n".
                 "</div>\n".
-                "<div class=\"kwfLightboxMask kwfLightboxMaskOpen\"></div>\n";
+                "<div class=\"".$kwfUniquePrefix."kwfLightboxMask ".$kwfUniquePrefix."kwfLightboxMaskOpen\"></div>\n";
             return preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
         } else {
             return $lightboxContent;
