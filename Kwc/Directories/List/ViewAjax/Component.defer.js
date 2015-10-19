@@ -346,6 +346,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
                 }
             }
             this.$el.html(html);
+            this.$el.trigger('load', data);
             Kwf.callOnContentReady(this.$el, { action: 'render' });
         }).bind(this));
     },
