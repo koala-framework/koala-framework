@@ -17,27 +17,29 @@ class Kwf_Media_Image
     /**
      * Returns supported image-widths of specific image with given base-dimensions
      */
-    public static function getResponsiveWidthSteps($dim, $image)
+    public static function getResponsiveWidthSteps($dim, $imageDimensions)
     {
         $ret = array();
-        if (is_string($image)) {
-            $size = getimagesize($image);
-        } else if ($image instanceof Imagick) {
-            $size = array(
-                $image->getImageWidth(),
-                $image->getImageHeight()
+        if (is_string($imageDimensions)) {
+            $size = getimagesize($imageDimensions);
+            $imageDimensions = array(
+                'width' => $size[0],
+                'height' => $size[1],
             );
-        } else {
-            throw new Kwf_Exception("Image is required");
+        } else if ($imageDimensions instanceof Imagick) {
+            $imageDimensions = array(
+                'width' => $imageDimensions->getImageWidth(),
+                'height' => $imageDimensions->getImageHeight()
+            );
         }
 
         $maxWidth = $dim['width'] * 2;
-        if ($size[0] < $dim['width'] * 2) {
-            $maxWidth = $size[0];
+        if ($imageDimensions['width'] < $dim['width'] * 2) {
+            $maxWidth = $imageDimensions['width'];
         }
         $calculateWidth = $dim['width'];
-        if ($size[0] < $dim['width']) {
-            $calculateWidth = $size[0];
+        if ($imageDimensions['width'] < $dim['width']) {
+            $calculateWidth = $imageDimensions['width'];
         }
 
         $width = $calculateWidth % 100; // startwidth or minwidth
@@ -147,18 +149,24 @@ class Kwf_Media_Image
      * Acutally this is a 600x600 max-width. If it's smaller in both dimensions
      * it will keep it's original size.
      */
-    public static function getHandyScaleFactor($originalPath)
+    public static function getHandyScaleFactor($original)
     {
-        if (!file_exists($originalPath)) return 1;
         $targetSize = array(600, 600, 'cover' => false);
-        $original = @getimagesize($originalPath);
-        if (abs(self::getExifRotation($originalPath)) == 90) {
-            $original = array($original[1], $original[0]);
-        }
-        $original['width'] = $original[0];
-        $original['height'] = $original[1];
-        $target = Kwf_Media_Image::calculateScaleDimensions($originalPath, $targetSize);
 
+        if (is_string($original)) {
+            if (!file_exists($original)) return 1;
+            $original = getimagesize($original);
+            $original = array(
+                'width' => $original[0],
+                'height' => $original[1],
+                'rotation' => self::getExifRotation($original),
+            );
+        }
+
+        $target = Kwf_Media_Image::calculateScaleDimensions($original, $targetSize);
+        if (abs($original['rotation']) == 90) {
+            $original = array('width'=>$original['height'], 'height'=>$original['width']);
+        }
         if ($original['width'] <= $target['width'] && $original['height'] <= $target['height']) {
             return 1;
         } else {
