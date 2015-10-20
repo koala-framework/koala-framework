@@ -69,6 +69,15 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
         exit;
     }
 
+    public function showJobsAction()
+    {
+        echo "List of available jobs:\n";
+        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
+            echo "  ".get_class($job)."\n";
+        }
+        exit;
+    }
+
     public function runJobAction()
     {
         $debug = $this->_getParam('debug');
