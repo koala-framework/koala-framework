@@ -74,36 +74,34 @@ class Kwf_Cache_SimpleStatic
      */
     public static function clear($cacheIdPrefix)
     {
-        if (extension_loaded('apc')) {
-            if (php_sapi_name() == 'cli') {
-                Kwf_Util_Apc::callClearCacheByCli(array('clearCacheSimpleStatic'=>$cacheIdPrefix));
-                self::$_cache = array();
-            } else {
-                if (!class_exists('APCIterator')) {
-                    throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
-                } else {
-                    static $prefix;
-                    if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
-                    $it = new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#', APC_ITER_NONE);
-                    if ($it->getTotalCount() && !$it->current()) {
-                        //APCIterator is borked, delete everything
-                        //see https://bugs.php.net/bug.php?id=59938
-                        if (extension_loaded('apcu')) {
-                            apc_clear_cache();
-                        } else {
-                            apc_clear_cache('user');
-                        }
-                    } else {
-                        //APCIterator seems to work, use it for deletion
-                        apc_delete($it);
-                    }
-                }
-            }
-        } else {
+        if (!extension_loaded('apc') || PHP_SAPI == 'cli') {
             self::$_cache = array();
             //don't use $cacheIdPrefix as filenames are base64 encoded
             foreach (glob('cache/simple/*') as $f) {
                 unlink($f);
+            }
+            if (extension_loaded('apc')) {
+                Kwf_Util_Apc::callClearCacheByCli(array('clearCacheSimpleStatic'=>$cacheIdPrefix));
+            }
+        } else {
+            if (!class_exists('APCIterator')) {
+                throw new Kwf_Exception_NotYetImplemented("We don't want to clear the whole");
+            } else {
+                static $prefix;
+                if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
+                $it = new APCIterator('user', '#^'.preg_quote($prefix.$cacheIdPrefix).'#', APC_ITER_NONE);
+                if ($it->getTotalCount() && !$it->current()) {
+                    //APCIterator is borked, delete everything
+                    //see https://bugs.php.net/bug.php?id=59938
+                    if (extension_loaded('apcu')) {
+                        apc_clear_cache();
+                    } else {
+                        apc_clear_cache('user');
+                    }
+                } else {
+                    //APCIterator seems to work, use it for deletion
+                    apc_delete($it);
+                }
             }
         }
     }
