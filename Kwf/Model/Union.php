@@ -398,10 +398,12 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
 
             $sel = $this->getDbSelects($select);
 
-            $rows = Kwf_Registry::get('db')->query($sel)->fetchAll();
             $ids = array();
-            foreach ($rows as $row) {
-                $ids[] = $row['id'];
+            if ($sel) {
+                $rows = Kwf_Registry::get('db')->query($sel)->fetchAll();
+                foreach ($rows as $row) {
+                    $ids[] = $row['id'];
+                }
             }
         } else {
             $orderValues = array();
