@@ -3,9 +3,11 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 {
     public function delete($componentId)
     {
-        $row = $this->_getRow($componentId);
-        if ($row) {
-            $row->delete();
+        if (Kwc_Abstract::createOwnModel($this->_class)) {
+            $row = Kwc_Abstract::createOwnModel($this->_class)->getRow($componentId);
+            if ($row) {
+                $row->delete();
+            }
         }
     }
 
