@@ -26,10 +26,10 @@ class Kwf_Model_FnF_ModelTest extends Kwf_Test_TestCase
             array('id' => 2, 'value' => 'bar'),
         ));
         $this->assertEquals(count($model->fetchAll()), 2);
-        $this->assertEquals(count($model->find(1)), 1);
-        $this->assertEquals($model->find(2)->current()->value, 'bar');
+        $this->assertEquals(count($model->getRows(1)), 1);
+        $this->assertEquals($model->getRows(2)->current()->value, 'bar');
         $this->assertEquals($model->fetchAll()->current()->value, 'foo');
-        $this->assertEquals(count($model->find(3)), 0);
+        $this->assertEquals(count($model->getRows(3)), 0);
     }
 
     public function testDeleteRows()
@@ -41,8 +41,8 @@ class Kwf_Model_FnF_ModelTest extends Kwf_Test_TestCase
             ));
         $model->deleteRows($model->select()->whereEquals('value', 'foo'));
         $this->assertEquals(count($model->fetchAll()), 1);
-        $this->assertEquals(count($model->find(1)), 0);
-        $this->assertEquals($model->find(2)->current()->value, 'bar');
+        $this->assertEquals(count($model->getRows(1)), 0);
+        $this->assertEquals($model->getRow(2)->value, 'bar');
         $model->deleteRows($model->select());
         $this->assertEquals(count($model->fetchAll()), 0);
     }

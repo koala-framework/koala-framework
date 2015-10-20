@@ -160,7 +160,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
             $this->_sortable = false;
             $this->_defaultOrder = $this->_position;
         }
-        if (isset($this->_model) && ($info = $this->_getTableInfo())) {
+        if (isset($this->_model)) {
             foreach ($this->_columns as $column) {
                 if (!$column->getType()) {
                     $column->setType((string)$this->_model->getColumnType($column->getDataIndex()));

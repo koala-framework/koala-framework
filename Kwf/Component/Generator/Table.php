@@ -30,42 +30,6 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
         return $ret;
     }
 
-    public function joinWithChildGenerator($select, $childGenerator)
-    {
-        $table = $this->_getModel()->getTable()->info('name');
-        $childTable = $childGenerator->_getModel()->getTable()->info('name');
-        $select->setIntegrityCheck(false);
-        $select->join($childTable, "{$table}.cache_child_component_id={$childTable}.component_id", array());
-        return $select;
-    }
-
-    public function joinWithParentGenerator($select, $parentGenerator, $grandParentData = null)
-    {
-        $table = $this->_getModel()->getTable()->info('name');
-        $parentTable = $parentGenerator->_getModel()->getTable()->info('name');
-        $select->setIntegrityCheck(false);
-        $select->join($parentTable, "{$parentTable}.cache_child_component_id={$table}.component_id", array());
-        if ($grandParentData) {
-            $parentSelect = $parentGenerator->select($grandParentData);
-            $parentSelect = $parentGenerator->_formatSelect($grandParentData, $parentSelect);
-            $where = $parentSelect->getPart(Kwf_Component_Select::WHERE_EQUALS);
-            if ($where) {
-                foreach ($parentSelect->getPart(Kwf_Component_Select::WHERE_EQUALS) as $key => $value) {
-                    if (!strpos($key, '.')) { $key = $parentTable . '.' . $key; }
-                    $select->where("$key=?", $value);
-                }
-            }
-            $where = $parentSelect->getPart(Kwf_Component_Select::WHERE);
-            if ($where) {
-                foreach ($where as $key => $value) {
-                    if (!strpos($key, '.')) { $key = $parentTable . '.' . $key; }
-                    $select->where($key, $value);
-                }
-            }
-        }
-        return $select;
-    }
-
     public final function getChildIds($parentData, $select = array())
     {
         $select = $this->_formatSelect($parentData, $select);

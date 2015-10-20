@@ -89,7 +89,7 @@ class Kwf_Model_Db_FetchTest extends Kwf_Test_TestCase
     }
 
     /**
-     * Testet ob es eh noch funktioniert wenn in der Zend_Db_Table_Row isset und get
+     * Testet ob es eh noch funktioniert wenn in der Kwf_Db_Table_Row isset und get
      * überschrieben sind, nur wg. rückwärtskompatibilität notwendig.
      */
     public function testValuesNotInModel()

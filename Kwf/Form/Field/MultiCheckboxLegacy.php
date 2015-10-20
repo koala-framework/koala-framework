@@ -29,11 +29,6 @@ class Kwf_Form_Field_MultiCheckboxLegacy extends Kwf_Form_Field_Abstract
         }
 
         parent::__construct(get_class($model));
-        if ($model instanceof Zend_Db_Table_Abstract) {
-            $model = new Kwf_Model_Db(array(
-                'table' => $model
-            ));
-        }
         $this->setModel($model);
 
         if ($title) $this->setTitle($title);
@@ -69,9 +64,6 @@ class Kwf_Form_Field_MultiCheckboxLegacy extends Kwf_Form_Field_Abstract
             $this->_fields = new Kwf_Collection_FormFields();
             if ($this->getValues() instanceof Kwf_Model_Rowset_Interface) {
                 $pk = $this->getValues()->getModel()->getPrimaryKey();
-            } else if ($this->getValues() instanceof Zend_Db_Table_Rowset_Abstract) {
-                $info = $this->getValues()->getTable()->info();
-                $pk = $info['primary'][1];
             }
             foreach ($this->getValues() as $key => $i) {
                 if (isset($pk)) {
