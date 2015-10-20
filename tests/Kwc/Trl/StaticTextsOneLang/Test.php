@@ -32,6 +32,9 @@ class Kwc_Trl_StaticTextsOneLang_Test extends Kwc_TestAbstract
     public function tearDown()
     {
         Kwf_Trl::getInstance()->setWebCodeLanguage(null);
+        Kwf_Trl::getInstance()->unsetTrlElements();
+        Kwf_Cache_SimpleStatic::clear('trl-');
+        Kwf_Cache_SimpleStatic::clear('trlp-');
         parent::tearDown();
     }
 
