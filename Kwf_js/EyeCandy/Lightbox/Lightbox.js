@@ -97,7 +97,7 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
                 context: this
             }).done(function(responseText) {
                 mainContent.html(responseText);
-                Kwf.callOnContentReady(mainContent, {action: 'render'});
+                onReady.callOnContentReady(mainContent, {action: 'render'});
             });
         }, 100);
     }
@@ -369,7 +369,7 @@ Lightbox.prototype = {
                 this.innerLightboxEl.one(transEndEventName,
                     (function() {
                         $('body').removeClass('kwfUp-kwfLightboxAnimate');
-                        Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
+                        onReady.callOnContentReady(this.lightboxEl, {action: 'show'});
                         this.style.afterContentShown();
                         this.preloadLinks();
                     }).bind(this));
