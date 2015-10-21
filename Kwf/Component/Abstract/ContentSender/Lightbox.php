@@ -63,7 +63,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
     {
         $lightboxContent = $this->_data->render(null, false, $hasDynamicParts);
         $kwfUniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
-        if ($kwfUniquePrefix) $kwfUniquePrefix = '-'.$kwfUniquePrefix;
+        if ($kwfUniquePrefix) $kwfUniquePrefix = $kwfUniquePrefix.'-';
         if ($includeMaster) {
             $parent = $this->_getParent();
             $parentContentSender = Kwc_Abstract::getSetting($parent->componentClass, 'contentSender');
