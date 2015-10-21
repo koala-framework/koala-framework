@@ -66,9 +66,6 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
         $ret['total'] = $ret['order']->getTotal();
 
         $ret['sumRows'] = $ret['order']->getSumRows();
-        foreach ($ret['sumRows'] as $k=>$i) {
-            $ret['sumRows'][$k]['text'] = $this->getData()->trlStaticExecute($i['text']);
-        }
         return $ret;
     }
 
