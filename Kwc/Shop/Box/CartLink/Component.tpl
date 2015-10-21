@@ -2,7 +2,7 @@
     <? if ($this->hasContent) { ?>
     <ul class="links">
         <? foreach ($this->links as $link) { ?>
-            <li><?=$this->componentLink($link['component'], $link['text'])?></li>
+            <li><?=$this->componentLink($link['component'], $this->data->trlStaticExecute($link['text']))?></li>
         <? } ?>
     </ul>
     <? } ?>

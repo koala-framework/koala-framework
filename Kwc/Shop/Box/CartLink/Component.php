@@ -30,9 +30,10 @@ class Kwc_Shop_Box_CartLink_Component extends Kwc_Abstract
     protected function _getLinks()
     {
         $ret = array();
+        $placeholder = $this->_getSetting('placeholder');
         $ret['cart'] = array(
             'component' => $this->_getCart(),
-            'text' => $this->_getPlaceholder('toCart')
+            'text' => $placeholder['toCart']
         );
         return $ret;
     }
