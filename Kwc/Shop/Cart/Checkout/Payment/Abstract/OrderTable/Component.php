@@ -12,8 +12,6 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Kwc_A
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['order'] = $this->_getOrder();
-        $ret['items'] = $ret['order']->getProductsData();
-
         $items = $ret['order']->getChildRows('Products');
         $ret['items'] = array();
         $ret['additionalOrderDataHeaders'] = array();
