@@ -123,7 +123,11 @@ abstract class Kwc_Chained_Abstract_Component extends Kwc_Abstract
         } else {
             //doesn't have own template, use from chained
             if (!isset($ret['template']) || !$ret['template']) {
-                $ret['template'] = self::getTemplateFile($data->chained->componentClass);
+                if ($renderer) {
+                    $ret['template'] = $renderer->getTemplate($ret['chained'], 'Component');
+                } else {
+                    $ret['template'] = self::getTemplateFile($data->chained->componentClass);
+                }
             }
         }
 
