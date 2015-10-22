@@ -13,9 +13,9 @@ class Kwc_Tags_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $model = Kwf_Model_Abstract::getInstance('Kwc_Tags_ComponentToTag');
         $select = new Kwf_Model_Select();
         $select->whereEquals('component_id', $this->getData()->dbId);

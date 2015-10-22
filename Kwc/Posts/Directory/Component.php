@@ -30,9 +30,9 @@ class Kwc_Posts_Directory_Component extends Kwc_Directories_Item_Directory_Compo
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['write'] = $this->getData()->getChildComponent('_write');
         $ret['quickwrite'] = $this->getData()->getChildComponent('-quickwrite');
         return $ret;

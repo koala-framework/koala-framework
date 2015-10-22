@@ -9,9 +9,9 @@ class Kwc_Abstract_Cards_Trl_Component extends Kwc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['child'] = $this->getData()->getChildComponent(array(
             'generator' => 'child'
         ));

@@ -9,9 +9,9 @@ class Kwc_User_Detail_Component extends Kwc_Directories_Item_Detail_Component
         return $ret;
     }
     
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $generators = $this->_getSetting('generators');
         foreach ($generators['child']['component'] as $generator => $class) {
             if (is_instance_of($class, 'Kwc_User_Detail_Menu_Component')) {

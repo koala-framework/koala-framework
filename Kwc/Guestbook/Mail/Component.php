@@ -13,9 +13,9 @@ class Kwc_Guestbook_Mail_Component extends Kwc_Mail_Abstract_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret = array_merge($ret, $this->getMailData());
         return $ret;
     }

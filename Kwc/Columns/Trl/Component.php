@@ -9,9 +9,9 @@ class Kwc_Columns_Trl_Component extends Kwc_Abstract_List_Trl_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $columnTypes = Kwc_Abstract::getSetting($this->getData()->chained->componentClass, 'columns');
         $type = $ret['row']->type;
         if (!$type) {

@@ -17,9 +17,9 @@ class Kwc_Blog_Detail_Component extends Kwc_Directories_Item_Detail_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['title'] = $this->getData()->row->title;
         $ret['publish_date'] = $this->getData()->row->publish_date;
         $ret['author'] = $this->getData()->row->author_firstname.' '.$this->getData()->row->author_lastname;

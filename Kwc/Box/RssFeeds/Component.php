@@ -13,9 +13,9 @@ class Kwc_Box_RssFeeds_Component extends Kwc_Abstract
         return $this->getData();
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $feeds = Kwf_Component_Data_Root::getInstance()->getComponentsByClass(
             'Kwc_Abstract_Feed_Component',
             array('subroot' => $this->getData())
