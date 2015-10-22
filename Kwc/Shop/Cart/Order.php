@@ -187,6 +187,7 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
                     continue;
                 } else {
                     $r['product'] = $addComponent->parent;
+                    $r['text'] = $data->getProductTextDynamic($i);
                 }
             }
             $ret[] = (object)$r;

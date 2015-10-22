@@ -27,12 +27,14 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Kwc_A
                     );
                 }
             }
+
+            $data = Kwc_Shop_VoucherProduct_AddToCart_OrderProductData::getInstance($i->add_component_class);
             $ret['items'][] = (object)array(
                 'product' => $addComponent->parent,
                 'row' => $i,
                 'additionalOrderData' => $additionalOrderData,
                 'price' => $i->getProductPrice(),
-                'text' => $i->getProductText(),
+                'text' => $data->getProductTextDynamic($i),
             );
         }
 

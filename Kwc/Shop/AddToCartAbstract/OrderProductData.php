@@ -30,6 +30,10 @@ abstract class Kwc_Shop_AddToCartAbstract_OrderProductData
     abstract public function getPrice($orderProduct);
     abstract public function getAmount($orderProduct);
     abstract public function getProductText($orderProduct);
+    public function getProductTextDynamic($orderProduct)
+    {
+        return $this->getProductText($orderProduct);
+    }
 
     public function orderConfirmed($orderProduct)
     {
