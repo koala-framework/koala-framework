@@ -318,6 +318,14 @@ class Kwf_Util_Setup
 
         $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
 
+        //up here to have less dependencies or broken redirect
+        $ret .= "\n";
+        $ret .= "if (substr(\$requestUri, 0, 14) == '/kwf/util/apc/'\n";
+        $ret .= ") {\n";
+        $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
+        $ret .= "}\n";
+
+
         if (Kwf_Config::getValue('server.https') !== 'unknown') {
             $redirectHttpsCode  = "    if (\$_SERVER['REQUEST_METHOD'] != 'GET') {\n";
             $redirectHttpsCode .= "        header('HTTP/1.1 400 Bad Request');\n";
@@ -373,13 +381,6 @@ class Kwf_Util_Setup
         if ((Kwf_COnfig::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
-
-        //up here to have less dependencies or broken redirect
-        $ret .= "\n";
-        $ret .= "if (substr(\$requestUri, 0, 14) == '/kwf/util/apc/'\n";
-        $ret .= ") {\n";
-        $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
-        $ret .= "}\n";
 
         // Falls redirectToDomain eingeschalten ist, umleiten
         if (Kwf_Config::getValue('server.redirectToDomain')) {
