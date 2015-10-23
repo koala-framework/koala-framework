@@ -30,6 +30,11 @@ class Kwc_Mail_Trl_Mail_Component extends Kwc_Mail_Abstract_Component
         return $ret;
     }
 
+    public function getHtmlStyles()
+    {
+        return $this->getData()->parent->getComponent()->getHtmlStyles();
+    }
+
     public function getRecipientSources()
     {
         return $this->getData()->parent->getComponent()->getRecipientSources();
