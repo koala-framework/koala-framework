@@ -417,7 +417,7 @@ Lightbox.prototype = {
             var closeLightbox = (function() {
                 //didn't change yet, wait a bit longer
                 if (previousEntries == historyState.entries) {
-                    closeLightbox.defer(10, this);
+                    setTimeout(closeLightbox.bind(this), 10);
                     return;
                 }
                 //check if there is still a lightbox open
@@ -425,13 +425,13 @@ Lightbox.prototype = {
                 if (historyState.currentState.lightbox) {
                     previousEntries = historyState.entries;
                     history.back();
-                    closeLightbox.defer(1, this);
+                    setTimeout(closeLightbox.bind(this), 1);
                 } else {
                     //last entry in history that had lightbox open
                     onlyCloseOnPopstate = false;
                 }
             });
-            closeLightbox.defer(1, this);
+            setTimeout(closeLightbox.bind(this), 1);
         } else {
             delete historyState.currentState.lightbox;
             historyState.replaceState(document.title, this.closeHref);
