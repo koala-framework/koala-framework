@@ -12,7 +12,7 @@ abstract class Kwf_Component_Plugin_LoginAbstract_Component extends Kwf_Componen
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $templateVars = array();
         $templateVars['loginForm'] = Kwf_Component_Data_Root::getInstance()
@@ -32,7 +32,7 @@ abstract class Kwf_Component_Plugin_LoginAbstract_Component extends Kwf_Componen
 
         $renderer = new Kwf_Component_Renderer();
         $view = new Kwf_Component_View($renderer);
-        $view->assign($this->getTemplateVars());
+        $view->assign($this->getTemplateVars($renderer));
         return $renderer->render($view->render($template));
     }
 

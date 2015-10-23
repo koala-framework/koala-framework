@@ -10,9 +10,9 @@ class Kwc_User_Box_Component extends Kwc_User_BoxWithoutLogin_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         return $ret;
     }
 }

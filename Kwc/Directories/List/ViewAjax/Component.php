@@ -17,9 +17,9 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $cfg = Kwf_Component_Abstract_ExtConfig_Abstract::getInstance($this->getData()->componentClass);
         $ret['config'] = array(
             'controllerUrl' => $cfg->getControllerUrl('View'),

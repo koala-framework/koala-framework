@@ -17,9 +17,9 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
         return $this->getData();
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['domain'] = $this->_getDomain();
         $ret['id'] = $this->_getIdSite();
         $ret['customVariables'] = $this->_getCustomVariables();

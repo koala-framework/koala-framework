@@ -30,9 +30,9 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Component extends Kwc_Abstract_Com
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['order'] = $this->_getOrder();
         $ret['orderProducts'] = $ret['order']->getChildRows('Products');
         $ret['sumRows'] = $this->_getSumRows($this->_getOrder());

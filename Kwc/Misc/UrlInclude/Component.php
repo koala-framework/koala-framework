@@ -15,9 +15,9 @@ class Kwc_Misc_UrlInclude_Component extends Kwc_Abstract
         return 15*60;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $row = $this->getRow();
         $ret['content'] = '';
         if ($row->url && preg_match('#^https?\\:/#', $row->url)) {

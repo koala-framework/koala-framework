@@ -9,9 +9,9 @@ class Kwc_Basic_Table_Trl_Component extends Kwc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $model = $this->getChildModel();
         $rows = $model->getRows($model->select()
             ->whereEquals('component_id', $this->getData()->componentId)

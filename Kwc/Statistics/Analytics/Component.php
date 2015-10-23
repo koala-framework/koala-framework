@@ -19,9 +19,9 @@ class Kwc_Statistics_Analytics_Component extends Kwc_Abstract
         return $this->getData()->getBaseProperty('statistics.analytics.code');
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['code'] = $this->_getAnalyticsCode();
         if ($ret['code'] && !is_string($ret['code'])) {
             throw new Kwf_Exception("AnalyticsCode must be a string, '".gettype($ret['code'])."' given");

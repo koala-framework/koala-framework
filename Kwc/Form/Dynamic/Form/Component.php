@@ -9,9 +9,9 @@ class Kwc_Form_Dynamic_Form_Component extends Kwc_Form_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['paragraphs'] = $this->getData()->parent->getChildComponent('-paragraphs');
         $ret['submitCaption'] = $this->getData()->parent->getComponent()->getRow()->submit_caption;
         if (!$ret['submitCaption']) {

@@ -13,9 +13,9 @@ class Kwc_Basic_Text_Cc_Component extends Kwc_Chained_Cc_Component
         return $this->getData()->chained->getComponent()->getFulltextContent();
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $childs = $this->getData()->getChildComponents();
         foreach ($ret['contentParts'] as $kPart=>$part) {
             if (is_array($part)) {

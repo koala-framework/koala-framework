@@ -82,9 +82,9 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
         return $url;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['register'] = $this->_getRegisterComponent();
         $ret['lostPassword'] = $this->_getLostPasswordComponent();
 

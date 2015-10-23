@@ -8,9 +8,9 @@ class Kwc_Directories_List_ViewMap_Coordinates_Component extends Kwc_Abstract_Aj
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['response'] = array();
         $select = new Kwf_Component_Select();
         $lowestLng = isset($_REQUEST['lowestLng']) ? $_REQUEST['lowestLng'] : null;

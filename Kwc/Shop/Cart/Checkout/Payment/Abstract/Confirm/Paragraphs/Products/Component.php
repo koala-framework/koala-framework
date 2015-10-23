@@ -19,9 +19,9 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Paragraphs_Products_Compon
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
 
         $order = $this->_getOrder();
         $ret['order'] = $order;

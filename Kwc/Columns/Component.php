@@ -91,9 +91,9 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
         ));
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $row = $ret['row'];
 
         $columnTypes = $this->_getSetting('columns');

@@ -13,10 +13,10 @@ class Kwc_Basic_LinkTag_FirstChildPage_Component extends Kwc_Basic_LinkTag_Abstr
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $ex = new Kwf_Exception(get_class($this) . ' must only be used as a page type.');
         $ex->logOrThrow();
-        return parent::getTemplateVars();
+        return parent::getTemplateVars($renderer);
     }
 }

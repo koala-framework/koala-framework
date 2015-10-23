@@ -14,9 +14,9 @@ class Kwc_Box_SwitchLanguage_AlternativeLanguageLinks_Component extends Kwc_Abst
         return $this->getData();
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['languages'] = $this->getData()->parent->getComponent()->getLanguages(true, false);
         return $ret;
     }

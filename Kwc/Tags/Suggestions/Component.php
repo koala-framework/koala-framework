@@ -10,9 +10,9 @@ class Kwc_Tags_Suggestions_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['config'] = array(
             'componentId' => $this->getData()->componentId,
             'controllerUrl' => Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl()
