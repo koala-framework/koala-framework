@@ -82,11 +82,6 @@ class Kwf_User_EditModel extends Kwf_Model_Proxy
         fwrite($this->_lock, getmypid());
     }
 
-    public function writeLog(array $data)
-    {
-        $this->getDependentModel('Messages')->createRow($data)->save();
-    }
-
     /**
      * @param string E-Mail address of user
      * @param string webcode parameter used for Service Model (that can have global users)

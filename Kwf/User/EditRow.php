@@ -148,10 +148,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
         parent::_afterInsert();
         $this->getModel()->unlockCreateUser();
 
-        $this->getModel()->writeLog(array(
-            'user_id' => $this->id,
-            'message_type' => 'user_created'
-        ));
+        $this->writeLog('user_created');
     }
 
     protected function _afterSave()
@@ -164,10 +161,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
         }
 
         if ($this->_passwordSet) {
-            $this->getModel()->writeLog(array(
-                'user_id' => $this->id,
-                'message_type' => 'user_'.$this->_passwordSet
-            ));
+            $this->writeLog('user_'.$this->_passwordSet);
 
             $this->_passwordSet = false;
         }
@@ -189,10 +183,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
             $this->sendDeletedMail();
         }
         if ($this->_saveDeletedLog) {
-            $this->getModel()->writeLog(array(
-                'user_id' => $this->id,
-                'message_type' => 'user_deleted'
-            ));
+            $this->writeLog('user_deleted');
 
             $this->_saveDeletedLog = false;
         }
@@ -202,10 +193,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
     {
         parent::_afterUpdate();
         if ($this->_logChangedUser) {
-            $this->getModel()->writeLog(array(
-                'user_id' => $this->id,
-                'message_type' => 'user_edited'
-            ));
+            $this->writeLog('user_edited');
 
             $this->_logChangedUser = false;
         }
@@ -271,10 +259,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
             $row = $this->getModel()->getKwfUserRowById($this->id);
             $mail = new Kwf_User_Mail_Activation($row);
             $mail->send();
-            $this->getModel()->writeLog(array(
-                'user_id' => $this->id,
-                'message_type' => 'user_mail_UserActivation'
-            ));
+            $this->writeLog('user_mail_UserActivation');
         }
     }
 
@@ -285,10 +270,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
             $row = $this->getModel()->getKwfUserRowById($this->id);
             $mail = new Kwf_User_Mail_GlobalUserActivated($row);
             $mail->send();
-            $this->getModel()->writeLog(array(
-                'user_id' => $this->id,
-                'message_type' => 'user_mail_GlobalUserActivation'
-            ));
+            $this->writeLog('user_mail_GlobalUserActivation');
         }
     }
 
@@ -299,10 +281,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
             $mail = new Kwf_User_Mail_ChangedMail($row);
             $mail->oldMail = $oldMail;
             $mail->send();
-            $this->getModel()->writeLog(array(
-                'user_id' => $this->id,
-                'message_type' => 'user_mail_UserChangedMail'
-            ));
+            $this->writeLog('user_mail_UserChangedMail');
         }
     }
 
@@ -312,10 +291,7 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
             $row = $this->getModel()->getKwfUserRowById($this->id);
             $mail = new Kwf_User_Mail_Deleted($row);
             $mail->send();
-            $this->getModel()->writeLog(array(
-                'user_id' => $this->id,
-                'message_type' => 'user_mail_UserDeleted'
-            ));
+            $this->writeLog('user_mail_UserDeleted');
         }
     }
 
@@ -348,5 +324,14 @@ class Kwf_User_EditRow extends Kwf_Model_Proxy_Row
     public function getMailFormat()
     {
         return $this->email_format;
+    }
+
+    public function writeLog($messageType)
+    {
+        $data = array(
+            'user_id' => $this->id,
+            'message_type' => $messageType
+        );
+        $this->getModel()->getDependentModel('Messages')->createRow($data)->save();
     }
 }
