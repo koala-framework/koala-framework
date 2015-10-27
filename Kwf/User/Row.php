@@ -124,4 +124,12 @@ class Kwf_User_Row extends Kwf_Model_RowCache_Row
     {
         return $this->format;
     }
+
+    public function writeLog($messageType)
+    {
+        $row = $this->getProxiedRow();
+        if (method_exists($row, 'writeLog')) {
+            $row->writeLog($messageType);
+        }
+    }
 }
