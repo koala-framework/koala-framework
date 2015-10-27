@@ -22,8 +22,9 @@ class Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Component
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $ret = parent::getTemplateVars($renderer);
-        $addCmp = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($this->getData()->row->add_component_id, array('subroot'=>$this->getData()));
+        $addCmp = Kwc_Shop_AddToCartAbstract_OrderProductData::getAddComponentByDbId(
+            $this->getData()->row->add_component_id, $this->getData()
+        );
         if ($addCmp) {
             $ret['product'] = $addCmp->parent;
             $ret['row'] = $this->getData()->row;
@@ -35,8 +36,9 @@ class Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Component
 
     public function getAddToCartForm()
     {
-        return Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($this->getData()->row->add_component_id, array('subroot'=>$this->getData()));
+        return Kwc_Shop_AddToCartAbstract_OrderProductData::getAddComponentByDbId(
+            $this->getData()->row->add_component_id, $this->getData()
+        );
 
     }
 

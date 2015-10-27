@@ -179,8 +179,9 @@ class Kwc_Shop_Cart_Order extends Kwf_Model_Db_Row
                 'text' => $data->getProductText($i),
             );
             if ($subroot) {
-                $addComponent = Kwf_Component_Data_Root::getInstance()
-                                ->getComponentByDbId($i->add_component_id, array('subroot' => $subroot));
+                $addComponent = Kwc_Shop_AddToCartAbstract_OrderProductData::getAddComponentByDbId(
+                    $i->add_component_id, $subroot
+                );
                 if (!$addComponent) {
                     //product doesn't exist anymore, also delete from cart
                     $i->delete();

@@ -17,8 +17,9 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Trl_Component extends Kwc_Abstract
             $p->orderConfirmed($order);
         }
         foreach ($order->getChildRows('Products') as $p) {
-            $addComponent = Kwf_Component_Data_Root::getInstance()
-                ->getComponentByDbId($p->add_component_id, array('subroot'=>$this->getData()));
+            $addComponent = Kwc_Shop_AddToCartAbstract_OrderProductData::getAddComponentByDbId(
+                $p->add_component_id, $this->getData()
+            );
             $addComponent->getComponent()->orderConfirmed($p);
         }
 
