@@ -173,4 +173,18 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         }
         return new Kwf_SourceMaps_SourceMap(file_get_contents($cacheFile.'.map'), file_get_contents($cacheFile));
     }
+
+    public function getMTime()
+    {
+        $ret = parent::getMTime();
+        $cacheFile = $this->_getCacheFileName();
+        if (!file_exists("$cacheFile.sourcetimes")) {
+            $this->warmupCaches();
+        }
+        $sourceTimes = unserialize(file_get_contents("$cacheFile.sourcetimes"));
+        foreach ($sourceTimes as $t) {
+            if (file_exists($t['file'])) $ret = max($ret, filemtime($t['file']));
+        }
+        return $ret;
+    }
 }

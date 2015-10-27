@@ -85,6 +85,9 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
         foreach ($this->_componentDependencies as $dep) {
             $dep->warmupCaches();
         }
+        if (!$this->usesLanguage()) {
+            $this->getContentsPacked(null); //creates/updates cache file
+        }
     }
 
     public function usesLanguage()
@@ -100,23 +103,10 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
 
     public function getContentsPacked($language)
     {
-        $hash = '';
-        foreach ($this->_componentDependencies as $dep) {
-            $src = $dep->getContentsSource();
-            if ($src['type'] == 'file') {
-                $hash .= md5_file($src['file']);
-            } else if ($src['type'] == 'contents') {
-                $hash .= md5($src['contents']);
-            } else {
-                throw new Kwf_Exception_NotYetImplemented();
-            }
-        }
-        $hash = md5($hash);
         $cacheFile = "cache/componentassets/{$this->_componentClass}".
             ($this->usesLanguage() ? "-$language" : '').
-            "-".Kwf_Config::getValue('application.uniquePrefix')."-$hash";
-
-        if (file_exists($cacheFile)) {
+            "-".Kwf_Config::getValue('application.uniquePrefix')."-".str_replace('text/', '', $this->getMimeType());
+        if (file_exists($cacheFile) && filemtime($cacheFile) > $this->getMTime()) {
             $ret = Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));
         } else {
             $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
