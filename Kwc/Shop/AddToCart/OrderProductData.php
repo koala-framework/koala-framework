@@ -17,17 +17,6 @@ class Kwc_Shop_AddToCart_OrderProductData extends Kwc_Shop_AddToCartAbstract_Ord
         return $product->__toString();
     }
 
-    public function getProductTextDynamic($orderProduct)
-    {
-        $ret = parent::getProductTextDynamic($orderProduct);
-        $addCmp = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($orderProduct->add_component_id);
-        if ($addCmp && is_instance_of($addCmp->parent->componentClass, 'Kwc_Shop_AddToCartAbstract_Trl_Component')) {
-            $ret = $addCmp->getParentByClass('Kwc_Shop_Products_Detail_Trl_Component')->row->title;
-        }
-        return $ret;
-    }
-
     public function getAdditionalOrderData($row)
     {
         $ret = parent::getAdditionalOrderData($row);
