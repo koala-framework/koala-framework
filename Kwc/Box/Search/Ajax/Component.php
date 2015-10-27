@@ -8,10 +8,10 @@ class Kwc_Box_Search_Ajax_Component extends Kwc_Abstract_Ajax_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $parent = $this->getData()->parent->getComponent();
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $searchViews = $parent->getSearchViews();
         $formData = $parent->getSearchFormData();
         $ret['queryValue'] = $formData['queryValue'];

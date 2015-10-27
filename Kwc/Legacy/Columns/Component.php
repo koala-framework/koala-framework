@@ -16,9 +16,9 @@ class Kwc_Legacy_Columns_Component extends Kwc_Abstract_List_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         foreach($ret['listItems'] as $k => $v) {
             $ret['listItems'][$k]['width'] = $this->getChildContentWidth($v['data']).'px';
         }

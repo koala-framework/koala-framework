@@ -24,9 +24,9 @@ abstract class Kwc_Shop_AddToCartAbstract_Component extends Kwc_Form_Component
         $this->_form->setModel($m);
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         if ($this->_form->getId()) {
             $ret['placeholder']['submitButton'] = $this->data->trlKwf('Update');
         }

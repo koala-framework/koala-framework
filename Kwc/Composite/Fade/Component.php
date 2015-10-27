@@ -12,9 +12,9 @@ class Kwc_Composite_Fade_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['selector'] = $this->_getSetting('selector');
         return $ret;
     }

@@ -19,9 +19,9 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $return = parent::getTemplateVars();
+        $return = parent::getTemplateVars($renderer);
 
         $fileRow = $this->_getFileRow();
         $parentRow = $fileRow->getParentRow('File');

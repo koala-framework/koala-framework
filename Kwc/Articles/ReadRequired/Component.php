@@ -43,9 +43,9 @@ class Kwc_Articles_ReadRequired_Component extends Kwc_Abstract
         return $this->_requiredArticles;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $articles = $this->_getRequiredArticles();
         $ret['count'] = $articles->count();
         $ret['article'] = Kwf_Component_Data_Root::getInstance()->getComponentByClass(

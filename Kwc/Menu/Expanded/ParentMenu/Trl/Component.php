@@ -1,9 +1,9 @@
 <?php
 class Kwc_Menu_Expanded_ParentMenu_Trl_Component extends Kwc_Menu_ParentMenu_Trl_Component
 {
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         foreach ($ret['menu'] as $k=>$m) {
             $masterSubMenu = $this->getData()->chained->getComponent()->getMenuData($m['data']->chained, array('ignoreVisible'=>true), 'Kwc_Menu_Expanded_EditableItems_Component');
             foreach ($masterSubMenu as $sm) {

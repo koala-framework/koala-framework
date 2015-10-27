@@ -1,9 +1,9 @@
 <?php
 class Kwc_Trl_StaticTexts_Test_Trl_Component extends Kwc_Chained_Trl_Component
 {
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
 
         /* Wird im normalfall nicht in Trl Component überschrieben,
            weil man das sowieso nicht benötigt in den templateVars.

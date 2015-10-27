@@ -12,11 +12,11 @@ class Kwc_Basic_Flash_Upload_Trl_Component extends Kwc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         if ($this->getRow()->own_flash) {
-            $tvars = $this->getData()->getChildComponent('-flash')->getComponent()->getTemplateVars();
+            $tvars = $this->getData()->getChildComponent('-flash')->getComponent()->getTemplateVars($renderer);
             $ret['flash'] = $tvars['flash'];
         }
         return $ret;

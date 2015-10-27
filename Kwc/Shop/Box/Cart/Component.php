@@ -13,9 +13,9 @@ class Kwc_Shop_Box_Cart_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
 
         $ret['order'] = Kwf_Model_Abstract::getInstance($this->_getSetting('ordersModel'))
                             ->getCartOrder();

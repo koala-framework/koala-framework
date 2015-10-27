@@ -15,9 +15,9 @@ class Kwc_Box_DogearRandom_Dogear_Component extends Kwc_Abstract_Composite_Compo
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
 
         $options = array();
         $options['colors'] = array(
@@ -31,7 +31,7 @@ class Kwc_Box_DogearRandom_Dogear_Component extends Kwc_Abstract_Composite_Compo
         $options['urlSmall'] = $ret['imageSmall']->getComponent()->getImageUrl();
         $options['urlBig'] = $ret['image']->getComponent()->getImageUrl();
         // link
-        $vars = $ret['linkExtern']->getComponent()->getTemplateVars();
+        $vars = $ret['linkExtern']->getComponent()->getTemplateVars($renderer);
         $options['linkUrl'] = $vars['data']->url;
         $options['linkOpen'] = $vars['data']->rel;
 

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Trl_StaticTextsOneLang_Translate_Component extends Kwc_Abstract
 {
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
 
         $ret['trlTest'] = $this->getData()->trl('Sichtbar');
         $ret['trlcTest'] = $this->getData()->trlc('time', 'Am');

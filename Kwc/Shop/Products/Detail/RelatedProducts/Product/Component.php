@@ -9,9 +9,9 @@ class Kwc_Shop_Products_Detail_RelatedProducts_Product_Component extends Kwc_Abs
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['product'] = Kwf_Component_Data_Root::getInstance()->getComponentByClass(
             'Kwc_Shop_Products_Detail_Component',
             array('id' => $this->getRow()->product_id)
