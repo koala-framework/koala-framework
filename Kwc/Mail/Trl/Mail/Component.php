@@ -18,8 +18,6 @@ class Kwc_Mail_Trl_Mail_Component extends Kwc_Mail_Abstract_Component
         $ret['attachImages'] = Kwc_Abstract::getSetting($masterComponentClass, 'attachImages');
         $ret['trackViews'] = Kwc_Abstract::getSetting($masterComponentClass, 'trackViews');
         $ret['docType'] = Kwc_Abstract::getSetting($masterComponentClass, 'docType');
-
-        $ret['flags'] = Kwc_Abstract::getSetting($masterComponentClass, 'flags');
         return $ret;
     }
 
