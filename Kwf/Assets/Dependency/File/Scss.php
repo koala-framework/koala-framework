@@ -2,6 +2,8 @@
 class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 {
     private $_cacheWarm = false;
+    private $_config = null;
+    private $_configMTime = null;
     private function _getCacheFileName()
     {
         $fileName = $this->getFileNameWithType();
@@ -81,6 +83,15 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                 $loadPath = escapeshellarg(implode(PATH_SEPARATOR, $loadPath));
             }
 
+            if ($this->_config) {
+                $config = "\$config: ".self::_generateScssConfig($this->_config).";\n";
+                file_put_contents('cache/scss/generated/_config.scss', $config);
+            } else {
+                if (file_exists('cache/scss/generated/_config.scss')) {
+                    unlink('cache/scss/generated/_config.scss');
+                }
+            }
+
             if (substr($fileName, 0, 2) == './') $fileName = getcwd().substr($fileName, 1);
             $bin = Kwf_Config::getValue('server.nodeSassBinary');
             if (!$bin) {
@@ -94,6 +105,9 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             exec($cmd, $out, $retVal);
             if ($retVal) {
                 throw new Kwf_Exception("compiling sass failed: ".implode("\n", $out));
+            }
+            if ($this->_config) {
+                unlink('cache/scss/generated/_config.scss');
             }
             $map = json_decode(file_get_contents("{$cacheFile}.map"));
             $sourceFiles = array();
@@ -185,6 +199,42 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         foreach ($sourceTimes as $t) {
             if (file_exists($t['file'])) $ret = max($ret, filemtime($t['file']));
         }
+        if ($this->_configMTime) $ret = max($ret, $this->_configMTime);
         return $ret;
+    }
+
+    public function setConfig(array $config, $mtime = null)
+    {
+        $this->_config = $config;
+        $this->_configMTime = $mtime;
+    }
+
+    private static function _generateScssConfig($config)
+    {
+        if (is_array($config)) {
+            $ret = '(';
+            $keys = array_keys($config);
+            $isList = $keys && $keys[0] === 0;
+            foreach ($config as $k=>$i) {
+                if (!$isList) {
+                    $ret .= "$k:";
+                }
+                $ret .= self::_generateScssConfig($i);
+                $ret .= ',';
+            }
+            $ret = substr($ret, 0, -1);
+            $ret .= ')';
+            return $ret;
+        } else if (is_bool($config)) {
+            return $config ? 'true' : 'false';
+        } else if (is_null($config)) {
+            return 'null';
+        } else if (is_string($config)) {
+            return '"'.str_replace('"', '\\"', $config).'"';
+        } else if (is_numeric($config)) {
+            return $config;
+        } else {
+            throw new Kwf_Exception("Unsupported type");
+        }
     }
 }
