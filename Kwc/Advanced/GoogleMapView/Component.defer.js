@@ -41,7 +41,7 @@ onReady.onRender('.kwcClass', function(map) {
     }
 }, { checkVisibility: true });
 
-Kwf.onJElementReady('.kwcClass .mobileOverlay', function (el) {
+onReady.onRender('.kwcClass .mobileOverlay', function (el) {
     el.click(function (ev) {
         if ($(this).is(':visible')) {
             var newEl = $(this).parent();
