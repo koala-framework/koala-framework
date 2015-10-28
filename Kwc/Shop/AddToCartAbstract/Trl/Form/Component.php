@@ -11,8 +11,6 @@ class Kwc_Shop_AddToCartAbstract_Trl_Form_Component extends Kwc_Form_Component
     protected function _initForm()
     {
         $this->_form = $this->getData()->parent->chained->getComponent()->getForm();
-
-        parent::_initForm();
     }
 
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
