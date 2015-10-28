@@ -1,10 +1,9 @@
 var $ = require('jQuery');
-var responsiveEl = require('kwf/responsive-el');
 var onReady = require('kwf/on-ready');
 var gmapLoader = require('kwf/google-map/loader');
 var gmapMap = require('kwf/google-map/map');
 
-responsiveEl('.kwcClass', [500]);
+
 
 var renderedMaps = [];
 
