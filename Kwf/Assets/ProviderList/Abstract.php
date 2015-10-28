@@ -26,15 +26,18 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
             $paths[] = '.';
             foreach ($paths as $i) {
                 if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
-                    $config = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
-                    if ($config->provider) {
-                        $provider = $config->provider;
-                        if (is_string($provider)) $provider = array($provider);
-                        foreach ($provider as $p) {
-                            $cachedProviders[] = array(
-                                'cls' => $p,
-                                'file' => $i.'/dependencies.ini'
-                            );
+                    $config = new Zend_Config_Ini($i.'/dependencies.ini');
+                    if (isset($config->config)) {
+                        $config = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                        if ($config->provider) {
+                            $provider = $config->provider;
+                            if (is_string($provider)) $provider = array($provider);
+                            foreach ($provider as $p) {
+                                $cachedProviders[] = array(
+                                    'cls' => $p,
+                                    'file' => $i.'/dependencies.ini'
+                                );
+                            }
                         }
                     }
                 }
