@@ -236,4 +236,14 @@ class Kwf_Component_Abstract_Admin
     public function afterDuplicate($rootSource, $rootTarget)
     {
     }
+
+    public function getScssConfig()
+    {
+        return null;
+    }
+
+    public function getScssConfigMTime()
+    {
+        return null;
+    }
 }
