@@ -14,7 +14,7 @@ class Kwf_Util_Wirecard
 
     public static function process($logModel = 'Kwf_Util_Wirecard_LogModel', $secret = null)
     {
-        Zend_Registry::get('config')->debug->error->log = true; //log immer aktivieren, da dieser request von wirecard gemacht wird
+        Kwf_Exception_Abstract::$logErrors = true; //activate log always, because request comes from wirecard
         ignore_user_abort(true);
 
         if (!$secret) $secret = Kwf_Registry::get('config')->wirecard->secret;

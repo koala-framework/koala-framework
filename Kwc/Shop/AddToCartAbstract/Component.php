@@ -71,4 +71,9 @@ abstract class Kwc_Shop_AddToCartAbstract_Component extends Kwc_Form_Component
         return Kwc_Shop_AddToCartAbstract_OrderProductData::getInstance($this->getData()->componentClass)
             ->getProductText($orderProduct);
     }
+
+    public function getProduct()
+    {
+        return $this->getData()->parent;
+    }
 }

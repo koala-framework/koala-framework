@@ -68,8 +68,9 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Chec
                     $p->orderConfirmed($order);
                 }
                 foreach ($order->getChildRows('Products') as $p) {
-                    $addComponent = Kwf_Component_Data_Root::getInstance()
-                        ->getComponentByDbId($p->add_component_id);
+                    $addComponent = Kwc_Shop_AddToCartAbstract_OrderProductData::getAddComponentByDbId(
+                        $p->add_component_id, $this->getData()
+                    );
                     $addComponent->getComponent()->orderConfirmed($p);
                 }
                 $this->sendConfirmMail($order);
