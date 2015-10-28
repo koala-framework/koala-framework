@@ -56,7 +56,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             static $loadPath;
             if (!isset($loadPath)) {
                 $loadPath = array();
-                foreach (glob(VENDOR_PATH.'/bower_components/*') as $p) {
+                foreach (glob(VENDOR_PATH.'/*/*') as $p) {
                     $bowerMain = null;
                     $mainExt = null;
                     if (file_exists($p.'/bower.json')) {
