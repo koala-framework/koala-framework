@@ -19,6 +19,6 @@ class Kwc_Shop_Products_Detail_Trl_Component extends Kwc_Directories_Item_Detail
 
     public function getAddToCartForm()
     {
-        return $this->getData()->getChildComponent('-addToCart')->getChildComponent('-child');
+        return $this->getData()->getChildComponent('-addToCart')->getChildComponent('-form');
     }
 }
