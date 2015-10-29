@@ -435,8 +435,8 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
     public function checkContentsSubrootAction()
     {
         ini_set('memory_limit', '256M');
-        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'), array('ignoreVisible'=>true));
-        if (!$subroot->isVisible()) return;
+
+        $subroot = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_getParam('subroot'));
         if (!$subroot) $subroot = Kwf_Component_Data_Root::getInstance();
         $documents = Kwf_Util_Fulltext_Backend_Abstract::getInstance()->getAllDocuments($subroot);
         if ($this->_getParam('debug')) echo "count: ".count($documents)."\n";
