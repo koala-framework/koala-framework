@@ -446,6 +446,10 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
         }
 
         $ret['icon'] = 'page';
+        $contentSender = Kwc_Abstract::getSetting($component->componentClass, 'contentSender');
+        if (is_instance_of ($contentSender, 'Kwf_Component_Abstract_ContentSender_Lightbox')) {
+            $ret['icon'] = 'image';
+        }
 
         if ($component->isHome) {
             $ret['iconEffects'][] = 'home';
