@@ -80,11 +80,8 @@ class Kwf_User_Auth_PasswordFields extends Kwf_User_Auth_Abstract implements Kwf
     {
         $mail = new Kwf_User_Mail_LostPassword($kwfUserRow);
         $mail->send($this->_mailTransport);
-        if ($row instanceof Kwf_User_EditRow) {
-            $row->getModel()->writeLog(array(
-                'user_id' => $row->id,
-                'message_type' => 'user_mail_UserLostPassword'
-            ));
+        if (method_exists($row, 'writeLog')) {
+            $row->writeLog('user_mail_UserLostPassword');
         }
         return true;
     }
