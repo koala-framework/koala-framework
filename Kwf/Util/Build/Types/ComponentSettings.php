@@ -3,6 +3,7 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
 {
     protected function _build($options)
     {
+        echo "\nsettings...\n";
         if (!file_exists('build/component')) {
             mkdir('build/component');
         }
@@ -11,6 +12,12 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
 
         $fileName = 'build/component/settings';
         if (file_exists($fileName)) unlink($fileName);
+
+        $layoutContextsFileName = 'build/component/layoutcontexts';
+        if (file_exists($layoutContextsFileName)) unlink($layoutContextsFileName);
+        $masterLayoutContextsFileName = 'build/component/masterlayoutcontexts';
+        if (file_exists($masterLayoutContextsFileName)) unlink($masterLayoutContextsFileName);
+
         try {
             $data = Kwf_Component_Settings::_getSettingsCached();
         } catch (Kwf_Trl_BuildFileMissingException $e) {
@@ -24,6 +31,15 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
             self::_checkSettings($cmp, $settings);
         }
         file_put_contents($fileName, serialize($data));
+        $componentClasses = Kwc_Abstract::getComponentClasses();
+
+        echo "masterLayouts...\n";
+        $data = Kwf_Component_MasterLayout_Abstract::_build($componentClasses);
+        file_put_contents($masterLayoutContextsFileName, serialize($data));
+
+        echo "layouts...\n";
+        $data = Kwf_Component_Layout_Abstract::_build($componentClasses);
+        file_put_contents($layoutContextsFileName, serialize($data));
     }
 
     private function _checkSettings($settingName, $settings)

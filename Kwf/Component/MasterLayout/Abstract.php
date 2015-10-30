@@ -3,6 +3,9 @@ abstract class Kwf_Component_MasterLayout_Abstract
 {
     protected $_class;
     protected $_settings;
+    private static $_supportedContexts;
+    private static $_supportedBoxContexts;
+
     public function __construct($class, array $settings)
     {
         $this->_class = $class;
@@ -24,7 +27,10 @@ abstract class Kwf_Component_MasterLayout_Abstract
         return Kwc_Abstract::hasSetting($this->_class, $name);
     }
 
-    public function getInstance($class)
+    /**
+     * @return self
+     */
+    public static function getInstance($class)
     {
         static $i = array();
         if (!isset($i[$class])) {
@@ -41,4 +47,81 @@ abstract class Kwf_Component_MasterLayout_Abstract
 
     abstract public function getContexts(Kwf_Component_Data $data);
     abstract public function getContentWidth(Kwf_Component_Data $data);
+
+    /**
+     * @internal
+     */
+    public static function _build($componentClasses)
+    {
+        foreach ($componentClasses as $cmp) {
+            if (Kwc_Abstract::hasSetting($cmp, 'masterLayout')) {
+                //fills $_supportedContexts and $_supportedBoxContexts
+                self::getInstance($cmp)->getSupportedContexts();
+                self::getInstance($cmp)->_getSupportedBoxesContexts();
+            }
+        }
+        return array(
+            'contexts' => self::$_supportedContexts,
+            'childContexts' => self::$_supportedBoxContexts,
+        );
+    }
+
+    private static function _loadFromBuild()
+    {
+        if (!isset(self::$_supportedContexts)) {
+            if (file_exists('build/component/layoutcontexts')) {
+                $data = unserialize(file_get_contents('build/component/masterlayoutcontexts'));
+                self::$_supportedContexts = $data['contexts'];
+                self::$_supportedBoxContexts = $data['boxContexts'];
+            } else {
+                self::$_supportedContexts = array();
+                self::$_supportedBoxContexts = array();
+            }
+        }
+    }
+    public final function getSupportedContexts()
+    {
+        $cacheId = 'mlayout-ctx-'.$this->_class;
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
+        if (!$success) {
+            self::_loadFromBuild();
+            if (!isset(self::$_supportedContexts[$this->_class])) {
+                self::$_supportedContexts[$this->_class] = $this->calcSupportedContexts();
+            }
+            $ret = self::$_supportedContexts[$this->_class];
+            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+        }
+        return $ret;
+    }
+
+    private function _getSupportedBoxesContexts()
+    {
+        self::_loadFromBuild();
+        if (!isset(self::$_supportedBoxContexts[$this->_class])) {
+            self::$_supportedBoxContexts[$this->_class] = $this->calcSupportedBoxContexts();
+        }
+        return self::$_supportedBoxContexts[$this->_class];
+    }
+
+    public final function getSupportedBoxContexts($boxName)
+    {
+        $cacheId = 'mlayout-boxctx-'.$this->_class.'-'.$boxName;
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
+        if (!$success) {
+            $boxesContexts = $this->_getSupportedBoxesContexts();
+            $ret = $boxesContexts[$boxName];
+            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+        }
+        return $ret;
+    }
+
+    public function calcSupportedContexts()
+    {
+        return false;
+    }
+
+    public function calcSupportedBoxContexts()
+    {
+        return false;
+    }
 }

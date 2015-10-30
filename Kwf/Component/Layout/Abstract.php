@@ -1,6 +1,9 @@
 <?php
 abstract class Kwf_Component_Layout_Abstract
 {
+    private static $_supportedContexts;
+    private static $_supportedChildContexts;
+
     protected $_class;
     public function __construct($class) //for the moment we need class only
     {
@@ -15,7 +18,7 @@ abstract class Kwf_Component_Layout_Abstract
     /**
      * @return self
      */
-    public function getInstance($class)
+    public static function getInstance($class)
     {
         static $i = array();
         if (!isset($i[$class])) {
@@ -28,15 +31,78 @@ abstract class Kwf_Component_Layout_Abstract
         return $i[$class];
     }
 
-    public function getSupportedContexts()
+    /**
+     * @internal
+     */
+    public static function _build($componentClasses)
+    {
+        foreach ($componentClasses as $cmp) {
+            if (Kwc_Abstract::hasSetting($cmp, 'layoutClass')) {
+                //fills $_supportedContexts and $_supportedChildContexts
+                self::getInstance($cmp)->getSupportedContexts();
+                self::getInstance($cmp)->getSupportedChildContexts();
+            }
+        }
+        return array(
+            'contexts' => self::$_supportedContexts,
+            'childContexts' => self::$_supportedChildContexts,
+        );
+    }
+
+    private static function _loadFromBuild()
+    {
+        if (!isset(self::$_supportedContexts)) {
+            if (file_exists('build/component/layoutcontexts')) {
+                $data = unserialize(file_get_contents('build/component/layoutcontexts'));
+                self::$_supportedContexts = $data['contexts'];
+                self::$_supportedChildContexts = $data['childContexts'];
+            } else {
+                self::$_supportedContexts = array();
+                self::$_supportedChildContexts = array();
+            }
+        }
+    }
+
+    public final function getSupportedContexts()
+    {
+        $cacheId = 'layout-ctx-'.$this->_class;
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
+        if (!$success) {
+            self::_loadFromBuild();
+            if (!isset(self::$_supportedContexts[$this->_class])) {
+                self::$_supportedContexts[$this->_class]['contexts'] = $this->calcSupportedContexts();
+            }
+            $ret = self::$_supportedContexts[$this->_class]['contexts'];
+            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+        }
+        return $ret;
+    }
+
+    public final function getSupportedChildContexts()
+    {
+        $cacheId = 'layout-childctx-'.$this->_class;
+        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
+        if (!$success) {
+            self::_loadFromBuild();
+            if (!isset(self::$_supportedChildContexts[$this->_class])) {
+                self::$_supportedChildContexts[$this->_class] = $this->calcSupportedChildContexts();
+            }
+            $ret = self::$_supportedChildContexts[$this->_class];
+            Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+        }
+        return $ret;
+    }
+
+    public function calcSupportedContexts()
     {
         return false;
     }
 
-    public function getSupportedChildContexts()
+    public function calcSupportedChildContexts()
     {
         return false;
     }
+
 /*
     public function getChildContentWidth(Kwf_Component_Data $child)
     {
