@@ -153,15 +153,20 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             //a single paragraph (paragraphs child) is in clipboard
             $sources = array($source);
         }
+        unset($source);
         $classes = Kwc_Abstract::getChildComponentClasses($target->componentClass, 'paragraphs');
 
 
 
         Kwf_Events_ModelObserver::getInstance()->disable(); //This would be slow as hell. But luckily we can be sure that for the new (duplicated) components there will be no view cache to clear.
 
+        $steps = 0;
+        foreach ($sources as $s) {
+            $steps += Kwf_Util_Component::getDuplicateProgressSteps($s);
+        }
         $progressBar = new Zend_ProgressBar(
             new Kwf_Util_ProgressBar_Adapter_Cache($this->_getParam('progressNum')),
-            0, Kwf_Util_Component::getDuplicateProgressSteps($source)
+            0, $steps
         );
 
         $newPos = $this->_getParam('pos');
@@ -193,8 +198,9 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
             $row->pos = $newPos++;
             $row->visible = false;
             $row->save();
+
+            Kwf_Util_Component::afterDuplicate($s, $target);
         }
-        Kwf_Util_Component::afterDuplicate($source, $target);
         $progressBar->finish();
         Kwf_Events_ModelObserver::getInstance()->enable();
 
