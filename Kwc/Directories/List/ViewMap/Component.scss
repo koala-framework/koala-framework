@@ -108,7 +108,7 @@
     }
 
     &.gt700 {
-        .mobileOverlay {
+        .mobileOverlayOpen, .mobileOverlayClose {
             display: none;
         }
     }
