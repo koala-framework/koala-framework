@@ -1,8 +1,13 @@
 <div class="<?=$this->cssClass?><? if ($this->optimizedMobileUI) { ?> optimizedMobileUI<? } ?>">
-    <div class="mobileOverlay">
+    <div class="mobileOverlayOpen">
         <img class="navigateIcon" src="/assets/kwf/Kwc/Directories/List/ViewMap/navigateIcon.png" />
         <div class="innerMobileOverlay">
             <span class="tapToNav"><?=$this->data->trlKwf('Tap to navigate');?></span>
+        </div>
+    </div>
+
+    <div class="mobileOverlayClose">
+        <div class="innerMobileOverlay">
             <span class="tapToScroll"><?=$this->data->trlKwf('close');?></span>
         </div>
     </div>

@@ -84,20 +84,27 @@ Kwf.onElementReady('div.kwcDirectoriesListViewMap', function(map) {
     }
 });
 
-Kwf.onJElementReady('.cssClass .mobileOverlay', function (el) {
-    el.click(function (ev) {
+Kwf.onJElementReady('.cssClass', function (el) {
+    var mobileOverlayOpen = el.find('.mobileOverlayOpen');
+    var mobileOverlayClose = el.find('.mobileOverlayClose');
+
+    mobileOverlayOpen.click(function (ev) {
         if ($(this).is(':visible')) {
             var newEl = $(this).parent();
-            newEl.toggleClass('navigate');
-            if (newEl.hasClass('navigate')) {
-                $('html, body').animate({
-                    scrollTop: newEl.offset().top
-                });
-            } else {
-                $('html, body').animate({
-                    scrollTop: newEl.offset().top - (($(window).innerHeight() - newEl.height()) / 2)
-                });
-            }
+            newEl.addClass('navigate');
+            $('html, body').animate({
+                scrollTop: newEl.offset().top
+            });
+        }
+    });
+
+    mobileOverlayClose.on('touchstart click', function (ev) {
+        if ($(this).is(':visible')) {
+            var newEl = $(this).parent();
+            newEl.removeClass('navigate');
+            $('html, body').animate({
+                scrollTop: newEl.offset().top - (($(window).innerHeight() - newEl.height()) / 2)
+            });
         }
     });
 });
