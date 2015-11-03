@@ -15782,5 +15782,10 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>This field should be a URL in the format "http://www.domain.com"</en>
 <id>2296</id>
 </text>
+<text>
+<en>Tap to navigate</en>
+<de>Tippen zum Navigieren</de>
+<id>2297</id>
+</text>
 </trl>
 

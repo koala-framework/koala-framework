@@ -8,7 +8,7 @@
 
     <div class="mobileOverlayClose">
         <div class="innerMobileOverlay">
-            <span class="tapToScroll"><?=$this->data->trlKwf('close');?></span>
+            <span class="tapToScroll"><?=$this->data->trlKwf('Close');?></span>
         </div>
     </div>
 
