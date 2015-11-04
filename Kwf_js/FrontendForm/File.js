@@ -94,9 +94,9 @@ Kwf.FrontendForm.File = Ext2.extend(Kwf.FrontendForm.Field, {
                 } catch (e) {
                     return alert(trl('An error occured, please try again later'));
                 }
-
                 this.dropContainer.find('input.kwfFormFieldFileUnderlayText').val(response.value.filename);
                 uploadIdField.val(response.value.uploadId+'_'+response.value.hashKey);
+                this.dropContainer.find('input.fileSelector').val('');
 
             } else if (xhr.readyState == 4 && xhr.status !== 200) {
                 this.form.enableSubmit();
