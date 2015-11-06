@@ -39,7 +39,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
             'amount' => $params['amount'],
             'currency' => $params['currency'],
             'language' => $payment->getLanguage(),
-            'orderDescription' => $order->firstname . ' ' . $order->lastname . ' (' . $order->zip . '), '.$payment->trlKwf('Order: {0}', $order->id),
+            'orderDescription' => $order->firstname . ' ' . $order->lastname . ' (' . $order->zip . '), '.$payment->trlKwf('Order: {0}', $order->number),
             'displayText' => $payment->trlKwf('Thank you very much for your order.'),
             'successURL' => $payment->getChildComponent('_success')->getAbsoluteUrl(),
             'confirmURL' => $payment->getChildComponent('_ipn')->getAbsoluteUrl(),
