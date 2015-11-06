@@ -1,6 +1,13 @@
 <?php
 class Kwc_Directories_Item_Directory_Trl_FormController_ComponentData extends Kwf_Data_Table
 {
+    public function load($row)
+    {
+        $name = $this->getField();
+        $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible' => true));
+        return $c->chained->row->$name;
+    }
+
     public function save(Kwf_Model_Row_Interface $row, $data)
     {
     }
