@@ -55,7 +55,11 @@ class Kwc_Basic_Headline_Component extends Kwc_Abstract
         $ret['headline1'] = $this->_getRow()->headline1;
         $ret['headline2'] = $this->_getRow()->headline2;
         $headlines = $this->_getSetting('headlines');
-        $ret['headlineType'] = !$this->getRow()->headline_type ? reset($headlines) : $headlines[$this->getRow()->headline_type];
+        if ($this->getRow()->headline_type && isset($headlines[$this->getRow()->headline_type])) {
+            $ret['headlineType'] = $headlines[$this->getRow()->headline_type];
+        } else {
+            $ret['headlineType'] = reset($headlines);
+        }
         return $ret;
     }
 
