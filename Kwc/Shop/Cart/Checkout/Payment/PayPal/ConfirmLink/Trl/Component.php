@@ -32,7 +32,7 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Trl_Component extends Kw
         $params = array(
             'amount' => $total,
             'currency_code' => 'EUR',
-            'no_shipping' => Kwc_Abstract::getSetting($payment->componentClass, 'noShipping'),
+            'no_shipping' => Kwc_Abstract::getSetting($payment->chained->componentClass, 'noShipping'),
             'custom' => $custom
         );
 
