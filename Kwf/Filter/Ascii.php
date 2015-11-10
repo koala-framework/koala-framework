@@ -10,7 +10,6 @@ class Kwf_Filter_Ascii implements Zend_Filter_Interface
     {
         URLify::$remove_list = array();
         $value = URLify::filter($value, 60, 'de');
-        $value = str_replace('-', '_', $value);
         return $value;
     }
 }
