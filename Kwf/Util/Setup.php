@@ -344,7 +344,7 @@ class Kwf_Util_Setup
                 $ret .= "    $redirectHttpCode";
                 $ret .= "}\n";
             } else {
-                if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
+                if ($domains = call_user_func(array(Kwf_Setup::$utilSetupClass, '_getHttpsDomains'))) {
                     $ret .= "\$domains = array(";
                     foreach ($domains as $d) {
                         $ret .= "'".$d."'=>true, ";
@@ -386,7 +386,7 @@ class Kwf_Util_Setup
         if (Kwf_Config::getValue('server.redirectToDomain')) {
             $ret .= "if (\$host && substr(\$requestUri, 0, 17) != '/kwf/maintenance/' && substr(\$requestUri, 0, 8) != '/assets/') {\n";
             $ret .= "    \$redirect = false;\n";
-            if ($domains = Kwf_Config::getValueArray('kwc.domains')) {
+            if ($domains = call_user_func(array(Kwf_Setup::$utilSetupClass, '_getDomains'))) {
                 $ret .= "    \$domainMatches = false;\n";
                 foreach ($domains as $domain) {
                     $ret .= "    if ('{$domain['domain']}' == \$host) \$domainMatches = true;\n";
@@ -497,5 +497,15 @@ class Kwf_Util_Setup
         $ret .= "}\n";
 
         return $ret;
+    }
+
+    protected static function _getHttpsDomains()
+    {
+        return Kwf_Config::getValueArray('server.httpsDomains');
+    }
+
+    protected static function _getDomains()
+    {
+        return Kwf_Config::getValueArray('kwc.domains');
     }
 }
