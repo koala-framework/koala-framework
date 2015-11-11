@@ -20,6 +20,7 @@ function is_instance_of($sub, $super)
 
 class Kwf_Setup
 {
+    public static $utilSetupClass;
     public static $configClass;
     public static $configSection;
     const CACHE_SETUP_VERSION = 5; //increase version if incompatible changes to generated file are made
@@ -29,17 +30,18 @@ class Kwf_Setup
         error_reporting(E_ALL & ~E_STRICT);
         define('APP_PATH', getcwd());
         Kwf_Setup::$configClass = $configClass;
+        if (!Kwf_Setup::$utilSetupClass) Kwf_Setup::$utilSetupClass = 'Kwf_Util_Setup';
         if (php_sapi_name() == 'cli') {
             //don't use cached setup on cli so clear-cache will always work even if eg. paths change
             require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
-            Kwf_Util_Setup::minimalBootstrap();
-            $setupCode = Kwf_Util_Setup::generateCode();
+            call_user_func(array(self::$utilSetupClass, 'minimalBootstrap'));
+            $setupCode = call_user_func(array(self::$utilSetupClass, 'generateCode'));
             Zend_Registry::_unsetInstance();
             eval(substr($setupCode, 5));
         } else if (!@include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
             if (!file_exists(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
                 require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
-                Kwf_Util_Setup::minimalBootstrapAndGenerateFile();
+                call_user_func(array(self::$utilSetupClass, 'minimalBootstrapAndGenerateFile'));
             }
             include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php');
         }
