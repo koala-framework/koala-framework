@@ -8,6 +8,7 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
         $ret['componentName'] = trlKwfStatic('Columns');
         $ret['componentIcon'] = 'application_tile_horizontal';
         $ret['componentCategory'] = 'layout';
+        $ret['mobileBreakpoint'] = 480;
         $ret['componentPriority'] = 100;
         $ret['childModel'] = 'Kwc_Columns_Model';
 
@@ -106,7 +107,7 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
 
         $i = 1;
         $ret['cssClass'] .= " col{$type}";
-        foreach($ret['listItems'] as $key => $value) {
+        foreach ($ret['listItems'] as $key => $value) {
             $cls = " span{$columns['colSpans'][$i-1]}";
             if ($i == 1) $cls .= " lineFirst";
             if ($i == count($columns['colSpans'])) $cls .= " lineLast";
@@ -122,10 +123,11 @@ class Kwc_Columns_Component extends Kwc_Abstract_List_Component
     protected function _getChildContentWidth(Kwf_Component_Data $child)
     {
         $ownWidth = parent::_getChildContentWidth($child);
+        $breakpoint = $this->_getSetting('mobileBreakpoint');
         $widthCalc = $child->row->col_span / $child->row->columns;
         $ret = floor($ownWidth * $widthCalc);
-        if ($ret < 480) {
-            $ret = min($ownWidth, 480);
+        if ($ret < $breakpoint) {
+            $ret = min($ownWidth, $breakpoint);
         }
         return $ret;
     }
