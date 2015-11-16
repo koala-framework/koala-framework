@@ -4,6 +4,7 @@ Kwc.Paragraphs.AddParagraphButton = Ext2.extend(Ext2.Button, {
     cls  : 'x2-btn-text-icon',
     initComponent: function() {
         this.addEvents('addParagraph');
+
         var buildMenu = function(components, addToItem)
         {
             if (components.length == 0) { return; }
@@ -52,8 +53,15 @@ Kwc.Paragraphs.AddParagraphButton = Ext2.extend(Ext2.Button, {
                 }
             }
         };
+
         this.menu = new Ext2.menu.Menu();
-        buildMenu.call(this, this.components, this.menu);
+        this.menu.on('beforeshow', function() {
+            //lazily build menu
+            buildMenu.call(this, this.components, this.menu);
+        }, this);
+        this.menu.on('hide', function() {
+            this.menu.removeAll();
+        }, this);
 
         Kwc.Paragraphs.AddParagraphButton.superclass.initComponent.call(this);
     },
