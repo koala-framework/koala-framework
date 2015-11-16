@@ -137,6 +137,8 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 
     public function jsonPasteAction()
     {
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
+
         $session = new Kwf_Session_Namespace('Kwc_Paragraphs:copy');
         $id = $session->id;
         if (!$id || !Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true))) {
@@ -203,7 +205,11 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
                 continue; //skip this one
             }
 
-            $newParagraph = Kwf_Util_Component::duplicate($s, $target, $progressBar);
+            try {
+                $newParagraph = Kwf_Util_Component::duplicate($s, $target, $progressBar);
+            } catch (Kwf_Component_Exception_IncompatibleContexts $e) {
+                throw new Kwf_Exception_Client(trlKwf("Can't paste paragraph as it's not compatible with this context."));
+            }
             $countDuplicated++;
 
             $row = $newParagraph->row;
@@ -215,6 +221,8 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         }
         $progressBar->finish();
         Kwf_Events_ModelObserver::getInstance()->enable();
+
+        if (Zend_Registry::get('db')) Zend_Registry::get('db')->commit();
 
         if (!$countDuplicated && $errorMsg) {
             //if at least one was duplicated show no error, else show one
