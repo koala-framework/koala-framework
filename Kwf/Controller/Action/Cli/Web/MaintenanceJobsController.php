@@ -47,6 +47,13 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             if (!$lastMinutelyRun || time()-$lastMinutelyRun > 60) {
                 $lastMinutelyRun = time();
                 Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_MINUTELY, $debug);
+
+                //discard connection to database to reconnect on next job run
+                //avoids problems with auto closed connections due to inactivity
+                Kwf_Model_Abstract::clearAllRows();
+                Kwf_Model_Abstract::clearInstances();
+                Kwf_Registry::getInstance()->offsetUnset('db');
+                Kwf_Registry::getInstance()->offsetUnset('dao');
             }
 
             Kwf_Component_Data_Root::getInstance()->freeMemory();
