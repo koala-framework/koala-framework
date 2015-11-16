@@ -39,9 +39,9 @@ class Kwf_Component_Generator_PseudoPage_Table extends Kwf_Component_Generator_T
                 $select->whereEquals($this->_settings['filenameColumn'], $filename);
             } else {
                 if ($this->_hasNumericIds) {
-                    $pattern = '#^([0-9]+)_#';
+                    $pattern = '#^([0-9]+)-#';
                 } else {
-                    $pattern = '#^([^_]+)_#';
+                    $pattern = '#^([^-]+)-#';
                 }
                 if (!preg_match($pattern, $filename, $m)) return null;
                 $select->whereEquals($this->_idColumn, $m[1]);
