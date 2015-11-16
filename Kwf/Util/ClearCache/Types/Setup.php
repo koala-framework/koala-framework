@@ -10,7 +10,7 @@ class Kwf_Util_ClearCache_Types_Setup extends Kwf_Util_ClearCache_Types_Abstract
 
     protected function _refreshCache($options)
     {
-        file_put_contents('cache/setup'.Kwf_Setup::CACHE_SETUP_VERSION.'.php', call_user_func(array(Kwf_Setup::$utilSetupClass, 'generateCode'), Kwf_Setup::$configClass));
+        file_put_contents('cache/setup'.Kwf_Setup::CACHE_SETUP_VERSION.'.php', Kwf_Util_Setup::generateCode(Kwf_Setup::$configClass));
         Kwf_Util_Apc::callClearCacheByCli(array('files' => getcwd().'/cache/setup'.Kwf_Setup::CACHE_SETUP_VERSION.'.php'));
     }
 
