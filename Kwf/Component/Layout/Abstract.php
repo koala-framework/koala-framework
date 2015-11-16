@@ -38,9 +38,8 @@ abstract class Kwf_Component_Layout_Abstract
     {
         foreach ($componentClasses as $cmp) {
             if (Kwc_Abstract::hasSetting($cmp, 'layoutClass')) {
-                //fills $_supportedContexts and $_supportedChildContexts
-                self::getInstance($cmp)->getSupportedContexts();
-                self::getInstance($cmp)->getSupportedChildContexts();
+                self::$_supportedContexts[$cmp] = self::getInstance($cmp)->calcSupportedContexts();
+                self::$_supportedChildContexts[$cmp] = self::getInstance($cmp)->calcSupportedChildContexts();
             }
         }
         return array(
@@ -70,24 +69,28 @@ abstract class Kwf_Component_Layout_Abstract
         if (!$success) {
             self::_loadFromBuild();
             if (!isset(self::$_supportedContexts[$this->_class])) {
-                self::$_supportedContexts[$this->_class]['contexts'] = $this->calcSupportedContexts();
+                self::$_supportedContexts[$this->_class] = $this->calcSupportedContexts();
             }
-            $ret = self::$_supportedContexts[$this->_class]['contexts'];
+            $ret = self::$_supportedContexts[$this->_class];
             Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         }
         return $ret;
     }
 
-    public final function getSupportedChildContexts()
+    public final function getSupportedChildContexts($generator)
     {
-        $cacheId = 'layout-childctx-'.$this->_class;
+        $cacheId = 'layout-childctx-'.$this->_class.'-'.$generator;
         $ret = Kwf_Cache_SimpleStatic::fetch($cacheId, $success);
         if (!$success) {
             self::_loadFromBuild();
             if (!isset(self::$_supportedChildContexts[$this->_class])) {
                 self::$_supportedChildContexts[$this->_class] = $this->calcSupportedChildContexts();
             }
-            $ret = self::$_supportedChildContexts[$this->_class];
+            if (self::$_supportedChildContexts[$this->_class] && isset(self::$_supportedChildContexts[$this->_class][$generator])) {
+                $ret = self::$_supportedChildContexts[$this->_class][$generator];
+            } else {
+                $ret = false;
+            }
             Kwf_Cache_SimpleStatic::add($cacheId, $ret);
         }
         return $ret;
