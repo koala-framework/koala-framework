@@ -1,8 +1,7 @@
 <?php
 class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
 {
-    public static $needsParentComponentClass = true;
-    public static function getSettings($parentComponentClass)
+    public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Columns');
@@ -13,7 +12,7 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
 
         $ret['generators']['child'] = array(
             'class' => 'Kwc_Columns_Abstract_Generator',
-            'component' => $parentComponentClass
+            'component' => 'Kwc_Paragraphs_Component'
         );
         $ret['extConfig'] = 'Kwc_Columns_Abstract_ExtConfig';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Columns/Abstract/List.js';
