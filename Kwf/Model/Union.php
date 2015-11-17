@@ -427,21 +427,14 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
         if ($this->_allDb) {
 
-            $dbSelects = $this->getDbSelects($select);
-            if (!$dbSelects) return array();
-            $dbSelect = Kwf_Registry::get('db')->select();
-            $dbSelect->union($dbSelects);
-            if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
-                $dbSelect->order('orderField '. $p[0]['direction']);
-            }
-            if ($limitCnt = $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
-                $limitOffs = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
-                $dbSelect->limit($limitCnt, $limitOffs);
-            }
-            $rows = Kwf_Registry::get('db')->query($dbSelect)->fetchAll();
+            $sel = $this->getDbSelects($select);
+
             $ids = array();
-            foreach ($rows as $row) {
-                $ids[] = $row['id'];
+            if ($sel) {
+                $rows = Kwf_Registry::get('db')->query($sel)->fetchAll();
+                foreach ($rows as $row) {
+                    $ids[] = $row['id'];
+                }
             }
 
         } else {

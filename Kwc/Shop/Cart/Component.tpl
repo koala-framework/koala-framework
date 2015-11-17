@@ -5,7 +5,7 @@
         <div class="kwfUp-clear"></div>
         <? foreach ($this->sumRows as $row) { ?>
             <div class="amounts <?=isset($row['class']) ? $row['class'] : ''?>">
-                <span class="label"><?=$row['text']?></span>
+                <span class="label"><?=$this->data->trlStaticExecute($row['text'])?></span>
                 <span class="sum"><?=$this->money($row['amount'],'')?></span>
             </div>
         <? } ?>

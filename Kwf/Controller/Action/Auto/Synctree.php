@@ -200,7 +200,7 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
     public function jsonNodeDataAction()
     {
         $id = $this->getRequest()->getParam('node');
-        $row = $this->_model->find($id)->current();
+        $row = $this->_model->getRow($id);
         if ($row) {
             $this->view->data = $this->_formatNode($row);
         } else {
@@ -437,7 +437,7 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
         $openedId = $this->_getParam('openedId');
         $this->_openedNodes = array();
         while ($openedId) {
-            $row = $this->_model->find($openedId)->current();
+            $row = $this->_model->getRow($openedId);
             $this->_openedNodes[$openedId] = true;
             $field = $this->_parentField;
             $openedId = $row ? $row->$field : null;
@@ -448,7 +448,7 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
     {
         $visible = $this->getRequest()->getParam('visible') == 'true';
         $id = $this->getRequest()->getParam('id');
-        $row = $this->_model->find($id)->current();
+        $row = $this->_model->getRow($id);
         if (!$this->_hasPermissions($row, 'visible')) {
             throw new Kwf_Exception("Making visible/unvisible is not allowed for this row.");
         }
@@ -492,7 +492,7 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
     public function jsonDeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $row = $this->_model->find($id)->current();
+        $row = $this->_model->getRow($id);
         if (!$row) throw new Kwf_Exception("No entry with id '$id' found");
         if (!$this->_hasPermissions($row, 'delete')) {
             throw new Kwf_Exception("Delete is not allowed for this row.");
@@ -557,7 +557,7 @@ abstract class Kwf_Controller_Action_Auto_Synctree extends Kwf_Controller_Action
         }
         $row->save();
 
-        $row = $this->_model->find($row->id)->current();
+        $row = $this->_model->getRow($row->id);
         $primaryKey = $this->_model->getPrimaryKey();
         $before = null;
         $select = $this->_getSelect($this->_getTreeWhere());

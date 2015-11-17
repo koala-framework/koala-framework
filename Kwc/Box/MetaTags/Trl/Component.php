@@ -24,9 +24,9 @@ class Kwc_Box_MetaTags_Trl_Component extends Kwc_Abstract_Composite_Trl_Componen
         return Kwc_Box_MetaTags_Component::getMetaTagsForData($this->getData());
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['metaTags'] = $this->_getMetaTags();
         return $ret;
     }

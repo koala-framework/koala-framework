@@ -45,11 +45,5 @@ class Kwf_User_Mail_Abstract
     public function send($transport = null)
     {
         return $this->_mail->send($transport);
-/*
-        $this->getModel()->writeLog(array(
-            'user_id' => $row->id,
-            'message_type' => 'user_mail_'.$tpl
-        ));
-*/
     }
 }

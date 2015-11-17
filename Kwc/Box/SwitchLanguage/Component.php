@@ -76,9 +76,9 @@ class Kwc_Box_SwitchLanguage_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['separator'] = $this->_getSetting('separator');
         $ret['languages'] = $this->getLanguages($this->_getSetting('showCurrent'), true);
         return $ret;

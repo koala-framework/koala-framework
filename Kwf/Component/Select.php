@@ -41,15 +41,6 @@ class Kwf_Component_Select extends Kwf_Model_Select
         }
     }
 
-    public function joinWithParentGenerators($data, $generatorNames)
-    {
-        foreach ($generatorNames as $generatorName) {
-            $data = $data->parent;
-            $generator = $data->getGenerator($generatorName);
-            $generator->joinWithParentGenerator($this, $data);
-        }
-    }
-
     public function wherePageGenerator($value = true)
     {
         $this->_parts[self::WHERE_PAGE_GENERATOR] = $value;

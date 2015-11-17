@@ -308,24 +308,20 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
             $model = $this->getOwnModel();
             if (!$model) return null;
             $dbId = $this->getData()->dbId;
-            if ($model instanceof Kwf_Model_Interface) {
-                $sharedDataClass = self::getFlag($this->getData()->componentClass, 'sharedDataClass');
-                if ($sharedDataClass) {
-                    $component = $this->getData();
-                    while ($component) {
-                        if (is_instance_of($component->componentClass, $sharedDataClass))
-                            $dbId = $component->dbId;
-                        $component = $component->parent;
-                    }
+            $sharedDataClass = self::getFlag($this->getData()->componentClass, 'sharedDataClass');
+            if ($sharedDataClass) {
+                $component = $this->getData();
+                while ($component) {
+                    if (is_instance_of($component->componentClass, $sharedDataClass))
+                        $dbId = $component->dbId;
+                    $component = $component->parent;
                 }
+            }
 
-                $this->_row = $model->getRow($dbId);
-                if (!$this->_row) {
-                    $this->_row = $model->createRow();
-                    $this->_row->component_id = $dbId;
-                }
-            } else {
-                $this->_row = $model->find($dbId)->current();
+            $this->_row = $model->getRow($dbId);
+            if (!$this->_row) {
+                $this->_row = $model->createRow();
+                $this->_row->component_id = $dbId;
             }
         }
         return $this->_row;

@@ -33,9 +33,9 @@ class Kwc_FulltextSearch_Box_Trl_Component extends Kwc_Chained_Trl_Component
         return $this->_getSearchDirectory();
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $searchPage = $this->_getSearchDirectory();
         $ret['searchForm'] = null;
         if ($searchPage) {

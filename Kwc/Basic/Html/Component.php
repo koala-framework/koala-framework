@@ -49,7 +49,7 @@ class Kwc_Basic_Html_Component extends Kwc_Abstract_Composite_Component
 
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         if (!$renderer)  {
             throw new Kwf_Exception('renderer required');
         }

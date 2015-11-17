@@ -11,6 +11,15 @@ class Kwc_Trl_StaticTextsForm_Test extends Kwc_TestAbstract
         parent::setUp('Kwc_Trl_StaticTextsForm_Root');
     }
 
+    public function tearDown()
+    {
+        Kwf_Trl::getInstance()->setWebCodeLanguage(null);
+        Kwf_Trl::getInstance()->unsetTrlElements();
+        Kwf_Cache_SimpleStatic::clear('trl-');
+        Kwf_Cache_SimpleStatic::clear('trlp-');
+        parent::tearDown();
+    }
+
     public function testFormTranslate()
     {
         // web code language is 'de', tested language is 'en'

@@ -50,9 +50,9 @@ class Kwc_Menu_Component extends Kwc_Menu_Abstract_Component
         return $requiredLevels;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['menu'] = $this->_getMenuData();
         if ($this->_getSetting('emptyIfSingleEntry')) {
             if (count($ret['menu']) == 1) {

@@ -99,9 +99,9 @@ var File = kwfExtend(Field, {
                 } catch (e) {
                     return alert(trlKwf('An error occured, please try again later'));
                 }
-
                 this.dropContainer.find('input.kwfFormFieldFileUnderlayText').val(response.value.filename);
                 uploadIdField.val(response.value.uploadId+'_'+response.value.hashKey);
+                this.dropContainer.find('input.fileSelector').val('');
 
             } else if (xhr.readyState == 4 && xhr.status !== 200) {
                 this.form.enableSubmit();

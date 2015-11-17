@@ -13,9 +13,9 @@ class Kwc_Composite_ParagraphsImage_Component extends Kwc_Abstract_Composite_Com
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $return = parent::getTemplateVars();
+        $return = parent::getTemplateVars($renderer);
         return $return;
     }
 }

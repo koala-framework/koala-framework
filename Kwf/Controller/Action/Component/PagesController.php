@@ -300,8 +300,8 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
     }
 
     protected function _beforeSaveMove($row) {
-        $sourceRow = $this->_model->getTable()->find($this->getRequest()->getParam('source'))->current();
-        $targetRow = $this->_model->getTable()->find($this->getRequest()->getParam('target'))->current();
+        $sourceRow = $this->_model->getTable()->getRow($this->getRequest()->getParam('source'));
+        $targetRow = $this->_model->getTable()->getRow($this->getRequest()->getParam('target'));
         if ($sourceRow && $targetRow) {
             $sourceRow->save();
         }

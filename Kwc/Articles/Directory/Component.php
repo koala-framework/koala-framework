@@ -37,6 +37,7 @@ class Kwc_Articles_Directory_Component extends Kwc_Directories_ItemPage_Director
         if (!$user || $user->role == 'external') {
             $ret->whereEquals('only_intern', 0);
         }
+        $ret->order('date', 'DESC');
         return $ret;
     }
 }

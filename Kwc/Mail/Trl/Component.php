@@ -5,6 +5,32 @@ class Kwc_Mail_Trl_Component extends Kwc_Chained_Trl_Component
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['generators']['mail'] = array(
+            'class' => 'Kwf_Component_Generator_Static',
+            'component' => 'Kwc_Mail_Trl_Mail_Component.' . $masterComponentClass
+        );
         return $ret;
+    }
+
+    public function send(Kwc_Mail_Recipient_Interface $recipient, $data = null, $toAddress = null, $format = null, $addViewTracker = true)
+    {
+        return $this->getData()->getChildComponent('-mail')->getComponent()->send(
+            $recipient, $data, $toAddress, $format, $addViewTracker
+        );
+    }
+
+    public function getPlaceholders(Kwc_Mail_Recipient_Interface $recipient = null)
+    {
+        return $this->getData()->chained->getComponent()->getPlaceholders($recipient);
+    }
+
+    public function getRecipientSources()
+    {
+        return $this->getData()->chained->getComponent()->getRecipientSources();
+    }
+
+    public function getHtmlStyles()
+    {
+        return $this->getData()->chained->getComponent()->getHtmlStyles();
     }
 }

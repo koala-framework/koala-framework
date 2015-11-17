@@ -16,9 +16,9 @@ abstract class Kwc_News_Detail_Abstract_Component extends Kwc_Directories_Item_D
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['title'] = $this->getData()->row->title;
         $ret['publish_date'] = $this->getData()->row->publish_date;
         return $ret;

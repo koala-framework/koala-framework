@@ -18,9 +18,9 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Component extends Kwc_Abstract_Comp
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['readMoreLinktext'] = $this->getRow()->link_text;
         $ret['headlineComponentLinkConfig'] = $this->_getSetting('headlineComponentLinkConfig');
         $ret['readMoreComponentLinkConfig'] = $this->_getSetting('readMoreComponentLinkConfig');

@@ -13,9 +13,9 @@ class Kwf_Component_Cache_ComponentLink_Root_Component extends Kwf_Component_NoC
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         for ($x = 1; $x <= 4; $x++) {
             $ret["p$x"] = Kwf_Component_Data_Root::getInstance()->getComponentById($x);
         }

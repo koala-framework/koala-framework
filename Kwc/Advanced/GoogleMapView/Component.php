@@ -10,9 +10,9 @@ abstract class Kwc_Advanced_GoogleMapView_Component extends Kwc_Abstract_Composi
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
 
         $options = $this->_getOptions();
         if (!isset($options['coordinates'])) {

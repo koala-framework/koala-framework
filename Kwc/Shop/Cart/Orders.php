@@ -72,7 +72,7 @@ class Kwc_Shop_Cart_Orders extends Kwf_Model_Db
         $ret = null;
         $orderId = self::getCartOrderId();
         if ($orderId) {
-            $ret = $this->find($orderId)->current();
+            $ret = $this->getRow($orderId);
         }
         if (!$ret) {
             $ret = $this->createRow();

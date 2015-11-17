@@ -1,35 +1,13 @@
 <?php
 class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 {
-    protected function _getRow($componentId)
-    {
-        if (!Kwc_Abstract::hasSetting($this->_class, 'tablename')) return null;
-        $tablename = Kwc_Abstract::getSetting($this->_class, 'tablename');
-        if ($tablename) {
-            $table = new $tablename(array('componentClass'=>$this->_class));
-            return $table->find($componentId)->current();
-        }
-        return null;
-    }
-
-    protected function _getRows($componentId)
-    {
-        $tablename = Kwc_Abstract::getSetting($this->_class, 'tablename');
-        if ($tablename) {
-            $table = new $tablename(array('componentClass' => $this->_class));
-            $where = array(
-                'component_id = ?' => $componentId
-            );
-            return $table->fetchAll($where);
-        }
-        return array();
-    }
-
     public function delete($componentId)
     {
-        $row = $this->_getRow($componentId);
-        if ($row) {
-            $row->delete();
+        if (Kwc_Abstract::createOwnModel($this->_class)) {
+            $row = Kwc_Abstract::createOwnModel($this->_class)->getRow($componentId);
+            if ($row) {
+                $row->delete();
+            }
         }
     }
 

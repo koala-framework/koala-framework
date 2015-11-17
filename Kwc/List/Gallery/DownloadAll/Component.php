@@ -16,8 +16,8 @@ class Kwc_List_Gallery_DownloadAll_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars() {
-        $ret = parent::getTemplateVars();
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null) {
+        $ret = parent::getTemplateVars($renderer);
         $ret['downloadUrl'] = Kwf_Media::getUrl($this->getData()->componentClass,
             $this->getData()->componentId, 'list', 'all'
         );

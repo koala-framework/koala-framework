@@ -33,7 +33,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_Confirm_Component extends Kwc_Edit
     {
         $o = $this->_getOrder();
         if (!$o) {
-            //bestellung wurde bereits bestaetigt
+            //this order was already confirmed
             header("Location: ".$this->getData()->parent->parent->parent->parent->url);
             exit;
         }

@@ -33,7 +33,9 @@ class Kwf_Setup
             //don't use cached setup on cli so clear-cache will always work even if eg. paths change
             require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';
             Kwf_Util_Setup::minimalBootstrap();
-            eval(substr(Kwf_Util_Setup::generateCode(), 5));
+            $setupCode = Kwf_Util_Setup::generateCode();
+            Zend_Registry::_unsetInstance();
+            eval(substr($setupCode, 5));
         } else if (!@include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
             if (!file_exists(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php')) {
                 require_once dirname(__FILE__).'/../Kwf/Util/Setup.php';

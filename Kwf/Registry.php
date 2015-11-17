@@ -45,5 +45,16 @@ class Kwf_Registry extends Zend_Registry
         }
         return parent::offsetExists($index);
     }
+
+    public function offsetUnset($index)
+    {
+        if (in_array($index, array('db', 'dao', 'userModel'))) {
+            if (!parent::offsetExists($index)) {
+                //not yet set, ignore
+                return;
+            }
+        }
+        return parent::offsetUnset($index);
+    }
 }
 Zend_Registry::setClassName('Kwf_Registry');

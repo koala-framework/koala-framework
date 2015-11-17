@@ -11,9 +11,9 @@ class Kwc_Advanced_Imprint_GoogleAnalytics_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $content = array(
             'en' => 'This website uses Google Analytics, a web analytics service provided by
                     Google, Inc. (“Google”). Google Analytics uses “cookies”, which are

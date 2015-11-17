@@ -38,9 +38,9 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
         }
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
 
         if (preg_match(self::REGEX, $ret['row']->url, $matches)) {
             $videoId = $matches[0];

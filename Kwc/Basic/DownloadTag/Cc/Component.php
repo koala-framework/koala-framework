@@ -9,9 +9,9 @@ class Kwc_Basic_DownloadTag_Cc_Component extends Kwc_Basic_LinkTag_Abstract_Cc_C
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['url'] = $this->getDownloadUrl();
         return $ret;
     }

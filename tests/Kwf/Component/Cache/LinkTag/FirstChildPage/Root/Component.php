@@ -13,9 +13,9 @@ class Kwf_Component_Cache_LinkTag_FirstChildPage_Root_Component extends Kwf_Comp
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['link'] = $this->getData()->getComponentById(2);
         return $ret;
     }

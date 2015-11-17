@@ -23,9 +23,9 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
         $this->getData()->row->markRead();
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['config'] = array(
             'isTopArticle' => ($this->getData()->getRow()->is_top) ? 1 : 0
         );

@@ -17,7 +17,7 @@ class Kwc_Abstract_Cards_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $ret = array();
         $ret['child'] = $this->getData()->getChildComponent(array(

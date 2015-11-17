@@ -39,9 +39,8 @@ class Kwf_Model_DbWithConnection_Dirty_Test extends Kwf_Test_TestCase
     {
         Kwf_Model_DbWithConnection_Dirty_Row::resetMock();
 
-        $table = new Kwf_Db_Table(array(
+        $table = new Kwf_Model_DbWithConnection_Dirty_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Kwf_Model_DbWithConnection_Dirty_Row'
         ));
         $model = new Kwf_Model_Db(array(
             'table' => $table
@@ -63,9 +62,8 @@ class Kwf_Model_DbWithConnection_Dirty_Test extends Kwf_Test_TestCase
     {
         Kwf_Model_DbWithConnection_Dirty_Row::resetMock();
 
-        $table = new Kwf_Db_Table(array(
+        $table = new Kwf_Model_DbWithConnection_Dirty_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Kwf_Model_DbWithConnection_Dirty_Row'
         ));
         $model = new Kwf_Model_Db(array(
             'table' => $table
@@ -87,9 +85,8 @@ class Kwf_Model_DbWithConnection_Dirty_Test extends Kwf_Test_TestCase
     {
         Kwf_Model_DbWithConnection_Dirty_Row::resetMock();
 
-        $table = new Kwf_Db_Table(array(
+        $table = new Kwf_Model_DbWithConnection_Dirty_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Kwf_Model_DbWithConnection_Dirty_Row'
         ));
         $model = new Kwf_Model_Db(array(
             'table' => $table
@@ -104,9 +101,8 @@ class Kwf_Model_DbWithConnection_Dirty_Test extends Kwf_Test_TestCase
     {
         Kwf_Model_DbWithConnection_Dirty_Row::resetMock();
 
-        $table = new Kwf_Db_Table(array(
+        $table = new Kwf_Model_DbWithConnection_Dirty_Table(array(
             'name' => $this->_tableName,
-            'rowClass' => 'Kwf_Model_DbWithConnection_Dirty_Row'
         ));
         $model = new Kwf_Model_Db(array(
             'table' => $table

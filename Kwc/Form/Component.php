@@ -7,6 +7,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     private $_initialized = false;
     private $_posted = false;
     private $_postData = array();
+    private $_formTrlStaticExecuted = false;
     protected $_errors = array();
 
     public static function getSettings()
@@ -108,6 +109,10 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         }
 
         if (!$this->getForm()) return;
+
+        $this->getForm()->trlStaticExecute($this->getData()->getLanguage());
+        $this->_formTrlStaticExecuted = true;
+
 
         if ($this->_getIdFromPostData($postData)) {
             $this->getForm()->setId($this->_getIdFromPostData($postData));
@@ -241,8 +246,6 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
             $this->_initForm();
 
             $this->_form->initFields();
-
-            if ($this->_form) $this->_form->trlStaticExecute($this->getData()->getLanguage());
         }
         return $this->_form;
     }
@@ -252,11 +255,16 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         return $this->getData()->getChildComponent('-success');
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = Kwc_Abstract::getTemplateVars();
+        $ret = Kwc_Abstract::getTemplateVars($renderer);
 
         $this->_checkWasProcessed();
+
+        if (!$this->_formTrlStaticExecuted) {
+            $this->getForm()->trlStaticExecute($this->getData()->getLanguage());
+            $this->_formTrlStaticExecuted = true;
+        }
 
         $ret['isPosted'] = $this->_posted;
         $ret['showSuccess'] = false;

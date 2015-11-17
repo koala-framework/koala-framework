@@ -94,6 +94,9 @@ class Kwf_Component_Abstract
                 }
             }
         }
+        if (isset($settings['tablename'])) {
+            throw new Kwf_Exception("tablename for '$componentClass' is set - please convert to model");
+        }
         if (isset($settings['modelname'])) {
             throw new Kwf_Exception("modelname for '$componentClass' is set - please rename into ownModel or childModel");
         }
@@ -124,40 +127,6 @@ class Kwf_Component_Abstract
      * @deprecated
      * @internal
      */
-    public function getTable($tablename = null)
-    {
-        return self::createTable($this->getData()->componentClass);
-    }
-
-    /**
-     * @deprecated
-     * @internal
-     */
-    public static function createTable($class, $tablename = null)
-    {
-        $tables = self::$_modelsCache['table'];
-        if (!isset($tables[$class.'-'.$tablename])) {
-            if (!$tablename) {
-                $tablename = Kwc_Abstract::getSetting($class, 'tablename');
-                if (!$tablename) {
-                    throw new Kwc_Exception('No tablename in Setting defined: ' . $class);
-                }
-            }
-            if (!is_instance_of($tablename, 'Zend_Db_Table_Abstract')) {
-                throw new Kwf_Exception("table setting '$tablename' for generator in $class is not a Zend_Db_Table");
-            }
-            $tables[$class.'-'.$tablename] = new $tablename(array('componentClass'=>$class));
-            if (!$tables[$class.'-'.$tablename] instanceof Zend_Db_Table_Abstract) {
-                throw new Kwf_Exception("table setting for generator in $class is not a Zend_Db_Table");
-            }
-        }
-        return $tables[$class.'-'.$tablename];
-    }
-
-    /**
-     * @deprecated
-     * @internal
-     */
     public static function createModel($class)
     {
         return self::createOwnModel($class);
@@ -169,15 +138,7 @@ class Kwf_Component_Abstract
     public static function createOwnModel($class)
     {
         if (!array_key_exists($class, self::$_modelsCache['own'])) {
-            if (Kwc_Abstract::hasSetting($class, 'tablename')) {
-                $t = self::createTable($class);
-                if (!$t instanceof Zend_Db_Table_Abstract) {
-                    throw new Kwf_Exception("table setting for generator in $class is not a Zend_Db_Table");
-                }
-                $model = new Kwf_Model_Db(array(
-                    'table' => $t
-                ));
-            } else if (Kwc_Abstract::hasSetting($class, 'ownModel')) {
+            if (Kwc_Abstract::hasSetting($class, 'ownModel')) {
                 $modelName = Kwc_Abstract::getSetting($class, 'ownModel');
                 $model = Kwf_Model_Abstract::getInstance($modelName);
             } else {
@@ -194,15 +155,7 @@ class Kwf_Component_Abstract
     public static function createChildModel($class)
     {
         if (!array_key_exists($class, self::$_modelsCache['child'])) {
-            if (Kwc_Abstract::hasSetting($class, 'tablename')) {
-                $t = self::createTable($class);
-                if (!$t instanceof Zend_Db_Table_Abstract) {
-                    throw new Kwf_Exception("table setting for generator in $class is not a Zend_Db_Table");
-                }
-                $model = new Kwf_Model_Db(array(
-                    'table' => $t
-                ));
-            } else if (Kwc_Abstract::hasSetting($class, 'childModel')) {
+            if (Kwc_Abstract::hasSetting($class, 'childModel')) {
                 $modelName = Kwc_Abstract::getSetting($class, 'childModel');
                 $model = Kwf_Model_Abstract::getInstance($modelName);
             } else {

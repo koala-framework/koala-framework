@@ -17,6 +17,15 @@ class Kwc_Trl_StaticPage_Test extends Kwc_TestAbstract
         $this->assertEquals('en', $this->_root->getComponentById('root-en')->getLanguage());
     }
 
+    public function tearDown()
+    {
+        Kwf_Trl::getInstance()->setWebCodeLanguage(null);
+        Kwf_Trl::getInstance()->unsetTrlElements();
+        Kwf_Cache_SimpleStatic::clear('trl-');
+        Kwf_Cache_SimpleStatic::clear('trlp-');
+        parent::tearDown();
+    }
+
     public function testMaster()
     {
         $this->assertEquals('Sichtbar', $this->_root->getComponentById('root-master_foo')->name);
