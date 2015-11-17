@@ -96,6 +96,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
     controllerUrl: null,
     loadMoreBufferPx: 700,
     initialPageSize: null,
+    minimumCharactersForFilter: 3,
 
     addHistoryEntryTimer: 0,
 
@@ -119,7 +120,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             $.extend(this.baseParams, this.searchForm.getValues());
 
             this.searchForm.on('fieldChange', function(f) {
-                if (f instanceof Kwf.FrontendForm.TextField && f.getValue().length < 3) return; //minimum length
+                if (f instanceof Kwf.FrontendForm.TextField && f.getValue().length < this.minimumCharactersForFilter) return; //minimum length
 
                 var values = this.searchForm.getValues();
                 var diffFound = false;
