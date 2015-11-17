@@ -339,14 +339,21 @@ Kwc.Directories.List.ViewAjax.prototype = {
             if (!data.rows.length) {
                 html = '<span class="noEntriesFound">'+this.placeholder.noEntriesFound+'</span>';
             } else {
-                for (var i=0; i<data.rows.length; i++) {
-                    html += "<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>";
-                }
+                html += this._renderAjaxItems(data);
             }
             this.$el.html(html);
             this.$el.trigger('load', data);
             Kwf.callOnContentReady(this.$el, { action: 'render' });
         }).bind(this));
+    },
+
+    _renderAjaxItems: function(data)
+    {
+        var html = '';
+        for (var i=0; i<data.rows.length; i++) {
+            html += "<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>";
+        }
+        return html;
     },
 
     hideDetail: function()
