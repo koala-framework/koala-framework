@@ -1,9 +1,9 @@
 <?php
 class Kwc_Shop_Box_CartLink_Trl_Component extends Kwc_Chained_Trl_Component
 {
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         foreach ($ret['links'] as $k=>$i) {
             $chained = Kwc_Chained_Trl_Component::getChainedByMaster($i['component'], $this->getData());
             if ($chained) {

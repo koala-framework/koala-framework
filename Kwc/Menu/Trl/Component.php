@@ -50,9 +50,9 @@ class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
         }
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['menu'] = $this->getMenuData();
         $ret['subMenu'] = $this->getData()->getChildComponent('-subMenu');
         return $ret;

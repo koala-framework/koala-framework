@@ -258,6 +258,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
         }
     },
     setBaseParams : function(baseParams) {
+        baseParams = Kwf.clone(baseParams);
         if (this.getStore()) {
             this.getStore().baseParams = baseParams;
         } else {

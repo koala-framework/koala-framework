@@ -23,9 +23,9 @@ class Kwc_Shop_Products_Directory_AddToCart_Component extends Kwc_Form_Component
         $this->_actionUrl = $url;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['action'] = '';
         return $ret;
     }

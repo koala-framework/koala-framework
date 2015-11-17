@@ -8,9 +8,9 @@ class Kwc_User_Detail_Menu_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['links'] = array();
 
         $userRow = Kwf_Registry::get('userModel')->getAuthedUser();

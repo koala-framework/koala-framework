@@ -10,7 +10,9 @@ class Kwc_Shop_Cart_Checkout_Payment_PayPal_Ipn_Component extends Kwc_Abstract
 
     public function processInput(array $postData)
     {
-        Kwf_Util_PayPal_Ipn::process();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            Kwf_Util_PayPal_Ipn::process();
+        }
         exit;
     }
 }

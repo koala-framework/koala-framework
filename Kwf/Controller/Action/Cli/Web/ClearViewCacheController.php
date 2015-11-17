@@ -10,6 +10,12 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
     {
         Kwf_Util_MemoryLimit::set(512);
 
+        $tables = Kwf_Registry::get('db')->listTables();
+        if (!in_array('cache_component', $tables)) {
+            echo "Database doesn't contain cache_component, nothing to clear.\n";
+            exit;
+        }
+
         $select = new Kwf_Model_Select();
         if ($this->_getParam('all')) {
         }

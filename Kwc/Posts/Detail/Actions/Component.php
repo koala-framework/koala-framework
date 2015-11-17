@@ -28,9 +28,9 @@ class Kwc_Posts_Detail_Actions_Component extends Kwc_Abstract_Composite_Componen
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $data = $this->getData();
 
         $ret['edit'] = null;

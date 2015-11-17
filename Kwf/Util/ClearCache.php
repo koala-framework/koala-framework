@@ -59,7 +59,11 @@ class Kwf_Util_ClearCache
         } catch (Exception $e) {
             return $ret;
         }
-        $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
+        try {
+            $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
+        } catch (Exception $e) {
+            return $ret;
+        }
         foreach ($tables as $table) {
             if (substr($table, 0, 6) == 'cache_') {
                 $ret[] = $table;

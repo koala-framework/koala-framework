@@ -47,6 +47,13 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             if (!$lastMinutelyRun || time()-$lastMinutelyRun > 60) {
                 $lastMinutelyRun = time();
                 Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_MINUTELY, $debug);
+
+                //discard connection to database to reconnect on next job run
+                //avoids problems with auto closed connections due to inactivity
+                Kwf_Model_Abstract::clearAllRows();
+                Kwf_Model_Abstract::clearInstances();
+                Kwf_Registry::getInstance()->offsetUnset('db');
+                Kwf_Registry::getInstance()->offsetUnset('dao');
             }
 
             Kwf_Component_Data_Root::getInstance()->freeMemory();
@@ -66,6 +73,43 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
     {
         $debug = $this->_getParam('debug');
         Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY, $debug);
+        exit;
+    }
+
+    public function showJobsAction()
+    {
+        echo "List of available jobs:\n";
+        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
+            echo "  ".get_class($job)."\n";
+        }
+        exit;
+    }
+
+    public function runJobAction()
+    {
+        $debug = $this->_getParam('debug');
+        $jobClassName = $this->_getParam('job');
+        if (!$jobClassName) {
+            echo "Missing parameter job.\n";
+            exit;
+        }
+        $jobFound = false;
+        foreach (Kwf_Util_Maintenance_Dispatcher::getAllMaintenanceJobs() as $job) {
+            if (get_class($job) === $jobClassName) {
+                $jobFound = true;
+                break;
+            }
+        }
+        if (!$jobFound) {
+            echo "Job not found. Should be the classname.\n";
+            exit;
+        }
+
+        $t = microtime(true);
+        $job = new $jobClassName();
+        $job->execute($debug);
+        $t = microtime(true)-$t;
+        if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
         exit;
     }
 }

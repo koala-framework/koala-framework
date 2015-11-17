@@ -30,9 +30,9 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['options'] = $this->_getSetting('mapOptions');
         if ($this->getData()->getChildComponent('_coordinates')) {
             $ret['options']['noMarkersOptions'] = $this->_noMarkersOptions();

@@ -35,10 +35,10 @@ class Kwc_Menu_OtherCategory_Component extends Kwc_Abstract
         return $this->_getSetting('menuComponentClass');
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $menu = $this->_getMenuSource();
-        $ret = $menu->getComponent()->getTemplateVars();
+        $ret = $menu->getComponent()->getTemplateVars($renderer);
         while (isset($menu->chained)) $menu = $menu->chained;
         $ret['template'] = self::getTemplateFile($menu->componentClass);
         return $ret;

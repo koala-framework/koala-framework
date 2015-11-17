@@ -10,9 +10,9 @@ class Kwc_Directories_Item_Detail_Related_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['related'] = $this->_getRelatedCompaniesLinks();
         return $ret;
     }

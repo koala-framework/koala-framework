@@ -18,9 +18,9 @@ class Kwc_Advanced_SearchEngineReferer_ViewLatest_Component
         return 60*60;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['referers'] = $this->_getReferers();
         return $ret;
     }

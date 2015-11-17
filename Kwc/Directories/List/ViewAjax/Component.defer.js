@@ -11,9 +11,6 @@ function getUniqueIdForFilterLink(el) {
 
 $(document).on('click', 'a', function(event) {
     var a = $(event.currentTarget);
-
-    if (a.data('kwfViewAjaxInitDone')) return; //ignore back link
-
     if (a.data('kwc-view-ajax-filter')) {
         var config = a.data('kwc-view-ajax-filter');
 
@@ -346,6 +343,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
                 }
             }
             this.$el.html(html);
+            this.$el.trigger('load', data);
             Kwf.callOnContentReady(this.$el, { action: 'render' });
         }).bind(this));
     },
@@ -392,11 +390,11 @@ Kwc.Directories.List.ViewAjax.prototype = {
             var directoryUrl = href.match(/(.*)\/[^/]+/)[1];
             this.detailEl.find('a').each((function(index, el) {
                 if ($(el).attr('href') == directoryUrl) {
-                    $(el).data('kwfViewAjaxInitDone', true);
                     $(el).click((function(ev) {
                         if (history.length > 1) {
                             if (Kwf.Utils.HistoryState.entries > 0 || document.referrer.indexOf(document.domain) >= 0) {
                                 ev.preventDefault();
+                                ev.stopPropagation();
                                 history.back(); //keeps scroll position
                             }
                         } else {

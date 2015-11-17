@@ -9,13 +9,13 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['wirecardButton'] = $this->_getWirecardButton();
         $ret['options'] = array(
             'controllerUrl' =>
-                Kwc_Admin::getInstance(get_class($this))->getControllerUrl() .
+                Kwc_Admin::getInstance($this->getData()->componentClass)->getControllerUrl() .
                 '/json-confirm-order',
             'params' => array(
                 'paymentComponentId' => $this->getData()->parent->componentId
@@ -24,44 +24,33 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
         return $ret;
     }
 
-    protected function _getWirecardButton()
+    //used in trl
+    public static function buildWirecardButtonHtml($params, $payment, $order)
     {
-        $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting(
-            $this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'
-        ))->getReferencedModel('Order')->getCartOrder();
-        $total = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Component')
-            ->getComponent()->getTotal($order);
-
-        $wirecardCustomerId = $this->getData()->getBaseProperty('wirecard.customerId');
-        $wirecardSecret = $this->getData()->getBaseProperty('wirecard.secret');
+        $wirecardCustomerId = $payment->getBaseProperty('wirecard.customerId');
+        $wirecardSecret = $payment->getBaseProperty('wirecard.secret');
         if (!$wirecardCustomerId || !$wirecardSecret) {
             throw new Kwf_Exception('Set wirecard settings (customerId & secret) in config!');
         }
 
-        $custom = Kwc_Shop_Cart_Checkout_Payment_Wirecard_LogModel::getEncodedCallback(
-            $this->getData()->parent->componentId, array('orderId' => $order->id)
-        );
-
-        $payment = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component');
-        $orderDescription = $order->firstname . ' ' . $order->lastname . ' (' . $order->zip . '), Bestellung: ' . $order->id;
         $params = array(
             'secret' => $wirecardSecret,
             'customerId' => $wirecardCustomerId,
-            'amount' => round($total, 2),
-            'currency' => 'EUR',
-            'language' => $this->getData()->getLanguage(),
-            'orderDescription' => $orderDescription,
-            'displayText' => $this->getData()->trlKwf('Thank you very much for your order.'),
+            'amount' => $params['amount'],
+            'currency' => $params['currency'],
+            'language' => $payment->getLanguage(),
+            'orderDescription' => $order->firstname . ' ' . $order->lastname . ' (' . $order->zip . '), '.$payment->trlKwf('Order: {0}', $order->number),
+            'displayText' => $payment->trlKwf('Thank you very much for your order.'),
             'successURL' => $payment->getChildComponent('_success')->getAbsoluteUrl(),
             'confirmURL' => $payment->getChildComponent('_ipn')->getAbsoluteUrl(),
-            'serviceURL' => $this->getData()->getSubroot()->getAbsoluteUrl(),
+            'serviceURL' => $payment->getSubroot()->getAbsoluteUrl(),
             'failureURL' => $payment->getChildComponent('_failure')->getAbsoluteUrl(),
             'cancelURL' => $payment->getChildComponent('_cancel')->getAbsoluteUrl(),
             'requestFingerprintOrder' => '',
-            'paymentType' => Kwc_Abstract::getSetting($payment->componentClass, 'paymentType'),
-            'custom' => $custom
+            'paymentType' => $params['paymentType'],
+            'custom' => $params['custom'],
         );
-        if ($shopId = $this->getData()->getBaseProperty('wirecard.shopId')) $params['shopId'] = $shopId;
+        if ($shopId = $payment->getBaseProperty('wirecard.shopId')) $params['shopId'] = $shopId;
 
         $requestFingerprintSeed  = "";
         $exclude = array('requestFingerprintOrder');
@@ -77,12 +66,36 @@ class Kwc_Shop_Cart_Checkout_Payment_Wirecard_ConfirmLink_Component extends Kwc_
         $initURL = "https://checkout.wirecard.com/page/init.php";
         $ret = "<form action=\"$initURL\" method=\"post\" name=\"form\">\n";
         foreach ($params as $k=>$i) {
-            if ($k == 'secret') continue;
+        if ($k == 'secret') continue;
             $ret .= "<input type=\"hidden\" name=\"$k\" value=\"".htmlspecialchars($i)."\">\n";
         }
 
-        $ret .= "<input type=\"button\" value=\"{$this->getData()->trlKwf('Buy now')}\" class=\"submit\">\n";
+        $ret .= "<input type=\"button\" value=\"{$payment->trlKwf('Buy now')}\" class=\"submit\">\n";
         $ret .= "</form>\n";
         return $ret;
+
+    }
+
+    protected function _getWirecardButton()
+    {
+        $order = Kwf_Model_Abstract::getInstance(Kwc_Abstract::getSetting(
+            $this->getData()->getParentByClass('Kwc_Shop_Cart_Component')->componentClass, 'childModel'
+        ))->getReferencedModel('Order')->getCartOrder();
+        $total = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Component')
+            ->getComponent()->getTotal($order);
+
+        $payment = $this->getData()->getParentByClass('Kwc_Shop_Cart_Checkout_Payment_Wirecard_Component');
+
+        $custom = Kwc_Shop_Cart_Checkout_Payment_Wirecard_LogModel::getEncodedCallback(
+            $payment->componentId, array('orderId' => $order->id)
+        );
+        $params = array(
+            'amount' => round($total, 2),
+            'currency' => 'EUR',
+            'paymentType' => Kwc_Abstract::getSetting($payment->componentClass, 'paymentType'),
+            'custom' => $custom
+        );
+
+        return self::buildWirecardButtonHtml($params, $payment, $order);
     }
 }

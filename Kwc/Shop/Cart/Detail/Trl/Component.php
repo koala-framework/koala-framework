@@ -15,9 +15,18 @@ class Kwc_Shop_Cart_Detail_Trl_Component extends Kwc_Abstract_Composite_Trl_Comp
         }
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
+        $addCmp = Kwc_Shop_AddToCartAbstract_OrderProductData::getAddComponentByDbId(
+            $this->getData()->chained->row->add_component_id, $this->getData()
+        );
+        if ($addCmp) {
+            $ret['product'] = $addCmp->getComponent()->getProduct();
+            $ret['row'] = $this->getData()->chained->row;
+            $ret['price'] = $addCmp->getComponent()->getPrice($ret['row']);
+            $ret['text'] = $addCmp->getComponent()->getProductText($ret['row']);
+        }
         return $ret;
     }
 }

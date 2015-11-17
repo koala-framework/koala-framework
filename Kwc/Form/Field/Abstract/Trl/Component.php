@@ -11,9 +11,9 @@ class Kwc_Form_Field_Abstract_Trl_Component extends Kwc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = Kwc_Abstract::getTemplateVars();
+        $ret = Kwc_Abstract::getTemplateVars($renderer);
         $form = $this->_getForm();
 
         //initialize form, sets formName on fields
