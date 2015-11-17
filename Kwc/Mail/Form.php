@@ -5,18 +5,19 @@ class Kwc_Mail_Form extends Kwc_Abstract_Form
     {
         parent::_initFields();
 
-        $default = Kwc_Abstract::getSetting($this->getClass(), 'default');
         $this->add(new Kwf_Form_Field_TextField('subject', trlKwf('Subject')))
             ->setAllowBlank(false)
             ->setWidth(300);
         if (Kwc_Abstract::getSetting($this->getClass(), 'editFrom')) {
+            $defaultFromEmail = Kwc_Abstract::getSetting($this->getClass(), 'fromEmail');
             $this->add(new Kwf_Form_Field_TextField('from_email', trlKwf('From Address')))
                 ->setVtype('email')
                 ->setWidth(300)
-                ->setDefaultValue($default['from_email']);
+                ->setEmptyText($defaultFromEmail);
+            $defaultFromName = Kwc_Abstract::getSetting($this->getClass(), 'fromName');
             $this->add(new Kwf_Form_Field_TextField('from_name', trlKwf('From Name')))
                 ->setWidth(300)
-                ->setDefaultValue($default['from_name']);
+                ->setEmptyText($defaultFromName);
         }
         if (Kwc_Abstract::getSetting($this->getClass(), 'editReplyTo')) {
             $defaultReplyEmail = Kwc_Abstract::getSetting($this->getClass(), 'replyEmail');

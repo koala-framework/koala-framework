@@ -13,10 +13,8 @@ class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
         );
 
         $sender = Kwf_Mail::getSenderFromConfig();
-        $ret['default'] = array(
-            'from_email' => $sender['address'],
-            'from_name' => $sender['name']
-        );
+        $ret['fromEmail'] = $sender['address'];
+        $ret['fromName'] = $sender['name'];
         $ret['editFrom'] = true;
         $ret['editReplyTo'] = true;
         $ret['editReturnPath'] = false;
