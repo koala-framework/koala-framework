@@ -19,6 +19,7 @@ class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
         );
         $ret['editFrom'] = true;
         $ret['editReplyTo'] = true;
+        $ret['editReturnPath'] = false;
 
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Mail/PreviewWindow.js';
         $ret['assetsAdmin']['dep'][] = 'ExtWindow';
@@ -81,6 +82,9 @@ class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
         }
         if ($this->getRow()->reply_email && $this->_getSetting('editReplyTo')) {
             $mail->setReplyTo($this->getRow()->reply_email);
+        }
+        if ($this->getRow()->return_path && $this->_getSetting('editReturnPath')) {
+            $mail->setReturnPath($this->getRow()->return_path);
         }
         return $mail;
     }
