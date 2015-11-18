@@ -138,6 +138,19 @@ class Kwf_Assets_Package
         return $ret;
     }
 
+    private function _getFilterdDependencyContents($dep, $language)
+    {
+        $ret = $dep->getContentsPacked($language);
+        foreach ($this->getProviderList()->getFilters() as $filter) {
+            if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_DEPENDENCY
+                && $filter->getMimeType() == $dep->getMimeType()
+            ) {
+                $ret = $filter->filter($ret);
+            }
+        }
+        return $ret;
+    }
+
     private function _getCommonJsDeps($i, $language, &$data)
     {
         $ret = array();
@@ -147,7 +160,7 @@ class Kwf_Assets_Package
                 $commonJsDeps = $this->_getCommonJsDeps($dep, $language, $data);
                 $data[$dep->__toString()] = array(
                     'id' => $dep->__toString(),
-                    'source' => $c = $dep->getContentsPacked($language)->getFileContentsInlineMap(false),
+                    'source' => $c = $this->_getFilterdDependencyContents($dep, $language)->getFileContentsInlineMap(false),
                     'sourceFile' => $dep->__toString(), //TODO
                     'deps' => $commonJsDeps,
                     'entry' => false
@@ -191,7 +204,7 @@ class Kwf_Assets_Package
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry()) {
-                    $c = $i->getContentsPacked($language)->getFileContentsInlineMap(false);
+                    $c = $this->_getFilterdDependencyContents($i, $language)->getFileContentsInlineMap(false);
                     $commonJsDeps = $this->_getCommonJsDeps($i, $language, $commonJsData);
                     $commonJsData[$i->__toString()] = array(
                         'id' => $i->__toString(),
@@ -225,7 +238,7 @@ class Kwf_Assets_Package
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if (!(($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry())) {
-                    $map = $i->getContentsPacked($language);
+                    $map = $this->_getFilterdDependencyContents($i, $language);
                     if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
                         throw new Kwf_Exception("contents must not contain sourceMappingURL");
                     }
@@ -241,6 +254,14 @@ class Kwf_Assets_Package
         if ($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') {
             if ($uniquePrefix = Kwf_Config::getValue('application.uniquePrefix')) {
                 $packageMap = Kwf_Assets_Package_Filter_UniquePrefix::filter($packageMap, $uniquePrefix);
+            }
+        }
+
+        foreach ($this->getProviderList()->getFilters() as $filter) {
+            if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_PACKAGE
+                && $filter->getMimeType() == $mimeType
+            ) {
+                $packageMap = $filter->filter($packageMap);
             }
         }
 

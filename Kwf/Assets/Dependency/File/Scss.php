@@ -159,6 +159,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             $ret = preg_replace("#/\*\# sourceMappingURL=.* \*/#", '', $ret);
 
             $map = new Kwf_SourceMaps_SourceMap(file_get_contents("{$cacheFile}.map"), $ret);
+            $map->setMimeType('text/css');
 
             if (strpos($ret, 'kwfUp-') !== false) {
                 if (Kwf_Config::getValue('application.uniquePrefix')) {
@@ -201,7 +202,9 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         if (!file_exists("$cacheFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$cacheFile.buildtime")) {
             $this->warmupCaches();
         }
-        return new Kwf_SourceMaps_SourceMap(file_get_contents($cacheFile.'.map'), file_get_contents($cacheFile));
+        $ret = new Kwf_SourceMaps_SourceMap(file_get_contents($cacheFile.'.map'), file_get_contents($cacheFile));
+        $ret->setMimeType('text/css');
+        return $ret;
     }
 
     public function getMTime()

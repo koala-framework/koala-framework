@@ -2,13 +2,15 @@
 class Kwf_Assets_ProviderList_Abstract implements Serializable
 {
     protected $_providers;
+    protected $_filters;
     protected $_dependencies = array();
-    public function __construct(array $providers)
+    public function __construct(array $providers, array $filters)
     {
         foreach ($providers as $p) {
             $p->setProviderList($this);
         }
         $this->_providers = $providers;
+        $this->_filters = $filters;
     }
 
     public function getProviders()
@@ -156,5 +158,10 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         foreach (unserialize($serialized) as $k=>$i) {
             $this->$k = $i;
         }
+    }
+
+    public function getFilters()
+    {
+        return $this->_filters;
     }
 }
