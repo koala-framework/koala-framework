@@ -233,7 +233,7 @@ Ext2.extend(Kwc.Form.Component, Ext2.util.Observable, {
                 var scrollTo = null;
                 if (!hasErrors) {
                     // Scroll to top of form
-                    scrollTo = this.el.getY();
+                    scrollTo = this.el.parent('.kwcForm').getY() - 150;
                 } else {
                     // Scroll to first error. If there are form-errors those are first
                     if (!r.errorMessages.length) { // there are no form-errors
