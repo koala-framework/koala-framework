@@ -31,6 +31,33 @@ class Kwf_Media_Output_Component
      */
     public static function getMediaOutputForDimension($data, $dim, $type)
     {
+        if (isset($data['url'])) {
+            $file = 'cache/media/remotefile_' . md5($data['url']);
+            if (!is_file($file)) {
+                $httpClientConfig = array(
+                    'timeout' => 20,
+                    'persistent' => false
+                );
+                if (Kwf_Config::getValue('http.proxy.host')) {
+                    $httpClientConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
+                    $httpClientConfig['proxy_host'] = Kwf_Config::getValue('http.proxy.host');
+                    $httpClientConfig['proxy_port'] = Kwf_Config::getValue('http.proxy.port');
+                }
+                $httpClient = new Zend_Http_Client($data['url'], $httpClientConfig);
+                $request = $httpClient->request();
+                if ($request->getStatus() == 200) {
+                    file_put_contents($file, $request->getBody());
+                    if (!getimagesize($file)) {
+                        unlink($file);
+                        throw new Kwf_Exception('File is no image: ' . $data['url']);
+                    }
+                } else {
+                    throw new Kwf_Exception('Could not download file: ' . $data['url']);
+                }
+            }
+            $data['file'] = $file;
+        }
+
         // calculate output width/height on base of getImageDimensions and given width
         $width = substr($type, strlen(Kwf_Media::DONT_HASH_TYPE_PREFIX));
         $width = substr($width, 0, strpos($width, '-'));
