@@ -15,12 +15,4 @@ class Kwc_List_Switch_Preview_Component extends Kwc_Basic_Image_Component
         );
         return $ret;
     }
-
-    protected function _getChildContentWidth(Kwf_Component_Data $child)
-    {
-        if ($child->id == 'large') {
-            return Kwc_Abstract_Composite_Component::getContentWidth();
-        }
-        return parent::_getChildContentWidth($child);
-    }
 }

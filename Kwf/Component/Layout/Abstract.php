@@ -15,6 +15,11 @@ abstract class Kwf_Component_Layout_Abstract
         return Kwc_Abstract::getSetting($this->_class, $name);
     }
 
+    protected function _hasSetting($name)
+    {
+        return Kwc_Abstract::hasSetting($this->_class, $name);
+    }
+
     /**
      * @return self
      */
@@ -106,12 +111,6 @@ abstract class Kwf_Component_Layout_Abstract
         return false;
     }
 
-/*
-    public function getChildContentWidth(Kwf_Component_Data $child)
-    {
-    }
-*/
-
     public function getChildContexts(Kwf_Component_Data $data, Kwf_Component_Data $child)
     {
         return $this->getContexts($data);
@@ -134,6 +133,47 @@ abstract class Kwf_Component_Layout_Abstract
                 throw new Kwf_Exception("Can't detect contexts");
             }
             return Kwf_Component_Layout_Abstract::getInstance($parent->componentClass)->getChildContexts($parent, $data);
+        }
+    }
+
+    /**
+     * Returns the contentWidth of a given child
+     *
+     * Can be overridden to adapt the available child width
+     *
+     * Use 'contentWidthSubtract' setting to subtract a fixed amount
+     * from getContentWidth() value
+     *
+     * @return int
+     */
+    public function getChildContentWidth(Kwf_Component_Data $data, Kwf_Component_Data $child)
+    {
+        $ret = $this->getContentWidth($data);
+        if ($this->_hasSetting('contentWidthSubtract')) {
+            $ret -= $this->_getSetting('contentWidthSubtract');
+        }
+        return $ret;
+    }
+
+    public function getContentWidth(Kwf_Component_Data $data)
+    {
+        if ($this->_hasSetting('contentWidth')) return $this->_getSetting('contentWidth');
+
+        if ($data->isPage || isset($data->box)) {
+            $componentWithMaster = Kwf_Component_View_Helper_Master::
+                getComponentsWithMasterTemplate($data);
+            $last = array_pop($componentWithMaster);
+            if ($last && $last['type'] == 'master') {
+                $p = $last['data'];
+            } else {
+                $p = Kwf_Component_Data_Root::getInstance(); // for tests
+            }
+            return Kwf_Component_MasterLayout_Abstract::getInstance($p->componentClass)->getContentWidth($data);
+        } else {
+            if (!$data->parent) {
+                throw new Kwf_Exception("Can't detect contentWidth, use contentWidth setting for '".$data->componentClass."'");
+            }
+            return self::getInstance($data->parent->componentClass)->getChildContentWidth($data->parent, $data);
         }
     }
 }

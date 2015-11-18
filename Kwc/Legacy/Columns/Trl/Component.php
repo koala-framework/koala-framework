@@ -13,7 +13,8 @@ class Kwc_Legacy_Columns_Trl_Component extends Kwc_Abstract_List_Trl_Component
     {
         $ret = parent::getTemplateVars();
         foreach($ret['listItems'] as $k => $v) {
-            $ret['listItems'][$k]['width'] = $this->getData()->chained->getComponent()->getChildContentWidth($v['data']).'px';
+            $ret['listItems'][$k]['width'] = Kwf_Component_Layout_Abstract::getInstance($this->getData()->chained->componentClass)
+                ->getChildContentWidth($v['data']).'px';
         }
         return $ret;
     }

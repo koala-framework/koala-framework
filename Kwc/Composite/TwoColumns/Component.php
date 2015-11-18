@@ -10,6 +10,7 @@ class Kwc_Composite_TwoColumns_Component extends Kwc_Abstract_Composite_Componen
         $ret['generators']['child']['component']['rightColumn'] = 'Kwc_Composite_TwoColumns_Right_Component';
 
         $ret['extConfig'] = 'Kwc_Abstract_Composite_ExtConfigTabs';
+        $ret['layoutClass'] = 'Kwc_Composite_TwoColumns_Layout';
 
         $ret['contentMargin'] = 20;
 
@@ -19,16 +20,8 @@ class Kwc_Composite_TwoColumns_Component extends Kwc_Abstract_Composite_Componen
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['leftWidth'] = $this->_getChildContentWidth($this->getData()->getChildComponent('-leftColumn'));
-        $ret['rightWidth'] = $this->_getChildContentWidth($this->getData()->getChildComponent('-rightColumn'));
-        return $ret;
-    }
-
-    protected function _getChildContentWidth(Kwf_Component_Data $child)
-    {
-        $ret = parent::_getChildContentWidth($child);
-        $ret -= $this->_getSetting('contentMargin') * 1;
-        $ret = $ret / 2;
+        $ret['leftWidth'] = $this->getData()->getChildComponent('-leftColumn')->getComponent()->getContentWidth();
+        $ret['rightWidth'] = $this->getData()->getChildComponent('-rightColumn')->getComponent()->getContentWidth();
         return $ret;
     }
 }

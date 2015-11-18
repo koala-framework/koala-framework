@@ -10,6 +10,7 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         $ret['componentPriority'] = 45;
         $ret['generators']['child']['component'] = 'Kwc_List_Gallery_Image_Component';
         $ret['extConfig'] = 'Kwc_List_Gallery_ExtConfig';
+        $ret['layoutClass'] = 'Kwc_List_Gallery_Layout';
         $ret['placeholder']['moreButton'] = trlKwfStatic('more');
         $ret['breakpoint'] = '600';
         $ret['showMoreLink'] = true;
@@ -22,6 +23,11 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         if (Kwc_Abstract::hasSetting($componentClass, 'dimensions')) {
             throw new Kwf_Exception("Setting 'dimensions' must NOT exist");
         }
+    }
+
+    public final function getGalleryColumns()
+    {
+        return $this->_getGalleryColumns();
     }
 
     protected function _getGalleryColumns()
@@ -48,35 +54,6 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
             $ret['showPics'] = null;
         } else {
             $ret['showPics'] = $showPics;
-        }
-        return $ret;
-    }
-
-    protected function _getChildContentWidth(Kwf_Component_Data $child)
-    {
-        $ownWidth = parent::_getChildContentWidth($child);
-        $contentMargin = $this->_getSetting('contentMargin');
-        $breakpoint = $this->_getSetting('breakpoint');
-        $columns = (int)$this->_getGalleryColumns();
-        $ownWidth -= ($columns-1) * $contentMargin;
-
-        if (!$columns) $columns = 1;
-        if ($columns >=5 && $columns <= 10) {
-            $originColumnWidth = (int)floor($ownWidth / $columns);
-            if ($columns == 6) {
-                $columns = 3;
-            }
-            if ($columns % 2 == 0) {
-                $columns = 4;
-            } else {
-                $columns = 3;
-            }
-            $ret = (int)floor((($breakpoint - $contentMargin) - ($columns-1) * $contentMargin) / $columns);
-            if ($ret < $originColumnWidth) {
-                $ret = $originColumnWidth;
-            }
-        } else {
-            $ret = (int)floor($ownWidth / $columns);
         }
         return $ret;
     }

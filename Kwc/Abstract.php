@@ -674,45 +674,15 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
      */
     public function getContentWidth()
     {
-        if ($this->_hasSetting('contentWidth')) return $this->_getSetting('contentWidth');
-
-        if ($this->getData()->isPage || isset($this->getData()->box)) {
-            $componentWithMaster = Kwf_Component_View_Helper_Master::
-                getComponentsWithMasterTemplate($this->getData());
-            $last = array_pop($componentWithMaster);
-            if ($last && $last['type'] == 'master') {
-                $p = $last['data'];
-            } else {
-                $p = Kwf_Component_Data_Root::getInstance(); // for tests
-            }
-            return Kwf_Component_MasterLayout_Abstract::getInstance($p->componentClass)->getContentWidth($this->getData());
-        } else {
-            if (!$this->getData()->parent) {
-                throw new Kwf_Exception("Can't detect contentWidth, use contentWidth setting for '".$this->getData()->componentClass."'");
-            }
-            return $this->getData()->parent->getComponent()->_getChildContentWidth($this->getData());
-        }
+        return Kwf_Component_Layout_Abstract::getInstance($this->getData()->componentClass)
+            ->getContentWidth($this->getData());
     }
 
     /**
-     * Returns the contentWidth of a given child
-     *
-     * Can be overridden to adapt the available child width
-     *
-     * Use 'contentWidthSubtract' setting to subtract a fixed amount
-     * from getContentWidth() value
-     *
-     * @param Kwf_Component_Data
-     * @return int
+     * @deprecated use Layout class instead
+     * @internal
      */
-    protected function _getChildContentWidth(Kwf_Component_Data $child)
-    {
-        $ret = $this->getContentWidth();
-        if ($this->_hasSetting('contentWidthSubtract')) {
-            $ret -= $this->_getSetting('contentWidthSubtract');
-        }
-        return $ret;
-    }
+    protected final function _getChildContentWidth(Kwf_Component_Data $child) {}
 
     public function getMasterLayoutContexts()
     {

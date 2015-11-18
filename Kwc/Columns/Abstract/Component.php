@@ -17,6 +17,7 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
         );
         $ret['extConfig'] = 'Kwc_Columns_Abstract_ExtConfig';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Columns/Abstract/List.js';
+        $ret['layoutClass'] = 'Kwc_Columns_Abstract_Layout';
 
         $columnsTrl = trlKwfStatic('Columns');
         $ret['columns'] = array(
@@ -115,17 +116,6 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
             if (!$ret['listItems'][$key]['data']->hasContent()) {
                 $ret['listItems'][$key]['class'] .= ' emptyContent';
             }
-        }
-        return $ret;
-    }
-
-    protected function _getChildContentWidth(Kwf_Component_Data $child)
-    {
-        $ownWidth = parent::_getChildContentWidth($child);
-        $widthCalc = $child->row->col_span / $child->row->columns;
-        $ret = floor($ownWidth * $widthCalc);
-        if ($ret < 480) {
-            $ret = min($ownWidth, 480);
         }
         return $ret;
     }
