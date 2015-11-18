@@ -2,6 +2,7 @@ var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var isVisible = require('kwf/element/is-visible');
 var getCachedWidth = require('kwf/element/get-cached-width');
+var _ = require('underscore');
 
 var DONT_HASH_TYPE_PREFIX = 'dh-';
 var $w = $(window);
@@ -26,7 +27,7 @@ module.exports = function (selector) {
 
 var lastScrollTop = null;
 $(function() {
-    $w.scroll(function()
+    function showImageWhenVisible()
     {
         if (lastScrollTop && Math.abs($w.scrollTop()-lastScrollTop) < 50) {
             //only check for images to load in steps of 50px, we can do that as we load 50px in advance
@@ -42,7 +43,8 @@ $(function() {
                 initResponsiveImgEl(el);
             }
         }
-    });
+    }
+    $w.scroll(_.debounce(showImageWhenVisible, 150));
 });
 
 
