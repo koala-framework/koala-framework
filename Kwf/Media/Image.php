@@ -155,10 +155,10 @@ class Kwf_Media_Image
 
         if (is_string($original)) {
             if (!file_exists($original)) return 1;
-            $original = getimagesize($original);
+            $size = getimagesize($original);
             $original = array(
-                'width' => $original[0],
-                'height' => $original[1],
+                'width' => $size[0],
+                'height' => $size[1],
                 'rotation' => self::getExifRotation($original),
             );
         }

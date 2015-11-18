@@ -37,6 +37,16 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         $this->md5_hash = md5($contents);
         $this->save();
         $this->_putFileContents($contents);
+        if ($this->getFileSource() && is_file($this->getFileSource())) {
+            $size = @getimagesize($this->getFileSource());
+            if ($size) {
+                $this->is_image = true;
+                $this->image_width = $size[0];
+                $this->image_height = $size[1];
+                $this->image_rotation = Kwf_Media_Image::getExifRotation($this->getFileSource());
+                $this->save();
+            }
+        }
         return $this;
     }
 
@@ -160,23 +170,6 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
     {
         parent::_beforeDelete();
         $this->_deleteFile();
-    }
-
-    protected function _beforeSave()
-    {
-        parent::_beforeSave();
-
-        if ($this->getFileSource() && is_file($this->getFileSource())) {
-            $size = @getimagesize($this->getFileSource());
-            if ($size) {
-                $this->is_image = true;
-                $this->image_width = $size[0];
-                $this->image_height = $size[1];
-                $this->image_rotation = Kwf_Media_Image::getExifRotation($this->getFileSource());
-            } else {
-                $this->is_image = false;
-            }
-        }
     }
 
     public function getImageDimensions()
