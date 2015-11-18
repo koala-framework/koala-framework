@@ -194,6 +194,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
             throw new Kwf_Exception('Unsupported partial type '.get_class($partial));
         }
         $ret['placeholder'] = $this->_getPlaceholder();
+        $ret['bemClass'] = $this->_getBemClass('');
         return $ret;
     }
 
