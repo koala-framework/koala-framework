@@ -1,10 +1,10 @@
 @import "config/default-loading-animation-small";
 
-.webResponsiveImgLoading {
+.kwfUp-webResponsiveImgLoading {
     position: relative;
 }
 
-.webResponsiveImgLoading:after {
+.kwfUp-webResponsiveImgLoading:after {
     @include default-loading-animation-small;
     background-position: center;
     position: absolute;
@@ -19,7 +19,7 @@
     z-index: 2;
 }
 
-.webResponsiveImgLoading:before {
+.kwfUp-webResponsiveImgLoading:before {
     background: none transparent;
     position: absolute;
     display: block;
