@@ -75,7 +75,7 @@ class Kwf_Component_Generator_PseudoPage_Table extends Kwf_Component_Generator_T
         $data = parent::_formatConfig($parentData, $row);
 
         if (!$this->_settings['uniqueFilename']) {
-            $data['filename'] = $this->_getIdFromRow($row).'_';
+            $data['filename'] = $this->_getIdFromRow($row).'-';
             $data['filename'] .= Kwf_Filter::filterStatic($this->_getFilenameFromRow($row), 'Ascii');
             if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
                 $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
