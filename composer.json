@@ -41,7 +41,8 @@
             "es6-promise": "3.0.2",
             "css-selectors-count": "1.0.1",
             "postcss-chunk": "git://github.com/koala-framework/postcss-chunk.git#1b5a343cd4017d5608ece9f5f7a702f4db821171",
-            "autoprefixer": "6.1.0"
+            "autoprefixer": "6.1.0",
+            "postcss-prefixer-keyframes": "git://github.com/koala-framework/postcss-prefixer-keyframes"
         },
         "require-dev-bower": {
             "qunit": "1.18.0",
