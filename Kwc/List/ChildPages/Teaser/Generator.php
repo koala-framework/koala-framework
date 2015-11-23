@@ -5,13 +5,16 @@ class Kwc_List_ChildPages_Teaser_Generator extends Kwf_Component_Generator_Table
     protected $_idColumn = 'child_id';
     protected $_useComponentId = true;
 
-    protected function _formatConfig($parentData, $row)
+    protected function _createData($parentData, $row, $select)
     {
-        $ret = parent::_formatConfig($parentData, $row);
-        $ret['targetPage'] = Kwf_Component_Data_Root::getInstance()
-            ->getComponentByDbId($row->target_page_id, array('subroot'=>$parentData, 'limit'=>1, 'ignoreVisible'=>true));
-
-        if (!$ret['targetPage']) return null; //can happen if page was deleted but entry still exists
+        $ret = parent::_createData($parentData, $row, $select);
+        $ignoreVisible = false;
+        if ($select->hasPart('ignoreVisible')) $ignoreVisible = $select->getPart('ignoreVisible');
+        $ret->targetPage = Kwf_Component_Data_Root::getInstance()
+            ->getComponentByDbId($row->target_page_id, array(
+                'subroot'=>$parentData, 'limit'=>1, 'ignoreVisible'=>$ignoreVisible
+            ));
+        if (!$ret->targetPage) return null; //can happen if page was deleted but entry still exists
 
         return $ret;
     }

@@ -45,7 +45,8 @@ class Kwf_Model_Tree_Row extends Kwf_Model_Proxy_Row
 
     public function getRecursiveIds()
     {
-        return $this->getModel()->getRecursiveIds($this->id);
+        $pk = $this->getModel()->getPrimaryKey();
+        return $this->getModel()->getRecursiveIds($this->$pk);
     }
 
     public function getParentNode()
