@@ -16,6 +16,12 @@ class Kwf_Assets_Dependency_Dependencies extends Kwf_Assets_Dependency_Abstract
         return parent::__toString();
     }
 
+    public function getIdentifier()
+    {
+        if (!$this->_name) throw new Kwf_Exception('No name set for depdency');
+        return $this->_name;
+    }
+
     public function addDependency($type, Kwf_Assets_Dependency_Abstract $dependency)
     {
         $this->_dependencies[$type][] = $dependency;

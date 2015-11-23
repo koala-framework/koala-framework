@@ -34,6 +34,16 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
         return $ret;
     }
 
+    public function getMasterFiles()
+    {
+        $ret = array();
+        foreach ($this->_componentDependencies as $dep) {
+            $ret = array_merge($ret, $dep->getMasterFiles());
+        }
+        return $ret;
+    }
+
+
     public function getContents($language)
     {
         $ret = '';
@@ -137,6 +147,11 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
     }
 
     public function __toString()
+    {
+        return $this->_dependencyName;
+    }
+
+    public function getIdentifier()
     {
         return $this->_dependencyName;
     }

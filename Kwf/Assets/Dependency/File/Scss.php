@@ -222,6 +222,20 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         return $ret;
     }
 
+    public function getMasterFiles()
+    {
+        $ret = parent::getMasterFiles();
+        $cacheFile = $this->_getCacheFileName();
+        if (!file_exists("$cacheFile.sourcetimes")) {
+            $this->warmupCaches();
+        }
+        $sourceTimes = unserialize(file_get_contents("$cacheFile.sourcetimes"));
+        foreach ($sourceTimes as $t) {
+            $ret[] = $t['file'];
+        }
+        return $ret;
+    }
+
     public function setConfig(array $config, $mtime = null)
     {
         $this->_config = $config;

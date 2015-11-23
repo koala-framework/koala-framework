@@ -56,6 +56,11 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         return $this->_fileName;
     }
 
+    public function getIdentifier()
+    {
+        return $this->_fileName;
+    }
+
     protected static function _getAllPaths()
     {
         static $paths;
@@ -125,6 +130,13 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
             }
         }
         return $this->_mtimeCache;
+    }
+
+    public function getMasterFiles()
+    {
+        return array(
+            $this->getAbsoluteFileName()
+        );
     }
 
     public static function createDependency($fileName, Kwf_Assets_ProviderList_Abstract $providerList)

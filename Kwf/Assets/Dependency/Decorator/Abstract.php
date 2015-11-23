@@ -33,6 +33,11 @@ class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Dependency_Abs
         return $this->_dep->getMTime();
     }
 
+    public function getMasterFiles()
+    {
+        return $this->_dep->getMasterFiles();
+    }
+
     public function warmupCaches()
     {
         return $this->_dep->warmupCaches();

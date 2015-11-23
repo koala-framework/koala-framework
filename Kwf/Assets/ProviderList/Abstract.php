@@ -4,6 +4,8 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
     protected $_providers;
     protected $_filters;
     protected $_dependencies = array();
+    private $_dependencyIdentifiers = array();
+
     public function __construct(array $providers, array $filters)
     {
         foreach ($providers as $p) {
@@ -89,6 +91,11 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         foreach ($this->_providers as $p) {
             $d = $p->getDependency($dependencyName);
             if ($d !== null) {
+                $id = $d->getIdentifier();
+                if (isset($this->_dependencyIdentifiers[$id])) {
+                    throw new Kwf_Exception("Dependency '$d' uses an non-unique identifier '$id'");
+                }
+                $this->_dependencyIdentifiers[$id] = true;
                 $this->_dependencies[$dependencyName] = $d;
                 $this->_setDependenciesForDependency($d);
                 return $d;

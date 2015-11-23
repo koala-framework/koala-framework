@@ -134,6 +134,11 @@ abstract class Kwf_Assets_Dependency_Abstract
         return null;
     }
 
+    public function getMasterFiles()
+    {
+        return array();
+    }
+
     public function warmupCaches()
     {
     }
@@ -141,6 +146,11 @@ abstract class Kwf_Assets_Dependency_Abstract
     public function __toString()
     {
         return get_class($this);
+    }
+
+    public function getIdentifier()
+    {
+        throw new Kwf_Exception_NotYetImplemented();
     }
 
     public function toDebug()
