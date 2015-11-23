@@ -4,7 +4,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
     private function _getCacheFileName()
     {
         $fileName = $this->getFileNameWithType();
-        return 'cache/scss/v2'.str_replace(array('\\', ':', '/', '.', '-'), '_', $fileName);
+        return 'cache/scss/v3'.str_replace(array('\\', ':', '/', '.', '-'), '_', $fileName);
     }
 
     private static function _getAbsolutePath($path)
