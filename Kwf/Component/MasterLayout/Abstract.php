@@ -51,8 +51,33 @@ abstract class Kwf_Component_MasterLayout_Abstract
     /**
      * @internal
      */
-    public static function _build($componentClasses)
+    public static function _buildAll($componentClasses)
     {
+        $masterLayouts = "\$all-master-layouts: ();\n";
+        foreach (Kwc_Abstract::getComponentClasses() as $c) {
+            if (Kwc_Abstract::hasSetting($c, 'masterLayout')) {
+                $masterLayout = Kwc_Abstract::getSetting($c, 'masterLayout');
+                $f = new Kwf_Assets_Dependency_File($masterLayout['layoutConfig']);
+                $masterLayouts .= $f->getContents(null)."\n";
+                $masterLayouts .= "\$all-master-layouts: map-merge(\$all-master-layouts, \$master-layouts);\n";
+            }
+        }
+        $masterLayouts .= "\$master-layouts: \$all-master-layouts;\n";
+        $masterLayouts .= "\$all-master-layouts: null\n";
+
+        $file = "cache/scss/generated/config/_master-layouts.scss";
+        if (!is_dir(dirname($file))) mkdir(dirname($file), 0777, true);
+        if (!file_exists($file) || file_get_contents($file) != $masterLayouts) { //only modify if actually changed
+            file_put_contents($file, $masterLayouts);
+        }
+
+
+        foreach ($componentClasses as $cmp) {
+            if (Kwc_Abstract::hasSetting($cmp, 'masterLayout')) {
+                self::getInstance($cmp)->_build();
+            }
+        }
+
         foreach ($componentClasses as $cmp) {
             if (Kwc_Abstract::hasSetting($cmp, 'masterLayout')) {
                 //fills $_supportedContexts and $_supportedBoxContexts
@@ -60,16 +85,22 @@ abstract class Kwf_Component_MasterLayout_Abstract
                 self::getInstance($cmp)->_getSupportedBoxesContexts();
             }
         }
-        return array(
+        $data = array(
             'contexts' => self::$_supportedContexts,
             'childContexts' => self::$_supportedBoxContexts,
         );
+
+        file_put_contents('build/component/masterlayoutcontexts', serialize($data));
+    }
+
+    protected function _build()
+    {
     }
 
     private static function _loadFromBuild()
     {
         if (!isset(self::$_supportedContexts)) {
-            if (file_exists('build/component/layoutcontexts')) {
+            if (file_exists('build/component/masterlayoutcontexts')) {
                 $data = unserialize(file_get_contents('build/component/masterlayoutcontexts'));
                 self::$_supportedContexts = $data['contexts'];
                 self::$_supportedBoxContexts = $data['boxContexts'];

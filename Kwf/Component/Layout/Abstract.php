@@ -39,7 +39,7 @@ abstract class Kwf_Component_Layout_Abstract
     /**
      * @internal
      */
-    public static function _build($componentClasses)
+    public static function _buildAll($componentClasses)
     {
         foreach ($componentClasses as $cmp) {
             if (Kwc_Abstract::hasSetting($cmp, 'layoutClass')) {
@@ -47,10 +47,12 @@ abstract class Kwf_Component_Layout_Abstract
                 self::$_supportedChildContexts[$cmp] = self::getInstance($cmp)->calcSupportedChildContexts();
             }
         }
-        return array(
+        $data = array(
             'contexts' => self::$_supportedContexts,
             'childContexts' => self::$_supportedChildContexts,
         );
+
+        file_put_contents('build/component/layoutcontexts', serialize($data));
     }
 
     private static function _loadFromBuild()
