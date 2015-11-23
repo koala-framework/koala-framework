@@ -23,8 +23,8 @@
             "jquery.transit": "0.9.9",
             "jquery.easing": "1.3.0",
             "underscore": "1.7.0",
-            "susy": "vivid-planet/susy#8161395e8ad5d75a0a15a0355feb9853ebaad369",
-            "compass-mixins": "0.12.7",
+            "susy": "vivid-planet/susy#c1b4e3abd44197b39b3410f024eefbb18237d8eb",
+            "compass-mixins": "koala-framework/compass-mixins#7319116335050516e01b250b6e771600ab55e105",
             "tinymce": "tinymce/tinymce#4.1.9"
         },
         "require-npm": {
