@@ -4,7 +4,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
     private function _getCacheFileName()
     {
         $fileName = $this->getFileNameWithType();
-        return 'cache/scss/v2'.str_replace(array('\\', ':', '/', '.', '-'), '_', $fileName);
+        return 'cache/scss/v3'.str_replace(array('\\', ':', '/', '.', '-'), '_', $fileName);
     }
 
     private static function _getAbsolutePath($path)
@@ -51,7 +51,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             static $loadPath;
             if (!isset($loadPath)) {
                 $loadPath = array();
-                foreach (glob(VENDOR_PATH.'/bower_components/*') as $p) {
+                foreach (glob(realpath(VENDOR_PATH).'/bower_components/*') as $p) {
                     $bowerMain = null;
                     $mainExt = null;
                     if (file_exists($p.'/bower.json')) {
@@ -81,6 +81,10 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             $bin = Kwf_Config::getValue('server.nodeSassBinary');
             if (!$bin) {
                 $bin = getcwd()."/".VENDOR_PATH."/bin/node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/node-sass/bin/node-sass';
+            } else {
+                $p = json_decode(file_get_contents(KWF_PATH.'/node_modules/node-sass/package.json'), true);
+                $bin = str_replace('%version%', $p['version'], $bin);
+                unset($p);
             }
             $cmd = "$bin --include-path $loadPath --output-style compressed ";
             $cmd .= " --source-map ".escapeshellarg($cacheFile.'.map');
@@ -117,6 +121,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 
             $ret = file_get_contents($cacheFile);
             $ret = str_replace("@charset \"UTF-8\";\n", '', $ret); //remove charset, no need to adjust sourcemap as sourcemap doesn't include that (bug in libsass)
+            $ret = str_replace(chr(0xEF).chr(0xBB).chr(0xBF), '', $ret); //remove byte order mark
             $ret = preg_replace("#/\*\# sourceMappingURL=.* \*/#", '', $ret);
 
             $map = new Kwf_SourceMaps_SourceMap(file_get_contents("{$cacheFile}.map"), $ret);
