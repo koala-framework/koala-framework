@@ -29,7 +29,7 @@ class Kwc_List_ChildPages_Teaser_TeaserImage_Component extends Kwc_Abstract_Comp
 
     public function hasContent()
     {
-        if ($this->getRow()->visible) return true;
+        if ($this->getData()->row->visible) return true;
         return false;
     }
 }

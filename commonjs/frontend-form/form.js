@@ -64,6 +64,8 @@ var FormComponent = function(form)
         }
     }
 
+    this.errorStyle = new errorStyleRegistry.errorStyles[this.config.errorStyle](this);
+
     $.each(this.fields, function(i, f) {
         f.initField();
     });
@@ -96,8 +98,6 @@ var FormComponent = function(form)
             this.el.trigger('kwfUp-form-fieldChange', f);
         }, this);
     }).bind(this));
-
-    this.errorStyle = new errorStyleRegistry.errorStyles[this.config.errorStyle](this);
 };
 FormComponent.prototype = {
 

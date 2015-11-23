@@ -105,6 +105,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
     controllerUrl: null,
     loadMoreBufferPx: 700,
     initialPageSize: null,
+    minimumCharactersForFilter: 3,
 
     addHistoryEntryTimer: 0,
 
@@ -128,7 +129,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             $.extend(this.baseParams, this.searchForm.getValues());
 
             this.searchForm.on('fieldChange', function(f) {
-                if (f instanceof Kwf.FrontendForm.TextField && f.getValue().length < 3) return; //minimum length
+                if (f instanceof Kwf.FrontendForm.TextField && f.getValue().length < this.minimumCharactersForFilter) return; //minimum length
 
                 var values = this.searchForm.getValues();
                 var diffFound = false;
@@ -347,14 +348,21 @@ Kwc.Directories.List.ViewAjax.prototype = {
             if (!data.rows.length) {
                 html = '<span class="noEntriesFound">'+this.placeholder.noEntriesFound+'</span>';
             } else {
-                for (var i=0; i<data.rows.length; i++) {
-                    html += "<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>";
-                }
+                html += this._renderAjaxItems(data);
             }
             this.$el.html(html);
             this.$el.trigger('load', data);
             onReady.callOnContentReady(this.$el, { action: 'render' });
         }).bind(this));
+    },
+
+    _renderAjaxItems: function(data)
+    {
+        var html = '';
+        for (var i=0; i<data.rows.length; i++) {
+            html += "<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>";
+        }
+        return html;
     },
 
     hideDetail: function()

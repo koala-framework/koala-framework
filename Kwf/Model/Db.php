@@ -840,7 +840,6 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         if (is_string($select) || is_int($select)) {
             //primary key given, skip query and use already existing row
             if (!is_array($this->getPrimaryKey())) {
-                $select = $this->transformColumnName($select);
                 if (isset($this->_rows[$select])) {
                     return $this->_rows[$select];
                 }
@@ -1178,7 +1177,19 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             } else {
                 $dbSelect = $this->_createDbSelectWithColumns($select, $options);
                 if (!$dbSelect) return array();
-                return $this->getAdapter()->query($dbSelect)->fetchAll();
+                $ret = $this->getAdapter()->query($dbSelect)->fetchAll();
+                foreach ($this->getOwnColumns() as $c) {
+                    $transformedColumn = $this->transformColumnName($c);
+                    if ($transformedColumn != $c) {
+                        foreach ($ret as $k=>$i) {
+                            if (isset($i[$transformedColumn])) {
+                                $ret[$k][$c] = $i[$transformedColumn];
+                                unset($ret[$k][$transformedColumn]);
+                            }
+                        }
+                    }
+                }
+                return $ret;
             }
 
         } else {

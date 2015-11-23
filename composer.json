@@ -25,13 +25,13 @@
         "require-bower": {
             "jquery": "~1.11 || 2.*",
             "underscore": "1.7.0",
-            "compass-mixins": "0.12.7",
+            "compass-mixins": "koala-framework/compass-mixins#7319116335050516e01b250b6e771600ab55e105",
             "tinymce": "tinymce/tinymce#4.1.9",
             "matches-selector": "1.0.3"
         },
         "require-npm": {
             "uglify-js": "2.4.13",
-            "node-sass": "3.4.1",
+            "node-sass": "3.4.2",
             "amdlc": "0.1.5",
             "esprima": "1.2.2",
             "browser-pack": "5.0.1",

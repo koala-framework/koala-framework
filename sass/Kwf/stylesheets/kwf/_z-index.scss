@@ -1,0 +1,26 @@
+
+/**
+ * Kwc Z-indices
+ * http://www.koala-framework.org/documentation/kwc_cms/styling_general/z-indices
+ */
+$layers: (
+    'lightbox': 100,
+    'lightbox-background': 90,
+    'header': 50,
+    'switch-content': 45,
+    'dropdown': 40,
+    'content_mask': 38,
+    'scroll-up-btn': 35,
+    'form-error': 30,
+    'social-click': 25
+);
+
+@mixin z-index($layer, $location: 'below', $offset: 1) {
+    $layerIndex: map-get($layers, $layer);
+
+    @if $location == 'above' {
+        z-index: $layerIndex + $offset;
+    } @else {
+        z-index: $layerIndex - $offset;
+    }
+}
