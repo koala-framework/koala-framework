@@ -1,5 +1,3 @@
-//TODO: convert to jquery
-/*
 var onReady = require('kwf/on-ready');
 var $ = require('jQuery');
 var historyState = require('kwf/history-state');
@@ -7,7 +5,8 @@ var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var statistics = require('kwf/statistics');
 var formRegistry = require('kwf/frontend-form/form-registry');
 
-(function() {
+var byComponentId = {};
+var byDirectoryViewComponentId = {};
 
 var uniqueIdCnt = 0;
 function getUniqueIdForFilterLink(el) {
@@ -23,7 +22,7 @@ $(document).on('click', 'a', function(event) {
     if (a.data('kwc-view-ajax-filter')) {
         var config = a.data('kwc-view-ajax-filter');
 
-        var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[config.viewComponentId];
+        var view = byDirectoryViewComponentId[config.viewComponentId];
         if (!view) return;
         view.loadView({
             filterComponentId: config.componentId
@@ -48,10 +47,12 @@ $(document).on('click', 'a', function(event) {
 
 });
 
-onReady.onRender('.kwcClass', function viewAjax(el, config) {
+onReady.onRender('.kwcClass', function initViewAjax(el, config) {
+
     config.el = el.find('.viewContainer')[0];
+
     el.find('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
-    el[0].kwcViewAjax = new Kwc.Directories.List.ViewAjax(config);
+    el[0].kwcViewAjax = new ViewAjax(config);
 
     var linkToTop = $('<div class="linkToTop"></div>');
     el.append(linkToTop);
@@ -80,7 +81,7 @@ historyState.on('popstate', function() {
     if (historyState.currentState.viewAjax) {
         var found = false;
         for (var componentId in historyState.currentState.viewAjax) {
-            if (Kwc.Directories.List.ViewAjax.byComponentId[componentId]) {
+            if (byComponentId[componentId]) {
                 found = true;
             }
         }
@@ -91,16 +92,12 @@ historyState.on('popstate', function() {
 }, this);
 
 
-Kwf.namespace('Kwc.Directories.List');
-Kwc.Directories.List.ViewAjax = function(config) {
+var ViewAjax = function(config) {
     $.extend(this, config);
     this.init();
 };
 
-Kwc.Directories.List.ViewAjax.byComponentId = {};
-Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId = {};
-
-Kwc.Directories.List.ViewAjax.prototype = {
+ViewAjax.prototype = {
 
     controllerUrl: null,
     loadMoreBufferPx: 700,
@@ -111,9 +108,9 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
     init: function() {
         this.$el = $(this.el);
-        Kwc.Directories.List.ViewAjax.byComponentId[this.componentId] = this;
+        byComponentId[this.componentId] = this;
         if (this.directoryViewComponentId) {
-            Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.directoryViewComponentId] = this;
+            byDirectoryViewComponentId[this.directoryViewComponentId] = this;
         }
         this.baseParams = {
             componentId: this.componentId,
@@ -426,8 +423,4 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
         }).bind(this));
     }
-
 };
-
-})();
-*/
