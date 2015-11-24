@@ -22,7 +22,7 @@ Kwf.onJElementReady('.kwcMenuMobile', function mobileMenu(el, config) {
                 '<% } %>'+
                 '<% _.each(item.children, function(child) { %>'+
                     '<li class="<% if (child.hasChildren) {  %>hasChildren<% } else if (child.isParent) { %>parent<% } %>">\n' +
-                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %></a>\n'+
+                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %><% if (child.isParent) { %> <span class="overview">('+trlKwf('Overview')+')</span><% } %></a>\n'+
                     '</li>\n' +
                 '<% }) %>' +
             '<% } %>' +

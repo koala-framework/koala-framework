@@ -12,6 +12,10 @@
         background: white;
         width: 100%;
 
+        span.overview {
+            display: none;
+        }
+
         > a.showMenu {
             display: block;
             position: relative;
