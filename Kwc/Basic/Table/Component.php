@@ -119,4 +119,17 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         }
         return $ret;
     }
+
+    public function hasContent()
+    {
+        $dataSelect = new Kwf_Model_Select();
+        $dataSelect->whereEquals('visible', 1);
+        $dataSelect->order('pos', 'ASC');
+        $rows = $this->_getRow()->getChildRows('tableData', $dataSelect);
+        if (count($rows)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
