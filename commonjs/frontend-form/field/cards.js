@@ -6,11 +6,11 @@ var Cards = kwfExtend(Field, {
     initField: function() {
         var config = this.form.getFieldConfig(this.getFieldName());
         var combobox = this.form.findField(config.combobox);
-        combobox.el.select('input.submit').remove(); //remove non-js fallback
-        combobox.on('change', function(value) {
+        combobox.el.find('input.submit').remove(); //remove non-js fallback
+        combobox.on('change', (function() {
             this.el.select('.kwfFormContainerCard .kwfFormCard').addClass('inactive');
-            this.el.select('.kwfFormContainerCard.'+value+' .kwfFormCard').removeClass('inactive');
-        }, this);
+            this.el.select('.kwfFormContainerCard.'+combobox.value+' .kwfFormCard').removeClass('inactive');
+        }).bind(this));
     },
     getFieldName: function() {
         var classNames = this.el.get(0).className.split(' ');

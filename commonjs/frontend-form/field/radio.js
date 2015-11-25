@@ -5,34 +5,34 @@ var kwfExtend = require('kwf/extend');
 
 var Radio = kwfExtend(Field, {
     initField: function() {
-        this.el.select('input').each(function(input) {
+        this.el.find('input').each((function(index, input) {
             $(input).on('click', (function() {
-                this.el.trigger('kwf-form-change', this.getValue());
+                this.el.trigger('kwfUp-form-change', this.getValue());
             }).bind(this));
-        }, this);
+        }).bind(this));
     },
     getValue: function() {
         var ret = null;
-        this.el.select('input').each(function(input) {
-            if (input.get(0).checked) {
-                ret = input.get(0).value;
+        this.el.select('input').each(function(index, input) {
+            if (input.checked) {
+                ret = input.value;
             }
-        }, this);
+        });
         return ret;
     },
     clearValue: function() {
-        this.el.select('input').each(function(input) {
-            input.get(0).checked = false;
-        }, this);
+        this.el.select('input').each(function(index, input) {
+            input.checked = false;
+        });
     },
     setValue: function(value) {
-        this.el.select('input').each(function(input) {
-            if (input.get(0).value == value) {
-                input.get(0).checked = true;
+        this.el.select('input').each(function(index, input) {
+            if (input.value == value) {
+                input.checked = true;
             } else {
-                input.get(0).checked = false;
+                input.checked = false;
             }
-        }, this);
+        });
     }
 });
 

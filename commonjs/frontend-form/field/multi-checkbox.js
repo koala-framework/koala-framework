@@ -9,7 +9,7 @@ onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
         var checkNone = mc.find('a.kwfMultiCheckboxCheckNone');
 
         if (checkAll) {
-            checkAll.on('click', function(ev) {
+            checkAll.on('click', (function(ev) {
                 ev.stopEvent();
                 var allInputs = this.query('input');
                 for (var i = 0; i < allInputs.length; i++) {
@@ -17,10 +17,10 @@ onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
                         allInputs[i].checked = true;
                     }
                 }
-            }, mc);
+            }).bind(mc));
         }
         if (checkNone) {
-            checkNone.on('click', function(ev) {
+            checkNone.on('click', (function(ev) {
                 ev.stopEvent();
                 var allInputs = this.query('input');
                 for (var i = 0; i < allInputs.length; i++) {
@@ -28,7 +28,7 @@ onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
                         allInputs[i].checked = false;
                     }
                 }
-            }, mc);
+            }).bind(mc));
         }
 }, { defer: true });
 

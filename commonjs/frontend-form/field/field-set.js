@@ -8,13 +8,13 @@ onReady.onRender('div.kwfFormContainerFieldSet fieldset > legend > input', funct
     if (!c.get(0).checked) {
         c.up('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
     }
-    c.on('click', function() {
-        if (this.get(0).checked) {
+    c.on('click', (function() {
+        if (this.checked) {
             this.up('fieldset').removeClass('kwfFormContainerFieldSetCollapsed');
         } else {
             this.up('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
         }
-    }, c);
+    }).bind(c));
 });
 
 var FieldSet = kwfExtend(Field, {
@@ -22,7 +22,7 @@ var FieldSet = kwfExtend(Field, {
         var inp = this.el.find('fieldset > legend > input');
         if (inp) {
             inp.on('click', (function() {
-                this.el.trigger('kwf-form-change', this.getValue());
+                this.el.trigger('kwfUp-form-change', this.getValue());
             }).bind(this));
         }
     },
