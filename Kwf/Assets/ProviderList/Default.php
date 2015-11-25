@@ -32,6 +32,7 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $filters = array();
         $filters[] = new Kwf_Assets_Filter_Css_Autoprefixer();
         $filters[] = new Kwf_Assets_Filter_Css_PrefixerKeyframes();
+        $filters[] = new Kwf_Assets_Filter_Css_MediaQueriesDropRedundant();
 
         parent::__construct($providers, $filters);
     }

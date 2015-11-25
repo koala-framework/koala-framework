@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "55399e2fce6f506f7df0c77b2e6a707c",
-    "content-hash": "481c6e2bfbff8dd1ecc77dc5c0f86c21",
+    "hash": "b9a178d8441122e3a6723d9c3d2c05d8",
+    "content-hash": "d014291f04334136df0aac66f44fac98",
     "packages": [
         {
             "name": "jbroadway/urlify",
