@@ -2,6 +2,7 @@ var ErrorStyleAbove = require('kwf/frontend-form/error-style/above');
 var kwfExtend = require('kwf/extend');
 var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
 var onReady = require('kwf/on-ready');
+var elementIsVisible = require('kwf/element/is-visible');
 
 var ErrorStyleIconBubble = kwfExtend(ErrorStyleAbove, {
     showErrors: function(r) {
@@ -12,37 +13,36 @@ var ErrorStyleIconBubble = kwfExtend(ErrorStyleAbove, {
             if (!firstField) { firstField = field; }
             field.el.addClass('kwfUp-kwfFieldError');
             if (!field.errorEl) {
-                field.errorEl = field.el.find('.kwfUp-kwfFormFieldWrapper').append('<div class="kwfUp-kwfFieldErrorIconBubble"></div>');
+                field.errorEl = $('<div class="kwfUp-kwfFieldErrorIconBubble"></div>').appendTo(field.el.find('.kwfUp-kwfFormFieldWrapper'));
                 field.errorEl.append('<div class="kwfUp-message"></div>');
                 field.errorEl.append('<div class="kwfUp-arrow"></div>');
                 field.errorEl.find('.kwfUp-message').hide();
                 field.errorEl.find('.kwfUp-arrow').hide();
                 field.errorEl.hide();
 
-                field.el.on('mouseenter', (function() {
+                field.el.on('mouseenter', function() {
                     if (firstField) {
-                        firstField.errorEl.find('.kwfUp-message').stopFx().fadeOut({duration: 0.4});
-                        firstField.errorEl.find('.kwfUp-arrow').stopFx().fadeOut({duration: 0.4});
+                        firstField.errorEl.find('.kwfUp-message').stop().fadeOut({duration: 400});
+                        firstField.errorEl.find('.kwfUp-arrow').stop().fadeOut({duration: 400});
                     }
-                    this.errorEl.find('.kwfUp-message').stopFx().fadeIn({duration: 0.4});
-                    this.errorEl.find('.kwfUp-arrow').stopFx().fadeIn({duration: 0.4});
-                }).bind(this));
-                field.el.on('mouseleave', (function() {
-                    this.errorEl.find('.kwfUp-message').stopFx().fadeOut({duration: 0.2});
-                    this.errorEl.find('.kwfUp-arrow').stopFx().fadeOut({duration: 0.2});
-                }).bind(this));
+                    field.errorEl.find('.kwfUp-message').stop().fadeIn({duration: 400});
+                    field.errorEl.find('.kwfUp-arrow').stop().fadeIn({duration: 400});
+                });
+                field.el.on('mouseleave', function() {
+                    field.errorEl.find('.kwfUp-message').stop().fadeOut({duration: 200});
+                    field.errorEl.find('.kwfUp-arrow').stop().fadeOut({duration: 200});
+                });
             }
-            field.errorEl.find('.kwfUp-message').update(r.errorFields[fieldName]);
-            field.errorEl.clearOpacity();
-            field.errorEl.fadeIn({
-                endOpacity: 1 //TODO read from css (but that's hard for IE)
-            });
+            field.errorEl.find('.kwfUp-message').html(r.errorFields[fieldName]);
+            field.errorEl.fadeIn();
         }
         if (firstField) {
-            firstField.errorEl.find('.kwfUp-message').stopFx().fadeIn({duration: 0.4});
-            firstField.errorEl.find('.kwfUp-arrow').stopFx().fadeIn({duration: 0.4});
-            firstField.errorEl.find('.kwfUp-message').fadeOut.defer(4000, firstField.errorEl.find('.kwfUp-message'));
-            firstField.errorEl.find('.kwfUp-arrow').fadeOut.defer(4000, firstField.errorEl.find('.kwfUp-arrow'));
+            firstField.errorEl.find('.kwfUp-message').stop().fadeIn({duration: 400});
+            firstField.errorEl.find('.kwfUp-arrow').stop().fadeIn({duration: 400});
+            setTimeout(function() {
+                firstField.errorEl.find('.kwfUp-message').fadeOut();
+                firstField.errorEl.find('.kwfUp-arrow').fadeOut();
+            }, 4000);
         }
 
         if (r.errorMessages && r.errorMessages.length) {
@@ -52,12 +52,13 @@ var ErrorStyleIconBubble = kwfExtend(ErrorStyleAbove, {
     hideFieldError: function(field)
     {
         field.el.removeClass('kwfUp-kwfFieldError');
-        if (field.errorEl && field.errorEl.isVisible() && !field.errorEl.fadingOut) {
+        if (field.errorEl && elementIsVisible(field.errorEl) && !field.errorEl.fadingOut) {
             field.errorEl.hide();
             onReady.callOnContentReady(field.el, {newRender: false});
             field.errorEl.show();
             field.errorEl.fadeOut({
-                callback: function() {
+                complete: function() {
+                    field.errorEl.hide();
                     field.errorEl.fadingOut = false;
                 }
             });
