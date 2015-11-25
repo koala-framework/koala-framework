@@ -3,14 +3,19 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
 {
     protected function _build($options)
     {
+        echo "\nsettings...\n";
         if (!file_exists('build/component')) {
             mkdir('build/component');
         }
 
         Kwf_Component_Settings::resetSettingsCache();
 
+        foreach (glob('build/component/*') as $f) {
+            unlink($f);
+        }
+
         $fileName = 'build/component/settings';
-        if (file_exists($fileName)) unlink($fileName);
+
         try {
             $data = Kwf_Component_Settings::_getSettingsCached();
         } catch (Kwf_Trl_BuildFileMissingException $e) {
@@ -24,6 +29,14 @@ class Kwf_Util_Build_Types_ComponentSettings extends Kwf_Util_Build_Types_Abstra
             self::_checkSettings($cmp, $settings);
         }
         file_put_contents($fileName, serialize($data));
+        $componentClasses = Kwc_Abstract::getComponentClasses();
+
+        echo "masterLayouts...\n";
+        Kwf_Component_MasterLayout_Abstract::_buildAll($componentClasses);
+
+
+        echo "layouts...\n";
+        Kwf_Component_Layout_Abstract::_buildAll($componentClasses);
     }
 
     private function _checkSettings($settingName, $settings)

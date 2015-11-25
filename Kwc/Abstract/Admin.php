@@ -31,6 +31,17 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 
     public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
+        $contexts = Kwf_Component_Layout_Abstract::getInstance($target->componentClass)->getContexts($target);
+        $supportedContexts = Kwf_Component_Layout_Abstract::getInstance($target->componentClass)->getSupportedContexts();
+        if ($contexts && $supportedContexts) {
+            foreach ($contexts as $context) {
+                if (!in_array($context, $supportedContexts)) {
+                    throw new Kwf_Component_Exception_IncompatibleContexts("Duplicating component in incompatible context");
+                }
+            }
+        }
+
+
         Kwf_Component_LogDuplicateModel::getInstance()->import(
             Kwf_Model_Abstract::FORMAT_ARRAY,
             array(

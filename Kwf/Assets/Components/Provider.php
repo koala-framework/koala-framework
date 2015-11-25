@@ -305,25 +305,4 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 
         return $ret;
     }
-
-    protected function _initialize()
-    {
-        $masterLayouts = "\$all-master-layouts: ();\n";
-        foreach (Kwc_Abstract::getComponentClasses() as $c) {
-            if (Kwc_Abstract::hasSetting($c, 'layoutConfig')) {
-                $layoutConfig = Kwc_Abstract::getSetting($c, 'layoutConfig');
-                $f = new Kwf_Assets_Dependency_File($layoutConfig);
-                $masterLayouts .= $f->getContents(null)."\n";
-                $masterLayouts .= "\$all-master-layouts: map-merge(\$all-master-layouts, \$master-layouts);\n";
-            }
-        }
-        $masterLayouts .= "\$master-layouts: \$all-master-layouts;\n";
-        $masterLayouts .= "\$all-master-layouts: null\n";
-
-        $file = "cache/scss/generated/config/_master-layouts.scss";
-        if (!is_dir(dirname($file))) mkdir(dirname($file), 0777, true);
-        if (!file_exists($file) || file_get_contents($file) != $masterLayouts) { //only modify if actually changed
-            file_put_contents($file, $masterLayouts);
-        }
-    }
 }
