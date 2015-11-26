@@ -189,6 +189,9 @@ class Kwf_Util_Setup
         $ret .= "Kwf_Loader::registerAutoload();\n";
         $ret .= "\n";
 
+        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
+        $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
+
         $ret .= "//here to be as fast as possible (and have no session)\n";
         $ret .= "if (\$requestUri == '/kwf/json-progress-status'\n";
         $ret .= ") {\n";
@@ -301,9 +304,6 @@ class Kwf_Util_Setup
             $ret .= "Kwf_Cache_Simple::\$memcacheHost = '".$host."';\n";
             $ret .= "Kwf_Cache_Simple::\$memcachePort = '".Kwf_Config::getValue('server.memcache.port')."';\n";
         }
-
-        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
-        $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
 
         $ret .= "if (substr(\$requestUri, 0, 8) == '/assets/') {\n";
         $ret .= "    Kwf_Assets_Loader::load(\$requestUri);\n";
