@@ -53,6 +53,15 @@ interface Kwf_User_Auth_Interface_Redirect
     public function getLoginRedirectUrl($redirectBackUrl, $state, $formValues);
 
     /**
+     * Returns html code to be output to do a redirect when using this auth method
+     *
+     * @param $redirectBackUrl
+     * @param $state
+     * @param $formValues
+     */
+    public function getLoginRedirectHtml($redirectBackUrl, $state, $formValues);
+
+    /**
      * Returns the (existing) user that should be logged in by $params. The User must be already associated
      * to this sso account.
      *
