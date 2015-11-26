@@ -24,7 +24,9 @@ class Kwf_Assets_Filter_Css_Autoprefixer extends Kwf_Assets_Filter_Abstract
             $ret = Kwf_SourceMaps_SourceMap::createFromInline($out);
         } else {
             $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($out);
+            $ret->setMimeType('text/css');
         }
+        $ret->setSources($sourcemap->getSources());
         return $ret;
     }
 }

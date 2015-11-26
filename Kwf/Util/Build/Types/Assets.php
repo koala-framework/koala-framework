@@ -8,7 +8,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         'ie8.css' => 'text/css; ie8',
     );
 
-    private function _buildPackageContents($cacheContents, $maxMTime, $p, $extension, $language)
+    private function _buildPackageContents($cacheContents, $p, $extension, $language)
     {
         $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension, $language);
         Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
@@ -20,7 +20,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         }
     }
 
-    private function _buildPackageSourceMap($cacheContents, $maxMTime, $p, $extension, $language)
+    private function _buildPackageSourceMap($cacheContents, $p, $extension, $language)
     {
         $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension.'.map', $language);
         Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
@@ -136,17 +136,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             foreach ($exts as $extension) {
                 $progress->next(1, "$depName $extension");
                 $p->getFilteredUniqueDependencies(self::$_mimeTypeByExtension[$extension]);
-
-                $cacheId = $p->getMaxMTimeCacheId(self::$_mimeTypeByExtension[$extension]);
-                if (!$cacheId) throw new Kwf_Exception("Didn't get cacheId for ".get_class($p));
-                $maxMTime = $p->getMaxMTime(self::$_mimeTypeByExtension[$extension]);
-                Kwf_Assets_BuildCache::getInstance()->save($maxMTime, $cacheId);
-
-                //save generated caches for clear-cache-watcher
-                $fileName = 'build/assets/package-max-mtime-'.$extension;
-                if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
-                    file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
-                }
             }
             $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_UniqueFilter(new Kwf_Assets_Dependency_Iterator_Recursive($p->getDependency(), Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL)), RecursiveIteratorIterator::CHILD_FIRST);
             foreach ($it as $i) {
@@ -168,7 +157,9 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             foreach ($it as $dep) {
                 $progress->next(1, "$dep");
                 foreach ($langs as $language) {
-                    $p->warmupDependencyCaches($dep, $language);
+                    if ($dep->getMimeType()) {
+                        $p->warmupDependencyCaches($dep, $language);
+                    }
                 }
             }
         }
@@ -198,7 +189,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                     $cacheId = $p->getPackageUrlsCacheId(self::$_mimeTypeByExtension[$extension], $language);
                     Kwf_Assets_BuildCache::getInstance()->save($urls, $cacheId);
 
-                    $maxMTime = $p->getMaxMTime(self::$_mimeTypeByExtension[$extension]);
                     foreach ($urls as $urlNum=>$url) {
                         $param = explode('/', $url);
                         $urlLanguage = $param[5];
@@ -208,10 +198,10 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
                         $progressIncrement = $urlNum == 0 ? 1 : 0;
                         $progress->next($progressIncrement, "$depName $urlExtension $urlLanguage source");
-                        $this->_buildPackageContents($contents, $maxMTime, $p, $urlExtension, $urlLanguage);
+                        $this->_buildPackageContents($contents, $p, $urlExtension, $urlLanguage);
 
                         $progress->next($progressIncrement, "$depName $urlExtension $urlLanguage map");
-                        $this->_buildPackageSourceMap($contents, $maxMTime, $p, $urlExtension, $urlLanguage);
+                        $this->_buildPackageSourceMap($contents, $p, $urlExtension, $urlLanguage);
                     }
 
                     if (!$urls) {

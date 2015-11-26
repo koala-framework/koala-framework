@@ -1,17 +1,9 @@
 <?php
 class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
 {
-    private $_contentsCache;
-
     public function getMimeType()
     {
         return 'text/css';
-    }
-    public function getContents($language)
-    {
-        $ret = parent::getContents($language);
-        $ret = $this->_processContents($ret);
-        return $ret;
     }
 
     public function usesLanguage()
@@ -47,25 +39,23 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
 
     public function getContentsPacked($language)
     {
-        if (!isset($this->_cacheContents)) {
+        $contents = $this->getContentsSourceString();
+        $contents = str_replace("\r", "\n", $contents);
 
-            $contents = $this->getContents($language);
+        $contents = $this->_processContents($contents);
 
-            $contents = str_replace("\r", "\n", $contents);
 
-            // remove comments
-            //$contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
+        // remove comments
+        //$contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
 
-            // multiple whitespaces
-            $contents = str_replace("\t", " ", $contents);
-            $contents = preg_replace('/(\n)\n+/', '$1', $contents);
-            $contents = preg_replace('/(\n)\ +/', '$1', $contents);
-            $contents = preg_replace('/(\ )\ +/', '$1', $contents);
+        // multiple whitespaces
+        $contents = str_replace("\t", " ", $contents);
+        $contents = preg_replace('/(\n)\n+/', '$1', $contents);
+        $contents = preg_replace('/(\n)\ +/', '$1', $contents);
+        $contents = preg_replace('/(\ )\ +/', '$1', $contents);
 
-            $this->_cacheContents = $contents;
-        }
-
-        $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($this->_cacheContents);
+        $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
+        $ret->addSource($this->getFileNameWithType());
         $ret->setMimeType('text/css');
         return $ret;
     }

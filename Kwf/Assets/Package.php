@@ -57,40 +57,10 @@ class Kwf_Assets_Package
         return $this->_providerList;
     }
 
-    public function getMaxMTimeCacheId($mimeType)
-    {
-        $ret = $this->_getCacheId($mimeType);
-        if (!$ret) return $ret;
-        return 'mtime_'.$ret;
-    }
-
     //default impl doesn't cache, overriden in Package_Default
     protected function _getCacheId($mimeType)
     {
         return null;
-    }
-
-    public function getMaxMTime($mimeType)
-    {
-        $cacheId = $this->getMaxMTimeCacheId($mimeType);
-        if ($cacheId) {
-            $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-            if ($ret !== false) return $ret;
-        }
-
-        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
-            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
-        }
-
-        $maxMTime = 0;
-        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
-            $mTime = $i->getMTime();
-            if ($mTime) {
-                $maxMTime = max($maxMTime, $mTime);
-            }
-        }
-
-        return $maxMTime;
     }
 
     public function getFilteredUniqueDependencies($mimeType)
@@ -150,12 +120,21 @@ class Kwf_Assets_Package
         if (!file_exists($cacheFile) || !file_exists($cacheFile.'.masterFiles')) {
             $cacheIsFresh = false;
         } else {
-            $masterFiles = json_decode(file_get_contents($cacheFile.'.masterFiles'));
+            $masterFiles = json_decode(file_get_contents($cacheFile.'.masterFiles'), true);
             $mtime = filemtime($cacheFile);
-            foreach ($masterFiles as $f) {
-                if (file_exists($f) && filemtime($f) > $mtime) {
-                    $cacheIsFresh = false;
-                    break;
+            foreach ($masterFiles as $i) {
+                if ($i['mtime']) {
+                    if (!file_exists($i['file']) || filemtime($i['file']) != $i['mtime']) {
+                        //file was modified or deleted
+                        $cacheIsFresh = false;
+                        break;
+                    }
+                } else {
+                    if (file_exists($i['file'])) {
+                        //file didn't exist, was created
+                        $cacheIsFresh = false;
+                        break;
+                    }
                 }
             }
         }
@@ -164,6 +143,9 @@ class Kwf_Assets_Package
             if (file_exists($cacheFile.'.masterFiles')) unlink($cacheFile.'.masterFiles');
 
             $ret = $dep->getContentsPacked($language);
+            if (!$ret) {
+                throw new Kwf_Exception("Dependency '$dep' didn't return contents");
+            }
             foreach ($this->getProviderList()->getFilters() as $filter) {
                 if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_DEPENDENCY
                     && $filter->getMimeType() == $dep->getMimeType()
@@ -174,11 +156,14 @@ class Kwf_Assets_Package
             file_put_contents($cacheFile, $ret->getFileContentsInlineMap());
 
             $mtime = filemtime($cacheFile);
-            $masterFiles = $dep->getMasterFiles();
-            foreach ($masterFiles as $f) {
-                if (file_exists($f) && filemtime($f) > $mtime) {
-                    throw new Kwf_Exception("Master file '$f' has a futuristic mtime");
-                }
+            $masterFiles = array();
+            foreach ($ret->getSources() as $f) {
+                $f = new Kwf_Assets_Dependency_File($f);
+                $f = $f->getAbsoluteFileName();
+                $masterFiles[] = array(
+                    'file' => $f,
+                    'mtime' => file_exists($f) ? filemtime($f) : null
+                );
             }
             file_put_contents($cacheFile.'.masterFiles', json_encode($masterFiles));
         }
@@ -497,19 +482,17 @@ class Kwf_Assets_Package
         }
         if (!$sourceMap) {
             $contents = $map->getFileContents();
-            $mtime = $this->getMaxMTime($mimeType);
             if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
             else if (substr($extension, -3) == 'css') $mimeType = 'text/css; charset=utf-8';
         } else {
             $contents = $map->getMapContents(false);
-            $mtime = $this->getMaxMTime($mimeType);
             $mimeType = 'application/json';
         }
         $ret = array(
             'contents' => $contents,
             'mimeType' => $mimeType,
+            'mtime' => time()
         );
-        if ($mtime) $ret['mtime'] = $mtime;
         return $ret;
     }
 }

@@ -6,7 +6,7 @@ class Kwf_Assets_Dependency_Dynamic_CountriesData extends Kwf_Assets_Dependency_
         return 'text/javascript';
     }
 
-    public function getContents($language)
+    public function getContentsPacked($language)
     {
         $data = array();
         $nameColumn = 'name_'.$language;
@@ -18,7 +18,7 @@ class Kwf_Assets_Dependency_Dynamic_CountriesData extends Kwf_Assets_Dependency_
         }
         $ret = "Kwf.CountriesData = ".json_encode($data).";\n";
 
-        return $ret;
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
     public function usesLanguage()

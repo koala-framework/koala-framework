@@ -13,15 +13,6 @@ class Kwf_Assets_Dependency_Decorator_StringReplace extends Kwf_Assets_Dependenc
         return $this->_replacements;
     }
 
-    public function getContents($language)
-    {
-        $ret = $this->_dep->getContents($language);
-        foreach ($this->_getReplacements() as $k=>$i) {
-            $ret = str_replace($k, $i, $Ret);
-        }
-        return $ret;
-    }
-
     public function getContentsPacked($language)
     {
         $ret = $this->_dep->getContentsPacked($language);

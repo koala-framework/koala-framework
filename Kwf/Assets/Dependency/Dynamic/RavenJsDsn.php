@@ -6,7 +6,7 @@ class Kwf_Assets_Dependency_Dynamic_RavenJsDsn extends Kwf_Assets_Dependency_Abs
         return 'text/javascript';
     }
 
-    public function getContents($language)
+    public function getContentsPacked($language)
     {
         if (!Kwf_Config::getValue('ravenJs.dsn')) {
             throw new Kwf_Exception('ravenJS.dsn config setting is required');
@@ -14,7 +14,8 @@ class Kwf_Assets_Dependency_Dynamic_RavenJsDsn extends Kwf_Assets_Dependency_Abs
         $data = array(
             'dsn' => Kwf_Config::getValue('ravenJs.dsn')
         );
-        return "Kwf.RavenJsConfig = ".json_encode($data).";";
+        $ret = "Kwf.RavenJsConfig = ".json_encode($data).";";
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
     public function usesLanguage()

@@ -20,7 +20,13 @@ class Kwf_Assets_Filter_Css_MediaQueriesDropRedundant extends Kwf_Assets_Filter_
         $process->mustRun();
 
         $out = $process->getOutput();
-        return Kwf_SourceMaps_SourceMap::createFromInline($out);
+        if (Kwf_SourceMaps_SourceMap::hasInline($out)) {
+            $ret = Kwf_SourceMaps_SourceMap::createFromInline($out);
+        } else {
+            $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($out);
+            $ret->setMimeType('text/css');
+        }
+        return $ret;
     }
 }
 

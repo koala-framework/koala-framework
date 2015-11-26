@@ -6,7 +6,7 @@ class Kwf_Assets_Dependency_Dynamic_FacebookAppId extends Kwf_Assets_Dependency_
         return 'text/javascript';
     }
 
-    public function getContents($language)
+    public function getContentsPacked($language)
     {
         $appIds = array();
         foreach (Kwf_Component_Abstract::getComponentClasses() as $class) {
@@ -21,7 +21,8 @@ class Kwf_Assets_Dependency_Dynamic_FacebookAppId extends Kwf_Assets_Dependency_
         }
         if (empty($appIds)) throw new Kwf_Exception('No Facebook App ID found');
 
-        return "Kwf.FacebookAppIds = " . json_encode($appIds) . ";\n";
+        $ret = "Kwf.FacebookAppIds = " . json_encode($appIds) . ";\n";
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
     public function usesLanguage()

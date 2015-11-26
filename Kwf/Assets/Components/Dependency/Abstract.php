@@ -25,43 +25,6 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
         return $kwcClass;
     }
 
-    public function getMTime()
-    {
-        $ret = null;
-        foreach ($this->_componentDependencies as $dep) {
-            $ret = max($ret, $dep->getMTime());
-        }
-        return $ret;
-    }
-
-    public function getMasterFiles()
-    {
-        $ret = array();
-        foreach ($this->_componentDependencies as $dep) {
-            $ret = array_merge($ret, $dep->getMasterFiles());
-        }
-        return $ret;
-    }
-
-
-    public function getContents($language)
-    {
-        $ret = '';
-        foreach ($this->_componentDependencies as $dep) {
-            $c = $dep->getContents($language);
-            if (Kwf_Config::getValue('application.uniquePrefix')) {
-                $c = str_replace('kwcBem--', $this->_getKwcClass().'--', $c);
-                $c = str_replace('kwcBem__', $this->_getKwcClass().'__', $c);
-            } else {
-                $c = str_replace('kwcBem--', '', $c);
-                $c = str_replace('kwcBem__', '', $c);
-            }
-            $c = str_replace('.kwcClass', '.'.$this->_getKwcClass(), $c);
-            $ret .= $c."\n";
-        }
-        return $ret;
-    }
-
     public function getContentsSourceString()
     {
         $ret = '';
@@ -90,16 +53,6 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
         );
     }
 
-    public function warmupCaches()
-    {
-        foreach ($this->_componentDependencies as $dep) {
-            $dep->warmupCaches();
-        }
-        if (!$this->usesLanguage()) {
-            $this->getContentsPacked(null); //creates/updates cache file
-        }
-    }
-
     public function usesLanguage()
     {
         $ret = false;
@@ -113,34 +66,18 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
 
     public function getContentsPacked($language)
     {
-        //add all deps in key to get different cache value when dep is added/removed
-        $ids = array();
+        $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
         foreach ($this->_componentDependencies as $dep) {
-            $ids[] = $dep->__toString();
-        }
-
-        $cacheFile = "cache/componentassets/" . md5($this->_componentClass . ($this->usesLanguage() ? "-$language" : '').
-            "-".Kwf_Config::getValue('application.uniquePrefix') . "-" . $this->_dependencyName
-            .'-'.implode('-', $ids)
-            );
-
-        if (file_exists($cacheFile) && filemtime($cacheFile) > $this->getMTime()) {
-            $ret = Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));
-        } else {
-            $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
-            foreach ($this->_componentDependencies as $dep) {
-                $c = $dep->getContentsPacked($language);
-                if (Kwf_Config::getValue('application.uniquePrefix')) {
-                    $c->stringReplace('kwcBem--', $this->_getKwcClass().'--');
-                    $c->stringReplace('kwcBem__', $this->_getKwcClass().'__');
-                } else {
-                    $c->stringReplace('kwcBem--', '');
-                    $c->stringReplace('kwcBem__', '');
-                }
-                $c->stringReplace('.kwcClass', '.'.$this->_getKwcClass());
-                $ret->concat($c);
+            $c = $dep->getContentsPacked($language);
+            if (Kwf_Config::getValue('application.uniquePrefix')) {
+                $c->stringReplace('kwcBem--', $this->_getKwcClass().'--');
+                $c->stringReplace('kwcBem__', $this->_getKwcClass().'__');
+            } else {
+                $c->stringReplace('kwcBem--', '');
+                $c->stringReplace('kwcBem__', '');
             }
-            file_put_contents($cacheFile, $ret->getFileContentsInlineMap());
+            $c->stringReplace('.kwcClass', '.'.$this->_getKwcClass());
+            $ret->concat($c);
         }
         if ($this->getMimeType() == 'text/css') {
             $ret->setMimeType('text/css');

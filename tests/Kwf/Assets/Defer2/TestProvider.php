@@ -34,20 +34,20 @@ class Kwf_Assets_Defer2_TestProvider extends Kwf_Assets_Provider_Abstract
     public function getDependenciesForDependency($dependency)
     {
         if ($dependency instanceof Kwf_Assets_Defer_JsDependency) {
-            if ($dependency->getContents('en') == 'A') {
+            if ($dependency->getContentsPacked('en')->getFileContents() == 'A') {
                 return array(
                     Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES => array(
                         $this->_providerList->findDependency('B'),
                         $this->_providerList->findDependency('C'),
                     )
                 );
-            } else if ($dependency->getContents('en') == 'B') {
+            } else if ($dependency->getContentsPacked('en')->getFileContents() == 'B') {
                 return array(
                     Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES => array(
                         $this->_providerList->findDependency('D')
                     )
                 );
-            } else if ($dependency->getContents('en') == 'D') {
+            } else if ($dependency->getContentsPacked('en')->getFileContents() == 'D') {
                 return array(
                     Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES => array(
                         $this->_providerList->findDependency('C')
