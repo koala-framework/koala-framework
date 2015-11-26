@@ -299,9 +299,10 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
         $this->_rootParentValue = null;
     }
 
-    protected function _beforeSaveMove($row) {
-        $sourceRow = $this->_model->getTable()->getRow($this->getRequest()->getParam('source'));
-        $targetRow = $this->_model->getTable()->getRow($this->getRequest()->getParam('target'));
+    protected function _beforeSaveMove($row)
+    {
+        $sourceRow = $this->_model->getRow($this->getRequest()->getParam('source'));
+        $targetRow = $this->_model->getRow($this->getRequest()->getParam('target'));
         if ($sourceRow && $targetRow) {
             $sourceRow->save();
         }
