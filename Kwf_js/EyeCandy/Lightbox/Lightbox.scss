@@ -230,7 +230,7 @@ body {
 
 .kwfUp-Lightbox .lightboxHeader { position: relative; z-index: 102; }
 
-.kwfUp-kwfLightbox .closeButton {
+.kwfUp-kwfLightbox .kwfUp-closeButton {
     background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
     position: fixed;
     display: block;
@@ -241,7 +241,7 @@ body {
     top: 10px;
 }
 
-.kwfUp-kwfLightbox.mobile .closeButton {
+.kwfUp-kwfLightbox.mobile .kwfUp-closeButton {
     right: 2px;
     top: 2px;
 }
