@@ -12,6 +12,7 @@ process.stdin.on('end', function() {
     media.process(css).then(function (result) {
         process.stdout.write(result.css);
     }).catch(function(e) {
+        console.log(e);
         process.exit(1);
     });
 });

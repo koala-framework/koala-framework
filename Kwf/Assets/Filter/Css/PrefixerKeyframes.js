@@ -12,6 +12,7 @@ process.stdin.on('end', function() {
     prefix.process(css).then(function (result) {
         process.stdout.write(result.css);
     }).catch(function(e) {
+        console.log(e);
         process.exit(1);
     });
 });

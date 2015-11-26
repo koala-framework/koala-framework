@@ -3,7 +3,8 @@ class Kwf_Assets_Filter_Css_PrefixerKeyframes extends Kwf_Assets_Filter_Abstract
 {
     protected $_prefix;
 
-    public function __construct($prefix = NULL) {
+    public function __construct($prefix = null)
+    {
         $this->_prefix = $prefix ? $prefix : Kwf_Config::getValue('application.uniquePrefix');
     }
 
@@ -28,6 +29,8 @@ class Kwf_Assets_Filter_Css_PrefixerKeyframes extends Kwf_Assets_Filter_Abstract
 
             $out = $process->getOutput();
             return Kwf_SourceMaps_SourceMap::createFromInline($out);
+        } else {
+            return $sourcemap;
         }
     }
 }
