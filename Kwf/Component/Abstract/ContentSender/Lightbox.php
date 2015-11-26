@@ -100,23 +100,25 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
             if (isset($options['cssClass'])) $class .= " $options[cssClass]";
             if (isset($options['adaptHeight']) && $options['adaptHeight']) $class .= " adaptHeight";
             $options = htmlspecialchars(json_encode($options));
-            $lightboxContent = "<div class=\"$class ".$kwfUniquePrefix."kwfLightboxOpen\">\n".
-                "<div class=\"".$kwfUniquePrefix."kwfLightboxScrollOuter\">\n".
-                "   <div class=\"".$kwfUniquePrefix."kwfLightboxScroll\">\n".
-                "       <div class=\"".$kwfUniquePrefix."kwfLightboxBetween\">\n".
-                "           <div class=\"".$kwfUniquePrefix."kwfLightboxBetweenInner\">\n".
-                "               <div class=\"".$kwfUniquePrefix."kwfLightboxInner\" style=\"$style\">\n".
-                "                   <input type=\"hidden\" class=\"options\" value=\"$options\" />\n".
-                "                   <div class=\"".$kwfUniquePrefix."kwfLightboxContent\">\n".
-                "                       $lightboxContent\n".
+            $lightboxContent =
+                "<div class=\"$class ".$kwfUniquePrefix."kwfLightboxOpen\">\n".
+                "    <div class=\"".$kwfUniquePrefix."kwfLightboxScrollOuter\">\n".
+                "        <div class=\"".$kwfUniquePrefix."kwfLightboxScroll\">\n".
+                "            <div class=\"".$kwfUniquePrefix."kwfLightboxBetween\">\n".
+                "               <div class=\"".$kwfUniquePrefix."kwfLightboxBetweenInner\">\n".
+                "                   <div class=\"".$kwfUniquePrefix."kwfLightboxInner\" style=\"$style\">\n".
+                "                       <input type=\"hidden\" class=\"options\" value=\"$options\" />\n".
+                "                       <div class=\"".$kwfUniquePrefix."kwfLightboxContent\">\n".
+                "                           $lightboxContent\n".
+                "                       </div>\n".
                 "                   </div>\n".
                 "               </div>\n".
-                "           </div>\n".
-                "       </div>\n".
+                "            </div>\n".
+                "        </div>\n".
+                "        <div class=\"".$kwfUniquePrefix."kwfLightboxMask ".$kwfUniquePrefix."kwfLightboxMaskOpen\"></div>\n".
                 "    </div>\n".
-                "<a class=\"closeButton\" href=\"$parent->url\"></a>\n".
-                "</div>\n".
-                "<div class=\"".$kwfUniquePrefix."kwfLightboxMask ".$kwfUniquePrefix."kwfLightboxMaskOpen\"></div>\n";
+                "    <a class=\"".$kwfUniquePrefix."closeButton\" href=\"$parent->url\"></a>\n".
+                "</div>\n";
             return preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
         } else {
             return $lightboxContent;
