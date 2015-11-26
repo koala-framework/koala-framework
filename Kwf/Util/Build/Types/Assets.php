@@ -167,7 +167,9 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_UniqueFilter(new Kwf_Assets_Dependency_Iterator_Recursive($p->getDependency(), Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL)), RecursiveIteratorIterator::CHILD_FIRST);
             foreach ($it as $dep) {
                 $progress->next(1, "$dep");
-                $dep->warmupCaches();
+                foreach ($langs as $language) {
+                    $p->warmupDependencyCaches($dep, $language);
+                }
             }
         }
         $progress->finish();

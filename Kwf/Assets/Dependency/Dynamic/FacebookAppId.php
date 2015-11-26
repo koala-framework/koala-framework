@@ -28,4 +28,9 @@ class Kwf_Assets_Dependency_Dynamic_FacebookAppId extends Kwf_Assets_Dependency_
     {
         return false;
     }
+
+    public function getIdentifier()
+    {
+        return 'FacebookAppId';
+    }
 }

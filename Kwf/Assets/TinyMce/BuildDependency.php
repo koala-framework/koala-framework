@@ -70,4 +70,9 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
     {
         return 'tinymce';
     }
+
+    public function getIdentifier()
+    {
+        return 'tinymce';
+    }
 }

@@ -26,6 +26,7 @@ class Kwf_Util_ClearCache
                 if ($d->getFilename() == 'uglifyjs') continue; //never clear uglifyjs, too expensive to regenerate
                 if ($d->getFilename() == 'commonjs') continue; //never clear commonjs, too expensive to regenerate
                 if ($d->getFilename() == 'componentassets') continue; //never clear componentassets, too expensive to regenerate
+                if ($d->getFilename() == 'assetdeps') continue; //never clear assetdeps, too expensive to regenerate
                 if ($d->getFilename() == 'media') continue; //never clear media, too expensive to regenerate
                 if ($d->getFilename() == 'mediameta') continue; //never clear mediameta, too expensive to regenerate
                 $ret[] = $d->getFilename();

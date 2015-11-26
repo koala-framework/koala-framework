@@ -16,4 +16,9 @@ class Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys extends Kwf_Assets_Depende
     {
         return false;
     }
+
+    public function getIdentifier()
+    {
+        return 'GoogleMapsApiKey';
+    }
 }

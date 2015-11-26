@@ -150,7 +150,7 @@ abstract class Kwf_Assets_Dependency_Abstract
 
     public function getIdentifier()
     {
-        throw new Kwf_Exception_NotYetImplemented();
+        throw new Kwf_Exception("getIdentifier is not implemented for '$this'");
     }
 
     public function toDebug()

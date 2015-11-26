@@ -142,7 +142,11 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
             }
             file_put_contents($cacheFile, $ret->getFileContentsInlineMap());
         }
-
+        if ($this->getMimeType() == 'text/css') {
+            $ret->setMimeType('text/css');
+        } else {
+            $ret->setMimeType('text/javascript');
+        }
         return $ret;
     }
 

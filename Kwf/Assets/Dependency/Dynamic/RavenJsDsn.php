@@ -21,4 +21,9 @@ class Kwf_Assets_Dependency_Dynamic_RavenJsDsn extends Kwf_Assets_Dependency_Abs
     {
         return false;
     }
+
+    public function getIdentifier()
+    {
+        return 'RavenJsDsn';
+    }
 }

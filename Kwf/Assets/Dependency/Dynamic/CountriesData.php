@@ -25,4 +25,9 @@ class Kwf_Assets_Dependency_Dynamic_CountriesData extends Kwf_Assets_Dependency_
     {
         return true;
     }
+
+    public function getIdentifier()
+    {
+        return 'CountriesData';
+    }
 }

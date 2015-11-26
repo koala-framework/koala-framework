@@ -29,4 +29,9 @@ class Kwf_Assets_Dependency_Dynamic_LoaderConfig extends Kwf_Assets_Dependency_A
     {
         return false;
     }
+
+    public function getIdentifier()
+    {
+        return 'LoaderConfig';
+    }
 }

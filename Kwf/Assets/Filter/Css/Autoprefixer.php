@@ -20,6 +20,11 @@ class Kwf_Assets_Filter_Css_Autoprefixer extends Kwf_Assets_Filter_Abstract
         $process->mustRun();
 
         $out = $process->getOutput();
-        return Kwf_SourceMaps_SourceMap::createFromInline($out);
+        if (Kwf_SourceMaps_SourceMap::hasInline($out)) {
+            $ret = Kwf_SourceMaps_SourceMap::createFromInline($out);
+        } else {
+            $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($out);
+        }
+        return $ret;
     }
 }

@@ -138,17 +138,58 @@ class Kwf_Assets_Package
         return $ret;
     }
 
-    private function _getFilterdDependencyContents($dep, $language)
+    public function warmupDependencyCaches($dep, $language)
     {
-        $ret = $dep->getContentsPacked($language);
-        foreach ($this->getProviderList()->getFilters() as $filter) {
-            if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_DEPENDENCY
-                && $filter->getMimeType() == $dep->getMimeType()
-            ) {
-                $ret = $filter->filter($ret);
+        $cacheId = $dep->getIdentifier();
+        if ($dep->usesLanguage()) {
+            $cacheId .= '-'.$language;
+        }
+
+        $cacheIsFresh = true;
+        $cacheFile = 'cache/assetdeps/'.md5($cacheId);
+        if (!file_exists($cacheFile) || !file_exists($cacheFile.'.masterFiles')) {
+            $cacheIsFresh = false;
+        } else {
+            $masterFiles = json_decode(file_get_contents($cacheFile.'.masterFiles'));
+            $mtime = filemtime($cacheFile);
+            foreach ($masterFiles as $f) {
+                if (file_exists($f) && filemtime($f) > $mtime) {
+                    $cacheIsFresh = false;
+                    break;
+                }
             }
         }
-        return $ret;
+
+        if (!$cacheIsFresh) {
+            if (file_exists($cacheFile.'.masterFiles')) unlink($cacheFile.'.masterFiles');
+
+            $ret = $dep->getContentsPacked($language);
+            foreach ($this->getProviderList()->getFilters() as $filter) {
+                if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_DEPENDENCY
+                    && $filter->getMimeType() == $dep->getMimeType()
+                ) {
+                    $ret = $filter->filter($ret);
+                }
+            }
+            file_put_contents($cacheFile, $ret->getFileContentsInlineMap());
+
+            $mtime = filemtime($cacheFile);
+            $masterFiles = $dep->getMasterFiles();
+            foreach ($masterFiles as $f) {
+                if (file_exists($f) && filemtime($f) > $mtime) {
+                    throw new Kwf_Exception("Master file '$f' has a futuristic mtime");
+                }
+            }
+            file_put_contents($cacheFile.'.masterFiles', json_encode($masterFiles));
+        }
+
+        return $cacheFile;
+    }
+
+    private function _getFilterdDependencyContents($dep, $language)
+    {
+        $cacheFile = $this->warmupDependencyCaches($dep, $language);
+        return Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));
     }
 
     private function _getCommonJsDeps($i, $language, &$data)
