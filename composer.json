@@ -24,7 +24,7 @@
             "jquery.easing": "1.3.0",
             "underscore": "1.7.0",
             "susy": "vivid-planet/susy#18ad7cba4101e85bf4ed0ecfa45e6c2d59489a76",
-            "compass-mixins": "koala-framework/compass-mixins#7319116335050516e01b250b6e771600ab55e105",
+            "compass-mixins": "koala-framework/compass-mixins#11f18e1ec8b672bcfed9c8c08fbf9dc7d1e7f43d",
             "tinymce": "tinymce/tinymce#4.1.9"
         },
         "require-npm": {
