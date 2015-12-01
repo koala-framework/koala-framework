@@ -126,7 +126,8 @@ ViewAjax.prototype = {
             $.extend(this.baseParams, this.searchForm.getValues());
 
             this.searchForm.on('fieldChange', function(f) {
-                if (f instanceof Kwf.FrontendForm.TextField && f.getValue().length < this.minimumCharactersForFilter) return; //minimum length
+                var queryField = $(f.target).find('input[name="query"]');
+                if (queryField && queryField.length < this.minimumCharactersForFilter) return; //minimum length
 
                 var values = this.searchForm.getValues();
                 var diffFound = false;
