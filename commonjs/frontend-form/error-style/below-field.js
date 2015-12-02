@@ -9,16 +9,10 @@ var ErrorStyleBelowField = kwfExtend(ErrorStyleAbove, {
             var field = this.form.findField(fieldName);
             field.el.addClass('kwfUp-kwfFieldError');
             if (!field.errorEl) {
-                if (field.el.up('.kwfFormContainerColumn')) {
-                    field.errorEl = field.el.up('.kwfFormContainerColumn').up('.kwfFormContainerColumns')
-                        .append('<div class="kwfUp-kwfFieldErrorMessage"></div>');
-                } else {
-                    field.errorEl = field.el.append('<div class="kwfUp-kwfFieldErrorMessage"></div>');
-                }
+                field.errorEl = $('<div class="kwfUp-kwfFieldErrorMessage"></div>').appendTo(field.el);
             }
             field.errorEl.show();
-            field.errorEl.update(r.errorFields[fieldName]);
-
+            field.errorEl.html(r.errorFields[fieldName]);
         }
         if (r.errorMessages && r.errorMessages.length) {
             this._showErrorMessagesAbove(r.errorMessages, r);
