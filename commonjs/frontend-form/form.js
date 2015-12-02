@@ -109,6 +109,7 @@ FormComponent.prototype = {
 
     getFieldConfig: function(fieldName)
     {
+        fieldName = fieldName.replace('kwfUp-', '');
         if (this.config.fieldConfig[fieldName]) {
             return this.config.fieldConfig[fieldName];
         }
