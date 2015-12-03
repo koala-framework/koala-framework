@@ -71,31 +71,6 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
     public static function detectMimeType($mimeType, $contents)
     {
         $ret = $mimeType;
-        if (!$mimeType || $mimeType == 'application/octet-stream') {
-            if (function_exists('finfo_open')) {
-                //für andere server muss dieser pfad vielleicht einstellbar gemacht werden
-                $path = false;
-                if (is_file('/usr/share/file/magic')) {
-                    $path = '/usr/share/file/magic';
-                } else if (is_file('/usr/share/misc/magic')) {
-                    $path = '/usr/share/misc/magic';
-                } else {
-                    $path = null;
-                }
-                $finfo = new finfo(FILEINFO_MIME, $path);
-                $ret = $finfo->buffer($contents);
-                $ret = str_replace('; charset=binary', '', $ret);
-                if($ret == 'application/zip') {
-                    $path = Kwf_Config::getValue('externLibraryPath.file');
-                    $finfo = new finfo(FILEINFO_MIME, $path);
-                    $ret = $finfo->buffer($contents);
-                    $ret = str_replace('; charset=binary', '', $ret);
-                }
-            } else {
-                throw new Kwf_Exception("Can't autodetect mimetype, install FileInfo extension");
-            }
-        }
-
         if (!$ret) {
             $ret = 'application/octet-stream';
         }
