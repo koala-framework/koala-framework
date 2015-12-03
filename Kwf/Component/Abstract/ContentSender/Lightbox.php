@@ -72,10 +72,10 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
 
             //remove main content to avoid duplicate content for search engines
             //content will be loaded using ajax
-            $startPos = strpos($parentContent, '<div class="'.$kwfUniquePrefix.'kwfMainContent">');
-            $endPos = strpos($parentContent, '</div><!--/'.$kwfUniquePrefix.'kwfMainContent-->');
+            $startPos = strpos($parentContent, '<div class="kwfMainContent">');
+            $endPos = strpos($parentContent, '</div><!--/kwfMainContent-->');
             $parentContent = substr($parentContent, 0, $startPos)
-                            .'<div class="'.$kwfUniquePrefix.'kwfMainContent" data-kwc-component-id="'.$parent->componentId.'">'
+                            .'<div class="kwfMainContent" data-kwc-component-id="'.$parent->componentId.'">'
                             .substr($parentContent, $endPos);
 
             foreach ($this->_data->getRecursiveChildComponents(array('flag' => 'hasInjectIntoRenderedHtml')) as $component) {
