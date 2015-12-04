@@ -252,7 +252,7 @@ ViewAjax.prototype = {
             }).bind(this));
         }
 
-        this.kwfMainContent = this.$el.closest('.kwfMainContent');
+        this.kwfMainContent = this.$el.closest('.kwfUp-kwfMainContent');
     },
 
     showView: function() {
@@ -389,7 +389,7 @@ ViewAjax.prototype = {
         this.kwfMainContent.hide();
 
             //style: 'width: ' + this.kwfMainContent.getStyle('width'),
-        this.detailEl = $('<div class="kwfMainContent loadingContent '+classNames+'""><div class="loading"></div></div>');
+        this.detailEl = $('<div class="kwfUp-kwfMainContent loadingContent '+classNames+'""><div class="loading"></div></div>');
         this.kwfMainContent.after(this.detailEl);
 
         $.ajax({

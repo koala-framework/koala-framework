@@ -35,9 +35,11 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
         } else if ($last['type'] == 'component') {
             $helper = new Kwf_Component_View_Helper_Component();
             $helper->setRenderer($this->_getRenderer());
-            return '<div class="kwfMainContent">' . "\n    " .
+            $kwfUniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
+            if ($kwfUniquePrefix) $kwfUniquePrefix = $kwfUniquePrefix.'-';
+            return '<div class="'.$kwfUniquePrefix.'kwfMainContent">' . "\n    " .
                 $helper->component($component) . "\n" .
-                '</div><!--/kwfMainContent-->' . "\n";
+                '</div><!--/'.$kwfUniquePrefix.'kwfMainContent-->' . "\n";
         } else {
             throw new Kwf_Exception("invalid type");
         }

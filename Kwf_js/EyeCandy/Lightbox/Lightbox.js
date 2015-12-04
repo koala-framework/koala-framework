@@ -87,7 +87,7 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
     onReady.callOnContentReady(l.contentEl, {action: 'show'});
 
     //lazy load parent content
-    var mainContent = $('.kwfMainContent');
+    var mainContent = $('.kwfUp-kwfMainContent');
     if (mainContent.data('kwc-component-id')) {
         setTimeout(function() {
             $.ajax({
