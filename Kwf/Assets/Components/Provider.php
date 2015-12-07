@@ -128,7 +128,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                     }
                     if ($dep instanceof Kwf_Assets_Dependency_File_Scss) {
                         if ($scssConfig = Kwc_Admin::getInstance($class)->getScssConfig()) {
-                            $dep->setConfig($scssConfig, Kwc_Admin::getInstance($class)->getScssConfigMTime());
+                            $dep->setConfig($scssConfig, Kwc_Admin::getInstance($class)->getScssConfigMasterFiles());
                         }
                     }
                 }

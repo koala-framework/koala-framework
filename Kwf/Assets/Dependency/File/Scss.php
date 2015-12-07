@@ -3,6 +3,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 {
     private $_cacheWarm = false;
     private $_config = null;
+    private $_configMasterFiles = array();
     private function _getCacheFileName()
     {
         $fileName = $this->getFileNameWithType();
@@ -89,7 +90,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         }
         $map = json_decode(file_get_contents("{$cacheFile}.map"));
         $sources = array();
-        $additionalSources = array();
+        $additionalSources = $this->_configMasterFiles;
         foreach ($map->sources as $k=>$i) {
             //sources are relative to cache/sass, strip that
             if (substr($i, 0, 10) == 'generated/') {
@@ -136,9 +137,10 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         return $map;
     }
 
-    public function setConfig(array $config)
+    public function setConfig(array $config, array $masterFiles = array())
     {
         $this->_config = $config;
+        $this->_configMasterFiles = $masterFiles;
     }
 
     private static function _generateScssConfig($config)
