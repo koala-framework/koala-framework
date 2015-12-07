@@ -13,8 +13,7 @@ var Cards = kwfExtend(Field, {
         }).bind(this));
     },
     getFieldName: function() {
-        var classNames = this.el.get(0).className.split(' ');
-        return classNames[classNames.length-1];
+        return this.el.data('fieldName');
     },
     getValue: function() {
         return null;
