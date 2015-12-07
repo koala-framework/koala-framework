@@ -140,7 +140,7 @@ class Kwf_Loader
         return $file;
     }
 
-    public static function loadClass($class)
+    public static function findFile($class)
     {
         static $namespaces;
         if (!isset($namespaces)) {
@@ -154,7 +154,12 @@ class Kwf_Loader
             $classMap = include VENDOR_PATH.'/composer/autoload_classmap.php';
         }
 
-        $file = self::_findFile($class, $namespaces, $classMap);
+        return self::_findFile($class, $namespaces, $classMap);
+    }
+
+    public static function loadClass($class)
+    {
+        $file = self::findFile($class);
         try {
             include $file;
         } catch (Exception $e) {
