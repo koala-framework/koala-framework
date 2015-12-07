@@ -46,9 +46,12 @@
         "kwf": {
             "exclude-production": [
                 "symfony/console",
+                "symfony/process",
                 "koala-framework/file-watcher",
                 "koala-framework/sourcemaps",
                 "koala-framework/composer-extra-assets",
+                "koala-framework/kwf-trl-jsparser",
+                "sepia/po-parser",
                 "nodejs/nodejs"
             ]
         },
