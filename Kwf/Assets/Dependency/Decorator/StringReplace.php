@@ -2,10 +2,12 @@
 class Kwf_Assets_Dependency_Decorator_StringReplace extends Kwf_Assets_Dependency_Decorator_Abstract
 {
     private $_replacements;
-    public function __construct(Kwf_Assets_Dependency_Abstract $dep, array $replacements)
+    private $_identifier;
+    public function __construct(Kwf_Assets_Dependency_Abstract $dep, array $replacements, $identifier)
     {
         parent::__construct($dep);
         $this->_replacements = $replacements;
+        $this->_identifier = $identifier;
     }
 
     protected function _getReplacements()
@@ -21,5 +23,10 @@ class Kwf_Assets_Dependency_Decorator_StringReplace extends Kwf_Assets_Dependenc
             $ret->stringReplace($k, $i);
         }
         return $ret;
+    }
+
+    public function getIdentifier()
+    {
+        return $this->_identifier;
     }
 }

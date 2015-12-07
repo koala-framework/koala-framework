@@ -13,4 +13,10 @@ class Kwf_Assets_CommonJs_JQueryPluginDecoratorDependency extends Kwf_Assets_Dep
         $ret->concat($c);
         return $ret;
     }
+
+    public function getIdentifier()
+    {
+        return 'JQueryPlugin('.$this->_dep->getIdentifier().')';
+    }
+
 }

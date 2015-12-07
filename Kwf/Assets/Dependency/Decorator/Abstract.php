@@ -1,5 +1,5 @@
 <?php
-class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Dependency_Abstract
+abstract class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Dependency_Abstract
 {
     protected $_dep;
     public function __construct(Kwf_Assets_Dependency_Abstract $dep)
