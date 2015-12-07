@@ -1,3 +1,5 @@
+@import "compass/utilities/general/clearfix";
+
 /* kwfTabsFx is set by javascript. So we can show all content elements if there is no javascript. */
 .kwfUp-kwfTabsFx .kwfUp-kwfTabsContents { position: relative; }
 
@@ -7,10 +9,16 @@
     width: 100%;
     clear: both;
 }
+
 .kwfUp-kwfTabsLink {
     background-color: #ddd;
     float: left; cursor: pointer;
     padding: 3px 10px; border: 1px solid #bbb;
     border-bottom: none; margin-right: 10px;
 }
+
+.kwfUp-kwfTabsLinks {
+    @include pie-clearfix;
+}
+
 .kwfUp-kwfTabsLinkActive { background-color: #fff; position: relative; bottom: -1px; z-index: 3; }

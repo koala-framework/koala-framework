@@ -14,8 +14,8 @@ var Tabs = function(el) {
     this.contentEls = this.el.find('> .kwfUp-kwfTabsContent');
     this.fxDuration = .5;
 
-    this.tabsContents = $('<div class="kwfUp-kwfTabsContents" data-width="100%"></div>').appendTo(this.el.first());
     var tabsLinks = $('<div class="kwfUp-kwfTabsLinks"></div>').appendTo(this.el.first());
+    this.tabsContents = $('<div class="kwfUp-kwfTabsContents" data-width="100%"></div>').appendTo(this.el.first());
 
     for (var i = 0; i < this.contentEls.length; i++) {
         this.tabsContents.append(this.contentEls[i]);
@@ -30,7 +30,7 @@ var Tabs = function(el) {
         $(this.switchEls[i]).removeClass('kwfUp-kwfTabsLinkActive');
 
         // if it is important, show on startup
-        if ($(this.contentEls[i]).children('.kwfUp-kwfImportant')) {
+        if ($(this.contentEls[i]).children('.kwfUp-kwfImportant').length) {
             activeTabIdx = i;
         }
 
