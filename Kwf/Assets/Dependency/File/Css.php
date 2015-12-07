@@ -27,6 +27,11 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         $ret = preg_replace('#url\((\'|")(?![a-z]+:)([^/\'"])#', 'url(\1/assets/'.$fnDir.'/\2', $ret);
         $ret = preg_replace('#url\((?![a-z]+:)([^/\'"])#', 'url(/assets/'.$fnDir.'/\1', $ret);
 
+        //hack around postcss imcompatibility with *prefixed css rules
+        //those rules where used for IE 6-7 specifics (=css star hack)
+        //as we don't support them anymore drop them
+        $ret = preg_replace('#\\*[a-z-]+:[^;}]+#', '', $ret);
+
         if (strpos($ret, 'kwfUp-') !== false) {
             if (Kwf_Config::getValue('application.uniquePrefix')) {
                 $ret = str_replace('kwfUp-', Kwf_Config::getValue('application.uniquePrefix').'-', $ret);
