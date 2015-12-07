@@ -108,7 +108,7 @@ class Kwf_Assets_Package
         return $ret;
     }
 
-    public function warmupDependencyCaches($dep, $language)
+    public function warmupDependencyCaches($dep, $language, $progress = null)
     {
         $cacheId = $dep->getIdentifier();
         if ($dep->usesLanguage()) {
@@ -150,6 +150,7 @@ class Kwf_Assets_Package
                 if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_DEPENDENCY
                     && $filter->getMimeType() == $dep->getMimeType()
                 ) {
+                    if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Filter_', '', get_class($filter)));
                     $ret = $filter->filter($ret);
                 }
             }

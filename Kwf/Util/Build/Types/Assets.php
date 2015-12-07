@@ -158,7 +158,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 $progress->next(1, "$dep");
                 foreach ($langs as $language) {
                     if ($dep->getMimeType()) {
-                        $p->warmupDependencyCaches($dep, $language);
+                        $p->warmupDependencyCaches($dep, $language, $progress);
                     }
                 }
             }
