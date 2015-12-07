@@ -1,14 +1,8 @@
 <?php
 class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 {
-    private $_cacheWarm = false;
     private $_config = null;
     private $_configMasterFiles = array();
-    private function _getCacheFileName()
-    {
-        $fileName = $this->getFileNameWithType();
-        return 'cache/scss/v5'.str_replace(array('\\', ':', '/', '.', '-'), '_', $fileName);
-    }
 
     private static function _getAbsolutePath($path)
     {
@@ -55,8 +49,20 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             } else {
                 $loadPath[] = KWF_PATH.'/sass/Kwf/stylesheets';
             }
-            $loadPath[] = 'cache/scss/generated';
+            $loadPath[] = 'temp/scss-generated';
             $loadPath = escapeshellarg(implode(PATH_SEPARATOR, $loadPath));
+        }
+
+        $buildFile = 'temp/scss-'.str_replace(array('\\', ':', '/', '.', '-'), '_', $this->getFileNameWithType());
+
+        if (!is_dir('temp/scss-generated')) mkdir('temp/scss-generated');
+        if ($this->_config) {
+            $config = "\$config: ".self::_generateScssConfig($this->_config).";\n";
+            file_put_contents('temp/scss-generated/_config.scss', $config);
+        } else {
+            if (file_exists('temp/scss-generated/_config.scss')) {
+                unlink('temp/scss-generated/_config.scss');
+            }
         }
 
         if (substr($fileName, 0, 2) == './') $fileName = getcwd().substr($fileName, 1);
@@ -76,8 +82,8 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             unset($p);
         }
         $cmd = "$bin --include-path $loadPath --output-style compressed ";
-        $cmd .= " --source-map ".escapeshellarg($cacheFile.'.map');
-        $cmd .= " ".escapeshellarg($wrapperFile)." ".escapeshellarg($cacheFile);
+        $cmd .= " --source-map ".escapeshellarg($buildFile.'.map');
+        $cmd .= " ".escapeshellarg($wrapperFile)." ".escapeshellarg($buildFile);
         $cmd .= " 2>&1";
         $out = array();
         exec($cmd, $out, $retVal);
@@ -86,20 +92,20 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         }
         unlink($wrapperFile);
         if ($this->_config) {
-            unlink('cache/scss/generated/_config.scss');
+            unlink('temp/scss-generated/_config.scss');
         }
-        $map = json_decode(file_get_contents("{$cacheFile}.map"));
+        $map = json_decode(file_get_contents("{$buildFile}.map"));
         $sources = array();
         $additionalSources = $this->_configMasterFiles;
         foreach ($map->sources as $k=>$i) {
             //sources are relative to cache/sass, strip that
-            if (substr($i, 0, 10) == 'generated/') {
-                $f = 'web/cache/scss/'.$i;
+            if (substr($i, 0, 15) == 'scss-generated/') {
+                $f = 'web/temp/scss-generated/'.$i;
             } else  {
-                if (substr($i, 0, 6) != '../../') {
-                    throw new Kwf_Exception('source doesn\'t start with ../../');
+                if (substr($i, 0, 3) != '../') {
+                    throw new Kwf_Exception('source doesn\'t start with ../: '.$i);
                 }
-                $i = substr($i, 6);
+                $i = substr($i, 3);
                 $f = self::getPathWithTypeByFileName(getcwd().'/'.$i);
                 if (!$f) {
                     throw new Kwf_Exception("Can't find path for '".getcwd().'/'.$i."'");
@@ -115,15 +121,15 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         $sources[] = 'config.ini'; //for uniquePrefix
         $map->sources = array_merge($sources, $additionalSources);
 
-        $map->file = $cacheFile;
-        file_put_contents("$cacheFile.map", json_encode($map));
+        $map->file = $buildFile;
+        file_put_contents("$buildFile.map", json_encode($map));
 
-        $ret = file_get_contents($cacheFile);
+        $ret = file_get_contents($buildFile);
         $ret = str_replace("@charset \"UTF-8\";\n", '', $ret); //remove charset, no need to adjust sourcemap as sourcemap doesn't include that (bug in libsass)
         $ret = str_replace(chr(0xEF).chr(0xBB).chr(0xBF), '', $ret); //remove byte order mark
         $ret = preg_replace("#/\*\# sourceMappingURL=.* \*/#", '', $ret);
 
-        $map = new Kwf_SourceMaps_SourceMap(file_get_contents("{$cacheFile}.map"), $ret);
+        $map = new Kwf_SourceMaps_SourceMap(file_get_contents("{$buildFile}.map"), $ret);
         $map->setMimeType('text/css');
 
         if (strpos($ret, 'kwfUp-') !== false) {
@@ -133,6 +139,9 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                 $map->stringReplace('kwfUp-', '');
             }
         }
+
+        unlink($buildFile);
+        unlink("{$buildFile}.map");
 
         return $map;
     }
