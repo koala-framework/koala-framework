@@ -123,8 +123,8 @@ class Kwf_Assets_Package
             $masterFiles = json_decode(file_get_contents($cacheFile.'.masterFiles'), true);
             $mtime = filemtime($cacheFile);
             foreach ($masterFiles as $i) {
-                if ($i['mtime']) {
-                    if (!file_exists($i['file']) || filemtime($i['file']) != $i['mtime']) {
+                if ($i['md5']) {
+                    if (!file_exists($i['file']) || md5_file($i['file']) != $i['md5']) {
                         //file was modified or deleted
                         $cacheIsFresh = false;
                         break;
@@ -163,7 +163,7 @@ class Kwf_Assets_Package
                 $f = $f->getAbsoluteFileName();
                 $masterFiles[] = array(
                     'file' => $f,
-                    'mtime' => file_exists($f) ? filemtime($f) : null
+                    'md5' => file_exists($f) ? md5_file($f) : null
                 );
             }
             file_put_contents($cacheFile.'.masterFiles', json_encode($masterFiles));
