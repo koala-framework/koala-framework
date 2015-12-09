@@ -8,6 +8,7 @@ abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
             'class' => 'Kwc_Chained_CopyTarget_TargetGenerator',
             'component' => null
         );
+        $ret['pageGeneratorComponentClass'] = $includePageGenerator;
 
         if ($includePageGenerator) {
             $pageGenerator = Kwc_Chained_Cc_Component::createChainedGenerator($includePageGenerator, 'page');
@@ -16,6 +17,7 @@ abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
                 $ret['generators']['page']['class'] = 'Kwc_Chained_CopyTarget_PagesGenerator';
             }
         }
+
         $ret['flags']['hasAllChainedByMaster'] = true;
         return $ret;
     }
