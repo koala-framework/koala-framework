@@ -64,7 +64,7 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
     {
         if ($this->_getParam('applicationAssetsVersion')
                 && $this->getHelper('ViewRenderer')->isJson()) {
-            if (Kwf_Assets_Dispatcher::getAssetsVersion() != $this->_getParam('applicationAssetsVersion')) {
+            if (Kwf_Assets_Dispatcher::getInstance()->getAssetsVersion() != $this->_getParam('applicationAssetsVersion')) {
                 $this->_forward('json-wrong-version', 'error',
                                     'kwf_controller_action_error');
                 return;

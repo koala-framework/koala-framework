@@ -19,7 +19,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 'mtime' => $p->getMaxMTime($mimeType)
             );
 
-            $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language, $partNumber);
+            $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension, $language, $partNumber);
             Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
 
             //save generated caches for clear-cache-watcher
@@ -40,7 +40,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 'mimeType' => 'application/json',
                 'mtime' => $p->getMaxMTime($mimeType)
             );
-            $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension.'.map', $language, $partNumber);
+            $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension.'.map', $language, $partNumber);
             Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
         }
     }
@@ -91,12 +91,12 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             foreach ($langs as $language) {
                 $partCount = 10; //don't call getPackageContentsPartCount as that would rebuild contents
                 for ($partNumber=0; $partNumber<$partCount; $partNumber++) {
-                    $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language, $partNumber);
+                    $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension, $language, $partNumber);
                     if (Kwf_Assets_BuildCache::getInstance()->load($cacheId) !== false) {
                         Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
                     }
 
-                    $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension.'.map', $language, $partNumber);
+                    $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension.'.map', $language, $partNumber);
                     if (Kwf_Assets_BuildCache::getInstance()->load($cacheId) !== false) {
                         Kwf_Assets_BuildCache::getInstance()->save('outdated', $cacheId);
                     }
@@ -216,7 +216,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             foreach ($exts as $extension) {
                 $partCount = $p->getPackageContentsPartCount(self::$_mimeTypeByExtension[$extension], $language);
                 for ($partNumber=0; $partNumber<$partCount; $partNumber++) {
-                    $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language, $partNumber);
+                    $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension, $language, $partNumber);
                     $cacheContents = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
                     echo "$depName ";
                     if ($partCount > 1) echo "part $partNumber ";
