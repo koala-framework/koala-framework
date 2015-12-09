@@ -929,6 +929,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             return $ret;
         } else if ($expr instanceof Kwf_Model_Select_Expr_Max) {
             $f = $expr->getField();
+            if (!count($rowset)) return null;
             $ret = $rowset->current()->$f;
             foreach ($rowset as $r) {
                 $ret = max($ret, $r->$f);
@@ -936,6 +937,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             return $ret;
         } else if ($expr instanceof Kwf_Model_Select_Expr_Min) {
             $f = $expr->getField();
+            if (!count($rowset)) return null;
             $ret = $rowset->current()->$f;
             foreach ($rowset as $r) {
                 $ret = min($ret, $r->$f);
