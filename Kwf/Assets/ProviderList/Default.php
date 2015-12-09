@@ -30,10 +30,12 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $providers[] = new Kwf_Assets_ResponsiveEl_Provider();
 
         $filters = array();
-        $filters[] = new Kwf_Assets_Filter_Css_Autoprefixer();
-        $filters[] = new Kwf_Assets_Filter_Css_PrefixerKeyframes();
-        //$filters[] = new Kwf_Assets_Filter_Css_PrefixerFontface();
-        $filters[] = new Kwf_Assets_Filter_Css_MediaQueriesDropRedundant();
+        $filters[] = new Kwf_Assets_Filter_Css_MultiplePostCss(array(
+            new Kwf_Assets_Filter_Css_Autoprefixer(),
+            new Kwf_Assets_Filter_Css_PrefixerKeyframes(),
+            //new Kwf_Assets_Filter_Css_PrefixerFontface(),
+            new Kwf_Assets_Filter_Css_MediaQueriesDropRedundant(),
+        ));
 
         parent::__construct($providers, $filters);
     }
