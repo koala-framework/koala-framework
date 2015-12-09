@@ -95,12 +95,14 @@ class Kwf_Component_PagesMetaRow extends Kwf_Model_Proxy_Row
     {
         if (is_numeric($this->page_id)) {
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($this->page_id, array('ignoreVisible'=>true));
-            $pages = $page->getChildPages(array(
-                'pageGenerator' => true
-            ));
-            foreach ($pages as $p) {
-                $row = $this->getModel()->getRow($p->componentId);
-                if ($row) $row->deleteRecursive();
+            if ($page) {
+                $pages = $page->getChildPages(array(
+                    'pageGenerator' => true
+                ));
+                foreach ($pages as $p) {
+                    $row = $this->getModel()->getRow($p->componentId);
+                    if ($row) $row->deleteRecursive();
+                }
             }
         }
 

@@ -35,11 +35,23 @@ class Kwf_User_Auth_Union_Redirect extends Kwf_User_Auth_Union_Abstract implemen
     {
         $row = $this->_auth->getUserToLoginByParams($params);
         if (!$row) return null;
+        $redirect = false;
+        if (is_array($row)) {
+            $redirect = $row['redirect'];
+            $row = $row['user'];
+        }
 
         foreach ($this->_model->getUnionModels() as $k=>$m) {
             if ($m == $row->getModel()) {
                 $id = $k.$row->{$m->getPrimaryKey()};
-                return $this->_model->getRow($id);
+                $row = $this->_model->getRow($id);
+                if ($redirect) {
+                    return array(
+                        'user' => $row,
+                        'redirect' => $redirect
+                    );
+                }
+                return $row;
             }
         }
         return null;

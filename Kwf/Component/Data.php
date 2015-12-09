@@ -1124,6 +1124,21 @@ class Kwf_Component_Data
     }
 
     /**
+     * Returns the page this data belongs to (might be a page itself) OR (if there is no page) the root component
+     *
+     * @return Kwf_Component_Data
+     */
+    public function getInheritsParent()
+    {
+        $page = $this;
+        while ($page && !$page->inherits) {
+            if ($page instanceof Kwf_Component_Data_Root) return $page;
+            $page = $page->parent;
+        }
+        return $page;
+    }
+
+    /**
      * Returns the title of the page
      *
      * Can be overridden to customize.

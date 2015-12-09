@@ -143,6 +143,18 @@ class Kwf_Mail extends Zend_Mail
         return $this;
     }
 
+    public function setReturnPath($email)
+    {
+        parent::clearReturnPath();
+        return parent::setReturnPath($email);
+    }
+
+    public function setReplyTo($email, $name = null)
+    {
+        parent::clearReplyTo();
+        return parent::setReplyTo($email, $name);
+    }
+
     public function send($transport = null)
     {
         $mailSendAll = Kwf_Registry::get('config')->debug->sendAllMailsTo;
