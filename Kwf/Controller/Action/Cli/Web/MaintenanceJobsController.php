@@ -20,6 +20,11 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
             if ($debug) echo "last daily run: ".date('Y-m-d H:i:s', $lastDailyRun)."\n";
         }
 
+        $lastHourlyRun = null;
+        if (file_exists('temp/maintenance-hourly-run')) {
+            $lastHourlyRun = file_get_contents('temp/maintenance-hourly-run');
+            if ($debug) echo "last hourly run: ".date('Y-m-d H:i:s', $lastHourlyRun)."\n";
+        }
 
         $dailyMaintenanceWindowStart = "01:00"; //don't set before 00:00
         $dailyMaintenanceWindowEnd = "05:00";
@@ -50,10 +55,21 @@ class Kwf_Controller_Action_Cli_Web_MaintenanceJobsController extends Kwf_Contro
 
                 //discard connection to database to reconnect on next job run
                 //avoids problems with auto closed connections due to inactivity
-                Kwf_Model_Abstract::clearAllRows();
-                Kwf_Model_Abstract::clearInstances();
-                Kwf_Registry::getInstance()->offsetUnset('db');
-                Kwf_Registry::getInstance()->offsetUnset('dao');
+                if (function_exists('gc_collect_cycles()')) {
+                    Kwf_Model_Abstract::clearAllRows();
+                    Kwf_Model_Abstract::clearInstances();
+                    gc_collect_cycles();
+                    Kwf_Registry::getInstance()->offsetUnset('db');
+                    Kwf_Registry::getInstance()->offsetUnset('dao');
+                }
+            }
+            Kwf_Component_Data_Root::getInstance()->freeMemory();
+
+            if (!$lastHourlyRun || time()-$lastHourlyRun > 3600) {
+                if ($debug) echo date('Y-m-d H:i:s')." execute hourly jobs\n";
+                $lastHourlyRun = time();
+                file_put_contents('temp/maintenance-hourly-run', $lastHourlyRun);
+                Kwf_Util_Maintenance_Dispatcher::executeJobs(Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_HOURLY, $debug);
             }
 
             Kwf_Component_Data_Root::getInstance()->freeMemory();
