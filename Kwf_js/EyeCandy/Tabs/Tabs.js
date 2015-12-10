@@ -109,7 +109,7 @@ Tabs.prototype = {
             newContentEl.fadeIn({
                 duration: this.fxDuration,
                 complete: function() {
-                    $(this).parents().css('height', 'auto');     //set the height after animation to auto because there are Components who change height when they are inside a tab
+                    $(this).closest().css('height', 'auto');     //set the height after animation to auto because there are Components who change height when they are inside a tab
                 }
             });
             oldContentEl.fadeOut({
