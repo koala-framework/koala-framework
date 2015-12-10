@@ -97,51 +97,6 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
             });
         }
         if (this.infoPosition == 'south') this.createInfoContainer();
-
-        if (!Kwf.Utils.Upload.supportsHtml5Upload()) {
-            this.swfu = new Kwf.Utils.SwfUpload({
-                fileSizeLimit: this.fileSizeLimit,
-                allowOnlyImages: this.allowOnlyImages,
-                buttonPlaceholderId: this.uploadButtonContainer.id,
-                postParams: {
-                    maxResolution: this.maxResolution
-                }
-            });
-            this.swfu.on('fileQueued', function(file) {
-                this.progress = Ext.MessageBox.show({
-                    title : trlKwf('Upload'),
-                    msg : trlKwf('Uploading file'),
-                    buttons: false,
-                    progress:true,
-                    closable:false,
-                    minWidth: 250,
-                    buttons: Ext.MessageBox.CANCEL,
-                    scope: this,
-                    fn: function(button) {
-                        this.swfu.cancelUpload(file.id);
-                    }
-                });
-                this.swfu.startUpload(file.id);
-            }, this);
-            this.swfu.on('uploadProgress', function(file, done, total) {
-                this.progress.updateProgress(done/total);
-            }, this);
-            this.swfu.on('uploadSuccess', function(file, response) {
-                this.progress.hide();
-                this.setValue(response.value);
-                this.fireEvent('uploaded', this, response.value);
-            }, this);
-            this.swfu.on('uploadError', function(file, errorCode, errorMessage) {
-                this.progress.hide();
-            }, this);
-            this.swfu.on('flashLoadError', function() {
-                this.createUploadButton();
-            }, this);
-        }
-    },
-
-    onDestroy: function() {
-        if (this.swfu) this.swfu.destroy();
     },
 
     createInfoContainer: function() {
@@ -151,8 +106,6 @@ Kwf.Form.File = Ext.extend(Ext.form.Field, {
     },
 
     createUploadButton : function () {
-        if (this.swfu) this.swfu.destroy();
-        this.swfu = null;
         while (this.uploadButtonContainer.last()) {
             this.uploadButtonContainer.last().remove();
         }

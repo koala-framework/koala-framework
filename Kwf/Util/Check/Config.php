@@ -89,9 +89,6 @@ class Kwf_Util_Check_Config
         $checks['setlocale'] = array(
             'name' => 'setlocale'
         );
-        $checks['fileinfo_functionality'] = array(
-            'name' => 'fileinfo functionality'
-        );
         $checks['apc'] = array(
             'name' => 'apc'
         );
@@ -343,24 +340,6 @@ class Kwf_Util_Check_Config
             setlocale(LC_ALL, $locales);
         } else {
             setlocale(LC_ALL, $locale);
-        }
-    }
-
-    private static function _fileinfo_functionality()
-    {
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/images/information.png'));
-        if ($mime != 'image/png') {
-            throw new Kwf_Exception("fileinfo returned wrong information: $mime");
-        }
-
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.docx'));
-        if ($mime != 'application/msword') {
-            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
-        }
-
-        $mime = Kwf_Uploads_Row::detectMimeType(false, file_get_contents(KWF_PATH.'/tests/Kwf/Uploads/DetectMimeType/sample.odt'));
-        if ($mime != 'application/vnd.oasis.opendocument.text') {
-            throw new Kwf_Exception("fileinfo returned wrong information:".$mime);
         }
     }
 

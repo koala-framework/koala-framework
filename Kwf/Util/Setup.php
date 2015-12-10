@@ -210,11 +210,6 @@ class Kwf_Util_Setup
             $ret .= "}\n";
         }
 
-        $ret .= "if (isset(\$_POST['PHPSESSID'])) {\n";
-        $ret .= "    //für swfupload\n";
-        $ret .= "    Zend_Session::setId(\$_POST['PHPSESSID']);\n";
-        $ret .= "}\n";
-
         /*
         if (isset($_COOKIE['unitTest'])) {
             //$config->debug->benchmark = false;
