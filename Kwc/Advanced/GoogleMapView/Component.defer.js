@@ -22,6 +22,9 @@ Kwc.Advanced.GoogleMap.renderMap = function(map) {
     }
 
     var myMap = new Kwf.GoogleMap.Map(cfg);
+    var cls = eval(cfg.mapClass) || Kwf.GoogleMap.Map;
+    var myMap = new cls(cfg);
+    map.map = myMap;
 
     Kwf.GoogleMap.load(function() {
         this.show();
@@ -41,20 +44,29 @@ Kwf.onContentReady(function(el, options) {
     }).defer(1, this, [el]);
 });
 
-Kwf.onJElementReady('.cssClass .mobileOverlay', function (el) {
-    el.click(function (ev) {
+Kwf.onJElementReady('.cssClass', function (el) {
+    var mobileOverlayOpen = el.find('.mobileOverlayOpen');
+    var mobileOverlayClose = el.find('.mobileOverlayClose');
+
+    mobileOverlayOpen.click(function (ev) {
         if ($(this).is(':visible')) {
             var newEl = $(this).parent();
-            newEl.toggleClass('navigate');
-            if (newEl.hasClass('navigate')) {
-                $('html, body').animate({
-                    scrollTop: newEl.offset().top
-                });
-            } else {
-                $('html, body').animate({
-                    scrollTop: newEl.offset().top - (($(window).innerHeight() - newEl.height()) / 2)
-                });
-            }
+            newEl.addClass('navigate');
+            $('html, body').animate({
+                scrollTop: newEl.offset().top
+            }, 400, function() {
+                google.maps.event.trigger(newEl.get(0).map.gmap, 'resize');
+            });
+        }
+    });
+
+    mobileOverlayClose.on('touchstart click', function (ev) {
+        if ($(this).is(':visible')) {
+            var newEl = $(this).parent();
+            newEl.removeClass('navigate');
+            $('html, body').animate({
+                scrollTop: newEl.offset().top - (($(window).innerHeight() - newEl.height()) / 2)
+            });
         }
     });
 });

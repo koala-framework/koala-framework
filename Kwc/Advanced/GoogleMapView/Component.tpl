@@ -1,11 +1,17 @@
 <div class="<?=$this->cssClass?><? if ($this->optimizedMobileUI) { ?> optimizedMobileUI<? } ?>">
-    <div class="mobileOverlay">
-        <img class="navigateIcon" src="/assets/kwf/Kwc/Advanced/GoogleMapView/navigateIcon.png" />
+    <div class="mobileOverlayOpen">
+        <img class="navigateIcon" src="/assets/kwf/Kwc/Directories/List/ViewMap/navigateIcon.png" />
         <div class="innerMobileOverlay">
             <span class="tapToNav"><?=$this->data->trlKwf('Tap to navigate');?></span>
-            <span class="tapToScroll"><?=$this->data->trlKwf('close');?></span>
         </div>
     </div>
+
+    <div class="mobileOverlayClose">
+        <div class="innerMobileOverlay">
+            <span class="tapToScroll"><?=$this->data->trlKwf('Close');?></span>
+        </div>
+    </div>
+
     <? if($this->data->hasContent()) { ?>
 
         <? if ($this->text && ($this->text instanceof Kwf_Component_Data)) { ?>

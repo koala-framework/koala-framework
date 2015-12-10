@@ -21,6 +21,10 @@ class Kwc_Basic_LinkTag_News_Form extends Kwc_Abstract_Form
         $row = $this->getRow($parentRow);
         $c = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId('news_'.$row->news_id, array('ignoreVisible'=>true));
-        return 'news_'.$c->parent->dbId == $this->getName();
+        if ($c) {
+            return 'news_'.$c->parent->dbId == $this->getName();
+        } else {
+            return false;
+        }
     }
 }

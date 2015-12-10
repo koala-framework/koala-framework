@@ -46,14 +46,12 @@
     @include opacity(0.3);
 }
 
-.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .uploadButton,
-.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .swfupload  {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField .uploadButton {
     position: absolute;
     bottom: 100px;
     right: 120px;
 }
-.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .uploadButton,
-.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .swfupload {
+.kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .uploadButton {
     bottom: 5px;
     right: 85px;
     @include opacity(0.3);
@@ -68,7 +66,6 @@
 
 .kwc-abstract-image-image-upload-big-preview:hover .kwc-dimensionfield-container .kwc-abstract-image-dimension-cropbutton,
 .kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .uploadButton,
-.kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .swfupload,
 .kwc-abstract-image-image-upload-big-preview:hover .kwc-abstract-image-imageuploadfile-container.x2-form-element .swfUploadField.file-uploaded .deleteButton {
     @include opacity(1);
 }
