@@ -136,7 +136,7 @@ class Kwf_Assets_Package
         return $ret;
     }
 
-    private function _getFilterdDependencyContents($dep, $language)
+    private function _getFilteredDependencyContents($dep, $language)
     {
         return $this->warmupDependencyCaches($dep, $language);
     }
@@ -150,7 +150,7 @@ class Kwf_Assets_Package
                 $commonJsDeps = $this->_getCommonJsDeps($dep, $language, $data);
                 $data[$dep->__toString()] = array(
                     'id' => $dep->__toString(),
-                    'source' => $c = $this->_getFilterdDependencyContents($dep, $language)->getFileContentsInlineMap(false),
+                    'source' => $c = $this->_getFilteredDependencyContents($dep, $language)->getFileContentsInlineMap(false),
                     'sourceFile' => $dep->__toString(), //TODO
                     'deps' => $commonJsDeps,
                     'entry' => false
@@ -194,7 +194,7 @@ class Kwf_Assets_Package
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry()) {
-                    $c = $this->_getFilterdDependencyContents($i, $language)->getFileContentsInlineMap(false);
+                    $c = $this->_getFilteredDependencyContents($i, $language)->getFileContentsInlineMap(false);
                     $commonJsDeps = $this->_getCommonJsDeps($i, $language, $commonJsData);
                     $commonJsData[$i->__toString()] = array(
                         'id' => $i->__toString(),
@@ -228,7 +228,7 @@ class Kwf_Assets_Package
         foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if (!(($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry())) {
-                    $map = $this->_getFilterdDependencyContents($i, $language);
+                    $map = $this->_getFilteredDependencyContents($i, $language);
                     if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
                         throw new Kwf_Exception("contents must not contain sourceMappingURL");
                     }
