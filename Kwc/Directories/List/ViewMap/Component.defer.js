@@ -84,6 +84,8 @@ Kwf.onJElementReady('.cssClass', function (el) {
             newEl.addClass('navigate');
             $('html, body').animate({
                 scrollTop: newEl.offset().top
+            }, 400, function() {
+                google.maps.event.trigger(newEl.get(0).map.gmap, 'resize');
             });
         }
     });
