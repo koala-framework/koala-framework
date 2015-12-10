@@ -57,7 +57,7 @@
         }
 
         @media (max-width: 800px) {
-            .container {
+            > .container {
                 height: 50vh !important;
             }
         }
@@ -94,7 +94,7 @@
                 top: 50%;
             }
 
-            .container {
+            > .container {
                 height: 100vh !important;
             }
 

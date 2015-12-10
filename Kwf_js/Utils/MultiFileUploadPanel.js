@@ -20,146 +20,47 @@ Kwf.Utils.MultiFileUploadPanel = Ext2.extend(Ext2.Panel,
 
         var container = this.body.createChild();
 
-        if (!Kwf.Utils.Upload.supportsHtml5Upload()) {
-            if (!this.maxResolution) {
-                this.maxResolution = 0;
+
+        container.setStyle('position', 'relative');
+        this.uploadButton = new Ext2.Button({
+            text: trlKwf('Upload Files'),
+            cls: 'x2-btn-text-icon',
+            icon: '/assets/silkicons/add.png',
+            renderTo: container
+        });
+
+        var fileInputContainer = container.createChild({
+            style: 'width: 120px; height: 20px; top: 0; position: absolute; overflow: hidden;'
+        });
+
+        var fileInput = fileInputContainer.createChild({
+            tag: 'input',
+            type: 'file',
+            multiple: 'multiple',
+            style: 'opacity: 0; cursor: pointer; '
+        });
+        fileInput.on('change', function(ev, dom) {
+            if (dom.files) {
+                this.html5UploadFiles(dom.files);
+                dom.value = ''; //leeren, damit gleiche datei nochmal gewählt werden kann
             }
-            this.swfu = new Kwf.Utils.SwfUpload({
-                fileSizeLimit: this.fileSizeLimit,
-                allowOnlyImages: this.allowOnlyImages,
-                buttonPlaceholderId: container.id,
-                postParams: {
-                    maxResolution: this.maxResolution
-                },
-                buttonText: trlKwf('Upload Files'),
-                selectMultiple: true
-            });
-            this.swfu.on('fileQueued', function(file) {
-                if (!this.numFiles) this.numFiles = 0;
-                this.numFiles++;
+        }, this);
 
-                if (this.maxNumberOfFiles!==null && this.numFiles > this.maxNumberOfFiles) {
-                    this.running = false;
-                    if (this.progress) this.progress.hide();
-                    if (this._maxEntriesAlertVisible) return;
-                    this._maxEntriesAlertVisible = true;
-                    Ext2.Msg.alert(trlKwf('Error'), this.maxEntriesErrorMessage, function() {
-                        this._maxEntriesAlertVisible = false;
-                    }, this);
-                    return;
-                }
-
-                if (this.running) {
-                    return;
-                }
-
-                this.uploadedIds = [];
-                this.running = true;
-                this.startFileIndex = this.numFiles-1;
-                this.progress = Ext2.MessageBox.show({
-                    title : trlKwf('Upload'),
-                    msg : trlKwf('Uploading files'),
-                    buttons: false,
-                    progress:true,
-                    closable:false,
-                    minWidth: 250,
-                    buttons: Ext2.MessageBox.CANCEL,
-                    scope: this,
-                    fn: function(button) {
-                        for(var i=this.startFileIndex;i<this.numFiles;i++) {
-                            this.swfu.cancelUpload(this.swfu.getFile(i));
-                        }
-                        this.running = false;
-                    }
-                });
-                this.swfu.startUpload(file.id);
-            }, this);
-            this.swfu.on('uploadProgress', function(file, done, total) {
-                var total = 0;
-                var sumDone = 0;
-                for(var i=this.startFileIndex;i<this.numFiles;i++) {
-                    var f = this.swfu.getFile(i)
-                    total += f.size;
-                    if (f.id == file.id) {
-                        sumDone += done;
-                    } else if (f.filestatus != SWFUpload.FILE_STATUS.QUEUED) {
-                        sumDone += f.size;
-                    }
-                }
-                this.progress.updateProgress(sumDone/total - 0.1);
-            }, this);
-            this.swfu.on('uploadSuccess', function(file, r) {
-                this.uploadedIds.push(r.value.uploadId);
-
-                for(var i=this.startFileIndex;i<this.numFiles;i++) {
-                    if (this.swfu.getFile(i).filestatus == SWFUpload.FILE_STATUS.QUEUED) {
-                        //neeext
-                        this.swfu.startUpload(this.swfu.getFile(i).id);
-                        return;
-                    }
-                }
-                this.running = false;
-                this.progress.updateProgress(0.9);
-
-                var params = Ext2.apply(this.baseParams, { uploadIds: this.uploadedIds.join(',')});
-                Ext2.Ajax.request({
-                    url: this.controllerUrl+'/json-multi-upload',
-                    params: params,
-                    success: function() {
-                        this.progress.hide();
-                        this.fireEvent('uploaded');
-                    },
-                    failure: function() {
-                        this.progress.hide();
-                    },
-                    scope: this
-                })
-            }, this);
-            this.swfu.on('uploadError', function(file, errorCode, errorMessage) {
-                this.progress.hide();
-            }, this);
-        } else {
-            container.setStyle('position', 'relative');
-            this.uploadButton = new Ext2.Button({
-                text: trlKwf('Upload Files'),
-                cls: 'x2-btn-text-icon',
-                icon: '/assets/silkicons/add.png',
-                renderTo: container
-            });
-
-            var fileInputContainer = container.createChild({
-                style: 'width: 120px; height: 20px; top: 0; position: absolute; overflow: hidden;'
-            });
-
-            var fileInput = fileInputContainer.createChild({
-                tag: 'input',
-                type: 'file',
-                multiple: 'multiple',
-                style: 'opacity: 0; cursor: pointer; '
-            });
-            fileInput.on('change', function(ev, dom) {
-                if (dom.files) {
-                    this.html5UploadFiles(dom.files);
-                    dom.value = ''; //leeren, damit gleiche datei nochmal gewählt werden kann
-                }
-            }, this);
-
-            this.el.on('dragenter', function(e) {
-                e.browserEvent.stopPropagation();
-                e.browserEvent.preventDefault();
-            }, this);
-            this.el.on('dragover', function(e) {
-                e.browserEvent.stopPropagation();
-                e.browserEvent.preventDefault();
-            }, this);
-            this.el.on('drop', function(e) {
-                e.browserEvent.stopPropagation();
-                e.browserEvent.preventDefault();
-                if (e.browserEvent.dataTransfer) {
-                    this.html5UploadFiles(e.browserEvent.dataTransfer.files);
-                }
-            }, this);
-        }
+        this.el.on('dragenter', function(e) {
+            e.browserEvent.stopPropagation();
+            e.browserEvent.preventDefault();
+        }, this);
+        this.el.on('dragover', function(e) {
+            e.browserEvent.stopPropagation();
+            e.browserEvent.preventDefault();
+        }, this);
+        this.el.on('drop', function(e) {
+            e.browserEvent.stopPropagation();
+            e.browserEvent.preventDefault();
+            if (e.browserEvent.dataTransfer) {
+                this.html5UploadFiles(e.browserEvent.dataTransfer.files);
+            }
+        }, this);
     },
     html5UploadFiles: function(files)
     {
@@ -243,9 +144,6 @@ Kwf.Utils.MultiFileUploadPanel = Ext2.extend(Ext2.Panel,
             },
             scope: this
         });
-    },
-    onDestroy: function() {
-        if (this.swfu) this.swfu.destroy();
     },
 
     applyBaseParams: function(baseParams)

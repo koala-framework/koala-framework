@@ -61,6 +61,14 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         return $this->_getChildPagesRecursive($sortedCategoryComponents, 2);
     }
 
+    protected function _showPage(Kwf_Component_Data $page)
+    {
+        if ($page->getDeviceVisible() == Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE) {
+            return false;
+        }
+        return true;
+    }
+
     protected function _getChildPagesRecursive($parentPage, $levels)
     {
         $levels--;
@@ -69,28 +77,28 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         if (!is_array($parentPage)) $parentPage = array($parentPage);
         foreach ($parentPage as $component) {
             $pages = $component->getChildPages(array('showInMenu'=>true));
-            foreach($pages as $page) {
-                if ($page->getDeviceVisible() == Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE
-                ) {
+            foreach ($pages as $page) {
+                if (!$this->_showPage($page)) {
                     continue;
                 }
 
                 $ret[$i]['name'] = $page->name;
                 $ret[$i]['url'] = $page->url;
                 $ret[$i]['id'] = $page->componentId;
+
                 if ($levels > 0) {
                     $ret[$i]['children'] = $this->_getChildPagesRecursive($page, $levels);
                     $ret[$i]['hasChildren'] = !empty($ret[$i]['children']);
                 } else {
-                    foreach($page->getChildPages(array('showInMenu'=>true)) as $page) {
-                        if ($page->getDeviceVisible() == Kwf_Component_Data::DEVICE_VISIBLE_HIDE_ON_MOBILE
-                        ) {
+                    foreach ($page->getChildPages(array('showInMenu'=>true)) as $page) {
+                        if (!$this->_showPage($page)) {
                             continue;
                         }
                         $ret[$i]['hasChildren'] = true;
                         break;
                     }
                 }
+
 
                 if (Kwc_Abstract::getSetting($this->_getParam('class'), 'showSelectedPageInList') && !empty($ret[$i]['children']) &&
                     !is_instance_of($page->componentClass, 'Kwc_Basic_LinkTag_FirstChildPage_Component')) {

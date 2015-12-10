@@ -1,7 +1,7 @@
 @import "compass/css3/transition";
 
 .cssClass {
-    .mobileOverlay {
+    .mobileOverlayOpen, .mobileOverlayClose {
         display: none;
     }
 
@@ -11,7 +11,7 @@
         @include transition-property(all);
         @include transition-duration(.24s);
 
-        .mobileOverlay {
+        .mobileOverlayOpen {
             background: rgba(0, 0, 0, 0.7);
             position: absolute;
             text-align: center;
@@ -57,7 +57,7 @@
         }
 
         @media (max-width: 800px) {
-            .container {
+            > .container {
                 height: 50vh !important;
             }
         }
@@ -70,15 +70,21 @@
             margin: 0 calc((100% - 100vw) / 2);
             z-index: 45;
 
-            .navigateIcon {
+            .mobileOverlayClose {
+                display: block;
+            }
+
+            .mobileOverlayOpen {
                 display: none;
             }
 
-            .mobileOverlay {
+            .mobileOverlayClose {
                 background: rgba(0, 0, 0, 0.9);
-                bottom: 35px;
-                height: 40px;
-                width: 150px;
+                position: fixed;
+                bottom: 85px;
+                height: 30px;
+                width: 120px;
+                z-index: 1;
                 left: auto;
                 right: 5px;
                 top: auto;
@@ -88,16 +94,12 @@
                 top: 50%;
             }
 
-            .container {
+            > .container {
                 height: 100vh !important;
             }
 
-            .tapToNav {
-                display: none;
-            }
-
             .tapToScroll {
-                background: url('/assets/kwf/Kwc/Advanced/GoogleMapView/closeIcon.png') no-repeat center right transparent;
+                background: url('/assets/kwf/Kwc/Directories/List/ViewMap/closeIcon.png') no-repeat center right transparent;
                 background-size: 16px 16px;
                 padding-right: 24px;
                 display: inline;
@@ -106,7 +108,7 @@
     }
 
     &.gt700 {
-        .mobileOverlay {
+        .mobileOverlayOpen, .mobileOverlayClose {
             display: none;
         }
     }
