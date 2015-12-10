@@ -110,37 +110,13 @@ class Kwf_Assets_Package
 
     public function warmupDependencyCaches($dep, $language, $progress = null)
     {
-        $cacheId = $dep->getIdentifier();
+        $cacheId = 'filtered-'.$dep->getIdentifier();
         if ($dep->usesLanguage()) {
             $cacheId .= '-'.$language;
         }
 
-        $cacheIsFresh = true;
-        $cacheFile = 'cache/assetdeps/'.md5($cacheId);
-        if (!file_exists($cacheFile) || !file_exists($cacheFile.'.masterFiles')) {
-            $cacheIsFresh = false;
-        } else {
-            $masterFiles = json_decode(file_get_contents($cacheFile.'.masterFiles'), true);
-            $mtime = filemtime($cacheFile);
-            foreach ($masterFiles as $i) {
-                if ($i['md5']) {
-                    if (!file_exists($i['file']) || md5_file($i['file']) != $i['md5']) {
-                        //file was modified or deleted
-                        $cacheIsFresh = false;
-                        break;
-                    }
-                } else {
-                    if (file_exists($i['file'])) {
-                        //file didn't exist, was created
-                        $cacheIsFresh = false;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (!$cacheIsFresh) {
-            if (file_exists($cacheFile.'.masterFiles')) unlink($cacheFile.'.masterFiles');
+        $ret = Kwf_Assets_ContentsCache::getInstance()->load($cacheId);
+        if ($ret === false) {
 
             $ret = $dep->getContentsPacked($language);
             if (!$ret) {
@@ -154,28 +130,15 @@ class Kwf_Assets_Package
                     $ret = $filter->filter($ret);
                 }
             }
-            file_put_contents($cacheFile, $ret->getFileContentsInlineMap());
-
-            $mtime = filemtime($cacheFile);
-            $masterFiles = array();
-            foreach ($ret->getSources() as $f) {
-                $f = new Kwf_Assets_Dependency_File($f);
-                $f = $f->getAbsoluteFileName();
-                $masterFiles[] = array(
-                    'file' => $f,
-                    'md5' => file_exists($f) ? md5_file($f) : null
-                );
-            }
-            file_put_contents($cacheFile.'.masterFiles', json_encode($masterFiles));
+            Kwf_Assets_ContentsCache::getInstance()->save($ret, $cacheId);
         }
 
-        return $cacheFile;
+        return $ret;
     }
 
     private function _getFilterdDependencyContents($dep, $language)
     {
-        $cacheFile = $this->warmupDependencyCaches($dep, $language);
-        return Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));
+        return $this->warmupDependencyCaches($dep, $language);
     }
 
     private function _getCommonJsDeps($i, $language, &$data)
