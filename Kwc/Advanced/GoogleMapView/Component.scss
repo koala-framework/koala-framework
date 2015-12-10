@@ -12,7 +12,8 @@
         @include transition-duration(.24s);
 
         .mobileOverlayOpen {
-            background: rgba(0, 0, 0, 0.7);
+            background: url('/assets/kwf/Kwc/Advanced/GoogleMapView/navigateIcon.png') no-repeat center 106px rgba(0, 0, 0, 0.7);
+            background-size: 52px 52px;
             position: absolute;
             text-align: center;
             display: block;
@@ -99,7 +100,7 @@
             }
 
             .tapToScroll {
-                background: url('/assets/kwf/Kwc/Directories/List/ViewMap/closeIcon.png') no-repeat center right transparent;
+                background: url('/assets/kwf/Kwc/Advanced/GoogleMapView/closeIcon.png') no-repeat center right transparent;
                 background-size: 16px 16px;
                 padding-right: 24px;
                 display: inline;
