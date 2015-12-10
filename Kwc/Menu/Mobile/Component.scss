@@ -13,6 +13,29 @@
         background: white;
         width: 100%;
 
+        span.kwfUp-overview {
+            display: none;
+        }
+
+        > a.kwfUp-showMenu {
+            display: block;
+            position: relative;
+            line-height: 40px;
+            color: var(mainColor);
+            float: right;
+            width: 52px;
+            z-index: 1;
+            top: 0px;
+            @include transition-delay(0.4s);
+            @include transition-property(all);
+            @include transition-duration(0s);
+            &.active {
+                background-position: left center;
+                @include transition-delay(0s);
+                @include transition-property(all);
+                @include transition-duration(0s);
+            }
+        }
         > .kwfUp-slider {
             position: relative;
 

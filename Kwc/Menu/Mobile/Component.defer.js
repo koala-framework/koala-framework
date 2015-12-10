@@ -27,7 +27,7 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
                 '<% } %>'+
                 '<% _.each(item.children, function(child) { %>'+
                     '<li class="<% if (child.hasChildren) {  %>kwfUp-hasChildren<% } else if (child.isParent) { %>kwfUp-parent<% } %>">\n' +
-                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %></a>\n'+
+                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %><% if (child.isParent) { %> <span class="kwfUp-overview">('+trlKwf('Overview')+')</span><% } %></a>\n'+
                     '</li>\n' +
                 '<% }) %>' +
             '<% } %>' +

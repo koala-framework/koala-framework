@@ -2,7 +2,7 @@
 @import "compass/css3/transition";
 
 .kwcClass {
-    .mobileOverlay {
+    .mobileOverlayOpen, .mobileOverlayClose {
         display: none;
     }
 
@@ -12,8 +12,9 @@
         @include transition-property(all);
         @include transition-duration(.24s);
 
-        .mobileOverlay {
-            background: rgba(0, 0, 0, 0.7);
+        .mobileOverlayOpen {
+            background: url('/assets/kwf/Kwc/Advanced/GoogleMapView/navigateIcon.png') no-repeat center 106px rgba(0, 0, 0, 0.7);
+            background-size: 52px 52px;
             position: absolute;
             text-align: center;
             display: block;
@@ -58,7 +59,7 @@
         }
 
         @media (max-width: 800px) {
-            .container {
+            > .container {
                 height: 50vh !important;
             }
         }
@@ -71,15 +72,21 @@
             margin: 0 calc((100% - 100vw) / 2);
             z-index: 45;
 
-            .navigateIcon {
+            .mobileOverlayClose {
+                display: block;
+            }
+
+            .mobileOverlayOpen {
                 display: none;
             }
 
-            .mobileOverlay {
+            .mobileOverlayClose {
                 background: rgba(0, 0, 0, 0.9);
-                bottom: 35px;
-                height: 40px;
-                width: 150px;
+                position: fixed;
+                bottom: 85px;
+                height: 30px;
+                width: 120px;
+                z-index: 1;
                 left: auto;
                 right: 5px;
                 top: auto;
@@ -89,12 +96,8 @@
                 top: 50%;
             }
 
-            .container {
+            > .container {
                 height: 100vh !important;
-            }
-
-            .tapToNav {
-                display: none;
             }
 
             .tapToScroll {
@@ -107,7 +110,7 @@
     }
 
     &.gt700 {
-        .mobileOverlay {
+        .mobileOverlayOpen, .mobileOverlayClose {
             display: none;
         }
     }

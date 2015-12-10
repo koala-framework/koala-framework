@@ -3,10 +3,6 @@ class Kwf_Assets_Loader
 {
     static public function load($url)
     {
-        if (strpos($url, '?') !== false) {
-            $url = substr($url, 0, strpos($url, '?'));
-        }
-        Kwf_Assets_Dispatcher::dispatch($url);
         try {
             $l = new self();
             $out = $l->getFileContents(substr($url, 8));
@@ -31,10 +27,10 @@ class Kwf_Assets_Loader
             $ret['mimeType'] = 'video/webm';
         } else if (substr($file, -4)=='.css' || substr($file, -5)=='.scss') {
             $ret['mimeType'] = 'text/css; charset=utf-8';
-            if (!Kwf_Assets_Dispatcher::allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
+            if (!Kwf_Assets_Dispatcher::getInstance()->allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
         } else if (substr($file, -3)=='.js') {
             $ret['mimeType'] = 'text/javascript; charset=utf-8';
-            if (!Kwf_Assets_Dispatcher::allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
+            if (!Kwf_Assets_Dispatcher::getInstance()->allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
         } else if (substr($file, -4)=='.swf') {
             $ret['mimeType'] = 'application/flash';
         } else if (substr($file, -4)=='.ico') {
