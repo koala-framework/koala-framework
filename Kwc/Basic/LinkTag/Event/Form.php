@@ -20,6 +20,10 @@ class Kwc_Basic_LinkTag_Event_Form extends Kwc_Abstract_Form
         $row = $this->getRow($parentRow);
         $c = Kwf_Component_Data_Root::getInstance()
             ->getComponentByDbId('events_'.$row->event_id, array('ignoreVisible'=>true));
-        return 'event_'.$c->parent->dbId == $this->getName();
+        if ($c) {
+            return 'event_'.$c->parent->dbId == $this->getName();
+        } else {
+            return false;
+        }
     }
 }
