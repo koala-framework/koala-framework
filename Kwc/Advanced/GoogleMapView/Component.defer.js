@@ -21,7 +21,6 @@ Kwc.Advanced.GoogleMap.renderMap = function(map) {
         if (text) cfg.markers.infoHtml = text.dom.innerHTML;
     }
 
-    var myMap = new Kwf.GoogleMap.Map(cfg);
     var cls = eval(cfg.mapClass) || Kwf.GoogleMap.Map;
     var myMap = new cls(cfg);
     map.map = myMap;
