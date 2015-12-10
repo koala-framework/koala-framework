@@ -32,13 +32,6 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         //as we don't support them anymore drop them
         $ret = preg_replace('#[^/]\\*[a-z-]+:[^;}]+#', '', $ret);
 
-        if (strpos($ret, 'kwfUp-') !== false) {
-            if (Kwf_Config::getValue('application.uniquePrefix')) {
-                $ret = str_replace('kwfUp-', Kwf_Config::getValue('application.uniquePrefix').'-', $ret);
-            } else {
-                $ret = str_replace('kwfUp-', '', $ret);
-            }
-        }
         return $ret;
     }
 

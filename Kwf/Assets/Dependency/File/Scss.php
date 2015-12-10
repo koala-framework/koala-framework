@@ -138,14 +138,6 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         $map = new Kwf_SourceMaps_SourceMap(file_get_contents("{$buildFile}.map"), $ret);
         $map->setMimeType('text/css');
 
-        if (strpos($ret, 'kwfUp-') !== false) {
-            if (Kwf_Config::getValue('application.uniquePrefix')) {
-                $map->stringReplace('kwfUp-', Kwf_Config::getValue('application.uniquePrefix').'-');
-            } else {
-                $map->stringReplace('kwfUp-', '');
-            }
-        }
-
         unlink($buildFile);
         unlink("{$buildFile}.map");
 
