@@ -217,11 +217,6 @@ class Kwf_Util_Setup
             $ret .= "\nif (php_sapi_name() != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
-        $ret .= "if (isset(\$_POST['PHPSESSID'])) {\n";
-        $ret .= "    //für swfupload\n";
-        $ret .= "    Zend_Session::setId(\$_POST['PHPSESSID']);\n";
-        $ret .= "}\n";
-
         /*
         if (isset($_COOKIE['unitTest'])) {
             //$config->debug->benchmark = false;
