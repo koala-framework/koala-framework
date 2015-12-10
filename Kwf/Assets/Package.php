@@ -172,7 +172,7 @@ class Kwf_Assets_Package
         //TODO support larger css with multiple parts
         $partNumber = 0;
 
-        $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($this, $ext, $language, $partNumber);
+        $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($this, $ext, $language, $partNumber);
         $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
         if ($ret === false || $ret === 'outdated') {
             if ($ret === 'outdated' && Kwf_Config::getValue('assets.lazyBuild') == 'outdated') {
@@ -273,7 +273,7 @@ class Kwf_Assets_Package
         if ($mimeType == 'text/javascript') {
             $ret = str_replace(
                 '{$application.assetsVersion}',
-                Kwf_Assets_Dispatcher::getAssetsVersion(),
+                Kwf_Assets_Dispatcher::getInstance()->getAssetsVersion(),
                 $ret);
         }
 
@@ -308,7 +308,7 @@ class Kwf_Assets_Package
     public function getPackageUrl($ext, $language, $partNumber)
     {
         return Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
-            .'/'.$language.'/'.$partNumber.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
+            .'/'.$language.'/'.$partNumber.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getInstance()->getAssetsVersion();
     }
 
     public function getPackageUrlsCacheId($mimeType, $language)
