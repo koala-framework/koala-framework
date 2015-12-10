@@ -22,6 +22,12 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 
     public function getContentsPacked($language)
     {
+        $cacheId = 'scss-'.$this->getIdentifier();
+        $ret = Kwf_Assets_ContentsCache::getInstance()->load($cacheId);
+        if ($ret !== false) {
+            return $ret;
+        }
+
         $fileName = $this->getAbsoluteFileName();
         static $loadPath;
         if (!isset($loadPath)) {
@@ -142,6 +148,8 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 
         unlink($buildFile);
         unlink("{$buildFile}.map");
+
+        Kwf_Assets_ContentsCache::getInstance()->save($map, $cacheId);
 
         return $map;
     }
