@@ -53,7 +53,6 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
     l.initialize();
     l.closeHref = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
     l.contentEl = l.innerLightboxEl.find('.kwfUp-kwfLightboxContent');
-    $('html').addClass('kwfUp-kwfLightboxActive');
     l.style.afterCreateLightboxEl();
     l.style.onContentReady();
     el[0].kwfLightbox = l;
