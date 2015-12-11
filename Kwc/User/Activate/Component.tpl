@@ -2,7 +2,7 @@
     <h1><?=$this->data->trlKwf('Activate Useraccount')?></h1>
     <? if ($this->showPassword) { ?>
     <div class="form">
-        <h2><?=trlKwf('Set Password')?>:</h2>
+        <h2><?=$this->data->trlKwf('Set password')?>:</h2>
         <p>
             <?=$this->data->trlKwf('Plese enter in both fields the password which you want to use for your useraccount')?>.<br />
             <?=$this->data->trlKwf('After the activation you are automatically logged in and you could use your account.')?>
@@ -11,7 +11,7 @@
     </div>
     <? } ?>
     <? if ($this->redirects) { ?>
-        <h2><?=trlKwf('Activate with')?>:</h2>
+        <h2><?=$this->data->trlKwf('Activate with')?>:</h2>
         <ul class="redirects">
         <?php foreach ($this->redirects as $r) { ?>
             <li>
