@@ -24,4 +24,11 @@ class Kwf_Assets_Filter_Css_PrefixerKeyframes extends Kwf_Assets_Filter_Css_Abst
             'prefix' => $this->_prefix
         );
     }
+
+    public function getMasterFiles()
+    {
+        return array(
+            getcwd().'/'.KWF_PATH.'/node_modules/postcss-prefixer-keyframes/package.json'
+        );
+    }
 }

@@ -24,4 +24,11 @@ class Kwf_Assets_Filter_Css_SelectorReplace extends Kwf_Assets_Filter_Css_Abstra
             'replacements' => $this->_replacements
         );
     }
+
+    public function getMasterFiles()
+    {
+        return array(
+            getcwd().'/'.KWF_PATH.'/Kwf/Assets/Filter/Css/SelectorReplace.js'
+        );
+    }
 }

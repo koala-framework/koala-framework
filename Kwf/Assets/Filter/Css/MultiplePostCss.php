@@ -24,6 +24,15 @@ class Kwf_Assets_Filter_Css_MultiplePostCss extends Kwf_Assets_Filter_Abstract
         foreach ($this->_filters as $f) {
             $pluginsInitCode .= "plugins.push(require('".$f->getPluginName()."')(".json_encode((object)$f->getPluginOptions())."));\n";
         }
-        return Kwf_Assets_Filter_Css_PostCssRunner::run($pluginsInitCode, $sourcemap);
+        $ret = Kwf_Assets_Filter_Css_PostCssRunner::run($pluginsInitCode, $sourcemap);
+
+        $sources = $ret->getSources();
+        foreach ($this->_filters as $f) {
+            foreach ($f->getMasterFiles() as $file) {
+                if (!in_array($file, $sources)) $ret->addSource($file);
+            }
+        }
+
+        return $ret;
     }
 }
