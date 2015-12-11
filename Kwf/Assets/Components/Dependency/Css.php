@@ -20,7 +20,7 @@ class Kwf_Assets_Components_Dependency_Css extends Kwf_Assets_Components_Depende
                 $replacements['kwcBem--'] = '';
                 $replacements['kwcBem__'] = '';
             }
-            $replacements['.kwcClass'] = '.'.$this->_getKwcClass();
+            $replacements['kwcClass'] = $this->_getKwcClass();
             $filter = new Kwf_Assets_Filter_Css_SelectorReplace($replacements);
             $c = $filter->filter($c);
 
