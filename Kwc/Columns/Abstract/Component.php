@@ -1,8 +1,7 @@
 <?php
 class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
 {
-    public static $needsParentComponentClass = true;
-    public static function getSettings($parentComponentClass)
+    public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Columns');
@@ -13,10 +12,11 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
 
         $ret['generators']['child'] = array(
             'class' => 'Kwc_Columns_Abstract_Generator',
-            'component' => $parentComponentClass
+            'component' => 'Kwc_Paragraphs_Component'
         );
         $ret['extConfig'] = 'Kwc_Columns_Abstract_ExtConfig';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Columns/Abstract/List.js';
+        $ret['layoutClass'] = 'Kwc_Columns_Abstract_Layout';
 
         $columnsTrl = trlKwfStatic('Columns');
         $ret['columns'] = array(
@@ -108,24 +108,13 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
         $ret['rootElementClass'] .= " col{$type}";
         foreach($ret['listItems'] as $key => $value) {
             $cls = " span{$columns['colSpans'][$i-1]}";
-            if ($i == 1) $cls .= " lineFirst";
-            if ($i == count($columns['colSpans'])) $cls .= " lineLast";
+            if ($i == 1) $cls .= " ".$this->_getBemClass("listItem--lineFirst", "lineFirst");
+            if ($i == count($columns['colSpans'])) $cls .= " ".$this->_getBemClass("listItem--lineLast", "lineLast");
             $ret['listItems'][$key]['class'] .= $cls;
             ($i == count($columns['colSpans'])) ? $i = 1 : $i++;
             if (!$ret['listItems'][$key]['data']->hasContent()) {
                 $ret['listItems'][$key]['class'] .= ' emptyContent';
             }
-        }
-        return $ret;
-    }
-
-    protected function _getChildContentWidth(Kwf_Component_Data $child)
-    {
-        $ownWidth = parent::_getChildContentWidth($child);
-        $widthCalc = $child->row->col_span / $child->row->columns;
-        $ret = floor($ownWidth * $widthCalc);
-        if ($ret < 480) {
-            $ret = min($ownWidth, 480);
         }
         return $ret;
     }

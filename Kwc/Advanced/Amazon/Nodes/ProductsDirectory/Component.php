@@ -10,7 +10,7 @@ class Kwc_Advanced_Amazon_Nodes_ProductsDirectory_Component extends Kwc_Director
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         throw new Kwf_Exception_NotFound();
     }

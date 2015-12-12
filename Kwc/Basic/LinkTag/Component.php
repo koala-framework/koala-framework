@@ -20,6 +20,7 @@ class Kwc_Basic_LinkTag_Component extends Kwc_Abstract_Cards_Component
             'download' => 'Kwc_Basic_DownloadTag_Component'
         );
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Basic/LinkTag/ComboBox.js';
+        $ret['flags']['noIndex'] = true; //don't include in sitemap.xml
         $cc = Kwf_Registry::get('config')->kwc->childComponents;
         if (isset($cc->Kwc_Basic_LinkTag_Component)) {
             $ret['generators']['child']['component'] = array_merge(
@@ -38,9 +39,9 @@ class Kwc_Basic_LinkTag_Component extends Kwc_Abstract_Cards_Component
         }
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['linkTag'] = $ret['child'];
         return $ret;
     }

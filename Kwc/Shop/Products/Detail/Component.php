@@ -25,9 +25,9 @@ class Kwc_Shop_Products_Detail_Component extends Kwc_Directories_Item_Detail_Com
         $item->currentPrice = $item->row->current_price;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['addToCart'] = $this->getData()->getChildComponent('-addToCart');
         $ret['currentPrice'] = $this->getData()->row->current_price;
         return $ret;

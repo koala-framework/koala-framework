@@ -29,6 +29,7 @@ class Kwc_Paragraphs_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
     {
         $componentList = array();
         $componentIcons = array();
+        $supportedMasterLayoutContexts = array();
         $categories = Kwc_Abstract::getSetting($this->_class, 'categories');
         foreach ($categories as $k=>$i) {
             $categories[$k] = Kwf_Registry::get('trl')->trlStaticExecute($i);
@@ -59,6 +60,7 @@ class Kwc_Paragraphs_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
                 }
                 $this->_componentNameToArray($name, $component, $componentList);
                 $componentIcons[$component] = $icon;
+                $supportedMasterLayoutContexts[$component] = Kwf_Component_Layout_Abstract::getInstance($component)->getSupportedContexts();
             }
         }
 
@@ -80,6 +82,7 @@ class Kwc_Paragraphs_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
         $config['showDeviceVisible'] = Kwc_Abstract::getSetting($this->_class, 'useMobileBreakpoints');
         $config['components'] = $componentList;
         $config['componentIcons'] = $componentIcons;
+        $config['supportedMasterLayoutContexts'] = $supportedMasterLayoutContexts;
         $config['needsComponentPanel'] = true;
         return array(
             'paragraphs' => $config

@@ -36,6 +36,14 @@ class Kwf_Assets_Package
         return $this->_dependency;
     }
 
+    /**
+     * @return Kwf_Assets_ProviderList_Abstract
+     */
+    public function getProviderList()
+    {
+        return $this->_providerList;
+    }
+
     public function getMaxMTimeCacheId($mimeType)
     {
         $ret = $this->_getCacheId($mimeType);
@@ -94,7 +102,7 @@ class Kwf_Assets_Package
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
 
-        $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($this, $ext, $language);
+        $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($this, $ext, $language);
         $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
         if ($ret === false || $ret === 'outdated') {
             if ($ret === 'outdated' && Kwf_Config::getValue('assets.lazyBuild') == 'outdated') {
@@ -143,6 +151,10 @@ class Kwf_Assets_Package
             } else {
                 throw new Kwf_Exception_NotFound();
             }
+        }
+
+        foreach ($this->_providerList->getProviders() as $provider) {
+            $provider->initialize();
         }
 
         $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
@@ -243,7 +255,7 @@ class Kwf_Assets_Package
     public function getPackageUrl($ext, $language)
     {
         return Kwf_Setup::getBaseUrl().'/assets/dependencies/'.get_class($this).'/'.$this->toUrlParameter()
-            .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getAssetsVersion();
+            .'/'.$language.'/'.$ext.'?v='.Kwf_Assets_Dispatcher::getInstance()->getAssetsVersion();
     }
 
     public function getPackageUrlsCacheId($mimeType, $language)

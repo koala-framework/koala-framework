@@ -111,9 +111,9 @@ class Kwf_Controller_Action_Cli_Web_ScaffoldController extends Kwf_Controller_Ac
         }
         $templateVars = '';
         if ($create['js']['config']) {
-            $templateVars .= "    public function getTemplateVars()\n";
+            $templateVars .= "    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)\n";
             $templateVars .= "    {\n";
-            $templateVars .= "        \$ret = parent::getTemplateVars();\n";
+            $templateVars .= "        \$ret = parent::getTemplateVars($renderer);\n";
             $templateVars .= "        \$ret['config'] = array();\n";
             $templateVars .= "        return \$ret;\n";
             $templateVars .= "    }\n";

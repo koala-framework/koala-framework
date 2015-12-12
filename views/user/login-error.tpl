@@ -1,4 +1,4 @@
-<div class="content loginError">
+<div class="kwfUp-content kwfUp-loginError">
     <h1><?=trlKwf('Login Error')?></h1>
     <p>
         <?=$this->errorMessage?>

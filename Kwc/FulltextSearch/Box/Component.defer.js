@@ -37,7 +37,7 @@ var FulltextSearchBoxComponent = function(el, config) {
 
     if (location.pathname == config.searchUrl) {
         //we are already on search page; nothing to do
-        this.searchMainContent = Ext2.select('.kwfMainContent').first();
+        this.searchMainContent = Ext2.select('.kwfUp-kwfMainContent').first();
         historyState.currentState.searchBoxValues = this.searchForm.getValues();
         historyState.currentState.searchVisible = true;
         historyState.updateState();
@@ -62,7 +62,7 @@ var FulltextSearchBoxComponent = function(el, config) {
     }, this);
 
     historyState.currentState.searchVisible = false;
-    this.previousMainContent = Ext2.select('.kwfMainContent').first();
+    this.previousMainContent = Ext2.select('.kwfUp-kwfMainContent').first();
 };
 
 FulltextSearchBoxComponent.prototype =
@@ -112,11 +112,11 @@ FulltextSearchBoxComponent.prototype =
 
     loadSearch: function(params)
     {
-        this.previousMainContent = Ext2.select('.kwfMainContent').first();
+        this.previousMainContent = Ext2.select('.kwfUp-kwfMainContent').first();
         this.previousMainContent.enableDisplayMode('block');
         this.previousMainContent.hide();
         this.loadingContent = this.el.createChild({
-            cls: 'kwfMainContent loadingContent',
+            cls: 'kwfUp-kwfMainContent loadingContent',
             tag: 'div',
             style: 'width: ' + this.previousMainContent.getStyle('width'),
             html: '<div class="loading"></div>'
@@ -131,7 +131,7 @@ FulltextSearchBoxComponent.prototype =
             success: function(response, options) {
                 this.loadingContent.remove();
                 this.searchMainContent = this.el.createChild({
-                    cls: 'kwfMainContent',
+                    cls: 'kwfUp-kwfMainContent',
                     tag: 'div',
                     style: 'width: ' + this.previousMainContent.getStyle('width'),
                     html: response.responseText

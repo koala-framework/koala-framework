@@ -1,66 +1,48 @@
-var onReady = require('kwf/on-ready-ext2');
+var onReady = require('kwf/on-ready');
 var statistics = require('kwf/statistics');
 var $ = require('jQuery');
 
-onReady.onRender('div.kwfTabs', function tabs(el) {
-    el.tabsObject = new Kwf.Tabs(el);
+onReady.onRender('div.kwfUp-kwfTabs', function tabs(el) {
+    el.tabsObject = new Tabs(el);
 });
 
-
-Kwf.Tabs = function(el) {
-    /*
-    this.addEvents({
-        'beforeTabActivate': true,
-        'tabActivate': true
-    });
-    */
-
+var Tabs = function(el) {
     this.el = el;
-    this.el.addClass('kwfTabsFx');
+    this.el.addClass('kwfUp-kwfTabsFx');
     this._activeTabIdx = null;
-    this.switchEls = Ext2.query('> .kwfTabsLink', this.el.dom);
-    this.contentEls = Ext2.query('> .kwfTabsContent', this.el.dom);
+    this.switchEls = this.el.find('> .kwfUp-kwfTabsLink');
+    this.contentEls = this.el.find('> .kwfUp-kwfTabsContent');
     this.fxDuration = .5;
 
-    this.tabsContents = this.el.createChild({
-        tag: 'div', cls: 'kwfTabsContents', 'data-width': '100%'
-    }, this.el.first());
-    var tabsLinks = this.el.createChild({
-        tag: 'div', cls: 'kwfTabsLinks'
-    }, this.tabsContents);
+    var tabsLinks = $('<div class="kwfUp-kwfTabsLinks"></div>').appendTo(this.el.first());
+    this.tabsContents = $('<div class="kwfUp-kwfTabsContents" data-width="100%"></div>').appendTo(this.el.first());
 
     for (var i = 0; i < this.contentEls.length; i++) {
-        this.tabsContents.appendChild(this.contentEls[i]);
+        this.tabsContents.append(this.contentEls[i]);
     }
 
     var activeTabIdx = false;
     for (var i = 0; i < this.switchEls.length; i++) {
-        tabsLinks.appendChild(this.switchEls[i]);
-        var swEl = Ext2.get(this.switchEls[i]);
+        tabsLinks.append(this.switchEls[i]);
+        var swEl = $(this.switchEls[i]);
 
-        Ext2.get(this.contentEls[i]).enableDisplayMode('block');
-        Ext2.get(this.contentEls[i]).setVisible(false);
-        Ext2.get(this.switchEls[i]).removeClass('kwfTabsLinkActive');
+        $(this.contentEls[i]).hide();
+        $(this.switchEls[i]).removeClass('kwfUp-kwfTabsLinkActive');
 
         // if it is important, show on startup
-        if (Ext2.get(this.contentEls[i]).child('.kwfUp-kwfImportant')) {
+        if ($(this.contentEls[i]).children('.kwfUp-kwfImportant').length) {
             activeTabIdx = i;
         }
 
-        if (activeTabIdx === false && Ext2.get(this.contentEls[i]).hasClass('kwfTabsContentActive')) {
+        if (activeTabIdx === false && $(this.contentEls[i]).hasClass('kwfUp-kwfTabsContentActive')) {
             activeTabIdx = i;
-            Ext2.get(this.contentEls[i]).removeClass('kwfTabsContentActive');
+            $(this.contentEls[i]).removeClass('kwfUp-kwfTabsContentActive');
         }
 
-        swEl.on('click', function() {
-            this.tabsObject.activateTab(this.idx);
-        }, { tabsObject: this, idx: i } );
+        swEl.click({ idx: i }, (function(e) {
+            this.el.tabsObject.activateTab(e.data.idx);
+        }).bind(this));
     }
-
-
-    tabsLinks.createChild({
-        tag: 'div', cls: 'clear'
-    });
 
     //show first tab as default
     if (activeTabIdx === false && this.switchEls.length) {
@@ -68,24 +50,24 @@ Kwf.Tabs = function(el) {
     }
 
     if (activeTabIdx !== false) {
-        Ext2.get(this.switchEls[activeTabIdx]).addClass('kwfTabsLinkActive');
-        Ext2.get(this.contentEls[activeTabIdx]).setVisible(true);
+        $(this.switchEls[activeTabIdx]).addClass('kwfUp-kwfTabsLinkActive');
+        $(this.contentEls[activeTabIdx]).show();
         this._activeTabIdx = activeTabIdx;
     }
 };
 
-Kwf.Tabs.prototype = {
+Tabs.prototype = {
 
     on: function(event, cb, scope)
     {
         if (typeof scope != 'undefined') cb = cb.bind(scope);
-        $(this.el.dom).on('kwfUp-tabs-'+event, cb);
+        $(this.el).on('kwfUp-tabs-'+event, cb);
     },
 
     fireEvent: function(event)
     {
         var args = [].shift.call(arguments);
-        $(this.el.dom).trigger('kwfUp-tabs-'+event, args);
+        $(this.el).trigger('kwfUp-tabs-'+event, args);
     },
 
     activateTab: function(idx) {
@@ -93,66 +75,57 @@ Kwf.Tabs.prototype = {
         this.fireEvent('beforeTabActivate', this, idx, this._activeTabIdx);
         if (this._activeTabIdx == idx) return;
 
-        var newContentEl = Ext2.get(this.contentEls[idx]);
-        Ext2.get(this.switchEls[idx]).addClass('kwfTabsLinkActive');
-        newContentEl.setStyle('z-index', '1');
-        newContentEl.setOpacity(1);
-        newContentEl.setVisible(true);
-        newContentEl.addClass('kwfTabsContentActive');
+        var newContentEl = $(this.contentEls[idx]);
+        $(this.switchEls[idx]).addClass('kwfUp-kwfTabsLinkActive');
+        newContentEl.css('z-index', '1');
+        newContentEl.show();
+        newContentEl.addClass('kwfUp-kwfTabsContentActive');
 
-        var oldContentEl = Ext2.get(this.contentEls[this._activeTabIdx]);
+        var oldContentEl = $(this.contentEls[this._activeTabIdx]);
 
-        oldContentEl.stopFx();
-        newContentEl.stopFx();
-        this.tabsContents.stopFx();
+        oldContentEl.stop();
+        newContentEl.stop();
+        this.tabsContents.stop();
         if (this._activeTabIdx !== null) {
-            Ext2.get(this.switchEls[this._activeTabIdx]).removeClass('kwfTabsLinkActive');
-            oldContentEl.setStyle({
+            $(this.switchEls[this._activeTabIdx]).removeClass('kwfUp-kwfTabsLinkActive');
+            oldContentEl.css({
                 'z-index': 2,
                 'position': 'absolute'
             });
-            newContentEl.setStyle({
+            newContentEl.css({
                 'z-index': 1,
                 'position': 'absolute'
             });
             onReady.callOnContentReady(this.contentEls[idx], {newRender: false});
-            oldContentEl.setVisible(false);
+            oldContentEl.hide();
         }
         if (this._activeTabIdx !== null) {
-            oldContentEl.setVisible(true);
+            oldContentEl.show();
+
+            newContentEl.show();
+            onReady.callOnContentReady(this.el, {action: 'show'});
+            newContentEl.hide();
 
             newContentEl.fadeIn({
                 duration: this.fxDuration,
-                callback: function(el) {
-                    el.parent().setStyle('height', 'auto');     //set the height after animation to auto because there are Components who change height when they are inside a tab
+                complete: function() {
+                    $(this).closest().css('height', 'auto');     //set the height after animation to auto because there are Components who change height when they are inside a tab
                 }
             });
             oldContentEl.fadeOut({
                 duration: this.fxDuration,
-                callback: function(el) {
-                    this.oldEl.setStyle('position', 'static');
-                    this.oldEl.removeClass('kwfTabsContentActive');
-
-                    this.newEl.setStyle('position', 'static');
-                    this.newEl.setVisible(true);
-                    this.newEl.setOpacity(1);
-                    this.newEl.setStyle('height', 'auto');
-                },
-                scope: {
-                    oldEl: oldContentEl,
-                    newEl: newContentEl
+                complete: function() {
+                    oldContentEl.css('position', 'static');
+                    oldContentEl.removeClass('kwfUp-kwfTabsContentActive');
+                    newContentEl.css('position', 'static');
+                    newContentEl.show();
+                    newContentEl.css('height', 'auto');
                 }
             });
         }
 
-        this.tabsContents.setHeight(oldContentEl.getHeight());
-        this.tabsContents.scale(undefined, newContentEl.getHeight(), {
-            easing: 'easeOut',
-            duration: this.fxDuration,
-            callback: function(el) {
-                el.setStyle('height', 'auto');     //set the height after animation to auto because there are Components who change height when they are inside a tab
-            }
-        });
+        this.tabsContents.height(oldContentEl.height());
+        this.tabsContents.animate({ height: newContentEl.height() });
 
         // passed arguments are: tabsObject, newIndex, oldIndex
         this.fireEvent('tabActivate', this, idx, this._activeTabIdx);

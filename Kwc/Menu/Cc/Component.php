@@ -1,9 +1,9 @@
 <?php
 class Kwc_Menu_Cc_Component extends Kwc_Menu_Abstract_Cc_Component
 {
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $menu = array();
         $masterMenu = $this->getData()->chained->getComponent()->getMenuData(null, array('ignoreVisible'=>true));
         foreach ($masterMenu as $m) {

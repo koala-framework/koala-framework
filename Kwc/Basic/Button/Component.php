@@ -14,9 +14,9 @@ class Kwc_Basic_Button_Component extends Kwc_Basic_Link_Component
         return $ret;
     }
     
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['style'] = $this->_getRow()->style;
         if (!$ret['style']) {
              $ret['style'] = key($this->_getSetting('styles'));

@@ -38,9 +38,9 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['settingsRow'] = $this->_getRow();
         $ret['tableStyle'] = $this->_getRow()->table_style;
         $ret['columnCount'] = $this->getColumnCount();
@@ -120,5 +120,18 @@ class Kwc_Basic_Table_Component extends Kwc_Abstract_Composite_Component
             }
         }
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        $dataSelect = new Kwf_Model_Select();
+        $dataSelect->whereEquals('visible', 1);
+        $dataSelect->order('pos', 'ASC');
+        $rows = $this->_getRow()->getChildRows('tableData', $dataSelect);
+        if (count($rows)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

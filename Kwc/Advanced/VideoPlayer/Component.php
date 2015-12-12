@@ -7,10 +7,10 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = 'Videoplayer';
         $ret = array_merge(parent::getSettings(), array(
             'ownModel'     => 'Kwc_Advanced_VideoPlayer_Model',
             'componentName' => trlKwfStatic('Video'),
+            'componentCategory' => 'media',
             'componentIcon' => 'film',
             'extConfig' => 'Kwf_Component_Abstract_ExtConfig_Form'
         ));
@@ -100,6 +100,8 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         if ($image = $this->getData()->getChildComponent('-previewImage')) {
             $ret['imageUrl'] = $image->getComponent()->getImageUrl();
         }
+
+        $ret['cssClass'] .= ' format' . $row->format;
 
         return $ret;
     }

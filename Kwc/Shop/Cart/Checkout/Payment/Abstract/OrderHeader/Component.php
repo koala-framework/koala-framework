@@ -8,9 +8,9 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Component extends Kwc_
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['order'] = $this->_getOrder();
         $ret['paymentTypeText'] = null;
         $c = $this->getData()->parent->componentClass;

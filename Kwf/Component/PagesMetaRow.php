@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_PagesMetaRow extends Kwf_Model_Db_Row
+class Kwf_Component_PagesMetaRow extends Kwf_Model_Proxy_Row
 {
     private static function _canHaveFulltext($class)
     {
@@ -72,11 +72,22 @@ class Kwf_Component_PagesMetaRow extends Kwf_Model_Db_Row
         $this->deleted = !$page->isVisible();
         $this->page_id = $page->componentId;
         $this->expanded_component_id = $page->getExpandedComponentId();
-        $this->domain_component_id = $page->getDomainComponent()->componentId;
+        $domainCmp = $page->getDomainComponent();
+        $this->domain_component_id = $domainCmp ? $domainCmp->componentId : null;
         $this->subroot_component_id = $page->getSubroot()->componentId;
         $this->url = $page->getAbsoluteUrl();
 
-        $this->meta_noindex = $this->_getMetaNoIndex($page);
+        $this->sitemap_priority = '0.5';
+        $this->sitemap_changefreq = 'weekly';
+        $noindex = false;
+        foreach ($page->getRecursiveChildComponents(array('flag'=>'hasPageMeta')) as $c) {
+            $pageMeta = $c->getComponent()->getPageMeta();
+            $this->sitemap_priority = $pageMeta['sitemap_priority'];
+            $this->sitemap_changefreq = $pageMeta['sitemap_changefreq'];
+            $noindex = $pageMeta['noindex'];
+        }
+
+        $this->meta_noindex = $noindex || $this->_getMetaNoIndex($page);
         $this->fulltext_skip = $this->_getFulltextSkip($page);
     }
 
@@ -84,12 +95,14 @@ class Kwf_Component_PagesMetaRow extends Kwf_Model_Db_Row
     {
         if (is_numeric($this->page_id)) {
             $page = Kwf_Component_Data_Root::getInstance()->getComponentById($this->page_id, array('ignoreVisible'=>true));
-            $pages = $page->getChildPages(array(
-                'pageGenerator' => true
-            ));
-            foreach ($pages as $p) {
-                $row = $this->getModel()->getRow($p->componentId);
-                if ($row) $row->deleteRecursive();
+            if ($page) {
+                $pages = $page->getChildPages(array(
+                    'pageGenerator' => true
+                ));
+                foreach ($pages as $p) {
+                    $row = $this->getModel()->getRow($p->componentId);
+                    if ($row) $row->deleteRecursive();
+                }
             }
         }
 

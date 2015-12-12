@@ -10,6 +10,6 @@ onReady.onRender('.kwcClass', function(el) {
         button.hide();
         el.removeClass('hidePics');
 
-        Kwf.callOnContentReady(el, {action: 'show'});
+        onReady.callOnContentReady(el, {action: 'show'});
     });
 });

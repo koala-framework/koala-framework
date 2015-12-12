@@ -40,15 +40,20 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             }
 
             $f = new Kwf_Filter_StrongRandom();
-            $state = 'login-'.$postData['redirectAuth'].'-'.$f->filter(null).'-'.$redirectBackUrl;
+            $state = 'login.'.$postData['redirectAuth'].'.'.$f->filter(null).'.'.$redirectBackUrl;
 
             //save state in namespace to validate it later
             $ns = new Kwf_Session_Namespace('kwf-login-redirect');
             $ns->state = $state;
 
             $url = $auth->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
-            header("Location: ".$url);
-            exit;
+            if ($url) {
+                header("Location: ".$url);
+                exit;
+            } else {
+                echo $auth->getLoginRedirectHtml($this->_getRedirectBackUrl(), $state, $formValues);
+                exit;
+            }
         }
         if ($postData != array() && array_keys($postData) != array('redirect')) {
             $user = null;
@@ -82,9 +87,9 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
         return $url;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['register'] = $this->_getRegisterComponent();
         $ret['lostPassword'] = $this->_getLostPasswordComponent();
 

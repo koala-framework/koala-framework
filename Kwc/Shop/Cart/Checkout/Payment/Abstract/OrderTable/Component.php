@@ -8,18 +8,17 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Kwc_A
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['order'] = $this->_getOrder();
-        $ret['items'] = $ret['order']->getProductsData();
-
         $items = $ret['order']->getChildRows('Products');
         $ret['items'] = array();
         $ret['additionalOrderDataHeaders'] = array();
         foreach ($items as $i) {
-            $addComponent = Kwf_Component_Data_Root::getInstance()
-                            ->getComponentByDbId($i->add_component_id);
+            $addComponent = Kwc_Shop_AddToCartAbstract_OrderProductData::getAddComponentByDbId(
+                $i->add_component_id, $this->getData()
+            );
             $additionalOrderData = $addComponent->getComponent()->getAdditionalOrderData($i);
             foreach ($additionalOrderData as $d) {
                 if (!isset($ret['additionalOrderDataHeaders'][$d['name']])) {
@@ -29,12 +28,13 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderTable_Component extends Kwc_A
                     );
                 }
             }
+
             $ret['items'][] = (object)array(
                 'product' => $addComponent->parent,
                 'row' => $i,
                 'additionalOrderData' => $additionalOrderData,
                 'price' => $i->getProductPrice(),
-                'text' => $i->getProductText(),
+                'text' => $addComponent->getComponent()->getProductText($i),
             );
         }
 

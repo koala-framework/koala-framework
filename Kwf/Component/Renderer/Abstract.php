@@ -537,7 +537,7 @@ abstract class Kwf_Component_Renderer_Abstract
                 $id = substr($includedComponent, 0, strrpos($includedComponent, ':'));
                 $targetCmp = Kwf_Component_Data_Root::getInstance()
                     ->getComponentById($id, array('ignoreVisible' => true));
-                if ($cmp->getPage() !== $targetCmp->getPage()) {
+                if ($cmp->getInheritsParent() !== $targetCmp->getInheritsParent()) {
                     if (!in_array($includedComponent, $existingTargetIds)) {
                         $c = array(
                             'target_id' => $includedComponent,

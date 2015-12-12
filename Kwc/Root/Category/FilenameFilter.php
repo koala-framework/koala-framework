@@ -36,7 +36,7 @@ class Kwc_Root_Category_FilenameFilter extends Kwf_Filter_Row_Abstract
         if (!$unique) $unique = 1;
         while (in_array($unique, $values)) {
             if ($value) {
-                $unique = $value . '_' . ++$x;
+                $unique = $value . '-' . ++$x;
             } else {
                 $unique = ++$x;
             }

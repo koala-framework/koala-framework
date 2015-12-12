@@ -52,7 +52,6 @@ class Kwf_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('kwf_debug'));
         $this->add(new Zend_Acl_Resource('kwf_debug_session-restart'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_debug_php-info'), 'kwf_debug');
-        $this->add(new Zend_Acl_Resource('kwf_debug_requirements'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_debug_apc'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_debug_assets-dependencies'), 'kwf_debug');
         $this->add(new Zend_Acl_Resource('kwf_debug_benchmark'), 'kwf_debug');

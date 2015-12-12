@@ -1,5 +1,3 @@
-//TODO: convert to jquery
-/*
 var onReady = require('kwf/on-ready');
 var $ = require('jQuery');
 var historyState = require('kwf/history-state');
@@ -7,7 +5,8 @@ var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var statistics = require('kwf/statistics');
 var formRegistry = require('kwf/frontend-form/form-registry');
 
-(function() {
+var byComponentId = {};
+var byDirectoryViewComponentId = {};
 
 var uniqueIdCnt = 0;
 function getUniqueIdForFilterLink(el) {
@@ -20,13 +19,10 @@ function getUniqueIdForFilterLink(el) {
 
 $(document).on('click', 'a', function(event) {
     var a = $(event.currentTarget);
-
-    if (a.data('kwfViewAjaxInitDone')) return; //ignore back link
-
     if (a.data('kwc-view-ajax-filter')) {
         var config = a.data('kwc-view-ajax-filter');
 
-        var view = Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[config.viewComponentId];
+        var view = byDirectoryViewComponentId[config.viewComponentId];
         if (!view) return;
         view.loadView({
             filterComponentId: config.componentId
@@ -51,10 +47,12 @@ $(document).on('click', 'a', function(event) {
 
 });
 
-onReady.onRender('.kwcClass', function viewAjax(el, config) {
+onReady.onRender('.kwcClass', function initViewAjax(el, config) {
+
     config.el = el.find('.viewContainer')[0];
+
     el.find('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
-    el[0].kwcViewAjax = new Kwc.Directories.List.ViewAjax(config);
+    el[0].kwcViewAjax = new ViewAjax(config);
 
     var linkToTop = $('<div class="linkToTop"></div>');
     el.append(linkToTop);
@@ -83,7 +81,7 @@ historyState.on('popstate', function() {
     if (historyState.currentState.viewAjax) {
         var found = false;
         for (var componentId in historyState.currentState.viewAjax) {
-            if (Kwc.Directories.List.ViewAjax.byComponentId[componentId]) {
+            if (byComponentId[componentId]) {
                 found = true;
             }
         }
@@ -94,28 +92,25 @@ historyState.on('popstate', function() {
 }, this);
 
 
-Kwf.namespace('Kwc.Directories.List');
-Kwc.Directories.List.ViewAjax = function(config) {
+var ViewAjax = function(config) {
     $.extend(this, config);
     this.init();
 };
 
-Kwc.Directories.List.ViewAjax.byComponentId = {};
-Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId = {};
-
-Kwc.Directories.List.ViewAjax.prototype = {
+ViewAjax.prototype = {
 
     controllerUrl: null,
     loadMoreBufferPx: 700,
     initialPageSize: null,
+    minimumCharactersForFilter: 3,
 
     addHistoryEntryTimer: 0,
 
     init: function() {
         this.$el = $(this.el);
-        Kwc.Directories.List.ViewAjax.byComponentId[this.componentId] = this;
+        byComponentId[this.componentId] = this;
         if (this.directoryViewComponentId) {
-            Kwc.Directories.List.ViewAjax.byDirectoryViewComponentId[this.directoryViewComponentId] = this;
+            byDirectoryViewComponentId[this.directoryViewComponentId] = this;
         }
         this.baseParams = {
             componentId: this.componentId,
@@ -131,7 +126,8 @@ Kwc.Directories.List.ViewAjax.prototype = {
             $.extend(this.baseParams, this.searchForm.getValues());
 
             this.searchForm.on('fieldChange', function(f) {
-                if (f instanceof Kwf.FrontendForm.TextField && f.getValue().length < 3) return; //minimum length
+                var queryField = $(f.target).find('input[name="query"]');
+                if (queryField && queryField.length < this.minimumCharactersForFilter) return; //minimum length
 
                 var values = this.searchForm.getValues();
                 var diffFound = false;
@@ -256,7 +252,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
             }).bind(this));
         }
 
-        this.kwfMainContent = this.$el.closest('.kwfMainContent');
+        this.kwfMainContent = this.$el.closest('.kwfUp-kwfMainContent');
     },
 
     showView: function() {
@@ -350,13 +346,21 @@ Kwc.Directories.List.ViewAjax.prototype = {
             if (!data.rows.length) {
                 html = '<span class="noEntriesFound">'+this.placeholder.noEntriesFound+'</span>';
             } else {
-                for (var i=0; i<data.rows.length; i++) {
-                    html += "<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>";
-                }
+                html += this._renderAjaxItems(data);
             }
             this.$el.html(html);
+            this.$el.trigger('load', data);
             onReady.callOnContentReady(this.$el, { action: 'render' });
         }).bind(this));
+    },
+
+    _renderAjaxItems: function(data)
+    {
+        var html = '';
+        for (var i=0; i<data.rows.length; i++) {
+            html += "<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>";
+        }
+        return html;
     },
 
     hideDetail: function()
@@ -385,7 +389,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
         this.kwfMainContent.hide();
 
             //style: 'width: ' + this.kwfMainContent.getStyle('width'),
-        this.detailEl = $('<div class="kwfMainContent loadingContent '+classNames+'""><div class="loading"></div></div>');
+        this.detailEl = $('<div class="kwfUp-kwfMainContent loadingContent '+classNames+'""><div class="loading"></div></div>');
         this.kwfMainContent.after(this.detailEl);
 
         $.ajax({
@@ -401,11 +405,11 @@ Kwc.Directories.List.ViewAjax.prototype = {
             var directoryUrl = href.match(/(.*)\/[^/]+/)[1];
             this.detailEl.find('a').each((function(index, el) {
                 if ($(el).attr('href') == directoryUrl) {
-                    $(el).data('kwfViewAjaxInitDone', true);
                     $(el).click((function(ev) {
                         if (history.length > 1) {
                             if (Kwf.Utils.HistoryState.entries > 0 || document.referrer.indexOf(document.domain) >= 0) {
                                 ev.preventDefault();
+                                ev.stopPropagation();
                                 history.back(); //keeps scroll position
                             }
                         } else {
@@ -420,8 +424,4 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
         }).bind(this));
     }
-
 };
-
-})();
-*/

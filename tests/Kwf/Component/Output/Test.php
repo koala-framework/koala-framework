@@ -109,7 +109,7 @@ class Kwf_Component_Output_Test extends Kwc_TestAbstract
 
         $output = new Kwf_Component_Renderer();
         $html = $output->renderComponent(Kwf_Component_Data_Root::getInstance());
-        $this->assertEquals('<a href="/c1"><span>C1</span></a> <a href="/foo?f1=1#a2" class="Bar" rel="bar"><span>Foo</span></a>', $html);
+        $this->assertEquals('<a href="/c1">C1</a> <a href="/foo?f1=1#a2" class="Bar" rel="bar">Foo</a>', $html);
     }
 
     public function testHasContent()

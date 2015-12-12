@@ -61,6 +61,6 @@ class Kwf_View_Helper_Link
             }
         }
 
-        return "<a{$attrs}><span>$text</span></a>";
+        return "<a{$attrs}>$text</a>";
     }
 }

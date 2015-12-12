@@ -58,6 +58,18 @@ class Kwf_Component_View_Helper_ComponentLink extends Kwf_Component_View_Rendere
             }
         }
 
+        $text = self::_replaceHtmlKwfUp($text);
+        if (isset($config['cssClass'])) {
+            if (is_array($config['cssClass'])) {
+                foreach ($config['cssClass'] as &$i) {
+                    $i = self::_replaceKwfUp($i);
+                }
+                unset($i);
+            } else {
+                $config['cssClass'] = self::_replaceKwfUp($config['cssClass']);
+            }
+        }
+
         $url = $targetPage[0];
         if ($this->_getRenderer() instanceof Kwf_Component_Renderer_Mail) {
             $url = '*redirect*' . $url . '*';

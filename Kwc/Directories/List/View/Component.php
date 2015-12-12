@@ -141,9 +141,9 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         return $this->_getItems();
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['directory'] = $this->getData()->parent->getComponent()->getItemDirectory();
         $ret['formSaved'] = null;
         if ($this->_getSearchForm()) {
@@ -194,6 +194,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
             throw new Kwf_Exception('Unsupported partial type '.get_class($partial));
         }
         $ret['placeholder'] = $this->_getPlaceholder();
+        $ret['bemClass'] = $this->_getBemClass('');
         return $ret;
     }
 

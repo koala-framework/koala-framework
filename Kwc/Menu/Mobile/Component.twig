@@ -1,10 +1,12 @@
 <div class="{{ rootElementClass }}">
-    <div class="loadingMenu"><div class="innerLoading"></div></div>
+    <div class="kwfUp-loadingMenu"><div class="kwfUp-innerLoading"></div></div>
     <input type="hidden" value="{{ config|json_encode() }}" />
-    <a class="showMenu" href="#">
+    {% block showMenuButton %}
+    <a class="kwfUp-showMenu" href="#">
         {{ placeholder.menuLink }}
     </a>
+    {% endblock %}
     {% block beforeSlider %}{% endblock %}
-    <div class="slider"></div>
+    <div class="kwfUp-slider" data-mobile-slider="true"></div>
     {% block afterSlider %}{% endblock %}
 </div>

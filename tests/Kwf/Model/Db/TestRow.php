@@ -1,5 +1,5 @@
 <?php
-class Kwf_Model_Db_TestRow extends Kwf_Db_Table_Row_Abstract
+class Kwf_Model_Db_TestRow extends Kwf_Db_Table_Row
 {
     public function __get($columnName)
     {

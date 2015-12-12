@@ -64,17 +64,25 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             foreach ($poParser->entries() as $entry) {
                 $ctx = isset($entry['msgctxt']) ? implode($entry['msgctxt']) : '';
                 $translation = isset($entry['msgstr']) ? implode($entry['msgstr']) : '';
-                if (isset($entry['msgid_plural']) && isset($entry['msgstr[1]'])) {
-                    $translation = implode($entry['msgstr[1]']);
+                if (isset($entry['msgid_plural']) && isset($entry['msgstr[0]'])) {
+                    $translation = implode($entry['msgstr[0]']);
                 }
                 if ($translation == '') continue;
                 $msgId = implode($entry['msgid']);
-                $msgIdPlural =  isset($entry['msgid_plural']) ? implode($entry['msgid_plural']) : '';
-                $msgKey = ($msgIdPlural ? $msgIdPlural : $msgId).'-'.$ctx;
+                $msgKey = $msgId.'-'.$ctx;
                 if (isset($c[$msgKey])) {
                     echo "\nDuplicate entry in trl-files: $msgKey => $translation\n";
                 }
                 $c[$msgKey] = $translation;
+
+                if (isset($entry['msgid_plural'])) {
+                    $msgIdPlural =  implode($entry['msgid_plural']);
+                    $pluralTranslation = '';
+                    if (isset($entry['msgstr[1]'])) {
+                        $pluralTranslation = implode($entry['msgstr[1]']);
+                    }
+                    $c[$msgIdPlural.'-'.$ctx] = $pluralTranslation;
+                }
             }
         }
         return $c;
@@ -89,8 +97,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             }
         } else if ($source == Kwf_Trl::SOURCE_KWF) {
             // check all composer packages
-            $this->_checkPackagesForTrlFilesAndTryDownloadFromKoalaWebsiteIfNotExisting($targetLanguage);
-            $files = glob(VENDOR_PATH.'/*/*/trl/'.$targetLanguage.'.po');
+            $files = $this->_getAllLibraryTrlFiles($targetLanguage);
         }
         require_once VENDOR_PATH.'/autoload.php';
         $poParsers = array();
@@ -101,14 +108,23 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         return $poParsers;
     }
 
-    private function _checkPackagesForTrlFilesAndTryDownloadFromKoalaWebsiteIfNotExisting($targetLanguage)
+    private function _getAllLibraryTrlFiles($targetLanguage)
     {
-        $composerFiles = glob(VENDOR_PATH.'/*/*/composer.json');
-
+        $composerFiles = array_merge(
+            //Explicitly add koala-framework composer.json because of tests
+            array(KWF_PATH.'/composer.json'),
+            glob(VENDOR_PATH.'/*/*/composer.json')
+        );
+        $existingFiles = array();
+        $composerFiles = array_unique($composerFiles);
         foreach ($composerFiles as $composerFile) {
             $trlDir = dirname($composerFile).'/trl/';
 
-            if (file_exists($trlDir.$targetLanguage.'.po')) continue;
+            $trlFilePath = $trlDir.$targetLanguage.'.po';
+            if (file_exists($trlFilePath)) {
+                $existingFiles[] = $trlFilePath;
+                continue;
+            }
 
             $composerConfig = json_decode(file_get_contents($composerFile));
             if (!isset($composerConfig->extra)) continue;
@@ -118,8 +134,10 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             $file = @file_get_contents("$trlDownloadUrl/{$trlConfig->account}/{$trlConfig->project}/$targetLanguage");
             if (!$file) continue;
             if (!file_exists($trlDir)) mkdir($trlDir);
-            file_put_contents($trlDir.$targetLanguage.'.po', $file);
+            file_put_contents($trlFilePath, $file);
+            $existingFiles[] = $trlFilePath;
         }
+        return $existingFiles;
     }
 
     public function getTypeName()

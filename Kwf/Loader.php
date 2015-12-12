@@ -40,11 +40,13 @@ class Kwf_Loader
 
         foreach ($composerNamespaces as $namespace => $dirs) {
             // convert paths to psr4 style
-            $namespacePath = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
-            $namespacePath = str_replace('_', DIRECTORY_SEPARATOR, $namespacePath);
-            if ($namespacePath[strlen($namespacePath)-1] == DIRECTORY_SEPARATOR) {
-                // Path must not end with /
-                $namespacePath = substr($namespacePath, 0, -1);
+            if ($namespace) {
+                $namespacePath = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
+                $namespacePath = str_replace('_', DIRECTORY_SEPARATOR, $namespacePath);
+                if ($namespacePath[strlen($namespacePath)-1] == DIRECTORY_SEPARATOR) {
+                    // Path must not end with /
+                    $namespacePath = substr($namespacePath, 0, -1);
+                }
             }
             $preparedDirs = array();
             foreach ($dirs as $dir) {
@@ -138,7 +140,7 @@ class Kwf_Loader
         return $file;
     }
 
-    public static function loadClass($class)
+    public static function findFile($class)
     {
         static $namespaces;
         if (!isset($namespaces)) {
@@ -152,7 +154,12 @@ class Kwf_Loader
             $classMap = include VENDOR_PATH.'/composer/autoload_classmap.php';
         }
 
-        $file = self::_findFile($class, $namespaces, $classMap);
+        return self::_findFile($class, $namespaces, $classMap);
+    }
+
+    public static function loadClass($class)
+    {
+        $file = self::findFile($class);
         try {
             include $file;
         } catch (Exception $e) {

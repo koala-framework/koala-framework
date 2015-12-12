@@ -2,7 +2,7 @@
 /**
  * @internal
  */
-class Kwf_Db_Table_Select extends Zend_Db_Table_Select
+class Kwf_Db_Table_Select extends Zend_Db_Select
 {
     public function where($cond, $value = null, $type = null)
     {
@@ -34,12 +34,7 @@ class Kwf_Db_Table_Select extends Zend_Db_Table_Select
 
     public function getTableName()
     {
-        return $this->_info['name'];
-    }
-
-    public function info()
-    {
-        return $this->_info;
+        return $this->_table->getTableName();
     }
 
     /**
@@ -60,10 +55,9 @@ class Kwf_Db_Table_Select extends Zend_Db_Table_Select
         if (is_string($searchValues)) $searchValues = array('query' => $searchValues);
         if (is_string($searchFields)) $searchFields = array($searchFields);
 
-        $selectInfo = $this->info();
         foreach ($searchValues as $column => $value) {
             if (empty($value) ||
-                ($column != 'query' && !in_array($column, $selectInfo['cols']))
+                ($column != 'query' && !in_array($column, $this->_table()->getColumns()))
             ) {
                 continue;
             }
@@ -79,7 +73,7 @@ class Kwf_Db_Table_Select extends Zend_Db_Table_Select
                         ."'searchLike' method of Kwf_Db_Table_Select object");
                     }
                     if (in_array('*', $searchFields)) {
-                        $searchFields = array_merge($searchFields, $selectInfo['cols']);
+                        $searchFields = array_merge($searchFields, $this->_table()->getColumns());
                         foreach ($searchFields as $sfk => $sfv) {
                             if ($sfv == '*') unset($searchFields[$sfk]);
                             if (substr($sfv, 0, 1) == '!') {
@@ -92,7 +86,7 @@ class Kwf_Db_Table_Select extends Zend_Db_Table_Select
                     $wheres = array();
                     foreach ($searchFields as $field) {
                         if (strpos($field, '.') === false) {
-                            $field = $selectInfo['name'].'.'.$field;
+                            $field = $this->_table->getTableName().'.'.$field;
                         }
                         $wheres[] = Kwf_Registry::get('db')->quoteInto(
                             $field.' LIKE ?', "%$searchWord%"
@@ -127,5 +121,135 @@ class Kwf_Db_Table_Select extends Zend_Db_Table_Select
     {
         $part = strtolower($part);
         $this->_parts[$part] = $value;
+    }
+
+
+
+
+
+
+
+    /**
+     * Table integrity override.
+     *
+     * @var array
+     */
+    protected $_integrityCheck = true;
+
+    /**
+     * Table instance that created this select object
+     *
+     * @var Kwf_Db_Table
+     */
+    protected $_table;
+
+    /**
+     * Class constructor
+     *
+     * @param Kwf_Db_Table $table
+     */
+    public function __construct(Kwf_Db_Table $table)
+    {
+        parent::__construct($table->getAdapter());
+
+        $this->_table = $table;
+    }
+
+    /**
+     * Return the table that created this select object
+     *
+     * @return Kwf_Db_Table
+     */
+    public function getTable()
+    {
+        return $this->_table;
+    }
+
+    /**
+     * Sets the integrity check flag.
+     *
+     * Setting this flag to false skips the checks for table joins, allowing
+     * 'hybrid' table rows to be created.
+     *
+     * @param Kwf_Db_Table $adapter
+     * @return Zend_Db_Select This Zend_Db_Select object.
+     */
+    public function setIntegrityCheck($flag = true)
+    {
+        $this->_integrityCheck = $flag;
+        return $this;
+    }
+
+    /**
+     * Adds a FROM table and optional columns to the query.
+     *
+     * The table name can be expressed
+     *
+     * @param  array|string|Zend_Db_Expr|Kwf_Db_Table $name The table name or an
+                                                                      associative array relating
+                                                                      table name to correlation
+                                                                      name.
+     * @param  array|string|Zend_Db_Expr $cols The columns to select from this table.
+     * @param  string $schema The schema name to specify, if any.
+     * @return Kwf_Db_Table_Select This Kwf_Db_Table_Select object.
+     */
+    public function from($name, $cols = self::SQL_WILDCARD, $schema = null)
+    {
+        if ($name instanceof Kwf_Db_Table) {
+            $schema = $name->getTableName();
+            $schema = $name->getSchemaName();
+        }
+
+        return $this->joinInner($name, null, $cols, $schema);
+    }
+
+    /**
+     * Performs a validation on the select query before passing back to the parent class.
+     * Ensures that only columns from the primary Kwf_Db_Table are returned in the result.
+     *
+     * @return string|null This object as a SELECT string (or null if a string cannot be produced)
+     */
+    public function assemble()
+    {
+        $fields  = $this->getPart(Kwf_Db_Table_Select::COLUMNS);
+        $primary  = $this->_table->getTableName();
+        $schema  = $this->_table->getSchemaName();
+
+
+        if (count($this->_parts[self::UNION]) == 0) {
+
+            // If no fields are specified we assume all fields from primary table
+            if (!count($fields)) {
+                $this->from($primary, self::SQL_WILDCARD, $schema);
+                $fields = $this->getPart(Kwf_Db_Table_Select::COLUMNS);
+            }
+
+            $from = $this->getPart(Kwf_Db_Table_Select::FROM);
+
+            if ($this->_integrityCheck !== false) {
+                foreach ($fields as $columnEntry) {
+                    list($table, $column) = $columnEntry;
+
+                    // Check each column to ensure it only references the primary table
+                    if ($column) {
+                        if (!isset($from[$table]) || $from[$table]['tableName'] != $primary) {
+                            throw new Kwf_Exception('Select query cannot join with another table');
+                        }
+                    }
+                }
+            }
+        }
+
+        return parent::assemble();
+    }
+
+    public function __toString()
+    {
+        try {
+            return parent::__toString();
+        } catch (Exception $e) {
+            echo $e;
+            exit;
+        }
     }
 }

@@ -42,6 +42,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
             'media'        => trlKwfStatic('Pictures & Media'),
             'callToAction' => trlKwfStatic('Call to Action'),
             'childPages'   => trlKwfStatic('Child Pages'),
+            'teaser'       => trlKwfStatic('Teasers'),
             'special'      => trlKwfStatic('Special'),
             'model'        => trlKwfStatic('Model'),
             'contact'      => trlKwfStatic('Contact'),
@@ -50,9 +51,9 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['paragraphs'] = array();
         foreach($this->getData()->getChildComponents(array('generator'=>'paragraphs')) as $paragraph) {
             $cssClass = $this->_getBemClass('kwcParagraphItem');

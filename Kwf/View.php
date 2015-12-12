@@ -22,4 +22,14 @@ class Kwf_View extends Zend_View
         }
         return parent::_script($name);
     }
+
+    protected static function _replaceKwfUp($ret)
+    {
+        static $up;
+        if (!isset($up)) {
+            $up = Kwf_Config::getValue('application.uniquePrefix');
+            if ($up) $up .= '-';
+        }
+        return str_replace('kwfUp-', $up, $ret);
+    }
 }

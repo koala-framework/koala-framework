@@ -7,10 +7,11 @@ abstract class Kwc_Basic_LinkTag_Abstract_Component extends Kwc_Abstract
         $ret['componentIcon'] = 'page_link';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'url';
+        $ret['flags']['noIndex'] = true; //don't include in sitemap.xml
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $ret = array(
             'data' => $this->getData(),

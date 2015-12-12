@@ -16,6 +16,7 @@ class Kwc_TextImage_Form extends Kwc_Abstract_Form
         }
 
         $fs = $this->add(new Kwf_Form_Container_FieldSet(trlKwf('Image')))
+                ->setName('image')
                 ->setCheckboxToggle(true)
                 ->setCheckboxName('image')
                 ->setWidth($editorWidth);

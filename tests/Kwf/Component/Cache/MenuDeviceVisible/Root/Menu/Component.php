@@ -9,9 +9,9 @@ class Kwf_Component_Cache_MenuDeviceVisible_Root_Menu_Component extends Kwc_Menu
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = Kwc_Menu_Abstract_Component::getTemplateVars();
+        $ret = Kwc_Menu_Abstract_Component::getTemplateVars($renderer);
         $ret['menu'] = $this->_getMenuData();
         return $ret;
     }

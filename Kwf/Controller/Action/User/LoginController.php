@@ -176,7 +176,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
         $user = null;
         if ($action == 'login') {
             if (count($state) != 4) throw new Kwf_Exception_NotFound();
-            $redirect = $state[3];
+            $redirect = str_replace('kwfdot', '.', $state[3]);
             try {
                 $user = $authMethods[$authMethod]->getUserToLoginByCallbackParams($this->_getRedirectBackUrl(), $this->getRequest()->getParams());
             } catch (Kwf_Exception_Client $e) {
@@ -258,8 +258,12 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             }
         }
         if ($user) {
-            $users->loginUserRow($user, true);
             $redirect = $this->_getParam('redirect');
+            if (is_array($user)) {
+                $redirect = $user['redirect'];
+                $user = $user['user'];
+            }
+            $users->loginUserRow($user, true);
             if (!$redirect) $redirect = Kwf_Setup::getBaseUrl().'/';
             Kwf_Util_Redirect::redirect($redirect);
         } else {

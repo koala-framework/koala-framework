@@ -17,7 +17,7 @@ Ext2.form.BasicForm.override({
 
     //override stupid Ext behavior
     //better to ask the individual form fields
-    //needed for: Checkbox, ComboBox, SwfUpload, Date...
+    //needed for: Checkbox, ComboBox, Date...
     getValues: function() {
         var ret = {};
         this.items.each(function(field) {
@@ -49,13 +49,12 @@ Ext2.apply(Ext2.form.VTypes, {
     },
     urltelText: trlKwf('This field should be a URL in the format "http://www.domain.com" or tel:0043 1234'),
 
-    //Ersetzt alles außer a-z, 0-9 - durch _. So wie Kwf_Filter_Ascii
-    //standard-ext implementierung überschrieben um den - zu erlauben
+    // Allows everything except a-z, 0-9 and -. Like Kwf_Filter_Ascii
     alphanum:  function(v) {
-        return /^[a-zA-Z0-9_\-]+$/.test(v);
+        return /^[a-zA-Z0-9\-]+$/.test(v);
     },
-    alphanumText : trlKwf('This field should only contain letters, numbers, - and _'),
-    alphanumMask : /[a-z0-9_\-]/i,
+    alphanumText : trlKwf('This field should only contain letters, numbers and -'),
+    alphanumMask : /[a-z0-9\-]/i,
 
     num:  function(v) {
         return /^[0-9]+$/.test(v);

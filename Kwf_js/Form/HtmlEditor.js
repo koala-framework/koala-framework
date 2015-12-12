@@ -227,6 +227,19 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
             }
         }
     },
+    /**
+     * Protected method that will not generally be called directly. Pushes the value of the textarea
+     * into the iframe editor.
+     */
+    pushValue : function(){
+        if (!this.sourceEditMode && this.tinymceEditor) {
+            var v = this.el.dom.value;
+            if(!this.activated && v.length < 1){
+                v = this.defaultValue;
+            }
+            this.tinymceEditor.setContent(v);
+        }
+    },
 
     insertAtCursor : function(text) {
         if (!this.activated) {

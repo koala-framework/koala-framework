@@ -52,7 +52,7 @@ class Kwc_Form_Decorator_Label extends Kwc_Form_Decorator_Abstract
                 $class .= ' kwfUp-'.$item['item']->getFieldName();
             }
 
-            $preHtml = '<div class="'.$class.'">';
+            $preHtml = '<div class="'.$class.'" data-field-name="' . $item['item']->getFieldName() . '">';
             $hasLabel = false;
             if ($item['item'] && !$item['item']->getHideLabel() && $item['item']->getFieldLabel()) {
                 $preHtml .= '<label for="'

@@ -22,11 +22,11 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
     protected function _getErrorMessage($type)
     {
         if ($type == self::ERROR_DATA_NOT_COMPLETE) {
-            return trlKwf('Data was not sent completely. Please copy the complete address out of the email.');
+            return $this->getData()->trlKwf('Data was not sent completely. Please copy the complete address out of the email.');
         } else if ($type == self::ERROR_ALREADY_ACTIVATED) {
-            return trlKwf('This account has already been activated.');
+            return $this->getData()->trlKwf('This account has already been activated.');
         } else if ($type == self::ERROR_CODE_WRONG) {
-            return trlKwf('Activation code is wrong. Maybe the address was copied wrong out of the email?');
+            return $this->getData()->trlKwf('Activation code is wrong. Maybe the address was copied wrong out of the email?');
         }
         return null;
     }
@@ -38,9 +38,9 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         $this->_form->add(new Kwf_Form_Field_Hidden('code'));
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         if ($this->_hideForm) $ret['form'] = null;
         return $ret;
     }

@@ -58,7 +58,7 @@ class Kwc_Advanced_SocialBookmarks_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         return $this->getTemplateVarsWithNetworks($this->getData()->parent);
     }

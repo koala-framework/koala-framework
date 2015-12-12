@@ -5,11 +5,11 @@ var kwfExtend = require('kwf/extend');
 
 var Checkbox = kwfExtend(Field, {
     initField: function() {
-        this.el.select('input').each(function(input) {
-            $(input).on('click', function() {
-                this.el.trigger('kwf-form-change', this.getValue());
-            }, this);
-        }, this);
+        this.el.select('input').each((function(input) {
+            $(input).on('click', (function() {
+                this.el.trigger('kwfUp-form-change', this.getValue());
+            }).bind(this));
+        }).bind(this));
     },
     clearValue: function() {
         var inp = this.el.find('input');

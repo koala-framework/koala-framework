@@ -3,18 +3,15 @@ class Kwf_Data_Table_Parent extends Kwf_Data_Abstract
 {
     protected $_dataIndex;
     protected $_parentTable;
-    protected $_ruleKey;
 
     /**
-     * @param string $parentTable wenn Zend_Db_Table: table, wenn Kwf_Model: rule
+     * @param string $parentTable rule
      * @param string $dataIndex row die angezeigt werden soll, wenn null wird __toString verwendet
-     * @param string $ruleKey nur wenn Zend_Db_Table
      */
-    public function __construct($parentTable, $dataIndex = null, $ruleKey = null)
+    public function __construct($parentTable, $dataIndex = null)
     {
         $this->_parentTable = $parentTable;
         $this->_dataIndex = $dataIndex;
-        $this->_ruleKey = $ruleKey;
     }
 
     public function load($row)
@@ -26,11 +23,7 @@ class Kwf_Data_Table_Parent extends Kwf_Data_Abstract
             $tables = $this->_parentTable;
         }
         foreach ($tables as $t) {
-            if ((is_object($t) || class_exists($t)) && is_instance_of($t, 'Zend_Db_Table_Abstract')) {
-                $row = $row->findParentRow($t, $this->_ruleKey);
-            } else {
-                $row = $row->getParentRow($t);
-            }
+            $row = $row->getParentRow($t);
             if (!$row) return '';
         }
         if (!$this->_dataIndex) {

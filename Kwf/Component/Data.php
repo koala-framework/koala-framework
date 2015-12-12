@@ -224,9 +224,6 @@ class Kwf_Component_Data
             $page = $this->getPage();
             if (!$page) return '';
             $rel = $page->_rel;
-            if (/*$childs || */Kwf_Component_Abstract::getFlag($this->getPage()->componentClass, 'noIndex')) {
-                $rel .= ' nofollow';
-            }
             return trim($rel);
         } else if ($var == 'filename') {
             return rawurlencode($this->getPseudoPageOrRoot()->_filename);
@@ -1124,6 +1121,21 @@ class Kwf_Component_Data
             $c = $c->parent;
         }
         return $c->componentId;
+    }
+
+    /**
+     * Returns the page this data belongs to (might be a page itself) OR (if there is no page) the root component
+     *
+     * @return Kwf_Component_Data
+     */
+    public function getInheritsParent()
+    {
+        $page = $this;
+        while ($page && !$page->inherits) {
+            if ($page instanceof Kwf_Component_Data_Root) return $page;
+            $page = $page->parent;
+        }
+        return $page;
     }
 
     /**

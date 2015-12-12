@@ -11,6 +11,8 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
         $ret['childModel'] = 'Kwc_Mail_Redirect_Model';
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
+        $ret['flags']['skipFulltext'] = true;
+        $ret['flags']['noIndex'] = true;
         $ret['contentSender'] = 'Kwc_Mail_Redirect_ContentSender';
         return $ret;
     }
@@ -102,15 +104,11 @@ class Kwc_Mail_Redirect_Component extends Kwc_Abstract
     public function replaceLinks($mailText, Kwc_Mail_Recipient_Interface $recipient = null)
     {
         if ($recipient) {
-            if ($recipient instanceof Zend_Db_Table_Row_Abstract) {
-                $class = get_class($recipient->getTable());
-                $recipientPrimary = $recipient->getTable()->info(Zend_Db_Table_Abstract::PRIMARY);
-                $recipientPrimary = $recipientPrimary[1];
-            } else if ($recipient instanceof Kwf_Model_Row_Abstract) {
+            if ($recipient instanceof Kwf_Model_Row_Abstract) {
                 $class = get_class($recipient->getModel());
                 $recipientPrimary = $recipient->getModel()->getPrimaryKey();
             } else {
-                throw new Kwf_Exception('Only models or tables are supported.');
+                throw new Kwf_Exception('Only models are supported.');
             }
             $recipientSource = $this->getRecipientModelShortcut($class);
 

@@ -38,16 +38,7 @@ class Kwc_Basic_Text_StylesModel extends Kwf_Model_Db_Proxy
 
     public static function getMasterStyles()
     {
-        $cacheId = 'textMasterSyles';
-        $ret = Kwf_Cache_SimpleStatic::fetch($cacheId);
-        if ($ret !== false) return $ret;
-
-        $package = Kwf_Assets_Package_Default::getInstance('Frontend');
-        $ret = array();
-        foreach ($package->getDependency()->getFilteredUniqueDependencies('text/css') as $dep) {
-            $ret = array_merge($ret, self::parseMasterStyles($dep->getContentsSourceString()));
-        }
-        Kwf_Cache_SimpleStatic::add($cacheId, $ret);
+        $ret = json_decode(file_get_contents('build/assets/rte-styles'), true);
         return $ret;
     }
 

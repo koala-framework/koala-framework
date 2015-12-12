@@ -26,8 +26,11 @@ abstract class Kwc_Basic_LinkTag_Intern_Trl_DataAbstract extends Kwc_Basic_LinkT
                 }
             }
         }
-        $m = Kwc_Abstract::createModel($this->chained->componentClass);
-        $result = $m->fetchColumnsByPrimaryId(array('anchor'), $this->chained->dbId);
+
+        $chained = $this->chained;
+        while (isset($chained->chained)) $chained = $chained->chained;
+        $m = Kwc_Abstract::createModel($chained->componentClass);
+        $result = $m->fetchColumnsByPrimaryId(array('anchor'), $chained->dbId);
         if ($result['anchor']) $this->_anchor = $result['anchor'];
         return $this->_data;
     }

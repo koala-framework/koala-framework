@@ -189,6 +189,9 @@ class Kwf_Util_Setup
         $ret .= "Kwf_Loader::registerAutoload();\n";
         $ret .= "\n";
 
+        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
+        $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
+
         $ret .= "//here to be as fast as possible (and have no session)\n";
         $ret .= "if (\$requestUri == '/kwf/json-progress-status'\n";
         $ret .= ") {\n";
@@ -301,11 +304,14 @@ class Kwf_Util_Setup
             $ret .= "Kwf_Cache_Simple::\$memcachePort = '".Kwf_Config::getValue('server.memcache.port')."';\n";
         }
 
-        $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
-        $ret .= "Kwf_Setup::\$configSection = '".$configSection."';\n";
-
         $ret .= "if (substr(\$requestUri, 0, 8) == '/assets/') {\n";
-        $ret .= "    Kwf_Assets_Loader::load(\$requestUri);\n";
+        $ret .= "    \$url = \$requestUri;\n";
+        $ret .= "    if (strpos(\$url, '?') !== false) {\n";
+        $ret .= "        \$url = substr(\$url, 0, strpos(\$url, '?'));\n";
+        $ret .= "    }\n";
+        $ret .= "    \$dispatcher = new ".Kwf_Config::getValue('assets.dispatcherClass')."();\n";
+        $ret .= "    \$dispatcher->dispatch(\$url);\n";
+        $ret .= "    Kwf_Assets_Loader::load(\$url);\n";
         $ret .= "}\n";
 
         if (Kwf_Config::getValue('debug.benchmarkCounter')) {
@@ -317,6 +323,14 @@ class Kwf_Util_Setup
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
 
         $ret .= "session_name('SESSION_".Kwf_Config::getValue('application.id')."');\n";
+
+        //up here to have less dependencies or broken redirect
+        $ret .= "\n";
+        $ret .= "if (substr(\$requestUri, 0, 14) == '/kwf/util/apc/'\n";
+        $ret .= ") {\n";
+        $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
+        $ret .= "}\n";
+
 
         if (Kwf_Config::getValue('server.https') !== 'unknown') {
             $redirectHttpsCode  = "    if (\$_SERVER['REQUEST_METHOD'] != 'GET') {\n";
@@ -373,13 +387,6 @@ class Kwf_Util_Setup
         if ((Kwf_COnfig::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (PHP_SAPI != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
-
-        //up here to have less dependencies or broken redirect
-        $ret .= "\n";
-        $ret .= "if (substr(\$requestUri, 0, 14) == '/kwf/util/apc/'\n";
-        $ret .= ") {\n";
-        $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
-        $ret .= "}\n";
 
         // Falls redirectToDomain eingeschalten ist, umleiten
         if (Kwf_Config::getValue('server.redirectToDomain')) {

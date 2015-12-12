@@ -8,7 +8,7 @@ Kwc.Basic.DownloadTag.Panel = Ext2.extend(Ext2.Panel, {
                     var v = value.uploaded_filename || value.filename;
                     v = v.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe')
                         .replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-                        .replace(/[^a-z0-9]/g, '_').replace(/__+/g, '_');
+                        .replace(/[^a-z0-9]/g, '-').replace(/--+/g, '-');
                     f.setValue(v);
                 }, this);
                 this.ownerCt.find('autoFillWithFilename', 'filenameWithExt').forEach(function (f) {

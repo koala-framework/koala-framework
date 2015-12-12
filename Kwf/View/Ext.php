@@ -6,7 +6,10 @@ class Kwf_View_Ext extends Kwf_View
         if (isset($this->xtype) && !isset($this->ext)) {
             $this->ext(null);
         }
-        return parent::render($name);
+
+        $ret = parent::render($name);
+        $ret = self::_replaceKwfUp($ret);
+        return $ret;
     }
 
     public function kwc($config)

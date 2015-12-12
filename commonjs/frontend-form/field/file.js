@@ -36,11 +36,10 @@ var File = kwfExtend(Field, {
         e.stopPropagation();
         e.preventDefault();
 
-        this.form.disableSubmit();
-
         var files = e.dataTransfer ? e.dataTransfer.files : e.target.files;
-
         if (!files.length) return;
+
+        this.form.disableSubmit();
 
         var file = files[0];
 
@@ -67,7 +66,10 @@ var File = kwfExtend(Field, {
         xhr.setRequestHeader('X-Upload-Name', encodeURIComponent(file.name));
         xhr.setRequestHeader('X-Upload-Size', file.size);
         xhr.setRequestHeader('X-Upload-Type', file.type);
-        xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+        var ua = navigator.userAgent.toLowerCase();
+        if (!ua.match(/trident/) && !ua.match(/edge/)) {
+            xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+        }
 
 
         xhr.upload.onprogress = (function(data) {
@@ -95,13 +97,13 @@ var File = kwfExtend(Field, {
 
                 var response;
                 try {
-                    response = JSON.parse(xhr.response);
+                    response = JSON.parse(xhr.responseText);
                 } catch (e) {
                     return alert(trlKwf('An error occured, please try again later'));
                 }
-
-                this.dropContainer.find('input.kwfFormFieldFileUnderlayText').val(response.value.filename);
+                this.dropContainer.find('input.fileSelector').val('');
                 uploadIdField.val(response.value.uploadId+'_'+response.value.hashKey);
+                this.dropContainer.find('input.kwfFormFieldFileUnderlayText').val(response.value.filename);
 
             } else if (xhr.readyState == 4 && xhr.status !== 200) {
                 this.form.enableSubmit();

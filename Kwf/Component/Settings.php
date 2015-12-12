@@ -217,7 +217,7 @@ class Kwf_Component_Settings
                     //verwendet bei dependencies
                     'css' => array('filename'=>'Component', 'ext'=>array('css', 'scss', 'override.scss'), 'returnClass'=>false, 'multiple'=>true),
                     'masterCss' => array('filename'=>'Master', 'ext'=>array('css', 'scss'), 'returnClass'=>false, 'multiple'=>true),
-                    'js' => array('filename'=>'Component', 'ext'=>array('js', 'defer.js'), 'returnClass'=>false, 'multiple'=>true),
+                    'js' => array('filename'=>'Component', 'ext'=>array('js', 'defer.js', 'override.js', 'override.defer.js'), 'returnClass'=>false, 'multiple'=>true),
                 ));
                 $override = false;
                 foreach ($ret['css'] as $k=>$i) {
@@ -225,6 +225,16 @@ class Kwf_Component_Settings
                         unset($ret['css'][$k]);
                     } else {
                         if (substr($i, -14) == '.override.scss') {
+                            $override = true;
+                        }
+                    }
+                }
+                $override = false;
+                foreach ($ret['js'] as $k=>$i) {
+                    if ($override) {
+                        unset($ret['js'][$k]);
+                    } else {
+                        if (substr($i, -12) == '.override.js' || substr($i, -18) == '.override.defer.js') {
                             $override = true;
                         }
                     }

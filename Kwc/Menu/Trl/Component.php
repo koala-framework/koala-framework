@@ -11,13 +11,22 @@ class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
     {
         $menu = array();
         $masterMenu = $this->getData()->chained->getComponent()->getMenuData(null, array('ignoreVisible'=>true));
+        $i = 0;
         foreach ($masterMenu as $m) {
             $component = Kwc_Chained_Trl_Component::getChainedByMaster($m['data'], $this->getData());
             if ($component) {
+                if ($i == 0 && strpos($m['class'], 'first') === false) {
+                    $m['class'] .= ' first';
+                }
                 $m['data'] = $component;
                 $m['text'] = '{name}';
                 $menu[] = $m;
+                $i++;
             }
+        }
+        if (isset($menu[count($menu)-1]) && !$menu[count($menu)-1]['last']) {
+            $menu[count($menu)-1]['last'] = true;
+            $menu[count($menu)-1]['class'] .= ' last';
         }
         $this->_attachEditableToMenuData($menu);
         return $menu;
@@ -40,9 +49,9 @@ class Kwc_Menu_Trl_Component extends Kwc_Menu_Abstract_Trl_Component
         }
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['menu'] = $this->getMenuData();
         $ret['subMenu'] = $this->getData()->getChildComponent('-subMenu');
         return $ret;

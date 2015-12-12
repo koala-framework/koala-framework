@@ -1,35 +1,13 @@
 <?php
 class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 {
-    protected function _getRow($componentId)
-    {
-        if (!Kwc_Abstract::hasSetting($this->_class, 'tablename')) return null;
-        $tablename = Kwc_Abstract::getSetting($this->_class, 'tablename');
-        if ($tablename) {
-            $table = new $tablename(array('componentClass'=>$this->_class));
-            return $table->find($componentId)->current();
-        }
-        return null;
-    }
-
-    protected function _getRows($componentId)
-    {
-        $tablename = Kwc_Abstract::getSetting($this->_class, 'tablename');
-        if ($tablename) {
-            $table = new $tablename(array('componentClass' => $this->_class));
-            $where = array(
-                'component_id = ?' => $componentId
-            );
-            return $table->fetchAll($where);
-        }
-        return array();
-    }
-
     public function delete($componentId)
     {
-        $row = $this->_getRow($componentId);
-        if ($row) {
-            $row->delete();
+        if (Kwc_Abstract::createOwnModel($this->_class)) {
+            $row = Kwc_Abstract::createOwnModel($this->_class)->getRow($componentId);
+            if ($row) {
+                $row->delete();
+            }
         }
     }
 
@@ -53,6 +31,17 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 
     public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
+        $contexts = Kwf_Component_Layout_Abstract::getInstance($target->componentClass)->getContexts($target);
+        $supportedContexts = Kwf_Component_Layout_Abstract::getInstance($target->componentClass)->getSupportedContexts();
+        if ($contexts && $supportedContexts) {
+            foreach ($contexts as $context) {
+                if (!in_array($context, $supportedContexts)) {
+                    throw new Kwf_Component_Exception_IncompatibleContexts("Duplicating component in incompatible context");
+                }
+            }
+        }
+
+
         Kwf_Component_LogDuplicateModel::getInstance()->import(
             Kwf_Model_Abstract::FORMAT_ARRAY,
             array(

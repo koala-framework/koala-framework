@@ -207,6 +207,8 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                 record: record,
                 components: this.components,
                 componentIcons: this.componentIcons,
+                supportedMasterLayoutContexts: this.supportedMasterLayoutContexts,
+                masterLayoutContexts: this.masterLayoutContexts,
                 listeners: {
                     scope: this,
                     menushow: function(btn) {
@@ -251,5 +253,10 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
         tb.add('->');
         tb.add(record.get('component_name'));
         tb.add('<img src="'+record.get('component_icon')+'">');
+    },
+
+    setMasterLayoutContexts: function(masterLayoutContexts)
+    {
+        this.masterLayoutContexts = masterLayoutContexts;
     }
 });

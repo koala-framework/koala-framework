@@ -7,7 +7,7 @@ class Kwf_Assets_ResponsiveEl_Provider extends Kwf_Assets_Provider_Abstract
             if (strpos($dependency->getContentsSourceString(), 'el-breakpoint') === false) {
                 return array();
             }
-            $contents = $dependency->getContents('en');
+            $contents = $dependency->getContentsSourceString();
             if (preg_match_all('#([^}{]*){([^}]*kwf-responsive-el-gt:[^}]*)}#', $contents, $m)) {
                 $selectors = array();
                 foreach (array_keys($m[1]) as $k) {

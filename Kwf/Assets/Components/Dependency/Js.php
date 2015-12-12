@@ -10,13 +10,4 @@ class Kwf_Assets_Components_Dependency_Js extends Kwf_Assets_Components_Dependen
     {
         return true;
     }
-
-    public function __toString()
-    {
-        $ret = $this->_componentClass.'-js';
-        if ($this->getDeferLoad()) {
-            $ret .= ' defer';
-        }
-        return $ret;
-    }
 }

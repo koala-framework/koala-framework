@@ -30,9 +30,9 @@ class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
         return $nlData;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $nlData = $this->_getNewsletterComponent();
         $ret['unsubscribe'] = $nlData->getChildComponent('_unsubscribe');
         return $ret;

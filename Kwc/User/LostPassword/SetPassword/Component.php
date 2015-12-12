@@ -6,6 +6,8 @@ class Kwc_User_LostPassword_SetPassword_Component extends Kwc_Abstract_Composite
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['form'] =
             'Kwc_User_LostPassword_SetPassword_Form_Component';
+        $ret['flags']['skipFulltext'] = true;
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
 }

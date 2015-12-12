@@ -33,7 +33,7 @@ class Kwf_Component_Events_PagesMeta extends Kwf_Events_Subscriber
 
     public function onContentChanged(Kwf_Component_Event_Component_Abstract $ev)
     {
-        $m = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
+        $m = Kwf_Component_PagesMetaModel::getInstance();
         if ($page = $ev->component->getPage()) {
             $row = $m->getRow($page->componentId);
             if (!$row) {
@@ -47,7 +47,7 @@ class Kwf_Component_Events_PagesMeta extends Kwf_Events_Subscriber
 
     public function onComponentAdded(Kwf_Component_Event_Component_AbstractFlag $ev)
     {
-        $m = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
+        $m = Kwf_Component_PagesMetaModel::getInstance();
         if ($page = $ev->component->getPage()) {
             $row = $m->getRow(array('equals'=>array('page_id' => $page->componentId)));
             if (!$row) {
@@ -61,7 +61,7 @@ class Kwf_Component_Events_PagesMeta extends Kwf_Events_Subscriber
 
     public function onComponentRemoved(Kwf_Component_Event_Component_AbstractFlag $ev)
     {
-        $m = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
+        $m = Kwf_Component_PagesMetaModel::getInstance();
         if ($page = $ev->component->getPage()) {
             $row = $m->getRow(array('equals'=>array('page_id' => $page->componentId)));
             if ($row) {
@@ -73,7 +73,7 @@ class Kwf_Component_Events_PagesMeta extends Kwf_Events_Subscriber
 
     public function onComponentRecursiveAdded(Kwf_Component_Event_Component_RecursiveAbstract $ev)
     {
-        $m = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
+        $m = Kwf_Component_PagesMetaModel::getInstance();
         if ($page = $ev->component->getPage()) {
             $row = $m->getRow($page->componentId);
             if (!$row) {
@@ -88,7 +88,7 @@ class Kwf_Component_Events_PagesMeta extends Kwf_Events_Subscriber
 
     public function onComponentRecursiveRemoved(Kwf_Component_Event_Component_RecursiveAbstract $ev)
     {
-        $m = Kwf_Model_Abstract::getInstance('Kwf_Component_PagesMetaModel');
+        $m = Kwf_Component_PagesMetaModel::getInstance();
         if ($page = $ev->component->getPage()) {
             $row = $m->getRow($page->componentId);
             if ($row) {

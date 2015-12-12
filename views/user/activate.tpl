@@ -1,4 +1,4 @@
-<div class="content">
+<div class="kwfUp-content">
     <h1>
         <? if ($this->isActivate) { ?>
             <?=trlKwf('Activate Useraccount')?>

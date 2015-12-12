@@ -1,4 +1,4 @@
-<div class="content">
+<div class="kwfUp-content">
     <h1><?=trlKwf('Lost password')?></h1>
     <p><?=trlKwf('Please enter your email address')?></p>
     <?=$this->errorsHtml?>

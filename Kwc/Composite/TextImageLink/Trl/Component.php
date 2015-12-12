@@ -8,9 +8,9 @@ class Kwc_Composite_TextImageLink_Trl_Component extends Kwc_Abstract_Composite_T
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $row = $this->_getRow();
         $ret['title'] = $row->title;
         $ret['teaser'] = $row->teaser;

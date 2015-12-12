@@ -1,31 +1,31 @@
 .kwcClass {
     position: relative;
 
-    .image {
+    .kwcBem__image {
         position: relative;
         cursor: pointer;
         z-index: 2;
-
-        .playButton {
-            position: absolute;
-            text-align: center;
-            width: 100%;
-            top: 50%;
-        }
     }
 
-    .youtubeContainer {
+    .kwcBem__playButton {
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        top: 50%;
+    }
+
+    .kwcBem__youtubeContainer {
         position: absolute;
         width: auto;
         z-index: 3;
-
-        .youtubePlayer {
-            display: none;
-        }
     }
 
-    &.ratio16x9 {
-        .youtubeContainer {
+    .kwcBem__youtubePlayer {
+        display: none;
+    }
+
+    &.kwcBem--ratio16x9 {
+        .kwcBem__youtubeContainer {
             padding-bottom: 56.27%;
             height: 0;
 
@@ -36,8 +36,8 @@
             }
         }
     }
-    &.ratio4x3 {
-        .youtubeContainer {
+    &.kwcBem--ratio4x3 {
+        .kwcBem__youtubeContainer {
             padding-bottom: 75%;
             height: 0;
 

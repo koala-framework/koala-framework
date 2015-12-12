@@ -32,7 +32,7 @@ class Kwf_Assets_Dependency_DispatcherTest extends Kwf_Test_TestCase
         $this->assertEquals(1, count($urls));
         $url = $urls[0];
 
-        $output = Kwf_Assets_Dispatcher::getOutputForUrl($url, Kwf_Media_Output::ENCODING_NONE);
+        $output = Kwf_Assets_Dispatcher::getInstance()->getOutputForUrl($url, Kwf_Media_Output::ENCODING_NONE);
 
         $contents = trim($output['contents']);
         $contents = str_replace("\n\n", "\n", $contents);

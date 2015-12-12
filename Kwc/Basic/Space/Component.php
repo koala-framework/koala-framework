@@ -16,9 +16,9 @@ class Kwc_Basic_Space_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['height'] = $this->_getRow()->height;
         return $ret;
     }

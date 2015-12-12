@@ -12,7 +12,7 @@ Kwc.Abstract.Image.ImageFile = Ext2.extend(Kwf.Form.File, {
                         var v = value.uploaded_filename || value.filename;
                         v = v.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe')
                             .replace(/ü/g, 'ue').replace(/ß/g, 'ss')
-                            .replace(/[^a-z0-9]/g, '_').replace(/__+/g, '_');
+                            .replace(/[^a-z0-9]/g, '-').replace(/\-\-+/g, '-');
                         f.setValue(v);
                     }, this);
                 }

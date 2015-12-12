@@ -13,7 +13,6 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
         $ret['componentCategory'] = 'content';
         $ret['componentPriority'] = 40;
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
-        $ret['assetsDefer']['dep'][] = 'KwfYoutubePlayer';
         $ret['assetsAdmin']['dep'][] = 'KwfFormCards';
 
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
@@ -39,9 +38,9 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
         }
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
 
         if (preg_match(self::REGEX, $ret['row']->url, $matches)) {
             $videoId = $matches[0];
@@ -69,10 +68,10 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
         if ($d = $ret['row']->dimensions) {
             if ($d == '16x9') {
                 if ($config['width']) $config['height'] = ($config['width'] / 16) * 9;
-                $config['ratio'] = $d;
+                $config['ratio'] = self::getBemClass($this, '--ratio'.$d);
             } else if ($d == '4x3') {
                 if ($config['width']) $config['height'] = ($config['width'] / 4) * 3;
-                $config['ratio'] = $d;
+                $config['ratio'] = self::getBemClass($this, '--ratio'.$d);
             }
         }
         $ret['config'] = array_merge($config, array('playerVars' => $this->_getSetting('playerVars')));

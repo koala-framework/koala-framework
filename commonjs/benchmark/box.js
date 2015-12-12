@@ -5,7 +5,7 @@ module.exports = BenchmarkBox;
 
 var benchmarkEnabled = false;
 try {
-    benchmarkEnabled = Kwf && Kwf.Debug && Kwf.Debug.benchmark;
+    benchmarkEnabled = typeof Kwf !='undefined' && Kwf.Debug && Kwf.Debug.benchmark;
 } catch(e) {}
 if (!benchmarkEnabled) {
     benchmarkEnabled = location.search.match(/[\?&]KWF_BENCHMARK/);

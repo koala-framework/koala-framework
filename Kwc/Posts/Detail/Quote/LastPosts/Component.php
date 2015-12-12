@@ -3,7 +3,7 @@ class Kwc_Posts_Detail_Quote_LastPosts_Component extends Kwc_Posts_Write_LastPos
 {
     public static function getItemDirectoryClasses($directoryClass)
     {
-        return self::_getParentItemDirectoryClasses($directoryClass, 4);
+        return self::_getParentItemDirectoryClasses($directoryClass, 3);
     }
 
     protected function _getItemDirectory()

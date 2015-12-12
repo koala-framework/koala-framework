@@ -64,6 +64,8 @@ var FormComponent = function(form)
         }
     }
 
+    this.errorStyle = new errorStyleRegistry.errorStyles[this.config.errorStyle](this);
+
     $.each(this.fields, function(i, f) {
         f.initField();
     });
@@ -96,8 +98,6 @@ var FormComponent = function(form)
             this.el.trigger('kwfUp-form-fieldChange', f);
         }, this);
     }).bind(this));
-
-    this.errorStyle = new errorStyleRegistry.errorStyles[this.config.errorStyle](this);
 };
 FormComponent.prototype = {
 
@@ -193,6 +193,7 @@ FormComponent.prototype = {
 
         var data = this.el.find('form').serialize();
         data += '&'+$.param(this.config.baseParams);
+        data += '&'+this.el.find('.kwfUp-submitWrapper .kwfUp-button button').prop('name')+'=1';
         if (Kwf.sessionToken) data += '&kwfSessionToken='+Kwf.sessionToken;
         $.ajax({
             url: this.config.controllerUrl + '/json-save',

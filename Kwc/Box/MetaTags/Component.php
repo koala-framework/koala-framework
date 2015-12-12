@@ -14,45 +14,27 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
         return $this->getData();
     }
 
-    protected function _getMetaTagComponents()
-    {
-        $components = array();
-        if ($this->getData()->getPage()) {
-            /*
-            $components = $this->getData()->getPage()->getRecursiveChildComponents(array(
-                'page' => false,
-                'flags' => array('metaTags' => true)
-            ));*/
-            if (Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'metaTags')) {
-                $components[] = $this->getData()->getPage();
-            }
-        }
-        return $components;
-    }
-
     protected function _getMetaTags()
     {
-        $components = $this->_getMetaTagComponents();
+        return self::getMetaTagsForData($this->getData());
+    }
+
+    //public for trl
+    public static function getMetaTagsForData($data)
+    {
         $ret = array();
         if (Kwf_Config::getValue('application.kwf.name') == 'Koala Framework') {
             $ret['generator'] = 'Koala Web Framework CMS';
         }
-        foreach ($components as $component) {
-            foreach ($component->getComponent()->getMetaTags() as $name=>$content) {
-                if (!isset($ret[$name])) $ret[$name] = '';
-                //TODO: bei zB noindex,nofollow anderes trennzeichen
-                $ret[$name] .= ' '.$content;
+        if ($data->getPage()) {
+            if (Kwc_Abstract::getFlag($data->getPage()->componentClass, 'metaTags')) {
+                foreach ($data->getPage()->getComponent()->getMetaTags() as $name=>$content) {
+                    if (!isset($ret[$name])) $ret[$name] = '';
+                    //TODO: for eg noindex,nofollow other separator
+                    $ret[$name] .= ' '.$content;
+                }
             }
-        }
-        foreach ($ret as &$i) $i = trim($i);
-        if ($this->getData()->getPage()) {
-            /*
-            $components = $this->getData()->getPage()->getRecursiveChildComponents(array(
-                'page' => false,
-                'limit' => 1,
-                'flags' => array('noIndex' => true)
-            ));*/
-            if (/*$components || */Kwc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'noIndex')) {
+            if (Kwc_Abstract::getFlag($data->getPage()->componentClass, 'noIndex')) {
                 if (isset($ret['robots'])) {
                     $ret['robots'] .= ',';
                 } else {
@@ -61,6 +43,8 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
                 $ret['robots'] .= 'noindex';
             }
         }
+        foreach ($ret as &$i) $i = trim($i);
+        unset($i);
 
         // verify-v1
         if (isset($_SERVER['HTTP_HOST'])) {
@@ -92,9 +76,9 @@ class Kwc_Box_MetaTags_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['metaTags'] = $this->_getMetaTags();
         return $ret;
     }

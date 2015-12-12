@@ -16,6 +16,7 @@ before_script:
   - chmod a+w tests/temp
   - composer self-update
   - composer install
+  - php bootstrap.php build
   - php -S localhost:8080 `pwd`/bootstrap.php &
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 services:

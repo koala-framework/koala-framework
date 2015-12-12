@@ -1,10 +1,9 @@
 var $ = require('jQuery');
-var responsiveEl = require('kwf/responsive-el');
 var onReady = require('kwf/on-ready');
 var gmapLoader = require('kwf/google-map/loader');
 var gmapMap = require('kwf/google-map/map');
 
-responsiveEl('.kwcClass', [500]);
+
 
 var renderedMaps = [];
 
@@ -27,7 +26,9 @@ var renderMap = function(map) {
         if (text.length) cfg.markers.infoHtml = text.html();
     }
 
-    var myMap = new gmapMap(cfg);
+    var cls = eval(cfg.mapClass) || gmapMap;
+    var myMap = new cls(cfg);
+    map.map = myMap;
 
     gmapLoader(function() {
         this.show();
@@ -41,3 +42,30 @@ onReady.onRender('.kwcClass', function(map) {
         map.data('gmapObject', renderMap(map));
     }
 }, { checkVisibility: true });
+
+Kwf.onJElementReady('.kwcClass', function (el) {
+    var mobileOverlayOpen = el.find('.mobileOverlayOpen');
+    var mobileOverlayClose = el.find('.mobileOverlayClose');
+
+    mobileOverlayOpen.click(function (ev) {
+        if ($(this).is(':visible')) {
+            var newEl = $(this).parent();
+            newEl.addClass('navigate');
+            $('html, body').animate({
+                scrollTop: newEl.offset().top
+            }, 400, function() {
+                google.maps.event.trigger(newEl.get(0).map.gmap, 'resize');
+            });
+        }
+    });
+
+    mobileOverlayClose.on('touchstart click', function (ev) {
+        if ($(this).is(':visible')) {
+            var newEl = $(this).parent();
+            newEl.removeClass('navigate');
+            $('html, body').animate({
+                scrollTop: newEl.offset().top - (($(window).innerHeight() - newEl.height()) / 2)
+            });
+        }
+    });
+});

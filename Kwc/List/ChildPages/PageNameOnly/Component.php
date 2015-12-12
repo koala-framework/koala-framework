@@ -10,9 +10,9 @@ class Kwc_List_ChildPages_PageNameOnly_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $page = $this->getData()->getPage();
         $ret['childPages'] = $page->getChildPages();
         return $ret;

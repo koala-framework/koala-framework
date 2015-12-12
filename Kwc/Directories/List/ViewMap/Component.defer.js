@@ -36,3 +36,30 @@ var renderMap = function(map) {
 onReady.onRender('.kwcClass', function(map) {
     renderMap(map);
 }, { checkVisibility: true });
+
+Kwf.onJElementReady('.cssClass', function (el) {
+    var mobileOverlayOpen = el.find('.mobileOverlayOpen');
+    var mobileOverlayClose = el.find('.mobileOverlayClose');
+
+    mobileOverlayOpen.click(function (ev) {
+        if ($(this).is(':visible')) {
+            var newEl = $(this).parent();
+            newEl.addClass('navigate');
+            $('html, body').animate({
+                scrollTop: newEl.offset().top
+            }, 400, function() {
+                google.maps.event.trigger(newEl.get(0).map.gmap, 'resize');
+            });
+        }
+    });
+
+    mobileOverlayClose.on('touchstart click', function (ev) {
+        if ($(this).is(':visible')) {
+            var newEl = $(this).parent();
+            newEl.removeClass('navigate');
+            $('html, body').animate({
+                scrollTop: newEl.offset().top - (($(window).innerHeight() - newEl.height()) / 2)
+            });
+        }
+    });
+});

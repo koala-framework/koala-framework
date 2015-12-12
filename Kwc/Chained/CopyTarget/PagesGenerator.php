@@ -3,7 +3,8 @@ class Kwc_Chained_CopyTarget_PagesGenerator extends Kwc_Root_Category_Cc_Generat
 {
     protected function _getChainedGenerator()
     {
-        return Kwf_Component_Generator_Abstract::getInstance('Kwc_Root_Category_Component', 'page');
+        $class = Kwc_Abstract::getSetting($this->_class, 'pageGeneratorComponentClass');
+        return Kwf_Component_Generator_Abstract::getInstance($class, 'page');
     }
 
     protected function _getChainedChildComponents($parentData, $select)

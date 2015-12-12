@@ -10,9 +10,9 @@ class Kwc_Advanced_CommunityVideo_Trl_Component extends Kwc_Chained_Trl_Componen
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
 
         if ($this->getRow()->own_url) {
             $ret['url'] = Kwc_Advanced_CommunityVideo_Component::getVideoUrl($this->getRow()->url, $ret['row']);

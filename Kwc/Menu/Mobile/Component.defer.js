@@ -5,7 +5,7 @@ var trlKwf = require('kwf/trl').trlKwf;
 
 onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     var slideDuration = 400;
-    var menuLink = el.children('.showMenu');
+    var menuLink = el.children('.kwfUp-showMenu');
     var left = 100;
 
     // Store
@@ -14,20 +14,20 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     var fetchedPages = {};
 
     var template = _.template(
-        '<ul class="menu">\n' +
+        '<ul class="kwfUp-menu">\n' +
             '<% if (isRoot) { %>' +
                 '<% _.each(item.pages, function(page) { %>' +
-                    '<li class="<% if (page.hasChildren) {  %>hasChildren<% } else if (page.isParent) { %>parent<% } %>">\n' +
+                    '<li class="<% if (page.hasChildren) {  %>kwfUp-hasChildren<% } else if (page.isParent) { %>kwfUp-parent<% } %>">\n' +
                         '<a href="<%= page.url %>" data-id="<%= page.id %>" data-children="<%= (page.hasChildren || page.children && page.children.length) || false %>"><%= page.name %></a>\n'+
                     '</li>\n'+
                 '<% }) %>'+
             '<% } else { %>'+
                 '<% if (item.children && item.children.length) { %>'+
-                    '<li class="back"><a href="#">'+trlKwf('back')+'</a></li>\n'+
+                    '<li class="kwfUp-back"><a href="#">'+trlKwf('back')+'</a></li>\n'+
                 '<% } %>'+
                 '<% _.each(item.children, function(child) { %>'+
-                    '<li class="<% if (child.hasChildren) {  %>hasChildren<% } else if (child.isParent) { %>parent<% } %>">\n' +
-                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %></a>\n'+
+                    '<li class="<% if (child.hasChildren) {  %>kwfUp-hasChildren<% } else if (child.isParent) { %>kwfUp-parent<% } %>">\n' +
+                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %><% if (child.isParent) { %> <span class="kwfUp-overview">('+trlKwf('Overview')+')</span><% } %></a>\n'+
                     '</li>\n' +
                 '<% }) %>' +
             '<% } %>' +
@@ -35,8 +35,8 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     );
 
     var slide = function(direction, id) {
-        var menu = el.find('.slider > ul.menu');
-        var slider = el.find('.slider');
+        var menu = el.find('.kwfUp-slider > ul.kwfUp-menu');
+        var slider = el.find('.kwfUp-slider');
 
         if (direction == 'left') {
             var html = template({item: menuData[id], isRoot: false});
@@ -66,24 +66,24 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
         return false;
     };
 
-    el.on('click', 'li.back', function(e) {
+    el.on('click', 'li.kwfUp-back', function(e) {
         e.preventDefault();
-        if (el.find('.slider').is(':animated')) return false;
+        if (el.find('.kwfUp-slider').is(':animated')) return false;
         slide('right');
     });
 
     el.on('click', 'a[data-children="true"]', function(e) {
         e.preventDefault();
-        if (el.find('.slider').is(':animated')) return false;
+        if (el.find('.kwfUp-slider').is(':animated')) return false;
 
         var data = $(e.target).data();
         var responseAnimation = false;
 
         if (!_.has(menuData, data.id)) {
             responseAnimation = true;
-            el.addClass('loading');
-            el.find('.slider > ul.menu').hide();
-            el.find('.slider').removeAttr('style');
+            el.addClass('kwfUp-loading');
+            el.find('.kwfUp-slider > ul.kwfUp-menu').hide();
+            el.find('.kwfUp-slider').removeAttr('style');
         }
         if (_.has(menuData, data.id)) {
             slide('left', data.id);
@@ -91,20 +91,24 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
 
         if (!_.has(fetchedPages, data.id)) {
             fetchedPages[data.id] = true;
+            var params = {
+                pageId: data.id,
+                componentId: config.componentId
+            };
+            if (typeof Kwf != "undefined" && Kwf.sessionToken) {
+                params.kwfSessionToken = Kwf.sessionToken
+            }
+
             var request = $.ajax({
                 url: config.controllerUrl + '/json-index',
-                data: {
-                    pageId: data.id,
-                    componentId: config.componentId,
-                    kwfSessionToken: Kwf.sessionToken
-                }
+                data: params
             });
             request.done(function(res) {
                 _.each(res.pages, function(page) {
                     menuData[page.id] = page;
                 });
                 if (responseAnimation) {
-                    el.removeClass('loading');
+                    el.removeClass('kwfUp-loading');
                     slide('left', data.id);
                 }
             });
@@ -114,13 +118,13 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     menuLink.click(function(e) {
         menuLink.trigger('menuToggle', slideDuration);
         e.preventDefault();
-        var slider = el.find('.slider');
-        var menu = el.find('.slider > ul.menu');
+        var slider = el.find('.kwfUp-slider');
+        var menu = el.find('.kwfUp-slider > ul.kwfUp-menu');
 
-        var sliders = $('.kwcMenuMobile .slider').not(slider);
+        var sliders = $('[data-mobile-slider]').not(slider);
         if (sliders.length) {
-            sliders.parent().find('.active').removeClass('active');
-            sliders.parent().removeClass('open');
+            sliders.parent().find('.kwfUp-active').removeClass('kwfUp-active');
+            sliders.parent().removeClass('kwfUp-open');
             $('body').removeClass('kwcMobileMenuOpen');
             sliders.animate({height: 0}, slideDuration);
         }
@@ -128,26 +132,29 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
         slider.stop();
 
         if (!menu.length) {
-            el.addClass('loading');
+            el.addClass('kwfUp-loading');
         }
-        menuLink.toggleClass('active');
-        $('body').toggleClass('kwcMobileMenuOpen');
-        if (menuLink.parent().hasClass('open')) {
+        menuLink.toggleClass('kwfUp-active');
+        $('body').toggleClass('kwfUp-kwcMobileMenuOpen');
+        if (menuLink.parent().hasClass('kwfUp-open')) {
             slider.animate({height: 0}, slideDuration);
         } else {
             slider.animate({height: menu.height()}, slideDuration);
         }
-        menuLink.parent().toggleClass('open');
+        menuLink.parent().toggleClass('kwfUp-open');
     });
 
+    var params = {
+        subrootComponentId: config.subrootComponentId,
+        componentId: config.componentId
+    };
+    if (typeof Kwf != "undefined" && Kwf.sessionToken) {
+        params.kwfSessionToken = Kwf.sessionToken
+    }
     // Inital Request
     $.ajax({
         url: config.controllerUrl + '/json-index',
-        data: {
-            subrootComponentId: config.subrootComponentId,
-            componentId: config.componentId,
-            kwfSessionToken: Kwf.sessionToken
-        },
+        data: params,
         dataType: 'JSON',
         success: function(res) {
             _.each(res.pages, function(page) {
@@ -155,16 +162,16 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
                 menuData[page.id] = page;
             });
 
-            if (!el.find('.slider').length) el.append('<div class="slider"></div>');
+            if (!el.find('.kwfUp-slider').length) el.append('<div class="kwfUp-slider"></div>');
 
             var html = template({item: res, isRoot: true});
-            el.find('.slider').html(html);
+            el.find('.kwfUp-slider').html(html);
             menuHtml.push(html);
-            if (el.hasClass('loading')) {
-                el.find('.slider').animate({height: el.find('.slider > ul.menu').height()}, slideDuration);
+            if (el.hasClass('kwfUp-loading')) {
+                el.find('.kwfUp-slider').animate({height: el.find('.kwfUp-slider > ul.kwfUp-menu').height()}, slideDuration);
                 el.trigger('menuToggle', slideDuration);
             }
-            el.removeClass('loading');
+            el.removeClass('kwfUp-loading');
         }
     });
 
