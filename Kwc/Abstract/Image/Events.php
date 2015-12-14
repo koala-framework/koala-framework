@@ -34,11 +34,13 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
                 $this->_class, $c, $typeBase
             ));
             $dim = $c->getComponent()->getImageDimensions();
-            $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
-            foreach ($steps as $step) {
-                $this->fireEvent(new Kwf_Events_Event_Media_Changed(
-                    $this->_class, $c, str_replace('{width}', $step, $typeBase)
-                ));
+            if (isset($imageData['file'])) {
+                $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
+                foreach ($steps as $step) {
+                    $this->fireEvent(new Kwf_Events_Event_Media_Changed(
+                        $this->_class, $c, str_replace('{width}', $step, $typeBase)
+                    ));
+                }
             }
         }
         $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
