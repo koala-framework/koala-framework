@@ -1,0 +1,4794 @@
+msgid "Content"
+msgstr "Content"
+
+msgid "back"
+msgstr "back"
+
+msgid "Restore"
+msgstr "Restore"
+
+msgid "Do you really want to restore this entry (entries)?"
+msgstr "Do you really want to restore this entry (entries)?"
+
+msgid "Restoring..."
+msgstr "Restoring..."
+
+msgid "Add Recipients"
+msgstr "Add Recipients"
+
+msgid "Adds the currently shown recipients to the newsletter"
+msgstr "Adds the currently shown recipients to the newsletter"
+
+msgid "{0} recipients added, total {1} recipients."
+msgstr "{0} recipients added, total {1} recipients."
+
+msgid ""
+"The following E-Mail addresses were excluded due to the RTR-ECG-Check (see "
+"{0})"
+msgstr ""
+"The following E-Mail addresses were excluded due to the RTR-ECG-Check (see "
+"{0})"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Remove Recipients"
+msgstr "Remove Recipients"
+
+msgid "Removes the currently shown recipients to the newsletter"
+msgstr "Removes the currently shown recipients to the newsletter"
+
+msgid "{0} recipients removed, total {1} recipients."
+msgstr "{0} recipients removed, total {1} recipients."
+
+msgid "Mailing"
+msgstr "Mailing"
+
+msgid "Pause"
+msgstr "Pause"
+
+msgid "Send Newsletter"
+msgstr "Send Newsletter"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "current speed: <b>{0}</b>"
+msgstr "current speed: <b>{0}</b>"
+
+msgid "Remaining time: <b>{0}</b>"
+msgstr "Remaining time: <b>{0}</b>"
+
+msgid "Resume Sending"
+msgstr "Resume Sending"
+
+msgid "Sending finished"
+msgstr "Sending finished"
+
+msgid "Delete All"
+msgstr "Delete All"
+
+msgid "Are you sure?"
+msgstr "Are you sure?"
+
+msgid "Do you really want to delete all receivers with status \"queued\"?"
+msgstr "Do you really want to delete all receivers with status \"queued\"?"
+
+msgid "HTML"
+msgstr "HTML"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Send"
+msgstr "Send"
+
+msgid "Sending..."
+msgstr "Sending..."
+
+msgid "Send testmail to..."
+msgstr "Send testmail to..."
+
+msgid "Select an subscriber pool..."
+msgstr "Select an subscriber pool..."
+
+msgid "Subscriber"
+msgstr "Subscriber"
+
+msgid "Select an subscriber..."
+msgstr "Select an subscriber..."
+
+msgid "Searching..."
+msgstr "Searching..."
+
+msgid "Send testmail to:"
+msgstr "Send testmail to:"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "Add new newsletter"
+msgstr "Add new newsletter"
+
+msgid "Adding..."
+msgstr "Adding..."
+
+msgid "Enter tag..."
+msgstr "Enter tag..."
+
+msgid "Please enter a tag."
+msgstr "Please enter a tag."
+
+msgid "delete"
+msgstr "delete"
+
+msgid "Upload Image"
+msgstr "Upload Image"
+
+msgid "Change Image"
+msgstr "Change Image"
+
+msgid "Loading image"
+msgstr "Loading image"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Couldn't load image."
+msgstr "Couldn't load image."
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Image Data"
+msgstr "Image Data"
+
+msgid "Dimension"
+msgstr "Dimension"
+
+msgid "Output Image-Dimension"
+msgstr "Output Image-Dimension"
+
+msgid "Cropping is not possible because image is too small."
+msgstr "Cropping is not possible because image is too small."
+
+msgid "Reset"
+msgstr "Reset"
+
+msgid "Reset to default (maximum)"
+msgstr "Reset to default (maximum)"
+
+msgid "Image region"
+msgstr "Image region"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Please fill the marked fields correctly."
+msgstr "Please fill the marked fields correctly."
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Selection too small!"
+msgstr "Selection too small!"
+
+msgid "Width or height must be higher than 0."
+msgstr "Width or height must be higher than 0."
+
+msgid "At least: "
+msgstr "At least: "
+
+msgid "{0}px high"
+msgstr "{0}px high"
+
+msgid "{0}px wide"
+msgstr "{0}px wide"
+
+msgid ""
+"Caution! Image size of uploaded image does not match minimum requirement."
+msgstr ""
+"Caution! Image size of uploaded image does not match minimum requirement."
+
+msgid "Caution! Crop region does not match minimum requirement."
+msgstr "Caution! Crop region does not match minimum requirement."
+
+msgid "Copy"
+msgstr "Copy"
+
+msgid "Paste"
+msgstr "Paste"
+
+msgid "Pasting..."
+msgstr "Pasting..."
+
+msgid "Adopt"
+msgstr "Adopt"
+
+msgid ""
+"Caution! Image size of uploaded image does not match minimum requirement for "
+"enlarge image."
+msgstr ""
+"Caution! Image size of uploaded image does not match minimum requirement for "
+"enlarge image."
+
+msgid ""
+"Caution! Crop region does not match minimum requirement for enlarge image."
+msgstr ""
+"Caution! Crop region does not match minimum requirement for enlarge image."
+
+msgid "Edit Styles"
+msgstr "Edit Styles"
+
+msgid "Block-Styles"
+msgstr "Block-Styles"
+
+msgid "Inline-Styles"
+msgstr "Inline-Styles"
+
+msgid "Categories"
+msgstr "Categories"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "Newsletter Preview"
+msgstr "Newsletter Preview"
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "Add Paragraph"
+msgstr "Add Paragraph"
+
+msgid "visibility"
+msgstr "visibility"
+
+msgid "show on all devices"
+msgstr "show on all devices"
+
+msgid "hide on mobile devices"
+msgstr "hide on mobile devices"
+
+msgid "only show on mobile devices"
+msgstr "only show on mobile devices"
+
+msgid "edit"
+msgstr "edit"
+
+msgid "copy/paste"
+msgstr "copy/paste"
+
+msgid "Copy Paragraph"
+msgstr "Copy Paragraph"
+
+msgid "Paste Paragraph"
+msgstr "Paste Paragraph"
+
+msgid "Preview"
+msgstr "Preview"
+
+msgid "Preview in web"
+msgstr "Preview in web"
+
+msgid "All Visible"
+msgstr "All Visible"
+
+msgid "Do you really wish to set everything to visible?"
+msgstr "Do you really wish to set everything to visible?"
+
+msgid "Setting visible..."
+msgstr "Setting visible..."
+
+msgid "Copy all Paragraphs"
+msgstr "Copy all Paragraphs"
+
+msgid "Saving"
+msgstr "Saving"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Do you really wish to remove this paragraph?"
+msgstr "Do you really wish to remove this paragraph?"
+
+msgid "{0} selected row(s)"
+msgstr "{0} selected row(s)"
+
+msgid "Close this tab"
+msgstr "Close this tab"
+
+msgid "The value in this field is invalid"
+msgstr "The value in this field is invalid"
+
+msgid "January"
+msgstr "January"
+
+msgid "February"
+msgstr "February"
+
+msgid "March"
+msgstr "March"
+
+msgid "April"
+msgstr "April"
+
+msgid "May"
+msgstr "May"
+
+msgid "June"
+msgstr "June"
+
+msgid "July"
+msgstr "July"
+
+msgid "August"
+msgstr "August"
+
+msgid "September"
+msgstr "September"
+
+msgid "October"
+msgstr "October"
+
+msgid "November"
+msgstr "November"
+
+msgid "December"
+msgstr "December"
+
+msgid "Sunday"
+msgstr "Sunday"
+
+msgid "Monday"
+msgstr "Monday"
+
+msgid "Tuesday"
+msgstr "Tuesday"
+
+msgid "Wednesday"
+msgstr "Wednesday"
+
+msgid "Thursday"
+msgstr "Thursday"
+
+msgid "Friday"
+msgstr "Friday"
+
+msgid "Saturday"
+msgstr "Saturday"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "Today"
+msgstr "Today"
+
+msgid "This date is before the minimum date"
+msgstr "This date is before the minimum date"
+
+msgid "This date is after the maximum date"
+msgstr "This date is after the maximum date"
+
+msgid "Next Month (Control+Right)"
+msgstr "Next Month (Control+Right)"
+
+msgid "Previous Month (Control+Left)"
+msgstr "Previous Month (Control+Left)"
+
+msgid "Choose a month (Control+Up/Down to move years)"
+msgstr "Choose a month (Control+Up/Down to move years)"
+
+msgid "{0} (Spacebar)"
+msgstr "{0} (Spacebar)"
+
+msgid "m/d/y"
+msgstr "m/d/y"
+
+msgctxt "start day of week"
+msgid "0"
+msgstr "0"
+
+msgid "Page"
+msgstr "Page"
+
+msgid "of {0}"
+msgstr "of {0}"
+
+msgid "First Page"
+msgstr "First Page"
+
+msgid "Previous Page"
+msgstr "Previous Page"
+
+msgid "Next Page"
+msgstr "Next Page"
+
+msgid "Last Page"
+msgstr "Last Page"
+
+msgid "Refresh"
+msgstr "Refresh"
+
+msgid "Displaying {0} - {1} of {2}"
+msgstr "Displaying {0} - {1} of {2}"
+
+msgid "No data to display"
+msgstr "No data to display"
+
+msgid "The minimum length for this field is {0}"
+msgstr "The minimum length for this field is {0}"
+
+msgid "The maximum length for this field is {0}"
+msgstr "The maximum length for this field is {0}"
+
+msgid "This field is required"
+msgstr "This field is required"
+
+msgid "The minimum value for this field is {0}"
+msgstr "The minimum value for this field is {0}"
+
+msgid "The maximum value for this field is {0}"
+msgstr "The maximum value for this field is {0}"
+
+msgid "{0} is not a valid number"
+msgstr "{0} is not a valid number"
+
+msgid "Disabled"
+msgstr "Disabled"
+
+msgid "The date in this field must be after {0}"
+msgstr "The date in this field must be after {0}"
+
+msgid "The date in this field must be before {0}"
+msgstr "The date in this field must be before {0}"
+
+msgid "{0} is not a valid date - it must be in the format {1}"
+msgstr "{0} is not a valid date - it must be in the format {1}"
+
+msgid "This field should be an e-mail address in the format \"user@domain.com\""
+msgstr ""
+"This field should be an e-mail address in the format \"user@domain.com\""
+
+msgid "This field should be a URL in the format \"http://www.domain.com\""
+msgstr "This field should be a URL in the format \"http://www.domain.com\""
+
+msgid "This field should only contain letters and _"
+msgstr "This field should only contain letters and _"
+
+msgid "This field should only contain letters, numbers and _"
+msgstr "This field should only contain letters, numbers and _"
+
+msgid "Please enter the URL for the link:"
+msgstr "Please enter the URL for the link:"
+
+msgid "Bold (Ctrl+B)"
+msgstr "Bold (Ctrl+B)"
+
+msgid "Make the selected text bold."
+msgstr "Make the selected text bold."
+
+msgid "Italic (Ctrl+I)"
+msgstr "Italic (Ctrl+I)"
+
+msgid "Make the selected text italic."
+msgstr "Make the selected text italic."
+
+msgid "Underline (Ctrl+U)"
+msgstr "Underline (Ctrl+U)"
+
+msgid "Underline the selected text."
+msgstr "Underline the selected text."
+
+msgid "Grow Text"
+msgstr "Grow Text"
+
+msgid "Increase the font size."
+msgstr "Increase the font size."
+
+msgid "Shrink Text"
+msgstr "Shrink Text"
+
+msgid "Decrease the font size."
+msgstr "Decrease the font size."
+
+msgid "Text Highlight Color"
+msgstr "Text Highlight Color"
+
+msgid "Change the background color of the selected text."
+msgstr "Change the background color of the selected text."
+
+msgid "Font Color"
+msgstr "Font Color"
+
+msgid "Change the color of the selected text."
+msgstr "Change the color of the selected text."
+
+msgid "Align Text Left"
+msgstr "Align Text Left"
+
+msgid "Align text to the left."
+msgstr "Align text to the left."
+
+msgid "Center Text"
+msgstr "Center Text"
+
+msgid "Center text in the editor."
+msgstr "Center text in the editor."
+
+msgid "Align Text Right"
+msgstr "Align Text Right"
+
+msgid "Align text to the right."
+msgstr "Align text to the right."
+
+msgid "Bullet List"
+msgstr "Bullet List"
+
+msgid "Start a bulleted list."
+msgstr "Start a bulleted list."
+
+msgid "Numbered List"
+msgstr "Numbered List"
+
+msgid "Start a numbered list."
+msgstr "Start a numbered list."
+
+msgid "Hyperlink"
+msgstr "Hyperlink"
+
+msgid "Make the selected text a hyperlink."
+msgstr "Make the selected text a hyperlink."
+
+msgid "Source Edit"
+msgstr "Source Edit"
+
+msgid "Switch to source editing mode."
+msgstr "Switch to source editing mode."
+
+msgid "Sort Ascending"
+msgstr "Sort Ascending"
+
+msgid "Sort Descending"
+msgstr "Sort Descending"
+
+msgid "Lock Column"
+msgstr "Lock Column"
+
+msgid "Unlock Column"
+msgstr "Unlock Column"
+
+msgid "Columns"
+msgstr "Columns"
+
+msgid "(None)"
+msgstr "(None)"
+
+msgid "Group By This Field"
+msgstr "Group By This Field"
+
+msgid "Show in Groups"
+msgstr "Show in Groups"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Value"
+msgstr "Value"
+
+msgid "Drag to resize."
+msgstr "Drag to resize."
+
+msgid "Drag to resize. Double click to hide."
+msgstr "Drag to resize. Double click to hide."
+
+msgid "Entered place could not been found!"
+msgstr "Entered place could not been found!"
+
+msgid "en"
+msgstr "en"
+
+msgid "Allowed upload size exceeded max. allowed upload size {0} MB"
+msgstr "Allowed upload size exceeded max. allowed upload size {0} MB"
+
+msgid "Processing"
+msgstr "Processing"
+
+msgid "An error occured, please try again later"
+msgstr "An error occured, please try again later"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Can't save, please fill all red underlined fields correctly."
+msgstr "Can't save, please fill all red underlined fields correctly."
+
+msgid "Authenticate"
+msgstr "Authenticate"
+
+msgid "You are not yet authenticated to {0}. Do you want to authenticate now?"
+msgstr ""
+"You are not yet authenticated to {0}. Do you want to authenticate now?"
+
+msgid "Please confirm the authentification in the opened popup"
+msgstr "Please confirm the authentification in the opened popup"
+
+msgid "Success"
+msgstr "Success"
+
+msgid "Status Update successfully posted."
+msgstr "Status Update successfully posted."
+
+msgid "Do you really want to delete all logs?"
+msgstr "Do you really want to delete all logs?"
+
+msgid "Parse files"
+msgstr "Parse files"
+
+msgid "Delete Files"
+msgstr "Delete Files"
+
+msgid "Do you really want to delete all parsed Files?"
+msgstr "Do you really want to delete all parsed Files?"
+
+msgid "Progress"
+msgstr "Progress"
+
+msgid "Finished"
+msgstr "Finished"
+
+msgid "Upload File"
+msgstr "Upload File"
+
+msgid "Web Image Files"
+msgstr "Web Image Files"
+
+msgid "All Files"
+msgstr "All Files"
+
+msgid "Error - wrong version"
+msgstr "Error - wrong version"
+
+msgid "Because of an application update the application has to be reloaded."
+msgstr "Because of an application update the application has to be reloaded."
+
+msgid "A http Error occured."
+msgstr "A http Error occured."
+
+msgid "Upload URL string is empty."
+msgstr "Upload URL string is empty."
+
+msgid "IO Error."
+msgstr "IO Error."
+
+msgid "Security Error."
+msgstr "Security Error."
+
+msgid "The upload limit has been reached."
+msgstr "The upload limit has been reached."
+
+msgid "File Upload Cancelled."
+msgstr "File Upload Cancelled."
+
+msgid "Upload Stopped"
+msgstr "Upload Stopped"
+
+msgid "Upload Error"
+msgstr "Upload Error"
+
+msgid "File is zero bytes or cannot be accessed and cannot be uploaded."
+msgstr "File is zero bytes or cannot be accessed and cannot be uploaded."
+
+msgid "File size exceeds allowed limit."
+msgstr "File size exceeds allowed limit."
+
+msgid "File is zero bytes and cannot be uploaded."
+msgstr "File is zero bytes and cannot be uploaded."
+
+msgid "File is not an allowed file type."
+msgstr "File is not an allowed file type."
+
+msgctxt "facebook js-sdk locale"
+msgid "en_US"
+msgstr "en_US"
+
+msgid "ago"
+msgstr "ago"
+
+msgid "from now"
+msgstr "from now"
+
+msgid "less than a minute"
+msgstr "less than a minute"
+
+msgid "about a minute"
+msgstr "about a minute"
+
+msgid "{0} minutes"
+msgstr "{0} minutes"
+
+msgid "about an hour"
+msgstr "about an hour"
+
+msgid "about {0} hours"
+msgstr "about {0} hours"
+
+msgid "a day"
+msgstr "a day"
+
+msgid "{0} days"
+msgstr "{0} days"
+
+msgid "about a month"
+msgstr "about a month"
+
+msgid "{0} months"
+msgstr "{0} months"
+
+msgid "about a year"
+msgstr "about a year"
+
+msgid "{0} years"
+msgstr "{0} years"
+
+msgid "Upload Files"
+msgstr "Upload Files"
+
+msgid "Upload"
+msgstr "Upload"
+
+msgid "Uploading files"
+msgstr "Uploading files"
+
+msgid "A Server failure occured."
+msgstr "A Server failure occured."
+
+msgid "Enquiry"
+msgstr "Enquiry"
+
+msgid "Enquiries"
+msgstr "Enquiries"
+
+msgid "Show User Menu"
+msgstr "Show User Menu"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Information"
+msgstr "Information"
+
+msgid "Open frontend in a new window"
+msgstr "Open frontend in a new window"
+
+msgid "Y-m-d"
+msgstr "Y-m-d"
+
+msgid "Y-m-d H:i"
+msgstr "Y-m-d H:i"
+
+msgid "Male"
+msgstr "Male"
+
+msgid "Female"
+msgstr "Female"
+
+msgid "unsubscribed"
+msgstr "unsubscribed"
+
+msgid "not activated"
+msgstr "not activated"
+
+msgid "active"
+msgstr "active"
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "Abort"
+msgstr "Abort"
+
+msgid ""
+"This field should be a URL in the format \"http://www.domain.com\" or tel:"
+"0043 1234"
+msgstr ""
+"This field should be a URL in the format \"http://www.domain.com\" or tel:"
+"0043 1234"
+
+msgid "This field should only contain letters, numbers, - and _"
+msgstr "This field should only contain letters, numbers, - and _"
+
+msgid "This field should only contain numbers"
+msgstr "This field should only contain numbers"
+
+msgid "Not a valid time.  Must be in the format \"12:34:00\"."
+msgstr "Not a valid time.  Must be in the format \"12:34:00\"."
+
+msgid "File upload"
+msgstr "File upload"
+
+msgid "Show Original"
+msgstr "Show Original"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "New Entry"
+msgstr "New Entry"
+
+msgid "Insert Plain Text"
+msgstr "Insert Plain Text"
+
+msgid "Insert text without formating."
+msgstr "Insert text without formating."
+
+msgid "Remove Hyperlink"
+msgstr "Remove Hyperlink"
+
+msgid "Remove the selected link."
+msgstr "Remove the selected link."
+
+msgid "Create new Link for the selected text or edit selected Link."
+msgstr "Create new Link for the selected text or edit selected Link."
+
+msgid "Cleaning..."
+msgstr "Cleaning..."
+
+msgid "Undo (Ctrl+Z)"
+msgstr "Undo (Ctrl+Z)"
+
+msgid "Undo the last action."
+msgstr "Undo the last action."
+
+msgid "Redo"
+msgstr "Redo"
+
+msgid "Redo the last action."
+msgstr "Redo the last action."
+
+msgid "Modify and Create Styles."
+msgstr "Modify and Create Styles."
+
+msgid "Block"
+msgstr "Block"
+
+msgid "Inline"
+msgstr "Inline"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Insert new image or edit selected image."
+msgstr "Insert new image or edit selected image."
+
+msgid "Indent"
+msgstr "Indent"
+
+msgid "Increase Indent."
+msgstr "Increase Indent."
+
+msgid "Decrease Indent."
+msgstr "Decrease Indent."
+
+msgid "Character"
+msgstr "Character"
+
+msgid "Insert a custom character."
+msgstr "Insert a custom character."
+
+msgid "Insert Custom Character"
+msgstr "Insert Custom Character"
+
+msgid "Download"
+msgstr "Download"
+
+msgid "Create new Download for the selected text or edit selected Download."
+msgstr "Create new Download for the selected text or edit selected Download."
+
+msgid "H:i"
+msgstr "H:i"
+
+msgid "Select your Position"
+msgstr "Select your Position"
+
+msgid "Clear"
+msgstr "Clear"
+
+msgid "Search Location"
+msgstr "Search Location"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "enter address"
+msgstr "enter address"
+
+msgid "Example"
+msgstr "Example"
+
+msgid "Move marker while pressing mousekey."
+msgstr "Move marker while pressing mousekey."
+
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "Longitude"
+msgstr "Longitude"
+
+msgid "or drag here"
+msgstr "or drag here"
+
+msgid "empty"
+msgstr "empty"
+
+msgid "Delete File"
+msgstr "Delete File"
+
+msgid "Uploading file"
+msgstr "Uploading file"
+
+msgid "Color hex values must be either 3 or 6 characters."
+msgstr "Color hex values must be either 3 or 6 characters."
+
+msgid "Must have a hexidecimal value in the format ABCDEF."
+msgstr "Must have a hexidecimal value in the format ABCDEF."
+
+msgid "Please choose"
+msgstr "Please choose"
+
+msgid "no selection"
+msgstr "no selection"
+
+msgid "add new entry"
+msgstr "add new entry"
+
+msgid "Ignore"
+msgstr "Ignore"
+
+msgid "A connection problem occured."
+msgstr "A connection problem occured."
+
+msgid "Comments"
+msgstr "Comments"
+
+msgid "Log"
+msgstr "Log"
+
+msgid "E-Mail type"
+msgstr "E-Mail type"
+
+msgid "Activation"
+msgstr "Activation"
+
+msgid "Lost password"
+msgstr "Lost password"
+
+msgid "Generate a new activation link"
+msgstr "Generate a new activation link"
+
+msgid "Generate"
+msgstr "Generate"
+
+msgid "Please select the E-Mail type you wish to send to the user."
+msgstr "Please select the E-Mail type you wish to send to the user."
+
+msgid "Warning: this invalidates all previously generated activation links."
+msgstr "Warning: this invalidates all previously generated activation links."
+
+msgid "Send a mail to a user"
+msgstr "Send a mail to a user"
+
+msgid "Delete user"
+msgstr "Delete user"
+
+msgid "Do you really wish to delete this user?"
+msgstr "Do you really wish to delete this user?"
+
+msgid "Deleting..."
+msgstr "Deleting..."
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Lost password?"
+msgstr "Lost password?"
+
+msgid "Page tree"
+msgstr "Page tree"
+
+msgid "Search: "
+msgstr "Search: "
+
+msgid "Page properties"
+msgstr "Page properties"
+
+msgid "Add new child page"
+msgstr "Add new child page"
+
+msgid "Delete Page"
+msgstr "Delete Page"
+
+msgid "Copy Page"
+msgstr "Copy Page"
+
+msgid "Paste Page"
+msgstr "Paste Page"
+
+msgid "Show / Hide Page"
+msgstr "Show / Hide Page"
+
+msgid "Use as homepage"
+msgstr "Use as homepage"
+
+msgid ""
+"Attention! You are about to set the selected page as the homepage of your "
+"website. This may affect the entire website. Do you wish to proceed?"
+msgstr ""
+"Attention! You are about to set the selected page as the homepage of your "
+"website. This may affect the entire website. Do you wish to proceed?"
+
+msgid "Expand here"
+msgstr "Expand here"
+
+msgid "Collapse here"
+msgstr "Collapse here"
+
+msgid "Open preview"
+msgstr "Open preview"
+
+msgid "Copying..."
+msgstr "Copying..."
+
+msgid "create"
+msgstr "create"
+
+msgid "File successfully created:"
+msgstr "File successfully created:"
+
+msgid "Component"
+msgstr "Component"
+
+msgid "Add Component"
+msgstr "Add Component"
+
+msgid "Creating..."
+msgstr "Creating..."
+
+msgid "File successfully created: "
+msgstr "File successfully created: "
+
+msgid "Preview Modus"
+msgstr "Preview Modus"
+
+msgid "Desktop"
+msgstr "Desktop"
+
+msgid "Notebook"
+msgstr "Notebook"
+
+msgid "Tablet Portrait"
+msgstr "Tablet Portrait"
+
+msgid "Tablet Landscape"
+msgstr "Tablet Landscape"
+
+msgid "Smartphone Portrait"
+msgstr "Smartphone Portrait"
+
+msgid "Smartphone Landscape"
+msgstr "Smartphone Landscape"
+
+msgid "clearing cache..."
+msgstr "clearing cache..."
+
+msgid "Clear Cache"
+msgstr "Clear Cache"
+
+msgid "Reload"
+msgstr "Reload"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "No items to display"
+msgstr "No items to display"
+
+msgid "Do you really wish to remove this entry / these entries?"
+msgstr "Do you really wish to remove this entry / these entries?"
+
+msgid "Assign by text input"
+msgstr "Assign by text input"
+
+msgid "Please enter the text you wish to assign."
+msgstr "Please enter the text you wish to assign."
+
+msgid "Seperate items by a new line."
+msgstr "Seperate items by a new line."
+
+msgid "Edit {0}"
+msgstr "Edit {0}"
+
+msgid "Add {0}"
+msgstr "Add {0}"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "all"
+msgstr "all"
+
+msgid "Column"
+msgstr "Column"
+
+msgid "Toggle Visibility"
+msgstr "Toggle Visibility"
+
+msgid "Do you really want to delete this entry:\""
+msgstr "Do you really want to delete this entry:\n"
+"\n"
+"\""
+
+msgid "Duplicate"
+msgstr "Duplicate"
+
+msgid "Print"
+msgstr "Print"
+
+msgid "CSV Export"
+msgstr "CSV Export"
+
+msgid "Excel Export"
+msgstr "Excel Export"
+
+msgid "Saving..."
+msgstr "Saving..."
+
+msgid "No entries are selected"
+msgstr "No entries are selected"
+
+msgid "Duplicating..."
+msgstr "Duplicating..."
+
+msgid "CSV export"
+msgstr "CSV export"
+
+msgid "Your download is ready"
+msgstr "Your download is ready"
+
+msgid "Please click on the following link to download your CSV file."
+msgstr "Please click on the following link to download your CSV file."
+
+msgid "CSV export file"
+msgstr "CSV export file"
+
+msgid "Excel export"
+msgstr "Excel export"
+
+msgid "Please click on the following link to download your Excel file."
+msgstr "Please click on the following link to download your Excel file."
+
+msgid "Excel export file"
+msgstr "Excel export file"
+
+msgid "Assign"
+msgstr "Assign"
+
+msgid "The File has been imported successfully."
+msgstr "The File has been imported successfully."
+
+msgid "Import done"
+msgstr "Import done"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Save and Back"
+msgstr "Save and Back"
+
+msgid "delete?"
+msgstr "delete?"
+
+msgid "Do you really want to delete this entry?"
+msgstr "Do you really want to delete this entry?"
+
+msgid "Rebuild"
+msgstr "Rebuild"
+
+msgid "Setup"
+msgstr "Setup"
+
+msgid "Download Updates"
+msgstr "Download Updates"
+
+msgid "Update Error"
+msgstr "Update Error"
+
+msgid "Updates Finished"
+msgstr "Updates Finished"
+
+msgid "Update"
+msgstr "Update"
+
+msgid "Do you want to save the changes?"
+msgstr "Do you want to save the changes?"
+
+msgid "Version"
+msgstr "Version"
+
+msgid "File not found"
+msgstr "File not found"
+
+msgid "Errormessage"
+msgstr "Errormessage"
+
+msgid "The requested URL \"{0}\" was not found on this server."
+msgstr "The requested URL \"{0}\" was not found on this server."
+
+msgid "If you typed the address, make sure the spelling is correct"
+msgstr "If you typed the address, make sure the spelling is correct"
+
+msgid "Check the page you are coming from"
+msgstr "Check the page you are coming from"
+
+msgid "Go back to main page"
+msgstr "Go back to main page"
+
+msgid "Service Unavailable"
+msgstr "Service Unavailable"
+
+msgid "Temporarily Down for Maintenance"
+msgstr "Temporarily Down for Maintenance"
+
+msgid "Normal service will be restored soon."
+msgstr "Normal service will be restored soon."
+
+msgid "Access Denied"
+msgstr "Access Denied"
+
+msgid "You are not allowed to enter this page."
+msgstr "You are not allowed to enter this page."
+
+msgid "E-Mail"
+msgstr "E-Mail"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "From"
+msgstr "From"
+
+msgctxt "email"
+msgid "To"
+msgstr "To"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Activate Useraccount"
+msgstr "Activate Useraccount"
+
+msgid "Reset Password"
+msgstr "Reset Password"
+
+msgid "Your email address:"
+msgstr "Your email address:"
+
+msgid "Activate with:"
+msgstr "Activate with:"
+
+msgid "Lost password mail sent to email address."
+msgstr "Lost password mail sent to email address."
+
+msgid "Please enter your email address"
+msgstr "Please enter your email address"
+
+msgid "Submit"
+msgstr "Submit"
+
+msgid "Login Error"
+msgstr "Login Error"
+
+msgid "Continue"
+msgstr "Continue"
+
+msgid ""
+"Your account is active and a password has been set.{2}Use the application by "
+"{0}clicking here{1}."
+msgstr ""
+"Your account is active and a password has been set.{2}Use the application by "
+"{0}clicking here{1}."
+
+msgid "Go to<br />Website"
+msgstr "Go to<br />Website"
+
+msgid "WARNING: untagged"
+msgstr "WARNING: untagged"
+
+msgid "Login with:"
+msgstr "Login with:"
+
+msgid "Please type in your password. After clicking the button below"
+msgstr "Please type in your password. After clicking the button below"
+
+msgid "you are logged in automatically and may use the typed in password"
+msgstr "you are logged in automatically and may use the typed in password"
+
+msgid "for future logins."
+msgstr "for future logins."
+
+msgid "Activate and login account"
+msgstr "Activate and login account"
+
+msgid "Hello {0}!"
+msgstr "Hello {0}!"
+
+msgid "Your account at {0} has been deleted."
+msgstr "Your account at {0} has been deleted."
+
+msgid ""
+"This email has been generated automatically. There may be no recipient if "
+"you answer to this email."
+msgstr ""
+"This email has been generated automatically. There may be no recipient if "
+"you answer to this email."
+
+msgid "Your email address at {0} has been changed."
+msgstr "Your email address at {0} has been changed."
+
+msgid "Your old email address was {0}, the new one is {1}"
+msgstr "Your old email address was {0}, the new one is {1}"
+
+msgid "Your account at {0} has just been created."
+msgstr "Your account at {0} has just been created."
+
+msgid "Please use the following link to choose yourself a password"
+msgstr "Please use the following link to choose yourself a password"
+
+msgid ""
+"As soon as you have chosen a password you can login at the following Link"
+msgstr ""
+"As soon as you have chosen a password you can login at the following Link"
+
+msgid "Your account at {0} has just been set active."
+msgstr "Your account at {0} has just been set active."
+
+msgid "You may now log in to your account."
+msgstr "You may now log in to your account."
+
+msgid "If you lost your password, you may use the Lost Password? service."
+msgstr "If you lost your password, you may use the Lost Password? service."
+
+msgid "This email has been generated using the lost password function at {0}"
+msgstr "This email has been generated using the lost password function at {0}"
+
+msgid "Please use the following link to choose yourself a new password."
+msgstr "Please use the following link to choose yourself a new password."
+
+msgid "Click here to choose a new password"
+msgstr "Click here to choose a new password"
+
+msgid ""
+"If the activationlink does not work, copy the following address and paste it "
+"in your browser (it is possible that the address has a line-break, so please "
+"be sure to copy everything correctly):"
+msgstr ""
+"If the activationlink does not work, copy the following address and paste it "
+"in your browser (it is possible that the address has a line-break, so please "
+"be sure to copy everything correctly):"
+
+msgid ""
+"If you did not request this email you may just ignore it and use the login "
+"as before."
+msgstr ""
+"If you did not request this email you may just ignore it and use the login "
+"as before."
+
+msgid "Your account at {0}<br />has just been set active."
+msgstr "Your account at {0}<br />has just been set active."
+
+msgid "Rating"
+msgstr "Rating"
+
+msgid "order now at amazon"
+msgstr "order now at amazon"
+
+msgid "Amazon.Product"
+msgstr "Amazon.Product"
+
+msgid "ASIN"
+msgstr "ASIN"
+
+msgid "Amazon.Nodes"
+msgstr "Amazon.Nodes"
+
+msgid "Products"
+msgstr "Products"
+
+msgid "product description"
+msgstr "product description"
+
+msgid "customer reviews"
+msgstr "customer reviews"
+
+msgid "similar products"
+msgstr "similar products"
+
+msgid "This entry is classified in:"
+msgstr "This entry is classified in:"
+
+msgid "more information"
+msgstr "more information"
+
+msgid "Node {0}"
+msgstr "Node {0}"
+
+msgid "Node-ID"
+msgstr "Node-ID"
+
+msgid "Visible"
+msgstr "Visible"
+
+msgid "Bookmark at"
+msgstr "Bookmark at"
+
+msgid "Social Bookmarks"
+msgstr "Social Bookmarks"
+
+msgid "Network"
+msgstr "Network"
+
+msgid "Disclaimer"
+msgstr "Disclaimer"
+
+msgid "Imprint"
+msgstr "Imprint"
+
+msgid "Disclaimer name"
+msgstr "Disclaimer name"
+
+msgid "Disclaimer type"
+msgstr "Disclaimer type"
+
+msgid "None"
+msgstr "None"
+
+msgid "Germany"
+msgstr "Germany"
+
+msgid "Operating company / Responsible for content"
+msgstr "Operating company / Responsible for content"
+
+msgid "Commercial register number"
+msgstr "Commercial register number"
+
+msgid "Register court"
+msgstr "Register court"
+
+msgid "Court"
+msgstr "Court"
+
+msgid "VAT identification number"
+msgstr "VAT identification number"
+
+msgid "Bank data"
+msgstr "Bank data"
+
+msgid "Data handling register number"
+msgstr "Data handling register number"
+
+msgid "Clubnumber ZVR"
+msgstr "Clubnumber ZVR"
+
+msgid "Job title"
+msgstr "Job title"
+
+msgid "Agency accordant §5 ECG"
+msgstr "Agency accordant §5 ECG"
+
+msgid "Employment specification"
+msgstr "Employment specification"
+
+msgid "Entry at WK Austria"
+msgstr "Entry at WK Austria"
+
+msgid "Company A-Z"
+msgstr "Company A-Z"
+
+msgid "Company"
+msgstr "Company"
+
+msgid "Address"
+msgstr "Address"
+
+msgid "Zipcode"
+msgstr "Zipcode"
+
+msgid "City"
+msgstr "City"
+
+msgid "Fon"
+msgstr "Fon"
+
+msgid "Fax"
+msgstr "Fax"
+
+msgid "Mobile"
+msgstr "Mobile"
+
+msgid "EMail"
+msgstr "EMail"
+
+msgid "Website"
+msgstr "Website"
+
+msgid "Bank code"
+msgstr "Bank code"
+
+msgid "Account number"
+msgstr "Account number"
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "BIC / SWIFT"
+msgstr "BIC / SWIFT"
+
+msgid "Agency"
+msgstr "Agency"
+
+msgid "Google Analytics"
+msgstr "Google Analytics"
+
+msgid "Code Syntax Highlighted"
+msgstr "Code Syntax Highlighted"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "Line Numbers"
+msgstr "Line Numbers"
+
+msgid "Google Maps"
+msgstr "Google Maps"
+
+msgid "coordinates not entered"
+msgstr "coordinates not entered"
+
+msgid "Coordinates"
+msgstr "Coordinates"
+
+msgid "Zoomlevel"
+msgstr "Zoomlevel"
+
+msgid "Width"
+msgstr "Width"
+
+msgid "optional, if empty full width"
+msgstr "optional, if empty full width"
+
+msgid "Height"
+msgstr "Height"
+
+msgid "Zoom properties"
+msgstr "Zoom properties"
+
+msgid "Move + Zoom"
+msgstr "Move + Zoom"
+
+msgid "Move + Zoom (without zoombar)"
+msgstr "Move + Zoom (without zoombar)"
+
+msgid "Scale"
+msgstr "Scale"
+
+msgid "Satelitemap"
+msgstr "Satelitemap"
+
+msgid "Overviewmap"
+msgstr "Overviewmap"
+
+msgid "Routing"
+msgstr "Routing"
+
+msgid "Enable Scrollwheel to zoom"
+msgstr "Enable Scrollwheel to zoom"
+
+msgid "Worldview"
+msgstr "Worldview"
+
+msgid "Detailview"
+msgstr "Detailview"
+
+msgid "Start Video"
+msgstr "Start Video"
+
+msgid "Youtube with Teaser Image"
+msgstr "Youtube with Teaser Image"
+
+msgid "full width"
+msgstr "full width"
+
+msgid "Thumbnail"
+msgstr "Thumbnail"
+
+msgid "Original Url"
+msgstr "Original Url"
+
+msgid "Own Url"
+msgstr "Own Url"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Media.Community Video"
+msgstr "Media.Community Video"
+
+msgid "Please insert the web address to your YouTube or Vimeo video."
+msgstr "Please insert the web address to your YouTube or Vimeo video."
+
+msgid "Size"
+msgstr "Size"
+
+msgid "user-defined"
+msgstr "user-defined"
+
+msgid "Ratio"
+msgstr "Ratio"
+
+msgid "16:9"
+msgstr "16:9"
+
+msgid "4:3"
+msgstr "4:3"
+
+msgid "Show similar videos (YouTube only)"
+msgstr "Show similar videos (YouTube only)"
+
+msgid "Autoplay Video"
+msgstr "Autoplay Video"
+
+msgid "Sitemap"
+msgstr "Sitemap"
+
+msgid "Target"
+msgstr "Target"
+
+msgid "Levels"
+msgstr "Levels"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "File"
+msgstr "File"
+
+msgid "Mp3 File"
+msgstr "Mp3 File"
+
+msgid "Width (px)"
+msgstr "Width (px)"
+
+msgid "Height (px)"
+msgstr "Height (px)"
+
+msgid "Repeat"
+msgstr "Repeat"
+
+msgid "Auto play"
+msgstr "Auto play"
+
+msgid "Latest referer"
+msgstr "Latest referer"
+
+msgid "Search engine referer"
+msgstr "Search engine referer"
+
+msgid "This site was latest found by"
+msgstr "This site was latest found by"
+
+msgid "Place of departure: zip code, Town, Street"
+msgstr "Place of departure: zip code, Town, Street"
+
+msgid "Show Route"
+msgstr "Show Route"
+
+msgid "Suggestions"
+msgstr "Suggestions"
+
+msgid "Team"
+msgstr "Team"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "First name"
+msgstr "First name"
+
+msgid "Last name"
+msgstr "Last name"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Original Position"
+msgstr "Original Position"
+
+msgid "Phone"
+msgstr "Phone"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "vCard"
+msgstr "vCard"
+
+msgid "Team member data"
+msgstr "Team member data"
+
+msgid "Team member"
+msgstr "Team member"
+
+msgid "default"
+msgstr "default"
+
+msgid "Typ"
+msgstr "Typ"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "Filename"
+msgstr "Filename"
+
+msgid "Downloads"
+msgstr "Downloads"
+
+msgid "No valid youtube url"
+msgstr "No valid youtube url"
+
+msgid "Youtube"
+msgstr "Youtube"
+
+msgid "Autoplay"
+msgstr "Autoplay"
+
+msgid "Paragraphs in Lightbox"
+msgstr "Paragraphs in Lightbox"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Preview image"
+msgstr "Preview image"
+
+msgid "Video Source Type"
+msgstr "Video Source Type"
+
+msgid "Files"
+msgstr "Files"
+
+msgid "Mp4 file"
+msgstr "Mp4 file"
+
+msgid "Ogg File"
+msgstr "Ogg File"
+
+msgid "Webm file (optional)"
+msgstr "Webm file (optional)"
+
+msgid "Links"
+msgstr "Links"
+
+msgid "Mp4 link"
+msgstr "Mp4 link"
+
+msgid "Ogg link"
+msgstr "Ogg link"
+
+msgid "Webm link"
+msgstr "Webm link"
+
+msgid "Insert \"100%\" in both fields to make it responsive."
+msgstr "Insert \"100%\" in both fields to make it responsive."
+
+msgid "Stretch video to maximum width"
+msgstr "Stretch video to maximum width"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Set size of video"
+msgstr "Set size of video"
+
+msgid "Label"
+msgstr "Label"
+
+msgid "All"
+msgstr "All"
+
+msgid "Categorie"
+msgstr "Categorie"
+
+msgid "id"
+msgstr "id"
+
+msgid "Link cannot link to itself"
+msgstr "Link cannot link to itself"
+
+msgid "Text-Image"
+msgstr "Text-Image"
+
+msgid "Text/Image - Alignment"
+msgstr "Text/Image - Alignment"
+
+msgid "Alignment"
+msgstr "Alignment"
+
+msgid "Left"
+msgstr "Left"
+
+msgid "Right"
+msgstr "Right"
+
+msgid "Center"
+msgstr "Center"
+
+msgid "Text flows around Image"
+msgstr "Text flows around Image"
+
+msgid "No content specified. Please add in Admin -> Texts."
+msgstr "No content specified. Please add in Admin -> Texts."
+
+msgid "Texts"
+msgstr "Texts"
+
+msgid "Top-Article"
+msgstr "Top-Article"
+
+msgid "Url include"
+msgstr "Url include"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "Rrd Graph"
+msgstr "Rrd Graph"
+
+msgid "Graph"
+msgstr "Graph"
+
+msgid "duration (days)"
+msgstr "duration (days)"
+
+msgid "Cache lifetime (minutes)"
+msgstr "Cache lifetime (minutes)"
+
+msgid "Events.Show categories"
+msgstr "Events.Show categories"
+
+msgid "Original"
+msgstr "Original"
+
+msgid "Place (City)"
+msgstr "Place (City)"
+
+msgid "Teaser"
+msgstr "Teaser"
+
+msgid "To"
+msgstr "To"
+
+msgid "Events.Top"
+msgstr "Events.Top"
+
+msgid "Publish Date"
+msgstr "Publish Date"
+
+msgid "Start Date"
+msgstr "Start Date"
+
+msgid "End Date"
+msgstr "End Date"
+
+msgid "Place"
+msgstr "Place"
+
+msgid "Events"
+msgstr "Events"
+
+msgid "Read more"
+msgstr "Read more"
+
+msgid "Paragraphs passwordprotected"
+msgstr "Paragraphs passwordprotected"
+
+msgid "Paragraphs"
+msgstr "Paragraphs"
+
+msgid "Favourites"
+msgstr "Favourites"
+
+msgid "You have no favourites!"
+msgstr "You have no favourites!"
+
+msgid "save as favourite"
+msgstr "save as favourite"
+
+msgid "delete favourite"
+msgstr "delete favourite"
+
+msgid "Page name"
+msgstr "Page name"
+
+msgid "Menu"
+msgstr "Menu"
+
+msgid "Parent Page Name"
+msgstr "Parent Page Name"
+
+msgid "Articles"
+msgstr "Articles"
+
+msgid "Show categories"
+msgstr "Show categories"
+
+msgid "Publication"
+msgstr "Publication"
+
+msgid "Author"
+msgstr "Author"
+
+msgid "VI-Number"
+msgstr "VI-Number"
+
+msgid "Questions and answers"
+msgstr "Questions and answers"
+
+msgid "Question"
+msgstr "Question"
+
+msgid "Answer"
+msgstr "Answer"
+
+msgid "Please use this format -> Year / Month"
+msgstr "Please use this format -> Year / Month"
+
+msgid "Hot-topic"
+msgstr "Hot-topic"
+
+msgid "Ends at"
+msgstr "Ends at"
+
+msgid "Required reading"
+msgstr "Required reading"
+
+msgid "Only intern"
+msgstr "Only intern"
+
+msgid "Priority"
+msgstr "Priority"
+
+msgid "For sorting articles if they have same date"
+msgstr "For sorting articles if they have same date"
+
+msgid "Articles required for reading"
+msgstr "Articles required for reading"
+
+msgid "{0} articles are not read but required for reading - please read!"
+msgstr "{0} articles are not read but required for reading - please read!"
+
+msgid "Mark as read"
+msgstr "Mark as read"
+
+msgid "VI-Nr"
+msgstr "VI-Nr"
+
+msgid "Contraction"
+msgstr "Contraction"
+
+msgid "Feedback E-Mail"
+msgstr "Feedback E-Mail"
+
+msgid "Authors"
+msgstr "Authors"
+
+msgid "Article Views"
+msgstr "Article Views"
+
+msgid "Article"
+msgstr "Article"
+
+msgid "User"
+msgstr "User"
+
+msgid "Subject"
+msgstr "Subject"
+
+msgid "Creation Date"
+msgstr "Creation Date"
+
+msgid "Copy of"
+msgstr "Copy of"
+
+msgid "Your data has been saved successfully."
+msgstr "Your data has been saved successfully."
+
+msgid "Mails/Min"
+msgstr "Mails/Min"
+
+msgid "Sending stopped, cannot start again"
+msgstr "Sending stopped, cannot start again"
+
+msgid "Sending paused"
+msgstr "Sending paused"
+
+msgid "Sending"
+msgstr "Sending"
+
+msgid "Newsletter waiting for start"
+msgstr "Newsletter waiting for start"
+
+msgid "{0} sent, {1} waiting to send."
+msgstr "{0} sent, {1} waiting to send."
+
+msgid "Last mail sent: {0}"
+msgstr "Last mail sent: {0}"
+
+msgid "Unsubscribe"
+msgstr "Unsubscribe"
+
+msgid "Edit subscriber"
+msgstr "Edit subscriber"
+
+msgid "Newsletter"
+msgstr "Newsletter"
+
+msgid "Firstname"
+msgstr "Firstname"
+
+msgid "Lastname"
+msgstr "Lastname"
+
+msgid "{0} of {1} queued users deleted."
+msgstr "{0} of {1} queued users deleted."
+
+msgid "Newsletter stopped, cannot change status."
+msgstr "Newsletter stopped, cannot change status."
+
+msgid "Unknown status."
+msgstr "Unknown status."
+
+msgid "Can only add users to a paused newsletter"
+msgstr "Can only add users to a paused newsletter"
+
+msgid "Recipient"
+msgstr "Recipient"
+
+msgid "IP-Address"
+msgstr "IP-Address"
+
+msgid "Mail"
+msgstr "Mail"
+
+msgid "Add/Remove Subscriber to Queue"
+msgstr "Add/Remove Subscriber to Queue"
+
+msgid "Queue"
+msgstr "Queue"
+
+msgid "Statistics"
+msgstr "Statistics"
+
+msgid ""
+"Preview cannot be shown because it needs at least one recipient of this "
+"newsletter"
+msgstr ""
+"Preview cannot be shown because it needs at least one recipient of this "
+"newsletter"
+
+msgid "Starting Time"
+msgstr "Starting Time"
+
+msgid "Instantly"
+msgstr "Instantly"
+
+msgid "Later"
+msgstr "Later"
+
+msgid "Sending speed"
+msgstr "Sending speed"
+
+msgid "Slow"
+msgstr "Slow"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Fast"
+msgstr "Fast"
+
+msgid "Unlimited"
+msgstr "Unlimited"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Count"
+msgstr "Count"
+
+msgid "[%]"
+msgstr "[%]"
+
+msgid "view rate"
+msgstr "view rate"
+
+msgid "percentage of users which opened the html newsletter"
+msgstr "percentage of users which opened the html newsletter"
+
+msgid "click rate"
+msgstr "click rate"
+
+msgid "percentage of users which clicked at least one link in newsletter"
+msgstr "percentage of users which clicked at least one link in newsletter"
+
+msgid "Newsletter Subscriber settings"
+msgstr "Newsletter Subscriber settings"
+
+msgid "Unsubscribe Newsletter"
+msgstr "Unsubscribe Newsletter"
+
+msgid "Can only remove users from a paused newsletter"
+msgstr "Can only remove users from a paused newsletter"
+
+msgid "Gender"
+msgstr "Gender"
+
+msgid "Newsletter subscribing"
+msgstr "Newsletter subscribing"
+
+msgid "Subscribe the newsletter"
+msgstr "Subscribe the newsletter"
+
+msgid ""
+"Your E-Mail address has been verified. You will receive our newsletters in "
+"future."
+msgstr ""
+"Your E-Mail address has been verified. You will receive our newsletters in "
+"future."
+
+msgid "Recipients"
+msgstr "Recipients"
+
+msgid "Please select recipients."
+msgstr "Please select recipients."
+
+msgid "Subscribe date"
+msgstr "Subscribe date"
+
+msgid "Active?"
+msgstr "Active?"
+
+msgid "The subscription has been saved successfully."
+msgstr "The subscription has been saved successfully."
+
+msgid "You are already subscribed to new newsletter."
+msgstr "You are already subscribed to new newsletter."
+
+msgid "Hello {0}"
+msgstr "Hello {0}"
+
+msgid "You have just been subscribed to the newsletter at {0}."
+msgstr "You have just been subscribed to the newsletter at {0}."
+
+msgid ""
+"Please click the following link to confirm your E-Mail address and to "
+"receive our newsletters in future."
+msgstr ""
+"Please click the following link to confirm your E-Mail address and to "
+"receive our newsletters in future."
+
+msgid "ACTIVATION LINK"
+msgstr "ACTIVATION LINK"
+
+msgid "To unsubscribe anytime from our newsletter, click this link:"
+msgstr "To unsubscribe anytime from our newsletter, click this link:"
+
+msgid "To change you data or settings, click this link:"
+msgstr "To change you data or settings, click this link:"
+
+msgid "Thanks for your subscription!"
+msgstr "Thanks for your subscription!"
+
+msgid ""
+"Please click here, to confirm your E-Mail address and to receive our "
+"newsletters in future."
+msgstr ""
+"Please click here, to confirm your E-Mail address and to receive our "
+"newsletters in future."
+
+msgid "Newsletter subscription"
+msgstr "Newsletter subscription"
+
+msgid "Months"
+msgstr "Months"
+
+msgid "Unsubscribe newsletter"
+msgstr "Unsubscribe newsletter"
+
+msgid "You have been successfully unsubscribed from the newsletter."
+msgstr "You have been successfully unsubscribed from the newsletter."
+
+msgid "Form.Radio"
+msgstr "Form.Radio"
+
+msgid "Output Type"
+msgstr "Output Type"
+
+msgid "horizontal"
+msgstr "horizontal"
+
+msgid "vertical"
+msgstr "vertical"
+
+msgid "Form.Datefield"
+msgstr "Form.Datefield"
+
+msgid "Default Value"
+msgstr "Default Value"
+
+msgid "Form.Multi Checkbox"
+msgstr "Form.Multi Checkbox"
+
+msgid "Show check all links"
+msgstr "Show check all links"
+
+msgid "Form.File Upload"
+msgstr "Form.File Upload"
+
+msgid "attached"
+msgstr "attached"
+
+msgid "Form.Select"
+msgstr "Form.Select"
+
+msgid "Label Width"
+msgstr "Label Width"
+
+msgid "Required"
+msgstr "Required"
+
+msgid "Hide Label"
+msgstr "Hide Label"
+
+msgid "Label above field"
+msgstr "Label above field"
+
+msgid "Form.Textfield"
+msgstr "Form.Textfield"
+
+msgid "Validator"
+msgstr "Validator"
+
+msgid "none"
+msgstr "none"
+
+msgid "Alpha"
+msgstr "Alpha"
+
+msgid "Alphanumeric"
+msgstr "Alphanumeric"
+
+msgid "Form.Textarea"
+msgstr "Form.Textarea"
+
+msgid "Box Label"
+msgstr "Box Label"
+
+msgid "Form.Checkbox"
+msgstr "Form.Checkbox"
+
+msgid "Form"
+msgstr "Form"
+
+msgid "An error has occurred"
+msgstr "An error has occurred"
+
+msgid "Please don't fill 'Leave empty' field"
+msgstr "Please don't fill 'Leave empty' field"
+
+msgid ""
+"An error occured while processing the form. Please try to submit again later."
+""
+msgstr ""
+"An error occured while processing the form. Please try to submit again later."
+""
+
+msgid "Form.Fieldset"
+msgstr "Form.Fieldset"
+
+msgid "Form Properties"
+msgstr "Form Properties"
+
+msgid "E-Mail Subject"
+msgstr "E-Mail Subject"
+
+msgid "Submit Caption"
+msgstr "Submit Caption"
+
+msgid "Send copy to User"
+msgstr "Send copy to User"
+
+msgid "Thank you for your inquiry, it will be processed as soon as posible."
+msgstr "Thank you for your inquiry, it will be processed as soon as posible."
+
+msgid "Text on successful submit"
+msgstr "Text on successful submit"
+
+msgid "The form has been submitted successfully."
+msgstr "The form has been submitted successfully."
+
+msgid "Number"
+msgstr "Number"
+
+msgid "E-Mail Recipient"
+msgstr "E-Mail Recipient"
+
+msgid "E-Mail CC"
+msgstr "E-Mail CC"
+
+msgid "E-Mail Field"
+msgstr "E-Mail Field"
+
+msgid "Form-Paragraphs"
+msgstr "Form-Paragraphs"
+
+msgid ""
+"Cookies are set when visiting this webpage. Click to deactivate cookies."
+msgstr ""
+"Cookies are set when visiting this webpage. Click to deactivate cookies."
+
+msgid ""
+"No cookies are set when visiting this webpage. Click to activate cookies."
+msgstr ""
+"No cookies are set when visiting this webpage. Click to activate cookies."
+
+msgid "Cookie Opt In / Opt Out"
+msgstr "Cookie Opt In / Opt Out"
+
+msgid ""
+"This website uses cookies to help us give you the best experience when you "
+"visit our website."
+msgstr ""
+"This website uses cookies to help us give you the best experience when you "
+"visit our website."
+
+msgid "More information about the use of cookies"
+msgstr "More information about the use of cookies"
+
+msgid "Accept and continue"
+msgstr "Accept and continue"
+
+msgid "Userprofile"
+msgstr "Userprofile"
+
+msgid "Member since"
+msgstr "Member since"
+
+msgid "Latest online"
+msgstr "Latest online"
+
+msgid "Place of living"
+msgstr "Place of living"
+
+msgid "Short description"
+msgstr "Short description"
+
+msgid "Last Posts"
+msgstr "Last Posts"
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Nickname"
+msgstr "Nickname"
+
+msgid "Signature"
+msgstr "Signature"
+
+msgid "Short Description"
+msgstr "Short Description"
+
+msgid "A new entry has been written in your guestbook."
+msgstr "A new entry has been written in your guestbook."
+
+msgid "Here is the Link to your profile:"
+msgstr "Here is the Link to your profile:"
+
+msgid "This is the text that was saved in your guestbook:"
+msgstr "This is the text that was saved in your guestbook:"
+
+msgid "Click here to go directly to your profile"
+msgstr "Click here to go directly to your profile"
+
+msgid "Guestbook"
+msgstr "Guestbook"
+
+msgid "User '%value%' does already exist"
+msgstr "User '%value%' does already exist"
+
+msgid "General"
+msgstr "General"
+
+msgid "Gallery"
+msgstr "Gallery"
+
+msgid "Account - Change Password"
+msgstr "Account - Change Password"
+
+msgid "Current Password"
+msgstr "Current Password"
+
+msgid "New Password"
+msgstr "New Password"
+
+msgid "Change Password"
+msgstr "Change Password"
+
+msgid "This user doesn't have a password, he must log in using {0}"
+msgstr "This user doesn't have a password, he must log in using {0}"
+
+msgid "The password was changed successfully"
+msgstr "The password was changed successfully"
+
+msgid "Click here"
+msgstr "Click here"
+
+msgid "to get back to the formular"
+msgstr "to get back to the formular"
+
+msgid "Lost your password?"
+msgstr "Lost your password?"
+
+msgid "Please type in your {0} email address in the field below."
+msgstr "Please type in your {0} email address in the field below."
+
+msgid ""
+"You will receive an email with a password reset link and further "
+"instructions."
+msgstr ""
+"You will receive an email with a password reset link and further "
+"instructions."
+
+msgid "Set a new password"
+msgstr "Set a new password"
+
+msgid ""
+"Please enter in both fields the password which you want to use for your "
+"useraccount"
+msgstr ""
+"Please enter in both fields the password which you want to use for your "
+"useraccount"
+
+msgid "After entering your new password you are automatically logged in."
+msgstr "After entering your new password you are automatically logged in."
+
+msgid "Set new Password"
+msgstr "Set new Password"
+
+msgid ""
+"Maybe you have already set your password, or the link was not copied correct "
+"out of the email."
+msgstr ""
+"Maybe you have already set your password, or the link was not copied correct "
+"out of the email."
+
+msgid "Your new password has been set."
+msgstr "Your new password has been set."
+
+msgid "You were logged in, automatically"
+msgstr "You were logged in, automatically"
+
+msgid "to get back to the Startpage"
+msgstr "to get back to the Startpage"
+
+msgid "Request password"
+msgstr "Request password"
+
+msgid "An account for the address '%value%' doesn't exist"
+msgstr "An account for the address '%value%' doesn't exist"
+
+msgid "Set password"
+msgstr "Set password"
+
+msgid "Show my Profile"
+msgstr "Show my Profile"
+
+msgid "Delete Account"
+msgstr "Delete Account"
+
+msgid "Your Password"
+msgstr "Your Password"
+
+msgid "Register"
+msgstr "Register"
+
+msgid ""
+"With a free {0} account you can take part actively in the forum and write "
+"own posts. In addition, you have the possibility to observe single "
+"discussions and get informed by e-mail about new posts on the subject."
+msgstr ""
+"With a free {0} account you can take part actively in the forum and write "
+"own posts. In addition, you have the possibility to observe single "
+"discussions and get informed by e-mail about new posts on the subject."
+
+msgid "create account"
+msgstr "create account"
+
+msgid ""
+"Your Account has been created successfully. You will receive a confirmation "
+"e-mail soon."
+msgstr ""
+"Your Account has been created successfully. You will receive a confirmation "
+"e-mail soon."
+
+msgid "Please login"
+msgstr "Please login"
+
+msgid "You have to login to see the requested page."
+msgstr "You have to login to see the requested page."
+
+msgid "If you don't have an account, you can"
+msgstr "If you don't have an account, you can"
+
+msgid "register here"
+msgstr "register here"
+
+msgid "If you have lost your password,"
+msgstr "If you have lost your password,"
+
+msgid "request a new one here"
+msgstr "request a new one here"
+
+msgid "Auto Login"
+msgstr "Auto Login"
+
+msgid "Invalid E-Mail or password, please try again."
+msgstr "Invalid E-Mail or password, please try again."
+
+msgid "Logged In"
+msgstr "Logged In"
+
+msgid "You have been logged in sucessfully."
+msgstr "You have been logged in sucessfully."
+
+msgid "If the needed page doesn't load automatically,"
+msgstr "If the needed page doesn't load automatically,"
+
+msgid "please click here"
+msgstr "please click here"
+
+msgid "Edit Profile"
+msgstr "Edit Profile"
+
+msgid "Lost Password"
+msgstr "Lost Password"
+
+msgid "Activate"
+msgstr "Activate"
+
+msgid "Set Password:"
+msgstr "Set Password:"
+
+msgid ""
+"Plese enter in both fields the password which you want to use for your "
+"useraccount"
+msgstr ""
+"Plese enter in both fields the password which you want to use for your "
+"useraccount"
+
+msgid ""
+"After the activation you are automatically logged in and you could use your "
+"account."
+msgstr ""
+"After the activation you are automatically logged in and you could use your "
+"account."
+
+msgid "Activate Account"
+msgstr "Activate Account"
+
+msgid ""
+"Data was not sent completely. Please copy the complete address out of the "
+"email."
+msgstr ""
+"Data was not sent completely. Please copy the complete address out of the "
+"email."
+
+msgid "This account has already been activated."
+msgstr "This account has already been activated."
+
+msgid ""
+"Activation code is wrong. Maybe the address was copied wrong out of the "
+"email?"
+msgstr ""
+"Activation code is wrong. Maybe the address was copied wrong out of the "
+"email?"
+
+msgid "Your useraccount was successfully activated."
+msgstr "Your useraccount was successfully activated."
+
+msgid "Forum.User-List"
+msgstr "Forum.User-List"
+
+msgid "Login:"
+msgstr "Login:"
+
+msgid "Account - Properties"
+msgstr "Account - Properties"
+
+msgid "edit account"
+msgstr "edit account"
+
+msgid "The changed data was saved successfully"
+msgstr "The changed data was saved successfully"
+
+msgid "My Profile"
+msgstr "My Profile"
+
+msgid "Link Image"
+msgstr "Link Image"
+
+msgid "Left column"
+msgstr "Left column"
+
+msgid "2 Columns"
+msgstr "2 Columns"
+
+msgid "Right column"
+msgstr "Right column"
+
+msgid "Marquee"
+msgstr "Marquee"
+
+msgid "Switch display"
+msgstr "Switch display"
+
+msgid "Link text"
+msgstr "Link text"
+
+msgid "Link Text"
+msgstr "Link Text"
+
+msgid "Start opened"
+msgstr "Start opened"
+
+msgid "Text Image Link"
+msgstr "Text Image Link"
+
+msgid "Linktext"
+msgstr "Linktext"
+
+msgid "Shop.Product: Voucher"
+msgstr "Shop.Product: Voucher"
+
+msgctxt "Amount of Money"
+msgid "Amount"
+msgstr "Amount"
+
+msgid "Voucher"
+msgstr "Voucher"
+
+msgid "Order"
+msgstr "Order"
+
+msgid "Cart"
+msgstr "Cart"
+
+msgid "Shop"
+msgstr "Shop"
+
+msgid "Amount"
+msgstr "Amount"
+
+msgid "Product"
+msgstr "Product"
+
+msgid "Mr."
+msgstr "Mr."
+
+msgid "Ms."
+msgstr "Ms."
+
+msgid "value of goods"
+msgstr "value of goods"
+
+msgid "net amount"
+msgstr "net amount"
+
+msgid "+{0}% VAT"
+msgstr "+{0}% VAT"
+
+msgid "Shipping and Handling"
+msgstr "Shipping and Handling"
+
+msgid "Total Amount"
+msgstr "Total Amount"
+
+msgid "Discount"
+msgstr "Discount"
+
+msgid "Comment"
+msgstr "Comment"
+
+msgctxt "Amount of Money"
+msgid "Used Amount"
+msgstr "Used Amount"
+
+msgid "Vouchers"
+msgstr "Vouchers"
+
+msgid "Remaining Amount {0}"
+msgstr "Remaining Amount {0}"
+
+msgid "Amount of Money"
+msgstr "Amount of Money"
+
+msgid "'%value%' code was already used"
+msgstr "'%value%' code was already used"
+
+msgid "'%value%' is not a valid voucher code"
+msgstr "'%value%' is not a valid voucher code"
+
+msgid "Voucher Code"
+msgstr "Voucher Code"
+
+msgid "Redeem Voucher"
+msgstr "Redeem Voucher"
+
+msgid "Your Voucher has been successfully redeemed."
+msgstr "Your Voucher has been successfully redeemed."
+
+msgid "Checkout"
+msgstr "Checkout"
+
+msgid "Shop.Cart"
+msgstr "Shop.Cart"
+
+msgid "Back to shop"
+msgstr "Back to shop"
+
+msgid "To checkout"
+msgstr "To checkout"
+
+msgid "Your cart contains"
+msgstr "Your cart contains"
+
+msgid "Price"
+msgstr "Price"
+
+msgid "Order Number"
+msgstr "Order Number"
+
+msgid "Customer Number"
+msgstr "Customer Number"
+
+msgid "Invoice Number"
+msgstr "Invoice Number"
+
+msgid "Invoice Date"
+msgstr "Invoice Date"
+
+msgid "Can't submit order because the cart is empty."
+msgstr "Can't submit order because the cart is empty."
+
+msgid "Please enter your address"
+msgstr "Please enter your address"
+
+msgctxt "sex"
+msgid "Title"
+msgstr "Title"
+
+msgid "Street"
+msgstr "Street"
+
+msgid "ZIP"
+msgstr "ZIP"
+
+msgid "Country"
+msgstr "Country"
+
+msgid "What type of payment do you wish?"
+msgstr "What type of payment do you wish?"
+
+msgid "Payment"
+msgstr "Payment"
+
+msgid "Other comments, questions or suggestions"
+msgstr "Other comments, questions or suggestions"
+
+msgid "Orders"
+msgstr "Orders"
+
+msgid "Back to cart"
+msgstr "Back to cart"
+
+msgid "canceled"
+msgstr "canceled"
+
+msgid "Show canceled orders"
+msgstr "Show canceled orders"
+
+msgid "shipped"
+msgstr "shipped"
+
+msgid "Show shipped orders"
+msgstr "Show shipped orders"
+
+msgid "Order Nr"
+msgstr "Order Nr"
+
+msgid "Invoice Nr"
+msgstr "Invoice Nr"
+
+msgid "Amt"
+msgstr "Amt"
+
+msgid "Sum"
+msgstr "Sum"
+
+msgid "Payed"
+msgstr "Payed"
+
+msgctxt "Invoice"
+msgid "IN"
+msgstr "IN"
+
+msgctxt "Shipped"
+msgid "SH"
+msgstr "SH"
+
+msgid "Wirecard"
+msgstr "Wirecard"
+
+msgid "Failure"
+msgstr "Failure"
+
+msgid "Thank you very much for your order."
+msgstr "Thank you very much for your order."
+
+msgid "Buy now"
+msgstr "Buy now"
+
+msgid "No data received"
+msgstr "No data received"
+
+msgid "Shop Confirmation Text"
+msgstr "Shop Confirmation Text"
+
+msgid "Transfer Form"
+msgstr "Transfer Form"
+
+msgid "Pre Payment"
+msgstr "Pre Payment"
+
+msgid "Please check your details"
+msgstr "Please check your details"
+
+msgid "Send order"
+msgstr "Send order"
+
+msgid "Shop Shipped Mail"
+msgstr "Shop Shipped Mail"
+
+msgid "You ordered the following product"
+msgid_plural "You ordered the following products"
+msgstr[0] "You ordered the following product"
+msgstr[1] "You ordered the following products"
+
+msgid "Productlist"
+msgstr "Productlist"
+
+msgid "Order Products"
+msgstr "Order Products"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "Your message to {0}"
+msgstr "Your message to {0}"
+
+msgid "Max Mustermann..."
+msgstr "Max Mustermann..."
+
+msgid "Address Header"
+msgstr "Address Header"
+
+msgid "Your Comment"
+msgstr "Your Comment"
+
+msgid "You pay by"
+msgstr "You pay by"
+
+msgid "Cash on Delivery Charge"
+msgstr "Cash on Delivery Charge"
+
+msgid "Cash on Delivery"
+msgstr "Cash on Delivery"
+
+msgid "PayPal"
+msgstr "PayPal"
+
+msgid "done"
+msgstr "done"
+
+msgid "Order at {0}"
+msgstr "Order at {0}"
+
+msgid "Origin"
+msgstr "Origin"
+
+msgid "Internet"
+msgstr "Internet"
+
+msgid "Folder"
+msgstr "Folder"
+
+msgid "Fair"
+msgstr "Fair"
+
+msgid "Customer Nr"
+msgstr "Customer Nr"
+
+msgid "Shipped"
+msgstr "Shipped"
+
+msgid "Canceled"
+msgstr "Canceled"
+
+msgid "Customer"
+msgstr "Customer"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "add to cart"
+msgstr "add to cart"
+
+msgid "Need cart for shop but could not find it. Please add in Admin."
+msgstr "Need cart for shop but could not find it. Please add in Admin."
+
+msgid "The product has been added to the {0}."
+msgstr "The product has been added to the {0}."
+
+msgid "Related Products"
+msgstr "Related Products"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "Valid From"
+msgstr "Valid From"
+
+msgid "Detail info"
+msgstr "Detail info"
+
+msgid "Current Price"
+msgstr "Current Price"
+
+msgid "Shop.Products"
+msgstr "Shop.Products"
+
+msgid "Cart is empty"
+msgstr "Cart is empty"
+
+msgid "You cart contains {0} products"
+msgstr "You cart contains {0} products"
+
+msgid "To cart"
+msgstr "To cart"
+
+msgid "To Checkout"
+msgstr "To Checkout"
+
+msgid "Shop.ProductList"
+msgstr "Shop.ProductList"
+
+msgid "Headline"
+msgstr "Headline"
+
+msgid "Original headline"
+msgstr "Original headline"
+
+msgid "Stage"
+msgstr "Stage"
+
+msgid "Carousel"
+msgstr "Carousel"
+
+msgid "Column {0}"
+msgstr "Column {0}"
+
+msgid "Headline 1"
+msgstr "Headline 1"
+
+msgid "Headline 2"
+msgstr "Headline 2"
+
+msgid "Original headline 1"
+msgstr "Original headline 1"
+
+msgid "Original headline 2"
+msgstr "Original headline 2"
+
+msgid "Headlines"
+msgstr "Headlines"
+
+msgid "2 click social media buttons"
+msgstr "2 click social media buttons"
+
+msgid ""
+"2 clicks for more privacy: When you click here the button will be activated "
+"and you can send your recommendation. As soon as the button is activated "
+"data will be sent to third parties."
+msgstr ""
+"2 clicks for more privacy: When you click here the button will be activated "
+"and you can send your recommendation. As soon as the button is activated "
+"data will be sent to third parties."
+
+msgid "not connected to Facebook"
+msgstr "not connected to Facebook"
+
+msgid "connected to Facebook"
+msgstr "connected to Facebook"
+
+msgid "Recommend"
+msgstr "Recommend"
+
+msgid "en_US"
+msgstr "en_US"
+
+msgid "not connected to Twitter"
+msgstr "not connected to Twitter"
+
+msgid "connected to Twitter"
+msgstr "connected to Twitter"
+
+msgid "Tweet"
+msgstr "Tweet"
+
+msgid "not connected to Google+"
+msgstr "not connected to Google+"
+
+msgid "connected to Google+"
+msgstr "connected to Google+"
+
+msgid ""
+"If you activate these buttons with a click informations will be sent to "
+"Facebook, Twitter or Google in the USA and may be stored there."
+msgstr ""
+"If you activate these buttons with a click informations will be sent to "
+"Facebook, Twitter or Google in the USA and may be stored there."
+
+msgid "Agree permanent activation and data transfer:"
+msgstr "Agree permanent activation and data transfer:"
+
+msgid "settings"
+msgstr "settings"
+
+msgid "Social Media"
+msgstr "Social Media"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "Twitter"
+msgstr "Twitter"
+
+msgid "Google+"
+msgstr "Google+"
+
+msgid "New Tags"
+msgstr "New Tags"
+
+msgid "Tag"
+msgstr "Tag"
+
+msgid "Used"
+msgstr "Used"
+
+msgid "IGNOR"
+msgstr "IGNOR"
+
+msgid "Tags"
+msgstr "Tags"
+
+msgid "uses"
+msgstr "uses"
+
+msgid "Flash"
+msgstr "Flash"
+
+msgid "Choose Child"
+msgstr "Choose Child"
+
+msgid "Image caption"
+msgstr "Image caption"
+
+msgid "Original Image caption"
+msgstr "Original Image caption"
+
+msgid "Original {0}"
+msgstr "Original {0}"
+
+msgid ""
+"Talking filename (\"lorem-ipsum-2015\"), hyphens and underscores are allowed."
+""
+msgstr ""
+"Talking filename (\"lorem-ipsum-2015\"), hyphens and underscores are allowed."
+""
+
+msgid "Short, meaningful description of the image content."
+msgstr "Short, meaningful description of the image content."
+
+msgid ""
+"Some browsers show the text as a tooltip when the mouse pointer is hovering "
+"the image."
+msgstr ""
+"Some browsers show the text as a tooltip when the mouse pointer is hovering "
+"the image."
+
+msgid "Original Image"
+msgstr "Original Image"
+
+msgid "Own Image"
+msgstr "Own Image"
+
+msgid "original"
+msgstr "original"
+
+msgid "Please fill out the field"
+msgstr "Please fill out the field"
+
+msgid "Size of Target Image"
+msgstr "Size of Target Image"
+
+msgid "Size of Target Image to support High Resolution Displays (\"Retina\")"
+msgstr "Size of Target Image to support High Resolution Displays (\"Retina\")"
+
+msgid "or larger"
+msgstr "or larger"
+
+msgid "don't Crop"
+msgstr "don't Crop"
+
+msgid "Crop"
+msgstr "Crop"
+
+msgid "If size does not fit, scale method will be"
+msgstr "If size does not fit, scale method will be"
+
+msgid "Can't create more than {0} entries."
+msgstr "Can't create more than {0} entries."
+
+msgid "Clipboard is empty"
+msgstr "Clipboard is empty"
+
+msgid "Source and target paragraphs are not compatible."
+msgstr "Source and target paragraphs are not compatible."
+
+msgid "Paragraph {0}"
+msgstr "Paragraph {0}"
+
+msgid "Can't delete translated pages."
+msgstr "Can't delete translated pages."
+
+msgid "Original  Name"
+msgstr "Original  Name"
+
+msgid "Name of Page"
+msgstr "Name of Page"
+
+msgid "Custom Filename"
+msgstr "Custom Filename"
+
+msgid "Pasting {0}"
+msgstr "Pasting {0}"
+
+msgid "Cannot set Home Page invisible"
+msgstr "Cannot set Home Page invisible"
+
+msgid "Can't move Page to other Subroot"
+msgstr "Can't move Page to other Subroot"
+
+msgid "Pagetype"
+msgstr "Pagetype"
+
+msgid "Hide in Menu"
+msgstr "Hide in Menu"
+
+msgid "Menu settings"
+msgstr "Menu settings"
+
+msgid "Hide"
+msgstr "Hide"
+
+msgid "Device visible"
+msgstr "Device visible"
+
+msgid "Domain"
+msgstr "Domain"
+
+msgctxt "Flag of a Country"
+msgid "Flag"
+msgstr "Flag"
+
+msgid "Root"
+msgstr "Root"
+
+msgctxt "decimal separator"
+msgid "."
+msgstr "."
+
+msgctxt "thousands separator"
+msgid ","
+msgstr ","
+
+msgid "By"
+msgstr "By"
+
+msgid "on"
+msgstr "on"
+
+msgid "at"
+msgstr "at"
+
+msgid "Post"
+msgstr "Post"
+
+msgid "Guestbook Detail"
+msgstr "Guestbook Detail"
+
+msgid "Guestbook Settings"
+msgstr "Guestbook Settings"
+
+msgid "The entry in your guestbook has been deacitvated."
+msgstr "The entry in your guestbook has been deacitvated."
+
+msgid "Created"
+msgstr "Created"
+
+msgid "The entry in your guestbook has been acitvated."
+msgstr "The entry in your guestbook has been acitvated."
+
+msgid "Use this link to get to your guestbook:"
+msgstr "Use this link to get to your guestbook:"
+
+msgid "This post does not exist anymore."
+msgstr "This post does not exist anymore."
+
+msgid "Remind mail receiver"
+msgstr "Remind mail receiver"
+
+msgid "Send no mail"
+msgstr "Send no mail"
+
+msgid "Post save type"
+msgstr "Post save type"
+
+msgid "Active, may be deactivated"
+msgstr "Active, may be deactivated"
+
+msgid "Inactive, must be activated"
+msgstr "Inactive, must be activated"
+
+msgid "A new post has been written in your Guestbook."
+msgstr "A new post has been written in your Guestbook."
+
+msgid "Written by"
+msgstr "Written by"
+
+msgid "Content:"
+msgstr "Content:"
+
+msgid "Click this link to get to your guestbook:"
+msgstr "Click this link to get to your guestbook:"
+
+msgid "New entry in your guestbook"
+msgstr "New entry in your guestbook"
+
+msgid "Create Date"
+msgstr "Create Date"
+
+msgid "Feed"
+msgstr "Feed"
+
+msgid "Blog.Show categories"
+msgstr "Blog.Show categories"
+
+msgid "Posted on {0}"
+msgstr "Posted on {0}"
+
+msgid "by {0}"
+msgstr "by {0}"
+
+msgid "This entry was posted in"
+msgstr "This entry was posted in"
+
+msgid "Bookmark the {0}."
+msgstr "Bookmark the {0}."
+
+msgid "Back to overview"
+msgstr "Back to overview"
+
+msgid "Blog"
+msgstr "Blog"
+
+msgid "Blog Settings"
+msgstr "Blog Settings"
+
+msgid "New Comment Mail Receiver"
+msgstr "New Comment Mail Receiver"
+
+msgid "Recent Posts"
+msgstr "Recent Posts"
+
+msgid "Leave a Reply"
+msgstr "Leave a Reply"
+
+msgid "Your email address will not be published."
+msgstr "Your email address will not be published."
+
+msgid "Captcha"
+msgstr "Captcha"
+
+msgid "Post Comment"
+msgstr "Post Comment"
+
+msgid "A new comment has been written in your Blog."
+msgstr "A new comment has been written in your Blog."
+
+msgid "Blog Post"
+msgstr "Blog Post"
+
+msgid "New comment in your blog"
+msgstr "New comment in your blog"
+
+msgid "Blank"
+msgstr "Blank"
+
+msgid "Line"
+msgstr "Line"
+
+msgid "Flash.Code"
+msgstr "Flash.Code"
+
+msgid "Own Flash"
+msgstr "Own Flash"
+
+msgid "Flash.Upload"
+msgstr "Flash.Upload"
+
+msgid "swf File"
+msgstr "swf File"
+
+msgid "Allow fullscreen"
+msgstr "Allow fullscreen"
+
+msgid "Flash variables"
+msgstr "Flash variables"
+
+msgid "Variable name"
+msgstr "Variable name"
+
+msgid "Html"
+msgstr "Html"
+
+msgid "Offline hidden Html"
+msgstr "Offline hidden Html"
+
+msgid "(offline hidden)"
+msgstr "(offline hidden)"
+
+msgid "Space"
+msgstr "Space"
+
+msgid "Link to parent page"
+msgstr "Link to parent page"
+
+msgid "« back"
+msgstr "« back"
+
+msgid "Own Download"
+msgstr "Own Download"
+
+msgid "Original Filename"
+msgstr "Original Filename"
+
+msgid "Text 1"
+msgstr "Text 1"
+
+msgid "Text 2"
+msgstr "Text 2"
+
+msgid "Original text 1"
+msgstr "Original text 1"
+
+msgid "Original text 2"
+msgstr "Original text 2"
+
+msgid "Headline {0}"
+msgstr "Headline {0}"
+
+msgid "Layer"
+msgstr "Layer"
+
+msgid "Picture 100% width"
+msgstr "Picture 100% width"
+
+msgid "Background Window Width"
+msgstr "Background Window Width"
+
+msgctxt "color"
+msgid "None"
+msgstr "None"
+
+msgid "White"
+msgstr "White"
+
+msgid "Grey"
+msgstr "Grey"
+
+msgid "Black"
+msgstr "Black"
+
+msgid "Background Image"
+msgstr "Background Image"
+
+msgid "Optional"
+msgstr "Optional"
+
+msgid "Background Settings"
+msgstr "Background Settings"
+
+msgid "Standard Adjustments"
+msgstr "Standard Adjustments"
+
+msgid "Background Color"
+msgstr "Background Color"
+
+msgid "Margin Bottom"
+msgstr "Margin Bottom"
+
+msgid "Click on Preview Image"
+msgstr "Click on Preview Image"
+
+msgid "Image Enlarge"
+msgstr "Image Enlarge"
+
+msgid "Original Title"
+msgstr "Original Title"
+
+msgid "Enlarge Image"
+msgstr "Enlarge Image"
+
+msgid "Download original image"
+msgstr "Download original image"
+
+msgid "Use crop region"
+msgstr "Use crop region"
+
+msgid "Image text"
+msgstr "Image text"
+
+msgid "Default"
+msgstr "Default"
+
+msgid "Color"
+msgstr "Color"
+
+msgid "Font Weight"
+msgstr "Font Weight"
+
+msgid "Bold"
+msgstr "Bold"
+
+msgid "Bolder"
+msgstr "Bolder"
+
+msgid "Lighter"
+msgstr "Lighter"
+
+msgid "Font Family"
+msgstr "Font Family"
+
+msgid "Font size"
+msgstr "Font size"
+
+msgid "Additional Styles"
+msgstr "Additional Styles"
+
+msgid "Normal (p)"
+msgstr "Normal (p)"
+
+msgid "Headline 1 (h1)"
+msgstr "Headline 1 (h1)"
+
+msgid "Headline 2 (h2)"
+msgstr "Headline 2 (h2)"
+
+msgid "Headline 3 (h3)"
+msgstr "Headline 3 (h3)"
+
+msgid "Headline 4 (h4)"
+msgstr "Headline 4 (h4)"
+
+msgid "Headline 5 (h5)"
+msgstr "Headline 5 (h5)"
+
+msgid "Headline 6 (h6)"
+msgstr "Headline 6 (h6)"
+
+msgid "Margin top"
+msgstr "Margin top"
+
+msgid "Margin bottom"
+msgstr "Margin bottom"
+
+msgid "Text Align"
+msgstr "Text Align"
+
+msgid "Justify"
+msgstr "Justify"
+
+msgid "You can't delete master styles"
+msgstr "You can't delete master styles"
+
+msgid "Image Positionable"
+msgstr "Image Positionable"
+
+msgid "Position of Image"
+msgstr "Position of Image"
+
+msgid "Descriptiontext"
+msgstr "Descriptiontext"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Show Parent"
+msgstr "Show Parent"
+
+msgid "Flash.Media Player"
+msgstr "Flash.Media Player"
+
+msgid "Element"
+msgstr "Element"
+
+msgid "Start automatically"
+msgstr "Start automatically"
+
+msgid "Loop"
+msgstr "Loop"
+
+msgid "Style"
+msgstr "Style"
+
+msgid "Table"
+msgstr "Table"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "XLS Import"
+msgstr "XLS Import"
+
+msgid "Table style"
+msgstr "Table style"
+
+msgid "Responsive style"
+msgstr "Responsive style"
+
+msgid "Flip Scroll"
+msgstr "Flip Scroll"
+
+msgid "Button"
+msgstr "Button"
+
+msgid "Link.to Component"
+msgstr "Link.to Component"
+
+msgid "Link.to Event"
+msgstr "Link.to Event"
+
+msgid "Event"
+msgstr "Event"
+
+msgid "Link Title"
+msgstr "Link Title"
+
+msgid ""
+"Optional. Description of the link or the link target. Some browsers show the "
+"text as a tooltip when the mouse pointer is hovering the link."
+msgstr ""
+"Optional. Description of the link or the link target. Some browsers show the "
+"text as a tooltip when the mouse pointer is hovering the link."
+
+msgid "Own Link"
+msgstr "Own Link"
+
+msgid "Link.Extern"
+msgstr "Link.Extern"
+
+msgid "Open in"
+msgstr "Open in"
+
+msgid "Same window"
+msgstr "Same window"
+
+msgid "New window"
+msgstr "New window"
+
+msgid "Popup"
+msgstr "Popup"
+
+msgid "Anchor"
+msgstr "Anchor"
+
+msgid "Link.Intern"
+msgstr "Link.Intern"
+
+msgid "Link.to CommunityVideo"
+msgstr "Link.to CommunityVideo"
+
+msgid "Link.to parent page"
+msgstr "Link.to parent page"
+
+msgid "Link.First Child Page"
+msgstr "Link.First Child Page"
+
+msgid "Youtube in Lightbox"
+msgstr "Youtube in Lightbox"
+
+msgid "Link.to News"
+msgstr "Link.to News"
+
+msgid "News"
+msgstr "News"
+
+msgid "Link.to FlashMediaPlayer"
+msgstr "Link.to FlashMediaPlayer"
+
+msgid "Link target"
+msgstr "Link target"
+
+msgid "E-Mail Address"
+msgstr "E-Mail Address"
+
+msgid "Predefined Subject for Mail"
+msgstr "Predefined Subject for Mail"
+
+msgid "Predefined Text for Mail"
+msgstr "Predefined Text for Mail"
+
+msgid "Master"
+msgstr "Master"
+
+msgid "E-Mail address"
+msgstr "E-Mail address"
+
+msgid "Subject of E-Mail"
+msgstr "Subject of E-Mail"
+
+msgid "Predefined text of E-Mail"
+msgstr "Predefined text of E-Mail"
+
+msgid "News.Show categories"
+msgstr "News.Show categories"
+
+msgid "Expiry Date"
+msgstr "Expiry Date"
+
+msgid "News.Top"
+msgstr "News.Top"
+
+msgid "Years"
+msgstr "Years"
+
+msgid "Original Category"
+msgstr "Original Category"
+
+msgid "Directory"
+msgstr "Directory"
+
+msgid "Properties"
+msgstr "Properties"
+
+msgid "hide"
+msgstr "hide"
+
+msgid "You can not {0} this entry as it is used on the following pages:"
+msgstr "You can not {0} this entry as it is used on the following pages:"
+
+msgid "Show"
+msgstr "Show"
+
+msgid "No entries found"
+msgstr "No entries found"
+
+msgid "total"
+msgstr "total"
+
+msgid "Current category:"
+msgstr "Current category:"
+
+msgid ""
+"This category can't be deleted, because there exist sub-categories in it."
+msgstr ""
+"This category can't be deleted, because there exist sub-categories in it."
+
+msgid "No category selected."
+msgstr "No category selected."
+
+msgid "Hello"
+msgstr "Hello"
+
+msgid "a post has been reported for the following reason:"
+msgstr "a post has been reported for the following reason:"
+
+msgid "Open this url to go to the post or read it here:"
+msgstr "Open this url to go to the post or read it here:"
+
+msgid "Open the post or read it directly:"
+msgstr "Open the post or read it directly:"
+
+msgid "Please enter a reason for reporting this Post"
+msgstr "Please enter a reason for reporting this Post"
+
+msgid "A post has been reported"
+msgstr "A post has been reported"
+
+msgid "Comment was successfully reported."
+msgstr "Comment was successfully reported."
+
+msgid "confirmed"
+msgstr "confirmed"
+
+msgid "Do you really want to delete this post?"
+msgstr "Do you really want to delete this post?"
+
+msgid "Comment was successfully deleted."
+msgstr "Comment was successfully deleted."
+
+msgid "report"
+msgstr "report"
+
+msgid "quote"
+msgstr "quote"
+
+msgid "Edit Post"
+msgstr "Edit Post"
+
+msgid "save"
+msgstr "save"
+
+msgid "Create Post"
+msgstr "Create Post"
+
+msgid "Comment was successfully saved."
+msgstr "Comment was successfully saved."
+
+msgid "Posts"
+msgstr "Posts"
+
+msgid "Write"
+msgstr "Write"
+
+msgid "to continue"
+msgstr "to continue"
+
+msgid "Posts.Last Posts"
+msgstr "Posts.Last Posts"
+
+msgid "Linked Images"
+msgstr "Linked Images"
+
+msgid "Teaser image"
+msgstr "Teaser image"
+
+msgid "List child pages"
+msgstr "List child pages"
+
+msgid "List child page names"
+msgstr "List child page names"
+
+msgid "Large Image"
+msgstr "Large Image"
+
+msgid "Images"
+msgstr "Images"
+
+msgid "more"
+msgstr "more"
+
+msgid "Visible Pictures"
+msgstr "Visible Pictures"
+
+msgid "Show all"
+msgstr "Show all"
+
+msgid ""
+"Choose a number to just show this number of items and hide the others behind "
+"a \"more\"-button"
+msgstr ""
+"Choose a number to just show this number of items and hide the others behind "
+"a \"more\"-button"
+
+msgid "Button Link Text"
+msgstr "Button Link Text"
+
+msgid "Choose a text for the \"more\"-Button under the pictures"
+msgstr "Choose a text for the \"more\"-Button under the pictures"
+
+msgid "Download all images"
+msgstr "Download all images"
+
+msgid "for child pages"
+msgstr "for child pages"
+
+msgid ""
+"Optional, but important for SEO! Meaningful title for this page, max. 70 "
+"characters. Appears in the title or tab bar of the browser."
+msgstr ""
+"Optional, but important for SEO! Meaningful title for this page, max. 70 "
+"characters. Appears in the title or tab bar of the browser."
+
+msgid "Dogears"
+msgstr "Dogears"
+
+msgid "Image small"
+msgstr "Image small"
+
+msgid "Dogear"
+msgstr "Dogear"
+
+msgid "Image big"
+msgstr "Image big"
+
+msgid "Colors"
+msgstr "Colors"
+
+msgid "Color values in Hex code without a leading # (e.g. fa5500)"
+msgstr "Color values in Hex code without a leading # (e.g. fa5500)"
+
+msgid "Color small 1"
+msgstr "Color small 1"
+
+msgid "Color small 2"
+msgstr "Color small 2"
+
+msgid "Color big 1"
+msgstr "Color big 1"
+
+msgid "Color big 2"
+msgstr "Color big 2"
+
+msgid "Favicon"
+msgstr "Favicon"
+
+msgid "More about this Topic"
+msgstr "More about this Topic"
+
+msgid "Meta Tags"
+msgstr "Meta Tags"
+
+msgid "SEO"
+msgstr "SEO"
+
+msgid "Open Graph"
+msgstr "Open Graph"
+
+msgid ""
+"Optional, but important for SEO. Short description of the page content in "
+"about 170 characters. Important for Google, Facebook, etc."
+msgstr ""
+"Optional, but important for SEO. Short description of the page content in "
+"about 170 characters. Important for Google, Facebook, etc."
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Search term"
+msgstr "Search term"
+
+msgid "Please type at least two characters."
+msgstr "Please type at least two characters."
+
+msgid "No entries found for search term &quot;{0}&quot;."
+msgstr "No entries found for search term &quot;{0}&quot;."
+
+msgid "Show All"
+msgstr "Show All"
+
+msgid "401 - You are not authorized to view this page"
+msgstr "401 - You are not authorized to view this page"
+
+msgid ""
+"You do not have permission to view this directory or page using the "
+"credentials you supplied"
+msgstr ""
+"You do not have permission to view this directory or page using the "
+"credentials you supplied"
+
+msgid "Client Exception"
+msgstr "Client Exception"
+
+msgid "404 - File not found"
+msgstr "404 - File not found"
+
+msgid "Sorry, that address"
+msgstr "Sorry, that address"
+
+msgid "does not exist at this site"
+msgstr "does not exist at this site"
+
+msgid "If you typed the address, make sure the spelling is correct."
+msgstr "If you typed the address, make sure the spelling is correct."
+
+msgid "Note: Most addresses are case sensitive"
+msgstr "Note: Most addresses are case sensitive"
+
+msgid "Fulltext Search"
+msgstr "Fulltext Search"
+
+msgid "It is not possible to delete a column in first row"
+msgstr "It is not possible to delete a column in first row"
+
+msgid "Invisible"
+msgstr "Invisible"
+
+msgid "Column {0}, width {1}%"
+msgstr "Column {0}, width {1}%"
+
+msgid "Columns type"
+msgstr "Columns type"
+
+msgid "Original Subject"
+msgstr "Original Subject"
+
+msgid "Mail Texts"
+msgstr "Mail Texts"
+
+msgid "Dear Mr. {0} {1}"
+msgstr "Dear Mr. {0} {1}"
+
+msgid "Dear Mrs. {0} {1}"
+msgstr "Dear Mrs. {0} {1}"
+
+msgid "Dear Mrs./Mr. {0} {1}"
+msgstr "Dear Mrs./Mr. {0} {1}"
+
+msgid "Mr. {0}"
+msgstr "Mr. {0}"
+
+msgid "Mrs. {0}"
+msgstr "Mrs. {0}"
+
+msgid "Dear Mr. {0}"
+msgstr "Dear Mr. {0}"
+
+msgid "Hello Mr. {0}"
+msgstr "Hello Mr. {0}"
+
+msgctxt "salutation firstname male"
+msgid "Dear {0}"
+msgstr "Dear {0}"
+
+msgid "Dear Mrs. {0}"
+msgstr "Dear Mrs. {0}"
+
+msgid "Hello Mrs. {0}"
+msgstr "Hello Mrs. {0}"
+
+msgid "Mrs."
+msgstr "Mrs."
+
+msgctxt "salutation firstname female"
+msgid "Dear {0}"
+msgstr "Dear {0}"
+
+msgid "Dear {0} {1}"
+msgstr "Dear {0} {1}"
+
+msgid "Dear Sir or Madam"
+msgstr "Dear Sir or Madam"
+
+msgid "Hello {0} {1}"
+msgstr "Hello {0} {1}"
+
+msgctxt "salutation firstname unknown gender"
+msgid "Dear {0}"
+msgstr "Dear {0}"
+
+msgid "User not found, cannot send testmail."
+msgstr "User not found, cannot send testmail."
+
+msgid "E-Mail successfully sent."
+msgstr "E-Mail successfully sent."
+
+msgid "Error while sending E-Mail."
+msgstr "Error while sending E-Mail."
+
+msgid "Automatically sent e-mail"
+msgstr "Automatically sent e-mail"
+
+msgid "From Address"
+msgstr "From Address"
+
+msgid "From Name"
+msgstr "From Name"
+
+msgid "Reply Address"
+msgstr "Reply Address"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid ""
+"Do you have any questions, wishes or suggestions about this product? Send us "
+"your feedback!"
+msgstr ""
+"Do you have any questions, wishes or suggestions about this product? Send us "
+"your feedback!"
+
+msgid "Feedback from"
+msgstr "Feedback from"
+
+msgid "to page"
+msgstr "to page"
+
+msgid "Feedback to page "
+msgstr "Feedback to page "
+
+msgid "Tab"
+msgstr "Tab"
+
+msgid "Tabs"
+msgstr "Tabs"
+
+msgid "Tab {0}"
+msgstr "Tab {0}"
+
+msgid "Page not found"
+msgstr "Page not found"
+
+msgid "You can't paste a paragraph into itself."
+msgstr "You can't paste a paragraph into itself."
+
+msgid "Can't paste paragraph type '{0}', as it is not avaliable here."
+msgstr "Can't paste paragraph type '{0}', as it is not avaliable here."
+
+msgid "Layout"
+msgstr "Layout"
+
+msgid "Pictures & Media"
+msgstr "Pictures & Media"
+
+msgid "Call to Action"
+msgstr "Call to Action"
+
+msgid "Child Pages"
+msgstr "Child Pages"
+
+msgid "Special"
+msgstr "Special"
+
+msgid "Model"
+msgstr "Model"
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "Paragraphs Group"
+msgstr "Paragraphs Group"
+
+msgid "Kwf Benchmark"
+msgstr "Kwf Benchmark"
+
+msgid "Guest"
+msgstr "Guest"
+
+msgid "Administrator"
+msgstr "Administrator"
+
+msgid "on multiple pages, eg. in a footer"
+msgstr "on multiple pages, eg. in a footer"
+
+msgid "Invalid search terms"
+msgstr "Invalid search terms"
+
+msgid "Please select a value"
+msgstr "Please select a value"
+
+msgid "Please mark the checkbox"
+msgstr "Please mark the checkbox"
+
+msgid "yyyy-mm-dd"
+msgstr "yyyy-mm-dd"
+
+msgid "Day"
+msgstr "Day"
+
+msgid "Month"
+msgstr "Month"
+
+msgid "Year"
+msgstr "Year"
+
+msgid "Please solve captcha correctly"
+msgstr "Please solve captcha correctly"
+
+msgid "Please choose an option"
+msgstr "Please choose an option"
+
+msgid "hh:mm"
+msgstr "hh:mm"
+
+msgid "Delete Entry"
+msgstr "Delete Entry"
+
+msgctxt "locale"
+msgid "C"
+msgstr "C"
+
+msgid "Browse"
+msgstr "Browse"
+
+msgid "Drop your file here"
+msgstr "Drop your file here"
+
+msgid "Please choose a file"
+msgstr "Please choose a file"
+
+msgid "Only png, gif and jpeg supported."
+msgstr "Only png, gif and jpeg supported."
+
+msgid "Repeat {0}"
+msgstr "Repeat {0}"
+
+msgid "Passwords are different. Please try again."
+msgstr "Passwords are different. Please try again."
+
+msgid "Fieldset"
+msgstr "Fieldset"
+
+msgid "Passwords are different - please try again"
+msgstr "Passwords are different - please try again"
+
+msgid "An account with this email address already exists"
+msgstr "An account with this email address already exists"
+
+msgid "Account created."
+msgstr "Account created."
+
+msgid "Account created by {0}."
+msgstr "Account created by {0}."
+
+msgid "Account edited."
+msgstr "Account edited."
+
+msgid "Account edited by {0}."
+msgstr "Account edited by {0}."
+
+msgid "Account activated."
+msgstr "Account activated."
+
+msgid "Account activated by {0}."
+msgstr "Account activated by {0}."
+
+msgid "Password set."
+msgstr "Password set."
+
+msgid "Password set by {0}."
+msgstr "Password set by {0}."
+
+msgid "Account deleted e-mail sent."
+msgstr "Account deleted e-mail sent."
+
+msgid "Account deleted e-mail sent by {0}."
+msgstr "Account deleted e-mail sent by {0}."
+
+msgid "Changed mail address e-mail sent."
+msgstr "Changed mail address e-mail sent."
+
+msgid "Changed mail address e-mail sent by {0}."
+msgstr "Changed mail address e-mail sent by {0}."
+
+msgid "Lost password e-mail sent."
+msgstr "Lost password e-mail sent."
+
+msgid "Lost password e-mail sent by {0}."
+msgstr "Lost password e-mail sent by {0}."
+
+msgid "Activation e-mail sent."
+msgstr "Activation e-mail sent."
+
+msgid "Activation e-mail sent by {0}."
+msgstr "Activation e-mail sent by {0}."
+
+msgid "Global user activation e-mail sent."
+msgstr "Global user activation e-mail sent."
+
+msgid "Global user activation e-mail sent by {0}."
+msgstr "Global user activation e-mail sent by {0}."
+
+msgid "User deleted."
+msgstr "User deleted."
+
+msgid "User deleted by {0}."
+msgstr "User deleted by {0}."
+
+msgid "Wrong login password used."
+msgstr "Wrong login password used."
+
+msgid "Wrong login password used by {0}."
+msgstr "Wrong login password used by {0}."
+
+msgid "Account deleted"
+msgstr "Account deleted"
+
+msgid "Useraccount activated"
+msgstr "Useraccount activated"
+
+msgid "lost password"
+msgstr "lost password"
+
+msgid "Email changed"
+msgstr "Email changed"
+
+msgid "Useraccount created"
+msgstr "Useraccount created"
+
+msgid "This user doesn't have a password, please log in using {0}"
+msgstr "This user doesn't have a password, please log in using {0}"
+
+msgid "User not existent in this web."
+msgstr "User not existent in this web."
+
+msgid "Remember password on this computer"
+msgstr "Remember password on this computer"
+
+msgid "Please enter your E-Mail Address to access this area."
+msgstr "Please enter your E-Mail Address to access this area."
+
+msgid "Temporary access"
+msgstr "Temporary access"
+
+msgid "Invalid or expired Link. Please request a new one."
+msgstr "Invalid or expired Link. Please request a new one."
+
+msgid ""
+"The Form has been submitted successfully. You will receive an E-Mail with "
+"the access link to the protected area."
+msgstr ""
+"The Form has been submitted successfully. You will receive an E-Mail with "
+"the access link to the protected area."
+
+msgid "Invalid Password"
+msgstr "Invalid Password"
+
+msgid "Original Tag"
+msgstr "Original Tag"
+
+msgid "Tags Translation"
+msgstr "Tags Translation"
+
+msgid "Social Networks"
+msgstr "Social Networks"
+
+msgid "Inherit from parent page"
+msgstr "Inherit from parent page"
+
+msgid "No content"
+msgstr "No content"
+
+msgid "Own settings for this page"
+msgstr "Own settings for this page"
+
+msgid "Must not include newlines"
+msgstr "Must not include newlines"
+
+msgid "Invalid type given. The value should be a string or a integer"
+msgstr "Invalid type given. The value should be a string or a integer"
+
+msgid "'%value%' does not appear to be a postal code"
+msgstr "'%value%' does not appear to be a postal code"
+
+msgid "Must not include tags"
+msgstr "Must not include tags"
+
+msgid "The password is invalid"
+msgstr "The password is invalid"
+
+msgid "The password must be at least 8 characters long"
+msgstr "The password must be at least 8 characters long"
+
+msgid ""
+"Due to security reasons the password must contain 3 out of the following 4 "
+"character types: small letters, capital letters, numbers and special signs"
+msgstr ""
+"Due to security reasons the password must contain 3 out of the following 4 "
+"character types: small letters, capital letters, numbers and special signs"
+
+msgid ""
+"'%value%' appears to be an IP address, but IP addresses are not allowed"
+msgstr ""
+"'%value%' appears to be an IP address, but IP addresses are not allowed"
+
+msgid ""
+"'%value%' appears to be a DNS hostname but cannot match TLD against known "
+"list"
+msgstr ""
+"'%value%' appears to be a DNS hostname but cannot match TLD against known "
+"list"
+
+msgid ""
+"'%value%' appears to be a DNS hostname but contains a dash (-) in an invalid "
+"position"
+msgstr ""
+"'%value%' appears to be a DNS hostname but contains a dash (-) in an invalid "
+"position"
+
+msgid ""
+"'%value%' appears to be a DNS hostname but cannot match against hostname "
+"schema for TLD '%tld%'"
+msgstr ""
+"'%value%' appears to be a DNS hostname but cannot match against hostname "
+"schema for TLD '%tld%'"
+
+msgid "'%value%' appears to be a DNS hostname but cannot extract TLD part"
+msgstr "'%value%' appears to be a DNS hostname but cannot extract TLD part"
+
+msgid "'%value%' does not match the expected structure for a DNS hostname"
+msgstr "'%value%' does not match the expected structure for a DNS hostname"
+
+msgid "'%value%' does not appear to be a valid local network name"
+msgstr "'%value%' does not appear to be a valid local network name"
+
+msgid ""
+"'%value%' appears to be a local network name but local network names are not "
+"allowed"
+msgstr ""
+"'%value%' appears to be a local network name but local network names are not "
+"allowed"
+
+msgid "'%value%' must be less or equal than '%max%'"
+msgstr "'%value%' must be less or equal than '%max%'"
+
+msgid "'%value%' does not appear to be a valid date"
+msgstr "'%value%' does not appear to be a valid date"
+
+msgid "'%value%' does not fit the date format '{0}'"
+msgstr "'%value%' does not fit the date format '{0}'"
+
+msgid "Must not be negative"
+msgstr "Must not be negative"
+
+msgid ""
+"'%value%' contains characters which are not digits; but only digits are "
+"allowed"
+msgstr ""
+"'%value%' contains characters which are not digits; but only digits are "
+"allowed"
+
+msgid "'%value%' is an empty string"
+msgstr "'%value%' is an empty string"
+
+msgid "Invalid type given, value should be string, integer or float"
+msgstr "Invalid type given, value should be string, integer or float"
+
+msgid "Invalid type given, value should be string or integer"
+msgstr "Invalid type given, value should be string or integer"
+
+msgid "'%value%' does not appear to be an integer"
+msgstr "'%value%' does not appear to be an integer"
+
+msgid "'%value%' has not only alphabetic characters"
+msgstr "'%value%' has not only alphabetic characters"
+
+msgid "'%value%' must be greater or equal than '%min%'"
+msgstr "'%value%' must be greater or equal than '%min%'"
+
+msgid "You are not logged in"
+msgstr "You are not logged in"
+
+msgid "You entered a wrong password"
+msgstr "You entered a wrong password"
+
+msgid "'%value%' has not only alphabetic and digit characters"
+msgstr "'%value%' has not only alphabetic and digit characters"
+
+msgid "'%value%' is not a valid email address"
+msgstr "'%value%' is not a valid email address"
+
+msgid "'%hostname%' is not a valid hostname for email address '%value%'"
+msgstr "'%hostname%' is not a valid hostname for email address '%value%'"
+
+msgid ""
+"'%hostname%' does not appear to have a valid MX record for the email address "
+"'%value%'"
+msgstr ""
+"'%hostname%' does not appear to have a valid MX record for the email address "
+"'%value%'"
+
+msgid "'%localPart%' not matched against dot-atom format"
+msgstr "'%localPart%' not matched against dot-atom format"
+
+msgid "'%localPart%' not matched against quoted-string format"
+msgstr "'%localPart%' not matched against quoted-string format"
+
+msgid "'%localPart%' is not a valid local part for email address '%value%'"
+msgstr "'%localPart%' is not a valid local part for email address '%value%'"
+
+msgid "'%value%' is less than %min% characters long"
+msgstr "'%value%' is less than %min% characters long"
+
+msgid "'%value%' is greater than %max% characters long"
+msgstr "'%value%' is greater than %max% characters long"
+
+msgid "'%value%' does already exist"
+msgstr "'%value%' does already exist"
+
+msgctxt "time"
+msgid "On"
+msgstr "On"
+
+msgctxt "time"
+msgid "at"
+msgstr "at"
+
+msgid "Please specify a user name."
+msgstr "Please specify a user name."
+
+msgid "Please specify a password."
+msgstr "Please specify a password."
+
+msgid "Too many wrong logins."
+msgstr "Too many wrong logins."
+
+msgid ""
+"There were too many wrong logins from your connection. Please try again in 5 "
+"minutes."
+msgstr ""
+"There were too many wrong logins from your connection. Please try again in 5 "
+"minutes."
+
+msgid "Authentication successful"
+msgstr "Authentication successful"
+
+msgid "Supplied password is invalid"
+msgstr "Supplied password is invalid"
+
+msgid "User not existent in this web"
+msgstr "User not existent in this web"
+
+msgid "Time"
+msgstr "Time"
+
+msgid "Detail"
+msgstr "Detail"
+
+msgid "Not Found"
+msgstr "Not Found"
+
+msgid "No log files found."
+msgstr "No log files found."
+
+msgid "All files successfully parsed"
+msgstr "All files successfully parsed"
+
+msgid "Logs are empty. Nothing found to delete."
+msgstr "Logs are empty. Nothing found to delete."
+
+msgid "{0} of {1} logs deleted."
+msgstr "{0} of {1} logs deleted."
+
+msgid "All log files deleted."
+msgstr "All log files deleted."
+
+msgid "Welcome-Image"
+msgstr "Welcome-Image"
+
+msgid "Login-Image"
+msgstr "Login-Image"
+
+msgid "Frontend"
+msgstr "Frontend"
+
+msgid "Activation code is invalid. Maybe the URL wasn't copied completely?"
+msgstr "Activation code is invalid. Maybe the URL wasn't copied completely?"
+
+msgid ""
+"Activation code is invalid. Maybe your account has already been activated, "
+"the URL was not copied completely, or the password has already been set?"
+msgstr ""
+"Activation code is invalid. Maybe your account has already been activated, "
+"the URL was not copied completely, or the password has already been set?"
+
+msgid "Advice"
+msgstr "Advice"
+
+msgid ""
+"After following actions emails are sent automatically to the respective user:"
+""
+msgstr ""
+"After following actions emails are sent automatically to the respective user:"
+""
+
+msgid "Create, Delete and E-Mail change"
+msgstr "Create, Delete and E-Mail change"
+
+msgid "E-Mails"
+msgstr "E-Mails"
+
+msgid "Don't send any E-Mail when saving."
+msgstr "Don't send any E-Mail when saving."
+
+msgid "Logins"
+msgstr "Logins"
+
+msgid "Last login"
+msgstr "Last login"
+
+msgid "Permissions"
+msgstr "Permissions"
+
+msgid "Rights"
+msgstr "Rights"
+
+msgid "Additional rights"
+msgstr "Additional rights"
+
+msgid "Change password"
+msgstr "Change password"
+
+msgid "Repeat password"
+msgstr "Repeat password"
+
+msgid "You don't have enough permissions for this Action"
+msgstr "You don't have enough permissions for this Action"
+
+msgid "Login successful"
+msgstr "Login successful"
+
+msgid "Login failed"
+msgstr "Login failed"
+
+msgid "Can't login user, {0} account is not associated with {1}."
+msgstr "Can't login user, {0} account is not associated with {1}."
+
+msgid "lang"
+msgstr "lang"
+
+msgid "Activated"
+msgstr "Activated"
+
+msgid "Sent E-Mail again"
+msgstr "Sent E-Mail again"
+
+msgid "You cannot delete your own account."
+msgstr "You cannot delete your own account."
+
+msgid "Affected component / part (e.g.: References)"
+msgstr "Affected component / part (e.g.: References)"
+
+msgid ""
+"Why did you have to clear the cache? (steps to reproduce / description)"
+msgstr ""
+"Why did you have to clear the cache? (steps to reproduce / description)"
+
+msgid "You can't set {0} as Home"
+msgstr "You can't set {0} as Home"
+
+msgid "There's no row selected"
+msgstr "There's no row selected"
+
+msgid "Cannot move here. View has been reloaded, please try again."
+msgstr "Cannot move here. View has been reloaded, please try again."
+
+msgid "Cannot move here."
+msgstr "Cannot move here."
+
+msgid "Upload a file and click \"Save\" to import."
+msgstr "Upload a file and click \"Save\" to import."
+
+msgid "File not found."
+msgstr "File not found."
+
+msgid "Could not read excel"
+msgstr "Could not read excel"
+
+msgid "Too many rows to export. Try exporting two times with fewer rows."
+msgstr "Too many rows to export. Try exporting two times with fewer rows."
+
+msgid "Collecting data"
+msgstr "Collecting data"
+
+msgid "Writing data"
+msgstr "Writing data"
+
+msgid "Writing data. Please be patient."
+msgstr "Writing data. Please be patient."
+
+msgid "No File uploaded, please select a file."
+msgstr "No File uploaded, please select a file."
+
+msgid "The uploaded file was only partially uploaded."
+msgstr "The uploaded file was only partially uploaded."
+
+msgid "The uploaded file is too large."
+msgstr "The uploaded file is too large."
+
+msgid "No Filedata received."
+msgstr "No Filedata received."
+
+msgid "Source"
+msgstr "Source"
+
+msgid "Path"
+msgstr "Path"
+
+msgid "Domain and Path"
+msgstr "Domain and Path"
+
+msgid "Internal Page"
+msgstr "Internal Page"
+
+msgid "Internal Download"
+msgstr "Internal Download"
+
+msgid "Component-Id"
+msgstr "Component-Id"
+
+msgid "External Url"
+msgstr "External Url"
+
+msgid "Superuser"
+msgstr "Superuser"
+
+msgid "All Enquiries"
+msgstr "All Enquiries"
+
+msgid "Toolbox"
+msgstr "Toolbox"
+
+msgid "Useradministration"
+msgstr "Useradministration"
+
+msgid "Redirects"
+msgstr "Redirects"
+
+msgid "The file is larger than the maximum upload amount."
+msgstr "The file is larger than the maximum upload amount."
+
+msgid "The file was not uploaded completely."
+msgstr "The file was not uploaded completely."
+
+msgid "Customer added by {0}"
+msgstr "Customer added by {0}"
+
+msgid "Contact person"
+msgstr "Contact person"
+
+msgid "Date of birth"
+msgstr "Date of birth"
+
+msgctxt "career"
+msgid "Capacity"
+msgstr "Capacity"
+
+msgid "Annotation"
+msgstr "Annotation"
+
+msgid "This field should only contain letters, numbers and -"
+msgstr "This field should only contain letters, numbers and -"
+
+msgid "Community Video"
+msgstr "Community Video"
+
+msgid "Tap to navigate"
+msgstr "Tap to navigate"
+
+msgid "close"
+msgstr "close"
+
+msgid "SEO, Open Graph, Sitemap"
+msgstr "SEO, Open Graph, Sitemap"
+
+msgid "Don't index this page by search engines."
+msgstr "Don't index this page by search engines."
+
+msgid "Low"
+msgstr "Low"
+
+msgid "High"
+msgstr "High"
+
+msgid "Change Frequency"
+msgstr "Change Frequency"
+
+msgid "Always"
+msgstr "Always"
+
+msgid "Hourly"
+msgstr "Hourly"
+
+msgid "Daily"
+msgstr "Daily"
+
+msgid "Weekly"
+msgstr "Weekly"
+
+msgid "Monthly"
+msgstr "Monthly"
+
+msgid "Yearly"
+msgstr "Yearly"
+
+msgid "Never"
+msgstr "Never"
+
+msgid "Teasers"
+msgstr "Teasers"
+
+msgid "Fade"
+msgstr "Fade"
+
+msgid "Fade images"
+msgstr "Fade images"
+
+msgid "Alt Text"
+msgstr "Alt Text"
+
+msgid ""
+"Optional: Describe this image for visually handicapped people and search "
+"engines."
+msgstr ""
+"Optional: Describe this image for visually handicapped people and search "
+"engines."
+
+msgid "Assets Select"
+msgstr "Assets Select"
+
+msgid "Section"
+msgstr "Section"
+
+msgid ""
+"optional, if not set the title will be autogenerated from the sitename."
+msgstr ""
+"optional, if not set the title will be autogenerated from the sitename."
+
+msgid "Keywords"
+msgstr "Keywords"
+
+msgid "This is not an image."
+msgstr "This is not an image."
+
+msgid "Order: {0}"
+msgstr "Order: {0}"

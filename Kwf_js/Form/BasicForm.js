@@ -17,7 +17,7 @@ Ext.form.BasicForm.override({
 
     //override stupid Ext behavior
     //better to ask the individual form fields
-    //needed for: Checkbox, ComboBox, SwfUpload, Date...
+    //needed for: Checkbox, ComboBox, Date...
     getValues: function() {
         var ret = {};
         this.items.each(function(field) {
