@@ -138,7 +138,7 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
     public function onDirectoryRowUpdate(Kwc_Directories_List_EventItemUpdated $event)
     {
         $gen = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail');
-        $datas = $gen->getChildData(null, array('id' => $event->itemId));
+        $datas = $gen->getChildData(null, array('id' => $event->itemId, 'ignoreVisible' => true));
         if (isset($datas[0])) {
             $data = $datas[0];
             $subroot = $data->getSubroot();
