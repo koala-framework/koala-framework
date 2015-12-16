@@ -1,6 +1,7 @@
-.x2-form-field .box {
-    background-position: center;
+.x2-form-element .swfUploadField.loading .box {
+    background-image: url(/assets/ext2/resources/images/default/grid/loading.gif);
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 .x2-form-element .swfUploadField .uploadButton {

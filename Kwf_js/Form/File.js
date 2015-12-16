@@ -280,10 +280,10 @@ Kwf.Form.File = Ext2.extend(Ext2.form.Field, {
             return;
         }
         if (this.getEl().child('.previewImage') && this.imageData) {
-            this.getEl().child('.box').setStyle('background-image', 'url(/assets/ext2/resources/images/default/grid/loading.gif)');
+            this.getEl().addClass('loading');
             var img = new Image();
             img.onload = (function () {
-                this.getEl().child('.box').setStyle('background-image', 'none');
+                this.getEl().removeClass('loading');
             }).createDelegate(this);
             img.src = this._generatePreviewUrl(previewUrl);
             this.getEl().child('.previewImage')
