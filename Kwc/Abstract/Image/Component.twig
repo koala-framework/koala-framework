@@ -1,17 +1,23 @@
 <div class="{{ rootElementClass }} kwfUp-kwcImage" style="{{ style }}" data-width="100%" data-max-width="{{ maxWidth }}">
     {% if baseUrl %}
+        {% block image %}
         <div class="{{ "outerContainer"|bemClass }}">
             <div class="{{ containerClass }}" style="padding-bottom: {{aspectRatio}}%"
                 data-min-width="{{ minWidth }}"
                 data-max-width="{{ maxWidth }}"
                 data-src="{{ baseUrl }}">
+                {% if outputImgTag %}
                 <noscript>
                     {{ renderer.image(image, altText, imgAttributes) }}
                 </noscript>
+                {% endif %}
             </div>
         </div>
+        {% endblock %}
         {% if showImageCaption %}
+            {% block caption %}
             <div class="{{ "imageCaption"|bemClass }} kwfUp-imageCaption" style="{{ captionStyle }}"><span>{{ image_caption }}</span></div>
+            {% endblock %}
         {% endif %}
     {% endif %}
 </div>

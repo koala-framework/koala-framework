@@ -65,6 +65,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['files'][] = 'kwf/Kwf_js/Utils/Resizable.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageFile.js';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
+        $ret['outputImgTag'] = true;
 
         $ret['defineWidth'] = false;
         $ret['maxWidthImageWidth'] = true;
@@ -120,6 +121,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['baseUrl'] = $this->getBaseImageUrl();
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
+        $ret['outputImgTag'] = $this->_getSetting('outputImgTag');
 
         $ret['style'] = '';
         $ret['captionStyle'] = '';

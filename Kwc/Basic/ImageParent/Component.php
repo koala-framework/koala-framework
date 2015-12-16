@@ -12,6 +12,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
         $ret['defineWidth'] = false;
+        $ret['outputImgTag'] = true;
         return $ret;
     }
 
@@ -45,6 +46,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $ret['baseUrl'] = $this->_getBaseImageUrl();
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
+        $ret['outputImgTag'] = $this->_getSetting('outputImgTag');
 
         if (!$this->_getSetting('lazyLoadOutOfViewport')) $ret['containerClass'] .= ' kwfUp-loadImmediately';
 
