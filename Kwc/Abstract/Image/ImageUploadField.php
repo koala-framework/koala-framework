@@ -3,6 +3,8 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
 {
     private $_image;
     private $_dimensions;
+    protected $_imageFileClass = 'Kwc_Abstract_Image_ImageFile';
+    protected $_dimensionFieldClass = 'Kwc_Abstract_Image_DimensionField';
 
     public function __construct($imageLabel)
     {
@@ -10,8 +12,10 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
         $dpr2Check = Kwf_Config::getValue('kwc.requireDpr2');
         $this->setXtype('kwc.image.imageuploadfield');
         $this->setBaseCls('kwc-abstract-image-image-upload-big-preview');
+
         // Fileupload
-        $this->_image = new Kwc_Abstract_Image_ImageFile('Image', $imageLabel);
+        $cls = $this->_imageFileClass;
+        $this->_image = new $cls('Image', $imageLabel);
         $this->_image // set to provide big preview image
             ->setPreviewWidth(390)
             ->setPreviewHeight(184)
@@ -20,7 +24,8 @@ class Kwc_Abstract_Image_ImageUploadField extends Kwf_Form_Container_Abstract
             ->setHeight(184);
         $this->fields->add($this->_image);
 
-        $this->_dimensionField = new Kwc_Abstract_Image_DimensionField('dimension', trlKwf('Dimension'));
+        $cls = $this->_dimensionFieldClass;
+        $this->_dimensionField = new $cls('dimension', trlKwf('Dimension'));
         $this->_dimensionField->setDpr2Check($dpr2Check);
         $this->_dimensionField->setAllowBlank(false)
             ->setLabelStyle('display:none')

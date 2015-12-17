@@ -88,7 +88,9 @@ Kwc.Abstract.Image.ImageUploadField = Ext2.extend(Ext2.Panel, {
     },
 
     _getFileUploadField: function () {
-        return this.findByType('kwc.imagefile')[0];
+        return this.findBy(function(i) {
+            return i instanceof Kwc.Abstract.Image.ImageFile;
+        }, this)[0];
     },
 
     _getDimensionField: function () {
