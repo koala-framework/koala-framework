@@ -2,6 +2,7 @@
 class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
 {
     protected $_imageUploadFieldClass = 'Kwc_Abstract_Image_ImageUploadField';
+    protected $_createFieldsets = false;
 
     protected function _initFields()
     {
