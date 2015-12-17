@@ -130,7 +130,9 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
         $directory = $event->component->parent;
         $this->_fireTagEvent('ContentChanged', $directory);
         $this->_fireTagEvent('PartialsChanged', $directory);
-        if (!$this->_usesPartialId()) {
+        if ($this->_usesPartialId()) {
+            $this->_fireTagEvent('PartialChanged', $directory, $event->component->id);
+        } else {
             $this->_fireTagEvent('AllPartialChanged', $directory);
         }
     }
