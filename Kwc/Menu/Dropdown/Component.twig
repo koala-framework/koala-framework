@@ -5,7 +5,7 @@
             {% for m in menu %}
                 <li class="{{ m.class }}{% if m.submenu is defined and m.submenu|length %} hasSubMenu{% endif %}">
                     {% block menuLink %}
-                    {{ renderer.componentLink(m.data) }}
+                    {{ renderer.componentLink(m.data, null, '' ~ "link"|bemClass ) }}
                     {% endblock %}
                     {% if m.submenu is defined and m.submenu|length %}
                         <div class="dropdown">
@@ -13,7 +13,7 @@
                                 {% for sm in m.submenu %}
                                     <li class="{{ sm.class }}">
                                         {% block subMenuLink %}
-                                        {{ renderer.componentLink(sm.data) }}
+                                        {{ renderer.componentLink(sm.data, null, '' ~ "subMenuLink"|bemClass ) }}
                                         {% endblock %}
                                     </li>
                                 {% endfor %}
