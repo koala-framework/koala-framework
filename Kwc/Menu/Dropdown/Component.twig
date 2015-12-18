@@ -8,7 +8,7 @@
                     {{ renderer.componentLink(m.data, null, '' ~ "link"|bemClass ) }}
                     {% endblock %}
                     {% if m.submenu is defined and m.submenu|length %}
-                        <div class="dropdown">
+                        <div class="{{ 'dropdown'|bemClass }}">
                             <ul>
                                 {% for sm in m.submenu %}
                                     <li class="{{ sm.class }}">
