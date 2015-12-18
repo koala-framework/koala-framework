@@ -75,7 +75,7 @@
     display: block;
 }
 
-body.ext2-ie8 .kwcClass a {
+@ie8 {
     .outerHoverIcon {
         display: none;
     }
