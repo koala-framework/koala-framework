@@ -309,7 +309,9 @@ class Kwf_Util_Setup
         $ret .= "    if (strpos(\$url, '?') !== false) {\n";
         $ret .= "        \$url = substr(\$url, 0, strpos(\$url, '?'));\n";
         $ret .= "    }\n";
-        $ret .= "    \$dispatcher = new ".Kwf_Config::getValue('assets.dispatcherClass')."();\n";
+        $dispatcherClass = Kwf_Config::getValue('assets.dispatcherClass');
+        if (!$dispatcherClass) $dispatcherClass = 'Kwf_Assets_Dispatcher';
+        $ret .= "    \$dispatcher = new ".$dispatcherClass."();\n";
         $ret .= "    \$dispatcher->dispatch(\$url);\n";
         $ret .= "    Kwf_Assets_Loader::load(\$url);\n";
         $ret .= "}\n";
