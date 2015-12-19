@@ -103,9 +103,8 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
 
     public function getContentsPacked($language)
     {
-        $cacheFile = "cache/componentassets/{$this->_componentClass}".
-            ($this->usesLanguage() ? "-$language" : '').
-            "-".Kwf_Config::getValue('application.uniquePrefix')."-".$this->_dependencyName;
+        $cacheFile = "cache/componentassets/" . md5($this->_componentClass . ($this->usesLanguage() ? "-$language" : '').
+            "-".Kwf_Config::getValue('application.uniquePrefix') . "-" . $this->_dependencyName);
         if (file_exists($cacheFile) && filemtime($cacheFile) > $this->getMTime()) {
             $ret = Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));
         } else {
