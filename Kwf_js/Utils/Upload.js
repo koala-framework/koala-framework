@@ -72,7 +72,10 @@ Kwf.Utils.Upload = {
         xhr.setRequestHeader('X-Upload-Size', file.size);
         xhr.setRequestHeader('X-Upload-Type', file.type);
         xhr.setRequestHeader('X-Upload-MaxResolution', config.maxResolution);
-        xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+        var ua = navigator.userAgent.toLowerCase();
+        if (!ua.match(/trident/) && !ua.match(/edge/)) {
+            xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+        }
         xhr.send(file);
 
         return xhr;
