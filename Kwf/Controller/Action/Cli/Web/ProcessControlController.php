@@ -30,6 +30,10 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
 
     public function indexAction()
     {
+        if (!ini_get('short_open_tag')) {
+            throw new Kwf_Exception_Client("You must set short_open_tag to on in php.ini");
+        }
+
         $this->_start();
 
         if (Kwf_Config::getValue('debug.mailProcessControlOutput')) {
