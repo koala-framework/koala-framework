@@ -76,12 +76,14 @@
 }
 
 @ie8 {
-    .outerHoverIcon {
-        display: none;
-    }
+    .kwcClass a {
+        .outerHoverIcon {
+            display: none;
+        }
 
-    &:hover .outerHoverIcon {
-        display: block;
+        &:hover .outerHoverIcon {
+            display: block;
+        }
     }
 }
 
