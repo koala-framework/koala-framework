@@ -175,6 +175,7 @@ class Kwf_Util_ClearCache_Watcher
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
                 if ($assetsType == 'js') self::_clearAssetsAll('defer.js');
+                if ($assetsType == 'css') self::_clearAssetsAll('ie8.css');
 
 
             } else if ($event instanceof Event\Create || $event instanceof Event\Delete || $event instanceof Event\Move) {
@@ -185,6 +186,7 @@ class Kwf_Util_ClearCache_Watcher
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
                 if ($assetsType == 'js') self::_clearAssetsAll('defer.js');
+                if ($assetsType == 'css') self::_clearAssetsAll('ie8.css');
             }
 
         } else if (self::_endsWith($event->filename, '/dependencies.ini')) {
@@ -572,6 +574,7 @@ class Kwf_Util_ClearCache_Watcher
             self::_clearAssetsAll('js');
             self::_clearAssetsAll('defer.js');
             self::_clearAssetsAll('css');
+            self::_clearAssetsAll('ie8.css');
             return;
         }
         $fileNames = array(

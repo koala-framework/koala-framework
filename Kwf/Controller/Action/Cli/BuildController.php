@@ -74,6 +74,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             'text/javascript; defer',
             'text/css',
             'text/css; defer',
+            'text/css; ie8',
         );
 
         foreach ($packages as $p) {
