@@ -104,7 +104,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             $depName = $p->getDependencyName();
             $language = $langs[0];
             foreach ($exts as $extension) {
-                $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language);
+                $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension, $language);
                 $cacheContents = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
                 echo "$depName ";
                 $h = new Kwf_View_Helper_FileSize();
