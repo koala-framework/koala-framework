@@ -8,3 +8,13 @@
     }
     kwf-responsive-el-gt: $gtWidthUnitless;
 }
+@mixin el-breakpoint-max($ltWidth) {
+    @if unit($ltWidth) != 'px' {
+      @error 'Invalid unit, only px supported';
+    }
+    $ltWidthUnitless: $ltWidth / ($ltWidth * 0 + 1);
+    &.lt#{$ltWidthUnitless} {
+      @content;
+    }
+    kwf-responsive-el-lt: $ltWidthUnitless;
+}
