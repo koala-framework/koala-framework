@@ -3,7 +3,7 @@
   <head>
     <title><?php echo $this->applicationName; ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <?php if ($this->favicon) { ?>
     <link rel="shortcut icon" href="<?php echo htmlspecialchars($this->favicon)?>" />
     <?php } ?>
