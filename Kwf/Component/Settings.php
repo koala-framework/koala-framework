@@ -231,10 +231,22 @@ class Kwf_Component_Settings
                 }
                 $override = false;
                 foreach ($ret['js'] as $k=>$i) {
+                    if (substr($i, -9) == '.defer.js') continue;
                     if ($override) {
                         unset($ret['js'][$k]);
                     } else {
-                        if (substr($i, -12) == '.override.js' || substr($i, -18) == '.override.defer.js') {
+                        if (substr($i, -12) == '.override.js') {
+                            $override = true;
+                        }
+                    }
+                }
+                $override = false;
+                foreach ($ret['js'] as $k=>$i) {
+                    if (substr($i, -9) != '.defer.js') continue;
+                    if ($override) {
+                        unset($ret['js'][$k]);
+                    } else {
+                        if (substr($i, -18) == '.override.defer.js') {
                             $override = true;
                         }
                     }
