@@ -2,12 +2,12 @@
 {% if showSuccess %}
     {{ renderer.component(success) }}
 {% elseif message %}
-    <div class="kwfUp-webStandard kwfUp-webForm kwfUp-kwcForm">
+    <div class="kwfUp-webStandard">
         {{ message }}
     </div>
 {% else %}
     {% if errors %}
-        <div class="kwfUp-webStandard kwfUp-kwcFormError kwfUp-webFormError">
+        <div class="kwfUp-webStandard">
         <p class="{{ "error"|bemClass }}">{{ placeholder.error }}:</p>
         <ul>
         {% for error in errors %}
@@ -16,7 +16,7 @@
         </ul>
         </div>
     {% endif %}
-    <div class="kwfUp-webStandard kwfUp-webForm kwfUp-kwcForm" data-width="100%">
+    <div class="kwfUp-webStandard" data-width="100%">
     {% block formHeader %}
     {% if header %}{{ renderer.component(header) }}{% endif %}
     {% endblock %}
