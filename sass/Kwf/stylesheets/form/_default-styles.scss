@@ -7,7 +7,7 @@
 @import "form/predefined/form-style-default-center";
 @import "form/predefined/form-style-center";
 
-@mixin kwc-form {
+@mixin form-default-styles {
     .kwfUp-webForm {
         .kwfUp-kwfFormFieldWrapper {
             position: relative;
