@@ -31,6 +31,6 @@ class Kwf_View_Helper_Money
         }
 
         $number = number_format($amount, $decimals, $decimalSeparator, $thousandSeparator);
-        return str_replace('{0}', $number, $format);
+        return str_replace('{0}', '<span class="kwfUp-amount">'.$number.'</span>', $format);
     }
 }

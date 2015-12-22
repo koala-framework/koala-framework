@@ -82,7 +82,7 @@ class Kwf_View_Twig_Environment extends Twig_Environment
         }
 
         $number = number_format($amount, $decimals, $decimalSeparator, $thousandSeparator);
-        return str_replace('{0}', $number, $format);
+        return str_replace('{0}', '<span class="kwfUp-amount">'.$number.'</span>', $format);
     }
 
     public function mailEncodeText($text)
