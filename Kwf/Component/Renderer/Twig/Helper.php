@@ -22,6 +22,12 @@ class Kwf_Component_Renderer_Twig_Helper
         return new Twig_Markup($this->_renderer->getHelper('componentLink')->componentLink($component, $text, $config), 'utf-8');
     }
 
+    public function link($target, $text = null, $config = array())
+    {
+        $helper = new Kwf_View_Helper_Link();
+        return new Twig_Markup($helper->link($target, $text, $config), 'utf-8');
+    }
+
     public function partials($component, $params = array())
     {
         return new Twig_Markup($this->_renderer->getHelper('partials')->partials($component, $params), 'utf-8');
