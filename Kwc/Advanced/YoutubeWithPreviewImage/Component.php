@@ -9,4 +9,14 @@ class Kwc_Advanced_YoutubeWithPreviewImage_Component extends Kwc_Advanced_Youtub
         $ret['generators']['child']['component']['previewImage'] = 'Kwc_Advanced_YoutubeWithPreviewImage_Image_Component';
         return $ret;
     }
+
+
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    {
+        $ret = parent::getTemplateVars($renderer);
+        //always enable autoplay to play after clicking preview image
+        $ret['config']['playerVars']['autoplay'] = 1;
+        return $ret;
+    }
+
 }
