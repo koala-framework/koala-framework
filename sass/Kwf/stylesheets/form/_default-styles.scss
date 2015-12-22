@@ -8,79 +8,75 @@
 @import "form/predefined/form-style-center";
 
 @mixin form-default-styles {
-    .kwfUp-webForm {
-        .kwfUp-kwfFormFieldWrapper {
-            position: relative;
-        }
+    .kwfUp-kwfFormFieldWrapper {
+        position: relative;
+    }
 
-        /* ------------------------------------------ Styles --------------------------------------*/
-        &.center {
-            @include form-style-center;
-        }
+    /* ------------------------------------------ Styles --------------------------------------*/
+    &.center {
+        @include form-style-center;
+    }
 
-        &.centerDefault {
-            @include form-style-default-center;
-        }
+    &.centerDefault {
+        @include form-style-default-center;
+    }
 
-        &.default {
-            @include form-style-default;
-        }
+    &.default {
+        @include form-style-default;
     }
 
     /* ------------------------------------ Button Loading ------------------------------------*/
 
-    .kwfUp-webForm {
-        .kwfUp-submitWrapper {
-            .kwfUp-saving {
-                @include default-loading-animation-small;
-                visibility: hidden;
-                position: absolute;
-                margin-left: -12px;
-                margin-top: -12px;
-                height: 24px;
-                width: 24px;
-                left: 50%;
-                top: 50%;
-            }
+    .kwfUp-submitWrapper {
+        .kwfUp-saving {
+            @include default-loading-animation-small;
+            visibility: hidden;
+            position: absolute;
+            margin-left: -12px;
+            margin-top: -12px;
+            height: 24px;
+            width: 24px;
+            left: 50%;
+            top: 50%;
         }
     }
 
-    .kwfUp-webForm .kwfUp-kwfFieldError label { color: $typo; }
-    .kwfUp-webForm .kwfUp-kwfFieldError input,
-    .kwfUp-webForm .kwfUp-kwfFieldError textarea {
+    .kwfUp-kwfFieldError label { color: $typo; }
+    .kwfUp-kwfFieldError input,
+    .kwfUp-kwfFieldError textarea {
         color: $typo;
         border-color: $errorBorder ;
     }
 
-    .kwfUp-webForm button {
+    button {
         cursor: pointer;
     }
 
-    .kwfUp-webForm form .kwfUp-kwfField label,
-    .kwfUp-webForm form .kwfUp-kwfField span.fieldContent {
+    form .kwfUp-kwfField label,
+    form .kwfUp-kwfField span.fieldContent {
         line-height: 20px;
     }
-    .kwfUp-webForm .submitWrapper {
+    .submitWrapper {
         text-align: center;
         clear: both;
     }
-    .kwfUp-webForm .kwfUp-submitWrapper .beforeButton,
-    .kwfUp-webForm .kwfUp-submitWrapper .button,
-    .kwfUp-webForm .kwfUp-submitWrapper .saving,
-    .kwfUp-webForm .kwfUp-submitWrapper .afterButton {
+    .kwfUp-submitWrapper .beforeButton,
+    .kwfUp-submitWrapper .button,
+    .kwfUp-submitWrapper .saving,
+    .kwfUp-submitWrapper .afterButton {
         float: left;
     }
-    .kwfUp-webForm .kwfUp-submitWrapper .kwfUp-button {
+    .kwfUp-submitWrapper .kwfUp-button {
         position: relative;
     }
 
-    .kwfUp-webForm .kwfUp-submitWrapper .kwfUp-button.kwfUp-disabled {
+    .kwfUp-submitWrapper .kwfUp-button.kwfUp-disabled {
         opacity: 0.3;
     }
 
-    .kwfUp-webForm input,
-    .kwfUp-webForm textarea,
-    .kwfUp-webForm select {
+    input,
+    textarea,
+    select {
         padding: 2px;
         font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
         font-size: 11px;
@@ -90,68 +86,68 @@
         float: left;
     }
 
-    .kwfUp-webForm input.radio {
+    input.radio {
         margin-left: 10px;
         border: none;
         background: none;
     }
-    .kwfUp-webForm form .kwfUp-kwfFormFieldCheckbox input {
+    form .kwfUp-kwfFormFieldCheckbox input {
         width: auto;
         border: none;
         background: none;
         margin-top: 3px;
     }
-    .kwfUp-webForm label {
+    label {
         line-height: 18px;
     }
-    .kwfUp-webForm .kwfUp-kwcLabelPositionAbove .kwfUp-kwfFormFieldWrapper.kwfUp-hasLabel {
+    .kwfUp-kwcLabelPositionAbove .kwfUp-kwfFormFieldWrapper.kwfUp-hasLabel {
         margin-left: 0;
         padding-left: 0;
     }
-    .kwfUp-webForm .kwfUp-kwfFieldRequired label { font-weight: normal; }
-    .kwfUp-webForm .kwfUp-kwfFieldRequired span label { font-weight: normal; }
-    .kwfUp-webForm .kwfUp-kwfFieldLabelAlignTop label {
+    .kwfUp-kwfFieldRequired label { font-weight: normal; }
+    .kwfUp-kwfFieldRequired span label { font-weight: normal; }
+    .kwfUp-kwfFieldLabelAlignTop label {
         width: auto;
         margin: 0px;
         text-align: left;
     }
-    .kwfUp-webForm .kwfUp-kwfFieldLabelAlignLeft label {
+    .kwfUp-kwfFieldLabelAlignLeft label {
         text-align: left;
     }
-    .kwfUp-webForm .kwfUp-showField {
+    .kwfUp-showField {
         font-weight: bold;
         margin-bottom: 9px;
     }
-    .kwfUp-webForm fieldset {
+    fieldset {
         margin-bottom: 20px;
         padding: 10px;
     }
-    .kwfUp-webForm fieldset legend {
+    fieldset legend {
         font-weight: bold;
         margin-left: 20px;
         padding: 5px;
     }
-    .kwfUp-webForm form .kwfUp-kwfFormFieldRadio .kwfUp-kwfFormFieldWrapper label {
+    form .kwfUp-kwfFormFieldRadio .kwfUp-kwfFormFieldWrapper label {
         margin-right: 20px;
         clear: none;
     }
-    .kwfUp-webForm form .kwfUp-kwfFormFieldRadio input { margin: 0px; padding: 0px; }
-    .kwfUp-webForm form .kwfUp-kwfFormFieldRadioHorizontal span { display: inline-block; }
-    .kwfUp-webForm form .kwfUp-kwfFormFieldRadioVertical span { display: block; }
-    .kwfUp-webForm form .kwfUp-kwfFormFieldRadioVertical span label { margin-left: 0px; }
-    .kwfUp-webForm form .kwfUp-kwfFormFieldRadioVertical label { float: none; }
+    form .kwfUp-kwfFormFieldRadio input { margin: 0px; padding: 0px; }
+    form .kwfUp-kwfFormFieldRadioHorizontal span { display: inline-block; }
+    form .kwfUp-kwfFormFieldRadioVertical span { display: block; }
+    form .kwfUp-kwfFormFieldRadioVertical span label { margin-left: 0px; }
+    form .kwfUp-kwfFormFieldRadioVertical label { float: none; }
 
-    .kwfUp-webForm form .kwfUp-kwfFormFieldMultiCheckboxHorizontal label { float: none; width: auto; margin-left: 0px; }
-    .kwfUp-webForm form .kwfUp-kwfFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; padding-right: 10px; }
-    .kwfUp-webForm form .kwfUp-kwfFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
+    form .kwfUp-kwfFormFieldMultiCheckboxHorizontal label { float: none; width: auto; margin-left: 0px; }
+    form .kwfUp-kwfFormFieldMultiCheckboxHorizontal .checkboxItem { float: left; white-space: nowrap; padding-right: 10px; }
+    form .kwfUp-kwfFormFieldMultiCheckboxHorizontal .checkboxItem label { font-weight: normal; }
 
-    .kwfUp-webForm form .kwfUp-kwfFormContainerColumns .kwfUp-kwfFormContainerColumn { float: left; clear: none; margin-bottom: 0px; }
-    .kwfUp-webForm form .kwfUp-kwfFormContainerColumns .kwfUp-kwfFormContainerColumn .kwfUp-kwfField { clear: none; margin-bottom: 0px; }
+    form .kwfUp-kwfFormContainerColumns .kwfUp-kwfFormContainerColumn { float: left; clear: none; margin-bottom: 0px; }
+    form .kwfUp-kwfFormContainerColumns .kwfUp-kwfFormContainerColumn .kwfUp-kwfField { clear: none; margin-bottom: 0px; }
 
-    .kwfUp-webForm span.kwfUp-comment { margin-left: 10px; color: #999; }
-    .kwfUp-webForm .kwfUp-kwfField { clear: both; position: relative; margin-bottom: 4px; }
+    span.kwfUp-comment { margin-left: 10px; color: #999; }
+    .kwfUp-kwfField { clear: both; position: relative; margin-bottom: 4px; }
 
-    .kwfUp-webForm .kwfUp-kwcLabelPositionAbove label {
+    .kwfUp-kwcLabelPositionAbove label {
         display: block;
         float: none;
         margin-left: 0px;
@@ -159,7 +155,7 @@
         width: 100%;
     }
 
-    .kwfUp-webForm .kwfUp-spEmail {
+    .kwfUp-spEmail {
         display: none;
     }
 }
