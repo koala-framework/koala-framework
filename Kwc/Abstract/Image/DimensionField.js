@@ -119,7 +119,7 @@ Kwc.Abstract.Image.DimensionField = Ext2.extend(Ext2.form.Field, {
     }
 });
 
-Kwc.Abstract.Image.DimensionField.isValidImageSize = function(value, dimensions, scaleFactor, dpr2)
+Kwc.Abstract.Image.DimensionField.isValidImageSize = function(value, dimensions, dpr2)
 {
     if (!value.cropData)
         return true;
@@ -130,8 +130,8 @@ Kwc.Abstract.Image.DimensionField.isValidImageSize = function(value, dimensions,
     if (dpr2) {
         dprFactor = 2;
     }
-    if (width * dprFactor > value.cropData.width * scaleFactor
-        || height * dprFactor > value.cropData.height * scaleFactor) {
+    if (width * dprFactor > value.cropData.width
+        || height * dprFactor > value.cropData.height) {
         return false;
     }
     return true;

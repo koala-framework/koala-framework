@@ -153,7 +153,6 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             throw new Kwf_Exception_AccessDenied();
         }
 
-        $scaleFactor = Kwf_Media_Image::getHandyScaleFactor($fileRow->getFileSource());
         $outputParams = array(
             'mimeType' => $fileRow->mime_type,
             'downloadFilename' => $fileRow->filename . '.' . $fileRow->extension

@@ -32,6 +32,11 @@ class Kwc_Abstract_Image_PreviewController extends Kwf_Controller_Action
             $cache->save($output, $cacheId);
         }
 
+        $cropX = $this->_getParam('cropX');
+        $cropY = $this->_getParam('cropY');
+        $cropWidth = $this->_getParam('cropWidth');
+        $cropHeight = $this->_getParam('cropHeight');
+
         $imageOriginal = new Imagick($fileRow->getFileSource());
         if ($this->_getParam('cropX') == null || $this->_getParam('cropY') == null
             || $this->_getParam('cropWidth') == null || $this->_getParam('cropHeight') == null
@@ -68,13 +73,6 @@ class Kwc_Abstract_Image_PreviewController extends Kwf_Controller_Action
                 $cropWidth = $dimension['width'] * $imageOriginal->getImageHeight() / $dimension['height'];
                 $cropX = ($imageOriginal->getImageWidth() - $cropWidth) /2;
             }
-        } else {
-            //Calculate values relative to original image size
-            $factor = Kwf_Media_Image::getHandyScaleFactor($fileRow->getFileSource());
-            $cropX = $this->_getParam('cropX') * $factor;
-            $cropY = $this->_getParam('cropY') * $factor;
-            $cropWidth = $this->_getParam('cropWidth') * $factor;
-            $cropHeight = $this->_getParam('cropHeight') * $factor;
         }
 
         // Calculate values relative to preview image
