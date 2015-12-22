@@ -45,7 +45,15 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 $ret[] = $nonDeferDep;
             }
 
-            $componentClasses = $this->_getRecursiveChildClasses($this->_rootComponentClass);
+            $componentClasses = array();
+            $componentClassesWithoutParam = array();
+            foreach ($this->_getRecursiveChildClasses($this->_rootComponentClass) as $c) {
+                $cWithoutParam = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
+                if (!in_array($cWithoutParam, $componentClassesWithoutParam)) {
+                    $componentClassesWithoutParam[] = $cWithoutParam; //only add one per component class without parameter
+                    $componentClasses[] = $c;
+                }
+            }
 
             foreach ($componentClasses as $class) {
 
