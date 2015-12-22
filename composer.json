@@ -39,7 +39,7 @@
             "modernizr": "git://github.com/Modernizr/Modernizr.git#eb211bbcb",
             "postcss": "5.0.13",
             "es6-promise": "3.0.2",
-            "css-selectors-count": "1.0.1",
+            "css-selectors-count": "1.0.1"
         },
         "require-dev-bower": {
             "qunit": "1.18.0",
