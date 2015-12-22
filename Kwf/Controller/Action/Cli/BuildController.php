@@ -123,4 +123,23 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
         }
         exit;
     }
+
+    public function countCssSelectorsAction()
+    {
+        $a = new Kwf_Util_Build_Types_Assets();
+        $langs = $a->getAllLanguages();
+
+        $packages = array(
+            Kwf_Assets_Package_Default::getInstance('Frontend'),
+        );
+
+        foreach ($packages as $p) {
+            $c = $p->getBuildContents('text/css', $langs[0]);
+            $count = Kwf_Assets_Util_CssRuleCount::count($c);
+            echo $p->getDependency().': '.$count." rules\n";
+        }
+        exit;
+
+
+    }
 }
