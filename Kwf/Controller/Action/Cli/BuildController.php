@@ -124,7 +124,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
         exit;
     }
 
-    public function countCssSelectorsAction()
+    public function countCssRulesAction()
     {
         $a = new Kwf_Util_Build_Types_Assets();
         $langs = $a->getAllLanguages();
