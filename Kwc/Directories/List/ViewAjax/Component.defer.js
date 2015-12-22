@@ -51,7 +51,7 @@ onReady.onRender('.kwcClass', function initViewAjax(el, config) {
 
     config.el = el.find('.viewContainer')[0];
 
-    el.find('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
+    el.find('.kwfUp-kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
     el[0].kwcViewAjax = new ViewAjax(config);
 
     var linkToTop = $('<div class="linkToTop"></div>');
