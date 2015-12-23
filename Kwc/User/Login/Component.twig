@@ -8,13 +8,7 @@
             </p>
         {% endif %}
     {% endblock %}
-    {% block lostPassword %}
-        {% if lostPassword %}
-            <p>{{ data.trlKwf("If you have lost your password,") }}
-            {{ renderer.componentLink(lostPassword, data.trlKwf('request a new one here')) }}.
-            </p>
-        {% endif %}
-    {% endblock %}
+
     {% block redirects %}
         {% if redirects %}
             <ul class="redirects">
@@ -37,7 +31,16 @@
             </ul>
         {% endif %}
     {% endblock %}
+
     {% block form %}
         {{ renderer.component(form) }}
     {% endblock %}
+    {% block lostPassword %}
+        {% if lostPassword %}
+            <p>{{ data.trlKwf("If you have lost your password,") }}
+                {{ renderer.componentLink(lostPassword, data.trlKwf('request a new one here')) }}.
+            </p>
+        {% endif %}
+    {% endblock %}
+
 </div>
