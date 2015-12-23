@@ -52,4 +52,24 @@ class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Dependency_Abs
     {
         return str_replace('Kwf_Assets_Dependency_Decorator_', '', get_class($this)).'('.$this->_dep->__toString().')';
     }
+
+    public function setDependencies($type, $deps)
+    {
+        return $this->_dep->setDependencies($type, $deps);
+    }
+
+    public function addDependencies($type, $deps)
+    {
+        return $this->_dep->addDependencies($type, $deps);
+    }
+
+    public function addDependency($type, $dep, $index = null)
+    {
+        return $this->_dep->addDependency($type, $dep, $index);
+    }
+
+    public function getDependencies($type)
+    {
+        return $this->_dep->getDependencies($type);
+    }
 }
