@@ -29,7 +29,11 @@ class Kwf_Util_ModelSync
                 $keyValues[] = $row->$column;
             }
             $key = implode('#', $keyValues);
-            $existingRows[$key] = $row;
+            if (!isset($existingRows[$key])) {
+                $existingRows[$key] = $row;
+            } else {
+                $row->delete();
+            }
         }
         $this->_lastSyncStat['check'] = count($existingRows);
         foreach ($data as $id => $d) {
