@@ -1,4 +1,6 @@
 <div class="{{ cssClass }}">
+    {% block content %}
+
     {% block header %}
         <h1>{{ data.trlKwf('Please login') }}</h1>
         <p>{{ data.trlKwf('You have to login to see the requested page.') }}</p>
@@ -43,4 +45,5 @@
         {% endif %}
     {% endblock %}
 
+    {% endblock %}
 </div>
