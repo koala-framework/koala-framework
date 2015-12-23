@@ -49,7 +49,7 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext2.extend(Kwc.Abstract.Image.ImageUp
             enlargeDimensions = new Array();
             enlargeDimensions.add(this.imageEnlargeDimension);
             if (!Kwc.Abstract.Image.DimensionField
-                    .isValidImageSize(valueCopy, enlargeDimensions, scaleFactor, dpr2)) {
+                    .isValidImageSize(valueCopy, enlargeDimensions, dpr2)) {
                 this.getEl().addClass('error');
                 fileUploadField.getEl().child('.hover-background').addClass('error');
                 if (!fileUploadField.getEl().child('.hover-background .message')) {
