@@ -10,6 +10,7 @@ class Kwc_FulltextSearch_Search_Directory_Component extends Kwc_Directories_Item
         $ret['generators']['child']['component']['view'] = 'Kwc_FulltextSearch_Search_ViewAjax_Component';
         $ret['childModel'] = 'Kwc_FulltextSearch_Search_Directory_Model';
         $ret['flags']['usesFulltext'] = true;
+        $ret['flags']['noIndex'] = true;
         $ret['updateTags'] = array('fulltext');
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';
         return $ret;

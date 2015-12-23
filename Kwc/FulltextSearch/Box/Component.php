@@ -8,6 +8,7 @@ class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
         $ret['hideSubmit'] = false;
         $ret['flags']['forwardProcessInput'] = true;
         $ret['minSearchTermLength'] = 3;
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
 
