@@ -69,7 +69,9 @@ abstract class Kwf_Exception_Abstract extends Exception
                 if (isset($_SERVER['HTTP_HOST'])) {
                     //try to get the page of current domain to get correct language
                     $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
-                    $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', $acceptLanguage);
+                    try {
+                        $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', $acceptLanguage);
+                    } catch (Exception $e) {}
                 }
                 if (!$data) $data = Kwf_Component_Data_Root::getInstance();
                 $view->data = $data; //can be used for trl
@@ -93,11 +95,20 @@ abstract class Kwf_Exception_Abstract extends Exception
 
             echo $view->render($template);
         } catch (Exception $e) {
-            echo '<pre>';
-            echo $this->getException()->__toString();
-            echo "\n\n\nError happened while handling exception:";
-            echo $e->__toString();
-            echo '</pre>';
+            if (Kwf_Exception::isDebug()) {
+                echo '<pre>';
+                echo $this->getException()->__toString();
+                echo "\n\n\nError happened while handling exception:";
+                echo $e->__toString();
+                echo '</pre>';
+            } else {
+                if (!headers_sent()) {
+                    header('HTTP/1.1 500 Internal Server Error');
+                    header('Content-Type: text/html; charset=utf-8');
+                }
+                echo '<h1>Error</h1>';
+                echo '<p>An Error ocurred. Please try again later.</p>';
+            }
         }
 
    }
