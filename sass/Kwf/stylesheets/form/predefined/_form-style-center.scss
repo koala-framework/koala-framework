@@ -1,7 +1,8 @@
 @import "form/form-styles";
+@import "kwf/el-breakpoint";
 
 @mixin form-style-center {
-    &.veryNarrow {
+    @include el-breakpoint-max(500px) {
         $form-label-position  : top;
         $form-label-align  : center;
         $form-label-width  : 100%;
@@ -10,7 +11,7 @@
         $form-error-style  : simple;
     }
 
-    &.gt350 {
+    @include el-breakpoint(350px) {
         $form-label-position  : top;
         $form-label-align  : center;
         $form-label-width  : 100%;

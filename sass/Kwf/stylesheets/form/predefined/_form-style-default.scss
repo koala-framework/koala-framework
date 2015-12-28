@@ -1,7 +1,7 @@
 @import "form/form-styles";
 
 @mixin form-style-default {
-    &.veryNarrow {
+    @include el-breakpoint-max(500px) {
         $form-label-position  : top;
         $form-label-align  : left;
         $form-label-width  : 100%;
@@ -10,11 +10,11 @@
         $form-error-style  : simple;
     }
 
-    &.veryNarrow.gt350 {
+    &.lt500.gt350 {
         $form-error-style  : simple-right;
     }
 
-    &.gt350 {
+    @include el-breakpoint(350px) {
         $form-label-position  : left;
         $form-label-align  : right;
         $form-label-width  : 34%;
@@ -22,7 +22,7 @@
         $form-margin  : 6%;
     }
 
-    &.gt500 {
+    @include el-breakpoint(500px) {
         $form-label-position  : left;
         $form-label-align  : right;
         $form-label-width  : 120px;
