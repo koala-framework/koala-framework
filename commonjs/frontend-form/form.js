@@ -30,8 +30,10 @@ var FormComponent = function(form)
     form.get(0).kwcForm = this;
     form.data('kwcForm', this);
 
-    this.el = form;
-    var config = form.parent().data('config');
+    this.el = form.find('.kwfUp-formContainer');
+    if (!this.el.length) return;
+
+    var config = form.data('config');
     if (!config) return;
     this.config = config;
     this._submitDisabled = 0;
