@@ -64,7 +64,9 @@ abstract class Kwf_Exception_Abstract extends Exception
                 if (isset($_SERVER['HTTP_HOST'])) {
                     //try to get the page of current domain to get correct language
                     $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
-                    $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', $acceptLanguage);
+                    try {
+                        $data = Kwf_Component_Data_Root::getInstance()->getPageByUrl('http://'.$_SERVER['HTTP_HOST'].'/', $acceptLanguage);
+                    } catch (Exception $e) {}
                 }
                 if (!$data) $data = Kwf_Component_Data_Root::getInstance();
                 $view->data = $data; //can be used for trl
