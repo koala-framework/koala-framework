@@ -103,8 +103,17 @@ class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Dependency_Ab
 
     public function getContentsPacked($language)
     {
+        //add all deps in key to get different cache value when dep is added/removed
+        $ids = array();
+        foreach ($this->_componentDependencies as $dep) {
+            $ids[] = $dep->__toString();
+        }
+
         $cacheFile = "cache/componentassets/" . md5($this->_componentClass . ($this->usesLanguage() ? "-$language" : '').
-            "-".Kwf_Config::getValue('application.uniquePrefix') . "-" . $this->_dependencyName);
+            "-".Kwf_Config::getValue('application.uniquePrefix') . "-" . $this->_dependencyName
+            .'-'.implode('-', $ids)
+            );
+
         if (file_exists($cacheFile) && filemtime($cacheFile) > $this->getMTime()) {
             $ret = Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));
         } else {
