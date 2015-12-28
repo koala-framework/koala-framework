@@ -113,9 +113,11 @@ ViewAjax.prototype = {
             byDirectoryViewComponentId[this.directoryViewComponentId] = this;
         }
         this.baseParams = {
-            componentId: this.componentId,
-            kwfSessionToken: Kwf.sessionToken
+            componentId: this.componentId
         };
+        if (Kwf.sessionToken) {
+            this.baseParams.kwfSessionToken = Kwf.sessionToken;
+        }
 
         if (this.searchFormComponentId) {
             this.searchForm = formRegistry.getFormByComponentId(this.searchFormComponentId);
