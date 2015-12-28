@@ -9,6 +9,7 @@ class Kwc_Advanced_IntegratorTemplate_Embed_ContentSender extends Kwf_Component_
         $ret = parent::_render($includeMaster, $hasDynamicParts);
         $ret = str_replace('href="/', 'href="' . $domain . '/', $ret);
         $ret = str_replace('src="/', 'src="' . $domain . '/', $ret);
+        $ret = str_replace("src='/", "src='" . $domain . '/', $ret);
         return $ret;
     }
 }
