@@ -441,6 +441,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
 
 Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor = function (cropData, factor)
 {
+    if (!cropData) return cropData;
     return {
         x: cropData.x * factor,
         y: cropData.y * factor,
