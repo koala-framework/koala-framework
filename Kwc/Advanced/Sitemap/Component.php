@@ -5,6 +5,8 @@ class Kwc_Advanced_Sitemap_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlKwfStatic('Sitemap');
+        $ret['componentIcon'] = 'sitemap_color.png';
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         return $ret;
