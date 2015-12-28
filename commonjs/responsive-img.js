@@ -107,6 +107,7 @@ function initResponsiveImgEl(el) {
             img.attr('alt', alt[1]);
         }
     }
+    el.trigger('changesrc', sizePath);
 };
 
 function checkResponsiveImgEl(responsiveImgEl) {
