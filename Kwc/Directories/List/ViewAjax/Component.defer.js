@@ -115,7 +115,7 @@ ViewAjax.prototype = {
         this.baseParams = {
             componentId: this.componentId
         };
-        if (Kwf.sessionToken) {
+        if (typeof Kwf != 'undefined' && Kwf.sessionToken) {
             this.baseParams.kwfSessionToken = Kwf.sessionToken;
         }
 
