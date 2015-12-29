@@ -1,18 +1,18 @@
-.kwfFormContainerFieldSet div {
+.kwfUp-kwfFormContainerFieldSet div {
     display: block;
 }
 
-.kwfFormContainerFieldSet .kwfFormContainerFieldSetCollapsed {
+.kwfUp-kwfFormContainerFieldSet .kwfFormContainerFieldSetCollapsed {
     border-width: 2px 2px 0px 2px;
     border-left-color: transparent;
     border-right-color: transparent;
     margin-bottom: 0px;
 }
 
-.kwfFormContainerFieldSet fieldset {
+.kwfUp-kwfFormContainerFieldSet fieldset {
     border: 2px groove #EEE;
 }
 
-.kwfFormContainerFieldSet .kwfFormContainerFieldSetCollapsed div {
+.kwfUp-kwfFormContainerFieldSet .kwfFormContainerFieldSetCollapsed div {
     display: none;
 }
