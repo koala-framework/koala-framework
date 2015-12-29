@@ -49,7 +49,7 @@ $(document).on('click', 'a', function(event) {
 
 onReady.onRender('.kwcClass', function initViewAjax(el, config) {
 
-    config.el = el.find('.viewContainer')[0];
+    config.el = el.find('.kwcBem__viewContainer')[0];
 
     el.find('.kwfUp-kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
     el[0].kwcViewAjax = new ViewAjax(config);
