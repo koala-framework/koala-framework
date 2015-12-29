@@ -53,7 +53,7 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
 
     //Remove the kwfLightboxOpen class and get the transform matrix data
     //We need that info, for future open animations
-    var transformName = Modernizr.prefixed('transform');
+    var transformName = Modernizr.prefixed('transform') || '';
     l.lightboxEl.hide();
     l.lightboxEl.removeClass('kwfLightboxOpen');
     l.lightboxEl.width(); //trigger layout
@@ -199,7 +199,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.innerLightboxEl = lightbox.find('.kwfLightboxInner');
         var el = this.innerLightboxEl;
 
-        var transformName = Modernizr.prefixed('transform');
+        var transformName = Modernizr.prefixed('transform') || '';
         var matrix = el.css(transformName);
         var values = matrix.match(/-?[\d\.]+/g);
         if (values != null && values[4] && values[4] == el.outerWidth()) {
@@ -346,7 +346,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         if (!this.lightboxEl.is(':visible')) {
             this.lightboxEl.show();
             if (this.innerLightboxEl.magicTransform) {
-                var transformName = Modernizr.prefixed('transform');
+                var transformName = Modernizr.prefixed('transform') || '';
                 var matrix = this.innerLightboxEl.css(transformName);
                 var values = matrix.match(/-?[\d\.]+/g);
                 if (this.innerLightboxEl.magicScale) {
@@ -356,7 +356,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+',0,0)';
                 this.innerLightboxEl.css(transformName, newMatrix);
             }
-            var transitionDurationName = Modernizr.prefixed('transitionDuration');
+            var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
             var duration = this.innerLightboxEl.css(transitionDurationName);
             if (parseFloat(duration)>0) {
                 $('body').addClass('kwfLightboxAnimate');
@@ -384,7 +384,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
         this.style.onClose(options);
         this.lightboxEl.removeClass('kwfLightboxOpen');
         if (this.innerLightboxEl.magicTransform) {
-            var transformName = Modernizr.prefixed('transform');
+            var transformName = Modernizr.prefixed('transform') || '';
             var matrix = this.innerLightboxEl.css(transformName);
             var values = matrix.match(/-?[\d\.]+/g);
             if (this.innerLightboxEl.magicTransformX) {
@@ -463,7 +463,7 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
             'MozTransition'    : 'transitionend',
             'transition'       : 'transitionend'
         };
-        return transEndEventNames[ Modernizr.prefixed('transition') ];
+        return transEndEventNames[ Modernizr.prefixed('transition') || '' ];
     }
 };
 
@@ -527,7 +527,7 @@ Kwf.EyeCandy.Lightbox.Styles.Abstract.prototype = {
         var lightboxMaskEl = this.lightbox.lightboxEl.find('.kwfLightboxMask');
         $(document.body).removeClass('kwfLightboxTheaterMode');
         var transEndEventName = this.lightbox.getTransitionEndName();
-        var transitionDurationName = Modernizr.prefixed('transitionDuration');
+        var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
         var duration = lightboxMaskEl.css(transitionDurationName);
         lightboxMaskEl.removeClass('kwfLightboxMaskOpen');
         if (parseFloat(duration)>0) {
@@ -698,7 +698,7 @@ Kwf.EyeCandy.Lightbox.Styles.CenterBox = Ext2.extend(Kwf.EyeCandy.Lightbox.Style
     },
     onClose: function(options) {
         var transEndEventName = this.lightbox.getTransitionEndName();
-        var transitionDurationName = Modernizr.prefixed('transitionDuration');
+        var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
         var duration = this.lightbox.innerLightboxEl.css(transitionDurationName);
         if (parseFloat(duration)>0) {
             $('body').addClass('kwfLightboxAnimate');
