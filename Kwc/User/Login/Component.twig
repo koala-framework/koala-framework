@@ -1,4 +1,6 @@
 <div class="{{ rootElementClass }}">
+    {% block content %}
+
     {% block header %}
         <h1>{{ data.trlKwf('Please login') }}</h1>
         <p>{{ data.trlKwf('You have to login to see the requested page.') }}</p>
@@ -8,13 +10,7 @@
             </p>
         {% endif %}
     {% endblock %}
-    {% block lostPassword %}
-        {% if lostPassword %}
-            <p>{{ data.trlKwf("If you have lost your password,") }}
-            {{ renderer.componentLink(lostPassword, data.trlKwf('request a new one here')) }}.
-            </p>
-        {% endif %}
-    {% endblock %}
+
     {% block redirects %}
         {% if redirects %}
             <ul class="redirects">
@@ -37,7 +33,17 @@
             </ul>
         {% endif %}
     {% endblock %}
+
     {% block form %}
         {{ renderer.component(form) }}
+    {% endblock %}
+    {% block lostPassword %}
+        {% if lostPassword %}
+            <p>{{ data.trlKwf("If you have lost your password,") }}
+                {{ renderer.componentLink(lostPassword, data.trlKwf('request a new one here')) }}.
+            </p>
+        {% endif %}
+    {% endblock %}
+
     {% endblock %}
 </div>

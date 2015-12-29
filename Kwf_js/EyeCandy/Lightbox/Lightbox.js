@@ -60,7 +60,7 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
 
     //Remove the kwfUp-kwfLightboxOpen class and get the transform matrix data
     //We need that info, for future open animations
-    var transformName = Modernizr.prefixed('transform');
+    var transformName = Modernizr.prefixed('transform') || '';
     l.lightboxEl.hide();
     l.lightboxEl.removeClass('kwfUp-kwfLightboxOpen');
     l.lightboxEl.width(); //trigger layout
@@ -206,7 +206,7 @@ Lightbox.prototype = {
         this.innerLightboxEl = lightbox.find('.kwfUp-kwfLightboxInner');
         var el = this.innerLightboxEl;
 
-        var transformName = Modernizr.prefixed('transform');
+        var transformName = Modernizr.prefixed('transform') || '';
         var matrix = el.css(transformName);
         var values = matrix.match(/-?[\d\.]+/g);
         if (values != null && values[4] && values[4] == el.outerWidth()) {
@@ -352,7 +352,7 @@ Lightbox.prototype = {
         if (!this.lightboxEl.is(':visible')) {
             this.lightboxEl.show();
             if (this.innerLightboxEl.magicTransform) {
-                var transformName = Modernizr.prefixed('transform');
+                var transformName = Modernizr.prefixed('transform') || '';
                 var matrix = this.innerLightboxEl.css(transformName);
                 var values = matrix.match(/-?[\d\.]+/g);
                 if (this.innerLightboxEl.magicScale) {
@@ -362,7 +362,7 @@ Lightbox.prototype = {
                 var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+',0,0)';
                 this.innerLightboxEl.css(transformName, newMatrix);
             }
-            var transitionDurationName = Modernizr.prefixed('transitionDuration');
+            var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
             var duration = this.innerLightboxEl.css(transitionDurationName);
             if (parseFloat(duration)>0) {
                 $('body').addClass('kwfUp-kwfLightboxAnimate');
@@ -391,7 +391,7 @@ Lightbox.prototype = {
         this.lightboxEl.removeClass('kwfUp-kwfLightboxOpen');
 
         if (this.innerLightboxEl.magicTransform) {
-            var transformName = Modernizr.prefixed('transform');
+            var transformName = Modernizr.prefixed('transform') || '';
             var matrix = this.innerLightboxEl.css(transformName);
             var values = matrix.match(/-?[\d\.]+/g);
             if (this.innerLightboxEl.magicTransformX) {
@@ -468,7 +468,7 @@ Lightbox.prototype = {
             'MozTransition'    : 'transitionend',
             'transition'       : 'transitionend'
         };
-        return transEndEventNames[ Modernizr.prefixed('transition') ];
+        return transEndEventNames[ Modernizr.prefixed('transition') || '' ];
     }
 };
 
@@ -535,7 +535,7 @@ LightboxStyles.Abstract.prototype = {
         var lightboxMaskEl = this.lightbox.lightboxEl.find('.kwfUp-kwfLightboxMask');
         $(document.body).removeClass('kwfLightboxTheaterMode');
         var transEndEventName = this.lightbox.getTransitionEndName();
-        var transitionDurationName = Modernizr.prefixed('transitionDuration');
+        var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
         var duration = lightboxMaskEl.css(transitionDurationName);
         lightboxMaskEl.removeClass('kwfUp-kwfLightboxMaskOpen');
         if (parseFloat(duration)>0) {
@@ -706,7 +706,7 @@ LightboxStyles.CenterBox = kwfExtend(LightboxStyles.Abstract, {
     },
     onClose: function(options) {
         var transEndEventName = this.lightbox.getTransitionEndName();
-        var transitionDurationName = Modernizr.prefixed('transitionDuration');
+        var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
         var duration = this.lightbox.innerLightboxEl.css(transitionDurationName);
         if (parseFloat(duration)>0) {
             $('body').addClass('kwfUp-kwfLightboxAnimate');
