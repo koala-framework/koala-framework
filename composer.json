@@ -23,7 +23,7 @@
     "extra": {
         "require-bower": {
             "jquery": "~1.11 || 2.*",
-            "underscore": "1.7.0",
+            "underscore": "1.8.3",
             "compass-mixins": "koala-framework/compass-mixins#7319116335050516e01b250b6e771600ab55e105",
             "tinymce": "tinymce/tinymce#4.1.9",
             "matches-selector": "1.0.3"
