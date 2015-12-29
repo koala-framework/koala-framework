@@ -54,7 +54,7 @@ onReady.onRender('.kwcClass', function initViewAjax(el, config) {
     el.find('.kwfUp-kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
     el[0].kwcViewAjax = new ViewAjax(config);
 
-    var linkToTop = $('<div class="linkToTop"></div>');
+    var linkToTop = $('<div class="kwcBem__linkToTop"></div>');
     el.append(linkToTop);
     linkToTop.click(function() {
         window.scrollTo(0, 0);
@@ -63,9 +63,9 @@ onReady.onRender('.kwcClass', function initViewAjax(el, config) {
     $(window).on('scroll', function() {
         var scrollHeight = $(window).scrollTop();
         if (scrollHeight >= 1700) {
-            el.addClass('scrolledDown'); //will display linkToTop
+            el.addClass('kwcBem--scrolledDown'); //will display linkToTop
         } else {
-            el.removeClass('scrolledDown');
+            el.removeClass('kwcBem--scrolledDown');
         }
     });
 

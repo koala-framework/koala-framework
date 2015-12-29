@@ -26,7 +26,7 @@
     @include default-loading-animation-big;
 }
 
-.kwcClass .linkToTop {
+.kwcClass__linkToTop {
     display: none;
     background: url(/assets/kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left top;
     width: 58px;
@@ -37,11 +37,11 @@
     margin-left: -29px;
 }
 
-.kwcClass .linkToTop:hover {
+.kwcClass__linkToTop:hover {
     cursor: pointer;
     background: url(/assets/kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left bottom;
 }
 
-.kwcClass.scrolledDown .linkToTop {
+.kwcClass--scrolledDown .kwcClass__linkToTop {
     display: block;
 }
