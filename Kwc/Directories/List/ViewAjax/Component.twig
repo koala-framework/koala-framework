@@ -2,7 +2,7 @@
     <input type="hidden" name="config" value="{{ config|json_encode()|escape }}" />
     {% if searchForm is defined %}
         {% block searchForm %}
-        <div class="searchForm">
+        <div class="{{ 'searchForm'|bemClass }}">
             {{ renderer.component(searchForm) }}
         </div>
         {% endblock %}
@@ -12,12 +12,11 @@
             {{ renderer.component(count) }}
         {% endblock %}
     {% endif %}
-    <div class="viewContainer">
+    <div class="{{ 'viewContainer'|bemClass }}">
         {% block viewContainer %}
             {{ renderer.partials(data) }}
         {% endblock %}
     </div>
-    <div class="kwfUp-clear"></div>
     {% if paging is defined %}
         {% block paging %}
             {{ renderer.component(paging) }}
