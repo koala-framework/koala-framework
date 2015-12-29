@@ -63,7 +63,8 @@ Kwf.onJElementReady('.kwfLightbox', function lightboxEl(el) {
     l.lightboxEl.addClass('kwfLightboxOpen');
     l.lightboxEl.width(); //trigger layout
     l.lightboxEl.show();
-    var values = matrix.match(/-?[\d\.]+/g);
+    var values = null;
+    if (matrix) values = matrix.match(/-?[\d\.]+/g);
     if (values != null) {
         if (values[4] && values[4] == l.innerLightboxEl.outerWidth()) {
             //translatex
@@ -201,7 +202,8 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
 
         var transformName = Modernizr.prefixed('transform') || '';
         var matrix = el.css(transformName);
-        var values = matrix.match(/-?[\d\.]+/g);
+        var values = null;
+        if (matrix) values = matrix.match(/-?[\d\.]+/g);
         if (values != null && values[4] && values[4] == el.outerWidth()) {
             //translatex
             this.innerLightboxEl.magicTransform = true;
