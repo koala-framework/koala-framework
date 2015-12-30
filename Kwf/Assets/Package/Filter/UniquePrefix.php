@@ -33,7 +33,6 @@ class Kwf_Assets_Package_Filter_UniquePrefix
                 try {
                     kwfUp[name] = window[name] || eval(name);
                 } catch(e) {
-                    continue;
                 }
                 if (kwfOrigExports[name]) {
                     window[name] = kwfOrigExports[name];
