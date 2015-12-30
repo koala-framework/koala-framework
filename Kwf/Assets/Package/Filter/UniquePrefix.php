@@ -17,10 +17,10 @@ class Kwf_Assets_Package_Filter_UniquePrefix
                 if (kwfUp[name]) {
                     window[name] = kwfUp[name];
                 } else {
+                    window[name] = undefined;
                     try {
                         delete window[name];
                     } catch (e) {
-                        window[name] = undefined;
                     }
                 }
             }
@@ -37,10 +37,10 @@ class Kwf_Assets_Package_Filter_UniquePrefix
                 if (kwfOrigExports[name]) {
                     window[name] = kwfOrigExports[name];
                 } else {
+                    window[name] = undefined;
                     try {
                         delete window[name];
                     } catch (e) {
-                        window[name] = undefined;
                     }
                 }
                 eval("var "+name+" = kwfUp."+name+";");
