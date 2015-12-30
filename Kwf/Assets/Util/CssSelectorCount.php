@@ -1,9 +1,9 @@
 <?php
-class Kwf_Assets_Util_CssRuleCount
+class Kwf_Assets_Util_CssSelectorCount
 {
     public static function count($contents)
     {
-        $cmd = getcwd()."/".VENDOR_PATH."/bin/node ".KWF_PATH."/Kwf/Assets/Util/CssRuleCount.js";
+        $cmd = getcwd()."/".VENDOR_PATH."/bin/node ".KWF_PATH."/Kwf/Assets/Util/CssSelectorCount.js";
         $cmd .= " 2>&1";
         $process = new Symfony\Component\Process\Process($cmd);
         $process->setEnv(array(
@@ -14,6 +14,6 @@ class Kwf_Assets_Util_CssRuleCount
         $process->mustRun();
 
         $out = json_decode($process->getOutput(), true);
-        return $out['rules'];
+        return $out['selectors'];
     }
 }
