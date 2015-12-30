@@ -5,8 +5,11 @@ class Kwf_Assets_Package
     protected $_providerList;
     protected $_dependencyName;
     protected $_dependency;
-    protected $_cacheFilteredUniqueDependencies;
-    protected $_cssPackageContentsCache;
+    private $_chunkCss = false;
+
+    private $_cacheFilteredUniqueDependencies;
+    private $_cssPackageContentsCache;
+    private $_chunkedCssCache;
 
     public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $dependencyName)
     {
@@ -20,6 +23,13 @@ class Kwf_Assets_Package
     public function getDependencyName()
     {
         return $this->_dependencyName;
+    }
+
+    //if enabled multiple css files will be generated to avoid the <=ie9 4096 selectors limit
+    public function setChunkCss($v)
+    {
+        $this->_chunkCss = $v;
+        return $this;
     }
 
     /**
@@ -238,10 +248,10 @@ class Kwf_Assets_Package
     public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
     {
         if ($mimeType == 'text/css' || $mimeType == 'text/css; ie8') {
-            if (!isset($this->_cssPackageContentsCache)) {
-                $this->_cssPackageContentsCache = $this->_buildPackageContents($mimeType, $language);
+            if (!isset($this->_cssPackageContentsCacheNoIe8Filter)) {
+                $this->_cssPackageContentsCacheNoIe8Filter = $this->_buildPackageContents($mimeType, $language);
             }
-            $packageMap = $this->_cssPackageContentsCache;
+            $packageMap = $this->_cssPackageContentsCacheNoIe8Filter;
             if ($mimeType == 'text/css') {
                 //remove @ie8 {}
                 $f = new Kwf_Assets_Filter_Css_Ie8Remove();
@@ -272,6 +282,23 @@ class Kwf_Assets_Package
         }
 
         return $packageMap;
+    }
+
+    private function _getChunkedContents($mimeType, $language)
+    {
+        if (!$this->_chunkCss || $mimeType != 'text/css') {
+            return array($this->getPackageContents($mimeType, $language));
+        } else {
+
+            if (isset($this->_chunkedCssCache)) {
+                return $this->_chunkedCssCache;
+            }
+
+            $contents = $this->getPackageContents($mimeType, $language);
+            $filter = new Kwf_Assets_Filter_CssChunks();
+            $this->_chunkedCssCache = $filter->filter($contents);
+            return $this->_chunkedCssCache;
+        }
     }
 
     public function toUrlParameter()
@@ -343,7 +370,16 @@ class Kwf_Assets_Package
         }
 
         if ($hasContents) {
-            array_unshift($ret, $this->getPackageUrl($ext, $language));
+            $chunks = $this->_getChunkedContents($mimeType, $language);
+            if (count($chunks) > 1) {
+                $urls = array();
+                foreach ($chunks as $chunkNum=>$chunk) {
+                    $urls[] = $this->getPackageUrl($chunkNum.'.'.$ext, $language);
+                }
+            } else {
+                $urls = array($this->getPackageUrl($ext, $language));
+            }
+            $ret = array_merge($urls, $ret);
         }
 
         return $ret;
@@ -356,5 +392,42 @@ class Kwf_Assets_Package
 
     public function unserialize($serialized)
     {
+    }
+
+    public function getUrlContents($extension, $language)
+    {
+        $sourceMap = false;
+        if (substr($extension, -4) == '.map') {
+            $extension = substr($extension, 0, -4);
+            $sourceMap = true;
+        }
+        if ($extension == 'js') $mimeType = 'text/javascript';
+        else if ($extension == 'ie8.css') $mimeType = 'text/css; ie8';
+        else if ($extension == 'defer.js') $mimeType = 'text/javascript; defer';
+        else if (substr($extension, -3) == 'css') $mimeType = 'text/css';
+        else throw new Kwf_Exception_NotFound();
+
+        $map = $this->getPackageContents($mimeType, $language);
+        if ($mimeType == 'text/css' && $extension != 'css') {
+            $chunkNum = substr($extension, 0, -4);
+            $chunks = $this->_getChunkedContents($mimeType, $language);
+            $map = $chunks[$chunkNum];
+        }
+        if (!$sourceMap) {
+            $contents = $map->getFileContents();
+            $mtime = $this->getMaxMTime($mimeType);
+            if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
+            else if (substr($extension, -3) == 'css') $mimeType = 'text/css; charset=utf-8';
+        } else {
+            $contents = $map->getMapContents(false);
+            $mtime = $this->getMaxMTime($mimeType);
+            $mimeType = 'application/json';
+        }
+        $ret = array(
+            'contents' => $contents,
+            'mimeType' => $mimeType,
+        );
+        if ($mtime) $ret['mtime'] = $mtime;
+        return $ret;
     }
 }

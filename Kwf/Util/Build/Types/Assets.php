@@ -8,14 +8,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         'ie8.css' => 'text/css; ie8',
     );
 
-    private function _buildPackageContents($packageContents, $maxMTime, $p, $extension, $language)
+    private function _buildPackageContents($cacheContents, $maxMTime, $p, $extension, $language)
     {
-        $cacheContents = array(
-            'contents' => $packageContents->getFileContents(),
-            'mimeType' => ($extension == 'js' || $extension == 'defer.js') ? 'text/javascript; charset=utf-8' : 'text/css; charset=utf-8',
-            'mtime' => $maxMTime
-        );
-
         $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension, $language);
         Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
 
@@ -26,13 +20,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         }
     }
 
-    private function _buildPackageSourceMap($packageContents, $maxMTime, $p, $extension, $language)
+    private function _buildPackageSourceMap($cacheContents, $maxMTime, $p, $extension, $language)
     {
-        $cacheContents = array(
-            'contents' => $packageContents->getMapContents(false),
-            'mimeType' => 'application/json',
-            'mtime' => $maxMTime
-        );
         $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension.'.map', $language);
         Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
     }
@@ -197,16 +186,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
                 foreach ($exts as $extension) {
 
-                    $progress->next(1, "$depName $extension $language");
-                    $packageContents = $p->getPackageContents(self::$_mimeTypeByExtension[$extension], $language);
-                    $maxMTime = $p->getMaxMTime(self::$_mimeTypeByExtension[$extension]);
-
-                    $progress->next(1, "$depName $extension $language source");
-                    $this->_buildPackageContents($packageContents, $maxMTime, $p, $extension, $language);
-
-                    $progress->next(1, "$depName $extension $language map");
-                    $this->_buildPackageSourceMap($packageContents, $maxMTime, $p, $extension, $language);
-
                     $progress->next(1, "$depName $extension $language url");
                     $urls = $p->getPackageUrls(self::$_mimeTypeByExtension[$extension], $language);
                     if (Kwf_Setup::getBaseUrl()) {
@@ -216,6 +195,22 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                     }
                     $cacheId = $p->getPackageUrlsCacheId(self::$_mimeTypeByExtension[$extension], $language);
                     Kwf_Assets_BuildCache::getInstance()->save($urls, $cacheId);
+
+                    $maxMTime = $p->getMaxMTime(self::$_mimeTypeByExtension[$extension]);
+                    foreach ($urls as $urlNum=>$url) {
+                        $param = explode('/', $url);
+                        $urlLanguage = $param[5];
+                        $urlExtension = $param[6];
+                        $urlExtension = substr($urlExtension, 0, strpos($urlExtension, '?'));
+                        $contents = $p->getUrlContents($urlExtension, $urlLanguage);
+
+                        $progressIncrement = $urlNum == 0 ? 1 : 0;
+                        $progress->next($progressIncrement, "$depName $urlExtension $urlLanguage source");
+                        $this->_buildPackageContents($contents, $maxMTime, $p, $urlExtension, $urlLanguage);
+
+                        $progress->next($progressIncrement, "$depName $urlExtension $urlLanguage map");
+                        $this->_buildPackageSourceMap($contents, $maxMTime, $p, $urlExtension, $urlLanguage);
+                    }
                 }
 
             }

@@ -57,10 +57,10 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
 
     public static function createPackages()
     {
-        $packages = array(
-            self::getInstance('Frontend'),
-            self::getInstance('Admin')
-        );
+        $packages = array();
+        $packages[] = self::getInstance('Frontend')
+            ->setChunkCss(true);
+        $packages[] = self::getInstance('Admin');
         foreach (Kwf_Config::getValueArray('assets.packages') as $i) {
             $packages[] = self::getInstance($i);
         }
