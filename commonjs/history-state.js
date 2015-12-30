@@ -18,7 +18,8 @@ HistoryStateAbstract.prototype = {
      **/
     replaceState: function() {},
 
-    on: function(event, cb) {
+    on: function(event, cb, scope) {
+        if (typeof scope != 'undefined') cb = cb.bind(scope);
         $(window).on('kwf-history-state-'+event, cb);
     }
 };

@@ -277,6 +277,8 @@ ViewAjax.prototype = {
 
     _getState: function()
     {
+        if (!historyState.currentState.viewAjax) historyState.currentState.viewAjax = {};
+        historyState.currentState.viewAjax[this.componentId] = {};
         return historyState.currentState.viewAjax[this.componentId];
     },
 
