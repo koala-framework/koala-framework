@@ -1,8 +1,30 @@
 var _ = require('underscore');
 
-if (typeof Array.prototype.forEach != 'function') {
-    Array.prototype.forEach = function (fn, scope) {
+_.extend(Array.prototype, {
+    //deprecated! -> forEach (ist auch ein JS-Standard!)
+    each: function(fn, scope) {
+        _.each(this, fn, scope);
+    },
+
+    //to use array.forEach directly
+    forEach: function(fn, scope) {
         _.forEach(this, fn, scope);
+    }
+});
+
+if (typeof Array.prototype.add != 'function') {
+    //add is alias for push
+    Array.prototype.add = function () {
+        this.push.apply(this, arguments);
+    };
+}
+
+if (typeof Array.prototype.shuffle != 'function') {
+    //+ Jonas Raoni Soares Silva
+    //@ http://jsfromhell.com/array/shuffle [rev. #1]
+    Array.prototype.shuffle = function () {
+        for (var j, x, i = this.length; i; j = parseInt(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x);
+        return this;
     };
 }
 
