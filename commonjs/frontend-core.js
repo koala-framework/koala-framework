@@ -12,6 +12,12 @@ if (typeof Array.prototype.each != 'function') {
     };
 }
 
+if (typeof Array.prototype.add != 'function') {
+    Array.prototype.add = function () {
+        this.push.apply(this, arguments);
+    };
+}
+
 //source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 if (!Function.prototype.bind) {
     Function.prototype.bind = function (oThis) {
