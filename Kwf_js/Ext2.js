@@ -1,5 +1,15 @@
 Ext2.BLANK_IMAGE_URL = '/assets/ext2/resources/images/default/s.gif';
 
+Ext2.applyIf(Array.prototype, {
+    each : function(fn, scope){
+        Ext2.each(this, fn, scope);
+    },
+
+    add : function() {
+        this.push.apply(this, arguments);
+    }
+});
+
 Ext2.applyIf(Function.prototype, {
 
     interceptResult: function(fcn, scope) {

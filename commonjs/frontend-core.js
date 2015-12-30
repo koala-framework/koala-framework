@@ -6,18 +6,6 @@ if (typeof Array.prototype.forEach != 'function') {
     };
 }
 
-if (typeof Array.prototype.each != 'function') {
-    Array.prototype.each = function (fn, scope) {
-        _.each(this, fn, scope);
-    };
-}
-
-if (typeof Array.prototype.add != 'function') {
-    Array.prototype.add = function () {
-        this.push.apply(this, arguments);
-    };
-}
-
 //source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 if (!Function.prototype.bind) {
     Function.prototype.bind = function (oThis) {
