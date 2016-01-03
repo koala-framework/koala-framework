@@ -31,6 +31,8 @@ class Kwf_Cache_Simple
             $ret = 'elastiCache';
         } else if (Kwf_Config::getValue('server.memcache.host')) {
             $ret = 'memcache';
+        } else if (extension_loaded('apcu') && !Kwf_Config::getValue('server.apcStaticOnly')) {
+            $ret = 'apcu';
         } else if (extension_loaded('apc') && !Kwf_Config::getValue('server.apcStaticOnly')) {
             $ret = 'apc';
         } else {
@@ -54,7 +56,7 @@ class Kwf_Cache_Simple
                 self::$_zendCache->setBackend(new Kwf_Util_Aws_ElastiCache_CacheBackend(array(
                     'cacheClusterId' => Kwf_Config::getValue('aws.simpleCacheCluster'),
                 )));
-            } else if ($be == 'apc') {
+            } else if ($be == 'apc' || $be == 'apcu') {
                 self::$_zendCache = false;
             } else {
                 self::$_zendCache = new Zend_Cache_Core(array(
@@ -146,6 +148,10 @@ class Kwf_Cache_Simple
             static $prefix;
             if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
             return apc_fetch($prefix.$cacheId, $success);
+        } else if (self::getBackend() == 'apcu') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+            return apcu_fetch($prefix.$cacheId, $success);
         } else if (self::getBackend() == 'file') {
             $file = self::_getFileNameForCacheId($cacheId);
             if (!file_exists($file)) {
@@ -177,6 +183,10 @@ class Kwf_Cache_Simple
             static $prefix;
             if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
             return apc_add($prefix.$cacheId, $data, $ttl);
+        } else if (self::getBackend() == 'apcu') {
+            static $prefix;
+            if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+            return apcu_add($prefix.$cacheId, $data, $ttl);
         } else if (self::getBackend() == 'file') {
              $file = self::_getFileNameForCacheId($cacheId);
              $data = array($data);
@@ -201,6 +211,11 @@ class Kwf_Cache_Simple
                 if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
                 $r = apc_delete($prefix.$cacheId);
                 $ids[] = $prefix.$cacheId;
+            } else if (self::getBackend() == 'apcu') {
+                static $prefix;
+                if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
+                $r = apcu_delete($prefix.$cacheId);
+                $ids[] = $prefix.$cacheId;
             } else if (self::getBackend() == 'file') {
                 $r = true;
                 $file = self::_getFileNameForCacheId($cacheId);
@@ -215,7 +230,7 @@ class Kwf_Cache_Simple
             }
             if (!$r) $ret = false;
         }
-        if (self::getBackend() == 'apc' && php_sapi_name() == 'cli' && $ids) {
+        if ((self::getBackend() == 'apc' || self::getBackend() == 'apcu') && php_sapi_name() == 'cli' && $ids) {
             $ret = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
         }
         return $ret;

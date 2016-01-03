@@ -26,6 +26,8 @@ class Kwf_Component_Cache_MemoryZend extends Zend_Cache_Core
             throw new Kwf_Exception("don't use thru Zend_Cache");
         } else if ($be == 'apc') {
             $this->setBackend(new Kwf_Cache_Backend_Apc());
+        } else if ($be == 'apcu') {
+            $this->setBackend(new Kwf_Cache_Backend_Apcu());
         } else {
             //fallback to file backend (NOT recommended!)
             $this->setBackend(new Kwf_Cache_Backend_File(array(
