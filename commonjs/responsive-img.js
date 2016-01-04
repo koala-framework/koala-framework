@@ -75,6 +75,9 @@ function getResponsiveWidthSteps(minWidth, maxWidth) {
 function initResponsiveImgEl(el) {
     var elWidth = getCachedWidth(el);
     if (elWidth == 0) return;
+    if (elWidth > 100) {
+        el.addClass('kwfUp-webResponsiveImgLoading');
+    }
     el[0].responsiveImgInitDone = true; //don't save as el.data to avoid getting it copied when cloning elements
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
     var baseUrl = el.data("src");
