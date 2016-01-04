@@ -4,7 +4,7 @@ var kwfExtend = require('kwf/extend');
 
 var DateSelect = kwfExtend(Field, {
     initField: function() {
-        this.el.select('select').each((function(input) {
+        this.el.find('select').each((function(index, input) {
             $(input).on('change', (function() {
                 this.el.trigger('kwfUp-form-change', this.getValue());
             }).bind(this));
