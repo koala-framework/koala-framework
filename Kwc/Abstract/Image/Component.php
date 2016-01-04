@@ -132,7 +132,6 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if ($this->_getSetting('defineWidth')) $ret['style'] .= 'width:'.$ret['width'].'px;';
 
         $ret['containerClass'] = $this->_getBemClass("container").' kwfUp-kwcImageContainer ';
-        if ($ret['width'] > 100) $ret['containerClass'] .= ' kwfUp-webResponsiveImgLoading';
         if (!$this->_getSetting('lazyLoadOutOfViewport')) $ret['containerClass'] .= ' kwfUp-loadImmediately';
 
         $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
