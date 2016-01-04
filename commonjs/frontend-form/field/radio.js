@@ -13,7 +13,7 @@ var Radio = kwfExtend(Field, {
     },
     getValue: function() {
         var ret = null;
-        this.el.select('input').each(function(index, input) {
+        this.el.find('input').each(function(index, input) {
             if (input.checked) {
                 ret = input.value;
             }
