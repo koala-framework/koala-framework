@@ -7,7 +7,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
     private function _getCacheFileName()
     {
         $fileName = $this->getFileNameWithType();
-        return 'cache/scss/v4'.str_replace(array('\\', ':', '/', '.', '-'), '_', $fileName);
+        return 'cache/scss/v5'.str_replace(array('\\', ':', '/', '.', '-'), '_', $fileName);
     }
 
     private static function _getAbsolutePath($path)
@@ -93,6 +93,13 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             }
 
             if (substr($fileName, 0, 2) == './') $fileName = getcwd().substr($fileName, 1);
+
+            $wrapperContents = "";
+            $wrapperContents .= "@import \"config/global-settings\";\n";
+            $wrapperContents .= "@import \"$fileName\";\n";
+            $wrapperFile = tempnam('temp', 'scsswrapper');
+            file_put_contents($wrapperFile, $wrapperContents);
+
             $bin = Kwf_Config::getValue('server.nodeSassBinary');
             if (!$bin) {
                 $bin = getcwd()."/".VENDOR_PATH."/bin/node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/node-sass/bin/node-sass';
@@ -103,13 +110,14 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             }
             $cmd = "$bin --include-path $loadPath --output-style compressed ";
             $cmd .= " --source-map ".escapeshellarg($cacheFile.'.map');
-            $cmd .= " ".escapeshellarg($fileName)." ".escapeshellarg($cacheFile);
+            $cmd .= " ".escapeshellarg($wrapperFile)." ".escapeshellarg($cacheFile);
             $cmd .= " 2>&1";
             $out = array();
             exec($cmd, $out, $retVal);
             if ($retVal) {
                 throw new Kwf_Exception("compiling sass failed: ".implode("\n", $out));
             }
+            unlink($wrapperFile);
             if ($this->_config) {
                 unlink('cache/scss/generated/_config.scss');
             }
@@ -124,6 +132,9 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                         throw new Kwf_Exception('source doesn\'t start with ../../');
                     }
                     $i = substr($i, 6);
+                    if (getcwd().'/'.$i == $wrapperFile) {
+                        continue;
+                    }
                     $f = self::getPathWithTypeByFileName(getcwd().'/'.$i);
                     if (!$f) {
                         throw new Kwf_Exception("Can't find path for '".getcwd().'/'.$i."'");
