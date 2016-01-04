@@ -1,27 +1,34 @@
 // Modernizr mixin to create html.modernizr selector
 
 @mixin _modernizr($htmlClass) {
-    $selectors: selector_parse(&);
-    $newSelectors: ();
-    @each $selector in $selectors {
-      $newSelector: ();
-      $replacedHtml: false;
-      @each $part in $selector {
-        @if str-index($part, "html")==1{
-          $part: "#{$part}.#{$htmlClass}";
-          $replacedHtml: true;
-        }
-        $newSelector: append($newSelector, $part);
-      }
-      @if not($replacedHtml) {
-        $newSelector: join(("html.#{$htmlClass}"), $newSelector);
-      }
-      $newSelectors: append($newSelectors, $newSelector);
-    }
-    @at-root {
-      #{$newSelectors} {
+    @if & == null {
+      html.#{$htmlClass} {
         @content;
       }
+    } @else {
+
+        $selectors: selector_parse(&);
+        $newSelectors: ();
+        @each $selector in $selectors {
+            $newSelector: ();
+            $replacedHtml: false;
+            @each $part in $selector {
+                @if str-index($part, "html")==1{
+                    $part: "#{$part}.#{$htmlClass}";
+                    $replacedHtml: true;
+                }
+                $newSelector: append($newSelector, $part);
+            }
+            @if not($replacedHtml) {
+                $newSelector: join(("html.#{$htmlClass}"), $newSelector);
+            }
+            $newSelectors: append($newSelectors, $newSelector);
+        }
+        @at-root {
+            #{$newSelectors} {
+                @content;
+            }
+        }
     }
 }
 
