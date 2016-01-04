@@ -107,6 +107,8 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             //sources are relative to cache/sass, strip that
             if (substr($i, 0, 15) == 'scss-generated/') {
                 $f = 'web/temp/scss-generated/'.$i;
+            } else if (substr($i, 0, 11) == 'scsswrapper') {
+                $f = 'web/scsswrapper';
             } else  {
                 if (substr($i, 0, 3) != '../') {
                     throw new Kwf_Exception('source doesn\'t start with ../: '.$i);
