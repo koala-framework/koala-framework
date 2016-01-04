@@ -43,9 +43,10 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
 
     public static function fromUrlParameter($class, $parameter)
     {
-        $dependencyName = $parameter;
+        $param = explode(':', $parameter);
+        $dependencyName = $param[0];
         $ret = self::getInstance($dependencyName);
-        if (isset($param[2]) && $param[2] == 'l') {
+        if (isset($param[1]) && $param[1] == 'l') {
             $ret->setEnableLegacySupport(true);
         }
         return $ret;
