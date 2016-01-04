@@ -21,12 +21,12 @@ var Radio = kwfExtend(Field, {
         return ret;
     },
     clearValue: function() {
-        this.el.select('input').each(function(index, input) {
+        this.el.find('input').each(function(index, input) {
             input.checked = false;
         });
     },
     setValue: function(value) {
-        this.el.select('input').each(function(index, input) {
+        this.el.find('input').each(function(index, input) {
             if (input.value == value) {
                 input.checked = true;
             } else {

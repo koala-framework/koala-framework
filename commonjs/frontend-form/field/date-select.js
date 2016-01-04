@@ -16,7 +16,7 @@ var DateSelect = kwfExtend(Field, {
     },
     getValue: function() {
         var value = {};
-        this.el.select('select').each((function(index, input) {
+        this.el.find('select').each((function(index, input) {
             if (input.name.substr(-4) == '_day') {
                 value['day'] = input.value;
             } else if (input.name.substr(-6) == '_month') {
@@ -28,7 +28,7 @@ var DateSelect = kwfExtend(Field, {
         return value['year'] + '-' + value['month'] + '-' + value['day'];
     },
     clearValue: function() {
-        this.el.select('select').each((function(index, input) {
+        this.el.find('select').each((function(index, input) {
             input.value='';
         }).bind(this));
     },
