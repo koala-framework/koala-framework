@@ -118,9 +118,10 @@ function checkResponsiveImgEl(responsiveImgEl) {
             responsiveImgEl.data('minWidth'), responsiveImgEl.data('maxWidth'));
     if (width > responsiveImgEl.data('loadedWidth')) {
         responsiveImgEl.data('loadedWidth', width);
-        responsiveImgEl.find('img').attr('src',
-             responsiveImgEl.data('baseUrl').replace(DONT_HASH_TYPE_PREFIX+'{width}',
-                    DONT_HASH_TYPE_PREFIX+width));
+        var sizePath = responsiveImgEl.data('baseUrl').replace(DONT_HASH_TYPE_PREFIX+'{width}',
+                    DONT_HASH_TYPE_PREFIX+width);
+        responsiveImgEl.find('img').attr('src', sizePath);
+        el.trigger('changesrc', sizePath);
     }
 };
 
