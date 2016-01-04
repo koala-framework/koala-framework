@@ -1,9 +1,7 @@
-@import "compass/utilities/general/clearfix";
 @import "kwf/mobile-breakpoint";
 
 .kwcClass {
     .kwcBem__kwcParagraphItem {
-        @include pie-clearfix;
 
         &.kwcBem__onlyShowOnMobile {
             display: none;
