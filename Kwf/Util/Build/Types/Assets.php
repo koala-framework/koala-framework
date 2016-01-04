@@ -173,7 +173,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $progress->finish();
 
         echo "generating packages...\n";
-        $steps = count($packages) * count($langs) * count($exts) * 4;
+        $steps = count($packages) * count($langs) * count($exts) * 3;
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
@@ -210,6 +210,11 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
                         $progress->next($progressIncrement, "$depName $urlExtension $urlLanguage map");
                         $this->_buildPackageSourceMap($contents, $maxMTime, $p, $urlExtension, $urlLanguage);
+                    }
+
+                    if (!$urls) {
+                        //no urls, just increment progress
+                        $progress->next(2);
                     }
                 }
 

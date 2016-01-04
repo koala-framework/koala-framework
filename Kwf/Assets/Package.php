@@ -5,7 +5,7 @@ class Kwf_Assets_Package
     protected $_providerList;
     protected $_dependencyName;
     protected $_dependency;
-    private $_chunkCss = false;
+    protected $_enableLegacySupport = false;
 
     private $_cacheFilteredUniqueDependencies;
     private $_cssPackageContentsCache;
@@ -25,10 +25,12 @@ class Kwf_Assets_Package
         return $this->_dependencyName;
     }
 
-    //if enabled multiple css files will be generated to avoid the <=ie9 4096 selectors limit
-    public function setChunkCss($v)
+    //if enabled ie8+9 will be supported:
+    //* multiple css files will be generated to avoid the <=ie9 4096 selectors limit
+    //* text/css; ie8 file will be generated
+    public function setEnableLegacySupport($v)
     {
-        $this->_chunkCss = $v;
+        $this->_enableLegacySupport = $v;
         return $this;
     }
 
@@ -284,10 +286,19 @@ class Kwf_Assets_Package
         return $packageMap;
     }
 
+    private function _getChunkedContentsCount($mimeType, $language)
+    {
+        if (!$this->_enableLegacySupport || $mimeType != 'text/css') {
+            return 1;
+        } else {
+            return count($this->_getChunkedContents($mimeType, $language));
+        }
+    }
+
     private function _getChunkedContents($mimeType, $language)
     {
-        if (!$this->_chunkCss || $mimeType != 'text/css') {
-            return array($this->getPackageContents($mimeType, $language));
+        if (!$this->_enableLegacySupport || $mimeType != 'text/css') {
+            throw new Kwf_Exception("no chunks enabled");
         } else {
 
             if (isset($this->_chunkedCssCache)) {
@@ -303,14 +314,18 @@ class Kwf_Assets_Package
 
     public function toUrlParameter()
     {
-        return get_class($this->_providerList).':'.$this->_dependencyName;
+        return get_class($this->_providerList).':'.$this->_dependencyName.($this->_enableLegacySupport ? ':l' : '');
     }
 
     public static function fromUrlParameter($class, $parameter)
     {
         $param = explode(':', $parameter);
         $providerList = $param[0];
-        return new $class(new $providerList, $param[1]);
+        $ret = new $class(new $providerList, $param[1]);
+        if (isset($param[2]) && $param[2] == 'l') {
+            $ret->setEnableLegacySupport(true);
+        }
+        return $ret;
     }
 
     public function getPackageUrl($ext, $language)
@@ -343,6 +358,10 @@ class Kwf_Assets_Package
             throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
         }
 
+        if ($mimeType == 'text/css; ie8' && !$this->_enableLegacySupport) {
+            return array();
+        }
+
         if ($mimeType == 'text/javascript') $ext = 'js';
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
@@ -370,11 +389,11 @@ class Kwf_Assets_Package
         }
 
         if ($hasContents) {
-            $chunks = $this->_getChunkedContents($mimeType, $language);
-            if (count($chunks) > 1) {
+            $chunks = $this->_getChunkedContentsCount($mimeType, $language);
+            if ($chunks > 1) {
                 $urls = array();
-                foreach ($chunks as $chunkNum=>$chunk) {
-                    $urls[] = $this->getPackageUrl($chunkNum.'.'.$ext, $language);
+                for ($i=0; $i<$chunks; $i++) {
+                    $urls[] = $this->getPackageUrl($i.'.'.$ext, $language);
                 }
             } else {
                 $urls = array($this->getPackageUrl($ext, $language));
@@ -407,11 +426,12 @@ class Kwf_Assets_Package
         else if (substr($extension, -3) == 'css') $mimeType = 'text/css';
         else throw new Kwf_Exception_NotFound();
 
-        $map = $this->getPackageContents($mimeType, $language);
         if ($mimeType == 'text/css' && $extension != 'css') {
             $chunkNum = substr($extension, 0, -4);
             $chunks = $this->_getChunkedContents($mimeType, $language);
             $map = $chunks[$chunkNum];
+        } else {
+            $map = $this->getPackageContents($mimeType, $language);
         }
         if (!$sourceMap) {
             $contents = $map->getFileContents();
