@@ -5,12 +5,13 @@ var kwfExtend = require('kwf/extend');
 
 var TextArea = kwfExtend(Field, {
     initField: function() {
-        this.el.select('textarea').each((function(index, input) {
-            $(input).on('keypress', (function() {
+        var input = this.el.find('textarea');
+        if (input) {
+            input.on('keypress', (function () {
                 this.el.trigger('kwfUp-form-change', this.getValue());
             }).bind(this));
             this._initPlaceholder(input);
-        }).bind(this));
+        }
     },
     getFieldName: function() {
         return this.el.find('textarea').get(0).name;
@@ -19,10 +20,10 @@ var TextArea = kwfExtend(Field, {
         return this.el.find('textarea').get(0).value;
     },
     clearValue: function() {
-        this.el.select('textarea').get(0).value = '';
+        this.el.find('textarea').get(0).value = '';
     },
     clearValue: function(value) {
-        this.el.select('textarea').get(0).value = value;
+        this.el.find('textarea').get(0).value = value;
     }
 });
 
