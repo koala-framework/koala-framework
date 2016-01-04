@@ -121,7 +121,7 @@ function checkResponsiveImgEl(responsiveImgEl) {
         var sizePath = responsiveImgEl.data('baseUrl').replace(DONT_HASH_TYPE_PREFIX+'{width}',
                     DONT_HASH_TYPE_PREFIX+width);
         responsiveImgEl.find('img').attr('src', sizePath);
-        el.trigger('changesrc', sizePath);
+        responsiveImgEl.trigger('changesrc', sizePath);
     }
 };
 
