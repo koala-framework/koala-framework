@@ -32,16 +32,23 @@
     }
 }
 
-
-@mixin modernizr($feature) {
-    $feature: to-lower-case($feature);
-    @include _modernizr("kwfUp-no-#{$feature}") {
+// Extra param if feature-name and className does not match
+// (like for css/checked => html.checked)
+@mixin modernizr($feature, $className:"") {
+    @if $className == "" {
+        $className: $feature;
+    }
+    $className: to-lower-case($className);
+    @include _modernizr("kwfUp-#{$className}") {
         @content;
     }
 }
-@mixin modernizr-no($feature) {
-    $feature: to-lower-case($feature);
-    @include _modernizr("kwfUp-#{$feature}") {
+@mixin modernizr-no($feature, $className:"") {
+    @if $className == "" {
+        $className: $feature;
+    }
+    $className: to-lower-case($className);
+    @include _modernizr("kwfUp-no-#{$className}") {
         @content;
     }
 }
