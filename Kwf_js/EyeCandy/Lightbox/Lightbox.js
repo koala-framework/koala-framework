@@ -145,8 +145,7 @@ historyState.on('popstate', function() {
     }
 });
 
-/* TODO commonjs
-if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
+//if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
     var timer = 0;
     $(window).resize(function(ev) {
         clearTimeout(timer);
@@ -156,16 +155,16 @@ if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
             }
         }, 100);
     });
-
+/*
 } else {
-*/
     //on iOS listen to orientationchange as resize event triggers randomly when scrolling
     $(window).on('orientationchange', function(ev) {
         if (currentOpen) {
             currentOpen.style.onResizeWindow(ev);
         }
     });
-// }
+}
+*/
 
 var Lightbox = function(href, options) {
     this.href = href;
