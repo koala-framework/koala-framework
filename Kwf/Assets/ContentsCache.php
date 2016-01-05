@@ -1,6 +1,8 @@
 <?php
 class Kwf_Assets_ContentsCache
 {
+    private $_filemd5Cache = array();
+
     public static function getInstance()
     {
         static $cache;
@@ -23,7 +25,7 @@ class Kwf_Assets_ContentsCache
             }
             $masterFiles[] = array(
                 'file' => $f,
-                'md5' => file_exists($f) ? md5_file($f) : null
+                'md5' => file_exists($f) ? md5_file($f) : false
             );
         }
         file_put_contents($cacheFile.'.masterFiles', json_encode($masterFiles));
@@ -38,16 +40,15 @@ class Kwf_Assets_ContentsCache
             $masterFiles = json_decode(file_get_contents($cacheFile.'.masterFiles'), true);
             $mtime = filemtime($cacheFile);
             foreach ($masterFiles as $i) {
-                if ($i['md5']) {
-                    if (!file_exists($i['file']) || md5_file($i['file']) != $i['md5']) {
-                        //file was modified or deleted
-                        return false;
+                if (!isset($this->_filemd5Cache[$i['file']])) {
+                    if (!file_exists($i['file'])) {
+                        $this->_filemd5Cache[$i['file']] = false;
+                    } else {
+                        $this->_filemd5Cache[$i['file']] = md5_file($i['file']);
                     }
-                } else {
-                    if (file_exists($i['file'])) {
-                        //file didn't exist, was created
-                        return false;
-                    }
+                }
+                if ($i['md5'] != $this->_filemd5Cache[$i['file']]) {
+                    return false;
                 }
             }
         }
