@@ -37,16 +37,7 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         $this->md5_hash = md5($contents);
         $this->save();
         $this->_putFileContents($contents);
-        if ($this->getFileSource() && is_file($this->getFileSource())) {
-            $size = @getimagesize($this->getFileSource());
-            if ($size) {
-                $this->is_image = true;
-                $this->image_width = $size[0];
-                $this->image_height = $size[1];
-                $this->image_rotation = Kwf_Media_Image::getExifRotation($this->getFileSource());
-                $this->save();
-            }
-        }
+        $this->_saveImageDimensions();
         return $this;
     }
 
@@ -152,30 +143,37 @@ class Kwf_Uploads_Row extends Kwf_Model_Proxy_Row
         $this->_deleteFile();
     }
 
+    private function _saveImageDimensions()
+    {
+        if (is_null($this->is_image)) {
+            $size = null;
+            if ($this->getFileSource() && is_file($this->getFileSource())) {
+                $size = @getimagesize($this->getFileSource());
+                $rotation = Kwf_Media_Image::getExifRotation($this->getFileSource());
+            }
+            if ($size) {
+                $this->is_image = 1;
+                $this->image_width = $size[0];
+                $this->image_height = $size[1];
+                $this->image_rotation = $rotation;
+            } else {
+                $this->is_image = 0;
+            }
+            $this->save();
+        }
+    }
+
     public function getImageDimensions()
     {
-        if ($this->is_image == -1) {
-            //unknown, calculate-dimensions didn't update yet
-            $size = @getimagesize($this->getFileSource());
-            if ($size) {
-                $ret = array();
-                $ret['width'] = $size[0];
-                $ret['height'] = $size[1];
-                $ret['rotation'] = Kwf_Media_Image::getExifRotation($this->getFileSource());
-            } else {
-                $ret = false;
-            }
-            return $ret;
-        } else {
-            if ($this->is_image) {
-                return array(
-                    'width' => $this->image_width,
-                    'height' => $this->image_height,
-                    'rotation' => $this->image_rotation,
-                );
-            }
-            return false;
+        $this->_saveImageDimensions();
+        if ($this->is_image) {
+            return array(
+                'width' => $this->image_width,
+                'height' => $this->image_height,
+                'rotation' => $this->image_rotation,
+            );
         }
+        return null;
     }
 
     /*
