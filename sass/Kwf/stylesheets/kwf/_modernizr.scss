@@ -34,11 +34,13 @@
 
 
 @mixin modernizr($feature) {
+    $feature: to-lower-case($feature);
     @include _modernizr("kwfUp-no-#{$feature}") {
         @content;
     }
 }
 @mixin modernizr-no($feature) {
+    $feature: to-lower-case($feature);
     @include _modernizr("kwfUp-#{$feature}") {
         @content;
     }
