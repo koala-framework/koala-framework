@@ -10,6 +10,7 @@
 class Kwf_Cache_SimpleStatic
 {
     private static $_cache = array(); //only used when apc is not used (and also on cli)
+    private static $_fileCacheDisabled = false;
 
     private static function _processId($cacheId)
     {
@@ -39,6 +40,10 @@ class Kwf_Cache_SimpleStatic
                 $success = true;
                 return self::$_cache[$cacheId];
             }
+            if (self::$_fileCacheDisabled) {
+                $success =  false;
+                return false;
+            }
             $file = self::_getFileNameForCacheId($cacheId);
             if (!file_exists($file)) {
                 $success =  false;
@@ -56,12 +61,14 @@ class Kwf_Cache_SimpleStatic
         static $prefix;
         static $extensionLoaded;
         if (!isset($extensionLoaded)) $extensionLoaded = extension_loaded('apc');
-
         if ($extensionLoaded && PHP_SAPI != 'cli') {
             if (!isset($prefix)) $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
             return apc_add($prefix.$cacheId, $data);
         } else {
             self::$_cache[$cacheId] = $data;
+            if (self::$_fileCacheDisabled) {
+                return true;
+            }
             $file = self::_getFileNameForCacheId($cacheId);
             return file_put_contents($file, serialize($data));
         }
@@ -144,6 +151,14 @@ class Kwf_Cache_SimpleStatic
             }
         }
         return $ret;
+    }
+
+    /**
+     * Disables the cache/simple file based cache
+     */
+    public static function disableFileCache()
+    {
+        self::$_fileCacheDisabled = true;
     }
 }
 
