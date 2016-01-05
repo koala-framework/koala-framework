@@ -43,6 +43,6 @@ class Kwc_Directories_List_Feed_Events extends Kwc_Abstract_Events
 
     public function onDirectoryUpdate(Kwc_Directories_List_EventItemAbstract $event)
     {
-        $this->fireEvent(new Kwf_Component_Event_ComponentClass_ContentChanged($this->_class));
+        Kwf_Cache_Simple::delete('feed-' . $this->_class);
     }
 }
