@@ -15,6 +15,7 @@ class Kwc_Advanced_IntegratorTemplate_Component extends Kwc_Abstract
             'filename' => 'embed'
         );
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
 }
