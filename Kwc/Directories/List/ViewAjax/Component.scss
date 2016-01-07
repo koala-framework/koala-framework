@@ -16,13 +16,13 @@
     padding: 10px 10px 10px 10px;
 }
 
-.kwcClass.loadingContent {
+.kwcClass.kwfUp-loadingContent {
     background-color: white;
     padding: 50px 0px 50px 0px;
     behavior: url(/assets/css3pie/pie.htc);
 }
 
-.kwcClass.loadingContent .loading {
+.kwcClass.kwfUp-loadingContent .kwfUp-loading {
     @include default-loading-animation-big;
 }
 

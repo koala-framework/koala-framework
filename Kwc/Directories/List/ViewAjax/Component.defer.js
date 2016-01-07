@@ -392,7 +392,7 @@ ViewAjax.prototype = {
         this.kwfMainContent.hide();
 
             //style: 'width: ' + this.kwfMainContent.getStyle('width'),
-        this.detailEl = $('<div class="kwfUp-kwfMainContent loadingContent '+classNames+'""><div class="loading"></div></div>');
+        this.detailEl = $('<div class="kwfUp-kwfMainContent kwfUp-loadingContent '+classNames+'""><div class="kwfUp-loading"></div></div>');
         this.kwfMainContent.after(this.detailEl);
 
         $.ajax({
@@ -401,7 +401,7 @@ ViewAjax.prototype = {
             dataType: 'html'
         }).done((function(data) {
             if (!this.detailEl) return;
-            this.detailEl.removeClass('loadingContent '+classNames);
+            this.detailEl.removeClass('kwfUp-loadingContent '+classNames);
             this.detailEl.html(data);
             statistics.count(href);
 
