@@ -59,7 +59,11 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
     public function getPartialParams()
     {
         $ret = parent::getPartialParams();
-        $ret['tpl'] = '<div class="kwfViewAjaxItem {id}">{content}</div>'."\n";
+        $up = Kwf_Config::getValue('application.uniquePrefix');
+        if ($up) {
+            $up = $up.'-';
+        }
+        $ret['tpl'] = '<div class="'.$up.'kwfViewAjaxItem {id}">{content}</div>'."\n";
         return $ret;
     }
 }
