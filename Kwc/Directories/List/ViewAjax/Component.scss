@@ -1,21 +1,5 @@
 @import "config/default-loading-animation-big";
 
-.kwfViewAjaxHidden { display: none; }
-
-.kwcClass .ext-el-mask {
-    background-color: white;
-}
-
-.kwcClass .ext-el-mask-msg.loading {
-    @include default-loading-animation-big;
-}
-
-.kwcClass .ext-el-mask-msg.loading div {
-    background: white;
-    border: 0px;
-    padding: 10px 10px 10px 10px;
-}
-
 .kwcClass.kwfUp-loadingContent {
     background-color: white;
     padding: 50px 0px 50px 0px;
