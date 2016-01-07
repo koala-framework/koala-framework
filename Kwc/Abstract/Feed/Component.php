@@ -17,7 +17,7 @@ abstract class Kwc_Abstract_Feed_Component extends Kwc_Abstract
 
     public function getXml()
     {
-        $cacheId = 'feed-' . $this->getData()->componentClass;
+        $cacheId = 'feed-' . $this->getData()->componentId;
         $data = Kwf_Cache_Simple::fetch($cacheId, $success);
         if (!$success) {
             $data = $this->_getFeedXml();
