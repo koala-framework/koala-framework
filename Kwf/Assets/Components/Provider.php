@@ -87,7 +87,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                     }
                 }
                 foreach ($this->_getComponentSettingDependenciesFiles($class, 'assetsDefer', true) as $dep) {
-                    if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z]+$#', $dep->getFileNameWithType())) {
+                    if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z\.]+$#', $dep->getFileNameWithType())) {
                         $deps[] = array(
                             'dep' => $dep,
                             'master' => true,
