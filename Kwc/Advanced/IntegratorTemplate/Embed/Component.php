@@ -8,6 +8,11 @@ class Kwc_Advanced_IntegratorTemplate_Embed_Component extends Kwc_Abstract
         $ret['flags']['hasHeaderIncludeCode'] = true;
         $ret['flags']['hasFooterIncludeCode'] = true;
         $ret['flags']['noIndex'] = true;
+        $ret['generators']['metaTags'] = array(
+            'class' => 'Kwf_Component_Generator_Box_Static',
+            'component' => 'Kwc_Basic_None_Component',
+            'inherit' => true
+        );
         return $ret;
     }
 
