@@ -63,7 +63,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
         if ($up) {
             $up = $up.'-';
         }
-        $ret['tpl'] = '<div class="'.$up.'kwfViewAjaxItem {id}">{content}</div>'."\n";
+        $ret['tpl'] = '<div class="'.$up.'kwfViewAjaxItem">{content}</div>'."\n";
         return $ret;
     }
 }
