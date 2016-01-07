@@ -113,7 +113,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
-        $c->setTextWidth(50);
+        $c->setTextWidth(80);
         $progress = new Zend_ProgressBar($c, 0, $steps);
         foreach ($providers as $provider) {
             $progress->next(1, get_class($provider));
@@ -127,7 +127,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
-        $c->setTextWidth(50);
+        $c->setTextWidth(80);
         $progress = new Zend_ProgressBar($c, 0, $steps);
 
         $countDependencies = 0;
@@ -146,10 +146,10 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
         echo "compiling assets...\n";
         $c = new Zend_ProgressBar_Adapter_Console();
-        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_ETA,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
-        $c->setTextWidth(50);
+        $c->setTextWidth(80);
         $progress = new Zend_ProgressBar($c, 0, $countDependencies);
 
         foreach ($packages as $p) {
@@ -158,7 +158,11 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                 $progress->next(1, "$dep");
                 foreach ($langs as $language) {
                     if ($dep->getMimeType()) {
-                        $p->warmupDependencyCaches($dep, $language, $progress);
+                        $mimeType = $dep->getMimeType();
+                        $p->warmupDependencyCaches($dep, $mimeType, $language, $progress);
+                        if ($mimeType == 'text/css') {
+                            $p->warmupDependencyCaches($dep, 'text/css; ie8', $language, $progress);
+                        }
                     }
                 }
             }
@@ -171,7 +175,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
-        $c->setTextWidth(50);
+        $c->setTextWidth(80);
         $progress = new Zend_ProgressBar($c, 0, $steps);
         foreach ($packages as $p) {
             $depName = $p->getDependencyName();

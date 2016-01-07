@@ -2,6 +2,7 @@
 class Kwf_Assets_ContentsCache
 {
     private $_filemd5Cache = array();
+    private $_cache = array();
 
     public static function getInstance()
     {
@@ -14,6 +15,8 @@ class Kwf_Assets_ContentsCache
 
     public function save(Kwf_SourceMaps_SourceMap $map, $cacheId)
     {
+        $this->_cache[$cacheId] = $map;
+
         $cacheFile = 'cache/assetdeps/'.md5($cacheId);
         file_put_contents($cacheFile, $map->getFileContentsInlineMap());
 
@@ -33,6 +36,9 @@ class Kwf_Assets_ContentsCache
 
     public function load($cacheId)
     {
+        if (isset($this->_cache[$cacheId])) {
+            return $this->_cache[$cacheId];
+        }
         $cacheFile = 'cache/assetdeps/'.md5($cacheId);
         if (!file_exists($cacheFile) || !file_exists($cacheFile.'.masterFiles')) {
             return false;
@@ -53,6 +59,8 @@ class Kwf_Assets_ContentsCache
             }
         }
 
-        return Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));
+        $ret = Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));
+        $this->_cache[$cacheId] = $ret;
+        return $ret;
     }
 }
