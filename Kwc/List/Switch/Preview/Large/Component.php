@@ -10,7 +10,7 @@ class Kwc_List_Switch_Preview_Large_Component extends Kwc_Basic_ImageParent_Comp
             'cover' => true,
         );
         $ret['componentName'] = trlKwfStatic('Large Image');
-        $ret['imgCssClass'] = 'hideWhileLoading';
+        $ret['imgCssClass'] = 'kwfUp-hideWhileLoading';
         return $ret;
     }
 }

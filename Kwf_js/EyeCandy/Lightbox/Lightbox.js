@@ -192,7 +192,7 @@ Lightbox.prototype = {
                     '<div class="kwfUp-kwfLightboxScroll">'+
                         '<div class="kwfUp-kwfLightboxBetween">'+
                             '<div class="kwfUp-kwfLightboxBetweenInner">'+
-                                '<div class="kwfUp-kwfLightboxInner kwfUp-kwfLightboxLoading"><div class="loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'+
+                                '<div class="kwfUp-kwfLightboxInner kwfUp-kwfLightboxLoading"><div class="kwfUp-loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'+
                             '</div>'+
                         '</div>'+
                     '</div>'+
@@ -285,7 +285,7 @@ Lightbox.prototype = {
 
                 var showContent = function() {
                     self.innerLightboxEl.removeClass('kwfUp-kwfLightboxLoading');
-                    self.innerLightboxEl.find('.loading').remove();
+                    self.innerLightboxEl.find('.kwfUp-loading').remove();
                     if (self.lightboxEl.is(':visible')) {
                         self.contentEl.show();
                     }
@@ -295,7 +295,7 @@ Lightbox.prototype = {
                     }
                 };
                 var imagesToLoad = 0;
-                self.contentEl.find('img.hideWhileLoading').each(function() {
+                self.contentEl.find('img.kwfUp-hideWhileLoading').each(function() {
                     imagesToLoad++;
                     $(this).on('load', function() {
                         imagesToLoad--;
@@ -627,9 +627,9 @@ LightboxStyles.CenterBox = kwfExtend(LightboxStyles.Abstract, {
     _updateMobile: function()
     {
         if (this._getOuterMargin() == 0) {
-            this.lightbox.lightboxEl.addClass('mobile');
+            this.lightbox.lightboxEl.addClass('kwfUp-mobile');
         } else {
-            this.lightbox.lightboxEl.removeClass('mobile');
+            this.lightbox.lightboxEl.removeClass('kwfUp-mobile');
         }
     },
     _getMaxContentSize: function(subtractOuterMargin) {

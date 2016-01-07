@@ -74,7 +74,7 @@ body {
             right: 0px;
         }
 
-        &.mobile {
+        &.kwfUp-mobile {
             .kwfUp-kwfLightboxScroll {
                 padding: 0px;
             }
@@ -228,7 +228,7 @@ body {
     position: absolute;
 }
 
-.kwfUp-Lightbox .lightboxHeader { position: relative; z-index: 102; }
+.kwfUp-Lightbox .kwfUp-lightboxHeader { position: relative; z-index: 102; }
 
 .kwfUp-kwfLightbox .kwfUp-closeButton {
     background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
@@ -241,12 +241,12 @@ body {
     top: 10px;
 }
 
-.kwfUp-kwfLightbox.mobile .kwfUp-closeButton {
+.kwfUp-kwfLightbox.kwfUp-mobile .kwfUp-closeButton {
     right: 2px;
     top: 2px;
 }
 
-.kwfUp-kwfLightbox.mobile .kwfUp-kwfLightboxInner {
+.kwfUp-kwfLightbox.kwfUp-mobile .kwfUp-kwfLightboxInner {
     margin-bottom: 0;
 }
 
@@ -292,12 +292,12 @@ body {
 .kwfUp-kwfLightbox .kwfUp-lightboxBody .image { z-index: 1; }
 
 .kwfUp-kwfLightbox .kwfUp-lightboxFooter p { text-align: left; margin-bottom: 0px; }
-.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.imageCaption { margin-top: 10px; }
-.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.imageCaptionTitle { margin: 10px 0px -10px 0px; }
-.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.title { margin-top: 10px; }
-.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.fullSizeLink { margin-top: 10px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.kwfUp-imageCaption { margin-top: 10px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.kwfUp-imageCaptionTitle { margin: 10px 0px -10px 0px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.kwfUp-title { margin-top: 10px; }
+.kwfUp-kwfLightbox .kwfUp-lightboxFooter p.kwfUp-fullSizeLink { margin-top: 10px; }
 
-.kwfUp-kwfLightbox .loading {
+.kwfUp-kwfLightbox .kwfUp-loading {
     @include default-loading-animation-big;
 }
 

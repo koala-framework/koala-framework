@@ -24,17 +24,17 @@
                     data-max-width="<?=$this->maxWidth;?>"
                     data-src="<?=$this->baseUrl;?>">
                 <noscript>
-                    <img class="centerImage hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
+                    <img class="kwfUp-centerImage kwfUp-hideWhileLoading" src="<?=$this->imageUrl?>" width="<?=$this->width?>" height="<?=$this->height?>" alt="" />
                 </noscript>
             </div>
         </div>
         <? } ?>
     </div>
     <div class="kwfUp-lightboxFooter">
-        <? if(isset($this->options->title) && $this->options->title) { ?><p class="title"><?=$this->options->title?></p><? } ?>
+        <? if(isset($this->options->title) && $this->options->title) { ?><p class="kwfUp-title"><?=$this->options->title?></p><? } ?>
         <? if(isset($this->options->fullSizeUrl)) { ?>
-            <p class="fullSizeLink">
-                <a href="<?=$this->options->fullSizeUrl?>" class="fullSizeLink"><?=$this->data->trlKwf('Download original image')?></a>
+            <p class="kwfUp-fullSizeLink">
+                <a href="<?=$this->options->fullSizeUrl?>" class="kwfUp-fullSizeLink"><?=$this->data->trlKwf('Download original image')?></a>
             </p>
         <? } ?>
     </div>
