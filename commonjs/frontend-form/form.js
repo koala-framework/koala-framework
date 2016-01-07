@@ -189,7 +189,7 @@ FormComponent.prototype = {
     {
         var button = this.el.find('.kwfUp-submitWrapper .kwfUp-button');
         button.prepend('<div class="kwfUp-saving"></div>');
-        button.find('.kwfUp-submit').hide();
+        button.find('.kwfUp-submit').css('visibility', 'hidden');
 
         this.errorStyle.hideErrors();
 
@@ -231,7 +231,7 @@ FormComponent.prototype = {
 
                 if (!r.successUrl) {
                     button.find('.kwfUp-saving').remove();
-                    button.find('.kwfUp-submit').show();
+                    button.find('.kwfUp-submit').css('visibility', 'visible');
                 }
 
                 // show success content

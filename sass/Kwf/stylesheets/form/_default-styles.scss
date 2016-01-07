@@ -30,7 +30,6 @@
     .kwfUp-submitWrapper {
         .kwfUp-saving {
             @include default-loading-animation-small;
-            visibility: hidden;
             position: absolute;
             margin-left: -12px;
             margin-top: -12px;
