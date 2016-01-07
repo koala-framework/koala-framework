@@ -267,8 +267,13 @@ class Kwf_Assets_Package
             $packageMap = $this->_cssPackageContentsCacheNoIe8Filter;
             if ($mimeType == 'text/css') {
                 //remove @ie8 {}
-                $f = new Kwf_Assets_Filter_Css_Ie8Remove();
-                $packageMap = $f->filter($packageMap);
+                if (isset($this->_cssPackageContentsCacheIe8Removed)) {
+                    $packageMap = $this->_cssPackageContentsCacheIe8Removed;
+                } else {
+                    $f = new Kwf_Assets_Filter_Css_Ie8Remove();
+                    $packageMap = $f->filter($packageMap);
+                    $this->_cssPackageContentsCacheIe8Removed = $packageMap;
+                }
             }
             if ($mimeType == 'text/css; ie8') {
                 //remove all but @ie8 {}
