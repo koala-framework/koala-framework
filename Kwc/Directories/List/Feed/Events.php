@@ -43,11 +43,13 @@ class Kwc_Directories_List_Feed_Events extends Kwc_Abstract_Events
 
     public function onDirectoryUpdate(Kwc_Directories_List_EventItemAbstract $event)
     {
-        $gen = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail');
-        $datas = $gen->getChildData(null, array('id' => $event->itemId));
+        $datas = Kwf_Component_Generator_Abstract::getInstance($event->class, 'detail')
+            ->getChildData(null, array('id' => $event->itemId));
         if (isset($datas[0])) {
-            $feed = $datas[0]->parent->getChildComponent('_feed');
-            Kwf_Cache_Simple::delete('feed-' . $feed->componentId);
+            $directory = $datas[0]->parent;
+            $this->fireEvent(new Kwf_Component_Event_ComponentClass_Tag_ContentChanged(
+                $this->_class, $directory->componentId
+            ));
         }
     }
 }

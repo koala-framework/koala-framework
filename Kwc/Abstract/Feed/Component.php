@@ -17,13 +17,14 @@ abstract class Kwc_Abstract_Feed_Component extends Kwc_Abstract
 
     public function getXml()
     {
-        $cacheId = 'feed-' . $this->getData()->componentId;
-        $data = Kwf_Cache_Simple::fetch($cacheId, $success);
-        if (!$success) {
-            $data = $this->_getFeedXml();
-            Kwf_Cache_Simple::add($cacheId, $data);
+        $cache = Kwf_Component_Cache::getInstance();
+        if (!$xml = $cache->load($this->getData())) {
+            $xml = $this->_getFeedXml();
+            $directory = $this->getData()->parent->getComponent()->getItemDirectory();
+            $cache->save($this->getData(), $xml, 'component', 'page', null, $directory->componentId, null);
+            Kwf_Component_Cache::getInstance()->writeBuffer();
         }
-        return $data;
+        return $xml;
     }
 
     private function _getFeedXml()
