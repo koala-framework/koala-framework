@@ -178,6 +178,7 @@ if (!(Ext2.isMac && 'ontouchstart' in document.documentElement)) {
 }
 
 Kwf.EyeCandy.Lightbox.currentOpen = null;
+Kwf.EyeCandy.Lightbox._escapeHandlerInstalled = false;
 Kwf.EyeCandy.Lightbox.allByUrl = {};
 Kwf.EyeCandy.Lightbox.Lightbox = function(href, options) {
     this.href = href;
@@ -453,11 +454,14 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
     {
         var closeButtons = this.lightboxEl.find('.closeButton');
 
-        $('body').keydown((function(e) {
-            if (e.keyCode == 27) {
-                this.closeAndPushState();
-            }
-        }).bind(this));
+        if (!Kwf.EyeCandy.Lightbox._escapeHandlerInstalled) {
+            Kwf.EyeCandy.Lightbox._escapeHandlerInstalled = true;
+            $('body').keydown((function(e) {
+                if (e.keyCode == 27 && Kwf.EyeCandy.Lightbox.currentOpen) {
+                    Kwf.EyeCandy.Lightbox.currentOpen.closeAndPushState();
+                }
+            }));
+        }
 
         closeButtons.click((function(ev) {
             ev.preventDefault();
