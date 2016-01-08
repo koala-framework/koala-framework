@@ -18,7 +18,9 @@ class Kwf_Assets_ContentsCache
         $this->_cache[$cacheId] = $map;
 
         $cacheFile = 'cache/assetdeps/'.md5($cacheId);
-        file_put_contents($cacheFile, $map->getFileContentsInlineMap());
+
+        $map->getMapContentsData(true); //this will trigger _generateMappings
+        file_put_contents($cacheFile, serialize($map));
 
         $masterFiles = array();
         foreach ($map->getSources() as $f) {
@@ -31,7 +33,7 @@ class Kwf_Assets_ContentsCache
                 'md5' => file_exists($f) ? md5_file($f) : false
             );
         }
-        file_put_contents($cacheFile.'.masterFiles', json_encode($masterFiles));
+        file_put_contents($cacheFile.'.masterFiles', serialize($masterFiles));
     }
 
     public function load($cacheId)
@@ -43,7 +45,7 @@ class Kwf_Assets_ContentsCache
         if (!file_exists($cacheFile) || !file_exists($cacheFile.'.masterFiles')) {
             return false;
         } else {
-            $masterFiles = json_decode(file_get_contents($cacheFile.'.masterFiles'), true);
+            $masterFiles = unserialize(file_get_contents($cacheFile.'.masterFiles'));
             $mtime = filemtime($cacheFile);
             foreach ($masterFiles as $i) {
                 if (!isset($this->_filemd5Cache[$i['file']])) {
@@ -59,7 +61,7 @@ class Kwf_Assets_ContentsCache
             }
         }
 
-        $ret = Kwf_SourceMaps_SourceMap::createFromInline(file_get_contents($cacheFile));
+        $ret = unserialize(file_get_contents($cacheFile));
         $this->_cache[$cacheId] = $ret;
         return $ret;
     }
