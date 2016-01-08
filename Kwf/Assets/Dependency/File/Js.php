@@ -144,26 +144,4 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         $replacements = $jsLoader->getReplacements($trlElements, $language);
         return $replacements;
     }
-
-    public static function pack($ret)
-    {
-
-
-        $ret = str_replace("\r", "\n", $ret);
-
-        // remove comments
-        $ret = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $ret);
-        // deaktiviert wg. urls mit http:// in hilfetexten $contents = preg_replace('!//[^\n]*!', '', $ret);
-
-        // remove tabs, spaces, newlines, etc. - funktioniert nicht - da fehlen hinundwider ;
-        //$ret = str_replace(array("\r", "\n", "\t"), "", $ret);
-
-        // multiple whitespaces
-        $ret = str_replace("\t", " ", $ret);
-        $ret = preg_replace('/(\n)\n+/', '$1', $ret);
-        $ret = preg_replace('/(\n)\ +/', '$1', $ret);
-        $ret = preg_replace('/(\ )\ +/', '$1', $ret);
-
-        return $ret;
-    }
 }
