@@ -382,9 +382,9 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 Kwf.EyeCandy.Lightbox._oneTransitionEnd(this.innerLightboxEl, function() {
                     $('body').removeClass('kwfLightboxAnimate');
                     Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
-                    this.style.afterContentShown();
-                    this.preloadLinks();
                 }, this);
+            } else {
+                Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
             }
         }
         this.lightboxEl.addClass('kwfLightboxOpen');
