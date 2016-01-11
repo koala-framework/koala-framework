@@ -26,32 +26,37 @@ HistoryStateAbstract.prototype = {
 
 var HistoryStateHtml5 = function() {
     HistoryStateHtml5.superclass.constructor.call(this);
-    $((function() {
-        //in onReady to avoid getting initial popstate event that chrome sends on load
-        $(window).on('popstate', (function(event) {
-            if (this.disabled) return;
-            this.entries--;
-            if (event.originalEvent.state) {
-                this.currentState = event.originalEvent.state;
-            } else {
-                this.currentState = {};
-            }
+    $(window).on('popstate', (function(event) {
+        if (this.disabled) return;
+        this.entries--;
+        if (event.originalEvent.state) {
+            this.currentState = event.originalEvent.state;
+        } else {
+            this.currentState = {};
+        }
+
+        //only when state cromes from "us" react on it
+        //works around safari bug which fires popstate on load
+        if (this.currentState['kwfUp-kwfHistoryState']) {
             $(window).trigger('kwf-history-state-popstate');
-        }).bind(this));
+        }
     }).bind(this));
 };
 kwfExtend(HistoryStateHtml5, HistoryStateAbstract, {
     pushState: function(title, href) {
         if (this.disabled) return;
+        this.currentState['kwfUp-kwfHistoryState'] = true;
         window.history.pushState(this.currentState, title, href);
         this.entries++;
     },
     updateState: function() {
         if (this.disabled) return;
+          this.currentState['kwfUp-kwfHistoryState'] = true;
         window.history.replaceState(this.currentState, document.title, window.location.href);
     },
     replaceState: function(title, href) {
         if (this.disabled) return;
+          this.currentState['kwfUp-kwfHistoryState'] = true;
         window.history.replaceState(this.currentState, title, href);
     }
 });
