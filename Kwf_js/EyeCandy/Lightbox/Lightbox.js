@@ -512,7 +512,6 @@ LightboxStyles.Abstract.prototype = {
     },
     mask: function() {
         //calling mask multiple times in valid, unmask must be called exactly often
-        $(document.body).addClass('kwfUp-kwfLightboxTheaterMode');
         var maskEl = $(document.body).find('.kwfUp-lightboxMask');
         if (maskEl.length) {
             maskEl.show();
@@ -534,7 +533,6 @@ LightboxStyles.Abstract.prototype = {
     },
     unmask: function() {
         var lightboxMaskEl = this.lightbox.lightboxEl.find('.kwfUp-kwfLightboxMask');
-        $(document.body).removeClass('kwfLightboxTheaterMode');
         var transEndEventName = this.lightbox.getTransitionEndName();
         var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
         var duration = lightboxMaskEl.css(transitionDurationName);
