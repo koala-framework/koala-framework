@@ -30,17 +30,13 @@ class Kwf_Registry extends Zend_Registry
             $v = Kwf_Trl::getInstance();
             $this->offsetSet('trl', $v);
             return $v;
-        } else if ($index == 'hlp' && !parent::offsetExists($index)) {
-            $v = new Kwf_Hlp();
-            $this->offsetSet('hlp', $v);
-            return $v;
         }
         return parent::offsetGet($index);
     }
 
     public function offsetExists($index)
     {
-        if (in_array($index, array('db', 'config', 'dao', 'acl', 'userModel', 'trl', 'hlp'))) {
+        if (in_array($index, array('db', 'config', 'dao', 'acl', 'userModel', 'trl'))) {
             return true;
         }
         return parent::offsetExists($index);

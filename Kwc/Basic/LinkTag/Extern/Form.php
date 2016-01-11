@@ -7,7 +7,7 @@ class Kwc_Basic_LinkTag_Extern_Form extends Kwc_Abstract_Form
 
         $this->add(new Kwf_Form_Field_UrlField('target', trlKwf('Url')))
             ->setWidth(450)
-            ->setHelpText(hlpKwf('kwc_basic_linktag_extern_target'))
+            ->setHelpText(trlKwf('Enter the Internetaddress including "http://". For example if you want to link to Google.com, type "http://www.google.com" into the textfield.'))
             ->setAllowBlank(false)
             ->setVtype('urltel');
 

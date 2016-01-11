@@ -10,7 +10,7 @@ class Kwc_Basic_Download_Form extends Kwc_Abstract_Form
         $this->add(new Kwf_Form_Field_TextField('infotext', trlKwf('Description')))
             ->setWidth(300)
             ->setAutoFillWithFilename('filenameWithExt') //um es beim MultiFileUpload zu finde
-            ->setHelpText(hlpKwf('kwc_download_linktext'))
+            ->setHelpText(trlKwf('Text, shown after the file icon (automatically generated) and used as link for downloading the file.'))
             ->setAllowBlank(false);
     }
 

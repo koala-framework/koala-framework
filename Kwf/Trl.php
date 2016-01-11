@@ -1,19 +1,5 @@
 <?php
 /**
- * @package Hlp
- */
-function hlp($string) {
-    return Zend_Registry::get('hlp')->hlp($string);
-}
-
-/**
- * @package Hlp
- */
-function hlpKwf($string) {
-    return Zend_Registry::get('hlp')->hlpKwf($string);
-}
-
-/**
  * Basic translated string
  *
  * More information: https://github.com/vivid-planet/koala-framework/wiki/Translation
