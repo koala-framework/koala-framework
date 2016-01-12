@@ -386,10 +386,10 @@ Lightbox.prototype = {
                 $('body').addClass('kwfUp-kwfLightboxAnimate');
                 oneTransitionEnd(this.innerLightboxEl, function() {
                     $('body').removeClass('kwfUp-kwfLightboxAnimate');
-                    Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
+                    onReady.callOnContentReady(this.lightboxEl, {action: 'show'});
                 }, this);
             } else {
-                Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
+                onReady.callOnContentReady(this.lightboxEl, {action: 'show'});
             }
         }
         this.lightboxEl.addClass('kwfUp-kwfLightboxOpen');
