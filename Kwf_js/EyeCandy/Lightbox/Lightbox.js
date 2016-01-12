@@ -270,7 +270,7 @@ Lightbox.prototype = {
             el.height(parseInt(this.options.height) /*+ el.getBorderWidth("tb") + el.getPadding("tb")*/);
         }
         if (this.options.adaptHeight) {
-            this.lightboxEl.addClass('adaptHeight');
+            this.lightboxEl.addClass('kwfUp-adaptHeight');
         }
         this.style.afterCreateLightboxEl();
         this.lightboxEl.hide();
