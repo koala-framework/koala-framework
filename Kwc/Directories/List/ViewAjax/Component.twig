@@ -1,26 +1,28 @@
 <div class="{{ rootElementClass }}" data-width="100%">
     <input type="hidden" name="config" value="{{ config|json_encode()|escape }}" />
-    {% if searchForm is defined %}
-        {% block searchForm %}
-        <div class="{{ 'searchForm'|bemClass }}">
-            {{ renderer.component(searchForm) }}
+    {% block content %}
+        {% if searchForm is defined %}
+            {% block searchForm %}
+            <div class="{{ 'searchForm'|bemClass }}">
+                {{ renderer.component(searchForm) }}
+            </div>
+            {% endblock %}
+        {% endif %}
+        {% if count is defined %}
+            {% block count %}
+                {{ renderer.component(count) }}
+            {% endblock %}
+        {% endif %}
+        <div class="{{ 'viewContainer'|bemClass }}">
+            {% block viewContainer %}
+                {{ renderer.partials(data) }}
+            {% endblock %}
         </div>
-        {% endblock %}
-    {% endif %}
-    {% if count is defined %}
-        {% block count %}
-            {{ renderer.component(count) }}
-        {% endblock %}
-    {% endif %}
-    <div class="{{ 'viewContainer'|bemClass }}">
-        {% block viewContainer %}
-            {{ renderer.partials(data) }}
-        {% endblock %}
-    </div>
-    {% if paging is defined %}
-        {% block paging %}
-            {{ renderer.component(paging) }}
-        {% endblock %}
-    {% endif %}
+        {% if paging is defined %}
+            {% block paging %}
+                {{ renderer.component(paging) }}
+            {% endblock %}
+        {% endif %}
+    {% endblock %}
 </div>
 
