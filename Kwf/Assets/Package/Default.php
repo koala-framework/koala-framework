@@ -38,7 +38,7 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
 
     public function toUrlParameter()
     {
-        return $this->_dependencyName.($this->_enableLegacySupport ? ':l' : '');
+        return $this->_dependencyName;
     }
 
     public static function fromUrlParameter($class, $parameter)
@@ -46,9 +46,6 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
         $param = explode(':', $parameter);
         $dependencyName = $param[0];
         $ret = self::getInstance($dependencyName);
-        if (isset($param[1]) && $param[1] == 'l') {
-            $ret->setEnableLegacySupport(true);
-        }
         return $ret;
 
     }
@@ -64,8 +61,21 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
     public static function createPackages()
     {
         $packages = array();
-        $packages[] = self::getInstance('Frontend')
-            ->setEnableLegacySupport(true);
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            $frontendPackage = Kwf_Assets_Package_ComponentFrontend::getInstance();
+            $packages[] = $frontendPackage;
+
+            $packageNames = array();
+            foreach (Kwc_Abstract::getComponentClasses() as $cls) {
+                if (Kwc_Abstract::getFlag($cls, 'assetsPackage')) {
+                    $packageName = Kwc_Abstract::getFlag($cls, 'assetsPackage');
+                    if (!in_array($packageName, $packageNames)) {
+                        $packageNames[] = $packageName;
+                        $packages[] = new Kwf_Assets_Package_ComponentPackage($packageName, $frontendPackage);
+                    }
+                }
+            }
+        }
         $packages[] = self::getInstance('Admin');
         foreach (Kwf_Config::getValueArray('assets.packages') as $i) {
             $packages[] = self::getInstance($i);

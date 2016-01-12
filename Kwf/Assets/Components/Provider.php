@@ -3,7 +3,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 {
     private $_rootComponentClass;
     private $_fileDependencies = array();
-
+    private $_componentClassesCache;
     public function __construct($rootComponentClass)
     {
         $this->_rootComponentClass = $rootComponentClass;
@@ -45,27 +45,30 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 $ret[] = $nonDeferDep;
             }
 
-            $componentClasses = array();
-            $componentClassesWithoutParam = array();
-            foreach ($this->_getRecursiveChildClasses($this->_rootComponentClass) as $c) {
-                $cWithoutParam = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
-                if (!in_array($cWithoutParam, $componentClassesWithoutParam)) {
-                    $componentClassesWithoutParam[] = $cWithoutParam; //only add one per component class without parameter
-                    $componentClasses[] = $c;
+            foreach ($this->_getComponentClassesPackages()['Frontend'] as $c) {
+                if (!Kwc_Abstract::getFlag($c, 'assetsPackage')) {
+                    $d = $this->_providerList->findDependency('Component-'.$c);
+                    if (!$d) throw new Kwf_Exception("Didn't get dependency 'Component-$c'");
+                    $ret[] = $d;
                 }
             }
+            return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
 
-            foreach ($componentClasses as $class) {
-                $d = $this->_providerList->findDependency('Component-'.$class);
-                if (!$d) throw new Kwf_Exception("Didn't get dependency 'Component-$class'");
+        } else if (substr($dependencyName, 0, 17) == 'ComponentsPackage') {
+
+            $ret = array();
+            $assetsPackageName = substr($dependencyName, 17);
+
+            foreach ($this->_getComponentClassesPackages()[$assetsPackageName] as $c) {
+                $d = $this->_providerList->findDependency('Component-'.$c);
+                if (!$d) throw new Kwf_Exception("Didn't get dependency 'Component-$c'");
                 $ret[] = $d;
             }
             return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
 
         } else if ($dependencyName == 'ComponentsAdmin') {
             $ret = array();
-            $componentClasses = $this->_getRecursiveChildClasses($this->_rootComponentClass);
-            foreach ($componentClasses as $class) {
+            foreach (Kwc_Abstract::getComponentClasses() as $class) {
                 //dep
                 $ret = array_merge($ret, $this->_getComponentSettingDependenciesDep($class, 'assetsAdmin'));
 
@@ -299,6 +302,93 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
         return $ret;
     }
 
+    private function _getComponentClassesPackages()
+    {
+        $frontendPackageClasses = array();
+        $componentClassesWithoutParam = array();
+        foreach ($this->_getRecursiveChildClasses($this->_rootComponentClass, '') as $c) {
+            $cWithoutParam = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
+            if (!in_array($cWithoutParam, $componentClassesWithoutParam)) {
+                $componentClassesWithoutParam[] = $cWithoutParam; //only add one per component class without parameter
+                $frontendPackageClasses[] = $c;
+            }
+        }
+
+        $otherPackageClasses = array();
+        $otherPackageClassesWithoutParam = array();
+        foreach (Kwc_Abstract::getComponentClasses() as $c) {
+            $cWithoutParam = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
+            if (in_array($cWithoutParam, $componentClassesWithoutParam)) {
+                continue;
+            }
+            $packageName = Kwc_Abstract::getFlag($c, 'assetsPackage');
+            if ($packageName) {
+                if (!isset($otherPackageClasses[$packageName])) {
+                    $otherPackageClasses[$packageName] = array();
+                }
+                if (!isset($otherPackageClassesWithoutParam[$packageName])) {
+                    $otherPackageClassesWithoutParam[$packageName] = array();
+                }
+                foreach ($this->_getRecursiveChildClasses($c, $packageName) as $i) {
+                    $iWithoutParam = strpos($i, '.') ? substr($i, 0, strpos($i, '.')) : $i;
+                    if (!in_array($iWithoutParam, $componentClassesWithoutParam) && !in_array($iWithoutParam, $otherPackageClassesWithoutParam[$packageName])) {
+                        $otherPackageClasses[$packageName][] = $i;
+                        $otherPackageClassesWithoutParam[$packageName][] = $iWithoutParam;
+                        foreach ($otherPackageClasses as $pName => $classes) {
+                            if ($pName == $packageName) continue;
+                            if (in_array($i, $classes)) {
+                                throw new Kwf_Exception("Component '$i' is in package '$pName' and '$packageName'");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $otherPackageClasses['Frontend'] = $frontendPackageClasses;
+
+
+        return $otherPackageClasses;
+    }
+
+    private function _getRecursiveChildClasses($class, $assetsPackage, &$processedComponents = array())
+    {
+        $processedComponents[] = $class;
+
+        $ret = array();
+
+        $cPackage = Kwc_Abstract::getFlag($class, 'assetsPackage');
+        if (!$assetsPackage) {
+            if ($cPackage) {
+                return $ret;
+            }
+        } else {
+            if ($cPackage) {
+                if ($cPackage != $assetsPackage) {
+                    return $ret;
+                }
+            }
+        }
+        $ret[] = $class;
+
+        $classes = Kwc_Abstract::getChildComponentClasses($class);
+        $classes = array_merge($classes, Kwc_Abstract::getSetting($class, 'plugins'));
+        foreach (Kwc_Abstract::getSetting($class, 'generators') as $g) {
+            if (isset($g['plugins'])) {
+                $classes = array_merge($classes, $g['plugins']);
+            }
+        }
+
+        foreach ($classes as $i) {
+            if ($i && !in_array($i, $processedComponents)) {
+                $ret = array_merge($ret, $this->_getRecursiveChildClasses($i, $assetsPackage, $processedComponents));
+            }
+        }
+
+        return $ret;
+    }
+
+/*
     private function _getRecursiveChildClasses($class, &$processedComponents = array())
     {
         $processedComponents[] = $class;
@@ -323,4 +413,5 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 
         return $ret;
     }
+*/
 }
