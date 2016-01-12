@@ -5,6 +5,10 @@ class Kwf_Assets_Package
     protected $_providerList;
     protected $_dependencyName;
     protected $_dependency;
+
+    //if enabled ie8+9 will be supported:
+    //* multiple css files will be generated to avoid the <=ie9 4096 selectors limit
+    //* text/css; ie8 file will be generated
     protected $_enableLegacySupport = false;
 
     private $_cacheFilteredUniqueDependencies;
@@ -23,15 +27,6 @@ class Kwf_Assets_Package
     public function getDependencyName()
     {
         return $this->_dependencyName;
-    }
-
-    //if enabled ie8+9 will be supported:
-    //* multiple css files will be generated to avoid the <=ie9 4096 selectors limit
-    //* text/css; ie8 file will be generated
-    public function setEnableLegacySupport($v)
-    {
-        $this->_enableLegacySupport = $v;
-        return $this;
     }
 
     /**
@@ -170,7 +165,7 @@ class Kwf_Assets_Package
         return $this->warmupDependencyCaches($dep, $mimeType, $language);
     }
 
-    private function _getCommonJsDeps($i, $language, &$data)
+    protected function _getCommonJsDeps($i, $language, &$data)
     {
         $ret = array();
         foreach ($i->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS) as $depName=>$dep) {
@@ -189,35 +184,8 @@ class Kwf_Assets_Package
         return $ret;
     }
 
-    public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
+    protected function _getCommonJsData($mimeType, $language)
     {
-        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
-            if (Kwf_Exception_Abstract::isDebug()) {
-                //proper error message on development server
-                throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
-            } else {
-                throw new Kwf_Exception_NotFound();
-            }
-        }
-
-        foreach ($this->_providerList->getProviders() as $provider) {
-            $provider->initialize();
-        }
-
-        $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
-        if ($mimeType == 'text/javascript') $ext = 'js';
-        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
-        else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
-        else throw new Kwf_Exception("Invalid mimeType: '$mimeType'");
-        $packageMap->setFile($this->getPackageUrl($ext, $language));
-        if ($mimeType == 'text/css' || $mimeType == 'text/css; ie8') {
-            $packageMap->setMimeType('text/css');
-        } else {
-            $packageMap->setMimeType('text/javascript');
-        }
-
-        // ***** commonjs
         $commonJsData = array();
         $commonJsDeps = array();
         if ($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') {
@@ -250,6 +218,41 @@ class Kwf_Assets_Package
                     }
                 }
             }
+        }
+        return $commonJsData;
+    }
+
+    public function getPackageContents($mimeType, $language)
+    {
+        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
+            if (Kwf_Exception_Abstract::isDebug()) {
+                //proper error message on development server
+                throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
+            } else {
+                throw new Kwf_Exception_NotFound();
+            }
+        }
+
+        foreach ($this->_providerList->getProviders() as $provider) {
+            $provider->initialize();
+        }
+
+        $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
+        if ($mimeType == 'text/javascript') $ext = 'js';
+        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
+        else if ($mimeType == 'text/css') $ext = 'css';
+        else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
+        else throw new Kwf_Exception("Invalid mimeType: '$mimeType'");
+        $packageMap->setFile($this->getPackageUrl($ext, $language));
+        if ($mimeType == 'text/css' || $mimeType == 'text/css; ie8') {
+            $packageMap->setMimeType('text/css');
+        } else {
+            $packageMap->setMimeType('text/javascript');
+        }
+
+        // ***** commonjs
+        $commonJsData = $this->_getCommonJsData($mimeType, $language);
+        if ($commonJsData) {
             $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData)).";\n";
             $map = Kwf_SourceMaps_SourceMap::createFromInline($contents);
             $packageMap->concat($map);
@@ -286,21 +289,6 @@ class Kwf_Assets_Package
             ) {
                 $packageMap = $filter->filter($packageMap);
             }
-        }
-
-        if ($includeSourceMapComment) {
-            $contents = $packageMap->getFileContents();
-            if ($mimeType == 'text/javascript') $ext = 'js';
-            else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
-            else if ($mimeType == 'text/css') $ext = 'css';
-            else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
-            else throw new Kwf_Exception_NotYetImplemented();
-            if ($ext == 'js' || $ext == 'defer.js') {
-                $contents .= "\n//# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)."\n";
-            } else if ($ext == 'css') {
-                $contents .= "\n/*# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)." */\n";
-            }
-            $packageMap->setFileContents($contents);
         }
 
         return $packageMap;
@@ -342,9 +330,6 @@ class Kwf_Assets_Package
         $param = explode(':', $parameter);
         $providerList = $param[0];
         $ret = new $class(new $providerList, $param[1]);
-        if (isset($param[2]) && $param[2] == 'l') {
-            $ret->setEnableLegacySupport(true);
-        }
         return $ret;
     }
 
@@ -455,6 +440,13 @@ class Kwf_Assets_Package
         }
         if (!$sourceMap) {
             $contents = $map->getFileContents();
+
+            if ($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') {
+                $contents .= "\n//# sourceMappingURL=".$this->getPackageUrl($extension.'.map', $language)."\n";
+            } else if ($mimeType == 'text/css') {
+                $contents .= "\n/*# sourceMappingURL=".$this->getPackageUrl($extension.'.map', $language)." */\n";
+            }
+
             if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
             else if (substr($extension, -3) == 'css') $mimeType = 'text/css; charset=utf-8';
         } else {
