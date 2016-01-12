@@ -31,6 +31,13 @@ class Kwc_Box_MetaTagsContent_OpenGraphImage_Component extends Kwc_Abstract_Imag
         if ($imageUrl) {
             $ret['imageUrl'] = "$protocol://$domain$imageUrl";
         }
+        $ret['width'] = '';
+        $ret['height'] = '';
+        $imageDimensions = $this->getImageDimensions();
+        if ($imageDimensions) {
+            $ret['width'] = $imageDimensions['width'];
+            $ret['height'] = $imageDimensions['height'];
+        }
         return $ret;
     }
 }

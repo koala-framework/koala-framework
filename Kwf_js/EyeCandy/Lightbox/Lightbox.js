@@ -7,6 +7,7 @@ var kwfExtend = require('kwf/extend');
 
 var statistics = require('kwf/statistics');
 var currentOpen = null;
+var escapeHandlerInstalled = false;
 var allByUrl = {};
 var onlyCloseOnPopstate;
 
@@ -38,6 +39,25 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
 
     event.preventDefault();
 });
+
+var oneTransitionEnd = function (el, callback, scope) {
+    var transEndEventNames = {
+        'WebkitTransition' : 'webkitTransitionEnd.kwfLightbox',
+        'MozTransition'    : 'transitionend.kwfLightbox',
+        'transition'       : 'transitionend.kwfLightbox'
+    };
+    var transitionType = Modernizr.prefixed('transition');
+    if (!transitionType) return;
+
+    var event = transEndEventNames[ transitionType ];
+    if (transitionType != 'WebkitTransition') { // can be removed as soon as modernizr fixes https://github.com/Modernizr/Modernizr/issues/897
+        event += ' ' +transEndEventNames['WebkitTransition'];
+    }
+    el.on(event, function() {
+        el.off(event);
+        callback.call(scope, arguments);
+    });
+};
 
 onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
@@ -309,12 +329,10 @@ Lightbox.prototype = {
             //Check if the Lightbox is currently animating
             //If that's the case, wait till the animation is over and insert the content
             //Otherwise the animation could look bad, if the content changes the lightbox size
-            var transEndEventName = this.getTransitionEndName();
             if ($('body').hasClass('kwfUp-kwfLightboxAnimate'))  {
-                this.innerLightboxEl.one(transEndEventName,
-                    (function() {
-                        appendContent();
-                    }).bind(this));
+                oneTransitionEnd(this.innerLightboxEl, function() {
+                    appendContent();
+                }, this);
             } else {
                 appendContent();
             }
@@ -349,7 +367,6 @@ Lightbox.prototype = {
         if (!this.fetched) {
             this.fetchContent();
         }
-        var transEndEventName = this.getTransitionEndName();
         if (!this.lightboxEl.is(':visible')) {
             this.lightboxEl.show();
             if (this.innerLightboxEl.magicTransform) {
@@ -367,13 +384,12 @@ Lightbox.prototype = {
             var duration = this.innerLightboxEl.css(transitionDurationName);
             if (parseFloat(duration)>0) {
                 $('body').addClass('kwfUp-kwfLightboxAnimate');
-                this.innerLightboxEl.one(transEndEventName,
-                    (function() {
-                        $('body').removeClass('kwfUp-kwfLightboxAnimate');
-                        onReady.callOnContentReady(this.lightboxEl, {action: 'show'});
-                        this.style.afterContentShown();
-                        this.preloadLinks();
-                    }).bind(this));
+                oneTransitionEnd(this.innerLightboxEl, function() {
+                    $('body').removeClass('kwfUp-kwfLightboxAnimate');
+                    Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
+                }, this);
+            } else {
+                Kwf.callOnContentReady(this.lightboxEl, {action: 'show'});
             }
         }
         this.lightboxEl.addClass('kwfUp-kwfLightboxOpen');
@@ -443,11 +459,15 @@ Lightbox.prototype = {
     initialize: function()
     {
         var closeButtons = this.lightboxEl.find('.kwfUp-closeButton');
-        $('body').keydown((function(e) {
-            if (e.keyCode == 27) {
-                this.closeAndPushState();
-            }
-        }).bind(this));
+
+        if (!escapeHandlerInstalled) {
+            escapeHandlerInstalled = true;
+            $('body').keydown((function(e) {
+                if (e.keyCode == 27 && currentOpen) {
+                    currentOpen.closeAndPushState();
+                }
+            }));
+        }
 
         closeButtons.click((function(ev) {
             ev.preventDefault();
@@ -462,14 +482,6 @@ Lightbox.prototype = {
     preload: function() {
         this.createLightboxEl();
         this.fetchContent();
-    },
-    getTransitionEndName: function() {
-        var transEndEventNames = {
-            'WebkitTransition' : 'webkitTransitionEnd',
-            'MozTransition'    : 'transitionend',
-            'transition'       : 'transitionend'
-        };
-        return transEndEventNames[ Modernizr.prefixed('transition') || '' ];
     }
 };
 
@@ -533,15 +545,13 @@ LightboxStyles.Abstract.prototype = {
     },
     unmask: function() {
         var lightboxMaskEl = this.lightbox.lightboxEl.find('.kwfUp-kwfLightboxMask');
-        var transEndEventName = this.lightbox.getTransitionEndName();
         var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
         var duration = lightboxMaskEl.css(transitionDurationName);
         lightboxMaskEl.removeClass('kwfUp-kwfLightboxMaskOpen');
         if (parseFloat(duration)>0) {
-            lightboxMaskEl.one(transEndEventName,
-                (function() {
-                    lightboxMaskEl.hide();
-                }).bind(this));
+            oneTransitionEnd(lightboxMaskEl, function() {
+                lightboxMaskEl.hide();
+            }, this);
         } else {
             lightboxMaskEl.hide();
         }
@@ -704,18 +714,16 @@ LightboxStyles.CenterBox = kwfExtend(LightboxStyles.Abstract, {
         this.mask();
     },
     onClose: function(options) {
-        var transEndEventName = this.lightbox.getTransitionEndName();
         var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
         var duration = this.lightbox.innerLightboxEl.css(transitionDurationName);
         if (parseFloat(duration)>0) {
             $('body').addClass('kwfUp-kwfLightboxAnimate');
-            this.lightbox.innerLightboxEl.one(transEndEventName,
-                (function() {
-                    $('html').removeClass('kwfUp-kwfLightboxActive');
-                    $('body').removeClass('kwfUp-kwfLightboxAnimate');
-                    this.lightbox.lightboxEl.hide();
-                    this.afterClose();
-                }).bind(this));
+            oneTransitionEnd(this.lightbox.innerLightboxEl, function() {
+                $('html').removeClass('kwfUp-kwfLightboxActive');
+                $('body').removeClass('kwfUp-kwfLightboxAnimate');
+                this.lightbox.lightboxEl.hide();
+                this.afterClose();
+            }, this);
         } else {
             this.lightbox.lightboxEl.hide();
             this.afterClose();
