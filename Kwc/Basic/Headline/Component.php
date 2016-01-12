@@ -64,6 +64,7 @@ class Kwc_Basic_Headline_Component extends Kwc_Abstract
         } else {
             $ret['headlineType'] = reset($headlines);
         }
+        $ret['showAnchor'] = Kwc_Abstract::getFlag($this->getData()->componentClass, 'hasAnchors');
         return $ret;
     }
 
