@@ -69,6 +69,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
 
         $ret['defineWidth'] = false;
         $ret['maxWidthImageWidth'] = true;
+        $ret['inlineTags'] = false;
         return $ret;
     }
 
@@ -122,6 +123,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
         $ret['outputImgTag'] = $this->_getSetting('outputImgTag');
+        $ret['inlineTags'] = $this->_getSetting('inlineTags');
 
         $ret['style'] = '';
         $ret['captionStyle'] = '';
