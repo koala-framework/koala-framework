@@ -57,6 +57,7 @@ body {
         }
 
         .kwfUp-kwfLightboxInner {
+            @include box-sizing(border-box);
             display: inline-block;
             position: relative;
             text-align: left;
@@ -232,16 +233,21 @@ body {
 
 .kwfUp-kwfLightbox .kwfUp-closeButton {
     background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
-    position: fixed;
+    position: absolute;
     display: block;
     height: 42px;
     z-index: 102;
     width: 42px;
-    right: 10px;
-    top: 10px;
+    right: -25px;
+    top: -25px;
+}
+
+.kwfUp-kwfLightbox .kwfUp-innerCloseButton {
+    display: none;
 }
 
 .kwfUp-kwfLightbox.kwfUp-mobile .kwfUp-closeButton {
+    position: fixed;
     right: 2px;
     top: 2px;
 }

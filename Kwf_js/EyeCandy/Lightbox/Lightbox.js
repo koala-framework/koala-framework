@@ -4,6 +4,7 @@ var onReady = require('kwf/on-ready');
 var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var kwfExtend = require('kwf/extend');
+var trlKwf = require('kwf/trl').trlKwf;
 
 var statistics = require('kwf/statistics');
 var currentOpen = null;
@@ -290,12 +291,12 @@ Lightbox.prototype = {
                 '<div class="kwfUp-kwfLightboxContent"></div>'
             );
             this.closeButtonEl = $(
-                '<a href="#" class="kwfUp-closeButton"></a>'
+                '<a href="#" class="kwfUp-closeButton"><span class="kwfUp-innerCloseButton">'+trlKwf("Close")+'</span></a>'
             );
             var self = this;
             var appendContent = function() {
                 self.innerLightboxEl.append(self.contentEl);
-                self.lightboxEl.append(self.closeButtonEl);
+                self.innerLightboxEl.append(self.closeButtonEl);
 
                 self.style.updateContent(responseText);
 
