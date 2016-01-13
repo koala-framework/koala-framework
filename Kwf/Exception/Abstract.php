@@ -93,11 +93,20 @@ abstract class Kwf_Exception_Abstract extends Exception
 
             echo $view->render($template);
         } catch (Exception $e) {
-            echo '<pre>';
-            echo $this->getException()->__toString();
-            echo "\n\n\nError happened while handling exception:";
-            echo $e->__toString();
-            echo '</pre>';
+            if (Kwf_Exception::isDebug()) {
+                echo '<pre>';
+                echo $this->getException()->__toString();
+                echo "\n\n\nError happened while handling exception:";
+                echo $e->__toString();
+                echo '</pre>';
+            } else {
+                if (!headers_sent()) {
+                    header('HTTP/1.1 500 Internal Server Error');
+                    header('Content-Type: text/html; charset=utf-8');
+                }
+                echo '<h1>Error</h1>';
+                echo '<p>An Error ocurred. Please try again later.</p>';
+            }
         }
 
    }
