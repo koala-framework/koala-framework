@@ -1185,9 +1185,15 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             return;
         }
         $ret[$model->getFactoryId()] = $model;
-        foreach ($model->getDependentModels() as $m) {
-            self::_findAllInstancesProcessModel($ret, $m);
+
+        if ($model instanceof Kwf_Model_Proxy) {
+            self::_findAllInstancesProcessModel($ret, $model->getProxyModel());
+        } else if ($model instanceof Kwf_Model_Union) {
+            foreach ($model->getUnionModels() as $subModel) {
+                self::_findAllInstancesProcessModel($ret, $subModel);
+            }
         }
+
         foreach ($model->getDependentModels() as $m) {
             self::_findAllInstancesProcessModel($ret, $m);
         }
