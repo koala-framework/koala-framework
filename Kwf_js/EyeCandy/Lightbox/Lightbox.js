@@ -284,12 +284,12 @@ Kwf.EyeCandy.Lightbox.Lightbox.prototype = {
                 '<div class="kwfLightboxContent"></div>'
             );
             this.closeButtonEl = $(
-                '<a href="#" class="closeButton"></a>'
+                '<a href="#" class="closeButton"><span class="innerCloseButton">'+trlKwf("Close")+'</span></a>'
             );
             var self = this;
             var appendContent = function() {
                 self.innerLightboxEl.append(self.contentEl);
-                self.lightboxEl.append(self.closeButtonEl);
+                self.innerLightboxEl.append(self.closeButtonEl);
 
                 self.style.updateContent(responseText);
 
