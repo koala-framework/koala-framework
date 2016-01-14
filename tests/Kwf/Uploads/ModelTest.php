@@ -41,26 +41,6 @@ class Kwf_Uploads_ModelTest extends Kwf_Test_TestCase
         unlink($file);
     }
 
-
-    public function testUploadFileNoMimeType()
-    {
-        $file = tempnam('/tmp', 'testupload');
-        file_put_contents($file, 'fooo');
-        $postData = array(
-            'error' => 0,
-            'tmp_name' => $file,
-            'name' => 'test.txt',
-            'type' => 'application/octet-stream' //macht flash so
-        );
-        $row = $this->_uploadsModel->createRow();
-        $row->uploadFile($postData);
-        $this->assertFileEquals($file, $row->getFileSource());
-        $this->assertContains('text/plain', $row->mime_type);
-        $this->assertEquals('test', $row->filename);
-        $this->assertEquals('txt', $row->extension);
-        unlink($file);
-    }
-
     public function testCopyFile()
     {
         $file = tempnam('/tmp', 'testupload');
@@ -79,50 +59,11 @@ class Kwf_Uploads_ModelTest extends Kwf_Test_TestCase
         $this->assertStringEqualsFile($row->getFileSource(), 'foo');
     }
 
-    public function testWriteFileDetectMimeType()
-    {
-        $row = $this->_uploadsModel->createRow();
-        $row->writeFile('foo', 'foo', 'gif', 'application/octet-stream');
-        $this->assertContains('text/plain', $row->mime_type);
-
-        $row = $this->_uploadsModel->createRow();
-        $row->writeFile('foo', 'fooobar', 'txt');
-        $this->assertContains('text/plain', $row->mime_type);
-
-        $row = $this->_uploadsModel->createRow();
-        $row->writeFile('bäm oida', 'fooobar', 'txt');
-        $this->assertContains('text/plain', $row->mime_type);
-
-        $row = $this->_uploadsModel->createRow();
-        $row->writeFile(utf8_decode('bäm oida'), 'fooobar', 'txt');
-        $this->assertContains('text/plain', $row->mime_type);
-
-        $row = $this->_uploadsModel->createRow();
-        $row->writeFile('<html><head></head><body></body></html>', 'foo', 'html');
-        $this->assertContains('text/html', $row->mime_type);
-
-        $row = $this->_uploadsModel->createRow();
-        $row->writeFile('<html><head></head><body>bäm ähm</body></html>', 'foo', 'html');
-        $this->assertContains('text/html', $row->mime_type);
-
-        $row = $this->_uploadsModel->createRow();
-        $row->copyFile(KWF_PATH.'/images/welcome/ente.jpg', 'foo', 'jpg');
-        $this->assertContains('image/jpeg', $row->mime_type);
-
-        $row = $this->_uploadsModel->createRow();
-        $row->copyFile(KWF_PATH.'/images/links.png', 'foo', 'png');
-        $this->assertContains('image/png', $row->mime_type);
-
-        $row = $this->_uploadsModel->createRow();
-        $row->copyFile(KWF_PATH.'/images/spacer.gif', 'foo', 'gif');
-        $this->assertContains('image/gif', $row->mime_type);
-    }
-
 
     public function testGetFileSource()
     {
         $row = $this->_uploadsModel->createRow();
-        $row->writeFile('foo', 'foo', 'txt');
+        $row->writeFile('foo', 'foo', 'txt', 'text/plain');
         $dir = $this->_uploadsModel->getUploadDir();
         $this->assertRegExp('#^'.$dir.'/[a-z0-9]{2}/.+$#', $row->getFileSource());
         $this->assertEquals(3, $row->getFileSize());
@@ -136,7 +77,7 @@ class Kwf_Uploads_ModelTest extends Kwf_Test_TestCase
     public function testGetFileInfo()
     {
         $row = $this->_uploadsModel->createRow();
-        $row->writeFile('foo', 'foo', 'txt');
+        $row->writeFile('foo', 'foo', 'txt', 'text/plain');
         $info = $row->getFileInfo();
         $this->assertRegExp('#^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$#', $info['uploadId']);
         $this->assertContains('text/plain', $info['mimeType']);
@@ -161,7 +102,7 @@ class Kwf_Uploads_ModelTest extends Kwf_Test_TestCase
     public function testDeleteFile()
     {
         $row = $this->_uploadsModel->createRow();
-        $row->writeFile('foo', 'foo', 'txt');
+        $row->writeFile('foo', 'foo', 'txt', 'text/plain');
         $f = $row->getFileSource();
         $this->assertTrue(file_exists($f));
         $row->delete();
