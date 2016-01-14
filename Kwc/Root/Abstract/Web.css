@@ -10,8 +10,8 @@
 .kwfUp-webStandard li { list-style-type: disc; margin-bottom: 5px; }
 
 ul.kwfUp-webListNone,
-.kwfUp-webListNone ul { margin: 0px; }
-.kwfUp-webListNone li {
+.kwfUp-webStandard.kwfUp-webListNone ul { margin: 0px; }
+.kwfUp-webStandard.kwfUp-webListNone li {
     list-style-type: none !important;
     list-style-image: none !important;
     margin-bottom: 0px;

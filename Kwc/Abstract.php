@@ -370,6 +370,10 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         $supportedContexts = Kwf_Component_Layout_Abstract::getInstance($this->getData()->componentClass)->getSupportedContexts();
         if ($supportedContexts) {
             $contexts = Kwf_Component_Layout_Abstract::getInstance($this->getData()->componentClass)->getContexts($this->getData());
+            if (is_null($contexts)) {
+                $e = Kwf_Exception("Didn't get layout contexts for ".$this->getData()->componentId);
+                $e->logOrThrow();
+            }
             foreach ($contexts as $ctx) {
                 if (!in_array($ctx, $supportedContexts)) {
                     $e = new Kwf_Exception("Master Layout Context ".json_encode($ctx)." is not supported by ".$this->getData()->componentClass." for '".$this->getData()->componentId."'");

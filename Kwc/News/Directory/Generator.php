@@ -1,6 +1,8 @@
 <?php
 class Kwc_News_Directory_Generator extends Kwf_Component_Generator_Page_Table
 {
+    protected $_eventsClass = 'Kwc_News_Directory_GeneratorEvents';
+
     protected function _formatSelect($parentData, $select)
     {
         $ret = parent::_formatSelect($parentData, $select);

@@ -222,7 +222,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
                             dimension: this._dimensionField.getValue(),
                             width: this._getUserSelectedDimensionWidth(),
                             height: this._getUserSelectedDimensionHeight(),
-                            cropData: this._cropImage.getValue()
+                            cropData: Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(this._cropImage.getValue(), this._scaleFactor)
                         };
                         this.fireEvent('save', this.value);
                         this.close();
@@ -257,30 +257,30 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
         var outWidth = this._getUserSelectedDimensionWidth();
         var outHeight = this._getUserSelectedDimensionHeight();
 
-        var imageWidth = Math.round(this.imageData.imageWidth / this.imageData.imageHandyScaleFactor);
-        var imageHeight = Math.round(this.imageData.imageHeight / this.imageData.imageHandyScaleFactor);
+        var cropImageWidth = Math.round(this.imageData.imageWidth / this.imageData.imageHandyScaleFactor);
+        var cropImageHeight = Math.round(this.imageData.imageHeight / this.imageData.imageHandyScaleFactor);
         this._cropImage = new Kwc.Abstract.Image.CropImage({
             // call controller to create image with nice size to work with
             src: '/kwf/media/upload/download-handy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey,
             cls: 'kwc-abstract-image-dimension-window-crop-image',
             outWidth: outWidth,
             outHeight: outHeight,
-            cropData: cropData,
-            width: imageWidth,
-            height: imageHeight,
-            style: 'margin-left:'+imageWidth/-2+'px;margin-top:'+imageHeight/-2+'px'
+            cropData: Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(cropData, 1/this._scaleFactor),
+            scaleFactor: this.imageData.imageHandyScaleFactor,
+            width: cropImageWidth,
+            height: cropImageHeight,
+            style: 'margin-left:'+cropImageWidth/-2+'px;margin-top:'+cropImageHeight/-2+'px'
         });
         this._cropImage.on('cropChanged', function (cropData) {
             var value = {
                 dimension: this._dimensionField.getValue(),
                 width: this._widthField.getValue(),
                 height: this._heightField.getValue(),
-                cropData: cropData
+                cropData: Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(cropData, this._scaleFactor)
             };
-            var scaleFactor = this._scaleFactor;
             var errorMessageEl = Ext2.get(this._errorMessage.getEl());
             errorMessageEl.addClass('kwc-abstract-image-dimensionwindow-errorMessage');
-            if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, this.dimensions, scaleFactor, this._dpr2Check)) {
+            if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, this.dimensions, this._dpr2Check)) {
                 errorMessageEl.addClass('error');
                 errorMessageEl.update(trlKwf('Selection too small!'));
                 this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').addClass('error');
@@ -294,12 +294,12 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
 
         // Check if smaller than usefull so keep min-width
         var width = this.width;
-        if (imageWidth +this._configPanel.width +18 > this.minWidth) {// and border
-            width = this._configPanel.width +18 + imageWidth;
+        if (cropImageWidth +this._configPanel.width +18 > this.minWidth) {// and border
+            width = this._configPanel.width +18 + cropImageWidth;
         }
         var height = this.height;
-        if (imageHeight +98 + 26 > this.minHeight) { //titles height + toolbar height
-            height = imageHeight +98 +26;
+        if (cropImageHeight +98 + 26 > this.minHeight) { //titles height + toolbar height
+            height = cropImageHeight +98 +26;
         }
         this.setSize(width, height);
     },
@@ -358,7 +358,8 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
     _resetCropRegion: function (element, value)
     {
         //Change to cropData = null to reset selection on change
-        var cropData = this._cropImage.getValue();
+        var cropData = Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(this._cropImage.getValue(), this._scaleFactor);
+
         if (value.inputValue == this.value.dimension) {
             cropData = this.value.cropData;
         }
@@ -368,11 +369,11 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
             dimension: this._dimensionField.getValue(),
             width: width,
             height: height,
-            cropData: cropData
+            cropData: Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(cropData)
         };
         this._cropImage.outWidth = width;
         this._cropImage.outHeight = height;
-        this._cropImage.setCropDataAndPreserveRatio(cropData, this._getPreserveRatio());
+        this._cropImage.setCropDataAndPreserveRatio(Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(cropData, 1/this._scaleFactor), this._getPreserveRatio());
     },
 
     _validateSizes: function()
@@ -437,5 +438,16 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
         }
     }
 });
+
+Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor = function (cropData, factor)
+{
+    if (!cropData) return cropData;
+    return {
+        x: cropData.x * factor,
+        y: cropData.y * factor,
+        width: cropData.width * factor,
+        height: cropData.height * factor
+    };
+};
 
 Ext2.reg('kwc.image.dimensionwindow', Kwc.Abstract.Image.DimensionWindow);

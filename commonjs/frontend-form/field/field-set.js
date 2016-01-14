@@ -3,16 +3,16 @@ var Field = require('kwf/frontend-form/field/field');
 var kwfExtend = require('kwf/extend');
 var onReady = require('kwf/on-ready');
 
-onReady.onRender('div.kwfFormContainerFieldSet fieldset > legend > input', function fieldSet(c)
+onReady.onRender('div.kwfUp-kwfFormContainerFieldSet fieldset > legend > input', function fieldSet(c)
 {
     if (!c.get(0).checked) {
-        c.up('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
+        c.closest('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
     }
     c.on('click', (function() {
-        if (this.checked) {
-            this.up('fieldset').removeClass('kwfFormContainerFieldSetCollapsed');
+        if (this.get(0).checked) {
+            this.closest('fieldset').removeClass('kwfFormContainerFieldSetCollapsed');
         } else {
-            this.up('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
+            this.closest('fieldset').addClass('kwfFormContainerFieldSetCollapsed');
         }
     }).bind(c));
 });

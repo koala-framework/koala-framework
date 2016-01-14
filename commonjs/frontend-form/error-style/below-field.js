@@ -1,3 +1,4 @@
+var $ = require('jQuery');
 var ErrorStyleAbove = require('kwf/frontend-form/error-style/above');
 var kwfExtend = require('kwf/extend');
 var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');

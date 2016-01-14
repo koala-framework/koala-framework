@@ -75,6 +75,9 @@ function getResponsiveWidthSteps(minWidth, maxWidth) {
 function initResponsiveImgEl(el) {
     var elWidth = getCachedWidth(el);
     if (elWidth == 0) return;
+    if (elWidth > 100) {
+        el.addClass('kwfUp-webResponsiveImgLoading');
+    }
     el[0].responsiveImgInitDone = true; //don't save as el.data to avoid getting it copied when cloning elements
     var devicePixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
     var baseUrl = el.data("src");
@@ -107,6 +110,7 @@ function initResponsiveImgEl(el) {
             img.attr('alt', alt[1]);
         }
     }
+    el.trigger('changesrc', sizePath);
 };
 
 function checkResponsiveImgEl(responsiveImgEl) {
@@ -117,9 +121,10 @@ function checkResponsiveImgEl(responsiveImgEl) {
             responsiveImgEl.data('minWidth'), responsiveImgEl.data('maxWidth'));
     if (width > responsiveImgEl.data('loadedWidth')) {
         responsiveImgEl.data('loadedWidth', width);
-        responsiveImgEl.find('img').attr('src',
-             responsiveImgEl.data('baseUrl').replace(DONT_HASH_TYPE_PREFIX+'{width}',
-                    DONT_HASH_TYPE_PREFIX+width));
+        var sizePath = responsiveImgEl.data('baseUrl').replace(DONT_HASH_TYPE_PREFIX+'{width}',
+                    DONT_HASH_TYPE_PREFIX+width);
+        responsiveImgEl.find('img').attr('src', sizePath);
+        responsiveImgEl.trigger('changesrc', sizePath);
     }
 };
 

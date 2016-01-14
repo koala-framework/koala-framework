@@ -49,12 +49,12 @@ $(document).on('click', 'a', function(event) {
 
 onReady.onRender('.kwcClass', function initViewAjax(el, config) {
 
-    config.el = el.find('.viewContainer')[0];
+    config.el = el.find('.kwcBem__viewContainer')[0];
 
-    el.find('.kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
+    el.find('.kwfUp-kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
     el[0].kwcViewAjax = new ViewAjax(config);
 
-    var linkToTop = $('<div class="linkToTop"></div>');
+    var linkToTop = $('<div class="kwcBem__linkToTop"></div>');
     el.append(linkToTop);
     linkToTop.click(function() {
         window.scrollTo(0, 0);
@@ -63,9 +63,9 @@ onReady.onRender('.kwcClass', function initViewAjax(el, config) {
     $(window).on('scroll', function() {
         var scrollHeight = $(window).scrollTop();
         if (scrollHeight >= 1700) {
-            el.addClass('scrolledDown'); //will display linkToTop
+            el.addClass('kwcBem--scrolledDown'); //will display linkToTop
         } else {
-            el.removeClass('scrolledDown');
+            el.removeClass('kwcBem--scrolledDown');
         }
     });
 
@@ -113,9 +113,11 @@ ViewAjax.prototype = {
             byDirectoryViewComponentId[this.directoryViewComponentId] = this;
         }
         this.baseParams = {
-            componentId: this.componentId,
-            kwfSessionToken: Kwf.sessionToken
+            componentId: this.componentId
         };
+        if (typeof Kwf != 'undefined' && Kwf.sessionToken) {
+            this.baseParams.kwfSessionToken = Kwf.sessionToken;
+        }
 
         if (this.searchFormComponentId) {
             this.searchForm = formRegistry.getFormByComponentId(this.searchFormComponentId);
@@ -125,9 +127,8 @@ ViewAjax.prototype = {
 
             $.extend(this.baseParams, this.searchForm.getValues());
 
-            this.searchForm.on('fieldChange', function(f) {
-                var queryField = $(f.target).find('input[name="query"]');
-                if (queryField && queryField.length < this.minimumCharactersForFilter) return; //minimum length
+            this.searchForm.on('fieldChange', function(ev, f) {
+                if (f.el.find('input[type=text]').length && f.getValue().length < this.minimumCharactersForFilter) return; //minimum length
 
                 var values = this.searchForm.getValues();
                 var diffFound = false;
@@ -276,6 +277,8 @@ ViewAjax.prototype = {
 
     _getState: function()
     {
+        if (!historyState.currentState.viewAjax) historyState.currentState.viewAjax = {};
+        if (!historyState.currentState.viewAjax[this.componentId]) historyState.currentState.viewAjax[this.componentId] = {};
         return historyState.currentState.viewAjax[this.componentId];
     },
 
@@ -301,12 +304,12 @@ ViewAjax.prototype = {
 
     loadMore: function()
     {
-        if (this.$el.find('.kwfViewAjaxItem').length<this.initialPageSize || this.loadingMore || this.visibleDetail) return;
+        if (this.$el.find('.kwfUp-kwfViewAjaxItem').length<this.initialPageSize || this.loadingMore || this.visibleDetail) return;
 
         this.loadingMore = true;
-        this.$el.addClass('loadingMore');
+        this.$el.addClass('kwfUp-loadingMore');
         var params = $.extend({
-            start: this.$el.find('.kwfViewAjaxItem').length,
+            start: this.$el.find('.kwfUp-kwfViewAjaxItem').length,
             limit: 10
         }, this.baseParams);
         $.ajax({
@@ -314,12 +317,12 @@ ViewAjax.prototype = {
             url: this.controllerUrl+'/json-data',
             dataType: 'json'
         }).done((function(data) {
-            this.$el.removeClass('loadingMore');
+            this.$el.removeClass('kwfUp-loadingMore');
             if (data.rows.length) { //wenn nichts geladen sind wir bereits am ende
                 this.loadingMore = false;
             }
             for (var i=0; i<data.rows.length; i++) {
-                this.$el.append("<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>");
+                this.$el.append("<div class=\"kwfUp-kwfViewAjaxItem\">"+data.rows[i].content+"</div>");
             }
             onReady.callOnContentReady(this.$el, { action: 'render' });
         }).bind(this));
@@ -358,7 +361,7 @@ ViewAjax.prototype = {
     {
         var html = '';
         for (var i=0; i<data.rows.length; i++) {
-            html += "<div class=\"kwfViewAjaxItem\">"+data.rows[i].content+"</div>";
+            html += "<div class=\"kwfUp-kwfViewAjaxItem\">"+data.rows[i].content+"</div>";
         }
         return html;
     },
@@ -389,7 +392,7 @@ ViewAjax.prototype = {
         this.kwfMainContent.hide();
 
             //style: 'width: ' + this.kwfMainContent.getStyle('width'),
-        this.detailEl = $('<div class="kwfUp-kwfMainContent loadingContent '+classNames+'""><div class="loading"></div></div>');
+        this.detailEl = $('<div class="kwfUp-kwfMainContent kwfUp-loadingContent '+classNames+'""><div class="kwfUp-loading"></div></div>');
         this.kwfMainContent.after(this.detailEl);
 
         $.ajax({
@@ -398,7 +401,7 @@ ViewAjax.prototype = {
             dataType: 'html'
         }).done((function(data) {
             if (!this.detailEl) return;
-            this.detailEl.removeClass('loadingContent '+classNames);
+            this.detailEl.removeClass('kwfUp-loadingContent '+classNames);
             this.detailEl.html(data);
             statistics.count(href);
 

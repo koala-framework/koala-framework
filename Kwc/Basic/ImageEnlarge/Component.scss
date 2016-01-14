@@ -75,13 +75,15 @@
     display: block;
 }
 
-body.ext2-ie8 .kwcClass a {
-    .outerHoverIcon {
-        display: none;
-    }
+@ie8 {
+    .kwcClass a {
+        .outerHoverIcon {
+            display: none;
+        }
 
-    &:hover .outerHoverIcon {
-        display: block;
+        &:hover .outerHoverIcon {
+            display: block;
+        }
     }
 }
 

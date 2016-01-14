@@ -15,7 +15,7 @@ ErrorStyleAbstract.prototype = {
         }
         html += '</ul>';
         html += '</div>';
-        $(html).insertAfter(this.form.el.find('form'));
+        $(html).insertBefore(this.form.el.find('form'));
         onReady.callOnContentReady(this.form.el, {newRender: true});
     },
     showErrors: function() {

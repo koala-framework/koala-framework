@@ -12,6 +12,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $ret['pdfMaxWidth'] = 0;
         $ret['pdfMaxDpi'] = 150;
         $ret['defineWidth'] = false;
+        $ret['outputImgTag'] = true;
         return $ret;
     }
 
@@ -28,7 +29,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $ret = parent::getTemplateVars($renderer);
         $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
         $ret['style'] = '';
-        $ret['containerClass'] = 'container';
+        $ret['containerClass'] = $this->_getBemClass("container");
         $ret['image'] = $this->getData();
         $imageComponent = $this->_getImageComponent();
         if ($imageComponent) {
@@ -40,13 +41,14 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
             );
             $ret['style'] .= 'max-width:'.$ret['width'].'px;';
             if ($this->_getSetting('defineWidth')) $ret['style'] .= 'width:'.$ret['width'].'px;';
-            if ($ret['width'] > 100) $ret['containerClass'] .= ' webResponsiveImgLoading';
+            if ($ret['width'] > 100) $ret['containerClass'] .= ' kwfUp-webResponsiveImgLoading';
         }
         $ret['baseUrl'] = $this->_getBaseImageUrl();
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
+        $ret['outputImgTag'] = $this->_getSetting('outputImgTag');
 
-        if (!$this->_getSetting('lazyLoadOutOfViewport')) $ret['containerClass'] .= ' loadImmediately';
+        if (!$this->_getSetting('lazyLoadOutOfViewport')) $ret['containerClass'] .= ' kwfUp-loadImmediately';
 
         if (!$renderer instanceof Kwf_Component_Renderer_Mail) { //TODO this check is a hack
             $ret['template'] = Kwf_Component_Renderer_Twig_TemplateLocator::getComponentTemplate('Kwc_Abstract_Image_Component');

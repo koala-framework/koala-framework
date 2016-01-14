@@ -1,32 +1,16 @@
 @import "config/default-loading-animation-big";
 
-.kwfViewAjaxHidden { display: none; }
-
-.kwcClass .ext-el-mask {
-    background-color: white;
-}
-
-.kwcClass .ext-el-mask-msg.loading {
-    @include default-loading-animation-big;
-}
-
-.kwcClass .ext-el-mask-msg.loading div {
-    background: white;
-    border: 0px;
-    padding: 10px 10px 10px 10px;
-}
-
-.kwcClass.loadingContent {
+.kwcClass.kwfUp-loadingContent {
     background-color: white;
     padding: 50px 0px 50px 0px;
     behavior: url(/assets/css3pie/pie.htc);
 }
 
-.kwcClass.loadingContent .loading {
+.kwcClass.kwfUp-loadingContent .kwfUp-loading {
     @include default-loading-animation-big;
 }
 
-.kwcClass .linkToTop {
+.kwcClass__linkToTop {
     display: none;
     background: url(/assets/kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left top;
     width: 58px;
@@ -37,11 +21,11 @@
     margin-left: -29px;
 }
 
-.kwcClass .linkToTop:hover {
+.kwcClass__linkToTop:hover {
     cursor: pointer;
     background: url(/assets/kwf/Kwc/Directories/List/ViewAjax/scrollToTop.png) no-repeat left bottom;
 }
 
-.kwcClass.scrolledDown .linkToTop {
+.kwcClass--scrolledDown .kwcClass__linkToTop {
     display: block;
 }

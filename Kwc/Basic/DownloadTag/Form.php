@@ -12,7 +12,7 @@ class Kwc_Basic_DownloadTag_Form extends Kwc_Abstract_Form
         $this->fields->add(new Kwf_Form_Field_TextField('filename', trlKwf('Filename')))
             ->setVtype('alphanum')
             ->setAutoFillWithFilename('filename') //um es beim MultiFileUpload und im JavaScript zu finde
-            ->setHelpText(hlpKwf('kwf_download_filename'))
+            ->setHelpText(trlKwf('Enter the name (without file extension), the file should get when downloading it.'))
             ->setWidth(300)
             ->setAllowBlank(false);
     }

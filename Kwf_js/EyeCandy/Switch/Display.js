@@ -1,4 +1,5 @@
 var onReady = require('kwf/on-ready');
+var $ = require('jQuery');
 
     var switchDisplayCls = function(el, config) {
 
@@ -14,8 +15,8 @@ var onReady = require('kwf/on-ready');
         $.extend(this.config, config);
 
         this.el = $(el);
-        this.switchLink = this.el.find(this.config.link || '.switchLink');
-        this.switchContainer = this.el.find(this.config.container || '.switchContent');
+        this.switchLink = this.el.find(this.config.link || '.kwfUp-switchLink');
+        this.switchContainer = this.el.find(this.config.container || '.kwfUp-switchContent');
         this.boundEvent = this.config.hover ? 'hover' : 'click';
         this.activeTimeout = null;
 
@@ -27,12 +28,12 @@ var onReady = require('kwf/on-ready');
             this.switchContainer
                 .css('display', 'none')
 
-            if(this.config.fade) {
+            if (this.config.fade) {
                 this.switchContainer.fadeIn(this.config);
             } else {
                 this.switchContainer.slideDown(this.config);
             }
-            this.switchLink.addClass('switchLinkOpened');
+            this.switchLink.addClass('kwfUp-switchLinkOpened');
         }
 
         this.doClose = function() {
@@ -41,12 +42,12 @@ var onReady = require('kwf/on-ready');
             this.switchContainer
                 .css('display', 'block')
 
-            if(this.config.fade) {
+            if (this.config.fade) {
                 this.switchContainer.fadeOut(this.config);
             } else {
                 this.switchContainer.slideUp(this.config);
             }
-            this.switchLink.removeClass('switchLinkOpened');
+            this.switchLink.removeClass('kwfUp-switchLinkOpened');
         }
 
         this.switchLink[this.boundEvent]($.proxy(function(){
@@ -67,7 +68,7 @@ var onReady = require('kwf/on-ready');
                 }
             } else {
                 if (this.config.fade) {
-                    if(this.activeTimeout && event.type === 'mouseenter') {
+                    if (this.activeTimeout && event.type === 'mouseenter') {
                         clearTimeout(this.activeTimeout);
                         this.activeTimeout = null;
                         return;
@@ -95,27 +96,27 @@ var onReady = require('kwf/on-ready');
                 SwitchDisplay(el, config);
             }, { defer: true });
             onReady.onRender(elOrSelector, function(el, config) {
-                if (!el.find(config.container || 'div.switchContent').hasClass('active')) {
-                    el.find(config.container || 'div.switchContent').hide();
+                if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('active')) {
+                    el.find(config.container || 'div.kwfUp-switchContent').hide();
                 }
             });
         } else {
             config = config || {};
             el = elOrSelector;
-            if (!el.find(config.container || 'div.switchContent').hasClass('active')) {
-                el.find(config.container || 'div.switchContent').hide();
+            if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('active')) {
+                el.find(config.container || 'div.kwfUp-switchContent').hide();
             }
             el = elOrSelector.get(0);
 
-            if(!el.switchDisplayObject) {
+            if (!el.switchDisplayObject) {
                 el.switchDisplayObject = new switchDisplayCls(el, config);
             }
         };
 
     };
 
-    SwitchDisplay('.kwfSwitchDisplay');
-    SwitchDisplay('.kwfSwitchHoverFade', {
+    SwitchDisplay('.kwfUp-kwfSwitchDisplay');
+    SwitchDisplay('.kwfUp-kwfSwitchHoverFade', {
         fade: true,
         hover: true,
         duration: 200

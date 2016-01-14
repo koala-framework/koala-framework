@@ -23,4 +23,18 @@ class Kwf_Assets_Modernizr_ProviderTest extends Kwf_Test_TestCase
         $this->assertTrue($d instanceof Kwf_Assets_Modernizr_Dependency);
         $this->assertEquals(array('Animation', 'Transition'), $d->getFeatures());
     }
+
+    public function testParseScssMixin()
+    {
+        $d = $this->_list->findDependency('TestParseCss');
+        $deps = $d->getRecursiveDependencies();
+        $ok = false;
+        foreach ($deps as $i) {
+            if ($i instanceof Kwf_Assets_Modernizr_Dependency) {
+                $ok = true;
+                $this->assertEquals(array('Csscalc'), $i->getFeatures());
+            }
+        }
+        $this->assertTrue($ok);
+    }
 }

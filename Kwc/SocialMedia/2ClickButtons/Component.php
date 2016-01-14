@@ -15,14 +15,24 @@ class Kwc_SocialMedia_2ClickButtons_Component extends Kwc_Abstract
         return $ret;
     }
 
+    protected function _getSocialNetworks()
+    {
+        return (object)array(
+            'facebook' => $this->_getRow()->facebook,
+            'twitter' => $this->_getRow()->twitter,
+            'google' => $this->_getRow()->google
+        );
+    }
+
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $ret = parent::getTemplateVars($renderer);
+        $socialNetworks = $this->_getSocialNetworks();
         $txtInfo = $this->getData()->trlKwf('2 clicks for more privacy: When you click here the button will be activated and you can send your recommendation. As soon as the button is activated data will be sent to third parties.');
         $ret['config'] = array(
-            'showFacebook' => ($ret['row']->facebook) ? 1 : 0,
-            'showTwitter' => ($ret['row']->twitter) ? 1 : 0,
-            'showGoogle' => ($ret['row']->google) ? 1 : 0,
+            'showFacebook' => ($socialNetworks->facebook) ? 1 : 0,
+            'showTwitter' => ($socialNetworks->twitter) ? 1 : 0,
+            'showGoogle' => ($socialNetworks->google) ? 1 : 0,
             'services' => array(
                 'facebook' => array(
                     'txtInfo' => $txtInfo,
@@ -54,8 +64,8 @@ class Kwc_SocialMedia_2ClickButtons_Component extends Kwc_Abstract
 
     public function hasContent()
     {
-        $row = $this->getRow();
-        if ($row->facebook || $row->twitter || $row->google) return true;
+        $socialNetworks = $this->_getSocialNetworks();
+        if ($socialNetworks->facebook || $socialNetworks->twitter || $socialNetworks->google) return true;
         return false;
     }
 

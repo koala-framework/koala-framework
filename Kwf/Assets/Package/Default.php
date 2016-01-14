@@ -38,13 +38,19 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
 
     public function toUrlParameter()
     {
-        return $this->_dependencyName;
+        return $this->_dependencyName.($this->_enableLegacySupport ? ':l' : '');
     }
 
     public static function fromUrlParameter($class, $parameter)
     {
-        $dependencyName = $parameter;
-        return self::getInstance($dependencyName);
+        $param = explode(':', $parameter);
+        $dependencyName = $param[0];
+        $ret = self::getInstance($dependencyName);
+        if (isset($param[1]) && $param[1] == 'l') {
+            $ret->setEnableLegacySupport(true);
+        }
+        return $ret;
+
     }
 
     protected function _getCacheId($mimeType)
@@ -57,10 +63,10 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
 
     public static function createPackages()
     {
-        $packages = array(
-            self::getInstance('Frontend'),
-            self::getInstance('Admin')
-        );
+        $packages = array();
+        $packages[] = self::getInstance('Frontend')
+            ->setEnableLegacySupport(true);
+        $packages[] = self::getInstance('Admin');
         foreach (Kwf_Config::getValueArray('assets.packages') as $i) {
             $packages[] = self::getInstance($i);
         }

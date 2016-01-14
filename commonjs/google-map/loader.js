@@ -1,4 +1,5 @@
 var apiKeys = require('DynamicGoogleMapsApiKeys');
+var t = require('kwf/trl');
 var isLoaded = false;
 var isCallbackCalled = false;
 var callbacks = [];
@@ -38,7 +39,7 @@ module.exports = function(callback, scope)
     if (apiKeyIndex in apiKeys) {
         key = apiKeys[apiKeyIndex];
     }
-    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+trlKwf('en');
+    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+ t.trlKwf('en');
     url += '&callback=';
     url += 'kwfUp-KwfGoogleMapLoaded'.replace('-', '_');
     var s = document.createElement('script');

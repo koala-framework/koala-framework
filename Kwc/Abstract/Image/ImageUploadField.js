@@ -78,7 +78,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext2.extend(Ext2.Panel, {
             fileUploadField.getEl().child('.hover-background .message')
                 .update(trlKwf('Caution! Crop region does not match minimum requirement.'));
         }
-        if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, dimensions, scaleFactor, dpr2)) {
+        if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, dimensions, dpr2)) {
             this.getEl().addClass('error');
             fileUploadField.getEl().child('.hover-background').addClass('error');
         } else {
@@ -88,7 +88,9 @@ Kwc.Abstract.Image.ImageUploadField = Ext2.extend(Ext2.Panel, {
     },
 
     _getFileUploadField: function () {
-        return this.findByType('kwc.imagefile')[0];
+        return this.findBy(function(i) {
+            return i instanceof Kwc.Abstract.Image.ImageFile;
+        }, this)[0];
     },
 
     _getDimensionField: function () {

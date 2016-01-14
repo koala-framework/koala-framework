@@ -74,6 +74,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             'text/javascript; defer',
             'text/css',
             'text/css; defer',
+            'text/css; ie8',
         );
 
         foreach ($packages as $p) {
@@ -104,7 +105,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             $depName = $p->getDependencyName();
             $language = $langs[0];
             foreach ($exts as $extension) {
-                $cacheId = Kwf_Assets_Dispatcher::getCacheIdByPackage($p, $extension, $language);
+                $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension, $language);
                 $cacheContents = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
                 echo "$depName ";
                 $h = new Kwf_View_Helper_FileSize();
@@ -121,5 +122,24 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             }
         }
         exit;
+    }
+
+    public function countCssSelectorsAction()
+    {
+        $a = new Kwf_Util_Build_Types_Assets();
+        $langs = $a->getAllLanguages();
+
+        $packages = array(
+            Kwf_Assets_Package_Default::getInstance('Frontend'),
+        );
+
+        foreach ($packages as $p) {
+            $c = $p->getBuildContents('text/css', $langs[0]);
+            $count = Kwf_Assets_Util_CssSelectorCount::count($c);
+            echo $p->getDependency().': '.$count." rules\n";
+        }
+        exit;
+
+
     }
 }

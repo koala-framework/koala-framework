@@ -7,6 +7,7 @@ class Kwc_Basic_LinkTag_Youtube_Video_ContentSender extends Kwf_Component_Abstra
         $templateVars = $this->_data->getComponent()->getTemplateVars();
         $ret['width'] = $templateVars['config']['width'] + 20;
         $ret['height'] = $templateVars['config']['height'] + 18;
+        $ret['adaptHeight'] = true;
         return $ret;
     }
 }

@@ -8,15 +8,24 @@ class Kwf_Assets_ResponsiveEl_Provider extends Kwf_Assets_Provider_Abstract
                 return array();
             }
             $contents = $dependency->getContentsSourceString();
-            if (preg_match_all('#([^}{]*){([^}]*kwf-responsive-el-gt:[^}]*)}#', $contents, $m)) {
+            if (preg_match_all('#([^}{]*){([^}]*kwf-responsive-el-(gt|lt):[^}]*)}#', $contents, $m)) {
                 $selectors = array();
                 foreach (array_keys($m[1]) as $k) {
                     $selector = trim($m[1][$k]);
                     if (!isset($selectors[$selector])) $selectors[$selector] = array();
                     $ruleContent = $m[2][$k];
-                    if (preg_match_all('#kwf-responsive-el-gt:\s*([0-9]+)#', $ruleContent, $m2)) {
-                        foreach ($m2[1] as $size) {
-                            $selectors[$selector][] = $size;
+                    if (preg_match_all('#kwf-responsive-el-(gt|lt):\s*([0-9]+)#', $ruleContent, $m2)) {
+                        foreach (array_keys($m2[1]) as $k2) {
+                            $mode = $m2[1][$k];
+                            $size = $m2[2][$k];
+                            if ($mode == 'gt') {
+                                $selectors[$selector][] = $size;
+                            } else if ($mode == 'lt') {
+                                $selectors[$selector][] = array(
+                                    'maxWidth' => $size,
+                                    'cls' => 'lt'.$size
+                                );
+                            }
                         }
                     }
                 }

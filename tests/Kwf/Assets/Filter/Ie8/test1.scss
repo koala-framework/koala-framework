@@ -1,0 +1,9 @@
+@ie8 {
+    p {
+        color: red;
+    }
+}
+p {
+    color: green;
+}
+@media print { p { color: blue; } }

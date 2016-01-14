@@ -21,4 +21,11 @@ class Kwf_Assets_DependencyScss_Test extends Kwf_Test_TestCase
         $c = $f->getContents('en');
         $this->assertContains("body{-webkit-border-radius:3px;-moz-border-radius:3px;-ms-border-radius:3px;-o-border-radius:3px;border-radius:3px}", trim($c));
     }
+
+    public function testGlobalSetting()
+    {
+        $f = new Kwf_Assets_Dependency_File_Scss('kwf/tests/Kwf/Assets/DependencyScss/globalsetting.scss');
+        $c = $f->getContents('en');
+        $this->assertContains("body{color:red}", trim($c));
+    }
 }

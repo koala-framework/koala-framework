@@ -8,7 +8,7 @@ class Kwf_Assets_Package_Filter_UniquePrefix
             if (!window.'.$uniquePrefix.') window.'.$uniquePrefix.' = {};
             var kwfUp = window.'.$uniquePrefix.';
 
-            var kwfNamespaces = ["Kwf", "Kwc", "Ext2", "$", "jQuery", "Modernizr", "require", "trl", "trlp"];
+            var kwfNamespaces = ["Kwf", "Kwc", "Ext2", "$", "jQuery", "Modernizr", "require", "define", "trl", "trlp"];
 
             var kwfOrigExports = {};
             for (var i=0; i<kwfNamespaces.length; i++) {
@@ -17,10 +17,10 @@ class Kwf_Assets_Package_Filter_UniquePrefix
                 if (kwfUp[name]) {
                     window[name] = kwfUp[name];
                 } else {
+                    window[name] = undefined;
                     try {
                         delete window[name];
                     } catch (e) {
-                        window[name] = undefined;
                     }
                 }
             }
@@ -33,15 +33,14 @@ class Kwf_Assets_Package_Filter_UniquePrefix
                 try {
                     kwfUp[name] = window[name] || eval(name);
                 } catch(e) {
-                    continue;
                 }
                 if (kwfOrigExports[name]) {
                     window[name] = kwfOrigExports[name];
                 } else {
+                    window[name] = undefined;
                     try {
                         delete window[name];
                     } catch (e) {
-                        window[name] = undefined;
                     }
                 }
                 eval("var "+name+" = kwfUp."+name+";");

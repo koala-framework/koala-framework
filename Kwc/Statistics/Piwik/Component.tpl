@@ -1,6 +1,5 @@
 <? if ($this->domain && $this->id) { ?>
     <!-- Piwik -->
-
     <? if ($this->ignoreCode) { ?>
       <!--
       Ignore Code, because of config setting statistics.ignore or statistics.piwik.ignore
@@ -12,7 +11,7 @@
       <? if ($this->disableCookies) { ?>
       _paq.push(['disableCookies']);
       <? } else { ?>
-      if (!Kwf.Legacy.Statistics.isUserOptIn()) { _paq.push(['disableCookies']); }
+      if (!<?=$this->namespace?>Kwf.Legacy.Statistics.isUserOptIn()) { _paq.push(['disableCookies']); }
       <? } ?>
 
       <? if ($this->customTrackingDomain) { ?>

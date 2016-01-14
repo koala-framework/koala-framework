@@ -1,28 +1,12 @@
 Ext2.BLANK_IMAGE_URL = '/assets/ext2/resources/images/default/s.gif';
 
-
 Ext2.applyIf(Array.prototype, {
-
-    //deprecated! -> forEach (ist auch ein JS-Standard!)
     each : function(fn, scope){
         Ext2.each(this, fn, scope);
     },
 
-    //to use array.forEach directly
-    forEach : function(fn, scope){
-        Ext2.each(this, fn, scope);
-    },
-
-    //add is alias for push
     add : function() {
         this.push.apply(this, arguments);
-    },
-
-    //+ Jonas Raoni Soares Silva
-    //@ http://jsfromhell.com/array/shuffle [rev. #1]
-    shuffle : function() {
-        for(var j, x, i = this.length; i; j = parseInt(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x);
-        return this;
     }
 });
 

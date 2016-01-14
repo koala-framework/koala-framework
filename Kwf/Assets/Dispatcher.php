@@ -158,33 +158,7 @@ class Kwf_Assets_Dispatcher
         if (!$package instanceof Kwf_Assets_Package) {
             throw new Kwf_Exception_NotFound();
         }
-
-        $sourceMap = false;
-        if (substr($extension, -4) == '.map') {
-            $extension = substr($extension, 0, -4);
-            $sourceMap = true;
-        }
-        if ($extension == 'js') $mimeType = 'text/javascript';
-        else if ($extension == 'css') $mimeType = 'text/css';
-        else if ($extension == 'defer.js') $mimeType = 'text/javascript; defer';
-        else throw new Kwf_Exception_NotFound();
-
-        if (!$sourceMap) {
-            $contents = $package->getPackageContents($mimeType, $language)->getFileContents();
-            $mtime = $package->getMaxMTime($mimeType);
-            if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
-            else if ($extension == 'css') $mimeType = 'text/css; charset=utf-8';
-        } else {
-            $contents = $package->getPackageContents($mimeType, $language)->getMapContents(false);
-            $mtime = $package->getMaxMTime($mimeType);
-            $mimeType = 'application/json';
-        }
-        $ret = array(
-            'contents' => $contents,
-            'mimeType' => $mimeType,
-        );
-        if ($mtime) $ret['mtime'] = $mtime;
-        return $ret;
+        return $package->getUrlContents($extension, $language);
     }
 
     private function _getBaseUrlReplacements($extension, $contents)

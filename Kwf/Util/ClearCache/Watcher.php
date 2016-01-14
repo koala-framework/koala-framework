@@ -114,8 +114,8 @@ class Kwf_Util_ClearCache_Watcher
             '/eventlog',
             '/build/*',
             '/Gruntfile.js',
-            '/node_modules/',
-            '/.idea/'
+            '/node_modules/*',
+            '/.idea/*'
         ));
         $watcher->setQueueSizeLimit(100);
         $watcher->setFollowLinks(true);
@@ -174,7 +174,6 @@ class Kwf_Util_ClearCache_Watcher
                 $assetsType = substr($event->filename, strrpos($event->filename, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
-                if ($assetsType == 'js') self::_clearAssetsAll('defer.js');
 
 
             } else if ($event instanceof Event\Create || $event instanceof Event\Delete || $event instanceof Event\Move) {
@@ -184,7 +183,6 @@ class Kwf_Util_ClearCache_Watcher
                 $assetsType = substr($event->filename, strrpos($event->filename, '.')+1);
                 if ($assetsType == 'scss') $assetsType = 'css';
                 self::_clearAssetsAll($assetsType);
-                if ($assetsType == 'js') self::_clearAssetsAll('defer.js');
             }
 
         } else if (self::_endsWith($event->filename, '/dependencies.ini')) {
@@ -570,7 +568,6 @@ class Kwf_Util_ClearCache_Watcher
     {
         if (!$fileType) {
             self::_clearAssetsAll('js');
-            self::_clearAssetsAll('defer.js');
             self::_clearAssetsAll('css');
             return;
         }
@@ -612,5 +609,15 @@ class Kwf_Util_ClearCache_Watcher
         $a->flagAllPackagesOutdated($fileType);
 
         self::_informDuckcast($fileType);
+
+        if ($fileType == 'css') {
+            self::_clearAssetsAll('0.css');
+            self::_clearAssetsAll('1.css');
+            self::_clearAssetsAll('ie8.css');
+        }
+        if ($fileType == 'js') {
+            self::_clearAssetsAll('defer.js');
+        }
+
     }
 }

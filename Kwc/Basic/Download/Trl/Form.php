@@ -9,7 +9,7 @@ class Kwc_Basic_Download_Trl_Form extends Kwc_Abstract_Form
 
         $this->add(new Kwf_Form_Field_TextField('infotext', trlKwf('Descriptiontext')))
             ->setWidth(300)
-            ->setHelpText(hlpKwf('kwc_download_linktext'));
+            ->setHelpText(trlKwf('Text, shown after the file icon (automatically generated) and used as link for downloading the file.'));
 
         $this->add(new Kwf_Form_Field_ShowField('original_infotext', trlKwf('Original')))
             ->setData(new Kwf_Data_Trl_OriginalComponent('infotext'));

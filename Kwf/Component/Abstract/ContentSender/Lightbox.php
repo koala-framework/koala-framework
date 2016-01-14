@@ -111,13 +111,13 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
                 "                       <div class=\"".$kwfUniquePrefix."kwfLightboxContent\">\n".
                 "                           $lightboxContent\n".
                 "                       </div>\n".
+                "                       <a class=\"".$kwfUniquePrefix."closeButton\" href=\"$parent->url\"><span class=\"".$kwfUniquePrefix."innerCloseButton\">". trlKwf('Close') ."</span></a>\n".
                 "                   </div>\n".
                 "               </div>\n".
                 "            </div>\n".
                 "        </div>\n".
                 "        <div class=\"".$kwfUniquePrefix."kwfLightboxMask ".$kwfUniquePrefix."kwfLightboxMaskOpen\"></div>\n".
                 "    </div>\n".
-                "    <a class=\"".$kwfUniquePrefix."closeButton\" href=\"$parent->url\"></a>\n".
                 "</div>\n";
             $ret = preg_replace('#(<body[^>]*>)#', "\\1\n".$lightboxContent, $parentContent);
             if (preg_match('#<html[^>]* class#', $ret)) {

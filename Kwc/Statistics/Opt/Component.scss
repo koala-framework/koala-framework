@@ -1,25 +1,5 @@
 .kwcClass {
-    .kwfUp-kwcForm {
-        background: none;
-        padding: 0px;
-        width: auto;
-
-        .kwfFormFieldCheckbox input { 
-            margin-left: 0px;
-            margin-top: 0px;
-            position: absolute;
-            top: 2px;
-        }
-        
-        label.boxLabel { 
-            float: none;
-            margin-left: 20px;
-            font-family: inherit;
-            font-size: auto;
-        }
-        
-        .submitWrapper {
-            display: none;
-        }
+    .kwfUp-submitWrapper {
+        display: none;
     }
 }

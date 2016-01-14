@@ -157,7 +157,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         static $jsLoader;
         if (!isset($jsLoader)) $jsLoader = new Kwf_Trl_JsLoader();
         $replacements = $jsLoader->getReplacements($trlElements, $language);
-        $replacements = array_merge($replacements, $this->_getHelpReplacements($contents, $language));
         return $replacements;
     }
 
@@ -188,19 +187,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
     {
         $c = $this->_getContents($language, false);
         return $c->getFileContents();
-    }
-
-    private function _getHelpReplacements($contents, $language)
-    {
-        $ret = array();
-        $matches = array();
-        preg_match_all("#hlp\(['\"](.+?)['\"]\)#", $contents, $matches);
-        foreach ($matches[0] as $key => $search) {
-            $r = Zend_Registry::get('hlp')->hlp($matches[1][$key], $language);
-            $r = str_replace(array("\n", "\r", "'"), array('\n', '', "\\'"), $r);
-            $ret[] = array('search'=>$search, 'replace' => "'" . $r . "'");
-        }
-        return $ret;
     }
 
     public final function getContentsPacked($language)

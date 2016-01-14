@@ -4,45 +4,47 @@
 .kwcClass {
     ul {
         @include pie-clearfix;
-        li {
+
+        .kwcBem__item {
             display: block;
             float: left;
 
-            a {
-                display: block;
-                width: auto;
-            }
-            
             &.hover {
-                div.dropdown {
+                .kwcBem__dropdown {
                     display: block;
                 }
             }
 
             @include modernizr-no(touchevents) {
                 &:hover {
-                    div.dropdown {
+                    .kwcBem__dropdown {
                         display: block;
                     }
                 }
             }
         }
 
-        div.dropdown {
-            position: absolute;
-            display: none;
+        .kwcBem__link {
+            display: block;
+            width: auto;
+        }
+    }
 
-            ul {
-                margin-bottom: -1px;
+    &__dropdown {
+        position: absolute;
+        background: white;
+        display: none;
 
-                li {
+        ul {
+            margin-bottom: -1px;
+
+            li {
+                float: none;
+                margin: 0px;
+
+                a {
+                    padding: 0px;
                     float: none;
-                    margin: 0px;
-
-                    a {
-                        padding: 0px;
-                        float: none;
-                    }
                 }
             }
         }

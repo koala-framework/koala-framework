@@ -33,6 +33,8 @@ class Kwc_Statistics_Piwik_Component extends Kwc_Abstract
         ) {
             $ret['ignoreCode'] = true;
         }
+        $ret['namespace'] = Kwf_Config::getValue('application.uniquePrefix');
+        if ($ret['namespace']) $ret['namespace'] .= '.';
         return $ret;
     }
 

@@ -48,7 +48,7 @@ class Kwf_Util_Maintenance_Dispatcher
                 }
                 if ($t > $maxTime) {
                     $msg = "Maintenance job ".get_class($job)." took ".round($t, 3)."s to execute which is above the limit of $maxTime.";
-                    file_put_contents('php://error', $msg."\n");
+                    file_put_contents('php://stderr', $msg."\n");
                     $e = new Kwf_Exception($msg);
                     $e->logOrThrow();
                 }

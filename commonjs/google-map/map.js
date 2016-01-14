@@ -1,4 +1,5 @@
 var $ = require('jQuery');
+var t = require('kwf/trl');
 var onReady = require('kwf/on-ready');
 
 var maps = [];
@@ -262,7 +263,7 @@ Map.prototype = {
     _reloadMarkers: function(params)
     {
         if (!this.gmapLoader) {
-            $(this.mapContainer).append('<div id="gmapLoader">'+trlKwf('Loading...')+'</div>')
+            $(this.mapContainer).append('<div id="gmapLoader">'+ t.trlKwf('Loading...')+'</div>')
             this.gmapLoader = this.mapContainer.find('#gmapLoader');
         }
         this.gmapLoader.show();
@@ -401,7 +402,7 @@ Map.prototype = {
                 onReady.callOnContentReady(this.directionsDisplay.getPanel(), { newRender: true});
             }).defer(1, this);
         } else {
-            alert(trlKwf('Entered place could not been found!'));
+            alert(t.trlKwf('Entered place could not been found!'));
         }
     }
 };

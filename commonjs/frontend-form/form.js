@@ -30,8 +30,10 @@ var FormComponent = function(form)
     form.get(0).kwcForm = this;
     form.data('kwcForm', this);
 
-    this.el = form;
-    var config = form.parent().data('config');
+    this.el = form.find('.kwfUp-formContainer');
+    if (!this.el.length) return;
+
+    var config = form.data('config');
     if (!config) return;
     this.config = config;
     this._submitDisabled = 0;
@@ -186,8 +188,8 @@ FormComponent.prototype = {
     submit: function()
     {
         var button = this.el.find('.kwfUp-submitWrapper .kwfUp-button');
-        button.find('.kwfUp-saving').show();
-        button.find('.kwfUp-submit').hide();
+        button.prepend('<div class="kwfUp-saving"></div>');
+        button.find('.kwfUp-submit').css('visibility', 'hidden');
 
         this.errorStyle.hideErrors();
 
@@ -228,8 +230,8 @@ FormComponent.prototype = {
                 }
 
                 if (!r.successUrl) {
-                    button.find('.kwfUp-saving').hide();
-                    button.find('.kwfUp-submit').show();
+                    button.find('.kwfUp-saving').remove();
+                    button.find('.kwfUp-submit').css('visibility', 'visible');
                 }
 
                 // show success content

@@ -1,2 +1,2 @@
 var responsiveImg = require('kwf/responsive-img');
-responsiveImg('.kwcClass .container');
+responsiveImg('.kwcClass .kwcBem__container');

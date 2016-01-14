@@ -1,0 +1,3 @@
+@if not($legacy-support-for-ie6) {
+    body{color:red}
+}

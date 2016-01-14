@@ -141,6 +141,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
                         $part = str_replace($matched, $prefix.$styleAttr.$postfix, $part);
                     }
                 }
+                $part = str_replace('[-]', '&shy;', $part);
                 $ret['contentParts'][] = $part;
             }
         }

@@ -20,7 +20,7 @@ class Kwf_Assets_ResponsiveEl_JsDependency extends Kwf_Assets_Dependency_Abstrac
 
     public function getContents($language)
     {
-        return "require('kwf/responsive-el')('".$this->_selector."', [".implode(',', $this->_breakpoints)."]);\n";
+        return "require('kwf/responsive-el')('".$this->_selector."', ".json_encode($this->_breakpoints).");\n";
     }
     public function __toString()
     {

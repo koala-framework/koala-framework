@@ -132,7 +132,7 @@ abstract class Kwf_Component_Layout_Abstract
         } else {
             $parent = $data->parent;
             if (!$parent) {
-                throw new Kwf_Exception("Can't detect contexts");
+                throw new Kwf_Exception("Can't detect contexts for $data->componentId");
             }
             return Kwf_Component_Layout_Abstract::getInstance($parent->componentClass)->getChildContexts($parent, $data);
         }

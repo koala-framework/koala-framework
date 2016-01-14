@@ -29,7 +29,7 @@ module.exports = function(callback, scope)
 
     var tag = document.createElement('script');
     tag.setAttribute('type', 'text/javascript');
-    tag.setAttribute('src', '//www.youtube.com/iframe_api');
+    tag.setAttribute('src', 'https://www.youtube.com/iframe_api');
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 };

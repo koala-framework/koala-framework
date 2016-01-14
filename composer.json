@@ -23,7 +23,7 @@
     "extra": {
         "require-bower": {
             "jquery": "~1.11 || 2.*",
-            "underscore": "1.7.0",
+            "underscore": "1.8.3",
             "compass-mixins": "koala-framework/compass-mixins#7319116335050516e01b250b6e771600ab55e105",
             "tinymce": "tinymce/tinymce#4.1.9",
             "matches-selector": "1.0.3"
@@ -36,7 +36,11 @@
             "browser-pack": "5.0.1",
             "module-deps": "3.8.0",
             "JSONStream": "1.0.4",
-            "modernizr": "git://github.com/Modernizr/Modernizr.git#eb211bbcb"
+            "modernizr": "git://github.com/Modernizr/Modernizr.git#eb211bbcb",
+            "postcss": "5.0.13",
+            "es6-promise": "3.0.2",
+            "css-selectors-count": "1.0.1",
+            "postcss-chunk": "git://github.com/koala-framework/postcss-chunk.git#1b5a343cd4017d5608ece9f5f7a702f4db821171"
         },
         "require-dev-bower": {
             "qunit": "1.18.0",

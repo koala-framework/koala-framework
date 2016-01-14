@@ -135,11 +135,14 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
     public function getDependency($dependencyName)
     {
         $ret = null;
-        if (strtolower($dependencyName) == $this->_path || strtolower($dependencyName).'.js' == $this->_path) {
+        if (strtolower($dependencyName) == strtolower($this->_path) || strtolower($dependencyName).'.js' == strtolower($this->_path)) {
             $type = $this->_path;
+            if (substr($type, -3) == '.js') {
+                $type = substr($type, 0, -3);
+            }
             $dir = VENDOR_PATH.'/bower_components/'.$this->_path;
             if (file_exists($dir.'/bower.json')) {
-                $ret = new Kwf_Assets_Dependency_Dependencies(array(), $dependencyName);
+                $dependencies = array();
                 $bower = json_decode(file_get_contents($dir.'/bower.json'), true);
                 if (isset($bower['dependencies'])) {
                     foreach ($bower['dependencies'] as $depName=>$version) {
@@ -147,12 +150,13 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
                         if (!$d) {
                             throw new Kwf_Exception("Can't find dependency '$depName'");
                         }
-                        $ret->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $d);
+                        $dependencies[] = $d;
                     }
                 }
                 if (isset($bower['main'])) {
                     $main = $bower['main'];
                     if (is_string($main)) $main = array($main);
+                    $mainDeps = array('js'=>array(), 'css'=>array());
                     foreach ($main as $mainFile) {
                         $mainFile = $mainFile;
                         if (substr($mainFile, -3) == '.js') {
@@ -169,18 +173,25 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
                             } else {
                                 $d = new Kwf_Assets_Dependency_File_Js($type.'/'.$mainFile);
                             }
-                            $ret->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $d);
+                            $mainDeps['js'][] = $d;
                         } elseif (substr($mainFile, -4) == '.css') {
                             $d = new Kwf_Assets_Dependency_File_Css($type.'/'.$mainFile);
-                            $ret->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $d);
+                            $mainDeps['css'][] = $d;
                         }
                     }
                 } else {
                     throw new Kwf_Exception("No main property in $dir/bower.json");
                 }
-                $deps = $ret->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL);
-                if (count($deps) == 1) {
-                    $ret = $deps[0];
+                if (count($mainDeps['js']) == 1) {
+                    //if there is a single js file in main return that and add the other dependencies
+                    $ret = $mainDeps['js'][0];
+                    $ret->addDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $mainDeps['css']);
+                    $ret->addDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $dependencies);
+                } else {
+                    $ret = new Kwf_Assets_Dependency_Dependencies(array(), $dependencyName);
+                    $ret->addDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $mainDeps['js']);
+                    $ret->addDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $mainDeps['css']);
+                    $ret->addDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $dependencies);
                 }
             } else {
                 $ret = $this->_guessMainFiles($dependencyName);
@@ -207,6 +218,9 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             } else {
                 throw new Kwf_Exception("Can't find font dependency for $dependencyName");
             }
+        } else if  (substr(strtolower($dependencyName), 0, strlen($this->_path)+1) == strtolower($this->_path).'/') {
+            //absolute path to single file path given
+            return new Kwf_Assets_Dependency_File_Js($dependencyName.'.js');
         }
         return $ret;
     }

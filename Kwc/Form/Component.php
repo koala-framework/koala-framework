@@ -336,6 +336,12 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
 
         $ret['message'] = null;
 
+        $ret['rootElementClass'] .= ' kwfUp-webForm kwfUp-kwcForm';
+
+        if ($ret['errors']) {
+            $ret['rootElementClass'] .= ' kwfUp-kwcFormError kwfUp-webFormError';
+        }
+
         $cacheId = 'kwcFormCu-'.get_class($this);
         $controllerUrl = Kwf_Cache_SimpleStatic::fetch($cacheId);
         if (!$controllerUrl) {

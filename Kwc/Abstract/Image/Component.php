@@ -65,9 +65,11 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['assetsAdmin']['files'][] = 'kwf/Kwf_js/Utils/Resizable.js';
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Abstract/Image/ImageFile.js';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'kwf_upload_id';
+        $ret['outputImgTag'] = true;
 
         $ret['defineWidth'] = false;
         $ret['maxWidthImageWidth'] = true;
+        $ret['inlineTags'] = false;
         return $ret;
     }
 
@@ -120,6 +122,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['baseUrl'] = $this->getBaseImageUrl();
         $ret['defineWidth'] = $this->_getSetting('defineWidth');
         $ret['lazyLoadOutOfViewport'] = $this->_getSetting('lazyLoadOutOfViewport');
+        $ret['outputImgTag'] = $this->_getSetting('outputImgTag');
+        $ret['inlineTags'] = $this->_getSetting('inlineTags');
 
         $ret['style'] = '';
         $ret['captionStyle'] = '';
@@ -130,7 +134,6 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         if ($this->_getSetting('defineWidth')) $ret['style'] .= 'width:'.$ret['width'].'px;';
 
         $ret['containerClass'] = $this->_getBemClass("container").' kwfUp-kwcImageContainer ';
-        if ($ret['width'] > 100) $ret['containerClass'] .= ' kwfUp-webResponsiveImgLoading';
         if (!$this->_getSetting('lazyLoadOutOfViewport')) $ret['containerClass'] .= ' kwfUp-loadImmediately';
 
         $ret['imgCssClass'] = $this->_getSetting('imgCssClass');

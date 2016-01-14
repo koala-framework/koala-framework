@@ -22,15 +22,6 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         $cropWidth = $row->crop_width;
         $cropHeight = $row->crop_height;
 
-        if ($row->getParentRow('Image')) {
-            $scaleFactor = Kwf_Media_Image::getHandyScaleFactor($row->getParentRow('Image')->getFileSource());
-            if ($scaleFactor != 1) {
-                $cropX = $row->crop_x !== null ? $row->crop_x / $scaleFactor : null;
-                $cropY = $row->crop_y !== null ? $row->crop_y / $scaleFactor : null;
-                $cropWidth = $row->crop_width !== null ? $row->crop_width / $scaleFactor : null;
-                $cropHeight = $row->crop_height !== null ? $row->crop_height / $scaleFactor : null;
-            }
-        }
         $cover = false;
         if (isset($d['cover'])) {
             $cover = $d['cover'];
@@ -77,16 +68,6 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
                 ? $value['cropData']['width'] : null;
             $row->crop_height = (isset($value['cropData']['height']) && $value['cropData']['height'])
                 ? $value['cropData']['height'] : null;
-
-            if ($row->getParentRow('Image')) {
-                $scaleFactor = Kwf_Media_Image::getHandyScaleFactor($row->getParentRow('Image')->getFileSource());
-                if ($scaleFactor != 1) {
-                    $row->crop_x = $row->crop_x * $scaleFactor;
-                    $row->crop_y = $row->crop_y * $scaleFactor;
-                    $row->crop_width = $row->crop_width * $scaleFactor;
-                    $row->crop_height = $row->crop_height * $scaleFactor;
-                }
-            }
         } else {
             $row->crop_x = null;
             $row->crop_y = null;
