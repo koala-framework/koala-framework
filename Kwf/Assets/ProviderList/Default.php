@@ -28,6 +28,7 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $providers[] = new Kwf_Assets_Provider_KwfCommonJs();
         $providers[] = new Kwf_Assets_CommonJs_JQueryPluginProvider();
         $providers[] = new Kwf_Assets_ResponsiveEl_Provider();
+        $providers[] = new Kwf_Assets_CommonJs_Underscore_TemplateProvider();
         parent::__construct($providers);
     }
 }
