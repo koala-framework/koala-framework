@@ -22,8 +22,8 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
             'data' => array(
             )
         ));
-        $fRow = $this->_uploadsModel->createRow()->writeFile('asdf', 'foo', 'txt');
-        $this->_uploadsModel->createRow()->writeFile('asdf1', 'foo1', 'txt');
+        $fRow = $this->_uploadsModel->createRow()->writeFile('asdf', 'foo', 'txt', 'text/plain');
+        $this->_uploadsModel->createRow()->writeFile('asdf1', 'foo1', 'txt', 'text/plain');
 
         $this->_row = $this->_model->createRow();
         $this->_row->upload_id = $fRow->id;
