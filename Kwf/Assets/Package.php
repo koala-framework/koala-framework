@@ -144,14 +144,14 @@ class Kwf_Assets_Package
         foreach ($i->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS) as $depName=>$dep) {
             $ret[$depName] = $dep->__toString();
             if (!isset($data[$dep->__toString()])) {
-                $commonJsDeps = $this->_getCommonJsDeps($dep, $language, $data);
                 $data[$dep->__toString()] = array(
                     'id' => $dep->__toString(),
                     'source' => $c = $dep->getContentsPacked($language)->getFileContentsInlineMap(false),
                     'sourceFile' => $dep->__toString(), //TODO
-                    'deps' => $commonJsDeps,
+                    'deps' => array(),
                     'entry' => false
                 );
+                $data[$dep->__toString()]['deps'] = $this->_getCommonJsDeps($dep, $language, $data);
             }
         }
         return $ret;
