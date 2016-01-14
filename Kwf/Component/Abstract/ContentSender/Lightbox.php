@@ -111,7 +111,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
                 "                       <div class=\"".$kwfUniquePrefix."kwfLightboxContent\">\n".
                 "                           $lightboxContent\n".
                 "                       </div>\n".
-                "                       <a class=\"".$kwfUniquePrefix."closeButton\" href=\"$parent->url\"><span class=\"".$kwfUniquePrefix."innerCloseButton\">". trlKwf('Close') ."</span></a>\n".
+                "                       <a class=\"".$kwfUniquePrefix."closeButton\" href=\"$parent->url\"><span class=\"".$kwfUniquePrefix."innerCloseButton\">". $this->_data->trlKwf('Close') ."</span></a>\n".
                 "                   </div>\n".
                 "               </div>\n".
                 "            </div>\n".
