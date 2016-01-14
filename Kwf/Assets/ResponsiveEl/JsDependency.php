@@ -18,10 +18,12 @@ class Kwf_Assets_ResponsiveEl_JsDependency extends Kwf_Assets_Dependency_Abstrac
         return 'text/javascript';
     }
 
-    public function getContents($language)
+    public function getContentsPacked($language)
     {
-        return "require('kwf/responsive-el')('".$this->_selector."', ".json_encode($this->_breakpoints).");\n";
+        $ret = "require('kwf/responsive-el')('".$this->_selector."', ".json_encode($this->_breakpoints).");\n";
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
+
     public function __toString()
     {
         return $this->_dependencyName;

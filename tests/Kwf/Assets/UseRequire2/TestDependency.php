@@ -7,9 +7,10 @@ class Kwf_Assets_UseRequire2_TestDependency extends Kwf_Assets_Dependency_Abstra
         $this->_contents = $contents;
     }
 
-    public function getContents($language)
+    public function getContentsPacked($language)
     {
-        return $this->_contents;
+        $ret = $this->_contents;
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
 

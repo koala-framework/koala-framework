@@ -2,7 +2,6 @@
 class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
 {
     protected $_fileName;
-    private $_mtimeCache;
     private $_fileNameCache;
     private $_sourceStringCache;
 
@@ -25,9 +24,11 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         //}
     }
 
-    public function getContents($language)
+    public function getContentsPacked($language)
     {
-        return $this->getContentsSourceString();
+        $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($this->getContentsSourceString());
+        $ret->addSource($this->_fileName);
+        return $ret;
     }
 
     public function getContentsSource()
@@ -52,6 +53,11 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     }
 
     public function getFileNameWithType()
+    {
+        return $this->_fileName;
+    }
+
+    public function getIdentifier()
     {
         return $this->_fileName;
     }
@@ -114,17 +120,6 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         $this->_fileNameCache = $f;
 
         return $f;
-    }
-
-    public function getMTime()
-    {
-        if (!isset($this->_mtimeCache)) {
-            $f = $this->getAbsoluteFileName();
-            if ($f) {
-                $this->_mtimeCache = filemtime($f);
-            }
-        }
-        return $this->_mtimeCache;
     }
 
     public static function createDependency($fileName, Kwf_Assets_ProviderList_Abstract $providerList)

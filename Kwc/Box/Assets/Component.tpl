@@ -1,1 +1,3 @@
-<?= $this->assets($this->assetsPackage, $this->language) ?>
+<? foreach ($this->assetsPackages as $package) { ?>
+<?= $this->assets($package, $this->language) ?>
+<? } ?>
