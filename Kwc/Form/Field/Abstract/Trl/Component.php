@@ -14,6 +14,7 @@ class Kwc_Form_Field_Abstract_Trl_Component extends Kwc_Chained_Trl_Component
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $ret = Kwc_Abstract::getTemplateVars($renderer);
+        $this->getFormField()->trlStaticExecute($this->getData()->getLanguage());
         $form = $this->_getForm();
 
         //initialize form, sets formName on fields
