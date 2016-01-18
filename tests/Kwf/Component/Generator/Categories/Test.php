@@ -184,4 +184,19 @@ class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
         $page = $this->_root->getComponentById(1);
         $this->assertEquals(5, $page->getChildComponent(array('filename' => 'foo'))->componentId);
     }
+
+    public function testParentIdChangeHistory()
+    {
+        $pm = Kwf_Model_Abstract::getInstance('Kwf_Component_Generator_Categories_PagesModel');
+
+        $this->assertEquals(2, $this->_root->getComponentById(1)->getChildComponent(array('filename' => 'foo'))->componentId);
+
+        $row = $pm->getRow(2);
+        $row->parent_id = 4;
+        $row->save();
+        $this->_process();
+
+        $this->assertEquals(2, $this->_root->getComponentById(1)->getChildComponent(array('filename' => 'foo'))->componentId);
+        $this->assertEquals(2, $this->_root->getComponentById(4)->getChildComponent(array('filename' => 'foo'))->componentId);
+    }
 }
