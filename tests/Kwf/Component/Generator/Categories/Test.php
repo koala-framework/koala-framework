@@ -199,4 +199,63 @@ class Kwf_Component_Generator_Categories_Test extends Kwc_TestAbstract
         $this->assertEquals(2, $this->_root->getComponentById(1)->getChildComponent(array('filename' => 'foo'))->componentId);
         $this->assertEquals(2, $this->_root->getComponentById(4)->getChildComponent(array('filename' => 'foo'))->componentId);
     }
+
+    public function testParentIdChangeHistory2()
+    {
+        $this->markTestIncomplete();
+        $pm = Kwf_Model_Abstract::getInstance('Kwf_Component_Generator_Categories_PagesModel');
+
+        // foo (2)
+        //  |- bar (5)
+        $row = $pm->createRow(array(
+            'id'=>5, 'pos'=>1, 'visible'=>true, 'name'=>'Bar', 'filename' => 'bar', 'custom_filename' => false,
+            'parent_id'=>2, 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id' => 'root',
+        ));
+        $row->save();
+        $this->_process();
+
+        $this->assertEquals(5, $this->_root->getComponentById(2)->getChildComponent(array('filename' => 'bar'))->componentId);
+
+        // foo2 (6)
+        //  | foo (2)
+        //     |- bar (5)
+        $row = $pm->createRow(array(
+            'id'=>6, 'pos'=>2, 'visible'=>true, 'name'=>'Foo2', 'filename' => 'foo2', 'custom_filename' => false,
+            'parent_id'=>1, 'component'=>'empty', 'is_home'=>false, 'hide'=>false, 'parent_subroot_id' => 'root',
+        ));
+        $row->save();
+        $row = $pm->getRow(2);
+        $row->parent_id = 6;
+        $row->save();
+        $this->_process();
+
+        $this->assertNull($this->_root->getComponentById(6)->getChildComponent(array('filename' => 'bar')));
+
+        // foo (6)
+        //  | foo (2)
+        //     |- bar (5)
+        $row = $pm->getRow(6);
+        $row->name = 'Foo';
+        $row->filename = 'foo';
+        $row->save();
+        $this->_process();
+
+        $component = $this->_root->getComponentById(6)->getChildComponent(array('filename' => 'bar'));
+        $this->assertEquals(5, $component->componentId);
+        $this->assertEquals(2, $component->parent->componentId);
+        $this->assertEquals(6, $component->parent->parent->componentId);
+
+
+        // foo2 (6)
+        //  | foo (2)
+        //     |- bar (5)
+        $row = $pm->getRow(6);
+        $row->name = 'Foo2';
+        $row->filename = 'foo2';
+        $row->save();
+        $this->_process();
+
+        $this->assertEquals(6, $this->_root->getComponentById(1)->getChildComponent(array('filename' => 'foo'))->componentId);
+        $this->assertEquals(5, $this->_root->getComponentById(6)->getChildComponent(array('filename' => 'bar'))->componentId);
+    }
 }
