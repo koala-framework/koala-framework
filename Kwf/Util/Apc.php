@@ -21,7 +21,7 @@ class Kwf_Util_Apc
     {
         static $hasApc;
         if (isset($hasApc)) return $hasApc;
-        $hasApc = extension_loaded('apc');
+        $hasApc = extension_loaded('apc') || extension_loaded('apcu');
         if (!$hasApc && PHP_SAPI == 'cli') {
             //apc might be enabled in webserver only, not in cli
             $hasApc = Kwf_Util_Apc::callUtil('is-loaded', array(), array('returnBody'=>true)) == 'OK1';
@@ -199,7 +199,11 @@ class Kwf_Util_Apc
             }
             if (isset($_REQUEST['cacheIds'])) {
                 foreach (explode(',', $_REQUEST['cacheIds']) as $cacheId) {
-                    apc_delete($cacheId);
+                    if (extension_loaded('apcu')) {
+                        apcu_delete($cacheId);
+                    } else {
+                        apc_delete($cacheId);
+                    }
                 }
             }
             if (isset($_REQUEST['files']) && function_exists('apc_delete_file')) {
@@ -237,7 +241,7 @@ class Kwf_Util_Apc
             self::iterate();
         } else if ($uri == '/kwf/util/apc/is-loaded') {
 
-            if (extension_loaded('apc')) {
+            if (extension_loaded('apc') || extension_loaded('apcu')) {
                 echo 'OK1';
             } else {
                 echo 'OK0';

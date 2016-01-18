@@ -5,7 +5,7 @@ class Kwf_Component_Cache_Mysql_Test extends Kwc_TestAbstract
 {
     public function setUp()
     {
-        if (Kwf_Cache_Simple::getBackend() == 'apc') $this->markTestSkipped("Test doesn't work with apc in cli.");
+        if (Kwf_Cache_Simple::getBackend() == 'apc' || Kwf_Cache_Simple::getBackend() == 'apcu') $this->markTestSkipped("Test doesn't work with apc in cli.");
         parent::setUp('Kwf_Component_Cache_Mysql_Root_Component');
         Kwf_Component_Cache::setInstance(new Kwf_Component_Cache_Mysql_Cache());
     }
