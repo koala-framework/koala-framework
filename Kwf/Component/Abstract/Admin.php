@@ -242,8 +242,8 @@ class Kwf_Component_Abstract_Admin
         return null;
     }
 
-    public function getScssConfigMTime()
+    public function getScssConfigMasterFiles()
     {
-        return null;
+        return array();
     }
 }

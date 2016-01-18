@@ -22,11 +22,6 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         return 'text/javascript';
     }
 
-    public function warmupCaches()
-    {
-        $this->getContents('en');
-    }
-
     private function _getOutputFile()
     {
         if (isset($this->_outputFile)) {
@@ -42,7 +37,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         return $this->_outputFile;
     }
 
-    public function getContents($language)
+    public function getContentsPacked($language)
     {
         if (isset($this->_contentsCache)) return $this->_contentsCache;
 
@@ -52,7 +47,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         $outputFile = $this->_getOutputFile();
 
         if (file_exists($outputFile)) {
-            $ret = file_get_contents($outputFile);
+            $ret = Kwf_SourceMaps_SourceMap::createEmptyMap(file_get_contents($outputFile));
             $this->_contentsCache = $ret;
             return $ret;
         }
@@ -109,17 +104,17 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         }
         $ret = file_get_contents($outputFile);
 
+        $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
         $this->_contentsCache = $ret;
         return $ret;
     }
 
-    public function getMTime()
+    public function __toString()
     {
-        if (!file_exists($this->_getOutputFile())) return time();
-        return filemtime($this->_getOutputFile());
+        return 'Modernizr('.implode(',', $this->_features).')';
     }
 
-    public function __toString()
+    public function getIdentifier()
     {
         return 'Modernizr('.implode(',', $this->_features).')';
     }

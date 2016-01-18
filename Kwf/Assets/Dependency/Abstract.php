@@ -35,22 +35,13 @@ abstract class Kwf_Assets_Dependency_Abstract
         return $this->_isCommonJsEntry;
     }
 
-    public function getContents($language)
-    {
-        return null;
-    }
-
-    public function getContentsPacked($language)
-    {
-        $contents = $this->getContents($language);
-        return Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
-    }
+    abstract public function getContentsPacked($language);
 
     public function getContentsSource()
     {
         return array(
             'type' => 'contents',
-            'contents' => $this->getContents('en'),
+            'contents' => '',
         );
     }
 
@@ -129,18 +120,14 @@ abstract class Kwf_Assets_Dependency_Abstract
         return true;
     }
 
-    public function getMTime()
-    {
-        return null;
-    }
-
-    public function warmupCaches()
-    {
-    }
-
     public function __toString()
     {
         return get_class($this);
+    }
+
+    public function getIdentifier()
+    {
+        throw new Kwf_Exception("getIdentifier is not implemented for '$this'");
     }
 
     public function toDebug()

@@ -48,6 +48,7 @@ class Kwf_Util_Build
         $output = isset($options['output']) ? $options['output'] : false;
         $excludeTypes = isset($options['excludeTypes']) ? $options['excludeTypes'] : array();
 
+        Kwf_Cache_SimpleStatic::disableFileCache();
         Kwf_Events_ModelObserver::getInstance()->disable();
 
         Kwf_Util_MemoryLimit::set(512);

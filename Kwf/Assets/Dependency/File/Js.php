@@ -14,11 +14,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         parent::__construct($fileName);
     }
 
-    protected function _getRawContents($language)
-    {
-        return parent::getContents($language);
-    }
-
     public function usesLanguage()
     {
         $this->warmupCaches();
@@ -30,7 +25,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         if (isset($this->_contentsCache)) return;
 
         $fileName = $this->getFileNameWithType();
-        $rawContents = $this->_getRawContents(null);
+        $rawContents = file_get_contents($this->getAbsoluteFileName());
 
 
         $usesUniquePrefix = strpos($rawContents, 'kwfUp-') !== false;
@@ -114,27 +109,17 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         );
     }
 
-    protected function _getContents($language, $pack)
+    public final function getContentsPacked($language)
     {
-        if ($pack) {
-            $compiledContents = $this->_getCompliedContents();
-            $map = $compiledContents['contents'];
-            $trlElements = $compiledContents['trlElements'];
-        } else {
-            $contents = $this->_getRawContents(null);
-            $map = Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
-            $trlElements = Kwf_TrlJsParser_JsParser::parseContent($contents);
-            unset($contents);
-        }
+        $compiledContents = $this->_getCompliedContents();
+        $map = $compiledContents['contents'];
+        $trlElements = $compiledContents['trlElements'];
 
         if ($trlElements) {
 
-            $buildFile = false;
-            if ($pack) {
-                $buildFile = "cache/assets/".$this->getFileNameWithType().'-'.$language;
-                $dir = dirname($buildFile);
-                if (!file_exists($dir)) mkdir($dir, 0777, true);
-            }
+            $buildFile = "cache/assets/".$this->getFileNameWithType().'-'.$language;
+            $dir = dirname($buildFile);
+            if (!file_exists($dir)) mkdir($dir, 0777, true);
 
             if (!$buildFile || !file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
                 foreach ($this->_getTrlReplacements($trlElements, $map->getFileContents(), $language) as $value) {
@@ -158,40 +143,5 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         if (!isset($jsLoader)) $jsLoader = new Kwf_Trl_JsLoader();
         $replacements = $jsLoader->getReplacements($trlElements, $language);
         return $replacements;
-    }
-
-
-    public static function pack($ret)
-    {
-
-
-        $ret = str_replace("\r", "\n", $ret);
-
-        // remove comments
-        $ret = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*'.'/!', '', $ret);
-        // deaktiviert wg. urls mit http:// in hilfetexten $contents = preg_replace('!//[^\n]*!', '', $ret);
-
-        // remove tabs, spaces, newlines, etc. - funktioniert nicht - da fehlen hinundwider ;
-        //$ret = str_replace(array("\r", "\n", "\t"), "", $ret);
-
-        // multiple whitespaces
-        $ret = str_replace("\t", " ", $ret);
-        $ret = preg_replace('/(\n)\n+/', '$1', $ret);
-        $ret = preg_replace('/(\n)\ +/', '$1', $ret);
-        $ret = preg_replace('/(\ )\ +/', '$1', $ret);
-
-        return $ret;
-    }
-
-    public final function getContents($language)
-    {
-        $c = $this->_getContents($language, false);
-        return $c->getFileContents();
-    }
-
-    public final function getContentsPacked($language)
-    {
-        $c = $this->_getContents($language, true);
-        return $c;
     }
 }

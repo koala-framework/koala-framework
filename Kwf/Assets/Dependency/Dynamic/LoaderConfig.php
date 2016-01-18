@@ -13,7 +13,7 @@ class Kwf_Assets_Dependency_Dynamic_LoaderConfig extends Kwf_Assets_Dependency_A
         return 'text/javascript';
     }
 
-    public function getContents($language)
+    public function getContentsPacked($language)
     {
         $config = array(
             'providerList' => get_class($this->_providerList)
@@ -22,11 +22,16 @@ class Kwf_Assets_Dependency_Dynamic_LoaderConfig extends Kwf_Assets_Dependency_A
         $ret .= "if (!window.Kwf) window.Kwf = {};\n";
         $ret .= "if (!window.Kwf.Loader) window.Kwf.Loader = {};\n";
         $ret .= "window.Kwf.Loader.config = ".json_encode($config).";\n";
-        return $ret;
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
     public function usesLanguage()
     {
         return false;
+    }
+
+    public function getIdentifier()
+    {
+        return 'LoaderConfig';
     }
 }

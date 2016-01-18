@@ -6,13 +6,6 @@ class Kwf_Assets_CommonJs_JQueryPluginDecoratorDependency extends Kwf_Assets_Dep
         return "var jQuery = require('jQuery');\n";
     }
 
-    public function getContents($language)
-    {
-        $ret = $this->_dep->getContents($language);
-        $ret = $this->_getPrependCode().$ret;
-        return $ret;
-    }
-
     public function getContentsPacked($language)
     {
         $c = $this->_dep->getContentsPacked($language);
@@ -20,4 +13,10 @@ class Kwf_Assets_CommonJs_JQueryPluginDecoratorDependency extends Kwf_Assets_Dep
         $ret->concat($c);
         return $ret;
     }
+
+    public function getIdentifier()
+    {
+        return 'JQueryPlugin('.$this->_dep->getIdentifier().')';
+    }
+
 }

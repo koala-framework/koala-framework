@@ -28,6 +28,16 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $providers[] = new Kwf_Assets_Provider_KwfCommonJs();
         $providers[] = new Kwf_Assets_CommonJs_JQueryPluginProvider();
         $providers[] = new Kwf_Assets_ResponsiveEl_Provider();
-        parent::__construct($providers);
+
+        $filters = array();
+        $filters[] = new Kwf_Assets_Filter_Css_MultiplePostCss(array(
+            new Kwf_Assets_Filter_Css_Autoprefixer(),
+            new Kwf_Assets_Filter_Css_PrefixerKeyframes(),
+            //new Kwf_Assets_Filter_Css_PrefixerFontface(),
+            new Kwf_Assets_Filter_Css_MediaQueriesDropRedundant(),
+            new Kwf_Assets_Filter_Css_UniquePrefix(),
+        ));
+
+        parent::__construct($providers, $filters);
     }
 }

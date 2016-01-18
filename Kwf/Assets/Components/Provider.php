@@ -56,172 +56,9 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
             }
 
             foreach ($componentClasses as $class) {
-
-                $deps = $this->_getComponentSettingDependenciesDep($class, 'assetsDefer', true);
-                if ($deps) {
-                    $deps = new Kwf_Assets_Dependency_Dependencies($deps, $class.'-deps-defer');
-                    $deps->setDeferLoad(true);
-                    $ret[] = $deps;
-                }
-
-                $deps = $this->_getComponentSettingDependenciesDep($class, 'assets', true);
-                if ($deps) {
-                    $deps = new Kwf_Assets_Dependency_Dependencies($deps, $class.'-deps');
-                    $ret[] = $deps;
-                }
-
-                $deps = array();
-                foreach ($this->_getComponentSettingDependenciesFiles($class, 'assets', true) as $dep) {
-                    if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z]+$#', $dep->getFileNameWithType())) {
-                        $deps[] = array(
-                            'dep' => $dep,
-                            'master' => true,
-                            'defer' => false
-                        );
-                    } else {
-                        $deps[] = array(
-                            'dep' => $dep,
-                            'master' => false,
-                            'defer' => false
-                        );
-                    }
-                }
-                foreach ($this->_getComponentSettingDependenciesFiles($class, 'assetsDefer', true) as $dep) {
-                    if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z\.]+$#', $dep->getFileNameWithType())) {
-                        $deps[] = array(
-                            'dep' => $dep,
-                            'master' => true,
-                            'defer' => true
-                        );
-                    } else {
-                        $deps[] = array(
-                            'dep' => $dep,
-                            'master' => false,
-                            'defer' => true
-                        );
-                    }
-                }
-
-                //alle dateien der vererbungshierache includieren
-                $files = Kwc_Abstract::getSetting($class, 'componentFiles');
-                $componentCssFiles = array();
-                foreach (array_merge($files['css'], $files['js']) as $f) {
-                    $componentCssFiles[] = $f;
-                }
-
-                //reverse damit css von weiter unten in der vererbungshierachie überschreibt
-                $componentCssFiles = array_reverse($componentCssFiles);
-                foreach ($componentCssFiles as $i) {
-                    $dep = $this->_createDependencyForFile($i, true);
-                    if (substr($i, -8) == 'defer.js') {
-                        $deps[] = array(
-                            'dep' => $dep,
-                            'master' => false,
-                            'defer' => true
-                        );
-                    } else {
-                        $deps[] = array(
-                            'dep' => $dep,
-                            'master' => false,
-                            'defer' => false
-                        );
-                    }
-                    if ($dep instanceof Kwf_Assets_Dependency_File_Scss) {
-                        if ($scssConfig = Kwc_Admin::getInstance($class)->getScssConfig()) {
-                            $dep->setConfig($scssConfig, Kwc_Admin::getInstance($class)->getScssConfigMTime());
-                        }
-                    }
-                }
-
-                //reverse damit css von weiter unten in der vererbungshierachie überschreibt
-                $componentCssFiles = array_reverse($files['masterCss']);
-                foreach ($componentCssFiles as $i) {
-                    $dep = $this->_createDependencyForFile($i, true);
-                    if (substr($i, -8) == 'defer.js') {
-                        $deps[] = array(
-                            'dep' => $dep,
-                            'master' => true,
-                            'defer' => true
-                        );
-                    } else {
-                        $deps[] = array(
-                            'dep' => $dep,
-                            'master' => true,
-                            'defer' => false
-                        );
-                    }
-                }
-
-
-                //css, not master
-                $matchingDeps = array();
-                foreach ($deps as $i) {
-                    if ($i['dep']->getMimeType() == 'text/css' && $i['master'] == false) {
-                        $matchingDeps[] = $i['dep'];
-                    }
-                }
-                if ($matchingDeps) {
-                    $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $matchingDeps, false, $class.'-css');
-                }
-
-                //css, master
-                $matchingDeps = array();
-                foreach ($deps as $i) {
-                    if ($i['dep']->getMimeType() == 'text/css' && $i['master'] == true) {
-                        $matchingDeps[] = $i['dep'];
-                    }
-                }
-                if ($matchingDeps) {
-                    $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $matchingDeps, true, $class.'-master-css');
-                }
-
-                //js, not master, not defer
-                $matchingDeps = array();
-                foreach ($deps as $i) {
-                    if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == false && $i['defer'] == false) {
-                        $matchingDeps[] = $i['dep'];
-                    }
-                }
-                if ($matchingDeps) {
-                    $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, false, $class.'-js');
-                }
-
-                //js, master, not defer
-                $matchingDeps = array();
-                foreach ($deps as $i) {
-                    if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == true && $i['defer'] == false) {
-                        $matchingDeps[] = $i['dep'];
-                    }
-                }
-                if ($matchingDeps) {
-                    $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, true, $class.'-master-js');
-                }
-
-                //js, not master, defer
-                $matchingDeps = array();
-                foreach ($deps as $i) {
-                    if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == false && $i['defer'] == true) {
-                        $matchingDeps[] = $i['dep'];
-                    }
-                }
-                if ($matchingDeps) {
-                    $dep = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, false, $class.'-defer-js');
-                    $dep->setDeferLoad(true);
-                    $ret[] = $dep;
-                }
-
-                //js, master, defer
-                $matchingDeps = array();
-                foreach ($deps as $i) {
-                    if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == true && $i['defer'] == true) {
-                        $matchingDeps[] = $i['dep'];
-                    }
-                }
-                if ($matchingDeps) {
-                    $dep = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, true, $class.'-master-defer-js');
-                    $dep->setDeferLoad(true);
-                    $ret[] = $dep;
-                }
+                $d = $this->_providerList->findDependency('Component-'.$class);
+                if (!$d) throw new Kwf_Exception("Didn't get dependency 'Component-$class'");
+                $ret[] = $d;
             }
             return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
 
@@ -255,6 +92,179 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
             $deps[] = $dep;
 
             return new Kwf_Assets_Dependency_Dependencies($deps, 'FrontendCore');
+        } else if (substr($dependencyName, 0, 10) == 'Component-') {
+
+            $class = substr($dependencyName, 10);
+
+            $ret = array();
+
+            $deps = $this->_getComponentSettingDependenciesDep($class, 'assetsDefer', true);
+            if ($deps) {
+                $deps = new Kwf_Assets_Dependency_Dependencies($deps, $class.'-deps-defer');
+                $deps->setDeferLoad(true);
+                $ret[] = $deps;
+            }
+
+            $deps = $this->_getComponentSettingDependenciesDep($class, 'assets', true);
+            if ($deps) {
+                $deps = new Kwf_Assets_Dependency_Dependencies($deps, $class.'-deps');
+                $ret[] = $deps;
+            }
+
+            $deps = array();
+            foreach ($this->_getComponentSettingDependenciesFiles($class, 'assets', true) as $dep) {
+                if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z]+$#', $dep->getFileNameWithType())) {
+                    $deps[] = array(
+                        'dep' => $dep,
+                        'master' => true,
+                        'defer' => false
+                    );
+                } else {
+                    $deps[] = array(
+                        'dep' => $dep,
+                        'master' => false,
+                        'defer' => false
+                    );
+                }
+            }
+            foreach ($this->_getComponentSettingDependenciesFiles($class, 'assetsDefer', true) as $dep) {
+                if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z\.]+$#', $dep->getFileNameWithType())) {
+                    $deps[] = array(
+                        'dep' => $dep,
+                        'master' => true,
+                        'defer' => true
+                    );
+                } else {
+                    $deps[] = array(
+                        'dep' => $dep,
+                        'master' => false,
+                        'defer' => true
+                    );
+                }
+            }
+
+            //alle dateien der vererbungshierache includieren
+            $files = Kwc_Abstract::getSetting($class, 'componentFiles');
+            $componentCssFiles = array();
+            foreach (array_merge($files['css'], $files['js']) as $f) {
+                $componentCssFiles[] = $f;
+            }
+
+            //reverse damit css von weiter unten in der vererbungshierachie überschreibt
+            $componentCssFiles = array_reverse($componentCssFiles);
+            foreach ($componentCssFiles as $i) {
+                $dep = $this->_createDependencyForFile($i, true);
+                if (substr($i, -8) == 'defer.js') {
+                    $deps[] = array(
+                        'dep' => $dep,
+                        'master' => false,
+                        'defer' => true
+                    );
+                } else {
+                    $deps[] = array(
+                        'dep' => $dep,
+                        'master' => false,
+                        'defer' => false
+                    );
+                }
+                if ($dep instanceof Kwf_Assets_Dependency_File_Scss) {
+                    if ($scssConfig = Kwc_Admin::getInstance($class)->getScssConfig()) {
+                        $dep->setConfig($scssConfig, Kwc_Admin::getInstance($class)->getScssConfigMasterFiles());
+                    }
+                }
+            }
+
+            //reverse damit css von weiter unten in der vererbungshierachie überschreibt
+            $componentCssFiles = array_reverse($files['masterCss']);
+            foreach ($componentCssFiles as $i) {
+                $dep = $this->_createDependencyForFile($i, true);
+                if (substr($i, -8) == 'defer.js') {
+                    $deps[] = array(
+                        'dep' => $dep,
+                        'master' => true,
+                        'defer' => true
+                    );
+                } else {
+                    $deps[] = array(
+                        'dep' => $dep,
+                        'master' => true,
+                        'defer' => false
+                    );
+                }
+            }
+
+
+            //css, not master
+            $matchingDeps = array();
+            foreach ($deps as $i) {
+                if ($i['dep']->getMimeType() == 'text/css' && $i['master'] == false) {
+                    $matchingDeps[] = $i['dep'];
+                }
+            }
+            if ($matchingDeps) {
+                $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $matchingDeps, false, $class.'-css');
+            }
+
+            //css, master
+            $matchingDeps = array();
+            foreach ($deps as $i) {
+                if ($i['dep']->getMimeType() == 'text/css' && $i['master'] == true) {
+                    $matchingDeps[] = $i['dep'];
+                }
+            }
+            if ($matchingDeps) {
+                $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $matchingDeps, true, $class.'-master-css');
+            }
+
+            //js, not master, not defer
+            $matchingDeps = array();
+            foreach ($deps as $i) {
+                if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == false && $i['defer'] == false) {
+                    $matchingDeps[] = $i['dep'];
+                }
+            }
+            if ($matchingDeps) {
+                $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, false, $class.'-js');
+            }
+
+            //js, master, not defer
+            $matchingDeps = array();
+            foreach ($deps as $i) {
+                if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == true && $i['defer'] == false) {
+                    $matchingDeps[] = $i['dep'];
+                }
+            }
+            if ($matchingDeps) {
+                $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, true, $class.'-master-js');
+            }
+
+            //js, not master, defer
+            $matchingDeps = array();
+            foreach ($deps as $i) {
+                if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == false && $i['defer'] == true) {
+                    $matchingDeps[] = $i['dep'];
+                }
+            }
+            if ($matchingDeps) {
+                $dep = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, false, $class.'-defer-js');
+                $dep->setDeferLoad(true);
+                $ret[] = $dep;
+            }
+
+            //js, master, defer
+            $matchingDeps = array();
+            foreach ($deps as $i) {
+                if ($i['dep']->getMimeType() != 'text/css' && $i['master'] == true && $i['defer'] == true) {
+                    $matchingDeps[] = $i['dep'];
+                }
+            }
+            if ($matchingDeps) {
+                $dep = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, true, $class.'-master-defer-js');
+                $dep->setDeferLoad(true);
+                $ret[] = $dep;
+            }
+
+            return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
         }
         return null;
     }

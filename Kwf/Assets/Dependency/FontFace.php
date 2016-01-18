@@ -13,7 +13,7 @@ class Kwf_Assets_Dependency_FontFace extends Kwf_Assets_Dependency_Abstract
         return 'text/css';
     }
 
-    public function getContents($language)
+    public function getContentsPacked($language)
     {
         $basePath = 'vendor/bower_components/';
         if (file_exists($basePath.$this->_path."/fonts/$this->_name.eot")) {
@@ -34,7 +34,7 @@ class Kwf_Assets_Dependency_FontFace extends Kwf_Assets_Dependency_Abstract
         $ret .= "         url('".$fontsPath.".ttf') format('truetype'),\n";
         $ret .= "         url('".$fontsPath.".svg') format('svg');\n";
         $ret .= "}\n";
-        return $ret;
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
     public function __toString()
