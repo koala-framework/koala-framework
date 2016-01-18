@@ -9,7 +9,8 @@ class Kwf_Assets_Dependency_Dynamic_AssetsVersion extends Kwf_Assets_Dependency_
     public function getContents($language)
     {
         $ret = "if (typeof Kwf == 'undefined') Kwf = {};".
-            "Kwf.application = { assetsVersion: '".Kwf_Assets_Dispatcher::getAssetsVersion()."' };\n";
+            "Kwf.application = { assetsVersion: '".Kwf_Assets_Dispatcher::getInstance()
+                ->getAssetsVersion()."' };\n";
         return $ret;
     }
 
