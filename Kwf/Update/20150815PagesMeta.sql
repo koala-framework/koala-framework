@@ -1,3 +1,4 @@
+#tags: kwc
 CREATE TABLE IF NOT EXISTS `kwf_pages_meta` (
   `page_id` varchar(255) NOT NULL,
   `domain_component_id` varchar(255) NOT NULL,
