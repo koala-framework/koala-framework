@@ -56,9 +56,7 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
                 $updates[] = new Kwf_Update_Setup_InitialUploads('setup/initial/uploads');
             }
         } else {
-
-            $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates());
-
+            $updates = array();
             foreach (Kwf_Util_Update_Helper::getUpdateTags() as $tag) {
                 $file = KWF_PATH.'/setup/'.$tag.'.sql';
                 if (file_exists($file)) {
@@ -67,6 +65,8 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
                     $updates[] = $update;
                 }
             }
+
+            $updates = array_merge($updates, Kwf_Util_Update_Helper::getUpdates());
 
             $updates[] = new Kwf_Update_Setup_InitialDb('setup/setup.sql');
             $updates[] = new Kwf_Update_Setup_InitialUploads('setup/uploads');
