@@ -1,7 +1,7 @@
+var $ = require('jQuery');
 var fieldRegistry = require('kwf/frontend-form/field-registry');
 var Field = require('kwf/frontend-form/field/field');
 var kwfExtend = require('kwf/extend');
-
 var onReady = require('kwf/on-ready');
 
 onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
@@ -10,25 +10,15 @@ onReady.onRender('.kwfFormFieldMultiCheckbox', function multiCheckbox(mc) {
 
         if (checkAll) {
             checkAll.on('click', (function(ev) {
-                ev.stopEvent();
-                var allInputs = this.query('input');
-                for (var i = 0; i < allInputs.length; i++) {
-                    if (allInputs[i].type == 'checkbox') {
-                        allInputs[i].checked = true;
-                    }
-                }
-            }).bind(mc));
+                ev.preventDefault();
+                mc.find('input[type=checkbox]').prop('checked', true);
+            }));
         }
         if (checkNone) {
             checkNone.on('click', (function(ev) {
-                ev.stopEvent();
-                var allInputs = this.query('input');
-                for (var i = 0; i < allInputs.length; i++) {
-                    if (allInputs[i].type == 'checkbox') {
-                        allInputs[i].checked = false;
-                    }
-                }
-            }).bind(mc));
+                ev.preventDefault();
+                mc.find('input[type=checkbox]').prop('checked', false);
+            }));
         }
 }, { defer: true });
 

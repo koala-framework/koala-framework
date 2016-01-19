@@ -1,5 +1,5 @@
 // @require ModernizrNetworkXhr2
-
+var $ = require('jQuery');
 var fieldRegistry = require('kwf/frontend-form/field-registry');
 var Field = require('kwf/frontend-form/field/field');
 var kwfExtend = require('kwf/extend');
