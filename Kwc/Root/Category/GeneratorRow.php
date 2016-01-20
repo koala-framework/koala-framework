@@ -32,17 +32,30 @@ class Kwc_Root_Category_GeneratorRow extends Kwf_Model_Tree_Row
             }
         }
         if (in_array('filename', $this->getDirtyColumns())) {
-            $model = Kwf_Component_Data_Root::getInstance()
-                ->getComponentById($this->id, array('ignoreVisible'=>true))
-                ->generator->getHistoryModel();
-            $data = array(
-                'page_id' => $this->id,
-                'parent_id' => $this->parent_id,
-                'filename' => $this->getCleanValue('filename'),
-            );
-            $row = $model->createRow($data);
-            $row->save();
+            $this->_updateHistory('filename');
         }
+        if (in_array('parent_id', $this->getDirtyColumns())) {
+            $this->_updateHistory('parent_id');
+        }
+    }
+
+    private function _updateHistory($cleanValueColumn)
+    {
+        $model = Kwf_Component_Data_Root::getInstance()
+            ->getComponentById($this->id, array('ignoreVisible'=>true))
+            ->generator->getHistoryModel();
+        $row = $model->createRow(array('page_id' => $this->id));
+        if ($cleanValueColumn == 'parent_id') {
+            $row->parent_id = $this->getCleanValue('parent_id');
+        } else {
+            $row->parent_id = $this->parent_id;
+        }
+        if ($cleanValueColumn == 'filename') {
+            $row->filename = $this->getCleanValue('filename');
+        } else {
+            $row->filename = $this->filename;
+        }
+        $row->save();
     }
 
     protected function _beforeDelete()
