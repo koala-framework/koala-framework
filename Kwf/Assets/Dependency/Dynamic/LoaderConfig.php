@@ -13,7 +13,7 @@ class Kwf_Assets_Dependency_Dynamic_LoaderConfig extends Kwf_Assets_Dependency_A
         return 'text/javascript';
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $config = array(
             'providerList' => get_class($this->_providerList)

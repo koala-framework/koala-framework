@@ -37,7 +37,7 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         return $this->_outputFile;
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         if (isset($this->_contentsCache)) return $this->_contentsCache;
 

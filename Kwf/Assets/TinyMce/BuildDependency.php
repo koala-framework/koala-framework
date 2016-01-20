@@ -10,7 +10,7 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
         return 'text/javascript';
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $mtime = null;
         $it = new RecursiveDirectoryIterator(getcwd() . '/' . VENDOR_PATH . '/bower_components/tinymce/js/tinymce');

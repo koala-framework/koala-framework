@@ -13,39 +13,39 @@ class Kwf_Assets_TrlJs_Test extends Kwf_Test_TestCase
     public function testIt()
     {
         $f = new Kwf_Assets_Dependency_File_Js('kwf/tests/Kwf/Assets/TrlJs/foo.js');
-        $c = $f->getContentsPacked('en')->getFileContents();
+        $c = $f->getContentsPacked()->getFileContents();
         $this->assertEquals("trl('Ja');", trim($c));
     }
 
     public function testWithContext()
     {
         $f = new Kwf_Assets_Dependency_File_Js('kwf/tests/Kwf/Assets/TrlJs/withContext.js');
-        $c = $f->getContentsPacked('en')->getFileContents();
+        $c = $f->getContentsPacked()->getFileContents();
         $this->assertEquals("trl(',');", trim($c));
 
-        $c = $f->getContentsPacked('de')->getFileContents();
+        $c = $f->getContentsPacked()->getFileContents();
         $this->assertEquals("trl(\",\");", trim($c));
 
-        $c = $f->getContentsPacked('en')->getFileContents();
+        $c = $f->getContentsPacked()->getFileContents();
         $this->assertEquals("trl('.');", trim($c));
 
-        $c = $f->getContentsPacked('en')->getFileContents();
+        $c = $f->getContentsPacked()->getFileContents();
         $this->assertEquals("trl(\".\");", trim($c));
     }
 
     public function testWithContext2()
     {
         $f = new Kwf_Assets_Dependency_File_Js('kwf/tests/Kwf/Assets/TrlJs/withContext2.js');
-        $c = $f->getContentsPacked('en')->getFileContents();
+        $c = $f->getContentsPacked()->getFileContents();
         $this->assertEquals("trl('.');", trim($c));
 
-        $c = $f->getContentsPacked('de')->getFileContents();
+        $c = $f->getContentsPacked()->getFileContents();
         $this->assertEquals("trl(\".\");", trim($c));
 
-        $c = $f->getContentsPacked('en')->getFileContents();
+        $c = $f->getContentsPacked()->getFileContents();
         $this->assertEquals("trl(',');", trim($c));
 
-        $c = $f->getContentsPacked('en')->getFileContents();
+        $c = $f->getContentsPacked()->getFileContents();
         $this->assertEquals("trl(\",\");", trim($c));
     }
 }

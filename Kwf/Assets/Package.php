@@ -120,7 +120,7 @@ class Kwf_Assets_Package
         if ($ret === false) {
 
             if (!isset($this->_depContentsCache[$dep->getIdentifier()])) {
-                $ret = $dep->getContentsPacked(null);
+                $ret = $dep->getContentsPacked();
                 if (!$ret) {
                     throw new Kwf_Exception("Dependency '$dep' didn't return contents");
                 }

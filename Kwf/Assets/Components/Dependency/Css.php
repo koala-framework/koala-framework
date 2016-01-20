@@ -6,11 +6,11 @@ class Kwf_Assets_Components_Dependency_Css extends Kwf_Assets_Components_Depende
         return 'text/css';
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
         foreach ($this->_componentDependencies as $dep) {
-            $c = $dep->getContentsPacked($language);
+            $c = $dep->getContentsPacked();
 
             $replacements = array();
             if (Kwf_Config::getValue('application.uniquePrefix')) {

@@ -11,12 +11,12 @@ class Kwf_Assets_Components_Dependency_Js extends Kwf_Assets_Components_Dependen
         return true;
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
         $trlData = array();
         foreach ($this->_componentDependencies as $dep) {
-            $c = $dep->getContentsPacked($language);
+            $c = $dep->getContentsPacked();
             $data = $c->getMapContentsData(false);
             if (isset($data->{'_x_org_koala-framework_trlData'})) {
                 $trlData = array_merge($trlData, $data->{'_x_org_koala-framework_trlData'});

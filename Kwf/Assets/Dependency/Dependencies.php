@@ -28,7 +28,7 @@ class Kwf_Assets_Dependency_Dependencies extends Kwf_Assets_Dependency_Abstract
         return $this;
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         return null;
     }

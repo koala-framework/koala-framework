@@ -30,13 +30,13 @@ class Kwf_Assets_CommonJs_TestProvider extends Kwf_Assets_Provider_Abstract
     public function getDependenciesForDependency($dependency)
     {
         if ($dependency instanceof Kwf_Assets_CommonJs_Dependency) {
-            if ($dependency->getContentsPacked('en')->getFileContents() == 'console.log(A)') {
+            if ($dependency->getContentsPacked()->getFileContents() == 'console.log(A)') {
                 return array(
                     Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS => array(
                         $this->_providerList->findDependency('B'),
                     )
                 );
-            } else if ($dependency->getContentsPacked('en')->getFileContents() == 'console.log(B)') {
+            } else if ($dependency->getContentsPacked()->getFileContents() == 'console.log(B)') {
                 return array(
                     Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES => array(
                         $this->_providerList->findDependency('C'),

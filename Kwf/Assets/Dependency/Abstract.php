@@ -35,7 +35,7 @@ abstract class Kwf_Assets_Dependency_Abstract
         return $this->_isCommonJsEntry;
     }
 
-    abstract public function getContentsPacked($language);
+    abstract public function getContentsPacked();
 
     public function getContentsSource()
     {

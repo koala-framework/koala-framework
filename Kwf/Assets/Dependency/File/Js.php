@@ -11,7 +11,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         parent::__construct($fileName);
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $fileName = $this->getFileNameWithType();
         $rawContents = file_get_contents($this->getAbsoluteFileName());

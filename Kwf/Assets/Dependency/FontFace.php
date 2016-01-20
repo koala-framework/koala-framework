@@ -13,7 +13,7 @@ class Kwf_Assets_Dependency_FontFace extends Kwf_Assets_Dependency_Abstract
         return 'text/css';
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $basePath = 'vendor/bower_components/';
         if (file_exists($basePath.$this->_path."/fonts/$this->_name.eot")) {

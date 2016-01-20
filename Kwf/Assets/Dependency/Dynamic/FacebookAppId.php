@@ -6,7 +6,7 @@ class Kwf_Assets_Dependency_Dynamic_FacebookAppId extends Kwf_Assets_Dependency_
         return 'text/javascript';
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $appIds = array();
         foreach (Kwf_Component_Abstract::getComponentClasses() as $class) {

@@ -82,7 +82,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
                 $sizes = array();
                 echo "\n".$p->getDependencyName()." $mimeType\n";
                 foreach ($p->getFilteredUniqueDependencies($mimeType) as $i) {
-                    $sizes[(string)$i] = strlen(gzencode($i->getContentsPacked('en')->getFileContents(), 9, FORCE_GZIP));
+                    $sizes[(string)$i] = strlen(gzencode($i->getContentsPacked()->getFileContents(), 9, FORCE_GZIP));
                 }
                 arsort($sizes);
                 $sumSize = array_sum($sizes);
