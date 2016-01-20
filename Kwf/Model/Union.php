@@ -109,6 +109,8 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             } else {
                 return null;
             }
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Sql) {
+            return $expr;
         } else {
             throw new Kwf_Exception_NotImplemented();
         }
