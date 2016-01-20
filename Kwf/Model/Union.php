@@ -112,7 +112,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         } else if ($expr instanceof Kwf_Model_Select_Expr_Sql) {
             return $expr;
         } else {
-            throw new Kwf_Exception_NotImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         }
     }
 
@@ -221,7 +221,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         } else if ($expr instanceof Kwf_Model_Select_Expr_String || $expr instanceof Kwf_Model_Select_Expr_Boolean || $expr instanceof Kwf_Model_Select_Expr_Integer) {
             return $expr;
         } else {
-            throw new Kwf_Exception_NotImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         }
     }
 
