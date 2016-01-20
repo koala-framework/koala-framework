@@ -15,6 +15,8 @@ class Kwc_Events_Directory_Component extends Kwc_News_Directory_Component
 
         $ret['generators']['child']['component']['view'] = 'Kwc_Events_List_View_Component';
 
+        $ret['flags']['assetsPackage'] = 'Events';
+
         return $ret;
     }
 
