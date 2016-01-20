@@ -26,11 +26,7 @@ class Kwf_Assets_Components_Dependency_Css extends Kwf_Assets_Components_Depende
 
             $ret->concat($c);
         }
-        if ($this->getMimeType() == 'text/css') {
-            $ret->setMimeType('text/css');
-        } else {
-            $ret->setMimeType('text/javascript');
-        }
+        $ret->setMimeType('text/css');
         return $ret;
     }
 }

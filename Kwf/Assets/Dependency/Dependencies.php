@@ -28,11 +28,6 @@ class Kwf_Assets_Dependency_Dependencies extends Kwf_Assets_Dependency_Abstract
         return $this;
     }
 
-    public function usesLanguage()
-    {
-        return false;
-    }
-
     public function getContentsPacked($language)
     {
         return null;

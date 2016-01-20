@@ -118,9 +118,4 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
     {
         return 'Modernizr('.implode(',', $this->_features).')';
     }
-
-    public function usesLanguage()
-    {
-        return false;
-    }
 }

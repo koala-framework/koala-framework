@@ -250,7 +250,7 @@ Kwf.Auto.SyncTreePanel = Ext2.extend(Kwf.Binding.AbstractPanel, {
     },
 
     onDelete: function (o, e) {
-        Ext2.MessageBox.confirm(trlKwf('Delete'), trlKwf('Do you really want to delete this entry:\n\n"') + this.tree.getSelectionModel().getSelectedNode().text + '"',
+        Ext2.MessageBox.confirm(trlKwf('Delete'), trlKwf('Do you really want to delete this entry:')+'\n\n"' + this.tree.getSelectionModel().getSelectedNode().text + '"',
             function  (button) {
                 if (button == 'yes') {
                     Ext2.Ajax.request({

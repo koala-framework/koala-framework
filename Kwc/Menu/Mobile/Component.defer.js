@@ -1,7 +1,7 @@
 var onReady = require('kwf/on-ready');
 var _ = require('underscore');
 var $ = require('jQuery');
-var trlKwf = require('kwf/trl').trlKwf;
+var t = require('kwf/trl');
 
 onReady.onRender('.kwcClass', function mobileMenu(el, config) {
     var slideDuration = 400;
@@ -23,11 +23,11 @@ onReady.onRender('.kwcClass', function mobileMenu(el, config) {
                 '<% }) %>'+
             '<% } else { %>'+
                 '<% if (item.children && item.children.length) { %>'+
-                    '<li class="kwfUp-back"><a href="#">'+trlKwf('back')+'</a></li>\n'+
+                    '<li class="kwfUp-back"><a href="#">'+t.trlKwf('back')+'</a></li>\n'+
                 '<% } %>'+
                 '<% _.each(item.children, function(child) { %>'+
                     '<li class="<% if (child.hasChildren) {  %>kwfUp-hasChildren<% } else if (child.isParent) { %>kwfUp-parent<% } %>">\n' +
-                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %><% if (child.isParent) { %> <span class="kwfUp-overview">('+trlKwf('Overview')+')</span><% } %></a>\n'+
+                        '<a href="<%= child.url %>" data-id="<%= child.id %>" data-children="<%= child.hasChildren %>"><%= child.name %><% if (child.isParent) { %> <span class="kwfUp-overview">('+t.trlKwf('Overview')+')</span><% } %></a>\n'+
                     '</li>\n' +
                 '<% }) %>' +
             '<% } %>' +

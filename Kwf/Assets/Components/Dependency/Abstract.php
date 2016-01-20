@@ -53,17 +53,6 @@ abstract class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Depe
         );
     }
 
-    public function usesLanguage()
-    {
-        $ret = false;
-        foreach ($this->_componentDependencies as $dep) {
-            if ($dep->usesLanguage()) {
-                $ret = true;
-            }
-        }
-        return $ret;
-    }
-
     public function __toString()
     {
         return $this->_dependencyName;

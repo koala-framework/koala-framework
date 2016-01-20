@@ -13,11 +13,6 @@ class Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys extends Kwf_Assets_Depende
         return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
-    public function usesLanguage()
-    {
-        return false;
-    }
-
     public function getIdentifier()
     {
         return 'GoogleMapsApiKey';

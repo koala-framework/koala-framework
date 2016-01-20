@@ -25,11 +25,6 @@ class Kwf_Assets_Dependency_Dynamic_FacebookAppId extends Kwf_Assets_Dependency_
         return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
-    public function usesLanguage()
-    {
-        return false;
-    }
-
     public function getIdentifier()
     {
         return 'FacebookAppId';

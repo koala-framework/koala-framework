@@ -25,11 +25,6 @@ class Kwf_Assets_Dependency_Dynamic_LoaderConfig extends Kwf_Assets_Dependency_A
         return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
-    public function usesLanguage()
-    {
-        return false;
-    }
-
     public function getIdentifier()
     {
         return 'LoaderConfig';

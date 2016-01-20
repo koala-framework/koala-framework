@@ -156,13 +156,11 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             $it = new RecursiveIteratorIterator(new Kwf_Assets_Dependency_Iterator_UniqueFilter(new Kwf_Assets_Dependency_Iterator_Recursive($p->getDependency(), Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL)), RecursiveIteratorIterator::CHILD_FIRST);
             foreach ($it as $dep) {
                 $progress->next(1, "$dep");
-                foreach ($langs as $language) {
-                    if ($dep->getMimeType()) {
-                        $mimeType = $dep->getMimeType();
-                        $p->warmupDependencyCaches($dep, $mimeType, $language, $progress);
-                        if ($mimeType == 'text/css') {
-                            $p->warmupDependencyCaches($dep, 'text/css; ie8', $language, $progress);
-                        }
+                if ($dep->getMimeType()) {
+                    $mimeType = $dep->getMimeType();
+                    $p->warmupDependencyCaches($dep, $mimeType, $progress);
+                    if ($mimeType == 'text/css') {
+                        $p->warmupDependencyCaches($dep, 'text/css; ie8', $progress);
                     }
                 }
             }

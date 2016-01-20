@@ -18,11 +18,6 @@ class Kwf_Assets_Dependency_Dynamic_RavenJsDsn extends Kwf_Assets_Dependency_Abs
         return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
-    public function usesLanguage()
-    {
-        return false;
-    }
-
     public function getIdentifier()
     {
         return 'RavenJsDsn';
