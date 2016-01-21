@@ -47,6 +47,9 @@ class Kwf_Component_Data
     private $_recursiveGeneratorsCache = array();
     private $_languageCache;
     private $_expandedComponentIdCache;
+    private $_serializedBaseProperties = array(
+        'preLogin' => null
+    );
 
     //public static $objectsCount;
     //public static $objectsById = array();
@@ -1250,6 +1253,9 @@ class Kwf_Component_Data
     public function getBaseProperty($propertyName)
     {
         $ret = null;
+        if (isset($this->_serializedBaseProperties[$propertyName])) {
+            $ret = $this->_serializedBaseProperties[$propertyName];
+        }
         $c = $this;
         while (is_null($ret) && $c) {
             if (Kwc_Abstract::getFlag($c->componentClass, 'hasBaseProperties')) {
@@ -1396,6 +1402,10 @@ class Kwf_Component_Data
     {
         $this->getLanguage(); //fill _languageCache
         $this->getExpandedComponentId(); //fill _expandedComponentIdCache
+
+        foreach ($this->_serializedBaseProperties as $baseProperty => $value) {
+            $this->_serializedBaseProperties[$baseProperty] = $this->getBaseProperty($baseProperty);
+        }
 
         $ret = array();
         $ret['class'] = get_class($this);
