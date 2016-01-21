@@ -20,7 +20,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         return DIRECTORY_SEPARATOR.implode(DIRECTORY_SEPARATOR, $absolutes);
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $cacheId = 'scss-'.$this->getIdentifier();
         $ret = Kwf_Assets_ContentsCache::getInstance()->load($cacheId);

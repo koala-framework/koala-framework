@@ -26,6 +26,24 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
         return $ret;
     }
 
+    private static function _getCache()
+    {
+        static $cache;
+        if (!isset($cache)) {
+            $cache = new Zend_Cache_Core(array(
+                'lifetime' => null,
+                'write_control' => false,
+                'automatic_cleaning_factor' => 0,
+                'automatic_serialization' => true,
+            ));
+            $cache->setBackend(new Kwf_Cache_Backend_File(array(
+                'cache_dir' => 'cache/commonjs',
+                'hashed_directory_level' => 2,
+            )));
+        }
+        return $cache;
+    }
+
     private function _parseDependencies($dependency)
     {
         if (in_array($dependency, $this->_parsed, true)) return array();
@@ -33,18 +51,26 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
         $this->_parsed[] = $dependency;
 
         $ret = array();
-        $deps = array();
 
         $src = $dependency->getContentsSource();
         if ($src['type'] == 'file') {
-            $deps = Kwf_Assets_CommonJs_Parser::parse($src['file']);
+            $cacheId = str_replace(array('/', '.', '-'), '_', $src['file']).'__'.md5_file($src['file']);
         } else if ($src['type'] == 'contents') {
-            $temp = tempnam('temp/', 'commonjs');
-            file_put_contents($temp, $src['contents']);
-            $deps = Kwf_Assets_CommonJs_Parser::parse($temp);
-            unlink($temp);
+            $cacheId = md5($src['contents']);
         } else {
             throw new Kwf_Exception_NotYetImplemented();
+        }
+        $deps = self::_getCache()->load($cacheId);
+        if ($deps === false) {
+            if ($src['type'] == 'file') {
+                $deps = Kwf_Assets_CommonJs_Parser::parse($src['file']);
+            } else if ($src['type'] == 'contents') {
+                $temp = tempnam('temp/', 'commonjs');
+                file_put_contents($temp, $src['contents']);
+                $deps = Kwf_Assets_CommonJs_Parser::parse($temp);
+                unlink($temp);
+            }
+            self::_getCache()->save($deps, $cacheId);
         }
 
         foreach ($deps as $dep) {

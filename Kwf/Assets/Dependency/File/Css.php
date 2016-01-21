@@ -6,11 +6,6 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         return 'text/css';
     }
 
-    public function usesLanguage()
-    {
-        return false;
-    }
-
     protected function _processContents($ret)
     {
         $pathType = $this->getType();
@@ -35,7 +30,7 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         return $ret;
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $contents = $this->getContentsSourceString();
         $contents = str_replace("\r", "\n", $contents);

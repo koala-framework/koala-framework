@@ -1,9 +1,3 @@
 var t = require('kwf/trl');
-window.trl = t.trl;
-window.trlc = t.trlc;
-window.trlp = t.trlp;
-window.trlcp = t.trlcp;
-window.trlKwf = t.trlKwf;
-window.trlcKwf = t.trlcKwf;
-window.trlpKwf = t.trlpKwf;
-window.trlcpKwf = t.trlcpKwf;
+window._kwfTrl = t._kwfTrl;
+window._kwfTrlp = t._kwfTrlp;

@@ -24,7 +24,7 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
         //}
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($this->getContentsSourceString());
         $ret->addSource($this->_fileName);

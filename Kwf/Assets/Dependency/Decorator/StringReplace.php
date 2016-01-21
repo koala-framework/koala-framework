@@ -16,9 +16,9 @@ class Kwf_Assets_Dependency_Decorator_StringReplace extends Kwf_Assets_Dependenc
         return $this->_replacements;
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
-        $ret = $this->_dep->getContentsPacked($language);
+        $ret = $this->_dep->getContentsPacked();
         $ret = clone $ret;
         foreach ($this->_getReplacements() as $k=>$i) {
             $ret->stringReplace($k, $i);
