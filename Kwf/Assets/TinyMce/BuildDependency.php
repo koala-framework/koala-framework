@@ -1,9 +1,6 @@
 <?php
 class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
 {
-    private $_contentsCachePacked;
-    private $_contentsCacheSourceMap;
-
     public function __construct()
     {
     }
@@ -13,10 +10,8 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
         return 'text/javascript';
     }
 
-    public function warmupCaches()
+    public function getContentsPacked()
     {
-        if ($this->_contentsCachePacked) return;
-
         $mtime = null;
         $it = new RecursiveDirectoryIterator(getcwd() . '/' . VENDOR_PATH . '/bower_components/tinymce/js/tinymce');
         $it = new RecursiveIteratorIterator($it);
@@ -48,14 +43,8 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
             copy('temp/tinymce-build-out.js', $buildFile);
             Kwf_Assets_Dependency_Filter_UglifyJs::build($buildFile, 'temp/tinymce-build-out.js');
         }
-        $this->_contentsCachePacked = file_get_contents("$buildFile.min.js");
-        $this->_contentsCacheSourceMap = file_get_contents("$buildFile.min.js.map.json");
-    }
 
-    public function getContentsPacked($language)
-    {
-        $this->warmupCaches();
-        return new Kwf_SourceMaps_SourceMap($this->_contentsCacheSourceMap, $this->_contentsCachePacked);
+        return new Kwf_SourceMaps_SourceMap(file_get_contents("$buildFile.min.js.map.json"), file_get_contents("$buildFile.min.js"));
     }
 
     public function __toString()

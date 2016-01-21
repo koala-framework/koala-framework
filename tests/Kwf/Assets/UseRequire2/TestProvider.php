@@ -32,22 +32,22 @@ class Kwf_Assets_UseRequire2_TestProvider extends Kwf_Assets_Provider_Abstract
     */
     public function getDependenciesForDependency(Kwf_Assets_Dependency_Abstract $dependency)
     {
-        if ($dependency->getContentsPacked('en')->getFileContents() == 'A') {
+        if ($dependency->getContentsPacked()->getFileContents() == 'A') {
             return array();
-        } else if ($dependency->getContentsPacked('en')->getFileContents() == 'B') {
+        } else if ($dependency->getContentsPacked()->getFileContents() == 'B') {
             return array(
                 Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES => array(
                     $this->_providerList->findDependency('A')
                 )
             );
-        } else if ($dependency->getContentsPacked('en')->getFileContents() == 'C') {
+        } else if ($dependency->getContentsPacked()->getFileContents() == 'C') {
             return array(
                 Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES => array(
                     $this->_providerList->findDependency('B'),
                     $this->_providerList->findDependency('D'),
                 )
             );
-        } else if ($dependency->getContentsPacked('en')->getFileContents() == 'D') {
+        } else if ($dependency->getContentsPacked()->getFileContents() == 'D') {
             return array(
             );
         }

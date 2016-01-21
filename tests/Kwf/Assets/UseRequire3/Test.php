@@ -20,9 +20,9 @@ class Kwf_Assets_UseRequire3_Test extends Kwf_Test_TestCase
         $d = $this->_list->findDependency('A');
         $deps = $d->getFilteredUniqueDependencies('text/javascript');
         $this->assertEquals(3, count($deps));
-        $this->assertEquals('B', $deps[0]->getContentsPacked('en')->getFileContents());
-        $this->assertEquals('A', $deps[1]->getContentsPacked('en')->getFileContents());
-        $this->assertEquals('C', $deps[2]->getContentsPacked('en')->getFileContents());
+        $this->assertEquals('B', $deps[0]->getContentsPacked()->getFileContents());
+        $this->assertEquals('A', $deps[1]->getContentsPacked()->getFileContents());
+        $this->assertEquals('C', $deps[2]->getContentsPacked()->getFileContents());
     }
 
     public function testPackageContents()

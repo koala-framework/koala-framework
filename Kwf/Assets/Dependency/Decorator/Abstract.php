@@ -8,11 +8,6 @@ abstract class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Depen
         parent::__construct();
     }
 
-    public function usesLanguage()
-    {
-        return $this->_dep->usesLanguage();
-    }
-
     public function getContentsSource()
     {
         return $this->_dep->getContentsSource();

@@ -12,7 +12,7 @@ class Kwf_Assets_Loader
         }
     }
 
-    public function getFileContents($file, $language = null)
+    public function getFileContents($file)
     {
         $ret = array();
         if (substr($file, -4)=='.gif') {

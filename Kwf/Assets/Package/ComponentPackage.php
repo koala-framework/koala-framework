@@ -62,9 +62,9 @@ class Kwf_Assets_Package_ComponentPackage extends Kwf_Assets_Package
         return null;
     }
 
-    protected function _getCommonJsData($mimeType, $language)
+    protected function _getCommonJsData($mimeType)
     {
-        $commonJsData = parent::_getCommonJsData($mimeType, $language);
+        $commonJsData = parent::_getCommonJsData($mimeType);
         if ($commonJsData) {
             $deps = array_merge(
                 $this->_getFilteredUniqueDependencies('text/javascript'),
@@ -72,7 +72,7 @@ class Kwf_Assets_Package_ComponentPackage extends Kwf_Assets_Package
             );
             foreach ($deps as $i) {
                 $data = array();
-                $commonJsDeps = $this->_getCommonJsDeps($i, $language, $data);
+                $commonJsDeps = $this->_getCommonJsDeps($i, $data);
                 foreach (array_keys($data) as $key) {
                     if (isset($commonJsData[$key])) {
                         unset($commonJsData[$key]);
