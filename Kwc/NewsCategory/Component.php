@@ -13,6 +13,7 @@ class Kwc_NewsCategory_Component extends Kwc_News_Directory_Component
             'name' => trlKwfStatic('Categories'),
             'showInMenu' => false
         );
+        $ret['flags']['assetsPackage'] = 'News';
         return $ret;
     }
 }
