@@ -70,6 +70,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['defineWidth'] = false;
         $ret['maxWidthImageWidth'] = true;
         $ret['inlineTags'] = false;
+        $ret['imageCompressionQuality'] = 75;
         return $ret;
     }
 
@@ -347,6 +348,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 $s['crop']['height'] = $row->crop_height;
             }
         }
+
+        $s['imageCompressionQuality'] = $this->_getSetting('imageCompressionQuality');
 
         return $s;
     }
