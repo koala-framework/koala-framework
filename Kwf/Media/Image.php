@@ -496,6 +496,11 @@ class Kwf_Media_Image
             $im->resizeImage($size['width'], $size['height'], Imagick::FILTER_LANCZOS, 1);
             $im->setImagePage(0, 0, 0, 0);
 //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
+            if (isset($size['imageCompressionQuality'])) {
+                $im->setImageCompressionQuality($size['imageCompressionQuality']);
+            } else {
+                $im->setImageCompressionQuality(75);
+            }
             $ret = $im->getImageBlob();
             $im->destroy();
         } else {
