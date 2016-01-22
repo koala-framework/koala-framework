@@ -10,6 +10,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     protected $_db;
     private $_tableName;
     private $_columns;
+    private $_columnTypes = array();
     private $_primaryKey;
 
     protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
@@ -57,12 +58,16 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     public function getColumnType($col)
     {
+        if (isset($this->_columnTypes[$col])) {
+            return $this->_columnTypes[$col];
+        }
         $info = $this->getTable()->info();
         if (isset($info['metadata'][$col])) {
             $type = $this->_getTypeFromDbType($info['metadata'][$col]['DATA_TYPE']);
             if ($col == 'pos' && $type == self::TYPE_BOOLEAN) {
                 throw new Kwf_Exception('Column "pos" must not be of type TINYINT in table "' . $this->getTable()->getTableName() . '"');
             }
+            $this->_columnTypes[$col] = $type;
             return $type;
         }
         return parent::getColumnType($col);
