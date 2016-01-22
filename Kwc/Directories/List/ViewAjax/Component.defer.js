@@ -95,6 +95,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
 
     controllerUrl: null,
     loadMoreBufferPx: 700,
+    limit: 10,
     initialPageSize: null,
     minimumCharactersForFilter: 3,
 
@@ -300,7 +301,7 @@ Kwc.Directories.List.ViewAjax.prototype = {
         this.$el.addClass('loadingMore');
         var params = $.extend({
             start: this.$el.find('.kwfViewAjaxItem').length,
-            limit: 10
+            limit: this.limit
         }, this.baseParams);
         $.ajax({
             data: params,
