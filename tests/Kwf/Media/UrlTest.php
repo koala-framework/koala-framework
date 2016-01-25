@@ -3,14 +3,8 @@
  * @group Media
  * @group Image
  */
-class Kwf_Media_UrlTest extends Kwc_TestAbstract
+class Kwf_Media_UrlTest extends Kwf_Test_Kwc_TestCase
 {
-    public function setUp()
-    {
-        parent::setUp('Kwc_Basic_Image_Root');
-        $this->_root->setFilename(null);
-    }
-
     public function testUrl()
     {
         $url = Kwf_Media::getUrl('Kwc_Basic_Image_TestComponent', 1600, 'foo', 'test.jpg');

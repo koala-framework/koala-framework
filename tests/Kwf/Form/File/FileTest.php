@@ -168,7 +168,7 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
         $this->_field->setAllowOnlyImages(true);
         $this->assertEquals(1, count($this->_field->validate($row, array('File'=>$this->_uploadId1))));
 
-        $fRow = $this->_uploadsModel->createRow()->writeFile('', 'foo', 'jpg', 'image/jpeg');
+        $fRow = $this->_uploadsModel->createRow()->writeFile(file_get_contents(KWF_PATH.'/images/devices/macBook.jpg'), 'foo', 'jpg', 'image/jpeg');
         $this->assertEquals(array(), $this->_field->validate($row, array('File'=>$fRow->id)));
     }
 

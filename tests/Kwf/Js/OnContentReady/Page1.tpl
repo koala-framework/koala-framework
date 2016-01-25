@@ -3,7 +3,7 @@
     <head>
         <?=$this->assets(new Kwf_Assets_Package_TestPackage('Kwf_Js_OnContentReady', 'Page1'))?>
     </head>
-    <body>
+    <body class="frontend">
         <div class="foo">foo</div>
     </body>
 </html>
