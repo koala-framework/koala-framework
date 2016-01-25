@@ -499,7 +499,7 @@ class Kwf_Media_Image
             if (isset($size['imageCompressionQuality'])) {
                 $im->setImageCompressionQuality($size['imageCompressionQuality']);
             } else {
-                $im->setImageCompressionQuality(75);
+                $im->setImageCompressionQuality(80);
             }
             $ret = $im->getImageBlob();
             $im->destroy();
