@@ -8,7 +8,7 @@ function trl (text, values){
         values.push(temp);
       }
       var cnt = 0;
-            values.each(function(value) {
+            values.forEach(function(value) {
         text = text.replace(new RegExp('\\{('+cnt+')\\}', 'g'), value);
         cnt++;
       });
@@ -32,7 +32,7 @@ function trlp (single, plural, values){
         text = plural;
       }
       var cnt = 0;
-            values.each(function(value) {
+            values.forEach(function(value) {
         text = text.replace(new RegExp('\\{('+cnt+')\\}', 'g'), value);
         cnt++;
       });
