@@ -117,7 +117,7 @@ FulltextSearchBoxComponent.prototype =
         this.previousMainContent.hide();
         this.loadingContent = this.el.createChild({
             cls: 'kwfUp-kwfMainContent loadingContent',
-            tag: 'div',
+            tag: 'main',
             style: 'width: ' + this.previousMainContent.getStyle('width'),
             html: '<div class="loading"></div>'
         }, this.previousMainContent);
@@ -132,7 +132,7 @@ FulltextSearchBoxComponent.prototype =
                 this.loadingContent.remove();
                 this.searchMainContent = this.el.createChild({
                     cls: 'kwfUp-kwfMainContent',
-                    tag: 'div',
+                    tag: 'main',
                     style: 'width: ' + this.previousMainContent.getStyle('width'),
                     html: response.responseText
                 }, this.previousMainContent);

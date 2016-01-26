@@ -37,9 +37,9 @@ class Kwf_Component_View_Helper_ComponentWithMaster extends Kwf_Component_View_H
             $helper->setRenderer($this->_getRenderer());
             $kwfUniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
             if ($kwfUniquePrefix) $kwfUniquePrefix = $kwfUniquePrefix.'-';
-            return '<div class="'.$kwfUniquePrefix.'kwfMainContent">' . "\n    " .
+            return '<main class="'.$kwfUniquePrefix.'kwfMainContent">' . "\n    " .
                 $helper->component($component) . "\n" .
-                '</div><!--/'.$kwfUniquePrefix.'kwfMainContent-->' . "\n";
+                '</main><!--/'.$kwfUniquePrefix.'kwfMainContent-->' . "\n";
         } else {
             throw new Kwf_Exception("invalid type");
         }

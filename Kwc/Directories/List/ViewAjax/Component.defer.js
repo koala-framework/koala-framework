@@ -393,7 +393,7 @@ ViewAjax.prototype = {
         this.kwfMainContent.hide();
 
             //style: 'width: ' + this.kwfMainContent.getStyle('width'),
-        this.detailEl = $('<div class="kwfUp-kwfMainContent kwfUp-loadingContent '+classNames+'""><div class="kwfUp-loading"></div></div>');
+        this.detailEl = $('<main class="kwfUp-kwfMainContent kwfUp-loadingContent '+classNames+'""><div class="kwfUp-loading"></div></main>');
         this.kwfMainContent.after(this.detailEl);
 
         $.ajax({

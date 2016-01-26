@@ -1,4 +1,4 @@
-<div class="{{ rootElementClass }}">
+<nav class="{{ rootElementClass }}">
     <div class="kwfUp-loadingMenu"><div class="kwfUp-innerLoading"></div></div>
     <input type="hidden" value="{{ config|json_encode() }}" />
     {% block showMenuButton %}
@@ -9,4 +9,4 @@
     {% block beforeSlider %}{% endblock %}
     <div class="kwfUp-slider" data-mobile-slider="true"></div>
     {% block afterSlider %}{% endblock %}
-</div>
+</nav>
