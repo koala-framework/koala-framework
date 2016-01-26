@@ -176,7 +176,7 @@ class Kwf_Assets_Package
                     'deps' => array(),
                     'entry' => false
                 );
-                $data[$dep->__toString()]['deps'] = $this->_getCommonJsDeps($dep, $language, $data);
+                $data[$dep->__toString()]['deps'] = $this->_getCommonJsDeps($dep, $data);
             }
         }
         return $ret;
