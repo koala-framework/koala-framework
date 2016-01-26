@@ -128,18 +128,14 @@ abstract class Kwf_Controller_Action extends Zend_Controller_Action
 
     protected function _isAllowedComponent()
     {
-        $actionName = $this->getRequest()->getActionName();
-        if ($actionName != 'json-index' && $actionName != 'index') {
-            $authData = $this->_getAuthData();
-            $class = $this->_getParam('class');
-            $componentId = $this->_getParam('componentId');
-            if (!$componentId) {
-                return Kwf_Registry::get('acl')->isAllowedComponent($class, $authData);
-            } else {
-                return Kwf_Registry::get('acl')->isAllowedComponentById($componentId, $class, $authData);
-            }
+        $authData = $this->_getAuthData();
+        $class = $this->_getParam('class');
+        $componentId = $this->_getParam('componentId');
+        if (!$componentId) {
+            return Kwf_Registry::get('acl')->isAllowedComponent($class, $authData);
+        } else {
+            return Kwf_Registry::get('acl')->isAllowedComponentById($componentId, $class, $authData);
         }
-        return true;
     }
 
     public function postDispatch()

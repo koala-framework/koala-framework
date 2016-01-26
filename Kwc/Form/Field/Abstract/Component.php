@@ -16,6 +16,7 @@ class Kwc_Form_Field_Abstract_Component extends Kwc_Abstract
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
         $ret = parent::getTemplateVars($renderer);
+        $this->getFormField()->trlStaticExecute($this->getData()->getLanguage());
         $form = $this->_getForm();
 
         //initialize form, sets formName on fields

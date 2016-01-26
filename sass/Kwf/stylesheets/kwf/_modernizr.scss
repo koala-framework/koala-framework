@@ -22,7 +22,7 @@
             @if not($replacedHtml) {
                 $newSelector: join(("html.#{$htmlClass}"), $newSelector);
             }
-            $newSelectors: append($newSelectors, $newSelector);
+            $newSelectors: append($newSelectors, $newSelector, comma);
         }
         @at-root {
             #{$newSelectors} {

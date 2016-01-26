@@ -192,6 +192,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                     Kwf_Assets_BuildCache::getInstance()->save($urls, $cacheId);
 
                     foreach ($urls as $urlNum=>$url) {
+                        if (substr($url, 0, 8) != '/assets/') continue;
                         $param = explode('/', $url);
                         $urlLanguage = $param[5];
                         $urlExtension = $param[6];

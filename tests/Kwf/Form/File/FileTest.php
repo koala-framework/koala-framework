@@ -24,9 +24,9 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
             'data' => array(
             )
         ));
-        $fRow = $this->_uploadsModel->createRow()->writeFile('asdf', 'foo', 'txt');
+        $fRow = $this->_uploadsModel->createRow()->writeFile('asdf', 'foo', 'txt', 'text/plain');
         $this->_uploadId1 = $fRow->id;
-        $r = $this->_uploadsModel->createRow()->writeFile('asdf1', 'foo1', 'txt');
+        $r = $this->_uploadsModel->createRow()->writeFile('asdf1', 'foo1', 'txt', 'text/plain');
         $this->_uploadId2 = $r->id;
 
         $this->_row = $this->_model->createRow();
@@ -168,7 +168,7 @@ class Kwf_Form_File_FileTest extends Kwf_Test_TestCase
         $this->_field->setAllowOnlyImages(true);
         $this->assertEquals(1, count($this->_field->validate($row, array('File'=>$this->_uploadId1))));
 
-        $fRow = $this->_uploadsModel->createRow()->writeFile('', 'foo', 'jpg', 'image/jpeg');
+        $fRow = $this->_uploadsModel->createRow()->writeFile(file_get_contents(KWF_PATH.'/images/devices/macBook.jpg'), 'foo', 'jpg', 'image/jpeg');
         $this->assertEquals(array(), $this->_field->validate($row, array('File'=>$fRow->id)));
     }
 

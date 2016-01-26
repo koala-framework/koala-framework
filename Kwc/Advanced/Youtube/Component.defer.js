@@ -14,10 +14,17 @@ onReady.onShow('.kwcClass .kwcBem__youtubePlayer', function(el) {
     var config = kwcAdvancedYoutube.data('config');
     if (kwcAdvancedYoutube.data('player')) {
         if (config.playerVars.autoplay) kwcAdvancedYoutube.data('player').playVideo();
-    } else if (config.videoId) {
+    }
+}, {defer: true});
+
+
+onReady.onRender('.kwcClass .kwcBem__youtubePlayer', function(el) {
+    var kwcAdvancedYoutube = el.closest('.kwcClass');
+    var config = kwcAdvancedYoutube.data('config');
+    if (config.videoId) {
         youtubeLoader(function() {
             var loadingEl = kwcAdvancedYoutube.find('.kwcBem__outerLoading');
-            loadingEl.css('display', 'nonde');
+            loadingEl.css('display', 'none');
             var youtubePlayerEl = $('<div></div>');
             el.append(youtubePlayerEl);
 

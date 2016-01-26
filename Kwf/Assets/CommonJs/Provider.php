@@ -73,24 +73,37 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
             self::_getCache()->save($deps, $cacheId);
         }
 
-        foreach ($deps as $dep) {
+        foreach ($deps as $depName) {
+            $dep = $depName;
             if (substr($dep, 0, 2) == './') {
                 $fn = $dependency->getFileNameWithType();
                 $dir = substr($fn, 0, strrpos($fn, '/')+1);
                 $dep = $dir . substr($dep, 2);
+            } else if (substr($dep, 0, 3) == '../') {
+                $fn = $dependency->getFileNameWithType();
+                $dir = substr($fn, 0, strrpos($fn, '/'));
+                while (substr($dep, 0, 3) == '../') {
+                    $dep = substr($dep, 3);
+                    $dir = substr($dir, 0, strrpos($dir, '/'));
+                }
+                $dep = $dir . '/'. $dep;
             }
             $d = $this->_providerList->findDependency($dep);
-            if (!$d) throw new Kwf_Exception("Can't resolve dependency: require '$dep' for $dependency");
-            $ret[$dep] = $d;
-            foreach ($this->_parseDependencies($d) as $index=>$i) {
-                $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, $i, $index);
-                $requires = $d->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES);
-                $indx = array_search($i, $requires, true);
-                if ($indx) {
-                    unset($requires[$indx]);
-                    $d->setDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $requires);
+            if (!$d) throw new Kwf_Exception("Can't resolve dependency: require '$depName' for $dependency");
+            $ret[$depName] = $d;
+
+            $requires = $d->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES);
+            foreach ($requires as $index=>$r) {
+                if ($r->getMimeType() == 'text/javascript') {
+                    unset($requires[$index]);
                 }
             }
+            $d->setDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES, $requires);
+
+            foreach ($this->_parseDependencies($d) as $index=>$i) {
+                $d->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, $i, $index);
+            }
+
         }
         return $ret;
     }

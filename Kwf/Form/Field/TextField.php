@@ -57,7 +57,9 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         $value = $this->_getOutputValueFromValues($values);
 
         $ret = array();
-        $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
+        if (!$this->getHideLabel()) {
+            $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
+        }
         $cls = $this->getCls();
         if ($this->getClearOnFocus() && $value == $this->getDefaultValue()) {
             $cls .= ' kwfUp-kwfClearOnFocus';
@@ -98,7 +100,7 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
     {
         $ret = parent::getTemplateVars($values, $fieldNamePostfix, $idPrefix);
         $prop = $this->_getInputProperties($values, $fieldNamePostfix, $idPrefix);
-        $ret['id'] = $prop['id'];
+        if (isset($prop['id'])) $ret['id'] = $prop['id'];
         $ret['html'] = "<input";
         foreach ($prop as $k=>$i) {
             $ret['html'] .= ' '.htmlspecialchars($k).'="'.htmlspecialchars($i).'"';

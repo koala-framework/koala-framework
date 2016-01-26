@@ -14,7 +14,7 @@
             @include opacity(0.7);
         }
 
-        .kwcBem--backgroundImage {
+        &.kwcBem__backgroundImage {
             z-index: 1;
         }
     }

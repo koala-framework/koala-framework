@@ -117,8 +117,10 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
             } else {
                 return null;
             }
+        } else if ($expr instanceof Kwf_Model_Select_Expr_Sql) {
+            return $expr;
         } else {
-            throw new Kwf_Exception_NotImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         }
     }
 
@@ -238,7 +240,7 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         } else if ($expr instanceof Kwf_Model_Select_Expr_String || $expr instanceof Kwf_Model_Select_Expr_Boolean || $expr instanceof Kwf_Model_Select_Expr_Integer) {
             return $expr;
         } else {
-            throw new Kwf_Exception_NotImplemented();
+            throw new Kwf_Exception_NotYetImplemented();
         }
     }
 
@@ -427,14 +429,21 @@ class Kwf_Model_Union extends Kwf_Model_Abstract
         }
         if ($this->_allDb) {
 
-            $sel = $this->getDbSelects($select);
-
+            $dbSelects = $this->getDbSelects($select);
+            if (!$dbSelects) return array();
+            $dbSelect = Kwf_Registry::get('db')->select();
+            $dbSelect->union($dbSelects);
+            if ($p = $select->getPart(Kwf_Model_Select::ORDER)) {
+                $dbSelect->order('orderField '. $p[0]['direction']);
+            }
+            if ($limitCnt = $select->getPart(Kwf_Model_Select::LIMIT_COUNT)) {
+                $limitOffs = $select->getPart(Kwf_Model_Select::LIMIT_OFFSET);
+                $dbSelect->limit($limitCnt, $limitOffs);
+            }
+            $rows = Kwf_Registry::get('db')->query($dbSelect)->fetchAll();
             $ids = array();
-            if ($sel) {
-                $rows = Kwf_Registry::get('db')->query($sel)->fetchAll();
-                foreach ($rows as $row) {
-                    $ids[] = $row['id'];
-                }
+            foreach ($rows as $row) {
+                $ids[] = $row['id'];
             }
 
         } else {

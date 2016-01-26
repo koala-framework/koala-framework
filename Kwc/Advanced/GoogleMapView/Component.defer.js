@@ -43,7 +43,7 @@ onReady.onRender('.kwcClass', function(map) {
     }
 }, { checkVisibility: true });
 
-Kwf.onJElementReady('.kwcClass', function (el) {
+onReady.onRender('.kwcClass', function (el) {
     var mobileOverlayOpen = el.find('.mobileOverlayOpen');
     var mobileOverlayClose = el.find('.mobileOverlayClose');
 
