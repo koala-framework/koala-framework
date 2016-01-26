@@ -43,10 +43,19 @@ class Kwc_Mail_HtmlParser
             $stack = array_reverse($stack);
             foreach ($selectors as $selector) {
                 foreach ($stack as $stackItem=>$s) {
-                    if ($selector == $s['tag']
-                        || (isset($s['class']) && $selector == '.'.$s['class'])
-                        || (isset($s['class']) && $selector == $s['tag'].'.'.$s['class'])
-                    ) {
+
+                    $classes = explode(' ', $s['class']);
+                    foreach ($classes as $class) {
+                        if (
+                            (isset($class) && $selector == '.'.$class) ||
+                            (isset($class) && $selector == $s['tag'].'.'.$class)
+                        ) {
+                            $stack = array_slice($stack, $stackItem);
+                            continue 3;
+                        }
+                    }
+
+                    if ($selector == $s['tag']) {
                         $stack = array_slice($stack, $stackItem);
                         continue 2;
                     }
