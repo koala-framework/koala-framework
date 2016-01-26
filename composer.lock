@@ -63,16 +63,16 @@
         },
         {
             "name": "koala-framework/composer-extra-assets",
-            "version": "v2.0.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/koala-framework/composer-extra-assets.git",
-                "reference": "781124e183df8187fb9d9f5e692add8f2756d348"
+                "reference": "fe3b4c64d9c0465598a0657747ecb8951293645d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/koala-framework/composer-extra-assets/zipball/781124e183df8187fb9d9f5e692add8f2756d348",
-                "reference": "781124e183df8187fb9d9f5e692add8f2756d348",
+                "url": "https://api.github.com/repos/koala-framework/composer-extra-assets/zipball/fe3b4c64d9c0465598a0657747ecb8951293645d",
+                "reference": "fe3b4c64d9c0465598a0657747ecb8951293645d",
                 "shasum": ""
             },
             "require": {
@@ -105,7 +105,7 @@
             ],
             "description": "Composer Plugin for installing Assets using native npm/bower",
             "homepage": "https://github.com/koala-framework/composer-extra-assets",
-            "time": "2016-01-21 13:31:51"
+            "time": "2016-01-21 13:47:22"
         },
         {
             "name": "koala-framework/extjs2",
