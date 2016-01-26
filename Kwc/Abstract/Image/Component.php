@@ -259,7 +259,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
         $filename .= '.'.$fileRow->extension;
         $file = $fileRow->getFileSource();
-        if (!$file || !file_exists($file)) return null;
+        if (!$file) return null;
         return array(
             'filename' => $filename,
             'file' => $file,
