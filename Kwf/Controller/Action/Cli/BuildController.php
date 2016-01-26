@@ -128,10 +128,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
     {
         $a = new Kwf_Util_Build_Types_Assets();
         $langs = $a->getAllLanguages();
-
-        $packages = array(
-            Kwf_Assets_Package_Default::getInstance('Frontend'),
-        );
+        $packages = $a->getAllPackages();
 
         foreach ($packages as $p) {
             $c = $p->getBuildContents('text/css', $langs[0]);
