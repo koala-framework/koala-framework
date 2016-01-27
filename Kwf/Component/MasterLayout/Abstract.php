@@ -35,12 +35,16 @@ abstract class Kwf_Component_MasterLayout_Abstract
         static $i = array();
         if (!isset($i[$class])) {
             if (!Kwc_Abstract::hasSetting($class, 'masterLayout')) {
-                throw new Kwf_Exception("No masterLayout set for '$class'");
+                //default masterLayout
+                $layout = array(
+                    'class' => 'Kwf_Component_MasterLayout_Legacy'
+                );
+            } else {
+                $layout = Kwc_Abstract::getSetting($class, 'masterLayout');
             }
-            $layout = Kwc_Abstract::getSetting($class, 'masterLayout');
-            $class = $layout['class'];
+            $layoutClass = $layout['class'];
             unset($layout['class']);
-            $i[$class] = new $class($class, $layout);
+            $i[$class] = new $layoutClass($class, $layout);
         }
         return $i[$class];
     }
