@@ -268,9 +268,6 @@ class Kwf_Assets_Package
                     if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
                         throw new Kwf_Exception("contents must not contain sourceMappingURL");
                     }
-                    foreach ($map->getMapContentsData(false)->sources as &$s) {
-                        $s = '/assets/'.$s;
-                    }
                     // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
                     $packageMap->concat($map);
                 }
@@ -358,6 +355,14 @@ class Kwf_Assets_Package
         else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
         else throw new Kwf_Exception("Invalid mimeType: '$mimeType'");
         $packageMap->setFile($this->getPackageUrl($ext, $language));
+
+        $data = $packageMap->getMapContentsData(false);
+        $data->sourcesContent = array();
+        foreach ($data->sources as $k=>$i) {
+            $i = new Kwf_Assets_Dependency_File($i);
+            $data->sourcesContent[$k] = $i->getContentsSourceString();
+            $data->sources[$k] = '/assets/'.$i;
+        }
 
         return $packageMap;
     }
