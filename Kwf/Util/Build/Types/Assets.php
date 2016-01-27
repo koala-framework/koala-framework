@@ -66,6 +66,9 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
     public function flagAllPackagesOutdated($extension)
     {
+        Kwf_Assets_BuildCache::getInstance()->remove('assetsVersion'); //remove and save as remove will also remove cache in apc
+        Kwf_Assets_BuildCache::getInstance()->save(time(), 'assetsVersion');
+
         $langs = $this->getAllLanguages();
         $packages = $this->getAllPackages();
         foreach ($packages as $p) {
