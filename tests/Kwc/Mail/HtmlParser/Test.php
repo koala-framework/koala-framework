@@ -257,7 +257,6 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
 
     public function testSelectorMultipleClasses5()
     {
-        $this->markTestIncomplete();
         $styles = array(
             array(
                 'selector' => '.foo.bar',
@@ -285,7 +284,6 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
 
     public function testSelectorMultipleClasses6()
     {
-        $this->markTestIncomplete();
         $styles = array(
             array(
                 'selector' => 'p.foo.bar',
@@ -313,7 +311,6 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
 
     public function testSelectorMultipleClasses7()
     {
-        $this->markTestIncomplete();
         $styles = array(
             array(
                 'selector' => 'div.foo.bar',
@@ -324,12 +321,14 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
         );
 
         $html = '<p class="foo bar">Lorem Ipsum</p>';
+        $html .= '<div class="foo bar">Lorem Ipsum</div>';
         $html .= '<p class="foo">Lorem Ipsum</p>';
         $html .= '<p class="bar">Lorem Ipsum</p>';
 
         $expected = '<html xmlns="http://www.w3.org/1999/xhtml">';
         $expected .= '<head><title></title></head>';
         $expected .= '<p class="foo bar">Lorem Ipsum</p>';
+        $expected .= '<div class="foo bar" style="font-size: 12px; ">Lorem Ipsum</div>';
         $expected .= '<p class="foo">Lorem Ipsum</p>';
         $expected .= '<p class="bar">Lorem Ipsum</p>';
         $expected .= '</html>';
@@ -341,7 +340,39 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
 
     public function testSelectorMultipleClasses8()
     {
-        $this->markTestIncomplete();
+        $styles = array(
+            array(
+                'selector' => '.foo.bar.koala',
+                'styles' => array(
+                    'font-size' => '12px'
+                ),
+            ),
+            array(
+                'selector' => 'div.foo.bar.koala',
+                'styles' => array(
+                    'line-height' => '100%'
+                ),
+            )
+        );
+
+        $html = '<p class="foo koala bar">Lorem Ipsum</p>';
+        $html .= '<div class="foo bar koala">Lorem Ipsum</div>';
+        $html .= '<p class="foo bar">Lorem Ipsum</p>';
+
+        $expected = '<html xmlns="http://www.w3.org/1999/xhtml">';
+        $expected .= '<head><title></title></head>';
+        $expected .= '<p class="foo koala bar" style="font-size: 12px; ">Lorem Ipsum</p>';
+        $expected .= '<div class="foo bar koala" style="font-size: 12px; line-height: 100%; ">Lorem Ipsum</div>';
+        $expected .= '<p class="foo bar">Lorem Ipsum</p>';
+        $expected .= '</html>';
+
+        $p = new Kwc_Mail_HtmlParser($styles);
+        $html = $p->parse($html);
+        $this->_assertHtmlEquals($expected, $html);
+    }
+
+    public function testSelectorMultipleClasses9()
+    {
         $styles = array(
             array(
                 'selector' => '.foo .bar',
@@ -352,14 +383,14 @@ class Kwc_Mail_HtmlParser_Test extends Kwf_Test_TestCase
         );
 
         $html = '<p class="foo bar">Lorem Ipsum</p>';
-        $html .= '<p class="foo">Lorem Ipsum</p>';
+        $html .= '<p class="foo"><span class="bar">Lorem Ipsum</span></p>';
         $html .= '<p class="bar">Lorem Ipsum</p>';
 
         $expected = '<html xmlns="http://www.w3.org/1999/xhtml">';
         $expected .= '<head><title></title></head>';
-        $expected .= '<p class="foo bar" style="font-size: 12px; >Lorem Ipsum</p>';
-        $expected .= '<p class="foo" style="font-size: 12px; >Lorem Ipsum</p>';
-        $expected .= '<p class="bar" style="font-size: 12px; >Lorem Ipsum</p>';
+        $expected .= '<p class="foo bar">Lorem Ipsum</p>';
+        $expected .= '<p class="foo"><span class="bar" style="font-size: 12px; ">Lorem Ipsum</span></p>';
+        $expected .= '<p class="bar">Lorem Ipsum</p>';
         $expected .= '</html>';
 
         $p = new Kwc_Mail_HtmlParser($styles);
