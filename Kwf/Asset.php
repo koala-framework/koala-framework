@@ -80,7 +80,7 @@ class Kwf_Asset
     public function getFilename()
     {
         $d = $this->_getIconAndType();
-        $file = new Kwf_Assets_Dependency_File($d['type'].'/'.$d['icon']);
+        $file = new Kwf_Assets_Dependency_File(Kwf_Assets_ProviderList_Default::getInstance(), $d['type'].'/'.$d['icon']);
         return $file->getAbsoluteFileName();
     }
 

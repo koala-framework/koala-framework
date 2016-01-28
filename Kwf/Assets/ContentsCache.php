@@ -13,7 +13,7 @@ class Kwf_Assets_ContentsCache
         return $cache;
     }
 
-    public function save(Kwf_SourceMaps_SourceMap $map, $cacheId)
+    public function save(Kwf_SourceMaps_SourceMap $map, $cacheId, Kwf_Assets_ProviderList_Abstract $providerList)
     {
         $this->_cache[$cacheId] = $map;
 
@@ -25,7 +25,7 @@ class Kwf_Assets_ContentsCache
         $masterFiles = array();
         foreach ($map->getSources() as $f) {
             if (!file_exists($f)) {
-                $f = new Kwf_Assets_Dependency_File($f);
+                $f = new Kwf_Assets_Dependency_File($providerList, $f);//TODO providerList
                 $f = $f->getAbsoluteFileName();
             }
             $masterFiles[] = array(

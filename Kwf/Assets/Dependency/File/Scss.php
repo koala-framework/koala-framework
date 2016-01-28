@@ -114,7 +114,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                     throw new Kwf_Exception('source doesn\'t start with ../: '.$i);
                 }
                 $i = substr($i, 3);
-                $f = self::getPathWithTypeByFileName(getcwd().'/'.$i);
+                $f = self::getPathWithTypeByFileName($this->_providerList, getcwd().'/'.$i);
                 if (!$f) {
                     throw new Kwf_Exception("Can't find path for '".getcwd().'/'.$i."'");
                 }
@@ -143,7 +143,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         unlink($buildFile);
         unlink("{$buildFile}.map");
 
-        Kwf_Assets_ContentsCache::getInstance()->save($map, $cacheId);
+        Kwf_Assets_ContentsCache::getInstance()->save($map, $cacheId, $this->_providerList);
 
         return $map;
     }

@@ -43,4 +43,9 @@ abstract class Kwf_Assets_Provider_Abstract
     protected function _initialize()
     {
     }
+
+    public function getPathTypes()
+    {
+        return array();
+    }
 }

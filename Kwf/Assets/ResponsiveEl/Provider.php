@@ -33,6 +33,7 @@ class Kwf_Assets_ResponsiveEl_Provider extends Kwf_Assets_Provider_Abstract
                 foreach ($selectors as $selector=>$breakpoints) {
                     $selectorNum++;
                     $d = new Kwf_Assets_ResponsiveEl_JsDependency(
+                        $this->_providerList,
                         trim($selector),
                         $breakpoints,
                         'ResponsiveEl-'.$dependency->__toString().'-'.$selectorNum

@@ -1,6 +1,13 @@
 <?php
 class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
 {
+    protected $_pathTypesCacheId = 'assets-file-paths';
+
+    public static function getInstance()
+    {
+        return Kwf_Assets_Package_Default::getDefaultProviderList();
+    }
+
     public function __construct()
     {
         $providers = array();

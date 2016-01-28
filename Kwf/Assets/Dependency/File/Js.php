@@ -6,11 +6,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         return 'text/javascript';
     }
 
-    public function __construct($fileName)
-    {
-        parent::__construct($fileName);
-    }
-
     public function getContentsPacked()
     {
         $fileName = $this->getFileNameWithType();

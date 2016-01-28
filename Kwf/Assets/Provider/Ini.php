@@ -83,7 +83,7 @@ class Kwf_Assets_Provider_Ini extends Kwf_Assets_Provider_Abstract implements Se
             }
         }
 
-        return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
+        return new Kwf_Assets_Dependency_Dependencies($this->_providerList, $ret, $dependencyName);
     }
 
     public function serialize()

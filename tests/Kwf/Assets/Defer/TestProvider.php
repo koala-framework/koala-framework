@@ -4,13 +4,13 @@ class Kwf_Assets_Defer_TestProvider extends Kwf_Assets_Provider_Abstract
     public function getDependency($dependencyName)
     {
         if ($dependencyName == 'A') {
-            return new Kwf_Assets_Defer_JsDependency("A", false);
+            return new Kwf_Assets_Defer_JsDependency($this->_providerList, "A", false);
         } else if ($dependencyName == 'B') {
-            return new Kwf_Assets_Defer_JsDependency("B", true);
+            return new Kwf_Assets_Defer_JsDependency($this->_providerList, "B", true);
         } else if ($dependencyName == 'C') {
-            return new Kwf_Assets_Defer_JsDependency("C", false);
+            return new Kwf_Assets_Defer_JsDependency($this->_providerList, "C", false);
         } else if ($dependencyName == 'D') {
-            return new Kwf_Assets_Defer_JsDependency("D", false);
+            return new Kwf_Assets_Defer_JsDependency($this->_providerList, "D", false);
         }
     }
     /*

@@ -4,11 +4,11 @@ class Kwf_Assets_UseRequire3_TestProvider extends Kwf_Assets_Provider_Abstract
     public function getDependency($dependencyName)
     {
         if ($dependencyName == 'A') {
-            return new Kwf_Assets_UseRequire3_TestDependency("A");
+            return new Kwf_Assets_UseRequire3_TestDependency($this->_providerList, "A");
         } else if ($dependencyName == 'B') {
-            return new Kwf_Assets_UseRequire3_TestDependency("B");
+            return new Kwf_Assets_UseRequire3_TestDependency($this->_providerList, "B");
         } else if ($dependencyName == 'C') {
-            return new Kwf_Assets_UseRequire3_TestDependency("C");
+            return new Kwf_Assets_UseRequire3_TestDependency($this->_providerList, "C");
         }
     }
     /*
