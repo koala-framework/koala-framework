@@ -13711,7 +13711,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Продолжить чтение</ru>
 <ua>Продовжити читання</ua>
 <ro>Citeste mai mult</ro>
-<hr>Nastaviti čitati</hr>
+<hr>više informacija</hr>
 </text>
 <text>
 <en>said</en>
@@ -14197,6 +14197,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>16:9</de>
 <ru>16:9</ru>
 <ua>16:9</ua>
+<ro>16:9</ro>
 </text>
 <text>
 <en>4:3</en>
@@ -14204,6 +14205,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>4:3</de>
 <ru>4:3</ru>
 <ua>4:3</ua>
+<ro>4:3</ro>
 </text>
 <text>
 <en>Set size of video</en>
@@ -14549,6 +14551,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <en>Saturday</en>
 <ru>Суббота</ru>
 <id>2065</id>
+<ro>Sambata</ro>
 </text>
 <text>
 <en>{0} selected row{1}</en>
@@ -15065,18 +15068,21 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Сессия истекла, пожалуйста, перезайдите.</ru>
 <de>Session abgelaufen, bitte neu einloggen.</de>
 <id>2188</id>
+<ro>Sesiunea a expirat, va rugam sa va logati din nou.</ro>
 </text>
 <text>
 <en>Please specify a user name.</en>
 <ru>Пожалуйста, укажите имя пользователя.</ru>
 <de>Bitte geben Sie einen Benutzernamen an.</de>
 <id>2189</id>
+<ro>Va rugam introduceti un nume de utilizator.</ro>
 </text>
 <text>
 <en>Please specify a password.</en>
 <ru>Пожалуйста, укажите пароль.</ru>
 <de>Bitte geben Sie ein Passwort an.</de>
 <id>2190</id>
+<ro>Va rugam sa introduceti parola.</ro>
 </text>
 <text>
 <en>Export</en>
