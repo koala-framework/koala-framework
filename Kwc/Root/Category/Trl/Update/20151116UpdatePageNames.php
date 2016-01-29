@@ -1,5 +1,5 @@
 <?php
-class Kwc_Root_Category_Update_20151116UpdatePageNames extends Kwf_Update
+class Kwc_Root_Category_Trl_Update_20151116UpdatePageNames extends Kwf_Update
 {
     public function update()
     {
