@@ -39,7 +39,24 @@ class Kwf_Util_Maintenance_Dispatcher
             if ($job->getFrequency() == $jobFrequency) {
                 if ($debug) echo "executing ".get_class($job)."\n";
                 $t = microtime(true);
-                $job->execute($debug);
+                if ($jobFrequency == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY) {
+                    $cmd = "php bootstrap.php maintenance-jobs run-job --job=".escapeshellarg(get_class($job));
+                    if ($debug) $cmd .= " --debug";
+                    $retVar = null;
+                    passthru($cmd, $retVar);
+                    if ($retVar) {
+                        $e = new Kwf_Exception("Maintenance job ".get_class($job)." failed with exit code $retVar");
+                        $e->logOrThrow();
+                    }
+                } else {
+                    try {
+                        $job->execute($debug);
+                    } catch (Exception $e) {
+                        file_put_contents('php://stderr', $e->toString()."\n");
+                        if (!$e instanceof Kwf_Exception_Abstract) $e = new Kwf_Exception_Other($e);
+                        $e->logOrThrow();
+                    }
+                }
                 $t = microtime(true)-$t;
                 if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
                 $maxTime = 60;
