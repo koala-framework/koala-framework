@@ -27,7 +27,8 @@
             "compass-mixins": "koala-framework/compass-mixins#7319116335050516e01b250b6e771600ab55e105",
             "tinymce": "tinymce/tinymce#4.1.9",
             "matches-selector": "^1.0.3",
-            "html5shiv": "^3.7.3"
+            "html5shiv": "^3.7.3",
+            "es5-shim": "^4.5.1"
         },
         "require-npm": {
             "uglify-js": "^2.4.13",
