@@ -4,8 +4,9 @@ class Kwf_Assets_CommonJs_Dependency extends Kwf_Assets_Dependency_Abstract
     private $_defer;
     private $_contents;
     private $_mimeType;
-    public function __construct($contents, $mimeType, $defer)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $contents, $mimeType, $defer)
     {
+        parent::__construct($providerList);
         $this->_contents = $contents;
         $this->_mimeType = $mimeType;
         $this->_defer = $defer;

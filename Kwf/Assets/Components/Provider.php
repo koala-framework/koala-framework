@@ -33,7 +33,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                         $j = substr($j, 3);
                     }
                     $j = $cwd.'/'.$j;
-                    $jj = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($j);
+                    $jj = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($this->_providerList, $j);
                     if (!$jj) {
                         throw new Kwf_Exception("Can't find path type for '$j'");
                     }
@@ -41,7 +41,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 }
             }
             if ($nonDeferDep) {
-                $nonDeferDep = new Kwf_Assets_Dependency_Dependencies($nonDeferDep, 'Web');
+                $nonDeferDep = new Kwf_Assets_Dependency_Dependencies($this->_providerList, $nonDeferDep, 'Web');
                 $ret[] = $nonDeferDep;
             }
 
@@ -52,7 +52,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                     $ret[] = $d;
                 }
             }
-            return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
+            return new Kwf_Assets_Dependency_Dependencies($this->_providerList, $ret, $dependencyName);
 
         } else if (substr($dependencyName, 0, 17) == 'ComponentsPackage') {
 
@@ -64,7 +64,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 if (!$d) throw new Kwf_Exception("Didn't get dependency 'Component-$c'");
                 $ret[] = $d;
             }
-            return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
+            return new Kwf_Assets_Dependency_Dependencies($this->_providerList, $ret, $dependencyName);
 
         } else if ($dependencyName == 'ComponentsAdmin') {
             $ret = array();
@@ -81,20 +81,20 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                     $ret[] = $this->_fileDependencies[$file];
                 }
             }
-            return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
+            return new Kwf_Assets_Dependency_Dependencies($this->_providerList, $ret, $dependencyName);
         } else if ($dependencyName == 'FrontendCore') {
             $deps = array();
 
-            $dep = new Kwf_Assets_Dependency_File_Js('kwf/commonjs/frontend-core.js');
+            $dep = new Kwf_Assets_Dependency_File_Js($this->_providerList, 'kwf/commonjs/frontend-core.js');
             $dep->setIsCommonJsEntry(true);
             $deps[] = $dep;
 
-            $dep = new Kwf_Assets_Dependency_File_Js('kwf/commonjs/frontend-core.defer.js');
+            $dep = new Kwf_Assets_Dependency_File_Js($this->_providerList, 'kwf/commonjs/frontend-core.defer.js');
             $dep->setIsCommonJsEntry(true);
             $dep->setDeferLoad(true);
             $deps[] = $dep;
 
-            return new Kwf_Assets_Dependency_Dependencies($deps, 'FrontendCore');
+            return new Kwf_Assets_Dependency_Dependencies($this->_providerList, $deps, 'FrontendCore');
         } else if (substr($dependencyName, 0, 10) == 'Component-') {
 
             $class = substr($dependencyName, 10);
@@ -103,14 +103,14 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 
             $deps = $this->_getComponentSettingDependenciesDep($class, 'assetsDefer', true);
             if ($deps) {
-                $deps = new Kwf_Assets_Dependency_Dependencies($deps, $class.'-deps-defer');
+                $deps = new Kwf_Assets_Dependency_Dependencies($this->_providerList, $deps, $class.'-deps-defer');
                 $deps->setDeferLoad(true);
                 $ret[] = $deps;
             }
 
             $deps = $this->_getComponentSettingDependenciesDep($class, 'assets', true);
             if ($deps) {
-                $deps = new Kwf_Assets_Dependency_Dependencies($deps, $class.'-deps');
+                $deps = new Kwf_Assets_Dependency_Dependencies($this->_providerList, $deps, $class.'-deps');
                 $ret[] = $deps;
             }
 
@@ -205,7 +205,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 }
             }
             if ($matchingDeps) {
-                $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $matchingDeps, false, $class.'-css');
+                $ret[] = new Kwf_Assets_Components_Dependency_Css($this->_providerList, $class, $matchingDeps, false, $class.'-css');
             }
 
             //css, master
@@ -216,7 +216,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 }
             }
             if ($matchingDeps) {
-                $ret[] = new Kwf_Assets_Components_Dependency_Css($class, $matchingDeps, true, $class.'-master-css');
+                $ret[] = new Kwf_Assets_Components_Dependency_Css($this->_providerList, $class, $matchingDeps, true, $class.'-master-css');
             }
 
             //js, not master, not defer
@@ -227,7 +227,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 }
             }
             if ($matchingDeps) {
-                $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, false, $class.'-js');
+                $ret[] = new Kwf_Assets_Components_Dependency_Js($this->_providerList, $class, $matchingDeps, false, $class.'-js');
             }
 
             //js, master, not defer
@@ -238,7 +238,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 }
             }
             if ($matchingDeps) {
-                $ret[] = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, true, $class.'-master-js');
+                $ret[] = new Kwf_Assets_Components_Dependency_Js($this->_providerList, $class, $matchingDeps, true, $class.'-master-js');
             }
 
             //js, not master, defer
@@ -249,7 +249,7 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 }
             }
             if ($matchingDeps) {
-                $dep = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, false, $class.'-defer-js');
+                $dep = new Kwf_Assets_Components_Dependency_Js($this->_providerList, $class, $matchingDeps, false, $class.'-defer-js');
                 $dep->setDeferLoad(true);
                 $ret[] = $dep;
             }
@@ -262,12 +262,12 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 }
             }
             if ($matchingDeps) {
-                $dep = new Kwf_Assets_Components_Dependency_Js($class, $matchingDeps, true, $class.'-master-defer-js');
+                $dep = new Kwf_Assets_Components_Dependency_Js($this->_providerList, $class, $matchingDeps, true, $class.'-master-defer-js');
                 $dep->setDeferLoad(true);
                 $ret[] = $dep;
             }
 
-            return new Kwf_Assets_Dependency_Dependencies($ret, $dependencyName);
+            return new Kwf_Assets_Dependency_Dependencies($this->_providerList, $ret, $dependencyName);
         }
         return null;
     }

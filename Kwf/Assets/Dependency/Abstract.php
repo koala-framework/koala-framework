@@ -6,12 +6,14 @@ abstract class Kwf_Assets_Dependency_Abstract
     const DEPENDENCY_TYPE_USES = 'uses';
     const DEPENDENCY_TYPE_COMMONJS = 'commonjs';
     protected $_dependencies = array();
+    protected $_providerList;
 
     private $_deferLoad = false;
     private $_isCommonJsEntry = false;
 
-    public function __construct()
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList)
     {
+        $this->_providerList = $providerList;
     }
 
     public function getDeferLoad()

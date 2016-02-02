@@ -46,7 +46,7 @@ class Kwf_Assets_CommonJs_JQueryPluginProvider extends Kwf_Assets_Provider_Abstr
             return null;
         } else {
             if ($dep->getMimeType() == 'text/javascript') {
-                return new Kwf_Assets_CommonJs_JQueryPluginDecoratorDependency($dep);
+                return new Kwf_Assets_CommonJs_JQueryPluginDecoratorDependency($this->_providerList, $dep);
             } else {
                 return $dep;
             }

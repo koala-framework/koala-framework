@@ -6,11 +6,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         return 'text/javascript';
     }
 
-    public function __construct($fileName)
-    {
-        parent::__construct($fileName);
-    }
-
     public function getContentsPacked()
     {
         $fileName = $this->getFileNameWithType();
@@ -32,8 +27,9 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
         if ($useTrl) {
             $useTrl = strpos($rawContents, 'trl') !== false && preg_match('#trl(c|p|cp)?(Kwf)?(Static)?\(#', $rawContents);
         }
+        $useBabel = strpos($rawContents, '"use es6";') !== false;
 
-        if ($usesUniquePrefix || $useTrl) {
+        if ($usesUniquePrefix || $useTrl || $useBabel) {
             //when contents contain .cssClass we must cache per app
             $buildFile = 'cache/uglifyjs/'.$fileName.'.v2'.md5(file_get_contents($this->getAbsoluteFileName()).Kwf_Config::getValue('application.uniquePrefix'));
         } else {
@@ -45,6 +41,11 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             $dir = dirname($buildFile);
             if (!file_exists($dir)) mkdir($dir, 0777, true);
             file_put_contents($buildFile, $rawContents);
+
+            if ($useBabel) {
+                $map = Kwf_Assets_Dependency_Filter_BabelJs::build($buildFile);
+                file_put_contents($buildFile, $map->getFileContents()); //TODO: map support
+            }
 
             $map = Kwf_Assets_Dependency_Filter_UglifyJs::build($buildFile, $this->getFileNameWithType());
 

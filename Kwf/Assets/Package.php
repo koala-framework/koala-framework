@@ -153,7 +153,7 @@ class Kwf_Assets_Package
                 }
             }
 
-            Kwf_Assets_ContentsCache::getInstance()->save($ret, $cacheId);
+            Kwf_Assets_ContentsCache::getInstance()->save($ret, $cacheId, $this->_providerList);
         }
         return $ret;
     }

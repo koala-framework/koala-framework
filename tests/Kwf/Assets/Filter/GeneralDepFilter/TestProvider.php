@@ -4,9 +4,9 @@ class Kwf_Assets_Filter_GeneralDepFilter_TestProvider extends Kwf_Assets_Provide
     public function getDependency($dependencyName)
     {
         if ($dependencyName == 'Foo1') {
-            return new Kwf_Assets_Filter_GeneralDepFilter_Dependency1();
+            return new Kwf_Assets_Filter_GeneralDepFilter_Dependency1($this->_providerList);
         } else if ($dependencyName == 'Foo2') {
-            return new Kwf_Assets_Filter_GeneralDepFilter_Dependency2();
+            return new Kwf_Assets_Filter_GeneralDepFilter_Dependency2($this->_providerList);
         }
     }
 

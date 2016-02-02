@@ -4,7 +4,7 @@ class Kwf_Assets_Filter_PrefixerFontface_Test extends Kwf_Test_TestCase
 {
     public function testRulePrefix()
     {
-        $d = new Kwf_Assets_Dependency_File_Scss('kwf/tests/Kwf/Assets/Filter/PrefixerFontface/test1.scss');
+        $d = new Kwf_Assets_Dependency_File_Scss(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/tests/Kwf/Assets/Filter/PrefixerFontface/test1.scss');
         $map = $d->getContentsPacked();
 
         $filter = new Kwf_Assets_Filter_Css_PrefixerFontface('myWebsite-');
@@ -15,7 +15,7 @@ class Kwf_Assets_Filter_PrefixerFontface_Test extends Kwf_Test_TestCase
 
     public function testDeclarationPrefix()
     {
-        $d = new Kwf_Assets_Dependency_File_Scss('kwf/tests/Kwf/Assets/Filter/PrefixerFontface/test2.scss');
+        $d = new Kwf_Assets_Dependency_File_Scss(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/tests/Kwf/Assets/Filter/PrefixerFontface/test2.scss');
         $map = $d->getContentsPacked();
 
         $filter = new Kwf_Assets_Filter_Css_PrefixerFontface('myWebsite-');
@@ -26,7 +26,7 @@ class Kwf_Assets_Filter_PrefixerFontface_Test extends Kwf_Test_TestCase
 
     public function testExternalPrefix()
     {
-        $d = new Kwf_Assets_Dependency_File_Scss('kwf/tests/Kwf/Assets/Filter/PrefixerFontface/test3.scss');
+        $d = new Kwf_Assets_Dependency_File_Scss(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/tests/Kwf/Assets/Filter/PrefixerFontface/test3.scss');
         $map = $d->getContentsPacked();
 
         $filter = new Kwf_Assets_Filter_Css_PrefixerFontface('myWebsite-');

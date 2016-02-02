@@ -3,14 +3,14 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
 {
     public function testFileJs()
     {
-        $f = new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Kwf.js');
+        $f = new Kwf_Assets_Dependency_File_Js(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/Kwf_js/Kwf.js');
         $this->assertEquals('text/javascript', $f->getMimeType());
         $this->assertContains('Kwf.clone', $f->getContentsPacked()->getFileContents());
         $this->assertEquals(array(), $f->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL));
     }
     public function testFileJsPacked()
     {
-        $f = new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Kwf.js');
+        $f = new Kwf_Assets_Dependency_File_Js(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/Kwf_js/Kwf.js');
         $this->assertEquals('text/javascript', $f->getMimeType());
         $c = $f->getContentsPacked()->getFileContents();
         $cPacked = $f->getContentsPacked()->getFileContents();
@@ -29,21 +29,21 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
 
     public function testDependency()
     {
-        $files = array(new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Kwf.js'));
+        $files = array(new Kwf_Assets_Dependency_File_Js(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/Kwf_js/Kwf.js'));
         $dep = array();
-        $d = new Kwf_Assets_Dependency_Dependencies($files);
+        $d = new Kwf_Assets_Dependency_Dependencies(new Kwf_Assets_Dependency_EmptyProviderList(), $files);
         $this->assertEquals($files, $d->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_ALL));
         $this->assertEquals(null, $d->getContentsPacked()->getFileContents());
     }
 
     public function testRecursiveIterator()
     {
-        $file1 = new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Kwf.js');
-        $file2 = new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/OnReadyExt.js');
+        $file1 = new Kwf_Assets_Dependency_File_Js(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/Kwf_js/Kwf.js');
+        $file2 = new Kwf_Assets_Dependency_File_Js(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/Kwf_js/OnReadyExt.js');
 
-        $d = new Kwf_Assets_Dependency_Dependencies(array(
+        $d = new Kwf_Assets_Dependency_Dependencies(new Kwf_Assets_Dependency_EmptyProviderList(), array(
             $file1,
-            new Kwf_Assets_Dependency_Dependencies(array(
+            new Kwf_Assets_Dependency_Dependencies(new Kwf_Assets_Dependency_EmptyProviderList(), array(
                 $file2
             ))
         ));
@@ -62,12 +62,12 @@ class Kwf_Assets_Dependency_Test extends Kwf_Test_TestCase
 
     public function testRecursiveIteratorFilter()
     {
-        $file1 = new Kwf_Assets_Dependency_File_Js('kwf/Kwf_js/Kwf.js');
-        $file2 = new Kwf_Assets_Dependency_File_Css('kwf/css/web.css');
+        $file1 = new Kwf_Assets_Dependency_File_Js(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/Kwf_js/Kwf.js');
+        $file2 = new Kwf_Assets_Dependency_File_Css(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/css/web.css');
 
-        $d = new Kwf_Assets_Dependency_Dependencies(array(
+        $d = new Kwf_Assets_Dependency_Dependencies(new Kwf_Assets_Dependency_EmptyProviderList(), array(
             $file1,
-            new Kwf_Assets_Dependency_Dependencies(array(
+            new Kwf_Assets_Dependency_Dependencies(new Kwf_Assets_Dependency_EmptyProviderList(), array(
                 $file2
             ))
         ));

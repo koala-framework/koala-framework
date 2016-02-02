@@ -57,7 +57,7 @@ abstract class Kwf_Component_MasterLayout_Abstract
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (Kwc_Abstract::hasSetting($c, 'masterLayout')) {
                 $masterLayout = Kwc_Abstract::getSetting($c, 'masterLayout');
-                $f = new Kwf_Assets_Dependency_File($masterLayout['layoutConfig']);
+                $f = new Kwf_Assets_Dependency_File(Kwf_Assets_ProviderList_Default::getInstance(), $masterLayout['layoutConfig']);
                 $masterLayouts .= $f->getContentsSourceString()."\n";
                 $masterLayouts .= "\$all-master-layouts: map-merge(\$all-master-layouts, \$master-layouts);\n";
             }
