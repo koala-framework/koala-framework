@@ -6,7 +6,7 @@ class Kwf_Assets_Provider_ExtTrl extends Kwf_Assets_Provider_Abstract
         if ($dependency instanceof Kwf_Assets_Dependency_File_Js && $dependency->getFileNameWithType() == 'ext2/src/core/EventManager.js') {
             return array(
                 Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES => array(
-                    new Kwf_Assets_Dependency_File_Js('kwf/Ext/ext-lang-en.js')
+                    new Kwf_Assets_Dependency_File_Js($this->_providerList, 'kwf/Ext/ext-lang-en.js')
                 )
             );
         }

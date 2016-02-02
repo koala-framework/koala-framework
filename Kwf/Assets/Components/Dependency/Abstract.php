@@ -5,8 +5,9 @@ abstract class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Depe
     protected $_componentDependencies;
     protected $_isMaster;
 
-    public function __construct($componentClass, array $componentDependencies, $isMaster, $dependencyName)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $componentClass, array $componentDependencies, $isMaster, $dependencyName)
     {
+        parent::__construct($providerList);
         $this->_componentClass = $componentClass;
         $this->_componentDependencies = $componentDependencies;
         $this->_isMaster = $isMaster;

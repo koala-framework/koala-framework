@@ -3,11 +3,11 @@ class Kwf_Assets_Dependency_Dependencies extends Kwf_Assets_Dependency_Abstract
 {
     protected $_name;
 
-    public function __construct(array $dependencies, $name = null)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, array $dependencies, $name = null)
     {
         $this->setDependencies(self::DEPENDENCY_TYPE_REQUIRES, $dependencies);
         $this->_name = $name;
-        parent::__construct();
+        parent::__construct($providerList);
     }
 
     public function __toString()

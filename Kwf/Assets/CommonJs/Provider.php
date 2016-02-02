@@ -54,7 +54,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
 
         $src = $dependency->getContentsSource();
         if ($src['type'] == 'file') {
-            $cacheId = str_replace(array('/', '.', '-'), '_', $src['file']).'__'.md5_file($src['file']);
+            $cacheId = str_replace(array('/', '.', '-', '$'), '_', $src['file']).'__'.md5_file($src['file']);
         } else if ($src['type'] == 'contents') {
             $cacheId = md5($src['contents']);
         } else {
@@ -62,6 +62,16 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
         }
         $deps = self::_getCache()->load($cacheId);
         if ($deps === false) {
+            if ($src['type'] == 'file') {
+                $contents = file_get_contents($src['file']);
+            } else if ($src['type'] == 'contents') {
+                $contents = $src['contents'];
+            }
+            $useBabel = strpos($contents, '"use es6";') !== false;
+            if ($useBabel) {
+                $src['type'] = 'contents';
+                $src['contents'] = $dependency->getContentsPacked()->getFileContents(); //we have to use complied contents as babel adds require() statements
+            }
             if ($src['type'] == 'file') {
                 $deps = Kwf_Assets_CommonJs_Parser::parse($src['file']);
             } else if ($src['type'] == 'contents') {

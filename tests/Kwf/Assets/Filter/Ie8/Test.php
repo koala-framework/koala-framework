@@ -3,7 +3,7 @@ class Kwf_Assets_Filter_Ie8_Test extends Kwf_Test_TestCase
 {
     public function testOnlyIe8()
     {
-        $d = new Kwf_Assets_Dependency_File_Scss('kwf/tests/Kwf/Assets/Filter/Ie8/test1.scss');
+        $d = new Kwf_Assets_Dependency_File_Scss(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/tests/Kwf/Assets/Filter/Ie8/test1.scss');
         $map = $d->getContentsPacked();
         $map->setMimeType('text/css');
 
@@ -16,7 +16,7 @@ class Kwf_Assets_Filter_Ie8_Test extends Kwf_Test_TestCase
 
     public function testNotIe8()
     {
-        $d = new Kwf_Assets_Dependency_File_Scss('kwf/tests/Kwf/Assets/Filter/Ie8/test1.scss');
+        $d = new Kwf_Assets_Dependency_File_Scss(new Kwf_Assets_Dependency_EmptyProviderList(), 'kwf/tests/Kwf/Assets/Filter/Ie8/test1.scss');
         $map = $d->getContentsPacked();
         $map->setMimeType('text/css');
 

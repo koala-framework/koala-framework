@@ -4,9 +4,9 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
     protected $_builtFile;
     protected $_sourceMapFile;
 
-    public function __construct($fileName, $builtFile, $sourceMapFile)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $fileName, $builtFile, $sourceMapFile)
     {
-        parent::__construct($fileName);
+        parent::__construct($providerList, $fileName);
         $this->_builtFile = $builtFile;
         $this->_sourceMapFile = $sourceMapFile;
     }
@@ -18,7 +18,7 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
 
     public function getContentsPacked()
     {
-        $paths = self::_getAllPaths();
+        $paths = $this->_providerList->getPathTypes();
         $pathType = $this->getType();
         $f = $paths[$pathType].substr($this->_builtFile, strpos($this->_builtFile, '/'));
         $contents = file_get_contents($f);
@@ -30,7 +30,6 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
         }
         $contents = implode("\n", $contents);
 
-        $paths = self::_getAllPaths();
         $pathType = $this->getType();
         $f = $paths[$pathType].substr($this->_sourceMapFile, strpos($this->_sourceMapFile, '/'));
         $mapContents = file_get_contents($f);

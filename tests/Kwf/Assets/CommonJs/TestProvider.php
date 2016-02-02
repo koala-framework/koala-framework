@@ -4,15 +4,15 @@ class Kwf_Assets_CommonJs_TestProvider extends Kwf_Assets_Provider_Abstract
     public function getDependency($dependencyName)
     {
         if ($dependencyName == 'A') {
-            $ret = new Kwf_Assets_CommonJs_Dependency("console.log(A)", 'text/javascript', false);
+            $ret = new Kwf_Assets_CommonJs_Dependency($this->_providerList, "console.log(A)", 'text/javascript', false);
             $ret->setIsCommonJsEntry(true);
             return $ret;
         } else if ($dependencyName == 'B') {
-            return new Kwf_Assets_CommonJs_Dependency("console.log(B)", 'text/javascript', false);
+            return new Kwf_Assets_CommonJs_Dependency($this->_providerList, "console.log(B)", 'text/javascript', false);
         } else if ($dependencyName == 'C') {
-            return new Kwf_Assets_CommonJs_Dependency("C", 'text/css', false);
+            return new Kwf_Assets_CommonJs_Dependency($this->_providerList, "C", 'text/css', false);
         } else if ($dependencyName == 'D') {
-            return new Kwf_Assets_CommonJs_Dependency("console.log(D)", 'text/javascript', false);
+            return new Kwf_Assets_CommonJs_Dependency($this->_providerList, "console.log(D)", 'text/javascript', false);
         }
     }
 

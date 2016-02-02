@@ -2,10 +2,10 @@
 abstract class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Dependency_Abstract
 {
     protected $_dep;
-    public function __construct(Kwf_Assets_Dependency_Abstract $dep)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, Kwf_Assets_Dependency_Abstract $dep)
     {
         $this->_dep = $dep;
-        parent::__construct();
+        parent::__construct($providerList);
     }
 
     public function getContentsSource()

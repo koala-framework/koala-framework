@@ -16,7 +16,7 @@ class Kwf_Assets_Provider_ViewsUser extends Kwf_Assets_Provider_Abstract
                     $deps[] = Kwf_Assets_Dependency_File::createDependency('web/'.$f, $this->_providerList);
                 }
             }
-            return new Kwf_Assets_Dependency_Dependencies($deps, $dependencyName);
+            return new Kwf_Assets_Dependency_Dependencies($this->_providerList, $deps, $dependencyName);
         }
         return null;
     }

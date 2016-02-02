@@ -2,10 +2,10 @@
 class Kwf_Assets_Dependency_HttpUrl extends Kwf_Assets_Dependency_Abstract
 {
     private $_url;
-    public function __construct($url)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $url)
     {
+        parent::__construct($providerList);
         $this->_url = $url;
-        parent::__construct();
     }
 
     public function getIncludeInPackage()

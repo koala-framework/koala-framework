@@ -1,6 +1,13 @@
 <?php
 class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
 {
+    protected $_pathTypesCacheId = 'assets-file-paths';
+
+    public static function getInstance()
+    {
+        return Kwf_Assets_Package_Default::getDefaultProviderList();
+    }
+
     public function __construct()
     {
         $providers = array();
@@ -29,6 +36,7 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $providers[] = new Kwf_Assets_CommonJs_JQueryPluginProvider();
         $providers[] = new Kwf_Assets_ResponsiveEl_Provider();
         $providers[] = new Kwf_Assets_CommonJs_Underscore_TemplateProvider();
+        $providers[] = new Kwf_Assets_Provider_BabelRuntime();
 
         $filters = array();
         $filters[] = new Kwf_Assets_Filter_Css_MultiplePostCss(array(
