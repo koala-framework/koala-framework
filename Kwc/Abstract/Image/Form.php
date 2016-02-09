@@ -53,9 +53,8 @@ class Kwc_Abstract_Image_Form extends Kwc_Abstract_Composite_Form
             ->setAllowBlankImage(Kwc_Abstract::getSetting($this->getClass(), 'allowBlank'))
             ->setShowHelptext(Kwc_Abstract::getSetting($this->getClass(), 'showHelpText'))
             ->setPreviewUrl(Kwc_Admin::getInstance($this->getClass())->getControllerUrl('Preview').'/preview-with-crop');
-
         if (Kwc_Abstract::getSetting($this->getClass(), 'maxResolution')) {
-            $this->setMaxResolution(Kwc_Abstract::getSetting($this->getClass(), 'maxResolution'));
+            $imageUploadField->setMaxResolution(Kwc_Abstract::getSetting($this->getClass(), 'maxResolution'));
         }
         return $imageUploadField;
     }

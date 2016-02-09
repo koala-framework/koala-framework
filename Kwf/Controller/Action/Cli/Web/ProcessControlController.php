@@ -36,39 +36,27 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
 
         $this->_start();
 
-        if (Kwf_Config::getValue('debug.mailProcessControlOutput')) {
+        $logFiles = array();
+        foreach ($this->_commands as $requiredCmd) {
+            $logFiles[] = "log/$requiredCmd[cmd].log";
+            $logFiles[] = "log/$requiredCmd[cmd].err";
+        }
+        $msg = '';
+        foreach ($logFiles as $logFile) {
+            if (!file_exists($logFile)) continue;
+            if (!filesize($logFile)) continue;
+            if ($this->_getParam('debug')) echo "$logFile: ".filesize($logFile)." bytes\n";;
+            $tempFile = tempnam('temp/', 'log');
+            copy($logFile, $tempFile);
+            $fp = fopen($logFile, 'w');
+            ftruncate($fp, filesize($tempFile)-filesize($logFile));
+            fclose($fp);
+            $msg .= date('Y-m-d H:i:s')." $logFile:\n";
+            $msg .= trim(file_get_contents($tempFile))."\n";
+        }
 
-            $logFiles = array();
-            foreach ($this->_commands as $requiredCmd) {
-                $logFiles[] = "log/$requiredCmd[cmd].log";
-                $logFiles[] = "log/$requiredCmd[cmd].err";
-            }
-            $msg = '';
-            foreach ($logFiles as $logFile) {
-                if (!file_exists($logFile)) continue;
-                if (!filesize($logFile)) continue;
-                if ($this->_getParam('debug')) echo "$logFile: ".filesize($logFile)." bytes\n";;
-                $tempFile = tempnam('temp/', 'log');
-                copy($logFile, $tempFile);
-                $fp = fopen($logFile, 'w');
-                ftruncate($fp, filesize($tempFile)-filesize($logFile));
-                fclose($fp);
-                $msg .= date('Y-m-d H:i:s')." $logFile:\n";
-                $msg .= trim(file_get_contents($tempFile))."\n";
-            }
-
-            if ($msg) {
-                $mail = new Kwf_Mail();
-                $mail->setSubject(Kwf_Config::getValue('server.domain').' process-control output');
-                $mail->setBodyText($msg);
-                foreach (Kwf_Registry::get('config')->developers as $d) {
-                    if ($d->sendProcessControlOutput) {
-                        $d->email;
-                        $mail->addTo($d->email);
-                    }
-                }
-                $mail->send();
-            }
+        if ($msg) {
+            echo $msg;
         }
 
         exit;
