@@ -109,7 +109,10 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
                             $and[] = new Kwf_Model_Select_Expr_Equal($k, $v);
                         }
                     }
-                    $or[] = new Kwf_Model_Select_Expr_And($and);
+                    $and = new Kwf_Model_Select_Expr_And($and);
+                    if (!in_array($and, $or)) {
+                        $or[] = $and;
+                    }
                 }
             }
             $select = new Kwf_Model_Select();

@@ -4,7 +4,7 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
     public function getListeners()
     {
         $ret = array();
-
+        $registeredDirectoryClasses = array();
         foreach (Kwc_Abstract::getComponentClasses() as $class) {
             if (in_array('Kwc_Directories_List_Component', Kwc_Abstract::getParentClasses($class)) ||
                 in_array('Kwc_Directories_List_Trl_Component', Kwc_Abstract::getParentClasses($class)) ||
@@ -17,6 +17,8 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
                         array(strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class, 'getItemDirectoryClasses'), $class
                     );
                     foreach ($directoryClasses as $directoryClass) {
+                        if (in_array($directoryClass, $registeredDirectoryClasses)) continue;
+                        $registeredDirectoryClasses[] = $directoryClass;
                         $ret[] = array(
                             'class' => $directoryClass,
                             'event' => 'Kwc_Directories_List_EventItemInserted',
