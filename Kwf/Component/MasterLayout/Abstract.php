@@ -91,7 +91,7 @@ abstract class Kwf_Component_MasterLayout_Abstract
         }
         $data = array(
             'contexts' => self::$_supportedContexts,
-            'childContexts' => self::$_supportedBoxContexts,
+            'boxContexts' => self::$_supportedBoxContexts,
         );
 
         file_put_contents('build/component/masterlayoutcontexts', serialize($data));
