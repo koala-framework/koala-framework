@@ -77,7 +77,8 @@ class Kwf_Exception extends Kwf_Exception_NoLog
             $body .= $this->_format('_SESSION', print_r($_SESSION, true));
         }
         try {
-            if ($request = Kwf_Controller_Front::getInstance()->getRequest() && $request instanceof Zend_Controller_Request_Http) {
+            $request = Kwf_Controller_Front::getInstance()->getRequest();
+            if ($request && $request instanceof Zend_Controller_Request_Http) {
                 $rawBody = $request->getRawBody();
                 if ($rawBody) {
                     if (defined('JSON_PRETTY_PRINT') && substr($rawBody, 0, 1) == '{' &&

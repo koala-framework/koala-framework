@@ -356,7 +356,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 }
                 $pData = Kwf_Component_Data_Root::getInstance()
                                     ->getComponentById($i, $c);
-                if ($pData->componentClass != $this->_class) {
+                if (!$pData || $pData->componentClass != $this->_class) {
                     return null;
                 }
             }

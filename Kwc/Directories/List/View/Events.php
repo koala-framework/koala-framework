@@ -42,6 +42,7 @@ class Kwc_Directories_List_View_Events extends Kwc_Abstract_Events
                                 'callback' => 'onDirectoryDetailRemoved'
                             );
                         }
+
                         $ret[] = array(
                             'class' => $directoryClass,
                             'event' => 'Kwc_Directories_List_EventItemUpdated',
