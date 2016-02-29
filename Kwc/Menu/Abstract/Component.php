@@ -221,6 +221,11 @@ abstract class Kwc_Menu_Abstract_Component extends Kwc_Abstract
                 $r['preHtml'] = '<!-- start '.$p->componentId.' '.$p->componentClass.' -->';
                 $r['postHtml'] = '<!-- end '.$p->componentId.' '.$p->componentClass.' -->';
             }
+            foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_Data_RootPlugin_Interface_MaskComponentLink') as $plugin) {
+                $mask = $plugin->getMaskCode($p);
+                $r['preHtml'] = $mask['begin'] . $r['preHtml'];
+                $r['postHtml'] = $r['postHtml'] . $mask['end'];
+            }
             $ret[] = $r;
             $i++;
         }
