@@ -1,5 +1,5 @@
 <?php
-class Kwf_Component_RootPlugin_MaskComponentLink_Model extends Kwc_Root_Category_GeneratorModel
+class Kwf_Component_PluginRoot_MaskComponentLink_Model extends Kwc_Root_Category_GeneratorModel
 {
     public function __construct()
     {
