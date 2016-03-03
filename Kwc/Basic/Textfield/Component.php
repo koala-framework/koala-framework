@@ -19,4 +19,12 @@ class Kwc_Basic_Textfield_Component extends Kwc_Basic_Html_Component
         $ret['content'] = str_replace('[-]', '&shy;', $ret['content']);
         return $ret;
     }
+
+    public function getFulltextContent()
+    {
+        $ret = parent::getFulltextContent();
+        $ret['content'] = str_replace('[-]', '&shy;', $ret['content']);
+        $ret['normalContent'] = str_replace('[-]', '&shy;', $ret['normalContent']);
+        return $ret;
+    }
 }
