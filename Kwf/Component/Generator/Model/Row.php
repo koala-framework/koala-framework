@@ -37,7 +37,7 @@ class Kwf_Component_Generator_Model_Row extends Kwf_Model_Row_Abstract
     public function save()
     {
         if (isset($this->visible)) {
-            $row = $this->_model->getTable()->find($this->componentId)->current();
+            $row = $this->_model->getRow($this->componentId)->getRow();
             $row->visible = $this->visible;
             $row->save();
         }

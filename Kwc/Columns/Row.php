@@ -1,12 +1,16 @@
 <?php
 class Kwc_Columns_Row extends Kwc_Abstract_List_Row
 {
+    private $_rows;
     public function __get($name)
     {
         if ($name == 'name' || $name == 'col_span' || $name == 'total_columns' || $name == 'columns') {
-            $select = new Kwf_Model_Select();
-            $select->whereEquals('component_id', $this->component_id);
-            $select->order('pos');
+            if (!isset($this->_rows)) {
+                $select = new Kwf_Model_Select();
+                $select->whereEquals('component_id', $this->component_id);
+                $select->order('pos');
+                $this->_rows = $this->getModel()->getRows($select);
+            }
 
             $columnTypes = Kwc_Abstract::getSetting($this->getModel()->getComponentClass(), 'columns');
             $typeName = array_shift(array_keys($columnTypes));
@@ -18,7 +22,7 @@ class Kwc_Columns_Row extends Kwc_Abstract_List_Row
 
             $i = 0;
             $countInvisible = 0;
-            foreach ($this->getModel()->getRows($select) as $row) {
+            foreach ($this->_rows as $row) {
                 if (!$row->visible) {
                     $countInvisible++;
                     $i++;

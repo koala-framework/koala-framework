@@ -9,9 +9,7 @@ class Kwf_Form_Field_ShowSelect extends Kwf_Form_Field_ShowField
         $ret = parent::load($row, $postData);
         $data = $this->getValues();
         if ($data) {
-            if ($data instanceof Kwf_Db_Table_Rowset_Abstract
-                || $data instanceof Kwf_Model_Rowset_Interface
-            ) {
+            if ($data instanceof Kwf_Model_Rowset_Interface) {
                 foreach ($data as $row) {
                     if ($row->id == $ret[$this->getFieldName()]) {
                         $ret[$this->getFieldName()] = $row->__toString();

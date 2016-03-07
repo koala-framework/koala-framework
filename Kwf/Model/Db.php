@@ -10,6 +10,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     protected $_db;
     private $_tableName;
     private $_columns;
+    private $_columnTypes = array();
     private $_primaryKey;
 
     protected $_supportedImportExportFormats = array(self::FORMAT_SQL, self::FORMAT_CSV, self::FORMAT_ARRAY);
@@ -57,12 +58,16 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     public function getColumnType($col)
     {
+        if (isset($this->_columnTypes[$col])) {
+            return $this->_columnTypes[$col];
+        }
         $info = $this->getTable()->info();
         if (isset($info['metadata'][$col])) {
             $type = $this->_getTypeFromDbType($info['metadata'][$col]['DATA_TYPE']);
             if ($col == 'pos' && $type == self::TYPE_BOOLEAN) {
-                throw new Kwf_Exception('Column "pos" must not be of type TINYINT in table "' . $info['name'] . '"');
+                throw new Kwf_Exception('Column "pos" must not be of type TINYINT in table "' . $this->getTable()->getTableName() . '"');
             }
+            $this->_columnTypes[$col] = $type;
             return $type;
         }
         return parent::getColumnType($col);
@@ -88,11 +93,11 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     protected function _getOwnColumns()
     {
         if (!$this->_columns) {
-            $cache = self::_getMetadataCache();
-            $cacheId = md5($this->getUniqueIdentifier()).'_columns';
-            if (!$this->_columns = $cache->load($cacheId)) {
-                $this->_columns = $this->getTable()->info(Zend_Db_Table_Abstract::COLS);
-                $cache->save($this->_columns, $cacheId);
+            $cacheId = 'db_'.md5($this->getUniqueIdentifier()).'_columns';
+            $this->_columns = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            if ($this->_columns === false) {
+                $this->_columns = $this->getTable()->getColumns();
+                Kwf_Cache_SimpleStatic::add($cacheId, $this->_columns);
             }
         }
         return $this->_columns;
@@ -142,7 +147,6 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     {
         $id = $this->_getUniqueId($proxiedRow);
         if (!isset($this->_rows[$id])) {
-            $proxiedRow->setReadOnly(false);
             $exprValues = array();
             foreach (array_keys($this->_exprs) as $k) {
                 if (isset($proxiedRow->$k)) {
@@ -282,7 +286,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
 
     protected function _applySelect(Zend_Db_Select $dbSelect, Kwf_Model_Select $select)
     {
-        if ($dbSelect instanceof Zend_Db_Table_Select) {
+        if ($dbSelect instanceof Kwf_Db_Table_Select) {
             $dbSelect->setIntegrityCheck(false);
         }
 
@@ -834,15 +838,6 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         return $dbSelect->__toString();
     }
 
-    public function find($id)
-    {
-        return new $this->_rowsetClass(array(
-            'rowset' => $this->getTable()->find($id),
-            'rowClass' => $this->_rowClass,
-            'model' => $this
-        ));
-    }
-
     public function getRow($select)
     {
         if (is_string($select) || is_int($select)) {
@@ -1000,15 +995,15 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     public function getPrimaryKey()
     {
         if (!$this->_primaryKey) {
-            $cache = self::_getMetadataCache();
-            $cacheId = md5($this->getUniqueIdentifier()).'_primaryKey';
-            if (!$this->_primaryKey = $cache->load($cacheId)) {
-                $this->_primaryKey = $this->getTable()->info('primary');
+            $cacheId = 'db_'.md5($this->getUniqueIdentifier()).'_primaryKey';
+            $this->_primaryKey = Kwf_Cache_SimpleStatic::fetch($cacheId);
+            if ($this->_primaryKey === false) {
+                $this->_primaryKey = $this->getTable()->getPrimaryKey();
                 if (sizeof($this->_primaryKey) == 1) {
                     $this->_primaryKey = array_values($this->_primaryKey);
                     $this->_primaryKey = $this->_primaryKey[0];
                 }
-                $cache->save($this->_primaryKey, $cacheId);
+                Kwf_Cache_SimpleStatic::add($cacheId, $this->_primaryKey);
             }
         }
         return $this->_primaryKey;
@@ -1035,7 +1030,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
     {
         if (!$this->_tableName) {
             if (is_string($this->_table)) return $this->_table;
-            return $this->_table->info(Zend_Db_Table_Abstract::NAME);
+            return $this->_table->getTableName();
         }
         return $this->_tableName;
     }
@@ -1455,29 +1450,6 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $ret = array_values($ret);
             return $ret;
         }
-    }
-
-    private static function _getMetadataCache()
-    {
-        static $ret;
-        if (!isset($ret)) {
-            $frontendOptions = array(
-                'automatic_serialization' => true,
-                'write_control' => false,
-            );
-            if (extension_loaded('apc') && php_sapi_name() != 'cli') {
-                $backendOptions = array();
-                $backend = 'Apc';
-            } else {
-                $backendOptions = array(
-                    'cache_dir' => 'cache/model',
-                    'file_name_prefix' => 'servicemeta'
-                );
-                $backend = 'File';
-            }
-            $ret = Kwf_Cache::factory('Core', $backend, $frontendOptions, $backendOptions);
-        }
-        return $ret;
     }
 
     public function fetchColumnByPrimaryId($column, $id)

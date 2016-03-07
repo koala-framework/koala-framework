@@ -84,17 +84,7 @@ abstract class Kwf_Component_Generator_Abstract
                     $this->_model = $this->_settings['model'];
                 }
             } else {
-                if (isset($this->_settings['table'])) {
-                    if (is_string($this->_settings['table'])) {
-                        $table = new $this->_settings['table'];
-                    } else {
-                        $table = $this->_settings['table'];
-                    }
-                    if (!$table instanceof Zend_Db_Table_Abstract) {
-                        throw new Kwf_Exception("table setting for generator in $this->_class is not a Zend_Db_Table");
-                    }
-                    $this->_model = new Kwf_Model_Db(array('table' => $table));
-                } else if ($this->_loadTableFromComponent) {
+                if ($this->_loadTableFromComponent) {
                     $this->_model = Kwc_Abstract::createChildModel($this->_class);
                 } else {
                     throw new Kwf_Exception("Can't create model for generator '{$this->getGeneratorKey()}' in '$this->_class'");

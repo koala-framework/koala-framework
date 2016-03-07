@@ -1,5 +1,5 @@
 <?php
-class Kwf_Model_Db_Table extends Kwf_Db_Table_Abstract
+class Kwf_Model_Db_Table extends Kwf_Db_Table
 {
     protected $_name = 'testtable';
     protected $_primary = array('id');

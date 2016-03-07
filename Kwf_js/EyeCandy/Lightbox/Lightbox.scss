@@ -1,5 +1,216 @@
 @import "config/default-loading-animation-big";
+@import "config/lightbox-animation";
 @import "kwf/background-image-dpr2";
+@import "compass/css3/box-sizing";
+@import "compass/css3/transition";
+@import "compass/css3/transform";
+
+html.kwfLightboxActive, html.kwfLightboxActive body {
+    overflow: hidden;
+}
+
+body {
+    .kwfLightbox {
+        opacity: 0;
+    }
+    .kwfLightboxOpen {
+        opacity: 1;
+    }
+
+    .kwfLightboxScrollOuter {
+        z-index: 100;
+        width: 100%;
+        right: 0;
+        left: 0;
+    }
+
+    div.kwfLightboxCenterBox {
+        overflow-y: auto;
+        position: fixed;
+        height: 100%;
+
+        .kwfLightboxScroll {
+            @include box-sizing(border-box);
+            position: absolute;
+            overflow-y: auto;
+            position: fixed;
+            padding: 10px;
+            z-index: 100;
+            height: 100%;
+            width: 100%;
+            right: 0;
+            left: 0;
+            top: 0;
+        }
+
+        .kwfLightboxBetween {
+            display: table;
+            height: 100%;
+            width: 100%;
+        }
+
+        .kwfLightboxBetweenInner {
+            vertical-align: middle;
+            display: table-cell;
+            text-align: center;
+            width: 100%;
+        }
+
+        .kwfLightboxInner {
+            @include box-sizing(border-box);
+            display: inline-block;
+            position: relative;
+            text-align: left;
+            height: auto;
+            z-index: 51;
+        }
+
+        .kwfLightboxMask {
+            height: 100%;
+            background: #000;
+            position: fixed;
+            left: 0; top: 0;
+            opacity: 0.8;
+            z-index: 50;
+            right: 0px;
+        }
+
+        &.mobile {
+            .kwfLightboxScroll {
+                padding: 0px;
+            }
+        }
+    }
+}
+
+@media (max-width: 1025px) {
+    html.touch {
+        .kwfLightboxScrollOuter {
+            height: 100000px;
+        }
+    }
+}
+
+@if $animation-style == fadeIn {
+    .kwfLightbox {
+        .kwfLightboxInner {
+            @include transition-duration(50ms);
+            opacity: 0;
+        }
+
+        &.kwfLightboxOpen {
+            .kwfLightboxInner {
+                @include transition-property(opacity);
+                @include transition-duration(150ms);
+                @include transition-timing-function(linear);
+                opacity: 1;
+            }
+        }
+    }
+
+    .kwfLightboxMask {
+        @include transition-property(opacity);
+        @include transition-duration(50ms);
+        @include transition-timing-function(linear);
+        opacity: 0;
+
+        &.kwfLightboxMaskOpen {
+            @include transition-property(opacity);
+            @include transition-duration(150ms);
+            @include transition-timing-function(linear);
+            opacity: 0.8;
+        }
+    }
+} @else if $animation-style == fadeInSlideUp {
+    .kwfLightbox {
+        .kwfLightboxInner {
+            @include transform(translateX(0) translateY(100px) scale(1));
+            @include transition(opacity 50ms linear, transform 0ms linear);
+            @include transition-delay(0ms);
+            opacity: 0;
+        }
+
+        &.kwfLightboxOpen {
+            .kwfLightboxInner {
+                @include transform(translateX(0) translateY(0) scale(1));
+                @include transition(opacity 500ms cubic-bezier(0.215, 0.61, 0.355, 1), transform 400ms cubic-bezier(0.215, 0.61, 0.355, 1));
+                @include transition-delay(300ms);
+                opacity: 1;
+            }
+        }
+    }
+
+    .kwfLightboxMask {
+        @include transition(opacity 50ms linear);
+        opacity: 0;
+
+        &.kwfLightboxMaskOpen {
+            @include transition(opacity 1250ms cubic-bezier(0.23, 1, 0.32, 1));
+            opacity: 0.8;
+        }
+    }
+} @else if $animation-style == fadeInSlideInRight {
+    .kwfLightbox {
+        .kwfLightboxInner {
+            @include transform(translateX(100%) translateY(0) scale(1));
+            @include transition(opacity 0ms linear, transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1));
+            @include transition-delay(0ms);
+            opacity: 0;
+        }
+
+        &.kwfLightboxOpen {
+            .kwfLightboxInner {
+                @include transform(translateX(0) translateY(0) scale(1));
+                @include transition(opacity 300ms cubic-bezier(0.215, 0.61, 0.355, 1), transform 500ms cubic-bezier(0.215, 0.61, 0.355, 1));
+                @include transition-delay(150ms);
+                opacity: 1;
+            }
+        }
+    }
+
+    .kwfLightboxMask {
+        @include transition-property(opacity);
+        @include transition-duration(50ms);
+        @include transition-timing-function(linear);
+        opacity: 0;
+
+        &.kwfLightboxMaskOpen {
+            @include transition-property(opacity);
+            @include transition-duration(150ms);
+            @include transition-timing-function(linear);
+            opacity: 0.8;
+        }
+    }
+} @else if $animation-style == fadeInZoom {
+    .kwfLightbox {
+        .kwfLightboxInner {
+            @include transform(translateX(0) translateY(0) scale(0.9));
+            @include transition(opacity 0ms linear, transform 0ms linear);
+            @include transition-delay(0ms);
+            opacity: 0;
+        }
+
+        &.kwfLightboxOpen {
+            .kwfLightboxInner {
+                @include transform(translateX(0) translateY(0) scale(1));
+                @include transition(opacity 500ms cubic-bezier(0.215, 0.61, 0.355, 1), transform 550ms cubic-bezier(0.215, 0.61, 0.355, 1));
+                @include transition-delay(150ms);
+                opacity: 1;
+            }
+        }
+    }
+
+    .kwfLightboxMask {
+        @include transition(opacity 50ms linear);
+        opacity: 0;
+
+        &.kwfLightboxMaskOpen {
+            @include transition(opacity 300ms linear);
+            opacity: 0.8;
+        }
+    }
+}
+
 
 .kwfLightbox {
     position: absolute;
@@ -17,24 +228,30 @@
     padding: 10px;
     position: absolute;
 }
-.ext-ie6 .kwfLightbox .kwfLightboxInner { width: 800px; }
 
 .kwfLightbox .lightboxHeader { position: relative; z-index: 102; }
+
 .kwfLightbox .closeButton {
+    background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
     position: absolute;
+    display: block;
+    height: 42px;
+    z-index: 102;
+    width: 42px;
     right: -25px;
     top: -25px;
-    display: block;
-    width: 42px;
-    height: 42px;
-    background: url('/assets/kwf/Kwf_js/EyeCandy/Lightbox/close.png') no-repeat center center;
-    z-index: 102;
+}
+
+.kwfUp-kwfLightbox .kwfUp-innerCloseButton {
+    display: none;
 }
 
 .kwfLightbox.mobile .closeButton {
-    right: 0;
-    top: 0;
+    position: fixed;
+    right: 2px;
+    top: 2px;
 }
+
 .kwfLightbox.mobile .kwfLightboxInner {
     margin-bottom: 0;
 }
@@ -42,14 +259,10 @@
 .kwfLightbox .closeButton:hover { text-decoration: none; }
 
 .kwfLightbox .kwfLightboxContent {
-    height: 100%;
-    width: 100%;
-}
-.kwfLightbox .lightboxBody {
     position: relative;
-    height: 100%; 
+    height: 100%;
+    z-index: 60;
     width: 100%;
-    z-index: 101;
 }
 .kwfLightbox .lightboxBody .nextBtn,
 .kwfLightbox .lightboxBody .nextBtn a,
@@ -90,23 +303,12 @@
 .kwfLightbox .lightboxFooter p.title { margin-top: 10px; }
 .kwfLightbox .lightboxFooter p.fullSizeLink { margin-top: 10px; }
 
-.lightboxMask {
-    background: #000;
-    opacity: 0.8;
-    -moz-opacity: 0.8;
-    filter: alpha(opacity=80);
-    z-index: 50 !important;
-    position: fixed;
-    width: 100%; height: 100%;
-    left: 0; top: 0;
-}
-
 .kwfLightbox .loading {
     @include default-loading-animation-big;
 }
 
 @media (max-width: 650px) {
-    body .lightboxMask {
+    body .kwfLightboxMask {
         opacity: 1;
     }
 }

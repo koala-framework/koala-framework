@@ -47,8 +47,13 @@ class Kwc_User_Login_Component extends Kwc_Abstract_Composite_Component
             $ns->state = $state;
 
             $url = $auth->getLoginRedirectUrl($this->_getRedirectBackUrl(), $state, $formValues);
-            header("Location: ".$url);
-            exit;
+            if ($url) {
+                header("Location: ".$url);
+                exit;
+            } else {
+                echo $auth->getLoginRedirectHtml($this->_getRedirectBackUrl(), $state, $formValues);
+                exit;
+            }
         }
         if ($postData != array() && array_keys($postData) != array('redirect')) {
             $user = null;

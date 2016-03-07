@@ -29,7 +29,12 @@ class Kwc_Basic_Image_Component extends Kwc_Abstract_Image_Component
         return array(
             'filename' => $emptyImage,
             'file' => $file,
-            'mimeType' => $s['mime']
+            'mimeType' => $s['mime'],
+            'dimensions' => array(
+                'width' => $s[0],
+                'height' => $s[1],
+                'rotation' => 0,
+            )
         );
     }
 }

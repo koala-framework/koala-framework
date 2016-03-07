@@ -26,11 +26,21 @@ class Kwf_User_Auth_Proxy_Redirect extends Kwf_User_Auth_Proxy_Abstract implemen
         return $this->_auth->getLoginRedirectUrl($redirectBackUrl, $state, $formValues);
     }
 
+    public function getLoginRedirectHtml($redirectBackUrl, $state, $formValues)
+    {
+        return $this->_auth->getLoginRedirectHtml($redirectBackUrl, $state, $formValues);
+    }
+
     public function getUserToLoginByParams(array $params)
     {
         $row = $this->_auth->getUserToLoginByParams($params);
         if (!$row) return null;
-        return $this->_model->getRowByProxiedRow($row);
+        if (is_array($row)) {
+            $row['user'] = $this->_model->getRowByProxiedRow($row['user']);
+        } else {
+            $row = $this->_model->getRowByProxiedRow($row);
+        }
+        return $row;
     }
 
     public function getUserToLoginByCallbackParams($redirectBackUrl, array $params)

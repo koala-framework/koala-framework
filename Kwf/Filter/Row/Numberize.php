@@ -120,22 +120,12 @@ class Kwf_Filter_Row_Numberize extends Kwf_Filter_Row_Abstract
         $fieldname = $this->_field;
         $value = $row->$fieldname;
 
-        if ($row instanceof Kwf_Model_Row_Interface) {
-            $select = $this->_getSelect($row);
-            $pk = $row->getModel()->getPrimaryKey();
-            if ($row->{$pk}) {
-                $select->whereNotEquals($pk, $row->{$pk});
-            }
-            $count = $row->getModel()->countRows($select) + 1;
-        } else {
-            $where = $this->_getWhere($row);
-            foreach ($row->getPrimaryKey() as $k=>$i) {
-                if ($i) {
-                    $where["$k != ?"] = $i;
-                }
-            }
-            $count = $row->getTable()->fetchAll($where)->count() + 1;
+        $select = $this->_getSelect($row);
+        $pk = $row->getModel()->getPrimaryKey();
+        if ($row->{$pk}) {
+            $select->whereNotEquals($pk, $row->{$pk});
         }
+        $count = $row->getModel()->countRows($select) + 1;
 
         // Wenn value null ist, Datensatz am Ende einfügen
         // is_numeric: Wenn in grid direkt bearbeitet wird kann sein, dass es
@@ -152,19 +142,14 @@ class Kwf_Filter_Row_Numberize extends Kwf_Filter_Row_Abstract
 
         //ermittel ob eine andere row dirty ist
         $dirty = false;
-        if ($row instanceof Kwf_Model_Row_Interface) {
-            $select->order($fieldname);
-            $rows = $row->getModel()->getRows($select);
-            foreach ($rows as $r) {
-                if ($r !== $row && in_array($fieldname, $r->getDirtyColumns())) {
-                    $dirty = true;
-                    break;
-                }
+        $select->order($fieldname);
+        $rows = $row->getModel()->getRows($select);
+        foreach ($rows as $r) {
+            if ($r !== $row && in_array($fieldname, $r->getDirtyColumns())) {
+                $dirty = true;
+                break;
             }
-        } else {
-            $rows = $row->getTable()->fetchAll($where, $fieldname);
         }
-
 
         if (!$dirty) {
             //wenn keine dirty ist alle durchgehen und nummerierung ev. korrigieren
@@ -190,29 +175,19 @@ class Kwf_Filter_Row_Numberize extends Kwf_Filter_Row_Abstract
         $where = $this->_getWhere($row);
 
         $dirty = false;
-        if ($row instanceof Kwf_Model_Row_Interface) {
-            $select = $this->_getSelect($row);
-            $pk = $row->getModel()->getPrimaryKey();
-            if ($row->{$pk}) {
-                $select->whereNotEquals($pk, $row->{$pk});
+        $select = $this->_getSelect($row);
+        $pk = $row->getModel()->getPrimaryKey();
+        if ($row->{$pk}) {
+            $select->whereNotEquals($pk, $row->{$pk});
+        }
+        $select->order($fieldname);
+        $rows = $row->getModel()->getRows($select);
+        //ermittel ob eine andere row dirty ist
+        foreach ($rows as $r) {
+            if ($r->isDirty()) {
+                $dirty = true;
+                break;
             }
-            $select->order($fieldname);
-            $rows = $row->getModel()->getRows($select);
-            //ermittel ob eine andere row dirty ist
-            foreach ($rows as $r) {
-                if ($r->isDirty()) {
-                    $dirty = true;
-                    break;
-                }
-            }
-        } else {
-            $where = $this->_getWhere($row);
-            foreach ($row->getPrimaryKey() as $k=>$i) {
-                if ($i) {
-                    $where["$k != ?"] = $i;
-                }
-            }
-            $rows = $row->getTable()->fetchAll($where, $fieldname);
         }
 
         if (!$dirty) {

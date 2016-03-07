@@ -67,7 +67,7 @@ class Kwc_Articles_Directory_Controller extends Kwf_Controller_Action_Auto_Kwc_G
         ignore_user_abort(true);
         if (Zend_Registry::get('db')) Zend_Registry::get('db')->beginTransaction();
         foreach ($ids as $id) {
-            $row = $this->_model->find($id)->current();
+            $row = $this->_model->getRow($id);
             if (!$row) {
                 throw new Kwf_Exception_Client("Can't find row with id '$id'.");
             }
