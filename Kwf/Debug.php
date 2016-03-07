@@ -129,7 +129,7 @@ function pHex($s)
         pHex(substr($s, 0, $breakAt));
         $s = substr($s, $breakAt);
     }
-    for($i=0;$i<strlen($s);$i++) {
+    for ($i=0;$i<strlen($s);$i++) {
         if ($s[$i] == "\0") {
             echo '\0 ';
         } else if ($s[$i] == "\n") {
@@ -141,7 +141,7 @@ function pHex($s)
         }
     }
     echo "\n";
-    for($i=0;$i<strlen($s);$i++) {
+    for ($i=0;$i<strlen($s);$i++) {
         $h = dechex(ord($s[$i]));
         if (strlen($h)==1) $h = "0$h";
         echo $h.' ';
@@ -282,9 +282,12 @@ class Kwf_Debug
     {
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
         if (defined('E_STRICT') && $errno == E_STRICT) return;
-        if (defined('E_DEPRECATED') && $errno == E_DEPRECATED
-            && (strpos($errfile, '/usr/share/php/') !== false)) {
-            return;
+        if (defined('E_DEPRECATED') && $errno == E_DEPRECATED) {
+            if (strpos($errfile, '/usr/share/php/') !== false) {
+                return;
+            } else if (strpos($errstr, 'iconv_set_encoding') !== false) {
+                return;
+            }
         }
 
         //ignore notice from iconv like "Detected an incomplete multibyte character in input string"
