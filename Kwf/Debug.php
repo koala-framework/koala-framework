@@ -133,7 +133,7 @@ function pHex($s)
         pHex(substr($s, 0, $breakAt));
         $s = substr($s, $breakAt);
     }
-    for($i=0;$i<strlen($s);$i++) {
+    for ($i=0;$i<strlen($s);$i++) {
         if ($s[$i] == "\0") {
             echo '\0 ';
         } else if ($s[$i] == "\n") {
@@ -145,7 +145,7 @@ function pHex($s)
         }
     }
     echo "\n";
-    for($i=0;$i<strlen($s);$i++) {
+    for ($i=0;$i<strlen($s);$i++) {
         $h = dechex(ord($s[$i]));
         if (strlen($h)==1) $h = "0$h";
         echo $h.' ';
