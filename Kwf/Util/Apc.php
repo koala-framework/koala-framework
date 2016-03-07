@@ -183,12 +183,20 @@ class Kwf_Util_Apc
             }
             if (isset($_REQUEST['files'])) {
                 foreach (explode(',', $_REQUEST['files']) as $file) {
-                    @apc_delete_file($file);
+                    if (extension_loaded('Zend OPcache')) {
+                        opcache_invalidate($file);
+                    } else {
+                        @apc_delete_file($file);
+                    }
                 }
             } else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'user') {
                 apc_clear_cache('user');
             } else {
-                apc_clear_cache('file');
+                if (extension_loaded('Zend OPcache')) {
+                    opcache_reset();
+                } else {
+                    apc_clear_cache('file');
+                }
             }
             echo 'OK '.round((microtime(true)-$s)*1000).' ms';
             exit;
