@@ -920,7 +920,7 @@ abstract class Kwf_Controller_Action_Auto_Grid extends Kwf_Controller_Action_Aut
     public function jsonXlsAction()
     {
         // e.g.: Stargate customer export: 128M memory_limit exhaust at 1500 lines
-        ini_set('memory_limit', "768M");
+        ini_set('memory_limit', "600M");
         set_time_limit(600); // 10 minuten
         if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
             throw new Kwf_Exception("XLS is not allowed.");

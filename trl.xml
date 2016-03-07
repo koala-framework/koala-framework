@@ -14331,6 +14331,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>16:9</de>
 <ru>16:9</ru>
 <ua>16:9</ua>
+<ro>16:9</ro>
 </text>
 <text>
 <en>4:3</en>
@@ -14338,6 +14339,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>4:3</de>
 <ru>4:3</ru>
 <ua>4:3</ua>
+<ro>4:3</ro>
 </text>
 <text>
 <en>Set size of video</en>
@@ -14694,6 +14696,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>Суббота</ru>
 <id>2065</id>
 <hr>Subota</hr>
+<ro>Sambata</ro>
 </text>
 <text>
 <en>{0} selected row{1}</en>
@@ -15259,6 +15262,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Session abgelaufen, bitte neu einloggen.</de>
 <id>2188</id>
 <hr>Sesija je istekla, molimo prijavite se ponovo</hr>
+<ro>Sesiunea a expirat, va rugam sa va logati din nou.</ro>
 </text>
 <text>
 <en>Please specify a user name.</en>
@@ -15266,6 +15270,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Bitte geben Sie einen Benutzernamen an.</de>
 <id>2189</id>
 <hr>Molimo dodijelite si korisničko ime.</hr>
+<ro>Va rugam introduceti un nume de utilizator.</ro>
 </text>
 <text>
 <en>Please specify a password.</en>
@@ -15273,6 +15278,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <de>Bitte geben Sie ein Passwort an.</de>
 <id>2190</id>
 <hr>Molimo odredite si lozinku.</hr>
+<ro>Va rugam sa introduceti parola.</ro>
 </text>
 <text>
 <en>Export</en>
