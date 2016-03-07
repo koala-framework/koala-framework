@@ -28,12 +28,6 @@
                 {{ renderer.formField(form) }}
             {% endblock %}
 
-            {% if method != 'get' %}
-            <div class="spEmail">
-                <label for="{{ data.componentId }}-sp-email">{{ data.trlKwf('Leave empty') }}:</label>
-                <input id="{{ data.componentId }}-sp-email" name="{{ formName }}-sp-email" /> {# spam protection, named email so bots think they should fill this #}
-            </div>
-            {% endif %}
             <div class="submitWrapper {{ buttonClass }}">
                 <div class="beforeButton"></div>
                 <div class="button">

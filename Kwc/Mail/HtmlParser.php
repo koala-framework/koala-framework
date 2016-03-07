@@ -30,6 +30,30 @@ class Kwc_Mail_HtmlParser
         }
     }
 
+    private static function _matchStackEntrySelector($stack, $selector)
+    {
+        $ret = true;
+
+        $classes = explode(' ', $stack['class']);
+
+        $selectorsWithTag = explode('.', $selector);
+        $selectorTag = $selectorsWithTag[0];
+        unset($selectorsWithTag[0]);
+        $selectors = array_values($selectorsWithTag);
+
+        if (!empty($selectorTag) && $selectorTag != $stack['tag']) {
+            $ret = false;
+        }
+
+        foreach ($selectors as $s) {
+            if (!in_array($s, $classes)) {
+                $ret = false;
+            }
+        }
+
+        return $ret;
+    }
+
     private static function _matchesStyle($stack, $style)
     {
         $tag = $stack[count($stack)-1]['tag'];
@@ -43,11 +67,8 @@ class Kwc_Mail_HtmlParser
             $stack = array_reverse($stack);
             foreach ($selectors as $selector) {
                 foreach ($stack as $stackItem=>$s) {
-                    if ($selector == $s['tag']
-                        || (isset($s['class']) && $selector == '.'.$s['class'])
-                        || (isset($s['class']) && $selector == $s['tag'].'.'.$s['class'])
-                    ) {
-                        $stack = array_slice($stack, $stackItem);
+                    if (self::_matchStackEntrySelector($s, $selector) || $selector == $s['tag']) {
+                        $stack = array_slice($stack, $stackItem+1);
                         continue 2;
                     }
                 }
@@ -80,7 +101,6 @@ class Kwc_Mail_HtmlParser
             'class' => $class,
             'appendedTags' => array()
         );
-
         $appendTags = array();
         $styles = array();
         foreach ($this->_styles as $s) {
