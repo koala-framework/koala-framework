@@ -4,7 +4,7 @@ class Kwf_Util_ClearCache
     /**
      * @return Kwf_Util_ClearCache
      */
-    public function getInstance()
+    public static function getInstance()
     {
         static $i;
         if (!isset($i)) {
@@ -71,7 +71,7 @@ class Kwf_Util_ClearCache
         if ($simpleCacheBackend == 'memcache' || $simpleCacheBackend == 'elastiCache') {
             $types[] = new Kwf_Util_ClearCache_Types_SimpleCache();
         }
-        $hasApc = extension_loaded('apc');
+        $hasApc = extension_loaded('apc') || extension_loaded('Zend OPcache');
         if (!$hasApc) {
             //apc might be enabled in webserver only, not in cli
             $hasApc = Kwf_Util_Apc::callUtil('is-loaded', array(), array('returnBody'=>true)) == 1;
