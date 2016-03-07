@@ -28,7 +28,7 @@ class Kwc_Advanced_Amazon_Product_Component extends Kwc_Abstract
                 $asins[] = $c->getComponent()->getRow()->asin;
             }
             $asinsChunks = array_chunk($asins, 10);
-            foreach($asinsChunks as $chunk) {
+            foreach ($asinsChunks as $chunk) {
                 $amazon = new Kwf_Service_Amazon();
                 try {
                     $resultSet = $amazon->itemLookup(
@@ -43,8 +43,11 @@ class Kwc_Advanced_Amazon_Product_Component extends Kwc_Abstract
                     $e->logOrThrow();
                     $resultSet = array();
                 }
+                if ($resultSet instanceof Kwf_Service_Amazon_Item) {
+                    $resultSet = array($resultSet);
+                }
                 foreach ($resultSet as $i) {
-                    if(!is_null($i) && isset($i->ASIN)) { 
+                    if (!is_null($i) && isset($i->ASIN)) {
                         $products[$i->ASIN] = (object)array(
                             'item' => $i,
                             'title' => isset($i->Title) ? $i->Title : null,
@@ -66,7 +69,7 @@ class Kwc_Advanced_Amazon_Product_Component extends Kwc_Abstract
 
         $ret['product'] = null;
         if ($this->getRow()->asin) {
-            if(isset($productsByPage[$this->getData()->parent->componentId][strtoupper($this->getRow()->asin)])) {
+            if (isset($productsByPage[$this->getData()->parent->componentId][strtoupper($this->getRow()->asin)])) {
                 $ret['product'] = $productsByPage[$this->getData()->parent->componentId][strtoupper($this->getRow()->asin)];
             }
         }

@@ -71,7 +71,8 @@ abstract class Kwf_Model_Data_Abstract extends Kwf_Model_Abstract
         } else {
             $select = $where;
         }
-        return $this->_selectDataKeys($select, $this->getData());
+        $data = $this->getData();
+        return $this->_selectDataKeys($select, $data);
     }
 
     public function update(Kwf_Model_Row_Interface $row, $rowData)
