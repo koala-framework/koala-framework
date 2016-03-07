@@ -1,0 +1,1 @@
+ALTER TABLE  `kwc_articles` CHANGE  `priority`  `priority` SMALLINT NOT NULL;

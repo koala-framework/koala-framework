@@ -37,17 +37,19 @@ class Kwf_Form_Field_DateSelect extends Kwf_Form_Field_SimpleAbstract
 
         $value = isset($values[$name]) ? $values[$name] : $this->getDefaultValue();
         if ($value) {
-            $value = new Kwf_Date($value);
-            $valueYear = (int)$value->format('Y');
-            $valueMonth = (int)$value->format('m');
-            $valueDay = (int)$value->format('d');
+            $value = strtotime($value);
+            if ($value) {
+                $valueYear = (int)date('Y', $value);
+                $valueMonth = (int)date('m', $value);
+                $valueDay = (int)date('d', $value);
+            }
         }
         $kwfTrl = Kwf_Trl::getInstance();
 
         $ret['id'] = $idPrefix.str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<select name=\"{$name}_day\">";
         $ret['html'] .= "<option value=\"\">{$kwfTrl->trlKwf('Day', array(), $this->_language)}</option>";
-        for($i = 1; $i <= 31; $i++) {
+        for ($i = 1; $i <= 31; $i++) {
             $v = str_pad($i, 2, '0', STR_PAD_LEFT);
             $ret['html'] .= "<option value=\"{$v}\"";
             if ($i == $valueDay) $ret['html'] .= ' selected="selected"';
@@ -72,7 +74,7 @@ class Kwf_Form_Field_DateSelect extends Kwf_Form_Field_SimpleAbstract
         );
         $ret['html'] .= "<select name=\"{$name}_month\">";
         $ret['html'] .= "<option value=\"\">{$kwfTrl->trlKwf('Month', array(), $this->_language)}</option>";
-        for($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 12; $i++) {
             $v = str_pad($i, 2, '0', STR_PAD_LEFT);
             $ret['html'] .= "<option value=\"{$v}\"";
             if ($i == $valueMonth) $ret['html'] .= ' selected="selected"';
@@ -83,7 +85,7 @@ class Kwf_Form_Field_DateSelect extends Kwf_Form_Field_SimpleAbstract
 
         $ret['html'] .= "<select name=\"{$name}_year\">";
         $ret['html'] .= "<option value=\"\">{$kwfTrl->trlKwf('Year', array(), $this->_language)}</option>";
-        for($i = date('Y'); $i >= 1900; $i--) {
+        for ($i = date('Y'); $i >= 1900; $i--) {
             $ret['html'] .= "<option value=\"{$i}\"";
             if ($i == $valueYear) $ret['html'] .= ' selected="selected"';
             $ret['html'] .= ">{$i}</option>";
