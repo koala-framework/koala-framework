@@ -60,7 +60,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         } else {
             $select = $where;
         }
-        return $this->_selectDataKeys($select, $this->getData());
+        $data = $this->getData();
+        return $this->_selectDataKeys($select, $data);
     }
 
     public function update(Vps_Model_Row_Interface $row, $rowData)
