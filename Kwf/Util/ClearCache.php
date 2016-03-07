@@ -7,7 +7,7 @@ class Kwf_Util_ClearCache
     /**
      * @return Kwf_Util_ClearCache
      */
-    public function getInstance()
+    public static function getInstance()
     {
         static $i;
         if (!isset($i)) {
@@ -72,7 +72,7 @@ class Kwf_Util_ClearCache
         $types = array('all');
         if (class_exists('Memcache') && Kwf_Config::getValue('server.memcache.host')) $types[] = 'memcache';
         if (extension_loaded('apc')) $types[] = 'apc';
-        if (extension_loaded('apc')) {
+        if (extension_loaded('apc') || extension_loaded('Zend OPcache')) {
             $types[] = 'optcode';
         }
         $types[] = 'setup';
