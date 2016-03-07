@@ -230,6 +230,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 } else {
                     $s->where(new Kwf_Model_Select_Expr_Like('parent_id', $parentId.'%'));
                 }
+                $s->order('pos');
                 Kwf_Benchmark::count('GenPage::query', 'component');
                 $rows = $this->_getModel()->export(Kwf_Model_Interface::FORMAT_ARRAY, $s, array('columns'=>array('id')));
                 foreach ($rows as $row) {
@@ -356,7 +357,7 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
                 }
                 $pData = Kwf_Component_Data_Root::getInstance()
                                     ->getComponentById($i, $c);
-                if ($pData->componentClass != $this->_class) {
+                if (!$pData || $pData->componentClass != $this->_class) {
                     return null;
                 }
             }

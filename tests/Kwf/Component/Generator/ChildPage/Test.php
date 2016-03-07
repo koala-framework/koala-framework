@@ -35,16 +35,18 @@ class Kwf_Component_Generator_ChildPage_Test extends Kwc_TestAbstract
         $page = $this->_root->getChildComponent('-child')
                             ->getChildComponent('_1');
         $this->assertEquals('root-child_1', $page->dbId);
+        $this->assertEquals('1-foo', $page->filename);
+
         /*
         $this->assertEquals(Kwf_Benchmark::getCounterValue('generators'), 2);
         $this->assertEquals(Kwf_Benchmark::getCounterValue('componentDatas'), 2);
         $this->assertEquals(Kwf_Benchmark::getCounterValue('getChildComponents'), 3);
         */
 
-        $page = $this->_root->getChildComponent('-child')->getChildComponent(array('filename' => '1_foo'));
+        $page = $this->_root->getChildComponent('-child')->getChildComponent(array('filename' => '1-foo'));
         $this->assertEquals('root-child_1', $page->dbId);
 
-        $page = $this->_root->getChildPage(array('filename' => '1_foo'));
+        $page = $this->_root->getChildPage(array('filename' => '1-foo'));
         $this->assertEquals('root-child_1', $page->dbId);
     }
 

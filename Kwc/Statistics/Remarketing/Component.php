@@ -16,22 +16,21 @@ class Kwc_Statistics_Remarketing_Component extends Kwc_Abstract
 
     protected function _getRemarketingId()
     {
-        $ret = null;
-        if (!$this->getData()->getBaseProperty('statistics.ignore') &&
-            !$this->getData()->getBaseProperty('statistics.remarketing.ignore')
-        ) {
-            $ret = $this->getData()->getBaseProperty('statistics.remarketing.id');
-        }
-        return $ret;
+        return $this->getData()->getBaseProperty('statistics.remarketing.id');
+    }
+
+    protected function _getRemarketingLabel()
+    {
+        return $this->getData()->getBaseProperty('statistics.remarketing.label');
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['id'] = $this->_getRemarketingId();
-        if ($ret['id'] && !is_string($ret['id'])) {
-            throw new Kwf_Exception("RemarketingId must be a string, '".gettype($ret['id'])."' given");
-        }
+        $ret['id'] = (int)$this->_getRemarketingId();
+        $ret['label'] = (string)$this->_getRemarketingLabel();
+        $ret['ignoreCode'] = $this->getData()->getBaseProperty('statistics.ignore') || 
+            $this->getData()->getBaseProperty('statistics.remarketing.ignore');
         return $ret;
     }
 }

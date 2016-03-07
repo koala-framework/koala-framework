@@ -166,6 +166,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         foreach ($this->_getRow()->getContentParts() as $part) {
             if (is_string($part)) {
                 $part = strip_tags($part);
+                $part = str_replace('[-]', '&shy;', $part);
                 $ret .= ' '.$part;
             }
         }

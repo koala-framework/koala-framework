@@ -44,7 +44,7 @@ $(function() {
             }
         }
     }
-    $w.scroll(_.debounce(showImageWhenVisible, 150));
+    $w.scroll(_.throttle(showImageWhenVisible, 150));
 });
 
 

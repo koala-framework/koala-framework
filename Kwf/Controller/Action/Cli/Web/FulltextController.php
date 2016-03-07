@@ -239,7 +239,7 @@ class Kwf_Controller_Action_Cli_Web_FulltextController extends Kwf_Controller_Ac
             //if ($this->_getParam('debug')) echo "memory_usage ".(memory_get_usage()/(1024*1024))."MB\n";
         }
 
-        if (!$this->_getParam('silent')) {
+        if ($this->_getParam('debug')) {
             if (!$this->_getParam('skip-diff')) echo "pages with diff: $stats[diffPages]\n";
             echo "indexed pages: $stats[indexedPages]\n";
         }

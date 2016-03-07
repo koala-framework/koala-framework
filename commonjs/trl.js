@@ -51,8 +51,8 @@ function _kwfTrlp(key, text, plural, values)
             cnt++;
         });
         return text;
-    }}
-
+    }
+}
 
 module.exports = {
     _kwfTrl: _kwfTrl,

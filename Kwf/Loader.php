@@ -130,6 +130,7 @@ class Kwf_Loader
                     foreach ($dirs as $dir) {
                         if (file_exists($dir.($file ? '/' : '').$file.'.php')) {
                             $file = $dir.($file ? '/' : '').$file.'.php';
+                            break;
                         }
                     }
                 }

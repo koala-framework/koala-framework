@@ -40,20 +40,14 @@ class Kwc_Newsletter_Subscribe_FrontendForm extends Kwf_Form
                 'male'   => trlKwfStatic('Male')
             ))
             ->setCls('kwf-radio-group-transparent');
-        $this->add(new Kwf_Form_Field_TextField('title', trlKwfStatic('Title')))
-            ->setWidth(255);
+        $this->add(new Kwf_Form_Field_TextField('title', trlKwfStatic('Title')));
         $this->add(new Kwf_Form_Field_TextField('firstname', trlKwfStatic('Firstname')))
-            ->setWidth(255)
             ->setAllowBlank(false);
         $this->add(new Kwf_Form_Field_TextField('lastname', trlKwfStatic('Lastname')))
-            ->setWidth(255)
             ->setAllowBlank(false);
-
         $this->add(new Kwf_Form_Field_TextField('email', trlKwfStatic('E-Mail')))
-            ->setWidth(255)
             ->setVtype('email')
             ->setAllowBlank(false);
-
         $this->_addEmailValidator();
     }
 }

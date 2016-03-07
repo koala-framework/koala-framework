@@ -26,6 +26,11 @@ class Kwc_Directories_Category_ShowCategories_Component extends Kwc_Directories_
         $class = self::getSetting($directoryClass, 'showDirectoryClass');
         foreach (Kwc_Abstract::getComponentClasses() as $cls) {
             if (is_instance_of($cls, $class)) {
+                foreach (self::getSetting($directoryClass, 'hideDirectoryClasses') as $hideClass) {
+                    if (is_instance_of($cls, $hideClass)) {
+                        continue 2;
+                    }
+                }
                 $ret[] = $cls;
             }
         }

@@ -17,6 +17,7 @@ class Kwc_Newsletter_Unsubscribe_Form_Component extends Kwc_Form_Component
     {
         parent::_initForm();
         if ($this->_recipient) {
+            $this->_form->setModel($this->_recipient->getModel());
             $this->_form->setId($this->_recipient->id);
         }
     }
@@ -30,4 +31,45 @@ class Kwc_Newsletter_Unsubscribe_Form_Component extends Kwc_Form_Component
     //moved to FrontendForm
     protected final function getParentField()
     {}
+
+    public function processInput(array $postData)
+    {
+        if (!$this->_recipient && isset($postData['d'])) {
+            /**
+             * 0 = redirectId
+             * 1 = recipientId
+             * 2 = recipientModelShortcut
+             * 3 = hash
+             */
+            $params = explode('_', $postData['d']);
+            if (count($params) >= 4 && $params[3] == $this->_getHash(array(
+                    $params[0], $params[1], $params[2]
+                ))) {
+                $c = Kwf_Component_Data_Root::getInstance()->getComponentByClass('Kwc_Newsletter_Detail_Mail_Component', array(
+                    'limit' => 1,
+                    'subroot' => $this->getData()
+                ));
+                if ($c) {
+                    $model = null;
+                    foreach ($c->getComponent()->getRecipientSources() as $key=>$value) {
+                        if (is_array($value) && $key == $params[2]) {
+                            $model = $value['model'];
+                        }
+                    }
+                    if ($model) {
+                        $this->_recipient = Kwf_Model_Abstract::getInstance($model)
+                            ->getRow($params[1]);
+                    }
+                }
+            }
+        }
+
+        parent::processInput($postData);
+    }
+
+    private function _getHash(array $hashData)
+    {
+        $hashData = implode('', $hashData);
+        return substr(Kwf_Util_Hash::hash($hashData), 0, 6);
+    }
 }

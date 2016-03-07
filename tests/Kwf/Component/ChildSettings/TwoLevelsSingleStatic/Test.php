@@ -13,13 +13,15 @@ class Kwf_Component_ChildSettings_TwoLevelsSingleStatic_Test extends Kwc_TestAbs
     {
         $gen = Kwc_Abstract::getSetting('Kwf_Component_ChildSettings_TwoLevelsSingleStatic_Root', 'generators');
         $c = $gen['first']['component'];
-        $this->assertTrue(is_instance_of($c, 'Kwf_Component_ChildSettings_TwoLevelsSingleStatic_First'));
+        $this->assertTrue(is_array($c));
+        $this->assertTrue(is_instance_of($c['first'], 'Kwf_Component_ChildSettings_TwoLevelsSingleStatic_First'));
 
-        $gen = Kwc_Abstract::getSetting($c, 'generators');
+        $gen = Kwc_Abstract::getSetting($c['first'], 'generators');
         $c = $gen['second']['component'];
-        $this->assertTrue(is_instance_of($c, 'Kwc_Basic_None_Component'));
+        $this->assertTrue(is_array($c));
+        $this->assertTrue(is_instance_of($c['second'], 'Kwc_Basic_None_Component'));
 
-        $this->assertEquals(Kwc_Abstract::getSetting($c, 'componentName'), 'test123');
+        $this->assertEquals(Kwc_Abstract::getSetting($c['second'], 'componentName'), 'test123');
 
     }
 }

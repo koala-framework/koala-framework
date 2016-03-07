@@ -3,7 +3,7 @@ class Kwf_Component_MasterLayout_Legacy extends Kwf_Component_MasterLayout_Abstr
 {
     public function getContexts(Kwf_Component_Data $data)
     {
-        throw new Kwf_Exception("Not possible for MasterLayout_Legacy");
+        return null;
     }
 
     public function getContentWidth(Kwf_Component_Data $data)
