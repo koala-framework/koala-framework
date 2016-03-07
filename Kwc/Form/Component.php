@@ -184,13 +184,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     //can be overriden to implement custom validation logic
     protected function _validate($postData)
     {
-        $ret = $this->_form->validate(null, $postData);
-        if (!empty($postData[$this->getData()->componentId.'-sp-email'])) {
-            $ret[] = array(
-                'message' => $this->getData()->trlKwf("Please don't fill 'Leave empty' field")
-            );
-        }
-        return $ret;
+        return $this->_form->validate(null, $postData);
     }
 
     //can be overriden to *not* log specific exceptions or adapt error
