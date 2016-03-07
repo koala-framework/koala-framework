@@ -4,7 +4,7 @@ class Vps_Util_ClearCache
     const MODE_CLEAR = 'clear';
     const MODE_IMPORT = 'import';
 
-    public function getInstance()
+    public static function getInstance()
     {
         static $i;
         if (!isset($i)) {

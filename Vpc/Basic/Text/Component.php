@@ -85,12 +85,17 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
         return $models[$componentClass];
     }
 
+    protected function _getContentParts()
+    {
+        return $this->_getRow()->getContentParts();
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
         $ret['contentParts'] = array();
         $childs = $this->getData()->getChildComponents();
-        foreach ($this->_getRow()->getContentParts() as $part) {
+        foreach ($this->_getContentParts() as $part) {
             if (is_array($part)) {
                 if ($part['type'] == 'image') {
                     $part['nr'] = 'i'.$part['nr'];
