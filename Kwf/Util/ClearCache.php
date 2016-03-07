@@ -72,7 +72,7 @@ class Kwf_Util_ClearCache
         $types = array('all');
         if (class_exists('Memcache')) $types[] = 'memcache';
         if (extension_loaded('apc')) $types[] = 'apc';
-        if (extension_loaded('apc')) {
+        if (extension_loaded('apc') || extension_loaded('Zend OPcache')) {
             $types[] = 'optcode';
         }
         $types[] = 'setup';
