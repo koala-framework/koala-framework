@@ -183,7 +183,11 @@ class Kwf_Util_Apc
             }
             if (isset($_REQUEST['files']) && function_exists('apc_delete_file')) {
                 foreach (explode(',', $_REQUEST['files']) as $file) {
-                    @apc_delete_file($file);
+                    if (extension_loaded('Zend OPcache')) {
+                        opcache_invalidate($file);
+                    } else {
+                        @apc_delete_file($file);
+                    }
                 }
             } else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'user') {
                 if (extension_loaded('apcu')) {
@@ -192,7 +196,9 @@ class Kwf_Util_Apc
                     apc_clear_cache('user');
                 }
             } else {
-                if (!extension_loaded('apcu')) {
+                if (extension_loaded('Zend OPcache')) {
+                    opcache_reset();
+                } else if (!extension_loaded('apcu')) {
                     apc_clear_cache('file');
                 }
             }
