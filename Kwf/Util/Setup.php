@@ -133,9 +133,6 @@ class Kwf_Util_Setup
         if (function_exists('mb_internal_encoding')) {
             $ret .= "mb_internal_encoding('UTF-8');\n";
         }
-        if (function_exists('iconv_set_encoding')) {
-            $ret .= "iconv_set_encoding('internal_encoding', 'utf-8');\n";
-        }
         $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL & ~E_STRICT);\n";
         $ret .= "set_exception_handler(array('Kwf_Debug', 'handleException'));\n";
         $ret .= "umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen\n";
