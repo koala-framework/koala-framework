@@ -221,14 +221,7 @@ class Kwf_Util_Setup
         if (function_exists('mb_internal_encoding')) {
             $ret .= "mb_internal_encoding('UTF-8');\n";
         }
-        if (PHP_VERSION_ID < 50600) {
-            if (function_exists('iconv_set_encoding')) {
-                $ret .= "iconv_set_encoding('internal_encoding', 'utf-8');\n";
-            }
-        } else {
-            $ret .= "ini_set('default_charset', 'UTF-8');\n";
-        }
-
+        $ret .= "ini_set('default_charset', 'UTF-8');\n";
         $ret .= "umask(000); //nicht 002 weil wwwrun und kwcms in unterschiedlichen gruppen\n";
 
         //this is *NOT* recommended but still works somehow
