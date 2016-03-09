@@ -43,6 +43,9 @@ class Vpc_Advanced_Amazon_Product_Component extends Vpc_Abstract
                     $e->logOrThrow();
                     $resultSet = array();
                 }
+                if ($resultSet instanceof Vps_Service_Amazon_Item) {
+                    $resultSet = array($resultSet);
+                }
                 foreach ($resultSet as $i) {
                     if(!is_null($i) && isset($i->ASIN)) { 
                         $products[$i->ASIN] = (object)array(

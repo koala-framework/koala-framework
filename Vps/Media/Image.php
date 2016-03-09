@@ -269,6 +269,21 @@ class Vps_Media_Image
 
     private function _processCommonImagickSettings($im)
     {
+        if ($im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
+            $profiles = $im->getImageProfiles('icc', false);
+            $hasIccProfile = in_array('icc', $profiles);
+            // if it doesnt have a CMYK ICC profile, we add one
+            if ($hasIccProfile === false) {
+                $iccCmyk = file_get_contents(Vps_Registry::get('config')->libraryPath.'/icc/ISOuncoated.icc');
+                $im->profileImage('icc', $iccCmyk);
+                unset($iccCmyk);
+            }
+            // then we add an RGB profile
+            $iccRgb = file_get_contents(Vps_Registry::get('config')->libraryPath.'/icc/sRGB_v4_ICC_preference.icc');
+            $im->profileImage('icc', $iccRgb);
+            unset($iccRgb);
+        }
+
         $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         $im->setImageCompressionQuality(90);
         $version = $im->getVersion();
