@@ -36,6 +36,12 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
 
         $this->_start();
 
+        if (file_exists('log/process-control-log-status')) {
+            $logFileSendPos = unserialize(file_get_contents('log/process-control-log-status'));
+        } else {
+            $logFileSendPos = array();
+        }
+
         $logFiles = array();
         foreach ($this->_commands as $requiredCmd) {
             $logFiles[] = "log/$requiredCmd[cmd].log";
@@ -44,20 +50,22 @@ class Kwf_Controller_Action_Cli_Web_ProcessControlController extends Kwf_Control
         $msg = '';
         foreach ($logFiles as $logFile) {
             if (!file_exists($logFile)) continue;
-            if (!filesize($logFile)) continue;
-            if ($this->_getParam('debug')) echo "$logFile: ".filesize($logFile)." bytes\n";;
-            $tempFile = tempnam('temp/', 'log');
-            copy($logFile, $tempFile);
-            $fp = fopen($logFile, 'w');
-            ftruncate($fp, filesize($tempFile)-filesize($logFile));
-            fclose($fp);
-            $msg .= date('Y-m-d H:i:s')." $logFile:\n";
-            $msg .= trim(file_get_contents($tempFile))."\n";
+            $fileSize = filesize($logFile);
+            if (!isset($logFileSendPos[$logFile]) || $fileSize != $logFileSendPos[$logFile]) {
+                if ($this->_getParam('debug')) echo "$logFile: ".$fileSize." bytes\n";;
+                $prevFileSize = isset($logFileSendPos[$logFile]) ? isset($logFileSendPos[$logFile]) : 0;
+                if ($fileSize < $prevFileSize) $prevFileSize = 0; //log file was truncated or deleted
+                $fp = fopen($logFile, 'r');
+                $msg .= date('Y-m-d H:i:s')." $logFile:\n";
+                $msg .= stream_get_contents($fp, -1, $prevFileSize);
+                fclose($fp);
+                $logFileSendPos[$logFile] = $fileSize;
+            }
         }
-
         if ($msg) {
             echo $msg;
         }
+        file_put_contents('log/process-control-log-status', serialize($logFileSendPos));
 
         exit;
     }
