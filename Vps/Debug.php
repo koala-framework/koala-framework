@@ -182,7 +182,10 @@ class Vps_Debug
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
         if (defined('E_STRICT') && $errno == E_STRICT) return;
         if (defined('E_DEPRECATED') && $errno == E_DEPRECATED) {
-            if (strpos($errfile, '/usr/share/php/') !== false) {
+            if (substr($errstr, 0, 17) == 'Non-static method') {
+                //ignore Non-static method called statically E_DEPRECATED errors for compatibility of older code with newer php versions
+                return;
+            } else if (strpos($errfile, '/usr/share/php/') !== false) {
                 return;
             } else if (strpos($errstr, 'iconv_set_encoding') !== false) {
                 return;
