@@ -67,25 +67,6 @@ class Kwf_Util_Setup
             'Kwf_Cache_Simple',
             'Kwf_Debug',
             'Kwf_Trl',
-            'Kwf_Component_Data',
-            'Kwf_Component_Data_Root',
-            'Kwf_Model_Select',
-            'Kwf_Component_Select',
-            'Kwf_Component_Abstract',
-            'Kwc_Abstract',
-            'Kwc_Paragraphs_Component',
-            'Kwf_Component_Renderer_Abstract',
-            'Kwf_Component_Renderer',
-            'Kwf_Component_Cache',
-            'Kwf_Component_Cache_Mysql',
-            'Kwf_Component_View_Helper_Abstract',
-            'Kwf_Component_View_Renderer',
-            'Kwf_Component_View_Helper_Master',
-            'Kwf_Component_View_Helper_Component',
-            'Kwf_Component_View_Helper_ComponentLink',
-            'Kwf_View_Helper_ComponentLink',
-            'Kwf_Component_Abstract_ContentSender_Abstract',
-            'Kwf_Component_Abstract_ContentSender_Default',
         );
         foreach ($preloadClasses as $cls) {
             foreach ($ip as $path) {
@@ -172,6 +153,38 @@ class Kwf_Util_Setup
             }
             $ret .= "    ob_start();\n";
             $ret .= "}\n";
+        }
+
+        if (Kwf_Component_Data_Root::getComponentClass()) {
+            //only load component related classes if it is a component web
+            $preloadClasses[] = 'Kwf_Model_Select';
+            $preloadClasses[] = 'Kwf_Component_Data';
+            $preloadClasses[] = 'Kwf_Component_Data_Root';
+            $preloadClasses[] = 'Kwf_Component_Select';
+            $preloadClasses[] = 'Kwf_Component_Abstract';
+            $preloadClasses[] = 'Kwc_Abstract';
+            $preloadClasses[] = 'Kwc_Paragraphs_Component';
+            $preloadClasses[] = 'Kwf_Component_Renderer_Abstract';
+            $preloadClasses[] = 'Kwf_Component_Renderer';
+            $preloadClasses[] = 'Kwf_Component_Cache';
+            $preloadClasses[] = 'Kwf_Component_Cache_Mysql';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_Abstract';
+            $preloadClasses[] = 'Kwf_Component_View_Renderer';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_Master';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_Component';
+            $preloadClasses[] = 'Kwf_Component_View_Helper_ComponentLink';
+            $preloadClasses[] = 'Kwf_View_Helper_Link';
+            $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Abstract';
+            $preloadClasses[] = 'Kwf_Component_Abstract_ContentSender_Default';
+            foreach ($preloadClasses as $cls) {
+                foreach ($ip as $path) {
+                    $file = $path.'/'.str_replace('_', '/', $cls).'.php';
+                    if (file_exists($file)) {
+                        $ret .= "require_once('".$file."');\n";
+                        break;
+                    }
+                }
+            }
         }
 
         $ret .= "\$host = isset(\$_SERVER['HTTP_HOST']) ? \$_SERVER['HTTP_HOST'] : null;\n";
