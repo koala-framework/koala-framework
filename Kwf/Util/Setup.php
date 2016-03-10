@@ -113,8 +113,8 @@ class Kwf_Util_Setup
             $ret .= "Kwf_Benchmark::enable();\n";
         } else {
             $ret .= "if (isset(\$_REQUEST['KWF_BENCHMARK'])) {\n";
-            foreach (Kwf_Config::getValueArray('debug.benchmarkActivatorIp') as $ip) {
-                $ret .= "    if (\$_SERVER['REMOTE_ADDR'] == '$ip') Kwf_Benchmark::enable();\n";
+            foreach (Kwf_Config::getValueArray('debug.benchmarkActivatorIp') as $i) {
+                $ret .= "    if (\$_SERVER['REMOTE_ADDR'] == '$i') Kwf_Benchmark::enable();\n";
             }
             $ret .= "}\n";
         }
