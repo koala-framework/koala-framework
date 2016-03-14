@@ -167,8 +167,16 @@ class Kwf_Component_Settings
         if (substr($file, 0, strlen(getcwd())) == getcwd()) {
             $path = substr($file, strlen(getcwd())+1);
         } else if (KWF_PATH == '..') {
-            //when running unit tests we can simply use the absolute path as this won't be cached
-            $path = $file;
+            $cwd = getcwd();
+            $parentCwd = substr($cwd, 0, strrpos($cwd, '/'));
+            if (substr($file, 0, strlen($parentCwd)) != $parentCwd) {
+                throw new Kwf_Exception("'$file' is not in web directory '$parentCwd'");
+            }
+            if ($file == $parentCwd) {
+                $path = '..';
+            } else {
+                $path = '../'.substr($file, strlen($parentCwd)+1);
+            }
         } else {
             $file = str_replace('_', '/', $c) . '.php';
             foreach ($dirs as $dir) {

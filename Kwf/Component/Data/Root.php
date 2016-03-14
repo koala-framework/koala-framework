@@ -15,6 +15,7 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
     private $_generatorsForClassesCache = array();
     private $_currentPage;
     private $_pageGenerators;
+    private $_plugins = array();
 
     //caches fuer getComponentById
     private $_dataCache = array();
@@ -699,6 +700,23 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
             return $this->_dataCacheIgnoreVisible[$id];
         }
         return null;
+    }
+
+    public function registerPlugin($plugin)
+    {
+        $this->_plugins[] = $plugin;
+    }
+
+    public function getPlugins($interface = null)
+    {
+        if (!$interface) return $this->_plugins;
+        $ret = array();
+        foreach ($this->_plugins as $plugin) {
+            if (is_instance_of($plugin, $interface)) {
+                $ret[] = $plugin;
+            }
+        }
+        return $ret;
     }
 }
 ?>
