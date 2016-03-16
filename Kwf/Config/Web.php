@@ -63,7 +63,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
     {
         $configClass = Kwf_Setup::$configClass;
         $config = new $configClass(Kwf_Setup::getConfigSection());
-        $cacheId = 'config_'.str_replace('-', '_', Kwf_Setup::getConfigSection());
+        $cacheId = 'config_'.str_replace(array('-', '.'), '_', Kwf_Setup::getConfigSection());
         Kwf_Config_Cache::getInstance()->save($config, $cacheId);
 
         Kwf_Config_Web::clearInstances();
