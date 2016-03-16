@@ -222,6 +222,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         $html = str_replace("\r", ' ', $html);
         $html = str_replace("\n", ' ', $html);
         $html = preg_replace('#  +#', ' ', $html);
+        $html = str_replace('[-]', '&shy;', $html);
         $html = trim($html);
         return $html;
     }

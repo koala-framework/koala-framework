@@ -41,6 +41,7 @@ class Kwf_Loader
         foreach ($composerNamespaces as $namespace => $dirs) {
             // convert paths to psr4 style
             if ($namespace) {
+                if (strpos($namespace, '\\') !== false && substr($namespace, -1) != '\\') $namespace .= '\\';
                 $namespacePath = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
                 $namespacePath = str_replace('_', DIRECTORY_SEPARATOR, $namespacePath);
                 if ($namespacePath[strlen($namespacePath)-1] == DIRECTORY_SEPARATOR) {

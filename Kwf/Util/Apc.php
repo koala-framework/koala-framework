@@ -50,57 +50,25 @@ class Kwf_Util_Apc
 
         $params['password'] = self::_getHttpPassword();
 
-        $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
-
         $config = Kwf_Registry::get('config');
 
-        if (!$config->server->aws || $skipOtherServers) {
-            $d = $config->server->domain;
-            if (!$d) {
-                if (isset($options['outputFn'])) {
-                    call_user_func($options['outputFn'], "error: $outputType: domain not set");
-                }
-                return false;
+        $d = $config->server->domain;
+        if (!$d) {
+            if (isset($options['outputFn'])) {
+                call_user_func($options['outputFn'], "error: $outputType: domain not set");
             }
-
-            $domains = array(
-                array(
-                    'domain' => $d,
-                )
-            );
-            if ($config->server->noRedirectPattern) {
-                $domains[0]['alternative'] = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
-            }
-        } else {
-            $ec2 = new Kwf_Util_Aws_Ec2();
-            $r = $ec2->describe_instances(array(
-                'Filter' => array(
-                    array(
-                        'Name' => 'tag:application.id',
-                        'Value' => $config->application->id,
-                    ),
-                    array(
-                        'Name' => 'tag:config_section',
-                        'Value' => Kwf_Setup::getConfigSection(),
-                    )
-                )
-            ));
-            if (!$r->isOK()) {
-                throw new Kwf_Exception($r->body->asXml());
-            }
-
-            $domains = array();
-            foreach ($r->body->reservationSet->item as $resItem) {
-                foreach ($resItem->instancesSet->item as $item) {
-                    $dnsName = (string)$item->dnsName;
-                    if ($dnsName) {
-                        $domains[] = array(
-                            'domain'=>$dnsName,
-                        );
-                    }
-                }
-            }
+            return false;
         }
+
+        $domains = array(
+            array(
+                'domain' => $d,
+            )
+        );
+        if ($config->server->noRedirectPattern) {
+            $domains[0]['alternative'] = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
+        }
+
 
         foreach ($domains as $d) {
             $s = microtime(true);

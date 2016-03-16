@@ -56,9 +56,12 @@ class Kwf_Component_Renderer extends Kwf_Component_Renderer_Abstract
         $content = $this->_renderPass2($content);
         Kwf_Benchmark::checkpoint('render pass 2');
 
-
-
         Kwf_Component_Cache::getInstance()->writeBuffer();
+
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_PostRender') as $plugin) {
+            $content = $plugin->processOutput($content);
+        }
+
         return $content;
     }
 
