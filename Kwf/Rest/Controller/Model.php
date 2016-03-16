@@ -197,7 +197,7 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
         $ret = array();
         foreach ($data as $d) {
             $row = $this->_model->createRow();
-            if ($d->id) {
+            if (isset($d->id) && $d->id) {
                 $row->id = $d->id;
             }
 

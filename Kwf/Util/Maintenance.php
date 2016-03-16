@@ -51,17 +51,6 @@ class Kwf_Util_Maintenance
         if (file_exists('bootstrap.php.backup')) return;
 
         self::writeMaintenanceBootstrapSelf($output);
-        if (Kwf_Config::getValue('server.aws')) {
-            $domains = Kwf_Util_Aws_Ec2_InstanceDnsNames::getOther();
-            foreach ($domains as $domain) {
-                if ($output) {
-                    echo "executing clear-cache write-maintenance on $domain:\n";
-                }
-                $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache write-maintenance";
-                $cmd = "ssh $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
-                passthru($cmd);
-            }
-        }
     }
 
     public static function restoreMaintenanceBootstrapSelf($output = true)
@@ -82,16 +71,5 @@ class Kwf_Util_Maintenance
         if (!file_exists('bootstrap.php.backup')) return;
 
         self::restoreMaintenanceBootstrapSelf($output);
-        if (Kwf_Config::getValue('server.aws')) {
-            $domains = Kwf_Util_Aws_Ec2_InstanceDnsNames::getOther();
-            foreach ($domains as $domain) {
-                if ($output) {
-                    echo "executing clear-cache restore-maintenance on $domain:\n";
-                }
-                $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache restore-maintenance";
-                $cmd = "ssh $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
-                passthru($cmd);
-            }
-        }
     }
 }

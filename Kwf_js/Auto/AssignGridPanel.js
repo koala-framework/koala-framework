@@ -101,6 +101,7 @@ Kwf.Auto.AssignGridPanel = Ext2.extend(Kwf.Binding.ProxyPanel, {
                 this.gridAssigned.reload();
                 this.gridData.reload();
                 this.fireEvent('assigned', this);
+                this.gridData.getSelectionModel().clearSelections();
             },
             scope: this
         });
