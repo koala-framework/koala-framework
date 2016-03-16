@@ -1,4 +1,4 @@
-<div class="item">
+<article class="item">
     <div class="previewImage">
         <?=$this->componentLink($this->item, $this->component($this->item->getChildComponent('-previewImage')))?>
     </div>
@@ -12,4 +12,4 @@
         </div>
     </div>
     <div class="kwfUp-clear"></div>
-</div>
+</article>

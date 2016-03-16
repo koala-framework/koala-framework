@@ -21,7 +21,7 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
     {
         $url = $this->_getImageUrl($image);
         if (stripos($url, "/assets/") === 0) {
-            $file = new Kwf_Assets_Dependency_File(substr($url, 8));
+            $file = new Kwf_Assets_Dependency_File(Kwf_Assets_ProviderList_Default::getInstance(), substr($url, 8));
             return $file->getAbsoluteFileName();
         } else {
             throw new Kwf_Exception("Path does not include '/assets/'. Not implemented yet.");

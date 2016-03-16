@@ -101,6 +101,7 @@ ViewAjax.prototype = {
 
     controllerUrl: null,
     loadMoreBufferPx: 700,
+    limit: 10,
     initialPageSize: null,
     minimumCharactersForFilter: 3,
 
@@ -310,7 +311,7 @@ ViewAjax.prototype = {
         this.$el.addClass('kwfUp-loadingMore');
         var params = $.extend({
             start: this.$el.find('.kwfUp-kwfViewAjaxItem').length,
-            limit: 10
+            limit: this.limit
         }, this.baseParams);
         $.ajax({
             data: params,
@@ -392,7 +393,7 @@ ViewAjax.prototype = {
         this.kwfMainContent.hide();
 
             //style: 'width: ' + this.kwfMainContent.getStyle('width'),
-        this.detailEl = $('<div class="kwfUp-kwfMainContent kwfUp-loadingContent '+classNames+'""><div class="kwfUp-loading"></div></div>');
+        this.detailEl = $('<main class="kwfUp-kwfMainContent kwfUp-loadingContent '+classNames+'""><div class="kwfUp-loading"></div></main>');
         this.kwfMainContent.after(this.detailEl);
 
         $.ajax({

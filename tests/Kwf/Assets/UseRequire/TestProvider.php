@@ -4,13 +4,13 @@ class Kwf_Assets_UseRequire_TestProvider extends Kwf_Assets_Provider_Abstract
     public function getDependency($dependencyName)
     {
         if ($dependencyName == 'A') {
-            return new Kwf_Assets_UseRequire_TestDependency("A");
+            return new Kwf_Assets_UseRequire_TestDependency($this->_providerList, "A");
         } else if ($dependencyName == 'B') {
-            return new Kwf_Assets_UseRequire_TestDependency("B");
+            return new Kwf_Assets_UseRequire_TestDependency($this->_providerList, "B");
         } else if ($dependencyName == 'C') {
-            return new Kwf_Assets_UseRequire_TestDependency("C");
+            return new Kwf_Assets_UseRequire_TestDependency($this->_providerList, "C");
         } else if ($dependencyName == 'D') {
-            return new Kwf_Assets_UseRequire_TestDependency("D");
+            return new Kwf_Assets_UseRequire_TestDependency($this->_providerList, "D");
         }
     }
     /*
@@ -33,21 +33,21 @@ class Kwf_Assets_UseRequire_TestProvider extends Kwf_Assets_Provider_Abstract
     */
     public function getDependenciesForDependency(Kwf_Assets_Dependency_Abstract $dependency)
     {
-        if ($dependency->getContents('en') == 'A') {
+        if ($dependency->getContentsPacked()->getFileContents() == 'A') {
             return array();
-        } else if ($dependency->getContents('en') == 'B') {
+        } else if ($dependency->getContentsPacked()->getFileContents() == 'B') {
             return array(
                 Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_USES => array(
                     $this->_providerList->findDependency('A')
                 )
             );
-        } else if ($dependency->getContents('en') == 'C') {
+        } else if ($dependency->getContentsPacked()->getFileContents() == 'C') {
             return array(
                 Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES => array(
                     $this->_providerList->findDependency('A')
                 )
             );
-        } else if ($dependency->getContents('en') == 'D') {
+        } else if ($dependency->getContentsPacked()->getFileContents() == 'D') {
             return array(
                 Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_REQUIRES => array(
                     $this->_providerList->findDependency('B'),

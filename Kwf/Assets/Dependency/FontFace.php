@@ -1,19 +1,19 @@
 <?php
 class Kwf_Assets_Dependency_FontFace extends Kwf_Assets_Dependency_Abstract
 {
-    public function __construct($name, $path)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $name, $path)
     {
         $this->_path = $path;
         $this->_name = $name;
+        parent::__construct($providerList);
     }
-
 
     public function getMimeType()
     {
         return 'text/css';
     }
 
-    public function getContents($language)
+    public function getContentsPacked()
     {
         $basePath = 'vendor/bower_components/';
         if (file_exists($basePath.$this->_path."/fonts/$this->_name.eot")) {
@@ -34,16 +34,11 @@ class Kwf_Assets_Dependency_FontFace extends Kwf_Assets_Dependency_Abstract
         $ret .= "         url('".$fontsPath.".ttf') format('truetype'),\n";
         $ret .= "         url('".$fontsPath.".svg') format('svg');\n";
         $ret .= "}\n";
-        return $ret;
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
     public function __toString()
     {
         return 'FontFace'.ucfirst($this->_name);
-    }
-
-    public function usesLanguage()
-    {
-        return false;
     }
 }

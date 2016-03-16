@@ -35,12 +35,16 @@ abstract class Kwf_Component_MasterLayout_Abstract
         static $i = array();
         if (!isset($i[$class])) {
             if (!Kwc_Abstract::hasSetting($class, 'masterLayout')) {
-                throw new Kwf_Exception("No masterLayout set for '$class'");
+                //default masterLayout
+                $layout = array(
+                    'class' => 'Kwf_Component_MasterLayout_Legacy'
+                );
+            } else {
+                $layout = Kwc_Abstract::getSetting($class, 'masterLayout');
             }
-            $layout = Kwc_Abstract::getSetting($class, 'masterLayout');
-            $class = $layout['class'];
+            $layoutClass = $layout['class'];
             unset($layout['class']);
-            $i[$class] = new $class($class, $layout);
+            $i[$class] = new $layoutClass($class, $layout);
         }
         return $i[$class];
     }
@@ -57,15 +61,15 @@ abstract class Kwf_Component_MasterLayout_Abstract
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (Kwc_Abstract::hasSetting($c, 'masterLayout')) {
                 $masterLayout = Kwc_Abstract::getSetting($c, 'masterLayout');
-                $f = new Kwf_Assets_Dependency_File($masterLayout['layoutConfig']);
-                $masterLayouts .= $f->getContents(null)."\n";
+                $f = new Kwf_Assets_Dependency_File(Kwf_Assets_ProviderList_Default::getInstance(), $masterLayout['layoutConfig']);
+                $masterLayouts .= $f->getContentsSourceString()."\n";
                 $masterLayouts .= "\$all-master-layouts: map-merge(\$all-master-layouts, \$master-layouts);\n";
             }
         }
         $masterLayouts .= "\$master-layouts: \$all-master-layouts;\n";
         $masterLayouts .= "\$all-master-layouts: null\n";
 
-        $file = "cache/scss/generated/config/_master-layouts.scss";
+        $file = "temp/scss-generated/config/_master-layouts.scss";
         if (!is_dir(dirname($file))) mkdir(dirname($file), 0777, true);
         if (!file_exists($file) || file_get_contents($file) != $masterLayouts) { //only modify if actually changed
             file_put_contents($file, $masterLayouts);
@@ -87,7 +91,7 @@ abstract class Kwf_Component_MasterLayout_Abstract
         }
         $data = array(
             'contexts' => self::$_supportedContexts,
-            'childContexts' => self::$_supportedBoxContexts,
+            'boxContexts' => self::$_supportedBoxContexts,
         );
 
         file_put_contents('build/component/masterlayoutcontexts', serialize($data));

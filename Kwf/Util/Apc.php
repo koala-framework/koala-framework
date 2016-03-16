@@ -21,7 +21,7 @@ class Kwf_Util_Apc
     {
         static $hasApc;
         if (isset($hasApc)) return $hasApc;
-        $hasApc = extension_loaded('apc');
+        $hasApc = extension_loaded('apc') || extension_loaded('apcu') || extension_loaded('Zend OPcache');
         if (!$hasApc && PHP_SAPI == 'cli') {
             //apc might be enabled in webserver only, not in cli
             $hasApc = Kwf_Util_Apc::callUtil('is-loaded', array(), array('returnBody'=>true)) == 'OK1';
@@ -50,57 +50,25 @@ class Kwf_Util_Apc
 
         $params['password'] = self::_getHttpPassword();
 
-        $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
-
         $config = Kwf_Registry::get('config');
 
-        if (!$config->server->aws || $skipOtherServers) {
-            $d = $config->server->domain;
-            if (!$d) {
-                if (isset($options['outputFn'])) {
-                    call_user_func($options['outputFn'], "error: $outputType: domain not set");
-                }
-                return false;
+        $d = $config->server->domain;
+        if (!$d) {
+            if (isset($options['outputFn'])) {
+                call_user_func($options['outputFn'], "error: $outputType: domain not set");
             }
-
-            $domains = array(
-                array(
-                    'domain' => $d,
-                )
-            );
-            if ($config->server->noRedirectPattern) {
-                $domains[0]['alternative'] = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
-            }
-        } else {
-            $ec2 = new Kwf_Util_Aws_Ec2();
-            $r = $ec2->describe_instances(array(
-                'Filter' => array(
-                    array(
-                        'Name' => 'tag:application.id',
-                        'Value' => $config->application->id,
-                    ),
-                    array(
-                        'Name' => 'tag:config_section',
-                        'Value' => Kwf_Setup::getConfigSection(),
-                    )
-                )
-            ));
-            if (!$r->isOK()) {
-                throw new Kwf_Exception($r->body->asXml());
-            }
-
-            $domains = array();
-            foreach ($r->body->reservationSet->item as $resItem) {
-                foreach ($resItem->instancesSet->item as $item) {
-                    $dnsName = (string)$item->dnsName;
-                    if ($dnsName) {
-                        $domains[] = array(
-                            'domain'=>$dnsName,
-                        );
-                    }
-                }
-            }
+            return false;
         }
+
+        $domains = array(
+            array(
+                'domain' => $d,
+            )
+        );
+        if ($config->server->noRedirectPattern) {
+            $domains[0]['alternative'] = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
+        }
+
 
         foreach ($domains as $d) {
             $s = microtime(true);
@@ -199,12 +167,20 @@ class Kwf_Util_Apc
             }
             if (isset($_REQUEST['cacheIds'])) {
                 foreach (explode(',', $_REQUEST['cacheIds']) as $cacheId) {
-                    apc_delete($cacheId);
+                    if (extension_loaded('apcu')) {
+                        apcu_delete($cacheId);
+                    } else {
+                        apc_delete($cacheId);
+                    }
                 }
             }
             if (isset($_REQUEST['files']) && function_exists('apc_delete_file')) {
                 foreach (explode(',', $_REQUEST['files']) as $file) {
-                    @apc_delete_file($file);
+                    if (extension_loaded('Zend OPcache')) {
+                        opcache_invalidate($file);
+                    } else {
+                        @apc_delete_file($file);
+                    }
                 }
             } else if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'user') {
                 if (extension_loaded('apcu')) {
@@ -213,7 +189,9 @@ class Kwf_Util_Apc
                     apc_clear_cache('user');
                 }
             } else {
-                if (!extension_loaded('apcu')) {
+                if (extension_loaded('Zend OPcache')) {
+                    opcache_reset();
+                } else if (!extension_loaded('apcu')) {
                     apc_clear_cache('file');
                 }
             }
@@ -237,7 +215,7 @@ class Kwf_Util_Apc
             self::iterate();
         } else if ($uri == '/kwf/util/apc/is-loaded') {
 
-            if (extension_loaded('apc')) {
+            if (extension_loaded('apc') || extension_loaded('apcu')) {
                 echo 'OK1';
             } else {
                 echo 'OK0';

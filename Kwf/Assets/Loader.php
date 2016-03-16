@@ -12,7 +12,7 @@ class Kwf_Assets_Loader
         }
     }
 
-    public function getFileContents($file, $language = null)
+    public function getFileContents($file)
     {
         $ret = array();
         if (substr($file, -4)=='.gif') {
@@ -61,9 +61,9 @@ class Kwf_Assets_Loader
 
         if (substr($ret['mimeType'], 0, 5) == 'text/') {
             $ret['mtime'] = time();
-            $file = new Kwf_Assets_Dependency_File($file);
+            $file = new Kwf_Assets_Dependency_File(Kwf_Assets_ProviderList_Default::getInstance(), $file);
             if (!$file->getAbsoluteFileName() || !file_exists($file->getAbsoluteFileName())) throw new Kwf_Exception_NotFound();
-            $ret['contents'] = $file->getContents(null);
+            $ret['contents'] = file_get_contents($file->getAbsoluteFileName());
         } else {
             $fx = substr($file, 0, strpos($file, '/'));
             if (substr($fx, 0, 3) == 'fx_') {
@@ -75,7 +75,7 @@ class Kwf_Assets_Loader
                     }
                     $im = new Imagick();
                     if (substr($file, -4)=='.ico') $im->setFormat('ico'); //required because imagick can't autodetect ico format
-                    $file = new Kwf_Assets_Dependency_File(substr($file, strpos($file, '/')+1));
+                    $file = new Kwf_Assets_Dependency_File(Kwf_Assets_ProviderList_Default::getInstance(), substr($file, strpos($file, '/')+1));
                     $im->readImage($file->getAbsoluteFileName());
                     $fx = explode('_', substr($fx, 3));
                     foreach ($fx as $i) {
@@ -86,7 +86,6 @@ class Kwf_Assets_Loader
                         }
                         call_user_func(array('Kwf_Assets_Effects', $i), $im, $params);
                     }
-                    $cacheData['mtime'] = $file->getMTime();
                     $cacheData['contents'] = $im->getImagesBlob();;
                     $im->destroy();
                     $cache->save($cacheData, $cacheId);
@@ -95,11 +94,11 @@ class Kwf_Assets_Loader
                 $ret['mtime'] = time();
             } else {
                 $ret['mtime'] = time();
-                $file = new Kwf_Assets_Dependency_File($file);
+                $file = new Kwf_Assets_Dependency_File(Kwf_Assets_ProviderList_Default::getInstance(), $file);
                 if (!file_exists($file->getAbsoluteFileName())) {
                     throw new Kwf_Exception_NotFound();
                 }
-                $ret['contents'] = $file->getContents(null);
+                $ret['contents'] = file_get_contents($file->getAbsoluteFileName());
             }
         }
 

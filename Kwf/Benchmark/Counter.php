@@ -5,9 +5,6 @@ class Kwf_Benchmark_Counter
     {
         static $i;
         if (!isset($i)) {
-            if (Kwf_Config::getValue('server.aws')) {
-                throw new Kwf_Exception_NotYetImplemented("using counter on multiple servers is not yet implemented");
-            }
             if (extension_loaded('apc')) {
                 if (function_exists('apc_inc')) { //apc >= 3.1.1
                     $i = new Kwf_Benchmark_Counter_Apc();

@@ -158,6 +158,7 @@ class Kwf_Assets_Dispatcher
         if (!$package instanceof Kwf_Assets_Package) {
             throw new Kwf_Exception_NotFound();
         }
+
         return $package->getUrlContents($extension, $language);
     }
 

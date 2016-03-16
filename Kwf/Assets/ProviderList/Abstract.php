@@ -2,13 +2,19 @@
 class Kwf_Assets_ProviderList_Abstract implements Serializable
 {
     protected $_providers;
+    protected $_filters;
     protected $_dependencies = array();
-    public function __construct(array $providers)
+    private $_dependencyIdentifiers = array();
+    private $_pathTypesCache;
+    protected $_pathTypesCacheId;
+
+    public function __construct(array $providers, array $filters)
     {
         foreach ($providers as $p) {
             $p->setProviderList($this);
         }
         $this->_providers = $providers;
+        $this->_filters = $filters;
     }
 
     public function getProviders()
@@ -87,6 +93,11 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         foreach ($this->_providers as $p) {
             $d = $p->getDependency($dependencyName);
             if ($d !== null) {
+                $id = $d->getIdentifier();
+                if (isset($this->_dependencyIdentifiers[$id])) {
+                    throw new Kwf_Exception("Dependency '$d' uses an non-unique identifier '$id'");
+                }
+                $this->_dependencyIdentifiers[$id] = true;
                 $this->_dependencies[$dependencyName] = $d;
                 $this->_setDependenciesForDependency($d);
                 return $d;
@@ -156,5 +167,53 @@ class Kwf_Assets_ProviderList_Abstract implements Serializable
         foreach (unserialize($serialized) as $k=>$i) {
             $this->$k = $i;
         }
+    }
+
+    public function getFilters()
+    {
+        return $this->_filters;
+    }
+
+    public function getPathTypes()
+    {
+        if (isset($this->_pathTypesCache)) return $this->_pathTypesCache;
+        if (isset($this->_pathTypesCacheId)) {
+            $ret = Kwf_Cache_SimpleStatic::fetch($this->_pathTypesCacheId);
+            if ($ret !== false) {
+                $this->_pathTypesCache = $ret;
+                return $ret;
+            }
+        }
+
+        $ret = array(
+            'webComponents' => 'components',
+            'webThemes' => 'themes',
+        );
+        $vendors[] = KWF_PATH; //required for kwf tests, in web kwf is twice in $vendors but that's not a problem
+        $vendors[] = '.';
+        $vendors = array_merge($vendors, glob(VENDOR_PATH."/*/*"));
+        foreach ($vendors as $i) {
+            if (is_dir($i) && file_exists($i.'/dependencies.ini')) {
+                $c = new Zend_Config_Ini($i.'/dependencies.ini');
+                if ($c->config) {
+                    $dep = new Zend_Config_Ini($i.'/dependencies.ini', 'config');
+                    $pathType = (string)$dep->pathType;
+                    if ($pathType) {
+                        $ret[$pathType] = $i;
+                    }
+                }
+            }
+        }
+
+        foreach ($this->_providers as $p) {
+            $ret = array_merge($ret, $p->getPathTypes());
+        }
+
+        $ret['web'] = '.';
+
+
+        Kwf_Cache_SimpleStatic::add($this->_pathTypesCacheId, $ret);
+        $this->_pathTypesCache = $ret;
+        return $ret;
     }
 }

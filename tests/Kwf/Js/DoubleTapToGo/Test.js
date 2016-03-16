@@ -1,3 +1,6 @@
+var $ = require('jQuery');
+var QUnit = require('qunit');
+
 var templates = {
     one:
         '<div class="mainMenu">'+
@@ -148,7 +151,7 @@ QUnit.asyncTest("Simulate touch-device and click-trough Levels : 2", function( a
 
     $('#main').html($(templates.one));
 
-    Modernizr.touch = true;
+    Modernizr.touchevents = true;
 
     Kwf.Utils.DoubleTapToGo($('ul.menu > li'), {targetToOpen: '> div.dropdown'});
     Kwf.Utils.DoubleTapToGo($('ul.menu > li > div > ul > li'), {targetToOpen: '> div.dropdown'});
@@ -186,7 +189,7 @@ QUnit.asyncTest("Simulate touch-device and click-trough  Levels : 3", function( 
 
     $('#main').html($(templates.two));
 
-    Modernizr.touch = true;
+    Modernizr.touchevents = true;
 
     Kwf.Utils.DoubleTapToGo($('ul.menu > li'), {targetToOpen: '> div.dropdown'});
     Kwf.Utils.DoubleTapToGo($('ul.menu > li > div > ul > li'), {targetToOpen: '> div.dropdown'});
@@ -198,13 +201,14 @@ QUnit.asyncTest("Simulate touch-device and click-trough  Levels : 3", function( 
     var firstLinkSecondSubLink = $('ul.menu > li:first > div.dropdown > ul > li:last > a');
     var firstLinkSecondSubSubLink = $('ul.menu > li:first > div.dropdown > ul > li:last > div.dropdown > ul > li > a');
 
+
     firstLinkTop.on('click', function(e) {
         setTimeout(function() {
             assert.ok(window.location.hash === $(e.target).attr('href') ? true : false , 'Check if preventDefault is active (Double Taped first Link)');
         }, 200);
     });
 
-    firstLinkTop.trigger('touchend');
+    firstLinkTop.closest('li').triggerHandler('touchend');
     assert.ok( $(firstLinkTop).next('.dropdown').is(':visible') ? true : false, 'First link (main) visible');
 
     firstLinkFirstSubLink.trigger('touchend');
@@ -234,7 +238,7 @@ QUnit.asyncTest('Simulate touch-device and click through between menu links', fu
 
     $('#main').html($(templates.three));
 
-    Modernizr.touch = true;
+    Modernizr.touchevents = true;
 
     Kwf.Utils.DoubleTapToGo($('ul.menu > li'), {targetToOpen: '> div.dropdown'});
     Kwf.Utils.DoubleTapToGo($('ul.menu > li > div > ul > li'), {targetToOpen: '> div.dropdown'});

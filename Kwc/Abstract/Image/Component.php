@@ -70,6 +70,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $ret['defineWidth'] = false;
         $ret['maxWidthImageWidth'] = true;
         $ret['inlineTags'] = false;
+        $ret['imageCompressionQuality'] = 80;
         return $ret;
     }
 
@@ -259,7 +260,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         }
         $filename .= '.'.$fileRow->extension;
         $file = $fileRow->getFileSource();
-        if (!$file || !file_exists($file)) return null;
+        if (!$file) return null;
         return array(
             'filename' => $filename,
             'file' => $file,
@@ -347,6 +348,8 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
                 $s['crop']['height'] = $row->crop_height;
             }
         }
+
+        $s['imageCompressionQuality'] = $this->_getSetting('imageCompressionQuality');
 
         return $s;
     }

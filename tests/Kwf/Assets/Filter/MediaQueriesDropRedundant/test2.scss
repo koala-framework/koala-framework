@@ -1,0 +1,13 @@
+@media (max-width: 1200px) {
+    .foo {
+        color: blue;
+        height: 100px;
+    }
+}
+
+@media (max-width: 900px) {
+    .foo {
+        color: red;
+        height: 100px;
+    }
+}

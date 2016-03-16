@@ -108,7 +108,7 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
                 if (!array_key_exists($g->getClass().'.'.$g->getGeneratorKey(), $generatorForms)) {
                     $f = $g->getPagePropertiesForm();
                     if ($f) {
-                        $f->setName('gen_'.$g->getGeneratorKey());
+                        $f->setName('gen_'.$g->getClass().'_'.$g->getGeneratorKey());
                         $f->setIdTemplate('{0}-'.$g->getGeneratorKey());
                         $f->setCreateMissingRow(true);
                         $f->setShowDependingOnComponent(true);
@@ -118,7 +118,7 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
                     $generatorForms[$g->getClass().'.'.$g->getGeneratorKey()] = $f;
                 }
                 if ($generatorForms[$g->getClass().'.'.$g->getGeneratorKey()]) {
-                    $formsForComponent[$key][] = 'gen_'.$g->getGeneratorKey();
+                    $formsForComponent[$key][] = 'gen_'.$g->getClass().'_'.$g->getGeneratorKey();
                 }
 
                 if ($g->getGeneratorFlag('static')) {

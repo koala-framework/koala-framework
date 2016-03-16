@@ -1,5 +1,5 @@
 <?php
-class Kwc_Root_Category_Update_20150309Legacy00001 extends Kwf_Update
+class Kwc_Root_Category_Update_20150309Legacy00006 extends Kwf_Update
 {
     public function update()
     {

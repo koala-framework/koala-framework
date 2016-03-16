@@ -15,3 +15,4 @@ automagic-checkout.log
 /.bowerrc
 /bower.json
 /trl
+/package.json

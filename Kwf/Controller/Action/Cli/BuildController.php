@@ -82,7 +82,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
                 $sizes = array();
                 echo "\n".$p->getDependencyName()." $mimeType\n";
                 foreach ($p->getFilteredUniqueDependencies($mimeType) as $i) {
-                    $sizes[(string)$i] = strlen(gzencode($i->getContentsPacked('en')->getFileContents(), 9, FORCE_GZIP));
+                    $sizes[(string)$i] = strlen(gzencode($i->getContentsPacked()->getFileContents(), 9, FORCE_GZIP));
                 }
                 arsort($sizes);
                 $sumSize = array_sum($sizes);
@@ -128,10 +128,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
     {
         $a = new Kwf_Util_Build_Types_Assets();
         $langs = $a->getAllLanguages();
-
-        $packages = array(
-            Kwf_Assets_Package_Default::getInstance('Frontend'),
-        );
+        $packages = $a->getAllPackages();
 
         foreach ($packages as $p) {
             $c = $p->getBuildContents('text/css', $langs[0]);

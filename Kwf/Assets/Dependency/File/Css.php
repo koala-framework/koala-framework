@@ -1,22 +1,9 @@
 <?php
 class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
 {
-    private $_contentsCache;
-
     public function getMimeType()
     {
         return 'text/css';
-    }
-    public function getContents($language)
-    {
-        $ret = parent::getContents($language);
-        $ret = $this->_processContents($ret);
-        return $ret;
-    }
-
-    public function usesLanguage()
-    {
-        return false;
     }
 
     protected function _processContents($ret)
@@ -35,36 +22,34 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         $ret = preg_replace('#url\((\'|")(?![a-z]+:)([^/\'"])#', 'url(\1/assets/'.$fnDir.'/\2', $ret);
         $ret = preg_replace('#url\((?![a-z]+:)([^/\'"])#', 'url(/assets/'.$fnDir.'/\1', $ret);
 
-        if (strpos($ret, 'kwfUp-') !== false) {
-            if (Kwf_Config::getValue('application.uniquePrefix')) {
-                $ret = str_replace('kwfUp-', Kwf_Config::getValue('application.uniquePrefix').'-', $ret);
-            } else {
-                $ret = str_replace('kwfUp-', '', $ret);
-            }
-        }
+        //hack around postcss imcompatibility with *prefixed css rules
+        //those rules where used for IE 6-7 specifics (=css star hack)
+        //as we don't support them anymore drop them
+        $ret = preg_replace('#[^/]\\*[a-z-]+:[^;}]+#', '', $ret);
+
         return $ret;
     }
 
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
-        if (!isset($this->_cacheContents)) {
+        $contents = $this->getContentsSourceString();
+        $contents = str_replace("\r", "\n", $contents);
 
-            $contents = $this->getContents($language);
+        $contents = $this->_processContents($contents);
 
-            $contents = str_replace("\r", "\n", $contents);
 
-            // remove comments
-            //$contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
+        // remove comments
+        //$contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
 
-            // multiple whitespaces
-            $contents = str_replace("\t", " ", $contents);
-            $contents = preg_replace('/(\n)\n+/', '$1', $contents);
-            $contents = preg_replace('/(\n)\ +/', '$1', $contents);
-            $contents = preg_replace('/(\ )\ +/', '$1', $contents);
+        // multiple whitespaces
+        $contents = str_replace("\t", " ", $contents);
+        $contents = preg_replace('/(\n)\n+/', '$1', $contents);
+        $contents = preg_replace('/(\n)\ +/', '$1', $contents);
+        $contents = preg_replace('/(\ )\ +/', '$1', $contents);
 
-            $this->_cacheContents = $contents;
-        }
-
-        return Kwf_SourceMaps_SourceMap::createEmptyMap($this->_cacheContents);
+        $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
+        $ret->addSource($this->getFileNameWithType());
+        $ret->setMimeType('text/css');
+        return $ret;
     }
 }

@@ -37,4 +37,9 @@ class Kwc_Chained_Start_Component extends Kwc_Abstract
         }
         return $ret;
     }
+
+    protected function _formatRootElementClass()
+    {
+        return $this->getData()->chained->getComponent()->_formatRootElementClass();
+    }
 }

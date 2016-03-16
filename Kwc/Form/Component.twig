@@ -27,12 +27,6 @@
                 {{ renderer.formField(form) }}
             {% endblock %}
 
-            {% if method != 'get' %}
-            <div class="kwfUp-spEmail">
-                <label for="kwfUp-{{ data.componentId }}-sp-email">{{ data.trlKwf('Leave empty') }}:</label>
-                <input id="kwfUp-{{ data.componentId }}-sp-email" name="{{ formName }}-sp-email" /> {# spam protection, named email so bots think they should fill this #}
-            </div>
-            {% endif %}
             <div class="kwfUp-submitWrapper {{ 'submitWrapper'|bemClass }}">
                 <div class="kwfUp-button {{ 'button'|bemClass }}">
                     <button class="kwfUp-submit {{ 'submit'|bemClass }}" type="submit" name="{{ formName }}" value="submit">

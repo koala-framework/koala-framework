@@ -1,8 +1,8 @@
 {% if links|length %}
-    <div class="{{ rootElementClass }}">
+    <nav class="{{ rootElementClass }}">
         {% for item in items %}
             {{ renderer.componentLink(item.data, '{name}', item.class) }}
             {% if not item.last %}{{ separator|raw }}{% endif %}
         {% endfor %}
-    </div>
+    </nav>
 {% endif %}

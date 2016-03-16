@@ -5,11 +5,16 @@ class Kwf_Assets_Package
     protected $_providerList;
     protected $_dependencyName;
     protected $_dependency;
+
+    //if enabled ie8+9 will be supported:
+    //* multiple css files will be generated to avoid the <=ie9 4096 selectors limit
+    //* text/css; ie8 file will be generated
     protected $_enableLegacySupport = false;
 
     private $_cacheFilteredUniqueDependencies;
-    private $_cssPackageContentsCache;
     private $_chunkedCssCache;
+    private $_depContentsCache;
+    private $_packageContentsCache = array();
 
     public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $dependencyName)
     {
@@ -23,15 +28,6 @@ class Kwf_Assets_Package
     public function getDependencyName()
     {
         return $this->_dependencyName;
-    }
-
-    //if enabled ie8+9 will be supported:
-    //* multiple css files will be generated to avoid the <=ie9 4096 selectors limit
-    //* text/css; ie8 file will be generated
-    public function setEnableLegacySupport($v)
-    {
-        $this->_enableLegacySupport = $v;
-        return $this;
     }
 
     /**
@@ -57,40 +53,10 @@ class Kwf_Assets_Package
         return $this->_providerList;
     }
 
-    public function getMaxMTimeCacheId($mimeType)
-    {
-        $ret = $this->_getCacheId($mimeType);
-        if (!$ret) return $ret;
-        return 'mtime_'.$ret;
-    }
-
     //default impl doesn't cache, overriden in Package_Default
     protected function _getCacheId($mimeType)
     {
         return null;
-    }
-
-    public function getMaxMTime($mimeType)
-    {
-        $cacheId = $this->getMaxMTimeCacheId($mimeType);
-        if ($cacheId) {
-            $ret = Kwf_Assets_BuildCache::getInstance()->load($cacheId);
-            if ($ret !== false) return $ret;
-        }
-
-        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
-            throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
-        }
-
-        $maxMTime = 0;
-        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
-            $mTime = $i->getMTime();
-            if ($mTime) {
-                $maxMTime = max($maxMTime, $mTime);
-            }
-        }
-
-        return $maxMTime;
     }
 
     public function getFilteredUniqueDependencies($mimeType)
@@ -138,68 +104,102 @@ class Kwf_Assets_Package
         return $ret;
     }
 
-    private function _getCommonJsDeps($i, $language, &$data)
+    public function warmupDependencyCaches($dep, $mimeType, $progress = null)
+    {
+        $cacheId = 'filtered-'.$dep->getIdentifier();
+        if ($mimeType == 'text/css; ie8') {
+            $cacheId .= '-ie8';
+        }
+
+        $ret = Kwf_Assets_ContentsCache::getInstance()->load($cacheId);
+        if ($ret === false) {
+
+            if (!isset($this->_depContentsCache[$dep->getIdentifier()])) {
+                $ret = $dep->getContentsPacked();
+                if (!$ret) {
+                    throw new Kwf_Exception("Dependency '$dep' didn't return contents");
+                }
+                foreach ($this->getProviderList()->getFilters() as $filter) {
+                    if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_DEPENDENCY
+                        && $filter->getMimeType() == $dep->getMimeType()
+                    ) {
+                        if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Filter_', '', get_class($filter)));
+                        $ret = $filter->filter($ret);
+                    }
+                }
+                $this->_depContentsCache[$dep->getIdentifier()] = $ret;
+            } else {
+                $ret = $this->_depContentsCache[$dep->getIdentifier()];
+            }
+
+
+            if ($mimeType == 'text/css' || $mimeType == 'text/css; ie8') {
+                if ($mimeType == 'text/css') {
+                    if (strpos($ret->getFileContents(), '@ie8') !== false) {
+                        //remove @ie8 {}
+                        $f = new Kwf_Assets_Filter_Css_Ie8Remove();
+                        if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Filter_', '', get_class($f)));
+                        $ret = $f->filter($ret);
+                    }
+                } else if ($mimeType == 'text/css; ie8') {
+                    if (strpos($ret->getFileContents(), '@ie8') !== false) {
+                        //remove all but @ie8 {}
+                        $f = new Kwf_Assets_Filter_Css_Ie8Only();
+                        if ($progress) $progress->update(null, $dep->__toString().' '.str_replace('Kwf_Assets_Filter_', '', get_class($f)));
+                        $ret = $f->filter($ret);
+                    } else {
+                        $ret = Kwf_SourceMaps_SourceMap::createEmptyMap('');
+                    }
+                }
+            }
+
+            Kwf_Assets_ContentsCache::getInstance()->save($ret, $cacheId, $this->_providerList);
+        }
+        return $ret;
+    }
+
+    private function _getFilteredDependencyContents($dep, $mimeType)
+    {
+        return $this->warmupDependencyCaches($dep, $mimeType);
+    }
+
+    protected function _getCommonJsDeps($i, &$data)
     {
         $ret = array();
         foreach ($i->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS) as $depName=>$dep) {
             $ret[$depName] = $dep->__toString();
             if (!isset($data[$dep->__toString()])) {
-                $commonJsDeps = $this->_getCommonJsDeps($dep, $language, $data);
                 $data[$dep->__toString()] = array(
                     'id' => $dep->__toString(),
-                    'source' => $c = $dep->getContentsPacked($language)->getFileContentsInlineMap(false),
+                    'source' => $this->_getFilteredDependencyContents($dep, 'text/javascript'),
                     'sourceFile' => $dep->__toString(), //TODO
-                    'deps' => $commonJsDeps,
+                    'deps' => array(),
                     'entry' => false
                 );
+                $data[$dep->__toString()]['deps'] = $this->_getCommonJsDeps($dep, $data);
             }
         }
         return $ret;
     }
 
-    private function _buildPackageContents($mimeType, $language)
+    protected function _getCommonJsData($mimeType)
     {
-        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
-            if (Kwf_Exception_Abstract::isDebug()) {
-                //proper error message on development server
-                throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
-            } else {
-                throw new Kwf_Exception_NotFound();
-            }
-        }
-
-        foreach ($this->_providerList->getProviders() as $provider) {
-            $provider->initialize();
-        }
-
-        $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
-        if ($mimeType == 'text/javascript') $ext = 'js';
-        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
-        else if ($mimeType == 'text/css') $ext = 'css';
-        else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
-        else throw new Kwf_Exception("Invalid mimeType: '$mimeType'");
-        $packageMap->setFile($this->getPackageUrl($ext, $language));
-        if ($mimeType == 'text/css' || $mimeType == 'text/css; ie8') {
-            $packageMap->setMimeType('text/css');
-        } else {
-            $packageMap->setMimeType('text/javascript');
-        }
-
-        // ***** commonjs
         $commonJsData = array();
         $commonJsDeps = array();
-        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
-            if ($i->getIncludeInPackage()) {
-                if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry()) {
-                    $c = $i->getContentsPacked($language)->getFileContentsInlineMap(false);
-                    $commonJsDeps = $this->_getCommonJsDeps($i, $language, $commonJsData);
-                    $commonJsData[$i->__toString()] = array(
-                        'id' => $i->__toString(),
-                        'source' => $c,
-                        'sourceFile' => $i->__toString(), //TODO
-                        'deps' => $commonJsDeps,
-                        'entry' => true
-                    );
+        if ($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') {
+            foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
+                if ($i->getIncludeInPackage()) {
+                    if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry()) {
+                        $c = $this->_getFilteredDependencyContents($i, $mimeType);
+                        $commonJsDeps = $this->_getCommonJsDeps($i, $commonJsData);
+                        $commonJsData[$i->__toString()] = array(
+                            'id' => $i->__toString(),
+                            'source' => $c,
+                            'sourceFile' => $i->__toString(), //TODO
+                            'deps' => $commonJsDeps,
+                            'entry' => true
+                        );
+                    }
                 }
             }
         }
@@ -208,7 +208,7 @@ class Kwf_Assets_Package
                 //in defer.js don't include deps that are already loaded in non-defer
                 foreach ($this->_getFilteredUniqueDependencies('text/javascript') as $i) {
                     $data = array();
-                    $commonJsDeps = $this->_getCommonJsDeps($i, $language, $data);
+                    $commonJsDeps = $this->_getCommonJsDeps($i, $data);
                     foreach (array_keys($data) as $key) {
                         if (isset($commonJsData[$key])) {
                             unset($commonJsData[$key]);
@@ -216,21 +216,57 @@ class Kwf_Assets_Package
                     }
                 }
             }
+        }
+        return $commonJsData;
+    }
+
+    private function _buildPackageContents($mimeType)
+    {
+        foreach ($this->_providerList->getProviders() as $provider) {
+            $provider->initialize();
+        }
+
+        $packageMap = Kwf_SourceMaps_SourceMap::createEmptyMap('');
+        if ($mimeType == 'text/css' || $mimeType == 'text/css; ie8') {
+            $packageMap->setMimeType('text/css');
+        } else {
+            $packageMap->setMimeType('text/javascript');
+        }
+
+        $trlData = array();
+
+
+        // ***** commonjs
+        $commonJsData = $this->_getCommonJsData($mimeType);
+        if ($commonJsData) {
+            foreach ($commonJsData as &$i) {
+                $data = $i['source']->getMapContentsData(false);
+                if (isset($data->{'_x_org_koala-framework_trlData'})) {
+                    $trlData = array_merge($trlData, $data->{'_x_org_koala-framework_trlData'});
+                }
+                $data->sourcesContent = $data->sources; //browser-pack needs sourcesContent, else it would ignore input source map. This is fake obviously and we'll drop it anyway after browser-pack finished
+                $i['source'] = $i['source']->getFileContentsInlineMap(false);
+            }
             $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData)).";\n";
             $map = Kwf_SourceMaps_SourceMap::createFromInline($contents);
+            $data = $map->getMapContentsData(false);
+            unset($data->sourcesContent); //drop fake sourcesContent (see comment above)
             $packageMap->concat($map);
         }
 
         // ***** non-commonjs, css
-        foreach ($this->_getFilteredUniqueDependencies($mimeType) as $i) {
+        $filterMimeType = $mimeType;
+        if ($filterMimeType == 'text/css; ie8') $filterMimeType = 'text/css';
+        foreach ($this->_getFilteredUniqueDependencies($filterMimeType) as $i) {
             if ($i->getIncludeInPackage()) {
                 if (!(($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry())) {
-                    $map = $i->getContentsPacked($language);
+                    $map = $this->_getFilteredDependencyContents($i, $mimeType);
+                    $data = $map->getMapContentsData(false);
+                    if (isset($data->{'_x_org_koala-framework_trlData'})) {
+                        $trlData = array_merge($trlData, $data->{'_x_org_koala-framework_trlData'});
+                    }
                     if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
                         throw new Kwf_Exception("contents must not contain sourceMappingURL");
-                    }
-                    foreach ($map->getMapContentsData(false)->sources as &$s) {
-                        $s = '/assets/'.$s;
                     }
                     // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
                     $packageMap->concat($map);
@@ -244,43 +280,88 @@ class Kwf_Assets_Package
             }
         }
 
-        return $packageMap;
+        foreach ($this->getProviderList()->getFilters() as $filter) {
+            if ($filter->getExecuteFor() == Kwf_Assets_Filter_Abstract::EXECUTE_FOR_PACKAGE
+                && $filter->getMimeType() == $mimeType
+            ) {
+                $packageMap = $filter->filter($packageMap);
+            }
+        }
+        return array(
+            'contents' => $packageMap,
+            'trlData' => $trlData,
+        );
     }
 
     public function getPackageContents($mimeType, $language, $includeSourceMapComment = true)
     {
-        if ($mimeType == 'text/css' || $mimeType == 'text/css; ie8') {
-            if (!isset($this->_cssPackageContentsCacheNoIe8Filter)) {
-                $this->_cssPackageContentsCacheNoIe8Filter = $this->_buildPackageContents($mimeType, $language);
+        if (!Kwf_Assets_BuildCache::getInstance()->building && !Kwf_Config::getValue('assets.lazyBuild')) {
+            if (Kwf_Exception_Abstract::isDebug()) {
+                //proper error message on development server
+                throw new Kwf_Exception("Building assets is disabled (assets.lazyBuild). Please upload build contents.");
+            } else {
+                throw new Kwf_Exception_NotFound();
             }
-            $packageMap = $this->_cssPackageContentsCacheNoIe8Filter;
-            if ($mimeType == 'text/css') {
-                //remove @ie8 {}
-                $f = new Kwf_Assets_Filter_Css_Ie8Remove();
-                $packageMap = $f->filter($packageMap);
-            }
-            if ($mimeType == 'text/css; ie8') {
-                //remove all but @ie8 {}
-                $f = new Kwf_Assets_Filter_Css_Ie8Only();
-                $packageMap = $f->filter($packageMap);
-            }
-        } else {
-            $packageMap = $this->_buildPackageContents($mimeType, $language);
         }
 
-        if ($includeSourceMapComment) {
-            $contents = $packageMap->getFileContents();
-            if ($mimeType == 'text/javascript') $ext = 'js';
-            else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
-            else if ($mimeType == 'text/css') $ext = 'css';
-            else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
-            else throw new Kwf_Exception_NotYetImplemented();
-            if ($ext == 'js' || $ext == 'defer.js') {
-                $contents .= "\n//# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)."\n";
-            } else if ($ext == 'css') {
-                $contents .= "\n/*# sourceMappingURL=".$this->getPackageUrl($ext.'.map', $language)." */\n";
+        if (!isset($this->_packageContentsCache[$mimeType])) {
+            $this->_packageContentsCache[$mimeType] = $this->_buildPackageContents($mimeType);
+        }
+
+        $packageMap = $this->_packageContentsCache[$mimeType]['contents'];
+        $trlData = $this->_packageContentsCache[$mimeType]['trlData'];
+
+
+        if (($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $trlData) {
+            $js = "";
+            $uniquePrefix = Kwf_Config::getValue('application.uniquePrefix');
+            if ($uniquePrefix) {
+                $js = "if (typeof window.$uniquePrefix == 'undefined') window.$uniquePrefix = {};";
+                $uniquePrefix = "window.$uniquePrefix.";
             }
-            $packageMap->setFileContents($contents);
+            $js .= "if (!{$uniquePrefix}_kwfTrlData) {$uniquePrefix}_kwfTrlData={};";
+            foreach ($trlData as $i) {
+                $key = $i->type.'.'.$i->source;
+                if (isset($i->context)) $key .= '.'.$i->context;
+                $key .= '.'.str_replace("'", "\\'", $i->text);
+                $method = $i->type;
+                if ($i->source == 'kwf') $method .= 'Kwf';
+                if ($i->type == 'trl') {
+                    $trlText = Kwf_Trl::getInstance()->$method($i->text, array(), $language);
+                    $js .= "{$uniquePrefix}_kwfTrlData['$key']='".str_replace("\'", "\\\'", $trlText)."';";
+                } else if ($i->type == 'trlc') {
+                    $trlText = Kwf_Trl::getInstance()->$method($i->context, $i->text, array(), $language);
+                    $js .= "{$uniquePrefix}_kwfTrlData['$key']='".str_replace("\'", "\\\'", $trlText)."';";
+                } else if ($i->type == 'trlp') {
+                    $trlText = Kwf_Trl::getInstance()->getTrlpValues(null, $i->text, $i->plural, array(), $language);
+                    $js .= "{$uniquePrefix}_kwfTrlData['$key']='".str_replace("\'", "\\\'", $trlText['single'])."';";
+                    $js .= "{$uniquePrefix}_kwfTrlData['$key.plural']='".str_replace("\'", "\\\'", $trlText['plural'])."';";
+                } else if ($i->type == 'trlcp') {
+                    $trlText = Kwf_Trl::getInstance()->getTrlpValues($i->context, $i->text, $i->plural, array(), $language);
+                    $js .= "{$uniquePrefix}_kwfTrlData['$key']='".str_replace("\'", "\\\'", $trlText['single'])."';";
+                    $js .= "{$uniquePrefix}_kwfTrlData['$key.plural']='".str_replace("\'", "\\\'", $trlText['plural'])."';";
+                } else {
+                    throw new Kwf_Exception("Unknown trl type");
+                }
+            }
+            $map = Kwf_SourceMaps_SourceMap::createEmptyMap($js."\n");
+            $map->concat($packageMap);
+            $packageMap = $map;
+        }
+
+        if ($mimeType == 'text/javascript') $ext = 'js';
+        else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
+        else if ($mimeType == 'text/css') $ext = 'css';
+        else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
+        else throw new Kwf_Exception("Invalid mimeType: '$mimeType'");
+        $packageMap->setFile($this->getPackageUrl($ext, $language));
+
+        $data = $packageMap->getMapContentsData(false);
+        $data->sourcesContent = array();
+        foreach ($data->sources as $k=>$i) {
+            $i = new Kwf_Assets_Dependency_File($i);
+            $data->sourcesContent[$k] = $i->getContentsSourceString();
+            $data->sources[$k] = '/assets/'.$i;
         }
 
         return $packageMap;
@@ -322,9 +403,6 @@ class Kwf_Assets_Package
         $param = explode(':', $parameter);
         $providerList = $param[0];
         $ret = new $class(new $providerList, $param[1]);
-        if (isset($param[2]) && $param[2] == 'l') {
-            $ret->setEnableLegacySupport(true);
-        }
         return $ret;
     }
 
@@ -435,19 +513,24 @@ class Kwf_Assets_Package
         }
         if (!$sourceMap) {
             $contents = $map->getFileContents();
-            $mtime = $this->getMaxMTime($mimeType);
+
+            if ($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') {
+                $contents .= "\n//# sourceMappingURL=".$this->getPackageUrl($extension.'.map', $language)."\n";
+            } else if ($mimeType == 'text/css') {
+                $contents .= "\n/*# sourceMappingURL=".$this->getPackageUrl($extension.'.map', $language)." */\n";
+            }
+
             if ($extension == 'js' || $extension == 'defer.js') $mimeType = 'text/javascript; charset=utf-8';
             else if (substr($extension, -3) == 'css') $mimeType = 'text/css; charset=utf-8';
         } else {
             $contents = $map->getMapContents(false);
-            $mtime = $this->getMaxMTime($mimeType);
             $mimeType = 'application/json';
         }
         $ret = array(
             'contents' => $contents,
             'mimeType' => $mimeType,
+            'mtime' => time()
         );
-        if ($mtime) $ret['mtime'] = $mtime;
         return $ret;
     }
 }

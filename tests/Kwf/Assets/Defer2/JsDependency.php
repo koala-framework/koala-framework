@@ -3,8 +3,9 @@ class Kwf_Assets_Defer2_JsDependency extends Kwf_Assets_Dependency_Abstract
 {
     private $_defer;
     private $_contents;
-    public function __construct($contents, $defer)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $contents, $defer)
     {
+        parent::__construct($providerList);
         $this->_contents = $contents;
         $this->_defer = $defer;
     }

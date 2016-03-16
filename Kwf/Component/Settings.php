@@ -166,6 +166,17 @@ class Kwf_Component_Settings
         $file = Kwf_Loader::_findFile($c, $namespaces, $classMap);
         if (substr($file, 0, strlen(getcwd())) == getcwd()) {
             $path = substr($file, strlen(getcwd())+1);
+        } else if (KWF_PATH == '..') {
+            $cwd = getcwd();
+            $parentCwd = substr($cwd, 0, strrpos($cwd, '/'));
+            if (substr($file, 0, strlen($parentCwd)) != $parentCwd) {
+                throw new Kwf_Exception("'$file' is not in web directory '$parentCwd'");
+            }
+            if ($file == $parentCwd) {
+                $path = '..';
+            } else {
+                $path = '../'.substr($file, strlen($parentCwd)+1);
+            }
         } else {
             $file = str_replace('_', '/', $c) . '.php';
             foreach ($dirs as $dir) {
@@ -173,6 +184,9 @@ class Kwf_Component_Settings
                 if (is_file($path)) {
                     break;
                 }
+            }
+            if (!is_file($path)) {
+                throw new Kwf_Exception("Can't find file");
             }
         }
         $cache[$c] = $path;
@@ -484,7 +498,7 @@ class Kwf_Component_Settings
         $tFull = microtime(true);
         $classes = array();
         foreach (Kwc_Abstract::getSetting($class, 'generators') as $generator) {
-            $classes = array_merge($classes, $generator['component']);
+            $classes = array_merge($classes, array_values($generator['component']));
             if (isset($generator['plugins'])) {
                 $classes = array_merge($classes, $generator['plugins']);
             }

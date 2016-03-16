@@ -1,6 +1,13 @@
 <?php
 class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
 {
+    protected $_pathTypesCacheId = 'assets-file-paths';
+
+    public static function getInstance()
+    {
+        return Kwf_Assets_Package_Default::getDefaultProviderList();
+    }
+
     public function __construct()
     {
         $providers = array();
@@ -18,7 +25,7 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $providers[] = new Kwf_Assets_TinyMce_Provider();
         $providers[] = new Kwf_Assets_Provider_JsClassKwf();
         $providers[] = new Kwf_Assets_Provider_JsClass('./ext', 'web/ext', 'App');
-        $providers[] = new Kwf_Assets_Provider_CssByJs(array('web/ext', 'kwf/commonjs'));
+        $providers[] = new Kwf_Assets_Provider_CssByJs(array('web/ext', 'web/commonjs', 'kwf/commonjs'));
         $providers[] = new Kwf_Assets_Provider_ExtTrl();
         $providers[] = new Kwf_Assets_Provider_ErrorHandler();
         $providers[] = new Kwf_Assets_Provider_AtRequires();
@@ -28,6 +35,18 @@ class Kwf_Assets_ProviderList_Default extends Kwf_Assets_ProviderList_Abstract
         $providers[] = new Kwf_Assets_Provider_KwfCommonJs();
         $providers[] = new Kwf_Assets_CommonJs_JQueryPluginProvider();
         $providers[] = new Kwf_Assets_ResponsiveEl_Provider();
-        parent::__construct($providers);
+        $providers[] = new Kwf_Assets_CommonJs_Underscore_TemplateProvider();
+        $providers[] = new Kwf_Assets_Provider_BabelRuntime();
+
+        $filters = array();
+        $filters[] = new Kwf_Assets_Filter_Css_MultiplePostCss(array(
+            new Kwf_Assets_Filter_Css_Autoprefixer(),
+            new Kwf_Assets_Filter_Css_PrefixerKeyframes(),
+            //new Kwf_Assets_Filter_Css_PrefixerFontface(),
+            //new Kwf_Assets_Filter_Css_MediaQueriesDropRedundant(),
+            new Kwf_Assets_Filter_Css_UniquePrefix(),
+        ));
+
+        parent::__construct($providers, $filters);
     }
 }

@@ -593,18 +593,6 @@ class Kwf_Util_ClearCache_Watcher
             }
         }
 
-        $fileName = 'build/assets/package-max-mtime-'.$fileType;
-        if (file_exists($fileName)) {
-            $cacheIds = file($fileName);
-            unlink($fileName);
-            foreach ($cacheIds as $cacheId) {
-                $cacheId = trim($cacheId);
-                echo $cacheId;
-                if (Kwf_Assets_BuildCache::getInstance()->remove($cacheId)) echo " [DELETED]";
-                echo "\n";
-            }
-        }
-
         $a = new Kwf_Util_Build_Types_Assets();
         $a->flagAllPackagesOutdated($fileType);
 

@@ -1,0 +1,12 @@
+@media (min-width: 300px) {
+    .foo {
+        color: red;
+    }
+}
+
+@media (min-width: 500px) {
+    .foo {
+        color: red;
+        padding: 10px;
+    }
+}

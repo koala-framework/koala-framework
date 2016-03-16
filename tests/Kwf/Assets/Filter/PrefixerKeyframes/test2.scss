@@ -1,0 +1,8 @@
+@keyframes mymove {
+    from {top: 0px;}
+    to {top: 200px;}
+}
+div {
+    width: 100px;
+    animation: mymove 5s infinite;
+}

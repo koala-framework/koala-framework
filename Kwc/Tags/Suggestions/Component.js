@@ -1,5 +1,5 @@
 var onReady = require('kwf/on-ready');
-var trlKwf = require('kwf/trl').trlKwf;
+var t = require('kwf/trl');
 
 onReady.onContentReady(function(el) {
     Ext2.query('.kwcClass', el).each(function(el) {
@@ -11,7 +11,7 @@ onReady.onContentReady(function(el) {
             ev.stopEvent();
             var tag = el.child('input[name="tag"]').getValue();
             tag = Ext2.util.Format.trim(tag);
-            if (tag && tag != trlKwf('Enter tag...')) {
+            if (tag && tag != t.trlKwf('Enter tag...')) {
                 Ext2.Ajax.request({
                     url: config.controllerUrl+'/json-suggest',
                     params: {
@@ -47,7 +47,7 @@ onReady.onContentReady(function(el) {
                         this.errorEl.child('.kwfUp-message').fadeOut({duration: 0.2});
                     }, el);
                 }
-                el.errorEl.child('.kwfUp-message').update(trlKwf('Please enter a tag.'));
+                el.errorEl.child('.kwfUp-message').update(t.trlKwf('Please enter a tag.'));
                 el.errorEl.clearOpacity();
                 el.errorEl.fadeIn({
                     endOpacity: 0.8 //TODO read from css (but that's hard for IE)

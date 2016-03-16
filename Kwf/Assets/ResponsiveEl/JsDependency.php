@@ -5,8 +5,9 @@ class Kwf_Assets_ResponsiveEl_JsDependency extends Kwf_Assets_Dependency_Abstrac
     private $_breakpoints;
     private $_dependencyName;
 
-    public function __construct($selector, $breakpoints, $dependencyName)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $selector, $breakpoints, $dependencyName)
     {
+        parent::__construct($providerList);
         $this->_selector = $selector;
         $this->_breakpoints = $breakpoints;
         $this->_dependencyName = $dependencyName;
@@ -18,10 +19,12 @@ class Kwf_Assets_ResponsiveEl_JsDependency extends Kwf_Assets_Dependency_Abstrac
         return 'text/javascript';
     }
 
-    public function getContents($language)
+    public function getContentsPacked()
     {
-        return "require('kwf/responsive-el')('".$this->_selector."', ".json_encode($this->_breakpoints).");\n";
+        $ret = "require('kwf/responsive-el')('".$this->_selector."', ".json_encode($this->_breakpoints).");\n";
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
+
     public function __toString()
     {
         return $this->_dependencyName;

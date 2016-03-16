@@ -1,4 +1,4 @@
-<{% if inlineTags %}span{% else %}div{% endif %} class="{{ rootElementClass }} kwfUp-kwcImage" style="{{ style }}" data-width="100%" data-max-width="{{ maxWidth }}">
+<{% if inlineTags %}span{% else %}figure{% endif %} class="{{ rootElementClass }} kwfUp-kwcImage" style="{{ style }}" data-width="100%" data-max-width="{{ maxWidth }}">
     {% if baseUrl %}
         {% block image %}
         <{% if inlineTags %}span{% else %}div{% endif %} class="{{ "outerContainer"|bemClass }}">
@@ -16,8 +16,8 @@
         {% endblock %}
         {% if showImageCaption %}
             {% block caption %}
-            <{% if inlineTags %}span{% else %}div{% endif %} class="{{ "imageCaption"|bemClass }} kwfUp-imageCaption" style="{{ captionStyle }}"><span>{{ image_caption }}</span></{% if inlineTags %}span{% else %}div{% endif %}>
+            <{% if inlineTags %}span{% else %}figcaption{% endif %} class="{{ "imageCaption"|bemClass }} kwfUp-imageCaption" style="{{ captionStyle }}"><span>{{ image_caption }}</span></{% if inlineTags %}span{% else %}figcaption{% endif %}>
             {% endblock %}
         {% endif %}
     {% endif %}
-</{% if inlineTags %}span{% else %}div{% endif %}>
+</{% if inlineTags %}span{% else %}figure{% endif %}>

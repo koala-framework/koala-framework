@@ -1,16 +1,11 @@
 <?php
-class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Dependency_Abstract
+abstract class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Dependency_Abstract
 {
     protected $_dep;
-    public function __construct(Kwf_Assets_Dependency_Abstract $dep)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, Kwf_Assets_Dependency_Abstract $dep)
     {
         $this->_dep = $dep;
-        parent::__construct();
-    }
-
-    public function usesLanguage()
-    {
-        return $this->_dep->usesLanguage();
+        parent::__construct($providerList);
     }
 
     public function getContentsSource()
@@ -26,16 +21,6 @@ class Kwf_Assets_Dependency_Decorator_Abstract extends Kwf_Assets_Dependency_Abs
     public function getMimeType()
     {
         return $this->_dep->getMimeType();
-    }
-
-    public function getMTime()
-    {
-        return $this->_dep->getMTime();
-    }
-
-    public function warmupCaches()
-    {
-        return $this->_dep->warmupCaches();
     }
 
     public function getDeferLoad()

@@ -2,14 +2,16 @@
 class Kwf_Assets_UseRequire3_TestDependency extends Kwf_Assets_Dependency_Abstract
 {
     private $_contents;
-    public function __construct($contents)
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList, $contents)
     {
+        parent::__construct($providerList);
         $this->_contents = $contents;
     }
 
-    public function getContents($language)
+    public function getContentsPacked($language)
     {
-        return $this->_contents;
+        $ret = $this->_contents;
+        return Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
     }
 
 

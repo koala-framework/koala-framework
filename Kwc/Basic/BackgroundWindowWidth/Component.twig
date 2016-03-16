@@ -1,6 +1,6 @@
 <div class="{{ rootElementClass }} {{ backgroundColor }}">
     {% if image.hasContent() %}
-        <div class="{{ "background"|bemClass }} {{ "background--backgroundImage"|bemClass }}">
+        <div class="{{ "background"|bemClass }} {{ "backgroundImage"|bemClass }}">
             {{ renderer.component(image) }}
         </div>
     {% endif %}
@@ -10,5 +10,5 @@
     </div>
 </div>
 {% if marginBottom %}
-<div class="<div class="{{ "space"|bemClass }}">" style="height: {{ marginBottom }}px"></div>
+<div class="{{ "space"|bemClass }}">" style="height: {{ marginBottom }}px"></div>
 {% endif %}

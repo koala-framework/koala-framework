@@ -434,11 +434,11 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         if (!$up) {
             $ret['bemClass'] = '';
         } else {
-            $ret['bemClass'] = Kwf_Component_Abstract::formatRootElementClass($this->getData()->componentClass, '').'Master__';
+            $ret['bemClass'] = $this->getData()->getComponent()->_formatRootElementClass().'Master__';
         }
 
-        $ret['rootElementClass'] = 'kwfUp-frontend '.Kwf_Component_Abstract::formatRootElementClass($this->getData()->componentClass, '').'Master';
 
+        $ret['rootElementClass'] = 'kwfUp-frontend '.$this->getData()->getComponent()->_formatRootElementClass().'Master';
         return $ret;
     }
 
@@ -502,6 +502,11 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
         }
         $ret .= Kwf_Component_Abstract::formatRootElementClass($component, '');
         return $ret;
+    }
+
+    protected function _formatRootElementClass()
+    {
+        return Kwf_Component_Abstract::formatRootElementClass($this->getData()->componentClass, '');
     }
 
     /**

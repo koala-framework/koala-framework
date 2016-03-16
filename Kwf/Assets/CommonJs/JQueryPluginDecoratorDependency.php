@@ -6,18 +6,17 @@ class Kwf_Assets_CommonJs_JQueryPluginDecoratorDependency extends Kwf_Assets_Dep
         return "var jQuery = require('jQuery');\n";
     }
 
-    public function getContents($language)
+    public function getContentsPacked()
     {
-        $ret = $this->_dep->getContents($language);
-        $ret = $this->_getPrependCode().$ret;
-        return $ret;
-    }
-
-    public function getContentsPacked($language)
-    {
-        $c = $this->_dep->getContentsPacked($language);
+        $c = $this->_dep->getContentsPacked();
         $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($this->_getPrependCode());
         $ret->concat($c);
         return $ret;
     }
+
+    public function getIdentifier()
+    {
+        return 'JQueryPlugin('.$this->_dep->getIdentifier().')';
+    }
+
 }

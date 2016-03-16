@@ -1,4 +1,5 @@
 var onReady = require('kwf/on-ready');
+window.$ = require('jQuery'); //leak for qunit
 
 $(function() {
     $('#show').click(function() {

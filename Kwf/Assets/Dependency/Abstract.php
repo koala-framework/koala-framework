@@ -6,12 +6,14 @@ abstract class Kwf_Assets_Dependency_Abstract
     const DEPENDENCY_TYPE_USES = 'uses';
     const DEPENDENCY_TYPE_COMMONJS = 'commonjs';
     protected $_dependencies = array();
+    protected $_providerList;
 
     private $_deferLoad = false;
     private $_isCommonJsEntry = false;
 
-    public function __construct()
+    public function __construct(Kwf_Assets_ProviderList_Abstract $providerList)
     {
+        $this->_providerList = $providerList;
     }
 
     public function getDeferLoad()
@@ -35,22 +37,13 @@ abstract class Kwf_Assets_Dependency_Abstract
         return $this->_isCommonJsEntry;
     }
 
-    public function getContents($language)
-    {
-        return null;
-    }
-
-    public function getContentsPacked($language)
-    {
-        $contents = $this->getContents($language);
-        return Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
-    }
+    abstract public function getContentsPacked();
 
     public function getContentsSource()
     {
         return array(
             'type' => 'contents',
-            'contents' => $this->getContents('en'),
+            'contents' => '',
         );
     }
 
@@ -64,11 +57,6 @@ abstract class Kwf_Assets_Dependency_Abstract
         } else {
             throw new Kwf_Exception_NotYetImplemented();
         }
-    }
-
-    public function usesLanguage()
-    {
-        return true;
     }
 
     public function setDependencies($type, $deps)
@@ -129,18 +117,14 @@ abstract class Kwf_Assets_Dependency_Abstract
         return true;
     }
 
-    public function getMTime()
-    {
-        return null;
-    }
-
-    public function warmupCaches()
-    {
-    }
-
     public function __toString()
     {
         return get_class($this);
+    }
+
+    public function getIdentifier()
+    {
+        throw new Kwf_Exception("getIdentifier is not implemented for '$this'");
     }
 
     public function toDebug()

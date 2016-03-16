@@ -30,28 +30,28 @@ root
         $this->assertEquals($c->url, '/page1');
 
         $c = $this->_root->getComponentById('root_page1-1_1');
-        $this->assertEquals($c->url, '/page1/1_asdf');
+        $this->assertEquals($c->url, '/page1/1-asdf');
 
         $c = $this->_root->getComponentById('root_page1-1_2');
-        $this->assertEquals($c->url, '/page1/2_asdf');
+        $this->assertEquals($c->url, '/page1/2-asdf');
 
         $c = $this->_root->getComponentById('root_page1-2_3');
-        $this->assertEquals($c->url, '/page1/3_asdf');
+        $this->assertEquals($c->url, '/page1/3-asdf');
     }
 
     public function testResolveUrl()
     {
         $this->_root->setFilename(null);
 
-        $c = $this->_root->getChildPageByPath('page1/1_asdf', null);
+        $c = $this->_root->getChildPageByPath('page1/1-asdf', null);
         $this->assertTrue(!!$c);
         $this->assertEquals($c->componentId, 'root_page1-1_1');
 
-        $c = $this->_root->getChildPageByPath('page1/2_asdf', null);
+        $c = $this->_root->getChildPageByPath('page1/2-asdf', null);
         $this->assertTrue(!!$c);
         $this->assertEquals($c->componentId, 'root_page1-1_2');
 
-        $c = $this->_root->getChildPageByPath('page1/3_asdf', null);
+        $c = $this->_root->getChildPageByPath('page1/3-asdf', null);
         $this->assertTrue(!!$c);
         $this->assertEquals($c->componentId, 'root_page1-2_3');
     }
