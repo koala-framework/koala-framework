@@ -39,7 +39,7 @@ class Kwc_Menu_EditableItems_Component extends Kwc_Abstract
             $children[$c->row->target_page_id] = $c;
         }
         foreach ($menuData as $k=>$i) {
-            $menuData[$k]['editable'] = $children[$i['data']->componentId];
+            $menuData[$k]['editable'] = isset($children[$i['data']->componentId]) ? $children[$i['data']->componentId] : null;
         }
     }
 }
