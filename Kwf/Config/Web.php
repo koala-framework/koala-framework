@@ -10,7 +10,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
             $section = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         }
         if (!isset(self::$_instances[$section])) {
-            $cacheId = 'config_'.str_replace('-', '_', $section);
+            $cacheId = 'config_'.str_replace(array('-', '.'), '_', $section);
             $configClass = Kwf_Setup::$configClass;
             if (extension_loaded('apc')) {
                 $apcCacheId = $cacheId.getcwd();
@@ -47,7 +47,7 @@ class Kwf_Config_Web extends Kwf_Config_Ini
     {
         $configClass = Kwf_Setup::$configClass;
         $config = new $configClass(Kwf_Setup::getConfigSection());
-        $cacheId = 'config_'.str_replace('-', '_', Kwf_Setup::getConfigSection());
+        $cacheId = 'config_'.str_replace(array('-', '.'), '_', Kwf_Setup::getConfigSection());
         Kwf_Config_Cache::getInstance()->save($config, $cacheId);
         if (extension_loaded('apc')) {
             $apcCacheId = $cacheId.getcwd();
@@ -62,12 +62,12 @@ class Kwf_Config_Web extends Kwf_Config_Ini
     public static function getInstanceMtime($section)
     {
         if (extension_loaded('apc')) {
-            $cacheId = 'config_'.str_replace('-', '_', $section);
+            $cacheId = 'config_'.str_replace(array('-', '.'), '_', $section);
             $cacheId .= getcwd();
             return apc_fetch($cacheId.'mtime');
         } else {
             $cache = Kwf_Config_Cache::getInstance();
-            return $cache->test('config_'.str_replace('-', '_', $section));
+            return $cache->test('config_'.str_replace(array('-', '.'), '_', $section));
         }
     }
 
