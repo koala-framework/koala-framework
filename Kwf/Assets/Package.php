@@ -318,8 +318,10 @@ class Kwf_Assets_Package
             if ($uniquePrefix) {
                 $js = "if (typeof window.$uniquePrefix == 'undefined') window.$uniquePrefix = {};";
                 $uniquePrefix = "window.$uniquePrefix.";
+                $js .= "if (!{$uniquePrefix}_kwfTrlData) {$uniquePrefix}_kwfTrlData={};";
+            } else {
+                $js .= "if (!window._kwfTrlData) window._kwfTrlData={};";
             }
-            $js .= "if (!{$uniquePrefix}_kwfTrlData) {$uniquePrefix}_kwfTrlData={};";
             foreach ($trlData as $i) {
                 $key = $i->type.'.'.$i->source;
                 if (isset($i->context)) $key .= '.'.$i->context;
