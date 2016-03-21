@@ -222,8 +222,7 @@ class Kwf_Media_Image
                 if ($source instanceof Imagick) {
                     $im = $source;
                 } else {
-                    $im = new Imagick();
-                    $im->readImage($source);
+                    $im = self::_createImagickFromFile($source);
                 }
                 $im = self::_processCommonImagickSettings($im);
                 if (isset($size['rotate']) && $size['rotate']) {
@@ -243,8 +242,7 @@ class Kwf_Media_Image
                 if ($source instanceof Imagick) {
                     $im = $source;
                 } else {
-                    $im = new Imagick();
-                    $im->readImage($source);
+                    $im = self::_createImagickFromFile($source);
                 }
                 $im = self::_processCommonImagickSettings($im);
                 if (isset($size['rotate']) && $size['rotate']) {
@@ -297,6 +295,28 @@ class Kwf_Media_Image
         return $ret;
     }
 
+    private function _createImagickFromFile($file)
+    {
+        $im = new Imagick();
+        $im->readImage($file);
+        if (method_exists($im, 'setColorspace')) {
+            $im->setType(Imagick::IMGTYPE_TRUECOLORMATTE);
+            $im->setColorspace($im->getImageColorspace());
+        }
+        return $im;
+    }
+
+    private function _createImagickFromBlob($blob, $mime)
+    {
+        $im = new Imagick();
+        $im->readImageBlob($blob, 'foo.'.str_replace('image/', '', $mime)); //add fake filename to help imagick with format detection
+        if (method_exists($im, 'setColorspace')) {
+            $im->setType(Imagick::IMGTYPE_TRUECOLORMATTE);
+            $im->setColorspace($im->getImageColorspace());
+        }
+        return $im;
+    }
+
     private function _processCommonImagickSettings($im)
     {
         if (method_exists($im, 'getImageProfiles') && $im->getImageColorspace() == Imagick::COLORSPACE_CMYK) {
@@ -313,10 +333,16 @@ class Kwf_Media_Image
             $im->profileImage('icc', $iccRgb);
             unset($iccRgb);
         }
+        if (method_exists($im, 'setColorspace')) {
+            $im->setColorspace(Imagick::COLORSPACE_RGB);
+        } else {
+            $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        }
 
         $im->setImageColorspace(Imagick::COLORSPACE_RGB);
         $im->stripImage();
-        $im->setImageCompressionQuality(90);
+        $im->setImageCompressionQuality(80);
+
         $version = $im->getVersion();
         if (isset($version['versionNumber']) && (int)$version['versionNumber'] >= 1632) {
             if ($im->getImageProperty('date:create')) $im->setImageProperty('date:create', null);
