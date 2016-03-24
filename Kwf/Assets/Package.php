@@ -106,7 +106,7 @@ class Kwf_Assets_Package
 
     public function warmupDependencyCaches($dep, $mimeType, $progress = null)
     {
-        $cacheId = 'filtered-'.$dep->getIdentifier();
+        $cacheId = 'filtered-'.$dep->getCacheId();
         if ($mimeType == 'text/css; ie8') {
             $cacheId .= '-ie8';
         }

@@ -63,4 +63,13 @@ abstract class Kwf_Assets_Components_Dependency_Abstract extends Kwf_Assets_Depe
     {
         return $this->_dependencyName;
     }
+
+    public function getCacheId()
+    {
+        $ret = $this->getIdentifier();
+        foreach ($this->_componentDependencies as $dep) {
+            $ret .= '-'.$dep->getCacheId();
+        }
+        return $ret;
+    }
 }
