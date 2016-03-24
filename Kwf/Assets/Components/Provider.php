@@ -117,32 +117,35 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
             $deps = array();
             foreach ($this->_getComponentSettingDependenciesFiles($class, 'assets', true) as $dep) {
                 if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z]+$#', $dep->getFileNameWithType())) {
+                    //Master.css/js needs to be part of Kwf_Assets_Components_Dependency_Abstract for .kwcClass to work correctly
                     $deps[] = array(
                         'dep' => $dep,
                         'master' => true,
                         'defer' => false
                     );
                 } else {
-                    $deps[] = array(
-                        'dep' => $dep,
-                        'master' => false,
-                        'defer' => false
-                    );
+                    //other files are dependencies like dep
+                    if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Web(\.defer)?\.js+$#', $dep->getFileNameWithType())) {
+                        $dep->setIsCommonJsEntry(true);
+                    }
+                    $ret[] = $dep;
                 }
             }
             foreach ($this->_getComponentSettingDependenciesFiles($class, 'assetsDefer', true) as $dep) {
                 if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z\.]+$#', $dep->getFileNameWithType())) {
+                    //Master.css/js needs to be part of Kwf_Assets_Components_Dependency_Abstract for .kwcClass to work correctly
                     $deps[] = array(
                         'dep' => $dep,
                         'master' => true,
                         'defer' => true
                     );
                 } else {
-                    $deps[] = array(
-                        'dep' => $dep,
-                        'master' => false,
-                        'defer' => true
-                    );
+                    //other files are dependencies like dep
+                    if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Web(\.defer)?\.js+$#', $dep->getFileNameWithType())) {
+                        $dep->setIsCommonJsEntry(true);
+                    }
+                    $dep->setDeferLoad(true);
+                    $ret[] = $dep;
                 }
             }
 
