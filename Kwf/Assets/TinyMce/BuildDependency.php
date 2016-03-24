@@ -18,7 +18,7 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
     {
         if ($this->_contentsCache) return;
 
-        $mtime = null;
+        $mtime = filemtime(__DIR__."/build.js");
         $it = new RecursiveDirectoryIterator(getcwd() . '/' . VENDOR_PATH . '/bower_components/tinymce/js/tinymce');
         $it = new RecursiveIteratorIterator($it);
         foreach ($it as $i) {
