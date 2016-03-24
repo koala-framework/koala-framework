@@ -43,7 +43,10 @@ class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract
                         $urlParts['path'] = $newParts['path'];
                         $urlParts['query'] = $newParts['query'];
                     }
-                    parse_str($urlParts['query'], $queryParts);
+                    $queryParts = array();
+                    if (isset($urlParts['query'])) {
+                        parse_str($urlParts['query'], $queryParts);
+                    }
                     if (isset($queryParts['v'])) {
                         $ret = '//www.youtube.com/embed/'.$queryParts['v'];
                         if (!$settingsRow->show_similar_videos) {
@@ -56,6 +59,8 @@ class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract
                         }
 
                         $ret.= '&wmode=transparent';
+                    } else {
+                        $ret = $url;
                     }
                 } else if (preg_match('/vimeo\.com$/i', $urlParts['host'])) {
                     $clipId = substr($urlParts['path'], 1);
