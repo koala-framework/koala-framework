@@ -361,9 +361,10 @@ class Kwf_Assets_Package
         $data = $packageMap->getMapContentsData(false);
         $data->sourcesContent = array();
         foreach ($data->sources as $k=>$i) {
-            $i = new Kwf_Assets_Dependency_File($i);
-            $data->sourcesContent[$k] = $i->getContentsSourceString();
-            $data->sources[$k] = '/assets/'.$i;
+            //TODO fix this
+            //$i = new Kwf_Assets_Dependency_File($this->_providerList, $i);
+            //$data->sourcesContent[$k] = $i->getContentsSourceString();
+            //$data->sources[$k] = '/assets/'.$i;
         }
 
         return $packageMap;
