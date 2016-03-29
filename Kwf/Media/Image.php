@@ -567,6 +567,11 @@ class Kwf_Media_Image
             $im->profileImage('icc', $iccRgb);
             unset($iccRgb);
         }
+        if (method_exists($im, 'setColorspace')) {
+            $im->setColorspace(Imagick::COLORSPACE_RGB);
+        } else {
+            $im->setImageColorspace(Imagick::COLORSPACE_RGB);
+        }
 
         if (method_exists($im, 'setColorspace')) {
             $im->setColorspace(Imagick::COLORSPACE_RGB);
@@ -575,7 +580,8 @@ class Kwf_Media_Image
         }
 
         $im->stripImage();
-        $im->setImageCompressionQuality(90);
+        $im->setImageCompressionQuality(80);
+
         $version = $im->getVersion();
         if (isset($version['versionNumber']) && (int)$version['versionNumber'] >= 1632) {
             if ($im->getImageProperty('date:create')) $im->setImageProperty('date:create', null);

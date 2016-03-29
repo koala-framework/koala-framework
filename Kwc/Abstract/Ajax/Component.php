@@ -5,6 +5,7 @@ abstract class Kwc_Abstract_Ajax_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['contentSender'] = 'Kwc_Abstract_Ajax_ContentSender';
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
 }
