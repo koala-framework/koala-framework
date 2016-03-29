@@ -31,9 +31,9 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
         if ($usesUniquePrefix || $useTrl || $useBabel) {
             //when contents contain .cssClass we must cache per app
-            $buildFile = 'cache/uglifyjs/'.$fileName.'.v2'.md5(file_get_contents($this->getAbsoluteFileName()).Kwf_Config::getValue('application.uniquePrefix'));
+            $buildFile = 'cache/uglifyjs/'.$fileName.'.v3'.md5(file_get_contents($this->getAbsoluteFileName()).Kwf_Config::getValue('application.uniquePrefix'));
         } else {
-            $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$fileName.'.v2'.md5(file_get_contents($this->getAbsoluteFileName()));
+            $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$fileName.'.v3'.md5(file_get_contents($this->getAbsoluteFileName()));
         }
 
         if (!file_exists("$buildFile.min.js")) {
