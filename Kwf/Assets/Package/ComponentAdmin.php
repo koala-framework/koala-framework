@@ -36,7 +36,7 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
         foreach (Kwc_Abstract::getComponentClasses() as $cls) {
             if (Kwc_Abstract::getFlag($cls, 'assetsPackage')) {
                 $packageName = Kwc_Abstract::getFlag($cls, 'assetsPackage');
-                if (!in_array($packageName, $packageNames)) {
+                if ($packageName != 'Default' && !in_array($packageName, $packageNames)) {
                     $packageNames[] = $packageName;
                     $ret = array_merge($ret, Kwf_Assets_Package_ComponentPackage::getInstance($packageName)->getPackageUrls($mimeType, $language));
                 }

@@ -16,6 +16,9 @@ class Kwf_Assets_Package_ComponentPackage extends Kwf_Assets_Package
 
     public function __construct($packageName, $loadedPackage)
     {
+        if ($packageName == 'Default') {
+            throw new Kwf_Exception("Default component assets package is ment to be included in Frontend package");
+        }
         $this->_packageName = $packageName;
         $this->_loadedPackage = $loadedPackage;
         parent::__construct(Kwf_Assets_Package_Default::getDefaultProviderList(), 'ComponentsPackage'.$packageName);
