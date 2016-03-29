@@ -255,8 +255,11 @@ class Kwf_Assets_Package
                 $data->sourcesContent = $data->sources; //browser-pack needs sourcesContent, else it would ignore input source map. This is fake obviously and we'll drop it anyway after browser-pack finished
                 $i['source'] = $i['source']->getFileContentsInlineMap(false);
             }
-            $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData)).";\n";
+            $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData));
             $map = Kwf_SourceMaps_SourceMap::createFromInline($contents);
+            $fileContents = $map->getFileContents();
+            $fileContents .= ";\n";
+            $map->setFileContents($fileContents);
             $data = $map->getMapContentsData(false);
             unset($data->sourcesContent); //drop fake sourcesContent (see comment above)
             $packageMap->concat($map);
