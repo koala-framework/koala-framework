@@ -10,8 +10,23 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
 
     public function getDependencyNameByAlias($dependencyName)
     {
-        if (strtolower($dependencyName) == strtolower($this->_path) || strtolower($dependencyName).'.js' == $this->_path) {
+        $matched = false;
+        if (strtolower($dependencyName) == strtolower($this->_path)) {
+            $matched = true;
+
+        //some packages end with .js, strip that
+        } else if (preg_match("#^".preg_quote($this->_path, '#').'\\.js$#i', $dependencyName)) {
+            $matched = true;
+
+        //also match if a prefix "foo-" is added in front of the package name
+        //required to support npm names for bower packages (example: desandro-classie)
+        } else if (preg_match("#^[a-z0-9]*-".preg_quote($this->_path, '#').'$#i', $dependencyName)) {
+            $matched = true;
+        }
+        if ($matched) {
             return ucfirst($this->_path);
+        } else {
+            return null;
         }
     }
 
@@ -135,20 +150,7 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
     public function getDependency($dependencyName)
     {
         $ret = null;
-        $matched = false;
-        if (strtolower($dependencyName) == strtolower($this->_path)) {
-            $matched = true;
-
-        //some packages end with .js, strip that
-        } else if (preg_match("#^".preg_quote($this->_path, '#').'\\.js$#i', $dependencyName)) {
-            $matched = true;
-
-        //also match if a prefix "foo-" is added in front of the package name
-        //required to support npm names for bower packages (example: desandro-classie)
-        } else if (preg_match("#^[a-z0-9]*-".preg_quote($this->_path, '#').'$#i', $dependencyName)) {
-            $matched = true;
-        }
-        if ($matched) {
+        if ($dependencyName == ucfirst($this->_path)) {
             $type = $this->_path;
             if (substr($type, -3) == '.js') {
                 $type = substr($type, 0, -3);
