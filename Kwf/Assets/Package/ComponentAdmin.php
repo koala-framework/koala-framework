@@ -27,7 +27,8 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
 
     public function getPackageUrls($mimeType, $language)
     {
-        $ret = parent::getPackageUrls($mimeType, $language);
+        $ret = array();
+
         $frontendPackage = Kwf_Assets_Package_ComponentFrontend::getInstance();
         $ret = array_merge($ret, $frontendPackage->getPackageUrls($mimeType, $language));
 
@@ -41,6 +42,26 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
                 }
             }
         }
+
+        $ret = array_merge($ret, parent::getPackageUrls($mimeType, $language));
+        return $ret;
+    }
+
+    protected function _getFilteredUniqueDependencies($mimeType)
+    {
+        $ret = parent::_getFilteredUniqueDependencies($mimeType);
+
+        $frontendPackage = Kwf_Assets_Package_ComponentFrontend::getInstance();
+
+        $loadedDeps = $frontendPackage->_getFilteredUniqueDependencies($mimeType);
+
+        foreach ($ret as $k=>$i) {
+            if (in_array($i, $loadedDeps, true)) {
+                unset($ret[$k]);
+            }
+        }
+
+        $ret = array_values($ret);
 
         return $ret;
     }
