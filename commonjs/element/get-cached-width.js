@@ -5,7 +5,7 @@ var benchmarkBox = require('kwf/benchmark/box');
 var cachedWidthEls = [];
 module.exports = function getCachedWidth(e) {
     if (e.dom) e = e.dom; //ExtJS Element (hopefully)
-    if (e instanceof $) e = e.get(0);
+    if (e.jquery) e = e.get(0);
     var ret = false;
     while (e) {
         if (e.getAttribute('data-width') == '100%') {

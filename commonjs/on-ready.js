@@ -65,7 +65,7 @@ var callOnContentReady = function(renderedEl, options)
         renderedEl = document.body;
     }
     if (renderedEl.dom) renderedEl = renderedEl.dom; //ExtJS Element (hopefully)
-    if ($ && renderedEl instanceof $) {
+    if (renderedEl.jquery) {
         renderedEl.each(function(){ callOnContentReady(this, options); });
         return;
     }
