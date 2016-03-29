@@ -12,7 +12,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
     {
         this.componentConfigs = {};
 
-        this.addEvents('delete', 'edit', 'changeVisible', 'changeDeviceVisible', 'changePos',
+        this.addEvents('delete', 'edit', 'recordModified', 'changePos',
             'addParagraphMenuShow', 'addParagraph', 'copyParagraph',
             'pasteParagraph', 'copyPasteMenuShow');
         this.tpl = new Ext2.XTemplate(
@@ -77,7 +77,9 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
             scope: this,
             record: record,
             handler: function(btn) {
-                this.fireEvent('changeVisible', btn.record);
+                var record = btn.record;
+                record.set('visible', !record.get('visible'));
+                this.fireEvent('recordModified', record);
             },
             icon : '/assets/silkicons/'+(record.get('visible') ? 'tick' : 'cross') + '.png',
             cls  : 'x2-btn-icon'
@@ -90,7 +92,8 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                     scope: this,
                     record: record,
                     handler: function(menu) {
-                        this.fireEvent('changeDeviceVisible', menu.record, 'all');
+                        menu.record.set('device_visible', 'all');
+                        this.fireEvent('recordModified', menu.record);
                     }
                 },{
                     text: trlKwf('hide on mobile devices'),
@@ -98,7 +101,8 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                     scope: this,
                     record: record,
                     handler: function(menu) {
-                        this.fireEvent('changeDeviceVisible', menu.record, 'hideOnMobile');
+                        menu.record.set('device_visible', 'hideOnMobile');
+                        this.fireEvent('recordModified', menu.record);
                     }
                 },{
                     text: trlKwf('only show on mobile devices'),
@@ -106,7 +110,8 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                     scope: this,
                     record: record,
                     handler: function(menu) {
-                        this.fireEvent('changeDeviceVisible', menu.record, 'onlyShowOnMobile');
+                        menu.record.set('device_visible', 'onlyShowOnMobile');
+                        this.fireEvent('recordModified', menu.record);
                     }
                 }],
                 cls  : 'x2-btn-icon'
@@ -260,3 +265,5 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
         this.masterLayoutContexts = masterLayoutContexts;
     }
 });
+
+Ext2.reg('kwc.paragraphs.dataview', Kwc.Paragraphs.DataView);
