@@ -106,12 +106,18 @@ class Kwf_Assets_Package
 
     public function warmupDependencyCaches($dep, $mimeType, $progress = null)
     {
-        $cacheId = 'filtered-'.$dep->getCacheId();
-        if ($mimeType == 'text/css; ie8') {
-            $cacheId .= '-ie8';
+        $cacheId = $dep->getCacheId();
+        if ($cacheId) {
+            $cacheId = 'filtered-'.$cacheId;
+            if ($mimeType == 'text/css; ie8') {
+                $cacheId .= '-ie8';
+            }
         }
 
-        $ret = Kwf_Assets_ContentsCache::getInstance()->load($cacheId);
+        $ret = false;
+        if ($cacheId) {
+            $ret = Kwf_Assets_ContentsCache::getInstance()->load($cacheId);
+        }
         if ($ret === false) {
 
             if (!isset($this->_depContentsCache[$dep->getIdentifier()])) {
@@ -153,7 +159,9 @@ class Kwf_Assets_Package
                 }
             }
 
-            Kwf_Assets_ContentsCache::getInstance()->save($ret, $cacheId, $this->_providerList);
+            if ($cacheId) {
+                Kwf_Assets_ContentsCache::getInstance()->save($ret, $cacheId, $this->_providerList);
+            }
         }
         return $ret;
     }

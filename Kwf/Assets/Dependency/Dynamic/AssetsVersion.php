@@ -18,4 +18,9 @@ class Kwf_Assets_Dependency_Dynamic_AssetsVersion extends Kwf_Assets_Dependency_
     {
         return 'AssetsVersion';
     }
+
+    public function getCacheId()
+    {
+        return false;
+    }
 }
