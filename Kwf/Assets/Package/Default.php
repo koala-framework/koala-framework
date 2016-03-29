@@ -75,8 +75,10 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
                     }
                 }
             }
+            $packages[] = Kwf_Assets_Package_ComponentAdmin::getInstance();
+        } else {
+            $packages[] = self::getInstance('Admin');
         }
-        $packages[] = self::getInstance('Admin');
         foreach (Kwf_Config::getValueArray('assets.packages') as $i) {
             $packages[] = self::getInstance($i);
         }
