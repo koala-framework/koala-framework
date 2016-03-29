@@ -17,7 +17,7 @@
     <? } ?>
     <? if($this->row->email || $this->row->website) {?>
         <p>
-            <? if($this->row->email) echo "<a href='mailto:".$this->row->email."'>".$this->row->email."</a><br/>"?>
+            <? if($this->row->email) echo $this->mailLink($this->row->email)."<br/>"?>
             <? if($this->row->website) echo "<a href='".$this->row->website."' data-kwc-popup='blank'>".$this->row->website."</a>"?>
         </p>
     <? } ?>
