@@ -36,6 +36,9 @@ Kwf.Utils.Upload = {
                     }
                 }
                 if (errorMsg) {
+                    if (config.failure) {
+                        config.failure.call(config.scope, r);
+                    }
                     var sendMail = !r || !r.exception;
                     Kwf.handleError({
                         url: '/kwf/media/upload/json-upload',
@@ -44,20 +47,17 @@ Kwf.Utils.Upload = {
                         mail: sendMail,
                         checkRetry: false
                     });
-                    if (config.failure) {
-                        config.failure.call(config.scope, r);
-                    }
                     return;
                 }
 
                 if (!r.success) {
+                    if (config.failure) {
+                        config.failure.call(config.scope, r);
+                    }
                     if (r.error) {
                         Ext2.Msg.alert(trlKwf('Error'), r.error);
                     } else {
                         Ext2.Msg.alert(trlKwf('Error'), trlKwf("A Server failure occured."));
-                    }
-                    if (config.failure) {
-                        config.failure.call(config.scope, r);
                     }
                     return;
                 }
