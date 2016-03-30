@@ -28,6 +28,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
     showPosition: true,
     showCopyPaste: true,
     _loadingCount: 0,
+    dataViewXtype: 'kwc.paragraphs.dataview',
     initComponent : function()
     {
         this.addEvents('editcomponent', 'gotComponentConfigs');
@@ -39,7 +40,8 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
         }
 
         if (!this.dataView) {
-            this.dataView = new Kwc.Paragraphs.DataView({
+            this.dataView = Ext2.ComponentMgr.create({
+                xtype: this.dataViewXtype,
                 components: this.components,
                 componentIcons: this.componentIcons,
                 supportedMasterLayoutContexts: this.supportedMasterLayoutContexts,
@@ -47,12 +49,12 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
                 showDeviceVisible: this.showDeviceVisible,
                 showPosition: this.showPosition,
                 showCopyPaste: this.showCopyPaste,
+                generatorProperties: this.generatorProperties,
                 listeners: {
                     scope: this,
                     'delete': this.onDelete,
                     edit: this.onEdit,
-                    changeVisible: this.onChangeVisible,
-                    changeDeviceVisible: this.onChangeDeviceVisible,
+                    recordModified: this.onRecordModified,
                     changePos: this.onChangePos,
                     addParagraphMenuShow: this.onAddParagraphMenuShow,
                     addParagraph: this.onParagraphAdd,
@@ -352,13 +354,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
         });
     },
 
-    onChangeVisible: function(record) {
-        record.set('visible', !record.get('visible'));
-        this.submit();
-    },
-
-    onChangeDeviceVisible: function(record, value) {
-        record.set('device_visible', value);
+    onRecordModified: function(record) {
         this.submit();
     },
 

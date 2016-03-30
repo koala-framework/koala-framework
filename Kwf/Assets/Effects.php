@@ -37,6 +37,13 @@ class Kwf_Assets_Effects
         $image->compositeImage($overlay, Imagick::COMPOSITE_OVER, 16-10, 16-10);
     }
 
+    public static function exclamation(Imagick $image)
+    {
+        $overlay = new Imagick();
+        $overlay->readImage(KWF_PATH."/Kwf/Assets/Overlay/exclamation.png");
+        $image->compositeImage($overlay, Imagick::COMPOSITE_OVER, 0, 0);
+    }
+
     public static function rotate(Imagick $image, $params)
     {
         if (isset($params[0])) {

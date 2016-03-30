@@ -75,5 +75,15 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
                 </tpl>');
         }
         $fs->add(new Kwf_Form_Field_Checkbox('hide',  $hideInMenuText));
+
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_GeneratorProperty') as $plugin) {
+            $params = $plugin->getGeneratorProperty($this->_generator);
+            if ($params) {
+                $this->add(new Kwf_Form_Field_Select($params['name'],  $params['label']))
+                    ->setValues($params['values'])
+                    ->setDefaultValue($params['defaultValue'])
+                    ->setData(new Kwf_Component_PluginRoot_GeneratorProperty_Data($plugin));
+            }
+        }
     }
 }

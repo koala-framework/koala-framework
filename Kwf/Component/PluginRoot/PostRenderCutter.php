@@ -1,6 +1,6 @@
 <?php
-class Kwf_Component_PluginRoot_ComponentLinkDynamicCutter implements 
-    Kwf_Component_PluginRoot_Interface_MaskComponentLink,
+class Kwf_Component_PluginRoot_PostRenderCutter implements
+    Kwf_Component_PluginRoot_Interface_MaskComponent,
     Kwf_Component_PluginRoot_Interface_PostRender
 {
     const MASK_TYPE_NOMASK = 'noMask';
@@ -44,7 +44,7 @@ class Kwf_Component_PluginRoot_ComponentLinkDynamicCutter implements
     {
         $matches = array();
         if (is_null($params)) {
-            $params = '[^ ]+';
+            $params = '[^ ]*';
         } else if ($params) {
             $params = base64_encode(json_encode($params));
         } else {

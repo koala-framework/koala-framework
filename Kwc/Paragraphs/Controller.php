@@ -22,8 +22,22 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
         $this->_columns->add(new Kwf_Grid_Column_Visible());
         $this->_columns->add(new Kwf_Grid_Column('device_visible'))
             ->setEditor(new Kwf_Form_Field_TextField());
+
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_GeneratorProperty') as $plugin) {
+            $params = $plugin->getGeneratorProperty(Kwf_Component_Generator_Abstract::getInstance($this->_getParam('class'), 'paragraphs'));
+            if ($params) {
+                $editor = new Kwf_Form_Field_Select();
+                $editor->setValues($params['values'])
+                    ->setListWidth(200);
+                $this->_columns->add(new Kwf_Grid_Column($params['name']))
+                    ->setEditor($editor)
+                    ->setData(new Kwf_Component_PluginRoot_GeneratorProperty_Data($plugin));
+            }
+        }
+
         $this->_columns->add(new Kwf_Grid_Column('edit_components'))
             ->setData(new Kwf_Data_Kwc_EditComponents($this->_getParam('class')));
+
     }
 
     public function jsonDataAction()

@@ -179,6 +179,9 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
         if (substr($parsedUrl['host'], 0, 4) == 'dev.') {
             $parsedUrl['host'] = 'www.'.substr($parsedUrl['host'], 4);
         }
+        foreach ($this->getPlugins('Kwf_Component_PluginRoot_Interface_PreResolveUrl') as $p) {
+            $parsedUrl = $p->preFormatPath($parsedUrl);
+        }
         $cacheUrl = $parsedUrl['host'].$parsedUrl['path'];
         $cacheId = 'url-'.$cacheUrl;
         if ($page = Kwf_Cache_Simple::fetch($cacheId)) {
