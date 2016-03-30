@@ -84,6 +84,15 @@ class Kwc_Paragraphs_ExtConfig extends Kwf_Component_Abstract_ExtConfig_Abstract
         $config['componentIcons'] = $componentIcons;
         $config['supportedMasterLayoutContexts'] = $supportedMasterLayoutContexts;
         $config['needsComponentPanel'] = true;
+
+        $config['generatorProperties'] = array();
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_GeneratorProperty') as $plugin) {
+            $prop = $plugin->getGeneratorProperty(Kwf_Component_Generator_Abstract::getInstance($this->_class, 'paragraphs'));
+            if ($prop) {
+                $config['generatorProperties'][] = $prop;
+            }
+        }
+
         return array(
             'paragraphs' => $config
         );

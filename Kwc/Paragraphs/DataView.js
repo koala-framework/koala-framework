@@ -125,6 +125,38 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
             }
             tb.add(deviceVisibleMenu);
         }
+        this.generatorProperties.forEach(function(param) {
+            var values = [];
+            for (var v in param.values) {
+                values.push([v, param.values[v]]);
+            }
+            var combo = new Kwf.Form.ComboBox({
+                displayField: 'name',
+                valueField: 'id',
+                store: {
+                    data: values
+                },
+                editable: false,
+                width: 50,
+                triggerAction: 'all',
+                mode: 'local',
+                record: record,
+                listWidth: 200,
+                listeners: {
+                    scope: this,
+                    changevalue: function(v, combo) {
+                        if (v && combo.record.get(param.name) != v) {
+                            combo.record.set(param.name, v);
+                            this.fireEvent('recordModified', combo.record);
+                            combo.blur();
+                            combo.hasFocus = false; //ansonsten wird die list angezeigt nachdem daten geladen wurden
+                        }
+                    }
+                }
+            });
+            combo.setValue(record.get(param.name));
+            tb.add(combo);
+        }, this);
 
         if (this.showPosition) {
             var posCombo = new Kwf.Form.ComboBox({

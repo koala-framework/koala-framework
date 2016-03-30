@@ -49,6 +49,7 @@ Kwc.Paragraphs.Panel = Ext2.extend(Kwf.Binding.AbstractPanel,
                 showDeviceVisible: this.showDeviceVisible,
                 showPosition: this.showPosition,
                 showCopyPaste: this.showCopyPaste,
+                generatorProperties: this.generatorProperties,
                 listeners: {
                     scope: this,
                     'delete': this.onDelete,
