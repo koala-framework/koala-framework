@@ -1241,6 +1241,12 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             }
         }
 
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_Models') as $plugin) {
+            foreach ($plugin->getModels() as $model) {
+                self::_findAllInstancesProcessModel($ret, $model);
+            }
+        }
+
         //hardcoded models that always exist
         self::_findAllInstancesProcessModel($ret, 'Kwf_Util_Model_Welcome');
         self::_findAllInstancesProcessModel($ret, 'Kwf_Util_Model_Redirects');
