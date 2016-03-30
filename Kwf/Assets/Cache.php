@@ -67,9 +67,14 @@ class Kwf_Assets_Cache
         return self::_getSlowCache()->clean();
     }
 
-    public function remove($cacheId)
+    public function remove($cacheIds)
     {
-        Kwf_Cache_SimpleStatic::_delete('as-'.$cacheId);
-        return self::_getSlowCache()->remove(str_replace('-', '_', $cacheId));
+        if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
+        $staticIds = array();
+        foreach ($cacheIds as $cacheId) {
+            self::_getSlowCache()->remove(str_replace('-', '_', $cacheId));
+            $staticIds[] = 'as-'.$cacheId;
+        }
+        Kwf_Cache_SimpleStatic::_delete($staticIds);
     }
 }

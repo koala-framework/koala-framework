@@ -62,13 +62,18 @@ class Kwf_Assets_BuildCache
         }
     }
 
-    public function remove($cacheId)
+    public function remove($cacheIds)
     {
-        Kwf_Cache_SimpleStatic::_delete('asb-'.$cacheId);
-        $fileName = self::$_buildDir.'/'.$cacheId;
-        if (file_exists($fileName)) {
-            unlink($fileName);
-            return true;
+        if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
+        $staticIds = array();
+        foreach ($cacheIds as $cacheId) {
+            $fileName = self::$_buildDir.'/'.$cacheId;
+            if (file_exists($fileName)) {
+                unlink($fileName);
+                return true;
+            }
+            $staticIds[] = 'asb-'.$cacheId;
         }
+        Kwf_Cache_SimpleStatic::_delete($staticIds);
     }
 }

@@ -575,23 +575,30 @@ class Kwf_Util_ClearCache_Watcher
             'cache/assets/output-cache-ids-'.$fileType,
             'build/assets/output-cache-ids-'.$fileType,
         );
+        $assetsCacheIds = array();
+        $assetsBuildCacheIds = array();
+        $simpleStaticCacheIds = array();
         foreach ($fileNames as $fileName) {
             if (file_exists($fileName)) {
                 $cacheIds = file($fileName);
                 unlink($fileName);
                 foreach ($cacheIds as $cacheId) {
                     $cacheId = trim($cacheId);
-                    echo $cacheId;
-                    if (Kwf_Assets_Cache::getInstance()->remove($cacheId)) echo " [DELETED]";
-                    if (Kwf_Assets_BuildCache::getInstance()->remove($cacheId)) echo " [build DELETED]";
-                    if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_gzip', 'as_'.$cacheId.'_deflate'))) echo " [gzip DELETED]";
-                    if (Kwf_Assets_Cache::getInstance()->remove($cacheId.'_map')) echo " [map DELETED]";
-                    if (Kwf_Assets_BuildCache::getInstance()->remove($cacheId.'_map')) echo " [build map DELETED]";
-                    if (Kwf_Cache_SimpleStatic::_delete(array('as_'.$cacheId.'_map_gzip', 'as_'.$cacheId.'_map_deflate'))) echo " [map_gzip DELETED]";
-                    echo "\n";
+                    echo $cacheId."\n";
+                    $assetsCacheIds[] = $cacheId;
+                    $assetsBuildCacheIds[] = $cacheId;
+                    $simpleStaticCacheIds[] = 'as_'.$cacheId.'_gzip';
+                    $simpleStaticCacheIds[] = 'as_'.$cacheId.'_deflate';
+                    $assetsCacheIds[] = $cacheId.'_map';
+                    $assetsBuildCacheIds[] = $cacheId.'_map';
+                    $simpleStaticCacheIds[] = 'as_'.$cacheId.'_map_gzip';
+                    $simpleStaticCacheIds[] = 'as_'.$cacheId.'_map_deflate';
                 }
             }
         }
+        Kwf_Assets_Cache::getInstance()->remove($assetsCacheIds);
+        Kwf_Assets_BuildCache::getInstance()->remove($assetsBuildCacheIds);
+        Kwf_Cache_SimpleStatic::_delete($simpleStaticCacheIds);
 
         $a = new Kwf_Util_Build_Types_Assets();
         $a->flagAllPackagesOutdated($fileType);
