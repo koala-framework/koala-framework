@@ -411,7 +411,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
         }
         if ($expr instanceof Kwf_Model_Select_Expr_CompareField_Abstract) {
             if ($expr->getValue() instanceof Kwf_Date && !$expr->getValue() instanceof Kwf_DateTime) {
-                if (is_string($expr->getField()) && $this->getColumnType($expr->getField()) == self::TYPE_DATE) {
+                if (is_string($expr->getField()) && $this->getColumnType($expr->getField()) == self::TYPE_DATETIME) {
                     //when comparing DATETIME field with '2016-06-09' apply DATE() to field
                     $field = 'DATE('.$field.')';
                 }
