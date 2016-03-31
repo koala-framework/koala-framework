@@ -60,12 +60,8 @@ class Kwf_Update_Action_Component_ConvertComponentIds extends Kwf_Update_Action_
                 }
             }
         }
-        $db->query("UPDATE kwc_basic_text SET content =
-                REPLACE(content, 'href=\"$search', 'href=\"$replace') WHERE content LIKE '%href=\"$dbPattern\"%'");
-        $db->query("UPDATE kwc_basic_text SET content =
-                REPLACE(content, 'href=\n  \"$search', 'href=\"$replace') WHERE content LIKE '%href=\n  \"$dbPattern\"%'");
         foreach ($db->query("SELECT component_id, content FROM kwc_basic_text WHERE content LIKE '%href=\"%$dbPattern\"%' OR content LIKE '%href=\n  \"%$dbPattern\"%'")->fetchAll() as $r) {
-            $r['content'] = preg_replace('#(href=\s*")([^"]*/)?([^"]*)'.preg_quote($search).'([^"]*)"#', '\1\2\3'.$replace.'\4"', $r['content']);
+            $r['content'] = preg_replace('#(href=\s*")([^"]*/)?([^"]*)'.preg_quote($search).'([^"]*)"#', '${1}${2}${3}'.$replace.'${4}"', $r['content']);
             $db->update('kwc_basic_text', array('content' => $r['content']), 'component_id='.$db->quote($r['component_id']));
         }
         //TODO: Images
