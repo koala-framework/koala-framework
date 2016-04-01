@@ -17,6 +17,11 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
             }
             $helper = new Kwf_View_Helper_DebugData();
             $ret .= $helper->debugData();
+
+            $helper = new Kwf_Component_View_Helper_Dynamic();
+            $helper->setRenderer($this->_getRenderer());
+            $helper->setView($this->_getView());
+            $ret .= $helper->dynamic('SessionToken');
         }
 
         $flag = ($position == 'header') ? 'hasHeaderIncludeCode' : 'hasFooterIncludeCode';
@@ -62,11 +67,6 @@ class Kwf_Component_View_Helper_IncludeCode extends Kwf_Component_View_Helper_Ab
                 $a = new Kwf_View_Helper_Assets();
                 $ret .= $a->assets(Kwf_Assets_Package_Default::getInstance('Frontend'), null);
             }
-
-            $helper = new Kwf_Component_View_Helper_Dynamic();
-            $helper->setRenderer($this->_getRenderer());
-            $helper->setView($this->_getView());
-            $ret .= $helper->dynamic('SessionToken');
 
         } else if ($position == 'footer') {
             if (!$statisticsBoxUsed) {
