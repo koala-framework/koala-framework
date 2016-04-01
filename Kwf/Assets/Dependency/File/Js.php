@@ -137,6 +137,7 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             }
 
             if (!$buildFile || !file_exists("$buildFile.buildtime") || filemtime($this->getAbsoluteFileName()) != file_get_contents("$buildFile.buildtime")) {
+                $map = clone $map; //clone as same object will be re-used
                 foreach ($this->_getTrlReplacements($trlElements, $map->getFileContents(), $language) as $value) {
                     $map->stringReplace($value['search'], $value['replace']);
                 }

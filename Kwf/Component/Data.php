@@ -84,6 +84,7 @@ class Kwf_Component_Data
         } else {
             Kwf_Benchmark::count('componentDatas', $this->componentId);
         }
+        Kwf_Events_Log::getInstance()->log("create data object: ".$this->getExpandedComponentId(), Zend_Log::INFO);
     }
 
     public function __destruct()
