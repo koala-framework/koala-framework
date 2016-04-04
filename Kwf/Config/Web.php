@@ -53,6 +53,12 @@ class Kwf_Config_Web extends Kwf_Config_Ini
             $apcCacheId = $cacheId.getcwd();
             apc_delete($apcCacheId);
             apc_delete($apcCacheId.'mtime');
+            if (PHP_SAPI == 'cli') {
+                Kwf_Util_Apc::callClearCacheByCli(array(
+                    array('cacheIds' => $apcCacheId.','.$apcCacheId.'mtime')
+                ));
+            }
+            Kwf_Cache_SimpleStatic::clear('config-');
         }
 
         Kwf_Config_Web::clearInstances();
