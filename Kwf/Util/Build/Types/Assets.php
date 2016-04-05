@@ -8,24 +8,6 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         'ie8.css' => 'text/css; ie8',
     );
 
-    private function _buildPackageContents($cacheContents, $p, $extension, $language)
-    {
-        $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension, $language);
-        Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
-
-        //save generated caches for clear-cache-watcher
-        $fileName = 'build/assets/output-cache-ids-'.$extension;
-        if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
-            file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
-        }
-    }
-
-    private function _buildPackageSourceMap($cacheContents, $p, $extension, $language)
-    {
-        $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension.'.map', $language);
-        Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
-    }
-
     public function getAllPackages()
     {
         $packages = array();
@@ -204,10 +186,20 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
                         $progressIncrement = $urlNum == 0 ? 1 : 0;
                         $progress->next($progressIncrement, "$depName $urlExtension $urlLanguage source");
-                        $this->_buildPackageContents($contents, $p, $urlExtension, $urlLanguage);
+                        $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $urlExtension, $urlLanguage);
+                        Kwf_Assets_BuildCache::getInstance()->save($contents, $cacheId);
 
+                        //save generated caches for clear-cache-watcher
+                        $fileName = 'build/assets/output-cache-ids-'.$extension;
+                        if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
+                            file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+                        }
+
+
+                        $contents = $p->getUrlContents($urlExtension.'.map', $urlLanguage);
                         $progress->next($progressIncrement, "$depName $urlExtension $urlLanguage map");
-                        $this->_buildPackageSourceMap($contents, $p, $urlExtension, $urlLanguage);
+                        $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $urlExtension.'.map', $urlLanguage);
+                        Kwf_Assets_BuildCache::getInstance()->save($contents, $cacheId);
                     }
 
                     if (!$urls) {
