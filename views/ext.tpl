@@ -34,7 +34,6 @@
             document.write('<?=$this->image('/assets/ext2/resources/images/default/shared/large-loading.gif')?>');
             document.write('<?= addslashes($this->applicationName) ?><br /><span id="loading-msg"><?= trlKwf('Loading...') ?></span></div>');
         document.write('</div>');
-        var Kwf = {isApp: true};
     </script>
 
     <?php echo $this->debugData() ?>
@@ -65,6 +64,7 @@
             if((!Kwf.Connection || Kwf.Connection.masks == 0)  && Ext2.get('loading')) {
                 Ext2.get('loading').fadeOut({remove: true});
             }
+            Kwf.activateKeepAlive();
         };
         Ext2.onReady(function() {
             Kwf.main();
