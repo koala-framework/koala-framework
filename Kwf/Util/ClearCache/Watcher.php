@@ -596,9 +596,15 @@ class Kwf_Util_ClearCache_Watcher
                 }
             }
         }
-        Kwf_Assets_Cache::getInstance()->remove($assetsCacheIds);
-        Kwf_Assets_BuildCache::getInstance()->remove($assetsBuildCacheIds);
-        Kwf_Cache_SimpleStatic::_delete($simpleStaticCacheIds);
+        if ($assetsCacheIds) {
+            Kwf_Assets_Cache::getInstance()->remove($assetsCacheIds);
+        }
+        if ($assetsBuildCacheIds) {
+            Kwf_Assets_BuildCache::getInstance()->remove($assetsBuildCacheIds);
+        }
+        if ($simpleStaticCacheIds) {
+            Kwf_Cache_SimpleStatic::_delete($simpleStaticCacheIds);
+        }
 
         $a = new Kwf_Util_Build_Types_Assets();
         $a->flagAllPackagesOutdated($fileType);
