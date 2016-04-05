@@ -11,9 +11,15 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 
     private function _createDependencyForFile($file, $isCommonJsEntry)
     {
-        $ret = Kwf_Assets_Dependency_File::createDependency($file, $this->_providerList);
-        $ret->setIsCommonJsEntry($isCommonJsEntry);
-        return $ret;
+        if (!isset($this->_fileDependencies[$file])) {
+            $this->_fileDependencies[$file] = Kwf_Assets_Dependency_File::createDependency($file, $this->_providerList);
+            $this->_fileDependencies[$file]->setIsCommonJsEntry($isCommonJsEntry);
+        } else {
+            if ($isCommonJsEntry != $this->_fileDependencies[$file]->isCommonJsEntry()) {
+                throw new Kwf_Exception("isCommonJsEntry is already set to other value");
+            }
+        }
+        return $this->_fileDependencies[$file];
     }
 
     public function getDependency($dependencyName)

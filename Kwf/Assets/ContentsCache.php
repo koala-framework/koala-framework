@@ -17,7 +17,7 @@ class Kwf_Assets_ContentsCache
     {
         $this->_cache[$cacheId] = $map;
 
-        $cacheFile = 'cache/assetdeps/'.md5($cacheId);
+        $cacheFile = 'cache/assetdeps/'.md5($cacheId).'v1';
 
         $map->getMapContentsData(true); //this will trigger _generateMappings
         file_put_contents($cacheFile, serialize($map));
