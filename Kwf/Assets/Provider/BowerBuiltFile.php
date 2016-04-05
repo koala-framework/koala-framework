@@ -235,7 +235,11 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             }
         } else if  (substr(strtolower($dependencyName), 0, strlen($this->_path)+1) == strtolower($this->_path).'/') {
             //absolute path to single file path given
-            return new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName.'.js');
+            if (substr($dependencyName, -4) == '.css') {
+                return new Kwf_Assets_Dependency_File_Css($this->_providerList, $dependencyName);
+            } else {
+                return new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName . '.js');
+            }
         }
         return $ret;
     }

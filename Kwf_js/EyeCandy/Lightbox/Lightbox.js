@@ -525,14 +525,14 @@ LightboxStyles.Abstract.prototype = {
     },
     mask: function() {
         //calling mask multiple times in valid, unmask must be called exactly often
-        var maskEl = $(document.body).find('.kwfUp-lightboxMask');
+        var maskEl = $(document.body).find('.kwfUp-kwfLightboxMask');
         if (maskEl.length) {
             maskEl.show();
             setTimeout(function(){
                 maskEl.addClass('kwfUp-kwfLightboxMaskOpen');
             }, 0);
         } else {
-            var maskEl = $('<div class="kwfUp-kwfLightboxMask"></div>');
+            maskEl = $('<div class="kwfUp-kwfLightboxMask"></div>');
             var lightboxEl = this.lightbox.lightboxEl;
             lightboxEl.find('.kwfUp-kwfLightboxScrollOuter').append(maskEl);
             setTimeout(function(){
