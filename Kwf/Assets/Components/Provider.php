@@ -166,9 +166,13 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 
             //reverse damit css von weiter unten in der vererbungshierachie überschreibt
             $componentCssFiles = array_reverse($componentCssFiles);
-            foreach ($componentCssFiles as $i) {
-                $dep = $this->_createDependencyForFile($i, true);
-                if (substr($i, -8) == 'defer.js') {
+            foreach ($componentCssFiles as $path) {
+                $pathWithType = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($this->_providerList, './'.$path);
+                if (!$pathWithType) {
+                    throw new Kwf_Exception("Can't find path type for '$path'");
+                }
+                $dep = $this->_createDependencyForFile($pathWithType, true);
+                if (substr($path, -8) == 'defer.js') {
                     $deps[] = array(
                         'dep' => $dep,
                         'master' => false,
@@ -190,9 +194,13 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 
             //reverse damit css von weiter unten in der vererbungshierachie überschreibt
             $componentCssFiles = array_reverse($files['masterCss']);
-            foreach ($componentCssFiles as $i) {
-                $dep = $this->_createDependencyForFile($i, true);
-                if (substr($i, -8) == 'defer.js') {
+            foreach ($componentCssFiles as $path) {
+                $pathWithType = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($this->_providerList, './'.$path);
+                if (!$pathWithType) {
+                    throw new Kwf_Exception("Can't find path type for '$path'");
+                }
+                $dep = $this->_createDependencyForFile($pathWithType, true);
+                if (substr($path, -8) == 'defer.js') {
                     $deps[] = array(
                         'dep' => $dep,
                         'master' => true,

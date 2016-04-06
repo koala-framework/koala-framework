@@ -34,7 +34,7 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
         $f = $paths[$pathType].substr($this->_sourceMapFile, strpos($this->_sourceMapFile, '/'));
         $mapContents = file_get_contents($f);
 
-        $cacheFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$this->getFileNameWithType().'.map.v2.'.md5($mapContents);
+        $cacheFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$this->getFileNameWithType().'.map.v3.'.md5($mapContents);
         if (!file_exists($cacheFile)) {
             $map = new Kwf_SourceMaps_SourceMap($mapContents, $contents);
             $mappings = $map->getMappings();
@@ -48,7 +48,10 @@ class Kwf_Assets_Dependency_File_JsPreBuilt extends Kwf_Assets_Dependency_File
                 throw new Kwf_Exception('map must consist only of a single source');
             }
             $data->sources = array(
-                $this->getFileNameWithType()
+                '/assets/'.$this->getFileNameWithType()
+            );
+            $data->{'_x_org_koala-framework_masterFiles'} = array(
+                $this->getAbsoluteFileName()
             );
             $map->save($cacheFile);
         } else {

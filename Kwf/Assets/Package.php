@@ -160,7 +160,7 @@ class Kwf_Assets_Package
             }
 
             if ($cacheId) {
-                Kwf_Assets_ContentsCache::getInstance()->save($ret, $cacheId, $this->_providerList);
+                Kwf_Assets_ContentsCache::getInstance()->save($ret, $cacheId);
             }
         }
         return $ret;
@@ -177,10 +177,10 @@ class Kwf_Assets_Package
         foreach ($i->getDependencies(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS) as $depName=>$dep) {
             $ret[$depName] = $dep->__toString();
             if (!isset($data[$dep->__toString()])) {
+                $c = $this->_getFilteredDependencyContents($dep, 'text/javascript');
                 $data[$dep->__toString()] = array(
                     'id' => $dep->__toString(),
-                    'source' => $this->_getFilteredDependencyContents($dep, 'text/javascript'),
-                    'sourceFile' => $dep->__toString(), //TODO
+                    'source' => $c,
                     'deps' => array(),
                     'entry' => false
                 );
@@ -203,7 +203,6 @@ class Kwf_Assets_Package
                         $commonJsData[$i->__toString()] = array(
                             'id' => $i->__toString(),
                             'source' => $c,
-                            'sourceFile' => $i->__toString(), //TODO
                             'deps' => $commonJsDeps,
                             'entry' => true
                         );
@@ -253,6 +252,7 @@ class Kwf_Assets_Package
                     $trlData = array_merge($trlData, $data->{'_x_org_koala-framework_trlData'});
                 }
                 $data->sourcesContent = $data->sources; //browser-pack needs sourcesContent, else it would ignore input source map. This is fake obviously and we'll drop it anyway after browser-pack finished
+                $i['sourceFile'] = $i['source']->getMapContentsData(false)->sources[0];
                 $i['source'] = $i['source']->getFileContentsInlineMap(false);
             }
             $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData));
@@ -262,16 +262,19 @@ class Kwf_Assets_Package
             $map->setFileContents($fileContents);
             $data = $map->getMapContentsData(false);
             unset($data->sourcesContent); //drop fake sourcesContent (see comment above)
+            if ($data->sources[0] == 'vendor/koala-framework/koala-framework/node_modules/browser-pack/_prelude.js') {
+                $data->sources[0] = '/assets/kwf/node_modules/browser-pack/_prelude.js';
+            }
             $packageMap->concat($map);
         }
 
         // ***** non-commonjs, css
         $filterMimeType = $mimeType;
         if ($filterMimeType == 'text/css; ie8') $filterMimeType = 'text/css';
-        foreach ($this->_getFilteredUniqueDependencies($filterMimeType) as $i) {
-            if ($i->getIncludeInPackage()) {
-                if (!(($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $i->isCommonJsEntry())) {
-                    $map = $this->_getFilteredDependencyContents($i, $mimeType);
+        foreach ($this->_getFilteredUniqueDependencies($filterMimeType) as $dep) {
+            if ($dep->getIncludeInPackage()) {
+                if (!(($mimeType == 'text/javascript' || $mimeType == 'text/javascript; defer') && $dep->isCommonJsEntry())) {
+                    $map = $this->_getFilteredDependencyContents($dep, $mimeType);
                     $data = $map->getMapContentsData(false);
                     if (isset($data->{'_x_org_koala-framework_trlData'})) {
                         $trlData = array_merge($trlData, $data->{'_x_org_koala-framework_trlData'});
@@ -279,8 +282,26 @@ class Kwf_Assets_Package
                     if (strpos($map->getFileContents(), "//@ sourceMappingURL=") !== false && strpos($map->getFileContents(), "//# sourceMappingURL=") !== false) {
                         throw new Kwf_Exception("contents must not contain sourceMappingURL");
                     }
-                    // $ret .= "/* *** $i */\n"; // attention: commenting this in breaks source maps
+                    $sourcesCount = 0;
+                    $packageData = $packageMap->getMapContentsData(false);
+                    if (isset($packageData->sources)) {
+                        $sourcesCount = count($packageData->sources);
+                    }
+                    unset($packageData);
+
+                    // $ret .= "/* *** $dep */\n"; // attention: commenting this in breaks source maps
                     $packageMap->concat($map);
+
+                    if (isset($data->{'_x_org_koala-framework_sourcesContent'})) {
+                        $packageMapData = $packageMap->getMapContentsData(false);
+                        if (!isset($packageMapData->{'_x_org_koala-framework_sourcesContent'})) {
+                            $packageMapData->{'_x_org_koala-framework_sourcesContent'} = array();
+                        }
+                        //copy sourcesContent to packageMap with $sourcesCount offset
+                        foreach ($data->{'_x_org_koala-framework_sourcesContent'} as $k=>$i) {
+                            $packageMapData->{'_x_org_koala-framework_sourcesContent'}[$k+$sourcesCount] = $i;
+                        }
+                    }
                 }
             }
         }
@@ -298,6 +319,23 @@ class Kwf_Assets_Package
                 $packageMap = $filter->filter($packageMap);
             }
         }
+
+        $data = $packageMap->getMapContentsData(false);
+        $data->sourcesContent = array();
+        foreach ($data->sources as $k=>$i) {
+            if (substr($i, 0, 8) != '/assets/') {
+                throw new Kwf_Exception("Source path doesn't start with /assets/: $i");
+            }
+            $i = substr($i, 8);
+
+            if (isset($data->{'_x_org_koala-framework_sourcesContent'}[$k])) {
+                $data->sourcesContent[$k] = $data->{'_x_org_koala-framework_sourcesContent'}[$k];
+            } else {
+                $i = new Kwf_Assets_Dependency_File($this->_providerList, $i);
+                $data->sourcesContent[$k] = $i->getContentsSourceString();
+            }
+        }
+
         return array(
             'contents' => $packageMap,
             'trlData' => $trlData,
@@ -368,16 +406,6 @@ class Kwf_Assets_Package
         else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
         else throw new Kwf_Exception("Invalid mimeType: '$mimeType'");
         $packageMap->setFile($this->getPackageUrl($ext, $language));
-
-        $data = $packageMap->getMapContentsData(false);
-        $data->sourcesContent = array();
-        foreach ($data->sources as $k=>$i) {
-            //TODO fix this
-            //$i = new Kwf_Assets_Dependency_File($this->_providerList, $i);
-            //$data->sourcesContent[$k] = $i->getContentsSourceString();
-            //$data->sources[$k] = '/assets/'.$i;
-        }
-
         return $packageMap;
     }
 

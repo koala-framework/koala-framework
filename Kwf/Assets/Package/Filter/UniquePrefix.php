@@ -53,6 +53,12 @@ class Kwf_Assets_Package_Filter_UniquePrefix
         $ret->concat($map);
         $ret->concat(Kwf_SourceMaps_SourceMap::createEmptyMap($foot));
 
+        $mapData = $map->getMapContentsData(false);
+        if (isset($mapData->{'_x_org_koala-framework_sourcesContent'})) {
+            $retData = $ret->getMapContentsData(false);
+            $retData->{'_x_org_koala-framework_sourcesContent'} = $mapData->{'_x_org_koala-framework_sourcesContent'};
+        }
+
         return $ret;
     }
 }

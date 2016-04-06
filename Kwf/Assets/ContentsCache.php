@@ -13,25 +13,23 @@ class Kwf_Assets_ContentsCache
         return $cache;
     }
 
-    public function save(Kwf_SourceMaps_SourceMap $map, $cacheId, Kwf_Assets_ProviderList_Abstract $providerList)
+    public function save(Kwf_SourceMaps_SourceMap $map, $cacheId)
     {
         $this->_cache[$cacheId] = $map;
 
         $cacheFile = 'cache/assetdeps/'.md5($cacheId).'v1';
 
-        $map->getMapContentsData(true); //this will trigger _generateMappings
+        $data = $map->getMapContentsData(true); //this will trigger _generateMappings
         file_put_contents($cacheFile, serialize($map));
 
         $masterFiles = array();
-        foreach ($map->getSources() as $f) {
-            if (!file_exists($f)) {
-                $f = new Kwf_Assets_Dependency_File($providerList, $f);//TODO providerList
-                $f = $f->getAbsoluteFileName();
+        if (isset($data->{'_x_org_koala-framework_masterFiles'})) {
+            foreach ($data->{'_x_org_koala-framework_masterFiles'} as $f) {
+                $masterFiles[] = array(
+                    'file' => $f,
+                    'md5' => file_exists($f) ? md5_file($f) : false
+                );
             }
-            $masterFiles[] = array(
-                'file' => $f,
-                'md5' => file_exists($f) ? md5_file($f) : false
-            );
         }
         file_put_contents($cacheFile.'.masterFiles', serialize($masterFiles));
     }
