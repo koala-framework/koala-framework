@@ -41,7 +41,8 @@ class Kwf_Assets_ContentsCache
         if (isset($this->_cache[$cacheId])) {
             return $this->_cache[$cacheId];
         }
-        $cacheFile = 'cache/assetdeps/'.md5($cacheId);
+
+        $cacheFile = 'cache/assetdeps/'.md5($cacheId).'v1';
         if (!file_exists($cacheFile) || !file_exists($cacheFile.'.masterFiles')) {
             return false;
         } else {
