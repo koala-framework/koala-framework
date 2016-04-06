@@ -252,7 +252,9 @@ class Kwf_Assets_Package
                     $trlData = array_merge($trlData, $data->{'_x_org_koala-framework_trlData'});
                 }
                 $data->sourcesContent = $data->sources; //browser-pack needs sourcesContent, else it would ignore input source map. This is fake obviously and we'll drop it anyway after browser-pack finished
-                $i['sourceFile'] = $i['source']->getMapContentsData(false)->sources[0];
+                if (isset($i['source']->getMapContentsData(false)->sources[0])) {
+                    $i['sourceFile'] = $i['source']->getMapContentsData(false)->sources[0];
+                }
                 $i['source'] = $i['source']->getFileContentsInlineMap(false);
             }
             $contents = 'window.require = '.Kwf_Assets_CommonJs_BrowserPack::pack(array_values($commonJsData));
