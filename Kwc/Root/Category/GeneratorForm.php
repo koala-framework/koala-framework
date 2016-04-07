@@ -3,6 +3,9 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
 {
     private $_componentOrParent;
     private $_generator;
+
+    public $toSaveGeneratorProperty = array();
+
     public function __construct($componentOrParent, $generator)
     {
         $this->_componentOrParent = $componentOrParent;
