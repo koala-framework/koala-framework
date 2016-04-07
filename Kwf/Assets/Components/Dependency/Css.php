@@ -50,7 +50,7 @@ class Kwf_Assets_Components_Dependency_Css extends Kwf_Assets_Components_Depende
             }
             unset($packageData);
         }
-        $ret->{'_x_org_koala-framework_masterFiles'} = $masterFiles;
+        $ret->getMapContentsData(false)->{'_x_org_koala-framework_masterFiles'} = $masterFiles;
 
 
 

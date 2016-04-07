@@ -56,8 +56,8 @@ class Kwf_Assets_Components_Dependency_Js extends Kwf_Assets_Components_Dependen
             }
             unset($packageData);
         }
-        $ret->{'_x_org_koala-framework_trlData'} = $trlData;
-        $ret->{'_x_org_koala-framework_masterFiles'} = $masterFiles;
+        $ret->getMapContentsData(false)->{'_x_org_koala-framework_trlData'} = $trlData;
+        $ret->getMapContentsData(false)->{'_x_org_koala-framework_masterFiles'} = $masterFiles;
 
         $ret->setMimeType('text/javascript');
         return $ret;

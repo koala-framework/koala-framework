@@ -20,7 +20,11 @@ abstract class Kwf_Assets_Filter_Css_AbstractPostCss extends Kwf_Assets_Filter_A
         $ret = Kwf_Assets_Filter_Css_PostCssRunner::run($pluginsInitCode, $sourcemap);
 
         $data = $ret->getMapContentsData(false);
-        if (!isset($data->{'_x_org_koala-framework_masterFiles'})) {
+        $inData = $sourcemap->getMapContentsData(false);
+
+        if (isset($inData->{'_x_org_koala-framework_masterFiles'})) {
+            $data->{'_x_org_koala-framework_masterFiles'} = $inData->{'_x_org_koala-framework_masterFiles'};
+        } else {
             $data->{'_x_org_koala-framework_masterFiles'} = array();
         }
         foreach ($this->getMasterFiles() as $file) {
@@ -29,7 +33,6 @@ abstract class Kwf_Assets_Filter_Css_AbstractPostCss extends Kwf_Assets_Filter_A
             }
         }
 
-        $inData = $sourcemap->getMapContentsData(false);
         if (isset($inData->{'_x_org_koala-framework_sourcesContent'})) {
             $data->{'_x_org_koala-framework_sourcesContent'} = $inData->{'_x_org_koala-framework_sourcesContent'};
         }
