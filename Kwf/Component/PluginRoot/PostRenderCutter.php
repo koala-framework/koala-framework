@@ -6,6 +6,7 @@ class Kwf_Component_PluginRoot_PostRenderCutter implements
     const MASK_TYPE_NOMASK = 'noMask';
     const MASK_TYPE_HIDE = 'hide';
     const MASK_TYPE_SHOW = 'show';
+
     const MASK_CODE_BEGIN = 'Begin';
     const MASK_CODE_END = 'End';
 
@@ -20,20 +21,28 @@ class Kwf_Component_PluginRoot_PostRenderCutter implements
         return $ret;
     }
 
-    protected function _getMaskType(Kwf_Component_Data $page)
+    /**
+     * return mask_type (= implicit params=null)
+     * return array('type'=>mask_type, 'params' => params)
+     */
+    protected function _getMask(Kwf_Component_Data $page)
     {
         return self::MASK_TYPE_NOMASK;
     }
 
-    protected function _getMaskParams(Kwf_Component_Data $page)
-    {
-        return null;
-    }
-
     public final function getMaskCode(Kwf_Component_Data $page)
     {
-        $maskType = $this->_getMaskType($page);
-        $maskParams = $this->_getMaskParams($page);
+        $maskParams = null;
+
+        $mask = $this->_getMask($page);
+        if (is_array($mask)) {
+            $maskType = $mask['type'];
+            if (isset($mask['params'])) {
+                $maskParams = $mask['params'];
+            }
+        } else {
+            $maskType = $mask;
+        }
         return array(
             'begin' => $this->_getMaskCode($maskType, self::MASK_CODE_BEGIN, $maskParams),
             'end' => $this->_getMaskCode($maskType, self::MASK_CODE_END, $maskParams),
