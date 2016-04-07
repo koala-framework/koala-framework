@@ -51,7 +51,8 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 $ret[] = $nonDeferDep;
             }
 
-            foreach ($this->_getComponentClassesPackages()['Frontend'] as $c) {
+            $componentClassesPackages = $this->_getComponentClassesPackages();
+            foreach ($componentClassesPackages['Frontend'] as $c) {
                 $packageName = Kwc_Abstract::getFlag($c, 'assetsPackage');
                 if ($packageName == 'Default') $packageName = false;
                 if (!$packageName) {
@@ -67,7 +68,8 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
             $ret = array();
             $assetsPackageName = substr($dependencyName, 17);
 
-            foreach ($this->_getComponentClassesPackages()[$assetsPackageName] as $c) {
+            $componentClassesPackages = $this->_getComponentClassesPackages();
+            foreach ($componentClassesPackages[$assetsPackageName] as $c) {
                 $d = $this->_providerList->findDependency('Component-'.$c);
                 if (!$d) throw new Kwf_Exception("Didn't get dependency 'Component-$c'");
                 $ret[] = $d;
