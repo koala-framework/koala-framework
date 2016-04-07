@@ -935,7 +935,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
                 if ($o['field'] instanceof Zend_Db_Expr) {
                     $dbSelect->order($o['field']);
                 } else if ($o['field'] instanceof Kwf_Model_Select_Expr_Interface) {
-                    $dbSelect->order($this->_createDbSelectExpression($o['field'], $dbSelect).' '.$o['direction']);
+                    $dbSelect->order(new Zend_Db_Expr($this->_createDbSelectExpression($o['field'], $dbSelect).' '.$o['direction']));
                 } else if ($o['field'] == Kwf_Model_Select::ORDER_RAND) {
                     $dbSelect->order('RAND()');
                 } else {
