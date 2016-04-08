@@ -44,7 +44,9 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
             $d = $d->parent;
         }
         foreach ($packageNames as $packageName) {
-            $ret['assetsPackages'][] = Kwf_Assets_Package_ComponentPackage::getInstance($packageName);
+            if ($packageName != 'Default') {
+                $ret['assetsPackages'][] = Kwf_Assets_Package_ComponentPackage::getInstance($packageName);
+            }
         }
         return $ret;
     }
