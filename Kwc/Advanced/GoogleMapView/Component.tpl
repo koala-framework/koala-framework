@@ -48,5 +48,6 @@
     <? } else { ?>
         <?=$this->placeholder['noCoordinates']?>
     <? } ?>
+<? } ?>
 </div>
 
