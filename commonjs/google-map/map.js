@@ -185,9 +185,9 @@ Map.prototype = {
                     $.proxy(this._reloadMarkersOnMapChange, this));
             }
         } else {
-            this.config.markers.each(function(marker) {
-                this.addMarker(marker);
-            }, this);
+            for (var i = 0; i < this.config.markers.length; i++) {
+                this.addMarker(this.config.markers[i]);
+            }
         }
 
         // Opens the first InfoWindow. Must be deferred, because there were
@@ -195,9 +195,12 @@ Map.prototype = {
         var showNextWindow = function() {
             var map = maps.shift();
             if (!map) return;
-            map.markers.each(function(m) {
-                if (m.kwfConfig.autoOpenInfoWindow) this.showWindow(m);
-            }, map);
+
+            for (var i = 0; i < map.markers.length; i++) {
+                if (map.markers[i].kwfConfig.autoOpenInfoWindow) {
+                    map.showWindow(map.markers[i]);
+                }
+            }
         };
         if (maps.length == 0) {
             setTimeout($.proxy(showNextWindow, this), 1);
@@ -229,9 +232,11 @@ Map.prototype = {
             if (this.markers.length == 0) return;
             // Calculate center of all markers via google-map
             var latlngbounds = new google.maps.LatLngBounds();
-            this.markers.each(function(n){
-                if (n.kwfConfig.isLightMarker) latlngbounds.extend(n.getPosition());
-            });
+            for (var i = 0; i < this.markers.length; i++) {
+                if (this.markers[i].kwfConfig.isLightMarker) {
+                    latlngbounds.extend(this.markers[i].getPosition());
+                }
+            }
             this.gmap.setCenter(latlngbounds.getCenter());
             this.gmap.fitBounds(latlngbounds);
 
@@ -276,20 +281,21 @@ Map.prototype = {
             success: (function(response, options, result) {
                 var reuseMarkers = [];
                 var newMarkers = [];
-                result.responseJSON.markers.each(function(m) {
+                for (var a = 0; a < result.responseJSON.markers.length; a++) {
+                    var marker = result.responseJSON.markers[a];
                     var doAdd = true;
                     for (var i = 0; i < this.markers.length; i++) {
-                        if (this.markers[i].kwfConfig.latitude == m.latitude
-                            && this.markers[i].kwfConfig.longitude == m.longitude
-                            && this.markers[i].kwfConfig.isLightMarker == m.isLightMarker
+                        if (this.markers[i].kwfConfig.latitude == marker.latitude
+                            && this.markers[i].kwfConfig.longitude == marker.longitude
+                            && this.markers[i].kwfConfig.isLightMarker == marker.isLightMarker
                         ) {
                             reuseMarkers.push(this.markers[i]);
                             doAdd = false;
                             break;
                         }
                     }
-                    if (doAdd) newMarkers.push(m);
-                }, this);
+                    if (doAdd) newMarkers.push(marker);
+                }
 
                 for (var i = 0; i < this.markers.length; i++) {
                     if (reuseMarkers.indexOf(this.markers[i]) == -1) {
