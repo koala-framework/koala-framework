@@ -179,10 +179,10 @@ Map.prototype = {
                  * 2. Then load all markers.
                  * */
                 google.maps.event.addListenerOnce(this.gmap, "idle",
-                    this._loadAllMarkers.createDelegate(this, []));
+                    $.proxy(this._loadAllMarkers, this));
             } else {
                 google.maps.event.addListener(this.gmap, "idle",
-                    this._reloadMarkersOnMapChange.createDelegate(this, [ ]));
+                    $.proxy(this._reloadMarkersOnMapChange, this));
             }
         } else {
             this.config.markers.each(function(marker) {
@@ -200,7 +200,7 @@ Map.prototype = {
             }, map);
         };
         if (maps.length == 0) {
-            showNextWindow.defer(1, this);
+            setTimeout($.proxy(showNextWindow, this), 1);
         }
         maps.push(this);
         this.fireEvent('show', this);
@@ -236,7 +236,7 @@ Map.prototype = {
             this.gmap.fitBounds(latlngbounds);
 
             google.maps.event.addListener(this.gmap, "idle",
-                this._reloadMarkersOnMapChange.createDelegate(this, [ ]));
+                $.proxy(this._reloadMarkersOnMapChange, this));
         }, this, { single: true });
 
         this._reloadMarkers($.extend({}, this._baseParams));
@@ -324,9 +324,7 @@ Map.prototype = {
         marker.setMap(this.gmap);
         this.markers.push(marker);
         if (markerConfig.infoHtml) {
-            google.maps.event.addListener(marker, 'click', this.toggleWindow.createDelegate(
-                this, [ marker ]
-            ));
+            google.maps.event.addListener(marker, 'click', $.proxy(this.toggleWindow, this, [ marker ]));
         }
     },
 
@@ -369,9 +367,7 @@ Map.prototype = {
             marker.infoWindow.setContent(marker.kwfConfig.infoHtml);
             marker.infoWindow.open(marker.map, marker);
         }
-        google.maps.event.addListener(marker.infoWindow, 'domready', this.markerWindowReady.createDelegate(
-            this, [ marker ]
-        ));
+        google.maps.event.addListener(marker.infoWindow, 'domready', $.proxy(this.markerWindowReady, this, [ marker ]));
     },
     closeWindow: function(marker) {
         marker.infoWindow.close();
@@ -391,9 +387,7 @@ Map.prototype = {
             destination:end,
             travelMode: google.maps.TravelMode.DRIVING
         };
-        this.directionsService.route(request, this._directionsCallback.createDelegate(
-            this
-        ));
+        this.directionsService.route(request, $.proxy(this._directionsCallback, this));
     },
     _directionsCallback: function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
