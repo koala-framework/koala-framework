@@ -14,6 +14,7 @@ class Kwc_Advanced_GoogleMap_Component extends Kwc_Advanced_GoogleMapView_Compon
         $ret['componentCategory'] = 'special';
         $ret['generators']['child']['component']['text'] = 'Kwc_Basic_Text_Component';
         $ret['placeholder']['noCoordinates'] = trlKwfStatic('coordinates not entered');
+        $ret['assetsAdmin']['dep'][] = 'KwfGoogleMapField';
         return $ret;
     }
 
