@@ -61,7 +61,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
             if ($this->_getSetting('useMobileBreakpoints') && $row->device_visible) $cssClass .= ' ' . $this->_getBemClass($row->device_visible);
             $cssClass .= ' '.$this->_getBemClass(
                     'outer'.ucfirst($paragraph->row->component),
-                    'outer'.ucfirst(Kwf_Component_Abstract::formatRootElementClass($paragraph->componentClass, ''))
+                    'outer'.ucfirst(substr(Kwf_Component_Abstract::formatRootElementClass($paragraph->componentClass, ''), 0, 6))
                 );
             $preHtml = '';
             $postHtml = '';
