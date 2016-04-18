@@ -40,6 +40,7 @@ class Kwf_Assets_Package_ComponentPackage extends Kwf_Assets_Package
         return $ret;
     }
 
+    //remove already loaded (in _loadedPackage = Frontend) dependencies dependencies
     protected function _getFilteredUniqueDependencies($mimeType)
     {
         $ret = parent::_getFilteredUniqueDependencies($mimeType);
@@ -65,13 +66,14 @@ class Kwf_Assets_Package_ComponentPackage extends Kwf_Assets_Package
         return null;
     }
 
+    //remove already loaded (in _loadedPackage = Frontend) commonjs dependencies
     protected function _getCommonJsData($mimeType)
     {
         $commonJsData = parent::_getCommonJsData($mimeType);
         if ($commonJsData) {
             $deps = array_merge(
-                $this->_getFilteredUniqueDependencies('text/javascript'),
-                $this->_getFilteredUniqueDependencies('text/javascript; defer')
+                $this->_loadedPackage->_getFilteredUniqueDependencies('text/javascript'),
+                $this->_loadedPackage->_getFilteredUniqueDependencies('text/javascript; defer')
             );
             foreach ($deps as $i) {
                 $data = array();
