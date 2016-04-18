@@ -179,6 +179,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                     foreach ($urls as $urlNum=>$url) {
                         if (substr($url, 0, 8) != '/assets/') continue;
                         $param = explode('/', $url);
+                        if (count($param) != 7) continue;
                         $urlLanguage = $param[5];
                         $urlExtension = $param[6];
                         $urlExtension = substr($urlExtension, 0, strpos($urlExtension, '?'));

@@ -8,9 +8,6 @@ class Kwf_View_Helper_Assets
         $indent = str_repeat(' ', 8);
         $ret = '';
 
-        $file = '/assets/es5-shim/es5-shim.js';
-        $ret .= "$indent<!--[if lte IE 8]><script type=\"text/javascript\" src=\"".htmlspecialchars($file)."\"></script><![endif]-->\n";
-
         foreach ($assetsPackage->getPackageUrls('text/css', $language) as $file) {
             $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($file)."\" />\n";
         }
