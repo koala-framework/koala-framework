@@ -212,7 +212,7 @@ class Kwf_Component_Settings
                 foreach (self::getSetting($class, 'parentClasses') as $c) {
                     $c = strpos($c, '.') ? substr($c, 0, strpos($c, '.')) : $c;
                     $path = self::_findComponentFile($c);
-                    if (substr($path, -14) == '/Component.php') {
+                    if (substr($path, -14) == DIRECTORY_SEPARATOR.'Component.php' || substr($path, -14) == '/Component.php') {
                         $ret[substr($path, 0, -14)] = substr($c, 0, -10);
                     } else {
                         $ret[substr($path, 0, -4)] = $c; //nur .php

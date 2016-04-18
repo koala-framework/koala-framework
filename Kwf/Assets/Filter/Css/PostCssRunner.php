@@ -25,16 +25,16 @@ class Kwf_Assets_Filter_Css_PostCssRunner
         $runfile = tempnam("temp/", 'postcss');
         file_put_contents($runfile, $js);
 
+        putenv("NODE_PATH=".getcwd()."/".KWF_PATH."/node_modules".PATH_SEPARATOR.getcwd()."/".KWF_PATH);
         $cmd = getcwd()."/".VENDOR_PATH."/bin/node ".$runfile;
         $cmd .= " 2>&1";
         $process = new Symfony\Component\Process\Process($cmd);
-        $process->setEnv(array(
-            'NODE_PATH' => getcwd().'/'.KWF_PATH.'/node_modules'
-        ));
         $process->setInput($sourcemap->getFileContentsInlineMap(false));
 
-        $process->mustRun();
-
+        if ($process->run() !== 0) {
+            throw new Kwf_Exception("Process '$cmd' failed with ".$process->getExitCode()."\n".$process->getOutput());
+        }
+        putenv("NODE_PATH=");
         unlink($runfile);
 
         $out = $process->getOutput();

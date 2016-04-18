@@ -71,12 +71,12 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             }
         }
 
-        if (substr($fileName, 0, 2) == './') $fileName = getcwd().substr($fileName, 1);
+        if (substr($fileName, 0, 2) == './') $fileName = str_replace(DIRECTORY_SEPARATOR, '/', getcwd()).substr($fileName, 1);
 
         $wrapperContents = "";
         $wrapperContents .= "@import \"config/global-settings\";\n";
         $wrapperContents .= "@import \"$fileName\";\n";
-        $wrapperFile = tempnam('temp', 'scsswrapper');
+        $wrapperFile = tempnam('temp', 'scw');
         file_put_contents($wrapperFile, $wrapperContents);
 
         $bin = Kwf_Config::getValue('server.nodeSassBinary');
@@ -101,7 +101,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         $masterFiles = $this->_configMasterFiles;
         foreach ($map->sources as $k=>$i) {
             //sources are relative to cache/sass, strip that
-            if (substr($i, 0, 15) == 'scss-generated/' || substr($i, 0, 11) == 'scsswrapper') {
+            if (substr($i, 0, 15) == 'scss-generated/' || substr($i, 0, 3) == 'scw') {
                 $f = substr($this->getFileNameWithType(), 0, -5).'/temp/'.$i;
                 $map->{'_x_org_koala-framework_sourcesContent'}[$k] = file_get_contents('temp/'.$i);
             } else  {
