@@ -944,6 +944,18 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         } else if ($expr instanceof Kwf_Model_Select_Expr_GroupConcat) {
             $f = $expr->getField();
             $ret = array();
+
+            $orderField = $expr->getOrderField();
+            if ($orderField) {
+                $orderFieldValues = array();
+                foreach ($rowset as $key => $r)
+                {
+                    $orderFieldValues[$key] = $r->$orderField;
+                }
+                array_multisort($orderFieldValues, SORT_ASC, $rowset);
+
+            }
+
             foreach ($rowset as $r) {
                 $ret[] = $r->$f;
             }
