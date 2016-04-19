@@ -55,4 +55,19 @@ class Kwf_Model_DbWithConnection_ExprGroupConcat_Test extends Kwf_Test_TestCase
         $this->assertEquals($row->foo1, '');
         $this->assertEquals($row->foo2, '');
     }
+
+    public function testSortExpr()
+    {
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Model_DbWithConnection_ExprGroupConcat_Model');
+        $s = $m->select();
+        $s->expr('foo3');
+
+        $s->whereId(1);
+        $row = $m->getRow($s);
+        $this->assertEquals($row->foo3, '1,3');
+
+        $s->whereId(2);
+        $row = $m->getRow($s);
+        $this->assertEquals($row->foo3, '2');
+    }
 }

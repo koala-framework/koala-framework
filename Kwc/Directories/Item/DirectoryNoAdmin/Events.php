@@ -3,7 +3,7 @@ class Kwc_Directories_Item_DirectoryNoAdmin_Events extends Kwc_Abstract_Events
 {
     public function getListeners()
     {
-        $ret = array();
+        $ret = parent::getListeners();
         $generator = Kwf_Component_Generator_Abstract::getInstance($this->_class, 'detail');
         $ret[] = array(
             'class' => get_class($generator->getModel()),

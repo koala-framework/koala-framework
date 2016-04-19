@@ -10,9 +10,11 @@ class Kwf_Model_DbWithConnection_ExprGroupConcat_Model extends Kwf_Model_Db
         $this->_tableName = uniqid('dbtest');
         $config['table'] = $this->_tableName;
 
+        $s = Kwf_Model_Select();
         $config['exprs'] = array(
             'foo1' => new Kwf_Model_Select_Expr_Child_GroupConcat('Children', 'id'),
             'foo2' => new Kwf_Model_Select_Expr_Child_GroupConcat('Children', 'id', ', '),
+            'foo3' => new Kwf_Model_Select_Expr_Child_GroupConcat('Children', 'id', ', ', $s, 'id'),
         );
 
         parent::__construct($config);

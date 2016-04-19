@@ -16,15 +16,16 @@ class Kwf_Model_DbWithConnection_ExprGroupConcat_ChildModel extends Kwf_Model_Db
     {
         Kwf_Registry::get('db')->query("CREATE TABLE IF NOT EXISTS {$this->_tableName} (
             `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-            parent_id INT NOT NULL
+            parent_id INT NOT NULL,
+            sort_field INT NULL
         ) ENGINE = INNODB");
         Kwf_Registry::get('db')->query("TRUNCATE TABLE {$this->_tableName}");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, parent_id) VALUES (1, 1)");
+                        (id, parent_id, sort_field) VALUES (1, 1, 3)");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, parent_id) VALUES (2, 1)");
+                        (id, parent_id, sort_field) VALUES (2, 1, 1)");
         Kwf_Registry::get('db')->query("INSERT INTO {$this->_tableName}
-                        (id, parent_id) VALUES (3, 2)");
+                        (id, parent_id, sort_field) VALUES (3, 2, 2)");
     }
 
     public function dropTable()

@@ -223,42 +223,7 @@ class Kwf_Util_ClearCache
                 }
             }
         }
-/*
-        TODO re-enable this somehow
-          * required at all?
-          * own type? or should the different types each also clear the other servers (apc does that already)
 
-        $skipOtherServers = isset($options['skipOtherServers']) ? $options['skipOtherServers'] : false;
-        if (Kwf_Config::getValue('server.aws') && !$skipOtherServers) {
-            $otherHostsTypes = $this->_getCacheDirs();
-            //add other types
-            $otherHostsTypes[] = 'config';
-            $otherHostsTypes[] = 'setup';
-            $otherHostsTypes[] = 'component';
-            $otherHostsTypes[] = 'events';
-            $otherHostsTypes[] = 'trl';
-            $otherHostsTypes = array_unique($otherHostsTypes);
-            if (in_array('all', $types)) {
-                //use all of $otherHostsTypes
-            } else {
-                $otherHostsTypes = array_intersect($otherHostsTypes, $types);
-            }
-            if ($otherHostsTypes) {
-                $domains = Kwf_Util_Aws_Ec2_InstanceDnsNames::getOther();
-                foreach ($domains as $domain) {
-                    if ($output) {
-                        echo "executing clear-cache on $domain:\n";
-                    }
-                    $cmd = Kwf_Config::getValue('server.phpCli')." bootstrap.php clear-cache --type=".implode(',', $otherHostsTypes).' --skip-other-servers';
-                    $cmd = "ssh -o 'StrictHostKeyChecking no' $domain ".escapeshellarg('cd '.Kwf_Config::getValue('server.dir').'; '.$cmd);
-                    passthru($cmd);
-                    if ($output) {
-                        echo "\n";
-                    }
-                }
-            }
-        }
-*/
         if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
             Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
         }

@@ -27,10 +27,17 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             if (!isset($file['tmp_name']) || !is_file($file['tmp_name'])) {
                 throw new Kwf_Exception("No File found");
             }
+            $imageSize = getimagesize($file['tmp_name']);
+            if (isset($imageSize[0]) && $imageSize[0] > 10000) {
+                throw new Kwf_Exception_Client(trlKwf("The uploaded image has too large pixel dimensions. Please upload an image with less than 10 000 pixels width."));
+            }
+            if (isset($imageSize[1]) && $imageSize[1] > 10000) {
+                throw new Kwf_Exception_Client(trlKwf("The uploaded image has too large pixel dimensions. Please upload an image with less than 10 000 pixels height. "));
+            }
+
             $maxResolution = (int)$this->_getParam('maxResolution');
             if ($this->_getParam('maxResolution')) {
-                $image = getimagesize($file['tmp_name']);
-                if (substr($image['mime'], 0, 6) != 'image/') $maxResolution = 0;
+                if (substr($imageSize['mime'], 0, 6) != 'image/') $maxResolution = 0;
             }
             $filename = substr($file['name'], 0, strrpos($file['name'], '.'));
             $extension = substr(strrchr($file['name'], '.'), 1);
@@ -65,16 +72,25 @@ class Kwf_Controller_Action_Media_UploadController extends Kwf_Controller_Action
             if (isset($_SERVER['HTTP_X_UPLOAD_TYPE'])) {
                 $mimeType = $_SERVER['HTTP_X_UPLOAD_TYPE'];
             }
+
+            $tempFile = tempnam('temp', 'upload');
+            file_put_contents($tempFile, $fileData);
+            $imageSize = getimagesize($tempFile);
+            if (isset($imageSize[0]) && $imageSize[0] > 10000) {
+                throw new Kwf_Exception_Client(trlKwf("The uploaded image has too large pixel dimensions. Please upload an image with less than 10 000 pixels width."));
+            }
+            if (isset($imageSize[1]) && $imageSize[1] > 10000) {
+                throw new Kwf_Exception_Client(trlKwf("The uploaded image has too large pixel dimensions. Please upload an image with less than 10 000 pixels height. "));
+            }
+
             if (isset($_SERVER['HTTP_X_UPLOAD_MAXRESOLUTION']) && $_SERVER['HTTP_X_UPLOAD_MAXRESOLUTION'] > 0) {
                 $maxResolution = $_SERVER['HTTP_X_UPLOAD_MAXRESOLUTION'];
-                $tempFile = tempnam('temp', 'upload');
-                file_put_contents($tempFile, $fileData);
                 $fileData = Kwf_Media_Image::scale($tempFile, array('width' => $maxResolution, 'height' => $maxResolution, 'cover' => false));
-                unlink($tempFile);
                 $fileRow = $uploadModel->writeFile($fileData, $filename, $extension, $mimeType);
             } else {
                 $fileRow = $uploadModel->writeFile($fileData, $filename, $extension, $mimeType);
             }
+            unlink($tempFile);
         } else {
             throw new Kwf_Exception_Client(trlKwf("No Filedata received."));
         }

@@ -49,11 +49,8 @@ class Kwc_Root_Category_GeneratorRow extends Kwf_Model_Tree_Row
     {
         parent::_beforeDelete();
         // Dranhängende Komponente löschen
-        $generators = Kwf_Component_Data_Root::getInstance()->getPageGenerators();
-        foreach ($generators as $generator) {
-            $class = Kwc_Abstract::getChildComponentClass($generator->getClass(), null, $this->component);
-            Kwc_Admin::getInstance($class)->delete($this->id);
-        }
+        $data = Kwf_Component_Data_Root::getInstance()->getComponentById($this->id, array('ignoreVisible'=>true));
+        Kwc_Admin::getInstance($data->componentClass)->delete($this->id);
     }
 
     public function getComponentsDependingOnRow()
