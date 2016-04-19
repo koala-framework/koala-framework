@@ -943,10 +943,36 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             return $ret;
         } else if ($expr instanceof Kwf_Model_Select_Expr_GroupConcat) {
             $f = $expr->getField();
+            $orderField = $expr->getOrderField();
             $ret = array();
-            foreach ($rowset as $r) {
-                $ret[] = $r->$f;
+
+            if ($orderField) {
+                $orderFieldValue = $orderField['field'];
+                $orderFieldDirection = ($orderField['direction'] == 'DESC') ? SORT_DESC : SORT_ASC;
+
+                $rowData = array();
+                foreach ($rowset as $r) {
+                    $rowData[] = array(
+                        $f => $r->$f,
+                        $orderFieldValue => $r->$orderFieldValue
+                    );
+                }
+
+                $orderFieldValues = array();
+
+                foreach ($rowData as $key => $data) {
+                    $orderFieldValues[$key] = $data[$orderFieldValue];
+                }
+                array_multisort($orderFieldValues, $orderFieldDirection, $rowData);
+                foreach ($rowData as $r) {
+                    $ret[] = $r[$f];
+                }
+            } else {
+                foreach ($rowset as $r) {
+                    $ret[] = $r->$f;
+                }
             }
+
             return implode($expr->getSeparator(), $ret);
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
             if (!count($rowset)) {
