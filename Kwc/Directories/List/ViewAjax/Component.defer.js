@@ -7,7 +7,7 @@ onReady.onRender('.kwcClass', function initViewAjax(el, config) {
     config.el = el.find('.kwcBem__viewContainer')[0];
     el[0].kwcViewAjax = new ViewAjax(config);
 
-    var linkToTop = $('<div class="kwcBem__linkToTop"></div>');
+    var linkToTop = $('<div class="kwfUp-linkToTop"></div>');
     el.append(linkToTop);
     linkToTop.click(function() {
         window.scrollTo(0, 0);
@@ -16,9 +16,9 @@ onReady.onRender('.kwcClass', function initViewAjax(el, config) {
     $(window).on('scroll', function() {
         var scrollHeight = $(window).scrollTop();
         if (scrollHeight >= 1700) {
-            el.addClass('kwcBem--scrolledDown'); //will display linkToTop
+            el.addClass('kwfUp-scrolledDown'); //will display linkToTop
         } else {
-            el.removeClass('kwcBem--scrolledDown');
+            el.removeClass('kwfUp-scrolledDown');
         }
     });
 
