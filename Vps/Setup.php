@@ -124,7 +124,6 @@ class Vps_Setup
         error_reporting(E_ALL & ~E_STRICT);
         date_default_timezone_set('Europe/Berlin');
         mb_internal_encoding('UTF-8');
-        iconv_set_encoding('internal_encoding', 'utf-8');
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL & ~E_STRICT);
         set_exception_handler(array('Vps_Debug', 'handleException'));
         umask(000); //nicht 002 weil wwwrun und vpcms in unterschiedlichen gruppen
