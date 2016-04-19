@@ -377,6 +377,10 @@ class Kwf_Assets_Package
                     //include dependency only once
                     continue;
                 }
+                if ($i->getMimeType() != $mimeType) {
+                    //happens for 'text/css; ie8'
+                    continue;
+                }
                 $includesDependencies[] = $i;
                 if ($i instanceof Kwf_Assets_Dependency_HttpUrl) {
                     $ret[] = $i->getUrl();
