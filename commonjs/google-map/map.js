@@ -179,10 +179,10 @@ Map.prototype = {
                  * 2. Then load all markers.
                  * */
                 google.maps.event.addListenerOnce(this.gmap, "idle",
-                    $.proxy(this._loadAllMarkers, this));
+                    $.proxy(this._loadAllMarkers, this, []));
             } else {
                 google.maps.event.addListener(this.gmap, "idle",
-                    $.proxy(this._reloadMarkersOnMapChange, this));
+                    $.proxy(this._reloadMarkersOnMapChange, this, []));
             }
         } else {
             for (var i = 0; i < this.config.markers.length; i++) {
@@ -241,7 +241,7 @@ Map.prototype = {
             this.gmap.fitBounds(latlngbounds);
 
             google.maps.event.addListener(this.gmap, "idle",
-                $.proxy(this._reloadMarkersOnMapChange, this));
+                $.proxy(this._reloadMarkersOnMapChange, this, []));
         }, this, { single: true });
 
         this._reloadMarkers($.extend({}, this._baseParams));

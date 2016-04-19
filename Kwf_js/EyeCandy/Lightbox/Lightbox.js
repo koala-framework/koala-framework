@@ -116,7 +116,6 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
                 url: getKwcRenderUrl(),
                 data: { componentId: mainContent.data('kwc-component-id') },
                 dataType: 'html',
-                cache: false,
                 context: this
             }).done(function(responseText) {
                 mainContent.html(responseText);
@@ -286,7 +285,6 @@ Lightbox.prototype = {
             url: getKwcRenderUrl(),
             data: { url: 'http://'+location.host+this.href },
             dataType: 'html',
-            cache: false,
             context: this
         }).done(function(responseText) {
             this.contentEl = $(
