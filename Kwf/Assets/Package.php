@@ -488,6 +488,7 @@ class Kwf_Assets_Package
         else if ($mimeType == 'text/javascript; defer') $ext = 'defer.js';
         else if ($mimeType == 'text/css') $ext = 'css';
         else if ($mimeType == 'text/css; ie8') $ext = 'ie8.css';
+        else if ($mimeType == 'text/javascript; ie8') $ext = 'ie8.js';
         else throw new Kwf_Exception_NotYetImplemented();
 
         $ret = array();

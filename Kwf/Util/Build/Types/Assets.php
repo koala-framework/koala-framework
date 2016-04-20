@@ -6,6 +6,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         'defer.js' => 'text/javascript; defer',
         'css' => 'text/css',
         'ie8.css' => 'text/css; ie8',
+        'ie8.js' => 'text/javascript; ie8',
     );
 
     public function getAllPackages()
@@ -82,7 +83,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
         $langs = $this->getAllLanguages();
         $packages = $this->getAllPackages();
-        $exts = array('js', 'defer.js', 'css', 'ie8.css');
+        $exts = array('js', 'defer.js', 'css', 'ie8.css', 'ie8.js');
 
         $providers = array();
         foreach ($packages as $p) {
