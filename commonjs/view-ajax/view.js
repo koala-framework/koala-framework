@@ -371,12 +371,13 @@ ViewAjax.prototype = {
 
         $.ajax({
             url: getKwcRenderUrl(),
-            data: { url: 'http://'+location.host+href },
-            dataType: 'html'
-        }).done((function(data) {
+            data: { url: 'http://'+location.host+href, type: 'json' },
+            dataType: 'json'
+        }).done((function(response) {
             if (!this.detailEl) return;
+            injectAssets(response.assets);
             this.detailEl.removeClass('kwfUp-loadingContent '+classNames);
-            this.detailEl.html(data);
+            this.detailEl.html(response.content);
             statistics.count(href);
 
             var directoryUrl = href.match(/(.*)\/[^/]+/)[1];

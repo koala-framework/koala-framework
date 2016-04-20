@@ -5,6 +5,7 @@ var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var kwfExtend = require('kwf/extend');
 var t = require('kwf/trl');
+var injectAssets = require('kwf/inject-assets');
 
 var statistics = require('kwf/statistics');
 var currentOpen = null;
@@ -114,11 +115,12 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
         setTimeout(function() {
             $.ajax({
                 url: getKwcRenderUrl(),
-                data: { componentId: mainContent.data('kwc-component-id') },
-                dataType: 'html',
+                data: { componentId: mainContent.data('kwc-component-id'), type: 'json' },
+                dataType: 'json',
                 context: this
-            }).done(function(responseText) {
-                mainContent.html(responseText);
+            }).done(function(response) {
+                injectAssets(response.assets);
+                mainContent.html(response.content);
                 onReady.callOnContentReady(mainContent, {action: 'render'});
             });
         }, 100);
@@ -283,10 +285,13 @@ Lightbox.prototype = {
 
         $.ajax({
             url: getKwcRenderUrl(),
-            data: { url: 'http://'+location.host+this.href },
-            dataType: 'html',
+            data: { url: 'http://'+location.host+this.href, type: 'json' },
+            dataType: 'json',
             context: this
-        }).done(function(responseText) {
+        }).done(function(response) {
+
+            injectAssets(response.assets);
+
             this.contentEl = $(
                 '<div class="kwfUp-kwfLightboxContent"></div>'
             );
@@ -298,7 +303,7 @@ Lightbox.prototype = {
                 self.innerLightboxEl.append(self.contentEl);
                 self.innerLightboxEl.append(self.closeButtonEl);
 
-                self.style.updateContent(responseText);
+                self.style.updateContent(response.content);
 
                 if (self.lightboxEl.is(':visible')) {
                     self.contentEl.hide();
