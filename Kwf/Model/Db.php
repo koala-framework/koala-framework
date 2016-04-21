@@ -607,7 +607,10 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             ";
         } else if ($expr instanceof Kwf_Model_Select_Expr_GroupConcat) {
             $field = $this->_formatField($expr->getField(), $dbSelect, $tableNameAlias);
-            return "GROUP_CONCAT($field SEPARATOR ".$this->getAdapter()->quote($expr->getSeparator()).")";
+            $orderField = $expr->getOrderField();
+            $orderFieldValue = $orderField ? $this->_formatField($orderField['field'], $dbSelect, $tableNameAlias) : null;
+            $orderBy = $orderField ? 'ORDER BY '.$orderFieldValue.' '.$orderField['direction'] : '';
+            return "GROUP_CONCAT($field $orderBy SEPARATOR ".$this->getAdapter()->quote($expr->getSeparator()).")";
         } else if ($expr instanceof Kwf_Model_Select_Expr_Child) {
             $d = $depOf->getDependentModelWithDependentOf($expr->getChild());
             $depM = $d['model'];
