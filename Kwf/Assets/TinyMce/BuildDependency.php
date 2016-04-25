@@ -31,7 +31,7 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
 
 
 
-        $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/tinymce/'.md5(file_get_contents('temp/tinymce-build-out.js'));
+        $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/tinymce/v2-'.md5(file_get_contents('temp/tinymce-build-out.js'));
 
         if (!file_exists("$buildFile.min.js")) {
             $dir = dirname($buildFile);
