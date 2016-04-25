@@ -713,6 +713,7 @@ class Kwf_Model_Db extends Kwf_Model_Abstract
             $col2 = $dbRefM->_formatField($dbRefM->getPrimaryKey(), $dbSelect, $refTableNameAlias);
 
             $refSelect->where("$col2=$col1");
+            $refSelect->ignoreDeleted(true);
             $refDbSelect = $dbRefM->createDbSelect($refSelect, $refTableNameAlias);
             $f = $expr->getField();
             if (is_string($f)) {
