@@ -16,7 +16,7 @@ class Kwc_Columns_Abstract_Row extends Kwc_Abstract_List_Row
             $typeName = array_shift(array_keys($columnTypes));
             if ($parentRow = $this->getParentRow('Component')) $typeName = $parentRow->type;
             $type = $columnTypes[$typeName];
-            if ($name == 'columns') return $type['columns'];
+            if ($name == 'columns') return array_sum($type['colSpans']);
             if ($name == 'total_columns') return count($type['colSpans']);
             unset($columnTypes);
 
@@ -40,7 +40,7 @@ class Kwc_Columns_Abstract_Row extends Kwc_Abstract_List_Row
                 while ($number >= count($type['colSpans'])) $number -= count($type['colSpans']);
                 if ($this == $row) {
                     if ($name == 'name') {
-                        return trlKwf('Column {0}, width {1}%', array($number+1, floor(($type['colSpans'][$number] / $type['columns']) * 100)));
+                        return trlKwf('Column {0}, width {1}%', array($number+1, floor(($type['colSpans'][$number] / array_sum($type['colSpans'])) * 100)));
                     } else if ($name == 'col_span') {
                         return $type['colSpans'][$number];
                     }

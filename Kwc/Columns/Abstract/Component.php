@@ -21,57 +21,46 @@ class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
         $columnsTrl = trlKwfStatic('Columns');
         $ret['columns'] = array(
             '2col-50_50' => array(
-                'columns' => 2,
                 'colSpans' => array(1,1),
                 'name' => "2 $columnsTrl (50% - 50%)"
             ),
             '2col-33_66' => array(
-                'columns' => 3,
                 'colSpans' => array(1,2),
                 'name' => "2 $columnsTrl (33% - 66%)"
             ),
             '2col-66_33' => array(
-                'columns' => 3,
                 'colSpans' => array(2,1),
                 'name' => "2 $columnsTrl (66% - 33%)"
             ),
             '2col-25_75' => array(
-                'columns' => 4,
                 'colSpans' => array(1,3),
                 'name' => "2 $columnsTrl (25% - 75%)"
             ),
             '2col-75_25' => array(
-                'columns' => 4,
                 'colSpans' => array(3,1),
                 'name' => "2 $columnsTrl (75% - 25%)"
             ),
             '3col-33_33_33' => array(
-                'columns' => 3,
                 'colSpans' => array(1,1,1),
                 'name' => "3 $columnsTrl (33% - 33% - 33%)"
             ),
             '3col-50_25_25' => array(
-                'columns' => 4,
                 'colSpans' => array(2,1,1),
                 'name' => "3 $columnsTrl (50% - 25% - 25%)"
             ),
             '3col-25_50_25' => array(
-                'columns' => 4,
                 'colSpans' => array(1,2,1),
                 'name' => "3 $columnsTrl (25% - 50% - 25%)"
             ),
             '3col-25_25_50' => array(
-                'columns' => 4,
                 'colSpans' => array(1,1,2),
                 'name' => "3 $columnsTrl (25% - 25% - 50%)"
             ),
             '4col-25_25_25_25' => array(
-                'columns' => 4,
                 'colSpans' => array(1,1,1,1),
                 'name' => "4 $columnsTrl (25% - 25% - 25% - 25%)"
             ),
             '5col-20_20_20_20_20' => array(
-                'columns' => 5,
                 'colSpans' => array(1,1,1,1,1),
                 'name' => "5 $columnsTrl (20% - 20% - 20% - 20% - 20%)"
             )
