@@ -80,6 +80,9 @@ class Kwf_Assets_Modernizr_Dependency extends Kwf_Assets_Dependency_Abstract
         $ret = file_get_contents($outputFile);
         unlink($outputFile);
 
+        //remove comments containing selected tests
+        $ret = preg_replace("#\n/\*!\n\{.*?\}\n!\*/\n#s", '', $ret);
+
         $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($ret);
 
         $map = $ret->getMapContentsData(false);
