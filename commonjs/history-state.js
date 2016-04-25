@@ -41,6 +41,10 @@ var HistoryStateHtml5 = function() {
             $(window).trigger('kwf-history-state-popstate');
         }
     }).bind(this));
+
+    if (!window.history.state) {
+        this.updateState();
+    }
 };
 kwfExtend(HistoryStateHtml5, HistoryStateAbstract, {
     pushState: function(title, href) {
@@ -51,12 +55,12 @@ kwfExtend(HistoryStateHtml5, HistoryStateAbstract, {
     },
     updateState: function() {
         if (this.disabled) return;
-          this.currentState['kwfUp-kwfHistoryState'] = true;
+        this.currentState['kwfUp-kwfHistoryState'] = true;
         window.history.replaceState(this.currentState, document.title, window.location.href);
     },
     replaceState: function(title, href) {
         if (this.disabled) return;
-          this.currentState['kwfUp-kwfHistoryState'] = true;
+        this.currentState['kwfUp-kwfHistoryState'] = true;
         window.history.replaceState(this.currentState, title, href);
     }
 });
