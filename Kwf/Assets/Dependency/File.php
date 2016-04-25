@@ -28,7 +28,8 @@ class Kwf_Assets_Dependency_File extends Kwf_Assets_Dependency_Abstract
     public function getContentsPacked()
     {
         $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($this->getContentsSourceString());
-        $ret->addSource($this->_fileName);
+        $map = $ret->getMapContentsData(false);
+        $map->{'_x_org_koala-framework_masterFiles'} = array($this->getAbsoluteFileName());
         return $ret;
     }
 
