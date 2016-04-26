@@ -401,7 +401,7 @@ Lightbox.prototype = {
         this.lightboxEl.addClass('kwfUp-kwfLightboxOpen');
         this.style.afterShow(options);
 
-        statistics.count(this.href);
+        statistics.trackView(this.href);
     },
     close: function(options) {
         $('html').removeClass('kwfUp-kwfLightboxActive');

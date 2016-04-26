@@ -1,15 +1,13 @@
 var statistics = require('kwf/statistics');
-statistics.onCount(function(url, config) {
 
+statistics.onView(function(url) {
     if (typeof(_paq) == 'undefined') return;
-
-    if (config.customVariables) {
-        for (var x = 0; x < config.customVariables.length; x++) {
-            var cv = config.customVariables[x];
-            _paq.push(["setCustomVariable", cv.index, cv.name, cv.value, cv.scope]);
-        }
-    }
     _paq.push(["setCustomUrl", url]);
     _paq.push(["setReferrerUrl", location.href]);
     _paq.push(["trackPageView"]);
+});
+
+statistics.onEvent(function(category, action, name, value) {
+    if (typeof(_paq) == 'undefined') return;
+    _paq.push(["trackEvent", category, action, name, value]);
 });

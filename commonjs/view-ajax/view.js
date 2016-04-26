@@ -378,7 +378,7 @@ ViewAjax.prototype = {
             injectAssets(response.assets);
             this.detailEl.removeClass('kwfUp-loadingContent '+classNames);
             this.detailEl.html(response.content);
-            statistics.count(href);
+            statistics.trackView(href);
 
             var directoryUrl = href.match(/(.*)\/[^/]+/)[1];
             this.detailEl.find('a').each((function(index, el) {
