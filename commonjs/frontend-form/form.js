@@ -6,6 +6,8 @@ var onReady = require('kwf/on-ready');
 var fieldRegistry = require('kwf/frontend-form/field-registry');
 var errorStyleRegistry = require('kwf/frontend-form/error-style-registry');
 var formRegistry = require('kwf/frontend-form/form-registry');
+var statistics = require('kwf/statistics');
+var t = require('kwf/trl');
 
 require('kwf/frontend-form/error-style/above');
 require('kwf/frontend-form/error-style/below-field');
@@ -236,6 +238,7 @@ FormComponent.prototype = {
 
                 // show success content
                 if (r.successContent) {
+                    statistics.trackEvent(t.trl('Form Submission'), location.pathname, button.find('span').text());
                     var el = this.el.parent().append(r.successContent);
                     if (this.config.hideFormOnSuccess) {
                         this.el.hide();
@@ -247,6 +250,7 @@ FormComponent.prototype = {
                     }
                     onReady.callOnContentReady(el, {newRender: true});
                 } else if (r.successUrl) {
+                    statistics.trackEvent(t.trl('Form Submission'), location.pathname, button.find('span').text());
                     document.location.href = r.successUrl;
                 } else {
                     //errors are shown, lightbox etc needs to resize
