@@ -44,10 +44,8 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
 
     public function onRecursiveUrlChanged(Kwf_Component_Event_Page_RecursiveUrlChanged $event)
     {
-        if ($event->class != $this->_class) {
-            $pageIds = $this->_getPageIdsFromRecursiveEvent($event);
-            $this->_deleteCacheForTarget($pageIds, true, $event->component->getSubroot());
-        }
+        $pageIds = $this->_getPageIdsFromRecursiveEvent($event);
+        $this->_deleteCacheForTarget($pageIds, true, $event->component->getSubroot());
     }
 
     public function onRecursiveRemovedAdded(Kwf_Component_Event_Component_RecursiveAbstract $event)
