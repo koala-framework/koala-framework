@@ -202,6 +202,7 @@ var Lightbox = function(href, options) {
 Lightbox.prototype = {
     fetched: false,
     _blockOnContentReady: false,
+    _isClosing: false,
     createLightboxEl: function()
     {
         if (this.lightboxEl) return;
@@ -349,6 +350,8 @@ Lightbox.prototype = {
     },
     show: function(options)
     {
+        this._isClosing = false;
+
         $('html').addClass('kwfUp-kwfLightboxActive');
         this.createLightboxEl();
         this.style.onShow(options);
@@ -433,6 +436,8 @@ Lightbox.prototype = {
         currentOpen = null;
     },
     closeAndPushState: function() {
+        if (this._isClosing) return; //prevent double-click on close button
+        this._isClosing = true;
         if (historyState.entries > 0) {
             onlyCloseOnPopstate = true; //required to avoid flicker on closing, see popstate handler
             var previousEntries = historyState.entries;
