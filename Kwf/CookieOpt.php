@@ -8,13 +8,13 @@
  *
  * @see Kwc_Statistics_CookieBeforePlugin, Kwc_Statistics_CookieAfterPlugin
  */
-class Kwf_Statistics
+class Kwf_CookieOpt
 {
     const OPT_IN = 'in';
     const OPT_OUT = 'out';
     private static $_cookieName = 'cookieOpt';
 
-    public static function getDefaultOptValue(Kwf_Component_Data $data)
+    public static function getDefaultOpt(Kwf_Component_Data $data)
     {
         $ret = $data->getBaseProperty('statistics.defaultOptValue');
         if ($ret != self::OPT_IN && $ret != self::OPT_OUT) {
@@ -23,36 +23,25 @@ class Kwf_Statistics
         return $ret;
     }
 
-    public static function isUserOptIn(Kwf_Component_Data $data)
-    {
-        if (!self::issetUserOptValue()) {
-            return self::getDefaultOptValue($data) == self::OPT_IN;
-        } else {
-            return self::getUserOptValue() == self::OPT_IN;
-        }
-    }
-
-    public static function issetUserOptValue()
+    public static function isSetOpt()
     {
         return isset($_COOKIE[self::$_cookieName]);
     }
 
-    public static function getUserOptValue()
+    public static function getOpt()
     {
-        if (!isset($_COOKIE[self::$_cookieName])) {
-            return null;
-        } else {
+        $ret = null;
+        if (isset($_COOKIE[self::$_cookieName])) {
             $ret = $_COOKIE[self::$_cookieName];
             if ($ret != self::OPT_IN && $ret != self::OPT_OUT) {
                 $exception = new Kwf_Exception('stored Cookie must be ' . self::OPT_IN . ' or ' . self::OPT_OUT);
                 $exception->logOrThrow();
-                return null;
             }
-            return $ret;
         }
+        return $ret;
     }
 
-    public static function setUserOptValue($value)
+    public static function setOpt($value)
     {
         if ($value != self::OPT_IN && $value != self::OPT_OUT) {
             throw new Kwf_Exception('$value must be ' . self::OPT_IN . ' or ' . self::OPT_OUT);

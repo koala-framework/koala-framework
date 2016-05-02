@@ -12,7 +12,7 @@ class Kwc_Statistics_CookieBeforePlugin extends Kwf_Component_Plugin_Abstract
     public function processOutput($output, $renderer)
     {
         $component = Kwf_Component_Data_Root::getInstance()->getComponentById($this->_componentId);
-        $output = '{kwcDefaultOptValue}' . Kwf_Statistics::getDefaultOptValue($component) . '{/kwcDefaultOptValue}' . $output;
+        $output = '{kwcDefaultOptValue}' . Kwf_CookieOpt::getDefaultOpt($component) . '{/kwcDefaultOptValue}' . $output;
         return $output;
     }
 }
