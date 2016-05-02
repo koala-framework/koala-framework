@@ -596,26 +596,31 @@ LightboxStyles.CenterBox = kwfExtend(LightboxStyles.Abstract, {
         //if content is larger than window, resize accordingly
         var originalWidth = this.lightbox.innerLightboxEl.width();
         var originalHeight = this.lightbox.innerLightboxEl.height();
+        var newWidth = originalWidth;
+        var newHeight = originalHeight;
 
         var maxSize = this._getMaxContentSize();
 
-        if (originalWidth > maxSize.width) {
-            var ratio = originalHeight / originalWidth;
-            var offs = originalWidth-maxSize.width;
-            originalWidth -= offs;
-            if (this.lightbox.options.adaptHeight) originalHeight -= offs*ratio;
+        if (newWidth > maxSize.width) {
+            var ratio = newHeight / newWidth;
+            var offs = newWidth-maxSize.width;
+            newWidth -= offs;
+            if (this.lightbox.options.adaptHeight) newHeight -= offs*ratio;
         }
-        if (this.lightbox.options.adaptHeight && originalHeight > maxSize.height) {
-            var ratio = originalWidth / originalHeight;
-            var offs = originalHeight-maxSize.height;
-            originalHeight -= offs;
-            originalWidth -= offs*ratio;
+        if (this.lightbox.options.adaptHeight && newHeight > maxSize.height) {
+            var ratio = newWidth / newHeight;
+            var offs = newHeight-maxSize.height;
+            newHeight -= offs;
+            newWidth -= offs*ratio;
         }
-        if (!this.lightbox.options.adaptHeight && originalHeight > maxSize.height) {
+        if (!this.lightbox.options.adaptHeight && newHeight > maxSize.height) {
             //delete originalHeight;
         }
-        this.lightbox.innerLightboxEl.width(originalWidth);
-        this.lightbox.innerLightboxEl.height(originalHeight);
+        this.lightbox.innerLightboxEl.width(newWidth);
+        this.lightbox.innerLightboxEl.height(newHeight);
+        if (newWidth != originalWidth) {
+            onReady.callOnContentReady(this.lightbox.innerLightboxEl, { action: 'widthChange' });
+        }
     },
     afterContentShown: function() {
 
