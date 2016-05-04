@@ -12,9 +12,6 @@ onReady.onRender('.kwcClass', function (el, config) {
             cookieOpt.setOpt('in');
             el.hide();
         });
-        if (config.silentApprove) {
-            cookieOpt.setOpt('in');
-        }
     }
 });
 
