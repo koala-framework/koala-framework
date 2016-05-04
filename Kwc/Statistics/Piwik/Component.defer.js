@@ -27,7 +27,6 @@ onReady.onRender('.kwcClass', function(el, config) {
 
     var u=(("https:" == document.location.protocol) ? "https" : "http") + "://" + config.domain + '/';
     _paq.push(['setTrackerUrl', u+'piwik.php']);
-    console.log(_paq);
 
     if (!config.ignore && !location.search.match(/[\?&]kwcPreview/)) {
         (function() {
