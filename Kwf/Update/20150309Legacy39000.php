@@ -51,6 +51,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
             }
             $db->query("ALTER TABLE `kwf_uploads` CHANGE  `id`  `id_old` INT( 11 )");
             $db->query("ALTER TABLE `kwf_uploads` DROP PRIMARY KEY");
+            $db->query("ALTER TABLE `kwf_uploads` MODIFY `id_old` INT( 11 ) NULL");
             $db->query("ALTER TABLE `kwf_uploads` ADD  `id` VARBINARY( 36 ) NOT NULL FIRST");
             $db->query("UPDATE `kwf_uploads` SET `id` = UUID()");
             $db->query("ALTER TABLE `kwf_uploads` ADD PRIMARY KEY(`id`)");
