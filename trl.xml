@@ -133,7 +133,6 @@
 <bg>Вашият акаунт в {0} беше създаден.</bg>
 <ua>Ваш аккаунт на сайті {0} щойно створено.</ua>
 <rs>Vaš nalog na {0} je upravo kreiran.</rs>
-<hr>Tvoj račun kod {0} je upravo izrađen.</hr>
 <ba>Vaš korisnički račun kod {0} je upravo kreiran.</ba>
 </text>
 <text>
@@ -149,7 +148,6 @@
 <si>Prosimo uporabite ta link za novo geslo in registracijo.</si>
 <bg>Моля, използвайте този линк за създаване на парола и вход.</bg>
 <ua>Будь ласка, скористайтеся наступним лінком аби обрати пароль та увійти на сайт.</ua>
-<hr>Molimo koristite sljedeći link za izbor lozinke i prijavu.</hr>
 <ba>Molimo Vas koristite ovaj link, kako biste kreirali lozinku i prijavili se.</ba>
 </text>
 <text>
@@ -165,7 +163,6 @@
 <si>Sporočilo je avtomatsko in nima prejemnika.</si>
 <bg>Това е автоматично генериран мейл. Моля, не изпращайте отговор до него.</bg>
 <ua>Цей лист створено автоматично. Будь ласка, не відповідайте на нього.</ua>
-<hr>Ovaj Email je generiran automatski. Molimo nemojte odgovarati na isti.</hr>
 <ba>Ovaj mail je automatski generisan. Ne postoji primaoc kojem možete poslati odgovor.</ba>
 </text>
 <text>
@@ -196,7 +193,6 @@
 <si>Prosimo uporabite link, da si ustvarite novo geslo.</si>
 <bg>Моля, използвайте този линк за задаване на парола. </bg>
 <ua>Будь ласка, скористайтеся наступним лінком аби обрати новий пароль.</ua>
-<hr>Molimo koristite sljedeći link za izradu nove lozinke.</hr>
 <ba>Molimo Vas koristite sljedeći link, kako biste sami kreirali lozinku.</ba>
 </text>
 <text>
@@ -233,7 +229,6 @@
 <si>Vnešenega kraja ni možno najti. </si>
 <bg>Въведеното населено място не може да бъде намерено!</bg>
 <ua>Таке місто не знайдено!</ua>
-<hr>Upisano mjesto nije moguće pronaći</hr>
 <ba>Podaci o gradu nisu ispravno uneseni!</ba>
 </text>
 <text>
@@ -247,7 +242,6 @@
 <sl>Prikaz poti</sl>
 <ru>Показать маршрут</ru>
 <es_CL>Show Route</es_CL>
-<hr>Prikaz puta</hr>
 <si>pokaži pot</si>
 <bg>Покажи маршрут</bg>
 <ua>Показати маршрут</ua>
@@ -282,7 +276,6 @@
 <si>koordinate</si>
 <bg>Координати</bg>
 <ua>Координати</ua>
-<hr>Koordinate</hr>
 <ba>Koordinate</ba>
 </text>
 <text>
@@ -298,7 +291,6 @@
 <si>zoomnivo</si>
 <bg>степен на zoom</bg>
 <ua>Zoom</ua>
-<hr>Zoom level</hr>
 <ba>Zoom nivo</ba>
 </text>
 <text>
@@ -333,7 +325,6 @@
 <si>višina</si>
 <bg>височина</bg>
 <ua>Висота</ua>
-<hr>Visina</hr>
 <ba>Visina</ba>
 </text>
 <text>
@@ -349,7 +340,6 @@
 <si>premakniti + povečati</si>
 <bg>преместване + zoom</bg>
 <ua>Посунути + збільшити</ua>
-<hr>Pomakni + Povećaj</hr>
 <ba>Pokreni + povečaj</ba>
 </text>
 <text>
@@ -365,7 +355,6 @@
 <si>premakniti + povečati (brez zoom-a)</si>
 <bg>преместване + zoom (без лента за увеличаване)</bg>
 <ua>Посунути + збільшити (без масштабування)</ua>
-<hr>Pomakni + Povećaj (bez alatne trake)</hr>
 <ba>Pokreni + povečaj (bez menija za povečanje)</ba>
 </text>
 <text>
@@ -381,7 +370,6 @@
 <si>narediti  lestvico</si>
 <bg>скала</bg>
 <ua>масштабувати</ua>
-<hr>Skaliraj</hr>
 <ba>Skaliranje</ba>
 </text>
 <text>
@@ -411,7 +399,6 @@
 <si>karta pregleda</si>
 <bg>преглед на картата</bg>
 <ua>Оглядова мапа</ua>
-<hr>Pregled karte</hr>
 <ba>Mapa</ba>
 </text>
 <text>
@@ -426,7 +413,6 @@
 <si>svetovni pogled</si>
 <bg>преглед свят</bg>
 <ua>Збільшене зображення</ua>
-<hr>Prikaz svijeta</hr>
 <ba>Mapa Svijeta</ba>
 </text>
 <text>
@@ -441,7 +427,6 @@
 <si>podrobni pogled</si>
 <bg>детайлен преглед</bg>
 <ua>Деталі</ua>
-<hr>Detaljan pregled</hr>
 <ba>Detaljna mapa</ba>
 </text>
 <text>
@@ -658,7 +643,6 @@
 <uk>Значення за замовчуванням</uk>
 <si>standardna vrednost</si>
 <ua>Стандартні параметри</ua>
-<hr>Stndardna vrijednost</hr>
 <ba>Standardna vrijednost</ba>
 </text>
 <text>
@@ -674,7 +658,6 @@
 <si>Gesli se razlikujeta. Prosimo poskusite ponovno.</si>
 <ua>Ви ввели різні паролі. Будь ласка, спробуйте ще раз.</ua>
 <bg>Паролите не съвпадат, моля, опитайте отново. </bg>
-<hr>Lozinke su različite. Molimo pokušajte ponovo.</hr>
 <ba>Lozinke se razlikuju. Pokušajte ponovo.</ba>
 </text>
 <text>
@@ -746,7 +729,6 @@
 <si>e-mail</si>
 <ua>E-мail</ua>
 <bg>e-mail</bg>
-<hr>E-Mail</hr>
 <ba>E-Mail</ba>
 </text>
 <text>
@@ -798,7 +780,6 @@
 <hr>Naslov</hr>
 <si>naziv</si>
 <ua>Звертання</ua>
-<hr>Titula</hr>
 <ba>Naslov</ba>
 </text>
 <text>
@@ -854,7 +835,6 @@
 <ro>E-mail</ro>
 <sl>E-naslov</sl>
 <es_CL>E-Mail</es_CL>
-<hr>e-mail</hr>
 <uk>Email</uk>
 <si>e-mail</si>
 <ua>E-мail</ua>
@@ -933,7 +913,6 @@
 <ro>Ultima dată online</ro>
 <sl>Datum zadnje prijave</sl>
 <ru>Последний раз онлайн</ru>
-<hr>Zadnji put online</hr>
 <uk>Останні онлайн</uk>
 <si>zadnjič objavljeno</si>
 <ua>Останній вхід</ua>
@@ -953,7 +932,6 @@
 <si>kratek opis</si>
 <ua>Короткий опис</ua>
 <bg>кратко описание</bg>
-<hr>Kratki opis</hr>
 <ba>Kratki opis</ba>
 </text>
 <text>
@@ -1015,7 +993,6 @@
 <si>kratek tekst (teaser)</si>
 <ua>Тизер</ua>
 <bg>ткратък текст (тийзър)</bg>
-<hr>Teaser</hr>
 <ba>Kratki tekst (Teaser)</ba>
 </text>
 <text>
@@ -1030,7 +1007,6 @@
 <si>Komentar je bil uspešno shranjen.</si>
 <ua>Ваш коментар успішно збережено.</ua>
 <bg>Коментарът беше успешно записан. </bg>
-<hr>Komentar je uspješno spremljen.</hr>
 <ba>Komentar je uspješno pohranjen.</ba>
 </text>
 <text>
@@ -1047,7 +1023,6 @@
 <si>nadaljevati</si>
 <ua>продовжити</ua>
 <bg>за да продължите</bg>
-<hr>kako biste nastavili</hr>
 <ba>nastaviti</ba>
 </text>
 <text>
@@ -1079,7 +1054,6 @@
 <si>Uporabniški račun je aktiven.</si>
 <ua>Активувати аккаунт користувача</ua>
 <bg>активиране на потребителски акаунт</bg>
-<hr>Aktiviraj račun</hr>
 <ba>Aktiviranje korisničkog računa</ba>
 </text>
 <text>
@@ -1094,7 +1068,6 @@
 <si>Prosimo vnesite željeno geslo za vaš uporabniški račun v obe polji . </si>
 <ua>Будь ласка, введіть в обидва текстові поля пароль, який Ви будете використовувати для входу у Ваш аккаунт.</ua>
 <bg>Моля, задайте парола в двете полета.</bg>
-<hr>Molimo da u oba polja upišete željenu lozinku.</hr>
 <ba>Molimo Vas unesite željenu lozinku za Vaš korisnički račun u oba polja</ba>
 </text>
 <text>
@@ -1109,7 +1082,6 @@
 <si>Vaš uporabniški račun je bil uspešno aktiviran.</si>
 <ua>Ваш аккаунт користувача успішно активовано.</ua>
 <bg>Вашият потребителски акаунт беше активиран успешно.</bg>
-<hr>Vaš korisnički račun uspješno je aktiviran.</hr>
 <ba>Vaš korisničku račun je uspješno aktiviran.</ba>
 </text>
 <text>
@@ -1124,7 +1096,6 @@
 <si>nazaj na začetno stran</si>
 <ua>повернутися на першу сторінку</ua>
 <bg>за да се върнете към началната страница</bg>
-<hr>kako biste se vratili na početnu stranicu</hr>
 <ba>povratak na početnu stranu</ba>
 </text>
 <text>
@@ -1145,7 +1116,6 @@
 <sk>Žena</sk>
 <si>ženski</si>
 <ua>Жіноча</ua>
-<hr>Žensko</hr>
 <ba>Ženski spol</ba>
 </text>
 <text>
@@ -1166,7 +1136,6 @@
 <sk>Muž</sk>
 <si>moški</si>
 <ua>Чоловіча</ua>
-<hr>Muško</hr>
 <ba>Muški spol</ba>
 </text>
 <text>
@@ -1187,7 +1156,6 @@
 <sk>Pohlavie</sk>
 <si>spol</si>
 <ua>Стать</ua>
-<hr>Rod</hr>
 <ba>Spol</ba>
 </text>
 <text>
@@ -1202,7 +1170,6 @@
 <si>Račun - lastnosti</si>
 <ua>Властивості аккаунту</ua>
 <bg>акаунт - свойства</bg>
-<hr>Račun - postavke</hr>
 <ba>Specifikacije korisničkog računa</ba>
 </text>
 <text>
@@ -1218,7 +1185,6 @@
 <si>Spremenjeni podatki so bili uspešno shranjeni.</si>
 <ua>Внесені дані успішно збережені</ua>
 <bg>Променените данни бяха съхранени успешно</bg>
-<hr>Promijenjeni podaci uspješno su spremljeni.</hr>
 <ba>Izmjenjeni podaci su uspješno pohranjeni.</ba>
 </text>
 <text>
@@ -1234,7 +1200,6 @@
 <si>Za to niste pooblaščeni.</si>
 <ua>Недостатньо прав.</ua>
 <bg>Нямате необходимите права за това </bg>
-<hr>Za ovu akciju nemate potrebna prava</hr>
 <ba>Nemate potrebne ovlasti za ovu akciju.</ba>
 </text>
 <text>
@@ -1250,7 +1215,6 @@
 <si>Neuspešna prijava.</si>
 <ua>Невірний логін</ua>
 <bg>Неуспешно влизане</bg>
-<hr>Prijava nije uspjela.</hr>
 <ba>Prijava nije uspjela.</ba>
 </text>
 <text>
@@ -1265,7 +1229,6 @@
 <si>Vstopna koda je napačna. Ponovno preverite ustreznost kopije URL zapisa. </si>
 <ua>Помилковий код активації. Можливо, Ви неповністю скопіювали URL</ua>
 <bg>Активиращият код е грешен. Възможно е непълно копиране на URL</bg>
-<hr>Kod aktivacije nije ispravan. Možda URL nije ispravno kopiran.</hr>
 <ba>Lozinka za aktiviranje je pogrešna. MOžda URL nije u potpunosti kopiran?</ba>
 </text>
 <text>
@@ -1280,7 +1243,6 @@
 <si>Podatki nsio popolno izpolnjeni. </si>
 <ua>Ви ввели неповні дані.</ua>
 <bg>Данните не са пълни.</bg>
-<hr>Podaci nisu potpuni.</hr>
 <ba>Podaci su nepotpuni.</ba>
 </text>
 <text>
@@ -1296,7 +1258,6 @@
 <si>Spremenite geslo</si>
 <ua>Змінити пароль.</ua>
 <bg>промяна на паролата</bg>
-<hr>Promijeni lozinku</hr>
 <ba>Promjena lozinke</ba>
 </text>
 <text>
@@ -1312,7 +1273,6 @@
 <si>Ponovite geslo</si>
 <ua>Повторити пароль</ua>
 <bg>потвърждаване на паролата</bg>
-<hr>Ponovi lozinku</hr>
 <ba>Ponovite lozinku</ba>
 </text>
 <text>
@@ -1364,7 +1324,6 @@
 <si>informacije</si>
 <ua>Інформація</ua>
 <bg>информация</bg>
-<hr>Informacija</hr>
 <ba>Informacija</ba>
 </text>
 <text>
@@ -1379,7 +1338,6 @@
 <si>Po spremembi podatkov bo na vaš e-mail naslov generirano avtomatsko sporočilo. </si>
 <ua>Після внесення відповідних змін електронні повідомлення будуть автоматично надсилатися користувачу:</ua>
 <bg>При промени се изпраща автоматичен мейл до съответния потребител:</bg>
-<hr>Nakon promjene u sljedećim poljima korisniku će automatski biti poslan E-mail.</hr>
 <ba>Nakon promjene u sljedećem polju, automatski će biti proslijeđen mail:</ba>
 </text>
 <text>
@@ -1394,7 +1352,6 @@
 <si>Vstaviti, izbrisati in spremeniti e-mail</si>
 <ua>Створення, видалення та зміна електронної адреси </ua>
 <bg>създаване, изтриване и промени на мейла</bg>
-<hr>Dodavanje, brisanje i E-mail promjene</hr>
 <ba>Kreiranje, brisanje i promjena maila</ba>
 </text>
 <text>
@@ -1425,7 +1382,6 @@
 <si>obdelati</si>
 <ua>Опрацювати дані</ua>
 <bg>Промени</bg>
-<hr>Obradi</hr>
 <ba>Obrada</ba>
 </text>
 <text>
@@ -1441,7 +1397,6 @@
 <si>obdelati</si>
 <ua>опрацювати дані</ua>
 <bg>промени</bg>
-<hr>obradi</hr>
 <ba>obrada</ba>
 </text>
 <text>
@@ -1484,7 +1439,6 @@
 <si>Račun s tem e-mail naslovom že obstaja.</si>
 <ua>Аккаунт з такою електронною адресою вже існує</ua>
 <bg>Вече има потребител с този мейл. </bg>
-<hr>Već postoji korisnički račun sa ovim podacima</hr>
 <ba>Korisnički račun sa ovom mail adresom već postoji.</ba>
 </text>
 <text>
@@ -1499,7 +1453,6 @@
 <si>Različna gesla - prosimo poskusite ponovno</si>
 <ua>Введені паролі відрізняються - будь ласка, спробуйте ще раз</ua>
 <bg>Паролите не съвпадат. Моля, опитайте отново.</bg>
-<hr>Lozinke su različite - molimo pokušajte ponovo</hr>
 <ba>Lozinke su različite - pokušajte ponovo</ba>
 </text>
 <text>
@@ -1682,7 +1635,6 @@
 <uk>Опції сторінки</uk>
 <si>lastnosti strani</si>
 <ua>Властивості сторінки</ua>
-<hr>Postavke stranice</hr>
 <ba>Svojstva stranice</ba>
 </text>
 <text>
@@ -1712,7 +1664,6 @@
 <uk>Видалити сторінку</uk>
 <si>Brisati stran</si>
 <ua>Видалити сторінку</ua>
-<hr>Obriši stranicu</hr>
 <ba>Brisanje stranice</ba>
 </text>
 <text>
@@ -1740,7 +1691,6 @@
 <uk>Використати в якості домашньої сторінки</uk>
 <si>Uporabiti kot vstopno stran</si>
 <ua>Зробити домашньою сторінкою</ua>
-<hr>Koristi kao početnu stranicu</hr>
 <ba>Koristite kao početnu stranicu</ba>
 </text>
 <text>
@@ -1780,7 +1730,6 @@
 <uk>Відкрити попередній перегляд</uk>
 <si>odpreti predogled</si>
 <ua>Попередній перегляд</ua>
-<hr>Otvori pregled</hr>
 <ba>Otvorite pregled</ba>
 </text>
 <text>
@@ -1795,7 +1744,6 @@
 <uk>Сталася помилка сервера.</uk>
 <si>Napaka na strežniku.</si>
 <ua>Помилка серверу</ua>
-<hr>Greška na serveru.</hr>
 <ba>Greška servera.</ba>
 </text>
 <text>
@@ -1849,7 +1797,6 @@
 <uk> Виберіть установки</uk>
 <si>Izberite svojo pozicijo. </si>
 <ua>Оберіть Вашу посаду.</ua>
-<hr>Odaberite svoju poziciju.</hr>
 <ba>Odaberite Vašu poziciju.</ba>
 </text>
 <text>
@@ -1867,7 +1814,6 @@
 <si>Vnesite naslov. </si>
 <ua>Введіть адресу.</ua>
 <bg>Въведи адрес</bg>
-<hr>Upišite adresu.</hr>
 <ba>Unesite adresu.</ba>
 </text>
 <text>
@@ -2113,7 +2059,6 @@
 <ua>Будь ласка, введіть свою електронну адресу</ua>
 <bg>Моля, въведете Вашия e-mail адрес. </bg>
 <sk>Vložte prosím svoju e-mailovú adresu</sk>
-<hr>Molimo upišite svoju E-mail adresu</hr>
 <ba>Unesite Vašu mail adresu</ba>
 </text>
 <text>
@@ -2171,7 +2116,6 @@
 <hr>Vaša e-mail adresa:</hr>
 <ua>Ваша електронна адреса:</ua>
 <bg>Вашият e-mail адрес:</bg>
-<hr>Vaša E-Mail adresa:</hr>
 <ba>Vaša mail adresa:</ba>
 </text>
 <text>
@@ -2219,7 +2163,6 @@
 <ua>Виникла помилка</ua>
 <bg>Грешка</bg>
 <sk>Vyskytla sa chyba</sk>
-<hr>Došlo je do pogreške.</hr>
 <ba>Greška se pojavila</ba>
 </text>
 <text>
@@ -2275,7 +2218,6 @@
 <hr>Prekinuti</hr>
 <ua>Скасувати</ua>
 <bg>Откажи</bg>
-<hr>Poništi</hr>
 <ba>Poništiti</ba>
 </text>
 <text>
@@ -2290,7 +2232,6 @@
 <hr>Spremi i natrag</hr>
 <ua>Зберегти та повернутися назад</ua>
 <bg>Запамети и се върни назад</bg>
-<hr>Spremi i natrag</hr>
 <ba>Spasi i nazad</ba>
 </text>
 <text>
@@ -2304,7 +2245,6 @@
 <si>Brisati</si>
 <hr>Izbriši</hr>
 <ua>Видалити</ua>
-<hr>Obriši</hr>
 <ba>Brisanje</ba>
 </text>
 <text>
@@ -2318,7 +2258,6 @@
 <si>brisati</si>
 <hr>izbriši</hr>
 <ua>видалити</ua>
-<hr>obriši</hr>
 <ba>brisanje</ba>
 </text>
 <text>
@@ -2332,7 +2271,6 @@
 <si>Nov vnos</si>
 <hr>Novi upis</hr>
 <ua>Новий запис</ua>
-<hr>Novi unos</hr>
 <ba>Novi unos</ba>
 </text>
 <text>
@@ -2346,7 +2284,6 @@
 <si>Želite brisati?</si>
 <hr>Izbrisati?</hr>
 <ua>Видалити?</ua>
-<hr>obrisati?</hr>
 <ba>Brisanje?</ba>
 </text>
 <text>
