@@ -1,24 +1,21 @@
 var onReady = require('kwf/on-ready');
-var componentEvent = require('kwf/component-event');
-var findForm = require('kwf/frontend-form/find-form');
+var cookieOpt = require('kwf/cookie-opt');
 
 onReady.onRender('.kwcClass', function(el, config) {
-    var form = findForm(el);
-    form.findField('form_opt').el.change(function() {
-        form.submit();
-    });
-    form.on('submitSuccess', function () {
-        if (form.findField('form_opt').getValue()) {
-            componentEvent.trigger('cookieOptChanged', 'in');
+    var checkbox = el.find('input[type="checkbox"]');
+    function update() {
+        if (cookieOpt.getOpt() == 'in') {
+            checkbox[0].checked = true;
+            var label = config.textOptIn;
         } else {
-            componentEvent.trigger('cookieOptChanged', 'out');
+            checkbox[0].checked = false;
+            var label = config.textOptOut;
         }
-    });
-    componentEvent.on('cookieOptChanged', function(value) {
-        if (value == 'in') {
-            form.findField('form_opt').setValue(true);
-        } else if (value == 'out') {
-            form.findField('form_opt').setValue(false);
-        }
+        el.find('label').html(label);
+    }
+    update();
+    checkbox.change(function() {
+        cookieOpt.setOpt(checkbox[0].checked ? 'in' : 'out');
+        update();
     });
 });
