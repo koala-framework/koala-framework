@@ -28,7 +28,7 @@ CookieOpt.setOpt = function(value) {
 };
 
 CookieOpt.onOptChange = function(callback) {
-    componentEvent.on('cookieOptChange', callback);
+    componentEvent.on('cookieOptChanged', callback);
 };
 
 module.exports = CookieOpt;
