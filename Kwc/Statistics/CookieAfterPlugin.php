@@ -14,9 +14,8 @@ class Kwc_Statistics_CookieAfterPlugin extends Kwf_Component_Plugin_Abstract
         $pos = strpos($output, '{/kwcDefaultOptValue}');
         if ($pos) {
             $defaultOpt = substr($output, 20, $pos - 20);
-            if (
-                (!Kwf_Statistics::issetUserOptValue() && $defaultOpt == Kwf_Statistics::OPT_IN) ||
-                Kwf_Statistics::getUserOptValue() == Kwf_Statistics::OPT_IN
+            if ((!Kwf_CookieOpt::isSetOpt() && $defaultOpt == Kwf_CookieOpt::OPT_IN) ||
+                Kwf_CookieOpt::getOpt() == Kwf_CookieOpt::OPT_IN
             ) {
                 return substr($output, $pos + 21);
             }

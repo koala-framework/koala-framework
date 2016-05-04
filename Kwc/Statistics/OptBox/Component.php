@@ -12,62 +12,41 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['rootElementClass'] = 'kwfUp-webStandard';
-        $ret['flags']['hasHeaderIncludeCode'] = true;
+        $ret['componentName'] = trlKwfStatic('Cookie-Opt Banner');
+        $ret['generators']['child']['component']['linktag'] = 'Kwc_Basic_LinkTag_Component';
+        $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
+        $ret['flags']['hasFooterIncludeCode'] = true;
         return $ret;
     }
 
-    /**
-     * Puts a JavaScript Variable used in Kwf_js/Statistics.js
-     *
-     * @return string
-     */
     public function getIncludeCode()
     {
-        $value = Kwf_Statistics::getDefaultOptValue($this->getData());
-        $optInShowBox = $this->getData()->getBaseProperty('statistics.optInShowBox');
+        return $this->getData();
+    }
 
-        $html = '';
-        if ($value == 'out' || ($value == 'in' && $optInShowBox)) {
-            $components = Kwf_Component_Data_Root::getInstance()->getComponentsByClass(
-                'Kwc_Statistics_Opt_Component', array('subroot' => $this->getData())
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['showBanner'] = $this->_getRow()->show_banner;
+        if ($ret['showBanner']) {
+            $ret['config'] = array(
+                'html' => $this->_getOptBoxInnerHtml()
             );
-            $url = isset($components[0]) ? $components[0]->url : null;
-            $html = $this->_getOptBoxInnerHtml($url);
-            if (!$html) {
-                $exception = new Kwf_Exception('To disable optbox please change config.');
-                $exception->logOrThrow();
-            }
-            $html = '<div class="' . self::getRootElementClass($this) . '"><div class="inner">' . $html . '<div></div>';
-            $html = str_replace("'", "\'", $html);
         }
-
-        $ret  = '<script type="text/javascript">';
-        //TODO commonjs
-        /*
-        $ret .= "if (typeof Kwf == 'undefined') Kwf = {};";
-        $ret .= "if (typeof Kwf.Statistics == 'undefined') Kwf.Statistics = {};";
-        $ret .= "Kwf.Statistics.defaultOptValue = '$value';";
-        $ret .= "Kwf.Statistics.optBoxHtml = '$html';";
-        */
-        $ret .= $this->_getJavascriptIncludeCode();
-        $ret .= '</script>';
         return $ret;
     }
 
-    protected function _getJavascriptIncludeCode()
+    protected function _getOptBoxInnerHtml()
     {
-        return '';
-    }
-
-    protected function _getOptBoxInnerHtml($optUrl = null)
-    {
-        $ret = $this->getData()->trlKwf('This website uses cookies to help us give you the best experience when you visit our website.');
-        if ($optUrl) {
-            $ret .= ' <a href="' . $optUrl . '" class="info">' . $this->getData()->trlKwf('More information about the use of cookies') . '</a>';
+        $ret = $this->_getRow()->text;
+        if ($this->getData()->getChildComponent('-linktag')->hasContent()) {
+            $ret .= ' ';
+            $ret .= $this->getData()->getChildComponent('-linktag')->render();
+            $ret .= $this->_getRow()->more_text;
+            $ret .= '</a>';
         }
-        $ret .= '<a href="" class="accept"><span>' . $this->getData()->trlKwf('Accept and continue') . '</span></a>';
+        $ret .= '<a href="#" class="accept"><span>' . $this->_getRow()->accept_text . '</span></a>';
         return $ret;
-    }
+     }
 }
-

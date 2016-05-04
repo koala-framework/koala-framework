@@ -1,30 +1,30 @@
 <?php
-/**
- * Provides Form to let user choose Opt-In or Opt-Out
- *
- * @see Kwc_Statistics_OptBox_Component
- */
-class Kwc_Statistics_Opt_Component extends Kwc_Form_Component
+class Kwc_Statistics_Opt_Component extends Kwc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['componentName'] = trlKwfStatic('Cookie Opt In / Opt Out');
-        $ret['generators']['child']['component']['success'] = null;
-        $ret['viewCache'] = false;
+        $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;
     }
 
-    protected function _initForm()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
     {
-        $this->_form = new Kwc_Statistics_Opt_FrontendForm(
-            'form', $this->getData()->componentClass, Kwf_Statistics::isUserOptIn($this->getData())
-        );
-    }
-
-    protected function _beforeSave(Kwf_Model_Row_Interface $row)
-    {
-        $value = $row->opt ? Kwf_Statistics::OPT_IN : Kwf_Statistics::OPT_OUT;
-        Kwf_Statistics::setUserOptValue($value);
+        $ret = parent::getTemplateVars($renderer);
+        $config = array();
+        $config['textOptIn'] = $this->getRow()->text_opt_in;
+        if (!$config['textOptIn']) {
+            $config['textOptIn'] = $this->getData()->trl('Cookies are set when visiting this webpage. Click to deactivate cookies.');
+        }
+        $config['textOptOut'] = $this->getRow()->text_opt_out;
+        if (!$config['textOptOut']) {
+            $config['textOptOut'] = $this->getData()->trl('No cookies are set when visiting this webpage. Click to activate cookies.');
+        }
+        $config['textOptIn'] = nl2br($config['textOptIn']);
+        $config['textOptOut'] = nl2br($config['textOptOut']);
+        $ret['config'] = $config;
+        return $ret;
     }
 }
