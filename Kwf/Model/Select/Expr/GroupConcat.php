@@ -1,21 +1,79 @@
 <?php
 class Kwf_Model_Select_Expr_GroupConcat implements Kwf_Model_Select_Expr_Interface
 {
+    /**
+     * @var string
+     */
     private $_field;
+
+    /**
+     * @var string
+     */
     private $_separator;
-    public function __construct($field, $separator=',')
+
+    /**
+     * @var string|array|null
+     */
+    private $_orderField;
+
+    /**
+     * The orderfield param could be the fieldname of the order field as string or an array which contains the field and the order direction
+     *
+     * @example
+     * new Kwf_Model_Select_Expr_GroupConcat('id', ';', array(
+            'field' => 'my_order_field',
+     *      'direction' => 'DESC'
+     * ));
+     *
+     * @param string $field
+     * @param string $separator
+     * @param string|array|null $orderField
+     */
+    public function __construct($field, $separator = ',', $orderField = null)
     {
-        $this->_field = $field;
-        $this->_separator = $separator;
+        $this->setField($field);
+        $this->setSeparator($separator);
+        $this->setOrderField($orderField);
     }
+
     public function getField()
     {
         return $this->_field;
     }
 
+    public function setField($field)
+    {
+        $this->_field = $field;
+    }
+
     public function getSeparator()
     {
         return $this->_separator;
+    }
+
+    public function setSeparator($separator)
+    {
+        $this->_separator = $separator;
+    }
+
+    public function getOrderField()
+    {
+        return $this->_orderField;
+    }
+
+    public function setOrderField($orderField)
+    {
+        if ($orderField && !is_array($orderField)) {
+            $this->_orderField = array(
+                'field' => $orderField,
+                'direction' => 'ASC'
+            );
+        } else {
+            if (is_array($orderField) && (!isset($orderField['field']) || !isset($orderField['direction'] ))) {
+                throw new Kwf_Exception(trlKwf('Orderfield must contain a field and a direction property!'));
+            }
+            $this->_orderField = $orderField;
+        }
     }
 
     public function validate()
