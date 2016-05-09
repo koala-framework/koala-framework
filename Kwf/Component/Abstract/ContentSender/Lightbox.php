@@ -34,7 +34,7 @@ class Kwf_Component_Abstract_ContentSender_Lightbox extends Kwf_Component_Abstra
         }
 
         if (!$parent) {
-            $parent = Kwf_Component_Data_Root::getInstance()->getChildPage(array('home' => true), array());
+            $parent = $this->_data->getSubroot()->getChildPage(array('home' => true), array());
         }
 
         //TODO: the proper solution would be to restructure List_Switch so that the page is our parent

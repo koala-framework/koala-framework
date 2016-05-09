@@ -8,13 +8,10 @@ class Kwc_User_LostPassword_Form_FrontendForm extends Kwf_Form
 
         $this->add(new Kwc_User_LostPassword_Form_UserEMail('email', trlKwfStatic('E-Mail')))
             ->setAllowBlank(false)
-            ->setWidth(200)
             ->setLabelWidth(50);
     }
     protected function _afterSave(Kwf_Model_Row_Interface $row)
     {
         Zend_Registry::get('userModel')->lostPassword($row->email);
     }
-
-
 }

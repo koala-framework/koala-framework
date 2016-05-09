@@ -33,7 +33,6 @@ class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract
     public static function getVideoUrl($url, $settingsRow)
     {
         $ret = false;
-        $url = $settingsRow->url;
         if (!empty($url)) {
             $urlParts = parse_url($url);
             if ($urlParts && !empty($urlParts['host'])) {
