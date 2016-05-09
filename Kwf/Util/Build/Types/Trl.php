@@ -69,6 +69,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
                 }
                 if ($translation == '') continue;
                 $msgId = implode($entry['msgid']);
+                if ($msgId == '') continue;
                 $msgKey = $msgId.'-'.$ctx;
                 if (isset($c[$msgKey])) {
                     echo "\nDuplicate entry in trl-files: $msgKey => $translation\n";
