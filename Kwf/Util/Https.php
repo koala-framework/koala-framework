@@ -17,6 +17,13 @@ class Kwf_Util_Https
         if (Kwf_Config::getValue('server.https') === true) {
             if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
                 if ($domains && !in_array($domain, $domains)) {
+                    foreach ($domains as $d) {
+                        if (substr($d, 0, 2) == '*.') {
+                            if (substr($d, 1) == substr($domain, strpos($domain, '.'))) {
+                                return true;
+                            }
+                        }
+                    }
                     return false; //current host is not in server.httpsDomains, don't use https
                 }
             }
