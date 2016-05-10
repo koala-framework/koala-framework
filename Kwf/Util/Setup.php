@@ -391,6 +391,9 @@ class Kwf_Util_Setup
                 $ret .= "    \$domainMatches = false;\n";
                 foreach ($domains as $domain) {
                     $ret .= "    if ('{$domain['domain']}' == \$host) \$domainMatches = true;\n";
+                    if (isset($domain['preliminaryDomain'])) {
+                        $ret .= "    if ('{$domain['preliminaryDomain']}' == \$host) \$domainMatches = true;\n";
+                    }
                 }
                 $ret .= "    if (!\$domainMatches) {\n";
                 foreach ($domains as $domain) {
@@ -417,12 +420,18 @@ class Kwf_Util_Setup
                 $ret .= "    }\n";
             } else if (Kwf_Config::getValue('server.domain')) {
                 $ret .= "    if (\$host != '".Kwf_Config::getValue('server.domain')."') {\n";
-                    if (Kwf_Config::getValue('server.noRedirectPattern')) {
-                        $ret .= "        if (!preg_match('/".Kwf_Config::getValue('server.noRedirectPattern')."/', \$host)) {\n";
-                        $ret .= "            \$redirect = '".Kwf_Config::getValue('server.domain')."';\n";
-                        $ret .= "        }\n";
-                    } else {
-                        $ret .= "        \$redirect = '".Kwf_Config::getValue('server.domain')."';\n";
+                    if (Kwf_Config::getValue('server.preliminaryDomain')) {
+                        $ret .= "    if (\$host != '".Kwf_Config::getValue('server.preliminaryDomain')."') {\n";
+                    }
+                        if (Kwf_Config::getValue('server.noRedirectPattern')) {
+                            $ret .= "        if (!preg_match('/".Kwf_Config::getValue('server.noRedirectPattern')."/', \$host)) {\n";
+                            $ret .= "            \$redirect = '".Kwf_Config::getValue('server.domain')."';\n";
+                            $ret .= "        }\n";
+                        } else {
+                            $ret .= "        \$redirect = '".Kwf_Config::getValue('server.domain')."';\n";
+                        }
+                    if (Kwf_Config::getValue('server.preliminaryDomain')) {
+                        $ret .= "    }\n";
                     }
                 $ret .= "    }\n";
             }

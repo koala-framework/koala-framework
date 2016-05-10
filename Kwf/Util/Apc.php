@@ -65,7 +65,10 @@ class Kwf_Util_Apc
                 'domain' => $d,
             )
         );
-        if ($config->server->noRedirectPattern) {
+        if ($config->server->preliminaryDomain) {
+            $domains[0]['alternative'] = $config->server->preliminaryDomain;
+        }
+        if (!isset($domains[0]['alternative']) && $config->server->noRedirectPattern) {
             $domains[0]['alternative'] = str_replace(array('^', '\\', '$'), '', $config->server->noRedirectPattern);
         }
 
