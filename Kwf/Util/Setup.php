@@ -383,6 +383,7 @@ class Kwf_Util_Setup
             $ret .= "\nif (PHP_SAPI != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 
+        $ret .= "\n\$preLogin = false;\n";
         // Falls redirectToDomain eingeschalten ist, umleiten
         if (Kwf_Config::getValue('server.redirectToDomain')) {
             $ret .= "if (\$host && substr(\$requestUri, 0, 17) != '/kwf/maintenance/' && substr(\$requestUri, 0, 8) != '/assets/') {\n";
@@ -391,6 +392,20 @@ class Kwf_Util_Setup
                 $ret .= "    \$domainMatches = false;\n";
                 foreach ($domains as $domain) {
                     $ret .= "    if ('{$domain['domain']}' == \$host) \$domainMatches = true;\n";
+                    if (isset($domain['preliminaryDomain'])) {
+                        $ret .= "    if ('{$domain['preliminaryDomain']}' == \$host) {\n";
+                        $ret .= "        \$domainMatches = true;\n";
+                        if (isset($domain['preliminaryDomainPreLogin'])) {
+                            //preliminaryDomainPreLogin set for this domain
+                            if ($domain['preliminaryDomainPreLogin']) {
+                                $ret .= "        \$preLogin = true;\n";
+                            }
+                        } else if (Kwf_Config::getValue('server.preliminaryDomainPreLogin')) {
+                            //as default use global
+                            $ret .= "        \$preLogin = true;\n";
+                        }
+                        $ret .= "    }\n";
+                    }
                 }
                 $ret .= "    if (!\$domainMatches) {\n";
                 foreach ($domains as $domain) {
@@ -416,7 +431,15 @@ class Kwf_Util_Setup
                 $ret .= "        \$redirect = '".Kwf_Config::getValue('server.domain')."';\n";
                 $ret .= "    }\n";
             } else if (Kwf_Config::getValue('server.domain')) {
-                $ret .= "    if (\$host != '".Kwf_Config::getValue('server.domain')."') {\n";
+                $ret .= "    if (\$host == '".Kwf_Config::getValue('server.domain')."') {\n";
+                $ret .= "        //noop\n";
+                if (Kwf_Config::getValue('server.preliminaryDomain')) {
+                    $ret .= "    } else if (\$host == '".Kwf_Config::getValue('server.preliminaryDomain')."') {\n";
+                    if (Kwf_Config::getValue('server.preliminaryDomainPreLogin')) {
+                        $ret .= "        \$preLogin = true;\n";
+                    }
+                }
+                $ret .= "    } else {\n";
                     if (Kwf_Config::getValue('server.noRedirectPattern')) {
                         $ret .= "        if (!preg_match('/".Kwf_Config::getValue('server.noRedirectPattern')."/', \$host)) {\n";
                         $ret .= "            \$redirect = '".Kwf_Config::getValue('server.domain')."';\n";
@@ -442,10 +465,16 @@ class Kwf_Util_Setup
             $ret .= "        exit;\n";
             $ret .= "    }\n";
             $ret .= "}\n";
+
         }
 
         if (Kwf_Config::getValue('preLogin')) {
             $ret .= "if (PHP_SAPI != 'cli' && Kwf_Setup::getRequestPath()!==false) {\n";
+            $ret .= "    \$preLogin = true;\n";
+            $ret .= "}\n";
+        }
+
+            $ret .= "if (\$preLogin) {\n";
             $ret .= "    \$ignore = false;\n";
             foreach (Kwf_Config::getValueArray('preLoginIgnore') as $i) {
                 $ret .= "    if (substr(\$_SERVER['REDIRECT_URL'], 0, ".strlen($i).") == '$i') \$ignore = true;\n";
@@ -472,7 +501,6 @@ class Kwf_Util_Setup
             $ret .= "        throw new Kwf_Exception_AccessDenied();\n";
             $ret .= "    }\n";
             $ret .= "}\n";
-        }
 
         if ($parameters = Kwf_Config::getValueArray('parameterToCookie')) {
             foreach($parameters as $parameter) {
