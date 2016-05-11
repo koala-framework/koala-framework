@@ -37,11 +37,12 @@ class Kwf_View_Twig_Environment extends Twig_Environment
         } else {
             if (!$format) $format = trlKwf('Y-m-d');
         }
+        if (!$date || (is_string($date) && substr($date, 0, 10) == '0000-00-00')) return '';
 
-        if (!$date || substr($date, 0, 10) == '0000-00-00') return '';
-
-        $d = new Kwf_Date($date);
-        return $d->format($format, $language);
+        if (!$date instanceof Kwf_Date) {
+            $date = new Kwf_Date($date);
+        }
+        return $date->format($format, $language);
     }
 
     public function dateTime($context, $date, $format = null)
