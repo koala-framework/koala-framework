@@ -181,7 +181,9 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
                         if (substr($mainFile, -3) == '.js') {
                             if (substr($mainFile, -7) == '.min.js' || substr($mainFile, -7) == '-min.js') {
                                 //we don't want to use min file
-                                $mainFile = substr($mainFile, 0, -7).'.js';
+                                if (file_exists($dir.'/'.substr($mainFile, 0, -7))) { //make sure non-min file exists
+                                    $mainFile = substr($mainFile, 0, -7) . '.js';
+                                }
                             }
                             if (file_exists($dir.'/'.substr($mainFile, 0, -3).'.min.js') && file_exists($dir.'/'.substr($mainFile, 0, -3).'.min.map')) {
                                 //use shipped minimied+map file if exists
