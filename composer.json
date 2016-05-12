@@ -24,6 +24,7 @@
             "underscore": "1.7.0",
             "susy": "vivid-planet/susy#18ad7cba4101e85bf4ed0ecfa45e6c2d59489a76",
             "compass-mixins": "koala-framework/compass-mixins#11f18e1ec8b672bcfed9c8c08fbf9dc7d1e7f43d",
+            "swfobject": "swfobject/swfobject#2.2",
             "tinymce": "tinymce/tinymce#4.1.9"
         },
         "require-npm": {
