@@ -489,6 +489,10 @@ class Kwf_Component_Settings
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
         }
+        $plugins = Kwc_Abstract::getSetting($class, 'pluginsInherit');
+        if (is_array($plugins)) {
+            $classes = array_merge($classes, $plugins);
+        }
         if (Kwc_Abstract::getFlag($class, 'hasAlternativeComponent')) {
             $c = strpos($class, '.') ? substr($class, 0, strpos($class, '.')) : $class;
             $alternativeComponents = call_user_func(array($c, 'getAlternativeComponents'), $class);
