@@ -92,8 +92,6 @@ ViewAjax.prototype = {
             this.baseParams.kwfSessionToken = Kwf.sessionToken;
         }
 
-        this.$el.find('.kwfUp-kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
-
         if (this.searchFormComponentId) {
             this.searchForm = formRegistry.getFormByComponentId(this.searchFormComponentId);
         }

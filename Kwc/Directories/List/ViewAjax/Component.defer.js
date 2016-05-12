@@ -4,6 +4,8 @@ var ViewAjax = require('kwf/view-ajax/view');
 
 onReady.onRender('.kwcClass', function initViewAjax(el, config) {
 
+    el.find('.kwfUp-kwcDirectoriesListViewAjaxPaging').remove(); //remove paging, we will do endless scrolling instead
+
     config.el = el.find('.kwcBem__viewContainer')[0];
     el[0].kwcViewAjax = new ViewAjax(config);
 
