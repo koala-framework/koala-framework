@@ -22,6 +22,12 @@ class Kwc_Directories_List_Cc_Component extends Kwc_Abstract_Composite_Cc_Compon
         return $ret;
     }
 
+    public static function getItemDirectoryIsData($componentClass)
+    {
+        $masterCC = Kwc_Abstract::getSetting($componentClass, 'masterComponentClass');
+        return call_user_func(array($masterCC, 'getItemDirectoryIsData'), $masterCC);
+    }
+
     protected function _getChainedComponent()
     {
         return $this->getData()->chained;
