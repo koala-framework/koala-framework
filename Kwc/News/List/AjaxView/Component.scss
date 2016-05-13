@@ -1,0 +1,31 @@
+@import "compass/css3/box-sizing";
+@import "compass/utilities/general/clearfix";
+
+.kwcClass {
+    .kwcBem {
+        &__entry {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+        }
+
+        &__teaser {
+            @include box-sizing(border-box);
+            @include pie-clearfix;
+            padding: 6px 10px;
+            background: #e4e4e4;
+        }
+
+        &__text {
+            margin-top: 0;
+        }
+
+        &__prevImage {
+            float: left;
+            margin-right: 10px;
+        }
+
+        &__readMoreLink {
+            text-align: right;
+        }
+    }
+}
