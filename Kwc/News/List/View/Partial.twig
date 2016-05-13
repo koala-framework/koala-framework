@@ -1,0 +1,50 @@
+<a name="{{ item.componentId }}"></a>
+{% block entry %}
+    <article class="{{ 'entry'|bemClass }}">
+
+        {% block title %}
+            <h2 class="{{ 'title'|bemClass }}">
+                {% if item.hasContent %}
+                    {{ renderer.componentLink(item) }}
+                {% else %}
+                    {{ item.row.title }}
+                {% endif %}
+            </h2>
+        {% endblock %}
+
+        {% block publishDate %}
+            <div class="{{ 'publishDate'|bemClass }}">
+                <p>{{ item.publish_date|date }}</p>
+            </div>
+        {% endblock %}
+
+        {% if showPreviewImage and item.previewImage.hasContent %}
+            {% block previewImage %}
+                <div class="{{ 'prevImage'|bemClass }}">
+                    {{ renderer.component(item.previewImage) }}
+                </div>
+            {% endblock %}
+        {% endif %}
+
+        {% if item.row.teaser %}
+            {% block teaser %}
+                <div class="{{ 'teaser'|bemClass }}">
+                    <p class="{{ 'text'|bemClass }}">{{ item.row.teaser|nl2br }}</p>
+
+                    {% block readMoreTeaser %}
+                        <div class="{{ 'readMoreLink'|bemClass }}">
+                            {{ renderer.componentLink(item, placeholder.readMore) }}
+                        </div>
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        {% elseif item.hasContent and placeholder.readMore %}
+            {% block readMore %}
+                <div class="{{ 'readMoreLink'|bemClass }}">
+                    {{ renderer.componentLink(item, placeholder.readMore) }}
+                </div>
+            {% endblock %}
+        {% endif %}
+
+    </article>
+{% endblock %}
