@@ -223,7 +223,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
             Kwf_Assets_BuildCache::getInstance()->save($contents, $cacheId);
 
             //save generated caches for clear-cache-watcher
-            $fileName = 'build/assets/output-cache-ids-'.$extension;
+            $fileName = 'build/assets/output-cache-ids-'.$urlExtension;
             if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
                 file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
             }
