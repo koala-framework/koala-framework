@@ -33,11 +33,9 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstr
      */
     public final function isLoggedId() { return $this->isLoggedIn(); }
 
-    public function isLoggedIn()
+    protected function _isLoggedIn()
     {
         $pw = $this->_getPassword();
-        if (!$pw) return false; //no password defined
-
         if (!is_array($pw)) $pw = array($pw);
 
         if (isset($_COOKIE[get_class($this)])) {
@@ -55,6 +53,15 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Abstr
         if (array_intersect($session->passwords, $pw)) {
             return true;
         }
+    }
+
+    public function isLoggedIn()
+    {
+        if (!$this->_getPassword()) return false;
+        if ($this->_isLoggedIn()) return true;
+        $session = new Zend_Session_Namespace('login_password');
+        $pw = $this->_getPassword();
+        if (!is_array($pw)) $pw = array($pw);
         if (in_array($this->_getLoginPassword(), $pw)) {
             //this should not happen in herer (we are in isLoggedIn)
             //instead this should be in processInput of the LoginForm, just as Plugin_Login does it
