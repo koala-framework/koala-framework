@@ -20,6 +20,14 @@ class Kwf_Assets_CommonJs_Underscore_TemplateDependency extends Kwf_Assets_Depen
         foreach ($replacements as $search=>$replace) {
             $contents = str_replace($search, $replace, $contents);
         }
-        return Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
+
+        $map = Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
+
+        $data = $map->getMapContentsData();
+        $data->{'_x_org_koala-framework_masterFiles'} = array(
+            $this->getAbsoluteFileName()
+        );
+
+        return $map;
     }
 }
