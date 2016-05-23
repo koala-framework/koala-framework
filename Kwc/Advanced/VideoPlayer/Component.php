@@ -101,7 +101,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
             $ret['imageUrl'] = $image->getComponent()->getImageUrl();
         }
 
-        $ret['cssClass'] .= ' format' . $row->format;
+        $ret['rootElementClass'] .= ' format' . $row->format;
 
         return $ret;
     }
