@@ -36,7 +36,7 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
 
         $sort = $this->_getParam('sort');
         if ($sort) {
-            $this->_applySelectSort($ret, json_decode($sort));
+            $this->_applySelectSorters($ret, json_decode($sort));
         }
 
         if ($this->_getParam('limit')) {
@@ -45,11 +45,24 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
         return $ret;
     }
 
-    protected function _applySelectSort($select, array $sort)
+    protected function _applySelectSorters($select, array $sorters)
     {
-        foreach ($sort as $s) {
-            $select->order($s->property, $s->direction);
+        $this->_applySelectSort($select, $sorters);
+    }
+
+    /**
+     * @deprecated
+     */
+    protected function _applySelectSort($select, array $sorters)
+    {
+        foreach ($sorters as $s) {
+            $this->_applySelectSortProperty($select, $s);
         }
+    }
+
+    protected function _applySelectSortProperty($select, $sorter)
+    {
+        $select->order($sorter->property, $sorter->direction);
     }
 
     protected function _applySelectFilters($select, array $filters)
