@@ -29,6 +29,7 @@ class Kwc_Root_Category_FilenameFilter extends Kwf_Filter_Row_Abstract
             $values[] = 'kwf';
             $values[] = 'media';
             $values[] = 'assets';
+            $values[] = 'api';
         }
 
         $x = 0;
