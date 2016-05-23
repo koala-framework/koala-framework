@@ -65,7 +65,7 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
 
     if (el[0].kwfLightbox) return;
-    var options = jQuery.parseJSON(el.find('input.options').val());
+    var options = $.parseJSON(el.find('input.options').val());
     var l = new Lightbox(window.location.href, options);
     historyState.currentState.lightbox = window.location.href;
     historyState.updateState();
