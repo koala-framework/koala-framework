@@ -4,7 +4,7 @@ Kwf.FacebookClass = function() {
     this._onReadyCallbacks = [];
 };
 Ext2.extend(Kwf.FacebookClass, Ext2.util.Observable, {
-    loadedSubroot: null,
+    loadedAppId: null,
     isReady: false,
     onReady: function(options) {
         if (!options.callback) {
@@ -13,19 +13,17 @@ Ext2.extend(Kwf.FacebookClass, Ext2.util.Observable, {
                 scope: arguments[1] || this
             };
         }
-        if (!options.subroot) options.subroot = 'root';
-
-        if (!Kwf.FacebookAppIds[options.subroot]) {
-            throw new Error('No fbAppData.appId base property set for '+options.subroot);
+        if (!options.appId) {
+            throw new Error('No appId config given');
         }
 
-        if (!this.loadedSubroot) {
-            this.loadedSubroot = options.subroot;
+        if (!this.loadedAppId) {
+            this.loadedAppId = options.appId;
 
             var self = this;
             window.fbAsyncInit = function() {
                 FB.init({
-                    appId      : Kwf.FacebookAppIds[options.subroot], // App ID
+                    appId      : options.appId, // App ID
                     status     : true, // check login status
                     cookie     : true, // enable cookies to allow the server to access the session
                     oauth      : true, // enable OAuth 2.0
@@ -47,8 +45,8 @@ Ext2.extend(Kwf.FacebookClass, Ext2.util.Observable, {
                 d.getElementsByTagName('head')[0].appendChild(js);
             }(document));
         } else {
-            if (this.loadedSubroot != options.subroot) {
-                throw new Error('Facebook API can only be called with same the subroot per page');
+            if (this.loadedAppId != options.appId) {
+                throw new Error('Facebook API can only be called with same the appId per page');
             }
         }
 
