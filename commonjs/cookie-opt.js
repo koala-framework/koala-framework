@@ -1,10 +1,13 @@
 var componentEvent = require('kwf/component-event');
 var cookies = require('js-cookie');
+var $ = require('jQuery');
 
 var CookieOpt = {};
 
 CookieOpt.getDefaultOpt = function() {
-    return 'in'; // TODO get from baseProperty
+    var defaultOpt = $('body').data('cookieDefaultOpt');
+    if (defaultOpt != 'in' && defaultOpt != 'out') defaultOpt = 'in';
+    return defaultOpt;
 };
 
 CookieOpt.isSetOpt = function() {
