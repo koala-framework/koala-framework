@@ -21,6 +21,9 @@ class Kwf_Media_Image
     {
         $ret = array();
         if (is_string($imageDimensions)) {
+            if (!file_exists($imageDimensions)) {
+                return array();
+            }
             $size = getimagesize($imageDimensions);
             $imageDimensions = array(
                 'width' => $size[0],
