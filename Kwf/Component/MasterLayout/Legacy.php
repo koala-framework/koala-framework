@@ -9,7 +9,7 @@ class Kwf_Component_MasterLayout_Legacy extends Kwf_Component_MasterLayout_Abstr
     public function getContentWidth(Kwf_Component_Data $data)
     {
         if (!$this->_hasSetting('contentWidth')) {
-            throw new Kwf_Exception('contentWidth has to be set for $data->componentClass (getting width for $data->componentId)');
+            throw new Kwf_Exception("contentWidth has to be set for $data->componentClass (getting width for $data->componentId)");
         }
         $ret = $this->_getSetting('contentWidth');
         if (!$this->_hasSetting('contentWidthBoxSubtract')) return $ret;
