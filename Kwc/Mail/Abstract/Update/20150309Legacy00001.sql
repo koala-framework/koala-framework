@@ -1,4 +1,4 @@
-CREATE TABLE `kwc_mail_views` (
+CREATE TABLE IF NOT EXISTS `kwc_mail_views` (
 `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `mail_component_id` VARCHAR( 255 ) NOT NULL ,
 `recipient_id` INT( 11 ) NOT NULL ,

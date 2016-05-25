@@ -99,7 +99,6 @@
 
     > .listItem.kwcLast,
     > .listItem.lineLast {
-        float:right;
         margin-right:0;
         *margin-left:0;
     }
@@ -120,6 +119,10 @@
 
             &.kwcEven {
                 clear: none;
+            }
+
+            &.lineFirst {
+                clear: both;
             }
         }
     }

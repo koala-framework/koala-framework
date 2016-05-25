@@ -1,7 +1,7 @@
 <?php
 class Kwc_Root_Category_Trl_Update_20151116UpdatePageNames extends Kwf_Update
 {
-    public function update()
+    public function postUpdate()
     {
         $root = Kwf_Component_Data_Root::getInstance();
         $model = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_Trl_GeneratorModel');

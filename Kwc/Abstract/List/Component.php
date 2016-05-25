@@ -71,10 +71,20 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
             $class = trim($class);
             $i++;
 
+            $preHtml = '';
+            $postHtml = '';
+            foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_MaskComponent') as $plugin) {
+                $mask = $plugin->getMaskCode($child);
+                $preHtml = $mask['begin'] . $preHtml;
+                $postHtml = $postHtml . $mask['end'];
+            }
+
             $ret['listItems'][] = array(
                 'data' => $this->getItemComponent($child),
                 'class' => $class,
                 'style' => '',
+                'preHtml' => $preHtml,
+                'postHtml' => $postHtml
             );
         }
         return $ret;

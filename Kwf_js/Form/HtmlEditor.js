@@ -100,7 +100,8 @@ Kwf.Form.HtmlEditor = Ext2.extend(Ext2.form.HtmlEditor, {
         });
 
         var mceSettings = {
-            forced_root_block: 'p'
+            forced_root_block: 'p',
+            browser_spellcheck: true
         };
         this.tinymceEditor = new KwfEditor(this.el.id, mceSettings, tinymce.EditorManager);
         this.tinymceEditor.initContentBody(true);

@@ -1,7 +1,7 @@
 <?php
 class Kwf_Assets_CommonJs_Underscore_TemplateDependency extends Kwf_Assets_Dependency_File
 {
-    public function getContentsPacked($language)
+    public function getContentsPacked()
     {
         $contents = file_get_contents($this->getAbsoluteFileName());
         $contents = str_replace("\n", '\n', $contents);
@@ -20,6 +20,14 @@ class Kwf_Assets_CommonJs_Underscore_TemplateDependency extends Kwf_Assets_Depen
         foreach ($replacements as $search=>$replace) {
             $contents = str_replace($search, $replace, $contents);
         }
-        return Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
+
+        $map = Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
+
+        $data = $map->getMapContentsData();
+        $data->{'_x_org_koala-framework_masterFiles'} = array(
+            $this->getAbsoluteFileName()
+        );
+
+        return $map;
     }
 }

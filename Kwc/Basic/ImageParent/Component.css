@@ -1,7 +1,15 @@
+.kwcClass {
+    display: block;
+    margin: 0px;
+}
+.kwcClass .kwcBem__outerContainer {
+    display: block;
+}
 .kwcClass .kwcBem__container {
     height: 0;
     position: relative;
     overflow: hidden;
+    display: block;
 }
 
 .kwcClass img {
@@ -10,4 +18,5 @@
     width: 100%;
     top: 0;
     left: 0;
+    border: none;
 }

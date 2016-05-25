@@ -127,6 +127,11 @@ abstract class Kwf_Assets_Dependency_Abstract
         throw new Kwf_Exception("getIdentifier is not implemented for '$this'");
     }
 
+    public function getCacheId()
+    {
+        return $this->getIdentifier();
+    }
+
     public function toDebug()
     {
         return get_class($this).': '.$this->__toString()."\n";

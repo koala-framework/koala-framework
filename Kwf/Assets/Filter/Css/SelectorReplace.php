@@ -15,7 +15,7 @@ class Kwf_Assets_Filter_Css_SelectorReplace extends Kwf_Assets_Filter_Css_Abstra
 
     public function getPluginName()
     {
-        return getcwd().'/'.KWF_PATH.'/Kwf/Assets/Filter/Css/SelectorReplace';
+        return 'Kwf/Assets/Filter/Css/SelectorReplace';
     }
 
     public function getPluginOptions()

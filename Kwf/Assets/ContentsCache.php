@@ -13,27 +13,47 @@ class Kwf_Assets_ContentsCache
         return $cache;
     }
 
-    public function save(Kwf_SourceMaps_SourceMap $map, $cacheId, Kwf_Assets_ProviderList_Abstract $providerList)
+    public function save(Kwf_SourceMaps_SourceMap $map, $cacheId)
     {
         $this->_cache[$cacheId] = $map;
 
-        $cacheFile = 'cache/assetdeps/'.md5($cacheId);
+        $cacheFile = 'cache/assetdeps/'.md5($cacheId).'v2';
 
-        $map->getMapContentsData(true); //this will trigger _generateMappings
+        $data = $map->getMapContentsData(true); //this will trigger _generateMappings
         file_put_contents($cacheFile, serialize($map));
 
         $masterFiles = array();
-        foreach ($map->getSources() as $f) {
-            if (!file_exists($f)) {
-                $f = new Kwf_Assets_Dependency_File($providerList, $f);//TODO providerList
-                $f = $f->getAbsoluteFileName();
+        if (isset($data->{'_x_org_koala-framework_masterFiles'})) {
+            foreach ($data->{'_x_org_koala-framework_masterFiles'} as $f) {
+                $masterFiles[] = array(
+                    'file' => $f,
+                    'hash' => $this->_hashFile($f)
+                );
             }
-            $masterFiles[] = array(
-                'file' => $f,
-                'md5' => file_exists($f) ? md5_file($f) : false
-            );
         }
         file_put_contents($cacheFile.'.masterFiles', serialize($masterFiles));
+    }
+
+    private function _hashFile($f)
+    {
+        if (isset($this->_filemd5Cache[$f])) {
+            return $this->_filemd5Cache[$f];
+        }
+        $ret = null;
+        if (!file_exists($f)) {
+            $ret = false;
+        } else if (substr($f, -13) == '/package.json') {
+            //package.json changes on install even though installed version didn't change (_shasum field)
+            $c = json_decode(file_get_contents($f), true);
+            if (isset($c['_resolved'])) {
+                $ret = $c['_resolved'];
+            }
+        }
+        if (is_null($ret)) {
+            $ret = md5_file($f);
+        }
+        $this->_filemd5Cache[$f] = $ret;
+        return $ret;
     }
 
     public function load($cacheId)
@@ -41,21 +61,15 @@ class Kwf_Assets_ContentsCache
         if (isset($this->_cache[$cacheId])) {
             return $this->_cache[$cacheId];
         }
-        $cacheFile = 'cache/assetdeps/'.md5($cacheId);
+
+        $cacheFile = 'cache/assetdeps/'.md5($cacheId).'v2';
         if (!file_exists($cacheFile) || !file_exists($cacheFile.'.masterFiles')) {
             return false;
         } else {
             $masterFiles = unserialize(file_get_contents($cacheFile.'.masterFiles'));
             $mtime = filemtime($cacheFile);
             foreach ($masterFiles as $i) {
-                if (!isset($this->_filemd5Cache[$i['file']])) {
-                    if (!file_exists($i['file'])) {
-                        $this->_filemd5Cache[$i['file']] = false;
-                    } else {
-                        $this->_filemd5Cache[$i['file']] = md5_file($i['file']);
-                    }
-                }
-                if ($i['md5'] != $this->_filemd5Cache[$i['file']]) {
+                if ($i['hash'] != $this->_hashFile($i['file'])) {
                     return false;
                 }
             }

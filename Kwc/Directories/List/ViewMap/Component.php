@@ -4,8 +4,6 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['assetsDefer']['dep'][] = 'ExtUtilJson';
-        $ret['assetsDefer']['dep'][] = 'ExtConnection';
         $ret['generators']['child']['component']['paging'] = null;
 
         $ret['mapOptions']['zoom'] = null;

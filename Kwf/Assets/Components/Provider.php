@@ -11,9 +11,15 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 
     private function _createDependencyForFile($file, $isCommonJsEntry)
     {
-        $ret = Kwf_Assets_Dependency_File::createDependency($file, $this->_providerList);
-        $ret->setIsCommonJsEntry($isCommonJsEntry);
-        return $ret;
+        if (!isset($this->_fileDependencies[$file])) {
+            $this->_fileDependencies[$file] = Kwf_Assets_Dependency_File::createDependency($file, $this->_providerList);
+            $this->_fileDependencies[$file]->setIsCommonJsEntry($isCommonJsEntry);
+        } else {
+            if ($isCommonJsEntry != $this->_fileDependencies[$file]->isCommonJsEntry()) {
+                throw new Kwf_Exception("isCommonJsEntry is already set to other value");
+            }
+        }
+        return $this->_fileDependencies[$file];
     }
 
     public function getDependency($dependencyName)
@@ -45,8 +51,11 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 $ret[] = $nonDeferDep;
             }
 
-            foreach ($this->_getComponentClassesPackages()['Frontend'] as $c) {
-                if (!Kwc_Abstract::getFlag($c, 'assetsPackage')) {
+            $componentClassesPackages = $this->_getComponentClassesPackages();
+            foreach ($componentClassesPackages['Frontend'] as $c) {
+                $packageName = Kwc_Abstract::getFlag($c, 'assetsPackage');
+                if ($packageName == 'Default') $packageName = false;
+                if (!$packageName) {
                     $d = $this->_providerList->findDependency('Component-'.$c);
                     if (!$d) throw new Kwf_Exception("Didn't get dependency 'Component-$c'");
                     $ret[] = $d;
@@ -59,7 +68,8 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
             $ret = array();
             $assetsPackageName = substr($dependencyName, 17);
 
-            foreach ($this->_getComponentClassesPackages()[$assetsPackageName] as $c) {
+            $componentClassesPackages = $this->_getComponentClassesPackages();
+            foreach ($componentClassesPackages[$assetsPackageName] as $c) {
                 $d = $this->_providerList->findDependency('Component-'.$c);
                 if (!$d) throw new Kwf_Exception("Didn't get dependency 'Component-$c'");
                 $ret[] = $d;
@@ -117,32 +127,35 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
             $deps = array();
             foreach ($this->_getComponentSettingDependenciesFiles($class, 'assets', true) as $dep) {
                 if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z]+$#', $dep->getFileNameWithType())) {
+                    //Master.css/js needs to be part of Kwf_Assets_Components_Dependency_Abstract for .kwcClass to work correctly
                     $deps[] = array(
                         'dep' => $dep,
                         'master' => true,
                         'defer' => false
                     );
                 } else {
-                    $deps[] = array(
-                        'dep' => $dep,
-                        'master' => false,
-                        'defer' => false
-                    );
+                    //other files are dependencies like dep
+                    if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Web(\.defer)?\.js+$#', $dep->getFileNameWithType())) {
+                        $dep->setIsCommonJsEntry(true);
+                    }
+                    $ret[] = $dep;
                 }
             }
             foreach ($this->_getComponentSettingDependenciesFiles($class, 'assetsDefer', true) as $dep) {
                 if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z\.]+$#', $dep->getFileNameWithType())) {
+                    //Master.css/js needs to be part of Kwf_Assets_Components_Dependency_Abstract for .kwcClass to work correctly
                     $deps[] = array(
                         'dep' => $dep,
                         'master' => true,
                         'defer' => true
                     );
                 } else {
-                    $deps[] = array(
-                        'dep' => $dep,
-                        'master' => false,
-                        'defer' => true
-                    );
+                    //other files are dependencies like dep
+                    if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Web(\.defer)?\.js+$#', $dep->getFileNameWithType())) {
+                        $dep->setIsCommonJsEntry(true);
+                    }
+                    $dep->setDeferLoad(true);
+                    $ret[] = $dep;
                 }
             }
 
@@ -155,9 +168,13 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 
             //reverse damit css von weiter unten in der vererbungshierachie überschreibt
             $componentCssFiles = array_reverse($componentCssFiles);
-            foreach ($componentCssFiles as $i) {
-                $dep = $this->_createDependencyForFile($i, true);
-                if (substr($i, -8) == 'defer.js') {
+            foreach ($componentCssFiles as $path) {
+                $pathWithType = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($this->_providerList, './'.$path);
+                if (!$pathWithType) {
+                    throw new Kwf_Exception("Can't find path type for '$path'");
+                }
+                $dep = $this->_createDependencyForFile($pathWithType, true);
+                if (substr($path, -8) == 'defer.js') {
                     $deps[] = array(
                         'dep' => $dep,
                         'master' => false,
@@ -179,9 +196,13 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 
             //reverse damit css von weiter unten in der vererbungshierachie überschreibt
             $componentCssFiles = array_reverse($files['masterCss']);
-            foreach ($componentCssFiles as $i) {
-                $dep = $this->_createDependencyForFile($i, true);
-                if (substr($i, -8) == 'defer.js') {
+            foreach ($componentCssFiles as $path) {
+                $pathWithType = Kwf_Assets_Dependency_File::getPathWithTypeByFileName($this->_providerList, './'.$path);
+                if (!$pathWithType) {
+                    throw new Kwf_Exception("Can't find path type for '$path'");
+                }
+                $dep = $this->_createDependencyForFile($pathWithType, true);
+                if (substr($path, -8) == 'defer.js') {
                     $deps[] = array(
                         'dep' => $dep,
                         'master' => true,
@@ -346,6 +367,8 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
         }
 
         $otherPackageClasses['Frontend'] = $frontendPackageClasses;
+        $otherPackageClasses['Frontend'] = array_merge($otherPackageClasses['Frontend'], $otherPackageClasses['Default']);
+        unset($otherPackageClasses['Default']);
 
 
         return $otherPackageClasses;

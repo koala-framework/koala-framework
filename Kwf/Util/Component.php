@@ -102,7 +102,25 @@ class Kwf_Util_Component
         if (!$data) throw new Kwf_Exception_NotFound();
         $contentSender = Kwc_Abstract::getSetting($data->componentClass, 'contentSender');
         $contentSender = new $contentSender($data);
-        $contentSender->sendContent(false);
+        $content = $contentSender->getContent(false);
+
+        if (isset($content['lifetime']) && $content['lifetime']) {
+            header('Cache-Control: public, max-age='.$content['lifetime']);
+            header('Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$content['lifetime']));
+            header('Pragma: public');
+        }
+        if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'json') {
+            header('Content-Type: application/json');
+            echo json_encode(array(
+                'mimeType' => $content['mimeType'],
+                'content' => $content['content'],
+                'assets' => $content['assets']
+            ));
+        } else {
+            header('Content-Type: '.$content['mimeType']);
+            echo $content['content'];
+        }
+
 
         Kwf_Benchmark::shutDown();
         exit;

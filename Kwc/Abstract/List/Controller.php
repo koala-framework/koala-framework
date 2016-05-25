@@ -15,6 +15,22 @@ class Kwc_Abstract_List_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
                 $this->_columns->add($i);
             }
         }
+
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_GeneratorProperty') as $plugin) {
+            $params = $plugin->getGeneratorProperty(Kwf_Component_Generator_Abstract::getInstance($this->_getParam('class'), 'child'));
+            if ($params) {
+                $editor = new Kwf_Form_Field_Select();
+                $editor->setValues($params['values'])
+                    ->setListWidth(200);
+                $this->_columns->add(new Kwf_Grid_Column($params['name'],  $params['label']))
+                    ->setEditor($editor)
+                    ->setShowDataIndex($params['name'].'_text')
+                    ->setData(new Kwf_Component_PluginRoot_GeneratorProperty_Data($plugin));
+                $this->_columns->add(new Kwf_Grid_Column($params['name'].'_text'))
+                    ->setData(new Kwf_Component_PluginRoot_GeneratorProperty_DataText($plugin));
+            }
+        }
+
         $this->_columns->add(new Kwf_Grid_Column_Visible());
     }
 

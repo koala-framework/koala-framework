@@ -10,8 +10,27 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
 
     public function getDependencyNameByAlias($dependencyName)
     {
-        if (strtolower($dependencyName) == strtolower($this->_path) || strtolower($dependencyName).'.js' == $this->_path) {
+        $matched = false;
+        if (strtolower($dependencyName) == strtolower($this->_path)) {
+            $matched = true;
+
+        //some packages end with .js, strip that
+        } else if (preg_match("#^".preg_quote($this->_path, '#').'\\.js$#i', $dependencyName)) {
+            $matched = true;
+
+        //some dependencies end with .js, strip that
+        } else if (preg_match("#^".preg_quote($dependencyName, '#').'\\.js$#i', $this->_path)) {
+            $matched = true;
+
+        //also match if a prefix "foo-" is added in front of the package name
+        //required to support npm names for bower packages (example: desandro-classie)
+        } else if (preg_match("#^[a-z0-9]*-".preg_quote($this->_path, '#').'$#i', $dependencyName)) {
+            $matched = true;
+        }
+        if ($matched) {
             return ucfirst($this->_path);
+        } else {
+            return null;
         }
     }
 
@@ -135,20 +154,7 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
     public function getDependency($dependencyName)
     {
         $ret = null;
-        $matched = false;
-        if (strtolower($dependencyName) == strtolower($this->_path)) {
-            $matched = true;
-
-        //some packages end with .js, strip that
-        } else if (preg_match("#^".preg_quote($this->_path, '#').'\\.js$#i', $dependencyName)) {
-            $matched = true;
-
-        //also match if a prefix "foo-" is added in front of the package name
-        //required to support npm names for bower packages (example: desandro-classie)
-        } else if (preg_match("#^[a-z0-9]*-".preg_quote($this->_path, '#').'$#i', $dependencyName)) {
-            $matched = true;
-        }
-        if ($matched) {
+        if ($dependencyName == ucfirst($this->_path)) {
             $type = $this->_path;
             if (substr($type, -3) == '.js') {
                 $type = substr($type, 0, -3);
@@ -175,7 +181,9 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
                         if (substr($mainFile, -3) == '.js') {
                             if (substr($mainFile, -7) == '.min.js' || substr($mainFile, -7) == '-min.js') {
                                 //we don't want to use min file
-                                $mainFile = substr($mainFile, 0, -7).'.js';
+                                if (file_exists($dir.'/'.substr($mainFile, 0, -7))) { //make sure non-min file exists
+                                    $mainFile = substr($mainFile, 0, -7) . '.js';
+                                }
                             }
                             if (file_exists($dir.'/'.substr($mainFile, 0, -3).'.min.js') && file_exists($dir.'/'.substr($mainFile, 0, -3).'.min.map')) {
                                 //use shipped minimied+map file if exists
@@ -233,7 +241,11 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
             }
         } else if  (substr(strtolower($dependencyName), 0, strlen($this->_path)+1) == strtolower($this->_path).'/') {
             //absolute path to single file path given
-            return new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName.'.js');
+            if (substr($dependencyName, -4) == '.css') {
+                return new Kwf_Assets_Dependency_File_Css($this->_providerList, $dependencyName);
+            } else {
+                return new Kwf_Assets_Dependency_File_Js($this->_providerList, $dependencyName . '.js');
+            }
         }
         return $ret;
     }

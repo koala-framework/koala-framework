@@ -11,6 +11,11 @@ class Kwf_Util_Maintenance_Dispatcher
                 $providerClasses[] = $c;
             }
         }
+        foreach (Kwf_Model_Abstract::findAllInstances() as $model) {
+            if ($model instanceof Kwf_Util_Maintenance_JobProviderInterface) {
+                $providerClasses[] = get_class($model);;
+            }
+        }
 
         $jobClasses = array();
         foreach ($providerClasses as $c) {

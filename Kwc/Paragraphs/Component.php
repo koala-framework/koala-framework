@@ -61,11 +61,20 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
             if ($this->_getSetting('useMobileBreakpoints') && $row->device_visible) $cssClass .= ' ' . $this->_getBemClass($row->device_visible);
             $cssClass .= ' '.$this->_getBemClass(
                     'outer'.ucfirst($paragraph->row->component),
-                    'outer'.ucfirst(Kwf_Component_Abstract::formatRootElementClass($paragraph->componentClass, ''))
+                    'outer'.ucfirst(substr(Kwf_Component_Abstract::formatRootElementClass($paragraph->componentClass, ''), 6))
                 );
+            $preHtml = '';
+            $postHtml = '';
+            foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_MaskComponent') as $plugin) {
+                $mask = $plugin->getMaskCode($paragraph);
+                $preHtml = $mask['begin'] . $preHtml;
+                $postHtml = $postHtml . $mask['end'];
+            }
             $ret['paragraphs'][] = array(
                 'data' => $paragraph,
-                'class' => $cssClass
+                'class' => $cssClass,
+                'preHtml' => $preHtml,
+                'postHtml' => $postHtml
             );
         }
         return $ret;

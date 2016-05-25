@@ -69,6 +69,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
                 }
                 if ($translation == '') continue;
                 $msgId = implode($entry['msgid']);
+                if ($msgId == '') continue;
                 $msgKey = $msgId.'-'.$ctx;
                 if (isset($c[$msgKey])) {
                     echo "\nDuplicate entry in trl-files: $msgKey => $translation\n";
@@ -130,8 +131,17 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
             if (!isset($composerConfig->extra)) continue;
             if (!isset($composerConfig->extra->{'kwf-lingohub'})) continue;
             $trlConfig = $composerConfig->extra->{'kwf-lingohub'};
-            $trlDownloadUrl = Kwf_Registry::get('config')->trl->downloadUrl;
-            $file = @file_get_contents("$trlDownloadUrl/{$trlConfig->account}/{$trlConfig->project}/$targetLanguage");
+            $client = new Zend_Http_Client(Kwf_Registry::get('config')->trl->downloadUrl."/{$trlConfig->account}/{$trlConfig->project}/$targetLanguage");
+            $response = $client->request();
+            if ($response->isError()) {
+                if ($response->getStatus() == 404) {
+                    $file = "\n";
+                } else {
+                    throw new Kwf_Exception('Downloading resource from trl.koala-framework failed.');
+                }
+            } else {
+                $file = $response->getBody();
+            }
             if (!$file) continue;
             if (!file_exists($trlDir)) mkdir($trlDir);
             file_put_contents($trlFilePath, $file);

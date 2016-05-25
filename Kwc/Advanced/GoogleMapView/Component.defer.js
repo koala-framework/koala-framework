@@ -8,7 +8,7 @@ var gmapMap = require('kwf/google-map/map');
 var renderedMaps = [];
 
 var renderMap = function(map) {
-    if (renderedMaps.indexOf(map) != -1) return;
+    if ($.inArray(map, renderedMaps) != -1) return;
     renderedMaps.push(map);
 
     var cfg = map.find(".options", true);

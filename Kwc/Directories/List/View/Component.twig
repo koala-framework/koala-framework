@@ -1,0 +1,29 @@
+<div class="{{ rootElementClass }}">
+    {% if searchForm %}
+        {% block searchForm %}
+            {{ renderer.component(searchForm) }}
+        {% endblock %}
+    {% endif %}
+
+    {% if count %}
+        {% block count %}
+            {{ renderer.component(count) }}
+        {% endblock %}
+    {% endif %}
+
+    {% if paging %}
+        {% block topPaging %}
+            {{ renderer.component(paging) }}
+        {% endblock %}
+    {% endif %}
+
+    {% block partials %}
+        {{ renderer.partials(data) }}
+    {% endblock %}
+
+    {% if paging %}
+        {% block bottomPaging %}
+            {{ renderer.component(paging) }}
+        {% endblock %}
+    {% endif %}
+</div>

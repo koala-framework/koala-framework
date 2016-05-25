@@ -206,7 +206,14 @@ class Kwf_Component_Data
      */
     public function getPreviewUrl()
     {
-        return Kwf_Setup::getBaseUrl().'/admin/component/preview/?url='.urlencode($this->getAbsoluteUrl().'?kwcPreview');
+        if ($domain = $this->getBaseProperty('preliminaryDomain')) {
+            $https = Kwf_Util_Https::domainSupportsHttps($domain);
+            $protocol = $https ? 'https' : 'http';
+            $url = $protocol . '://'.$domain.$this->url;
+        } else {
+            $url = $this->getAbsoluteUrl();
+        }
+        return Kwf_Setup::getBaseUrl().'/admin/component/preview/?url='.urlencode($url.'?kwcPreview');
     }
 
     public function __get($var)

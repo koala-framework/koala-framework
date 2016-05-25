@@ -92,7 +92,3 @@ Kwf.activateKeepAlive = function() {
     Kwf._keepAliveActivated = true;
     Kwf._keepAlive.defer(1000 * 60 * 5);
 };
-
-if (Kwf.isApp) {
-    Kwf.activateKeepAlive();
-}

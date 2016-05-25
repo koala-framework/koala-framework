@@ -202,7 +202,6 @@ class Kwf_Cache_Simple
     {
         if (!is_array($cacheIds)) $cacheIds = array($cacheIds);
         $ret = true;
-        $ids = array();
         foreach ($cacheIds as $cacheId) {
             if (self::getBackend() == 'memcache') {
                 $r = self::getMemcache()->delete(self::_getMemcachePrefix().$cacheId);
@@ -210,12 +209,10 @@ class Kwf_Cache_Simple
                 static $prefix;
                 if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
                 $r = apc_delete($prefix.$cacheId);
-                $ids[] = $prefix.$cacheId;
             } else if (self::getBackend() == 'apcu') {
                 static $prefix;
                 if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
                 $r = apcu_delete($prefix.$cacheId);
-                $ids[] = $prefix.$cacheId;
             } else if (self::getBackend() == 'file') {
                 $r = true;
                 $file = self::_getFileNameForCacheId($cacheId);
@@ -230,8 +227,8 @@ class Kwf_Cache_Simple
             }
             if (!$r) $ret = false;
         }
-        if ((self::getBackend() == 'apc' || self::getBackend() == 'apcu') && PHP_SAPI == 'cli' && $ids) {
-            $ret = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
+        if ((self::getBackend() == 'apc' || self::getBackend() == 'apcu') && PHP_SAPI == 'cli') {
+            $ret = Kwf_Util_Apc::callClearCacheByCli(array('deleteCacheSimple' => implode(',', $cacheIds)));
         }
         return $ret;
     }

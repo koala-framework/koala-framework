@@ -6,25 +6,8 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         'defer.js' => 'text/javascript; defer',
         'css' => 'text/css',
         'ie8.css' => 'text/css; ie8',
+        'ie8.js' => 'text/javascript; ie8',
     );
-
-    private function _buildPackageContents($cacheContents, $p, $extension, $language)
-    {
-        $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension, $language);
-        Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
-
-        //save generated caches for clear-cache-watcher
-        $fileName = 'build/assets/output-cache-ids-'.$extension;
-        if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
-            file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
-        }
-    }
-
-    private function _buildPackageSourceMap($cacheContents, $p, $extension, $language)
-    {
-        $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $extension.'.map', $language);
-        Kwf_Assets_BuildCache::getInstance()->save($cacheContents, $cacheId);
-    }
 
     public function getAllPackages()
     {
@@ -100,7 +83,7 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
 
         $langs = $this->getAllLanguages();
         $packages = $this->getAllPackages();
-        $exts = array('js', 'defer.js', 'css', 'ie8.css');
+        $exts = array('js', 'defer.js', 'css', 'ie8.css', 'ie8.js');
 
         $providers = array();
         foreach ($packages as $p) {
@@ -170,21 +153,22 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
         }
         $progress->finish();
 
-        echo "generating packages...\n";
-        $steps = count($packages) * count($langs) * count($exts) * 3;
+        echo "generating package urls...\n";
+        $steps = count($packages) * count($langs) * count($exts);
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
         $c->setTextWidth(80);
         $progress = new Zend_ProgressBar($c, 0, $steps);
+        $allUrls = array();
         foreach ($packages as $p) {
             $depName = $p->getDependencyName();
             foreach ($langs as $language) {
 
                 foreach ($exts as $extension) {
 
-                    $progress->next(1, "$depName $extension $language url");
+                    $progress->next(1, "$depName $extension $language");
                     $urls = $p->getPackageUrls(self::$_mimeTypeByExtension[$extension], $language);
                     if (Kwf_Setup::getBaseUrl()) {
                         foreach ($urls as $k=>$i) {
@@ -194,30 +178,63 @@ class Kwf_Util_Build_Types_Assets extends Kwf_Util_Build_Types_Abstract
                     $cacheId = $p->getPackageUrlsCacheId(self::$_mimeTypeByExtension[$extension], $language);
                     Kwf_Assets_BuildCache::getInstance()->save($urls, $cacheId);
 
-                    foreach ($urls as $urlNum=>$url) {
-                        if (substr($url, 0, 8) != '/assets/') continue;
-                        $param = explode('/', $url);
-                        $urlLanguage = $param[5];
-                        $urlExtension = $param[6];
-                        $urlExtension = substr($urlExtension, 0, strpos($urlExtension, '?'));
-                        $contents = $p->getUrlContents($urlExtension, $urlLanguage);
-
-                        $progressIncrement = $urlNum == 0 ? 1 : 0;
-                        $progress->next($progressIncrement, "$depName $urlExtension $urlLanguage source");
-                        $this->_buildPackageContents($contents, $p, $urlExtension, $urlLanguage);
-
-                        $progress->next($progressIncrement, "$depName $urlExtension $urlLanguage map");
-                        $this->_buildPackageSourceMap($contents, $p, $urlExtension, $urlLanguage);
-                    }
-
-                    if (!$urls) {
-                        //no urls, just increment progress
-                        $progress->next(2);
+                    foreach ($urls as $url) {
+                        if (!in_array($url, $allUrls)) {
+                            $allUrls[] = $url;
+                        }
                     }
                 }
 
             }
         }
+
+        echo "generating package contents...\n";
+        $steps = count($allUrls)*2;
+        $c = new Zend_ProgressBar_Adapter_Console();
+        $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+                                Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+        $c->setTextWidth(80);
+        $progress = new Zend_ProgressBar($c, 0, $steps);
+        foreach ($allUrls as $url) {
+            if (substr($url, 0, 8) != '/assets/') continue;
+            $param = explode('/', $url);
+            if (count($param) != 7) continue;
+            $dependencyClass = $param[3];
+            $dependencyParams = $param[4];
+            $urlLanguage = $param[5];
+            $urlExtension = $param[6];
+            $urlExtension = substr($urlExtension, 0, strpos($urlExtension, '?'));
+            if (!class_exists($dependencyClass)) {
+                throw new Kwf_Exception();
+            }
+            if (!is_instance_of($dependencyClass, 'Kwf_Assets_Interface_UrlResolvable')) {
+                throw new Kwf_Exception();
+            }
+            $p = call_user_func(array($dependencyClass, 'fromUrlParameter'), $dependencyClass, $dependencyParams);
+            if (!$p instanceof Kwf_Assets_Package) {
+                throw new Kwf_Exception();
+            }
+
+            $contents = $p->getUrlContents($urlExtension, $urlLanguage);
+
+            $progress->next(1, "{$p->getDependencyName()} $urlExtension $urlLanguage source");
+            $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $urlExtension, $urlLanguage);
+            Kwf_Assets_BuildCache::getInstance()->save($contents, $cacheId);
+
+            //save generated caches for clear-cache-watcher
+            $fileName = 'build/assets/output-cache-ids-'.$urlExtension;
+            if (!file_exists($fileName) || strpos(file_get_contents($fileName), $cacheId."\n") === false) {
+                file_put_contents($fileName, $cacheId."\n", FILE_APPEND);
+            }
+
+
+            $contents = $p->getUrlContents($urlExtension.'.map', $urlLanguage);
+            $progress->next(1, "{$p->getDependencyName()} $urlExtension $urlLanguage map");
+            $cacheId = Kwf_Assets_Dispatcher::getInstance()->getCacheIdByPackage($p, $urlExtension.'.map', $urlLanguage);
+            Kwf_Assets_BuildCache::getInstance()->save($contents, $cacheId);
+        }
+
 
         Kwf_Assets_Cache::getInstance()->clean();
         Kwf_Assets_BuildCache::getInstance()->building = false;

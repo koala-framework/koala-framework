@@ -26,11 +26,25 @@ class Kwf_Assets_Filter_Css_MultiplePostCss extends Kwf_Assets_Filter_Abstract
         }
         $ret = Kwf_Assets_Filter_Css_PostCssRunner::run($pluginsInitCode, $sourcemap);
 
-        $sources = $ret->getSources();
+        $data = $ret->getMapContentsData(false);
+        $inData = $sourcemap->getMapContentsData(false);
+
+        if (isset($inData->{'_x_org_koala-framework_masterFiles'})) {
+            $data->{'_x_org_koala-framework_masterFiles'} = $inData->{'_x_org_koala-framework_masterFiles'};
+        } else {
+            $data->{'_x_org_koala-framework_masterFiles'} = array();
+        }
         foreach ($this->_filters as $f) {
             foreach ($f->getMasterFiles() as $file) {
-                if (!in_array($file, $sources)) $ret->addSource($file);
+                if (!in_array($file, $data->{'_x_org_koala-framework_masterFiles'})) {
+                    $data->{'_x_org_koala-framework_masterFiles'}[] = $file;
+                }
             }
+        }
+
+
+        if (isset($inData->{'_x_org_koala-framework_sourcesContent'})) {
+            $data->{'_x_org_koala-framework_sourcesContent'} = $inData->{'_x_org_koala-framework_sourcesContent'};
         }
 
         return $ret;

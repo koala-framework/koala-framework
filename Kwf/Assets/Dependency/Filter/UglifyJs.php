@@ -27,6 +27,11 @@ class Kwf_Assets_Dependency_Filter_UglifyJs
         file_put_contents("$buildFile.min.js.map.json", json_encode($mapData));
 
         $map = new Kwf_SourceMaps_SourceMap(file_get_contents("$buildFile.min.js.map.json"), $contents);
+        $mappings = $map->getMappings();
+        foreach ($mappings as $k=>$m) {
+            $mappings[$k]['originalName'] = null;
+        }
+        $map->setMappings($mappings);
         $map->save("$buildFile.min.js.map.json", "$buildFile.min.js"); //adds last extension
         return $map;
     }

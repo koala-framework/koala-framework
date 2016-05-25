@@ -5,6 +5,7 @@ var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var kwfExtend = require('kwf/extend');
 var t = require('kwf/trl');
+var injectAssets = require('kwf/inject-assets');
 
 var statistics = require('kwf/statistics');
 var currentOpen = null;
@@ -64,7 +65,7 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
 
     if (el[0].kwfLightbox) return;
-    var options = jQuery.parseJSON(el.find('input.options').val());
+    var options = $.parseJSON(el.find('input.options').val());
     var l = new Lightbox(window.location.href, options);
     historyState.currentState.lightbox = window.location.href;
     historyState.updateState();
@@ -114,11 +115,12 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
         setTimeout(function() {
             $.ajax({
                 url: getKwcRenderUrl(),
-                data: { componentId: mainContent.data('kwc-component-id') },
-                dataType: 'html',
+                data: { componentId: mainContent.data('kwc-component-id'), type: 'json' },
+                dataType: 'json',
                 context: this
-            }).done(function(responseText) {
-                mainContent.html(responseText);
+            }).done(function(response) {
+                injectAssets(response.assets);
+                mainContent.html(response.content);
                 onReady.callOnContentReady(mainContent, {action: 'render'});
             });
         }, 100);
@@ -200,6 +202,7 @@ var Lightbox = function(href, options) {
 Lightbox.prototype = {
     fetched: false,
     _blockOnContentReady: false,
+    _isClosing: false,
     createLightboxEl: function()
     {
         if (this.lightboxEl) return;
@@ -283,10 +286,13 @@ Lightbox.prototype = {
 
         $.ajax({
             url: getKwcRenderUrl(),
-            data: { url: 'http://'+location.host+this.href },
-            dataType: 'html',
+            data: { url: 'http://'+location.host+this.href, type: 'json' },
+            dataType: 'json',
             context: this
-        }).done(function(responseText) {
+        }).done(function(response) {
+
+            injectAssets(response.assets);
+
             this.contentEl = $(
                 '<div class="kwfUp-kwfLightboxContent"></div>'
             );
@@ -298,7 +304,7 @@ Lightbox.prototype = {
                 self.innerLightboxEl.append(self.contentEl);
                 self.innerLightboxEl.append(self.closeButtonEl);
 
-                self.style.updateContent(responseText);
+                self.style.updateContent(response.content);
 
                 if (self.lightboxEl.is(':visible')) {
                     self.contentEl.hide();
@@ -344,6 +350,8 @@ Lightbox.prototype = {
     },
     show: function(options)
     {
+        this._isClosing = false;
+
         $('html').addClass('kwfUp-kwfLightboxActive');
         this.createLightboxEl();
         this.style.onShow(options);
@@ -396,7 +404,7 @@ Lightbox.prototype = {
         this.lightboxEl.addClass('kwfUp-kwfLightboxOpen');
         this.style.afterShow(options);
 
-        statistics.count(this.href);
+        statistics.trackView(this.href);
     },
     close: function(options) {
         $('html').removeClass('kwfUp-kwfLightboxActive');
@@ -428,6 +436,8 @@ Lightbox.prototype = {
         currentOpen = null;
     },
     closeAndPushState: function() {
+        if (this._isClosing) return; //prevent double-click on close button
+        this._isClosing = true;
         if (historyState.entries > 0) {
             onlyCloseOnPopstate = true; //required to avoid flicker on closing, see popstate handler
             var previousEntries = historyState.entries;
@@ -525,14 +535,14 @@ LightboxStyles.Abstract.prototype = {
     },
     mask: function() {
         //calling mask multiple times in valid, unmask must be called exactly often
-        var maskEl = $(document.body).find('.kwfUp-lightboxMask');
+        var maskEl = $(document.body).find('.kwfUp-kwfLightboxMask');
         if (maskEl.length) {
             maskEl.show();
             setTimeout(function(){
                 maskEl.addClass('kwfUp-kwfLightboxMaskOpen');
             }, 0);
         } else {
-            var maskEl = $('<div class="kwfUp-kwfLightboxMask"></div>');
+            maskEl = $('<div class="kwfUp-kwfLightboxMask"></div>');
             var lightboxEl = this.lightbox.lightboxEl;
             lightboxEl.find('.kwfUp-kwfLightboxScrollOuter').append(maskEl);
             setTimeout(function(){
@@ -586,26 +596,31 @@ LightboxStyles.CenterBox = kwfExtend(LightboxStyles.Abstract, {
         //if content is larger than window, resize accordingly
         var originalWidth = this.lightbox.innerLightboxEl.width();
         var originalHeight = this.lightbox.innerLightboxEl.height();
+        var newWidth = originalWidth;
+        var newHeight = originalHeight;
 
         var maxSize = this._getMaxContentSize();
 
-        if (originalWidth > maxSize.width) {
-            var ratio = originalHeight / originalWidth;
-            var offs = originalWidth-maxSize.width;
-            originalWidth -= offs;
-            if (this.lightbox.options.adaptHeight) originalHeight -= offs*ratio;
+        if (newWidth > maxSize.width) {
+            var ratio = newHeight / newWidth;
+            var offs = newWidth-maxSize.width;
+            newWidth -= offs;
+            if (this.lightbox.options.adaptHeight) newHeight -= offs*ratio;
         }
-        if (this.lightbox.options.adaptHeight && originalHeight > maxSize.height) {
-            var ratio = originalWidth / originalHeight;
-            var offs = originalHeight-maxSize.height;
-            originalHeight -= offs;
-            originalWidth -= offs*ratio;
+        if (this.lightbox.options.adaptHeight && newHeight > maxSize.height) {
+            var ratio = newWidth / newHeight;
+            var offs = newHeight-maxSize.height;
+            newHeight -= offs;
+            newWidth -= offs*ratio;
         }
-        if (!this.lightbox.options.adaptHeight && originalHeight > maxSize.height) {
+        if (!this.lightbox.options.adaptHeight && newHeight > maxSize.height) {
             //delete originalHeight;
         }
-        this.lightbox.innerLightboxEl.width(originalWidth);
-        this.lightbox.innerLightboxEl.height(originalHeight);
+        this.lightbox.innerLightboxEl.width(newWidth);
+        this.lightbox.innerLightboxEl.height(newHeight);
+        if (newWidth != originalWidth) {
+            onReady.callOnContentReady(this.lightbox.innerLightboxEl, { action: 'widthChange' });
+        }
     },
     afterContentShown: function() {
 

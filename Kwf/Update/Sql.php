@@ -8,7 +8,7 @@ class Kwf_Update_Sql extends Kwf_Update
         $mysqlOptions = "--host=".escapeshellarg($dbConfig['host'])." --user=".escapeshellarg($dbConfig['username'])." --password=".escapeshellarg($dbConfig['password'])." ".escapeshellarg($dbConfig['dbname'])." ";
         $mysqlBinary = 'mysql';
 
-        exec("which $mysqlBinary >/dev/null 2>&1", $out, $ret);
+        exec("which $mysqlBinary 2>&1", $out, $ret);
         if (!$ret) {
 
             $descriptorspec = array(

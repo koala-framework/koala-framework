@@ -48,7 +48,13 @@ class Kwf_Assets_Dependency_File_Css extends Kwf_Assets_Dependency_File
         $contents = preg_replace('/(\ )\ +/', '$1', $contents);
 
         $ret = Kwf_SourceMaps_SourceMap::createEmptyMap($contents);
-        $ret->addSource($this->getFileNameWithType());
+        $data = $ret->getMapContentsData();
+        $data->{'_x_org_koala-framework_masterFiles'} = array(
+            $this->getAbsoluteFileName()
+        );
+        $data->sources = array(
+            '/assets/'.$this->getFileNameWithType()
+        );
         $ret->setMimeType('text/css');
         return $ret;
     }

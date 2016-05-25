@@ -31,9 +31,9 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
 
         if ($usesUniquePrefix || $useTrl || $useBabel) {
             //when contents contain .cssClass we must cache per app
-            $buildFile = 'cache/uglifyjs/'.$fileName.'.v2'.md5(file_get_contents($this->getAbsoluteFileName()).Kwf_Config::getValue('application.uniquePrefix'));
+            $buildFile = 'cache/uglifyjs/'.$fileName.'.v6'.md5(file_get_contents($this->getAbsoluteFileName()).Kwf_Config::getValue('application.uniquePrefix'));
         } else {
-            $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$fileName.'.v2'.md5(file_get_contents($this->getAbsoluteFileName()));
+            $buildFile = sys_get_temp_dir().'/kwf-uglifyjs/'.$fileName.'.v6'.md5(file_get_contents($this->getAbsoluteFileName()));
         }
 
         if (!file_exists("$buildFile.min.js")) {
@@ -47,7 +47,12 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                 file_put_contents($buildFile, $map->getFileContents()); //TODO: map support
             }
 
-            $map = Kwf_Assets_Dependency_Filter_UglifyJs::build($buildFile, $this->getFileNameWithType());
+            $map = Kwf_Assets_Dependency_Filter_UglifyJs::build($buildFile, '/assets/'.$this->getFileNameWithType());
+
+            $data = $map->getMapContentsData();
+            $data->{'_x_org_koala-framework_masterFiles'} = array(
+                $this->getAbsoluteFileName()
+            );
 
             $contents = file_get_contents("$buildFile.min.js");
             $replacements = array();
@@ -97,7 +102,6 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
                     unset($trlElement['error_short']);
                     $trlData[] = (object)$trlElement;
                 }
-                $data = $map->getMapContentsData();
                 $data->{'_x_org_koala-framework_trlData'} = $trlData;
             }
 

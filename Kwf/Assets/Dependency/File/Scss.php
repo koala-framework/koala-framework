@@ -22,7 +22,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 
     public function getContentsPacked()
     {
-        $cacheId = 'scss-'.$this->getIdentifier();
+        $cacheId = 'scss-v2-'.$this->getIdentifier();
         $ret = Kwf_Assets_ContentsCache::getInstance()->load($cacheId);
         if ($ret !== false) {
             return $ret;
@@ -71,12 +71,12 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             }
         }
 
-        if (substr($fileName, 0, 2) == './') $fileName = getcwd().substr($fileName, 1);
+        if (substr($fileName, 0, 2) == './') $fileName = str_replace(DIRECTORY_SEPARATOR, '/', getcwd()).substr($fileName, 1);
 
         $wrapperContents = "";
         $wrapperContents .= "@import \"config/global-settings\";\n";
         $wrapperContents .= "@import \"$fileName\";\n";
-        $wrapperFile = tempnam('temp', 'scsswrapper');
+        $wrapperFile = tempnam('temp', 'scw');
         file_put_contents($wrapperFile, $wrapperContents);
 
         $bin = Kwf_Config::getValue('server.nodeSassBinary');
@@ -96,19 +96,14 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         if ($retVal) {
             throw new Kwf_Exception("compiling sass failed: ".implode("\n", $out));
         }
-        unlink($wrapperFile);
-        if ($this->_config) {
-            unlink('temp/scss-generated/_config.scss');
-        }
         $map = json_decode(file_get_contents("{$buildFile}.map"));
         $sources = array();
-        $additionalSources = $this->_configMasterFiles;
+        $masterFiles = $this->_configMasterFiles;
         foreach ($map->sources as $k=>$i) {
             //sources are relative to cache/sass, strip that
-            if (substr($i, 0, 15) == 'scss-generated/') {
-                $f = 'web/temp/scss-generated/'.$i;
-            } else if (substr($i, 0, 11) == 'scsswrapper') {
-                $f = 'web/scsswrapper';
+            if (substr($i, 0, 15) == 'scss-generated/' || substr($i, 0, 3) == 'scw') {
+                $f = substr($this->getFileNameWithType(), 0, -5).'/temp/'.$i;
+                $map->{'_x_org_koala-framework_sourcesContent'}[$k] = file_get_contents('temp/'.$i);
             } else  {
                 if (substr($i, 0, 3) != '../') {
                     throw new Kwf_Exception('source doesn\'t start with ../: '.$i);
@@ -118,19 +113,28 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
                 if (!$f) {
                     throw new Kwf_Exception("Can't find path for '".getcwd().'/'.$i."'");
                 }
+                $dep = new Kwf_Assets_Dependency_File($this->_providerList, $i);
+                $masterFiles[] = $dep->getAbsoluteFileName();
             }
-            $sources[$k] = $f;
+            $sources[$k] = '/assets/'.$f;
             if (substr($f, 0, 16) == 'web/scss/config/') {
-                $additionalSources[] = 'kwf/sass/Kwf/stylesheets/config/'.substr($f, 16);
+                $masterFiles[] = KWF_PATH.'/sass/Kwf/stylesheets/config/'.substr($f, 16);
             } else if (substr($f, 0, 32) == 'kwf/sass/Kwf/stylesheets/config/') {
-                $additionalSources[] = 'web/scss/config/'.substr($f, 32);
+                $masterFiles[] = 'scss/config/'.substr($f, 32);
             }
         }
-        $sources[] = 'config.ini'; //for uniquePrefix
-        $map->sources = array_merge($sources, $additionalSources);
+        $masterFiles[] = 'config.ini'; //for uniquePrefix
 
+        $map->{'_x_org_koala-framework_masterFiles'} = $masterFiles;
+
+        $map->sources = $sources;
         $map->file = $buildFile;
         file_put_contents("$buildFile.map", json_encode($map));
+
+        unlink($wrapperFile);
+        if ($this->_config) {
+            unlink('temp/scss-generated/_config.scss');
+        }
 
         $ret = file_get_contents($buildFile);
         $ret = str_replace("@charset \"UTF-8\";\n", '', $ret); //remove charset, no need to adjust sourcemap as sourcemap doesn't include that (bug in libsass)
@@ -143,7 +147,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         unlink($buildFile);
         unlink("{$buildFile}.map");
 
-        Kwf_Assets_ContentsCache::getInstance()->save($map, $cacheId, $this->_providerList);
+        Kwf_Assets_ContentsCache::getInstance()->save($map, $cacheId);
 
         return $map;
     }

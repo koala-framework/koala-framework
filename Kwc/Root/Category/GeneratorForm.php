@@ -3,6 +3,9 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
 {
     private $_componentOrParent;
     private $_generator;
+
+    public $toSaveGeneratorProperty = array();
+
     public function __construct($componentOrParent, $generator)
     {
         $this->_componentOrParent = $componentOrParent;
@@ -75,5 +78,52 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
                 </tpl>');
         }
         $fs->add(new Kwf_Form_Field_Checkbox('hide',  $hideInMenuText));
+
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_GeneratorProperty') as $plugin) {
+            $params = $plugin->getGeneratorProperty($this->_generator);
+            if ($params) {
+                $this->add(new Kwf_Form_Field_Select($params['name'],  $params['label']))
+                    ->setValues($params['values'])
+                    ->setDefaultValue($params['defaultValue'])
+                    ->setData(new Kwc_Root_Category_GeneratorForm_GeneratorPropertyData($this, $plugin));
+            }
+        }
+    }
+
+    public function afterSave($parentRow, $postData)
+    {
+        parent::afterSave($parentRow, $postData);
+        foreach ($this->toSaveGeneratorProperty as $i) {
+            $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($i['row']->id, array('ignoreVisible'=>true, 'limit'=>1));
+            if (!$data) {
+                throw new Kwf_Exception("Didn't get data for $id");
+            }
+            $i['plugin']->saveGeneratorPropertyValue($data, $i['value']);
+        }
+    }
+}
+
+class Kwc_Root_Category_GeneratorForm_GeneratorPropertyData extends Kwf_Component_PluginRoot_GeneratorProperty_Data
+{
+    private $_form;
+    public function __construct($form, Kwf_Component_PluginRoot_Interface_GeneratorProperty $plugin)
+    {
+        $this->_form = $form;
+        parent::__construct($plugin);
+    }
+
+    public function save(Kwf_Model_Row_Interface $row, $value)
+    {
+        if (!$row->id) {
+            //when row doesn't have an id yet (when adding page) we don't have a data and can't save the property value
+            //this HACK moves saving into afterSave in that case
+            $this->_form->toSaveGeneratorProperty[] = array(
+                'row' => $row,
+                'value' => $value,
+                'plugin' => $this->_plugin
+            );
+        } else {
+            return parent::save($row, $value);
+        }
     }
 }

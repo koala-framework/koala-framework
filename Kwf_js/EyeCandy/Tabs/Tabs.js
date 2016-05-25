@@ -129,7 +129,7 @@ Tabs.prototype = {
 
         // passed arguments are: tabsObject, newIndex, oldIndex
         this.fireEvent('tabActivate', this, idx, this._activeTabIdx);
-        statistics.count(document.location.href + '#tab' + (idx + 1));
+        statistics.trackView(document.location.href + '#tab' + (idx + 1));
 
         this._activeTabIdx = idx;
     },

@@ -39,6 +39,29 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
         }
     }
 
+    public function clearAction()
+    {
+        $paths = array(
+            'cache/uglifyjs',
+            'cache/commonjs',
+            'cache/assetdeps',
+            sys_get_temp_dir().'/kwf-uglifyjs/',
+            'build'
+        );
+        foreach ($paths as $path) {
+            echo "clearing $path...\n";
+            $files = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+            foreach ($files as $fileinfo) {
+                $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+                $todo($fileinfo->getRealPath());
+            }
+        }
+        exit;
+    }
+
     public function showExtDepAction()
     {
         $d = Kwf_Assets_Package_Default::getDefaultProviderList()->findDependency('Frontend');

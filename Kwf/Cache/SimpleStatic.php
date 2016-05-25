@@ -134,12 +134,7 @@ class Kwf_Cache_SimpleStatic
                 }
             }
             if (extension_loaded('apc')) {
-                $prefix = Kwf_Cache_Simple::getUniquePrefix().'-';
-                $ids = array();
-                foreach ($cacheIds as $cacheId) {
-                    $ids[] = $prefix.$cacheId;
-                }
-                $result = Kwf_Util_Apc::callClearCacheByCli(array('cacheIds' => implode(',', $ids)));
+                $result = Kwf_Util_Apc::callClearCacheByCli(array('clearCacheSimpleStatic' => implode(',', $cacheIds)));
                 if (!$result['result']) $ret = false;
             }
         } else {

@@ -666,7 +666,12 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             if (!$row instanceof Kwf_Model_Row_Interface) {
                 $row = $this->getRow($row[$this->getPrimaryKey()]);
             }
-            $parent = $row->getParentRow($expr->getParent());
+            $reference = $row->getModel()->getReference($expr->getParent());
+            $parentModel = $row->getModel()->getReferencedModel($expr->getParent());
+            $select = new Kwf_Model_Select();
+            $select->whereId($row->{$reference['column']});
+            $select->ignoreDeleted(true);
+            $parent = $parentModel->getRow($select);
             if (!$parent) return null;
             $field = $expr->getField();
             if (is_string($field)) {
@@ -945,10 +950,36 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             return $ret;
         } else if ($expr instanceof Kwf_Model_Select_Expr_GroupConcat) {
             $f = $expr->getField();
+            $orderField = $expr->getOrderField();
             $ret = array();
-            foreach ($rowset as $r) {
-                $ret[] = $r->$f;
+
+            if ($orderField) {
+                $orderFieldValue = $orderField['field'];
+                $orderFieldDirection = ($orderField['direction'] == 'DESC') ? SORT_DESC : SORT_ASC;
+
+                $rowData = array();
+                foreach ($rowset as $r) {
+                    $rowData[] = array(
+                        $f => $r->$f,
+                        $orderFieldValue => $r->$orderFieldValue
+                    );
+                }
+
+                $orderFieldValues = array();
+
+                foreach ($rowData as $key => $data) {
+                    $orderFieldValues[$key] = $data[$orderFieldValue];
+                }
+                array_multisort($orderFieldValues, $orderFieldDirection, $rowData);
+                foreach ($rowData as $r) {
+                    $ret[] = $r[$f];
+                }
+            } else {
+                foreach ($rowset as $r) {
+                    $ret[] = $r->$f;
+                }
             }
+
             return implode($expr->getSeparator(), $ret);
         } else if ($expr instanceof Kwf_Model_Select_Expr_Field) {
             if (!count($rowset)) {
@@ -1238,6 +1269,12 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
                 if (isset($g['model'])) {
                     self::_findAllInstancesProcessModel($ret, $g['model']);
                 }
+            }
+        }
+
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_Models') as $plugin) {
+            foreach ($plugin->getModels() as $model) {
+                self::_findAllInstancesProcessModel($ret, $model);
             }
         }
 

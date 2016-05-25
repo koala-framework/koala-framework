@@ -69,14 +69,16 @@ class Kwf_Assets_Package_Default extends Kwf_Assets_Package implements Kwf_Asset
             foreach (Kwc_Abstract::getComponentClasses() as $cls) {
                 if (Kwc_Abstract::getFlag($cls, 'assetsPackage')) {
                     $packageName = Kwc_Abstract::getFlag($cls, 'assetsPackage');
-                    if (!in_array($packageName, $packageNames)) {
+                    if ($packageName != 'Default' && !in_array($packageName, $packageNames)) {
                         $packageNames[] = $packageName;
                         $packages[] = new Kwf_Assets_Package_ComponentPackage($packageName, $frontendPackage);
                     }
                 }
             }
+            $packages[] = Kwf_Assets_Package_ComponentAdmin::getInstance();
+        } else {
+            $packages[] = self::getInstance('Admin');
         }
-        $packages[] = self::getInstance('Admin');
         foreach (Kwf_Config::getValueArray('assets.packages') as $i) {
             $packages[] = self::getInstance($i);
         }

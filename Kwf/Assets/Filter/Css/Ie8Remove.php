@@ -8,7 +8,7 @@ class Kwf_Assets_Filter_Css_Ie8Remove extends Kwf_Assets_Filter_Css_AbstractPost
 
     public function getPluginName()
     {
-        return getcwd().'/'.KWF_PATH.'/Kwf/Assets/Filter/Css/Ie8Remove';
+        return 'Kwf/Assets/Filter/Css/Ie8Remove';
     }
 
     public function getPluginOptions()

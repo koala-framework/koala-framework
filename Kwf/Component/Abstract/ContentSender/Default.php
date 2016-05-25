@@ -59,7 +59,7 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         }
     }
 
-    public function sendContent($includeMaster)
+    public function getContent($includeMaster)
     {
         if ($this->_data->getBaseProperty('preLogin')) {
             $ignore = false;
@@ -91,21 +91,41 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         self::_callProcessInput($process);
         if ($benchmarkEnabled) Kwf_Benchmark::checkpoint('processInput');
 
+        $ret = array();
         $hasDynamicParts = false;
-        $out = $this->_render($includeMaster, $hasDynamicParts);
+        $ret['content'] = $this->_render($includeMaster, $hasDynamicParts);
         if ($benchmarkEnabled) Kwf_Benchmark::checkpoint('render');
 
-        header('Content-Type: text/html; charset=utf-8');
-        if (!$hasDynamicParts) {
-            $lifetime = 60*60;
-            header('Cache-Control: public, max-age='.$lifetime);
-            header('Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$lifetime));
-            header('Pragma: public');
-        }
-        echo $out;
+        $ret['mimeType'] = 'text/html; charset=utf-8';
 
+        if (!$includeMaster) {
+            $assetsBox = $this->_data->getChildComponent('-assets');
+            if ($assetsBox) {
+                $ret['assets'] = $assetsBox->render(null, false, $hasDynamicParts);
+            } else {
+                $ret['assets'] = '';
+            }
+        }
+
+        if (!$hasDynamicParts) {
+            $ret['lifetime'] = 60*60;
+        }
         self::_callPostProcessInput($process);
         if ($benchmarkEnabled) Kwf_Benchmark::checkpoint('postProcessInput');
+
+        return $ret;
+    }
+
+    public function sendContent($includeMaster)
+    {
+        $content = $this->getContent($includeMaster);
+        header('Content-Type: '.$content['mimeType']);
+        if (isset($content['lifetime']) && $content['lifetime']) {
+            header('Cache-Control: public, max-age='.$content['lifetime']);
+            header('Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$content['lifetime']));
+            header('Pragma: public');
+        }
+        echo $content['content'];
     }
 
     //removed, if required add _getMimeType() method
