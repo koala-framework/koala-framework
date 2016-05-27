@@ -2,6 +2,7 @@
 
 var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
+var oneTransitionEnd = require('kwf/lightbox/helper/one-transition-end');
 
 var AbstractStyle = function(lightbox) {
     this.lightbox = lightbox;

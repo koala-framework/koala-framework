@@ -5,6 +5,7 @@ var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var t = require('kwf/trl');
 var injectAssets = require('kwf/inject-assets');
+var oneTransitionEnd = require('kwf/lightbox/helper/one-transition-end');
 var StylesRegistry = require('kwf/lightbox/styles-registry');
 StylesRegistry.register('CenterBox', require('kwf/lightbox/style/center-box'));
 
@@ -42,25 +43,6 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
 
     event.preventDefault();
 });
-
-var oneTransitionEnd = function (el, callback, scope) {
-    var transEndEventNames = {
-        'WebkitTransition' : 'webkitTransitionEnd.kwfLightbox',
-        'MozTransition'    : 'transitionend.kwfLightbox',
-        'transition'       : 'transitionend.kwfLightbox'
-    };
-    var transitionType = Modernizr.prefixed('transition');
-    if (!transitionType) return;
-
-    var event = transEndEventNames[ transitionType ];
-    if (transitionType != 'WebkitTransition') { // can be removed as soon as modernizr fixes https://github.com/Modernizr/Modernizr/issues/897
-        event += ' ' +transEndEventNames['WebkitTransition'];
-    }
-    el.on(event, function() {
-        el.off(event);
-        callback.call(scope, arguments);
-    });
-};
 
 onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
     //initialize lightbox that was not dynamically created (created by ContentSender/Lightbox)
