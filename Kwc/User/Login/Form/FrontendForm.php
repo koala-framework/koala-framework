@@ -8,6 +8,7 @@ class Kwc_User_Login_Form_FrontendForm extends Kwf_Form
 
         $this->add(new Kwf_Form_Field_TextField('email', trlKwfStatic('E-Mail')))
                     ->setVtype('email')
+                    ->setAutofocus(true)
                     ->setAllowBlank(false);
 
         $this->add(new Kwf_Form_Field_Password('password', trlKwfStatic('Password')))
