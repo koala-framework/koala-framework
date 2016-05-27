@@ -29,7 +29,14 @@ class Kwf_Assets_Filter_Css_PostCssRunner
         $cmd = getcwd()."/".VENDOR_PATH."/bin/node ".$runfile;
         $cmd .= " 2>&1";
         $process = new Symfony\Component\Process\Process($cmd);
-        $process->setInput($sourcemap->getFileContentsInlineMap(false));
+
+        $mapData = $sourcemap->getMapContentsData(false);
+        $hasSourcemap = !!$mapData->mappings;
+        if ($hasSourcemap) {
+            $process->setInput($sourcemap->getFileContentsInlineMap(false));
+        } else {
+            $process->setInput($sourcemap->getFileContents());
+        }
 
         if ($process->run() !== 0) {
             throw new Kwf_Exception("Process '$cmd' failed with ".$process->getExitCode()."\n".$process->getOutput());
