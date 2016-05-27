@@ -4,6 +4,7 @@
 @import "compass/css3/box-sizing";
 @import "config/user/master";
 
+$colorIcon: null;
 @if $background-color != #aaaaaa {
     $colorIcon: mix($background-color, #aaaaaa);
 } @else if $background-color != #aaa {
