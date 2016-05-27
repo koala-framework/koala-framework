@@ -43,4 +43,9 @@ class Kwc_Abstract_Image_Trl_Image_Component extends Kwc_Abstract_Image_Componen
         }
         return $ret;
     }
+
+    public function getMaxContentWidth()
+    {
+        return $this->getData()->parent->chained->getComponent()->getMaxContentWidth();
+    }
 }

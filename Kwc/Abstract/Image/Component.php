@@ -396,7 +396,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         $data = $this->_getImageDataOrEmptyImageData();
         $s = $this->getConfiguredImageDimensions();
         if ($s['width'] === self::CONTENT_WIDTH) {
-            return parent::getContentWidth();
+            return $this->getMaxContentWidth();
         }
         if ($data) {
             if (isset($data['image'])) {
