@@ -93,6 +93,9 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
         if ($this->getEmptyText()) {
             $ret['placeholder'] = $this->getEmptyText();
         }
+        if ($this->getAutofocus()) {
+            $ret['autofocus'] = 'autofocus';
+        }
         return $ret;
     }
 
@@ -153,5 +156,16 @@ class Kwf_Form_Field_TextField extends Kwf_Form_Field_SimpleAbstract
     public function setAutoComplete($value)
     {
         return $this->setProperty('autoComplete', $value);
+    }
+
+    /**
+     * Enables autofocus for this field.
+     *
+     * @param bool
+     * @return $this
+     */
+    public function setAutofocus($value)
+    {
+        return $this->setProperty('autofocus', $value);
     }
 }

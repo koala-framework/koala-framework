@@ -367,8 +367,10 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
         }
 
         $otherPackageClasses['Frontend'] = $frontendPackageClasses;
-        $otherPackageClasses['Frontend'] = array_merge($otherPackageClasses['Frontend'], $otherPackageClasses['Default']);
-        unset($otherPackageClasses['Default']);
+        if (isset($otherPackageClasses['Default'])) {
+            $otherPackageClasses['Frontend'] = array_merge($otherPackageClasses['Frontend'], $otherPackageClasses['Default']);
+            unset($otherPackageClasses['Default']);
+        }
 
 
         return $otherPackageClasses;
