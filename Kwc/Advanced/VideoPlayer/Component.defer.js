@@ -1,4 +1,5 @@
 var onReady = require('kwf/on-ready');
+require('kwf-jquery-plugin/mediaelement');
 
 onReady.onHide('.kwcAdvancedVideoPlayer', function(el) {
     if (el.get(0).mediaElement) el.get(0).mediaElement.stop();

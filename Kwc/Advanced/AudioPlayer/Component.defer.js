@@ -1,4 +1,5 @@
 var onReady = require('kwf/on-ready');
+require('kwf-jquery-plugin/mediaelement');
 
 onReady.onRender('.kwcClass', function(el, config) {
     el.children('audio').mediaelementplayer({

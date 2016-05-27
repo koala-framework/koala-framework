@@ -16,9 +16,6 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         ));
         $ret['assetsAdmin']['dep'][] = 'KwfFormCards';
         $ret['assetsAdmin']['dep'][] = 'KwfFormFile';
-        $ret['assetsDefer']['dep'][] = 'jQuery';
-        $ret['assetsDefer']['files'][] = 'mediaelement/build/mediaelement-and-player.js';
-        $ret['assetsDefer']['files'][] = 'mediaelement/build/mediaelementplayer.css';
 
         $ret['generators']['child']['component']['previewImage'] = 'Kwc_Advanced_VideoPlayer_PreviewImage_Component';
 
