@@ -84,23 +84,9 @@ class Kwf_Assets_Dependency_File_Js extends Kwf_Assets_Dependency_File
             if ($useTrl) {
                 $trlData = array();
                 foreach (Kwf_TrlJsParser_JsParser::parseContent($contents) as $trlElement) {
-                    $b = $trlElement['before'];
-                    $fn = substr($b, 0, strpos($b, '('));
-                    $key = $trlElement['type'].'.'.$trlElement['source'];
-                    if (isset($trlElement['context'])) $key .= '.'.$trlElement['context'];
-                    $key .= '.'.str_replace("'", "\\'", $trlElement['text']);
-                    $replace = substr($b, 0, strpos($b, 'trl'));
-                    if ($trlElement['type'] == 'trlp' || $trlElement['type'] == 'trlcp') {
-                        $replace .= "_kwfTrlp";
-                    } else {
-                        $replace .= "_kwfTrl";
-                    }
-                    $replace .= "('$key', ".substr($b, strpos($b, '(')+1);
-                    $map->stringReplace($b, $replace);
-                    unset($trlElement['before']);
-                    unset($trlElement['linenr']);
-                    unset($trlElement['error_short']);
-                    $trlData[] = (object)$trlElement;
+                    $d = Kwf_Assets_Util_Trl::getJsReplacement($trlElement);
+                    $map->stringReplace($d['before'], $d['replace']);
+                    $trlData[] = $d['trlElement'];
                 }
                 $data->{'_x_org_koala-framework_trlData'} = $trlData;
             }
