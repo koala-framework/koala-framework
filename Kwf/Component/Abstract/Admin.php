@@ -141,6 +141,7 @@ class Kwf_Component_Abstract_Admin
                             $i = $c.'_'.str_replace('/', '_', $file['filename']);
                         } else {
                             $i = $path.'/'.$f;
+                            $i = str_replace(DIRECTORY_SEPARATOR, '/', $i);
                         }
                         if (isset($file['multiple']) && $file['multiple']) {
                             $ret[$kFile][] = $i;
