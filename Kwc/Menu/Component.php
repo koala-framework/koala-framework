@@ -42,7 +42,7 @@ class Kwc_Menu_Component extends Kwc_Menu_Abstract_Component
 
         $generators = Kwc_Abstract::getSetting($componentClass, 'generators');
         while (isset($generators['subMenu'])) {
-            $class = $generators['subMenu']['component'];
+            $class = $generators['subMenu']['component']['subMenu'];
             if (!is_instance_of($class, 'Kwc_Menu_Abstract_Component')) break;
             $generators = Kwc_Abstract::getSetting($class, 'generators');
             $requiredLevels++;
