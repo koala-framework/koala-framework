@@ -15,6 +15,7 @@ class Kwf_Assets_Loader
     public function getFileContents($file, $language = null)
     {
         $ret = array();
+        $checkSourceAccess = false;
         if (substr($file, -4)=='.gif') {
             $ret['mimeType'] = 'image/gif';
         } else if (substr($file, -4)=='.png') {
@@ -27,10 +28,10 @@ class Kwf_Assets_Loader
             $ret['mimeType'] = 'video/webm';
         } else if (substr($file, -4)=='.css' || substr($file, -5)=='.scss') {
             $ret['mimeType'] = 'text/css; charset=utf-8';
-            if (!Kwf_Assets_Dispatcher::getInstance()->allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
+            $checkSourceAccess = true;
         } else if (substr($file, -3)=='.js') {
             $ret['mimeType'] = 'text/javascript; charset=utf-8';
-            if (!Kwf_Assets_Dispatcher::getInstance()->allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
+            $checkSourceAccess = true;
         } else if (substr($file, -4)=='.swf') {
             $ret['mimeType'] = 'application/flash';
         } else if (substr($file, -4)=='.ico') {
@@ -57,6 +58,15 @@ class Kwf_Assets_Loader
             $ret['mimeType'] = 'application/xml; charset=utf-8';
         } else {
             throw new Kwf_Assets_NotFoundException("Invalid filetype ($file)");
+        }
+
+        if ($checkSourceAccess) {
+            $sourceAccess = Kwf_Config::getValueArray('assets.sourceAccess');
+            $access = false;
+            if ($sourceAccess) {
+                $access = in_array($file, $sourceAccess);
+            }
+            if (!$access && !Kwf_Assets_Dispatcher::getInstance()->allowSourceAccess()) throw new Kwf_Exception_AccessDenied();
         }
 
         if (substr($ret['mimeType'], 0, 5) == 'text/') {
