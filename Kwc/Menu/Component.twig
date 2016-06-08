@@ -17,7 +17,7 @@
                     {% block menuLink %}
                     {{ renderer.componentLink(m.data, "#{linkPrefix}#{m.text}", '' ~ "link"|bemClass ) }}
                     {% endblock %}
-                    {% if not m.last %}{{ separator }}{% endif %}
+                    {% if not m.last %}{{ separator|raw }}{% endif %}
                     {% if subMenu is defined and m.current is defined and m.current %}
                         {{ renderer.component(subMenu) }}
                     {% endif %}
