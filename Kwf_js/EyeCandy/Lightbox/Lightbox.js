@@ -375,6 +375,7 @@ Lightbox.prototype = {
                 $('body').addClass('kwfUp-kwfLightboxAnimate');
                 oneTransitionEnd(this.innerLightboxEl, function() {
                     $('body').removeClass('kwfUp-kwfLightboxAnimate');
+                    $('html').addClass('kwfUp-kwfLightboxAnimationEnd');
                     onReady.callOnContentReady(this.lightboxEl, {action: 'show'});
                 }, this);
             } else {
@@ -388,6 +389,7 @@ Lightbox.prototype = {
     },
     close: function(options) {
         $('html').removeClass('kwfUp-kwfLightboxActive');
+        $('html').removeClass('kwfUp-kwfLightboxAnimationEnd');
         this.lightboxEl.hide();
         //so eg. flash component can remove object
         onReady.callOnContentReady(this.lightboxEl, {action: 'hide'});
