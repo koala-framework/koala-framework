@@ -10,6 +10,13 @@ class Kwf_Assets_Provider_BowerBuiltFile extends Kwf_Assets_Provider_Abstract
 
     public function getDependencyNameByAlias($dependencyName)
     {
+        //for better performance shortcut for some common dependencyNames
+        if (substr($dependencyName, 0, 10) == 'Component-' || substr($dependencyName, 0, 3) == 'Kwf' || substr($dependencyName, 0, 3) == 'Ext') {
+            return null;
+        } else if (strpos($dependencyName, '/') !== false) {
+            return null;
+        }
+
         $matched = false;
         if (strtolower($dependencyName) == strtolower($this->_path)) {
             $matched = true;
