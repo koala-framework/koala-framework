@@ -20,13 +20,15 @@
                     <input type="hidden" name="redirectAuth" value="{{ r.authMethod|escape }}" />
                     <input type="hidden" name="redirect" value="{{ r.redirect|escape }}" />
                     {{ r.formOptions }}
-                    <button>
-                        {% if r.icon %}
-                            <img src="{{ r.icon|escape }}" />
-                        {% else %}
-                            {{ r.name|escape }}
-                        {% endif %}
-                    </button>
+                    <div class="button {{ r.authMethod}}">
+                        <button class="{{ r.authMethod}}">
+                            {% if r.icon %}
+                                <img src="{{ r.icon|escape }}" />
+                            {% else %}
+                                {{ r.name|escape }}
+                            {% endif %}
+                        </button>
+                    </div>
                     </form>
                 </li>
             {% endfor %}
