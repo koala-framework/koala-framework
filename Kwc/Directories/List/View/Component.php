@@ -251,7 +251,9 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
     {
         $ret = parent::getViewCacheSettings();
         $dir = $this->getData()->parent->getComponent()->getItemDirectory();
-        if (is_string($dir)) {
+        if (!$dir) {
+            return null;
+        } else if (is_string($dir)) {
             $ret['cacheTag'] = $dir;
         } else {
             $ret['cacheTag'] = $dir->componentId;

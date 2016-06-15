@@ -40,7 +40,10 @@ class Kwf_Assets_TinyMce_BuildDependency extends Kwf_Assets_Dependency_Abstract
             Kwf_Assets_Dependency_Filter_UglifyJs::build($buildFile, '/assets/web/temp/tinymce-build-out.js');
         }
 
-        return new Kwf_SourceMaps_SourceMap(file_get_contents("$buildFile.min.js.map.json"), file_get_contents("$buildFile.min.js"));
+        $ret = new Kwf_SourceMaps_SourceMap(file_get_contents("$buildFile.min.js.map.json"), file_get_contents("$buildFile.min.js"));
+        $data = $ret->getMapContentsData(false);
+        $data->{'_x_org_koala-framework_sourcesContent'}[0] = file_get_contents('temp/tinymce-build-out.js');
+        return $ret;
     }
 
     public function __toString()

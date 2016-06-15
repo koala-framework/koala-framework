@@ -14,6 +14,6 @@ class Kwf_Assets_ProviderList_Maintenance extends Kwf_Assets_ProviderList_Abstra
         $providers[] = new Kwf_Assets_Provider_ErrorHandler();
         $providers[] = new Kwf_Assets_TinyMce_Provider();
         $providers[] = new Kwf_Assets_Provider_BowerBuiltFile(VENDOR_PATH.'/bower_components/jquery');
-        parent::__construct($providers);
+        parent::__construct($providers, array());
     }
 }

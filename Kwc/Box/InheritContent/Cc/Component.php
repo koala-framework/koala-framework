@@ -23,8 +23,12 @@ class Kwc_Box_InheritContent_Cc_Component extends Kwc_Chained_Cc_Component
                 $c = null;
                 break;
             }
-            $masterChild = $page->chained->getChildComponent('-'.$this->getData()->id)
-                    ->getChildComponent(array('generator' => 'child'));
+            $masterBox = $page->chained->getChildComponent('-'.$this->getData()->id);
+            if (!$masterBox) {
+                $c = null;
+                break;
+            }
+            $masterChild = $masterBox->getChildComponent(array('generator' => 'child'));
             $c = Kwc_Chained_Cc_Component::getChainedByMaster($masterChild, $this->getData());
             if ($page instanceof Kwf_Component_Data_Root) break;
             $page = $page->parent;

@@ -106,6 +106,8 @@ class Kwf_Assets_Package
 
     public function warmupDependencyCaches($dep, $mimeType, $progress = null)
     {
+        if (!$dep->getIncludeInPackage()) return;
+
         $cacheId = $dep->getCacheId();
         if ($cacheId) {
             $cacheId = 'filtered-'.$cacheId;

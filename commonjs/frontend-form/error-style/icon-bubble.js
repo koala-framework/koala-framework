@@ -21,18 +21,18 @@ var ErrorStyleIconBubble = kwfExtend(ErrorStyleAbove, {
                 field.errorEl.find('.kwfUp-arrow').hide();
                 field.errorEl.hide();
 
-                field.el.on('mouseenter', function() {
+                field.el.on('mouseenter', (function() {
                     if (firstField) {
                         firstField.errorEl.find('.kwfUp-message').stop().fadeOut({duration: 400});
                         firstField.errorEl.find('.kwfUp-arrow').stop().fadeOut({duration: 400});
                     }
-                    field.errorEl.find('.kwfUp-message').stop().fadeIn({duration: 400});
-                    field.errorEl.find('.kwfUp-arrow').stop().fadeIn({duration: 400});
-                });
-                field.el.on('mouseleave', function() {
-                    field.errorEl.find('.kwfUp-message').stop().fadeOut({duration: 200});
-                    field.errorEl.find('.kwfUp-arrow').stop().fadeOut({duration: 200});
-                });
+                    this.errorEl.find('.kwfUp-message').stop().fadeIn({duration: 400});
+                    this.errorEl.find('.kwfUp-arrow').stop().fadeIn({duration: 400});
+                }).bind(field));
+                field.el.on('mouseleave', (function() {
+                    this.errorEl.find('.kwfUp-message').stop().fadeOut({duration: 200});
+                    this.errorEl.find('.kwfUp-arrow').stop().fadeOut({duration: 200});
+                }).bind(field));
             }
             field.errorEl.find('.kwfUp-message').html(r.errorFields[fieldName]);
             field.errorEl.fadeIn();

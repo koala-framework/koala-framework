@@ -155,11 +155,30 @@ class Kwf_Assets_Dispatcher
         if (!is_instance_of($dependencyClass, 'Kwf_Assets_Interface_UrlResolvable')) {
             throw new Kwf_Exception_NotFound();
         }
+
+
+        //build whole assets dependency tree
+        //required for eg. Modernizr to pick up all required tests
+        $buildType = new Kwf_Util_Build_Types_Assets();
+        $packages = $buildType->getAllPackages();
+        $providers = array();
+        foreach ($packages as $p) {
+            foreach ($p->getProviderList()->getProviders() as $provider) {
+                if (!in_array($provider, $providers)) {
+                    $providers[] = $provider;
+                    $provider->initialize();
+                }
+            }
+        }
+        foreach ($packages as $p) {
+            $p->getDependency()->getRecursiveDependencies();
+        }
+
+
         $package = call_user_func(array($dependencyClass, 'fromUrlParameter'), $dependencyClass, $dependencyParams);
         if (!$package instanceof Kwf_Assets_Package) {
             throw new Kwf_Exception_NotFound();
         }
-
         return $package->getUrlContents($extension, $language);
     }
 

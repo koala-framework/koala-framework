@@ -27,7 +27,7 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
                 $packageNames[] = $packageName;
             }
         }
-        foreach ($page->getRecursiveChildComponents(array('flags'=>array('assetsPackage'=>true))) as $d) {
+        foreach ($page->getRecursiveChildComponents(array('flags'=>array('assetsPackage'=>true), 'page'=>false)) as $d) {
             $packageName = Kwc_Abstract::getFlag($d->componentClass, 'assetsPackage');
             if ($packageName && !in_array($packageName, $packageNames)) {
                 $packageNames[] = $packageName;

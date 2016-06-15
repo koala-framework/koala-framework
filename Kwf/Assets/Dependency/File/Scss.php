@@ -104,6 +104,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
             if (substr($i, 0, 15) == 'scss-generated/' || substr($i, 0, 3) == 'scw') {
                 $f = substr($this->getFileNameWithType(), 0, -5).'/temp/'.$i;
                 $map->{'_x_org_koala-framework_sourcesContent'}[$k] = file_get_contents('temp/'.$i);
+                $masterFiles[] = 'temp/'.$i;
             } else  {
                 if (substr($i, 0, 3) != '../') {
                     throw new Kwf_Exception('source doesn\'t start with ../: '.$i);

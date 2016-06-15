@@ -189,6 +189,7 @@ class Kwf_Component_Settings
                 throw new Kwf_Exception("Can't find file");
             }
         }
+        $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
         $cache[$c] = $path;
         return $path;
     }
