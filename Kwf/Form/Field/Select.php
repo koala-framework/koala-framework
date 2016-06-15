@@ -94,7 +94,7 @@ class Kwf_Form_Field_Select extends Kwf_Form_Field_ComboBox
             if ($disabledValues && in_array($i[0], $disabledValues)) {
                 $ret['html'] .= ' disabled="disabled"';
             }
-            if ($i[0] == $value) $ret['html'] .= ' selected="selected"';
+            if (!is_null($value) && $i[0] == $value) $ret['html'] .= ' selected="selected"';
             $ret['html'] .= '>'.htmlspecialchars($i[1]).'</option>';
         }
         $ret['html'] .= "</select>\n";
