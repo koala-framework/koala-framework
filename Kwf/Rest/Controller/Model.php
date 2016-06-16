@@ -214,6 +214,8 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
                 $row->id = $d->id;
             }
 
+            $this->_validateInsert((array)$d);
+            $this->_validateSave((array)$d);
             $this->_fillRowInsert($row, $d);
             $this->_beforeInsert($row);
             $this->_beforeSave($row);
@@ -262,6 +264,8 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
             $row = $this->_model->getRow($s);
             if (!$row) throw new Kwf_Exception_NotFound();
 
+            $this->_validateUpdate((array)$d);
+            $this->_validateSave((array)$d);
             $this->_fillRow($row, $d);
             $this->_beforeUpdate($row);
             $this->_beforeSave($row);
@@ -285,6 +289,30 @@ class Kwf_Rest_Controller_Model extends Kwf_Rest_Controller
         if (!$row) throw new Kwf_Exception_NotFound();
         $this->_beforeDelete($row);
         $row->delete();
+    }
+
+    public function validateInsertAction()
+    {
+        $this->_validateInsert($this->getAllParams());
+        $this->_validateSave($this->getAllParams());
+    }
+
+    protected function _validateInsert(array $params)
+    {
+    }
+
+    public function validateUpdateAction()
+    {
+        $this->_validateUpdate($this->getAllParams());
+        $this->_validateSave($this->getAllParams());
+    }
+
+    protected function _validateUpdate(array $params)
+    {
+    }
+
+    protected function _validateSave(array $params)
+    {
     }
 
     protected function _beforeInsert(Kwf_Model_Row_Interface $row)
