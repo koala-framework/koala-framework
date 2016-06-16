@@ -22,4 +22,25 @@ class Kwc_Basic_DownloadTag_Trl_Events extends Kwc_Basic_LinkTag_Abstract_Trl_Ev
             }
         }
     }
+
+    public function onMasterOwnRowUpdate(Kwf_Events_Event_Row_Abstract $event)
+    {
+        parent::onMasterOwnRowUpdate($event);
+        $cmps = Kwf_Component_Data_Root::getInstance()->getComponentsByDbId(
+            $event->row->component_id, array('ignoreVisible'=>true)
+        );
+        foreach ($cmps as $c) {
+            $chainedType = 'Trl';
+            $select = array('ignoreVisible' => true);
+            $chained = Kwc_Chained_Abstract_Component::getAllChainedByMaster($c, $chainedType, $select);
+            foreach ($chained as $i) {
+                if ($i->componentClass != $this->_class) { continue; } //like in parent::onMasterOwnRowUpdate
+                if ($i->getComponent()->getRow()->own_download) continue;
+
+                $this->fireEvent(new Kwf_Component_Event_Page_UrlChanged(
+                    $this->_class, $i
+                ));
+            }
+        }
+    }
 }
