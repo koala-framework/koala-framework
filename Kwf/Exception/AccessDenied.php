@@ -16,6 +16,11 @@ class Kwf_Exception_AccessDenied extends Kwf_Exception_Abstract
         return 'Error401';
     }
 
+    public function getComponentClass()
+    {
+        return 'Kwc_Errors_AccessDenied_Component';
+    }
+
     public function log()
     {
         if (Kwf_Exception::isDebug()) {

@@ -67,12 +67,12 @@ Field.prototype = {
     },
     getFieldName: function() {
         var inp = this.el.find('input');
-        if (!inp) return null;
+        if (!inp.length) return null;
         return inp.get(0).name;
     },
     getValue: function() {
         var inp = this.el.find('input');
-        if (!inp) return null;
+        if (!inp.length) return null;
         var ret = inp.get(0).value;
         if (this._placeholder && ret == this._placeholder) ret = '';
         return ret;

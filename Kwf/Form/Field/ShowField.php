@@ -40,6 +40,8 @@ class Kwf_Form_Field_ShowField extends Kwf_Form_Field_SimpleAbstract
             } else if ($this->getTpl() == '{value:localizedDate}') {
                 $date = new Kwf_Date($v);
                 $v = $date->format(trlKwf('Y-m-d'));
+            } else if ($this->getTpl() == '{value:boolean}') {
+                $v = $v ? trlKwf('Yes') : trlKwf('No');
             }
             $ret['html'] = '<span class="fieldContent">'.$v.'</span>';
         }
