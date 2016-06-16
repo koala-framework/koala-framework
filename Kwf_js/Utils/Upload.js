@@ -22,7 +22,10 @@ Kwf.Utils.Upload = {
             if (xhr.readyState == 4) {
                 var errorMsg = false;
                 if (xhr.status != 200) {
-                        errorMsg = xhr.responseText;
+                     errorMsg = xhr.responseText;
+                     if (!errorMsg) {
+                         errorMsg = trlKwf("A connection problem occured.");
+                     }
                 } else if (!xhr.responseText) {
                     errorMsg = 'response is empty';
                 } else {
