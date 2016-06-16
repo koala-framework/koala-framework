@@ -42,10 +42,20 @@ class Kwc_Abstract_List_Trl_Component extends Kwc_Chained_Trl_Component
             $class = trim($class);
             $i++;
 
+            $preHtml = '';
+            $postHtml = '';
+            foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_MaskComponent') as $plugin) {
+                $mask = $plugin->getMaskCode($child->chained);
+                $preHtml = $mask['begin'] . $preHtml;
+                $postHtml = $postHtml . $mask['end'];
+            }
+
             $ret['listItems'][] = array(
                 'data' => $this->getData()->chained->getComponent()->getItemComponent($child),
                 'class' => $class,
                 'style' => '',
+                'preHtml' => $preHtml,
+                'postHtml' => $postHtml
             );
         }
         return $ret;

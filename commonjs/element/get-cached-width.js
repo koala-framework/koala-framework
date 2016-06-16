@@ -14,7 +14,12 @@ module.exports = function getCachedWidth(e) {
             break;
         } else {
             var t = benchmarkBox.now();
-            ret = e.clientWidth;
+            if (e.tagName == 'MAIN') {
+                //IE 12 returns clientWidth 0 for <main>??!
+                ret = e.offsetWidth;
+            } else {
+                ret = e.clientWidth;
+            }
             benchmarkBox.time('getWidth uncached', benchmarkBox.now()-t);
             e.kwfWidthCache = ret;
             cachedWidthEls.push(e);

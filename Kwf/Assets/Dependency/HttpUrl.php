@@ -39,4 +39,14 @@ class Kwf_Assets_Dependency_HttpUrl extends Kwf_Assets_Dependency_Abstract
             throw new Kwf_Exception("Unknown file type");
         }
     }
+
+    public function getContentsPacked()
+    {
+        return null;
+    }
+
+    public function getIdentifier()
+    {
+        return $this->_url;
+    }
 }

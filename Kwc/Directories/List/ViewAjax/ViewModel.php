@@ -19,6 +19,20 @@ class Kwc_Directories_List_ViewAjax_ViewModel extends Kwf_Model_Abstract
         throw new Kwf_Exception('Not possible');
     }
 
+    public function countRows($select = array())
+    {
+        $parentData = null;
+        $itemDirectory = $this->getItemDirectory();
+        if (is_string($itemDirectory)) {
+            $itemDirectoryClass = $itemDirectory;
+        } else {
+            $itemDirectoryClass = $itemDirectory->componentClass;
+            $parentData = $itemDirectory;
+        }
+        $gen = Kwf_Component_Generator_Abstract::getInstance($itemDirectoryClass, 'detail');
+        return $gen->countChildData($parentData, $select);
+    }
+
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
         if (!is_object($where)) {

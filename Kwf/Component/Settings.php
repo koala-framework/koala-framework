@@ -189,6 +189,7 @@ class Kwf_Component_Settings
                 throw new Kwf_Exception("Can't find file");
             }
         }
+        $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
         $cache[$c] = $path;
         return $path;
     }
@@ -504,6 +505,10 @@ class Kwf_Component_Settings
             }
         }
         $plugins = Kwc_Abstract::getSetting($class, 'plugins');
+        if (is_array($plugins)) {
+            $classes = array_merge($classes, $plugins);
+        }
+        $plugins = Kwc_Abstract::getSetting($class, 'pluginsInherit');
         if (is_array($plugins)) {
             $classes = array_merge($classes, $plugins);
         }

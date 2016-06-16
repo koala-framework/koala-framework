@@ -84,7 +84,7 @@ var $ = require('jQuery');
             return false;
         }, this));
 
-        if (this.switchContainer.hasClass('active')) {
+        if (this.switchContainer.hasClass('kwfUp-active')) {
             this.doOpen();
         }
 
@@ -96,14 +96,14 @@ var $ = require('jQuery');
                 SwitchDisplay(el, config);
             }, { defer: true });
             onReady.onRender(elOrSelector, function(el, config) {
-                if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('active')) {
+                if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('kwfUp-active')) {
                     el.find(config.container || 'div.kwfUp-switchContent').hide();
                 }
             });
         } else {
             config = config || {};
             el = elOrSelector;
-            if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('active')) {
+            if (!el.find(config.container || 'div.kwfUp-switchContent').hasClass('kwfUp-active')) {
                 el.find(config.container || 'div.kwfUp-switchContent').hide();
             }
             el = elOrSelector.get(0);

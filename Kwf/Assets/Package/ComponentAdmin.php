@@ -65,4 +65,27 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
 
         return $ret;
     }
+
+    protected function _getCommonJsData($mimeType)
+    {
+        $commonJsData = parent::_getCommonJsData($mimeType);
+
+        $frontendPackage = Kwf_Assets_Package_ComponentFrontend::getInstance();
+
+        if ($commonJsData) {
+            $deps = array_merge(
+                $frontendPackage->_getFilteredUniqueDependencies($mimeType)
+            );
+            foreach ($deps as $i) {
+                $data = array();
+                $commonJsDeps = $this->_getCommonJsDeps($i, $data);
+                foreach (array_keys($data) as $key) {
+                    if (isset($commonJsData[$key])) {
+                        unset($commonJsData[$key]);
+                    }
+                }
+            }
+        }
+        return $commonJsData;
+    }
 }

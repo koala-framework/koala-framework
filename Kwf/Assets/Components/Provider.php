@@ -4,6 +4,8 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
     private $_rootComponentClass;
     private $_fileDependencies = array();
     private $_componentClassesCache;
+    private $_componentClassesPackagesCache;
+
     public function __construct($rootComponentClass)
     {
         $this->_rootComponentClass = $rootComponentClass;
@@ -325,6 +327,10 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
 
     private function _getComponentClassesPackages()
     {
+        if (isset($this->_componentClassesPackagesCache)) {
+            return $this->_componentClassesPackagesCache;
+        }
+
         $frontendPackageClasses = array();
         $componentClassesWithoutParam = array();
         foreach ($this->_getRecursiveChildClasses($this->_rootComponentClass, '') as $c) {
@@ -372,8 +378,8 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
             unset($otherPackageClasses['Default']);
         }
 
-
-        return $otherPackageClasses;
+        $this->_componentClassesPackagesCache = $otherPackageClasses;
+        return $this->_componentClassesPackagesCache;
     }
 
     private function _getRecursiveChildClasses($class, $assetsPackage, &$processedComponents = array())

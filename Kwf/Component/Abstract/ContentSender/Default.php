@@ -119,13 +119,10 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
     public function sendContent($includeMaster)
     {
         $content = $this->getContent($includeMaster);
-        header('Content-Type: '.$content['mimeType']);
-        if (isset($content['lifetime']) && $content['lifetime']) {
-            header('Cache-Control: public, max-age='.$content['lifetime']);
-            header('Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+$content['lifetime']));
-            header('Pragma: public');
-        }
-        echo $content['content'];
+        $content['contents'] = $content['content'];
+        unset($content['content']);
+        if (!isset($content['lifetime'])) $content['lifetime'] = false;
+        Kwf_Media_Output::output($content);
     }
 
     //removed, if required add _getMimeType() method

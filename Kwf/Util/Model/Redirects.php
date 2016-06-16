@@ -20,13 +20,20 @@ class Kwf_Util_Model_Redirects extends Kwf_Model_Db
                 $sourceWithoutWww.'/',
                 'http://'.$sourceWithoutWww.'/',
             );
+            $s->whereEquals('source', $sources);
         } else {
-            $sources = array(
-                $source,
-                $source.'/',
-            );
+            if (substr($source, 0, 6) == '/media') {
+                $parts = explode('/', $source);
+                if (isset($parts[6])) $source = str_replace($parts[6], '%', $source);
+                $s->where(new Kwf_Model_Select_Expr_Like('source', $source));
+            } else {
+                $sources = array(
+                    $source,
+                    $source.'/',
+                );
+                $s->whereEquals('source', $sources);
+            }
         }
-        $s->whereEquals('source', $sources);
         $s->whereEquals('active', true);
         if ($type == 'path') {
             $root = Kwf_Component_Data_Root::getInstance();
