@@ -4,6 +4,7 @@ class Kwc_Errors_Component extends Kwc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['contentSender'] = 'Kwc_Errors_ContentSender';
         $ret['generators']['accessDenied'] = array(
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwc_Errors_AccessDenied_Component'
