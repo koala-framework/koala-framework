@@ -129,7 +129,7 @@ class Kwf_Util_ClearCache
     }
 
     /**
-     * @param array possible options: types(=all), output(=false), refresh(=true), excludeTypes, skipMaintenanceBootstrap, skipOtherServers
+     * @param array possible options: types(=all), output(=false), refresh(=true), excludeTypes, skipOtherServers
      */
     public final function clearCache(array $options)
     {
@@ -141,9 +141,6 @@ class Kwf_Util_ClearCache
         Kwf_Events_ModelObserver::getInstance()->disable();
 
         Kwf_Util_MemoryLimit::set(512);
-        if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
-            Kwf_Util_Maintenance::writeMaintenanceBootstrap($output);
-        }
 
         if ($typeNames == 'all') {
             $types = $this->getTypes();
@@ -223,10 +220,6 @@ class Kwf_Util_ClearCache
                     }
                 }
             }
-        }
-
-        if (!isset($options['skipMaintenanceBootstrap']) || !$options['skipMaintenanceBootstrap']) {
-            Kwf_Util_Maintenance::restoreMaintenanceBootstrap($output);
         }
 
         Kwf_Events_ModelObserver::getInstance()->enable();
