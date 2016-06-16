@@ -238,7 +238,7 @@ FormComponent.prototype = {
 
                 // show success content
                 if (r.successContent) {
-                    statistics.trackEvent(t.trl('Form Submission'), location.pathname, button.find('span').text());
+                    statistics.trackEvent(t.trlKwf('Form Submission'), location.pathname, button.find('span').text());
                     var el = this.el.parent().append(r.successContent);
                     if (this.config.hideFormOnSuccess) {
                         this.el.hide();
@@ -250,7 +250,7 @@ FormComponent.prototype = {
                     }
                     onReady.callOnContentReady(el, {newRender: true});
                 } else if (r.successUrl) {
-                    statistics.trackEvent(t.trl('Form Submission'), location.pathname, button.find('span').text());
+                    statistics.trackEvent(t.trlKwf('Form Submission'), location.pathname, button.find('span').text());
                     document.location.href = r.successUrl;
                 } else {
                     //errors are shown, lightbox etc needs to resize
