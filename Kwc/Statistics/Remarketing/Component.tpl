@@ -7,7 +7,7 @@ Remarketing tags may not be associated with personally identifiable information 
 <script type="text/javascript">
     /* <![CDATA[ */
     var google_conversion_id = <?=$this->id?>;
-    <? if ($this->label) { ?>var google_conversion_label = "<?=$this->label?>";<?php } ?>
+    <? if ($this->label) { ?>var google_conversion_label = "<?=$this->label?>";<? } ?>
 
     var google_custom_params = window.google_tag_params;
     var google_remarketing_only = true;
