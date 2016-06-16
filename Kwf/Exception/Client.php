@@ -10,7 +10,6 @@ class Kwf_Exception_Client extends Kwf_Exception_NoLog
     {
         return 'ErrorClient';
     }
-
     
     public function render($ignoreCli = false)
     {
