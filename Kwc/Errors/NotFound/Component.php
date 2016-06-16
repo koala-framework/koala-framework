@@ -5,6 +5,7 @@ class Kwc_Errors_NotFound_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
+        $ret['rootElementClass'] = 'kwfUp-webStandard';
         return $ret;
     }
     

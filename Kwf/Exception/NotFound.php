@@ -16,6 +16,11 @@ class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
         return 'Error404';
     }
 
+    public function getComponentClass()
+    {
+        return 'Kwc_Errors_NotFound_Component';
+    }
+
     public function log()
     {
         if (Kwf_Exception::isDebug()) {
@@ -57,6 +62,7 @@ class Kwf_Exception_NotFound extends Kwf_Exception_Abstract
         } catch (Exception $e) {
             Kwf_Debug::handleException($e);
         }
+
         parent::render($ignoreCli);
     }
 }
