@@ -1,9 +1,9 @@
-Kwc.Abstract.Image.ImageFile = Ext2.extend(Kwf.Form.File, {
+Kwf.Form.Field.Image.ImageFile = Ext2.extend(Kwf.Form.File, {
 
     _completeValue: null,
 
     initComponent: function() {
-        Kwc.Abstract.Image.ImageFile.superclass.initComponent.call(this);
+        Kwf.Form.Field.Image.ImageFile.superclass.initComponent.call(this);
         this.on('uploaded', function(field, value) {
             if (value) {
                 var fs = this.ownerCt.ownerCt.items.find(function(i){return i.xtype=='fieldset'});
@@ -21,7 +21,7 @@ Kwc.Abstract.Image.ImageFile = Ext2.extend(Kwf.Form.File, {
     },
 
     afterRender: function() {
-        Kwc.Abstract.Image.ImageFile.superclass.afterRender.call(this);
+        Kwf.Form.Field.Image.ImageFile.superclass.afterRender.call(this);
         this.deleteButton.setText(trlKwf('delete'));
         this.uploadButton.setText(trlKwf('Upload Image'));
     },
@@ -41,8 +41,8 @@ Kwc.Abstract.Image.ImageFile = Ext2.extend(Kwf.Form.File, {
         } else {
             this.uploadButton.setText(trlKwf('Upload Image'));
         }
-        Kwc.Abstract.Image.ImageFile.superclass.setValue.call(this, value);
+        Kwf.Form.Field.Image.ImageFile.superclass.setValue.call(this, value);
     }
 });
 
-Ext2.reg('kwc.imagefile', Kwc.Abstract.Image.ImageFile);
+Ext2.reg('kwf.form.field.image.imagefile', Kwf.Form.Field.Image.ImageFile);

@@ -1,21 +1,21 @@
-Ext2.namespace('Kwc.Abstract.Image');
-Kwc.Abstract.Image.ImageUploadField = Ext2.extend(Ext2.Panel, {
+Ext2.namespace('Kwf.Form.Field.Image');
+Kwf.Form.Field.Image.UploadField = Ext2.extend(Ext2.Panel, {
 
     _scaleFactor: null,
     baseParams: null,
 
     initComponent: function() {
         this.baseParams = {};
-        Kwc.Abstract.Image.ImageUploadField.superclass.initComponent.call(this);
+        Kwf.Form.Field.Image.UploadField.superclass.initComponent.call(this);
         var dimensionField = this._getDimensionField();
         if (dimensionField) {// because it's possible to define only a single dimension
             dimensionField.on('render', function () {
                 // fileUploadField also has to be rendered
                 var dimensionField = this._getDimensionField();
                 var fileUploadField = this._getFileUploadField();
-                fileUploadField.container.addClass('kwc-abstract-image-imageuploadfile-container');
+                fileUploadField.container.addClass('kwf-form-field-image-uploadfield-container');
                 if (dimensionField.getEl() && fileUploadField.getEl()) {
-                    dimensionField.getEl().parent().parent().addClass('kwc-dimensionfield-container');
+                    dimensionField.getEl().parent().parent().addClass('kwf-form-field-image-dimensionfield-container');
                 }
             }, this);
             dimensionField.on('change', function (dimension) {
@@ -71,14 +71,14 @@ Kwc.Abstract.Image.ImageUploadField = Ext2.extend(Ext2.Panel, {
         }
         if (!value.cropData) {
             var dimension = dimensionField.dimensions[value.dimension];
-            value.cropData = Kwc.Abstract.Image.CropImage
+            value.cropData = Kwf.Form.Field.Image.CropImage
                 .calculateDefaultCrop(dimension.width, dimension.height,
                     dimensionField.imageData.imageWidth, dimensionField.imageData.imageHeight);
         } else {
             fileUploadField.getEl().child('.hover-background .message')
                 .update(trlKwf('Caution! Crop region does not match minimum requirement.'));
         }
-        if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, dimensions, dpr2)) {
+        if (!Kwf.Form.Field.Image.DimensionField.isValidImageSize(value, dimensions, dpr2)) {
             this.getEl().addClass('error');
             fileUploadField.getEl().child('.hover-background').addClass('error');
         } else {
@@ -89,12 +89,12 @@ Kwc.Abstract.Image.ImageUploadField = Ext2.extend(Ext2.Panel, {
 
     _getFileUploadField: function () {
         return this.findBy(function(i) {
-            return i instanceof Kwc.Abstract.Image.ImageFile;
+            return i instanceof Kwf.Form.Field.Image.ImageFile;
         }, this)[0];
     },
 
     _getDimensionField: function () {
-        return this.findByType('kwc.image.dimensionfield')[0];
+        return this.findByType('kwf.form.field.image.dimensionfield')[0];
     },
 
     _setPreviewUrl: function(value) {
@@ -112,7 +112,7 @@ Kwc.Abstract.Image.ImageUploadField = Ext2.extend(Ext2.Panel, {
                         && Math.floor(outWidth * 100 / outHeight)
                             != Math.floor(value.cropData.width * 100 / value.cropData.height)
                     ) {
-                        var result = Kwc.Abstract.Image.CropImage
+                        var result = Kwf.Form.Field.Image.CropImage
                             .calculateDefaultCrop(outWidth, outHeight,
                                                 value.cropData.width, value.cropData.height);
                         // This also resets the value of dimensionField. Thisway also
@@ -124,6 +124,10 @@ Kwc.Abstract.Image.ImageUploadField = Ext2.extend(Ext2.Panel, {
                         value.cropData.x += result.x;
                         value.cropData.y += result.y;
                     }
+                } else if (dimension) {
+                    previewParams.dimension_width = dimension.width;
+                    previewParams.dimension_height = dimension.height;
+                    previewParams.dimension_cover = dimension.cover;
                 }
             }
 
@@ -148,4 +152,4 @@ Kwc.Abstract.Image.ImageUploadField = Ext2.extend(Ext2.Panel, {
     }
 });
 
-Ext2.reg('kwc.image.imageuploadfield', Kwc.Abstract.Image.ImageUploadField);
+Ext2.reg('kwf.form.field.image.uploadfield', Kwf.Form.Field.Image.UploadField);

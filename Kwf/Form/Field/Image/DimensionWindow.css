@@ -1,4 +1,4 @@
-.kwc-abstract-image-dimension-window-crop-panel .information {
+.kwf-form-field-image-dimension-window-crop-panel .information {
     background-image: url('/assets/silkicons/error.png');
     background-repeat: no-repeat;
     padding-left: 22px;
@@ -8,12 +8,12 @@
     line-height: 14px;
 }
 
-.kwc-abstract-image-dimension-window-imagedata {
+.kwf-form-field-image-dimension-window-imagedata {
     margin-top:10px;
 }
 
-.kwc-abstract-image-dimension-window-userselection,
-.kwc-abstract-image-dimension-window-userselection > div > div {
+.kwf-form-field-image-dimension-window-userselection,
+.kwf-form-field-image-dimension-window-userselection > div > div {
     border: none;
 }
 
@@ -22,11 +22,11 @@
     color: #ffffff;
 }
 
-.x2-window .kwc-abstract-image-crop-image-wrapper.error {
+.x2-window .kwf-form-field-image-crop-image-wrapper.error {
     background-image: url('/assets/kwf/images/cropimage/redPx85.png');
 }
 
-.kwc-abstract-image-dimensionwindow-errorMessage.error {
+.kwf-form-field-image-dimensionwindow-errorMessage.error {
     padding-left: 18px;
     background-image: url('/assets/silkicons/exclamation.png');
     background-repeat: no-repeat;

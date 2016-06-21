@@ -1,5 +1,5 @@
 Ext2.namespace('Kwc.Basic.ImageEnlarge');
-Kwc.Basic.ImageEnlarge.ImageUploadField = Ext2.extend(Kwc.Abstract.Image.ImageUploadField, {
+Kwc.Basic.ImageEnlarge.ImageUploadField = Ext2.extend(Kwf.Form.Field.Image.UploadField, {
 
     _findUseCropCheckbox: function () {
         var useCropCheckboxes = this.findParentBy(function (component, container){
@@ -39,16 +39,16 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext2.extend(Kwc.Abstract.Image.ImageUp
             }
 
             // change min-requirement text
-            var pixelString = Kwc.Abstract.Image.DimensionField
+            var pixelString = Kwf.Form.Field.Image.DimensionField
                 .getDimensionPixelString(this.imageEnlargeDimension, value, dpr2);
-            dimensionField.getEl().child('.kwc-abstract-image-dimension-name')
+            dimensionField.getEl().child('.kwf-form-field-image-dimension-name')
                 .update(trlKwf('At least: ')+pixelString);
 
             // check size and show message at fileUploadField
             valueCopy.dimension = 0;
             enlargeDimensions = new Array();
             enlargeDimensions.add(this.imageEnlargeDimension);
-            if (!Kwc.Abstract.Image.DimensionField
+            if (!Kwf.Form.Field.Image.DimensionField
                     .isValidImageSize(valueCopy, enlargeDimensions, dpr2)) {
                 this.getEl().addClass('error');
                 fileUploadField.getEl().child('.hover-background').addClass('error');
@@ -66,18 +66,18 @@ Kwc.Basic.ImageEnlarge.ImageUploadField = Ext2.extend(Kwc.Abstract.Image.ImageUp
                         .update(trlKwf('Caution! Crop region does not match minimum requirement for enlarge image.'));
                 }
             } else {
-                var pixelString = Kwc.Abstract.Image.DimensionField
+                var pixelString = Kwf.Form.Field.Image.DimensionField
                     .getDimensionPixelString(dimensions[value.dimension], value, dpr2);
-                dimensionField.getEl().child('.kwc-abstract-image-dimension-name')
+                dimensionField.getEl().child('.kwf-form-field-image-dimension-name')
                     .update(trlKwf('At least: ')+pixelString);
 
                 Kwc.Basic.ImageEnlarge.ImageUploadField.superclass
                     ._validateImageTooSmallUserNotification.call(this, value, dimensions, scaleFactor, fileUploadField, dimensionField, dpr2);
             }
         } else {
-            var pixelString = Kwc.Abstract.Image.DimensionField
+            var pixelString = Kwf.Form.Field.Image.DimensionField
                 .getDimensionPixelString(dimensions[value.dimension], value, dpr2);
-            dimensionField.getEl().child('.kwc-abstract-image-dimension-name')
+            dimensionField.getEl().child('.kwf-form-field-image-dimension-name')
                 .update(trlKwf('At least: ')+pixelString);
             Kwc.Basic.ImageEnlarge.ImageUploadField.superclass
                 ._validateImageTooSmallUserNotification.call(this, value, dimensions, scaleFactor, fileUploadField, dimensionField, dpr2);

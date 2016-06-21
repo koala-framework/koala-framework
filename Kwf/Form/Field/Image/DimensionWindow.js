@@ -1,5 +1,5 @@
-Ext2.namespace('Kwc.Abstract.Image');
-Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
+Ext2.namespace('Kwf.Form.Field.Image');
+Kwf.Form.Field.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
 
     _scaleFactor: null,
     _dpr2Check: false,
@@ -22,7 +22,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
         for (var i in this.dimensions) {
             radios.push({
                 inputValue: i,
-                boxLabel: Kwc.Abstract.Image.DimensionField.getDimensionString(this.dimensions[i], this._dpr2Check),
+                boxLabel: Kwf.Form.Field.Image.DimensionField.getDimensionString(this.dimensions[i], this._dpr2Check),
                 name: 'dimension',
                 listeners: {
                     check: this._enableDisableFields,
@@ -65,7 +65,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
         this._userSelection = new Ext2.Panel({
             xtype: 'panel',
             layout: 'column',
-            cls: 'kwc-abstract-image-dimension-window-userselection',
+            cls: 'kwf-form-field-image-dimension-window-userselection',
             hideBorders: true,
             autoHeight: true,
             items: [
@@ -119,7 +119,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
         var imageDataField = {
             xtype: 'fieldset',
             autoHeight: true,
-            cls: 'kwc-abstract-image-dimension-window-imagedata',
+            cls: 'kwf-form-field-image-dimension-window-imagedata',
             hideBorders: false,
             title: trlKwf('Image Data'),
             items: [
@@ -131,7 +131,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
 
         var showDimensionField = new Ext2.BoxComponent({
             autoEl: {
-                html: '<div class="only-dimension">'+trlKwf('Dimension')+': '+Kwc.Abstract.Image.DimensionField
+                html: '<div class="only-dimension">'+trlKwf('Dimension')+': '+Kwf.Form.Field.Image.DimensionField
                     .getDimensionString(this.dimensions[this._dimensionField.getValue()], this._dpr2Check)+'</div>',
                 hideBorders: true
             }
@@ -196,7 +196,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
             '->',
                 this._errorMessage
             ],
-            cls: 'kwc-abstract-image-dimension-window-crop-panel',
+            cls: 'kwf-form-field-image-dimension-window-crop-panel',
             region: 'center',
             title: trlKwf('Image region'),
             width: 600,
@@ -222,7 +222,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
                             dimension: this._dimensionField.getValue(),
                             width: this._getUserSelectedDimensionWidth(),
                             height: this._getUserSelectedDimensionHeight(),
-                            cropData: Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(this._cropImage.getValue(), this._scaleFactor)
+                            cropData: Kwf.Form.Field.Image.DimensionWindow._multiplyCropDataWithFactor(this._cropImage.getValue(), this._scaleFactor)
                         };
                         this.fireEvent('save', this.value);
                         this.close();
@@ -240,7 +240,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
             }
         ];
 
-        Kwc.Abstract.Image.DimensionWindow.superclass.initComponent.call(this);
+        Kwf.Form.Field.Image.DimensionWindow.superclass.initComponent.call(this);
         this._validateSizes();
     },
 
@@ -259,13 +259,13 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
 
         var cropImageWidth = Math.round(this.imageData.imageWidth / this.imageData.imageHandyScaleFactor);
         var cropImageHeight = Math.round(this.imageData.imageHeight / this.imageData.imageHandyScaleFactor);
-        this._cropImage = new Kwc.Abstract.Image.CropImage({
+        this._cropImage = new Kwf.Form.Field.Image.CropImage({
             // call controller to create image with nice size to work with
             src: '/kwf/media/upload/download-handy?uploadId='+this.imageData.uploadId+'&hashKey='+this.imageData.hashKey,
-            cls: 'kwc-abstract-image-dimension-window-crop-image',
+            cls: 'kwf-form-field-image-dimension-window-crop-image',
             outWidth: outWidth,
             outHeight: outHeight,
-            cropData: Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(cropData, 1/this._scaleFactor),
+            cropData: Kwf.Form.Field.Image.DimensionWindow._multiplyCropDataWithFactor(cropData, 1/this._scaleFactor),
             scaleFactor: this.imageData.imageHandyScaleFactor,
             width: cropImageWidth,
             height: cropImageHeight,
@@ -276,19 +276,19 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
                 dimension: this._dimensionField.getValue(),
                 width: this._widthField.getValue(),
                 height: this._heightField.getValue(),
-                cropData: Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(cropData, this._scaleFactor)
+                cropData: Kwf.Form.Field.Image.DimensionWindow._multiplyCropDataWithFactor(cropData, this._scaleFactor)
             };
             var errorMessageEl = Ext2.get(this._errorMessage.getEl());
-            errorMessageEl.addClass('kwc-abstract-image-dimensionwindow-errorMessage');
-            if (!Kwc.Abstract.Image.DimensionField.isValidImageSize(value, this.dimensions, this._dpr2Check)) {
+            errorMessageEl.addClass('kwf-form-field-image-dimensionwindow-errorMessage');
+            if (!Kwf.Form.Field.Image.DimensionField.isValidImageSize(value, this.dimensions, this._dpr2Check)) {
                 errorMessageEl.addClass('error');
                 errorMessageEl.update(trlKwf('Selection too small!'));
-                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').addClass('error');
+                this._cropImage.getEl().child('.kwf-form-field-image-crop-image-wrapper').addClass('error');
             } else {
                 var errorMessageEl = Ext2.get(this._errorMessage.getEl());
                 errorMessageEl.removeClass('error');
                 errorMessageEl.update('');
-                this._cropImage.getEl().child('.kwc-abstract-image-crop-image-wrapper').removeClass('error');
+                this._cropImage.getEl().child('.kwf-form-field-image-crop-image-wrapper').removeClass('error');
             }
         }, this);
 
@@ -358,7 +358,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
     _resetCropRegion: function (element, value)
     {
         //Change to cropData = null to reset selection on change
-        var cropData = Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(this._cropImage.getValue(), this._scaleFactor);
+        var cropData = Kwf.Form.Field.Image.DimensionWindow._multiplyCropDataWithFactor(this._cropImage.getValue(), this._scaleFactor);
 
         if (value.inputValue == this.value.dimension) {
             cropData = this.value.cropData;
@@ -369,11 +369,11 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
             dimension: this._dimensionField.getValue(),
             width: width,
             height: height,
-            cropData: Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(cropData)
+            cropData: Kwf.Form.Field.Image.DimensionWindow._multiplyCropDataWithFactor(cropData)
         };
         this._cropImage.outWidth = width;
         this._cropImage.outHeight = height;
-        this._cropImage.setCropDataAndPreserveRatio(Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor(cropData, 1/this._scaleFactor), this._getPreserveRatio());
+        this._cropImage.setCropDataAndPreserveRatio(Kwf.Form.Field.Image.DimensionWindow._multiplyCropDataWithFactor(cropData, 1/this._scaleFactor), this._getPreserveRatio());
     },
 
     _validateSizes: function()
@@ -439,7 +439,7 @@ Kwc.Abstract.Image.DimensionWindow = Ext2.extend(Ext2.Window, {
     }
 });
 
-Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor = function (cropData, factor)
+Kwf.Form.Field.Image.DimensionWindow._multiplyCropDataWithFactor = function (cropData, factor)
 {
     if (!cropData) return cropData;
     return {
@@ -450,4 +450,4 @@ Kwc.Abstract.Image.DimensionWindow._multiplyCropDataWithFactor = function (cropD
     };
 };
 
-Ext2.reg('kwc.image.dimensionwindow', Kwc.Abstract.Image.DimensionWindow);
+Ext2.reg('kwf.form.field.image.dimensionwindow', Kwf.Form.Field.Image.DimensionWindow);
