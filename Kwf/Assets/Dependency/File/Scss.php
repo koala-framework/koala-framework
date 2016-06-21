@@ -78,6 +78,7 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
         $wrapperContents .= "@import \"$fileName\";\n";
         $wrapperFile = tempnam('temp', 'scw');
         file_put_contents($wrapperFile, $wrapperContents);
+        chmod($wrapperFile, 0777);
 
         $bin = Kwf_Config::getValue('server.nodeSassBinary');
         if (!$bin) {
