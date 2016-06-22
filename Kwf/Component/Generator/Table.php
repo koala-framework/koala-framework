@@ -321,6 +321,12 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             throw new Kwf_Exception("you must call this only with the correct source");
         }
 
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_DenyAddComponentClass') as $p) {
+            if ($p->isComponentClassAddDenied($parentTarget, $source->componentClass)) {
+                return null;
+            }
+        }
+
         $newRow = $this->_duplicateRow($source, $parentTarget);
         if (!$newRow) {
             return null;
