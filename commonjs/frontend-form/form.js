@@ -141,9 +141,9 @@ FormComponent.prototype = {
         return ret;
     },
     clearValues: function() {
-        $.each(this.fields, function(i, f) {
+        $.each(this.fields, $.proxy(function(i, f) {
             f.clearValue();
-        }, this);
+        }, this));
     },
     setValues: function(values) {
         for (var i in values) {
