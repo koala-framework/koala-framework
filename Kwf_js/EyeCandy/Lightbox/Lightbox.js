@@ -525,7 +525,7 @@ LightboxStyles.Abstract.prototype = {
     },
     mask: function() {
         //calling mask multiple times in valid, unmask must be called exactly often
-        var maskEl = $(document.body).find('.kwfUp-kwfLightboxMask');
+        var maskEl = this.lightbox.lightboxEl.find('.kwfUp-kwfLightboxMask');
         if (maskEl.length) {
             maskEl.show();
             setTimeout(function(){
