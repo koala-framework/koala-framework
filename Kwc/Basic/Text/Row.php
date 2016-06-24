@@ -458,7 +458,7 @@ class Kwc_Basic_Text_Row extends Kwf_Model_Proxy_Row
 
                 $srcRow = Kwc_Abstract::createModel($classes['download'])
                                 ->getRow($part['componentId']);
-                if ($srcRow->fileExists()) {
+                if ($srcRow && $srcRow->fileExists()) {
                     $destRow = Kwc_Abstract::createModel($classes['download'])
                                                 ->createRow($srcRow->toArray());
                     $this->addChildComponentRow('download', $destRow);
