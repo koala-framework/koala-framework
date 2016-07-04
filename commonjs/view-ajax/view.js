@@ -75,7 +75,6 @@ ViewAjax.prototype = {
     limit: 10,
     initialPageSize: null,
     minimumCharactersForFilter: 3,
-    checkLastViewScrollPosition: false,
 
     addHistoryEntryTimer: 0,
 
@@ -171,7 +170,7 @@ ViewAjax.prototype = {
                 });
             }
 
-            if (this.checkLastViewScrollPosition && !this.visibleDetail && this._lastViewScrollPosition) {
+            if (!this.visibleDetail && this._lastViewScrollPosition) {
                 $(window).scrollTop(this._lastViewScrollPosition);
             }
             if (this._getState().menuLinkId) {
@@ -219,7 +218,7 @@ ViewAjax.prototype = {
 
                 ev.preventDefault();
                 //more... Link clicked
-                if (this.checkLastViewScrollPosition) this._lastViewScrollPosition = $(window).scrollTop();
+                this._lastViewScrollPosition = $(window).scrollTop();
                 this.showDetail(a.attr('href'));
 
             }).bind(this));

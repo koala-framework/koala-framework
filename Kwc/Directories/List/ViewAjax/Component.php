@@ -29,8 +29,7 @@ class Kwc_Directories_List_ViewAjax_Component extends Kwc_Directories_List_View_
             'loadMoreBufferPx' => $this->_getSetting('loadMoreBufferPx'),
             'loadDetailAjax' => $this->_getSetting('loadDetailAjax'),
             'limit' => 10,
-            'minimumCharactersForFilter' => 3,
-            'checkLastViewScrollPosition' => false
+            'minimumCharactersForFilter' => 3
         );
         $itemDir = $this->getData()->parent->getComponent()->getItemDirectory();
         if (is_string($itemDir)) {
