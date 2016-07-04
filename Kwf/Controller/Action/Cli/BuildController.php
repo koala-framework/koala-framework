@@ -56,7 +56,7 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
             );
             foreach ($files as $fileinfo) {
                 $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-                $todo($fileinfo->getRealPath());
+                $todo((string)$fileinfo);
             }
         }
         exit;
