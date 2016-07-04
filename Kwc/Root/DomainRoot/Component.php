@@ -17,6 +17,9 @@ class Kwc_Root_DomainRoot_Component extends Kwc_Root_Abstract
     public function formatPath($parsedUrl)
     {
         $host = $parsedUrl['host'];
+        if (isset($parsedUrl['port']) && $parsedUrl['port'] != 80) {
+            $host .= ':' . $parsedUrl['port'];
+        }
         $setting = $this->_getSetting('generators');
         $modelName = $setting['domain']['model'];
         $domain = Kwf_Model_Abstract::getInstance($modelName)->getRowByHost($host);

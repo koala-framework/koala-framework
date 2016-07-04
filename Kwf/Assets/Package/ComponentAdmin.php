@@ -73,9 +73,7 @@ class Kwf_Assets_Package_ComponentAdmin extends Kwf_Assets_Package_Default
         $frontendPackage = Kwf_Assets_Package_ComponentFrontend::getInstance();
 
         if ($commonJsData) {
-            $deps = array_merge(
-                $frontendPackage->_getFilteredUniqueDependencies($mimeType)
-            );
+            $deps = $frontendPackage->_getFilteredUniqueDependencies($mimeType);
             foreach ($deps as $i) {
                 $data = array();
                 $commonJsDeps = $this->_getCommonJsDeps($i, $data);

@@ -105,7 +105,6 @@ class Kwf_Util_Update_Runner
                 'types' => 'all',
                 'output' => $this->_verbose,
                 'refresh' => isset($options['refreshCache']) ? $options['refreshCache'] : true,
-                'skipMaintenanceBootstrap'=>true,
             ));
             if ($this->_verbose) echo "\n";
         }
