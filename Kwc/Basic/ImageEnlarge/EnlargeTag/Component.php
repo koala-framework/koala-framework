@@ -133,7 +133,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
 
     public static function isValidMediaOutput($id, $type, $className)
     {
-        return Kwf_Media_Output_Component::isValidImage($id, $type, $className);
+        if ($type == 'original') {
+            return Kwf_Media_Output_Component::isValid($id);
+        } else {
+            return Kwf_Media_Output_Component::isValidImage($id, $type, $className);
+        }
     }
 
     public static function getMediaOutput($id, $type, $className)
@@ -145,9 +149,16 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
         if (!$data) {
             return null;
         }
-        $dimension = $component->getComponent()->getImageDimensions();
-
-        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dimension, $type);
+        if ($type == 'original') {
+            return array(
+                'file' => $data['file'],
+                'downloadFilename' => $data['filename'],
+                'mimeType' => $data['mimeType'],
+            );
+        } else {
+            $dimension = $component->getComponent()->getImageDimensions();
+            return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dimension, $type);
+        }
      }
 
 
