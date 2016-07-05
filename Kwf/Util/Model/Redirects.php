@@ -5,6 +5,27 @@ class Kwf_Util_Model_Redirects extends Kwf_Model_Db
 
     public function findRedirectUrl($type, $source, $host = null)
     {
+        $target = $this->_fetchRedirectUrl($type, $source, $host);
+
+        if (!$target && ($type == 'path' || $type == 'domainPath') && strpos($source, '?') !== false) {
+            $queryParams = substr($source, strpos($source, '?'));
+            $source = substr($source, 0, strpos($source, '?')-1);
+            $target = $this->_fetchRedirectUrl($type, $source, $host);
+            if ($target) {
+                if (strpos($source, '?') !== false) {
+                    $target .= '&';
+                } else {
+                    $target .= '?';
+                }
+                $target .= $queryParams;
+            }
+        }
+
+        return $target;
+    }
+
+    private function _fetchRedirectUrl($type, $source, $host)
+    {
         $s = new Kwf_Model_Select();
         $s->whereEquals('type', $type);
         $source = rtrim($source, '/');
