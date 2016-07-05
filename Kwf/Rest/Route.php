@@ -58,7 +58,7 @@ class Kwf_Rest_Route extends Zend_Rest_Route
                 $params['id'] = $path[$pathElementCount-2];
             } elseif ($pathElementCount == 1) {
                 $params['id'] = urldecode(array_shift($path));
-            } elseif ($pathElementCount == 0 && !isset($params['id'])) {
+            } elseif ($pathElementCount == 0) {
                 $specialGetTarget = 'index';
             }
 

@@ -7,8 +7,8 @@
     </div>
 {% else %}
     {% if errors %}
-        <div class="kwfUp-webStandard">
-        <p class="{{ "error"|bemClass }}">{{ placeholder.error }}:</p>
+        <div class="kwfUp-webStandard kwfUp-kwcFormError kwfUp-webFormError">
+        <p class="kwfUp-error">{{ placeholder.error }}:</p>
         <ul>
         {% for error in errors %}
             <li>{{ error }}</li>

@@ -10,7 +10,7 @@
         width: 100%;
         z-index: 2;
 
-        .kwcBem--opaque {
+        &.kwcBem__background--opaque {
             @include opacity(0.7);
         }
 
@@ -19,44 +19,38 @@
         }
     }
 
-    .kwcBem--white {
-        .kwcBem {
-            .kwcBem__background {
-                background: #FFFFFF;
-            }
+    &.kwcBem--white {
+        .kwcBem__background {
+            background: #FFFFFF;
+        }
 
-            .kwcBem__content {
-                .kwfUp-webStandard p {
-                    color: $typo;
-                }
+        .kwcBem__content {
+            .kwfUp-webStandard p {
+                color: $typo;
             }
         }
     }
 
-    .kwcBem--grey {
-        .kwcBem {
-            .kwcBem__background {
-                background: #ccd0d4;
-            }
+    &.kwcBem--grey {
+        .kwcBem__background {
+            background: #ccd0d4;
+        }
 
-            .kwcBem__content {
-                .kwfUp-webStandard p {
-                    color: $typo;
-                }
+        .kwcBem__content {
+            .kwfUp-webStandard p {
+                color: $typo;
             }
         }
     }
 
-    &--black {
-        .kwcBem {
-            &__background {
-                background: #000000;
-            }
+    &.kwcBem--black {
+        .kwcBem__background {
+            background: #000000;
+        }
 
-            &__content {
-                .kwfUp-webStandard p {
-                    color: #FFFFFF;
-                }
+        .kwcBem__content {
+            .kwfUp-webStandard p {
+                color: #FFFFFF;
             }
         }
     }

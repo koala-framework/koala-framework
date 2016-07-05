@@ -169,11 +169,10 @@ ViewAjax.prototype = {
                     filterComponentId: null
                 });
             }
-            //commented out because it should work without manual scrolling (browser should restore scroll position)
-            //but if it fails in real-world we can re-enable it
-            //if (!this.visibleDetail && this._lastViewScrollPosition) {
-            //    $(window).scrollTop(this._lastViewScrollPosition);
-            //}
+
+            if (!this.visibleDetail && this._lastViewScrollPosition) {
+                $(window).scrollTop(this._lastViewScrollPosition);
+            }
             if (this._getState().menuLinkId) {
                 $('a[kwc-view-ajax-filter]').each((function(i, el) {
                     var config = $(el).data('kwc-view-ajax-filter');
@@ -219,7 +218,7 @@ ViewAjax.prototype = {
 
                 ev.preventDefault();
                 //more... Link clicked
-                //this._lastViewScrollPosition = $(window).scrollTop();
+                this._lastViewScrollPosition = $(window).scrollTop();
                 this.showDetail(a.attr('href'));
 
             }).bind(this));
