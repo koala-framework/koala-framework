@@ -22,7 +22,7 @@ class Kwf_Component_Plugin_Login_Component extends Kwf_Component_Plugin_LoginAbs
         return false;
     }
 
-    public function skipProcessInput()
+    public function skipProcessInput(Kwf_Component_Data $data)
     {
         return false;
     }
