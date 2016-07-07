@@ -141,7 +141,7 @@ class Kwf_Assets_Dispatcher
 
     private function _buildOutputForUrl($url)
     {
-        Kwf_Util_MemoryLimit::set(512);
+        Kwf_Util_MemoryLimit::set(768);
         class_exists('Kwf_Trl'); //required because setup doesn't load Trl.php before dispatching assets
         $param = explode('/', $url);
         if (count($param) != 4) throw new Kwf_Exception_NotFound();
