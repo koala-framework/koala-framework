@@ -2,7 +2,7 @@ var AbstractStyle = require('kwf/lightbox/style/abstract');
 var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var kwfExtend = require('kwf/extend');
-var oneTransitionEnd = require('kwf/lightbox/helper/one-transition-end');
+var oneTransitionEnd = require('kwf/element/one-transition-end');
 
 var CenterBoxStyle = kwfExtend(AbstractStyle, {
     init: function()

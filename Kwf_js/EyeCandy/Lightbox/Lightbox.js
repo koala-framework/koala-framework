@@ -5,7 +5,7 @@ var historyState = require('kwf/history-state');
 var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var t = require('kwf/trl');
 var injectAssets = require('kwf/inject-assets');
-var oneTransitionEnd = require('kwf/lightbox/helper/one-transition-end');
+var oneTransitionEnd = require('kwf/element/one-transition-end');
 var StylesRegistry = require('kwf/lightbox/styles-registry');
 StylesRegistry.register('CenterBox', require('kwf/lightbox/style/center-box'));
 
