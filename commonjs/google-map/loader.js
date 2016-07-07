@@ -18,26 +18,31 @@ module.exports = function(callback, scope)
 
     isLoaded = true;
 
+
     //try find the correct api key
     //apiKeys is set by Kwf_Assets_Dependency_Dynamic_GoogleMapsApiKeys
-    //and contains possibly multiple api keys (to support multiple domains)
-    var apiKeyIndex;
-
-    var hostParts = location.host.split('.');
-    if (hostParts.length <= 1) {
-        apiKeyIndex = location.host;
-    } else {
-        apiKeyIndex = hostParts[hostParts.length-2]  // eg. 'koala-framework'
-            +hostParts[hostParts.length-1]; // eg. 'org'
-    }
-    if (['orat', 'coat', 'gvat', 'couk'].indexOf(apiKeyIndex) != -1) {
-        //one part more for those
-        apiKeyIndex = hostParts[hostParts.length-3]+apiKeyIndex;
-    }
-
     var key = '';
-    if (apiKeyIndex in apiKeys) {
-        key = apiKeys[apiKeyIndex];
+    if (typeof apiKeys == 'string') {
+        //one api key can have multiple domains configured
+        key = apiKeys;
+    } else {
+        //for legacy reasons support multiple domains with individual api keys
+        var apiKeyIndex;
+
+        var hostParts = location.host.split('.');
+        if (hostParts.length <= 1) {
+            apiKeyIndex = location.host;
+        } else {
+            apiKeyIndex = hostParts[hostParts.length-2]  // eg. 'koala-framework'
+                +hostParts[hostParts.length-1]; // eg. 'org'
+        }
+        if (['orat', 'coat', 'gvat', 'couk'].indexOf(apiKeyIndex) != -1) {
+            //one part more for those
+            apiKeyIndex = hostParts[hostParts.length-3]+apiKeyIndex;
+        }
+        if (apiKeyIndex in apiKeys) {
+            key = apiKeys[apiKeyIndex];
+        }
     }
     var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+ t.trlKwf('en');
     url += '&callback=';
