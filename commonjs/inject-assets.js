@@ -2,8 +2,8 @@ var $ = require('jQuery');
 
 function assetUrlEqual(a, b) {
     //remove v (version) paramete before comparing url
-    a = a.replace(/\?v=\d+$/, '');
-    b = b.replace(/\?v=\d+$/, '');
+    a = a.replace(/\?.*$/, '');
+    b = b.replace(/\?.*$/, '');
     return a == b;
 }
 
