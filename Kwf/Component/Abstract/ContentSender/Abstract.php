@@ -15,7 +15,10 @@ abstract class Kwf_Component_Abstract_ContentSender_Abstract
      *
      * used for Lightbox
      */
-    public function getLinkDataAttributes() { return array(); }
+    public function getLinkDataAttributes()
+    {
+        return array();
+    }
 
     abstract public function sendContent($includeMaster);
 
@@ -85,13 +88,7 @@ abstract class Kwf_Component_Abstract_ContentSender_Abstract
         foreach ($datas as $d) {
             foreach ($d['plugins'] as $p) {
                 $plugin = Kwf_Component_Plugin_Abstract::getInstance($p['pluginClass'], $p['componentId']);
-                $result = $plugin->skipProcessInput();
-                if ($result === Kwf_Component_Plugin_Interface_SkipProcessInput::SKIP_SELF_AND_CHILDREN) {
-                    continue 2;
-                }
-                if ($result === Kwf_Component_Plugin_Interface_SkipProcessInput::SKIP_SELF &&
-                    $p['componentId'] == $d['data']->componentId
-                ) {
+                if ($plugin->skipProcessInput($d['data'])) {
                     continue 2;
                 }
             }
