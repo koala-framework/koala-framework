@@ -8,23 +8,25 @@ Kwc.FulltextSearch.Box.Component = function(el, config) {
         this.el.child('.submitWrapper').hide();
     }
 
-    Kwf.Utils.HistoryState.on('popstate', function() {
-        if (Kwf.Utils.HistoryState.currentState.searchVisible) {
-            if (this.searchMainContent) {
-                this.showSearch();
+    if (this.config.useLiveSearch) {
+        Kwf.Utils.HistoryState.on('popstate', function () {
+            if (Kwf.Utils.HistoryState.currentState.searchVisible) {
+                if (this.searchMainContent) {
+                    this.showSearch();
+                } else {
+                    this.searchForm.setValues(Kwf.Utils.HistoryState.currentState.searchBoxValues);
+                    this.loadSearch();
+                }
             } else {
-                this.searchForm.setValues(Kwf.Utils.HistoryState.currentState.searchBoxValues);
-                this.loadSearch();
+                if (!this.previousMainContent) {
+                    //we didn't load the search using ajax, so we don't have a main content to show -> reload
+                    location.href = location.href;
+                } else {
+                    this.hideSearch();
+                }
             }
-        } else {
-            if (!this.previousMainContent) {
-                //we didn't load the search using ajax, so we don't have a main content to show -> reload
-                location.href = location.href;
-            } else {
-                this.hideSearch();
-            }
-        }
-    }, this);
+        }, this);
+    }
 
     this.searchForm = Kwc.Form.findForm(el);
 
