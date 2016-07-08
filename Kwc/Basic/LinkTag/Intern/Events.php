@@ -70,7 +70,7 @@ class Kwc_Basic_LinkTag_Intern_Events extends Kwc_Abstract_Events
         if ($c->isPage) {
             $ids[] = (string)$c->dbId;
         }
-        if ($c->generator instanceof Kwc_Root_Category_Generator) {
+        if (isset($c->generator) && $c->generator instanceof Kwc_Root_Category_Generator) {
             foreach ($c->generator->getRecursivePageChildIds($c->dbId) as $id) {
                 $ids[] = (string)$id;
             }
