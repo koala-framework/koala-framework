@@ -25,10 +25,6 @@ function _kwfTrl(key, text, values)
 
 function _kwfTrlp(key, text, plural, values)
 {
-    var prefix = 'kwfUp-';
-    if (prefix) prefix = prefix.substr(0, -1);
-    var trlData = prefix ? window[prefix]._trlData : window._trlData;
-
     if (trlData[key]) text = trlData[key];
     if (trlData[key+'.plural']) plural = trlData[key+'.plural'];
     if (values == null) {
