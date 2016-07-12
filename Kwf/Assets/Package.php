@@ -388,11 +388,11 @@ class Kwf_Assets_Package
                     $trlText = Kwf_Trl::getInstance()->$method($i->context, $i->text, array(), $language);
                     $js .= "{$uniquePrefix}_kwfTrlData['$key']='".str_replace("'", "\\'", $trlText)."';";
                 } else if ($i->type == 'trlp') {
-                    $trlText = Kwf_Trl::getInstance()->getTrlpValues(null, $i->text, $i->plural, array(), $language);
+                    $trlText = Kwf_Trl::getInstance()->getTrlpValues(null, $i->text, $i->plural, $i->source, $language);
                     $js .= "{$uniquePrefix}_kwfTrlData['$key']='".str_replace("'", "\\'", $trlText['single'])."';";
                     $js .= "{$uniquePrefix}_kwfTrlData['$key.plural']='".str_replace("'", "\\'", $trlText['plural'])."';";
                 } else if ($i->type == 'trlcp') {
-                    $trlText = Kwf_Trl::getInstance()->getTrlpValues($i->context, $i->text, $i->plural, array(), $language);
+                    $trlText = Kwf_Trl::getInstance()->getTrlpValues($i->context, $i->text, $i->plural, $i->source, $language);
                     $js .= "{$uniquePrefix}_kwfTrlData['$key']='".str_replace("'", "\\'", $trlText['single'])."';";
                     $js .= "{$uniquePrefix}_kwfTrlData['$key.plural']='".str_replace("'", "\\'", $trlText['plural'])."';";
                 } else {
