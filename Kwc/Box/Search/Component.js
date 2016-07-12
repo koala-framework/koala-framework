@@ -27,6 +27,7 @@ Kwf.onContentReady(function() {
             mgr.abort();
             var params = {};
             params[this.submitParam.dom.name] = this.submitParam.getValue();
+            params[this.submitParam.dom.name+'-post'] = 'post';
             params[this.searchField.dom.name] = this.searchField.getValue();
             mgr.update({
                 url: this.ajaxUrl.getValue(),
