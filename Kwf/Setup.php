@@ -236,8 +236,13 @@ class Kwf_Setup
 
             Kwf_Trl::getInstance()->setUseUserLanguage(false);
 
-            $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Kwf_Component_Data_Root::getInstance();
+
+            foreach ($root->getPlugins('Kwf_Component_PluginRoot_Interface_PreDispatch') as $p) {
+                $p->preDispatch($requestUrl);
+            }
+
+            $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $exactMatch = true;
             $data = $root->getPageByUrl($requestUrl, $acceptLanguage, $exactMatch);
             Kwf_Benchmark::checkpoint('getPageByUrl');
