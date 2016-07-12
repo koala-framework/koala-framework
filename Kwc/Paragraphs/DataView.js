@@ -137,6 +137,7 @@ Kwc.Paragraphs.DataView = Ext2.extend(Ext2.DataView, {
                     data: values
                 },
                 editable: false,
+                forceSelection: true,
                 width: 50,
                 triggerAction: 'all',
                 mode: 'local',
