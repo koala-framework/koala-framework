@@ -3,7 +3,7 @@
         <input type="hidden" value="{{ config|json_encode() }}" />
         <ul class="menu">
             {% for m in menu %}
-                {{ m.preHtml }}
+                {{ m.preHtml|raw }}
                 <li class="{{ m.class }}{% if m.submenu is defined and m.submenu|length %} hasSubMenu{% endif %}">
                     {% block menuLink %}
                     {{ renderer.componentLink(m.data, null, '' ~ "link"|bemClass ) }}
@@ -12,19 +12,19 @@
                         <div class="{{ 'dropdown'|bemClass }}">
                             <ul>
                                 {% for sm in m.submenu %}
-                                    {{ sm.preHtml }}
+                                    {{ sm.preHtml|raw }}
                                     <li class="{{ sm.class }}">
                                         {% block subMenuLink %}
                                         {{ renderer.componentLink(sm.data, null, '' ~ "subMenuLink"|bemClass ) }}
                                         {% endblock %}
                                     </li>
-                                    {{ sm.postHtml }}
+                                    {{ sm.postHtml|raw }}
                                 {% endfor %}
                             </ul>
                         </div>
                     {% endif %}
                 </li>
-                {{ m.postHtml }}
+                {{ m.postHtml|raw }}
             {% endfor %}
         </ul>
     </nav>
