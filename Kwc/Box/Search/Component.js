@@ -1,6 +1,5 @@
 
 Kwf.onContentReady(function() {
-
     var searchBoxes = Ext2.DomQuery.select('.kwcBoxSearch');
     Ext2.each(searchBoxes, function(searchBox) {
         var els = {
@@ -31,7 +30,11 @@ Kwf.onContentReady(function() {
             params[this.searchField.dom.name] = this.searchField.getValue();
             mgr.update({
                 url: this.ajaxUrl.getValue(),
-                params: params
+                params: params,
+                callback: function(el) {
+                    Kwf.callOnContentReady(el.dom, {newRender: true});
+                    el.show();
+                }
             });
         }, els, { buffer: 250 });
 
@@ -54,10 +57,13 @@ Kwf.onContentReady(function() {
             }
             focused = true;
         });
+
         els.searchField.on('blur', function() {
             if (!mouseover) {
                 if (searchSettings && searchSettings.searchResultBoxFade) {
-                    els.searchResult.fadeOut({ duration: .35, useDisplay: true });
+                    if (els.searchResult.isVisible()) {
+                        els.searchResult.fadeOut({duration: .35, useDisplay: true});
+                    }
                 } else {
                     els.searchResult.hide();
                 }
@@ -67,7 +73,9 @@ Kwf.onContentReady(function() {
         Ext2.get(document.body).on('click', function() {
             if (!mouseover && !focused) {
                 if (searchSettings && searchSettings.searchResultBoxFade) {
-                    els.searchResult.fadeOut({ duration: .35, useDisplay: true });
+                    if (els.searchResult.isVisible()) {
+                        els.searchResult.fadeOut({duration: .35, useDisplay: true});
+                    }
                 } else {
                     els.searchResult.hide();
                 }
