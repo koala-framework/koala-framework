@@ -36,9 +36,7 @@ function _kwfTrlp(key, text, plural, values)
             values.push(temp);
         }
 
-        if (values[0] == 1) {
-            text = single;
-        } else {
+        if (values[0] != 1) {
             text = plural;
         }
         var cnt = 0;
