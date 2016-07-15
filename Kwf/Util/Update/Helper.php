@@ -196,29 +196,30 @@ class Kwf_Util_Update_Helper
     public static function getExecutedUpdatesNames()
     {
         $db = Kwf_Registry::get('db');
-        try {
-            $q = $db->query("SELECT data FROM kwf_update");
-        } catch (Exception $e) {
-        }
+        $tables = $db->listTables();
         $doneNames = false;
-        if (isset($q)) {
+        if (in_array('kwf_updates', $tables)) {
+            $q = $db->query("SELECT name FROM kwf_updates");
+            $doneNames = array();
+            foreach($q->fetchAll() as $row) {
+                $doneNames[] = $row['name'];
+            }
+        } else if (in_array('kwf_update', $tables)) {
+            //update pre 4.2
+            $q = $db->query("SELECT data FROM kwf_update");
             $doneNames = $q->fetchColumn();
         }
+
         if (!$doneNames) {
             //fallback for older versions, update used to be a file
-            if (!file_exists('update')) {
-                $doneNames = array();
-                foreach (Kwf_Util_Update_Helper::getUpdates() as $u) {
-                    $doneNames[] = $u->getUniqueName();
-                }
-                $db->query("UPDATE kwf_update SET data=?", serialize($doneNames));
-                echo "No update revision found, assuming up-to-date\n";
-                exit;
+            if (file_exists('update')) {
+                $doneNames = file_get_contents('update');
+            } else {
+                throw new Kwf_Exception("Can't read kwf_update");
             }
-            $doneNames = file_get_contents('update');
         }
 
-        if (is_numeric(trim($doneNames))) {
+        if (is_string($doneNames) && is_numeric(trim($doneNames))) {
             //UPDATE applicaton/update format
             $r = trim($doneNames);
             $doneNames = array();
@@ -227,7 +228,7 @@ class Kwf_Util_Update_Helper
                     $doneNames[] = $u->getUniqueName();
                 }
             }
-        } else {
+        } else if (is_string($doneNames)) {
             $doneNames = unserialize($doneNames);
             if (isset($doneNames['start'])) {
                 //UPDATE applicaton/update format

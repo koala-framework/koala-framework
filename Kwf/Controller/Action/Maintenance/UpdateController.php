@@ -67,8 +67,8 @@ class Kwf_Controller_Action_Maintenance_UpdateController extends Kwf_Controller_
         if (!$runner->checkUpdatesSettings()) {
             throw new Kwf_Exception_Client("checkSettings failed, update stopped");
         }
-        $doneNames = array_merge($doneNames, $runner->executeUpdates());
-        $runner->writeExecutedUpdates($doneNames);
+        $executedUpdates = $runner->executeUpdates();
+        $runner->writeExecutedUpdates($executedUpdates);
 
         $errMsg = '';
         $errors = $runner->getErrors();

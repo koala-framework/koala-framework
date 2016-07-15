@@ -37,7 +37,7 @@ class Kwf_Controller_Action_Maintenance_SetupController extends Kwf_Controller_A
             } catch (Exception $e) {
                 throw new Kwf_Exception_Client("Fetching Tables failed: ".$e->getMessage());
             }
-            if (in_array('kwf_update', $tables)) {
+            if (in_array('kwf_update', $tables) || in_array('kwf_updates', $tables)) {
                 throw new Kwf_Exception_Client("Application seems to be set up already. (kwf_update table exists)");
             }
             if ($tables) {
