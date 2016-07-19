@@ -77,7 +77,7 @@ class Kwf_Controller_Action_Component_PagesController extends Kwf_Controller_Act
             $pageGenerator = Kwf_Component_Generator_Abstract::getInstances($component, array(
                 'pageGenerator' => true
             ));
-            if ($pageGenerator) {
+            if ($pageGenerator && $pageGenerator[0] instanceof Kwc_Root_Category_Generator) {
                 $data['actions']['add'] = true;
                 $data['actions']['paste'] = true;
                 $data['allowDrop'] = true;
