@@ -23,7 +23,7 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     if (options.lightboxUrl) {
         href = options.lightboxUrl; //ImagePage passes lightboxUrl as href points to img directly
     }
-    if (allByUrl[href]) {
+    if (allByUrl[href] && !options.alwaysReload) {
         l = allByUrl[href];
     } else {
         l = new Lightbox(href, options);
