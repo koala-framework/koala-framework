@@ -1,5 +1,12 @@
 var $ = require('jQuery');
 
+function assetUrlEqual(a, b) {
+    //remove v (version) paramete before comparing url
+    a = a.replace(/\?.*$/, '');
+    b = b.replace(/\?.*$/, '');
+    return a == b;
+}
+
 function injectAssets(html, re, type) {
     var m;
     while (m = re.exec(html)) {
@@ -7,7 +14,7 @@ function injectAssets(html, re, type) {
         if (type == 'text/css') {
             var alreadyLoaded = false;
             $.each(document.getElementsByTagName('link'), function(k, i) {
-                if (i.rel == 'stylesheet' && i.href == location.protocol+'//'+location.host+m[1]) {
+                if (i.rel == 'stylesheet' && assetUrlEqual(i.href, location.protocol+'//'+location.host+m[1])) {
                     alreadyLoaded = true;
                 }
             });
@@ -20,7 +27,7 @@ function injectAssets(html, re, type) {
         } else {
             var alreadyLoaded = false;
             $.each(document.getElementsByTagName('script'), function(k, i) {
-                if (i.src == location.protocol+'//'+location.host+m[1]) {
+                if (assetUrlEqual(i.src, location.protocol+'//'+location.host+m[1])) {
                     alreadyLoaded = true;
                 }
             });

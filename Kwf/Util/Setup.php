@@ -512,10 +512,6 @@ class Kwf_Util_Setup
             $ret .= "set_time_limit($tl);\n";
         }
 
-        $ret .= "if (substr(\$requestUri, 0, 9) == '/kwf/pma/' || \$requestUri == '/kwf/pma') {\n";
-        $ret .= "    Kwf_Util_Pma::dispatch();\n";
-        $ret .= "}\n";
-
         $ret .= "if (isset(\$_GET['kwcPreview'])) {\n";
         $ret .= "    \$role = Kwf_Registry::get('userModel')->getAuthedUserRole();\n";
         $ret .= "    if (!Kwf_Registry::get('acl')->isAllowed(\$role, 'kwf_component_preview', 'view')) {\n";

@@ -78,9 +78,7 @@ class Kwf_Setup
         }
 
         if (isset($_SERVER['REQUEST_URI']) && substr($_SERVER['REQUEST_URI'], 0, 5) == '/kwf/') {
-            if (substr($_SERVER['REQUEST_URI'], 0, 9) == '/kwf/pma/' || $_SERVER['REQUEST_URI'] == '/kwf/pma') {
-                Kwf_Util_Pma::dispatch();
-            } else if ($_SERVER['REQUEST_URI'] == '/kwf/check') {
+            if ($_SERVER['REQUEST_URI'] == '/kwf/check') {
                 $ok = true;
                 $msg = '';
                 if (Kwf_Setup::hasDb()) {
@@ -236,8 +234,13 @@ class Kwf_Setup
 
             Kwf_Trl::getInstance()->setUseUserLanguage(false);
 
-            $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Kwf_Component_Data_Root::getInstance();
+
+            foreach ($root->getPlugins('Kwf_Component_PluginRoot_Interface_PreDispatch') as $p) {
+                $p->preDispatch($requestUrl);
+            }
+
+            $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $exactMatch = true;
             $data = $root->getPageByUrl($requestUrl, $acceptLanguage, $exactMatch);
             Kwf_Benchmark::checkpoint('getPageByUrl');

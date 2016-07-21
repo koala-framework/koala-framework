@@ -69,10 +69,21 @@ class Kwf_Component_Plugin_Password_Component extends Kwf_Component_Plugin_Login
     {
     }
 
-    public function skipProcessInput()
+    public function skipProcessInput(Kwf_Component_Data $data)
     {
         // overwrite because parent call that makes a redirect on login which we don't want
-        $session = new Kwf_Session_Namespace('login_password');
-        return (bool)$session->login;
+
+        if ($data->componentId == $this->_componentId.'-loginForm') {
+            return false;
+        }
+
+        while ($data->parent && !$data->isPage) {
+            if ($data->componentId == $this->_componentId) {
+                $session = new Kwf_Session_Namespace('login_password');
+                return !(bool)$session->login;
+            }
+            $data = $data->parent;
+        }
+        return false;
     }
 }

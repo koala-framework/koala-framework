@@ -142,7 +142,7 @@ class Kwf_Update_20150309Legacy39000 extends Kwf_Update
             $this->createHashes();
             $this->moveOldFiles();
         } else {
-            echo "More than 5000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-uploads rename-uploads\"\n\"php bootstrap.php update-uploads create-hashes\"\n\"php bootstrap.php update-uploads move-old-files\"\n";
+            echo "More than 5000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-uploads rename-uploads\"\n\"php bootstrap.php update-uploads create-hashes\"\n\"php bootstrap.php update-uploads move-old-files\"\n\n";
         }
     }
 

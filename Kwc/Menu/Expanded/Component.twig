@@ -7,7 +7,7 @@
         {% endif %}
         <ul class="menu">
             {% for m in menu %}
-                {{ m.preHtml }}
+                {{ m.preHtml|raw }}
                 <li class="{{ m.class }}">
                     {% if m.isFirstChildPage %}
                         <p>{{ m.data.name|replace('{name}', m.data.name) }}</p>
@@ -19,18 +19,18 @@
                     {% if m.submenu|length %}
                         <ul class="subMenu">
                             {% for sm in m.submenu %}
-                                {{ sm.preHtml }}
+                                {{ sm.preHtml|raw }}
                                 <li class="{{ sm.class }}">
                                     {% block subMenuLink %}
                                     {{ renderer.componentLink(sm.data, sm.text) }}
                                     {% endblock %}
                                 </li>
-                                {{ sm.postHtml }}
+                                {{ sm.postHtml|raw }}
                             {% endfor %}
                         </ul>
                     {% endif %}
                 </li>
-                {{ m.postHtml }}
+                {{ m.postHtml|raw }}
             {% endfor %}
         </ul>
         <div class="kwfUp-clear"></div>

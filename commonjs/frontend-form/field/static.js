@@ -10,7 +10,8 @@ var Static = kwfExtend(Field, {
     },
     getFieldName: function() {
         return null; //TODO?
-    }
+    },
+    clearValue: function () {}
 });
 
 fieldRegistry.register('kwfFormFieldStatic', Static);

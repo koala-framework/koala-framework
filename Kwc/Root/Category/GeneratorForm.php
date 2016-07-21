@@ -85,6 +85,7 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
                 $this->add(new Kwf_Form_Field_Select($params['name'],  $params['label']))
                     ->setValues($params['values'])
                     ->setDefaultValue($params['defaultValue'])
+                    ->setWidth(300)
                     ->setData(new Kwc_Root_Category_GeneratorForm_GeneratorPropertyData($this, $plugin));
             }
         }

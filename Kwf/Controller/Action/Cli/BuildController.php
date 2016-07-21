@@ -55,8 +55,10 @@ class Kwf_Controller_Action_Cli_BuildController extends Kwf_Controller_Action_Cl
                 RecursiveIteratorIterator::CHILD_FIRST
             );
             foreach ($files as $fileinfo) {
-                $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-                $todo((string)$fileinfo);
+                if ($fileinfo->getFilename() != '.gitignore') {
+                    $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+                    $todo((string)$fileinfo);
+                }
             }
         }
         exit;
