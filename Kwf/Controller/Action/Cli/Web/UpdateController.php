@@ -79,8 +79,6 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         }
 
 
-        if (!$this->_getParam('debug')) Kwf_Util_Maintenance::writeMaintenanceBootstrap();
-
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
                                 Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
@@ -93,6 +91,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         $runner->setVerbose(true);
         $runner->setEnableDebug($this->_getParam('debug'));
         $runner->setSkipClearCache($skipClearCache);
+        $runner->setWriteMaintenanceBootstrap(!$this->_getParam('debug'));
         if (!$runner->checkUpdatesSettings()) {
             echo "\ncheckSettings failed, update stopped\n";
         } else {
@@ -101,8 +100,6 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
             $doneNames = array_unique(array_merge($doneNames, $executedUpdates));
             $runner->writeExecutedUpdates($doneNames);
         }
-        
-        if (!$this->_getParam('debug')) Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
 
         $errors = $runner->getErrors();
         if ($errors) {
