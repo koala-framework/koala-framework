@@ -98,8 +98,7 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         } else {
             $executedUpdates = $runner->executeUpdates();
             echo "\n\033[32mupdate finished\033[0m\n";
-            $doneNames = array_unique(array_merge($doneNames, $executedUpdates));
-            $runner->writeExecutedUpdates($doneNames);
+            $runner->writeExecutedUpdates($executedUpdates);
         }
         
         if (!$this->_getParam('debug')) Kwf_Util_Maintenance::restoreMaintenanceBootstrap();

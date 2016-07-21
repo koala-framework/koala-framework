@@ -66,10 +66,12 @@ class Kwf_Util_Update_Runner
 
     public function writeExecutedUpdates($doneNames)
     {
-        Kwf_Registry::get('db')->query("UPDATE kwf_update SET data=?", serialize($doneNames));
-        if (file_exists('update')) {
-            //move away old update file to avoid confusion
-            rename('update', 'update.backup');
+        $m = Kwf_Model_Abstract::getInstance('Kwf_Util_Update_UpdatesModel');
+        foreach ($doneNames as $name) {
+            $row = $m->createRow();
+            $row->name = $name;
+            $row->executed_at = date('Y-m-d H:i:s');
+            $row->save();
         }
     }
 
