@@ -22,7 +22,7 @@ var TextArea = kwfExtend(Field, {
     clearValue: function() {
         this.el.find('textarea').get(0).value = '';
     },
-    clearValue: function(value) {
+    setValue: function(value) {
         this.el.find('textarea').get(0).value = value;
     }
 });
