@@ -8,6 +8,7 @@ class Kwf_Util_Update_Runner
     private $_debug = false;
     private $_skipClearCache = false;
     private $_verbose = false;
+    private $_writeMaintenanceBootstrap = false;
     /**
      * @var Zend_ProgressBar
      */
@@ -40,6 +41,11 @@ class Kwf_Util_Update_Runner
     public function setVerbose($v)
     {
         $this->_verbose = (bool)$v;
+    }
+
+    public function setWriteMaintenanceBootstrap($v)
+    {
+        $this->_writeMaintenanceBootstrap = (bool)$v;
     }
 
     public function setProgressBar(Zend_ProgressBar $progressBar)
@@ -96,8 +102,12 @@ class Kwf_Util_Update_Runner
     {
         $doneNames = array();
 
+        if ($this->_writeMaintenanceBootstrap) Kwf_Util_Maintenance::writeMaintenanceBootstrap();
         $this->_executeUpdatesAction('preUpdate');
         $this->_executeUpdatesAction('update');
+        if ($this->_progressBar) {
+            $this->_progressBar->finish();
+        }
         $this->_executeUpdatesAction('postUpdate');
         if (!$this->_skipClearCache) {
             if ($this->_verbose) echo "\n";
@@ -109,6 +119,8 @@ class Kwf_Util_Update_Runner
             if ($this->_verbose) echo "\n";
         }
         $this->_executeUpdatesAction('postClearCache');
+        if ($this->_writeMaintenanceBootstrap) Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
+        $this->_executeUpdatesAction('postMaintenanceBootstrap');
         foreach ($this->_updates as $k=>$u) {
             $doneNames[] = $u->getUniqueName();
         }
