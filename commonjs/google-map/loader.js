@@ -3,11 +3,34 @@ var t = require('kwf/trl');
 var isLoaded = false;
 var isCallbackCalled = false;
 var callbacks = [];
+var loadedLibraries;
 
-module.exports = function(callback, scope)
+module.exports = function(callback, options)
 {
+    if (!options) options = {};
+    if (!options.libraries) {
+        options.libraries = [];
+    }
+
+    var scope = window;
+    if (options.scope) {
+        scope = options.scope;
+    } else {
+        scope = options;
+    }
+
+    // Add places library by default
+    if (options.libraries.indexOf('places') == -1) {
+        options.libraries.push('places');
+    }
+    options.libraries = options.libraries.sort(); //for comparing JSON
+
+    if (loadedLibraries && JSON.stringify(options.libraries) !== JSON.stringify(loadedLibraries)) {
+        throw new Error('Google map was already loaded with different libraries');
+    }
+
     if (isCallbackCalled) {
-        callback.call(scope || window);
+        callback.call(scope);
         return;
     }
     callbacks.push({
@@ -44,13 +67,16 @@ module.exports = function(callback, scope)
             key = apiKeys[apiKeyIndex];
         }
     }
-    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries=places&async=2&language='+ t.trlKwf('en');
+
+    var url = location.protocol+'/'+'/maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&key='+key+'&c&libraries='+options.libraries.join(',')+'&async=2&language='+ t.trlKwf('en');
     url += '&callback=';
     url += 'kwfUp-KwfGoogleMapLoaded'.replace('-', '_');
     var s = document.createElement('script');
     s.setAttribute('type', 'text/javascript');
     s.setAttribute('src', url);
     document.getElementsByTagName("head")[0].appendChild(s);
+
+    loadedLibraries = options.libraries;
 };
 
 window['kwfUp-KwfGoogleMapLoaded'.replace('-', '_')] = function()
