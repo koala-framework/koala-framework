@@ -43,39 +43,6 @@ class Kwf_Setup
             }
             include(APP_PATH.'/cache/setup'.self::CACHE_SETUP_VERSION.'.php');
         }
-        if (!defined('VKWF_PATH') && PHP_SAPI != 'cli' && self::getBaseUrl() === null) {
-            //if server.baseUrl is not set try to auto detect it and generate config.local.ini accordingly
-            //this code is not used if server.baseUrl is set to "" in vkwf
-            if (!isset($_SERVER['PHP_SELF'])) {
-                echo "Can't detect baseUrl, PHP_SELF is not set\n";
-                exit(1);
-            }
-            $baseUrl = substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
-            if (substr($baseUrl, -16) == '/kwf/maintenance') {
-                $baseUrl = substr($baseUrl, 0, -16);
-            }
-            $cfg  = "[production]\n";
-            $cfg .= "server.domain = \"$_SERVER[HTTP_HOST]\"\n";
-            $cfg .= "server.baseUrl = \"$baseUrl\"\n";
-            $cfg .= "setupFinished = false\n";
-
-            if (file_exists('config.local.ini') && filesize('config.local.ini')>0) {
-                echo "config.local.ini already exists but server.baseUrl is not set\n";
-                exit(1);
-            }
-            if (!is_writable('.')) {
-                echo "'".getcwd()."' is not writable, can't create config.local.ini\n";
-                exit(1);
-            }
-            file_put_contents('config.local.ini', $cfg);
-            Kwf_Config_Web::reload();
-            Kwf_Config::deleteValueCache('server.domain');
-            Kwf_Config::deleteValueCache('server.baseUrl');
-            unlink('cache/setup'.self::CACHE_SETUP_VERSION.'.php');
-            echo "<h1>".Kwf_Config::getValue('application.name')."</h1>\n";
-            echo "<a href=\"$baseUrl/kwf/maintenance/setup\">[start setup]</a>\n";
-            exit;
-        }
 
         if (isset($_SERVER['REQUEST_URI']) && substr($_SERVER['REQUEST_URI'], 0, 5) == '/kwf/') {
             if (substr($_SERVER['REQUEST_URI'], 0, 9) == '/kwf/pma/' || $_SERVER['REQUEST_URI'] == '/kwf/pma') {

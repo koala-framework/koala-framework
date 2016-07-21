@@ -57,10 +57,6 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/kwf/redirects/:controller/:action',
                     array('module'     => 'kwf_controller_action_redirects',
                           'action'     =>'index')));
-        $this->AddRoute('kwf_maintenance', new Zend_Controller_Router_Route(
-                    '/kwf/maintenance/:controller/:action',
-                    array('module'     => 'kwf_controller_action_maintenance',
-                          'action'     =>'index')));
         $this->AddRoute('kwf_component', new Zend_Controller_Router_Route(
                     '/kwf/component/:controller/:action',
                     array('module'     => 'kwf_controller_action_component',
