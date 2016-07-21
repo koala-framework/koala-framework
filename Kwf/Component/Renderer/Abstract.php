@@ -512,9 +512,12 @@ abstract class Kwf_Component_Renderer_Abstract
         return null;
     }
 
-
-    private function _cacheSave($componentId, $type, $value, $content)
+    private function _cacheSaveIncludes($componentId, $type, $value)
     {
+        if ($value !== null && $value !== '') {
+            //each partial (type=partial) is rendered on it's own
+            $type .= '#'.$value;
+        }
         $m = Kwf_Component_Cache::getInstance()->getModel('includes');
         $s = $m->select()
             ->whereEquals('component_id', $componentId)
@@ -557,6 +560,11 @@ abstract class Kwf_Component_Renderer_Abstract
                 ->whereEquals('target_id', $diffTargetIds);
             $m->deleteRows($s);
         }
+    }
+
+    private function _cacheSave($componentId, $type, $value, $content)
+    {
+        $this->_cacheSaveIncludes($componentId, $type, $value);
 
         //save rendered contents into view cache
         $cacheContent = $content;
