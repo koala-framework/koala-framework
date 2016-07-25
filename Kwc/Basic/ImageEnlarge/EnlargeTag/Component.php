@@ -104,7 +104,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
             $imageData = $this->getImageData();
             $width = Kwf_Media_Image::getResponsiveWidthStep($dimensions['width'],
                     Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageData['file']));
-            return str_replace('{width}', $width, $baseUrl);
+            $ret = str_replace('{width}', $width, $baseUrl);
+            if ($this->getData()->getBaseProperty('varnishDomain')) {
+                $ret = '//'.$this->getData()->getBaseProperty('varnishDomain').$ret;
+            }
+            return $ret;
         }
         return null;
     }

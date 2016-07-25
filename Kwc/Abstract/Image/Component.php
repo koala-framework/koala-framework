@@ -236,10 +236,14 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     {
         $data = $this->_getImageDataOrEmptyImageData();
         if ($data) {
-            return Kwf_Media::getUrl($this->getData()->componentClass,
+            $ret = Kwf_Media::getUrl($this->getData()->componentClass,
                 $this->getData()->componentId,
                 $this->getBaseType(),
                 $data['filename']);
+            if ($this->getData()->getBaseProperty('varnishDomain')) {
+                $ret = '//'.$this->getData()->getBaseProperty('varnishDomain').$ret;
+            }
+            return $ret;
         }
         return null;
     }

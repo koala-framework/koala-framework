@@ -17,6 +17,7 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['language'] = $this->getData()->getLanguage();
+        $ret['varnishDomain'] = $this->getData()->getBaseProperty('varnishDomain');
         $ret['assetsPackages'] = array(Kwf_Assets_Package_ComponentFrontend::getInstance());
 
         $packageNames = array();

@@ -80,6 +80,8 @@ class Kwf_Controller_Action_Cli_ClearCacheController extends Kwf_Controller_Acti
         echo "clearing media cache, this can take some time...\n";
         Kwf_Media_MemoryCache::getInstance()->clean();
         echo "done\n";
+
+        Kwf_Util_Varnish::purge('/media/*');
         exit;
     }
 
