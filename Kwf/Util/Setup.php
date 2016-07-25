@@ -326,6 +326,11 @@ class Kwf_Util_Setup
         $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
         $ret .= "}\n";
 
+        $ret .= "\n";
+        $ret .= "if (\$requestUri == '/kwf/check') {\n";
+        $ret .= "    Kwf_Util_Check::dispatch();\n";
+        $ret .= "}\n";
+        $ret .= "\n";
 
         if (Kwf_Config::getValue('server.https') !== 'unknown') {
             $redirectHttpsCode  = "    if (\$_SERVER['REQUEST_METHOD'] != 'GET') {\n";
