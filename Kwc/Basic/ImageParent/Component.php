@@ -105,10 +105,9 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         if ($data) {
             $id = $this->getData()->componentId;
             $ret = Kwf_Media::getUrl($this->getData()->componentClass, $id, $this->getBaseType(), $data['filename']);
-            if ($this->getData()->getBaseProperty('varnishDomain')) {
-                $ret = '//'.$this->getData()->getBaseProperty('varnishDomain').$ret;
-            }
-            return $ret;
+            $ev = new Kwf_Component_Event_CreateMediaUrl($this->getData()->componentClass, $this->getData(), $ret);
+            Kwf_Events_Dispatcher::fireEvent($ev);
+            return $ev->url;
         }
         return null;
     }

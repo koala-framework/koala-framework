@@ -1,13 +1,13 @@
 <?php
 class Kwf_View_Helper_Assets
 {
-    public function assets(Kwf_Assets_Package $assetsPackage, $language = null, $varnishDomain = null)
+    public function assets(Kwf_Assets_Package $assetsPackage, $language = null, $subroot = null)
     {
         if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
-        $prefix = '';
-        if ($varnishDomain) {
-            $prefix = '//:'.$varnishDomain;
-        }
+
+        $ev = new Kwf_Events_Event_CreateAssetUrls(get_class($assetsPackage), $assetsPackage, $subroot);
+        Kwf_Events_Dispatcher::fireEvent($ev);
+        $prefix = $ev->prefix;
 
         $indent = str_repeat(' ', 8);
         $ret = '';

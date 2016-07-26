@@ -123,8 +123,6 @@ class Kwf_Media
         Kwf_Media_MemoryCache::getInstance()->remove($cacheId);
         Kwf_Media_MemoryCache::getInstance()->remove('mtime-'.$cacheId);
         //not required to delete cache/media/$cacheId, that will be regenerated if $cacheId is deleted
-
-        Kwf_Util_Varnish::purge("/media/$class/$id/$type/*");
     }
 
     public static function getOutputWithoutCheckingIsValid($class, $id, $type)

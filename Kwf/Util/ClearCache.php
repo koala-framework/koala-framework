@@ -111,9 +111,6 @@ class Kwf_Util_ClearCache
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
         $types[] = new Kwf_Util_ClearCache_Types_Assets();
-        if (Kwf_Util_Varnish::getVarnishDomains()) {
-            $types[] = new Kwf_Util_ClearCache_Types_AssetsVarnish();
-        }
 
         if (!Kwf_Config::getValue('clearCacheSkipProcessControl') && VENDOR_PATH != '../vendor') {
             $types[] = new Kwf_Util_ClearCache_Types_ProcessControl();
