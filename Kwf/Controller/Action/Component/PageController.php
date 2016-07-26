@@ -101,16 +101,17 @@ class Kwf_Controller_Action_Component_PageController extends Kwf_Controller_Acti
             $componentValues = $fields['component']->getValues();
         }
         foreach ($possibleComponentClasses as $key=>$componentClass) {
-            foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_DenyAddComponentClass') as $p) {
-                if ($p->isComponentClassAddDenied($componentOrParent, $componentClass)) {
-                    if ($this->_getParam('id') && $componentOrParent->componentClass == $componentClass) {
-                        //in edit-mode allow already used componentClass
-                    } else {
-                        unset($componentValues[$key]);
-                        continue 2;
-                    }
+            $ev = new Kwf_Component_Event_Component_FilterAddComponentClass($componentClass, $componentOrParent);
+            Kwf_Events_Dispatcher::fireEvent($ev);
+            if (!$ev->deny) {
+                if ($this->_getParam('id') && $componentOrParent->componentClass == $componentClass) {
+                    //in edit-mode allow already used componentClass
+                } else {
+                    unset($componentValues[$key]);
+                    continue 2;
                 }
             }
+
             $component = array(
                 'componentClass' => $componentClass,
                 'inheritClasses' => $inheritClasses

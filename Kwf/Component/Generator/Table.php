@@ -321,10 +321,10 @@ class Kwf_Component_Generator_Table extends Kwf_Component_Generator_Abstract
             throw new Kwf_Exception("you must call this only with the correct source");
         }
 
-        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_DenyAddComponentClass') as $p) {
-            if ($p->isComponentClassAddDenied($parentTarget, $source->componentClass)) {
-                return null;
-            }
+        $ev = new Kwf_Component_Event_Component_FilterAddComponentClass($source->componentClass, $parentTarget);
+        Kwf_Events_Dispatcher::fireEvent($ev);
+        if ($ev->deny) {
+            return null;
         }
 
         $newRow = $this->_duplicateRow($source, $parentTarget);
