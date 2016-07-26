@@ -46,7 +46,7 @@ function injectAssets(html, re, type) {
 module.exports = function(html) {
     injectAssets(html, /<link rel="stylesheet" type="text\/css" href="([^"]+)" \/>(?!<!\[endif)/g, 'text/css');
     injectAssets(html, /<script type="text\/javascript" src="([^"]+)"><\/script>(?!<!\[endif)/g, 'text/javascript');
-    injectAssets(html, /var se=document\.createElement\('script'\);se\.type='text\/javascript';se\.async=true;\s+se\.src='([^']+)';/g, 'text/javascript');
+    injectAssets(html, /var se=document\.createElement\('script'\);se\.type='text\/javascript';se\.async=true;se\.src='([^']+)';/g, 'text/javascript');
 
     var div = document.createElement('div');
     div.innerHTML = '<!--[if lte IE 8]><i></i><![endif]-->';
