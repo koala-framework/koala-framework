@@ -28,8 +28,8 @@ class Kwf_Util_Build
             $types[] = new Kwf_Util_Build_Types_RteStyles();
         }
 
-        $ev = new Kwf_Events_Event_FetchBuildTypes();
-        Kwf_Events_Dispatcher::fireEvent(get_class($this), $ev);
+        $ev = new Kwf_Events_Event_FetchBuildTypes(get_class($this));
+        Kwf_Events_Dispatcher::fireEvent($ev);
         $types = array_merge($types, $ev->types);
 
         return $types;
