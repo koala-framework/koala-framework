@@ -37,4 +37,9 @@ class Kwc_Chained_Start_Component extends Kwc_Abstract
         }
         return $ret;
     }
+
+    public function getMasterTemplateVars(Kwf_Component_Data $innerComponent, Kwf_Component_Renderer_Abstract $renderer)
+    {
+        return $this->getData()->chained->getComponent()->getMasterTemplateVars($innerComponent, $renderer);
+    }
 }
