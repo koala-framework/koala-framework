@@ -13,6 +13,14 @@ class Kwf_Controller_Router extends Zend_Controller_Router_Rewrite
                       'controller' => 'index',
                       'action'     => 'index')));
 
+        if (!$prefix) {
+            $this->AddRoute('welcome', new Zend_Controller_Router_Route(
+                '',
+                array('module'=>'kwf_controller_action_welcome',
+                    'controller' => 'welcome',
+                    'action' => 'index')));
+        }
+
         $this->AddRoute('kwf_welcome', new Zend_Controller_Router_Route(
                     '/kwf/welcome/:controller/:action',
                     array('module'     => 'kwf_controller_action_welcome',
