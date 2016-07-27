@@ -164,6 +164,7 @@ class Kwf_Loader
         $file = self::findFile($class);
         try {
             include $file;
+            return true;
         } catch (Exception $e) {
             if ($fp = @fopen($file, 'r', true)) {
                 //if file exists re-throw exception
@@ -171,6 +172,7 @@ class Kwf_Loader
                 fclose($fp);
                 throw $e;
             }
+            return false;
         }
     }
 
