@@ -15,7 +15,8 @@ abstract class Kwf_Component_Renderer_Abstract
 
     public function includedComponent($targetComponentId, $targetType)
     {
-        $this->_includedComponents[] = $targetComponentId.':'.$targetType;
+        $targetId = $targetComponentId.':'.$targetType;
+        if (!in_array($targetId, $this->_includedComponents)) $this->_includedComponents[] = $targetId;
     }
 
     public function __construct()
