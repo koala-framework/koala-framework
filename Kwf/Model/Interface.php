@@ -67,6 +67,8 @@ interface Kwf_Model_Interface
     public function getEventSubscribers();
     public function getUpdates();
 
+    public function getSerializationColumns($groups);
+
 
     //deprecated
     public function find($id);
