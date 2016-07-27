@@ -49,13 +49,11 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Events extends Kwc_Abstract_Events
                 $dim = $component->getComponent()->getImageDimensions();
                 $typeBase = $component->getComponent()->getBaseType();
                 $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['file']);
-                $types = array();
                 foreach ($steps as $step) {
-                    $types[] = str_replace('{width}', $step, $typeBase);
+                    $this->fireEvent(new Kwf_Events_Event_Media_Changed(
+                        $this->_class, $component, str_replace('{width}', $step, $typeBase)
+                    ));
                 }
-                $this->fireEvent(new Kwf_Events_Event_Media_Changed(
-                    $this->_class, $component, $types
-                ));
             }
             $this->fireEvent(new Kwf_Component_Event_Component_ContentChanged(
                 $this->_class, $component

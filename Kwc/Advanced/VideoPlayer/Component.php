@@ -173,10 +173,7 @@ class Kwc_Advanced_VideoPlayer_Component extends Kwc_Abstract_Composite_Componen
         if ($row->source_type == 'links') {
             return $row->{$format.'_url'};
         }
-        $ret = Kwf_Media::getUrl($this->getData()->componentClass,
+        return Kwf_Media::getUrl($this->getData()->componentClass,
             $this->getData()->componentId, $format, 'video.'.$format);
-        $ev = new Kwf_Component_Event_CreateMediaUrl($this->getData()->componentClass, $this->getData(), $ret);
-        Kwf_Events_Dispatcher::fireEvent($ev);
-        return $ev->url;
     }
 }

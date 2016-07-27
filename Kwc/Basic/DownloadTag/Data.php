@@ -14,10 +14,7 @@ class Kwc_Basic_DownloadTag_Data extends Kwf_Component_Data
                 $filename = $fRow->filename;
             }
             $filename .= '.'.$fRow->extension;
-            $ret = Kwf_Media::getUrl($this->componentClass, $this->componentId, 'default', $filename);
-            $ev = new Kwf_Component_Event_CreateMediaUrl($this->componentClass, $this, $ret);
-            Kwf_Events_Dispatcher::fireEvent($ev);
-            return $ev->url;
+            return Kwf_Media::getUrl($this->componentClass, $this->componentId, 'default', $filename);
         } else {
             return parent::__get($var);
         }

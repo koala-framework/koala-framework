@@ -104,10 +104,7 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
         $data = $this->getImageData();
         if ($data) {
             $id = $this->getData()->componentId;
-            $ret = Kwf_Media::getUrl($this->getData()->componentClass, $id, $this->getBaseType(), $data['filename']);
-            $ev = new Kwf_Component_Event_CreateMediaUrl($this->getData()->componentClass, $this->getData(), $ret);
-            Kwf_Events_Dispatcher::fireEvent($ev);
-            return $ev->url;
+            return Kwf_Media::getUrl($this->getData()->componentClass, $id, $this->getBaseType(), $data['filename']);
         }
         return null;
     }

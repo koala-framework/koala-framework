@@ -459,9 +459,7 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
         Kwf_Media::clearCache($event->class, $event->component->componentId, $event->type);
         $log = Kwf_Events_Log::getInstance();
         if ($log) {
-            $type = $event->type;
-            if (is_array($type)) $type = implode(',', $type);
-            $log->log("media cache clear class=$event->class id={$event->component->componentId} type=$type", Zend_Log::INFO);
+            $log->log("media cache clear class=$event->class id={$event->component->componentId} type=$event->type", Zend_Log::INFO);
         }
     }
 }

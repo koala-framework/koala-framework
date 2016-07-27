@@ -46,10 +46,6 @@ class Kwc_Advanced_AudioPlayer_Component extends Kwc_Abstract_Composite_Componen
         //mp3
         $url = Kwf_Media::getUrl($this->getData()->componentClass,
             $this->getData()->componentId, 'mp3', 'audio.mp3');
-        $ev = new Kwf_Component_Event_CreateMediaUrl($this->getData()->componentClass, $this->getData(), $url);
-        Kwf_Events_Dispatcher::fireEvent($ev);
-        $url = $ev->url;
-
         if ($url) {
             $ret['source'] = array(
                 'src' => $url,
