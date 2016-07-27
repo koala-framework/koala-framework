@@ -116,6 +116,10 @@ class Kwf_Util_ClearCache
             $types[] = new Kwf_Util_ClearCache_Types_ProcessControl();
         }
 
+        $ev = new Kwf_Events_Event_FetchClearCacheTypes(get_class($this));
+        Kwf_Events_Dispatcher::fireEvent($ev);
+        $types = array_merge($types, $ev->types);
+
         return $types;
     }
 

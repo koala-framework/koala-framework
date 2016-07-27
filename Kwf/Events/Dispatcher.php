@@ -127,6 +127,13 @@ class Kwf_Events_Dispatcher
             $subscribers = array_merge($subscribers, self::_getSubscribersFromModel($m));
         }
 
+        foreach (Kwf_Config::getValueArray('eventSubscribers') as $subscriber) {
+            if ($subscriber) {
+                $subscriber = Kwf_Events_Subscriber::getInstance($subscriber);
+                $subscribers[] = $subscriber;
+            }
+        }
+
         $ret = array();
         self::_addListenersFromSubscribers($ret, $subscribers);
         Kwf_Events_ModelObserver::getInstance()->enable();
