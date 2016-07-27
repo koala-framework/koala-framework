@@ -1,3 +1,3 @@
-<? foreach ($this->children as $child) {
+<?php foreach ($this->children as $child) {
     echo $this->component($child)."\n";
 } ?>

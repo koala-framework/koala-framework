@@ -1,14 +1,14 @@
 <div class="<?=$this->rootElementClass?>">
     <h2><?=$this->data->trlKwf('Favourites');?></h2>
-    <? if ($this->favourites) { ?>
+    <?php if ($this->favourites) { ?>
         <ul>
-            <? foreach ($this->favourites as $favourite) { ?>
+            <?php foreach ($this->favourites as $favourite) { ?>
                 <li class="favourite">
                     <?= $this->componentLink($favourite); ?>
                 </li>
-            <? } ?>
+            <?php } ?>
         </ul>
-    <? } else { ?>
+    <?php } else { ?>
         <?=$this->data->trlKwf('You have no favourites!'); ?>
-    <? } ?>
+    <?php } ?>
 </div>

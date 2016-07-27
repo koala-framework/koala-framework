@@ -1,6 +1,6 @@
 <div class="<?=$this->rootElementClass?>">
-    <? if ($this->target) { ?>
+    <?php if ($this->target) { ?>
         <p><?=$this->componentLink($this->target)?></p>
         <?=$this->listHtml?>
-    <? } ?>
+    <?php } ?>
 </div>

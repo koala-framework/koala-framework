@@ -1,15 +1,15 @@
 <a name="<?=$this->item->componentId;?>"></a>
 <div class="entry">
     <h2>
-        <? if ($this->hasContent($this->item)) { ?>
+        <?php if ($this->hasContent($this->item)) { ?>
             <?=$this->componentLink($this->item);?>
-        <? } else { ?>
+        <?php } else { ?>
             <?=$this->item->row->title;?>
-        <? } ?>
+        <?php } ?>
     </h2>
     <div class="publishDate">
         <p>
-        <?
+        <?php
             if ($this->date($this->item->row->start_date,'H:i') != '00:00' && ($this->date($this->item->row->start_date,'H:i') != $this->date($this->item->row->end_date,'H:i'))) {
                 //startdatum mit unterschiedlicher uhrzeit
                 echo $this->dateTime($this->item->row->start_date);
@@ -42,20 +42,20 @@
         ?>
         </p>
     </div>
-    <? if($this->item->row->teaser) { ?>
+    <?php if ($this->item->row->teaser) { ?>
         <div class="teaser">
             <p>
                 <?=nl2br($this->item->row->teaser);?>
-                <? if($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
+                <?php if ($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
                     <div class="readMoreLink">
                         <?=$this->componentLink($this->item, $this->placeholder['readMore']);?>
                     </div>
-                <? } ?>
+                <?php } ?>
             </p>
         </div>
-    <? } else if($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
+    <?php } else if ($this->hasContent($this->item) && $this->placeholder['readMore']) { ?>
         <div class="readMoreLink">
             <?=$this->componentLink($this->item, $this->placeholder['readMore']);?>
         </div>
-    <? } ?>
+    <?php } ?>
 </div>

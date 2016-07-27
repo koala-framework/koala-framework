@@ -1,8 +1,8 @@
 <div class="<?=$this->rootElementClass?>">
     <h1><?=$this->title;?></h1>
     <div class="publishDate">
-    	
-        <?
+
+        <?php
         if ($this->date($this->row->start_date,'H:i') != '00:00' && ($this->date($this->row->start_date,'H:i') != $this->date($this->row->end_date,'H:i'))) {
             //startdatum mit unterschiedlicher uhrzeit
             echo $this->dateTime($this->row->start_date);
@@ -33,9 +33,9 @@
         ?>
     </div>
     <div class="infoContainer"><?=$this->component($this->content) ?></div>
-    <? if ($this->placeholder['backLink']) { ?>
-	    <div class="backLink">
-	        <p><?=$this->componentLink($this->data->parent, '&laquo; '.$this->placeholder['backLink'])?><p>
-	    </div>
-    <? } ?>
+    <?php if ($this->placeholder['backLink']) { ?>
+        <div class="backLink">
+            <p><?=$this->componentLink($this->data->parent, '&laquo; '.$this->placeholder['backLink'])?><p>
+        </div>
+    <?php } ?>
 </div>

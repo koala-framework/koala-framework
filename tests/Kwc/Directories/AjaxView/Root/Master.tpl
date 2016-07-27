@@ -8,7 +8,7 @@
         <div class="menu">
             <?=$this->component($this->boxes['menu'])?>
         </div>
-        <?
+        <?php
         echo $this->componentWithMaster($this->componentWithMaster);
         ?>
     </body>

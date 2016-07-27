@@ -8,7 +8,7 @@
         <div class="box">
             <?=$this->component($this->boxes['favouritesbox'])?>
         </div>
-        <?
+        <?php
         echo $this->componentWithMaster($this->componentWithMaster);
         ?>
     </body>

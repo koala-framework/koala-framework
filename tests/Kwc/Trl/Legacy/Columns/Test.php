@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * @group Kwc_Trl
  * @group Kwc_Trl_Columns

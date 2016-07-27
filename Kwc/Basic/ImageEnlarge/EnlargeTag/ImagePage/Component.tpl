@@ -1,23 +1,23 @@
 <div class="<?=$this->rootElementClass?>">
     <div class="kwfUp-lightboxHeader">
     </div>
-    <div class="kwfUp-lightboxBody<? if($this->previous || $this->next) { ?> kwfUp-hasNextOrPrevious<? } ?>">
-        <? if($this->previous) { ?>
+    <div class="kwfUp-lightboxBody<?php if($this->previous || $this->next) { ?> kwfUp-hasNextOrPrevious<?php } ?>">
+        <?php if($this->previous) { ?>
         <div class="kwfUp-prevBtn">
             <?=$this->componentLink($this->previous, '&nbsp;',  'kwfUp-preload')?>
         </div>
-        <? } else { ?>
+        <?php } else { ?>
         <div class="kwfUp-prevBtnInactive"></div>
-        <? } ?>
+        <?php } ?>
 
-        <? if($this->next) { ?>
+        <?php if($this->next) { ?>
         <div class="kwfUp-nextBtn">
             <?=$this->componentLink($this->next, '&nbsp;',  'kwfUp-preload')?>
         </div>
-        <? } else { ?>
+        <?php } else { ?>
         <div class="kwfUp-nextBtnInactive"></div>
-        <? } ?>
-        <? if ($this->baseUrl) { ?>
+        <?php } ?>
+        <?php if ($this->baseUrl) { ?>
         <div class="kwfUp-image" style="max-width:<?=$this->width;?>px;">
             <div class="kwfUp-container" style="padding-bottom:<?=$this->aspectRatio;?>%;"
                     data-min-width="<?=$this->minWidth;?>"
@@ -28,14 +28,14 @@
                 </noscript>
             </div>
         </div>
-        <? } ?>
+        <?php } ?>
     </div>
     <div class="kwfUp-lightboxFooter">
-        <? if(isset($this->options->title) && $this->options->title) { ?><p class="kwfUp-title"><?=$this->options->title?></p><? } ?>
-        <? if(isset($this->options->fullSizeUrl)) { ?>
+        <?php if(isset($this->options->title) && $this->options->title) { ?><p class="kwfUp-title"><?=$this->options->title?></p><?php } ?>
+        <?php if(isset($this->options->fullSizeUrl)) { ?>
             <p class="kwfUp-fullSizeLink">
                 <a href="<?=$this->options->fullSizeUrl?>" class="kwfUp-fullSizeLink"><?=$this->data->trlKwf('Download original image')?></a>
             </p>
-        <? } ?>
+        <?php } ?>
     </div>
 </div>

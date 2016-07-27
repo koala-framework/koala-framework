@@ -3,7 +3,7 @@
 
         <span><?=$this->mailEncodeText($this->text)?></span>
 
-    <?if ($this->hasContent($this->linkTag)) {?>
+    <?php if ($this->hasContent($this->linkTag)) { ?>
     </a>
-    <?}?>
+    <?php } ?>
 </span>

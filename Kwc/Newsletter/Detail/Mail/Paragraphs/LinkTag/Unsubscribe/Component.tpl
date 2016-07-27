@@ -1,2 +1,2 @@
-<? /* wird nur in mails eingebunden */ ?>
+<?php /* wird nur in mails eingebunden */ ?>
 <a href="#">

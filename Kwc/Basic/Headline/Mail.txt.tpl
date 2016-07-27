@@ -1,4 +1,4 @@
 <?= $this->headline1 ?>
-<? if ($this->headline2) { ?>
+<?php if ($this->headline2) { ?>
     <?= $this->headline2 ?>
-<? } ?>
+<?php } ?>

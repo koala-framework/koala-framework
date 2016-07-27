@@ -1,10 +1,10 @@
 <div class="<?=$this->rootElementClass?>">
-    <? if($this->placeholder['headline']) {?>
+    <?php if ($this->placeholder['headline']) { ?>
     <h1><?=$this->placeholder['headline']?></h1>
-    <? } ?>
+    <?php } ?>
     <ul>
-    <? foreach($this->related as $c) { ?>
+    <?php foreach ($this->related as $c) { ?>
         <li><?=$this->componentLink($c)?></li>
-    <? } ?>
+    <?php } ?>
     </ul>
 </div>

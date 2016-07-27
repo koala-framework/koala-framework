@@ -1,5 +1,5 @@
 <div class="<?=$this->rootElementClass?>">
-    <? foreach($this->keys as $k) { ?>
+    <?php foreach($this->keys as $k) { ?>
         <?=$this->component($this->$k)?>
-    <? } ?>
+    <?php } ?>
 </div>

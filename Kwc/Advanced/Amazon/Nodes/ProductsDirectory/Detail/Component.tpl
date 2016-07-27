@@ -1,74 +1,74 @@
 <div class="<?=$this->rootElementClass?>">
     <div class="bookInfos">
-        <? if ($this->item->MediumImage) { ?>
+        <?php if ($this->item->MediumImage) { ?>
             <img class="cover" src="<?=$this->item->MediumImage->Url->__toString()?>" width="<?=$this->item->MediumImage->Width?>" height="<?=$this->item->MediumImage->Height?>" alt="" />
-        <? } ?>
+        <?php } ?>
         <h1><?=$this->product->title?></h1>
         <h2><?=$this->product->author?></h2>
         <p><?=$this->product->formattedPrice?></p>
-        <? if(!is_null($this->product->averageRating)) { ?>
+        <?php if(!is_null($this->product->averageRating)) { ?>
             <p><?=$this->data->trlKwf('Rating')?>:
-            <? for($i=0; $i<round($this->product->averageRating); $i++) { ?>
+            <?php for($i=0; $i<round($this->product->averageRating); $i++) { ?>
                 <?=$this->image('/assets/kwf/images/rating/ratingStarFull.jpg', 'StarFull', 'ratingStar');?>
-            <? } ?>
-            <? for($i=0; $i<5-round($this->product->averageRating); $i++) { ?>
+            <?php } ?>
+            <?php for($i=0; $i<5-round($this->product->averageRating); $i++) { ?>
                 <?=$this->image('/assets/kwf/images/rating/ratingStarEmpty.jpg', 'StarEmpty', 'ratingStar');?>
-            <? } ?></p>
-        <? } ?>
+            <?php } ?></p>
+        <?php } ?>
         <a class="order" href="<?=$this->product->detailPageURL?>" data-kwc-popup="blank"><?=$this->data->trlKwf('order now at amazon')?></a>
         <div class="kwfUp-clear"></div>
     </div>
 
-    <? if (isset($this->item->EditorialReviews)) { ?>
+    <?php if (isset($this->item->EditorialReviews)) { ?>
     <ul class="editorialReviews">
         <li><h2><?=$this->data->trlKwf('product description');?></h2></li>
-        <? foreach ($this->item->EditorialReviews as $r) { ?>
+        <?php foreach ($this->item->EditorialReviews as $r) { ?>
             <li>
                 <?=$r->Source?>
                 <?=$r->Content?>
             </li>
-        <? } ?>
+        <?php } ?>
     </ul>
-    <? } ?>
+    <?php } ?>
 
-    <? if (isset($this->item->CustomerReviews)) { ?>
+    <?php if (isset($this->item->CustomerReviews)) { ?>
     <ul class="customerReviews">
         <li><h2><?=$this->data->trlKwf('customer reviews');?></h2></li>
-        <? foreach ($this->item->CustomerReviews as $r) { ?>
+        <?php foreach ($this->item->CustomerReviews as $r) { ?>
             <li>
-                <? for($i=0; $i<$r->Rating; $i++) { ?>
+                <?php for($i=0; $i<$r->Rating; $i++) { ?>
                     <?=$this->image('/assets/kwf/images/rating/ratingStarFull.jpg','StarFull', 'ratingStar');?>
-                <? } ?>
-                <? for($i=0; $i<5-$r->Rating; $i++) { ?>
+                <?php } ?>
+                <?php for($i=0; $i<5-$r->Rating; $i++) { ?>
                     <?=$this->image('/assets/kwf/images/rating/ratingStarEmpty.jpg','StarEmpty', 'ratingStar');?>
-                <? } ?>
+                <?php } ?>
                 <span class="summary"><?=$r->Summary?></span><br/>
                 <?=$r->Content?>
             </li>
-        <? } ?>
+        <?php } ?>
     </ul>
-    <? } ?>
+    <?php } ?>
 
-    <? if ($this->similarProducts) { ?>
+    <?php if ($this->similarProducts) { ?>
     <ul class="similarProducts">
         <li><h2><?=$this->data->trlKwf('similar products');?></h2></li>
-        <? foreach ($this->similarProducts as $p) { ?>
+        <?php foreach ($this->similarProducts as $p) { ?>
             <li><?=$this->componentLink($p)?></li>
-        <? } ?>
+        <?php } ?>
     </ul>
-    <? } ?>
+    <?php } ?>
 
 
     <ul class="similarProducts">
         <li><h2><?=$this->data->trlKwf('This entry is classified in:');?></h2></li>
-        <? foreach ($this->nodes as $n) { ?>
+        <?php foreach ($this->nodes as $n) { ?>
             <li><?=$this->componentLink($n)?></li>
-        <? } ?>
+        <?php } ?>
     </ul>
 
-    <? foreach($this->keys as $k) { ?>
+    <?php foreach($this->keys as $k) { ?>
         <?=$this->component($this->$k)?>
-    <? } ?>
+    <?php } ?>
 
 </div>
 

@@ -1,4 +1,4 @@
-<?
+<?php
 $echos = array();
 if (isset($this->edit) && $this->edit) {
     $echos[] = $this->componentLink($this->edit);

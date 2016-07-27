@@ -78,7 +78,7 @@ class Kwf_Util_Model_Feed_Row_Feed extends Kwf_Model_Row_Data_Abstract
                 $tidy->parseString($str, $c, 'utf8');
                 $tidy->cleanRepair();
                 $str = $tidy->value;
-                $str = preg_replace('#(<?xml[^>]* encoding=["\'])([^"\']*)(["\'])#', '\1utf-8\3', $str);
+                $str = preg_replace('#(<?phpxml[^>]* encoding=["\'])([^"\']*)(["\'])#', '\1utf-8\3', $str);
                 $str = str_replace("\0", '', $str);
                 $this->_xml = simplexml_load_string($str, 'SimpleXMLElement', LIBXML_NOERROR|LIBXML_NOWARNING);
             }

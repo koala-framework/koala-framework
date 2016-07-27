@@ -1,15 +1,15 @@
-<? if ($this->pages) { ?>
+<?php if ($this->pages) { ?>
     <a class="kwfUp-frontendLink" href="<?=$this->baseUrl?>/">
         <div class="kwfUp-innerFrontendLink">
             <div class="kwfUp-front"><?=trlKwf('Go to<br />Website');?></div>
             <div class="kwfUp-back"></div>
         </div>
     </a>
-<? } ?>
+<?php } ?>
 <div class="kwfUp-content">
-    <? if ($this->untagged) { ?>
+    <?php if ($this->untagged) { ?>
         <div class="kwfUp-untagged"><?=trlKwf('WARNING: untagged')?></div>
-    <? } ?>
+    <?php } ?>
     <?php if($this->image) { ?>
         <div class="kwfUp-image" style="margin-top: -<?= $this->imageSize['height'] ?>px">
             <img src="<?= $this->image ?>" width="<?= $this->imageSize['width'] ?>" height="<?= $this->imageSize['height'] ?>" />
@@ -26,7 +26,7 @@
     <p>
         <a class="kwfUp-lostPassword" href="<?=$this->lostPasswordLink?>"><?=trlKwf('Lost password?')?></a>
     </p>
-    <? if ($this->redirects) { ?>
+    <?php if ($this->redirects) { ?>
         <div class="externalAuthButtons">
             <p><?=trlKwf('Login with:')?></p>
             <ul>
@@ -37,16 +37,16 @@
                     <input type="hidden" name="redirect" value="<?=htmlspecialchars($r['redirect'])?>" />
                     <?=$r['formOptions']?>
                     <button>
-                        <? if ($r['icon']) { ?>
+                        <?php if ($r['icon']) { ?>
                             <img src="<?=htmlspecialchars($r['icon'])?>" />
-                        <? } else { ?>
+                        <?php } else { ?>
                             <?=htmlspecialchars($r['name'])?>
-                        <? } ?>
+                        <?php } ?>
                     </button>
                     </form>
                 </li>
             <?php } ?>
             </ul>
         </div>
-    <? } ?>
+    <?php } ?>
 </div>
