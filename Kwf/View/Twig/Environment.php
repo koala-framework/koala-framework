@@ -3,10 +3,19 @@ class Kwf_View_Twig_Environment extends Twig_Environment
 {
     public function __construct()
     {
-        parent::__construct(new Kwf_View_Twig_FilesystemLoader('.'), array(
+        $config = array(
             'cache' => 'cache/twig',
             'auto_reload' => false
-        ));
+        );
+
+        if (Kwf_Config::get('debug.twig')) {
+            $config['debug'] = true;
+        }
+        parent::__construct(new Kwf_View_Twig_FilesystemLoader('.'), $config);
+
+        if (isset($config['debug'])) {
+            $this->addExtension(new Twig_Extension_Debug());
+        }
 
         $this->addFilter(new Twig_SimpleFilter('date',
             array('Kwf_Component_Renderer_Twig_Environment', 'date'),
