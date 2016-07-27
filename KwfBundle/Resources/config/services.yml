@@ -1,11 +1,7 @@
 parameters:
-    validator.builder.factory.class: KwfBundle\Validation\ValidatorBuilderFactory
     fos_rest.view_handler.default.class: KwfBundle\Rest\ViewHandler
 
 services:
-    validator.metadatafactory:
-        class: KwfBundle\Validation\MetaDataFactory
-
     kwf.session.storage:
         class: KwfBundle\HttpFoundation\Session\KwfSessionStorage
         public: false
