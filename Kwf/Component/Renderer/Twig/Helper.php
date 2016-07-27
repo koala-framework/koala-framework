@@ -56,11 +56,6 @@ class Kwf_Component_Renderer_Twig_Helper
 
     public function getComponentTemplate($componentClass)
     {
-        return Kwf_Component_Renderer_Twig_TemplateLocator::getComponentTemplate($componentClass, 'Component');
-    }
-
-    public function getComponentMasterTemplate($componentClass)
-    {
-        return Kwf_Component_Renderer_Twig_TemplateLocator::getComponentTemplate($componentClass, 'Master');
+        return Kwf_Component_Renderer_Twig_TemplateLocator::getComponentTemplate($componentClass);
     }
 }
