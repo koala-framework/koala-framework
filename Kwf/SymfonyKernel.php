@@ -2,7 +2,7 @@
 use Symfony\Component\HttpKernel\Kernel;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
-class Kwf_SymfonyKernel extends Kernel
+abstract class Kwf_SymfonyKernel extends Kernel
 {
     public function __construct()
     {
