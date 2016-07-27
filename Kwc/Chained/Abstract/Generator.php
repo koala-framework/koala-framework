@@ -311,4 +311,9 @@ class Kwc_Chained_Abstract_Generator extends Kwf_Component_Generator_Abstract
     {
         return $data->chained->getDeviceVisible();
     }
+
+    public function getStaticChildComponentIds()
+    {
+        return $this->_getChainedGenerator()->getStaticChildComponentIds();
+    }
 }
