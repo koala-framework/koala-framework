@@ -116,7 +116,7 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
 
         $rows = $this->_model->getRows($select);
         foreach ($rows as $row) {
-            $this->denyAccessUnlessGranted('view', $row);
+            $this->denyAccessUnlessGranted('read', $row);
         }
         $view = View::create();
         $view->setData(array(
@@ -141,7 +141,7 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
         if (!$row) {
             return View::create(array(), Codes::HTTP_NOT_FOUND);
         }
-        $this->denyAccessUnlessGranted('view', $row);
+        $this->denyAccessUnlessGranted('read', $row);
 
         $view = View::create(array(
             'data'=>$row
@@ -183,7 +183,7 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
             $view->setContext($ctx);
             return $view;
         } else {
-            $this->denyAccessUnlessGranted('edit', $row);
+            $this->denyAccessUnlessGranted('create', $row);
             $this->_beforeInsert($row);
             $this->_beforeSave($row);
             $row->save();
@@ -236,7 +236,7 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
             $view->setContext($ctx);
             return $view;
         } else {
-            $this->denyAccessUnlessGranted('edit', $row);
+            $this->denyAccessUnlessGranted('update', $row);
             $this->_beforeUpdate($row);
             $this->_beforeSave($row);
             $row->save();
@@ -259,7 +259,7 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
         if (!$row) {
             return View::create(array(), Codes::HTTP_NOT_FOUND);
         }
-        $this->denyAccessUnlessGranted('edit', $row);
+        $this->denyAccessUnlessGranted('delete', $row);
         $this->_beforeDelete($row);
         $row->delete();
         return View::create(array(), Codes::HTTP_NO_CONTENT);
