@@ -161,31 +161,6 @@ class Kwf_Assets_Components_Provider extends Kwf_Assets_Provider_Abstract
                 }
             }
 
-            if (Kwc_Abstract::hasSetting($class, 'masterExtends') && Kwc_Abstract::getSetting($class, 'masterExtends')) {
-                //plus masterExtends for inherited styles
-                foreach ($this->_getComponentSettingDependenciesFiles(Kwc_Abstract::getSetting($class, 'masterExtends'), 'assets', true) as $dep) {
-                    if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z]+$#', $dep->getFileNameWithType())) {
-                        //Master.css/js needs to be part of Kwf_Assets_Components_Dependency_Abstract for .kwcClass to work correctly
-                        $deps[] = array(
-                            'dep' => $dep,
-                            'master' => true,
-                            'defer' => false
-                        );
-                    }
-                }
-                foreach ($this->_getComponentSettingDependenciesFiles(Kwc_Abstract::getSetting($class, 'masterExtends'), 'assetsDefer', true) as $dep) {
-                    if ($dep instanceof Kwf_Assets_Dependency_File && preg_match('#Master\.[a-z]+$#', $dep->getFileNameWithType())) {
-                        //Master.css/js needs to be part of Kwf_Assets_Components_Dependency_Abstract for .kwcClass to work correctly
-                        $deps[] = array(
-                            'dep' => $dep,
-                            'master' => true,
-                            'defer' => true
-                        );
-                    }
-                }
-//                 d($deps);
-            }
-
             //alle dateien der vererbungshierache includieren
             $files = Kwc_Abstract::getSetting($class, 'componentFiles');
             $componentCssFiles = array();
