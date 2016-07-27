@@ -104,10 +104,7 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
             $imageData = $this->getImageData();
             $width = Kwf_Media_Image::getResponsiveWidthStep($dimensions['width'],
                     Kwf_Media_Image::getResponsiveWidthSteps($dimensions, $imageData['file']));
-            $ret = str_replace('{width}', $width, $baseUrl);
-            $ev = new Kwf_Component_Event_CreateMediaUrl($this->getData()->componentClass, $this->getData(), $ret);
-            Kwf_Events_Dispatcher::fireEvent($ev);
-            return $ev->url;
+            return str_replace('{width}', $width, $baseUrl);
         }
         return null;
     }

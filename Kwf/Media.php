@@ -117,22 +117,12 @@ class Kwf_Media
         return $output;
     }
 
-    /**
-     *
-     * @param string
-     * @param string
-     * @param string|array array to clear multiple types
-     */
-    public static function clearCache($class, $id, $types)
+    public static function clearCache($class, $id, $type)
     {
-        if (!is_array($types)) $types = array($types);
-
-        foreach ($types as $type) {
-            $cacheId = self::createCacheId($class, $id, $type);
-            Kwf_Media_MemoryCache::getInstance()->remove($cacheId);
-            Kwf_Media_MemoryCache::getInstance()->remove('mtime-'.$cacheId);
-            //not required to delete cache/media/$cacheId, that will be regenerated if $cacheId is deleted
-        }
+        $cacheId = self::createCacheId($class, $id, $type);
+        Kwf_Media_MemoryCache::getInstance()->remove($cacheId);
+        Kwf_Media_MemoryCache::getInstance()->remove('mtime-'.$cacheId);
+        //not required to delete cache/media/$cacheId, that will be regenerated if $cacheId is deleted
     }
 
     public static function getOutputWithoutCheckingIsValid($class, $id, $type)
