@@ -16,6 +16,7 @@ use FOS\RestBundle\Util\Codes;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use FOS\RestBundle\Context\Context;
 
 class FOSRestModelController extends Controller implements ClassResourceInterface
 {
@@ -107,6 +108,12 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
 
         $select = $this->_getSelect($paramFetcher, $request);
 
+        $restColumns = $this->_model->getSerializationColumns(array('rest_read', 'rest'));
+        $exprColumns = $this->_model->getExprColumns();
+        foreach (array_intersect($restColumns, $exprColumns) as $i) {
+            $select->expr($i);
+        }
+
         $rows = $this->_model->getRows($select);
         foreach ($rows as $row) {
             $this->denyAccessUnlessGranted('view', $row);
@@ -116,7 +123,9 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
             'data'=>$rows,
             'total' => $this->_model->countRows($select)
         ));
-        $view->setContext(array('groups'=>array('rest_read', 'rest')));
+        $ctx = new Context();
+        $ctx->setGroups(array('rest_read', 'rest'));
+        $view->setContext($ctx);
         return $view;
     }
 
@@ -137,7 +146,9 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
         $view = View::create(array(
             'data'=>$row
         ));
-        $view->setContext(array('groups'=>array('rest_read', 'rest')));
+        $ctx = new Context();
+        $ctx->setGroups(array('rest_read', 'rest'));
+        $view->setContext($ctx);
         return $view;
     }
 
@@ -167,7 +178,9 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
             $view = View::create(array(
                 'errors'=>$formattedErrors
             ), 400);
-            $view->setContext(array('groups'=>array('rest_read', 'rest')));
+            $ctx = new Context();
+            $ctx->setGroups(array('rest_read', 'rest'));
+            $view->setContext($ctx);
             return $view;
         } else {
             $this->denyAccessUnlessGranted('edit', $row);
@@ -215,7 +228,9 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
             $view = View::create(array(
                 'errors'=>$formattedErrors
             ), 400);
-            $view->setContext(array('groups'=>array('rest_read', 'rest')));
+            $ctx = new Context();
+            $ctx->setGroups(array('rest_read', 'rest'));
+            $view->setContext($ctx);
             return $view;
         } else {
             $this->denyAccessUnlessGranted('edit', $row);
