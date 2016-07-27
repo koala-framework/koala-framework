@@ -77,4 +77,14 @@ class KwfUser implements UserInterface
     public function eraseCredentials()
     {
     }
+
+    public function getKwfUser()
+    {
+        return $this->_kwfUser;
+    }
+
+    public function getUserId()
+    {
+        return $this->_kwfUser->id;
+    }
 }
