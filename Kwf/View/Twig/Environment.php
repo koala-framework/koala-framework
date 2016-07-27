@@ -8,7 +8,7 @@ class Kwf_View_Twig_Environment extends Twig_Environment
             'auto_reload' => false
         );
 
-        if (Kwf_Config::get('debug.twig')) {
+        if (Kwf_Config::getValue('debug.twig')) {
             $config['debug'] = true;
         }
         parent::__construct(new Kwf_View_Twig_FilesystemLoader('.'), $config);
