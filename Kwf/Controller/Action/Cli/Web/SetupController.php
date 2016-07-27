@@ -86,6 +86,7 @@ class Kwf_Controller_Action_Cli_Web_SetupController extends Kwf_Controller_Actio
         }
         $doneNames = $runner->executeUpdates();
         $runner->writeExecutedUpdates($doneNames);
+        $runner->executePostMaintenanceBootstrapUpdates();
 
         $errors = $runner->getErrors();
         if ($errors) {

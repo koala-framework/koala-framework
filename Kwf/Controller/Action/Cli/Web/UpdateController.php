@@ -79,10 +79,12 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         }
 
 
+        if (!$this->_getParam('debug')) Kwf_Util_Maintenance::writeMaintenanceBootstrap();
+
         $c = new Zend_ProgressBar_Adapter_Console();
         $c->setElements(array(Zend_ProgressBar_Adapter_Console::ELEMENT_PERCENT,
-                                Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
-                                Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
+            Zend_ProgressBar_Adapter_Console::ELEMENT_BAR,
+            Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT));
         $c->setTextWidth(50);
 
         $runner = new Kwf_Util_Update_Runner($updates);
@@ -91,13 +93,20 @@ class Kwf_Controller_Action_Cli_Web_UpdateController extends Kwf_Controller_Acti
         $runner->setVerbose(true);
         $runner->setEnableDebug($this->_getParam('debug'));
         $runner->setSkipClearCache($skipClearCache);
-        $runner->setWriteMaintenanceBootstrap(!$this->_getParam('debug'));
-        if (!$runner->checkUpdatesSettings()) {
+        $checkUpdatesSettings = $runner->checkUpdatesSettings();
+        if (!$checkUpdatesSettings) {
             echo "\ncheckSettings failed, update stopped\n";
         } else {
             $executedUpdates = $runner->executeUpdates();
             echo "\n\033[32mupdate finished\033[0m\n";
             $runner->writeExecutedUpdates($executedUpdates);
+        }
+
+        if (!$this->_getParam('debug')) Kwf_Util_Maintenance::restoreMaintenanceBootstrap();
+
+        if ($checkUpdatesSettings) {
+            $runner->executePostMaintenanceBootstrapUpdates();
+            echo "\n\033[32mpost maintenance bootstrap update finished\033[0m\n";
         }
 
         $errors = $runner->getErrors();
