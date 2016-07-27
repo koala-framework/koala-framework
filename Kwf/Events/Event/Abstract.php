@@ -28,6 +28,8 @@ class Kwf_Events_Event_Abstract
         foreach (array_reverse(get_object_vars($this)) as $i) {
             if ($i instanceof Kwf_Component_Data) {
                 $ret[] = $i->componentId;
+            } else if (is_array($i)) {
+                $ret[] = json_encode($i);
             } else {
                 $ret[] = (string)$i;
             }
