@@ -141,7 +141,7 @@ class Kwf_Cache_Simple
     public static function fetch($cacheId, &$success = true)
     {
         if (self::getBackend() == 'memcache') {
-            $ret = self::getMemcache()->get(self::_getMemcachePrefix().$cacheId);
+            $ret = self::getMemcache()->get(self::_getMemcachePrefix().md5($cacheId));
             $success = $ret !== false;
             return $ret;
         } else if (self::getBackend() == 'apc') {
@@ -178,7 +178,7 @@ class Kwf_Cache_Simple
     public static function add($cacheId, $data, $ttl = null)
     {
         if (self::getBackend() == 'memcache') {
-            return self::getMemcache()->set(self::_getMemcachePrefix().$cacheId, $data, 0, $ttl);
+            return self::getMemcache()->set(self::_getMemcachePrefix().md5($cacheId), $data, 0, $ttl);
         } else if (self::getBackend() == 'apc') {
             static $prefix;
             if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';
@@ -204,7 +204,7 @@ class Kwf_Cache_Simple
         $ret = true;
         foreach ($cacheIds as $cacheId) {
             if (self::getBackend() == 'memcache') {
-                $r = self::getMemcache()->delete(self::_getMemcachePrefix().$cacheId);
+                $r = self::getMemcache()->delete(self::_getMemcachePrefix().md5($cacheId));
             } else if (self::getBackend() == 'apc') {
                 static $prefix;
                 if (!isset($prefix)) $prefix = self::getUniquePrefix().'-';

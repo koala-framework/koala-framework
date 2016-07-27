@@ -150,9 +150,7 @@ class Kwf_Media_Output
                 $ret['headers'][] = 'ETag: tag';
             }
             if (isset($file['mtime'] )) $ret['headers'][] = 'Last-Modified: ' . $lastModifiedString;
-            if (isset($file['downloadFilename']) && $file['downloadFilename'] &&
-                substr($file['mimeType'], 0, 6) != 'image/'
-            ) {
+            if (isset($file['downloadFilename']) && $file['downloadFilename']) {
                 $ret['headers'][] = 'Content-Disposition: attachment; filename="' . $file['downloadFilename'] . '"';
             }
             if (isset($file['filename']) && $file['filename']) {

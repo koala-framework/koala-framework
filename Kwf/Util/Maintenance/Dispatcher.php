@@ -64,10 +64,8 @@ class Kwf_Util_Maintenance_Dispatcher
                 }
                 $t = microtime(true)-$t;
                 if ($debug) echo "executed ".get_class($job)." in ".round($t, 3)."s\n";
-                $maxTime = 60;
-                if ($jobFrequency == Kwf_Util_Maintenance_Job_Abstract::FREQUENCY_DAILY) {
-                    $maxTime = 60*60;
-                }
+
+                $maxTime = $job->getMaxTime();
                 if ($t > $maxTime) {
                     $msg = "Maintenance job ".get_class($job)." took ".round($t, 3)."s to execute which is above the limit of $maxTime.";
                     file_put_contents('php://stderr', $msg."\n");

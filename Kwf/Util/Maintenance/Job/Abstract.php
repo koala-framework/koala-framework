@@ -13,5 +13,14 @@ abstract class Kwf_Util_Maintenance_Job_Abstract
         return 0;
     }
 
+    public function getMaxTime()
+    {
+        $ret = 60;
+        if ($this->getFrequency() == self::FREQUENCY_DAILY) {
+            $ret = 60 * 60;
+        }
+        return $ret;
+    }
+
     abstract public function execute($debug);
 }

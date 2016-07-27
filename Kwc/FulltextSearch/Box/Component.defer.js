@@ -15,23 +15,30 @@ var FulltextSearchBoxComponent = function(el, config) {
         this.el.child('.submitWrapper').hide();
     }
 
-    historyState.on('popstate', function() {
-        if (historyState.currentState.searchVisible) {
-            if (this.searchMainContent) {
-                this.showSearch();
+    if (this.config.useLiveSearch) {
+        historyState.on('popstate', function() {
+            if (historyState.currentState.searchVisible) {
+                if (this.searchMainContent) {
+                    this.showSearch();
+                } else {
+                    this.searchForm.setValues(historyState.currentState.searchBoxValues);
+                    this.loadSearch();
+                }
             } else {
-                this.searchForm.setValues(historyState.currentState.searchBoxValues);
-                this.loadSearch();
+                if (!this.previousMainContent) {
+                    //we didn't load the search using ajax, so we don't have a main content to show -> reload
+                    location.href = location.href;
+                } else {
+                    if (!this.previousMainContent) {
+                        //we didn't load the search using ajax, so we don't have a main content to show -> reload
+                        location.href = location.href;
+                    } else {
+                        this.hideSearch();
+                    }
+                }
             }
-        } else {
-            if (!this.previousMainContent) {
-                //we didn't load the search using ajax, so we don't have a main content to show -> reload
-                location.href = location.href;
-            } else {
-                this.hideSearch();
-            }
-        }
-    }, this);
+        }, this);
+    }
 
     this.searchForm = findForm(el.dom);
 
