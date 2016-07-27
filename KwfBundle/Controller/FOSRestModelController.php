@@ -28,42 +28,8 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
         if (is_string($this->_model)) $this->_model = \Kwf_Model_Abstract::getInstance($this->_model);
     }
 
-    /**
-     * @ApiDoc()
-     */
-    public function cgetAction(ParamFetcher $paramFetcher, Request $request)
+    protected function _getSelect(ParamFetcher $paramFetcher, Request $request)
     {
-        // "cget_places"            [GET] /places
-
-        $dynamicRequestParam = new QueryParam();
-        $dynamicRequestParam->name = "limit";
-        $dynamicRequestParam->requirements = "\d+";
-        $dynamicRequestParam->default = '25';
-        $paramFetcher->addParam($dynamicRequestParam);
-
-        $dynamicRequestParam = new QueryParam();
-        $dynamicRequestParam->name = "start";
-        $dynamicRequestParam->requirements = "\d+";
-        $dynamicRequestParam->default = '0';
-        $paramFetcher->addParam($dynamicRequestParam);
-
-        $dynamicRequestParam = new QueryParam();
-        $dynamicRequestParam->name = "sort";
-        $dynamicRequestParam->requirements = "[\w_]+";
-        $dynamicRequestParam->default = null;
-        $paramFetcher->addParam($dynamicRequestParam);
-
-        $dynamicRequestParam = new QueryParam();
-        $dynamicRequestParam->name = "filter";
-        $dynamicRequestParam->default = null;
-        $paramFetcher->addParam($dynamicRequestParam);
-
-        $dynamicRequestParam = new QueryParam();
-        $dynamicRequestParam->name = "query";
-        $dynamicRequestParam->default = null;
-        $paramFetcher->addParam($dynamicRequestParam);
-
-
         $select = new \Kwf_Model_Select();
         $select->limit($paramFetcher->get('limit'), $paramFetcher->get('start'));
 
@@ -100,6 +66,46 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
                 $select->where($exprs[0]);
             }
         }
+
+        return $select;
+    }
+
+    /**
+     * @ApiDoc()
+     */
+    public function cgetAction(ParamFetcher $paramFetcher, Request $request)
+    {
+        // "cget_places"            [GET] /places
+
+        $dynamicRequestParam = new QueryParam();
+        $dynamicRequestParam->name = "limit";
+        $dynamicRequestParam->requirements = "\d+";
+        $dynamicRequestParam->default = '25';
+        $paramFetcher->addParam($dynamicRequestParam);
+
+        $dynamicRequestParam = new QueryParam();
+        $dynamicRequestParam->name = "start";
+        $dynamicRequestParam->requirements = "\d+";
+        $dynamicRequestParam->default = '0';
+        $paramFetcher->addParam($dynamicRequestParam);
+
+        $dynamicRequestParam = new QueryParam();
+        $dynamicRequestParam->name = "sort";
+        $dynamicRequestParam->requirements = "[\w_]+";
+        $dynamicRequestParam->default = null;
+        $paramFetcher->addParam($dynamicRequestParam);
+
+        $dynamicRequestParam = new QueryParam();
+        $dynamicRequestParam->name = "filter";
+        $dynamicRequestParam->default = null;
+        $paramFetcher->addParam($dynamicRequestParam);
+
+        $dynamicRequestParam = new QueryParam();
+        $dynamicRequestParam->name = "query";
+        $dynamicRequestParam->default = null;
+        $paramFetcher->addParam($dynamicRequestParam);
+
+        $select = $this->_getSelect($paramFetcher, $request);
 
         $rows = $this->_model->getRows($select);
         foreach ($rows as $row) {
