@@ -542,12 +542,12 @@ class Kwc_Root_Category_Generator extends Kwf_Component_Generator_Abstract
             throw new Kwf_Exception("didn't find just duplicated component '$newRow->id' below '{$parentTarget->componentId}'");
         }
 
-        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_DenyAddComponentClass') as $p) {
-            if ($p->isComponentClassAddDenied($target, $source->componentClass)) {
-                //increment for number of child pages as those will be skipped
-                if ($progressBar) $progressBar->next($this->getDuplicateProgressSteps($source)-1);
-                return null;
-            }
+        $ev = new Kwf_Component_Event_Component_FilterAddComponentClass($source->componentClass, $target);
+        Kwf_Events_Dispatcher::fireEvent($ev);
+        if ($ev->deny) {
+            //increment for number of child pages as those will be skipped
+            if ($progressBar) $progressBar->next($this->getDuplicateProgressSteps($source)-1);
+            return null;
         }
 
         Kwc_Admin::getInstance($source->componentClass)->duplicate($source, $target, $progressBar);

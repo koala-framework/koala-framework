@@ -1,1 +1,1 @@
-root <? if ($this->hasContent($this->child)) { echo $this->component($this->child); } ?>
+root <?php if ($this->hasContent($this->child)) { echo $this->component($this->child); } ?>

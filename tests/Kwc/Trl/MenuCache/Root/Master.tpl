@@ -5,7 +5,7 @@
     </head>
     <body>
         Default-Master, in Root-Komponente überschreiben!
-        <?
+        <?php
         foreach($this->boxes as $box) {
             echo $this->component($box);
         }

@@ -1,7 +1,7 @@
 <div class="item">
-    <? if ($this->item->categories) { ?>
+    <?php if ($this->item->categories) { ?>
         <div class="categories">
-            <? $nci = 0;
+            <?php $nci = 0;
             foreach ($this->item->categories as $nc) {
                 if (!$nc) continue;
                 if ($nci++ >= 1) echo ' | ';
@@ -9,7 +9,7 @@
             } ?>
             <div class="kwfUp-clear"></div>
         </div>
-    <? } ?>
+    <?php } ?>
     <div class="previewImage">
         <?=$this->componentLink($this->item, $this->component($this->item->getChildComponent('-previewImage')))?>
     </div>

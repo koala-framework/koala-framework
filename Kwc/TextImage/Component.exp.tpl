@@ -1,6 +1,6 @@
 <div class="<?=$this->rootElementClass?>">
-    <? if ($this->image) { ?>
-        <?
+    <?php if ($this->image) { ?>
+        <?php
             $style = "";
             if ($this->position == 'left') {
                 $style = "float: left; margin-right: 20px;";
@@ -11,7 +11,7 @@
         <div class="image" style="<?=$style?>">
             <?=$this->component($this->image)?>
         </div>
-    <? } ?>
+    <?php } ?>
     <div class="text">
         <?=$this->component($this->text)?>
     </div>

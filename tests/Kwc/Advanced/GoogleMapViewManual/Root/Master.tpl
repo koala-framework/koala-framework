@@ -5,7 +5,7 @@
     <?=$this->debugData()?>
 </head>
 <body class="kwfUp-frontend">
-<?
+<?php
         echo $this->componentWithMaster($this->componentWithMaster);
 ?>
 </body>

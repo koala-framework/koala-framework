@@ -6,9 +6,9 @@
     <div class="infoContainer">
         <?=$this->component($this->content);?>
     </div>
-    <? if ($this->placeholder['backLink']) { ?>
+    <?php if ($this->placeholder['backLink']) { ?>
         <div class="backLink">
             <p><?=$this->componentLink($this->data->parent, $this->placeholder['backLink'])?></p>
         </div>
-    <? } ?>
+    <?php } ?>
 </div>

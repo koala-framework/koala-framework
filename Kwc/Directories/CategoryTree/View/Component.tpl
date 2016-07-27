@@ -1,8 +1,8 @@
 <div class="<?=$this->rootElementClass?>">
-    <? if (isset($this->searchForm)) echo $this->component($this->searchForm); ?>
-    <? if (isset($this->paging)) echo $this->component($this->paging); ?>
+    <?php if (isset($this->searchForm)) echo $this->component($this->searchForm); ?>
+    <?php if (isset($this->paging)) echo $this->component($this->paging); ?>
     <ul>
         <?=$this->partialsPaging($this->data);?>
     </ul>
-    <? if (isset($this->paging)) echo $this->component($this->paging); ?>
+    <?php if (isset($this->paging)) echo $this->component($this->paging); ?>
 </div>

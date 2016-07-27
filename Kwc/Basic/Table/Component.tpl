@@ -1,30 +1,30 @@
 <div class="<?=$this->rootElementClass?>">
     <table class="<?=$this->tableStyle?>" cellspacing="0" cellpadding="0">
-        <? if ($this->headerRows) { ?>
+        <?php if ($this->headerRows) { ?>
         <thead>
-            <? foreach ($this->headerRows as $dr) { ?>
+            <?php foreach ($this->headerRows as $dr) { ?>
             <tr class="<?=$dr['cssClass']; ?>">
-                <? foreach ($dr['data'] as $dataItem) { ?>
+                <?php foreach ($dr['data'] as $dataItem) { ?>
                 <<?=$dr['htmlTag'];?> class="<?= $dataItem['cssClass']; ?>">
                     <?= $this->toHtmlLink($dataItem['value']); ?>
                 </<?=$dr['htmlTag'];?>>
-                <? } ?>
+                <?php } ?>
             </tr>
-            <? } ?>
+            <?php } ?>
         </thead>
         <tbody>
-        <? } ?>
-            <? foreach ($this->dataRows as $dr) { ?>
+        <?php } ?>
+            <?php foreach ($this->dataRows as $dr) { ?>
             <tr class="<?=$dr['cssClass']; ?>">
-                <? foreach ($dr['data'] as $dataItem) { ?>
+                <?php foreach ($dr['data'] as $dataItem) { ?>
                 <<?=$dr['htmlTag'];?> class="<?= $dataItem['cssClass']; ?>">
                     <?= $this->toHtmlLink($dataItem['value']); ?>
                 </<?=$dr['htmlTag'];?>>
-                <? } ?>
+                <?php } ?>
             </tr>
-            <? } ?>
-        <? if ($this->headerRows) { ?>
+            <?php } ?>
+        <?php if ($this->headerRows) { ?>
         </tbody>
-        <? } ?>
+        <?php } ?>
     </table>
 </div>

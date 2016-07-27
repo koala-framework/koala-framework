@@ -1,6 +1,6 @@
 <div class="<?=$this->rootElementClass?>">
     <h1><?=$this->data->trlKwf('Activate Useraccount')?></h1>
-    <? if ($this->showPassword) { ?>
+    <?php if ($this->showPassword) { ?>
     <div class="form">
         <h2><?=$this->data->trlKwf('Set password')?>:</h2>
         <p>
@@ -9,8 +9,8 @@
         </p>
         <?=$this->component($this->form)?>
     </div>
-    <? } ?>
-    <? if ($this->redirects) { ?>
+    <?php } ?>
+    <?php if ($this->redirects) { ?>
         <h2><?=$this->data->trlKwf('Activate with')?>:</h2>
         <ul class="redirects">
         <?php foreach ($this->redirects as $r) { ?>
@@ -20,15 +20,15 @@
                 <input type="hidden" name="code" value="<?=htmlspecialchars($r['code'])?>" />
                 <?=$r['formOptions']?>
                 <button>
-                    <? if ($r['icon']) { ?>
+                    <?php if ($r['icon']) { ?>
                         <img src="<?=htmlspecialchars($r['icon'])?>" />
-                    <? } else { ?>
+                    <?php } else { ?>
                         <?=htmlspecialchars($r['name'])?>
-                    <? } ?>
+                    <?php } ?>
                 </button>
                 </form>
             </li>
         <?php } ?>
         </ul>
-    <? } ?>
+    <?php } ?>
 </div>

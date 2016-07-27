@@ -54,10 +54,10 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
 
         $this->view->deniedComponentClasses = array();
         foreach (Kwc_Abstract::getChildComponentClasses($this->_getParam('class'), 'paragraphs') as $componentKey=>$componentClass) {
-            foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_DenyAddComponentClass') as $p) {
-                if ($p->isComponentClassAddDenied($c, $componentClass)) {
-                    $this->view->deniedComponentClasses[] = $componentClass;
-                }
+            $ev = new Kwf_Component_Event_Component_FilterAddComponentClass($componentClass, $c);
+            Kwf_Events_Dispatcher::fireEvent($ev);
+            if ($ev->deny) {
+                $this->view->deniedComponentClasses[] = $componentClass;
             }
         }
     }
@@ -99,10 +99,10 @@ class Kwc_Paragraphs_Controller extends Kwf_Controller_Action_Auto_Kwc_Grid
                     }
                 }
             }
-            foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_DenyAddComponentClass') as $p) {
-                if ($p->isComponentClassAddDenied($paragraphsData, $class)) {
-                    throw new Kwf_Exception("Adding '$class' is denied for $paragraphsData->componentId by plugin");
-                }
+            $ev = new Kwf_Component_Event_Component_FilterAddComponentClass($class, $paragraphsData);
+            Kwf_Events_Dispatcher::fireEvent($ev);
+            if ($ev->deny) {
+                throw new Kwf_Exception("Adding '$class' is denied for $paragraphsData->componentId by plugin");
             }
 
             $row = $this->_model->createRow();

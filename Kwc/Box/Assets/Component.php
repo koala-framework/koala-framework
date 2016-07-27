@@ -5,6 +5,7 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
     {
         $ret = parent::getSettings();
         $ret['flags']['hasHeaderIncludeCode'] = true;
+        $ret['flags']['hasInjectIntoRenderedHtml'] = true;
         return $ret;
     }
 
@@ -17,6 +18,7 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['language'] = $this->getData()->getLanguage();
+        $ret['subroot'] = $this->getData()->getSubroot();
         $ret['assetsPackages'] = array(Kwf_Assets_Package_ComponentFrontend::getInstance());
 
         $packageNames = array();
@@ -56,5 +58,43 @@ class Kwc_Box_Assets_Component extends Kwc_Abstract
      */
     protected final function _getSection()
     {
+    }
+
+    public function injectIntoRenderedHtml($html)
+    {
+        $startPos = strpos($html, '<!-- assets -->');
+        $endPos = strpos($html, '<!-- /assets -->')+16;
+        $assets = substr($html, $startPos, $endPos-$startPos-16);
+
+        $loadedAssets = array();
+        foreach (self::_parseAssets($assets) as $i) {
+            $loadedAssets[] = $i['assetUrl'];
+        }
+
+        $lightboxAssets = $this->getData()->render();
+        foreach (self::_parseAssets($lightboxAssets) as $i) {
+            if (!in_array($i['assetUrl'], $loadedAssets)) {
+                $assets .= $i['html']."\n";
+            }
+        }
+        $html = substr($html, 0, $startPos)
+                .$assets.'<!-- /assets -->'
+                .substr($html, $endPos);
+        return $html;
+    }
+
+    private static function _parseAssets($html)
+    {
+        $ret = array();
+                            //assumption: one asset spans across exactly one line
+        if (preg_match_all('#.*(/assets/[^"\']+).*#', $html, $m)) {
+            foreach ($m[0] as $k=>$html) {
+                $ret[] = array(
+                    'assetUrl' => $m[1][$k],
+                    'html' => $html
+                );
+            }
+        }
+        return $ret;
     }
 }

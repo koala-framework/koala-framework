@@ -13,15 +13,15 @@
     <?php echo $this->render($this->contentScript) ?>
     <div class="kwfUp-footer">
         <div class="kwfUp-innerFooter">
-            <? if ($this->brandingVividPlanet || $this->brandingKoala) { ?>
+            <?php if ($this->brandingVividPlanet || $this->brandingKoala) { ?>
                 <span>Powered by</span>
-            <? } ?>
-            <? if ($this->brandingVividPlanet) { ?>
+            <?php } ?>
+            <?php if ($this->brandingVividPlanet) { ?>
                 <a class="kwfUp-logo kwfUp-vividPlanet" href="http://www.vivid-planet.com" target="_blank"></a>
-            <? } ?>
-            <? if ($this->brandingKoala) { ?>
+            <?php } ?>
+            <?php if ($this->brandingKoala) { ?>
                 <a class="kwfUp-logo kwfUp-koala" href="http://www.koala-framework.org" target="_blank"></a>
-            <? } ?>
+            <?php } ?>
         </div>
     </div>
   </body>

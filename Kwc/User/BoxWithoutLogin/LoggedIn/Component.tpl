@@ -4,14 +4,14 @@
             <li class="mail">
                 <?=$this->authedUser->email?>
             </li>
-            <? if ($this->myProfile) { ?>
+            <?php if ($this->myProfile) { ?>
             <li class="profile">
                 <?=$this->componentLink($this->myProfile, $this->data->trlKwf('My Profile'))?>
             </li>
-            <? } ?>
-            <? foreach ($this->links as $l) { ?>
+            <?php } ?>
+            <?php foreach ($this->links as $l) { ?>
                 <li><?=$this->componentLink($l)?></li>
-            <? } ?>
+            <?php } ?>
             <li class="logout"><a href="<?=$this->logoutLink?>"><?=$this->data->trlKwf('Logout')?></a></li>
         </ul>
         <div class="kwfUp-clear"></div>

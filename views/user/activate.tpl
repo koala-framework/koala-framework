@@ -1,10 +1,10 @@
 <div class="kwfUp-content">
     <h1>
-        <? if ($this->isActivate) { ?>
+        <?php if ($this->isActivate) { ?>
             <?=trlKwf('Activate Useraccount')?>
-        <? } else { ?>
+        <?php } else { ?>
             <?=trlKwf('Reset Password')?>
-        <? } ?>
+        <?php } ?>
     </h1>
     <p>
         <?=trlKwf('Your email address:')?> <strong><?=$this->email?></strong>
@@ -14,11 +14,11 @@
 
     <p><?=trlKwf('Activate with:')?></p>
     <ul>
-        <? if ($this->showPassword) { ?>
+        <?php if ($this->showPassword) { ?>
             <li>
                 <a href="<?=$this->passwordUrl?>"><?=trlKwf('Password')?></a>
             </li>
-        <? } ?>
+        <?php } ?>
         <?php foreach ($this->redirects as $r) { ?>
             <li>
                 <form method="GET" action="<?=htmlspecialchars($r['url'])?>">
@@ -26,11 +26,11 @@
                 <input type="hidden" name="code" value="<?=htmlspecialchars($r['code'])?>" />
                 <?=$r['formOptions']?>
                 <button>
-                    <? if ($r['icon']) { ?>
+                    <?php if ($r['icon']) { ?>
                         <img src="<?=htmlspecialchars($r['icon'])?>" />
-                    <? } else { ?>
+                    <?php } else { ?>
                         <?=htmlspecialchars($r['name'])?>
-                    <? } ?>
+                    <?php } ?>
                 </button>
                 </form>
             </li>

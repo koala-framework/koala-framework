@@ -2,15 +2,15 @@
     <div class="headers">
         <div class="subject"><?= $this->subject; ?></div>
         <div class="detail">
-            <? if (!empty($this->from['name']) || !empty($this->from['email'])) { ?>
+            <?php if (!empty($this->from['name']) || !empty($this->from['email'])) { ?>
                 <div>
                     <label><?= trlKwf('From'); ?>:</label>
                     <div>
-                        <? if (!empty($this->from['name'])) echo $this->from['name']; ?>
-                        <? if (!empty($this->from['email'])) echo '&lt;'.$this->from['email'].'&gt;'; ?>
+                        <?php if (!empty($this->from['name'])) echo $this->from['name']; ?>
+                        <?php if (!empty($this->from['email'])) echo '&lt;'.$this->from['email'].'&gt;'; ?>
                     </div>
                 </div>
-            <? } ?>
+            <?php } ?>
             <div>
                 <label><?= trlcKwf('email', 'To'); ?>:</label>
                 <div>
@@ -24,7 +24,7 @@
                 ?>
                 </div>
             </div>
-            <? if ($this->cc) { ?>
+            <?php if ($this->cc) { ?>
                 <div>
                     <label><?= trlKwf('Copy'); ?>:</label>
                     <div>
@@ -38,7 +38,7 @@
                     ?>
                     </div>
                 </div>
-            <? } ?>
+            <?php } ?>
             <div><label><?= trlKwf('Date'); ?>:</label> <?= $this->dateTime($this->send_date); ?></div>
         </div>
     </div>

@@ -11,7 +11,7 @@
 <?= $this->text; ?>
 
 
-<? if ($this->activationType == Kwc_Guestbook_Component::INACTIVE_ON_SAVE) {
+<?php if ($this->activationType == Kwc_Guestbook_Component::INACTIVE_ON_SAVE) {
     echo $this->data->trlKwf('Click this link to activate the post on your website:');
     echo "\n*showcomponent*".$this->activateId."*&post_id=".$this->activatePostId;
 } else if ($this->activationType == Kwc_Guestbook_Component::ACTIVE_ON_SAVE) {

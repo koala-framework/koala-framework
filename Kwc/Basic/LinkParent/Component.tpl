@@ -4,8 +4,8 @@
 
             <?=$this->mailEncodeText($this->text)?>
 
-        <?if ($this->hasContent($this->linkTag)) {?>
+        <?php if ($this->hasContent($this->linkTag)) { ?>
         </a>
-        <?}?>
+        <?php } ?>
     </p>
 </div>

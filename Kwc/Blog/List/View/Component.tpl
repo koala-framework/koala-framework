@@ -1,1 +1,5 @@
-<div class="<?=$this->rootElementClass?>">    <? if (isset($this->searchForm)) echo $this->component($this->searchForm); ?>    <?=$this->partials($this->data);?>    <? if (isset($this->paging)) echo $this->component($this->paging); ?></div>
+<div class="<?=$this->rootElementClass?>">
+    <?php if (isset($this->searchForm)) echo $this->component($this->searchForm); ?>
+    <?=$this->partials($this->data);?>
+    <?php if (isset($this->paging)) echo $this->component($this->paging); ?>
+</div>

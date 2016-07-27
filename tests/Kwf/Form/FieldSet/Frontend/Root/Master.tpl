@@ -4,7 +4,7 @@
         <?=$this->assets(new Kwf_Assets_Package_TestPackage('Kwf_Form_FieldSet_Frontend', 'TestFiles', 'Kwf_Form_FieldSet_Frontend_Root'))?>
     </head>
     <body>
-        <?
+        <?php
         foreach($this->boxes as $box) {
             echo $this->component($box);
         }

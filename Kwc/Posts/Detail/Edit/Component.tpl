@@ -1,4 +1,4 @@
 <div class="<?=$this->rootElementClass?>">
-    <? if (!$this->isSaved) echo $this->component($this->preview); ?>
+    <?php if (!$this->isSaved) echo $this->component($this->preview); ?>
     <?=$this->component($this->form)?>
 </div>

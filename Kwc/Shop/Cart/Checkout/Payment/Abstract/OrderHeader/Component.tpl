@@ -14,17 +14,17 @@
     </div>
     <div class="receiverComment">
         <p>
-            <? if ($this->order->comment) { ?>
+            <?php if ($this->order->comment) { ?>
                 <strong><?=$this->data->trlKwf('Your Comment')?></strong><br />
                 <?=$this->order->comment?>
-            <? } ?>
+            <?php } ?>
         </p>
     </div>
-    <? if ($this->paymentTypeText) { ?>
+    <?php if ($this->paymentTypeText) { ?>
     <div class="orderInfo">
         <p>
             <?=$this->data->trlKwf('You pay by')?> <strong><?=$this->paymentTypeText?></strong>.
         </p>
     </div>
-    <? } ?>
+    <?php } ?>
 </div>

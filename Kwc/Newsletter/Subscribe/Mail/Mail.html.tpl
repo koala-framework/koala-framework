@@ -2,13 +2,13 @@
 
 <?= $this->data->trlKwf('You have just been subscribed to the newsletter at {0}.', $this->host); ?><br /><br />
 
-<? if ($this->doubleOptInComponentId) { ?>
+<?php if ($this->doubleOptInComponentId) { ?>
     <?= '-- '.$this->data->trlKwf('ACTIVATION LINK').' --'; ?><br />
     <a href="*showcomponent*<?= $this->doubleOptInComponentId; ?>*"><?= $this->data->trlKwf('Please click here, to confirm your E-Mail address and to receive our newsletters in future.'); ?></a><br /><br />
-<? } else if ($this->unsubscribeComponentId) { ?>
+<?php } else if ($this->unsubscribeComponentId) { ?>
     <?= $this->data->trlKwf('To unsubscribe anytime from our newsletter, click this link:'); ?><br />
     <a href="*showcomponent*<?= $this->unsubscribeComponentId; ?>*"><?= $this->data->trlKwf('Unsubscribe'); ?></a><br /><br />
-<? } ?>
+<?php } ?>
 
 <?= $this->data->trlKwf('To change you data or settings, click this link:'); ?><br />
 <a href="*showcomponent*<?= $this->editComponentId; ?>*"><?= $this->data->trlKwf('Settings'); ?></a><br /><br />

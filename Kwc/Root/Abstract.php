@@ -36,8 +36,11 @@ class Kwc_Root_Abstract extends Kwc_Abstract implements Kwf_Util_Maintenance_Job
         if (!$b && isset($parsedUrl['port'])) {
             $b = Kwf_Config::getValue('server.domain') == $parsedUrl['host'].':'.$parsedUrl['port'];
         }
+        if (!$b && Kwf_Config::getValue('server.preliminaryDomain')) {
+            $b = Kwf_Config::getValue('server.preliminaryDomain') == $parsedUrl['host'];
+        }
         if (!$b) {
-            $p =  Kwf_Config::getValue('server.noRedirectPattern');
+            $p = Kwf_Config::getValue('server.noRedirectPattern');
             if (!$p) return null;
             if (!preg_match('/'.$p.'/', $parsedUrl['host'])) {
                 return null;

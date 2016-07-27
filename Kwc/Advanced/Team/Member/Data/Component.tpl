@@ -2,68 +2,68 @@
 
     <ul>
 
-        <? if (!empty($this->row->title) || !empty($this->row->firstname) || !empty($this->row->lastname)) { ?>
+        <?php if (!empty($this->row->title) || !empty($this->row->firstname) || !empty($this->row->lastname)) { ?>
             <li>
-                <? if ($this->showLabels) { ?>
+                <?php if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['nameLabel'].$this->labelSeparator; ?></label>
-                <? } ?>
+                <?php } ?>
                 <strong><?= $this->row->title; ?> <?= $this->row->firstname; ?> <?= $this->row->lastname; ?></strong>
             </li>
-        <? } ?>
+        <?php } ?>
 
-        <? if (!empty($this->workingPosition)) { ?>
+        <?php if (!empty($this->workingPosition)) { ?>
             <li>
-                <? if ($this->showLabels) { ?>
+                <?php if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['positionLabel'].$this->labelSeparator; ?></label>
-                <? } ?>
+                <?php } ?>
                 <?= $this->workingPosition; ?>
             </li>
-        <? } ?>
+        <?php } ?>
 
-        <? if (!empty($this->row->phone)) { ?>
+        <?php if (!empty($this->row->phone)) { ?>
             <li>
-                <? if ($this->showLabels) { ?>
+                <?php if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['phoneLabel'].$this->labelSeparator; ?></label>
-                <? } ?>
+                <?php } ?>
                 <?= $this->row->phone; ?>
             </li>
-        <? } ?>
+        <?php } ?>
 
-        <? if (!empty($this->row->mobile)) { ?>
+        <?php if (!empty($this->row->mobile)) { ?>
             <li>
-                <? if ($this->showLabels) { ?>
+                <?php if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['mobileLabel'].$this->labelSeparator; ?></label>
-                <? } ?>
+                <?php } ?>
                 <?= $this->row->mobile; ?>
             </li>
-        <? } ?>
+        <?php } ?>
 
-        <? if (!empty($this->row->fax)) { ?>
+        <?php if (!empty($this->row->fax)) { ?>
             <li>
-                <? if ($this->showLabels) { ?>
+                <?php if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['faxLabel'].$this->labelSeparator; ?></label>
-                <? } ?>
+                <?php } ?>
                 <?= $this->row->fax; ?>
             </li>
-        <? } ?>
+        <?php } ?>
 
-        <? if (!empty($this->row->email)) { ?>
+        <?php if (!empty($this->row->email)) { ?>
             <li>
-                <? if ($this->showLabels) { ?>
+                <?php if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['emailLabel'].$this->labelSeparator; ?></label>
-                <? } ?>
+                <?php } ?>
                 <?=$this->mailLink($this->row->email); ?>
             </li>
-        <? } ?>
+        <?php } ?>
 
-        <? if ($this->vcard) { ?>
+        <?php if ($this->vcard) { ?>
             <li>
-                <? if ($this->showLabels) { ?>
+                <?php if ($this->showLabels) { ?>
                     <label><?= $this->placeholder['vcardLabel'].$this->labelSeparator; ?></label>
-                <? } ?>
+                <?php } ?>
                 <?= $this->componentLink($this->vcard, '<img src="/assets/kwf/images/fileicons/vcard.png" height="11" width="16" /> vCard Download'); ?>
             </li>
-        <? } ?>
+        <?php } ?>
 
     </ul>
 

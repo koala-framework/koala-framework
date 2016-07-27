@@ -1,7 +1,7 @@
 <div class="<?=$this->rootElementClass?> kwfUp-kwfTabs">
-    <? $i = 0; ?>
-    <? foreach ($this->listItems as $child) { ?>
-        <?
+    <?php $i = 0; ?>
+    <?php foreach ($this->listItems as $child) { ?>
+        <?php
             $class = 'kwfUp-listItem ';
             if ($i == 0) $class .= 'kwfUp-kwcFirst ';
             if ($i == count($this->children)-1) $class .= 'kwfUp-kwcLast ';
@@ -16,6 +16,6 @@
         <div class="<?=$class;?> kwfUp-kwfTabsContent">
             <?=$this->component($child['data']);?>
         </div>
-    <? $i++;
+    <?php $i++;
        } ?>
 </div>

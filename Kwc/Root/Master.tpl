@@ -5,7 +5,7 @@
     </head>
     <body>
         Default-Master, override in Root-Komponente.
-        <?
+        <?php
         foreach($this->boxes as $box) {
             echo $this->component($box);
         }

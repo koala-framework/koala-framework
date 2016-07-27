@@ -28,11 +28,13 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
         $imageData = $c->getComponent()->getImageDataOrEmptyImageData();
         $this->fireEvent(new Kwc_Abstract_Image_ImageChangedEvent($this->_class, $c));
         if ($imageData) {
+            $types = array();
+
             $typeBase = $c->getComponent()->getBaseType();
+
             // Kwc_Abstract_Image_Component->getBaseImageUrl is cached in Kwf_Media and uses therefore the base type
-            $this->fireEvent(new Kwf_Events_Event_Media_Changed(
-                $this->_class, $c, $typeBase
-            ));
+            $types[] = $typeBase;
+
             $dim = $c->getComponent()->getImageDimensions();
             if (isset($imageData['dimensions'])) {
                 $steps = Kwf_Media_Image::getResponsiveWidthSteps($dim, $imageData['dimensions']);
@@ -42,10 +44,9 @@ class Kwc_Abstract_Image_Events extends Kwc_Abstract_Events
                 throw new Kwf_Exception("Can't detect responsiveWidthSteps as image dimensions are unknown");
             }
             foreach ($steps as $step) {
-                $this->fireEvent(new Kwf_Events_Event_Media_Changed(
-                    $this->_class, $c, str_replace('{width}', $step, $typeBase)
-                ));
+                $types[] = str_replace('{width}', $step, $typeBase);
             }
+            $this->fireEvent(new Kwf_Events_Event_Media_Changed($this->_class, $c, $types));
         }
         $this->fireEvent(new Kwf_Component_Event_Component_ContentWidthChanged(
             $this->_class, $c

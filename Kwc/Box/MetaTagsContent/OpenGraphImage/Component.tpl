@@ -1,9 +1,9 @@
-<? if($this->imageUrl) { ?>
+<?php if ($this->imageUrl) { ?>
 <meta property="og:image" content="<?=$this->imageUrl?>" />
-<? } ?>
-<? if($this->width) { ?>
+<?php } ?>
+<?php if ($this->width) { ?>
 <meta property="og:image:width" content="<?=$this->width?>" />
-<? } ?>
-<? if($this->height) { ?>
+<?php } ?>
+<?php if ($this->height) { ?>
 <meta property="og:image:height" content="<?=$this->height?>" />
-<? } ?>
+<?php } ?>

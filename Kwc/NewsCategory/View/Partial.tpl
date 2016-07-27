@@ -4,25 +4,25 @@
         <h1><?=$this->componentLink($this->item)?></h1>
         <p>
             <span class="publishDate"><?=$this->date($this->item->publish_date)?>
-                <?
+                <?php
                 if ($this->item->categories) { ?>
                     | <?= $this->data->trlpKwf('Category', 'Categories', count($this->item->categories)); ?>
-                    <? $nci = 0;
+                    <?php $nci = 0;
                     foreach ($this->item->categories as $nc) {
                         if ($nci++ >= 1) echo ', ';
                         echo $this->componentLink($nc);
                     } ?>
-                <? } ?>
+                <?php } ?>
             </span>
             <div class="kwfUp-clear"></div>
         </p>
     </div>
     <div class="kwfUp-clear"></div>
-    <? if (isset($this->item->previewImage)) { ?>
+    <?php if (isset($this->item->previewImage)) { ?>
     <div class="image left">
         <?=$this->componentLink($this->item, $this->component($this->item->previewImage))?>
     </div>
-    <? } ?>
+    <?php } ?>
     <div class="teaser">
         <p><?=$this->item->row->teaser?></p>
         <?=$this->componentLink($this->item, trlKwf('Read more').' &raquo;');?>

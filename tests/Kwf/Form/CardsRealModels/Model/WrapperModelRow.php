@@ -1,4 +1,4 @@
-<?
+<?php
 class Kwf_Form_CardsRealModels_Model_WrapperModelRow extends Kwf_Model_Db_Row
 {
     protected function _getSiblingRows()

@@ -326,6 +326,11 @@ class Kwf_Util_Setup
         $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
         $ret .= "}\n";
 
+        $ret .= "\n";
+        $ret .= "if (\$requestUri == '/kwf/check') {\n";
+        $ret .= "    Kwf_Util_Check::dispatch();\n";
+        $ret .= "}\n";
+        $ret .= "\n";
 
         if (Kwf_Config::getValue('server.https') !== 'unknown') {
             $redirectHttpsCode  = "    if (\$_SERVER['REQUEST_METHOD'] != 'GET') {\n";
@@ -386,7 +391,7 @@ class Kwf_Util_Setup
         $ret .= "\n\$preLogin = false;\n";
         // Falls redirectToDomain eingeschalten ist, umleiten
         if (Kwf_Config::getValue('server.redirectToDomain')) {
-            $ret .= "if (\$host && substr(\$requestUri, 0, 17) != '/kwf/maintenance/' && substr(\$requestUri, 0, 8) != '/assets/') {\n";
+            $ret .= "if (\$host && substr(\$requestUri, 0, 8) != '/assets/') {\n";
             $ret .= "    \$redirect = false;\n";
             if ($domains = Kwf_Config::getValueArray('kwc.domains')) {
                 $ret .= "    \$domainMatches = false;\n";

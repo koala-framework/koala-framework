@@ -25,6 +25,11 @@ class Kwf_Assets_Package
         $this->_dependencyName = $dependencyName;
     }
 
+    public function __toString()
+    {
+        return get_class($this);
+    }
+
     public function getDependencyName()
     {
         return $this->_dependencyName;

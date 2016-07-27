@@ -1,12 +1,12 @@
 <div class="<?=$this->rootElementClass?>">
-    <? foreach($this->categories as $type=>$links) { ?>
+    <?php foreach ($this->categories as $type=>$links) { ?>
     <h3><?=$type?></h3>
     <ul>
-        <? foreach($links as $m) { ?>
+        <?php foreach ($links as $m) { ?>
             <li class="<?= $m['class'] ?>">
                 <?=$this->componentLink($m['data'])?>
             </li>
-        <? } ?>
+        <?php } ?>
     </ul>
-    <? } ?>
+    <?php } ?>
 </div>

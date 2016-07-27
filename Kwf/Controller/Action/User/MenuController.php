@@ -41,12 +41,14 @@ class Kwf_Controller_Action_User_MenuController extends Kwf_Controller_Action
 
         $this->view->frontendUrls = array();
         if (Kwf_Registry::get('acl')->has('kwf_component_pages')) {
-            foreach (Kwf_Component_Data_Root::getInstance()->getDomainComponents() as $component) {
-                if ($acl->getComponentAcl()->isAllowed($authData, $component)) {
-                    $this->view->frontendUrls[] = array(
-                        'href' => Kwf_Setup::getBaseUrl().'/admin/component/preview?url='.urlencode($component->getAbsoluteUrl()),
-                        'text' => $component->name,
-                    );
+            if ($root = Kwf_Component_Data_Root::getInstance()) {
+                foreach ($root->getDomainComponents() as $component) {
+                    if ($acl->getComponentAcl()->isAllowed($authData, $component)) {
+                        $this->view->frontendUrls[] = array(
+                            'href' => Kwf_Setup::getBaseUrl().'/admin/component/preview?url='.urlencode($component->getAbsoluteUrl()),
+                            'text' => $component->name,
+                        );
+                    }
                 }
             }
             if (!$this->view->frontendUrls) {
