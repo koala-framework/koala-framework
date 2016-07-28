@@ -187,8 +187,8 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
             $this->_beforeInsert($row);
             $this->_beforeSave($row);
             $row->save();
-            $this->_afterSave($row);
-            $this->_afterInsert($row);
+            $this->_afterSave($row, $request);
+            $this->_afterInsert($row, $request);
 
             //there must be a better way to do that
             $getRouteName = preg_replace('#^post_(.*)$#', 'get_\1', $request->get('_route'));
@@ -240,8 +240,8 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
             $this->_beforeUpdate($row);
             $this->_beforeSave($row);
             $row->save();
-            $this->_afterSave($row);
-            $this->_afterUpdate($row);
+            $this->_afterSave($row, $request);
+            $this->_afterUpdate($row, $request);
 
             return View::create(array(), Codes::HTTP_NO_CONTENT);
         }
@@ -265,31 +265,31 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
         return View::create(array(), Codes::HTTP_NO_CONTENT);
     }
 
-    protected function _beforeInsert(Kwf_Model_Row_Interface $row)
+    protected function _beforeInsert(\Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _beforeUpdate(Kwf_Model_Row_Interface $row)
+    protected function _beforeUpdate(\Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _beforeSave(Kwf_Model_Row_Interface $row)
+    protected function _beforeSave(\Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _beforeDelete(Kwf_Model_Row_Interface $row)
+    protected function _beforeDelete(\Kwf_Model_Row_Interface $row)
     {
     }
 
-    protected function _afterUpdate(Kwf_Model_Row_Interface $row, $data)
+    protected function _afterUpdate(\Kwf_Model_Row_Interface $row, Request $request)
     {
     }
 
-    protected function _afterInsert(Kwf_Model_Row_Interface $row, $data)
+    protected function _afterInsert(\Kwf_Model_Row_Interface $row, Request $request)
     {
     }
 
-    protected function _afterSave(Kwf_Model_Row_Interface $row, $data)
+    protected function _afterSave(\Kwf_Model_Row_Interface $row, Request $request)
     {
     }
 }
