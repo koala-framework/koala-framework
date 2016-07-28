@@ -86,7 +86,7 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
                     ->setValues($params['values'])
                     ->setDefaultValue($params['defaultValue'])
                     ->setWidth(300)
-                    ->setData(new Kwc_Root_Category_GeneratorForm_GeneratorPropertyData($this, $plugin));
+                    ->setData(new Kwf_Component_PluginRoot_GeneratorProperty_Data($plugin, $this));
             }
         }
     }
@@ -95,36 +95,16 @@ class Kwc_Root_Category_GeneratorForm extends Kwf_Form
     {
         parent::afterSave($parentRow, $postData);
         foreach ($this->toSaveGeneratorProperty as $i) {
-            $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($i['row']->id, array('ignoreVisible'=>true, 'limit'=>1));
+            if (isset($i['row']->component_id)) {
+                $id = $i['row']->component_id.'-'.$i['row']->id;
+            } else {
+                $id = $i['row']->id;
+            }
+            $data = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible'=>true, 'limit'=>1));
             if (!$data) {
                 throw new Kwf_Exception("Didn't get data for $id");
             }
             $i['plugin']->saveGeneratorPropertyValue($data, $i['value']);
-        }
-    }
-}
-
-class Kwc_Root_Category_GeneratorForm_GeneratorPropertyData extends Kwf_Component_PluginRoot_GeneratorProperty_Data
-{
-    private $_form;
-    public function __construct($form, Kwf_Component_PluginRoot_Interface_GeneratorProperty $plugin)
-    {
-        $this->_form = $form;
-        parent::__construct($plugin);
-    }
-
-    public function save(Kwf_Model_Row_Interface $row, $value)
-    {
-        if (!$row->id) {
-            //when row doesn't have an id yet (when adding page) we don't have a data and can't save the property value
-            //this HACK moves saving into afterSave in that case
-            $this->_form->toSaveGeneratorProperty[] = array(
-                'row' => $row,
-                'value' => $value,
-                'plugin' => $this->_plugin
-            );
-        } else {
-            return parent::save($row, $value);
         }
     }
 }
