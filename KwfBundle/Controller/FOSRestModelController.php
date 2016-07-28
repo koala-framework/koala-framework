@@ -76,8 +76,6 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
      */
     public function cgetAction(ParamFetcher $paramFetcher, Request $request)
     {
-        // "cget_places"            [GET] /places
-
         $dynamicRequestParam = new QueryParam();
         $dynamicRequestParam->name = "limit";
         $dynamicRequestParam->requirements = "\d+";
@@ -134,8 +132,6 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
      */
     public function getAction($id)
     {
-        // "get_places"             [GET] /places/{slug}
-
         $row = $this->_model->getRow($id);
 
         if (!$row) {
@@ -160,8 +156,6 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
      */
     public function postAction(ParamFetcher $paramFetcher, Request $request)
     {
-        // "post_places"           [POST] /places
-
         $row = $this->_model->createRow();
         $this->get('serializer')->denormalize($request->request->all(), get_class($row),
                                               'json',
@@ -208,8 +202,6 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
      */
     public function putAction($id, ParamFetcher $paramFetcher, Request $request)
     {
-        // "put_places"           [PUT] /places/{id}
-
         $row = $this->_model->getRow($id);
         if (!$row) {
             $view = View::create(array(), Codes::HTTP_NOT_FOUND);
@@ -260,8 +252,6 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
      */
     public function deleteAction($id)
     {
-        // "delete_places"          [DELETE] /places/{id}
-
         $row = $this->_model->getRow($id);
         if (!$row) {
             $view = View::create(array(), Codes::HTTP_NOT_FOUND);
