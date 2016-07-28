@@ -179,7 +179,6 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
                 'errors'=>$formattedErrors
             ), 400);
             $ctx = new Context();
-            $ctx->setGroups(array('rest_read', 'rest'));
             $view->setContext($ctx);
             return $view;
         } else {
@@ -210,7 +209,10 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
 
         $row = $this->_model->getRow($id);
         if (!$row) {
-            return View::create(array(), Codes::HTTP_NOT_FOUND);
+            $view = View::create(array(), Codes::HTTP_NOT_FOUND);
+            $ctx = new Context();
+            $view->setContext($ctx);
+            return $view;
         }
 
         $this->get('serializer')->denormalize($request->request->all(), get_class($row),
@@ -232,7 +234,6 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
                 'errors'=>$formattedErrors
             ), 400);
             $ctx = new Context();
-            $ctx->setGroups(array('rest_read', 'rest'));
             $view->setContext($ctx);
             return $view;
         } else {
@@ -243,7 +244,10 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
             $this->_afterSave($row, $request);
             $this->_afterUpdate($row, $request);
 
-            return View::create(array(), Codes::HTTP_NO_CONTENT);
+            $view = View::create(array(), Codes::HTTP_NO_CONTENT);
+            $ctx = new Context();
+            $view->setContext($ctx);
+            return $view;
         }
 
     }
@@ -257,12 +261,18 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
 
         $row = $this->_model->getRow($id);
         if (!$row) {
-            return View::create(array(), Codes::HTTP_NOT_FOUND);
+            $view = View::create(array(), Codes::HTTP_NOT_FOUND);
+            $ctx = new Context();
+            $view->setContext($ctx);
+            return $view;
         }
         $this->denyAccessUnlessGranted('delete', $row);
         $this->_beforeDelete($row);
         $row->delete();
-        return View::create(array(), Codes::HTTP_NO_CONTENT);
+        $view =  View::create(array(), Codes::HTTP_NO_CONTENT);
+        $ctx = new Context();
+        $view->setContext($ctx);
+        return $view;
     }
 
     protected function _beforeInsert(\Kwf_Model_Row_Interface $row)
