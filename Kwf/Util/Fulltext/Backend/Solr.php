@@ -42,8 +42,11 @@ class Kwf_Util_Fulltext_Backend_Solr extends Kwf_Util_Fulltext_Backend_Abstract
         $ret = array();
         foreach (Kwc_Abstract::getComponentClasses() as $c) {
             if (Kwc_Abstract::getFlag($c, 'subroot')) {
-                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsByClass($c) as $sr) {
-                    $ret[] = $sr->componentId;
+                foreach (Kwf_Component_Data_Root::getInstance()->getComponentsBySameClass($c, array('ignoreVisible' => true)) as $sr) {
+                    if (isset($sr->parent) && $sr->parent) {//only keep highest level
+                        unset($ret[$sr->parent->componentId]);
+                    }
+                    $ret[$sr->componentId] = $sr->componentId;
                 }
             }
         }
