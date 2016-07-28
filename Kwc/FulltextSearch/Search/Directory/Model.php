@@ -64,9 +64,9 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
                 } else {
                     $query = $this->_getSearchQueryByExpr($exp);
                     if (isset($params['fq'])) {
-                        $params['fq'] .= '+'.$query;
+                        $params['fq'] .= ' +'.$query;
                     } else {
-                        $params['fq'] = $query;
+                        $params['fq'] = '+'.$query;
                     }
                 }
             }
@@ -75,7 +75,7 @@ class Kwc_FulltextSearch_Search_Directory_Model extends Kwf_Model_Abstract
             foreach ($select->getPart(Kwf_Model_Select::WHERE_NOT_EQUALS) as $field=>$value) {
                 if (isset($params['fq'])) {
                     //if more than one fields should be queried they are apended with +
-                    $params['fq'] .= '+'.'-'.$field.':'.$value;
+                    $params['fq'] .= ' -'.$field.':'.$value;
                 } else {
                     //format is: -field:value for negation
                     $params['fq'] = '-'.$field.':'.$value;
