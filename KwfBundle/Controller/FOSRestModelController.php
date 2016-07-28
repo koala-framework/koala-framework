@@ -139,7 +139,10 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
         $row = $this->_model->getRow($id);
 
         if (!$row) {
-            return View::create(array(), Codes::HTTP_NOT_FOUND);
+            $view = View::create(array(), Codes::HTTP_NOT_FOUND);
+            $ctx = new Context();
+            $view->setContext($ctx);
+            return $view;
         }
         $this->denyAccessUnlessGranted('read', $row);
 
