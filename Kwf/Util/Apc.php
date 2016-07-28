@@ -83,7 +83,15 @@ class Kwf_Util_Apc
             $baseUrl = Kwf_Setup::getBaseUrl();
             $url = "$urlPart$d[domain]$baseUrl/kwf/util/apc/$method";
 
-            $client = new Zend_Http_Client();
+            $config = array();
+            if (extension_loaded('curl')) {
+                $config['adapter'] = 'Zend_Http_Client_Adapter_Curl';
+                $config['curloptions'] = array(
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false
+                );
+            }
+            $client = new Zend_Http_Client($url, $config);
             $client->setMethod(Zend_Http_Client::POST);
             $client->setParameterPost($params);
             $client->setConfig(array(
@@ -91,7 +99,6 @@ class Kwf_Util_Apc
                 'keepalive' => true
             ));
 
-            $client->setUri($url);
             $body = null;
             $outputMessage = 'could not reach web per http';
             try {
@@ -105,14 +112,7 @@ class Kwf_Util_Apc
             $url2 = null;
             if (!$result && isset($d['alternative'])) {
                 $url2 = "$urlPart$d[alternative]$baseUrl/kwf/util/apc/$method";
-                $client = new Zend_Http_Client();
-                $client->setMethod(Zend_Http_Client::POST);
-                $client->setConfig(array(
-                    'timeout' => 60,
-                    'keepalive' => true
-                ));
                 $client->setUri($url2);
-                $client->setParameterPost($params);
                 try {
                     $response = $client->request();
                     $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
