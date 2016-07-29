@@ -271,62 +271,67 @@ Lightbox.prototype = {
             context: this
         }).done(function(response) {
 
-            injectAssets(response.assets);
+            injectAssets(response.assets, (function() {
+                this._renderContent(response.content);
+            }).bind(this));
 
-            this.contentEl = $(
-                '<div class="kwfUp-kwfLightboxContent"></div>'
-            );
-            this.closeButtonEl = $(
-                '<a href="#" class="kwfUp-closeButton"><span class="kwfUp-innerCloseButton">'+t.trlKwf("Close")+'</span></a>'
-            );
-            var self = this;
-            var appendContent = function() {
-                self.innerLightboxEl.append(self.contentEl);
-                self.innerLightboxEl.append(self.closeButtonEl);
-
-                self.style.updateContent(response.content);
-
-                if (self.lightboxEl.is(':visible')) {
-                    self.contentEl.hide();
-                }
-
-                var showContent = function() {
-                    self.innerLightboxEl.removeClass('kwfUp-kwfLightboxLoading');
-                    self.innerLightboxEl.find('.kwfUp-loading').remove();
-                    if (self.lightboxEl.is(':visible')) {
-                        self.contentEl.show();
-                    }
-                    self.style.afterContentShown();
-                    if (self.lightboxEl.is(':visible')) {
-                        self.preloadLinks();
-                    }
-                };
-                var imagesToLoad = 0;
-                self.contentEl.find('img.kwfUp-hideWhileLoading').each(function() {
-                    imagesToLoad++;
-                    $(this).on('load', function() {
-                        imagesToLoad--;
-                        if (imagesToLoad <= 0) showContent.call(this);
-                    });
-                });
-                if (imagesToLoad == 0) showContent.call(this);
-
-                self.initialize();
-            };
-            //Check if the Lightbox is currently animating
-            //If that's the case, wait till the animation is over and insert the content
-            //Otherwise the animation could look bad, if the content changes the lightbox size
-            if ($('body').hasClass('kwfUp-kwfLightboxAnimate'))  {
-                oneTransitionEnd(this.innerLightboxEl, function() {
-                    appendContent();
-                }, this);
-            } else {
-                appendContent();
-            }
         }).fail(function() {
             //fallback
             location.href = this.href;
         });
+    },
+    _renderContent: function(content)
+    {
+        this.contentEl = $(
+            '<div class="kwfUp-kwfLightboxContent"></div>'
+        );
+        this.closeButtonEl = $(
+            '<a href="#" class="kwfUp-closeButton"><span class="kwfUp-innerCloseButton">'+t.trlKwf("Close")+'</span></a>'
+        );
+        var self = this;
+        var appendContent = function() {
+            self.innerLightboxEl.append(self.contentEl);
+            self.innerLightboxEl.append(self.closeButtonEl);
+
+            self.style.updateContent(content);
+
+            if (self.lightboxEl.is(':visible')) {
+                self.contentEl.hide();
+            }
+
+            var showContent = function() {
+                self.innerLightboxEl.removeClass('kwfUp-kwfLightboxLoading');
+                self.innerLightboxEl.find('.kwfUp-loading').remove();
+                if (self.lightboxEl.is(':visible')) {
+                    self.contentEl.show();
+                }
+                self.style.afterContentShown();
+                if (self.lightboxEl.is(':visible')) {
+                    self.preloadLinks();
+                }
+            };
+            var imagesToLoad = 0;
+            self.contentEl.find('img.kwfUp-hideWhileLoading').each(function() {
+                imagesToLoad++;
+                $(this).on('load', function() {
+                    imagesToLoad--;
+                    if (imagesToLoad <= 0) showContent.call(this);
+                });
+            });
+            if (imagesToLoad == 0) showContent.call(this);
+
+            self.initialize();
+        };
+        //Check if the Lightbox is currently animating
+        //If that's the case, wait till the animation is over and insert the content
+        //Otherwise the animation could look bad, if the content changes the lightbox size
+        if ($('body').hasClass('kwfUp-kwfLightboxAnimate'))  {
+            oneTransitionEnd(this.innerLightboxEl, function() {
+                appendContent();
+            }, this);
+        } else {
+            appendContent();
+        }
     },
     show: function(options)
     {
