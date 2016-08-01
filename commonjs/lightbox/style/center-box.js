@@ -3,6 +3,7 @@ var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
 var kwfExtend = require('kwf/extend');
 var oneTransitionEnd = require('kwf/element/one-transition-end');
+var lightboxHelper = require('kwf/lightbox/lightbox-helper');
 
 var CenterBoxStyle = kwfExtend(AbstractStyle, {
     init: function()
@@ -159,6 +160,7 @@ var CenterBoxStyle = kwfExtend(AbstractStyle, {
     },
     onShow: function() {
         this.mask();
+        $('html').addClass('kwfUp-kwfLightboxActive');
     },
     onClose: function(options) {
         var transitionDurationName = Modernizr.prefixed('transitionDuration') || '';
@@ -166,12 +168,15 @@ var CenterBoxStyle = kwfExtend(AbstractStyle, {
         if (parseFloat(duration)>0) {
             $('body').addClass('kwfUp-kwfLightboxAnimate');
             oneTransitionEnd(this.lightbox.innerLightboxEl, function() {
-                $('html').removeClass('kwfUp-kwfLightboxActive');
+                if (!lightboxHelper.currentOpen) {
+                    $('html').removeClass('kwfUp-kwfLightboxActive');
+                }
                 $('body').removeClass('kwfUp-kwfLightboxAnimate');
                 this.lightbox.lightboxEl.hide();
                 this.afterClose();
             }, this);
         } else {
+            $('html').removeClass('kwfUp-kwfLightboxActive');
             this.lightbox.lightboxEl.hide();
             this.afterClose();
         }

@@ -6,11 +6,11 @@ var getKwcRenderUrl = require('kwf/get-kwc-render-url');
 var t = require('kwf/trl');
 var injectAssets = require('kwf/inject-assets');
 var oneTransitionEnd = require('kwf/element/one-transition-end');
+var lightboxHelper = require('kwf/lightbox/lightbox-helper');
 var StylesRegistry = require('kwf/lightbox/styles-registry');
 StylesRegistry.register('CenterBox', require('kwf/lightbox/style/center-box'));
 
 var statistics = require('kwf/statistics');
-var currentOpen = null;
 var escapeHandlerInstalled = false;
 var allByUrl = {};
 var onlyCloseOnPopstate;
@@ -30,7 +30,7 @@ $(document).on('click', 'a[data-kwc-lightbox]', function(event) {
     }
     el.kwfLightbox = l;
 
-    if (currentOpen && currentOpen.href == href) {
+    if (lightboxHelper.currentOpen && lightboxHelper.currentOpen.href == href) {
         //already open, ignore click
         event.preventDefault();
         return;
@@ -61,7 +61,7 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
     l.style.afterCreateLightboxEl();
     l.style.onContentReady();
     el[0].kwfLightbox = l;
-    currentOpen = l;
+    lightboxHelper.currentOpen = l;
 
     //Remove the kwfUp-kwfLightboxOpen class and get the transform matrix data
     //We need that info, for future open animations
@@ -114,17 +114,17 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
 
 onReady.onContentReady(function lightboxContent(readyEl, options)
 {
-    if (!currentOpen) return;
+    if (!lightboxHelper.currentOpen) return;
 
     readyEl = $(readyEl);
     if (readyEl.is(':visible')) {
         //callOnContentReady was called for an element inside the lightbox, style can update the lightbox size
-        if (currentOpen.lightboxEl
-            && currentOpen.lightboxEl.is(':visible')
-            && ($.contains(currentOpen.innerLightboxEl, readyEl)
-            || $.contains(readyEl, currentOpen.innerLightboxEl))
+        if (lightboxHelper.currentOpen.lightboxEl
+            && lightboxHelper.currentOpen.lightboxEl.is(':visible')
+            && ($.contains(lightboxHelper.currentOpen.innerLightboxEl, readyEl)
+            || $.contains(readyEl, lightboxHelper.currentOpen.innerLightboxEl))
         ) {
-            currentOpen.style.onContentReady();
+            lightboxHelper.currentOpen.style.onContentReady();
         }
     }
 });
@@ -134,20 +134,20 @@ historyState.on('popstate', function() {
         //onlyCloseOnPopstate is set in closeAndPushState
         //if multiple lightboxes are in history and we close current one we go back in history until none is open
         //so just close current one and don't show others (required to avoid flicker on closing)
-        if (currentOpen) {
-            currentOpen.close();
+        if (lightboxHelper.currentOpen) {
+            lightboxHelper.currentOpen.close();
         }
         return;
     }
     var lightbox = historyState.currentState.lightbox;
     if (lightbox) {
         if (!allByUrl[lightbox]) return;
-        if (currentOpen != allByUrl[lightbox]) {
+        if (lightboxHelper.currentOpen != allByUrl[lightbox]) {
             allByUrl[lightbox].show();
         }
     } else {
-        if (currentOpen) {
-            currentOpen.close();
+        if (lightboxHelper.currentOpen) {
+            lightboxHelper.currentOpen.close();
         }
     }
 });
@@ -157,8 +157,8 @@ historyState.on('popstate', function() {
     $(window).resize(function(ev) {
         clearTimeout(timer);
         timer = setTimeout(function(){
-            if (currentOpen) {
-                currentOpen.style.onResizeWindow(ev);
+            if (lightboxHelper.currentOpen) {
+                lightboxHelper.currentOpen.style.onResizeWindow(ev);
             }
         }, 100);
     });
@@ -166,8 +166,8 @@ historyState.on('popstate', function() {
 } else {
     //on iOS listen to orientationchange as resize event triggers randomly when scrolling
     $(window).on('orientationchange', function(ev) {
-        if (currentOpen) {
-            currentOpen.style.onResizeWindow(ev);
+        if (lightboxHelper.currentOpen) {
+            lightboxHelper.currentOpen.style.onResizeWindow(ev);
         }
     });
 }
@@ -338,26 +338,25 @@ Lightbox.prototype = {
     {
         this._isClosing = false;
 
-        $('html').addClass('kwfUp-kwfLightboxActive');
-        this.createLightboxEl();
-        this.style.onShow(options);
-
         if (!this.closeHref) {
-            if (currentOpen) {
-                this.closeHref = currentOpen.closeHref;
+            if (lightboxHelper.currentOpen) {
+                this.closeHref = lightboxHelper.currentOpen.closeHref;
             } else {
                 this.closeHref = window.location.href;
             }
         }
-
-        if (currentOpen) {
+        if (lightboxHelper.currentOpen) {
             var closeOptions = {};
             if (options && options.clickTarget) {
                 closeOptions.showClickTarget = options.clickTarget;
             }
-            currentOpen.close(closeOptions);
+            lightboxHelper.currentOpen.close(closeOptions);
         }
-        currentOpen = this;
+
+        this.createLightboxEl();
+        this.style.onShow(options);
+
+        lightboxHelper.currentOpen = this;
         this.showOptions = options;
         if (!this.fetched) {
             this.fetchContent();
@@ -395,7 +394,6 @@ Lightbox.prototype = {
         statistics.trackView(this.href);
     },
     close: function(options) {
-        $('html').removeClass('kwfUp-kwfLightboxActive');
         $('html').removeClass('kwfUp-kwfLightboxAnimationEnd');
         this.lightboxEl.hide();
         //so eg. flash component can remove object
@@ -422,7 +420,7 @@ Lightbox.prototype = {
             var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
             this.innerLightboxEl.css(transformName, newMatrix);
         }
-        currentOpen = null;
+        lightboxHelper.currentOpen = null;
     },
     closeAndPushState: function() {
         if (this._isClosing) return; //prevent double-click on close button
@@ -463,8 +461,8 @@ Lightbox.prototype = {
         if (!escapeHandlerInstalled) {
             escapeHandlerInstalled = true;
             $('body').keydown((function(e) {
-                if (e.keyCode == 27 && currentOpen) {
-                    currentOpen.closeAndPushState();
+                if (e.keyCode == 27 && lightboxHelper.currentOpen) {
+                    lightboxHelper.currentOpen.closeAndPushState();
                 }
             }));
         }

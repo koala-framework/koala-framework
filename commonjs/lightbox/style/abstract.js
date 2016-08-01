@@ -22,9 +22,13 @@ AbstractStyle.prototype = {
         onReady.callOnContentReady(this.lightbox.contentEl, {action: 'render'});
         this._blockOnContentReady = false;
     },
-    onShow: function() {},
+    onShow: function() {
+        $('html').addClass('kwfUp-kwfLightboxActive');
+    },
     afterShow: function() {},
-    onClose: function() {},
+    onClose: function() {
+        $('html').removeClass('kwfUp-kwfLightboxActive');
+    },
     afterClose: function() {},
     onContentReady: function() {},
     onResizeWindow: function() {},
