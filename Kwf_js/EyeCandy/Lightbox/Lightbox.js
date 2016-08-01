@@ -192,16 +192,18 @@ Lightbox.prototype = {
         if (this.options.cssClass) cls += ' '+this.options.cssClass;
         var lightbox = $(
             '<div class="'+cls+'">'+
-                '<div class="kwfUp-kwfLightboxInner"></div>'+
+                '<div class="kwfUp-kwfLightboxScrollOuter">'+
+                    '<div class="kwfUp-kwfLightboxScroll">'+
+                        '<div class="kwfUp-kwfLightboxBetween">'+
+                            '<div class="kwfUp-kwfLightboxBetweenInner">'+
+                                '<div class="kwfUp-kwfLightboxInner kwfUp-kwfLightboxLoading"><div class="kwfUp-loading"><div class="inner1"><div class="inner2">&nbsp;</div></div></div></div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
             '</div>'
         );
-
-
         $(document.body).append(lightbox);
-        console.log('add transtionend', lightbox);
-        lightbox.find('.kwfUp-kwfLightboxInner').on('transitionend MSTransitionEnd', function() {
-            console.log('******* transitionend');
-        });
         lightbox[0].kwfLightbox = this; //don't initialize again in onContentReady
 
         this.lightboxEl = lightbox;
@@ -377,7 +379,6 @@ Lightbox.prototype = {
             if (parseFloat(duration)>0) {
                 $('body').addClass('kwfUp-kwfLightboxAnimate');
                 oneTransitionEnd(this.innerLightboxEl, function() {
-                    console.log('callOnContentReady');
                     $('body').removeClass('kwfUp-kwfLightboxAnimate');
                     $('html').addClass('kwfUp-kwfLightboxAnimationEnd');
                     onReady.callOnContentReady(this.lightboxEl, {action: 'show'});

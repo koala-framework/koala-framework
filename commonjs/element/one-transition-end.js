@@ -15,20 +15,9 @@ var oneTransitionEnd = function (el, callback, scope) {
     if (transitionType != 'WebkitTransition') { // can be removed as soon as modernizr fixes https://github.com/Modernizr/Modernizr/issues/897
         event += ' ' +transEndEventNames['WebkitTransition'];
     }
-
-    /*
-    //safety net, some browsers don't call transtionend reliable (IE 10)
-    var timeout = setTimeout(function() {
-        el.off(event);
-        callback.call(scope);
-    }, 600);
-    */
-
     el.on(event, function() {
         el.off(event);
         callback.call(scope, arguments);
-//         clearTimeout(timeout);
     });
-
 };
 module.exports = oneTransitionEnd;
