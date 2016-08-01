@@ -90,7 +90,6 @@ onReady.onRender('.kwfUp-kwfLightbox', function lightboxEl(el) {
         }
     }
     //callOnContentReady so eg. ResponsiveEl can do it's job based on the new with of the lightbox
-    l.innerLightboxEl.addClass('kwfUp-kwfLightboxFullLoaded');
     onReady.callOnContentReady(l.contentEl, {action: 'show'});
 
     //lazy load parent content
@@ -388,12 +387,12 @@ Lightbox.prototype = {
             }
         }
         this.lightboxEl.addClass('kwfUp-kwfLightboxOpen');
-        this.innerLightboxEl.addClass('kwfUp-kwfLightboxFullLoaded');
         this.style.afterShow(options);
 
         statistics.trackView(this.href);
     },
     close: function(options) {
+        lightboxHelper.currentOpen = null;
         $('html').removeClass('kwfUp-kwfLightboxAnimationEnd');
         this.lightboxEl.hide();
         //so eg. flash component can remove object
@@ -420,7 +419,6 @@ Lightbox.prototype = {
             var newMatrix = 'matrix('+values[0]+','+values[1]+','+values[2]+','+values[3]+','+values[4]+','+values[5]+')';
             this.innerLightboxEl.css(transformName, newMatrix);
         }
-        lightboxHelper.currentOpen = null;
     },
     closeAndPushState: function() {
         if (this._isClosing) return; //prevent double-click on close button
