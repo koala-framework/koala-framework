@@ -64,6 +64,11 @@ body {
             text-align: left;
             height: auto;
             z-index: 51;
+            opacity: 0;
+
+            &.kwfUp-kwfLightboxFullLoaded {
+                opacity: 1;
+            }
         }
 
         .kwfUp-kwfLightboxMask {
