@@ -8,6 +8,9 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
         } else if ($this->_getParam('pageId')) {
             $cacheId = 'kwcMenuMobile-' . $this->_getParam('pageId');
         }
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_PreDispatch') as $plugin) {
+            $plugin->preDispatch($this->_getParam('pageUrl'));
+        }
         $data = Kwf_Cache_Simple::fetch($cacheId);
         if ($data === false) {
             if ($this->_getParam('subrootComponentId')) {
@@ -31,7 +34,49 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
             Kwf_Cache_Simple::add($cacheId, $data);
         }
 
+        $skipProcessPages = true;
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_MaskComponent') as $plugin) {
+            if (!$plugin->canIgnoreMasks()) {
+                $skipProcessPages = false;
+            }
+        }
+        foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_PostRender') as $plugin) {
+            if (!$plugin->canIgnoreProcessUrl()) {
+                $skipProcessPages = false;
+            }
+        }
+        if (!$skipProcessPages) {
+            $contents = json_decode($data['contents'], true);
+            $contents['pages'] = $this->_processPages($contents['pages']);
+            $data['contents'] = json_encode($contents);
+        }
+
         Kwf_Media_Output::output($data);
+    }
+
+    protected function _processPages($pages)
+    {
+        $ret = array();
+        foreach ($pages as $page) {
+            if (isset($page['mask'])) {
+                foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_MaskComponent') as $plugin) {
+                    if (!$plugin->showMasked($page['mask']['type'], $page['mask']['params'])) {
+                        continue 2; //don't show this page
+                    }
+                }
+            }
+
+            if (isset($page['children'])) {
+                $page['children'] = $this->_processPages($page['children']);
+            }
+            if (isset($page['url'])) {
+                foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_PostRender') as $plugin) {
+                    $page['url'] = $plugin->processUrl($page['url']);
+                }
+            }
+            $ret[] = $page;
+        }
+        return $ret;
     }
 
     protected function _isAllowedComponent()
@@ -95,6 +140,15 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                 $ret[$i]['name'] = $pageData['name'];
                 $ret[$i]['url'] = $pageData['url'];
                 $ret[$i]['id'] = $pageData['id'];
+                foreach (Kwf_Component_Data_Root::getInstance()->getPlugins('Kwf_Component_PluginRoot_Interface_MaskComponent') as $plugin) {
+                    $mask = $plugin->getMask($page);
+                    if ($mask != Kwf_Component_PluginRoot_Interface_MaskComponent::MASK_TYPE_NOMASK) {
+                        $ret[$i]['mask'] = $mask;
+                        if ($ret[$i]['mask'] == Kwf_Component_PluginRoot_Interface_MaskComponent::MASK_TYPE_HIDE) {
+                            $ret[$i]['hidden'] = true;
+                        }
+                    }
+                }
 
                 if ($levels > 0) {
                     $ret[$i]['children'] = $this->_getChildPagesRecursive($page, $levels);

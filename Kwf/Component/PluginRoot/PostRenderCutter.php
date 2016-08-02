@@ -1,12 +1,8 @@
 <?php
-class Kwf_Component_PluginRoot_PostRenderCutter implements
+abstract class Kwf_Component_PluginRoot_PostRenderCutter implements
     Kwf_Component_PluginRoot_Interface_MaskComponent,
     Kwf_Component_PluginRoot_Interface_PostRender
 {
-    const MASK_TYPE_NOMASK = 'noMask';
-    const MASK_TYPE_HIDE = 'hide';
-    const MASK_TYPE_SHOW = 'show';
-
     const MASK_CODE_BEGIN = 'Begin';
     const MASK_CODE_END = 'End';
 
@@ -30,10 +26,9 @@ class Kwf_Component_PluginRoot_PostRenderCutter implements
         return self::MASK_TYPE_NOMASK;
     }
 
-    public final function getMaskCode(Kwf_Component_Data $page)
+    public final function getMask(Kwf_Component_Data $page)
     {
         $maskParams = null;
-
         $mask = $this->_getMask($page);
         if (is_array($mask)) {
             $maskType = $mask['type'];
@@ -44,8 +39,26 @@ class Kwf_Component_PluginRoot_PostRenderCutter implements
             $maskType = $mask;
         }
         return array(
-            'begin' => $this->_getMaskCode($maskType, self::MASK_CODE_BEGIN, $maskParams),
-            'end' => $this->_getMaskCode($maskType, self::MASK_CODE_END, $maskParams),
+            'type' => $maskType,
+            'params' => $maskParams
+        );
+    }
+
+    public function processMask($mask)
+    {
+        if ($mask == self::MASK_TYPE_HIDE) {
+            return false;
+        }
+    }
+
+    public final function getMaskCode(Kwf_Component_Data $page)
+    {
+        $mask = $this->getMask($page);
+        $maskType = $mask['type'];
+        $maskParams = $mask['params'];
+        return array(
+            'begin' => $this->_getMaskCode($mask['type'], self::MASK_CODE_BEGIN, $mask['params']),
+            'end' => $this->_getMaskCode($mask['type'], self::MASK_CODE_END, $mask['params']),
         );
     }
 
@@ -99,11 +112,6 @@ class Kwf_Component_PluginRoot_PostRenderCutter implements
             $output = str_replace($part['maskBegin'], '', $output);
             $output = str_replace($part['maskEnd'], '', $output);
         }
-        return $output;
-    }
-
-    public function processOutput($output)
-    {
         return $output;
     }
 }
