@@ -89,7 +89,7 @@ body {
     .kwfUp-kwfLightbox {
         .kwfUp-kwfLightboxInner {
             @include transition-property(opacity);
-            @include transition-duration(50ms);
+            @include transition-duration(150ms);
             @include transition-timing-function(linear);
             opacity: 0;
         }
@@ -102,15 +102,17 @@ body {
         }
     }
 
-    .kwfUp-kwfLightboxMask {
-        @include transition-property(opacity);
-        @include transition-duration(50ms);
-        @include transition-timing-function(linear);
-        opacity: 0;
-
-        &.kwfUp-kwfLightboxMaskOpen {
+    body div.kwfUp-kwfLightboxCenterBox {
+        .kwfUp-kwfLightboxMask {
+            @include transition-property(opacity);
             @include transition-duration(150ms);
-            opacity: 0.8;
+            @include transition-timing-function(linear);
+            opacity: 0;
+
+            &.kwfUp-kwfLightboxMaskOpen {
+                @include transition-duration(150ms);
+                opacity: 0.8;
+            }
         }
     }
 } @else if $animation-style == fadeInSlideUp {
@@ -132,13 +134,15 @@ body {
         }
     }
 
-    .kwfUp-kwfLightboxMask {
-        @include transition(opacity 50ms linear);
-        opacity: 0;
+    body div.kwfUp-kwfLightboxCenterBox {
+        .kwfUp-kwfLightboxMask {
+            @include transition(opacity 50ms linear);
+            opacity: 0;
 
-        &.kwfUp-kwfLightboxMaskOpen {
-            @include transition(opacity 1250ms cubic-bezier(0.23, 1, 0.32, 1));
-            opacity: 0.8;
+            &.kwfUp-kwfLightboxMaskOpen {
+                @include transition(opacity 1250ms cubic-bezier(0.23, 1, 0.32, 1));
+                opacity: 0.8;
+            }
         }
     }
 } @else if $animation-style == fadeInSlideInRight {
@@ -160,17 +164,19 @@ body {
         }
     }
 
-    .kwfUp-kwfLightboxMask {
-        @include transition-property(opacity);
-        @include transition-duration(50ms);
-        @include transition-timing-function(linear);
-        opacity: 0;
-
-        &.kwfUp-kwfLightboxMaskOpen {
+    body div.kwfUp-kwfLightboxCenterBox {
+        .kwfUp-kwfLightboxMask {
             @include transition-property(opacity);
-            @include transition-duration(150ms);
+            @include transition-duration(50ms);
             @include transition-timing-function(linear);
-            opacity: 0.8;
+            opacity: 0;
+
+            &.kwfUp-kwfLightboxMaskOpen {
+                @include transition-property(opacity);
+                @include transition-duration(150ms);
+                @include transition-timing-function(linear);
+                opacity: 0.8;
+            }
         }
     }
 } @else if $animation-style == fadeInZoom {
@@ -192,13 +198,15 @@ body {
         }
     }
 
-    .kwfUp-kwfLightboxMask {
-        @include transition(opacity 50ms linear);
-        opacity: 0;
+    body div.kwfUp-kwfLightboxCenterBox {
+        .kwfUp-kwfLightboxMask {
+            @include transition(opacity 50ms linear);
+            opacity: 0;
 
-        &.kwfUp-kwfLightboxMaskOpen {
-            @include transition(opacity 300ms linear);
-            opacity: 0.8;
+            &.kwfUp-kwfLightboxMaskOpen {
+                @include transition(opacity 300ms linear);
+                opacity: 0.8;
+            }
         }
     }
 }
