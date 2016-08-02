@@ -38,8 +38,10 @@ class Kwf_Form_Field_NumberField extends Kwf_Form_Field_TextField
     public function trlStaticExecute($language = null)
     {
         parent::trlStaticExecute($language);
-        $l = Zend_Locale::findLocale($language);
-        $this->_floatValidator->setLocale($l);
+        if (!$language) {
+            $language = Kwf_Trl::getInstance()->getTargetLanguage();
+        }
+        $this->_floatValidator->setLocale($language);
     }
 
     protected function _addValidators()

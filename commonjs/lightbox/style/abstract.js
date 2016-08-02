@@ -2,7 +2,7 @@
 
 var $ = require('jQuery');
 var onReady = require('kwf/on-ready');
-var oneTransitionEnd = require('kwf/lightbox/helper/one-transition-end');
+var oneTransitionEnd = require('kwf/element/one-transition-end');
 
 var AbstractStyle = function(lightbox) {
     this.lightbox = lightbox;
@@ -22,9 +22,13 @@ AbstractStyle.prototype = {
         onReady.callOnContentReady(this.lightbox.contentEl, {action: 'render'});
         this._blockOnContentReady = false;
     },
-    onShow: function() {},
+    onShow: function() {
+        $('html').addClass('kwfUp-kwfLightboxActive');
+    },
     afterShow: function() {},
-    onClose: function() {},
+    onClose: function() {
+        $('html').removeClass('kwfUp-kwfLightboxActive');
+    },
     afterClose: function() {},
     onContentReady: function() {},
     onResizeWindow: function() {},

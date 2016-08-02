@@ -8,6 +8,7 @@ class Kwf_Component_Plugin_AccessByMail_Form_Component extends Kwc_Form_Componen
         $ret = parent::getSettings();
         $ret['placeholder']['subject'] = trlKwfStatic('Temporary access');
         $ret['generators']['child']['component']['success'] = 'Kwc_Form_Success_Component';
+        unset($ret['plugins']['useViewCache']);
         return $ret;
     }
 

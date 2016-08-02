@@ -91,6 +91,11 @@ abstract class Kwf_Update
         }
         return $ret;
     }
+
+    public function postMaintenanceBootstrap()
+    {
+    }
+
     public function checkSettings()
     {
         $ret = array();

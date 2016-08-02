@@ -6,6 +6,9 @@ class Kwf_Assets_CommonJs_JQueryPluginProvider extends Kwf_Assets_Provider_Abstr
         if (substr($dependencyName, 0, 18) == 'kwf-jquery-plugin/') {
             $dependencyName = substr($dependencyName, 18);
             $dep = $this->_providerList->findDependency($dependencyName);
+            if (!$dep) {
+                throw new Kwf_Exception("Can't resolve dependency '$dependencyName'");
+            }
             $dep = $this->_transformDep($dep);
             if ($dep instanceof Kwf_Assets_CommonJs_JQueryPluginDecoratorDependency) {
                 $dep->addDependency(Kwf_Assets_Dependency_Abstract::DEPENDENCY_TYPE_COMMONJS, $this->_providerList->findDependency('jQuery'), 'jQuery');

@@ -77,35 +77,6 @@ class Kwf_Setup
             exit;
         }
 
-        if (isset($_SERVER['REQUEST_URI']) && substr($_SERVER['REQUEST_URI'], 0, 5) == '/kwf/') {
-            if (substr($_SERVER['REQUEST_URI'], 0, 9) == '/kwf/pma/' || $_SERVER['REQUEST_URI'] == '/kwf/pma') {
-                Kwf_Util_Pma::dispatch();
-            } else if ($_SERVER['REQUEST_URI'] == '/kwf/check') {
-                $ok = true;
-                $msg = '';
-                if (Kwf_Setup::hasDb()) {
-                    $date = Kwf_Registry::get('db')->query("SELECT NOW()")->fetchColumn();
-                    if (!$date) {
-                        $ok = false;
-                        $msg .= 'mysql connection failed';
-                    }
-                }
-                if (file_exists('instance_startup')) {
-                    //can be used while starting up autoscaling instances
-                    $ok = false;
-                    $msg .= 'instance startup in progress';
-                }
-                if (!$ok) {
-                    header("HTTP/1.0 500 Error");
-                    echo "<h1>Check failed</h1>";
-                    echo $msg;
-                } else {
-                    echo "ok";
-                }
-                exit;
-            }
-        }
-
         Kwf_Benchmark::checkpoint('setUp');
     }
 
@@ -174,6 +145,7 @@ class Kwf_Setup
         switch (PHP_SAPI) {
             case 'apache2handler':
             case 'apache':
+            case 'fpm-fcgi':
                 $requestPath = $_SERVER['REQUEST_URI'];
                 $requestPath = strtok($requestPath, '?');
                 break;
@@ -235,8 +207,13 @@ class Kwf_Setup
 
             Kwf_Trl::getInstance()->setUseUserLanguage(false);
 
-            $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $root = Kwf_Component_Data_Root::getInstance();
+
+            foreach ($root->getPlugins('Kwf_Component_PluginRoot_Interface_PreDispatch') as $p) {
+                $p->preDispatch($requestUrl);
+            }
+
+            $acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : null;
             $exactMatch = true;
             $data = $root->getPageByUrl($requestUrl, $acceptLanguage, $exactMatch);
             Kwf_Benchmark::checkpoint('getPageByUrl');

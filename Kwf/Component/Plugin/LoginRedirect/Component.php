@@ -55,8 +55,14 @@ class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_
         return false;
     }
 
-    public function skipProcessInput()
+    public function skipProcessInput(Kwf_Component_Data $data)
     {
-        return !$this->isLoggedIn();
+        while ($data->parent && !$data->isPage) {
+            if ($data->componentId == $this->_componentId) {
+                return !$this->isLoggedIn();
+            }
+            $data = $data->parent;
+        }
+        return false;
     }
 }

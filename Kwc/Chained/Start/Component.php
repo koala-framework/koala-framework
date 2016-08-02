@@ -38,8 +38,8 @@ class Kwc_Chained_Start_Component extends Kwc_Abstract
         return $ret;
     }
 
-    protected function _formatRootElementClass()
+    public function getMasterTemplateVars(Kwf_Component_Data $innerComponent, Kwf_Component_Renderer_Abstract $renderer)
     {
-        return $this->getData()->chained->getComponent()->_formatRootElementClass();
+        return $this->getData()->chained->getComponent()->getMasterTemplateVars($innerComponent, $renderer);
     }
 }

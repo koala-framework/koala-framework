@@ -98,6 +98,9 @@ class Kwf_Util_Update_Runner
 
         $this->_executeUpdatesAction('preUpdate');
         $this->_executeUpdatesAction('update');
+        if ($this->_progressBar) {
+            $this->_progressBar->finish();
+        }
         $this->_executeUpdatesAction('postUpdate');
         if (!$this->_skipClearCache) {
             if ($this->_verbose) echo "\n";
@@ -105,7 +108,6 @@ class Kwf_Util_Update_Runner
                 'types' => 'all',
                 'output' => $this->_verbose,
                 'refresh' => isset($options['refreshCache']) ? $options['refreshCache'] : true,
-                'skipMaintenanceBootstrap'=>true,
             ));
             if ($this->_verbose) echo "\n";
         }
@@ -115,6 +117,11 @@ class Kwf_Util_Update_Runner
         }
 
         return $doneNames;
+    }
+
+    public function executePostMaintenanceBootstrapUpdates()
+    {
+        $this->_executeUpdatesAction('postMaintenanceBootstrap');
     }
 
     private function _executeUpdatesAction($method)

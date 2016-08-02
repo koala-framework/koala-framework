@@ -36,9 +36,19 @@ abstract class Kwf_Component_Plugin_LoginAbstract_Component extends Kwf_Componen
         return $renderer->render($view->render($template));
     }
 
-    public function skipProcessInput()
+    public function skipProcessInput(Kwf_Component_Data $data)
     {
-        return !$this->isLoggedIn();
+        if ($data->componentId == $this->_componentId.'-loginForm') {
+            return false;
+        }
+
+        while ($data->parent && !$data->isPage) {
+            if ($data->componentId == $this->_componentId) {
+                return !$this->isLoggedIn();
+            }
+            $data = $data->parent;
+        }
+        return false;
     }
 
     protected function _getComponentId()

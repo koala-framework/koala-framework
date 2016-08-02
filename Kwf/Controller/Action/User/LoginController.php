@@ -76,10 +76,7 @@ class Kwf_Controller_Action_User_LoginController extends Kwf_Controller_Action
             $this->view->image = false;
         }
         if (Kwf_Registry::get('config')->allowUntagged === true) {
-            if (file_exists('.git') && Kwf_Util_Git::web()->getActiveBranch() != 'production') {
-                $this->view->untagged = true;
-            }
-            if (file_exists(KWF_PATH.'/.git') && Kwf_Util_Git::kwf()->getActiveBranch() != 'production/'.Kwf_Registry::get('config')->application->id) {
+            if (file_exists('.git') && (strpos(Kwf_Util_Git::web()->getActiveBranch(), 'production') !== false)) {
                 $this->view->untagged = true;
             }
         }

@@ -37,7 +37,7 @@ class Kwf_Update_20151012UploadsDimensions extends Kwf_Update
         if ($this->countUploads() < 5000) {
             $this->calculateDimensions();
         } else {
-            echo "More than 5000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-uploads calculate-dimensions\"\n";
+            echo "More than 5000 Uploads. Please execute renaming manually:\n\"php bootstrap.php update-uploads calculate-dimensions\"\n\n";
         }
     }
 

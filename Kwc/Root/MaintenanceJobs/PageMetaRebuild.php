@@ -13,4 +13,13 @@ class Kwc_Root_MaintenanceJobs_PageMetaRebuild extends Kwf_Util_Maintenance_Job_
         if ($debug) echo "$cmd\n";
         passthru($cmd);
     }
+
+    public function getMaxTime()
+    {
+        $ret = parent::getMaxTime();
+        if ($value = Kwf_Config::getValue('maintenanceJobs.pageMetaRebuildMaxTime')) {
+            $ret = $value;
+        }
+        return $ret;
+    }
 }

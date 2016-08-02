@@ -1,1 +1,0 @@
-Kwf.activateKeepAlive();

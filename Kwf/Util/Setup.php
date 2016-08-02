@@ -326,6 +326,11 @@ class Kwf_Util_Setup
         $ret .= "    Kwf_Util_Apc::dispatchUtils();\n";
         $ret .= "}\n";
 
+        $ret .= "\n";
+        $ret .= "if (\$requestUri == '/kwf/check') {\n";
+        $ret .= "    Kwf_Util_Check::dispatch();\n";
+        $ret .= "}\n";
+        $ret .= "\n";
 
         if (Kwf_Config::getValue('server.https') !== 'unknown') {
             $redirectHttpsCode  = "    if (\$_SERVER['REQUEST_METHOD'] != 'GET') {\n";
@@ -511,10 +516,6 @@ class Kwf_Util_Setup
         if ($tl = Kwf_Config::getValue('debug.timeLimit')) {
             $ret .= "set_time_limit($tl);\n";
         }
-
-        $ret .= "if (substr(\$requestUri, 0, 9) == '/kwf/pma/' || \$requestUri == '/kwf/pma') {\n";
-        $ret .= "    Kwf_Util_Pma::dispatch();\n";
-        $ret .= "}\n";
 
         $ret .= "if (isset(\$_GET['kwcPreview'])) {\n";
         $ret .= "    \$role = Kwf_Registry::get('userModel')->getAuthedUserRole();\n";

@@ -76,12 +76,15 @@ class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
     {
         $mail = parent::createMail($recipient, $data, $toAddress, $format, $addViewTracker);
         if ($this->getRow()->from_email && $this->_getSetting('editFrom')) {
+            $mail->clearFrom();
             $mail->setFrom($this->getRow()->from_email, $this->getRow()->from_name);
         }
         if ($this->getRow()->reply_email && $this->_getSetting('editReplyTo')) {
+            $mail->clearReplyTo();
             $mail->setReplyTo($this->getRow()->reply_email);
         }
         if ($this->getRow()->return_path && $this->_getSetting('editReturnPath')) {
+            $mail->clearReturnPath();
             $mail->setReturnPath($this->getRow()->return_path);
         }
         return $mail;

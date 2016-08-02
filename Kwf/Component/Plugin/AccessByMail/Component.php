@@ -43,8 +43,18 @@ class Kwf_Component_Plugin_AccessByMail_Component extends Kwf_Component_Plugin_A
         return $view->render($template);
     }
 
-    public function skipProcessInput()
+    public function skipProcessInput(Kwf_Component_Data $data)
     {
-        return !$this->isLoggedIn();
+        if ($data->componentId == $this->_componentId.'-form') {
+            return false;
+        }
+
+        while ($data->parent && !$data->isPage) {
+            if ($data->componentId == $this->_componentId) {
+                return !$this->isLoggedIn();
+            }
+            $data = $data->parent;
+        }
+        return false;
     }
 }
