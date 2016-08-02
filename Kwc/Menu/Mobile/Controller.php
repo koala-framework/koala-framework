@@ -137,6 +137,10 @@ class Kwc_Menu_Mobile_Controller extends Kwf_Controller_Action
                 }
 
                 $pageData = $this->_getPageData($page);
+                if (!$pageData['url']) {
+                    //skip pages without url (eg. invalid intern link) like componentLink does
+                    continue;
+                }
                 $ret[$i]['name'] = $pageData['name'];
                 $ret[$i]['url'] = $pageData['url'];
                 $ret[$i]['id'] = $pageData['id'];
