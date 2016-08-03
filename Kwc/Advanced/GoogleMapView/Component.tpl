@@ -1,6 +1,6 @@
 <div class="<?=$this->rootElementClass?><? if ($this->optimizedMobileUI) { ?> optimizedMobileUI<? } ?>">
 <? if($this->data->hasContent()) { ?>
-    <div class="mobileOverlay">
+    <div class="mobileOverlayOpen">
         <div class="innerMobileOverlay">
             <span class="tapToNav"><?=$this->data->trlKwf('Tap to navigate');?></span>
         </div>
