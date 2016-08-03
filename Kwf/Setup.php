@@ -225,10 +225,13 @@ class Kwf_Setup
                     throw new Kwf_Exception("getPageByUrl reported this isn't an exact match, but the urls are equal. wtf.");
                 }
                 $url = $data->url;
-                if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']) $url .= '?' . $_SERVER['QUERY_STRING'];
                 if (!$url) { // e.g. firstChildPageData without child pages
                     throw new Kwf_Exception_NotFound();
                 }
+                foreach ($root->getPlugins('Kwf_Component_PluginRoot_Interface_PostRender') as $p) {
+                    $url = $p->processUrl($url);
+                }
+                if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']) $url .= '?' . $_SERVER['QUERY_STRING'];
                 header('Location: '.$url, true, 301);
                 exit;
             }
