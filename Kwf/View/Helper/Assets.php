@@ -19,7 +19,7 @@ class Kwf_View_Helper_Assets
             $ret .= "$indent<!--[if lte IE 8]><link rel=\"stylesheet\" type=\"text/css\" href=\"".htmlspecialchars($prefix.$file)."\" /><![endif]-->\n";
         }
         foreach ($assetsPackage->getPackageUrls('text/javascript; ie8', $language) as $file) {
-            $ret .= "$indent<!--[if lte IE 8]><script type=\"text/javascript\" src=\"".htmlspecialchars($$prefix.file)."\"></script><![endif]-->\n";
+            $ret .= "$indent<!--[if lte IE 8]><script type=\"text/javascript\" src=\"".htmlspecialchars($prefix.$file)."\"></script><![endif]-->\n";
         }
         foreach ($assetsPackage->getPackageUrls('text/javascript', $language) as $file) {
             $ret .= "$indent<script type=\"text/javascript\" src=\"".htmlspecialchars($prefix.$file)."\"></script>\n";
