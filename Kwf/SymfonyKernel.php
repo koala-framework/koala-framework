@@ -6,8 +6,9 @@ abstract class Kwf_SymfonyKernel extends Kernel
 {
     public function __construct()
     {
-        if (Kwf_Exception::isDebug()) {
-            $environment = 'dev';
+        $env = Kwf_Config::getValue('symfony.environment');
+        if (in_array($env, array('test', 'dev'))) {
+            $environment = $env;
             $debug = true;
             //Debug::enable();
         } else {
