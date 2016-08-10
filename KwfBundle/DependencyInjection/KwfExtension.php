@@ -22,9 +22,11 @@ class KwfExtension extends Extension implements PrependExtensionInterface
     {
         $container->prependExtensionConfig('framework', array(
             'session' => array('storage_id' => 'kwf.session.storage'),
-            'validation' => null,
+            'validation' => array(
+                'enable_annotations' => false
+            ),
             'serializer' => array(
-                'enable_annotations' => true
+                'enable_annotations' => false
             ),
             'templating' => array(
                 'engines' => array('twig') //requried for NelmioApiDocBundle

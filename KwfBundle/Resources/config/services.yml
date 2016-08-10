@@ -22,9 +22,15 @@ services:
     kwf.security.entrypoint.api:
         class: KwfBundle\Security\EntryPoint
 
-    kwf_model_normalizer:
+    kwf.model_normalizer:
         class: KwfBundle\Serializer\KwfModelNormalizer
-        arguments: ['@serializer.mapping.class_metadata_factory']
         tags:
             - { name: serializer.normalizer }
+        public: false
+
+    kwf.submit_handler_error_normalizer:
+        class: KwfBundle\Serializer\SubmitHandlerErrorNormalizer
+        arguments: ['@translator']
+        tags:
+            - { name: serializer.normalizer, priority: -10 }
         public: false

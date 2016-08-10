@@ -12,6 +12,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
     protected $_referenceMap = array();
     protected $_toStringField;
     protected $_serialization = array();
+    protected $_validation = array();
     
     protected $_hasDeletedFlag = false;
     /**
@@ -59,6 +60,7 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
         if (isset($config['exprs'])) $this->_exprs = (array)$config['exprs'];
         if (isset($config['hasDeletedFlag'])) $this->_hasDeletedFlag = $config['hasDeletedFlag'];
         if (isset($config['serialization'])) $this->_serialization = $config['serialization'];
+        if (isset($config['validation'])) $this->_validation = $config['validation'];
         //self::$instanceCount[spl_object_hash($this)] = get_class($this);
         self::$_allInstances[] = $this;
         $this->_init();
@@ -1253,8 +1255,43 @@ abstract class Kwf_Model_Abstract implements Kwf_Model_Interface
             if (is_string($s)) $s = array($s);
             if (isset($s[0])) $s = array('groups'=>$s);
             if (is_string($s['groups'])) $s['groups'] = array($s['groups']);
+
+            if (isset($s['constraints'])) {
+                $constraints = $s['constraints'];
+                $s['constraints'] = array();
+                if (!is_array($constraints)) $constraints = array($constraints);
+                foreach ($constraints as $constraint) {
+                    if (is_string($constraint)) {
+                        if (!class_exists($constraint)) {
+                            $constraint = "Symfony\\Component\\Validator\\Constraints\\".$constraint;
+                        }
+                        $constraint = new $constraint();
+                    }
+                    $s['constraints'][] = $constraint;
+                }
+            }
+
             if (array_intersect($groups, $s['groups'])) {
-                $ret[] = $column;
+                $ret[$column] = $s;
+            }
+        }
+        return $ret;
+    }
+
+    public function getValidationConstrainsForColumn($column)
+    {
+        $ret = array();
+        if (isset($this->_validation[$column])) {
+            $constraints = $this->_validation[$column];
+            if (!is_array($constraints)) $constraints = array($constraints);
+            foreach ($constraints as $constraint) {
+                if (is_string($constraint)) {
+                    if (!class_exists($constraint)) {
+                        $constraint = "Symfony\\Component\\Validator\\Constraints\\".$constraint;
+                    }
+                    $constraint = new $constraint();
+                }
+                $ret[] = $constraint;
             }
         }
         return $ret;
