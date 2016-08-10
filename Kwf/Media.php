@@ -111,9 +111,14 @@ class Kwf_Media
             if ($isValid != Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
                 Kwf_Cache_Simple::add($cacheId, true, 60*60);
             }
+        } else {
+            $isValid = Kwf_Media_Output_IsValidInterface::VALID;
         }
         Zend_Session::writeClose();
         $output = self::_getOutputWithoutCheckingIsValid($class, $id, $type);
+        if ($isValid == Kwf_Media_Output_IsValidInterface::VALID_DONT_CACHE) {
+            $output['lifetime'] = false; //for valid don't cache also don't output cache http headers (to avoid proxy or browser caching)
+        }
         return $output;
     }
 
