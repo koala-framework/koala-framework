@@ -344,7 +344,7 @@ class Kwf_Util_Setup
             $redirectHttpsCode .= "    exit;\n";
             $redirectHttpCode = str_replace('https', 'http', $redirectHttpsCode);
 
-            $ret .= "if (PHP_SAPI != 'cli') {\n";
+            $ret .= "if (PHP_SAPI != 'cli' && isset(\$_SERVER['HTTP_HOST'])) {\n";
             if (!Kwf_Config::getValue('server.https')) {
                 $ret .= "if (isset(\$_SERVER['HTTPS'])) {\n";
                 $ret .= "    $redirectHttpCode";
@@ -353,10 +353,19 @@ class Kwf_Util_Setup
                 if ($domains = Kwf_Config::getValueArray('server.httpsDomains')) {
                     $ret .= "\$domains = array(";
                     foreach ($domains as $d) {
-                        $ret .= "'".$d."'=>true, ";
+                        if (substr($d, 0, 2) != '*.') {
+                            $ret .= "'".$d."'=>true, ";
+                        }
                     }
                     $ret .= ");\n";
-                    $ret .= "\$supportsHttps = isset(\$_SERVER['HTTP_HOST']) && isset(\$domains[\$_SERVER['HTTP_HOST']]);\n";
+                    $ret .= "\$supportsHttps = isset(\$domains[\$_SERVER['HTTP_HOST']]);\n";
+                    foreach ($domains as $d) {
+                        if (substr($d, 0, 2) == '*.') {
+                            $ret .= "    if (!\$supportsHttps && '".substr($d, 1)."' == substr(\$_SERVER['HTTP_HOST'], strpos(\$_SERVER['HTTP_HOST'], '.'))) {\n";
+                            $ret .= "        \$supportsHttps = true;\n";
+                            $ret .= "    }\n";
+                        }
+                    }
                     $ret .= "if (\$supportsHttps != isset(\$_SERVER['HTTPS'])) {\n";
                     $ret .= "    if (\$supportsHttps) {\n";
                     $ret .= "        $redirectHttpsCode";
