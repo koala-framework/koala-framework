@@ -106,7 +106,7 @@ class FOSRestModelController extends Controller implements ClassResourceInterfac
 
         $select = $this->_getSelect($paramFetcher, $request);
 
-        $restColumns = $this->_model->getSerializationColumns(array('rest_read', 'rest'));
+        $restColumns = array_keys($this->_model->getSerializationColumns(array('rest_read', 'rest')));
         $exprColumns = $this->_model->getExprColumns();
         foreach (array_intersect($restColumns, $exprColumns) as $i) {
             $select->expr($i);
