@@ -5,7 +5,7 @@ class Kwf_View_Helper_Assets
     {
         if (!$language) $language = Kwf_Trl::getInstance()->getTargetLanguage();
 
-        $ev = new Kwf_Events_Event_CreateAssetUrls(get_class($assetsPackage), $assetsPackage, $subroot);
+        $ev = new Kwf_Events_Event_CreateAssetsPackageUrls(get_class($assetsPackage), $assetsPackage, $subroot);
         Kwf_Events_Dispatcher::fireEvent($ev);
         $prefix = $ev->prefix;
 
