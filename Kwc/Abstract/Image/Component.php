@@ -200,7 +200,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     public function getAbsoluteImageUrl()
     {
         $ret = $this->getImageUrl();
-        if ($ret && substr($ret, 0, 1) == '/') { //can already be absolute, due to Event_CreateMediaUrl (eg. varnish cache)
+        if ($ret && substr($ret, 0, 1) == '/' && substr($ret, 0, 2) != '//') { //can already be absolute, due to Event_CreateMediaUrl (eg. varnish cache)
             $domain = $this->getData()->getDomain();
             $protocol = Kwf_Util_Https::domainSupportsHttps($domain) ? 'https' : 'http';
             $ret = "$protocol://$domain$ret";

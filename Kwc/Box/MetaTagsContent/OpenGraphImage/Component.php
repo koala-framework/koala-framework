@@ -25,10 +25,14 @@ class Kwc_Box_MetaTagsContent_OpenGraphImage_Component extends Kwc_Abstract_Imag
     {
         $ret = parent::getTemplateVars($renderer);
         $imageUrl = $this->getAbsoluteImageUrl();
+
+        //always use http, see http://stackoverflow.com/a/8858052/781662
         if (substr($imageUrl, 0, 6) == 'https:') {
-            //always use http, see http://stackoverflow.com/a/8858052/781662
             $imageUrl = 'http:'.substr($imageUrl, 6);
+        } else if (substr($imageUrl, 0, 2) == '//') {
+            $imageUrl = 'http:'.$imageUrl;
         }
+
         $ret['imageUrl'] = $imageUrl;
         $ret['width'] = '';
         $ret['height'] = '';
