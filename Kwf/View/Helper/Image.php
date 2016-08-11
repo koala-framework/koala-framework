@@ -35,8 +35,13 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
         $url = $this->_getImageUrl($image);
         if ($url == '') return '';
 
-        if (Kwf_Setup::getBaseUrl() && substr($url, 0, 8) == '/assets/') {
-            $url = Kwf_Setup::getBaseUrl().$url;
+        if (substr($url, 0, 8) == '/assets/') {
+            if (Kwf_Setup::getBaseUrl()) {
+                $url = Kwf_Setup::getBaseUrl().$url;
+            }
+            $ev = new Kwf_Events_Event_CreateAssetUrl(get_class($this), $url);
+            Kwf_Events_Dispatcher::fireEvent($ev);
+            $url = $ev->url;
         }
 
         $class = '';
