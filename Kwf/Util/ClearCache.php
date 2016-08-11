@@ -104,9 +104,6 @@ class Kwf_Util_ClearCache
                 $types[] = new Kwf_Util_ClearCache_Types_Table($t);
             }
         }
-        if (Kwf_Config::getValue('assetsCacheUrl')) {
-            $types[] = new Kwf_Util_ClearCache_Types_AssetsServer();
-        }
 
         $types[] = new Kwf_Util_ClearCache_Types_Config();
         $types[] = new Kwf_Util_ClearCache_Types_Setup();
