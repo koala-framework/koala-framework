@@ -39,7 +39,11 @@ class Kwf_View_Helper_Image extends Kwf_Component_View_Helper_Abstract
             if (Kwf_Setup::getBaseUrl()) {
                 $url = Kwf_Setup::getBaseUrl().$url;
             }
-            $ev = new Kwf_Events_Event_CreateAssetUrl(get_class($this), $url);
+            $subroot = null;
+            if ($this->_getView() && $this->_getView()->component) {
+                $subroot = $this->_getView()->component->getSubroot();
+            }
+            $ev = new Kwf_Events_Event_CreateAssetUrl(get_class($this), $url, $subroot);
             Kwf_Events_Dispatcher::fireEvent($ev);
             $url = $ev->url;
         }
