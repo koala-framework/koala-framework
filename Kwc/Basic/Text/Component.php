@@ -94,7 +94,9 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
 
     protected function _getContentParts()
     {
-        return $this->_getRow()->getContentParts();
+        $content = $this->_getRow()->content;
+        $content = Kwf_Trl::getInstance()->trlStaticExecute($content, $this->getData()->getLanguage());
+        return $this->_getRow()->getContentParts($content);
     }
 
     public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
