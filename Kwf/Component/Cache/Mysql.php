@@ -113,6 +113,12 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
         return $data;
     }
 
+    public function countViewCacheEntries($updates)
+    {
+        $select = $this->buildSelectForDelete($update);
+        return $this->getModel()->countRows($select);
+    }
+
     public function buildSelectForDelete($updates)
     {
         $or = array();

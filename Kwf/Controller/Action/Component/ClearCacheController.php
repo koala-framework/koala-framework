@@ -99,10 +99,7 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
         if ($this->_getParam('type')) {
             $update['type'] = $this->_getParam('type');
         }
-        $select = Kwf_Component_Cache::getInstance()->buildSelectForDelete($updates);
-
-        $model = Kwf_Component_Cache::getInstance()->getModel();
-        $this->view->entries = $model->countRows($select);
+        $this->view->entries = Kwf_Component_Cache::getInstance()->countViewCacheEntries(array($update));
         if (!$this->view->entries) {
             throw new Kwf_Exception_Client("No active view cache entries found; nothing to do.");
         }

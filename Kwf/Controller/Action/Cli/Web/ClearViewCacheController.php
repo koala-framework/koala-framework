@@ -49,10 +49,7 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
             throw new Kwf_Exception_Client("required parameter: --all, --id, --dbId, --expandedId, --type or --class");
         }
 
-        $select = Kwf_Component_Cache::getInstance()->buildSelectForDelete(array($update));
-
-        $model = Kwf_Component_Cache::getInstance()->getModel();
-        $entries = $model->countRows($select);
+        $entries = Kwf_Component_Cache::getInstance()->countViewCacheEntries(array($update));
         if (!$entries) {
             echo "No active view cache entries found; nothing to do.\n";
             exit;

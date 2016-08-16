@@ -4,6 +4,7 @@ abstract class Kwf_Component_Cache
     static private $_instance;
     static private $_backend = self::CACHE_BACKEND_MYSQL;
     const CACHE_BACKEND_MYSQL = 'Kwf_Component_Cache_Mysql';
+    const CACHE_BACKEND_REDIS = 'Kwf_Component_Cache_Redis';
     const CACHE_BACKEND_FNF = 'Kwf_Component_Cache_Fnf';
     const NO_CACHE = '{nocache}';
 
@@ -33,6 +34,7 @@ abstract class Kwf_Component_Cache
     public abstract function save(Kwf_Component_Data $component, $content, $renderer, $type, $value, $tag, $lifetime);
     public abstract function loadWithMetadata($componentId, $renderer='component', $type = 'component', $value = '');
     public abstract function load($componentId, $renderer='component', $type = 'component', $value = '');
+    public abstract function countViewCacheEntries($updates);
     public abstract function deleteViewCache(array $updates);
     public abstract function handlePageParentChanges(array $pageParentChanges);
     public abstract function saveIncludes($componentId, $type, $includedComponents);
