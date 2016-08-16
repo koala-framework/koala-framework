@@ -432,11 +432,7 @@ class Kwf_Util_ClearCache_Watcher
             echo "generators changed...\n";
             echo count(Kwc_Abstract::getComponentClasses())." component classes (previously)\n";
 
-            $m = Kwf_Component_Cache::getInstance()->getModel('url');
-            foreach ($m->getRows() as $r) {
-                Kwf_Cache_Simple::delete('url-'.$r->url);
-                $r->delete();
-            }
+            Kwf_Component_Cache_Url_Abstract::getInstance()->clear();
             foreach ($newChildComponentClasses as $cmpClass) {
                 if (!in_array($cmpClass, Kwc_Abstract::getComponentClasses())) {
                     self::_loadSettingsRecursive($settings, $cmpClass);
