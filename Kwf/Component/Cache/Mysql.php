@@ -114,7 +114,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     public function countViewCacheEntries($updates)
     {
-        $select = $this->buildSelectForDelete($update);
+        $select = $this->buildSelectForDelete($updates);
         return $this->getModel()->countRows($select);
     }
 
@@ -148,19 +148,23 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
                         $and[] = new Kwf_Model_Select_Expr_Equal($k, $v);
                     }
                 }
-                $and = new Kwf_Model_Select_Expr_And($and);
-                if (!in_array($and, $or)) {
-                    $or[] = $and;
+                if ($and) {
+                    $and = new Kwf_Model_Select_Expr_And($and);
+                    if (!in_array($and, $or)) {
+                        $or[] = $and;
+                    }
                 }
             }
         }
         $select = new Kwf_Model_Select();
-        $select->where($or[0]);
-        unset($or[0]);
-        foreach ($or as $i) {
-            $s = new Kwf_Model_Select();
-            $s->where($i);
-            $select->union($s);
+        if ($or) {
+            $select->where($or[0]);
+            unset($or[0]);
+            foreach ($or as $i) {
+                $s = new Kwf_Model_Select();
+                $s->where($i);
+                $select->union($s);
+            }
         }
         $select->whereEquals('deleted', false);
         return $select;
