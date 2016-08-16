@@ -4,8 +4,7 @@ class Kwf_Component_Cache_Url_Redis extends Kwf_Component_Cache_Url_Abstract
     protected $_redis;
     public function __construct()
     {
-        $this->_redis = new Redis();
-        $this->_redis->connect('127.0.0.1', 6379);
+        $this->_redis = Kwf_Cache_Simple::getRedis();
     }
 
     public function save($cacheUrl, Kwf_Component_Data $data)
