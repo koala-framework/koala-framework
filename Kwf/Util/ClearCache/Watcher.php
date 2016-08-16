@@ -311,50 +311,34 @@ class Kwf_Util_ClearCache_Watcher
                     self::_clearComponentSettingsCache($matchingClasses);
 
                     //view cache can depend on settings
-                    $s = new Kwf_Model_Select();
-                    $s->whereEquals('component_class', $matchingClasses);
-                    self::_deleteViewCache($s);
+                    self::_deleteViewCache(array(array('component_class' => $matchingClasses)));
                 }
             } else if (self::_endsWith($event->filename, '/Component.css') || self::_endsWith($event->filename, '/Component.scss')) {
                 //MODIFY already handled above (assets)
                 //CREATE/DELETE also handled above
             } else if (self::_endsWith($event->filename, '/Master.tpl') || self::_endsWith($event->filename, '/Master.twig')) {
                 if ($event instanceof Event\Modify) {
-                    $s = new Kwf_Model_Select();
                     //all component_classes
-                    $s->whereEquals('type', 'master');
-                    self::_deleteViewCache($s);
+                    self::_deleteViewCache(array(array('type'=>'master')));
                 }
             } else if (self::_endsWith($event->filename, '/Component.tpl') || self::_endsWith($event->filename, '/Component.twig')) {
                 if ($event instanceof Event\Modify) {
-                    $s = new Kwf_Model_Select();
-                    $s->whereEquals('component_class', $matchingClasses);
-                    $s->whereEquals('type', 'component');
-                    $s->whereEquals('renderer', 'component');
-                    self::_deleteViewCache($s);
+                    self::_deleteViewCache(array(array('component_class'=>$matchingClasses, 'type'=>'component', 'renderer'=>'component')));
                 }
             } else if (self::_endsWith($event->filename, '/Partial.tpl') || self::_endsWith($event->filename, '/Partial.twig')) {
                 if ($event instanceof Event\Modify) {
                     $s = new Kwf_Model_Select();
                     $s->whereEquals('component_class', $matchingClasses);
                     $s->whereEquals('type', 'partial');
-                    self::_deleteViewCache($s);
+                    self::_deleteViewCache(array(array('component_class'=>$matchingClasses, 'type'=>'partial')));
                 }
             } else if (self::_endsWith($event->filename, '/Mail.html.tpl') || self::_endsWith($event->filename, '/Mail.html.twig')) {
                 if ($event instanceof Event\Modify) {
-                    $s = new Kwf_Model_Select();
-                    $s->whereEquals('component_class', $matchingClasses);
-                    $s->whereEquals('type', 'component');
-                    $s->whereEquals('renderer', 'mail_html');
-                    self::_deleteViewCache($s);
+                    self::_deleteViewCache(array(array('component_class' => $matchingClasses, 'type'=>'component', 'renderer'=>'mail_html')));
                 }
             } else if (self::_endsWith($event->filename, '/Mail.txt.tpl') || self::_endsWith($event->filename, '/Mail.txt.twig')) {
                 if ($event instanceof Event\Modify) {
-                    $s = new Kwf_Model_Select();
-                    $s->whereEquals('component_class', $matchingClasses);
-                    $s->whereEquals('type', 'component');
-                    $s->whereEquals('renderer', 'mail_txt');
-                    self::_deleteViewCache($s);
+                    self::_deleteViewCache(array(array('component_class' => $matchingClasses, 'type'=>'component', 'renderer'=>'mail_txt')));
                 }
             }
         }
@@ -552,9 +536,9 @@ class Kwf_Util_ClearCache_Watcher
 
     }
 
-    private static function _deleteViewCache(Kwf_Model_Select $s)
+    private static function _deleteViewCache($updates)
     {
-        $countDeleted = Kwf_Component_Cache::getInstance()->deleteViewCache($s);
+        $countDeleted = Kwf_Component_Cache::getInstance()->deleteViewCache($updates);
         echo "deleted ".$countDeleted." view cache entries\n";
     }
 

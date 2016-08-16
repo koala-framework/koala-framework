@@ -16,20 +16,20 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
             exit;
         }
 
-        $select = new Kwf_Model_Select();
+        $update = array();
         if ($this->_getParam('all')) {
         }
         if ($this->_getParam('dbId')) {
-            $select->where(new Kwf_Model_Select_Expr_Like('db_id', $this->_getParam('dbId')));
+            $update['db_id'] = $this->_getParam('dbId');
         }
         if ($this->_getParam('id')) {
-            $select->where(new Kwf_Model_Select_Expr_Like('component_id', $this->_getParam('id')));
+            $update['component_id'] = $this->_getParam('id');
         }
         if ($this->_getParam('expandedId')) {
-            $select->where(new Kwf_Model_Select_Expr_Like('expanded_component_id', $this->_getParam('expandedId')));
+            $update['expanded_component_id'] = $this->_getParam('expandedId');
         }
         if ($this->_getParam('type')) {
-            $select->where(new Kwf_Model_Select_Expr_Like('type', $this->_getParam('type')));
+            $update['type'] = $this->_getParam('type');
         }
         if ($this->_getParam('class')) {
             $c = $this->_getParam('class');
@@ -40,16 +40,16 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
                         $whereClass[] = $cls;
                     }
                 }
-                $select->whereEquals('component_class', $whereClass);
+                $update['component_class'] = $whereClass;
             } else {
-                $select->where(new Kwf_Model_Select_Expr_Like('component_class', $this->_getParam('class')));
+                $update['component_class'] = $this->_getParam('class');
             }
         }
         if (!$this->_getParam('all') && !$this->_getParam('dbId') && !$this->_getParam('id') && !$this->_getParam('expandedId') && !$this->_getParam('type') && !$this->_getParam('class')) {
             throw new Kwf_Exception_Client("required parameter: --all, --id, --dbId, --expandedId, --type or --class");
         }
 
-        $select->whereEquals('deleted', false);
+        $select = Kwf_Component_Cache::getInstance()->buildSelectForDelete(array($update));
 
         $model = Kwf_Component_Cache::getInstance()->getModel();
         $entries = $model->countRows($select);
@@ -76,7 +76,7 @@ class Kwf_Controller_Action_Cli_Web_ClearViewCacheController extends Kwf_Control
             Zend_ProgressBar_Adapter_Console::ELEMENT_TEXT
         ));
         $c->setTextWidth(50);
-        Kwf_Component_Cache::getInstance()->deleteViewCache($select, $c);
+        Kwf_Component_Cache::getInstance()->deleteViewCache(array($update), $c);
         echo "done\n";
 
         if ($this->_getParam('clear')) {

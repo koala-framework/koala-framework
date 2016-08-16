@@ -12,7 +12,7 @@ class Kwf_Util_ClearCache_Types_TableComponentView extends Kwf_Util_ClearCache_T
             $this->_output("skipped: (won't delete, use clear-view-cache to clear)\n");
             return;
         }
-        Kwf_Component_Cache::getInstance()->deleteViewCache(new Kwf_Model_Select());
+        Kwf_Component_Cache::getInstance()->deleteViewCache(array());
     }
 
     public function getTypeName()

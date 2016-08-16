@@ -30,12 +30,14 @@ abstract class Kwf_Component_Cache
         self::$_instance = null;
     }
 
-    public abstract function deleteViewCache($select);
+    public abstract function save(Kwf_Component_Data $component, $content, $renderer, $type, $value, $tag, $lifetime);
+    public abstract function loadWithMetadata($componentId, $renderer='component', $type = 'component', $value = '');
+    public abstract function load($componentId, $renderer='component', $type = 'component', $value = '');
+    public abstract function deleteViewCache(array $updates);
+    public abstract function handlePageParentChanges(array $pageParentChanges);
+    public abstract function saveIncludes($componentId, $type, $includedComponents);
 
     public function writeBuffer()
     {
-        foreach ($this->_models as $m) {
-            if (is_object($m)) $m->writeBuffer();
-        }
     }
 }

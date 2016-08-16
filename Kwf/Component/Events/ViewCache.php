@@ -97,88 +97,14 @@ class Kwf_Component_Events_ViewCache extends Kwf_Events_Subscriber
     public function onRowUpdatesFinished(Kwf_Events_Event_Row_UpdatesFinished $event)
     {
         if ($this->_updates) {
-            $or = array();
-            foreach ($this->_updates as $key => $values) {
-                if ($key === 'component_id') {
-                    $or[] = new Kwf_Model_Select_Expr_And(array(
-                        new Kwf_Model_Select_Expr_Equal('component_id', array_unique($values)),
-                        new Kwf_Model_Select_Expr_Equal('type', 'component'),
-                    ));
-                } else if ($key === 'master-component_id') {
-                    $or[] = new Kwf_Model_Select_Expr_And(array(
-                        new Kwf_Model_Select_Expr_Equal('component_id', array_unique($values)),
-                        new Kwf_Model_Select_Expr_Equal('type', 'master'),
-                    ));
-                } else {
-                    $and = array();
-                    foreach ($values as $k => $v) {
-                        if (substr($v, -1) == '%') {
-                            $v = substr($v, 0, -1);
-                            $and[] = new Kwf_Model_Select_Expr_Or(array(
-                                new Kwf_Model_Select_Expr_Equal($k, $v),
-                                new Kwf_Model_Select_Expr_Like($k, $v.'-%'),
-                                new Kwf_Model_Select_Expr_Like($k, $v.'_%'),
-                            ));
-                        } else if (strpos($v, '%') !== false) {
-                            $and[] = new Kwf_Model_Select_Expr_Like($k, $v);
-                        } else {
-                            $and[] = new Kwf_Model_Select_Expr_Equal($k, $v);
-                        }
-                    }
-                    $and = new Kwf_Model_Select_Expr_And($and);
-                    if (!in_array($and, $or)) {
-                        $or[] = $and;
-                    }
-                }
-            }
-            $select = new Kwf_Model_Select();
-            $select->where($or[0]);
-            unset($or[0]);
-            foreach ($or as $i) {
-                $s = new Kwf_Model_Select();
-                $s->where($i);
-                $select->union($s);
-            }
-            Kwf_Component_Cache::getInstance()->deleteViewCache($select);
+            Kwf_Component_Cache::getInstance()->deleteViewCache($this->_updates);
             $this->_updates = array();
         }
 
-        foreach ($this->_pageParentChanges as $changes) {
-            $oldParentId = $changes['oldParentId'];
-            $newParentId = $changes['newParentId'];
-            $componentId = $changes['componentId'];
-            $length = strlen($oldParentId);
-            $like = $oldParentId . '_' . $componentId;
-            $model = Kwf_Component_Cache::getInstance()->getModel();
-            while ($model instanceof Kwf_Model_Proxy) $model = $model->getProxyModel();
-            if ($model instanceof Kwf_Model_Db) {
-                $db = Kwf_Registry::get('db');
-                $newParentId = $db->quote($newParentId);
-                $where[] = 'expanded_component_id = ' . $db->quote($like);
-                $where[] = 'expanded_component_id LIKE ' . str_replace('_', '\_', $db->quote($like . '-%'));
-                $where[] = 'expanded_component_id LIKE ' . str_replace('_', '\_', $db->quote($like . '_%'));
-                $sql = "UPDATE cache_component
-                    SET expanded_component_id=CONCAT(
-                        $newParentId, SUBSTRING(expanded_component_id, $length)
-                    )
-                    WHERE " . implode(' OR ', $where);
-                $model->executeSql($sql);
-                $this->_log("expanded_component_id={$like}%->{$newParentId}");
-            } else {
-                $model = Kwf_Component_Cache::getInstance()->getModel();
-                $select = $model->select()->where(
-                    new Kwf_Model_Select_Expr_Like('expanded_component_id', $like . '%')
-                );
-                foreach ($model->getRows($select) as $row) {
-                    $oldExpandedId = $row->expanded_component_id;
-                    $newExpandedId = $newParentId . substr($oldExpandedId, $length);
-                    $row->expanded_component_id = $newExpandedId;
-                    $row->save();
-                    $this->_log("expanded_component_id={$oldExpandedId}->{$newExpandedId}");
-                }
-            }
+        if ($this->_pageParentChanges) {
+            Kwf_Component_Cache::getInstance()->handlePageParentChanges($this->_pageParentChanges);
+            $this->_pageParentChanges = array();
         }
-        $this->_pageParentChanges = array();
     }
 
     public function onContentChange(Kwf_Component_Event_Component_ContentChanged $event)

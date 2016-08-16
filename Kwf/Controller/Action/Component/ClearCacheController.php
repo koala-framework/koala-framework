@@ -72,15 +72,15 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
 
     public function jsonClearViewCacheAction()
     {
-        $select = new Kwf_Model_Select();
+        $update = array();
         if ($this->_getParam('dbId')) {
-            $select->where(new Kwf_Model_Select_Expr_Like('db_id', $this->_getParam('dbId')));
+            $update['db_id'] = $this->_getParam('dbId');
         }
         if ($this->_getParam('id')) {
-            $select->where(new Kwf_Model_Select_Expr_Like('component_id', $this->_getParam('id')));
+            $update['component_id'] = $this->_getParam('id');
         }
         if ($this->_getParam('expandedId')) {
-            $select->where(new Kwf_Model_Select_Expr_Like('expanded_component_id', $this->_getParam('expandedId')));
+            $update['expanded_component_id'] = $this->_getParam('expandedId');
         }
         if ($this->_getParam('class')) {
             $c = $this->_getParam('class');
@@ -91,15 +91,15 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
                         $whereClass[] = $cls;
                     }
                 }
-                $select->whereEquals('component_class', $whereClass);
+                $update['component_class'] = $whereClass;
             } else {
-                $select->where(new Kwf_Model_Select_Expr_Like('component_class', $this->_getParam('class')));
+                $update['component_class'] = $this->_getParam('class');
             }
         }
         if ($this->_getParam('type')) {
-            $select->where(new Kwf_Model_Select_Expr_Like('type', $this->_getParam('type')));
+            $update['type'] = $this->_getParam('type');
         }
-        $select->whereEquals('deleted', false);
+        $select = Kwf_Component_Cache::getInstance()->buildSelectForDelete($updates);
 
         $model = Kwf_Component_Cache::getInstance()->getModel();
         $this->view->entries = $model->countRows($select);
@@ -107,7 +107,7 @@ class Kwf_Controller_Action_Component_ClearCacheController extends Kwf_Controlle
             throw new Kwf_Exception_Client("No active view cache entries found; nothing to do.");
         }
         if ($this->_getParam('force')) {
-            Kwf_Component_Cache::getInstance()->deleteViewCache($select);
+            Kwf_Component_Cache::getInstance()->deleteViewCache(array($update));
         }
     }
 }
