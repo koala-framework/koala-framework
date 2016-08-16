@@ -2,10 +2,6 @@
 abstract class Kwf_Component_Cache_Url_Abstract
 {
     static private $_instance;
-    static private $_backend = self::CACHE_BACKEND_MYSQL;
-    const CACHE_BACKEND_MYSQL = 'Kwf_Component_Cache_Url_Mysql';
-    const CACHE_BACKEND_REDIS = 'Kwf_Component_Cache_Url_Redis';
-    const CACHE_BACKEND_FNF = 'Kwf_Component_Cache_Url_Fnf';
 
     /**
      * @return Kwf_Component_Cache_Mysql
@@ -13,8 +9,11 @@ abstract class Kwf_Component_Cache_Url_Abstract
     public static function getInstance()
     {
         if (!self::$_instance) {
-            $backend = self::$_backend;
-            self::$_instance = new $backend();
+            if (Kwf_Cache_Simple::getBackend() == 'redis') {
+                self::$_instance = new Kwf_Component_Cache_Url_Redis;
+            } else {
+                self::$_instance = new Kwf_Component_Cache_Url_Mysql;
+            }
         }
         return self::$_instance;
     }
