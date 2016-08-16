@@ -26,7 +26,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
         foreach ($parts as $part) {
             $id .= $part;
             if ($part != '-' && $part != '_' && $id != 'root') {
-                $this->_redis->sAdd('viewids:expandedid:'.$id, $key);
+                $this->_redis->sAdd('viewids:recexpandedid:'.$id, $key);
             }
         }
 
