@@ -130,7 +130,7 @@ class Kwf_Util_ClearCache
     }
 
     /**
-     * @param array possible options: types(=all), output(=false), refresh(=true), excludeTypes, skipOtherServers
+     * @param array possible options: types(=all), output(=false), refresh(=true), excludeTypes
      */
     public final function clearCache(array $options)
     {
