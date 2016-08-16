@@ -83,7 +83,10 @@ class Kwf_Util_Apc
             $baseUrl = Kwf_Setup::getBaseUrl();
             $url = "$urlPart$d[domain]$baseUrl/kwf/util/apc/$method";
 
-            $config = array();
+            $config = array(
+                'timeout' => 60,
+                'keepalive' => true
+            );
             if (extension_loaded('curl')) {
                 $config['adapter'] = 'Zend_Http_Client_Adapter_Curl';
                 $config['curloptions'] = array(
@@ -112,7 +115,10 @@ class Kwf_Util_Apc
             $url2 = null;
             if (!$result && isset($d['alternative'])) {
                 $url2 = "$urlPart$d[alternative]$baseUrl/kwf/util/apc/$method";
-                $client->setUri($url2);
+                $client = new Zend_Http_Client($url2, $config);
+                $client->setMethod(Zend_Http_Client::POST);
+                $client->setParameterPost($params);
+
                 try {
                     $response = $client->request();
                     $result = !$response->isError() && substr($response->getBody(), 0, 2) == 'OK';
