@@ -32,13 +32,12 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             'contents' => $contents,
             'expire' => is_null($lifetime) ? null : time()+$lifetime
         );
-        $ret = $this->_redis->set($key, serialize($cacheContent));
+
         if (is_null($lifetime)) {
             //Set a TTL for view contents http://stackoverflow.com/questions/16370278/how-to-make-redis-choose-lru-eviction-policy-for-only-some-of-the-keys
-            $this->_redis->expire($key, 365*24*60*60);
-        } else {
-            $this->_redis->expire($key, $lifetime);
+            $lifetime = 365*24*60*60;
         }
+        $ret = $this->_redis->setEx($key, $lifetime, serialize($cacheContent));
 
         return $ret;
     }

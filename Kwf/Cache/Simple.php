@@ -204,9 +204,9 @@ class Kwf_Cache_Simple
         if (self::getBackend() == 'memcache') {
             return self::getMemcache()->set(self::_getMemcachePrefix().md5($cacheId), $data, 0, $ttl);
         } else if (self::getBackend() == 'redis') {
-            $ret = self::getRedis()->set('simple:'.$cacheId, serialize($data));
+            if (!$ttl) $ttl = 365*24*60*60; //Set a TTL so it can be evicted http://stackoverflow.com/questions/16370278/how-to-make-redis-choose-lru-eviction-policy-for-only-some-of-the-keys
+            $ret = self::getRedis()->setEx('simple:'.$cacheId, $ttl, serialize($data));
             if ($ttl) self::getRedis()->expire($cacheId, $ttl);
-            else self::getRedis()->expire($cacheId, 365*24*60*60);
             return $ret;
         } else if (self::getBackend() == 'apc') {
             static $prefix;

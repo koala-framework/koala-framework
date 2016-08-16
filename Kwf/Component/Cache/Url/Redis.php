@@ -21,8 +21,7 @@ class Kwf_Component_Cache_Url_Redis extends Kwf_Component_Cache_Url_Abstract
             }
         }
 
-        $this->_redis->set('url:'.$cacheUrl, $data->kwfSerialize());
-        $this->_redis->expire('url:'.$cacheUrl, 365*24*60*60);
+        $this->_redis->setEx('url:'.$cacheUrl, 365*24*60*60, $data->kwfSerialize());
     }
 
     public function load($cacheUrl)
