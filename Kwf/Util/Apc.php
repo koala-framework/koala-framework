@@ -224,9 +224,6 @@ class Kwf_Util_Apc
                 echo 'OK0';
             }
             exit;
-        } else if ($uri == '/kwf/util/apc/get-hostname') {
-            echo php_uname('n');
-            exit;
         }
         throw new Kwf_Exception_NotFound();
     }

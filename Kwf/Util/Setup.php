@@ -286,13 +286,6 @@ class Kwf_Util_Setup
 
         if (Kwf_Config::getValue('server.memcache.host')) {
             $host = Kwf_Config::getValue('server.memcache.host');
-            if ($host == '%webserverHostname%') {
-                if (PHP_SAPI == 'cli') {
-                    $host = Kwf_Util_Apc::callUtil('get-hostname', array(), array('returnBody'=>true, 'skipCache'=>true));
-                } else {
-                    $host = php_uname('n');
-                }
-            }
             $ret .= "Kwf_Cache_Simple::\$memcacheHost = '".$host."';\n";
             $ret .= "Kwf_Cache_Simple::\$memcachePort = '".Kwf_Config::getValue('server.memcache.port')."';\n";
         }
