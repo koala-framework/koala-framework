@@ -13,12 +13,12 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
         $key = self::_getCacheId($component->componentId, $renderer, $type, $value);
 
         //TODO cleanup unused entries
-        $this->_redis->sAdd('view:componentid:'.$component->componentId, $key);
-        $this->_redis->sAdd('view:dbid:'.$component->dbId, $key);
-        $this->_redis->sAdd('view:pagedbid:'.$component->getPageOrRoot()->dbId, $key);
-        $this->_redis->sAdd('view:cls:'.$component->componentClass, $key);
+        $this->_redis->sAdd('viewids:componentid:'.$component->componentId, $key);
+        $this->_redis->sAdd('viewids:dbid:'.$component->dbId, $key);
+        $this->_redis->sAdd('viewids:pagedbid:'.$component->getPageOrRoot()->dbId, $key);
+        $this->_redis->sAdd('viewids:cls:'.$component->componentClass, $key);
         if ($tag) {
-            $this->_redis->sAdd('view:tag:'.$tag, $key);
+            $this->_redis->sAdd('viewids:tag:'.$tag, $key);
         }
 
         $parts = preg_split('/([_\-])/', $component->getExpandedComponentId(), -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -26,7 +26,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
         foreach ($parts as $part) {
             $id .= $part;
             if ($part != '-' && $part != '_' && $id != 'root') {
-                $this->_redis->sAdd('view:expandedid:'.$id, $key);
+                $this->_redis->sAdd('viewids:expandedid:'.$id, $key);
             }
         }
 
@@ -66,22 +66,22 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     {
         $sets = array(
             'component_id' => array(
-                'prefix' => 'view:componentid:'
+                'prefix' => 'viewids:componentid:'
             ),
             'db_id' => array(
-                'prefix' => 'view:dbid:'
+                'prefix' => 'viewids:dbid:'
             ),
             'page_db_id' => array(
-                'prefix' => 'view:pagedbid:'
+                'prefix' => 'viewids:pagedbid:'
             ),
             'component_class' => array(
-                'prefix' => 'view:cls:'
+                'prefix' => 'viewids:cls:'
             ),
             'tag' => array(
-                'prefix' => 'view:tag:'
+                'prefix' => 'viewids:tag:'
             ),
             'expanded_component_id' => array(
-                'prefix' => 'view:expandedid:'
+                'prefix' => 'viewids:expandedid:'
             ),
 
             'type' => array(
@@ -178,7 +178,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             if ($ids) {
                 $keys = array();
                 foreach ($ids as $id) {
-                    $keys[] = 'view:componentid:'.$id;
+                    $keys[] = 'viewids:componentid:'.$id;
                 }
                 $fullPageKeysToDelete = array();
                 foreach (call_user_func_array(array($this->_redis, 'sUnion'), $keys) as $i) {
@@ -236,7 +236,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
 
         $keys = array();
         foreach ($ids as $id) {
-            $keys[] = 'view:includes:'.$id;
+            $keys[] = 'viewincludes:'.$id;
         }
         $childIds = call_user_func(array($this->_redis, 'sInter'), $keys);
 
@@ -278,32 +278,51 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
 
     public function saveIncludes($componentId, $type, $includedComponents)
     {
-        $existingTargetIds = $this->_redis->sMembers('view:includes:'.$componentId.':'.$type);
+        $existingTargetIds = $this->_redis->sMembers('viewincludes:'.$componentId.':'.$type);
 
         $diffTargetIds = array_diff($includedComponents, $existingTargetIds);
         if ($diffTargetIds) {
             //add new includes
-            $this->_redis->sAdd('view:includes:'.$componentId.':'.$type, $diffTargetIds);
+            $this->_redis->sAdd('viewincludes:'.$componentId.':'.$type, $diffTargetIds);
         }
 
         $diffTargetIds = array_diff($existingTargetIds, $includedComponents);
         if ($diffTargetIds) {
             //delete not anymore included
-            $this->_redis->sRem('view:includes:'.$componentId.':'.$type, $diffTargetIds);
+            $this->_redis->sRem('viewincludes:'.$componentId.':'.$type, $diffTargetIds);
         }
     }
 
     public function handlePageParentChanges(array $pageParentChanges)
     {
         foreach ($pageParentChanges as $changes) {
-            $pattern = "view:expandedid:$changes[oldParentId]_$changes[componentId]*";
+            $pattern = "viewids:expandedid:$changes[oldParentId]_$changes[componentId]*";
             $it = null;
             while ($keys = $this->_redis->scan($it, $pattern)) {
                 foreach ($keys as $key) {
-                    $newKey = $changes['newParentId'].substr($key, strlen("view:expandedid:$changes[oldParentId]"));
+                    $newKey = $changes['newParentId'].substr($key, strlen("viewids:expandedid:$changes[oldParentId]"));
                     $this->_redis->rename($key, $newKey);
                 }
             }
         }
+    }
+
+    public function collectGarbage($debug)
+    {
+        $pattern = "viewids:*";
+        $it = null;
+        while ($keys = $this->_redis->scan($it, $pattern)) {
+            foreach ($keys as $key) {
+                foreach ($this->_redis->sMembers($key) as $viewId) {
+                    if (!$this->_redis->exists($viewId)) {
+                        if ($debug) {
+                            //echo "removing $viewId from $key\n";
+                        }
+                        $this->_redis->sRem($key, $viewId);
+                    }
+                }
+            }
+        }
+
     }
 }
