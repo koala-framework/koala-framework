@@ -12,7 +12,7 @@ class Kwf_Util_ClearCache_Types_SimpleCache extends Kwf_Util_ClearCache_Types_Ab
 
     public function getTypeName()
     {
-        return 'simpleCache';
+        return 'simple';
     }
     public function doesRefresh() { return false; }
     public function doesClear() { return true; }
