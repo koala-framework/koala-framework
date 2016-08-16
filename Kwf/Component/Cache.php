@@ -39,6 +39,10 @@ abstract class Kwf_Component_Cache
     public abstract function handlePageParentChanges(array $pageParentChanges);
     public abstract function saveIncludes($componentId, $type, $includedComponents);
 
+    public function collectGarbage($debug)
+    {
+    }
+
     public function writeBuffer()
     {
     }
