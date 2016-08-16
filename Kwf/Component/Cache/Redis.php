@@ -12,7 +12,6 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     {
         $key = self::_getCacheId($component->componentId, $renderer, $type, $value);
 
-        //TODO cleanup unused entries
         $this->_redis->sAdd('viewids:componentid:'.$component->componentId, $key);
         $this->_redis->sAdd('viewids:dbid:'.$component->dbId, $key);
         $this->_redis->sAdd('viewids:pagedbid:'.$component->getPageOrRoot()->dbId, $key);
