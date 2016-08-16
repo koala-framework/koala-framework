@@ -55,6 +55,16 @@ class Kwf_Component_Cache_Url_Redis extends Kwf_Component_Cache_Url_Abstract
 
     public function clear()
     {
-        $this->_redis->delete($this->_redis->keys('url:*'));
+        $pattern = "url:*";
+        $it = null;
+        while ($keys = $this->_redis->scan($it, $pattern)) {
+            $this->_redis->delete($keys);
+        }
+
+        $pattern = "urlids:*";
+        $it = null;
+        while ($keys = $this->_redis->scan($it, $pattern)) {
+            $this->_redis->delete($keys);
+        }
     }
 }

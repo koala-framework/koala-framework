@@ -68,9 +68,12 @@ class Kwf_Component_Cache_Url_Mysql extends Kwf_Component_Cache_Url_Abstract
 
     public function clear()
     {
-        foreach ($this->getModel()->getRows() as $r) {
-            Kwf_Cache_Simple::delete('url-'.$r->url);
-            $r->delete();
+        $select = new Kwf_Model_Select();
+        $rows = $this->getModel()->export(Kwf_Model_Abstract::FORMAT_ARRAY, $select);
+        foreach ($rows as $row) {
+            $cacheId = 'url-'.$row['url'];
+            Kwf_Cache_Simple::delete($cacheId);
         }
+        $this->getModel()->deleteRows($select);
     }
 }

@@ -1,11 +1,6 @@
 <?php
-class Kwf_Util_ClearCache_Types_TableComponentView extends Kwf_Util_ClearCache_Types_Table
+class Kwf_Util_ClearCache_Types_ComponentView extends Kwf_Util_ClearCache_Types_Abstract
 {
-    public function __construct()
-    {
-        parent::__construct('cache_component');
-    }
-
     protected function _clearCache($options)
     {
         if (!Kwf_Config::getValue('debug.componentCache.clearOnClearCache')) {
@@ -17,7 +12,7 @@ class Kwf_Util_ClearCache_Types_TableComponentView extends Kwf_Util_ClearCache_T
 
     public function getTypeName()
     {
-        return 'cache_component';
+        return 'componentView';
     }
     public function doesRefresh() { return false; }
     public function doesClear() { return true; }
