@@ -122,7 +122,14 @@ class Kwf_Component_Abstract_ContentSender_Default extends Kwf_Component_Abstrac
         $content['contents'] = $content['content'];
         unset($content['content']);
         if (!isset($content['lifetime'])) $content['lifetime'] = false;
-        Kwf_Media_Output::output($content);
+        if (Kwf_Benchmark::isEnabled()) {
+            ob_start();
+            Kwf_Benchmark::output();
+            $content['contents'] .= ob_get_contents();
+            ob_end_clean();
+        }
+        Kwf_Media_Output::outputWithoutShutdown($content);
+        exit;
     }
 
     //removed, if required add _getMimeType() method
