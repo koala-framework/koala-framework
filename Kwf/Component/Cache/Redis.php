@@ -313,13 +313,12 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                 foreach ($this->_redis->sMembers($key) as $viewId) {
                     if (!$this->_redis->exists($viewId)) {
                         if ($debug) {
-                            //echo "removing $viewId from $key\n";
+                            echo "removing $viewId from $key\n";
                         }
                         $this->_redis->sRem($key, $viewId);
                     }
                 }
             }
         }
-
     }
 }

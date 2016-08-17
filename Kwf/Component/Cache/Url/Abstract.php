@@ -34,4 +34,7 @@ abstract class Kwf_Component_Cache_Url_Abstract
     public abstract function delete(array $constraints);
     public abstract function clear();
 
+    public function collectGarbage($debug)
+    {
+    }
 }
