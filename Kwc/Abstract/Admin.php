@@ -1,16 +1,6 @@
 <?php
 class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
 {
-    public function delete($componentId)
-    {
-        if (Kwc_Abstract::createOwnModel($this->_class)) {
-            $row = Kwc_Abstract::createOwnModel($this->_class)->getRow($componentId);
-            if ($row) {
-                $row->delete();
-            }
-        }
-    }
-
     public function getDuplicateProgressSteps($source)
     {
         $ret = 0;
