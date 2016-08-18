@@ -25,7 +25,7 @@ class Kwc_Abstract_List_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public static function validateSettings($settings)
+    public static function validateSettings($settings, $componentClass)
     {
         if (isset($settings['default'])) {
             throw new Kwf_Exception("Setting default doesn't exist anymore");

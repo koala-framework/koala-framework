@@ -111,7 +111,7 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
         return $ret;
     }
 
-    public function getPagePropertiesForm()
+    public function getPagePropertiesForm($config)
     {
         return null;
     }

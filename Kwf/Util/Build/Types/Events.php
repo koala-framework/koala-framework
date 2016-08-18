@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_Build_Types_Events extends Kwf_Util_Build_Types_Abstract
 {
-    protected function _build()
+    protected function _build($options)
     {
         Kwf_Events_Dispatcher::clearCache();
 

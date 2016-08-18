@@ -12,7 +12,7 @@ class Kwf_Assets_CommonJs_Provider extends Kwf_Assets_Provider_Abstract
         return null;
     }
 
-    public function getDependenciesForDependency($dependency)
+    public function getDependenciesForDependency(Kwf_Assets_Dependency_Abstract $dependency)
     {
         if ($dependency->getMimeType() != 'text/javascript' && $dependency->getMimeType() != 'text/javascript; defer') {
             return array();

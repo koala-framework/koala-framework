@@ -1,7 +1,7 @@
 <?php
 class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
 {
-    protected function _build()
+    protected function _build($options)
     {
         if (!file_exists('build/trl')) {
             mkdir('build/trl');

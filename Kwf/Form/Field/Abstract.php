@@ -225,7 +225,7 @@ abstract class Kwf_Form_Field_Abstract implements Kwf_Collection_Item_Interface
 
     public function delete(Kwf_Model_Row_Interface $row)
     {
-        if ($this->hasChildren()) {
+       if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
                 $field->delete($row);
             }

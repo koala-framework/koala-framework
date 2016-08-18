@@ -36,7 +36,7 @@ class Kwc_Basic_Text_Generator extends Kwf_Component_Generator_Table
         return $select;
     }
 
-    public function duplicateChild($source, $parentTarget)
+    public function duplicateChild($source, $parentTarget, Zend_ProgressBar $progressBar = null)
     {
         if ($source->generator !== $this) {
             throw new Kwf_Exception("you must call this only with the correct source");
