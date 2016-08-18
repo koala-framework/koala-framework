@@ -27,7 +27,11 @@ class Kwf_Util_Setup
         $configSection = call_user_func(array(Kwf_Setup::$configClass, 'getDefaultConfigSection'));
         Kwf_Setup::$configSection = $configSection;
 
-        error_reporting(E_ALL^E_STRICT);
+        if (Kwf_Exception::isDebug()) {
+            error_reporting(E_ALL | E_STRICT | E_DEPRECATED);
+        } else {
+            error_reporting(E_ALL^E_STRICT);
+        }
 
         class_exists('Kwf_Trl'); //trigger autoload
 
@@ -159,8 +163,13 @@ class Kwf_Util_Setup
         $ret .= "Kwf_Loader::setIncludePath('".implode(PATH_SEPARATOR, $ip)."');\n";
         $ret .= "\n";
         $ret .= "\n";
-        $ret .= "error_reporting(E_ALL & ~E_STRICT);\n";
-        $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL & ~E_STRICT);\n";
+        if (Kwf_Exception::isDebug()) {
+            $ret .= "error_reporting(E_ALL | E_STRICT | E_DEPRECATED);\n";
+            $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL | E_STRICT | E_DEPRECATED);\n";
+        } else {
+            $ret .= "error_reporting(E_ALL & ~E_STRICT);\n";
+            $ret .= "set_error_handler(array('Kwf_Debug', 'handleError'), E_ALL & ~E_STRICT);\n";
+        }
         $ret .= "set_exception_handler(array('Kwf_Debug', 'handleException'));\n";
         $ret .= "\n";
         $ret .= "\$requestUri = isset(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : null;\n";
