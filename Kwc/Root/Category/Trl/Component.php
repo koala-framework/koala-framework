@@ -1,7 +1,7 @@
 <?php
 class Kwc_Root_Category_Trl_Component extends Kwc_Chained_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['page']['class'] = 'Kwc_Root_Category_Trl_Generator';

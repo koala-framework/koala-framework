@@ -1,9 +1,9 @@
 <?php
 abstract class Kwc_Form_Container_Abstract_Component extends Kwc_Form_Field_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['paragraphs'] = array(
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwc_Form_Dynamic_Paragraphs_Component'

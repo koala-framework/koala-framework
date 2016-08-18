@@ -2,10 +2,10 @@
 class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_Unsubscribe_Component
     extends Kwc_Basic_LinkTag_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = parent::getSettings($param);
+        $ret = array_merge(parent::getSettings($param), array(
             'componentName' => trlKwfStatic('Unsubscribe Newsletter')
         ));
         return $ret;

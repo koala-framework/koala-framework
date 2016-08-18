@@ -3,7 +3,7 @@ abstract class Kwc_Chained_CopyTarget_Component extends Kwc_Abstract
 {
     public static function getSettings($includePageGenerator = 'Kwc_Root_Category_Component')
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($includePageGenerator);
         $ret['generators']['target'] = array(
             'class' => 'Kwc_Chained_CopyTarget_TargetGenerator',
             'component' => null

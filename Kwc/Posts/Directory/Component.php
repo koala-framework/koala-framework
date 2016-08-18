@@ -1,9 +1,9 @@
 <?php
 class Kwc_Posts_Directory_Component extends Kwc_Directories_Item_Directory_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Posts');
         $ret['componentIcon'] = 'comments';
         $ret['childModel'] = 'Kwc_Posts_Directory_Model';

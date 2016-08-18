@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Cache_Visible_Root_Component extends Kwf_Component_NoCategoriesRoot
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['table'] = array(
             'class' => 'Kwf_Component_Generator_Table',
             'component' => 'Kwf_Component_Cache_Visible_Root_Child',

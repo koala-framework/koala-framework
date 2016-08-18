@@ -1,9 +1,9 @@
 <?php
 class Kwc_ImageResponsive_InScrollDiv_Root_Component extends Kwc_Root_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
 
         $ret['generators']['image1'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',

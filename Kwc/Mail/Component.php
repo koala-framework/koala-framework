@@ -4,9 +4,9 @@
  */
 class Kwc_Mail_Component extends Kwc_Mail_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['content'] = array(
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwc_Paragraphs_Component'

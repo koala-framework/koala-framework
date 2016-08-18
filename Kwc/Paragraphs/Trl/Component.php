@@ -2,7 +2,7 @@
 class Kwc_Paragraphs_Trl_Component extends Kwc_Chained_Trl_Component
 {
 
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['componentIcon'] = 'page';

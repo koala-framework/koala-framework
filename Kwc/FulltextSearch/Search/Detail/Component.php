@@ -1,9 +1,9 @@
 <?php
 class Kwc_FulltextSearch_Search_Detail_Component extends Kwc_Directories_Item_Detail_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['viewCache'] = false;
         return $ret;
     }

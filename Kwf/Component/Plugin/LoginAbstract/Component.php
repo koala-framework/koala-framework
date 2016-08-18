@@ -2,9 +2,9 @@
 abstract class Kwf_Component_Plugin_LoginAbstract_Component extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_Login, Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_SkipProcessInput
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['loginForm'] = array(
             'class' => 'Kwf_Component_Generator_Static',
             'component' => null

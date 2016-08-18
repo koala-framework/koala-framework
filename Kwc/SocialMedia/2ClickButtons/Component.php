@@ -2,9 +2,9 @@
 //requires jquery.socialshareprivacy bower package
 class Kwc_SocialMedia_2ClickButtons_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('2 click social media buttons');
         $ret['componentCategory'] = 'callToAction';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';

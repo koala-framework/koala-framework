@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_LinkTag_CommunityVideo_Component extends Kwc_Basic_LinkTag_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Link.to CommunityVideo');
         $ret['generators']['video'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',

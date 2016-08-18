@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_Image_Component extends Kwc_Abstract_Image_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Image');
         $ret['componentIcon'] = 'picture';
         $ret['emptyImage'] = false; // eg. 'Empty.jpg' in same folder

@@ -1,9 +1,9 @@
 <?php
 class Kwc_News_TopChoose_Component extends Kwc_Directories_TopChoose_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('News.Top');
         $ret['componentIcon'] = 'newspaper';
         $ret['showDirectoryClass'] = 'Kwc_News_Directory_Component';

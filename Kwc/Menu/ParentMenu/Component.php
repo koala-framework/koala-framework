@@ -1,9 +1,9 @@
 <?php
 class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
 {
-    public static function getSettings($menuComponentClass)
+    public static function getSettings($menuComponentClass = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($menuComponentClass);
         $generators = Kwc_Abstract::getSetting($menuComponentClass, 'generators');
         if (isset($generators['subMenu'])) {
             $ret['generators']['subMenu'] = $generators['subMenu'];

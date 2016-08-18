@@ -1,9 +1,9 @@
 <?php
 class Kwc_Shop_Cart_Checkout_Form_Success_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['viewCache'] = false;
         return $ret;
     }

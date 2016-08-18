@@ -1,9 +1,9 @@
 <?php
 abstract class Kwc_Box_Search_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
 
         $ret['generators']['ajax'] = array(
             'class'     => 'Kwf_Component_Generator_Page_Static',

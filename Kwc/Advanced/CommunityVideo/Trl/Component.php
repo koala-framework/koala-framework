@@ -1,7 +1,7 @@
 <?php
 class Kwc_Advanced_CommunityVideo_Trl_Component extends Kwc_Chained_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Composite_TwoColumns_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('2 Columns');
         $ret['componentIcon'] = 'application_tile_horizontal';
         $ret['generators']['child']['component']['leftColumn'] = 'Kwc_Composite_TwoColumns_Left_Component';

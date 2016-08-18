@@ -10,9 +10,9 @@
 class Kwc_List_Gallery_DownloadAll_Component extends Kwc_Abstract
     implements Kwf_Media_Output_IsValidInterface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         return $ret;
     }
 

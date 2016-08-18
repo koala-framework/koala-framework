@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_Imprint_Imprint_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Imprint').'.'.trlKwfStatic('Imprint');
         $ret['componentCategory'] = 'admin';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';

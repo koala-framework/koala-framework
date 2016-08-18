@@ -1,9 +1,9 @@
 <?php
 class Kwc_Posts_Latest_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Posts.Last Posts');
         $ret['childModel'] = 'Kwc_Posts_Directory_Model';
         $ret['numberOfPosts'] = 9;

@@ -1,7 +1,7 @@
 <?php
 class Kwc_Mail_Editable_Trl_Component extends Kwc_Mail_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         return $ret;

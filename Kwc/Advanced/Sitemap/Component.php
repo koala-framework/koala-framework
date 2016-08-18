@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_Sitemap_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Sitemap');
         $ret['componentIcon'] = 'sitemap_color.png';
         $ret['rootElementClass'] = 'kwfUp-webStandard';

@@ -1,9 +1,9 @@
 <?php
 class Kwc_User_BoxWithoutLogin_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['showLostPassword'] = true;
         $ret['showLoginLink'] = true;
         $ret['showRegisterLink'] = true;

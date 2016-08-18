@@ -1,9 +1,9 @@
 <?php
 class Kwc_Events_Detail_Component extends Kwc_News_Detail_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['assetsAdmin']['dep'][] = 'KwfFormDateTimeField';
         return $ret;
     }

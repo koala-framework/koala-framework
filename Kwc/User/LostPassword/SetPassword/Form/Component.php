@@ -2,9 +2,9 @@
 class Kwc_User_LostPassword_SetPassword_Form_Component
     extends Kwc_User_Activate_Form_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['submitButton'] = trlKwfStatic('Set new Password');
         $ret['generators']['child']['component']['success'] =
             'Kwc_User_LostPassword_SetPassword_Form_Success_Component';

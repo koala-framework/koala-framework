@@ -2,7 +2,7 @@
 class Kwc_Abstract_Image_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
     implements Kwf_Media_Output_IsValidInterface
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['image'] = array(

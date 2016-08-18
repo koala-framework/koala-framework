@@ -1,9 +1,9 @@
 <?php
 class Kwc_Composite_ParagraphsImage_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'componentName'     => 'ParagraphsImage',
             'componentIcon'     => new Kwf_Asset('page_white_picture')
         ));

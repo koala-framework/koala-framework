@@ -1,9 +1,9 @@
 <?php
 class Kwc_Composite_TextImages_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'componentName'     => 'TextImages',
             'componentIcon'     => new Kwf_Asset('textImages'),
             'ownModel'         => 'Kwc_Composite_TextImages_Model',

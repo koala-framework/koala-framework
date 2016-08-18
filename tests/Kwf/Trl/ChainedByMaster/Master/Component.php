@@ -1,9 +1,9 @@
 <?php
 class Kwf_Trl_ChainedByMaster_Master_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['page'] = array(
             'class' => 'Kwc_Root_Category_Generator',
             'inherit' => true,

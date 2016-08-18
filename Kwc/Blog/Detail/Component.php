@@ -1,9 +1,9 @@
 <?php
 class Kwc_Blog_Detail_Component extends Kwc_Directories_Item_Detail_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['content'] = 'Kwc_Paragraphs_Component';
         $ret['rootElementClass'] = 'kwfUp-webStandard';
         $ret['placeholder']['backLink'] = trlKwfStatic('Back to overview');

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_IntegratorTemplate_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Integrator Template');
         $ret['dataClass'] = 'Kwc_Advanced_IntegratorTemplate_Data';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';

@@ -6,9 +6,9 @@ class Kwc_Advanced_Youtube_Component extends Kwc_Abstract_Composite_Component
     const USER_SELECT = 'user';
     const CONTENT_WIDTH = 'contentWidth';
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Youtube');
         $ret['componentCategory'] = 'media';
         $ret['componentPriority'] = 40;

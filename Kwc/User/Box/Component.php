@@ -1,9 +1,9 @@
 <?php
 class Kwc_User_Box_Component extends Kwc_User_BoxWithoutLogin_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['showLoginLink'] = false;
         $ret['generators']['child']['component']['login'] = 'Kwc_User_Box_Login_Component';
         $ret['placeholder']['loginHeadline'] = trlKwfStatic('Login:');

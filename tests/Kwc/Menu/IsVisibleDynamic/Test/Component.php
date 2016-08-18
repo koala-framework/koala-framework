@@ -3,9 +3,9 @@ class Kwc_Menu_IsVisibleDynamic_Test_Component extends Kwc_Abstract
 {
     public static $invisibleIds = array(); //modified by test during runtime
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['flags']['hasIsVisibleDynamic'] = true;
         return $ret;
     }

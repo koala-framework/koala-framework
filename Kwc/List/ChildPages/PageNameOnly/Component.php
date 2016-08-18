@@ -1,9 +1,9 @@
 <?php
 class Kwc_List_ChildPages_PageNameOnly_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('List child page names');
         $ret['componentCategory'] = 'childPages';
         $ret['rootElementClass'] = 'kwfUp-webStandard';

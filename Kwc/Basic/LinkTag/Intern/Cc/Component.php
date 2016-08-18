@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_LinkTag_Intern_Cc_Component extends Kwc_Basic_LinkTag_Abstract_Cc_Component
 {
-    public static function getSettings($masterComponent)
+    public static function getSettings($masterComponent = null)
     {
         $ret = parent::getSettings($masterComponent);
         $ret['dataClass'] = 'Kwc_Basic_LinkTag_Intern_Cc_Data';

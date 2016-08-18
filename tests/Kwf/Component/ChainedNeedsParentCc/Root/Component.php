@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_ChainedNeedsParentCc_Root_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['master'] = array(
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwf_Component_ChainedNeedsParentCc_Master_Component',

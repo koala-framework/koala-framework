@@ -1,9 +1,9 @@
 <?php
 class Kwc_Menu_IsVisibleDynamic_Root_Component extends Kwf_Component_NoCategoriesRoot
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['page']['model'] = 'Kwc_Menu_IsVisibleDynamic_Root_Model';
         $ret['generators']['page']['component'] = array(
             'empty' => 'Kwc_Basic_Empty_Component',

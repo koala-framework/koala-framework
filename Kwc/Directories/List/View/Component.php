@@ -4,9 +4,9 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
 {
     protected $_items;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['paging'] = 'Kwc_Paging_Component';
         //$ret['generators']['child']['component']['count'] = 'Kwc_Directories_List_View_Count_Component';
         $ret['placeholder']['noEntriesFound'] = trlKwfStatic('No entries found');

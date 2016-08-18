@@ -1,9 +1,9 @@
 <?php
 class Kwc_User_LostPassword_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['setpass'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_User_LostPassword_SetPassword_Component',

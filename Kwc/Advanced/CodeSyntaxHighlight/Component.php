@@ -2,9 +2,9 @@
 //requires easybook/geshi package
 class Kwc_Advanced_CodeSyntaxHighlight_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Code Syntax Highlighted');
         $ret['componentIcon'] = 'page_code';
         $ret['ownModel'] = 'Kwf_Component_FieldModel';

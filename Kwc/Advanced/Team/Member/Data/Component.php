@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_Team_Member_Data_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
 
         $ret['generators']['vcard'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',

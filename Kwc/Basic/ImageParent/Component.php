@@ -3,9 +3,9 @@ class Kwc_Basic_ImageParent_Component extends Kwc_Abstract
     implements Kwf_Media_Output_IsValidInterface
 {
     const CONTENT_WIDTH = 'contentWidth';
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['dimension'] = array('width'=>100, 'height'=>100, 'cover' => false);
         $ret['imgCssClass'] = '';
         $ret['lazyLoadOutOfViewport'] = true; // Set to false to load image also when not in view

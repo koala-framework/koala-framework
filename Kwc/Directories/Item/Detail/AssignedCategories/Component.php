@@ -2,9 +2,9 @@
 class Kwc_Directories_Item_Detail_AssignedCategories_Component
     extends Kwc_Directories_List_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['view'] =
             'Kwc_Directories_Item_Detail_AssignedCategories_View_Component';
         $ret['useDirectorySelect'] = false;

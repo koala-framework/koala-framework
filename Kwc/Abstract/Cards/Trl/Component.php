@@ -1,7 +1,7 @@
 <?php
 class Kwc_Abstract_Cards_Trl_Component extends Kwc_Chained_Trl_Component
 {
-    public static function getSettings($masterComponent)
+    public static function getSettings($masterComponent = null)
     {
         $ret = parent::getSettings($masterComponent);
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';

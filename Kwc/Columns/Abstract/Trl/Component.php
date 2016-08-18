@@ -1,7 +1,7 @@
 <?php
 class Kwc_Columns_Abstract_Trl_Component extends Kwc_Abstract_List_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['child']['class'] = 'Kwc_Chained_Abstract_Generator';

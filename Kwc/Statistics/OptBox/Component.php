@@ -9,9 +9,9 @@
  */
 class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Cookie-Opt Banner');
         $ret['generators']['child']['component']['linktag'] = 'Kwc_Basic_LinkTag_Component';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';

@@ -10,9 +10,9 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
     private $_formTrlStaticExecuted = false;
     protected $_errors = array();
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['success'] = 'Kwc_Form_Success_Component';
         $ret['generators']['child']['component']['header'] = null;
         $ret['generators']['child']['component']['footer'] = null;

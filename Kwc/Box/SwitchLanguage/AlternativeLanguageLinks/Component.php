@@ -1,9 +1,9 @@
 <?php
 class Kwc_Box_SwitchLanguage_AlternativeLanguageLinks_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['flags']['hasHeaderIncludeCode'] = true;
         $ret['flags']['hasInjectIntoRenderedHtml'] = true;
         return $ret;

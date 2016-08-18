@@ -1,9 +1,9 @@
 <?php
 class Kwc_TextImage_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Text-Image');
         $ret['componentCategory'] = 'content';
         $ret['componentPriority'] = 100;

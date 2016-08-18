@@ -1,9 +1,9 @@
 <?php
 class Kwc_Root_TrlRoot_Component extends Kwc_Root_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         unset($ret['generators']['box']);
         $ret['generators']['master'] = array(
             'class' => 'Kwc_Chained_Trl_MasterGenerator',

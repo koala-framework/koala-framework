@@ -2,9 +2,9 @@
 abstract class Kwc_Abstract_Flash_Upload_Component extends Kwc_Abstract_Flash_Component
     implements Kwf_Media_Output_Interface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['uploadModelRule'] = 'FileMedia';
         return $ret;
     }

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Columns_Abstract_Component extends Kwc_Abstract_List_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Columns');
         $ret['componentIcon'] = 'application_tile_horizontal';
         $ret['componentCategory'] = 'layout';

@@ -5,9 +5,9 @@
  */
 class Kwc_Basic_LinkTag_Component extends Kwc_Abstract_Cards_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['dataClass'] = 'Kwc_Basic_LinkTag_Data';
         $ret['componentName'] = trlKwfStatic('Link');
         $ret['componentIcon'] = 'page_link';

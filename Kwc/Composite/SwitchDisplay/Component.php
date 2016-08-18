@@ -1,9 +1,9 @@
 <?php
 class Kwc_Composite_SwitchDisplay_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentIcon'] = 'shape_move_forwards';
         $ret['componentName'] = trlKwfStatic('Switch display');
         $ret['componentCategory'] = 'layout';

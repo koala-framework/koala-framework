@@ -1,9 +1,9 @@
 <?php
 class Kwc_Box_Search_Ajax_Component extends Kwc_Abstract_Ajax_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['viewCache'] = false;
         return $ret;
     }

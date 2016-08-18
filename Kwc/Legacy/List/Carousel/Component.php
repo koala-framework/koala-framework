@@ -1,9 +1,9 @@
 <?php
 class Kwc_Legacy_List_Carousel_Component extends Kwc_Abstract_List_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Stage');
         $ret['generators']['child']['component'] = 'Kwc_Legacy_List_Carousel_Image_Component';
         $ret['assetsDefer']['files'][] = 'kwf/Kwc/Legacy/List/Carousel/Carousel.js';

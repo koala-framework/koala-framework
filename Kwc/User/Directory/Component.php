@@ -1,9 +1,9 @@
 <?php
 class Kwc_User_Directory_Component extends Kwc_Directories_ItemPage_Directory_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['detail']['class'] = 'Kwc_User_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Kwc_User_Detail_Component';
         $ret['generators']['detail']['model'] = Kwf_Registry::get('config')->user->model;

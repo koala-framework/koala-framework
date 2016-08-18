@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_Text_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'ownModel'          => 'Kwc_Basic_Text_Model',
             'componentName'     => trlKwfStatic('Text'),
             'componentIcon'     => 'paragraph_page',

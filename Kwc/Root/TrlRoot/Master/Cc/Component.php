@@ -1,7 +1,7 @@
 <?php
 class Kwc_Root_TrlRoot_Master_Cc_Component extends Kwc_Chained_Cc_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['flags']['hasBaseProperties'] = true;

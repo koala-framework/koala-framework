@@ -1,9 +1,9 @@
 <?php
 class Kwc_FulltextSearch_Box_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['useLiveSearch'] = true;
         $ret['hideSubmit'] = false;
         $ret['flags']['forwardProcessInput'] = true;

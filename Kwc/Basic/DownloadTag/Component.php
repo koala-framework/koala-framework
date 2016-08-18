@@ -2,9 +2,9 @@
 class Kwc_Basic_DownloadTag_Component extends Kwc_Basic_LinkTag_Abstract_Component
     implements Kwf_Media_Output_IsValidInterface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'ownModel'     => 'Kwc_Basic_DownloadTag_Model',
             'componentName' => trlKwfStatic('Download'),
             'componentIcon' => 'folder_link',

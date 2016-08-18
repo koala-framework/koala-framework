@@ -4,7 +4,7 @@ class Kwf_Component_ChainedNeedsParentCc_TestComponent_Component extends Kwc_Abs
     public static $needsParentComponentClass = true;
     public static function getSettings($parentComponentClass)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['parentComponentClass'] = $parentComponentClass;
         return $ret;
     }

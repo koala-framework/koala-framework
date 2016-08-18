@@ -1,9 +1,9 @@
 <?php
 class Kwc_Chained_Abstract_MasterAsChild_Component extends Kwc_Abstract
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         if (!$masterComponentClass) {
             throw new Kwf_Exception("This component requires a parameter");
         }

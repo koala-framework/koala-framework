@@ -2,9 +2,9 @@
 class Kwc_Misc_RrdGraph_Component extends Kwc_Abstract
     implements Kwf_Media_Output_Interface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['componentName'] = trlKwfStatic('Rrd Graph');
         return $ret;

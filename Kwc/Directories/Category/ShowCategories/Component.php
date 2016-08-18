@@ -3,9 +3,9 @@ class Kwc_Directories_Category_ShowCategories_Component extends Kwc_Directories_
 {
     private $_categories;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['showDirectoryClass'] = 'Kwc_Directories_Item_Directory_Component'; // nur für form
         $ret['hideDirectoryClasses'] = array();
         return $ret;

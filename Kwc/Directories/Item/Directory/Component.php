@@ -1,9 +1,9 @@
 <?php
 abstract class Kwc_Directories_Item_Directory_Component extends Kwc_Directories_Item_DirectoryNoAdmin_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['assetsAdmin']['dep'][] = 'KwfAutoGrid';
         $ret['assetsAdmin']['dep'][] = 'KwfAutoForm';
         $ret['assetsAdmin']['dep'][] = 'KwfProxyPanel';

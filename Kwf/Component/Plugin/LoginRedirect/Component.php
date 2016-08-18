@@ -2,9 +2,9 @@
 class Kwf_Component_Plugin_LoginRedirect_Component extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewReplace, Kwf_Component_Plugin_Interface_Login, Kwf_Component_Plugin_Interface_SkipProcessInput
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['validUserRoles'] = null;
         return $ret;
     }

@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Generator_Plugin_Tags_Component extends Kwf_Component_Generator_Plugin_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Tags');
         $ret['componentIcon'] = 'tag_blue.png';
         $ret['assetsAdmin']['dep'][] = 'KwfAutoAssignGrid';

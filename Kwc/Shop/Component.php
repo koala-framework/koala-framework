@@ -1,9 +1,9 @@
 <?php
 class Kwc_Shop_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
 
         $ret['generators']['child']['component']['products'] = 'Kwc_Shop_Products_Directory_Component';
 

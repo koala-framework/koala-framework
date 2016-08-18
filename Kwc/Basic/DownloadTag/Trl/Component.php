@@ -2,7 +2,7 @@
 class Kwc_Basic_DownloadTag_Trl_Component extends Kwc_Basic_LinkTag_Abstract_Trl_Component
     implements Kwf_Media_Output_IsValidInterface
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['download'] = array(

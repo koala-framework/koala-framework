@@ -3,9 +3,9 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
 {
     private $_chartPlugins;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['form'] = 'Kwc_Shop_Cart_Form_Component';
         $ret['generators']['child']['component']['view'] = 'Kwc_Shop_Cart_View_Component';
         $ret['generators']['detail']['class'] = 'Kwc_Shop_Cart_Generator';

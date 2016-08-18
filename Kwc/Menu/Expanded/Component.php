@@ -1,9 +1,9 @@
 <?php
 class Kwc_Menu_Expanded_Component extends Kwc_Menu_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['menuModel'] = 'Kwc_Menu_Expanded_MenuModel';
         return $ret;
     }

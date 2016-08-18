@@ -6,9 +6,9 @@
  */
 class Kwc_Mail_Editable_Component extends Kwc_Mail_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['assetsAdmin']['files'][] = 'kwf/Kwc/Mail/Editable/Panel.js';
         $ret['menuConfig'] = 'Kwc_Mail_Editable_MenuConfig';
         return $ret;

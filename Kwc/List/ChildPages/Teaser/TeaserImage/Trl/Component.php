@@ -1,7 +1,7 @@
 <?php
 class Kwc_List_ChildPages_Teaser_TeaserImage_Trl_Component extends Kwc_Abstract_Composite_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['ownModel'] = 'Kwc_List_ChildPages_Teaser_TeaserImage_Model';

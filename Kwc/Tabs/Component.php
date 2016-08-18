@@ -1,9 +1,9 @@
 <?php
 class Kwc_Tabs_Component extends Kwc_Abstract_List_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component'] = 'Kwc_Paragraphs_Component';
         $ret['componentName'] = trlKwfStatic('Tabs');
         $ret['componentIcon'] = 'tab.png';

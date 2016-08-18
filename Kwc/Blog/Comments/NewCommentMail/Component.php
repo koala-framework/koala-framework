@@ -1,9 +1,9 @@
 <?php
 class Kwc_Blog_Comments_NewCommentMail_Component extends Kwc_Mail_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['recipientSources'] = array(
             'u' => get_class(Kwf_Registry::get('userModel'))
         );

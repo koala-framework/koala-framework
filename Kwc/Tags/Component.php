@@ -1,9 +1,9 @@
 <?php
 class Kwc_Tags_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Tags');
         $ret['flags']['hasFulltext'] = true;
         $ret['generators']['child']['component']['suggestions'] = 'Kwc_Tags_Suggestions_Component';

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_Link_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'ownModel' => 'Kwc_Basic_Link_Model',
             'componentName' => trlKwfStatic('Link'),
             'componentIcon' => 'page_white_link',

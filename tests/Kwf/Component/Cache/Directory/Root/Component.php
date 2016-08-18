@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Cache_Directory_Root_Component extends Kwf_Component_NoCategoriesRoot
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
 
         $ret['generators']['dir'] = array(
             'component' => 'Kwf_Component_Cache_Directory_Root_Directory_Component',

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_Image_CacheFullWidth_Image_Component extends Kwc_Basic_Image_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
 
         $ret['dimensions'] = array(
             'fullWidth'=>array(

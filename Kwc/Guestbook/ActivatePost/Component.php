@@ -3,9 +3,9 @@ class Kwc_Guestbook_ActivatePost_Component extends Kwc_Form_Success_Component
 {
     protected $_newVisibleValue = 1;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['success'] = trlKwfStatic('The entry in your guestbook has been acitvated.');
         $ret['placeholder']['toGuestbook'] = trlKwfStatic('Use this link to get to your guestbook:');
         return $ret;

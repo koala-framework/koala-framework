@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_Flash_Upload_Trl_Component extends Kwc_Chained_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['generators']['flash'] = array(

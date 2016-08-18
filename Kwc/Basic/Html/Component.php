@@ -5,9 +5,9 @@
  */
 class Kwc_Basic_Html_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'componentName' => trlKwfStatic('Html'),
             'componentIcon' => 'tag',
             'ownModel'     => 'Kwc_Basic_Html_Model'

@@ -3,9 +3,9 @@ class Kwc_Basic_Download_Component extends Kwc_Abstract_Composite_Component
 {
     private $_fileRow;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['ownModel'] = 'Kwc_Basic_Download_Model';
         $ret['componentName'] = trlKwfStatic('Download');
         $ret['componentCategory'] = 'special';

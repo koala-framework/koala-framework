@@ -1,7 +1,7 @@
 <?php
 class Kwc_News_Directory_Trl_Component extends Kwc_Directories_Item_Directory_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['childModel'] = 'Kwc_News_Directory_Trl_Model';

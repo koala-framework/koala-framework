@@ -2,9 +2,9 @@
 class Kwc_Abstract_ListRandom_Component extends Kwc_Abstract_List_Component
     implements Kwf_Component_Partial_Interface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['limit'] = 1;
         return $ret;
     }

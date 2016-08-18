@@ -1,9 +1,9 @@
 <?php
 class Kwc_Shop_Cart_Checkout_Payment_Abstract_Mail_Paragraphs_Message_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['viewCache'] = false;
         $ret['componentName'] = trlKwfStatic('Message');
         return $ret;

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Shop_Cart_Checkout_Payment_Wirecard_Success_Component extends Kwc_Editable_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['flags']['processInput'] = true;
         $ret['plugins']['placeholders'] = 'Kwf_Component_Plugin_Placeholders';
         $ret['viewCache'] = false;

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Posts_Write_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['preview'] = 'Kwc_Posts_Write_Preview_Component';
         $ret['generators']['child']['component']['form'] = 'Kwc_Posts_Write_Form_Component';
         $ret['generators']['child']['component']['lastPosts'] = 'Kwc_Posts_Write_LastPosts_Component';

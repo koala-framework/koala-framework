@@ -1,7 +1,7 @@
 <?php
 class Kwc_Form_Field_MultiCheckbox_Trl_Component extends Kwc_Form_Field_Abstract_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['ownModel'] = 'Kwc_Form_Field_MultiCheckbox_Trl_Model';

@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_SocialBookmarks_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Social Bookmarks');
         $ret['ownModel'] = 'Kwc_Advanced_SocialBookmarks_Model';
         $ret['rootElementClass'] = 'kwfUp-webStandard';

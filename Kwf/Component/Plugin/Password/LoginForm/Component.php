@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Plugin_Password_LoginForm_Component extends Kwc_Form_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['success'] = false;
         $ret['useAjaxRequest'] = false;
         return $ret;

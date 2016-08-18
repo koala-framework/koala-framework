@@ -1,9 +1,9 @@
 <?php
 class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['content'] = 'Kwc_Articles_Detail_Paragraphs_Component';
         $ret['generators']['child']['component']['previewImage'] = 'Kwc_Articles_Detail_PreviewImage_Component';
 
