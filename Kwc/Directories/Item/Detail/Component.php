@@ -9,7 +9,7 @@ class Kwc_Directories_Item_Detail_Component extends Kwc_Abstract_Composite_Compo
         $ret['dataClass'] = 'Kwc_Directories_Item_Detail_Data';
         return $ret;
     }
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['row'] = $this->getData()->row;

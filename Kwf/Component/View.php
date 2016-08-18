@@ -6,7 +6,7 @@ class Kwf_Component_View extends Kwf_View
 {
     private $_renderer;
 
-    public function __construct(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function __construct(Kwf_Component_Renderer_Abstract $renderer)
     {
         $this->_renderer = $renderer;
         parent::__construct();

@@ -17,7 +17,7 @@ class Kwc_Composite_TextImages_Component extends Kwc_Abstract_Composite_Componen
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $return = parent::getTemplateVars($renderer);
         $return['imagePosition'] = $this->_getRow()->image_position;

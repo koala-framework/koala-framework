@@ -22,7 +22,7 @@ class Kwc_List_ChildPages_Teaser_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['children'] = $this->getData()->getChildComponents(array('generator' => 'child'));

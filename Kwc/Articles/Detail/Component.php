@@ -23,7 +23,7 @@ class Kwc_Articles_Detail_Component extends Kwc_Directories_Item_Detail_Componen
         $this->getData()->row->markRead();
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['config'] = array(

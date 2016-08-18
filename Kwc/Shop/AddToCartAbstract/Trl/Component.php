@@ -11,7 +11,7 @@ class Kwc_Shop_AddToCartAbstract_Trl_Component extends Kwc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = Kwc_Chained_Trl_Component::getTemplateVars($renderer);
         $ret['form'] = $this->getData()->getChildComponent('-form');

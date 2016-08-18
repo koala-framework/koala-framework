@@ -11,7 +11,7 @@ class Kwc_Newsletter_Detail_Mail_Paragraphs_LinkTag_EditSubscriber_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $nlData = $this->_getNewsletterComponent();

@@ -8,7 +8,7 @@ class Kwc_Shop_Cart_Checkout_Payment_Abstract_ConfirmLink_Component extends Kwc_
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['confirm'] = $this->getData()->parent->getChildComponent('_confirm');

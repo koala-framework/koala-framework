@@ -8,7 +8,7 @@ class Kwc_Events_Detail_Component extends Kwc_News_Detail_Abstract_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = Kwc_Directories_Item_Detail_Component::getTemplateVars($renderer);
         $ret['title'] = $this->getData()->row->title;

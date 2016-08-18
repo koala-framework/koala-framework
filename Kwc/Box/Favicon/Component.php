@@ -11,7 +11,7 @@ class Kwc_Box_Favicon_Component extends Kwc_Basic_Image_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['imageUrl'] = $this->getImageUrl();

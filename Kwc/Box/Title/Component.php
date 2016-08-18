@@ -28,7 +28,7 @@ class Kwc_Box_Title_Component extends Kwc_Abstract
         return $this->getData()->getBaseProperty('application.name');
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['title'] = $this->_getTitle();

@@ -8,7 +8,7 @@ class Kwc_Mail_Placeholder_Content_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         if ($renderer && $renderer instanceof Kwf_Component_Renderer_Mail) {

@@ -25,9 +25,9 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
         return $this->getData();
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['showBanner'] = $this->_getRow()->show_banner;
         if ($ret['showBanner']) {
             $ret['config'] = array(

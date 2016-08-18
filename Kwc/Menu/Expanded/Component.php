@@ -21,7 +21,7 @@ class Kwc_Menu_Expanded_Component extends Kwc_Menu_Abstract_Component
         return $level + 2;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
 

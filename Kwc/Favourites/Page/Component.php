@@ -32,7 +32,7 @@ class Kwc_Favourites_Page_Component extends Kwc_Abstract
             '</div>';
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $userId = Kwf_Registry::get('userModel')->getAuthedUserId();

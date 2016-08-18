@@ -1,7 +1,7 @@
 <?php
 class Kwc_Directories_Category_Detail_List_Trl_Component extends Kwc_Directories_List_Trl_Component
 {
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         return $ret;

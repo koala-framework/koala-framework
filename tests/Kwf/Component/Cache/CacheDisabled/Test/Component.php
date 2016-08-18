@@ -10,7 +10,7 @@ class Kwf_Component_Cache_CacheDisabled_Test_Component extends Kwc_Abstract_Comp
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['test'] = self::$test;

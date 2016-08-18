@@ -35,7 +35,7 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         return $this->_getRow()->columns;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $showPics = null;

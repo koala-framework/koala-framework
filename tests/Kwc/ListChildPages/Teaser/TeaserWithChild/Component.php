@@ -8,7 +8,7 @@ class Kwc_ListChildPages_Teaser_TeaserWithChild_Component extends Kwc_List_Child
         $ret['childModel'] = 'Kwc_ListChildPages_Teaser_TestModel';
         return $ret;
     }
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         return $ret;

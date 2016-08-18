@@ -8,7 +8,7 @@ class Kwc_FulltextSearch_Search_Detail_Component extends Kwc_Directories_Item_De
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['queryParts'] = $this->getData()->parent->getChildComponent('-view')

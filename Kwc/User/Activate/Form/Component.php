@@ -38,7 +38,7 @@ class Kwc_User_Activate_Form_Component extends Kwc_Form_Component
         $this->_form->add(new Kwf_Form_Field_Hidden('code'));
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         if ($this->_hideForm) $ret['form'] = null;

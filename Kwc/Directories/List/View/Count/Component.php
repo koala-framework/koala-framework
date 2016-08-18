@@ -9,7 +9,7 @@ class Kwc_Directories_List_View_Count_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['count'] = $this->getData()->parent->getComponent()->getPagingCount();

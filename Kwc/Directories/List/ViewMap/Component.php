@@ -33,7 +33,7 @@ class Kwc_Directories_List_ViewMap_Component extends Kwc_Directories_List_View_C
         return $this->_getSelect();
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['options'] = $this->_getSetting('mapOptions');

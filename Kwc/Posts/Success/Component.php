@@ -5,7 +5,7 @@ class Kwc_Posts_Success_Component extends Kwc_Form_Success_Component
     {
         return $this->getData()->getPage();
     }
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['targetPage'] = $this->_getTargetPage();

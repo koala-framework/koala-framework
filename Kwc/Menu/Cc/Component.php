@@ -1,7 +1,7 @@
 <?php
 class Kwc_Menu_Cc_Component extends Kwc_Menu_Abstract_Cc_Component
 {
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $menu = array();
@@ -21,7 +21,13 @@ class Kwc_Menu_Cc_Component extends Kwc_Menu_Abstract_Cc_Component
 
     public function hasContent()
     {
-        $tvars = $this->getTemplateVars();
-        return !!count($tvars['menu']);
+        $masterMenu = $this->getData()->chained->getComponent()->getMenuData(null, array('ignoreVisible'=>true));
+        foreach ($masterMenu as $m) {
+            $component = self::getChainedByMaster($m['data'], $this->getData());
+            if ($component) {
+                return true;
+            }
+        }
+        return false;
     }
 }

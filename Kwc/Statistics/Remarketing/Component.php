@@ -24,9 +24,9 @@ class Kwc_Statistics_Remarketing_Component extends Kwc_Abstract
         return $this->getData()->getBaseProperty('statistics.remarketing.label');
     }
 
-    public function getTemplateVars()
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($renderer);
         $ret['id'] = (int)$this->_getRemarketingId();
         $ret['label'] = (string)$this->_getRemarketingLabel();
         $ret['ignoreCode'] = $this->getData()->getBaseProperty('statistics.ignore') || 

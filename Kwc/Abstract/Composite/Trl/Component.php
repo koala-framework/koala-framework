@@ -8,7 +8,7 @@ class Kwc_Abstract_Composite_Trl_Component extends Kwc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {

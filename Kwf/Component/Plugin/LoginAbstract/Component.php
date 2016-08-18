@@ -12,7 +12,7 @@ abstract class Kwf_Component_Plugin_LoginAbstract_Component extends Kwf_Componen
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $templateVars = array();
         $templateVars['loginForm'] = Kwf_Component_Data_Root::getInstance()

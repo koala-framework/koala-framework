@@ -11,7 +11,7 @@ class Kwc_Menu_DropdownMask_Component extends Kwc_Menu_Dropdown_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['config'] = array(

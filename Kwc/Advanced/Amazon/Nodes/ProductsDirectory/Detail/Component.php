@@ -7,7 +7,7 @@ class Kwc_Advanced_Amazon_Nodes_ProductsDirectory_Detail_Component extends Kwc_A
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['product'] = $this->getData()->row;

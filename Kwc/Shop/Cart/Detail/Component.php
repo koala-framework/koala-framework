@@ -19,7 +19,7 @@ class Kwc_Shop_Cart_Detail_Component extends Kwc_Abstract_Composite_Component
         }
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $addCmp = Kwc_Shop_AddToCartAbstract_OrderProductData::getAddComponentByDbId(

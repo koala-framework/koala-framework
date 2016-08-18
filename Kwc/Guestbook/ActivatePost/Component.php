@@ -11,7 +11,7 @@ class Kwc_Guestbook_ActivatePost_Component extends Kwc_Form_Success_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['guestbookComponent'] = $this->getData()->parent;

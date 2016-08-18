@@ -15,7 +15,7 @@ class Kwc_Basic_ImageEnlargeParent_Component extends Kwc_Basic_ImageParent_Compo
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['keys'] = array();

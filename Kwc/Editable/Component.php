@@ -20,7 +20,7 @@ class Kwc_Editable_Component extends Kwc_Abstract
         return Kwf_Trl::getInstance()->trlStaticExecute(Kwc_Abstract::getSetting($this->getData()->componentClass, 'componentName'));
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['content'] = $this->getData()->getChildComponent('-content');

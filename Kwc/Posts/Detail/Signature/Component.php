@@ -8,7 +8,7 @@ class Kwc_Posts_Detail_Signature_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $userDir = Kwf_Component_Data_Root::getInstance()

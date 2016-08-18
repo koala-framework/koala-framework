@@ -12,7 +12,7 @@ class Kwc_Legacy_List_Carousel_Component extends Kwc_Abstract_List_Component
         return $ret;
     }
     
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         if(count($ret['listItems']) == 2 || count($ret['listItems']) == 3) {

@@ -43,7 +43,7 @@ class Kwc_List_Switch_Component extends Kwc_Abstract_List_Component
         }
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['previewCssClass'] = $this->_getSetting('previewCssClass');

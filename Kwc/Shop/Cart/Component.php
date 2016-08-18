@@ -52,7 +52,7 @@ class Kwc_Shop_Cart_Component extends Kwc_Directories_Item_Directory_Component
             ->getProductsDataWithProduct($this->getData());
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['countProducts'] = $this->getData()->countChildComponents(array('generator'=>'detail'));

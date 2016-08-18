@@ -28,7 +28,7 @@ class Kwc_Shop_Cart_Form_Component extends Kwc_Form_Component
         parent::_initForm();
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['form'] = array(); //form-felder nicht nochmal ausgeben

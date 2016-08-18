@@ -8,7 +8,7 @@ class Kwc_Box_Search_Ajax_Component extends Kwc_Abstract_Ajax_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $parent = $this->getData()->parent->getComponent();
         $ret = parent::getTemplateVars($renderer);

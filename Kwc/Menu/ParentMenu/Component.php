@@ -91,7 +91,7 @@ class Kwc_Menu_ParentMenu_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $menu = $this->_getParentContentData();
         if (!is_instance_of($menu->componentClass, 'Kwc_Menu_Abstract_Component')) {

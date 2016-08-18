@@ -249,7 +249,7 @@ class Kwc_Form_Component extends Kwc_Abstract_Composite_Component
         return $this->getData()->getChildComponent('-success');
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = Kwc_Abstract::getTemplateVars($renderer);
 

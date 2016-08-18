@@ -13,7 +13,7 @@ class Kwc_Form_Field_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $this->getFormField()->trlStaticExecute($this->getData()->getLanguage());

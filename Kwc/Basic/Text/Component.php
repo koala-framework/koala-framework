@@ -99,7 +99,7 @@ class Kwc_Basic_Text_Component extends Kwc_Abstract
         return $this->_getRow()->getContentParts($content);
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['contentParts'] = array();

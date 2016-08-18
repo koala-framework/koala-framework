@@ -357,7 +357,7 @@ abstract class Kwc_Abstract extends Kwf_Component_Abstract
      * @param e.g. for accessing recipient in Mail_Renderer
      * @return array
      */
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = array();
         $ret['placeholder'] = $this->_getPlaceholder();

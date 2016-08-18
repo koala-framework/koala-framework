@@ -141,7 +141,7 @@ class Kwc_Directories_List_View_Component extends Kwc_Abstract_Composite_Compone
         return $this->_getItems();
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['directory'] = $this->getData()->parent->getComponent()->getItemDirectory();

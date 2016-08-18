@@ -13,7 +13,7 @@ class Kwc_User_BoxWithoutLogin_Component extends Kwc_Abstract_Composite_Componen
         $ret['linkPostfix'] = '';
         return $ret;
     }
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         if ($this->_getSetting('showRegisterLink')) {

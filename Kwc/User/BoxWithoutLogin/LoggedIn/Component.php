@@ -10,7 +10,7 @@ class Kwc_User_BoxWithoutLogin_LoggedIn_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['authedUser'] = Kwf_Registry::get('userModel')->getAuthedUser();

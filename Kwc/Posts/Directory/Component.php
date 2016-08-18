@@ -30,7 +30,7 @@ class Kwc_Posts_Directory_Component extends Kwc_Directories_Item_Directory_Compo
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['write'] = $this->getData()->getChildComponent('_write');
