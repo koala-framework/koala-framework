@@ -343,20 +343,6 @@ class Kwf_Component_Settings
                             }
                         }
                     }
-
-
-                    $retModified = array();
-                    foreach ($ret as $k=>$g) {
-                        foreach ($g['component'] as $l=>$cc) {
-                            $cc = strpos($cc, '.') ? substr($cc, 0, strpos($cc, '.')) : $cc;
-                            $vars = get_class_vars($cc);
-                            if (isset($vars['needsParentComponentClass']) && $vars['needsParentComponentClass']) {
-                                $g['component'][$l] .= '.'.$class;
-                            }
-                        }
-                        $retModified[$k] = $g;
-                    }
-                    $ret = $retModified;
                 }
             }
             return $ret;
