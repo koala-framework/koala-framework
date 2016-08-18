@@ -8,7 +8,7 @@ class Kwf_Data_Kwc_ComponentName extends Kwf_Data_Abstract
         $this->_componentClass = $componentClass;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $generators = Kwc_Abstract::getSetting($this->_componentClass, 'generators');
         $classes = $generators['paragraphs']['component']; 

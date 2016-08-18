@@ -152,7 +152,7 @@ class Kwf_Form_Field_File extends Kwf_Form_Field_SimpleAbstract
         return $postData;
     }
 
-    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
+    public function prepareSave($row, $postData)
     {
         if ($this->getSave() === false) return;
 

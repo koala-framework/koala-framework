@@ -27,7 +27,7 @@ class Kwf_Model_FieldRows extends Kwf_Model_Data_Abstract
         throw new Kwf_Exception('getRows is not possible for Kwf_Model_FieldRows');
     }
 
-    public function update(Kwf_Model_FieldRows_Row $row, $rowData)
+    public function update(Kwf_Model_Row_Interface $row, $rowData)
     {
         $iId = $row->getSubModelParentRow()->getInternalId();
         foreach ($this->_rows[$iId] as $k=>$i) {
@@ -40,7 +40,7 @@ class Kwf_Model_FieldRows extends Kwf_Model_Data_Abstract
         throw new Kwf_Exception("Can't find entry");
     }
 
-    public function insert(Kwf_Model_FieldRows_Row $row, $rowData)
+    public function insert(Kwf_Model_Row_Interface $row, $rowData)
     {
         $iId = $row->getSubModelParentRow()->getInternalId();
         if (!isset($rowData[$this->getPrimaryKey()])) {
@@ -57,7 +57,7 @@ class Kwf_Model_FieldRows extends Kwf_Model_Data_Abstract
         return $rowData[$this->getPrimaryKey()];
     }
 
-    public function delete(Kwf_Model_FieldRows_Row $row)
+    public function delete(Kwf_Model_Row_Interface $row)
     {
         foreach ($this->_rows[$row->getSubModelParentRow()->getInternalId()] as $k=>$i) {
             if ($row === $i) {
@@ -70,7 +70,7 @@ class Kwf_Model_FieldRows extends Kwf_Model_Data_Abstract
         throw new Kwf_Exception("Can't find entry");
     }
 
-    public function getRowByDataKey($key, $parentRow)
+    public function getRowByDataKeyAndParentRow($key, $parentRow)
     {
         if (!isset($this->_rows[$parentRow->getInternalId()][$key])) {
             $this->_rows[$parentRow->getInternalId()][$key] = new $this->_rowClass(array(

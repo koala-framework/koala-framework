@@ -7,7 +7,7 @@ class Kwf_Component_PluginRoot_GeneratorProperty_Data extends Kwf_Data_Abstract
         $this->_plugin = $plugin;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         if (isset($row->component_id)) {
             $id = $row->component_id.'-'.$row->id;

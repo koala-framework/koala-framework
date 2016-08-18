@@ -95,7 +95,7 @@ class Kwc_Abstract_Admin extends Kwf_Component_Abstract_Admin
         return $ret;
     }
 
-    public function getVisibleCardForms()
+    public function getVisibleCardForms($cardDbId)
     {
         $ret = array('form');
         return $ret;

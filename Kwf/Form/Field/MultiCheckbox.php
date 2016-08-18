@@ -225,7 +225,7 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
         return $this->_pool;
     }
 
-    public function load(Kwf_Model_Row_Interface $row, $postData = array())
+    public function load($row, $postData = array())
     {
         if (!$row) return array();
 
@@ -283,7 +283,7 @@ class Kwf_Form_Field_MultiCheckbox extends Kwf_Form_Field_Abstract
         return $ret;
     }
 
-    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
+    public function prepareSave($row, $postData)
     {
         //TODO remove in later branches?
         if ($this->getSave() === false || $this->getInternalSave() === false) return;

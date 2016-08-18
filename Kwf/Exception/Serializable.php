@@ -9,7 +9,7 @@ class Kwf_Exception_Serializable extends Kwf_Exception implements Serializable
 {
     private $_exception;
 
-    public function __construct(Exception $exception)
+    public function __construct($exception)
     {
         $this->_exception = $exception;
     }

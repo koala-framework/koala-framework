@@ -91,7 +91,7 @@ class Kwf_Form_Field_FilterField extends Kwf_Form_Field_Abstract
         );
     }
 
-    public function load($row, array $postData = array())
+    public function load($row, $postData = array())
     {
         $ret = parent::load($row, $postData);
         return $ret;

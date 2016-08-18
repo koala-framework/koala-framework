@@ -78,7 +78,7 @@ class Kwc_Basic_LinkTag_News_Admin extends Kwc_Basic_LinkTag_Abstract_Admin
         return $ret;
     }
 
-    public function duplicate($source, $target, $progressBar = null)
+    public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
         parent::duplicate($source, $target, $progressBar);
         $this->_duplicated[] = array(

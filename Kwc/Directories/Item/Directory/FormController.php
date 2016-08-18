@@ -67,7 +67,7 @@ class Kwc_Directories_Item_Directory_FormController extends Kwf_Controller_Actio
         return parent::_hasPermissions($row, $action);
     }
 
-    protected function _beforeSave($row)
+    protected function _beforeSave(Kwf_Model_Row_Interface $row)
     {
         if ($this->_getParam('id') == 0 && $this->_getParam('componentId')) {
             if (isset($row->component_id)) $row->component_id = $this->_getParam('componentId');

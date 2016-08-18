@@ -4,8 +4,9 @@ class Kwf_Assets_Package_ComponentFrontend extends Kwf_Assets_Package_Default
     static $_instance;
     protected $_enableLegacySupport = true;
 
-    public static function getInstance()
+    public static function getInstance($dependencyName = null)
     {
+        if ($dependencyName) throw new Kwf_Exception("Parameter must be null");
         if (!isset(self::$_instance)) {
             self::$_instance = new self();
         }

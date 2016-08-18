@@ -7,7 +7,7 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         $this->setXtype('kwc.image.dimensionfield');
     }
 
-    public function load($row)
+    public function load($row, $postData = array())
     {
         //Standardwert so wie in Kwc_Abstract_Image_Component::getImageDimensions
         $dimensions = $this->getDimensions();
@@ -48,7 +48,7 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         return array($this->getFieldName() => $value);
     }
 
-    public function prepareSave(Kwf_Model_Row_Interface $row, $postData)
+    public function prepareSave($row, $postData)
     {
         Kwf_Form_Field_Abstract::prepareSave($row, $postData);
         $value = $this->_getValueFromPostData($postData);

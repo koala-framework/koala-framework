@@ -14,6 +14,6 @@ class Kwf_Model_Rowset_ParentRow extends Kwf_Model_Rowset_Abstract
 
     protected function _getRowByDataKey($key)
     {
-        return $this->getModel()->getRowByDataKey($key, $this->_parentRow);
+        return $this->getModel()->getRowByDataKeyAndParentRow($key, $this->_parentRow);
     }
 }
