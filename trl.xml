@@ -78,7 +78,7 @@
 <rs>Zaboravljena lozinka?</rs>
 <hu>Elfelejtette jelszavát?</hu>
 <al>Harruar passwordin?</al>
-<ba>Zaboravili ste lozinku?</ba>
+<ba>Zaboravljena šifra?</ba>
 </text>
 <text>
 <en>Login</en>
@@ -117,7 +117,7 @@
 <ua>Привіт {0}!</ua>
 <rs>Halo {O}!</rs>
 <al>Përshëndetje {0}!</al>
-<ba>Pozdrav{0}!</ba>
+<ba>Zdravo {0}!</ba>
 </text>
 <text>
 <en>Your account at {0} has just been created.</en>
@@ -134,6 +134,7 @@
 <ua>Ваш аккаунт на сайті {0} щойно створено.</ua>
 <rs>Vaš nalog na {0} je upravo kreiran.</rs>
 <ba>Vaš korisnički račun kod {0} je upravo kreiran.</ba>
+<al>Llogaria juaj ne {0} u krijua. </al>
 </text>
 <text>
 <en>Please use the following link to choose yourself a password</en>
@@ -149,6 +150,7 @@
 <bg>Моля, използвайте този линк за създаване на парола и вход.</bg>
 <ua>Будь ласка, скористайтеся наступним лінком аби обрати пароль та увійти на сайт.</ua>
 <ba>Molimo Vas koristite ovaj link, kako biste kreirali lozinku i prijavili se.</ba>
+<al>Ju lutemi ndiqni linkun e mëposhtëm për të vendosur fjalëkalimin tuaj.</al>
 </text>
 <text>
 <en>This email has been generated automatically. There may be no recipient if you answer to this email.</en>
@@ -164,6 +166,7 @@
 <bg>Това е автоматично генериран мейл. Моля, не изпращайте отговор до него.</bg>
 <ua>Цей лист створено автоматично. Будь ласка, не відповідайте на нього.</ua>
 <ba>Ovaj mail je automatski generisan. Ne postoji primaoc kojem možete poslati odgovor.</ba>
+<al>Ky email është krijuar automaktikisht. Ju nuk mund ti përgjigjeni këtij emaili.</al>
 </text>
 <text>
 <en>Your account at {0} has been deleted.</en>
@@ -179,6 +182,7 @@
 <bg>Вашият акаунт в {0} беше изтрит.</bg>
 <ua>Ваш аккаунт на сайті {0} видалено.</ua>
 <ba>Vaš korisnički račun kod {0} je izbrisan.</ba>
+<al>Llogaria juaj në {0} është fshirë.</al>
 </text>
 <text>
 <en>Please use the following link to choose yourself a new password.</en>
@@ -194,6 +198,7 @@
 <bg>Моля, използвайте този линк за задаване на парола. </bg>
 <ua>Будь ласка, скористайтеся наступним лінком аби обрати новий пароль.</ua>
 <ba>Molimo Vas koristite sljedeći link, kako biste sami kreirali lozinku.</ba>
+<al>Ju lutemi ndiqni linkun e mëposhtëm për të zgjedhur një fjalëkalim të ri.</al>
 </text>
 <text>
 <en>Place of departure: zip code, Town, Street</en>
@@ -213,6 +218,7 @@
 <ua>Місце відправки: індекс, місто, вулиця</ua>
 <al>Pikënisja.  Kodi postar, vendi, rruga.</al>
 <ba>Grad odlaska: poštanski broj, grad, ulica</ba>
+<al>Vendi i nisjes: kodi postar, Qyteti, Rruga</al>
 </text>
 <text>
 <en>Entered place could not been found!</en>
@@ -230,6 +236,7 @@
 <bg>Въведеното населено място не може да бъде намерено!</bg>
 <ua>Таке місто не знайдено!</ua>
 <ba>Podaci o gradu nisu ispravno uneseni!</ba>
+<al>Faqja e kërkuar nuk mund të gjendet!</al>
 </text>
 <text>
 <en>Show Route</en>
@@ -261,7 +268,7 @@
 <si>predlogi</si>
 <bg>Предложения</bg>
 <ua>Пропозиції</ua>
-<ba>Prijedlozi</ba>
+<ba>Sugestije</ba>
 </text>
 <text>
 <en>Coordinates</en>
@@ -385,7 +392,7 @@
 <si>karta satelita</si>
 <bg>сателитна карта</bg>
 <ua>Супутникова карта</ua>
-<ba>Satelitska mapa</ba>
+<ba>Mapa web stranice</ba>
 </text>
 <text>
 <en>Overviewmap</en>
@@ -904,7 +911,7 @@
 <ua>Ім'я</ua>
 <bg>Име</bg>
 <bg>име</bg>
-<ba>Ime</ba>
+<ba>Naziv</ba>
 </text>
 <text>
 <en>Latest online</en>
@@ -6652,6 +6659,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Spletna stran</sl>
 <ru>Интернет-страница</ru>
 <ua>Інтернет сторінка</ua>
+<ba>Internet stranica</ba>
 </text>
 <text>
 <en>Type</en>
@@ -7426,6 +7434,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <es>Teléfono</es>
 <ua>Телефон</ua>
 <bg>телефон</bg>
+<ba>Telefon</ba>
 </text>
 <text>
 <en>EMail</en>
@@ -7610,6 +7619,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <fr>Exploitant / Responsable du contenu</fr>
 <es>Empresa / Responsable del contenido</es>
 <ua>Компанія / Відповідальний за контент</ua>
+<ba>Za sadržaje na ovoj Internet stranici odgovara</ba>
 </text>
 <text>
 <en>Disclaimer</en>
@@ -7694,6 +7704,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <ru>404 - Файл не найден</ru>
 <ua>404 - File not found</ua>
 <hu>404 - a fájl nem található</hu>
+<ba>404 - Stranica nije pronađena</ba>
 </text>
 <text>
 <en>Sorry, that address</en>
@@ -7836,7 +7847,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <text>
 <en>News</en>
 <id>1071</id>
-<de>News</de>
+<de>Новини</de>
 <ro>Ştiri</ro>
 <sl>Novice</sl>
 <ru>Новости</ru>
@@ -10882,6 +10893,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Pozor! S klikom boste izbrano stran nastavili kot začetno stran svoje spletne strani. To bo vplivalo na celotno spletno stran. Ali želite izvesti to dejanje?</sl>
 <ru>Внимание! Вы собираетесь сделать выбранную страницу домашней. Это повлияет на работу всего сайта. Вы действительно хотите продолжить?</ru>
 <ua>Увага! Ви збираєтесь зробити цю сторінку домашньою. Це може вплинути на роботу сайту. Ви дійсно бажаєте продовжити?</ua>
+<ba>Napomena! Ovom akcijom želite postaviti ovu Internet stranicu za Vašu početnu. Želite li nastaviti?. </ba>
 </text>
 <text>
 <en>Zoom properties</en>
@@ -12603,6 +12615,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <sl>Dragi {0}</sl>
 <ru>Дорогой {0}</ru>
 <ro>Draga {0}</ro>
+<ba>Dragi</ba>
 </text>
 <text>
 <en>Dear {0}</en>
@@ -13904,6 +13917,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <si>Za pravilno delovanje in preprostejšo uporabo te strani uporabljamo piškotke. </si>
 <ro>Aecst website foloseste cookies pentru a ne ajuat sa va oferim cea mai buna experienta cand ne vizitati website-ul.</ro>
 <hr>Ova stranica koristi kolačiće (Cookies) da nam pomogne da vam pružili bolje korisničko iskustvo.</hr>
+<ba>Koristimo ''Cookies''-e kako bismo bolje razumijeli Vaše potrebe.</ba>
 </text>
 <text>
 <en>More information about the use of cookies</en>
@@ -13960,7 +13974,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2007</id>
 <ua>Cookie встановлено для цієї сторінки. Натисніть тут для деактивації cookies. </ua>
 <al>Ruatja e 'cookies' është aktivizuar. Kliko këtu për ta çaktivizuar.</al>
-<ba>Prilikom Vašeg posjeta ovoj internetskoj stranici trenutno se pohranjuju kolačići. Kliknite ovdje kako biste deaktivirali kolačiće.</ba>
+<ba>Naša stranica koristi ''cookies''-a prilikom Vaše posjete. Kliknite ovdje da biste isključili ''cookies''-s.</ba>
 </text>
 <text>
 <en>No cookies are set when visiting this webpage. Click to activate cookies.</en>
@@ -13978,7 +13992,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <id>2008</id>
 <ua>Cookie не встановлено для цієї сторінки. Натисніть тут для активації cookies. </ua>
 <al>Ruatja e 'cookies' është çaktivizuar. Kliko këtu për ta riaktivizuar.</al>
-<ba>Prilikom Vašeg posjeta ovoj internetskoj stranici trenutno se ne pohranjuju kolačići. Kliknite ovdje ako želite prihvatiti korištenje kolačića.</ba>
+<ba>''Cookies'' su trenutno isključeni. Kliknite ovdje ako želite prihvatiti korištenje ove opcije.</ba>
 </text>
 <text>
 <en>Website produced by</en>
@@ -13990,6 +14004,7 @@ Odprite aktivacijsko povezavo v brskalniku. Potem vnesite geslo, ki ga boste v p
 <si>Spletno stran je izdelal</si>
 <ro>Website dezvoltat de </ro>
 <hr>Stranica izrađena</hr>
+<ba>CMS razvio</ba>
 </text>
 <text>
 <en>{0} sent, {1} waiting to send.</en>
