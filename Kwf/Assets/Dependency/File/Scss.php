@@ -82,9 +82,9 @@ class Kwf_Assets_Dependency_File_Scss extends Kwf_Assets_Dependency_File_Css
 
         $bin = Kwf_Config::getValue('server.nodeSassBinary');
         if (!$bin) {
-            $bin = getcwd()."/".VENDOR_PATH."/bin/node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/node-sass/bin/node-sass';
+            $bin = getcwd()."/".VENDOR_PATH."/bin/node ".getcwd().'/node_modules/node-sass/bin/node-sass';
         } else {
-            $p = json_decode(file_get_contents(KWF_PATH.'/node_modules/node-sass/package.json'), true);
+            $p = json_decode(file_get_contents(getcwd().'/node_modules/node-sass/package.json'), true);
             $bin = str_replace('%version%', $p['version'], $bin);
             unset($p);
         }

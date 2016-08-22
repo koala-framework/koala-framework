@@ -3,7 +3,7 @@ class Kwf_Assets_Dependency_Filter_UglifyJs
 {
     public static function build($buildFile, $sourceFileUrl)
     {
-        $uglifyjs = getcwd()."/".VENDOR_PATH."/bin/node ".dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/node_modules/uglify-js/bin/uglifyjs';
+        $uglifyjs = getcwd()."/".VENDOR_PATH."/bin/node ".getcwd().'/node_modules/uglify-js/bin/uglifyjs';
         $cmd = "$uglifyjs ";
         $cmd .= "--source-map ".escapeshellarg("$buildFile.min.js.map.json").' ';
         $cmd .= "--prefix 2 ";

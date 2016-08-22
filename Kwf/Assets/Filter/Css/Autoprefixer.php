@@ -23,7 +23,7 @@ class Kwf_Assets_Filter_Css_Autoprefixer extends Kwf_Assets_Filter_Css_AbstractP
     public function getMasterFiles()
     {
         return array(
-            getcwd().'/'.KWF_PATH.'/node_modules/autoprefixer/package.json'
+            getcwd().'/node_modules/autoprefixer/package.json'
         );
     }
 }
