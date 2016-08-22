@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_Table_Trl_Component extends Kwc_Chained_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['childModel'] = 'Kwc_Basic_Table_Trl_DataModel';
@@ -9,7 +9,7 @@ class Kwc_Basic_Table_Trl_Component extends Kwc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $model = $this->getChildModel();

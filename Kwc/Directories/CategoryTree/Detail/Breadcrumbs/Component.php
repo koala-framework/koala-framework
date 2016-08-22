@@ -2,16 +2,16 @@
 class Kwc_Directories_CategoryTree_Detail_Breadcrumbs_Component
     extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['currentCategories'] = trlKwfStatic('Current category:');
         $ret['placeholder']['categoryTreeRootText'] = null;
         $ret['rootElementClass'] = 'kwfUp-webStandard';
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
 

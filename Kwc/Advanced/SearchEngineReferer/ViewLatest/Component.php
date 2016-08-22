@@ -5,9 +5,9 @@ class Kwc_Advanced_SearchEngineReferer_ViewLatest_Component
     private $_referersCache = null;
     private $_parentModel;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['limit'] = 5;
         $ret['placeholder']['header'] = trlKwfStatic('Latest referer');
         return $ret;
@@ -18,7 +18,7 @@ class Kwc_Advanced_SearchEngineReferer_ViewLatest_Component
         return 60*60;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['referers'] = $this->_getReferers();

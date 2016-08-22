@@ -1,9 +1,9 @@
 <?php
 class Kwc_Tags_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Tags');
         $ret['flags']['hasFulltext'] = true;
         $ret['generators']['child']['component']['suggestions'] = 'Kwc_Tags_Suggestions_Component';
@@ -13,7 +13,7 @@ class Kwc_Tags_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $model = Kwf_Model_Abstract::getInstance('Kwc_Tags_ComponentToTag');

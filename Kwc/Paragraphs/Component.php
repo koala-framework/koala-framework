@@ -5,9 +5,9 @@
  */
 class Kwc_Paragraphs_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'componentName' => trlKwfStatic('Paragraphs'),
             'componentIcon' => 'page'
         ));
@@ -51,7 +51,7 @@ class Kwc_Paragraphs_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['paragraphs'] = array();

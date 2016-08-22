@@ -79,7 +79,7 @@ class Kwf_Util_Model_Feed_Entries extends Kwf_Model_Abstract
             'parentRow' => $parentRow
         ));
     }
-    public function getRowByDataKey($key, $parentRow)
+    public function getRowByDataKeyAndParentRow($key, $parentRow)
     {
         $pId = $parentRow->getInternalId();
         if (!isset($this->_rows[$pId][$key])) {

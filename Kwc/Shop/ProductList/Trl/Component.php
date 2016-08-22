@@ -1,7 +1,7 @@
 <?php
 class Kwc_Shop_ProductList_Trl_Component extends Kwc_Directories_List_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_None';

@@ -112,7 +112,7 @@ class Kwf_Component_Settings
         return self::$_cacheSettings[$c][$param];
     }
 
-    public function _getSettingsIncludingPreComputed($c)
+    public static function _getSettingsIncludingPreComputed($c)
     {
         $settings = self::_loadCacheSettings($c);
 

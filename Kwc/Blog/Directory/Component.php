@@ -1,9 +1,9 @@
 <?php
 class Kwc_Blog_Directory_Component extends Kwc_Directories_ItemPage_Directory_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Blog');
         $ret['componentIcon'] = 'newspaper';
         $ret['componentCategory'] = 'admin';

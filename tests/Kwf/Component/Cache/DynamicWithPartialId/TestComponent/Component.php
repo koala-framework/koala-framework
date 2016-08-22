@@ -4,9 +4,9 @@ class Kwf_Component_Cache_DynamicWithPartialId_TestComponent_Component extends K
 {
     public static $ids = array(1, 2, 3, 4, 5);
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         return $ret;
     }
 

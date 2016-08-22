@@ -3,9 +3,9 @@
 // /kwf/kwctest/Kwc_Flash_Root_Component/community
 class Kwc_Flash_Root_Component extends Kwf_Component_NoCategoriesRoot
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['flash'] = array(
             'component' => 'Kwc_Flash_Flash_Component',
             'class' => 'Kwf_Component_Generator_Page_Static',

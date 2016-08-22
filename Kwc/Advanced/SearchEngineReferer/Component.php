@@ -1,9 +1,9 @@
 <?php
 class Kwc_Advanced_SearchEngineReferer_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['allowedHosts'] = array(
             'google', 'yahoo', 'msn', 'live', 'aol', 'altavista'
         );

@@ -1,9 +1,9 @@
 <?php
 class Kwc_News_List_View_Component extends Kwc_Directories_List_View_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['readMore'] = trlKwfStatic('Read more').' &raquo;';
         $ret['showPreviewImage'] = true;
         return $ret;

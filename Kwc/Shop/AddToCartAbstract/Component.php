@@ -1,9 +1,9 @@
 <?php
 abstract class Kwc_Shop_AddToCartAbstract_Component extends Kwc_Form_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['submitButton'] = trlKwfStatic('add to cart');
         $ret['generators']['child']['component']['success'] = 'Kwc_Shop_AddToCartAbstract_Success_Component';
         $ret['orderProductData'] = 'Kwc_Shop_AddToCartAbstract_OrderProductData';
@@ -24,7 +24,7 @@ abstract class Kwc_Shop_AddToCartAbstract_Component extends Kwc_Form_Component
         $this->_form->setModel($m);
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         if ($this->_form->getId()) {

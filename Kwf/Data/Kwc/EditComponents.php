@@ -20,7 +20,7 @@ class Kwf_Data_Kwc_EditComponents extends Kwf_Data_Abstract
         return $classes[$row->component];
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $gen = Kwf_Component_Generator_Abstract::getInstance($this->_componentClass, $this->_generatorKey);
 

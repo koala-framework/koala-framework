@@ -54,7 +54,7 @@ class Kwf_View_Twig_Environment extends Twig_Environment
         return $date->format($format, $language);
     }
 
-    public function dateTime($context, $date, $format = null)
+    public static function dateTime($context, $date, $format = null)
     {
         if (isset($context['data']) && $context['data'] instanceof Kwf_Component_Data) {
             if (!$format) $format = $context['data']->trlKwf('Y-m-d H:i');
@@ -95,19 +95,19 @@ class Kwf_View_Twig_Environment extends Twig_Environment
         return new Twig_Markup(str_replace('{0}', '<span class="kwfUp-amount">'.$number.'</span>', $format), 'utf-8');
     }
 
-    public function mailEncodeText($text)
+    public static function mailEncodeText($text)
     {
         $helper = new Kwf_View_Helper_MailEncodeText();
         return $helper->mailEncodeText($text);
     }
 
-    public function mailLink($mailAddress, $linkText = null, $cssClass = null)
+    public static function mailLink($mailAddress, $linkText = null, $cssClass = null)
     {
         $helper = new Kwf_View_Helper_MailLink();
         return new Twig_Markup($helper->mailLink($mailAddress, $linkText, $cssClass), 'utf-8');
     }
 
-    public function hiddenOptions($options, $class = 'options')
+    public static function hiddenOptions($options, $class = 'options')
     {
         $helper = new Kwf_View_Helper_HiddenOptions();
         return new Twig_Markup($helper->hiddenOptions($options, $class), 'utf-8');

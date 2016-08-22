@@ -1,9 +1,9 @@
 <?php
 class Kwc_Shop_Cart_Checkout_Payment_PayPal_Component extends Kwc_Shop_Cart_Checkout_Payment_Abstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('PayPal');
         $ret['generators']['child']['component']['confirmLink'] = 'Kwc_Shop_Cart_Checkout_Payment_PayPal_ConfirmLink_Component';
         $ret['generators']['confirm']['component'] = 'Kwc_Shop_Cart_Checkout_Payment_PayPal_Confirm_Component';

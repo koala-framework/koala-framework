@@ -329,7 +329,8 @@ class Kwf_Component_Data_Root extends Kwf_Component_Data
                     $ret = null;
                     $generators = $this->getPageGenerators();
                     foreach ($generators as $generator) {
-                        $ret = array_pop($generator->getChildData(null, $s));
+                        $ret = $generator->getChildData(null, $s);
+                        $ret = array_pop($ret);
                         if ($ret) break;
                     }
                 } else {

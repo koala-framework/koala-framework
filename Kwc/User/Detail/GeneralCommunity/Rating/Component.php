@@ -1,9 +1,9 @@
 <?php
 class Kwc_User_Detail_GeneralCommunity_Rating_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = 'Rating';
         $ret['pointsPerPost'] = 1;
         $ret['pointsPerThread'] = 5;
@@ -18,7 +18,7 @@ class Kwc_User_Detail_GeneralCommunity_Rating_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['rating'] = $this->getRating();

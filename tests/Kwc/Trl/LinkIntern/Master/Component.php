@@ -1,9 +1,9 @@
 <?php
 class Kwc_Trl_LinkIntern_Master_Component extends Kwc_Root_TrlRoot_Master_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
 
         $ret['generators']['test1'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',

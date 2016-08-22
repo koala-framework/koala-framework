@@ -9,7 +9,7 @@ class Kwc_Shop_Products_Detail_Trl_Component extends Kwc_Directories_Item_Detail
         $item->currentPrice = $item->chained->row->current_price;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['currentPrice'] = $this->getData()->chained->row->current_price;

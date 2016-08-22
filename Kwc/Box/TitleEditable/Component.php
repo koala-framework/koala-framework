@@ -1,9 +1,9 @@
 <?php
 class Kwc_Box_TitleEditable_Component extends Kwc_Box_Title_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Title');
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         return $ret;

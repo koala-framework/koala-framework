@@ -75,7 +75,7 @@ abstract class Kwf_Assets_Dependency_Abstract
         $this->_dependencies[$type] = array_merge($this->_dependencies[$type], $deps);
     }
 
-    public function addDependency($type, $dep, $index = null)
+    public function addDependency($type, Kwf_Assets_Dependency_Abstract $dep, $index = null)
     {
         if (!$dep) throw new Kwf_Exception("Not a valid dependency");
         if (!isset($this->_dependencies[$type])) $this->_dependencies[$type] = array();

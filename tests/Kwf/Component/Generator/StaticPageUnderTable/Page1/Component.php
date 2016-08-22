@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Generator_StaticPageUnderTable_Page1_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['table'] = array(
             'class' => 'Kwf_Component_Generator_Table',
             'model' => new Kwf_Model_FnF(array(

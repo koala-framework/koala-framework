@@ -3,9 +3,9 @@ class Kwc_Form_Field_Abstract_Component extends Kwc_Abstract
 {
     private $_formField;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['ownModel'] = 'Kwf_Component_FieldModel';
         $ret['flags']['formField'] = true;
         $ret['viewCache'] = false;
@@ -13,7 +13,7 @@ class Kwc_Form_Field_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $this->getFormField()->trlStaticExecute($this->getData()->getLanguage());

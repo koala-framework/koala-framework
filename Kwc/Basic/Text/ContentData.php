@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_Text_ContentData extends Kwf_Data_Table
 {
-    public function load($row)
+    public function load($row, array $info = array())
     {
-        $content = parent::load($row);
+        $content = parent::load($row, $info);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentByDbId($row->component_id, array('ignoreVisible'=>true, 'limit'=>1));
         if ($c) {

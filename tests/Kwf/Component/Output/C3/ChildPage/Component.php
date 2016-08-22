@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Output_C3_ChildPage_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['childpage'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwf_Component_Output_C3_ChildPage2_Component'

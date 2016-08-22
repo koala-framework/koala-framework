@@ -1,9 +1,9 @@
 <?php
 class Kwc_List_Gallery_Image_Component extends Kwc_Basic_ImageEnlarge_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Image');
         $ret['imageCaption'] = true;
 

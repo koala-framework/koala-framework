@@ -1,9 +1,9 @@
 <?php
 abstract class Kwc_Basic_LinkTag_Abstract_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentIcon'] = 'page_link';
         $ret['extConfig'] = 'Kwf_Component_Abstract_ExtConfig_Form';
         $ret['throwHasContentChangedOnRowColumnsUpdate'] = 'url';
@@ -11,7 +11,7 @@ abstract class Kwc_Basic_LinkTag_Abstract_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = array(
             'data' => $this->getData(),

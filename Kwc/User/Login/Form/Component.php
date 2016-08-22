@@ -1,9 +1,9 @@
 <?php
 class Kwc_User_Login_Form_Component extends Kwc_Form_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['placeholder']['submitButton'] = trlKwfStatic('Login');
         $ret['generators']['child']['component']['success'] = 'Kwc_User_Login_Form_Success_Component';
         $ret['plugins'][] = 'Kwc_User_Login_Form_UseViewCachePlugin';
@@ -28,7 +28,7 @@ class Kwc_User_Login_Form_Component extends Kwc_Form_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['register'] = $this->_getRegisterComponent();

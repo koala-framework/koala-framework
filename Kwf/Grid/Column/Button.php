@@ -14,7 +14,7 @@ class Kwf_Grid_Column_Button extends Kwf_Grid_Column
         $this->setData(new Kwf_Data_Empty());
     }
 
-    public function load($row, $role)
+    public function load($row, $role, $info)
     {
         return self::BUTTON_VISIBLE;
     }

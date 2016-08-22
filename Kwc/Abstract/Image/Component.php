@@ -6,9 +6,9 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
     const CONTENT_WIDTH = 'contentWidth';
     private $_imageDataOrEmptyImageData;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['ownModel'] = 'Kwc_Abstract_Image_Model';
 
         $ret['dimensions'] = array(
@@ -99,7 +99,7 @@ class Kwc_Abstract_Image_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['image'] = $this->getData();

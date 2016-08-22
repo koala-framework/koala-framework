@@ -1,9 +1,9 @@
 <?php
 class Kwc_List_Downloads_Component extends Kwc_Abstract_List_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $settings = parent::getSettings();
+        $settings = parent::getSettings($param);
         $settings['generators']['child']['component'] = 'Kwc_Basic_Download_Component';
         $settings['componentIcon'] = 'disk';
         $settings['componentName'] = trlKwfStatic('Downloads');

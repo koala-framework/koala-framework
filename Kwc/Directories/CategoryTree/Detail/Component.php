@@ -3,7 +3,7 @@ class Kwc_Directories_CategoryTree_Detail_Component extends Kwc_Directories_Cate
 {
     static public function getSettings()
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['categoryList'] =
             'Kwc_Directories_CategoryTree_Detail_CategoryList_Component';
         $ret['generators']['child']['component']['breadcrumbs'] =

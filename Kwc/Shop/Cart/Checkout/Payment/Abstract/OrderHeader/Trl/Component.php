@@ -1,7 +1,7 @@
 <?php
 class Kwc_Shop_Cart_Checkout_Payment_Abstract_OrderHeader_Trl_Component extends Kwc_Chained_Trl_Component
 {
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $c = $this->getData()->parent->chained->componentClass;

@@ -1,7 +1,7 @@
 <?php
 class Kwc_Articles_Detail_Trl_Component extends Kwc_Directories_Item_Detail_Trl_Component
 {
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['title'] = $this->getData()->row->title;

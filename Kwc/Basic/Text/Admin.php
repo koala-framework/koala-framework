@@ -1,7 +1,7 @@
 <?php
 class Kwc_Basic_Text_Admin extends Kwc_Admin
 {
-    public function duplicate($source, $target)
+    public function duplicate($source, $target, Zend_ProgressBar $progressBar = null)
     {
         if (!$source->getComponent()->getModel()->getRow($source->dbId)) {
             //falls es nur eine nicht-vorhandene standard-row gibt müssen wir gar nichts tun

@@ -3,9 +3,9 @@ abstract class Kwc_Directories_List_Component extends Kwc_Abstract_Composite_Com
 {
     private $_itemDirectory = false;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['child']['component']['view'] = 'Kwc_Directories_List_ViewPage_Component';
         $ret['useDirectorySelect'] = true;
         $ret['generatorJoins'] = false;
@@ -53,7 +53,7 @@ abstract class Kwc_Directories_List_Component extends Kwc_Abstract_Composite_Com
     }
 
     abstract protected function _getItemDirectory();
-    abstract public static function getItemDirectoryClasses($componentClass);
+    //abstract public static function getItemDirectoryClasses($componentClass);
 
     protected static function _getParentItemDirectoryClasses($componentClass, $steps = null)
     {

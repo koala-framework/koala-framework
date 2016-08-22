@@ -164,7 +164,7 @@ class Kwf_Debug
     public static function handleError($errno, $errstr, $errfile, $errline)
     {
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
-        if (defined('E_STRICT') && $errno == E_STRICT) return;
+        if (!Kwf_Exception::isDebug() && defined('E_STRICT') && $errno == E_STRICT) return; //in non-debug mode ignore strict errors
         if (defined('E_DEPRECATED') && $errno == E_DEPRECATED) {
             if (substr($errstr, 0, 17) == 'Non-static method') {
                 //ignore Non-static method called statically E_DEPRECATED errors for compatibility of older code with newer php versions

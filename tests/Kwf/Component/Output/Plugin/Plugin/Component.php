@@ -2,9 +2,9 @@
 class Kwf_Component_Output_Plugin_Plugin_Component extends Kwf_Component_Plugin_Abstract
     implements Kwf_Component_Plugin_Interface_ViewAfterChildRender
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['pluginChild'] = array(
             'class' => 'Kwf_Component_Generator_Static',
             'component' => 'Kwf_Component_Output_Plugin_Plugin_Child_Component'

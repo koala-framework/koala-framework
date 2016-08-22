@@ -10,9 +10,9 @@ class Kwc_Newsletter_Detail_Component extends Kwc_Directories_Item_Detail_Compon
      */
     private $_rtrCheck = array();
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['mail'] = array(
             'class' => 'Kwf_Component_Generator_Page_Static',
             'component' => 'Kwc_Newsletter_Detail_Mail_Component'

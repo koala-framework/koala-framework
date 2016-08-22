@@ -24,7 +24,7 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Test extends Kwc_TestA
     {
         $user = 'test';
         $c = Kwf_Component_Data_Root::getInstance();
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertTrue($cfg['actions']['add']); //hinzufügen hier möglich weil  PageGenerator darunter
         $this->assertTrue($cfg['allowDrop']); //drop hier möglich weil PageGenerator darunter
         $this->assertFalse($cfg['actions']['delete']);
@@ -32,7 +32,7 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Test extends Kwc_TestA
         $this->assertFalse($cfg['allowDrag']);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('1');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertTrue($cfg['actions']['delete']);
         $this->assertTrue($cfg['actions']['makeHome']);
         $this->assertTrue($cfg['actions']['add']);
@@ -40,7 +40,7 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Test extends Kwc_TestA
         $this->assertTrue($cfg['allowDrag']);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('3');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertTrue($cfg['actions']['delete']);
         $this->assertTrue($cfg['actions']['makeHome']);
         $this->assertTrue($cfg['actions']['add']);
@@ -52,7 +52,7 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Test extends Kwc_TestA
     {
         $user = 'special';
         $c = Kwf_Component_Data_Root::getInstance();
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertNotNull($cfg);
         $this->assertFalse($cfg['actions']['add']);
         $this->assertFalse($cfg['allowDrop']);
@@ -62,15 +62,15 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Test extends Kwc_TestA
         $this->assertTrue($cfg['disabled']);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('1');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertNull($cfg);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('3');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertNull($cfg);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('4');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertNotNull($cfg);
         $this->assertTrue($cfg['actions']['add']);
         $this->assertTrue($cfg['allowDrop']);
@@ -84,7 +84,7 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Test extends Kwc_TestA
     {
         $user = 'special';
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('5');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertNotNull($cfg);
         $this->assertFalse($cfg['actions']['add']);
         $this->assertFalse($cfg['allowDrop']);
@@ -98,24 +98,24 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Test extends Kwc_TestA
     {
         $user = 'test';
         $c = Kwf_Component_Data_Root::getInstance();
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(0, count($cfg['editComponents']));
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('1');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(0, count($cfg['editComponents']));
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('3');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(0, count($cfg['editComponents']));
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('4');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(1, count($cfg['editComponents']));
 
         //SpecialContainer
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('5');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(1, count($cfg['editComponents']));
     }
 
@@ -123,19 +123,19 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Test extends Kwc_TestA
     {
         $user = 'special';
         $c = Kwf_Component_Data_Root::getInstance();
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(0, count($cfg['editComponents']));
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('1');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(0, count($cfg['editComponents']));
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('3');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(0, count($cfg['editComponents']));
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('4');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(1, count($cfg['editComponents']));
     }
 
@@ -143,7 +143,7 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Test extends Kwc_TestA
     {
         $user = 'special';
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('5');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertEquals(1, count($cfg['editComponents']));
     }
 
@@ -153,11 +153,11 @@ class Kwf_Component_PagesController_PagesGeneratorActions_Test extends Kwc_TestA
     {
         $user = 'special';
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('6');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertNull($cfg);
 
         $c = Kwf_Component_Data_Root::getInstance()->getComponentById('7');
-        $cfg = Kwf_Controller_Action_Component_PagesController::getNodeConfig($c, $user, $this->_acl);
+        $cfg = Kwf_Controller_Action_Component_PagesController::getComponentNodeConfig($c, $user, $this->_acl);
         $this->assertNull($cfg);
     }
 }

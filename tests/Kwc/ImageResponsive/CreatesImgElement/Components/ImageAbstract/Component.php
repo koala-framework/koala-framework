@@ -1,9 +1,9 @@
 <?php
 class Kwc_ImageResponsive_CreatesImgElement_Components_ImageAbstract_Component extends Kwc_Abstract_Image_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['ownModel'] = 'Kwc_ImageResponsive_CreatesImgElement_Components_Image_TestModel';
         $ret['dimensions'] = array(
             'default'=>array(

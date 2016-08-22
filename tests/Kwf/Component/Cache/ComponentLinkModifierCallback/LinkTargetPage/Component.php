@@ -3,9 +3,9 @@ class Kwf_Component_Cache_ComponentLinkModifierCallback_LinkTargetPage_Component
 {
     public static $linkModifierContent = 'foo';
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['flags']['hasComponentLinkModifiers'] = true;
         return $ret;
     }

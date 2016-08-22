@@ -1,9 +1,9 @@
 <?php
 class Kwc_Basic_Link_Component extends Kwc_Abstract_Composite_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'ownModel' => 'Kwc_Basic_Link_Model',
             'componentName' => trlKwfStatic('Link'),
             'componentIcon' => 'page_white_link',
@@ -19,7 +19,7 @@ class Kwc_Basic_Link_Component extends Kwc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['text'] = $this->_getRow()->text;

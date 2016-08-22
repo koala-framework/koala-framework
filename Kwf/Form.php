@@ -46,7 +46,7 @@ class Kwf_Form extends Kwf_Form_NonTableForm
         return $this->_hideForValue;
     }
 
-    public function getMetaData()
+    public function getMetaData($model = null)
     {
         $ret = parent::getMetaData($this->getModel());
         /*
@@ -63,7 +63,7 @@ class Kwf_Form extends Kwf_Form_NonTableForm
         return $ret;
     }
 
-    public function processInput($parentRow, array $postData = array())
+    public function processInput($parentRow, $postData = array())
     {
         $ret = parent::processInput($parentRow, $postData);
         foreach ($this->_hideForValue as $v) {
@@ -154,7 +154,7 @@ class Kwf_Form extends Kwf_Form_NonTableForm
     }
 
 
-    public function delete($parentRow)
+    public function delete(Kwf_Model_Row_Interface $parentRow)
     {
         $row = $this->_getRowByParentRow($parentRow);
         if (!$row) {
@@ -181,7 +181,7 @@ class Kwf_Form extends Kwf_Form_NonTableForm
     {
         return $this->_model;
     }
-    public function setModel(Kwf_Model_Interface $model)
+    public function setModel($model)
     {
         $this->_model = $model;
         return $this;

@@ -1,7 +1,7 @@
 <?php
 class Kwc_Menu_Expanded_EditableItems_Trl_Component extends Kwc_Chained_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['extConfig'] = 'Kwc_Menu_Expanded_EditableItems_ExtConfig';

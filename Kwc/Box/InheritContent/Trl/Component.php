@@ -1,7 +1,7 @@
 <?php
 class Kwc_Box_InheritContent_Trl_Component extends Kwc_Chained_Trl_Component
 {
-    public static function getSettings($masterComponentClass)
+    public static function getSettings($masterComponentClass = null)
     {
         $ret = parent::getSettings($masterComponentClass);
         $ret['viewCache'] = false;
@@ -15,7 +15,7 @@ class Kwc_Box_InheritContent_Trl_Component extends Kwc_Chained_Trl_Component
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = Kwc_Abstract::getTemplateVars($renderer);
         $ret['template'] = self::getTemplateFile($this->getData()->chained->componentClass);

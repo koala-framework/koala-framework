@@ -11,7 +11,7 @@ class Kwf_Data_Kwc_Image extends Kwf_Data_Abstract implements Kwf_Data_Kwc_ListI
         $this->_size = $size;
     }
 
-    public function load($row)
+    public function load($row, array $info = array())
     {
         $model = Kwc_Abstract::createOwnModel($this->_class);
         $componentId = $row->component_id . '-' . $row->id;

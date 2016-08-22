@@ -3,10 +3,10 @@
 class Kwc_Advanced_AudioPlayer_Component extends Kwc_Abstract_Composite_Component
     implements Kwf_Media_Output_IsValidInterface
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = parent::getSettings($param);
+        $ret = array_merge(parent::getSettings($param), array(
             'ownModel'     => 'Kwc_Advanced_AudioPlayer_Model',
             'componentName' => trlKwfStatic('Audio'),
             'componentIcon' => 'sound',
@@ -38,7 +38,7 @@ class Kwc_Advanced_AudioPlayer_Component extends Kwc_Abstract_Composite_Componen
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $ret['sources'] = null;

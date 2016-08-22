@@ -3,9 +3,9 @@ class Kwc_Articles_ReadRequired_Component extends Kwc_Abstract
 {
     private $_requiredArticles;
 
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['viewCache'] = false;
         $ret['flags']['processInput'] = true;
         return $ret;
@@ -43,7 +43,7 @@ class Kwc_Articles_ReadRequired_Component extends Kwc_Abstract
         return $this->_requiredArticles;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $articles = $this->_getRequiredArticles();

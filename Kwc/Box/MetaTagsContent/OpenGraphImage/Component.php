@@ -1,9 +1,9 @@
 <?php
 class Kwc_Box_MetaTagsContent_OpenGraphImage_Component extends Kwc_Abstract_Image_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['componentName'] = trlKwfStatic('Open Graph').' '.trlKwfStatic('Image');
         $ret['imageLabel'] = trlKwfStatic('Open Graph').' '.trlKwfStatic('Image');
         $ret['dimensions'] = array(
@@ -21,7 +21,7 @@ class Kwc_Box_MetaTagsContent_OpenGraphImage_Component extends Kwc_Abstract_Imag
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $imageUrl = $this->getAbsoluteImageUrl();

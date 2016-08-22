@@ -1,9 +1,9 @@
 <?php
 class Kwf_Component_Plugin_Login_Component extends Kwf_Component_Plugin_LoginAbstract_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['loginForm']['component'] = 'Kwc_User_Login_Component';
         $ret['validUserRoles'] = null;
         return $ret;

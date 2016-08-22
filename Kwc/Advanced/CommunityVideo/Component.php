@@ -4,9 +4,9 @@
  */
 class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings($param), array(
             'componentName' => trlKwfStatic('Community Video'),
             'componentCategory' => 'media',
             'ownModel'     => 'Kwc_Advanced_CommunityVideo_Model',
@@ -16,7 +16,7 @@ class Kwc_Advanced_CommunityVideo_Component extends Kwc_Abstract
         return $ret;
     }
 
-    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer = null)
+    public function getTemplateVars(Kwf_Component_Renderer_Abstract $renderer)
     {
         $ret = parent::getTemplateVars($renderer);
         $row = $ret['row'];

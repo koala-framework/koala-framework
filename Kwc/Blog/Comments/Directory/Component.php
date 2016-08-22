@@ -1,9 +1,9 @@
 <?php
 class Kwc_Blog_Comments_Directory_Component extends Kwc_Posts_Directory_Component
 {
-    public static function getSettings()
+    public static function getSettings($param = null)
     {
-        $ret = parent::getSettings();
+        $ret = parent::getSettings($param);
         $ret['generators']['detail']['component'] = 'Kwc_Blog_Comments_Detail_Component';
 
         $ret['generators']['child']['component']['newCommentMail'] = 'Kwc_Blog_Comments_NewCommentMail_Component';
