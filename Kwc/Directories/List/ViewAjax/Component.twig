@@ -20,7 +20,9 @@
         </div>
         {% if paging is defined %}
             {% block paging %}
-                {{ renderer.component(paging) }}
+                <div class="{{ 'paging'|bemClass }}">
+                    {{ renderer.component(paging) }}
+                </div>
             {% endblock %}
         {% endif %}
     {% endblock %}

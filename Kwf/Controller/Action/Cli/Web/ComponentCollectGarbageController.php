@@ -28,6 +28,11 @@ class Kwf_Controller_Action_Cli_Web_ComponentCollectGarbageController extends Kw
             $s->whereEquals('component_id', $row['component_id']);
             $model->deleteRows($s);
 
+            $s = new Kwf_Model_Select();
+            $s->where(new Kwf_Model_Select_Expr_Or(array(
+                new Kwf_Model_Select_Expr_Equal('component_id', $row['component_id']),
+                new Kwf_Model_Select_Expr_Like('target_id', $row['component_id'].':%'),
+            )));
             $includesModel->deleteRows($s);
         }
 

@@ -1,7 +1,7 @@
 <?php
 class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Events_Table
 {
-    private $_deferredDeleteCacheIds = array();
+    private $_deferredDeleteChildPageIdsCache = array();
     public function getListeners()
     {
         $ret = parent::getListeners();
@@ -76,12 +76,12 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
         if ($event->isDirty('parent_id')) {
             $oldParentId = $event->row->getCleanValue('parent_id');
             $newParentId = $event->row->parent_id;
-            Kwf_Cache_Simple::delete('pcIds-'.$oldParentId);
-            Kwf_Cache_Simple::delete('pcIds-'.$newParentId);
+            $this->_deleteChildPageIdsCache($oldParentId);
+            $this->_deleteChildPageIdsCache($newParentId);
         }
         if ($event->isDirty('pos')) {
             //cache is ordered by pos
-            Kwf_Cache_Simple::delete('pcIds-'.$event->row->parent_id);
+            $this->_deleteChildPageIdsCache($event->row->parent_id);
         }
     }
 
@@ -111,11 +111,22 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
         Kwf_Cache_Simple::delete('pd-'.$event->row->id);
         if ($event instanceof Kwf_Events_Event_Row_Deleted) {
             $this->_deletePageDataCacheRecursive($event->row->id);
-            $this->_deferredDeleteCacheIds[] = 'pcIds-'.$event->row->parent_id; //deferred delete, see comment in onRowUpdatesFinished
+            $this->_deferredDeleteChildPageIdsCache[] = $event->row->parent_id; //deferred delete, see comment in onRowUpdatesFinished
         } else if ($event instanceof Kwf_Events_Event_Row_Inserted) {
-            Kwf_Cache_Simple::delete('pcIds-'.$event->row->parent_id);
+            $this->_deleteChildPageIdsCache($event->row->parent_id);
         }
         $this->_getGenerator()->pageDataChanged();
+    }
+
+    private function _deleteChildPageIdsCache($parentId)
+    {
+        Kwf_Cache_Simple::delete('pcIds-'.$parentId);
+        if (!is_numeric($parentId)) {
+            //when parentId is non-numeric LIKE $parentId% is used in query so we need to delete more:
+            // root-main (that's whats in parent_id column) and root (that's used eg. when resolving urls)
+            $pid = substr($parentId, 0, max(strrpos($parentId, '-'), strrpos($parentId, '_')));
+            Kwf_Cache_Simple::delete('pcIds-'.$pid);
+        }
     }
 
     protected function _getComponentsFromRow($row, $select)
@@ -129,7 +140,9 @@ class Kwc_Root_Category_GeneratorEvents extends Kwf_Component_Generator_Page_Eve
     //else the Generator would cache again with the *old* data as it's called from menu events
     public function onRowUpdatesFinished(Kwf_Events_Event_Row_UpdatesFinished $event)
     {
-        Kwf_Cache_Simple::delete($this->_deferredDeleteCacheIds);
-        $this->_deferredDeleteCacheIds = array();
+        foreach ($this->_deferredDeleteChildPageIdsCache as $i) {
+            $this->_deleteChildPageIdsCache($i);
+        }
+        $this->_deferredDeleteChildPageIdsCache = array();
     }
 }

@@ -7,7 +7,7 @@
             <?php if ($list['title']) { ?>
             <h2>
                 <?= $list['title']; ?>
-                <?php if ($list['showAllHref']) { ?>- <a href="<?= $list['showAllHref'] ?>"><?= $this->data->trlKwf('Show All') ?></a><?php } ?>
+                <?php if ($list['showAllHref']) { ?> <a href="<?= $list['showAllHref'] ?>"><?= $this->data->trlKwf('Show All') ?></a><?php } ?>
             </h2>
             <?php } ?>
             <div class="kwfUp-clear"></div>

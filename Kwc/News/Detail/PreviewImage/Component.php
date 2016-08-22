@@ -12,6 +12,7 @@ class Kwc_News_Detail_PreviewImage_Component extends Kwc_Basic_Image_Component
             )
         );
         $ret['defineWidth'] = true;
+        $ret['flags']['assetsPackage'] = 'Default';
         return $ret;
     }
 }

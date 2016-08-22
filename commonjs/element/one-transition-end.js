@@ -5,7 +5,11 @@ var oneTransitionEnd = function (el, callback, scope) {
         'transition'       : 'transitionend.kwfLightbox'
     };
     var transitionType = Modernizr.prefixed('transition');
-    if (!transitionType) return;
+    if (!transitionType) {
+        //browser doesn't support transitions, call callback immediately
+        callback.call(scope);
+        return;
+    }
 
     var event = transEndEventNames[ transitionType ];
     if (transitionType != 'WebkitTransition') { // can be removed as soon as modernizr fixes https://github.com/Modernizr/Modernizr/issues/897

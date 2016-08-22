@@ -11,16 +11,31 @@ class Kwc_Basic_Text_Admin extends Kwc_Admin
             return;
         }
 
-        $idMap = array();
+        $row = $source->getComponent()->getRow();
 
+        //get existing component ids based on content parts to only duplicate those
+        $existingComponentIds = array();
+        foreach ($row->getContentParts() as $p) {
+            if (!is_string($p) && ($p['type'] == 'image' || $p['type'] == 'link' || $p['type'] == 'download')) {
+                $componentId = $row->component_id.'-'.substr($p['type'], 0, 1).$p['nr'];
+                $existingComponentIds[] = $componentId;
+            }
+
+        }
+
+        $idMap = array();
         foreach ($source->getChildComponents(array('inherit' => false)) as $c) {
-            $newChild = $c->generator->duplicateChild($c, $target);
             if ($c->generator instanceof Kwc_Basic_Text_Generator) {
-                $idMap[$c->dbId] = $newChild;
+                if (in_array($c->dbId, $existingComponentIds)) {
+                    $newChild = $c->generator->duplicateChild($c, $target);
+                    $idMap[$c->dbId] = $newChild;
+                }
+            } else {
+                $c->generator->duplicateChild($c, $target);
             }
         }
+
         $content = '';
-        $row = $source->getComponent()->getRow();
         foreach ($row->getContentParts() as $p) {
             if (!is_string($p) && ($p['type'] == 'image' || $p['type'] == 'link' || $p['type'] == 'download')) {
                 $componentId = $row->component_id.'-'.substr($p['type'], 0, 1).$p['nr'];

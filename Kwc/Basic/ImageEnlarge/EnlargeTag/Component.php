@@ -158,14 +158,16 @@ class Kwc_Basic_ImageEnlarge_EnlargeTag_Component extends Kwc_Abstract
             return null;
         }
         if ($type == 'original') {
-            $dimension = null;
+            return array(
+                'file' => $data['file'],
+                'downloadFilename' => $data['filename'],
+                'mimeType' => $data['mimeType'],
+            );
         } else {
             $dimension = $component->getComponent()->getImageDimensions();
+            return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dimension, $type);
         }
-
-        return Kwf_Media_Output_Component::getMediaOutputForDimension($data, $dimension, $type);
-     }
-
+    }
 
     public function getFulltextContent()
     {

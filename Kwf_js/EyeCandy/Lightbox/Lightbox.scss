@@ -10,13 +10,6 @@ html.kwfUp-kwfLightboxActive, html.kwfUp-kwfLightboxActive body {
 }
 
 body {
-    .kwfUp-kwfLightbox {
-        opacity: 0;
-    }
-    .kwfUp-kwfLightboxOpen {
-        opacity: 1;
-    }
-
     .kwfUp-kwfLightboxScrollOuter {
         z-index: 100;
         width: 100%;
@@ -64,6 +57,7 @@ body {
             text-align: left;
             height: auto;
             z-index: 51;
+            opacity: 0;
         }
 
         .kwfUp-kwfLightboxMask {
@@ -95,31 +89,31 @@ body {
 @if $animation-style == fadeIn {
     .kwfUp-kwfLightbox {
         .kwfUp-kwfLightboxInner {
-            @include transition-duration(50ms);
+            @include transition-property(opacity);
+            @include transition-duration(150ms);
+            @include transition-timing-function(linear);
             opacity: 0;
         }
 
         &.kwfUp-kwfLightboxOpen {
             .kwfUp-kwfLightboxInner {
-                @include transition-property(opacity);
                 @include transition-duration(150ms);
-                @include transition-timing-function(linear);
                 opacity: 1;
             }
         }
     }
 
-    .kwfUp-kwfLightboxMask {
-        @include transition-property(opacity);
-        @include transition-duration(50ms);
-        @include transition-timing-function(linear);
-        opacity: 0;
-
-        &.kwfUp-kwfLightboxMaskOpen {
+    body div.kwfUp-kwfLightboxCenterBox {
+        .kwfUp-kwfLightboxMask {
             @include transition-property(opacity);
             @include transition-duration(150ms);
             @include transition-timing-function(linear);
-            opacity: 0.8;
+            opacity: 0;
+
+            &.kwfUp-kwfLightboxMaskOpen {
+                @include transition-duration(150ms);
+                opacity: 0.8;
+            }
         }
     }
 } @else if $animation-style == fadeInSlideUp {
@@ -141,13 +135,15 @@ body {
         }
     }
 
-    .kwfUp-kwfLightboxMask {
-        @include transition(opacity 50ms linear);
-        opacity: 0;
+    body div.kwfUp-kwfLightboxCenterBox {
+        .kwfUp-kwfLightboxMask {
+            @include transition(opacity 50ms linear);
+            opacity: 0;
 
-        &.kwfUp-kwfLightboxMaskOpen {
-            @include transition(opacity 1250ms cubic-bezier(0.23, 1, 0.32, 1));
-            opacity: 0.8;
+            &.kwfUp-kwfLightboxMaskOpen {
+                @include transition(opacity 1250ms cubic-bezier(0.23, 1, 0.32, 1));
+                opacity: 0.8;
+            }
         }
     }
 } @else if $animation-style == fadeInSlideInRight {
@@ -169,17 +165,19 @@ body {
         }
     }
 
-    .kwfUp-kwfLightboxMask {
-        @include transition-property(opacity);
-        @include transition-duration(50ms);
-        @include transition-timing-function(linear);
-        opacity: 0;
-
-        &.kwfUp-kwfLightboxMaskOpen {
+    body div.kwfUp-kwfLightboxCenterBox {
+        .kwfUp-kwfLightboxMask {
             @include transition-property(opacity);
-            @include transition-duration(150ms);
+            @include transition-duration(50ms);
             @include transition-timing-function(linear);
-            opacity: 0.8;
+            opacity: 0;
+
+            &.kwfUp-kwfLightboxMaskOpen {
+                @include transition-property(opacity);
+                @include transition-duration(150ms);
+                @include transition-timing-function(linear);
+                opacity: 0.8;
+            }
         }
     }
 } @else if $animation-style == fadeInZoom {
@@ -201,13 +199,15 @@ body {
         }
     }
 
-    .kwfUp-kwfLightboxMask {
-        @include transition(opacity 50ms linear);
-        opacity: 0;
+    body div.kwfUp-kwfLightboxCenterBox {
+        .kwfUp-kwfLightboxMask {
+            @include transition(opacity 50ms linear);
+            opacity: 0;
 
-        &.kwfUp-kwfLightboxMaskOpen {
-            @include transition(opacity 300ms linear);
-            opacity: 0.8;
+            &.kwfUp-kwfLightboxMaskOpen {
+                @include transition(opacity 300ms linear);
+                opacity: 0.8;
+            }
         }
     }
 }
@@ -224,7 +224,7 @@ body {
     overflow: visible !important;                                                                                       //because of flicker when lightbox open for the first time
     min-width: 100px;
     min-height: 100px;
-    background: #fff;
+    background: white;
     margin-bottom: 40px;
     padding: 10px;
     position: absolute;

@@ -41,10 +41,11 @@ class Kwc_Statistics_OptBox_Component extends Kwc_Abstract_Composite_Component
     {
         $ret = $this->_getRow()->text;
         if ($this->getData()->getChildComponent('-linktag')->hasContent()) {
-            $ret .= ' ';
+            $ret .= ' <div class="' . $this->_getBemClass('info') . '">';
             $ret .= $this->getData()->getChildComponent('-linktag')->render();
             $ret .= $this->_getRow()->more_text;
             $ret .= '</a>';
+            $ret .= '</div>';
         }
         $ret .= '<a href="#" class="accept"><span>' . $this->_getRow()->accept_text . '</span></a>';
         return $ret;

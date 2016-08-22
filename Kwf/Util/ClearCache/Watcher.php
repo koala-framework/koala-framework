@@ -236,13 +236,10 @@ class Kwf_Util_ClearCache_Watcher
                 echo "cleared acl cache...\n";
             }
         } else if (self::_endsWith($event->filename, '.twig')) {
-            $loader = new Twig_Loader_Filesystem('.');
-            $twig = new Twig_Environment($loader, array(
-                'cache' => 'cache/twig'
-            ));
+            $twig = new Kwf_View_Twig_Environment();
             $cacheFile = $event->filename;
             $cacheFile = substr($cacheFile, strlen(getcwd())+1);
-            $cacheFile = $twig->getCacheFilename($cacheFile);
+            $cacheFile = $twig->getCache(false)->generateKey(null, $twig->getTemplateClass($cacheFile));
 
             if (file_exists($cacheFile)) {
                 unlink($cacheFile);

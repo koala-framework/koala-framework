@@ -1,7 +1,7 @@
 <?php
 class Kwc_Root_Category_Update_20151110UpdatePageNames extends Kwf_Update
 {
-    public function postUpdate()
+    public function postClearCache()
     {
         $model = Kwf_Model_Abstract::getInstance('Kwc_Root_Category_GeneratorModel');
         $select = $model->select()->where(new Kwf_Model_Select_Expr_Like('filename', '%_%'));

@@ -121,7 +121,9 @@ class Kwf_Util_Update_Helper
                     if (is_numeric($f)) {
                         throw new Kwf_Exception("Invalid update script name: ".$i->getPathname()." Please use the new syntax.");
                     }
-                    $update = self::createUpdate($classPrefix.'_'.$f, $i->getPathname());
+                    $className = $classPrefix.'_'.$f;
+                    if ($className == 'Kwf_Update_Sql') continue;
+                    $update = self::createUpdate($className, $i->getPathname());
 
                     if (!$update) continue;
                     $tags = $update->getTags();
