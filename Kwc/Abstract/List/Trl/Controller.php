@@ -8,12 +8,12 @@ class Kwc_Abstract_List_Trl_Controller extends Kwf_Controller_Action_Auto_Kwc_Gr
 
     protected function _initColumns()
     {
+        $this->_columns->add(new Kwf_Grid_Column_Visible());
+
         $c = Kwc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
         foreach (Kwc_Admin::getInstance($c)->gridColumns() as $i) {
             $this->_columns->add($i);
         }
-
-        $this->_columns->add(new Kwf_Grid_Column_Visible());
     }
 
     public function preDispatch()
