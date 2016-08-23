@@ -114,11 +114,11 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     public function countViewCacheEntries($updates)
     {
-        $select = $this->buildSelectForDelete($updates);
+        $select = $this->_buildSelectForDelete($updates);
         return $this->getModel()->countRows($select);
     }
 
-    public function buildSelectForDelete($updates)
+    protected function _buildSelectForDelete($updates)
     {
         $or = array();
         foreach ($updates as $key => $values) {
@@ -172,7 +172,7 @@ class Kwf_Component_Cache_Mysql extends Kwf_Component_Cache
 
     public function deleteViewCache(array $updates, $progressBarAdapter = null)
     {
-        $select = $this->buildSelectForDelete($updates);
+        $select = $this->_buildSelectForDelete($updates);
 
         //execute select
         $microtime = $this->_getMicrotime();
