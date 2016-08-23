@@ -14,6 +14,7 @@ class Kwc_List_Gallery_Component extends Kwc_List_Images_Component
         $ret['placeholder']['moreButton'] = trlKwfStatic('more');
         $ret['breakpoint'] = '600';
         $ret['showMoreLink'] = true;
+        $ret['defaultVisible'] = true;
         return $ret;
     }
 

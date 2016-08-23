@@ -12,10 +12,6 @@ class Kwc_Abstract_List_Model extends Kwf_Model_Db_Proxy
         )
     );
 
-    protected $_default = array(
-        'visible' => 1
-    );
-
     protected function _init()
     {
         $this->_siblingModels[] = new Kwf_Model_Field(array('fieldName'=>'data'));
