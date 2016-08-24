@@ -9,12 +9,6 @@ class Kwc_Abstract_Composite_Component extends Kwc_Abstract
             'class' => 'Kwf_Component_Generator_Static',
             'component' => array()
         );
-        $cc = Kwf_Registry::get('config')->kwc->childComponents;
-        if (isset($cc->Kwc_Abstract_Composite_Component)) {
-            $ret['generators']['child']['component'] =
-                $cc->Kwc_Abstract_Composite_Component->toArray();
-        }
-
         $ret['extConfig'] = 'Kwc_Abstract_Composite_ExtConfigForm';
 
         return $ret;
