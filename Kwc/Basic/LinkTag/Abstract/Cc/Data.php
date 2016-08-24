@@ -20,4 +20,9 @@ class Kwc_Basic_LinkTag_Abstract_Cc_Data extends Kwf_Component_Data
     {
         return $this->chained->getLinkDataAttributes();
     }
+
+    public function getLinkClass()
+    {
+        return $this->chained->getLinkClass();
+    }
 }

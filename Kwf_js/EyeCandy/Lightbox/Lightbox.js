@@ -15,7 +15,7 @@ var escapeHandlerInstalled = false;
 var allByUrl = {};
 var onlyCloseOnPopstate;
 
-$(document).on('click', 'a[data-kwc-lightbox]', function(event) {
+$(document).on('click', 'a.kwfUp-kwcLightbox', function(event) {
     var el = event.currentTarget;
     var $el = $(el);
     var options = $el.data('kwc-lightbox');

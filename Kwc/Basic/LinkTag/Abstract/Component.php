@@ -19,6 +19,7 @@ abstract class Kwc_Basic_LinkTag_Abstract_Component extends Kwc_Abstract
             'bemClass' => $this->_getBemClass('')
         );
         $ret['linkTitle'] = $ret['data']->getLinkTitle();
+        $ret['linkClass'] = trim($ret['rootElementClass'].' '.$ret['data']->getLinkClass());
         return $ret;
     }
 

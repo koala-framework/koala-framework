@@ -17,7 +17,7 @@ function getUniqueIdForFilterLink(el) {
     return el.id;
 }
 
-$(document).on('click', 'a', function(event) {
+$(document).on('click', 'a.kwfUp-kwcViewAjaxFilter', function(event) {
     var a = $(event.currentTarget);
     if (a.data('kwc-view-ajax-filter')) {
         var config = a.data('kwc-view-ajax-filter');
@@ -33,7 +33,7 @@ $(document).on('click', 'a', function(event) {
             historyState.pushState(document.title, this.href);
         }
 
-        $('a[kwc-view-ajax-filter]').each(function() {
+        $('a.kwfUp-kwcViewAjaxFilter').each(function() {
             var config = $(this).data('kwc-view-ajax-filter');
             if (config.viewComponentId == view.componentId) {
                 $(this).removeClass('current');
@@ -135,7 +135,7 @@ ViewAjax.prototype = {
         }
 
         //set menuLinkId to link that is current, be be able to set current again
-        $('a[kwc-view-ajax-filter]').each((function(index, linkEl) {
+        $('a.kwfUp-kwcViewAjaxFilter').each((function(index, linkEl) {
             var config = $(linkEl).data('kwc-view-ajax-filter');
             if (config.viewComponentId == this.componentId) {
                 if ($(linkEl).hasClass('current')) {
@@ -174,7 +174,7 @@ ViewAjax.prototype = {
                 $(window).scrollTop(this._lastViewScrollPosition);
             }
             if (this._getState().menuLinkId) {
-                $('a[kwc-view-ajax-filter]').each((function(i, el) {
+                $('a.kwfUp-kwcViewAjaxFilter').each((function(i, el) {
                     var config = $(el).data('kwc-view-ajax-filter');
                     if (config.viewComponentId == this.componentId) {
                         $(el).removeClass('current');

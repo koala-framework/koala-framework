@@ -1,5 +1,5 @@
 var $ = require('jQuery');
-$(document).on('click', 'a', function(e) {
+$(document).on('click', 'a.kwfUp-kwcLinkIntern', function(e) {
     var el = e.currentTarget;
     var href = $(el).attr('href');
     if (href != undefined) {

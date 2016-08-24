@@ -34,4 +34,9 @@ class Kwc_Basic_DownloadTag_Trl_Data extends Kwf_Component_Data
     {
         return $this->chained->getLinkDataAttributes();
     }
+
+    public function getLinkClass()
+    {
+        return $this->chained->getLinkClass();
+    }
 }
