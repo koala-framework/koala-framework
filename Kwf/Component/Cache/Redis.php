@@ -61,30 +61,15 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
 
     private function _deleteViewCache(array $updates, $dryRun)
     {
-        $sets = array(
-            'component_id' => array(
-                'prefix' => 'viewids:componentid:'
-            ),
-            'db_id' => array(
-                'prefix' => 'viewids:dbid:'
-            ),
-            'page_db_id' => array(
-                'prefix' => 'viewids:pagedbid:'
-            ),
-            'component_class' => array(
-                'prefix' => 'viewids:cls:'
-            ),
-            'tag' => array(
-                'prefix' => 'viewids:tag:'
-            ),
-            'expanded_component_id' => array(
-                'prefix' => 'viewids:recexpandedid:'
-            ),
-
-            'type' => array(
-                'filterClientSide' => true
-            )
+        $prefixes = array(
+            'component_id' => 'viewids:componentid:',
+            'db_id' => 'viewids:dbid:',
+            'page_db_id' => 'viewids:pagedbid:',
+            'component_class' => 'viewids:cls:',
+            'tag' => 'viewids:tag:',
+            'expanded_component_id' => 'viewids:recexpandedid:',
         );
+
         if (isset($updates['component_id'])) {
             $updates[] = array(
                 'component_id' => $updates['component_id'],
@@ -106,12 +91,12 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             $keys = array();
             foreach ($update as $key=>$value) {
 
-                if (!isset($sets[$key])) {
-                    throw new Kwf_Exception("Unsupported updates key '$key'");
-                }
-                if (isset($sets[$key]['filterClientSide'])) {
+                if ($key == 'type') {
                     //not in redis query, handled below
                     continue;
+                }
+                if (!isset($prefixes[$key])) {
+                    throw new Kwf_Exception("Unsupported updates key '$key'");
                 }
                 if (!is_array($value)) {
                     if ($key == 'expanded_component_id') {
@@ -121,7 +106,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                     } else if (strpos($value, '%') !== false) {
                         throw new Kwf_Exception("Unsupported % for key '$key'");
                     }
-                    $keys[] = $sets[$key]['prefix'].substr($value, 0, -1);
+                    $keys[] = $prefixes[$key].substr($value, 0, -1);
                 } else {
                     $tempKey = 'temp:'.md5(implode(':', $value));
 
@@ -129,7 +114,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                         $tempKey //1st arg: destination
                     );
                     foreach ($value as $i) {
-                        $args[] = $sets[$key]['prefix'].$i; //key
+                        $args[] = $prefixes[$key].$i; //key
                     }
                     call_user_func_array(array($this->_redis, 'sUnionStore'), $args);
                     $this->_redis->expire($tempKey, 20);
