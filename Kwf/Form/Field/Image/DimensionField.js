@@ -1,14 +1,14 @@
-Ext2.namespace('Kwc.Abstract.Image');
-Kwc.Abstract.Image.DimensionField = Ext2.extend(Ext2.form.Field, {
+Ext2.namespace('Kwf.Form.Field.Image');
+Kwf.Form.Field.Image.DimensionField = Ext2.extend(Ext2.form.Field, {
     _scaleFactor: null,
     resolvedDimensions: null,
 
     autoEl: {
         tag: 'div',
-        cls: 'kwc-abstract-image-dimension',
+        cls: 'kwf-form-field-image-dimension',
         children: [{
             tag: 'div',
-            cls: 'kwc-abstract-image-dimension-name'
+            cls: 'kwf-form-field-image-dimension-name'
         }]
     },
     imageData: null,
@@ -29,12 +29,12 @@ Kwc.Abstract.Image.DimensionField = Ext2.extend(Ext2.form.Field, {
         if (this.rendered) {
             var pixelString = '';
             if (v.dimension) {
-                pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(this.resolvedDimensions[v.dimension], v, this.dpr2Check);
+                pixelString = Kwf.Form.Field.Image.DimensionField.getDimensionPixelString(this.resolvedDimensions[v.dimension], v, this.dpr2Check);
             }
             if (pixelString) {
-                this.getEl().child('.kwc-abstract-image-dimension-name').update(trlKwf('At least: ')+pixelString);
+                this.getEl().child('.kwf-form-field-image-dimension-name').update(trlKwf('At least: ')+pixelString);
             } else {
-                this.getEl().child('.kwc-abstract-image-dimension-name').update('&nbsp;');
+                this.getEl().child('.kwf-form-field-image-dimension-name').update('&nbsp;');
             }
         }
         this.fireEvent('change', this.value);
@@ -42,14 +42,14 @@ Kwc.Abstract.Image.DimensionField = Ext2.extend(Ext2.form.Field, {
 
     initComponent: function() {
         this.resolvedDimensions = Kwf.clone(this.dimensions);
-        Kwc.Abstract.Image.DimensionField.superclass.initComponent.call(this);
+        Kwf.Form.Field.Image.DimensionField.superclass.initComponent.call(this);
     },
 
     afterRender: function() {
-        Kwc.Abstract.Image.DimensionField.superclass.afterRender.call(this);
+        Kwf.Form.Field.Image.DimensionField.superclass.afterRender.call(this);
         this._cropButton = new Ext2.Button({
             text: trlKwf('Edit'),
-            cls: 'x2-btn-text-icon kwc-abstract-image-dimension-cropbutton',
+            cls: 'x2-btn-text-icon kwf-form-field-image-dimension-cropbutton',
             icon: '/assets/silkicons/shape_handles.png',
             renderTo: this.getEl(),
             scope: this,
@@ -62,7 +62,7 @@ Kwc.Abstract.Image.DimensionField = Ext2.extend(Ext2.form.Field, {
     },
 
     _onButtonClick: function() {
-        this._sizeWindow = new Kwc.Abstract.Image.DimensionWindow({
+        this._sizeWindow = new Kwf.Form.Field.Image.DimensionWindow({
             dimensions: this.resolvedDimensions,
             value: this.getValue(),
             imageData: this.imageData,
@@ -119,7 +119,7 @@ Kwc.Abstract.Image.DimensionField = Ext2.extend(Ext2.form.Field, {
     }
 });
 
-Kwc.Abstract.Image.DimensionField.isValidImageSize = function(value, dimensions, dpr2)
+Kwf.Form.Field.Image.DimensionField.isValidImageSize = function(value, dimensions, dpr2)
 {
     if (!value.cropData)
         return true;
@@ -137,7 +137,7 @@ Kwc.Abstract.Image.DimensionField.isValidImageSize = function(value, dimensions,
     return true;
 };
 
-Kwc.Abstract.Image.DimensionField.getDimensionPixelString = function(dimension, v, dpr2)
+Kwf.Form.Field.Image.DimensionField.getDimensionPixelString = function(dimension, v, dpr2)
 {
     var dprFactor = 1;
     if (dpr2) dprFactor = 2;
@@ -166,7 +166,7 @@ Kwc.Abstract.Image.DimensionField.getDimensionPixelString = function(dimension, 
     return ret;
 };
 
-Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v, dpr2)
+Kwf.Form.Field.Image.DimensionField.getDimensionString = function(dimension, v, dpr2)
 {
     var ret;
     if (!dimension) return;
@@ -177,7 +177,7 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v, dp
         ret = '';
     }
 
-    var pixelString = Kwc.Abstract.Image.DimensionField.getDimensionPixelString(dimension, v, dpr2);
+    var pixelString = Kwf.Form.Field.Image.DimensionField.getDimensionPixelString(dimension, v, dpr2);
     if (ret) {
         if (pixelString) {
             ret += ' ('+pixelString+')';
@@ -190,4 +190,4 @@ Kwc.Abstract.Image.DimensionField.getDimensionString = function(dimension, v, dp
 };
 
 
-Ext2.reg('kwc.image.dimensionfield', Kwc.Abstract.Image.DimensionField);
+Ext2.reg('kwf.form.field.image.dimensionfield', Kwf.Form.Field.Image.DimensionField);

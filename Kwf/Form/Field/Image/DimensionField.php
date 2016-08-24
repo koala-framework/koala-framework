@@ -1,26 +1,32 @@
 <?php
-class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
+class Kwf_Form_Field_Image_DimensionField extends Kwf_Form_Field_Abstract
 {
     public function __construct($name = null, $fieldLabel = null)
     {
         parent::__construct($name, $fieldLabel);
-        $this->setXtype('kwc.image.dimensionfield');
+        $this->setXtype('kwf.form.field.image.dimensionfield');
+    }
+
+    protected $_fieldPrefix = '';
+    public function setFieldPrefix($prefix)
+    {
+        $this->_fieldPrefix = $prefix;
     }
 
     public function load($row, $postData = array())
     {
         //Standardwert so wie in Kwc_Abstract_Image_Component::getImageDimensions
         $dimensions = $this->getDimensions();
-        $dimension = $row->dimension;
+        $dimension = $row->{$this->_fieldPrefix.'dimension'};
         if (!isset($dimensions[$dimension])) {
             $dimension = current(array_keys($dimensions));
         }
         $d = $dimensions[$dimension];
 
-        $cropX = $row->crop_x;
-        $cropY = $row->crop_y;
-        $cropWidth = $row->crop_width;
-        $cropHeight = $row->crop_height;
+        $cropX = $row->{$this->_fieldPrefix.'crop_x'};
+        $cropY = $row->{$this->_fieldPrefix.'crop_y'};
+        $cropWidth = $row->{$this->_fieldPrefix.'crop_width'};
+        $cropHeight = $row->{$this->_fieldPrefix.'crop_height'};
 
         $cover = false;
         if (isset($d['cover'])) {
@@ -30,7 +36,7 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         $cropData = null;
         if ($cropX !== null && $cropY !== null
             && $cropWidth !== null && $cropHeight !== null
-       ) {
+        ) {
             $cropData = array(
                 'x' => $cropX,
                 'y' => $cropY,
@@ -40,8 +46,8 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
         }
         $value = array(
             'dimension' => $dimension,
-            'width' => $row->width,
-            'height' => $row->height,
+            'width' => $row->{$this->_fieldPrefix.'width'},
+            'height' => $row->{$this->_fieldPrefix.'height'},
             'cover' => $cover,
             'cropData' => $cropData
         );
@@ -56,23 +62,23 @@ class Kwc_Abstract_Image_DimensionField extends Kwf_Form_Field_Abstract
             $value = Zend_Json::decode($value);
         }
         if (!is_array($value)) $value = array();
-        $row->dimension = isset($value['dimension']) ? $value['dimension'] : null;
-        $row->width = (isset($value['width']) && $value['width']) ? $value['width'] : null;
-        $row->height = (isset($value['height']) && $value['height']) ? $value['height'] : null;
+        $row->{$this->_fieldPrefix.'dimension'} = isset($value['dimension']) ? $value['dimension'] : null;
+        $row->{$this->_fieldPrefix.'width'} = (isset($value['width']) && $value['width']) ? $value['width'] : null;
+        $row->{$this->_fieldPrefix.'height'} = (isset($value['height']) && $value['height']) ? $value['height'] : null;
         if (isset($value['cropData'])) {
-            $row->crop_x = (isset($value['cropData']['x']) && $value['cropData']['x'] !== null)
+            $row->{$this->_fieldPrefix.'crop_x'} = (isset($value['cropData']['x']) && $value['cropData']['x'] !== null)
                 ? $value['cropData']['x'] : null;
-            $row->crop_y = (isset($value['cropData']['y']) && $value['cropData']['y'] !== null)
+            $row->{$this->_fieldPrefix.'crop_y'} = (isset($value['cropData']['y']) && $value['cropData']['y'] !== null)
                 ? $value['cropData']['y'] : null;
-            $row->crop_width = (isset($value['cropData']['width']) && $value['cropData']['width'])
+            $row->{$this->_fieldPrefix.'crop_width'} = (isset($value['cropData']['width']) && $value['cropData']['width'])
                 ? $value['cropData']['width'] : null;
-            $row->crop_height = (isset($value['cropData']['height']) && $value['cropData']['height'])
+            $row->{$this->_fieldPrefix.'crop_height'} = (isset($value['cropData']['height']) && $value['cropData']['height'])
                 ? $value['cropData']['height'] : null;
         } else {
-            $row->crop_x = null;
-            $row->crop_y = null;
-            $row->crop_width = null;
-            $row->crop_height = null;
+            $row->{$this->_fieldPrefix.'crop_x'} = null;
+            $row->{$this->_fieldPrefix.'crop_y'} = null;
+            $row->{$this->_fieldPrefix.'crop_width'} = null;
+            $row->{$this->_fieldPrefix.'crop_height'} = null;
         }
     }
 

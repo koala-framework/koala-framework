@@ -1,5 +1,5 @@
-Ext2.namespace('Kwc.Abstract.Image');
-Kwc.Abstract.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
+Ext2.namespace('Kwf.Form.Field.Image');
+Kwf.Form.Field.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
     src: null,//image path
     width: 0,//width of image,
     height: 0,//height of image
@@ -20,7 +20,7 @@ Kwc.Abstract.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
         tag: 'div',
         children: [{
             tag: 'div',
-            cls: 'kwc-abstract-image-crop-image-wrapper'
+            cls: 'kwf-form-field-image-crop-image-wrapper'
         }]
     },
 
@@ -86,7 +86,7 @@ Kwc.Abstract.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
     },
 
     initComponent: function () {
-        Kwc.Abstract.Image.CropImage.superclass.initComponent.call(this);
+        Kwf.Form.Field.Image.CropImage.superclass.initComponent.call(this);
         if (this.cropData) {
             this._userSelectedCropRegion = {
                 x: this.cropData.x,
@@ -98,12 +98,12 @@ Kwc.Abstract.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
     },
 
     onRender: function(ct, position) {
-        Kwc.Abstract.Image.CropImage.superclass.onRender.call(this, ct, position);
+        Kwf.Form.Field.Image.CropImage.superclass.onRender.call(this, ct, position);
         this.el.setStyle({
             'background': 'url('+this.src+') no-repeat left top'
         });
 
-        this._wrapEl = this.el.down('.kwc-abstract-image-crop-image-wrapper');
+        this._wrapEl = this.el.down('.kwf-form-field-image-crop-image-wrapper');
         this._wrapEl.setSize(this.width, this.height);
 
         this._image = new Ext2.BoxComponent({
@@ -136,7 +136,7 @@ Kwc.Abstract.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
             transparent: true
         });
 
-        this._resizer.getEl().addClass('kwc-abstract-image-crop-image-resizable');
+        this._resizer.getEl().addClass('kwf-form-field-image-crop-image-resizable');
         this._resizer.on('beforeresize', function () {
             this._hideCropShadow();
         }, this);
@@ -168,30 +168,30 @@ Kwc.Abstract.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
 
         if (this.isCropDisabled()) { // Disable crop because image too small
             this._resizer.enabled = false;
-            this._resizer.getEl().removeClass('kwc-abstract-image-crop-image-resizable');
-            this._resizer.getEl().addClass('kwc-abstract-image-crop-image-resizable-disabled');
+            this._resizer.getEl().removeClass('kwf-form-field-image-crop-image-resizable');
+            this._resizer.getEl().addClass('kwf-form-field-image-crop-image-resizable-disabled');
             dragDrop.lock();
         } else {
             this._resizer.enabled = true;
-            this._resizer.getEl().addClass('kwc-abstract-image-crop-image-resizable');
-            this._resizer.getEl().removeClass('kwc-abstract-image-crop-image-resizable-disabled');
+            this._resizer.getEl().addClass('kwf-form-field-image-crop-image-resizable');
+            this._resizer.getEl().removeClass('kwf-form-field-image-crop-image-resizable-disabled');
             dragDrop.unlock();
         }
     },
 
     _hideCropShadow: function () {
-        var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
+        var wrapper = this.getEl().child('.kwf-form-field-image-crop-image-wrapper');
         wrapper.addClass('crop-changing');
     },
 
     _showCropShadow: function () {
-        var wrapper = this.getEl().child('.kwc-abstract-image-crop-image-wrapper');
+        var wrapper = this.getEl().child('.kwf-form-field-image-crop-image-wrapper');
         wrapper.removeClass('crop-changing');
     },
 
     afterRender: function () {
         this._styleHandles();
-        Kwc.Abstract.Image.CropImage.superclass.afterRender.call(this);
+        Kwf.Form.Field.Image.CropImage.superclass.afterRender.call(this);
 
         // Loading-Mask while loading down-sampled image
         this.getEl().mask(trlKwf('Loading image'), 'x2-mask-loading');
@@ -253,7 +253,7 @@ Kwc.Abstract.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
         cropData.width = this.width;
         cropData.height = this.height;
         if (preserveRatio) {
-            cropData = Kwc.Abstract.Image.CropImage
+            cropData = Kwf.Form.Field.Image.CropImage
                 .calculateDefaultCrop(this.outWidth, this.outHeight, this.width, this.height);
         }
         return cropData;
@@ -308,7 +308,7 @@ Kwc.Abstract.Image.CropImage = Ext2.extend(Ext2.BoxComponent, {
         }
     }
 });
-Kwc.Abstract.Image.CropImage.calculateDefaultCrop = function (outWidth, outHeight, width, height) {
+Kwf.Form.Field.Image.CropImage.calculateDefaultCrop = function (outWidth, outHeight, width, height) {
     var cropData = {
         width: null,
         height: null,
@@ -331,4 +331,4 @@ Kwc.Abstract.Image.CropImage.calculateDefaultCrop = function (outWidth, outHeigh
     return cropData;
 };
 
-Ext2.reg('kwc.image.cropimage', Kwc.Abstract.Image.CropImage);
+Ext2.reg('kwf.form.field.image.cropimage', Kwf.Form.Field.Image.CropImage);
