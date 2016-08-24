@@ -48,10 +48,11 @@
             "postcss-prefixer-keyframes": "git://github.com/koala-framework/postcss-prefixer-keyframes",
             "postcss-prefixer-font-face": "git://github.com/koala-framework/postcss-prefixer-font-face",
             "postcss-media-queries-drop-redundant": "git://github.com/koala-framework/postcss-media-queries-drop-redundant",
-            "babel-cli": "~6.4.5",
-            "babel-preset-es2015": "~6.3.13",
-            "babel-plugin-transform-runtime": "~6.12.0"
+            "babel-cli": "^6.11.4",
+            "babel-preset-es2015": "^6.13.2",
+            "babel-plugin-transform-runtime": "^6.12.0"
         },
+        "expose-npm-packages": true,
         "require-dev-bower": {
             "qunit": "^1.18.0",
             "qunit-phantomjs-runner": "vivid-planet/qunit-phantomjs-runner#e96347ee33b773160cf061d7b1b5c4ad3d1d9082"

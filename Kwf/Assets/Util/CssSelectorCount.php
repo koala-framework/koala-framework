@@ -7,7 +7,7 @@ class Kwf_Assets_Util_CssSelectorCount
         $cmd .= " 2>&1";
         $process = new Symfony\Component\Process\Process($cmd);
         $process->setEnv(array(
-            'NODE_PATH' => getcwd().'/'.KWF_PATH.'/node_modules'
+            'NODE_PATH' => getcwd().'/node_modules'
         ));
         $process->setInput($contents);
 
