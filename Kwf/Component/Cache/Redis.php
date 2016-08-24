@@ -78,7 +78,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
                 'prefix' => 'viewids:tag:'
             ),
             'expanded_component_id' => array(
-                'prefix' => 'viewids:expandedid:'
+                'prefix' => 'viewids:recexpandedid:'
             ),
 
             'type' => array(
@@ -293,11 +293,11 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
     public function handlePageParentChanges(array $pageParentChanges)
     {
         foreach ($pageParentChanges as $changes) {
-            $pattern = "viewids:expandedid:$changes[oldParentId]_$changes[componentId]*";
+            $pattern = "viewids:recexpandedid:$changes[oldParentId]_$changes[componentId]*";
             $it = null;
             while ($keys = $this->_redis->scan($it, $pattern)) {
                 foreach ($keys as $key) {
-                    $newKey = $changes['newParentId'].substr($key, strlen("viewids:expandedid:$changes[oldParentId]"));
+                    $newKey = $changes['newParentId'].substr($key, strlen("viewids:recexpandedid:$changes[oldParentId]"));
                     $this->_redis->rename($key, $newKey);
                 }
             }
