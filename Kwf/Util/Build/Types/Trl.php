@@ -39,19 +39,13 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
 
         foreach ($langs as $l) {
             if ($l != $config->webCodeLanguage) {
-                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_WEB, $l, true);
-                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_WEB, $l, true), serialize($c));
-
-                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_WEB, $l, false);
-                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_WEB, $l, false), serialize($c));
+                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_WEB, $l);
+                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_WEB, $l), serialize($c));
             }
 
             if ($l != 'en') {
-                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_KWF, $l, true);
-                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_KWF, $l, true), serialize($c));
-
-                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_KWF, $l, false);
-                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_KWF, $l, false), serialize($c));
+                $c = $this->_loadTrlArray(Kwf_Trl::SOURCE_KWF, $l);
+                file_put_contents(Kwf_Trl::generateBuildFileName(Kwf_Trl::SOURCE_KWF, $l), serialize($c));
             }
         }
     }
@@ -85,7 +79,7 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
         return $ret;
     }
 
-    private function _loadTrlArray($source, $targetLanguage, $plural)
+    private function _loadTrlArray($source, $targetLanguage)
     {
         $trlEntries = array();
         $kwfTrlFile = KWF_PATH.'/trl/'.$targetLanguage.'.po';

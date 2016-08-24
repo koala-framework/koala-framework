@@ -392,7 +392,7 @@ class Kwf_Trl
             return;
         }
 
-        $buildFileName = Kwf_Trl::generateBuildFileName($source, $target, $plural);
+        $buildFileName = Kwf_Trl::generateBuildFileName($source, $target);
         if (file_exists($buildFileName)) {
             $c = unserialize(file_get_contents($buildFileName));
         } else {
@@ -402,9 +402,9 @@ class Kwf_Trl
         return $c;
     }
 
-    public static function generateBuildFileName($source, $target, $plural)
+    public static function generateBuildFileName($source, $target)
     {
-        return 'build/trl/'.$source.$target.($plural ? '_plural' : '');
+        return 'build/trl/'.$source.$target;
     }
 
     protected function _findElement($needle, $source, $context, $language = null)
