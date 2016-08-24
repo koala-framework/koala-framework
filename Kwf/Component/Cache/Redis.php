@@ -297,7 +297,7 @@ class Kwf_Component_Cache_Redis extends Kwf_Component_Cache
             $it = null;
             while ($keys = $this->_redis->scan($it, $pattern)) {
                 foreach ($keys as $key) {
-                    $newKey = $changes['newParentId'].substr($key, strlen("viewids:recexpandedid:$changes[oldParentId]"));
+                    $newKey = "viewids:recexpandedid:".$changes['newParentId'].substr($key, strlen("viewids:recexpandedid:$changes[oldParentId]"));
                     $this->_redis->rename($key, $newKey);
                 }
             }
