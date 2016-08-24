@@ -9,8 +9,10 @@ class Kwf_Component_PagesMetaModel extends Kwf_Model_Db_Proxy
     /**
      * @return self
      */
-    public static function getInstance()
+    public static function getInstance($modelName = null)
     {
+        if ($modelName) throw new Kwf_Exception("modelName parameter must not be set");
+
         if (isset(self::$_instance)) {
             return self::$_instance;
         }
