@@ -262,7 +262,6 @@ class Kwf_Util_Setup
         $preloadClasses[] = 'Kwf_Registry';
         $preloadClasses[] = 'Kwf_Trl';
         $preloadClasses[] = 'Kwf_Util_SessionHandler';
-        $preloadClasses[] = 'Kwf_Util_Memcache';
         $preloadClasses[] = 'Zend_Session';
         $preloadClasses[] = 'Kwf_Benchmark_Counter';
         $preloadClasses[] = 'Kwf_Benchmark_Counter_Apc';
@@ -297,6 +296,11 @@ class Kwf_Util_Setup
             $host = Kwf_Config::getValue('server.memcache.host');
             $ret .= "Kwf_Cache_Simple::\$memcacheHost = '".$host."';\n";
             $ret .= "Kwf_Cache_Simple::\$memcachePort = '".Kwf_Config::getValue('server.memcache.port')."';\n";
+        }
+        if (Kwf_Config::getValue('server.redis.host')) {
+            $host = Kwf_Config::getValue('server.redis.host');
+            $ret .= "Kwf_Cache_Simple::\$redisHost = '".$host."';\n";
+            $ret .= "Kwf_Cache_Simple::\$redisPort = '".Kwf_Config::getValue('server.redis.port')."';\n";
         }
 
         $ret .= "if (substr(\$requestUri, 0, 8) == '/assets/') {\n";
@@ -395,7 +399,12 @@ class Kwf_Util_Setup
         $ret .= "\n";
 
         //store session data in memcache if avaliable
-        if ((Kwf_COnfig::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
+        if (Kwf_Config::getValue('server.redis.host')) {
+            $ret .= "\nif (PHP_SAPI != 'cli') {\n";
+            $ret .= "    ini_set('session.save_handler', 'redis');\n";
+            $ret .= "    ini_set('session.save_path', 'tcp://".Kwf_Config::getValue('server.redis.host').":".Kwf_Config::getValue('server.redis.port')."?prefix=".substr(md5(Kwf_Cache_Simple::getUniquePrefix()), 0, 10)."');\n";
+            $ret .= "}\n";
+        } else if ((Kwf_Config::getValue('server.memcache.host') || Kwf_Config::getValue('aws.simpleCacheCluster')) && Kwf_Setup::hasDb()) {
             $ret .= "\nif (PHP_SAPI != 'cli') Kwf_Util_SessionHandler::init();\n";
         }
 

@@ -2,9 +2,6 @@
 abstract class Kwf_Component_Cache
 {
     static private $_instance;
-    static private $_backend = self::CACHE_BACKEND_MYSQL;
-    const CACHE_BACKEND_MYSQL = 'Kwf_Component_Cache_Mysql';
-    const CACHE_BACKEND_FNF = 'Kwf_Component_Cache_Fnf';
     const NO_CACHE = '{nocache}';
 
     /**
@@ -13,8 +10,11 @@ abstract class Kwf_Component_Cache
     public static function getInstance()
     {
         if (!self::$_instance) {
-            $backend = self::$_backend;
-            self::$_instance = new $backend();
+            if (Kwf_Cache_Simple::getBackend() == 'redis') {
+                self::$_instance = new Kwf_Component_Cache_Redis;
+            } else {
+                self::$_instance = new Kwf_Component_Cache_Mysql;
+            }
         }
         return self::$_instance;
     }
@@ -30,12 +30,19 @@ abstract class Kwf_Component_Cache
         self::$_instance = null;
     }
 
-    public abstract function deleteViewCache($select);
+    public abstract function save(Kwf_Component_Data $component, $content, $renderer, $type, $value, $tag, $lifetime);
+    public abstract function loadWithMetadata($componentId, $renderer='component', $type = 'component', $value = '');
+    public abstract function load($componentId, $renderer='component', $type = 'component', $value = '');
+    public abstract function countViewCacheEntries($updates);
+    public abstract function deleteViewCache(array $updates);
+    public abstract function handlePageParentChanges(array $pageParentChanges);
+    public abstract function saveIncludes($componentId, $type, $includedComponents);
+
+    public function collectGarbage($debug)
+    {
+    }
 
     public function writeBuffer()
     {
-        foreach ($this->_models as $m) {
-            if (is_object($m)) $m->writeBuffer();
-        }
     }
 }
