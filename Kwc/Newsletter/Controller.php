@@ -57,6 +57,7 @@ class Kwc_Newsletter_Controller extends Kwc_Directories_Item_Directory_Controlle
             $newDetailRow->start_date = null;
             $newDetailRow->resume_date = null;
             $newDetailRow->last_sent_date = null;
+            $newDetailRow->count_sent = 0;
             $newDetailRow->status = null;
             $newDetailRow->save();
 
