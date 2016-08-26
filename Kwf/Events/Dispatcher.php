@@ -157,25 +157,30 @@ class Kwf_Events_Dispatcher
                 ) {
                     throw new Kwf_Exception('Listeners of ' . get_class($subscriber) . ' must return arrays with keys "class" (optional), "event" and "callback"');
                 }
-                $event = $listener['event'];
-                if (!class_exists($event)) throw new Kwf_Exception("Event-Class $event not found, comes from " . get_class($subscriber));
-                $class = isset($listener['class']) ? $listener['class'] : 'all';
-                if (!is_array($class)) {
-                    $class = array($class);
+                $events = $listener['event'];
+                if (!is_array($events)) {
+                    $events = array($events);
                 }
-                foreach ($class as $c) {
-                    if (is_object($c)) {
-                        if ($c instanceof Kwf_Model_Abstract) {
-                            $c = $c->getFactoryId();
-                        } else {
-                            $c = get_class($c);
-                        }
+                foreach ($events as $event) {
+                    if (!class_exists($event)) throw new Kwf_Exception("Event-Class $event not found, comes from " . get_class($subscriber));
+                    $class = isset($listener['class']) ? $listener['class'] : 'all';
+                    if (!is_array($class)) {
+                        $class = array($class);
                     }
-                    $listeners[$event][$c][] = array(
+                    foreach ($class as $c) {
+                        if (is_object($c)) {
+                            if ($c instanceof Kwf_Model_Abstract) {
+                                $c = $c->getFactoryId();
+                            } else {
+                                $c = get_class($c);
+                            }
+                        }
+                        $listeners[$event][$c][] = array(
                             'class' => get_class($subscriber),
                             'method' => $listener['callback'],
                             'config' => $subscriber->getConfig()
-                    );
+                        );
+                    }
                 }
             }
         }
