@@ -44,6 +44,7 @@ class Kwf_Assets_Dependency_Filter_BabelJs
     {
         return array(
             getcwd()."/node_modules",
+            getcwd()."/".KWF_PATH,
             getcwd()."/"
         );
     }

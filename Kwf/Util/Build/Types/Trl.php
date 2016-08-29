@@ -142,7 +142,11 @@ class Kwf_Util_Build_Types_Trl extends Kwf_Util_Build_Types_Abstract
                 }
             }
         }
-        return $trlEntries;
+        $trl = array();
+        foreach ($trlEntries as $id => $value) {
+            $trl[$id] = $value['translation'];
+        }
+        return $trl;
     }
 
     private function _getAllPoParsersExceptKwf($source, $targetLanguage)
